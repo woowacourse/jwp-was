@@ -19,13 +19,23 @@ class HttpRequestTest {
     void getPath_indexUrl_true() throws IOException {
         InputStream inputStream = new FileInputStream(new File(testDirectory + "request_index_test.txt"));
         HttpRequest request = new HttpRequest(inputStream);
-        assertThat(request.getPath()).isEqualTo(HttpRequestUtils.ROOT_FILE_PATH + INDEX_URL);
+        assertThat(request.getFilePath()).isEqualTo(HttpRequestUtils.ROOT_FILE_PATH + INDEX_URL);
     }
 
     @Test
     void getPath_root_true() throws IOException {
         InputStream inputStream = new FileInputStream(new File(testDirectory + "request_root_test.txt"));
         HttpRequest request = new HttpRequest(inputStream);
-        assertThat(request.getPath()).isEqualTo(HttpRequestUtils.ROOT_FILE_PATH + INDEX_URL);
+        assertThat(request.getFilePath()).isEqualTo(HttpRequestUtils.ROOT_FILE_PATH + INDEX_URL);
     }
+
+    @Test
+    void getParameter_userInfo_true() throws IOException {
+        InputStream inputStream = new FileInputStream(new File(testDirectory + "request_form_param_test.txt"));
+        HttpRequest request = new HttpRequest(inputStream);
+        assertThat(request.getParam("userId")).isEqualTo("id");
+        assertThat(request.getParam("password")).isEqualTo("password");
+        assertThat(request.getParam("name")).isEqualTo("gyu");
+    }
+
 }

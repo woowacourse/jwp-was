@@ -17,3 +17,10 @@
 - [x] HttpRequest class 생성(리팩토링)
 - [ ] httpRequestUrlPathException 생성
 - [ ] http error response 처리
+
+
+
+요구사항2
+
+- [x] get request param 추출
+- [ ] param 추출해서 User만들기

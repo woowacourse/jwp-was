@@ -12,14 +12,14 @@ public class HttpRequestUtilsTest {
     void parseURLPath_indexUrl_true() {
         String URL = INDEX_URL;
         String line = "GET " + URL + " HTTP/1.1";
-        assertThat(HttpRequestUtils.parseURLPath(line)).isEqualTo(URL);
+        assertThat(HttpRequestUtils.parseAbsPathAndQuery(line)).isEqualTo(URL);
     }
 
     @Test
     void parseURLPath_emptyUrl_error() {
         String line = "GET HTTP/1.1";
         assertThrows(IllegalArgumentException.class, () -> {
-            HttpRequestUtils.parseURLPath(line);
+            HttpRequestUtils.parseAbsPathAndQuery(line);
         });
     }
 

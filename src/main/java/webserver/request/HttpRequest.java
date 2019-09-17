@@ -8,14 +8,22 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class HttpRequest {
-    private final String url;
+    private final RequestUri uri;
 
     public HttpRequest(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-        url = HttpRequestUtils.generateFilePath(bufferedReader.readLine());
+        uri = new RequestUri(bufferedReader.readLine());
     }
 
-    public String getPath() {
-        return url;
+    public String getAbsPath(){
+        return uri.getAbsPath();
+    }
+
+    public String getFilePath() {
+        return HttpRequestUtils.generateFilePath(uri.getAbsPath());
+    }
+
+    public String getParam(String key) {
+        return uri.getQueryString(key);
     }
 }
