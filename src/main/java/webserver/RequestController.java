@@ -16,16 +16,14 @@ public class RequestController {
             logger.info(request.getUrl());
 
             String url = request.getUrl();
-            Response staticResponse = serveStaticFile(url);
-            if (staticResponse != null) {
-                return staticResponse;
+            Response response = serveFile("./static" + url);
+            if (response != null) {
+                return response;
             }
-            
-            if ("/index.html".equals(url)) {
-                byte[] body = FileIoUtils.loadFileFromClasspath("./templates/index.html");
-                Map<String, String> headers = new HashMap<>();
-                headers.put("Content-Length", String.valueOf(body.length));
-                return new Response(200, "OK", MediaType.HTML, headers, body);
+
+            response = serveFile("./templates" + url);
+            if (response != null) {
+                return response;
             }
         } catch (Exception e) {
             logger.error("Error is occurred while processing request", e);
@@ -33,9 +31,9 @@ public class RequestController {
         return new Response(404, "NOT FOUND", null, null, null);
     }
 
-    private static Response serveStaticFile(String url) {
+    private static Response serveFile(String url) {
         try {
-            byte[] body = FileIoUtils.loadFileFromClasspath("./static" + url);
+            byte[] body = FileIoUtils.loadFileFromClasspath(url);
             Map<String, String> headers = new HashMap<>();
 
             MediaType contentType = extractExtension(url);
