@@ -1,12 +1,11 @@
 package webserver;
 
+import http.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.RequestParseUtils;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.List;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -23,9 +22,8 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader buffer = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-            List<String> lines = RequestParseUtils.parseRequestHeader(buffer);
-            printRequestHeader(lines);
-
+            HttpRequest httpRequest = HttpRequest.of(buffer);
+            logger.debug(httpRequest.toString());
 
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = "Hello World".getBytes();
@@ -34,16 +32,6 @@ public class RequestHandler implements Runnable {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
-    }
-
-    private void printRequestHeader(List<String> lines) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("\n============================================\n");
-        for (String line : lines) {
-            stringBuilder.append(line).append("\n");
-        }
-        stringBuilder.append("============================================\n");
-        logger.debug(stringBuilder.toString());
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
