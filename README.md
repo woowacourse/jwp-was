@@ -13,3 +13,4 @@
 - [x] request Header 전체 출력
 - [x] request Header에서 url path 추출
 - [x] file 읽기
+- [x] localhost:8080 으로 접속해도 자동으로 /index.html로 렌더링

@@ -1,5 +1,10 @@
 package webserver;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import utils.FileIoUtils;
+import utils.HttpRequestUtils;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -9,14 +14,8 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import utils.FileIoUtils;
-import utils.HttpRequestUtils;
-
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    public static final String ROOT_FILE_PATH = "./templates";
 
     private Socket connection;
 
@@ -30,9 +29,9 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-            String url = HttpRequestUtils.parseURLPath(bufferedReader.readLine());
+            String filePath = HttpRequestUtils.generateFilePath(bufferedReader.readLine());
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = FileIoUtils.loadFileFromClasspath(ROOT_FILE_PATH + url);
+            byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException | URISyntaxException e) {
