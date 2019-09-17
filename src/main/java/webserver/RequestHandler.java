@@ -2,10 +2,10 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.RequestParseUtils;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.List;
 
 public class RequestHandler implements Runnable {
@@ -23,8 +23,9 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader buffer = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-            List<String> lines = findRequestHeader(buffer);
+            List<String> lines = RequestParseUtils.parseRequestHeader(buffer);
             printRequestHeader(lines);
+
 
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = "Hello World".getBytes();
@@ -43,18 +44,6 @@ public class RequestHandler implements Runnable {
         }
         stringBuilder.append("============================================\n");
         logger.debug(stringBuilder.toString());
-    }
-
-    private List<String> findRequestHeader(BufferedReader buffer) throws IOException {
-        List<String> lines = new ArrayList<>();
-        String line;
-        while (!"".equals(line = buffer.readLine())) {
-            if (line == null) {
-                break;
-            }
-            lines.add(line);
-        }
-        return lines;
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
