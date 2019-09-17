@@ -22,7 +22,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void readStrings() throws Exception {
+    public void parseData() throws Exception {
         String expected = "Request URL: http://localhost:8080/\n" +
                 "Request Method: GET\n" +
                 "Status Code: 200 OK\n" +
