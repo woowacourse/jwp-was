@@ -13,7 +13,7 @@ public class RequestController {
 
     public static Response handle(Request request) {
         try {
-            logger.info(request.getUrl());
+            logger.info(request.toString());
 
             String url = request.getUrl();
             Response response = serveFile("./static" + url);
@@ -24,6 +24,10 @@ public class RequestController {
             response = serveFile("./templates" + url);
             if (response != null) {
                 return response;
+            }
+
+            if ("/user/create".equals(url)) {
+                return UserController.signUp(request);
             }
         } catch (Exception e) {
             logger.error("Error is occurred while processing request", e);

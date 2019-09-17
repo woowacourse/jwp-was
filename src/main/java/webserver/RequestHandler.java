@@ -42,9 +42,11 @@ public class RequestHandler implements Runnable {
 
     private void writeHeader(DataOutputStream dos, Response response) throws IOException {
         dos.writeBytes(String.format("HTTP/1.1 %d %s\r\n", response.getStatusCode(), response.getStatusText()));
-        writeHeaderLine(dos, String.format("Content-Type: %s", response.getMediaType()));
+        if (response.getMediaType() != null) {
+            writeHeaderLine(dos, String.format("Content-Type: %s", response.getMediaType()));
+        }
         response.getHeaderKeys()
-            .forEach(k -> writeHeaderLine(dos, response.getHeader(k)));
+            .forEach(k -> writeHeaderLine(dos, k + ": " + response.getHeader(k)));
         dos.writeBytes("\r\n");
     }
 
@@ -58,7 +60,9 @@ public class RequestHandler implements Runnable {
 
     private void responseBody(DataOutputStream dos, Response response) {
         try {
-            dos.write(response.getBody(), 0, response.getBody().length);
+            if (response.getBody() != null) {
+                dos.write(response.getBody(), 0, response.getBody().length);
+            }
             dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
