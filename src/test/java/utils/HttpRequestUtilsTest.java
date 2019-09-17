@@ -27,13 +27,15 @@ public class HttpRequestUtilsTest {
     void generateFilePath_index_true() {
         String URL = INDEX_URL;
         String line = "GET " + URL + " HTTP/1.1";
-        assertThat(HttpRequestUtils.generateFilePath(line)).isEqualTo(HttpRequestUtils.ROOT_FILE_PATH + URL);
+        String absPathAndQuery = HttpRequestUtils.parseAbsPathAndQuery(line);
+        assertThat(HttpRequestUtils.generateFilePath(absPathAndQuery)).isEqualTo(HttpRequestUtils.ROOT_FILE_PATH + URL);
     }
 
     @Test
     void generateFilePath_root_true() {
         String URL = "/";
         String line = "GET " + URL + " HTTP/1.1";
-        assertThat(HttpRequestUtils.generateFilePath(line)).isEqualTo(HttpRequestUtils.ROOT_FILE_PATH + INDEX_URL);
+        String absPathAndQuery = HttpRequestUtils.parseAbsPathAndQuery(line);
+        assertThat(HttpRequestUtils.generateFilePath(absPathAndQuery)).isEqualTo(HttpRequestUtils.ROOT_FILE_PATH + INDEX_URL);
     }
 }
