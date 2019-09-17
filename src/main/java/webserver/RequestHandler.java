@@ -2,9 +2,11 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.FileIoUtils;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
@@ -14,6 +16,8 @@ public class RequestHandler implements Runnable {
     private static final String SPACE = " ";
     private static final int FIRST_LINE_INDEX = 0;
     private static final int PATH_INDEX = 1;
+    private static final String TEMPLATES_PATH = "./templates";
+    private static final String STATIC_PATH = "./static";
 
     private Socket connection;
 
@@ -26,16 +30,13 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            String requestHeader = getRequestHeader(in);
+            final String requestHeader = getRequestHeader(in);
             logger.info(requestHeader);
-            String path = extractRequestPath(requestHeader);
-            logger.info("path: {}", path);
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
+            final byte[] body = readBody(requestHeader);
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = "Hello World".getBytes();
             response200Header(dos, body.length);
             responseBody(dos, body);
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException | NullPointerException e) {
             logger.error(e.getMessage());
         }
     }
@@ -45,7 +46,7 @@ public class RequestHandler implements Runnable {
         final BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         final StringBuilder builder = new StringBuilder();
         while (true) {
-            String line = reader.readLine();
+            final String line = reader.readLine();
             if (Objects.isNull(line) || "".equals(line)) {
                 break;
             }
@@ -56,6 +57,20 @@ public class RequestHandler implements Runnable {
 
     private String extractRequestPath(final String requestHeader) {
         return requestHeader.split(NEW_LINE)[FIRST_LINE_INDEX].split(SPACE)[PATH_INDEX];
+    }
+
+    private String makeFilePath(final String requestHeader, final String prefix) {
+        final String requestPath = extractRequestPath(requestHeader);
+        final String pathEnd = (requestPath.endsWith("/") || "".equals(requestPath)) ? "index.html" : "";
+        return prefix + requestPath + pathEnd;
+    }
+
+    private byte[] readBody(final String requestHeader) throws IOException, URISyntaxException, NullPointerException {
+        try {
+            return FileIoUtils.loadFileFromClasspath(makeFilePath(requestHeader, STATIC_PATH));
+        } catch (IOException | URISyntaxException | NullPointerException e) {
+            return FileIoUtils.loadFileFromClasspath(makeFilePath(requestHeader, TEMPLATES_PATH));
+        }
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
