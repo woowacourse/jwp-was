@@ -14,17 +14,41 @@ public class RequestController {
     public static Response handle(Request request) {
         try {
             logger.info(request.getUrl());
+
             String url = request.getUrl();
+            Response staticResponse = serveStaticFile(url);
+            if (staticResponse != null) {
+                return staticResponse;
+            }
+            
             if ("/index.html".equals(url)) {
                 byte[] body = FileIoUtils.loadFileFromClasspath("./templates/index.html");
                 Map<String, String> headers = new HashMap<>();
-                headers.put("Content-Type", "text/html;charset=utf-8");
                 headers.put("Content-Length", String.valueOf(body.length));
-                return new Response(200, "OK", headers, body);
+                return new Response(200, "OK", MediaType.HTML, headers, body);
             }
         } catch (Exception e) {
             logger.error("Error is occurred while processing request", e);
         }
-        return null;
+        return new Response(404, "NOT FOUND", null, null, null);
+    }
+
+    private static Response serveStaticFile(String url) {
+        try {
+            byte[] body = FileIoUtils.loadFileFromClasspath("./static" + url);
+            Map<String, String> headers = new HashMap<>();
+
+            MediaType contentType = extractExtension(url);
+            headers.put("Content-Length", String.valueOf(body.length));
+            return new Response(200, "OK", contentType, headers, body);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private static MediaType extractExtension(String url) {
+        String[] tokens = url.split("\\.");
+        return MediaType.fromExtension(tokens[tokens.length - 1])
+            .orElseThrow(() -> new IllegalArgumentException("지원되지 않는 확장자 입니다."));
     }
 }
