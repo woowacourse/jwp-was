@@ -11,5 +11,5 @@
 요구사항 1
 
 - [x] request Header 전체 출력
-- [ ] request Header에서 url path 추출
+- [x] request Header에서 url path 추출
 - [ ] file 읽기
