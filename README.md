@@ -7,3 +7,9 @@
 
 ## 우아한테크코스 코드리뷰
 * [온라인 코드 리뷰 과정](https://github.com/woowacourse/woowacourse-docs/blob/master/maincourse/README.md)
+
+## 1단계 - HTTP 웹 서버 구현
+1. http://localhost:8080/index.html 로 접속했을 때 webapp 디렉토리의 index.html 파일을 읽어 클라이언트에 응답한다.
+- [ ] Request Header 출력하기
+- [ ] Header의 첫번째 라인에서 요청 URL 추출하기
+- [ ] path에 해당하는 파일 읽어서 응답하기
