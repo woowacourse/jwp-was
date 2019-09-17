@@ -12,4 +12,4 @@
 
 - [x] request Header 전체 출력
 - [x] request Header에서 url path 추출
-- [ ] file 읽기
+- [x] file 읽기
