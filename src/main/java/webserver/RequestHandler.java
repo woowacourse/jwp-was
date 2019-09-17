@@ -23,30 +23,41 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
+            Response res = RequestController.handle(RequestParser.parse(in));
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = "Hello World".getBytes();
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+            writeResponse(dos, res);
+        } catch (IOException e) {
+            logger.error("Error: ", e);
+        }
+    }
+
+    private void writeResponse(DataOutputStream dos, Response response) {
+        try {
+            writeHeader(dos, response);
+            responseBody(dos, response);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void writeHeader(DataOutputStream dos, Response response) throws IOException {
+        dos.writeBytes(String.format("HTTP/1.1 %d %s", response.getStatusCode(), response.getStatusText()));
+        response.getHeaderKeys()
+            .forEach(k -> writeHeaderLine(dos, response.getHeader(k)));
+        dos.writeBytes("\r\n");
+    }
+
+    private void writeHeaderLine(DataOutputStream dos, String header) {
         try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
+            dos.writeBytes(header + "\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void responseBody(DataOutputStream dos, byte[] body) {
+    private void responseBody(DataOutputStream dos, Response response) {
         try {
-            dos.write(body, 0, body.length);
+            dos.write(response.getBody(), 0, response.getBody().length);
             dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
