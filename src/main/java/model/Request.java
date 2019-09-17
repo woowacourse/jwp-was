@@ -1,34 +1,33 @@
 package model;
 
+import exception.NotFoundRequestElementException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.RequestHandler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class Request {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
-    private List<String> request;
+    private Map<String, String> request;
+    private String url;
 
-    public String getUrl() {
-        return request.get(0).split(" ")[1];
-    }
+    public Request(BufferedReader bufferedReader) throws IOException {
+        request = new HashMap<>();
 
-    public void print(InputStream in) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         String line = bufferedReader.readLine();
-
-        request = new ArrayList<>();
+        url = line.split(" ")[1];
 
         while (!"".equals(line)) {
-            request.add(line);
+            String key = line.split(":")[0].trim();
+            String value = line.split(":")[1].trim();
+
+            request.put(key, value);
             logger.debug("header : {}", line);
 
             line = bufferedReader.readLine();
@@ -37,5 +36,19 @@ public class Request {
                 return;
             }
         }
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public String getRequestElement(String key) {
+        String element = request.get(key);
+
+        if (Objects.isNull(element)) {
+            throw new NotFoundRequestElementException();
+        }
+
+        return element;
     }
 }

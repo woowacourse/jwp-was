@@ -5,10 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.net.URISyntaxException;
 
@@ -16,11 +13,9 @@ public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
-    private Request request;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
-        this.request = new Request();
     }
 
     public void run() {
@@ -28,7 +23,7 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            request.print(in);
+            Request request = new Request(new BufferedReader(new InputStreamReader(in)));
 
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + request.getUrl());
