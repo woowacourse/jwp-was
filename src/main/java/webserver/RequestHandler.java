@@ -22,13 +22,17 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-            String message;
+            String line = bufferedReader.readLine();
+            String url = line.split(" ")[1];
 
-            while (!"".equals(message = bufferedReader.readLine())) {
-                if (message == null) {
+            while (!"".equals(line)) {
+                logger.debug("header : {}", line);
+
+                line = bufferedReader.readLine();
+
+                if (line == null) {
                     return;
                 }
-                logger.debug("header : {}", message);
             }
 
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
