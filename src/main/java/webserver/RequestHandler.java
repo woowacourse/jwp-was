@@ -5,9 +5,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.URISyntaxException;
 
+import http.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.FileIoUtils;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -25,10 +28,22 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = "Hello World".getBytes();
+
+            Request request = new Request(in);
+            String path = request.getPath();
+            byte[] body;
+            if (path.contains("htm")) {
+                body = FileIoUtils.loadFileFromClasspath("./templates" + request.getPath());
+            } else if (path.contains("css")) {
+                body = FileIoUtils.loadFileFromClasspath("./static/css" + request.getPath());
+            } else {
+                // TODO: servlet
+                body = new byte[10];
+            }
+
             response200Header(dos, body.length);
             responseBody(dos, body);
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }
