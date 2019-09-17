@@ -10,6 +10,10 @@ import java.util.Objects;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final String NEW_LINE = "/n";
+    private static final String SPACE = " ";
+    private static final int FIRST_LINE_INDEX = 0;
+    private static final int PATH_INDEX = 1;
 
     private Socket connection;
 
@@ -22,7 +26,10 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            logger.info(getRequestHeader(in));
+            String requestHeader = getRequestHeader(in);
+            logger.info(requestHeader);
+            String path = extractRequestPath(requestHeader);
+            logger.info("path: {}", path);
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = "Hello World".getBytes();
@@ -33,6 +40,7 @@ public class RequestHandler implements Runnable {
         }
     }
 
+    // TODO 메서드명 다시 고민하기
     private String getRequestHeader(final InputStream inputStream) throws IOException {
         final BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         final StringBuilder builder = new StringBuilder();
@@ -44,6 +52,10 @@ public class RequestHandler implements Runnable {
             builder.append(line).append("\n");
         }
         return builder.toString();
+    }
+
+    private String extractRequestPath(final String requestHeader) {
+        return requestHeader.split(NEW_LINE)[FIRST_LINE_INDEX].split(SPACE)[PATH_INDEX];
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
