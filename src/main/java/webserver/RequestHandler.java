@@ -38,9 +38,21 @@ public class RequestHandler implements Runnable {
             logger.debug("request header: {}", requestHeader);
             if (requestHeader.getRequestMethodType() == RequestMethodType.GET) {
                 String path = requestHeader.getRequestUri().split("\\?")[0];
-
+                // TODO: 2019-09-18 정적 html이 올때에는 template을 찾는게 아닌 static을 찾아야함.
+                if (path.contains(".css")) {
+                    body = FileIoUtils.loadFileFromClasspath(String.format("./static%s", path));
+                    response200Header(dos, body.length, "text/css");
+                    responseBody(dos, body);
+                }
+                if (path.contains(".js")) {
+                    body = FileIoUtils.loadFileFromClasspath(String.format("./static%s", path));
+                    response200Header(dos, body.length, "application/javascript");
+                    responseBody(dos, body);
+                }
                 if (path.contains(".html")) {
                     body = FileIoUtils.loadFileFromClasspath(String.format("./templates%s", path));
+                    response200Header(dos, body.length,"text/html");
+                    responseBody(dos, body);
                 }
 
                 if (path.equals("/create")) {
@@ -56,10 +68,9 @@ public class RequestHandler implements Runnable {
 
                     DataBase.addUser(user);
                     logger.debug("user: " + user);
+                    response200Header(dos, body.length,"text/html");
+                    responseBody(dos, body);
                 }
-
-                response200Header(dos, body.length);
-                responseBody(dos, body);
             }
 
             if (requestHeader.getRequestMethodType() == RequestMethodType.POST) {
@@ -102,10 +113,10 @@ public class RequestHandler implements Runnable {
         return kv;
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Type: " + contentType + "; charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
@@ -134,9 +145,10 @@ public class RequestHandler implements Runnable {
 
     private RequestHeader createRequestHeader(BufferedReader br) throws IOException {
         String line = br.readLine();
+        logger.debug(line);
+
         String methodType = line.split(" ")[0];
         String path = line.split(" ")[1];
-
         if ("GET".equals(methodType)) {
             return new RequestHeader(RequestMethodType.GET, path);
         }

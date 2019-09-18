@@ -30,6 +30,22 @@ public class RequestHandlerTest {
     }
 
     @Test
+    void css_확인() throws IOException {
+        Socket socket = mock(Socket.class);
+        String request = "GET ./css/styles.css HTTP/1.1\n" +
+                "Host: localhost:8080\n" +
+                "Accept: text/css,*/*;q=0.1\n" +
+                "Connection: keep-alive\n";
+        InetAddress mockInetAddress = mock(InetAddress.class);
+        when(socket.getInetAddress()).thenReturn(mockInetAddress);
+        when(socket.getPort()).thenReturn(8080);
+        when(socket.getInputStream()).thenReturn(IOUtils.toInputStream(request, "UTF-8"));
+        requestHandler = new RequestHandler(socket);
+
+        requestHandler.run();
+    }
+
+    @Test
     void get_회원가입요청() throws IOException {
         Socket socket = mock(Socket.class);
         String request = "GET /user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net HTTP/1.1\n" +
