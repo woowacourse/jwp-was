@@ -1,5 +1,7 @@
 package http.view;
 
+import http.model.HttpResponse;
+
 public interface Resolver {
-    Object resolve(ModelAndView modelAndView);
+    HttpResponse resolve(ModelAndView modelAndView);
 }

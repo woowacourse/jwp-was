@@ -1,5 +1,7 @@
 package http.view;
 
+import http.model.HttpResponse;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +16,7 @@ public class ViewHandler {
         resolvers.add(viewResolver);
     }
 
-    public byte[] handle(ModelAndView modelAndView) {
-        return (byte[]) resolvers.get(0).resolve(modelAndView);
+    public HttpResponse handle(ModelAndView modelAndView) {
+        return resolvers.get(0).resolve(modelAndView);
     }
 }
