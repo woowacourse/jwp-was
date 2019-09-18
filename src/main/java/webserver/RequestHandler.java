@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-
+    private final UserController userController = UserController.getInstance();
     private Socket connection;
 
     public RequestHandler(Socket connectionSocket) {
@@ -27,10 +27,15 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             HttpRequest httpRequest = new HttpRequest(br);
 
-            String path = httpRequest.getUrl();
+            String path = httpRequest.getPath();
+
+            if ("/user/create".equals(path)) {
+                userController.create(httpRequest.getRequestParameter());
+                path = "index.html";
+            }
 
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = FileIoUtils.loadFileFromClasspath("../resources/templates/" + path);
+            byte[] body = FileIoUtils.loadFileFromClasspath("./templates/" + path);
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException | URISyntaxException e) {
