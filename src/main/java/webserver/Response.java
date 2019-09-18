@@ -5,15 +5,13 @@ import java.util.Set;
 
 public class Response {
 
-    private final int statusCode;
-    private final String statusText;
+    private final Status status;
     private final MediaType mediaType;
     private final Map<String, String> headers;
     private final byte[] body;
 
-    public Response(int statusCode, String statusText, MediaType mediaType, Map<String, String> headers, byte[] body) {
-        this.statusCode = statusCode;
-        this.statusText = statusText;
+    public Response(Status status, MediaType mediaType, Map<String, String> headers, byte[] body) {
+        this.status = status;
         this.mediaType = mediaType;
         this.headers = headers;
         this.body = body;
@@ -27,12 +25,8 @@ public class Response {
         return headers.get(key);
     }
 
-    public int getStatusCode() {
-        return statusCode;
-    }
-
-    public String getStatusText() {
-        return statusText;
+    public Status getStatus() {
+        return status;
     }
 
     public String getMediaType() {

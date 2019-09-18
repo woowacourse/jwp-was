@@ -31,12 +31,4 @@ public class Request {
     public byte[] getBody() {
         return body;
     }
-
-    @Override
-    public String toString() {
-        if (body == null) {
-            return String.format("%s %s\nEmpty body", method, url);
-        }
-        return String.format("%s %s\n%s", method, url, new String(body));
-    }
 }

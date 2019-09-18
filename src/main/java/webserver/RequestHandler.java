@@ -10,7 +10,11 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 public class RequestHandler implements Runnable {
+
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final String HTTP_VERSION = "HTTP/1.1";
+    private static final String CONTENT_TYPE_HEADER_KEY = "Content-type";
+    private static final String NEXT_LINE = "\r\n";
 
     private Socket connection;
 
@@ -23,8 +27,8 @@ public class RequestHandler implements Runnable {
             connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            Response res = RequestController.handle(RequestParser.parse(in));
             DataOutputStream dos = new DataOutputStream(out);
+            Response res = RequestDispatcher.handle(RequestParser.parse(in));
             writeResponse(dos, res);
         } catch (IOException e) {
             logger.error("Error: ", e);
@@ -34,38 +38,46 @@ public class RequestHandler implements Runnable {
     private void writeResponse(DataOutputStream dos, Response response) {
         try {
             writeHeader(dos, response);
-            responseBody(dos, response);
+            writeBody(dos, response);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
     private void writeHeader(DataOutputStream dos, Response response) throws IOException {
-        dos.writeBytes(String.format("HTTP/1.1 %d %s\r\n", response.getStatusCode(), response.getStatusText()));
-        if (response.getMediaType() != null) {
-            writeHeaderLine(dos, String.format("Content-Type: %s", response.getMediaType()));
-        }
+        dos.writeBytes(String.format("%s %d %s%s", HTTP_VERSION, response.getStatus().getCode(), response.getStatus().getText(), NEXT_LINE));
+        writeContentType(dos, response);
         response.getHeaderKeys()
             .forEach(k -> writeHeaderLine(dos, k + ": " + response.getHeader(k)));
-        dos.writeBytes("\r\n");
+        dos.writeBytes(NEXT_LINE);
+    }
+
+    private void writeContentType(DataOutputStream dos, Response response) {
+        if (response.getMediaType() != null) {
+            writeHeaderLine(dos, String.format("%s: %s", CONTENT_TYPE_HEADER_KEY, response.getMediaType()));
+        }
     }
 
     private void writeHeaderLine(DataOutputStream dos, String header) {
         try {
-            dos.writeBytes(header + "\r\n");
+            dos.writeBytes(header + NEXT_LINE);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void responseBody(DataOutputStream dos, Response response) {
+    private void writeBody(DataOutputStream dos, Response response) {
         try {
-            if (response.getBody() != null) {
-                dos.write(response.getBody(), 0, response.getBody().length);
-            }
+            writeBodyIfExist(dos, response);
             dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
+        }
+    }
+
+    private void writeBodyIfExist(DataOutputStream dos, Response response) throws IOException {
+        if (response.getBody() != null) {
+            dos.write(response.getBody(), 0, response.getBody().length);
         }
     }
 }

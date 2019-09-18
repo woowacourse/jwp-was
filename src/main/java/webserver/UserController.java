@@ -8,17 +8,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UserController {
+
+    static final String USER_CREATE_URL = "/user/create";
+    private static final String USER_ID = "userId";
+    private static final String PASSWORD = "password";
+    private static final String NAME = "name";
+    private static final String EMAIL = "email";
+    private static final String LOCATION_HEADER_KEY = "Location";
+
     public static Response signUp(Request req) {
         String body = new String(req.getBody());
         Map<String, String> parsedBody = UrlEncodedBodyParser.parse(body);
-        User user = new User(parsedBody.get("userId"),
-            parsedBody.get("password"),
-            parsedBody.get("name"),
-            parsedBody.get("email"));
+        User user = new User(parsedBody.get(USER_ID),
+            parsedBody.get(PASSWORD),
+            parsedBody.get(NAME),
+            parsedBody.get(EMAIL));
         DataBase.addUser(user);
 
         Map<String, String> headers = new HashMap<>();
-        headers.put("Location", "/index.html");
-        return new Response(302, "Found", null, headers, null);
+        headers.put(LOCATION_HEADER_KEY, "/index.html");
+        return new Response(Status.FOUND, null, headers, null);
     }
 }

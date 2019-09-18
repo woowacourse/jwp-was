@@ -7,32 +7,37 @@ import utils.FileIoUtils;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RequestController {
+import static webserver.UserController.USER_CREATE_URL;
 
-    private static final Logger logger = LoggerFactory.getLogger(RequestController.class);
+public class RequestDispatcher {
+
+    private static final Logger logger = LoggerFactory.getLogger(RequestDispatcher.class);
+    private static final String TEMPLATES_DIR = "./templates";
+    private static final String STATIC_DIR = "./static";
+    private static final String CONTENT_LENGTH_HEADER_KEY = "Content-Length";
+    private static final String MESSAGE_UNSUPPORTED_EXTENSION = "지원되지 않는 확장자 입니다.";
+    private static final String EXTENSION_DELIMITER = "\\.";
 
     public static Response handle(Request request) {
         try {
-            logger.info(request.toString());
-
             String url = request.getUrl();
-            Response response = serveFile("./static" + url);
+            Response response = serveFile(STATIC_DIR + url);
             if (response != null) {
                 return response;
             }
 
-            response = serveFile("./templates" + url);
+            response = serveFile(TEMPLATES_DIR + url);
             if (response != null) {
                 return response;
             }
 
-            if ("/user/create".equals(url)) {
+            if (USER_CREATE_URL.equals(url)) {
                 return UserController.signUp(request);
             }
         } catch (Exception e) {
             logger.error("Error is occurred while processing request", e);
         }
-        return new Response(404, "NOT FOUND", null, null, null);
+        return new Response(Status.NOT_FOUND, null, null, null);
     }
 
     private static Response serveFile(String url) {
@@ -41,16 +46,16 @@ public class RequestController {
             Map<String, String> headers = new HashMap<>();
 
             MediaType contentType = extractExtension(url);
-            headers.put("Content-Length", String.valueOf(body.length));
-            return new Response(200, "OK", contentType, headers, body);
+            headers.put(CONTENT_LENGTH_HEADER_KEY, String.valueOf(body.length));
+            return new Response(Status.OK, contentType, headers, body);
         } catch (Exception e) {
             return null;
         }
     }
 
     private static MediaType extractExtension(String url) {
-        String[] tokens = url.split("\\.");
+        String[] tokens = url.split(EXTENSION_DELIMITER);
         return MediaType.fromExtension(tokens[tokens.length - 1])
-            .orElseThrow(() -> new IllegalArgumentException("지원되지 않는 확장자 입니다."));
+                .orElseThrow(() -> new IllegalArgumentException(MESSAGE_UNSUPPORTED_EXTENSION));
     }
 }
