@@ -17,9 +17,9 @@ public class HttpRequest {
     private static final int START_LINE_SIZE = 3;
 
     private HttpMethod method;
-    private String url;
+    private HttpUrl url;
     private HttpVersion version;
-    private Map<String, String> attributes;
+    private Map<String, String> headerAttributes; //Todo: 클래스 분리
 
     private HttpRequest(BufferedReader bufferedReader) throws IOException {
         List<String> lines = parseRequest(bufferedReader);
@@ -28,7 +28,7 @@ public class HttpRequest {
         String[] parsedStartLine = parseStartLine(lines.get(START_LINE_INDEX));
         checkStartLine(parsedStartLine);
         method = HttpMethod.resolve(parsedStartLine[HTTP_METHOD_INDEX]);
-        url = parsedStartLine[PATH_INDEX];
+        url = new HttpUrl(parsedStartLine[PATH_INDEX]);
         version = HttpVersion.resolve(parsedStartLine[HTTP_VERSION_INDEX]);
     }
 
@@ -65,7 +65,7 @@ public class HttpRequest {
         return method;
     }
 
-    public String getUrl() {
+    public HttpUrl getUrl() {
         return url;
     }
 
@@ -75,6 +75,6 @@ public class HttpRequest {
 
     @Override
     public String toString() {
-        return "\n" + method + " " + url + " " + version + "\n";
+        return "\n" + method + " " + url.getPath() + " " + version + "\n";
     }
 }

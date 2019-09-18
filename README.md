@@ -13,8 +13,10 @@
     - [x] Request Header 출력하기
     - [x] Header의 첫번째 라인에서 요청 URL 추출하기
     - [x] path에 해당하는 파일 읽어서 응답하기
-2. "회원가입" 메뉴를 클릭하면 http://localhost:8080/user/form.html 으로 이동하면서 회원가입할 수 있다.
-    - [ ] 요청 URL에서 접근 경로와 이름=값을 추출해 User 클래스에 담는다.
+2. "회원가입" 메뉴를 클릭하면 http://localhost:8080/user/form.html 으로 이동하면서 회원가입할 수 있다. 회원가입한다.
+    - [x] "회원가입" 메뉴를 클릭하면 http://localhost:8080/user/form.html 으로 이동한다.
+    - [x] 요청 URL에서 접근 경로와 이름=값을 추출
+    - [ ] 추출한 이름=값을 User 클래스에 담는다.
 3. http://localhost:8080/user/form.html 파일의 form 태그 method를 get에서 post로 수정한 후 회원가입 기능이 정상적으로 동작하도록 구현한다.
     - [ ] Request Body에서 회원가입시 입력한 모든 데이터를 추출해 User 객체를 생성한다.
 4. "회원가입"을 완료하면 /index.html 페이지로 이동한다.
