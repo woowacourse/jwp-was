@@ -1,32 +1,36 @@
 package http.request;
 
+import http.common.HttpBody;
+import http.common.HttpHeader;
 import http.common.HttpMethod;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import webserver.RequestHandler;
+
+import java.io.BufferedReader;
+import java.io.IOException;
 
 public class HttpRequest {
+    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+
     private RequestStartLine requestStartLine;
-    private RequestHeader requestHeader;
-    private RequestBody requestBody;
+    private HttpHeader httpHeader;
+    private HttpBody httpBody;
 
-    private HttpRequest(RequestStartLine requestStartLine,
-                       RequestHeader requestHeader,
-                       RequestBody requestBody) {
-            this.requestStartLine = requestStartLine;
-            this.requestHeader = requestHeader;
-            this.requestBody = requestBody;
-    }
-
-    public static HttpRequest of(RequestStartLine requestStartLine,
-                                 RequestHeader requestHeader,
-                                 RequestBody requestBody) {
-        return new HttpRequest(requestStartLine,
-                requestHeader,
-                requestBody);
+    public HttpRequest(BufferedReader br) {
+        try {
+            requestStartLine = RequestStartLine.of(br);
+            httpHeader = HttpHeader.of(br);
+            httpBody = HttpBody.of(br, httpHeader);
+        } catch (IOException e) {
+            logger.debug("error : {}", e.getMessage());
+        }
     }
 
     public String getUrl() {
         String path = requestStartLine.getPath();
         String protocol = requestStartLine.getProtocol();
-        String host = requestHeader.getHeader("Host");
+        String host = httpHeader.getHeader("Host");
 
         return String.format("%s://%s%s", protocol, host, path);
     }
@@ -39,19 +43,15 @@ public class HttpRequest {
         return requestStartLine.getPath();
     }
 
-    public boolean isGet() {
-        return requestStartLine.getMethod().equals(HttpMethod.GET);
-    }
-
-    public boolean isPost() {
-        return requestStartLine.getMethod().equals(HttpMethod.POST);
+    public HttpMethod getMethod() {
+        return requestStartLine.getMethod();
     }
 
     public String getHeader(String headerKey) {
-        return requestHeader.getHeader(headerKey);
+        return httpHeader.getHeader(headerKey);
     }
 
     public String getEntityValue(String entityKey) {
-        return requestBody.getEntityValue(entityKey);
+        return httpBody.getEntityValue(entityKey);
     }
 }
