@@ -1,6 +1,9 @@
 package webserver;
 
+import db.DataBase;
 import http.HttpRequest;
+import http.QueryParams;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
@@ -28,6 +31,10 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = HttpRequest.of(buffer);
             logger.debug(httpRequest.toString());
 
+            if (httpRequest.getUrl().getPath().equals("/user/create")) {
+                createUser(httpRequest);
+            }
+
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = FileIoUtils.loadFileFromClasspath(DEFAULT_PATH + httpRequest.getUrl().getPath());
             response200Header(dos, body.length);
@@ -35,6 +42,13 @@ public class RequestHandler implements Runnable {
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private void createUser(HttpRequest httpRequest) {
+        QueryParams queryParams = httpRequest.getUrl().getQueryParams();
+        User user = new User(queryParams.getParam("userId"), queryParams.getParam("password"), queryParams.getParam("name"), queryParams.getParam("email"));
+        DataBase.addUser(user);
+        logger.debug(DataBase.findUserById(user.getUserId()).toString());
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
