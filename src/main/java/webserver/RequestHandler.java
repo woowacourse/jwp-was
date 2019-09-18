@@ -1,5 +1,6 @@
 package webserver;
 
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
@@ -28,6 +29,10 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest request = new HttpRequest(in);
             String filePath = request.getFilePath();
+            if (request.getAbsPath().equals("/user/create")) {
+                User user = new User(request.getParam("userId"), request.getParam("password"), request.getParam("name"), request.getParam("email"));
+                logger.debug(">>> User : {}", user);
+            }
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
             response200Header(dos, body.length);
