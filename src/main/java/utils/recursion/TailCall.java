@@ -1,20 +1,19 @@
 package utils;
 
-public class Trampoline<T>
+@FunctionalInterface
+public interface TailCall<T>
 {
-    public T execute() {
-        Trampoline<T> trampoline = this;
+    default T execute() {
+        TailCall<T> trampoline = this;
         while (trampoline.done() == null) {
             trampoline = trampoline.call();
         }
         return trampoline.done();
     }
 
-    public Trampoline<T> call() {
-        return null;
-    }
+    TailCall<T> call();
 
-    public T done() {
+    default T done() {
         return null;
     }
 }
