@@ -1,15 +1,16 @@
 package webserver;
 
+import db.DataBase;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
+import utils.IOUtils;
 
 import java.io.*;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,51 +30,74 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-            String line = br.readLine();
+            RequestHeader requestHeader = createRequestHeader(br);
+
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = new byte[]{};
 
-            String path = line.split(" ")[1];
-            if(path.contains(".html")) {
-                body = FileIoUtils.loadFileFromClasspath(String.format("./templates%s", path));
-            } else {
-                String decodedUri = URLDecoder.decode(path, "UTF-8");
-                logger.debug(decodedUri);
+            logger.debug("request header: {}", requestHeader);
+            if (requestHeader.getRequestMethodType() == RequestMethodType.GET) {
+                String path = requestHeader.getRequestUri().split("\\?")[0];
 
-                String[] params = decodedUri.split("\\?")[1].split("&");
-                logger.debug(Arrays.toString(params));
-
-                Map<String,String> kv = new HashMap<>();
-                for (String param : params) {
-                    String[] tmp = param.split("=");
-                    kv.put(tmp[0], tmp[1]);
+                if (path.contains(".html")) {
+                    body = FileIoUtils.loadFileFromClasspath(String.format("./templates%s", path));
                 }
-                logger.debug("kv: " + kv);
 
-                User user = new User(
-                        kv.get("userId"),
-                        kv.get("password"),
-                        kv.get("name"),
-                        kv.get("email"));
+                if (path.equals("/create")) {
+                    String requestParams = requestHeader.getRequestUri().split("\\?")[1];
+                    Map<String, String> kv = convertRequestDataToMap(requestParams);
+                    logger.debug("kv: " + kv);
 
-                logger.debug("user: " + user);
+                    User user = new User(
+                            kv.get("userId"),
+                            kv.get("password"),
+                            kv.get("name"),
+                            kv.get("email"));
+
+                    DataBase.addUser(user);
+                    logger.debug("user: " + user);
+                }
             }
 
-            while (!"".equals(line)) {
-                logger.debug(line);
-                if (line == null) {
-                    return;
+            if (requestHeader.getRequestMethodType() == RequestMethodType.POST) {
+                String path = requestHeader.getRequestUri();
+                if (path.equals("/create")) {
+                    String requestParams = requestHeader.getRequestBody();
+                    Map<String, String> kv = convertRequestDataToMap(requestParams);
+                    logger.debug("kv: " + kv);
+
+                    User user = new User(
+                            kv.get("userId"),
+                            kv.get("password"),
+                            kv.get("name"),
+                            kv.get("email"));
+
+                    DataBase.addUser(user);
+                    logger.debug("user: " + user);
                 }
-                line = br.readLine();
             }
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+
+            return;
+//            response200Header(dos, body.length);
+//            responseBody(dos, body);
         } catch (IOException e) {
             logger.error(e.getMessage());
         } catch (URISyntaxException e) {
             logger.error(e.getMessage());
             e.printStackTrace();
         }
+
+    }
+
+    private Map<String, String> convertRequestDataToMap(String requestParams) throws UnsupportedEncodingException {
+        String decodedParams = URLDecoder.decode(requestParams, "UTF-8");
+        logger.debug(decodedParams);
+        Map<String, String> kv = new HashMap<>();
+        for (String param : decodedParams.split("&")) {
+            String[] tmp = param.split("=");
+            kv.put(tmp[0], tmp[1]);
+        }
+        return kv;
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
@@ -94,5 +118,32 @@ public class RequestHandler implements Runnable {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private RequestHeader createRequestHeader(BufferedReader br) throws IOException {
+        String line = br.readLine();
+        String methodType = line.split(" ")[0];
+        String path = line.split(" ")[1];
+
+        if ("GET".equals(methodType)) {
+            return new RequestHeader(RequestMethodType.GET, path);
+        }
+
+        if ("POST".equals(methodType)) {
+            int contentLength = 0;
+            while (!"".equals(line)) {
+                logger.debug(line);
+                if (line == null) {
+                    break;
+                }
+                if(line.contains("Content-Length:")) {
+                    contentLength = Integer.parseInt(line.split(" ")[1]);
+                }
+                line = br.readLine();
+            }
+            return new RequestHeader(RequestMethodType.POST, path, IOUtils.readData(br, contentLength));
+        }
+
+        throw new NotSupportedMethodTypeException();
     }
 }
