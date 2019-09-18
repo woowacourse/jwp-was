@@ -1,4 +1,4 @@
-package http;
+package http.view;
 
 public class ModelResolver implements Resolver {
     @Override

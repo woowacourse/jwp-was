@@ -1,6 +1,14 @@
 package webserver;
 
-import http.*;
+import http.controller.FileResourceRequestHandler;
+import http.controller.HttpRequestHandler;
+import http.controller.HttpRequestHandlers;
+import http.model.HttpMethod;
+import http.model.HttpUri;
+import http.supoort.RequestMapping;
+import http.view.ModelResolver;
+import http.view.ViewHandler;
+import http.view.ViewResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +27,7 @@ public class WebServer {
             port = Integer.parseInt(args[0]);
         }
         HttpRequestHandlers httpRequestHandlers = new HttpRequestHandlers();
-        HttpRequestHandler fileHandler = new FileResourceHandler();
+        HttpRequestHandler fileHandler = new FileResourceRequestHandler();
         httpRequestHandlers.addHandler(new RequestMapping(HttpMethod.GET, new HttpUri("/index.html")), fileHandler);
         httpRequestHandlers.addHandler(new RequestMapping(HttpMethod.GET, new HttpUri("/user/form.html")), fileHandler);
         httpRequestHandlers.addHandler(new RequestMapping(HttpMethod.GET, new HttpUri("/favicon.ico")), fileHandler);

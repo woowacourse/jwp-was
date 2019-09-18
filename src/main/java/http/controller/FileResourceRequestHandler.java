@@ -1,6 +1,11 @@
-package http;
+package http.controller;
 
-public class FileResourceHandler implements HttpRequestHandler {
+import http.model.HttpRequest;
+import http.model.HttpUri;
+import http.view.ModelAndView;
+import http.view.View;
+
+public class FileResourceRequestHandler implements HttpRequestHandler {
 
     @Override
     public ModelAndView handle(HttpRequest httpRequest) {

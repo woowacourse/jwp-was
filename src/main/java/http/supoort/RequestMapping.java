@@ -1,4 +1,7 @@
-package http;
+package http.supoort;
+
+import http.model.HttpMethod;
+import http.model.HttpUri;
 
 import java.util.Objects;
 

@@ -1,5 +1,6 @@
-package http;
+package http.supoort;
 
+import http.model.*;
 import utils.IOUtils;
 
 import java.io.InputStream;

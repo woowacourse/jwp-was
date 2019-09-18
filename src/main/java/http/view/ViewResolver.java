@@ -1,4 +1,4 @@
-package http;
+package http.view;
 
 import utils.FileIoUtils;
 

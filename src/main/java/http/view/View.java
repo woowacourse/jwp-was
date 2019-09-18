@@ -1,4 +1,6 @@
-package http;
+package http.view;
+
+import http.model.HttpUri;
 
 public class View {
     private HttpUri uri;

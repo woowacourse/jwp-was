@@ -1,4 +1,6 @@
-package http;
+package http.model;
+
+import http.supoort.RequestMapping;
 
 public class HttpRequest {
     private HttpMethod httpMethod;
@@ -24,5 +26,25 @@ public class HttpRequest {
 
     public RequestMapping getMapping() {
         return new RequestMapping(httpMethod, httpUri);
+    }
+
+    public HttpMethod getHttpMethod() {
+        return httpMethod;
+    }
+
+    public HttpUri getHttpUri() {
+        return httpUri;
+    }
+
+    public HttpParameters getParameters() {
+        return parameters;
+    }
+
+    public HttpProtocol getHttpProtocol() {
+        return httpProtocol;
+    }
+
+    public HttpHeaders getHeaders() {
+        return headers;
     }
 }
