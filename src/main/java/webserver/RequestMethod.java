@@ -1,11 +1,11 @@
 package webserver;
 
-public enum HttpMethod {
+public enum RequestMethod {
     GET(false), DELETE(false), POST(true), PUT(true);
 
     private final boolean hasBody;
 
-    private HttpMethod(boolean hasBody) {
+    private RequestMethod(boolean hasBody) {
         this.hasBody = hasBody;
     }
 
