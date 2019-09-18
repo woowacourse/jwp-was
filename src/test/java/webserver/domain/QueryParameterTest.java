@@ -24,7 +24,14 @@ class QueryParameterTest {
 
     @Test
     @DisplayName("없는 파라미터를 검색했을 때 빈 문자열을 반환")
-    void emptyQueryCheck() {
+    void nonExistQueryCheck() {
         assertThat(queryParameter.getValue("asdf")).isEqualTo("");
+    }
+
+    @Test
+    @DisplayName("빈 쿼리 파라미터가 입력된 경우")
+    void emptyQueryCheck() {
+        final QueryParameter empty = new QueryParameter("");
+        assertThat(empty.getQueries().size()).isEqualTo(0);
     }
 }
