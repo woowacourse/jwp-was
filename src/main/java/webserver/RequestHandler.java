@@ -1,7 +1,6 @@
 package webserver;
 
-import http.HttpRequestHandlers;
-import http.ModelAndView;
+import http.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,10 +15,12 @@ public class RequestHandler implements Runnable {
 
     private Socket connection;
     private HttpRequestHandlers httpRequestHandlers;
+    private ViewHandler viewHandler;
 
-    public RequestHandler(Socket connectionSocket, HttpRequestHandlers httpRequestHandlers) {
+    public RequestHandler(Socket connectionSocket, HttpRequestHandlers httpRequestHandlers, ViewHandler viewHandler) {
         this.connection = connectionSocket;
         this.httpRequestHandlers = httpRequestHandlers;
+        this.viewHandler = viewHandler;
     }
 
     public void run() {
@@ -27,16 +28,30 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
+            try {
+                HttpRequest request = HttpRequestParser.parse(in);
 
-            ModelAndView modelAndView = httpRequestHandlers.handle(in);
+                ModelAndView modelAndView = httpRequestHandlers.doService(request);
 
+                byte[] body = viewHandler.handle(modelAndView);
 
-            DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = "Hello World".getBytes();
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+                DataOutputStream dos = new DataOutputStream(out);
+
+                response200Header(dos, body.length);
+                responseBody(dos, body);
+
+            } catch (Exception e) {
+                logger.error(e.getMessage());
+                DataOutputStream dos = new DataOutputStream(out);
+                byte[] body = "ERROR_".getBytes();
+
+                response200Header(dos, body.length);
+                responseBody(dos, body);
+            }
+
         } catch (IOException e) {
             logger.error(e.getMessage());
+
         }
     }
 

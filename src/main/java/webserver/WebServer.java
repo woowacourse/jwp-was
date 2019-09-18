@@ -1,7 +1,6 @@
 package webserver;
 
-import http.FileResourceMapping;
-import http.HttpRequestHandlers;
+import http.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +18,15 @@ public class WebServer {
         } else {
             port = Integer.parseInt(args[0]);
         }
+        HttpRequestHandlers httpRequestHandlers = new HttpRequestHandlers();
+        HttpRequestHandler fileHandler = new FileResourceHandler();
+        httpRequestHandlers.addHandler(new RequestMapping(HttpMethod.GET, new HttpUri("/index.html")), fileHandler);
+        httpRequestHandlers.addHandler(new RequestMapping(HttpMethod.GET, new HttpUri("/user/form.html")), fileHandler);
+        httpRequestHandlers.addHandler(new RequestMapping(HttpMethod.GET, new HttpUri("/favicon.ico")), fileHandler);
+
+        ViewHandler viewHandler = new ViewHandler();
+        viewHandler.addResolver(new ViewResolver());
+        viewHandler.addResolver(new ModelResolver());
 
         // 서버소켓을 생성한다. 웹서버는 기본적으로 8080번 포트를 사용한다.
         try (ServerSocket listenSocket = new ServerSocket(port)) {
@@ -27,9 +35,7 @@ public class WebServer {
             // 클라이언트가 연결될때까지 대기한다.
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
-                HttpRequestHandlers httpRequestHandlers = new HttpRequestHandlers();
-                httpRequestHandlers.addHandlerMapping(new FileResourceMapping());
-                Thread thread = new Thread(new RequestHandler(connection, httpRequestHandlers));
+                Thread thread = new Thread(new RequestHandler(connection, httpRequestHandlers, viewHandler));
                 thread.start();
             }
         }
