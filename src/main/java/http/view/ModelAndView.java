@@ -20,4 +20,8 @@ public class ModelAndView {
     public String getViewLocation() {
         return this.view.getResourceLocation();
     }
+
+    public Model getModel() {
+        return model;
+    }
 }
