@@ -1,11 +1,11 @@
 package http.supoort;
 
-public class IllegalHttpRequest extends RuntimeException {
+public class IllegalHttpRequestException extends RuntimeException {
 
-    public IllegalHttpRequest() {
+    public IllegalHttpRequestException() {
     }
 
-    public IllegalHttpRequest(String message) {
+    public IllegalHttpRequestException(String message) {
         super(message);
     }
 }

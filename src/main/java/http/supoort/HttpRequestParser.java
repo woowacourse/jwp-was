@@ -44,7 +44,7 @@ public class HttpRequestParser {
 
     private static void validate(List<String> requestLines) {
         if (requestLines.size() == 0) {
-            throw new IllegalHttpRequest();
+            throw new IllegalHttpRequestException();
         }
     }
 }
