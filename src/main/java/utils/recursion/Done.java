@@ -1,4 +1,9 @@
 package utils.recursion;
 
-public class Done {
+@FunctionalInterface
+public interface Done<T> extends TailRecursion<T> {
+    @Override
+    default TailRecursion<T> call() {
+        return null;
+    }
 }

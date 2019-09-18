@@ -1,18 +1,8 @@
-package utils;
+package utils.recursion;
 
 @FunctionalInterface
-public interface TailCall<T>
-{
-    default T execute() {
-        TailCall<T> trampoline = this;
-        while (trampoline.done() == null) {
-            trampoline = trampoline.call();
-        }
-        return trampoline.done();
-    }
-
-    TailCall<T> call();
-
+public interface TailCall<T> extends TailRecursion<T> {
+    @Override
     default T done() {
         return null;
     }

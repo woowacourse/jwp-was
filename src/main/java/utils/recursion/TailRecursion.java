@@ -1,22 +1,22 @@
 package utils.recursion;
 
-public interface Recursion<T> {
+public interface TailRecursion<T> {
     default void execute() {
-        Recursion<T> trampoline = this;
+        TailRecursion<T> trampoline = this;
         while (trampoline != null) {
             trampoline = trampoline.call();
         }
     }
 
     default T get() {
-        Recursion<T> trampoline = this;
+        TailRecursion<T> trampoline = this;
         while (trampoline.done() == null) {
             trampoline = trampoline.call();
         }
         return trampoline.done();
     }
 
-    Recursion<T> call();
+    TailRecursion<T> call();
 
     T done();
 }

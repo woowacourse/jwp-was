@@ -1,9 +1,13 @@
 package utils.recursion;
 
 @FunctionalInterface
-public interface TailCall<T> extends TailRecursion<T> {
+public interface Procedure extends TailRecursion<Void> {
+    static Procedure exit() {
+        return () -> null;
+    }
+
     @Override
-    default T done() {
+    default Void done() {
         return null;
     }
 }
