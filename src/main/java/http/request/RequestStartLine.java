@@ -3,6 +3,7 @@ package http.request;
 import http.common.HttpMethod;
 import http.utils.HttpUtils;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.util.Map;
@@ -22,7 +23,8 @@ public class RequestStartLine {
         this.httpVersion = httpVersion;
     }
 
-    public static RequestStartLine of(String startLine) throws IOException {
+    public static RequestStartLine of(BufferedReader br) throws IOException {
+        String startLine = br.readLine();
         String[] token = startLine.split(BLANK);
         HttpMethod method = HttpMethod.valueOf(token[0]);
         String requestUrl = URLDecoder.decode(token[1], "UTF-8");

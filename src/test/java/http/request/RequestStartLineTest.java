@@ -4,14 +4,21 @@ import http.common.HttpMethod;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class RequestStartLineTest {
+    private static final String TEST_DIRECTORY = "./src/test/resources/";
+
     private RequestStartLine requestStartLine;
 
     @BeforeEach
     void setUp() throws Exception {
-        requestStartLine = RequestStartLine.of("GET /user/create?userId=aiden&password=password&name=aiden&email=aiden@aiden.com HTTP/1.1");
+        InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "Http_GET.txt"));
+        BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+        requestStartLine = RequestStartLine.of(br);
     }
 
     @Test
