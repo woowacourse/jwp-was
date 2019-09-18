@@ -3,6 +3,7 @@ package webserver.request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.request.requestline.HttpRequestLine;
+import webserver.request.requestline.QueryParams;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,8 +20,9 @@ public class HttpRequestParser {
     public static HttpRequest parseHttpRequest(BufferedReader br) throws IOException {
         HttpRequestLine httpRequestLine = parseHttpStatus(br);
         HttpHeaderFields httpHeaderFields = parseHeaderFields(br);
+        HttpRequestBody httpRequestBody = parseHttpRequestBody(br);
 
-        return new HttpRequest(httpRequestLine, httpHeaderFields);
+        return new HttpRequest(httpRequestLine, httpHeaderFields, httpRequestBody);
     }
 
     private static HttpRequestLine parseHttpStatus(BufferedReader br) throws IOException {
@@ -58,5 +60,10 @@ public class HttpRequestParser {
         return line != null && !EMPTY.equals(line) && !NEW_LINE.equals(line);
     }
 
+    private static HttpRequestBody parseHttpRequestBody(final BufferedReader br) throws IOException {
+        String queryString = br.readLine();
+        QueryParams queryParams = QueryStringParser.parseQueryParams(queryString);
 
+        return new HttpRequestBody(queryParams);
+    }
 }

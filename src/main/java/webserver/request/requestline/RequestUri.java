@@ -1,13 +1,11 @@
 package webserver.request.requestline;
 
-import java.util.Arrays;
+import webserver.request.QueryStringParser;
 
 public class RequestUri {
 
     private static final String QUERY_STRING_MARK = "\\?";
     private static final String EXTENSION_DELIMITER = "\\.";
-    private static final String QUERY_STRING_DELIMITER = "&";
-    private static final String PARAM_DELIMITER = "=";
     private String uri;
 
     public RequestUri(String uri) {
@@ -36,22 +34,12 @@ public class RequestUri {
     }
 
     public QueryParams findQueryParams() {
-        QueryParams queryParams = new QueryParams();
-
         if (hasQueryString()) {
             String queryString = uri.split(QUERY_STRING_MARK)[1];
-            String[] queryTokens = queryString.split(QUERY_STRING_DELIMITER);
-
-            Arrays.stream(queryTokens).forEach(queryToken -> {
-                String[] paramTokens = queryToken.split(PARAM_DELIMITER);
-                String key = paramTokens[0];
-                String value = paramTokens[1];
-
-                queryParams.addParam(key, value);
-            });
+            return QueryStringParser.parseQueryParams(queryString);
         }
 
-        return queryParams;
+        return new QueryParams();
     }
 
     public String getUri() {

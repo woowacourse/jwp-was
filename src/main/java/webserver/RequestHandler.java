@@ -1,5 +1,7 @@
 package webserver;
 
+import db.DataBase;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
@@ -46,6 +48,22 @@ public class RequestHandler implements Runnable {
                 response200Header(dos, httpRequest.findContentType(), body.length);
                 responseBody(dos, body);
             }
+
+            if (method == HttpMethod.POST) {
+                String userId = httpRequest.findRequestBodyParam("userId");
+                String password = httpRequest.findRequestBodyParam("password");
+                String name = httpRequest.findRequestBodyParam("name");
+                String email = httpRequest.findRequestBodyParam("email");
+
+                User user = new User(userId, password, name, email);
+                DataBase.addUser(user);
+
+                DataOutputStream dos = new DataOutputStream(out);
+                byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.findFilePath());
+                response200Header(dos, httpRequest.findContentType(), body.length);
+                responseBody(dos, body);
+            }
+
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
@@ -66,6 +84,17 @@ public class RequestHandler implements Runnable {
         try {
             dos.write(body, 0, body.length);
             dos.flush();
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void response201Header(DataOutputStream dos, String contentType, int lengthOfBodyContent) {
+        try {
+            dos.writeBytes("HTTP/1.1 201 Created \r\n");
+            dos.writeBytes("Content-Type: " + contentType + ";charset=utf-8\r\n");
+            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
