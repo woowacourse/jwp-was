@@ -29,8 +29,7 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            final NetworkInput networkInput = new NetworkInput(in);
-            final Request request = new Request(networkInput);
+            final Request request = new Request(new NetworkInput(in));
             final byte[] body = readBody(request);
             DataOutputStream dos = new DataOutputStream(out);
             response200Header(dos, body.length);
