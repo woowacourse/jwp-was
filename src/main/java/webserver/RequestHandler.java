@@ -1,6 +1,7 @@
 package webserver;
 
 import db.DataBase;
+import http.HttpMethod;
 import http.HttpRequest;
 import http.QueryParams;
 import model.User;
@@ -28,15 +29,15 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader buffer = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-            HttpRequest httpRequest = HttpRequest.of(buffer);
-            logger.debug(httpRequest.toString());
+            HttpRequest request = HttpRequest.of(buffer);
+            logger.debug(request.toString());
 
-            if (httpRequest.getUrl().getPath().equals("/user/create")) {
-                createUser(httpRequest);
+            if (HttpMethod.POST.match(request.getMethod()) && request.getUrl().getPath().equals("/user/create")) {
+                createUser(request.getQueryParams());
             }
 
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = FileIoUtils.loadFileFromClasspath(DEFAULT_PATH + httpRequest.getUrl().getPath());
+            byte[] body = FileIoUtils.loadFileFromClasspath(DEFAULT_PATH + request.getUrl().getPath());
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException | URISyntaxException e) {
@@ -44,9 +45,9 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void createUser(HttpRequest httpRequest) {
-        QueryParams queryParams = httpRequest.getUrl().getQueryParams();
-        User user = new User(queryParams.getParam("userId"), queryParams.getParam("password"), queryParams.getParam("name"), queryParams.getParam("email"));
+    private void createUser(QueryParams queryParams) {
+        User user = new User(queryParams.getParam("userId"), queryParams.getParam("password"),
+                queryParams.getParam("name"), queryParams.getParam("email"));
         DataBase.addUser(user);
         logger.debug(DataBase.findUserById(user.getUserId()).toString());
     }

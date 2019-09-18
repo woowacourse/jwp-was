@@ -34,7 +34,7 @@ public class HttpUrl {
         return path;
     }
 
-    public QueryParams getQueryParams() {
+    QueryParams getQueryParams() {
         return queryParams;
     }
 
