@@ -9,13 +9,15 @@ public class QueryParameter {
     private final Map<String, String> queries;
 
     public QueryParameter(final String rawQuery) {
-        this.queries = Arrays.stream(rawQuery.split("&"))
-                .map(query -> query.split("=", 2))
-                .collect(Collectors.toMap(s -> s[0], s -> s[1]));
+        this.queries = Collections.unmodifiableMap(
+                Arrays.stream(rawQuery.split("&"))
+                        .map(query -> query.split("=", 2))
+                        .collect(Collectors.toMap(s -> s[0], s -> s[1]))
+        );
     }
 
     public Map<String, String> getQueries() {
-        return Collections.unmodifiableMap(queries);
+        return queries;
     }
 
     public String getValue(final String key) {
