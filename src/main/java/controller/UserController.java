@@ -32,8 +32,8 @@ public class UserController {
         headers.put(LOCATION_HEADER_KEY, "/index.html");
 
         return Response.ResponseBuilder.createBuilder()
-                .withStatus(Status.FOUND)
-                .withHeaders(headers)
-                .build();
+            .withStatus(Status.FOUND)
+            .withHeaders(headers)
+            .build();
     }
 }

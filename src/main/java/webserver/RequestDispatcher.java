@@ -1,5 +1,6 @@
 package webserver;
 
+import controller.UserController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
@@ -7,7 +8,8 @@ import utils.FileIoUtils;
 import java.util.HashMap;
 import java.util.Map;
 
-import static webserver.UserController.USER_CREATE_URL;
+import static controller.UserController.USER_CREATE_URL;
+
 
 public class RequestDispatcher {
 
@@ -38,8 +40,8 @@ public class RequestDispatcher {
             logger.error("Error is occurred while processing request", e);
         }
         return Response.ResponseBuilder.createBuilder()
-                .withStatus(Status.NOT_FOUND)
-                .build();
+            .withStatus(Status.NOT_FOUND)
+            .build();
     }
 
     private static Response serveFile(String url) {
@@ -51,11 +53,11 @@ public class RequestDispatcher {
             headers.put(CONTENT_LENGTH_HEADER_KEY, String.valueOf(body.length));
 
             return Response.ResponseBuilder.createBuilder()
-                    .withStatus(Status.OK)
-                    .withMediaType(contentType)
-                    .withHeaders(headers)
-                    .withBody(body)
-                    .build();
+                .withStatus(Status.OK)
+                .withMediaType(contentType)
+                .withHeaders(headers)
+                .withBody(body)
+                .build();
         } catch (Exception e) {
             return null;
         }
@@ -64,6 +66,6 @@ public class RequestDispatcher {
     private static MediaType extractExtension(String url) {
         String[] tokens = url.split(EXTENSION_DELIMITER);
         return MediaType.fromExtension(tokens[tokens.length - 1])
-                .orElseThrow(() -> new IllegalArgumentException(MESSAGE_UNSUPPORTED_EXTENSION));
+            .orElseThrow(() -> new IllegalArgumentException(MESSAGE_UNSUPPORTED_EXTENSION));
     }
 }
