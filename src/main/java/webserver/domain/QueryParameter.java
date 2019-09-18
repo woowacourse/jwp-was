@@ -12,9 +12,13 @@ public class QueryParameter {
         this.queries = Collections.unmodifiableMap(
                 Arrays.stream(rawQuery.split("&"))
                         .map(query -> query.split("=", 2))
-                        .filter(query -> !query[0].isEmpty())
+                        .filter(this::queryFilter)
                         .collect(Collectors.toMap(str -> str[0], str -> str[1]))
         );
+    }
+
+    private boolean queryFilter(final String[] keyValue) {
+        return keyValue.length == 2 && !keyValue[0].isEmpty() && !keyValue[1].isEmpty();
     }
 
     public Map<String, String> getQueries() {
