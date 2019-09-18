@@ -7,7 +7,7 @@ import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class WebServer {
+public class WebServer implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
     private static final int DEFAULT_PORT = 8080;
 
@@ -21,7 +21,7 @@ public class WebServer {
         this.port = port;
     }
 
-    public void run() throws IOException {
+    public void run() {
         // 서버소켓을 생성한다. 웹서버는 기본적으로 8080번 포트를 사용한다.
         try (ServerSocket listenSocket = new ServerSocket(port)) {
             logger.info("Web Application Server started {} port.", port);
@@ -32,6 +32,8 @@ public class WebServer {
                 Thread thread = new Thread(new RequestHandler(connection));
                 thread.start();
             }
+        } catch (IOException e) {
+            throw new IllegalArgumentException();
         }
     }
 }

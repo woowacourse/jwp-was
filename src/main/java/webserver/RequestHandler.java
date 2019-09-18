@@ -1,16 +1,17 @@
 package webserver;
 
+import http.MimeType;
+import http.Request;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import utils.FileIoUtils;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
-
-import http.Request;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import utils.FileIoUtils;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -35,23 +36,26 @@ public class RequestHandler implements Runnable {
             if (path.contains("htm")) {
                 body = FileIoUtils.loadFileFromClasspath("./templates" + request.getPath());
             } else if (path.contains("css")) {
-                body = FileIoUtils.loadFileFromClasspath("./static/css" + request.getPath());
+                body = FileIoUtils.loadFileFromClasspath("./static" + request.getPath());
             } else {
                 // TODO: servlet
                 body = new byte[10];
             }
 
-            response200Header(dos, body.length);
+            String[] splitPath = path.split("\\.");
+            String contentType = splitPath[splitPath.length-1];
+
+            response200Header(dos, body.length, contentType);
             responseBody(dos, body);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Type: " + MimeType.getType(contentType) + "\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
