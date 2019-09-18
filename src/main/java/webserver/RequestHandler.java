@@ -1,5 +1,7 @@
 package webserver;
 
+import db.DataBase;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
@@ -10,6 +12,7 @@ import webserver.support.Request;
 import java.io.*;
 import java.net.Socket;
 import java.net.URISyntaxException;
+import java.util.Map;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -25,7 +28,16 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            String url = readRequestUrl(in);
+            Request request = readRequestUrl(in);
+            String url = request.extractUrl();
+            Map<String, String> map = request.extractQueryParameter(url);
+
+            if (!map.isEmpty()) {
+                User user = new User(map.get("userId"), map.get("password"), map.get("name"), map.get("email"));
+                DataBase.addUser(user);
+                logger.debug("insert user : {}", user);
+                logger.debug("user list : {}", DataBase.findAll());
+            }
 
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = FileIoUtils.loadFileFromClasspath(PathHandler.path(url));
@@ -37,11 +49,10 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private String readRequestUrl(InputStream in) throws IOException {
+    private Request readRequestUrl(InputStream in) throws IOException {
         InputStreamReader inputStreamReader = new InputStreamReader(in);
         BufferedReader br = new BufferedReader(inputStreamReader);
-        Request request = new Request(IOUtils.parseData(br));
-        return request.extractUrl();
+        return new Request(IOUtils.parseData(br));
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
