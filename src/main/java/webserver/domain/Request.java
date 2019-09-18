@@ -3,7 +3,6 @@ package webserver.domain;
 import org.slf4j.Logger;
 import webserver.view.NetworkInput;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +32,10 @@ public class Request {
         this.queryParameter = new QueryParameter((pathAndQuery.length > 1) ? pathAndQuery[1] : "");
         this.requestFields = makeFields(networkInput);
 
-        LOG.debug("Request: {}", Arrays.toString(httpMethodAndPath));
+        LOG.debug("Request - protocol: {}, path: {}, parameter: {}",
+                this.protocol,
+                this.path,
+                this.queryParameter.getQueries().toString());
     }
 
     private Map<String, String> makeFields(final NetworkInput networkInput) {
