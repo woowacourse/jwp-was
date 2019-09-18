@@ -14,6 +14,10 @@ public class HttpParameters {
         return parameters;
     }
 
+    public void addParameter(String key, String value) {
+        parameters.put(key,value);
+    }
+
     public String getParameter(String key) {
         return parameters.get(key);
     }

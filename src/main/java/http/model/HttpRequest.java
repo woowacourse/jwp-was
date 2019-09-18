@@ -1,17 +1,20 @@
 package http.model;
 
+import java.util.Map;
+
 public class HttpRequest {
     private HttpMethod httpMethod;
     private HttpUri httpUri;
     private HttpParameters parameters;
-    private HttpProtocol httpProtocol;
-    private HttpHeaders headers;
+    private HttpProtocols httpProtocol;
+    private Map<String, String> headers;
 
-    public HttpRequest(HttpMethod method, HttpUri uri, HttpParameters httpParameters, HttpProtocol protocol) {
+    public HttpRequest(HttpMethod method, HttpUri uri, HttpParameters httpParameters, HttpProtocols protocol, Map<String, String> headers) {
         httpMethod = method;
         httpUri = uri;
         parameters = httpParameters;
         httpProtocol = protocol;
+        this.headers = headers;
     }
 
     public HttpMethod getMethod() {
@@ -34,11 +37,11 @@ public class HttpRequest {
         return parameters;
     }
 
-    public HttpProtocol getHttpProtocol() {
+    public HttpProtocols getHttpProtocol() {
         return httpProtocol;
     }
 
-    public HttpHeaders getHeaders() {
+    public Map<String, String> getHeaders() {
         return headers;
     }
 }
