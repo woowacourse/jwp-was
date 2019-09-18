@@ -29,7 +29,7 @@ public class Request {
         this.httpMethod = httpMethodAndPath[0];
         this.protocol = httpMethodAndPath[2];
         this.path = pathAndQuery[0];
-        this.queryParameter = new QueryParameter((pathAndQuery.length > 1) ? pathAndQuery[1] : "");
+        this.queryParameter = new QueryParameter((pathAndQuery.length == 1) ? "" : pathAndQuery[1]);
         this.requestFields = makeFields(networkInput);
 
         LOG.debug("Request - protocol: {}, path: {}, parameter: {}",
