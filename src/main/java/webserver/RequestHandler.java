@@ -1,15 +1,17 @@
 package webserver;
 
+import http.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import utils.MimeTypesUtils;
 
-import java.io.*;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -25,24 +27,13 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-            List<String> lines = new ArrayList<>();
-            String line = br.readLine();
-            while (!"".equals(line)) {
-                if (line == null) {
-                    break;
-                }
-                lines.add(line);
-                line = br.readLine();
-            }
-            logger.info(String.join("\n", lines));
 
-            String[] tokens = lines.get(0).split(" ");
-            String path = tokens[1];
-            byte[] body = FileIoUtils.loadFileFromClasspath(path);
+            HttpRequest httpRequest = new HttpRequest(in);
+
+            byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getUri());
 
             DataOutputStream dos = new DataOutputStream(out);
-            response200Header(dos, MimeTypesUtils.getMimeType(path), body.length);
+            response200Header(dos, MimeTypesUtils.getMimeType(httpRequest.getUri()), body.length);
             responseBody(dos, body);
             dos.close();
         } catch (IOException e) {
