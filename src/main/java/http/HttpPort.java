@@ -2,6 +2,7 @@ package http;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 public class HttpPort {
@@ -25,7 +26,7 @@ public class HttpPort {
 
     public static Optional<HttpPort> of(String number) {
         try {
-            return of(Integer.parseInt(number));
+            return of(Integer.parseInt(number.trim()));
         } catch (NumberFormatException e) {
             return Optional.empty();
         }
@@ -41,5 +42,29 @@ public class HttpPort {
 
     public int number() {
         return this.number;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof HttpPort)) {
+            return false;
+        }
+        final HttpPort rhs = (HttpPort) o;
+        return this.number == rhs.number;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.number);
+    }
+
+    @Override
+    public String toString() {
+        return "HttpPort{" +
+                "number=" + this.number +
+                '}';
     }
 }

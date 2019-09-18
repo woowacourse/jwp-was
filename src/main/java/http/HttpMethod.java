@@ -14,7 +14,7 @@ public enum HttpMethod {
     TRACE("TRACE"),
     PATCH("PATCH");
 
-    final String name;
+    private final String name;
 
     HttpMethod(String name) {
         this.name = name;
@@ -22,7 +22,14 @@ public enum HttpMethod {
 
     public static Optional<HttpMethod> of(String name) {
         return Stream.of(values())
-                    .filter(x -> x.name.equals(name.toUpperCase()))
+                    .filter(x -> x.name.equals(name.toUpperCase().trim()))
                     .findAny();
+    }
+
+    @Override
+    public String toString() {
+        return "HttpMethod{" +
+                "name='" + this.name + '\'' +
+                '}';
     }
 }

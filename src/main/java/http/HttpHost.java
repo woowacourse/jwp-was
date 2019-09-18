@@ -1,17 +1,26 @@
 package http;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 public class HttpHost {
+    private static final Map<String, HttpHost> CACHE = new HashMap<>();
+
     private final String name;
     private final HttpPort port;
 
     public Optional<HttpHost> of(String host) {
+        final String key = host.trim();
         final String[] args = host.split(":");
-        final String name = args[0];
-        return (args.length > 1)
-                ? HttpPort.of(args[1]).map(x -> new HttpHost(name, port))
-                : Optional.of(new HttpHost(name, new HttpPort()));
+        final String name = args[0].trim();
+        if (name.isEmpty()) {
+            return Optional.empty();
+        }
+        return (args.length == 1)
+                ? Optional.of(CACHE.computeIfAbsent(key, k -> new HttpHost(name, new HttpPort())))
+                : HttpPort.of(args[1].trim()).map(port -> CACHE.computeIfAbsent(key, k -> new HttpHost(name, port)));
     }
 
     private HttpHost(String name, HttpPort port) {
@@ -25,5 +34,31 @@ public class HttpHost {
 
     public HttpPort port() {
         return this.port;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof HttpHost)) {
+            return false;
+        }
+        final HttpHost rhs = (HttpHost) o;
+        return Objects.equals(this.name, rhs.name) &&
+                Objects.equals(this.port, rhs.port);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.name, this.port);
+    }
+
+    @Override
+    public String toString() {
+        return "HttpHost{" +
+                "name='" + this.name + '\'' +
+                ", port=" + this.port +
+                '}';
     }
 }

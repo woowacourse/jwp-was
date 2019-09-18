@@ -9,7 +9,7 @@ public enum HttpVersion {
     HTTP_1_1(1.1),
     HTTP_2(2.0);
 
-    final double version;
+    private final double version;
 
     HttpVersion(double version) {
         this.version = version;
@@ -22,6 +22,13 @@ public enum HttpVersion {
     }
 
     public static Optional<HttpVersion> of(String version) {
-        return of(Double.parseDouble(version));
+        return of(Double.parseDouble(version.split("/")[1]));
+    }
+
+    @Override
+    public String toString() {
+        return "HttpVersion{" +
+                "version=" + this.version +
+                '}';
     }
 }
