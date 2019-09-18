@@ -13,6 +13,6 @@ public class FileResourceRequestHandler implements HttpRequestHandler {
     }
 
     private View getViewByUri(HttpUri uri) {
-        return new View(uri);
+        return new View(uri.getResourceLocation());
     }
 }

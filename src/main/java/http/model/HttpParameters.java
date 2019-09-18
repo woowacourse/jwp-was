@@ -10,6 +10,14 @@ public class HttpParameters {
         this.parameters = parameters;
     }
 
+    public Map<String, String> getParameters() {
+        return parameters;
+    }
+
+    public String getParameter(String key) {
+        return parameters.get(key);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -3,6 +3,9 @@ package webserver;
 import http.controller.FileResourceRequestHandler;
 import http.controller.HttpRequestHandler;
 import http.controller.HttpRequestHandlers;
+import http.controller.UserRequestHandler;
+import http.model.HttpMethod;
+import http.supoort.RequestMapping;
 import http.view.ModelResolver;
 import http.view.ViewHandler;
 import http.view.ViewResolver;
@@ -25,10 +28,10 @@ public class WebServer {
         }
         HttpRequestHandlers httpRequestHandlers = new HttpRequestHandlers();
         HttpRequestHandler fileHandler = new FileResourceRequestHandler();
+        HttpRequestHandler userRequestHandler = new UserRequestHandler();
 
-//        httpRequestHandlers.addHandler(new RequestMapping(HttpMethod.GET, new HttpUri("/index.html")), fileHandler);
-//        httpRequestHandlers.addHandler(new RequestMapping(HttpMethod.GET, new HttpUri("/user/form.html")), fileHandler);
-//        httpRequestHandlers.addHandler(new RequestMapping(HttpMethod.GET, new HttpUri("/favicon.ico")), fileHandler);
+        httpRequestHandlers.addHandler(new RequestMapping(HttpMethod.GET, "/*"), fileHandler);
+        httpRequestHandlers.addHandler(new RequestMapping(HttpMethod.GET, "/user/create"), userRequestHandler);
 
         ViewHandler viewHandler = new ViewHandler();
         viewHandler.addResolver(new ViewResolver());

@@ -2,6 +2,8 @@ package http.supoort;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,5 +33,11 @@ public class RegexTest {
         assertThat(matcher.find()).isFalse();
         Matcher matcher1 = pattern.matcher("/user/delete");
         assertThat(matcher1.find()).isTrue();
+    }
+
+    @Test
+    void name1() {
+        Map<String, String> map = new HashMap<>();
+        assertThat(map.get("abc")).isNull();
     }
 }
