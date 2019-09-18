@@ -14,15 +14,22 @@ public class Request {
     private static final String ROOT_URL = "/";
     private static final String INDEX_HTML = "/index.html";
 
-    private final String requestHeader;
+    private final RequestHeader requestHeader;
+    private final RequestBody requestBody;
 
-    public Request(String header) {
-        requestHeader = header;
+    public Request(RequestHeader requestHeader, RequestBody requestBody) {
+        this.requestHeader = requestHeader;
+        this.requestBody = requestBody;
+    }
+
+    public Request(RequestHeader header) {
+        this(header, new RequestBody(""));
     }
 
     public String extractUrl() {
-        String[] url = requestHeader.split(SPACE_DELIMITER);
-        return validate(url[INDEX_OF_URL]);
+//        String[] url = requestHeader.split(SPACE_DELIMITER);
+//        return validate(url[INDEX_OF_URL]);
+        return validate(requestHeader.get("url"));
     }
 
     private String validate(String url) {
@@ -32,20 +39,11 @@ public class Request {
         return url;
     }
 
-    public Map<String, String> extractQueryParameter(String url) {
-        Map<String, String> map = new HashMap<>();
-        logger.debug("Extract Query Parameter in {}", url);
+    public Map<String, String> extractQueryParameter() {
+        return requestHeader.extractQueryParameter();
+    }
 
-        if (url.contains("?")) {
-            String query = url.split("\\?")[1];
-            String[] queryParameters = query.split("&");
-            for (String queryParameter : queryParameters) {
-                String name = queryParameter.split("=")[0];
-                String value = queryParameter.split("=")[1];
-                map.put(name, value);
-            }
-        }
-
-        return map;
+    public Map<String, String> extractFormData() {
+        return requestBody.getBody();
     }
 }

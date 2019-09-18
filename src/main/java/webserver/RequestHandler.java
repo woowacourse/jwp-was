@@ -8,6 +8,8 @@ import utils.FileIoUtils;
 import utils.IOUtils;
 import webserver.support.PathHandler;
 import webserver.support.Request;
+import webserver.support.RequestBody;
+import webserver.support.RequestHeader;
 
 import java.io.*;
 import java.net.Socket;
@@ -30,7 +32,7 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             Request request = readRequestUrl(in);
             String url = request.extractUrl();
-            Map<String, String> map = request.extractQueryParameter(url);
+            Map<String, String> map = request.extractFormData();
 
             if (!map.isEmpty()) {
                 User user = new User(map.get("userId"), map.get("password"), map.get("name"), map.get("email"));
@@ -52,7 +54,14 @@ public class RequestHandler implements Runnable {
     private Request readRequestUrl(InputStream in) throws IOException {
         InputStreamReader inputStreamReader = new InputStreamReader(in);
         BufferedReader br = new BufferedReader(inputStreamReader);
-        return new Request(IOUtils.parseData(br));
+        RequestHeader header = new RequestHeader(IOUtils.parseData(br));
+
+        if (header.get("method").equals("POST")) {
+            String body = IOUtils.readData(br, Integer.parseInt(header.get("content-length")));
+            RequestBody requestBody = new RequestBody(body);
+            return new Request(header, requestBody);
+        }
+        return new Request(header);
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
