@@ -13,6 +13,7 @@ public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
+    private String classPath;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -26,18 +27,31 @@ public class RequestHandler implements Runnable {
             Request request = new Request(new BufferedReader(new InputStreamReader(in)));
 
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + request.getUrl());
-            response200Header(dos, body.length);
+            String url = request.getUrl();
+            String extension = url.substring(url.lastIndexOf(".") + 1);
+            String type = "text/html";
+
+            if (extension.equals("html") || extension.equals("ico")) {
+                classPath = "./templates" + url;
+            } else if (extension.equals("css")) {
+                classPath = "./static" + url;
+                type = "text/css";
+            } else {
+                classPath = "./static" + url;
+            }
+
+            byte[] body = FileIoUtils.loadFileFromClasspath(classPath);
+            response200Header(dos, body.length, type);
             responseBody(dos, body);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String type) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Type: " + type + ";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {

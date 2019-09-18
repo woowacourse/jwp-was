@@ -21,20 +21,22 @@ public class Request {
         request = new HashMap<>();
 
         String line = bufferedReader.readLine();
+        logger.info("header : {}", line);
         url = line.split(" ")[1];
 
         while (!"".equals(line)) {
-            String key = line.split(":")[0].trim();
+            line = bufferedReader.readLine();
+
+            if (line == null || line.equals("")) {
+                return;
+            }
+
+            String key = line.split(" :")[0].trim();
             String value = line.split(":")[1].trim();
 
             request.put(key, value);
-            logger.debug("header : {}", line);
 
-            line = bufferedReader.readLine();
-
-            if (line == null) {
-                return;
-            }
+            logger.info("header : {}", line);
         }
     }
 
