@@ -17,23 +17,9 @@ public class NetworkIOStream implements NetworkIO {
     private final DataOutputStream writer;
 
     public static Optional<NetworkIOStream> init(Socket connection) {
-        InputStream in = null;
-        OutputStream out = null;
         try {
-            in = connection.getInputStream();
-            out = connection.getOutputStream();
-            return Optional.of(new NetworkIOStream(in, out));
+            return Optional.of(new NetworkIOStream(connection.getInputStream(), connection.getOutputStream()));
         } catch (IOException e) {
-            try {
-                if (in != null) {
-                    in.close();
-                }
-                if (out != null) {
-                    out.close();
-                }
-            } catch (IOException ee) {
-                logger.error(ee.getMessage());
-            }
             logger.error(e.getMessage());
             return Optional.empty();
         }
@@ -57,19 +43,19 @@ public class NetworkIOStream implements NetworkIO {
     }
 
     @Override
-    public Optional<String> readLine() {
+    public String readLine() {
         try {
-            return Optional.of(reader.readLine());
+            return reader.readLine();
         } catch (IOException e) {
             logger.error(e.getMessage());
-            return Optional.empty();
+            return null;
         }
     }
 
     @Override
     public void write(String body) {
         try {
-            writer.writeBytes(body);
+            writer.write(body.getBytes());
             writer.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -79,12 +65,8 @@ public class NetworkIOStream implements NetworkIO {
     @Override
     public void close() {
         try {
-            if (this.in != null) {
-                this.in.close();
-            }
-            if (this.out != null) {
-                out.close();
-            }
+            this.in.close();
+            this.out.close();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }

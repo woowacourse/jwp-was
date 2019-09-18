@@ -2,14 +2,13 @@ package utils;
 
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.Optional;
 
-public interface NetworkIO extends Iterator<Optional<String>>, AutoCloseable {
+public interface NetworkIO extends Iterator<String>, AutoCloseable {
     @Override
-    default Optional<String> next() {
+    default String next() {
         return readLine();
     }
 
-    Optional<String> readLine();
+    String readLine();
     void write(String body) throws IOException;
 }

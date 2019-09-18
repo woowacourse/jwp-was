@@ -2,7 +2,7 @@ package utils;
 
 public class Trampoline<T>
 {
-    public T run() {
+    public T execute() {
         Trampoline<T> trampoline = this;
         while (trampoline.done() == null) {
             trampoline = trampoline.call();

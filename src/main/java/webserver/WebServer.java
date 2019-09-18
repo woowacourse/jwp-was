@@ -2,6 +2,7 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.Procedure;
 import utils.Trampoline;
 
 import java.io.IOException;
@@ -24,7 +25,7 @@ public class WebServer {
             logger.info("Web Application Server started {} port.", port);
 
             // 클라이언트가 연결될때까지 대기한다.
-            handleRequest(listenSocket).run();
+            handleRequest(listenSocket).execute();
         }
     }
 
@@ -36,23 +37,23 @@ public class WebServer {
         }
     }
 
-    private static Trampoline<Boolean> handleRequest(ServerSocket listenSocket) {
+    private static Trampoline<Procedure> handleRequest(ServerSocket listenSocket) {
         boolean isSuccess = acceptConnection(listenSocket).map(x -> {
             new Thread(new RequestHandler(x)).start();
             return true;
         }).orElse(false);
         if (isSuccess) {
-            return new Trampoline<Boolean>() {
+            return new Trampoline<Procedure>() {
                 @Override
-                public Trampoline<Boolean> call() {
+                public Trampoline<Procedure> call() {
                     return handleRequest(listenSocket);
                 }
             };
         }
-        return new Trampoline<Boolean>() {
+        return new Trampoline<Procedure>() {
             @Override
-            public Boolean done() {
-                return true;
+            public Procedure done() {
+                return Procedure.instance();
             }
         };
     }
