@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class UserController {
 
-    static final String USER_CREATE_URL = "/user/create";
+    public static final String USER_CREATE_URL = "/user/create";
     private static final String USER_ID = "userId";
     private static final String PASSWORD = "password";
     private static final String NAME = "name";
