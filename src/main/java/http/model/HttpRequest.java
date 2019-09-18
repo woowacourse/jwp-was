@@ -1,7 +1,5 @@
 package http.model;
 
-import http.supoort.RequestMapping;
-
 public class HttpRequest {
     private HttpMethod httpMethod;
     private HttpUri httpUri;
@@ -22,10 +20,6 @@ public class HttpRequest {
 
     public HttpUri getUri() {
         return httpUri;
-    }
-
-    public RequestMapping getMapping() {
-        return new RequestMapping(httpMethod, httpUri);
     }
 
     public HttpMethod getHttpMethod() {

@@ -32,6 +32,7 @@ public class IOUtils {
             while (!StringUtils.isEmpty(readData = bufferedReader.readLine())) {
                 lines.add(readData);
             }
+            in.close();
         } catch (IOException e) {
             e.getMessage();
         }

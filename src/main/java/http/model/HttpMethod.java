@@ -1,7 +1,7 @@
 package http.model;
 
 import http.supoort.IllegalHttpRequestException;
-import http.supoort.NotSupportedHTTPMethod;
+import http.supoort.NotSupportedRequestException;
 
 public enum HttpMethod {
     GET,
@@ -11,7 +11,7 @@ public enum HttpMethod {
 
     public static void match(HttpMethod method, HttpRequest httpRequest) {
         if (httpRequest.getMethod() != method) {
-            throw new NotSupportedHTTPMethod();
+            throw new NotSupportedRequestException();
         }
     }
 
