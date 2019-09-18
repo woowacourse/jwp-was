@@ -32,14 +32,18 @@ public class RequestHandler implements Runnable {
             HttpRequest request = HttpRequest.of(buffer);
             logger.debug(request.toString());
 
-            if (HttpMethod.POST.match(request.getMethod()) && request.getUrl().getPath().equals("/user/create")) {
-                createUser(request.getQueryParams());
+            if (HttpMethod.GET.match(request.getMethod())) {
+                DataOutputStream dos = new DataOutputStream(out);
+                byte[] body = FileIoUtils.loadFileFromClasspath(DEFAULT_PATH + request.getUrl().getPath());
+                response200Header(dos, body.length);
+                responseBody(dos, body);
             }
 
-            DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = FileIoUtils.loadFileFromClasspath(DEFAULT_PATH + request.getUrl().getPath());
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+            if (HttpMethod.POST.match(request.getMethod()) && request.getUrl().getPath().equals("/user/create")) {
+                DataOutputStream dos = new DataOutputStream(out);
+                createUser(request.getQueryParams());
+                response302Header(dos, "/index.html");
+            }
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
@@ -57,6 +61,16 @@ public class RequestHandler implements Runnable {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
             dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void response302Header(DataOutputStream dos, String redirectPath) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 Found \r\n");
+            dos.writeBytes("Location: http://localhost:8080/" + redirectPath + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
