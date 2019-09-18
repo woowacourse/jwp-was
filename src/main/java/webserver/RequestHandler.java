@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import webserver.domain.Request;
+import webserver.view.NetworkInput;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -28,9 +29,9 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            final Request requestHeader = new Request(in);
-//            logger.info(requestHeader);
-            final byte[] body = readBody(requestHeader);
+            final NetworkInput networkInput = new NetworkInput(in);
+            final Request request = new Request(networkInput);
+            final byte[] body = readBody(request);
             DataOutputStream dos = new DataOutputStream(out);
             response200Header(dos, body.length);
             responseBody(dos, body);
