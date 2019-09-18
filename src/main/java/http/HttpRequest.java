@@ -8,7 +8,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class HttpRequest {
     private static final Logger log = LoggerFactory.getLogger(HttpRequest.class);
@@ -16,6 +19,7 @@ public class HttpRequest {
     private String uri;
     private HttpMethod method;
     private HttpHeader headers;
+    private RequestParameter requestParameter;
     private String body;
 
     public HttpRequest(InputStream requestStream) {
@@ -29,7 +33,7 @@ public class HttpRequest {
             List<String> headers = parseHeaders(br);
             lines.addAll(headers);
 
-            if(this.headers.getContentLength() > 0) {
+            if (this.headers.getContentLength() > 0) {
                 List<String> bodies = parseBody(br);
                 lines.addAll(bodies);
             }
@@ -44,6 +48,12 @@ public class HttpRequest {
         String line = br.readLine();
         String[] tokens = line.split(" ");
         method = HttpMethod.of(tokens[0]);
+        if(tokens[1].contains("?")) {
+            String[] path = tokens[1].split("\\?");
+            uri = path[0];
+            requestParameter = new RequestParameter(parseQueryString(path[1]));
+            return line;
+        }
         uri = tokens[1];
         return line;
     }
@@ -78,6 +88,13 @@ public class HttpRequest {
         return bodies;
     }
 
+    private Map<String, String> parseQueryString(String queryString) {
+        return Arrays.stream(queryString.split("&"))
+                .map(query -> query.split("="))
+                .collect(Collectors.toMap(q -> q[0], q -> q[1]))
+                ;
+    }
+
     public String getUri() {
         return uri;
     }
@@ -92,5 +109,9 @@ public class HttpRequest {
 
     public String getBody() {
         return body;
+    }
+
+    public String getParameter(String key) {
+        return requestParameter.getParameter(key);
     }
 }

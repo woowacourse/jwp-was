@@ -46,6 +46,14 @@ public class HttpRequestTest {
     }
 
     @Test
+    void 헤더_Request_Parameter_가져오기() {
+        String request = "GET /index.html?a=b&c=d HTTP/1.1";
+        HttpRequest httpRequest = new HttpRequest(new ByteArrayInputStream(request.getBytes(UTF_8)));
+        assertThat(httpRequest.getParameter("a")).isEqualTo("b");
+        assertThat(httpRequest.getParameter("c")).isEqualTo("d");
+    }
+
+    @Test
     void 헤더_Method_가져오기() {
         assertThat(request.getMethod()).isEqualTo(HttpMethod.GET);
     }
