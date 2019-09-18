@@ -2,21 +2,21 @@ package webserver;
 
 public class URL {
     private final String path;
-    private final RequestParameter requestParameter;
+    private final String queryString;
 
-    public URL(String path, RequestParameter requestParameter) {
+    public URL(String path, String queryString) {
         this.path = path;
-        this.requestParameter = requestParameter;
+        this.queryString = queryString;
     }
 
     public static URL of(String url) {
         int index = getIndex(url);
         String path = url.substring(0, index);
-        String requestParameter = getReq(url, index + 1);
-        return new URL(path, new RequestParameter(requestParameter));
+        String queryString = getQueryString(url, index + 1);
+        return new URL(path, queryString);
     }
 
-    private static String getReq(String url, int index) {
+    private static String getQueryString(String url, int index) {
         return url.length() >= index ? url.substring(index) : "";
     }
 
@@ -29,7 +29,7 @@ public class URL {
         return path;
     }
 
-    public RequestParameter getRequestParameter() {
-        return requestParameter;
+    public String getQueryString() {
+        return queryString;
     }
 }

@@ -9,33 +9,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HttpRequest {
-    private static final String CONTENT_LENGTH = "Content-length";
+    private static final String CONTENT_LENGTH = "Content-Length";
+    private static final String CONTENT_TYPE = "Content-Type";
     private static final String BLANK = "";
     private final RequestLine requestLine;
     private final RequestHeader requestHeader;
+    private final RequestParameter requestParameter;
     private final String body;
 
     public HttpRequest(BufferedReader br) throws IOException {
         requestLine = extractRequestLine(br);
         requestHeader = extractHeader(br);
-        body = getBody(br);
+        body = extractBody(br);
+        requestParameter = createRequestParameter();
     }
 
     private RequestLine extractRequestLine(BufferedReader br) throws IOException {
         String requestLine = br.readLine();
         return new RequestLine(requestLine);
-    }
-
-    private String getBody(BufferedReader br) throws IOException {
-        RequestMethod requestMethod = requestLine.getMethod();
-        if (requestMethod.hasBody()) {
-            return extractBody(br, requestHeader.get(CONTENT_LENGTH));
-        }
-        return BLANK;
-    }
-
-    private String extractBody(BufferedReader br, String size) throws IOException {
-        return IOUtils.readData(br, Integer.parseInt(size));
     }
 
     private RequestHeader extractHeader(BufferedReader br) throws IOException {
@@ -48,6 +39,23 @@ public class HttpRequest {
         }
 
         return new RequestHeader(lines);
+    }
+
+    private String extractBody(BufferedReader br) throws IOException {
+        RequestMethod requestMethod = requestLine.getMethod();
+        if (requestMethod.hasBody()) {
+            int contentLength = Integer.parseInt(requestHeader.get(CONTENT_LENGTH));
+            return IOUtils.readData(br, contentLength);
+        }
+        return BLANK;
+    }
+
+    private RequestParameter createRequestParameter() {
+        String queryString = requestLine.getUrl().getQueryString();
+        if (requestLine.getMethod().hasBody() && "application/x-www-form-urlencoded".equals(requestHeader.get(CONTENT_TYPE))) {
+            queryString += "&" + body;
+        }
+        return new RequestParameter(queryString);
     }
 
     public RequestHeader getRequestHeader() {
@@ -64,6 +72,6 @@ public class HttpRequest {
     }
 
     public RequestParameter getRequestParameter() {
-        return requestLine.getUrl().getRequestParameter();
+        return requestParameter;
     }
 }
