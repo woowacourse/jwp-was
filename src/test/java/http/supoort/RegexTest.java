@@ -21,7 +21,7 @@ public class RegexTest {
     void wildcard() {
         Pattern pattern = Pattern.compile("/*");
         Matcher matcher = pattern.matcher("/user/create//");
-        while(matcher.find()){
+        while (matcher.find()) {
             System.out.println(matcher.group());
         }
     }
