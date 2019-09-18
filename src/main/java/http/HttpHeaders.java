@@ -32,4 +32,14 @@ public class HttpHeaders {
     public boolean hasContentLength() {
         return headers.get("Content-Length") != null;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        for (String key : headers.keySet()) {
+            sb.append(key).append(": ").append(headers.get(key)).append("\n");
+        }
+        return sb.toString();
+    }
 }

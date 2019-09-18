@@ -88,6 +88,10 @@ public class HttpRequest {
         return version;
     }
 
+    public HttpHeaders getHeaders() {
+        return headers;
+    }
+
     public QueryParams getQueryParams() {
         if (method.match(HttpMethod.GET)) {
             return url.getQueryParams();
@@ -100,6 +104,6 @@ public class HttpRequest {
 
     @Override
     public String toString() {
-        return "\n" + method + " " + url.getPath() + " " + version + "\n";
+        return "\n" + method + " " + url.getPath() + " " + version + "\n" + headers + "\n";
     }
 }
