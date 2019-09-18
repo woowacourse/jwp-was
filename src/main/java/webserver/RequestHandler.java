@@ -35,6 +35,7 @@ public class RequestHandler implements Runnable {
             HttpRequest request = new HttpRequest(in);
             String filePath = request.getFilePath();
 
+
             byte[] body = null;
             int statusCode = 200;
             Map<String, Object> header = new HashMap<>();
@@ -42,6 +43,8 @@ public class RequestHandler implements Runnable {
             if (request.getMethod() == RequestMethod.GET) {
                 body = FileIoUtils.loadFileFromClasspath(filePath);
                 header.put("lengthOfBodyContent", body.length);
+                logger.debug(">>> Accept : {}", request.getHeader("Accept").split(",")[0]);
+                header.put("Content-Type", request.getHeader("Accept").split(",")[0]);
             }
             if (request.getMethod() == RequestMethod.POST && request.getAbsPath().equals("/user/create")) {
                 User user = new User(request.getBody("userId"), request.getBody("password"), request.getBody("name"), request.getBody("email"));

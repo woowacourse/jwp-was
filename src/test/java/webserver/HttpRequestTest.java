@@ -7,7 +7,6 @@ import webserver.request.RequestMethod;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -21,14 +20,14 @@ class HttpRequestTest {
     void getPath_indexUrl_true() throws IOException {
         InputStream inputStream = new FileInputStream(new File(testDirectory + "request_index_test.txt"));
         HttpRequest request = new HttpRequest(inputStream);
-        assertThat(request.getFilePath()).isEqualTo(HttpRequestUtils.ROOT_FILE_PATH + INDEX_URL);
+        assertThat(request.getFilePath()).isEqualTo(HttpRequestUtils.ROOT_TEMPLATE_FILE_PATH + INDEX_URL);
     }
 
     @Test
     void getPath_root_true() throws IOException {
         InputStream inputStream = new FileInputStream(new File(testDirectory + "request_root_test.txt"));
         HttpRequest request = new HttpRequest(inputStream);
-        assertThat(request.getFilePath()).isEqualTo(HttpRequestUtils.ROOT_FILE_PATH + INDEX_URL);
+        assertThat(request.getFilePath()).isEqualTo(HttpRequestUtils.ROOT_TEMPLATE_FILE_PATH + INDEX_URL);
     }
 
     @Test

@@ -38,3 +38,10 @@
 - [x] response 객체 만들기
 - [x] response 302 메소드 만들기
 - [x] 회원가입시 index.html로 리다이렉트
+
+
+
+요구사항5
+
+- [ ] static 파일일 시 경로 변경
+- [ ] response header의 Content-Type 값을 보내주는 파일의 타입으로 설정하게 변경
