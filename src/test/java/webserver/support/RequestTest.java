@@ -26,6 +26,6 @@ public class RequestTest {
                 "Connection: keep-alive\n" +
                 "Accept: */*");
 
-        assertThat(request.extractUrl()).isEqualTo("/");
+        assertThat(request.extractUrl()).isEqualTo("/index.html");
     }
 }
