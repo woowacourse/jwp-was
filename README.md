@@ -23,4 +23,18 @@
 요구사항2
 
 - [x] get request param 추출
-- [ ] param 추출해서 User만들기
+- [x] param 추출해서 User만들기
+
+
+
+요구사항3
+
+- [x] post로 변경
+
+
+
+요구사항4
+
+- [x] response 객체 만들기
+- [x] response 302 메소드 만들기
+- [x] 회원가입시 index.html로 리다이렉트
