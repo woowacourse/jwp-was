@@ -32,6 +32,8 @@ public class WebServer {
 
         httpRequestHandlers.addHandler(new RequestMapping(HttpMethod.GET, "/*"), fileHandler);
         httpRequestHandlers.addHandler(new RequestMapping(HttpMethod.GET, "/user/create"), userRequestHandler);
+        httpRequestHandlers.addHandler(new RequestMapping(HttpMethod.POST, "/user/create"), userRequestHandler);
+
 
         ViewHandler viewHandler = new ViewHandler();
         viewHandler.addResolver(new ViewResolver());

@@ -8,7 +8,7 @@ import utils.FileIoUtils;
 
 public class ViewResolver implements Resolver {
     private static final String HTML_PATH = "./templates";
-    private static final String STATIC_PATH ="./static";
+    private static final String STATIC_PATH = "./static";
     private static final String REDIRECT_PREFIX = "redirect:";
     private static final String EXTENSION_SEPARATOR = ".";
 

@@ -2,7 +2,9 @@ package webserver;
 
 import http.controller.HttpRequestHandlers;
 import http.model.HttpRequest;
+import http.model.HttpResponse;
 import http.supoort.HttpRequestParser;
+import http.supoort.ResponseMessageConverter;
 import http.view.ModelAndView;
 import http.view.ViewHandler;
 import org.slf4j.Logger;
@@ -37,20 +39,11 @@ public class RequestHandler implements Runnable {
 
                 ModelAndView modelAndView = httpRequestHandlers.doService(request);
 
-                byte[] body = viewHandler.handle(modelAndView);
-
-                DataOutputStream dos = new DataOutputStream(out);
-
-                response200Header(dos, body.length);
-                responseBody(dos, body);
+                response(viewHandler.handle(modelAndView), out);
 
             } catch (Exception e) {
                 logger.error(e.getMessage());
-                DataOutputStream dos = new DataOutputStream(out);
-                byte[] body = "ERROR_".getBytes();
-
-                response200Header(dos, body.length);
-                responseBody(dos, body);
+                sendError(e.getMessage(), out);
             }
 
         } catch (IOException e) {
@@ -59,23 +52,14 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+    private void sendError(String message, OutputStream out) {
+
     }
 
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+    private void response(HttpResponse response, OutputStream out) {
+        DataOutputStream dos = new DataOutputStream(out);
+        ResponseMessageConverter.convert(response, dos);
     }
+
+
 }

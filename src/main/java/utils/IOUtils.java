@@ -11,10 +11,8 @@ import java.util.List;
 
 public class IOUtils {
     /**
-     * @param BufferedReader는
-     *            Request Body를 시작하는 시점이어야
-     * @param contentLength는
-     *            Request Header의 Content-Length 값이다.
+     * @param BufferedReader는 Request Body를 시작하는 시점이어야
+     * @param contentLength는  Request Header의 Content-Length 값이다.
      * @return
      * @throws IOException
      */
@@ -32,7 +30,6 @@ public class IOUtils {
             while (!StringUtils.isEmpty(readData = bufferedReader.readLine())) {
                 lines.add(readData);
             }
-            in.close();
         } catch (IOException e) {
             e.getMessage();
         }

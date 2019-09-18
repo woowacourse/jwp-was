@@ -15,7 +15,7 @@ public class HttpParameters {
     }
 
     public void addParameter(String key, String value) {
-        parameters.put(key,value);
+        parameters.put(key, value);
     }
 
     public String getParameter(String key) {

@@ -9,14 +9,15 @@ public enum ContentType {
     PNG("image/png");
 
     private String type;
+
     private ContentType(String type) {
         this.type = type;
     }
 
-    public static ContentType of (String type) {
-        try{
+    public static ContentType of(String type) {
+        try {
             return ContentType.valueOf(type.toUpperCase());
-        }catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             throw new IllegalHttpRequestException(e.getMessage());
         }
     }

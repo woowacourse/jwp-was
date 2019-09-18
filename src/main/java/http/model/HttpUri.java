@@ -13,7 +13,7 @@ public class HttpUri {
     }
 
     private void validate(String resourceLocation) {
-        if(!resourceLocation.startsWith("/")) {
+        if (!resourceLocation.startsWith("/")) {
             throw new IllegalHttpRequestException();
         }
     }
