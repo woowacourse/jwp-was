@@ -57,4 +57,11 @@ public class HttpStartLine {
     public boolean hasParameters() {
         return target.split("\\?").length == 2;
     }
+
+    public String getContentType() {
+        System.out.println("getSource() = " + getSource());
+        String[] split = getSource().split("\\.");
+        int length = split.length;
+        return split[length - 1];
+    }
 }

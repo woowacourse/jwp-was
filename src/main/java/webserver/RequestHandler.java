@@ -43,9 +43,16 @@ public class RequestHandler implements Runnable {
                 String file = startLine.getSource();
                 logger.debug("file : {}", file);
 
-                byte[] body = FileIoUtils.loadFileFromClasspath("./templates/" + file);
-                response200Header(dos, body.length);
-                responseBody(dos, body);
+
+                if (startLine.getContentType().equals("html")) {
+                    byte[] body = FileIoUtils.loadFileFromClasspath("./templates/" + file);
+                    response200Header(dos, body.length);
+                    responseBody(dos, body);
+                } else {
+                    byte[] body = FileIoUtils.loadFileFromClasspath("./static/" + file);
+                    responseContent(dos, body.length, startLine.getContentType());
+                    responseBody(dos, body);
+                }
             }
 
             if (startLine.isPost()) {
@@ -64,10 +71,22 @@ public class RequestHandler implements Runnable {
 
     }
 
+
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
             dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void responseContent(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
+        try {
+            dos.writeBytes("HTTP/1.1 200 OK \r\n");
+            dos.writeBytes("Content-Type: text/" + contentType + "\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
