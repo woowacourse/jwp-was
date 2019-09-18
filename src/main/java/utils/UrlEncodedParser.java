@@ -9,26 +9,26 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UrlEncodedBodyParser {
+public class UrlEncodedParser {
 
-    private static final Logger logger = LoggerFactory.getLogger(UrlEncodedBodyParser.class);
+    private static final Logger logger = LoggerFactory.getLogger(UrlEncodedParser.class);
     private static final String PAIR_DELIMITER = "&";
     private static final String KEY_VALUE_DELIMITER = "=";
     private static final String ENCODE_CHARSET = "UTF-8";
 
-    public static Map<String, String> parse(String body) {
-        String[] tokenPairs = body.split(PAIR_DELIMITER);
-        Map<String, String> parsedBody = new HashMap<>();
+    public static Map<String, String> parse(String urlEncodedString) {
+        String[] tokenPairs = urlEncodedString.split(PAIR_DELIMITER);
+        Map<String, String> parsed = new HashMap<>();
         Arrays.stream(tokenPairs)
-            .forEach(pairToken -> parsePair(parsedBody, pairToken));
+                .forEach(pairToken -> parsePair(parsed, pairToken));
 
-        return parsedBody;
+        return parsed;
     }
 
-    private static void parsePair(Map<String, String> parsedBody, String pairToken) {
+    private static void parsePair(Map<String, String> parsed, String pairToken) {
         String[] tokens = pairToken.split(KEY_VALUE_DELIMITER);
         try {
-            parsedBody.put(tokens[0], URLDecoder.decode(tokens[1], ENCODE_CHARSET));
+            parsed.put(tokens[0], URLDecoder.decode(tokens[1], ENCODE_CHARSET));
         } catch (UnsupportedEncodingException e) {
             logger.error("error : ", e);
         }

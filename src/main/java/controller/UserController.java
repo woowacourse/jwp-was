@@ -2,7 +2,7 @@ package controller;
 
 import db.DataBase;
 import model.User;
-import utils.UrlEncodedBodyParser;
+import utils.UrlEncodedParser;
 import webserver.Request;
 import webserver.Response;
 import webserver.Status;
@@ -21,19 +21,19 @@ public class UserController {
 
     public static Response signUp(Request req) {
         String body = new String(req.getBody());
-        Map<String, String> parsedBody = UrlEncodedBodyParser.parse(body);
+        Map<String, String> parsedBody = UrlEncodedParser.parse(body);
         User user = new User(parsedBody.get(USER_ID),
-            parsedBody.get(PASSWORD),
-            parsedBody.get(NAME),
-            parsedBody.get(EMAIL));
+                parsedBody.get(PASSWORD),
+                parsedBody.get(NAME),
+                parsedBody.get(EMAIL));
         DataBase.addUser(user);
 
         Map<String, String> headers = new HashMap<>();
         headers.put(LOCATION_HEADER_KEY, "/index.html");
 
         return Response.ResponseBuilder.createBuilder()
-            .withStatus(Status.FOUND)
-            .withHeaders(headers)
-            .build();
+                .withStatus(Status.FOUND)
+                .withHeaders(headers)
+                .build();
     }
 }
