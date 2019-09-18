@@ -29,7 +29,7 @@ public class RequestHandler implements Runnable {
             logger.debug(httpRequest.toString());
 
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = FileIoUtils.loadFileFromClasspath(DEFAULT_PATH + httpRequest.getUrl());
+            byte[] body = FileIoUtils.loadFileFromClasspath(DEFAULT_PATH + httpRequest.getUrl().getPath());
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException | URISyntaxException e) {
