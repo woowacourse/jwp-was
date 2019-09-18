@@ -1,5 +1,5 @@
 package http;
 
-public interface HandlerMapping {
+public interface HttpRequestHandler {
     ModelAndView handle(HttpRequest httpRequest);
 }

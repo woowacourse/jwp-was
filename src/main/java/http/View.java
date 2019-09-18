@@ -1,19 +1,13 @@
 package http;
 
-import java.nio.file.Path;
-
 public class View {
-    private Path path;
+    private HttpUri uri;
 
-    public View(Path path) {
-        this.path = path;
+    public View(HttpUri uri) {
+        this.uri = uri;
     }
 
-    public View(String path) {
-
-    }
-
-    public Path getPath() {
-        return path;
+    public String getResourceLocation() {
+        return uri.getResourceLocation();
     }
 }

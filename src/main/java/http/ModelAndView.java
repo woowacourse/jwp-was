@@ -1,7 +1,5 @@
 package http;
 
-import java.nio.file.Path;
-
 public class ModelAndView {
     private Model model;
     private View view;
@@ -19,7 +17,7 @@ public class ModelAndView {
         this.view = view;
     }
 
-    public Path getViewName() {
-        return this.view.getPath();
+    public String getViewLocation() {
+        return this.view.getResourceLocation();
     }
 }
