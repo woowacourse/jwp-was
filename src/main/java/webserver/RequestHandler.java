@@ -9,8 +9,6 @@ import utils.FileIoUtils;
 import java.io.*;
 import java.net.Socket;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Map;
 
 public class RequestHandler implements Runnable {
@@ -29,53 +27,41 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             DataOutputStream dos = new DataOutputStream(out);
-            BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-            String line = br.readLine();
-            byte[] body = "Hello World".getBytes();
+            BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 
-            while (!"".equals(line)) {
-                if (line == null) {
-                    break;
+            HttpStartLine startLine = new HttpStartLine(br.readLine());
+            HttpRequestHeader httpRequestHeader = new HttpRequestHeader(br);
+
+            if (startLine.isGet()) {
+                if (startLine.hasParameters()) {
+                    Map<String, String> userParams = startLine.getParameters();
+
+
+                    User user = new User(userParams.get("userId"), userParams.get("password"), userParams.get("name"), userParams.get("email"));
+                    DataBase.addUser(user);
                 }
+                String file = startLine.getSource();
+                logger.debug("file : {}", file);
 
-                if (line.startsWith("GET")) {
-                    String fullResponse = line.split(" ")[1].substring(1);
-                    logger.debug("fullResponse : {}", fullResponse);
-                    String[] split = fullResponse.split("\\?");
-                    String file = split[0];
-
-                    Map<String, String> userParams = new HashMap<>();
-                    if (split.length == 2) {
-                        String variable = split[1];
-                        logger.debug("file = {}", file);
-                        logger.debug("variable = {}", variable);
-
-                        String[] variables = variable.split("&");
-                        for (String each : variables) {
-                            logger.debug("each = {}", each);
-                            String[] split1 = each.split("=");
-                            String key = split1[0];
-                            String value = "";
-                            if (split1.length == 2) {
-                                value = split1[1];
-                            }
-
-                            userParams.put(key, value);
-
-                            logger.debug("{key, debug} {} {}", key, value);
-                        }
-                        User user = new User(userParams.get("userId"), userParams.get("password"), userParams.get("name"), userParams.get("email"));
-                        DataBase.addUser(user);
-                    }
-                    body = FileIoUtils.loadFileFromClasspath("./templates/" + file);
-                }
-                line = br.readLine();
+                byte[] body = FileIoUtils.loadFileFromClasspath("./templates/" + file);
+                response200Header(dos, body.length);
+                responseBody(dos, body);
             }
-            response200Header(dos, body.length);
-            responseBody(dos, body);
-        } catch (IOException | URISyntaxException e) {
+
+            if (startLine.isPost()) {
+
+                HttpRequestBody httpRequestBody = new HttpRequestBody(br, httpRequestHeader.getContentLength());
+                User user = new User(httpRequestBody.get("userId"), httpRequestBody.get("password"), httpRequestBody.get("name"), httpRequestBody.get("email"));
+                DataBase.addUser(user);
+                response302Header(dos, httpRequestHeader.getHost(), "/index.html");
+            }
+
+
+        } catch (IOException |
+                URISyntaxException e) {
             logger.error(e.getMessage());
         }
+
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
@@ -83,6 +69,16 @@ public class RequestHandler implements Runnable {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
             dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void response302Header(DataOutputStream dos, String host, String path) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 Found \r\n");
+            dos.writeBytes("Location: http://" + host + path + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
