@@ -43,8 +43,7 @@ public class RequestHandler implements Runnable {
             if (request.getMethod() == RequestMethod.GET) {
                 body = FileIoUtils.loadFileFromClasspath(filePath);
                 header.put("lengthOfBodyContent", body.length);
-                logger.debug(">>> Accept : {}", request.getHeader("Accept").split(",")[0]);
-                header.put("Content-Type", request.getHeader("Accept").split(",")[0]);
+                header.put("Content-Type", FileIoUtils.loadMIMEFromClasspath(filePath));
             }
             if (request.getMethod() == RequestMethod.POST && request.getAbsPath().equals("/user/create")) {
                 User user = new User(request.getBody("userId"), request.getBody("password"), request.getBody("name"), request.getBody("email"));
