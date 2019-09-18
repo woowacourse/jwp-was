@@ -1,7 +1,9 @@
 package webserver;
 
+import http.RequestHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import service.UserService;
 import utils.FileIoUtils;
 
 import java.io.*;
@@ -13,9 +15,11 @@ public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
+    private UserService userService;
 
-    public RequestHandler(Socket connectionSocket) {
-        this.connection = connectionSocket;
+    public RequestHandler(Socket connection) {
+        this.connection = connection;
+        userService = UserService.getInstance();
     }
 
     public void run() {
@@ -24,14 +28,24 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-            String line = br.readLine();
-            String[] tokens = line.split(" ");
+            RequestHeader requestHeader = new RequestHeader(br);
+            String path = requestHeader.getRequestPath().getPath();
 
-            String fileName = tokens[1];
-            String path = "../resources/templates" + fileName;
+            if (path.contains("?")) {
+                logger.debug("handler : {}", path.contains(""));
+                userService.createUser(requestHeader.getRequestPath().getParameters());
+            }
+
+//            String line = br.readLine();
+//            String[] tokens = line.split(" ");
+//
+//            String fileName = tokens[1];
+//
+//            String path = "../resources/templates" + fileName;
 
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = FileIoUtils.loadFileFromClasspath(path);
+
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException e) {
