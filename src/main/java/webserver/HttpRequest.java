@@ -1,55 +1,71 @@
 package webserver;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.IOUtils;
 
 import java.io.*;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class HttpRequest implements AutoCloseable {
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
-    private final List<String> requestContents = new ArrayList<>();
 
-    private InputStreamReader inputStreamReader;
+    private final Map<String, String> headerContents = new HashMap<>();
+    private String body;
+
     private BufferedReader bufferedReader;
-
 
     public HttpRequest(InputStream in) {
         try {
-            inputStreamReader = new InputStreamReader(in);
-            bufferedReader = new BufferedReader(inputStreamReader);
-
-            String line;
-
-            do {
-                line = bufferedReader.readLine();
-
-                if (line == null || line.equals("")) {
-                    break;
-                }
-
-                logger.info("request contents: {}", line);
-
-                requestContents.add(line);
-
-            } while (true);
+            bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+            createHeader();
+            createBody();
 
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
+    private void createBody() throws IOException {
+        if (headerContents.containsKey("Content-Length")) {
+            body = IOUtils.readData(bufferedReader, Integer.parseInt(headerContents.get("Content-Length")));
+            logger.info("request body contents: {}", body);
+        }
+    }
 
-    public String getRequestContents() {
-        return StringUtils.join(requestContents, '\n');
+    private void createHeader() throws IOException {
+        String line = bufferedReader.readLine();
+        String[] tokens = line.split(" ");
+        System.out.println(line);
+        headerContents.put(HttpRequestCoreInfo.METHOD.name(), tokens[0]);
+        createAddress(tokens[1]);
+
+        headerContents.put(HttpRequestCoreInfo.HTTP_VERSION.name(), tokens[2]);
+
+        while (true) {
+            line = bufferedReader.readLine();
+            logger.info("request header contents: {}", line);
+            if (line == null || line.equals("")) {
+                break;
+            }
+            String[] keyValue = line.split(": ");
+            headerContents.put(keyValue[0], keyValue[1]);
+        }
+    }
+
+    private void createAddress(String token) {
+        String[] address = token.split("\\?");
+        if (address.length > 1) {
+            headerContents.put(HttpRequestCoreInfo.QUERY_STRING.name(), address[1]);
+        }
+        headerContents.put(HttpRequestCoreInfo.PATH.name(), address[0]);
     }
 
     public RequestMethod getMethod() {
-        return RequestMethod.GET;
+        return RequestMethod.valueOf(headerContents.get(HttpRequestCoreInfo.METHOD.name()));
     }
 
     @Override
@@ -58,14 +74,20 @@ public class HttpRequest implements AutoCloseable {
     }
 
     public String getPath() {
-        String[] tokens = requestContents.get(0).split(" ");
-        return tokens[1].split("\\?")[0];
+        return headerContents.get(HttpRequestCoreInfo.PATH.name());
     }
 
     public String getQueryString() {
-        String[] tokens = requestContents.get(0).split(" ");
         try {
-            return URLDecoder.decode(tokens[1].split("\\?")[1], StandardCharsets.UTF_8.toString());
+            return URLDecoder.decode(headerContents.get(HttpRequestCoreInfo.QUERY_STRING.name()), StandardCharsets.UTF_8.toString());
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("UTF-8 not supported");
+        }
+    }
+
+    public String getBody() {
+        try {
+            return URLDecoder.decode(body, StandardCharsets.UTF_8.toString());
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("UTF-8 not supported");
         }

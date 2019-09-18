@@ -19,4 +19,13 @@ public class UserCreateController extends AbstractController {
             log.error(e.getMessage());
         }
     }
+
+    @Override
+    void doPost(HttpRequest request, HttpResponse response) {
+        try {
+            DataBase.addUser(User.fromMap(QueryStringUtils.parse(request.getBody())));
+        } catch (IllegalAccessException e) {
+            log.error(e.getMessage());
+        }
+    }
 }
