@@ -25,7 +25,7 @@ public class HttpRequestParser {
 
     private static HttpRequestLine parseHttpStatus(BufferedReader br) throws IOException {
         String line = br.readLine();
-        log.debug("request : {}",line);
+        log.debug("request : {}", line);
 
         String[] tokens = line.split(BLANK_DELIMITER);
         String method = tokens[0];
@@ -40,7 +40,7 @@ public class HttpRequestParser {
 
         String line = br.readLine();
         while (isValidLine(line)) {
-            log.debug("request : {}",line);
+            log.debug("request : {}", line);
 
             String[] tokens = line.split(COLON_DELIMITER, SIZE_OF_PART);
 
@@ -50,7 +50,7 @@ public class HttpRequestParser {
 
             line = br.readLine();
         }
-        
+
         return httpHeaderFields;
     }
 

@@ -20,4 +20,8 @@ public class HttpRequest {
     public String findFilePath() {
         return httpRequestLine.findFilePath();
     }
+
+    public String findContentType() {
+        return httpRequestLine.findContentType();
+    }
 }

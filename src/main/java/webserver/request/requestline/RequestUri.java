@@ -15,7 +15,7 @@ public class RequestUri {
         return extension.getUriPrefix();
     }
 
-    private RequestUriExtension findExtension() {
+    public RequestUriExtension findExtension() {
         if (hasQueryString()) {
             return RequestUriExtension.NONE;
         }

@@ -3,9 +3,9 @@ package webserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
-import webserver.request.requestline.HttpMethod;
 import webserver.request.HttpRequest;
 import webserver.request.HttpRequestParser;
+import webserver.request.requestline.HttpMethod;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -39,7 +39,7 @@ public class RequestHandler implements Runnable {
             if (method == HttpMethod.GET) {
                 DataOutputStream dos = new DataOutputStream(out);
                 byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.findFilePath());
-                response200Header(dos, body.length);
+                response200Header(dos, httpRequest.findContentType(), body.length);
                 responseBody(dos, body);
             }
         } catch (IOException | URISyntaxException e) {
@@ -47,10 +47,10 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response200Header(DataOutputStream dos, String contentType, int lengthOfBodyContent) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Type: " + contentType + ";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {

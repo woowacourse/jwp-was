@@ -19,4 +19,9 @@ public class HttpRequestLine {
     public String findFilePath() {
         return requestUri.findUriPrefix() + requestUri.getUri();
     }
+
+    public String findContentType() {
+        RequestUriExtension extension = requestUri.findExtension();
+        return extension.getContentType();
+    }
 }
