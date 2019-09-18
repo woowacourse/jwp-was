@@ -33,8 +33,8 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
             String url = request.getUrl();
 
-            if (url.contains("/user/create?")) {
-                saveUser(url);
+            if (url.contains("/user/create")) {
+                saveUser(request.getBody());
             }
 
             String extension = url.substring(url.lastIndexOf(".") + 1);

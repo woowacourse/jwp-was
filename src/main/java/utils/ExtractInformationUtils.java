@@ -4,13 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ExtractInformationUtils {
-    public static Map<String, String> extractInformation(String queryString) {
+    public static Map<String, String> extractInformation(String body) {
         Map<String, String> userInfo = new HashMap<>();
-        String[] queryParams = queryString.substring(queryString.indexOf("?") + 1).split("&");
+        String[] params = body.split("&");
 
-        for (String queryParam : queryParams) {
-            String[] separatedParam = queryParam.split("=");
-            System.out.println(queryParam);
+        for (String param : params) {
+            String[] separatedParam = param.split("=");
             userInfo.put(separatedParam[0], separatedParam[1]);
         }
 

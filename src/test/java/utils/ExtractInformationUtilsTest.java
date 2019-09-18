@@ -10,7 +10,7 @@ class ExtractInformationUtilsTest {
 
     @Test
     void extractInformation() {
-        String query = "/user/create?userId=harry&password=harry123&name=harry&email=harry@naver.com";
+        String query = "userId=harry&password=harry123&name=harry&email=harry@naver.com";
 
         Map<String, String> userInfo = ExtractInformationUtils.extractInformation(query);
 
