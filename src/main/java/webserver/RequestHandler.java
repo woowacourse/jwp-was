@@ -57,11 +57,14 @@ public class RequestHandler implements Runnable {
                     DataBase.addUser(user);
                     logger.debug("user: " + user);
                 }
+
+                response200Header(dos, body.length);
+                responseBody(dos, body);
             }
 
             if (requestHeader.getRequestMethodType() == RequestMethodType.POST) {
                 String path = requestHeader.getRequestUri();
-                if (path.equals("/create")) {
+                if (path.equals("/user/create")) {
                     String requestParams = requestHeader.getRequestBody();
                     Map<String, String> kv = convertRequestDataToMap(requestParams);
                     logger.debug("kv: " + kv);
@@ -74,12 +77,10 @@ public class RequestHandler implements Runnable {
 
                     DataBase.addUser(user);
                     logger.debug("user: " + user);
+
+                    response302Header(dos, "/index.html");
                 }
             }
-
-            return;
-//            response200Header(dos, body.length);
-//            responseBody(dos, body);
         } catch (IOException e) {
             logger.error(e.getMessage());
         } catch (URISyntaxException e) {
@@ -90,6 +91,7 @@ public class RequestHandler implements Runnable {
     }
 
     private Map<String, String> convertRequestDataToMap(String requestParams) throws UnsupportedEncodingException {
+        logger.debug(requestParams);
         String decodedParams = URLDecoder.decode(requestParams, "UTF-8");
         logger.debug(decodedParams);
         Map<String, String> kv = new HashMap<>();
@@ -105,6 +107,16 @@ public class RequestHandler implements Runnable {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
             dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void response302Header(DataOutputStream dos, String location) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 Found \r\n");
+            dos.writeBytes(String.format("Location: %s \r\n", location));
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -136,7 +148,7 @@ public class RequestHandler implements Runnable {
                 if (line == null) {
                     break;
                 }
-                if(line.contains("Content-Length:")) {
+                if (line.contains("Content-Length:")) {
                     contentLength = Integer.parseInt(line.split(" ")[1]);
                 }
                 line = br.readLine();
