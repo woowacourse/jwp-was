@@ -29,8 +29,8 @@ public class RequestHandler implements Runnable {
              HttpResponse httpResponse = new HttpResponse(out)) {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
 
-            httpResponse.addHeader(httpRequest);
-            httpResponse.addBody(httpRequest);
+            httpResponse.addHeader(httpRequest.getPath());
+            httpResponse.addBody(httpRequest.getPath());
 
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());

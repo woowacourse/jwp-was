@@ -14,27 +14,34 @@ public class HttpResponse implements AutoCloseable {
 
     private final DataOutputStream dataOutputStream;
 
-
     public HttpResponse(final OutputStream out) {
         dataOutputStream = new DataOutputStream(out);
     }
 
-    public void addHeader(HttpRequest httpRequest) throws IOException, URISyntaxException {
-        byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + httpRequest.getPath());
+    public void addHeader(String path) throws IOException, URISyntaxException {
+        byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + path);
 
-        response200Header(dataOutputStream, body.length);
+        if (body == null) {
+            body = FileIoUtils.loadFileFromClasspath("./static" + path);
+        }
+
+        response200Header(dataOutputStream, body.length, ContentType.valueByPath(path));
     }
 
-    public void addBody(HttpRequest httpRequest) throws IOException, URISyntaxException {
-        byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + httpRequest.getPath());
+    public void addBody(String path) throws IOException, URISyntaxException {
+        byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + path);
+
+        if (body == null) {
+            body = FileIoUtils.loadFileFromClasspath("./static" + path);
+        }
 
         responseBody(dataOutputStream, body);
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, ContentType contentType) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Type: " + contentType.getContents() + ";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
