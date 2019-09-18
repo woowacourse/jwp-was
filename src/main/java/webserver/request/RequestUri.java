@@ -16,8 +16,8 @@ public class RequestUri {
     private final String absPath;
     private final Map<String, String> queryStrings;
 
-    public RequestUri(String line) {
-        absPathAndQuery = HttpRequestUtils.parseAbsPathAndQuery(line);
+    public RequestUri(String pathAndQuery) {
+        absPathAndQuery = pathAndQuery;
         absPath = parseAbsPath(absPathAndQuery);
         queryStrings = parseQueryStrings(absPathAndQuery);
     }
@@ -31,11 +31,7 @@ public class RequestUri {
         if (splitAbsPath.length != 2) {
             return new HashMap<>();
         }
-
-        Map<String, String> queryStrings = Arrays.stream(splitAbsPath[1].trim().split("&"))
-            .map(s -> s.split("=", 2))
-            .collect(Collectors.toMap(a -> a[0], a -> a.length > 1 ? a[1] : ""));
-
+        Map<String, String> queryStrings = HttpRequestUtils.parseParamToMap(splitAbsPath[1]);
         return queryStrings;
     }
 

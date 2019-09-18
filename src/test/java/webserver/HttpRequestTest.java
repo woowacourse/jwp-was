@@ -3,9 +3,11 @@ package webserver;
 import org.junit.jupiter.api.Test;
 import utils.HttpRequestUtils;
 import webserver.request.HttpRequest;
+import webserver.request.RequestMethod;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -38,4 +40,18 @@ class HttpRequestTest {
         assertThat(request.getParam("name")).isEqualTo("gyu");
     }
 
+    @Test
+    void getMethod_post_true() throws IOException {
+        InputStream inputStream = new FileInputStream(new File(testDirectory + "request_form_post_test.txt"));
+        HttpRequest request = new HttpRequest(inputStream);
+        assertThat(request.getMethod()).isEqualTo(RequestMethod.POST);
+    }
+
+    @Test
+    void getBody_userId_true() throws IOException {
+        InputStream inputStream = new FileInputStream(new File(testDirectory + "request_form_post_test.txt"));
+        HttpRequest request = new HttpRequest(inputStream);
+        assertThat(request.getBody("userId")).isEqualTo("javajigi");
+        assertThat(request.getBody("password")).isEqualTo("password");
+    }
 }

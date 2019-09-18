@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import webserver.request.HttpRequest;
+import webserver.request.RequestMethod;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -27,16 +28,22 @@ public class RequestHandler implements Runnable {
             connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
+
             HttpRequest request = new HttpRequest(in);
+
             String filePath = request.getFilePath();
-            if (request.getAbsPath().equals("/user/create")) {
-                User user = new User(request.getParam("userId"), request.getParam("password"), request.getParam("name"), request.getParam("email"));
+
+            if (request.getMethod() == RequestMethod.POST && request.getAbsPath().equals("/user/create")) {
+                User user = new User(request.getBody("userId"), request.getBody("password"), request.getBody("name"), request.getBody("email"));
                 logger.debug(">>> User : {}", user);
             }
+
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
+
             response200Header(dos, body.length);
             responseBody(dos, body);
+
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
