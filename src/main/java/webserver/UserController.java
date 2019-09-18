@@ -27,6 +27,10 @@ public class UserController {
 
         Map<String, String> headers = new HashMap<>();
         headers.put(LOCATION_HEADER_KEY, "/index.html");
-        return new Response(Status.FOUND, null, headers, null);
+
+        return Response.ResponseBuilder.createBuilder()
+                .withStatus(Status.FOUND)
+                .withHeaders(headers)
+                .build();
     }
 }

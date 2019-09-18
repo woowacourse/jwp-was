@@ -37,7 +37,9 @@ public class RequestDispatcher {
         } catch (Exception e) {
             logger.error("Error is occurred while processing request", e);
         }
-        return new Response(Status.NOT_FOUND, null, null, null);
+        return Response.ResponseBuilder.createBuilder()
+                .withStatus(Status.NOT_FOUND)
+                .build();
     }
 
     private static Response serveFile(String url) {
@@ -47,7 +49,13 @@ public class RequestDispatcher {
 
             MediaType contentType = extractExtension(url);
             headers.put(CONTENT_LENGTH_HEADER_KEY, String.valueOf(body.length));
-            return new Response(Status.OK, contentType, headers, body);
+
+            return Response.ResponseBuilder.createBuilder()
+                    .withStatus(Status.OK)
+                    .withMediaType(contentType)
+                    .withHeaders(headers)
+                    .withBody(body)
+                    .build();
         } catch (Exception e) {
             return null;
         }
