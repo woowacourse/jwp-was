@@ -2,6 +2,7 @@ package webserver.request;
 
 import webserver.request.requestline.HttpMethod;
 import webserver.request.requestline.HttpRequestLine;
+import webserver.request.requestline.QueryParams;
 
 public class HttpRequest {
 
@@ -23,5 +24,9 @@ public class HttpRequest {
 
     public String findContentType() {
         return httpRequestLine.findContentType();
+    }
+
+    public QueryParams findQueryParams() {
+        return httpRequestLine.findQueryParams();
     }
 }

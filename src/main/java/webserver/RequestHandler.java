@@ -6,6 +6,7 @@ import utils.FileIoUtils;
 import webserver.request.HttpRequest;
 import webserver.request.HttpRequestParser;
 import webserver.request.requestline.HttpMethod;
+import webserver.request.requestline.QueryParams;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -37,6 +38,9 @@ public class RequestHandler implements Runnable {
             HttpMethod method = httpRequest.findMethod();
 
             if (method == HttpMethod.GET) {
+                // TODO : query string params 사용하기
+                QueryParams queryParams = httpRequest.findQueryParams();
+
                 DataOutputStream dos = new DataOutputStream(out);
                 byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.findFilePath());
                 response200Header(dos, httpRequest.findContentType(), body.length);

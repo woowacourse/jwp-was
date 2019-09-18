@@ -24,4 +24,8 @@ public class HttpRequestLine {
         RequestUriExtension extension = requestUri.findExtension();
         return extension.getContentType();
     }
+
+    public QueryParams findQueryParams() {
+        return requestUri.findQueryParams();
+    }
 }
