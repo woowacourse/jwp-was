@@ -9,21 +9,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HttpRequest {
-    private static final String METHOD = "method";
     private static final String CONTENT_LENGTH = "Content-length";
     private static final String BLANK = "";
-    private final HttpHeader httpHeader;
+    private final RequestLine requestLine;
+    private final RequestHeader requestHeader;
     private final String body;
 
     public HttpRequest(BufferedReader br) throws IOException {
-        httpHeader = extractHeader(br);
-        body = getBody(br, httpHeader);
+        requestLine = extractRequestLine(br);
+        requestHeader = extractHeader(br);
+        body = getBody(br);
     }
 
-    private String getBody(BufferedReader br, HttpHeader httpHeader) throws IOException {
-        HttpMethod requestMethod = HttpMethod.valueOf(httpHeader.get(METHOD));
-        if(requestMethod.hasBody()) {
-            return extractBody(br, httpHeader.get(CONTENT_LENGTH));
+    private RequestLine extractRequestLine(BufferedReader br) throws IOException {
+        String requestLine = br.readLine();
+        return new RequestLine(requestLine);
+    }
+
+    private String getBody(BufferedReader br) throws IOException {
+        RequestMethod requestMethod = requestLine.getMethod();
+        if (requestMethod.hasBody()) {
+            return extractBody(br, requestHeader.get(CONTENT_LENGTH));
         }
         return BLANK;
     }
@@ -32,7 +38,7 @@ public class HttpRequest {
         return IOUtils.readData(br, Integer.parseInt(size));
     }
 
-    private HttpHeader extractHeader(BufferedReader br) throws IOException {
+    private RequestHeader extractHeader(BufferedReader br) throws IOException {
         List<String> lines = new ArrayList<>();
 
         String line = br.readLine();
@@ -41,18 +47,23 @@ public class HttpRequest {
             line = br.readLine();
         }
 
-        return new HttpHeader(lines);
+        return new RequestHeader(lines);
     }
 
-    public HttpHeader getHttpHeader() {
-        return httpHeader;
+    public RequestHeader getRequestHeader() {
+        return requestHeader;
     }
 
     public String getBody() {
         return body;
     }
 
-    public String getUrl() {
-        return httpHeader.get("url");
+    public String getPath() {
+        URL url = requestLine.getUrl();
+        return url.getPath();
+    }
+
+    public RequestParameter getRequestParameter() {
+        return requestLine.getUrl().getRequestParameter();
     }
 }
