@@ -4,10 +4,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +59,15 @@ public class HttpRequest implements AutoCloseable {
 
     public String getPath() {
         String[] tokens = requestContents.get(0).split(" ");
-        return tokens[1];
+        return tokens[1].split("\\?")[0];
+    }
+
+    public String getQueryString() {
+        String[] tokens = requestContents.get(0).split(" ");
+        try {
+            return URLDecoder.decode(tokens[1].split("\\?")[1], StandardCharsets.UTF_8.toString());
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("UTF-8 not supported");
+        }
     }
 }
