@@ -12,7 +12,8 @@ public class QueryParameter {
         this.queries = Collections.unmodifiableMap(
                 Arrays.stream(rawQuery.split("&"))
                         .map(query -> query.split("=", 2))
-                        .collect(Collectors.toMap(s -> s[0], s -> s[1]))
+                        .filter(query -> !query[0].isEmpty())
+                        .collect(Collectors.toMap(str -> str[0], str -> str[1]))
         );
     }
 
