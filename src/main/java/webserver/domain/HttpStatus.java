@@ -13,11 +13,11 @@ public enum HttpStatus {
         this.phrase = phrase;
     }
 
-    public int getCode() {
+    public int code() {
         return code;
     }
 
-    public String getPhrase() {
+    public String phrase() {
         return phrase;
     }
 
