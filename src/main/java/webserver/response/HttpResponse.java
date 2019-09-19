@@ -19,45 +19,24 @@ public class HttpResponse {
         this.body = body;
     }
 
-    public void render(DataOutputStream dos) {
+    public void render(DataOutputStream dos) throws IOException {
+        responseHeader(dos);
         if (httpStatus == HttpStatus.OK) {
-            response200Header(dos);
             responseBody(dos, body);
         }
-
-        if (httpStatus == HttpStatus.FOUND) {
-            response302Header(dos);
-        }
     }
 
-    private void response200Header(DataOutputStream dos) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: " + header.get("Content-Type") + "\r\n");
-            dos.writeBytes("Content-Length: " + header.get("Content-Length") + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
+    private void responseHeader(DataOutputStream dos) throws IOException {
+        dos.writeBytes("HTTP/1.1 " + httpStatus.getCode() + " " + httpStatus.getName() + "\r\n");
+        for (Map.Entry value : header.entrySet()) {
+            dos.writeBytes(value.getKey() + ": " + value.getValue() + "\r\n");
         }
+        dos.writeBytes("\r\n");
     }
 
-    private void response302Header(DataOutputStream dos) {
-        try {
-            dos.writeBytes("HTTP/1.1 302 Found \r\n");
-            dos.writeBytes("Location: " + header.get("Location") + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+    private void responseBody(DataOutputStream dos, byte[] body) throws IOException {
+        dos.write(body, 0, body.length);
+        dos.flush();
     }
 }
 
