@@ -3,14 +3,11 @@ package webserver.support;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class Request {
     private static final Logger logger = LoggerFactory.getLogger(Request.class);
 
-    private static final int INDEX_OF_URL = 1;
-    private static final String SPACE_DELIMITER = " ";
     private static final String ROOT_URL = "/";
     private static final String INDEX_HTML = "/index.html";
 
@@ -27,8 +24,6 @@ public class Request {
     }
 
     public String extractUrl() {
-//        String[] url = requestHeader.split(SPACE_DELIMITER);
-//        return validate(url[INDEX_OF_URL]);
         return validate(requestHeader.get("url"));
     }
 
