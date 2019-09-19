@@ -1,56 +1,52 @@
 package network;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
 public class HttpRequest {
-    private StartLine startLine;
+    private Url url;
+    private HttpMethod httpMethod;
+    private HttpVersion httpVersion;
+    private HttpRequestParams httpRequestParams;
     private HttpHeader httpHeader;
-    private HttpBody httpBody;
 
-    public HttpRequest(final StartLine startLine, final HttpHeader httpHeader, final HttpBody httpBody) {
-        this.startLine = startLine;
+    public HttpRequest(final Url url,
+                       final HttpMethod httpMethod,
+                       final HttpVersion httpVersion,
+                       final HttpRequestParams httpRequestParams,
+                       final HttpHeader httpHeader) {
+        this.url = url;
+        this.httpMethod = httpMethod;
+        this.httpVersion = httpVersion;
+        this.httpRequestParams = httpRequestParams;
         this.httpHeader = httpHeader;
-        this.httpBody = httpBody;
     }
 
-    public static HttpRequest init(final InputStream inputStream) throws IOException{
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-        String line = bufferedReader.readLine();
-        StartLine startLine = StartLine.of(line);
-        HttpHeader httpHeader = new HttpHeader();
-
-        while (!line.equals("")) {
-            String[] headerLine = bufferedReader.readLine().split(": ");
-            if (headerLine.length == 1) {
-                break;
-            }
-            httpHeader.addHeader(headerLine[0], headerLine[1]);
-        }
-
-        return new HttpRequest(startLine, httpHeader, null);
+    public String getUrl() {
+        return url.getFullUrl();
     }
 
-    public StartLine getStartLine() {
-        return startLine;
+    public HttpMethod getHttpMethod() {
+        return httpMethod;
+    }
+
+    public HttpVersion getHttpVersion() {
+        return httpVersion;
+    }
+
+    public HttpRequestParams getHttpRequestParams() {
+        return httpRequestParams;
     }
 
     public HttpHeader getHttpHeader() {
         return httpHeader;
     }
 
-    public HttpBody getHttpBody() {
-        return httpBody;
-    }
-
     @Override
     public String toString() {
         return "HttpRequest{" +
-                "startLine=" + startLine +
+                "url=" + url +
+                ", httpMethod=" + httpMethod +
+                ", httpVersion=" + httpVersion +
+                ", httpRequestParams=" + httpRequestParams +
                 ", httpHeader=" + httpHeader +
-                ", httpBody=" + httpBody +
                 '}';
     }
 }

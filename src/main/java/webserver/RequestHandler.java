@@ -10,6 +10,8 @@ import java.util.Map;
 
 import model.User;
 import network.HttpRequest;
+import network.HttpRequestParams;
+import network.HttpRequestParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
@@ -28,19 +30,19 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            HttpRequest httpRequest = HttpRequest.init(in);
+            HttpRequest httpRequest = HttpRequestParser.parse(in);
 
             logger.info("{}", httpRequest);
 
-            if (httpRequest.getStartLine().getUrl().equals("/user/create")) {
-                Map<String, String> parameters = httpRequest.getStartLine().getParameters();
+            if (httpRequest.getUrl().equals("/user/create")) {
+                HttpRequestParams parameters = httpRequest.getHttpRequestParams();
                 User user = new User(parameters.get("userId"), parameters.get("password"),
                         parameters.get("name"), parameters.get("email"));
 
                 logger.info("{}", user);
             } else {
                 DataOutputStream dos = new DataOutputStream(out);
-                byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getStartLine().getUrl());
+                byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getUrl());
                 response200Header(dos, body.length);
                 responseBody(dos, body);
             }
