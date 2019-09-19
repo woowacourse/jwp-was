@@ -77,7 +77,7 @@ public class RequestHandler implements Runnable {
 
     private void response300Header(DataOutputStream dos, String location) {
         try {
-            dos.writeBytes("HTTP/1.1 301 Moved Permanently \r\n");
+            dos.writeBytes("HTTP/1.1 302 Found \r\n");
             dos.writeBytes("Location: " + location + "\r\n");
             dos.writeBytes("\r\n");
             dos.flush();
