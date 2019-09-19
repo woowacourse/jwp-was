@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class HttpProtocolsTest {
     @Test
-    void name() {
+    void ENUM_메서드_확인() {
         assertDoesNotThrow(() -> HttpProtocols.of("HTTP/1.1"));
     }
 
