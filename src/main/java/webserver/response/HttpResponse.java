@@ -1,14 +1,10 @@
 package webserver.response;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Map;
 
 public class HttpResponse {
-    private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
     private HttpStatus httpStatus;
     private Map<String, Object> header;
     private byte[] body;
