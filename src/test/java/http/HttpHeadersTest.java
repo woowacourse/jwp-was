@@ -2,22 +2,41 @@ package http;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class HttpHeadersTest {
     @Test
-    void httpHeaders_생성_확인() {
-        List<String> lines = Arrays.asList("Host: localhost:8080", "Connection: keep-alive",
-                "Content-Length: 59", "Content-Type: application/x-www-form-urlencoded", "Accept: */*");
+    void header_속성에_해당하는_값을_가져온다() {
+        HttpHeaders httpHeaders;
+        Map<String, String> headers = new HashMap<>();
 
-        HttpHeaders httpHeaders = new HttpHeaders(lines);
+        headers.put("Host", "localhost:8080");
+        httpHeaders = new HttpHeaders(headers);
+
         assertThat(httpHeaders.getHeader("Host")).isEqualTo("localhost:8080");
-        assertThat(httpHeaders.getHeader("Connection")).isEqualTo("keep-alive");
-        assertThat(httpHeaders.getHeader("Content-Length")).isEqualTo("59");
-        assertThat(httpHeaders.getHeader("Content-Type")).isEqualTo("application/x-www-form-urlencoded");
-        assertThat(httpHeaders.getHeader("Accept")).isEqualTo("*/*");
+    }
+
+    @Test
+    void content_length_속성이_있는_경우() {
+        HttpHeaders httpHeaders;
+        Map<String, String> headers = new HashMap<>();
+
+        headers.put("Content-Length", "5");
+        httpHeaders = new HttpHeaders(headers);
+
+        assertThat(httpHeaders.hasContentLength()).isTrue();
+    }
+
+    @Test
+    void content_length_속성이_없는_경우() {
+        HttpHeaders httpHeaders;
+        Map<String, String> headers = new HashMap<>();
+
+        httpHeaders = new HttpHeaders(headers);
+
+        assertThat(httpHeaders.hasContentLength()).isFalse();
     }
 }
