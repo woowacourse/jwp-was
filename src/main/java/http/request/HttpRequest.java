@@ -1,31 +1,32 @@
-package http;
+package http.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RequestHeader {
+public class HttpRequest {
     private RequestMethod requestMethod;
     private RequestPath requestPath;
     private RequestVersion requestVersion;
-    private List<String> requestLines;
+    private RequestHeader requestHeader;
 
-    public RequestHeader(BufferedReader br) throws IOException {
-        requestLines = getRequestLine(br);
-        String[] tokens = getTokens(requestLines.get(0));
+    public HttpRequest(BufferedReader br) throws IOException {
+        String line = br.readLine();
+        String[] tokens = getTokens(line);
+
+        this.requestHeader = new RequestHeader(parsedBufferedReader(br, line));
         this.requestMethod = RequestMethod.from(tokens[0]);
         this.requestPath = new RequestPath(tokens[1]);
         this.requestVersion = RequestVersion.from(tokens[2]);
     }
 
-    private List<String> getRequestLine(BufferedReader br) throws IOException {
+    private List<String> parsedBufferedReader(BufferedReader br, String line) throws IOException {
         List<String> requestLines = new ArrayList<>();
 
-        String lines = br.readLine();
-        while (!lines.equals("")) {
-            requestLines.add(lines);
-            lines = br.readLine();
+        while (!line.equals("")) {
+            line = br.readLine();
+            requestLines.add(line);
         }
 
         return requestLines;
