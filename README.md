@@ -23,3 +23,13 @@
     - [X] "회원가입"을 완료하면 /index.html 페이지로 리다이렉트한다. (302 code 사용)
 5. 지금까지 구현한 소스 코드는 stylesheet 파일을 지원하지 못하고 있다. Stylesheet 파일을 지원하도록 구현하도록 한다.
     - [X] Stylesheet인 경우 응답 헤더의 Content-Type을 text/css로 전송한다. (Accept로 Stylesheet 판단)
+    
+## 1단계 리펙터링
+1. HttpRequest 리펙토링
+    - [ ] Http 요청을 Parsing하는 기능 분리
+    - [ ] QueryParams 리펙토링 
+    - [ ] Test code 작성
+    
+2. Response 생성 기능 분리
+
+3. RequestHandler 리펙토링
