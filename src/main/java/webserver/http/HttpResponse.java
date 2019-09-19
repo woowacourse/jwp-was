@@ -5,26 +5,24 @@ public class HttpResponse {
     private HttpContentType httpContentType;
     private byte[] body;
 
-    public static class Builder {
+    public static class builder {
         private HttpStatusCode statusCode = HttpStatusCode.OK;
         private HttpContentType httpContentType;
         private byte[] body = {};
 
-        public Builder() {
+        public builder() {}
 
-        }
-
-        public Builder httpStatusCode(HttpStatusCode statusCode) {
+        public builder httpStatusCode(HttpStatusCode statusCode) {
             this.statusCode = statusCode;
             return this;
         }
 
-        public Builder httpContentType(HttpContentType httpContentType) {
+        public builder httpContentType(HttpContentType httpContentType) {
             this.httpContentType = httpContentType;
             return this;
         }
 
-        public Builder body(byte[] body) {
+        public builder body(byte[] body) {
             this.body = body;
             return this;
         }
@@ -34,10 +32,9 @@ public class HttpResponse {
         }
     }
 
-    private HttpResponse(Builder builder) {
+    private HttpResponse(builder builder) {
         this.statusCode = builder.statusCode;
         this.httpContentType = builder.httpContentType;
         this.body = builder.body;
-        new HttpResponse.Builder().
     }
 }

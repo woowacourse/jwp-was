@@ -5,7 +5,6 @@ import utils.recursion.TailCall;
 import utils.recursion.TailRecursion;
 
 import java.util.Iterator;
-import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 public interface NetworkIO extends Iterator<String>, AutoCloseable {
@@ -21,20 +20,26 @@ public interface NetworkIO extends Iterator<String>, AutoCloseable {
     String readLine();
 
     default String readWhile(Predicate<? super String> condition) {
-        class AnonymousPlaceholder {}
-        return new AnonymousPlaceholder() {
-            BiFunction<Predicate<? super String>, StringBuilder, TailRecursion<String>> f = (cond, acc) -> {
+        class Closure {
+            private TailRecursion<String> readWhile(StringBuilder acc) {
+                final String line = this.appendLine(acc);
+                if (line != null && condition.test(line)) {
+                    return (TailCall<String>) () -> this.readWhile(acc);
+                }
+                return (Done<String>) acc::toString;
+            }
+
+            private String appendLine(StringBuilder acc) {
                 if (!isEOF()) {
                     final String line = readLine();
                     acc.append(line);
-                    acc.append("\n");
-                    if (condition.test(line)) {
-                        return (TailCall<String>) () -> this.f.apply(cond, acc);
-                    }
+                    acc.append("\r\n");
+                    return line;
                 }
-                return (Done<String>) acc::toString;
-            };
-        }.f.apply(condition, new StringBuilder()).get();
+                return null;
+            }
+        }
+        return (new Closure()).readWhile(new StringBuilder()).get();
     }
 
     void write(byte[] body);
