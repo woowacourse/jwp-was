@@ -28,15 +28,10 @@ public class HttpRequest {
     }
 
     public QueryParams getQueryParams() {
-        HttpMethod method = requestLine.getMethod();
-
-        if (HttpMethod.GET.match(method)) {
-            return requestLine.getUrl().getQueryParams();
+        if (HttpMethod.GET.match(requestLine.getMethod())) {
+            return QueryParams.of(requestLine.getUrl().getQueryParams());
         }
-        if (HttpMethod.POST.match(method)) {
-            return new QueryParams(body);
-        }
-        return null;
+        return QueryParams.of(body);
     }
 
     public String getBody() {

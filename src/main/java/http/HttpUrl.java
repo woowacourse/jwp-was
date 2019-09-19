@@ -13,7 +13,7 @@ public class HttpUrl {
     private static final String URL_DELIMITER = "\\?";
 
     private String path;
-    private QueryParams queryParams;
+    private String queryParams;
 
     public HttpUrl(String url) throws UnsupportedEncodingException {
         String decodedUrl = decode(url, StandardCharsets.UTF_8.name());
@@ -22,7 +22,7 @@ public class HttpUrl {
         path = splicedUrl[PATH_INDEX];
 
         if (hasQueryParams(splicedUrl)) {
-            queryParams = new QueryParams(splicedUrl[QUERY_INDEX]);
+            queryParams = splicedUrl[QUERY_INDEX];
         }
     }
 
@@ -34,7 +34,7 @@ public class HttpUrl {
         return path;
     }
 
-    QueryParams getQueryParams() {
+    public String getQueryParams() {
         return queryParams;
     }
 

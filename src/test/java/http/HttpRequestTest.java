@@ -15,7 +15,6 @@ class HttpRequestTest {
     @Test
     void HttpRequest_GET_생성() throws IOException {
         InputStream in = new FileInputStream(new File(testDirectory + "Http_GET.txt"));
-
         HttpRequest httpRequest = HttpRequestFactory.makeHttpRequest(in);
         HttpHeaders httpHeaders = httpRequest.getHeaders();
 
@@ -31,7 +30,6 @@ class HttpRequestTest {
     @Test
     void HttpRequest_POST_생성() throws IOException {
         InputStream in = new FileInputStream(new File(testDirectory + "Http_POST.txt"));
-
         HttpRequest httpRequest = HttpRequestFactory.makeHttpRequest(in);
         HttpHeaders httpHeaders = httpRequest.getHeaders();
 
@@ -60,5 +58,27 @@ class HttpRequestTest {
         InputStream in = new ByteArrayInputStream(request.getBytes());
 
         assertThatThrownBy(() -> HttpRequestFactory.makeHttpRequest(in)).isInstanceOf(StartLineException.class);
+    }
+
+    @Test
+    void QueryParams_GET() throws IOException {
+        InputStream in = new FileInputStream(new File(testDirectory + "Http_GET.txt"));
+        HttpRequest httpRequest = HttpRequestFactory.makeHttpRequest(in);
+        QueryParams queryParams = httpRequest.getQueryParams();
+
+        assertThat(queryParams.getParam("userId")).isEqualTo("woowa");
+        assertThat(queryParams.getParam("password")).isEqualTo("password");
+        assertThat(queryParams.getParam("name")).isEqualTo("woo");
+    }
+
+    @Test
+    void QueryParams_POST() throws IOException {
+        InputStream in = new FileInputStream(new File(testDirectory + "Http_POST.txt"));
+        HttpRequest httpRequest = HttpRequestFactory.makeHttpRequest(in);
+        QueryParams queryParams = httpRequest.getQueryParams();
+
+        assertThat(queryParams.getParam("userId")).isEqualTo("woowa");
+        assertThat(queryParams.getParam("password")).isEqualTo("password");
+        assertThat(queryParams.getParam("name")).isEqualTo("woo");
     }
 }
