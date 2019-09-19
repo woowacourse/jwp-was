@@ -1,5 +1,6 @@
 package webserver.domain;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -30,7 +31,12 @@ public class QueryParameter {
     }
 
     private String urlDecode(final String encodedString) {
-        return URLDecoder.decode(encodedString, StandardCharsets.UTF_8);
+        try {
+            return URLDecoder.decode(encodedString, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
     public Map<String, String> getQueries() {
