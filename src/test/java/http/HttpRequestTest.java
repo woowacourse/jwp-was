@@ -26,6 +26,28 @@ public class HttpRequestTest {
                     "Accept-Language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7\n" +
                     "Cookie: Idea-c5a8acf3=c2c6d2e2-54d7-47a9-8e2a-b0ff8e06a759; JSESSIONID=55F183C31FC99489F6D47D0794FD685F\n";
 
+    private static final String POST_REQUEST =
+                    "POST /user/create HTTP/1.1\n" +
+                    "Host: localhost:8080\n" +
+                    "Connection: keep-alive\n" +
+                    "Content-Length: 61\n" +
+                    "Pragma: no-cache\n" +
+                    "Cache-Control: no-cache\n" +
+                    "Origin: http://localhost:8080\n" +
+                    "Upgrade-Insecure-Requests: 1\n" +
+                    "Content-Type: application/x-www-form-urlencoded\n" +
+                    "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36\n" +
+                    "Sec-Fetch-Mode: navigate\n" +
+                    "Sec-Fetch-User: ?1\n" +
+                    "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3\n" +
+                    "Sec-Fetch-Site: same-origin\n" +
+                    "Referer: http://localhost:8080/user/form.html\n" +
+                    "Accept-Encoding: gzip, deflate, br\n" +
+                    "Accept-Language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7\n" +
+                    "Cookie: Idea-c5a8acf3=c2c6d2e2-54d7-47a9-8e2a-b0ff8e06a759; JSESSIONID=55F183C31FC99489F6D47D0794FD685F\n" +
+                    "\n" +
+                    "userId=park&password=1234&name=sungbum&email=park%40naver.com";
+
     HttpRequest request;
 
     @BeforeEach
@@ -77,5 +99,14 @@ public class HttpRequestTest {
     @Test
     void 비어있는_바디_가져오기() {
         assertThat(request.getBody()).isEqualTo(null);
+    }
+
+    @Test
+    void POST_요청_body_가져오기() {
+        HttpRequest postRequest = new HttpRequest(new ByteArrayInputStream(POST_REQUEST.getBytes(UTF_8)));
+        assertThat(postRequest.getRequestBody("userId")).isEqualTo("park");
+        assertThat(postRequest.getRequestBody("password")).isEqualTo("1234");
+        assertThat(postRequest.getRequestBody("name")).isEqualTo("sungbum");
+        assertThat(postRequest.getRequestBody("email")).isEqualTo("park@naver.com");
     }
 }

@@ -46,10 +46,10 @@ public class RequestHandler implements Runnable {
 
             if (httpRequest.getUri().equals("/user/create")) {
                 User user = new User(
-                        httpRequest.getParameter("userId"),
-                        httpRequest.getParameter("password"),
-                        httpRequest.getParameter("name"),
-                        httpRequest.getParameter("email"));
+                        httpRequest.getRequestBody("userId"),
+                        httpRequest.getRequestBody("password"),
+                        httpRequest.getRequestBody("name"),
+                        httpRequest.getRequestBody("email"));
                 logger.info(user.toString());
 
                 httpResponse.setStatus(200);

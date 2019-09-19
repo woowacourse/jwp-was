@@ -2,11 +2,13 @@ package http;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.IOUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,6 +22,7 @@ public class HttpRequest {
     private HttpMethod method;
     private HttpHeader headers;
     private RequestParameter requestParameter;
+    private RequestParameter requestBody;
     private String body;
 
     public HttpRequest(InputStream requestStream) {
@@ -34,8 +37,7 @@ public class HttpRequest {
             lines.addAll(headers);
 
             if (this.headers.getContentLength() > 0) {
-                List<String> bodies = parseBody(br);
-                lines.addAll(bodies);
+                lines.add(parseBody(br));
             }
 
             log.info(String.join("\n", lines));
@@ -69,23 +71,17 @@ public class HttpRequest {
             header = br.readLine();
         }
         this.headers = new HttpHeader(headers);
+        headers.add("");
         return headers;
     }
 
-    private List<String> parseBody(BufferedReader br) throws IOException {
-        List<String> bodies = new ArrayList<>();
-        String line = br.readLine();
-        StringBuilder sb = new StringBuilder();
-        while (!"".equals(line)) {
-            if (line == null) {
-                break;
-            }
-            bodies.add(line);
-            sb.append(line);
-            line = br.readLine();
+    private String parseBody(BufferedReader br) throws IOException {
+        body = IOUtils.readData(br, headers.getContentLength());
+        if (method.equals(HttpMethod.POST)
+                && headers.getValue("Content-Type").equals("application/x-www-form-urlencoded")) {
+            requestBody = new RequestParameter(parseQueryString(URLDecoder.decode(body, "UTF-8")));
         }
-        body = sb.toString();
-        return bodies;
+        return body;
     }
 
     private Map<String, String> parseQueryString(String queryString) {
@@ -117,5 +113,9 @@ public class HttpRequest {
 
     public String getParameter(String key) {
         return requestParameter.getParameter(key);
+    }
+
+    public String getRequestBody(String key) {
+        return requestBody.getParameter(key);
     }
 }
