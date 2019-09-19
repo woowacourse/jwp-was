@@ -18,8 +18,10 @@ public abstract class View {
         StringBuffer sb = new StringBuffer();
         sb.append(HTTP.VERSION.getPhrase()).append(" ").append(httpStatus.getInfo()).append("\r\n");
 
-        for (HTTP key : header.keySet()) {
-            sb.append(key.getPhrase()).append(": ").append(header.get(key)).append("\r\n");
+        for (HTTP key : HTTP.values()) {
+            if (header.containsKey(key)) {
+                sb.append(key.getPhrase()).append(": ").append(header.get(key)).append("\r\n");
+            }
         }
         sb.append("\r\n");
 
