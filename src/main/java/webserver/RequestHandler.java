@@ -3,6 +3,7 @@ package webserver;
 import db.DataBase;
 import http.HttpMethod;
 import http.HttpRequest;
+import http.HttpRequestFactory;
 import http.QueryParams;
 import model.User;
 import org.slf4j.Logger;
@@ -29,10 +30,8 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            BufferedReader buffer = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-            HttpRequest request = HttpRequest.of(buffer);
+            HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
             logger.debug(request.toString());
-
 
             if (HttpMethod.GET.match(request.getMethod())) {
                 DataOutputStream dos = new DataOutputStream(out);
