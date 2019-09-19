@@ -5,7 +5,8 @@ import http.exception.NotFoundStatusException;
 import java.util.Arrays;
 
 public enum HttpStatus {
-    OK(200, "OK");
+    OK(200, "OK"),
+    FOUND(302, "FOUND");
 
     private int statusCode;
     private String status;

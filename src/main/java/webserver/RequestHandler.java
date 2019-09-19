@@ -52,7 +52,8 @@ public class RequestHandler implements Runnable {
                         httpRequest.getRequestBody("email"));
                 logger.info(user.toString());
 
-                httpResponse.setStatus(200);
+                httpResponse.setStatus(302);
+                httpResponse.addHeader("Location", "/index.html");
                 httpResponse.send();
                 dos.close();
             }
