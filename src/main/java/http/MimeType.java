@@ -1,23 +1,28 @@
 package http;
 
-public enum MimeType {
-    CSS("text/css;charset=utf-8"),
-    JS("text/javascript;charset=UTF-8"),
-    HTML("text/html;charset=utf-8");
+import java.util.HashMap;
+import java.util.Map;
 
-    private final String type;
+public class MimeType {
+    public final static Map<String, String> MAP = new HashMap<>();
 
-    MimeType(final String type) {
-        this.type = type;
+    static {
+        MAP.put("css", "text/css;charset=utf-8");
+        MAP.put("js", "text/javascript;charset=UTF-8:");
+        MAP.put("htm", "text/html;charset=utf-8");
+        MAP.put("html", "text/html;charset=utf-8");
+        MAP.put("gif", "image/gif");
+        MAP.put("png", "image/png");
+        MAP.put("jpg", "image/jpeg");
+        MAP.put("jpeg", "image/jpeg");
+        MAP.put("bmp", "image/bmp");
+        MAP.put("webp", "image/webp");
+        MAP.put("ttf", "font/ttf");
+        MAP.put("woff", "font/woff");
+        MAP.put("ico", "image/vnd.microsoft.icon");
     }
 
-    public static String getType(String type) {
-        for (final MimeType mimeType : MimeType.values()) {
-            if (mimeType.type.contains(type)) {
-                return mimeType.type;
-            }
-        }
-
-        throw new IllegalArgumentException("Invalid MimeType");
+    public static String getType(String extension) {
+        return MAP.get(extension);
     }
 }

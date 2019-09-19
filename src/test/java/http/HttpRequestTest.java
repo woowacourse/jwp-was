@@ -9,8 +9,8 @@ import java.io.InputStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class RequestTest {
-    private Request request;
+class HttpRequestTest {
+    private HttpRequest httpRequest;
 
     @BeforeEach
     void setUp() throws IOException {
@@ -21,29 +21,29 @@ class RequestTest {
                 "\r\n";
         InputStream is = new ByteArrayInputStream(plainTextRequest.getBytes());
 
-        request = new Request(is);
+        httpRequest = new HttpRequest(is);
     }
 
     @Test
     void parsePathTest() {
-        assertThat(request.getPath()).isEqualTo("/index.html");
+        assertThat(httpRequest.getPath()).isEqualTo("/index.html");
     }
 
     @Test
     void parseMethodTest() {
-        assertThat(request.getMethod()).isEqualTo("GET");
+        assertThat(httpRequest.getMethod()).isEqualTo("GET");
     }
 
     @Test
     void parseHttpVersionTest() {
-        assertThat(request.getHttpVersion()).isEqualTo("HTTP/1.1");
+        assertThat(httpRequest.getHttpVersion()).isEqualTo("HTTP/1.1");
     }
 
     @Test
     void parseHeadersTest() {
-        assertThat(request.getHeader("Host")).isEqualTo("localhost:8080");
-        assertThat(request.getHeader("Connection")).isEqualTo("keep-alive");
-        assertThat(request.getHeader("Accept")).isEqualTo("*/*");
+        assertThat(httpRequest.getHeader("Host")).isEqualTo("localhost:8080");
+        assertThat(httpRequest.getHeader("Connection")).isEqualTo("keep-alive");
+        assertThat(httpRequest.getHeader("Accept")).isEqualTo("*/*");
     }
 
     @Test
@@ -55,11 +55,11 @@ class RequestTest {
                 "\r\n";
         InputStream is = new ByteArrayInputStream(plainTextRequest.getBytes());
 
-        Request request = new Request(is);
+        HttpRequest httpRequest = new HttpRequest(is);
 
-        assertThat(request.getParam("userId")).isEqualTo("javajigi");
-        assertThat(request.getParam("password")).isEqualTo("password");
-        assertThat(request.getParam("email")).isEqualTo("javajigi@slipp.net");
+        assertThat(httpRequest.getParam("userId")).isEqualTo("javajigi");
+        assertThat(httpRequest.getParam("password")).isEqualTo("password");
+        assertThat(httpRequest.getParam("email")).isEqualTo("javajigi@slipp.net");
     }
 
     @Test
@@ -75,9 +75,9 @@ class RequestTest {
 
         InputStream is = new ByteArrayInputStream(plainTextRequest.getBytes());
 
-        Request request = new Request(is);
-        assertThat(request.getBody("userId")).isEqualTo("javajigi");
-        assertThat(request.getBody("password")).isEqualTo("password");
-        assertThat(request.getBody("email")).isEqualTo("javajigi@slipp.net");
+        HttpRequest httpRequest = new HttpRequest(is);
+        assertThat(httpRequest.getBody("userId")).isEqualTo("javajigi");
+        assertThat(httpRequest.getBody("password")).isEqualTo("password");
+        assertThat(httpRequest.getBody("email")).isEqualTo("javajigi@slipp.net");
     }
 }

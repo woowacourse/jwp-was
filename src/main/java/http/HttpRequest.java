@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Request {
+public class HttpRequest {
     private final String method;
     private final String path;
     private final String httpVersion;
@@ -19,7 +19,7 @@ public class Request {
     private final Map<String, String> params = new HashMap<>();
     private final Map<String, String> body = new HashMap<>();
 
-    public Request(final InputStream is) throws IOException {
+    public HttpRequest(final InputStream is) throws IOException {
         InputStreamReader isr = new InputStreamReader(is);
         BufferedReader br = new BufferedReader(isr);
 
