@@ -19,12 +19,16 @@ public class ViewResolver implements Resolver {
         if (resource.startsWith(REDIRECT_PREFIX)) {
             return new HttpResponse(HttpProtocols.DEFAULT, HttpStatus.FOUND, ContentType.HTML);
         }
-        String resourceName = modelAndView.getViewLocation();
-        String extension = resourceName.substring(resourceName.lastIndexOf(EXTENSION_SEPARATOR) + 1);
-        ContentType contentType = ContentType.of(extension);
+        ContentType contentType = getContentType(modelAndView);
         if (contentType == ContentType.HTML) {
             return new HttpResponse(HttpProtocols.DEFAULT, HttpStatus.OK, contentType, FileIoUtils.loadFileFromClasspath(HTML_PATH + modelAndView.getViewLocation()));
         }
         return new HttpResponse(HttpProtocols.DEFAULT, HttpStatus.OK, contentType, FileIoUtils.loadFileFromClasspath(STATIC_PATH + modelAndView.getViewLocation()));
+    }
+
+    private ContentType getContentType(ModelAndView modelAndView) {
+        String resourceName = modelAndView.getViewLocation();
+        String extension = resourceName.substring(resourceName.lastIndexOf(EXTENSION_SEPARATOR) + 1);
+        return ContentType.of(extension);
     }
 }
