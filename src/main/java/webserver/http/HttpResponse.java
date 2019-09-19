@@ -38,6 +38,17 @@ public class HttpResponse {
         this.statusCode = builder.statusCode;
         this.httpContentType = builder.httpContentType;
         this.body = builder.body;
-        new HttpResponse.Builder().
+    }
+
+    public HttpStatusCode getStatusCode() {
+        return statusCode;
+    }
+
+    public HttpContentType getHttpContentType() {
+        return httpContentType;
+    }
+
+    public byte[] getBody() {
+        return body;
     }
 }
