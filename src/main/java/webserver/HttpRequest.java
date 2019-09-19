@@ -13,13 +13,13 @@ public class HttpRequest {
     private static final String CONTENT_TYPE = "Content-Type";
     private static final String BLANK = "";
     private final RequestLine requestLine;
-    private final RequestHeader requestHeader;
+    private final HttpHeader httpHeader;
     private final RequestParameter requestParameter;
     private final String body;
 
     public HttpRequest(BufferedReader br) throws IOException {
         requestLine = extractRequestLine(br);
-        requestHeader = extractHeader(br);
+        httpHeader = extractHeader(br);
         body = extractBody(br);
         requestParameter = createRequestParameter();
     }
@@ -29,7 +29,7 @@ public class HttpRequest {
         return new RequestLine(requestLine);
     }
 
-    private RequestHeader extractHeader(BufferedReader br) throws IOException {
+    private HttpHeader extractHeader(BufferedReader br) throws IOException {
         List<String> lines = new ArrayList<>();
 
         String line = br.readLine();
@@ -38,13 +38,13 @@ public class HttpRequest {
             line = br.readLine();
         }
 
-        return new RequestHeader(lines);
+        return new HttpHeader(lines);
     }
 
     private String extractBody(BufferedReader br) throws IOException {
         RequestMethod requestMethod = requestLine.getMethod();
         if (requestMethod.hasBody()) {
-            int contentLength = Integer.parseInt(requestHeader.get(CONTENT_LENGTH));
+            int contentLength = Integer.parseInt(httpHeader.get(CONTENT_LENGTH));
             return IOUtils.readData(br, contentLength);
         }
         return BLANK;
@@ -52,14 +52,14 @@ public class HttpRequest {
 
     private RequestParameter createRequestParameter() {
         String queryString = requestLine.getUrl().getQueryString();
-        if (requestLine.getMethod().hasBody() && "application/x-www-form-urlencoded".equals(requestHeader.get(CONTENT_TYPE))) {
+        if (requestLine.getMethod().hasBody() && "application/x-www-form-urlencoded".equals(httpHeader.get(CONTENT_TYPE))) {
             queryString += "&" + body;
         }
         return new RequestParameter(queryString);
     }
 
-    public RequestHeader getRequestHeader() {
-        return requestHeader;
+    public HttpHeader getHttpHeader() {
+        return httpHeader;
     }
 
     public String getBody() {
