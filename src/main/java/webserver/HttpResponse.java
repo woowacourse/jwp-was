@@ -19,10 +19,10 @@ public class HttpResponse {
         return new HttpResponse(statusLine, httpHeader, new byte[0]);
     }
 
-    public static HttpResponse ok(byte[] body) {
+    public static HttpResponse ok(byte[] body, String extension) {
         StatusLine statusLine = new StatusLine("HTTP/1.1", ResponseStatus.OK);
         HttpHeader httpHeader = new HttpHeader(Arrays.asList(
-                "Content-Type: text/html;charset=utf-8",
+                "Content-Type: " + ContentType.getContentType(extension) + ";charset=utf-8",
                 "Content-Length: " + body.length
         ));
         return new HttpResponse(statusLine, httpHeader, body);
