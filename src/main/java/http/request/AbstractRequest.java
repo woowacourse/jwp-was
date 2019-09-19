@@ -15,20 +15,19 @@ public class AbstractRequest implements Request {
 
 
     public AbstractRequest(BufferedReader br, String[] tokens) throws IOException {
-        String line = tokens[0] + tokens[1] + tokens[2];
         this.requestMethod = RequestMethod.from(tokens[0]);
         this.requestPath = new RequestPath(tokens[1]);
         this.requestVersion = RequestVersion.from(tokens[2]);
-        this.requestHeader = new RequestHeader(parsedBufferedReader(br, line));
+        this.requestHeader = new RequestHeader(parsedBufferedReader(br));
     }
 
     @Override
-    public List<String> parsedBufferedReader(BufferedReader br, String line) throws IOException {
+    public List<String> parsedBufferedReader(BufferedReader br) throws IOException {
         List<String> requestLines = new ArrayList<>();
-
+        String line = "Header: start";
         while (!line.equals("")) {
-            line = br.readLine();
             requestLines.add(line);
+            line = br.readLine();
         }
 
         return requestLines;

@@ -5,7 +5,7 @@ public class RequestPath {
 
     RequestPath(String path) {
          this.path = (path.contains("/css") || path.contains("/js") || path.contains("/fonts")) ?
-            "../resources/static/" + path : "../resources/templates" + path;
+            "../resources/static" + path : "../resources/templates" + path;
     }
 
     public String getPath() {

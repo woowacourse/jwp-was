@@ -1,10 +1,8 @@
 package http.response;
 
-import java.io.DataOutputStream;
+public class CssResponse extends AbstractResponse {
 
-public class CssResponse implements Response {
-    @Override
-    public void doResponse(DataOutputStream dos) {
-
+    public CssResponse(String path) {
+        super(path);
     }
 }

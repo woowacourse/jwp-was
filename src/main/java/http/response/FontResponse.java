@@ -1,10 +1,7 @@
 package http.response;
 
-import java.io.DataOutputStream;
-
-public class FontResponse implements Response {
-    @Override
-    public void doResponse(DataOutputStream dos) {
-
+public class FontResponse extends AbstractResponse {
+    public FontResponse(String path) {
+        super(path);
     }
 }

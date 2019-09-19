@@ -1,10 +1,8 @@
 package http.response;
 
-import java.io.DataOutputStream;
+public class RedirectResponse extends AbstractResponse {
 
-public class RedirectResponse implements Response {
-    @Override
-    public void doResponse(DataOutputStream dos) {
-
+    public RedirectResponse(String path) {
+        super(path);
     }
 }

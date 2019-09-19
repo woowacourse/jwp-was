@@ -10,7 +10,7 @@ public class HomeController {
     }
 
     public Response home(Request request) {
-        return ResponseFactory.getResponse(request.getRequestPath()+"index.html");
+        return ResponseFactory.getResponse(request.getRequestPath().getPath(), "../resources/templates/");
     }
 
     private static class HomeControllerHolder {

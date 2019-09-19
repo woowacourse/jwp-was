@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface Request {
-    List<String> parsedBufferedReader(BufferedReader br, String line) throws IOException;
+    List<String> parsedBufferedReader(BufferedReader br) throws IOException;
 
     Map<String, String> getParams();
 

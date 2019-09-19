@@ -4,53 +4,53 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ResponseFactory {
-    private static Map<String, ResponseCreator> responsCreators = new HashMap<>();
+    private static Map<String, ResponseCreator> responseCreators = new HashMap<>();
 
     static {
-        responsCreators.put("../resources/templates/", new HtmlResponseCreator());
-        responsCreators.put("../resources/static/css/", new CssResponseCreator());
-        responsCreators.put("../resources/static/js/", new JsResponseCreator());
-        responsCreators.put("../resources/static/fonts/", new FontResponseCreator());
-        responsCreators.put("redirect:../resources/templates/", new RedirectionResponseCreator());
+        responseCreators.put("../resources/templates/", new HtmlResponseCreator());
+        responseCreators.put("../resources/static/css/", new CssResponseCreator());
+        responseCreators.put("../resources/static/js/", new JsResponseCreator());
+        responseCreators.put("../resources/static/fonts/", new FontResponseCreator());
+        responseCreators.put("redirect://../resources/templates/", new RedirectionResponseCreator());
     }
 
-    public static Response getResponse(String path) {
-        ResponseCreator responseCreator = responsCreators.get(path);
-        return responseCreator.create();
+    public static Response getResponse(String path, String key) {
+        ResponseCreator responseCreator = responseCreators.get(key);
+        return responseCreator.create(path);
     }
 }
 
 class HtmlResponseCreator implements ResponseCreator {
     @Override
-    public Response create() {
-        return new HtmlResponse();
+    public Response create(String path) {
+        return new HtmlResponse(path);
     }
 }
 
 class CssResponseCreator implements ResponseCreator {
     @Override
-    public Response create() {
-        return new CssResponse();
+    public Response create(String path) {
+        return new CssResponse(path);
     }
 }
 
 class JsResponseCreator implements ResponseCreator {
     @Override
-    public Response create() {
-        return new JsResponse();
+    public Response create(String path) {
+        return new JsResponse(path);
     }
 }
 
 class RedirectionResponseCreator implements ResponseCreator {
     @Override
-    public Response create() {
-        return new RedirectResponse();
+    public Response create(String path) {
+        return new RedirectResponse(path);
     }
 }
 
 class FontResponseCreator implements ResponseCreator {
     @Override
-    public Response create() {
-        return new FontResponse();
+    public Response create(String path) {
+        return new FontResponse(path);
     }
 }

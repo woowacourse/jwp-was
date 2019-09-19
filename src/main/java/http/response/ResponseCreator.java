@@ -1,5 +1,5 @@
 package http.response;
 
 public interface ResponseCreator {
-    Response create();
+    Response create(String path);
 }
