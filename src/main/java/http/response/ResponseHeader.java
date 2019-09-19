@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ResponseHeader {
-    private static final String HEADER_DELIMITER = ": ";
+    private static final String HEADER_DELIMITER = ":\\s";
     private static final String CRLF = "\r\n";
 
     private Map<String, String> responseHeader;
@@ -23,6 +23,10 @@ public class ResponseHeader {
 
     public void put(String headerKey, String headerValue) {
         responseHeader.put(headerKey, headerValue);
+    }
+
+    public String getHeader(String key) {
+        return responseHeader.get(key);
     }
 
     @Override

@@ -1,11 +1,12 @@
 package http.request;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class RequestHeader {
-    private static final String HEADER_DELIMITER = ": ";
+    private static final String HEADER_DELIMITER = ":\\s";
     private static final String CRLF = "\r\n";
 
     private Map<String, String> requestHeader;
@@ -14,11 +15,13 @@ public class RequestHeader {
         this.requestHeader = requestHeader;
     }
 
-    public static RequestHeader of(List<String> header) {
+    public static RequestHeader of(BufferedReader br) throws IOException {
         RequestHeader requestHeader = new RequestHeader(new HashMap<>());
-        for (String headerLine : header) {
-            requestHeader.put(headerLine);
+        String header;
+        while (!(header = br.readLine()).equals("")) {
+            requestHeader.put(header);
         }
+
         return requestHeader;
     }
 
@@ -35,7 +38,7 @@ public class RequestHeader {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (String key : requestHeader.keySet()) {
-            sb.append(key).append(HEADER_DELIMITER).append(requestHeader.get(key)).append(CRLF);
+            sb.append(key + HEADER_DELIMITER +  requestHeader.get(key) + CRLF);
         }
         return sb.toString();
     }
