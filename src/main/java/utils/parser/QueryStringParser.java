@@ -1,6 +1,6 @@
 package utils.parser;
 
-public class QueryStringParser extends EncodedURLParser {
+public class QueryStringParser extends URLParser {
     protected QueryStringParser() {
         super("&", "=");
     }

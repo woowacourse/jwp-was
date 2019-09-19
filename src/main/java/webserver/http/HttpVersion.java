@@ -22,7 +22,11 @@ public enum HttpVersion {
     }
 
     public static Optional<HttpVersion> of(String version) {
-        return of(Double.parseDouble(version.split("/")[1]));
+        try {
+            return of(Double.parseDouble(version.split("/")[1].trim()));
+        } catch (NumberFormatException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
