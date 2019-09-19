@@ -29,34 +29,31 @@ public class RequestHandler implements Runnable {
 
             String path = httpRequest.getPath();
 
+            String result = "";
             if ("/user/create".equals(path)) {
-                userController.create(httpRequest.getRequestParameter());
-                path = "index.html";
+                result = userController.create(httpRequest.getRequestParameter());
             }
 
-            DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = FileIoUtils.loadFileFromClasspath("./templates/" + path);
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+            if (result.startsWith("redirect: ")) {
+                String location = result.substring(result.indexOf(" ") + 1);
+                HttpResponse httpResponse = HttpResponse.found(location);
+                sendResponse(out, httpResponse);
+            } else {
+                byte[] body = FileIoUtils.loadFileFromClasspath("./templates/" + path);
+                HttpResponse httpResponse = HttpResponse.ok(body);
+                sendResponse(out, httpResponse);
+            }
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
+    private void sendResponse(OutputStream out, HttpResponse httpResponse) {
+        DataOutputStream dos = new DataOutputStream(out);
 
-    private void responseBody(DataOutputStream dos, byte[] body) {
         try {
-            dos.write(body, 0, body.length);
+            byte[] response = httpResponse.serialize();
+            dos.write(response, 0, response.length);
             dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
