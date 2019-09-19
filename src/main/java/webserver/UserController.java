@@ -18,7 +18,7 @@ public class UserController {
 
         DataBase.addUser(user);
 
-        return "index";
+        return "redirect: /index.html";
     }
 
     private static class UserControllerLazyHolder {
