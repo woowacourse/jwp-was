@@ -35,6 +35,7 @@ public class RequestHandler implements Runnable {
 
             if (url.contains("/user/create")) {
                 saveUser(request.getBody());
+                response300Header(dos, request.getRequestElement("Origin") + "/index.html");
             }
 
             String extension = url.substring(url.lastIndexOf(".") + 1);
@@ -69,6 +70,17 @@ public class RequestHandler implements Runnable {
             dos.writeBytes("Content-Type: " + type + ";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void response300Header(DataOutputStream dos, String location) {
+        try {
+            dos.writeBytes("HTTP/1.1 301 Moved Permanently \r\n");
+            dos.writeBytes("Location: " + location + "\r\n");
+            dos.writeBytes("\r\n");
+            dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
