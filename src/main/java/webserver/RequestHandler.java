@@ -12,6 +12,7 @@ import model.User;
 import network.HttpRequest;
 import network.HttpRequestParams;
 import network.HttpRequestParser;
+import network.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
@@ -40,6 +41,10 @@ public class RequestHandler implements Runnable {
                         parameters.get("name"), parameters.get("email"));
 
                 logger.info("{}", user);
+
+                DataOutputStream dos = new DataOutputStream(out);
+                String host = httpRequest.getHttpHeader().get("Origin");
+                response3xxHeader(dos, HttpStatus.FOUND, host + "/index.html");
             } else {
                 DataOutputStream dos = new DataOutputStream(out);
                 byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getUrl());
@@ -47,6 +52,17 @@ public class RequestHandler implements Runnable {
                 responseBody(dos, body);
             }
         } catch (IOException | URISyntaxException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void response3xxHeader(final DataOutputStream dos, final HttpStatus httpStatus, final String location) {
+        try {
+            dos.writeBytes("HTTP/1.1 " + httpStatus + "\r\n");
+            dos.writeBytes("Location: " + location + "\r\n");
+            dos.writeBytes("\r\n");
+            dos.flush();
+        } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
