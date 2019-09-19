@@ -8,6 +8,8 @@ import java.io.*;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.List;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -27,8 +29,17 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             HttpRequest httpRequest = new HttpRequest(br);
 
-            String path = httpRequest.getPath();
+            sendResponse(out, getHttpResponse(httpRequest));
 
+        } catch (IOException | URISyntaxException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private HttpResponse getHttpResponse(HttpRequest httpRequest) throws IOException, URISyntaxException {
+        List<String> resources = Arrays.asList("/index.html", "/user/create", "/user/form.html");
+        String path = httpRequest.getPath();
+        if (resources.contains(path)) {
             String result = "";
             if ("/user/create".equals(path)) {
                 result = userController.create(httpRequest.getRequestParameter());
@@ -37,15 +48,18 @@ public class RequestHandler implements Runnable {
             if (result.startsWith("redirect: ")) {
                 String location = result.substring(result.indexOf(" ") + 1);
                 HttpResponse httpResponse = HttpResponse.found(location);
-                sendResponse(out, httpResponse);
-            } else {
-                byte[] body = FileIoUtils.loadFileFromClasspath("./templates/" + path);
-                HttpResponse httpResponse = HttpResponse.ok(body);
-                sendResponse(out, httpResponse);
+                return httpResponse;
             }
-        } catch (IOException | URISyntaxException e) {
-            logger.error(e.getMessage());
+
+            return create200Response("./templates/" + path);
         }
+        return create200Response("./static/" + path);
+    }
+
+    private HttpResponse create200Response(String path) throws IOException, URISyntaxException {
+        byte[] body = FileIoUtils.loadFileFromClasspath(path);
+        String[] extension = path.split("[.]");
+        return HttpResponse.ok(body, extension[extension.length - 1]);
     }
 
     private void sendResponse(OutputStream out, HttpResponse httpResponse) {
