@@ -25,7 +25,7 @@ public class HttpContentType {
 
     public HttpContentType(String input, KeyValueParserFactory keyValueParserFactory) {
         final int slashIndex = input.indexOf("/");
-        this.chemical = Chemical.valueOf(input.substring(slashIndex).toUpperCase());
+        this.chemical = Chemical.valueOf(input.substring(0, slashIndex).toUpperCase());
         this.subtype = input.contains(";")
                 ? input.substring(slashIndex + 1, input.indexOf(";"))
                 : input.substring(slashIndex + 1);
