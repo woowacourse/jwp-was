@@ -1,5 +1,7 @@
 package http.request;
 
+import exception.NoMatchHttpVersionException;
+
 import java.util.Arrays;
 
 public enum RequestVersion {
@@ -18,7 +20,7 @@ public enum RequestVersion {
         return Arrays.stream(values())
                 .filter(version -> version.getVersion().equals(requestVersion))
                 .findAny()
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(NoMatchHttpVersionException::new);
     }
 
     public String getVersion() {

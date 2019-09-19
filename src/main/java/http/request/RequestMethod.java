@@ -1,5 +1,7 @@
 package http.request;
 
+import exception.NoMatchHttpMethodException;
+
 import java.util.Arrays;
 
 public enum RequestMethod {
@@ -18,7 +20,7 @@ public enum RequestMethod {
         return Arrays.stream(values())
                 .filter(method -> method.getMethod().equals(requestMethod))
                 .findAny()
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(NoMatchHttpMethodException::new);
     }
 
     private String getMethod() {

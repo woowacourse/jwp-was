@@ -1,6 +1,7 @@
 package webserver;
 
 import http.request.HttpRequest;
+import http.request.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
@@ -28,24 +29,25 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-            HttpRequest httpRequest = new HttpRequest(br);
-            String path = httpRequest.getRequestPath().getPath();
+            Request request = HttpRequest.getRequest(br);
 
-            if (path.contains("?")) {
-                logger.debug("handler : {}", path.contains(""));
-                userService.createUser(httpRequest.getRequestPath().getParameters());
-            }
-
-            DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = FileIoUtils.loadFileFromClasspath(path);
-
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+//            String path = httpRequest.getRequestPath().getPath();
+//
+//            if (path.contains("?")) {
+//                logger.debug("handler : {}", path.contains(""));
+//                userService.createUser(httpRequest.getRequestPath().getParameters());
+//            }
+//
+//            DataOutputStream dos = new DataOutputStream(out);
+//            byte[] body = FileIoUtils.loadFileFromClasspath(path);
+//
+//            response200Header(dos, body.length);
+//            responseBody(dos, body);
         } catch (IOException e) {
             logger.error(e.getMessage());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
+        } //catch (URISyntaxException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
