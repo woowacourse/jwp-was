@@ -10,7 +10,7 @@ public enum HttpProtocols {
 
     private String protocol;
 
-    private HttpProtocols(String protocol) {
+    HttpProtocols(String protocol) {
         this.protocol = protocol;
     }
 

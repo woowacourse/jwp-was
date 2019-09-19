@@ -10,7 +10,7 @@ public enum ContentType {
 
     private String type;
 
-    private ContentType(String type) {
+    ContentType(String type) {
         this.type = type;
     }
 

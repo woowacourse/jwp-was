@@ -8,7 +8,7 @@ public enum HttpStatus {
 
     private String message;
 
-    private HttpStatus(String message) {
+    HttpStatus(String message) {
         this.message = message;
     }
 

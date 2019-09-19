@@ -24,7 +24,7 @@ public class WebServer {
     private static final int DEFAULT_PORT = 8080;
     private static AtomicInteger counter = new AtomicInteger(0);
 
-    public static void main(String args[]) throws Exception {
+    public static void main(String[] args) throws Exception {
         int port = getPort(args);
 
         HttpRequestHandlers httpRequestHandlers = initRequestHandlers();
@@ -39,7 +39,7 @@ public class WebServer {
             // 클라이언트가 연결될때까지 대기한다.
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
-                es.execute(new RequestHandler(connection,httpRequestHandlers,viewHandler));
+                es.execute(new RequestHandler(connection, httpRequestHandlers, viewHandler));
             }
         }
         es.shutdown();
