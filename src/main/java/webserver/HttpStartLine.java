@@ -1,5 +1,7 @@
 package webserver;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,11 +10,16 @@ public class HttpStartLine {
     private final String target;
     private final String httpVersion;
 
-    public HttpStartLine(String startLine) {
+    private HttpStartLine(String method, String target, String httpVersion) {
+        this.method = method;
+        this.target = target;
+        this.httpVersion = httpVersion;
+    }
+
+    public static HttpStartLine of(BufferedReader br) throws IOException {
+        String startLine = br.readLine();
         String[] splitStartLine = startLine.split(" ");
-        method = splitStartLine[0];
-        target = splitStartLine[1];
-        httpVersion = splitStartLine[2];
+        return new HttpStartLine(splitStartLine[0], splitStartLine[1], splitStartLine[2]);
     }
 
     public String getMethod() {
@@ -50,12 +57,12 @@ public class HttpStartLine {
         return target.split("\\?")[0];
     }
 
-    public boolean isPost() {
-        return method.equals("POST");
-    }
-
     public boolean hasParameters() {
         return target.split("\\?").length == 2;
+    }
+
+    public boolean isPost() {
+        return method.equals("POST");
     }
 
     public String getContentType() {
