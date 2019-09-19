@@ -20,19 +20,16 @@ public class HttpRequestParser {
 
     public static HttpRequest parseHttpRequest(BufferedReader br) throws IOException {
         HttpRequestLine httpRequestLine = parseHttpRequestLine(br);
-        log.debug("=== make Requestline ===");
         HttpHeaderFields httpHeaderFields = parseHeaderFields(br);
-        log.debug("=== make headerFields ===");
 
         if (br.ready()) {
             String contentLength = httpHeaderFields.findField("Content-Length");
             HttpRequestBody httpRequestBody = parseHttpRequestBody(br, Integer.parseInt(contentLength));
-            log.debug("=== make RequestBody ===");
 
             return new HttpRequest(httpRequestLine, httpHeaderFields, httpRequestBody);
         }
-        log.debug("=== make RequestBody ===");
-        return new HttpRequest(httpRequestLine, httpHeaderFields, new HttpRequestBody(new QueryParams()));
+        HttpRequestBody emptyBody = new HttpRequestBody(new QueryParams());
+        return new HttpRequest(httpRequestLine, httpHeaderFields, emptyBody);
     }
 
     private static HttpRequestLine parseHttpRequestLine(BufferedReader br) throws IOException {
@@ -54,7 +51,7 @@ public class HttpRequestParser {
         log.debug("request : {}", line);
 
         while (isValidLine(line)) {
-//            log.debug("request : {}", line);
+            log.debug("request : {}", line);
 
             String[] tokens = line.split(COLON_DELIMITER, SIZE_OF_PART);
 
@@ -63,8 +60,6 @@ public class HttpRequestParser {
             httpHeaderFields.addField(name, value);
 
             line = br.readLine();
-            log.debug("request : {}", line);
-
         }
 
         return httpHeaderFields;
@@ -74,20 +69,11 @@ public class HttpRequestParser {
         return line != null && !EMPTY.equals(line) && !NEW_LINE.equals(line);
     }
 
-//    private static HttpRequestBody parseHttpRequestBody(final BufferedReader br) throws IOException {
-//        String queryString = br.readLine();
-//        QueryParams queryParams = QueryStringParser.parseQueryParams(queryString);
-//
-//        return new HttpRequestBody(queryParams);
-//    }
-
     private static HttpRequestBody parseHttpRequestBody(final BufferedReader br, final int contentLength) throws IOException {
-        QueryParams queryParams = new QueryParams();
-
         String line = IOUtils.readData(br, contentLength);
         log.debug("request : {}", line);
 
-        queryParams = QueryStringParser.parseQueryParams(line);
+        QueryParams queryParams = QueryStringParser.parseQueryParams(line);
         return new HttpRequestBody(queryParams);
     }
 }

@@ -39,4 +39,8 @@ public class HttpRequest {
     public String findRequestBodyParam(String key) {
         return httpRequestBody.findQueryParam(key);
     }
+
+    public String findHeaderField(String name) {
+        return httpHeaderFields.findField(name);
+    }
 }

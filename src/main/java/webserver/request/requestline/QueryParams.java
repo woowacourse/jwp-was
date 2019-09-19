@@ -14,4 +14,8 @@ public class QueryParams {
     public String findParam(String key) {
         return params.get(key);
     }
+
+    public boolean isEmpty() {
+        return params.isEmpty();
+    }
 }
