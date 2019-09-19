@@ -1,4 +1,4 @@
-package webserver;
+package http;
 
 public enum RequestMethod {
     POST,

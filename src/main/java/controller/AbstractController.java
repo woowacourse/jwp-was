@@ -1,8 +1,8 @@
 package controller;
 
-import webserver.HttpRequest;
-import webserver.HttpResponse;
-import webserver.RequestMethod;
+import http.HttpRequest;
+import http.HttpResponse;
+import http.RequestMethod;
 
 public abstract class AbstractController implements Controller {
 

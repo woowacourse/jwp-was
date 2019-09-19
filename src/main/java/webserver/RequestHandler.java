@@ -1,5 +1,7 @@
 package webserver;
 
+import http.HttpRequest;
+import http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,8 +30,6 @@ public class RequestHandler implements Runnable {
              HttpResponse httpResponse = new HttpResponse(out)) {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             ControllerContainer.service(httpRequest, httpResponse);
-
-
 
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());

@@ -1,7 +1,10 @@
 package webserver;
 
 import db.DataBase;
+import http.HttpRequest;
+import http.HttpResponse;
 import org.junit.jupiter.api.Test;
+import view.DefaultView;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -14,8 +17,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ControllerContainerTest {
 
     @Test
-    void user_controller_get요청() throws IOException, URISyntaxException {
-        String request = "GET /user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net HTTP/1.1\nHost: localhost:8080\nConnection: keep-alive\nAccept: */*";
+    void user_controller_POST요청() throws IOException, URISyntaxException {
+        String request = "POST /user/create HTTP/1.1\n" +
+                "Host: localhost:8080\n" +
+                "Connection: keep-alive\n" +
+                "Content-Length: 93\n" +
+                "Content-Type: application/x-www-form-urlencoded\n" +
+                "Accept: */*\n" +
+                "\n" +
+                "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
 
         InputStream in = new ByteArrayInputStream(request.getBytes());
 
@@ -38,8 +48,7 @@ class ControllerContainerTest {
 
         ByteArrayOutputStream testOut = new ByteArrayOutputStream();
         HttpResponse testHttpResponse = new HttpResponse(testOut);
-        testHttpResponse.addHeader(httpRequest.getPath());
-        testHttpResponse.addBody(httpRequest.getPath());
+        testHttpResponse.write(new DefaultView(httpRequest.getPath()));
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         HttpResponse httpResponse = new HttpResponse(out);

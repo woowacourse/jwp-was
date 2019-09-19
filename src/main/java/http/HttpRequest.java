@@ -1,4 +1,4 @@
-package webserver;
+package http;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +39,7 @@ public class HttpRequest implements AutoCloseable {
     private void createHeader() throws IOException {
         String line = bufferedReader.readLine();
         String[] tokens = line.split(" ");
-        System.out.println(line);
+
         headerContents.put(HttpRequestCoreInfo.METHOD.name(), tokens[0]);
         createAddress(tokens[1]);
 
@@ -47,10 +47,12 @@ public class HttpRequest implements AutoCloseable {
 
         while (true) {
             line = bufferedReader.readLine();
-            logger.info("request header contents: {}", line);
+
             if (line == null || line.equals("")) {
                 break;
             }
+
+            logger.info("request header contents: {}", line);
             String[] keyValue = line.split(": ");
             headerContents.put(keyValue[0], keyValue[1]);
         }
@@ -91,5 +93,9 @@ public class HttpRequest implements AutoCloseable {
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("UTF-8 not supported");
         }
+    }
+
+    public String getheaderContents(String key) {
+        return headerContents.getOrDefault(key, "");
     }
 }
