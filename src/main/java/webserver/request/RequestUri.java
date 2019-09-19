@@ -1,16 +1,14 @@
 package webserver.request;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import utils.HttpRequestUtils;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class RequestUri {
-    private static final Logger log = LoggerFactory.getLogger(RequestUri.class);
+    private static final int ABS_PATH_QUERY_TOKEN_LENGTH = 2;
+    private static final int ABS_PATH_INDEX = 0;
+    private static final int QUERY_STRING_INDEX = 1;
 
     private final String absPathAndQuery;
     private final String absPath;
@@ -18,27 +16,28 @@ public class RequestUri {
 
     public RequestUri(String pathAndQuery) {
         absPathAndQuery = pathAndQuery;
-        absPath = parseAbsPath(absPathAndQuery);
-        queryStrings = parseQueryStrings(absPathAndQuery);
+        absPath = parseAbsPath();
+        queryStrings = parseQueryStrings();
     }
 
-    private String parseAbsPath(String absPathAndQuery) {
-        return absPathAndQuery.split("\\?")[0];
+    private String parseAbsPath() {
+        return absPathAndQuery.split("\\?")[ABS_PATH_INDEX];
     }
 
-    private Map<String, String> parseQueryStrings(String absPath) {
-        String[] splitAbsPath = absPath.split("\\?");
-        if (splitAbsPath.length != 2) {
+    private Map<String, String> parseQueryStrings() {
+        String[] splitAbsPath = absPathAndQuery.split("\\?");
+        if (splitAbsPath.length != ABS_PATH_QUERY_TOKEN_LENGTH) {
             return new HashMap<>();
         }
-        Map<String, String> queryStrings = HttpRequestUtils.parseParamToMap(splitAbsPath[1]);
+        Map<String, String> queryStrings = HttpRequestUtils.parseParamToMap(splitAbsPath[QUERY_STRING_INDEX]);
         return queryStrings;
     }
 
     public String getAbsPath() {
         return absPath;
     }
-    public String getQueryString(String key){
+
+    public String getQueryString(String key) {
         return queryStrings.get(key);
     }
 }

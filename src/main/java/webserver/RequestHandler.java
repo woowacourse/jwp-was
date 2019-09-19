@@ -1,7 +1,10 @@
 package webserver;
 
+import exceptions.ErrorResponseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.FileIoUtils;
+import webserver.response.HttpStatus;
 import webserver.servlet.HomeServlet;
 import webserver.servlet.HttpServlet;
 import webserver.request.HttpRequest;
@@ -38,16 +41,11 @@ public class RequestHandler implements Runnable {
             servlets.put("/", new HomeServlet());
             servlets.put("/user/create", new UserCreateServlet());
 
-            HttpServlet httpServlet = MappingHandler.getDispatcher(request, servlets);
+            HttpServlet httpServlet = MappingHandler.getDispatcher(request.getAbsPath(), servlets);
             HttpResponse httpResponse = httpServlet.run(request);
-
-            DataOutputStream dos = new DataOutputStream(out);
-            httpResponse.render(dos);
-
+            httpResponse.render(new DataOutputStream(out));
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }
-
-
 }

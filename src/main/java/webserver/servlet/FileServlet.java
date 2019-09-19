@@ -13,8 +13,8 @@ import java.util.Map;
 public class FileServlet implements HttpServlet {
     @Override
     public HttpResponse run(HttpRequest httpRequest) throws IOException, URISyntaxException {
-        Map<String, Object> header = new HashMap<>();
         byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getFilePath());
+        Map<String, Object> header = new HashMap<>();
         header.put("Content-Length", body.length);
         header.put("Content-Type", FileIoUtils.loadMIMEFromClasspath(httpRequest.getFilePath()));
         return new HttpResponse(HttpStatus.OK, header, body);
