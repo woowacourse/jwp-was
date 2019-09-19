@@ -25,4 +25,8 @@ public class MimeType {
     public static String getType(String extension) {
         return MAP.get(extension);
     }
+
+    public static boolean contains(final String extension) {
+        return MAP.containsKey(extension);
+    }
 }

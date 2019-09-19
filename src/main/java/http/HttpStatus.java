@@ -1,6 +1,6 @@
 package http;
 
-public enum  HttpStatus {
+public enum HttpStatus {
     OK(200, "OK"),
     CREATED(201, "Created"),
     ACCEPTED(202, "Accepted"),

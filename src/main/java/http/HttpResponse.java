@@ -21,15 +21,7 @@ public class HttpResponse {
 
     public void forward(String resource) {
         try (DataOutputStream dos = new DataOutputStream(out)) {
-            byte[] body;
-            if (resource.contains("htm")) {
-                body = FileIoUtils.loadFileFromClasspath("./templates" + resource);
-            } else if (resource.contains("css")) {
-                body = FileIoUtils.loadFileFromClasspath("./static" + resource);
-            } else {
-                // TODO: servlet
-                body = new byte[10];
-            }
+            byte[] body = FileIoUtils.loadFileFromClasspath(resource);
 
             final String extension = resource.substring(resource.lastIndexOf(".") + 1);
             String contentType = MimeType.getType(extension);
