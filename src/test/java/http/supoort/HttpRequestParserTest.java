@@ -70,7 +70,7 @@ class HttpRequestParserTest {
 
         assertThat(request.getHttpMethod()).isEqualTo(HttpMethod.POST);
         assertThat(request.getHttpUri().getResourceLocation()).isEqualTo("/user/create");
-        assertThat(request.getHeaders().get("Connection")).isEqualTo("keep-alive");
+        assertThat(request.getHeaders().getHeader("Connection")).isEqualTo("keep-alive");
         assertThat(request.getParameters().getParameter("id")).isEqualTo("1");
         assertThat(request.getParameters().getParameter("userId")).isEqualTo("javajigi");
     }

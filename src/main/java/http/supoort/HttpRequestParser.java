@@ -16,24 +16,24 @@ public class HttpRequestParser {
     private static final String HEADER_SEPARATOR = ": ";
 
     public static HttpRequest parse(InputStream inputStream) {
-        List<String> requestLines = IOUtils.readData(inputStream);
-        validate(requestLines);
-        String requestHeadline = requestLines.get(0);
-        List<String> headerLines = requestLines.subList(1, requestLines.size());
+        List<String> requestMessages = IOUtils.readData(inputStream);
+        validate(requestMessages);
+        String requestLine = requestMessages.get(0);
+        List<String> headerLines = requestMessages.subList(1, requestMessages.size());
         try {
-            String[] headlines = requestHeadline.split(SEPARATOR);
-            HttpMethod method = HttpMethod.of(headlines[0]);
+            String[] requestLineTokens = requestLine.split(SEPARATOR);
+            HttpMethod method = HttpMethod.of(requestLineTokens[0]);
             if (method == HttpMethod.POST) {
-                return parsePost(method, headlines[1], headlines[2], headerLines);
+                return parsePost(method, requestLineTokens[1], requestLineTokens[2], headerLines);
             }
             if (method == HttpMethod.GET) {
-                return parserGet(method, headlines[1], headlines[2], headerLines);
+                return parserGet(method, requestLineTokens[1], requestLineTokens[2], headerLines);
             }
             if (method == HttpMethod.PUT) {
-                return parsePost(method, headlines[1], headlines[2], headerLines);
+                return parsePost(method, requestLineTokens[1], requestLineTokens[2], headerLines);
             }
             if (method == HttpMethod.DELETE) {
-                return parserGet(method, headlines[1], headlines[2], headerLines);
+                return parserGet(method, requestLineTokens[1], requestLineTokens[2], headerLines);
             }
             throw new IllegalHttpRequestException();
 
@@ -51,19 +51,9 @@ public class HttpRequestParser {
     private static HttpRequest parsePost(HttpMethod method, String uri, String protocol, List<String> headerLines) {
         HttpProtocols httpProtocol = HttpProtocols.of(protocol);
         HttpParameters httpParameters = new HttpParameters(parseParameter(getQueryStringFromBody(headerLines)));
-        HttpHeaders headers = new HttpHeaders(parseHeaders(headerLines));
+        HttpHeaders headers = new HttpHeaders(parseHeaders(getHeaderWithoutMessageBody(headerLines)));
         HttpUri httpUri = parseUri(uri, httpParameters);
         return new HttpRequest(method, httpUri, httpParameters, httpProtocol, headers);
-    }
-
-    private static String getQueryStringFromBody(List<String> headerLines) {
-        return headerLines.get(headerLines.size() - 1);
-    }
-
-
-    private static HttpUri parseUri(String uri, HttpParameters httpParameters) {
-        appendParameter(uri, httpParameters);
-        return getPureHttpUri(uri);
     }
 
     private static HttpRequest parserGet(HttpMethod method, String uri, String protocol, List<String> headerLines) {
@@ -74,27 +64,32 @@ public class HttpRequestParser {
         return new HttpRequest(method, httpUri, httpParameters, httpProtocol, headers);
     }
 
-    private static String getQueryStringFromUri(String uri) {
-        return uri.substring(uri.indexOf(QUERY_STRING_INDICATOR) + 1);
+    private static List<String> getHeaderWithoutMessageBody(List<String> headerLines) {
+        return headerLines.subList(0, headerLines.size() - 2);
+    }
+
+    private static String getQueryStringFromBody(List<String> headerLines) {
+        return headerLines.get(headerLines.size() - 1);
     }
 
     private static Map<String, String> parseHeaders(List<String> headerLines) {
         Map<String, String> headers = new HashMap<>();
         for (String header : headerLines) {
             String[] tmp = header.split(HEADER_SEPARATOR);
-            if (tmp.length == 1) {
-                return headers;
-            }
             headers.put(tmp[0], tmp[1]);
         }
         return headers;
     }
 
+    private static void appendParameter(String uri, HttpParameters httpParameters) {
+        for (Map.Entry<String, String> entry : parseParameter(getQueryStringFromUri(uri)).entrySet()) {
+            httpParameters.addParameter(entry.getKey(), entry.getValue());
+        }
+    }
+
     private static Map<String, String> parseParameter(String queryString) {
         Map<String, String> parameters = new HashMap<>();
-        if (queryString.contains(QUERY_STRING_INDICATOR)) {
-            addKeyAndValue(queryString, parameters);
-        }
+        addKeyAndValue(queryString, parameters);
         return parameters;
     }
 
@@ -106,10 +101,16 @@ public class HttpRequestParser {
         }
     }
 
-    private static void appendParameter(String uri, HttpParameters httpParameters) {
-        for (Map.Entry<String, String> entry : parseParameter(getQueryStringFromUri(uri)).entrySet()) {
-            httpParameters.addParameter(entry.getKey(), entry.getValue());
+    private static String getQueryStringFromUri(String uri) {
+        return uri.substring(uri.indexOf(QUERY_STRING_INDICATOR) + 1);
+    }
+
+    private static HttpUri parseUri(String uri, HttpParameters httpParameters) {
+        if (uri.contains(QUERY_STRING_INDICATOR)) {
+            appendParameter(uri, httpParameters);
+            return getPureHttpUri(uri);
         }
+        return new HttpUri(uri);
     }
 
     private static HttpUri getPureHttpUri(String uri) {

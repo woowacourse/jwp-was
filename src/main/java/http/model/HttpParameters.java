@@ -1,6 +1,7 @@
 package http.model;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -12,6 +13,7 @@ public class HttpParameters {
     }
 
     public HttpParameters() {
+        parameters = new HashMap<>();
     }
 
     public Map<String, String> getParameters() {
