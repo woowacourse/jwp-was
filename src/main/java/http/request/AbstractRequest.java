@@ -4,12 +4,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class AbstractRequest implements Request {
-    private final RequestMethod requestMethod;
-    private final RequestPath requestPath;
-    private final RequestVersion requestVersion;
-    private final RequestHeader requestHeader;
+    protected final RequestMethod requestMethod;
+    protected final RequestPath requestPath;
+    protected final RequestVersion requestVersion;
+    protected final RequestHeader requestHeader;
+    protected Map<String, String> parameters;
+
 
     public AbstractRequest(BufferedReader br, String[] tokens) throws IOException {
         String line = tokens[0] + tokens[1] + tokens[2];
@@ -31,4 +34,12 @@ public class AbstractRequest implements Request {
         return requestLines;
     }
 
+    @Override
+    public Map<String, String> getParams() {
+        return parameters;
+    }
+
+    public RequestPath getRequestPath() {
+        return requestPath;
+    }
 }

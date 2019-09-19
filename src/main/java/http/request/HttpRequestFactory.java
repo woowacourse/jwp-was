@@ -2,12 +2,10 @@ package http.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class HttpRequest {
+public class HttpRequestFactory {
     private static Map<RequestMethod, RequestCreator> requestCreators = new HashMap<>();
 
     static {
