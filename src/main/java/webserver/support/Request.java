@@ -34,6 +34,10 @@ public class Request {
         return url;
     }
 
+    public String get(String key) {
+        return requestHeader.get(key);
+    }
+
     public Map<String, String> extractQueryParameter() {
         return requestHeader.extractQueryParameter();
     }

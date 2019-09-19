@@ -1,20 +1,14 @@
 package webserver;
 
-import db.DataBase;
-import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import utils.IOUtils;
-import webserver.support.PathHandler;
-import webserver.support.Request;
-import webserver.support.RequestBody;
-import webserver.support.RequestHeader;
+import webserver.support.*;
 
 import java.io.*;
 import java.net.Socket;
 import java.net.URISyntaxException;
-import java.util.Map;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -31,21 +25,16 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             Request request = readRequestUrl(in);
-            String url = request.extractUrl();
-            Map<String, String> map = request.extractFormData();
+            RequestProcessor requestProcessor = new RequestProcessor();
 
-            if (!map.isEmpty()) {
-                User user = new User(map.get("userId"), map.get("password"), map.get("name"), map.get("email"));
-                DataBase.addUser(user);
-                logger.debug("insert user : {}", user);
-                logger.debug("user list : {}", DataBase.findAll());
-            }
+            ResponseHeader responseHeader = requestProcessor.process(request);
+            String absoluteUrl = PathHandler.path(responseHeader.getUrl());
 
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = FileIoUtils.loadFileFromClasspath(PathHandler.path(url));
+            byte[] body = FileIoUtils.loadFileFromClasspath(absoluteUrl);
+            Response response = new Response(responseHeader, new ResponseBody(body));
 
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+            response.writeMessage(dos);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
@@ -62,25 +51,5 @@ public class RequestHandler implements Runnable {
             return new Request(header, requestBody);
         }
         return new Request(header);
-    }
-
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
     }
 }
