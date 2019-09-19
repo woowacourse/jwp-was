@@ -1,4 +1,4 @@
-package view;
+package http.response;
 
 import http.ContentType;
 import http.HTTP;

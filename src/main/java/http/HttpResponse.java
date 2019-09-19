@@ -1,8 +1,8 @@
 package http;
 
+import http.response.View;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import view.View;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

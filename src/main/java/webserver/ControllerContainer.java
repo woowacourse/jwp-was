@@ -3,9 +3,9 @@ package webserver;
 import com.google.common.collect.Maps;
 import controller.AbstractController;
 import controller.UserCreateController;
-import http.HttpRequest;
 import http.HttpResponse;
-import view.DefaultView;
+import http.request.HttpRequest;
+import http.response.DefaultView;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

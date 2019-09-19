@@ -1,10 +1,10 @@
 package webserver;
 
 import db.DataBase;
-import http.HttpRequest;
 import http.HttpResponse;
+import http.request.HttpRequest;
+import http.response.DefaultView;
 import org.junit.jupiter.api.Test;
-import view.DefaultView;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

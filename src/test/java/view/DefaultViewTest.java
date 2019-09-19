@@ -1,7 +1,9 @@
 package view;
 
 import http.ContentType;
-import http.HttpRequest;
+import http.request.HttpRequest;
+import http.response.DefaultView;
+import http.response.View;
 import org.junit.jupiter.api.Test;
 import utils.FileIoUtils;
 
