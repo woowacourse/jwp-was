@@ -16,8 +16,8 @@ public enum HttpMethod {
 
     public static HttpMethod of(String method) {
         return Arrays.stream(HttpMethod.values())
-                        .filter(httpMethod -> httpMethod.method.equals(method))
-                        .findAny()
-                        .orElseThrow(NotFoundMethodException::new);
+                .filter(httpMethod -> httpMethod.method.equals(method))
+                .findAny()
+                .orElseThrow(NotFoundMethodException::new);
     }
 }

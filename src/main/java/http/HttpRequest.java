@@ -48,7 +48,7 @@ public class HttpRequest {
         String line = br.readLine();
         String[] tokens = line.split(" ");
         method = HttpMethod.of(tokens[0]);
-        if(tokens[1].contains("?")) {
+        if (tokens[1].contains("?")) {
             String[] path = tokens[1].split("\\?");
             uri = path[0];
             requestParameter = new RequestParameter(parseQueryString(path[1]));
@@ -93,6 +93,10 @@ public class HttpRequest {
                 .map(query -> query.split("="))
                 .collect(Collectors.toMap(q -> q[0], q -> q[1]))
                 ;
+    }
+
+    public boolean isFileRequest() {
+        return uri.contains(".");
     }
 
     public String getUri() {

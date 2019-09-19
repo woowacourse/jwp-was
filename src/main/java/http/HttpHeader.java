@@ -3,9 +3,13 @@ package http;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class HttpHeader {
     private Map<String, String> headers = new HashMap<>();
+
+    public HttpHeader() {
+    }
 
     public HttpHeader(List<String> headers) {
         for (String header : headers) {
@@ -22,5 +26,13 @@ public class HttpHeader {
 
     public int getContentLength() {
         return Integer.parseInt(headers.getOrDefault("Content-Length", "-1"));
+    }
+
+    public void addHeader(String key, String value) {
+        headers.put(key, value);
+    }
+
+    public Set<Map.Entry<String, String>> getHeaders() {
+        return headers.entrySet();
     }
 }

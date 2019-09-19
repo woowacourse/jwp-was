@@ -1,6 +1,8 @@
 package webserver;
 
 import http.HttpRequest;
+import http.HttpResponse;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
@@ -27,40 +29,37 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-
             HttpRequest httpRequest = new HttpRequest(in);
-
-            byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getUri());
-
             DataOutputStream dos = new DataOutputStream(out);
-            response200Header(dos, MimeTypesUtils.getMimeType(httpRequest.getUri()), body.length);
-            responseBody(dos, body);
-            dos.close();
+            HttpResponse httpResponse = new HttpResponse(dos);
+
+            if (httpRequest.isFileRequest()) {
+                byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getUri());
+
+                httpResponse.setStatus(200);
+                httpResponse.addHeader("Content-Type", MimeTypesUtils.getMimeType(httpRequest.getUri()));
+                httpResponse.setBody(body);
+                httpResponse.send();
+                dos.close();
+                return;
+            }
+
+            if (httpRequest.getUri().equals("/user/create")) {
+                User user = new User(
+                        httpRequest.getParameter("userId"),
+                        httpRequest.getParameter("password"),
+                        httpRequest.getParameter("name"),
+                        httpRequest.getParameter("email"));
+                logger.info(user.toString());
+
+                httpResponse.setStatus(200);
+                httpResponse.send();
+                dos.close();
+            }
         } catch (IOException e) {
             logger.error(e.getMessage());
         } catch (URISyntaxException e) {
             e.printStackTrace();
-        }
-    }
-
-    private void response200Header(DataOutputStream dos, String extension, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            logger.info("extension : " + extension);
-            dos.writeBytes("Content-Type: " + extension + ";charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
         }
     }
 }

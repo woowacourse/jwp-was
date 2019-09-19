@@ -76,6 +76,6 @@ public class HttpRequestTest {
 
     @Test
     void 비어있는_바디_가져오기() {
-        assertThat(request.getBody()).isEqualTo("");
+        assertThat(request.getBody()).isEqualTo(null);
     }
 }
