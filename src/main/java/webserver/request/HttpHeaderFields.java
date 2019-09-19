@@ -10,4 +10,8 @@ public class HttpHeaderFields {
     public void addField(String name, String value) {
         fields.put(name, value);
     }
+
+    public String findField(final String name) {
+        return fields.get(name);
+    }
 }

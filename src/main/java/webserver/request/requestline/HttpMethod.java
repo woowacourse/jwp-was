@@ -1,11 +1,15 @@
 package webserver.request.requestline;
 
+import exception.IllegalHttpMethodException;
+
 public enum HttpMethod {
-    GET("GET"), POST("POST"), PUT("PUT"), DELETE("DELETE");
+    GET, POST, PUT, DELETE;
 
-    private String method;
-
-    HttpMethod(String method) {
-        this.method = method;
+    public static HttpMethod of(String method) {
+        try {
+            return HttpMethod.valueOf(method);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalHttpMethodException();
+        }
     }
 }

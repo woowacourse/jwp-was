@@ -11,7 +11,6 @@ public class QueryStringParser {
 
     public static QueryParams parseQueryParams(String queryString) {
         QueryParams queryParams = new QueryParams();
-
         String[] queryTokens = queryString.split(QUERY_STRING_DELIMITER);
 
         Arrays.stream(queryTokens).forEach(queryToken -> {

@@ -40,6 +40,7 @@ public class RequestHandler implements Runnable {
             HttpMethod method = httpRequest.findMethod();
 
             if (method == HttpMethod.GET) {
+
                 // TODO : query string params 사용하기
                 QueryParams queryParams = httpRequest.findQueryParams();
 
@@ -59,9 +60,7 @@ public class RequestHandler implements Runnable {
                 DataBase.addUser(user);
 
                 DataOutputStream dos = new DataOutputStream(out);
-                byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.findFilePath());
-                response200Header(dos, httpRequest.findContentType(), body.length);
-                responseBody(dos, body);
+                response302Header(dos, "/index.html");
             }
 
         } catch (IOException | URISyntaxException e) {
@@ -89,11 +88,10 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void response201Header(DataOutputStream dos, String contentType, int lengthOfBodyContent) {
+    private void response302Header(DataOutputStream dos, String location) {
         try {
-            dos.writeBytes("HTTP/1.1 201 Created \r\n");
-            dos.writeBytes("Content-Type: " + contentType + ";charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("HTTP/1.1 302 Found \r\n");
+            dos.writeBytes("Location:" + location + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());

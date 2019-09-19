@@ -7,7 +7,7 @@ public class HttpRequestLine {
     private String version;
 
     public HttpRequestLine(final String method, final String uri, final String version) {
-        this.method = HttpMethod.valueOf(method);
+        this.method = HttpMethod.of(method);
         this.requestUri = new RequestUri(uri);
         this.version = version;
     }
