@@ -23,11 +23,13 @@ public class HttpRequest {
         InputStreamReader isr = new InputStreamReader(is);
         BufferedReader br = new BufferedReader(isr);
 
+        //startLine
         String requestLine = br.readLine();
         String[] split = requestLine.split(" ");
         method = split[0];
         httpVersion = split[2];
 
+        // query params
         String[] splitPath = split[1].split("\\?");
         path = splitPath[0];
 
@@ -39,6 +41,7 @@ public class HttpRequest {
             }
         }
 
+        // headers
         String line;
         while (!"".equals(line = br.readLine())) {
             if (line == null) {
@@ -48,6 +51,7 @@ public class HttpRequest {
             headers.put(splitHeader[0], splitHeader[1]);
         }
 
+        // body
         if (headers.get("Content-Length") != null) {
             String requestBody = IOUtils.readData(br, Integer.parseInt(headers.get("Content-Length")));
             final String decode = URLDecoder.decode(requestBody, StandardCharsets.UTF_8.toString());
