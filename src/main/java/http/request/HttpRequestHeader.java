@@ -1,4 +1,6 @@
-package http;
+package http.request;
+
+import http.request.exception.NotFoundHttpRequestHeader;
 
 import java.util.List;
 import java.util.Map;
@@ -27,5 +29,9 @@ public class HttpRequestHeader {
     public String getHeader(String key) {
         return Optional.ofNullable(headers.get(key))
                 .orElseThrow(() -> new NotFoundHttpRequestHeader(key));
+    }
+
+    public boolean contains(String key) {
+        return headers.containsKey(key);
     }
 }

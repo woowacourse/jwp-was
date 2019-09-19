@@ -1,4 +1,6 @@
-package http;
+package http.request;
+
+import http.request.exception.NotFoundHttpRequestParameter;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;

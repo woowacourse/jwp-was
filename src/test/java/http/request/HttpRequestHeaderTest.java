@@ -1,5 +1,6 @@
-package http;
+package http.request;
 
+import http.request.exception.NotFoundHttpRequestHeader;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

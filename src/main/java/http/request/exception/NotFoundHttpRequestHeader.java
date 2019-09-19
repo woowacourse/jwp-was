@@ -1,4 +1,4 @@
-package http;
+package http.request.exception;
 
 public class NotFoundHttpRequestHeader extends RuntimeException {
     public NotFoundHttpRequestHeader(String key) {

@@ -1,4 +1,4 @@
-package http;
+package http.request;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class HttpRequestTest {
 
@@ -20,7 +19,7 @@ class HttpRequestTest {
                 "";
         InputStream in = IOUtils.toInputStream(request, "UTF-8");
 
-        HttpRequest httpRequest = new HttpRequest(in);
+        HttpRequest httpRequest = HttpRequest.of(in);
 
         assertThat(httpRequest.getPath()).isEqualTo("/index.html");
     }
@@ -34,7 +33,7 @@ class HttpRequestTest {
                 "";
         InputStream in = IOUtils.toInputStream(request, "UTF-8");
 
-        HttpRequest httpRequest = new HttpRequest(in);
+        HttpRequest httpRequest = HttpRequest.of(in);
 
         assertThat(httpRequest.getHeader("Host")).isEqualTo("localhost:8080");
         assertThat(httpRequest.getHeader("Connection")).isEqualTo("keep-alive");
@@ -50,7 +49,7 @@ class HttpRequestTest {
                 "";
         InputStream in = IOUtils.toInputStream(requestWithParameters, "UTF-8");
 
-        HttpRequest httpRequest = new HttpRequest(in);
+        HttpRequest httpRequest = HttpRequest.of(in);
 
         assertThat(httpRequest.getParameter("userId")).isEqualTo("javajigi");
         assertThat(httpRequest.getParameter("password")).isEqualTo("password");
@@ -71,7 +70,7 @@ class HttpRequestTest {
 
         InputStream in = IOUtils.toInputStream(requestWithBody, "UTF-8");
 
-        HttpRequest httpRequest = new HttpRequest(in);
+        HttpRequest httpRequest = HttpRequest.of(in);
 
         HttpBody expectedBody = HttpBody.of("userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net");
         assertThat(httpRequest.getBody()).isEqualTo(expectedBody);

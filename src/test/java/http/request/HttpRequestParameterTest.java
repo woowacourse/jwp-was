@@ -1,5 +1,6 @@
-package http;
+package http.request;
 
+import http.request.exception.NotFoundHttpRequestParameter;
 import org.junit.jupiter.api.Test;
 
 import java.io.UnsupportedEncodingException;

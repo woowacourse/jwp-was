@@ -1,4 +1,4 @@
-package http;
+package http.request.exception;
 
 public class NotFoundHttpRequestParameter extends RuntimeException {
     public NotFoundHttpRequestParameter(String key) {

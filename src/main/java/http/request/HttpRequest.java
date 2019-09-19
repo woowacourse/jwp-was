@@ -1,4 +1,4 @@
-package http;
+package http.request;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ public class HttpRequest {
     private HttpRequestHeader httpRequestHeader;
     private HttpBody httpBody;
 
-    public HttpRequest(InputStream in) throws IOException {
+    private HttpRequest(InputStream in) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 
         initializeStart(br);
@@ -29,6 +29,10 @@ public class HttpRequest {
         initializeHeader(br);
 
         initializeBody(br);
+    }
+
+    public static HttpRequest of(InputStream in) throws IOException {
+        return new HttpRequest(in);
     }
 
     private void initializeStart(BufferedReader br) throws IOException {
@@ -53,6 +57,10 @@ public class HttpRequest {
     }
 
     private void initializeBody(BufferedReader br) throws IOException {
+        if(!httpRequestHeader.contains(CONTENT_LENGTH)) {
+            log.debug("body가 없습니다.");
+            return;
+        }
         int contentLength = Integer.parseInt(httpRequestHeader.getHeader(CONTENT_LENGTH));
         httpBody = HttpBody.of(IOUtils.readData(br, contentLength));
     }
