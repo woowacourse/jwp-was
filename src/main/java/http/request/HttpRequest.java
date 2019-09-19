@@ -44,9 +44,13 @@ public class HttpRequest {
 
     private void makeHttpBody(BufferedReader bufferedReader) throws IOException {
         if (httpRequestHeader.getContentLength() != 0) {
-            this.httpRequestBody = new HttpRequestBody(IOUtils.readData(bufferedReader, httpRequestHeader.getContentLength()));
+            this.httpRequestBody = new HttpRequestBody(IOUtils.readData(bufferedReader, httpRequestHeader.getContentLength()).getBytes());
             log.debug("Request Body: {}", httpRequestBody);
         }
+    }
+
+    public byte[] getHttpRequestBody() {
+        return httpRequestBody.getBody();
     }
 
     public HttpMethod getMethod() {
