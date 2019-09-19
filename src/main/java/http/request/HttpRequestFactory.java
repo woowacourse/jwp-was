@@ -1,7 +1,10 @@
-package http;
+package http.request;
 
+import http.HttpHeaders;
+import http.HttpUrl;
+import http.HttpVersion;
 import http.exception.EmptyHttpRequestException;
-import http.exception.StartLineException;
+import http.exception.RequestLineException;
 import utils.IOUtils;
 
 import java.io.*;
@@ -76,7 +79,7 @@ public class HttpRequestFactory {
 
     private static void checkStartLine(String[] parsedStartLine) {
         if (parsedStartLine.length != START_LINE_SIZE) {
-            throw new StartLineException();
+            throw new RequestLineException();
         }
     }
 

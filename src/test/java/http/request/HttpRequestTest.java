@@ -1,7 +1,9 @@
-package http;
+package http.request;
 
+import http.HttpHeaders;
+import http.HttpVersion;
 import http.exception.EmptyHttpRequestException;
-import http.exception.StartLineException;
+import http.exception.RequestLineException;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -57,7 +59,7 @@ class HttpRequestTest {
                 "Connection: keep-alive\n" + "Accept: */*";
         InputStream in = new ByteArrayInputStream(request.getBytes());
 
-        assertThatThrownBy(() -> HttpRequestFactory.makeHttpRequest(in)).isInstanceOf(StartLineException.class);
+        assertThatThrownBy(() -> HttpRequestFactory.makeHttpRequest(in)).isInstanceOf(RequestLineException.class);
     }
 
     @Test

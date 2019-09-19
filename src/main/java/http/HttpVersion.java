@@ -9,18 +9,18 @@ import java.util.Objects;
 public enum HttpVersion {
     HTTP_1_0("HTTP/1.0"), HTTP_1_1("HTTP/1.1"), HTTP_2_0("HTTP/2.0");
 
-    private String httpVersion;
+    private String version;
 
     private static final Map<String, HttpVersion> mappings = new HashMap<>();
 
     static {
         for (HttpVersion httpVersion : values()) {
-            mappings.put(httpVersion.httpVersion, httpVersion);
+            mappings.put(httpVersion.version, httpVersion);
         }
     }
 
-    HttpVersion(String httpVersion) {
-        this.httpVersion = httpVersion;
+    HttpVersion(String version) {
+        this.version = version;
     }
 
     public static HttpVersion resolve(String version) {
@@ -33,6 +33,6 @@ public enum HttpVersion {
 
     @Override
     public String toString() {
-        return httpVersion;
+        return version;
     }
 }
