@@ -24,7 +24,7 @@ public class Request {
     }
 
     public String extractUrl() {
-        return validate(requestHeader.get("url"));
+        return validate(requestHeader.get(RequestHeader.URL));
     }
 
     private String validate(String url) {

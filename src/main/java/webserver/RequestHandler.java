@@ -56,7 +56,7 @@ public class RequestHandler implements Runnable {
         BufferedReader br = new BufferedReader(inputStreamReader);
         RequestHeader header = new RequestHeader(IOUtils.parseData(br));
 
-        if (header.get("method").equals("POST")) {
+        if (header.get(RequestHeader.HTTP_METHOD).equals("POST")) {
             String body = IOUtils.readData(br, Integer.parseInt(header.get("content-length")));
             RequestBody requestBody = new RequestBody(body);
             return new Request(header, requestBody);
