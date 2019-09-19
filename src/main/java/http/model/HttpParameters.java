@@ -1,5 +1,6 @@
 package http.model;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
@@ -10,8 +11,11 @@ public class HttpParameters {
         this.parameters = parameters;
     }
 
+    public HttpParameters() {
+    }
+
     public Map<String, String> getParameters() {
-        return parameters;
+        return Collections.unmodifiableMap(parameters);
     }
 
     public void addParameter(String key, String value) {

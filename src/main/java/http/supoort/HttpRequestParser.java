@@ -49,27 +49,33 @@ public class HttpRequestParser {
     }
 
     private static HttpRequest parsePost(HttpMethod method, String uri, String protocol, List<String> headerLines) {
-        HttpUri httpUri = new HttpUri(uri);
         HttpProtocols httpProtocol = HttpProtocols.of(protocol);
-        HttpParameters httpParameters = new HttpParameters(parseParameter(headerLines.get(headerLines.size() - 1)));
-        Map<String, String> headers = parseHeaders(headerLines);
-        if (uri.contains(QUERY_STRING_INDICATOR)) {
-            appendParameter(uri, httpParameters);
-            httpUri = getPureHttpUri(uri);
-        }
+        HttpParameters httpParameters = new HttpParameters(parseParameter(getQueryStringFromBody(headerLines)));
+        HttpHeaders headers = new HttpHeaders(parseHeaders(headerLines));
+        HttpUri httpUri = parseUri(uri, httpParameters);
         return new HttpRequest(method, httpUri, httpParameters, httpProtocol, headers);
     }
 
+    private static String getQueryStringFromBody(List<String> headerLines) {
+        return headerLines.get(headerLines.size() - 1);
+    }
+
+
+    private static HttpUri parseUri(String uri, HttpParameters httpParameters) {
+        appendParameter(uri, httpParameters);
+        return getPureHttpUri(uri);
+    }
+
     private static HttpRequest parserGet(HttpMethod method, String uri, String protocol, List<String> headerLines) {
-        HttpUri httpUri = new HttpUri(uri);
-        HttpParameters httpParameters = null;
         HttpProtocols httpProtocol = HttpProtocols.of(protocol);
-        Map<String, String> headers = parseHeaders(headerLines);
-        if (uri.contains(QUERY_STRING_INDICATOR)) {
-            httpParameters = new HttpParameters(parseParameter(uri.substring(uri.indexOf(QUERY_STRING_INDICATOR) + 1)));
-            httpUri = getPureHttpUri(uri);
-        }
+        HttpHeaders headers = new HttpHeaders(parseHeaders(headerLines));
+        HttpParameters httpParameters = new HttpParameters();
+        HttpUri httpUri = parseUri(uri, httpParameters);
         return new HttpRequest(method, httpUri, httpParameters, httpProtocol, headers);
+    }
+
+    private static String getQueryStringFromUri(String uri) {
+        return uri.substring(uri.indexOf(QUERY_STRING_INDICATOR) + 1);
     }
 
     private static Map<String, String> parseHeaders(List<String> headerLines) {
@@ -84,18 +90,24 @@ public class HttpRequestParser {
         return headers;
     }
 
-    private static Map<String, String> parseParameter(String payload) {
+    private static Map<String, String> parseParameter(String queryString) {
         Map<String, String> parameters = new HashMap<>();
-        String[] details = payload.split(QUERY_STRING_SEPARATOR);
-        for (String detail : details) {
-            String[] entry = detail.split(QUERY_STRING_DELIMITER);
-            parameters.put(entry[0], entry[1]);
+        if (queryString.contains(QUERY_STRING_INDICATOR)) {
+            addKeyAndValue(queryString, parameters);
         }
         return parameters;
     }
 
+    private static void addKeyAndValue(String queryString, Map<String, String> parameters) {
+        String[] details = queryString.split(QUERY_STRING_SEPARATOR);
+        for (String detail : details) {
+            String[] entry = detail.split(QUERY_STRING_DELIMITER);
+            parameters.put(entry[0], entry[1]);
+        }
+    }
+
     private static void appendParameter(String uri, HttpParameters httpParameters) {
-        for (Map.Entry<String, String> entry : parseParameter(uri.substring(uri.indexOf(QUERY_STRING_INDICATOR) + 1)).entrySet()) {
+        for (Map.Entry<String, String> entry : parseParameter(getQueryStringFromUri(uri)).entrySet()) {
             httpParameters.addParameter(entry.getKey(), entry.getValue());
         }
     }

@@ -8,6 +8,7 @@ public class HttpRequest {
     private HttpParameters parameters;
     private HttpProtocols httpProtocol;
     private Map<String, String> headers;
+    private HttpHeaders httpHeaders;
 
     public HttpRequest(HttpMethod method, HttpUri uri, HttpParameters httpParameters, HttpProtocols protocol, Map<String, String> headers) {
         httpMethod = method;
@@ -17,8 +18,12 @@ public class HttpRequest {
         this.headers = headers;
     }
 
-    public HttpMethod getMethod() {
-        return HttpMethod.GET;
+    public HttpRequest(HttpMethod httpMethod, HttpUri httpUri, HttpParameters parameters, HttpProtocols httpProtocol, HttpHeaders httpHeaders) {
+        this.httpMethod = httpMethod;
+        this.httpUri = httpUri;
+        this.parameters = parameters;
+        this.httpProtocol = httpProtocol;
+        this.httpHeaders = httpHeaders;
     }
 
     public HttpUri getUri() {
@@ -41,7 +46,11 @@ public class HttpRequest {
         return httpProtocol;
     }
 
-    public Map<String, String> getHeaders() {
-        return headers;
+    public HttpHeaders getHeaders() {
+        return httpHeaders;
+    }
+
+    public String getHeader(String key) {
+        return httpHeaders.getHeader(key);
     }
 }

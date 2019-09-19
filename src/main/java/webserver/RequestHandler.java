@@ -34,21 +34,24 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            try {
-                HttpRequest request = HttpRequestParser.parse(in);
-
-                ModelAndView modelAndView = httpRequestHandlers.doService(request);
-
-                response(viewHandler.handle(modelAndView), out);
-
-            } catch (Exception e) {
-                logger.error(e.getMessage());
-                sendError(e.getMessage(), out);
-            }
-
+            handleRequest(in, out);
         } catch (IOException e) {
             logger.error(e.getMessage());
 
+        }
+    }
+
+    private void handleRequest(InputStream in, OutputStream out) {
+        try {
+            HttpRequest request = HttpRequestParser.parse(in);
+
+            ModelAndView modelAndView = httpRequestHandlers.doService(request);
+
+            response(viewHandler.handle(modelAndView), out);
+
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            sendError(e.getMessage(), out);
         }
     }
 
