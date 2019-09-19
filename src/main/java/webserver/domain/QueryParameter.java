@@ -1,5 +1,7 @@
 package webserver.domain;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -20,11 +22,15 @@ public class QueryParameter {
         return Arrays.stream(rawQuery.split("&"))
                 .map(query -> query.split("=", 2))
                 .filter(this::queryFilter)
-                .collect(Collectors.toMap(str -> str[0], str -> str[1]));
+                .collect(Collectors.toMap(array -> urlDecode(array[0]), array -> urlDecode(array[1])));
     }
 
     private boolean queryFilter(final String[] keyValue) {
         return keyValue.length == 2 && !keyValue[0].isEmpty() && !keyValue[1].isEmpty();
+    }
+
+    private String urlDecode(final String encodedString) {
+        return URLDecoder.decode(encodedString, StandardCharsets.UTF_8);
     }
 
     public Map<String, String> getQueries() {
