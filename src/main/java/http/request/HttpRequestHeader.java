@@ -26,4 +26,13 @@ public class HttpRequestHeader {
 
         return length;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        fields.forEach((key, value) -> stringBuilder.append(key).append(": ").append(value).append("\r\n"));
+        stringBuilder.append("\r\n");
+
+        return stringBuilder.toString();
+    }
 }
