@@ -6,9 +6,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class HttpRequestParameter {
+    public static final HttpRequestParameter EMPTY_PARAMETER = new HttpRequestParameter(new HashMap<>());
+
     private static final String PARAMETER_LINE_SPLITTER = "&";
     private static final String PARAMETER_SPLITTER = "=";
-    private static final HttpRequestParameter EMPTY_PARAMETER = new HttpRequestParameter(new HashMap<>());
     private Map<String, String> parameters;
 
     private HttpRequestParameter(Map<String, String> parameters) {
