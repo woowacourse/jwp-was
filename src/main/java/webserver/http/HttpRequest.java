@@ -1,4 +1,4 @@
-package http;
+package webserver.http;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,15 +20,13 @@ public class HttpRequest {
     public static Optional<HttpRequest> deserialize(NetworkIO io, KeyValueParserFactory keyValueParserFactory) {
         final String[] requestLine = io.readLine().split("\\s+");
         return HttpMethod.of(requestLine[0]).flatMap(method ->
-            HttpPath.of(requestLine[1]).flatMap(path ->
-                HttpVersion.of(requestLine[2]).map(version ->
-                    new HttpRequest(
-                            method,
-                            path,
-                            version,
-                            parseOtherFields(io, keyValueParserFactory),
-                            parseParams(method, requestLine[1], io, keyValueParserFactory)
-                    )
+            HttpVersion.of(requestLine[2]).map(version ->
+                new HttpRequest(
+                        method,
+                        new HttpPath(requestLine[1]),
+                        version,
+                        parseOtherFields(io, keyValueParserFactory),
+                        parseParams(method, requestLine[1], io, keyValueParserFactory)
                 )
             )
         );

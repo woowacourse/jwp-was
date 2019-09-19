@@ -1,7 +1,7 @@
 package webserver;
 
-import http.HttpPath;
-import http.HttpRequest;
+import webserver.http.HttpPath;
+import webserver.http.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.io.FileIoUtils;
@@ -32,7 +32,7 @@ public class RequestHandler implements Runnable {
         try (final NetworkIO io = new NetworkIOStream(this.connection)) {
             HttpRequest.deserialize(io, keyValueParserFactory).ifPresent(req ->
                 FileIoUtils.loadFileFromClasspath(route(req.path())).ifPresent(body -> {
-                    response200Header(io, body.length);
+                    response200Header(io, req.path(), body.length);
                     responseBody(io, body);
                 })
             );
@@ -45,17 +45,20 @@ public class RequestHandler implements Runnable {
         switch(path.extension()) {
             case "htm":
             case "html":
-            case "ico":
                 return "./templates" + path.get();
             default:
                 return "./static" + path.get();
         }
     }
 
-    private void response200Header(NetworkIO io, int lengthOfBodyContent) {
+    private void response200Header(NetworkIO io, HttpPath path, int lengthOfBodyContent) {
+        String contentType = "text/html";
+        if (path.extension().equals("css")) {
+            contentType = "text/css";
+        }
         io.write(
                 "HTTP/1.1 200 OK \r\n"
-                + "Content-Type: text/html;charset=utf-8\r\n"
+                + "Content-Type: " + contentType + ";charset=utf-8\r\n"
                 + "Content-Length: " + lengthOfBodyContent + "\r\n"
                 + "\r\n"
         );

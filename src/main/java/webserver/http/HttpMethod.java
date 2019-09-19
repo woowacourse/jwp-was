@@ -1,4 +1,4 @@
-package http;
+package webserver.http;
 
 import java.util.Optional;
 import java.util.stream.Stream;

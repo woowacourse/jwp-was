@@ -1,18 +1,13 @@
-package http;
+package webserver.http;
 
 import java.net.URLDecoder;
 import java.util.Objects;
-import java.util.Optional;
 
 public class HttpPath {
     private final String path;
 
-    public static Optional<HttpPath> of(String path) {
-        return path.contains("/") ? Optional.of(new HttpPath(path)) : Optional.empty();
-    }
-
-    private HttpPath(String path) {
-        this.path = path.split("\\?")[0];
+    public HttpPath(String path) {
+        this.path = path.substring(0, path.lastIndexOf("?")).toLowerCase();
     }
 
     public String get() {

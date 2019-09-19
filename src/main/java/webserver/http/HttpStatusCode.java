@@ -1,4 +1,4 @@
-package http;
+package webserver.http;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -98,6 +98,8 @@ public enum HttpStatusCode {
 
     @Override
     public String toString() {
-        return code() + " " + statusName();
+        return "HttpStatusCode{" +
+                "code=" + statusName() + "(" + this.code + ")" +
+                '}';
     }
 }

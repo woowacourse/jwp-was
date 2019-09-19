@@ -30,7 +30,7 @@ public class WebServer {
     }
 
     private static TailRecursion<Void> handleRequest(ServerSocket listener) {
-        boolean isSuccess = acceptConnection(listener).map(connection -> {
+        final boolean isSuccess = acceptConnection(listener).map(connection -> {
             new Thread(new RequestHandler(connection)).start();
             return true;
         }).orElse(false);
