@@ -1,9 +1,13 @@
 package http.request;
 
 public class HttpRequestBody {
-    private String body;
+    private byte[] body;
 
-    public HttpRequestBody(String body) {
+    public HttpRequestBody(byte[] body) {
         this.body = body;
+    }
+
+    public byte[] getBody() {
+        return body;
     }
 }
