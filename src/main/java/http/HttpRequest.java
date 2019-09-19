@@ -2,13 +2,11 @@ package http;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.NetworkIO;
+import utils.io.NetworkIO;
+import utils.parser.KeyValueParserFactory;
 
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class HttpRequest {
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
@@ -19,51 +17,40 @@ public class HttpRequest {
     private final Map<String, String> otherFields;
     private final Map<String, String> params;
 
-    public static Optional<HttpRequest> parse(NetworkIO io) {
-        if (io.hasNext()) {
-            final String requestLine = io.readLine();
-            logger.debug("test : {}", requestLine);
-            final String[] requestLineTokens = requestLine.split("\\s+");
-            return HttpMethod.of(requestLineTokens[0]).flatMap(method ->
-                HttpPath.of(requestLineTokens[1]).flatMap(path ->
-                    HttpVersion.of(requestLineTokens[2]).map(version ->
-                        new HttpRequest(method, path, version, parseOtherFields(io), parseParams(method, requestLineTokens[1], io))
+    public static Optional<HttpRequest> deserialize(NetworkIO io, KeyValueParserFactory keyValueParserFactory) {
+        final String[] requestLine = io.readLine().split("\\s+");
+        return HttpMethod.of(requestLine[0]).flatMap(method ->
+            HttpPath.of(requestLine[1]).flatMap(path ->
+                HttpVersion.of(requestLine[2]).map(version ->
+                    new HttpRequest(
+                            method,
+                            path,
+                            version,
+                            parseOtherFields(io, keyValueParserFactory),
+                            parseParams(method, requestLine[1], io, keyValueParserFactory)
                     )
                 )
-            );
-        }
-        return Optional.empty();
+            )
+        );
     }
 
-    private static Map<String, String> parseOtherFields(NetworkIO io) {
-        return new HashMap<String, String>() {{
-            while (io.hasNext()) {
-                final String[] tokens = io.readLine().split(": ");
-                if (tokens.length < 2) {
-                    break;
-                }
-                put(tokens[0], tokens[1]);
-            }
-        }};
-
+    private static Map<String, String> parseOtherFields(NetworkIO io, KeyValueParserFactory keyValueParserFactory) {
+        return keyValueParserFactory.httpHeaderFieldsParser().toMap(io.readWhile(line -> line.length() > 0));
     }
 
-    private static Map<String, String> parseParams(HttpMethod method, String path, NetworkIO io) {
-        String params = null;
-        if (method == HttpMethod.GET && path.contains("?")) {
-            params = path.split("\\?")[1];
-        } else if (io.hasNext()) {
+    private static Map<String, String> parseParams(
+            HttpMethod method,
+            String fullPath,
+            NetworkIO io,
+            KeyValueParserFactory keyValueParserFactory
+    ) {
+        String params = "";
+        if (method == HttpMethod.GET && fullPath.contains("?")) {
+            params = fullPath.split("\\?")[1];
+        } else if (!io.isEOF()) {
             params = io.readLine();
         }
-        return parseKeyValueParams(params);
-    }
-
-    private static Map<String, String> parseKeyValueParams(String params) {
-        return (params != null)
-                ? Arrays.stream(params.split("&"))
-                        .map(x -> Arrays.asList(x.split("=")))
-                        .collect(Collectors.toMap(x -> x.get(0), x -> x.get(1)))
-                : new HashMap<>();
+        return keyValueParserFactory.queryStringParser().toMap(params);
     }
 
     private HttpRequest(
@@ -73,6 +60,14 @@ public class HttpRequest {
             Map<String, String> otherFields,
             Map<String, String> params
     ) {
+        logger.debug(
+                "{}: {}\n  fields:\n{}  params:\n{}",
+                method,
+                path.get(),
+                debugString(otherFields),
+                debugString(params)
+        );
+
         this.method = method;
         this.path = path;
         this.version = version;
@@ -80,8 +75,24 @@ public class HttpRequest {
         this.params = params;
     }
 
+    private String debugString(Map<String, String> x) {
+        final StringBuilder acc = new StringBuilder();
+        x.forEach((key, value) -> {
+            acc.append("    ");
+            acc.append(key);
+            acc.append(": ");
+            acc.append(value);
+            acc.append("\n");
+        });
+        return acc.toString();
+    }
+
     public HttpPath path() {
         return this.path;
+    }
+
+    public String getField(String key) {
+        return this.otherFields.get(key);
     }
 
     public String getParam(String key) {

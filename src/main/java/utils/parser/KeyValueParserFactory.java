@@ -2,18 +2,18 @@ package utils.parser;
 
 public class KeyValueParserFactory {
     private static final KeyValueParserFactory instance = new KeyValueParserFactory();
-    private static final StringChunkParser httpHeaderFieldsParser = new HttpHeaderFieldsParser();
-    private static final StringChunkParser queryStringParser = new QueryStringParser();
+    private static final EncodedURLParser httpHeaderFieldsParser = new HttpHeaderFieldsParser();
+    private static final EncodedURLParser queryStringParser = new QueryStringParser();
 
     public static KeyValueParserFactory getInstance() {
         return instance;
     }
 
-    public StringChunkParser httpHeaderFieldsParser() {
+    public EncodedURLParser httpHeaderFieldsParser() {
         return httpHeaderFieldsParser;
     }
 
-    public StringChunkParser queryStringParser() {
+    public EncodedURLParser queryStringParser() {
         return queryStringParser;
     }
 

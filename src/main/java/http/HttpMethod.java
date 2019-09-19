@@ -22,14 +22,12 @@ public enum HttpMethod {
 
     public static Optional<HttpMethod> of(String name) {
         return Stream.of(values())
-                    .filter(x -> x.name.equals(name.toUpperCase().trim()))
+                    .filter(x -> x.name.equals(name.toUpperCase()))
                     .findAny();
     }
 
     @Override
     public String toString() {
-        return "HttpMethod{" +
-                "name='" + this.name + '\'' +
-                '}';
+        return this.name;
     }
 }

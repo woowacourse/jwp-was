@@ -2,8 +2,8 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.Procedure;
-import utils.Trampoline;
+import utils.recursion.Procedure;
+import utils.recursion.TailRecursion;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -21,40 +21,30 @@ public class WebServer {
                                                     .orElse(DEFAULT_PORT);
 
         // 서버소켓을 생성한다. 웹서버는 기본적으로 8080번 포트를 사용한다.
-        try (final ServerSocket listenSocket = new ServerSocket(port)) {
+        try (final ServerSocket listener = new ServerSocket(port)) {
             logger.info("Web Application Server started {} port.", port);
 
             // 클라이언트가 연결될때까지 대기한다.
-            handleRequest(listenSocket).execute();
+            handleRequest(listener).execute();
         }
     }
 
-    private static Optional<Socket> acceptConnection(ServerSocket listenSocket) {
-        try {
-            return Optional.of(listenSocket.accept());
-        } catch (IOException e) {
-            return Optional.empty();
-        }
-    }
-
-    private static Trampoline<Procedure> handleRequest(ServerSocket listenSocket) {
-        boolean isSuccess = acceptConnection(listenSocket).map(x -> {
-            new Thread(new RequestHandler(x)).start();
+    private static TailRecursion<Void> handleRequest(ServerSocket listener) {
+        boolean isSuccess = acceptConnection(listener).map(connection -> {
+            new Thread(new RequestHandler(connection)).start();
             return true;
         }).orElse(false);
         if (isSuccess) {
-            return new Trampoline<Procedure>() {
-                @Override
-                public Trampoline<Procedure> call() {
-                    return handleRequest(listenSocket);
-                }
-            };
+            return (Procedure) () -> handleRequest(listener);
         }
-        return new Trampoline<Procedure>() {
-            @Override
-            public Procedure done() {
-                return Procedure.instance();
-            }
-        };
+        return Procedure.exit();
+    }
+
+    private static Optional<Socket> acceptConnection(ServerSocket listener) {
+        try {
+            return Optional.of(listener.accept());
+        } catch (IOException e) {
+            return Optional.empty();
+        }
     }
 }

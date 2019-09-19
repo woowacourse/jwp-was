@@ -4,38 +4,41 @@ import http.HttpPath;
 import http.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.FileIoUtils;
-import utils.NetworkIOStream;
+import utils.io.FileIoUtils;
+import utils.io.NetworkIO;
+import utils.io.NetworkIOStream;
+import utils.parser.KeyValueParserFactory;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.net.Socket;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
-    private Socket connection;
+    private static final KeyValueParserFactory keyValueParserFactory = KeyValueParserFactory.getInstance();
 
-    public RequestHandler(Socket connectionSocket) {
-        this.connection = connectionSocket;
+    private final Socket connection;
+
+    public RequestHandler(Socket connection) {
+        this.connection = connection;
     }
 
     public void run() {
         logger.debug(
                 "New Client Connect! Connected IP : {}, Port : {}",
-                connection.getInetAddress(),
-                connection.getPort()
+                this.connection.getInetAddress(),
+                this.connection.getPort()
         );
 
-        NetworkIOStream.init(this.connection).ifPresent(io -> {
-            HttpRequest.parse(io).ifPresent(req ->
+        try (final NetworkIO io = new NetworkIOStream(this.connection)) {
+            HttpRequest.deserialize(io, keyValueParserFactory).ifPresent(req ->
                 FileIoUtils.loadFileFromClasspath(route(req.path())).ifPresent(body -> {
-                    response200Header(io.getDos(), body.length());
-                    responseBody(io.getDos(), body);
+                    response200Header(io, body.length);
+                    responseBody(io, body);
                 })
             );
-            io.close();
-        });
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
     }
 
     private String route(HttpPath path) {
@@ -49,23 +52,16 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+    private void response200Header(NetworkIO io, int lengthOfBodyContent) {
+        io.write(
+                "HTTP/1.1 200 OK \r\n"
+                + "Content-Type: text/html;charset=utf-8\r\n"
+                + "Content-Length: " + lengthOfBodyContent + "\r\n"
+                + "\r\n"
+        );
     }
 
-    private void responseBody(DataOutputStream dos, String body) {
-        try {
-            dos.write(body.getBytes());
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+    private void responseBody(NetworkIO io, byte[] body) {
+        io.write(body);
     }
 }

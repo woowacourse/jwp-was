@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 public class User {
     private String userId;
     private String password;
@@ -14,23 +16,36 @@ public class User {
     }
 
     public String getUserId() {
-        return userId;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
+        return this.userId;
     }
 
     @Override
     public String toString() {
-        return "User [userId=" + userId + ", password=" + password + ", name=" + name + ", email=" + email + "]";
+        return "User{" +
+                "userId='" + this.userId + '\'' +
+                ", password='" + this.password + '\'' +
+                ", name='" + this.name + '\'' +
+                ", email='" + this.email + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof User)) {
+            return false;
+        }
+        final User rhs = (User) o;
+        return Objects.equals(this.userId, rhs.userId) &&
+                Objects.equals(this.password, rhs.password) &&
+                Objects.equals(this.name, rhs.name) &&
+                Objects.equals(this.email, rhs.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.userId, this.password, this.name, this.email);
     }
 }
