@@ -15,6 +15,12 @@ public class NetworkInput implements Iterable<String> {
         this.bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
     }
 
+    public String readBody(int contentLength) throws IOException {
+        char[] body = new char[contentLength];
+        this.bufferedReader.read(body, 0, contentLength);
+        return String.copyValueOf(body);
+    }
+
     @Override
     public Iterator<String> iterator() {
         try {

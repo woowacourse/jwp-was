@@ -3,6 +3,7 @@ package webserver.domain;
 import org.slf4j.Logger;
 import webserver.view.NetworkInput;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,10 +20,11 @@ public class Request {
     private final String httpMethod;
     private final String path;
     private final String protocol;
+    private final String body;
     private final QueryParameter queryParameter;
     private final Map<String, String> requestFields;
 
-    public Request(final NetworkInput networkInput) {
+    public Request(final NetworkInput networkInput) throws IOException {
         final String[] httpMethodAndPath = networkInput.iterator().next().split(" ");
         final String[] pathAndQuery = httpMethodAndPath[1].split("\\?");
 
@@ -32,10 +34,16 @@ public class Request {
         this.queryParameter = new QueryParameter((pathAndQuery.length == 1) ? "" : pathAndQuery[1]);
         this.requestFields = makeFields(networkInput);
 
-        LOG.debug("Request - protocol: {}, path: {}, parameter: {}",
+        final int contentLength = Integer.parseInt(requestFields.getOrDefault("content-length", "0"));
+        this.body = (contentLength > 0) ? networkInput.readBody(contentLength) : "";
+        this.queryParameter.putByRawQueries(this.body);
+
+        LOG.debug("Request - protocol: {}, method: {}, path: {}, parameter: {}\nbody: {}",
                 this.protocol,
+                this.httpMethod,
                 this.path,
-                this.queryParameter.getQueries().toString());
+                this.queryParameter.getQueries().toString(),
+                this.body);
     }
 
     private Map<String, String> makeFields(final NetworkInput networkInput) {
@@ -48,7 +56,7 @@ public class Request {
 
     // TODO: 한번에 Key:Value를 반환하게끔 리팩토링
     private String makeKey(final String rawField) {
-        return rawField.split(":")[0].trim();
+        return rawField.split(":")[0].trim().toLowerCase();
     }
 
     private String makeValue(final String rawField) {
