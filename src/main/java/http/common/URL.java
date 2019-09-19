@@ -1,4 +1,4 @@
-package webserver;
+package http.common;
 
 public class URL {
     private final String path;

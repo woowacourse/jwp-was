@@ -1,5 +1,7 @@
-package webserver;
+package http.request;
 
+import http.common.HttpHeader;
+import http.common.URL;
 import org.springframework.util.StringUtils;
 import utils.IOUtils;
 

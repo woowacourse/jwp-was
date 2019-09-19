@@ -1,4 +1,4 @@
-package webserver;
+package http.response;
 
 public class StatusLine {
     private final String version;

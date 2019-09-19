@@ -1,4 +1,4 @@
-package webserver;
+package http.response;
 
 public enum ResponseStatus {
     OK(200), FOUND(302);

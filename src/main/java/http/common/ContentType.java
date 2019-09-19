@@ -1,4 +1,4 @@
-package webserver;
+package http.common;
 
 public enum ContentType {
     JS("text/javascript"),

@@ -1,4 +1,4 @@
-package webserver;
+package http.common;
 
 import org.springframework.util.StringUtils;
 

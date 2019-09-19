@@ -1,4 +1,7 @@
-package webserver;
+package http.response;
+
+import http.common.HttpHeader;
+import http.common.ContentType;
 
 import java.util.Arrays;
 
