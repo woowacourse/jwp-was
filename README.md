@@ -26,10 +26,8 @@
     
 ## 1단계 리펙터링
 1. HttpRequest 리펙토링
-    - [ ] Http 요청을 Parsing하는 기능 분리
-    - [ ] QueryParams 리펙토링 
-    - [ ] Test code 작성
-    
+    - [X] Http 요청을 Parsing하는 기능 분리
+    - [X] QueryParams 리펙토링
 2. Response 생성 기능 분리
 
 3. RequestHandler 리펙토링
