@@ -9,20 +9,17 @@ import java.util.Map;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
-
-    private DataOutputStream dos;
     private int statusCode;
     private Map<String, Object> header;
     private byte[] body;
 
-    public HttpResponse(DataOutputStream dos, int statusCode, Map<String, Object> header, byte[] body) {
-        this.dos = dos;
+    public HttpResponse(int statusCode, Map<String, Object> header, byte[] body) {
         this.statusCode = statusCode;
         this.header = header;
         this.body = body;
     }
 
-    public void render() {
+    public void render(DataOutputStream dos) {
         if (statusCode == 200) {
             response200Header(dos);
             responseBody(dos, body);

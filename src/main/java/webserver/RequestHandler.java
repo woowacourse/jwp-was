@@ -1,12 +1,13 @@
 package webserver;
 
-import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.FileIoUtils;
+import webserver.servlet.HomeServlet;
+import webserver.servlet.HttpServlet;
 import webserver.request.HttpRequest;
-import webserver.request.RequestMethod;
+import webserver.handler.MappingHandler;
 import webserver.response.HttpResponse;
+import webserver.servlet.UserCreateServlet;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -31,30 +32,17 @@ public class RequestHandler implements Runnable {
             connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-
             HttpRequest request = new HttpRequest(in);
-            String filePath = request.getFilePath();
 
+            Map<String, Object> servlets = new HashMap<>();
+            servlets.put("/", new HomeServlet());
+            servlets.put("/user/create", new UserCreateServlet());
 
-            byte[] body = null;
-            int statusCode = 200;
-            Map<String, Object> header = new HashMap<>();
-
-            if (request.getMethod() == RequestMethod.GET) {
-                body = FileIoUtils.loadFileFromClasspath(filePath);
-                header.put("lengthOfBodyContent", body.length);
-                header.put("Content-Type", FileIoUtils.loadMIMEFromClasspath(filePath));
-            }
-            if (request.getMethod() == RequestMethod.POST && request.getAbsPath().equals("/user/create")) {
-                User user = new User(request.getBody("userId"), request.getBody("password"), request.getBody("name"), request.getBody("email"));
-                logger.debug(">>> User : {}", user);
-                statusCode = 302;
-                header.put("location", "/index.html");
-            }
+            HttpServlet httpServlet = MappingHandler.getDispatcher(request, servlets);
+            HttpResponse httpResponse = httpServlet.run(request);
 
             DataOutputStream dos = new DataOutputStream(out);
-            HttpResponse httpResponse = new HttpResponse(dos, statusCode, header, body);
-            httpResponse.render();
+            httpResponse.render(dos);
 
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());

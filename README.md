@@ -43,5 +43,8 @@
 
 요구사항5
 
-- [ ] static 파일일 시 경로 변경
-- [ ] response header의 Content-Type 값을 보내주는 파일의 타입으로 설정하게 변경
+- [x] static 파일일 시 경로 변경
+- [x] response header의 Content-Type 값을 보내주는 파일의 타입으로 설정하게 변경
+
+리팩토링
+- [x] servlet 생성
