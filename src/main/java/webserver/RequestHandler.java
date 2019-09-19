@@ -4,14 +4,15 @@ import db.DataBase;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.FileIoUtils;
 import webserver.request.HttpRequest;
 import webserver.request.HttpRequestParser;
 import webserver.request.requestline.HttpMethod;
 import webserver.request.requestline.QueryParams;
+import webserver.response.FoundHttpResponse;
+import webserver.response.HttpResponse;
+import webserver.response.OkHttpResponse;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -40,14 +41,11 @@ public class RequestHandler implements Runnable {
             HttpMethod method = httpRequest.findMethod();
 
             if (method == HttpMethod.GET) {
-
                 // TODO : query string params 사용하기
                 QueryParams queryParams = httpRequest.findQueryParams();
 
-                DataOutputStream dos = new DataOutputStream(out);
-                byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.findFilePath());
-                response200Header(dos, httpRequest.findContentType(), body.length);
-                responseBody(dos, body);
+                HttpResponse httpResponse = new OkHttpResponse();
+                httpResponse.makeResponse(out, httpRequest);
             }
 
             if (method == HttpMethod.POST) {
@@ -59,41 +57,11 @@ public class RequestHandler implements Runnable {
                 User user = new User(userId, password, name, email);
                 DataBase.addUser(user);
 
-                DataOutputStream dos = new DataOutputStream(out);
-                response302Header(dos, "/index.html");
+                HttpResponse httpResponse = new FoundHttpResponse("/index.html");
+                httpResponse.makeResponse(out, httpRequest);
             }
 
         } catch (IOException | URISyntaxException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void response200Header(DataOutputStream dos, String contentType, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: " + contentType + ";charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void response302Header(DataOutputStream dos, String location) {
-        try {
-            dos.writeBytes("HTTP/1.1 302 Found \r\n");
-            dos.writeBytes("Location:" + location + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
