@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
+import java.util.Objects;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -47,7 +48,8 @@ public class RequestHandler implements Runnable {
 
     private byte[] readBody(final Request requestHeader) throws IOException, URISyntaxException, NullPointerException {
         try {
-            return FileIoUtils.loadFileFromClasspath(makeFilePath(requestHeader, STATIC_PATH));
+            final byte[] body = RequestDispatcher.forward(requestHeader);
+            return Objects.nonNull(body) ? body : FileIoUtils.loadFileFromClasspath(makeFilePath(requestHeader, STATIC_PATH));
         } catch (IOException | URISyntaxException | NullPointerException e) {
             return FileIoUtils.loadFileFromClasspath(makeFilePath(requestHeader, TEMPLATES_PATH));
         }
