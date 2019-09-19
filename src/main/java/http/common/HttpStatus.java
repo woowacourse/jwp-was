@@ -1,20 +1,13 @@
 package http.common;
 
 public enum HttpStatus {
-    OK(200, "OK"),
-    FOUND(302, "FOUND"),
-    NOT_FOUND(404, "NOT FOUND");
+    OK(200),
+    FOUND(302),
+    NOT_FOUND(404);
 
     private int code;
-    private String description;
 
-    HttpStatus(int code, String description) {
+    HttpStatus(int code) {
         this.code = code;
-        this.description = description;
-    }
-
-    @Override
-    public String toString() {
-        return code + " " + description;
     }
 }
