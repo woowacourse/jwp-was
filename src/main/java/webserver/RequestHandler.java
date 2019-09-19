@@ -6,7 +6,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
+import java.util.Map;
 
+import model.User;
 import network.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,11 +32,18 @@ public class RequestHandler implements Runnable {
 
             logger.info("{}", httpRequest);
 
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
-            DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getStartLine().getUrl());
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+            if (httpRequest.getStartLine().getUrl().equals("/user/create")) {
+                Map<String, String> parameters = httpRequest.getStartLine().getParameters();
+                User user = new User(parameters.get("userId"), parameters.get("password"),
+                        parameters.get("name"), parameters.get("email"));
+
+                logger.info("{}", user);
+            } else {
+                DataOutputStream dos = new DataOutputStream(out);
+                byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getStartLine().getUrl());
+                response200Header(dos, body.length);
+                responseBody(dos, body);
+            }
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }

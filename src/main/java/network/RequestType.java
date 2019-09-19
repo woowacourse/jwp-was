@@ -5,9 +5,9 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 public enum RequestType {
-    STATIC("./static", url -> Pattern.compile("(/[0-9a-zA-Z\\-_])*(.*\\.((?!html).)*)$").matcher(url).matches()),
-    TEMPLATES("./templates", url -> Pattern.compile("(/[0-9a-zA-Z\\-_])*(.*\\.html)$").matcher(url).matches()),
-    LOGIC("", url -> Pattern.compile("(/[0-9a-zA-Z\\-_])*").matcher(url).matches());
+    STATIC("./static", url -> Pattern.compile("(/[0-9a-zA-Z\\-_]*)*(.*\\.((?!html).)*)$").matcher(url).matches()),
+    TEMPLATES("./templates", url -> Pattern.compile("(/[0-9a-zA-Z\\-_]*)*(.*\\.html)$").matcher(url).matches()),
+    LOGIC("", url -> Pattern.compile("(/[0-9a-zA-Z\\-_]*)*").matcher(url).matches());
 
     private String prefix;
     private Predicate<String> requestTypeChecker;
