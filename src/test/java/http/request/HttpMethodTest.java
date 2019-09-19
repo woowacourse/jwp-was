@@ -1,4 +1,4 @@
-package http;
+package http.request;
 
 import http.exception.HttpMethodMismatchException;
 import org.junit.jupiter.api.Test;

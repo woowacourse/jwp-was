@@ -5,7 +5,7 @@ import java.util.Map;
 public class HttpHeaders {
     private Map<String, String> headers;
 
-    HttpHeaders(Map<String, String> headers) {
+    public HttpHeaders(Map<String, String> headers) {
         this.headers = headers;
     }
 
@@ -13,7 +13,11 @@ public class HttpHeaders {
         return headers.get(key);
     }
 
-    boolean hasContentLength() {
+    public String put(String key, String value) {
+        return headers.put(key, value);
+    }
+
+    public boolean hasContentLength() {
         return headers.get("Content-Length") != null;
     }
 
@@ -22,7 +26,7 @@ public class HttpHeaders {
         StringBuilder sb = new StringBuilder();
 
         for (String key : headers.keySet()) {
-            sb.append(key).append(": ").append(headers.get(key)).append("\n");
+            sb.append(key).append(": ").append(headers.get(key)).append("\r\n");
         }
         return sb.toString();
     }

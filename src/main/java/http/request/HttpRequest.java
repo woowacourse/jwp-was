@@ -1,4 +1,8 @@
-package http;
+package http.request;
+
+import http.HttpHeaders;
+import http.HttpUrl;
+import http.HttpVersion;
 
 public class HttpRequest {
     private HttpRequestLine requestLine;
