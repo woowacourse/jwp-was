@@ -9,23 +9,23 @@ import java.util.Map;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
-    private int statusCode;
+    private HttpStatus httpStatus;
     private Map<String, Object> header;
     private byte[] body;
 
-    public HttpResponse(int statusCode, Map<String, Object> header, byte[] body) {
-        this.statusCode = statusCode;
+    public HttpResponse(HttpStatus httpStatus, Map<String, Object> header, byte[] body) {
+        this.httpStatus = httpStatus;
         this.header = header;
         this.body = body;
     }
 
     public void render(DataOutputStream dos) {
-        if (statusCode == 200) {
+        if (httpStatus == HttpStatus.OK) {
             response200Header(dos);
             responseBody(dos, body);
         }
 
-        if (statusCode == 302) {
+        if (httpStatus == HttpStatus.FOUND) {
             response302Header(dos);
         }
     }
@@ -34,7 +34,7 @@ public class HttpResponse {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
             dos.writeBytes("Content-Type: " + header.get("Content-Type") + "\r\n");
-            dos.writeBytes("Content-Length: " + header.get("lengthOfBodyContent") + "\r\n");
+            dos.writeBytes("Content-Length: " + header.get("Content-Length") + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -44,13 +44,12 @@ public class HttpResponse {
     private void response302Header(DataOutputStream dos) {
         try {
             dos.writeBytes("HTTP/1.1 302 Found \r\n");
-            dos.writeBytes("Location: " + header.get("location") + "\r\n");
+            dos.writeBytes("Location: " + header.get("Location") + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
-
 
     private void responseBody(DataOutputStream dos, byte[] body) {
         try {

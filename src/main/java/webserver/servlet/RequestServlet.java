@@ -1,6 +1,5 @@
 package webserver.servlet;
 
-import org.apache.commons.httpclient.HttpMethod;
 import webserver.request.HttpRequest;
 import webserver.request.RequestMethod;
 import webserver.response.HttpResponse;
@@ -23,9 +22,10 @@ public abstract class RequestServlet implements HttpServlet {
 
     public HttpResponse doGet(HttpRequest httpRequest) throws IOException, URISyntaxException {
         throw new IllegalArgumentException("지원하지 않는 메소드 입니다.");
-    };
+    }
 
-    public HttpResponse doPost(HttpRequest httpRequest){
+    public HttpResponse doPost(HttpRequest httpRequest) {
         throw new IllegalArgumentException("지원하지 않는 메소드 입니다.");
-    };
+    }
+
 }
