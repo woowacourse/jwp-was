@@ -28,4 +28,8 @@ public class HttpRequestLine {
     public QueryParams findQueryParams() {
         return requestUri.findQueryParams();
     }
+
+    public String findUri() {
+        return requestUri.getUri();
+    }
 }

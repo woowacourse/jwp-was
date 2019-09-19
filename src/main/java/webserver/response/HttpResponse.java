@@ -12,8 +12,13 @@ import java.net.URISyntaxException;
 public abstract class HttpResponse {
 
     private static final Logger log = LoggerFactory.getLogger(HttpResponse.class);
+    protected final OutputStream out;
 
-    public abstract void makeResponse(OutputStream out, HttpRequest request) throws IOException, URISyntaxException;
+    public HttpResponse(final OutputStream out) {
+        this.out = out;
+    }
+
+    public abstract void makeResponse(HttpRequest request) throws IOException, URISyntaxException;
 
     protected void responseBody(DataOutputStream dos, byte[] body) {
         try {

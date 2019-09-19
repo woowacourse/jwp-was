@@ -1,15 +1,14 @@
 package webserver;
 
-import db.DataBase;
-import model.User;
+import controller.Controller;
+import controller.ControllerFinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.request.HttpRequest;
 import webserver.request.HttpRequestParser;
-import webserver.request.requestline.HttpMethod;
-import webserver.request.requestline.QueryParams;
 import webserver.response.FoundHttpResponse;
 import webserver.response.HttpResponse;
+import webserver.response.HttpStatus;
 import webserver.response.OkHttpResponse;
 
 import java.io.BufferedReader;
@@ -38,28 +37,20 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             HttpRequest httpRequest = HttpRequestParser.parseHttpRequest(br);
 
-            HttpMethod method = httpRequest.findMethod();
+            String uri = httpRequest.findUri();
+            Controller controller = ControllerFinder.findController(uri);
 
-            if (method == HttpMethod.GET) {
-                // TODO : query string params 사용하기
-                QueryParams queryParams = httpRequest.findQueryParams();
+            HttpResponse httpResponse = null;
 
-                HttpResponse httpResponse = new OkHttpResponse();
-                httpResponse.makeResponse(out, httpRequest);
+            HttpStatus status = controller.findStatus();
+            if (status == HttpStatus.Ok) {
+                httpResponse = new OkHttpResponse(out);
+            }
+            if (status == HttpStatus.Found) {
+                httpResponse = new FoundHttpResponse(out, "/index.html");
             }
 
-            if (method == HttpMethod.POST) {
-                String userId = httpRequest.findRequestBodyParam("userId");
-                String password = httpRequest.findRequestBodyParam("password");
-                String name = httpRequest.findRequestBodyParam("name");
-                String email = httpRequest.findRequestBodyParam("email");
-
-                User user = new User(userId, password, name, email);
-                DataBase.addUser(user);
-
-                HttpResponse httpResponse = new FoundHttpResponse("/index.html");
-                httpResponse.makeResponse(out, httpRequest);
-            }
+            controller.service(httpRequest, httpResponse);
 
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());

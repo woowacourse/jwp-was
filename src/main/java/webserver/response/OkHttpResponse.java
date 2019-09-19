@@ -13,8 +13,12 @@ import java.net.URISyntaxException;
 public class OkHttpResponse extends HttpResponse {
     private static final Logger log = LoggerFactory.getLogger(OkHttpResponse.class);
 
+    public OkHttpResponse(OutputStream out) {
+        super(out);
+    }
+
     @Override
-    public void makeResponse(final OutputStream out, final HttpRequest httpRequest) throws IOException, URISyntaxException {
+    public void makeResponse(final HttpRequest httpRequest) throws IOException, URISyntaxException {
         DataOutputStream dos = new DataOutputStream(out);
         byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.findFilePath());
         response200Header(dos, httpRequest.findContentType(), body.length);

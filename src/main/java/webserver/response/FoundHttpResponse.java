@@ -7,18 +7,18 @@ import webserver.request.HttpRequest;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URISyntaxException;
 
 public class FoundHttpResponse extends HttpResponse {
     private static final Logger log = LoggerFactory.getLogger(FoundHttpResponse.class);
     private final String location;
 
-    public FoundHttpResponse(final String location) {
+    public FoundHttpResponse(final OutputStream out, final String location) {
+        super(out);
         this.location = location;
     }
 
     @Override
-    public void makeResponse(final OutputStream out, final HttpRequest request) throws IOException, URISyntaxException {
+    public void makeResponse(final HttpRequest request) {
         DataOutputStream dos = new DataOutputStream(out);
         response302Header(dos, location);
     }

@@ -20,6 +20,10 @@ public class HttpRequest {
         return httpRequestLine.getMethod();
     }
 
+    public String findUri() {
+        return httpRequestLine.findUri();
+    }
+
     public String findFilePath() {
         return httpRequestLine.findFilePath();
     }
