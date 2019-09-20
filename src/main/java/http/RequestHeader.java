@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RequestHeader {
+    public static final String HTTP_METHOD = "method";
+    public static final String URL = "url";
+    public static final String HTTP_VERSION = "httpVersion";
     private static final Logger logger = LoggerFactory.getLogger(RequestHeader.class);
     private static final String DELIMITER_OF_START_LINE = " ";
     private static final String DELIMITER_OF_HEADER = ":";
@@ -14,10 +17,6 @@ public class RequestHeader {
     private static final String DELIMITER_OF_QUERY_PARAMETERS = "&";
     private static final String DELIMITER_OF_QUERY_PARAMETER = "=";
     private static final String START_POINT_OF_QUERY_PARAMETERS = "?";
-
-    public static final String HTTP_METHOD = "method";
-    public static final String URL = "url";
-    public static final String HTTP_VERSION = "httpVersion";
 
     private final Map<String, String> headers = new HashMap<>();
 
