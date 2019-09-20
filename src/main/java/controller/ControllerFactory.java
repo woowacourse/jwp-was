@@ -30,7 +30,7 @@ public class ControllerFactory {
     static class UserControllerCreator implements ControllerCreator {
         @Override
         public Controller create(Request request) {
-            return new UserController(request);
+            return new DataController(request);
         }
     }
 }
