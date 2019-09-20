@@ -31,12 +31,12 @@ public class ResponseHeader {
             this.httpStatus = httpStatus;
         }
 
-        public Builder setProtocol(final String protocol) {
+        public Builder protocol(final String protocol) {
             this.protocol = protocol;
             return this;
         }
 
-        public Builder setHttpStatus(final HttpStatus httpStatus) {
+        public Builder httpStatus(final HttpStatus httpStatus) {
             this.httpStatus = httpStatus;
             return this;
         }
