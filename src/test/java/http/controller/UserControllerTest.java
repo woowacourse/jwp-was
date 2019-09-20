@@ -2,6 +2,7 @@ package http.controller;
 
 import http.model.HttpRequest;
 import http.supoort.HttpRequestParser;
+import http.supoort.RequestMapping;
 import model.User;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +17,7 @@ class UserControllerTest {
         String request = "GET /user/create?userId=andole&password=password&name=andole&email=andole@andole.com HTTP/1.1";
         HttpRequest httpRequest = HttpRequestParser.parse(new ByteArrayInputStream(request.getBytes()));
 
-        Controller handler = new UserController();
+        Controller handler = new UserController(RequestMapping.GET("/user/create"));
         User result = (User) handler.handle(httpRequest).getModel().getAttributes("user");
 
         assertThat(result).isEqualTo(user);

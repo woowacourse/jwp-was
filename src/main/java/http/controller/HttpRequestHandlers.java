@@ -1,21 +1,25 @@
 package http.controller;
 
 import http.model.HttpRequest;
+import http.supoort.IllegalRequestMappingException;
 import http.view.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class HttpRequestHandlers {
-    private List<Controller> controllers;
+    private Set<Controller> controllers;
     private Controller defaultController;
 
     public HttpRequestHandlers(Controller defaultController) {
-        controllers = new ArrayList<>();
+        controllers = new HashSet<>();
         this.defaultController = defaultController;
     }
 
     public void addHandler(Controller handler) {
+        if (controllers.contains(handler)) {
+            throw new IllegalRequestMappingException();
+        }
         controllers.add(handler);
     }
 

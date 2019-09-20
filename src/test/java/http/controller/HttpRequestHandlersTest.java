@@ -2,6 +2,7 @@ package http.controller;
 
 import http.model.HttpRequest;
 import http.supoort.HttpRequestParser;
+import http.supoort.IllegalRequestMappingException;
 import http.supoort.RequestMapping;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayInputStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class HttpRequestHandlersTest {
     private HttpRequestHandlers handlers = new HttpRequestHandlers(new FileResourceController(RequestMapping.GET("/*")));
@@ -40,5 +42,14 @@ class HttpRequestHandlersTest {
         HttpRequest httpRequest = HttpRequestParser.parse(new ByteArrayInputStream(request.getBytes()));
 
         assertThat(handlers.doService(httpRequest).getViewLocation()).isEqualTo("/user/form.html");
+    }
+
+    @Test
+    void 리퀘스트매핑_중복_등록() {
+        HttpRequestHandlers handlers = new HttpRequestHandlers(new FileResourceController(RequestMapping.GET("/")));
+        handlers.addHandler(new FileResourceController(RequestMapping.GET("/index.html")));
+        assertThatThrownBy(() -> handlers.addHandler(new FileResourceController(RequestMapping.GET("/index.html"))))
+                .isInstanceOf(IllegalRequestMappingException.class);
+
     }
 }
