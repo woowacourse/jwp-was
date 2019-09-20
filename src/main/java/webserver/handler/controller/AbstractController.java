@@ -17,10 +17,10 @@ public abstract class AbstractController implements Controller {
 
     /**
      * 이 메서드를 오버라이드 할 시 하위에 정의된 컨트롤러의 HttpRequest 의 HttpMethod 는 GET 이어야 하며
-     * 이에 따른 처리는 service 함수가 하게 된다.
+     * 이에 따른 처리는 service 함수가 하게 된다. 이것(super)을 직접 호출하는 방식은 잘못된 호출이다.
      *
-     * @param request
-     * @param response
+     * @param request HttpRequest
+     * @param response HttpResponse
      */
     protected void doGet(HttpRequest request, HttpResponse response) {
         if (request.getHttpMethod() != HttpMethod.GET) {
@@ -31,10 +31,10 @@ public abstract class AbstractController implements Controller {
 
     /**
      * 이 메서드를 오버라이드 할 시 하위에 정의된 컨트롤러의 HttpRequest 의 HttpMethod 는 POST 이어야 하며
-     * 이에 따른 처리는 service 함수가 하게 된다.
+     * 이에 따른 처리는 service 함수가 하게 된다. 이것(super)을 직접 호출하는 방식은 잘못된 호출이다.
      *
-     * @param request
-     * @param response
+     * @param request HttpRequest
+     * @param response HttpResponse
      */
     protected void doPost(HttpRequest request, HttpResponse response) {
         if (request.getHttpMethod() != HttpMethod.POST) {
