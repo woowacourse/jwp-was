@@ -48,4 +48,8 @@ public class HttpRequest {
     public RequestParameter getRequestParameter() {
         return requestParameter;
     }
+
+    public RequestMethod getMethod() {
+        return requestLine.getMethod();
+    }
 }
