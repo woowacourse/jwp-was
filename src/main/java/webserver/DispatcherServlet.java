@@ -4,8 +4,10 @@ import controller.Controller;
 import http.HttpRequest;
 import http.HttpResponse;
 import http.MimeType;
+import utils.FileIoUtils;
 import view.View;
 import view.ViewResolver;
+import webserver.exception.NotFoundResourceException;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -19,12 +21,18 @@ public class DispatcherServlet {
 
         Controller controller = HandlerMapping.handle(httpRequest);
         View view = controller.service(httpRequest, httpResponse);
-        httpResponse.setBody(ViewResolver.resolve(view.getViewName()));
+        if (!view.isRedirectView()) {
+            httpResponse.setBody(ViewResolver.resolve(view.getViewName()));
+        }
         view.render(httpRequest, httpResponse);
     }
 
     private static void handleStaticRequest(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
-        byte[] body = ViewResolver.resolve(httpRequest.getUri());
+        String path = "./static" + httpRequest.getUri();
+        if (!FileIoUtils.isExistFile(path)) {
+            throw new NotFoundResourceException();
+        }
+        byte[] body = FileIoUtils.loadFileFromClasspath(path);
 
         httpResponse.setStatus(200);
         httpResponse.addHeader("Content-Type", MimeType.of(httpRequest.getUri()));

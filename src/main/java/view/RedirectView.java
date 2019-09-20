@@ -17,6 +17,11 @@ public class RedirectView implements View {
     }
 
     @Override
+    public boolean isRedirectView() {
+        return true;
+    }
+
+    @Override
     public String getViewName() {
         return viewName;
     }

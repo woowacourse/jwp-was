@@ -16,6 +16,11 @@ public class ModelAndView implements View {
     }
 
     @Override
+    public boolean isRedirectView() {
+        return false;
+    }
+
+    @Override
     public String getViewName() {
         return viewName;
     }

@@ -7,4 +7,6 @@ public interface View {
     void render(HttpRequest httpRequest, HttpResponse httpResponse);
 
     String getViewName();
+
+    boolean isRedirectView();
 }
