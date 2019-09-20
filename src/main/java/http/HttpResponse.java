@@ -11,13 +11,11 @@ import java.util.Map;
 public class HttpResponse {
     private static final Logger log = LoggerFactory.getLogger(HttpResponse.class);
 
-    private DataOutputStream dos;
     private HttpStatus status;
     private HttpHeader header = new HttpHeader();
     private byte[] body;
 
-    public HttpResponse(DataOutputStream dataOutputStream) {
-        this.dos = dataOutputStream;
+    public HttpResponse() {
     }
 
     public void setStatus(int statusCode) {
@@ -33,13 +31,13 @@ public class HttpResponse {
         header.addHeader("Content-Length", String.valueOf(body.length));
     }
 
-    public void send() {
+    public void send(DataOutputStream dos) {
         if (status == null) {
             throw new EmptyStatusException();
         }
         try {
             dos.writeBytes("HTTP/1.1 " + status.getStatusCode() + " " + status.getStatus() + "\r\n");
-            writeHeader();
+            dos.writeBytes(makeHeaderLines());
             if (body != null) {
                 dos.write(body, 0, body.length);
             }
@@ -49,10 +47,12 @@ public class HttpResponse {
         }
     }
 
-    private void writeHeader() throws IOException {
+    private String makeHeaderLines() {
+        StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, String> header : header.getHeaders()) {
-            dos.writeBytes(header.getKey() + ": " + header.getValue() + "\r\n");
+            sb.append(header.getKey() + ": " + header.getValue() + "\r\n");
         }
-        dos.writeBytes("\r\n");
+        sb.append("\r\n");
+        return sb.toString();
     }
 }

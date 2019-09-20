@@ -2,11 +2,8 @@ package webserver;
 
 import http.HttpRequest;
 import http.HttpResponse;
-import http.MimeType;
-import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.FileIoUtils;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -30,33 +27,12 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest httpRequest = new HttpRequest(in);
+            HttpResponse httpResponse = new HttpResponse();
             DataOutputStream dos = new DataOutputStream(out);
-            HttpResponse httpResponse = new HttpResponse(dos);
 
-            if (httpRequest.isFileRequest()) {
-                byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getUri());
-
-                httpResponse.setStatus(200);
-                httpResponse.addHeader("Content-Type", MimeType.of(httpRequest.getUri()));
-                httpResponse.setBody(body);
-                httpResponse.send();
-                dos.close();
-                return;
-            }
-
-            if (httpRequest.getUri().equals("/user/create")) {
-                User user = new User(
-                        httpRequest.getRequestBody("userId"),
-                        httpRequest.getRequestBody("password"),
-                        httpRequest.getRequestBody("name"),
-                        httpRequest.getRequestBody("email"));
-                logger.info(user.toString());
-
-                httpResponse.setStatus(302);
-                httpResponse.addHeader("Location", "/index.html");
-                httpResponse.send();
-                dos.close();
-            }
+            DispatcherServlet.doDispatch(httpRequest, httpResponse);
+            httpResponse.send(dos);
+            dos.close();
         } catch (IOException e) {
             logger.error(e.getMessage());
         } catch (URISyntaxException e) {
