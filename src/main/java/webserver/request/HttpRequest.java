@@ -1,13 +1,8 @@
 package webserver.request;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import utils.HttpRequestUtils;
-import webserver.RequestHandler;
 
 public class HttpRequest {
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-
     private RequestLine requestLine;
     private RequestHeader header;
     private RequestBody body;

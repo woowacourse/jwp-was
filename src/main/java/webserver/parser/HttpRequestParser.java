@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 public class HttpRequestParser {
-    public static final int REQUEST_LINES_REQUESTLINE_INDEX = 0;
-    public static final int REQUEST_LINES_HEADER_INDEX = 1;
+    private static final int REQUEST_LINES_REQUESTLINE_INDEX = 0;
+    private static final int REQUEST_LINES_HEADER_INDEX = 1;
     private static final int KEY_INDEX = 0;
     private static final int VALUE_INDEX = 1;
 
