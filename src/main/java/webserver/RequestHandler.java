@@ -6,6 +6,8 @@ import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
 import http.request.QueryParams;
 import http.response.HttpResponse;
+import http.response.HttpResponseBody;
+import http.response.HttpResponseFactory;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +40,6 @@ public class RequestHandler implements Runnable {
             logger.debug(request.toString());
 
             DataOutputStream dos = new DataOutputStream(out);
-            HttpResponse response = new HttpResponse();
 
             if (HttpMethod.GET.match(request.getMethod())) {
                 byte[] body;
@@ -49,20 +50,23 @@ public class RequestHandler implements Runnable {
                 }
 
                 if (request.getHeaders().getHeader("Accept").contains("text/css")) {
-                    response.setBody(body, "text/css");
+                    HttpResponseBody responseBody = new HttpResponseBody(body, "text/css");
+                    HttpResponse response = HttpResponseFactory.makeHttp200Response(responseBody);
+                    dos.writeBytes(response.getHeaderMessage());
+                    dos.write(response.getBody());
                 } else {
-                    response.setBody(body, "text/html;charset=utf-8");
+                    HttpResponseBody responseBody = new HttpResponseBody(body, "text/html;charset=utf-8");
+                    HttpResponse response = HttpResponseFactory.makeHttp200Response(responseBody);
+                    dos.writeBytes(response.getHeaderMessage());
+                    dos.write(response.getBody());
                 }
             }
 
             if (HttpMethod.POST.match(request.getMethod()) && request.getUrl().getPath().equals("/user/create")) {
                 createUser(request.getQueryParams());
-                response.changeStatusToFound("/index.html");
+                HttpResponse response = HttpResponseFactory.makeHttp302Response("http://localhost:8080/index.html");
+                dos.writeBytes(response.getHeaderMessage());
             }
-
-            dos.writeBytes(response.getHeaders());
-            dos.write(response.getBody());
-
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }

@@ -29,6 +29,7 @@
     - [X] Http 요청을 Parsing하는 기능 분리
     - [X] QueryParams 리펙토링
 2. Response 생성 기능 분리
+    - [X] Status에 따라 Http Response 만드는 기능 분리
 
 3. RequestHandler 리펙토링
 
