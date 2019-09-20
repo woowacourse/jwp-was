@@ -1,13 +1,15 @@
 package http.request;
 
-public class HttpRequestBody {
-    private byte[] body;
+import java.util.List;
 
-    public HttpRequestBody(byte[] body) {
+public class HttpRequestBody {
+    List<String> body;
+
+    public HttpRequestBody(List<String> body) {
         this.body = body;
     }
 
-    public byte[] getBody() {
+    public List<String> getBody() {
         return body;
     }
 }
