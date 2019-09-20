@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class HttpRequestHandlers {
-    private static final int MIN_MAPPER_COUNT = 1;
     private Map<RequestMapping, HttpRequestHandler> handlers;
 
     public HttpRequestHandlers() {
@@ -34,7 +33,7 @@ public class HttpRequestHandlers {
     }
 
     private RequestMapping resolveRequestMapping(List<RequestMapping> requestMappings) {
-        if (requestMappings.size() < MIN_MAPPER_COUNT) {
+        if (requestMappings.isEmpty()) {
             throw new NotSupportedRequestException();
         }
         return requestMappings.get(0);
