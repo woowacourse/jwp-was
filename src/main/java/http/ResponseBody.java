@@ -1,4 +1,4 @@
-package webserver.support;
+package http;
 
 public class ResponseBody {
     private final byte[] body;

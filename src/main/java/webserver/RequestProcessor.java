@@ -1,9 +1,9 @@
 package webserver;
 
+import http.Request;
+import http.RequestHeader;
+import http.ResponseHeader;
 import model.UserService;
-import webserver.support.Request;
-import webserver.support.RequestHeader;
-import webserver.support.ResponseHeader;
 
 public class RequestProcessor {
     private static final String REGEX_FOR_FILE = "/?[A-Za-z0-9/.\\-]+\\.(html|ico|css|js)";

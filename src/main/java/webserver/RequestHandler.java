@@ -1,10 +1,11 @@
 package webserver;
 
+import http.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import utils.IOUtils;
-import webserver.support.*;
+import webserver.support.PathHandler;
 
 import java.io.*;
 import java.net.Socket;

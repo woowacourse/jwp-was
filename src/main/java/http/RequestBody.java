@@ -1,4 +1,4 @@
-package webserver.support;
+package http;
 
 import com.github.jknack.handlebars.internal.lang3.StringUtils;
 

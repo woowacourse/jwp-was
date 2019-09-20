@@ -1,4 +1,4 @@
-package webserver.support;
+package http;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
