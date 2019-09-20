@@ -38,7 +38,17 @@ public class AbstractRequest implements Request {
         return parameters;
     }
 
+    @Override
     public RequestPath getRequestPath() {
         return requestPath;
+    }
+
+    public RequestHeader getRequestHeader() {
+        return requestHeader;
+    }
+
+    @Override
+    public RequestMethod getRequestMethod() {
+        return requestMethod;
     }
 }

@@ -11,8 +11,8 @@ public class GetRequest extends AbstractRequest {
         parameters = new HashMap<>();
 
         if (requestPath.getPath().contains("?")) {
-            String[] parameters = requestPath.getPath().split("\\?");
-            extractParameter(parameters[1].split("&"));
+            String[] params = requestPath.getPath().split("\\?");
+            extractParameter(params[1].split("&"));
         }
     }
 

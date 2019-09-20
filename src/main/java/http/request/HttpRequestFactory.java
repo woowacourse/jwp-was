@@ -1,11 +1,15 @@
 package http.request;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class HttpRequestFactory {
+    private static final Logger log = LoggerFactory.getLogger(HttpRequestFactory.class);
     private static Map<RequestMethod, RequestCreator> requestCreators = new HashMap<>();
 
     static {
@@ -22,6 +26,7 @@ public class HttpRequestFactory {
     }
 
     private static String[] getTokens(String line) {
+        log.debug("line: {}", line);
         return line.split(" ");
     }
 }

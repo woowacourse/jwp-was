@@ -23,7 +23,7 @@ public enum RequestMethod {
                 .orElseThrow(NoMatchHttpMethodException::new);
     }
 
-    private String getMethod() {
+    public String getMethod() {
         return method;
     }
 }

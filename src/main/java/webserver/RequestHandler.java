@@ -8,7 +8,6 @@ import http.response.Response;
 import http.response.ResponseFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import service.UserService;
 
 import java.io.*;
 import java.net.Socket;
@@ -39,11 +38,20 @@ public class RequestHandler implements Runnable {
             Request request = HttpRequestFactory.getRequest(br);
             DataOutputStream dos = new DataOutputStream(out);
 
-            request.getParams();
             if(request.getRequestPath().getPath().equals(TEMPLATE_PATH + "/") || request.getRequestPath().getPath().equals(TEMPLATE_PATH+"/index.html")) {
-                Response response = ResponseFactory.getResponse(request.getRequestPath().getPath(), "../resources/templates/");
+                Response response = homeController.home(request);
                 response.doResponse(dos, "Content-Type: text/html;charset=utf-8");
-//                homeController.home(request);
+            }
+
+            if(request.getRequestPath().getPath().equals(TEMPLATE_PATH + "/user/form.html")) {
+                Response response = userController.userForm(request);
+                response.doResponse(dos, "Content-Type: text/html;charset=utf-8");
+            }
+
+            if((request.getRequestMethod().getMethod().equals("GET") && request.getRequestPath().getPath().contains(TEMPLATE_PATH + "/user/create?")) ||
+                    request.getRequestMethod().getMethod().equals("POST") && request.getRequestPath().getPath().contains(TEMPLATE_PATH + "/user/create")) {
+                Response response = userController.createUser(request);
+                response.doResponse(dos, "Location: http://localhost:8080/");
             }
 
             if(request.getRequestPath().getPath().equals(TEMPLATE_PATH + "/favicon.ico")) {
