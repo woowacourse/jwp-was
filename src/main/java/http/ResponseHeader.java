@@ -24,20 +24,20 @@ public class ResponseHeader {
         return type;
     }
 
+    public void setType(String type) {
+        this.type = String.format("text/%s", type);
+    }
+
     public String getLocation() {
         return location;
     }
 
-    public boolean isOk() {
-        return (statusCode == OK_STATUS_CODE);
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public String getUrl() {
         return isOk() ? url : location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
     }
 
     public void setUrl(String url) {
@@ -48,8 +48,8 @@ public class ResponseHeader {
         this.statusCode = statusCode;
     }
 
-    public void setType(String type) {
-        this.type = String.format("text/%s", type);
+    public boolean isOk() {
+        return (statusCode == OK_STATUS_CODE);
     }
 
     @Override

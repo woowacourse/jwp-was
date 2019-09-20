@@ -3,12 +3,10 @@ package webserver;
 import http.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.FileIoUtils;
 import utils.IOUtils;
 import webserver.controller.Controller;
 import webserver.controller.CreateUserController;
 import webserver.controller.FileController;
-import webserver.support.PathHandler;
 
 import java.io.*;
 import java.net.Socket;
@@ -19,14 +17,14 @@ import java.util.Optional;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-
-    private Socket connection;
     private static Map<String, Controller> api;
 
     static {
         api = new HashMap<>();
         api.put("/user/create", new CreateUserController());
     }
+
+    private Socket connection;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
