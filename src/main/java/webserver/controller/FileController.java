@@ -17,7 +17,7 @@ public class FileController extends HttpController {
 
         response.setUrl(url);
         response.setStatusCode(OK_STATUS_CODE);
-        response.setType(url.substring(url.lastIndexOf(".") + 1));
+        response.setContentType(url.substring(url.lastIndexOf(".") + 1));
 
         String absoluteUrl = PathHandler.path(response.getHeaderUrl());
         byte[] body = FileIoUtils.loadFileFromClasspath(absoluteUrl);

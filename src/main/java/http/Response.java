@@ -29,7 +29,7 @@ public class Response {
         header.setLocation(location);
     }
 
-    public void setType(String type) {
+    public void setContentType(String type) {
         header.setType(type);
     }
 
