@@ -5,19 +5,17 @@ import controller.CreateUserController;
 import model.Request;
 import model.RequestParser;
 import model.Response;
-import org.apache.tika.Tika;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.FileIoUtils;
 
-import java.io.*;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -43,49 +41,35 @@ public class RequestHandler implements Runnable {
             RequestParser requestParser = new RequestParser(in);
             Request request = new Request(requestParser.getHeaderInfo(), requestParser.getParameter());
 
-            String url = request.getUrl();
+            String url = request.getPath();
             String extension = url.substring(url.lastIndexOf(".") + 1);
 
-            a(dos, request, url, extension);
+            processResponse(dos, request, url, extension);
 
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void a(DataOutputStream dos, Request request, String url, String extension) throws URISyntaxException, IOException {
-        if (!extension.startsWith("/")) {
-            if ("html".equals(extension)) {
-                String classPath = "./templates" + url;
-                processResponse(dos, classPath);
-                return;
-            }
-            String classPath = "./static" + url;
-            processResponse(dos, classPath);
-        }
-
-        if (extension.startsWith("/")) {
-            Response response = new Response(dos);
-
-            Controller controller = controllers.get(request.getUrl());
-            controller.service(request, response);
-        }
-    }
-
-    private void processResponse(DataOutputStream dos, String classPath) throws URISyntaxException, IOException {
+    private void processResponse(DataOutputStream dos, Request request, String url, String extension) throws URISyntaxException, IOException {
         Response response = new Response(dos);
 
-        Path path = Paths.get(Objects.requireNonNull(FileIoUtils.class.getClassLoader().getResource(classPath)).toURI());
-        File file = new File(path.toString());
-        String mimeType = new Tika().detect(file);
+        if (!extension.startsWith("/")) {
+            String classPath = getClassPath(url, extension);
+            response.responseResource(classPath);
+            return;
+        }
 
-        byte[] body = FileIoUtils.loadFileFromClasspath(classPath);
+        Controller controller = controllers.get(request.getPath());
+        controller.service(request, response);
+    }
 
-        response.setHeader("Status", "HTTP/1.1 200 OK \r\n");
-        response.setHeader("Content-Type", mimeType + ";charset=utf-8\r\n");
-        response.setHeader("Content-Length", body.length + "\r\n");
+    private String getClassPath(String url, String extension) {
+        if ("html".equals(extension)) {
+            return "./templates" + url;
+        }
 
-        response.response200(body);
+        return "./static" + url;
     }
 }
 

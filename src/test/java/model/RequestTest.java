@@ -20,17 +20,30 @@ class RequestTest {
 
         assertThat(request.getMethod()).isEqualTo("POST");
         assertThat(request.getHeader("Connection")).isEqualTo("keep-alive");
-        assertThat(request.getUrl()).isEqualTo("/user/create");
+        assertThat(request.getPath()).isEqualTo("/user/create");
         assertThat(requestParser.getParameter().get("userId")).isEqualTo("javajigi");
     }
 
     @Test
-    public void request_GET() throws Exception {
+    void request_GET() throws Exception {
         InputStream in = new FileInputStream(new File(testDirectory + "Http_GET.txt"));
         RequestParser requestParser = new RequestParser(in);
         Request request = new Request(requestParser.getHeaderInfo(), requestParser.getParameter());
 
         assertThat(request.getMethod()).isEqualTo("GET");
         assertThat(request.getHeader("Connection")).isEqualTo("keep-alive");
+    }
+
+    @Test
+    void request_POST2() throws Exception {
+        InputStream in = new FileInputStream(new File(testDirectory + "Http_POST2.txt"));
+        RequestParser requestParser = new RequestParser(in);
+        Request request = new Request(requestParser.getHeaderInfo(), requestParser.getParameter());
+
+        assertThat(request.getMethod()).isEqualTo("POST");
+        assertThat(request.getPath()).isEqualTo("/user/create");
+        assertThat(request.getHeader("Connection")).isEqualTo("keep-alive");
+        assertThat(request.getParameter("id")).isEqualTo("1");
+        assertThat(request.getParameter("userId")).isEqualTo("javajigi");
     }
 }

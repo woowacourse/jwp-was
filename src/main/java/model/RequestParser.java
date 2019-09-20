@@ -25,6 +25,7 @@ public class RequestParser {
 
     public RequestParser(InputStream in) throws IOException {
         header = new HashMap<>();
+        parameter = new HashMap<>();
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
         parseRequest(bufferedReader);
     }
@@ -59,16 +60,18 @@ public class RequestParser {
     private void processPostRequest(BufferedReader bufferedReader) throws IOException {
         if (header.get(METHOD).contains(POST)) {
             String body = IOUtils.readData(bufferedReader, Integer.parseInt(header.get(CONTENT_LENGTH)));
-            parameter = ExtractInformationUtils.extractInformation(body);
+            parameter.putAll(ExtractInformationUtils.extractInformation(body));
         }
     }
 
     private void processQueryString() {
         String method = header.get(METHOD);
 
-        if (QUERY_STRING_SEPARATOR.equals(method)) {
-            parameter = ExtractInformationUtils
-                    .extractInformation(method.substring(method.split(" ")[1].indexOf(QUERY_STRING_SEPARATOR) + 1));
+        if (method.contains(QUERY_STRING_SEPARATOR)) {
+            String url = method.split(" ")[1];
+            Map<String, String> queryParams = ExtractInformationUtils
+                    .extractInformation(url.substring(url.lastIndexOf(QUERY_STRING_SEPARATOR) + 1));
+            parameter.putAll(queryParams);
         }
     }
 

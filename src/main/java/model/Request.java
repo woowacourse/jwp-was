@@ -16,8 +16,18 @@ public class Request {
         this.parameter = parameter;
     }
 
-    public String getUrl() {
-        return header.get("Method").split(" ")[1];
+    public String getMethod() {
+        return header.get(METHOD).split(" ")[0];
+    }
+
+    public String getPath() {
+        String path = header.get("Method").split(" ")[1];
+
+        if (path.contains("?")) {
+            return path.substring(0, path.lastIndexOf("?"));
+        }
+
+        return path;
     }
 
     public String getHeader(String key) {
@@ -27,10 +37,6 @@ public class Request {
             throw new NotFoundRequestElementException();
         }
         return element;
-    }
-
-    public String getMethod() {
-        return header.get(METHOD).split(" ")[0];
     }
 
     public String getParameter(String key) {
