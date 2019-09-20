@@ -3,29 +3,28 @@ package webserver;
 import controller.UserController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.FileIoUtils;
+import utils.ResourceLoadUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Optional;
 
 import static controller.UserController.USER_CREATE_URL;
 
 public class RequestDispatcher {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestDispatcher.class);
-    private static final String TEMPLATES_DIR = "./templates";
-    private static final String STATIC_DIR = "./static";
     private static final String MESSAGE_UNSUPPORTED_EXTENSION = "지원되지 않는 확장자 입니다.";
     private static final String EXTENSION_DELIMITER = "\\.";
 
     public static Response handle(Request request) {
         try {
             String url = request.getUrl();
-            Response response = serveFile(STATIC_DIR + url);
-            if (response != null) {
-                return response;
-            }
+            Optional<File> file = ResourceLoadUtils.detectFile(url);
 
-            response = serveFile(TEMPLATES_DIR + url);
-            if (response != null) {
-                return response;
+            if (file.isPresent()) {
+                return serveFile(file.get());
             }
 
             if (USER_CREATE_URL.equals(url)) {
@@ -39,14 +38,15 @@ public class RequestDispatcher {
                 .build();
     }
 
-    private static Response serveFile(String url) {
+    private static Response serveFile(File file) {
         try {
             return Response.ResponseBuilder.createBuilder()
                     .withStatus(Status.OK)
-                    .withMediaType(extractExtension(url))
-                    .withBody(FileIoUtils.loadFileFromClasspath(url))
+                    .withMediaType(extractExtension(file.getName()))
+                    .withBody(Files.readAllBytes(file.toPath()))
                     .build();
-        } catch (Exception e) {
+        } catch (IOException e) {
+            logger.error("serveFile error : {}", e.getMessage());
             return null;
         }
     }
