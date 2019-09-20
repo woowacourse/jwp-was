@@ -74,9 +74,9 @@ public class HttpRequestParser {
 
     private static Map<String, String> parseHeaders(List<String> headerLines) {
         Map<String, String> headers = new HashMap<>();
-        for (String header : headerLines) {
-            String[] tmp = header.split(HEADER_SEPARATOR);
-            headers.put(tmp[0], tmp[1]);
+        for (String headerLine : headerLines) {
+            String[] header = headerLine.split(HEADER_SEPARATOR);
+            headers.put(header[0], header[1]);
         }
         return headers;
     }
