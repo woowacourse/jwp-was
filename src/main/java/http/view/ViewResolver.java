@@ -3,9 +3,6 @@ package http.view;
 import http.model.*;
 import utils.FileIoUtils;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class ViewResolver implements Resolver {
     private static final String HTML_PATH = "./templates";
     private static final String STATIC_PATH = "./static";
@@ -17,10 +14,11 @@ public class ViewResolver implements Resolver {
     @Override
     public HttpResponse resolve(ModelAndView modelAndView) {
         String resource = modelAndView.getViewLocation();
-        HttpHeaders headers = defaultHeaders(resource);
+        HttpHeaders headers = new HttpHeaders();
         if (resource.startsWith(REDIRECT_PREFIX)) {
             appendLocationHeader(headers, extractLocation(resource));
         }
+        appendDefaultHeader(headers, resource);
         return resolveResponse(resource, headers);
     }
 
@@ -42,11 +40,10 @@ public class ViewResolver implements Resolver {
         headers.addHeader("Location", redirectUri);
     }
 
-    private HttpHeaders defaultHeaders(String resource) {
-        Map<String, String> headers = new HashMap<>();
-        headers.put(CONTENT_TYPE, getContentType(resource).getType());
-        headers.put("Server", "ANDOLE MACHINE");
-        return new HttpHeaders(headers);
+    private HttpHeaders appendDefaultHeader(HttpHeaders headers, String resource) {
+        headers.addHeader(CONTENT_TYPE, getContentType(resource).getType());
+        headers.addHeader("Server", "ANDOLE MACHINE");
+        return headers;
     }
 
     private ContentType getContentType(String resource) {
