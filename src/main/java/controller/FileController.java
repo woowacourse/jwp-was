@@ -12,10 +12,6 @@ public class FileController implements Controller {
         this.request = request;
     }
 
-    public Response home(Request request) {
-        return ResponseFactory.getResponse(request);
-    }
-
     @Override
     public Response createResponse() {
         return ResponseFactory.getResponse(request);

@@ -6,18 +6,18 @@ import http.response.Response;
 import http.response.ResponseFactory;
 import service.UserService;
 
-public class DataController implements Controller {
+public class PostDataController implements Controller {
     private UserService userService;
     private Request request;
 
-    public DataController(Request request) {
+    public PostDataController(Request request) {
         this.request = request;
         userService = UserService.getInstance();
     }
 
-    public Response createUser(Request request) {
+    public void createUser(Request request) {
         userService.createUser(request.getParams());
-        return ResponseFactory.getResponse(request);
+        ResponseFactory.getResponse(request);
     }
 
     @Override
