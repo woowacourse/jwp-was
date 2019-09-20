@@ -1,10 +1,8 @@
 package http.request;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class HttpRequestParams {
     private static final String QUERY_PARAM_DELIMITER = "&";
@@ -32,9 +30,23 @@ public class HttpRequestParams {
     }
 
     private static Map<String, String> generateQueryParams(final String queryString) {
-        return Collections.unmodifiableMap(Arrays.stream(queryString.split(QUERY_PARAM_DELIMITER))
-                .map(param -> param.split(KEY_VALUE_DELIMITER))
-                .collect(Collectors.toMap(tokens -> tokens[0], tokens -> tokens[1])));
+        Map<String, String> parameters = new HashMap<>();
+        String[] params = queryString.split(QUERY_PARAM_DELIMITER);
+
+        for (String param : params) {
+            String[] tokens = param.split(KEY_VALUE_DELIMITER);
+            parameters.put(tokens[0], parseParamValue(tokens));
+        }
+
+        return parameters;
+    }
+
+    private static String parseParamValue(final String[] tokens) {
+        if (tokens.length == 1) {
+            return "";
+        }
+
+        return tokens[1];
     }
 
     public String get(final String key) {
