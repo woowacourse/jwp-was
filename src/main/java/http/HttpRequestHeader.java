@@ -18,7 +18,7 @@ public class HttpRequestHeader {
     }
 
     private void checkContainsKey(String key) {
-        if (headers.containsKey(key)) {
+        if (!headers.containsKey(key)) {
             throw new NotFoundHeaderException("그런 헤더는 존재하지 않습니다.");
         }
     }
