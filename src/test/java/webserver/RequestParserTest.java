@@ -1,5 +1,6 @@
 package webserver;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -25,6 +26,7 @@ public class RequestParserTest {
                     "This is body").getBytes();
 
     @Test
+    @DisplayName("Request 파싱")
     void parse() throws IOException {
         Request req = RequestParser.parse(new ByteArrayInputStream(REQUEST_BYTE));
 
@@ -35,6 +37,7 @@ public class RequestParserTest {
     }
 
     @Test
+    @DisplayName("Query String 파싱")
     void querystring() throws IOException {
         Request req = RequestParser.parse(new ByteArrayInputStream("GET /some-resource?q=abcde&email=john%40example.com".getBytes()));
 
