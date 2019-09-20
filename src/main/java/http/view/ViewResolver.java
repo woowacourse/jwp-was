@@ -16,14 +16,19 @@ public class ViewResolver implements Resolver {
         String resource = modelAndView.getViewLocation();
         HttpHeaders headers = new HttpHeaders();
         if (resource.startsWith(REDIRECT_PREFIX)) {
-            appendLocationHeader(headers, extractLocation(resource));
+            return resolveRedirect(resource, headers);
         }
-        appendDefaultHeader(headers, resource);
         return resolveResponse(resource, headers);
     }
 
+    private HttpResponse resolveRedirect(String resource, HttpHeaders headers) {
+        appendLocationHeader(headers, extractLocation(resource));
+        return new HttpResponse(HttpProtocols.DEFAULT, HttpStatus.FOUND, headers);
+    }
+
     private HttpResponse resolveResponse(String resource, HttpHeaders headers) {
-        ContentType contentType = ContentType.from(headers.getHeader(CONTENT_TYPE));
+        appendDefaultHeader(headers, resource);
+        ContentType contentType = ContentType.from(headers.getHeader("Content-Type"));
         if (contentType.isHTML()) {
             return new HttpResponse(HttpProtocols.DEFAULT, HttpStatus.OK,
                     headers, FileIoUtils.loadFileFromClasspath(HTML_PATH + resource));
@@ -33,7 +38,7 @@ public class ViewResolver implements Resolver {
     }
 
     private String extractLocation(String resource) {
-        return resource.substring(resource.indexOf(REDIRECT_PREFIX) - 1);
+        return resource.replace(REDIRECT_PREFIX, "");
     }
 
     private void appendLocationHeader(HttpHeaders headers, String redirectUri) {

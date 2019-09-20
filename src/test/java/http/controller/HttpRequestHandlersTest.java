@@ -1,6 +1,5 @@
 package http.controller;
 
-import http.model.HttpMethod;
 import http.model.HttpRequest;
 import http.supoort.HttpRequestParser;
 import http.supoort.RequestMapping;
@@ -13,19 +12,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class HttpRequestHandlersTest {
     private HttpRequestHandlers handlers = new HttpRequestHandlers();
-    private HttpRequestHandler fileResourceRequestHandler;
-    private HttpRequestHandler modelRequestHandler;
 
     @BeforeEach
     void setUp() {
-        fileResourceRequestHandler = new FileResourceRequestHandler();
-        modelRequestHandler = new UserRequestHandler();
-        handlers.addHandler(new RequestMapping(HttpMethod.GET, "/*"), fileResourceRequestHandler);
-        handlers.addHandler(new RequestMapping(HttpMethod.GET, "/user/create"), modelRequestHandler);
+        handlers.addHandler(new FileResourceController(RequestMapping.GET("/*")));
+        handlers.addHandler(new UserController(RequestMapping.POST("/user/create"), RequestMapping.GET("/user/create")));
     }
 
     @Test
-    void 모델핸들러_선택() {
+    void 유저핸들러_선택() {
         String request = "GET /user/create?key=value HTTP/1.1";
         HttpRequest httpRequest = HttpRequestParser.parse(new ByteArrayInputStream(request.getBytes()));
 

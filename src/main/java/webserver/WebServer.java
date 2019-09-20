@@ -1,10 +1,9 @@
 package webserver;
 
-import http.controller.FileResourceRequestHandler;
-import http.controller.HttpRequestHandler;
+import http.controller.Controller;
+import http.controller.FileResourceController;
 import http.controller.HttpRequestHandlers;
-import http.controller.UserRequestHandler;
-import http.model.HttpMethod;
+import http.controller.UserController;
 import http.supoort.RequestMapping;
 import http.view.ModelResolver;
 import http.view.ViewHandler;
@@ -58,12 +57,11 @@ public class WebServer {
 
     private static HttpRequestHandlers initRequestHandlers() {
         HttpRequestHandlers httpRequestHandlers = new HttpRequestHandlers();
-        HttpRequestHandler fileHandler = new FileResourceRequestHandler();
-        HttpRequestHandler userRequestHandler = new UserRequestHandler();
+        Controller fileHandler = new FileResourceController(RequestMapping.GET("/*"));
+        Controller userRequestHandler = new UserController(RequestMapping.GET("/user/create"), RequestMapping.POST("/user/create"));
 
-        httpRequestHandlers.addHandler(new RequestMapping(HttpMethod.GET, "/*"), fileHandler);
-        httpRequestHandlers.addHandler(new RequestMapping(HttpMethod.GET, "/user/create"), userRequestHandler);
-        httpRequestHandlers.addHandler(new RequestMapping(HttpMethod.POST, "/user/create"), userRequestHandler);
+        httpRequestHandlers.addHandler(fileHandler);
+        httpRequestHandlers.addHandler(userRequestHandler);
         return httpRequestHandlers;
     }
 

@@ -20,6 +20,14 @@ public class RequestMapping implements Comparable<RequestMapping> {
         this.pattern = Pattern.compile(regex);
     }
 
+    public static RequestMapping GET(String regex) {
+        return new RequestMapping(HttpMethod.GET, regex);
+    }
+
+    public static RequestMapping POST(String regex) {
+        return new RequestMapping(HttpMethod.POST, regex);
+    }
+
     public boolean match(HttpRequest httpRequest) {
         Matcher matcher = pattern.matcher(httpRequest.getUri().getResourceLocation());
         return httpRequest.getHttpMethod() == method

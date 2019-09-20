@@ -27,11 +27,10 @@ class ViewResolverTest {
 
     @Test
     void 상태코드_302_테스트() {
-        ModelAndView modelAndView = new ModelAndView(new View("redirect:/user/create"));
+        ModelAndView modelAndView = new ModelAndView(new View("redirect:/index.html"));
         HttpResponse response = viewResolver.resolve(modelAndView);
 
         assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
-        assertThat(response.getBody()).isEmpty();
         assertThat(response.getHeader("Location")).isNotEmpty();
     }
 }

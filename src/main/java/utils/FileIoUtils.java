@@ -20,7 +20,7 @@ public class FileIoUtils {
 
         } catch (IOException | NullPointerException | URISyntaxException e) {
             log.error(e.getMessage());
-            throw new NoSuchResource();
+            throw new NoSuchResource(e.getMessage());
         }
     }
 
