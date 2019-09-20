@@ -1,12 +1,12 @@
 package http.controller;
 
-import http.model.HttpParameters;
 import http.model.HttpRequest;
 import http.supoort.RequestMapping;
 import http.view.Model;
 import http.view.ModelAndView;
 import http.view.View;
 import model.User;
+import model.UserDto;
 
 public class UserController extends AbstractController {
 
@@ -20,10 +20,8 @@ public class UserController extends AbstractController {
 
     @Override
     public ModelAndView handle(HttpRequest httpRequest) {
-        HttpParameters httpParameters = httpRequest.getParameters();
-
-        User user = new User(httpParameters.getParameter("userId"), httpParameters.getParameter("password"),
-                httpParameters.getParameter("name"), httpParameters.getParameter("email"));
+        UserDto userDto = new UserDto(httpRequest.getParameters());
+        User user = userDto.toEntity();
 
         Model model = new Model();
         model.addAttributes("user", user);

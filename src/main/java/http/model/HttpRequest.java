@@ -31,6 +31,10 @@ public class HttpRequest {
         return parameters;
     }
 
+    public String getParameter(String key) {
+        return parameters.getParameter(key);
+    }
+
     public HttpProtocols getHttpProtocol() {
         return httpProtocol;
     }
