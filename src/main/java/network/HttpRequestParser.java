@@ -6,6 +6,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HttpRequestParser {
     private static final String BLANK = " ";
@@ -30,11 +32,12 @@ public class HttpRequestParser {
         String[] tokens = requestPath.split("\\?");
         Url url = new Url(tokens[0]);
         HttpVersion httpVersion = HttpVersion.of(version);
-        HttpHeader httpHeader = HttpHeader.of(bufferedReader);
+        HttpHeader httpHeader = HttpHeader.of(convertHeaderLines(bufferedReader));
         HttpRequestParams httpRequestParams = extractQueryParams(tokens);
 
         return new HttpRequest(url, method, httpVersion, httpRequestParams, httpHeader);
     }
+
 
     private static HttpRequestParams extractQueryParams(final String[] tokens) {
         if (tokens.length == 2) {
@@ -47,11 +50,22 @@ public class HttpRequestParser {
                                          final String requestPath, final String version) throws IOException {
         Url url = new Url(requestPath);
         HttpVersion httpVersion = HttpVersion.of(version);
-        HttpHeader httpHeader = HttpHeader.of(bufferedReader);
+        HttpHeader httpHeader = HttpHeader.of(convertHeaderLines(bufferedReader));
         HttpRequestParams httpRequestParams = HttpRequestParams.of(
                 IOUtils.readData(bufferedReader, Integer.parseInt(httpHeader.get(CONTENT_LENGTH)))
         );
 
         return new HttpRequest(url, method, httpVersion, httpRequestParams, httpHeader);
+    }
+
+    private static List<String> convertHeaderLines(final BufferedReader bufferedReader) throws IOException {
+        List<String> headerLines = new ArrayList<>();
+        String line;
+
+        while (!(line = bufferedReader.readLine()).equals("")) {
+            headerLines.add(line);
+        }
+
+        return headerLines;
     }
 }

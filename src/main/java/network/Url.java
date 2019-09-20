@@ -17,7 +17,7 @@ public class Url {
     public String toString() {
         return "Url{" +
                 "url='" + url + '\'' +
-                ", dispatcher=" + httpRequestType +
+                ", httpRequestType=" + httpRequestType +
                 '}';
     }
 }

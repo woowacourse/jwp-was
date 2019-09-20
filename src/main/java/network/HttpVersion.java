@@ -21,4 +21,9 @@ public enum HttpVersion {
                 .findAny()
                 .orElseThrow(IllegalHttpVersionException::new);
     }
+
+    @Override
+    public String toString() {
+        return value;
+    }
 }

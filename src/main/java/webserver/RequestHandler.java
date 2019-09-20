@@ -1,21 +1,16 @@
 package webserver;
 
+import model.User;
+import network.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
-import java.util.Map;
-
-import model.User;
-import network.HttpRequest;
-import network.HttpRequestParams;
-import network.HttpRequestParser;
-import network.HttpStatus;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import utils.FileIoUtils;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -32,8 +27,7 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest httpRequest = HttpRequestParser.parse(in);
-
-            logger.info("{}", httpRequest);
+            DataOutputStream dos = new DataOutputStream(out);
 
             if (httpRequest.getUrl().equals("/user/create")) {
                 HttpRequestParams parameters = httpRequest.getHttpRequestParams();
@@ -41,48 +35,11 @@ public class RequestHandler implements Runnable {
                         parameters.get("name"), parameters.get("email"));
 
                 logger.info("{}", user);
-
-                DataOutputStream dos = new DataOutputStream(out);
-                String host = httpRequest.getHttpHeader().get("Origin");
-                response3xxHeader(dos, HttpStatus.FOUND, host + "/index.html");
+                HttpResponseGenerator.redirect(dos, httpRequest.getHttpHeader().get("Origin"), "/index.html");
             } else {
-                DataOutputStream dos = new DataOutputStream(out);
-                byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getUrl());
-                response200Header(dos, body.length);
-                responseBody(dos, body);
+                HttpResponseGenerator.forward(dos, httpRequest.getUrl());
             }
         } catch (IOException | URISyntaxException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void response3xxHeader(final DataOutputStream dos, final HttpStatus httpStatus, final String location) {
-        try {
-            dos.writeBytes("HTTP/1.1 " + httpStatus + "\r\n");
-            dos.writeBytes("Location: " + location + "\r\n");
-            dos.writeBytes("\r\n");
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }

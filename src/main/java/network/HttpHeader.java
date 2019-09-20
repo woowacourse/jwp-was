@@ -1,38 +1,37 @@
 package network;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class HttpHeader {
+    private static final String HEADER_LINE_DELIMITER = ": ";
+
     private Map<String, String> headers;
 
-    private HttpHeader() {
-        this.headers = new HashMap<>();
+    private HttpHeader(final Map<String, String> headers) {
+        this.headers = Collections.unmodifiableMap(headers);
     }
 
-    public static HttpHeader of(final BufferedReader bufferedReader) throws IOException {
-        HttpHeader httpHeader = new HttpHeader();
-        String line = bufferedReader.readLine();
-
-        while (!line.equals("")) {
-            String[] headerLine = bufferedReader.readLine().split(": ");
-            if (headerLine.length == 1) {
-                break;
-            }
-            httpHeader.addHeader(headerLine[0], headerLine[1]);
-        }
-
-        return httpHeader;
+    public static HttpHeader of(final List<String> headerLines) {
+        return new HttpHeader(
+                headerLines.stream()
+                    .map(line -> line.split(HEADER_LINE_DELIMITER))
+                    .collect(Collectors.toMap(token -> token[0], token -> token[1]))
+        );
     }
 
-    private void addHeader(String key, String value) {
-        headers.put(key, value);
+    public static HttpHeader redirect(final String host, final String redirectUrl) {
+        return HttpHeader.of(Collections.singletonList("Location: " + host + redirectUrl));
     }
 
     public String get(final String key) {
         return headers.get(key);
+    }
+
+    public Map<String, String> getHeaders() {
+        return Collections.unmodifiableMap(headers);
     }
 
     @Override
