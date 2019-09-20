@@ -9,7 +9,6 @@ import view.RedirectView;
 import view.View;
 
 public class CreateUserController extends AbstractController {
-
     @Override
     public View service(HttpRequest httpRequest, HttpResponse httpResponse) {
         if (httpRequest.getMethod().equals(HttpMethod.GET)) {

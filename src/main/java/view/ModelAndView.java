@@ -11,9 +11,7 @@ public class ModelAndView implements View {
     }
 
     @Override
-    public void render(HttpRequest httpRequest, HttpResponse httpResponse) {
-
-    }
+    public void render(HttpRequest httpRequest, HttpResponse httpResponse) {}
 
     @Override
     public boolean isRedirectView() {
