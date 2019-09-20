@@ -69,6 +69,10 @@ public class HttpRequest {
         return httpRequestStartLine.hasParamaters();
     }
 
+    public boolean hasBody() {
+        return !httpBody.equals(HttpBody.EMPTY_BODY);
+    }
+
     public HttpMethod getHttpMethod() {
         return httpRequestStartLine.getHttpMethod();
     }

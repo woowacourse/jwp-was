@@ -6,6 +6,7 @@ import http.request.HttpRequest;
 import http.response.HttpResponse;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 
 public class AbstractController implements Controller {
@@ -27,7 +28,7 @@ public class AbstractController implements Controller {
         throw new NotSupportedHttpMethodException();
     }
 
-    public void doPost(HttpRequest request, HttpResponse response) {
+    public void doPost(HttpRequest request, HttpResponse response) throws UnsupportedEncodingException {
         throw new NotSupportedHttpMethodException();
     }
 }

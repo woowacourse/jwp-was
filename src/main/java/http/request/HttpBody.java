@@ -3,6 +3,8 @@ package http.request;
 import java.util.Objects;
 
 public class HttpBody {
+    public static final HttpBody EMPTY_BODY = HttpBody.of("");
+
     private final String body;
 
     private HttpBody(String body) {
@@ -28,8 +30,6 @@ public class HttpBody {
 
     @Override
     public String toString() {
-        return "HttpBody{" +
-                "body='" + body + '\'' +
-                '}';
+        return body;
     }
 }

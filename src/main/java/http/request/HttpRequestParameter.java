@@ -1,17 +1,17 @@
 package http.request;
 
 import http.request.exception.NotFoundHttpRequestParameter;
+import utils.ParameterParser;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 public class HttpRequestParameter {
     public static final HttpRequestParameter EMPTY_PARAMETER = new HttpRequestParameter(new HashMap<>());
 
-    private static final String PARAMETER_LINE_SPLITTER = "&";
-    private static final String PARAMETER_SPLITTER = "=";
     private Map<String, String> parameters;
 
     private HttpRequestParameter(Map<String, String> parameters) {
@@ -19,17 +19,12 @@ public class HttpRequestParameter {
     }
 
     public static HttpRequestParameter of(String parameterLine) throws UnsupportedEncodingException {
-        if("".equals(parameterLine) || parameterLine == null) {
+        if ("".equals(parameterLine) || parameterLine == null) {
             return EMPTY_PARAMETER;
         }
         parameterLine = URLDecoder.decode(parameterLine, "UTF-8");
-        List<String> parameterLines = Arrays.asList(parameterLine.split(PARAMETER_LINE_SPLITTER));
 
-        Map<String, String> parameters = parameterLines.stream().collect(Collectors.toMap(
-                parameter -> parameter.split(PARAMETER_SPLITTER)[0],
-                parameter -> parameter.split(PARAMETER_SPLITTER)[1]));
-
-        return new HttpRequestParameter(parameters);
+        return new HttpRequestParameter(ParameterParser.parse(parameterLine));
     }
 
     public String getParameter(String key) {

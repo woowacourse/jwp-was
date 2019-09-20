@@ -10,7 +10,6 @@ import java.util.List;
 import static org.mockito.Mockito.*;
 
 class HttpResponseTest {
-
     @Test
     void response200Header() throws IOException {
         IDataOutputStream dos = mock(IDataOutputStream.class);
