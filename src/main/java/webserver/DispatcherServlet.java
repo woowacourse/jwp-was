@@ -30,7 +30,10 @@ public class DispatcherServlet {
     private static void handleStaticRequest(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         String path = "./static" + httpRequest.getUri();
         if (!FileIoUtils.isExistFile(path)) {
-            throw new NotFoundResourceException();
+            path = "./templates" + httpRequest.getUri();
+            if (!FileIoUtils.isExistFile(path)) {
+                throw new NotFoundResourceException();
+            }
         }
         byte[] body = FileIoUtils.loadFileFromClasspath(path);
 
