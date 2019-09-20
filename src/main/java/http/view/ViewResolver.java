@@ -23,17 +23,17 @@ public class ViewResolver implements Resolver {
 
     private HttpResponse resolveRedirect(String resource, HttpHeaders headers) {
         appendLocationHeader(headers, extractLocation(resource));
-        return new HttpResponse(HttpProtocols.DEFAULT, HttpStatus.FOUND, headers);
+        return new HttpResponse(HttpProtocols.HTTP1, HttpStatus.FOUND, headers);
     }
 
     private HttpResponse resolveResponse(String resource, HttpHeaders headers) {
         appendDefaultHeader(headers, resource);
         ContentType contentType = ContentType.from(headers.getHeader("Content-Type"));
         if (contentType.isHTML()) {
-            return new HttpResponse(HttpProtocols.DEFAULT, HttpStatus.OK,
+            return new HttpResponse(HttpProtocols.HTTP1, HttpStatus.OK,
                     headers, FileIoUtils.loadFileFromClasspath(HTML_PATH + resource));
         }
-        return new HttpResponse(HttpProtocols.DEFAULT, HttpStatus.OK,
+        return new HttpResponse(HttpProtocols.HTTP1, HttpStatus.OK,
                 headers, FileIoUtils.loadFileFromClasspath(STATIC_PATH + resource));
     }
 

@@ -14,7 +14,7 @@ class RequestMappingTest {
 
     @BeforeEach
     void setUp() {
-        httpRequest = new HttpRequest(HttpMethod.GET, new HttpUri("/index.html"), null, HttpProtocols.DEFAULT, null);
+        httpRequest = new HttpRequest(HttpMethod.GET, new HttpUri("/index.html"), null, HttpProtocols.HTTP1, null);
     }
 
     @Test

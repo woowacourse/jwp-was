@@ -5,8 +5,8 @@ import http.supoort.IllegalHttpRequestException;
 import java.util.Arrays;
 
 public enum HttpProtocols {
-    DEFAULT("HTTP/1.1"),
-    ADVANCED("HTTP/2.0");
+    HTTP1("HTTP/1.1"),
+    HTTP2("HTTP/2.0");
 
     private String protocol;
 
