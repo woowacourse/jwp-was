@@ -2,7 +2,7 @@ package webserver.http;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import utils.parser.KeyValueParserFactory;
+import webserver.http.headerfields.HttpContentType;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -12,7 +12,7 @@ class HttpContentTypeTest {
     void httpContentType() {
         String input = "text/html; charset=utf-8";
 
-        HttpContentType httpContentType = new HttpContentType(input, KeyValueParserFactory.getInstance());
+        HttpContentType httpContentType = HttpContentType.of(input).get();
 
         assertNotNull(httpContentType);
     }

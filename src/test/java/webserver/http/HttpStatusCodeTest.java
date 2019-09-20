@@ -2,6 +2,7 @@ package webserver.http;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import webserver.http.headerfields.HttpStatusCode;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -17,7 +18,7 @@ class HttpStatusCodeTest {
     @DisplayName("존재하지 않는 상태코드를 ")
     void notFindHttpStatusCode() {
         assertThrows(IllegalArgumentException.class, () ->
-            HttpStatusCode.of(199).orElseThrow(IllegalArgumentException::new)
+                HttpStatusCode.of(199).orElseThrow(IllegalArgumentException::new)
         );
     }
 }

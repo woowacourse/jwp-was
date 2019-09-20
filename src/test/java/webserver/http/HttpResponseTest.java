@@ -2,25 +2,22 @@ package webserver.http;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import utils.parser.KeyValueParserFactory;
+import webserver.http.headerfields.HttpContentType;
+import webserver.http.headerfields.HttpStatusCode;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class HttpResponseTest {
     @Test
     @DisplayName("정상적인 HttpResponse 객체를 생성한다.")
     void httpResponse() {
         String input = "text/html; charset=utf-8";
-        HttpContentType httpContentType = new HttpContentType(input, KeyValueParserFactory.getInstance());
+        HttpContentType httpContentType = HttpContentType.of(input).get();
 
-        HttpResponse httpResponse = new HttpResponse.Builder()
-                .httpStatusCode(HttpStatusCode.OK)
-                .httpContentType(httpContentType)
-                .body("Hello World".getBytes())
-                .build();
-
-        assertThat(httpResponse.getStatusCode()).isEqualTo(HttpStatusCode.OK);
-        assertThat(httpResponse.getHttpContentType()).isEqualTo(httpContentType);
-        assertThat(httpResponse.getBody()).isEqualTo("Hello World".getBytes());
+        assertNotNull(HttpResponse.builder(httpContentType)
+                .statusCode(HttpStatusCode.OK)
+                .body("Hello World")
+                .location("/index.html")
+                .build());
     }
 }
