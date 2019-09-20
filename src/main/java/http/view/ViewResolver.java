@@ -17,13 +17,13 @@ public class ViewResolver implements Resolver {
     public HttpResponse resolve(ModelAndView modelAndView) {
         String resource = modelAndView.getViewLocation();
         if (resource.startsWith(REDIRECT_PREFIX)) {
-            return new HttpResponse(HttpProtocols.DEFAULT, HttpStatus.FOUND, ContentType.HTML);
+            return new HttpResponse(HttpProtocols.HTTP1_1, HttpStatus.FOUND, ContentType.HTML);
         }
         ContentType contentType = getContentType(modelAndView);
         if (contentType == ContentType.HTML) {
-            return new HttpResponse(HttpProtocols.DEFAULT, HttpStatus.OK, contentType, FileIoUtils.loadFileFromClasspath(HTML_PATH + modelAndView.getViewLocation()));
+            return new HttpResponse(HttpProtocols.HTTP1_1, HttpStatus.OK, contentType, FileIoUtils.loadFileFromClasspath(HTML_PATH + modelAndView.getViewLocation()));
         }
-        return new HttpResponse(HttpProtocols.DEFAULT, HttpStatus.OK, contentType, FileIoUtils.loadFileFromClasspath(STATIC_PATH + modelAndView.getViewLocation()));
+        return new HttpResponse(HttpProtocols.HTTP1_1, HttpStatus.OK, contentType, FileIoUtils.loadFileFromClasspath(STATIC_PATH + modelAndView.getViewLocation()));
     }
 
     private ContentType getContentType(ModelAndView modelAndView) {
