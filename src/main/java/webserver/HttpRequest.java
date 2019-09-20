@@ -1,9 +1,8 @@
 package webserver;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import webserver.httpRequest.HttpRequestBody;
+import webserver.httpRequest.HttpRequestHeader;
+import webserver.httpRequest.HttpStartLine;
 
 public class HttpRequest {
     private HttpStartLine httpStartLine;
@@ -16,22 +15,24 @@ public class HttpRequest {
         this.httpRequestBody = httpRequestBody;
     }
 
-    public static HttpRequest of(InputStream in) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-
-        HttpStartLine startLine = HttpStartLine.of(br);
-        HttpRequestHeader requestHeader = HttpRequestHeader.of(br);
-        HttpRequestBody requestBody = HttpRequestBody.of(br, requestHeader.getContentLength());
-
-        return new HttpRequest(startLine, requestHeader, requestBody);
+    public String getMethod() {
+        return httpStartLine.getMethod();
     }
 
-    public HttpRequest(HttpStartLine httpStartLine, HttpRequestHeader httpRequestHeader) {
-        this.httpStartLine = httpStartLine;
-        this.httpRequestHeader = httpRequestHeader;
+    public String getPath() {
+        return httpStartLine.getPath();
     }
 
     public String getParam(String key) {
-        return httpRequestBody.get(key);
+        String bodyParam = httpRequestBody.getBodyParam(key);
+        if (bodyParam == null) {
+            String param = httpStartLine.getParam(key);
+            if (param == null) {
+                return "";
+            }
+        }
+        return bodyParam;
     }
+
+
 }
