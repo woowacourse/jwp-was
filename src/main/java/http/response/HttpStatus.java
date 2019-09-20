@@ -22,4 +22,8 @@ public enum HttpStatus {
     public String getMessage() {
         return code + " " + message;
     }
+
+    public boolean match(HttpStatus httpStatus) {
+        return this == httpStatus;
+    }
 }

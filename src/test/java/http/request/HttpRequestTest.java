@@ -12,16 +12,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class HttpRequestTest {
-    private String testDirectory = "./src/test/resources/";
+    private static final String TEST_DIRECTORY = "./src/test/resources/";
 
     @Test
     void HttpRequest_GET_생성() throws IOException {
-        InputStream in = new FileInputStream(new File(testDirectory + "Http_GET.txt"));
+        InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "Http_GET.txt"));
         HttpRequest httpRequest = HttpRequestFactory.makeHttpRequest(in);
         HttpHeaders httpHeaders = httpRequest.getHeaders();
 
         assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.GET);
-        assertThat(httpRequest.getUrl().getPath()).isEqualTo("/user/create");
+        assertThat(httpRequest.getUri().getPath()).isEqualTo("/user/create");
         assertThat(httpRequest.getVersion()).isEqualTo(HttpVersion.HTTP_1_1);
         assertThat(httpHeaders.getHeader("Host")).isEqualTo("localhost:8080");
         assertThat(httpHeaders.getHeader("Connection")).isEqualTo("keep-alive");
@@ -31,12 +31,12 @@ class HttpRequestTest {
 
     @Test
     void HttpRequest_POST_생성() throws IOException {
-        InputStream in = new FileInputStream(new File(testDirectory + "Http_POST.txt"));
+        InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "Http_POST.txt"));
         HttpRequest httpRequest = HttpRequestFactory.makeHttpRequest(in);
         HttpHeaders httpHeaders = httpRequest.getHeaders();
 
         assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.POST);
-        assertThat(httpRequest.getUrl().getPath()).isEqualTo("/user/create");
+        assertThat(httpRequest.getUri().getPath()).isEqualTo("/user/create");
         assertThat(httpRequest.getVersion()).isEqualTo(HttpVersion.HTTP_1_1);
         assertThat(httpHeaders.getHeader("Host")).isEqualTo("localhost:8080");
         assertThat(httpHeaders.getHeader("Connection")).isEqualTo("keep-alive");
@@ -64,7 +64,7 @@ class HttpRequestTest {
 
     @Test
     void QueryParams_GET() throws IOException {
-        InputStream in = new FileInputStream(new File(testDirectory + "Http_GET.txt"));
+        InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "Http_GET.txt"));
         HttpRequest httpRequest = HttpRequestFactory.makeHttpRequest(in);
         QueryParams queryParams = httpRequest.getQueryParams();
 
@@ -75,12 +75,21 @@ class HttpRequestTest {
 
     @Test
     void QueryParams_POST() throws IOException {
-        InputStream in = new FileInputStream(new File(testDirectory + "Http_POST.txt"));
+        InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "Http_POST.txt"));
         HttpRequest httpRequest = HttpRequestFactory.makeHttpRequest(in);
         QueryParams queryParams = httpRequest.getQueryParams();
 
         assertThat(queryParams.getParam("userId")).isEqualTo("woowa");
         assertThat(queryParams.getParam("password")).isEqualTo("password");
         assertThat(queryParams.getParam("name")).isEqualTo("woo");
+    }
+
+    @Test
+    void getResponseContentType() throws IOException {
+        InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "Http_GET.txt"));
+        HttpRequest httpRequest = HttpRequestFactory.makeHttpRequest(in);
+
+        assertThat(httpRequest.getResponseContentsType()).isEqualTo("text/html;charset=utf-8");
+
     }
 }

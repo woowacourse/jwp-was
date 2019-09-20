@@ -11,4 +11,11 @@ class HttpStatusTest {
 
         assertThat(HttpStatus.OK.getMessage()).isEqualTo(status200Message);
     }
+
+    @Test
+    void status_매치() {
+        HttpStatus httpStatus = HttpStatus.OK;
+
+        assertThat(HttpStatus.OK.match(httpStatus)).isTrue();
+    }
 }
