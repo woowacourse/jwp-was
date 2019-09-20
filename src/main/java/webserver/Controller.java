@@ -1,5 +1,7 @@
 package webserver;
 
+import webserver.httpResponse.HttpResponse;
+
 public interface Controller {
-    Object service(HttpRequest request, HttpResponse response);
+    String service(HttpRequest request);
 }
