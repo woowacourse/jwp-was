@@ -1,5 +1,8 @@
 package webserver;
 
+import webserver.controller.UserCreateController;
+import webserver.controller.WelcomePageController;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,14 +10,21 @@ public class UrlMapper {
     private static Map<String, Controller> map = new HashMap<>();
 
     static {
-//        map.put("/", MainController.of());
-//        map.put("/", SignUpController.of());
+        map.put(UserCreateController.PATH, UserCreateController.getInstance());
+        map.put(WelcomePageController.PATH, WelcomePageController.getInstance());
     }
 
-    public Object service(HttpRequest request, HttpResponse response, String url) {
+    public String service(HttpRequest request) {
+        String url = request.getPath();
         if (map.containsKey(url)) {
-            return map.get(url).service(request, response);
+            return getService(request, url);
         }
-        throw new IllegalArgumentException("404 error");
+
+        return url;
+    }
+
+    private String getService(HttpRequest request, String url) {
+        Controller controller = map.get(url);
+        return controller.service(request);
     }
 }
