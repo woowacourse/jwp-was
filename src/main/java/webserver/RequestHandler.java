@@ -31,22 +31,11 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             String firstLine = br.readLine();
-            log.debug("requestResolver : {}", firstLine);
             List<String> lines = parsedBufferedReader(br);
             Request request = HttpRequestFactory.getRequest(firstLine, lines);
             Map<String, String> parameters = new HashMap<>();
 
-            if(request.getRequestMethod().getMethod().equals("GET")) {
-                if (request.getRequestPath().getPath().contains("?")) {
-                    String[] params = request.getRequestPath().getPath().split("\\?");
-                    parameters = extractParameter(params[1].split("&"));
-                }
-            }
-
-            if(request.getRequestMethod().getMethod().equals("POST")) {
-                String params = IOUtils.readData(br, Integer.parseInt(request.getRequestHeader().getHeaders().get("Content-Length")));
-                parameters = extractParameter(params.split("&"));
-            }
+            parameters = checkGetOrPostParams(br, request, parameters);
 
             Controller controller = ControllerFactory.getController(request, parameters);
             Response response = controller.createResponse();
@@ -59,6 +48,19 @@ public class RequestHandler implements Runnable {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
+    }
+
+    private Map<String, String> checkGetOrPostParams(BufferedReader br, Request request, Map<String, String> parameters) throws IOException {
+        if (request.getRequestPath().getPath().contains("?")) {
+            String[] params = request.getRequestPath().getPath().split("\\?");
+            parameters = extractParameter(params[1].split("&"));
+        }
+
+        if (request.getRequestMethod().getMethod().equals("POST")) {
+            String params = IOUtils.readData(br, Integer.parseInt(request.getRequestHeader().getHeaders().get("Content-Length")));
+            parameters = extractParameter(params.split("&"));
+        }
+        return parameters;
     }
 
     private static List<String> parsedBufferedReader(BufferedReader br) throws IOException {
