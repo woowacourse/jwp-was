@@ -2,10 +2,11 @@ package webserver;
 
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
-import http.response.*;
+import http.response.Http200ResponseEntity;
+import http.response.HttpResponse;
+import http.response.HttpResponseEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.FileIoUtils;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -16,8 +17,6 @@ import java.net.URISyntaxException;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private static final String DEFAULT_PATH = "./templates";
-    private static final String STATIC_PATH = "./static";
 
     private Socket connection;
 
@@ -33,57 +32,26 @@ public class RequestHandler implements Runnable {
             HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
             logger.debug(request.toString());
 
-            DataOutputStream dos = new DataOutputStream(out);
+            HttpResponse response = getResponse(request);
 
-            if (request.getUri().hasExtension()) {
-                send200Response(request, dos, request.getUri().getPath());
-            } else {
-                HttpResponseEntity responseEntity = ControllerMapper.map(request);
-
-                if (responseEntity.getStatus().match(HttpStatus.FOUND)) {
-                    send302Response(dos);
-                } else if (responseEntity.getStatus().match(HttpStatus.OK)) {
-                    send200Response(request, dos, responseEntity.getViewTemplatePath());
-                } else if (responseEntity.getStatus().match(HttpStatus.NOT_FOUND)) {
-                    send404Response(request, dos, responseEntity);
-                }
-            }
+            writeResponse(out, response);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void send302Response(DataOutputStream dos) throws IOException {
-        HttpResponse response = HttpResponseFactory.makeHttp302Response("http://localhost:8080/index.html");
-
-        dos.writeBytes(response.getHeaderMessage());
+    private HttpResponse getResponse(HttpRequest request) throws IOException, URISyntaxException {
+        HttpResponseEntity responseEntity = request.getUri().hasExtension()
+                ? new Http200ResponseEntity(request.getUri().getPath())
+                : ControllerMapper.map(request);
+        return responseEntity.makeResponse();
     }
 
-    private void send200Response(HttpRequest request, DataOutputStream dos, String viewTemplatePath) throws IOException, URISyntaxException {
-        byte[] body = getBody(viewTemplatePath);
-        HttpResponseBody responseBody = new HttpResponseBody(body, request.getResponseContentsType());
-        HttpResponse response = HttpResponseFactory.makeHttp200Response(responseBody);
-
+    private void writeResponse(OutputStream out, HttpResponse response) throws IOException {
+        DataOutputStream dos = new DataOutputStream(out);
         dos.writeBytes(response.getHeaderMessage());
-        dos.write(response.getBody());
-    }
-
-    private void send404Response(HttpRequest request, DataOutputStream dos, HttpResponseEntity responseEntity) throws IOException, URISyntaxException {
-        byte[] body = getBody(responseEntity.getViewTemplatePath());
-        HttpResponseBody responseBody = new HttpResponseBody(body, request.getResponseContentsType());
-        HttpResponse response = HttpResponseFactory.makeHttp404Response(responseBody);
-
-        dos.writeBytes(response.getHeaderMessage());
-        dos.write(response.getBody());
-    }
-
-    private byte[] getBody(String path) throws IOException, URISyntaxException {
-        byte[] body;
-        try {
-            body = FileIoUtils.loadFileFromClasspath(DEFAULT_PATH + path);
-        } catch (NullPointerException e) {
-            body = FileIoUtils.loadFileFromClasspath(STATIC_PATH + path);
+        if (response.hasBody()) {
+            dos.write(response.getBody());
         }
-        return body;
     }
 }

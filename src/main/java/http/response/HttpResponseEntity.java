@@ -1,19 +1,8 @@
 package http.response;
 
-public class HttpResponseEntity {
-    private String viewTemplatePath;
-    private HttpStatus status;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
-    public HttpResponseEntity(String viewTemplatePath, HttpStatus status) {
-        this.viewTemplatePath = viewTemplatePath;
-        this.status = status;
-    }
-
-    public String getViewTemplatePath() {
-        return viewTemplatePath;
-    }
-
-    public HttpStatus getStatus() {
-        return status;
-    }
+public interface HttpResponseEntity {
+    HttpResponse makeResponse() throws IOException, URISyntaxException;
 }
