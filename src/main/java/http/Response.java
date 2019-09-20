@@ -17,6 +17,34 @@ public class Response {
         this.body = body;
     }
 
+    public Response(ResponseHeader header) {
+        this.header = header;
+    }
+
+    public void setStatusCode(int statusCode) {
+        header.setStatusCode(statusCode);
+    }
+
+    public void setLocation(String location) {
+        header.setLocation(location);
+    }
+
+    public void setType(String type) {
+        header.setType(type);
+    }
+
+    public void setUrl(String url) {
+        header.setUrl(url);
+    }
+
+    public void setBody(byte[] body) {
+        this.body = new ResponseBody(body);
+    }
+
+    public String getHeaderUrl() {
+        return header.getUrl();
+    }
+
     public void writeMessage(DataOutputStream dos) {
         if (header.isOk()) {
             writeHeader(dos, response200Header());
@@ -34,12 +62,11 @@ public class Response {
     }
 
     private String response302Header() {
-        return "HTTP/1.1 302 OK \r\n" +
+        return "HTTP/1.1 302 FOUND \r\n" +
                 "Content-Type: " + header.getType() + ";charset=utf-8\r\n" +
                 "Location: " + header.getLocation() + "\r\n" +
                 "\r\n";
     }
-
     private void writeHeader(DataOutputStream dos, String message) {
         try {
             dos.writeBytes(message);

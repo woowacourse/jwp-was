@@ -5,16 +5,28 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import utils.IOUtils;
+import webserver.controller.Controller;
+import webserver.controller.CreateUserController;
+import webserver.controller.FileController;
 import webserver.support.PathHandler;
 
 import java.io.*;
 import java.net.Socket;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
+    private static Map<String, Controller> api;
+
+    static {
+        api = new HashMap<>();
+        api.put("/user/create", new CreateUserController());
+    }
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -26,16 +38,12 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             Request request = readRequestUrl(in);
-            RequestProcessor requestProcessor = new RequestProcessor();
+            Response response = new Response(new ResponseHeader());
 
-            ResponseHeader responseHeader = requestProcessor.process(request);
-            String absoluteUrl = PathHandler.path(responseHeader.getUrl());
+            Controller controller = Optional.ofNullable(api.get(request.extractUrl())).orElseGet(FileController::new);
+            controller.service(request, response);
 
-            DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = FileIoUtils.loadFileFromClasspath(absoluteUrl);
-            Response response = new Response(responseHeader, new ResponseBody(body));
-
-            response.writeMessage(dos);
+            response.writeMessage(new DataOutputStream(out));
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
