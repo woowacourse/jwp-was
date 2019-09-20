@@ -48,7 +48,6 @@ public class RequestDispatcher {
     private static void serveFile(String url, HttpResponse res) {
         try {
             byte[] body = FileIoUtils.loadFileFromClasspath(url);
-
             MediaType contentType = extractExtension(url);
 
             res.setStatus(HttpStatus.OK);
