@@ -1,5 +1,6 @@
 package http.response;
 
+import http.StatusCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,6 +10,8 @@ import java.util.List;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
+
+    private StatusCode code;
     //    private ResponseHeader responseHeader;
     private final IDataOutputStream dos;
 
@@ -20,10 +23,18 @@ public class HttpResponse {
         return new HttpResponse(dos);
     }
 
+    public static HttpResponse ok(IDataOutputStream dos) {
+        code = StatusCode.Ok;
+        return new HttpResponse(dos);
+    }
+
+    public void response200Header(int lengthOfBodyContent, String contentType) {
+
     public void response200Header(int lengthOfBodyContent, String contentType) {
         try {
             List<String> lines = Arrays.asList(
-                    "HTTP/1.1 200 OK \r\n",
+                    String.format("HTTP/1.1 %d %s \r\n", ),
+
                     "Content-Type: " + contentType + ";charset=utf-8\r\n",
                     "Content-Length: " + lengthOfBodyContent + "\r\n",
                     "\r\n");
