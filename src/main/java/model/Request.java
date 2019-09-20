@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Objects;
 
 public class Request {
+    private static final String METHOD = "Method";
+
     private Map<String, String> header;
     private Map<String, String> parameter;
 
@@ -28,7 +30,7 @@ public class Request {
     }
 
     public String getMethod() {
-        return header.get("Method").split(" ")[0];
+        return header.get(METHOD).split(" ")[0];
     }
 
     public String getParameter(String key) {

@@ -20,10 +20,11 @@ public class RequestParser {
     private static final String POST = "POST";
     private static final String QUERY_STRING_SEPARATOR = "?";
 
-    private Map<String, String> header = new HashMap<>();
+    private Map<String, String> header;
     private Map<String, String> parameter;
 
     public RequestParser(InputStream in) throws IOException {
+        header = new HashMap<>();
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
         parseRequest(bufferedReader);
     }

@@ -1,17 +1,11 @@
 package model;
 
-import org.apache.tika.Tika;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.FileIoUtils;
 import webserver.RequestHandler;
 
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -27,21 +21,10 @@ public class Response {
         header = new LinkedHashMap<>();
     }
 
-    public void response200(String classPath) {
+    public void response200(byte[] body) {
         try {
-            Path path = Paths.get(FileIoUtils.class.getClassLoader().getResource(classPath).toURI());
-            File file = new File(path.toString());
-
-            String mimeType = new Tika().detect(file);
-
-            byte[] body = FileIoUtils.loadFileFromClasspath(classPath);
-
-            header.put(STATUS, "HTTP/1.1 200 OK \r\n");
-            header.put("Content-Type", mimeType + ";charset=utf-8\r\n");
-            header.put("Content-Length", body.length + "\r\n");
-
             forward(body);
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
@@ -84,5 +67,9 @@ public class Response {
         }
 
         dos.writeBytes("\r\n");
+    }
+
+    public void setHeader(String key, String value) {
+        header.put(key, value);
     }
 }
