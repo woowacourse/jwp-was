@@ -1,19 +1,18 @@
 package http.controller;
 
 import http.model.HttpRequest;
-import http.supoort.NotSupportedRequestException;
 import http.view.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class HttpRequestHandlers {
-    private static final int MIN_MAPPER_COUNT = 1;
     private List<Controller> controllers;
+    private Controller defaultController;
 
-    public HttpRequestHandlers() {
+    public HttpRequestHandlers(Controller defaultController) {
         controllers = new ArrayList<>();
+        this.defaultController = defaultController;
     }
 
     public void addHandler(Controller handler) {
@@ -21,20 +20,13 @@ public class HttpRequestHandlers {
     }
 
     public ModelAndView doService(HttpRequest httpRequest) {
-        return resolveRequestMapping(getCandidate(httpRequest)).handle(httpRequest);
+        return resolveRequestMapping(httpRequest).handle(httpRequest);
     }
 
-    private List<Controller> getCandidate(HttpRequest httpRequest) {
+    private Controller resolveRequestMapping(HttpRequest httpRequest) {
         return controllers.stream()
                 .filter(controller -> controller.canHandle(httpRequest))
-                .sorted()
-                .collect(Collectors.toList());
-    }
-
-    private Controller resolveRequestMapping(List<Controller> requestMappings) {
-        if (requestMappings.size() < MIN_MAPPER_COUNT) {
-            throw new NotSupportedRequestException();
-        }
-        return requestMappings.get(0);
+                .findAny()
+                .orElse(this.defaultController);
     }
 }

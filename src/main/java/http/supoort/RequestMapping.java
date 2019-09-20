@@ -4,20 +4,14 @@ import http.model.HttpMethod;
 import http.model.HttpRequest;
 
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class RequestMapping implements Comparable<RequestMapping> {
+public class RequestMapping {
     private final HttpMethod method;
-    private final String regex;
-    private final Pattern pattern;
-    private final int patternLength;
+    private final String location;
 
-    public RequestMapping(HttpMethod method, String regex) {
+    public RequestMapping(HttpMethod method, String location) {
         this.method = method;
-        this.regex = regex;
-        this.patternLength = regex.length();
-        this.pattern = Pattern.compile(regex);
+        this.location = location;
     }
 
     public static RequestMapping GET(String regex) {
@@ -29,27 +23,21 @@ public class RequestMapping implements Comparable<RequestMapping> {
     }
 
     public boolean match(HttpRequest httpRequest) {
-        Matcher matcher = pattern.matcher(httpRequest.getUri().getResourceLocation());
         return httpRequest.getHttpMethod() == method
-                && matcher.find();
+                && httpRequest.getUri().getResourceLocation().equals(location);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof RequestMapping)) return false;
         RequestMapping that = (RequestMapping) o;
         return method == that.method &&
-                Objects.equals(regex, that.regex);
+                Objects.equals(location, that.location);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(method, regex);
-    }
-
-    @Override
-    public int compareTo(RequestMapping requestMapping) {
-        return requestMapping.patternLength - this.patternLength;
+        return Objects.hash(method, location);
     }
 }

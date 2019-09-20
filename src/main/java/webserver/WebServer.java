@@ -16,12 +16,10 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class WebServer {
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
     private static final int DEFAULT_PORT = 8080;
-    private static AtomicInteger counter = new AtomicInteger(0);
 
     public static void main(String[] args) throws Exception {
         int port = getPort(args);
@@ -56,11 +54,9 @@ public class WebServer {
     }
 
     private static HttpRequestHandlers initRequestHandlers() {
-        HttpRequestHandlers httpRequestHandlers = new HttpRequestHandlers();
-        Controller fileHandler = new FileResourceController(RequestMapping.GET("/*"));
+        HttpRequestHandlers httpRequestHandlers = new HttpRequestHandlers(new FileResourceController(RequestMapping.GET("/*")));
         Controller userRequestHandler = new UserController(RequestMapping.GET("/user/create"), RequestMapping.POST("/user/create"));
 
-        httpRequestHandlers.addHandler(fileHandler);
         httpRequestHandlers.addHandler(userRequestHandler);
         return httpRequestHandlers;
     }

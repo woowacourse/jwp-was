@@ -11,11 +11,10 @@ import java.io.ByteArrayInputStream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class HttpRequestHandlersTest {
-    private HttpRequestHandlers handlers = new HttpRequestHandlers();
+    private HttpRequestHandlers handlers = new HttpRequestHandlers(new FileResourceController(RequestMapping.GET("/*")));
 
     @BeforeEach
     void setUp() {
-        handlers.addHandler(new FileResourceController(RequestMapping.GET("/*")));
         handlers.addHandler(new UserController(RequestMapping.POST("/user/create"), RequestMapping.GET("/user/create")));
     }
 

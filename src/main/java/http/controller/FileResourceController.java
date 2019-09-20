@@ -11,10 +11,6 @@ public class FileResourceController extends AbstractController {
         super(requestMapping);
     }
 
-    public FileResourceController(RequestMapping... mappings) {
-        super(mappings);
-    }
-
     @Override
     public ModelAndView handle(HttpRequest httpRequest) {
         return new ModelAndView(getViewByUri(httpRequest.getUri()));
