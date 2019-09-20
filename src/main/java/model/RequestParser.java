@@ -33,7 +33,7 @@ public class RequestParser {
         header.put(METHOD, line);
         logger.info("header : {}", line);
 
-        while (!"".equals(bufferedReader.readLine())) {
+        while (!"".equals(line)) {
             line = bufferedReader.readLine();
 
             if (line == null || line.equals("")) {

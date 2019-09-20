@@ -20,16 +20,14 @@ public class Response {
     private static final String STATUS = "Status";
 
     private DataOutputStream dos;
-    private String classPath;
     private Map<String, String> header;
 
-    public Response(DataOutputStream dos, String classPath) {
+    public Response(DataOutputStream dos) {
         this.dos = dos;
-        this.classPath = classPath;
         header = new LinkedHashMap<>();
     }
 
-    public void response200() {
+    public void response200(String classPath) {
         try {
             Path path = Paths.get(FileIoUtils.class.getClassLoader().getResource(classPath).toURI());
             File file = new File(path.toString());

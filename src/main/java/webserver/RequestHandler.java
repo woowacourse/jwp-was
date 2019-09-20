@@ -1,10 +1,11 @@
 package webserver;
 
-import db.DataBase;
+import controller.Controller;
+import controller.CreateUserController;
+import controller.IndexController;
 import model.Request;
 import model.RequestParser;
 import model.Response;
-import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,32 +31,22 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             DataOutputStream dos = new DataOutputStream(out);
             RequestParser requestParser = new RequestParser(in);
-            Request request = new Request(requestParser.getHeaderInfo(),requestParser.getParameter());
-            String url = request.getUrl();
+            Request request = new Request(requestParser.getHeaderInfo(), requestParser.getParameter());
+            Response response = new Response(dos);
 
-            String extension = url.substring(url.lastIndexOf(".") + 1);
-
-            String classPath = "./templates" + url;
-
-            if (!"html".equals(extension)) {
-                classPath = "./static" + url;
+            if (request.getMethod().contains("GET")) {
+                Controller controller = new IndexController();
+                controller.service(request, response);
             }
 
-            Response response = new Response(dos, classPath);
-            if (url.contains("/user/create")) {
-                saveUser(request);
-                response.response300(request.getHeader("Origin") + "/index.html");
-                return;
+            if (request.getMethod().contains("POST")) {
+                Controller controller = new CreateUserController();
+                controller.service(request, response);
             }
-            response.response200();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void saveUser(Request request) {
-        User user = new User(request.getParameter("userId"), request.getParameter("password"), request.getParameter("name"), request.getParameter("email"));
-        DataBase.addUser(user);
-    }
 }
 
