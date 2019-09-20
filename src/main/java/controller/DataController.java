@@ -6,7 +6,7 @@ import http.response.Response;
 import http.response.ResponseFactory;
 import service.UserService;
 
-public class DataController implements Controller{
+public class DataController implements Controller {
     private UserService userService;
     private Request request;
 

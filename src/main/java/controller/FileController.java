@@ -4,7 +4,7 @@ import http.request.Request;
 import http.response.Response;
 import http.response.ResponseFactory;
 
-public class FileController implements Controller{
+public class FileController implements Controller {
 
     private Request request;
 
