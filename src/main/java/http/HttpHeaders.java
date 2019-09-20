@@ -1,9 +1,14 @@
 package http;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class HttpHeaders {
     private Map<String, String> headers;
+
+    public HttpHeaders() {
+        headers = new LinkedHashMap<>();
+    }
 
     public HttpHeaders(Map<String, String> headers) {
         this.headers = headers;
