@@ -2,11 +2,13 @@ package webserver;
 
 import http.Controller;
 import http.request.HttpRequest;
+import http.response.DataOutputStreamWrapper;
 import http.response.HttpResponse;
 import http.response.IndexController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -28,7 +30,8 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest httpRequest = HttpRequest.of(in);
-            HttpResponse httpResponse = HttpResponse.of(out);
+            DataOutputStreamWrapper dos = new DataOutputStreamWrapper(new DataOutputStream(out));
+            HttpResponse httpResponse = HttpResponse.of(dos);
             Controller controller =  new IndexController();
             controller.service(httpRequest, httpResponse);
         } catch (IOException e) {
