@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import webserver.domain.Request;
+import webserver.domain.Response;
 import webserver.view.NetworkInput;
 
 import java.io.DataOutputStream;
@@ -31,10 +32,9 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             final Request request = new Request(new NetworkInput(in));
-            final byte[] body = readBody(request);
-            DataOutputStream dos = new DataOutputStream(out);
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+            final byte[] response = processRequest(request);
+            final DataOutputStream dos = new DataOutputStream(out);
+            writeResponse(dos, response);
         } catch (IOException | URISyntaxException | NullPointerException e) {
             logger.error(e.getMessage());
         }
@@ -46,27 +46,24 @@ public class RequestHandler implements Runnable {
         return prefix + requestPath + pathEnd;
     }
 
-    private byte[] readBody(final Request requestHeader) throws IOException, URISyntaxException, NullPointerException {
+    private byte[] processRequest(final Request request) throws IOException, URISyntaxException, NullPointerException {
         try {
-            final byte[] body = RequestDispatcher.forward(requestHeader);
-            return Objects.nonNull(body) ? body : FileIoUtils.loadFileFromClasspath(makeFilePath(requestHeader, STATIC_PATH));
+            final Response body = RequestDispatcher.forward(request);
+            return Objects.nonNull(body) ? convertToBytes(body) : convertToBytes(FileIoUtils.loadFileFromClasspath(makeFilePath(request, STATIC_PATH)));
         } catch (IOException | URISyntaxException | NullPointerException e) {
-            return FileIoUtils.loadFileFromClasspath(makeFilePath(requestHeader, TEMPLATES_PATH));
+            return convertToBytes(FileIoUtils.loadFileFromClasspath(makeFilePath(request, TEMPLATES_PATH)));
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+    private byte[] convertToBytes(final Response response) {
+        return response.toBytes();
     }
 
-    private void responseBody(DataOutputStream dos, byte[] body) {
+    private byte[] convertToBytes(final byte[] bytes) {
+        return new Response.Builder().body(bytes).build().toBytes();
+    }
+
+    private void writeResponse(final DataOutputStream dos, final byte[] body) {
         try {
             dos.write(body, 0, body.length);
             dos.flush();
