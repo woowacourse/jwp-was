@@ -3,6 +3,7 @@ package webserver;
 import com.google.common.collect.Maps;
 import controller.AbstractController;
 import controller.UserCreateController;
+import controller.UserLoginController;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.response.view.DefaultView;
@@ -17,6 +18,7 @@ public class ControllerContainer {
 
     static {
         controllers.put("/user/create", new UserCreateController());
+        controllers.put("/user/login", new UserLoginController());
     }
 
     private static Optional<AbstractController> findController(String path) {

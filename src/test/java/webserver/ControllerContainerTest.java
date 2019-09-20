@@ -3,7 +3,7 @@ package webserver;
 import db.DataBase;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import http.response.view.DefaultView;
+import model.User;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -40,20 +40,50 @@ class ControllerContainerTest {
     }
 
     @Test
-    void index문서_get요청() throws IOException, URISyntaxException {
-        String request = "GET /index.html HTTP/1.1\nHost: localhost:8080\nConnection: keep-alive\nAccept: */*";
+    void 유저_로그인_성공() throws IOException, URISyntaxException {
+        DataBase.addUser(new User("javajigi", "password", "박재성", "javajigi@slipp.net"));
+
+        String request = "POST /user/login HTTP/1.1\n" +
+                "Host: localhost:8080\n" +
+                "Connection: keep-alive\n" +
+                "Content-Length: 33\n" +
+                "Content-Type: application/x-www-form-urlencoded\n" +
+                "Accept: */*\n" +
+                "\n" +
+                "userId=javajigi&password=password";
 
         InputStream in = new ByteArrayInputStream(request.getBytes());
-        HttpRequest httpRequest = new HttpRequest(in);
-
-        ByteArrayOutputStream testOut = new ByteArrayOutputStream();
-        HttpResponse testHttpResponse = new HttpResponse(testOut);
-        testHttpResponse.render(new DefaultView(httpRequest.getPath()));
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
+        HttpRequest httpRequest = new HttpRequest(in);
         HttpResponse httpResponse = new HttpResponse(out);
 
         ControllerContainer.service(httpRequest, httpResponse);
-        assertThat(out.toByteArray()).isEqualTo(testOut.toByteArray());
+        assertThat(httpResponse.getResponseHeader().contains("logined=true")).isTrue();
     }
+
+    @Test
+    void 유저_로그인_실패() throws IOException, URISyntaxException {
+        DataBase.addUser(new User("javajigi", "password", "박재성", "javajigi@slipp.net"));
+
+        String request = "POST /user/login HTTP/1.1\n" +
+                "Host: localhost:8080\n" +
+                "Connection: keep-alive\n" +
+                "Content-Length: 33\n" +
+                "Content-Type: application/x-www-form-urlencoded\n" +
+                "Accept: */*\n" +
+                "\n" +
+                "userId=fail&password=password";
+
+        InputStream in = new ByteArrayInputStream(request.getBytes());
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        HttpRequest httpRequest = new HttpRequest(in);
+        HttpResponse httpResponse = new HttpResponse(out);
+
+        ControllerContainer.service(httpRequest, httpResponse);
+        assertThat(httpResponse.getResponseHeader().contains("logined=false")).isTrue();
+    }
+
+
 }
