@@ -7,7 +7,6 @@ import webserver.Request;
 import webserver.Response;
 import webserver.Status;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class UserController {
@@ -28,12 +27,9 @@ public class UserController {
                 parsedBody.get(EMAIL));
         DataBase.addUser(user);
 
-        Map<String, String> headers = new HashMap<>();
-        headers.put(LOCATION_HEADER_KEY, "/index.html");
-
         return Response.ResponseBuilder.createBuilder()
                 .withStatus(Status.FOUND)
-                .withHeaders(headers)
+                .withHeader(LOCATION_HEADER_KEY, "/index.html")
                 .build();
     }
 }

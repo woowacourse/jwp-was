@@ -1,5 +1,6 @@
 package webserver;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -47,6 +48,7 @@ public class Response {
         private byte[] body;
 
         private ResponseBuilder() {
+            headers = new HashMap<>();
         }
 
         public static ResponseBuilder createBuilder() {
@@ -63,8 +65,8 @@ public class Response {
             return this;
         }
 
-        public ResponseBuilder withHeaders(Map<String, String> headers) {
-            this.headers = headers;
+        public ResponseBuilder withHeader(String key, String value) {
+            this.headers.put(key, value);
             return this;
         }
 

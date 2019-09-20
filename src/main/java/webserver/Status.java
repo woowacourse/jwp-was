@@ -1,6 +1,7 @@
 package webserver;
 
 public enum Status {
+
     OK(200, "OK"),
     CREATED(201, "Created"),
     FOUND(302, "Found"),

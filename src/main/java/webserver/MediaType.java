@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 public enum MediaType {
+
     HTML("text/html", "html"),
     JS("application/javascript", "js"),
     CSS("text/css", "css"),
@@ -24,8 +25,8 @@ public enum MediaType {
 
     public static Optional<MediaType> fromExtension(String extension) {
         return Arrays.stream(values())
-            .filter(mediaType -> mediaType.extension.equals(extension.toLowerCase()))
-            .findFirst();
+                .filter(mediaType -> mediaType.extension.equals(extension.toLowerCase()))
+                .findFirst();
     }
 
     public String getContentType() {
