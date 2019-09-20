@@ -3,7 +3,7 @@ package utils.parser;
 import java.net.URLDecoder;
 import java.util.Map;
 
-public class URLParser extends PlainStringParser {
+public class URLParser extends SimpleStringParser {
     protected URLParser(String pairDelimiter, String keyValueDelimiter) {
         super(pairDelimiter, keyValueDelimiter);
     }

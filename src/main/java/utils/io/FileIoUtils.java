@@ -12,12 +12,13 @@ import java.util.Optional;
 public class FileIoUtils {
     private static final Logger logger = LoggerFactory.getLogger(FileIoUtils.class);
 
-    public static Optional<byte[]> loadFileFromClasspath(String filePath) {
-        logger.debug("Route to: {}", filePath);
+    public static Optional<String> loadFileFromClasspath(String filePath) {
         try {
             return Optional.of(
-                    Files.readAllBytes(
-                            Paths.get(FileIoUtils.class.getClassLoader().getResource(filePath).toURI())
+                    new String(
+                        Files.readAllBytes(
+                                Paths.get(FileIoUtils.class.getClassLoader().getResource(filePath).toURI())
+                        )
                     )
             );
         } catch (IOException | URISyntaxException | NullPointerException e) {

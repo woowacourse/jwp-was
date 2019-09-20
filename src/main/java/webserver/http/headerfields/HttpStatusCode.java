@@ -1,4 +1,4 @@
-package webserver.http;
+package webserver.http.headerfields;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -68,6 +68,14 @@ public enum HttpStatusCode {
     NOT_EXTENDED(510),
     NETWORK_AUTHENTICATION_REQUIRED(511);
 
+    public enum Group {
+        INFORMATIONAL,
+        SUCCESSFUL,
+        REDIRECTION,
+        CLIENT_ERROR,
+        SERVER_ERROR
+    }
+
     private final int code;
 
     HttpStatusCode(int code) {
@@ -88,18 +96,20 @@ public enum HttpStatusCode {
         }
     }
 
-    public int code() {
-        return this.code;
+    public HttpStatusCode.Group group() {
+        return Group.values()[(this.code / 100 - 1)];
     }
 
-    public String statusName() {
+    public String text() {
         return name().replaceAll("_", " ");
+    }
+
+    public int number() {
+        return this.code;
     }
 
     @Override
     public String toString() {
-        return "HttpStatusCode{" +
-                "code=" + statusName() + "(" + this.code + ")" +
-                '}';
+        return text() + "(" + number() + ")";
     }
 }

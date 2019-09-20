@@ -30,7 +30,7 @@ public class WebServer {
 
     private static RecursiveProcedure handleRequest(ServerSocket listener) {
         final boolean isSuccess = acceptConnection(listener).map(connection -> {
-            new Thread(new RequestHandler(connection)).start();
+            (new Thread(new RequestHandler(connection))).start();
             return true;
         }).orElse(false);
         if (isSuccess) {

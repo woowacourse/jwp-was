@@ -3,26 +3,26 @@ package model;
 import java.util.Objects;
 
 public class User {
-    private String userId;
+    private String id;
     private String password;
     private String name;
     private String email;
 
-    public User(String userId, String password, String name, String email) {
-        this.userId = userId;
+    public User(String id, String password, String name, String email) {
+        this.id = id;
         this.password = password;
         this.name = name;
         this.email = email;
     }
 
-    public String getUserId() {
-        return this.userId;
+    public String id() {
+        return this.id;
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "userId='" + this.userId + '\'' +
+                "id='" + this.id + '\'' +
                 ", password='" + this.password + '\'' +
                 ", name='" + this.name + '\'' +
                 ", email='" + this.email + '\'' +
@@ -38,14 +38,14 @@ public class User {
             return false;
         }
         final User rhs = (User) o;
-        return Objects.equals(this.userId, rhs.userId) &&
-                Objects.equals(this.password, rhs.password) &&
-                Objects.equals(this.name, rhs.name) &&
-                Objects.equals(this.email, rhs.email);
+        return this.id.equals(rhs.id) &&
+                this.password.equals(rhs.password) &&
+                this.name.equals(rhs.name) &&
+                this.email.equals(rhs.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.userId, this.password, this.name, this.email);
+        return Objects.hash(this.id, this.password, this.name, this.email);
     }
 }

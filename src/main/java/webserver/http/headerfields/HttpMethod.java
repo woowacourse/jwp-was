@@ -1,4 +1,4 @@
-package webserver.http;
+package webserver.http.headerfields;
 
 import java.util.Optional;
 import java.util.stream.Stream;
