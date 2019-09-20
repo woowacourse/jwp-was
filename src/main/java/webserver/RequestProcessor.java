@@ -6,7 +6,7 @@ import http.ResponseHeader;
 import model.UserService;
 
 public class RequestProcessor {
-    private static final String REGEX_FOR_FILE = "/?[A-Za-z0-9/.\\-]+\\.(html|ico|css|js)";
+    private static final String REGEX_FOR_FILE = "/?[A-Za-z0-9/.\\-]+\\.(html|ico|css|js|woff|ttf)";
 
     public ResponseHeader process(Request request) {
         String url = request.extractUrl();
