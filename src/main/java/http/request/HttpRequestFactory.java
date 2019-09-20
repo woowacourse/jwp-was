@@ -9,6 +9,7 @@ import java.util.Map;
 public class HttpRequestFactory {
     private static final Map<RequestMethod, RequestCreator> requestCreators = new HashMap<>();
     private static BufferedReader br;
+
     static {
         requestCreators.put(RequestMethod.GET, new GetRequestCreator());
         requestCreators.put(RequestMethod.POST, new PostRequestCreator());

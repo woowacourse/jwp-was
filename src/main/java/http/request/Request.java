@@ -6,6 +6,4 @@ public interface Request {
     Map<String, String> getParams();
 
     RequestPath getRequestPath();
-
-    RequestMethod getRequestMethod();
 }

@@ -32,11 +32,6 @@ public class AbstractRequest implements Request {
         return requestHeader;
     }
 
-    @Override
-    public RequestMethod getRequestMethod() {
-        return requestMethod;
-    }
-
     protected void extractParameter(String[] params) {
         Arrays.stream(params)
                 .forEach(param -> {
