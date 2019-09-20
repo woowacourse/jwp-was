@@ -5,9 +5,17 @@ import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import webserver.RequestHandler;
 
+import javax.activation.MimetypesFileTypeMap;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import org.apache.tika.Tika;
 
 public class Response {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -20,12 +28,17 @@ public class Response {
         this.classPath = classPath;
     }
 
-    public void response200(String type) {
+    public void response200() {
         try {
+            Path path = Paths.get(FileIoUtils.class.getClassLoader().getResource(classPath).toURI());
+            File file = new File(path.toString());
+
+            String mimeType = new Tika().detect(file);
+
             byte[] body = FileIoUtils.loadFileFromClasspath(classPath);
 
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: " + type + ";charset=utf-8\r\n");
+            dos.writeBytes("Content-Type: " + mimeType + ";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + body.length + "\r\n");
             dos.writeBytes("\r\n");
 
