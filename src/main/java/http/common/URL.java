@@ -1,5 +1,7 @@
 package http.common;
 
+import java.util.Objects;
+
 public class URL {
     private final String path;
     private final String queryString;
@@ -31,5 +33,19 @@ public class URL {
 
     public String getQueryString() {
         return queryString;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        URL url = (URL) o;
+        return Objects.equals(path, url.path) &&
+                Objects.equals(queryString, url.queryString);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(path, queryString);
     }
 }

@@ -9,6 +9,14 @@ public enum RequestMethod {
         this.hasBody = hasBody;
     }
 
+    public static RequestMethod of(String methodName) {
+        try {
+            return RequestMethod.valueOf(methodName);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidRequestMethodException();
+        }
+    }
+
     public boolean hasBody() {
         return hasBody;
     }
