@@ -20,10 +20,10 @@ public class RequestDispatcher {
     private static final String MESSAGE_UNSUPPORTED_EXTENSION = "지원되지 않는 확장자 입니다.";
     private static final String EXTENSION_DELIMITER = "\\.";
 
-    public static Response handle(Request request) {
+    public static HttpResponse handle(HttpRequest request) {
         try {
             String url = request.getUrl();
-            Response response = serveFile(STATIC_DIR + url);
+            HttpResponse response = serveFile(STATIC_DIR + url);
             if (response != null) {
                 return response;
             }
@@ -39,12 +39,12 @@ public class RequestDispatcher {
         } catch (Exception e) {
             logger.error("Error is occurred while processing request", e);
         }
-        return Response.ResponseBuilder.createBuilder()
-            .withStatus(Status.NOT_FOUND)
+        return HttpResponse.ResponseBuilder.createBuilder()
+            .withStatus(HttpStatus.NOT_FOUND)
             .build();
     }
 
-    private static Response serveFile(String url) {
+    private static HttpResponse serveFile(String url) {
         try {
             byte[] body = FileIoUtils.loadFileFromClasspath(url);
             Map<String, String> headers = new HashMap<>();
@@ -52,8 +52,8 @@ public class RequestDispatcher {
             MediaType contentType = extractExtension(url);
             headers.put(CONTENT_LENGTH_HEADER_KEY, String.valueOf(body.length));
 
-            return Response.ResponseBuilder.createBuilder()
-                .withStatus(Status.OK)
+            return HttpResponse.ResponseBuilder.createBuilder()
+                .withStatus(HttpStatus.OK)
                 .withMediaType(contentType)
                 .withHeaders(headers)
                 .withBody(body)

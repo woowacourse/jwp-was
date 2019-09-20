@@ -3,9 +3,9 @@ package controller;
 import db.DataBase;
 import model.User;
 import utils.UrlEncodedParser;
-import webserver.Request;
-import webserver.Response;
-import webserver.Status;
+import webserver.HttpRequest;
+import webserver.HttpResponse;
+import webserver.HttpStatus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +19,7 @@ public class UserController {
     private static final String EMAIL = "email";
     private static final String LOCATION_HEADER_KEY = "Location";
 
-    public static Response signUp(Request req) {
+    public static HttpResponse signUp(HttpRequest req) {
         String body = new String(req.getBody());
         Map<String, String> parsedBody = UrlEncodedParser.parse(body);
         User user = new User(parsedBody.get(USER_ID),
@@ -31,8 +31,8 @@ public class UserController {
         Map<String, String> headers = new HashMap<>();
         headers.put(LOCATION_HEADER_KEY, "/index.html");
 
-        return Response.ResponseBuilder.createBuilder()
-                .withStatus(Status.FOUND)
+        return HttpResponse.ResponseBuilder.createBuilder()
+                .withStatus(HttpStatus.FOUND)
                 .withHeaders(headers)
                 .build();
     }

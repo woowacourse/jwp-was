@@ -3,14 +3,14 @@ package webserver;
 import java.util.Map;
 import java.util.Set;
 
-public class Response {
+public class HttpResponse {
 
-    private final Status status;
+    private final HttpStatus status;
     private final MediaType mediaType;
     private final Map<String, String> headers;
     private final byte[] body;
 
-    private Response(Status status, MediaType mediaType, Map<String, String> headers, byte[] body) {
+    private HttpResponse(HttpStatus status, MediaType mediaType, Map<String, String> headers, byte[] body) {
         this.status = status;
         this.mediaType = mediaType;
         this.headers = headers;
@@ -25,7 +25,7 @@ public class Response {
         return headers.get(key);
     }
 
-    public Status getStatus() {
+    public HttpStatus getStatus() {
         return status;
     }
 
@@ -41,7 +41,7 @@ public class Response {
     }
 
     public static final class ResponseBuilder {
-        private Status status;
+        private HttpStatus status;
         private MediaType mediaType;
         private Map<String, String> headers;
         private byte[] body;
@@ -53,7 +53,7 @@ public class Response {
             return new ResponseBuilder();
         }
 
-        public ResponseBuilder withStatus(Status status) {
+        public ResponseBuilder withStatus(HttpStatus status) {
             this.status = status;
             return this;
         }
@@ -73,8 +73,8 @@ public class Response {
             return this;
         }
 
-        public Response build() {
-            return new Response(status, mediaType, headers, body);
+        public HttpResponse build() {
+            return new HttpResponse(status, mediaType, headers, body);
         }
     }
 }

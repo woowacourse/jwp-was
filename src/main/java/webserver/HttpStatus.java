@@ -1,6 +1,6 @@
 package webserver;
 
-public enum Status {
+public enum HttpStatus {
     OK(200, "OK"),
     CREATED(201, "Created"),
     FOUND(302, "Found"),
@@ -9,7 +9,7 @@ public enum Status {
     private final int code;
     private final String text;
 
-    Status(int code, String text) {
+    HttpStatus(int code, String text) {
         this.code = code;
         this.text = text;
     }

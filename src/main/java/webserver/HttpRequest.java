@@ -2,17 +2,19 @@ package webserver;
 
 import java.util.Map;
 
-public class Request {
+public class HttpRequest {
 
-    private final String method;
+    private final HttpMethod method;
     private final String url;
+    private final String path;
     private final Map<String, String> queries;
     private final Map<String, String> headers;
     private final byte[] body;
 
-    public Request(String method, String url, Map<String, String> queries, Map<String, String> headers, byte[] body) {
+    public HttpRequest(HttpMethod method, String url, String path, Map<String, String> queries, Map<String, String> headers, byte[] body) {
         this.method = method;
         this.url = url;
+        this.path = path;
         this.queries = queries;
         this.headers = headers;
         this.body = body;
@@ -26,12 +28,16 @@ public class Request {
         return headers.get(key);
     }
 
-    public String getMethod() {
+    public HttpMethod getMethod() {
         return method;
     }
 
     public String getUrl() {
         return url;
+    }
+
+    public String getPath() {
+        return path;
     }
 
     public byte[] getBody() {
