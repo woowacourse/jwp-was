@@ -7,15 +7,10 @@ import java.util.stream.Collectors;
 public class HttpRequestUtils {
     public static final String ROOT_TEMPLATE_FILE_PATH = "./templates";
     private static final String ROOT_STATIC_FILE_PATH = "./static";
-    private static final String DEFAULT_INDEX = "/index.html";
-    private static final String ROOT = "/";
     private static final String PARAMS_TOKEN = "&";
     private static final String KEY_VALUE_TOKEN = "=";
 
     public static String generateTemplateFilePath(String absPath) {
-        if (ROOT.equals(absPath)) {
-            return ROOT_TEMPLATE_FILE_PATH + DEFAULT_INDEX;
-        }
         return ROOT_TEMPLATE_FILE_PATH + absPath;
     }
 
