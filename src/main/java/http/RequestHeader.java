@@ -2,9 +2,11 @@ package http;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.exception.NotFoundHeaderException;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class RequestHeader {
     public static final String HTTP_METHOD = "method";
@@ -43,7 +45,7 @@ public class RequestHeader {
     }
 
     public String get(String key) {
-        return headers.get(key.toLowerCase());
+        return Optional.ofNullable(headers.get(key.toLowerCase())).orElseThrow(NotFoundHeaderException::new);
     }
 
     public Map<String, String> extractQueryParameter() {
