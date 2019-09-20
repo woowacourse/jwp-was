@@ -11,12 +11,10 @@ public class RequestMapping implements Comparable<RequestMapping> {
     private final HttpMethod method;
     private final String regex;
     private final Pattern pattern;
-    private final int patternLength;
 
     public RequestMapping(HttpMethod method, String regex) {
         this.method = method;
         this.regex = regex;
-        this.patternLength = regex.length();
         this.pattern = Pattern.compile(regex);
     }
 
@@ -42,6 +40,6 @@ public class RequestMapping implements Comparable<RequestMapping> {
 
     @Override
     public int compareTo(RequestMapping requestMapping) {
-        return requestMapping.patternLength - this.patternLength;
+        return requestMapping.regex.length() - this.regex.length();
     }
 }
