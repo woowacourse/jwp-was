@@ -1,7 +1,10 @@
 package webserver;
 
+import http.request.HttpRequest;
+import http.request.HttpRequestParams;
+import http.request.HttpRequestParser;
+import http.response.HttpResponseGenerator;
 import model.User;
-import network.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

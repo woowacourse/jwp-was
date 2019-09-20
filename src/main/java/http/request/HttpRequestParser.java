@@ -1,5 +1,7 @@
-package network;
+package http.request;
 
+import http.common.HttpHeader;
+import http.common.HttpVersion;
 import utils.IOUtils;
 
 import java.io.BufferedReader;

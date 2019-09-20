@@ -1,5 +1,7 @@
-package network;
+package http.response;
 
+import http.common.HttpHeader;
+import http.common.HttpVersion;
 import utils.FileIoUtils;
 
 import java.io.DataOutputStream;

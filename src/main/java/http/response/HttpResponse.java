@@ -1,4 +1,7 @@
-package network;
+package http.response;
+
+import http.common.HttpHeader;
+import http.common.HttpVersion;
 
 public class HttpResponse {
     private HttpVersion httpVersion;

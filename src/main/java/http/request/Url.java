@@ -1,4 +1,4 @@
-package network;
+package http.request;
 
 public class Url {
     private String url;

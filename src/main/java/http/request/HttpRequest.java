@@ -1,4 +1,7 @@
-package network;
+package http.request;
+
+import http.common.HttpHeader;
+import http.common.HttpVersion;
 
 public class HttpRequest {
     private Url url;

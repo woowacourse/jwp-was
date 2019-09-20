@@ -1,4 +1,4 @@
-package network;
+package http.response;
 
 public class HttpResponseBody {
     private byte[] body;

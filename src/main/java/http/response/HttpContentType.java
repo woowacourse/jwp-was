@@ -1,4 +1,4 @@
-package network;
+package http.response;
 
 import java.util.Arrays;
 import java.util.function.Predicate;
