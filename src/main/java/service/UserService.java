@@ -14,11 +14,10 @@ public class UserService {
         return UserServiceHolder.INSTANCE;
     }
 
-    public User createUser(Map<String, String> params) {
+    public void createUser(Map<String, String> params) {
         log.debug("userService: {}, {}, {}", params.get("password"), params.get("name"), params.get("email"));
         User user = new User(params.get("userId"), params.get("password"), params.get("name"), params.get("email"));
         DataBase.addUser(user);
-        return user;
     }
 
     private static class UserServiceHolder {

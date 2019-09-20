@@ -1,8 +1,10 @@
 package http.response;
 
-public class HtmlResponse extends AbstractResponse {
+import http.request.Request;
 
-    public HtmlResponse(String path) {
-        super(path);
+public class HtmlResponse extends AbstractResponse {
+    public HtmlResponse(Request request) {
+        super(request);
+        contentType = "text/html";
     }
 }

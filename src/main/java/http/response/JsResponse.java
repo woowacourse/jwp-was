@@ -1,8 +1,10 @@
 package http.response;
 
-public class JsResponse extends AbstractResponse {
+import http.request.Request;
 
-    public JsResponse(String path) {
-        super(path);
+public class JsResponse extends AbstractResponse {
+    public JsResponse(Request request) {
+        super(request);
+        contentType = "application/javascript";
     }
 }

@@ -1,5 +1,8 @@
 package http.response;
 
+import exception.PathNotFoundException;
+import http.request.Request;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,43 +17,49 @@ public class ResponseFactory {
         responseCreators.put("redirect://../resources/templates/", new RedirectionResponseCreator());
     }
 
-    public static Response getResponse(String path, String key) {
-        ResponseCreator responseCreator = responseCreators.get(key);
-        return responseCreator.create(path);
+    public static Response getResponse(Request request) {
+        String responseCreatorKey = responseCreators.keySet().stream()
+                .filter(key -> (request.getRequestPath().getPath()).contains(key))
+                .findAny()
+                .orElseThrow(PathNotFoundException::new);
+
+        ResponseCreator responseCreator = responseCreators.get(responseCreatorKey);
+        return responseCreator.create(request);
+    }
+
+    static class HtmlResponseCreator implements ResponseCreator {
+        @Override
+        public Response create(Request request) {
+            return new HtmlResponse(request);
+        }
+    }
+
+    static class CssResponseCreator implements ResponseCreator {
+        @Override
+        public Response create(Request request) {
+            return new CssResponse(request);
+        }
+    }
+
+    static class JsResponseCreator implements ResponseCreator {
+        @Override
+        public Response create(Request request) {
+            return new JsResponse(request);
+        }
+    }
+
+    static class RedirectionResponseCreator implements ResponseCreator {
+        @Override
+        public Response create(Request request) {
+            return new RedirectResponse();
+        }
+    }
+
+    static class FontResponseCreator implements ResponseCreator {
+        @Override
+        public Response create(Request request) {
+            return new FontResponse(request);
+        }
     }
 }
 
-class HtmlResponseCreator implements ResponseCreator {
-    @Override
-    public Response create(String path) {
-        return new HtmlResponse(path);
-    }
-}
-
-class CssResponseCreator implements ResponseCreator {
-    @Override
-    public Response create(String path) {
-        return new CssResponse(path);
-    }
-}
-
-class JsResponseCreator implements ResponseCreator {
-    @Override
-    public Response create(String path) {
-        return new JsResponse(path);
-    }
-}
-
-class RedirectionResponseCreator implements ResponseCreator {
-    @Override
-    public Response create(String path) {
-        return new RedirectResponse(path);
-    }
-}
-
-class FontResponseCreator implements ResponseCreator {
-    @Override
-    public Response create(String path) {
-        return new FontResponse(path);
-    }
-}

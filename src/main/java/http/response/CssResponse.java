@@ -1,8 +1,10 @@
 package http.response;
 
-public class CssResponse extends AbstractResponse {
+import http.request.Request;
 
-    public CssResponse(String path) {
-        super(path);
+public class CssResponse extends AbstractResponse {
+    public CssResponse(Request request) {
+        super(request);
+        contentType = "text/css";
     }
 }
