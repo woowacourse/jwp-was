@@ -1,5 +1,7 @@
 package http.request;
 
+import http.request.exception.InvalidRequestMethodException;
+
 public enum RequestMethod {
     GET(false), DELETE(false), POST(true), PUT(true);
 

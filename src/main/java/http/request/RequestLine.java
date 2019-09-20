@@ -1,6 +1,7 @@
 package http.request;
 
 import http.common.URL;
+import http.request.exception.InvalidRequestException;
 import utils.StringUtils;
 
 public class RequestLine {

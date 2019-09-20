@@ -1,6 +1,8 @@
 package http.request;
 
 import http.common.URL;
+import http.request.exception.InvalidRequestException;
+import http.request.exception.InvalidRequestMethodException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
