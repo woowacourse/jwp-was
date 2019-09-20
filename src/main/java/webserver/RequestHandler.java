@@ -11,11 +11,7 @@ import webserver.response.HttpResponse;
 import webserver.response.HttpStatus;
 import webserver.response.OkHttpResponse;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -31,7 +27,7 @@ public class RequestHandler implements Runnable {
 
     public void run() {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
-            connection.getPort());
+                connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
@@ -40,12 +36,9 @@ public class RequestHandler implements Runnable {
             String uri = httpRequest.findUri();
             Controller controller = ControllerFinder.findController(uri);
 
-            HttpResponse httpResponse = null;
+            HttpResponse httpResponse = new OkHttpResponse(out);
 
             HttpStatus status = controller.findStatus();
-            if (status == HttpStatus.Ok) {
-                httpResponse = new OkHttpResponse(out);
-            }
             if (status == HttpStatus.Found) {
                 httpResponse = new FoundHttpResponse(out, "/index.html");
             }

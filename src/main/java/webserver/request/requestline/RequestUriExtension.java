@@ -35,9 +35,9 @@ public enum RequestUriExtension {
 
     public static RequestUriExtension findExtension(String extension) {
         return Arrays.stream(RequestUriExtension.values())
-            .filter(e -> e.isSame(extension))
-            .findFirst()
-            .orElse(RequestUriExtension.NONE);
+                .filter(e -> e.isSame(extension))
+                .findFirst()
+                .orElse(RequestUriExtension.NONE);
     }
 
     public boolean isSame(String extension) {
