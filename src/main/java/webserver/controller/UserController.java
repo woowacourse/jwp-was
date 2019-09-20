@@ -15,7 +15,7 @@ public class UserController extends AbstractController {
     public void doGet(HttpRequest request, HttpResponse response) {
         if(request.hasParameters()) {
             DataBase.addUser(createUser(request));
-            response.response200Header(0);
+            response.response200Header(0, "text/html");
         }
     }
 

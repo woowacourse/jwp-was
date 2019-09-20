@@ -20,11 +20,11 @@ public class HttpResponse {
         return new HttpResponse(dos);
     }
 
-    public void response200Header(int lengthOfBodyContent) {
+    public void response200Header(int lengthOfBodyContent, String contentType) {
         try {
             List<String> lines = Arrays.asList(
                     "HTTP/1.1 200 OK \r\n",
-                    "Content-Type: text/html;charset=utf-8\r\n",
+                    "Content-Type: " + contentType + ";charset=utf-8\r\n",
                     "Content-Length: " + lengthOfBodyContent + "\r\n",
                     "\r\n");
 
