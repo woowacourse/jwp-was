@@ -18,7 +18,6 @@ class RedirectViewTest {
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         setHeader(path, byteArrayOutputStream);
-        System.out.println(view.getHeader());
         assertThat(view.getHeader().getBytes()).isEqualTo(byteArrayOutputStream.toByteArray());
     }
 

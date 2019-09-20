@@ -38,7 +38,6 @@ public class RequestHeader {
     }
 
     public String getHeaderContents(String key) {
-        System.out.println(headerContents.getOrDefault(key, ""));
         return headerContents.getOrDefault(key, "");
     }
 }
