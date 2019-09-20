@@ -52,8 +52,7 @@ public class RequestHandler implements Runnable {
     private Handler getHandler(HttpRequest httpRequest) {
         for (Handler handler : HandlerList.LIST) {
             // TODO optional 을 반환할 것인가 null 리턴해도 괜찮은가
-            String temp = httpRequest.getDirectory();
-            Handler targetHandler = handler.getHandler(temp);
+            Handler targetHandler = handler.getHandler(httpRequest.getDirectory());
             if (targetHandler != null) {
                 return targetHandler;
             }
