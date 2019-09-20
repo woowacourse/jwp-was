@@ -1,4 +1,4 @@
-package webserver.http;
+package webserver.http.headerfields;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,6 +45,11 @@ public class HttpPort {
     }
 
     @Override
+    public String toString() {
+        return String.valueOf(this.number);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -59,12 +64,5 @@ public class HttpPort {
     @Override
     public int hashCode() {
         return Objects.hash(this.number);
-    }
-
-    @Override
-    public String toString() {
-        return "HttpPort{" +
-                "number=" + this.number +
-                '}';
     }
 }

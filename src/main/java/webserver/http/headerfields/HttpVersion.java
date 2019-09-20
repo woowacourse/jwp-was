@@ -1,4 +1,4 @@
-package webserver.http;
+package webserver.http.headerfields;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -29,14 +29,8 @@ public enum HttpVersion {
         }
     }
 
-    public String get() {
-        return "HTTP/" + this.version;
-    }
-
     @Override
     public String toString() {
-        return "HttpVersion{" +
-                "version=" + this.version +
-                '}';
+        return "HTTP/" + this.version;
     }
 }

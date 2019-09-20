@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 public class NetworkIOStream implements NetworkIO {
     private static final Logger logger = LoggerFactory.getLogger(NetworkIOStream.class);
@@ -15,7 +16,15 @@ public class NetworkIOStream implements NetworkIO {
     private final BufferedReader reader;
     private final DataOutputStream writer;
 
-    public NetworkIOStream(Socket connection) throws IOException {
+    public static Optional<NetworkIOStream> init(Socket connection) {
+        try {
+            return Optional.of(new NetworkIOStream(connection));
+        } catch (IOException e) {
+            return Optional.empty();
+        }
+    }
+
+    private NetworkIOStream(Socket connection) throws IOException {
         this.in = connection.getInputStream();
         this.out = connection.getOutputStream();
         this.reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
@@ -44,18 +53,21 @@ public class NetworkIOStream implements NetworkIO {
     }
 
     @Override
-    public void write(byte[] body) {
+    public void write(String body) {
         try {
-            this.writer.write(body);
+            this.writer.write(body.getBytes());
             this.writer.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    @Override
-    public void close() throws IOException {
-        this.in.close();
-        this.out.close();
+    public void close() {
+        try {
+            this.in.close();
+            this.out.close();
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
     }
 }

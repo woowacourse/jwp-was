@@ -7,7 +7,7 @@ import utils.recursion.TailRecursion;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
-public interface NetworkIO extends Iterator<String>, AutoCloseable {
+public interface NetworkIO extends Iterator<String> {
     default boolean isEOF() {
         return !hasNext();
     }
@@ -42,9 +42,5 @@ public interface NetworkIO extends Iterator<String>, AutoCloseable {
         return (new Closure()).readWhile(new StringBuilder()).get();
     }
 
-    void write(byte[] body);
-
-    default void write(String body) {
-        write(body.getBytes());
-    }
+    void write(String body);
 }

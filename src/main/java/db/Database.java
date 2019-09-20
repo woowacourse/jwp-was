@@ -1,21 +1,20 @@
 package db;
 
-import java.util.Collection;
-import java.util.Map;
-
-import com.google.common.collect.Maps;
-
 import model.User;
 
-public class DataBase {
-    private static Map<String, User> users = Maps.newHashMap();
+import java.util.Collection;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+public class Database {
+    private static Map<String, User> users = new ConcurrentHashMap<>();
 
     public static void addUser(User user) {
-        users.put(user.getUserId(), user);
+        users.put(user.id(), user);
     }
 
-    public static User findUserById(String userId) {
-        return users.get(userId);
+    public static User findUserById(String id) {
+        return users.get(id);
     }
 
     public static Collection<User> findAll() {

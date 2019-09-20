@@ -1,4 +1,4 @@
-package webserver.http;
+package webserver.http.headerfields;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +37,11 @@ public class HttpHost {
     }
 
     @Override
+    public String toString() {
+        return this.name + ":" + this.port;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -45,20 +50,12 @@ public class HttpHost {
             return false;
         }
         final HttpHost rhs = (HttpHost) o;
-        return Objects.equals(this.name, rhs.name) &&
+        return this.name.equals(rhs.name) &&
                 Objects.equals(this.port, rhs.port);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(this.name, this.port);
-    }
-
-    @Override
-    public String toString() {
-        return "HttpHost{" +
-                "name='" + this.name + '\'' +
-                ", port=" + this.port +
-                '}';
     }
 }

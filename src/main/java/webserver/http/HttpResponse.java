@@ -1,28 +1,66 @@
 package webserver.http;
 
+import webserver.http.headerfields.HttpConnection;
+import webserver.http.headerfields.HttpContentType;
+import webserver.http.headerfields.HttpStatusCode;
+import webserver.http.headerfields.HttpVersion;
+
 public class HttpResponse {
-    private HttpStatusCode statusCode;
-    private HttpContentType httpContentType;
-    private byte[] body;
+    public static final HttpResponse BAD_REQUEST =
+            HttpResponse.builder(HttpContentType.TEXT_PLAIN())
+                        .statusCode(HttpStatusCode.BAD_REQUEST)
+                        .build();
 
-    public static class builder {
+    public static final HttpResponse NOT_FOUND =
+            HttpResponse.builder(HttpContentType.TEXT_PLAIN())
+                        .statusCode(HttpStatusCode.NOT_FOUND)
+                        .build();
+
+    public static final HttpResponse INTERNAL_SERVER_ERROR =
+            HttpResponse.builder(HttpContentType.TEXT_PLAIN())
+                        .statusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                        .build();
+
+    private final HttpVersion version;
+    private final HttpStatusCode statusCode;
+    private final HttpContentType contentType;
+    private final HttpConnection connection;
+    private String location;
+    private final String body;
+
+    public static class HttpResponseBuilder {
+        private HttpVersion version = HttpVersion.HTTP_1_1;
         private HttpStatusCode statusCode = HttpStatusCode.OK;
-        private HttpContentType httpContentType;
-        private byte[] body = {};
+        private final HttpContentType contentType;
+        private HttpConnection connection;
+        private String location;
+        private String body = "";
 
-        public builder() {}
+        public HttpResponseBuilder(HttpContentType contentType) {
+            this.contentType = contentType;
+        }
 
-        public builder httpStatusCode(HttpStatusCode statusCode) {
+        public HttpResponseBuilder version(HttpRequest req) {
+            this.version = req.version();
+            return this;
+        }
+
+        public HttpResponseBuilder statusCode(HttpStatusCode statusCode) {
             this.statusCode = statusCode;
             return this;
         }
 
-        public builder httpContentType(HttpContentType httpContentType) {
-            this.httpContentType = httpContentType;
+        public HttpResponseBuilder connection(HttpRequest req) {
+            this.connection = req.connection().orElse(null);
             return this;
         }
 
-        public builder body(byte[] body) {
+        public HttpResponseBuilder location(String location) {
+            this.location = location;
+            return this;
+        }
+
+        public HttpResponseBuilder body(String body) {
             this.body = body;
             return this;
         }
@@ -32,9 +70,49 @@ public class HttpResponse {
         }
     }
 
-    private HttpResponse(builder builder) {
+    public static HttpResponseBuilder builder(HttpContentType contentType) {
+        return new HttpResponseBuilder(contentType);
+    }
+
+    private HttpResponse(HttpResponseBuilder builder) {
+        this.version = builder.version;
         this.statusCode = builder.statusCode;
-        this.httpContentType = builder.httpContentType;
+        this.contentType = builder.contentType;
+        this.connection = builder.connection;
+        this.location = builder.location;
         this.body = builder.body;
+    }
+
+    public String serializeHeader() {
+        final StringBuilder header = new StringBuilder(serializeMandatory());
+        if (this.connection != null) {
+            header.append("Connection: " + this.connection + "\r\n");
+        }
+        if (this.location != null) {
+            header.append("Location: " + this.location + "\r\n");
+        }
+        return header.toString();
+    }
+
+    private String serializeMandatory() {
+        return String.format(
+                "%s %d %s\r\n" +
+                "Content-Type: %s\r\n" +
+                "Content-Length: %d\r\n",
+                this.version,
+                this.statusCode.number(),
+                this.statusCode.text(),
+                this.contentType,
+                this.body.length()
+        );
+    }
+
+    public String serialize() {
+        return serializeHeader() + "\r\n" + this.body;
+    }
+
+    @Override
+    public String toString() {
+        return serialize();
     }
 }

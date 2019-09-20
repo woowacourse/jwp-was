@@ -1,33 +1,47 @@
-package webserver.http;
+package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.io.FileIoUtils;
 import utils.parser.KeyValueParserFactory;
+import webserver.http.HttpRequest;
+import webserver.http.HttpResponse;
 import webserver.http.headerfields.HttpContentType;
+import webserver.http.headerfields.HttpMethod;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 import java.util.Optional;
 
 public class Router {
     private static final Logger logger = LoggerFactory.getLogger(Router.class);
 
+    private static final Map<String, String> GET_ROUTER =
+            FileIoUtils.loadFileFromClasspath("./get-route.wwml").map(config ->
+                    KeyValueParserFactory.routerParser().toMap(config)
+            ).orElse(null);
+    private static final Map<String, String> POST_ROUTER =
+            FileIoUtils.loadFileFromClasspath("./post-route.wwml").map(config ->
+                    KeyValueParserFactory.routerParser().toMap(config)
+            ).orElse(null);
+
     public static HttpResponse serve(HttpRequest req) {
-        final String path = req.path().toString();
-        if (req.path().extension().isEmpty()) {
-            return FileIoUtils.loadFileFromClasspath("./route.wwml").map(config ->
-                route(req, KeyValueParserFactory.routerParser().toMap(config).get(path))
-            ).orElse(HttpResponse.INTERNAL_SERVER_ERROR);
+        if (req.path().extension().equals("html") || req.path().extension().isEmpty()) {
+            return route(req);
         }
         return serveStaticFiles(req);
     }
 
-    private static HttpResponse route(HttpRequest req, String mapping) {
-        return Optional.ofNullable(mapping).map(controller -> {
-            final String[] names = controller.split(".");
+    private static HttpResponse route(HttpRequest req) {
+        final String mapping = (req.method() == HttpMethod.GET)
+                ? GET_ROUTER.get(req.path().toString())
+                : POST_ROUTER.get(req.path().toString());
+        logger.debug("{} -> {}", req.path(), mapping);
+        return Optional.ofNullable(mapping).map(routeTo -> {
+            final String[] classAndMethodNames = routeTo.split("\\.");
             try {
-                return (HttpResponse) Class.forName("controller." + names[0])
-                                            .getMethod(names[1], HttpRequest.class)
+                return (HttpResponse) Class.forName("controller." + classAndMethodNames[0])
+                                            .getMethod(classAndMethodNames[1], HttpRequest.class)
                                             .invoke(null, req);
             } catch (
                     ClassNotFoundException |

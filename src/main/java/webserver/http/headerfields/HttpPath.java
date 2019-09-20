@@ -1,4 +1,4 @@
-package webserver.http;
+package webserver.http.headerfields;
 
 import java.net.URLDecoder;
 import java.util.Objects;
@@ -16,7 +16,8 @@ public class HttpPath {
         return (this.path.contains(".")) ? this.path.substring(this.path.lastIndexOf(".") + 1) : "";
     }
 
-    public String get() {
+    @Override
+    public String toString() {
         return this.path;
     }
 
@@ -29,18 +30,11 @@ public class HttpPath {
             return false;
         }
         final HttpPath rhs = (HttpPath) o;
-        return Objects.equals(this.path, rhs.path);
+        return this.path.equals(rhs.path);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(this.path);
-    }
-
-    @Override
-    public String toString() {
-        return "HttpPath{" +
-                "path='" + this.path + '\'' +
-                '}';
     }
 }
