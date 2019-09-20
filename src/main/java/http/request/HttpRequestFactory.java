@@ -1,47 +1,45 @@
 package http.request;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class HttpRequestFactory {
-    private static final Logger log = LoggerFactory.getLogger(HttpRequestFactory.class);
-    private static Map<RequestMethod, RequestCreator> requestCreators = new HashMap<>();
-
+    private static final Map<RequestMethod, RequestCreator> requestCreators = new HashMap<>();
+    private static BufferedReader br;
     static {
         requestCreators.put(RequestMethod.GET, new GetRequestCreator());
         requestCreators.put(RequestMethod.POST, new PostRequestCreator());
     }
 
-    public static Request getRequest(BufferedReader br) throws IOException {
-        String line = br.readLine();
-        String[] tokens = getTokens(line);
+    public static Request getRequest(String firstLine, List<String> lines, BufferedReader bufferedReader) throws IOException {
+        br = bufferedReader;
+        String[] tokens = getTokens(firstLine);
 
         RequestCreator requestCreator = requestCreators.get(RequestMethod.from(tokens[0]));
-        return requestCreator.create(br, tokens);
+        return requestCreator.create(lines, tokens);
     }
 
     private static String[] getTokens(String line) {
-        log.debug("line: {}", line);
         return line.split(" ");
     }
-}
 
-class GetRequestCreator implements RequestCreator {
-    @Override
-    public Request create(BufferedReader br, String[] tokens) throws IOException {
-        return new GetRequest(br, tokens);
+    static class GetRequestCreator implements RequestCreator {
+        @Override
+        public Request create(List<String> lines, String[] tokens) {
+            return new GetRequest(lines, tokens);
+        }
+    }
+
+    static class PostRequestCreator implements RequestCreator {
+        @Override
+        public Request create(List<String> lines, String[] tokens) throws IOException {
+            return new PostRequest(lines, tokens, br);
+        }
     }
 }
 
-class PostRequestCreator implements RequestCreator {
-    @Override
-    public Request create(BufferedReader br, String[] tokens) throws IOException {
-        return new PostRequest(br, tokens);
-    }
-}
+
 

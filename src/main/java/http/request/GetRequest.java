@@ -1,26 +1,20 @@
 package http.request;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class GetRequest extends AbstractRequest {
-    GetRequest(BufferedReader br, String[] tokens) throws IOException {
-        super(br, tokens);
+    GetRequest(List<String> lines, String[] tokens) {
+        super(lines, tokens);
         parameters = new HashMap<>();
 
+        checkGetParameter();
+    }
+
+    private void checkGetParameter() {
         if (requestPath.getPath().contains("?")) {
             String[] params = requestPath.getPath().split("\\?");
             extractParameter(params[1].split("&"));
         }
-    }
-
-    private void extractParameter(String[] params) {
-        Arrays.stream(params)
-                .forEach(param -> {
-                    String[] keyValues = param.split("=");
-                    parameters.put(keyValues[0], keyValues[1]);
-                });
     }
 }

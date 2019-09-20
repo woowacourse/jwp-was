@@ -1,9 +1,9 @@
 package http.request;
 
-import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.List;
 
 @FunctionalInterface
 public interface RequestCreator {
-    Request create(BufferedReader br, String[] tokens) throws IOException;
+    Request create(List<String> lines, String[] tokens) throws IOException;
 }

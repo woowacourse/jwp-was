@@ -13,6 +13,8 @@ import java.io.*;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RequestHandler implements Runnable {
     private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
@@ -35,7 +37,10 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-            Request request = HttpRequestFactory.getRequest(br);
+            String firstLine = br.readLine();
+            List<String> lines = parsedBufferedReader(br);
+            Request request = HttpRequestFactory.getRequest(firstLine, lines, br);
+
             DataOutputStream dos = new DataOutputStream(out);
 
             if(request.getRequestPath().getPath().equals(TEMPLATE_PATH + "/") || request.getRequestPath().getPath().equals(TEMPLATE_PATH+"/index.html")) {
@@ -78,5 +83,16 @@ public class RequestHandler implements Runnable {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
+    }
+
+    private static List<String> parsedBufferedReader(BufferedReader br) throws IOException {
+        List<String> requestLines = new ArrayList<>();
+        String line = "Header: start";
+        while (!line.equals("")) {
+            requestLines.add(line);
+            line = br.readLine();
+        }
+
+        return requestLines;
     }
 }
