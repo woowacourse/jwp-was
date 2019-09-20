@@ -5,15 +5,13 @@ import http.exception.NotFoundStatusException;
 import java.util.Arrays;
 
 public enum HttpStatus {
-    OK(200, "OK"),
-    FOUND(302, "FOUND");
+    OK(200),
+    FOUND(302);
 
     private int statusCode;
-    private String status;
 
-    HttpStatus(int statusCode, String status) {
+    HttpStatus(int statusCode) {
         this.statusCode = statusCode;
-        this.status = status;
     }
 
     public static HttpStatus of(int statusCode) {
@@ -29,6 +27,6 @@ public enum HttpStatus {
     }
 
     public String getStatus() {
-        return status;
+        return this.name();
     }
 }

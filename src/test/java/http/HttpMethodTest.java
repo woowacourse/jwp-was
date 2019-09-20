@@ -8,8 +8,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class HttpMethodTest {
     @Test
-    void of_정상_동작() {
+    void GET_of_정상_동작() {
         assertThat(HttpMethod.of("GET")).isEqualTo(HttpMethod.GET);
+    }
+
+    @Test
+    void POST_of_정상_동작() {
+        assertThat(HttpMethod.of("POST")).isEqualTo(HttpMethod.POST);
     }
 
     @Test

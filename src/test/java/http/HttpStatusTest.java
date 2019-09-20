@@ -8,8 +8,18 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class HttpStatusTest {
     @Test
-    void of_정상_동작() {
+    void OK_of_정상_동작() {
         assertThat(HttpStatus.of(200)).isEqualTo(HttpStatus.OK);
+    }
+
+    @Test
+    void FOUND_of_정상_동작() {
+        assertThat(HttpStatus.of(302)).isEqualTo(HttpStatus.FOUND);
+    }
+
+    @Test
+    void getStatus_정상_동작() {
+        assertThat(HttpStatus.OK.getStatus()).isEqualTo("OK");
     }
 
     @Test
