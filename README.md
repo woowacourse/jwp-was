@@ -49,3 +49,4 @@
 리팩토링
 - [x] servlet 생성
 - [x] http response status code enum으로 변경
+- [x] 쓰레드 풀 변경
