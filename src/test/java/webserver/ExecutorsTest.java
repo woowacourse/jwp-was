@@ -15,7 +15,7 @@ public class ExecutorsTest {
     private static AtomicInteger counter = new AtomicInteger(0);
 
     public static void main(String[] args) throws Exception {
-        ExecutorService es = Executors.newFixedThreadPool(100);
+        ExecutorService es = Executors.newFixedThreadPool(10);
 
         StopWatch sw = new StopWatch();
         sw.start();
