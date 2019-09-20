@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RequestHeader {
-    private static final String HEADER_DELIMITER = ":\\s";
+    private static final String HEADER_DELIMITER = ": ";
     private static final String CRLF = "\r\n";
 
     private Map<String, String> requestHeader;
@@ -38,7 +38,7 @@ public class RequestHeader {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (String key : requestHeader.keySet()) {
-            sb.append(key + HEADER_DELIMITER +  requestHeader.get(key) + CRLF);
+            sb.append(key).append(HEADER_DELIMITER).append(requestHeader.get(key)).append(CRLF);
         }
         return sb.toString();
     }
