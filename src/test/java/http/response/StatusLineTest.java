@@ -1,5 +1,6 @@
 package http.response;
 
+import http.response.exception.InvalidStatusLineException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
