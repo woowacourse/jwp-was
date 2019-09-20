@@ -1,14 +1,12 @@
 package webserver;
 
-import controller.UserController;
+import controller.SignUpController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static controller.UserController.USER_CREATE_URL;
 
 
 public class RequestDispatcher {
@@ -20,46 +18,45 @@ public class RequestDispatcher {
     private static final String MESSAGE_UNSUPPORTED_EXTENSION = "지원되지 않는 확장자 입니다.";
     private static final String EXTENSION_DELIMITER = "\\.";
 
-    public static HttpResponse handle(HttpRequest request) {
+    private static final Map<String, Controller> controllers;
+
+    static {
+        controllers = new HashMap<>();
+        SignUpController signUpController = new SignUpController();
+
+        controllers.put(signUpController.getPath(), signUpController);
+    }
+
+    public static void handle(HttpRequest request, HttpResponse response) {
         try {
             String url = request.getUrl();
-            HttpResponse response = serveFile(STATIC_DIR + url);
-            if (response != null) {
-                return response;
-            }
+            serveFile(STATIC_DIR + url, response);
+            serveFile(TEMPLATES_DIR + url, response);
 
-            response = serveFile(TEMPLATES_DIR + url);
-            if (response != null) {
-                return response;
-            }
-
-            if (USER_CREATE_URL.equals(url)) {
-                return UserController.signUp(request);
+            Controller toServe = controllers.get(request.getPath());
+            if (toServe != null) {
+                toServe.service(request, response);
             }
         } catch (Exception e) {
             logger.error("Error is occurred while processing request", e);
         }
-        return HttpResponse.ResponseBuilder.createBuilder()
-            .withStatus(HttpStatus.NOT_FOUND)
-            .build();
+        if (response.getStatus() == null) {
+            response.setStatus(HttpStatus.NOT_FOUND);
+        }
     }
 
-    private static HttpResponse serveFile(String url) {
+    private static void serveFile(String url, HttpResponse res) {
         try {
             byte[] body = FileIoUtils.loadFileFromClasspath(url);
-            Map<String, String> headers = new HashMap<>();
 
             MediaType contentType = extractExtension(url);
-            headers.put(CONTENT_LENGTH_HEADER_KEY, String.valueOf(body.length));
 
-            return HttpResponse.ResponseBuilder.createBuilder()
-                .withStatus(HttpStatus.OK)
-                .withMediaType(contentType)
-                .withHeaders(headers)
-                .withBody(body)
-                .build();
+            res.setStatus(HttpStatus.OK);
+            res.setContentType(contentType);
+            res.addHeader(CONTENT_LENGTH_HEADER_KEY, String.valueOf(body.length));
+            res.setBody(body);
         } catch (Exception e) {
-            return null;
+            logger.error("Error while serving file", e);
         }
     }
 

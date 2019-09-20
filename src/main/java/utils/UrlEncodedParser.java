@@ -20,7 +20,7 @@ public class UrlEncodedParser {
         String[] tokenPairs = urlEncodedString.split(PAIR_DELIMITER);
         Map<String, String> parsed = new HashMap<>();
         Arrays.stream(tokenPairs)
-                .forEach(pairToken -> parsePair(parsed, pairToken));
+            .forEach(pairToken -> parsePair(parsed, pairToken));
 
         return parsed;
     }

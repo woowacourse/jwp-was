@@ -17,11 +17,10 @@ public class ResponseWriterTest {
         DataOutputStream dos = new DataOutputStream(baos);
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "text/plain");
-        HttpResponse res = HttpResponse.ResponseBuilder.createBuilder()
-            .withStatus(HttpStatus.OK)
-            .withHeaders(headers)
-            .withBody("This is body".getBytes())
-            .build();
+        HttpResponse res = new HttpResponse();
+        res.setStatus(HttpStatus.OK);
+        res.addHeader("Content-Type", "text/plain");
+        res.setBody("This is body".getBytes());
         ResponseWriter rw = new ResponseWriter(dos);
         rw.write(res);
 

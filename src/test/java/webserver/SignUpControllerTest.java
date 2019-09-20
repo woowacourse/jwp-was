@@ -1,13 +1,13 @@
 package webserver;
 
-import controller.UserController;
+import controller.SignUpController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 
-public class UserControllerTest {
+public class SignUpControllerTest {
 
     private WebTestClient webTestClient;
 
@@ -19,7 +19,7 @@ public class UserControllerTest {
     @Test
     void create() {
         webTestClient.post()
-                .uri(UserController.USER_CREATE_URL)
+                .uri(SignUpController.USER_CREATE_URL)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .body(BodyInserters.fromFormData("userId", "john123")
                 .with("password", "p@ssW0rd")

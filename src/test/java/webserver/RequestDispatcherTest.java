@@ -12,23 +12,26 @@ public class RequestDispatcherTest {
     void static_file() {
         String uri = "/css/styles.css";
         HttpRequest req = new HttpRequest(HttpMethod.GET, uri, uri, new HashMap<>(), null, null);
-        HttpResponse res = RequestDispatcher.handle(req);
-        assertThat(res.getStatus().getCode()).isEqualTo(200);
+        HttpResponse res = new HttpResponse();
+        RequestDispatcher.handle(req, res);
+        assertThat(res.getStatus().getCode()).isEqualTo(HttpStatus.OK.getCode());
     }
 
     @Test
     void index() {
         String uri = "/index.html";
         HttpRequest req = new HttpRequest(HttpMethod.GET, uri, uri, new HashMap<>(), null, null);
-        HttpResponse res = RequestDispatcher.handle(req);
-        assertThat(res.getStatus().getCode()).isEqualTo(200);
+        HttpResponse res = new HttpResponse();
+        RequestDispatcher.handle(req, res);
+        assertThat(res.getStatus().getCode()).isEqualTo(HttpStatus.OK.getCode());
     }
 
     @Test
     void not_found() {
         String uri = "index.hhtml";
         HttpRequest req = new HttpRequest(HttpMethod.GET, uri, uri, new HashMap<>(), null, null);
-        HttpResponse res = RequestDispatcher.handle(req);
-        assertThat(res.getStatus().getCode()).isEqualTo(404);
+        HttpResponse res = new HttpResponse();
+        RequestDispatcher.handle(req, res);
+        assertThat(res.getStatus().getCode()).isEqualTo(HttpStatus.NOT_FOUND.getCode());
     }
 }

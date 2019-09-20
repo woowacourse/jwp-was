@@ -20,6 +20,10 @@ public class HttpRequest {
         this.body = body;
     }
 
+    public boolean matchMethod(HttpMethod method) {
+        return this.method.equals(method);
+    }
+
     public String getQuery(String key) {
         return queries.get(key);
     }

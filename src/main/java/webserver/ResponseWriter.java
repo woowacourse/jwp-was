@@ -38,8 +38,8 @@ public class ResponseWriter {
     }
 
     private void writeContentType(DataOutputStream dos, HttpResponse response) {
-        if (response.getMediaType() != null) {
-            writeHeaderLine(dos, CONTENT_TYPE_HEADER_KEY, response.getMediaType());
+        if (response.getContentType() != null) {
+            writeHeaderLine(dos, CONTENT_TYPE_HEADER_KEY, response.getContentType().getHeaderValue());
         }
     }
 

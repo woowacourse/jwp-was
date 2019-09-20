@@ -14,11 +14,11 @@ public enum MediaType {
     WOFF("application/font-woff", "woff"),
     WOFF2("font/woff2", "woff2");
 
-    private String contentType;
+    private String headerValue;
     private String extension;
 
-    MediaType(String contentType, String extension) {
-        this.contentType = contentType;
+    MediaType(String headerValue, String extension) {
+        this.headerValue = headerValue;
         this.extension = extension;
     }
 
@@ -28,7 +28,7 @@ public enum MediaType {
             .findFirst();
     }
 
-    public String getContentType() {
-        return contentType;
+    public String getHeaderValue() {
+        return headerValue;
     }
 }

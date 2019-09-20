@@ -1,19 +1,35 @@
 package webserver;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 public class HttpResponse {
 
-    private final HttpStatus status;
-    private final MediaType mediaType;
+    private HttpStatus status;
+    private MediaType contentType;
     private final Map<String, String> headers;
-    private final byte[] body;
+    private byte[] body;
 
-    private HttpResponse(HttpStatus status, MediaType mediaType, Map<String, String> headers, byte[] body) {
+    HttpResponse() {
+        this.status = null;
+        this.contentType = null;
+        this.headers = new HashMap<>();
+    }
+
+    public void addHeader(String key, String value) {
+        headers.put(key, value);
+    }
+
+    public void setStatus(HttpStatus status) {
         this.status = status;
-        this.mediaType = mediaType;
-        this.headers = headers;
+    }
+
+    public void setContentType(MediaType contentType) {
+        this.contentType = contentType;
+    }
+
+    public void setBody(byte[] body) {
         this.body = body;
     }
 
@@ -29,52 +45,11 @@ public class HttpResponse {
         return status;
     }
 
-    public String getMediaType() {
-        if (mediaType == null) {
-            return null;
-        }
-        return mediaType.getContentType();
+    public MediaType getContentType() {
+        return contentType;
     }
 
     public byte[] getBody() {
         return body;
-    }
-
-    public static final class ResponseBuilder {
-        private HttpStatus status;
-        private MediaType mediaType;
-        private Map<String, String> headers;
-        private byte[] body;
-
-        private ResponseBuilder() {
-        }
-
-        public static ResponseBuilder createBuilder() {
-            return new ResponseBuilder();
-        }
-
-        public ResponseBuilder withStatus(HttpStatus status) {
-            this.status = status;
-            return this;
-        }
-
-        public ResponseBuilder withMediaType(MediaType mediaType) {
-            this.mediaType = mediaType;
-            return this;
-        }
-
-        public ResponseBuilder withHeaders(Map<String, String> headers) {
-            this.headers = headers;
-            return this;
-        }
-
-        public ResponseBuilder withBody(byte[] body) {
-            this.body = body;
-            return this;
-        }
-
-        public HttpResponse build() {
-            return new HttpResponse(status, mediaType, headers, body);
-        }
     }
 }
