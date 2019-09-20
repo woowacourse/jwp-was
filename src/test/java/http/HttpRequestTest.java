@@ -52,14 +52,14 @@ public class HttpRequestTest {
 
     @BeforeEach
     void setUp() {
-        request = new HttpRequest(new ByteArrayInputStream(GET_REQUEST.getBytes(UTF_8)));
+        request = HttpRequestParser.parse(new ByteArrayInputStream(GET_REQUEST.getBytes(UTF_8)));
     }
 
     @Test
     void 존재하지_않는_Method_생성_오류() {
         String undefinedHeader = "NONE /index.html HTTP/1.1";
         assertThrows(NotFoundMethodException.class,
-                () -> new HttpRequest(new ByteArrayInputStream(undefinedHeader.getBytes(UTF_8))));
+                () -> HttpRequestParser.parse(new ByteArrayInputStream(undefinedHeader.getBytes(UTF_8))));
     }
 
     @Test
@@ -70,7 +70,7 @@ public class HttpRequestTest {
     @Test
     void 헤더_Request_Parameter_가져오기() {
         String request = "GET /index.html?a=b&c=d HTTP/1.1";
-        HttpRequest httpRequest = new HttpRequest(new ByteArrayInputStream(request.getBytes(UTF_8)));
+        HttpRequest httpRequest = HttpRequestParser.parse(new ByteArrayInputStream(request.getBytes(UTF_8)));
         assertThat(httpRequest.getParameter("a")).isEqualTo("b");
         assertThat(httpRequest.getParameter("c")).isEqualTo("d");
     }
@@ -103,7 +103,7 @@ public class HttpRequestTest {
 
     @Test
     void POST_요청_body_가져오기() {
-        HttpRequest postRequest = new HttpRequest(new ByteArrayInputStream(POST_REQUEST.getBytes(UTF_8)));
+        HttpRequest postRequest = HttpRequestParser.parse(new ByteArrayInputStream(POST_REQUEST.getBytes(UTF_8)));
         assertThat(postRequest.getRequestBody("userId")).isEqualTo("park");
         assertThat(postRequest.getRequestBody("password")).isEqualTo("1234");
         assertThat(postRequest.getRequestBody("name")).isEqualTo("sungbum");

@@ -1,6 +1,7 @@
 package webserver;
 
 import http.HttpRequest;
+import http.HttpRequestParser;
 import http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +27,7 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            HttpRequest httpRequest = new HttpRequest(in);
+            HttpRequest httpRequest = HttpRequestParser.parse(in);
             HttpResponse httpResponse = new HttpResponse();
             DataOutputStream dos = new DataOutputStream(out);
 
