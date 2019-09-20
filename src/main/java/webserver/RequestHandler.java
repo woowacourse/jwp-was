@@ -2,11 +2,11 @@ package webserver;
 
 import http.HttpRequest;
 import http.HttpResponse;
+import http.MimeType;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
-import utils.MimeTypesUtils;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -37,7 +37,7 @@ public class RequestHandler implements Runnable {
                 byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getUri());
 
                 httpResponse.setStatus(200);
-                httpResponse.addHeader("Content-Type", MimeTypesUtils.getMimeType(httpRequest.getUri()));
+                httpResponse.addHeader("Content-Type", MimeType.of(httpRequest.getUri()));
                 httpResponse.setBody(body);
                 httpResponse.send();
                 dos.close();
