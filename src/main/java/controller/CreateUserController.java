@@ -5,7 +5,7 @@ import model.Request;
 import model.Response;
 import model.User;
 
-public class CreateUserController extends AbstractController{
+public class CreateUserController extends AbstractController {
     @Override
     void doPost(Request request, Response response) {
         String url = request.getUrl();
@@ -25,9 +25,7 @@ public class CreateUserController extends AbstractController{
 
     @Override
     void doGet(Request request, Response response) {
-
     }
-
 
     private void saveUser(Request request) {
         User user = new User(request.getParameter("userId"), request.getParameter("password"), request.getParameter("name"), request.getParameter("email"));
