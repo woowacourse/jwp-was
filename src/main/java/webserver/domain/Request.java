@@ -15,9 +15,8 @@ public class Request {
 
     // TODO: 잘못된 요청을 받았을 때 문제가 없는지 검토
     // TODO: 래퍼 클래스로 감싸기
-    //private final HttpMethod httpMethod;
     //private final Path path;
-    private final String httpMethod;
+    private final HttpMethod httpMethod;
     private final String path;
     private final String protocol;
     private final String body;
@@ -54,7 +53,6 @@ public class Request {
         return Collections.unmodifiableMap(fields);
     }
 
-    // TODO: 한번에 Key:Value를 반환하게끔 리팩토링
     private String makeKey(final String rawField) {
         return rawField.split(":")[0].trim().toLowerCase();
     }
@@ -64,7 +62,7 @@ public class Request {
     }
 
     public String getHttpMethod() {
-        return httpMethod;
+        return httpMethod.name();
     }
 
     public String getPath() {
