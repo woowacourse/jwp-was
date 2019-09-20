@@ -1,8 +1,5 @@
 package webserver.request;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 public class RequestHeader {
@@ -14,21 +11,8 @@ public class RequestHeader {
 
     private Map<String, String> header;
 
-    public RequestHeader(BufferedReader bufferedReader) throws IOException {
-        String line = bufferedReader.readLine();
-        header = new HashMap<>();
-        while (!"".equals(line) && null != line) {
-            generateHeader(line);
-            line = bufferedReader.readLine();
-        }
-    }
-
-    private void generateHeader(String line) {
-        String[] splitLine = line.split(HEADER_SPLIT_TOKEN);
-        if (splitLine.length != HEADER_LENGTH) {
-            throw new IllegalArgumentException(WRONG_REQUEST_HEADER_FORM_MESSAGE);
-        }
-        header.put(splitLine[HEADER_KEY_INDEX], splitLine[HEADER_VALUE_INDEX]);
+    public RequestHeader(Map<String, String> header) {
+        this.header = header;
     }
 
     public String getHeader(String key) {
