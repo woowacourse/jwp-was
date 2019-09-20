@@ -2,12 +2,16 @@ package http;
 
 public class HttpRequestLine {
 
-    private String[] firstLine;
+    private String method;
+    private String url;
+    private String protocol;
 
     public HttpRequestLine(String firstLine) {
         String[] splitFirstLine = firstLine.split(" ");
         checkSplitLength(splitFirstLine);
-        this.firstLine = splitFirstLine;
+        this.method = splitFirstLine[0];
+        this.url = splitFirstLine[1];
+        this.protocol = splitFirstLine[2];
     }
 
     private void checkSplitLength(String[] splitFirstLine) {
@@ -17,18 +21,14 @@ public class HttpRequestLine {
     }
 
     public String getMethod() {
-        return getInformationFromRequestLine(0);
-    }
-
-    private String getInformationFromRequestLine(int index) {
-        return firstLine[index];
+        return method;
     }
 
     public String getUrl() {
-        return getInformationFromRequestLine(1);
+        return url;
     }
 
     public String getProtocol() {
-        return getInformationFromRequestLine(2);
+        return protocol;
     }
 }
