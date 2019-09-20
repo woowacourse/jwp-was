@@ -2,8 +2,7 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.recursion.Procedure;
-import utils.recursion.TailRecursion;
+import utils.recursion.RecursiveProcedure;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -29,15 +28,15 @@ public class WebServer {
         }
     }
 
-    private static TailRecursion<Void> handleRequest(ServerSocket listener) {
+    private static RecursiveProcedure handleRequest(ServerSocket listener) {
         final boolean isSuccess = acceptConnection(listener).map(connection -> {
             new Thread(new RequestHandler(connection)).start();
             return true;
         }).orElse(false);
         if (isSuccess) {
-            return (Procedure) () -> handleRequest(listener);
+            return () -> handleRequest(listener);
         }
-        return Procedure.exit();
+        return RecursiveProcedure.exit();
     }
 
     private static Optional<Socket> acceptConnection(ServerSocket listener) {

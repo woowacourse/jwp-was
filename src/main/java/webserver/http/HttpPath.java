@@ -7,19 +7,17 @@ public class HttpPath {
     private final String path;
 
     public HttpPath(String path) {
-        this.path = path.substring(0, path.lastIndexOf("?")).toLowerCase();
-    }
-
-    public String get() {
-        return this.path;
-    }
-
-    public String decoded() {
-        return URLDecoder.decode(this.path);
+        this.path = (path.contains("?") && path.lastIndexOf("?") > path.lastIndexOf("/"))
+                ? URLDecoder.decode(path.substring(0, path.lastIndexOf("?")))
+                : URLDecoder.decode(path);
     }
 
     public String extension() {
         return (this.path.contains(".")) ? this.path.substring(this.path.lastIndexOf(".") + 1) : "";
+    }
+
+    public String get() {
+        return this.path;
     }
 
     @Override
