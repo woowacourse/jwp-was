@@ -1,16 +1,15 @@
 package http.request;
 
-import http.HttpUrl;
 import http.HttpVersion;
 
 public class HttpRequestLine {
     private HttpMethod method;
-    private HttpUrl url;
+    private HttpUri uri;
     private HttpVersion version;
 
-    public HttpRequestLine(HttpMethod method, HttpUrl url, HttpVersion version) {
+    public HttpRequestLine(HttpMethod method, HttpUri uri, HttpVersion version) {
         this.method = method;
-        this.url = url;
+        this.uri = uri;
         this.version = version;
     }
 
@@ -18,8 +17,8 @@ public class HttpRequestLine {
         return method;
     }
 
-    public HttpUrl getUrl() {
-        return url;
+    public HttpUri getUri() {
+        return uri;
     }
 
     public HttpVersion getVersion() {
@@ -28,6 +27,6 @@ public class HttpRequestLine {
 
     @Override
     public String toString() {
-        return "\n" + method + " " + url.getPath() + " " + version;
+        return "\n" + method + " " + uri.getPath() + " " + version;
     }
 }

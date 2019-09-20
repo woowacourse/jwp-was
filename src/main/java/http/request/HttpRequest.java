@@ -1,7 +1,6 @@
 package http.request;
 
 import http.HttpHeaders;
-import http.HttpUrl;
 import http.HttpVersion;
 
 public class HttpRequest {
@@ -19,8 +18,8 @@ public class HttpRequest {
         return requestLine.getMethod();
     }
 
-    public HttpUrl getUrl() {
-        return requestLine.getUrl();
+    public HttpUri getUri() {
+        return requestLine.getUri();
     }
 
     public HttpVersion getVersion() {
@@ -31,9 +30,18 @@ public class HttpRequest {
         return headers;
     }
 
+    public String getResponseContentsType() {
+        String accepts = headers.getHeader("Accept");
+
+        if (accepts.contains("text/css")) {
+            return "text/css";
+        }
+        return "text/html;charset=utf-8";
+    }
+
     public QueryParams getQueryParams() {
         if (HttpMethod.GET.match(requestLine.getMethod())) {
-            return QueryParams.of(requestLine.getUrl().getQueryParams());
+            return QueryParams.of(requestLine.getUri().getQueryParams());
         }
         return QueryParams.of(body);
     }

@@ -1,7 +1,6 @@
 package http.request;
 
 import http.HttpHeaders;
-import http.HttpUrl;
 import http.HttpVersion;
 import http.exception.EmptyHttpRequestException;
 import http.exception.RequestLineException;
@@ -59,7 +58,7 @@ public class HttpRequestFactory {
         String[] parsedStartLine = requestLine.split(START_LINE_DELIMITER);
         checkStartLine(parsedStartLine);
         HttpMethod method = HttpMethod.resolve(parsedStartLine[HTTP_METHOD_INDEX]);
-        HttpUrl url = new HttpUrl(parsedStartLine[PATH_INDEX]);
+        HttpUri url = new HttpUri(parsedStartLine[PATH_INDEX]);
         HttpVersion version = HttpVersion.resolve(parsedStartLine[HTTP_VERSION_INDEX]);
         return new HttpRequestLine(method, url, version);
     }

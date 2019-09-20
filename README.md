@@ -30,8 +30,9 @@
     - [X] QueryParams 리펙토링
 2. Response 생성 기능 분리
     - [X] Status에 따라 Http Response 만드는 기능 분리
-
 3. RequestHandler 리펙토링
+    - [X] controller 분리
+    - [ ] ResponseEntity 분리
 
 ## 의문사항
 - HTTP response version이 어떻게 결정되는지? request로 온 HTTP버전에 맞춰서 결정되는지 아니면 server에서 정해진 버전으로만 응답하는지?

@@ -1,14 +1,8 @@
 package webserver;
 
-import db.DataBase;
-import http.request.HttpMethod;
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
-import http.request.QueryParams;
-import http.response.HttpResponse;
-import http.response.HttpResponseBody;
-import http.response.HttpResponseFactory;
-import model.User;
+import http.response.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
@@ -41,41 +35,55 @@ public class RequestHandler implements Runnable {
 
             DataOutputStream dos = new DataOutputStream(out);
 
-            if (HttpMethod.GET.match(request.getMethod())) {
-                byte[] body;
-                try {
-                    body = FileIoUtils.loadFileFromClasspath(DEFAULT_PATH + request.getUrl().getPath());
-                } catch (NullPointerException e) {
-                    body = FileIoUtils.loadFileFromClasspath(STATIC_PATH + request.getUrl().getPath());
-                }
+            if (request.getUri().hasExtension()) {
+                send200Response(request, dos, request.getUri().getPath());
+            } else {
+                HttpResponseEntity responseEntity = ControllerMapper.map(request);
 
-                if (request.getHeaders().getHeader("Accept").contains("text/css")) {
-                    HttpResponseBody responseBody = new HttpResponseBody(body, "text/css");
-                    HttpResponse response = HttpResponseFactory.makeHttp200Response(responseBody);
-                    dos.writeBytes(response.getHeaderMessage());
-                    dos.write(response.getBody());
-                } else {
-                    HttpResponseBody responseBody = new HttpResponseBody(body, "text/html;charset=utf-8");
-                    HttpResponse response = HttpResponseFactory.makeHttp200Response(responseBody);
-                    dos.writeBytes(response.getHeaderMessage());
-                    dos.write(response.getBody());
+                if (responseEntity.getStatus().match(HttpStatus.FOUND)) {
+                    send302Response(dos);
+                } else if (responseEntity.getStatus().match(HttpStatus.OK)) {
+                    send200Response(request, dos, responseEntity.getViewTemplatePath());
+                } else if (responseEntity.getStatus().match(HttpStatus.NOT_FOUND)) {
+                    send404Response(request, dos, responseEntity);
                 }
-            }
-
-            if (HttpMethod.POST.match(request.getMethod()) && request.getUrl().getPath().equals("/user/create")) {
-                createUser(request.getQueryParams());
-                HttpResponse response = HttpResponseFactory.makeHttp302Response("http://localhost:8080/index.html");
-                dos.writeBytes(response.getHeaderMessage());
             }
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void createUser(QueryParams queryParams) {
-        User user = new User(queryParams.getParam("userId"), queryParams.getParam("password"),
-                queryParams.getParam("name"), queryParams.getParam("email"));
-        DataBase.addUser(user);
-        logger.debug(DataBase.findUserById(user.getUserId()).toString());
+    private void send302Response(DataOutputStream dos) throws IOException {
+        HttpResponse response = HttpResponseFactory.makeHttp302Response("http://localhost:8080/index.html");
+
+        dos.writeBytes(response.getHeaderMessage());
+    }
+
+    private void send200Response(HttpRequest request, DataOutputStream dos, String viewTemplatePath) throws IOException, URISyntaxException {
+        byte[] body = getBody(viewTemplatePath);
+        HttpResponseBody responseBody = new HttpResponseBody(body, request.getResponseContentsType());
+        HttpResponse response = HttpResponseFactory.makeHttp200Response(responseBody);
+
+        dos.writeBytes(response.getHeaderMessage());
+        dos.write(response.getBody());
+    }
+
+    private void send404Response(HttpRequest request, DataOutputStream dos, HttpResponseEntity responseEntity) throws IOException, URISyntaxException {
+        byte[] body = getBody(responseEntity.getViewTemplatePath());
+        HttpResponseBody responseBody = new HttpResponseBody(body, request.getResponseContentsType());
+        HttpResponse response = HttpResponseFactory.makeHttp404Response(responseBody);
+
+        dos.writeBytes(response.getHeaderMessage());
+        dos.write(response.getBody());
+    }
+
+    private byte[] getBody(String path) throws IOException, URISyntaxException {
+        byte[] body;
+        try {
+            body = FileIoUtils.loadFileFromClasspath(DEFAULT_PATH + path);
+        } catch (NullPointerException e) {
+            body = FileIoUtils.loadFileFromClasspath(STATIC_PATH + path);
+        }
+        return body;
     }
 }
