@@ -1,5 +1,6 @@
 package controller;
 
+import db.DataBase;
 import model.User;
 import org.slf4j.Logger;
 import webserver.domain.QueryParameter;
@@ -17,6 +18,8 @@ public class UserController {
         final String name = queries.getValue("name");
         final String email = queries.getValue("email");
         final User user = new User(userId, password, name, email);
+
+        DataBase.addUser(user);
         LOG.debug(user.toString());
 
         return user.toString().getBytes();
