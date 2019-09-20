@@ -1,50 +1,40 @@
 package http.supoort;
 
 import http.model.HttpResponse;
-import http.model.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Map;
 
 public class ResponseMessageConverter {
     private static final Logger logger = LoggerFactory.getLogger(ResponseMessageConverter.class);
-    private static final String SEPARATOR = " ";
+    private static final String SPACE = " ";
+    private static final String HEAD_SEPARATOR = ":" + SPACE;
     private static final String LINE_BREAK = "\r\n";
-    private static final String LOCATION_TO_ROOT_URI = "Location: http://localhost:8080/index.html";
 
     public static void convert(HttpResponse httpResponse, DataOutputStream dos) {
-        if (httpResponse.getHttpStatus() == HttpStatus.OK) {
+        try {
+            responseStatus(httpResponse, dos);
             responseHeader(httpResponse, dos);
             responseBody(httpResponse.getBody(), dos);
-        }
-        if (httpResponse.getHttpStatus() == HttpStatus.FOUND) {
-            responseRedirectHeader(httpResponse, dos);
-        }
-    }
-
-    private static void responseRedirectHeader(HttpResponse httpResponse, DataOutputStream dos) {
-        try {
-            dos.writeBytes(httpResponse.getProtocol().getProtocol() + SEPARATOR + httpResponse.getHttpStatus().getMessage() + LINE_BREAK);
-            dos.writeBytes(LOCATION_TO_ROOT_URI + LINE_BREAK);
-            dos.writeBytes("Content-Type: " + httpResponse.getContentType() + LINE_BREAK);
-            dos.writeBytes(LINE_BREAK);
-            dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private static void responseHeader(HttpResponse httpResponse, DataOutputStream dos) {
-        try {
-            dos.writeBytes(httpResponse.getProtocol().getProtocol() + " " + httpResponse.getHttpStatus().getMessage() + LINE_BREAK);
-            dos.writeBytes("Content-Type: " + httpResponse.getContentType().getType() + LINE_BREAK);
-            dos.writeBytes("Content-Length: " + httpResponse.getBody().length + LINE_BREAK);
-            dos.writeBytes(LINE_BREAK);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
+    private static void responseStatus(HttpResponse httpResponse, DataOutputStream dos) throws IOException {
+        dos.writeBytes(httpResponse.getProtocol().getProtocol() + SPACE);
+        dos.writeBytes(httpResponse.getHttpStatus().getMessage() + LINE_BREAK);
+    }
+
+
+    private static void responseHeader(HttpResponse httpResponse, DataOutputStream dos) throws IOException {
+        for (Map.Entry<String, String> entry : httpResponse.getHeaders().entrySet()) {
+            dos.writeBytes(entry.getKey() + HEAD_SEPARATOR + entry.getValue() + LINE_BREAK);
         }
+        dos.writeBytes(LINE_BREAK);
     }
 
     private static void responseBody(byte[] body, DataOutputStream dos) {
