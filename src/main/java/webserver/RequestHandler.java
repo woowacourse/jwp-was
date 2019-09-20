@@ -49,13 +49,6 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private HttpResponse checkResponse(HttpResponse httpResponse) {
-        if (httpResponse.isNotInitialized()) {
-            httpResponse = HttpResponse.createError();
-        }
-        return httpResponse;
-    }
-
     private Handler getHandler(HttpRequest httpRequest) {
         for (Handler handler : HandlerList.LIST) {
             // TODO optional 을 반환할 것인가 null 리턴해도 괜찮은가
@@ -66,6 +59,13 @@ public class RequestHandler implements Runnable {
             }
         }
         return null;
+    }
+
+    private HttpResponse checkResponse(HttpResponse httpResponse) {
+        if (httpResponse.isNotInitialized()) {
+            httpResponse = HttpResponse.createError();
+        }
+        return httpResponse;
     }
 
     private void handleOutputStream(OutputStream out, ModelAndView mav, HttpResponse httpResponse) throws IOException
@@ -89,14 +89,18 @@ public class RequestHandler implements Runnable {
     private void responseHeader(DataOutputStream dos, int lengthOfBodyContent, HttpResponse response) {
         try {
             dos.writeBytes("HTTP/1.1 " + response.getHttpStatusCode() + " " + response.getHttpReasonPhrase() + " \r\n");
-            if (response.isRedirect()) {
-                dos.writeBytes("Location: " + response.getLocation() + " \r\n");
-            }
+            checkRedirect(dos, response);
             dos.writeBytes("Content-Type: " + response.getMediaType() + ";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
+        }
+    }
+
+    private void checkRedirect(DataOutputStream dos, HttpResponse response) throws IOException {
+        if (response.isRedirect()) {
+            dos.writeBytes("Location: " + response.getLocation() + " \r\n");
         }
     }
 
