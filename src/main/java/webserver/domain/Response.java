@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Response {
-    private static final byte[] NEW_LINE_BYTES = "\r\n".getBytes();
+    private static final byte[] NEW_LINE_BYTES = "\r\n\r\n".getBytes();
 
     private ResponseHeader header;
     private ResponseBody body;
@@ -26,7 +26,7 @@ public class Response {
         public Builder(final String protocol, final HttpStatus httpStatus) {
             this.protocol = protocol;
             this.httpStatus = httpStatus;
-            this.responseFields.put("Content-Type", "text/html; charset=utf-8");
+            this.responseFields.put("Content-Type", "application/octet-stream");
         }
 
         public Builder(final String protocol) {
@@ -62,8 +62,8 @@ public class Response {
             return this;
         }
 
-        public Builder contentType(final String contentType) {
-            this.responseFields.replace("Content-Type", contentType + "; charset=utf-8");
+        public Builder contentType(final MediaType contentType) {
+            this.responseFields.replace("Content-Type", contentType.getMediaType());
             return this;
         }
 
@@ -74,6 +74,12 @@ public class Response {
 
         public Builder body(final byte[] body) {
             this.body = new ResponseBody(body);
+            return this;
+        }
+
+        public Builder body(final StaticFile file) {
+            this.responseFields.replace("Content-Type", MediaType.of(file.getExtension()).getMediaType());
+            this.body = new ResponseBody(file.getBody());
             return this;
         }
 

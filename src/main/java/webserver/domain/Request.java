@@ -28,9 +28,6 @@ public class Request {
     private static final int ZERO = 0;
     private static final int NO_QUERY = 1;
 
-    // TODO: 잘못된 요청을 받았을 때 문제가 없는지 검토
-    // TODO: 래퍼 클래스로 감싸기
-    //private final Path path;
     private final HttpMethod httpMethod;
     private final String path;
     private final String protocol;

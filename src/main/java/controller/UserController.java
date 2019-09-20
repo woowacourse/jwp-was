@@ -23,6 +23,6 @@ public class UserController {
         DataBase.addUser(user);
         LOG.debug(user.toString());
 
-        return new Response.Builder().redirectUrl("/index.html").build();
+        return new Response.Builder().redirectUrl("/").build();
     }
 }
