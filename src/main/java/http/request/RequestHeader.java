@@ -1,7 +1,6 @@
 package http.request;
 
 import http.HTTP;
-import http.HttpRequestCoreInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +19,6 @@ public class RequestHeader {
     }
 
     private void createHeader(BufferedReader bufferedReader) throws IOException {
-        createCoreHeader(bufferedReader);
         String line;
         while (true) {
             line = bufferedReader.readLine();
@@ -33,24 +31,6 @@ public class RequestHeader {
             String[] keyValue = line.split(": ");
             headerContents.put(keyValue[0], keyValue[1]);
         }
-    }
-
-    private void createCoreHeader(BufferedReader bufferedReader) throws IOException {
-        String line = bufferedReader.readLine();
-        String[] tokens = line.split(" ");
-
-        headerContents.put(HttpRequestCoreInfo.METHOD.name(), tokens[0]);
-        createAddress(tokens[1]);
-
-        headerContents.put(HttpRequestCoreInfo.HTTP_VERSION.name(), tokens[2]);
-    }
-
-    private void createAddress(String token) {
-        String[] address = token.split("\\?");
-        if (address.length > 1) {
-            headerContents.put(HttpRequestCoreInfo.QUERY_STRING.name(), address[1]);
-        }
-        headerContents.put(HttpRequestCoreInfo.PATH.name(), address[0]);
     }
 
     public boolean contains(HTTP http) {

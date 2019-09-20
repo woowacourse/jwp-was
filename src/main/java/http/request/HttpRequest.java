@@ -1,7 +1,6 @@
 package http.request;
 
 import http.HTTP;
-import http.HttpRequestCoreInfo;
 import http.RequestMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 public class HttpRequest implements AutoCloseable {
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
 
+    private RequestFirstLine requestFirstLine;
     private RequestHeader requestHeader;
     private RequestBody requestBody;
 
@@ -20,6 +20,8 @@ public class HttpRequest implements AutoCloseable {
 
     public HttpRequest(InputStream in) throws IOException {
         bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+        this.requestFirstLine = new RequestFirstLine(bufferedReader.readLine());
+
         this.requestHeader = new RequestHeader(bufferedReader);
 
         if (requestHeader.contains(HTTP.CONTENT_LENGTH)) {
@@ -29,15 +31,15 @@ public class HttpRequest implements AutoCloseable {
     }
 
     public RequestMethod getMethod() {
-        return RequestMethod.valueOf(requestHeader.getHeaderContents(HttpRequestCoreInfo.METHOD.name()));
+        return requestFirstLine.getMethod();
     }
 
     public String getPath() {
-        return requestHeader.getHeaderContents(HttpRequestCoreInfo.PATH.name());
+        return requestFirstLine.getPath();
     }
 
     public String getQueryString() {
-        return decode(requestHeader.getHeaderContents(HttpRequestCoreInfo.QUERY_STRING.name()));
+        return decode(requestFirstLine.getQuery());
     }
 
     public String getBody() {
