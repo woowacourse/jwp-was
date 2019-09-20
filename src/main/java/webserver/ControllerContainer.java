@@ -3,9 +3,9 @@ package webserver;
 import com.google.common.collect.Maps;
 import controller.AbstractController;
 import controller.UserCreateController;
-import http.HttpResponse;
 import http.request.HttpRequest;
-import http.response.DefaultView;
+import http.response.HttpResponse;
+import http.response.view.DefaultView;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -29,6 +29,6 @@ public class ControllerContainer {
             maybeController.get().service(httpRequest, httpResponse);
             return;
         }
-        httpResponse.write(new DefaultView(httpRequest.getPath()));
+        httpResponse.render(new DefaultView(httpRequest.getPath()));
     }
 }

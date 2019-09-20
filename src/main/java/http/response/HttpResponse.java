@@ -1,6 +1,7 @@
-package http;
+package http.response;
 
-import http.response.View;
+import http.HTTP;
+import http.response.view.View;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,15 +12,35 @@ import java.io.OutputStream;
 public class HttpResponse implements AutoCloseable {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
+    private View view;
+
     private final DataOutputStream dataOutputStream;
 
     public HttpResponse(final OutputStream out) {
         dataOutputStream = new DataOutputStream(out);
     }
 
-    public void write(View view) {
-        writeHeader(view.getHeader());
-        writeBody(view.getBody());
+    public void render(View view) {
+        this.view = view;
+    }
+
+    public void addHeader(HTTP http, String value) {
+        view.addHeader(http, value);
+    }
+
+    public String getResponseHeader() {
+        return view.getHeader();
+    }
+
+    public byte[] getResponseBody() {
+        return view.getBody();
+    }
+
+    @Override
+    public void close() throws IOException {
+        writeHeader(getResponseHeader());
+        writeBody(getResponseBody());
+        dataOutputStream.close();
     }
 
     private void writeBody(byte[] body) {
@@ -39,8 +60,5 @@ public class HttpResponse implements AutoCloseable {
         }
     }
 
-    @Override
-    public void close() throws IOException {
-        dataOutputStream.close();
-    }
+
 }

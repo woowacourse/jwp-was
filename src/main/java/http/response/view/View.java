@@ -1,7 +1,7 @@
-package http.response;
+package http.response.view;
 
 import http.HTTP;
-import http.HttpStatus;
+import http.response.ResponseStatus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,9 +14,9 @@ public abstract class View {
         this.body = "".getBytes();
     }
 
-    String getHeader(HttpStatus httpStatus) {
+    String getHeader(ResponseStatus responseStatus) {
         StringBuffer sb = new StringBuffer();
-        sb.append(HTTP.VERSION.getPhrase()).append(" ").append(httpStatus.getInfo()).append("\r\n");
+        sb.append(HTTP.VERSION.getPhrase()).append(" ").append(responseStatus.getInfo()).append("\r\n");
 
         for (HTTP key : HTTP.values()) {
             if (header.containsKey(key)) {
@@ -32,5 +32,9 @@ public abstract class View {
 
     public byte[] getBody() {
         return body;
+    }
+
+    public void addHeader(HTTP key, String value) {
+        header.put(key, value);
     }
 }

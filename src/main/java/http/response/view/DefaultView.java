@@ -1,8 +1,8 @@
-package http.response;
+package http.response.view;
 
 import http.ContentType;
 import http.HTTP;
-import http.HttpStatus;
+import http.response.ResponseStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
@@ -19,13 +19,9 @@ public class DefaultView extends View {
         header.put(HTTP.CONTENT_LENGTH, String.valueOf(body.length));
     }
 
-    public void addHeader(HTTP key, String value) {
-        header.put(key, value);
-    }
-
     @Override
     public String getHeader() {
-        return super.getHeader(HttpStatus.OK);
+        return super.getHeader(ResponseStatus.OK);
     }
 
     private byte[] findBody(String path) throws IOException, URISyntaxException {

@@ -1,7 +1,5 @@
-package view;
+package http.response.view;
 
-import http.response.RedirectView;
-import http.response.View;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;

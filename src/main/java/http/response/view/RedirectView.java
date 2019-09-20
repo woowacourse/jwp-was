@@ -1,7 +1,7 @@
-package http.response;
+package http.response.view;
 
 import http.HTTP;
-import http.HttpStatus;
+import http.response.ResponseStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,6 +14,6 @@ public class RedirectView extends View {
 
     @Override
     public String getHeader() {
-        return super.getHeader(HttpStatus.FOUND);
+        return super.getHeader(ResponseStatus.FOUND);
     }
 }

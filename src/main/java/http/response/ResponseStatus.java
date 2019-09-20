@@ -1,13 +1,13 @@
-package http;
+package http.response;
 
-public enum HttpStatus {
+public enum ResponseStatus {
     OK(200, "OK"),
     FOUND(302, "Found");
 
     private int code;
     private String phrase;
 
-    HttpStatus(int code, String phrase) {
+    ResponseStatus(int code, String phrase) {
         this.code = code;
         this.phrase = phrase;
     }

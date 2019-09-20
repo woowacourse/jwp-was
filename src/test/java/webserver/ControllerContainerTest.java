@@ -1,9 +1,9 @@
 package webserver;
 
 import db.DataBase;
-import http.HttpResponse;
 import http.request.HttpRequest;
-import http.response.DefaultView;
+import http.response.HttpResponse;
+import http.response.view.DefaultView;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -48,7 +48,7 @@ class ControllerContainerTest {
 
         ByteArrayOutputStream testOut = new ByteArrayOutputStream();
         HttpResponse testHttpResponse = new HttpResponse(testOut);
-        testHttpResponse.write(new DefaultView(httpRequest.getPath()));
+        testHttpResponse.render(new DefaultView(httpRequest.getPath()));
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         HttpResponse httpResponse = new HttpResponse(out);

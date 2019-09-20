@@ -18,16 +18,13 @@ public class HttpRequest implements AutoCloseable {
 
     private BufferedReader bufferedReader;
 
-    public HttpRequest(InputStream in) {
-        try {
-            bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-            this.requestHeader = new RequestHeader(bufferedReader);
-            if (requestHeader.contains(HTTP.CONTENT_LENGTH)) {
-                this.requestBody = new RequestBody(bufferedReader,
-                        Integer.parseInt(requestHeader.getHeaderContents(HTTP.CONTENT_LENGTH.getPhrase())));
-            }
-        } catch (IOException e) {
-            logger.error(e.getMessage());
+    public HttpRequest(InputStream in) throws IOException {
+        bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+        this.requestHeader = new RequestHeader(bufferedReader);
+
+        if (requestHeader.contains(HTTP.CONTENT_LENGTH)) {
+            this.requestBody = new RequestBody(bufferedReader,
+                    Integer.parseInt(requestHeader.getHeaderContents(HTTP.CONTENT_LENGTH.getPhrase())));
         }
     }
 

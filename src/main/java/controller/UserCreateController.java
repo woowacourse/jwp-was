@@ -1,9 +1,9 @@
 package controller;
 
 import db.DataBase;
-import http.HttpResponse;
 import http.request.HttpRequest;
-import http.response.RedirectView;
+import http.response.HttpResponse;
+import http.response.view.RedirectView;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +16,7 @@ public class UserCreateController extends AbstractController {
     void doPost(HttpRequest request, HttpResponse response) {
         try {
             DataBase.addUser(User.fromMap(QueryStringUtils.parse(request.getBody())));
-            response.write(new RedirectView("/index.html"));
+            response.render(new RedirectView("/index.html"));
 
         } catch (IllegalAccessException e) {
             log.error(e.getMessage());
