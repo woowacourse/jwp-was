@@ -3,8 +3,8 @@ package controller;
 import db.DataBase;
 import http.request.HttpRequest;
 import http.request.QueryParams;
+import http.response.Http302ResponseEntity;
 import http.response.HttpResponseEntity;
-import http.response.HttpStatus;
 import model.User;
 
 public class UserController extends AbstractController {
@@ -14,6 +14,6 @@ public class UserController extends AbstractController {
         User user = new User(queryParams.getParam("userId"), queryParams.getParam("password"),
                 queryParams.getParam("name"), queryParams.getParam("email"));
         DataBase.addUser(user);
-        return new HttpResponseEntity("index.html", HttpStatus.FOUND);
+        return new Http302ResponseEntity("/index.html");
     }
 }

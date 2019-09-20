@@ -2,8 +2,8 @@ package controller;
 
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
+import http.response.Http302ResponseEntity;
 import http.response.HttpResponseEntity;
-import http.response.HttpStatus;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -14,8 +14,9 @@ import java.io.InputStream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UserControllerTest {
-    private UserController userController = new UserController();
     private static final String TEST_DIRECTORY = "./src/test/resources/";
+
+    private UserController userController = new UserController();
 
     @Test
     void user_생성() throws IOException {
@@ -23,7 +24,7 @@ class UserControllerTest {
         HttpRequest httpRequest = HttpRequestFactory.makeHttpRequest(in);
 
         HttpResponseEntity responseEntity = userController.doPost(httpRequest);
-        assertThat(responseEntity.getViewTemplatePath()).isEqualTo("index.html");
-        assertThat(responseEntity.getStatus()).isEqualTo(HttpStatus.FOUND);
+
+        assertThat(responseEntity).isEqualTo(new Http302ResponseEntity("/index.html"));
     }
 }
