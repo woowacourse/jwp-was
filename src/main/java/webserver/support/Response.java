@@ -21,6 +21,7 @@ public class Response {
         if (header.isOk()) {
             writeHeader(dos, response200Header());
             writeBody(dos);
+            return;
         }
         writeHeader(dos, response302Header());
     }
