@@ -95,5 +95,4 @@ public class HttpResponse {
             dos.write(body, 0, body.length);
         }
     }
-
 }
