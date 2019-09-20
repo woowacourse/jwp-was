@@ -27,13 +27,13 @@ public class HttpRequestParser {
                 return parsePost(method, requestLineTokens[1], requestLineTokens[2], headerLines);
             }
             if (method == HttpMethod.GET) {
-                return parserGet(method, requestLineTokens[1], requestLineTokens[2], headerLines);
+                return parseGet(method, requestLineTokens[1], requestLineTokens[2], headerLines);
             }
             if (method == HttpMethod.PUT) {
                 return parsePost(method, requestLineTokens[1], requestLineTokens[2], headerLines);
             }
             if (method == HttpMethod.DELETE) {
-                return parserGet(method, requestLineTokens[1], requestLineTokens[2], headerLines);
+                return parseGet(method, requestLineTokens[1], requestLineTokens[2], headerLines);
             }
             throw new IllegalHttpRequestException();
 
@@ -56,7 +56,7 @@ public class HttpRequestParser {
         return new HttpRequest(method, httpUri, httpParameters, httpProtocol, headers);
     }
 
-    private static HttpRequest parserGet(HttpMethod method, String uri, String protocol, List<String> headerLines) {
+    private static HttpRequest parseGet(HttpMethod method, String uri, String protocol, List<String> headerLines) {
         HttpProtocols httpProtocol = HttpProtocols.of(protocol);
         HttpHeaders headers = new HttpHeaders(parseHeaders(headerLines));
         HttpParameters httpParameters = new HttpParameters();
