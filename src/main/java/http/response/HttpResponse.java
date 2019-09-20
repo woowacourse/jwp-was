@@ -44,4 +44,14 @@ public class HttpResponse {
             logger.error(e.getMessage());
         }
     }
+
+    public void response302Header(String location) {
+        try{
+            String header = "HTTP/1.1 302 Found\n" +
+                    "Location: " + location;
+            dos.writeBytes(header);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

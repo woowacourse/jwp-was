@@ -29,7 +29,8 @@ public class UserController extends AbstractController {
             DataBase.addUser(createUser(bodyData));
 
             // response 만들기
-            response.response200Header(0);
+            response.response302Header("/index.html");
+
         }
     }
 
