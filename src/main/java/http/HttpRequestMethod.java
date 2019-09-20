@@ -2,6 +2,8 @@ package http;
 
 import java.util.Arrays;
 
+import http.excption.NotSupportedHttpRequestMethodException;
+
 public enum HttpRequestMethod {
     GET("GET"),
     POST("POST");
@@ -20,7 +22,7 @@ public enum HttpRequestMethod {
         return Arrays.stream(values())
                 .filter(requestMethod -> requestMethod.contains(method))
                 .findFirst().orElseThrow(() ->
-                        new IllegalArgumentException("지원하지 않는 요청 메서드 입니다."));
+                        new NotSupportedHttpRequestMethodException("지원하지 않는 요청 메서드 입니다."));
     }
 
     private boolean contains(String method) {
