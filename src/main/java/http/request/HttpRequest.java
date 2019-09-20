@@ -4,17 +4,24 @@ import http.common.HttpHeader;
 import http.common.URL;
 
 public class HttpRequest {
-    private static final String CONTENT_TYPE = "Content-Type";
+    static final String CONTENT_TYPE = "Content-Type";
     private final RequestLine requestLine;
     private final HttpHeader httpHeader;
     private final RequestParameter requestParameter;
     private final String body;
 
     public HttpRequest(RequestLine requestLine, HttpHeader httpHeader, String body) {
+        checkValidHttpRequest(requestLine, httpHeader, body);
         this.requestLine = requestLine;
         this.httpHeader = httpHeader;
         this.body = body;
         this.requestParameter = createRequestParameter();
+    }
+
+    private void checkValidHttpRequest(RequestLine requestLine, HttpHeader httpHeader, String body) {
+        if (requestLine == null || httpHeader == null || body == null) {
+            throw new InvalidHttpRequestException();
+        }
     }
 
     private RequestParameter createRequestParameter() {
