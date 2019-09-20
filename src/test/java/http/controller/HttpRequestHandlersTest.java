@@ -13,13 +13,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class HttpRequestHandlersTest {
     private HttpRequestHandlers handlers = new HttpRequestHandlers();
-    private FileResourceRequestHandler fileResourceRequestHandler;
-    private ModelRequestHandler modelRequestHandler;
+    private HttpRequestHandler fileResourceRequestHandler;
+    private HttpRequestHandler modelRequestHandler;
 
     @BeforeEach
     void setUp() {
         fileResourceRequestHandler = new FileResourceRequestHandler();
-        modelRequestHandler = new ModelRequestHandler();
+        modelRequestHandler = new UserRequestHandler();
         handlers.addHandler(new RequestMapping(HttpMethod.GET, "/*"), fileResourceRequestHandler);
         handlers.addHandler(new RequestMapping(HttpMethod.GET, "/user/create"), modelRequestHandler);
     }
