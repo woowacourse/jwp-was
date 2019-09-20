@@ -7,15 +7,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class FileIoUtils {
-    public static byte[] loadFileFromClasspath(String filePath) throws IOException, URISyntaxException {
-        String checkPath = "./static/" + filePath;
+    public static boolean isExistFile(String filePath) throws URISyntaxException {
         try {
-            Path path = Paths.get(FileIoUtils.class.getClassLoader().getResource(checkPath).toURI());
-            return Files.readAllBytes(path);
+            return Files.exists(Paths.get(FileIoUtils.class.getClassLoader().getResource(filePath).toURI()));
         } catch (NullPointerException e) {
-            checkPath = "./templates/" + filePath;
-            Path path = Paths.get(FileIoUtils.class.getClassLoader().getResource(checkPath).toURI());
-            return Files.readAllBytes(path);
+            return false;
         }
+    }
+
+    public static byte[] loadFileFromClasspath(String filePath) throws IOException, URISyntaxException {
+        Path path = Paths.get(FileIoUtils.class.getClassLoader().getResource(filePath).toURI());
+        return Files.readAllBytes(path);
     }
 }
