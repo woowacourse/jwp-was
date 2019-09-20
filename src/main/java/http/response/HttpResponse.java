@@ -2,6 +2,7 @@ package http.response;
 
 import http.common.HttpHeader;
 import http.common.ContentType;
+import http.response.exception.InvalidHttpResponseException;
 
 import java.util.Arrays;
 
@@ -11,9 +12,16 @@ public class HttpResponse {
     private final byte[] body;
 
     public HttpResponse(StatusLine statusLine, HttpHeader httpHeader, byte[] body) {
+        checkValidHttpResponse(statusLine, httpHeader);
         this.statusLine = statusLine;
         this.httpHeader = httpHeader;
         this.body = body;
+    }
+
+    private void checkValidHttpResponse(StatusLine statusLine, HttpHeader httpHeader) {
+        if (statusLine == null || httpHeader == null) {
+            throw new InvalidHttpResponseException();
+        }
     }
 
     public static HttpResponse found(String location) {

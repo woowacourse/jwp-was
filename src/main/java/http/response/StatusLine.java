@@ -1,5 +1,6 @@
 package http.response;
 
+import http.response.exception.InvalidStatusLineException;
 import utils.StringUtils;
 
 public class StatusLine {
