@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import http.excption.InvalidRequestException;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -19,19 +21,19 @@ public class HttpRequestLineTest {
     @DisplayName("HttpRequestLine 의 요청 메서드가 일치하는지 확인한다.")
     @Test
     void getMethodFromHttpRequestLine() {
-        assertEquals(httpRequestLine.getMethod(), "GET");
+        assertEquals(httpRequestLine.getMethod(), HttpRequestMethod.GET);
     }
 
     @DisplayName("HttpRequestLine 의 Url 이 일치하는지 확인한다.")
     @Test
     void getUrlFromHttpRequestLine() {
-        assertEquals(httpRequestLine.getUrl(), "/index.html");
+        assertEquals(httpRequestLine.getUrl(), HttpRequestUrl.of("/index.html"));
     }
 
     @DisplayName("HttpRequestLine 의 요청 메서드가 일치하는지 확인한다.")
     @Test
     void getProtocolFromHttpRequestLine() {
-        assertEquals(httpRequestLine.getProtocol(), "HTTP/1.1");
+        assertEquals(httpRequestLine.getProtocol(), HttpProtocol.of("HTTP/1.1"));
     }
 
     @DisplayName("적절하지 않은 요청은 에러가 발생한다.")
