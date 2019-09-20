@@ -4,11 +4,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class PlainStringParser implements KeyValueParser {
+public class SimpleStringParser implements KeyValueParser {
     private final String pairDelimiter;
     private final String keyValueDelimiter;
 
-    protected PlainStringParser(String pairDelimiter, String keyValueDelimiter) {
+    protected SimpleStringParser(String pairDelimiter, String keyValueDelimiter) {
         this.pairDelimiter = pairDelimiter;
         this.keyValueDelimiter = keyValueDelimiter;
     }

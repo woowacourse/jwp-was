@@ -26,6 +26,7 @@ public class HttpContentType {
         put(TEXT_HTML, new HttpContentType(Chemical.TEXT, "html"));
         put(TEXT_CSS, new HttpContentType(Chemical.TEXT, "css"));
         put(APPLICATION_JSON, new HttpContentType(Chemical.APPLICATION, "json"));
+        put("text/plain", new HttpContentType(Chemical.TEXT, "plain"));
     }};
     private static final String DEFAULT = TEXT_HTML;
 
