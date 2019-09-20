@@ -6,7 +6,7 @@ public class Url {
 
     public Url(final String url) {
         this.url = url;
-        httpRequestType = HttpRequestType.value(url);
+        httpRequestType = HttpRequestType.of(url);
     }
 
     public String getFullUrl() {

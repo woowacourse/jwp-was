@@ -17,7 +17,7 @@ public enum HttpRequestType {
         this.requestTypeChecker = requestTypeChecker;
     }
 
-    public static HttpRequestType value(String url) {
+    public static HttpRequestType of(String url) {
         return Arrays.stream(HttpRequestType.values())
                 .filter(httpRequestType -> httpRequestType.requestTypeChecker.test(url))
                 .findFirst()

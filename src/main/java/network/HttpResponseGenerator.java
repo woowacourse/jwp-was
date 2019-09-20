@@ -21,7 +21,7 @@ public class HttpResponseGenerator {
         HttpResponseConverter.response2xx(dos, generateHttpResponse(
                 HttpVersion.HTTP_1_1,
                 HttpStatus.OK,
-                HttpHeader.of(Arrays.asList()),
+                HttpHeader.of(Arrays.asList("Content-Type: " + HttpContentType.of(url).getContentType())),
                 HttpResponseBody.of(
                         FileIoUtils.loadFileFromClasspath(url)
                 )
