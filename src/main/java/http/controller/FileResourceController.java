@@ -2,10 +2,18 @@ package http.controller;
 
 import http.model.HttpRequest;
 import http.model.HttpUri;
+import http.supoort.RequestMapping;
 import http.view.ModelAndView;
 import http.view.View;
 
-public class FileResourceRequestHandler implements HttpRequestHandler {
+public class FileResourceController extends AbstractController {
+    public FileResourceController(RequestMapping requestMapping) {
+        super(requestMapping);
+    }
+
+    public FileResourceController(RequestMapping... mappings) {
+        super(mappings);
+    }
 
     @Override
     public ModelAndView handle(HttpRequest httpRequest) {

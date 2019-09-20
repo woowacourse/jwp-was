@@ -16,7 +16,7 @@ class UserRequestHandlerTest {
         String request = "GET /user/create?userId=andole&password=password&name=andole&email=andole@andole.com HTTP/1.1";
         HttpRequest httpRequest = HttpRequestParser.parse(new ByteArrayInputStream(request.getBytes()));
 
-        HttpRequestHandler handler = new UserRequestHandler();
+        Controller handler = new UserRequestHandler();
         User result = (User) handler.handle(httpRequest).getModel().getAttributes("user");
 
         assertThat(result).isEqualTo(user);
