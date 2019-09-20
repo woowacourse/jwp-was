@@ -1,15 +1,12 @@
 package http.request;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class AbstractRequest implements Request {
     protected final RequestMethod requestMethod;
     protected final RequestPath requestPath;
     protected final RequestVersion requestVersion;
     protected final RequestHeader requestHeader;
-    protected Map<String, String> parameters;
 
     public AbstractRequest(List<String> lines, String[] tokens) {
         this.requestMethod = RequestMethod.from(tokens[0]);
@@ -19,8 +16,8 @@ public class AbstractRequest implements Request {
     }
 
     @Override
-    public Map<String, String> getParams() {
-        return parameters;
+    public RequestMethod getRequestMethod() {
+        return requestMethod;
     }
 
     @Override
@@ -28,15 +25,8 @@ public class AbstractRequest implements Request {
         return requestPath;
     }
 
-    RequestHeader getRequestHeader() {
+    @Override
+    public RequestHeader getRequestHeader() {
         return requestHeader;
-    }
-
-    protected void extractParameter(String[] params) {
-        Arrays.stream(params)
-                .forEach(param -> {
-                    String[] keyValues = param.split("=");
-                    parameters.put(keyValues[0], keyValues[1]);
-                });
     }
 }

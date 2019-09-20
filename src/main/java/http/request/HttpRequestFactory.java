@@ -8,15 +8,13 @@ import java.util.Map;
 
 public class HttpRequestFactory {
     private static final Map<RequestMethod, RequestCreator> requestCreators = new HashMap<>();
-    private static BufferedReader br;
 
     static {
         requestCreators.put(RequestMethod.GET, new GetRequestCreator());
         requestCreators.put(RequestMethod.POST, new PostRequestCreator());
     }
 
-    public static Request getRequest(String firstLine, List<String> lines, BufferedReader bufferedReader) throws IOException {
-        br = bufferedReader;
+    public static Request getRequest(String firstLine, List<String> lines) throws IOException {
         String[] tokens = getTokens(firstLine);
 
         RequestCreator requestCreator = requestCreators.get(RequestMethod.from(tokens[0]));
@@ -36,8 +34,8 @@ public class HttpRequestFactory {
 
     static class PostRequestCreator implements RequestCreator {
         @Override
-        public Request create(List<String> lines, String[] tokens) throws IOException {
-            return new PostRequest(lines, tokens, br);
+        public Request create(List<String> lines, String[] tokens) {
+            return new PostRequest(lines, tokens);
         }
     }
 }
