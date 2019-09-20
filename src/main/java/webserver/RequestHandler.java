@@ -30,7 +30,7 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             DataOutputStream dos = new DataOutputStream(out);
             RequestParser requestParser = new RequestParser(in);
-            Request request = new Request(requestParser.getHeaderInfo(),requestParser.getParameter(),requestParser.getMethod());
+            Request request = new Request(requestParser.getHeaderInfo(),requestParser.getParameter());
             String url = request.getUrl();
 
             String extension = url.substring(url.lastIndexOf(".") + 1);

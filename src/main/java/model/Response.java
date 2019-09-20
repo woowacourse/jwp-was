@@ -14,6 +14,9 @@ import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.tika.Tika;
 
@@ -22,10 +25,12 @@ public class Response {
 
     private DataOutputStream dos;
     private String classPath;
+    private Map<String, String> header;
 
     public Response(DataOutputStream dos, String classPath) {
         this.dos = dos;
         this.classPath = classPath;
+        header = new LinkedHashMap<>();
     }
 
     public void response200() {
@@ -37,15 +42,30 @@ public class Response {
 
             byte[] body = FileIoUtils.loadFileFromClasspath(classPath);
 
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: " + mimeType + ";charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + body.length + "\r\n");
-            dos.writeBytes("\r\n");
-
+            header.put("Status", "HTTP/1.1 200 OK \r\n");
+            header.put("Content-Type", mimeType + ";charset=utf-8\r\n");
+            header.put("Content-Length", body.length + "\r\n");
+            System.out.println("길이+"+body.length);
+            for (String key : header.keySet()) {
+                if(key.equals("Status")) {
+                    dos.writeBytes(header.get(key));
+                }
+                dos.writeBytes(key + ": " + header.get(key));
+                System.out.println("키"+header.get(key));
+            }
             responseBody(body);
+
+            //forward(body);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private void forward(byte[] body) throws IOException {
+        for (String key : header.keySet()) {
+            dos.writeBytes(key + ": " + header.get(key));
+        }
+        responseBody(body);
     }
 
     public void response300(String location) {
