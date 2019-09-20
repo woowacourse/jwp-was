@@ -1,15 +1,18 @@
 package webserver;
 
 import http.request.HttpRequest;
+import http.request.HttpRequestCreator;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 
-import java.io.*;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,12 +29,10 @@ public class RequestHandler implements Runnable {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
 
-        try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
+        try (InputStream inputStream = connection.getInputStream(); OutputStream outputStream = connection.getOutputStream()) {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
-            BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-            HttpRequest httpRequest = new HttpRequest(br);
-
-            sendResponse(out, getHttpResponse(httpRequest));
+            HttpRequest httpRequest = HttpRequestCreator.create(inputStream);
+            sendResponse(outputStream, getHttpResponse(httpRequest));
 
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
@@ -49,8 +50,7 @@ public class RequestHandler implements Runnable {
 
             if (result.startsWith("redirect: ")) {
                 String location = result.substring(result.indexOf(" ") + 1);
-                HttpResponse httpResponse = HttpResponse.found(location);
-                return httpResponse;
+                return HttpResponse.found(location);
             }
 
             return create200Response("./templates/" + path);
