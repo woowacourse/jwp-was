@@ -1,17 +1,19 @@
 package http;
 
+import http.excption.InvalidRequestException;
+
 public class HttpRequestLine {
 
-    private String method;
-    private String url;
-    private String protocol;
+    private HttpRequestMethod method;
+    private HttpRequestUrl url;
+    private HttpProtocol protocol;
 
     public HttpRequestLine(String firstLine) {
         String[] splitFirstLine = firstLine.split(" ");
         checkSplitLength(splitFirstLine);
-        this.method = splitFirstLine[0];
-        this.url = splitFirstLine[1];
-        this.protocol = splitFirstLine[2];
+        this.method = HttpRequestMethod.of(splitFirstLine[0]);
+        this.url = HttpRequestUrl.of(splitFirstLine[1]);
+        this.protocol = HttpProtocol.of(splitFirstLine[2]);
     }
 
     private void checkSplitLength(String[] splitFirstLine) {
@@ -20,15 +22,15 @@ public class HttpRequestLine {
         }
     }
 
-    public String getMethod() {
+    public HttpRequestMethod getMethod() {
         return method;
     }
 
-    public String getUrl() {
+    public HttpRequestUrl getUrl() {
         return url;
     }
 
-    public String getProtocol() {
+    public HttpProtocol getProtocol() {
         return protocol;
     }
 }

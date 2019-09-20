@@ -1,4 +1,4 @@
-package http;
+package http.excption;
 
 public class NotFoundHeaderException extends RuntimeException {
     public NotFoundHeaderException(String message) {

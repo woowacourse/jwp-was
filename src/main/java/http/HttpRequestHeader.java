@@ -2,6 +2,8 @@ package http;
 
 import java.util.Map;
 
+import http.excption.NotFoundHeaderException;
+
 public class HttpRequestHeader {
 
     private final Map<String, String> headers;
