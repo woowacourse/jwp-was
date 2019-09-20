@@ -1,27 +1,23 @@
 package model;
 
+import org.apache.tika.Tika;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import webserver.RequestHandler;
 
-import javax.activation.MimetypesFileTypeMap;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.URLConnection;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.TreeMap;
-
-import org.apache.tika.Tika;
 
 public class Response {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final String STATUS = "Status";
 
     private DataOutputStream dos;
     private String classPath;
@@ -42,38 +38,21 @@ public class Response {
 
             byte[] body = FileIoUtils.loadFileFromClasspath(classPath);
 
-            header.put("Status", "HTTP/1.1 200 OK \r\n");
+            header.put(STATUS, "HTTP/1.1 200 OK \r\n");
             header.put("Content-Type", mimeType + ";charset=utf-8\r\n");
             header.put("Content-Length", body.length + "\r\n");
-            System.out.println("길이+"+body.length);
-            for (String key : header.keySet()) {
-                if(key.equals("Status")) {
-                    dos.writeBytes(header.get(key));
-                }
-                dos.writeBytes(key + ": " + header.get(key));
-                System.out.println("키"+header.get(key));
-            }
-            responseBody(body);
 
-            //forward(body);
+            forward(body);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void forward(byte[] body) throws IOException {
-        for (String key : header.keySet()) {
-            dos.writeBytes(key + ": " + header.get(key));
-        }
-        responseBody(body);
-    }
-
     public void response300(String location) {
         try {
-            dos.writeBytes("HTTP/1.1 302 Found \r\n");
-            dos.writeBytes("Location: " + location + "\r\n");
-            dos.writeBytes("\r\n");
-            dos.flush();
+            header.put(STATUS, "HTTP/1.1 302 Found \r\n");
+            header.put("Location", location + "\r\n");
+            sendRedirect();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -86,5 +65,26 @@ public class Response {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private void forward(byte[] body) throws IOException {
+        writeResponse();
+        responseBody(body);
+    }
+
+    private void sendRedirect() throws IOException {
+        writeResponse();
+        dos.flush();
+    }
+
+    private void writeResponse() throws IOException {
+        for (String key : header.keySet()) {
+            if (key.equals(STATUS)) {
+                dos.writeBytes(header.get(key));
+            }
+            dos.writeBytes(key + ": " + header.get(key));
+        }
+
+        dos.writeBytes("\r\n");
     }
 }
