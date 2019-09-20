@@ -1,26 +1,34 @@
-package webserver.controller;
+package controller;
 
 import db.DataBase;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.ParameterParser;
 
-import java.io.UnsupportedEncodingException;
+import java.io.IOException;
 import java.net.URLDecoder;
+import java.util.Arrays;
 import java.util.Map;
 
-public class UserController extends AbstractController {
+public class UserController extends BasicController {
+    private static final Logger log = LoggerFactory.getLogger(UserController.class);
     @Override
-    public void doGet(HttpRequest request, HttpResponse response) {
+    public HttpResponse doGet(HttpRequest request, HttpResponse response) throws IOException {
         if(request.hasParameters()) {
             DataBase.addUser(createUser(request));
-            response.response200Header(0, "text/html");
+            response.responseStartLine("HTTP/1.1 200 OK");
+            response.responseHeader();
         }
+        return response;
     }
 
     @Override
-    public void doPost(HttpRequest request, HttpResponse response) throws UnsupportedEncodingException {
+    public HttpResponse doPost(HttpRequest request, HttpResponse response) throws IOException {
+        log.debug("{}", request.hasBody());
+
         if(request.hasBody()) {
             String body = request.getBody().toString();
             body = URLDecoder.decode(body, "UTF-8");
@@ -29,9 +37,14 @@ public class UserController extends AbstractController {
             DataBase.addUser(createUser(bodyData));
 
             // response 만들기
-            response.response302Header("/index.html");
-
+            //헤더 없고 쓰는거 없고
+            response.addHeader(Arrays.asList("Location: /index.html\r\n"));
+            response.responseStartLine("HTTP/1.1 302 FOUND\r\n");
+            response.responseHeader();
+            response.responseBody(new byte[]{});
         }
+
+        return response;
     }
 
     private User createUser(HttpRequest request) {

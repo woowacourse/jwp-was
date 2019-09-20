@@ -1,5 +1,6 @@
 package http.request;
 
+import http.HttpHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.IOUtils;
@@ -18,14 +19,14 @@ public class HttpRequest {
     private static final String CONTENT_LENGTH = "Content-Length";
 
     private HttpRequestStartLine httpRequestStartLine;
-    private HttpRequestHeader httpRequestHeader;
+    private HttpHeader httpHeader;
     private HttpBody httpBody;
 
     private HttpRequest(InputStream in) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 
         initializeStart(br);
-
+        log.debug("method: {} {}", httpRequestStartLine.getHttpMethod(), httpRequestStartLine.getPath());
         initializeHeader(br);
 
         initializeBody(br);
@@ -53,15 +54,15 @@ public class HttpRequest {
             }
             httpRequestHeaderLines.add(line);
         }
-        httpRequestHeader = HttpRequestHeader.of(httpRequestHeaderLines);
+        httpHeader = HttpHeader.of(httpRequestHeaderLines);
     }
 
     private void initializeBody(BufferedReader br) throws IOException {
-        if(!httpRequestHeader.contains(CONTENT_LENGTH)) {
+        if(!httpHeader.contains(CONTENT_LENGTH)) {
             log.debug("body가 없습니다.");
             return;
         }
-        int contentLength = Integer.parseInt(httpRequestHeader.getHeader(CONTENT_LENGTH));
+        int contentLength = Integer.parseInt(httpHeader.getHeader(CONTENT_LENGTH));
         httpBody = HttpBody.of(IOUtils.readData(br, contentLength));
     }
 
@@ -82,7 +83,7 @@ public class HttpRequest {
     }
 
     public String getHeader(String key) {
-        return httpRequestHeader.getHeader(key);
+        return httpHeader.getHeader(key);
     }
 
     public String getParameter(String key) {

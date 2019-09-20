@@ -1,10 +1,14 @@
 package http.request;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.UnsupportedEncodingException;
 
 public class HttpRequestStartLine {
     private static final String LINE_SPLITTER = " ";
     private static final String QUERY_SPLITTER = "\\?";
+    private static final Logger log = LoggerFactory.getLogger(HttpRequestStartLine.class);
 
     private final HttpMethod httpMethod;
     private final String path;

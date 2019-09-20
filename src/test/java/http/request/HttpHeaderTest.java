@@ -1,5 +1,6 @@
 package http.request;
 
+import http.HttpHeader;
 import http.request.exception.NotFoundHttpRequestHeader;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +12,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class HttpRequestHeaderTest {
+class HttpHeaderTest {
 
     @Test
     void of_올바른경우() {
@@ -20,7 +21,7 @@ class HttpRequestHeaderTest {
                 "Connection: keep-alive",
                 "Accept: */*"
         );
-        HttpRequestHeader httpRequestHeader = HttpRequestHeader.of(headerLines);
+        HttpHeader httpHeader = HttpHeader.of(headerLines);
 
         Map<String, String> expectedHeaders = new HashMap<>();
         expectedHeaders.put("Host", "localhost:8080");
@@ -29,7 +30,7 @@ class HttpRequestHeaderTest {
 
         for (String expectedKey : expectedHeaders.keySet()) {
             assertThat(expectedHeaders.get(expectedKey))
-                    .isEqualTo(httpRequestHeader.getHeader(expectedKey));
+                    .isEqualTo(httpHeader.getHeader(expectedKey));
         }
     }
 
@@ -40,10 +41,10 @@ class HttpRequestHeaderTest {
                 "Connection: keep-alive",
                 "Accept: */*"
         );
-        HttpRequestHeader httpRequestHeader = HttpRequestHeader.of(headerLines);
+        HttpHeader httpHeader = HttpHeader.of(headerLines);
 
         String notExistKey = "notExist";
-        assertThrows(NotFoundHttpRequestHeader.class, () -> httpRequestHeader.getHeader(notExistKey));
+        assertThrows(NotFoundHttpRequestHeader.class, () -> httpHeader.getHeader(notExistKey));
 
     }
 }

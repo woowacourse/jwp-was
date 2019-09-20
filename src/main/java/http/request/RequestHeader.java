@@ -1,4 +1,6 @@
-package webserver;
+package http.request;
+
+import webserver.RequestMethodType;
 
 public class RequestHeader {
 
