@@ -1,8 +1,7 @@
 package http.request;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class RequestHeader {
@@ -15,13 +14,11 @@ public class RequestHeader {
         this.requestHeader = requestHeader;
     }
 
-    public static RequestHeader of(BufferedReader br) throws IOException {
+    public static RequestHeader of(List<String> header) {
         RequestHeader requestHeader = new RequestHeader(new HashMap<>());
-        String header;
-        while (!(header = br.readLine()).equals("")) {
-            requestHeader.put(header);
+        for (String headerLine : header) {
+            requestHeader.put(headerLine);
         }
-
         return requestHeader;
     }
 
