@@ -16,19 +16,32 @@ public class ResponseHeader {
                            final Map<String, String> responseFields) {
         this.protocol = protocol;
         this.httpStatus = httpStatus;
-        this.responseFields = Collections.unmodifiableMap(responseFields);
+        this.responseFields = responseFields;
     }
 
     public static class Builder {
         private static final String HTTP_1_1 = "HTTP/1.1";
 
-        private String protocol = HTTP_1_1;
-        private HttpStatus httpStatus = HttpStatus.OK;
+        private String protocol;
+        private HttpStatus httpStatus;
         private Map<String, String> responseFields = new HashMap<>();
 
         public Builder(final String protocol, final HttpStatus httpStatus) {
             this.protocol = protocol;
             this.httpStatus = httpStatus;
+            this.responseFields.put("Content-Type", "text/html; charset=utf-8");
+        }
+
+        public Builder(final String protocol) {
+            this(protocol, HttpStatus.OK);
+        }
+
+        public Builder(final HttpStatus httpStatus) {
+            this(HTTP_1_1, httpStatus);
+        }
+
+        public Builder() {
+            this(HTTP_1_1, HttpStatus.OK);
         }
 
         public Builder protocol(final String protocol) {
@@ -52,6 +65,11 @@ public class ResponseHeader {
             return this;
         }
 
+        public Builder contentType(final String contentType) {
+            this.responseFields.replace("Content-Type", contentType + "; charset=utf-8");
+            return this;
+        }
+
         public ResponseHeader build() {
             return new ResponseHeader(this.protocol, this.httpStatus, this.responseFields);
         }
@@ -66,11 +84,16 @@ public class ResponseHeader {
     }
 
     public Map<String, String> getResponseFields() {
-        return responseFields;
+        return Collections.unmodifiableMap(this.responseFields);
+    }
+
+    public String getFieldValue(final String fieldKey) {
+        return this.responseFields.getOrDefault(fieldKey, "");
     }
 
     // TODO 이름 바꾸자
-    public String make() {
+    public String make(final int contentLength) {
+        this.responseFields.put("Content-Length", Integer.toString(contentLength));
         return this.protocol + " " + httpStatus.toString() + NEW_LINE
                 + this.responseFields.entrySet().stream()
                 .map(entry -> entry.getKey() + ": " + entry.getValue())
