@@ -67,6 +67,7 @@ public class Response {
                 "Location: " + header.getLocation() + "\r\n" +
                 "\r\n";
     }
+
     private void writeHeader(DataOutputStream dos, String message) {
         try {
             dos.writeBytes(message);
