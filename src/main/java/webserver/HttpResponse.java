@@ -11,7 +11,7 @@ public class HttpResponse {
     private final Map<String, String> headers;
     private byte[] body;
 
-    HttpResponse() {
+    public HttpResponse() {
         this.status = null;
         this.contentType = null;
         this.headers = new HashMap<>();
