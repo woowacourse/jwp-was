@@ -49,4 +49,8 @@ public class HttpRequestStartLine {
     public String getParameter(String key) {
         return httpRequestParameters.getParameter(key);
     }
+
+    public boolean hasParamaters() {
+        return !httpRequestParameters.equals(HttpRequestParameter.EMPTY_PARAMETER);
+    }
 }

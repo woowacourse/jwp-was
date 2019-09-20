@@ -1,12 +1,13 @@
 package webserver;
 
-import http.Controller;
 import http.request.HttpRequest;
 import http.response.DataOutputStreamWrapper;
 import http.response.HttpResponse;
-import http.response.IndexController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.controller.Controller;
+import webserver.controller.TemplatesController;
+import webserver.controller.UserController;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -32,13 +33,27 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = HttpRequest.of(in);
             DataOutputStreamWrapper dos = new DataOutputStreamWrapper(new DataOutputStream(out));
             HttpResponse httpResponse = HttpResponse.of(dos);
-            Controller controller =  new IndexController();
+
+            Controller controller = route(httpRequest);
             controller.service(httpRequest, httpResponse);
+
         } catch (IOException e) {
             logger.error(e.getMessage());
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
+    }
+
+    private Controller route(HttpRequest httpRequest) {
+        if(httpRequest.getPath().contains(".html")) {
+            return new TemplatesController();
+       }
+
+        if(httpRequest.getPath().equals("/user/create")) {
+            return new UserController();
+        }
+
+        throw new BadRequestException();
     }
 
 }

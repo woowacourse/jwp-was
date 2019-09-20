@@ -65,6 +65,10 @@ public class HttpRequest {
         httpBody = HttpBody.of(IOUtils.readData(br, contentLength));
     }
 
+    public boolean hasParameters() {
+        return httpRequestStartLine.hasParamaters();
+    }
+
     public HttpMethod getHttpMethod() {
         return httpRequestStartLine.getHttpMethod();
     }
