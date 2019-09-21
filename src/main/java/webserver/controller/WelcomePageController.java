@@ -15,13 +15,13 @@ public class WelcomePageController implements Controller {
     @Override
     public String service(HttpRequest request) {
         if (request.getMethod().equals("GET")) {
-            return doGet(request);
+            return doGet();
         }
 
         throw new IllegalArgumentException("지원 하지 않는 Http Method 타입입니다.");
     }
 
-    private String doGet(HttpRequest request) {
+    private String doGet() {
         return "/index.html";
     }
 }
