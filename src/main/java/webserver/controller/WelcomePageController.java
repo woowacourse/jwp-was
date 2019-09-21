@@ -11,7 +11,6 @@ public class WelcomePageController implements Controller {
         return INSTANCE;
     }
 
-
     @Override
     public String service(HttpRequest request) {
         if (request.getMethod().equals("GET")) {

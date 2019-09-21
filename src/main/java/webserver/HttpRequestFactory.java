@@ -31,7 +31,7 @@ public class HttpRequestFactory {
 
         HttpRequestBody httpRequestBody = null;
         if (httpStartLine.isGet()) {
-            httpRequestBody = HttpRequestBody.Empty();
+            httpRequestBody = HttpRequestBody.empty();
         }
 
         if (httpStartLine.isPost()) {

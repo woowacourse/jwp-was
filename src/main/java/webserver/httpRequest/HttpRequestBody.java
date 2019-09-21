@@ -33,7 +33,7 @@ public class HttpRequestBody {
         return new HttpRequestBody(params);
     }
 
-    public static HttpRequestBody Empty() {
+    public static HttpRequestBody empty() {
         Map<String, String> parameters = new HashMap<>();
         return new HttpRequestBody(parameters);
     }
