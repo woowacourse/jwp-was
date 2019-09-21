@@ -1,7 +1,7 @@
 package http;
 
 public enum HttpMediaType {
-    HTML("html/text"), CSS("text/css");
+    HTML("text/html"), CSS("text/css");
 
     public static final HttpMediaType DEFAULT_MEDIA_TYPE = HTML;
 

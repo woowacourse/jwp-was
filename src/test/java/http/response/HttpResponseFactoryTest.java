@@ -19,7 +19,7 @@ class HttpResponseFactoryTest {
         httpResponse.setBody(body, DEFAULT_MEDIA_TYPE);
 
         String headers = "HTTP/1.1 200 OK\r\n"
-                + "Content-Type: html/text\r\n"
+                + "Content-Type: " + DEFAULT_MEDIA_TYPE + "\r\n"
                 + "Content-Length: " + body.length + "\r\n"
                 + "\r\n";
 
@@ -50,7 +50,7 @@ class HttpResponseFactoryTest {
         httpResponse.setBody(body, DEFAULT_MEDIA_TYPE);
 
         String headers = "HTTP/1.1 404 Not Found\r\n"
-                + "Content-Type: html/text\r\n"
+                + "Content-Type: " + DEFAULT_MEDIA_TYPE + "\r\n"
                 + "Content-Length: " + body.length + "\r\n"
                 + "\r\n";
 
