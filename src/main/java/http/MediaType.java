@@ -33,4 +33,13 @@ public enum MediaType {
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);
     }
+
+    public static boolean isContain(String extension) {
+        return Arrays.stream(values())
+                .map(value -> extension.contains(value.extension))
+                .filter(value -> value)
+                .findFirst()
+                .orElse(false);
+
+    }
 }
