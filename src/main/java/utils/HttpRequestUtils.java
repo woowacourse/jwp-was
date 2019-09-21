@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import http.HttpRequestUrl;
+import http.MimeType;
 
 public class HttpRequestUtils {
 
@@ -47,5 +48,23 @@ public class HttpRequestUtils {
             return body;
         }
         return buildParams(bodyData, body);
+    }
+
+    public static boolean hasExtension(String path) {
+        return path.contains(".");
+    }
+
+    public static String extractExtension(String path) {
+        if (!path.contains(".")) {
+            throw new IllegalArgumentException("확장자가 없습니다.");
+        }
+        return path.substring(path.lastIndexOf("."));
+    }
+
+    public static String filePathBuilder(String path, MimeType mimeType) {
+        if (!mimeType.isHtml()) {
+            return "./static" + path;
+        }
+        return "./templates" + path;
     }
 }
