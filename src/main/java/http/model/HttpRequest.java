@@ -6,6 +6,7 @@ public class HttpRequest {
     private HttpParameters parameters;
     private HttpProtocols httpProtocol;
     private HttpHeaders httpHeaders;
+    private HttpSession httpSession;
 
     public HttpRequest(HttpMethod httpMethod, HttpUri httpUri, HttpProtocols httpProtocol, HttpParameters parameters, HttpHeaders httpHeaders) {
         this.httpMethod = httpMethod;
