@@ -1,12 +1,14 @@
 package http.request;
 
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class HttpRequestParams {
     private static final String QUERY_PARAM_DELIMITER = "&";
     private static final String KEY_VALUE_DELIMITER = "=";
+    private static final String EMPTY = "";
 
     private Map<String, String> queryParams;
 
@@ -14,36 +16,28 @@ public class HttpRequestParams {
         this.queryParams = Collections.unmodifiableMap(queryParams);
     }
 
-    public static HttpRequestParams init() {
-        return new HttpRequestParams(new HashMap<>());
-    }
-
     public static HttpRequestParams of(final String queryString) {
         return new HttpRequestParams(extractQueryParams(queryString));
     }
 
     private static Map<String, String> extractQueryParams(final String queryString) {
-        if ("".equals(queryString)) {
+        if (EMPTY.equals(queryString)) {
             return Collections.emptyMap();
         }
+
         return generateQueryParams(queryString);
     }
 
     private static Map<String, String> generateQueryParams(final String queryString) {
-        Map<String, String> parameters = new HashMap<>();
-        String[] params = queryString.split(QUERY_PARAM_DELIMITER);
-
-        for (String param : params) {
-            String[] tokens = param.split(KEY_VALUE_DELIMITER);
-            parameters.put(tokens[0], parseParamValue(tokens));
-        }
-
-        return parameters;
+        return Arrays.stream(queryString.split(QUERY_PARAM_DELIMITER))
+                .map(param -> param.split(KEY_VALUE_DELIMITER))
+                .collect(Collectors.toMap(param -> param[0], HttpRequestParams::parseParamValue))
+                ;
     }
 
     private static String parseParamValue(final String[] tokens) {
         if (tokens.length == 1) {
-            return "";
+            return EMPTY;
         }
 
         return tokens[1];
