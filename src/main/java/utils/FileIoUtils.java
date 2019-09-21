@@ -8,7 +8,14 @@ import java.nio.file.Paths;
 
 public class FileIoUtils {
     public static byte[] loadFileFromClasspath(String filePath) throws IOException, URISyntaxException {
-        Path path = Paths.get(FileIoUtils.class.getClassLoader().getResource(filePath).toURI());
+        Path path = Paths.get(FileIoUtils.class.getClassLoader().getResource(getResourcePath(filePath)).toURI());
         return Files.readAllBytes(path);
+    }
+
+    private static String getResourcePath(String path) {
+        if (path.endsWith(".html")) {
+            return "./templates" + path;
+        }
+        return "./static" + path;
     }
 }
