@@ -9,13 +9,8 @@ import java.io.IOException;
 public class Response {
     private static final Logger logger = LoggerFactory.getLogger(Response.class);
 
-    private final ResponseHeader header;
+    private ResponseHeader header;
     private ResponseBody body;
-
-    public Response(ResponseHeader header, ResponseBody body) {
-        this.header = header;
-        this.body = body;
-    }
 
     public Response(ResponseHeader header) {
         this.header = header;

@@ -10,16 +10,6 @@ public class ResponseHeader {
     private String location;
     private String url;
 
-    public ResponseHeader() {
-    }
-
-    public ResponseHeader(int statusCode, String type, String location, String url) {
-        this.statusCode = statusCode;
-        this.type = String.format("text/%s", type);
-        this.location = location;
-        this.url = url;
-    }
-
     public String getType() {
         return type;
     }
