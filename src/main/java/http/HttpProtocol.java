@@ -29,4 +29,11 @@ public enum HttpProtocol {
     private boolean contains(String protocol) {
         return this.protocol.contains(protocol);
     }
+
+    @Override
+    public String toString() {
+        return "HttpProtocol{" +
+                "protocol='" + protocol + '\'' +
+                '}';
+    }
 }

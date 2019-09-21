@@ -35,6 +35,15 @@ public class HttpRequestUrl {
         }
     }
 
+    public boolean hasParams() {
+        try {
+            checkQueryParamExist();
+            return true;
+        } catch (NoQueryParamsException e) {
+            return false;
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -48,12 +57,10 @@ public class HttpRequestUrl {
         return Objects.hash(url);
     }
 
-    public boolean hasParams() {
-        try {
-            checkQueryParamExist();
-            return true;
-        } catch (NoQueryParamsException e) {
-            return false;
-        }
+    @Override
+    public String toString() {
+        return "HttpRequestUrl{" +
+                "url='" + url + '\'' +
+                '}';
     }
 }

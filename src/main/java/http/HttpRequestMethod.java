@@ -29,4 +29,10 @@ public enum HttpRequestMethod {
         return this.method.contains(method);
     }
 
+    @Override
+    public String toString() {
+        return "HttpRequestMethod{" +
+                "method='" + method + '\'' +
+                '}';
+    }
 }

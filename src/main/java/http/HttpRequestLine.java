@@ -37,4 +37,13 @@ public class HttpRequestLine {
     public boolean hasUrlParams() {
         return url.hasParams();
     }
+
+    @Override
+    public String toString() {
+        return "HttpRequestLine{" +
+                "method=" + method +
+                ", url=" + url +
+                ", protocol=" + protocol +
+                '}';
+    }
 }
