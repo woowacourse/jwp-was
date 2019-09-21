@@ -10,15 +10,11 @@ import http.response.ResponseBody;
 import http.response.ResponseBodyParser;
 import http.response.StatusLine;
 import org.apache.tika.Tika;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-public class IndexController {
-
-    private static final Logger log = LoggerFactory.getLogger(IndexController.class);
+public class ResourceController {
 
     public HttpResponse doGet(HttpRequest httpRequest) throws IOException, URISyntaxException {
         StatusLine statusLine = new StatusLine(httpRequest.getHttpVersion(), HttpStatus.OK);

@@ -17,4 +17,8 @@ public class HttpUri {
     public String getQuery() {
         return this.uri.getQuery();
     }
+
+    public String findPathPrefix() {
+        return UriExtension.of(uri.getPath()).getPathPrefix();
+    }
 }

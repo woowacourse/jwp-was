@@ -19,6 +19,7 @@ public class Response200 extends HttpResponse {
     public void writeResponse(final DataOutputStream dos) {
         try {
             dos.writeBytes(statusLine.getHttpVersion() + " " + statusLine.getCodeAndStatus() + "\r\n");
+//            dos.writeBytes("Content-Type: " + responseHeader.findHeader("Content-Type") + "\r\n");
             dos.writeBytes("Content-Type: " + responseHeader.findHeader("Content-Type") + "\r\n");
             dos.writeBytes("Content-Length: " + responseHeader.findHeader("Content-Length") + "\r\n");
             dos.writeBytes("\r\n");

@@ -8,6 +8,6 @@ import java.net.URISyntaxException;
 public class ResponseBodyParser {
 
     public static ResponseBody parse(String filePath) throws IOException, URISyntaxException {
-        return new ResponseBody(FileIoUtils.loadFileFromClasspath("./templates" + filePath));
+        return new ResponseBody(FileIoUtils.loadFileFromClasspath(filePath));
     }
 }
