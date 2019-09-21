@@ -6,24 +6,24 @@ public class HttpRequest {
     private static final String BLANK = "";
     private static final String COLON = ":";
 
-    private RequestFirstLine requestFirstLine;
+    private RequestLine requestLine;
     private RequestHeaders requestHeaders;
     private RequestData requestParams;
     private RequestData requestBody;
 
     public HttpRequest(List<String> lines) {
-        this.requestFirstLine = new RequestFirstLine(lines.get(0));
-        this.requestParams = getRequestParams(requestFirstLine);
+        this.requestLine = new RequestLine(lines.get(0));
+        this.requestParams = getRequestParams(requestLine);
         this.requestHeaders = new RequestHeaders();
         this.requestBody = new RequestData();
         setRequestHeaderAndBody(lines);
     }
 
-    private static RequestData getRequestParams(RequestFirstLine requestFirstLine) {
+    private static RequestData getRequestParams(RequestLine requestLine) {
         RequestData requestParams = new RequestData();
 
-        if (requestFirstLine.hasParams()) {
-            String search = requestFirstLine.getSearch();
+        if (requestLine.hasParams()) {
+            String search = requestLine.getSearch();
             requestParams.put(search);
         }
         return requestParams;
@@ -51,7 +51,7 @@ public class HttpRequest {
     }
 
     public String getMethod() {
-        return requestFirstLine.getMethod();
+        return requestLine.getMethod();
     }
 
     public String getHeader(String key) {
@@ -70,10 +70,10 @@ public class HttpRequest {
     }
 
     public String getPath() {
-        return requestFirstLine.getUri();
+        return requestLine.getUri();
     }
 
     public String getVersion() {
-        return requestFirstLine.getVersion();
+        return requestLine.getVersion();
     }
 }

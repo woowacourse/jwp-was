@@ -1,6 +1,6 @@
 package webserver.request;
 
-public class RequestFirstLine {
+public class RequestLine {
     private static final String SPACE = " ";
     private static final int WORD_COUNT = 3;
     private static final String SEPARATOR = "\\?";
@@ -10,7 +10,7 @@ public class RequestFirstLine {
     private String uri;
     private String version;
 
-    public RequestFirstLine(String requestFirstLine) {
+    public RequestLine(String requestFirstLine) {
         String[] splitFirstLine = requestFirstLine.split(SPACE);
         checkRequestFirstLine(splitFirstLine);
         this.method = splitFirstLine[0];
