@@ -35,6 +35,7 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             handleRequest(in, out);
+            //TODO: connect close 해줘야하는지??
         } catch (IOException e) {
             logger.error(e.getMessage());
 

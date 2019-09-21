@@ -6,9 +6,10 @@ import http.controller.HttpRequestHandlers;
 import http.controller.UserRequestHandler;
 import http.model.HttpMethod;
 import http.supoort.RequestMapping;
-import http.view.ModelResolver;
+import http.supoort.ResolverMapping;
 import http.view.ViewHandler;
-import http.view.ViewResolver;
+import http.view.ViewStaticResolver;
+import http.view.ViewTemplatesResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,8 +70,9 @@ public class WebServer {
 
     private static ViewHandler initViewHandlers() {
         ViewHandler viewHandler = new ViewHandler();
-        viewHandler.addResolver(new ViewResolver());
-        viewHandler.addResolver(new ModelResolver());
+        viewHandler.addResolver(new ResolverMapping("\\/.*\\.html"), new ViewTemplatesResolver());
+        viewHandler.addResolver(new ResolverMapping("\\/.*\\.(css|js|png)"), new ViewStaticResolver());
+//        viewHandler.addResolver(new ModelResolver());
         return viewHandler;
     }
 }
