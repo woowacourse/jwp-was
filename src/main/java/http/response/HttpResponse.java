@@ -27,9 +27,7 @@ public class HttpResponse {
 
     public void sendRedirect(String uri) {
         this.httpStatusLine = new HttpStatusLine("HTTP/1.1 302 FOUND \r\n");
-        this.httpResponseHeader = new HttpResponseHeader(
-                "Content-Type: text/html;charset=utf-8\r\n"
-                        + "Location: /" + uri + "\r\n");
+        this.httpResponseHeader = new HttpResponseHeader("Location: /" + uri + "\r\n");
     }
 
     public void send200Ok(String uri) throws IOException, URISyntaxException {
