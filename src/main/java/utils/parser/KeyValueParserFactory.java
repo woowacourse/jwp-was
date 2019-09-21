@@ -21,6 +21,4 @@ public class KeyValueParserFactory {
     public static KeyValueParser routerParser() {
         return routerParser;
     }
-
-    private KeyValueParserFactory() {}
 }

@@ -16,9 +16,9 @@ public class FileIoUtils {
         try {
             return Optional.of(
                     new String(
-                        Files.readAllBytes(
-                                Paths.get(FileIoUtils.class.getClassLoader().getResource(filePath).toURI())
-                        )
+                            Files.readAllBytes(
+                                    Paths.get(FileIoUtils.class.getClassLoader().getResource(filePath).toURI())
+                            )
                     )
             );
         } catch (IOException | URISyntaxException | NullPointerException e) {

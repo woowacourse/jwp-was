@@ -33,9 +33,8 @@ public class Router {
     }
 
     private static HttpResponse route(HttpRequest req) {
-        final String mapping = (req.method() == HttpMethod.GET)
-                ? GET_ROUTER.get(req.path().toString())
-                : POST_ROUTER.get(req.path().toString());
+        final String mapping = (req.method() == HttpMethod.GET) ? GET_ROUTER.get(req.path().toString())
+                                                                : POST_ROUTER.get(req.path().toString());
         logger.debug("{} -> {}", req.path(), mapping);
         return Optional.ofNullable(mapping).map(routeTo -> {
             final String[] classAndMethodNames = routeTo.split("\\.");
