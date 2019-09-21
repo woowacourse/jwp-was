@@ -1,6 +1,6 @@
 package http.controller;
 
-import http.supoort.IllegalRequestMappingException;
+import http.exceptions.IllegalRequestMappingException;
 import http.supoort.RequestMapping;
 import org.junit.jupiter.api.Test;
 

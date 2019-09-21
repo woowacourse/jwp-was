@@ -1,4 +1,4 @@
-package http.supoort;
+package http.exceptions;
 
 public class IllegalRequestMappingException extends RuntimeException {
     public IllegalRequestMappingException() {

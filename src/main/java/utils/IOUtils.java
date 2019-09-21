@@ -1,7 +1,7 @@
 package utils;
 
 import com.github.jknack.handlebars.internal.lang3.StringUtils;
-import http.supoort.IllegalHttpRequestException;
+import http.exceptions.IllegalHttpRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

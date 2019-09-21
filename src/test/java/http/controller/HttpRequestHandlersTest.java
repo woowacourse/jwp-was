@@ -1,8 +1,8 @@
 package http.controller;
 
+import http.exceptions.IllegalRequestMappingException;
 import http.model.HttpRequest;
 import http.supoort.HttpRequestParser;
-import http.supoort.IllegalRequestMappingException;
 import http.supoort.RequestMapping;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

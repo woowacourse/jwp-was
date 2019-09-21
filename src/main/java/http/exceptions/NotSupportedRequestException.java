@@ -1,4 +1,4 @@
-package http.supoort;
+package http.exceptions;
 
 public class NotSupportedRequestException extends RuntimeException {
     public NotSupportedRequestException() {

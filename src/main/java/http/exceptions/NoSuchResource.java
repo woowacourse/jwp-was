@@ -1,4 +1,4 @@
-package utils;
+package http.exceptions;
 
 public class NoSuchResource extends RuntimeException {
     public NoSuchResource() {

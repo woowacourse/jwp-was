@@ -1,5 +1,6 @@
 package http.supoort;
 
+import http.exceptions.FailToConvertMessageException;
 import http.model.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

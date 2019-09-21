@@ -1,4 +1,4 @@
-package http.supoort;
+package http.exceptions;
 
 public class IllegalHttpRequestException extends RuntimeException {
 

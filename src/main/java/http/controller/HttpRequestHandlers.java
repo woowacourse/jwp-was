@@ -1,7 +1,7 @@
 package http.controller;
 
+import http.exceptions.IllegalRequestMappingException;
 import http.model.HttpRequest;
-import http.supoort.IllegalRequestMappingException;
 import http.view.ModelAndView;
 
 import java.util.HashSet;

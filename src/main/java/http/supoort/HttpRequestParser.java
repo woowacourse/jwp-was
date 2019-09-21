@@ -1,5 +1,6 @@
 package http.supoort;
 
+import http.exceptions.IllegalHttpRequestException;
 import http.model.*;
 import utils.IOUtils;
 
