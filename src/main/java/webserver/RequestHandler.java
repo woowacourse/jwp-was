@@ -6,14 +6,14 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import db.DataBase;
+import model.QueryString;
 import model.Request;
 import model.Response;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.FileIoUtils;
-import utils.RequestHeaderReader;
-import utils.ResourcePathUtils;
-import utils.ResponseGenerator;
+import utils.*;
 
 public class RequestHandler implements Runnable {
 	private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -35,7 +35,15 @@ public class RequestHandler implements Runnable {
 			Request request = new Request(RequestHeaderReader.readRequest(bufferedReader));
 			String path = ResourcePathUtils.getResourcePath(request.getRequestElement("Path"));
 
-			byte[] body = FileIoUtils.loadFileFromClasspath(path);
+			if(path.contains("?")) {
+				QueryString queryString = new QueryString(QueryStringSeparator.separate(request.getRequestElement("Path")));
+				User user = new User(queryString.getQueryString("userId"), queryString.getQueryString("password"),
+						queryString.getQueryString("name"), queryString.getQueryString("email"));
+				DataBase.addUser(user);
+				return;
+			}
+
+			byte[] body = FileIoUtils.loadFileFromClasspath(path.substring(0, path.lastIndexOf("?")));
 
 			Response response = new Response(ResponseGenerator.responseHeader(path, body.length));
 			sendResponseHeader(response.getAllHeaders(), dos);
