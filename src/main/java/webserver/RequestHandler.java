@@ -2,12 +2,18 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import model.Request;
+import model.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.FileIoUtils;
 import utils.RequestHeaderReader;
+import utils.ResourcePathUtils;
+import utils.ResponseGenerator;
 
 public class RequestHandler implements Runnable {
 	private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -27,27 +33,26 @@ public class RequestHandler implements Runnable {
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
 
 			Request request = new Request(RequestHeaderReader.readRequest(bufferedReader));
+			String path = ResourcePathUtils.getResourcePath(request.getRequestElement("Path"));
 
-			byte[] body = "Hello World".getBytes();
-			response200Header(dos, body.length);
-			responseBody(dos, body);
-		} catch (IOException e) {
+			byte[] body = FileIoUtils.loadFileFromClasspath(path);
+
+			Response response = new Response(ResponseGenerator.responseHeader(path, body.length));
+			sendResponseHeader(response.getAllHeaders(), dos);
+			sendResponseBody(body, dos);
+		} catch (IOException | URISyntaxException e) {
 			logger.error(e.getMessage());
 		}
 	}
 
-	private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-		try {
-			dos.writeBytes("HTTP/1.1 200 OK \r\n");
-			dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-			dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-			dos.writeBytes("\r\n");
-		} catch (IOException e) {
-			logger.error(e.getMessage());
+	private void sendResponseHeader(List<String> responseHeader, DataOutputStream dos) throws IOException {
+		for (String header : responseHeader) {
+			dos.writeBytes(header);
 		}
+		dos.writeBytes("\r\n");
 	}
 
-	private void responseBody(DataOutputStream dos, byte[] body) {
+	private void sendResponseBody(byte[] body, DataOutputStream dos) {
 		try {
 			dos.write(body, 0, body.length);
 			dos.flush();

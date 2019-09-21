@@ -20,6 +20,8 @@ public class RequestHeaderReader {
 		Map<String, String> requests = new HashMap<>();
 		String requestLine = bufferedReader.readLine();
 
+		logger.info("request header - {}", requestLine);
+
 		saveRequestURL(requestLine, requests);
 
 		while ((requestLine = bufferedReader.readLine()) != null && !requestLine.isEmpty()) {
