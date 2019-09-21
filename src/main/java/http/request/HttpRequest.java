@@ -1,55 +1,38 @@
 package http.request;
 
 import http.common.HttpHeader;
-import http.common.HttpVersion;
 
 public class HttpRequest {
-    private Url url;
-    private HttpMethod httpMethod;
-    private HttpVersion httpVersion;
-    private HttpRequestParams httpRequestParams;
+    private RequestLine requestLine;
     private HttpHeader httpHeader;
+    private HttpRequestParams httpRequestParams;
 
-    public HttpRequest(final Url url,
-                       final HttpMethod httpMethod,
-                       final HttpVersion httpVersion,
-                       final HttpRequestParams httpRequestParams,
-                       final HttpHeader httpHeader) {
-        this.url = url;
-        this.httpMethod = httpMethod;
-        this.httpVersion = httpVersion;
-        this.httpRequestParams = httpRequestParams;
+    public HttpRequest(final RequestLine requestLine,
+                       final HttpHeader httpHeader,
+                       final HttpRequestParams httpRequestParams) {
+        this.requestLine = requestLine;
         this.httpHeader = httpHeader;
+        this.httpRequestParams = httpRequestParams;
     }
 
-    public String getUrl() {
-        return url.getFullUrl();
-    }
-
-    public HttpMethod getHttpMethod() {
-        return httpMethod;
-    }
-
-    public HttpVersion getHttpVersion() {
-        return httpVersion;
-    }
-
-    public HttpRequestParams getHttpRequestParams() {
-        return httpRequestParams;
+    public RequestLine getRequestLine() {
+        return requestLine;
     }
 
     public HttpHeader getHttpHeader() {
         return httpHeader;
     }
 
+    public HttpRequestParams getHttpRequestParams() {
+        return httpRequestParams;
+    }
+
     @Override
     public String toString() {
         return "HttpRequest{" +
-                "url=" + url +
-                ", httpMethod=" + httpMethod +
-                ", httpVersion=" + httpVersion +
-                ", httpRequestParams=" + httpRequestParams +
+                "requestLine=" + requestLine +
                 ", httpHeader=" + httpHeader +
+                ", httpRequestParams=" + httpRequestParams +
                 '}';
     }
 }
