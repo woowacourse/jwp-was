@@ -26,6 +26,9 @@ public class RequestHeaderReader {
 
 		while ((requestLine = bufferedReader.readLine()) != null && !requestLine.isEmpty()) {
 			logger.info("request header - {}", requestLine);
+			if(requestLine.isEmpty()) {
+				break;
+			}
 			String[] request = requestLine.split(REQUEST_SEPARATOR);
 			requests.put(request[0].trim(), request[1].trim());
 		}
