@@ -23,8 +23,8 @@ public class RequestHandler implements Runnable {
 
     static {
         controllers = new HashMap<>();
-        controllers.put("/user/create", new CreateUserController());
-        controllers.put("/", new FileController());
+        controllers.put("/user/create", CreateUserController.getInstance());
+        controllers.put("/", FileController.getInstance());
     }
 
     private Socket connection;

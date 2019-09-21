@@ -10,6 +10,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CreateUserController extends AbstractController {
+    private CreateUserController() {
+
+    }
+
+    public static CreateUserController getInstance() {
+        return LazyHolder.INSTANCE;
+    }
+
+    private static class LazyHolder {
+        private static final CreateUserController INSTANCE = new CreateUserController();
+    }
 
     @Override
     void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
