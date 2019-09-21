@@ -1,13 +1,8 @@
 package http;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.Map;
 
 public class Request {
-    private static final Logger logger = LoggerFactory.getLogger(Request.class);
-
     private static final String ROOT_URL = "/";
     private static final String INDEX_HTML = "/index.html";
 

@@ -9,6 +9,7 @@ import java.util.Map;
 public class RequestBody {
     private static final String DELIMITER_OF_FORM = "&";
     private static final String DELIMITER_OF_FORM_PARAMETER = "=";
+
     private final Map<String, String> parameters = new HashMap<>();
 
     public RequestBody(String body) {
