@@ -6,7 +6,7 @@ public class RequestLineParser {
         String[] requestLineTokens = requestLine.split(" ");
 
         HttpMethod method = HttpMethod.valueOf(requestLineTokens[0].trim());
-        HttpUri uri = new HttpUri(requestLineTokens[1].trim());
+        HttpUri uri = HttpUriParser.parse(requestLineTokens[1].trim());
         HttpVersion version = HttpVersion.of(requestLineTokens[2].trim());
 
         return new RequestLine(method, uri, version);

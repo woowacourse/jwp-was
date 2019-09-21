@@ -12,7 +12,7 @@ class RequestLineTest {
         String uri = "/index.html";
         String version = "HTTP/1.1";
 
-        assertDoesNotThrow(() -> new RequestLine(HttpMethod.valueOf(method), new HttpUri(uri), HttpVersion.of(version)));
+        assertDoesNotThrow(() -> new RequestLine(HttpMethod.valueOf(method), HttpUriParser.parse(uri), HttpVersion.of(version)));
     }
 
 }

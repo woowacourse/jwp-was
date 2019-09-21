@@ -1,6 +1,7 @@
 package http;
 
 public class HttpRequest {
+    // TODO: HttpRequestTest 구현
 
     private RequestLine requestLine;
     private RequestHeader header;
