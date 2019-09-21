@@ -1,6 +1,6 @@
 package http.request;
 
-import http.QueryParamsParser;
+import http.common.QueryParamsParser;
 import utils.IOUtils;
 
 import java.io.BufferedReader;
@@ -9,7 +9,7 @@ import java.io.IOException;
 public class RequestBodyParser {
 
     public static RequestBody parse(BufferedReader br, String contentLength) throws IOException {
-        String body = IOUtils.readData(br,Integer.parseInt(contentLength));
+        String body = IOUtils.readData(br, Integer.parseInt(contentLength));
         return new RequestBody(QueryParamsParser.parse(body));
     }
 }

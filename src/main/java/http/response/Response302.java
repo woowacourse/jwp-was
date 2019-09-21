@@ -5,7 +5,7 @@ import http.common.HttpHeader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class Response302 extends HttpResponse{
+public class Response302 extends HttpResponse {
 
     public Response302(final StatusLine statusLine, final HttpHeader responseHeader, final ResponseBody responseBody) {
         super(statusLine, responseHeader, responseBody);

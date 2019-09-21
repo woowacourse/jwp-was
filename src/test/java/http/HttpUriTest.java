@@ -1,5 +1,7 @@
 package http;
 
+import http.request.HttpUri;
+import http.request.HttpUriParser;
 import org.junit.jupiter.api.Test;
 
 import java.net.URI;

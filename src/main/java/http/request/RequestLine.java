@@ -1,4 +1,4 @@
-package http;
+package http.request;
 
 import http.common.HttpVersion;
 
@@ -32,5 +32,9 @@ public class RequestLine {
 
     public String getQuery() {
         return httpUri.getQuery();
+    }
+
+    public String findPathPrefix() {
+        return httpUri.findPathPrefix();
     }
 }

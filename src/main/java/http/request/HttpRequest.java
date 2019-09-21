@@ -1,8 +1,7 @@
-package http;
+package http.request;
 
 import http.common.HttpHeader;
 import http.common.HttpVersion;
-import http.request.RequestBody;
 
 public class HttpRequest {
 
@@ -38,5 +37,13 @@ public class HttpRequest {
 
     public String findParam(String name) {
         return requestBody.findParam(name);
+    }
+
+    public HttpMethod getHttpMethod() {
+        return requestLine.getHttpMethod();
+    }
+
+    public String findPathPrefix() {
+        return requestLine.findPathPrefix();
     }
 }

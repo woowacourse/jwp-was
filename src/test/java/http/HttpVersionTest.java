@@ -5,7 +5,7 @@ import http.common.HttpVersion;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class HttpVersionTest {
 
@@ -16,6 +16,6 @@ class HttpVersionTest {
 
     @Test
     void none_match_http_version() {
-        assertThrows(InvalidHttpVersionException.class, ()->HttpVersion.of("HTTP/0.0"));
+        assertThrows(InvalidHttpVersionException.class, () -> HttpVersion.of("HTTP/0.0"));
     }
 }

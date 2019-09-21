@@ -1,4 +1,6 @@
-package http;
+package http.request;
+
+import http.common.UriExtension;
 
 import java.net.URI;
 

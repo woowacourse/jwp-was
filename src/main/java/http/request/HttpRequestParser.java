@@ -1,8 +1,6 @@
-package http;
+package http.request;
 
 import http.common.HttpHeader;
-import http.request.RequestBody;
-import http.request.RequestBodyParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +28,7 @@ public class HttpRequestParser {
         HttpHeader requestHeader = RequestHeaderParser.parse(headerLines);
 
         RequestBody requestBody = null;
-        if(br.ready()) {
+        if (br.ready()) {
             requestBody = RequestBodyParser.parse(br, requestHeader.findHeader("Content-Length"));
         }
         return new HttpRequest(requestLine, requestHeader, requestBody);

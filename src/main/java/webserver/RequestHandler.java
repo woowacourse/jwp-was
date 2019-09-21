@@ -1,8 +1,9 @@
 package webserver;
 
-import controller.IndexController;
-import http.HttpRequest;
-import http.HttpRequestParser;
+import controller.Controller;
+import controller.ControllerFinder;
+import http.request.HttpRequest;
+import http.request.HttpRequestParser;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,8 +33,9 @@ public class RequestHandler implements Runnable {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             HttpRequest httpRequest = HttpRequestParser.parse(in);
 
-            IndexController indexController = new IndexController();
-            HttpResponse httpResponse = indexController.doGet(httpRequest);
+            Controller controller = ControllerFinder.findController(httpRequest.getPath());
+            HttpResponse httpResponse = controller.service(httpRequest);
+
             DataOutputStream dos = new DataOutputStream(out);
             httpResponse.writeResponse(dos);
 
