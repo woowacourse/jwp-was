@@ -1,5 +1,7 @@
 package http.response;
 
+import http.response.exception.InvalidContentTypeException;
+
 import java.util.Arrays;
 import java.util.function.Predicate;
 
@@ -22,7 +24,7 @@ public enum HttpContentType {
         return Arrays.stream(HttpContentType.values())
                 .filter(contentType -> contentType.contentTypeChecker.test(url))
                 .findFirst()
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(InvalidContentTypeException::new);
     }
 
     public String getContentType() {
