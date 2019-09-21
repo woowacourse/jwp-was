@@ -1,5 +1,6 @@
 package webserver;
 
+import http.HttpMediaType;
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
 import http.response.HttpResponse;
@@ -9,6 +10,7 @@ import http.response.response_entity.HttpResponseEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
+import utils.MediaTypeParser;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -20,7 +22,6 @@ import java.net.URISyntaxException;
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
-    private static final String STYLESHEET = "css";
     private static final String DEFAULT_PATH = "./templates";
     private static final String STATIC_PATH = "./static";
 
@@ -59,7 +60,8 @@ public class RequestHandler implements Runnable {
 
     private void setBody(String viewTemplatePath, HttpResponse httpResponse) throws IOException, URISyntaxException {
         if (viewTemplatePath != null) {
-            httpResponse.setBody(getBody(viewTemplatePath), getMediaType(viewTemplatePath));
+            HttpMediaType mediaType = MediaTypeParser.parse(viewTemplatePath);
+            httpResponse.setBody(getBody(viewTemplatePath), mediaType);
         }
     }
 
@@ -71,15 +73,6 @@ public class RequestHandler implements Runnable {
             body = FileIoUtils.loadFileFromClasspath(STATIC_PATH + path);
         }
         return body;
-    }
-
-    private String getMediaType(String path) {
-        String fileName = path.substring(path.lastIndexOf('/') + 1);
-        String[] splicedFileName = fileName.split("\\.");
-        String extension = splicedFileName[splicedFileName.length - 1];
-        return extension.equals(STYLESHEET)
-                ? "text/css"
-                : "text/html";
     }
 
     private void writeResponse(OutputStream out, HttpResponse response) throws IOException {

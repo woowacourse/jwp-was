@@ -6,6 +6,7 @@ import http.response.response_entity.Http404ResponseEntity;
 import http.response.response_entity.HttpResponseEntity;
 import org.junit.jupiter.api.Test;
 
+import static http.HttpMediaType.DEFAULT_MEDIA_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class HttpResponseFactoryTest {
@@ -15,7 +16,7 @@ class HttpResponseFactoryTest {
         HttpResponse httpResponse = HttpResponseFactory.makeResponse(responseEntity);
 
         byte[] body = "body".getBytes();
-        httpResponse.setBody(body, "html/text");
+        httpResponse.setBody(body, DEFAULT_MEDIA_TYPE);
 
         String headers = "HTTP/1.1 200 OK\r\n"
                 + "Content-Type: html/text\r\n"
@@ -46,7 +47,7 @@ class HttpResponseFactoryTest {
         HttpResponse httpResponse = HttpResponseFactory.makeResponse(responseEntity);
 
         byte[] body = "404 Not Found".getBytes();
-        httpResponse.setBody(body, "html/text");
+        httpResponse.setBody(body, DEFAULT_MEDIA_TYPE);
 
         String headers = "HTTP/1.1 404 Not Found\r\n"
                 + "Content-Type: html/text\r\n"
