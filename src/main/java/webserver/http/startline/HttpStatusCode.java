@@ -1,4 +1,6 @@
-package webserver.http.headerfields;
+package webserver.http.startline;
+
+import utils.StringUtils;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -100,8 +102,17 @@ public enum HttpStatusCode {
         return Group.values()[(this.code / 100 - 1)];
     }
 
-    public String text() {
-        return name().replaceAll("_", " ");
+    public String toName() {
+        switch (this.code) {
+            case 226:
+                return "IM Used";
+            case 418:
+                return "I'm a teapot";
+            case 505:
+                return "HTTP Version Not Supported";
+            default:
+                return StringUtils.screamingSnakeCaseToStartCase(name());
+        }
     }
 
     public int number() {
@@ -110,6 +121,6 @@ public enum HttpStatusCode {
 
     @Override
     public String toString() {
-        return text() + "(" + number() + ")";
+        return toName() + "(" + number() + ")";
     }
 }

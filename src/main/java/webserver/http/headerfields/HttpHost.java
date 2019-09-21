@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-public class HttpHost {
+public class HttpHost implements HttpHeaderField {
     private static final Map<String, HttpHost> CACHE = new HashMap<>();
 
     private final String name;
@@ -50,7 +50,7 @@ public class HttpHost {
             return false;
         }
         final HttpHost rhs = (HttpHost) o;
-        return this.name.equals(rhs.name) &&
+        return Objects.equals(this.name, rhs.name) &&
                 Objects.equals(this.port, rhs.port);
     }
 

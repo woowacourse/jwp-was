@@ -26,10 +26,7 @@ public class Router {
             ).orElse(null);
 
     public static HttpResponse serve(HttpRequest req) {
-        if (req.path().extension().equals("html") || req.path().extension().isEmpty()) {
-            return route(req);
-        }
-        return serveStaticFiles(req);
+        return (req.path().extension().isEmpty()) ? route(req) : serveStaticFiles(req);
     }
 
     private static HttpResponse route(HttpRequest req) {
@@ -50,7 +47,7 @@ public class Router {
                     InvocationTargetException e
             ) {
                 logger.debug(e.getMessage());
-                return HttpResponse.NOT_FOUND;
+                return HttpResponse.INTERNAL_SERVER_ERROR;
             }
         }).orElse(HttpResponse.NOT_FOUND);
     }
@@ -67,10 +64,14 @@ public class Router {
 
     private static HttpContentType extensionToContentType(String extension) {
         switch (extension) {
+            case "html":
+                return HttpContentType.TEXT_HTML_UTF_8;
             case "css":
-                return HttpContentType.TEXT_CSS;
+                return HttpContentType.TEXT_CSS_UTF_8;
             case "js":
-                return HttpContentType.APPLICATION_JAVASCRIPT;
+                return HttpContentType.APPLICATION_JAVASCRIPT_UTF_8;
+            case "bmp":
+                return HttpContentType.IMAGE_BMP;
             case "gif":
                 return HttpContentType.IMAGE_GIF;
             case "jpg":
@@ -81,7 +82,7 @@ public class Router {
                 return HttpContentType.IMAGE_X_ICON;
             case "txt":
             default:
-                return HttpContentType.TEXT_PLAIN;
+                return HttpContentType.TEXT_PLAIN_UTF_8;
         }
     }
 }

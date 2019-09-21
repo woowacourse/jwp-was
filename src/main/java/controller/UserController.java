@@ -10,8 +10,8 @@ import webserver.http.startline.HttpStatusCode;
 
 public class UserController {
     public static HttpResponse showSignUpPage(HttpRequest req) {
-        return FileIoUtils.loadFileFromClasspath("./templates/user/form.html").map(body ->
-            HttpResponse.builder(HttpContentType.TEXT_HTML)
+        return FileIoUtils.loadFileFromClasspath("static/user/form.html").map(body ->
+            HttpResponse.builder(HttpContentType.TEXT_HTML_UTF_8)
                         .version(req)
                         .connection(req)
                         .body(body)
@@ -28,7 +28,7 @@ public class UserController {
                         req.getParam("email")
                 )
         );
-        return HttpResponse.builder(HttpContentType.TEXT_PLAIN)
+        return HttpResponse.builder(HttpContentType.TEXT_PLAIN_UTF_8)
                             .version(req)
                             .statusCode(HttpStatusCode.FOUND)
                             .connection(req)

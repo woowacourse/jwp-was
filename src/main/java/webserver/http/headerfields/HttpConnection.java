@@ -4,29 +4,18 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public enum HttpConnection implements HttpHeaderField {
-    CLOSE("close"),
-    KEEP_ALIVE("keep-alive"),
-    UPGRADE("upgrade");
-
-    private final String type;
-
-    HttpConnection(String type) {
-        this.type = type;
-    }
+    KEEP_ALIVE,
+    CLOSE,
+    UPGRADE;
 
     public static Optional<HttpConnection> of(String name) {
         return Stream.of(values())
-                    .filter(x -> x.type.equals(name))
+                    .filter(x -> x.name().replaceAll("_", "-").equalsIgnoreCase(name))
                     .findAny();
     }
 
     @Override
-    public String nameOfField() {
-        return "Connection";
-    }
-
-    @Override
     public String toString() {
-        return this.type;
+        return name().replaceAll("_", "-").toLowerCase();
     }
 }

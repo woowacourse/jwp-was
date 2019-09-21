@@ -2,22 +2,22 @@ package webserver.http;
 
 import webserver.http.headerfields.HttpConnection;
 import webserver.http.headerfields.HttpContentType;
-import webserver.http.headerfields.HttpStatusCode;
-import webserver.http.headerfields.HttpVersion;
+import webserver.http.startline.HttpStatusCode;
+import webserver.http.startline.HttpVersion;
 
 public class HttpResponse {
     public static final HttpResponse BAD_REQUEST =
-            HttpResponse.builder(HttpContentType.TEXT_PLAIN())
+            HttpResponse.builder(HttpContentType.TEXT_PLAIN_UTF_8)
                         .statusCode(HttpStatusCode.BAD_REQUEST)
                         .build();
 
     public static final HttpResponse NOT_FOUND =
-            HttpResponse.builder(HttpContentType.TEXT_PLAIN())
+            HttpResponse.builder(HttpContentType.TEXT_PLAIN_UTF_8)
                         .statusCode(HttpStatusCode.NOT_FOUND)
                         .build();
 
     public static final HttpResponse INTERNAL_SERVER_ERROR =
-            HttpResponse.builder(HttpContentType.TEXT_PLAIN())
+            HttpResponse.builder(HttpContentType.TEXT_PLAIN_UTF_8)
                         .statusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
                         .build();
 
@@ -101,7 +101,7 @@ public class HttpResponse {
                 "Content-Length: %d\r\n",
                 this.version,
                 this.statusCode.number(),
-                this.statusCode.text(),
+                this.statusCode.toName(),
                 this.contentType,
                 this.body.length()
         );

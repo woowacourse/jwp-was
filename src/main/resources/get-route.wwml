@@ -1,4 +1,1 @@
 / -> IndexController.index
-/index.html -> IndexController.index
-
-/user/form.html -> UserController.showSignUpPage

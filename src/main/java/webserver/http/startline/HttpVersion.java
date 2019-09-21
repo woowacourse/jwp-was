@@ -1,4 +1,4 @@
-package webserver.http.headerfields;
+package webserver.http.startline;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -24,7 +24,7 @@ public enum HttpVersion {
     public static Optional<HttpVersion> of(String version) {
         try {
             return of(Double.parseDouble(version.split("/")[1].trim()));
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException | IndexOutOfBoundsException e) {
             return Optional.empty();
         }
     }

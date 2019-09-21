@@ -1,4 +1,4 @@
-package webserver.http.headerfields;
+package webserver.http.startline;
 
 import java.net.URLDecoder;
 import java.util.Objects;
@@ -30,7 +30,7 @@ public class HttpPath {
             return false;
         }
         final HttpPath rhs = (HttpPath) o;
-        return this.path.equals(rhs.path);
+        return Objects.equals(this.path, rhs.path);
     }
 
     @Override
