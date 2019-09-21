@@ -29,6 +29,7 @@ public class User {
         return email;
     }
 
+    //TODO 빌더 패턴의 경우 null이 들어와도 빈값으로 생성되는 케이스에 대해서 어떻게 처리할 지 생각해보자
     public static final class Builder {
         private String userId;
         private String password;
