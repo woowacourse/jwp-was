@@ -1,7 +1,5 @@
 package http;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 import http.excption.NoQueryParamsException;
@@ -18,26 +16,23 @@ public class HttpRequestUrl {
         return new HttpRequestUrl(url);
     }
 
-    public Map<String, String> queryParams() {
-        checkQueryParamExist();
-        return getQueryParams();
+    public String getPath() {
+        if (!url.contains("?")) {
+            return url;
+        }
+        return url.substring(0, url.indexOf("?"));
     }
+
+    public String getParams() {
+        checkQueryParamExist();
+        return url.substring(url.indexOf("?") + 1);
+    }
+
 
     private void checkQueryParamExist() {
         if (!url.contains("?")) {
             throw new NoQueryParamsException("쿼리 문자열이 존재하지 않습니다.");
         }
-    }
-
-    private Map<String, String> getQueryParams() {
-        int index = url.indexOf("?");
-        Map<String, String> params = new HashMap<>();
-        String[] queryParams = url.substring(index + 1).split("&");
-        for (String queryParam : queryParams) {
-            String[] paramKeyValue = queryParam.split("=");
-            params.put(paramKeyValue[0], paramKeyValue[1]);
-        }
-        return params;
     }
 
     @Override
@@ -51,5 +46,14 @@ public class HttpRequestUrl {
     @Override
     public int hashCode() {
         return Objects.hash(url);
+    }
+
+    public boolean hasParams() {
+        try {
+            checkQueryParamExist();
+            return true;
+        } catch (NoQueryParamsException e) {
+            return false;
+        }
     }
 }
