@@ -36,7 +36,7 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = new HttpRequest(lines);
             HttpResponse httpResponse = RequestMapper.controller(httpRequest);
 
-            Renderer.renderer(dos, httpResponse.responseBuilder());
+            Renderer.render(dos, httpResponse.responseBuilder());
         } catch (IOException e) {
             logger.error(e.getMessage());
         }

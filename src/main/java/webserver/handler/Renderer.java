@@ -10,7 +10,7 @@ import java.util.List;
 public class Renderer {
     private static final Logger logger = LoggerFactory.getLogger(Renderer.class);
 
-    public static void renderer(DataOutputStream dos, List<String> responses) {
+    public static void render(DataOutputStream dos, List<String> responses) {
         try {
             for (String response : responses) {
                 dos.write(response.getBytes());
@@ -18,6 +18,7 @@ public class Renderer {
             dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
+
         }
     }
 }
