@@ -3,26 +3,19 @@ package webserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
-import http.HttpRequestBody;
-import http.HttpRequestHeader;
-import http.HttpRequestLine;
-import http.HttpRequestParam;
+import http.HttpRequest;
+import http.HttpRequestMethod;
+import http.MimeType;
+import model.User;
 import utils.FileIoUtils;
 import utils.HttpRequestUtils;
-import utils.IOUtils;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -38,65 +31,45 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            // Line 은 여기서 계속 읽는다.
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+            HttpRequest httpRequest = new HttpRequest(in);
 
-            // HttpRequestLine 을 만들고
-            HttpRequestLine httpRequestLine = getHttpRequestLine(bufferedReader);
-            logger.debug("Http Request Line : {}", httpRequestLine);
-
-            HttpRequestParam httpRequestParam = getHttpRequestParams(httpRequestLine);
-            logger.debug("Http Request Line : {}", httpRequestParam);
-
-            HttpRequestHeader httpRequestHeader = getHttpRequestHeader(bufferedReader);
-            logger.debug("Http Request Header : {}", httpRequestHeader);
-
-            HttpRequestBody httpRequestBody = getHttpRequestBody(bufferedReader, httpRequestHeader.getContentLength());
-            logger.debug("Http Request Body : {}", httpRequestBody);
-
-            // 여기서 static file 들을 모두 처리하도록 만들자.
-            // enum MimeType 을 만들어서 확장자로 MimeType 을 생성하자.
+            String path = httpRequest.getPath();
 
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + httpRequestLine.getUrl().getPath());
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+
+            if (HttpRequestUtils.hasExtension(path)) {
+                MimeType mimeType = MimeType.of(HttpRequestUtils.extractExtension(path));
+                String filePath = HttpRequestUtils.filePathBuilder(httpRequest.getPath(), mimeType);
+
+                byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
+                response200Header(dos, body.length, mimeType);
+                responseBody(dos, body);
+                return;
+            }
+
+            if (path.equals("/user/create") && httpRequest.getMethod().equals(HttpRequestMethod.POST)) {
+                User user = new User(
+                        httpRequest.getBodyParameter("userId"),
+                        httpRequest.getBodyParameter("password"),
+                        httpRequest.getBodyParameter("name"),
+                        httpRequest.getBodyParameter("email")
+                );
+
+                logger.debug("Generated User : {}", user);
+
+                response302Header(dos, "/index.html");
+            }
+
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private HttpRequestLine getHttpRequestLine(BufferedReader bufferedReader) throws IOException {
-        String firstLine = bufferedReader.readLine();
-        return new HttpRequestLine(firstLine);
-    }
 
-    private HttpRequestParam getHttpRequestParams(HttpRequestLine httpRequestLine) {
-        Map<String, String> params = HttpRequestUtils.parse(httpRequestLine.getUrl());
-        return new HttpRequestParam(params);
-    }
-
-    private HttpRequestHeader getHttpRequestHeader(BufferedReader bufferedReader) throws IOException {
-        List<String> lines = new ArrayList<>();
-        String line = bufferedReader.readLine();
-        while (!"".equals(line) && line != null) {
-            lines.add(line);
-            line = bufferedReader.readLine();
-        }
-        Map<String, String> headers = HttpRequestUtils.parse(lines);
-        return new HttpRequestHeader(headers);
-    }
-
-    private HttpRequestBody getHttpRequestBody(BufferedReader bufferedReader, int contentLength) throws IOException {
-        String bodyData = IOUtils.readData(bufferedReader, contentLength);
-        Map<String, String> body = HttpRequestUtils.parse(bodyData);
-        return new HttpRequestBody(body);
-    }
-
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, MimeType mimeType) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Type: " + mimeType.getMimeType() + ";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
@@ -108,6 +81,16 @@ public class RequestHandler implements Runnable {
         try {
             dos.write(body, 0, body.length);
             dos.flush();
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void response302Header(DataOutputStream dos, String location) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 Found \r\n");
+            dos.writeBytes("Location: " + location + "\r\n");
+            dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
