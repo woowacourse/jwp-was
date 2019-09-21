@@ -11,7 +11,7 @@ class HttpResponseBodyTest {
 
     @Test
     void getBodyLength() throws IOException, URISyntaxException {
-        HttpResponseBody httpResponseBody = new HttpResponseBody("index.html");
+        HttpResponseBody httpResponseBody = new HttpResponseBody("/index.html");
         assertThat(httpResponseBody.getBodyLength()).isEqualTo(6902);
     }
 }

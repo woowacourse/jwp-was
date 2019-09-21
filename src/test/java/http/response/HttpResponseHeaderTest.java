@@ -11,9 +11,8 @@ class HttpResponseHeaderTest {
                 "Content-Type: text/html;charset=utf-8";
 
         HttpResponseHeader httpResponseHeader = new HttpResponseHeader(headers);
-        assertThat(httpResponseHeader.toString()).isEqualTo("Content-Length: 1150\n" +
-                "Content-Type: text/html;charset=utf-8\n" +
-                "\r\n" +
+        assertThat(httpResponseHeader.toString()).isEqualTo("Content-Length: 1150\r\n" +
+                "Content-Type: text/html;charset=utf-8\r\n" +
                 "\r\n");
     }
 }
