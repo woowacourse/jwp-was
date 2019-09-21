@@ -5,9 +5,10 @@ import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 
 import db.DataBase;
-import model.QueryString;
+import method.HttpMethod;
 import model.Request;
 import model.Response;
 import model.User;
@@ -35,22 +36,31 @@ public class RequestHandler implements Runnable {
 			Request request = new Request(RequestHeaderReader.readRequest(bufferedReader));
 			String path = ResourcePathUtils.getResourcePath(request.getRequestElement("Path"));
 
-			if(path.contains("?")) {
-				QueryString queryString = new QueryString(QueryStringSeparator.separate(request.getRequestElement("Path")));
-				User user = new User(queryString.getQueryString("userId"), queryString.getQueryString("password"),
-						queryString.getQueryString("name"), queryString.getQueryString("email"));
-				DataBase.addUser(user);
+			if (HttpMethod.POST.isSameMethod(request.getRequestElement("Method"))) {
+				String body = RequestBodyReader.readRequestBody(bufferedReader, request.getRequestElement("Content-Length"));
+				RequestBody requestBody = new RequestBody(QueryStringSeparator.separate(body));
+				saveUser(requestBody.getBody());
 				return;
 			}
 
-			byte[] body = FileIoUtils.loadFileFromClasspath(path);
+			byte[] responseBody = FileIoUtils.loadFileFromClasspath(path);
+			if (path.contains("?")) {
+				saveUser(QueryStringSeparator.separate(request.getRequestElement("Path")));
+				return;
+			}
 
-			Response response = new Response(ResponseGenerator.responseHeader(path, body.length));
+			Response response = new Response(ResponseGenerator.responseHeader(path, responseBody.length));
 			sendResponseHeader(response.getAllHeaders(), dos);
-			sendResponseBody(body, dos);
+			sendResponseBody(responseBody, dos);
 		} catch (IOException | URISyntaxException e) {
 			logger.error(e.getMessage());
 		}
+	}
+
+	private void saveUser(Map<String, String> userInfo) {
+		User user = new User(userInfo.get("userId"), userInfo.get("password"),
+				userInfo.get("name"), userInfo.get("email"));
+		DataBase.addUser(user);
 	}
 
 	private void sendResponseHeader(List<String> responseHeader, DataOutputStream dos) throws IOException {

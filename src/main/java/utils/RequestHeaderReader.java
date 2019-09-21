@@ -29,6 +29,7 @@ public class RequestHeaderReader {
 			String[] request = requestLine.split(REQUEST_SEPARATOR);
 			requests.put(request[0].trim(), request[1].trim());
 		}
+
 		return requests;
 	}
 
