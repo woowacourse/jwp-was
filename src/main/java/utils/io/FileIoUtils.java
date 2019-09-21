@@ -26,4 +26,6 @@ public class FileIoUtils {
             return Optional.empty();
         }
     }
+
+    private FileIoUtils() {}
 }

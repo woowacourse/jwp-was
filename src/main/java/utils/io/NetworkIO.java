@@ -19,28 +19,30 @@ public interface NetworkIO extends Iterator<String> {
 
     String readLine();
 
-    default String readWhile(Predicate<? super String> condition) {
+    default String readLinesWhile(Predicate<? super String> condition) {
         class Closure {
-            private TailRecursion<String> readWhile(StringBuilder acc) {
+            private TailRecursion<String> readLinesWhile(StringBuilder acc) {
                 final String line = this.appendLine(acc);
-                if (line != null && condition.test(line)) {
-                    return (TailCall<String>) () -> this.readWhile(acc);
-                }
-                return (Done<String>) acc::toString;
+                return (!line.isEmpty() && condition.test(line))
+                        ? (TailCall<String>) () -> this.readLinesWhile(acc)
+                        : (Done<String>) acc::toString;
             }
 
             private String appendLine(StringBuilder acc) {
                 if (!isEOF()) {
                     final String line = readLine();
-                    acc.append(line);
-                    acc.append("\r\n");
+                    acc.append(line).append("\r\n");
                     return line;
                 }
-                return null;
+                return "";
             }
         }
-        return (new Closure()).readWhile(new StringBuilder()).get();
+        return (new Closure()).readLinesWhile(new StringBuilder()).get();
     }
 
+    String readAllLeft();
+
     void write(String body);
+
+    void close();
 }
