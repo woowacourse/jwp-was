@@ -70,4 +70,9 @@ public class NetworkIOStream implements NetworkIO {
             logger.error(e.getMessage());
         }
     }
+
+    @Override
+    public String postBody(int contentLength) throws IOException {
+        return IOUtils.readData(reader, contentLength);
+    }
 }

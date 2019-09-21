@@ -4,6 +4,7 @@ import utils.recursion.Done;
 import utils.recursion.TailCall;
 import utils.recursion.TailRecursion;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
@@ -43,4 +44,6 @@ public interface NetworkIO extends Iterator<String> {
     }
 
     void write(String body);
+
+    String postBody(int contentLength) throws IOException;
 }
