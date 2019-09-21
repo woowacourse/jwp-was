@@ -1,23 +1,27 @@
 package http.request;
 
 public class Url {
-    private String url;
-    private HttpRequestType httpRequestType;
+    private String originUrl;
+    private String fullUrl;
 
-    public Url(final String url) {
-        this.url = url;
-        httpRequestType = HttpRequestType.of(url);
+    public Url(final String originUrl) {
+        this.originUrl = originUrl;
+        this.fullUrl = HttpRequestType.of(originUrl).getPrefix() + originUrl;
+    }
+
+    public String getOriginUrl() {
+        return originUrl;
     }
 
     public String getFullUrl() {
-        return httpRequestType.getPrefix() + url;
+        return fullUrl;
     }
 
     @Override
     public String toString() {
         return "Url{" +
-                "url='" + url + '\'' +
-                ", httpRequestType=" + httpRequestType +
+                "originUrl='" + originUrl + '\'' +
+                ", fullUrl='" + fullUrl + '\'' +
                 '}';
     }
 }
