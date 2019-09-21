@@ -3,7 +3,7 @@ package http.session;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HttpSessionManager {
+public class HttpSessionManager implements SessionManager {
     private final IdGenerateStrategy idGenerateStrategy;
     private Map<String, HttpSession> sessions = new HashMap<>();
 
@@ -12,10 +12,12 @@ public class HttpSessionManager {
         this.idGenerateStrategy = idGenerateStrategy;
     }
 
+    @Override
     public HttpSession getSession(String id) {
         return sessions.get(id);
     }
 
+    @Override
     public HttpSession getSession() {
         return generate();
     }

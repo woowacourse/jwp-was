@@ -49,4 +49,12 @@ public class HttpRequest {
     public String getHeader(String key) {
         return httpHeaders.getHeader(key);
     }
+
+    public void bindSession(HttpSession httpSession) {
+        this.httpSession = httpSession;
+    }
+
+    public boolean hasSession() {
+        return this.httpSession == null;
+    }
 }

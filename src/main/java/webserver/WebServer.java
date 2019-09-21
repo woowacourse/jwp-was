@@ -4,6 +4,9 @@ import http.controller.Controller;
 import http.controller.FileResourceController;
 import http.controller.HttpRequestHandlers;
 import http.controller.UserController;
+import http.session.HttpSessionManager;
+import http.session.RandomGenerateStrategy;
+import http.supoort.HttpRequestFactory;
 import http.supoort.RequestMapping;
 import http.view.FileResourceViewResolver;
 import http.view.ViewResolver;
@@ -23,6 +26,7 @@ public class WebServer {
     public static void main(String[] args) throws Exception {
         int port = getPort(args);
 
+        HttpRequestFactory httpRequestFactory = new HttpRequestFactory(new HttpSessionManager(new RandomGenerateStrategy()));
         HttpRequestHandlers httpRequestHandlers = initRequestHandlers();
         ViewResolver viewResolver = initViewResolver();
 
@@ -35,7 +39,7 @@ public class WebServer {
             // 클라이언트가 연결될때까지 대기한다.
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
-                es.execute(new RequestHandler(connection, httpRequestHandlers, viewResolver));
+                es.execute(new RequestHandler(connection, httpRequestFactory, httpRequestHandlers, viewResolver));
             }
         }
         es.shutdown();

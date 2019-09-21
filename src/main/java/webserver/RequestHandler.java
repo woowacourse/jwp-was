@@ -4,7 +4,7 @@ import http.controller.HttpRequestHandlers;
 import http.model.HttpRequest;
 import http.model.HttpResponse;
 import http.supoort.HttpErrorResponse;
-import http.supoort.HttpRequestParser;
+import http.supoort.HttpRequestFactory;
 import http.supoort.ResponseMessageConverter;
 import http.view.ModelAndView;
 import http.view.ViewResolver;
@@ -21,11 +21,14 @@ public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
+    private HttpRequestFactory httpRequestFactory;
     private HttpRequestHandlers httpRequestHandlers;
     private ViewResolver viewResolver;
 
-    public RequestHandler(Socket connectionSocket, HttpRequestHandlers httpRequestHandlers, ViewResolver viewResolver) {
-        this.connection = connectionSocket;
+    public RequestHandler(Socket connection, HttpRequestFactory httpRequestFactory,
+                          HttpRequestHandlers httpRequestHandlers, ViewResolver viewResolver) {
+        this.connection = connection;
+        this.httpRequestFactory = httpRequestFactory;
         this.httpRequestHandlers = httpRequestHandlers;
         this.viewResolver = viewResolver;
     }
@@ -44,8 +47,7 @@ public class RequestHandler implements Runnable {
 
     private void handleRequest(InputStream in, OutputStream out) {
         try {
-            HttpRequest request = HttpRequestParser.parse(in);
-
+            HttpRequest request = httpRequestFactory.getRequest(in);
             ModelAndView modelAndView = httpRequestHandlers.doService(request);
 
             response(viewResolver.resolve(modelAndView), out);
