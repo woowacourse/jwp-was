@@ -22,7 +22,7 @@
 4. "회원가입"을 완료하면 /index.html 페이지로 이동한다.
     - [x] "회원가입"을 완료하면 /index.html 페이지로 리다이렉트한다. (302 code 사용)
 5. 지금까지 구현한 소스 코드는 stylesheet 파일을 지원하지 못하고 있다. Stylesheet 파일을 지원하도록 구현하도록 한다.
-    - [x] Stylesheet인 경우 응답 헤더의 Content-Type을 text/css로 전송한다. (Accept로 Stylesheet 판단)
+    - [x] Stylesheet인 경우 응답 헤더의 Content-Type을 text/css로 전송한다. (~~Accept로 Stylesheet 판단~~ 확장자로 판단)
     
 ## 1단계 리펙터링
 1. HttpRequest 리펙토링
