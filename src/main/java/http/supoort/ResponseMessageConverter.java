@@ -21,6 +21,7 @@ public class ResponseMessageConverter {
             responseBody(httpResponse.getBody(), dos);
         } catch (IOException e) {
             logger.error(e.getMessage());
+            throw new FailToConvertMessageException(e.getMessage());
         }
     }
 
@@ -37,12 +38,8 @@ public class ResponseMessageConverter {
         dos.writeBytes(LINE_BREAK);
     }
 
-    private static void responseBody(byte[] body, DataOutputStream dos) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+    private static void responseBody(byte[] body, DataOutputStream dos) throws IOException {
+        dos.write(body, 0, body.length);
+        dos.flush();
     }
 }
