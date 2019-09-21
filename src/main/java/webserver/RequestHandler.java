@@ -24,28 +24,23 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
-            HttpRequest httpRequest = new HttpRequest(in);
-            HttpResponse httpResponse = new HttpResponse(out);
+            HttpRequest httpRequest = HttpHandler.parse(in);
+            HttpResponse httpResponse = new HttpResponse();
 
-            // static files
+            // TODO: Handler Factory 를 만들어서 request 를 주면 적절한 Handler 를 리턴하도록 만들 수 있을 듯.
             ResourceHandler handler = StaticResourceHandler.getInstance();
-            if (handler.handle(httpRequest, httpResponse)) {
-                return;
+            if (handler.canHandle(httpRequest)) {
+                httpResponse = handler.handle(httpRequest);
             }
-
-            // servlet
-            // Router Call -> Servlet
-            // Servlet Call
 
             Servlet servlet = ROUTER.getServlet(httpRequest.getPath());
             if (servlet != null) {
-                servlet.service(httpRequest, httpResponse);
-                return;
+                httpResponse = servlet.service(httpRequest);
             }
 
-            // cannot serve
             // TODO: 404 NOT FOUND
+            httpResponse.setHttpVersion(httpRequest.getHttpVersion());
+            HttpHandler.send(out, httpResponse);
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
         }

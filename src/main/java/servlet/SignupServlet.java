@@ -8,20 +8,23 @@ import model.User;
 
 public class SignupServlet extends AbstractServlet {
     @Override
-    protected void doPost(final HttpRequest request, final HttpResponse response) {
-        String userId = request.getBody("userId");
-        String password = request.getBody("password");
-
-        DataBase.addUser(new User(request.getBody("userId"),
-                request.getBody("password"),
-                request.getBody("name"),
-                request.getBody("email")));
-
-        response.sendRedirect("/");
+    protected HttpResponse doGet(final HttpRequest request) {
+        HttpResponse httpResponse = new HttpResponse();
+        httpResponse.forward("./templates/user/form.html");
+        return httpResponse;
     }
 
     @Override
-    protected void doGet(final HttpRequest request, final HttpResponse response) {
-        response.forward("./templates/user/form.html");
+    protected HttpResponse doPost(final HttpRequest request) {
+        DataBase.addUser(new User(
+                request.getBody("userId"),
+                request.getBody("password"),
+                request.getBody("name"),
+                request.getBody("email")
+        ));
+
+        HttpResponse httpResponse = new HttpResponse();
+        httpResponse.sendRedirect("/");
+        return httpResponse;
     }
 }

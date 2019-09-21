@@ -6,7 +6,9 @@ import http.HttpResponse;
 
 public class IndexServlet extends AbstractServlet {
     @Override
-    protected void doGet(final HttpRequest request, final HttpResponse response) {
-        response.forward("./templates/index.html");
+    protected HttpResponse doGet(final HttpRequest request) {
+        HttpResponse httpResponse = new HttpResponse();
+        httpResponse.forward("./templates/index.html");
+        return httpResponse;
     }
 }

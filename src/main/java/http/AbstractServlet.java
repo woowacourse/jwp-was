@@ -1,20 +1,21 @@
 package http;
 
 public abstract class AbstractServlet implements Servlet {
-    public void service(HttpRequest request, HttpResponse response) {
+    public HttpResponse service(final HttpRequest request) {
         String method = request.getMethod();
         if (method.equals("GET")) {
-            doGet(request, response);
+            return doGet(request);
         } else {
-            doPost(request, response);
+            return doPost(request);
         }
     }
 
-    protected void doPost(final HttpRequest request, final HttpResponse response) {
-
+    protected HttpResponse doPost(final HttpRequest request) {
+        // TODO: 기본으로 METHOD_NOT_ALLOWED 에러 리턴하도록
+        return null;
     }
-
-    protected void doGet(final HttpRequest request, final HttpResponse response) {
-
+    protected HttpResponse doGet(final HttpRequest request) {
+        // TODO: 기본으로 METHOD_NOT_ALLOWED 에러 리턴하도록
+        return null;
     }
 }

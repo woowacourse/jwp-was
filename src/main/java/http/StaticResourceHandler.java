@@ -1,24 +1,30 @@
 package http;
 
+import utils.FileIoUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class StaticResourceHandler implements ResourceHandler {
     @Override
-    public boolean handle(final HttpRequest httpRequest, final HttpResponse httpResponse) {
-        final ArrayList<String> extensions = new ArrayList<>(Arrays.asList("css", "js", "htm"));
-
-        if (MimeType.contains(httpRequest.getPath().substring(httpRequest.getPath().lastIndexOf(".") + 1))) {
+    public HttpResponse handle(final HttpRequest httpRequest) {
+        if (canHandle(httpRequest)) {
             String resource = httpRequest.getPath();
             if (resource.contains("htm")) {
                 resource = "./templates" + resource;
             } else {
                 resource = "./static" + resource;
             }
+            HttpResponse httpResponse = new HttpResponse();
             httpResponse.forward(resource);
-            return true;
+            return httpResponse;
         }
-        return false;
+        throw new StaticResourceHandlingFailException();
+    }
+
+    @Override
+    public boolean canHandle(final HttpRequest httpRequest) {
+        return MimeType.contains(FileIoUtils.getFileExtension(httpRequest.getPath()));
     }
 
     public static StaticResourceHandler getInstance() {
