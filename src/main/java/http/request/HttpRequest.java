@@ -1,6 +1,7 @@
 package http.request;
 
 import http.HttpMethod;
+import http.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,7 +9,6 @@ import java.util.List;
 
 public class HttpRequest {
     private static final Logger log = LoggerFactory.getLogger(HttpRequest.class);
-    private static final String NEW_LINE = "\n";
 
     private HttpRequestLine httpRequestLine;
     private HttpRequestHeader httpRequestHeader;
@@ -20,10 +20,9 @@ public class HttpRequest {
         log.debug("Request Header: {}", httpRequestHeader);
 
         if (httpRequestHeader.getContentLength() != 0) {
-            this.httpRequestBody = new HttpRequestBody(lines.subList(getToIndex(lines) + 1, lines.size() - 1));
+            this.httpRequestBody = new HttpRequestBody(lines.subList(getToIndex(lines) + 1, lines.size()));
+            log.debug("Request Body: {}", httpRequestBody.getBody());
         }
-        log.debug("Request Body: {}", httpRequestBody);
-
     }
 
     private int getToIndex(List<String> lines) {
@@ -37,10 +36,15 @@ public class HttpRequest {
         return lastIndex;
     }
 
-//    private void makeHttpBody(List<String> lines) throws IOException {
-//        this.httpRequestBody = new HttpRequestBody(IOUtils.readData(bufferedReader, httpRequestHeader.getContentLength()).getBytes());
-//        log.debug("Request Body: {}", httpRequestBody);
-//    }
+    public HttpRequestLine getHttpRequestLine() {
+        return httpRequestLine;
+    }
+
+    public boolean isContainExtension() {
+        int lastIndex = httpRequestLine.getUri().lastIndexOf("/");
+        String extension = httpRequestLine.getUri().substring(lastIndex + 1);
+        return MediaType.isContain(extension);
+    }
 
     public List<String> getHttpRequestBody() {
         return httpRequestBody.getBody();
