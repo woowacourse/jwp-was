@@ -30,9 +30,10 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest httpRequest = HttpRequestParser.parse(in);
+            logger.info("{}", httpRequest);
             DataOutputStream dos = new DataOutputStream(out);
 
-            if (httpRequest.getUrl().equals("/user/create")) {
+            if (httpRequest.getRequestLine().getOriginUrl().equals("/user/create")) {
                 HttpRequestParams parameters = httpRequest.getHttpRequestParams();
                 User user = new User(parameters.get("userId"), parameters.get("password"),
                         parameters.get("name"), parameters.get("email"));
@@ -40,7 +41,7 @@ public class RequestHandler implements Runnable {
                 logger.info("{}", user);
                 HttpResponseGenerator.redirect(dos, httpRequest.getHttpHeader().get("Origin"), "/index.html");
             } else {
-                HttpResponseGenerator.forward(dos, httpRequest.getUrl());
+                HttpResponseGenerator.forward(dos, httpRequest.getRequestLine().getFullUrl());
             }
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
