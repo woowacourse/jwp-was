@@ -40,10 +40,10 @@ class HttpRequestTest {
         assertThat(httpRequest.getVersion()).isEqualTo(HttpVersion.HTTP_1_1);
         assertThat(httpHeaders.getHeader("Host")).isEqualTo("localhost:8080");
         assertThat(httpHeaders.getHeader("Connection")).isEqualTo("keep-alive");
-        assertThat(httpHeaders.getHeader("Content-Length")).isEqualTo("39");
+        assertThat(httpHeaders.getHeader("Content-Length")).isEqualTo("53");
         assertThat(httpHeaders.getHeader("Content-Type")).isEqualTo("application/x-www-form-urlencoded");
         assertThat(httpHeaders.getHeader("Accept")).isEqualTo("*/*");
-        assertThat(httpRequest.getBody()).isEqualTo("userId=woowa&password=password&name=woo");
+        assertThat(httpRequest.getBody()).isEqualTo("userId=woowa&password=password&name=woo&email=woo@w.a");
     }
 
     @Test

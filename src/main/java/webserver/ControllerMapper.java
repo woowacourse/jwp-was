@@ -3,8 +3,8 @@ package webserver;
 import controller.Controller;
 import controller.UserController;
 import http.request.HttpRequest;
-import http.response.Http404ResponseEntity;
-import http.response.HttpResponseEntity;
+import http.response.response_entity.Http404ResponseEntity;
+import http.response.response_entity.HttpResponseEntity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +22,6 @@ public class ControllerMapper {
         if (controller != null) {
             return controller.handle(httpRequest);
         }
-        return new Http404ResponseEntity("/error.html");
+        return new Http404ResponseEntity();
     }
 }

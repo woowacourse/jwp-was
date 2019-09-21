@@ -9,16 +9,24 @@ public class HttpResponse {
     private HttpHeaders headers;
     private byte[] body;
 
-    HttpResponse(HttpStatusLine statusLine, HttpHeaders headers, byte[] body) {
+    public HttpResponse(HttpStatusLine statusLine, HttpHeaders headers) {
         this.statusLine = statusLine;
         this.headers = headers;
-        this.body = body;
+        this.body = null;
     }
 
     public String getHeaderMessage() {
         return statusLine + CRLF
                 + headers
                 + CRLF;
+    }
+
+    public void setBody(byte[] body, String contentType) {
+        if (body != null) {
+            headers.put("Content-Type", contentType);
+            headers.put("Content-Length", Integer.toString(body.length));
+            this.body = body;
+        }
     }
 
     public byte[] getBody() {

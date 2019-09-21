@@ -11,10 +11,6 @@ public class HttpStatusLine {
         this.status = status;
     }
 
-    public void changeStatus(HttpStatus status) {
-        this.status = status;
-    }
-
     @Override
     public String toString() {
         return version + " " + status.getMessage();

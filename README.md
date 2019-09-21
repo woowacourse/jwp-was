@@ -33,6 +33,8 @@
 3. RequestHandler 리펙토링
     - [x] controller 분리
     - [x] ResponseEntity 분리
+4. 다수의 사용자 처리
+    - [ ] 다수의 사용자 요청에 대해 Queue 에 저장한 후 순차적으로 처리가 가능하도록 해야 한다.
 
 ## 의문사항
 - HTTP response version이 어떻게 결정되는지? request로 온 HTTP버전에 맞춰서 결정되는지 아니면 server에서 정해진 버전으로만 응답하는지?

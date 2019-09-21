@@ -2,6 +2,7 @@ package http;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class HttpHeaders {
     private Map<String, String> headers;
@@ -34,5 +35,18 @@ public class HttpHeaders {
             sb.append(key).append(": ").append(headers.get(key)).append("\r\n");
         }
         return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HttpHeaders that = (HttpHeaders) o;
+        return Objects.equals(headers, that.headers);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(headers);
     }
 }

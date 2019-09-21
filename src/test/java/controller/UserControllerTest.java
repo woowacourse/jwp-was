@@ -1,9 +1,11 @@
 package controller;
 
+import db.DataBase;
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
-import http.response.Http302ResponseEntity;
-import http.response.HttpResponseEntity;
+import http.response.response_entity.Http302ResponseEntity;
+import http.response.response_entity.HttpResponseEntity;
+import model.User;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -22,9 +24,13 @@ class UserControllerTest {
     void user_생성() throws IOException {
         InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "Http_POST.txt"));
         HttpRequest httpRequest = HttpRequestFactory.makeHttpRequest(in);
+        userController.doPost(httpRequest);
 
-        HttpResponseEntity responseEntity = userController.doPost(httpRequest);
+        User user = DataBase.findUserById("woowa");
 
-        assertThat(responseEntity).isEqualTo(new Http302ResponseEntity("/index.html"));
+        assertThat(user.getUserId()).isEqualTo("woowa");
+        assertThat(user.getEmail()).isEqualTo("woo@w.a");
+        assertThat(user.getName()).isEqualTo("woo");
+        assertThat(user.getPassword()).isEqualTo("password");
     }
 }
