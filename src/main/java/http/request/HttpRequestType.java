@@ -1,5 +1,7 @@
 package http.request;
 
+import http.request.exception.InvalidHttpRequestType;
+
 import java.util.Arrays;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -21,7 +23,7 @@ public enum HttpRequestType {
         return Arrays.stream(HttpRequestType.values())
                 .filter(httpRequestType -> httpRequestType.requestTypeChecker.test(url))
                 .findFirst()
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(InvalidHttpRequestType::new);
     }
 
     public String getPrefix() {
