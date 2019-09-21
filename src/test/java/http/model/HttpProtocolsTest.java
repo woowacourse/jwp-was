@@ -13,7 +13,7 @@ class HttpProtocolsTest {
     }
 
     @Test
-    void HTTP_프로토콜이_맞는경우() {
+    void HTTP2_프로토콜인_경우() {
         assertDoesNotThrow(() -> HttpProtocols.of("HTTP/2.0"));
     }
 }
