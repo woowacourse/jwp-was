@@ -24,9 +24,8 @@ public class ControllerContainer {
     }
 
     public static void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
-        Optional<AbstractController> maybeController = findController(httpRequest.getPath());
-        if (maybeController.isPresent()) {
-            maybeController.get().service(httpRequest, httpResponse);
+        if (controllers.keySet().contains(httpRequest.getPath())) {
+            controllers.get(httpRequest.getPath()).service(httpRequest, httpResponse);
             return;
         }
         httpResponse.render(new DefaultView(httpRequest.getPath()));
