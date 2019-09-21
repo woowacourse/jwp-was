@@ -7,6 +7,7 @@ import utils.IOUtils;
 import webserver.controller.Controller;
 import webserver.controller.CreateUserController;
 import webserver.controller.FileController;
+import webserver.support.MethodHandler;
 
 import java.io.*;
 import java.net.Socket;
@@ -17,12 +18,6 @@ import java.util.Optional;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private static Map<String, Controller> api;
-
-    static {
-        api = new HashMap<>();
-        api.put("/user/create", new CreateUserController());
-    }
 
     private Socket connection;
 
@@ -38,8 +33,7 @@ public class RequestHandler implements Runnable {
             Request request = readRequestUrl(in);
             Response response = new Response(new ResponseHeader());
 
-            Controller controller = Optional.ofNullable(api.get(request.extractUrl())).orElseGet(FileController::new);
-            controller.service(request, response);
+            MethodHandler.handle(request, response);
 
             response.writeMessage(new DataOutputStream(out));
         } catch (IOException | URISyntaxException e) {
