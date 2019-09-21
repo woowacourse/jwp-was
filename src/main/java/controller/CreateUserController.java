@@ -1,8 +1,9 @@
 package controller;
 
+import db.DataBase;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import service.UserService;
+import model.User;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -24,8 +25,17 @@ public class CreateUserController extends AbstractController {
         Arrays.stream(tokens)
                 .forEach(s -> parameters.put(s.split("=")[0], s.split("=")[1]));
 
-        UserService userService = new UserService();
-        userService.save(parameters.get("userId"), parameters.get("password"), parameters.get("name"), parameters.get("email"));
+        save(parameters.get("userId"), parameters.get("password"), parameters.get("name"), parameters.get("email"));
         httpResponse.sendRedirect("index.html");
+    }
+
+    private void save(String userId, String password, String name, String email) {
+        if (DataBase.findUserById(userId) == null) {
+            User user = new User(userId, password, name, email);
+            DataBase.addUser(user);
+            return;
+        }
+
+        throw new IllegalArgumentException();
     }
 }
