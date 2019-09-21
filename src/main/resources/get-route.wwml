@@ -3,5 +3,3 @@
 /index.html ## IndexController.index
 
 /user/form.html ## UserController.showSignUpPage
-
-/user/create ## UserController.signUp

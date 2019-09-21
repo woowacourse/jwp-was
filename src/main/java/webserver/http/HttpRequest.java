@@ -4,14 +4,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.io.NetworkIO;
 import utils.parser.KeyValueParserFactory;
-import webserver.http.headerfields.*;
+import webserver.http.headerfields.HttpConnection;
+import webserver.http.headerfields.HttpMethod;
+import webserver.http.headerfields.HttpPath;
+import webserver.http.headerfields.HttpVersion;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
 public class HttpRequest {
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
+    private static final String CONTENT_LENGTH = "Content-Length";
 
     private final HttpMethod method;
     private final HttpPath path;
@@ -19,18 +24,31 @@ public class HttpRequest {
     private final Map<String, String> headerFields;
     private final Map<String, String> params;
 
+    private HttpRequest(HttpMethod method,
+                        HttpPath path,
+                        HttpVersion version,
+                        Map<String, String> headerFields,
+                        Map<String, String> params) {
+        logger.debug("\r\n{}: {} {}\r\n{}\r\n{}", method, path, version, debugString(headerFields), debugString(params));
+
+        this.method = method;
+        this.path = path;
+        this.version = version;
+        this.headerFields = Collections.unmodifiableMap(headerFields);
+        this.params = Collections.unmodifiableMap(params);
+    }
+
     public static Optional<HttpRequest> deserialize(NetworkIO io) {
         final String[] requestLine = io.readLine().split("\\s+");
+
         return HttpMethod.of(requestLine[0]).flatMap(method ->
-            HttpVersion.of(requestLine[2]).map(version ->
-                new HttpRequest(
-                        method,
-                        new HttpPath(requestLine[1]),
-                        version,
-                        parseHeaderFields(io),
-                        parseParams(method, requestLine[1], io)
-                )
-            )
+                HttpVersion.of(requestLine[2]).map(version -> {
+                    HttpPath path = new HttpPath(requestLine[1]);
+                    Map<String, String> headerFields = parseHeaderFields(io);
+                    Map<String, String> params = parseParams(method, path.toString(), io, headerFields.get(CONTENT_LENGTH));
+
+                    return new HttpRequest(method, path, version, headerFields, params);
+                })
         );
     }
 
@@ -38,37 +56,28 @@ public class HttpRequest {
         return KeyValueParserFactory.httpHeaderFieldsParser().toMap(io.readWhile(line -> line.length() > 0));
     }
 
-    private static Map<String, String> parseParams(HttpMethod method, String fullPath, NetworkIO io) {
-        String params = "";
-        if (method == HttpMethod.GET && fullPath.contains("?")) {
-            params = fullPath.split("\\?")[1];
-        } else if (!io.isEOF()) {
-            params = io.readLine();
-        }
+    public static Map<String, String> parseParams(HttpMethod method, String fullPath, NetworkIO io, String contentLength) {
+        String params = paramsLine(method, fullPath, io, contentLength);
         return KeyValueParserFactory.queryStringParser().toMap(params);
     }
 
-    private HttpRequest(
-            HttpMethod method,
-            HttpPath path,
-            HttpVersion version,
-            Map<String, String> headerFields,
-            Map<String, String> params
-    ) {
-        logger.debug(
-                "\r\n{}: {} {}\r\n{}\r\n{}",
-                method,
-                path,
-                version,
-                debugString(headerFields),
-                debugString(params)
-        );
+    private static String paramsLine(HttpMethod method, String fullPath, NetworkIO io, String contentLength) {
+        if (method == HttpMethod.GET && fullPath.contains("?")) {
+            return fullPath.split("\\?")[1];
+        }
+        if (method == HttpMethod.POST) {
+            return postParamsLine(io, contentLength);
+        }
+        return "";
+    }
 
-        this.method = method;
-        this.path = path;
-        this.version = version;
-        this.headerFields = Collections.unmodifiableMap(headerFields);
-        this.params = Collections.unmodifiableMap(params);
+    private static String postParamsLine(NetworkIO io, String contentLength) {
+        try {
+            return io.postBody(Integer.parseInt(contentLength));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        throw new IllegalArgumentException();
     }
 
     private String debugString(Map<String, String> x) {
