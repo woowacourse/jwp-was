@@ -4,6 +4,7 @@ import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.UrlNotFoundException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,7 +32,7 @@ public class RequestHandler implements Runnable {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             ControllerContainer.service(httpRequest, httpResponse);
 
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException | URISyntaxException | UrlNotFoundException e) {
             logger.error(e.getMessage());
         }
     }

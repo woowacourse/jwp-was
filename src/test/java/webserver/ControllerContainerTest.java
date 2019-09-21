@@ -5,6 +5,7 @@ import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.response.view.DefaultView;
 import org.junit.jupiter.api.Test;
+import utils.UrlNotFoundException;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -17,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ControllerContainerTest {
 
     @Test
-    void user_controller_POST요청() throws IOException, URISyntaxException {
+    void user_controller_POST요청() throws IOException, URISyntaxException, UrlNotFoundException {
         String request = "POST /user/create HTTP/1.1\n" +
                 "Host: localhost:8080\n" +
                 "Connection: keep-alive\n" +
@@ -40,7 +41,7 @@ class ControllerContainerTest {
     }
 
     @Test
-    void index문서_get요청() throws IOException, URISyntaxException {
+    void index문서_get요청() throws IOException, URISyntaxException, UrlNotFoundException {
         String request = "GET /index.html HTTP/1.1\nHost: localhost:8080\nConnection: keep-alive\nAccept: */*";
 
         InputStream in = new ByteArrayInputStream(request.getBytes());
