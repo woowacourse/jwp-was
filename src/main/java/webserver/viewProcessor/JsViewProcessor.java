@@ -6,10 +6,8 @@ public class JsViewProcessor implements ViewProcessor {
 
     @Override
     public boolean isSupported(String viewName) {
-        if (viewName.endsWith(".js")) {
-            return true;
-        }
-        return false;
+        return viewName.endsWith(".js");
+
     }
 
     @Override

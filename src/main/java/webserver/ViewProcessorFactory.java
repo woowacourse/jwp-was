@@ -8,7 +8,7 @@ import java.util.List;
 public class ViewProcessorFactory {
     private static List<ViewProcessor> viewProcessors = new ArrayList<>();
 
-    //TODO RedirectViewProcessor가 처음에 있지 않고 순서가 바뀌면 리다이렉트 시 HTML 파일일 경우는 HtmlViewProcessor가 추출된다.
+    //TODO RedirectViewProcessor가 처음에 있지 않고 순서가 바뀌면 리다이렉트 시 HTML 파일일 경우는 HtmlViewProcessor가 추출된다
     static {
         viewProcessors.add(new RedirectViewProcessor());
         viewProcessors.add(new CssViewProcessor());

@@ -6,10 +6,7 @@ public class RedirectViewProcessor implements ViewProcessor {
 
     @Override
     public boolean isSupported(String viewName) {
-        if (viewName.startsWith("/redirect:")) {
-            return true;
-        }
-        return false;
+        return viewName.startsWith("/redirect:");
     }
 
     @Override

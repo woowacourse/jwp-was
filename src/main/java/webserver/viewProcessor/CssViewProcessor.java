@@ -5,10 +5,7 @@ import webserver.httpResponse.HttpResponse;
 public class CssViewProcessor implements ViewProcessor {
     @Override
     public boolean isSupported(String viewName) {
-        if (viewName.endsWith(".css")) {
-            return true;
-        }
-        return false;
+        return viewName.endsWith(".css");
     }
 
     @Override
