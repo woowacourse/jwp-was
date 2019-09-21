@@ -8,14 +8,14 @@ import java.io.StringReader;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-class NetworkInputTest extends RequestHelper {
-    private static final Logger LOG = getLogger(NetworkInputTest.class);
+class IOUtilsTest extends RequestHelper {
+    private static final Logger LOG = getLogger(IOUtilsTest.class);
 
     @Test
     public void readData() throws Exception {
         String data = "abcd123";
         StringReader sr = new StringReader(data);
 
-        LOG.debug("parse body : {}", networkInput.readBody(data.length()));
+        LOG.debug("parse body : {}", ioUtils.readBody(data.length()));
     }
 }

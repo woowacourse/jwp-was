@@ -2,10 +2,11 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.DataConverter;
 import utils.FileIoUtils;
-import webserver.domain.Request;
-import webserver.domain.Response;
-import webserver.view.NetworkInput;
+import utils.IOUtils;
+import webserver.domain.request.Request;
+import webserver.domain.response.Response;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -31,7 +32,7 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            final Request request = new Request(new NetworkInput(in));
+            final Request request = new Request(new IOUtils(in));
             final byte[] response = processRequest(request);
             final DataOutputStream dos = new DataOutputStream(out);
             writeResponse(dos, response);
@@ -49,18 +50,11 @@ public class RequestHandler implements Runnable {
     private byte[] processRequest(final Request request) throws IOException, URISyntaxException, NullPointerException {
         try {
             final Response body = RequestDispatcher.forward(request);
-            return Objects.nonNull(body) ? convertToBytes(body) : convertToBytes(FileIoUtils.loadFileFromClasspath(makeFilePath(request, STATIC_PATH)));
+            return Objects.nonNull(body) ? DataConverter.convertToBytes(body) :
+                    DataConverter.convertToBytes(FileIoUtils.loadFileFromClasspath(makeFilePath(request, STATIC_PATH)));
         } catch (IOException | URISyntaxException | NullPointerException e) {
-            return convertToBytes(FileIoUtils.loadFileFromClasspath(makeFilePath(request, TEMPLATES_PATH)));
+            return DataConverter.convertToBytes(FileIoUtils.loadFileFromClasspath(makeFilePath(request, TEMPLATES_PATH)));
         }
-    }
-
-    private byte[] convertToBytes(final Response response) {
-        return response.toBytes();
-    }
-
-    private byte[] convertToBytes(final byte[] bytes) {
-        return new Response.Builder().body(bytes).build().toBytes();
     }
 
     private void writeResponse(final DataOutputStream dos, final byte[] body) {

@@ -1,4 +1,4 @@
-package webserver.domain;
+package webserver.domain.request;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -32,7 +32,7 @@ public enum MediaType {
         return Arrays.stream(values())
                 .filter(m -> m.extensions.contains(extension.toLowerCase()))
                 .findFirst()
-                .orElseGet(() -> MediaType.APPLICATION_BINARY);
+                .orElse(MediaType.APPLICATION_BINARY);
     }
 
     public String getMediaType() {

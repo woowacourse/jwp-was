@@ -1,4 +1,6 @@
-package webserver.view;
+package utils;
+
+import org.slf4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,10 +10,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.Objects;
 
-public class NetworkInput implements Iterable<String> {
+import static org.slf4j.LoggerFactory.getLogger;
+
+public class IOUtils implements Iterable<String> {
+    private static final Logger LOG = getLogger(IOUtils.class);
+
     private final BufferedReader bufferedReader;
 
-    public NetworkInput(final InputStream inputStream) {
+    public IOUtils(final InputStream inputStream) {
         this.bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
     }
 
@@ -26,7 +32,7 @@ public class NetworkInput implements Iterable<String> {
         try {
             return new MyIterator(bufferedReader);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage());
             return iterator();
         }
     }
@@ -52,7 +58,7 @@ public class NetworkInput implements Iterable<String> {
                 this.nextLine = bufferedReader.readLine();
                 return result;
             } catch (IOException e) {
-                e.printStackTrace();
+                LOG.error(e.getMessage());
                 return "";
             }
         }

@@ -1,7 +1,8 @@
-package webserver.domain;
+package webserver.domain.request;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import webserver.domain.request.HttpMethod;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

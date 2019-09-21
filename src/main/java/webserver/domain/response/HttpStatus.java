@@ -1,4 +1,4 @@
-package webserver.domain;
+package webserver.domain.response;
 
 public enum HttpStatus {
     OK(200, "OK"),
@@ -13,11 +13,11 @@ public enum HttpStatus {
         this.phrase = phrase;
     }
 
-    public int code() {
+    public int getCode() {
         return code;
     }
 
-    public String phrase() {
+    public String getPhrase() {
         return phrase;
     }
 

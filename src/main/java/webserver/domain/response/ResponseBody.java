@@ -1,4 +1,4 @@
-package webserver.domain;
+package webserver.domain.response;
 
 public class ResponseBody {
     private byte[] body = new byte[0];

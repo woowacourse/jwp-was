@@ -1,11 +1,13 @@
-package webserver.domain;
+package webserver.domain.response;
+
+import webserver.domain.request.MediaType;
 
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Response {
-    private static final byte[] NEW_LINE_BYTES = "\r\n\r\n".getBytes();
+    private static final byte[] HEADER_BODY_DELIMITER_BYTES = "\r\n\r\n".getBytes();
 
     private ResponseHeader header;
     private ResponseBody body;
@@ -16,33 +18,35 @@ public class Response {
     }
 
     public static class Builder {
-        private static final String HTTP_1_1 = "HTTP/1.1";
-
         private ResponseBody body = new ResponseBody();
-        private String protocol;
+        private HttpVersion httpVersion;
         private HttpStatus httpStatus;
         private Map<String, String> responseFields = new HashMap<>();
 
-        public Builder(final String protocol, final HttpStatus httpStatus) {
-            this.protocol = protocol;
+        public Builder(final HttpVersion httpVersion, final HttpStatus httpStatus) {
+            this.httpVersion = httpVersion;
             this.httpStatus = httpStatus;
-            this.responseFields.put("Content-Type", "application/octet-stream");
+            this.responseFields.put("Content-Type", MediaType.APPLICATION_BINARY.getMediaType());
         }
 
-        public Builder(final String protocol) {
-            this(protocol, HttpStatus.OK);
+        public Builder(final String httpVersion) {
+            this(HttpVersion.of(httpVersion), HttpStatus.OK);
+        }
+
+        public Builder(final HttpVersion httpVersion) {
+            this(httpVersion, HttpStatus.OK);
         }
 
         public Builder(final HttpStatus httpStatus) {
-            this(HTTP_1_1, httpStatus);
+            this(HttpVersion.HTTP_1_1, httpStatus);
         }
 
         public Builder() {
-            this(HTTP_1_1, HttpStatus.OK);
+            this(HttpVersion.HTTP_1_1, HttpStatus.OK);
         }
 
-        public Builder protocol(final String protocol) {
-            this.protocol = protocol;
+        public Builder httpVersion(final String httpVersion) {
+            this.httpVersion = HttpVersion.of(httpVersion);
             return this;
         }
 
@@ -84,18 +88,18 @@ public class Response {
         }
 
         public Response build() {
-            final ResponseHeader header = new ResponseHeader(this.protocol, this.httpStatus, this.responseFields);
+            final ResponseHeader header = new ResponseHeader(this.httpVersion, this.httpStatus, this.responseFields);
             return new Response(header, this.body);
         }
     }
 
     public byte[] toBytes() {
         final int bodyLength = this.body.length();
-        final byte[] header = this.header.make(bodyLength).getBytes();
+        final byte[] header = this.header.makeHeaderLine(bodyLength).getBytes();
 
         return ByteBuffer
-                .allocate(header.length + NEW_LINE_BYTES.length + bodyLength)
-                .put(header).put(NEW_LINE_BYTES).put(this.body.getBody())
+                .allocate(header.length + HEADER_BODY_DELIMITER_BYTES.length + bodyLength)
+                .put(header).put(HEADER_BODY_DELIMITER_BYTES).put(this.body.getBody())
                 .array();
     }
 }

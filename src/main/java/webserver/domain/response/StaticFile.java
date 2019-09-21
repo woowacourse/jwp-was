@@ -1,4 +1,4 @@
-package webserver.domain;
+package webserver.domain.response;
 
 import utils.FileIoUtils;
 
@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class StaticFile {
+    private static final String PATH_DELIMITER = "/";
+    private static final String EXTENSION_DELIMITER = "\\.";
+
     private final String path;
     private final String name;
     private final String extension;
@@ -19,12 +22,12 @@ public class StaticFile {
     }
 
     private String extractName(final String path) {
-        final String[] pathFragments = path.split("/");
+        final String[] pathFragments = path.split(PATH_DELIMITER);
         return pathFragments[pathFragments.length - 1];
     }
 
     private String extractExtension(final String fileName) {
-        final String[] namePieces = fileName.split("\\.");
+        final String[] namePieces = fileName.split(EXTENSION_DELIMITER);
         return namePieces.length == 1 ? "" : namePieces[namePieces.length - 1];
     }
 

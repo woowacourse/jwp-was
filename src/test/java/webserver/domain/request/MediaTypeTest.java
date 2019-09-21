@@ -1,7 +1,8 @@
-package webserver.domain;
+package webserver.domain.request;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import webserver.domain.request.MediaType;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,6 +26,6 @@ class MediaTypeTest {
     @DisplayName("미디어타입을 잘 반환하는지 확인")
     void getMediaType() {
         String extension = "htm";
-        assertThat(MediaType.of(extension).getMediaType()).isEqualTo("text/html");
+        assertThat(MediaType.of(extension).getMediaType()).isEqualTo("text/html; charset=utf-8");
     }
 }
