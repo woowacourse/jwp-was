@@ -23,6 +23,13 @@ public class HttpRequestHeader {
         }
     }
 
+    public int getContentLength() {
+        if (headers.containsKey("Content-Length")) {
+            return Integer.parseInt(headers.get("Content-Length"));
+        }
+        return 0;
+    }
+
     @Override
     public String toString() {
         return "HttpRequestHeader{" +
