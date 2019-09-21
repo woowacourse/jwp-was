@@ -30,6 +30,10 @@ public class HttpRequestLine {
         return url;
     }
 
+    public String getPath() {
+        return url.getPath();
+    }
+
     public HttpProtocol getProtocol() {
         return protocol;
     }
