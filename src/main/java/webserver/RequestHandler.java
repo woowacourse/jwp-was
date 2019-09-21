@@ -1,25 +1,31 @@
 package webserver;
 
-import http.HttpMethod;
+import controller.Controller;
+import controller.CreateUserController;
+import controller.FileController;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import http.response.HttpResponseBody;
-import http.response.HttpResponseHeader;
-import http.response.HttpStatusLine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.RequestParser;
 
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final Map<String, Controller> controllers;
+
+    static {
+        controllers = new HashMap<>();
+        controllers.put("/user/create", new CreateUserController());
+        controllers.put("/", new FileController());
+    }
 
     private Socket connection;
 
@@ -33,43 +39,24 @@ public class RequestHandler implements Runnable {
 
         try (InputStream inputStream = connection.getInputStream();
              OutputStream outputStream = connection.getOutputStream()) {
-            DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
-            HttpRequest httpRequest = new HttpRequest(bufferedReader);
-            HttpResponse httpResponse = makeResponse(httpRequest);
+            DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+            HttpRequest httpRequest = new HttpRequest(RequestParser.parse(inputStream));
+            HttpResponse httpResponse = new HttpResponse();
+
+            logger.debug("RequestLine: {}", httpRequest.getHttpRequestLine().toString());
+
+            if (httpRequest.isContainExtension()) {
+                controllers.get("/").service(httpRequest, httpResponse);
+            } else {
+                controllers.get(httpRequest.getUri()).service(httpRequest, httpResponse);
+            }
 
             dataOutputStream.writeBytes(httpResponse.getHttpStatusLine().toString());
             dataOutputStream.writeBytes(httpResponse.getHttpResponseHeader().toString());
+
             responseBody(dataOutputStream, httpResponse.getHttpResponseBody().getBody());
-        } catch (IOException | URISyntaxException e) {
-            logger.error(e.getMessage());
-        }
-    }
 
-    private HttpResponse makeResponse(HttpRequest httpRequest) throws IOException, URISyntaxException {
-        HttpMethod method = httpRequest.getMethod();
-        String uri = httpRequest.getUri();
-
-        if (method.equals(HttpMethod.GET)) {
-            HttpStatusLine httpStatusLine = new HttpStatusLine("HTTP/1.1 200 OK \r\n");
-            HttpResponseBody httpResponseBody = new HttpResponseBody(uri);
-            HttpResponseHeader httpResponseHeader = new HttpResponseHeader(
-                    "Content-Type: text/html;charset=utf-8\r\n"
-                            + "Content-Length: " + httpResponseBody.getBodyLength());
-            HttpResponse httpResponse = new HttpResponse(httpStatusLine, httpResponseHeader, httpResponseBody);
-            return httpResponse;
-        }
-
-        return null;
-    }
-
-    private void response200Header(DataOutputStream dataOutputStream, int lengthOfBodyContent) {
-        try {
-            dataOutputStream.writeBytes("HTTP/1.1 200 OK \r\n");
-            dataOutputStream.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dataOutputStream.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dataOutputStream.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
