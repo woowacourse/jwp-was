@@ -22,22 +22,20 @@ public interface NetworkIO extends Iterator<String> {
     default String readLinesWhile(Predicate<? super String> condition) {
         class Closure {
             private TailRecursion<String> readLinesWhile(StringBuilder acc) {
-                final String line = this.appendLine(acc);
-                return (!line.isEmpty() && condition.test(line))
-                        ? (TailCall<String>) () -> this.readLinesWhile(acc)
-                        : (Done<String>) acc::toString;
-            }
-
-            private String appendLine(StringBuilder acc) {
-                if (!isEOF()) {
-                    final String line = readLine();
-                    acc.append(line).append("\r\n");
-                    return line;
+                final String line = readLine();
+                if (line.isEmpty()) {
+                    return (Done<String>) acc::toString;
                 }
-                return "";
+                return condition.test(line)
+                        ? (TailCall<String>) () -> this.readLinesWhile(acc.append(line))
+                        : (Done<String>) () -> acc.append(line).toString();
             }
         }
         return (new Closure()).readLinesWhile(new StringBuilder()).get();
+    }
+
+    default String readLinesWhileNotEmpty() {
+        return readLinesWhile(line -> !line.replaceAll("(\r|\n|\r\n)", "").isEmpty());
     }
 
     String readAllLeft();

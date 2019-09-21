@@ -55,11 +55,8 @@ public class NetworkIOStream implements NetworkIO {
     }
 
     private TailRecursion<String> readLine(StringBuilder acc) {
-        if (isEOF()) {
-            return (Done<String>) acc::toString;
-        }
         try {
-            return checkIfLineBreak(acc);
+            return this.reader.ready() ? checkIfLineBreak(acc) : (Done<String>) acc::toString;
         } catch (IOException e) {
             logger.error(e.getMessage());
             return (Done<String>) acc::toString;
@@ -71,15 +68,12 @@ public class NetworkIOStream implements NetworkIO {
         if (c == '\r') {
             this.reader.mark(1);
             if (this.reader.ready() && this.reader.read() == '\n') {
-                logger.debug("LINE: " + acc.toString());
                 return (Done<String>) () -> acc.append("\r\n").toString();
             }
             this.reader.reset();
-            logger.debug("LINE: " + acc.toString());
             return (Done<String>) () -> acc.append("\r").toString();
         }
         if (c == '\n') {
-            logger.debug("LINE: " + acc.toString());
             return (Done<String>) () -> acc.append("\n").toString();
         }
         return (TailCall<String>) () -> readLine(acc.append((char) c));
@@ -99,7 +93,7 @@ public class NetworkIOStream implements NetworkIO {
     }
 
     private TailRecursion<String> continueReading(StringBuilder acc) throws IOException {
-        return readAllLeft(acc.append(this.reader.read()));
+        return readAllLeft(acc.append((char) this.reader.read()));
     }
 
     @Override

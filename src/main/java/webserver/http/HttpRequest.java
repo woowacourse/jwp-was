@@ -2,11 +2,19 @@ package webserver.http;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.StringUtils;
 import utils.io.NetworkIO;
 import utils.parser.KeyValueParserFactory;
-import webserver.http.headerfields.*;
+import webserver.http.headerfields.HttpConnection;
+import webserver.http.headerfields.HttpContentType;
+import webserver.http.headerfields.HttpHeaderField;
+import webserver.http.headerfields.HttpMimeType;
+import webserver.http.startline.HttpMethod;
+import webserver.http.startline.HttpPath;
+import webserver.http.startline.HttpVersion;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -16,62 +24,101 @@ public class HttpRequest {
     private final HttpMethod method;
     private final HttpPath path;
     private final HttpVersion version;
-    private final Map<String, String> headerFields;
+    private final HttpConnection connection;
+    private final HttpContentType contentType;
+    private final Map<String, String> otherHeaderFields;
     private final Map<String, String> params;
+    private final String body;
 
     public static Optional<HttpRequest> deserialize(NetworkIO io) {
-        final String[] requestLine = io.readLine().split("\\s+");
-        return HttpMethod.of(requestLine[0]).flatMap(method ->
-            HttpVersion.of(requestLine[2]).map(version ->
-                new HttpRequest(
-                        method,
-                        new HttpPath(requestLine[1]),
-                        version,
-                        parseHeaderFields(io),
-                        parseParams(method, requestLine[1], io)
-                )
-            )
-        );
+        final String[] startLine = io.readLine().split("\\s+");
+        return (startLine.length != 3)
+                ? Optional.empty()
+                : HttpMethod.of(startLine[0]).flatMap(method ->
+                    HttpVersion.of(startLine[2]).map(version -> {
+                        final HttpPath path = new HttpPath(startLine[1]);
+                        final Map<String, String> headerFields = parseHeaderFields(io);
+                        final HttpConnection connection = HttpConnection.of(
+                                headerFields.remove(toFieldName(HttpConnection.class))
+                        ).orElse(null);
+                        final HttpContentType contentType = HttpContentType.of(
+                                headerFields.remove(toFieldName(HttpContentType.class))
+                        ).orElse(null);
+                        if (method == HttpMethod.GET && startLine[1].contains("?")) {
+                            return new HttpRequest(
+                                    method, path, version,
+                                    connection, contentType, headerFields,
+                                    KeyValueParserFactory.queryStringParser().interpret(startLine[1].split("\\?")[1]),
+                                    null
+                            );
+                        }
+                        if (method == HttpMethod.POST || method == HttpMethod.PUT) {
+                            if (contentType.mimeType() == HttpMimeType.APPLICATION_X_WWW_FORM_URLENCODED) {
+                                return new HttpRequest(
+                                        method, path, version,
+                                        connection, contentType, headerFields,
+                                        KeyValueParserFactory.queryStringParser().interpret(io.readAllLeft()),
+                                        null
+                                );
+                            }
+                        }
+                        return new HttpRequest(
+                                method, path, version,
+                                connection, contentType, headerFields,
+                                new HashMap<>(),
+                                null
+                        );
+                    })
+                );
     }
 
     private static Map<String, String> parseHeaderFields(NetworkIO io) {
-        return KeyValueParserFactory.httpHeaderFieldsParser().toMap(io.readWhile(line -> line.length() > 0));
-    }
-
-    private static Map<String, String> parseParams(HttpMethod method, String fullPath, NetworkIO io) {
-        String params = "";
-        if (method == HttpMethod.GET && fullPath.contains("?")) {
-            params = fullPath.split("\\?")[1];
-        } else if (!io.isEOF()) {
-            params = io.readLine();
-        }
-        return KeyValueParserFactory.queryStringParser().toMap(params);
+        return KeyValueParserFactory.httpHeaderFieldsParser().interpret(io.readLinesWhileNotEmpty());
     }
 
     private HttpRequest(
             HttpMethod method,
             HttpPath path,
             HttpVersion version,
-            Map<String, String> headerFields,
-            Map<String, String> params
+            HttpConnection connection,
+            HttpContentType contentType,
+            Map<String, String> otherHeaderFields,
+            Map<String, String> params,
+            String body
     ) {
-        logger.debug(
-                "\r\n{}: {} {}\r\n{}\r\n{}",
-                method,
-                path,
-                version,
-                debugString(headerFields),
-                debugString(params)
-        );
-
         this.method = method;
         this.path = path;
         this.version = version;
-        this.headerFields = Collections.unmodifiableMap(headerFields);
+        this.connection = connection;
+        this.contentType = contentType;
+        this.otherHeaderFields = Collections.unmodifiableMap(otherHeaderFields);
         this.params = Collections.unmodifiableMap(params);
+        this.body = body;
+
+        logger.debug(
+                String.format(
+                        "Request:\r\n%s %s %s\r\n%s%s%s%s%s",
+                        method, path, version,
+                        toDebugString(this.connection),
+                        toDebugString(this.contentType),
+                        toDebugString(otherHeaderFields),
+                        toDebugString(params),
+                        (body != null ? "\r\n" + body : "")
+                )
+        );
     }
 
-    private String debugString(Map<String, String> x) {
+    private static String toFieldName(Class headerFieldClass) {
+        return StringUtils.pascalToKebobCase(headerFieldClass.getSimpleName().split("Http")[1]);
+    }
+
+    private String toDebugString(HttpHeaderField headerField) {
+        return Optional.ofNullable(headerField).map(x ->
+                toFieldName(headerField.getClass()) + ": " + x + "\r\n"
+        ).orElse("");
+    }
+
+    private String toDebugString(Map<String, String> x) {
         final StringBuilder acc = new StringBuilder();
         x.forEach((key, value) -> acc.append(String.format("%s: %s\r\n", key, value)));
         return acc.toString();
@@ -90,11 +137,11 @@ public class HttpRequest {
     }
 
     public Optional<HttpConnection> connection() {
-        return HttpConnection.of(headerFields.get("Connection"));
+        return Optional.ofNullable(this.connection);
     }
 
     public String getField(String key) {
-        return this.headerFields.get(key);
+        return this.otherHeaderFields.get(key);
     }
 
     public String getParam(String key) {
