@@ -24,14 +24,11 @@ public class HttpRequest {
     }
 
     public String getParam(String key) {
-        String bodyParam = httpRequestBody.getBodyParam(key);
-        if (bodyParam == null) {
-            String param = httpStartLine.getParam(key);
-            if (param == null) {
-                return "";
-            }
+        String param = httpRequestBody.getBodyParam(key);
+        if (param == null) {
+            param = httpStartLine.getParam(key);
         }
-        return bodyParam;
+        return param;
     }
 
 
