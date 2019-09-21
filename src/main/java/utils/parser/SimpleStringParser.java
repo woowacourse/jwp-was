@@ -5,6 +5,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class SimpleStringParser implements KeyValueParser {
+    private static final int KEY_INDEX = 0;
+    private static final int VALUE_INDEX = 1;
+    private static final int KEY_VALUE_SIZE = 2;
+
     private final String pairDelimiter;
     private final String keyValueDelimiter;
 
@@ -17,8 +21,8 @@ public class SimpleStringParser implements KeyValueParser {
     public Map<String, String> toMap(String input) {
         return Stream.of(input.split(this.pairDelimiter))
                     .map(x -> x.split(this.keyValueDelimiter))
-                    .filter(x -> x.length == 2)
-                    .map(pair -> new String[] { pair[0].trim(), pair[1].trim() })
-                    .collect(Collectors.toMap(pair -> pair[0], pair -> pair[1]));
+                    .filter(x -> x.length == KEY_VALUE_SIZE)
+                    .map(pair -> new String[] { pair[KEY_INDEX].trim(), pair[VALUE_INDEX].trim() })
+                    .collect(Collectors.toMap(pair -> pair[KEY_INDEX], pair -> pair[VALUE_INDEX]));
     }
 }

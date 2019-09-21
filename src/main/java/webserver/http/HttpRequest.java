@@ -16,7 +16,14 @@ import java.util.Optional;
 
 public class HttpRequest {
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
+
+    private static final int METHOD_INDEX = 0;
+    private static final int PATH_INDEX = 1;
+    private static final int VERSION_INDEX = 2;
+    private static final int ZERO = 0;
+
     private static final String CONTENT_LENGTH = "Content-Length";
+    private static final String CONNECTION = "Connection";
 
     private final HttpMethod method;
     private final HttpPath path;
@@ -41,9 +48,9 @@ public class HttpRequest {
     public static Optional<HttpRequest> deserialize(NetworkIO io) {
         final String[] requestLine = io.readLine().split("\\s+");
 
-        return HttpMethod.of(requestLine[0]).flatMap(method ->
-                HttpVersion.of(requestLine[2]).map(version -> {
-                    HttpPath path = new HttpPath(requestLine[1]);
+        return HttpMethod.of(requestLine[METHOD_INDEX]).flatMap(method ->
+                HttpVersion.of(requestLine[VERSION_INDEX]).map(version -> {
+                    HttpPath path = new HttpPath(requestLine[PATH_INDEX]);
                     Map<String, String> headerFields = parseHeaderFields(io);
                     Map<String, String> params = parseParams(method, path.toString(), io, headerFields.get(CONTENT_LENGTH));
 
@@ -53,7 +60,7 @@ public class HttpRequest {
     }
 
     private static Map<String, String> parseHeaderFields(NetworkIO io) {
-        return KeyValueParserFactory.httpHeaderFieldsParser().toMap(io.readWhile(line -> line.length() > 0));
+        return KeyValueParserFactory.httpHeaderFieldsParser().toMap(io.readWhile(line -> line.length() > ZERO));
     }
 
     public static Map<String, String> parseParams(HttpMethod method, String fullPath, NetworkIO io, String contentLength) {
@@ -99,7 +106,7 @@ public class HttpRequest {
     }
 
     public Optional<HttpConnection> connection() {
-        return HttpConnection.of(headerFields.get("Connection"));
+        return HttpConnection.of(headerFields.get(CONNECTION));
     }
 
     public String getField(String key) {
