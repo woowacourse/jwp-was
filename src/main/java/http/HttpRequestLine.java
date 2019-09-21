@@ -34,10 +34,6 @@ public class HttpRequestLine {
         return protocol;
     }
 
-    public boolean hasUrlParams() {
-        return url.hasParams();
-    }
-
     @Override
     public String toString() {
         return "HttpRequestLine{" +
