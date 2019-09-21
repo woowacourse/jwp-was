@@ -8,19 +8,19 @@ public class HttpRequest {
 
     private RequestFirstLine requestFirstLine;
     private RequestHeaders requestHeaders;
-    private RequestParams requestParams;
-    private RequestBody requestBody;
+    private RequestData requestParams;
+    private RequestData requestBody;
 
     public HttpRequest(List<String> lines) {
         this.requestFirstLine = new RequestFirstLine(lines.get(0));
         this.requestParams = getRequestParams(requestFirstLine);
         this.requestHeaders = new RequestHeaders();
-        this.requestBody = new RequestBody();
+        this.requestBody = new RequestData();
         setRequestHeaderAndBody(lines);
     }
 
-    private static RequestParams getRequestParams(RequestFirstLine requestFirstLine) {
-        RequestParams requestParams = new RequestParams();
+    private static RequestData getRequestParams(RequestFirstLine requestFirstLine) {
+        RequestData requestParams = new RequestData();
 
         if (requestFirstLine.hasParams()) {
             String search = requestFirstLine.getSearch();

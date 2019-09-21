@@ -6,18 +6,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class RequestBody {
+public class RequestData {
     private static final String AMPERSAND = "&";
     private static final String EQUALS_SIGN = "=";
 
-    private Map<String, String> body;
+    private Map<String, String> data;
 
-    public RequestBody() {
-        this.body = new HashMap<>();
+    public RequestData() {
+        this.data = new HashMap<>();
     }
 
     public String get(String key) {
-        return Optional.ofNullable(body.get(key))
+        return Optional.ofNullable(data.get(key))
                 .orElseThrow(() ->
                         new IllegalArgumentException(String.format("key 값(%s)에 해당되는 Body 데이터가 존재하지 않습니다.", key)));
     }
@@ -26,7 +26,12 @@ public class RequestBody {
         String[] bodyParams = body.split(AMPERSAND);
         for (String param : bodyParams) {
             String[] queryParam = param.split(EQUALS_SIGN);
-            this.body.put(DecoderUtils.decodeString(queryParam[0]), DecoderUtils.decodeString(queryParam[1]));
+            this.data.put(DecoderUtils.decodeString(queryParam[0]), DecoderUtils.decodeString(queryParam[1]));
         }
     }
+
+    public boolean isEmpty() {
+        return data.isEmpty();
+    }
 }
+
