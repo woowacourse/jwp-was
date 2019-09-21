@@ -43,7 +43,7 @@ public class RequestHandler implements Runnable {
 				return;
 			}
 
-			byte[] body = FileIoUtils.loadFileFromClasspath(path.substring(0, path.lastIndexOf("?")));
+			byte[] body = FileIoUtils.loadFileFromClasspath(path);
 
 			Response response = new Response(ResponseGenerator.responseHeader(path, body.length));
 			sendResponseHeader(response.getAllHeaders(), dos);
