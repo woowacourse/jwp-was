@@ -14,7 +14,7 @@ public class RedirectViewProcessor implements ViewProcessor {
 
     @Override
     public String process(String viewName, HttpResponse httpResponse) {
-        httpResponse.forward();
+        httpResponse.sendRedirect();
         String[] split = viewName.split(":");
         return split[1];
     }
