@@ -2,6 +2,7 @@ package webserver;
 
 import org.junit.jupiter.api.Test;
 import webserver.httpResponse.Http2xxResponseProcessor;
+import webserver.httpResponse.Http3xxResponseProcessor;
 import webserver.httpResponse.HttpResponse;
 
 import java.util.Objects;
@@ -27,6 +28,6 @@ class HttpResponseProcessorFactoryTest {
         httpResponse.sendRedirect();
 
         HttpResponseProcessor httpResponseProcessor = httpResponseProcessorFactory.getHttpResponseProcessor(httpResponse);
-        assertThat(httpResponseProcessor).isInstanceOf(Http2xxResponseProcessor.class);
+        assertThat(httpResponseProcessor).isInstanceOf(Http3xxResponseProcessor.class);
     }
 }
