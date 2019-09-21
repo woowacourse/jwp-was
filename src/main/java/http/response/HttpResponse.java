@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public abstract class HttpResponse {
 
-    private static final Logger log = LoggerFactory.getLogger(HttpResponse.class);
+    protected static final Logger log = LoggerFactory.getLogger(HttpResponse.class);
 
     protected StatusLine statusLine;
     protected HttpHeader responseHeader;
