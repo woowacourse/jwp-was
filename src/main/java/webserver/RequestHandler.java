@@ -36,7 +36,7 @@ public class RequestHandler implements Runnable {
 			Request request = new Request(RequestHeaderReader.readRequest(bufferedReader));
 			String path = ResourcePathUtils.getResourcePath(request.getRequestElement("Path"));
 
-			if (HttpMethod.POST.isSameMethod(request.getRequestElement("Method"))) {
+			if ("/user/create".equals(request.getRequestElement("Path"))) {
 				String body = RequestBodyReader.readRequestBody(bufferedReader, request.getRequestElement("Content-Length"));
 				RequestBody requestBody = new RequestBody(QueryStringSeparator.separate(body));
 				saveUser(requestBody.getBody());
