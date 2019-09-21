@@ -55,7 +55,9 @@ public class RequestHandler implements Runnable {
             dataOutputStream.writeBytes(httpResponse.getHttpStatusLine().toString());
             dataOutputStream.writeBytes(httpResponse.getHttpResponseHeader().toString());
 
-            responseBody(dataOutputStream, httpResponse.getHttpResponseBody().getBody());
+            if (httpResponse.getHttpResponseBody() != null) {
+                responseBody(dataOutputStream, httpResponse.getHttpResponseBody().getBody());
+            }
 
         } catch (IOException e) {
             logger.error(e.getMessage());
