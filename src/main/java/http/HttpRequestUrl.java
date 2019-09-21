@@ -2,8 +2,6 @@ package http;
 
 import java.util.Objects;
 
-import http.excption.NoQueryParamsException;
-
 public class HttpRequestUrl {
 
     private String url;
@@ -17,31 +15,25 @@ public class HttpRequestUrl {
     }
 
     public String getPath() {
-        if (!url.contains("?")) {
+        if (!hasParams()) {
             return url;
         }
         return url.substring(0, url.indexOf("?"));
     }
 
     public String getParams() {
-        checkQueryParamExist();
+        if (!hasParams()) {
+            return "";
+        }
         return url.substring(url.indexOf("?") + 1);
     }
 
-
-    private void checkQueryParamExist() {
-        if (!url.contains("?")) {
-            throw new NoQueryParamsException("쿼리 문자열이 존재하지 않습니다.");
-        }
+    public boolean hasParams() {
+        return url.contains("?");
     }
 
-    public boolean hasParams() {
-        try {
-            checkQueryParamExist();
-            return true;
-        } catch (NoQueryParamsException e) {
-            return false;
-        }
+    public boolean isEmptyParams() {
+        return getParams().equals("");
     }
 
     @Override
