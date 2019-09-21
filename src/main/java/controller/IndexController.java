@@ -8,7 +8,7 @@ import webserver.http.headerfields.HttpContentType;
 public class IndexController {
     public static HttpResponse index(HttpRequest req) {
         return FileIoUtils.loadFileFromClasspath("./templates/index.html").map(body ->
-            HttpResponse.builder(HttpContentType.TEXT_HTML())
+            HttpResponse.builder(HttpContentType.TEXT_HTML)
                         .version(req)
                         .connection(req)
                         .body(body)

@@ -9,7 +9,7 @@ public class URLParser extends SimpleStringParser {
     }
 
     @Override
-    public Map<String, String> toMap(String input) {
-        return super.toMap(URLDecoder.decode(input));
+    public Map<String, String> interpret(String input) {
+        return super.interpret(URLDecoder.decode(input));
     }
 }

@@ -1,9 +1,10 @@
 package utils.parser;
 
-/** WooWaMarkupLanguage
- * URI ## controller */
+/** WooWaMarkupLanguage for setting routes
+ *
+ * path -> controller.method */
 public class WWMLParser extends SimpleStringParser {
     protected WWMLParser() {
-        super("(\\r\\n|\\r|\\n)+", "##");
+        super("(\\r|\\n|\\r\\n)+", "->");
     }
 }

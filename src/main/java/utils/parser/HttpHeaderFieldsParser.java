@@ -2,6 +2,6 @@ package utils.parser;
 
 public class HttpHeaderFieldsParser extends URLParser {
     protected HttpHeaderFieldsParser() {
-        super("(\\r\\n|\\r|\\n)", ": ");
+        super("(\\r|\\n|\\r\\n)", ": ");
     }
 }

@@ -7,7 +7,7 @@ import utils.parser.KeyValueParserFactory;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
 import webserver.http.headerfields.HttpContentType;
-import webserver.http.headerfields.HttpMethod;
+import webserver.http.startline.HttpMethod;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
@@ -18,11 +18,11 @@ public class Router {
 
     private static final Map<String, String> GET_ROUTER =
             FileIoUtils.loadFileFromClasspath("./get-route.wwml").map(config ->
-                    KeyValueParserFactory.routerParser().toMap(config)
+                    KeyValueParserFactory.routerParser().interpret(config)
             ).orElse(null);
     private static final Map<String, String> POST_ROUTER =
             FileIoUtils.loadFileFromClasspath("./post-route.wwml").map(config ->
-                    KeyValueParserFactory.routerParser().toMap(config)
+                    KeyValueParserFactory.routerParser().interpret(config)
             ).orElse(null);
 
     public static HttpResponse serve(HttpRequest req) {
@@ -36,7 +36,7 @@ public class Router {
         final String mapping = (req.method() == HttpMethod.GET)
                 ? GET_ROUTER.get(req.path().toString())
                 : POST_ROUTER.get(req.path().toString());
-        logger.debug("{} -> {}", req.path(), mapping);
+        logger.debug("Route: {} -> {}", req.path(), mapping);
         return Optional.ofNullable(mapping).map(routeTo -> {
             final String[] classAndMethodNames = routeTo.split("\\.");
             try {
@@ -68,20 +68,20 @@ public class Router {
     private static HttpContentType extensionToContentType(String extension) {
         switch (extension) {
             case "css":
-                return HttpContentType.TEXT_CSS();
+                return HttpContentType.TEXT_CSS;
             case "js":
-                return HttpContentType.APPLICATION_JAVASCRIPT();
+                return HttpContentType.APPLICATION_JAVASCRIPT;
             case "gif":
-                return HttpContentType.IMAGE_GIF();
+                return HttpContentType.IMAGE_GIF;
             case "jpg":
-                return HttpContentType.IMAGE_JPEG();
+                return HttpContentType.IMAGE_JPEG;
             case "png":
-                return HttpContentType.IMAGE_PNG();
+                return HttpContentType.IMAGE_PNG;
             case "ico":
-                return HttpContentType.IMAGE_X_ICON();
+                return HttpContentType.IMAGE_X_ICON;
             case "txt":
             default:
-                return HttpContentType.TEXT_PLAIN();
+                return HttpContentType.TEXT_PLAIN;
         }
     }
 }

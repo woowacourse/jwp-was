@@ -1,24 +1,24 @@
 package utils.parser;
 
 public class KeyValueParserFactory {
-    private static final KeyValueParser httpHeaderFieldsParser = new HttpHeaderFieldsParser();
-    private static final KeyValueParser queryStringParser = new QueryStringParser();
-    private static final KeyValueParser contentTypeParser = new ContentTypeParser();
-    private static final KeyValueParser routerParser = new WWMLParser();
+    private static final SimpleStringParser httpHeaderFieldsParser = new HttpHeaderFieldsParser();
+    private static final SimpleStringParser queryStringParser = new QueryStringParser();
+    private static final SimpleStringParser contentTypeParser = new ContentTypeParser();
+    private static final SimpleStringParser routerParser = new WWMLParser();
 
-    public static KeyValueParser httpHeaderFieldsParser() {
+    public static SimpleStringParser httpHeaderFieldsParser() {
         return httpHeaderFieldsParser;
     }
 
-    public static KeyValueParser queryStringParser() {
+    public static SimpleStringParser queryStringParser() {
         return queryStringParser;
     }
 
-    public static KeyValueParser contentTypeParser() {
+    public static SimpleStringParser contentTypeParser() {
         return contentTypeParser;
     }
 
-    public static KeyValueParser routerParser() {
+    public static SimpleStringParser routerParser() {
         return routerParser;
     }
 
