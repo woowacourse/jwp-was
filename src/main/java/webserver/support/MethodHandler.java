@@ -13,14 +13,18 @@ import java.util.Map;
 import java.util.Optional;
 
 public class MethodHandler {
-    private static Map<String, Controller> api;
+    private Map<String, Controller> api;
 
-    static {
+    public MethodHandler() {
+        initialize();
+    }
+
+    private void initialize() {
         api = new HashMap<>();
         api.put("/user/create", new CreateUserController());
     }
 
-    public static void handle(Request request, Response response) throws IOException, URISyntaxException {
+    public void handle(Request request, Response response) throws IOException, URISyntaxException {
         Controller controller = Optional.ofNullable(api.get(request.extractUrl())).orElseGet(FileController::new);
         controller.service(request, response);
     }

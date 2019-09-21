@@ -33,7 +33,8 @@ public class RequestHandler implements Runnable {
             Request request = readRequestUrl(in);
             Response response = new Response(new ResponseHeader());
 
-            MethodHandler.handle(request, response);
+            MethodHandler handler = new MethodHandler();
+            handler.handle(request, response);
 
             response.writeMessage(new DataOutputStream(out));
         } catch (IOException | URISyntaxException e) {
