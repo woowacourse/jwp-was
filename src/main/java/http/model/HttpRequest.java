@@ -1,5 +1,7 @@
 package http.model;
 
+import http.session.HttpSession;
+
 public class HttpRequest {
     private HttpMethod httpMethod;
     private HttpUri httpUri;

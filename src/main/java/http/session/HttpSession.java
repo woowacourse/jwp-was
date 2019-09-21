@@ -1,15 +1,15 @@
-package http.model;
+package http.session;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
+import java.util.Objects;
 
 public class HttpSession {
     private final String id;
     private Map<String, Object> attributes = new HashMap<>();
 
-    public HttpSession() {
-        this.id = UUID.randomUUID().toString();
+    public HttpSession(String id) {
+        this.id = id;
     }
 
     public String getId() {
@@ -30,5 +30,18 @@ public class HttpSession {
 
     public void invalidate() {
         this.attributes = new HashMap<>();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof HttpSession)) return false;
+        HttpSession that = (HttpSession) o;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

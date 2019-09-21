@@ -1,5 +1,6 @@
 package http.controller;
 
+import db.DataBase;
 import http.model.HttpRequest;
 import http.supoort.RequestMapping;
 import http.view.Model;
@@ -22,6 +23,8 @@ public class UserController extends AbstractController {
     public ModelAndView handle(HttpRequest httpRequest) {
         UserDto userDto = new UserDto(httpRequest.getParameters());
         User user = userDto.toEntity();
+
+        DataBase.addUser(user);
 
         Model model = new Model();
         model.addAttributes("user", user);
