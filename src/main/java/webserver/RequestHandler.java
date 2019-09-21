@@ -43,12 +43,12 @@ public class RequestHandler implements Runnable {
 				return;
 			}
 
-			byte[] responseBody = FileIoUtils.loadFileFromClasspath(path);
 			if (path.contains("?")) {
-				saveUser(QueryStringSeparator.separate(request.getRequestElement("Path")));
+				saveUser(QueryStringSeparator.separate(path.substring(path.indexOf("?") + 1)));
 				return;
 			}
 
+			byte[] responseBody = FileIoUtils.loadFileFromClasspath(path);
 			Response response = new Response(ResponseGenerator.responseHeader(path, responseBody.length));
 			sendResponseHeader(response.getAllHeaders(), dos);
 			sendResponseBody(responseBody, dos);
