@@ -1,6 +1,5 @@
 package http.response;
 
-import http.common.HttpHeader;
 import http.common.HttpVersion;
 
 public class StatusLine {
@@ -11,5 +10,17 @@ public class StatusLine {
     public StatusLine(final HttpVersion httpVersion, final HttpStatus httpStatus) {
         this.httpVersion = httpVersion;
         this.httpStatus = httpStatus;
+    }
+
+    public HttpVersion getHttpVersion() {
+        return httpVersion;
+    }
+
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
+    }
+
+    public String getCodeAndStatus() {
+        return httpStatus.getCodeAndStatus();
     }
 }

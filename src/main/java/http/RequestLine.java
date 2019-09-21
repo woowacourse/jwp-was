@@ -25,4 +25,12 @@ public class RequestLine {
     public HttpVersion getHttpVersion() {
         return httpVersion;
     }
+
+    public String getPath() {
+        return httpUri.getPath();
+    }
+
+    public String getQuery() {
+        return httpUri.getQuery();
+    }
 }

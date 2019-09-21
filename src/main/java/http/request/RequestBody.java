@@ -9,4 +9,8 @@ public class RequestBody {
     public RequestBody(final Map<String, String> body) {
         this.body = body;
     }
+
+    public String findParam(String name) {
+        return body.get(name);
+    }
 }

@@ -29,7 +29,10 @@ public class HttpRequestParser {
         List<String> headerLines = toHeaderList(br);
         HttpHeader requestHeader = RequestHeaderParser.parse(headerLines);
 
-        RequestBody requestBody = RequestBodyParser.parse(br, requestHeader.findHeader("Content-Length"));
+        RequestBody requestBody = null;
+        if(br.ready()) {
+            requestBody = RequestBodyParser.parse(br, requestHeader.findHeader("Content-Length"));
+        }
         return new HttpRequest(requestLine, requestHeader, requestBody);
     }
 
