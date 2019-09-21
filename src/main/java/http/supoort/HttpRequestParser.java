@@ -56,7 +56,7 @@ public class HttpRequestParser {
         HttpHeaders headers = new HttpHeaders(parseHeaders(headerLines));
         HttpParameters httpParameters = new HttpParameters(parseParameter(getRequestBody(headers, bufferedReader)));
         HttpUri httpUri = parseUri(uri, httpParameters);
-        return new HttpRequest(method, httpUri, httpParameters, httpProtocol, headers);
+        return new HttpRequest(method, httpUri, httpProtocol, httpParameters, headers);
     }
 
     private static HttpRequest parserGet(HttpMethod method, String uri, String protocol, BufferedReader bufferedReader) {
@@ -65,7 +65,7 @@ public class HttpRequestParser {
         HttpHeaders headers = new HttpHeaders(parseHeaders(headerLines));
         HttpParameters httpParameters = new HttpParameters();
         HttpUri httpUri = parseUri(uri, httpParameters);
-        return new HttpRequest(method, httpUri, httpParameters, httpProtocol, headers);
+        return new HttpRequest(method, httpUri, httpProtocol, httpParameters, headers);
     }
 
     private static String getRequestBody(HttpHeaders httpHeaders, BufferedReader bufferedReader) {

@@ -17,7 +17,7 @@ class HttpRequestParserTest {
     @Test
     void 올바른_입력_파싱_확인() {
         InputStream in = new ByteArrayInputStream("GET /index.html HTTP/1.1\r\nHost: localhost:8080/".getBytes());
-        HttpRequest httpRequest = new HttpRequest(HttpMethod.GET, new HttpUri("/index.html"), null, HttpProtocols.of("HTTP/1.1"), null);
+        HttpRequest httpRequest = new HttpRequest(HttpMethod.GET, new HttpUri("/index.html"), HttpProtocols.of("HTTP/1.1"), null, null);
         HttpRequest parsedRequest = HttpRequestParser.parse(in);
         assertThat(parsedRequest.getHttpMethod()).isEqualTo(httpRequest.getHttpMethod());
         assertThat(parsedRequest.getHttpUri()).isEqualTo(httpRequest.getHttpUri());
@@ -31,7 +31,7 @@ class HttpRequestParserTest {
         parameters.put("age", "25");
 
         HttpParameters httpParameters = new HttpParameters(parameters);
-        HttpRequest httpRequest = new HttpRequest(HttpMethod.GET, new HttpUri("/index.html"), httpParameters, HttpProtocols.of("HTTP/1.1"), null);
+        HttpRequest httpRequest = new HttpRequest(HttpMethod.GET, new HttpUri("/index.html"), HttpProtocols.of("HTTP/1.1"), httpParameters, null);
         HttpRequest parsedRequest = HttpRequestParser.parse(in);
 
         assertThat(parsedRequest.getHttpMethod()).isEqualTo(httpRequest.getHttpMethod());

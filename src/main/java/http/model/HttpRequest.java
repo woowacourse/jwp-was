@@ -7,7 +7,7 @@ public class HttpRequest {
     private HttpProtocols httpProtocol;
     private HttpHeaders httpHeaders;
 
-    public HttpRequest(HttpMethod httpMethod, HttpUri httpUri, HttpParameters parameters, HttpProtocols httpProtocol, HttpHeaders httpHeaders) {
+    public HttpRequest(HttpMethod httpMethod, HttpUri httpUri, HttpProtocols httpProtocol, HttpParameters parameters, HttpHeaders httpHeaders) {
         this.httpMethod = httpMethod;
         this.httpUri = httpUri;
         this.parameters = parameters;

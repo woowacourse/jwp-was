@@ -8,7 +8,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class AbstractControllerTest {
-    private
 
     @Test
     void 리퀘스트매핑_중복없음() {
