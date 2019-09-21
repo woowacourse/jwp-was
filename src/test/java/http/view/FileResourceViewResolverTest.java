@@ -7,18 +7,18 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-class ViewResolverTest {
-    private ViewResolver viewResolver;
+class FileResourceViewResolverTest {
+    private FileResourceViewResolver fileResourceViewResolver;
 
     @BeforeEach
     void setUp() {
-        viewResolver = new ViewResolver();
+        fileResourceViewResolver = new FileResourceViewResolver();
     }
 
     @Test
     void 상태코드_OK_테스트() {
         ModelAndView modelAndView = new ModelAndView(new View("/index.html"));
-        HttpResponse response = viewResolver.resolve(modelAndView);
+        HttpResponse response = fileResourceViewResolver.resolve(modelAndView);
 
         assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotEmpty();
@@ -28,7 +28,7 @@ class ViewResolverTest {
     @Test
     void 상태코드_302_테스트() {
         ModelAndView modelAndView = new ModelAndView(new View("redirect:/index.html"));
-        HttpResponse response = viewResolver.resolve(modelAndView);
+        HttpResponse response = fileResourceViewResolver.resolve(modelAndView);
 
         assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
         assertThat(response.getHeader("Location")).isNotEmpty();

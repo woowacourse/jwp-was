@@ -5,8 +5,7 @@ import http.controller.FileResourceController;
 import http.controller.HttpRequestHandlers;
 import http.controller.UserController;
 import http.supoort.RequestMapping;
-import http.view.ModelResolver;
-import http.view.ViewHandler;
+import http.view.FileResourceViewResolver;
 import http.view.ViewResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +24,7 @@ public class WebServer {
         int port = getPort(args);
 
         HttpRequestHandlers httpRequestHandlers = initRequestHandlers();
-        ViewHandler viewHandler = initViewHandlers();
+        ViewResolver viewResolver = initViewResolver();
 
         ExecutorService es = Executors.newFixedThreadPool(100);
 
@@ -36,7 +35,7 @@ public class WebServer {
             // 클라이언트가 연결될때까지 대기한다.
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
-                es.execute(new RequestHandler(connection, httpRequestHandlers, viewHandler));
+                es.execute(new RequestHandler(connection, httpRequestHandlers, viewResolver));
             }
         }
         es.shutdown();
@@ -61,10 +60,8 @@ public class WebServer {
         return httpRequestHandlers;
     }
 
-    private static ViewHandler initViewHandlers() {
-        ViewHandler viewHandler = new ViewHandler();
-        viewHandler.addResolver(new ViewResolver());
-        viewHandler.addResolver(new ModelResolver());
-        return viewHandler;
+    private static ViewResolver initViewResolver() {
+        return new FileResourceViewResolver();
     }
+
 }

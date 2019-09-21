@@ -7,7 +7,7 @@ import http.supoort.HttpErrorResponse;
 import http.supoort.HttpRequestParser;
 import http.supoort.ResponseMessageConverter;
 import http.view.ModelAndView;
-import http.view.ViewHandler;
+import http.view.ViewResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,12 +22,12 @@ public class RequestHandler implements Runnable {
 
     private Socket connection;
     private HttpRequestHandlers httpRequestHandlers;
-    private ViewHandler viewHandler;
+    private ViewResolver viewResolver;
 
-    public RequestHandler(Socket connectionSocket, HttpRequestHandlers httpRequestHandlers, ViewHandler viewHandler) {
+    public RequestHandler(Socket connectionSocket, HttpRequestHandlers httpRequestHandlers, ViewResolver viewResolver) {
         this.connection = connectionSocket;
         this.httpRequestHandlers = httpRequestHandlers;
-        this.viewHandler = viewHandler;
+        this.viewResolver = viewResolver;
     }
 
     public void run() {
@@ -48,7 +48,7 @@ public class RequestHandler implements Runnable {
 
             ModelAndView modelAndView = httpRequestHandlers.doService(request);
 
-            response(viewHandler.handle(modelAndView), out);
+            response(viewResolver.resolve(modelAndView), out);
 
         } catch (Exception e) {
             logger.error(e.getMessage());
