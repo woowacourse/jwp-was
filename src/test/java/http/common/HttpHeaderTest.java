@@ -1,5 +1,7 @@
-package http;
+package http.common;
 
+import http.RequestHeaderParser;
+import http.common.HttpHeader;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -10,7 +12,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-class RequestHeaderTest {
+class HttpHeaderTest {
 
     @Test
     void create_request_header() {
@@ -24,7 +26,7 @@ class RequestHeaderTest {
             header.put(paramTokens[0], paramTokens[1]);
         });
 
-        assertDoesNotThrow(() -> new RequestHeader(header));
+        assertDoesNotThrow(() -> new HttpHeader(header));
     }
 
     @Test
@@ -32,7 +34,7 @@ class RequestHeaderTest {
         List<String> headers = Arrays.asList("Host: localhost:8080",
             "Connection: keep-alive",
             "Accept: */*");
-        RequestHeader requestHeader = RequestHeaderParser.parse(headers);
-        assertThat(requestHeader.findHeader("Connection")).isEqualTo("keep-alive");
+        HttpHeader httpHeader = RequestHeaderParser.parse(headers);
+        assertThat(httpHeader.findHeader("Connection")).isEqualTo("keep-alive");
     }
 }

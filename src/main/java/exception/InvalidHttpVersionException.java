@@ -1,4 +1,4 @@
-package http.exception;
+package exception;
 
 public class InvalidHttpVersionException extends IllegalArgumentException {
 

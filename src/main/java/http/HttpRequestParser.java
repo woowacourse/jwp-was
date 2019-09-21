@@ -1,5 +1,8 @@
 package http;
 
+import http.common.HttpHeader;
+import http.request.RequestBody;
+import http.request.RequestBodyParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,13 +23,14 @@ public class HttpRequestParser {
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
 
         String firstLine = br.readLine();
-        log.debug("request: {}",firstLine);
+        log.debug("request: {}", firstLine);
         RequestLine requestLine = RequestLineParser.parse(firstLine);
 
         List<String> headerLines = toHeaderList(br);
-        RequestHeader requestHeader = RequestHeaderParser.parse(headerLines);
+        HttpHeader requestHeader = RequestHeaderParser.parse(headerLines);
 
-        return new HttpRequest(requestLine, requestHeader);
+        RequestBody requestBody = RequestBodyParser.parse(br, requestHeader.findHeader("Content-Length"));
+        return new HttpRequest(requestLine, requestHeader, requestBody);
     }
 
     private static List<String> toHeaderList(final BufferedReader br) throws IOException {
@@ -35,7 +39,7 @@ public class HttpRequestParser {
         String line = br.readLine();
 
         while (isValidLine(line)) {
-            log.debug("request: {}",line);
+            log.debug("request: {}", line);
             headerLines.add(line);
             line = br.readLine();
         }

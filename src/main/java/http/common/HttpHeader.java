@@ -1,12 +1,12 @@
-package http;
+package http.common;
 
 import java.util.Map;
 
-public class RequestHeader {
+public class HttpHeader {
 
     private Map<String, String> headers;
 
-    public RequestHeader(final Map<String, String> headers) {
+    public HttpHeader(final Map<String, String> headers) {
         this.headers = headers;
     }
 

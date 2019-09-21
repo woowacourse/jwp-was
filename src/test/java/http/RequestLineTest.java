@@ -1,5 +1,6 @@
 package http;
 
+import http.common.HttpVersion;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;

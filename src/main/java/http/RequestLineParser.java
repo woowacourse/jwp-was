@@ -1,5 +1,7 @@
 package http;
 
+import http.common.HttpVersion;
+
 import java.net.URISyntaxException;
 
 public class RequestLineParser {

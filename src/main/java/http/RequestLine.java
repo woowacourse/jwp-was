@@ -1,26 +1,28 @@
 package http;
 
+import http.common.HttpVersion;
+
 public class RequestLine {
 
-    private HttpMethod method;
-    private HttpUri uri;
-    private HttpVersion version;
+    private HttpMethod httpMethod;
+    private HttpUri httpUri;
+    private HttpVersion httpVersion;
 
-    public RequestLine(final HttpMethod method, final HttpUri uri, final HttpVersion version) {
-        this.method = method;
-        this.uri = uri;
-        this.version = version;
+    public RequestLine(final HttpMethod httpMethod, final HttpUri httpUri, final HttpVersion httpVersion) {
+        this.httpMethod = httpMethod;
+        this.httpUri = httpUri;
+        this.httpVersion = httpVersion;
     }
 
-    public HttpMethod getMethod() {
-        return method;
+    public HttpMethod getHttpMethod() {
+        return httpMethod;
     }
 
-    public HttpUri getUri() {
-        return uri;
+    public HttpUri getHttpUri() {
+        return httpUri;
     }
 
-    public HttpVersion getVersion() {
-        return version;
+    public HttpVersion getHttpVersion() {
+        return httpVersion;
     }
 }
