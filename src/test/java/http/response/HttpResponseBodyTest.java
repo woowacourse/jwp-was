@@ -2,9 +2,7 @@ package http.response;
 
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Array;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class HttpResponseBodyTest {
     @Test
