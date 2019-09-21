@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ public class HttpRequestParser {
 
     private static final Logger log = LoggerFactory.getLogger(HttpRequestParser.class);
 
-    public static HttpRequest parse(InputStream in) throws IOException {
+    public static HttpRequest parse(InputStream in) throws IOException, URISyntaxException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
 
         String firstLine = br.readLine();

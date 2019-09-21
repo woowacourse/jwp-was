@@ -1,8 +1,10 @@
 package http;
 
+import java.net.URISyntaxException;
+
 public class RequestLineParser {
 
-    public static RequestLine parse(String requestLine) {
+    public static RequestLine parse(String requestLine) throws URISyntaxException {
         String[] requestLineTokens = requestLine.split(" ");
 
         HttpMethod method = HttpMethod.valueOf(requestLineTokens[0].trim());
