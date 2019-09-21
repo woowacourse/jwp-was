@@ -19,14 +19,14 @@ public class RequestLine {
     }
 
     public static RequestLine of(final String line) {
-        String[] tokens = line.split(BLANK);
-        validRequestLine(tokens);
+        String[] values = line.split(BLANK);
+        validRequestLine(values);
 
-        return new RequestLine(HttpMethod.valueOf(tokens[0]), new Url(tokens[1]), HttpVersion.of(tokens[2]));
+        return new RequestLine(HttpMethod.valueOf(values[0]), new Url(values[1]), HttpVersion.of(values[2]));
     }
 
-    private static void validRequestLine(final String[] tokens) {
-        if (tokens.length == 3) {
+    private static void validRequestLine(final String[] values) {
+        if (values.length == 3) {
             return;
         }
 
@@ -37,9 +37,9 @@ public class RequestLine {
         return extractQueryString(getOriginUrl().split(QUERY_STRING_DELIMITER));
     }
 
-    private String extractQueryString(final String[] tokens) {
-        if (tokens.length == 2) {
-            return tokens[1];
+    private String extractQueryString(final String[] values) {
+        if (values.length == 2) {
+            return values[1];
         }
 
         return EMPTY;
