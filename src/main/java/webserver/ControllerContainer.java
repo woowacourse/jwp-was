@@ -6,6 +6,7 @@ import controller.UserCreateController;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.response.view.DefaultView;
+import http.response.view.ErrorView;
 import utils.UrlNotFoundException;
 
 import java.io.IOException;
@@ -19,11 +20,20 @@ public class ControllerContainer {
         controllers.put("/user/create", new UserCreateController());
     }
 
-    public static void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException, UrlNotFoundException {
+    public static void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         if (controllers.keySet().contains(httpRequest.getPath())) {
             controllers.get(httpRequest.getPath()).service(httpRequest, httpResponse);
             return;
         }
-        httpResponse.render(new DefaultView(httpRequest.getPath()));
+
+        serviceDefault(httpRequest, httpResponse);
+    }
+
+    private static void serviceDefault(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+        try {
+            httpResponse.render(new DefaultView(httpRequest.getPath()));
+        } catch (URISyntaxException | UrlNotFoundException e) {
+            httpResponse.render(new ErrorView(404, "404 Not Found"));
+        }
     }
 }

@@ -43,22 +43,17 @@ public class HttpResponse implements AutoCloseable {
         dataOutputStream.close();
     }
 
-    private void writeBody(byte[] body) {
-        try {
-            dataOutputStream.write(body, 0, body.length);
-            dataOutputStream.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+    private void writeBody(byte[] body) throws IOException {
+
+        dataOutputStream.write(body, 0, body.length);
+        dataOutputStream.flush();
+
     }
 
-    private void writeHeader(String header) {
-        try {
-            dataOutputStream.writeBytes(header);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
+    private void writeHeader(String header) throws IOException {
 
+        dataOutputStream.writeBytes(header);
+
+    }
 
 }
