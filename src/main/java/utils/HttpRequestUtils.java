@@ -32,12 +32,20 @@ public class HttpRequestUtils {
         return buildParams(url.getParams(), params);
     }
 
-    private static Map<String, String> buildParams(String urlParams, Map<String, String> params) {
-        String[] tokens = urlParams.split("&");
+    private static Map<String, String> buildParams(String dataSequence, Map<String, String> params) {
+        String[] tokens = dataSequence.split("&");
         for (String token : tokens) {
             String[] paramKeyValue = token.split("=");
             params.put(paramKeyValue[0], paramKeyValue[1]);
         }
         return params;
+    }
+
+    public static Map<String, String> parse(String bodyData) {
+        Map<String, String> body = new HashMap<>();
+        if (bodyData.equals("")) {
+            return body;
+        }
+        return buildParams(bodyData, body);
     }
 }
