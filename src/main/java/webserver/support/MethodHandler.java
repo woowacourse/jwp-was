@@ -21,11 +21,11 @@ public class MethodHandler {
 
     private void initialize() {
         api = new HashMap<>();
-        api.put("/user/create", new CreateUserController());
+        api.put("/user/create", CreateUserController.getInstance());
     }
 
     public void handle(Request request, Response response) throws IOException, URISyntaxException {
-        Controller controller = Optional.ofNullable(api.get(request.extractUrl())).orElseGet(FileController::new);
+        Controller controller = Optional.ofNullable(api.get(request.extractUrl())).orElseGet(FileController::getInstance);
         controller.service(request, response);
     }
 }
