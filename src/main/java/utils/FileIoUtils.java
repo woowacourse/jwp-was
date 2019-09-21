@@ -24,12 +24,4 @@ public class FileIoUtils {
             throw new NoSuchResource(e.getMessage());
         }
     }
-
-    public static byte[] loadFileByPath(Path path) {
-        try {
-            return Files.readAllBytes(path);
-        } catch (IOException e) {
-            throw new NoSuchResource();
-        }
-    }
 }

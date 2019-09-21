@@ -5,6 +5,7 @@ import http.exceptions.IllegalHttpRequestException;
 import java.util.Objects;
 
 public class HttpUri {
+    private static final String ROOT_INDICATOR = "/";
     private String resourceLocation;
 
     public HttpUri(String resourceLocation) {
@@ -13,7 +14,7 @@ public class HttpUri {
     }
 
     private void validate(String resourceLocation) {
-        if (!resourceLocation.startsWith("/")) {
+        if (!resourceLocation.startsWith(ROOT_INDICATOR)) {
             throw new IllegalHttpRequestException();
         }
     }

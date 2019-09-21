@@ -9,6 +9,8 @@ public class ViewResolver implements Resolver {
     private static final String REDIRECT_PREFIX = "redirect:";
     private static final String EXTENSION_SEPARATOR = ".";
     private static final String CONTENT_TYPE = "Content-Type";
+    private static final String BLANK = "";
+    private static final String HEADER_LOCATION_KEY = "Location";
 
 
     @Override
@@ -28,7 +30,7 @@ public class ViewResolver implements Resolver {
 
     private HttpResponse resolveResponse(String resource, HttpHeaders headers) {
         appendDefaultHeader(headers, resource);
-        ContentType contentType = ContentType.from(headers.getHeader("Content-Type"));
+        ContentType contentType = ContentType.from(headers.getHeader(CONTENT_TYPE));
         if (contentType.isHTML()) {
             return new HttpResponse(HttpProtocols.HTTP1, HttpStatus.OK,
                     headers, FileIoUtils.loadFileFromClasspath(HTML_PATH + resource));
@@ -38,17 +40,16 @@ public class ViewResolver implements Resolver {
     }
 
     private String extractLocation(String resource) {
-        return resource.replace(REDIRECT_PREFIX, "");
+        return resource.replace(REDIRECT_PREFIX, BLANK);
     }
 
     private void appendLocationHeader(HttpHeaders headers, String redirectUri) {
-        headers.addHeader("Location", redirectUri);
+        headers.addHeader(HEADER_LOCATION_KEY, redirectUri);
     }
 
-    private HttpHeaders appendDefaultHeader(HttpHeaders headers, String resource) {
+    private void appendDefaultHeader(HttpHeaders headers, String resource) {
         headers.addHeader(CONTENT_TYPE, getContentType(resource).getType());
         headers.addHeader("Server", "ANDOLE MACHINE");
-        return headers;
     }
 
     private ContentType getContentType(String resource) {

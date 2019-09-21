@@ -34,6 +34,7 @@ public class IOUtils {
             }
         } catch (IOException e) {
             log.error(e.getMessage());
+            throw new IllegalHttpRequestException(e.getMessage());
         }
         return lines;
     }
