@@ -1,5 +1,7 @@
 package webserver;
 
+import db.DataBase;
+import factory.UserFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
@@ -12,6 +14,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
+import java.net.URLDecoder;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -31,7 +34,7 @@ public class RequestHandler implements Runnable {
 
             String line = br.readLine();
             String[] splitedLine = line.split(" ");
-            
+
             if (splitedLine[0].equals("GET")) {
                 byte[] bytes = FileIoUtils.loadFileFromClasspath("./templates" + splitedLine[1]);
                 DataOutputStream dos = new DataOutputStream(out);
@@ -39,8 +42,12 @@ public class RequestHandler implements Runnable {
                     response200Header(dos, bytes.length, "html");
                 }
                 responseBody(dos, bytes);
-            }
 
+                if (splitedLine[1].contains("/user/create?")) {
+                    String[] signUpUrl = splitedLine[1].split("\\?");
+                    DataBase.addUser(UserFactory.of(URLDecoder.decode(signUpUrl[1], "UTF-8").split("&")));
+                }
+            }
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
