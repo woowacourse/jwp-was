@@ -6,20 +6,23 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class HttpPort {
-    private static final int DEFAULT_PORT = 80;
     private static final int PORT_MIN = 0;
     private static final int PORT_MAX = 65535;
 
-    private static final Map<Integer, HttpPort> CACHE = new HashMap<Integer, HttpPort>() {{
-        put(80, new HttpPort(80));
-        put(8080, new HttpPort(8080));
-    }};
+    private static final Map<Integer, HttpPort> CACHE = new HashMap<Integer, HttpPort>();
+    public static final HttpPort PORT_80 = of(80).get();
+    public static final HttpPort PORT_8080 = of(8080).get();
 
     private final int number;
 
     public static Optional<HttpPort> of(int number) {
+        if (CACHE.containsKey(number)) {
+            return Optional.of(CACHE.get(number));
+        }
         if (PORT_MIN <= number && number <= PORT_MAX) {
-            return Optional.of(CACHE.computeIfAbsent(number, HttpPort::new));
+            final HttpPort port = new HttpPort(number);
+            CACHE.put(number, port);
+            return Optional.of(port);
         }
         return Optional.empty();
     }
@@ -34,14 +37,6 @@ public class HttpPort {
 
     private HttpPort(int number) {
         this.number = number;
-    }
-
-    public HttpPort() {
-        this.number = DEFAULT_PORT;
-    }
-
-    public int number() {
-        return this.number;
     }
 
     @Override

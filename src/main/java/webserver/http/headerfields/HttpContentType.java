@@ -9,16 +9,16 @@ import java.util.Optional;
 
 public class HttpContentType implements HttpHeaderField {
     private static final Map<String, HttpContentType> CACHE = new HashMap<>();
-    public static final HttpContentType APPLICATION_JSON_UTF_8 = of("application/json;charset=utf-8").get();
-    public static final HttpContentType TEXT_HTML_UTF_8 = of("text/html;charset=utf-8").get();
-    public static final HttpContentType TEXT_CSS_UTF_8 = of("text/css;charset=utf-8").get();
-    public static final HttpContentType TEXT_PLAIN_UTF_8 = of("text/plain;charset=utf-8").get();
     public static final HttpContentType APPLICATION_JAVASCRIPT_UTF_8 = of("application/javascript;charset=utf-8").get();
+    public static final HttpContentType APPLICATION_JSON_UTF_8 = of("application/json;charset=utf-8").get();
     public static final HttpContentType IMAGE_BMP = of("image/bmp").get();
     public static final HttpContentType IMAGE_GIF = of("image/gif").get();
     public static final HttpContentType IMAGE_JPEG = of("image/jpeg").get();
     public static final HttpContentType IMAGE_PNG = of("image/png").get();
     public static final HttpContentType IMAGE_X_ICON = of("image/x-icon").get();
+    public static final HttpContentType TEXT_CSS_UTF_8 = of("text/css;charset=utf-8").get();
+    public static final HttpContentType TEXT_HTML_UTF_8 = of("text/html;charset=utf-8").get();
+    public static final HttpContentType TEXT_PLAIN_UTF_8 = of("text/plain;charset=utf-8").get();
 
     private final HttpMimeType mimeType;
     private final Charset charset;

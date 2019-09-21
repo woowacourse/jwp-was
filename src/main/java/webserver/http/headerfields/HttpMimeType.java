@@ -22,19 +22,21 @@ public class HttpMimeType {
 
     private static final Map<String, HttpMimeType> CACHE = new HashMap<>();
     public static final HttpMimeType ALL = of("*/*").get();
-    public static final HttpMimeType APPLICATION_JSON = of("application/json").get();
-    public static final HttpMimeType APPLICATION_X_WWW_FORM_URLENCODED = of("application/x-www-form-urlencoded").get();
-    public static final HttpMimeType MULTIPART_FORM_DATA = of("multipart/form-data").get();
-    public static final HttpMimeType TEXT_HTML = of("text/html").get();
-    public static final HttpMimeType TEXT_CSS = of("text/css").get();
-    public static final HttpMimeType TEXT_PLAIN = of("text/plain").get();
     public static final HttpMimeType APPLICATION_JAVASCRIPT = of("application/javascript").get();
+    public static final HttpMimeType APPLICATION_JSON = of("application/json").get();
+    public static final HttpMimeType APPLICATION_XHTML_XML = of("application/xhtml+xml").get();
+    public static final HttpMimeType APPLICATION_XML = of("application/xml").get();
+    public static final HttpMimeType APPLICATION_X_WWW_FORM_URLENCODED = of("application/x-www-form-urlencoded").get();
     public static final HttpMimeType IMAGE_ALL = of("image/*").get();
     public static final HttpMimeType IMAGE_BMP = of("image/bmp").get();
     public static final HttpMimeType IMAGE_GIF = of("image/gif").get();
     public static final HttpMimeType IMAGE_JPEG = of("image/jpeg").get();
     public static final HttpMimeType IMAGE_PNG = of("image/png").get();
     public static final HttpMimeType IMAGE_X_ICON = of("image/x-icon").get();
+    public static final HttpMimeType MULTIPART_FORM_DATA = of("multipart/form-data").get();
+    public static final HttpMimeType TEXT_CSS = of("text/css").get();
+    public static final HttpMimeType TEXT_HTML = of("text/html").get();
+    public static final HttpMimeType TEXT_PLAIN = of("text/plain").get();
 
     private final Chemical chemical;
     private final String subtype;

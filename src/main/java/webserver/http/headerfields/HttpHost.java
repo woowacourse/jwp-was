@@ -11,29 +11,30 @@ public class HttpHost implements HttpHeaderField {
     private final String name;
     private final HttpPort port;
 
-    public Optional<HttpHost> of(String host) {
-        final String key = host.trim();
-        final String[] args = host.split(":");
-        final String name = args[0].trim();
-        if (name.isEmpty()) {
+    public static Optional<HttpHost> of(String input) {
+        final String escaped = input.trim();
+        if (CACHE.containsKey(escaped)) {
+            return Optional.of(CACHE.get(escaped));
+        }
+        if (escaped.contains(" ")) {
             return Optional.empty();
         }
-        return (args.length == 1)
-                ? Optional.of(CACHE.computeIfAbsent(key, k -> new HttpHost(name, new HttpPort())))
-                : HttpPort.of(args[1].trim()).map(port -> CACHE.computeIfAbsent(key, k -> new HttpHost(name, port)));
+        final String[] hostnameAndPort = escaped.split(":");
+        if (hostnameAndPort.length == 1) {
+            final HttpHost host = new HttpHost(escaped, HttpPort.PORT_80);
+            CACHE.put(escaped, host);
+            return Optional.of(host);
+        }
+        return HttpPort.of(hostnameAndPort[1]).map(port -> {
+            final HttpHost host = new HttpHost(hostnameAndPort[0], port);
+            CACHE.put(escaped, host);
+            return host;
+        });
     }
 
     private HttpHost(String name, HttpPort port) {
         this.name = name;
         this.port = port;
-    }
-
-    public String name() {
-        return this.name;
-    }
-
-    public HttpPort port() {
-        return this.port;
     }
 
     @Override
