@@ -15,13 +15,4 @@ public class IOUtils {
         br.read(body, 0, contentLength);
         return String.copyValueOf(body);
     }
-
-    public static String readAllData(BufferedReader br) throws IOException {
-        StringBuilder result = new StringBuilder();
-        String line;
-        while ((line = br.readLine()) != null) {
-            result.append(line);
-        }
-        return result.toString();
-    }
 }
