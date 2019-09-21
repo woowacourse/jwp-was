@@ -3,6 +3,7 @@ package webserver;
 import http.controller.HttpRequestHandlers;
 import http.model.HttpRequest;
 import http.model.HttpResponse;
+import http.supoort.HttpErrorResponse;
 import http.supoort.HttpRequestParser;
 import http.supoort.ResponseMessageConverter;
 import http.view.ModelAndView;
@@ -37,7 +38,7 @@ public class RequestHandler implements Runnable {
             handleRequest(in, out);
         } catch (IOException e) {
             logger.error(e.getMessage());
-
+            throw new RuntimeException(e);
         }
     }
 
@@ -56,13 +57,11 @@ public class RequestHandler implements Runnable {
     }
 
     private void sendError(String message, OutputStream out) {
-
+        response(HttpErrorResponse.generate(message), out);
     }
 
     private void response(HttpResponse response, OutputStream out) {
         DataOutputStream dos = new DataOutputStream(out);
         ResponseMessageConverter.convert(response, dos);
     }
-
-
 }
