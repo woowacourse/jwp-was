@@ -48,7 +48,7 @@ public class ViewResolver implements Resolver {
     }
 
     private void appendDefaultHeader(HttpHeaders headers, String resource) {
-        headers.addHeader(CONTENT_TYPE, getContentType(resource).getType());
+        headers.addHeader(CONTENT_TYPE, getContentType(resource).getMimeType());
         headers.addHeader("Server", "ANDOLE MACHINE");
     }
 

@@ -10,10 +10,10 @@ public enum ContentType {
     JS("application/js"),
     PNG("image/png");
 
-    private String type;
+    private String mimeType;
 
-    ContentType(String type) {
-        this.type = type;
+    ContentType(String mimeType) {
+        this.mimeType = mimeType;
     }
 
     public static ContentType of(String extension) {
@@ -24,9 +24,9 @@ public enum ContentType {
         }
     }
 
-    public static ContentType from(String type) {
+    public static ContentType from(String mime) {
         return Arrays.stream(ContentType.values())
-                .filter(contentType -> contentType.type.equals(type))
+                .filter(contentType -> contentType.mimeType.equals(mime))
                 .findAny()
                 .orElseThrow(IllegalHttpRequestException::new);
     }
@@ -35,7 +35,7 @@ public enum ContentType {
         return this == ContentType.HTML;
     }
 
-    public String getType() {
-        return this.type;
+    public String getMimeType() {
+        return this.mimeType;
     }
 }
