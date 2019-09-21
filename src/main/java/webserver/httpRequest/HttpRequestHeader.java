@@ -1,7 +1,5 @@
 package webserver.httpRequest;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,24 +10,15 @@ public class HttpRequestHeader {
         this.headers = new HashMap<>(headers);
     }
 
-    public static HttpRequestHeader of(BufferedReader br) {
+    public static HttpRequestHeader of(String header) {
         HashMap<String, String> headers = new HashMap<>();
-        String line = null;
-        try {
-            line = br.readLine();
-        } catch (IOException e) {
-            throw new IllegalArgumentException();
+
+        String[] headerLines = header.split("\n");
+        for (String headerLine : headerLines) {
+            String[] headerLinePair = headerLine.split(": ");
+            headers.put(headerLinePair[0], headerLinePair[1]);
         }
 
-        while (!"".equals(line) && line != null) {
-            String[] attribute = line.split(": ");
-            headers.put(attribute[0], attribute[1]);
-            try {
-                line = br.readLine();
-            } catch (IOException e) {
-                throw new IllegalArgumentException();
-            }
-        }
         return new HttpRequestHeader(headers);
     }
 

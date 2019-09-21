@@ -1,7 +1,5 @@
 package webserver.httpRequest;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,13 +16,7 @@ public class HttpStartLine {
         this.httpVersion = httpVersion;
     }
 
-    public static HttpStartLine of(BufferedReader br) {
-        String startLine = null;
-        try {
-            startLine = br.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public static HttpStartLine of(String startLine) {
         String[] splitStartLine = startLine.split(" ");
 
         Map<String, String> queryParams = new HashMap<>();
@@ -34,17 +26,21 @@ public class HttpStartLine {
         String path = splitTarget[0];
 
         if (splitTarget.length == 2) {
-            for (String pair : splitTarget) {
-                String[] split1 = pair.split("=");
-                String key = split1[0];
-                String value = "";
-                if (split1.length == 2) {
-                    value = split1[1];
-                }
-                queryParams.put(key, value);
-            }
+            parseQueryParams(queryParams, splitTarget);
         }
         return new HttpStartLine(splitStartLine[0], path, queryParams, splitStartLine[2]);
+    }
+
+    private static void parseQueryParams(Map<String, String> queryParams, String[] splitTarget) {
+        for (String pair : splitTarget) {
+            String[] split1 = pair.split("=");
+            String key = split1[0];
+            String value = "";
+            if (split1.length == 2) {
+                value = split1[1];
+            }
+            queryParams.put(key, value);
+        }
     }
 
 
@@ -62,15 +58,6 @@ public class HttpStartLine {
 
     public boolean isPost() {
         return method.equals("POST");
-    }
-
-    public String getContentType() {
-        String[] split = path.split("\\.");
-        int length = split.length;
-        if (length == 2) {
-            return split[length - 1];
-        }
-        return null;
     }
 
     public String getPath() {

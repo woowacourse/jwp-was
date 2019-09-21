@@ -17,9 +17,8 @@ public class HttpRequestBody {
         this.parameters = parameters;
     }
 
-    public static HttpRequestBody of(BufferedReader br, int contentLength) {
+    public static HttpRequestBody of(String body) {
         Map<String, String> params = new HashMap<>();
-        String body = readBody(br, contentLength);
 
         String[] split = body.split("&");
         for (String pair : split) {
@@ -32,22 +31,6 @@ public class HttpRequestBody {
             params.put(key, value);
         }
         return new HttpRequestBody(params);
-    }
-
-    private static String readBody(BufferedReader br, int contentLength) {
-        String body = null;
-        try {
-            body = IOUtils.readData(br, contentLength);
-        } catch (IOException e) {
-            throw new IllegalArgumentException();
-        }
-
-        try {
-            URLDecoder.decode(body, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new IllegalArgumentException();
-        }
-        return body;
     }
 
     public static HttpRequestBody Empty() {
