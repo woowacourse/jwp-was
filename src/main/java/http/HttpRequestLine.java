@@ -33,4 +33,8 @@ public class HttpRequestLine {
     public HttpProtocol getProtocol() {
         return protocol;
     }
+
+    public boolean hasUrlParams() {
+        return url.hasParams();
+    }
 }
