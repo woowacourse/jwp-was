@@ -4,27 +4,18 @@ import http.common.HttpHeader;
 import http.common.HttpVersion;
 
 public class HttpResponse {
-    private HttpVersion httpVersion;
-    private HttpStatus httpStatus;
+    private StartLine startLine;
     private HttpHeader httpHeader;
     private HttpResponseBody httpResponseBody;
 
-    public HttpResponse(final HttpVersion httpVersion,
-                        final HttpStatus httpStatus,
-                        final HttpHeader httpHeader,
-                        final HttpResponseBody httpResponseBody) {
-        this.httpVersion = httpVersion;
-        this.httpStatus = httpStatus;
+    public HttpResponse(final StartLine startLine, final HttpHeader httpHeader, final HttpResponseBody httpResponseBody) {
+        this.startLine = startLine;
         this.httpHeader = httpHeader;
         this.httpResponseBody = httpResponseBody;
     }
 
-    public HttpVersion getHttpVersion() {
-        return httpVersion;
-    }
-
-    public HttpStatus getHttpStatus() {
-        return httpStatus;
+    public StartLine getStartLine() {
+        return startLine;
     }
 
     public HttpHeader getHttpHeader() {
@@ -38,8 +29,7 @@ public class HttpResponse {
     @Override
     public String toString() {
         return "HttpResponse{" +
-                "httpVersion=" + httpVersion +
-                ", httpStatus=" + httpStatus +
+                "startLine=" + startLine +
                 ", httpHeader=" + httpHeader +
                 ", httpResponseBody=" + httpResponseBody +
                 '}';

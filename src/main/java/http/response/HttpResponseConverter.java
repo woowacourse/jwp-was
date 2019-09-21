@@ -29,7 +29,7 @@ public class HttpResponseConverter {
     }
 
     private static void responseHeader(final DataOutputStream dos, final HttpResponse httpResponse) throws IOException {
-        dos.writeBytes(httpResponse.getHttpVersion() + " " + httpResponse.getHttpStatus() + "\r\n");
+        dos.writeBytes(httpResponse.getStartLine() + "\r\n");
 
         for (Map.Entry<String, String> element : httpResponse.getHttpHeader().getHeaders().entrySet()) {
             dos.writeBytes(element.getKey() + ": " + element.getValue() + "\r\n");
@@ -37,7 +37,7 @@ public class HttpResponseConverter {
         dos.writeBytes("\r\n");
     }
 
-    private static void responseBody(DataOutputStream dos, HttpResponseBody httpResponseBody) {
+    private static void responseBody(final DataOutputStream dos, final HttpResponseBody httpResponseBody) {
         try {
             dos.write(httpResponseBody.getBody(), 0, httpResponseBody.getLength());
             dos.flush();
