@@ -23,7 +23,7 @@ public class HttpRequestParams {
     }
 
     private static Map<String, String> extractQueryParams(final String queryString) {
-        if (queryString.equals("")) {
+        if ("".equals(queryString)) {
             return Collections.emptyMap();
         }
         return generateQueryParams(queryString);
