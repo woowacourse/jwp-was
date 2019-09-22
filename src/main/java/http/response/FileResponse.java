@@ -24,7 +24,7 @@ public class FileResponse implements Response {
         byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: " + contentType +";charset=utf-8\r\n");
+            dos.writeBytes("Content-Type: " + contentType + ";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + body.length + "\r\n");
             dos.writeBytes("\r\n");
             dos.write(body, 0, body.length);

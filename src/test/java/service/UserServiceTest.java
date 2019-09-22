@@ -16,7 +16,7 @@ public class UserServiceTest {
     private Map<String, String> parameters1;
     private Map<String, String> parameters2;
 
-    UserService userService;
+    private UserService userService;
 
     @BeforeEach
     void setUp() {

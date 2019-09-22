@@ -27,7 +27,7 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             RequestInformation requestInformation = HttpParser.parse(br);
-            
+
             RequestMethod method = requestInformation.extractMethod();
             RequestUrl url = requestInformation.extractUrl();
             log.error("this is the url ==> {}", url.getUrlPath());
@@ -42,7 +42,7 @@ public class RequestHandler implements Runnable {
         } catch (IOException e) {
             log.error(e.getMessage());
         } catch (URISyntaxException e) {
-          e.printStackTrace();
-       }
+            e.printStackTrace();
+        }
     }
 }

@@ -22,7 +22,7 @@ public class HttpParser {
     }
 
     private static void putKeyValues(BufferedReader br, Map<String, String> requestInformation, String line) throws IOException {
-        while(!"".equals(line)) {
+        while (!"".equals(line)) {
             line = br.readLine();
             put(requestInformation, line);
         }
