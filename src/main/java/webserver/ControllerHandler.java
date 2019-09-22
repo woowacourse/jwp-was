@@ -2,6 +2,7 @@ package webserver;
 
 import controller.Controller;
 import controller.CreateUserController;
+import exception.NotFoundUrlException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +18,10 @@ public class ControllerHandler {
     }
 
     public Controller getController(String url) {
+        if (!controllers.containsKey(url)) {
+            throw new NotFoundUrlException();
+        }
+
         return controllers.get(url);
     }
 }
