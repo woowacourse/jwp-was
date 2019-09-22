@@ -6,6 +6,7 @@ import webserver.http.servlet.Servlet;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class ServletMapping {
     private final Map<String, Servlet> servlets;
@@ -19,6 +20,10 @@ public class ServletMapping {
 
     public Servlet getServlet(String path) {
         return servlets.get(path);
+    }
+
+    public boolean isMapping(String path){
+        return servlets.containsKey(path);
     }
 
     public static ServletMapping getInstance() {

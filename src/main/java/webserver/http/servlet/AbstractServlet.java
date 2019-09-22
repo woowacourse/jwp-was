@@ -18,9 +18,9 @@ public abstract class AbstractServlet implements Servlet {
             doPut(request, response);
         } else if (method == HttpMethod.DELETE) {
             doDelete(request, response);
+        } else {
+            response.sendError(HttpStatus.NOT_FOUND, "not support this method");
         }
-
-        response.sendError(HttpStatus.NOT_FOUND, "not support this method");
     }
 
     protected void doPost(final HttpRequest request, final HttpResponse response) {

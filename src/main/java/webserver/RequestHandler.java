@@ -36,18 +36,18 @@ public class RequestHandler implements Runnable {
             final HttpRequest httpRequest = HttpRequestFactory.generate(in);
             final HttpResponse httpResponse = new HttpResponse(out);
 
-            // TODO 정적 파일 (css, html, js)
             final String path = httpRequest.getPath();
             if (staticResourceHandler.isMapping(path)) {
                 staticResourceHandler.handle(httpRequest, httpResponse);
                 return;
             }
 
-            // TODO 동적 처리 (servlet or controller)
-            final Servlet servlet = servletMapping.getServlet(path);
-            servlet.service(httpRequest, httpResponse);
+            if (servletMapping.isMapping(path)) {
+                final Servlet servlet = servletMapping.getServlet(path);
+                servlet.service(httpRequest, httpResponse);
+                return;
+            }
 
-            // TODO 404
             httpResponse.sendError(HttpStatus.NOT_FOUND);
 
         } catch (IOException e) {

@@ -17,7 +17,7 @@ import static webserver.http.HttpHeaders.*;
 
 public class HttpResponse {
     private static final Logger log = LoggerFactory.getLogger(HttpResponse.class);
-    private static final String HTTP_VERSION = "HTTP/1.1";
+    public static final String DEFAULT_HTTP_VERSION = "HTTP/1.1";
 
     private final Map<String, String> headers = new HashMap<>();
     private final OutputStream out;
@@ -83,7 +83,7 @@ public class HttpResponse {
     }
 
     private void writeStartLine(final DataOutputStream dos) throws IOException {
-        dos.writeBytes(String.format("%s %s %s\n", HTTP_VERSION, httpStatus.getCode(), httpStatus.getPhrase()));
+        dos.writeBytes(String.format("%s %s %s\n", DEFAULT_HTTP_VERSION, httpStatus.getCode(), httpStatus.getPhrase()));
     }
 
     private void writeHeader(final DataOutputStream dos) throws IOException {

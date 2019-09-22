@@ -1,14 +1,16 @@
-package webserver;
+package servlet;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import test.HttpTestClient;
+import webserver.WebServer;
 
 import java.io.IOException;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class RequestHandlerTest {
+class IndexServletTest {
     private HttpTestClient httpTestClient;
 
     @BeforeEach
@@ -17,11 +19,10 @@ class RequestHandlerTest {
     }
 
     @Test
-    void static_파일_요청() {
-        final String response = httpTestClient.get()
-                .uri("/css/styles.css")
+    void get() {
+        final String response = httpTestClient.get().uri("/")
                 .exchange();
 
-        assertThat(response).contains("background-color:#e0e0e0;");
+        assertThat(response).contains("runtime 에");
     }
 }

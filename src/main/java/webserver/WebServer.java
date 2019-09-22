@@ -34,7 +34,7 @@ public class WebServer implements Runnable {
                 pool.execute(new RequestHandler(connection));
             }
         } catch (IOException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(e.getMessage());
         }
     }
 }
