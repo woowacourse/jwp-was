@@ -4,6 +4,7 @@ import controller.Controller;
 import controller.CreateUserController;
 import controller.FileController;
 import http.request.HttpRequest;
+import http.request.factory.HttpRequestFactory;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +42,8 @@ public class RequestHandler implements Runnable {
              OutputStream outputStream = connection.getOutputStream()) {
 
             DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-            HttpRequest httpRequest = new HttpRequest(RequestParser.parse(inputStream));
+//            HttpRequest httpRequest = new HttpRequest(RequestParser.parse(inputStream));
+            HttpRequest httpRequest = HttpRequestFactory.create(RequestParser.parse(inputStream));
             HttpResponse httpResponse = new HttpResponse();
 
             logger.debug("RequestLine: {}", httpRequest.getHttpRequestLine().toString());
