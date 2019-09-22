@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,9 +25,10 @@ public class RequestHeaderReader {
 
 		saveRequestURL(requestLine, requests);
 
-		while ((requestLine = bufferedReader.readLine()) != null && !requestLine.isEmpty()) {
+		while (!Objects.isNull(requestLine) && !requestLine.isEmpty()) {
+			requestLine = bufferedReader.readLine();
 			logger.info("request header - {}", requestLine);
-			if(requestLine.isEmpty()) {
+			if (requestLine.isEmpty() || Objects.isNull(requestLine)) {
 				break;
 			}
 			String[] request = requestLine.split(REQUEST_SEPARATOR);

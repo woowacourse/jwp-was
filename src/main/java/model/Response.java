@@ -24,7 +24,7 @@ public class Response {
 
 	public List<String> getAllHeaders() {
 		List<String> headers = new LinkedList<>();
-		for(String key : header.keySet()) {
+		for (String key : header.keySet()) {
 			headers.add(key + ": " + header.get(key));
 		}
 		return headers;

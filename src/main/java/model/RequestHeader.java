@@ -5,10 +5,10 @@ import java.util.Objects;
 
 import exception.NotFoundElementException;
 
-public class Request {
+public class RequestHeader {
 	private final Map<String, String> header;
 
-	public Request(final Map<String, String> header) {
+	public RequestHeader(final Map<String, String> header) {
 		this.header = header;
 	}
 
