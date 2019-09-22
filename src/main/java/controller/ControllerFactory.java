@@ -10,12 +10,12 @@ import java.util.Map;
 
 public class ControllerFactory {
 
-    private Map<String, ControllerCreator> controller2Creators;
+    private Map<String, ControllerCreator> controllerCreators;
 
     private void initialize() {
-        controller2Creators = new HashMap<>();
-        controller2Creators.put("POST /user/create", new PostUserControllerCreator());
-        controller2Creators.put("FILE", new GetFileControllerCreator());
+        controllerCreators = new HashMap<>();
+        controllerCreators.put("POST /user/create", new PostUserControllerCreator());
+        controllerCreators.put("FILE", new GetFileControllerCreator());
     }
 
 
@@ -23,13 +23,13 @@ public class ControllerFactory {
         initialize();
         String key = request.createKey();
 
-        String mapKey = controller2Creators.keySet()
+        String mapKey = controllerCreators.keySet()
                 .stream()
                 .filter(keyOfMap -> key.contains(keyOfMap))
                 .findAny()
                 .orElse("FILE");
 
-        return controller2Creators.get(mapKey).createController(request);
+        return controllerCreators.get(mapKey).createController(request);
     }
 }
 
