@@ -2,6 +2,7 @@ package http.supoort;
 
 import http.model.HttpMethod;
 import http.model.HttpRequest;
+import http.model.ServletRequest;
 
 import java.util.Objects;
 
@@ -22,9 +23,14 @@ public class RequestMapping {
         return new RequestMapping(HttpMethod.POST, regex);
     }
 
-    public boolean match(HttpRequest httpRequest) {
-        return httpRequest.getHttpMethod() == method
-                && httpRequest.getUri().getResourceLocation().equals(location);
+    public boolean match(ServletRequest request) {
+        return request.getMethod() == method
+                && request.getUri().getResourceLocation().equals(location);
+    }
+
+    public boolean match(HttpRequest request) {
+        return request.getHttpMethod() == method
+                && request.getUri().getResourceLocation().equals(location);
     }
 
     @Override

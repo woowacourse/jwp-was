@@ -1,12 +1,9 @@
 package webserver;
 
-import http.controller.Controller;
-import http.controller.FileResourceController;
-import http.controller.HttpRequestHandlers;
-import http.controller.UserController;
-import http.session.HttpSessionManager;
-import http.session.RandomGenerateStrategy;
-import http.supoort.HttpRequestFactory;
+import http.controller.FileResourceHandler;
+import http.controller.Handler;
+import http.controller.ServletRequestHandlers;
+import http.controller.UserHandler;
 import http.supoort.RequestMapping;
 import http.view.FileResourceViewResolver;
 import http.view.ViewResolver;
@@ -26,8 +23,7 @@ public class WebServer {
     public static void main(String[] args) throws Exception {
         int port = getPort(args);
 
-        HttpRequestFactory httpRequestFactory = new HttpRequestFactory(new HttpSessionManager(new RandomGenerateStrategy()));
-        HttpRequestHandlers httpRequestHandlers = initRequestHandlers();
+        ServletRequestHandlers requestHandlers = initRequestHandlers();
         ViewResolver viewResolver = initViewResolver();
 
         ExecutorService es = Executors.newFixedThreadPool(100);
@@ -39,7 +35,7 @@ public class WebServer {
             // 클라이언트가 연결될때까지 대기한다.
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
-                es.execute(new RequestHandler(connection, httpRequestFactory, httpRequestHandlers, viewResolver));
+                es.execute(new RequestHandler(connection, requestHandlers, viewResolver));
             }
         }
         es.shutdown();
@@ -56,12 +52,12 @@ public class WebServer {
         return port;
     }
 
-    private static HttpRequestHandlers initRequestHandlers() {
-        HttpRequestHandlers httpRequestHandlers = new HttpRequestHandlers(new FileResourceController(RequestMapping.GET("/*")));
-        Controller userRequestHandler = new UserController(RequestMapping.GET("/user/create"), RequestMapping.POST("/user/create"));
+    private static ServletRequestHandlers initRequestHandlers() {
+        ServletRequestHandlers servletRequestHandlers = new ServletRequestHandlers(new FileResourceHandler(RequestMapping.GET("/*")));
+        Handler userRequestHandler = new UserHandler(RequestMapping.GET("/user/create"), RequestMapping.POST("/user/create"));
 
-        httpRequestHandlers.addHandler(userRequestHandler);
-        return httpRequestHandlers;
+        servletRequestHandlers.addHandler(userRequestHandler);
+        return servletRequestHandlers;
     }
 
     private static ViewResolver initViewResolver() {

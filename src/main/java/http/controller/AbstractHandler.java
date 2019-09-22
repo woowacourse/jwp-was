@@ -1,19 +1,19 @@
 package http.controller;
 
 import http.exceptions.IllegalRequestMappingException;
-import http.model.HttpRequest;
+import http.model.ServletRequest;
 import http.supoort.RequestMapping;
 
 import java.util.*;
 
-public abstract class AbstractController implements Controller {
+public abstract class AbstractHandler implements Handler {
     private final Set<RequestMapping> mappings = new HashSet<>();
 
-    public AbstractController(RequestMapping mapping) {
+    public AbstractHandler(RequestMapping mapping) {
         this.mappings.add(mapping);
     }
 
-    public AbstractController(RequestMapping... mappings) {
+    public AbstractHandler(RequestMapping... mappings) {
         Collection<RequestMapping> mappingCollection = Arrays.asList(mappings);
         if (mappingCollection.isEmpty()) {
             throw new IllegalRequestMappingException("There is No Mappings");
@@ -27,8 +27,9 @@ public abstract class AbstractController implements Controller {
         this.mappings.addAll(mappingCollection);
     }
 
+
     @Override
-    public boolean canHandle(HttpRequest httpRequest) {
+    public boolean canHandle(ServletRequest httpRequest) {
         return mappings.stream()
                 .anyMatch(mapping -> mapping.match(httpRequest));
     }
@@ -36,8 +37,8 @@ public abstract class AbstractController implements Controller {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AbstractController)) return false;
-        AbstractController that = (AbstractController) o;
+        if (!(o instanceof AbstractHandler)) return false;
+        AbstractHandler that = (AbstractHandler) o;
         return Objects.equals(mappings, that.mappings);
     }
 
@@ -45,4 +46,6 @@ public abstract class AbstractController implements Controller {
     public int hashCode() {
         return Objects.hash(mappings);
     }
+
+
 }
