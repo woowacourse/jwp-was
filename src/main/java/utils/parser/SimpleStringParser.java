@@ -20,8 +20,8 @@ public class SimpleStringParser implements KeyValueParser {
     @Override
     public Map<String, String> toMap(String input) {
         return Stream.of(input.split(this.pairDelimiter))
-                    .map(x -> x.split(this.keyValueDelimiter))
-                    .filter(x -> x.length == KEY_VALUE_SIZE)
+                    .map(keyValueLine -> keyValueLine.split(this.keyValueDelimiter))
+                    .filter(keyValueArray -> keyValueArray.length == KEY_VALUE_SIZE)
                     .map(pair -> new String[] { pair[KEY_INDEX].trim(), pair[VALUE_INDEX].trim() })
                     .collect(Collectors.toMap(pair -> pair[KEY_INDEX], pair -> pair[VALUE_INDEX]));
     }

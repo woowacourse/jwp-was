@@ -39,7 +39,6 @@ public class NetworkIOStream implements NetworkIO {
             logger.error(e.getMessage());
             return false;
         }
-
     }
 
     @Override
