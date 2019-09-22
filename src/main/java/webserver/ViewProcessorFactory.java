@@ -1,6 +1,9 @@
 package webserver;
 
-import webserver.viewProcessor.*;
+import webserver.viewProcessor.ErrorViewProcessor;
+import webserver.viewProcessor.HtmlViewProcessor;
+import webserver.viewProcessor.RedirectViewProcessor;
+import webserver.viewProcessor.ResourceViewProcessor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +20,10 @@ public class ViewProcessorFactory {
     }
 
     private void initViewProcessorFactory() {
+        viewProcessors.add(new ErrorViewProcessor());
         viewProcessors.add(new RedirectViewProcessor());
-        viewProcessors.add(new CssViewProcessor());
         viewProcessors.add(new HtmlViewProcessor());
-        viewProcessors.add(new JsViewProcessor());
-        viewProcessors.add(new PlainViewProcessor());
+        viewProcessors.add(new ResourceViewProcessor());
     }
 
     private static class LazyHolder {
