@@ -1,5 +1,6 @@
 package webserver.parser;
 
+import utils.HttpRequestUtils;
 import utils.IOUtils;
 import webserver.request.HttpRequest;
 import webserver.request.RequestBody;
@@ -29,10 +30,9 @@ public class HttpRequestParser {
 
     private static List<String> parseRequestBuffer(BufferedReader bufferedReader) throws IOException {
         List<String> lines = new ArrayList<>();
-        String line = bufferedReader.readLine();
-        while (!"".equals(line) && null != line) {
+
+        for (String line = bufferedReader.readLine(); HttpRequestUtils.isLineEmpty(line); line = bufferedReader.readLine()) {
             lines.add(line);
-            line = bufferedReader.readLine();
         }
         return lines;
     }

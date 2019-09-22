@@ -39,4 +39,8 @@ public class HttpRequestUtils {
     public static String[] parseAbsPathAndQuery(String absPathAndQuery) {
         return absPathAndQuery.split(ABS_PATH_QUERY_DELIMITER);
     }
+
+    public static boolean isLineEmpty(String line){
+        return !"".equals(line) && null != line;
+    }
 }
