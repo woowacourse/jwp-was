@@ -13,7 +13,11 @@ public class DataConverter {
         return new Response.Builder().body(bytes).build().toBytes();
     }
 
-    public static Response convertToResponse(final StaticFile file) {
+    public static Response convertTo200Response(final StaticFile file) {
         return new Response.Builder().body(file).build();
+    }
+
+    public static Response convertTo404Response(final StaticFile file) {
+        return new Response.Builder().body(file).httpStatus(HttpStatus.NOT_FOUND).build();
     }
 }

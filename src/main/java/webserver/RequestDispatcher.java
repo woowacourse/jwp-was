@@ -6,6 +6,8 @@ import utils.FileLoader;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -18,6 +20,14 @@ public class RequestDispatcher {
     }
 
     public static Response forward(final Request request) {
-        return requestUrls.getOrDefault(request.getPath(), FileLoader::serveStaticFile).apply(request);
+        return requestUrls.getOrDefault(request.getPath(), RequestDispatcher::serveResponse).apply(request);
+    }
+
+    private static Response serveResponse(Request request) {
+        try {
+            return DataConverter.convertTo200Response(FileLoader.loadStaticFile(request));
+        } catch (IOException | URISyntaxException | NullPointerException e) {
+            return DataConverter.convertTo404Response(FileLoader.loadNotFoundFile());
+        }
     }
 }

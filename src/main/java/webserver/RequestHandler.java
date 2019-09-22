@@ -37,7 +37,7 @@ public class RequestHandler implements Runnable {
             final DataOutputStream dos = new DataOutputStream(out);
             writeResponse(dos, response);
         } catch (IOException | URISyntaxException | NullPointerException e) {
-            logger.error(e.getMessage());
+            logger.error("run() {}", e.getMessage());
         }
     }
 
@@ -62,7 +62,8 @@ public class RequestHandler implements Runnable {
             dos.write(body, 0, body.length);
             dos.flush();
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            logger.error("writeResponse() {}", e.getMessage());
+
         }
     }
 }

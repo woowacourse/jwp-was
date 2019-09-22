@@ -1,6 +1,5 @@
 package webserver.support;
 
-import org.junit.jupiter.api.BeforeEach;
 import utils.IOUtils;
 
 import java.io.ByteArrayInputStream;
@@ -18,16 +17,18 @@ public class RequestHelper {
                     "Host: localhost:8080\n" +
                     "Connection: keep-alive\n" +
                     "Accept: */*";
-    private InputStream inputStream;
-    private InputStream inputStreamWithQueryString;
-    protected IOUtils ioUtils;
-    protected IOUtils ioUtilsWithQueryString;
+    protected final String requestNotFoundInput =
+            "GET /weirdPath HTTP/1.1\n" +
+                    "Host: localhost:8080\n" +
+                    "Connection: keep-alive\n" +
+                    "Accept: */*";
 
-    @BeforeEach
-    void setUp() {
-        inputStream = new ByteArrayInputStream(requestInput.getBytes());
-        inputStreamWithQueryString = new ByteArrayInputStream(requestInputWithQueryString.getBytes());
-        ioUtils = new IOUtils(inputStream);
-        ioUtilsWithQueryString = new IOUtils(inputStreamWithQueryString);
+    protected InputStream inputStream(final String requestInput) {
+        return new ByteArrayInputStream(requestInput.getBytes());
+    }
+
+    protected IOUtils ioUtils(final String requestInput) {
+        final InputStream inputStream = new ByteArrayInputStream(requestInput.getBytes());
+        return new IOUtils(inputStream);
     }
 }

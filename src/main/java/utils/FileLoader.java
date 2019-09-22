@@ -14,32 +14,22 @@ public class FileLoader {
 
     private static final String STATIC_PATH = "./static";
     private static final String TEMPLATES_PATH = "./templates";
-    private static final String NOT_FOUND_PAGE_PATH = TEMPLATES_PATH + "/error/404_not_found.html";
+    private static final String NOT_FOUND_PATH = TEMPLATES_PATH + "/error/404_not_found.html";
 
-    public static Response serveStaticFile(final Request request) {
-        return DataConverter.convertToResponse(loadFile(request));
-    }
-
-    private static StaticFile loadFile(final Request request) {
-        StaticFile file;
-        try {
-            file = tryStaticFileRead(request);
-        } catch (IOException | URISyntaxException | NullPointerException e) {
-            try {
-                file = new StaticFile(NOT_FOUND_PAGE_PATH);
-            } catch (IOException | URISyntaxException ex) {
-                LOG.debug(ex.getMessage());
-                file = null;
-            }
-        }
-        return file;
-    }
-
-    private static StaticFile tryStaticFileRead(final Request request) throws IOException, URISyntaxException {
+    public static StaticFile loadStaticFile(final Request request) throws IOException, URISyntaxException, NullPointerException {
         try {
             return new StaticFile(makeFilePath(request, STATIC_PATH));
         } catch (IOException | URISyntaxException | NullPointerException e) {
             return new StaticFile(makeFilePath(request, TEMPLATES_PATH));
+        }
+    }
+
+    public static StaticFile loadNotFoundFile() {
+        try {
+            return new StaticFile(NOT_FOUND_PATH);
+        } catch (IOException | URISyntaxException | NullPointerException e) {
+            LOG.debug(e.getMessage());
+            return null; // TODO 여기를 어떻게 처리해야 할까
         }
     }
 
@@ -48,4 +38,5 @@ public class FileLoader {
         final String pathEnd = (requestPath.endsWith("/") || "".equals(requestPath)) ? "index.html" : "";
         return prefix + requestPath + pathEnd;
     }
+
 }
