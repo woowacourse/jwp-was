@@ -1,4 +1,4 @@
-package webserver.message.response;
+package webserver.message;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
