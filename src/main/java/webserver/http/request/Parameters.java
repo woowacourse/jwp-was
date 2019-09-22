@@ -3,10 +3,10 @@ package webserver.http.request;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Parameter {
+public class Parameters {
     private final Map<String, String> parameters = new HashMap<>();
 
-    Parameter() {
+    Parameters() {
     }
 
     void add(final String key, final String value) {

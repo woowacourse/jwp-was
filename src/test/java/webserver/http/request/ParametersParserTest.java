@@ -6,7 +6,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ParameterParserTest {
+class ParametersParserTest {
 
     @Test
     void 생성_테스트() {

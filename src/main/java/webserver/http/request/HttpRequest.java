@@ -3,16 +3,16 @@ package webserver.http.request;
 public class HttpRequest {
     private final RequestLine requestLine;
     private final RequestHeaders headers;
-    private final Parameter parameter;
+    private final Parameters parameters;
 
-    private HttpRequest(final RequestLine requestLine,  final RequestHeaders headers, final Parameter parameter) {
+    private HttpRequest(final RequestLine requestLine, final RequestHeaders headers, final Parameters parameters) {
         this.requestLine = requestLine;
         this.headers = headers;
-        this.parameter = parameter;
+        this.parameters = parameters;
     }
 
-    public static HttpRequest of(final RequestLine requestLine, final RequestHeaders headers, final Parameter parameter) {
-        return new HttpRequest(requestLine, headers, parameter);
+    public static HttpRequest of(final RequestLine requestLine, final RequestHeaders headers, final Parameters parameters) {
+        return new HttpRequest(requestLine, headers, parameters);
     }
 
     public HttpMethod getMethod() {
@@ -32,10 +32,10 @@ public class HttpRequest {
     }
 
     public String getParameter(final String key) {
-        return parameter.getParameter(key);
+        return parameters.getParameter(key);
     }
 
     public int sizeOfParameters() {
-        return parameter.size();
+        return parameters.size();
     }
 }

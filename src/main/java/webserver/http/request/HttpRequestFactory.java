@@ -23,20 +23,20 @@ public class HttpRequestFactory {
             final BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
             final RequestLine requestLine = RequestLineFactory.generate(br.readLine());
-            final Parameter parameter = readParameters(requestLine.getParameters());
+            final Parameters parameters = readParameters(requestLine.getParameters());
             final RequestHeaders requestHeaders = readHeaders(br);
 
-            readBody(br, parameter, requestHeaders);
+            readBody(br, parameters, requestHeaders);
 
-            return HttpRequest.of(requestLine, requestHeaders, parameter);
+            return HttpRequest.of(requestLine, requestHeaders, parameters);
         } catch (IOException e) {
             log.error(e.getMessage());
             throw new IllegalArgumentException(e.getMessage());
         }
     }
 
-    private static Parameter readParameters(final String parameters) {
-        final Parameter parameter = new Parameter();
+    private static Parameters readParameters(final String parameters) {
+        final Parameters parameter = new Parameters();
         parameter.addAll(ParameterParser.parse(parameters));
         return parameter;
     }
@@ -45,11 +45,11 @@ public class HttpRequestFactory {
         return RequestHeadersFactory.generate(br);
     }
 
-    private static void readBody(final BufferedReader br, final Parameter parameter, final RequestHeaders requestHeaders) throws IOException {
+    private static void readBody(final BufferedReader br, final Parameters parameters, final RequestHeaders requestHeaders) throws IOException {
         if (requestHeaders.contains(HttpHeaders.CONTENT_LENGTH)) {
             final String contentLength = requestHeaders.getHeader(HttpHeaders.CONTENT_LENGTH);
             final String params = IOUtils.readData(br, Integer.parseInt(contentLength));
-            parameter.addAll(ParameterParser.parse(params));
+            parameters.addAll(ParameterParser.parse(params));
         }
     }
 }
