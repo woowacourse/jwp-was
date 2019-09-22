@@ -15,7 +15,7 @@ public abstract class AbstractRequestMessageConverter implements RequestMessageC
     private static final String HEADER_SEPARATOR = ": ";
     private static final String BODY_LENGTH = "Content-Length";
 
-    protected HttpRequest convertWithoutBody(HttpMethod httpMethod, String uri, String protocol, BufferedReader bufferedReader) {
+    protected HttpRequest convertWithBody(HttpMethod httpMethod, String uri, String protocol, BufferedReader bufferedReader) {
         List<String> headerLines = IOUtils.readData(bufferedReader);
         HttpProtocols httpProtocol = HttpProtocols.of(protocol);
         HttpHeaders headers = new HttpHeaders(parseHeaders(headerLines));
@@ -24,7 +24,7 @@ public abstract class AbstractRequestMessageConverter implements RequestMessageC
         return new HttpRequest(httpMethod, httpUri, httpProtocol, httpParameters, headers);
     }
 
-    protected HttpRequest convertWithBody(HttpMethod httpMethod, String uri, String protocol, BufferedReader bufferedReader) {
+    protected HttpRequest convertWithoutBody(HttpMethod httpMethod, String uri, String protocol, BufferedReader bufferedReader) {
         List<String> headerLines = IOUtils.readData(bufferedReader);
         HttpProtocols httpProtocol = HttpProtocols.of(protocol);
         HttpHeaders headers = new HttpHeaders(parseHeaders(headerLines));

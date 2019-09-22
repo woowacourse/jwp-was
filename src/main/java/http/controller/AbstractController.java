@@ -4,10 +4,7 @@ import http.exceptions.IllegalRequestMappingException;
 import http.model.HttpRequest;
 import http.supoort.RequestMapping;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public abstract class AbstractController implements Controller {
     private final Set<RequestMapping> mappings = new HashSet<>();
@@ -17,13 +14,17 @@ public abstract class AbstractController implements Controller {
     }
 
     public AbstractController(RequestMapping... mappings) {
-        if (mappings.length != new HashSet<>(Arrays.asList(mappings)).size()) {
+        Collection<RequestMapping> mappingCollection = Arrays.asList(mappings);
+        if (mappingCollection.isEmpty()) {
+            throw new IllegalRequestMappingException("There is No Mappings");
+        }
+        if (mappings.length != new HashSet<>(mappingCollection).size()) {
             throw new IllegalRequestMappingException("Ambiguous RequestMapping");
         }
-        if (this.mappings.containsAll(Arrays.asList(mappings))) {
+        if (this.mappings.containsAll(mappingCollection)) {
             throw new IllegalRequestMappingException("Ambiguous RequestMapping");
         }
-        this.mappings.addAll(Arrays.asList(mappings));
+        this.mappings.addAll(mappingCollection);
     }
 
     @Override
