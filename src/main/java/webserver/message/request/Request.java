@@ -54,7 +54,7 @@ public class Request {
         return body;
     }
 
-    public String getFieldsValue(final String key) {
+    public String getHeaderValue(final String key) {
         return header.getFieldsValue(key);
     }
 

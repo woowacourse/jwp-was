@@ -41,6 +41,9 @@ public class RequestHandler implements Runnable {
         }
     }
 
+    // RequestHandler의 makeFilePath 메서드에서는 인덱스일 때만 처리하고
+    // FileLoader의 makeFilePath 메서드에서는 다른 모든 파일들을 처리하니까
+    // 얘네를 합치자
     private String makeFilePath(final Request requestHeader, final String prefix) {
         final String requestPath = requestHeader.getPath();
         final String pathEnd = (requestPath.endsWith("/") || "".equals(requestPath)) ? "index.html" : "";

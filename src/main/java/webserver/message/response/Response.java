@@ -23,6 +23,9 @@ public class Response {
     }
 
     public static class Builder {
+        private static final String CONTENT_TYPE = "Content-Type";
+        private static final String LOCATION = "Location";
+
         private HttpVersion httpVersion;
         private HttpStatus httpStatus;
         private ResponseBody body = new ResponseBody();
@@ -31,7 +34,7 @@ public class Response {
         public Builder(final HttpVersion httpVersion, final HttpStatus httpStatus) {
             this.httpVersion = httpVersion;
             this.httpStatus = httpStatus;
-            this.responseFields.put("Content-Type", MediaType.APPLICATION_BINARY.getMediaType());
+            this.responseFields.put(CONTENT_TYPE, MediaType.APPLICATION_BINARY.getMediaType());
         }
 
         public Builder(final String httpVersion) {
@@ -67,12 +70,12 @@ public class Response {
 
         public Builder redirectUrl(final String url) {
             this.httpStatus = HttpStatus.FOUND;
-            putField("Location", url);
+            putField(LOCATION, url);
             return this;
         }
 
         public Builder contentType(final MediaType contentType) {
-            this.responseFields.replace("Content-Type", contentType.getMediaType());
+            this.responseFields.replace(CONTENT_TYPE, contentType.getMediaType());
             return this;
         }
 
@@ -87,7 +90,7 @@ public class Response {
         }
 
         public Builder body(final StaticFile file) {
-            this.responseFields.replace("Content-Type", MediaType.of(file.getExtension()).getMediaType());
+            this.responseFields.replace(CONTENT_TYPE, MediaType.of(file.getExtension()).getMediaType());
             this.body = new ResponseBody(file.getBody());
             return this;
         }
