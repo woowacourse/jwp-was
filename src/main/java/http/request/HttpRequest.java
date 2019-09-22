@@ -1,6 +1,7 @@
 package http.request;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class HttpRequest {
 	private HttpRequestHeader httpRequestHeader;
@@ -20,6 +21,9 @@ public class HttpRequest {
 	}
 
 	public Map<String, String> getHttpRequestBody() {
+		if(Objects.isNull(httpRequestBody)) {
+			throw new NullPointerException();
+		}
 		return httpRequestBody.getBody();
 	}
 }

@@ -1,11 +1,7 @@
-package utils;
+package controller;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import controller.Controller;
-import controller.CreateUserController;
-import controller.ResourceController;
 
 public class ControllerGenerator {
 	private static Map<String, Controller> controllers = new HashMap<>();
