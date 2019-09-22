@@ -2,10 +2,10 @@ package webserver.controller;
 
 import db.DataBase;
 import model.User;
-import webserver.Controller;
 import webserver.HttpRequest;
+import webserver.exception.NotSupportedHttpMethodException;
 
-public class UserCreateController implements Controller {
+public class UserCreateController extends AbstractController {
     public static final String PATH = "/user/create";
     private static final UserCreateController INSTANCE = new UserCreateController();
 
@@ -14,14 +14,12 @@ public class UserCreateController implements Controller {
     }
 
     @Override
-    public String service(HttpRequest request) {
-        if (request.getMethod().equals("POST")) {
-            return doPost(request);
-        }
-        throw new IllegalArgumentException("지원하지 않는 Http Method 입니다.");
+    protected String doGet(HttpRequest httpRequest) {
+        throw new NotSupportedHttpMethodException();
     }
 
-    private String doPost(HttpRequest request) {
+    @Override
+    protected String doPost(HttpRequest request) {
         User user = User.Builder.anUser()
                 .userId(request.getParam("userId"))
                 .email(request.getParam("email"))

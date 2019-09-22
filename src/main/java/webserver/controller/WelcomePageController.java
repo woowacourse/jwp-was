@@ -1,9 +1,9 @@
 package webserver.controller;
 
-import webserver.Controller;
 import webserver.HttpRequest;
+import webserver.exception.NotSupportedHttpMethodException;
 
-public class WelcomePageController implements Controller {
+public class WelcomePageController extends AbstractController {
     public static final String PATH = "/";
     private static final WelcomePageController INSTANCE = new WelcomePageController();
 
@@ -12,15 +12,12 @@ public class WelcomePageController implements Controller {
     }
 
     @Override
-    public String service(HttpRequest request) {
-        if (request.getMethod().equals("GET")) {
-            return doGet();
-        }
-
-        throw new IllegalArgumentException("지원 하지 않는 Http Method 타입입니다.");
+    protected String doGet(HttpRequest httpRequest) {
+        return "/index.html";
     }
 
-    private String doGet() {
-        return "/index.html";
+    @Override
+    protected String doPost(HttpRequest httpRequest) {
+        throw new NotSupportedHttpMethodException();
     }
 }
