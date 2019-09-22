@@ -14,7 +14,7 @@ public class GetFileController extends AbstractController {
     public boolean isMapping(Request request) {
         return (request.getRequestMethod() == RequestMethod.GET)
                 &&
-                (isCorrectRequestUrlContentType(request));
+                (isCorrectRequestContentType(request));
     }
 
     @Override
@@ -30,7 +30,7 @@ public class GetFileController extends AbstractController {
         return new FileResponse(request.getUrl().getUrlPath(), request.getUrl().getRequestContentType().getContentType());
     }
 
-    private boolean isCorrectRequestUrlContentType(Request request) {
+    private boolean isCorrectRequestContentType(Request request) {
         return Arrays.stream(RequestContentType.values())
                 .anyMatch(type -> request.getUrl().getRequestContentType() == type);
     }
