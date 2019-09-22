@@ -1,5 +1,7 @@
 package test;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import webserver.WebServer;
 
 import java.io.*;
@@ -8,8 +10,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class HttpTestClient {
+    private static final String LOCALHOST = "localhost";
+
     private final BufferedReader in;
     private final PrintWriter out;
+
+    public HttpTestClient(int port) throws IOException {
+        this(LOCALHOST, port);
+    }
 
     public HttpTestClient(String host, int port) throws IOException {
         WebServer webServer = new WebServer();

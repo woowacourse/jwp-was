@@ -17,7 +17,7 @@ public class HttpRequestFactory {
     private HttpRequestFactory() {
     }
 
-    static HttpRequest generate(final InputStream in) {
+    public static HttpRequest generate(final InputStream in) {
 
         try {
             final BufferedReader br = new BufferedReader(new InputStreamReader(in));

@@ -9,7 +9,7 @@ import java.net.Socket;
 
 public class WebServer implements Runnable {
     private static final Logger log = LoggerFactory.getLogger(WebServer.class);
-    private static final int DEFAULT_PORT = 8080;
+    public static final int DEFAULT_PORT = 8080;
 
     private final int port;
 
