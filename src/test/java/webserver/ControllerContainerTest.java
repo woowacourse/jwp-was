@@ -33,7 +33,7 @@ class ControllerContainerTest {
         HttpRequest httpRequest = new HttpRequest(in);
         HttpResponse httpResponse = new HttpResponse(out);
 
-        ControllerContainer.service(httpRequest, httpResponse);
+        //ControllerContainer.service(httpRequest, httpResponse);
 
         assertThat(DataBase.findAll().size()).isEqualTo(1);
 
@@ -53,7 +53,7 @@ class ControllerContainerTest {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         HttpResponse httpResponse = new HttpResponse(out);
 
-        ControllerContainer.service(httpRequest, httpResponse);
+        //ControllerContainer.service(httpRequest, httpResponse);
         assertThat(out.toByteArray()).isEqualTo(testOut.toByteArray());
     }
 }

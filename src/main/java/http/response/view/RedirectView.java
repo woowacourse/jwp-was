@@ -9,11 +9,7 @@ public class RedirectView extends View {
     private static final Logger log = LoggerFactory.getLogger(RedirectView.class);
 
     public RedirectView(String path) {
+        super(ResponseStatus.FOUND);
         header.put(HTTP.LOCATION, path);
-    }
-
-    @Override
-    public String getHeader() {
-        return super.getHeader(ResponseStatus.FOUND);
     }
 }

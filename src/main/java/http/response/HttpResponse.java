@@ -13,7 +13,6 @@ public class HttpResponse implements AutoCloseable {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
     private View view;
-
     private final DataOutputStream dataOutputStream;
 
     public HttpResponse(final OutputStream out) {
@@ -28,37 +27,45 @@ public class HttpResponse implements AutoCloseable {
         view.addHeader(http, value);
     }
 
-    public String getResponseHeader() {
-        return view.getHeader();
+    public String getHeader() {
+        StringBuffer sb = new StringBuffer();
+        sb.append(HTTP.VERSION.getPhrase()).append(" ").append(view.getResponseStatus().getInfo()).append("\r\n");
+
+        for (HTTP key : HTTP.values()) {
+            if (view.checkHeader(key)) {
+                sb.append(key.getPhrase()).append(": ").append(view.getHeaderContents(key)).append("\r\n");
+            }
+        }
+        sb.append("\r\n");
+
+        return sb.toString();
     }
 
-    public byte[] getResponseBody() {
+    public byte[] getBody() {
         return view.getBody();
     }
 
     @Override
     public void close() throws IOException {
-        writeHeader(getResponseHeader());
-        writeBody(getResponseBody());
+        writeHeader();
+        writeBody();
         dataOutputStream.close();
     }
 
-    private void writeBody(byte[] body) {
+    private void writeBody() {
         try {
-            dataOutputStream.write(body, 0, body.length);
+            dataOutputStream.write(view.getBody(), 0, view.getBody().length);
             dataOutputStream.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void writeHeader(String header) {
+    private void writeHeader() {
         try {
-            dataOutputStream.writeBytes(header);
+            dataOutputStream.writeBytes(getHeader());
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
-
-
 }
