@@ -8,10 +8,10 @@ import http.response.HttpResponseEntity;
 public abstract class AbstractController implements Controller {
     @Override
     public HttpResponseEntity handle(HttpRequest httpRequest) {
-        if (httpRequest.getMethod().match(HttpMethod.GET)) {
+        if (HttpMethod.GET.match(httpRequest.getMethod())) {
             return doGet(httpRequest);
         }
-        if (httpRequest.getMethod().match(HttpMethod.POST)) {
+        if (HttpMethod.POST.match(httpRequest.getMethod())) {
             return doPost(httpRequest);
         }
         return new Http404ResponseEntity("/error.html");
