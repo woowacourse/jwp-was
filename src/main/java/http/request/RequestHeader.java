@@ -11,6 +11,8 @@ import java.util.Map;
 
 public class RequestHeader {
     private static final Logger logger = LoggerFactory.getLogger(RequestHeader.class);
+    private static final String HEADER_DELIMITER = ": ";
+    private static final String EMPTY_STRING = "";
 
     private final Map<String, String> headerContents = new HashMap<>();
 
@@ -23,12 +25,12 @@ public class RequestHeader {
         while (true) {
             line = bufferedReader.readLine();
 
-            if (line == null || line.equals("")) {
+            if (line == null || line.equals(EMPTY_STRING)) {
                 break;
             }
 
             logger.info("request header contents: {}", line);
-            String[] keyValue = line.split(": ");
+            String[] keyValue = line.split(HEADER_DELIMITER);
             headerContents.put(keyValue[0], keyValue[1]);
         }
     }
@@ -38,7 +40,6 @@ public class RequestHeader {
     }
 
     public String getHeaderContents(String key) {
-        System.out.println(headerContents.getOrDefault(key, ""));
-        return headerContents.getOrDefault(key, "");
+        return headerContents.getOrDefault(key, EMPTY_STRING);
     }
 }
