@@ -1,8 +1,8 @@
 package webserver;
 
 import servlet.IndexServlet;
-import servlet.Servlet;
 import servlet.SignupServlet;
+import webserver.http.servlet.Servlet;
 
 import java.util.HashMap;
 import java.util.Map;

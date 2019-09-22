@@ -22,7 +22,7 @@ public class ParameterParser {
     }
 
     static Map<String, String> parse(final String queryParamsText) {
-        if(StringUtils.isEmpty(queryParamsText)){
+        if (StringUtils.isEmpty(queryParamsText)) {
             return Collections.EMPTY_MAP;
         }
 

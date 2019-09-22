@@ -31,7 +31,7 @@ public class MimeType {
         return MAP.containsKey(extension);
     }
 
-    public static Set<String> getExtensions(){
+    public static Set<String> getExtensions() {
         return MAP.keySet();
     }
 }

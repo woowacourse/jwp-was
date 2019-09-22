@@ -1,4 +1,4 @@
-package servlet;
+package webserver.http.servlet;
 
 import webserver.http.HttpStatus;
 import webserver.http.request.HttpMethod;

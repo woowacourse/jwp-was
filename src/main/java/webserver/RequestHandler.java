@@ -2,15 +2,14 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import servlet.Servlet;
 import webserver.http.HttpStatus;
 import webserver.http.handler.StaticResourceHandler;
 import webserver.http.handler.StaticResourceMapping;
 import webserver.http.request.HttpRequest;
 import webserver.http.request.HttpRequestFactory;
 import webserver.http.response.HttpResponse;
+import webserver.http.servlet.Servlet;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;

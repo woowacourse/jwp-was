@@ -2,6 +2,7 @@ package servlet;
 
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
+import webserver.http.servlet.AbstractServlet;
 
 public class IndexServlet extends AbstractServlet {
 
