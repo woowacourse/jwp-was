@@ -6,14 +6,14 @@ import http.supoort.RequestMapping;
 
 import java.util.*;
 
-public abstract class AbstractHandler implements Handler {
+public abstract class AbstractController implements Controller {
     private final Set<RequestMapping> mappings = new HashSet<>();
 
-    public AbstractHandler(RequestMapping mapping) {
+    public AbstractController(RequestMapping mapping) {
         this.mappings.add(mapping);
     }
 
-    public AbstractHandler(RequestMapping... mappings) {
+    public AbstractController(RequestMapping... mappings) {
         Collection<RequestMapping> mappingCollection = Arrays.asList(mappings);
         if (mappingCollection.isEmpty()) {
             throw new IllegalRequestMappingException("There is No Mappings");
@@ -37,8 +37,8 @@ public abstract class AbstractHandler implements Handler {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AbstractHandler)) return false;
-        AbstractHandler that = (AbstractHandler) o;
+        if (!(o instanceof AbstractController)) return false;
+        AbstractController that = (AbstractController) o;
         return Objects.equals(mappings, that.mappings);
     }
 

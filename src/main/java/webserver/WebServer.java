@@ -1,9 +1,9 @@
 package webserver;
 
-import http.controller.FileResourceHandler;
-import http.controller.Handler;
-import http.controller.ServletRequestHandlers;
-import http.controller.UserHandler;
+import http.controller.Controller;
+import http.controller.FileResourceController;
+import http.controller.HttpRequestControllers;
+import http.controller.UserController;
 import http.supoort.RequestMapping;
 import http.view.FileResourceViewResolver;
 import http.view.ViewResolver;
@@ -23,7 +23,8 @@ public class WebServer {
     public static void main(String[] args) throws Exception {
         int port = getPort(args);
 
-        ServletRequestHandlers requestHandlers = initRequestHandlers();
+
+        HttpRequestControllers requestHandlers = initRequestHandlers();
         ViewResolver viewResolver = initViewResolver();
 
         ExecutorService es = Executors.newFixedThreadPool(100);
@@ -52,12 +53,12 @@ public class WebServer {
         return port;
     }
 
-    private static ServletRequestHandlers initRequestHandlers() {
-        ServletRequestHandlers servletRequestHandlers = new ServletRequestHandlers(new FileResourceHandler(RequestMapping.GET("/*")));
-        Handler userRequestHandler = new UserHandler(RequestMapping.GET("/user/create"), RequestMapping.POST("/user/create"));
+    private static HttpRequestControllers initRequestHandlers() {
+        HttpRequestControllers httpRequestControllers = new HttpRequestControllers(new FileResourceController(RequestMapping.GET("/*")));
+        Controller userRequestController = new UserController(RequestMapping.GET("/user/create"), RequestMapping.POST("/user/create"));
 
-        servletRequestHandlers.addHandler(userRequestHandler);
-        return servletRequestHandlers;
+        httpRequestControllers.addHandler(userRequestController);
+        return httpRequestControllers;
     }
 
     private static ViewResolver initViewResolver() {

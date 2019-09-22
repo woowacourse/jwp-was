@@ -1,6 +1,6 @@
 package webserver;
 
-import http.controller.ServletRequestHandlers;
+import http.controller.HttpRequestControllers;
 import http.model.HttpResponse;
 import http.supoort.HttpErrorResponse;
 import http.supoort.converter.ResponseMessageConverter;
@@ -18,12 +18,12 @@ public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private final Socket connection;
-    private final ServletRequestHandlers servletRequestHandlers;
+    private final HttpRequestControllers httpRequestControllers;
     private final ViewResolver viewResolver;
 
-    public RequestHandler(Socket connection, ServletRequestHandlers servletRequestHandlers, ViewResolver viewResolver) {
+    public RequestHandler(Socket connection, HttpRequestControllers httpRequestControllers, ViewResolver viewResolver) {
         this.connection = connection;
-        this.servletRequestHandlers = servletRequestHandlers;
+        this.httpRequestControllers = httpRequestControllers;
         this.viewResolver = viewResolver;
     }
 

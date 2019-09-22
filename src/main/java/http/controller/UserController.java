@@ -4,13 +4,12 @@ import http.model.ServletRequest;
 import http.model.ServletResponse;
 import http.supoort.RequestMapping;
 
-public class FileResourceHandler extends AbstractHandler {
-
-    public FileResourceHandler(RequestMapping mapping) {
+public class UserController extends AbstractController {
+    public UserController(RequestMapping mapping) {
         super(mapping);
     }
 
-    public FileResourceHandler(RequestMapping... mappings) {
+    public UserController(RequestMapping... mappings) {
         super(mappings);
     }
 
