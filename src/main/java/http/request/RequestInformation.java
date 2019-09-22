@@ -1,10 +1,14 @@
 package http.request;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 public class RequestInformation {
     private static final String DELIMITER = " ";
+
     private Map<String, String> requestInformation;
+    private List<String> requestUrlPatterns = Arrays.asList("user", "html", "css", "js", "ico", "woff", "ttf");
 
     public RequestInformation(Map<String, String> requestInformation) {
         this.requestInformation = requestInformation;
@@ -18,8 +22,16 @@ public class RequestInformation {
         return RequestUrl.from(tokenize()[1]);
     }
 
+    public String extractPatternPath() {
+        return requestUrlPatterns
+                .stream()
+                .filter(pattern -> tokenize()[1].contains(pattern))
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new);
+    }
+
     private String[] tokenize() {
-        String requestLine = requestInformation.get("Request-Line");
+        String requestLine = requestInformation.get("Request-Line:");
         return requestLine.split(DELIMITER);
     }
 }
