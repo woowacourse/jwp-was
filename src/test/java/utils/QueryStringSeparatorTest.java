@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class QueryStringSeparatorTest {
-	private String path = "/user/create?userId=tiber&password=tiber1234&name=tiber&email=tiber@naver.com";
+	private String path = "userId=tiber&password=tiber1234&name=tiber&email=tiber@naver.com";
 
 	@DisplayName("쿼리스트링 분리")
 	@Test

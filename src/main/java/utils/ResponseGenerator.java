@@ -36,4 +36,13 @@ public class ResponseGenerator {
 		header.put("Content-Type", mimeType + ";charset=utf-8\r\n");
 		header.put("Content-Length", lengthOfBodyContent + "\r\n");
 	}
+
+	public static Map<String, String> responseHeader(String location) {
+		Map<String, String> header = new LinkedHashMap<>();
+		header.put("Http", "HTTP/1.1");
+		header.put("Code", "302");
+		header.put("Description", "Found");
+		header.put("Location", location);
+		return header;
+	}
 }
