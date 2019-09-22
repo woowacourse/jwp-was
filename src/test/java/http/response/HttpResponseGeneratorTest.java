@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class HttpResponseGeneratorTest {
-	private String filePath = "src/test/resources/test.html";
+	private String filePath = "./src/test/resources/test.html";
 
 	@DisplayName("200 응답 헤더 확인")
 	@Test
