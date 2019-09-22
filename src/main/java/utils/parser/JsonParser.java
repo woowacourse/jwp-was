@@ -44,6 +44,31 @@ public class JsonParser implements KeyValueParser<JsonObject> {
         return input.substring(1, input.length() - 1).trim();
     }
 
+    private JsonObject parseObject(String token, List<String> stringTokens) {
+        final String innerContent = unwrapEnclosure(token);
+        if (innerContent.isEmpty()) {
+            return new JsonObject();
+        }
+        final Map<String, JsonValue<?>> val = parseAttributes(innerContent, stringTokens);
+        return !val.isEmpty() ? new JsonObject(val) : null;
+    }
+
+    private Map<String, JsonValue<?>> parseAttributes(String input, List<String> stringTokens) {
+        return attributesParser.interpret(input).entrySet()
+                                                .stream()
+                                                .map(x -> new Object[] {
+                                                        decodeString(x.getKey(), stringTokens),
+                                                        parseValue(x.getValue(), stringTokens)
+                                                }).collect(Collectors.toMap(
+                                                        attr -> (String) attr[0],
+                                                        attr -> (JsonValue<?>) attr[1])
+                                                );
+    }
+
+    private JsonString parseString(String token, List<String> stringTokens) {
+        return new JsonString(decodeString(token, stringTokens));
+    }
+
     private JsonValue<?> parseValue(String token, List<String> stringTokens) {
         if (REPLACED_STRING.matcher(token).find()) {
             return parseString(token, stringTokens);
@@ -69,25 +94,8 @@ public class JsonParser implements KeyValueParser<JsonObject> {
         return null;
     }
 
-    private JsonObject parseObject(String token, List<String> stringTokens) {
-        final String innerContent = unwrapEnclosure(token);
-        if (innerContent.isEmpty()) {
-            return new JsonObject();
-        }
-        final Map<String, JsonValue<?>> val = parseAttributes(innerContent, stringTokens);
-        return !val.isEmpty() ? new JsonObject(val) : null;
-    }
-
-    private Map<String, JsonValue<?>> parseAttributes(String input, List<String> stringTokens) {
-        return attributesParser.interpret(input).entrySet()
-                                                .stream()
-                                                .map(x -> new JsonValue<?>[] {
-                                                        parseString(x.getKey(), stringTokens),
-                                                        parseValue(x.getValue(), stringTokens)
-                                                }).collect(Collectors.toMap(attr ->
-                                                    (String) attr[0].val(),
-                                                    attr -> attr[1])
-                                                );
+    private String decodeString(String token, List<String> stringTokens) {
+        return stringTokens.get(Integer.parseInt(token.substring(1)));
     }
 
     private JsonArray parseArray(String token, List<String> stringTokens) {
@@ -99,9 +107,5 @@ public class JsonParser implements KeyValueParser<JsonObject> {
                                                 .map(x -> parseValue(x, stringTokens))
                                                 .collect(Collectors.toList());
         return !elements.contains(null) ? new JsonArray(elements) : null;
-    }
-
-    private JsonString parseString(String token, List<String> stringTokens) {
-        return new JsonString(stringTokens.get(Integer.parseInt(token.substring(1))));
     }
 }

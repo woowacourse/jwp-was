@@ -42,16 +42,16 @@ public class HttpMimeType {
     private final String subtype;
 
     public static Optional<HttpMimeType> of(String input) {
-        final String escaped = input.replaceAll("\\s+", "").toLowerCase();
-        if (CACHE.containsKey(escaped)) {
-            return Optional.of(CACHE.get(escaped));
+        final String noSpace = input.replaceAll("\\s+", "").toLowerCase();
+        if (CACHE.containsKey(noSpace)) {
+            return Optional.of(CACHE.get(noSpace));
         }
-        final String[] args = escaped.split("/");
+        final String[] args = noSpace.split("/");
         try {
             final HttpMimeType mimeType = (args[0].equals("*") && args[1].equals("*"))
                     ? new HttpMimeType(Chemical.ALL, "*")
                     : new HttpMimeType(Chemical.valueOf(args[0].toUpperCase()), args[1]);
-            CACHE.put(escaped, mimeType);
+            CACHE.put(noSpace, mimeType);
             return Optional.of(mimeType);
         } catch (IllegalArgumentException | IndexOutOfBoundsException e) {
             return Optional.empty();

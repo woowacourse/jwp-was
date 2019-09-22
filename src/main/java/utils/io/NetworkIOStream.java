@@ -2,9 +2,9 @@ package utils.io;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.recursion.Done;
-import utils.recursion.TailCall;
-import utils.recursion.TailRecursion;
+import utils.fp.Done;
+import utils.fp.TailCall;
+import utils.fp.TailRecursion;
 
 import java.io.*;
 import java.net.Socket;

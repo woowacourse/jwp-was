@@ -10,7 +10,7 @@ public class FileIoUtilsTest {
 
     @Test
     void loadFileFromClasspath() throws Exception {
-        String body = FileIoUtils.loadFileFromClasspath("static/index.html").get();
+        String body = FileIoUtils.loadFileFromClasspath("./static/index.html").get();
         log.debug("file : {}", body);
     }
 }

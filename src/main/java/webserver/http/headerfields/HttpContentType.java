@@ -26,17 +26,17 @@ public class HttpContentType implements HttpHeaderField {
 
     public static Optional<HttpContentType> of(String input) {
         return Optional.ofNullable(input).flatMap(x -> {
-            final String escaped = x.replaceAll("\\s+", "").toLowerCase();
-            if (CACHE.containsKey(escaped)) {
-                return Optional.of(CACHE.get(escaped));
+            final String noSpace = x.replaceAll("\\s+", "").toLowerCase();
+            if (CACHE.containsKey(noSpace)) {
+                return Optional.of(CACHE.get(noSpace));
             }
-            return HttpMimeTypeAndParams.of(escaped).filter(y -> !y.mimeType().subtype().equals("*"))
+            return HttpMimeTypeWithParamsDTO.of(noSpace).filter(y -> !y.mimeType().subtype().equals("*"))
                                                     .map(y -> {
                                                         try {
                                                             final HttpContentType contentType =
                                                                     new HttpContentType(y.mimeType(), y.params());
                                                             if (contentType.boundary == null) {
-                                                                CACHE.put(escaped, contentType);
+                                                                CACHE.put(noSpace, contentType);
                                                             }
                                                             return contentType;
                                                         } catch (UnsupportedCharsetException e) {

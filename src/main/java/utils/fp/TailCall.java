@@ -1,4 +1,4 @@
-package utils.recursion;
+package utils.fp;
 
 @FunctionalInterface
 public interface TailCall<T> extends TailRecursion<T> {

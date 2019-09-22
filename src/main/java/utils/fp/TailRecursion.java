@@ -1,4 +1,4 @@
-package utils.recursion;
+package utils.fp;
 
 public interface TailRecursion<T> {
     default T get() {

@@ -1,6 +1,7 @@
 package utils.parser;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -12,6 +13,12 @@ public class JsonObject extends JsonValue<Map<String, JsonValue<?>>> {
 
     public JsonObject(Map<String, JsonValue<?>> val) {
         super(val);
+    }
+
+    public JsonObject(String key, JsonValue<?> value) {
+        super(new HashMap<String, JsonValue<?>>() {{
+            put(key, value);
+        }});
     }
 
     public Optional<JsonValue<?>> get(String key) {

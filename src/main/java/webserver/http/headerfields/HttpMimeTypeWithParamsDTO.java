@@ -7,27 +7,27 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class HttpMimeTypeAndParams implements HttpHeaderField {
-    private static final Map<String, HttpMimeTypeAndParams> CACHE = new HashMap<>();
+public class HttpMimeTypeWithParamsDTO {
+    private static final Map<String, HttpMimeTypeWithParamsDTO> CACHE = new HashMap<>();
 
     private final HttpMimeType mimeType;
     private final Map<String, String> params;
 
-    public static Optional<HttpMimeTypeAndParams> of(String input) {
+    public static Optional<HttpMimeTypeWithParamsDTO> of(String input) {
         if (CACHE.containsKey(input)) {
             return Optional.of(CACHE.get(input));
         }
         return HttpMimeType.of(
                 input.contains(";") ? input.substring(0, input.indexOf(";")) : input
         ).map(mimeType -> {
-            final HttpMimeTypeAndParams mimeTypeAndParams =
-                    new HttpMimeTypeAndParams(mimeType, KeyValueParserFactory.contentTypeParser().interpret(input));
+            final HttpMimeTypeWithParamsDTO mimeTypeAndParams =
+                    new HttpMimeTypeWithParamsDTO(mimeType, KeyValueParserFactory.contentTypeParser().interpret(input));
             CACHE.put(input, mimeTypeAndParams);
             return mimeTypeAndParams;
         });
     }
 
-    private HttpMimeTypeAndParams(HttpMimeType mimeType, Map<String, String> params) {
+    private HttpMimeTypeWithParamsDTO(HttpMimeType mimeType, Map<String, String> params) {
         this.mimeType = mimeType;
         this.params = Collections.unmodifiableMap(params);
     }

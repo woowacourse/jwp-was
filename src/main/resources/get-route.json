@@ -1,1 +1,3 @@
-/ -> IndexController.index
+{
+  "/": "IndexController.index"
+}

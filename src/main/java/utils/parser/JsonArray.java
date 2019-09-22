@@ -1,5 +1,6 @@
 package utils.parser;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +13,10 @@ public class JsonArray extends JsonValue<List<JsonValue<?>>> {
 
     public JsonArray(List<JsonValue<?>> val) {
         super(val);
+    }
+
+    public JsonArray(JsonValue<?>... elements) {
+        this(Arrays.asList(elements));
     }
 
     Optional<JsonValue<?>> get(int i) {

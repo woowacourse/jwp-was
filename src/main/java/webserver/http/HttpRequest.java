@@ -35,7 +35,8 @@ public class HttpRequest {
                 : HttpMethod.of(startLine[0]).flatMap(method ->
                     HttpVersion.of(startLine[2]).map(version -> {
                         final HttpPath path = new HttpPath(startLine[1]);
-                        final Map<String, String> headerFields = parseHeaderFields(io);
+                        final Map<String, String> headerFields =
+                                KeyValueParserFactory.httpHeaderFieldsParser().interpret(io.readLinesWhileNotEmpty());
                         final HttpHost host = HttpHost.of(
                                 headerFields.remove(toFieldName(HttpHost.class))
                         ).orElse(null);
@@ -71,10 +72,6 @@ public class HttpRequest {
                         );
                     })
                 );
-    }
-
-    private static Map<String, String> parseHeaderFields(NetworkIO io) {
-        return KeyValueParserFactory.httpHeaderFieldsParser().interpret(io.readLinesWhileNotEmpty());
     }
 
     private HttpRequest(
