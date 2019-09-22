@@ -2,7 +2,7 @@ package controller;
 
 import http.request.Request;
 import http.request.RequestMethod;
-import http.request.RequestUrlType;
+import http.request.RequestContentType;
 import http.response.FileResponse;
 import http.response.Response;
 
@@ -27,12 +27,12 @@ public class GetFileController extends AbstractController {
 
     @Override
     public Response createGetResponse(Request request) {
-        return new FileResponse(request.getUrl().getUrlPath(), request.getUrl().getRequestUrlType().getContentType());
+        return new FileResponse(request.getUrl().getUrlPath(), request.getUrl().getRequestContentType().getContentType());
     }
 
     private boolean isCorrectRequestUrlContentType(Request request) {
-        return Arrays.stream(RequestUrlType.values())
-                .anyMatch(type -> request.getUrl().getRequestUrlType() == type);
+        return Arrays.stream(RequestContentType.values())
+                .anyMatch(type -> request.getUrl().getRequestContentType() == type);
     }
 
 }

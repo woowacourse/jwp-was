@@ -2,7 +2,7 @@ package http.request;
 
 import java.util.Arrays;
 
-public enum RequestUrlType {
+public enum RequestContentType {
 //    private static final String STATIC_FILE_PATH = "../resources/static";
 //    private static final String TEMPLATES = "../resources/templates";
 
@@ -18,13 +18,13 @@ public enum RequestUrlType {
     private String destinationPath;
     private String contentType;
 
-    RequestUrlType(String pattern, String destinationPath, String contentType) {
+    RequestContentType(String pattern, String destinationPath, String contentType) {
         this.pattern = pattern;
         this.destinationPath = destinationPath;
         this.contentType = contentType;
     }
 
-    public static RequestUrlType findType(String urlPath) {
+    public static RequestContentType findType(String urlPath) {
         return Arrays.stream(values())
                 .filter(type -> urlPath.contains(type.getExtension()))
                 .findAny()

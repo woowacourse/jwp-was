@@ -1,20 +1,20 @@
 package http.request;
 
 public class RequestUrl {
-    private RequestUrlType requestUrlType;
+    private RequestContentType requestContentType;
     private String urlPath;
 
     private RequestUrl(String urlPath) {
-        this.requestUrlType = RequestUrlType.findType(urlPath);
-        this.urlPath = requestUrlType.getDestinationPath() + urlPath;
+        this.requestContentType = RequestContentType.findType(urlPath);
+        this.urlPath = requestContentType.getDestinationPath() + urlPath;
     }
 
     public static RequestUrl from(String url) {
         return new RequestUrl(url);
     }
 
-    public RequestUrlType getRequestUrlType() {
-        return requestUrlType;
+    public RequestContentType getRequestContentType() {
+        return requestContentType;
     }
 
     public String getUrlPath() {
