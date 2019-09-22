@@ -7,8 +7,8 @@ import exception.FailedRedirectException;
 import exception.UnauthorizedRequestException;
 import model.HttpResponse;
 import service.UserService;
-import utils.HttpResponseGenerator;
-import webserver.HttpRequest;
+import http.HttpResponseGenerator;
+import http.HttpRequest;
 
 public class CreateUserController extends AbstractController {
 	@Override

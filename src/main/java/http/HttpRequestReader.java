@@ -1,12 +1,10 @@
-package utils;
+package http;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 
-import method.HttpMethod;
+import http.method.HttpMethod;
 import model.RequestHeader;
-import webserver.HttpRequest;
-import webserver.RequestBody;
 
 public class HttpRequestReader {
 

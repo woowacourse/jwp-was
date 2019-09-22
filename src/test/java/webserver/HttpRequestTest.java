@@ -4,9 +4,10 @@ import java.io.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import http.HttpRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import utils.HttpRequestReader;
+import http.HttpRequestReader;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

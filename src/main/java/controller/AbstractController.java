@@ -3,8 +3,8 @@ package controller;
 import java.io.DataOutputStream;
 import java.io.OutputStream;
 
-import method.HttpMethod;
-import webserver.HttpRequest;
+import http.method.HttpMethod;
+import http.HttpRequest;
 
 public abstract class AbstractController implements Controller {
 	@Override

@@ -9,9 +9,9 @@ import exception.UnauthorizedRequestException;
 import exception.WrongPathException;
 import model.HttpResponse;
 import utils.FileIoUtils;
-import utils.HttpResponseGenerator;
+import http.HttpResponseGenerator;
 import utils.ResourcePathUtils;
-import webserver.HttpRequest;
+import http.HttpRequest;
 
 public class ResourceController extends AbstractController {
 	@Override
