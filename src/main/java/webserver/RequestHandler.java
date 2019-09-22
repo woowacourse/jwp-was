@@ -1,21 +1,33 @@
 package webserver;
 
+import http.controller.HttpRequestHandlers;
+import http.model.HttpRequest;
+import http.model.HttpResponse;
+import http.supoort.HttpErrorResponse;
+import http.supoort.HttpRequestParser;
+import http.supoort.ResponseMessageConverter;
+import http.view.ModelAndView;
+import http.view.ViewResolver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
+    private HttpRequestHandlers httpRequestHandlers;
+    private ViewResolver viewResolver;
 
-    public RequestHandler(Socket connectionSocket) {
+    public RequestHandler(Socket connectionSocket, HttpRequestHandlers httpRequestHandlers, ViewResolver viewResolver) {
         this.connection = connectionSocket;
+        this.httpRequestHandlers = httpRequestHandlers;
+        this.viewResolver = viewResolver;
     }
 
     public void run() {
@@ -23,33 +35,33 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
-            DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = "Hello World".getBytes();
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+            handleRequest(in, out);
         } catch (IOException e) {
             logger.error(e.getMessage());
+            throw new FailToHandleRequestException(e.getMessage());
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void handleRequest(InputStream in, OutputStream out) {
         try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
+            HttpRequest request = HttpRequestParser.parse(in);
+
+            ModelAndView modelAndView = httpRequestHandlers.doService(request);
+
+            response(viewResolver.resolve(modelAndView), out);
+
+        } catch (Exception e) {
             logger.error(e.getMessage());
+            sendError(e.getMessage(), out);
         }
     }
 
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+    private void sendError(String message, OutputStream out) {
+        response(HttpErrorResponse.generate(message), out);
+    }
+
+    private void response(HttpResponse response, OutputStream out) {
+        DataOutputStream dos = new DataOutputStream(out);
+        ResponseMessageConverter.convert(response, dos);
     }
 }
