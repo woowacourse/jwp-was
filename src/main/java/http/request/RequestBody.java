@@ -1,5 +1,6 @@
 package http.request;
 
+import http.exception.NotFoundDataException;
 import org.apache.commons.collections4.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,11 +45,7 @@ public class RequestBody {
         if (datas.containsKey(name)) {
             return datas.get(name);
         }
-        throw new IllegalArgumentException(name + "를 찾을 수 없습니다.");
-    }
-
-    public Map<String, String> getDatas() {
-        return unmodifiableMap(datas);
+        throw new NotFoundDataException(name + "를 찾을 수 없습니다.");
     }
 
     @Override
