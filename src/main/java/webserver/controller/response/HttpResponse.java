@@ -50,4 +50,15 @@ public class HttpResponse {
             logger.error(e.getMessage());
         }
     }
+
+    public void badRequest(String errorMessage) {
+        try {
+            dataOutputStream.writeBytes("HTTP/1.1 400 BAD REQUEST"+ errorMessage + "\r\n");
+            dataOutputStream.writeBytes("Server: jwp-was(robby) \r\n");
+            dataOutputStream.writeBytes("Connection: close \r\n");
+            dataOutputStream.flush();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
 }

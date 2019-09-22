@@ -13,7 +13,7 @@ public class HttpRequestBody {
 
     public HttpRequestBody(String requestParams) throws UnsupportedEncodingException {
         bodyDataSet = new HashMap<>();
-        URLDecoder.decode(requestParams, "UTF-8");
+        requestParams = URLDecoder.decode(requestParams, "UTF-8");
         String[] splitedParams = requestParams.split("&");
 
         for(String splitedParam : splitedParams) {

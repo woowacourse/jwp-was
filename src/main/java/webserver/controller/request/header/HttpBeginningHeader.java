@@ -1,5 +1,6 @@
 package webserver.controller.request.header;
 
+import exception.ContentTypeNotFoundException;
 import utils.FileIoUtils;
 import webserver.controller.response.ContentType;
 
@@ -41,7 +42,7 @@ public class HttpBeginningHeader {
         return FileIoUtils.loadFileFromClasspath(STATIC_FILE_PATH + url);
     }
 
-    public ContentType getContentType() {
+    public ContentType getContentType() throws ContentTypeNotFoundException{
         return ContentType.match(url);
     }
 }

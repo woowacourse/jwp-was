@@ -1,5 +1,6 @@
 package webserver.controller.request;
 
+import exception.ContentTypeNotFoundException;
 import webserver.controller.request.header.HttpBeginningHeader;
 import webserver.controller.request.header.HttpHeaderFields;
 import webserver.controller.response.ContentType;
@@ -25,7 +26,7 @@ public class HttpRequest {
         return httpBeginningHeader.getResponseBody(contentType);
     }
 
-    public ContentType getContentType() {
+    public ContentType getContentType() throws ContentTypeNotFoundException {
         return httpBeginningHeader.getContentType();
     }
 
