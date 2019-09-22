@@ -11,7 +11,7 @@ class SignupServletTest {
 
     @Test
     void get() {
-        final String response = httpTestClient.get().uri("/signup")
+        final String response = httpTestClient.get().uri("/user/create")
                 .exchange();
 
         assertThat(response).contains("사용자 아이디");
@@ -19,7 +19,7 @@ class SignupServletTest {
 
     @Test
     void post() {
-        final String response = httpTestClient.post().uri("/signup")
+        final String response = httpTestClient.post().uri("/user/create")
                 .body("userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net")
                 .exchange();
 
