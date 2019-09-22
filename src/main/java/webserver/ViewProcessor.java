@@ -1,6 +1,6 @@
-package webserver.viewProcessor;
+package webserver;
 
-import webserver.httpResponse.HttpResponse;
+import webserver.HttpResponse;
 
 public interface ViewProcessor {
     boolean isSupported(String viewName);

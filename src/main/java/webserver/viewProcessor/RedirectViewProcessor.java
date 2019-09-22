@@ -1,6 +1,7 @@
 package webserver.viewProcessor;
 
-import webserver.httpResponse.HttpResponse;
+import webserver.HttpResponse;
+import webserver.ViewProcessor;
 
 public class RedirectViewProcessor implements ViewProcessor {
 

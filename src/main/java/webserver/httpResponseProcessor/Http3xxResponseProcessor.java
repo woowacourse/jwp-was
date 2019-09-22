@@ -1,7 +1,8 @@
-package webserver.httpResponse;
+package webserver.httpResponseProcessor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.HttpResponse;
 import webserver.HttpResponseProcessor;
 
 import java.io.DataOutputStream;

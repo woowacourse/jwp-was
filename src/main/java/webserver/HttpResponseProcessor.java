@@ -1,7 +1,5 @@
 package webserver;
 
-import webserver.httpResponse.HttpResponse;
-
 import java.io.DataOutputStream;
 
 public interface HttpResponseProcessor {

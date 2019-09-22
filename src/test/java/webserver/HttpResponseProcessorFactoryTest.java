@@ -1,11 +1,8 @@
 package webserver;
 
 import org.junit.jupiter.api.Test;
-import webserver.httpResponse.Http2xxResponseProcessor;
-import webserver.httpResponse.Http3xxResponseProcessor;
-import webserver.httpResponse.HttpResponse;
-
-import java.util.Objects;
+import webserver.httpResponseProcessor.Http2xxResponseProcessor;
+import webserver.httpResponseProcessor.Http3xxResponseProcessor;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -2,7 +2,6 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.viewProcessor.ViewProcessor;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
