@@ -6,9 +6,10 @@ import db.DataBase;
 import model.User;
 
 public class UserService {
-	public static void saveUser(Map<String, String> userInfo) {
+	public static User saveUser(Map<String, String> userInfo) {
 		User user = new User(userInfo.get("userId"), userInfo.get("password"),
 				userInfo.get("name"), userInfo.get("email"));
 		DataBase.addUser(user);
+		return user;
 	}
 }
