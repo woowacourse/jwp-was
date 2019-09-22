@@ -16,6 +16,6 @@ class IOUtilsTest extends RequestHelper {
         String data = "abcd123";
         StringReader sr = new StringReader(data);
 
-        LOG.debug("parse body : {}", ioUtils(requestInput).readBody(data.length()));
+        LOG.debug("parse body : {}", ioUtils(requestGetHeader).readBody(data.length()));
     }
 }

@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import utils.IOUtils;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -12,23 +14,20 @@ public class Request {
 
     private static final String EMPTY = "";
     private static final String SPACE_DELIMITER = " ";
-    private static final String QUERY_DELIMITER = "\\?";
     private static final int URL_INDEX = 1;
-    private static final int QUERY_INDEX = 0;
     private static final int ZERO = 0;
-    private static final int NO_QUERY = 1;
 
     private final RequestStartLine startLine;
     private final RequestHeader header;
     private final RequestBody body;
 
-    public Request(final IOUtils IOUtils) throws IOException {
+    public Request(final IOUtils IOUtils) throws IOException, URISyntaxException {
         final String[] httpMethodAndPath = IOUtils.iterator().next().split(SPACE_DELIMITER);
-        final String[] pathAndQuery = httpMethodAndPath[URL_INDEX].split(QUERY_DELIMITER);
+        final URI url = new URI(httpMethodAndPath[URL_INDEX]);
 
         this.startLine = new RequestStartLine(httpMethodAndPath);
         this.header = new RequestHeader(IOUtils);
-        this.body = new RequestBody((pathAndQuery.length == NO_QUERY) ? EMPTY : pathAndQuery[QUERY_INDEX]);
+        this.body = new RequestBody(url.getQuery() == null ? EMPTY : url.getQuery());
 
         final int contentLength = header.getContentLength();
         final String body = (contentLength > ZERO) ? IOUtils.readBody(contentLength) : EMPTY;

@@ -17,7 +17,7 @@ class RequestDispatcherTest extends RequestHelper {
     @Test
     @DisplayName("url 분기처리를 제대로 하는지 확인")
     void forwardIndex() throws IOException, URISyntaxException {
-        final Request request = new Request(ioUtils(requestInput));
+        final Request request = new Request(ioUtils(requestGetHeader));
         final Response response = RequestDispatcher.forward(request);
         final StaticFile staticFile = new StaticFile("./templates/index.html");
 
@@ -31,7 +31,7 @@ class RequestDispatcherTest extends RequestHelper {
     @Test
     @DisplayName("존재하지 않는 URL로 접근하였을 경우 처리")
     void forwardNotFound() throws IOException, URISyntaxException {
-        final Request request = new Request(ioUtils(requestNotFoundInput));
+        final Request request = new Request(ioUtils(requestNotFoundHeader));
         final Response response = RequestDispatcher.forward(request);
         final StaticFile staticFile = new StaticFile("./templates/error/404_not_found.html");
 

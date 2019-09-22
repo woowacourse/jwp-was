@@ -34,7 +34,7 @@ public class ExecutorsTest {
 
         es.shutdown();
         es.awaitTermination(100, TimeUnit.SECONDS);
-        logger.info("Total Elaspsed: {}", sw.getTotalTimeSeconds());
+        logger.info("Total Elapsed: {}", sw.getTotalTimeSeconds());
     }
 }
 
