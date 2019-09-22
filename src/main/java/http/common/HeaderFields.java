@@ -11,6 +11,7 @@ import java.util.Objects;
 
 public class HeaderFields {
     private static final Logger logger = LoggerFactory.getLogger(HeaderFields.class);
+    private static final String HEADER_FIELD_KEY_VALUE_DELIMITER = ":";
 
     private final Map<String, String> headerFields;
 
@@ -20,8 +21,8 @@ public class HeaderFields {
         }
         this.headerFields = new HashMap<>();
         for (String headerField : headerFields) {
-            String key = headerField.substring(0, headerField.indexOf(":"));
-            String value = headerField.substring(headerField.indexOf(":") + 2);
+            String key = headerField.substring(0, headerField.indexOf(HEADER_FIELD_KEY_VALUE_DELIMITER));
+            String value = headerField.substring(headerField.indexOf(HEADER_FIELD_KEY_VALUE_DELIMITER) + 2);
             this.headerFields.put(key, value);
         }
     }

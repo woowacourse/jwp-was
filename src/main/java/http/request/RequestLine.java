@@ -12,6 +12,10 @@ import static http.common.HttpMethod.GET;
 import static http.common.HttpMethod.POST;
 
 public class RequestLine {
+    private static final String QUERY_STRING_DELIMITER = "?";
+    private static final String QUERY_STRING_DELIMITER_REGEX = "\\?";
+    private static final String REQUEST_LINE_DELIMITER_REGEX = " ";
+
     private final HttpMethod method;
     private String path;
     private final String queryString;
@@ -27,15 +31,15 @@ public class RequestLine {
 
     private String splitQueryString() {
         String pathWithQueryString = path;
-        if (pathWithQueryString.contains("?")) {
-            path = pathWithQueryString.split("\\?")[0];
-            return pathWithQueryString.split("\\?")[1];
+        if (pathWithQueryString.contains(QUERY_STRING_DELIMITER)) {
+            path = pathWithQueryString.split(QUERY_STRING_DELIMITER_REGEX)[0];
+            return pathWithQueryString.split(QUERY_STRING_DELIMITER_REGEX)[1];
         }
         return "";
     }
 
     private static List<String> makeTokensFrom(String requestLine) {
-        List<String> tokens = Arrays.asList(requestLine.split(" "));
+        List<String> tokens = Arrays.asList(requestLine.split(REQUEST_LINE_DELIMITER_REGEX));
         validateRequestLine(requestLine, tokens);
         return tokens;
     }

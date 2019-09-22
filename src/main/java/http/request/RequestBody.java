@@ -11,10 +11,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static java.util.Collections.unmodifiableMap;
-
 public class RequestBody {
     private static final Logger logger = LoggerFactory.getLogger(RequestBody.class);
+    private static final String PARAMETERS_DELIMITER = "&";
+    private static final String PARAMETER_KEY_VALUE_DELIMITER = "=";
 
     private final Map<String, String> datas;
 
@@ -26,7 +26,7 @@ public class RequestBody {
 
     private void addDataIfExist(String data) {
         if (exist(data)) {
-            addDatas(Arrays.asList(data.split("&")));
+            addDatas(Arrays.asList(data.split(PARAMETERS_DELIMITER)));
         }
     }
 
@@ -37,7 +37,7 @@ public class RequestBody {
     private void addDatas(List<String> tokens) {
         tokens.forEach(token -> {
             logger.debug("data : {}", token);
-            datas.put(token.split("=")[0], token.split("=")[1]);
+            datas.put(token.split(PARAMETER_KEY_VALUE_DELIMITER)[0], token.split(PARAMETER_KEY_VALUE_DELIMITER)[1]);
         });
     }
 
