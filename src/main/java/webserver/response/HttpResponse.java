@@ -4,6 +4,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 
 public class HttpResponse {
     private static final String NEW_LINE = "\r\n";
@@ -17,15 +18,15 @@ public class HttpResponse {
         this.body = body;
     }
 
-    public void render(DataOutputStream dos) throws IOException {
-        reponseLine(dos);
+    public void send(DataOutputStream dos) throws IOException {
+        responseLine(dos);
         responseHeader(dos);
         if (httpStatus == HttpStatus.OK) {
             responseBody(dos, body);
         }
     }
 
-    private void reponseLine(DataOutputStream dos) throws IOException {
+    private void responseLine(DataOutputStream dos) throws IOException {
         dos.writeBytes("HTTP/1.1 " + httpStatus.getCode() + " " + httpStatus.getName() + NEW_LINE);
     }
 
@@ -49,7 +50,7 @@ public class HttpResponse {
         HttpResponse that = (HttpResponse) o;
 
         if (httpStatus != that.httpStatus) return false;
-        if (header != null ? !header.equals(that.header) : that.header != null) return false;
+        if (!Objects.equals(header, that.header)) return false;
         return Arrays.equals(body, that.body);
     }
 

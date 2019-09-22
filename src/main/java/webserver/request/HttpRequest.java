@@ -32,4 +32,8 @@ public class HttpRequest {
     public String getHeader(String key) {
         return header.getHeader(key);
     }
+
+    public boolean isHeaderContain(String key, String value) {
+        return header.getHeader(key).contains(value);
+    }
 }

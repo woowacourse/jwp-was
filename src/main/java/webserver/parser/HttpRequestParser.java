@@ -19,6 +19,8 @@ public class HttpRequestParser {
     private static final int REQUEST_LINES_HEADER_INDEX = 1;
     private static final int KEY_INDEX = 0;
     private static final int VALUE_INDEX = 1;
+    public static final String HEADER_KEY_VALUE_DELIMETER = ": ";
+    public static final String REQUEST_LINE_DELIMETER = " ";
 
     public static HttpRequest parse(BufferedReader bufferedReader) throws IOException {
         List<String> requestLines = parseRequestBuffer(bufferedReader);
@@ -38,15 +40,15 @@ public class HttpRequestParser {
     }
 
     private static RequestLine parseRequestLine(List<String> lines) {
-        String method = lines.get(REQUEST_LINES_REQUESTLINE_INDEX).split(" ")[KEY_INDEX];
-        String uri = lines.get(REQUEST_LINES_REQUESTLINE_INDEX).split(" ")[VALUE_INDEX];
+        String method = lines.get(REQUEST_LINES_REQUESTLINE_INDEX).split(REQUEST_LINE_DELIMETER)[KEY_INDEX];
+        String uri = lines.get(REQUEST_LINES_REQUESTLINE_INDEX).split(REQUEST_LINE_DELIMETER)[VALUE_INDEX];
         return new RequestLine(method, uri);
     }
 
     private static RequestHeader parseRequestHeader(List<String> lines) {
         Map<String, String> headers = new HashMap<>();
         for (int i = REQUEST_LINES_HEADER_INDEX; i < lines.size(); i++) {
-            headers.put(lines.get(i).split(": ")[KEY_INDEX], lines.get(i).split(": ")[VALUE_INDEX]);
+            headers.put(lines.get(i).split(HEADER_KEY_VALUE_DELIMETER)[KEY_INDEX], lines.get(i).split(HEADER_KEY_VALUE_DELIMETER)[VALUE_INDEX]);
         }
         return new RequestHeader(headers);
     }

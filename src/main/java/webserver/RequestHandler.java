@@ -35,7 +35,7 @@ public class RequestHandler implements Runnable {
             HttpRequest request = HttpRequestParser.parse(new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
             HttpServlet httpServlet = MappingHandler.getServlets(request.getAbsPath());
             HttpResponse httpResponse = httpServlet.run(request);
-            httpResponse.render(new DataOutputStream(out));
+            httpResponse.send(new DataOutputStream(out));
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
