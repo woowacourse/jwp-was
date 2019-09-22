@@ -56,6 +56,23 @@ public class Response {
         }
     }
 
+    public void response405() {
+        try {
+            header.put(STATUS, HTTP_1_1 + "405 Method Not Allowed \r\n");
+            sendRedirect();
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void response200(byte[] body) {
+        try {
+            forward(body);
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
     private void responseBody(byte[] body) {
         try {
             dos.write(body, 0, body.length);
@@ -85,13 +102,4 @@ public class Response {
 
         dos.writeBytes("\r\n");
     }
-
-    private void response200(byte[] body) {
-        try {
-            forward(body);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
 }

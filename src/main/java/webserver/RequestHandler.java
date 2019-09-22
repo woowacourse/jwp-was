@@ -1,7 +1,6 @@
 package webserver;
 
 import controller.Controller;
-import controller.CreateUserController;
 import model.Request;
 import model.RequestParser;
 import model.Response;
@@ -14,8 +13,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -24,19 +21,14 @@ public class RequestHandler implements Runnable {
     private static final String HTML = "html";
     private static final String TEMPLATES = "./templates";
     private static final String STATIC = "./static";
-    private static final String USER_CREATE_URL = "/user/create";
     private static final int NEXT_INT = 1;
 
-    private static Map<String, Controller> controllers = new HashMap<>();
-
-    static {
-        controllers.put(USER_CREATE_URL, new CreateUserController());
-    }
-
     private Socket connection;
+    private ControllerHandler controllerHandler;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
+        this.controllerHandler = new ControllerHandler();
     }
 
     public void run() {
@@ -67,7 +59,7 @@ public class RequestHandler implements Runnable {
             return;
         }
 
-        Controller controller = controllers.get(request.getPath());
+        Controller controller = controllerHandler.getController(request.getPath());
         controller.service(request, response);
     }
 

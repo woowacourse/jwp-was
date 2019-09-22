@@ -14,13 +14,9 @@ public class CreateUserController extends AbstractController {
     private static final String INDEX_HTML = "/index.html";
 
     @Override
-    void doPost(Request request, Response response) {
+    public void doPost(Request request, Response response) {
         saveUser(request);
         response.response300(request.getHeader(ORIGIN) + INDEX_HTML);
-    }
-
-    @Override
-    void doGet(Request request, Response response) {
     }
 
     private void saveUser(Request request) {
