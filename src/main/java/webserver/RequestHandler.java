@@ -5,7 +5,7 @@ import http.model.HttpRequest;
 import http.model.HttpResponse;
 import http.supoort.HttpErrorResponse;
 import http.supoort.HttpRequestFactory;
-import http.supoort.ResponseMessageConverter;
+import http.supoort.converter.ResponseMessageConverter;
 import http.view.ModelAndView;
 import http.view.ViewResolver;
 import org.slf4j.Logger;
