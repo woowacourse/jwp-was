@@ -2,6 +2,7 @@ package webserver;
 
 import webserver.controller.UserCreateController;
 import webserver.controller.WelcomePageController;
+import webserver.exception.NotSupportedHttpMethodException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +26,10 @@ public class UrlMapper {
 
     private String getService(HttpRequest request, String url) {
         Controller controller = map.get(url);
-        return controller.service(request);
+        try {
+            return controller.service(request);
+        } catch (NotSupportedHttpMethodException e) {
+            return "/error:405";
+        }
     }
 }
