@@ -17,8 +17,10 @@ public class RequestParser {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private static final String CONTENT_LENGTH = "Content-Length";
     private static final String METHOD = "Method";
-    private static final String POST = "POST";
     private static final String QUERY_STRING_SEPARATOR = "?";
+    private static final String EMPTY_STRING = "";
+    private static final String SEPARATOR = ": ";
+    private static final int NEXT_INT = 1;
 
     private Map<String, String> header;
     private Map<String, String> parameter;
@@ -35,7 +37,7 @@ public class RequestParser {
         header.put(METHOD, line);
         logger.info("header : {}", line);
 
-        while (!"".equals(line)) {
+        while (!EMPTY_STRING.equals(line)) {
             line = bufferedReader.readLine();
 
             if (line == null || line.equals("")) {
@@ -51,14 +53,14 @@ public class RequestParser {
     }
 
     private void separate(String line) {
-        String key = line.split(": ")[0].trim();
-        String value = line.split(": ")[1].trim();
+        String key = line.split(SEPARATOR)[0].trim();
+        String value = line.split(SEPARATOR)[1].trim();
 
         header.put(key, value);
     }
 
     private void processPostRequest(BufferedReader bufferedReader) throws IOException {
-        if (header.get(METHOD).contains(POST)) {
+        if (header.get(METHOD).contains(HttpMethod.POST.name())) {
             String body = IOUtils.readData(bufferedReader, Integer.parseInt(header.get(CONTENT_LENGTH)));
             parameter.putAll(ExtractInformationUtils.extractInformation(body));
         }
@@ -70,7 +72,7 @@ public class RequestParser {
         if (method.contains(QUERY_STRING_SEPARATOR)) {
             String url = method.split(" ")[1];
             Map<String, String> queryParams = ExtractInformationUtils
-                    .extractInformation(url.substring(url.lastIndexOf(QUERY_STRING_SEPARATOR) + 1));
+                    .extractInformation(url.substring(url.lastIndexOf(QUERY_STRING_SEPARATOR) + NEXT_INT));
             parameter.putAll(queryParams);
         }
     }

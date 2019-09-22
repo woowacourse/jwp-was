@@ -19,6 +19,10 @@ import java.util.Objects;
 public class Response {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private static final String STATUS = "Status";
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String CONTENT_LENGTH = "Content-Length";
+    private static final String LOCATION = "Location";
+    private static final String HTTP_1_1 = "HTTP/1.1";
 
     private DataOutputStream dos;
     private Map<String, String> header;
@@ -35,17 +39,17 @@ public class Response {
 
         byte[] body = FileIoUtils.loadFileFromClasspath(classPath);
 
-        header.put("Status", "HTTP/1.1 200 OK \r\n");
-        header.put("Content-Type", mimeType + ";charset=utf-8\r\n");
-        header.put("Content-Length", body.length + "\r\n");
+        header.put(STATUS, HTTP_1_1 + " 200 OK \r\n");
+        header.put(CONTENT_TYPE, mimeType + ";charset=utf-8\r\n");
+        header.put(CONTENT_LENGTH, body.length + "\r\n");
 
         response200(body);
     }
 
     public void response300(String location) {
         try {
-            header.put(STATUS, "HTTP/1.1 302 Found \r\n");
-            header.put("Location", location + "\r\n");
+            header.put(STATUS, HTTP_1_1 + " 302 Found \r\n");
+            header.put(LOCATION, location + "\r\n");
             sendRedirect();
         } catch (IOException e) {
             logger.error(e.getMessage());

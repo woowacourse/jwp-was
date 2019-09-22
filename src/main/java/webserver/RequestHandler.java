@@ -19,11 +19,18 @@ import java.util.Map;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final String DIVISION_EXTENSION = ".";
+    private static final String PREFIX_SLASH = "/";
+    private static final String HTML = "html";
+    private static final String TEMPLATES = "./templates";
+    private static final String STATIC = "./static";
+    private static final String USER_CREATE_URL = "/user/create";
+    private static final int NEXT_INT = 1;
 
     private static Map<String, Controller> controllers = new HashMap<>();
 
     static {
-        controllers.put("/user/create", new CreateUserController());
+        controllers.put(USER_CREATE_URL, new CreateUserController());
     }
 
     private Socket connection;
@@ -42,7 +49,7 @@ public class RequestHandler implements Runnable {
             Request request = new Request(requestParser.getHeaderInfo(), requestParser.getParameter());
 
             String url = request.getPath();
-            String extension = url.substring(url.lastIndexOf(".") + 1);
+            String extension = url.substring(url.lastIndexOf(DIVISION_EXTENSION) + NEXT_INT);
 
             processResponse(dos, request, url, extension);
 
@@ -54,7 +61,7 @@ public class RequestHandler implements Runnable {
     private void processResponse(DataOutputStream dos, Request request, String url, String extension) throws URISyntaxException, IOException {
         Response response = new Response(dos);
 
-        if (!extension.startsWith("/")) {
+        if (!extension.startsWith(PREFIX_SLASH)) {
             String classPath = getClassPath(url, extension);
             response.responseResource(classPath);
             return;
@@ -65,11 +72,11 @@ public class RequestHandler implements Runnable {
     }
 
     private String getClassPath(String url, String extension) {
-        if ("html".equals(extension)) {
-            return "./templates" + url;
+        if (HTML.equals(extension)) {
+            return TEMPLATES + url;
         }
 
-        return "./static" + url;
+        return STATIC + url;
     }
 }
 

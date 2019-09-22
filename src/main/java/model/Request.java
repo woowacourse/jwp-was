@@ -7,6 +7,7 @@ import java.util.Objects;
 
 public class Request {
     private static final String METHOD = "Method";
+    private static final String BODY_PARAMETER_SEPARATOR = "?";
 
     private Map<String, String> header;
     private Map<String, String> parameter;
@@ -21,10 +22,10 @@ public class Request {
     }
 
     public String getPath() {
-        String path = header.get("Method").split(" ")[1];
+        String path = header.get(METHOD).split(" ")[1];
 
-        if (path.contains("?")) {
-            return path.substring(0, path.lastIndexOf("?"));
+        if (path.contains(BODY_PARAMETER_SEPARATOR)) {
+            return path.substring(0, path.lastIndexOf(BODY_PARAMETER_SEPARATOR));
         }
 
         return path;
