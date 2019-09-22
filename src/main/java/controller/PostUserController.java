@@ -22,7 +22,7 @@ public class PostUserController extends AbstractController {
         if (isMapping(request)) {
             return createPostResponse(request);
         }
-        return new PostUserController().createResponse(request);
+        return new GetFileController().createResponse(request);
     }
 
     @Override

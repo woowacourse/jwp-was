@@ -5,26 +5,15 @@ import exception.NoMatchHttpMethodException;
 import java.util.Arrays;
 
 public enum RequestMethod {
-    //Todo name
-    GET("GET"),
-    POST("POST"),
-    PUT("PUT"),
-    DELETE("DELETE");
-
-    private String method;
-
-    RequestMethod(String method) {
-        this.method = method;
-    }
-
+    GET(),
+    POST(),
+    PUT(),
+    DELETE();
+    
     public static RequestMethod from(String requestMethod) {
         return Arrays.stream(values())
-                .filter(method -> method.getMethod().equals(requestMethod))
+                .filter(method -> method.name().equals(requestMethod))
                 .findAny()
                 .orElseThrow(NoMatchHttpMethodException::new);
-    }
-
-    public String getMethod() {
-        return method;
     }
 }
