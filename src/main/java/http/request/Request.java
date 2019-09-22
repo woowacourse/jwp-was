@@ -20,6 +20,14 @@ public class Request {
         this(requestLine, requestHeader, new RequestBody(""));
     }
 
+    public boolean isGetMethod() {
+        return requestLine.isGet();
+    }
+
+    public boolean isPostMethod() {
+        return requestLine.isPost();
+    }
+
     public String extractUrl() {
         return requestLine.getUrl();
     }

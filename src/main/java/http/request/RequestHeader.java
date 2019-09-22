@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public class RequestHeader {
-    public static final String URL = "url";
+    private static final String URL = "url";
     private static final Logger logger = LoggerFactory.getLogger(RequestHeader.class);
     private static final String DELIMITER_OF_HEADER = ":";
     private static final String DELIMITER_OF_HTTP_HEADER = "\n";
@@ -27,10 +27,10 @@ public class RequestHeader {
     }
 
     private void splitRequestHeader(String[] splitedInput) {
-        for (int i = 1; i < splitedInput.length; i++) {
-            int indexOfDelimiter = splitedInput[i].indexOf(DELIMITER_OF_HEADER);
-            String key = splitedInput[i].substring(0, indexOfDelimiter).trim().toLowerCase();
-            String value = splitedInput[i].substring(indexOfDelimiter + 1).trim();
+        for (String input : splitedInput) {
+            int indexOfDelimiter = input.indexOf(DELIMITER_OF_HEADER);
+            String key = input.substring(0, indexOfDelimiter).trim().toLowerCase();
+            String value = input.substring(indexOfDelimiter + 1).trim();
 
             headers.put(key, value);
         }

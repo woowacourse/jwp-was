@@ -18,16 +18,30 @@ public class RequestFactory {
         InputStreamReader inputStreamReader = new InputStreamReader(in);
         BufferedReader br = new BufferedReader(inputStreamReader);
 
-        String[] requestData = IOUtils.parseData(br).split(DELIMITER_OF_REQUEST, 2);
+        String[] requestData = validateRequest(IOUtils.parseData(br));
         RequestLine requestLine = new RequestLine(requestData[0]);
         RequestHeader requestHeader = new RequestHeader(requestData[1]);
 
-        if ("POST".equals(requestHeader.get("method"))) {
-            String body = IOUtils.readData(br, Integer.parseInt(requestHeader.get("content-length")));
-            RequestBody requestBody = new RequestBody(body);
-            return new Request(requestLine, requestHeader, requestBody);
+        if (requestLine.isPost()) {
+            return makeRequestWithBody(br, requestLine, requestHeader);
         }
 
         return new Request(requestLine, requestHeader);
+    }
+
+    private static String[] validateRequest(String parsedData) {
+        String[] requestData = parsedData.split(DELIMITER_OF_REQUEST, 2);
+
+        if(requestData.length != 2) {
+            throw new IllegalArgumentException("Invalid Request");
+        }
+
+        return requestData;
+    }
+
+    private static Request makeRequestWithBody(BufferedReader br, RequestLine requestLine, RequestHeader requestHeader) throws IOException {
+        String body = IOUtils.readData(br, Integer.parseInt(requestHeader.get("content-length")));
+        RequestBody requestBody = new RequestBody(body);
+        return new Request(requestLine, requestHeader, requestBody);
     }
 }
