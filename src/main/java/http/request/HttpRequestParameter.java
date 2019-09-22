@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public class HttpRequestParameter {
-    public static final HttpRequestParameter EMPTY_PARAMETER = new HttpRequestParameter(new HashMap<>());
+    static final HttpRequestParameter EMPTY_PARAMETER = new HttpRequestParameter(new HashMap<>());
 
     private Map<String, String> parameters;
 

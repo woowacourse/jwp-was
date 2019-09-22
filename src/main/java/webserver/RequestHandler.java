@@ -1,6 +1,7 @@
 package webserver;
 
 import http.request.HttpRequest;
+import http.request.RequestFactory;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,18 +25,14 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            HttpRequest httpRequest = RequestFactory.createHttpRequest(in);
             DataOutputStream dos = new DataOutputStream(out);
-
-            HttpResponse httpResponse = HttpResponse.of(dos);
-
+            HttpRequest httpRequest = RequestFactory.createHttpRequest(in);
+            HttpResponse httpResponse = new HttpResponse();
             Router.route(httpRequest, httpResponse);
-
-            httpResponse.forward();
+            httpResponse.forward(dos);
 
         } catch (IOException e) {
             logger.error(e.getMessage());
-            // TODO: 2019-09-20 400에러
         }
     }
 }

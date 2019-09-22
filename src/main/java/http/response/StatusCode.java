@@ -1,4 +1,4 @@
-package http;
+package http.response;
 
 public enum StatusCode {
     OK(200), FOUND(302);

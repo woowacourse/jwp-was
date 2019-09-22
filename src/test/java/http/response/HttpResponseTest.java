@@ -35,7 +35,7 @@ class HttpResponseTest {
         byte[] expectedBody = new byte[]{1, 2, 3};
         HttpResponse response = HttpResponse.of(dos);
 
-        response.responseBody(expectedBody);
+        response.writeBody(expectedBody);
 
         InOrder inOrder = inOrder(dos);
         inOrder.verify(dos).write(expectedBody, 0, expectedBody.length);

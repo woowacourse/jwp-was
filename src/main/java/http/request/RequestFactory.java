@@ -1,9 +1,6 @@
-package webserver;
+package http.request;
 
 import http.HttpHeader;
-import http.request.HttpBody;
-import http.request.HttpRequest;
-import http.request.HttpRequestStartLine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.IOUtils;
@@ -20,7 +17,7 @@ public class RequestFactory {
     private static final String LAST_LINE = "";
     private static final String CONTENT_LENGTH = "Content-Length";
 
-    static HttpRequest createHttpRequest(InputStream in) throws IOException {
+    public static HttpRequest createHttpRequest(InputStream in) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
         HttpRequestStartLine httpRequestStartLine = initializeStart(br);
         HttpHeader httpHeader = initializeHeader(br);

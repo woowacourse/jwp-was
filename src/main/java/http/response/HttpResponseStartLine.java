@@ -1,7 +1,5 @@
 package http.response;
 
-import http.StatusCode;
-
 public class HttpResponseStartLine {
     private StatusCode statusCode;
     private String version;

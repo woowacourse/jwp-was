@@ -1,14 +1,10 @@
 package http.request;
 
 import http.HttpHeader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 public class HttpRequest {
-    private static final Logger log = LoggerFactory.getLogger(HttpRequest.class);
-
     private HttpRequestStartLine httpRequestStartLine;
     private HttpHeader httpHeader;
     private HttpBody httpBody;
@@ -27,8 +23,8 @@ public class HttpRequest {
         return !httpBody.equals(HttpBody.EMPTY_BODY);
     }
 
-    public HttpMethod getHttpMethod() {
-        return httpRequestStartLine.getHttpMethod();
+    public HttpMethodType getHttpMethod() {
+        return httpRequestStartLine.getHttpMethodType();
     }
 
     public String getPath() {

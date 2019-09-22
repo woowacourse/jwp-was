@@ -1,21 +1,17 @@
 package http.request;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.UnsupportedEncodingException;
 
 public class HttpRequestStartLine {
     private static final String LINE_SPLITTER = " ";
     private static final String QUERY_SPLITTER = "\\?";
-    private static final Logger log = LoggerFactory.getLogger(HttpRequestStartLine.class);
 
-    private final HttpMethod httpMethod;
+    private final HttpMethodType httpMethodType;
     private final String path;
     private final HttpRequestParameter httpRequestParameters;
 
-    private HttpRequestStartLine(HttpMethod httpMethod, String path, HttpRequestParameter httpRequestParameters) {
-        this.httpMethod = httpMethod;
+    private HttpRequestStartLine(HttpMethodType httpMethodType, String path, HttpRequestParameter httpRequestParameters) {
+        this.httpMethodType = httpMethodType;
         this.path = path;
         this.httpRequestParameters = httpRequestParameters;
     }
@@ -23,7 +19,7 @@ public class HttpRequestStartLine {
     public static HttpRequestStartLine of(String startLine) throws UnsupportedEncodingException {
         String[] startLineValues = startLine.split(LINE_SPLITTER);
 
-        HttpMethod httpMethod = HttpMethod.valueOf(startLineValues[0]);
+        HttpMethodType httpMethodType = HttpMethodType.valueOf(startLineValues[0]);
 
         String url = startLineValues[1];
         String[] splittedUrl = url.split(QUERY_SPLITTER);
@@ -31,7 +27,7 @@ public class HttpRequestStartLine {
         String path = splittedUrl[0];
         HttpRequestParameter httpRequestParameters = parseHttpRequestParameter(splittedUrl);
 
-        return new HttpRequestStartLine(httpMethod, path, httpRequestParameters);
+        return new HttpRequestStartLine(httpMethodType, path, httpRequestParameters);
     }
 
     private static HttpRequestParameter parseHttpRequestParameter(String[] splittedUrl) throws UnsupportedEncodingException {
@@ -42,8 +38,8 @@ public class HttpRequestStartLine {
         return httpRequestParameters;
     }
 
-    HttpMethod getHttpMethod() {
-        return httpMethod;
+    HttpMethodType getHttpMethodType() {
+        return httpMethodType;
     }
 
     String getPath() {

@@ -1,7 +1,7 @@
 package controller;
 
 import http.NotSupportedHttpMethodException;
-import http.request.HttpMethod;
+import http.request.HttpMethodType;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 
@@ -12,10 +12,10 @@ public abstract class BasicController implements Controller {
 
     @Override
     public HttpResponse service(HttpRequest request, HttpResponse response) throws IOException, URISyntaxException {
-        if(HttpMethod.GET.equals(request.getHttpMethod())) {
+        if(HttpMethodType.GET.equals(request.getHttpMethod())) {
             return doGet(request, response);
         }
-        if(HttpMethod.POST.equals(request.getHttpMethod())) {
+        if(HttpMethodType.POST.equals(request.getHttpMethod())) {
             return doPost(request, response);
         }
         throw new NotSupportedHttpMethodException();

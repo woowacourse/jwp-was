@@ -1,7 +1,6 @@
 package http.response;
 
 import http.HttpHeader;
-import http.StatusCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,17 +10,11 @@ import java.util.List;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
-    private final DataOutputStream dos;
     private HttpResponseStartLine httpResponseStartLine;
     private HttpHeader header;
     private byte[] body;
 
-    private HttpResponse(DataOutputStream dos) {
-        this.dos = dos;
-    }
-
-    public static HttpResponse of(DataOutputStream dos) {
-        return new HttpResponse(dos);
+    public HttpResponse() {
     }
 
     public void addHeader(List<String> headerLines) {
@@ -38,26 +31,24 @@ public class HttpResponse {
         this.body = new byte[]{};
     }
 
-    public void responseStartLine() throws IOException {
+    private void writeStartLine(DataOutputStream dos) throws IOException {
         logger.debug("{}", httpResponseStartLine.toString() + "\r\n" );
         String line = httpResponseStartLine.toString();
         dos.writeBytes(line + "\r\n");
     }
 
-    public void responseHeader() {
+    private void writeHeader(DataOutputStream dos) {
         try {
             for (String line : header.getKeySet()) {
-                String s = line + ": "+ header.getHeader(line);
                 logger.debug("{}", line + ": "+ header.getHeader(line) + "\r\n");
                 dos.writeBytes(line + ": "+ header.getHeader(line));
             }
         } catch (IOException e) {
             logger.error(e.getMessage());
-            // TODO: 2019-09-20 여기에
         }
     }
 
-    public void responseBody() {
+    private void writeBody(DataOutputStream dos) {
         try {
             dos.writeBytes("\r\n");
             dos.write(body, 0, body.length);
@@ -67,10 +58,10 @@ public class HttpResponse {
         }
     }
 
-    public void forward() throws IOException {
-        responseStartLine();
-        responseHeader();
-        responseBody();
+    public void forward(DataOutputStream dos) throws IOException {
+        writeStartLine(dos);
+        writeHeader(dos);
+        writeBody(dos);
     }
 
 }

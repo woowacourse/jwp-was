@@ -18,7 +18,7 @@ public class Router {
         controllers.put("/user/create", new UserController());
     }
 
-    public static HttpResponse route(HttpRequest httpRequest, HttpResponse httpResponse) {
+    public static void route(HttpRequest httpRequest, HttpResponse httpResponse) {
         try {
             String requestUrl = httpRequest.getPath();
 
@@ -26,13 +26,11 @@ public class Router {
             HttpResponse response = fileController.service(httpRequest, httpResponse);
             if (response == null) {
                 Controller controller = Optional.ofNullable(controllers.get(requestUrl)).orElseThrow(BadRequestException::new);
-                return controller.service(httpRequest, httpResponse);
+                controller.service(httpRequest, httpResponse);
             }
-            return null; // TODO: 2019-09-20 없는 요청
+            // TODO: 2019-09-20 없는 요청
         } catch (Exception e) {
             // TODO: 2019-09-20 400해야함
-//            return httpResponse.addHeader();
-            return null; // TODO: 2019-09-20  
         }
     }
 }
