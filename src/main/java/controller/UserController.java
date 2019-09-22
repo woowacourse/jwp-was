@@ -13,7 +13,7 @@ public class UserController {
     private static final Logger LOG = getLogger(UserController.class);
 
     public static Response createUser(final Request request) {
-        final RequestBody body = request.getRequestBody();
+        final RequestBody body = request.getBody();
         final String userId = body.getQueryValue("userId");
         final String password = body.getQueryValue("password");
         final String name = body.getQueryValue("name");

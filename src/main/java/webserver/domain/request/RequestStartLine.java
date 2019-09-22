@@ -5,7 +5,7 @@ import webserver.domain.common.HttpVersion;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-public class RequestLine {
+public class RequestStartLine {
     private static final Logger LOG = getLogger(Request.class);
 
     private static final String QUERY_DELIMITER = "\\?";
@@ -18,14 +18,14 @@ public class RequestLine {
     private final String path;
     private final HttpVersion httpVersion;
 
-    public RequestLine(final String[] httpMethodAndPath) {
+    public RequestStartLine(final String[] httpMethodAndPath) {
         final String[] pathAndQuery = httpMethodAndPath[URL_INDEX].split(QUERY_DELIMITER);
 
         this.httpMethod = HttpMethod.valueOf(httpMethodAndPath[METHOD_INDEX]);
         this.path = pathAndQuery[PATH_INDEX];
         this.httpVersion = HttpVersion.of(httpMethodAndPath[PROTOCOL_INDEX]);
 
-        LOG.debug("RequestLine - httpVersion: {}, method: {}, path: {}",
+        LOG.debug("RequestStartLine - httpVersion: {}, method: {}, path: {}",
                 this.getHttpVersion(), this.getHttpMethod(), this.getPath());
     }
 

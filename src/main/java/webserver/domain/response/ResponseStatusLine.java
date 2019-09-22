@@ -2,13 +2,13 @@ package webserver.domain.response;
 
 import webserver.domain.common.HttpVersion;
 
-public class ResponseLine {
+public class ResponseStatusLine {
     private static final String NEW_LINE = "\r\n";
 
     private HttpVersion httpVersion;
     private HttpStatus httpStatus;
 
-    public ResponseLine(HttpVersion httpVersion, HttpStatus httpStatus) {
+    public ResponseStatusLine(HttpVersion httpVersion, HttpStatus httpStatus) {
         this.httpVersion = httpVersion;
         this.httpStatus = httpStatus;
     }

@@ -10,12 +10,12 @@ import java.util.Map;
 public class Response {
     private static final byte[] HEADER_BODY_DELIMITER_BYTES = "\r\n\r\n".getBytes();
 
-    private final ResponseLine line;
+    private final ResponseStatusLine statusLine;
     private final ResponseHeader header;
     private final ResponseBody body;
 
-    private Response(final ResponseLine line, final ResponseHeader header, final ResponseBody body) {
-        this.line = line;
+    private Response(final ResponseStatusLine statusLine, final ResponseHeader header, final ResponseBody body) {
+        this.statusLine = statusLine;
         this.header = header;
         this.body = body;
     }
@@ -91,15 +91,15 @@ public class Response {
         }
 
         public Response build() {
-            final ResponseLine line = new ResponseLine(this.httpVersion, this.httpStatus);
+            final ResponseStatusLine statusLine = new ResponseStatusLine(this.httpVersion, this.httpStatus);
             final ResponseHeader header = new ResponseHeader(this.responseFields);
-            return new Response(line, header, this.body);
+            return new Response(statusLine, header, this.body);
         }
     }
 
     public byte[] toBytes() {
         final int bodyLength = this.body.length();
-        final byte[] line = this.line.toBytes();
+        final byte[] line = this.statusLine.toBytes();
         final byte[] header = this.header.toBytes(bodyLength);
 
         return ByteBuffer

@@ -25,8 +25,8 @@ class RequestTest extends RequestHelper {
         assertThat(request.getHttpMethod()).isEqualTo(expected.getHttpMethod());
         assertThat(request.getPath()).isEqualTo(expected.getPath());
         assertThat(request.getHttpVersion()).isEqualTo(expected.getHttpVersion());
-        assertThat(request.getRequestHeader().getRequestFields()).isEqualTo(expected.getRequestHeader().getRequestFields());
-        assertThat(request.getRequestBody().getQueries()).isEqualTo(expected.getRequestBody().getQueries());
+        assertThat(request.getHeader().getRequestFields()).isEqualTo(expected.getHeader().getRequestFields());
+        assertThat(request.getBody().getQueries()).isEqualTo(expected.getBody().getQueries());
     }
 
     @Test
@@ -41,7 +41,7 @@ class RequestTest extends RequestHelper {
         assertThat(request.getHttpMethod()).isEqualTo(expected.getHttpMethod());
         assertThat(request.getPath()).isEqualTo(expected.getPath());
         assertThat(request.getHttpVersion()).isEqualTo(expected.getHttpVersion());
-        assertThat(request.getRequestHeader().getRequestFields()).isEqualTo(expected.getRequestHeader().getRequestFields());
-        assertThat(request.getRequestBody().getQueries()).isEqualTo(expected.getRequestBody().getQueries());
+        assertThat(request.getHeader().getRequestFields()).isEqualTo(expected.getHeader().getRequestFields());
+        assertThat(request.getBody().getQueries()).isEqualTo(expected.getBody().getQueries());
     }
 }

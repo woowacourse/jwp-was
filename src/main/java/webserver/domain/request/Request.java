@@ -18,49 +18,49 @@ public class Request {
     private static final int ZERO = 0;
     private static final int NO_QUERY = 1;
 
-    private final RequestLine requestLine;
-    private final RequestHeader requestHeader;
-    private final RequestBody requestBody;
+    private final RequestStartLine startLine;
+    private final RequestHeader header;
+    private final RequestBody body;
 
     public Request(final IOUtils IOUtils) throws IOException {
         final String[] httpMethodAndPath = IOUtils.iterator().next().split(SPACE_DELIMITER);
         final String[] pathAndQuery = httpMethodAndPath[URL_INDEX].split(QUERY_DELIMITER);
 
-        this.requestLine = new RequestLine(httpMethodAndPath);
-        this.requestHeader = new RequestHeader(IOUtils);
-        this.requestBody = new RequestBody((pathAndQuery.length == NO_QUERY) ? EMPTY : pathAndQuery[QUERY_INDEX]);
+        this.startLine = new RequestStartLine(httpMethodAndPath);
+        this.header = new RequestHeader(IOUtils);
+        this.body = new RequestBody((pathAndQuery.length == NO_QUERY) ? EMPTY : pathAndQuery[QUERY_INDEX]);
 
-        final int contentLength = requestHeader.getContentLength();
+        final int contentLength = header.getContentLength();
         final String body = (contentLength > ZERO) ? IOUtils.readBody(contentLength) : EMPTY;
-        this.requestBody.putQueryBy(body);
+        this.body.putQueryBy(body);
     }
 
     public String getHttpMethod() {
-        return requestLine.getHttpMethod();
+        return startLine.getHttpMethod();
     }
 
     public String getPath() {
-        return requestLine.getPath();
+        return startLine.getPath();
     }
 
     public String getHttpVersion() {
-        return requestLine.getHttpVersion();
+        return startLine.getHttpVersion();
     }
 
-    public RequestHeader getRequestHeader() {
-        return requestHeader;
+    public RequestHeader getHeader() {
+        return header;
     }
 
-    public RequestBody getRequestBody() {
-        return requestBody;
+    public RequestBody getBody() {
+        return body;
     }
 
     public String getFieldsValue(final String key) {
-        return requestHeader.getFieldsValue(key);
+        return header.getFieldsValue(key);
     }
 
     public String getQueryValue(final String key) {
-        return requestBody.getQueryValue(key);
+        return body.getQueryValue(key);
     }
 
 }
