@@ -48,7 +48,7 @@ public class Request {
     }
 
     public Map<String, String> extractQueryParameter() {
-        return requestHeader.extractQueryParameter();
+        return requestLine.extractQueryParameter();
     }
 
     public Map<String, String> extractFormData() {

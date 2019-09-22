@@ -1,13 +1,10 @@
 package http;
 
+import http.exception.NotFoundHeaderException;
 import http.request.RequestHeader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import webserver.exception.NotFoundHeaderException;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -22,18 +19,6 @@ public class RequestHeaderTest {
                         "Host: localhost:8080\n" +
                         "Connection: keep-alive\n" +
                         "Accept: */*\n");
-    }
-
-    @Test
-    @DisplayName("Header에서 Query Parameter 추출")
-    public void extractQueryParameter() {
-        Map<String, String> expected = new HashMap<>();
-        expected.put("userId", "javajigi");
-        expected.put("password", "password");
-        expected.put("name", "%EB%B0%95%EC%9E%AC%EC%84%B1");
-        expected.put("email", "javajigi%40slipp.net");
-
-        assertThat(requestHeader.extractQueryParameter()).isEqualTo(expected);
     }
 
     @Test
