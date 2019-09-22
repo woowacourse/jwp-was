@@ -5,10 +5,10 @@ import java.io.IOException;
 
 import exception.FailedRedirectException;
 import exception.UnauthorizedRequestException;
-import http.response.HttpResponse;
-import service.UserService;
-import http.response.HttpResponseGenerator;
 import http.request.HttpRequest;
+import http.response.HttpResponse;
+import http.response.HttpResponseGenerator;
+import service.UserService;
 
 public class CreateUserController extends AbstractController {
 	@Override

@@ -12,6 +12,7 @@ import webserver.RequestHandler;
 
 public class HttpRequestHeaderReader {
 	private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+
 	public static final String REQUEST_METHOD = "Method";
 	public static final String REQUEST_PATH = "Path";
 	public static final String REQUEST_HTTP = "Http";

@@ -2,7 +2,6 @@ package http.response;
 
 import java.util.Map;
 
-import http.response.HttpResponseGenerator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

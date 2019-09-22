@@ -6,7 +6,6 @@ import java.io.IOException;
 import http.method.HttpMethod;
 
 public class HttpRequestReader {
-
 	public static HttpRequest readHttpRequest(BufferedReader bufferedReader) throws IOException {
 		HttpRequestHeader httpRequestHeader = new HttpRequestHeader(HttpRequestHeaderReader.readRequest(bufferedReader));
 

@@ -3,9 +3,9 @@ package utils;
 import java.util.HashMap;
 import java.util.Map;
 
+import controller.Controller;
 import controller.CreateUserController;
 import controller.ResourceController;
-import controller.Controller;
 
 public class ControllerGenerator {
 	private static Map<String, Controller> controllers = new HashMap<>();
@@ -16,7 +16,7 @@ public class ControllerGenerator {
 	}
 
 	public static Controller generateController(String path) {
-		if(path.contains(".")) {
+		if (path.contains(".")) {
 			return controllers.get("resource");
 		}
 		return controllers.get(path);
