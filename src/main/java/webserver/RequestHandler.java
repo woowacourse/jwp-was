@@ -3,12 +3,18 @@ package webserver;
 import http.request.Request;
 import http.response.Response;
 import http.response.ResponseHeader;
+import http.response.StatusLine;
 import http.utils.RequestFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.support.MethodHandler;
+import webserver.controller.Controller;
+import webserver.support.ControllerMapper;
+import webserver.support.ResponseWriter;
 
-import java.io.*;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
 
@@ -27,12 +33,12 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             Request request = RequestFactory.makeRequest(in);
-            Response response = new Response(new ResponseHeader());
+            Response response = new Response(new StatusLine(request.extractHttpVersion()), new ResponseHeader());
 
-            MethodHandler handler = new MethodHandler();
-            handler.handle(request, response);
+            Controller controller = new ControllerMapper().map(request.extractUrl());
+            controller.service(request, response);
 
-            response.writeMessage(new DataOutputStream(out));
+            ResponseWriter.write(new DataOutputStream(out), response);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
