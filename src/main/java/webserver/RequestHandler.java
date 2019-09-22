@@ -33,10 +33,7 @@ public class RequestHandler implements Runnable {
             String view = urlMapper.service(httpRequest);
 
             ViewProcessor viewProcessor = ViewProcessorFactory.getInstance().getViewProcessor(view);
-            String resolve = viewProcessor.process(view, httpResponse);
-
-            HttpResponseProcessor httpResponseProcessor = HttpResponseProcessorFactory.getInstance().getHttpResponseProcessor(httpResponse);
-            httpResponseProcessor.process(dos, resolve, httpResponse);
+            viewProcessor.process(dos, view, httpResponse);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
