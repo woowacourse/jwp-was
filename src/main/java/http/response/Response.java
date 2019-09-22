@@ -1,82 +1,64 @@
 package http.response;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.DataOutputStream;
-import java.io.IOException;
-
 public class Response {
-    private static final Logger logger = LoggerFactory.getLogger(Response.class);
+    private StatusLine statusLine;
+    private ResponseHeader responseHeader;
+    private ResponseBody responseBody;
 
-    private ResponseHeader header;
-    private ResponseBody body;
-
-    public Response(ResponseHeader header) {
-        this.header = header;
+    public Response(StatusLine statusLine, ResponseHeader responseHeader) {
+        this.statusLine = statusLine;
+        this.responseHeader = responseHeader;
     }
 
     public void setStatusCode(int statusCode) {
-        header.setStatusCode(statusCode);
+        statusLine.setStatusCode(statusCode);
+    }
+
+    public void setReasonPhrase(String reasonPhrase) {
+        statusLine.setReasonPhrase(reasonPhrase);
     }
 
     public void setLocation(String location) {
-        header.setLocation(location);
+        responseHeader.setLocation(location);
     }
 
     public void setContentType(String type) {
-        header.setType(type);
+        responseHeader.setType(type);
     }
 
-    public void setUrl(String url) {
-        header.setUrl(url);
+    public void setResponseBody(byte[] responseBody) {
+        this.responseBody = new ResponseBody(responseBody);
     }
 
-    public void setBody(byte[] body) {
-        this.body = new ResponseBody(body);
+    public int getContentLength() {
+        return responseBody.getBody().length;
     }
 
-    public String getHeaderUrl() {
-        return header.getUrl();
+    public String getContentType() {
+        return responseHeader.getType();
     }
 
-    public void writeMessage(DataOutputStream dos) {
-        if (header.isOk()) {
-            writeHeader(dos, response200Header());
-            writeBody(dos);
-            return;
-        }
-        writeHeader(dos, response302Header());
+    public boolean isOk() {
+        return statusLine.isOk();
     }
 
-    private String response200Header() {
-        return "HTTP/1.1 200 OK \r\n" +
-                "Content-Type: " + header.getType() + ";charset=utf-8\r\n" +
-                "Content-Length: " + body.getBody().length + "\r\n" +
-                "\r\n";
+    public String getHttpVersion() {
+        return statusLine.getHttpVersion();
     }
 
-    private String response302Header() {
-        return "HTTP/1.1 302 FOUND \r\n" +
-                "Content-Type: " + header.getType() + ";charset=utf-8\r\n" +
-                "Location: " + header.getLocation() + "\r\n" +
-                "\r\n";
+    public int getStatusCode() {
+        return statusLine.getStatusCode();
     }
 
-    private void writeHeader(DataOutputStream dos, String message) {
-        try {
-            dos.writeBytes(message);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+    public String getReasonPhrase() {
+        return statusLine.getReasonPhrase();
     }
 
-    private void writeBody(DataOutputStream dos) {
-        try {
-            dos.write(body.getBody(), 0, body.getBody().length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+    public byte[] getContentBody() {
+        return responseBody.getBody();
+    }
+
+    public String getLocation() {
+        return responseHeader.getLocation();
     }
 }
