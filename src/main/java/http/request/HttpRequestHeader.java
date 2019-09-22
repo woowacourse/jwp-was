@@ -3,9 +3,14 @@ package http.request;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class HttpRequestHeader {
     private Map<String, String> fields;
+
+    public HttpRequestHeader(Map<String, String> fields) {
+        this.fields = fields;
+    }
 
     public HttpRequestHeader(List<String> headers) {
         this.fields = new HashMap<>();
@@ -24,6 +29,19 @@ public class HttpRequestHeader {
         }
 
         return length;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HttpRequestHeader that = (HttpRequestHeader) o;
+        return fields.equals(that.fields);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fields);
     }
 
     @Override

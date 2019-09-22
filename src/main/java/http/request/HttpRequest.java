@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Objects;
 
 public class HttpRequest {
     private static final Logger log = LoggerFactory.getLogger(HttpRequest.class);
@@ -13,6 +14,12 @@ public class HttpRequest {
     private HttpRequestLine httpRequestLine;
     private HttpRequestHeader httpRequestHeader;
     private HttpRequestBody httpRequestBody;
+
+    public HttpRequest(HttpRequestLine httpRequestLine, HttpRequestHeader httpRequestHeader, HttpRequestBody httpRequestBody) {
+        this.httpRequestLine = httpRequestLine;
+        this.httpRequestHeader = httpRequestHeader;
+        this.httpRequestBody = httpRequestBody;
+    }
 
     public HttpRequest(List<String> lines) {
         this.httpRequestLine = new HttpRequestLine(lines.get(0));
@@ -56,5 +63,20 @@ public class HttpRequest {
 
     public String getUri() {
         return httpRequestLine.getUri();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HttpRequest that = (HttpRequest) o;
+        return httpRequestLine.equals(that.httpRequestLine) &&
+                httpRequestHeader.equals(that.httpRequestHeader) &&
+                httpRequestBody.equals(that.httpRequestBody);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(httpRequestLine, httpRequestHeader, httpRequestBody);
     }
 }
