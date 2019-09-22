@@ -11,13 +11,15 @@ import java.util.Optional;
 
 public class MappingHandler {
     private static Map<String, HttpServlet> servlets = new HashMap<>();
+    private static FileServlet fileServlet;
 
     static {
         servlets.put("/", new HomeServlet());
         servlets.put("/user/create", new UserCreateServlet());
+        FileServlet fileServlet = new FileServlet();
     }
 
     public static HttpServlet getServlets(String absPath) {
-        return servlets.getOrDefault(absPath, new FileServlet());
+        return servlets.getOrDefault(absPath, fileServlet);
     }
 }
