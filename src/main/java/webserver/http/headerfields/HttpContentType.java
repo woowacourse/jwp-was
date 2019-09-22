@@ -1,11 +1,17 @@
 package webserver.http.headerfields;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import utils.exception.NotFoundSlashException;
+import utils.parser.ContentTypeParser;
 import utils.parser.KeyValueParserFactory;
 
 import java.util.*;
 
 public class HttpContentType implements HttpHeaderField {
-    private enum Chemical {
+    private static final Logger logger = LoggerFactory.getLogger(HttpContentType.class);
+
+    public enum Chemical {
         APPLICATION,
         AUDIO,
         EXAMPLE,
@@ -17,6 +23,9 @@ public class HttpContentType implements HttpHeaderField {
         TEXT,
         VIDEO
     }
+
+    private static final int CONTENT_TYPE_INDEX = 0;
+    private static final int CONTENT_TYPE_PARAMS_INDEX = 1;
     private static final String APPLICATION_JSON = "application/json";
     private static final String APPLICATION_X_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded";
     private static final String MULTIPART_FORM_DATA = "multipart/form-data";
@@ -95,34 +104,36 @@ public class HttpContentType implements HttpHeaderField {
     }
 
     public static Optional<HttpContentType> of(String input) {
-        input = input.replaceAll(";\\s+", ";").toLowerCase();
         if (CACHE.containsKey(input)) {
             return Optional.of(CACHE.get(input));
         }
-        if (!input.contains("/")) {
-            return Optional.empty();
-        }
+
         try {
-            final HttpContentType contentType = new HttpContentType(input);
-            CACHE.put(input, contentType);
-            return Optional.of(contentType);
-        } catch (IllegalArgumentException e) {
+            CACHE.put(input, HttpContentType.of(ContentTypeParser.convertContentType(input)));
+            return Optional.of(CACHE.get(input));
+        } catch (NotFoundSlashException | IllegalArgumentException e) {
+            logger.debug(e.getMessage());
             return Optional.empty();
         }
     }
 
-    private HttpContentType(String input) {
-        final int slashIdx = input.indexOf("/");
-        this.chemical = Chemical.valueOf(input.substring(0, slashIdx).toUpperCase());
-        if (input.contains(";")) {
-            this.subtype = input.substring(slashIdx + 1, input.indexOf(";"));
-            final Map<String, String> params = KeyValueParserFactory.contentTypeParser().toMap(input);
-            params.putAll(DEFAULT_PARAMS);
-            this.params = Collections.unmodifiableMap(params);
-        } else {
-            this.subtype = input.substring(slashIdx + 1);
-            this.params = DEFAULT_PARAMS;
+    private static HttpContentType of(List<String> input) {
+        final String contentTypeLine = input.get(CONTENT_TYPE_INDEX);
+        final Chemical chemical = ContentTypeParser.chemicalParse(contentTypeLine);
+        final String subtype = ContentTypeParser.subtypeParse(contentTypeLine);
+        Map<String, String> params = DEFAULT_PARAMS;
+
+        if (input.size() > CONTENT_TYPE_PARAMS_INDEX) {
+            params.putAll(KeyValueParserFactory.contentTypeParser().toMap(input.get(CONTENT_TYPE_PARAMS_INDEX)));
         }
+
+        return new HttpContentType(chemical, subtype, params);
+    }
+
+    private HttpContentType(Chemical chemical, String subtype, Map<String, String> params) {
+        this.chemical = chemical;
+        this.subtype = subtype;
+        this.params = params;
     }
 
     private HttpContentType(Chemical chemical, String subtype) {
