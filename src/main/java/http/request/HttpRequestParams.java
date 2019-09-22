@@ -7,6 +7,8 @@ import java.util.Map;
 public class HttpRequestParams {
     private static final String QUERY_PARAM_DELIMITER = "&";
     private static final String KEY_VALUE_DELIMITER = "=";
+    private static final String REQUEST_LAST_LINE = "";
+    private static final String NONE_VALUE = "";
 
     private Map<String, String> queryParams;
 
@@ -23,7 +25,7 @@ public class HttpRequestParams {
     }
 
     private static Map<String, String> extractQueryParams(final String queryString) {
-        if (queryString.equals("")) {
+        if (REQUEST_LAST_LINE.equals(queryString)) {
             return Collections.emptyMap();
         }
         return generateQueryParams(queryString);
@@ -43,7 +45,7 @@ public class HttpRequestParams {
 
     private static String parseParamValue(final String[] tokens) {
         if (tokens.length == 1) {
-            return "";
+            return NONE_VALUE;
         }
 
         return tokens[1];
