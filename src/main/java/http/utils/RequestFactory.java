@@ -1,5 +1,6 @@
 package http.utils;
 
+import http.exception.InvalidRequestException;
 import http.request.Request;
 import http.request.RequestBody;
 import http.request.RequestHeader;
@@ -33,7 +34,7 @@ public class RequestFactory {
         String[] requestData = parsedData.split(DELIMITER_OF_REQUEST, 2);
 
         if(requestData.length != 2) {
-            throw new IllegalArgumentException("Invalid Request");
+            throw new InvalidRequestException("Invalid Request");
         }
 
         return requestData;

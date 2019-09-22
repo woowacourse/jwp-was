@@ -26,7 +26,6 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-//            Request request = readRequestUrl(in);
             Request request = RequestFactory.makeRequest(in);
             Response response = new Response(new ResponseHeader());
 
@@ -38,17 +37,4 @@ public class RequestHandler implements Runnable {
             logger.error(e.getMessage());
         }
     }
-
-//    private Request readRequestUrl(InputStream in) throws IOException {
-//        InputStreamReader inputStreamReader = new InputStreamReader(in);
-//        BufferedReader br = new BufferedReader(inputStreamReader);
-//        RequestHeader header = new RequestHeader(IOUtils.parseData(br));
-//
-//        if (header.extractHeader(RequestHeader.HTTP_METHOD).equals("POST")) {
-//            String body = IOUtils.readData(br, Integer.parseInt(header.extractHeader("content-length")));
-//            RequestBody requestBody = new RequestBody(body);
-//            return new Request(requestLine, header, requestBody);
-//        }
-//        return new Request(header, requestLine);
-//    }
 }
