@@ -12,8 +12,9 @@ import java.util.List;
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
     private final DataOutputStream dos;
+    private HttpResponseStartLine httpResponseStartLine;
     private HttpHeader header;
-    private StatusCode code;
+    private byte[] body;
 
     private HttpResponse(DataOutputStream dos) {
         this.dos = dos;
@@ -27,13 +28,26 @@ public class HttpResponse {
         header = HttpHeader.of(headerLines);
     }
 
-    public void responseStartLine(String line) throws IOException {
-        dos.writeBytes(line);
+    public void okResponse(byte[] body) {
+        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.OK, "HTTP/1.1");
+        this.body = body;
+    }
+
+    public void redirectResponse() {
+        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.FOUND, "HTTP/1.1");
+        this.body = new byte[]{};
+    }
+
+    public void responseStartLine() throws IOException {
+        logger.debug("{}", httpResponseStartLine.toString() + "\r\n" );
+        String line = httpResponseStartLine.toString();
+        dos.writeBytes(line + "\r\n");
     }
 
     public void responseHeader() {
         try {
             for (String line : header.getKeySet()) {
+                String s = line + ": "+ header.getHeader(line);
                 logger.debug("{}", line + ": "+ header.getHeader(line) + "\r\n");
                 dos.writeBytes(line + ": "+ header.getHeader(line));
             }
@@ -43,7 +57,7 @@ public class HttpResponse {
         }
     }
 
-    public void responseBody(byte[] body) {
+    public void responseBody() {
         try {
             dos.writeBytes("\r\n");
             dos.write(body, 0, body.length);
@@ -51,6 +65,12 @@ public class HttpResponse {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    public void forward() throws IOException {
+        responseStartLine();
+        responseHeader();
+        responseBody();
     }
 
 }

@@ -19,8 +19,10 @@ public class UserController extends BasicController {
     public HttpResponse doGet(HttpRequest request, HttpResponse response) throws IOException {
         if(request.hasParameters()) {
             DataBase.addUser(createUser(request));
-            response.responseStartLine("HTTP/1.1 200 OK");
-            response.responseHeader();
+            response.addHeader(Arrays.asList("Location: /index.html\r\n"));
+            response.redirectResponse();
+
+            response.forward();
         }
         return response;
     }
@@ -37,11 +39,10 @@ public class UserController extends BasicController {
             DataBase.addUser(createUser(bodyData));
 
             // response 만들기
-            //헤더 없고 쓰는거 없고
             response.addHeader(Arrays.asList("Location: /index.html\r\n"));
-            response.responseStartLine("HTTP/1.1 302 FOUND\r\n");
-            response.responseHeader();
-            response.responseBody(new byte[]{});
+            response.redirectResponse();
+
+            response.forward();
         }
 
         return response;
