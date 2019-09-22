@@ -18,9 +18,7 @@ public class RequestMapper {
     }
 
     public void executeMapping(HttpRequest httpRequest, HttpResponse httpResponse) {
-
         String path = httpRequest.getPath();
-        System.out.println("PATH : >>>" + path);
         if (requestMapper.containsKey(path)) {
             requestMapper.get(path).accept(httpRequest, httpResponse);
             return;

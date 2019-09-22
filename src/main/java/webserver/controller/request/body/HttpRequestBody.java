@@ -1,7 +1,6 @@
 package webserver.controller.request.body;
 
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
@@ -18,6 +17,10 @@ public class HttpRequestBody {
         requestParams = URLDecoder.decode(requestParams, StandardCharsets.UTF_8);
         String[] splitedParams = requestParams.split(FIELD_SEPERATE_DELEMETER);
 
+        mappingRequestParams(splitedParams);
+    }
+
+    private void mappingRequestParams(String[] splitedParams) {
         for (String splitedParam : splitedParams) {
             String[] queryParam = splitedParam.split(KEY_VALUE_DELEMETER);
             bodyDataSet.put(queryParam[0], queryParam[1]);

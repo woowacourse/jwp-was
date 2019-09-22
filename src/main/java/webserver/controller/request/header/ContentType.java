@@ -23,8 +23,6 @@ public enum ContentType {
     }
 
     public static ContentType match(String url) {
-        System.out.println("URL >>>" + url);
-
         return Arrays.stream(ContentType.values())
             .filter(c -> url.contains("." + c.getContentType()))
             .findFirst()
