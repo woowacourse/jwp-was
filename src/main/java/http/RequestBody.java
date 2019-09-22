@@ -9,6 +9,8 @@ import java.util.Map;
 public class RequestBody {
     private static final String DELIMITER_OF_FORM = "&";
     private static final String DELIMITER_OF_FORM_PARAMETER = "=";
+    private static final int KEY = 0;
+    private static final int VALUE = 1;
 
     private final Map<String, String> parameters = new HashMap<>();
 
@@ -21,8 +23,9 @@ public class RequestBody {
 
     private void splitRequestBody(String[] queryParams) {
         for (String queryParam : queryParams) {
-            String key = queryParam.split(DELIMITER_OF_FORM_PARAMETER)[0];
-            String value = queryParam.split(DELIMITER_OF_FORM_PARAMETER)[1];
+            String[] splitedQueryParam = queryParam.split(DELIMITER_OF_FORM_PARAMETER);
+            String key = splitedQueryParam[KEY];
+            String value = splitedQueryParam[VALUE];
 
             parameters.put(key, value);
         }

@@ -19,6 +19,8 @@ public class RequestHeader {
     private static final String DELIMITER_OF_QUERY_PARAMETERS = "&";
     private static final String DELIMITER_OF_QUERY_PARAMETER = "=";
     private static final String START_POINT_OF_QUERY_PARAMETERS = "?";
+    private static final int KEY = 0;
+    private static final int VALUE = 1;
 
     private final Map<String, String> headers = new HashMap<>();
 
@@ -65,10 +67,11 @@ public class RequestHeader {
 
     private void splitQueryParameter(Map<String, String> map, String[] queryParameters) {
         for (String queryParameter : queryParameters) {
-            String name = queryParameter.split(DELIMITER_OF_QUERY_PARAMETER)[0];
-            String value = queryParameter.split(DELIMITER_OF_QUERY_PARAMETER)[1];
+            String[] splitedQueryParameter = queryParameter.split(DELIMITER_OF_QUERY_PARAMETER);
+            String key = splitedQueryParameter[KEY];
+            String value = splitedQueryParameter[VALUE];
 
-            map.put(name, value);
+            map.put(key, value);
         }
     }
 }
