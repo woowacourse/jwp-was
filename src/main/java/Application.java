@@ -1,4 +1,4 @@
-import webserver.WebServer;
+import was.webserver.WebServer;
 
 import java.io.IOException;
 
