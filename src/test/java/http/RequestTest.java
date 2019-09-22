@@ -1,5 +1,8 @@
 package http;
 
+import http.request.Request;
+import http.request.RequestBody;
+import http.request.RequestHeader;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +22,7 @@ public class RequestTest {
         RequestBody requestBody = new RequestBody(
                 "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net\n");
 
-        Request request = new Request(requestHeader, requestBody);
+        Request request = new Request(requestLine, requestHeader, requestBody);
         assertThat(request.extractUrl()).isEqualTo("/user/create");
     }
 }

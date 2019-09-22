@@ -1,4 +1,4 @@
-package http;
+package http.request;
 
 import java.util.Map;
 
@@ -6,20 +6,30 @@ public class Request {
     private static final String ROOT_URL = "/";
     private static final String INDEX_HTML = "/index.html";
 
+    private final RequestLine requestLine;
     private final RequestHeader requestHeader;
     private final RequestBody requestBody;
 
-    public Request(RequestHeader requestHeader, RequestBody requestBody) {
+    public Request(RequestLine requestLine, RequestHeader requestHeader, RequestBody requestBody) {
+        this.requestLine = requestLine;
         this.requestHeader = requestHeader;
         this.requestBody = requestBody;
     }
 
-    public Request(RequestHeader header) {
-        this(header, new RequestBody(""));
+    public Request(RequestLine requestLine, RequestHeader requestHeader) {
+        this(requestLine, requestHeader, new RequestBody(""));
     }
 
+//    public String extractUrl2() {
+//        return validate(requestHeader.extractHeader(RequestHeader.URL));
+//    }
+
     public String extractUrl() {
-        return validate(requestHeader.get(RequestHeader.URL));
+        return requestLine.getUrl();
+    }
+
+    public String extractMethod() {
+        return requestLine.getMethod();
     }
 
     private String validate(String url) {
@@ -29,7 +39,7 @@ public class Request {
         return url;
     }
 
-    public String get(String key) {
+    public String extractHeader(String key) {
         return requestHeader.get(key);
     }
 

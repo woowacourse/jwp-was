@@ -1,4 +1,4 @@
-package http;
+package http.request;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,11 +11,11 @@ import java.util.Optional;
 public class RequestHeader {
     public static final String HTTP_METHOD = "method";
     public static final String URL = "url";
-    public static final String HTTP_VERSION = "httpVersion";
+//    public static final String HTTP_VERSION = "httpVersion";
     private static final Logger logger = LoggerFactory.getLogger(RequestHeader.class);
-    private static final String DELIMITER_OF_START_LINE = " ";
+//    private static final String DELIMITER_OF_START_LINE = " ";
     private static final String DELIMITER_OF_HEADER = ":";
-    private static final String DELIMITER_OF_HTTP_MESSAGE = "\n";
+    private static final String DELIMITER_OF_HTTP_HEADER = "\n";
     private static final String DELIMITER_OF_QUERY_PARAMETERS = "&";
     private static final String DELIMITER_OF_QUERY_PARAMETER = "=";
     private static final String START_POINT_OF_QUERY_PARAMETERS = "?";
@@ -24,16 +24,9 @@ public class RequestHeader {
 
     private final Map<String, String> headers = new HashMap<>();
 
-    public RequestHeader(String headerInput) {
-        String[] splitedInput = headerInput.split(DELIMITER_OF_HTTP_MESSAGE);
-        splitStartLine(splitedInput[0]);
+    public RequestHeader(String requestHeader) {
+        String[] splitedInput = requestHeader.split(DELIMITER_OF_HTTP_HEADER);
         splitRequestHeader(splitedInput);
-    }
-
-    private void splitStartLine(String startLine) {
-        headers.put(HTTP_METHOD, startLine.split(DELIMITER_OF_START_LINE)[0]);
-        headers.put(URL, startLine.split(DELIMITER_OF_START_LINE)[1]);
-        headers.put(HTTP_VERSION, startLine.split(DELIMITER_OF_START_LINE)[2]);
     }
 
     private void splitRequestHeader(String[] splitedInput) {

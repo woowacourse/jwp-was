@@ -1,7 +1,7 @@
 package webserver.controller;
 
-import http.Request;
-import http.Response;
+import http.request.Request;
+import http.response.Response;
 import model.UserService;
 
 public class CreateUserController extends HttpController {

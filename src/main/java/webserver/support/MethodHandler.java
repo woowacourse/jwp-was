@@ -1,7 +1,7 @@
 package webserver.support;
 
-import http.Request;
-import http.Response;
+import http.request.Request;
+import http.response.Response;
 import webserver.controller.Controller;
 import webserver.controller.CreateUserController;
 import webserver.controller.FileController;
