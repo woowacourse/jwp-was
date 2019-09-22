@@ -1,4 +1,4 @@
-package webserver.domain.response;
+package webserver.domain.common;
 
 import java.util.Arrays;
 

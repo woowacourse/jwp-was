@@ -1,5 +1,6 @@
 package webserver.domain.response;
 
+import webserver.domain.common.HttpVersion;
 import webserver.domain.request.MediaType;
 
 import java.nio.ByteBuffer;
@@ -9,18 +10,20 @@ import java.util.Map;
 public class Response {
     private static final byte[] HEADER_BODY_DELIMITER_BYTES = "\r\n\r\n".getBytes();
 
-    private ResponseHeader header;
-    private ResponseBody body;
+    private final ResponseLine line;
+    private final ResponseHeader header;
+    private final ResponseBody body;
 
-    private Response(final ResponseHeader header, final ResponseBody body) {
+    private Response(final ResponseLine line, final ResponseHeader header, final ResponseBody body) {
+        this.line = line;
         this.header = header;
         this.body = body;
     }
 
     public static class Builder {
-        private ResponseBody body = new ResponseBody();
         private HttpVersion httpVersion;
         private HttpStatus httpStatus;
+        private ResponseBody body = new ResponseBody();
         private Map<String, String> responseFields = new HashMap<>();
 
         public Builder(final HttpVersion httpVersion, final HttpStatus httpStatus) {
@@ -88,18 +91,23 @@ public class Response {
         }
 
         public Response build() {
-            final ResponseHeader header = new ResponseHeader(this.httpVersion, this.httpStatus, this.responseFields);
-            return new Response(header, this.body);
+            final ResponseLine line = new ResponseLine(this.httpVersion, this.httpStatus);
+            final ResponseHeader header = new ResponseHeader(this.responseFields);
+            return new Response(line, header, this.body);
         }
     }
 
     public byte[] toBytes() {
         final int bodyLength = this.body.length();
-        final byte[] header = this.header.makeHeaderLine(bodyLength).getBytes();
+        final byte[] line = this.line.toBytes();
+        final byte[] header = this.header.toBytes(bodyLength);
 
         return ByteBuffer
-                .allocate(header.length + HEADER_BODY_DELIMITER_BYTES.length + bodyLength)
-                .put(header).put(HEADER_BODY_DELIMITER_BYTES).put(this.body.getBody())
+                .allocate(line.length + header.length + HEADER_BODY_DELIMITER_BYTES.length + bodyLength)
+                .put(line)
+                .put(header)
+                .put(HEADER_BODY_DELIMITER_BYTES)
+                .put(this.body.getBody())
                 .array();
     }
 }

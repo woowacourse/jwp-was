@@ -18,7 +18,7 @@ public class Request {
     private static final int ZERO = 0;
     private static final int NO_QUERY = 1;
 
-    private final RequestStartLine requestStartLine;
+    private final RequestLine requestLine;
     private final RequestHeader requestHeader;
     private final RequestBody requestBody;
 
@@ -26,7 +26,7 @@ public class Request {
         final String[] httpMethodAndPath = IOUtils.iterator().next().split(SPACE_DELIMITER);
         final String[] pathAndQuery = httpMethodAndPath[URL_INDEX].split(QUERY_DELIMITER);
 
-        this.requestStartLine = new RequestStartLine(httpMethodAndPath);
+        this.requestLine = new RequestLine(httpMethodAndPath);
         this.requestHeader = new RequestHeader(IOUtils);
         this.requestBody = new RequestBody((pathAndQuery.length == NO_QUERY) ? EMPTY : pathAndQuery[QUERY_INDEX]);
 
@@ -36,15 +36,15 @@ public class Request {
     }
 
     public String getHttpMethod() {
-        return requestStartLine.getHttpMethod();
+        return requestLine.getHttpMethod();
     }
 
     public String getPath() {
-        return requestStartLine.getPath();
+        return requestLine.getPath();
     }
 
     public String getHttpVersion() {
-        return requestStartLine.getHttpVersion();
+        return requestLine.getHttpVersion();
     }
 
     public RequestHeader getRequestHeader() {

@@ -7,31 +7,31 @@ import webserver.support.RequestHelper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class RequestStartLineTest extends RequestHelper {
+class RequestLineTest extends RequestHelper {
 
     private String[] httpMethodAndPath = requestStartLineInput.split(" ");
-    private RequestStartLine requestStartLine;
+    private RequestLine requestLine;
 
     @BeforeEach
     void setUp() {
-        this.requestStartLine = new RequestStartLine(httpMethodAndPath);
+        this.requestLine = new RequestLine(httpMethodAndPath);
     }
 
     @Test
     @DisplayName("Http 메서드 정보를 정확하게 저장하는지 확인")
     void getHttpMethod() {
-        assertThat(this.requestStartLine.getHttpMethod()).isEqualTo("GET");
+        assertThat(this.requestLine.getHttpMethod()).isEqualTo("GET");
     }
 
     @Test
     @DisplayName("요청 경로 정보를 정확하게 저장하는지 확인")
     void getPath() {
-        assertThat(this.requestStartLine.getPath()).isEqualTo("/index.html");
+        assertThat(this.requestLine.getPath()).isEqualTo("/index.html");
     }
 
     @Test
     @DisplayName("Http 버전 정보를 정확하게 저장하는지 확인")
     void getHttpVersion() {
-        assertThat(this.requestStartLine.getHttpVersion()).isEqualTo("HTTP/1.1");
+        assertThat(this.requestLine.getHttpVersion()).isEqualTo("HTTP/1.1");
     }
 }
