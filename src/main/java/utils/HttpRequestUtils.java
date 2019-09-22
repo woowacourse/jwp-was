@@ -24,7 +24,7 @@ public class HttpRequestUtils {
 
     public static Map<String, String> parseParamToMap(String params) {
         return Arrays.stream(params.trim().split(PARAMS_DELIMITER))
-            .map(s -> s.split(KEY_VALUE_DELIMITER, 2))
+            .map(param -> param.split(KEY_VALUE_DELIMITER, 2))
             .collect(Collectors.toMap(a -> a[0], a -> a.length > 1 ? a[1] : ""));
     }
 

@@ -17,13 +17,6 @@ public class HttpRequest {
         return requestLine.getAbsPath();
     }
 
-    public String getFilePath() {
-        if (header.getHeader("Accept").contains("text/html")) {
-            return HttpRequestUtils.generateTemplateFilePath(requestLine.getAbsPath());
-        }
-        return HttpRequestUtils.generateStaticFilePath(requestLine.getAbsPath());
-    }
-
     public String getParam(String key) {
         return requestLine.getQueryString(key);
     }

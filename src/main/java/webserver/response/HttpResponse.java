@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 public class HttpResponse {
+    private static final String NEW_LINE = "\r\n";
     private HttpStatus httpStatus;
     private Map<String, Object> header;
     private byte[] body;
@@ -25,14 +26,14 @@ public class HttpResponse {
     }
 
     private void reponseLine(DataOutputStream dos) throws IOException {
-        dos.writeBytes("HTTP/1.1 " + httpStatus.getCode() + " " + httpStatus.getName() + "\r\n");
+        dos.writeBytes("HTTP/1.1 " + httpStatus.getCode() + " " + httpStatus.getName() + NEW_LINE);
     }
 
     private void responseHeader(DataOutputStream dos) throws IOException {
         for (Map.Entry value : header.entrySet()) {
-            dos.writeBytes(value.getKey() + ": " + value.getValue() + "\r\n");
+            dos.writeBytes(value.getKey() + ": " + value.getValue() + NEW_LINE);
         }
-        dos.writeBytes("\r\n");
+        dos.writeBytes(NEW_LINE);
     }
 
     private void responseBody(DataOutputStream dos, byte[] body) throws IOException {
