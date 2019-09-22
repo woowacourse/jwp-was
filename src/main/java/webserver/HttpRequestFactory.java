@@ -14,6 +14,17 @@ public class HttpRequestFactory {
     private static final Logger log = LoggerFactory.getLogger(HttpRequestFactory.class);
     private static final String TAG = "HttpRequestFactory";
 
+    private HttpRequestFactory() {
+    }
+
+    public static HttpRequestFactory getInstance() {
+        return LazyHolder.INSTANCE;
+    }
+
+    private static class LazyHolder {
+        private static final HttpRequestFactory INSTANCE = new HttpRequestFactory();
+    }
+
     public HttpRequest getHttpRequest(InputStream in) throws IOException {
         BufferedReader br = null;
         try {
