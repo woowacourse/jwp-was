@@ -1,6 +1,5 @@
-package http.request;
+package http;
 
-import http.HttpHeader;
 import http.request.exception.NotFoundHttpRequestHeader;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class HttpHeaderTest {
 
     @Test
-    void of_올바른경우() {
+    void request_헤더_생성() {
         List<String> headerLines = Arrays.asList(
                 "Host: localhost:8080",
                 "Connection: keep-alive",
@@ -27,6 +26,23 @@ class HttpHeaderTest {
         expectedHeaders.put("Host", "localhost:8080");
         expectedHeaders.put("Connection", "keep-alive");
         expectedHeaders.put("Accept", "*/*");
+
+        for (String expectedKey : expectedHeaders.keySet()) {
+            assertThat(expectedHeaders.get(expectedKey))
+                    .isEqualTo(httpHeader.getHeader(expectedKey));
+        }
+    }
+
+    @Test
+    void response_헤더_생성() {
+        List<String> headerLines =
+                Arrays.asList("Content-Type: text/html;charset=utf-8\r\n",
+                        "Content-Length: 10\r\n");
+        HttpHeader httpHeader = HttpHeader.of(headerLines);
+
+        Map<String, String> expectedHeaders = new HashMap<>();
+        expectedHeaders.put("Content-Type", "text/html;charset=utf-8\r\n");
+        expectedHeaders.put("Content-Length", "10\r\n");
 
         for (String expectedKey : expectedHeaders.keySet()) {
             assertThat(expectedHeaders.get(expectedKey))

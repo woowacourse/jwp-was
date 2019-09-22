@@ -19,10 +19,26 @@ class HttpRequestTest {
                 "";
         InputStream in = IOUtils.toInputStream(request, "UTF-8");
 
-        HttpRequest httpRequest = HttpRequest.of(in);
+        HttpRequest httpRequest = RequestFactory.createHttpRequest(in);
 
         assertThat(httpRequest.getPath()).isEqualTo("/index.html");
     }
+
+    @Test
+    void getPath_파라미터_있는경우() throws IOException {
+        String requestWithParameters = "GET /user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net HTTP/1.1\n" +
+                "Host: localhost:8080\n" +
+                "Connection: keep-alive\n" +
+                "Accept: */*\n" +
+                "";
+        InputStream in = IOUtils.toInputStream(requestWithParameters, "UTF-8");
+
+        HttpRequest httpRequest = RequestFactory.createHttpRequest(in);
+
+        assertThat(httpRequest.getPath()).isEqualTo("/user/create");
+    }
+
+
 
     @Test
     void getHeader() throws IOException {
@@ -33,28 +49,11 @@ class HttpRequestTest {
                 "";
         InputStream in = IOUtils.toInputStream(request, "UTF-8");
 
-        HttpRequest httpRequest = HttpRequest.of(in);
+        HttpRequest httpRequest = RequestFactory.createHttpRequest(in);
 
         assertThat(httpRequest.getHeader("Host")).isEqualTo("localhost:8080");
         assertThat(httpRequest.getHeader("Connection")).isEqualTo("keep-alive");
         assertThat(httpRequest.getHeader("Accept")).isEqualTo("*/*");
-    }
-
-    @Test
-    void getParameter() throws IOException {
-        String requestWithParameters = "GET /user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net HTTP/1.1\n" +
-                "Host: localhost:8080\n" +
-                "Connection: keep-alive\n" +
-                "Accept: */*\n" +
-                "";
-        InputStream in = IOUtils.toInputStream(requestWithParameters, "UTF-8");
-
-        HttpRequest httpRequest = HttpRequest.of(in);
-
-        assertThat(httpRequest.getParameter("userId")).isEqualTo("javajigi");
-        assertThat(httpRequest.getParameter("password")).isEqualTo("password");
-        assertThat(httpRequest.getParameter("name")).isEqualTo("박재성");
-        assertThat(httpRequest.getParameter("email")).isEqualTo("javajigi@slipp.net");
     }
 
     @Test
@@ -70,7 +69,7 @@ class HttpRequestTest {
 
         InputStream in = IOUtils.toInputStream(requestWithBody, "UTF-8");
 
-        HttpRequest httpRequest = HttpRequest.of(in);
+        HttpRequest httpRequest = RequestFactory.createHttpRequest(in);
 
         HttpBody expectedBody = HttpBody.of("userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net");
         assertThat(httpRequest.getBody()).isEqualTo(expectedBody);
