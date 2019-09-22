@@ -9,16 +9,15 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-public class HtmlViewProcessor implements ViewProcessor {
-
+public class ResourceViewProcessor implements ViewProcessor {
     @Override
     public boolean isSupported(String viewName) {
-        return viewName.endsWith(".html");
+        return true;
     }
 
     @Override
     public void process(DataOutputStream dos, String viewName, HttpResponse httpResponse) {
-        String filePath = "./templates" + viewName;
+        String filePath = "./static" + viewName;
         try {
             byte[] bytes = FileIoUtils.loadFileFromClasspath(filePath);
             String type = MimeType.values(filePath);

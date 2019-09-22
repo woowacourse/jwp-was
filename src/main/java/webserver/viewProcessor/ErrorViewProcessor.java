@@ -5,17 +5,16 @@ import webserver.ViewProcessor;
 
 import java.io.DataOutputStream;
 
-public class RedirectViewProcessor implements ViewProcessor {
+public class ErrorViewProcessor implements ViewProcessor {
 
     @Override
     public boolean isSupported(String viewName) {
-        return viewName.startsWith("/redirect:");
+        return viewName.startsWith("/error:");
     }
 
     @Override
     public void process(DataOutputStream dos, String viewName, HttpResponse httpResponse) {
-        String[] split = viewName.split(":");
-        String path = split[1];
-        httpResponse.sendRedirect(dos, path);
+        String errorCode = viewName.split(":")[1];
+        httpResponse.error(dos, errorCode);
     }
 }
