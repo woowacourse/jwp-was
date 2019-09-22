@@ -25,9 +25,10 @@ public class RequestLine {
     }
 
     private String splitQueryString() {
-        if (path.contains("?")) {
-            path = path.split("\\?")[0];
-            return path.split("\\?")[1];
+        String pathWithQueryString  = path;
+        if (pathWithQueryString.contains("?")) {
+            path = pathWithQueryString.split("\\?")[0];
+            return pathWithQueryString.split("\\?")[1];
         }
         return "";
     }

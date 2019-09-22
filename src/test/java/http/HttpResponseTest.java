@@ -25,7 +25,7 @@ public class HttpResponseTest {
     @Test
     void forward() {
         HttpResponse response = new HttpResponse();
-        response.forward("./templates/index.html");
+        response.forward("/index.html");
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK);
         assertThat(response.getHeader("Content-Type")).isEqualTo("text/html;charset=utf-8");
     }
