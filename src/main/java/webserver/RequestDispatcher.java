@@ -20,7 +20,7 @@ public class RequestDispatcher {
 
     public static Response handle(Request request) {
         try {
-            String url = request.getUrl();
+            String url = request.getPath();
             Optional<File> file = ResourceLoadUtils.detectFile(url);
 
             if (file.isPresent()) {

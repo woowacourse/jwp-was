@@ -7,8 +7,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class RequestParser {
 
@@ -18,6 +20,8 @@ public class RequestParser {
     private static final String FIRST_LINE_DELIMITER = " ";
     private static final String PATH_QUERY_DELIMITER = "?";
     private static final String PATH_QUERY_DELIMITER_REGEX = "\\?";
+    private static final String COOKIE_HEADER_KEY = "Cookie";
+    private static final String COOKIE_PAIR_DELIMITER = "; ";
 
     public static Request parse(InputStream in) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
@@ -27,9 +31,10 @@ public class RequestParser {
         String url = firstLine[1].split(PATH_QUERY_DELIMITER_REGEX)[0];
         Map<String, String> queries = parseQueryString(firstLine[1]);
         Map<String, String> headers = parseHeader(br);
+        Map<String, String> cookies = parseCookie(headers);
         byte[] body = IOUtils.readData(br, MAX_BODY_SIZE);
 
-        return new Request(method, url, queries, headers, body);
+        return new Request(method, url, queries, headers, cookies, body);
     }
 
     private static Map<String, String> parseQueryString(String pair) {
@@ -52,6 +57,19 @@ public class RequestParser {
         }
 
         return headers;
+    }
+
+    private static Map<String, String> parseCookie(Map<String, String> headers) {
+        Map<String, String> cookies = new HashMap<>();
+
+        if (headers.containsKey(COOKIE_HEADER_KEY)) {
+            String[] tokens = headers.get(COOKIE_HEADER_KEY).split(COOKIE_PAIR_DELIMITER);
+            Arrays.stream(tokens)
+                    .map(UrlEncodedParser::parsePair)
+                    .filter(Objects::nonNull)
+                    .forEach(tuple -> cookies.put(tuple.getKey(), tuple.getValue()));
+        }
+        return cookies;
     }
 
     private static boolean hasMoreLine(String line) {
