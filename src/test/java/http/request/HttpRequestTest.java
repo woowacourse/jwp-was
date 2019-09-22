@@ -83,13 +83,4 @@ class HttpRequestTest {
         assertThat(queryParams.getParam("password")).isEqualTo("password");
         assertThat(queryParams.getParam("name")).isEqualTo("woo");
     }
-
-    @Test
-    void getResponseContentType() throws IOException {
-        InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "Http_GET.txt"));
-        HttpRequest httpRequest = HttpRequestFactory.makeHttpRequest(in);
-
-        assertThat(httpRequest.getResponseContentsType()).isEqualTo("text/html;charset=utf-8");
-
-    }
 }

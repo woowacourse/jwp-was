@@ -30,15 +30,6 @@ public class HttpRequest {
         return headers;
     }
 
-    public String getResponseContentsType() {
-        String accepts = headers.getHeader("Accept");
-
-        if (accepts.contains("text/css")) {
-            return "text/css";
-        }
-        return "text/html;charset=utf-8";
-    }
-
     public QueryParams getQueryParams() {
         if (HttpMethod.GET.match(requestLine.getMethod())) {
             return QueryParams.of(requestLine.getUri().getQueryParams());
