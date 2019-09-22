@@ -26,8 +26,8 @@ public class HttpRequest implements AutoCloseable {
         }
     }
 
-    public RequestMethod getMethod() {
-        return requestFirstLine.getMethod();
+    public boolean checkMethod(RequestMethod requestMethod) {
+        return requestFirstLine.getMethod().equals(requestMethod);
     }
 
     public String getPath() {
