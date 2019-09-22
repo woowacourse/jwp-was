@@ -3,7 +3,7 @@ package http.controller;
 import db.DataBase;
 import http.HttpResponse;
 import http.request.HttpRequest;
-import model.User;
+import model.UserFactory;
 
 public class CreateUserController extends AbstractController {
     @Override
@@ -17,7 +17,7 @@ public class CreateUserController extends AbstractController {
     }
 
     private void addUser(HttpRequest request, HttpResponse response) {
-        DataBase.addUser(User.createUser(request.getDatas()));
+        DataBase.addUser(UserFactory.createUser(request));
         response.sendRedirect("/index.html");
     }
 }

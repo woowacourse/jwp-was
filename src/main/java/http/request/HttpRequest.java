@@ -34,8 +34,4 @@ public class HttpRequest {
     public String getPath() {
         return requestLine.getPath();
     }
-
-    public Map<String, String> getDatas() {
-        return datas.getDatas();
-    }
 }
