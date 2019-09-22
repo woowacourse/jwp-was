@@ -14,7 +14,7 @@ public class ServletMapping {
         servlets = new HashMap<>();
 
         servlets.put("/", new IndexServlet());
-        servlets.put("/signup", new SignupServlet());
+        servlets.put("/user/create", new SignupServlet());
     }
 
     Servlet getServlet(String path) {
