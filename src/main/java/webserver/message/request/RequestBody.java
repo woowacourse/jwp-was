@@ -1,4 +1,4 @@
-package webserver.domain.request;
+package webserver.message.request;
 
 import org.slf4j.Logger;
 

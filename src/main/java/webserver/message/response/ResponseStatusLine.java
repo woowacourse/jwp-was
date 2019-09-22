@@ -1,6 +1,7 @@
-package webserver.domain.response;
+package webserver.message.response;
 
-import webserver.domain.common.HttpVersion;
+import webserver.message.HttpStatus;
+import webserver.message.HttpVersion;
 
 public class ResponseStatusLine {
     private static final String NEW_LINE = "\r\n";

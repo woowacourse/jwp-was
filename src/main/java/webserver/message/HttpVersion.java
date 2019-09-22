@@ -1,4 +1,4 @@
-package webserver.domain.common;
+package webserver.message;
 
 import java.util.Arrays;
 

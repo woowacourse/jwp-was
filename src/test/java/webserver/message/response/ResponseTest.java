@@ -1,9 +1,10 @@
-package webserver.domain.response;
+package webserver.message.response;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import webserver.domain.common.HttpVersion;
+import webserver.message.HttpStatus;
+import webserver.message.HttpVersion;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

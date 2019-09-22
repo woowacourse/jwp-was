@@ -1,4 +1,4 @@
-package webserver.domain.request;
+package webserver.message.request;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,10 +16,10 @@ class RequestTest extends RequestHelper {
     @Test
     @DisplayName("쿼리없는 객체 생성 테스트")
     void create() throws IOException {
-        InputStream expectedInputStream = new ByteArrayInputStream(requestInput.getBytes());
+        InputStream expectedInputStream = inputStream(requestInput);
         IOUtils expectedNetworkInput = new IOUtils(expectedInputStream);
 
-        Request request = new Request(this.ioUtils);
+        Request request = new Request(ioUtils(requestInput));
         Request expected = new Request(expectedNetworkInput);
 
         assertThat(request.getHttpMethod()).isEqualTo(expected.getHttpMethod());
@@ -35,7 +35,7 @@ class RequestTest extends RequestHelper {
         InputStream expectedInputStream = new ByteArrayInputStream(requestInputWithQueryString.getBytes());
         IOUtils expectedNetworkInput = new IOUtils(expectedInputStream);
 
-        Request request = new Request(this.ioUtilsWithQueryString);
+        Request request = new Request(ioUtils(requestInputWithQueryString));
         Request expected = new Request(expectedNetworkInput);
 
         assertThat(request.getHttpMethod()).isEqualTo(expected.getHttpMethod());

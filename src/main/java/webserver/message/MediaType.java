@@ -1,4 +1,4 @@
-package webserver.domain.request;
+package webserver.message;
 
 import java.util.Arrays;
 import java.util.Collections;

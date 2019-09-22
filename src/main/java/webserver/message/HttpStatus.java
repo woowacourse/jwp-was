@@ -1,4 +1,4 @@
-package webserver.domain.response;
+package webserver.message;
 
 public enum HttpStatus {
     OK(200, "OK"),

@@ -1,7 +1,8 @@
 package utils;
 
-import webserver.domain.response.Response;
-import webserver.domain.response.StaticFile;
+import webserver.message.HttpStatus;
+import webserver.message.response.Response;
+import webserver.StaticFile;
 
 public class DataConverter {
     public static byte[] convertToBytes(final Response response) {

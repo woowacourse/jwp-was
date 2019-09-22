@@ -1,4 +1,4 @@
-package webserver.domain.request;
+package webserver.message.request;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

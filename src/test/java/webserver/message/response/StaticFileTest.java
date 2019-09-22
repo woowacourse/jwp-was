@@ -1,8 +1,8 @@
-package webserver.domain.response;
+package webserver.message.response;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import webserver.domain.response.StaticFile;
+import webserver.StaticFile;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

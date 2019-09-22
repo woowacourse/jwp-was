@@ -1,9 +1,8 @@
 package utils;
 
 import org.slf4j.Logger;
-import webserver.domain.request.Request;
-import webserver.domain.response.Response;
-import webserver.domain.response.StaticFile;
+import webserver.StaticFile;
+import webserver.message.request.Request;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

@@ -2,8 +2,9 @@ package webserver;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import webserver.domain.request.Request;
-import webserver.domain.response.Response;
+import webserver.message.HttpStatus;
+import webserver.message.request.Request;
+import webserver.message.response.Response;
 import webserver.support.RequestHelper;
 
 import java.io.IOException;

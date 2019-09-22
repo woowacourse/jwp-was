@@ -5,8 +5,8 @@ import org.slf4j.LoggerFactory;
 import utils.DataConverter;
 import utils.FileIoUtils;
 import utils.IOUtils;
-import webserver.domain.request.Request;
-import webserver.domain.response.Response;
+import webserver.message.request.Request;
+import webserver.message.response.Response;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -49,8 +49,8 @@ public class RequestHandler implements Runnable {
 
     private byte[] processRequest(final Request request) throws IOException, URISyntaxException, NullPointerException {
         try {
-            final Response body = RequestDispatcher.forward(request);
-            return Objects.nonNull(body) ? DataConverter.convertToBytes(body) :
+            final Response response = RequestDispatcher.forward(request);
+            return Objects.nonNull(response) ? DataConverter.convertToBytes(response) :
                     DataConverter.convertToBytes(FileIoUtils.loadFileFromClasspath(makeFilePath(request, STATIC_PATH)));
         } catch (IOException | URISyntaxException | NullPointerException e) {
             return DataConverter.convertToBytes(FileIoUtils.loadFileFromClasspath(makeFilePath(request, TEMPLATES_PATH)));

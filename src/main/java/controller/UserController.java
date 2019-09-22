@@ -3,9 +3,9 @@ package controller;
 import db.DataBase;
 import model.User;
 import org.slf4j.Logger;
-import webserver.domain.request.Request;
-import webserver.domain.request.RequestBody;
-import webserver.domain.response.Response;
+import webserver.message.request.Request;
+import webserver.message.request.RequestBody;
+import webserver.message.response.Response;
 
 import static org.slf4j.LoggerFactory.getLogger;
 

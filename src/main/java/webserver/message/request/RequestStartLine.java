@@ -1,7 +1,8 @@
-package webserver.domain.request;
+package webserver.message.request;
 
 import org.slf4j.Logger;
-import webserver.domain.common.HttpVersion;
+import webserver.message.HttpMethod;
+import webserver.message.HttpVersion;
 
 import static org.slf4j.LoggerFactory.getLogger;
 

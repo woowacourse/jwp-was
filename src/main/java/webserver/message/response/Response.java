@@ -1,7 +1,9 @@
-package webserver.domain.response;
+package webserver.message.response;
 
-import webserver.domain.common.HttpVersion;
-import webserver.domain.request.MediaType;
+import webserver.StaticFile;
+import webserver.message.HttpStatus;
+import webserver.message.HttpVersion;
+import webserver.message.MediaType;
 
 import java.nio.ByteBuffer;
 import java.util.HashMap;

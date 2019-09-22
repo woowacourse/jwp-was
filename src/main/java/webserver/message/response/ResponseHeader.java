@@ -1,4 +1,4 @@
-package webserver.domain.response;
+package webserver.message.response;
 
 import java.util.Collections;
 import java.util.Map;
