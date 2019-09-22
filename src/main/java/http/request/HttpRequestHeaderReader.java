@@ -1,4 +1,4 @@
-package http;
+package http.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.RequestHandler;
 
-public class RequestHeaderReader {
+public class HttpRequestHeaderReader {
 	private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 	public static final String REQUEST_METHOD = "Method";
 	public static final String REQUEST_PATH = "Path";

@@ -4,7 +4,7 @@ import java.io.DataOutputStream;
 import java.io.OutputStream;
 
 import http.method.HttpMethod;
-import http.HttpRequest;
+import http.request.HttpRequest;
 
 public abstract class AbstractController implements Controller {
 	@Override

@@ -1,4 +1,4 @@
-package model;
+package http.response;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

@@ -5,16 +5,16 @@ import java.io.IOException;
 
 import exception.FailedRedirectException;
 import exception.UnauthorizedRequestException;
-import model.HttpResponse;
+import http.response.HttpResponse;
 import service.UserService;
-import http.HttpResponseGenerator;
-import http.HttpRequest;
+import http.response.HttpResponseGenerator;
+import http.request.HttpRequest;
 
 public class CreateUserController extends AbstractController {
 	@Override
 	public void doPost(HttpRequest httpRequest, DataOutputStream dos) {
 		try {
-			UserService.saveUser(httpRequest.getRequestBody());
+			UserService.saveUser(httpRequest.getHttpRequestBody());
 			String redirectPath = "http://localhost:8080/index.html";
 			HttpResponse httpResponse = new HttpResponse(HttpResponseGenerator.response302Header(redirectPath));
 			httpResponse.sendRedirect(dos);

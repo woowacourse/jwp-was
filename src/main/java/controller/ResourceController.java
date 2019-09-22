@@ -7,11 +7,11 @@ import java.net.URISyntaxException;
 import exception.FailedForwardException;
 import exception.UnauthorizedRequestException;
 import exception.WrongPathException;
-import model.HttpResponse;
+import http.response.HttpResponse;
 import utils.FileIoUtils;
-import http.HttpResponseGenerator;
+import http.response.HttpResponseGenerator;
 import utils.ResourcePathUtils;
-import http.HttpRequest;
+import http.request.HttpRequest;
 
 public class ResourceController extends AbstractController {
 	@Override

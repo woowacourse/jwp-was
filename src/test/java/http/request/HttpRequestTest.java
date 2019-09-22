@@ -1,13 +1,13 @@
-package webserver;
+package http.request;
 
 import java.io.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import http.HttpRequest;
+import http.request.HttpRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import http.HttpRequestReader;
+import http.request.HttpRequestReader;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -44,7 +44,7 @@ class HttpRequestTest {
 			assertThat(httpRequest.getRequestHeaderElement("Content-Length")).isEqualTo("46");
 			assertThat(httpRequest.getRequestHeaderElement("Content-Type")).isEqualTo("application/x-www-form-urlencoded");
 			assertThat(httpRequest.getRequestHeaderElement("Accept")).isEqualTo("*/*");
-			assertThat(httpRequest.getRequestBody()).isEqualTo(saveRequestBody());
+			assertThat(httpRequest.getHttpRequestBody()).isEqualTo(saveRequestBody());
 		}
 	}
 

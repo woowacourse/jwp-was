@@ -1,14 +1,14 @@
-package model;
+package http.request;
 
 import java.util.Map;
 import java.util.Objects;
 
 import exception.NotFoundElementException;
 
-public class RequestHeader {
+public class HttpRequestHeader {
 	private final Map<String, String> header;
 
-	public RequestHeader(final Map<String, String> header) {
+	public HttpRequestHeader(final Map<String, String> header) {
 		this.header = header;
 	}
 
