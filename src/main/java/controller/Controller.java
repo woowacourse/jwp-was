@@ -1,10 +1,10 @@
 package controller;
 
-import http.request.Request2;
-import http.response.Response2;
+import http.request.Request;
+import http.response.Response;
 
 public interface Controller {
 
-    boolean isMapping(Request2 request);
-    Response2 createResponse(Request2 request);
+    boolean isMapping(Request request);
+    Response createResponse(Request request);
 }

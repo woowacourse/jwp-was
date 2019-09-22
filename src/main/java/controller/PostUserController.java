@@ -1,8 +1,8 @@
 package controller;
 
-import http.request.Request2;
-import http.response.RedirectResponse2;
-import http.response.Response2;
+import http.request.Request;
+import http.response.RedirectResponse;
+import http.response.Response;
 import service.UserService;
 
 import java.util.Arrays;
@@ -13,12 +13,12 @@ public class PostUserController extends AbstractController {
     private UserService userService = UserService.getInstance();
 
     @Override
-    public boolean isMapping(Request2 request) {
+    public boolean isMapping(Request request) {
         return ("POST /user/create".equals("POST " + request.getUrl().getUrlPath()));
     }
 
     @Override
-    public Response2 createResponse(Request2 request) {
+    public Response createResponse(Request request) {
         if (isMapping(request)) {
             return createPostResponse(request);
         }
@@ -26,7 +26,7 @@ public class PostUserController extends AbstractController {
     }
 
     @Override
-    public Response2 createPostResponse(Request2 request) {
+    public Response createPostResponse(Request request) {
         Map<String, String> params = new HashMap<>();
         String queryParams = request.getRequestInformation().extractQueryParameters();
         String[] tokens = queryParams.split("&");
@@ -36,6 +36,6 @@ public class PostUserController extends AbstractController {
                     params.put(keyValues[0], keyValues[1]);
                 });
         userService.createUser(params);
-        return new RedirectResponse2();
+        return new RedirectResponse();
     }
 }

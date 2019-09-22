@@ -3,7 +3,7 @@ package webserver;
 import controller.Controller;
 import controller.ControllerFactory;
 import http.request.*;
-import http.response.Response2;
+import http.response.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,15 +31,14 @@ public class RequestHandler implements Runnable {
             RequestMethod method = requestInformation.extractMethod();
             RequestUrl url = requestInformation.extractUrl();
             log.error("this is the url ==> {}", url.getUrlPath());
-            Request2 request = new Request2(method, url, requestInformation);
+            Request request = new Request(method, url, requestInformation);
 
             ControllerFactory factory = new ControllerFactory();
             Controller controller = factory.createController(request);
-            Response2 response = controller.createResponse(request);
+            Response response = controller.createResponse(request);
 
             DataOutputStream dos = new DataOutputStream(out);
             response.doResponse(dos);
-
         } catch (IOException e) {
             log.error(e.getMessage());
         } catch (URISyntaxException e) {

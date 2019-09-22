@@ -8,13 +8,13 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-public class FileResponse2 implements Response2 {
-    private static final Logger log = LoggerFactory.getLogger(FileResponse2.class);
+public class FileResponse implements Response {
+    private static final Logger log = LoggerFactory.getLogger(FileResponse.class);
 
     private String filePath;
     private String contentType;
 
-    public FileResponse2(String filePath, String contentType) {
+    public FileResponse(String filePath, String contentType) {
         this.filePath = filePath;
         this.contentType = contentType;
     }

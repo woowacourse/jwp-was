@@ -1,7 +1,7 @@
 package controller;
 
 import controller.creator.*;
-import http.request.Request2;
+import http.request.Request;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +17,7 @@ public class ControllerFactory {
     }
 
 
-    public Controller createController(Request2 request) {
+    public Controller createController(Request request) {
         initialize();
         String key = request.createKey();
 

@@ -7,8 +7,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-public class RedirectResponse2 implements Response2 {
-    private static final Logger log = LoggerFactory.getLogger(RedirectResponse2.class);
+public class RedirectResponse implements Response {
+    private static final Logger log = LoggerFactory.getLogger(RedirectResponse.class);
 
     @Override
     public void doResponse(DataOutputStream dos) throws IOException, URISyntaxException {

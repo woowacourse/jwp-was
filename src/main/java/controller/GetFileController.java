@@ -1,24 +1,24 @@
 package controller;
 
-import http.request.Request2;
+import http.request.Request;
 import http.request.RequestMethod;
 import http.request.RequestUrlType;
-import http.response.FileResponse2;
-import http.response.Response2;
+import http.response.FileResponse;
+import http.response.Response;
 
 import java.util.Arrays;
 
 public class GetFileController extends AbstractController {
 
     @Override
-    public boolean isMapping(Request2 request) {
+    public boolean isMapping(Request request) {
         return (request.getRequestMethod() == RequestMethod.GET)
                 &&
                 (isCorrectRequestUrlContentType(request));
     }
 
     @Override
-    public Response2 createResponse(Request2 request) {
+    public Response createResponse(Request request) {
         if (isMapping(request)) {
             return createGetResponse(request);
         }
@@ -26,11 +26,11 @@ public class GetFileController extends AbstractController {
     }
 
     @Override
-    public Response2 createGetResponse(Request2 request) {
-        return new FileResponse2(request.getUrl().getUrlPath(), request.getUrl().getRequestUrlType().getContentType());
+    public Response createGetResponse(Request request) {
+        return new FileResponse(request.getUrl().getUrlPath(), request.getUrl().getRequestUrlType().getContentType());
     }
 
-    private boolean isCorrectRequestUrlContentType(Request2 request) {
+    private boolean isCorrectRequestUrlContentType(Request request) {
         return Arrays.stream(RequestUrlType.values())
                 .anyMatch(type -> request.getUrl().getRequestUrlType() == type);
     }

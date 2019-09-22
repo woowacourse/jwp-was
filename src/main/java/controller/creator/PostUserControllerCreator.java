@@ -2,12 +2,12 @@ package controller.creator;
 
 import controller.Controller;
 import controller.PostUserController;
-import http.request.Request2;
+import http.request.Request;
 
 public class PostUserControllerCreator implements ControllerCreator {
 
     @Override
-    public Controller createController(Request2 request) {
+    public Controller createController(Request request) {
         return new PostUserController();
     }
 }
