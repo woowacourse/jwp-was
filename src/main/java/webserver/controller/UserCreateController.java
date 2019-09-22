@@ -14,11 +14,6 @@ public class UserCreateController extends AbstractController {
     }
 
     @Override
-    protected String doGet(HttpRequest httpRequest) {
-        throw new NotSupportedHttpMethodException();
-    }
-
-    @Override
     protected String doPost(HttpRequest request) {
         User user = User.Builder.anUser()
                 .userId(request.getParam("userId"))

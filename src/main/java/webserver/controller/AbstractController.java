@@ -18,7 +18,11 @@ public abstract class AbstractController implements Controller {
         throw new NotSupportedHttpMethodException();
     }
 
-    protected abstract String doGet(HttpRequest httpRequest);
+    protected String doGet(HttpRequest httpRequest) {
+        throw new NotSupportedHttpMethodException();
+    }
 
-    protected abstract String doPost(HttpRequest httpRequest);
+    protected String doPost(HttpRequest httpRequest) {
+        throw new NotSupportedHttpMethodException();
+    }
 }
