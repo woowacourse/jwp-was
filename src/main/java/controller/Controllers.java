@@ -15,21 +15,21 @@ public class Controllers implements Controller {
     private static final String RESOURCE_FILE_PATTERN = "^.+\\.([a-zA-Z]+)$";
     private static final String RESOURCE = "resource";
 
-    private Map<String, Function<HttpRequest, HttpResponse>> methodFinder = new HashMap<>();
+    private Map<String, Function<HttpRequest, HttpResponse>> finder = new HashMap<>();
 
     public Controllers() {
-        methodFinder.put(HttpMethod.GET + "/index.html", httpRequest -> new IndexController().doGet(httpRequest));
-        methodFinder.put(HttpMethod.POST + "/user/create", httpRequest -> new UserCreateController().doPost(httpRequest));
-        methodFinder.put(RESOURCE, httpRequest -> new ResourceController().doGet(httpRequest));
+        finder.put(HttpMethod.GET + "/index.html", httpRequest -> new IndexController().doGet(httpRequest));
+        finder.put(HttpMethod.POST + "/user/create", httpRequest -> new UserCreateController().doPost(httpRequest));
+        finder.put(RESOURCE, httpRequest -> new ResourceController().doGet(httpRequest));
     }
 
     public HttpResponse service(HttpRequest httpRequest) {
-        String key = httpRequest.getHttpMethod() + httpRequest.getPath();
-        if (methodFinder.containsKey(key)) {
-            return methodFinder.get(key).apply(httpRequest);
+        String methodAndPath = httpRequest.getHttpMethod() + httpRequest.getPath();
+        if (finder.containsKey(methodAndPath)) {
+            return finder.get(methodAndPath).apply(httpRequest);
         }
-        if (isResource(key)) {
-            return methodFinder.get(RESOURCE).apply(httpRequest);
+        if (isResource(methodAndPath)) {
+            return finder.get(RESOURCE).apply(httpRequest);
         }
         return null; // 404 error 반환 에정
     }
