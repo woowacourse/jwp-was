@@ -3,7 +3,7 @@ package controller;
 import http.request.Request2;
 import http.response.Response2;
 
-public class AbstractController2 implements Controller2{
+public class AbstractController implements Controller {
 
     @Override
     public boolean isMapping(Request2 request) {

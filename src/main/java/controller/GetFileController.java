@@ -8,7 +8,7 @@ import http.response.Response2;
 
 import java.util.Arrays;
 
-public class GetFileController extends AbstractController2 {
+public class GetFileController extends AbstractController {
 
     @Override
     public boolean isMapping(Request2 request) {

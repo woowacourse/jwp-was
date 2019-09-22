@@ -1,9 +1,6 @@
 package controller;
 
 import http.request.Request2;
-import http.request.RequestMethod;
-import http.request.RequestUrlType;
-import http.response.FileResponse2;
 import http.response.RedirectResponse2;
 import http.response.Response2;
 import service.UserService;
@@ -12,7 +9,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PostUserController extends AbstractController2 {
+public class PostUserController extends AbstractController {
     private UserService userService = UserService.getInstance();
 
     @Override
