@@ -12,14 +12,17 @@ public class HttpRequestHeader {
 
     public static HttpRequestHeader of(String header) {
         HashMap<String, String> headers = new HashMap<>();
+        parseBody(header, headers);
 
+        return new HttpRequestHeader(headers);
+    }
+
+    private static void parseBody(String header, HashMap<String, String> headers) {
         String[] headerLines = header.split("\n");
         for (String headerLine : headerLines) {
             String[] headerLinePair = headerLine.split(": ");
             headers.put(headerLinePair[0], headerLinePair[1]);
         }
-
-        return new HttpRequestHeader(headers);
     }
 
     public int getContentLength() {

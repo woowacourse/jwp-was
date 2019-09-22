@@ -20,7 +20,7 @@ public enum HttpStatus {
         return message;
     }
 
-    public String getTo() {
+    public String getCodeAndMessage() {
         return code + " " + message;
     }
 }

@@ -1,11 +1,5 @@
 package webserver.httpRequest;
 
-import utils.IOUtils;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +13,12 @@ public class HttpRequestBody {
 
     public static HttpRequestBody of(String body) {
         Map<String, String> params = new HashMap<>();
+        parseBody(body, params);
 
+        return new HttpRequestBody(params);
+    }
+
+    private static void parseBody(String body, Map<String, String> params) {
         String[] split = body.split("&");
         for (String pair : split) {
             String[] split1 = pair.split("=");
@@ -30,7 +29,6 @@ public class HttpRequestBody {
             }
             params.put(key, value);
         }
-        return new HttpRequestBody(params);
     }
 
     public static HttpRequestBody empty() {

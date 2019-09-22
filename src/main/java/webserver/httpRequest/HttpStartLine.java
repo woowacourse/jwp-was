@@ -43,6 +43,13 @@ public class HttpStartLine {
         }
     }
 
+    public boolean isGet() {
+        return method.equals("GET");
+    }
+
+    public boolean isPost() {
+        return method.equals("POST");
+    }
 
     public String getMethod() {
         return method;
@@ -50,14 +57,6 @@ public class HttpStartLine {
 
     public String getParam(String key) {
         return parameters.get(key);
-    }
-
-    public boolean isGet() {
-        return method.equals("GET");
-    }
-
-    public boolean isPost() {
-        return method.equals("POST");
     }
 
     public String getPath() {
