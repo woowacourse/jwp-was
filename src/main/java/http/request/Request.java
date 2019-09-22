@@ -20,10 +20,6 @@ public class Request {
         this(requestLine, requestHeader, new RequestBody(""));
     }
 
-//    public String extractUrl2() {
-//        return validate(requestHeader.extractHeader(RequestHeader.URL));
-//    }
-
     public String extractUrl() {
         return requestLine.getUrl();
     }

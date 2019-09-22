@@ -9,11 +9,8 @@ import java.util.Map;
 import java.util.Optional;
 
 public class RequestHeader {
-    public static final String HTTP_METHOD = "method";
     public static final String URL = "url";
-//    public static final String HTTP_VERSION = "httpVersion";
     private static final Logger logger = LoggerFactory.getLogger(RequestHeader.class);
-//    private static final String DELIMITER_OF_START_LINE = " ";
     private static final String DELIMITER_OF_HEADER = ":";
     private static final String DELIMITER_OF_HTTP_HEADER = "\n";
     private static final String DELIMITER_OF_QUERY_PARAMETERS = "&";
