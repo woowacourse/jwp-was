@@ -1,9 +1,6 @@
-package http;
+package http.request;
 
 import http.common.HttpVersion;
-import http.request.HttpMethod;
-import http.request.HttpUriParser;
-import http.request.RequestLine;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;

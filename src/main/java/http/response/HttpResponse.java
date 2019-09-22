@@ -10,7 +10,6 @@ import java.io.IOException;
 public abstract class HttpResponse {
 
     protected static final Logger log = LoggerFactory.getLogger(HttpResponse.class);
-
     protected StatusLine statusLine;
     protected HttpHeader responseHeader;
     protected ResponseBody responseBody;
@@ -26,7 +25,6 @@ public abstract class HttpResponse {
     }
 
     public abstract void writeResponse(final DataOutputStream dos);
-
 
     protected void responseBody(DataOutputStream dos, byte[] body) {
         try {

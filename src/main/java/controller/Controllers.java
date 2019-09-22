@@ -13,7 +13,8 @@ import java.util.regex.Pattern;
 public class Controllers implements Controller {
 
     private static final String RESOURCE_FILE_PATTERN = "^.+\\.([a-zA-Z]+)$";
-    public static final String RESOURCE = "resource";
+    private static final String RESOURCE = "resource";
+
     private Map<String, Function<HttpRequest, HttpResponse>> methodFinder = new HashMap<>();
 
     public Controllers() {

@@ -13,16 +13,16 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class HttpHeaderTest {
 
+    private List<String> headers = Arrays.asList("Host: localhost:8080",
+        "Connection: keep-alive",
+        "Accept: */*");
+
     @Test
     void create_request_header() {
-        List<String> headers = Arrays.asList("Host: localhost:8080",
-            "Connection: keep-alive",
-            "Accept: */*");
-
         Map<String, String> header = new HashMap<>();
-        headers.stream().forEach(params -> {
+        headers.forEach(params -> {
             String[] paramTokens = params.split(":", 2);
-            header.put(paramTokens[0], paramTokens[1]);
+            header.put(paramTokens[0].trim(), paramTokens[1].trim());
         });
 
         assertDoesNotThrow(() -> new HttpHeader(header));
@@ -30,10 +30,14 @@ class HttpHeaderTest {
 
     @Test
     void find_header() {
-        List<String> headers = Arrays.asList("Host: localhost:8080",
-            "Connection: keep-alive",
-            "Accept: */*");
         HttpHeader httpHeader = RequestHeaderParser.parse(headers);
         assertThat(httpHeader.findHeader("Connection")).isEqualTo("keep-alive");
+    }
+
+    @Test
+    void put_header() {
+        HttpHeader httpHeader = new HttpHeader();
+        httpHeader.putHeader("Host", "Conas");
+        assertThat(httpHeader.findHeader("Host")).isEqualTo("Conas");
     }
 }
