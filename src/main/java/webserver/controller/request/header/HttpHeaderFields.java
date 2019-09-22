@@ -20,7 +20,7 @@ public class HttpHeaderFields {
     }
 
     private void save(BufferedReader bufferedReader, String headerField) throws IOException {
-        while(headerField!=null && !headerField.equals("") && !headerField.equals("\n")) {
+        while (headerField != null && !headerField.equals("") && !headerField.equals("\n")) {
             saveHeaderFiled(headerField.split(HTTP_HEADER_FIELD_DELEMETER));
             logger.debug("HttpHeaderField : {}", headerField);
             headerField = bufferedReader.readLine();

@@ -1,22 +1,15 @@
 package webserver;
 
-import webserver.controller.AbstractController;
-import webserver.controller.response.HttpResponse;
-import db.DataBase;
-import factory.UserFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.FileIoUtils;
-import utils.IOUtils;
-import webserver.controller.request.*;
+import webserver.controller.request.HttpRequest;
+import webserver.controller.request.RequestMapper;
+import webserver.controller.response.HttpResponse;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.net.URISyntaxException;
-import java.net.URLDecoder;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);

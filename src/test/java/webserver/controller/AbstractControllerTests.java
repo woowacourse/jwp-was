@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import static exception.ContentTypeNotFoundException.CONTENT_TYPE_NOT_FOUND_MESSAGE;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

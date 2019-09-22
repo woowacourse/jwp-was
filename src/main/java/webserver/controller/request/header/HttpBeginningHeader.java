@@ -35,13 +35,13 @@ public class HttpBeginningHeader {
     }
 
     public byte[] getResponseBody(ContentType contentType) throws IOException, URISyntaxException {
-        if(contentType == ContentType.HTML || contentType == ContentType.ICO) {
-         return FileIoUtils.loadFileFromClasspath(NON_STATIC_FILE_PATH + url);
+        if (contentType == ContentType.HTML || contentType == ContentType.ICO) {
+            return FileIoUtils.loadFileFromClasspath(NON_STATIC_FILE_PATH + url);
         }
         return FileIoUtils.loadFileFromClasspath(STATIC_FILE_PATH + url);
     }
 
-    public ContentType getContentType() throws ContentTypeNotFoundException{
+    public ContentType getContentType() throws ContentTypeNotFoundException {
         return ContentType.match(url);
     }
 }

@@ -2,7 +2,6 @@ package webserver.controller.response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import webserver.controller.request.header.ContentType;
 
 import java.io.DataOutputStream;
@@ -20,7 +19,7 @@ public class HttpResponse {
     public void response200Header(int lengthOfBodyContent, ContentType contentType) {
         try {
             dataOutputStream.writeBytes("HTTP/1.1 200 OK \r\n");
-            dataOutputStream.writeBytes("Content-Type: text/"  + contentType + ";charset=utf-8\r\n");
+            dataOutputStream.writeBytes("Content-Type: text/" + contentType + ";charset=utf-8\r\n");
             dataOutputStream.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dataOutputStream.writeBytes("\r\n");
         } catch (IOException e) {
@@ -52,7 +51,7 @@ public class HttpResponse {
 
     public void badRequest(String errorMessage) {
         try {
-            dataOutputStream.writeBytes("HTTP/1.1 400 BAD REQUEST"+ errorMessage + "\r\n");
+            dataOutputStream.writeBytes("HTTP/1.1 400 BAD REQUEST" + errorMessage + "\r\n");
             dataOutputStream.writeBytes("Server: jwp-was(robby) \r\n");
             dataOutputStream.writeBytes("Connection: close \r\n");
             dataOutputStream.flush();

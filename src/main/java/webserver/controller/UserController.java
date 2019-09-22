@@ -9,6 +9,7 @@ import webserver.controller.response.HttpResponse;
 
 public class UserController {
     public static final String SAVE_REDIRECT_URL = "/index.html";
+
     public static void save(HttpRequest httpRequest, HttpResponse httpResponse) {
         try {
             String requestParam = httpRequest.readData();

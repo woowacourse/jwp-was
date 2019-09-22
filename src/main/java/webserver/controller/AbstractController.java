@@ -11,7 +11,7 @@ public class AbstractController {
 
     public static void movePage(HttpRequest httpRequest, HttpResponse httpResponse) {
         try {
-            ContentType contentType  = httpRequest.getContentType();
+            ContentType contentType = httpRequest.getContentType();
             byte[] body = httpRequest.getResponseBody(contentType);
             httpResponse.response200Header(body.length, contentType);
             httpResponse.responseBody(body);
