@@ -31,6 +31,7 @@ public class HttpRequestFactory {
             br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
         } catch (UnsupportedEncodingException e) {
             log.error("{} 클래스 에러 발생", TAG);
+            throw new IllegalArgumentException("올바르지 않은 요청입니다.");
         }
 
         String startLine = parseStartLine(br);

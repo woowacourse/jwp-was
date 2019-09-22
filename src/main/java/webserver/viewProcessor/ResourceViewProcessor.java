@@ -25,7 +25,7 @@ public class ResourceViewProcessor implements ViewProcessor {
             httpResponse.setContentType(type);
             httpResponse.forward(dos, bytes);
         } catch (IOException | URISyntaxException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException();
         }
     }
 }
