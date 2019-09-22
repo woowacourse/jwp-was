@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import webserver.http.HttpStatus;
 import webserver.http.MimeType;
+import webserver.http.request.HttpVersion;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -17,15 +18,18 @@ import static webserver.http.HttpHeaders.*;
 
 public class HttpResponse {
     private static final Logger log = LoggerFactory.getLogger(HttpResponse.class);
-    public static final String DEFAULT_HTTP_VERSION = "HTTP/1.1";
+    private static final String DEFAULT_ERROR_MESSAGE = "";
+    public static final HttpVersion DEFAULT_HTTP_VERSION = HttpVersion.of("HTTP/1.1");
 
     private final Map<String, String> headers = new HashMap<>();
     private final OutputStream out;
     private HttpStatus httpStatus;
+    private HttpVersion httpVersion;
     private byte[] body;
 
     public HttpResponse(final OutputStream out) {
         this.out = out;
+        this.httpVersion = DEFAULT_HTTP_VERSION;
     }
 
     public void forward(final String resource) {
@@ -41,7 +45,7 @@ public class HttpResponse {
             setBody(body);
             write();
         } catch (IOException | URISyntaxException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
 
@@ -61,8 +65,7 @@ public class HttpResponse {
     }
 
     public void sendError(final HttpStatus httpStatus) {
-        setStatus(httpStatus);
-        write();
+        sendError(httpStatus, DEFAULT_ERROR_MESSAGE);
     }
 
     public void sendError(final HttpStatus httpStatus, final String message) {
@@ -83,7 +86,7 @@ public class HttpResponse {
     }
 
     private void writeStartLine(final DataOutputStream dos) throws IOException {
-        dos.writeBytes(String.format("%s %s %s\n", DEFAULT_HTTP_VERSION, httpStatus.getCode(), httpStatus.getPhrase()));
+        dos.writeBytes(String.format("%s %s %s\n", httpVersion.getHttpVersion(), httpStatus.getCode(), httpStatus.getPhrase()));
     }
 
     private void writeHeader(final DataOutputStream dos) throws IOException {
@@ -99,6 +102,10 @@ public class HttpResponse {
         }
     }
 
+    public void setHttpVersion(final HttpVersion httpVersion) {
+        this.httpVersion = httpVersion;
+    }
+
     public void setHeader(final String name, final String value) {
         headers.put(name, value);
     }
@@ -109,5 +116,17 @@ public class HttpResponse {
 
     public void setStatus(final HttpStatus httpStatus) {
         this.httpStatus = httpStatus;
+    }
+
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
+    }
+
+    public String getHeader(final String name) {
+        return headers.get(name);
+    }
+
+    public HttpVersion getHttpVersion() {
+        return httpVersion;
     }
 }
