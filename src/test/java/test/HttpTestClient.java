@@ -24,11 +24,11 @@ public class HttpTestClient {
     private final PrintWriter out;
     private final int port;
 
-    public HttpTestClient(int port)  {
+    public HttpTestClient(int port) {
         this(LOCALHOST, port);
     }
 
-    public HttpTestClient(String host, int port)  {
+    public HttpTestClient(String host, int port) {
         try {
             this.port = port;
             WebServer webServer = new WebServer(port);
@@ -38,7 +38,7 @@ public class HttpTestClient {
             Socket socket = new Socket(host, port);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())));
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
             throw new IllegalArgumentException();
         }

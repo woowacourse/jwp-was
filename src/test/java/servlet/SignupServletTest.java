@@ -4,8 +4,6 @@ import org.junit.jupiter.api.Test;
 import test.HttpTestClient;
 import webserver.WebServer;
 
-import java.io.IOException;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SignupServletTest {

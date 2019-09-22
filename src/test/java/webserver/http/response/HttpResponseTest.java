@@ -2,10 +2,9 @@ package webserver.http.response;
 
 import org.junit.jupiter.api.Test;
 
-import java.io.*;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.assertj.core.api.Assertions.assertThat;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 class HttpResponseTest {
     @Test

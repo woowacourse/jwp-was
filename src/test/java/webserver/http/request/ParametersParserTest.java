@@ -17,7 +17,7 @@ class ParametersParserTest {
         assertThat(parameters).hasSize(3)
                 .containsEntry("userId", "javajigi")
                 .containsEntry("password", "password")
-                .containsEntry("email","javajigi@slipp.net");
+                .containsEntry("email", "javajigi@slipp.net");
     }
 
     @Test

@@ -6,31 +6,30 @@ import webserver.http.servlet.Servlet;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public class ServletMapping {
     private final Map<String, Servlet> servlets;
 
-    public ServletMapping() {
+    private ServletMapping() {
         servlets = new HashMap<>();
 
         servlets.put("/", new IndexServlet());
         servlets.put("/signup", new SignupServlet());
     }
 
-    public Servlet getServlet(String path) {
+    Servlet getServlet(String path) {
         return servlets.get(path);
     }
 
-    public boolean isMapping(String path){
+    boolean isMapping(String path) {
         return servlets.containsKey(path);
     }
 
-    public static ServletMapping getInstance() {
+    static ServletMapping getInstance() {
         return LazyHolder.INSTANCE;
     }
 
-    public static class LazyHolder {
+    private static class LazyHolder {
         private static final ServletMapping INSTANCE = new ServletMapping();
     }
 }
