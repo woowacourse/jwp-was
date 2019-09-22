@@ -3,5 +3,5 @@ package utils.parser;
 import java.util.Map;
 
 public interface KeyValueParser<T> {
-     T interpret(String x);
+     T interpret(String input);
 }

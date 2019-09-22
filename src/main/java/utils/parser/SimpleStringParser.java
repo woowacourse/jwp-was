@@ -17,11 +17,13 @@ public class SimpleStringParser implements KeyValueParser<Map<String, String>> {
     public Map<String, String> interpret(String input) {
         return Stream.of(input.split(this.pairDelimiter))
                     .filter(x -> x.contains(this.keyValueDelimiter))
-                    .map(x -> new String[] {
-                            x.substring(0, x.indexOf(this.keyValueDelimiter)).trim(),
-                            x.substring(x.indexOf(this.keyValueDelimiter) + keyValueDelimiter.length()).trim()
+                    .map(x -> {
+                        final String[] pair = x.split(this.keyValueDelimiter, 2);
+                        System.out.println(pair[0]);
+                        System.out.println(pair[1]);
+                        return new String[] { pair[0].trim(), pair[1].trim() };
                     })
-                    .filter(pair -> !pair[0].isEmpty() && !pair[1].isEmpty())
+                    .filter(pair -> !pair[0].isEmpty())
                     .collect(Collectors.toMap(pair -> pair[0], pair -> pair[1]));
     }
 }
