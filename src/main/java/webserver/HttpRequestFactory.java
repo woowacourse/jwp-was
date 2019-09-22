@@ -75,27 +75,21 @@ public class HttpRequestFactory {
     }
 
     private String readBody(BufferedReader br, int contentLength) {
-        //TODO 이 부분 조금 더 깔끔하게 해결할 수 없을까?
-        String body = null;
         try {
-            body = IOUtils.readData(br, contentLength);
+            return IOUtils.readData(br, contentLength);
         } catch (IOException e) {
-            log.debug("{} 클래스 {} 메서드 오류", TAG, "parseBody");
+            log.error("{} 클래스 {} 메서드 오류", TAG, "parseBody");
+            throw new IllegalArgumentException();
         }
-        return body;
     }
 
     private String decodeBody(String body) {
-        String decode = null;
         try {
-            decode = URLDecoder.decode(body, "UTF-8");
+            String decode = URLDecoder.decode(body, "UTF-8");
             return decode;
         } catch (UnsupportedEncodingException e) {
-            log.debug("{} 클래스 {} 메서드 오류", TAG, "decodeBody");
+            log.error("{} 클래스 {} 메서드 오류", TAG, "decodeBody");
+            throw new IllegalArgumentException();
         }
-
-        return decode;
     }
-
-
 }
