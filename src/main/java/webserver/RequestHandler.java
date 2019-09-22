@@ -13,9 +13,11 @@ public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
+    private UrlMapper urlMapper;
 
-    public RequestHandler(Socket connectionSocket) {
-        this.connection = connectionSocket;
+    public RequestHandler(Socket connection, UrlMapper urlMapper) {
+        this.connection = connection;
+        this.urlMapper = urlMapper;
     }
 
     public void run() {
@@ -28,7 +30,6 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = HttpRequestFactory.getInstance().getHttpRequest(in);
             HttpResponse httpResponse = new HttpResponse();
 
-            UrlMapper urlMapper = new UrlMapper();
             String view = urlMapper.service(httpRequest);
 
             ViewProcessor viewProcessor = ViewProcessorFactory.getInstance().getViewProcessor(view);
