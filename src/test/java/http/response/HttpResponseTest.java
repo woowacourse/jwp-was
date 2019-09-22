@@ -80,7 +80,7 @@ class HttpResponseTest {
     }
 
     @Test
-    void redirect_response_header_확인() throws IOException, URISyntaxException {
+    void redirect_response_header_확인() throws IOException {
         String path = "index.html";
         HttpResponse response = createResponse(new RedirectView(path));
 
@@ -89,7 +89,7 @@ class HttpResponseTest {
         assertThat(response.getHeader().getBytes()).isEqualTo(byteArrayOutputStream.toByteArray());
     }
 
-    private void setRedirectHeader(String path, ByteArrayOutputStream byteArrayOutputStream) throws IOException, URISyntaxException {
+    private void setRedirectHeader(String path, ByteArrayOutputStream byteArrayOutputStream) throws IOException {
         DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
         dataOutputStream.writeBytes("HTTP/1.1 302 Found\r\n");
         dataOutputStream.writeBytes("Location: " + path + "\r\n");

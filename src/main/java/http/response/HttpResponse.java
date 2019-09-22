@@ -11,6 +11,9 @@ import java.io.OutputStream;
 
 public class HttpResponse implements AutoCloseable {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
+    private static final String NEW_LINE = "\r\n";
+    private static final String HEADER_DELIMITER = ": ";
+    private static final String FIRST_LINE_DELIMITER = " ";
 
     private View view;
     private final DataOutputStream dataOutputStream;
@@ -29,14 +32,14 @@ public class HttpResponse implements AutoCloseable {
 
     public String getHeader() {
         StringBuffer sb = new StringBuffer();
-        sb.append(HTTP.VERSION.getPhrase()).append(" ").append(view.getResponseStatus().getInfo()).append("\r\n");
+        sb.append(HTTP.VERSION.getPhrase()).append(FIRST_LINE_DELIMITER).append(view.getResponseStatus().getInfo()).append(NEW_LINE);
 
         for (HTTP key : HTTP.values()) {
             if (view.checkHeader(key)) {
-                sb.append(key.getPhrase()).append(": ").append(view.getHeaderContents(key)).append("\r\n");
+                sb.append(key.getPhrase()).append(HEADER_DELIMITER).append(view.getHeaderContents(key)).append(NEW_LINE);
             }
         }
-        sb.append("\r\n");
+        sb.append(NEW_LINE);
 
         return sb.toString();
     }
