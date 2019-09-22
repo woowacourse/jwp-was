@@ -16,7 +16,8 @@ public class ResourceViewProcessor implements ViewProcessor {
     }
 
     @Override
-    public void process(DataOutputStream dos, String viewName, HttpResponse httpResponse) {
+    public void process(DataOutputStream dos, String viewName) {
+        HttpResponse httpResponse = new HttpResponse();
         String filePath = "./static" + viewName;
         try {
             byte[] bytes = FileIoUtils.loadFileFromClasspath(filePath);

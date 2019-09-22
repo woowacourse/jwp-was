@@ -13,7 +13,8 @@ public class RedirectViewProcessor implements ViewProcessor {
     }
 
     @Override
-    public void process(DataOutputStream dos, String viewName, HttpResponse httpResponse) {
+    public void process(DataOutputStream dos, String viewName) {
+        HttpResponse httpResponse = new HttpResponse();
         String[] split = viewName.split(":");
         String path = split[1];
         httpResponse.sendRedirect(dos, path);

@@ -17,7 +17,8 @@ public class HtmlViewProcessor implements ViewProcessor {
     }
 
     @Override
-    public void process(DataOutputStream dos, String viewName, HttpResponse httpResponse) {
+    public void process(DataOutputStream dos, String viewName) {
+        HttpResponse httpResponse = new HttpResponse();
         String filePath = "./templates" + viewName;
         try {
             byte[] bytes = FileIoUtils.loadFileFromClasspath(filePath);

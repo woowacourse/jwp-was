@@ -28,15 +28,13 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
 
             HttpRequest httpRequest = HttpRequestFactory.getInstance().getHttpRequest(in);
-            HttpResponse httpResponse = new HttpResponse();
 
             String view = urlMapper.service(httpRequest);
 
             ViewProcessor viewProcessor = ViewProcessorFactory.getInstance().getViewProcessor(view);
-            viewProcessor.process(dos, view, httpResponse);
+            viewProcessor.process(dos, view);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
-
     }
 }

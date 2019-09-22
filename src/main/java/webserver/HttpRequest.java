@@ -30,6 +30,4 @@ public class HttpRequest {
         }
         return param;
     }
-
-
 }
