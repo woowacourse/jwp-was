@@ -15,6 +15,7 @@ public enum HttpStatus {
     INTERNAL_SERVER_ERROR(500, "Internal Server Error"),
     SERVICE_UNAVAILABLE(503, "Service Unavailable");
 
+    public static final String BLANK = " ";
     private final int statusCode;
     private final String status;
 
@@ -32,6 +33,6 @@ public enum HttpStatus {
     }
 
     public String getCodeAndStatus() {
-        return statusCode + " " + status;
+        return statusCode + BLANK + status;
     }
 }

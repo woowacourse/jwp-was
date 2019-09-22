@@ -1,7 +1,6 @@
 package webserver;
 
-import controller.Controller;
-import controller.ControllerFinder;
+import controller.Controllers;
 import http.request.HttpRequest;
 import http.request.HttpRequestParser;
 import http.response.HttpResponse;
@@ -32,32 +31,11 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest httpRequest = HttpRequestParser.parse(in);
 
-            Controller controller = ControllerFinder.findController(httpRequest.getPath());
-            HttpResponse httpResponse = controller.service(httpRequest);
+            HttpResponse httpResponse = new Controllers().service(httpRequest);
 
             DataOutputStream dos = new DataOutputStream(out);
             httpResponse.writeResponse(dos);
         } catch (IOException | URISyntaxException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }

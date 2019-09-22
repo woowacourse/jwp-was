@@ -9,14 +9,8 @@ import http.response.Response302;
 import http.response.StatusLine;
 import model.User;
 
-public class UserController extends AbstractController {
+public class UserCreateController extends Controllers {
 
-    @Override
-    HttpResponse doGet(final HttpRequest httpRequest) {
-        return null;
-    }
-
-    @Override
     HttpResponse doPost(HttpRequest httpRequest) {
         String userId = httpRequest.findParam("userId");
         String password = httpRequest.findParam("password");
@@ -31,15 +25,5 @@ public class UserController extends AbstractController {
         responseHeader.putHeader("Location", "/index.html");
 
         return new Response302(statusLine, responseHeader, null);
-    }
-
-    @Override
-    HttpResponse doPut(final HttpRequest httpRequest) {
-        return null;
-    }
-
-    @Override
-    HttpResponse doDelete(final HttpRequest httpRequest) {
-        return null;
     }
 }

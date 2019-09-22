@@ -16,6 +16,8 @@ import java.util.List;
 public class HttpRequestParser {
 
     private static final Logger log = LoggerFactory.getLogger(HttpRequestParser.class);
+    private static final String EMPTY = "";
+    private static final String BLANK = " ";
 
     public static HttpRequest parse(InputStream in) throws IOException, URISyntaxException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
@@ -48,6 +50,6 @@ public class HttpRequestParser {
     }
 
     private static boolean isValidLine(String line) {
-        return line != null && !"".equals(line) && !" ".equals(line);
+        return line != null && !EMPTY.equals(line) && !BLANK.equals(line);
     }
 }

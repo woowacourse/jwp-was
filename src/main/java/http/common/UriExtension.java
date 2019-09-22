@@ -3,7 +3,11 @@ package http.common;
 import java.util.Arrays;
 
 public enum UriExtension {
-    HTML("html"), ICO("ico"), CSS("css"), JS("js"), NONE("none");
+    HTML("html"),
+    ICO("ico"),
+    CSS("css"),
+    JS("js"),
+    UNDEFINED("undefined");
 
     private static final String TEMPLATE_URI_PREFIX = "./templates";
     private static final String STATIC_URI_PREFIX = "./static";
@@ -16,7 +20,7 @@ public enum UriExtension {
         ICO.pathPrefix = TEMPLATE_URI_PREFIX;
         CSS.pathPrefix = STATIC_URI_PREFIX;
         JS.pathPrefix = STATIC_URI_PREFIX;
-        NONE.pathPrefix = STATIC_URI_PREFIX;
+        UNDEFINED.pathPrefix = STATIC_URI_PREFIX;
     }
 
     UriExtension(String extension) {
@@ -27,7 +31,7 @@ public enum UriExtension {
         return Arrays.stream(UriExtension.values())
             .filter(uriExtension -> uri.contains(uriExtension.extension))
             .findFirst()
-            .orElse(UriExtension.NONE);
+            .orElse(UriExtension.UNDEFINED);
     }
 
     public String getPathPrefix() {

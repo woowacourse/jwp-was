@@ -7,6 +7,8 @@ import java.io.IOException;
 
 public class Response302 extends HttpResponse {
 
+    public static final String BLANK = " ";
+
     public Response302(final StatusLine statusLine, final HttpHeader responseHeader, final ResponseBody responseBody) {
         super(statusLine, responseHeader, responseBody);
     }
@@ -14,7 +16,7 @@ public class Response302 extends HttpResponse {
     @Override
     public void writeResponse(final DataOutputStream dos) {
         try {
-            dos.writeBytes(statusLine.getHttpVersion() + " " + statusLine.getCodeAndStatus() + "\r\n");
+            dos.writeBytes(statusLine.getHttpVersion() + BLANK + statusLine.getCodeAndStatus() + "\r\n");
             dos.writeBytes("Location: " + responseHeader.findHeader("Location") + "\r\n");
             dos.writeBytes("\r\n");
             responseBody(dos, responseBody.getBody());
