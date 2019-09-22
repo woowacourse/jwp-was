@@ -27,8 +27,6 @@ public class FileController extends BasicController {
             response.addHeader(headers);
 
             response.okResponse(body);
-            //뿌려주기
-            response.forward();
             return response;
         }
 
@@ -41,7 +39,6 @@ public class FileController extends BasicController {
         response.addHeader(headers);
         response.okResponse(body);
 
-        response.forward();
         return response;
     }
 

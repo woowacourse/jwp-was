@@ -16,13 +16,11 @@ import java.util.Map;
 public class UserController extends BasicController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
     @Override
-    public HttpResponse doGet(HttpRequest request, HttpResponse response) throws IOException {
+    public HttpResponse doGet(HttpRequest request, HttpResponse response) {
         if(request.hasParameters()) {
             DataBase.addUser(createUser(request));
             response.addHeader(Arrays.asList("Location: /index.html\r\n"));
             response.redirectResponse();
-
-            response.forward();
         }
         return response;
     }
@@ -41,8 +39,6 @@ public class UserController extends BasicController {
             // response 만들기
             response.addHeader(Arrays.asList("Location: /index.html\r\n"));
             response.redirectResponse();
-
-            response.forward();
         }
 
         return response;

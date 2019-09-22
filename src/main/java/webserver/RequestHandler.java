@@ -31,6 +31,8 @@ public class RequestHandler implements Runnable {
 
             Router.route(httpRequest, httpResponse);
 
+            httpResponse.forward();
+
         } catch (IOException e) {
             logger.error(e.getMessage());
             // TODO: 2019-09-20 400에러
