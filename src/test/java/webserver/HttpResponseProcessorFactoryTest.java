@@ -10,7 +10,7 @@ class HttpResponseProcessorFactoryTest {
 
     @Test
     void 이백_OK_프로세서_생성_테스트() {
-        HttpResponseProcessorFactory httpResponseProcessorFactory = new HttpResponseProcessorFactory();
+        HttpResponseProcessorFactory httpResponseProcessorFactory = HttpResponseProcessorFactory.getInstance();
         HttpResponse httpResponse = new HttpResponse();
         httpResponse.forward();
 
@@ -20,7 +20,7 @@ class HttpResponseProcessorFactoryTest {
 
     @Test
     void 삼백_REDIRECT_프로세서_생성_테스트() {
-        HttpResponseProcessorFactory httpResponseProcessorFactory = new HttpResponseProcessorFactory();
+        HttpResponseProcessorFactory httpResponseProcessorFactory = HttpResponseProcessorFactory.getInstance();
         HttpResponse httpResponse = new HttpResponse();
         httpResponse.sendRedirect();
 

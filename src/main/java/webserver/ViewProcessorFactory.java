@@ -6,15 +6,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ViewProcessorFactory {
-    private static List<ViewProcessor> viewProcessors = new ArrayList<>();
+    private List<ViewProcessor> viewProcessors = new ArrayList<>();
 
-    //TODO RedirectViewProcessor가 처음에 있지 않고 순서가 바뀌면 리다이렉트 시 HTML 파일일 경우는 HtmlViewProcessor가 추출된다
-    static {
+    private ViewProcessorFactory() {
+        initViewProcessorFactory();
+    }
+
+    public static ViewProcessorFactory getInstance() {
+        return ViewProcessorFactory.LazyHolder.INSTANCE;
+    }
+
+    private void initViewProcessorFactory() {
         viewProcessors.add(new RedirectViewProcessor());
         viewProcessors.add(new CssViewProcessor());
         viewProcessors.add(new HtmlViewProcessor());
         viewProcessors.add(new JsViewProcessor());
         viewProcessors.add(new PlainViewProcessor());
+    }
+
+    private static class LazyHolder {
+        private static final ViewProcessorFactory INSTANCE = new ViewProcessorFactory();
     }
 
     public ViewProcessor getViewProcessor(String name) {

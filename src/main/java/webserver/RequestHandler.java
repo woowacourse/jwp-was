@@ -31,10 +31,10 @@ public class RequestHandler implements Runnable {
             UrlMapper urlMapper = new UrlMapper();
             String view = urlMapper.service(httpRequest);
 
-            ViewProcessor viewProcessor = new ViewProcessorFactory().getViewProcessor(view);
+            ViewProcessor viewProcessor = ViewProcessorFactory.getInstance().getViewProcessor(view);
             String resolve = viewProcessor.process(view, httpResponse);
 
-            HttpResponseProcessor httpResponseProcessor = new HttpResponseProcessorFactory().getHttpResponseProcessor(httpResponse);
+            HttpResponseProcessor httpResponseProcessor = HttpResponseProcessorFactory.getInstance().getHttpResponseProcessor(httpResponse);
             httpResponseProcessor.process(dos, resolve, httpResponse);
         } catch (IOException e) {
             logger.error(e.getMessage());
