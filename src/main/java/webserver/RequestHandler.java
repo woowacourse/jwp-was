@@ -5,14 +5,12 @@ import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Map;
 
-import db.DataBase;
 import model.RequestHeader;
 import model.Response;
-import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import service.UserService;
 import utils.*;
 
 public class RequestHandler implements Runnable {
@@ -37,7 +35,7 @@ public class RequestHandler implements Runnable {
 			if ("/user/create".equals(requestHeader.getRequestElement("Path"))) {
 				String body = RequestBodyReader.readRequestBody(bufferedReader, requestHeader.getRequestElement("Content-Length"));
 				RequestBody requestBody = new RequestBody(QueryStringSeparator.separate(body));
-				saveUser(requestBody.getBody());
+				UserService.saveUser(requestBody.getBody());
 				Response response = new Response(ResponseGenerator.responseHeader("http://localhost:8080/index.html"));
 				redirect(response, dos);
 				return;
@@ -45,7 +43,7 @@ public class RequestHandler implements Runnable {
 
 			String path = ResourcePathUtils.getResourcePath(requestHeader.getRequestElement("Path"));
 			if (path.contains("?")) {
-				saveUser(QueryStringSeparator.separate(path.substring(path.indexOf("?") + 1)));
+				UserService.saveUser(QueryStringSeparator.separate(path.substring(path.indexOf("?") + 1)));
 				return;
 			}
 
@@ -65,12 +63,6 @@ public class RequestHandler implements Runnable {
 		dos.writeBytes("Location: " + response.getRequestElement("Location") + "\r\n");
 		dos.writeBytes("\r\n");
 		dos.flush();
-	}
-
-	private void saveUser(Map<String, String> userInfo) {
-		User user = new User(userInfo.get("userId"), userInfo.get("password"),
-				userInfo.get("name"), userInfo.get("email"));
-		DataBase.addUser(user);
 	}
 
 	private void forward(List<String> responseHeader, DataOutputStream dos) throws IOException {
