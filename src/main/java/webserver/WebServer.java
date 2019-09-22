@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class WebServer implements Runnable {
     private static final Logger log = LoggerFactory.getLogger(WebServer.class);
@@ -22,13 +24,14 @@ public class WebServer implements Runnable {
     }
 
     public void run() {
+        ExecutorService pool = Executors.newFixedThreadPool(50);
+
         try (ServerSocket listenSocket = new ServerSocket(port)) {
             log.info("Web Application Server started {} port.", port);
 
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
-                Thread thread = new Thread(new RequestHandler(connection));
-                thread.start();
+                pool.execute(new RequestHandler(connection));
             }
         } catch (IOException e) {
             throw new IllegalArgumentException();
