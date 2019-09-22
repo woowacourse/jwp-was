@@ -6,7 +6,6 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import model.RequestHeader;
 import model.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,19 +28,16 @@ public class RequestHandler implements Runnable {
 		try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
 			DataOutputStream dos = new DataOutputStream(out);
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+			HttpRequest httpRequest = HttpRequestReader.readHttpRequest(bufferedReader);
 
-			RequestHeader requestHeader = new RequestHeader(RequestHeaderReader.readRequest(bufferedReader));
-
-			if ("/user/create".equals(requestHeader.getRequestElement("Path"))) {
-				String body = RequestBodyReader.readRequestBody(bufferedReader, requestHeader.getRequestElement("Content-Length"));
-				RequestBody requestBody = new RequestBody(QueryStringSeparator.separate(body));
-				UserService.saveUser(requestBody.getBody());
+			if ("/user/create".equals(httpRequest.getRequestHeaderElement("Path"))) {
+				UserService.saveUser(httpRequest.getRequestBody());
 				Response response = new Response(ResponseGenerator.responseHeader("http://localhost:8080/index.html"));
 				redirect(response, dos);
 				return;
 			}
 
-			String path = ResourcePathUtils.getResourcePath(requestHeader.getRequestElement("Path"));
+			String path = ResourcePathUtils.getResourcePath(httpRequest.getRequestHeaderElement("Path"));
 			if (path.contains("?")) {
 				UserService.saveUser(QueryStringSeparator.separate(path.substring(path.indexOf("?") + 1)));
 				return;
