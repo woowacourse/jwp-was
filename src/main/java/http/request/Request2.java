@@ -12,7 +12,7 @@ public class Request2 {
     }
 
     public String createKey() {
-        return requestMethod.name() + " /" + requestInformation.extractPatternPath();
+        return requestMethod.name() + " " + requestInformation.getOriginUrlPath();
     }
 
     public RequestMethod getRequestMethod() {

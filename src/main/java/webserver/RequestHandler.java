@@ -50,9 +50,6 @@ public class RequestHandler implements Runnable {
 //            Response response = controller.createResponse();
 //            DataOutputStream dos = new DataOutputStream(out);
 //            response.doResponse(dos);
-
-
-
 //            Request request = HttpRequestFactory.getRequest(firstLine, lines, br);
 //            Controller controller = ControllerFactory.getController(request);
 //            Response response = controller.createResponse();

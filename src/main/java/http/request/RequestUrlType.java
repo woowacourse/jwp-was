@@ -12,15 +12,15 @@ public enum RequestUrlType {
     ICO(".ico", "../resources/templates", "image/x-icon"),
     WOFF(".woff", "../resources/static", "font/woff"),
     TTF(".ttf", "../resources/static", "font/ttf"),
-    REDIRECTION("?", "../resources", "NOT_APPLICABLE");
+    REDIRECTION("?", "", "NOT_APPLICABLE");
 
-    private String extension;
-    private String folderPath;
+    private String pattern;
+    private String destinationPath;
     private String contentType;
 
-    RequestUrlType(String extension, String folderPath, String contentType) {
-        this.extension = extension;
-        this.folderPath = folderPath;
+    RequestUrlType(String pattern, String destinationPath, String contentType) {
+        this.pattern = pattern;
+        this.destinationPath = destinationPath;
         this.contentType = contentType;
     }
 
@@ -28,15 +28,15 @@ public enum RequestUrlType {
         return Arrays.stream(values())
                 .filter(type -> urlPath.contains(type.getExtension()))
                 .findAny()
-                .orElseThrow(IllegalArgumentException::new);
+                .orElse(REDIRECTION);
     }
 
     public String getExtension() {
-        return extension;
+        return pattern;
     }
 
-    public String getFolderPath() {
-        return folderPath;
+    public String getDestinationPath() {
+        return destinationPath;
     }
 
     public String getContentType() {

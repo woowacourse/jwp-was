@@ -6,7 +6,7 @@ public class RequestUrl {
 
     private RequestUrl(String urlPath) {
         this.requestUrlType = RequestUrlType.findType(urlPath);
-        this.urlPath = requestUrlType.getFolderPath() + urlPath;
+        this.urlPath = requestUrlType.getDestinationPath() + urlPath;
     }
 
     public static RequestUrl from(String url) {

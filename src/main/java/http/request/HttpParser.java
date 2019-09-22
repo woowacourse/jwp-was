@@ -10,11 +10,13 @@ import java.util.Map;
 public class HttpParser {
     public static RequestInformation parse(BufferedReader br) throws IOException {
         Map<String, String> requestInformation = new HashMap<>();
+
         String line = br.readLine();
         requestInformation.put("Request-Line:", line);
 
         putKeyValues(br, requestInformation, line);
-        putBodyIfPresent(br, requestInformation);
+        putParametersIfPresent(br, requestInformation);
+//        putParametersIfPresent();
 
         return new RequestInformation(requestInformation);
     }
@@ -30,6 +32,28 @@ public class HttpParser {
         if (!"".equals(line)) {
             String[] tokens = line.split(" ");
             requestInformation.put(tokens[0], tokens[1]);
+        }
+    }
+
+    private static void putParametersIfPresent(BufferedReader br, Map<String, String> requestInformation) throws IOException {
+        String requestLine = requestInformation.get("Request-Line:");
+        String[] tokens = requestLine.split(" ");
+        String path = tokens[1];
+        if (path.contains("//?")) {
+            tokens = path.split("//?");
+            String query = tokens[1];
+            requestInformation.put("Query-Parameters:", query);
+        }
+        if (search(requestInformation, "Content-Length:") && requestInformation.get("Query-Parameters") != null) {
+            String bodyContents = IOUtils.readData(br, Integer.parseInt(requestInformation.get("Content-Length:")));
+            String queryParameters = requestInformation.get("Query-Parameters");
+            String newQueryParameters = bodyContents + queryParameters;
+            requestInformation.put("Query-Parameters:", newQueryParameters);
+        }
+
+        if (search(requestInformation, "Content-Length:") && requestInformation.get("Query-Parameters") == null) {
+            String bodyContents = IOUtils.readData(br, Integer.parseInt(requestInformation.get("Content-Length:")));
+            requestInformation.put("Query-Parameters:", bodyContents);
         }
     }
 

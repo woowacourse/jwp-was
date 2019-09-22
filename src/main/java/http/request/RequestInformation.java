@@ -22,6 +22,10 @@ public class RequestInformation {
         return RequestUrl.from(tokenize()[1]);
     }
 
+    public String getOriginUrlPath() {
+        return tokenize()[1];
+    }
+
     public String extractPatternPath() {
         return requestUrlPatterns
                 .stream()
@@ -33,5 +37,9 @@ public class RequestInformation {
     private String[] tokenize() {
         String requestLine = requestInformation.get("Request-Line:");
         return requestLine.split(DELIMITER);
+    }
+
+    public String extractQueryParameters() {
+        return requestInformation.get("Query-Parameters:");
     }
 }
