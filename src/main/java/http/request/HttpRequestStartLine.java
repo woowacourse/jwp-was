@@ -21,11 +21,11 @@ public class HttpRequestStartLine {
     }
 
     public static HttpRequestStartLine of(String startLine) throws UnsupportedEncodingException {
-        String[] startlineValues = startLine.split(LINE_SPLITTER);
+        String[] startLineValues = startLine.split(LINE_SPLITTER);
 
-        HttpMethod httpMethod = HttpMethod.valueOf(startlineValues[0]);
+        HttpMethod httpMethod = HttpMethod.valueOf(startLineValues[0]);
 
-        String url = startlineValues[1];
+        String url = startLineValues[1];
         String[] splittedUrl = url.split(QUERY_SPLITTER);
 
         String path = splittedUrl[0];
@@ -42,19 +42,19 @@ public class HttpRequestStartLine {
         return httpRequestParameters;
     }
 
-    public HttpMethod getHttpMethod() {
+    HttpMethod getHttpMethod() {
         return httpMethod;
     }
 
-    public String getPath() {
+    String getPath() {
         return path;
     }
 
-    public String getParameter(String key) {
+    String getParameter(String key) {
         return httpRequestParameters.getParameter(key);
     }
 
-    public boolean hasParamaters() {
+    boolean hasParameters() {
         return !httpRequestParameters.equals(HttpRequestParameter.EMPTY_PARAMETER);
     }
 }

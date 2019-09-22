@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 
 public class HttpHeader {
     private static final String HEADER_SPLITTER = ": ";
+    private static final int KEY = 0;
+    private static final int VALUE = 1;
 
     private final Map<String, String> headers;
 
@@ -20,8 +22,8 @@ public class HttpHeader {
     public static HttpHeader of(List<String> headerLines) {
         Map<String, String> headers = headerLines.stream()
                 .collect(Collectors.toMap(
-                        headerLine -> headerLine.split(HEADER_SPLITTER)[0],
-                        headerLine -> headerLine.split(HEADER_SPLITTER)[1]
+                        headerLine -> headerLine.split(HEADER_SPLITTER)[KEY],
+                        headerLine -> headerLine.split(HEADER_SPLITTER)[VALUE]
                 ));
 
         return new HttpHeader(headers);
