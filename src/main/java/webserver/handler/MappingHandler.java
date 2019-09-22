@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public class MappingHandler {
-    private static Map<String, Object> servlets = new HashMap<>();
+    private static Map<String, HttpServlet> servlets = new HashMap<>();
 
     static {
         servlets.put("/", new HomeServlet());
@@ -18,7 +18,6 @@ public class MappingHandler {
     }
 
     public static HttpServlet getServlets(String absPath) {
-        Optional path = Optional.ofNullable(servlets.get(absPath));
-        return (HttpServlet) path.orElse(new FileServlet());
+        return servlets.getOrDefault(absPath, new FileServlet());
     }
 }
