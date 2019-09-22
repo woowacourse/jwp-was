@@ -42,34 +42,10 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
             response.doResponse(dos);
 
-//            String firstLine = br.readLine();
-//            log.debug("requestResolver : {}", firstLine);
-//            List<String> lines = parsedBufferedReader(br);
-//            ControllerMapper controllerMapper = HttpControllerMapperFactory.getControllerMapper(requestInformation);
-//            Controller controller = ControllerFactory.getController(controllerMapper);
-//            Response response = controller.createResponse();
-//            DataOutputStream dos = new DataOutputStream(out);
-//            response.doResponse(dos);
-//            Request request = HttpRequestFactory.getRequest(firstLine, lines, br);
-//            Controller controller = ControllerFactory.getController(request);
-//            Response response = controller.createResponse();
-//
-//            DataOutputStream dos = new DataOutputStream(out);
-//            response.doResponse(dos);
         } catch (IOException e) {
             log.error(e.getMessage());
         } catch (URISyntaxException e) {
           e.printStackTrace();
        }
-    }
-
-    private static List<String> parsedBufferedReader(BufferedReader br) throws IOException {
-        List<String> requestLines = new ArrayList<>();
-        String line = "Header: start";
-        while (!line.equals("")) {
-            requestLines.add(line);
-            line = br.readLine();
-        }
-        return requestLines;
     }
 }
