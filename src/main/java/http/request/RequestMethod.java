@@ -9,7 +9,7 @@ public enum RequestMethod {
     POST(),
     PUT(),
     DELETE();
-    
+
     public static RequestMethod from(String requestMethod) {
         return Arrays.stream(values())
                 .filter(method -> method.name().equals(requestMethod))
