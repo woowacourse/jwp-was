@@ -1,9 +1,9 @@
 package webserver;
 
-import webserver.HttpResponse;
+import java.io.DataOutputStream;
 
 public interface ViewProcessor {
     boolean isSupported(String viewName);
 
-    String process(String viewName, HttpResponse httpResponse);
+    void process(DataOutputStream dos, String viewName, HttpResponse httpResponse);
 }
