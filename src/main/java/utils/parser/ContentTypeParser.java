@@ -9,14 +9,16 @@ import java.util.stream.Collectors;
 
 public class ContentTypeParser extends SimpleStringParser {
     private static final String SLASH = "/";
+    private static final String SEMICOLON = ";";
     private static final int START_INDEX = 0;
+    private static final int TWO_SIZE = 2;
 
     protected ContentTypeParser() {
         super(";", "=");
     }
 
     public static List<String> convertContentType(String input) {
-        return Arrays.stream(input.split(";", 2))
+        return Arrays.stream(input.split(SEMICOLON, TWO_SIZE))
                     .map(data -> data.toLowerCase().trim())
                     .collect(Collectors.toList());
     }
