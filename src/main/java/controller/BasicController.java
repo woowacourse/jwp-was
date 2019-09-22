@@ -12,10 +12,10 @@ public abstract class BasicController implements Controller {
 
     @Override
     public HttpResponse service(HttpRequest request, HttpResponse response) throws IOException, URISyntaxException {
-        if(HttpMethodType.GET.equals(request.getHttpMethod())) {
+        if (HttpMethodType.GET.equals(request.getHttpMethod())) {
             return doGet(request, response);
         }
-        if(HttpMethodType.POST.equals(request.getHttpMethod())) {
+        if (HttpMethodType.POST.equals(request.getHttpMethod())) {
             return doPost(request, response);
         }
         throw new NotSupportedHttpMethodException();

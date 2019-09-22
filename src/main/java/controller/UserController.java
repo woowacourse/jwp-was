@@ -15,9 +15,10 @@ import java.util.Map;
 
 public class UserController extends BasicController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
+
     @Override
     public HttpResponse doGet(HttpRequest request, HttpResponse response) {
-        if(request.hasParameters()) {
+        if (request.hasParameters()) {
             DataBase.addUser(createUser(request));
             response.addHeader(Arrays.asList("Location: /index.html\r\n"));
             response.redirectResponse();
@@ -29,7 +30,7 @@ public class UserController extends BasicController {
     public HttpResponse doPost(HttpRequest request, HttpResponse response) throws IOException {
         log.debug("{}", request.hasBody());
 
-        if(request.hasBody()) {
+        if (request.hasBody()) {
             String body = request.getBody().toString();
             body = URLDecoder.decode(body, "UTF-8");
             Map<String, String> bodyData = ParameterParser.parse(body);

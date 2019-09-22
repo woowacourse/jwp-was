@@ -10,9 +10,9 @@ public class HttpRequest {
     private HttpBody httpBody;
 
     public HttpRequest(HttpRequestStartLine httpRequestStartLine, HttpHeader httpHeader, HttpBody httpBody) throws IOException {
-       this.httpRequestStartLine = httpRequestStartLine;
-       this.httpHeader = httpHeader;
-       this.httpBody = httpBody;
+        this.httpRequestStartLine = httpRequestStartLine;
+        this.httpHeader = httpHeader;
+        this.httpBody = httpBody;
     }
 
     public boolean hasParameters() {

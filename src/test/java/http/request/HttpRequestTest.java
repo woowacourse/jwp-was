@@ -39,7 +39,6 @@ class HttpRequestTest {
     }
 
 
-
     @Test
     void getHeader() throws IOException {
         String request = "GET /index.html HTTP/1.1\n" +

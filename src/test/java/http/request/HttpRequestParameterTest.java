@@ -55,7 +55,7 @@ public class HttpRequestParameterTest {
     }
 
     @Test
-    void getParameter_올바르지_않은_인코딩_문자(){
+    void getParameter_올바르지_않은_인코딩_문자() {
         String parameterLine =
                 "userId=javajigi&password=password&name=%EB%B0%95%EC%9";
 

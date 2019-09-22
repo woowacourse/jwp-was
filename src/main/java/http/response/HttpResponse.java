@@ -32,7 +32,7 @@ public class HttpResponse {
     }
 
     private void writeStartLine(DataOutputStream dos) throws IOException {
-        logger.debug("{}", httpResponseStartLine.toString() + "\r\n" );
+        logger.debug("{}", httpResponseStartLine.toString() + "\r\n");
         String line = httpResponseStartLine.toString();
         dos.writeBytes(line + "\r\n");
     }
@@ -40,8 +40,8 @@ public class HttpResponse {
     private void writeHeader(DataOutputStream dos) {
         try {
             for (String line : header.getKeySet()) {
-                logger.debug("{}", line + ": "+ header.getHeader(line) + "\r\n");
-                dos.writeBytes(line + ": "+ header.getHeader(line));
+                logger.debug("{}", line + ": " + header.getHeader(line) + "\r\n");
+                dos.writeBytes(line + ": " + header.getHeader(line));
             }
         } catch (IOException e) {
             logger.error(e.getMessage());
