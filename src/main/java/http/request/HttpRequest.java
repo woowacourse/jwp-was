@@ -7,9 +7,9 @@ import java.util.Map;
 public class HttpRequest {
     private final RequestLine requestLine;
     private final HeaderFields headerFields;
-    private final RequestDatas datas;
+    private final RequestBody datas;
 
-    public HttpRequest(RequestLine requestLine, HeaderFields headerFields, RequestDatas datas) {
+    public HttpRequest(RequestLine requestLine, HeaderFields headerFields, RequestBody datas) {
         this.requestLine = requestLine;
         this.headerFields = headerFields;
         this.datas = datas;

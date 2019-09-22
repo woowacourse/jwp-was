@@ -1,6 +1,5 @@
 package http.request;
 
-import http.exception.InvalidHeaderException;
 import org.apache.commons.collections4.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,12 +12,12 @@ import java.util.Objects;
 
 import static java.util.Collections.unmodifiableMap;
 
-public class RequestDatas {
-    private static final Logger logger = LoggerFactory.getLogger(RequestDatas.class);
+public class RequestBody {
+    private static final Logger logger = LoggerFactory.getLogger(RequestBody.class);
 
     private final Map<String, String> datas;
 
-    public RequestDatas(String queryString, String bodyData) {
+    public RequestBody(String queryString, String bodyData) {
         datas = new HashedMap<>();
         addDataIfExist(queryString);
         addDataIfExist(bodyData);
@@ -56,7 +55,7 @@ public class RequestDatas {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RequestDatas that = (RequestDatas) o;
+        RequestBody that = (RequestBody) o;
         return Objects.equals(datas, that.datas);
     }
 

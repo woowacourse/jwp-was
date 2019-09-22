@@ -38,7 +38,10 @@ class HeaderFieldsTest {
         fieldsByAddHeader.addHeader("Content-Length", "13309");
         fieldsByAddHeader.addHeader("Content-Type", "text/html; charset=utf-8");
 
-        assertThat(fieldsByConstructor).isEqualTo(fieldsByAddHeader);
+        assertThat(fieldsByConstructor.getHeader("Content-Length"))
+                .isEqualTo(fieldsByAddHeader.getHeader("Content-Length"));
+        assertThat(fieldsByConstructor.getHeader("Content-Type"))
+                .isEqualTo(fieldsByAddHeader.getHeader("Content-Type"));
     }
 
     @Test
