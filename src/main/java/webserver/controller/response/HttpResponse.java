@@ -3,12 +3,11 @@ package webserver.controller.response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import webserver.controller.request.HttpRequest;
+import webserver.controller.request.header.ContentType;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URISyntaxException;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);

@@ -1,20 +1,14 @@
 package webserver.controller.request.header;
 
 public enum HttpMethod {
-    GET("GET",false),
-    POST("POST", true),
-    PUT("PUT", true),
-    DELETE("DELETE", false);
+    GET("GET"),
+    POST("POST"),
+    PUT("PUT"),
+    DELETE("DELETE");
 
     private final String method;
-    private final boolean hasBody;
 
-    HttpMethod(String method, boolean hasBody) {
+    HttpMethod(String method) {
         this.method = method;
-        this.hasBody = hasBody;
-    }
-
-    public boolean hasBody() {
-        return hasBody;
     }
 }

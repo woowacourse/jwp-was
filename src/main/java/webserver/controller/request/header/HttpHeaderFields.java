@@ -10,6 +10,7 @@ import java.util.HashMap;
 
 public class HttpHeaderFields {
     private static final Logger logger = LoggerFactory.getLogger(HttpHeaderFields.class);
+    private static final String HTTP_HEADER_FIELD_DELEMETER = ": ";
     private final HashMap<String, String> headerFields;
 
     public HttpHeaderFields(BufferedReader bufferedReader) throws IOException {
@@ -19,9 +20,8 @@ public class HttpHeaderFields {
     }
 
     private void save(BufferedReader bufferedReader, String headerField) throws IOException {
-        headerField = bufferedReader.readLine();
-        while(!headerField.equals("") && !headerField.equals("\n") && headerField!=null) {
-            saveHeaderFiled(headerField.split(": "));
+        while(headerField!=null && !headerField.equals("") && !headerField.equals("\n")) {
+            saveHeaderFiled(headerField.split(HTTP_HEADER_FIELD_DELEMETER));
             logger.debug("HttpHeaderField : {}", headerField);
             headerField = bufferedReader.readLine();
         }

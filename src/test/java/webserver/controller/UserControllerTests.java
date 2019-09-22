@@ -40,7 +40,7 @@ public class UserControllerTests {
         when(httpRequest.getPath()).thenReturn("/user/create");
         requestMapper.executeMapping(httpRequest, httpResponse);
         User user = DataBase.findUserById("kangmin");
-        assertThat(user.getEmail()).isEqualTo("kangmin789%40slipp.net");
+        assertThat(user.getEmail()).isEqualTo("kangmin789@slipp.net");
         assertThat(user.getPassword()).isEqualTo("password");
         verify(httpResponse).redirect302Found(SAVE_REDIRECT_URL);
     }

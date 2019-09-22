@@ -1,4 +1,4 @@
-package webserver.controller.response;
+package webserver.controller.request.header;
 
 import exception.ContentTypeNotFoundException;
 

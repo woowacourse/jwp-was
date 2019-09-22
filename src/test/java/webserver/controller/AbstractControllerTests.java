@@ -4,20 +4,17 @@ import exception.ContentTypeNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Spy;
 import webserver.controller.request.HttpRequest;
 import webserver.controller.request.RequestMapper;
-import webserver.controller.response.ContentType;
+import webserver.controller.request.header.ContentType;
 import webserver.controller.response.HttpResponse;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.List;
 
 import static exception.ContentTypeNotFoundException.CONTENT_TYPE_NOT_FOUND_MESSAGE;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 

@@ -3,7 +3,7 @@ package webserver.controller.request;
 import exception.ContentTypeNotFoundException;
 import webserver.controller.request.header.HttpBeginningHeader;
 import webserver.controller.request.header.HttpHeaderFields;
-import webserver.controller.response.ContentType;
+import webserver.controller.request.header.ContentType;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -2,7 +2,6 @@ package webserver.controller.request.header;
 
 import exception.ContentTypeNotFoundException;
 import utils.FileIoUtils;
-import webserver.controller.response.ContentType;
 
 import java.io.BufferedReader;
 import java.io.IOException;
