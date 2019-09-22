@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HttpRequestBody {
+    private static final String BODY_SEPARATOR = "&";
+    private static final String BODY_PAIR_SEPARATOR = "=";
+    private static final String DEFAULT_VALUE = "";
+
     private final Map<String, String> parameters;
 
     private HttpRequestBody(Map<String, String> parameters) {
@@ -19,11 +23,11 @@ public class HttpRequestBody {
     }
 
     private static void parseBody(String body, Map<String, String> params) {
-        String[] split = body.split("&");
+        String[] split = body.split(BODY_SEPARATOR);
         for (String pair : split) {
-            String[] split1 = pair.split("=");
+            String[] split1 = pair.split(BODY_PAIR_SEPARATOR);
             String key = split1[0];
-            String value = "";
+            String value = DEFAULT_VALUE;
             if (split1.length == 2) {
                 value = split1[1];
             }
