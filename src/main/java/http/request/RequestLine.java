@@ -1,6 +1,7 @@
 package http.request;
 
 import http.common.HttpMethod;
+import http.common.HttpVersion;
 import http.exception.InvalidHeaderException;
 
 import java.util.Arrays;
@@ -11,21 +12,21 @@ import static http.common.HttpMethod.GET;
 import static http.common.HttpMethod.POST;
 
 public class RequestLine {
-    private static final String HTTP_VERSION = "HTTP/1.1";
-
     private final HttpMethod method;
     private String path;
     private final String queryString;
+    private final HttpVersion version;
 
     public RequestLine(String requestLine) {
         List<String> tokens = makeTokensFrom(requestLine);
         method = HttpMethod.valueOf(tokens.get(0));
         path = tokens.get(1);
         queryString = splitQueryString();
+        version = HttpVersion.getVersion(tokens.get(2));
     }
 
     private String splitQueryString() {
-        String pathWithQueryString  = path;
+        String pathWithQueryString = path;
         if (pathWithQueryString.contains("?")) {
             path = pathWithQueryString.split("\\?")[0];
             return pathWithQueryString.split("\\?")[1];
@@ -40,7 +41,7 @@ public class RequestLine {
     }
 
     private static void validateRequestLine(String requestLine, List<String> tokens) {
-        if (tokens.size() != 3 || !HttpMethod.matches(tokens.get(0)) || !tokens.get(2).matches(HTTP_VERSION)) {
+        if (tokens.size() != 3 || !HttpMethod.matches(tokens.get(0)) || !HttpVersion.isExistVersion(tokens.get(2))) {
             throw new InvalidHeaderException(requestLine + "은 유효하지않은 HttpRequest입니다.");
         }
     }
@@ -59,6 +60,10 @@ public class RequestLine {
 
     public String getQueryString() {
         return queryString;
+    }
+
+    public HttpVersion getVersion() {
+        return version;
     }
 
     @Override

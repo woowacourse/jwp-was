@@ -1,5 +1,6 @@
 package http.request;
 
+import http.common.HttpVersion;
 import http.exception.InvalidHeaderException;
 import org.junit.jupiter.api.Test;
 
@@ -41,5 +42,12 @@ class RequestLineTest {
         String queryString = "userId=seon&password=password&name=sos&email=sos@sos.sos";
         RequestLine requestLine = new RequestLine(line);
         assertThat(requestLine.getQueryString()).isEqualTo(queryString);
+    }
+
+    @Test
+    void version_테스트() {
+        String line = "POST /index.html HTTP/1.1";
+        RequestLine requestLine = new RequestLine(line);
+        assertThat(requestLine.getVersion()).isEqualTo(HttpVersion.HTTP_1_1);
     }
 }
