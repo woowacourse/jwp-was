@@ -36,6 +36,10 @@ public class Request {
         return requestLine.getMethod();
     }
 
+    public String extractHttpVersion(){
+        return requestLine.getHttpVersion();
+    }
+
     private String validate(String url) {
         if (url.equals(ROOT_URL)) {
             return INDEX_HTML;

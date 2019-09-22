@@ -19,13 +19,13 @@ public class RequestLine {
 
     private final String method;
     private final String url;
-    private final String version;
+    private final String httpVersion;
 
     public RequestLine(String requestLine) {
         String[] splitedRequestLine = validateRequestLine(requestLine);
         method = splitedRequestLine[0];
         url = splitedRequestLine[1];
-        version = splitedRequestLine[2];
+        httpVersion = splitedRequestLine[2];
     }
 
     private static String[] validateRequestLine(String requestLine) {
@@ -46,8 +46,8 @@ public class RequestLine {
         return url;
     }
 
-    public String getVersion() {
-        return version;
+    public String getHttpVersion() {
+        return httpVersion;
     }
 
     public boolean isGet() {
