@@ -83,11 +83,11 @@ public class HttpRequestFactory {
     }
 
     private static String getBody(BufferedReader buffer, HttpHeaders headers) throws IOException {
-        String body = EMPTY;
-        if (headers.hasContentLength()) {
-            int contentLength = Integer.parseInt(headers.getHeader("Content-Length"));
-            body = decode(IOUtils.readData(buffer, contentLength), StandardCharsets.UTF_8.name());
+        if (!headers.hasContentLength()) {
+            return EMPTY;
         }
-        return body;
+
+        int contentLength = Integer.parseInt(headers.getHeader("Content-Length"));
+        return decode(IOUtils.readData(buffer, contentLength), StandardCharsets.UTF_8.name());
     }
 }
