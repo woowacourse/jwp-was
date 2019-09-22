@@ -16,7 +16,6 @@ public class HttpParser {
 
         putKeyValues(br, requestInformation, line);
         putParametersIfPresent(br, requestInformation);
-//        putParametersIfPresent();
 
         return new RequestInformation(requestInformation);
     }
@@ -54,13 +53,6 @@ public class HttpParser {
         if (search(requestInformation, "Content-Length:") && requestInformation.get("Query-Parameters") == null) {
             String bodyContents = IOUtils.readData(br, Integer.parseInt(requestInformation.get("Content-Length:")));
             requestInformation.put("Query-Parameters:", bodyContents);
-        }
-    }
-
-    private static void putBodyIfPresent(BufferedReader br, Map<String, String> requestInformation) throws IOException {
-        if (search(requestInformation, "Content-Length:")) {
-            String bodyContents = IOUtils.readData(br, Integer.parseInt(requestInformation.get("Content-Length:")));
-            requestInformation.put("Body-Contents:", bodyContents);
         }
     }
 
