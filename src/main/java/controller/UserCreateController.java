@@ -9,7 +9,7 @@ import http.response.Response302;
 import http.response.StatusLine;
 import model.User;
 
-public class UserCreateController extends Controllers {
+public class UserCreateController {
 
     HttpResponse doPost(HttpRequest httpRequest) {
         String userId = httpRequest.findParam("userId");

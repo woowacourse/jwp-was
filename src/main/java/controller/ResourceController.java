@@ -10,7 +10,7 @@ import http.response.ResponseBodyParser;
 import http.response.StatusLine;
 import org.apache.tika.Tika;
 
-public class ResourceController extends Controllers {
+public class ResourceController {
 
     HttpResponse doGet(HttpRequest httpRequest) {
         StatusLine statusLine = new StatusLine(httpRequest.getHttpVersion(), HttpStatus.OK);

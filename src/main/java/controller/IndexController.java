@@ -10,7 +10,7 @@ import http.response.ResponseBodyParser;
 import http.response.StatusLine;
 import org.apache.tika.Tika;
 
-public class IndexController extends Controllers {
+public class IndexController {
 
     HttpResponse doGet(HttpRequest httpRequest) {
         StatusLine statusLine = new StatusLine(httpRequest.getHttpVersion(), HttpStatus.OK);
