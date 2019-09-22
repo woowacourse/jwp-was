@@ -10,6 +10,7 @@ import org.apache.commons.collections4.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.naming.ldap.Control;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,7 +42,8 @@ public class RequestHandler implements Runnable {
             HttpResponse response = new HttpResponse();
             DataOutputStream dos = new DataOutputStream(out);
 
-            Controller controller = controllers.getOrDefault(request.getPath(), new ResourcesController());
+            Controller controller = RequestMapper.mappingController(request.getPath());
+
             controller.service(request, response);
             dos.write(response.convert().getBytes());
             dos.flush();
