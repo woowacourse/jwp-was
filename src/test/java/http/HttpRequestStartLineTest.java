@@ -14,8 +14,7 @@ public class HttpRequestStartLineTest {
                 = new HttpRequestStartLine("GET /user/create?userId=javajigi&password=password HTTP/1.1");
 
         assertThat(httpRequestStartLine.getMethod()).isEqualTo("GET");
-        assertThat(httpRequestStartLine.getRequestUrl()).isEqualTo(
-                new RequestUrl("/user/create?userId=javajigi&password=password"));
+        assertThat(httpRequestStartLine.getResourcePath()).isEqualTo("/user/create");
         assertThat(httpRequestStartLine.getVersion()).isEqualTo("HTTP/1.1");
     }
 }

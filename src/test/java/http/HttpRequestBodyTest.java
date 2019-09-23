@@ -8,7 +8,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class HttpHttpRequestBodyTest {
+public class HttpRequestBodyTest {
 
     @Test
     @DisplayName("Body에서 Form Parameter 추출")

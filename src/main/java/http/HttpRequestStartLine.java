@@ -25,11 +25,15 @@ public class HttpRequestStartLine {
         return method;
     }
 
-    RequestUrl getRequestUrl() {
-        return requestUrl;
+    String getResourcePath() {
+        return requestUrl.getResourcePath();
     }
 
     String getVersion() {
         return version;
+    }
+
+    String getQueryParameter(String key) {
+        return requestUrl.getQueryParameter(key);
     }
 }
