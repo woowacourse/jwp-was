@@ -39,7 +39,7 @@ public class RequestHandler implements Runnable {
             controller.service(request, response);
 
             ResponseWriter.write(new DataOutputStream(out), response);
-        } catch (IOException | URISyntaxException e) {
+        } catch (Exception e) {
             logger.error(e.getMessage());
         }
     }
