@@ -13,4 +13,10 @@
     - in/out stream 에서 데이터를 읽거나 쓰는 책임은 HttpRequest / HttpResponse 가 갖는 것보다 별도의 클래스가 갖는 것이 낫다.
     - 점진적인 리팩토링을 통해 in/out 에서 문자열로 리팩토링한다.
         - 기존 코드를 유지한 채 리팩토링한 코드를 추가, 점진적으로 리팩토링한 코드를 사용하도록 기존 코드를 변경
-    
+
+- IntelliJ 의 패키지 리팩토링으로 인해 정적 파일들의 relative urls 가 이상하게 바뀜. 원상태로 되돌린다.
+    - was.~ -> ~
+- Thread Pool 사용해 한정된 쓰레드만 생성
+    - ThreadPool 인터페이스
+        - execute()
+    - BasicThreadPool 객체
