@@ -1,13 +1,15 @@
 package http.request.core;
 
 public class RequestPath {
-    private final String requestPath;
+    private RequestPrefixPath requestPrefixPath;
+    private String url;
 
-    public RequestPath(String requestPath) {
-        this.requestPath = requestPath;
+    public RequestPath(RequestPrefixPath requestPrefixPath, String url) {
+        this.requestPrefixPath = requestPrefixPath;
+        this.url = url;
     }
 
-    public String getRequestPath() {
-        return requestPath;
+    public String getFullPath() {
+        return requestPrefixPath.getPathPrefix() + url;
     }
 }

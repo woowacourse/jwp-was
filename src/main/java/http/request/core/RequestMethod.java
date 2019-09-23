@@ -23,15 +23,19 @@ public enum RequestMethod {
                 .orElseThrow(HttpRequestMethodException::new);
     }
 
-    public String getMethod() {
-        return method;
-    }
-
     public boolean isGet() {
-        return method.equals("GET");
+        return "GET".equals(method);
     }
 
     public boolean isPost() {
-        return method.equals("POST");
+        return "POST".equals(method);
+    }
+
+    public boolean isPut() {
+        return "PUT".equals(method);
+    }
+
+    public boolean isDelete() {
+        return "DELETE".equals(method);
     }
 }

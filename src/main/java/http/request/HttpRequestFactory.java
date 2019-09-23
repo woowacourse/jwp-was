@@ -27,7 +27,7 @@ public class HttpRequestFactory {
 
         return Arrays.asList(
                 RequestMethod.of(tokens[0]),
-                new RequestPath(tokens[1]),
+                new RequestPath(RequestPrefixPath.of(tokens[1]), tokens[1]),
                 RequestVersion.of(tokens[2])
         );
     }
@@ -46,10 +46,10 @@ public class HttpRequestFactory {
 
     private static Map<String, String> parseData(List<Object> firstLineTokens, BufferedReader br, RequestHeader headers) throws IOException {
         RequestMethod method = (RequestMethod) firstLineTokens.get(0);
-        RequestPath path = (RequestPath) firstLineTokens.get(1);
+        RequestPath url = (RequestPath) firstLineTokens.get(1);
 
         if(method.isGet()) {
-            return path.getRequestPath().contains("?") ? new RequestData(path).getData() : Collections.emptyMap();
+            return url.getFullPath().contains("?") ? new RequestData(url).getData() : Collections.emptyMap();
         }
 
         if(method.isPost()) {

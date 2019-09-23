@@ -22,4 +22,8 @@ public enum RequestVersion {
                 .findAny()
                 .orElseThrow(HttpRequestVersionException::new);
     }
+
+    public String getVersion() {
+        return version;
+    }
 }
