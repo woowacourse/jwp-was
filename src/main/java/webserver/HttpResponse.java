@@ -26,7 +26,7 @@ public class HttpResponse {
     }
 
     public void setContentType(String contentType) {
-        header.put("Content-Type", contentType);
+        header.put(CONTENT_TYPE, contentType);
     }
 
     public String getStatusCodeAndMessage() {
