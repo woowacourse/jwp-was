@@ -1,8 +1,10 @@
 package webserver;
 
-import controller.UserController;
+import controller.LoginController;
+import controller.SignUpController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpMethod;
 import utils.ResourceLoadUtils;
 
 import java.io.File;
@@ -10,7 +12,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Optional;
 
-import static controller.UserController.USER_CREATE_URL;
+import static controller.LoginController.USER_LOGIN_URL;
+import static controller.SignUpController.USER_CREATE_URL;
 
 public class RequestDispatcher {
 
@@ -27,8 +30,12 @@ public class RequestDispatcher {
                 return serveFile(file.get());
             }
 
-            if (USER_CREATE_URL.equals(url)) {
-                return UserController.signUp(request);
+            if (USER_CREATE_URL.equals(url) && request.matchMethod(HttpMethod.POST)) {
+                return SignUpController.signUp(request);
+            }
+
+            if (USER_LOGIN_URL.equals(url) && request.matchMethod(HttpMethod.POST)) {
+                return LoginController.login(request);
             }
         } catch (Exception e) {
             logger.error("Error is occurred while processing request", e);

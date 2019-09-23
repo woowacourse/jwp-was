@@ -14,7 +14,6 @@ import java.util.Objects;
 
 public class RequestParser {
 
-    private static final int MAX_BODY_SIZE = 1024 * 100; // 100KB
     private static final String HEADER_DELIMITER = ": ";
     private static final int HEADER_SPLIT_LIMIT = 2;
     private static final String FIRST_LINE_DELIMITER = " ";
@@ -32,7 +31,7 @@ public class RequestParser {
         Map<String, String> queries = parseQueryString(firstLine[1]);
         Map<String, String> headers = parseHeader(br);
         Map<String, String> cookies = parseCookie(headers);
-        byte[] body = IOUtils.readData(br, MAX_BODY_SIZE);
+        byte[] body = getBody(br, headers);
 
         return new Request(method, url, queries, headers, cookies, body);
     }
@@ -59,6 +58,10 @@ public class RequestParser {
         return headers;
     }
 
+    private static boolean hasMoreLine(String line) {
+        return !(line == null || line.isEmpty());
+    }
+
     private static Map<String, String> parseCookie(Map<String, String> headers) {
         Map<String, String> cookies = new HashMap<>();
 
@@ -72,7 +75,13 @@ public class RequestParser {
         return cookies;
     }
 
-    private static boolean hasMoreLine(String line) {
-        return !(line == null || line.isEmpty());
+    private static byte[] getBody(BufferedReader br, Map<String, String> headers) throws IOException {
+        byte[] body = new byte[]{};
+        String contentLength = headers.get("Content-Length");
+        if (contentLength != null) {
+            body = IOUtils.readData(br, Integer.parseInt(contentLength));
+        }
+
+        return body;
     }
 }

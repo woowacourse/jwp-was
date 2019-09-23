@@ -14,7 +14,7 @@ import java.io.InputStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class UserControllerTest {
+class SignUpControllerTest {
 
     private static final String TEST_DIRECTORY = "./src/test/resources";
 

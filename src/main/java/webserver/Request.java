@@ -1,5 +1,7 @@
 package webserver;
 
+import org.springframework.http.HttpMethod;
+
 import java.util.Map;
 
 public class Request {
@@ -18,6 +20,10 @@ public class Request {
         this.headers = headers;
         this.cookies = cookies;
         this.body = body;
+    }
+
+    public boolean matchMethod(HttpMethod httpMethod) {
+        return httpMethod.matches(method);
     }
 
     public String getMethod() {

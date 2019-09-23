@@ -31,7 +31,7 @@ public class UrlEncodedParser {
     public static Tuple<String, String> parsePair(String pairToken) {
         String[] tokens = pairToken.split(KEY_VALUE_DELIMITER);
         try {
-            return new Tuple<>(tokens[0], URLDecoder.decode(tokens[1], ENCODE_CHARSET));
+            return new Tuple<>(tokens[0], URLDecoder.decode(tokens[1].trim(), ENCODE_CHARSET));
         } catch (UnsupportedEncodingException e) {
             logger.error("error : ", e);
         }
