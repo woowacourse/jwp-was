@@ -17,7 +17,7 @@ public class ControllerHandler {
                 .filter(path::matches)
                 .map(controllers::get)
                 .findAny()
-                .orElse(null)
+                .orElseThrow(IllegalArgumentException::new)
                 ;
     }
 }
