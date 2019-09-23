@@ -16,7 +16,7 @@ class HttpRequestTest {
     @Test
     void HttpRequest_GET_생성() throws IOException {
         InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "Http_GET.txt"));
-        HttpRequest httpRequest = HttpRequestFactory.makeHttpRequest(in);
+        HttpRequest httpRequest = HttpRequestFactory.getHttpRequest(in);
         HttpHeaders httpHeaders = httpRequest.getHeaders();
 
         assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.GET);
@@ -31,7 +31,7 @@ class HttpRequestTest {
     @Test
     void HttpRequest_POST_생성() throws IOException {
         InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "Http_POST.txt"));
-        HttpRequest httpRequest = HttpRequestFactory.makeHttpRequest(in);
+        HttpRequest httpRequest = HttpRequestFactory.getHttpRequest(in);
         HttpHeaders httpHeaders = httpRequest.getHeaders();
 
         assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.POST);
@@ -49,13 +49,13 @@ class HttpRequestTest {
     void Request가_비어있을_때_예외_발생() {
         InputStream in = new ByteArrayInputStream("".getBytes());
 
-        assertThatThrownBy(() -> HttpRequestFactory.makeHttpRequest(in)).isInstanceOf(EmptyHttpRequestException.class);
+        assertThatThrownBy(() -> HttpRequestFactory.getHttpRequest(in)).isInstanceOf(EmptyHttpRequestException.class);
     }
 
     @Test
     void QueryParams_GET() throws IOException {
         InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "Http_GET.txt"));
-        HttpRequest httpRequest = HttpRequestFactory.makeHttpRequest(in);
+        HttpRequest httpRequest = HttpRequestFactory.getHttpRequest(in);
         QueryParams queryParams = httpRequest.getQueryParams();
 
         assertThat(queryParams.getParam("userId")).isEqualTo("woowa");
@@ -66,7 +66,7 @@ class HttpRequestTest {
     @Test
     void QueryParams_POST() throws IOException {
         InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "Http_POST.txt"));
-        HttpRequest httpRequest = HttpRequestFactory.makeHttpRequest(in);
+        HttpRequest httpRequest = HttpRequestFactory.getHttpRequest(in);
         QueryParams queryParams = httpRequest.getQueryParams();
 
         assertThat(queryParams.getParam("userId")).isEqualTo("woowa");

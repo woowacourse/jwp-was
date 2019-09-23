@@ -2,6 +2,7 @@ package webserver;
 
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
+import http.request.HttpUri;
 import http.response.Http200ResponseEntity;
 import http.response.HttpResponse;
 import http.response.HttpResponseEntity;
@@ -29,10 +30,10 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
+            HttpRequest request = HttpRequestFactory.getHttpRequest(in);
             logger.debug(request.toString());
 
-            HttpResponse response = getResponse(request);
+            HttpResponse response = getResponseOf(request);
 
             writeResponse(out, response);
         } catch (IOException | URISyntaxException e) {
@@ -40,11 +41,16 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private HttpResponse getResponse(HttpRequest request) throws IOException, URISyntaxException {
-        HttpResponseEntity responseEntity = request.getUri().hasExtension()
+    private HttpResponse getResponseOf(HttpRequest request) throws IOException, URISyntaxException {
+        HttpResponseEntity responseEntity = isStaticContentRequest(request)
                 ? new Http200ResponseEntity(request.getUri().getPath())
                 : ControllerMapper.map(request);
         return responseEntity.makeResponse();
+    }
+
+    private boolean isStaticContentRequest(HttpRequest request) {
+        HttpUri uri = request.getUri();
+        return uri.hasExtension();
     }
 
     private void writeResponse(OutputStream out, HttpResponse response) throws IOException {

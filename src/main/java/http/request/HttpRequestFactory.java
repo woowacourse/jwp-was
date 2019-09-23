@@ -22,7 +22,7 @@ public class HttpRequestFactory {
     private HttpRequestFactory() {
     }
 
-    public static HttpRequest makeHttpRequest(InputStream in) throws IOException {
+    public static HttpRequest getHttpRequest(InputStream in) throws IOException {
         BufferedReader buffer = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8.name()));
         List<String> lines = getHeaderLines(buffer);
 

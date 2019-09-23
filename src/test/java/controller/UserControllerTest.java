@@ -21,7 +21,7 @@ class UserControllerTest {
     @Test
     void user_생성() throws IOException {
         InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "Http_POST.txt"));
-        HttpRequest httpRequest = HttpRequestFactory.makeHttpRequest(in);
+        HttpRequest httpRequest = HttpRequestFactory.getHttpRequest(in);
 
         HttpResponseEntity responseEntity = userController.doPost(httpRequest);
 
