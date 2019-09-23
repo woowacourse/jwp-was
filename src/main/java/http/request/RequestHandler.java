@@ -19,11 +19,11 @@ public class RequestHandler {
     }
 
     public HttpRequest create() throws IOException {
-        RequestStartLine requestStartLine = createRequestStartLine();
+        RequestLine requestLine = createRequestStartLine();
         RequestHeader requestHeader = createRequestHeader();
         RequestBody requestBody = createRequestBody(requestHeader);
 
-        return HttpRequest.of(requestStartLine, requestHeader, requestBody);
+        return HttpRequest.of(requestLine, requestHeader, requestBody);
     }
 
     private RequestBody createRequestBody(RequestHeader requestHeader) throws IOException {
@@ -43,8 +43,8 @@ public class RequestHandler {
         return RequestHeader.of(header);
     }
 
-    private RequestStartLine createRequestStartLine() throws IOException {
+    private RequestLine createRequestStartLine() throws IOException {
         String startLine = br.readLine();
-        return RequestStartLine.of(startLine);
+        return RequestLine.of(startLine);
     }
 }

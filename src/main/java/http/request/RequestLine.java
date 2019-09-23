@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.net.URLDecoder;
 import java.util.Map;
 
-public class RequestStartLine {
+public class RequestLine {
     private static final String QUERY_FLAG = "\\?";
     private static final String BLANK = " ";
     private static final String SLASH = "/";
@@ -16,19 +16,19 @@ public class RequestStartLine {
     private String requestUrl;
     private String httpVersion;
 
-    private RequestStartLine(HttpMethod method, String requestUrl, String httpVersion) {
+    private RequestLine(HttpMethod method, String requestUrl, String httpVersion) {
         this.method = method;
         this.requestUrl = requestUrl;
         this.httpVersion = httpVersion;
     }
 
-    public static RequestStartLine of(String startLine) throws IOException {
+    public static RequestLine of(String startLine) throws IOException {
         String[] token = startLine.split(BLANK);
         HttpMethod method = HttpMethod.valueOf(token[0]);
         String requestUrl = URLDecoder.decode(token[1], "UTF-8");
         String httpVersion = token[2];
 
-        return new RequestStartLine(method, requestUrl, httpVersion);
+        return new RequestLine(method, requestUrl, httpVersion);
     }
 
     public HttpMethod getMethod() {

@@ -3,48 +3,48 @@ package http.request;
 import http.common.HttpMethod;
 
 public class HttpRequest {
-    private RequestStartLine requestStartLine;
+    private RequestLine requestLine;
     private RequestHeader requestHeader;
     private RequestBody requestBody;
 
-    private HttpRequest(RequestStartLine requestStartLine,
-                       RequestHeader requestHeader,
-                       RequestBody requestBody) {
-            this.requestStartLine = requestStartLine;
+    private HttpRequest(RequestLine requestLine,
+                        RequestHeader requestHeader,
+                        RequestBody requestBody) {
+        this.requestLine = requestLine;
             this.requestHeader = requestHeader;
             this.requestBody = requestBody;
     }
 
-    public static HttpRequest of(RequestStartLine requestStartLine,
+    public static HttpRequest of(RequestLine requestLine,
                                  RequestHeader requestHeader,
                                  RequestBody requestBody) {
-        return new HttpRequest(requestStartLine,
+        return new HttpRequest(requestLine,
                 requestHeader,
                 requestBody);
     }
 
     public String getUrl() {
-        String path = requestStartLine.getPath();
-        String protocol = requestStartLine.getProtocol();
+        String path = requestLine.getPath();
+        String protocol = requestLine.getProtocol();
         String host = requestHeader.getHeader("Host");
 
         return String.format("%s://%s%s", protocol, host, path);
     }
 
     public String getQuery(String key) {
-        return requestStartLine.getQuery().get(key);
+        return requestLine.getQuery().get(key);
     }
 
     public String getPath() {
-        return requestStartLine.getPath();
+        return requestLine.getPath();
     }
 
     public boolean isGet() {
-        return requestStartLine.getMethod().equals(HttpMethod.GET);
+        return requestLine.getMethod().equals(HttpMethod.GET);
     }
 
     public boolean isPost() {
-        return requestStartLine.getMethod().equals(HttpMethod.POST);
+        return requestLine.getMethod().equals(HttpMethod.POST);
     }
 
     public String getHeader(String headerKey) {

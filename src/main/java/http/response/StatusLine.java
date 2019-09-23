@@ -2,17 +2,17 @@ package http.response;
 
 import http.common.HttpStatus;
 
-public class ResponseStartLine {
+public class StatusLine {
     private String httpVersion;
     private HttpStatus httpStatus;
 
-    public ResponseStartLine(String httpVersion, HttpStatus httpStatus) {
+    public StatusLine(String httpVersion, HttpStatus httpStatus) {
         this.httpVersion = httpVersion;
         this.httpStatus = httpStatus;
     }
 
-    public static ResponseStartLine of() {
-        return new ResponseStartLine("HTTP/1.1", HttpStatus.OK);
+    public static StatusLine of() {
+        return new StatusLine("HTTP/1.1", HttpStatus.OK);
     }
 
     public void setHttpStatus(HttpStatus httpStatus) {
