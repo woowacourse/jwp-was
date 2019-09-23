@@ -9,6 +9,8 @@ public class HttpHeaders {
     private static final int KEY_INDEX = 0;
     private static final int VALUE_INDEX = 1;
     private static final String HEADER_DELIMITER = ":\\s+";
+    private static final String CRLF = "\r\n";
+    private static final String HEADER_KEY_VALUE_DELIMITER = ": ";
 
     private Map<String, String> headers;
 
@@ -48,7 +50,7 @@ public class HttpHeaders {
         StringBuilder sb = new StringBuilder();
 
         for (String key : headers.keySet()) {
-            sb.append(key).append(": ").append(headers.get(key)).append("\r\n");
+            sb.append(key).append(HEADER_KEY_VALUE_DELIMITER).append(headers.get(key)).append(CRLF);
         }
         return sb.toString();
     }

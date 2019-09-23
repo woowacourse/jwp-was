@@ -10,14 +10,14 @@ public class HttpUri {
     private static final int QUERY_INDEX = 1;
     private static final int PATH_WITH_QUERY_PARAMS = 2;
 
-    private static final String URI_DELIMITER = "\\?";
+    private static final String QUERY_STRING_SEPARATOR = "\\?";
 
     private String path;
     private String queryParams;
 
     public HttpUri(String uri) throws UnsupportedEncodingException {
         String decodedUri = decode(uri, StandardCharsets.UTF_8.name());
-        String[] splicedUri = decodedUri.split(URI_DELIMITER);
+        String[] splicedUri = decodedUri.split(QUERY_STRING_SEPARATOR);
 
         path = splicedUri[PATH_INDEX];
 
@@ -26,8 +26,8 @@ public class HttpUri {
         }
     }
 
-    private boolean hasQueryParams(String[] splicedUri) {
-        return splicedUri.length == PATH_WITH_QUERY_PARAMS;
+    private boolean hasQueryParams(String[] queryString) {
+        return queryString.length == PATH_WITH_QUERY_PARAMS;
     }
 
     public boolean hasExtension() {
