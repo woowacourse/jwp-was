@@ -78,7 +78,7 @@ public class HttpTestClient {
         HttpRequestBuilder(String method) {
             this.method = method;
             this.protocolVersion = DEFAULT_HTTP_VERSION.getHttpVersion();
-            headers.put(HOST, "localhost: " + port);
+            headers.put(HOST, "localhost:" + port);
         }
 
         public HttpRequestBuilder uri(String uri) {

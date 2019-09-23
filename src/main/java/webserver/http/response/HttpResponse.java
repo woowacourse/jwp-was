@@ -2,10 +2,10 @@ package webserver.http.response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.utils.FileIoUtils;
 import webserver.http.HttpStatus;
 import webserver.http.MimeType;
 import webserver.http.request.HttpVersion;
+import webserver.http.utils.FileIoUtils;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

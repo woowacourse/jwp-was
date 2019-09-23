@@ -21,7 +21,7 @@ public enum HttpMethod {
                 .forEach(httpMethod -> mappings.put(httpMethod.name(), httpMethod));
     }
 
-    public static HttpMethod getHttpMethod(final String httpMethod) {
+    public static HttpMethod of(final String httpMethod) {
         return mappings.get(httpMethod.toUpperCase());
     }
 }

@@ -4,11 +4,11 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class RequestLineFactoryTest {
+public class RequestLineTest {
     @Test
     void 생성_테스트() {
         // given & when
-        RequestLine requestLine = RequestLineFactory.generate("GET /test HTTP/1.1");
+        RequestLine requestLine = new RequestLine("GET /test HTTP/1.1");
 
         // then
         assertThat(requestLine.getMethod()).isEqualTo(HttpMethod.GET);

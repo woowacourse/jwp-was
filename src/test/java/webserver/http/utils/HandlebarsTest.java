@@ -1,4 +1,4 @@
-package webserver.utils;
+package webserver.http.utils;
 
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;

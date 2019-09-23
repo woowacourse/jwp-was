@@ -1,4 +1,4 @@
-package webserver.utils;
+package webserver.http.utils;
 
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;

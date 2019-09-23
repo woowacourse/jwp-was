@@ -1,4 +1,4 @@
-package webserver.utils;
+package webserver.http.utils;
 
 import org.junit.jupiter.api.Test;
 
@@ -20,5 +20,11 @@ class StringUtilsTest {
         // when & then
         assertThat(StringUtils.isEmpty(blankText)).isTrue();
         assertThat(StringUtils.isEmpty(nullText)).isTrue();
+    }
+
+    @Test
+    void isNullTest() {
+        assertThat(StringUtils.isNull(nullText)).isTrue();
+        assertThat(StringUtils.isNull("qwe")).isFalse();
     }
 }

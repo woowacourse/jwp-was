@@ -7,14 +7,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 class HttpMethodTest {
     @Test
     void getHttpMethodTest() {
-        HttpMethod httpMethod = HttpMethod.getHttpMethod("GET");
+        HttpMethod httpMethod = HttpMethod.of("GET");
 
         assertThat(httpMethod).isEqualTo(HttpMethod.GET);
     }
 
     @Test
     void 소문자로_입력시_성공() {
-        HttpMethod httpMethod = HttpMethod.getHttpMethod("post");
+        HttpMethod httpMethod = HttpMethod.of("post");
 
         assertThat(httpMethod).isEqualTo(HttpMethod.POST);
     }

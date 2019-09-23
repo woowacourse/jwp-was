@@ -1,4 +1,4 @@
-package webserver.utils;
+package webserver.http.utils;
 
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -16,6 +16,6 @@ public class IOUtilsTest {
         StringReader sr = new StringReader(data);
         BufferedReader br = new BufferedReader(sr);
 
-        logger.debug("parse body : {}", IOUtils.readData(br, data.length()));
+        logger.debug("parseQueryString body : {}", IOUtils.readData(br, data.length()));
     }
 }

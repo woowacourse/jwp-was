@@ -1,7 +1,7 @@
 import webserver.WebServer;
 
 public class Application {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         WebServer webServer;
         if (args == null || args.length == 0) {
             webServer = new WebServer();
