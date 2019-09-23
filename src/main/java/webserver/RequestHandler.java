@@ -53,8 +53,5 @@ public class RequestHandler implements Runnable {
         } catch (URISyntaxException | UrlNotFoundException e) {
             httpResponse.render(new ErrorView(ResponseStatus.NOT_FOUND, "Not Found"));
         }
-
     }
-
-
 }
