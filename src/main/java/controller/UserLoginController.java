@@ -25,10 +25,10 @@ public class UserLoginController extends AbstractController {
         try {
             User foundUser = userService.login(userId, password);
             response.render(new RedirectView("/index.html"));
-            response.addHeader(HTTP.COOKIE, "logined=true");
+            response.addHeader(HTTP.SET_COOKIE, "logined=true");
         } catch (AuthorizationFailException e) {
             response.render(new RedirectView("/user/login_failed.html"));
-            response.addHeader(HTTP.COOKIE, "logined=false");
+            response.addHeader(HTTP.SET_COOKIE, "logined=false");
         }
     }
 }

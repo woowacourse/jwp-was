@@ -26,6 +26,10 @@ public class HttpRequest implements AutoCloseable {
         }
     }
 
+    public String getHeaderContents(HTTP http) {
+        return requestHeader.getHeaderContents(http.getPhrase());
+    }
+
     public boolean checkMethod(RequestMethod requestMethod) {
         return requestFirstLine.getMethod().equals(requestMethod);
     }

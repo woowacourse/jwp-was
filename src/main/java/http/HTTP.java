@@ -5,7 +5,8 @@ public enum HTTP {
     CONTENT_TYPE("Content-Type"),
     CONTENT_LENGTH("Content-Length"),
     LOCATION("Location"),
-    COOKIE("Cookie");
+    COOKIE("Cookie"),
+    SET_COOKIE("Set-Cookie");
     private String phrase;
 
     HTTP(String phrase) {

@@ -40,6 +40,7 @@ public class RequestHandler implements Runnable {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+
     }
 
     private void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {

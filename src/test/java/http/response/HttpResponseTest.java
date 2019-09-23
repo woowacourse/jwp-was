@@ -21,7 +21,7 @@ class HttpResponseTest {
         HttpRequest httpRequest = createRequest(request);
         HttpResponse response = createResponse(new DefaultView(httpRequest.getPath()));
 
-        assertThat(response.getBody()).isEqualTo(FileIoUtils.loadFileFromClasspath("./templates" + httpRequest.getPath()));
+        assertThat(response.getBody()).isEqualTo(FileIoUtils.loadFileFromClasspath(httpRequest.getPath()));
     }
 
     @Test
@@ -30,7 +30,7 @@ class HttpResponseTest {
         HttpRequest httpRequest = createRequest(request);
         HttpResponse response = createResponse(new DefaultView(httpRequest.getPath()));
 
-        assertThat(response.getBody()).isEqualTo(FileIoUtils.loadFileFromClasspath("./static" + httpRequest.getPath()));
+        assertThat(response.getBody()).isEqualTo(FileIoUtils.loadFileFromClasspath(httpRequest.getPath()));
     }
 
     @Test
@@ -39,7 +39,7 @@ class HttpResponseTest {
         HttpRequest httpRequest = createRequest(request);
         HttpResponse response = createResponse(new DefaultView(httpRequest.getPath()));
 
-        assertThat(response.getBody()).isEqualTo(FileIoUtils.loadFileFromClasspath("./static" + httpRequest.getPath()));
+        assertThat(response.getBody()).isEqualTo(FileIoUtils.loadFileFromClasspath(httpRequest.getPath()));
     }
 
     @Test
@@ -69,7 +69,7 @@ class HttpResponseTest {
         DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
         dataOutputStream.writeBytes("HTTP/1.1 200 OK\r\n");
         dataOutputStream.writeBytes("Content-Type: " + ContentType.valueByPath(httpRequest.getPath()).getContents() + ";charset=utf-8\r\n");
-        dataOutputStream.writeBytes("Content-Length: " + FileIoUtils.loadFileFromClasspath("./static" + httpRequest.getPath()).length + "\r\n");
+        dataOutputStream.writeBytes("Content-Length: " + FileIoUtils.loadFileFromClasspath(httpRequest.getPath()).length + "\r\n");
         dataOutputStream.writeBytes("\r\n");
     }
 

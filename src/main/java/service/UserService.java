@@ -4,6 +4,9 @@ import db.DataBase;
 import model.AuthorizationFailException;
 import model.User;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserService {
 
     public User login(String id, String password) {
@@ -14,5 +17,9 @@ public class UserService {
         }
 
         return user;
+    }
+
+    public List<User> findAll() {
+        return new ArrayList<>(DataBase.findAll());
     }
 }
