@@ -28,14 +28,6 @@ class HttpRequestUtilsTest {
         assertEquals(headers.get("Accept"), "*/*");
     }
 
-    @DisplayName("헤더 내용이 없으면 빈 Map 으로 파싱한다.")
-    @Test
-    void parsingEmptyHeaderString() {
-        List<String> lines = Collections.singletonList("");
-        Map<String, String> headers = HttpRequestUtils.parse(lines);
-        assertTrue(headers.isEmpty());
-    }
-
     @DisplayName("Query Parameter 가 없는 HttpRequestUrl 객체를 파싱한다.")
     @Test
     void parseHttpRequestUrlWithNoQueryParams() {
