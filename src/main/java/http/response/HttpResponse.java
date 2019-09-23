@@ -10,18 +10,14 @@ public class HttpResponse {
     private ResponseHeader responseHeader;
     private ResponseBody responseBody;
 
-    private HttpResponse(StatusLine statusLine,
-                         ResponseHeader responseHeader,
-                         ResponseBody responseBody) {
+    private HttpResponse(StatusLine statusLine, ResponseHeader responseHeader, ResponseBody responseBody) {
         this.statusLine = statusLine;
         this.responseHeader = responseHeader;
         this.responseBody = responseBody;
     }
 
     public static HttpResponse of() {
-        return new HttpResponse(StatusLine.of(),
-                ResponseHeader.of(),
-                ResponseBody.of());
+        return new HttpResponse(StatusLine.of(), ResponseHeader.of(), ResponseBody.of());
     }
 
     public void putHeader(String key, String value) {
@@ -30,6 +26,7 @@ public class HttpResponse {
 
     public void setResponseBody(byte[] body, String path) {
         this.responseBody = ResponseBody.of(body);
+        statusLine.setHttpStatus(HttpStatus.OK);
         putHeader("Content-Type", MimeType.findByPath(path).getContentType());
         putHeader("Content-Length", String.valueOf(body.length));
     }
@@ -47,9 +44,12 @@ public class HttpResponse {
         statusLine.setHttpStatus(HttpStatus.NOT_FOUND);
     }
 
+    public void sendMethodNotAllowed() {
+        statusLine.setHttpStatus(HttpStatus.METHOD_NOT_ALLOWED);
+    }
+
     @Override
     public String toString() {
-        return statusLine + CRLF +
-                responseHeader + CRLF;
+        return statusLine + CRLF + responseHeader + CRLF;
     }
 }

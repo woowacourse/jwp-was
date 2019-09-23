@@ -6,6 +6,8 @@ import http.response.HttpResponse;
 public abstract class AbstractController implements Controller {
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
+        httpResponse.sendMethodNotAllowed();
+
         if (httpRequest.isGet()) {
             doGet(httpRequest, httpResponse);
         }
