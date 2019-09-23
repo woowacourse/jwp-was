@@ -11,4 +11,13 @@ public class FileIoUtils {
         Path path = Paths.get(FileIoUtils.class.getClassLoader().getResource(filePath).toURI());
         return Files.readAllBytes(path);
     }
+
+    public static boolean existFileInClasspath(String filePath) throws URISyntaxException {
+        try {
+            Paths.get(FileIoUtils.class.getClassLoader().getResource(filePath).toURI());
+        } catch (NullPointerException e) {
+            return false;
+        }
+        return true;
+    }
 }

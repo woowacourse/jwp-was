@@ -3,7 +3,6 @@ package webserver;
 import http.HttpMediaType;
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
-import http.request.HttpUri;
 import http.response.HttpResponse;
 import http.response.HttpResponseEntity;
 import http.response.HttpResponseFactory;
@@ -22,9 +21,6 @@ import java.net.URISyntaxException;
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
-    private static final String DEFAULT_PATH = "./templates";
-    private static final String STATIC_PATH = "./static";
-
     private Socket connection;
 
     public RequestHandler(Socket connectionSocket) {
@@ -40,6 +36,8 @@ public class RequestHandler implements Runnable {
             logger.debug(request.toString());
 
             HttpResponse response = getResponse(request);
+            logger.debug(response.toString());
+
             writeResponse(out, response);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
@@ -47,33 +45,19 @@ public class RequestHandler implements Runnable {
     }
 
     private HttpResponse getResponse(HttpRequest request) throws IOException, URISyntaxException {
-        HttpUri uri = request.getUri();
-        HttpResponseEntity responseEntity = uri.hasExtension()
-                ? HttpResponseEntity.get200Response(uri.getPath())
-                : ControllerMapper.map(request);
-
-        String viewTemplatePath = responseEntity.getViewTemplatePath();
+        HttpResponseEntity responseEntity = ResourceMapper.map(request);
         HttpResponse httpResponse = HttpResponseFactory.makeResponse(responseEntity);
-
-        setBody(viewTemplatePath, httpResponse);
+        setUpBody(responseEntity, httpResponse);
         return httpResponse;
     }
 
-    private void setBody(String viewTemplatePath, HttpResponse httpResponse) throws IOException, URISyntaxException {
-        if (viewTemplatePath != null) {
-            HttpMediaType mediaType = MediaTypeParser.parse(viewTemplatePath);
-            httpResponse.setBody(getBody(viewTemplatePath), mediaType);
+    private void setUpBody(HttpResponseEntity responseEntity, HttpResponse httpResponse) throws IOException, URISyntaxException {
+        if (responseEntity.hasBody()) {
+            String path = responseEntity.getViewTemplatePath();
+            HttpMediaType mediaType = MediaTypeParser.parse(path);
+            byte[] body = FileIoUtils.loadFileFromClasspath(path);
+            httpResponse.setBody(body, mediaType);
         }
-    }
-
-    private byte[] getBody(String path) throws IOException, URISyntaxException {
-        byte[] body;
-        try {
-            body = FileIoUtils.loadFileFromClasspath(DEFAULT_PATH + path);
-        } catch (NullPointerException e) {
-            body = FileIoUtils.loadFileFromClasspath(STATIC_PATH + path);
-        }
-        return body;
     }
 
     private void writeResponse(OutputStream out, HttpResponse response) throws IOException {

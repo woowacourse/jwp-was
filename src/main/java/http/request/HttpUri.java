@@ -30,11 +30,6 @@ public class HttpUri {
         return splicedUri.length == PATH_WITH_QUERY_PARAMS;
     }
 
-    public boolean hasExtension() {
-        String fileName = path.substring(path.lastIndexOf('/') + 1, path.length());
-        return fileName.contains(".");
-    }
-
     public String getPath() {
         return path;
     }

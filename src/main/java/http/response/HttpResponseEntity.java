@@ -5,8 +5,8 @@ import http.HttpHeaders;
 import static http.response.HttpStatus.*;
 
 public class HttpResponseEntity {
-    public static final String NOT_FOUND_PATH = "/error/404.html";
-    public static final String METHOD_NOT_ALLOWED_PATH = "/error/405.html";
+    public static final String NOT_FOUND_PATH = "./templates/error/404.html";
+    public static final String METHOD_NOT_ALLOWED_PATH = "./templates/error/405.html";
 
     private HttpStatus status;
     private HttpHeaders headers;
@@ -51,4 +51,7 @@ public class HttpResponseEntity {
         return viewTemplatePath;
     }
 
+    public boolean hasBody() {
+        return viewTemplatePath != null;
+    }
 }
