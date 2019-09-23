@@ -8,7 +8,7 @@ public class HttpRequest {
     private RequestParameter requestBody;
     private String body;
 
-    public HttpRequest(String uri, HttpMethod method, HttpHeader headers, RequestParameter requestParameter, RequestParameter requestBody, String body) {
+    private HttpRequest(String uri, HttpMethod method, HttpHeader headers, RequestParameter requestParameter, RequestParameter requestBody, String body) {
         this.uri = uri;
         this.method = method;
         this.headers = headers;
