@@ -1,6 +1,7 @@
 package utils;
 
 import org.slf4j.Logger;
+import utils.exception.UnexpectedIOException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -59,7 +60,7 @@ public class IOUtils implements Iterable<String> {
                 return result;
             } catch (IOException e) {
                 LOG.error(e.getMessage());
-                return "";
+                throw new UnexpectedIOException(e.getMessage());
             }
         }
     }
