@@ -2,7 +2,7 @@ package webserver.controller;
 
 import http.HttpRequest;
 import http.Response;
-import model.UserService;
+import model.UserController;
 
 public class CreateUserController extends HttpController {
     private static final String HTML = "html";
@@ -10,7 +10,7 @@ public class CreateUserController extends HttpController {
 
     @Override
     protected void doPost(HttpRequest httpRequest, Response response) {
-        String location = new UserService().addUser(httpRequest.extractFormData());
+        String location = new UserController().addUser(httpRequest);
 
         response.setLocation(location);
         response.setType(HTML);

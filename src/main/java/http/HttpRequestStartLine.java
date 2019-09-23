@@ -9,21 +9,27 @@ public class HttpRequestStartLine {
     private static final int INDEX_OF_URL = 1;
     private static final int INDEX_OF_VERSION = 2;
 
-    private final List<String> httpRequestLine;
+    private final String method;
+    private final RequestUrl requestUrl;
+    private final String version;
 
-    public HttpRequestStartLine(String httpRequestLine) {
-        this.httpRequestLine = Arrays.asList(httpRequestLine.split(DELIMITER));
+    public HttpRequestStartLine(final String httpRequestLine) {
+        List<String> lines = Arrays.asList(httpRequestLine.split(DELIMITER));
+
+        this.method = lines.get(INDEX_OF_METHOD);
+        this.requestUrl = new RequestUrl(lines.get(INDEX_OF_URL));
+        this.version = lines.get(INDEX_OF_VERSION);
     }
 
     String getMethod() {
-        return httpRequestLine.get(INDEX_OF_METHOD);
+        return method;
     }
 
-    String getUrl() {
-        return httpRequestLine.get(INDEX_OF_URL);
+    RequestUrl getRequestUrl() {
+        return requestUrl;
     }
 
     String getVersion() {
-        return httpRequestLine.get(INDEX_OF_VERSION);
+        return version;
     }
 }

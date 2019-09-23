@@ -30,8 +30,9 @@ public class HttpRequestHeader {
         return httpRequestStartLine.getMethod();
     }
 
-    public String getUrl() {
-        return httpRequestStartLine.getUrl();
+    public String getResourcePath() {
+         RequestUrl requestUrl = httpRequestStartLine.getRequestUrl();
+         return requestUrl.getResourcePath();
     }
 
     public String getVersion() {
@@ -40,5 +41,9 @@ public class HttpRequestHeader {
 
     public String get(String key) {
         return headers.get(key.toLowerCase());
+    }
+
+    String getParameter(String key) {
+        return httpRequestStartLine.getRequestUrl().getQueryParameters().get(key);
     }
 }

@@ -13,7 +13,7 @@ public class FileController extends HttpController {
 
     @Override
     protected void doGet(HttpRequest httpRequest, Response response) throws IOException, URISyntaxException {
-        String url = httpRequest.extractUrl();
+        String url = httpRequest.getResourcePath();
 
         response.setUrl(url);
         response.setStatusCode(OK_STATUS_CODE);

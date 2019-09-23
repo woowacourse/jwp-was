@@ -31,8 +31,8 @@ public class HttpHttpRequestHeaderTest {
     @DisplayName("RequestHeader에서 start line에 관련된 값을 반환한다")
     public void getStartLineValue() {
         assertThat(httpRequestHeader.getMethod()).isEqualTo("GET");
-        assertThat(httpRequestHeader.getUrl()).isEqualTo(
-                "/user/create?userId=javajigi&password=password");
+        assertThat(httpRequestHeader.getResourcePath()).isEqualTo(
+                "/user/create");
         assertThat(httpRequestHeader.getVersion()).isEqualTo("HTTP/1.1");
 
         assertThat(httpRequestHeader.get("host")).isEqualTo("localhost:8080");

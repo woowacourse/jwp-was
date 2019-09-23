@@ -38,7 +38,8 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = readRequestUrl(in);
             Response response = new Response(new ResponseHeader());
 
-            Controller controller = Optional.ofNullable(api.get(httpRequest.extractUrl())).orElseGet(FileController::new);
+            Controller controller = Optional.ofNullable(api.get(httpRequest.getResourcePath()))
+                    .orElseGet(FileController::new);
             controller.service(httpRequest, response);
 
             response.writeMessage(new DataOutputStream(out));
@@ -52,7 +53,8 @@ public class RequestHandler implements Runnable {
         BufferedReader br = new BufferedReader(inputStreamReader);
         HttpRequestHeader header = new HttpRequestHeader(IOUtils.parseHeader(br));
 
-        if (header.getMethod().equals("POST")) {
+        // @TODO 메시지 보내듯이 수정
+        if ("POST".equals(header.getMethod())) {
             String body = IOUtils.readData(br, Integer.parseInt(header.get("content-length")));
             HttpRequestBody httpRequestBody = new HttpRequestBody(body);
             return new HttpRequest(header, httpRequestBody);
