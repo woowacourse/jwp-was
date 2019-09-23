@@ -1,5 +1,6 @@
 package http.request;
 
+import http.common.HttpVersion;
 import http.common.URL;
 import http.request.exception.InvalidRequestException;
 import utils.StringUtils;
@@ -12,23 +13,27 @@ public class RequestLine {
     private static final int HTTP_VERSION_INDEX = 2;
     private final RequestMethod method;
     private final URL url;
-    private final String version;
+    private final HttpVersion version;
 
     public RequestLine(String requestLine) {
         String[] requestLineFields = splitRequestLine(requestLine);
         method = RequestMethod.of(requestLineFields[REQUEST_METHOD_INDEX]);
         url = URL.of(requestLineFields[URL_INDEX]);
-        version = requestLineFields[HTTP_VERSION_INDEX];
+        version = HttpVersion.of(requestLineFields[HTTP_VERSION_INDEX]);
     }
 
     private String[] splitRequestLine(String requestLine) {
-        String[] tokens = StringUtils.split(requestLine, WHITE_SPACE);
+        String[] requestLineFields = StringUtils.split(requestLine, WHITE_SPACE);
 
-        if (tokens == null || tokens.length != REQUEST_LINE_SIZE) {
+        if (isValidRequestLine(requestLineFields)) {
             throw new InvalidRequestException();
         }
 
-        return tokens;
+        return requestLineFields;
+    }
+
+    private boolean isValidRequestLine(String[] requestLineFields) {
+        return requestLineFields == null || requestLineFields.length != REQUEST_LINE_SIZE;
     }
 
     public RequestMethod getMethod() {
@@ -39,7 +44,7 @@ public class RequestLine {
         return url;
     }
 
-    public String getVersion() {
+    public HttpVersion getVersion() {
         return version;
     }
 }
