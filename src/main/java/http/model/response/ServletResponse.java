@@ -22,6 +22,11 @@ public class ServletResponse {
         setHTTP1();
     }
 
+    public void ok(String resource) {
+        this.httpStatus = HttpStatus.OK;
+        this.uri = new HttpUri(resource);
+    }
+
     public void addHeader(String key, String value) {
         this.httpHeaders.addHeader(key, value);
     }

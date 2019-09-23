@@ -23,7 +23,7 @@ public class UserController extends AbstractController {
 
         DataBase.addUser(user);
 
-        servletResponse.setCookie("logined=true");
+        servletResponse.setCookie("logined=true;Path=/");
         servletResponse.redirect("/index.html");
     }
 }
