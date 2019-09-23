@@ -12,7 +12,7 @@ public class ErrorViewProcessor implements ViewProcessor {
 
     @Override
     public boolean isSupported(String viewName) {
-        return viewName.startsWith("/sendError:");
+        return viewName.startsWith("/error:");
     }
 
     @Override

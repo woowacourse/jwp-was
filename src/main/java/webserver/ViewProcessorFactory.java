@@ -26,10 +26,6 @@ public class ViewProcessorFactory {
         viewProcessors.add(new ResourceViewProcessor());
     }
 
-    private static class LazyHolder {
-        private static final ViewProcessorFactory INSTANCE = new ViewProcessorFactory();
-    }
-
     public ViewProcessor getViewProcessor(String name) {
         for (ViewProcessor viewProcessor : viewProcessors) {
             if (viewProcessor.isSupported(name)) {
@@ -38,5 +34,9 @@ public class ViewProcessorFactory {
         }
 
         throw new IllegalArgumentException("지원 하지 않는 파일 타입 입니다.");
+    }
+
+    private static class LazyHolder {
+        private static final ViewProcessorFactory INSTANCE = new ViewProcessorFactory();
     }
 }
