@@ -13,8 +13,8 @@ import java.util.HashMap;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-class UserControllerTest {
-    private Controller controller = new UserController(RequestMapping.POST("/user/create"));
+class UserCreateControllerTest {
+    private Controller controller = new UserCreateController(RequestMapping.POST("/user/create"));
     private ServletRequest request;
     private ServletResponse response;
 

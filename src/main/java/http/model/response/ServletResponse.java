@@ -40,8 +40,8 @@ public class ServletResponse {
         this.setProtocols(HttpProtocols.HTTP1);
     }
 
-    public void setCookie(String id) {
-        addHeader(SET_COOKIE, id);
+    public void setCookie(String value) {
+        addHeader(SET_COOKIE, value);
     }
 
     public boolean hasResource() {
@@ -82,5 +82,9 @@ public class ServletResponse {
 
     public void setHttpStatus(HttpStatus httpStatus) {
         this.httpStatus = httpStatus;
+    }
+
+    public void unauthorized() {
+        this.httpStatus = HttpStatus.UNAUTHORIZED;
     }
 }

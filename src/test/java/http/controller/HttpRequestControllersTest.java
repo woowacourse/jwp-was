@@ -20,7 +20,7 @@ class HttpRequestControllersTest {
 
     @BeforeEach
     void setUp() {
-        handlers.addHandler(new UserController(RequestMapping.POST("/user/create"), RequestMapping.GET("/user/create")));
+        handlers.addHandler(new UserCreateController(RequestMapping.POST("/user/create"), RequestMapping.GET("/user/create")));
     }
 
     @Test

@@ -49,8 +49,10 @@
     <div class="col-md-12">
         <div class="navbar-header">
             <a class="navbar-btn btn btn-default btn-plus dropdown-toggle" data-toggle="dropdown" href="#"
-               style="margin-left:15px;"><i class="glyphicon glyphicon-home" style="color:#dd1111;"></i> Home <small><i
-                    class="glyphicon glyphicon-chevron-down"></i></small></a>
+               style="margin-left:15px;"><i class="glyphicon glyphicon-home" style="color:#dd1111;"></i> Home
+                <small><i
+                        class="glyphicon glyphicon-chevron-down"></i></small>
+            </a>
             <ul class="nav dropdown-menu">
                 <li><a href="../user/profile.html"><i class="glyphicon glyphicon-user" style="color:#1111dd;"></i>
                     Profile</a></li>
@@ -91,20 +93,15 @@
                 </tr>
                 </thead>
                 <tbody>
+                {{#each users}}
                 <tr>
-                    <th scope="row">1</th>
-                    <td>javajigi</td>
-                    <td>자바지기</td>
-                    <td>javajigi@sample.net</td>
+                    <td>{{inc @index}}</td>
+                    <td>{{userId}}</td>
+                    <td>{{name}}</td>
+                    <td>{{email}}</td>
                     <td><a class="btn btn-success" href="#" role="button">수정</a></td>
                 </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>slipp</td>
-                    <td>슬립</td>
-                    <td>slipp@sample.net</td>
-                    <td><a class="btn btn-success" href="#" role="button">수정</a></td>
-                </tr>
+                {{/each}}
                 </tbody>
             </table>
         </div>

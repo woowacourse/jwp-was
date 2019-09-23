@@ -7,12 +7,12 @@ import http.supoort.RequestMapping;
 import model.User;
 import model.UserDto;
 
-public class UserController extends AbstractController {
-    public UserController(RequestMapping mapping) {
+public class UserCreateController extends AbstractController {
+    public UserCreateController(RequestMapping mapping) {
         super(mapping);
     }
 
-    public UserController(RequestMapping... mappings) {
+    public UserCreateController(RequestMapping... mappings) {
         super(mappings);
     }
 
@@ -23,7 +23,6 @@ public class UserController extends AbstractController {
 
         DataBase.addUser(user);
 
-        servletResponse.setCookie("logined=true;Path=/");
         servletResponse.redirect("/index.html");
     }
 }

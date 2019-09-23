@@ -1,9 +1,6 @@
 package webserver;
 
-import http.controller.Controller;
-import http.controller.FileResourceController;
-import http.controller.HttpRequestControllers;
-import http.controller.UserController;
+import http.controller.*;
 import http.session.HttpSessionManager;
 import http.session.RandomGenerateStrategy;
 import http.session.SessionManager;
@@ -55,9 +52,11 @@ public class WebServer {
 
     private static HttpRequestControllers initRequestHandlers() {
         HttpRequestControllers httpRequestControllers = new HttpRequestControllers(new FileResourceController(RequestMapping.GET("/*")));
-        Controller userRequestController = new UserController(RequestMapping.GET("/user/create"), RequestMapping.POST("/user/create"));
+        Controller userCreateController = new UserCreateController(RequestMapping.GET("/user/create"), RequestMapping.POST("/user/create"));
+        Controller loginController = new LoginController(RequestMapping.POST("/user/login"));
 
-        httpRequestControllers.addHandler(userRequestController);
+        httpRequestControllers.addHandler(userCreateController);
+        httpRequestControllers.addHandler(loginController);
         return httpRequestControllers;
     }
 }
