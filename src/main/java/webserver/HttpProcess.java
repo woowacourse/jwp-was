@@ -2,7 +2,6 @@ package webserver;
 
 import http.controller.Controller;
 import http.controller.ControllerHandler;
-import http.exception.FileNotFoundException;
 import http.request.HttpRequest;
 import http.request.RequestHandler;
 import http.response.HttpResponse;
@@ -44,8 +43,6 @@ public class HttpProcess implements Runnable {
             dos.writeBytes(httpResponse.toString());
             responseBody(dos, httpResponse.getBody());
 
-        } catch (FileNotFoundException e) {
-            httpResponse.sendNotFound();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
