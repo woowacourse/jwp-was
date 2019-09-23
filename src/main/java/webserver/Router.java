@@ -3,9 +3,9 @@ package webserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.io.FileIoUtils;
+import webserver.http.HttpContentType;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
-import webserver.http.HttpContentType;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
@@ -44,10 +44,11 @@ public class Router {
     }
 
     private static HttpResponse serveStaticFiles(HttpRequest req) {
-        return FileIoUtils.loadFileFromClasspath("./static" + req.path()).map(body ->
+        final String routedPath = "./static" + req.path();
+        logger.debug("Route: {} -> {}", req.path(), routedPath);
+        return FileIoUtils.loadFileFromClasspath(routedPath).map(body ->
             HttpResponse.builder(extensionToContentType(req.path().extension()))
-                        .version(req)
-                        .connection(req)
+                        .extractFromRequest(req)
                         .body(body)
                         .build()
         ).orElse(HttpResponse.NOT_FOUND);

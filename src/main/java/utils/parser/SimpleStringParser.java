@@ -19,8 +19,6 @@ public class SimpleStringParser implements KeyValueParser<Map<String, String>> {
                     .filter(x -> x.contains(this.keyValueDelimiter))
                     .map(x -> {
                         final String[] pair = x.split(this.keyValueDelimiter, 2);
-                        System.out.println(pair[0]);
-                        System.out.println(pair[1]);
                         return new String[] { pair[0].trim(), pair[1].trim() };
                     })
                     .filter(pair -> !pair[0].isEmpty())

@@ -2,7 +2,6 @@ package webserver.http;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.StringUtils;
 import utils.io.NetworkIO;
 import utils.parser.KeyValueParserFactory;
 
@@ -34,13 +33,13 @@ public class HttpRequest {
                         final Map<String, String> headerFields =
                                 KeyValueParserFactory.httpHeaderFieldsParser().interpret(io.readLinesWhileNotEmpty());
                         final HttpHost host = HttpHost.of(
-                                headerFields.remove(toFieldName(HttpHost.class))
+                                headerFields.remove(HttpHeaderField.getName(HttpHost.class))
                         ).orElse(null);
                         final HttpContentType contentType = HttpContentType.of(
-                                headerFields.remove(toFieldName(HttpContentType.class))
+                                headerFields.remove(HttpHeaderField.getName(HttpContentType.class))
                         ).orElse(null);
                         final HttpConnection connection = HttpConnection.of(
-                                headerFields.remove(toFieldName(HttpConnection.class))
+                                headerFields.remove(HttpHeaderField.getName(HttpConnection.class))
                         ).orElse(null);
                         if (method == HttpMethod.GET && startLine[1].contains("?")) {
                             return new HttpRequest(
@@ -105,13 +104,9 @@ public class HttpRequest {
         );
     }
 
-    private static String toFieldName(Class headerFieldClass) {
-        return StringUtils.pascalToKebobCase(headerFieldClass.getSimpleName().split("Http")[1]);
-    }
-
     private String toDebugString(HttpHeaderField headerField) {
         return Optional.ofNullable(headerField).map(x ->
-                toFieldName(headerField.getClass()) + ": " + x + "\r\n"
+                x.fieldName() + ": " + x + "\r\n"
         ).orElse("");
     }
 
@@ -135,10 +130,6 @@ public class HttpRequest {
 
     public Optional<HttpConnection> connection() {
         return Optional.ofNullable(this.connection);
-    }
-
-    public String getField(String key) {
-        return this.otherHeaderFields.get(key);
     }
 
     public String getParam(String key) {

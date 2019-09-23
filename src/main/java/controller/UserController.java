@@ -12,8 +12,7 @@ public class UserController {
     public static HttpResponse showSignUpPage(HttpRequest req) {
         return FileIoUtils.loadFileFromClasspath("static/user/form.html").map(body ->
             HttpResponse.builder(HttpContentType.TEXT_HTML_UTF_8)
-                        .version(req)
-                        .connection(req)
+                        .extractFromRequest(req)
                         .body(body)
                         .build()
         ).orElse(HttpResponse.INTERNAL_SERVER_ERROR);
@@ -29,9 +28,8 @@ public class UserController {
                 )
         );
         return HttpResponse.builder(HttpContentType.TEXT_PLAIN_UTF_8)
-                            .version(req)
+                            .extractFromRequest(req)
                             .statusCode(HttpStatusCode.FOUND)
-                            .connection(req)
                             .location("/index.html")
                             .build();
     }

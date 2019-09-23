@@ -9,8 +9,7 @@ import java.util.Map;
 public class TestController {
     public static HttpResponse test(HttpRequest req, Map<String, String> pathVars) {
         return HttpResponse.builder(HttpContentType.TEXT_HTML_UTF_8)
-                            .version(req)
-                            .connection(req)
+                            .extractFromRequest(req)
                             .body(pathVars.get("num"))
                             .build();
     }

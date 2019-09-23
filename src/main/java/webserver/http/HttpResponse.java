@@ -20,7 +20,7 @@ public class HttpResponse {
     private final HttpStatusCode statusCode;
     private final HttpContentType contentType;
     private final HttpConnection connection;
-    private String location;
+    private final String location;
     private final String body;
 
     public static class HttpResponseBuilder {
@@ -35,8 +35,14 @@ public class HttpResponse {
             this.contentType = contentType;
         }
 
-        public HttpResponseBuilder version(HttpRequest req) {
+        public HttpResponseBuilder extractFromRequest(HttpRequest req) {
             this.version = req.version();
+            req.connection().ifPresent(connection -> this.connection = connection);
+            return this;
+        }
+
+        public HttpResponseBuilder version(HttpVersion version) {
+            this.version = version;
             return this;
         }
 
@@ -45,8 +51,8 @@ public class HttpResponse {
             return this;
         }
 
-        public HttpResponseBuilder connection(HttpRequest req) {
-            this.connection = req.connection().orElse(null);
+        public HttpResponseBuilder connection(HttpConnection connection) {
+            this.connection = connection;
             return this;
         }
 
@@ -81,7 +87,7 @@ public class HttpResponse {
     public String serializeHeader() {
         final StringBuilder header = new StringBuilder(serializeMandatory());
         if (this.connection != null) {
-            header.append("Connection: " + this.connection + "\r\n");
+            header.append(this.connection.fieldName() + ": " + this.connection + "\r\n");
         }
         if (this.location != null) {
             header.append("Location: " + this.location + "\r\n");
