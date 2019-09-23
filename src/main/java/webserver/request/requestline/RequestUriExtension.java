@@ -2,14 +2,12 @@ package webserver.request.requestline;
 
 import java.util.Arrays;
 
+import static configure.ContentType.*;
+import static configure.PathConstants.STATIC_URI_PREFIX;
+import static configure.PathConstants.TEMPLATE_URI_PREFIX;
+
 public enum RequestUriExtension {
     HTML("html"), ICO("ico"), CSS("css"), JS("js"), NONE("none");
-
-    private static final String TEMPLATE_URI_PREFIX = "./templates";
-    private static final String STATIC_URI_PREFIX = "./static";
-    private static final String HTML_CONTENT_TYPE = "text/html";
-    private static final String CSS_CONTENT_TYPE = "text/css";
-    private static final String JAVASCRIPT_CONTENT_TYPE = "text/javascript";
 
     private String extension;
     private String uriPrefix;

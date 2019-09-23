@@ -7,14 +7,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static constant.PathConstants.ERROR_PAGE_PATH;
+import static configure.PathConstants.ERROR_PAGE_PATH;
+import static configure.PathConstants.TEMPLATE_URI_PREFIX;
 
 public class FileIoUtils {
 
     public static byte[] loadFileFromClasspath(String filePath) throws IOException, URISyntaxException {
         URL resource = getResource(filePath);
         if (resource == null) {
-            resource = getResource(ERROR_PAGE_PATH);
+            resource = getResource(TEMPLATE_URI_PREFIX + ERROR_PAGE_PATH);
         }
 
         Path path = Paths.get(resource.toURI());
