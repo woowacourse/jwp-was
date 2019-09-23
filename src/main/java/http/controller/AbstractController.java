@@ -29,9 +29,9 @@ public abstract class AbstractController implements Controller {
 
 
     @Override
-    public boolean canHandle(ServletRequest httpRequest) {
+    public boolean canHandle(ServletRequest request) {
         return mappings.stream()
-                .anyMatch(mapping -> mapping.match(httpRequest));
+                .anyMatch(mapping -> mapping.match(request));
     }
 
     @Override

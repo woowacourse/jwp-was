@@ -1,5 +1,6 @@
 package http.controller;
 
+import db.DataBase;
 import http.model.request.ServletRequest;
 import http.model.response.ServletResponse;
 import http.supoort.RequestMapping;
@@ -20,6 +21,9 @@ public class UserController extends AbstractController {
         UserDto userDto = new UserDto(servletRequest.getParameters());
         User user = userDto.toEntity();
 
+        DataBase.addUser(user);
+
+        servletResponse.setCookie("logined=true");
         servletResponse.redirect("/index.html");
     }
 }

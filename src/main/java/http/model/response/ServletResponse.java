@@ -36,6 +36,10 @@ public class ServletResponse {
         addHeader(SET_COOKIE, id);
     }
 
+    public boolean hasResource() {
+        return uri != null;
+    }
+
     public String getUri() {
         return uri.getResourceLocation();
     }
