@@ -39,6 +39,10 @@ public class Response {
         return headers.get(key);
     }
 
+    public Set<String> getCookieKeys() {
+        return cookies.keySet();
+    }
+
     public String getCookie(String key) {
         return cookies.get(key);
     }
