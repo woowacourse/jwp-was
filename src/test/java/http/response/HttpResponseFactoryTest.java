@@ -2,7 +2,7 @@ package http.response;
 
 import org.junit.jupiter.api.Test;
 
-import static http.HttpMediaType.DEFAULT_MEDIA_TYPE;
+import static http.HttpMIMEType.DEFAULT_MEDIA_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class HttpResponseFactoryTest {

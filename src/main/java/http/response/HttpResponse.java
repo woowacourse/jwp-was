@@ -1,7 +1,7 @@
 package http.response;
 
 import http.HttpHeaders;
-import http.HttpMediaType;
+import http.HttpMIMEType;
 
 public class HttpResponse {
     public static final String CRLF = "\r\n";
@@ -22,7 +22,7 @@ public class HttpResponse {
                 + CRLF;
     }
 
-    public void setBody(byte[] body, HttpMediaType mediaType) {
+    public void setBody(byte[] body, HttpMIMEType mediaType) {
         if (body != null) {
             headers.put("Content-Type", mediaType.toString());
             headers.put("Content-Length", Integer.toString(body.length));

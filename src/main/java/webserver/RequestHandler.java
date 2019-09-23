@@ -1,6 +1,6 @@
 package webserver;
 
-import http.HttpMediaType;
+import http.HttpMIMEType;
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
 import http.response.HttpResponse;
@@ -9,7 +9,6 @@ import http.response.HttpResponseFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
-import utils.MediaTypeParser;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -36,7 +35,6 @@ public class RequestHandler implements Runnable {
             logger.debug(request.toString());
 
             HttpResponse response = getResponse(request);
-            logger.debug(response.toString());
 
             writeResponse(out, response);
         } catch (IOException | URISyntaxException e) {
@@ -47,17 +45,14 @@ public class RequestHandler implements Runnable {
     private HttpResponse getResponse(HttpRequest request) throws IOException, URISyntaxException {
         HttpResponseEntity responseEntity = ResourceMapper.map(request);
         HttpResponse httpResponse = HttpResponseFactory.makeResponse(responseEntity);
-        setUpBody(responseEntity, httpResponse);
-        return httpResponse;
-    }
 
-    private void setUpBody(HttpResponseEntity responseEntity, HttpResponse httpResponse) throws IOException, URISyntaxException {
         if (responseEntity.hasBody()) {
             String path = responseEntity.getViewTemplatePath();
-            HttpMediaType mediaType = MediaTypeParser.parse(path);
             byte[] body = FileIoUtils.loadFileFromClasspath(path);
-            httpResponse.setBody(body, mediaType);
+            HttpMIMEType type = request.getMIMEType();
+            httpResponse.setBody(body, type);
         }
+        return httpResponse;
     }
 
     private void writeResponse(OutputStream out, HttpResponse response) throws IOException {
