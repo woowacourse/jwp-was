@@ -1,22 +1,17 @@
 package model;
 
-import org.apache.tika.Tika;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import webserver.RequestHandler;
 
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Objects;
 
-public class Response {
+public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private static final String STATUS = "Status";
     private static final String CONTENT_TYPE = "Content-Type";
@@ -27,7 +22,7 @@ public class Response {
     private DataOutputStream dos;
     private Map<String, String> header;
 
-    public Response(DataOutputStream dos) {
+    public HttpResponse(DataOutputStream dos) {
         this.dos = dos;
         header = new LinkedHashMap<>();
     }
@@ -97,5 +92,13 @@ public class Response {
         }
 
         dos.writeBytes("\r\n");
+    }
+
+    public void addHeader(String key, String value) {
+        header.put(key, value);
+    }
+
+    public void sendRedirect(String url) {
+
     }
 }

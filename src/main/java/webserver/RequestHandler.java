@@ -1,9 +1,9 @@
 package webserver;
 
 import controller.Controller;
-import model.Request;
+import model.HttpRequest;
 import model.RequestParser;
-import model.Response;
+import model.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +38,7 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             DataOutputStream dos = new DataOutputStream(out);
             RequestParser requestParser = new RequestParser(in);
-            Request request = new Request(requestParser.getHeaderInfo(), requestParser.getParameter());
+            HttpRequest request = new HttpRequest(requestParser.getHeaderInfo(), requestParser.getParameter());
 
             String url = request.getPath();
             String extension = url.substring(url.lastIndexOf(DIVISION_EXTENSION) + NEXT_INT);
@@ -50,17 +50,17 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void processResponse(DataOutputStream dos, Request request, String url, String extension) throws URISyntaxException, IOException {
-        Response response = new Response(dos);
+    private void processResponse(DataOutputStream dos, HttpRequest request, String url, String extension) throws URISyntaxException, IOException {
+        HttpResponse httpResponse = new HttpResponse(dos);
 
         if (!extension.startsWith(PREFIX_SLASH)) {
             String classPath = getClassPath(url, extension);
-            response.responseResource(classPath, request.getHeader("Accept"));
+            httpResponse.responseResource(classPath, request.getHeader("Accept"));
             return;
         }
 
         Controller controller = controllerHandler.getController(request.getPath());
-        controller.service(request, response);
+        controller.service(request, httpResponse);
     }
 
     private String getClassPath(String url, String extension) {

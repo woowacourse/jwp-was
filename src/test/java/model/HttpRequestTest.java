@@ -9,7 +9,7 @@ import java.io.InputStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class RequestTest {
+class HttpRequestTest {
     @Test
     @DisplayName("Post 요청을 보냈을 때")
     void request_POST() throws IOException {
@@ -24,7 +24,7 @@ class RequestTest {
 
         InputStream in = new ByteArrayInputStream(header.getBytes());
         RequestParser requestParser = new RequestParser(in);
-        Request request = new Request(requestParser.getHeaderInfo(), requestParser.getParameter());
+        HttpRequest request = new HttpRequest(requestParser.getHeaderInfo(), requestParser.getParameter());
 
         assertThat(request.getMethod()).isEqualTo("POST");
         assertThat(request.getHeader("Connection")).isEqualTo("keep-alive");
@@ -41,7 +41,7 @@ class RequestTest {
                 "Accept: */*";
         InputStream in = new ByteArrayInputStream(header.getBytes());
         RequestParser requestParser = new RequestParser(in);
-        Request request = new Request(requestParser.getHeaderInfo(), requestParser.getParameter());
+        HttpRequest request = new HttpRequest(requestParser.getHeaderInfo(), requestParser.getParameter());
 
         assertThat(request.getMethod()).isEqualTo("GET");
         assertThat(request.getHeader("Connection")).isEqualTo("keep-alive");
@@ -61,7 +61,7 @@ class RequestTest {
 
         InputStream in = new ByteArrayInputStream(header.getBytes());
         RequestParser requestParser = new RequestParser(in);
-        Request request = new Request(requestParser.getHeaderInfo(), requestParser.getParameter());
+        HttpRequest request = new HttpRequest(requestParser.getHeaderInfo(), requestParser.getParameter());
 
         assertThat(request.getMethod()).isEqualTo("POST");
         assertThat(request.getPath()).isEqualTo("/user/create");

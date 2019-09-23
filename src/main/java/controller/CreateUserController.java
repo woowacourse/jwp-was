@@ -1,8 +1,8 @@
 package controller;
 
 import db.DataBase;
-import model.Request;
-import model.Response;
+import model.HttpRequest;
+import model.HttpResponse;
 import model.User;
 
 public class CreateUserController extends AbstractController {
@@ -14,12 +14,12 @@ public class CreateUserController extends AbstractController {
     private static final String INDEX_HTML = "/index.html";
 
     @Override
-    public void doPost(Request request, Response response) {
+    public void doPost(HttpRequest request, HttpResponse httpResponse) {
         saveUser(request);
-        response.response300(request.getHeader(ORIGIN) + INDEX_HTML);
+        httpResponse.response300(request.getHeader(ORIGIN) + INDEX_HTML);
     }
 
-    private void saveUser(Request request) {
+    private void saveUser(HttpRequest request) {
         User user = new User(request.getParameter(USER_ID), request.getParameter(PASSWORD), request.getParameter(NAME), request.getParameter(EMAIL));
         DataBase.addUser(user);
     }

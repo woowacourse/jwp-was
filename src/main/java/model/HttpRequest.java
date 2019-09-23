@@ -5,14 +5,14 @@ import exception.NotFoundRequestElementException;
 import java.util.Map;
 import java.util.Objects;
 
-public class Request {
+public class HttpRequest {
     private static final String METHOD = "Method";
     private static final String BODY_PARAMETER_SEPARATOR = "?";
 
     private Map<String, String> header;
     private Map<String, String> parameter;
 
-    public Request(Map<String, String> header, Map<String, String> parameter) {
+    public HttpRequest(Map<String, String> header, Map<String, String> parameter) {
         this.header = header;
         this.parameter = parameter;
     }
