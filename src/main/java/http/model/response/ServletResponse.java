@@ -3,7 +3,11 @@ package http.model.response;
 import http.model.common.HttpHeaders;
 import http.model.common.HttpProtocols;
 
+import java.util.Map;
+
 public class ServletResponse {
+    private static final String SET_COOKIE = "Set-Cookie";
+    private static final String LOCATION = "Location";
     private HttpProtocols protocols;
     private HttpStatus httpStatus;
     private HttpHeaders httpHeaders;
@@ -19,11 +23,11 @@ public class ServletResponse {
 
     public void redirect(String uri) {
         this.httpStatus = HttpStatus.FOUND;
-        addHeader("Location", uri);
+        addHeader(LOCATION, uri);
     }
 
     public void setCookie(String id) {
-        addHeader("Set-Cooke", id);
+        addHeader(SET_COOKIE, id);
     }
 
     public HttpProtocols getProtocols() {
@@ -42,8 +46,8 @@ public class ServletResponse {
         this.httpStatus = httpStatus;
     }
 
-    public HttpHeaders getHttpHeaders() {
-        return httpHeaders;
+    public Map<String, String> getHttpHeaders() {
+        return httpHeaders.getHeaders();
     }
 
     public byte[] getBody() {

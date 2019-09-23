@@ -1,6 +1,7 @@
 package http.supoort.converter.response;
 
 import http.exceptions.FailToConvertMessageException;
+import http.model.response.ServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,25 +15,25 @@ public class ResponseMessageConverter {
     private static final String HEAD_SEPARATOR = ":" + SPACE;
     private static final String LINE_BREAK = "\r\n";
 
-    public static void convert(HttpResponse httpResponse, DataOutputStream dos) {
+    public static void convert(ServletResponse response, DataOutputStream dos) {
         try {
-            responseStatus(httpResponse, dos);
-            responseHeader(httpResponse, dos);
-            responseBody(httpResponse.getBody(), dos);
+            responseStatus(response, dos);
+            responseHeader(response, dos);
+            responseBody(response.getBody(), dos);
         } catch (IOException e) {
             logger.error(e.getMessage());
             throw new FailToConvertMessageException(e.getMessage());
         }
     }
 
-    private static void responseStatus(HttpResponse httpResponse, DataOutputStream dos) throws IOException {
-        dos.writeBytes(httpResponse.getProtocol().getProtocol() + SPACE);
-        dos.writeBytes(httpResponse.getHttpStatus().getMessage() + LINE_BREAK);
+    private static void responseStatus(ServletResponse response, DataOutputStream dos) throws IOException {
+        dos.writeBytes(response.getProtocols().getProtocol() + SPACE);
+        dos.writeBytes(response.getHttpStatus().getMessage() + LINE_BREAK);
     }
 
 
-    private static void responseHeader(HttpResponse httpResponse, DataOutputStream dos) throws IOException {
-        for (Map.Entry<String, String> entry : httpResponse.getHeaders().entrySet()) {
+    private static void responseHeader(ServletResponse response, DataOutputStream dos) throws IOException {
+        for (Map.Entry<String, String> entry : response.getHttpHeaders().entrySet()) {
             dos.writeBytes(entry.getKey() + HEAD_SEPARATOR + entry.getValue() + LINE_BREAK);
         }
         dos.writeBytes(LINE_BREAK);

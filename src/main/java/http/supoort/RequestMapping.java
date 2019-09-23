@@ -26,12 +26,7 @@ public class RequestMapping {
         return request.getHttpMethod() == method
                 && request.getHttpUri().getResourceLocation().equals(location);
     }
-
-    public boolean match(HttpRequest request) {
-        return request.getHttpMethod() == method
-                && request.getUri().getResourceLocation().equals(location);
-    }
-
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

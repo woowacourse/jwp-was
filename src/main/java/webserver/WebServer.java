@@ -5,8 +5,6 @@ import http.controller.FileResourceController;
 import http.controller.HttpRequestControllers;
 import http.controller.UserController;
 import http.supoort.RequestMapping;
-import http.view.FileResourceViewResolver;
-import http.view.ViewResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +23,6 @@ public class WebServer {
 
 
         HttpRequestControllers requestHandlers = initRequestHandlers();
-        ViewResolver viewResolver = initViewResolver();
 
         ExecutorService es = Executors.newFixedThreadPool(100);
 
@@ -36,7 +33,7 @@ public class WebServer {
             // 클라이언트가 연결될때까지 대기한다.
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
-                es.execute(new RequestHandler(connection, requestHandlers, viewResolver));
+                es.execute(new RequestHandler(connection, requestHandlers));
             }
         }
         es.shutdown();
@@ -59,10 +56,6 @@ public class WebServer {
 
         httpRequestControllers.addHandler(userRequestController);
         return httpRequestControllers;
-    }
-
-    private static ViewResolver initViewResolver() {
-        return new FileResourceViewResolver();
     }
 
 }
