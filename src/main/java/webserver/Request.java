@@ -1,10 +1,14 @@
 package webserver;
 
 import org.springframework.http.HttpMethod;
+import session.HttpSession;
+import session.HttpSessionManager;
 
 import java.util.Map;
 
 public class Request {
+
+    public static final String SESSION_COOKIE_KEY = "SID";
 
     private final String method;
     private final String path;
@@ -12,6 +16,7 @@ public class Request {
     private final Map<String, String> headers;
     private final Map<String, String> cookies;
     private final byte[] body;
+    private HttpSession session;
 
     public Request(String method, String path, Map<String, String> queries, Map<String, String> headers, Map<String, String> cookies, byte[] body) {
         this.method = method;
@@ -48,5 +53,28 @@ public class Request {
 
     public byte[] getBody() {
         return body;
+    }
+
+    public HttpSession getSession() {
+        if (session == null) {
+            session = getValidSession();
+        }
+
+        return session;
+    }
+
+    private HttpSession getValidSession() {
+        HttpSession currentSession = HttpSessionManager.getSession(cookies.get(SESSION_COOKIE_KEY));
+        if (currentSession != null && currentSession.isValid()) {
+            return session;
+        }
+
+        return createNewSession();
+    }
+
+    private HttpSession createNewSession() {
+        HttpSession newSession = HttpSession.create();
+        HttpSessionManager.addSession(newSession);
+        return newSession;
     }
 }

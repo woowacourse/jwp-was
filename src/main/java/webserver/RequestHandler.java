@@ -29,17 +29,18 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             DataOutputStream dos = new DataOutputStream(out);
-            Response res = RequestDispatcher.handle(RequestParser.parse(in));
-            writeResponse(dos, res);
+            Request req = RequestParser.parse(in);
+            Response res = RequestDispatcher.handle(req);
+            writeResponse(dos, req, res);
         } catch (IOException e) {
             logger.error("Error: ", e);
         }
     }
 
-    private void writeResponse(DataOutputStream dos, Response response) {
+    private void writeResponse(DataOutputStream dos, Request request, Response response) {
         try {
             writeHeader(dos, response);
-            writeCookie(dos, response);
+            writeCookie(dos, request, response);
             dos.writeBytes(NEXT_LINE);
             writeBody(dos, response);
         } catch (IOException e) {
@@ -68,10 +69,11 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void writeCookie(DataOutputStream dos, Response response) {
+    private void writeCookie(DataOutputStream dos, Request request, Response response) {
         response.getCookieKeys().forEach(key -> {
             logger.info("[cookie] {}={}", key, response.getCookie(key));
             writeHeaderLine(dos, String.format("%s: %s=%s; Path=/", SET_COOKIE_HEADER_KEY, key, response.getCookie(key)));
+            writeHeaderLine(dos, String.format("%s: %s=%s; Path=/", SET_COOKIE_HEADER_KEY, Request.SESSION_COOKIE_KEY, request.getSession().getId()));
         });
     }
 
