@@ -32,7 +32,7 @@ public enum MediaType {
         return Arrays.stream(values())
                 .filter(m -> m.extensions.contains(extension.toLowerCase()))
                 .findFirst()
-                .orElse(MediaType.APPLICATION_BINARY);
+                .orElse(MediaType.TEXT_PLAIN);
     }
 
     public String getMediaType() {

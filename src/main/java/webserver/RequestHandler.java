@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import utils.DataConverter;
 import utils.FileIoUtils;
 import utils.IOUtils;
+import webserver.message.exception.UrlDecodeException;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
 
@@ -36,7 +37,7 @@ public class RequestHandler implements Runnable {
             final byte[] response = processRequest(request);
             final DataOutputStream dos = new DataOutputStream(out);
             writeResponse(dos, response);
-        } catch (IOException | URISyntaxException | NullPointerException e) {
+        } catch (IOException | URISyntaxException | NullPointerException | UrlDecodeException e) {
             logger.error("run() {}", e.getMessage());
         }
     }

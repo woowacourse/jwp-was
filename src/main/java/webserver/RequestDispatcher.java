@@ -3,6 +3,7 @@ package webserver;
 import controller.UserController;
 import utils.DataConverter;
 import utils.FileLoader;
+import webserver.message.exception.UrlDecodeException;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
 
@@ -26,7 +27,7 @@ public class RequestDispatcher {
     private static Response serveResponse(Request request) {
         try {
             return DataConverter.convertTo200Response(FileLoader.loadStaticFile(request));
-        } catch (IOException | URISyntaxException | NullPointerException e) {
+        } catch (IOException | URISyntaxException | NullPointerException | UrlDecodeException e) {
             return DataConverter.convertTo404Response(FileLoader.loadNotFoundFile());
         }
     }

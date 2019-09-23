@@ -1,8 +1,8 @@
 package utils;
 
+import webserver.StaticFile;
 import webserver.message.HttpStatus;
 import webserver.message.response.Response;
-import webserver.StaticFile;
 
 public class DataConverter {
     public static byte[] convertToBytes(final Response response) {
@@ -19,5 +19,9 @@ public class DataConverter {
 
     public static Response convertTo404Response(final StaticFile file) {
         return new Response.Builder().body(file).httpStatus(HttpStatus.NOT_FOUND).build();
+    }
+
+    public static Response convertTo500Response(final StaticFile file) {
+        return new Response.Builder().body(file).httpStatus(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 }

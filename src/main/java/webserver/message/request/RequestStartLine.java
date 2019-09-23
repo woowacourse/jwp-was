@@ -37,6 +37,10 @@ public class RequestStartLine {
         return url.getPath();
     }
 
+    public String getQuery() {
+        return url.getQuery();
+    }
+
     public String getUrl() {
         return url.toString();
     }

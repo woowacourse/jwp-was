@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import utils.IOUtils;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -14,7 +13,6 @@ public class Request {
 
     private static final String EMPTY = "";
     private static final String SPACE_DELIMITER = " ";
-    private static final int URL_INDEX = 1;
     private static final int ZERO = 0;
 
     private final RequestStartLine startLine;
@@ -23,11 +21,10 @@ public class Request {
 
     public Request(final IOUtils IOUtils) throws IOException, URISyntaxException {
         final String[] httpMethodAndPath = IOUtils.iterator().next().split(SPACE_DELIMITER);
-        final URI url = new URI(httpMethodAndPath[URL_INDEX]);
 
         this.startLine = new RequestStartLine(httpMethodAndPath);
         this.header = new RequestHeader(IOUtils);
-        this.body = new RequestBody(url.getQuery() == null ? EMPTY : url.getQuery());
+        this.body = new RequestBody(this.startLine.getQuery() == null ? EMPTY : this.startLine.getQuery());
 
         final int contentLength = header.getContentLength();
         final String body = (contentLength > ZERO) ? IOUtils.readBody(contentLength) : EMPTY;
