@@ -1,4 +1,4 @@
-package webserver.http.headerfields;
+package webserver.http;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,9 +7,9 @@ import java.util.Optional;
 
 public class HttpPort {
     private static final int PORT_MIN = 0;
-    private static final int PORT_MAX = 65535;
+    private static final int PORT_MAX = 65_535;
 
-    private static final Map<Integer, HttpPort> CACHE = new HashMap<Integer, HttpPort>();
+    private static final Map<Integer, HttpPort> CACHE = new HashMap<>();
     public static final HttpPort PORT_80 = of(80).get();
     public static final HttpPort PORT_8080 = of(8080).get();
 
@@ -37,6 +37,10 @@ public class HttpPort {
 
     private HttpPort(int number) {
         this.number = number;
+    }
+
+    public int number() {
+        return this.number;
     }
 
     @Override

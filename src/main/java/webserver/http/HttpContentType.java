@@ -1,4 +1,4 @@
-package webserver.http.headerfields;
+package webserver.http;
 
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
@@ -31,18 +31,18 @@ public class HttpContentType implements HttpHeaderField {
                 return Optional.of(CACHE.get(noSpace));
             }
             return HttpMimeTypeWithParamsDTO.of(noSpace).filter(y -> !y.mimeType().subtype().equals("*"))
-                                                    .map(y -> {
-                                                        try {
-                                                            final HttpContentType contentType =
-                                                                    new HttpContentType(y.mimeType(), y.params());
-                                                            if (contentType.boundary == null) {
-                                                                CACHE.put(noSpace, contentType);
+                                                        .map(y -> {
+                                                            try {
+                                                                final HttpContentType contentType =
+                                                                        new HttpContentType(y.mimeType(), y.params());
+                                                                if (contentType.boundary == null) {
+                                                                    CACHE.put(noSpace, contentType);
+                                                                }
+                                                                return contentType;
+                                                            } catch (UnsupportedCharsetException e) {
+                                                                return null;
                                                             }
-                                                            return contentType;
-                                                        } catch (UnsupportedCharsetException e) {
-                                                            return null;
-                                                        }
-                                                    });
+                                                        });
         });
     }
 

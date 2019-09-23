@@ -1,4 +1,4 @@
-package webserver.http.headerfields;
+package webserver.http;
 
 import utils.parser.KeyValueParserFactory;
 

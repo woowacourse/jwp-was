@@ -1,5 +1,7 @@
 package utils.parser;
 
+import utils.parser.json.JsonParser;
+
 public class KeyValueParserFactory {
     private static final JsonParser jsonParser = new JsonParser();
     private static final SimpleStringParser httpHeaderFieldsParser = new HttpHeaderFieldsParser();

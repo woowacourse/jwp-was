@@ -1,4 +1,4 @@
-package webserver.http.startline;
+package webserver.http;
 
 import utils.StringUtils;
 

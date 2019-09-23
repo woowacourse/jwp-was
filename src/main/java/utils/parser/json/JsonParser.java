@@ -1,6 +1,7 @@
-package utils.parser;
+package utils.parser.json;
 
 import utils.fp.*;
+import utils.parser.KeyValueParser;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,11 +12,6 @@ import java.util.regex.Pattern;
 public class JsonParser implements KeyValueParser<JsonObject> {
     private static final Pattern REAL_EXP_NOTATION = Pattern.compile("-?[0-9]\\.[0-9]+[eE][+\\-][0-9]+");
     private static final Pattern REAL = Pattern.compile("-?[0-9]+\\.[0-9]+");
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
 
     @Override
     public JsonObject interpret(String input) {
@@ -30,9 +26,9 @@ public class JsonParser implements KeyValueParser<JsonObject> {
         return input.substring(1, input.length() - 1).trim();
     }
 
-    private TailRecursion<Integer> jumpBlack(String input, int i) {
+    private TailRecursion<Integer> jumpBlank(String input, int i) {
         return (input.substring(i, i + 1).matches("\\s"))
-                ? (TailCall<Integer>) () -> jumpBlack(input, i + 1)
+                ? (TailCall<Integer>) () -> jumpBlank(input, i + 1)
                 : (Done<Integer>) () -> i;
     }
 
@@ -50,14 +46,14 @@ public class JsonParser implements KeyValueParser<JsonObject> {
     ) {
         return Optional.ofNullable(parseAttribute(input, begin)).map(attr -> {
             acc.put(attr.fst(), attr.snd());
-            final int nextSymbolIndex = jumpBlack(input, attr.trd() + 1).get();
-            if (input.charAt(nextSymbolIndex) == '}') {
+            final int nextLetterIndex = jumpBlank(input, attr.trd() + 1).get();
+            if (input.charAt(nextLetterIndex) == '}') {
                 return (Done<Map<String, JsonValue<?>>>) () -> acc;
             }
-            //이 밑에 안 고침: , 후 } 띄어쓰기 제거
-            if (input.charAt(nextSymbolIndex) == ',') {
-                return (input.charAt(nextSymbolIndex + 1) != '}')
-                        ? (TailCall<Map<String, JsonValue<?>>>) () -> parseAttributes(input, nextSymbolIndex + 1, acc)
+            if (input.charAt(nextLetterIndex) == ',') {
+                final int nextNextLetterIndex = jumpBlank(input, nextLetterIndex + 1).get();
+                return (input.charAt(nextNextLetterIndex) != '}')
+                        ? (TailCall<Map<String, JsonValue<?>>>) () -> parseAttributes(input, nextNextLetterIndex, acc)
                         : (Done<Map<String, JsonValue<?>>>) () -> acc;
             }
             return null;
@@ -65,12 +61,12 @@ public class JsonParser implements KeyValueParser<JsonObject> {
     }
 
     private Triplet<String, ? extends JsonValue<?>, Integer> parseAttribute(String input, int begin) {
-        return Optional.ofNullable(tokenizeKey(input, jumpBlack(input, begin).get())).flatMap(key -> {
-            final int colonIndex = jumpBlack(input, key.snd() + 1).get();
+        return Optional.ofNullable(tokenizeKey(input, jumpBlank(input, begin).get())).flatMap(key -> {
+            final int colonIndex = jumpBlank(input, key.snd() + 1).get();
             if (input.charAt(colonIndex) != ':') {
                 return Optional.empty();
             }
-            return Optional.ofNullable(tokenizeValue(input, jumpBlack(input, colonIndex + 1).get())).map(value ->
+            return Optional.ofNullable(tokenizeValue(input, jumpBlank(input, colonIndex + 1).get())).map(value ->
                 new Triplet<>(key.fst(), value.fst(), value.snd())
             );
         }).orElse(null);
@@ -80,8 +76,8 @@ public class JsonParser implements KeyValueParser<JsonObject> {
         if (input.charAt(begin) != '"') {
            return null;
         }
-        final int endIndex = tokenizeString(input, begin + 1);
-        return (begin < endIndex) ? new Pair<>(input.substring(begin + 1, endIndex), endIndex) : null;
+        final int end = tokenizeString(input, begin + 1);
+        return (begin < end) ? new Pair<>(input.substring(begin + 1, end), end) : null;
     }
 
     private Pair<? extends JsonValue<?>, Integer> tokenizeValue(String input, int begin) {
@@ -109,9 +105,14 @@ public class JsonParser implements KeyValueParser<JsonObject> {
         }
         if (c == 't' || c == 'T' || c == 'f' || c == 'F') {
             final int end = tokenizeBoolean(input, begin);
-            return (begin < end)
-                    ? new Pair<>(new JsonBoolean(Boolean.parseBoolean(input.substring(begin, end + 1))), end)
-                    : null;
+            switch (end - begin) {
+                case 3:
+                    return new Pair<>(new JsonBoolean(true), end);
+                case 4:
+                    return new Pair<>(new JsonBoolean(false), end);
+                default:
+                    return null;
+            }
         }
         if (c == '{') {
             final int end = tokenizeObject(input, begin + 1);
@@ -154,8 +155,6 @@ public class JsonParser implements KeyValueParser<JsonObject> {
     }
 
     private int tokenizeBoolean(String input, int i) {
-        System.out.println(input.substring(i, i + 4));
-        System.out.println(input.substring(i, i + 5));
         if ((i + 3 < input.length()) && input.substring(i, i + 4).equalsIgnoreCase("true")) {
             return i + 3;
         }
@@ -166,7 +165,7 @@ public class JsonParser implements KeyValueParser<JsonObject> {
     }
 
     private int tokenizeNull(String input, int i) {
-        return ((i + 4 < input.length()) && input.substring(i, i + 4).equalsIgnoreCase("null")) ? (i + 4) : -1;
+        return ((i + 3 < input.length()) && input.substring(i, i + 4).equalsIgnoreCase("null")) ? (i + 3) : -1;
     }
 
     private TailRecursion<Integer> tokenizePossiblyNestedValue(String input, char endToken, int i, int depth) {
@@ -174,7 +173,7 @@ public class JsonParser implements KeyValueParser<JsonObject> {
             return (Done<Integer>) () -> -1;
         }
         final char c = input.charAt(i);
-        if (depth == 0 && c == endToken) {
+        if (c == endToken && depth == 0) {
             return (Done<Integer>) () -> i;
         }
         if (c == '{' || c == '[') {

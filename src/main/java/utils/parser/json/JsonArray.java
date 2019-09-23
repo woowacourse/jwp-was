@@ -1,4 +1,4 @@
-package utils.parser;
+package utils.parser.json;
 
 import java.util.Arrays;
 import java.util.Collections;

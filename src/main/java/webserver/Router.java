@@ -1,51 +1,79 @@
 package webserver;
 
-import utils.fp.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.io.FileIoUtils;
-import utils.parser.JsonObject;
-import utils.parser.KeyValueParserFactory;
-import webserver.http.startline.HttpMethod;
+import webserver.http.HttpRequest;
+import webserver.http.HttpResponse;
+import webserver.http.HttpContentType;
 
-import java.util.Collections;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class Router {
-    private static final String ROUTER_CONFIG_PATH = "./router-config.json";
+    private static final Logger logger = LoggerFactory.getLogger(Router.class);
 
-    private static final Router instance = new Router();
+    private static final RouterConfig config = RouterConfig.getInstance();
 
-    private final Map<HttpMethod, Map<String, RoutedDestination>> config;
-
-    public static Router getInstance() {
-        return instance;
+    public static HttpResponse serve(HttpRequest req) {
+        return (req.path().extension().isEmpty()) ? route(req) : serveStaticFiles(req);
     }
 
-    private Router() {
-        this.config = FileIoUtils.loadFileFromClasspath(ROUTER_CONFIG_PATH).map(config ->
-                KeyValueParserFactory.jsonParser().interpret(config)
-        ).map(json ->
-                json.entrySet().stream().map(perMethod ->
-                        new Pair<>(
-                                HttpMethod.of(perMethod.getKey()).get(),
-                                ((JsonObject) perMethod.getValue()).entrySet().stream().map(perRoute ->
-                                        new Pair<>(
-                                                perRoute.getKey(),
-                                                new RoutedDestination((JsonObject) perRoute.getValue())
-                                        )
-                                ).collect(Collectors.toMap(Pair::fst, Pair::snd))
-                        )
-                ).collect(
-                        Collectors.collectingAndThen(
-                                Collectors.toMap(Pair::fst, Pair::snd),
-                                Collections::unmodifiableMap
-                        )
-                )
-        ).orElse(null);
+    private static HttpResponse route(HttpRequest req) {
+        return config.match(req.method(), req.path()).map(dest -> {
+            logger.debug("Route: {} -> {}", req.path(), dest);
+            try {
+                if (dest.pathVars().isEmpty()) {
+                    return (HttpResponse) Class.forName("controller." + dest.controller())
+                                                .getMethod(dest.method(), HttpRequest.class)
+                                                .invoke(null, req);
+                }
+                return (HttpResponse) Class.forName("controller." + dest.controller())
+                                            .getMethod(dest.method(), HttpRequest.class, Map.class)
+                                            .invoke(null, req, dest.pathVars());
+            } catch (
+                    ClassNotFoundException |
+                    NoSuchMethodException |
+                    IllegalAccessException |
+                    InvocationTargetException e
+            ) {
+                logger.error(e.getMessage());
+                return HttpResponse.INTERNAL_SERVER_ERROR;
+            }
+        }).orElse(HttpResponse.NOT_FOUND);
     }
 
-    public Optional<RoutedDestination> routeTo(HttpMethod method, String src) {
-        return Optional.ofNullable(this.config.get(method)).map(mappingTable -> mappingTable.get(src));
+    private static HttpResponse serveStaticFiles(HttpRequest req) {
+        return FileIoUtils.loadFileFromClasspath("./static" + req.path()).map(body ->
+            HttpResponse.builder(extensionToContentType(req.path().extension()))
+                        .version(req)
+                        .connection(req)
+                        .body(body)
+                        .build()
+        ).orElse(HttpResponse.NOT_FOUND);
+    }
+
+    private static HttpContentType extensionToContentType(String extension) {
+        switch (extension) {
+            case "html":
+                return HttpContentType.TEXT_HTML_UTF_8;
+            case "css":
+                return HttpContentType.TEXT_CSS_UTF_8;
+            case "js":
+                return HttpContentType.APPLICATION_JAVASCRIPT_UTF_8;
+            case "bmp":
+                return HttpContentType.IMAGE_BMP;
+            case "gif":
+                return HttpContentType.IMAGE_GIF;
+            case "jpg":
+                return HttpContentType.IMAGE_JPEG;
+            case "png":
+                return HttpContentType.IMAGE_PNG;
+            case "ico":
+                return HttpContentType.IMAGE_X_ICON;
+            case "txt":
+            default:
+                return HttpContentType.TEXT_PLAIN_UTF_8;
+        }
     }
 }

@@ -22,7 +22,7 @@ public class FileIoUtils {
                     )
             );
         } catch (IOException | URISyntaxException | NullPointerException e) {
-            logger.debug(e.getMessage());
+            logger.error(e.getMessage());
             return Optional.empty();
         }
     }

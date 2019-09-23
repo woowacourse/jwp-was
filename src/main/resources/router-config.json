@@ -3,6 +3,10 @@
     "/" : {
       "controller": "IndexController",
       "method": "index"
+    },
+    "/test/{num}" : {
+      "controller": "TestController",
+      "method": "test"
     }
   },
 

@@ -66,11 +66,12 @@ public class NetworkBlockingIO implements NetworkIO {
     private TailRecursion<String> checkIfLineBreak(StringBuilder acc) throws IOException {
         final int c = this.reader.read();
         if (c == '\r') {
-            this.reader.mark(1);
-            if (this.reader.ready() && this.reader.read() == '\n') {
-                return (Done<String>) () -> acc.append("\r\n").toString();
+            if (this.reader.ready()) {
+                final int _c = this.reader.read();
+                return (_c == '\n')
+                        ? (Done<String>) () -> acc.append("\r\n").toString()
+                        : (Done<String>) () -> acc.append("\r").append(_c).toString();
             }
-            this.reader.reset();
             return (Done<String>) () -> acc.append("\r").toString();
         }
         if (c == '\n') {

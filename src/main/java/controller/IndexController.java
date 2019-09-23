@@ -3,7 +3,7 @@ package controller;
 import utils.io.FileIoUtils;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
-import webserver.http.headerfields.HttpContentType;
+import webserver.http.HttpContentType;
 
 public class IndexController {
     public static HttpResponse index(HttpRequest req) {

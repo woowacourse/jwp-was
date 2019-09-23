@@ -5,8 +5,8 @@ import model.User;
 import utils.io.FileIoUtils;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
-import webserver.http.headerfields.HttpContentType;
-import webserver.http.startline.HttpStatusCode;
+import webserver.http.HttpContentType;
+import webserver.http.HttpStatusCode;
 
 public class UserController {
     public static HttpResponse showSignUpPage(HttpRequest req) {

@@ -5,10 +5,6 @@ import org.slf4j.LoggerFactory;
 import utils.StringUtils;
 import utils.io.NetworkIO;
 import utils.parser.KeyValueParserFactory;
-import webserver.http.headerfields.*;
-import webserver.http.startline.HttpMethod;
-import webserver.http.startline.HttpPath;
-import webserver.http.startline.HttpVersion;
 
 import java.util.Collections;
 import java.util.HashMap;

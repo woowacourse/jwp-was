@@ -1,4 +1,4 @@
-package utils.parser;
+package utils.parser.json;
 
 public class JsonString extends JsonValue<String> {
     public JsonString(String val) {

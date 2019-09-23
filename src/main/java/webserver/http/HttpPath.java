@@ -1,4 +1,4 @@
-package webserver.http.startline;
+package webserver.http;
 
 import java.net.URLDecoder;
 import java.util.Objects;
@@ -8,8 +8,8 @@ public class HttpPath {
 
     public HttpPath(String path) {
         this.path = (path.contains("?") && path.lastIndexOf("?") > path.lastIndexOf("/"))
-                ? URLDecoder.decode(path.substring(0, path.lastIndexOf("?")))
-                : URLDecoder.decode(path);
+                ? path.substring(0, path.lastIndexOf("?"))
+                : path;
     }
 
     public String extension() {
@@ -18,7 +18,7 @@ public class HttpPath {
 
     @Override
     public String toString() {
-        return this.path;
+        return URLDecoder.decode(this.path);
     }
 
     @Override
