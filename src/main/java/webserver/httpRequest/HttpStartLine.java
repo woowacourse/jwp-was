@@ -1,15 +1,20 @@
 package webserver.httpRequest;
 
+import webserver.HttpMethod;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class HttpStartLine {
-    private final String method;
+    private static final String START_LINE_SEPARATOR = " ";
+    private static final String QUERY_PARAMETER_SEPARATOR = "\\?";
+
+    private final HttpMethod method;
     private final String path;
     private final Map<String, String> parameters;
     private final String httpVersion;
 
-    private HttpStartLine(String method, String path, Map<String, String> parameters, String httpVersion) {
+    private HttpStartLine(HttpMethod method, String path, Map<String, String> parameters, String httpVersion) {
         this.method = method;
         this.path = path;
         this.parameters = parameters;
@@ -17,18 +22,23 @@ public class HttpStartLine {
     }
 
     public static HttpStartLine of(String startLine) {
-        String[] splitStartLine = startLine.split(" ");
+        String[] splitStartLine = startLine.split(START_LINE_SEPARATOR);
 
         Map<String, String> queryParams = new HashMap<>();
 
+        HttpMethod httpMethod = HttpMethod.valueOf(splitStartLine[0]);
         String target = splitStartLine[1];
-        String[] splitTarget = target.split("\\?");
+        String[] splitTarget = target.split(QUERY_PARAMETER_SEPARATOR);
         String path = splitTarget[0];
 
-        if (splitTarget.length == 2) {
+        if (hasQueryParams(splitTarget)) {
             parseQueryParams(queryParams, splitTarget);
         }
-        return new HttpStartLine(splitStartLine[0], path, queryParams, splitStartLine[2]);
+        return new HttpStartLine(httpMethod, path, queryParams, splitStartLine[2]);
+    }
+
+    private static boolean hasQueryParams(String[] splitTarget) {
+        return splitTarget.length == 2;
     }
 
     private static void parseQueryParams(Map<String, String> queryParams, String[] splitTarget) {
@@ -43,15 +53,11 @@ public class HttpStartLine {
         }
     }
 
-    public boolean isGet() {
-        return method.equals("GET");
+    public boolean checkMethod(HttpMethod httpMethod) {
+        return method.equals(httpMethod);
     }
 
-    public boolean isPost() {
-        return method.equals("POST");
-    }
-
-    public String getMethod() {
+    public HttpMethod getMethod() {
         return method;
     }
 

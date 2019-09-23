@@ -42,11 +42,11 @@ public class HttpRequestFactory {
         HttpRequestHeader httpRequestHeader = HttpRequestHeader.of(header);
 
         HttpRequestBody httpRequestBody = null;
-        if (httpStartLine.isGet()) {
+        if (httpStartLine.checkMethod(HttpMethod.GET)) {
             httpRequestBody = HttpRequestBody.empty();
         }
 
-        if (httpStartLine.isPost()) {
+        if (httpStartLine.checkMethod(HttpMethod.POST)) {
             String body = parseBody(br, httpRequestHeader.getContentLength());
             httpRequestBody = HttpRequestBody.of(body);
         }

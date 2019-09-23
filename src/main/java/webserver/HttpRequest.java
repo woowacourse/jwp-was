@@ -15,8 +15,8 @@ public class HttpRequest {
         this.httpRequestBody = httpRequestBody;
     }
 
-    public String getMethod() {
-        return httpStartLine.getMethod();
+    public boolean checkMethod(HttpMethod httpMethod) {
+        return httpStartLine.checkMethod(httpMethod);
     }
 
     public String getPath() {

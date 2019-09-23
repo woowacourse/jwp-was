@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HttpResponse {
+    private static final String CONTENT_TYPE = "Content-Type";
+
     private Map<String, String> header = new HashMap<>();
     private HttpStatus httpStatus;
 
@@ -16,7 +18,7 @@ public class HttpResponse {
     }
 
     public String getContentType() {
-        String contentType = header.get("Content-Type");
+        String contentType = header.get(CONTENT_TYPE);
         if (contentType == null) {
             return "text/plain";
         }
