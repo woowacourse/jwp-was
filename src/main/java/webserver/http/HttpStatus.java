@@ -1,5 +1,7 @@
 package webserver.http;
 
+import java.util.Arrays;
+
 public enum HttpStatus {
     OK(200, "OK"),
     CREATED(201, "Created"),
@@ -23,11 +25,26 @@ public enum HttpStatus {
         this.phrase = phrase;
     }
 
+    public static HttpStatus from(final String status) {
+        return Arrays.stream(values())
+                .filter(httpStatus -> httpStatus.contains(status))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("not support HttpStatus"));
+    }
+
+    private boolean contains(final String status) {
+        return getFullStatus().contains(status);
+    }
+
     public int getCode() {
         return code;
     }
 
     public String getPhrase() {
         return phrase;
+    }
+
+    public String getFullStatus() {
+        return String.format("%s %s", code, phrase);
     }
 }

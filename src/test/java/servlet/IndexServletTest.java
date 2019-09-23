@@ -4,24 +4,23 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import test.HttpTestClient;
 import webserver.WebServer;
+import webserver.http.HttpStatus;
 
 import java.io.IOException;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class IndexServletTest {
     private HttpTestClient httpTestClient;
 
     @BeforeEach
-    void setUp() throws IOException {
+    void setUp()  {
         httpTestClient = new HttpTestClient(WebServer.DEFAULT_PORT);
     }
 
     @Test
     void get() {
-        final String response = httpTestClient.get().uri("/")
-                .exchange();
-
-        assertThat(response).contains("runtime 에");
+        httpTestClient.get().uri("/")
+                .exchange()
+                .matchHttpStatus(HttpStatus.OK)
+                .containsBody("runtime 에");
     }
 }

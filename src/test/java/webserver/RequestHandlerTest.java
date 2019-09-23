@@ -3,10 +3,9 @@ package webserver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import test.HttpTestClient;
+import webserver.http.HttpStatus;
 
 import java.io.IOException;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class RequestHandlerTest {
     private HttpTestClient httpTestClient;
@@ -18,10 +17,10 @@ class RequestHandlerTest {
 
     @Test
     void static_파일_요청() {
-        final String response = httpTestClient.get()
+        httpTestClient.get()
                 .uri("/css/styles.css")
-                .exchange();
-
-        assertThat(response).contains("background-color:#e0e0e0;");
+                .exchange()
+                .matchHttpStatus(HttpStatus.OK)
+                .containsBody("background-color:#e0e0e0;");
     }
 }
