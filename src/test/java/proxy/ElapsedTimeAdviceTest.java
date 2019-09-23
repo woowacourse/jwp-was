@@ -14,7 +14,7 @@ class ElapsedTimeAdviceTest {
 
         ProxyFactory pf = new ProxyFactory();
         pf.setTarget(slowPrinter);
-        pf.addAdvice(new ElapsedTimeAdvice());
+        pf.addAdvice(ElapsedTimeAdvice.getInstance());
 
         Worker proxiedSlowPrinter = (Worker) pf.getProxy();
 

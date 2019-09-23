@@ -5,6 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.ProxyFactory;
 import proxy.AccessLoggingAdvice;
 import proxy.ElapsedTimeAdvice;
+import webserver.controller.StaticController;
+import webserver.controller.TemplatesController;
+import webserver.controller.UserController;
+import webserver.router.Router;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -18,7 +22,17 @@ public class WebServer {
     private static final int DEFAULT_PORT = 8080;
 
     public static void main(String args[]) throws Exception {
+        registerControllers();
+
         run(args);
+    }
+
+    private static void registerControllers() {
+        Router.getInstance()
+                .addController(path -> path.contains(".html"), new TemplatesController())
+                .addController(path -> path.contains(".css"), new StaticController())
+                .addController(path -> path.contains(".js"), new StaticController())
+                .addController(pattern -> pattern.equals("/user/create"), new UserController());
     }
 
     private static void run(String[] args) throws IOException {
