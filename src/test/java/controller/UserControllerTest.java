@@ -1,10 +1,12 @@
 package controller;
 
+import db.DataBase;
 import http.request.Request;
 import http.request.RequestInformation;
 import http.request.RequestMethod;
 import http.request.RequestUrl;
 import http.response.RedirectResponse;
+import model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -27,7 +29,7 @@ public class UserControllerTest {
         information.put("Content-Length:", "59");
         information.put("Content-Type:", "application/x-www-form-urlencoded");
         information.put("Accept:", "*/*");
-        information.put("Query-Parameters:", "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net");
+        information.put("Query-Parameters:", "userId=javajigi&password=password&name=이인권&email=podo@gmail.com");
 
 
         RequestInformation requestInformation = new RequestInformation(information);
@@ -36,7 +38,9 @@ public class UserControllerTest {
 
         ControllerFactory factory = new ControllerFactory();
         Controller controller = factory.createController(request);
+        controller.createResponse(request);
 
+        assertThat(DataBase.findUserById("javajigi")).isEqualTo(new User("javajigi", "password", "이인권", "podo@gmail.com"));
         assertThat(controller.createResponse(request).getClass()).isEqualTo(RedirectResponse.class);
     }
 }

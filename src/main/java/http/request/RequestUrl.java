@@ -1,5 +1,7 @@
 package http.request;
 
+import java.util.Objects;
+
 public class RequestUrl {
     private RequestContentType requestContentType;
     private String originalUrlPath;
@@ -39,5 +41,20 @@ public class RequestUrl {
 
     public String getDestinationFolderUrlPath() {
         return destinationFolderUrlPath;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RequestUrl that = (RequestUrl) o;
+        return requestContentType == that.requestContentType &&
+                Objects.equals(originalUrlPath, that.originalUrlPath) &&
+                Objects.equals(destinationFolderUrlPath, that.destinationFolderUrlPath);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(requestContentType, originalUrlPath, destinationFolderUrlPath);
     }
 }

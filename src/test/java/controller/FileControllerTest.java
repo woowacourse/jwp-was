@@ -32,4 +32,22 @@ public class FileControllerTest {
 
         assertThat(controller.createResponse(request).getClass()).isEqualTo(FileResponse.class);
     }
+
+    @Test
+    @DisplayName("Get File JavaScript 요청시 제대로된 response가 나오는지 테스트")
+    void createGetFileJSResponse() {
+        RequestMethod method = RequestMethod.GET;
+        RequestUrl url = RequestUrl.from("/index.js");
+        Map<String, String> information = new HashMap<>();
+        information.put("Request-Line:", "GET /index.js HTTP/1.1");
+        information.put("Host:", "localhost:8080");
+        information.put("Connection:", "keep-alive");
+        RequestInformation requestInformation = new RequestInformation(information);
+
+        Request request = new Request(method, url, requestInformation);
+        ControllerFactory factory = new ControllerFactory();
+        Controller controller = factory.createController(request);
+
+        assertThat(controller.createResponse(request).getClass()).isEqualTo(FileResponse.class);
+    }
 }

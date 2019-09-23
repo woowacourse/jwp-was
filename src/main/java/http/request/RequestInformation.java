@@ -8,7 +8,6 @@ public class RequestInformation {
     private static final String DELIMITER = " ";
 
     private Map<String, String> requestInformation;
-    private List<String> requestUrlPatterns = Arrays.asList("user", "html", "css", "js", "ico", "woff", "ttf");
 
     public RequestInformation(Map<String, String> requestInformation) {
         this.requestInformation = requestInformation;
@@ -20,10 +19,6 @@ public class RequestInformation {
 
     public RequestUrl extractUrl() {
         return RequestUrl.from(tokenize()[1]);
-    }
-
-    public String getOriginUrlPath() {
-        return tokenize()[1];
     }
 
     private String[] tokenize() {

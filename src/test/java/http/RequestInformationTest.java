@@ -2,6 +2,7 @@ package http;
 
 import http.request.RequestInformation;
 import http.request.RequestMethod;
+import http.request.RequestUrl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -9,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.in;
 
 public class RequestInformationTest {
 
@@ -51,6 +53,18 @@ public class RequestInformationTest {
     @Test
     @DisplayName("제대로 URL생성하는지 테스트")
     void getUrlPath() {
+        Map<String, String> information = new HashMap<>();
+        information.put("Request-Line:", "GET /user/create HTTP/1.1");
+        RequestInformation requestInformation = new RequestInformation(information);
+        assertThat(requestInformation.extractUrl()).isEqualTo(RequestUrl.from("/user/create"));
+    }
 
+    @Test
+    @DisplayName("제대로 URL생성하는지 테스트2")
+    void postUrlPath() {
+        Map<String, String> information = new HashMap<>();
+        information.put("Request-Line:", "GET /user/create/friend HTTP/1.1");
+        RequestInformation requestInformation = new RequestInformation(information);
+        assertThat(requestInformation.extractUrl()).isEqualTo(RequestUrl.from("/user/create/friend"));
     }
 }
