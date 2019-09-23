@@ -31,7 +31,5 @@ public class WebServer {
                 executor.execute(new RequestHandler(connection));
             }
         }
-
-        executor.shutdown();
     }
 }
