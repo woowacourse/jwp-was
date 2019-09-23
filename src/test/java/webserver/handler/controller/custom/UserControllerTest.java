@@ -2,27 +2,22 @@ package webserver.handler.controller.custom;
 
 import org.junit.jupiter.api.Test;
 import webserver.handler.controller.Controller;
+import webserver.handler.controller.HttpRequestHelper;
 import webserver.handler.controller.resource.TemplateController;
 import webserver.http.HttpStatus;
 import webserver.http.MediaType;
 import webserver.http.request.HttpRequest;
-import webserver.http.request.RequestHeaderParser;
 import webserver.http.response.HttpResponse;
 import webserver.view.TemplateResourceResolver;
 import webserver.view.ViewLocation;
 import webserver.view.ViewResolver;
-
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UserControllerTest {
     @Test
     void 회원가입_페이지_요청() throws Exception {
-        FileInputStream fileInputStream = new FileInputStream("src/test/java/data/user_form_request.txt");
-        InputStreamReader inputStream = new InputStreamReader(fileInputStream);
-        HttpRequest httpRequest = RequestHeaderParser.parseRequest(inputStream);
+        HttpRequest httpRequest = HttpRequestHelper.createHttpRequest("src/test/java/data/user_form_request.txt");
         HttpResponse httpResponse = HttpResponse.of();
         ViewResolver viewResolver = new TemplateResourceResolver();
 
@@ -36,9 +31,7 @@ class UserControllerTest {
 
     @Test
     void 회원가입_성공() throws Exception {
-        FileInputStream fileInputStream = new FileInputStream("src/test/java/data/user_form_post_request.txt");
-        InputStreamReader inputStream = new InputStreamReader(fileInputStream);
-        HttpRequest httpRequest = RequestHeaderParser.parseRequest(inputStream);
+        HttpRequest httpRequest = HttpRequestHelper.createHttpRequest("src/test/java/data/user_form_post_request.txt");
         HttpResponse httpResponse = HttpResponse.of();
         ViewResolver viewResolver = new TemplateResourceResolver();
 
