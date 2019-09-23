@@ -20,9 +20,7 @@ class UserControllerTest {
     @BeforeEach
     void setUp() {
         request = ServletRequest.builder()
-                .method(HttpMethod.POST)
-                .uri("/user/create")
-                .protocol("HTTP/1.1")
+                .requestLine(HttpMethod.POST, "/user/create", "HTTP/1.1")
                 .params(new HashMap<String, String>() {{
                     put("userId", "userId");
                     put("password", "password");

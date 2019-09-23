@@ -1,9 +1,13 @@
 package http.session;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class HttpSessionManager implements SessionManager {
+    private static final Logger log = LoggerFactory.getLogger(HttpSessionManager.class);
     private final IdGenerateStrategy idGenerateStrategy;
     private Map<String, HttpSession> sessions = new HashMap<>();
 
@@ -14,7 +18,12 @@ public class HttpSessionManager implements SessionManager {
 
     @Override
     public HttpSession getSession(String id) {
-        return sessions.get(id);
+        if (hasSessionId(id)) {
+            HttpSession session = sessions.get(id);
+            log.info("SESSION REQUESTED, RETURN {}", session);
+            return session;
+        }
+        throw new InvalidSessionException();
     }
 
     @Override
@@ -24,6 +33,7 @@ public class HttpSessionManager implements SessionManager {
 
     private HttpSession generate() {
         String id = generateId();
+        log.info("SESSION GENERATED {}", id);
         HttpSession session = new HttpSession(id);
         sessions.put(id, session);
         return session;
@@ -33,7 +43,11 @@ public class HttpSessionManager implements SessionManager {
         String id;
         do {
             id = idGenerateStrategy.generate();
-        } while (sessions.keySet().contains(id));
+        } while (hasSessionId(id));
         return id;
+    }
+
+    private boolean hasSessionId(String id) {
+        return sessions.keySet().contains(id);
     }
 }

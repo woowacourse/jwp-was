@@ -44,4 +44,12 @@ public class HttpSession {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    @Override
+    public String toString() {
+        return "HttpSession{" +
+                "id='" + id + '\'' +
+                ", attributes=" + attributes +
+                '}';
+    }
 }

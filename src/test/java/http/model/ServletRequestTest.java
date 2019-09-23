@@ -16,9 +16,7 @@ class ServletRequestTest {
     @Test
     void 빌더_정상_동작() {
         ServletRequest servletRequest = ServletRequest.builder()
-                .method(HttpMethod.GET)
-                .uri("/index.html")
-                .protocol("HTTP/1.1")
+                .requestLine(HttpMethod.GET, "/index.html", "HTTP/1.1")
                 .headers(new HashMap<String, String>() {{
                     put("Cookie", "Cookie");
                 }}).build();
@@ -31,19 +29,20 @@ class ServletRequestTest {
     @Test
     void 잘못된_URI() {
         assertThatThrownBy(() -> ServletRequest.builder()
-                .uri("malformed")).isInstanceOf(IllegalHttpRequestException.class);
+                .requestLine(HttpMethod.GET, "malformed", "HTTP/1.1")).isInstanceOf(IllegalHttpRequestException.class);
     }
 
     @Test
     void 잘못된_프로토콜() {
         assertThatThrownBy(() -> ServletRequest.builder()
-                .protocol("1.1").build()).isInstanceOf(IllegalHttpRequestException.class);
+                .requestLine(HttpMethod.GET, "/index.html", "1.1")).isInstanceOf(IllegalHttpRequestException.class);
     }
 
     @Test
     void 헤더_없이_빌드할_경우() {
         ServletRequest request = ServletRequest.builder()
-                .method(HttpMethod.GET).build();
+                .requestLine(HttpMethod.GET, "/index.html", "HTTP/1.1")
+                .build();
 
         assertThat(request.getHeaders()).isNotNull();
     }
@@ -51,7 +50,7 @@ class ServletRequestTest {
     @Test
     void 파라미터_없이_빌드할_경우() {
         ServletRequest request = ServletRequest.builder()
-                .method(HttpMethod.GET).build();
+                .requestLine(HttpMethod.GET, "/index.html", "HTTP/1.1").build();
 
         assertThat(request.getParameters()).isNotNull();
     }

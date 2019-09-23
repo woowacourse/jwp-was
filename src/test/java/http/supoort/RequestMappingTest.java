@@ -13,9 +13,7 @@ class RequestMappingTest {
     @BeforeEach
     void setUp() {
         request = ServletRequest.builder()
-                .method(HttpMethod.GET)
-                .uri("/index.html")
-                .protocol("HTTP/1.1")
+                .requestLine(HttpMethod.GET, "/index.html", "HTTP/1.1")
                 .build();
     }
 

@@ -24,9 +24,7 @@ public abstract class AbstractRequestMessageConverter implements RequestMessageC
         uri = parseUri(params, uri);
 
         return ServletRequest.builder()
-                .method(httpMethod)
-                .uri(uri)
-                .protocol(protocol)
+                .requestLine(httpMethod, uri, protocol)
                 .headers(headers)
                 .params(params)
                 .build();
@@ -43,9 +41,7 @@ public abstract class AbstractRequestMessageConverter implements RequestMessageC
         }
 
         return ServletRequest.builder()
-                .method(httpMethod)
-                .uri(uri)
-                .protocol(protocol)
+                .requestLine(httpMethod, uri, protocol)
                 .headers(headers)
                 .params(params)
                 .build();

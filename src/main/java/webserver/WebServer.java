@@ -4,6 +4,9 @@ import http.controller.Controller;
 import http.controller.FileResourceController;
 import http.controller.HttpRequestControllers;
 import http.controller.UserController;
+import http.session.HttpSessionManager;
+import http.session.RandomGenerateStrategy;
+import http.session.SessionManager;
 import http.supoort.RequestMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +24,8 @@ public class WebServer {
     public static void main(String[] args) throws Exception {
         int port = getPort(args);
 
-
         HttpRequestControllers requestHandlers = initRequestHandlers();
+        SessionManager sessionManager = new HttpSessionManager(new RandomGenerateStrategy());
 
         ExecutorService es = Executors.newFixedThreadPool(100);
 
@@ -33,7 +36,7 @@ public class WebServer {
             // 클라이언트가 연결될때까지 대기한다.
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
-                es.execute(new RequestHandler(connection, requestHandlers));
+                es.execute(new RequestHandler(connection, requestHandlers, sessionManager));
             }
         }
         es.shutdown();
@@ -57,5 +60,4 @@ public class WebServer {
         httpRequestControllers.addHandler(userRequestController);
         return httpRequestControllers;
     }
-
 }

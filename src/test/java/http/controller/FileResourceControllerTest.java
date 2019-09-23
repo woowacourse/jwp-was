@@ -15,9 +15,7 @@ class FileResourceControllerTest {
     @Test
     void 파일리소스_응답이_적절한지() {
         ServletRequest request = ServletRequest.builder()
-                .method(HttpMethod.GET)
-                .uri("/index.html")
-                .protocol("HTTP/1.1")
+                .requestLine(HttpMethod.GET, "/index.html", "HTTP/1.1")
                 .build();
 
         ServletResponse response = new ServletResponse();

@@ -3,8 +3,8 @@ package webserver;
 import http.controller.HttpRequestControllers;
 import http.model.request.ServletRequest;
 import http.model.response.ServletResponse;
-import http.session.HttpSessionManager;
-import http.supoort.converter.request.HttpRequestFactory;
+import http.session.SessionManager;
+import http.supoort.converter.request.HttpRequestParser;
 import http.supoort.converter.response.ResponseMessageConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,17 +14,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.util.UUID;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private final Socket connection;
     private final HttpRequestControllers httpRequestControllers;
+    private final SessionManager sessionManager;
 
-    public RequestHandler(Socket connection, HttpRequestControllers httpRequestControllers) {
+    public RequestHandler(Socket connection, HttpRequestControllers httpRequestControllers, SessionManager sessionManager) {
         this.connection = connection;
         this.httpRequestControllers = httpRequestControllers;
+        this.sessionManager = sessionManager;
     }
 
     public void run() {
@@ -41,7 +42,8 @@ public class RequestHandler implements Runnable {
 
     private void handleRequest(InputStream in, OutputStream out) {
         try {
-            ServletRequest request = new HttpRequestFactory(new HttpSessionManager(() -> UUID.randomUUID().toString())).getRequest(in);
+            ServletRequest request = HttpRequestParser.parse(in);
+            request.bindSessionManager(this.sessionManager);
             ServletResponse response = new ServletResponse();
 
             httpRequestControllers.doService(request, response);

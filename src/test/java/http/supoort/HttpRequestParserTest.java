@@ -20,9 +20,7 @@ class HttpRequestParserTest {
     void 올바른_입력_파싱_확인() {
         InputStream in = new ByteArrayInputStream("GET /index.html HTTP/1.1\r\nHost: localhost:8080/".getBytes());
         ServletRequest request = ServletRequest.builder()
-                .method(HttpMethod.GET)
-                .uri("/index.html")
-                .protocol("HTTP/1.1")
+                .requestLine(HttpMethod.GET, "/index.html", "HTTP/1.1")
                 .build();
 
         ServletRequest parsedRequest = HttpRequestParser.parse(in);
@@ -38,9 +36,7 @@ class HttpRequestParserTest {
         parameters.put("age", "25");
 
         ServletRequest request = ServletRequest.builder()
-                .method(HttpMethod.GET)
-                .uri("/index.html")
-                .protocol("HTTP/1.1")
+                .requestLine(HttpMethod.GET, "/index.html", "HTTP/1.1")
                 .params(parameters)
                 .build();
 

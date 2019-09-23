@@ -1,34 +1,51 @@
 package http.model.request;
 
+import http.model.common.HttpCookie;
 import http.model.common.HttpHeaders;
 import http.model.common.HttpProtocols;
 import http.session.HttpSession;
+import http.session.SessionManager;
 
 import java.util.Map;
 
 public class ServletRequest {
+    private static final String COOKIE = "Cookie";
+    private SessionManager sessionManager;
     private HttpMethod httpMethod;
     private HttpUri httpUri;
     private HttpProtocols httpProtocols;
     private HttpHeaders httpHeaders;
     private HttpParameters httpParameters;
-    private HttpSession session;
+    private HttpCookie httpCookie;
 
     private ServletRequest(HttpMethod httpMethod, HttpUri httpUri, HttpProtocols httpProtocols,
-                           HttpHeaders httpHeaders, HttpParameters httpParameters) {
+                           HttpHeaders httpHeaders, HttpParameters httpParameters, HttpCookie httpCookie) {
         this.httpMethod = httpMethod;
         this.httpUri = httpUri;
         this.httpProtocols = httpProtocols;
         this.httpHeaders = httpHeaders;
         this.httpParameters = httpParameters;
+        this.httpCookie = httpCookie;
     }
 
     public static Builder builder() {
         return new Builder();
     }
 
-    public void bindSession(HttpSession session) {
-        this.session = session;
+    public boolean hasCookie() {
+        return httpHeaders.getHeader(COOKIE) != null;
+    }
+
+    public String getCookie() {
+        return httpHeaders.getHeader(COOKIE);
+    }
+
+    public HttpSession getSession() {
+        return this.sessionManager.getSession();
+    }
+
+    public void bindSessionManager(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
     }
 
     public HttpMethod getHttpMethod() {
@@ -65,18 +82,11 @@ public class ServletRequest {
         private HttpProtocols httpProtocols;
         private HttpHeaders httpHeaders;
         private HttpParameters httpParameters;
+        private HttpCookie httpCookie;
 
-        public Builder method(HttpMethod httpMethod) {
+        public Builder requestLine(HttpMethod httpMethod, String uri, String protocol) {
             this.httpMethod = httpMethod;
-            return this;
-        }
-
-        public Builder uri(String uri) {
             this.httpUri = new HttpUri(uri);
-            return this;
-        }
-
-        public Builder protocol(String protocol) {
             this.httpProtocols = HttpProtocols.of(protocol);
             return this;
         }
@@ -91,6 +101,11 @@ public class ServletRequest {
             return this;
         }
 
+        public Builder cookie(Map<String, String> cookie) {
+            this.httpCookie = new HttpCookie(cookie);
+            return this;
+        }
+
         public ServletRequest build() {
             if (httpHeaders == null) {
                 httpHeaders = new HttpHeaders();
@@ -98,7 +113,10 @@ public class ServletRequest {
             if (httpParameters == null) {
                 httpParameters = new HttpParameters();
             }
-            return new ServletRequest(this.httpMethod, this.httpUri, this.httpProtocols, this.httpHeaders, this.httpParameters);
+            if (httpCookie == null) {
+                httpCookie = new HttpCookie();
+            }
+            return new ServletRequest(this.httpMethod, this.httpUri, this.httpProtocols, this.httpHeaders, this.httpParameters, this.httpCookie);
         }
     }
 }
