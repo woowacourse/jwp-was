@@ -1,30 +1,22 @@
 package http.response;
 
 import http.common.HttpHeader;
-import http.common.HttpVersion;
 
 public class HttpResponse {
-    private HttpVersion httpVersion;
-    private HttpStatus httpStatus;
+    private StatusLine statusLine;
     private HttpHeader httpHeader;
     private HttpResponseBody httpResponseBody;
 
-    public HttpResponse(final HttpVersion httpVersion,
-                        final HttpStatus httpStatus,
+    public HttpResponse(final StatusLine statusLine,
                         final HttpHeader httpHeader,
                         final HttpResponseBody httpResponseBody) {
-        this.httpVersion = httpVersion;
-        this.httpStatus = httpStatus;
+        this.statusLine = statusLine;
         this.httpHeader = httpHeader;
         this.httpResponseBody = httpResponseBody;
     }
 
-    public HttpVersion getHttpVersion() {
-        return httpVersion;
-    }
-
-    public HttpStatus getHttpStatus() {
-        return httpStatus;
+    public StatusLine getStatusLine() {
+        return statusLine;
     }
 
     public HttpHeader getHttpHeader() {
@@ -38,8 +30,7 @@ public class HttpResponse {
     @Override
     public String toString() {
         return "HttpResponse{" +
-                "httpVersion=" + httpVersion +
-                ", httpStatus=" + httpStatus +
+                "statusLine=" + statusLine +
                 ", httpHeader=" + httpHeader +
                 ", httpResponseBody=" + httpResponseBody +
                 '}';
