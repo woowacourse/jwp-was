@@ -1,6 +1,7 @@
 package http.controller;
 
 import com.google.common.collect.Maps;
+import http.exception.NotFoundException;
 
 import java.util.Map;
 
@@ -12,12 +13,12 @@ public class ControllerHandler {
         controllers.put("^/user/create$", new CreateUserController());
     }
 
-    public static Controller findByPath(String path) {
+    public static Controller findByPath(String path) throws NotFoundException {
         return controllers.keySet().stream()
                 .filter(path::matches)
                 .map(controllers::get)
                 .findAny()
-                .orElse(null)
+                .orElseThrow(NotFoundException::new)
                 ;
     }
 }
