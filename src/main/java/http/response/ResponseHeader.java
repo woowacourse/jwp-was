@@ -6,6 +6,8 @@ import java.util.Map;
 public class ResponseHeader {
     private static final String HEADER_DELIMITER = ": ";
     private static final String CRLF = "\r\n";
+    private static final String CONTENT_TYPE_KEY = "Content-Type";
+    private static final String CONTENT_LENGTH_KEY = "Content-Length";
 
     private Map<String, String> responseHeader;
 
@@ -15,8 +17,8 @@ public class ResponseHeader {
 
     public static ResponseHeader of() {
         ResponseHeader responseHeader = new ResponseHeader(new HashMap<>());
-        responseHeader.put("Content-Type", "text/plain;charset=utf-8");
-        responseHeader.put("Content-Length", "0");
+        responseHeader.put(CONTENT_TYPE_KEY, "text/plain;charset=utf-8");
+        responseHeader.put(CONTENT_LENGTH_KEY, "0");
 
         return responseHeader;
     }

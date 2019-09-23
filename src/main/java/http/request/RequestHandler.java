@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RequestHandler {
+    private static final String CONTENT_LENGTH_KEY = "Content-Length";
+
     private final BufferedReader br;
 
     public RequestHandler(BufferedReader br) {
@@ -48,7 +50,7 @@ public class RequestHandler {
     }
 
     private void readBody(Parameters parameters, RequestHeader requestHeader) throws IOException {
-        String contentLength = requestHeader.getHeader("Content-Length");
+        String contentLength = requestHeader.getHeader(CONTENT_LENGTH_KEY);
         if (contentLength != null) {
             String params = IOUtils.readData(br, Integer.parseInt(contentLength));
             parameters.addAll(HttpUtils.parseQuery(params));

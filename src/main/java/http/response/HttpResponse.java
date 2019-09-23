@@ -5,6 +5,9 @@ import http.common.MimeType;
 
 public class HttpResponse {
     private static final String CRLF = "\r\n";
+    private static final String CONTENT_TYPE_KEY = "Content-Type";
+    private static final String CONTENT_LENGTH_KEY = "Content-Length";
+    private static final String LOCATION_KEY = "Location";
 
     private StatusLine statusLine;
     private ResponseHeader responseHeader;
@@ -27,13 +30,13 @@ public class HttpResponse {
     public void setResponseBody(byte[] body, String path) {
         this.responseBody = ResponseBody.of(body);
         statusLine.setHttpStatus(HttpStatus.OK);
-        putHeader("Content-Type", MimeType.findByPath(path).getContentType());
-        putHeader("Content-Length", String.valueOf(body.length));
+        putHeader(CONTENT_TYPE_KEY, MimeType.findByPath(path).getContentType());
+        putHeader(CONTENT_LENGTH_KEY, String.valueOf(body.length));
     }
 
     public void redirect(String path) {
         statusLine.setHttpStatus(HttpStatus.FOUND);
-        putHeader("Location", path);
+        putHeader(LOCATION_KEY, path);
     }
 
     public byte[] getBody() {
