@@ -2,7 +2,7 @@ package webserver.http.response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.FileIoUtils;
+import webserver.utils.FileIoUtils;
 import webserver.http.HttpStatus;
 import webserver.http.MimeType;
 import webserver.http.request.HttpVersion;
@@ -18,8 +18,8 @@ import static webserver.http.HttpHeaders.*;
 
 public class HttpResponse {
     private static final Logger log = LoggerFactory.getLogger(HttpResponse.class);
-    private static final String DEFAULT_ERROR_MESSAGE = "";
     public static final HttpVersion DEFAULT_HTTP_VERSION = HttpVersion.of("HTTP/1.1");
+    private static final String DEFAULT_ERROR_MESSAGE = "";
 
     private final Map<String, String> headers = new HashMap<>();
     private final OutputStream out;

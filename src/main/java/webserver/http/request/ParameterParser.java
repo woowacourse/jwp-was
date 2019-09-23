@@ -2,7 +2,7 @@ package webserver.http.request;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.StringUtils;
+import webserver.utils.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;

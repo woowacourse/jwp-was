@@ -10,7 +10,7 @@ public class RequestLineFactory {
         final String[] split = requestLine.split(DELIMITER);
         final HttpMethod method = HttpMethod.getHttpMethod(split[0]);
         final String url = split[1];
-        final HttpVersion version = HttpVersion.of(split[2]);
+        final     HttpVersion version = HttpVersion.of(split[2]);
 
         return RequestLine.of(method, url, version);
     }

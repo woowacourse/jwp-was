@@ -40,9 +40,9 @@ public class HttpRequestFactoryTest {
     }
 
     @Test
-    void Parameters가_없는_경우() {
+    void Body는_없고_쿼리스트링만_있는_경우() {
         // given
-        final String plainTextRequest = "POST /user/create HTTP/1.1\n" +
+        final String plainTextRequest = "GET /user/create?id=1 HTTP/1.1\n" +
                 "Host: localhost:8080\n" +
                 "Connection: keep-alive\n" +
                 "Content-Type: application/x-www-form-urlencoded\n" +
@@ -55,12 +55,13 @@ public class HttpRequestFactoryTest {
         final HttpRequest httpRequest = HttpRequestFactory.generate(in);
 
         // then
-        assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.POST);
+        assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.GET);
         assertThat(httpRequest.getPath()).isEqualTo("/user/create");
         assertThat(httpRequest.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
         assertThat(httpRequest.getHeader("Host")).isEqualTo("localhost:8080");
         assertThat(httpRequest.getHeader("Connection")).isEqualTo("keep-alive");
         assertThat(httpRequest.getHeader("Accept")).isEqualTo("*/*");
-        assertThat(httpRequest.sizeOfParameters()).isEqualTo(0);
+        assertThat(httpRequest.getParameter("id")).isEqualTo("1");
+        assertThat(httpRequest.sizeOfParameters()).isEqualTo(1);
     }
 }
