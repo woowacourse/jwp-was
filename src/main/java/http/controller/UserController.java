@@ -1,7 +1,7 @@
 package http.controller;
 
-import http.model.ServletRequest;
-import http.model.ServletResponse;
+import http.model.request.ServletRequest;
+import http.model.response.ServletResponse;
 import http.supoort.RequestMapping;
 
 public class UserController extends AbstractController {

@@ -1,8 +1,9 @@
 package http.supoort;
 
 import http.exceptions.IllegalHttpRequestException;
-import http.model.HttpMethod;
-import http.model.ServletRequest;
+import http.model.request.HttpMethod;
+import http.model.request.ServletRequest;
+import http.supoort.converter.request.HttpRequestParser;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;

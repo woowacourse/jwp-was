@@ -1,6 +1,6 @@
-package http.supoort.converter;
+package http.supoort.converter.request;
 
-import http.model.ServletRequest;
+import http.model.request.ServletRequest;
 
 import java.io.BufferedReader;
 

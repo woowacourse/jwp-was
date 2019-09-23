@@ -1,5 +1,6 @@
 package http.model;
 
+import http.model.common.HttpHeaders;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;

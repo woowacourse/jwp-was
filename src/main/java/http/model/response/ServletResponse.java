@@ -1,4 +1,7 @@
-package http.model;
+package http.model.response;
+
+import http.model.common.HttpHeaders;
+import http.model.common.HttpProtocols;
 
 public class ServletResponse {
     private HttpProtocols protocols;

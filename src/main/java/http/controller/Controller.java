@@ -1,7 +1,7 @@
 package http.controller;
 
-import http.model.ServletRequest;
-import http.model.ServletResponse;
+import http.model.request.ServletRequest;
+import http.model.response.ServletResponse;
 
 public interface Controller {
     void handle(ServletRequest servletRequest, ServletResponse servletResponse);

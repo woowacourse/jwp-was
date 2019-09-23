@@ -1,7 +1,7 @@
-package http.supoort.converter;
+package http.supoort.converter.request;
 
 import http.exceptions.IllegalHttpRequestException;
-import http.model.ServletRequest;
+import http.model.request.ServletRequest;
 
 import java.io.BufferedReader;
 import java.util.Arrays;

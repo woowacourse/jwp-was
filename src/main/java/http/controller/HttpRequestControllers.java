@@ -1,8 +1,8 @@
 package http.controller;
 
 import http.exceptions.IllegalRequestMappingException;
-import http.model.ServletRequest;
-import http.model.ServletResponse;
+import http.model.request.ServletRequest;
+import http.model.response.ServletResponse;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -1,4 +1,4 @@
-package http.model;
+package http.model.request;
 
 import http.exceptions.IllegalHttpRequestException;
 

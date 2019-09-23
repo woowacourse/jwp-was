@@ -1,5 +1,7 @@
-package http.model;
+package http.model.request;
 
+import http.model.common.HttpHeaders;
+import http.model.common.HttpProtocols;
 import http.session.HttpSession;
 
 import java.util.Map;

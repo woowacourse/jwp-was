@@ -1,9 +1,8 @@
-package http.supoort;
+package http.supoort.converter.response;
 
-import http.model.HttpHeaders;
-import http.model.HttpProtocols;
-import http.model.HttpResponse;
-import http.model.HttpStatus;
+import http.model.common.HttpHeaders;
+import http.model.common.HttpProtocols;
+import http.model.response.HttpStatus;
 
 public class HttpErrorResponse {
     public static HttpResponse generate(String message) {

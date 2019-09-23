@@ -1,4 +1,4 @@
-package http.model;
+package http.model.common;
 
 import java.util.Collections;
 import java.util.HashMap;

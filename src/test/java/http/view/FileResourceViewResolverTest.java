@@ -1,11 +1,8 @@
 package http.view;
 
-import http.model.HttpResponse;
-import http.model.HttpStatus;
+import http.model.response.HttpStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class FileResourceViewResolverTest {
     private FileResourceViewResolver fileResourceViewResolver;

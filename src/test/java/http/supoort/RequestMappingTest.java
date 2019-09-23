@@ -1,9 +1,8 @@
 package http.supoort;
 
-import http.model.HttpMethod;
-import http.model.HttpProtocols;
-import http.model.HttpRequest;
-import http.model.HttpUri;
+import http.model.common.HttpProtocols;
+import http.model.request.HttpMethod;
+import http.model.request.HttpUri;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

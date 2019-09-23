@@ -1,9 +1,8 @@
 package webserver;
 
 import http.controller.HttpRequestControllers;
-import http.model.HttpResponse;
-import http.supoort.HttpErrorResponse;
-import http.supoort.converter.ResponseMessageConverter;
+import http.supoort.converter.response.HttpErrorResponse;
+import http.supoort.converter.response.ResponseMessageConverter;
 import http.view.ViewResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

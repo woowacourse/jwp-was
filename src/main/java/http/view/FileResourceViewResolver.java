@@ -1,6 +1,9 @@
 package http.view;
 
-import http.model.*;
+import http.model.common.HttpHeaders;
+import http.model.common.HttpProtocols;
+import http.model.response.ContentType;
+import http.model.response.HttpStatus;
 import utils.FileIoUtils;
 
 public class FileResourceViewResolver implements ViewResolver {

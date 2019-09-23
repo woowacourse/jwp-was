@@ -1,6 +1,9 @@
 package http.model;
 
 import http.exceptions.IllegalHttpRequestException;
+import http.model.common.HttpProtocols;
+import http.model.request.HttpMethod;
+import http.model.request.ServletRequest;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;

@@ -1,6 +1,6 @@
 package model;
 
-import http.model.HttpParameters;
+import http.model.request.HttpParameters;
 
 public class UserDto {
     private String userId;

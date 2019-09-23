@@ -1,7 +1,7 @@
 package http.controller;
 
 import http.exceptions.IllegalRequestMappingException;
-import http.model.ServletRequest;
+import http.model.request.ServletRequest;
 import http.supoort.RequestMapping;
 
 import java.util.*;

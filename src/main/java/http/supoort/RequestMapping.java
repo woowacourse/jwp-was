@@ -1,8 +1,7 @@
 package http.supoort;
 
-import http.model.HttpMethod;
-import http.model.HttpRequest;
-import http.model.ServletRequest;
+import http.model.request.HttpMethod;
+import http.model.request.ServletRequest;
 
 import java.util.Objects;
 

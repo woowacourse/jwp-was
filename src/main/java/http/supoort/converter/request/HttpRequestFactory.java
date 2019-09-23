@@ -1,6 +1,6 @@
-package http.supoort;
+package http.supoort.converter.request;
 
-import http.model.ServletRequest;
+import http.model.request.ServletRequest;
 import http.session.SessionManager;
 
 import java.io.InputStream;
