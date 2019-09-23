@@ -9,7 +9,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class HttpVersionTest {
     @Test
     void 해당_버전이_없는_경우() {
-        assertThatThrownBy(() -> HttpVersion.resolve("mismatch")).isInstanceOf(HttpVersionMismatchException.class);
+        assertThatThrownBy(() -> HttpVersion.resolve("mismatch"))
+                .isInstanceOf(HttpVersionMismatchException.class);
     }
 
     @Test

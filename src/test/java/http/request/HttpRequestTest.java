@@ -3,7 +3,6 @@ package http.request;
 import http.HttpHeaders;
 import http.HttpVersion;
 import http.exception.EmptyHttpRequestException;
-import http.exception.RequestLineException;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -51,15 +50,6 @@ class HttpRequestTest {
         InputStream in = new ByteArrayInputStream("".getBytes());
 
         assertThatThrownBy(() -> HttpRequestFactory.makeHttpRequest(in)).isInstanceOf(EmptyHttpRequestException.class);
-    }
-
-    @Test
-    void request_line_parsing_결과가_3개가_아니면_예외_발생() {
-        String request = "GET /index.html\n" + "Host: localhost:8080\n" +
-                "Connection: keep-alive\n" + "Accept: */*";
-        InputStream in = new ByteArrayInputStream(request.getBytes());
-
-        assertThatThrownBy(() -> HttpRequestFactory.makeHttpRequest(in)).isInstanceOf(RequestLineException.class);
     }
 
     @Test

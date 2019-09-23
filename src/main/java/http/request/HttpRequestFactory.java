@@ -1,41 +1,38 @@
 package http.request;
 
 import http.HttpHeaders;
-import http.HttpVersion;
 import http.exception.EmptyHttpRequestException;
-import http.exception.RequestLineException;
 import utils.IOUtils;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static java.net.URLDecoder.decode;
 
 public class HttpRequestFactory {
     private static final int REQUEST_LINE_INDEX = 0;
-    private static final int HTTP_METHOD_INDEX = 0;
-    private static final int PATH_INDEX = 1;
-    private static final int HTTP_VERSION_INDEX = 2;
-    private static final int START_LINE_SIZE = 3;
-    private static final int HEADER_STARTING_INDEX = 1;
-    private static final int KEY_INDEX = 0;
-    private static final int VALUE_INDEX = 1;
-    private static final String START_LINE_DELIMITER = " ";
-    private static final String HEADER_DELIMITER = ":\\s+";
+    private static final int STARTING_INDEX_OF_HEADER_FIELD = 1;
     private static final String EMPTY = "";
+
+    private HttpRequestFactory() {
+    }
 
     public static HttpRequest makeHttpRequest(InputStream in) throws IOException {
         BufferedReader buffer = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8.name()));
         List<String> lines = getHeaderLines(buffer);
 
-        HttpRequestLine requestLine = parseHttpRequestLine(lines.get(REQUEST_LINE_INDEX));
-        HttpHeaders headers = parseHttpHeaders(extractHeaders(lines));
+        String requestLine = lines.get(REQUEST_LINE_INDEX);
+        List<String> headerLines = extractHeaderLinesFrom(lines);
+
+        HttpRequestLine httpRequestLine = HttpRequestLine.of(requestLine);
+        HttpHeaders headers = HttpHeaders.of(headerLines);
         String body = getBody(buffer, headers);
-        return new HttpRequest(requestLine, headers, body);
+        return new HttpRequest(httpRequestLine, headers, body);
     }
 
     private static List<String> getHeaderLines(BufferedReader buffer) throws IOException {
@@ -54,32 +51,8 @@ public class HttpRequestFactory {
         }
     }
 
-    private static HttpRequestLine parseHttpRequestLine(String requestLine) throws UnsupportedEncodingException {
-        String[] parsedStartLine = requestLine.split(START_LINE_DELIMITER);
-        checkStartLine(parsedStartLine);
-        HttpMethod method = HttpMethod.resolve(parsedStartLine[HTTP_METHOD_INDEX]);
-        HttpUri url = new HttpUri(parsedStartLine[PATH_INDEX]);
-        HttpVersion version = HttpVersion.resolve(parsedStartLine[HTTP_VERSION_INDEX]);
-        return new HttpRequestLine(method, url, version);
-    }
-
-    private static List<String> extractHeaders(List<String> lines) {
-        return lines.subList(HEADER_STARTING_INDEX, lines.size());
-    }
-
-    private static HttpHeaders parseHttpHeaders(List<String> lines) {
-        Map<String, String> headers = new HashMap<>();
-        for (String header : lines) {
-            String[] splicedHeader = header.split(HEADER_DELIMITER);
-            headers.put(splicedHeader[KEY_INDEX], splicedHeader[VALUE_INDEX]);
-        }
-        return new HttpHeaders(headers);
-    }
-
-    private static void checkStartLine(String[] parsedStartLine) {
-        if (parsedStartLine.length != START_LINE_SIZE) {
-            throw new RequestLineException();
-        }
+    private static List<String> extractHeaderLinesFrom(List<String> lines) {
+        return lines.subList(STARTING_INDEX_OF_HEADER_FIELD, lines.size());
     }
 
     private static String getBody(BufferedReader buffer, HttpHeaders headers) throws IOException {
