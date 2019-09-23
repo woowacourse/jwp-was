@@ -10,7 +10,8 @@ public enum ContentType {
     TTF("application/x-font-ttf"),
     WOFF("application/x-font-woff"),
     WOFF2("application/font-woff2"),
-    ICO("image/x-icon");
+    ICO("image/x-icon"),
+    FORM_URLENCODED("application/x-www-form-urlencoded");
 
     private final String contentType;
 
@@ -20,5 +21,9 @@ public enum ContentType {
 
     public static String getContentType(String extension) {
         return ContentType.valueOf(extension.toUpperCase()).contentType;
+    }
+
+    public String getContentType() {
+        return contentType;
     }
 }

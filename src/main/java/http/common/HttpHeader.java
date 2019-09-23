@@ -11,8 +11,12 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class HttpHeader {
+    private static final int HTTP_HEADER_PARAMETER_SIZE = 2;
+    private static final String HEADER_FIELD_SPLIT_DELIMITER = ": ";
+    private static final String HEADER_FIELD_FORMAT = "%s: %s\r\n";
+    private static final int HEADER_FIELD_KEY_INDEX = 0;
+    private static final int HEADER_FIELD_VALUE_INDEX = 1;
 
-    public static final int HTTP_HEADER_PARAMETER_SIZE = 2;
     private final Map<String, String> httpHeader = new HashMap<>();
 
     public HttpHeader(List<String> header) {
@@ -27,10 +31,10 @@ public class HttpHeader {
     }
 
     private void addHeader(String line) {
-        String[] tokens = StringUtils.split(line, ": ");
+        String[] tokens = StringUtils.split(line, HEADER_FIELD_SPLIT_DELIMITER);
         checkHeaderParameter(tokens);
 
-        httpHeader.put(tokens[0], tokens[1]);
+        httpHeader.put(tokens[HEADER_FIELD_KEY_INDEX], tokens[HEADER_FIELD_VALUE_INDEX]);
     }
 
     private void checkHeaderParameter(String[] tokens) {
@@ -50,7 +54,7 @@ public class HttpHeader {
 
     public String serialize() {
         return httpHeader.entrySet().stream()
-                .map(entry -> String.format("%s: %s\r\n", entry.getKey(), entry.getValue()))
+                .map(entry -> String.format(HEADER_FIELD_FORMAT, entry.getKey(), entry.getValue()))
                 .collect(Collectors.joining());
     }
 

@@ -1,12 +1,14 @@
 package http.response;
 
-import http.common.HttpHeader;
 import http.common.ContentType;
+import http.common.HttpHeader;
 import http.response.exception.InvalidHttpResponseException;
 
 import java.util.Arrays;
 
 public class HttpResponse {
+    private static final String LINE_FEED_AND_CARRIAGE_RETURN = "\r\n";
+    private static final String RESPONSE_HEADER_SERIALIZE_FORMAT = "%s" + LINE_FEED_AND_CARRIAGE_RETURN + "%s";
     private final StatusLine statusLine;
     private final HttpHeader httpHeader;
     private final byte[] body;
@@ -40,12 +42,12 @@ public class HttpResponse {
     }
 
     public byte[] serialize() {
-        String responseHeader = String.format("%s\r\n%s",
+        String responseHeader = String.format(RESPONSE_HEADER_SERIALIZE_FORMAT,
                 statusLine.serialize(),
                 httpHeader.serialize());
 
         if (body != null) {
-            responseHeader += "\r\n" + new String(body);
+            responseHeader += LINE_FEED_AND_CARRIAGE_RETURN + new String(body);
         }
 
         return responseHeader.getBytes();

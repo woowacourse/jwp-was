@@ -13,6 +13,11 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class RequestParameter {
+    private static final String REQUEST_PARAMETER_DELIMITER = "&";
+    private static final String KEY_VALUE_DELIMITER = "=";
+    private static final int REQUEST_PARAMETER_KEY_INDEX = 0;
+    private static final int REQUEST_PARAMETER_VALUE_INDEX = 1;
+    private static final int REQUEST_PARAMETER_SIZE = 2;
     private final Map<String, String> requestParameters = new HashMap<>();
 
     public RequestParameter(String queryString) {
@@ -27,15 +32,19 @@ public class RequestParameter {
     }
 
     private void parse(String queryString) {
-        for (String requestParameter : queryString.split("&")) {
-            putRequestParameter(requestParameter.split("="));
+        for (String requestParameter : queryString.split(REQUEST_PARAMETER_DELIMITER)) {
+            putRequestParameter(requestParameter.split(KEY_VALUE_DELIMITER));
         }
     }
 
-    private void putRequestParameter(String[] requestParameter) {
-        if (requestParameter.length == 2 && !StringUtils.isEmpty(requestParameter[0])) {
-            requestParameters.put(decodeUTF8(requestParameter[0]), decodeUTF8(requestParameter[1]));
+    private void putRequestParameter(String[] requestParameters) {
+        if (isValidRequestParameter(requestParameters)) {
+            this.requestParameters.put(decodeUTF8(requestParameters[REQUEST_PARAMETER_KEY_INDEX]), decodeUTF8(requestParameters[REQUEST_PARAMETER_VALUE_INDEX]));
         }
+    }
+
+    private boolean isValidRequestParameter(String[] requestParameter) {
+        return requestParameter.length == REQUEST_PARAMETER_SIZE && !StringUtils.isEmpty(requestParameter[REQUEST_PARAMETER_KEY_INDEX]);
     }
 
     private String decodeUTF8(String encodedString) {

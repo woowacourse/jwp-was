@@ -1,6 +1,7 @@
 package http.request;
 
 import http.common.HttpHeader;
+import http.request.exception.InvalidHttpRequestException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

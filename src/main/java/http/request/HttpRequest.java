@@ -1,7 +1,9 @@
 package http.request;
 
+import http.common.ContentType;
 import http.common.HttpHeader;
 import http.common.URL;
+import http.request.exception.InvalidHttpRequestException;
 
 public class HttpRequest {
     static final String CONTENT_TYPE = "Content-Type";
@@ -26,7 +28,7 @@ public class HttpRequest {
 
     private RequestParameter createRequestParameter() {
         String queryString = requestLine.getUrl().getQueryString();
-        if (requestLine.getMethod().hasBody() && "application/x-www-form-urlencoded".equals(httpHeader.get(CONTENT_TYPE))) {
+        if (requestLine.getMethod().hasBody() && ContentType.FORM_URLENCODED.getContentType().equals(httpHeader.get(CONTENT_TYPE))) {
             queryString += "&" + body;
         }
         return new RequestParameter(queryString);

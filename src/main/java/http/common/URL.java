@@ -6,6 +6,7 @@ import utils.StringUtils;
 import java.util.Objects;
 
 public class URL {
+    private static final String QUERY_STRING_DELIMITER = "?";
     private final String path;
     private final String queryString;
 
@@ -25,9 +26,9 @@ public class URL {
 
     public static URL of(String url) {
         checkEmptyUrl(url);
-        int index = getIndex(url);
-        String path = url.substring(0, index);
-        String queryString = getQueryString(url, index + 1);
+        int queryStringIndex = getQueryStringIndex(url);
+        String path = url.substring(0, queryStringIndex);
+        String queryString = getQueryString(url, queryStringIndex + 1);
         return new URL(path, queryString);
     }
 
@@ -38,12 +39,16 @@ public class URL {
     }
 
     private static String getQueryString(String url, int index) {
-        return url.length() >= index ? url.substring(index) : "";
+        if (url.length() >= index) {
+            return url.substring(index);
+        }
+
+        return StringUtils.BLANK;
     }
 
-    private static int getIndex(String url) {
-        int index = url.indexOf("?");
-        return index > 0 ? index : url.length();
+    private static int getQueryStringIndex(String url) {
+        int queryStringIndex = url.indexOf(QUERY_STRING_DELIMITER);
+        return queryStringIndex > 0 ? queryStringIndex : url.length();
     }
 
     public String getPath() {

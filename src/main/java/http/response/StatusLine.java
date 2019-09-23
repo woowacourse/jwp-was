@@ -4,6 +4,7 @@ import http.response.exception.InvalidStatusLineException;
 import utils.StringUtils;
 
 public class StatusLine {
+    private static final String STATUS_LINE_FORMAT = "%s %s";
     private final String version;
     private final ResponseStatus responseStatus;
 
@@ -20,6 +21,6 @@ public class StatusLine {
     }
 
     public String serialize() {
-        return String.format("%s %s", version, responseStatus.serialize());
+        return String.format(STATUS_LINE_FORMAT, version, responseStatus.serialize());
     }
 }
