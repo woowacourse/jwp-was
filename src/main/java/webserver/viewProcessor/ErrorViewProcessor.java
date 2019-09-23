@@ -1,6 +1,7 @@
 package webserver.viewProcessor;
 
 import webserver.HttpResponse;
+import webserver.ResponseProcessor;
 import webserver.ViewProcessor;
 
 import java.io.DataOutputStream;
@@ -9,13 +10,14 @@ public class ErrorViewProcessor implements ViewProcessor {
 
     @Override
     public boolean isSupported(String viewName) {
-        return viewName.startsWith("/error:");
+        return viewName.startsWith("/sendError:");
     }
 
     @Override
     public void process(DataOutputStream dos, String viewName) {
+        ResponseProcessor responseProcessor = ResponseProcessor.getInstance();
         HttpResponse httpResponse = new HttpResponse();
         String errorCode = viewName.split(":")[1];
-        httpResponse.error(dos, errorCode);
+        responseProcessor.sendError(dos, errorCode, httpResponse);
     }
 }

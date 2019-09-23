@@ -3,6 +3,7 @@ package webserver.viewProcessor;
 import utils.FileIoUtils;
 import webserver.HttpResponse;
 import webserver.MimeType;
+import webserver.ResponseProcessor;
 import webserver.ViewProcessor;
 
 import java.io.DataOutputStream;
@@ -18,14 +19,15 @@ public class ResourceViewProcessor implements ViewProcessor {
     @Override
     public void process(DataOutputStream dos, String viewName) {
         HttpResponse httpResponse = new HttpResponse();
+        ResponseProcessor responseProcessor = ResponseProcessor.getInstance();
         String filePath = "./static" + viewName;
         try {
             byte[] bytes = FileIoUtils.loadFileFromClasspath(filePath);
             String type = MimeType.values(filePath);
             httpResponse.setContentType(type);
-            httpResponse.forward(dos, bytes);
+            responseProcessor.forward(dos, bytes, httpResponse);
         } catch (IOException | URISyntaxException e) {
-            throw new IllegalArgumentException();
+            responseProcessor.sendError(dos, "404", httpResponse);
         }
     }
 }
