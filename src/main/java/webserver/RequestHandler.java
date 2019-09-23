@@ -1,55 +1,57 @@
 package webserver;
 
-import java.io.DataOutputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import webserver.http.HttpStatus;
+import webserver.http.handler.StaticResourceHandler;
+import webserver.http.handler.StaticResourceMapping;
+import webserver.http.request.HttpRequest;
+import webserver.http.request.HttpRequestFactory;
+import webserver.http.response.HttpResponse;
+import webserver.http.servlet.Servlet;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class RequestHandler implements Runnable {
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
+    private StaticResourceHandler staticResourceHandler;
+    private ServletMapping servletMapping;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
+        staticResourceHandler = new StaticResourceHandler(new StaticResourceMapping());
+        servletMapping = ServletMapping.getInstance();
     }
 
     public void run() {
-        logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
+        log.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
-            DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = "Hello World".getBytes();
-            response200Header(dos, body.length);
-            responseBody(dos, body);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
+            final HttpRequest httpRequest = HttpRequestFactory.generate(in);
+            final HttpResponse httpResponse = new HttpResponse(out);
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
+            final String path = httpRequest.getPath();
+            if (staticResourceHandler.isMapping(path)) {
+                staticResourceHandler.handle(httpRequest, httpResponse);
+                return;
+            }
 
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
+            if (servletMapping.isMapping(path)) {
+                final Servlet servlet = servletMapping.getServlet(path);
+                servlet.service(httpRequest, httpResponse);
+                return;
+            }
+
+            httpResponse.sendError(HttpStatus.NOT_FOUND);
+
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
         }
     }
 }
