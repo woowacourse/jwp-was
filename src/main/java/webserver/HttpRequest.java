@@ -4,6 +4,8 @@ import java.util.Map;
 
 public class HttpRequest {
 
+    public static final String SID_ATTR_KEY = "sid";
+
     private final HttpMethod method;
     private final String url;
     private final String path;
@@ -23,8 +25,8 @@ public class HttpRequest {
         this.cookies = cookies;
         this.body = body;
 
-        if (headers.containsKey("sid")) {
-            session = SessionManager.getSession(headers.get("sid"));
+        if (cookies.containsKey(SID_ATTR_KEY)) {
+            session = SessionManager.getSession(cookies.get(SID_ATTR_KEY));
         }
     }
 
@@ -33,9 +35,11 @@ public class HttpRequest {
     }
 
     public HttpSession getSession() {
-        if (session == null || !session.isInvalid()) {
+        if (session == null || session.isInvalid()) {
+            HttpSession oldSession = session;
             session = HttpSession.createSession();
             SessionManager.addSession(session);
+            SessionManager.removeSession(oldSession);
         }
         return session;
     }

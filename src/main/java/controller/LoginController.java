@@ -38,8 +38,7 @@ public class LoginController extends AbstractController {
             req.getSession().setAttribute("logined", "true");
         }
 
-        response.setStatus(HttpStatus.FOUND);
-        response.addHeader("Location", redirectUrl);
+        response.redirect(redirectUrl);
     }
 
     @Override

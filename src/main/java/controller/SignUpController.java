@@ -39,6 +39,6 @@ public class SignUpController extends AbstractController {
 
     @Override
     public String getPath() {
-        return "/user/create";
+        return USER_CREATE_URL;
     }
 }

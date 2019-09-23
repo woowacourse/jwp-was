@@ -16,6 +16,8 @@ class SessionManager {
     }
 
     public static void removeSession(HttpSession session) {
-        sessions.remove(session.getId());
+        if (session != null) {
+            sessions.remove(session.getId());
+        }
     }
 }
