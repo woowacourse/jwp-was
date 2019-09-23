@@ -3,6 +3,7 @@ package webserver.response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
+import utils.FilePathUtils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -14,7 +15,7 @@ public class ResponseBody {
 
     public ResponseBody(String path) {
         try {
-            this.body = FileIoUtils.loadFileFromClasspath(path);
+            this.body = FileIoUtils.loadFileFromClasspath(FilePathUtils.getResourcePath(path));
         } catch (IOException | URISyntaxException e) {
             log.error("{}, {}", path, e.getMessage());
         }
