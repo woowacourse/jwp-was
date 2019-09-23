@@ -4,7 +4,6 @@ import webserver.Controller;
 import webserver.HttpMethod;
 import webserver.HttpRequest;
 import webserver.exception.NotSupportedHttpMethodException;
-import webserver.httpRequest.HttpStatus;
 
 public abstract class AbstractController implements Controller {
     @Override

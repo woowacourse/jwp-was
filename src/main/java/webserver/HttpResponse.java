@@ -2,8 +2,6 @@ package webserver;
 
 import webserver.httpRequest.HttpStatus;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
