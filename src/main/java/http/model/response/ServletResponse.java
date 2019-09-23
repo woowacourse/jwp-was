@@ -2,6 +2,7 @@ package http.model.response;
 
 import http.model.common.HttpHeaders;
 import http.model.common.HttpProtocols;
+import http.model.request.HttpUri;
 
 import java.util.Map;
 
@@ -11,10 +12,11 @@ public class ServletResponse {
     private HttpProtocols protocols;
     private HttpStatus httpStatus;
     private HttpHeaders httpHeaders;
-    private byte[] body;
+    private HttpUri uri;
 
     public ServletResponse() {
         this.httpHeaders = new HttpHeaders();
+        setHTTP1();
     }
 
     public void addHeader(String key, String value) {
@@ -26,8 +28,20 @@ public class ServletResponse {
         addHeader(LOCATION, uri);
     }
 
+    private void setHTTP1() {
+        this.setProtocols(HttpProtocols.HTTP1);
+    }
+
     public void setCookie(String id) {
         addHeader(SET_COOKIE, id);
+    }
+
+    public String getUri() {
+        return uri.getResourceLocation();
+    }
+
+    public void setUri(String uri) {
+        this.uri = new HttpUri(uri);
     }
 
     public String getHeader(String key) {
@@ -52,14 +66,5 @@ public class ServletResponse {
 
     public void setHttpStatus(HttpStatus httpStatus) {
         this.httpStatus = httpStatus;
-    }
-
-
-    public byte[] getBody() {
-        return body;
-    }
-
-    public void setBody(byte[] body) {
-        this.body = body;
     }
 }

@@ -19,7 +19,7 @@ public class ResponseMessageConverter {
         try {
             responseStatus(response, dos);
             responseHeader(response, dos);
-            responseBody(response.getBody(), dos);
+//            responseBody(response.getBody(), dos);
         } catch (IOException e) {
             logger.error(e.getMessage());
             throw new FailToConvertMessageException(e.getMessage());

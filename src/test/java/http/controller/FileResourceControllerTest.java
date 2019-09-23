@@ -13,7 +13,7 @@ class FileResourceControllerTest {
     private Controller controller = new FileResourceController(RequestMapping.GET("/index.html"));
 
     @Test
-    void 파일리소스를_잘_가져오는지() {
+    void 파일리소스_응답이_적절한지() {
         ServletRequest request = ServletRequest.builder()
                 .method(HttpMethod.GET)
                 .uri("/index.html")
@@ -27,7 +27,7 @@ class FileResourceControllerTest {
         controller.handle(request, response);
 
         assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).isNotEmpty();
+        assertThat(response.getUri()).isNotEmpty();
         assertThat(response.getHeader("Content-Type")).isEqualTo("text/html");
     }
 }

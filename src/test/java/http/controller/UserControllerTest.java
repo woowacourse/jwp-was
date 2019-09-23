@@ -33,7 +33,7 @@ class UserControllerTest {
 
         controller.handle(request, response);
 
-        assertThat(response.getBody()).isNull();
+        assertThat(response.getUri()).isNull();
         assertThat(response.getHeader("Location")).isEqualTo("/index.html");
         assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
     }
