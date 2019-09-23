@@ -1,31 +1,41 @@
 package webserver.response;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import webserver.request.HttpRequest;
+import exception.NotInitializedResponseMetaDataException;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URISyntaxException;
 
-public abstract class HttpResponse {
+import static webserver.response.AbstractResponseMetaData.HEADER_NEW_LINE;
 
-    private static final Logger log = LoggerFactory.getLogger(HttpResponse.class);
-    protected final OutputStream out;
+public class HttpResponse {
+
+    private final DataOutputStream dos;
+    private ResponseMetaData responseMetaData;
 
     public HttpResponse(final OutputStream out) {
-        this.out = out;
+        this.dos = new DataOutputStream(out);
     }
 
-    public abstract void makeResponse(HttpRequest request) throws IOException, URISyntaxException;
-
-    protected void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            log.error(e.getMessage());
+    public void makeResponse() throws IOException {
+        if (responseMetaData == null) {
+            throw new NotInitializedResponseMetaDataException();
         }
+
+        dos.writeBytes(responseMetaData.getResponseLine() + HEADER_NEW_LINE);
+        dos.writeBytes(responseMetaData.getHttpResponseHeaderFields());
+
+        if (responseMetaData.hasBody()) {
+            responseBody(responseMetaData.getBody());
+        }
+    }
+
+    private void responseBody(byte[] body) throws IOException {
+        dos.write(body, 0, body.length);
+        dos.flush();
+    }
+
+    public void setResponseMetaData(ResponseMetaData responseMetaData) {
+        this.responseMetaData = responseMetaData;
     }
 }

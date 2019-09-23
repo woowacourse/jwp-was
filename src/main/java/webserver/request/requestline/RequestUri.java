@@ -6,7 +6,7 @@ public class RequestUri {
 
     private static final String QUERY_STRING_DELIMITER = "\\?";
     private static final String EXTENSION_DELIMITER = "\\.";
-    public static final String QUERY_STRING_MARK = "?";
+    private static final String QUERY_STRING_MARK = "?";
     private String uri;
 
     public RequestUri(String uri) {

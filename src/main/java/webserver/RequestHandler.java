@@ -6,10 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.request.HttpRequest;
 import webserver.request.HttpRequestParser;
-import webserver.response.FoundHttpResponse;
 import webserver.response.HttpResponse;
-import webserver.response.HttpStatus;
-import webserver.response.OkHttpResponse;
 
 import java.io.*;
 import java.net.Socket;
@@ -36,12 +33,7 @@ public class RequestHandler implements Runnable {
             String uri = httpRequest.findUri();
             Controller controller = ControllerFinder.findController(uri);
 
-            HttpResponse httpResponse = new OkHttpResponse(out);
-
-            HttpStatus status = controller.findStatus();
-            if (status == HttpStatus.Found) {
-                httpResponse = new FoundHttpResponse(out, "/index.html");
-            }
+            HttpResponse httpResponse = new HttpResponse(out);
 
             controller.service(httpRequest, httpResponse);
 

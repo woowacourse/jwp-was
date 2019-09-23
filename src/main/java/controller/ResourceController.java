@@ -2,20 +2,18 @@ package controller;
 
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
-import webserver.response.HttpStatus;
+import webserver.response.OkResponseMetaData;
+import webserver.response.ResponseMetaData;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 public class ResourceController extends AbstractController {
 
     @Override
-    public void service(final HttpRequest request, final HttpResponse response) throws IOException, URISyntaxException {
-        doGet(request, response);
-    }
+    public void service(final HttpRequest request, final HttpResponse response) throws IOException {
+        ResponseMetaData responseMetaData = new OkResponseMetaData(request);
+        response.setResponseMetaData(responseMetaData);
 
-    @Override
-    public HttpStatus findStatus() {
-        return HttpStatus.Ok;
+        doGet(request, response);
     }
 }
