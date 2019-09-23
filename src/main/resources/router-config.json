@@ -1,0 +1,8 @@
+{
+  "GET": {
+    "/" : "IndexController.index"
+  },
+  "POST" : {
+    "/user/create": "UserController.signUp"
+  }
+}

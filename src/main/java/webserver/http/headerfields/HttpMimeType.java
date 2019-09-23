@@ -37,6 +37,7 @@ public class HttpMimeType {
     public static final HttpMimeType TEXT_CSS = of("text/css").get();
     public static final HttpMimeType TEXT_HTML = of("text/html").get();
     public static final HttpMimeType TEXT_PLAIN = of("text/plain").get();
+    //multipart!
 
     private final Chemical chemical;
     private final String subtype;

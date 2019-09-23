@@ -18,7 +18,7 @@ class JsonParserTest {
 
     @Test
     void singleAttributeObject() {
-        final String SINGLE_ATTRIBUTE = "{      \"Woowa\" :   \"Why not Wooa?\" }   ";
+        final String SINGLE_ATTRIBUTE = "{      \"Woowa\" :   \"Why not Wooa?\" ,}   ";
         final JsonObject result = jsonParser.interpret(SINGLE_ATTRIBUTE);
         System.out.println(result);
         assertThat(result.toString()).isEqualTo("{\"Woowa\": \"Why not Wooa?\"}");
@@ -38,7 +38,7 @@ class JsonParserTest {
 
     @Test
     void multipleAttributes() {
-        final String MULTIPLE_ATTRIBUTES = "{  \"Name\" :null ,\"Level\":-6 , \"cat\" : false, \"Wheel\": 3.5e-5 } ";
+        final String MULTIPLE_ATTRIBUTES = "{   \"Name\" :null ,\"Level\":-6 , \"cat\" : false, \"Wheel\": 3.5e-5,} ";
         final JsonObject result = jsonParser.interpret(MULTIPLE_ATTRIBUTES);
         System.out.println(result);
         assertThat(result.get("Name").get().val()).isEqualTo(null);
@@ -48,25 +48,24 @@ class JsonParserTest {
         assertThat(result.size()).isEqualTo(4);
     }
 
-    /*
-    아직 배열은 작동 안 함
-     */
+    @Test
+    void nestedAttributes() {
+        final String NESTED_ATTRIBUTES = "{\"Name\" :{ \"Level\":-998 , \"cat\" : false} } ";
+        final JsonObject result = jsonParser.interpret(NESTED_ATTRIBUTES);
+        final JsonObject innerKey = (JsonObject) result.get("Name").get();
+        System.out.println(result);
+        assertThat(innerKey.get("Level").get().val()).isEqualTo(-998);
+        assertThat(innerKey.get("cat").get().val()).isEqualTo(false);
+        assertThat(result.size()).isEqualTo(1);
+        assertThat(innerKey.size()).isEqualTo(2);
+    }
+
+    //아직 구현 안 함
     @Test
     void array() {
         final String ARRAY = "{  \"Name\" : [null ,-6 , \"cat\",false, 3.5e-5] } ";
         final JsonObject result = jsonParser.interpret(ARRAY);
         System.out.println(result);
         assertThat(result.size()).isEqualTo(1);
-    }
-
-    /*
-    중첩도..
-     */
-    @Test
-    void nestedAttributes() {
-        final String NESTED_ATTRIBUTES = "{  \"Name\" :{ \"Level\":-6 , \"cat\" : false} } ";
-        final JsonObject result = jsonParser.interpret(NESTED_ATTRIBUTES);
-        System.out.println(result);
-        assertThat(result.size()).isEqualTo(4);
     }
 }
