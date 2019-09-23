@@ -19,7 +19,7 @@ class UserListControllerTest {
     private static final String TEST_DIRECTORY = "./src/test/resources";
 
     @Test
-    @DisplayName("로그인 상태에서 사용자 리패스트 페이지 이동 성공")
+    @DisplayName("로그인 상태에서 사용자 리스트 페이지 이동 성공")
     void loggedIn() throws IOException {
         InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "/GetUserList.txt"));
         Response res = RequestDispatcher.handle(RequestParser.parse(in));

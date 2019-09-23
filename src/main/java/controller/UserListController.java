@@ -1,7 +1,13 @@
 package controller;
 
+import db.DataBase;
+import model.User;
 import webserver.Request;
 import webserver.Response;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserListController extends AbstractController {
 
@@ -10,9 +16,10 @@ public class UserListController extends AbstractController {
 
     @Override
     public Response doGet(Request request) {
-        String cookie = request.getCookie(LOGINED_COOKIE_KEY);
-        if ("true".equals(cookie)) {
-            return Response.ResponseBuilder.forward("/user/list")
+        if ("true".equals(request.getCookie(LOGINED_COOKIE_KEY))) {
+            Map<String, Collection<User>> params = new HashMap<>();
+            params.put("users", DataBase.findAll());
+            return Response.ResponseBuilder.forward("/user/list", params)
                     .build();
         }
 
