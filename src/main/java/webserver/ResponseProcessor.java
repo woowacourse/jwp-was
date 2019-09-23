@@ -41,7 +41,7 @@ public class ResponseProcessor {
         try {
             response300Header(dos, location, httpResponse);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException();
         }
     }
 
@@ -57,7 +57,7 @@ public class ResponseProcessor {
         try {
             response400Header(dos, httpResponse);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException();
         }
     }
 
@@ -70,5 +70,4 @@ public class ResponseProcessor {
     private static class LazyHolder {
         private static final ResponseProcessor INSTANCE = new ResponseProcessor();
     }
-
 }
