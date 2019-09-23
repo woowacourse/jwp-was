@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import http.HttpRequestUrl;
 import http.MimeType;
+import http.request.HttpRequestUrl;
 
 public class HttpRequestUtils {
 

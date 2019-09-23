@@ -10,9 +10,9 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
 
-import http.HttpRequest;
-import http.HttpRequestMethod;
 import http.MimeType;
+import http.request.HttpRequest;
+import http.request.HttpRequestMethod;
 import model.User;
 import utils.FileIoUtils;
 import utils.HttpRequestUtils;

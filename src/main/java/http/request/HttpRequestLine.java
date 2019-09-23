@@ -1,5 +1,6 @@
-package http;
+package http.request;
 
+import http.HttpProtocol;
 import http.excption.InvalidRequestException;
 
 public class HttpRequestLine {
