@@ -33,11 +33,15 @@ public class ServletRequest {
     }
 
     public boolean hasCookie() {
-        return httpHeaders.getHeader(COOKIE) != null;
+        return !httpCookie.isEmpty();
     }
 
-    public String getCookie() {
-        return httpHeaders.getHeader(COOKIE);
+    public String getCookie(String key) {
+        return httpCookie.getCookie(key);
+    }
+
+    public Map<String, String> getCookies() {
+        return httpCookie.getCookies();
     }
 
     public HttpSession getSession() {

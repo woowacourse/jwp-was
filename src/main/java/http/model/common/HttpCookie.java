@@ -16,6 +16,10 @@ public class HttpCookie {
         cookies = new HashMap<>();
     }
 
+    public boolean isEmpty() {
+        return cookies.isEmpty();
+    }
+
     public void addCookie(String key, String value) {
         cookies.put(key, value);
     }

@@ -1,9 +1,8 @@
-package http.supoort;
+package http.supoort.converter.request;
 
 import http.exceptions.IllegalHttpRequestException;
 import http.model.request.HttpMethod;
 import http.model.request.ServletRequest;
-import http.supoort.converter.request.HttpRequestParser;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -67,7 +66,7 @@ class HttpRequestParserTest {
     }
 
     @Test
-    public void request_POST2() {
+    void 쿼리스트링_포함_POST_요청() {
         InputStream in = new ByteArrayInputStream(("POST /user/create?id=1 HTTP/1.1\r\n" +
                 "Host: localhost:8080\r\n" +
                 "Connection: keep-alive\r\n" +
@@ -83,5 +82,63 @@ class HttpRequestParserTest {
         assertThat(request.getHeader("Connection")).isEqualTo("keep-alive");
         assertThat(request.getParameter("id")).isEqualTo("1");
         assertThat(request.getParameter("userId")).isEqualTo("javajigi");
+    }
+
+    @Test
+    void 쿠키헤더_포함_GET_요청() {
+        InputStream in = new ByteArrayInputStream(("GET /user/create?id=1 HTTP/1.1\r\n" +
+                "Cookie: logined=true\r\n").getBytes());
+
+        ServletRequest request = HttpRequestParser.parse(in);
+
+        assertThat(request.hasCookie()).isTrue();
+        assertThat(request.getCookie("logined")).isEqualTo("true");
+    }
+
+    @Test
+    void 쿠키헤더_여러개_포함_GET_요청() {
+        InputStream in = new ByteArrayInputStream(("GET /user/create?id=1 HTTP/1.1\r\n" +
+                "Cookie: logined=true; another=something\r\n").getBytes());
+
+        ServletRequest request = HttpRequestParser.parse(in);
+
+        assertThat(request.hasCookie()).isTrue();
+        assertThat(request.getCookies().size()).isEqualTo(2);
+        assertThat(request.getCookie("logined")).isEqualTo("true");
+        assertThat(request.getCookie("another")).isEqualTo("something");
+    }
+
+    @Test
+    void 쿠키헤더_포함_POST_요청() {
+        InputStream in = new ByteArrayInputStream(("POST /user/create?id=1 HTTP/1.1\r\n" +
+                "Cookie: logined=true\r\n" +
+                "Content-Length: 46\r\n" +
+                "\r\n" +
+                "userId=javajigi&password=password&name=JaeSung\r\n").getBytes());
+
+        ServletRequest request = HttpRequestParser.parse(in);
+
+        assertThat(request.hasCookie()).isTrue();
+        assertThat(request.getCookies().size()).isEqualTo(1);
+        assertThat(request.getCookie("logined")).isEqualTo("true");
+        assertThat(request.getHeaders().containsKey("Cookie")).isFalse();
+    }
+
+    @Test
+    void 쿠키헤더_여러개_포함_POST_요청() {
+        InputStream in = new ByteArrayInputStream(("POST /user/create?id=1 HTTP/1.1\r\n" +
+                "Cookie: logined=true; another=something\r\n" +
+                "Content-Length: 46\r\n" +
+                "\r\n" +
+                "userId=javajigi&password=password&name=JaeSung\r\n").getBytes());
+
+        ServletRequest request = HttpRequestParser.parse(in);
+
+        assertThat(request.hasCookie()).isTrue();
+        assertThat(request.getCookies().size()).isEqualTo(2);
+        assertThat(request.getCookie("logined")).isEqualTo("true");
+        assertThat(request.getCookie("another")).isEqualTo("something");
+        assertThat(request.getHeaders().containsKey("Cookie")).isFalse();
+
     }
 }
