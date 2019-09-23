@@ -14,6 +14,11 @@ public class UserLoginController extends AbstractController {
     private UserService userService = new UserService();
 
     @Override
+    void doGet(HttpRequest request, HttpResponse response) {
+
+    }
+
+    @Override
     void doPost(HttpRequest request, HttpResponse response) {
         String userId = QueryStringUtils.parse(request.getBody()).get("userId");
         String password = QueryStringUtils.parse(request.getBody()).get("password");

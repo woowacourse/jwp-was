@@ -2,16 +2,12 @@ package http.request;
 
 import http.HTTP;
 import http.RequestMethod;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
 public class HttpRequest implements AutoCloseable {
-    private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
-
     private RequestFirstLine requestFirstLine;
     private RequestHeader requestHeader;
     private RequestBody requestBody;
@@ -30,8 +26,8 @@ public class HttpRequest implements AutoCloseable {
         }
     }
 
-    public RequestMethod getMethod() {
-        return requestFirstLine.getMethod();
+    public boolean checkMethod(RequestMethod requestMethod) {
+        return requestFirstLine.getMethod().equals(requestMethod);
     }
 
     public String getPath() {

@@ -9,32 +9,30 @@ import java.util.Map;
 public abstract class View {
     final Map<HTTP, String> header = new HashMap<>();
     byte[] body;
+    ResponseStatus responseStatus;
 
-    View() {
+    View(ResponseStatus responseStatus) {
         this.body = "".getBytes();
+        this.responseStatus = responseStatus;
     }
-
-    String getHeader(ResponseStatus responseStatus) {
-        StringBuffer sb = new StringBuffer();
-        sb.append(HTTP.VERSION.getPhrase()).append(" ").append(responseStatus.getInfo()).append("\r\n");
-
-        for (HTTP key : HTTP.values()) {
-            if (header.containsKey(key)) {
-                sb.append(key.getPhrase()).append(": ").append(header.get(key)).append("\r\n");
-            }
-        }
-        sb.append("\r\n");
-
-        return sb.toString();
-    }
-
-    public abstract String getHeader();
 
     public byte[] getBody() {
         return body;
     }
 
+    public ResponseStatus getResponseStatus() {
+        return responseStatus;
+    }
+
     public void addHeader(HTTP key, String value) {
         header.put(key, value);
+    }
+
+    public boolean checkHeader(HTTP http) {
+        return header.containsKey(http);
+    }
+
+    public String getHeaderContents(HTTP http) {
+        return header.getOrDefault(http, "");
     }
 }

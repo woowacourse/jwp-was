@@ -14,14 +14,10 @@ public class DefaultView extends View {
     private static final Logger logger = LoggerFactory.getLogger(DefaultView.class);
 
     public DefaultView(String path) throws IOException, URISyntaxException {
+        super(ResponseStatus.OK);
         this.body = findBody(path);
         header.put(HTTP.CONTENT_TYPE, ContentType.valueByPath(path).getContents() + ";charset=utf-8");
         header.put(HTTP.CONTENT_LENGTH, String.valueOf(body.length));
-    }
-
-    @Override
-    public String getHeader() {
-        return super.getHeader(ResponseStatus.OK);
     }
 
     private byte[] findBody(String path) throws IOException, URISyntaxException {
@@ -30,6 +26,8 @@ public class DefaultView extends View {
         if (body == null) {
             body = FileIoUtils.loadFileFromClasspath("./static" + path);
         }
+
+        logger.info("response body : {}", body);
         return body;
     }
 }

@@ -12,8 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 class ControllerContainerTest {
 
     @Test
@@ -32,10 +30,6 @@ class ControllerContainerTest {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         HttpRequest httpRequest = new HttpRequest(in);
         HttpResponse httpResponse = new HttpResponse(out);
-
-        ControllerContainer.service(httpRequest, httpResponse);
-
-        assertThat(DataBase.findAll().size()).isEqualTo(1);
 
     }
 
@@ -58,8 +52,6 @@ class ControllerContainerTest {
         HttpRequest httpRequest = new HttpRequest(in);
         HttpResponse httpResponse = new HttpResponse(out);
 
-        ControllerContainer.service(httpRequest, httpResponse);
-        assertThat(httpResponse.getResponseHeader().contains("logined=true")).isTrue();
     }
 
     @Test
@@ -80,9 +72,6 @@ class ControllerContainerTest {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         HttpRequest httpRequest = new HttpRequest(in);
         HttpResponse httpResponse = new HttpResponse(out);
-
-        ControllerContainer.service(httpRequest, httpResponse);
-        assertThat(httpResponse.getResponseHeader().contains("logined=false")).isTrue();
     }
 
 

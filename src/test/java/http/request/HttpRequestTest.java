@@ -18,7 +18,7 @@ class HttpRequestTest {
         InputStream in = new ByteArrayInputStream(request.getBytes());
         HttpRequest httpRequest = new HttpRequest(in);
 
-        assertThat(httpRequest.getMethod()).isEqualTo(RequestMethod.GET);
+        assertThat(httpRequest.checkMethod(RequestMethod.GET)).isTrue();
     }
 
     @Test
@@ -35,7 +35,7 @@ class HttpRequestTest {
         InputStream in = new ByteArrayInputStream(request.getBytes());
         HttpRequest httpRequest = new HttpRequest(in);
 
-        assertThat(httpRequest.getMethod()).isEqualTo(RequestMethod.POST);
+        assertThat(httpRequest.checkMethod(RequestMethod.POST)).isTrue();
     }
 
     @Test
