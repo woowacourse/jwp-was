@@ -1,5 +1,6 @@
 package webserver;
 
+import controller.LoginController;
 import controller.SignUpController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,13 +24,16 @@ public class RequestDispatcher {
     static {
         controllers = new HashMap<>();
         SignUpController signUpController = new SignUpController();
+        LoginController loginController = new LoginController();
 
         controllers.put(signUpController.getPath(), signUpController);
+        controllers.put(loginController.getPath(), loginController);
     }
 
     public static void handle(HttpRequest request, HttpResponse response) {
         try {
             String url = request.getUrl();
+
             serveFile(STATIC_DIR + url, response);
             serveFile(TEMPLATES_DIR + url, response);
 
