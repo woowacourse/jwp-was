@@ -1,13 +1,15 @@
-package http.Request;
+package webserver;
 
 import controller.Controller;
+import controller.ControllerHandler;
+import http.request.Request;
+import http.request.RequestParser;
 import http.response.Response;
 import http.response.ResponseWriter;
 import http.support.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.ExtractInformationUtils;
-import controller.ControllerHandler;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -17,7 +19,6 @@ import java.net.Socket;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-
     private static final String PREFIX_SLASH = "/";
     private static final String HTML = "html";
     private static final String TEMPLATES = "./templates";
@@ -44,22 +45,24 @@ public class RequestHandler implements Runnable {
             String extension = ExtractInformationUtils.extractExtension(url);
 
             Response response = new Response();
-            ResponseWriter responseWriter = new ResponseWriter(dos);
+            ResponseWriter responseWriter = new ResponseWriter();
 
-            if (!extension.startsWith(PREFIX_SLASH)) {
-                String classPath = getClassPath(url, extension);
-                response.forward(classPath, HttpStatus.OK);
-                responseWriter.send(response, response.getBody());
-                return;
-            }
-
-            Controller controller = controllerHandler.getController(request.getPath());
-            controller.service(request, response);
-            responseWriter.send(response, response.getBody());
-
+            setResponse(request, url, extension, response);
+            responseWriter.send(dos, response);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private void setResponse(Request request, String url, String extension, Response response) {
+        if (!extension.startsWith(PREFIX_SLASH)) {
+            String classPath = getClassPath(url, extension);
+            response.forward(classPath, HttpStatus.OK);
+            return;
+        }
+
+        Controller controller = controllerHandler.getController(request.getPath());
+        controller.service(request, response);
     }
 
     private String getClassPath(String url, String extension) {

@@ -1,6 +1,6 @@
 package controller;
 
-import http.Request.Request;
+import http.request.Request;
 import http.response.Response;
 
 public interface Controller {

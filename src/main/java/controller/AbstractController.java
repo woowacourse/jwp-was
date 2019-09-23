@@ -1,19 +1,34 @@
 package controller;
 
-import http.support.HttpMethod;
-import http.Request.Request;
+import com.google.common.collect.Lists;
+import http.request.Request;
 import http.response.Response;
+import http.support.HttpMethod;
 import http.support.HttpStatus;
 
+import java.util.List;
+
 public abstract class AbstractController implements Controller {
+    private List<HttpMethod> supportMethod = Lists.newArrayList(HttpMethod.POST, HttpMethod.GET);
+
     @Override
     public void service(Request request, Response response) {
+        if (!isSupportMethod(request.getMethod())) {
+            response.forward(request.getPath(), HttpStatus.METHOD_NOT_ALLOWED);
+            return;
+        }
+
         if (request.getMethod().contains(HttpMethod.POST.name())) {
-            doPost(request, response);
+            doPost(request, response); return;
         }
-        if (request.getMethod().contains(HttpMethod.GET.name())) {
-            doGet(request, response);
-        }
+
+        doGet(request, response);
+    }
+
+    private boolean isSupportMethod(String method) {
+        return supportMethod.stream()
+                .map(Enum::name)
+                .anyMatch(name -> name.equals(method));
     }
 
     public void doPost(Request request, Response response) {
