@@ -3,6 +3,7 @@ package http.request;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class HttpRequestParams {
     private static final String QUERY_PARAM_DELIMITER = "&";
@@ -10,7 +11,7 @@ public class HttpRequestParams {
     private static final String REQUEST_LAST_LINE = "";
     private static final String NONE_VALUE = "";
 
-    private Map<String, String> queryParams;
+    private final Map<String, String> queryParams;
 
     private HttpRequestParams(final Map<String, String> queryParams) {
         this.queryParams = Collections.unmodifiableMap(queryParams);
@@ -60,5 +61,18 @@ public class HttpRequestParams {
         return "HttpRequestParams{" +
                 "queryParams=" + queryParams +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HttpRequestParams that = (HttpRequestParams) o;
+        return Objects.equals(queryParams, that.queryParams);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(queryParams);
     }
 }

@@ -2,17 +2,25 @@ package http.request;
 
 import java.util.Objects;
 
+import static http.request.HttpRequestParser.QUERY_STRING_DELIMITER;
+
 public class Url {
     private String url;
+    private String rawUrl;
     private HttpRequestType httpRequestType;
 
-    public Url(final String url) {
-        this.url = url;
+    public Url(final String rawUrl) {
+        this.rawUrl = rawUrl;
+        this.url = rawUrl.split(QUERY_STRING_DELIMITER)[0];
         httpRequestType = HttpRequestType.of(url);
     }
 
     public String getUrl() {
         return url;
+    }
+
+    public String getRawUrl() {
+        return rawUrl;
     }
 
     public String getFullUrl() {

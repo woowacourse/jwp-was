@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HttpRequestParser {
+    public static final String QUERY_STRING_DELIMITER = "\\?";
     private static final String BLANK = " ";
-    private static final String QUERY_STRING_DELIMITER = "\\?";
 
     public static HttpRequest parse(final InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -40,7 +40,7 @@ public class HttpRequestParser {
     }
 
     private static HttpRequestParams parseQueryParams(final RequestLine requestLine) {
-        String[] tokens = requestLine.getUrl().getUrl().split(QUERY_STRING_DELIMITER);
+        String[] tokens = requestLine.getUrl().getRawUrl().split(QUERY_STRING_DELIMITER);
 
         if (tokens.length == 2) {
             return HttpRequestParams.of(tokens[1]);
@@ -52,7 +52,7 @@ public class HttpRequestParser {
         List<String> headerLines = new ArrayList<>();
         String line;
 
-        while (!(line = bufferedReader.readLine()).equals("") && line != null) {
+        while (!(line = bufferedReader.readLine()).equals("")) {
             headerLines.add(line);
         }
 
