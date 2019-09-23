@@ -21,6 +21,7 @@ public class RequestParser {
     private static final String PATH_QUERY_DELIMITER_REGEX = "\\?";
     private static final String COOKIE_HEADER_KEY = "Cookie";
     private static final String COOKIE_PAIR_DELIMITER = "; ";
+    private static final String CONTENT_LENGTH_HEADER_KEY = "Content-Length";
 
     public static Request parse(InputStream in) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
@@ -77,7 +78,7 @@ public class RequestParser {
 
     private static byte[] getBody(BufferedReader br, Map<String, String> headers) throws IOException {
         byte[] body = new byte[]{};
-        String contentLength = headers.get("Content-Length");
+        String contentLength = headers.get(CONTENT_LENGTH_HEADER_KEY);
         if (contentLength != null) {
             body = IOUtils.readData(br, Integer.parseInt(contentLength));
         }
