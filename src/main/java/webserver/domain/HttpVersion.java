@@ -1,7 +1,7 @@
 package webserver.domain;
 
 public enum HttpVersion {
-    HTTP_1_1("HTTP/1.1");
+    _1_1("HTTP/1.1");
 
     private final String protocol;
 

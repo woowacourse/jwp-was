@@ -51,11 +51,19 @@ public enum MediaType {
         return message;
     }
 
-    public List<String> getExtensions() {
-        return extensions;
-    }
-
     private String getCharsetString(final Charset charset) {
         return Objects.isNull(charset) ? EMPTY : CHARSET + charset.name().toLowerCase();
+    }
+
+    public String getMediaType() {
+        return mediaType;
+    }
+
+    public Charset getCharset() {
+        return charset;
+    }
+
+    public List<String> getExtensions() {
+        return extensions;
     }
 }

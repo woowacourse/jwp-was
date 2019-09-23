@@ -9,51 +9,48 @@ import java.util.Iterator;
 import java.util.Objects;
 
 public class NetworkInput implements Iterable<String> {
-    private final BufferedReader bufferedReader;
+    private final BufferedReader reader;
 
     public NetworkInput(final InputStream inputStream) {
-        this.bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+        this.reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
     }
 
     public String readBody(int contentLength) throws IOException {
         char[] body = new char[contentLength];
-        this.bufferedReader.read(body, 0, contentLength);
+        this.reader.read(body, 0, contentLength);
         return String.copyValueOf(body);
     }
 
     @Override
     public Iterator<String> iterator() {
-        try {
-            return new MyIterator(bufferedReader);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return iterator();
-        }
+        return new MyIterator(reader);
     }
 
     private static class MyIterator implements Iterator<String> {
-        private BufferedReader bufferedReader;
-        private String nextLine;
+        private static final String EMPTY = "";
+        private BufferedReader reader;
+        private String nextLine = EMPTY;
 
-        MyIterator(final BufferedReader bufferedReader) throws IOException {
-            this.bufferedReader = bufferedReader;
-            this.nextLine = bufferedReader.readLine();
+        MyIterator(final BufferedReader reader) {
+            this.reader = reader;
+            try {
+                this.nextLine = this.reader.readLine();
+            } catch (final IOException ignored) {}
         }
 
         @Override
         public boolean hasNext() {
-            return Objects.nonNull(nextLine) && !"".equals(nextLine);
+            return Objects.nonNull(nextLine) && !EMPTY.equals(nextLine);
         }
 
         @Override
         public String next() {
             try {
                 final String result = this.nextLine;
-                this.nextLine = bufferedReader.readLine();
+                this.nextLine = this.reader.readLine();
                 return result;
-            } catch (IOException e) {
-                e.printStackTrace();
-                return "";
+            } catch (final IOException e) {
+                return EMPTY;
             }
         }
     }

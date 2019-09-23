@@ -35,11 +35,11 @@ public class Response {
         }
 
         public Builder(final HttpStatus httpStatus) {
-            this(HttpVersion.HTTP_1_1, httpStatus);
+            this(HttpVersion._1_1, httpStatus);
         }
 
         public Builder() {
-            this(HttpVersion.HTTP_1_1, HttpStatus.OK);
+            this(HttpVersion._1_1, HttpStatus.OK);
         }
 
         public Builder protocol(final HttpVersion protocol) {
@@ -92,7 +92,7 @@ public class Response {
 
     public byte[] toBytes() {
         final int bodyLength = this.body.length();
-        final byte[] header = this.header.make(bodyLength).getBytes(StandardCharsets.UTF_8);
+        final byte[] header = this.header.make(bodyLength).getBytes(StandardCharsets.ISO_8859_1); // 이 인코딩을 명시적으로 지정하면 Charset 변환과정 없이 array 복사만 한다.
 
         return ByteBuffer
                 .allocate(header.length + NEW_LINE.length + bodyLength)
