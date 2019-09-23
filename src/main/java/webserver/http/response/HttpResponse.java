@@ -16,6 +16,9 @@ import java.util.Map;
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
+    private static final String EXTENSION_DELIMITER = ".";
+    private static final String SLASH = "/";
+
     // TODO model 맵의 역할
     private Map<String, String> model = new HashMap<>();
     private Map<String, String> headers = new HashMap<>();
@@ -37,16 +40,24 @@ public class HttpResponse {
         this.path = path;
         this.body = FileIoUtils.loadFileFromClasspath(path);
         this.httpStatus = httpStatus;
-        this.mediaType = MediaType.find(path.substring(path.lastIndexOf(".") + 1).toUpperCase());
+        this.mediaType = MediaType.find(extractExtensions(path));
         createHeader();
+    }
+
+    private String extractExtensions(String path) {
+        return path.substring(path.lastIndexOf(EXTENSION_DELIMITER) + 1).toUpperCase();
     }
 
     private void createHeader() {
         if (isRedirect()) {
-            headers.put("Location", path.substring(path.indexOf("/")) + "\r\n");
+            headers.put("Location", excludePathPrefix(path) + "\r\n");
         }
         headers.put("Content-Type", mediaType.getContentType() + ";charset=utf-8\r\n");
         headers.put("Content-Length", body.length + ";charset=utf-8\r\n");
+    }
+
+    private String excludePathPrefix(String path) {
+        return path.substring(path.indexOf(SLASH));
     }
 
     public void sendError(HttpStatus httpStatus, String msg) {
