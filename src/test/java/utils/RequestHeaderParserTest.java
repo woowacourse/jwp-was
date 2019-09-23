@@ -1,10 +1,10 @@
 package utils;
 
-import webserver.http.request.RequestHeaderParser;
-import webserver.http.request.HttpRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import webserver.http.HttpMethod;
+import webserver.http.request.HttpRequest;
+import webserver.http.request.RequestHeaderParser;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -29,8 +29,8 @@ class RequestHeaderParserTest {
     }
 
     @Test
-    void target_검사() {
-        assertThat(httpRequest.getResource()).isEqualTo("index.html");
+    void path_검사() {
+        assertThat(httpRequest.getPath()).isEqualTo("/index.html");
     }
 
     @Test

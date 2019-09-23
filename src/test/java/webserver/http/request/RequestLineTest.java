@@ -4,7 +4,8 @@ import org.junit.jupiter.api.Test;
 import webserver.http.HttpMethod;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class RequestLineTest {
 
@@ -18,6 +19,6 @@ class RequestLineTest {
 
         assertFalse(requestLine.isBodyExists());
         assertTrue(requestLine.isSameHttpMethod(HttpMethod.GET));
-        assertThat(requestLine.getResource()).isEqualTo("index.html");
+        assertThat(requestLine.getPath()).isEqualTo("/index.html");
     }
 }

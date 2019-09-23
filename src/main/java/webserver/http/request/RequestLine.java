@@ -3,6 +3,8 @@ package webserver.http.request;
 import webserver.http.HttpMethod;
 
 final class RequestLine {
+    private static final String QUERY_START_DELIMITER = "?";
+
     private HttpMethod method;
     private String path;
     private QueryParams queryParams;
@@ -19,9 +21,9 @@ final class RequestLine {
     }
 
     private void initPath(String path) {
-        if (path.contains("?")) {
-            this.queryParams = QueryParser.parseRequest(path.substring(path.indexOf("?") + 1));
-            path = path.substring(0, path.indexOf("?"));
+        if (path.contains(QUERY_START_DELIMITER)) {
+            this.queryParams = QueryParser.parseRequest(path.substring(path.indexOf(QUERY_START_DELIMITER) + 1));
+            path = path.substring(0, path.indexOf(QUERY_START_DELIMITER));
         }
         this.path = path;
     }
@@ -38,35 +40,8 @@ final class RequestLine {
         return path;
     }
 
-    String getDirectory() {
-        if (isRootDirectoryRequest()) {
-            return "/";
-        }
-        return path.substring(0, path.lastIndexOf("/"));
-    }
-
-    private boolean isRootDirectoryRequest() {
-        return path.substring(0, path.lastIndexOf("/")).length() == 0;
-    }
-
-    String getResource() {
-        if (isRootRequest()) {
-            return "index.html";
-        }
-
-        return path.substring(path.lastIndexOf("/") + 1);
-    }
-
-    private boolean isRootRequest() {
-        return path.equals("/");
-    }
-
     HttpMethod getMethod() {
         return method;
-    }
-
-    QueryParams getQueryParams() {
-        return queryParams;
     }
 
     String getVersion() {

@@ -6,9 +6,11 @@ public enum ViewLocation {
     ROOT("");
 
     private final String location;
+
     ViewLocation(String location) {
         this.location = location;
     }
+
     public String getLocation() {
         return location;
     }

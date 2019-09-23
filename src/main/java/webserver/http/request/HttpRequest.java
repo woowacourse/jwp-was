@@ -18,6 +18,7 @@ public final class HttpRequest {
         this.requestHeader = requestHeader;
     }
 
+
     static HttpRequest createWithBody(RequestLine requestLine, RequestHeader requestHeader, RequestBody requestBody) {
         return new HttpRequest(requestLine, requestHeader, requestBody);
     }
@@ -30,20 +31,8 @@ public final class HttpRequest {
         return requestLine.isSameHttpMethod(httpMethod);
     }
 
-    public String getResource() {
-        return requestLine.getResource();
-    }
-
     public String getPath() {
         return requestLine.getPath();
-    }
-
-    public String getDirectory() {
-        return requestLine.getDirectory();
-    }
-
-    public QueryParams getQueryParams() {
-        return requestLine.getQueryParams();
     }
 
     public HttpMethod getHttpMethod() {
@@ -59,7 +48,7 @@ public final class HttpRequest {
     }
 
     public QueryParams getBody() {
-        if (requestBody != null) {
+        if (isBodyExists()) {
             return requestBody.getBody();
         }
         throw new RuntimeException("Body 가 있는 요청이 아닙니다");

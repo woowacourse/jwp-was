@@ -9,5 +9,12 @@ public interface Controller {
      * @param request HttpRequest
      * @param response HttpResponse
      */
-    void service(HttpRequest request, HttpResponse response);
+    void service(HttpRequest request, HttpResponse response) throws Exception;
+
+    /**
+     * 각 컨트롤러가 요청에 맞는 컨트롤러인지 판단하는 로직을 구현하면 된다.
+     * @param request HttpRequest
+     * @return boolean
+     */
+    boolean isMapping(HttpRequest request);
 }

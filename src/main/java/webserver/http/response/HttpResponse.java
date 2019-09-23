@@ -1,19 +1,29 @@
 package webserver.http.response;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import utils.FileIoUtils;
 import webserver.http.HttpStatus;
 import webserver.http.MediaType;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class HttpResponse {
+    private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
+
     // TODO model 맵의 역할
-    private Map<String, String> body = new HashMap<>();
-    private String resource;
-    private String location;
+    private Map<String, String> model = new HashMap<>();
+    private Map<String, String> headers = new HashMap<>();
+    private String path;
     private HttpStatus httpStatus;
     private MediaType mediaType;
     private String errorMsg;
+    private byte[] body;
 
     private HttpResponse() {
         this.httpStatus = HttpStatus.DEFAULT;
@@ -23,25 +33,20 @@ public class HttpResponse {
         return new HttpResponse();
     }
 
-    public static HttpResponse createError() {
-        HttpResponse httpResponse = new HttpResponse();
-        httpResponse.resource = "error.html";
-        httpResponse.httpStatus = HttpStatus.NOT_FOUND;
-        httpResponse.mediaType = MediaType.HTML;
-        httpResponse.location = "templates";
-        return httpResponse;
+    public void send(String path, HttpStatus httpStatus) throws IOException, URISyntaxException {
+        this.path = path;
+        this.body = FileIoUtils.loadFileFromClasspath(path);
+        this.httpStatus = httpStatus;
+        this.mediaType = MediaType.find(path.substring(path.lastIndexOf(".") + 1).toUpperCase());
+        createHeader();
     }
 
-    public void sendRedirect(String location, HttpStatus httpStatus) {
-        this.location = location;
-        this.httpStatus = httpStatus;
-        this.mediaType = MediaType.find(location.substring(location.lastIndexOf(".") + 1).toUpperCase());
-    }
-
-    public void forward(String resource, HttpStatus httpStatus) {
-        this.resource = resource;
-        this.httpStatus = httpStatus;
-        this.mediaType = MediaType.find(resource.substring(resource.lastIndexOf(".") + 1).toUpperCase());
+    private void createHeader() {
+        if (isRedirect()) {
+            headers.put("Location", path.substring(path.indexOf("/")) + "\r\n");
+        }
+        headers.put("Content-Type", mediaType.getContentType() + ";charset=utf-8\r\n");
+        headers.put("Content-Length", body.length + ";charset=utf-8\r\n");
     }
 
     public void sendError(HttpStatus httpStatus, String msg) {
@@ -49,31 +54,52 @@ public class HttpResponse {
         this.errorMsg = msg;
     }
 
-    public boolean hasError() {
-        return httpStatus.isError();
-    }
-
-    public String getLocation() {
-        return location;
+    private boolean isRedirect() {
+        return httpStatus.equals(HttpStatus.REDIRECT);
     }
 
     public int getHttpStatusCode() {
         return httpStatus.getValue();
     }
 
-    public String getHttpReasonPhrase() {
-        return httpStatus.getReasonPhrase();
-    }
-
     public String getMediaType() {
         return mediaType.getContentType();
     }
 
-    public boolean isRedirect() {
-        return httpStatus.equals(HttpStatus.REDIRECT);
+    public String getPath() {
+        return path;
     }
 
-    public boolean isNotInitialized() {
-        return httpStatus.isNotInitialized();
+    public void flush(OutputStream out) {
+        DataOutputStream dos = new DataOutputStream(out);
+        createResponse(dos);
+    }
+
+    private void createResponse(DataOutputStream dos) {
+        responseHeader(dos);
+        responseBody(dos, this.body);
+    }
+
+    private void responseHeader(DataOutputStream dos) {
+        try {
+            dos.writeBytes("HTTP/1.1 " + httpStatus.getValue() + " " + httpStatus.getReasonPhrase() + " \r\n");
+            if (isRedirect()) {
+                dos.writeBytes("Location: " + headers.get("Location"));
+            }
+            dos.writeBytes("Content-Type: " + headers.get("Content-Type") + ";charset=utf-8\r\n");
+            dos.writeBytes("Content-Length: " + headers.get("Content-Length") + "\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void responseBody(DataOutputStream dos, byte[] body) {
+        try {
+            dos.write(body, 0, body.length);
+            dos.flush();
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
     }
 }
