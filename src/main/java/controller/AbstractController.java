@@ -1,6 +1,6 @@
 package controller;
 
-import org.springframework.http.HttpMethod;
+import webserver.HttpMethod;
 import webserver.Request;
 import webserver.Response;
 

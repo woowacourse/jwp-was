@@ -1,6 +1,5 @@
 package webserver;
 
-import org.springframework.http.HttpMethod;
 import session.HttpSession;
 import session.HttpSessionManager;
 
@@ -10,7 +9,7 @@ public class Request {
 
     public static final String SESSION_COOKIE_KEY = "SID";
 
-    private final String method;
+    private final HttpMethod method;
     private final String path;
     private final Map<String, String> queries;
     private final Map<String, String> headers;
@@ -18,7 +17,7 @@ public class Request {
     private final byte[] body;
     private HttpSession session;
 
-    public Request(String method, String path, Map<String, String> queries, Map<String, String> headers, Map<String, String> cookies, byte[] body) {
+    public Request(HttpMethod method, String path, Map<String, String> queries, Map<String, String> headers, Map<String, String> cookies, byte[] body) {
         this.method = method;
         this.path = path;
         this.queries = queries;
@@ -27,11 +26,11 @@ public class Request {
         this.body = body;
     }
 
-    public boolean matchMethod(HttpMethod httpMethod) {
-        return httpMethod.matches(method);
+    public boolean matchMethod(HttpMethod method) {
+        return this.method.equals(method);
     }
 
-    public String getMethod() {
+    public HttpMethod getMethod() {
         return method;
     }
 

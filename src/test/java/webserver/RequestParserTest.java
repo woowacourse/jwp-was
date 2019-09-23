@@ -30,7 +30,7 @@ public class RequestParserTest {
     void parse() throws IOException {
         Request req = RequestParser.parse(new ByteArrayInputStream(REQUEST_BYTE));
 
-        assertThat(req.getMethod()).isEqualTo("POST");
+        assertThat(req.getMethod()).isEqualTo(HttpMethod.POST);
         assertThat(req.getPath()).isEqualTo("/");
         assertThat(req.getHeader("Content-Length")).isEqualTo("26");
         assertThat(new String(req.getBody()).trim()).isEqualTo("This is body");

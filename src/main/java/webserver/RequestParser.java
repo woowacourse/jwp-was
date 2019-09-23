@@ -27,7 +27,8 @@ public class RequestParser {
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
         String[] firstLine = br.readLine().split(FIRST_LINE_DELIMITER);
-        String method = firstLine[0];
+        HttpMethod method = HttpMethod.from(firstLine[0])
+                .orElseThrow(() -> new IllegalArgumentException("Unsupported http method: " + firstLine[0]));
         String url = firstLine[1].split(PATH_QUERY_DELIMITER_REGEX)[0];
         Map<String, String> queries = parseQueryString(firstLine[1]);
         Map<String, String> headers = parseHeader(br);
