@@ -1,21 +1,15 @@
 package webserver;
 
 import enumType.MediaType;
-import org.apache.tika.Tika;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.ExtractInformationUtils;
 import utils.FileIoUtils;
 
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -34,13 +28,16 @@ public class HttpResponse {
         header = new LinkedHashMap<>();
     }
 
-    private void forward(String location) throws IOException, URISyntaxException {
+    private void forward(String location) throws IOException {
         byte[] body = FileIoUtils.loadFileFromClasspath(location);
-        header.put("Location", location + "\r\n");
-        header.put(CONTENT_TYPE, MediaType.of(ExtractInformationUtils.extractExtension(location)).getMediaType() + ";charset=utf-8\r\n");
-        System.out.println( MediaType.of(ExtractInformationUtils.extractExtension(location)));
+        addHeader(LOCATION, location + "\r\n");
+        addHeader(CONTENT_TYPE, MediaType.of(ExtractInformationUtils.extractExtension(location)).getMediaType() + ";charset=utf-8\r\n");
 
         a(body);
+    }
+
+    public void forward(String location, HttpStatus httpStatus) {
+
     }
 
     private void a(byte[] body) throws IOException {
@@ -56,19 +53,13 @@ public class HttpResponse {
         dos.flush();
     }
 
-    public void response(String location) {
-        try {
-            header.put(STATUS, String.format("%s %d %s %s", HTTP_1_1, httpStatus.getStatusCode(), httpStatus.getMessage(), "\r\n"));
-            if (httpStatus.getStatusCode() == 302) {
-                sendRedirect(location);
-            }
-            if (httpStatus.getStatusCode() == 200) {
-                forward(location);
-            }
-        } catch (IOException e) {
-            e.getMessage();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
+    public void response(String location) throws IOException {
+        header.put(STATUS, String.format("%s %d %s %s", HTTP_1_1, httpStatus.getStatusCode(), httpStatus.getMessage(), "\r\n"));
+        if (httpStatus.getStatusCode() == 302) {
+            sendRedirect(location);
+        }
+        if (httpStatus.getStatusCode() == 200) {
+            forward(location);
         }
     }
 
@@ -99,5 +90,9 @@ public class HttpResponse {
         }
 
         dos.writeBytes("\r\n");
+    }
+
+    private void addHeader(String key, String value) {
+        header.put(key, value);
     }
 }
