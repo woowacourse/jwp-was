@@ -25,4 +25,14 @@ public enum HttpStatus {
     public String getCodeAndMessage() {
         return code + " " + message;
     }
+
+    public static HttpStatus values(String inputCode) {
+        int code = Integer.parseInt(inputCode);
+        for (HttpStatus value : values()) {
+            if (value.code == code) {
+                return value;
+            }
+        }
+        throw new IllegalArgumentException("올바르지 않은 상태코드 입니다.");
+    }
 }
