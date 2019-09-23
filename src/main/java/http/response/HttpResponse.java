@@ -4,6 +4,7 @@ import http.HttpHeaders;
 
 public class HttpResponse {
     public static final String CRLF = "\r\n";
+    private static final String EMPTY = "";
 
     private HttpStatusLine statusLine;
     private HttpHeaders headers;
@@ -34,7 +35,7 @@ public class HttpResponse {
     }
 
     private String getBodyMessage() {
-        return (body == null) ? "" : new String(body);
+        return !hasBody() ? EMPTY : new String(body);
     }
 
     public boolean hasBody() {
