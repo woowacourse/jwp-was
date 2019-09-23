@@ -15,7 +15,7 @@ public class UserController {
 
     public static Response service(final Request request) {
         if (request.matchesMethod("GET")) {
-            return doPost(request);
+            return doGet(request);
         }
         if (request.matchesMethod("POST")) {
             return doPost(request);
