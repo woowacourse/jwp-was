@@ -1,6 +1,5 @@
 package controller;
 
-import http.NotSupportedHttpMethodException;
 import http.request.HttpMethodType;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -20,7 +19,7 @@ public abstract class BasicController implements Controller {
             doPost(request, response);
             return;
         }
-        throw new NotSupportedHttpMethodException();
+        response.methodNotAllow();
     }
 
     public abstract void doGet(HttpRequest request, HttpResponse response) throws IOException, URISyntaxException;

@@ -3,7 +3,6 @@ package controller;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import utils.FileIoUtils;
-import webserver.BadRequestException;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -26,6 +25,7 @@ public class FileController extends BasicController {
         //css,js 찾기
         body = FileIoUtils.loadFileFromClasspath(String.format("./static%s", request.getPath()));
         if (body == null) {
+            response.notFound();
             return;
         }
         response.okResponse(contentType, body);
@@ -33,6 +33,6 @@ public class FileController extends BasicController {
 
     @Override
     public void doPost(HttpRequest request, HttpResponse response) {
-        throw new BadRequestException();
+        response.badRequest();
     }
 }

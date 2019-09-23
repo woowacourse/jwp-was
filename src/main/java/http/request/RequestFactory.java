@@ -14,6 +14,7 @@ import java.util.List;
 
 public class RequestFactory {
     private static final Logger log = LoggerFactory.getLogger(RequestFactory.class);
+    private static final String TAG = "RequestFactory";
     private static final String LAST_LINE = "";
     private static final String CONTENT_LENGTH = "Content-Length";
 
@@ -27,7 +28,11 @@ public class RequestFactory {
     }
 
     private static HttpRequestStartLine initializeStart(BufferedReader br) throws IOException {
-        return HttpRequestStartLine.of(br.readLine());
+        log.debug("{} BufferedReader {}", br, TAG);
+        String line = br.readLine();
+        log.debug("{} {}", TAG, line);
+        return HttpRequestStartLine.of(line);
+
     }
 
     private static HttpHeader initializeHeader(BufferedReader br) throws IOException {

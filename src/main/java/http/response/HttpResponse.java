@@ -41,11 +41,27 @@ public class HttpResponse {
     }
 
     public void badRequest() {
-        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.BAD_REQUEST, HttpVersion.HTTP_1_1);
+        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.FOUND, HttpVersion.HTTP_1_1);
+        Map<String, String> header = new HashMap<>();
+        header.put("Location", "/error.html");
+        addHeader(header);
+        this.body = new byte[]{};
     }
 
     public void notFound() {
         this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.NOT_FOUND, HttpVersion.HTTP_1_1);
+        Map<String, String> header = new HashMap<>();
+        header.put("Location", "/error.html");
+        addHeader(header);
+        this.body = new byte[]{};
+    }
+
+    public void methodNotAllow() {
+        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.METHOD_NOT_FOUND, HttpVersion.HTTP_1_1);
+        Map<String, String> header = new HashMap<>();
+        header.put("Location", "/error.html");
+        addHeader(header);
+        this.body = new byte[]{};
     }
 
     private void writeStartLine(DataOutputStream dos) throws IOException {
@@ -57,7 +73,7 @@ public class HttpResponse {
     private void writeHeader(DataOutputStream dos) {
         try {
             for (String line : header.getKeySet()) {
-                logger.debug("{}", line + ": " + header.getHeader(line) + "\r\n");
+                logger.debug("header {}", line + ": " + header.getHeader(line) + "\r\n");
                 dos.writeBytes(line + ": " + header.getHeader(line) + "\r\n");
             }
         } catch (IOException e) {

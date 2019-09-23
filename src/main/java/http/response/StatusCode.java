@@ -4,7 +4,9 @@ public enum StatusCode {
     OK("OK", 200),
     FOUND("FOUND", 302),
     BAD_REQUEST("BAD REQUEST", 400),
-    NOT_FOUND("NOT FOUND", 404);
+    NOT_FOUND("NOT FOUND", 404),
+    METHOD_NOT_FOUND("METHOD NOT FOUND", 405);
+
     private final String status;
     private final int value;
 

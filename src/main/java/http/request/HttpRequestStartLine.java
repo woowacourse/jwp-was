@@ -1,8 +1,12 @@
 package http.request;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.UnsupportedEncodingException;
 
 public class HttpRequestStartLine {
+    private static final Logger log = LoggerFactory.getLogger(HttpRequestStartLine.class);
     private static final String LINE_SPLITTER = " ";
     private static final String QUERY_SPLITTER = "\\?";
 
@@ -17,6 +21,7 @@ public class HttpRequestStartLine {
     }
 
     public static HttpRequestStartLine of(String startLine) throws UnsupportedEncodingException {
+        log.debug("start line {}", startLine);
         String[] startLineValues = startLine.split(LINE_SPLITTER);
 
         HttpMethodType httpMethodType = HttpMethodType.valueOf(startLineValues[0]);
