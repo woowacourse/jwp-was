@@ -10,13 +10,17 @@ public abstract class HttpController implements Controller {
 
     @Override
     public void service(Request request, Response response) throws IOException, URISyntaxException {
-        doGet(request, response);
-        doPost(request, response);
+        if (request.isGetMethod()) {
+            doGet(request, response);
+            return;
+        }
+
+        if (request.isPostMethod()) {
+            doPost(request, response);
+        }
     }
 
-    protected void doGet(Request request, Response response) throws IOException, URISyntaxException {
-    }
+    protected abstract void doGet(Request request, Response response) throws IOException, URISyntaxException;
 
-    protected void doPost(Request request, Response response) {
-    }
+    protected abstract void doPost(Request request, Response response);
 }

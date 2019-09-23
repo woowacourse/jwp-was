@@ -29,7 +29,7 @@ public class Request {
     }
 
     public String extractUrl() {
-        return requestLine.getUrl();
+        return requestLine.getUrl().split("\\?")[0];
     }
 
     public String extractMethod() {

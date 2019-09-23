@@ -3,6 +3,7 @@ package webserver.controller;
 import http.request.Request;
 import http.response.Response;
 import utils.FileIoUtils;
+import webserver.exception.InvalidRequestMethodException;
 import webserver.support.ContentTypeHandler;
 import webserver.support.PathHandler;
 
@@ -35,5 +36,10 @@ public class FileController extends HttpController {
         String absoluteUrl = PathHandler.path(url);
         byte[] body = FileIoUtils.loadFileFromClasspath(absoluteUrl);
         response.setResponseBody(body);
+    }
+
+    @Override
+    protected void doPost(Request request, Response response) {
+        throw new InvalidRequestMethodException();
     }
 }

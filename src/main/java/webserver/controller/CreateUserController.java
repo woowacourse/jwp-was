@@ -20,9 +20,21 @@ public class CreateUserController extends HttpController {
     }
 
     @Override
+    protected void doGet(Request request, Response response) {
+        String location = new UserService().addUser(request.extractQueryParameter());
+
+        setResponse(response, location);
+    }
+
+
+    @Override
     protected void doPost(Request request, Response response) {
         String location = new UserService().addUser(request.extractFormData());
 
+        setResponse(response, location);
+    }
+
+    private void setResponse(Response response, String location) {
         response.setStatusCode(REDIRECT_STATUS_CODE);
         response.setReasonPhrase(FOUND);
         response.setLocation(location);
