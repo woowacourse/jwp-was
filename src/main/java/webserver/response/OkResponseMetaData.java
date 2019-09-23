@@ -9,11 +9,12 @@ import java.net.URISyntaxException;
 
 public class OkResponseMetaData extends AbstractResponseMetaData {
 
+    private static final String DEFAULT_CHARSET = "utf-8";
     private static final HttpStatus httpStatus = HttpStatus.OK;
 
     public OkResponseMetaData(HttpRequest httpRequest) {
         super(httpRequest);
-        responseHeaderFields.put("Content-Type", httpRequest.findContentType() + ";charset=utf-8");
+        responseHeaderFields.put("Content-Type", httpRequest.findContentType() + ";charset=" + DEFAULT_CHARSET);
         responseHeaderFields.put("Content-Length", String.valueOf(getBody().length));
     }
 
