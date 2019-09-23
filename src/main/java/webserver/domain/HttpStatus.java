@@ -7,10 +7,12 @@ public enum HttpStatus {
 
     private final int code;
     private final String phrase;
+    private final String message;
 
     HttpStatus(final int code, final String phrase) {
         this.code = code;
         this.phrase = phrase;
+        this.message = this.code + this.phrase;
     }
 
     public int code() {
@@ -23,6 +25,6 @@ public enum HttpStatus {
 
     @Override
     public String toString() {
-        return this.code + " " + this.phrase;
+        return message;
     }
 }

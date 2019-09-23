@@ -1,11 +1,12 @@
 package webserver.domain;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Response {
-    private static final byte[] NEW_LINE_BYTES = "\r\n\r\n".getBytes();
+    private static final byte[] NEW_LINE = "\r\n".getBytes();
 
     private ResponseHeader header;
     private ResponseBody body;
@@ -16,32 +17,32 @@ public class Response {
     }
 
     public static class Builder {
-        private static final String HTTP_1_1 = "HTTP/1.1";
-
+        private static final String CONTENT_TYPE = "Content-Type";
+        private static final String LOCATION = "Location";
         private ResponseBody body = new ResponseBody();
-        private String protocol;
+        private HttpVersion protocol;
         private HttpStatus httpStatus;
         private Map<String, String> responseFields = new HashMap<>();
 
-        public Builder(final String protocol, final HttpStatus httpStatus) {
+        public Builder(final HttpVersion protocol, final HttpStatus httpStatus) {
             this.protocol = protocol;
             this.httpStatus = httpStatus;
-            this.responseFields.put("Content-Type", "application/octet-stream");
+            this.responseFields.put(CONTENT_TYPE, MediaType.APPLICATION_BINARY.is());
         }
 
-        public Builder(final String protocol) {
+        public Builder(final HttpVersion protocol) {
             this(protocol, HttpStatus.OK);
         }
 
         public Builder(final HttpStatus httpStatus) {
-            this(HTTP_1_1, httpStatus);
+            this(HttpVersion.HTTP_1_1, httpStatus);
         }
 
         public Builder() {
-            this(HTTP_1_1, HttpStatus.OK);
+            this(HttpVersion.HTTP_1_1, HttpStatus.OK);
         }
 
-        public Builder protocol(final String protocol) {
+        public Builder protocol(final HttpVersion protocol) {
             this.protocol = protocol;
             return this;
         }
@@ -58,12 +59,12 @@ public class Response {
 
         public Builder redirectUrl(final String url) {
             this.httpStatus = HttpStatus.FOUND;
-            putField("Location", url);
+            putField(LOCATION, url);
             return this;
         }
 
         public Builder contentType(final MediaType contentType) {
-            this.responseFields.replace("Content-Type", contentType.getMediaType());
+            this.responseFields.replace(CONTENT_TYPE, contentType.is());
             return this;
         }
 
@@ -78,7 +79,7 @@ public class Response {
         }
 
         public Builder body(final StaticFile file) {
-            this.responseFields.replace("Content-Type", MediaType.of(file.getExtension()).getMediaType());
+            this.responseFields.replace(CONTENT_TYPE, MediaType.of(file.getExtension()).is());
             this.body = new ResponseBody(file.getBody());
             return this;
         }
@@ -91,11 +92,11 @@ public class Response {
 
     public byte[] toBytes() {
         final int bodyLength = this.body.length();
-        final byte[] header = this.header.make(bodyLength).getBytes();
+        final byte[] header = this.header.make(bodyLength).getBytes(StandardCharsets.UTF_8);
 
         return ByteBuffer
-                .allocate(header.length + NEW_LINE_BYTES.length + bodyLength)
-                .put(header).put(NEW_LINE_BYTES).put(this.body.getBody())
+                .allocate(header.length + NEW_LINE.length + bodyLength)
+                .put(header).put(NEW_LINE).put(this.body.getBody())
                 .array();
     }
 }
