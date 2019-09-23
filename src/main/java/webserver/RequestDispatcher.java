@@ -1,25 +1,34 @@
 package webserver;
 
+import controller.Controller;
 import controller.LoginController;
 import controller.SignUpController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpMethod;
 import utils.ResourceLoadUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
-
-import static controller.LoginController.USER_LOGIN_URL;
-import static controller.SignUpController.USER_CREATE_URL;
 
 public class RequestDispatcher {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestDispatcher.class);
     private static final String MESSAGE_UNSUPPORTED_EXTENSION = "지원되지 않는 확장자 입니다.";
     private static final String EXTENSION_DELIMITER = "\\.";
+
+    private static final Map<String, Controller> controllers;
+
+    static {
+        controllers = new HashMap<>();
+        SignUpController signUpController = new SignUpController();
+        LoginController loginController = new LoginController();
+        controllers.put(signUpController.getPath(), signUpController);
+        controllers.put(loginController.getPath(), loginController);
+    }
 
     public static Response handle(Request request) {
         try {
@@ -30,12 +39,9 @@ public class RequestDispatcher {
                 return serveFile(file.get());
             }
 
-            if (USER_CREATE_URL.equals(url) && request.matchMethod(HttpMethod.POST)) {
-                return SignUpController.signUp(request);
-            }
-
-            if (USER_LOGIN_URL.equals(url) && request.matchMethod(HttpMethod.POST)) {
-                return LoginController.login(request);
+            Controller toServe = controllers.get(request.getPath());
+            if (toServe != null) {
+                return toServe.service(request);
             }
         } catch (Exception e) {
             logger.error("Error is occurred while processing request", e);

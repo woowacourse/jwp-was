@@ -8,16 +8,26 @@ import webserver.Response;
 
 import java.util.Map;
 
-public class LoginController {
+public class LoginController extends AbstractController {
 
-    public static final String USER_LOGIN_URL = "/user/login";
+    private static final String USER_LOGIN_URL = "/user/login";
 
     private static final String USER_ID = "userId";
     private static final String PASSWORD = "password";
     private static final String LOGINED_COOKIE_KEY = "logined";
 
-    public static Response login(Request req) {
-        Map<String, String> parsedBody = UrlEncodedParser.parse(new String(req.getBody()));
+    private static boolean verify(User user, String password) {
+        return user != null && user.matchPassword(password);
+    }
+
+    @Override
+    public Response doGet(Request request) {
+        throw createUnsupportedException();
+    }
+
+    @Override
+    public Response doPost(Request request) {
+        Map<String, String> parsedBody = UrlEncodedParser.parse(new String(request.getBody()));
         User user = DataBase.findUserById(parsedBody.get(USER_ID));
 
         String redirectUrl = "/user/login_failed.html";
@@ -33,7 +43,8 @@ public class LoginController {
                 .build();
     }
 
-    private static boolean verify(User user, String password) {
-        return user != null && user.matchPassword(password);
+    @Override
+    public String getPath() {
+        return USER_LOGIN_URL;
     }
 }
