@@ -68,4 +68,30 @@ class JsonParserTest {
         System.out.println(result);
         assertThat(result.size()).isEqualTo(1);
     }
+
+    @Test
+    void routeConfig() {
+        final String CONFIG =
+                "{\n" +
+                "  \"GET\": {\n" +
+                "    \"/\" : {\n" +
+                "      \"controller\": \"IndexController\",\n" +
+                "      \"method\": \"index\"\n" +
+                "    }\n" +
+                "  },\n" +
+                "\n" +
+                "  \"POST\": {\n" +
+                "    \"/user/create\": {\n" +
+                "      \"controller\": \"UserController\",\n" +
+                "      \"method\": \"signUp\"\n" +
+                "    }\n" +
+                "  },\n" +
+                "  \n" +
+                "  \"PUT\": {},\n" +
+                "  \n" +
+                "  \"DELETE\": {}\n" +
+                "}";
+        final JsonObject result = jsonParser.interpret(CONFIG);
+        System.out.println(result);
+    }
 }

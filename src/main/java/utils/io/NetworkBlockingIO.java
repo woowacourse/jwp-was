@@ -11,24 +11,24 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
-public class NetworkIOStream implements NetworkIO {
-    private static final Logger logger = LoggerFactory.getLogger(NetworkIOStream.class);
+public class NetworkBlockingIO implements NetworkIO {
+    private static final Logger logger = LoggerFactory.getLogger(NetworkBlockingIO.class);
 
     private final InputStream in;
     private final OutputStream out;
     private final BufferedReader reader;
     private final DataOutputStream writer;
 
-    public static Optional<NetworkIOStream> init(Socket connection) {
+    public static Optional<NetworkBlockingIO> init(Socket connection) {
         try {
-            return Optional.of(new NetworkIOStream(connection));
+            return Optional.of(new NetworkBlockingIO(connection));
         } catch (IOException | InterruptedException e) {
             logger.error(e.getMessage());
             return Optional.empty();
         }
     }
 
-    private NetworkIOStream(Socket connection) throws IOException, InterruptedException {
+    private NetworkBlockingIO(Socket connection) throws IOException, InterruptedException {
         this.in = connection.getInputStream();
         this.out = connection.getOutputStream();
         this.reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));

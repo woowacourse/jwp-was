@@ -21,7 +21,10 @@ public class HttpMimeTypeWithParamsDTO {
                 input.contains(";") ? input.substring(0, input.indexOf(";")) : input
         ).map(mimeType -> {
             final HttpMimeTypeWithParamsDTO mimeTypeAndParams =
-                    new HttpMimeTypeWithParamsDTO(mimeType, KeyValueParserFactory.contentTypeParser().interpret(input));
+                    new HttpMimeTypeWithParamsDTO(
+                            mimeType,
+                            KeyValueParserFactory.contentTypeParser().interpret(input)
+                    );
             CACHE.put(input, mimeTypeAndParams);
             return mimeTypeAndParams;
         });

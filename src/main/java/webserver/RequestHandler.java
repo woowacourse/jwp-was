@@ -3,7 +3,7 @@ package webserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.io.NetworkIO;
-import utils.io.NetworkIOStream;
+import utils.io.NetworkBlockingIO;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
 
@@ -25,8 +25,8 @@ public class RequestHandler implements Runnable {
                 this.connection.getPort()
         );
 
-        NetworkIOStream.init(this.connection).ifPresent(io -> {
-            sendResponse(io, HttpRequest.deserialize(io).map(Router::serve).orElse(HttpResponse.BAD_REQUEST));
+        NetworkBlockingIO.init(this.connection).ifPresent(io -> {
+            sendResponse(io, HttpRequest.deserialize(io).map(RoutingHandler::serve).orElse(HttpResponse.BAD_REQUEST));
             io.close();
         });
     }

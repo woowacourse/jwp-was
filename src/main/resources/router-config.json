@@ -1,8 +1,19 @@
 {
   "GET": {
-    "/" : "IndexController.index"
+    "/" : {
+      "controller": "IndexController",
+      "method": "index"
+    }
   },
-  "POST" : {
-    "/user/create": "UserController.signUp"
-  }
+
+  "POST": {
+    "/user/create": {
+      "controller": "UserController",
+      "method": "signUp"
+    }
+  },
+
+  "PUT": {},
+
+  "DELETE": {}
 }
