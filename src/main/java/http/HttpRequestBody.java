@@ -30,4 +30,8 @@ public class HttpRequestBody {
     public Map<String, String> getBody() {
         return Collections.unmodifiableMap(parameters);
     }
+
+    public String getParameter(String key) {
+        return parameters.get(key);
+    }
 }

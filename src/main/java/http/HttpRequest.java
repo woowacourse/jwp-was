@@ -30,6 +30,6 @@ public class HttpRequest {
         if ("GET".equals(method)) {
             return httpRequestHeader.getParameter(key);
         }
-        return httpRequestBody.getBody().get(key);
+        return httpRequestBody.getParameter(key);
     }
 }

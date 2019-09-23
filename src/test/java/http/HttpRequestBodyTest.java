@@ -22,6 +22,6 @@ public class HttpRequestBodyTest {
         expected.put("name", "%EB%B0%95%EC%9E%AC%EC%84%B1");
         expected.put("email", "javajigi%40slipp.net");
 
-        assertThat(httpRequestBody.getBody()).isEqualTo(expected);
+        assertThat(httpRequestBody.getParameter("userId")).isEqualTo("javajigi");
     }
 }
