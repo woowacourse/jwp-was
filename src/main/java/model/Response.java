@@ -32,13 +32,9 @@ public class Response {
         header = new LinkedHashMap<>();
     }
 
-    public void responseResource(String classPath) throws URISyntaxException, IOException {
-        Path path = Paths.get(Objects.requireNonNull(FileIoUtils.class.getClassLoader().getResource(classPath)).toURI());
-        File file = new File(path.toString());
-        String mimeType = new Tika().detect(file);
-
+    public void responseResource(String classPath, String accept) throws URISyntaxException, IOException {
         byte[] body = FileIoUtils.loadFileFromClasspath(classPath);
-
+        String mimeType = accept.split(",")[0];
         header.put(STATUS, HTTP_1_1 + " 200 OK \r\n");
         header.put(CONTENT_TYPE, mimeType + ";charset=utf-8\r\n");
         header.put(CONTENT_LENGTH, body.length + "\r\n");

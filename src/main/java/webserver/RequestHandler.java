@@ -55,7 +55,7 @@ public class RequestHandler implements Runnable {
 
         if (!extension.startsWith(PREFIX_SLASH)) {
             String classPath = getClassPath(url, extension);
-            response.responseResource(classPath);
+            response.responseResource(classPath, request.getHeader("Accept"));
             return;
         }
 
