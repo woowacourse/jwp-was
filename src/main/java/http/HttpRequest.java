@@ -67,6 +67,10 @@ public class HttpRequest {
         return uri.contains(".");
     }
 
+    public boolean matchMethod(HttpMethod method) {
+        return this.method.equals(method);
+    }
+
     public String getUri() {
         return uri;
     }
