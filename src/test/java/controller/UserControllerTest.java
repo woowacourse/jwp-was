@@ -3,8 +3,6 @@ package controller;
 import db.DataBase;
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
-import http.response.response_entity.Http302ResponseEntity;
-import http.response.response_entity.HttpResponseEntity;
 import model.User;
 import org.junit.jupiter.api.Test;
 

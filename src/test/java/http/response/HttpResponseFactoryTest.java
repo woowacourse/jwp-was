@@ -1,9 +1,5 @@
 package http.response;
 
-import http.response.response_entity.Http200ResponseEntity;
-import http.response.response_entity.Http302ResponseEntity;
-import http.response.response_entity.Http404ResponseEntity;
-import http.response.response_entity.HttpResponseEntity;
 import org.junit.jupiter.api.Test;
 
 import static http.HttpMediaType.DEFAULT_MEDIA_TYPE;
@@ -11,8 +7,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class HttpResponseFactoryTest {
     @Test
-    void Http200Response_생성() {
-        HttpResponseEntity responseEntity = new Http200ResponseEntity("");
+    void Http200Response_메세지_생성() {
+        HttpResponseEntity responseEntity = HttpResponseEntity.get200Response("");
         HttpResponse httpResponse = HttpResponseFactory.makeResponse(responseEntity);
 
         byte[] body = "body".getBytes();
@@ -28,9 +24,9 @@ class HttpResponseFactoryTest {
     }
 
     @Test
-    void Http302Response_생성() {
+    void Http302Response_메세지_생성() {
         String location = "/test.html";
-        HttpResponseEntity responseEntity = new Http302ResponseEntity(location);
+        HttpResponseEntity responseEntity = HttpResponseEntity.get302Response(location);
         HttpResponse httpResponse = HttpResponseFactory.makeResponse(responseEntity);
 
         String headers = "HTTP/1.1 302 Found\r\n"
@@ -42,8 +38,8 @@ class HttpResponseFactoryTest {
     }
 
     @Test
-    void Http404Response_생성() {
-        HttpResponseEntity responseEntity = new Http404ResponseEntity();
+    void Http404Response_메세지_생성() {
+        HttpResponseEntity responseEntity = HttpResponseEntity.get404Response();
         HttpResponse httpResponse = HttpResponseFactory.makeResponse(responseEntity);
 
         byte[] body = "404 Not Found".getBytes();

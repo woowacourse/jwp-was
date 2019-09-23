@@ -3,10 +3,10 @@ package webserver;
 import http.HttpMediaType;
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
+import http.request.HttpUri;
 import http.response.HttpResponse;
+import http.response.HttpResponseEntity;
 import http.response.HttpResponseFactory;
-import http.response.response_entity.Http200ResponseEntity;
-import http.response.response_entity.HttpResponseEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
@@ -47,8 +47,9 @@ public class RequestHandler implements Runnable {
     }
 
     private HttpResponse getResponse(HttpRequest request) throws IOException, URISyntaxException {
-        HttpResponseEntity responseEntity = request.getUri().hasExtension()
-                ? new Http200ResponseEntity(request.getUri().getPath())
+        HttpUri uri = request.getUri();
+        HttpResponseEntity responseEntity = uri.hasExtension()
+                ? HttpResponseEntity.get200Response(uri.getPath())
                 : ControllerMapper.map(request);
 
         String viewTemplatePath = responseEntity.getViewTemplatePath();

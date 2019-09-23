@@ -2,8 +2,7 @@ package controller;
 
 import http.request.HttpMethod;
 import http.request.HttpRequest;
-import http.response.response_entity.Http404ResponseEntity;
-import http.response.response_entity.HttpResponseEntity;
+import http.response.HttpResponseEntity;
 
 public abstract class AbstractController implements Controller {
     @Override
@@ -14,14 +13,14 @@ public abstract class AbstractController implements Controller {
         if (httpRequest.getMethod().match(HttpMethod.POST)) {
             return doPost(httpRequest);
         }
-        return new Http404ResponseEntity();
+        return HttpResponseEntity.get404Response();
     }
 
     protected HttpResponseEntity doGet(HttpRequest httpRequest) {
-        return new Http404ResponseEntity();
+        return HttpResponseEntity.get404Response();
     }
 
     protected HttpResponseEntity doPost(HttpRequest httpRequest) {
-        return new Http404ResponseEntity();
+        return HttpResponseEntity.get404Response();
     }
 }

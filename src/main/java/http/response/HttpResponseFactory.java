@@ -2,7 +2,6 @@ package http.response;
 
 import http.HttpHeaders;
 import http.HttpVersion;
-import http.response.response_entity.HttpResponseEntity;
 
 public class HttpResponseFactory {
     public static HttpResponse makeResponse(HttpResponseEntity responseEntity) {
