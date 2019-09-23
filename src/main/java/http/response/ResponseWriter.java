@@ -10,6 +10,7 @@ import java.io.IOException;
 public class ResponseWriter {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private static final String STATUS = "Status";
+    private static final String WRITE_FORMAT = "%s: %s";
 
     private DataOutputStream dos;
 
@@ -40,7 +41,7 @@ public class ResponseWriter {
             if (key.equals(STATUS)) {
                 dos.writeBytes(response.getHeader(key));
             }
-            dos.writeBytes(key + ": " + response.getHeader(key));
+            dos.writeBytes(String.format(WRITE_FORMAT, key, response.getHeader(key)));
         }
 
         dos.writeBytes("\r\n");

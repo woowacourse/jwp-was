@@ -3,6 +3,7 @@ package controller;
 import http.support.HttpMethod;
 import http.Request.Request;
 import http.response.Response;
+import http.support.HttpStatus;
 
 public abstract class AbstractController implements Controller {
     @Override
@@ -16,10 +17,10 @@ public abstract class AbstractController implements Controller {
     }
 
     public void doPost(Request request, Response response) {
-        response.response405();
+        response.forward(request.getPath(), HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     public void doGet(Request request, Response response) {
-        response.response405();
+        response.forward(request.getPath(), HttpStatus.METHOD_NOT_ALLOWED);
     }
 }
