@@ -4,6 +4,7 @@ import http.exception.NotFoundHeaderException;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 public class RequestHeader {
@@ -13,6 +14,7 @@ public class RequestHeader {
     private final Map<String, String> headers = new HashMap<>();
 
     public RequestHeader(String requestHeader) {
+        Objects.requireNonNull(requestHeader);
         String[] splitedInput = requestHeader.split(DELIMITER_OF_HTTP_HEADER);
         splitRequestHeader(splitedInput);
     }

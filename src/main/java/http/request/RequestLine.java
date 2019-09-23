@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class RequestLine {
     private static final Logger logger = LoggerFactory.getLogger(RequestLine.class);
@@ -25,6 +26,7 @@ public class RequestLine {
     private final String httpVersion;
 
     public RequestLine(String requestLine) {
+        Objects.requireNonNull(requestLine);
         String[] splitedRequestLine = validateRequestLine(requestLine);
 
         method = splitedRequestLine[INDEX_OF_METHOD];
