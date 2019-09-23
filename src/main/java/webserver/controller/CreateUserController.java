@@ -1,6 +1,6 @@
 package webserver.controller;
 
-import http.Request;
+import http.HttpRequest;
 import http.Response;
 import model.UserService;
 
@@ -9,8 +9,8 @@ public class CreateUserController extends HttpController {
     public static final int REDIRECT_STATUS_CODE = 302;
 
     @Override
-    protected void doPost(Request request, Response response) {
-        String location = new UserService().addUser(request.extractFormData());
+    protected void doPost(HttpRequest httpRequest, Response response) {
+        String location = new UserService().addUser(httpRequest.extractFormData());
 
         response.setLocation(location);
         response.setType(HTML);

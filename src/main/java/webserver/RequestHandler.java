@@ -3,12 +3,10 @@ package webserver;
 import http.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.FileIoUtils;
 import utils.IOUtils;
 import webserver.controller.Controller;
 import webserver.controller.CreateUserController;
 import webserver.controller.FileController;
-import webserver.support.PathHandler;
 
 import java.io.*;
 import java.net.Socket;
@@ -37,11 +35,11 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            Request request = readRequestUrl(in);
+            HttpRequest httpRequest = readRequestUrl(in);
             Response response = new Response(new ResponseHeader());
 
-            Controller controller = Optional.ofNullable(api.get(request.extractUrl())).orElseGet(FileController::new);
-            controller.service(request, response);
+            Controller controller = Optional.ofNullable(api.get(httpRequest.extractUrl())).orElseGet(FileController::new);
+            controller.service(httpRequest, response);
 
             response.writeMessage(new DataOutputStream(out));
         } catch (IOException | URISyntaxException e) {
@@ -49,16 +47,16 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private Request readRequestUrl(InputStream in) throws IOException {
+    private HttpRequest readRequestUrl(InputStream in) throws IOException {
         InputStreamReader inputStreamReader = new InputStreamReader(in);
         BufferedReader br = new BufferedReader(inputStreamReader);
-        RequestHeader header = new RequestHeader(IOUtils.parseData(br));
+        HttpRequestHeader header = new HttpRequestHeader(IOUtils.parseHeader(br));
 
-        if (header.get(RequestHeader.HTTP_METHOD).equals("POST")) {
+        if (header.getMethod().equals("POST")) {
             String body = IOUtils.readData(br, Integer.parseInt(header.get("content-length")));
-            RequestBody requestBody = new RequestBody(body);
-            return new Request(header, requestBody);
+            HttpRequestBody httpRequestBody = new HttpRequestBody(body);
+            return new HttpRequest(header, httpRequestBody);
         }
-        return new Request(header);
+        return new HttpRequest(header);
     }
 }

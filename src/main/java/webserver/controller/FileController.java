@@ -1,6 +1,6 @@
 package webserver.controller;
 
-import http.Request;
+import http.HttpRequest;
 import http.Response;
 import utils.FileIoUtils;
 import webserver.support.PathHandler;
@@ -12,8 +12,8 @@ public class FileController extends HttpController {
     private static final int OK_STATUS_CODE = 200;
 
     @Override
-    protected void doGet(Request request, Response response) throws IOException, URISyntaxException {
-        String url = request.extractUrl();
+    protected void doGet(HttpRequest httpRequest, Response response) throws IOException, URISyntaxException {
+        String url = httpRequest.extractUrl();
 
         response.setUrl(url);
         response.setStatusCode(OK_STATUS_CODE);

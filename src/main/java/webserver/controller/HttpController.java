@@ -1,6 +1,6 @@
 package webserver.controller;
 
-import http.Request;
+import http.HttpRequest;
 import http.Response;
 
 import java.io.IOException;
@@ -9,14 +9,14 @@ import java.net.URISyntaxException;
 public abstract class HttpController implements Controller {
 
     @Override
-    public void service(Request request, Response response) throws IOException, URISyntaxException {
-        doGet(request, response);
-        doPost(request, response);
+    public void service(HttpRequest httpRequest, Response response) throws IOException, URISyntaxException {
+        doGet(httpRequest, response);
+        doPost(httpRequest, response);
     }
 
-    protected void doGet(Request request, Response response) throws IOException, URISyntaxException {
+    protected void doGet(HttpRequest httpRequest, Response response) throws IOException, URISyntaxException {
     }
 
-    protected void doPost(Request request, Response response) {
+    protected void doPost(HttpRequest httpRequest, Response response) {
     }
 }

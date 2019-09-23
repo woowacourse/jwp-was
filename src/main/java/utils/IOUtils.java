@@ -2,6 +2,8 @@ package utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class IOUtils {
@@ -29,5 +31,15 @@ public class IOUtils {
             data = br.readLine();
         }
         return sb.toString();
+    }
+
+    public static List<String> parseHeader(BufferedReader br) throws IOException {
+        List<String> inputs = new ArrayList<>();
+        String line = br.readLine();
+        while (!BLANK.equals(line) && Objects.nonNull(line)) {
+            inputs.add(line);
+            line = br.readLine();
+        }
+        return inputs;
     }
 }

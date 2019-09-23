@@ -6,12 +6,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RequestBody {
+public class HttpRequestBody {
     private static final String DELIMITER_OF_FORM = "&";
     private static final String DELIMITER_OF_FORM_PARAMETER = "=";
     private final Map<String, String> parameters = new HashMap<>();
 
-    public RequestBody(String body) {
+    public HttpRequestBody(String body) {
         if (!StringUtils.isBlank(body)) {
             String[] queryParams = body.split(DELIMITER_OF_FORM);
             splitRequestBody(queryParams);
