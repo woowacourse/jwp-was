@@ -1,9 +1,9 @@
 package http.supoort.converter;
 
-import http.model.HttpRequest;
+import http.model.ServletRequest;
 
 import java.io.BufferedReader;
 
 public interface RequestMessageConverter {
-    HttpRequest convert(String uri, String protocol, BufferedReader bufferedReader);
+    ServletRequest convert(String uri, String protocol, BufferedReader bufferedReader);
 }

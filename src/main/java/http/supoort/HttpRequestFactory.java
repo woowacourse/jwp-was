@@ -1,6 +1,6 @@
 package http.supoort;
 
-import http.model.HttpRequest;
+import http.model.ServletRequest;
 import http.session.SessionManager;
 
 import java.io.InputStream;
@@ -12,10 +12,10 @@ public class HttpRequestFactory {
         this.sessionManager = sessionManager;
     }
 
-    public HttpRequest getRequest(InputStream inputStream) {
-        HttpRequest httpRequest = HttpRequestParser.parse(inputStream);
+    public ServletRequest getRequest(InputStream inputStream) {
+        ServletRequest servletRequest = HttpRequestParser.parse(inputStream);
 
-        httpRequest.bindSession(sessionManager.getSession());
-        return httpRequest;
+        servletRequest.bindSession(sessionManager.getSession());
+        return servletRequest;
     }
 }

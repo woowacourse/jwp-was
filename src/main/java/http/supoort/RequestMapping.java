@@ -24,8 +24,8 @@ public class RequestMapping {
     }
 
     public boolean match(ServletRequest request) {
-        return request.getMethod() == method
-                && request.getUri().getResourceLocation().equals(location);
+        return request.getHttpMethod() == method
+                && request.getHttpUri().getResourceLocation().equals(location);
     }
 
     public boolean match(HttpRequest request) {

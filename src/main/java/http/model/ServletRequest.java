@@ -1,5 +1,7 @@
 package http.model;
 
+import http.session.HttpSession;
+
 import java.util.Map;
 
 public class ServletRequest {
@@ -8,6 +10,7 @@ public class ServletRequest {
     private HttpProtocols httpProtocols;
     private HttpHeaders httpHeaders;
     private HttpParameters httpParameters;
+    private HttpSession session;
 
     private ServletRequest(HttpMethod httpMethod, HttpUri httpUri, HttpProtocols httpProtocols,
                            HttpHeaders httpHeaders, HttpParameters httpParameters) {
@@ -22,15 +25,19 @@ public class ServletRequest {
         return new Builder();
     }
 
-    public HttpMethod getMethod() {
-        return this.httpMethod;
+    public void bindSession(HttpSession session) {
+        this.session = session;
     }
 
-    public HttpUri getUri() {
-        return this.httpUri;
+    public HttpMethod getHttpMethod() {
+        return httpMethod;
     }
 
-    public HttpProtocols getProtocol() {
+    public HttpUri getHttpUri() {
+        return httpUri;
+    }
+
+    public HttpProtocols getHttpProtocols() {
         return httpProtocols;
     }
 
@@ -57,8 +64,8 @@ public class ServletRequest {
         private HttpHeaders httpHeaders;
         private HttpParameters httpParameters;
 
-        public Builder method(String httpMethod) {
-            this.httpMethod = HttpMethod.of(httpMethod);
+        public Builder method(HttpMethod httpMethod) {
+            this.httpMethod = httpMethod;
             return this;
         }
 

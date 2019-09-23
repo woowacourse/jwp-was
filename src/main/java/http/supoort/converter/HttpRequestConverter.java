@@ -1,7 +1,7 @@
 package http.supoort.converter;
 
 import http.exceptions.IllegalHttpRequestException;
-import http.model.HttpRequest;
+import http.model.ServletRequest;
 
 import java.io.BufferedReader;
 import java.util.Arrays;
@@ -25,7 +25,7 @@ public enum HttpRequestConverter {
                 .orElseThrow(IllegalHttpRequestException::new);
     }
 
-    public HttpRequest convert(String uri, String protocol, BufferedReader bufferedReader) {
+    public ServletRequest convert(String uri, String protocol, BufferedReader bufferedReader) {
         return converter.convert(uri, protocol, bufferedReader);
     }
 }

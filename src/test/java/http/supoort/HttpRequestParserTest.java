@@ -1,7 +1,8 @@
 package http.supoort;
 
 import http.exceptions.IllegalHttpRequestException;
-import http.model.*;
+import http.model.HttpMethod;
+import http.model.ServletRequest;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -17,10 +18,15 @@ class HttpRequestParserTest {
     @Test
     void 올바른_입력_파싱_확인() {
         InputStream in = new ByteArrayInputStream("GET /index.html HTTP/1.1\r\nHost: localhost:8080/".getBytes());
-        HttpRequest httpRequest = new HttpRequest(HttpMethod.GET, new HttpUri("/index.html"), HttpProtocols.of("HTTP/1.1"), null, null);
-        HttpRequest parsedRequest = HttpRequestParser.parse(in);
-        assertThat(parsedRequest.getHttpMethod()).isEqualTo(httpRequest.getHttpMethod());
-        assertThat(parsedRequest.getHttpUri()).isEqualTo(httpRequest.getHttpUri());
+        ServletRequest request = ServletRequest.builder()
+                .method(HttpMethod.GET)
+                .uri("/index.html")
+                .protocol("HTTP/1.1")
+                .build();
+
+        ServletRequest parsedRequest = HttpRequestParser.parse(in);
+        assertThat(parsedRequest.getHttpMethod()).isEqualTo(request.getHttpMethod());
+        assertThat(parsedRequest.getHttpUri()).isEqualTo(request.getHttpUri());
     }
 
     @Test
@@ -30,13 +36,19 @@ class HttpRequestParserTest {
         parameters.put("name", "coogi");
         parameters.put("age", "25");
 
-        HttpParameters httpParameters = new HttpParameters(parameters);
-        HttpRequest httpRequest = new HttpRequest(HttpMethod.GET, new HttpUri("/index.html"), HttpProtocols.of("HTTP/1.1"), httpParameters, null);
-        HttpRequest parsedRequest = HttpRequestParser.parse(in);
+        ServletRequest request = ServletRequest.builder()
+                .method(HttpMethod.GET)
+                .uri("/index.html")
+                .protocol("HTTP/1.1")
+                .params(parameters)
+                .build();
 
-        assertThat(parsedRequest.getHttpMethod()).isEqualTo(httpRequest.getHttpMethod());
-        assertThat(parsedRequest.getHttpUri()).isEqualTo(httpRequest.getHttpUri());
-        assertThat(parsedRequest.getParameters()).isEqualTo(httpParameters);
+        ServletRequest parsedRequest = HttpRequestParser.parse(in);
+
+        assertThat(parsedRequest.getHttpMethod()).isEqualTo(request.getHttpMethod());
+        assertThat(parsedRequest.getHttpUri()).isEqualTo(request.getHttpUri());
+        assertThat(parsedRequest.getParameter("name")).isEqualTo("coogi");
+        assertThat(parsedRequest.getParameter("age")).isEqualTo("25");
     }
 
     @Test
@@ -67,12 +79,12 @@ class HttpRequestParserTest {
                 "Accept: */*\r\n" +
                 "\r\n" +
                 "userId=javajigi&password=password&name=JaeSung\r\n").getBytes());
-        HttpRequest request = HttpRequestParser.parse(in);
+        ServletRequest request = HttpRequestParser.parse(in);
 
         assertThat(request.getHttpMethod()).isEqualTo(HttpMethod.POST);
         assertThat(request.getHttpUri().getResourceLocation()).isEqualTo("/user/create");
-        assertThat(request.getHeaders().getHeader("Connection")).isEqualTo("keep-alive");
-        assertThat(request.getParameters().getParameter("id")).isEqualTo("1");
-        assertThat(request.getParameters().getParameter("userId")).isEqualTo("javajigi");
+        assertThat(request.getHeader("Connection")).isEqualTo("keep-alive");
+        assertThat(request.getParameter("id")).isEqualTo("1");
+        assertThat(request.getParameter("userId")).isEqualTo("javajigi");
     }
 }

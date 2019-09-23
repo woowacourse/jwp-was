@@ -1,7 +1,7 @@
 package http.supoort;
 
 import http.exceptions.IllegalHttpRequestException;
-import http.model.HttpRequest;
+import http.model.ServletRequest;
 import http.supoort.converter.HttpRequestConverter;
 import utils.IOUtils;
 
@@ -12,7 +12,7 @@ import java.io.InputStreamReader;
 public class HttpRequestParser {
     private static final String SEPARATOR = " ";
 
-    public static HttpRequest parse(InputStream inputStream) {
+    public static ServletRequest parse(InputStream inputStream) {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         String requestLine = IOUtils.readFirstLine(bufferedReader);
         try {
