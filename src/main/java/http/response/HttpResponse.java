@@ -6,20 +6,20 @@ import http.common.MimeType;
 public class HttpResponse {
     private static final String CRLF = "\r\n";
 
-    private ResponseStartLine responseStartLine;
+    private ResponseLine responseLine;
     private ResponseHeader responseHeader;
     private ResponseBody responseBody;
 
-    private HttpResponse(ResponseStartLine responseStartLine,
+    private HttpResponse(ResponseLine responseLine,
                          ResponseHeader responseHeader,
                          ResponseBody responseBody) {
-        this.responseStartLine = responseStartLine;
+        this.responseLine = responseLine;
         this.responseHeader = responseHeader;
         this.responseBody = responseBody;
     }
 
     public static HttpResponse of() {
-        return new HttpResponse(ResponseStartLine.of(),
+        return new HttpResponse(ResponseLine.of(),
                 ResponseHeader.of(),
                 ResponseBody.of());
     }
@@ -35,7 +35,7 @@ public class HttpResponse {
     }
 
     public void redirect(String path) {
-        responseStartLine.setHttpStatus(HttpStatus.FOUND);
+        responseLine.setHttpStatus(HttpStatus.FOUND);
         putHeader("Location", path);
     }
 
@@ -44,12 +44,12 @@ public class HttpResponse {
     }
 
     public void sendNotFound() {
-        responseStartLine.setHttpStatus(HttpStatus.NOT_FOUND);
+        responseLine.setHttpStatus(HttpStatus.NOT_FOUND);
     }
 
     @Override
     public String toString() {
-        return responseStartLine + CRLF +
+        return responseLine + CRLF +
                 responseHeader + CRLF;
     }
 }
