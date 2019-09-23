@@ -21,7 +21,6 @@ class RequestHandlerTest {
 
         assertThat(httpRequest.getUrl()).isEqualTo("http://localhost:8080/user/create");
         assertThat(httpRequest.getHeader("Host")).isEqualTo("localhost:8080");
-        assertThat(httpRequest.getQuery("userId")).isEqualTo("aiden");
-        assertThat(httpRequest.getEntityValue("userId")).isEqualTo(null);
+        assertThat(httpRequest.getParameter("userId")).isEqualTo("aiden");
     }
 }

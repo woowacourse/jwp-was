@@ -25,20 +25,12 @@ class HttpRequestTest {
         assertThat(httpRequest.isGet()).isTrue();
         assertThat(httpRequest.getPath()).isEqualTo("/user/create");
         assertThat(httpRequest.getHeader("Connection")).isEqualTo("keep-alive");
-        assertThat(httpRequest.getQuery("userId")).isEqualTo("aiden");
+        assertThat(httpRequest.getParameter("userId")).isEqualTo("aiden");
     }
 
     @Test
     public void getUrlTest() {
         assertThat(httpRequest.getUrl()).isEqualTo("http://localhost:8080/user/create");
-    }
-
-    @Test
-    public void getQueryTest() {
-        assertThat(httpRequest.getQuery("userId")).isEqualTo("aiden");
-        assertThat(httpRequest.getQuery("password")).isEqualTo("password");
-        assertThat(httpRequest.getQuery("name")).isEqualTo("aiden");
-        assertThat(httpRequest.getQuery("email")).isEqualTo("aiden@aiden.com");
     }
 
     @Test
@@ -60,7 +52,10 @@ class HttpRequestTest {
     }
 
     @Test
-    public void getEntityValueTest() {
-        assertThat(httpRequest.getEntityValue("Host")).isEqualTo(null);
+    public void getParameterTest() {
+        assertThat(httpRequest.getParameter("userId")).isEqualTo("aiden");
+        assertThat(httpRequest.getParameter("password")).isEqualTo("password");
+        assertThat(httpRequest.getParameter("name")).isEqualTo("aiden");
+        assertThat(httpRequest.getParameter("email")).isEqualTo("aiden@aiden.com");
     }
 }

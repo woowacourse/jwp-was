@@ -1,26 +1,21 @@
 package http.request;
 
 import http.common.HttpMethod;
+import http.common.Parameters;
 
 public class HttpRequest {
     private RequestLine requestLine;
     private RequestHeader requestHeader;
-    private RequestBody requestBody;
+    private Parameters parameters;
 
-    private HttpRequest(RequestLine requestLine,
-                        RequestHeader requestHeader,
-                        RequestBody requestBody) {
+    private HttpRequest(RequestLine requestLine, RequestHeader requestHeader, Parameters parameters) {
         this.requestLine = requestLine;
-            this.requestHeader = requestHeader;
-            this.requestBody = requestBody;
+        this.requestHeader = requestHeader;
+        this.parameters = parameters;
     }
 
-    public static HttpRequest of(RequestLine requestLine,
-                                 RequestHeader requestHeader,
-                                 RequestBody requestBody) {
-        return new HttpRequest(requestLine,
-                requestHeader,
-                requestBody);
+    public static HttpRequest of(RequestLine requestLine, RequestHeader requestHeader, Parameters parameters) {
+        return new HttpRequest(requestLine, requestHeader, parameters);
     }
 
     public String getUrl() {
@@ -29,10 +24,6 @@ public class HttpRequest {
         String host = requestHeader.getHeader("Host");
 
         return String.format("%s://%s%s", protocol, host, path);
-    }
-
-    public String getQuery(String key) {
-        return requestLine.getQuery().get(key);
     }
 
     public String getPath() {
@@ -51,7 +42,7 @@ public class HttpRequest {
         return requestHeader.getHeader(headerKey);
     }
 
-    public String getEntityValue(String entityKey) {
-        return requestBody.getEntityValue(entityKey);
+    public String getParameter(String key) {
+        return parameters.getParameter(key);
     }
 }

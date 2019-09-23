@@ -1,11 +1,9 @@
 package http.request;
 
 import http.common.HttpMethod;
-import http.utils.HttpUtils;
 
 import java.io.IOException;
 import java.net.URLDecoder;
-import java.util.Map;
 
 public class RequestLine {
     private static final String QUERY_FLAG = "\\?";
@@ -14,11 +12,13 @@ public class RequestLine {
 
     private HttpMethod method;
     private String requestUrl;
+    private String queryString;
     private String httpVersion;
 
-    private RequestLine(HttpMethod method, String requestUrl, String httpVersion) {
+    private RequestLine(HttpMethod method, String requestUrl, String queryString, String httpVersion) {
         this.method = method;
         this.requestUrl = requestUrl;
+        this.queryString = queryString;
         this.httpVersion = httpVersion;
     }
 
@@ -26,9 +26,10 @@ public class RequestLine {
         String[] token = startLine.split(BLANK);
         HttpMethod method = HttpMethod.valueOf(token[0]);
         String requestUrl = URLDecoder.decode(token[1], "UTF-8");
+        String queryString = setQueryString(requestUrl);
         String httpVersion = token[2];
 
-        return new RequestLine(method, requestUrl, httpVersion);
+        return new RequestLine(method, requestUrl, queryString, httpVersion);
     }
 
     public HttpMethod getMethod() {
@@ -39,19 +40,19 @@ public class RequestLine {
         return requestUrl.split(QUERY_FLAG)[0];
     }
 
-    public String getQueryString() {
+    private static String setQueryString(String requestUrl) {
         try {
             return requestUrl.split(QUERY_FLAG)[1];
         } catch (ArrayIndexOutOfBoundsException e) {
-            return null;
+            return "";
         }
+    }
+
+    public String getQueryString() {
+        return queryString;
     }
 
     public String getProtocol() {
         return httpVersion.split(SLASH)[0].toLowerCase();
-    }
-
-    public Map<String, String> getQuery() {
-        return HttpUtils.parseQuery(getQueryString());
     }
 }

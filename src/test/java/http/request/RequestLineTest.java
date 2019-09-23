@@ -10,7 +10,7 @@ class RequestLineTest {
     private RequestLine requestLine;
 
     @BeforeEach
-    void setUp() throws Exception {
+    public void setUp() throws Exception {
         requestLine = RequestLine.of("GET /user/create?userId=aiden&password=password&name=aiden&email=aiden@aiden.com HTTP/1.1");
     }
 
@@ -32,13 +32,5 @@ class RequestLineTest {
     @Test
     public void getProtocolTest() {
         assertThat(requestLine.getProtocol()).isEqualTo("http");
-    }
-
-    @Test
-    public void getQueryTest() {
-        assertThat(requestLine.getQuery().get("userId")).isEqualTo("aiden");
-        assertThat(requestLine.getQuery().get("password")).isEqualTo("password");
-        assertThat(requestLine.getQuery().get("name")).isEqualTo("aiden");
-        assertThat(requestLine.getQuery().get("email")).isEqualTo("aiden@aiden.com");
     }
 }

@@ -22,13 +22,13 @@ public class RequestHeader {
         return requestHeader;
     }
 
+    public String getHeader(String key) {
+        return requestHeader.get(key);
+    }
+
     private void put(String headerLine) {
         String[] tokens = headerLine.split(HEADER_DELIMITER);
         requestHeader.put(tokens[0], tokens[1]);
-    }
-
-    public String getHeader(String key) {
-        return requestHeader.get(key);
     }
 
     @Override
