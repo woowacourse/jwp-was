@@ -11,11 +11,8 @@ public class IndexController extends AbstractController {
 
     @Override
     public void service(final HttpRequest request, final HttpResponse response) throws IOException, URISyntaxException {
-        doGet(request, response);
-    }
+        response.setHttpStatus(HttpStatus.OK);
 
-    @Override
-    public HttpStatus findStatus() {
-        return HttpStatus.Ok;
+        doGet(request, response);
     }
 }

@@ -1,7 +1,7 @@
 package webserver.response;
 
 public enum HttpStatus {
-    Ok(200), Found(302);
+    OK(200), FOUND(302), NOT_FOUND(404);
 
     private int number;
 

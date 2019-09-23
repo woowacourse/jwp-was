@@ -13,12 +13,10 @@ public class UserSignUpController extends AbstractController {
 
     @Override
     public void service(final HttpRequest request, final HttpResponse response) throws IOException, URISyntaxException {
-        doPost(request, response);
-    }
+        response.setHttpStatus(HttpStatus.FOUND);
+        response.setLocation("/index.html");
 
-    @Override
-    public HttpStatus findStatus() {
-        return HttpStatus.Found;
+        doPost(request, response);
     }
 
     @Override
