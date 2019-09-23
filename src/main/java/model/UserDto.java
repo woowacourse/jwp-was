@@ -1,6 +1,6 @@
 package model;
 
-import http.model.request.HttpParameters;
+import java.util.Map;
 
 public class UserDto {
     private String userId;
@@ -15,14 +15,12 @@ public class UserDto {
         this.email = email;
     }
 
-    public UserDto(HttpParameters parameters) {
-        this(parameters.getParameter("userId"), parameters.getParameter("password"),
-                parameters.getParameter("name"), parameters.getParameter("email"));
+    public UserDto(Map<String, String> params) {
+        this(params.get("userId"), params.get("password"),
+                params.get("name"), params.get("email"));
     }
 
     public User toEntity() {
         return new User(userId, password, name, email);
     }
-
-
 }

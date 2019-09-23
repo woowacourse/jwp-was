@@ -30,6 +30,14 @@ public class ServletResponse {
         addHeader(SET_COOKIE, id);
     }
 
+    public String getHeader(String key) {
+        return this.httpHeaders.getHeader(key);
+    }
+
+    public Map<String, String> getHttpHeaders() {
+        return httpHeaders.getHeaders();
+    }
+
     public HttpProtocols getProtocols() {
         return protocols;
     }
@@ -46,9 +54,6 @@ public class ServletResponse {
         this.httpStatus = httpStatus;
     }
 
-    public Map<String, String> getHttpHeaders() {
-        return httpHeaders.getHeaders();
-    }
 
     public byte[] getBody() {
         return body;
