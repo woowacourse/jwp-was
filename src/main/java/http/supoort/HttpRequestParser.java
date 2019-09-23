@@ -23,19 +23,22 @@ public class HttpRequestParser {
         try {
             String[] requestLineTokens = requestLine.split(SEPARATOR);
             HttpMethod method = HttpMethod.of(requestLineTokens[0]);
-            if (method == HttpMethod.POST) {
-                return parsePost(method, requestLineTokens[1], requestLineTokens[2], headerLines);
+            HttpProtocols httpProtocol = HttpProtocols.of(requestLineTokens[2]);
+            HttpParameters httpParameters;
+            HttpHeaders headers;
+
+            if (method == HttpMethod.POST || method == HttpMethod.PUT) {
+                httpParameters = parsePostParameters(headerLines);
+                headers = new HttpHeaders(parseHeaders(getHeaderWithoutMessageBody(headerLines)));
+            } else if (method == HttpMethod.GET || method == HttpMethod.DELETE) {
+                httpParameters = new HttpParameters();
+                headers = new HttpHeaders(parseHeaders(headerLines));
+            } else {
+                throw new IllegalHttpRequestException();
             }
-            if (method == HttpMethod.GET) {
-                return parseGet(method, requestLineTokens[1], requestLineTokens[2], headerLines);
-            }
-            if (method == HttpMethod.PUT) {
-                return parsePost(method, requestLineTokens[1], requestLineTokens[2], headerLines);
-            }
-            if (method == HttpMethod.DELETE) {
-                return parseGet(method, requestLineTokens[1], requestLineTokens[2], headerLines);
-            }
-            throw new IllegalHttpRequestException();
+
+            HttpUri httpUri = parseUri(requestLineTokens[1], httpParameters);
+            return new HttpRequest(method, httpUri, httpParameters, httpProtocol, headers);
 
         } catch (IndexOutOfBoundsException e) {
             throw new IllegalHttpRequestException(e.getMessage());
@@ -48,28 +51,16 @@ public class HttpRequestParser {
         }
     }
 
-    private static HttpRequest parsePost(HttpMethod method, String uri, String protocol, List<String> headerLines) {
-        HttpProtocols httpProtocol = HttpProtocols.of(protocol);
-        HttpParameters httpParameters = new HttpParameters(parseParameter(getQueryStringFromBody(headerLines)));
-        HttpHeaders headers = new HttpHeaders(parseHeaders(getHeaderWithoutMessageBody(headerLines)));
-        HttpUri httpUri = parseUri(uri, httpParameters);
-        return new HttpRequest(method, httpUri, httpParameters, httpProtocol, headers);
+    private static HttpParameters parsePostParameters(List<String> headerLines) {
+        return new HttpParameters(parseParameter(getQueryStringFromHeaderLines(headerLines)));
     }
 
-    private static HttpRequest parseGet(HttpMethod method, String uri, String protocol, List<String> headerLines) {
-        HttpProtocols httpProtocol = HttpProtocols.of(protocol);
-        HttpHeaders headers = new HttpHeaders(parseHeaders(headerLines));
-        HttpParameters httpParameters = new HttpParameters();
-        HttpUri httpUri = parseUri(uri, httpParameters);
-        return new HttpRequest(method, httpUri, httpParameters, httpProtocol, headers);
+    private static String getQueryStringFromHeaderLines(List<String> headerLines) {
+        return headerLines.get(headerLines.size() - 1);
     }
 
     private static List<String> getHeaderWithoutMessageBody(List<String> headerLines) {
         return headerLines.subList(0, headerLines.size() - 2);
-    }
-
-    private static String getQueryStringFromBody(List<String> headerLines) {
-        return headerLines.get(headerLines.size() - 1);
     }
 
     private static Map<String, String> parseHeaders(List<String> headerLines) {
