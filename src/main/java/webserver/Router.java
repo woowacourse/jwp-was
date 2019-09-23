@@ -6,6 +6,7 @@ import utils.parser.JsonObject;
 import utils.parser.KeyValueParserFactory;
 import webserver.http.startline.HttpMethod;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -15,14 +16,14 @@ public class Router {
 
     private static final Router instance = new Router();
 
-    private final Map<HttpMethod, Map<String, RoutedDestination>> mappingTable;
+    private final Map<HttpMethod, Map<String, RoutedDestination>> config;
 
     public static Router getInstance() {
         return instance;
     }
 
     private Router() {
-        this.mappingTable = FileIoUtils.loadFileFromClasspath(ROUTER_CONFIG_PATH).map(config ->
+        this.config = FileIoUtils.loadFileFromClasspath(ROUTER_CONFIG_PATH).map(config ->
                 KeyValueParserFactory.jsonParser().interpret(config)
         ).map(json ->
                 json.entrySet().stream().map(perMethod ->
@@ -35,11 +36,16 @@ public class Router {
                                         )
                                 ).collect(Collectors.toMap(Pair::fst, Pair::snd))
                         )
-                ).collect(Collectors.toMap(Pair::fst, Pair::snd))
+                ).collect(
+                        Collectors.collectingAndThen(
+                                Collectors.toMap(Pair::fst, Pair::snd),
+                                Collections::unmodifiableMap
+                        )
+                )
         ).orElse(null);
     }
 
     public Optional<RoutedDestination> routeTo(HttpMethod method, String src) {
-        return Optional.ofNullable(this.mappingTable.get(method).get(src));
+        return Optional.ofNullable(this.config.get(method)).map(mappingTable -> mappingTable.get(src));
     }
 }

@@ -11,9 +11,5 @@
       "controller": "UserController",
       "method": "signUp"
     }
-  },
-
-  "PUT": {},
-
-  "DELETE": {}
+  }
 }
