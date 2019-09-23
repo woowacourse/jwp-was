@@ -19,12 +19,12 @@ public class StatusLine {
         return statusCode;
     }
 
-    public String getReasonPhrase() {
-        return reasonPhrase;
-    }
-
     public void setStatusCode(int statusCode) {
         this.statusCode = statusCode;
+    }
+
+    public String getReasonPhrase() {
+        return reasonPhrase;
     }
 
     public void setReasonPhrase(String reasonPhrase) {

@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 
 public class RequestFactory {
     private static final String DELIMITER_OF_REQUEST = "\n";
+    private static final int REQUEST_SIZE = 2;
 
     public static Request makeRequest(InputStream in) throws IOException {
         InputStreamReader inputStreamReader = new InputStreamReader(in);
@@ -33,7 +34,7 @@ public class RequestFactory {
     private static String[] validateRequest(String parsedData) {
         String[] requestData = parsedData.split(DELIMITER_OF_REQUEST, 2);
 
-        if(requestData.length != 2) {
+        if (requestData.length != REQUEST_SIZE) {
             throw new InvalidRequestException("Invalid Request");
         }
 

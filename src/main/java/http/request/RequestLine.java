@@ -16,6 +16,7 @@ public class RequestLine {
     private static final String DELIMITER_OF_QUERY_PARAMETER = "=";
     private static final int KEY = 0;
     private static final int VALUE = 1;
+    private static final int REQUEST_LINE_SIZE = 3;
 
     private final String method;
     private final String url;
@@ -31,7 +32,7 @@ public class RequestLine {
     private static String[] validateRequestLine(String requestLine) {
         String[] requestLineData = requestLine.split(DELIMITER_OF_REQUEST_LINE);
 
-        if(requestLineData.length != 3) {
+        if (requestLineData.length != REQUEST_LINE_SIZE) {
             throw new InvalidRequestException("Invalid Request Line");
         }
 
