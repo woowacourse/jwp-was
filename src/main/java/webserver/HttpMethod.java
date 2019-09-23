@@ -1,4 +1,4 @@
-package model;
+package webserver;
 
 public enum HttpMethod {
     POST("POST"),
@@ -10,7 +10,7 @@ public enum HttpMethod {
         this.method = method;
     }
 
-    public String getMethod(String name) {
+    public String getMethod() {
         return method;
     }
 }

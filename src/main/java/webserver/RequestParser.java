@@ -1,10 +1,9 @@
-package model;
+package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.ExtractInformationUtils;
 import utils.IOUtils;
-import webserver.RequestHandler;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package model;
+package webserver;
 
 import exception.NotFoundRequestElementException;
 

@@ -1,8 +1,9 @@
 package controller;
 
 import db.DataBase;
-import model.HttpRequest;
-import model.HttpResponse;
+import webserver.HttpRequest;
+import webserver.HttpResponse;
+import webserver.HttpStatus;
 import model.User;
 
 public class CreateUserController extends AbstractController {
@@ -16,7 +17,8 @@ public class CreateUserController extends AbstractController {
     @Override
     public void doPost(HttpRequest request, HttpResponse httpResponse) {
         saveUser(request);
-        httpResponse.response300(request.getHeader(ORIGIN) + INDEX_HTML);
+        httpResponse.setHttpStatus(HttpStatus.FOUND);
+        httpResponse.response(request.getHeader(ORIGIN) + INDEX_HTML);
     }
 
     private void saveUser(HttpRequest request) {

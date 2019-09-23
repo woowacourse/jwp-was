@@ -1,9 +1,6 @@
 package webserver;
 
 import controller.Controller;
-import model.HttpRequest;
-import model.RequestParser;
-import model.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.net.URISyntaxException;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -43,24 +39,21 @@ public class RequestHandler implements Runnable {
             String url = request.getPath();
             String extension = url.substring(url.lastIndexOf(DIVISION_EXTENSION) + NEXT_INT);
 
-            processResponse(dos, request, url, extension);
+            HttpResponse httpResponse = new HttpResponse(dos);
 
-        } catch (IOException | URISyntaxException e) {
+            if (!extension.startsWith(PREFIX_SLASH)) {
+                String classPath = getClassPath(url, extension);
+                httpResponse.setHttpStatus(HttpStatus.OK);
+                httpResponse.response(classPath);
+                return;
+            }
+
+            Controller controller = controllerHandler.getController(request.getPath());
+            controller.service(request, httpResponse);
+
+        } catch (IOException e) {
             logger.error(e.getMessage());
         }
-    }
-
-    private void processResponse(DataOutputStream dos, HttpRequest request, String url, String extension) throws URISyntaxException, IOException {
-        HttpResponse httpResponse = new HttpResponse(dos);
-
-        if (!extension.startsWith(PREFIX_SLASH)) {
-            String classPath = getClassPath(url, extension);
-            httpResponse.responseResource(classPath, request.getHeader("Accept"));
-            return;
-        }
-
-        Controller controller = controllerHandler.getController(request.getPath());
-        controller.service(request, httpResponse);
     }
 
     private String getClassPath(String url, String extension) {
