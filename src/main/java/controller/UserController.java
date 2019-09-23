@@ -1,31 +1,42 @@
 package controller;
 
 import http.request.Request;
+import http.request.RequestMethod;
 import http.response.RedirectResponse;
 import http.response.Response;
 import service.UserService;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class UserController extends AbstractController {
+public class UserController implements Controller {
+    private List<RequestMethod> allowedMethods = Arrays.asList(RequestMethod.POST);
+    private String allowedUrlPath = "/user/create";
+
     private UserService userService = UserService.getInstance();
 
     @Override
-    public boolean isMapping(Request request) {
-        return ("POST /user/create".equals("POST " + request.getUrl().getUrlPath()));
+    public boolean isMapping(ControllerMapper controllerMapper) {
+        return (isAllowedMethod(controllerMapper.getRequestMethod())
+                && isAllowedUrlPath(controllerMapper.getOriginalUrlPath()));
+    }
+
+    private boolean isAllowedUrlPath(String originalUrlPath) {
+        return allowedUrlPath.contains(allowedUrlPath);
+    }
+
+    private boolean isAllowedMethod(RequestMethod requestMethod) {
+        return allowedMethods.stream()
+                .anyMatch(method -> method == requestMethod);
     }
 
     @Override
     public Response createResponse(Request request) {
-        if (isMapping(request)) {
-            return createPostResponse(request);
-        }
-        return new FileController().createResponse(request);
+        return createPostResponse(request);
     }
 
-    @Override
     public Response createPostResponse(Request request) {
         Map<String, String> params = new HashMap<>();
         String queryParams = request.getRequestInformation().extractQueryParameters();

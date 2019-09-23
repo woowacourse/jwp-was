@@ -27,10 +27,12 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             RequestInformation requestInformation = HttpParser.parse(br);
+            //우선 Controller를 찾음 ==> 없으면 FileController
+            //FileController에 없으면 에러 잡아서
 
             RequestMethod method = requestInformation.extractMethod();
             RequestUrl url = requestInformation.extractUrl();
-            log.error("this is the url ==> {}", url.getUrlPath());
+            log.error("this is the url ==> {}", url.getDestinationFolderUrlPath());
             Request request = new Request(method, url, requestInformation);
 
             ControllerFactory factory = new ControllerFactory();

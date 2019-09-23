@@ -3,8 +3,6 @@ package http.request;
 import java.util.Arrays;
 
 public enum RequestContentType {
-//    private static final String STATIC_FILE_PATH = "../resources/static";
-//    private static final String TEMPLATES = "../resources/templates";
 
     JS(".js", "../resources/static", "application/javascript"),
     CSS(".css", "../resources/static", "text/css"),
@@ -12,7 +10,7 @@ public enum RequestContentType {
     ICO(".ico", "../resources/templates", "image/x-icon"),
     WOFF(".woff", "../resources/static", "font/woff"),
     TTF(".ttf", "../resources/static", "font/ttf"),
-    REDIRECTION("?", "", "NOT_APPLICABLE");
+    NON_FILE_REQUEST("", "", "NOT_APPLICABLE");
 
     private String pattern;
     private String destinationPath;
@@ -28,7 +26,7 @@ public enum RequestContentType {
         return Arrays.stream(values())
                 .filter(type -> urlPath.contains(type.getExtension()))
                 .findAny()
-                .orElse(REDIRECTION);
+                .orElse(NON_FILE_REQUEST);
     }
 
     public String getExtension() {

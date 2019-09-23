@@ -5,7 +5,7 @@ import http.response.Response;
 
 public interface Controller {
 
-    boolean isMapping(Request request);
+    boolean isMapping(ControllerMapper controllerMapper);
 
     Response createResponse(Request request);
 }

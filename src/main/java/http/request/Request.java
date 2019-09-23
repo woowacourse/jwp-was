@@ -1,5 +1,7 @@
 package http.request;
 
+import controller.ControllerMapper;
+
 public class Request {
     private RequestMethod requestMethod;
     private RequestUrl url;
@@ -11,19 +13,15 @@ public class Request {
         this.requestInformation = requestInformation;
     }
 
-    public String createKey() {
-        return requestMethod.name() + " " + requestInformation.getOriginUrlPath();
-    }
-
-    public RequestMethod getRequestMethod() {
-        return requestMethod;
-    }
-
     public RequestUrl getUrl() {
         return url;
     }
 
     public RequestInformation getRequestInformation() {
         return requestInformation;
+    }
+
+    public ControllerMapper createControllerMapper() {
+        return new ControllerMapper(requestMethod, url.getOriginalUrlPath());
     }
 }
