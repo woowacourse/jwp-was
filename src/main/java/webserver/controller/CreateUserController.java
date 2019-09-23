@@ -16,13 +16,13 @@ public class CreateUserController extends HttpController {
     @Override
     protected void doGet(Request request, Response response) {
         String location = new UserService().addUser(request.extractQueryParameter());
-        response.configureFOUNDResponse(location);
+        response.configureFoundResponse(location);
     }
 
     @Override
     protected void doPost(Request request, Response response) {
         String location = new UserService().addUser(request.extractFormData());
-        response.configureFOUNDResponse(location);
+        response.configureFoundResponse(location);
     }
 
     private static class LazyHolder {

@@ -69,7 +69,7 @@ public class Response {
         responseHeader.setLocation(location);
     }
 
-    public void configureOKResponse(String url) throws IOException, URISyntaxException {
+    public void configureOkResponse(String url) throws IOException, URISyntaxException {
         setStatusCode(200);
         setReasonPhrase("OK");
         setContentType(ContentTypeHandler.type(url.substring(url.lastIndexOf(".") + 1)));
@@ -82,7 +82,7 @@ public class Response {
         setResponseBody(body);
     }
 
-    public void configureFOUNDResponse(String location) {
+    public void configureFoundResponse(String location) {
         setStatusCode(302);
         setReasonPhrase("FOUND");
         setLocation(location);
