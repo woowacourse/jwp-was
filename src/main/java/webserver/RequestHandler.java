@@ -3,9 +3,12 @@ package webserver;
 import controller.AbstractController;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import http.response.ResponseStatus;
 import http.response.view.DefaultView;
+import http.response.view.ErrorView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.UrlNotFoundException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,14 +35,26 @@ public class RequestHandler implements Runnable {
              HttpRequest httpRequest = new HttpRequest(in);
              HttpResponse httpResponse = new HttpResponse(out)) {
 
-            Optional<AbstractController> maybeController = ControllerContainer.findController(httpRequest.getPath());
+            service(httpRequest, httpResponse);
+
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+        Optional<AbstractController> maybeController = ControllerContainer.findController(httpRequest.getPath());
+        try {
             if (maybeController.isPresent()) {
                 maybeController.get().service(httpRequest, httpResponse);
                 return;
             }
             httpResponse.render(new DefaultView(httpRequest.getPath()));
-        } catch (IOException | URISyntaxException e) {
-            logger.error(e.getMessage());
+        } catch (URISyntaxException | UrlNotFoundException e) {
+            httpResponse.render(new ErrorView(ResponseStatus.NOT_FOUND, "Not Found"));
         }
+
     }
+
+
 }

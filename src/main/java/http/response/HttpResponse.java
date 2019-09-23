@@ -55,20 +55,12 @@ public class HttpResponse implements AutoCloseable {
         dataOutputStream.close();
     }
 
-    private void writeBody() {
-        try {
-            dataOutputStream.write(view.getBody(), 0, view.getBody().length);
-            dataOutputStream.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+    private void writeBody() throws IOException {
+        dataOutputStream.write(view.getBody(), 0, view.getBody().length);
+        dataOutputStream.flush();
     }
 
-    private void writeHeader() {
-        try {
-            dataOutputStream.writeBytes(getHeader());
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+    private void writeHeader() throws IOException {
+        dataOutputStream.writeBytes(getHeader());
     }
 }

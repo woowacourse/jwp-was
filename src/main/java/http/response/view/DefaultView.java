@@ -23,10 +23,6 @@ public class DefaultView extends View {
     private byte[] findBody(String path) throws IOException, URISyntaxException {
         byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + path);
 
-        if (body == null) {
-            body = FileIoUtils.loadFileFromClasspath("./static" + path);
-        }
-
         logger.info("response body : {}", body);
         return body;
     }
