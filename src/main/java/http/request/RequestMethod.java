@@ -13,8 +13,8 @@ public enum RequestMethod {
 
     public static RequestMethod of(String methodName) {
         try {
-            return RequestMethod.valueOf(methodName);
-        } catch (IllegalArgumentException e) {
+            return valueOf(methodName);
+        } catch (IllegalArgumentException | NullPointerException e) {
             throw new InvalidRequestMethodException();
         }
     }

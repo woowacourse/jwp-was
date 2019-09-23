@@ -1,5 +1,7 @@
 package http.common;
 
+import http.common.exception.InvalidContentTypeException;
+
 public enum ContentType {
     JS("text/javascript"),
     CSS("text/css"),
@@ -20,7 +22,11 @@ public enum ContentType {
     }
 
     public static String getContentType(String extension) {
-        return ContentType.valueOf(extension.toUpperCase()).contentType;
+        try {
+            return valueOf(extension.toUpperCase()).contentType;
+        } catch (IllegalArgumentException | NullPointerException e) {
+            throw new InvalidContentTypeException();
+        }
     }
 
     public String getContentType() {
