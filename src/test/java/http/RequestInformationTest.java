@@ -67,4 +67,19 @@ public class RequestInformationTest {
         RequestInformation requestInformation = new RequestInformation(information);
         assertThat(requestInformation.extractUrl()).isEqualTo(RequestUrl.from("/user/create/friend"));
     }
+
+//    @Test
+//    @DisplayName("Query-Parameters가 url가 body에 있을 때 제대로 가져오는지 테스트")
+//    void postWithQueryParamsInUrlAndBody() {
+//        Map<String, String> information = new HashMap<>();
+//        information.put("Request-Line:", "POST /user/create/?id=1 HTTP/1.1");
+//        information.put("Host:", "localhost:8080");
+//        information.put("Connection:", "keep-alive");
+//        information.put("Content-Length:", "59");
+//        information.put("Content-Type:", "application/x-www-form-urlencoded");
+//        information.put("Accept:", "*/*");
+//        information.put("Query-Parameters:", "userId=javajigi&password=password&name=jm&email=jm@gmail.com");
+//        RequestInformation requestInformation = new RequestInformation(information);
+//        assertThat(requestInformation.extractQueryParameters()).isEqualTo("userId=javajigi&password=password&name=jm&email=jm@gmail.com&id=1");
+//    }
 }
