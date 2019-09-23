@@ -2,8 +2,6 @@ package utils;
 
 import org.junit.jupiter.api.Test;
 
-import static http.HttpMIMEType.CSS;
-import static http.HttpMIMEType.HTML;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ExtensionParserTest {

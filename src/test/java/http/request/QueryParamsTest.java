@@ -31,7 +31,7 @@ class QueryParamsTest {
                 QueryParams.of("userId=woowa1&userId=woowa2&userId=woowa3&password=password&name=woo");
 
         assertThat(queryParams.getParams("userId"))
-                .isEqualTo(Arrays.asList("woowa1","woowa2","woowa3"));
+                .isEqualTo(Arrays.asList("woowa1", "woowa2", "woowa3"));
         assertThat(queryParams.getParam("password")).isEqualTo("password");
         assertThat(queryParams.getParam("name")).isEqualTo("woo");
     }
