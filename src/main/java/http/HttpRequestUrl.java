@@ -33,7 +33,23 @@ public class HttpRequestUrl {
     }
 
     public boolean isEmptyParams() {
-        return getParams().equals("");
+        return "".equals(getParams());
+    }
+
+    public boolean hasExtension() {
+        return isPathContains(".");
+    }
+
+    private boolean isPathContains(String contains) {
+        return getPath().contains(contains);
+    }
+
+    public String getExtension() {
+        String path = getPath();
+        if (!path.contains(".")) {
+            throw new IllegalArgumentException("확장자가 없습니다.");
+        }
+        return path.substring(path.lastIndexOf("."));
     }
 
     @Override

@@ -30,15 +30,16 @@ public class RequestHandler implements Runnable {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
 
-        try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
+        try (InputStream in = connection.getInputStream();
+             OutputStream out = connection.getOutputStream()) {
             HttpRequest httpRequest = new HttpRequest(in);
 
             String path = httpRequest.getPath();
 
             DataOutputStream dos = new DataOutputStream(out);
 
-            if (HttpRequestUtils.hasExtension(path)) {
-                MimeType mimeType = MimeType.of(HttpRequestUtils.extractExtension(path));
+            if (httpRequest.pathHasExtension()) {
+                MimeType mimeType = MimeType.of(httpRequest.pathExtension());
                 String filePath = HttpRequestUtils.filePathBuilder(httpRequest.getPath(), mimeType);
 
                 byte[] body = FileIoUtils.loadFileFromClasspath(filePath);

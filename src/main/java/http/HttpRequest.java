@@ -80,6 +80,14 @@ public class HttpRequest {
         return httpRequestBody.get(parameter);
     }
 
+    public boolean pathHasExtension() {
+        return httpRequestLine.hasExtension();
+    }
+
+    public String pathExtension() {
+        return httpRequestLine.getExtension();
+    }
+
     @Override
     public String toString() {
         return "HttpRequest{" + "\n" +

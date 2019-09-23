@@ -38,6 +38,14 @@ public class HttpRequestLine {
         return protocol;
     }
 
+    public boolean hasExtension() {
+        return url.hasExtension();
+    }
+
+    public String getExtension() {
+        return url.getExtension();
+    }
+
     @Override
     public String toString() {
         return "HttpRequestLine{" +

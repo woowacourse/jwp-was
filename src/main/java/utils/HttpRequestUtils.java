@@ -11,10 +11,14 @@ public class HttpRequestUtils {
 
     public static Map<String, String> parse(List<String> lines) {
         Map<String, String> headers = new HashMap<>();
-        if (lines.contains("")) {
-            return headers;
-        }
+        checkLines(lines);
         return buildHeaders(lines, headers);
+    }
+
+    private static void checkLines(List<String> lines) {
+        if (lines.isEmpty()) {
+            throw new NotAllowedHeaderException("헤더 라인이 비어있습니다.");
+        }
     }
 
     private static Map<String, String> buildHeaders(List<String> lines, Map<String, String> headers) {
@@ -44,21 +48,10 @@ public class HttpRequestUtils {
 
     public static Map<String, String> parse(String bodyData) {
         Map<String, String> body = new HashMap<>();
-        if (bodyData.equals("")) {
+        if ("".equals(bodyData)) {
             return body;
         }
         return buildParams(bodyData, body);
-    }
-
-    public static boolean hasExtension(String path) {
-        return path.contains(".");
-    }
-
-    public static String extractExtension(String path) {
-        if (!path.contains(".")) {
-            throw new IllegalArgumentException("확장자가 없습니다.");
-        }
-        return path.substring(path.lastIndexOf("."));
     }
 
     public static String filePathBuilder(String path, MimeType mimeType) {
