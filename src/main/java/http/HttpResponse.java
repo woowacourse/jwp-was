@@ -6,18 +6,18 @@ import org.slf4j.LoggerFactory;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class Response {
-    private static final Logger logger = LoggerFactory.getLogger(Response.class);
+public class HttpResponse {
+    private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
-    private final ResponseHeader header;
-    private ResponseBody body;
+    private final HttpResponseHeader header;
+    private HttpResponseBody body;
 
-    public Response(ResponseHeader header, ResponseBody body) {
+    public HttpResponse(HttpResponseHeader header, HttpResponseBody body) {
         this.header = header;
         this.body = body;
     }
 
-    public Response(ResponseHeader header) {
+    public HttpResponse(HttpResponseHeader header) {
         this.header = header;
     }
 
@@ -38,7 +38,7 @@ public class Response {
     }
 
     public void setBody(byte[] body) {
-        this.body = new ResponseBody(body);
+        this.body = new HttpResponseBody(body);
     }
 
     public String getHeaderUrl() {

@@ -1,9 +1,9 @@
 package http;
 
-public class ResponseBody {
+public class HttpResponseBody {
     private final byte[] body;
 
-    public ResponseBody(byte[] body) {
+    public HttpResponseBody(byte[] body) {
         this.body = body;
     }
 

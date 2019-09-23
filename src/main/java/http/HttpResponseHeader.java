@@ -2,7 +2,7 @@ package http;
 
 import java.util.Objects;
 
-public class ResponseHeader {
+public class HttpResponseHeader {
     private static final int OK_STATUS_CODE = 200;
 
     private int statusCode;
@@ -10,10 +10,10 @@ public class ResponseHeader {
     private String location;
     private String url;
 
-    public ResponseHeader() {
+    public HttpResponseHeader() {
     }
 
-    public ResponseHeader(int statusCode, String type, String location, String url) {
+    public HttpResponseHeader(int statusCode, String type, String location, String url) {
         this.statusCode = statusCode;
         this.type = String.format("text/%s", type);
         this.location = location;
@@ -56,7 +56,7 @@ public class ResponseHeader {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ResponseHeader that = (ResponseHeader) o;
+        HttpResponseHeader that = (HttpResponseHeader) o;
         return statusCode == that.statusCode &&
                 Objects.equals(type, that.type) &&
                 Objects.equals(location, that.location) &&

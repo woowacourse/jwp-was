@@ -36,13 +36,13 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest httpRequest = readRequestUrl(in);
-            Response response = new Response(new ResponseHeader());
+            HttpResponse httpResponse = new HttpResponse(new HttpResponseHeader());
 
             Controller controller = Optional.ofNullable(api.get(httpRequest.getResourcePath()))
                     .orElseGet(FileController::new);
-            controller.service(httpRequest, response);
+            controller.service(httpRequest, httpResponse);
 
-            response.writeMessage(new DataOutputStream(out));
+            httpResponse.writeMessage(new DataOutputStream(out));
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
