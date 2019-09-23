@@ -2,6 +2,8 @@ package was.webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import was.concurrency.FixedThreadPool;
+import was.concurrency.ThreadPool;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -10,6 +12,7 @@ import java.net.Socket;
 public class WebServer implements Runnable {
     private static final Logger LOGGER = LoggerFactory.getLogger(WebServer.class);
     private static final int DEFAULT_PORT = 8080;
+    private static final ThreadPool THREAD_POOL = new FixedThreadPool(50);
 
     private final int port;
 
@@ -26,8 +29,7 @@ public class WebServer implements Runnable {
             LOGGER.info("Web Application Server started {} port.", port);
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
-                Thread thread = new Thread(new RequestHandler(connection));
-                thread.start();
+                THREAD_POOL.execute(new Thread(new RequestHandler(connection)));
             }
         } catch (IOException e) {
             throw new IllegalArgumentException();
