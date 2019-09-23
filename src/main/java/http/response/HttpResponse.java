@@ -6,7 +6,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
@@ -17,17 +18,24 @@ public class HttpResponse {
     public HttpResponse() {
     }
 
-    public void addHeader(List<String> headerLines) {
-        header = HttpHeader.of(headerLines);
+    public void addHeader(Map<String, String> headers) {
+        header = new HttpHeader(headers);
     }
 
-    public void okResponse(byte[] body) {
+    public void okResponse(String contentType, byte[] body) {
         this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.OK, "HTTP/1.1");
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "text/" + contentType + ";charset=utf-8");
+        headers.put("Content-Length", ""+body.length);
+        addHeader(headers);
         this.body = body;
     }
 
-    public void redirectResponse() {
+    public void redirectResponse(String location) {
         this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.FOUND, "HTTP/1.1");
+        Map<String, String> header = new HashMap<>();
+        header.put("Location", location);
+        addHeader(header);
         this.body = new byte[]{};
     }
 
@@ -41,7 +49,7 @@ public class HttpResponse {
         try {
             for (String line : header.getKeySet()) {
                 logger.debug("{}", line + ": " + header.getHeader(line) + "\r\n");
-                dos.writeBytes(line + ": " + header.getHeader(line));
+                dos.writeBytes(line + ": " + header.getHeader(line) + "\r\n");
             }
         } catch (IOException e) {
             logger.error(e.getMessage());

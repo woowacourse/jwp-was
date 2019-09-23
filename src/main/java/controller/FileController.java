@@ -6,8 +6,6 @@ import utils.FileIoUtils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.List;
 
 public class FileController extends BasicController {
 
@@ -18,15 +16,9 @@ public class FileController extends BasicController {
         body = FileIoUtils.loadFileFromClasspath(String.format("./templates%s", request.getPath()));
         String[] splitPath = request.getPath().split("\\.");
         String contentType = splitPath[splitPath.length - 1];
-        List<String> headers;
-
         // html 찾기;
         if (body != null) {
-            headers = Arrays.asList("Content-Type: text/" + contentType + ";charset=utf-8\r\n",
-                    "Content-Length: " + body.length + "\r\n");
-            response.addHeader(headers);
-
-            response.okResponse(body);
+            response.okResponse(contentType,body);
             return response;
         }
 
@@ -35,9 +27,7 @@ public class FileController extends BasicController {
         if (body == null) {
             return null;
         }
-        headers = Arrays.asList("Content-Type: text/" + contentType + ";charset=utf-8\r\n");
-        response.addHeader(headers);
-        response.okResponse(body);
+        response.okResponse(contentType, body);
 
         return response;
     }

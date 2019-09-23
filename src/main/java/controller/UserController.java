@@ -6,11 +6,7 @@ import http.response.HttpResponse;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.ParameterParser;
 
-import java.io.IOException;
-import java.net.URLDecoder;
-import java.util.Arrays;
 import java.util.Map;
 
 public class UserController extends BasicController {
@@ -20,26 +16,19 @@ public class UserController extends BasicController {
     public HttpResponse doGet(HttpRequest request, HttpResponse response) {
         if (request.hasParameters()) {
             DataBase.addUser(createUser(request));
-            response.addHeader(Arrays.asList("Location: /index.html\r\n"));
-            response.redirectResponse();
+            response.redirectResponse("/index.html");
         }
         return response;
     }
 
     @Override
-    public HttpResponse doPost(HttpRequest request, HttpResponse response) throws IOException {
+    public HttpResponse doPost(HttpRequest request, HttpResponse response) {
         log.debug("{}", request.hasBody());
 
         if (request.hasBody()) {
-            String body = request.getBody().toString();
-            body = URLDecoder.decode(body, "UTF-8");
-            Map<String, String> bodyData = ParameterParser.parse(body);
-
-            DataBase.addUser(createUser(bodyData));
-
-            // response 만들기
-            response.addHeader(Arrays.asList("Location: /index.html\r\n"));
-            response.redirectResponse();
+            DataBase.addUser(createUser(request.convertBodyToMap()));
+//            response.addHeader(Arrays.asList("Location: /index.html\r\n"));
+            response.redirectResponse("/index.html");
         }
 
         return response;

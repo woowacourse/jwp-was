@@ -3,6 +3,7 @@ package http.request;
 import http.HttpHeader;
 
 import java.io.IOException;
+import java.util.Map;
 
 public class HttpRequest {
     private HttpRequestStartLine httpRequestStartLine;
@@ -13,6 +14,10 @@ public class HttpRequest {
         this.httpRequestStartLine = httpRequestStartLine;
         this.httpHeader = httpHeader;
         this.httpBody = httpBody;
+    }
+
+    public Map<String, String> convertBodyToMap() {
+        return httpBody.convertBodyToMap();
     }
 
     public boolean hasParameters() {
