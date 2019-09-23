@@ -21,7 +21,8 @@ class HttpResponseTest {
                 "Content-Length: " + expectedLenghtOfBodyContent + "\r\n",
                 "\r\n");
 
-        response.response200Header(expectedLenghtOfBodyContent);
+        // builder 사용해서 타입 정하고 charset 정하면 좋을듯..!
+        response.response200Header(expectedLenghtOfBodyContent, "text/html;charset=utf-8");
 
         for(String line : expectedHeader) {
             verify(dos).writeBytes(line);

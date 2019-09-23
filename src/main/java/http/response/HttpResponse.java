@@ -24,16 +24,16 @@ public class HttpResponse {
     }
 
     public static HttpResponse ok(IDataOutputStream dos) {
-        code = StatusCode.Ok;
+       // code = StatusCode.Ok;
         return new HttpResponse(dos);
     }
 
-    public void response200Header(int lengthOfBodyContent, String contentType) {
+   //  public void response200Header(int lengthOfBodyContent, String contentType) {
 
     public void response200Header(int lengthOfBodyContent, String contentType) {
         try {
             List<String> lines = Arrays.asList(
-                    String.format("HTTP/1.1 %d %s \r\n", ),
+                    String.format("HTTP/1.1 %d %s \r\n", 200, "OK"),
 
                     "Content-Type: " + contentType + ";charset=utf-8\r\n",
                     "Content-Length: " + lengthOfBodyContent + "\r\n",

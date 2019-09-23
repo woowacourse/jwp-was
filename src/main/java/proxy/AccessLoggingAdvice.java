@@ -6,8 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class AccessLoggingAdvice implements MethodInterceptor {
-    private static AccessLoggingAdvice advice = null;
-
     public static final String BEGIN_MESSAGE = "begin";
     public static final String END_MESSAGE = "end";
 
