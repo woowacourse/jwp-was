@@ -6,6 +6,9 @@ import http.excption.NotFoundHeaderException;
 
 public class HttpRequestHeader {
 
+    private static final String NOT_FOUND_HEADER_MESSAGE = "그런 헤더는 존재하지 않습니다.";
+    private static final String CONTENT_LENGTH = "Content-Length";
+
     private final Map<String, String> headers;
 
     public HttpRequestHeader(Map<String, String> headers) {
@@ -19,13 +22,13 @@ public class HttpRequestHeader {
 
     private void checkContainsKey(String key) {
         if (!headers.containsKey(key)) {
-            throw new NotFoundHeaderException("그런 헤더는 존재하지 않습니다.");
+            throw new NotFoundHeaderException(NOT_FOUND_HEADER_MESSAGE);
         }
     }
 
     public int getContentLength() {
-        if (headers.containsKey("Content-Length")) {
-            return Integer.parseInt(headers.get("Content-Length"));
+        if (headers.containsKey(CONTENT_LENGTH)) {
+            return Integer.parseInt(headers.get(CONTENT_LENGTH));
         }
         return 0;
     }

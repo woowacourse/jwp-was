@@ -10,15 +10,7 @@ import http.MimeType;
 public class HttpRequestUtils {
 
     public static Map<String, String> parse(List<String> lines) {
-        Map<String, String> headers = new HashMap<>();
-        checkLines(lines);
-        return buildHeaders(lines, headers);
-    }
-
-    private static void checkLines(List<String> lines) {
-        if (lines.isEmpty()) {
-            throw new NotAllowedHeaderException("헤더 라인이 비어있습니다.");
-        }
+        return buildHeaders(lines, new HashMap<>());
     }
 
     private static Map<String, String> buildHeaders(List<String> lines, Map<String, String> headers) {

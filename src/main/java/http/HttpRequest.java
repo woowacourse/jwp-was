@@ -9,10 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import http.excption.NotSupportedHttpRequestException;
 import utils.HttpRequestUtils;
 import utils.IOUtils;
 
 public class HttpRequest {
+
+    private static final String EMPTY_STRING = "";
+    private static final String NOT_SUPPORTED_HTTP_REQUEST_MESSAGE = "지원하지 않는 요청입니다.";
 
     private final HttpRequestLine httpRequestLine;
     private final HttpRequestParam httpRequestParam;
@@ -46,12 +50,19 @@ public class HttpRequest {
     private HttpRequestHeader getHttpRequestHeader(BufferedReader bufferedReader) throws IOException {
         List<String> lines = new ArrayList<>();
         String line = bufferedReader.readLine();
-        while (!"".equals(line) && line != null) {
+        while (!EMPTY_STRING.equals(line) && line != null) {
             lines.add(line);
             line = bufferedReader.readLine();
         }
+        checkEmpty(lines);
         Map<String, String> headers = HttpRequestUtils.parse(lines);
         return new HttpRequestHeader(headers);
+    }
+
+    private void checkEmpty(List<String> lines) {
+        if (lines.isEmpty()) {
+            throw new NotSupportedHttpRequestException(NOT_SUPPORTED_HTTP_REQUEST_MESSAGE);
+        }
     }
 
     private HttpRequestBody getHttpRequestBody(BufferedReader bufferedReader, int contentLength) throws IOException {

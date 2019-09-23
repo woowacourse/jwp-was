@@ -2,17 +2,21 @@ package http;
 
 import java.util.Map;
 
+import http.excption.NotExistKeyException;
+
 public class HttpRequestData {
+
+    private static final String NOT_EXIST_KEY_MESSAGE = "존재하지 않는 key 입니다.";
 
     private final Map<String, String> data;
 
-    public HttpRequestData(Map<String, String> data) {
+    HttpRequestData(Map<String, String> data) {
         this.data = data;
     }
 
     public String get(String key) {
         if (!data.containsKey(key)) {
-            throw new IllegalArgumentException("존재하지 않는 key 입니다.");
+            throw new NotExistKeyException(NOT_EXIST_KEY_MESSAGE);
         }
         return data.get(key);
     }

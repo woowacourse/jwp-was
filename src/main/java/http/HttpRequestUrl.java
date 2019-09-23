@@ -2,7 +2,14 @@ package http;
 
 import java.util.Objects;
 
+import http.excption.NotFoundExtensionException;
+
 public class HttpRequestUrl {
+
+    private static final String QUERY_STRING_DELIMITER = "?";
+    public static final String EMPTY_STRING = "";
+    public static final String EXTENSION_DELIMITER = ".";
+    public static final String NOT_FOUND_EXTENSION_MESSAGE = "확장자가 없습니다.";
 
     private String url;
 
@@ -18,26 +25,26 @@ public class HttpRequestUrl {
         if (!hasParams()) {
             return url;
         }
-        return url.substring(0, url.indexOf("?"));
+        return url.substring(0, url.indexOf(QUERY_STRING_DELIMITER));
     }
 
     public String getParams() {
         if (!hasParams()) {
             return "";
         }
-        return url.substring(url.indexOf("?") + 1);
+        return url.substring(url.indexOf(QUERY_STRING_DELIMITER) + 1);
     }
 
     public boolean hasParams() {
-        return url.contains("?");
+        return url.contains(QUERY_STRING_DELIMITER);
     }
 
     public boolean isEmptyParams() {
-        return "".equals(getParams());
+        return EMPTY_STRING.equals(getParams());
     }
 
     public boolean hasExtension() {
-        return isPathContains(".");
+        return isPathContains(EXTENSION_DELIMITER);
     }
 
     private boolean isPathContains(String contains) {
@@ -46,10 +53,14 @@ public class HttpRequestUrl {
 
     public String getExtension() {
         String path = getPath();
-        if (!path.contains(".")) {
-            throw new IllegalArgumentException("확장자가 없습니다.");
+        checkExtension(path);
+        return path.substring(path.lastIndexOf(EXTENSION_DELIMITER));
+    }
+
+    private void checkExtension(String path) {
+        if (!path.contains(EXTENSION_DELIMITER)) {
+            throw new NotFoundExtensionException(NOT_FOUND_EXTENSION_MESSAGE);
         }
-        return path.substring(path.lastIndexOf("."));
     }
 
     @Override
