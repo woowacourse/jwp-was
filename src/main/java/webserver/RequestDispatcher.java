@@ -3,6 +3,7 @@ package webserver;
 import controller.Controller;
 import controller.LoginController;
 import controller.SignUpController;
+import controller.UserListController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.ResourceLoadUtils;
@@ -26,8 +27,11 @@ public class RequestDispatcher {
         controllers = new HashMap<>();
         SignUpController signUpController = new SignUpController();
         LoginController loginController = new LoginController();
+        UserListController userListController = new UserListController();
+
         controllers.put(signUpController.getPath(), signUpController);
         controllers.put(loginController.getPath(), loginController);
+        controllers.put(userListController.getPath(), userListController);
     }
 
     public static Response handle(Request request) {

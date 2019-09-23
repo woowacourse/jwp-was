@@ -1,5 +1,13 @@
 package webserver;
 
+import com.github.jknack.handlebars.Handlebars;
+import com.github.jknack.handlebars.Template;
+import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
+import com.github.jknack.handlebars.io.TemplateLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -53,6 +61,9 @@ public class Response {
 
 
     public static final class ResponseBuilder {
+
+        private static final Logger logger = LoggerFactory.getLogger(ResponseBuilder.class);
+
         private Status status;
         private MediaType mediaType;
         private Map<String, String> headers;
@@ -72,6 +83,24 @@ public class Response {
             return createBuilder()
                     .withStatus(Status.FOUND)
                     .withHeader("Location", url);
+        }
+
+        public static ResponseBuilder forward(String url) {
+            try {
+                TemplateLoader loader = new ClassPathTemplateLoader();
+                loader.setPrefix("/templates");
+                loader.setSuffix(".html");
+                Handlebars handlebars = new Handlebars(loader);
+
+                Template template = handlebars.compile(url);
+
+                return createBuilder()
+                        .withStatus(Status.OK)
+                        .withBody(template.apply(null).getBytes());
+            } catch (IOException e) {
+                logger.error("Error while forward: ", e);
+            }
+            return null;
         }
 
         public ResponseBuilder withStatus(Status status) {
