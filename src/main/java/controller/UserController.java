@@ -3,6 +3,7 @@ package controller;
 import db.DataBase;
 import model.User;
 import org.slf4j.Logger;
+import webserver.message.exception.NotFoundFileException;
 import webserver.message.request.Request;
 import webserver.message.request.RequestBody;
 import webserver.message.response.Response;
@@ -12,7 +13,18 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class UserController {
     private static final Logger LOG = getLogger(UserController.class);
 
-    public static Response createUser(final Request request) {
+    public static Response service(final Request request) {
+        if (request.matchesMethod("GET")) {
+            return doPost(request);
+        }
+        if (request.matchesMethod("POST")) {
+            return doPost(request);
+        }
+
+        throw new NotFoundFileException();
+    }
+
+    private static Response doPost(final Request request) {
         final RequestBody body = request.getBody();
         final String userId = body.getQueryValue("userId");
         final String password = body.getQueryValue("password");
@@ -24,5 +36,9 @@ public class UserController {
         LOG.debug(user.toString());
 
         return new Response.Builder().redirectUrl("/").build();
+    }
+
+    private static Response doGet(final Request request) {
+        throw new NotFoundFileException();
     }
 }

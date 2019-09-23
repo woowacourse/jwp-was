@@ -6,6 +6,7 @@ import utils.FileIoUtils;
 import utils.FileLoader;
 import utils.IOUtils;
 import utils.exception.InvalidFileAccessException;
+import webserver.message.exception.NotFoundFileException;
 import webserver.message.exception.UrlDecodeException;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
@@ -24,7 +25,7 @@ public class RequestDispatcher {
     private static final Map<String, Function<Request, Response>> requestUrls = new HashMap<>();
 
     static {
-        requestUrls.put("/user/create", UserController::createUser);
+        requestUrls.put("/user/create", UserController::service);
     }
 
     public static byte[] forward(final IOUtils ioUtils) {
@@ -43,13 +44,15 @@ public class RequestDispatcher {
                     DataConverter.convertToBytes(FileIoUtils.loadFileFromClasspath(makeFilePath(request, STATIC_PATH)));
         } catch (IOException | URISyntaxException | NullPointerException e) {
             return DataConverter.convertToBytes(FileIoUtils.loadFileFromClasspath(makeFilePath(request, TEMPLATES_PATH)));
+        } catch (NotFoundFileException e) {
+            return DataConverter.convertTo404Response(FileLoader.loadNotFoundFile()).toBytes();
         }
     }
 
     private static Response serveResponse(Request request) {
         try {
             return DataConverter.convertTo200Response(FileLoader.loadStaticFile(request));
-        } catch (InvalidFileAccessException e) {
+        } catch (InvalidFileAccessException | NotFoundFileException e) {
             return DataConverter.convertTo404Response(FileLoader.loadNotFoundFile());
         } catch (NullPointerException | UrlDecodeException e) {
             return DataConverter.convertTo500Response(FileLoader.loadInternalServerErrorFile());

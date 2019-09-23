@@ -11,4 +11,8 @@ public enum HttpMethod {
     HttpMethod(final String method) {
         this.method = method;
     }
+
+    public boolean matchesMethod(String method) {
+        return this.method.equals(method);
+    }
 }

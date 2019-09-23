@@ -59,4 +59,8 @@ public class Request {
         return body.getQueryValue(key);
     }
 
+    public boolean matchesMethod(String method) {
+        return this.startLine.matchesMethod(method);
+    }
+
 }

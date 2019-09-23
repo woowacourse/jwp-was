@@ -48,4 +48,8 @@ public class RequestStartLine {
     public String getHttpVersion() {
         return httpVersion.getVersion();
     }
+
+    boolean matchesMethod(String method) {
+        return this.httpMethod.matchesMethod(method);
+    }
 }
