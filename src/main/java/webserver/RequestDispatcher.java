@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 
+import java.io.FileNotFoundException;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,8 +60,10 @@ public class RequestDispatcher {
             res.setContentType(contentType);
             res.addHeader(CONTENT_LENGTH_HEADER_KEY, String.valueOf(body.length));
             res.setBody(body);
+        } catch (FileNotFoundException e) {
+            logger.error("File not found for {}", url);
         } catch (Exception e) {
-            logger.error("Error while serving file", e);
+            logger.error("Error: {}", e.getMessage());
         }
     }
 

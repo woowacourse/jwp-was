@@ -31,7 +31,6 @@ public class LoginControllerTest {
 
         assertThat(res.getStatus()).isEqualTo(HttpStatus.FOUND);
         assertThat(res.getHeader("Location")).isEqualTo("/index.html");
-        assertThat(res.getCookie("logined")).isEqualTo("true");
     }
 
     @Test
@@ -42,6 +41,5 @@ public class LoginControllerTest {
 
         assertThat(res.getStatus()).isEqualTo(HttpStatus.FOUND);
         assertThat(res.getHeader("Location")).isEqualTo("/user/login_failed.html");
-        assertThat(res.getCookie("logined")).isEqualTo("false");
     }
 }

@@ -32,16 +32,14 @@ public class LoginController extends AbstractController {
         User found = DataBase.findUserById(parsedBody.get(USER_ID));
 
         String redirectUrl = "/user/login_failed.html";
-        String loginedCookie = "false";
 
         if (verifyUser(parsedBody, found)) {
             redirectUrl = "/index.html";
-            loginedCookie = "true";
+            req.getSession().setAttribute("logined", "true");
         }
 
         response.setStatus(HttpStatus.FOUND);
         response.addHeader("Location", redirectUrl);
-        response.addCookie(LOGINED_COOKIE_KEY, loginedCookie);
     }
 
     @Override
