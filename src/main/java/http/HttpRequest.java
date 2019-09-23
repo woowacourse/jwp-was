@@ -29,12 +29,20 @@ public class HttpRequest {
         return url;
     }
 
-    public String get(String key) {
+    public String getHeader(String key) {
         return httpRequestHeader.get(key);
     }
 
-    public Map<String, String> extractQueryParameter() {
-        return httpRequestHeader.extractQueryParameter();
+    public String getMethod() {
+        return httpRequestHeader.getMethod();
+    }
+
+    public String getUrl() {
+        return httpRequestHeader.getUrl();
+    }
+
+    public String getVersion() {
+        return httpRequestHeader.getVersion();
     }
 
     public Map<String, String> extractFormData() {

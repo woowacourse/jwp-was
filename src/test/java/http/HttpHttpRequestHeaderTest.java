@@ -41,16 +41,6 @@ public class HttpHttpRequestHeaderTest {
     }
 
     @Test
-    @DisplayName("Header에서 Query Parameter 추출")
-    public void extractQueryParameter() {
-        Map<String, String> expected = new HashMap<>();
-        expected.put("userId", "javajigi");
-        expected.put("password", "password");
-
-        assertThat(httpRequestHeader.extractQueryParameter()).isEqualTo(expected);
-    }
-
-    @Test
     @DisplayName("Header 정보에서 key값으로 value를 가져온다")
     public void get() {
         assertThat(httpRequestHeader.get("host")).isEqualTo("localhost:8080");
