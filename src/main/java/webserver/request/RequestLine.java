@@ -10,8 +10,8 @@ public class RequestLine {
     private String uri;
     private String version;
 
-    public RequestLine(String requestFirstLine) {
-        String[] splitFirstLine = requestFirstLine.split(SPACE);
+    public RequestLine(String requestLine) {
+        String[] splitFirstLine = requestLine.split(SPACE);
         checkRequestFirstLine(splitFirstLine);
         this.method = splitFirstLine[0];
         this.uri = splitFirstLine[1];
@@ -32,15 +32,8 @@ public class RequestLine {
         return uri.contains(QUESTION_MARK);
     }
 
-    public String getSearch() {
-        checkParams();
-        return uri.split(SEPARATOR)[1];
-    }
-
-    private void checkParams() {
-        if (!hasParams()) {
-            throw new IllegalArgumentException("Search 가 없는 Request 입니다.");
-        }
+    public String getQueryString() {
+        return hasParams() ? uri.split(SEPARATOR)[1] : null;
     }
 
     public String getMethod() {

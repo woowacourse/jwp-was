@@ -64,12 +64,12 @@ class RequestLineTest {
     @DisplayName("RequestFirstLine 객체의 search 를 추출한다.")
     @Test
     void getSearchSuccess() {
-        assertEquals(PARAMS_REQUEST_FIRST_LINE.getSearch(), PARAMS);
+        assertEquals(PARAMS_REQUEST_FIRST_LINE.getQueryString(), PARAMS);
     }
 
     @DisplayName("RequestFirstLine 객체의 search 가 없을 때, search 를 추출에 실패한다.")
     @Test
     void getSearchFailed() {
-        assertThrows(IllegalArgumentException.class, NO_PARAMS_REQUEST_FIRST_LINE::getSearch);
+        assertThrows(IllegalArgumentException.class, NO_PARAMS_REQUEST_FIRST_LINE::getQueryString);
     }
 }

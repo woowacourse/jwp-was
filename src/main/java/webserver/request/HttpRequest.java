@@ -23,7 +23,7 @@ public class HttpRequest {
         RequestData requestParams = new RequestData();
 
         if (requestLine.hasParams()) {
-            String search = requestLine.getSearch();
+            String search = requestLine.getQueryString();
             requestParams.put(search);
         }
         return requestParams;
