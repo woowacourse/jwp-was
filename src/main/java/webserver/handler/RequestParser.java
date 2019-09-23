@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RequestParser {
-    private static final String BLACK = "";
+    private static final String BLANK = "";
     private static final String SEPARATOR = ": ";
     private static final String CONTENT_LENGTH = "Content-Length";
 
@@ -16,7 +16,7 @@ public class RequestParser {
         List<String> lines = new ArrayList<>();
 
         String line;
-        while (!BLACK.equals(line = bufferedReader.readLine())) {
+        while (!BLANK.equals(line = bufferedReader.readLine())) {
             lines.add(line);
         }
 
