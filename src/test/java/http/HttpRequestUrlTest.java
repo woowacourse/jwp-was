@@ -3,10 +3,7 @@ package http;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import http.excption.NoQueryParamsException;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class HttpRequestUrlTest {
 
@@ -26,12 +23,12 @@ class HttpRequestUrlTest {
         assertEquals(httpRequestUrl.getParams(), "");
     }
 
-    @DisplayName("params 가 없는 경우 getParams 메서드는 오류가 발생한다.")
+    @DisplayName("params 가 없는 경우 getParams 메서드는 빈 문자열을 반환한다.")
     @Test
     void getParamsFail() {
         HttpRequestUrl httpRequestUrl = HttpRequestUrl.of("/index.html");
 
-        assertThrows(NoQueryParamsException.class, httpRequestUrl::getParams);
+        assertEquals(httpRequestUrl.getParams(), "");
     }
 
     @DisplayName("HttpRequestUrl 의 parameter 들을 성공적으로 추출한다.")
