@@ -1,6 +1,7 @@
 package http.response;
 
 import http.HttpHeader;
+import http.request.HttpVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +24,7 @@ public class HttpResponse {
     }
 
     public void okResponse(String contentType, byte[] body) {
-        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.OK, "HTTP/1.1");
+        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.OK, HttpVersion.HTTP_1_1);
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "text/" + contentType + ";charset=utf-8");
         headers.put("Content-Length", ""+body.length);
@@ -32,7 +33,7 @@ public class HttpResponse {
     }
 
     public void redirectResponse(String location) {
-        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.FOUND, "HTTP/1.1");
+        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.FOUND, HttpVersion.HTTP_1_1);
         Map<String, String> header = new HashMap<>();
         header.put("Location", location);
         addHeader(header);
@@ -40,11 +41,11 @@ public class HttpResponse {
     }
 
     public void badRequest() {
-        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.BAD_REQUEST, "HTTP/1.1");
+        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.BAD_REQUEST, HttpVersion.HTTP_1_1);
     }
 
     public void notFound() {
-        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.NOT_FOUND, "HTTP/1.1");
+        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.NOT_FOUND, HttpVersion.HTTP_1_1);
     }
 
     private void writeStartLine(DataOutputStream dos) throws IOException {
