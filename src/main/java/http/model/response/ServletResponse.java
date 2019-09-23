@@ -4,17 +4,20 @@ import http.model.common.HttpHeaders;
 import http.model.common.HttpProtocols;
 import http.model.request.HttpUri;
 
+import java.io.OutputStream;
 import java.util.Map;
 
 public class ServletResponse {
     private static final String SET_COOKIE = "Set-Cookie";
     private static final String LOCATION = "Location";
+    private final OutputStream outputStream;
     private HttpProtocols protocols;
     private HttpStatus httpStatus;
     private HttpHeaders httpHeaders;
     private HttpUri uri;
 
-    public ServletResponse() {
+    public ServletResponse(OutputStream outputStream) {
+        this.outputStream = outputStream;
         this.httpHeaders = new HttpHeaders();
         setHTTP1();
     }
@@ -38,6 +41,10 @@ public class ServletResponse {
 
     public boolean hasResource() {
         return uri != null;
+    }
+
+    public OutputStream getOutputStream() {
+        return outputStream;
     }
 
     public String getUri() {

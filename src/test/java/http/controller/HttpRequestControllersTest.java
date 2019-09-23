@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -26,7 +27,7 @@ class HttpRequestControllersTest {
     void 유저핸들러_선택() {
         String requestMessage = "GET /user/create?key=value HTTP/1.1";
         ServletRequest request = HttpRequestParser.parse(new ByteArrayInputStream(requestMessage.getBytes()));
-        ServletResponse response = new ServletResponse();
+        ServletResponse response = new ServletResponse(new ByteArrayOutputStream());
 
         handlers.doService(request, response);
 
@@ -38,7 +39,7 @@ class HttpRequestControllersTest {
     void 파일리소스핸들러_선택() {
         String requestMessage = "GET /index.html HTTP/1.1";
         ServletRequest request = HttpRequestParser.parse(new ByteArrayInputStream(requestMessage.getBytes()));
-        ServletResponse response = new ServletResponse();
+        ServletResponse response = new ServletResponse(new ByteArrayOutputStream());
 
         handlers.doService(request, response);
 

@@ -8,6 +8,7 @@ import http.supoort.RequestMapping;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -28,7 +29,7 @@ class UserControllerTest {
                     put("email", "email");
                 }})
                 .build();
-        response = new ServletResponse();
+        response = new ServletResponse(new ByteArrayOutputStream());
     }
 
     @Test

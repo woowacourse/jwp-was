@@ -7,6 +7,8 @@ import http.model.response.ServletResponse;
 import http.supoort.RequestMapping;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayOutputStream;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class FileResourceControllerTest {
@@ -18,7 +20,8 @@ class FileResourceControllerTest {
                 .requestLine(HttpMethod.GET, "/index.html", "HTTP/1.1")
                 .build();
 
-        ServletResponse response = new ServletResponse();
+
+        ServletResponse response = new ServletResponse(new ByteArrayOutputStream());
 
         assertThat(controller.canHandle(request)).isTrue();
 

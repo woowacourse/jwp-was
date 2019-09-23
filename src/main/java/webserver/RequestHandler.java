@@ -44,7 +44,7 @@ public class RequestHandler implements Runnable {
         try {
             ServletRequest request = HttpRequestParser.parse(in);
             request.bindSessionManager(this.sessionManager);
-            ServletResponse response = new ServletResponse();
+            ServletResponse response = new ServletResponse(out);
 
             httpRequestControllers.doService(request, response);
 
