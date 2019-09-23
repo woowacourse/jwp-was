@@ -27,11 +27,14 @@ public class ResourceMapper {
         if (controller != null) {
             return controller.handle(httpRequest);
         }
-        if (FileIoUtils.existFileInClasspath(STATIC_PATH + path)) {
-            return HttpResponseEntity.get200Response(STATIC_PATH + path);
-        }
-        if (FileIoUtils.existFileInClasspath(TEMPLATES_PATH + path)) {
-            return HttpResponseEntity.get200Response(TEMPLATES_PATH + path);
+        return findResource(STATIC_PATH + path, TEMPLATES_PATH + path);
+    }
+
+    private static HttpResponseEntity findResource(String... paths) throws URISyntaxException {
+        for (String path: paths) {
+            if (FileIoUtils.existFileInClasspath(path)) {
+                return HttpResponseEntity.get200Response(path);
+            }
         }
         return HttpResponseEntity.get404Response();
     }
