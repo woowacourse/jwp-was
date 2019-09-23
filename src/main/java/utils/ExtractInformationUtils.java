@@ -6,6 +6,8 @@ import java.util.Map;
 public class ExtractInformationUtils {
     private static final String EQUAL = "=";
     private static final String SEPARATOR = "&";
+    private static final String DIVISION_EXTENSION = ".";
+    private static final int NEXT_INT = 1;
 
     public static Map<String, String> extractInformation(String body) {
         Map<String, String> userInfo = new HashMap<>();
@@ -17,5 +19,9 @@ public class ExtractInformationUtils {
         }
 
         return userInfo;
+    }
+
+    public static String extractExtension(String url) {
+        return url.substring(url.lastIndexOf(DIVISION_EXTENSION) + NEXT_INT);
     }
 }

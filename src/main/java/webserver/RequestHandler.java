@@ -3,6 +3,7 @@ package webserver;
 import controller.Controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.ExtractInformationUtils;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -12,12 +13,11 @@ import java.net.Socket;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private static final String DIVISION_EXTENSION = ".";
+
     private static final String PREFIX_SLASH = "/";
     private static final String HTML = "html";
     private static final String TEMPLATES = "./templates";
     private static final String STATIC = "./static";
-    private static final int NEXT_INT = 1;
 
     private Socket connection;
     private ControllerHandler controllerHandler;
@@ -37,7 +37,7 @@ public class RequestHandler implements Runnable {
             HttpRequest request = new HttpRequest(requestParser.getHeaderInfo(), requestParser.getParameter());
 
             String url = request.getPath();
-            String extension = url.substring(url.lastIndexOf(DIVISION_EXTENSION) + NEXT_INT);
+            String extension = ExtractInformationUtils.extractExtension(url);
 
             HttpResponse httpResponse = new HttpResponse(dos);
 

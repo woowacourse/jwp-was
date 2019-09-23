@@ -1,8 +1,10 @@
 package webserver;
 
+import enumType.MediaType;
 import org.apache.tika.Tika;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.ExtractInformationUtils;
 import utils.FileIoUtils;
 
 import java.io.DataOutputStream;
@@ -34,11 +36,9 @@ public class HttpResponse {
 
     private void forward(String location) throws IOException, URISyntaxException {
         byte[] body = FileIoUtils.loadFileFromClasspath(location);
-        Path path = Paths.get(Objects.requireNonNull(FileIoUtils.class.getClassLoader().getResource(location)).toURI());
-        File file = new File(path.toString());
-        String mimeType = new Tika().detect(file);
         header.put("Location", location + "\r\n");
-        header.put(CONTENT_TYPE, mimeType + ";charset=utf-8\r\n");
+        header.put(CONTENT_TYPE, MediaType.of(ExtractInformationUtils.extractExtension(location)).getMediaType() + ";charset=utf-8\r\n");
+        System.out.println( MediaType.of(ExtractInformationUtils.extractExtension(location)));
 
         a(body);
     }
