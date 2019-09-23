@@ -25,14 +25,22 @@ public class HttpRequestBody {
     private static void parseBody(String body, Map<String, String> params) {
         String[] split = body.split(BODY_SEPARATOR);
         for (String pair : split) {
-            String[] split1 = pair.split(BODY_PAIR_SEPARATOR);
-            String key = split1[0];
-            String value = DEFAULT_VALUE;
-            if (split1.length == 2) {
-                value = split1[1];
-            }
-            params.put(key, value);
+            parseEachQuery(params, pair);
         }
+    }
+
+    private static void parseEachQuery(Map<String, String> params, String pair) {
+        String[] split1 = pair.split(BODY_PAIR_SEPARATOR);
+        String key = split1[0];
+        String value = DEFAULT_VALUE;
+        if (hasValue(split1)) {
+            value = split1[1];
+        }
+        params.put(key, value);
+    }
+
+    private static boolean hasValue(String[] split1) {
+        return split1.length == 2;
     }
 
     public static HttpRequestBody empty() {

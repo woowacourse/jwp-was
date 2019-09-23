@@ -7,7 +7,8 @@ import java.util.Map;
 
 public class HttpStartLine {
     private static final String START_LINE_SEPARATOR = " ";
-    private static final String QUERY_PARAMETER_SEPARATOR = "\\?";
+    private static final String QUERY_SEPARATOR = "\\?";
+    private static final String QUERY_PARAMETER_SEPARATOR = "=";
 
     private final HttpMethod method;
     private final String path;
@@ -28,7 +29,7 @@ public class HttpStartLine {
 
         HttpMethod httpMethod = HttpMethod.valueOf(splitStartLine[0]);
         String target = splitStartLine[1];
-        String[] splitTarget = target.split(QUERY_PARAMETER_SEPARATOR);
+        String[] splitTarget = target.split(QUERY_SEPARATOR);
         String path = splitTarget[0];
 
         if (hasQueryParams(splitTarget)) {
@@ -43,7 +44,7 @@ public class HttpStartLine {
 
     private static void parseQueryParams(Map<String, String> queryParams, String[] splitTarget) {
         for (String pair : splitTarget) {
-            String[] split1 = pair.split("=");
+            String[] split1 = pair.split(QUERY_PARAMETER_SEPARATOR);
             String key = split1[0];
             String value = "";
             if (split1.length == 2) {

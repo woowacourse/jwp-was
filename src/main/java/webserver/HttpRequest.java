@@ -5,6 +5,9 @@ import webserver.httpRequest.HttpRequestHeader;
 import webserver.httpRequest.HttpStartLine;
 
 public class HttpRequest {
+    public static final String CONTENT_LENGTH = "Content-Length";
+    public static final String CONTENT_TYPE = "Content-Type";
+
     private HttpStartLine httpStartLine;
     private HttpRequestHeader httpRequestHeader;
     private HttpRequestBody httpRequestBody;
