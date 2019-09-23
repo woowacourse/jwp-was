@@ -23,6 +23,5 @@ public class FileResourceController extends AbstractController {
         servletResponse.setUri(resource);
         servletResponse.setProtocols(HttpProtocols.HTTP1);
         servletResponse.setHttpStatus(HttpStatus.OK);
-        servletResponse.addHeader("Content-Type", "text/html");
     }
 }
