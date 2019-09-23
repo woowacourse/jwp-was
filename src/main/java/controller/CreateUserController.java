@@ -18,7 +18,7 @@ public class CreateUserController extends AbstractController {
     public void doPost(HttpRequest request, HttpResponse httpResponse) {
         saveUser(request);
         httpResponse.setHttpStatus(HttpStatus.FOUND);
-        httpResponse.response(request.getHeader(ORIGIN) + INDEX_HTML);
+        httpResponse.sendRedirect(request.getHeader(ORIGIN) + INDEX_HTML, HttpStatus.FOUND);
     }
 
     private void saveUser(HttpRequest request) {

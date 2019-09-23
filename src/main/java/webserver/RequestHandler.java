@@ -39,17 +39,19 @@ public class RequestHandler implements Runnable {
             String url = request.getPath();
             String extension = ExtractInformationUtils.extractExtension(url);
 
-            HttpResponse httpResponse = new HttpResponse(dos);
+            HttpResponse httpResponse = new HttpResponse();
+            ResponseWriter responseWriter = new ResponseWriter(dos);
 
             if (!extension.startsWith(PREFIX_SLASH)) {
                 String classPath = getClassPath(url, extension);
-                httpResponse.setHttpStatus(HttpStatus.OK);
-                httpResponse.response(classPath);
+                httpResponse.forward(classPath,HttpStatus.OK);
+                responseWriter.send(httpResponse,httpResponse.getBody());
                 return;
             }
 
             Controller controller = controllerHandler.getController(request.getPath());
             controller.service(request, httpResponse);
+            responseWriter.send(httpResponse,httpResponse.getBody());
 
         } catch (IOException e) {
             logger.error(e.getMessage());
