@@ -1,6 +1,7 @@
 package webserver.httpRequest;
 
 import org.junit.jupiter.api.Test;
+import webserver.HttpMethod;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -10,14 +11,14 @@ class HttpStartLineTest {
     void HttpStartLine생성및_GET_메서드_확인() {
         String startLine = "GET / HTTP1.1";
         HttpStartLine httpStartLine = HttpStartLine.of(startLine);
-        assertThat(httpStartLine.isGet()).isTrue();
+        assertThat(httpStartLine.checkMethod(HttpMethod.GET)).isTrue();
     }
 
     @Test
     void HttpStartLine생성및_POST_메서드_확인() {
         String startLine = "POST / HTTP1.1";
         HttpStartLine httpStartLine = HttpStartLine.of(startLine);
-        assertThat(httpStartLine.isPost()).isTrue();
+        assertThat(httpStartLine.checkMethod(HttpMethod.POST)).isTrue();
     }
 
     @Test
