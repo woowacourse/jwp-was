@@ -13,14 +13,14 @@ public abstract class AbstractController implements Controller {
         if (httpRequest.getMethod().match(HttpMethod.POST)) {
             return doPost(httpRequest);
         }
-        return HttpResponseEntity.get404Response();
+        return HttpResponseEntity.get405Response();
     }
 
     protected HttpResponseEntity doGet(HttpRequest httpRequest) {
-        return HttpResponseEntity.get404Response();
+        return HttpResponseEntity.get405Response();
     }
 
     protected HttpResponseEntity doPost(HttpRequest httpRequest) {
-        return HttpResponseEntity.get404Response();
+        return HttpResponseEntity.get405Response();
     }
 }

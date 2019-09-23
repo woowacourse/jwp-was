@@ -53,4 +53,21 @@ class HttpResponseFactoryTest {
         assertThat(httpResponse.getHeaderMessage()).isEqualTo(headers);
         assertThat(httpResponse.getBody()).isEqualTo(body);
     }
+
+    @Test
+    void Http405Response_메세지_생성() {
+        HttpResponseEntity responseEntity = HttpResponseEntity.get405Response();
+        HttpResponse httpResponse = HttpResponseFactory.makeResponse(responseEntity);
+
+        byte[] body = "405 Method Not Allowed".getBytes();
+        httpResponse.setBody(body, DEFAULT_MEDIA_TYPE);
+
+        String headers = "HTTP/1.1 405 Method Not Allowed\r\n"
+                + "Content-Type: " + DEFAULT_MEDIA_TYPE + "\r\n"
+                + "Content-Length: " + body.length + "\r\n"
+                + "\r\n";
+
+        assertThat(httpResponse.getHeaderMessage()).isEqualTo(headers);
+        assertThat(httpResponse.getBody()).isEqualTo(body);
+    }
 }

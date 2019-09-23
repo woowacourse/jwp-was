@@ -3,6 +3,8 @@ package http.response;
 import http.HttpHeaders;
 import org.junit.jupiter.api.Test;
 
+import static http.response.HttpResponseEntity.METHOD_NOT_ALLOWED_PATH;
+import static http.response.HttpResponseEntity.NOT_FOUND_PATH;
 import static http.response.HttpStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -37,6 +39,16 @@ class HttpResponseEntityTest {
 
         assertThat(httpResponseEntity.getStatus()).isEqualTo(NOT_FOUND);
         assertThat(httpResponseEntity.getHeaders()).isEqualTo(headers);
-        assertThat(httpResponseEntity.getViewTemplatePath()).isEqualTo("/error.html");
+        assertThat(httpResponseEntity.getViewTemplatePath()).isEqualTo(NOT_FOUND_PATH);
+    }
+
+    @Test
+    void Http405ResponseEntity_생성() {
+        HttpResponseEntity httpResponseEntity = HttpResponseEntity.get405Response();
+        HttpHeaders headers = new HttpHeaders();
+
+        assertThat(httpResponseEntity.getStatus()).isEqualTo(METHOD_NOT_ALLOWED);
+        assertThat(httpResponseEntity.getHeaders()).isEqualTo(headers);
+        assertThat(httpResponseEntity.getViewTemplatePath()).isEqualTo(METHOD_NOT_ALLOWED_PATH);
     }
 }

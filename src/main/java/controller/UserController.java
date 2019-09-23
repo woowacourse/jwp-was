@@ -13,6 +13,6 @@ public class UserController extends AbstractController {
         User user = new User(queryParams.getParam("userId"), queryParams.getParam("password"),
                 queryParams.getParam("name"), queryParams.getParam("email"));
         DataBase.addUser(user);
-        return HttpResponseEntity.get200Response("/index.html");
+        return HttpResponseEntity.get302Response("/index.html");
     }
 }
