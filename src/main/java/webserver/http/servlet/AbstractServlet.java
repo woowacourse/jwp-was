@@ -5,22 +5,23 @@ import webserver.http.request.HttpMethod;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public abstract class AbstractServlet implements Servlet {
+    public Map<HttpMethod, Servlet> map = new HashMap<>();
+
+    {
+        map.put(HttpMethod.GET, this::doGet);
+        map.put(HttpMethod.POST, this::doPost);
+        map.put(HttpMethod.PUT, this::doPut);
+        map.put(HttpMethod.DELETE, this::doDelete);
+    }
+
     @Override
     public void service(final HttpRequest request, final HttpResponse response) {
         final HttpMethod method = request.getMethod();
-
-        if (method == HttpMethod.GET) {
-            doGet(request, response);
-        } else if (method == HttpMethod.POST) {
-            doPost(request, response);
-        } else if (method == HttpMethod.PUT) {
-            doPut(request, response);
-        } else if (method == HttpMethod.DELETE) {
-            doDelete(request, response);
-        } else {
-            response.sendError(HttpStatus.NOT_FOUND, "not support this method");
-        }
+        map.get(method).service(request, response);
     }
 
     protected void doPost(final HttpRequest request, final HttpResponse response) {
