@@ -27,10 +27,13 @@ public final class RequestHeaderParser {
             String body = IOUtils.readData(br, requestHeader.getContentLength());
             RequestBody requestBody = RequestBody.of(body);
 
-            return HttpRequest.createWithBody(requestLine, requestHeader, requestBody);
+            return new HttpRequest.Builder()
+                    .requestHeader(requestHeader).requestLine(requestLine).requestBody(requestBody)
+                    .build();
         }
 
-        return HttpRequest.createWithoutBody(requestLine, requestHeader);
+        return new HttpRequest.Builder()
+                .requestHeader(requestHeader).requestLine(requestLine).build();
     }
 
 

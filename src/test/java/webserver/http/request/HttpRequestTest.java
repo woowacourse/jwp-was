@@ -36,7 +36,9 @@ class HttpRequestTest {
 
     @Test
     void http_request_생성_with_body() {
-        HttpRequest httpRequest = HttpRequest.createWithBody(requestLine, requestHeader, requestBody);
+        HttpRequest httpRequest = new HttpRequest.Builder()
+                .requestHeader(requestHeader).requestLine(requestLine).requestBody(requestBody)
+                .build();
 
         assertThat(httpRequest.getPath()).isEqualTo("/index.html");
         assertThat(httpRequest.getHttpMethod()).isEqualTo(HttpMethod.GET);
@@ -46,7 +48,9 @@ class HttpRequestTest {
 
     @Test
     void http_request_생성_without_body() {
-        HttpRequest httpRequest = HttpRequest.createWithoutBody(requestLine, requestHeader);
+        HttpRequest httpRequest = new HttpRequest.Builder()
+                .requestHeader(requestHeader).requestLine(requestLine)
+                .build();
 
         assertThat(httpRequest.getPath()).isEqualTo("/index.html");
         assertThat(httpRequest.getHttpMethod()).isEqualTo(HttpMethod.GET);

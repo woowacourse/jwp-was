@@ -7,24 +7,10 @@ public final class HttpRequest {
     private RequestHeader requestHeader;
     private RequestBody requestBody;
 
-    private HttpRequest(RequestLine requestLine, RequestHeader requestHeader, RequestBody requestBody) {
-        this.requestLine = requestLine;
-        this.requestHeader = requestHeader;
-        this.requestBody = requestBody;
-    }
-
-    private HttpRequest(RequestLine requestLine, RequestHeader requestHeader) {
-        this.requestLine = requestLine;
-        this.requestHeader = requestHeader;
-    }
-
-
-    static HttpRequest createWithBody(RequestLine requestLine, RequestHeader requestHeader, RequestBody requestBody) {
-        return new HttpRequest(requestLine, requestHeader, requestBody);
-    }
-
-    static HttpRequest createWithoutBody(RequestLine requestLine, RequestHeader requestHeader) {
-        return new HttpRequest(requestLine, requestHeader);
+    private HttpRequest(Builder builder) {
+        requestLine = builder.requestLine;
+        requestHeader = builder.requestHeader;
+        requestBody = builder.requestBody;
     }
 
     public boolean isSameHttpMethod(HttpMethod httpMethod) {
@@ -56,5 +42,33 @@ public final class HttpRequest {
 
     public String getVersion() {
         return requestLine.getVersion();
+    }
+
+    static final class Builder {
+        private RequestLine requestLine;
+        private RequestHeader requestHeader;
+        private RequestBody requestBody;
+
+        Builder() {
+        }
+
+        Builder requestLine(RequestLine val) {
+            requestLine = val;
+            return this;
+        }
+
+        Builder requestHeader(RequestHeader val) {
+            requestHeader = val;
+            return this;
+        }
+
+        Builder requestBody(RequestBody val) {
+            requestBody = val;
+            return this;
+        }
+
+        HttpRequest build() {
+            return new HttpRequest(this);
+        }
     }
 }
