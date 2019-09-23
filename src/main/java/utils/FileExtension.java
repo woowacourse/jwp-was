@@ -6,8 +6,8 @@ public enum FileExtension {
 	HTML("html", "./templates"),
 	ETC("etc", "./static");
 
-	private String fileExtension;
-	private String filePath;
+	private final String fileExtension;
+	private final String filePath;
 
 	FileExtension(String fileExtension, String filePath) {
 		this.fileExtension = fileExtension;
