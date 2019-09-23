@@ -17,9 +17,9 @@ public class HttpResponse {
 	}
 
 	public void sendRedirect(DataOutputStream dos) throws IOException {
-		dos.writeBytes(header.get("Http") + " " + header.get("Code") + " "
-				+ header.get("Description") + "\r\n");
-		dos.writeBytes("Location: " + header.get("Location") + "\r\n");
+		dos.writeBytes(String.format("%s %s %s\r\n", header.get("Http"), header.get("Code")
+				, header.get("Description")));
+		dos.writeBytes(String.format("Location: %s\r\n", header.get("Location")));
 		dos.writeBytes("\r\n");
 		dos.flush();
 	}
