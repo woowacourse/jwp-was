@@ -1,20 +1,28 @@
 package model;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class RequestTest {
-    private String testDirectory = "./src/test/resources/";
-
     @Test
+    @DisplayName("Post 요청을 보냈을 때")
     void request_POST() throws IOException {
-        InputStream in = new FileInputStream(new File(testDirectory + "Http_POST.txt"));
+        String header = "POST /user/create HTTP/1.1\n" +
+                "Host: localhost:8080\n" +
+                "Connection: keep-alive\n" +
+                "Content-Length: 46\n" +
+                "Content-Type: application/x-www-form-urlencoded\n" +
+                "Accept: */*\n" +
+                "\n" +
+                "userId=javajigi&password=password&name=JaeSung";
+
+        InputStream in = new ByteArrayInputStream(header.getBytes());
         RequestParser requestParser = new RequestParser(in);
         Request request = new Request(requestParser.getHeaderInfo(), requestParser.getParameter());
 
@@ -25,8 +33,13 @@ class RequestTest {
     }
 
     @Test
+    @DisplayName("Get 요청을 보냈을 때")
     void request_GET() throws Exception {
-        InputStream in = new FileInputStream(new File(testDirectory + "Http_GET.txt"));
+        String header = "GET /user/create?userId=javajigi&password=password&name=JaeSung HTTP/1.1 \n" +
+                "Host: localhost:8080 \n" +
+                "Connection: keep-alive \n" +
+                "Accept: */*";
+        InputStream in = new ByteArrayInputStream(header.getBytes());
         RequestParser requestParser = new RequestParser(in);
         Request request = new Request(requestParser.getHeaderInfo(), requestParser.getParameter());
 
@@ -35,8 +48,18 @@ class RequestTest {
     }
 
     @Test
+    @DisplayName("다른 Post 요청을 보냈을 때")
     void request_POST2() throws Exception {
-        InputStream in = new FileInputStream(new File(testDirectory + "Http_POST2.txt"));
+        String header = "POST /user/create?id=1 HTTP/1.1\n" +
+                "Host: localhost:8080\n" +
+                "Connection: keep-alive\n" +
+                "Content-Length: 46\n" +
+                "Content-Type: application/x-www-form-urlencoded\n" +
+                "Accept: */*\n" +
+                "\n" +
+                "userId=javajigi&password=password&name=JaeSung";
+
+        InputStream in = new ByteArrayInputStream(header.getBytes());
         RequestParser requestParser = new RequestParser(in);
         Request request = new Request(requestParser.getHeaderInfo(), requestParser.getParameter());
 
