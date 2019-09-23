@@ -50,7 +50,7 @@ public class ResponseMessageConverter {
         if (!response.hasResource()) {
             return;
         }
-        String resource = response.getUri();
+        String resource = response.getView();
         ContentType contentType = getExtension(resource);
         byte[] body = getFileResource(contentType, resource);
         writeBody(dos, contentType, body);

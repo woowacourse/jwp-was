@@ -1,8 +1,13 @@
 package http.controller;
 
+import db.DataBase;
 import http.model.request.ServletRequest;
 import http.model.response.ServletResponse;
 import http.supoort.RequestMapping;
+import model.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserListController extends AbstractController {
     public UserListController(RequestMapping mapping) {
@@ -19,6 +24,8 @@ public class UserListController extends AbstractController {
             servletResponse.redirect("/index.html");
             return;
         }
+
+        List<User> users = new ArrayList<>(DataBase.findAll());
 
     }
 }

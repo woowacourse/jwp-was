@@ -28,7 +28,7 @@ class FileResourceControllerTest {
         controller.handle(request, response);
 
         assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getUri()).isNotEmpty();
+        assertThat(response.getView()).isNotEmpty();
         assertThat(response.getHeader("Content-Type")).isEqualTo("text/html");
     }
 }

@@ -44,7 +44,7 @@ class HttpRequestControllersTest {
         handlers.doService(request, response);
 
         assertThat(response.getHttpStatus()).isNotNull();
-        assertThat(response.getUri()).isEqualTo("/index.html");
+        assertThat(response.getView()).isEqualTo("/index.html");
     }
 
     @Test

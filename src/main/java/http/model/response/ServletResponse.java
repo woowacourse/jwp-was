@@ -2,7 +2,6 @@ package http.model.response;
 
 import http.model.common.HttpHeaders;
 import http.model.common.HttpProtocols;
-import http.model.request.HttpUri;
 
 import java.io.OutputStream;
 import java.util.Map;
@@ -14,7 +13,7 @@ public class ServletResponse {
     private HttpProtocols protocols;
     private HttpStatus httpStatus;
     private HttpHeaders httpHeaders;
-    private HttpUri uri;
+    private String view;
 
     public ServletResponse(OutputStream outputStream) {
         this.outputStream = outputStream;
@@ -24,7 +23,7 @@ public class ServletResponse {
 
     public void ok(String resource) {
         this.httpStatus = HttpStatus.OK;
-        this.uri = new HttpUri(resource);
+        this.view = resource;
     }
 
     public void addHeader(String key, String value) {
@@ -45,19 +44,19 @@ public class ServletResponse {
     }
 
     public boolean hasResource() {
-        return uri != null;
+        return view != null;
     }
 
     public OutputStream getOutputStream() {
         return outputStream;
     }
 
-    public String getUri() {
-        return uri.getResourceLocation();
+    public String getView() {
+        return view;
     }
 
-    public void setUri(String uri) {
-        this.uri = new HttpUri(uri);
+    public void setView(String view) {
+        this.view = view;
     }
 
     public String getHeader(String key) {
