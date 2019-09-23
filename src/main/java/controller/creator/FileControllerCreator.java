@@ -1,13 +1,13 @@
 package controller.creator;
 
 import controller.Controller;
-import controller.GetFileController;
+import controller.FileController;
 import http.request.Request;
 
-public class GetFileControllerCreator implements ControllerCreator {
+public class FileControllerCreator implements ControllerCreator {
 
     @Override
     public Controller createController(Request request) {
-        return new GetFileController();
+        return new FileController();
     }
 }

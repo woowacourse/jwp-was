@@ -1,6 +1,5 @@
 package controller;
 
-import controller.creator.GetFileControllerCreator;
 import http.request.Request;
 import http.request.RequestInformation;
 import http.request.RequestMethod;
@@ -29,7 +28,7 @@ public class ControllerFactoryTest {
         Request request = new Request(method, url, requestInformation);
 
         ControllerFactory factory = new ControllerFactory();
-        assertThat(factory.createController(request).getClass()).isEqualTo(GetFileController.class);
+        assertThat(factory.createController(request).getClass()).isEqualTo(FileController.class);
     }
 
     @Test
@@ -52,6 +51,6 @@ public class ControllerFactoryTest {
         Request request = new Request(method, url, requestInformation);
 
         ControllerFactory factory = new ControllerFactory();
-        assertThat(factory.createController(request).getClass()).isEqualTo(PostUserController.class);
+        assertThat(factory.createController(request).getClass()).isEqualTo(UserController.class);
     }
 }

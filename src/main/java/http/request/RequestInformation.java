@@ -26,14 +26,6 @@ public class RequestInformation {
         return tokenize()[1];
     }
 
-    public String extractPatternPath() {
-        return requestUrlPatterns
-                .stream()
-                .filter(pattern -> tokenize()[1].contains(pattern))
-                .findFirst()
-                .orElseThrow(IllegalArgumentException::new);
-    }
-
     private String[] tokenize() {
         String requestLine = requestInformation.get("Request-Line:");
         return requestLine.split(DELIMITER);

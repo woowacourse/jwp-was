@@ -39,10 +39,8 @@ public class RequestHandler implements Runnable {
 
             DataOutputStream dos = new DataOutputStream(out);
             response.doResponse(dos);
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             log.error(e.getMessage());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
         }
     }
 }

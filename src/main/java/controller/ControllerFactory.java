@@ -1,8 +1,8 @@
 package controller;
 
 import controller.creator.ControllerCreator;
-import controller.creator.GetFileControllerCreator;
-import controller.creator.PostUserControllerCreator;
+import controller.creator.FileControllerCreator;
+import controller.creator.UserControllerCreator;
 import http.request.Request;
 
 import java.util.HashMap;
@@ -14,8 +14,8 @@ public class ControllerFactory {
 
     private void initialize() {
         controllerCreators = new HashMap<>();
-        controllerCreators.put("POST /user/create", new PostUserControllerCreator());
-        controllerCreators.put("FILE", new GetFileControllerCreator());
+        controllerCreators.put("POST /user/create", new UserControllerCreator());
+        controllerCreators.put("FILE", new FileControllerCreator());
     }
 
 

@@ -16,7 +16,7 @@ public class AbstractController implements Controller {
             createGetResponse(request);
             createPostResponse(request);
         }
-        return new GetFileController().createResponse(request);
+        return new FileController().createResponse(request);
     }
 
     public Response createGetResponse(Request request) {

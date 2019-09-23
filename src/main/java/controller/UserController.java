@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PostUserController extends AbstractController {
+public class UserController extends AbstractController {
     private UserService userService = UserService.getInstance();
 
     @Override
@@ -22,7 +22,7 @@ public class PostUserController extends AbstractController {
         if (isMapping(request)) {
             return createPostResponse(request);
         }
-        return new GetFileController().createResponse(request);
+        return new FileController().createResponse(request);
     }
 
     @Override
