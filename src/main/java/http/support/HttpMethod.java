@@ -1,4 +1,4 @@
-package webserver;
+package http.support;
 
 public enum HttpMethod {
     POST("POST"),

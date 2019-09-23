@@ -1,7 +1,8 @@
-package webserver;
+package http.response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import http.Request.RequestHandler;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -16,7 +17,7 @@ public class ResponseWriter {
         this.dos = dos;
     }
 
-    public void send(HttpResponse response, byte[] body) {
+    public void send(Response response, byte[] body) {
         try {
             writeResponse(response);
             responseBody(body);
@@ -34,7 +35,7 @@ public class ResponseWriter {
         }
     }
 
-    private void writeResponse(HttpResponse response) throws IOException {
+    private void writeResponse(Response response) throws IOException {
         for (String key : response.getKeySet()) {
             if (key.equals(STATUS)) {
                 dos.writeBytes(response.getHeader(key));

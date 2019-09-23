@@ -1,9 +1,13 @@
-package webserver;
+package http.Request;
 
 import controller.Controller;
+import http.response.Response;
+import http.response.ResponseWriter;
+import http.support.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.ExtractInformationUtils;
+import controller.ControllerHandler;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -34,24 +38,24 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             DataOutputStream dos = new DataOutputStream(out);
             RequestParser requestParser = new RequestParser(in);
-            HttpRequest request = new HttpRequest(requestParser.getHeaderInfo(), requestParser.getParameter());
+            Request request = new Request(requestParser.getHeaderInfo(), requestParser.getParameter());
 
             String url = request.getPath();
             String extension = ExtractInformationUtils.extractExtension(url);
 
-            HttpResponse httpResponse = new HttpResponse();
+            Response response = new Response();
             ResponseWriter responseWriter = new ResponseWriter(dos);
 
             if (!extension.startsWith(PREFIX_SLASH)) {
                 String classPath = getClassPath(url, extension);
-                httpResponse.forward(classPath,HttpStatus.OK);
-                responseWriter.send(httpResponse,httpResponse.getBody());
+                response.forward(classPath, HttpStatus.OK);
+                responseWriter.send(response, response.getBody());
                 return;
             }
 
             Controller controller = controllerHandler.getController(request.getPath());
-            controller.service(request, httpResponse);
-            responseWriter.send(httpResponse,httpResponse.getBody());
+            controller.service(request, response);
+            responseWriter.send(response, response.getBody());
 
         } catch (IOException e) {
             logger.error(e.getMessage());

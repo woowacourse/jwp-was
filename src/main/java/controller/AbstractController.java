@@ -1,25 +1,25 @@
 package controller;
 
-import webserver.HttpMethod;
-import webserver.HttpRequest;
-import webserver.HttpResponse;
+import http.support.HttpMethod;
+import http.Request.Request;
+import http.response.Response;
 
 public abstract class AbstractController implements Controller {
     @Override
-    public void service(HttpRequest request, HttpResponse httpResponse) {
+    public void service(Request request, Response response) {
         if (request.getMethod().contains(HttpMethod.POST.name())) {
-            doPost(request, httpResponse);
+            doPost(request, response);
         }
         if (request.getMethod().contains(HttpMethod.GET.name())) {
-            doGet(request, httpResponse);
+            doGet(request, response);
         }
     }
 
-    public void doPost(HttpRequest request, HttpResponse httpResponse) {
-        httpResponse.response405();
+    public void doPost(Request request, Response response) {
+        response.response405();
     }
 
-    public void doGet(HttpRequest request, HttpResponse httpResponse) {
-        httpResponse.response405();
+    public void doGet(Request request, Response response) {
+        response.response405();
     }
 }

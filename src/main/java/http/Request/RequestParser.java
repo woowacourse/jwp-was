@@ -1,5 +1,6 @@
-package webserver;
+package http.Request;
 
+import http.support.HttpMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.ExtractInformationUtils;

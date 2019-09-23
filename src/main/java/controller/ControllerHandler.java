@@ -1,7 +1,5 @@
-package webserver;
+package controller;
 
-import controller.Controller;
-import controller.CreateUserController;
 import exception.NotFoundUrlException;
 
 import java.util.HashMap;

@@ -2,8 +2,8 @@ package model;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import webserver.HttpRequest;
-import webserver.RequestParser;
+import http.Request.Request;
+import http.Request.RequestParser;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -11,7 +11,7 @@ import java.io.InputStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class HttpRequestTest {
+class RequestTest {
     @Test
     @DisplayName("Post 요청을 보냈을 때")
     void request_POST() throws IOException {
@@ -26,7 +26,7 @@ class HttpRequestTest {
 
         InputStream in = new ByteArrayInputStream(header.getBytes());
         RequestParser requestParser = new RequestParser(in);
-        HttpRequest request = new HttpRequest(requestParser.getHeaderInfo(), requestParser.getParameter());
+        Request request = new Request(requestParser.getHeaderInfo(), requestParser.getParameter());
 
         assertThat(request.getMethod()).isEqualTo("POST");
         assertThat(request.getHeader("Connection")).isEqualTo("keep-alive");
@@ -43,7 +43,7 @@ class HttpRequestTest {
                 "Accept: */*";
         InputStream in = new ByteArrayInputStream(header.getBytes());
         RequestParser requestParser = new RequestParser(in);
-        HttpRequest request = new HttpRequest(requestParser.getHeaderInfo(), requestParser.getParameter());
+        Request request = new Request(requestParser.getHeaderInfo(), requestParser.getParameter());
 
         assertThat(request.getMethod()).isEqualTo("GET");
         assertThat(request.getHeader("Connection")).isEqualTo("keep-alive");
@@ -63,7 +63,7 @@ class HttpRequestTest {
 
         InputStream in = new ByteArrayInputStream(header.getBytes());
         RequestParser requestParser = new RequestParser(in);
-        HttpRequest request = new HttpRequest(requestParser.getHeaderInfo(), requestParser.getParameter());
+        Request request = new Request(requestParser.getHeaderInfo(), requestParser.getParameter());
 
         assertThat(request.getMethod()).isEqualTo("POST");
         assertThat(request.getPath()).isEqualTo("/user/create");

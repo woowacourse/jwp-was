@@ -1,14 +1,15 @@
-package webserver;
+package http.response;
 
 import enumType.MediaType;
 import utils.ExtractInformationUtils;
 import utils.FileIoUtils;
+import http.support.HttpStatus;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class HttpResponse {
+public class Response {
 
     private static final String CONTENT_TYPE = "Content-Type";
     private static final String CONTENT_LENGTH = "Content-Length";
@@ -20,7 +21,7 @@ public class HttpResponse {
     private Map<String, String> header;
     private byte[] body;
 
-    public HttpResponse() {
+    public Response() {
         header = new LinkedHashMap<>();
     }
 
