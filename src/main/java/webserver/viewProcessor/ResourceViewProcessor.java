@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class ResourceViewProcessor implements ViewProcessor {
+
+    private static final String STATIC_FILE_ROUTE = "./static";
+
     @Override
     public boolean isSupported(String viewName) {
         return true;
@@ -20,7 +23,7 @@ public class ResourceViewProcessor implements ViewProcessor {
     public void process(DataOutputStream dos, String viewName) {
         HttpResponse httpResponse = new HttpResponse();
         ResponseProcessor responseProcessor = ResponseProcessor.getInstance();
-        String filePath = "./static" + viewName;
+        String filePath = STATIC_FILE_ROUTE + viewName;
         try {
             byte[] bytes = FileIoUtils.loadFileFromClasspath(filePath);
             String type = MimeType.values(filePath);

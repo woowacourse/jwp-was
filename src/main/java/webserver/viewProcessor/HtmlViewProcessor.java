@@ -12,6 +12,8 @@ import java.net.URISyntaxException;
 
 public class HtmlViewProcessor implements ViewProcessor {
 
+    private static final String HTML_ROUTE = "./templates";
+
     @Override
     public boolean isSupported(String viewName) {
         return viewName.endsWith(".html");
@@ -21,7 +23,7 @@ public class HtmlViewProcessor implements ViewProcessor {
     public void process(DataOutputStream dos, String viewName) {
         HttpResponse httpResponse = new HttpResponse();
         ResponseProcessor responseProcessor = ResponseProcessor.getInstance();
-        String filePath = "./templates" + viewName;
+        String filePath = HTML_ROUTE + viewName;
         try {
             byte[] bytes = FileIoUtils.loadFileFromClasspath(filePath);
             String type = MimeType.values(filePath);
