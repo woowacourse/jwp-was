@@ -1,5 +1,7 @@
 package webserver.servlet;
 
+import helper.IOHelper;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import utils.FileIoUtils;
 import webserver.parser.HttpRequestParser;
@@ -21,12 +23,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static utils.HttpRequestUtils.generateTemplateFilePath;
 
 class HomeServletTest {
-    private String testDirectory = "./src/test/resources/";
-
+    @DisplayName("루트로 get요청")
     @Test
-    void doGet() throws IOException, URISyntaxException {
-        InputStream inputStream = new FileInputStream(new File(testDirectory + "request_root_test.txt"));
-        HttpRequest httpRequest = HttpRequestParser.parse(new BufferedReader(new InputStreamReader(inputStream)));
+    void doGet_rootGetRequest_ok() throws IOException, URISyntaxException {
+        BufferedReader bufferedReader = new BufferedReader(IOHelper.createBuffer(
+                "GET / HTTP/1.1",
+                "Host: localhost:8080",
+                "Connection: keep-alive",
+                "Accept: text/html,*/*"
+
+        ));
+        HttpRequest httpRequest = HttpRequestParser.parse(bufferedReader);
         HomeServlet homeServlet = new HomeServlet();
         String filePath = generateTemplateFilePath(httpRequest.getAbsPath() + "index.html");
         byte[] body = FileIoUtils.loadFileFromClasspath(filePath);

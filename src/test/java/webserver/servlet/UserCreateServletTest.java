@@ -1,5 +1,7 @@
 package webserver.servlet;
 
+import helper.IOHelper;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import webserver.parser.HttpRequestParser;
 import webserver.request.HttpRequest;
@@ -18,12 +20,20 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UserCreateServletTest {
-    private String testDirectory = "./src/test/resources/";
-
+    @DisplayName("유저 생성")
     @Test
     void doPost() throws IOException {
-        InputStream inputStream = new FileInputStream(new File(testDirectory + "request_form_post_test.txt"));
-        HttpRequest httpRequest = HttpRequestParser.parse(new BufferedReader(new InputStreamReader(inputStream)));
+        BufferedReader bufferedReader = IOHelper.createBuffer(
+                "POST /user/create HTTP/1.1",
+                "Host: localhost:8080",
+                "Connection: keep-alive",
+                "Content-Length: 59",
+                "Content-Type: application/x-www-form-urlencoded",
+                "Accept: text/html,*/*",
+                "",
+                "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net"
+        );
+        HttpRequest httpRequest = HttpRequestParser.parse(bufferedReader);
         UserCreateServlet userCreateServlet = new UserCreateServlet();
         byte[] body = null;
         Map<String, Object> header = new HashMap<>();

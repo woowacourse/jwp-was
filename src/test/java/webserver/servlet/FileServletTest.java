@@ -1,5 +1,7 @@
 package webserver.servlet;
 
+import helper.IOHelper;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import utils.FileIoUtils;
 import webserver.parser.HttpRequestParser;
@@ -22,18 +24,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FileServletTest {
-    private String testDirectory = "./src/test/resources/";
-
+    @DisplayName("정적 html파일 가져오기")
     @Test
-    void run () throws IOException, URISyntaxException {
-        InputStream inputStream = new FileInputStream(new File(testDirectory + "request_index_test.txt"));
-        HttpRequest httpRequest = HttpRequestParser.parse(new BufferedReader(new InputStreamReader(inputStream)));
+    void run_httpFileRequest_ok() throws IOException, URISyntaxException {
+        BufferedReader bufferedReader = IOHelper.createBuffer(
+                "GET /index.html HTTP/1.1",
+                "Host: localhost:8080",
+                "Connection: keep-alive",
+                "Accept: text/html,*/*"
+        );
+        HttpRequest httpRequest = HttpRequestParser.parse(bufferedReader);
         FileServlet fileServlet = new FileServlet();
         byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getFilePath());
         HttpResponse httpResponse = fileServlet.run(httpRequest);
         Map<String, Object> header = new HashMap<>();
         header.put("Content-Length", body.length);
         header.put("Content-Type", FileIoUtils.loadMIMEFromClasspath(httpRequest.getFilePath()));
-        assertThat(httpResponse).isEqualTo(new HttpResponse(HttpStatus.OK,header, body));
+        assertThat(httpResponse).isEqualTo(new HttpResponse(HttpStatus.OK, header, body));
     }
 }
