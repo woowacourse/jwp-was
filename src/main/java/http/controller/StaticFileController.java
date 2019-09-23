@@ -1,6 +1,6 @@
 package http.controller;
 
-import http.exception.FileNotFoundException;
+import http.exception.NotFoundException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
@@ -25,7 +25,7 @@ public class StaticFileController extends AbstractController {
             httpResponse.setResponseBody(body, httpRequest.getPath());
         } catch (java.io.FileNotFoundException e) {
             logger.debug(e.getMessage());
-            throw new FileNotFoundException("파일을 찾을 수 없습니다.");
+            throw new NotFoundException("파일을 찾을 수 없습니다.");
         }
         catch (URISyntaxException | IOException e) {
             logger.debug(e.getMessage());
