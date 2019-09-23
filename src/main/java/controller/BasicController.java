@@ -11,17 +11,19 @@ import java.net.URISyntaxException;
 public abstract class BasicController implements Controller {
 
     @Override
-    public HttpResponse service(HttpRequest request, HttpResponse response) throws IOException, URISyntaxException {
+    public void service(HttpRequest request, HttpResponse response) throws IOException, URISyntaxException {
         if (HttpMethodType.GET.equals(request.getHttpMethod())) {
-            return doGet(request, response);
+            doGet(request, response);
+            return;
         }
         if (HttpMethodType.POST.equals(request.getHttpMethod())) {
-            return doPost(request, response);
+            doPost(request, response);
+            return;
         }
         throw new NotSupportedHttpMethodException();
     }
 
-    public abstract HttpResponse doGet(HttpRequest request, HttpResponse response) throws IOException, URISyntaxException;
+    public abstract void doGet(HttpRequest request, HttpResponse response) throws IOException, URISyntaxException;
 
-    public abstract HttpResponse doPost(HttpRequest request, HttpResponse response) throws IOException;
+    public abstract void doPost(HttpRequest request, HttpResponse response) throws IOException;
 }

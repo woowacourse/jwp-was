@@ -13,25 +13,21 @@ public class UserController extends BasicController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     @Override
-    public HttpResponse doGet(HttpRequest request, HttpResponse response) {
+    public void doGet(HttpRequest request, HttpResponse response) {
         if (request.hasParameters()) {
             DataBase.addUser(createUser(request));
             response.redirectResponse("/index.html");
         }
-        return response;
     }
 
     @Override
-    public HttpResponse doPost(HttpRequest request, HttpResponse response) {
+    public void doPost(HttpRequest request, HttpResponse response) {
         log.debug("{}", request.hasBody());
 
         if (request.hasBody()) {
             DataBase.addUser(createUser(request.convertBodyToMap()));
-//            response.addHeader(Arrays.asList("Location: /index.html\r\n"));
             response.redirectResponse("/index.html");
         }
-
-        return response;
     }
 
     private User createUser(HttpRequest request) {

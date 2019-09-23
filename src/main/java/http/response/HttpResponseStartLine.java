@@ -9,10 +9,9 @@ public class HttpResponseStartLine {
         this.version = version;
     }
 
-    @Override
-    public String toString() {
+    public String convertLineToString() {
         return version + " "
                 + statusCode.getStatusValue() + " "
-                + statusCode.name();
+                + statusCode.getStatus();
     }
 }

@@ -39,9 +39,17 @@ public class HttpResponse {
         this.body = new byte[]{};
     }
 
+    public void badRequest() {
+        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.BAD_REQUEST, "HTTP/1.1");
+    }
+
+    public void notFound() {
+        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.NOT_FOUND, "HTTP/1.1");
+    }
+
     private void writeStartLine(DataOutputStream dos) throws IOException {
-        logger.debug("{}", httpResponseStartLine.toString() + "\r\n");
-        String line = httpResponseStartLine.toString();
+        logger.debug("{}", httpResponseStartLine.convertLineToString() + "\r\n");
+        String line = httpResponseStartLine.convertLineToString();
         dos.writeBytes(line + "\r\n");
     }
 
@@ -71,5 +79,4 @@ public class HttpResponse {
         writeHeader(dos);
         writeBody(dos);
     }
-
 }

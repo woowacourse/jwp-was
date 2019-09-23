@@ -47,4 +47,9 @@ public class HttpRequest {
     public HttpBody getBody() {
         return httpBody;
     }
+
+    public boolean isFileRequest() {
+        return getPath().contains(".");
+    }
+
 }

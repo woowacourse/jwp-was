@@ -3,6 +3,7 @@ package controller;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import utils.FileIoUtils;
+import webserver.BadRequestException;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -10,7 +11,7 @@ import java.net.URISyntaxException;
 public class FileController extends BasicController {
 
     @Override
-    public HttpResponse doGet(HttpRequest request, HttpResponse response) throws IOException, URISyntaxException {
+    public void doGet(HttpRequest request, HttpResponse response) throws IOException, URISyntaxException {
         byte[] body;
 
         body = FileIoUtils.loadFileFromClasspath(String.format("./templates%s", request.getPath()));
@@ -19,21 +20,19 @@ public class FileController extends BasicController {
         // html 찾기;
         if (body != null) {
             response.okResponse(contentType,body);
-            return response;
+            return;
         }
 
         //css,js 찾기
         body = FileIoUtils.loadFileFromClasspath(String.format("./static%s", request.getPath()));
         if (body == null) {
-            return null;
+            return;
         }
         response.okResponse(contentType, body);
-
-        return response;
     }
 
     @Override
-    public HttpResponse doPost(HttpRequest request, HttpResponse response) throws IOException {
-        return null;
+    public void doPost(HttpRequest request, HttpResponse response) {
+        throw new BadRequestException();
     }
 }
