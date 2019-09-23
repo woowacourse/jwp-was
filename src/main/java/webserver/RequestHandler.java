@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Optional;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -61,8 +62,13 @@ public class RequestHandler implements Runnable {
             return;
         }
 
-        Controller controller = controllerHandler.getController(request.getPath());
-        controller.service(request, response);
+        Optional<Controller> controller = controllerHandler.getController(request.getPath());
+        if (controller.isPresent()) {
+            controller.get().service(request, response);
+            return;
+        }
+
+        response.notfound();
     }
 
     private String getClassPath(String url, String extension) {

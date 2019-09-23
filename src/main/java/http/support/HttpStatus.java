@@ -3,8 +3,8 @@ package http.support;
 public enum HttpStatus {
     OK(200, "OK"),
     FOUND(302, "Found"),
-    METHOD_NOT_ALLOWED(405, "Method Not Allowed");
-
+    METHOD_NOT_ALLOWED(405, "Method Not Allowed"),
+    NOT_FOUND(404, "Not Found");
 
     private final int statusCode;
     private final String message;

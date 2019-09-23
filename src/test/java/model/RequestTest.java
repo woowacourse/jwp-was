@@ -2,8 +2,8 @@ package model;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import http.Request.Request;
-import http.Request.RequestParser;
+import http.request.Request;
+import http.request.RequestParser;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

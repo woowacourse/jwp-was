@@ -4,6 +4,7 @@ import exception.NotFoundUrlException;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class ControllerHandler {
     private static final String USER_CREATE_URL = "/user/create";
@@ -15,11 +16,11 @@ public class ControllerHandler {
         controllers.put(USER_CREATE_URL, new CreateUserController());
     }
 
-    public Controller getController(String url) {
+    public Optional<Controller> getController(String url) {
         if (!controllers.containsKey(url)) {
-            throw new NotFoundUrlException();
+            return Optional.empty();
         }
 
-        return controllers.get(url);
+        return Optional.of(controllers.get(url));
     }
 }

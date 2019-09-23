@@ -13,7 +13,6 @@ public class Response {
     private static final String CONTENT_TYPE = "Content-Type";
     private static final String CONTENT_LENGTH = "Content-Length";
     private static final String LOCATION = "Location";
-    private static final String STATUS = "Status";
 
     private static final String LOCATION_FORMAT = "%s\r\n";
     private static final String CONTENT_TYPE_FORMAT = "%s;charset=utf-8\r\n";
@@ -69,5 +68,9 @@ public class Response {
 
     private void setBody(byte[] body) {
         this.body = body;
+    }
+
+    public void notfound() {
+        setHttpStatus(HttpStatus.NOT_FOUND);
     }
 }
