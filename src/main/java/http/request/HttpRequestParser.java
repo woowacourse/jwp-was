@@ -13,61 +13,54 @@ import java.util.List;
 
 public class HttpRequestParser {
     private static final String BLANK = " ";
-    private static final String CONTENT_LENGTH = "Content-Length";
+    private static final String QUERY_STRING_DELIMITER = "\\?";
 
     public static HttpRequest parse(final InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-        String[] startLine = bufferedReader.readLine().split(BLANK);
-        HttpMethod httpMethod = HttpMethod.valueOf(startLine[0]);
 
-        if (httpMethod == HttpMethod.GET) {
-            return parseGet(bufferedReader, httpMethod, startLine[1], startLine[2]);
-        } else if (httpMethod == HttpMethod.POST || httpMethod == HttpMethod.PUT) {
-            return parsePost(bufferedReader, httpMethod, startLine[1], startLine[2]);
-        }
+        RequestLine requestLine = parseRequestLine(bufferedReader.readLine());
+        HttpRequestParams requestParams = parseQueryParams(requestLine);
+        HttpHeader httpHeader = parseRequestHeader(convertHeaderLines(bufferedReader));
+        HttpRequestBody httpRequestBody = parseRequestBody(bufferedReader, httpHeader.getContentLength());
 
-        throw new IllegalArgumentException();
+        return new HttpRequest(requestLine, requestParams, httpHeader, httpRequestBody);
     }
 
-    private static HttpRequest parseGet(final BufferedReader bufferedReader, final HttpMethod method,
-                                        final String requestPath, final String version) throws IOException {
-        String[] tokens = requestPath.split("\\?");
-        Url url = new Url(tokens[0]);
-        HttpVersion httpVersion = HttpVersion.of(version);
-        HttpHeader httpHeader = HttpHeader.of(convertHeaderLines(bufferedReader));
-        HttpRequestParams httpRequestParams = extractQueryParams(tokens);
+    private static RequestLine parseRequestLine(String requestLine) {
+        String[] startLine = requestLine.split(BLANK);
 
-        return new HttpRequest(url, method, httpVersion, httpRequestParams, httpHeader);
+        return new RequestLine(
+                new Url(startLine[1]),
+                HttpMethod.valueOf(startLine[0]),
+                HttpVersion.of(startLine[2]));
     }
 
+    private static HttpHeader parseRequestHeader(List<String> rawHeaderLines) {
+        return HttpHeader.of(rawHeaderLines);
+    }
 
-    private static HttpRequestParams extractQueryParams(final String[] tokens) {
+    private static HttpRequestParams parseQueryParams(final RequestLine requestLine) {
+        String[] tokens = requestLine.getUrl().getUrl().split(QUERY_STRING_DELIMITER);
+
         if (tokens.length == 2) {
             return HttpRequestParams.of(tokens[1]);
         }
         return HttpRequestParams.init();
     }
 
-    private static HttpRequest parsePost(final BufferedReader bufferedReader, final HttpMethod method,
-                                         final String requestPath, final String version) throws IOException {
-        Url url = new Url(requestPath);
-        HttpVersion httpVersion = HttpVersion.of(version);
-        HttpHeader httpHeader = HttpHeader.of(convertHeaderLines(bufferedReader));
-        HttpRequestParams httpRequestParams = HttpRequestParams.of(
-                IOUtils.readData(bufferedReader, Integer.parseInt(httpHeader.get(CONTENT_LENGTH)))
-        );
-
-        return new HttpRequest(url, method, httpVersion, httpRequestParams, httpHeader);
-    }
-
     private static List<String> convertHeaderLines(final BufferedReader bufferedReader) throws IOException {
         List<String> headerLines = new ArrayList<>();
         String line;
 
-        while (!(line = bufferedReader.readLine()).equals("")) {
+        while (!(line = bufferedReader.readLine()).equals("") && line != null) {
             headerLines.add(line);
         }
 
         return headerLines;
+    }
+
+    private static HttpRequestBody parseRequestBody(BufferedReader bufferedReader,
+                                                    int contentLength) throws IOException {
+        return new HttpRequestBody(IOUtils.readData(bufferedReader, contentLength));
     }
 }

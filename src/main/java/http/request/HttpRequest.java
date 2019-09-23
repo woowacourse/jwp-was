@@ -1,37 +1,25 @@
 package http.request;
 
 import http.common.HttpHeader;
-import http.common.HttpVersion;
 
 public class HttpRequest {
-    private Url url;
-    private HttpMethod httpMethod;
-    private HttpVersion httpVersion;
-    private HttpRequestParams httpRequestParams;
-    private HttpHeader httpHeader;
+    private final RequestLine requestLine;
+    private final HttpRequestParams httpRequestParams;
+    private final HttpHeader httpHeader;
+    private final HttpRequestBody httpRequestBody;
 
-    public HttpRequest(final Url url,
-                       final HttpMethod httpMethod,
-                       final HttpVersion httpVersion,
+    public HttpRequest(final RequestLine requestLine,
                        final HttpRequestParams httpRequestParams,
-                       final HttpHeader httpHeader) {
-        this.url = url;
-        this.httpMethod = httpMethod;
-        this.httpVersion = httpVersion;
+                       final HttpHeader httpHeader,
+                       final HttpRequestBody httpRequestBody) {
+        this.requestLine = requestLine;
         this.httpRequestParams = httpRequestParams;
         this.httpHeader = httpHeader;
+        this.httpRequestBody = httpRequestBody;
     }
 
-    public String getUrl() {
-        return url.getFullUrl();
-    }
-
-    public HttpMethod getHttpMethod() {
-        return httpMethod;
-    }
-
-    public HttpVersion getHttpVersion() {
-        return httpVersion;
+    public RequestLine getRequestLine() {
+        return requestLine;
     }
 
     public HttpRequestParams getHttpRequestParams() {
@@ -42,14 +30,7 @@ public class HttpRequest {
         return httpHeader;
     }
 
-    @Override
-    public String toString() {
-        return "HttpRequest{" +
-                "url=" + url +
-                ", httpMethod=" + httpMethod +
-                ", httpVersion=" + httpVersion +
-                ", httpRequestParams=" + httpRequestParams +
-                ", httpHeader=" + httpHeader +
-                '}';
+    public HttpRequestBody getHttpRequestBody() {
+        return httpRequestBody;
     }
 }

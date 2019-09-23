@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 public class HttpHeader {
     private static final String HEADER_LINE_DELIMITER = ": ";
+    private static final String CONTENT_LENGTH = "Content-Length";
 
     private Map<String, String> headers;
 
@@ -17,8 +18,8 @@ public class HttpHeader {
     public static HttpHeader of(final List<String> headerLines) {
         return new HttpHeader(
                 headerLines.stream()
-                    .map(line -> line.split(HEADER_LINE_DELIMITER))
-                    .collect(Collectors.toMap(token -> token[0], token -> token[1]))
+                        .map(line -> line.split(HEADER_LINE_DELIMITER))
+                        .collect(Collectors.toMap(token -> token[0], token -> token[1]))
         );
     }
 
@@ -28,6 +29,14 @@ public class HttpHeader {
 
     public String get(final String key) {
         return headers.get(key);
+    }
+
+    public int getContentLength() {
+        if (headers.containsKey(CONTENT_LENGTH)) {
+            return Integer.parseInt(headers.get(CONTENT_LENGTH));
+        }
+
+        return 0;
     }
 
     public Map<String, String> getHeaders() {

@@ -11,6 +11,10 @@ public class Url {
         httpRequestType = HttpRequestType.of(url);
     }
 
+    public String getUrl() {
+        return url;
+    }
+
     public String getFullUrl() {
         return httpRequestType.getPrefix() + url;
     }
