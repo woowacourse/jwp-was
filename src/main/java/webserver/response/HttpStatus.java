@@ -8,4 +8,8 @@ public enum HttpStatus {
     HttpStatus(final int number) {
         this.number = number;
     }
+
+    public int getNumber() {
+        return number;
+    }
 }

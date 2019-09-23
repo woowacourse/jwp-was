@@ -7,12 +7,12 @@ import webserver.request.requestline.QueryParams;
 public class HttpRequest {
 
     private HttpRequestLine httpRequestLine;
-    private HttpHeaderFields httpHeaderFields;
+    private HttpRequestHeaderFields httpRequestHeaderFields;
     private HttpRequestBody httpRequestBody;
 
-    public HttpRequest(final HttpRequestLine httpRequestLine, final HttpHeaderFields httpHeaderFields, final HttpRequestBody httpRequestBody) {
+    public HttpRequest(final HttpRequestLine httpRequestLine, final HttpRequestHeaderFields httpRequestHeaderFields, final HttpRequestBody httpRequestBody) {
         this.httpRequestLine = httpRequestLine;
-        this.httpHeaderFields = httpHeaderFields;
+        this.httpRequestHeaderFields = httpRequestHeaderFields;
         this.httpRequestBody = httpRequestBody;
     }
 
@@ -41,6 +41,6 @@ public class HttpRequest {
     }
 
     public String findHeaderField(String name) {
-        return httpHeaderFields.findField(name);
+        return httpRequestHeaderFields.findField(name);
     }
 }

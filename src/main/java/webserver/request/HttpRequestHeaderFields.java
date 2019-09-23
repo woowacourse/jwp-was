@@ -3,7 +3,7 @@ package webserver.request;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HttpHeaderFields {
+public class HttpRequestHeaderFields {
 
     private final Map<String, String> fields = new HashMap<>();
 

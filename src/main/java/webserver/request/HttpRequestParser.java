@@ -20,16 +20,16 @@ public class HttpRequestParser {
 
     public static HttpRequest parseHttpRequest(BufferedReader br) throws IOException {
         HttpRequestLine httpRequestLine = parseHttpRequestLine(br);
-        HttpHeaderFields httpHeaderFields = parseHeaderFields(br);
+        HttpRequestHeaderFields httpRequestHeaderFields = parseHeaderFields(br);
 
         if (br.ready()) {
-            String contentLength = httpHeaderFields.findField("Content-Length");
+            String contentLength = httpRequestHeaderFields.findField("Content-Length");
             HttpRequestBody httpRequestBody = parseHttpRequestBody(br, Integer.parseInt(contentLength));
 
-            return new HttpRequest(httpRequestLine, httpHeaderFields, httpRequestBody);
+            return new HttpRequest(httpRequestLine, httpRequestHeaderFields, httpRequestBody);
         }
         HttpRequestBody emptyBody = new HttpRequestBody(new QueryParams());
-        return new HttpRequest(httpRequestLine, httpHeaderFields, emptyBody);
+        return new HttpRequest(httpRequestLine, httpRequestHeaderFields, emptyBody);
     }
 
     private static HttpRequestLine parseHttpRequestLine(BufferedReader br) throws IOException {
@@ -44,8 +44,8 @@ public class HttpRequestParser {
         return new HttpRequestLine(method, uri, version);
     }
 
-    private static HttpHeaderFields parseHeaderFields(BufferedReader br) throws IOException {
-        HttpHeaderFields httpHeaderFields = new HttpHeaderFields();
+    private static HttpRequestHeaderFields parseHeaderFields(BufferedReader br) throws IOException {
+        HttpRequestHeaderFields httpRequestHeaderFields = new HttpRequestHeaderFields();
 
         String line = br.readLine();
         log.debug("request : {}", line);
@@ -57,12 +57,12 @@ public class HttpRequestParser {
 
             String name = tokens[0].trim();
             String value = tokens[1].trim();
-            httpHeaderFields.addField(name, value);
+            httpRequestHeaderFields.addField(name, value);
 
             line = br.readLine();
         }
 
-        return httpHeaderFields;
+        return httpRequestHeaderFields;
     }
 
     private static boolean isValidLine(final String line) {
