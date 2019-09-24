@@ -14,29 +14,29 @@ public class UserController {
     private static final String USER_NAME = "name";
     private static final String USER_EMAIL = "email";
 
-    public static HttpResponse showSignUpPage(HttpRequest req) {
+    public static HttpResponse showSignUpPage(HttpRequest request) {
         return FileIoUtils.loadFileFromClasspath("./templates/user/form.html").map(body ->
             HttpResponse.builder(HttpContentType.TEXT_HTML())
-                        .version(req)
-                        .connection(req)
+                        .version(request.version())
+                        .connection(request.connection().orElse(null))
                         .body(body)
                         .build()
         ).orElse(HttpResponse.INTERNAL_SERVER_ERROR);
     }
 
-    public static HttpResponse signUp(HttpRequest req) {
+    public static HttpResponse signUp(HttpRequest request) {
         Database.addUser(
                 new User(
-                        req.getParam(USER_ID),
-                        req.getParam(USER_PASSWORD),
-                        req.getParam(USER_NAME),
-                        req.getParam(USER_EMAIL)
+                        request.getParam(USER_ID),
+                        request.getParam(USER_PASSWORD),
+                        request.getParam(USER_NAME),
+                        request.getParam(USER_EMAIL)
                 )
         );
         return HttpResponse.builder(HttpContentType.TEXT_PLAIN())
-                            .version(req)
+                            .version(request.version())
                             .statusCode(HttpStatusCode.FOUND)
-                            .connection(req)
+                            .connection(request.connection().orElse(null))
                             .location("/index.html")
                             .build();
     }

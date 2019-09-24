@@ -6,11 +6,11 @@ import webserver.http.HttpResponse;
 import webserver.http.headerfields.HttpContentType;
 
 public class IndexController {
-    public static HttpResponse index(HttpRequest req) {
+public static HttpResponse index(HttpRequest request) {
         return FileIoUtils.loadFileFromClasspath("./templates/index.html").map(body ->
             HttpResponse.builder(HttpContentType.TEXT_HTML())
-                        .version(req)
-                        .connection(req)
+                        .version(request.version())
+                        .connection(request.connection().orElse(null))
                         .body(body)
                         .build()
         ).orElse(HttpResponse.INTERNAL_SERVER_ERROR);

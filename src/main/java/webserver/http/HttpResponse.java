@@ -40,8 +40,8 @@ public class HttpResponse {
             this.contentType = contentType;
         }
 
-        public HttpResponseBuilder version(HttpRequest req) {
-            this.version = req.version();
+        public HttpResponseBuilder version(HttpVersion httpVersion) {
+            this.version = httpVersion;
             return this;
         }
 
@@ -50,8 +50,8 @@ public class HttpResponse {
             return this;
         }
 
-        public HttpResponseBuilder connection(HttpRequest req) {
-            this.connection = req.connection().orElse(null);
+        public HttpResponseBuilder connection(HttpConnection httpConnection) {
+            this.connection = httpConnection;
             return this;
         }
 

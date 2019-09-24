@@ -54,11 +54,11 @@ public class Router {
         }).orElse(HttpResponse.NOT_FOUND);
     }
 
-    private static HttpResponse serveStaticFiles(HttpRequest req) {
-        return FileIoUtils.loadFileFromClasspath("./static" + req.path()).map(body ->
-            HttpResponse.builder(extensionToContentType(req.path().extension()))
-                        .version(req)
-                        .connection(req)
+    private static HttpResponse serveStaticFiles(HttpRequest request) {
+        return FileIoUtils.loadFileFromClasspath("./static" + request.path()).map(body ->
+            HttpResponse.builder(extensionToContentType(request.path().extension()))
+                        .version(request.version())
+                        .connection(request.connection().orElse(null))
                         .body(body)
                         .build()
         ).orElse(HttpResponse.NOT_FOUND);
