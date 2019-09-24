@@ -1,6 +1,7 @@
 package http.request;
 
 import http.HttpRequestMethod;
+import http.HttpVersion;
 import http.MediaType;
 
 import java.util.Objects;
@@ -43,6 +44,10 @@ public class HttpRequest {
 
     public String getUri() {
         return httpRequestStartLine.getUri();
+    }
+
+    public HttpVersion getHttpVersion() {
+        return httpRequestStartLine.getHttpVersion();
     }
 
     @Override
