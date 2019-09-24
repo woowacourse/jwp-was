@@ -14,9 +14,9 @@ public class HttpResponse {
     private ResponseHeader header;
     private ResponseBody body;
 
-    public HttpResponse(HttpRequest httpRequest) {
-        this.header = ResponseHeader.of();
-        this.body = ResponseBody.of(httpRequest);
+    public HttpResponse() {
+        this.header = new ResponseHeader();
+        this.body = new ResponseBody();
     }
 
     public boolean addBody(byte[] body) {

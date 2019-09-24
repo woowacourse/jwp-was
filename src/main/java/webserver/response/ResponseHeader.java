@@ -6,12 +6,8 @@ import java.util.Map;
 public class ResponseHeader {
     private Map<String, String> attributes;
 
-    private ResponseHeader(Map<String, String> attributes) {
-        this.attributes = attributes;
-    }
-
-    public static ResponseHeader of() {
-        return new ResponseHeader(new HashMap<>());
+    public ResponseHeader() {
+        this.attributes = new HashMap<>();
     }
 
     public String response(String attribute) {
