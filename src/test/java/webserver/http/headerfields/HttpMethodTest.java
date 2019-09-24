@@ -13,7 +13,7 @@ class HttpMethodTest {
 
         for (HttpMethod httpMethod : httpMethods) {
             String methodName = httpMethod.name();
-            assertThat(HttpMethod.of(methodName).get()).isEqualTo(httpMethod);
+            assertThat(HttpMethod.of(methodName)).isEqualTo(httpMethod);
         }
     }
 }

@@ -1,5 +1,7 @@
 package webserver.http.headerfields;
 
+import webserver.http.exception.InvalidHttpVersionException;
+
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -21,11 +23,13 @@ public enum HttpVersion {
                     .findAny();
     }
 
-    public static Optional<HttpVersion> of(String version) {
+    public static HttpVersion of(String version) {
         try {
-            return of(Double.parseDouble(version.split("/")[1].trim()));
+            version = version.split("/")[1].trim();
+
+            return of(Double.parseDouble(version)).orElseThrow(InvalidHttpVersionException::new);
         } catch (NumberFormatException e) {
-            return Optional.empty();
+            throw new InvalidHttpVersionException();
         }
     }
 

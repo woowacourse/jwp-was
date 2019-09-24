@@ -2,6 +2,7 @@ package webserver.http.headerfields;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import webserver.http.exception.InvalidHttpVersionException;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -22,9 +23,7 @@ class HttpVersionTest {
     void createHttpVersion2() {
         String version = "HTTP/1.1";
 
-        assertDoesNotThrow(() -> HttpVersion.of(version)
-                .orElseThrow(IllegalArgumentException::new)
-        );
+        assertDoesNotThrow(() -> HttpVersion.of(version));
     }
 
     @Test
@@ -32,9 +31,7 @@ class HttpVersionTest {
     void createFailHttpVersion() {
         String version = "HTTP/3.0";
 
-        assertThrows(IllegalArgumentException.class, () ->
-                HttpVersion.of(version).orElseThrow(IllegalArgumentException::new)
-        );
+        assertThrows(InvalidHttpVersionException.class, () -> HttpVersion.of(version));
     }
 
     @Test

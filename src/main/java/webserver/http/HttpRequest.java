@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.io.NetworkIO;
 import utils.parser.KeyValueParserFactory;
+import webserver.http.exception.InvalidHttpTypeException;
 import webserver.http.headerfields.HttpConnection;
 import webserver.http.headerfields.HttpMethod;
 import webserver.http.headerfields.HttpPath;
@@ -46,17 +47,20 @@ public class HttpRequest {
     }
 
     public static Optional<HttpRequest> deserialize(NetworkIO io) {
-        final String[] requestLine = io.readLine().split("\\s+");
+        try {
+            final String[] requestLine = io.readLine().split("\\s+");
+            HttpMethod method = HttpMethod.of(requestLine[METHOD_INDEX]);
+            HttpPath path = HttpPath.of(requestLine[PATH_INDEX]);
+            HttpVersion version = HttpVersion.of(requestLine[VERSION_INDEX]);
 
-        return HttpMethod.of(requestLine[METHOD_INDEX]).flatMap(method ->
-                HttpVersion.of(requestLine[VERSION_INDEX]).map(version -> {
-                    HttpPath path = new HttpPath(requestLine[PATH_INDEX]);
-                    Map<String, String> headerFields = parseHeaderFields(io);
-                    Map<String, String> params = parseParams(method, path.toString(), io, headerFields.get(CONTENT_LENGTH));
+            Map<String, String> headerFields = parseHeaderFields(io);
+            Map<String, String> params = parseParams(method, path.toString(), io, headerFields.get(CONTENT_LENGTH));
 
-                    return new HttpRequest(method, path, version, headerFields, params);
-                })
-        );
+            return Optional.of(new HttpRequest(method, path, version, headerFields, params));
+        } catch (InvalidHttpTypeException e) {
+            logger.debug(e.getMessage());
+            return Optional.empty();
+        }
     }
 
     private static Map<String, String> parseHeaderFields(NetworkIO io) {
