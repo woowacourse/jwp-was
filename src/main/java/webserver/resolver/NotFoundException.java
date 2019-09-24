@@ -1,4 +1,4 @@
-package webserver;
+package webserver.resolver;
 
 public class NotFoundException extends RuntimeException {
     public NotFoundException() {

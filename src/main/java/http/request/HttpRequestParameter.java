@@ -22,9 +22,7 @@ public class HttpRequestParameter {
         if ("".equals(parameterLine) || parameterLine == null) {
             return EMPTY_PARAMETER;
         }
-        parameterLine = URLDecoder.decode(parameterLine, "UTF-8");
-
-        return new HttpRequestParameter(ParameterParser.parse(parameterLine));
+        return new HttpRequestParameter(ParameterParser.parse(URLDecoder.decode(parameterLine, "UTF-8")));
     }
 
     public String getParameter(String key) {

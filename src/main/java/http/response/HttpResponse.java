@@ -19,7 +19,7 @@ public class HttpResponse {
     public HttpResponse() {
     }
 
-    public void addHeader(Map<String, String> headers) {
+    void addHeader(Map<String, String> headers) {
         header = new HttpHeader(headers);
     }
 
@@ -54,6 +54,12 @@ public class HttpResponse {
 
     public void methodNotAllow() {
         this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.METHOD_NOT_FOUND, HttpVersion.HTTP_1_1);
+        addHeader(new HashMap<>());
+        this.body = new byte[]{};
+    }
+
+    public void internalServerError() {
+        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.INTERNAL_SERVER_ERROR, HttpVersion.HTTP_1_1);
         addHeader(new HashMap<>());
         this.body = new byte[]{};
     }

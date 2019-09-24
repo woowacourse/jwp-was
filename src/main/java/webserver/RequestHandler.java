@@ -1,10 +1,14 @@
 package webserver;
 
+import http.NotSupportedHttpMethodException;
 import http.request.HttpRequest;
 import http.request.RequestFactory;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.resolver.BadRequestException;
+import webserver.resolver.NotFoundException;
+import webserver.resolver.RequestResolver;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -24,18 +28,29 @@ public class RequestHandler implements Runnable {
     public void run() {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
-
+        HttpRequest httpRequest;
+        HttpResponse httpResponse = new HttpResponse();
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             DataOutputStream dos = new DataOutputStream(out);
-            HttpRequest httpRequest = RequestFactory.createHttpRequest(in);
-            HttpResponse httpResponse = new HttpResponse();
-            Router.route(httpRequest, httpResponse);
+            httpRequest = RequestFactory.createHttpRequest(in);
+            RequestResolver.route(httpRequest, httpResponse);
             httpResponse.forward(dos);
 
-        } catch (IOException e) {
+        } catch (BadRequestException e) {
             logger.error(e.getMessage());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
+            httpResponse.badRequest();
+
+        } catch (NotFoundException e) {
+            logger.error(e.getMessage());
+            httpResponse.notFound();
+
+        } catch (NotSupportedHttpMethodException e) {
+            logger.error(e.getMessage());
+            httpResponse.methodNotAllow();
+
+        } catch (IOException | URISyntaxException e) {
+            logger.error(e.getMessage());
+            httpResponse.internalServerError();
         }
     }
 }

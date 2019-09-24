@@ -2,15 +2,15 @@ package http.request;
 
 import http.HttpHeader;
 
-import java.io.IOException;
 import java.util.Map;
 
 public class HttpRequest {
+    private static final String POINT = ".";
     private HttpRequestStartLine httpRequestStartLine;
     private HttpHeader httpHeader;
     private HttpBody httpBody;
 
-    public HttpRequest(HttpRequestStartLine httpRequestStartLine, HttpHeader httpHeader, HttpBody httpBody) throws IOException {
+    public HttpRequest(HttpRequestStartLine httpRequestStartLine, HttpHeader httpHeader, HttpBody httpBody) {
         this.httpRequestStartLine = httpRequestStartLine;
         this.httpHeader = httpHeader;
         this.httpBody = httpBody;
@@ -29,7 +29,7 @@ public class HttpRequest {
     }
 
     public boolean isFileRequest() {
-        return getPath().contains(".");
+        return getPath().contains(POINT);
     }
 
     public HttpMethodType getHttpMethod() {

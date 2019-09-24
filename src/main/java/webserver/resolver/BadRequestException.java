@@ -1,4 +1,4 @@
-package webserver;
+package webserver.resolver;
 
 public class BadRequestException extends RuntimeException {
     public BadRequestException() {

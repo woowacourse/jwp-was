@@ -1,4 +1,4 @@
-package webserver;
+package webserver.resolver;
 
 import controller.Controller;
 import controller.UserController;
@@ -18,9 +18,10 @@ public class NormalRequestResolver {
         controllers.put("/user/create", new UserController());
     }
 
-    public static void resolve(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+    static void resolve(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         String path = httpRequest.getPath();
-        Controller controller = Optional.of(controllers.get(path)).orElseThrow(BadRequestException::new);
+        Controller controller = Optional.ofNullable(controllers.get(path)).orElseThrow(BadRequestException::new);
+
         controller.service(httpRequest, httpResponse);
     }
 }

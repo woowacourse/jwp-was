@@ -5,7 +5,8 @@ public enum StatusCode {
     FOUND("FOUND", 302),
     BAD_REQUEST("BAD REQUEST", 400),
     NOT_FOUND("NOT FOUND", 404),
-    METHOD_NOT_FOUND("METHOD NOT FOUND", 405);
+    METHOD_NOT_FOUND("METHOD NOT FOUND", 405),
+    INTERNAL_SERVER_ERROR("INTERNAL SERVER ERROR", 500);
 
     private final String status;
     private final int value;

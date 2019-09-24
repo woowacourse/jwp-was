@@ -1,6 +1,6 @@
 package utils;
 
-import webserver.NotFoundException;
+import webserver.resolver.NotFoundException;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -15,7 +15,7 @@ public class FileIoUtils {
             Path path = Paths.get(FileIoUtils.class.getClassLoader().getResource(filePath).toURI());
             return Optional.of(Files.readAllBytes(path)).orElseThrow(NotFoundException::new);
         } catch (Exception e) {
-            return null;
+            throw new NotFoundException();
         }
 
     }

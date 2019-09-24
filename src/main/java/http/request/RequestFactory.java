@@ -28,10 +28,7 @@ public class RequestFactory {
     }
 
     private static HttpRequestStartLine initializeStart(BufferedReader br) throws IOException {
-        log.debug("{} BufferedReader {}", br, TAG);
-        String line = br.readLine();
-        log.debug("{} {}", TAG, line);
-        return HttpRequestStartLine.of(line);
+        return HttpRequestStartLine.of(br.readLine());
 
     }
 
