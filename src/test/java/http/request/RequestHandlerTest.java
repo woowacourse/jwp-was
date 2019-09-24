@@ -1,26 +1,44 @@
 package http.request;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class RequestHandlerTest {
     private static final String TEST_DIRECTORY = "./src/test/resources/";
 
-    private HttpRequest httpRequest;
+    private static Stream<Arguments> provideHttpRequest() {
+        return Stream.of(
+                Arguments.of("Http_GET.txt",
+                        "http://localhost:8080/user/create",
+                        "localhost:8080",
+                        "aiden",
+                        true),
+                Arguments.of("Http_POST.txt",
+                        "http://localhost:8080/user/create",
+                        "localhost:8080",
+                        "aiden",
+                        false)
+        );
+    }
 
-    @Test
-    public void createTest() throws Exception {
-        InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "Http_GET.txt"));
+    @ParameterizedTest
+    @MethodSource("provideHttpRequest")
+    public void requestHandlerTest(String file, String url, String host, String userId, boolean isGet) throws Exception {
+        InputStream in = new FileInputStream(new File(TEST_DIRECTORY + file));
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         RequestHandler requestHandler = new RequestHandler(br);
-        httpRequest = requestHandler.create();
+        HttpRequest httpRequest = requestHandler.create();
 
-        assertThat(httpRequest.getUrl()).isEqualTo("http://localhost:8080/user/create");
-        assertThat(httpRequest.getHeader("Host")).isEqualTo("localhost:8080");
-        assertThat(httpRequest.getParameter("userId")).isEqualTo("aiden");
+        assertThat(httpRequest.getUrl()).isEqualTo(url);
+        assertThat(httpRequest.getHeader("Host")).isEqualTo(host);
+        assertThat(httpRequest.getParameter("userId")).isEqualTo(userId);
+        assertThat(httpRequest.isGet()).isEqualTo(isGet);
     }
 }
