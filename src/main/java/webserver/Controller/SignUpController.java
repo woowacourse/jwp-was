@@ -5,8 +5,6 @@ import model.User;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 
-import java.util.Map;
-
 public class SignUpController implements Controller {
 
     @Override
@@ -14,14 +12,28 @@ public class SignUpController implements Controller {
         if (httpRequest.isGet()) {
             doGet(httpRequest, httpResponse);
         }
+        if (httpRequest.isPost()) {
+            doPost(httpRequest, httpResponse);
+        }
     }
 
     private void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        if (httpRequest.hasParameters()) {
-            Map<String, String> parameters = httpRequest.getParameters();
-            User user = new User(parameters.get("userId"), parameters.get("password"), parameters.get("name"), parameters.get("email"));
-            DataBase.addUser(user);
-            httpResponse.addHeader(httpRequest, "200", "OK");
-        }
+        User user = new User(
+                httpRequest.getParameter("userId"),
+                httpRequest.getParameter("password"),
+                httpRequest.getParameter("name"),
+                httpRequest.getParameter("email"));
+        DataBase.addUser(user);
+        httpResponse.addHeader(httpRequest, "200", "OK");
+    }
+
+    private void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
+        User user = new User(
+                httpRequest.getParameter("userId"),
+                httpRequest.getParameter("password"),
+                httpRequest.getParameter("name"),
+                httpRequest.getParameter("email"));
+        DataBase.addUser(user);
+        httpResponse.addHeader(httpRequest, "200", "OK");
     }
 }
