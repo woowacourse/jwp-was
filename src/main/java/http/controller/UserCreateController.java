@@ -1,7 +1,7 @@
 package http.controller;
 
 import db.DataBase;
-import http.HttpResponse;
+import http.response.HttpResponse;
 import http.request.HttpRequest;
 import model.UserFactory;
 

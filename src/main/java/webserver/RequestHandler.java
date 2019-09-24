@@ -1,6 +1,6 @@
 package webserver;
 
-import http.HttpResponse;
+import http.response.HttpResponse;
 import http.controller.Controller;
 import http.controller.UserCreateController;
 import http.request.HttpRequest;

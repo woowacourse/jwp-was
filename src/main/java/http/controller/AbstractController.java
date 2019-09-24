@@ -1,6 +1,6 @@
 package http.controller;
 
-import http.HttpResponse;
+import http.response.HttpResponse;
 import http.request.HttpRequest;
 
 public abstract class AbstractController implements Controller {

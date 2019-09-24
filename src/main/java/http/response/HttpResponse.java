@@ -1,4 +1,4 @@
-package http;
+package http.response;
 
 import http.common.HeaderFields;
 import http.common.HttpStatus;
