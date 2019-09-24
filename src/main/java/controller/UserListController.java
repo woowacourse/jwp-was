@@ -16,7 +16,7 @@ public class UserListController extends AbstractController {
 
     @Override
     public void doGet(HttpRequest req, HttpResponse res) {
-        if ("true".equals(req.getSession().getAttribute(LOGINED_ATTR_KEY))) {
+        if ("true".equals(req.getCookie(LOGINED_ATTR_KEY))) {
             Map<String, Collection<User>> params = new HashMap<>();
             params.put("users", DataBase.findAll());
 

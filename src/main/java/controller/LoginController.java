@@ -2,10 +2,8 @@ package controller;
 
 import db.DataBase;
 import model.User;
-import utils.UrlEncodedParser;
 import webserver.HttpRequest;
 import webserver.HttpResponse;
-import webserver.HttpStatus;
 
 import java.util.Map;
 
@@ -28,14 +26,14 @@ public class LoginController extends AbstractController {
 
     @Override
     public void doPost(HttpRequest req, HttpResponse response) {
-        Map<String, String> parsedBody = UrlEncodedParser.parse(new String(req.getBody()));
+        Map<String, String> parsedBody = (Map<String, String>) req.getBody();
         User found = DataBase.findUserById(parsedBody.get(USER_ID));
 
         String redirectUrl = "/user/login_failed.html";
 
         if (verifyUser(parsedBody, found)) {
             redirectUrl = "/index.html";
-            req.getSession().setAttribute("logined", "true");
+            response.addCookie("logined", "true");
         }
 
         response.redirect(redirectUrl);

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -23,10 +24,19 @@ public class RequestParser {
         Map<String, String> headers = parseHeader(br);
         Map<String, String> cookies = parseCookie(headers);
 
-        byte[] buf = readBody(br, headers);
+        Map<String, ?> body = parseBody(headers, readBody(br, headers));
 
         return new HttpRequest(requestLine.getMethod(), requestLine.getRequestUri(),
-            requestLine.getPath(), requestLine.getQueries(), headers, cookies, buf);
+            requestLine.getPath(), requestLine.getQueries(), headers, cookies, body);
+    }
+
+    private static Map<String, ?> parseBody(Map<String, String> headers, byte[] buf) {
+        if (buf.length == 0) {
+            return Collections.emptyMap();
+        }
+        return RequestContentType.from(headers.get("Content-Type"))
+            .orElseThrow(() -> new UnsupportedContentType(headers.get("Content-Type")))
+            .parse(buf);
     }
 
     private static Map<String, String> parseHeader(BufferedReader br) throws IOException {

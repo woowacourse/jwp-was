@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +19,7 @@ public class ResponseWriterTest {
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "text/plain");
         HttpRequest req = new HttpRequest(HttpMethod.GET, "/", "/", new HashMap<>(), new HashMap<>(),
-            new HashMap<>(), new byte[]{});
+            new HashMap<>(), Collections.emptyMap());
         HttpResponse res = new HttpResponse();
         res.setStatus(HttpStatus.OK);
         res.addHeader("Content-Type", "text/plain");
@@ -37,7 +38,7 @@ public class ResponseWriterTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(baos);
         HttpRequest req = new HttpRequest(HttpMethod.GET, "/", "/", new HashMap<>(), new HashMap<>(),
-            new HashMap<>(), new byte[]{});
+            new HashMap<>(), Collections.emptyMap());
         HttpResponse res = new HttpResponse();
         res.setStatus(HttpStatus.OK);
         res.addCookie("logined", "true");

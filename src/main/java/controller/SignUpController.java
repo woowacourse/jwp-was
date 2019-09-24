@@ -2,7 +2,6 @@ package controller;
 
 import db.DataBase;
 import model.User;
-import utils.UrlEncodedParser;
 import webserver.HttpRequest;
 import webserver.HttpResponse;
 import webserver.HttpStatus;
@@ -25,8 +24,7 @@ public class SignUpController extends AbstractController {
 
     @Override
     public void doPost(HttpRequest req, HttpResponse res) {
-        String body = new String(req.getBody());
-        Map<String, String> parsedBody = UrlEncodedParser.parse(body);
+        Map<String, String> parsedBody = (Map<String, String>) req.getBody();
         User user = new User(parsedBody.get(USER_ID),
             parsedBody.get(PASSWORD),
             parsedBody.get(NAME),

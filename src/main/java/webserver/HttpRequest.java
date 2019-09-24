@@ -12,11 +12,11 @@ public class HttpRequest {
     private final Map<String, String> queries;
     private final Map<String, String> headers;
     private final Map<String, String> cookies;
-    private final byte[] body;
+    private final Map<String, ?> body;
     private HttpSession session;
 
     HttpRequest(HttpMethod method, String url, String path, Map<String, String> queries,
-                       Map<String, String> headers, Map<String, String> cookies, byte[] body) {
+                Map<String, String> headers, Map<String, String> cookies, Map<String, ?> body) {
         this.method = method;
         this.url = url;
         this.path = path;
@@ -72,7 +72,7 @@ public class HttpRequest {
         return path;
     }
 
-    public byte[] getBody() {
+    public Map<String, ?> getBody() {
         return body;
     }
 }
