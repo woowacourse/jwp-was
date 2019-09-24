@@ -1,10 +1,10 @@
 package http.controller;
 
 import db.DataBase;
-import http.response.HttpResponse;
 import http.exception.NotFoundUserException;
 import http.exception.NotMatchPasswordException;
 import http.request.HttpRequest;
+import http.response.HttpResponse;
 import model.User;
 
 import java.util.Optional;
@@ -20,10 +20,28 @@ public class UserLoginController extends AbstractController {
         String requestUserId = request.getData("userId");
         String requestPassword = request.getData("password");
         Optional<User> mayBeUser = Optional.ofNullable(DataBase.findUserById(requestUserId));
-        User user = mayBeUser.orElseThrow(() -> new NotFoundUserException("존재하지 않는 유저입니다."));
+        User user = mayBeUser.orElseThrow(() -> {
+            setLoginFailResponse(response);
+            return new NotFoundUserException("존재하지 않는 유저입니다.");
+        });
         if (!user.isEqualPassword(requestPassword)) {
+            setLoginFailResponse(response);
             throw new NotMatchPasswordException("비밀번호가 일치하지 않습니다.");
         }
-        response.setLoginSuccess("/");
+        setLoginSuccessResponse(response);
     }
+
+    private void setLoginSuccessResponse(HttpResponse response) {
+        response.addCookie("logined", "true");
+        response.addCookieOption("logined", "Path", "/");
+        response.sendRedirect("/user/login_failed.html");
+    }
+
+    private void setLoginFailResponse(HttpResponse response) {
+        response.addCookie("logined", "false");
+        response.addCookieOption("logined", "Path", "/");
+        response.sendRedirect("/user/login_failed.html");
+    }
+
+
 }

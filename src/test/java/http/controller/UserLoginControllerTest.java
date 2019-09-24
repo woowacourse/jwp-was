@@ -36,9 +36,8 @@ class UserLoginControllerTest {
         HttpResponse response = new HttpResponse();
         controller.doPost(request, response);
 
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getHeader("Set-Cookie")).isEqualTo("logined=true; Path=/");
-        assertThat(response.getHeader("Content-Type")).isEqualTo("text/html");
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
+        assertThat(response.getCookie("logined")).isEqualTo("logined=true; Path=/");
     }
 
     @Test
@@ -48,6 +47,10 @@ class UserLoginControllerTest {
         UserLoginController controller = new UserLoginController();
         HttpResponse response = new HttpResponse();
         assertThrows(NotMatchPasswordException.class, () -> controller.doPost(request, response));
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
+        assertThat(response.getCookie("logined")).isEqualTo("logined=false; Path=/");
+        assertThat(response.getHeader("Location")).isEqualTo("/user/login_failed.html");
     }
 
     @Test
@@ -57,5 +60,10 @@ class UserLoginControllerTest {
         UserLoginController controller = new UserLoginController();
         HttpResponse response = new HttpResponse();
         assertThrows(NotFoundUserException.class, () -> controller.doPost(request, response));
+
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
+        assertThat(response.getCookie("logined")).isEqualTo("logined=false; Path=/");
+        assertThat(response.getHeader("Location")).isEqualTo("/user/login_failed.html");
     }
 }

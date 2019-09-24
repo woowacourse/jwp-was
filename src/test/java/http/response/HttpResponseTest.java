@@ -1,4 +1,4 @@
-package http;
+package http.response;
 
 import http.common.HttpStatus;
 import http.response.HttpResponse;

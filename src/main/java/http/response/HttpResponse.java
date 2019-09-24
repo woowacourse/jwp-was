@@ -45,12 +45,6 @@ public class HttpResponse {
         headerFields.addHeader("Location", location);
     }
 
-    public void setLoginSuccess(String path) {
-        status = HttpStatus.OK;
-        headerFields.addHeader("Content-Type", "text/html");
-        headerFields.addHeader("Set-Cookie", "logined=true; Path=" + path);
-    }
-
     public String convert() {
         if (StringUtils.isEmpty(body)) {
             return convertHeader();
@@ -72,12 +66,24 @@ public class HttpResponse {
         headerFields.addHeader(fieldName, field);
     }
 
+    public void addCookie(String name, String value) {
+        headerFields.addCookie(name, value);
+    }
+
+    public void addCookieOption(String name, String option, String value) {
+        headerFields.addCookieOption(name, option, value);
+    }
+
     public HttpStatus getStatus() {
         return status;
     }
 
     public String getHeader(String fieldName) {
         return headerFields.getHeader(fieldName);
+    }
+
+    public String getCookie(String cookieName) {
+        return headerFields.getCookie(cookieName);
     }
 
     public byte[] getBody() {
@@ -105,4 +111,5 @@ public class HttpResponse {
     public String toString() {
         return convert();
     }
+
 }
