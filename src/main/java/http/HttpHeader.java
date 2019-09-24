@@ -1,5 +1,7 @@
 package http;
 
+import http.exception.InvalidHeaderFormatException;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,8 +19,13 @@ public class HttpHeader {
 
     public HttpHeader(List<String> headers) {
         for (String header : headers) {
-            String[] keyValue = header.split(HEADER_DELIMITER);
-            this.headers.put(keyValue[0].trim(), keyValue[1].trim());
+            int index = header.indexOf(HEADER_DELIMITER);
+            if (index == -1) {
+                throw new InvalidHeaderFormatException();
+            }
+            String key = header.substring(0, index);
+            String value = header.substring(index + 1);
+            this.headers.put(key.trim(), value.trim());
         }
     }
 
