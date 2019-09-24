@@ -9,9 +9,11 @@ public class FilePathUtils {
         if (path.startsWith("/")) {
             path = path.substring(1);
         }
-        if (path.endsWith(".html")) {
-            return "./templates/" + path;
-        }
-        return "./static/" + path;
+        return isStaticFile(path) ?
+                String.format("./static/%s", path) : String.format("./templates/%s", path);
+    }
+
+    public static boolean isStaticFile(String path) {
+        return !path.endsWith(".html");
     }
 }
