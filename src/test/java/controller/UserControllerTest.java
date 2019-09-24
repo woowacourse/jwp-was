@@ -37,7 +37,7 @@ public class UserControllerTest {
         Request request = new Request(method, url, requestInformation);
 
         ControllerFactory factory = new ControllerFactory();
-        Controller controller = factory.createController(request);
+        Controller controller = factory.mappingController(request);
         controller.createResponse(request);
 
         assertThat(DataBase.findUserById("javajigi")).isEqualTo(new User("javajigi", "password", "이인권", "podo@gmail.com"));

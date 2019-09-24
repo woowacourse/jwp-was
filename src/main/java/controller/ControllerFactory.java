@@ -10,7 +10,7 @@ public class ControllerFactory {
 
     private List<Controller> controllers = Arrays.asList(new UserController(), new FileController());
 
-    public Controller createController(Request request) {
+    public Controller mappingController(Request request) {
         try {
             return controllers.stream()
                     .filter(controller -> controller.isMapping(request.createControllerMapper()))

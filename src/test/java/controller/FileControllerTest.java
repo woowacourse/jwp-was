@@ -28,7 +28,7 @@ public class FileControllerTest {
 
         Request request = new Request(method, url, requestInformation);
         ControllerFactory factory = new ControllerFactory();
-        Controller controller = factory.createController(request);
+        Controller controller = factory.mappingController(request);
 
         assertThat(controller.createResponse(request).getClass()).isEqualTo(FileResponse.class);
     }
@@ -46,7 +46,7 @@ public class FileControllerTest {
 
         Request request = new Request(method, url, requestInformation);
         ControllerFactory factory = new ControllerFactory();
-        Controller controller = factory.createController(request);
+        Controller controller = factory.mappingController(request);
 
         assertThat(controller.createResponse(request).getClass()).isEqualTo(FileResponse.class);
     }

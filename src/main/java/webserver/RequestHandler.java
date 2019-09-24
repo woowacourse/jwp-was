@@ -37,7 +37,7 @@ public class RequestHandler implements Runnable {
             Request request = new Request(method, url, requestInformation);
 
             ControllerFactory factory = new ControllerFactory();
-            Controller controller = factory.createController(request);
+            Controller controller = factory.mappingController(request);
             Response response = controller.createResponse(request);
 
             DataOutputStream dos = new DataOutputStream(out);
