@@ -43,11 +43,11 @@ public class HttpHeader {
 
 
     public String getHeaderAttribute(String key) {
-        try {
-            return httpHeader.get(key);
-        } catch (NullPointerException e) {
-            throw new InvalidHeaderKeyException(e);
+        if (StringUtils.isEmpty(key)) {
+            throw new InvalidHeaderKeyException();
         }
+
+        return httpHeader.get(key);
     }
 
     public String serialize() {

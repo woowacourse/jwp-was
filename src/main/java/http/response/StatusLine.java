@@ -21,6 +21,10 @@ public class StatusLine {
     }
 
     public String serialize() {
-        return String.format(STATUS_LINE_FORMAT, version, responseStatus.serialize());
+        return String.format(STATUS_LINE_FORMAT, version.getVersion(), responseStatus.serialize());
+    }
+
+    public ResponseStatus getResponseStatus() {
+        return responseStatus;
     }
 }

@@ -1,6 +1,5 @@
 package http.request;
 
-import http.request.exception.InvalidQueryStringException;
 import http.request.exception.ParameterNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -10,6 +9,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class RequestParameterTest {
@@ -24,7 +24,7 @@ class RequestParameterTest {
 
     @Test
     void 생성_에러_query_string이_null() {
-        assertThrows(InvalidQueryStringException.class, () -> new RequestParameter(null));
+        assertEquals(new RequestParameter(null), new RequestParameter(""));
     }
 
     @Test

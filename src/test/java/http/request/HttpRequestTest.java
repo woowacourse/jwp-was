@@ -1,5 +1,6 @@
 package http.request;
 
+import http.common.ContentType;
 import http.common.HttpHeader;
 import http.request.exception.InvalidHttpRequestException;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,23 +9,23 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static http.request.HttpRequest.CONTENT_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class HttpRequestTest {
+    private static final String CONTENT_TYPE = "Content-Type";
     private RequestLine getRequestLine;
     private RequestLine postRequestLine;
     private HttpHeader httpHeader;
-    private String body;
+    private RequestBody body;
 
     @BeforeEach
     void setUp() {
         getRequestLine = new RequestLine("GET / HTTP/1.1");
         postRequestLine = new RequestLine("POST / HTTP/1.1");
         httpHeader = new HttpHeader(new ArrayList<>());
-        body = "";
+        body = new RequestBody("", "");
     }
 
     @Test
@@ -43,17 +44,15 @@ class HttpRequestTest {
         String queryString = "id=1";
         getRequestLine = new RequestLine(String.format("GET /user?%s HTTP/1.1", queryString));
         HttpRequest httpRequest = new HttpRequest(getRequestLine, httpHeader, body);
-        RequestParameter requestParameter = new RequestParameter(queryString);
-        assertThat(httpRequest.getRequestParameter()).isEqualTo(requestParameter);
+        assertThat(httpRequest.getQueryParameter("id")).isEqualTo("1");
     }
 
     @Test
     void body로_전달된_request_parameter_처리() {
         httpHeader = new HttpHeader(Arrays.asList(
-                String.format("%s: application/x-www-form-urlencoded", CONTENT_TYPE)));
-        body = "id=1";
+                String.format("%s: %s", CONTENT_TYPE, ContentType.FORM_URLENCODED)));
+        body = new RequestBody("id=1", ContentType.FORM_URLENCODED);
         HttpRequest httpRequest = new HttpRequest(postRequestLine, httpHeader, body);
-        RequestParameter requestParameter = new RequestParameter(body);
-        assertThat(httpRequest.getRequestParameter()).isEqualTo(requestParameter);
+        assertThat(httpRequest.getFormDataParameter("id")).isEqualTo("1");
     }
 }

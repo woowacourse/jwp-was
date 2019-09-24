@@ -37,4 +37,8 @@ public class HttpResponse {
     public void setBody(byte[] body) {
         this.body = body;
     }
+
+    public ResponseStatus getResponseStatus() {
+        return statusLine.getResponseStatus();
+    }
 }

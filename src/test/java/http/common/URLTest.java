@@ -20,6 +20,7 @@ class URLTest {
         assertThat(url.getQueryString()).isEqualTo(queryString);
     }
 
+    //TODO: TestCase 통과하도록 URL 검증 로직 추가
     @ParameterizedTest
     @NullAndEmptySource
     @ValueSource(strings = {"  ", "\t", "\n", "?id=1"})

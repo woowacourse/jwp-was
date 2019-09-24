@@ -1,6 +1,6 @@
 package http.common;
 
-import http.common.exception.HttpHeaderNotFoundException;
+import http.common.exception.InvalidHeaderKeyException;
 import http.common.exception.InvalidHttpHeaderException;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class HttpHeaderTest {
     @Test
     void 잘못된_생성_header가_null일_때() {
-        assertThrows(InvalidHttpHeaderException.class, () -> new HttpHeader(null));
+        assertThat(new HttpHeader(null)).isEqualTo(new HttpHeader(new ArrayList<>()));
     }
 
     @Test
@@ -41,13 +41,13 @@ class HttpHeaderTest {
         header.add(String.format("%s: %s", contentType, textHTML));
         HttpHeader httpHeader = new HttpHeader(header);
 
-        assertThat(httpHeader.get(contentType)).isEqualTo(textHTML);
+        assertThat(httpHeader.getHeaderAttribute(contentType)).isEqualTo(textHTML);
     }
 
     @Test
     void get_key가_null일_때() {
         HttpHeader httpHeader = new HttpHeader(Collections.emptyList());
 
-        assertThrows(HttpHeaderNotFoundException.class, () -> httpHeader.get(null));
+        assertThrows(InvalidHeaderKeyException.class, () -> httpHeader.getHeaderAttribute(null));
     }
 }

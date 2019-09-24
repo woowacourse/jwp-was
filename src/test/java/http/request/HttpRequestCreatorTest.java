@@ -25,9 +25,9 @@ class HttpRequestCreatorTest {
         HttpRequest httpRequest = HttpRequestCreator.create(createInputStream(httpRequestMessage));
         assertThat(httpRequest.getPath()).isEqualTo("/user/create");
         assertThat(httpRequest.getMethod()).isEqualTo(RequestMethod.POST);
-        assertThat(httpRequest.getRequestParameter().getParameter("userId")).isEqualTo("javajigi");
-        assertThat(httpRequest.getRequestParameter().getParameter("password")).isEqualTo("password");
-        assertThat(httpRequest.getRequestParameter().getParameter("address")).isEqualTo("ny");
+        assertThat(httpRequest.getFormDataParameter("userId")).isEqualTo("javajigi");
+        assertThat(httpRequest.getFormDataParameter("password")).isEqualTo("password");
+        assertThat(httpRequest.getQueryParameter("address")).isEqualTo("ny");
     }
 
     InputStream createInputStream(String str) {

@@ -1,5 +1,6 @@
 package http.request;
 
+import http.common.HttpVersion;
 import http.common.URL;
 import http.request.exception.InvalidRequestException;
 import http.request.exception.InvalidRequestMethodException;
@@ -16,7 +17,7 @@ class RequestLineTest {
 
         assertThat(requestLine.getMethod()).isEqualTo(RequestMethod.GET);
         assertThat(requestLine.getUrl()).isEqualTo(URL.of("/"));
-        assertThat(requestLine.getVersion()).isEqualTo("HTTP/1.1");
+        assertThat(requestLine.getVersion()).isEqualTo(HttpVersion.HTTP_1_1);
     }
 
     @Test
