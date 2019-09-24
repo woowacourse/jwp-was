@@ -43,7 +43,7 @@ public class RequestLine {
     }
 
     private static boolean hasNotParameters(String target) {
-        return target.split("\\?").length == 2;
+        return target.split("\\?").length != 2;
     }
 
     private static void addAttribute(Map<String, String> parameters, String pair) {
