@@ -1,7 +1,6 @@
 package http.common;
 
 import http.exception.InvalidHeaderException;
-import http.response.Cookie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +25,12 @@ public class HeaderFields {
         for (String headerField : headerFields) {
             String key = headerField.substring(0, headerField.indexOf(HEADER_FIELD_KEY_VALUE_DELIMITER));
             String value = headerField.substring(headerField.indexOf(HEADER_FIELD_KEY_VALUE_DELIMITER) + 2);
-            this.headerFields.put(key, value);
+            if(key.equals("Cookie")) {
+                Cookie cookie =  new Cookie(value);
+                cookies.put(cookie.getName(), cookie);
+            } else{
+                this.headerFields.put(key, value);
+            }
         }
     }
 
@@ -36,7 +40,7 @@ public class HeaderFields {
             sb.append(field).append(": ").append(headerFields.get(field)).append("\r\n");
         }
         for (String cookie : cookies.keySet()) {
-            sb.append("Set-Cookie: ").append(cookies.get(cookie).getCookie());
+            sb.append("Set-Cookie: ").append(cookies.get(cookie).getFieldString());
         }
         return sb.toString();
     }
@@ -49,12 +53,12 @@ public class HeaderFields {
         throw new InvalidHeaderException(fieldName + "를 찾을 수 없습니다.");
     }
 
-    public String getCookie(String cookieName) {
+    public Cookie getCookie(String cookieName) {
         if (!cookies.containsKey(cookieName)) {
             logger.error(cookieName + "라는 쿠키는 존재하지 않습니다.");
             throw new InvalidHeaderException("존재하지 않는 쿠키입니다.");
         }
-        return cookies.get(cookieName).getCookie();
+        return cookies.get(cookieName);
     }
 
     public int getContentLength() {

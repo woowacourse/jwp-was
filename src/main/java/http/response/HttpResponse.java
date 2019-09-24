@@ -1,5 +1,6 @@
 package http.response;
 
+import http.common.Cookie;
 import http.common.HeaderFields;
 import http.common.HttpStatus;
 import org.apache.tika.Tika;
@@ -82,7 +83,7 @@ public class HttpResponse {
         return headerFields.getHeader(fieldName);
     }
 
-    public String getCookie(String cookieName) {
+    public Cookie getCookie(String cookieName) {
         return headerFields.getCookie(cookieName);
     }
 

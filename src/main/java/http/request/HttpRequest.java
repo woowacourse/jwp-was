@@ -1,8 +1,7 @@
 package http.request;
 
+import http.common.Cookie;
 import http.common.HeaderFields;
-
-import java.util.Map;
 
 public class HttpRequest {
     private final RequestLine requestLine;
@@ -33,5 +32,9 @@ public class HttpRequest {
 
     public String getPath() {
         return requestLine.getPath();
+    }
+
+    public Cookie getCookie(String name) {
+        return headerFields.getCookie(name);
     }
 }

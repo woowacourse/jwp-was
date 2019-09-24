@@ -1,6 +1,7 @@
 package http.controller;
 
 import db.DataBase;
+import http.common.Cookie;
 import http.response.HttpResponse;
 import http.common.HttpStatus;
 import http.exception.NotFoundUserException;
@@ -35,9 +36,11 @@ class UserLoginControllerTest {
         UserLoginController controller = new UserLoginController();
         HttpResponse response = new HttpResponse();
         controller.doPost(request, response);
+        Cookie cookie = new Cookie("logined", "true");
+
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
-        assertThat(response.getCookie("logined")).isEqualTo("logined=true; Path=/");
+        assertThat(response.getCookie("logined")).isEqualTo(cookie);
     }
 
     @Test
@@ -47,9 +50,11 @@ class UserLoginControllerTest {
         UserLoginController controller = new UserLoginController();
         HttpResponse response = new HttpResponse();
         assertThrows(NotMatchPasswordException.class, () -> controller.doPost(request, response));
+        Cookie cookie = new Cookie("logined", "false");
+
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
-        assertThat(response.getCookie("logined")).isEqualTo("logined=false; Path=/");
+        assertThat(response.getCookie("logined")).isEqualTo(cookie);
         assertThat(response.getHeader("Location")).isEqualTo("/user/login_failed.html");
     }
 
@@ -60,10 +65,10 @@ class UserLoginControllerTest {
         UserLoginController controller = new UserLoginController();
         HttpResponse response = new HttpResponse();
         assertThrows(NotFoundUserException.class, () -> controller.doPost(request, response));
-
+        Cookie cookie = new Cookie("logined", "false");
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
-        assertThat(response.getCookie("logined")).isEqualTo("logined=false; Path=/");
+        assertThat(response.getCookie("logined")).isEqualTo(cookie);
         assertThat(response.getHeader("Location")).isEqualTo("/user/login_failed.html");
     }
 }
