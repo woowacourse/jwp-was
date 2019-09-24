@@ -20,14 +20,15 @@ public class LoginControllerTest {
     @BeforeAll
     static void init() throws IOException {
         HttpResponse httpResponse = new HttpResponse();
-        RequestDispatcher.handle(RequestParser.parse(new FileInputStream(new File(TEST_DIRECTORY + "/PostSignUp.txt"))), httpResponse);
+        SignUpController controller = new SignUpController();
+        controller.service(RequestParser.parse(new FileInputStream(new File(TEST_DIRECTORY + "/PostSignUp.txt"))), httpResponse);
     }
 
     @Test
     void login() throws IOException {
         InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "/PostLogin.txt"));
         HttpResponse res = new HttpResponse();
-        RequestDispatcher.handle(RequestParser.parse(in), res);
+        new LoginController().service(RequestParser.parse(in), res);
 
         assertThat(res.getStatus()).isEqualTo(HttpStatus.FOUND);
         assertThat(res.getHeader("Location")).isEqualTo("/index.html");
@@ -37,7 +38,7 @@ public class LoginControllerTest {
     void login_failed() throws IOException {
         InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "/PostLoginFailed.txt"));
         HttpResponse res = new HttpResponse();
-        RequestDispatcher.handle(RequestParser.parse(in), res);
+        new LoginController().service(RequestParser.parse(in), res);
 
         assertThat(res.getStatus()).isEqualTo(HttpStatus.FOUND);
         assertThat(res.getHeader("Location")).isEqualTo("/user/login_failed.html");

@@ -21,7 +21,7 @@ public class SingUpControllerTest {
     void create() throws IOException {
         InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "/PostSignUp.txt"));
         HttpResponse res = new HttpResponse();
-        RequestDispatcher.handle(RequestParser.parse(in), res);
+        new SignUpController().service(RequestParser.parse(in), res);
 
         assertThat(res.getStatus()).isEqualTo(HttpStatus.FOUND);
         assertThat(res.getHeader("Location")).isEqualTo("/index.html");

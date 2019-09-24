@@ -21,7 +21,7 @@ public class UserListControllerTest {
     void loggedIn() throws IOException {
         InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "/GetUserList.txt"));
         HttpResponse res = new HttpResponse();
-        RequestDispatcher.handle(RequestParser.parse(in), res);
+        new UserListController().service(RequestParser.parse(in), res);
 
         assertThat(res.getStatus()).isEqualTo(HttpStatus.OK);
         assertThat(new String(res.getBody())).contains("이메일");
@@ -31,7 +31,7 @@ public class UserListControllerTest {
     void loggedIn_failed() throws IOException {
         InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "/GetUserListFailed.txt"));
         HttpResponse res = new HttpResponse();
-        RequestDispatcher.handle(RequestParser.parse(in), res);
+        new UserListController().service(RequestParser.parse(in), res);
 
         assertThat(res.getStatus()).isEqualTo(HttpStatus.FOUND);
         assertThat(res.getHeader("Location")).isEqualTo("/user/login.html");
