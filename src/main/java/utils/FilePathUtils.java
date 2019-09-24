@@ -6,9 +6,12 @@ public class FilePathUtils {
     }
 
     public static String getResourcePath(String path) {
-        if (path.endsWith(".html")) {
-            return "./templates" + path;
+        if (path.startsWith("/")) {
+            path = path.substring(1);
         }
-        return "./static" + path;
+        if (path.endsWith(".html")) {
+            return "./templates/" + path;
+        }
+        return "./static/" + path;
     }
 }
