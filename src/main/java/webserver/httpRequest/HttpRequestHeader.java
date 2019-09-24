@@ -42,4 +42,8 @@ public class HttpRequestHeader {
     public String getContentType() {
         return headers.get(CONTENT_TYPE);
     }
+
+    public String getCookie() {
+        return headers.get("Cookie");
+    }
 }

@@ -33,4 +33,8 @@ public class HttpRequest {
         }
         return param;
     }
+
+    public String getCookie() {
+        return httpRequestHeader.getCookie();
+    }
 }
