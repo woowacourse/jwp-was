@@ -3,6 +3,8 @@ package http.request;
 import http.common.HttpHeader;
 import http.common.HttpVersion;
 
+import java.util.Map;
+
 public class HttpRequest {
 
     private RequestLine requestLine;
@@ -45,5 +47,9 @@ public class HttpRequest {
 
     public String findPathPrefix() {
         return requestLine.findPathPrefix();
+    }
+
+    public Map<String, String> getQueryParam() {
+        return requestLine.getQueryParam();
     }
 }

@@ -1,8 +1,10 @@
 package http.request;
 
+import http.common.QueryParamsParser;
 import http.common.UriExtension;
 
 import java.net.URI;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,5 +32,9 @@ public class HttpUri {
         Pattern pattern = Pattern.compile(regex);
         Matcher m = pattern.matcher(uri.getPath());
         return m.find();
+    }
+
+    public Map<String, String> getQueryParam() {
+        return QueryParamsParser.parse(uri.getQuery());
     }
 }
