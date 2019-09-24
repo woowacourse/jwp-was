@@ -14,6 +14,7 @@ public class ServletResponse {
     private HttpStatus httpStatus;
     private HttpHeaders httpHeaders;
     private String view;
+    private Object model;
 
     public ServletResponse(OutputStream outputStream) {
         this.outputStream = outputStream;
@@ -47,8 +48,20 @@ public class ServletResponse {
         return view != null;
     }
 
+    public boolean hasModel() {
+        return model != null;
+    }
+
     public OutputStream getOutputStream() {
         return outputStream;
+    }
+
+    public Object getModel() {
+        return model;
+    }
+
+    public void setModel(Object model) {
+        this.model = model;
     }
 
     public String getView() {

@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class AbstractRequestMessageConverter implements RequestMessageConverter {
+public abstract class AbstractHttpRequestMessageconverter implements HttpRequestMessageconverter {
     private static final String QUERY_STRING_INDICATOR = "?";
     private static final String QUERY_STRING_SEPARATOR = "&";
     private static final String QUERY_STRING_DELIMITER = "=";

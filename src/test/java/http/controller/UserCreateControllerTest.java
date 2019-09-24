@@ -42,11 +42,4 @@ class UserCreateControllerTest {
         assertThat(response.getHeader("Location")).isEqualTo("/index.html");
         assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
     }
-
-    @Test
-    void 유저컨트롤러_처리_후_세션_처리() {
-        controller.handle(request, response);
-
-        assertThat(response.getHeader("Set-Cookie")).isNotNull();
-    }
 }

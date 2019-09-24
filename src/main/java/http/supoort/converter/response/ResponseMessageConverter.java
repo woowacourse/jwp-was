@@ -21,8 +21,13 @@ public class ResponseMessageConverter {
     private static final String CONTENT_TYPE = "Content-Type";
     private static final String CONTENT_LENGTH = "Content-Length";
     private static final String EXTENSION_SEPARATOR = ".";
+    private final ViewResolver viewResolver;
 
-    public static void convert(ServletResponse response) {
+    public ResponseMessageConverter(ViewResolver viewResolver) {
+        this.viewResolver = viewResolver;
+    }
+
+    public void convert(ServletResponse response) {
         try {
             DataOutputStream dataOutputStream = new DataOutputStream(response.getOutputStream());
             responseStatus(response, dataOutputStream);
@@ -34,20 +39,25 @@ public class ResponseMessageConverter {
         }
     }
 
-    private static void responseStatus(ServletResponse response, DataOutputStream dos) throws IOException {
+    private void responseStatus(ServletResponse response, DataOutputStream dos) throws IOException {
         dos.writeBytes(response.getProtocols().getProtocol() + SPACE);
         dos.writeBytes(response.getHttpStatus().getMessage() + LINE_BREAK);
     }
 
 
-    private static void responseHeader(ServletResponse response, DataOutputStream dos) throws IOException {
+    private void responseHeader(ServletResponse response, DataOutputStream dos) throws IOException {
         for (Map.Entry<String, String> entry : response.getHttpHeaders().entrySet()) {
             dos.writeBytes(entry.getKey() + HEAD_SEPARATOR + entry.getValue() + LINE_BREAK);
         }
     }
 
-    private static void responseBody(ServletResponse response, DataOutputStream dos) throws IOException {
+    private void responseBody(ServletResponse response, DataOutputStream dos) throws IOException {
         if (!response.hasResource()) {
+            return;
+        }
+
+        if (response.hasModel()) {
+            viewResolver.render(response, dos);
             return;
         }
         String resource = response.getView();
@@ -56,18 +66,18 @@ public class ResponseMessageConverter {
         writeBody(dos, contentType, body);
     }
 
-    private static ContentType getExtension(String resource) {
+    private ContentType getExtension(String resource) {
         return ContentType.of(resource.substring(resource.lastIndexOf(EXTENSION_SEPARATOR) + 1));
     }
 
-    private static byte[] getFileResource(ContentType contentType, String resource) {
+    private byte[] getFileResource(ContentType contentType, String resource) {
         if (contentType.isHTML()) {
             return FileIoUtils.loadFileFromClasspath(TEMPLATE_PATH + resource);
         }
         return FileIoUtils.loadFileFromClasspath(STATIC_PATH + resource);
     }
 
-    private static void writeBody(DataOutputStream dos, ContentType contentType, byte[] body) throws IOException {
+    private void writeBody(DataOutputStream dos, ContentType contentType, byte[] body) throws IOException {
         dos.writeBytes(CONTENT_TYPE + HEAD_SEPARATOR + contentType.getMimeType() + LINE_BREAK);
         dos.writeBytes(CONTENT_LENGTH + HEAD_SEPARATOR + body.length + LINE_BREAK);
         dos.writeBytes(LINE_BREAK);

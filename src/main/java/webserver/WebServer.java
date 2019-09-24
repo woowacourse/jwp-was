@@ -5,6 +5,11 @@ import http.session.HttpSessionManager;
 import http.session.RandomGenerateStrategy;
 import http.session.SessionManager;
 import http.supoort.RequestMapping;
+import http.supoort.converter.HttpMessageConverter;
+import http.supoort.converter.request.RequestMessageConverter;
+import http.supoort.converter.response.HandleBarViewResolver;
+import http.supoort.converter.response.ResponseMessageConverter;
+import http.supoort.converter.response.ViewResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +27,8 @@ public class WebServer {
         int port = getPort(args);
 
         HttpRequestControllers requestHandlers = initRequestHandlers();
-        SessionManager sessionManager = new HttpSessionManager(new RandomGenerateStrategy());
+        SessionManager sessionManager = initSessionManager();
+        HttpMessageConverter converter = initConverter();
 
         ExecutorService es = Executors.newFixedThreadPool(100);
 
@@ -33,7 +39,7 @@ public class WebServer {
             // 클라이언트가 연결될때까지 대기한다.
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
-                es.execute(new RequestHandler(connection, requestHandlers, sessionManager));
+                es.execute(new RequestHandler(connection, requestHandlers, sessionManager, converter));
             }
         }
         es.shutdown();
@@ -58,5 +64,17 @@ public class WebServer {
         httpRequestControllers.addHandler(userCreateController);
         httpRequestControllers.addHandler(loginController);
         return httpRequestControllers;
+    }
+
+    private static HttpMessageConverter initConverter() {
+        return new HttpMessageConverter(new RequestMessageConverter(), new ResponseMessageConverter(initViewResolver()));
+    }
+
+    private static ViewResolver initViewResolver() {
+        return new HandleBarViewResolver();
+    }
+
+    private static SessionManager initSessionManager() {
+        return new HttpSessionManager(new RandomGenerateStrategy());
     }
 }

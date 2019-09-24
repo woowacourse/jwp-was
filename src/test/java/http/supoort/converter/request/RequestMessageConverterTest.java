@@ -13,7 +13,8 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class HttpRequestParserTest {
+class RequestMessageConverterTest {
+    private RequestMessageConverter requestConverter = new RequestMessageConverter();
 
     @Test
     void 올바른_입력_파싱_확인() {
@@ -22,7 +23,7 @@ class HttpRequestParserTest {
                 .requestLine(HttpMethod.GET, "/index.html", "HTTP/1.1")
                 .build();
 
-        ServletRequest parsedRequest = HttpRequestParser.parse(in);
+        ServletRequest parsedRequest = requestConverter.parse(in);
         assertThat(parsedRequest.getHttpMethod()).isEqualTo(request.getHttpMethod());
         assertThat(parsedRequest.getHttpUri()).isEqualTo(request.getHttpUri());
     }
@@ -39,7 +40,7 @@ class HttpRequestParserTest {
                 .params(parameters)
                 .build();
 
-        ServletRequest parsedRequest = HttpRequestParser.parse(in);
+        ServletRequest parsedRequest = requestConverter.parse(in);
 
         assertThat(parsedRequest.getHttpMethod()).isEqualTo(request.getHttpMethod());
         assertThat(parsedRequest.getHttpUri()).isEqualTo(request.getHttpUri());
@@ -50,19 +51,19 @@ class HttpRequestParserTest {
     @Test
     void 올바른_HTTP_요청_아닌_경우1() {
         InputStream in = new ByteArrayInputStream("GET /index.html?name=coogi&age=25HTTP/1.1\r\nHost: localhost:8080/".getBytes());
-        assertThatThrownBy(() -> HttpRequestParser.parse(in)).isInstanceOf(IllegalHttpRequestException.class);
+        assertThatThrownBy(() -> requestConverter.parse(in)).isInstanceOf(IllegalHttpRequestException.class);
     }
 
     @Test
     void 올바른_HTTP_요청_아닌_경우2() {
         InputStream in = new ByteArrayInputStream("GET/index.html?name=coogi&age=25 HTTP/1.1\r\nHost: localhost:8080/".getBytes());
-        assertThatThrownBy(() -> HttpRequestParser.parse(in)).isInstanceOf(IllegalHttpRequestException.class);
+        assertThatThrownBy(() -> requestConverter.parse(in)).isInstanceOf(IllegalHttpRequestException.class);
     }
 
     @Test
     void 올바른_HTTP_요청_아닌_경우3() {
         InputStream in = new ByteArrayInputStream("".getBytes());
-        assertThatThrownBy(() -> HttpRequestParser.parse(in)).isInstanceOf(IllegalHttpRequestException.class);
+        assertThatThrownBy(() -> requestConverter.parse(in)).isInstanceOf(IllegalHttpRequestException.class);
     }
 
     @Test
@@ -75,7 +76,7 @@ class HttpRequestParserTest {
                 "Accept: */*\r\n" +
                 "\r\n" +
                 "userId=javajigi&password=password&name=JaeSung\r\n").getBytes());
-        ServletRequest request = HttpRequestParser.parse(in);
+        ServletRequest request = requestConverter.parse(in);
 
         assertThat(request.getHttpMethod()).isEqualTo(HttpMethod.POST);
         assertThat(request.getHttpUri().getResourceLocation()).isEqualTo("/user/create");
@@ -89,7 +90,7 @@ class HttpRequestParserTest {
         InputStream in = new ByteArrayInputStream(("GET /user/create?id=1 HTTP/1.1\r\n" +
                 "Cookie: logined=true\r\n").getBytes());
 
-        ServletRequest request = HttpRequestParser.parse(in);
+        ServletRequest request = requestConverter.parse(in);
 
         assertThat(request.hasCookie()).isTrue();
         assertThat(request.getCookie("logined")).isEqualTo("true");
@@ -100,7 +101,7 @@ class HttpRequestParserTest {
         InputStream in = new ByteArrayInputStream(("GET /user/create?id=1 HTTP/1.1\r\n" +
                 "Cookie: logined=true; another=something\r\n").getBytes());
 
-        ServletRequest request = HttpRequestParser.parse(in);
+        ServletRequest request = requestConverter.parse(in);
 
         assertThat(request.hasCookie()).isTrue();
         assertThat(request.getCookies().size()).isEqualTo(2);
@@ -116,7 +117,7 @@ class HttpRequestParserTest {
                 "\r\n" +
                 "userId=javajigi&password=password&name=JaeSung\r\n").getBytes());
 
-        ServletRequest request = HttpRequestParser.parse(in);
+        ServletRequest request = requestConverter.parse(in);
 
         assertThat(request.hasCookie()).isTrue();
         assertThat(request.getCookies().size()).isEqualTo(1);
@@ -132,7 +133,7 @@ class HttpRequestParserTest {
                 "\r\n" +
                 "userId=javajigi&password=password&name=JaeSung\r\n").getBytes());
 
-        ServletRequest request = HttpRequestParser.parse(in);
+        ServletRequest request = requestConverter.parse(in);
 
         assertThat(request.hasCookie()).isTrue();
         assertThat(request.getCookies().size()).isEqualTo(2);

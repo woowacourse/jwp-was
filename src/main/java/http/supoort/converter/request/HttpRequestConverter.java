@@ -7,14 +7,14 @@ import java.io.BufferedReader;
 import java.util.Arrays;
 
 public enum HttpRequestConverter {
-    GET(new GetRequestMessageConverter()),
-    DELETE(new DeleteRequestMethodConverter()),
-    POST(new PostRequestMessageConverter()),
-    PUT(new PutRequestMessageConverter());
+    GET(new GetHttpRequestMessageconverter()),
+    DELETE(new DeleteHttpRequestMethodConverter()),
+    POST(new PostHttpRequestMessageconverter()),
+    PUT(new PutHttpRequestMessageconverter());
 
-    private RequestMessageConverter converter;
+    private HttpRequestMessageconverter converter;
 
-    private HttpRequestConverter(RequestMessageConverter converter) {
+    private HttpRequestConverter(HttpRequestMessageconverter converter) {
         this.converter = converter;
     }
 
