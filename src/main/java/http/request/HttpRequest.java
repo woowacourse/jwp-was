@@ -9,10 +9,11 @@ public class HttpRequest {
     private QueryParameter queryParameter; //TODO: queryParameter 가 여기 있는게 맞을까?
     private HttpRequestBody httpRequestBody;
 
-    public HttpRequest(HttpRequestLine httpRequestLine, HttpRequestHeader httpRequestHeader, HttpRequestBody httpRequestBody) {
+    public HttpRequest(HttpRequestLine httpRequestLine, HttpRequestHeader httpRequestHeader,
+                       QueryParameter queryParameter, HttpRequestBody httpRequestBody) {
         this.httpRequestLine = httpRequestLine;
         this.httpRequestHeader = httpRequestHeader;
-        this.queryParameter = QueryParameter.empty();
+        this.queryParameter = queryParameter;
         this.httpRequestBody = httpRequestBody;
     }
 
@@ -26,6 +27,10 @@ public class HttpRequest {
 
     public byte[] getHttpRequestBody() {
         return httpRequestBody.getBody();
+    }
+
+    public String getQueryValue(String key) {
+        return queryParameter.getValue(key);
     }
 
     public HttpMethod getMethod() {

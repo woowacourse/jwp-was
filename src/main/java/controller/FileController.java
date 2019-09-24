@@ -1,5 +1,6 @@
 package controller;
 
+import http.HttpStatus;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
@@ -33,8 +34,10 @@ public class FileController extends AbstractController {
         String uri = httpRequest.getUri();
 
         try {
-            httpResponse.send200Ok(uri);
+            httpResponse.setStatusCode(HttpStatus.OK);
+            httpResponse.forward(uri);
         } catch (IOException | URISyntaxException e) {
+            httpResponse.setStatusCode(HttpStatus.NOT_FOUND);
             logger.error(e.getMessage());
         }
 

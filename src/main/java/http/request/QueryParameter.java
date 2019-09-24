@@ -13,13 +13,15 @@ public class QueryParameter {
     }
 
     public static QueryParameter of(String queryString) {
-        String[] tokens = queryString.split("&");
+        if (queryString.contains("&")) {
+            String[] tokens = queryString.split("&");
+            Map<String, String> querys = new HashMap<>();
+            Arrays.stream(tokens)
+                    .forEach(s -> querys.put(s.split("=")[0], s.split("=")[1]));
 
-        Map<String, String> querys = new HashMap<>();
-        Arrays.stream(tokens)
-                .forEach(s -> querys.put(s.split("=")[0], s.split("=")[1]));
-
-        return new QueryParameter(querys);
+            return new QueryParameter(querys);
+        }
+        return empty();
     }
 
     public static QueryParameter empty() {

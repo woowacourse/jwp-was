@@ -3,6 +3,7 @@ package webserver;
 import controller.Controller;
 import controller.CreateUserController;
 import controller.FileController;
+import http.HttpStatus;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
@@ -66,7 +67,7 @@ public class RequestHandler implements Runnable {
                     .orElseThrow(() -> new ControllerNotFoundException(httpRequest.getUri()))
                     .service(httpRequest, httpResponse);
         } catch (ControllerNotFoundException e) {
-            httpResponse.send404Error();
+            httpResponse.setStatusCode(HttpStatus.NOT_FOUND);
         }
     }
 }

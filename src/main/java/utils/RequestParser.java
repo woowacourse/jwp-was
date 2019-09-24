@@ -4,6 +4,7 @@ import http.request.HttpRequest;
 import http.request.HttpRequestBody;
 import http.request.HttpRequestHeader;
 import http.request.HttpRequestLine;
+import http.request.QueryParameter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,8 +25,8 @@ public class RequestParser {
         if (httpRequestHeader.getContentLength() != 0) {
             httpRequestBody = readBody(bufferedReader, httpRequestHeader.getContentLength());
         }
-
-        return new HttpRequest(httpRequestLine, httpRequestHeader, httpRequestBody);
+        QueryParameter queryParameter = QueryParameter.of(new String(httpRequestBody.getBody()));
+        return new HttpRequest(httpRequestLine, httpRequestHeader, queryParameter, httpRequestBody);
     }
 
     private static HttpRequestLine readRequestLine(BufferedReader bufferedReader) throws IOException {
@@ -47,5 +48,6 @@ public class RequestParser {
 
     private static HttpRequestBody readBody(BufferedReader bufferedReader, int contentLength) throws IOException {
         return new HttpRequestBody(IOUtils.readData(bufferedReader, contentLength).getBytes());
+        //TODO: Request Body가 Parameter인지 json인지 xml인지.. 구분을 어떻게 하지?
     }
 }

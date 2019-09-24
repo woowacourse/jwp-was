@@ -2,7 +2,6 @@ package controller;
 
 import db.DataBase;
 import http.request.HttpRequest;
-import http.request.QueryParameter;
 import http.response.HttpResponse;
 import model.User;
 
@@ -26,12 +25,9 @@ public class CreateUserController extends AbstractController {
 
     @Override
     void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        String requestBody = new String(httpRequest.getHttpRequestBody());
-        QueryParameter parameters = QueryParameter.of(requestBody);
-        //TODO: 프레임워크 로직으로 빼야함
-        save(parameters.getValue("userId"), parameters.getValue("password"),
-                parameters.getValue("name"), parameters.getValue("email"));
-        httpResponse.sendRedirect("index.html");
+        save(httpRequest.getQueryValue("userId"), httpRequest.getQueryValue("password"),
+                httpRequest.getQueryValue("name"), httpRequest.getQueryValue("email"));
+        httpResponse.redirect("index.html");
     }
 
     private void save(String userId, String password, String name, String email) {

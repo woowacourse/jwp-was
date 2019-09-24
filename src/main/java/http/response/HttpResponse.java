@@ -27,21 +27,20 @@ public class HttpResponse {
         return httpResponseBody;
     }
 
-    public void sendRedirect(String uri) {
+    public void redirect(String uri) {
         this.httpStatusLine = new HttpStatusLine(HttpStatus.FOUND);
         httpResponseHeader.addHeader("Location", "/" + uri);
     }
 
-    public void send200Ok(String uri) throws IOException, URISyntaxException {
+    public void setStatusCode(HttpStatus httpStatus) {
+        this.httpStatusLine = new HttpStatusLine(httpStatus);
+    }
+
+    public void forward(String uri) throws IOException, URISyntaxException {
         String contentType = MediaType.getContentType(uri);
 
-        this.httpStatusLine = new HttpStatusLine(HttpStatus.OK);
         this.httpResponseBody = new HttpResponseBody(uri);
         httpResponseHeader.addHeader("Content-Type", contentType + ";charset=utf-8");
         httpResponseHeader.addHeader("Content-Length", String.valueOf(httpResponseBody.getBodyLength()));
-    }
-
-    public void send404Error() {
-        this.httpStatusLine = new HttpStatusLine(HttpStatus.NOT_FOUND);
     }
 }

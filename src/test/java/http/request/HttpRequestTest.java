@@ -20,7 +20,8 @@ class HttpRequestTest {
         HttpRequestLine httpRequestLine = new HttpRequestLine("GET /index.html HTTP/1.1");
         HttpRequestHeader httpRequestHeader = new HttpRequestHeader(Collections.singletonMap("Cache-Control", "max-age=0"));
         HttpRequestBody httpRequestBody = new HttpRequestBody(new byte[0]);
-        HttpRequest httpRequest = new HttpRequest(httpRequestLine, httpRequestHeader, httpRequestBody);
+        HttpRequest httpRequest = new HttpRequest(httpRequestLine, httpRequestHeader,
+                QueryParameter.empty(), httpRequestBody);
 
         assertThat(httpRequest.getHttpRequestLine().toString()).isEqualTo("GET /index.html HTTP/1.1\r\n");
     }
@@ -34,7 +35,8 @@ class HttpRequestTest {
         headers.put("Content-Length", "20");
         HttpRequestHeader httpRequestHeader = new HttpRequestHeader(headers);
         HttpRequestBody httpRequestBody = new HttpRequestBody("userId=abcd&userName=abc\r\n".getBytes());
-        HttpRequest httpRequest = new HttpRequest(httpRequestLine, httpRequestHeader, httpRequestBody);
+        HttpRequest httpRequest = new HttpRequest(httpRequestLine, httpRequestHeader,
+                QueryParameter.of(new String(httpRequestBody.getBody())), httpRequestBody);
 
         assertThat(httpRequest.getHttpRequestBody()).isEqualTo("userId=abcd&userName=abc\r\n".getBytes());
     }
@@ -47,7 +49,8 @@ class HttpRequestTest {
         headers.put("Cache-Control", "max-age=0");
         HttpRequestHeader httpRequestHeader = new HttpRequestHeader(headers);
         HttpRequestBody httpRequestBody = new HttpRequestBody(new byte[0]);
-        HttpRequest httpRequest = new HttpRequest(httpRequestLine, httpRequestHeader, httpRequestBody);
+        HttpRequest httpRequest = new HttpRequest(httpRequestLine, httpRequestHeader,
+                QueryParameter.empty(), httpRequestBody);
 
         assertTrue(httpRequest.isContainExtension());
     }
@@ -61,7 +64,8 @@ class HttpRequestTest {
         headers.put("Content-Length", "20");
         HttpRequestHeader httpRequestHeader = new HttpRequestHeader(headers);
         HttpRequestBody httpRequestBody = new HttpRequestBody("userId=abcd&userName=abc\n".getBytes());
-        HttpRequest httpRequest = new HttpRequest(httpRequestLine, httpRequestHeader, httpRequestBody);
+        HttpRequest httpRequest = new HttpRequest(httpRequestLine, httpRequestHeader,
+                QueryParameter.of(new String(httpRequestBody.getBody())), httpRequestBody);
 
         assertFalse(httpRequest.isContainExtension());
     }
@@ -72,7 +76,8 @@ class HttpRequestTest {
         HttpRequestLine httpRequestLine = new HttpRequestLine("GET /index.html HTTP/1.1");
         HttpRequestHeader httpRequestHeader = new HttpRequestHeader(Collections.singletonMap("Cache-Control", "max-age=0"));
         HttpRequestBody httpRequestBody = new HttpRequestBody(new byte[0]);
-        HttpRequest httpRequest = new HttpRequest(httpRequestLine, httpRequestHeader, httpRequestBody);
+        HttpRequest httpRequest = new HttpRequest(httpRequestLine, httpRequestHeader,
+                QueryParameter.empty(), httpRequestBody);
 
         assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.GET);
     }
@@ -83,7 +88,8 @@ class HttpRequestTest {
         HttpRequestLine httpRequestLine = new HttpRequestLine("GET /index.html HTTP/1.1");
         HttpRequestHeader httpRequestHeader = new HttpRequestHeader(Collections.singletonMap("Cache-Control", "max-age=0"));
         HttpRequestBody httpRequestBody = new HttpRequestBody(new byte[0]);
-        HttpRequest httpRequest = new HttpRequest(httpRequestLine, httpRequestHeader, httpRequestBody);
+        HttpRequest httpRequest = new HttpRequest(httpRequestLine, httpRequestHeader,
+                QueryParameter.empty(), httpRequestBody);
 
         assertThat(httpRequest.getUri()).isEqualTo("/index.html");
     }
