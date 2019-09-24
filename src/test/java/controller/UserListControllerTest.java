@@ -55,7 +55,7 @@ class UserListControllerTest {
         HttpRequest request = new HttpRequest(in);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         HttpResponse response = new HttpResponse(out);
-        controller.doGet(request, response);
+        controller.service(request, response);
 
         return response;
     }
