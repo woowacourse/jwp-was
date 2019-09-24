@@ -26,7 +26,7 @@ class HttpHeaderTest {
 
     @Test
     void Location_add_확인() {
-        HttpHeader httpHeader = HttpHeader.redirect("localhost:8080", "/index.html");
-        assertEquals("localhost:8080/index.html",httpHeader.get("Location"));
+        HttpHeader httpHeader = HttpHeader.of(Arrays.asList("Location: /index.html"));
+        assertEquals("/index.html", httpHeader.get("Location"));
     }
 }
