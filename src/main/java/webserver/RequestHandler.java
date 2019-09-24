@@ -1,8 +1,10 @@
 package webserver;
 
 import http.controller.HttpRequestHandlers;
+import http.model.HttpProtocols;
 import http.model.HttpRequest;
 import http.model.HttpResponse;
+import http.model.HttpStatus;
 import http.supoort.HttpRequestParser;
 import http.supoort.ResponseMessageConverter;
 import http.view.ModelAndView;
@@ -57,7 +59,13 @@ public class RequestHandler implements Runnable {
     }
 
     private void sendError(String message, OutputStream out) {
-
+        DataOutputStream dos = new DataOutputStream(out);
+        try {
+            dos.writeBytes(HttpProtocols.HTTP1_1 + " " + HttpStatus.NOT_FOUND + "\r\n");
+            dos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void response(HttpResponse response, OutputStream out) {
