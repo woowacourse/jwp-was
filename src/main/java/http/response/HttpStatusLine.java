@@ -1,15 +1,14 @@
 package http.response;
 
 import http.HttpStatus;
+import http.HttpVersion;
 
 public class HttpStatusLine {
-    private String httpVersion;
+    private HttpVersion httpVersion = HttpVersion.HTTP_1_1;
     private HttpStatus httpStatus;
 
-    public HttpStatusLine(String line) {
-        String[] statusLine = line.split(" ");
-        this.httpVersion = statusLine[0];
-        this.httpStatus = HttpStatus.of(statusLine[1]);
+    public HttpStatusLine(HttpStatus httpStatus) {
+        this.httpStatus = httpStatus;
     }
 
     @Override
