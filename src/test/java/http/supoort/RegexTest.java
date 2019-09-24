@@ -18,10 +18,8 @@ public class RegexTest {
     @Test
     void wildcard() {
         Pattern pattern = Pattern.compile("/*");
-        Matcher matcher = pattern.matcher("/user/create//");
-        while (matcher.find()) {
-            System.out.println(matcher.group());
-        }
+        Matcher matcher = pattern.matcher("/user/create/");
+        assertThat(matcher.find()).isTrue();
     }
 
     @Test
