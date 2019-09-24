@@ -6,9 +6,9 @@ import http.session.RandomGenerateStrategy;
 import http.session.SessionManager;
 import http.supoort.RequestMapping;
 import http.supoort.converter.HttpMessageConverter;
-import http.supoort.converter.request.RequestMessageConverter;
+import http.supoort.converter.request.RequestConverter;
 import http.supoort.converter.response.HandleBarViewResolver;
-import http.supoort.converter.response.ResponseMessageConverter;
+import http.supoort.converter.response.ResponseConverter;
 import http.supoort.converter.response.ViewResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,7 +67,7 @@ public class WebServer {
     }
 
     private static HttpMessageConverter initConverter() {
-        return new HttpMessageConverter(new RequestMessageConverter(), new ResponseMessageConverter(initViewResolver()));
+        return new HttpMessageConverter(new RequestConverter(), new ResponseConverter(initViewResolver()));
     }
 
     private static ViewResolver initViewResolver() {

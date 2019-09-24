@@ -8,7 +8,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class RequestMessageConverter {
+public class RequestConverter {
     private static final String SEPARATOR = " ";
 
     public ServletRequest parse(InputStream inputStream) {
@@ -18,7 +18,7 @@ public class RequestMessageConverter {
             validate(requestLine);
             String[] requestLineTokens = requestLine.split(SEPARATOR);
             String method = requestLineTokens[0];
-            return HttpRequestConverter.of(method).convert(requestLineTokens[1], requestLineTokens[2], bufferedReader);
+            return HttpRequestConverters.of(method).convert(requestLineTokens[1], requestLineTokens[2], bufferedReader);
 
         } catch (IndexOutOfBoundsException e) {
             throw new IllegalHttpRequestException(e.getMessage());

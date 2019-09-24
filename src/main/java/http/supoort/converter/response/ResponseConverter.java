@@ -11,8 +11,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Map;
 
-public class ResponseMessageConverter {
-    private static final Logger logger = LoggerFactory.getLogger(ResponseMessageConverter.class);
+public class ResponseConverter {
+    private static final Logger logger = LoggerFactory.getLogger(ResponseConverter.class);
     private static final String TEMPLATE_PATH = "./templates";
     private static final String STATIC_PATH = "./static";
     private static final String SPACE = " ";
@@ -23,7 +23,7 @@ public class ResponseMessageConverter {
     private static final String EXTENSION_SEPARATOR = ".";
     private final ViewResolver viewResolver;
 
-    public ResponseMessageConverter(ViewResolver viewResolver) {
+    public ResponseConverter(ViewResolver viewResolver) {
         this.viewResolver = viewResolver;
     }
 

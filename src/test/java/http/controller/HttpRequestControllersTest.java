@@ -5,7 +5,7 @@ import http.model.request.ServletRequest;
 import http.model.response.HttpStatus;
 import http.model.response.ServletResponse;
 import http.supoort.RequestMapping;
-import http.supoort.converter.request.RequestMessageConverter;
+import http.supoort.converter.request.RequestConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class HttpRequestControllersTest {
-    private RequestMessageConverter converter = new RequestMessageConverter();
+    private RequestConverter converter = new RequestConverter();
     private HttpRequestControllers handlers = new HttpRequestControllers(new FileResourceController(RequestMapping.GET("/*")));
 
     @BeforeEach

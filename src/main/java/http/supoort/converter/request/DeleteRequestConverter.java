@@ -5,9 +5,9 @@ import http.model.request.ServletRequest;
 
 import java.io.BufferedReader;
 
-public class PostHttpRequestMessageconverter extends AbstractHttpRequestMessageconverter {
+public class DeleteRequestConverter extends AbstractHttpRequestConverter {
     @Override
     public ServletRequest convert(String uri, String protocol, BufferedReader bufferedReader) {
-        return convertWithBody(HttpMethod.POST, uri, protocol, bufferedReader);
+        return convertWithoutBody(HttpMethod.DELETE, uri, protocol, bufferedReader);
     }
 }

@@ -13,8 +13,8 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class RequestMessageConverterTest {
-    private RequestMessageConverter requestConverter = new RequestMessageConverter();
+class RequestConverterTest {
+    private RequestConverter requestConverter = new RequestConverter();
 
     @Test
     void 올바른_입력_파싱_확인() {
