@@ -1,18 +1,30 @@
 package webserver;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.Socket;
-
+import http.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.IOUtils;
+import webserver.controller.Controller;
+import webserver.controller.CreateUserController;
+import webserver.controller.FileController;
+
+import java.io.*;
+import java.net.Socket;
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
+    private static Map<String, Controller> api;
+
+    static {
+        api = new HashMap<>();
+        api.put("/user/create", new CreateUserController());
+    }
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -23,33 +35,27 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
-            DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = "Hello World".getBytes();
-            response200Header(dos, body.length);
-            responseBody(dos, body);
-        } catch (IOException e) {
+            HttpRequest httpRequest = readRequestUrl(in);
+            HttpResponse httpResponse = new HttpResponse(new DataOutputStream(out));
+
+            Controller controller = Optional.ofNullable(api.get(httpRequest.getResourcePath()))
+                    .orElseGet(FileController::new);
+            controller.service(httpRequest, httpResponse);
+        } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
+    private HttpRequest readRequestUrl(InputStream in) throws IOException {
+        InputStreamReader inputStreamReader = new InputStreamReader(in);
+        BufferedReader br = new BufferedReader(inputStreamReader);
+        HttpRequestHeader header = new HttpRequestHeader(IOUtils.parseHeader(br));
 
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
+        if ("POST".equals(header.getMethod())) {
+            String body = IOUtils.readData(br, Integer.parseInt(header.get("content-length")));
+            HttpRequestBody httpRequestBody = new HttpRequestBody(body);
+            return new HttpRequest(header, httpRequestBody);
         }
+        return new HttpRequest(header);
     }
 }
