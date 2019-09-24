@@ -27,7 +27,7 @@ public class HttpResponse {
         this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.OK, HttpVersion.HTTP_1_1);
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "text/" + contentType + ";charset=utf-8");
-        headers.put("Content-Length", ""+body.length);
+        headers.put("Content-Length", "" + body.length);
         addHeader(headers);
         this.body = body;
     }
@@ -41,26 +41,20 @@ public class HttpResponse {
     }
 
     public void badRequest() {
-        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.FOUND, HttpVersion.HTTP_1_1);
-        Map<String, String> header = new HashMap<>();
-        header.put("Location", "/error.html");
-        addHeader(header);
+        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.BAD_REQUEST, HttpVersion.HTTP_1_1);
+        addHeader(new HashMap<>());
         this.body = new byte[]{};
     }
 
     public void notFound() {
         this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.NOT_FOUND, HttpVersion.HTTP_1_1);
-        Map<String, String> header = new HashMap<>();
-        header.put("Location", "/error.html");
-        addHeader(header);
+        addHeader(new HashMap<>());
         this.body = new byte[]{};
     }
 
     public void methodNotAllow() {
         this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.METHOD_NOT_FOUND, HttpVersion.HTTP_1_1);
-        Map<String, String> header = new HashMap<>();
-        header.put("Location", "/error.html");
-        addHeader(header);
+        addHeader(new HashMap<>());
         this.body = new byte[]{};
     }
 

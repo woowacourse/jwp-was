@@ -28,6 +28,10 @@ public class HttpRequest {
         return !httpBody.equals(HttpBody.EMPTY_BODY);
     }
 
+    public boolean isFileRequest() {
+        return getPath().contains(".");
+    }
+
     public HttpMethodType getHttpMethod() {
         return httpRequestStartLine.getHttpMethodType();
     }
@@ -46,10 +50,6 @@ public class HttpRequest {
 
     public HttpBody getBody() {
         return httpBody;
-    }
-
-    public boolean isFileRequest() {
-        return getPath().contains(".");
     }
 
 }
