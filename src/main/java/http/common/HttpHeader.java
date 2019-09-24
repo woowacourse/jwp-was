@@ -1,6 +1,6 @@
 package http.common;
 
-import http.common.exception.HttpHeaderNotFoundException;
+import http.common.exception.InvalidHeaderKeyException;
 import http.common.exception.InvalidHttpHeaderException;
 import utils.StringUtils;
 
@@ -42,12 +42,12 @@ public class HttpHeader {
     }
 
 
-    public String get(String key) {
-        if (StringUtils.isEmpty(key)) {
-            throw new HttpHeaderNotFoundException();
+    public String getHeaderAttribute(String key) {
+        try {
+            return httpHeader.get(key);
+        } catch (NullPointerException e) {
+            throw new InvalidHeaderKeyException(e);
         }
-
-        return httpHeader.get(key);
     }
 
     public String serialize() {
