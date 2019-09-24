@@ -9,9 +9,6 @@ import webserver.response.HttpResponse;
 import webserver.response.HttpStatus;
 import webserver.response.ResponseHeader;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class UserCreateServlet extends RequestServlet {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private static UserCreateServlet instance = null;

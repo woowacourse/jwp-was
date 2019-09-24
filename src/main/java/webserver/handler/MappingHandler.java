@@ -17,6 +17,6 @@ public class MappingHandler {
     }
 
     public static HttpServlet getServlets(String absPath) {
-        return (HttpServlet)servlets.getOrDefault(absPath, FileServlet.getInstance());
+        return (HttpServlet) servlets.getOrDefault(absPath, FileServlet.getInstance());
     }
 }

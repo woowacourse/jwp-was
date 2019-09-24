@@ -9,8 +9,6 @@ import webserver.response.ResponseHeader;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class FileServlet implements HttpServlet {
     private static FileServlet instance = null;

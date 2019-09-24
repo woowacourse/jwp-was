@@ -8,8 +8,6 @@ import webserver.response.ResponseHeader;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
 
 import static utils.HttpRequestUtils.generateTemplateFilePath;
 
