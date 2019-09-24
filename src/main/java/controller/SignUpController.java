@@ -3,27 +3,43 @@ package controller;
 import db.DataBase;
 import model.UserAssembler;
 import utils.UrlEncodedParser;
+import webserver.HttpMethod;
 import webserver.Request;
 import webserver.Response;
 
-public class SignUpController extends AbstractController {
+import java.util.HashMap;
+import java.util.Map;
+
+public class SignUpController implements Controller {
 
     private static final String USER_CREATE_URL = "/user/create";
 
-    @Override
-    public Response doGet(Request request) {
-        throw createUnsupportedException();
+    private static Map<HttpMethod, HandleHttpMethod> methods;
+
+    static {
+        methods = new HashMap<>();
+        methods.put(HttpMethod.POST, HandleHttpMethod.POST);
     }
 
     @Override
-    public Response doPost(Request request) {
-        DataBase.addUser(UserAssembler.toEntity(UrlEncodedParser.parse(new String(request.getBody()))));
-        return Response.ResponseBuilder.redirect("/index.html")
-                .build();
+    public Response service(Request request) {
+        return methods.get(request.getMethod()).method(request);
     }
 
     @Override
     public String getPath() {
         return USER_CREATE_URL;
+    }
+
+    private enum HandleHttpMethod {
+        POST {
+            Response method(Request request) {
+                DataBase.addUser(UserAssembler.toEntity(UrlEncodedParser.parse(new String(request.getBody()))));
+                return Response.ResponseBuilder.redirect("/index.html")
+                        .build();
+            }
+        };
+
+        abstract Response method(Request request);
     }
 }

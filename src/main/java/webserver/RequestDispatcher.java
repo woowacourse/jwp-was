@@ -36,14 +36,14 @@ public class RequestDispatcher {
 
     public static Response handle(Request request) {
         try {
-            String url = request.getPath();
-            Optional<File> file = ResourceLoadUtils.detectFile(url);
+            String path = request.getPath();
+            Optional<File> file = ResourceLoadUtils.detectFile(path);
 
             if (file.isPresent()) {
                 return serveFile(file.get());
             }
 
-            Controller toServe = controllers.get(request.getPath());
+            Controller toServe = controllers.get(path);
             if (toServe != null) {
                 return toServe.service(request);
             }
