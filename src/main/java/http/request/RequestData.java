@@ -1,6 +1,7 @@
-package http.request.core;
+package http.request;
 
 import http.exception.CanNotParseDataException;
+import http.request.core.RequestPath;
 
 import java.util.Arrays;
 import java.util.HashMap;
