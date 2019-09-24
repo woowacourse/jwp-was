@@ -1,7 +1,7 @@
 package utils.parser;
 
 import utils.exception.NotFoundContentTypeSeparatorException;
-import webserver.http.headerfields.HttpContentType.Chemical;
+import webserver.http.headerfields.Chemical;
 
 import java.util.Arrays;
 import java.util.List;

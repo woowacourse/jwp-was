@@ -56,31 +56,11 @@ public class Router {
 
     private static HttpResponse serveStaticFiles(HttpRequest request) {
         return FileIoUtils.loadFileFromClasspath("./static" + request.path()).map(body ->
-            HttpResponse.builder(extensionToContentType(request.path().extension()))
+            HttpResponse.builder(HttpContentType.extensionToContentType(request.path().extension()))
                         .version(request.version())
                         .connection(request.connection().orElse(null))
                         .body(body)
                         .build()
         ).orElse(HttpResponse.NOT_FOUND);
-    }
-
-    private static HttpContentType extensionToContentType(String extension) {
-        switch (extension) {
-            case "css":
-                return HttpContentType.TEXT_CSS();
-            case "js":
-                return HttpContentType.APPLICATION_JAVASCRIPT();
-            case "gif":
-                return HttpContentType.IMAGE_GIF();
-            case "jpg":
-                return HttpContentType.IMAGE_JPEG();
-            case "png":
-                return HttpContentType.IMAGE_PNG();
-            case "ico":
-                return HttpContentType.IMAGE_X_ICON();
-            case "txt":
-            default:
-                return HttpContentType.TEXT_PLAIN();
-        }
     }
 }

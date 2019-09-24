@@ -11,19 +11,6 @@ import java.util.*;
 public class HttpContentType implements HttpHeaderField {
     private static final Logger logger = LoggerFactory.getLogger(HttpContentType.class);
 
-    public enum Chemical {
-        APPLICATION,
-        AUDIO,
-        EXAMPLE,
-        FONT,
-        IMAGE,
-        MESSAGE,
-        MODEL,
-        MULTIPART,
-        TEXT,
-        VIDEO
-    }
-
     private static final int CONTENT_TYPE_INDEX = 0;
     private static final int CONTENT_TYPE_PARAMS_INDEX = 1;
     private static final String APPLICATION_JSON = "application/json";
@@ -140,6 +127,12 @@ public class HttpContentType implements HttpHeaderField {
         this.chemical = chemical;
         this.subtype = subtype;
         this.params = DEFAULT_PARAMS;
+    }
+
+    public static HttpContentType extensionToContentType(String extension) {
+        extension = extension.toLowerCase();
+
+        return Extension.extensionToContentType(extension).orElse(TEXT_PLAIN());
     }
 
     @Override

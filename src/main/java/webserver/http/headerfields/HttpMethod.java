@@ -1,6 +1,7 @@
 package webserver.http.headerfields;
 
-import java.util.Optional;
+import webserver.http.exception.InvalidHttpMethodException;
+
 import java.util.stream.Stream;
 
 public enum HttpMethod {
@@ -20,10 +21,11 @@ public enum HttpMethod {
         this.name = name;
     }
 
-    public static Optional<HttpMethod> of(String name) {
+    public static HttpMethod of(String name) {
         return Stream.of(values())
-                    .filter(x -> x.name.equals(name.toUpperCase()))
-                    .findAny();
+                .filter(x -> x.name.equals(name.toUpperCase()))
+                .findAny()
+                .orElseThrow(InvalidHttpMethodException::new);
     }
 
     @Override

@@ -3,7 +3,7 @@ package utils.parser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import utils.exception.NotFoundContentTypeSeparatorException;
-import webserver.http.headerfields.HttpContentType;
+import webserver.http.headerfields.Chemical;
 
 import java.util.List;
 import java.util.Map;
@@ -42,11 +42,11 @@ class ContentTypeParserTest {
         String inputData4 = "audio/file";
         String inputData5 = "font/fontFile";
 
-        assertThat(ContentTypeParser.chemicalParse(inputData1)).isEqualTo(HttpContentType.Chemical.APPLICATION);
-        assertThat(ContentTypeParser.chemicalParse(inputData2)).isEqualTo(HttpContentType.Chemical.TEXT);
-        assertThat(ContentTypeParser.chemicalParse(inputData3)).isEqualTo(HttpContentType.Chemical.IMAGE);
-        assertThat(ContentTypeParser.chemicalParse(inputData4)).isEqualTo(HttpContentType.Chemical.AUDIO);
-        assertThat(ContentTypeParser.chemicalParse(inputData5)).isEqualTo(HttpContentType.Chemical.FONT);
+        assertThat(ContentTypeParser.chemicalParse(inputData1)).isEqualTo(Chemical.APPLICATION);
+        assertThat(ContentTypeParser.chemicalParse(inputData2)).isEqualTo(Chemical.TEXT);
+        assertThat(ContentTypeParser.chemicalParse(inputData3)).isEqualTo(Chemical.IMAGE);
+        assertThat(ContentTypeParser.chemicalParse(inputData4)).isEqualTo(Chemical.AUDIO);
+        assertThat(ContentTypeParser.chemicalParse(inputData5)).isEqualTo(Chemical.FONT);
     }
 
     @Test
