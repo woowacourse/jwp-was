@@ -33,6 +33,7 @@ public class ResponseMessageConverter {
             dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
+            throw new IllegalHttpRequestException();
         }
     }
 
@@ -44,6 +45,7 @@ public class ResponseMessageConverter {
             dos.writeBytes(LINE_BREAK);
         } catch (IOException e) {
             logger.error(e.getMessage());
+            throw new IllegalHttpRequestException();
         }
     }
 
@@ -53,6 +55,7 @@ public class ResponseMessageConverter {
             dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
+            throw new IllegalHttpRequestException();
         }
     }
 }

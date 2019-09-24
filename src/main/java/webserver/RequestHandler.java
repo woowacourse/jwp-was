@@ -61,7 +61,7 @@ public class RequestHandler implements Runnable {
     private void sendError(String message, OutputStream out) {
         DataOutputStream dos = new DataOutputStream(out);
         try {
-            dos.writeBytes(HttpProtocols.HTTP1_1 + " " + HttpStatus.NOT_FOUND + "\r\n");
+            dos.writeBytes(HttpProtocols.HTTP1_1 + " " + HttpStatus.BAD_REQUEST + "\r\n");
             dos.flush();
         } catch (IOException e) {
             e.printStackTrace();
