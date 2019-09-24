@@ -1,7 +1,8 @@
 package http.request;
 
+import static http.common.ContentType.FORM_URLENCODED;
+
 public class RequestBody {
-    private static final String FORM_URLENCODED = "application/x-www-form-urlencoded";
     private final String body;
     private final RequestParameter formData;
 

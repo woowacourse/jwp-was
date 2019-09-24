@@ -1,5 +1,6 @@
 package webserver;
 
+import http.common.ContentTypeMapper;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.response.ResponseStatus;
@@ -19,10 +20,8 @@ public class ResourceHttpRequestHandler {
         String filePath = STATIC_RESOURCE_PATH_PREFIX + httpRequest.getPath();
         byte[] file = FileIoUtils.loadFileFromClasspath(filePath);
 
-        //TODO Content Type 추출
-        String contentType = "";
         httpResponse.setResponseStatus(ResponseStatus.OK);
-        httpResponse.addHeaderAttribute("Content-Type", contentType);
+        httpResponse.addHeaderAttribute("Content-Type", ContentTypeMapper.getContentType(filePath));
         httpResponse.addHeaderAttribute("Content-Length", String.valueOf(file.length));
         httpResponse.setBody(file);
     }
