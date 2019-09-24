@@ -22,6 +22,11 @@ public class HttpResponse {
         if (httpStatus == HttpStatus.OK) {
             responseBody(dos, body);
         }
+        responseFlush(dos);
+    }
+
+    private void responseFlush(DataOutputStream dos) throws IOException {
+        dos.flush();
     }
 
     private void reponseLine(DataOutputStream dos) throws IOException {
@@ -37,7 +42,6 @@ public class HttpResponse {
 
     private void responseBody(DataOutputStream dos, byte[] body) throws IOException {
         dos.write(body, 0, body.length);
-        dos.flush();
     }
 
     @Override
