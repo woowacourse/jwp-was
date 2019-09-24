@@ -1,8 +1,6 @@
 package webserver;
 
-import controller.Controller;
-import controller.CreateUserController;
-import controller.FileController;
+import controller.ControllerContainer;
 import http.request.HttpRequest;
 import http.request.factory.HttpRequestFactory;
 import http.response.HttpResponse;
@@ -15,19 +13,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.Map;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private static final Map<String, Controller> controllers;
-
-    static {
-        controllers = new HashMap<>();
-        controllers.put("/user/create", CreateUserController.getInstance());
-        controllers.put("/", FileController.getInstance());
-    }
-
     private Socket connection;
 
     public RequestHandler(Socket connectionSocket) {
@@ -42,19 +30,18 @@ public class RequestHandler implements Runnable {
              OutputStream outputStream = connection.getOutputStream()) {
 
             DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-//            HttpRequest httpRequest = new HttpRequest(RequestParser.parse(inputStream));
-            HttpRequest httpRequest = HttpRequestFactory.create(RequestParser.parse(inputStream));
+            HttpRequest httpRequest = HttpRequestFactory.create(RequestParser.lineParse(inputStream));
             HttpResponse httpResponse = new HttpResponse();
 
-            logger.debug("RequestLine: {}", httpRequest.getHttpRequestLine().toString());
+            logger.debug("RequestLine: {}", httpRequest.getHttpRequestStartLine().toString());
 
             if (httpRequest.isContainExtension()) {
-                controllers.get("/").service(httpRequest, httpResponse);
+                ControllerContainer.getController("/").service(httpRequest, httpResponse);
             } else {
-                controllers.get(httpRequest.getUri()).service(httpRequest, httpResponse);
+                ControllerContainer.getController(httpRequest.getUri()).service(httpRequest, httpResponse);
             }
 
-            dataOutputStream.writeBytes(httpResponse.getHttpStatusLine().toString());
+            dataOutputStream.writeBytes(httpResponse.getHttpResponseStatusLine().toString());
             dataOutputStream.writeBytes(httpResponse.getHttpResponseHeader().toString());
 
             if (httpResponse.getHttpResponseBody() != null) {
