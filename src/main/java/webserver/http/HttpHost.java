@@ -15,11 +15,13 @@ public class HttpHost implements HttpHeaderField {
         if (CACHE.containsKey(input)) {
             return Optional.of(CACHE.get(input));
         }
-        if (input.contains(" ")) {
-            return Optional.empty();
-        }
-        final String[] hostnameAndPort = input.split(":");
+        final String[] hostnameAndPort = input.contains("://")
+                ? input.substring(input.indexOf("://") + 3).split(":")
+                : input.trim().split("\\s*:\\s*");
         if (hostnameAndPort.length == 1) {
+            if (hostnameAndPort[0].split("\\s+").length > 1) {
+                return Optional.empty();
+            }
             final HttpHost host = new HttpHost(input, HttpPort.PORT_80);
             CACHE.put(input, host);
             return Optional.of(host);
@@ -34,6 +36,14 @@ public class HttpHost implements HttpHeaderField {
     private HttpHost(String name, HttpPort port) {
         this.name = name;
         this.port = port;
+    }
+
+    public String name() {
+        return this.name;
+    }
+
+    public HttpPort port() {
+        return this.port;
     }
 
     @Override

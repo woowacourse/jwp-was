@@ -28,44 +28,45 @@ public class HttpRequest {
         return (startLine.length != 3)
                 ? Optional.empty()
                 : HttpMethod.of(startLine[0]).flatMap(method ->
-                    HttpVersion.of(startLine[2]).map(version -> {
-                        final HttpPath path = new HttpPath(startLine[1]);
-                        final Map<String, String> headerFields =
-                                KeyValueParserFactory.httpHeaderFieldsParser().interpret(io.readLinesWhileNotEmpty());
-                        final HttpHost host = HttpHost.of(
-                                headerFields.remove(HttpHeaderField.getName(HttpHost.class))
-                        ).orElse(null);
-                        final HttpContentType contentType = HttpContentType.of(
-                                headerFields.remove(HttpHeaderField.getName(HttpContentType.class))
-                        ).orElse(null);
-                        final HttpConnection connection = HttpConnection.of(
-                                headerFields.remove(HttpHeaderField.getName(HttpConnection.class))
-                        ).orElse(null);
-                        if (method == HttpMethod.GET && startLine[1].contains("?")) {
-                            return new HttpRequest(
-                                    method, path, version,
-                                    host, contentType, connection, headerFields,
-                                    KeyValueParserFactory.queryStringParser().interpret(startLine[1].split("\\?")[1]),
-                                    null
-                            );
-                        }
-                        if (method == HttpMethod.POST || method == HttpMethod.PUT) {
-                            if (contentType.mimeType() == HttpMimeType.APPLICATION_X_WWW_FORM_URLENCODED) {
+                    HttpPath.of(startLine[1]).flatMap(path ->
+                        HttpVersion.of(startLine[2]).map(version -> {
+                            final Map<String, String> headerFields =
+                                    KeyValueParserFactory.httpHeaderFieldsParser().interpret(io.readLinesWhileNotEmpty());
+                            final HttpHost host = HttpHost.of(
+                                    headerFields.remove(HttpHeaderField.getName(HttpHost.class))
+                            ).orElse(null);
+                            final HttpContentType contentType = HttpContentType.of(
+                                    headerFields.remove(HttpHeaderField.getName(HttpContentType.class))
+                            ).orElse(null);
+                            final HttpConnection connection = HttpConnection.of(
+                                    headerFields.remove(HttpHeaderField.getName(HttpConnection.class))
+                            ).orElse(null);
+                            if (method == HttpMethod.GET && startLine[1].contains("?")) {
                                 return new HttpRequest(
                                         method, path, version,
                                         host, contentType, connection, headerFields,
-                                        KeyValueParserFactory.queryStringParser().interpret(io.readAllLeft()),
+                                        KeyValueParserFactory.queryStringParser().interpret(startLine[1].split("\\?")[1]),
                                         null
                                 );
                             }
-                        }
-                        return new HttpRequest(
-                                method, path, version,
-                                host, contentType, connection, headerFields,
-                                new HashMap<>(),
-                                null
-                        );
-                    })
+                            if (method == HttpMethod.POST || method == HttpMethod.PUT) {
+                                if (contentType.mimeType() == HttpMimeType.APPLICATION_X_WWW_FORM_URLENCODED) {
+                                    return new HttpRequest(
+                                            method, path, version,
+                                            host, contentType, connection, headerFields,
+                                            KeyValueParserFactory.queryStringParser().interpret(io.readAllLeft()),
+                                            null
+                                    );
+                                }
+                            }
+                            return new HttpRequest(
+                                    method, path, version,
+                                    host, contentType, connection, headerFields,
+                                    new HashMap<>(),
+                                    null
+                            );
+                        })
+                    )
                 );
     }
 

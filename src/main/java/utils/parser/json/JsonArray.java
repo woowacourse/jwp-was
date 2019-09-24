@@ -36,11 +36,12 @@ public class JsonArray extends JsonValue<List<JsonValue<?>>> {
         }
         if (super.val.size() == 1) {
             return super.val.stream()
-                            .map(o -> "[" + o.toString() + "]")
+                            .map(el -> "[" + el.toString() + "]")
                             .collect(Collectors.joining());
         }
-        return super.val.stream()
-                        .map(JsonValue::toString)
-                        .reduce("[", (a, b) -> a + ", " + b) + "]";
+        return "{" + super.val.stream()
+                                .map(JsonValue::toString)
+                                .reduce((a, b) -> a + ", " + b)
+                                .get() + "}";
     }
 }

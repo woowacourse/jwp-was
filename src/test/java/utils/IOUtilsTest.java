@@ -13,10 +13,9 @@ public class IOUtilsTest {
 
     @Test
     public void readData() throws Exception {
-        String data = "abcd123";
-        StringReader sr = new StringReader(data);
-        BufferedReader br = new BufferedReader(sr);
-
-        logger.debug("deserialize body : {}", IOUtils.readData(br, data.length()));
+        final String DATA = "abcd123";
+        final StringReader sr = new StringReader(DATA);
+        final BufferedReader br = new BufferedReader(sr);
+        logger.debug("deserialize body : {}", IOUtils.readData(br, DATA.length()));
     }
 }

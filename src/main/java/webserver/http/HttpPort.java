@@ -11,6 +11,7 @@ public class HttpPort {
 
     private static final Map<Integer, HttpPort> CACHE = new HashMap<>();
     public static final HttpPort PORT_80 = of(80).get();
+    public static final HttpPort PORT_443 = of(443).get();
     public static final HttpPort PORT_8080 = of(8080).get();
 
     private final int number;

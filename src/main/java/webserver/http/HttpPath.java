@@ -2,23 +2,40 @@ package webserver.http;
 
 import java.net.URLDecoder;
 import java.util.Objects;
+import java.util.Optional;
 
 public class HttpPath {
     private final String path;
 
-    public HttpPath(String path) {
-        this.path = (path.contains("?") && path.lastIndexOf("?") > path.lastIndexOf("/"))
-                ? path.substring(0, path.lastIndexOf("?"))
-                : path;
+    public static Optional<HttpPath> of(String path) {
+        final String withoutParams = path.contains("?")
+                ? path.substring(0, path.lastIndexOf("?")).trim()
+                : path.trim();
+        if (withoutParams.charAt(0) != '/' || withoutParams.split("\\s+").length > 1) {
+            return Optional.empty();
+        }
+        return Optional.of(new HttpPath(withoutParams));
+    }
+
+    private HttpPath(String path) {
+        this.path = path;
     }
 
     public String extension() {
         return (this.path.contains(".")) ? this.path.substring(this.path.lastIndexOf(".") + 1) : "";
     }
 
+    public String encoded() {
+        return this.path;
+    }
+
+    public String decoded() {
+        return URLDecoder.decode(this.path);
+    }
+
     @Override
     public String toString() {
-        return URLDecoder.decode(this.path);
+        return decoded();
     }
 
     @Override

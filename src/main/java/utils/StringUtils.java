@@ -26,6 +26,7 @@ public class StringUtils {
     public static String screamingSnakeCaseToStartCase(String s) {
         return Stream.of(s.split("_")).map(String::toLowerCase)
                                         .map(x -> x.substring(0, 1).toUpperCase() + x.substring(1))
-                                        .reduce("", (a, b) -> a + " " + b);
+                                        .reduce((a, b) -> a + " " + b)
+                                        .orElse("");
     }
 }
