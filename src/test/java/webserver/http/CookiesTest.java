@@ -6,19 +6,19 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CookiesTest {
-    private Cookie cookie;
+    private Cookies cookies;
 
     @BeforeEach
     void setUp() {
         final String text = "JSESSIONID=123; logined=true";
-        cookie = new Cookie(text);
+        cookies = new Cookies(text);
     }
 
     @Test
     void 문자열_입력시_파싱_되서_생성되는지_확인() {
         // then
-        assertThat(cookie.get(HttpHeaders.JSESSIONID)).isEqualTo("123");
-        assertThat(cookie.get("logined")).isEqualTo("true");
+        assertThat(cookies.get(HttpHeaders.JSESSIONID)).isEqualTo("123");
+        assertThat(cookies.get("logined")).isEqualTo("true");
     }
 
     @Test
@@ -28,27 +28,40 @@ public class CookiesTest {
         final String value = "value";
 
         // when
-        cookie.put(key, value);
+        cookies.put(key, value);
 
         // then
-        assertThat(cookie.get(key)).isEqualTo(value);
+        assertThat(cookies.get(key)).isEqualTo(value);
     }
 
     @Test
     void 생성_파라미터_NULL_처리() {
         // when
-        final Cookie cookie = new Cookie(null);
+        final Cookies cookies = new Cookies(null);
 
         // then
-        assertThat(cookie.size()).isEqualTo(0);
+        assertThat(cookies.size()).isEqualTo(0);
     }
 
     @Test
     void 생성_파라미터_공백_처리() {
         // when
-        final Cookie cookie = new Cookie("");
+        final Cookies cookies = new Cookies("");
 
         // then
-        assertThat(cookie.size()).isEqualTo(0);
+        assertThat(cookies.size()).isEqualTo(0);
+    }
+
+    @Test
+    void 모든_쿠키_String으로_얻기() {
+        // given
+        final String text = "JSESSIONID=123; logined=true";
+        final Cookies cookies = new Cookies(text);
+
+        // when
+        final String expected = cookies.getAllCookiesAsString();
+
+        // then
+        assertThat(text).isEqualTo(expected);
     }
 }

@@ -10,6 +10,8 @@
 - Request Builder Pattern
 - RequestHeader -> Response에서도 사용하면 어떨까?
 - getParameter - NPE 처리
+- Cookie MultiValueMap 사용?
+- HttpResponse 개선 해보기
 
 - 로그인 
    1. id로 db 조회

@@ -55,32 +55,6 @@ class HttpUtilsTest {
     }
 
     @Test
-    void parseCookieTest() {
-        // given
-        final String cookieText = "JSESSIONID=123; logined=true";
-
-        // when
-        final Map<String, String> cookie = HttpUtils.parseCookie(cookieText);
-
-        // then
-        assertThat(cookie).hasSize(2)
-                .containsEntry("JSESSIONID", "123")
-                .containsEntry("logined", "true");
-    }
-
-    @Test
-    void parseCookie_빈값_넣었을_경우() {
-        // given
-        final String cookieText = "";
-
-        // when
-        final Map<String, String> cookie = HttpUtils.parseCookie(cookieText);
-
-        // then
-        assertThat(cookie).isEqualTo(Collections.EMPTY_MAP);
-    }
-
-    @Test
     void parseExtension_정상_작동() {
         // when
         final String extension = HttpUtils.parseExtension("test.css");

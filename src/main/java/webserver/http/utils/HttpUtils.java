@@ -18,8 +18,6 @@ public class HttpUtils {
     private static final String DELIMITER_QUERY = "&";
     private static final String DELIMITER_QUERY_PAIR = "=";
     private static final String DELIMITER_HEADER = ": ";
-    private static final String DELIMITER_COOKIE = "; ";
-    private static final String DELIMITER_COOKIE_PAIR = "=";
     private static final String DELIMITER_EXTENSION = ".";
     private static final int NOT_EXISTS_EXTENSION = 0;
 
@@ -46,16 +44,6 @@ public class HttpUtils {
         return parseKeyValue(header, DELIMITER_HEADER);
     }
 
-    public static Map<String, String> parseCookie(final String cookieText) {
-        if (StringUtils.isEmpty(cookieText)) {
-            return new HashMap<>();
-        }
-
-        return Arrays.stream(cookieText.split(DELIMITER_COOKIE))
-                .map(cookie -> parseKeyValue(cookie, DELIMITER_COOKIE_PAIR))
-                .collect(Collectors.toMap(Pair::getKey, Pair::getValue));
-    }
-
     public static String parseExtension(final String resource) {
         int beginIndex = resource.lastIndexOf(DELIMITER_EXTENSION) + 1;
         if(beginIndex <= NOT_EXISTS_EXTENSION){
@@ -64,7 +52,7 @@ public class HttpUtils {
         return resource.substring(beginIndex);
     }
 
-    private static Pair parseKeyValue(final String text, final String delimiter) {
+    public static Pair parseKeyValue(final String text, final String delimiter) {
         String[] split;
         if (StringUtils.isEmpty(text) || (split = text.split(delimiter)).length != 2) {
             log.error(text);

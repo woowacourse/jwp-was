@@ -3,7 +3,7 @@ package test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.WebServer;
-import webserver.http.Cookie;
+import webserver.http.Cookies;
 import webserver.http.HttpHeaders;
 import webserver.http.HttpStatus;
 import webserver.http.request.HttpMethod;
@@ -134,7 +134,7 @@ public class HttpTestClient {
         private final HttpStatus httpStatus;
         private final Map<String, String> headers = new HashMap<>();
         private final String body;
-        private final Cookie cookie;
+        private final Cookies cookies;
 
         public ResponseSpec(final String response) {
             final String[] split = response.split("\n");
@@ -155,8 +155,8 @@ public class HttpTestClient {
                 }
             }
 
-            // cookie
-            cookie = new Cookie(headers.get(HttpHeaders.COOKIE));
+            // cookies
+            cookies = new Cookies(headers.get(HttpHeaders.COOKIE));
 
 
             // body
@@ -190,7 +190,7 @@ public class HttpTestClient {
         }
 
         public ResponseSpec matchCookie(final String key, final String value) {
-            assertThat(cookie.get(key)).isEqualTo(value);
+            assertThat(cookies.get(key)).isEqualTo(value);
             return this;
         }
     }

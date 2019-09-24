@@ -2,7 +2,7 @@ package webserver.http.response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.http.Cookie;
+import webserver.http.Cookies;
 import webserver.http.HttpHeaders;
 import webserver.http.HttpStatus;
 import webserver.http.MimeType;
@@ -14,9 +14,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static webserver.http.HttpHeaders.*;
@@ -28,14 +26,14 @@ public class HttpResponse {
 
     private final Map<String, String> headers = new HashMap<>();
     private final OutputStream out;
-    private final Cookie cookie;
+    private final Cookies cookies;
     private HttpStatus httpStatus;
     private HttpVersion httpVersion = DEFAULT_HTTP_VERSION;
     private byte[] body;
 
     public HttpResponse(final OutputStream out) {
         this.out = out;
-        this.cookie = new Cookie();
+        this.cookies = new Cookies();
     }
 
     public void forward(final String resource) {
@@ -77,9 +75,12 @@ public class HttpResponse {
     }
 
     private void write() {
+        // todo 쿠키 어떻게 입력?
+        if (cookies.isNotEmpty()) {
+            setHeader(HttpHeaders.COOKIE, cookies.getAllCookiesAsString());
+        }
         try (DataOutputStream dos = new DataOutputStream(out)) {
             writeStartLine(dos);
-            writeCookie(dos);
             writeHeader(dos);
             writeBody(dos);
         } catch (IOException e) {
@@ -98,19 +99,6 @@ public class HttpResponse {
         dos.writeBytes("\n");
     }
 
-    // todo 이렇게 하는게 맞을까? header에 넣을까? 리팩토링
-    private void writeCookie(final DataOutputStream dos) throws IOException {
-        if (cookie.isEmpty()) {
-            return;
-        }
-        List<String> list = new ArrayList<>();
-        for (final String key : cookie.keySet()) {
-            list.add(String.format("%s=%s", key, cookie.get(key)));
-        }
-        final String cookies = String.join("; ", list);
-        dos.writeBytes(String.format("%s: %s\n", HttpHeaders.COOKIE, cookies));
-    }
-
     private void writeBody(final DataOutputStream dos) throws IOException {
         if (body != null) {
             dos.write(body, 0, body.length);
@@ -126,7 +114,7 @@ public class HttpResponse {
     }
 
     public void setCookie(final String key, final Object value) {
-        cookie.put(key, String.valueOf(value));
+        cookies.put(key, String.valueOf(value));
     }
 
     public void setBody(byte[] body) {

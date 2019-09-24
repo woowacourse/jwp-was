@@ -3,6 +3,7 @@ package webserver.http.request;
 import java.util.HashMap;
 import java.util.Map;
 
+// todo Response HEADER랑 합치기?
 public class RequestHeaders {
     private final Map<String, String> headers;
 

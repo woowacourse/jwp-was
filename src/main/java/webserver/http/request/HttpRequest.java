@@ -1,18 +1,18 @@
 package webserver.http.request;
 
-import webserver.http.Cookie;
+import webserver.http.Cookies;
 
 public class HttpRequest {
     private final RequestLine requestLine;
     private final RequestHeaders headers;
     private final Parameters parameters;
-    private final Cookie cookie;
+    private final Cookies cookies;
 
-    public HttpRequest(final RequestLine requestLine, final RequestHeaders headers, final Parameters parameters, final Cookie cookie) {
+    public HttpRequest(final RequestLine requestLine, final RequestHeaders headers, final Parameters parameters, final Cookies cookies) {
         this.requestLine = requestLine;
         this.headers = headers;
         this.parameters = parameters;
-        this.cookie = cookie;
+        this.cookies = cookies;
     }
 
     public HttpMethod getMethod() {
@@ -20,7 +20,7 @@ public class HttpRequest {
     }
 
     public String getCookie(final String key) {
-        return cookie.get(key);
+        return cookies.get(key);
     }
 
     public String getHeader(final String name) {
@@ -51,7 +51,7 @@ public class HttpRequest {
         private RequestLine requestLine;
         private RequestHeaders headers;
         private Parameters parameters;
-        private Cookie cookie;
+        private Cookies cookies;
 
         HttpRequestBuilder() {
         }
@@ -71,13 +71,13 @@ public class HttpRequest {
             return this;
         }
 
-        HttpRequestBuilder cookie(Cookie cookie) {
-            this.cookie = cookie;
+        HttpRequestBuilder cookies(Cookies cookies) {
+            this.cookies = cookies;
             return this;
         }
 
         HttpRequest build() {
-            return new HttpRequest(requestLine, headers, parameters, cookie);
+            return new HttpRequest(requestLine, headers, parameters, cookies);
         }
     }
 

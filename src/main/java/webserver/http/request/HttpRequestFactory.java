@@ -3,7 +3,7 @@ package webserver.http.request;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.http.Cookie;
+import webserver.http.Cookies;
 import webserver.http.HttpHeaders;
 import webserver.http.utils.HttpUtils;
 import webserver.http.utils.IOUtils;
@@ -30,7 +30,7 @@ public class HttpRequestFactory {
             final RequestLine requestLine = new RequestLine(br.readLine());
             final Parameters parameters = new Parameters(requestLine.getParameters());
             final RequestHeaders requestHeaders = readHeaders(br);
-            final Cookie cookie = new Cookie(requestHeaders.get(HttpHeaders.COOKIE));
+            final Cookies cookies = new Cookies(requestHeaders.get(HttpHeaders.COOKIE));
 
             readBody(br, parameters, requestHeaders);
 
@@ -38,7 +38,7 @@ public class HttpRequestFactory {
                     .requestLine(requestLine)
                     .headers(requestHeaders)
                     .parameters(parameters)
-                    .cookie(cookie)
+                    .cookies(cookies)
                     .build();
         } catch (IOException e) {
             log.error(e.getMessage());
