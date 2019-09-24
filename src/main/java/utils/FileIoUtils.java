@@ -1,8 +1,7 @@
 package utils;
 
-import exceptions.NotFoundException;
+import exceptions.NotFoundURIException;
 import org.apache.tika.Tika;
-import webserver.response.HttpStatus;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -16,7 +15,7 @@ public class FileIoUtils {
             Path path = Paths.get(FileIoUtils.class.getClassLoader().getResource(filePath).toURI());
             return Files.readAllBytes(path);
         } catch (URISyntaxException e) {
-            throw new NotFoundException("없는 경로입니다.", HttpStatus.NOT_FOUND);
+            throw new NotFoundURIException(filePath);
         }
     }
 

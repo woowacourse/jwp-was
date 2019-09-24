@@ -18,10 +18,18 @@ public class HttpResponse {
         this.body = body;
     }
 
+    public static HttpResponse ok(Map<String, Object> header, byte[] body) {
+        return new HttpResponse(HttpStatus.OK, header, body);
+    }
+
+    public static HttpResponse redirect(Map<String, Object> header, byte[] body) {
+        return new HttpResponse(HttpStatus.FOUND, header, body);
+    }
+
     public void send(DataOutputStream dos) throws IOException {
         responseLine(dos);
         responseHeader(dos);
-        if (httpStatus == HttpStatus.OK) {
+        if (body != null) {
             responseBody(dos, body);
         }
         dos.flush();

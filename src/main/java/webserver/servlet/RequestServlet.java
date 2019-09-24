@@ -21,15 +21,15 @@ public abstract class RequestServlet implements HttpServlet {
         if (httpRequest.getMethod() == RequestMethod.POST) {
             return doPost(httpRequest);
         }
-        throw new MethodNotAllowedException(METHOD_NOT_ALLOW_MESSAGE, HttpStatus.METHOD_NOT_ALLOW);
+        throw new MethodNotAllowedException(httpRequest.getMethod());
     }
 
     public HttpResponse doGet(HttpRequest httpRequest) throws IOException {
-        throw new MethodNotAllowedException(METHOD_NOT_ALLOW_MESSAGE, HttpStatus.METHOD_NOT_ALLOW);
+        throw new MethodNotAllowedException(httpRequest.getMethod());
     }
 
     public HttpResponse doPost(HttpRequest httpRequest) {
-        throw new MethodNotAllowedException(METHOD_NOT_ALLOW_MESSAGE, HttpStatus.METHOD_NOT_ALLOW);
+        throw new MethodNotAllowedException(httpRequest.getMethod());
     }
 
 }

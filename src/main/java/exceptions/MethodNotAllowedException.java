@@ -1,9 +1,9 @@
 package exceptions;
 
-import webserver.response.HttpStatus;
+import webserver.request.RequestMethod;
 
-public class MethodNotAllowedException extends ErrorResponseException {
-    public MethodNotAllowedException(String message, HttpStatus httpStatus) {
-        super(message, httpStatus);
+public class MethodNotAllowedException extends RuntimeException{
+    public MethodNotAllowedException(RequestMethod requestMethod) {
+        super("지원하지 않는 메소드 입니다: "  + requestMethod.method);
     }
 }
