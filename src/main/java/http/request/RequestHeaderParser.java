@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class RequestHeaderParser {
 
-    public static final String HEADER_DELIMITER = ":";
+    private static final String HEADER_DELIMITER = ":";
 
     public static HttpHeader parse(List<String> headerLines) {
         Map<String, String> headers = new HashMap<>();
