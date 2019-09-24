@@ -16,23 +16,33 @@ public class HttpRequest {
 
     public HttpRequest(List<String> lines) {
         this.httpRequestLine = new HttpRequestLine(lines.get(0));
-        this.httpRequestHeader = new HttpRequestHeader(lines.subList(1, getToIndex(lines)));
+        createHeader(lines);
+        createBody(lines);
+    }
+
+    private void createHeader(List<String> lines) {
+        int lastIndex = getLastIndex(lines);
+
+        this.httpRequestHeader = new HttpRequestHeader(lines.subList(1, lastIndex));
         log.debug("Request Header: {}", httpRequestHeader);
+    }
+
+    private void createBody(List<String> lines) {
+        int lastIndex = getLastIndex(lines);
 
         if (httpRequestHeader.getContentLength() != 0) {
-            this.httpRequestBody = new HttpRequestBody(lines.subList(getToIndex(lines) + 1, lines.size()));
+            this.httpRequestBody = new HttpRequestBody(lines.subList(lastIndex + 1, lines.size()));
             log.debug("Request Body: {}", httpRequestBody.getBody());
         }
     }
 
-    private int getToIndex(List<String> lines) {
+    private int getLastIndex(List<String> lines) {
         int lastIndex = 0;
         String line = lines.get(0);
         while (!"".equals(line)) {
             lastIndex++;
             line = lines.get(lastIndex);
         }
-
         return lastIndex;
     }
 
