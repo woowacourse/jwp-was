@@ -1,5 +1,6 @@
 package webserver;
 
+import controller.Controller;
 import controller.UserController;
 import utils.DataConverter;
 import utils.FileIoUtils;
@@ -16,16 +17,15 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Function;
 
 public class RequestDispatcher {
     private static final String TEMPLATES_PATH = "./templates";
     private static final String STATIC_PATH = "./static";
 
-    private static final Map<String, Function<Request, Response>> requestUrls = new HashMap<>();
+    private static final Map<String, Controller> requestUrls = new HashMap<>();
 
     static {
-        requestUrls.put("/user/create", UserController::service);
+        requestUrls.put("/user/create", new UserController());
     }
 
     public static byte[] forward(final IOUtils ioUtils) {
@@ -39,7 +39,7 @@ public class RequestDispatcher {
 
     private static byte[] processResponse(final Request request) throws IOException, URISyntaxException {
         try {
-            final Response response = requestUrls.getOrDefault(request.getPath(), RequestDispatcher::serveResponse).apply(request);
+            final Response response = requestUrls.getOrDefault(request.getPath(), RequestDispatcher::serveResponse).service(request);
             return Objects.nonNull(response) ? DataConverter.convertToBytes(response) :
                     DataConverter.convertToBytes(FileIoUtils.loadFileFromClasspath(makeFilePath(request, STATIC_PATH)));
         } catch (IOException | URISyntaxException | NullPointerException e) {
