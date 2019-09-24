@@ -5,6 +5,7 @@ import java.util.Objects;
 public class ResponseHeader {
     private String type;
     private String location;
+    private String cookie;
 
     public String getType() {
         return type;
@@ -20,6 +21,14 @@ public class ResponseHeader {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getCookie() {
+        return cookie;
+    }
+
+    public void setCookie(String cookie) {
+        this.cookie = cookie;
     }
 
     @Override

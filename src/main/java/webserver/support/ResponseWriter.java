@@ -29,6 +29,7 @@ public class ResponseWriter {
     private static String response302Header(Response response) {
         return response.getHttpVersion() + " " + response.getStatusCode() + " " + response.getReasonPhrase() + "\r\n" +
                 "Location: " + response.getLocation() + "\r\n" +
+                "Set-Cookie: " + response.getCookie() + "\r\n" +
                 "\r\n";
     }
 

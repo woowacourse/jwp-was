@@ -69,6 +69,14 @@ public class Response {
         responseHeader.setLocation(location);
     }
 
+    public String getCookie() {
+        return responseHeader.getCookie();
+    }
+
+    public void setCookie(String cookie) {
+        responseHeader.setCookie(cookie);
+    }
+
     public void configureOkResponse(String url) throws IOException, URISyntaxException {
         setStatusCode(200);
         setReasonPhrase("OK");
@@ -86,5 +94,9 @@ public class Response {
         setStatusCode(302);
         setReasonPhrase("FOUND");
         setLocation(location);
+    }
+
+    public void configureCookie(String cookie) {
+        setCookie(cookie);
     }
 }

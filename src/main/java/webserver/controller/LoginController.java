@@ -28,8 +28,10 @@ public class LoginController extends HttpController {
         try {
             String location = new LoginService().login(request.extractFormData());
             response.configureFoundResponse(location);
+            response.setCookie("logined=true; Path=/");
         } catch (LoginFailException e) {
             response.configureFoundResponse("/user/login_failed.html");
+            response.setCookie("logined=false; Path=/");
         }
     }
 }
