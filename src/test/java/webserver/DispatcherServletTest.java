@@ -10,8 +10,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import static http.HttpHeader.CONTENT_TYPE;
-import static http.HttpRequestTest.LOGIN_REQUEST;
-import static http.HttpRequestTest.POST_REQUEST;
+import static http.HttpRequestTest.*;
 import static model.UserTest.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static utils.IOUtils.convertStringToInputStream;
@@ -39,7 +38,7 @@ class DispatcherServletTest {
     }
 
     @Test
-    void 존재하지않는_static_파일_요청() {
+    void 존재하지않는_static_파일_요청() throws IOException {
         HttpRequest request = new HttpRequest.HttpRequestBuilder()
                 .startLine(new HttpStartLine("/css/styles.cs", HttpMethod.GET))
                 .build();
@@ -95,5 +94,28 @@ class DispatcherServletTest {
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
         assertThat(response.getHeader("Location")).isEqualTo("/user/login_failed.html");
         assertThat(response.getHeader("Set-Cookie")).contains("logined=false");
+    }
+
+
+    @Test
+    void 로그인시_유저_목록_조회_처리() throws IOException {
+        HttpRequest request = HttpRequestParser.parse(convertStringToInputStream(String.format(USER_LIST_REQUEST, TRUE)));
+        HttpResponse response = new HttpResponse();
+
+        DispatcherServlet.doDispatch(request, response);
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK);
+    }
+
+
+    @Test
+    void 비로그인시_유저_목록_조회_처리() throws IOException {
+        HttpRequest request = HttpRequestParser.parse(convertStringToInputStream(String.format(USER_LIST_REQUEST, FALSE)));
+        HttpResponse response = new HttpResponse();
+
+        DispatcherServlet.doDispatch(request, response);
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
+        assertThat(response.getHeader("Location")).isEqualTo("/user/login.html");
     }
 }

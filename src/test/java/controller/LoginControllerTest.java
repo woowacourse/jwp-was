@@ -66,6 +66,4 @@ public class LoginControllerTest {
 
         assertThrows(URINotFoundException.class, () -> loginController.service(request, response));
     }
-
-
 }

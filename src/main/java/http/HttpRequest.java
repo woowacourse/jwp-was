@@ -1,6 +1,10 @@
 package http;
 
+import static http.HttpHeader.COOKIE;
+
 public class HttpRequest {
+    private static final String COOKIE_DELIMITER = ";";
+
     private HttpStartLine startLine;
     private HttpHeader headers;
     private HttpBody body;
@@ -42,6 +46,14 @@ public class HttpRequest {
 
     public boolean matchMethod(HttpMethod method) {
         return startLine.matchMethod(method);
+    }
+
+    public String[] getCookies() {
+        String cookies;
+        if ((cookies = headers.getValue(COOKIE)) == null) {
+            return new String[0];
+        }
+        return cookies.split(COOKIE_DELIMITER);
     }
 
     public String getUri() {

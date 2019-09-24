@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class HttpHeader {
+    public static final String COOKIE = "Cookie";
     public static final String CONTENT_TYPE = "Content-Type";
     public static final String CONTENT_LENGTH_KEY = "Content-Length";
     private static final String HEADER_DELIMITER = ":";
