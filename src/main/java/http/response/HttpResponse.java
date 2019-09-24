@@ -27,7 +27,7 @@ public class HttpResponse {
         responseHeader.put(key, value);
     }
 
-    public void setResponseBody(byte[] body, String path) {
+    public void ok(byte[] body, String path) {
         this.responseBody = ResponseBody.of(body);
         statusLine.setHttpStatus(HttpStatus.OK);
         putHeader(CONTENT_TYPE_KEY, MimeType.findByPath(path).getContentType());
