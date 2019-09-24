@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.URISyntaxException;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -41,23 +42,9 @@ public class RequestHandler implements Runnable {
                 ControllerContainer.getController(httpRequest.getUri()).service(httpRequest, httpResponse);
             }
 
-            dataOutputStream.writeBytes(httpResponse.getHttpResponseStatusLine().toString());
-            dataOutputStream.writeBytes(httpResponse.getHttpResponseHeader().toString());
+            httpResponse.sendResponse(dataOutputStream);
 
-            if (httpResponse.getHttpResponseBody() != null) {
-                responseBody(dataOutputStream, httpResponse.getHttpResponseBody().getBody());
-            }
-
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dataOutputStream, byte[] body) {
-        try {
-            dataOutputStream.write(body, 0, body.length);
-            dataOutputStream.flush();
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }
