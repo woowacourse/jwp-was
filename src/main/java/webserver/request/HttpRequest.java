@@ -1,5 +1,7 @@
 package webserver.request;
 
+import webserver.controller.RequestMapping;
+
 import java.util.List;
 
 public class HttpRequest {
@@ -48,6 +50,10 @@ public class HttpRequest {
 
     private void buildRequestBody(String bodyLine) {
         requestBody.put(bodyLine);
+    }
+
+    public RequestMapping getRequestMapping() {
+        return new RequestMapping(getMethod(), getPath());
     }
 
     public String getMethod() {
