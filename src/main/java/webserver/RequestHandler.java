@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.Controller.Controller;
 import webserver.Controller.MainController;
+import webserver.Controller.SignUpController;
+import webserver.Controller.UserController;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 
@@ -21,6 +23,8 @@ public class RequestHandler implements Runnable {
 
     static {
         urlMapper.put("/index.html", new MainController());
+        urlMapper.put("/user/form.html", new UserController());
+        urlMapper.put("/user/create", new SignUpController());
     }
 
     private Socket connection;
@@ -37,7 +41,7 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
 
             HttpRequest httpRequest = HttpRequest.of(in);
-            HttpResponse httpResponse = new HttpResponse(httpRequest);
+            HttpResponse httpResponse = new HttpResponse();
 
             urlMapper.get(httpRequest.getSource()).service(httpRequest, httpResponse);
             httpResponse.send(dos);
