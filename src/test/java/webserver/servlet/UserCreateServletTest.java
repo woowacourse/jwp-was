@@ -24,7 +24,7 @@ class UserCreateServletTest {
     void doPost() throws IOException {
         InputStream inputStream = new FileInputStream(new File(testDirectory + "request_form_post_test.txt"));
         HttpRequest httpRequest = HttpRequestParser.parse(new BufferedReader(new InputStreamReader(inputStream)));
-        UserCreateServlet userCreateServlet = new UserCreateServlet();
+        UserCreateServlet userCreateServlet = UserCreateServlet.getInstance();
         byte[] body = null;
         Map<String, Object> header = new HashMap<>();
         header.put("Location", "/index.html");

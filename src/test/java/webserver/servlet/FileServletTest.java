@@ -28,7 +28,7 @@ class FileServletTest {
     void run () throws IOException, URISyntaxException {
         InputStream inputStream = new FileInputStream(new File(testDirectory + "request_index_test.txt"));
         HttpRequest httpRequest = HttpRequestParser.parse(new BufferedReader(new InputStreamReader(inputStream)));
-        FileServlet fileServlet = new FileServlet();
+        FileServlet fileServlet = FileServlet.getInstance();
         byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getFilePath());
         HttpResponse httpResponse = fileServlet.run(httpRequest);
         Map<String, Object> header = new HashMap<>();

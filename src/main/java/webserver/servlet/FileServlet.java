@@ -11,6 +11,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FileServlet implements HttpServlet {
+    private static FileServlet instance = null;
+
+    private FileServlet() {
+    }
+
+    public static FileServlet getInstance() {
+        if (instance == null) {
+            instance = new FileServlet();
+        }
+        return instance;
+    }
+
     @Override
     public HttpResponse run(HttpRequest httpRequest) throws IOException, URISyntaxException {
         byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getFilePath());

@@ -27,7 +27,7 @@ class HomeServletTest {
     void doGet() throws IOException, URISyntaxException {
         InputStream inputStream = new FileInputStream(new File(testDirectory + "request_root_test.txt"));
         HttpRequest httpRequest = HttpRequestParser.parse(new BufferedReader(new InputStreamReader(inputStream)));
-        HomeServlet homeServlet = new HomeServlet();
+        HomeServlet homeServlet = HomeServlet.getInstance();
         String filePath = generateTemplateFilePath(httpRequest.getAbsPath() + "index.html");
         byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
         Map<String, Object> header = new HashMap<>();

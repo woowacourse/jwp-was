@@ -13,12 +13,12 @@ public class MappingHandler {
     private static Map<String, Object> servlets = new HashMap<>();
 
     static {
-        servlets.put("/", new HomeServlet());
-        servlets.put("/user/create", new UserCreateServlet());
+        servlets.put("/", HomeServlet.getInstance());
+        servlets.put("/user/create", UserCreateServlet.getInstance());
     }
 
     public static HttpServlet getServlets(String absPath) {
         Optional path = Optional.ofNullable(servlets.get(absPath));
-        return (HttpServlet) path.orElse(new FileServlet());
+        return (HttpServlet) path.orElse(FileServlet.getInstance());
     }
 }
