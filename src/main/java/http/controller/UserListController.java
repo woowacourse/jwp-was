@@ -50,7 +50,7 @@ public class UserListController extends AbstractController {
         loader.setSuffix(".html");
         Handlebars handlebars = new Handlebars(loader);
 
-        Template template = handlebars.compile("user/profile");
+        Template template = handlebars.compile("user/list");
         Users users = new Users(new ArrayList<>(DataBase.findAll()));
         return template.apply(users);
     }

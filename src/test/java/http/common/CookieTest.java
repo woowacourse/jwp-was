@@ -1,4 +1,4 @@
-package http.response;
+package http.common;
 
 import http.common.Cookie;
 import org.junit.jupiter.api.Test;
