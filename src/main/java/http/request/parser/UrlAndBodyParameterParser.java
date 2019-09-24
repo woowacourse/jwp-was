@@ -14,9 +14,9 @@ public class UrlAndBodyParameterParser implements ParameterParser {
 
     @Override
     public void parse(BufferedReader br, Map<String, String> requestInformation) throws IOException {
-            String bodyContents = IOUtils.readData(br, Integer.parseInt(requestInformation.get("Content-Length:")));
-            String queryParameters = requestInformation.get("Query-Parameters:");
-            String newQueryParameters = bodyContents + queryParameters;
-            requestInformation.put("Query-Parameters:", newQueryParameters);
+        String bodyContents = IOUtils.readData(br, Integer.parseInt(requestInformation.get("Content-Length:")));
+        String queryParameters = requestInformation.get("Query-Parameters:");
+        String newQueryParameters = bodyContents + queryParameters;
+        requestInformation.put("Query-Parameters:", newQueryParameters);
     }
 }

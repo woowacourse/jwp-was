@@ -7,5 +7,6 @@ import java.util.Map;
 public interface ParameterParser {
 
     boolean isParseable(Map<String, String> requestInformation);
+
     void parse(BufferedReader br, Map<String, String> requestInformation) throws IOException;
 }

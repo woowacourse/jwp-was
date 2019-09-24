@@ -16,9 +16,7 @@ public class ControllerFactory {
                     .filter(controller -> controller.isMapping(request.createControllerMapper()))
                     .findAny()
                     .orElseThrow(() -> new PathNotFoundException());
-
-        }
-        catch (PathNotFoundException e) {
+        } catch (PathNotFoundException e) {
 
             if ("경로를 찾을 수 없습니다.".equals(e.getMessage())) {
                 return new ExceptionController();
@@ -26,7 +24,6 @@ public class ControllerFactory {
             throw new PathNotFoundException();
 
         }
-
-        }
     }
+}
 
