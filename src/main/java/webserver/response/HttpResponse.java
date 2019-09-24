@@ -20,7 +20,7 @@ public class HttpResponse {
     public void render(DataOutputStream dos) throws IOException {
         responseLine(dos);
         responseHeader(dos);
-        if (httpStatus == HttpStatus.OK) {
+        if (body != null) {
             responseBody(dos, body);
         }
         responseFlush(dos);
