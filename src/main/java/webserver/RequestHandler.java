@@ -8,14 +8,8 @@ import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 import webserver.servlet.HttpServlet;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 
 public class RequestHandler implements Runnable {
@@ -33,7 +27,7 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest request = HttpRequestParser.parse(new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
-            HttpServlet httpServlet = MappingHandler.getServlets(request.getAbsPath());
+            HttpServlet httpServlet = MappingHandler.getServlets(request.getUri());
             HttpResponse httpResponse = httpServlet.run(request);
             httpResponse.send(new DataOutputStream(out));
         } catch (IOException e) {

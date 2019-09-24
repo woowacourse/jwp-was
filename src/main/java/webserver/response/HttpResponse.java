@@ -26,6 +26,10 @@ public class HttpResponse {
         return new HttpResponse(HttpStatus.FOUND, header, body);
     }
 
+    public static HttpResponse error(HttpStatus httpStatus) {
+        return new HttpResponse(httpStatus, null, null);
+    }
+
     public void send(DataOutputStream dos) throws IOException {
         responseLine(dos);
         responseHeader(dos);

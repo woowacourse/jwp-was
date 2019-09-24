@@ -1,5 +1,7 @@
 package webserver.handler;
 
+import exceptions.NotFoundURIException;
+import webserver.request.RequestUri;
 import webserver.servlet.FileServlet;
 import webserver.servlet.HomeServlet;
 import webserver.servlet.HttpServlet;
@@ -19,7 +21,11 @@ public class MappingHandler {
         fileServlet = new FileServlet();
     }
 
-    public static HttpServlet getServlets(String absPath) {
-        return servlets.getOrDefault(absPath, fileServlet);
+    public static HttpServlet getServlets(RequestUri requestUri) {
+        if (requestUri.isFile()) {
+            return fileServlet;
+        }
+        return Optional.ofNullable(servlets.get(requestUri.getAbsPath()))
+                .orElseThrow(() -> new NotFoundURIException(requestUri.getAbsPath()));
     }
 }

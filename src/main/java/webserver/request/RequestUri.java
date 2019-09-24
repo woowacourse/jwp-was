@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class RequestUri {
     private static final int ABS_PATH_INDEX = 0;
-
+    private static final String FILE_EXTENSION_DELIMITER = ".";
     private final String absPathAndQuery;
     private final String absPath;
     private final Map<String, String> queryStrings;
@@ -23,5 +23,9 @@ public class RequestUri {
 
     public String getQueryString(String key) {
         return queryStrings.get(key);
+    }
+
+    public boolean isFile() {
+        return absPath.contains(FILE_EXTENSION_DELIMITER);
     }
 }

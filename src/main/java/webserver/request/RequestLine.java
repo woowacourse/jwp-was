@@ -20,4 +20,8 @@ public class RequestLine {
     public String getAbsPath() {
         return uri.getAbsPath();
     }
+
+    public RequestUri getUri() {
+        return uri;
+    }
 }

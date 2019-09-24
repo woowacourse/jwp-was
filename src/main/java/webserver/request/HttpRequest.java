@@ -1,7 +1,5 @@
 package webserver.request;
 
-import utils.HttpRequestUtils;
-
 public class HttpRequest {
     private RequestLine requestLine;
     private RequestHeader header;
@@ -31,6 +29,10 @@ public class HttpRequest {
 
     public String getHeader(String key) {
         return header.getHeader(key);
+    }
+
+    public RequestUri getUri() {
+        return requestLine.getUri();
     }
 
     public boolean isHeaderContain(String key, String value) {
