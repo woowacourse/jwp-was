@@ -30,6 +30,10 @@ public class HttpRequest {
         return requestLine.getPath();
     }
 
+    public String getHttpVersion() {
+        return requestLine.getHttpVersion();
+    }
+
     public boolean isGet() {
         return requestLine.getMethod().equals(HttpMethod.GET);
     }

@@ -21,7 +21,7 @@ public class StaticFileController extends AbstractController {
 
         try {
             byte[] body = FileIoUtils.loadFileFromClasspath(dir + httpRequest.getPath());
-            httpResponse.ok(body, httpRequest.getPath());
+            httpResponse.ok(body);
         } catch (URISyntaxException | IOException e) {
             logger.debug(e.getMessage());
             httpResponse.sendNotFound();

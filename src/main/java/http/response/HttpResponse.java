@@ -2,6 +2,7 @@ package http.response;
 
 import http.common.HttpStatus;
 import http.common.MimeType;
+import http.request.HttpRequest;
 
 public class HttpResponse {
     private static final String CRLF = "\r\n";
@@ -27,16 +28,22 @@ public class HttpResponse {
         responseHeader.put(key, value);
     }
 
-    public void ok(byte[] body, String path) {
+    public void ok(byte[] body) {
         this.responseBody = ResponseBody.of(body);
         statusLine.setHttpStatus(HttpStatus.OK);
-        putHeader(CONTENT_TYPE_KEY, MimeType.findByPath(path).getContentType());
         putHeader(CONTENT_LENGTH_KEY, String.valueOf(body.length));
     }
 
     public void redirect(String path) {
         statusLine.setHttpStatus(HttpStatus.FOUND);
         putHeader(LOCATION_KEY, path);
+    }
+
+    public void addHeaderFromRequest(HttpRequest httpRequest) {
+        statusLine.setHttpVersion(httpRequest.getHttpVersion());
+        if (httpRequest.isGet()) {
+            putHeader(CONTENT_TYPE_KEY, MimeType.findByPath(httpRequest.getPath()).getContentType());
+        }
     }
 
     public byte[] getBody() {

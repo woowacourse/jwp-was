@@ -35,6 +35,7 @@ public class HttpProcess implements Runnable {
 
             ResponseHandler responseHandler = new ResponseHandler();
             httpResponse = responseHandler.create();
+            httpResponse.addHeaderFromRequest(httpRequest);
 
             Controller controller = ControllerHandler.findByPath(httpRequest.getPath());
             controller.service(httpRequest, httpResponse);

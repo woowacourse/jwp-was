@@ -23,10 +23,9 @@ class HttpResponseTest {
     @Test
     public void setResponseBodyTest() {
         String body = "HELLO!";
-        httpResponse.ok(body.getBytes(), "test.html");
+        httpResponse.ok(body.getBytes());
 
         assertThat(httpResponse.getBody()).isEqualTo(body.getBytes());
-        assertThat(httpResponse.toString()).contains("Content-Type: text/html;charset=utf-8");
     }
 
     @Test

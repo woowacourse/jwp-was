@@ -15,6 +15,10 @@ public class StatusLine {
         return new StatusLine("HTTP/1.1", HttpStatus.OK);
     }
 
+    public void setHttpVersion(String httpVersion) {
+        this.httpVersion = httpVersion;
+    }
+
     public void setHttpStatus(HttpStatus httpStatus) {
         this.httpStatus = httpStatus;
     }

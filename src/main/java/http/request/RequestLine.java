@@ -22,8 +22,8 @@ public class RequestLine {
         this.httpVersion = httpVersion;
     }
 
-    public static RequestLine of(String startLine) throws IOException {
-        String[] token = startLine.split(BLANK);
+    public static RequestLine of(String requestLine) throws IOException {
+        String[] token = requestLine.split(BLANK);
         HttpMethod method = HttpMethod.valueOf(token[0]);
         String requestUrl = URLDecoder.decode(token[1], "UTF-8");
         String queryString = setQueryString(requestUrl);
@@ -50,6 +50,10 @@ public class RequestLine {
 
     public String getQueryString() {
         return queryString;
+    }
+
+    public String getHttpVersion() {
+        return httpVersion;
     }
 
     public String getProtocol() {
