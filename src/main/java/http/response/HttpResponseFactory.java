@@ -5,8 +5,6 @@ import http.request.core.RequestPath;
 import http.response.core.Response;
 import http.response.core.ResponseBody;
 import http.response.core.ResponseCreator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

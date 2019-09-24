@@ -7,8 +7,6 @@ import http.response.core.Response;
 import http.response.core.ResponseBody;
 import http.response.core.ResponseContentType;
 import http.response.core.ResponseStatus;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class DynamicResponse extends Response {
     private static final String REDIRECT_URL = "Location: http://localhost:8080/\r\n";

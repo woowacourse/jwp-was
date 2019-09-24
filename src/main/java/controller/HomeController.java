@@ -14,7 +14,6 @@ public class HomeController implements Controller {
             RequestMethod.valueOf("GET").getMethod() + " ../resources/templates/favicon.ico"
     );
 
-
     @Override
     public boolean isMapping(HttpRequest httpRequest) {
         RequestMethod requestMethod = httpRequest.getRequestMethod();
