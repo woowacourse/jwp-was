@@ -13,7 +13,6 @@ import java.nio.file.Paths;
 public class FileIoUtils {
     private static final Logger log = LoggerFactory.getLogger(FileIoUtils.class);
 
-
     public static byte[] loadFileFromClasspath(String filePath) {
         try {
             Path path = Paths.get(FileIoUtils.class.getClassLoader().getResource(filePath).toURI());

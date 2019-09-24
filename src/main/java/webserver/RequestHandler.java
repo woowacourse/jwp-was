@@ -2,6 +2,7 @@ package webserver;
 
 import http.controller.HttpRequestControllers;
 import http.model.request.ServletRequest;
+import http.model.response.HttpStatus;
 import http.model.response.ServletResponse;
 import http.session.SessionManager;
 import http.supoort.converter.HttpMessageConverter;
@@ -21,7 +22,8 @@ public class RequestHandler implements Runnable {
     private final SessionManager sessionManager;
     private final HttpMessageConverter converter;
 
-    public RequestHandler(Socket connection, HttpRequestControllers httpRequestControllers, SessionManager sessionManager, HttpMessageConverter converter) {
+    public RequestHandler(Socket connection, HttpRequestControllers httpRequestControllers,
+                          SessionManager sessionManager, HttpMessageConverter converter) {
         this.connection = connection;
         this.httpRequestControllers = httpRequestControllers;
         this.sessionManager = sessionManager;
@@ -49,7 +51,7 @@ public class RequestHandler implements Runnable {
             converter.response(response);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            sendError(e.getMessage(), out);
+            sendError(out);
         }
     }
 
@@ -63,7 +65,9 @@ public class RequestHandler implements Runnable {
         return request;
     }
 
-    private void sendError(String message, OutputStream out) {
-
+    private void sendError(OutputStream out) {
+        ServletResponse response = new ServletResponse(out);
+        response.setHttpStatus(HttpStatus.ERROR);
+        converter.response(response);
     }
 }

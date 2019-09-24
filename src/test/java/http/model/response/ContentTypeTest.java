@@ -3,28 +3,36 @@ package http.model.response;
 import http.exceptions.IllegalHttpRequestException;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 class ContentTypeTest {
 
     @Test
-    void 확장자로_찾기() {
-        assertThat(ContentType.of("js")).isEqualTo(ContentType.JS);
+    void 확장자로_ContentType_가져오는지() {
+        String extension = "html";
+        assertThat(ContentType.of(extension)).isEqualTo(ContentType.HTML);
+
+        String upperExtension = "HTML";
+        assertThat(ContentType.of(upperExtension)).isEqualTo(ContentType.HTML);
     }
 
     @Test
-    void 확장자가_없을_경우() {
-        assertThatThrownBy(() -> ContentType.of("excel")).isInstanceOf(IllegalHttpRequestException.class);
+    void MIME_TYPE으로_ContentType_가져오는지() {
+        String mime = "text/html";
+        assertThat(ContentType.from(mime)).isEqualTo(ContentType.HTML);
     }
 
     @Test
-    void MIME_타입으로_찾기() {
-        assertThat(ContentType.from("text/html")).isEqualTo(ContentType.HTML);
+    void 존재하지_않는_확장자() {
+        String extension = "xls";
+
+        assertThatThrownBy(() -> ContentType.of(extension)).isInstanceOf(IllegalHttpRequestException.class);
     }
 
     @Test
-    void MIME_없을_경우() {
-        assertThatThrownBy(() -> ContentType.from("application/vnd.ms-excel")).isInstanceOf(IllegalHttpRequestException.class);
+    void 존재하지_않는_MIME_TYPE() {
+        String mime = "application/vnd.ms-excel";
+        assertThatThrownBy(() -> ContentType.from(mime)).isInstanceOf(IllegalHttpRequestException.class);
     }
 }

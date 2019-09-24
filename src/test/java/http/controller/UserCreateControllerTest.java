@@ -31,7 +31,7 @@ class UserCreateControllerTest extends BaseControllerTest {
     }
 
     @Test
-    void 유저컨트롤러_처리_결과가_리다이렉트인지() {
+    void 회원가입_처리_결과가_리다이렉트인지() {
         assertThat(controller.canHandle(request)).isTrue();
 
         controller.handle(request, response);

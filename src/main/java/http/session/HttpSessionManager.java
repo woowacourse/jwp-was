@@ -1,5 +1,6 @@
 package http.session;
 
+import http.exceptions.InvalidSessionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +11,6 @@ public class HttpSessionManager implements SessionManager {
     private static final Logger log = LoggerFactory.getLogger(HttpSessionManager.class);
     private final IdGenerateStrategy idGenerateStrategy;
     private Map<String, HttpSession> sessions = new HashMap<>();
-
 
     public HttpSessionManager(IdGenerateStrategy idGenerateStrategy) {
         this.idGenerateStrategy = idGenerateStrategy;

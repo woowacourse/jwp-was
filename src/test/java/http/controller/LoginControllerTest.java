@@ -47,6 +47,6 @@ class LoginControllerTest extends BaseControllerTest {
         assertThat(response.getHeader("Set-Cookie")).isEqualTo("logined=true; Path=/");
         assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
 
-        DataBase.deletebyId("userId");
+        DataBase.deleteById("userId");
     }
 }

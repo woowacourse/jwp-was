@@ -27,7 +27,6 @@ public abstract class AbstractController implements Controller {
         this.mappings.addAll(mappingCollection);
     }
 
-
     @Override
     public boolean canHandle(ServletRequest request) {
         return mappings.stream()
@@ -46,6 +45,4 @@ public abstract class AbstractController implements Controller {
     public int hashCode() {
         return Objects.hash(mappings);
     }
-
-
 }

@@ -4,9 +4,7 @@ import db.DataBase;
 import http.model.request.ServletRequest;
 import http.model.response.ServletResponse;
 import http.supoort.RequestMapping;
-import model.User;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,10 +24,8 @@ public class UserListController extends AbstractController {
             return;
         }
 
-        Collection<User> all = DataBase.findAll();
-
         Map<String, Object> model = new HashMap<String, Object>() {{
-            put("users", all);
+            put("users", DataBase.findAll());
         }};
 
         servletResponse.ok("/user/list");

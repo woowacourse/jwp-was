@@ -21,7 +21,7 @@ public class DataBase {
         return users.values();
     }
 
-    public static void deletebyId(String userId) {
+    public static void deleteById(String userId) {
         users.remove(userId);
     }
 }

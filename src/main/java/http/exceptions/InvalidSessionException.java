@@ -1,4 +1,4 @@
-package http.session;
+package http.exceptions;
 
 public class InvalidSessionException extends RuntimeException {
     public InvalidSessionException() {

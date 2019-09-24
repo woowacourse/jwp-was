@@ -4,30 +4,27 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class HttpHeadersTest {
-
     @Test
-    void 기본생성자_null_safe() {
-        assertDoesNotThrow(() -> new HttpHeaders().getHeaders());
+    void 기본동작() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.addHeader("Host", "http://localhost");
+        headers.addHeader("Referer", "http://google.com");
+        headers.addHeader("Cookie", "cookie");
+
+        assertThat(headers.getHeader("Host")).isEqualTo("http://localhost");
+        assertThat(headers.getHeader("Referer")).isEqualTo("http://google.com");
+        assertThat(headers.getHeader("Cookie")).isEqualTo("cookie");
     }
 
     @Test
-    void add호출시_내부맵_변경_테스트() {
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.addHeader("key", "value");
+    void 외부에서_변경하려_할때_거부() {
+        HttpHeaders headers = new HttpHeaders();
 
-        assertThat(httpHeaders.getHeader("key")).isEqualTo("value");
-    }
-
-    @Test
-    void 외부에서_내부맵_변경불가_테스트() {
-        HttpHeaders httpHeaders = new HttpHeaders();
-        Map<String, String> map = httpHeaders.getHeaders();
-
-        assertThatThrownBy(() -> map.put("some", "value")).isInstanceOf(UnsupportedOperationException.class);
+        Map<String, String> field = headers.getHeaders();
+        assertThatThrownBy(() -> field.put("some", "thing")).isInstanceOf(UnsupportedOperationException.class);
     }
 }

@@ -69,7 +69,6 @@ public abstract class AbstractHttpRequestConverter implements HttpRequestConvert
             headers.remove(COOKIE_HEADER);
             appendCookie(cookies, cookieValues);
         }
-
         return cookies;
     }
 
