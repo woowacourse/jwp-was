@@ -1,21 +1,21 @@
 package http.response;
 
+import http.common.HttpVersion;
 import http.response.exception.InvalidStatusLineException;
-import utils.StringUtils;
 
 public class StatusLine {
     private static final String STATUS_LINE_FORMAT = "%s %s";
-    private final String version;
+    private final HttpVersion version;
     private final ResponseStatus responseStatus;
 
-    public StatusLine(String version, ResponseStatus responseStatus) {
+    public StatusLine(HttpVersion version, ResponseStatus responseStatus) {
         checkValidateStatusLine(version, responseStatus);
         this.version = version;
         this.responseStatus = responseStatus;
     }
 
-    private void checkValidateStatusLine(String version, ResponseStatus responseStatus) {
-        if (StringUtils.isEmpty(version) || responseStatus == null) {
+    private void checkValidateStatusLine(HttpVersion version, ResponseStatus responseStatus) {
+        if (version == null || responseStatus == null) {
             throw new InvalidStatusLineException();
         }
     }
