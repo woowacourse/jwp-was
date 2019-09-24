@@ -2,7 +2,7 @@ package http.common;
 
 import http.common.exception.HttpHeaderNotFoundException;
 import http.common.exception.InvalidHttpHeaderException;
-import org.springframework.util.StringUtils;
+import utils.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,14 +19,12 @@ public class HttpHeader {
 
     private final Map<String, String> httpHeader = new HashMap<>();
 
-    public HttpHeader(List<String> header) {
-        checkHeader(header);
-        header.forEach(this::addHeader);
+    public HttpHeader() {
     }
 
-    private void checkHeader(List<String> header) {
-        if (header == null) {
-            throw new InvalidHttpHeaderException();
+    public HttpHeader(List<String> header) {
+        if (header != null) {
+            header.forEach(this::addHeader);
         }
     }
 
@@ -69,5 +67,9 @@ public class HttpHeader {
     @Override
     public int hashCode() {
         return Objects.hash(httpHeader);
+    }
+
+    public void add(String key, String value) {
+        this.httpHeader.put(key, value);
     }
 }
