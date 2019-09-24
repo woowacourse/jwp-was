@@ -17,7 +17,12 @@
 - [x] IntelliJ 의 패키지 리팩토링으로 인해 정적 파일들의 relative urls 가 이상하게 바뀜. 원상태로 되돌린다.
     - was.~ -> ~
 
-- [ ] Thread Pool 사용해 한정된 쓰레드만 생성
+- [x] Thread Pool 사용해 한정된 쓰레드만 생성
     - ThreadPool 인터페이스
         - execute()
     - BasicThreadPool 객체
+
+- [ ] 세션 기능
+    - UUID 클래스를 사용해 세션 고유 아이디 생성
+    - Session 객체는 Map<String, Object> 를 갖는 일급 컬레션
+    - Map<UUID, Session> 을 갖는 SessionHandler 클래스
