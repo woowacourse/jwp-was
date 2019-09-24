@@ -27,6 +27,6 @@ class HttpHeaderTest {
     @Test
     void Location_add_확인() {
         HttpHeader httpHeader = HttpHeader.redirect("/index.html");
-        assertEquals("/index.html",httpHeader.get("Location"));
+        assertEquals("/index.html", httpHeader.get("Location"));
     }
 }

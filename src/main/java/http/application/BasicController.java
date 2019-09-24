@@ -13,6 +13,6 @@ public class BasicController extends AbstractController {
 
     @Override
     void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        
+
     }
 }
