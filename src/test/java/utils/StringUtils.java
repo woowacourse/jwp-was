@@ -1,7 +1,6 @@
 package utils;
 
 public class StringUtils {
-    public static final String GET_PATH = "/index.html";
     public static final String GET_PARAMS_PATH = "/user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
     public static final String POST_BODY = "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
 
@@ -17,10 +16,17 @@ public class StringUtils {
 
     public static final String STATIC_PREFIX_PATH = "../resources/static";
     public static final String DYNAMIC_PREFIX_PATH = "../resources/templates";
+
     public static final String CSS_PATH = "/css/style.css";
     public static final String JS_PATH = "/js/script.js";
     public static final String IMAGES_PATH = "/images/80-text.png";
     public static final String FONT_PATH = "/fonts/glyphicons-halflings-regular.eot";
     public static final String FILE_PATH = "/index.html";
+
+    public static final String CSS_CONTENT_TYPE = "Content-Type: text/css;charset=utf-8\r\n";
+    public static final String JS_CONTENT_TYPE = "Content-Type: application/javascript;charset=utf-8\r\n";
+    public static final String FONTS_CONTENT_TYPE = "Content-Type: font/opentype;charset=utf-8\r\n";
+    public static final String IMAGES_CONTENT_TYPE = "Content-Type: image/jpeg\r\n";
+    public static final String DYNAMIC_CONTENT_TYPE = "Content-Type: text/html;charset=utf-8\r\n";
 
 }
