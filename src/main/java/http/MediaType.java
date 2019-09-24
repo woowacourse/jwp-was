@@ -18,12 +18,29 @@ public enum MediaType {
         this.contentType = contentType;
     }
 
+    public static MediaType of(String mediaType) {
+        return Arrays.stream(values())
+                .filter(value -> value.extension.equals(mediaType))
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new)
+                ;
+    }
+
+    public String getExtension() {
+        return extension;
+    }
+
+    public String getExtensionPath() {
+        return extension.equals("") ? "" : "." + getExtension();
+    }
+
     public static String getFullPath(String uri) {
         return Arrays.stream(values())
                 .filter(value -> uri.contains(value.extension))
                 .map(value -> "./" + value.path + uri)
                 .findFirst()
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(IllegalArgumentException::new)
+                ;
     }
 
     public static String getContentType(String uri) {
@@ -31,7 +48,8 @@ public enum MediaType {
                 .filter(value -> uri.contains(value.extension))
                 .map(value -> value.contentType)
                 .findFirst()
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(IllegalArgumentException::new)
+                ;
     }
 
     public static boolean isContain(String extension) {
@@ -39,7 +57,7 @@ public enum MediaType {
                 .map(value -> extension.contains(value.extension))
                 .filter(value -> value)
                 .findFirst()
-                .orElse(false);
-
+                .orElse(false)
+                ;
     }
 }
