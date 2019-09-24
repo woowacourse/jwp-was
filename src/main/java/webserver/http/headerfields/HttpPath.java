@@ -1,15 +1,34 @@
 package webserver.http.headerfields;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
+import java.util.Optional;
 
 public class HttpPath {
+    private static final Logger logger = LoggerFactory.getLogger(HttpPath.class);
+    private static final String UTF_8 = StandardCharsets.UTF_8.name();
+
     private final String path;
 
-    public HttpPath(String path) {
-        this.path = (path.contains("?") && path.lastIndexOf("?") > path.lastIndexOf("/"))
-                ? URLDecoder.decode(path.substring(0, path.lastIndexOf("?")))
-                : URLDecoder.decode(path);
+    public static Optional<HttpPath> of(String path) {
+        try {
+            path = (path.contains("?") && path.lastIndexOf("?") > path.lastIndexOf("/"))
+                    ? URLDecoder.decode(path.substring(0, path.lastIndexOf("?")), UTF_8)
+                    : URLDecoder.decode(path, UTF_8);
+            return Optional.of(new HttpPath(path));
+        } catch (UnsupportedEncodingException e) {
+            logger.debug(e.getMessage());
+            return Optional.empty();
+        }
+    }
+
+    private HttpPath(String path) {
+        this.path = path;
     }
 
     public String extension() {
