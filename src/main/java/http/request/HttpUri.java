@@ -3,6 +3,8 @@ package http.request;
 import http.common.UriExtension;
 
 import java.net.URI;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class HttpUri {
 
@@ -22,5 +24,11 @@ public class HttpUri {
 
     public String findPathPrefix() {
         return UriExtension.of(uri.getPath()).getPathPrefix();
+    }
+
+    public boolean isMatches(final String regex) {
+        Pattern pattern = Pattern.compile(regex);
+        Matcher m = pattern.matcher(uri.getPath());
+        return m.find();
     }
 }

@@ -10,9 +10,12 @@ import http.response.ResponseBodyParser;
 import http.response.StatusLine;
 import org.apache.tika.Tika;
 
-public class ResourceController {
+public class ResourceController implements Controller {
 
-    HttpResponse doGet(HttpRequest httpRequest) {
+    private static final String RESOURCE_FILE_REGEX = "^.+\\.([a-zA-Z]+)$";
+
+    @Override
+    public HttpResponse service(final HttpRequest httpRequest) {
         StatusLine statusLine = new StatusLine(httpRequest.getHttpVersion(), HttpStatus.OK);
 
         String filePath = httpRequest.findPathPrefix() + httpRequest.getPath();
@@ -22,6 +25,10 @@ public class ResourceController {
         HttpHeader responseHeader = new HttpHeader();
         responseHeader.putHeader("Content-Type", contentType);
         responseHeader.putHeader("Content-Length", Integer.toString(responseBody.getLength()));
-        return new Response200(statusLine, responseHeader, responseBody);
+        return new Response200(statusLine, responseHeader, responseBody);    }
+
+    @Override
+    public boolean isMapping(final RequestMapping requestMapping) {
+        return requestMapping.isMatches(RESOURCE_FILE_REGEX);
     }
 }

@@ -30,4 +30,20 @@ class HttpUriTest {
 
         assertThat(uri.getQuery()).isEqualTo("userId=conas&password=password");
     }
+
+    @Test
+    void isMatches() {
+        String regex = "^.+\\.([a-zA-Z]+)$";
+        HttpUri uri = HttpUriParser.parse("/index.html");
+
+        assertThat(uri.isMatches(regex)).isTrue();
+    }
+
+    @Test
+    void not_is_matches() {
+        String regex = "^.+\\.([a-zA-Z]+)$";
+        HttpUri uri = HttpUriParser.parse("abcdefg");
+
+        assertThat(uri.isMatches(regex)).isFalse();
+    }
 }

@@ -2,16 +2,24 @@ package controller;
 
 import db.DataBase;
 import http.common.HttpHeader;
+import http.request.HttpMethod;
 import http.request.HttpRequest;
+import http.request.HttpUriParser;
 import http.response.HttpResponse;
 import http.response.HttpStatus;
 import http.response.Response302;
 import http.response.StatusLine;
 import model.User;
 
-public class UserCreateController {
+import static controller.IndexController.INDEX_PATH;
 
-    HttpResponse doPost(HttpRequest httpRequest) {
+public class UserCreateController implements Controller {
+
+    private static final String USER_CREATE_PATH = "/user/create";
+    private static final RequestMapping USER_CREATE_REQUEST_MAPPING = RequestMapping.of(HttpMethod.POST, HttpUriParser.parse(USER_CREATE_PATH));
+
+    @Override
+    public HttpResponse service(final HttpRequest httpRequest) {
         String userId = httpRequest.findParam("userId");
         String password = httpRequest.findParam("password");
         String name = httpRequest.findParam("name");
@@ -22,8 +30,13 @@ public class UserCreateController {
 
         StatusLine statusLine = new StatusLine(httpRequest.getHttpVersion(), HttpStatus.FOUND);
         HttpHeader responseHeader = new HttpHeader();
-        responseHeader.putHeader("Location", "/index.html");
+        responseHeader.putHeader("Location", INDEX_PATH);
 
         return new Response302(statusLine, responseHeader, null);
+    }
+
+    @Override
+    public boolean isMapping(final RequestMapping requestMapping) {
+        return USER_CREATE_REQUEST_MAPPING.equals(requestMapping);
     }
 }
