@@ -28,7 +28,7 @@ public class LoginController extends AbstractController {
             return;
         }
 
-        servletResponse.setCookie("logined=true;Path=/");
+        servletResponse.setCookie("logined=true; Path=/");
         servletResponse.redirect("/index.html");
     }
 }

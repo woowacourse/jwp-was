@@ -21,7 +21,7 @@ public class HandlebarsTest {
 
         Template template = handlebars.compile("user/profile");
 
-        User user = new User("javajigi", "password", "자바지기", "javajigi@gmail.com");
+        User user = new User("andole", "password", "자바지기", "javajigi@gmail.com");
         String profilePage = template.apply(user);
         log.debug("ProfilePage : {}", profilePage);
     }

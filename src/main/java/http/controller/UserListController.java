@@ -6,8 +6,9 @@ import http.model.response.ServletResponse;
 import http.supoort.RequestMapping;
 import model.User;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserListController extends AbstractController {
     public UserListController(RequestMapping mapping) {
@@ -20,14 +21,18 @@ public class UserListController extends AbstractController {
 
     @Override
     public void handle(ServletRequest servletRequest, ServletResponse servletResponse) {
-        if (!servletRequest.hasCookie() || !servletRequest.getCookie("logined").equals("true")) {
+        if (!servletRequest.hasCookie() || !"true".equals(servletRequest.getCookie("logined"))) {
             servletResponse.redirect("/index.html");
             return;
         }
 
-        List<User> users = new ArrayList<>(DataBase.findAll());
+        Collection<User> all = DataBase.findAll();
+
+        Map<String, Object> model = new HashMap<String, Object>() {{
+            put("users", all);
+        }};
 
         servletResponse.ok("/user/list");
-        servletResponse.setModel(users);
+        servletResponse.setModel(model);
     }
 }

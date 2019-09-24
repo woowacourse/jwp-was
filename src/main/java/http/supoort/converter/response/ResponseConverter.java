@@ -60,6 +60,7 @@ public class ResponseConverter {
             viewResolver.render(response, dos);
             return;
         }
+
         String resource = response.getView();
         ContentType contentType = getExtension(resource);
         byte[] body = getFileResource(contentType, resource);

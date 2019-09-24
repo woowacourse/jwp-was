@@ -33,7 +33,7 @@ public abstract class AbstractViewResolver implements ViewResolver {
         dataOutputStream.writeBytes(CONTENT_TYPE + HEADER_SEPARATOR + HTML_MIMETYPE + LINEBREAK);
         dataOutputStream.writeBytes(CONTENT_LENGTH + HEADER_SEPARATOR + body.length() + LINEBREAK);
         dataOutputStream.writeBytes(LINEBREAK);
-        dataOutputStream.writeBytes(body);
+        dataOutputStream.write(body.getBytes());
         dataOutputStream.flush();
     }
 

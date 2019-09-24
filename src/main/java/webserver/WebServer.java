@@ -58,11 +58,13 @@ public class WebServer {
 
     private static HttpRequestControllers initRequestHandlers() {
         HttpRequestControllers httpRequestControllers = new HttpRequestControllers(new FileResourceController(RequestMapping.GET("/*")));
-        Controller userCreateController = new UserCreateController(RequestMapping.GET("/user/create"), RequestMapping.POST("/user/create"));
+        Controller userCreateController = new UserCreateController(RequestMapping.POST("/user/create"));
         Controller loginController = new LoginController(RequestMapping.POST("/user/login"));
+        Controller userListController = new UserListController(RequestMapping.GET("/user/list"));
 
         httpRequestControllers.addHandler(userCreateController);
         httpRequestControllers.addHandler(loginController);
+        httpRequestControllers.addHandler(userListController);
         return httpRequestControllers;
     }
 

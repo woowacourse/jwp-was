@@ -1,6 +1,7 @@
 package http.supoort.converter.response;
 
 import com.github.jknack.handlebars.Handlebars;
+import com.github.jknack.handlebars.Helper;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
@@ -19,6 +20,7 @@ public class HandleBarViewResolver extends AbstractViewResolver {
         loader.setPrefix(PREFIX);
         loader.setSuffix(SUFFIX);
         this.handlebars = new Handlebars(loader);
+        handlebars.registerHelper("i", (Helper<Integer>) (context, options) -> context + 1);
     }
 
     @Override
