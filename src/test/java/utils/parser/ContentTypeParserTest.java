@@ -2,7 +2,7 @@ package utils.parser;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import utils.exception.NotFoundSlashException;
+import utils.exception.NotFoundContentTypeSeparatorException;
 import webserver.http.headerfields.HttpContentType;
 
 import java.util.List;
@@ -65,10 +65,10 @@ class ContentTypeParserTest {
         String inputData3 = "application:x-www-form-urlencoded";
         String inputData4 = "application&x-www-form-urlencoded";
 
-        assertThrows(NotFoundSlashException.class, () -> ContentTypeParser.chemicalParse(inputData1));
-        assertThrows(NotFoundSlashException.class, () -> ContentTypeParser.chemicalParse(inputData2));
-        assertThrows(NotFoundSlashException.class, () -> ContentTypeParser.chemicalParse(inputData3));
-        assertThrows(NotFoundSlashException.class, () -> ContentTypeParser.chemicalParse(inputData4));
+        assertThrows(NotFoundContentTypeSeparatorException.class, () -> ContentTypeParser.chemicalParse(inputData1));
+        assertThrows(NotFoundContentTypeSeparatorException.class, () -> ContentTypeParser.chemicalParse(inputData2));
+        assertThrows(NotFoundContentTypeSeparatorException.class, () -> ContentTypeParser.chemicalParse(inputData3));
+        assertThrows(NotFoundContentTypeSeparatorException.class, () -> ContentTypeParser.chemicalParse(inputData4));
     }
 
     @Test
@@ -95,9 +95,9 @@ class ContentTypeParserTest {
         String inputData3 = "application:x-www-form-urlencoded";
         String inputData4 = "application&x-www-form-urlencoded";
 
-        assertThrows(NotFoundSlashException.class, () -> ContentTypeParser.subtypeParse(inputData1));
-        assertThrows(NotFoundSlashException.class, () -> ContentTypeParser.subtypeParse(inputData2));
-        assertThrows(NotFoundSlashException.class, () -> ContentTypeParser.subtypeParse(inputData3));
-        assertThrows(NotFoundSlashException.class, () -> ContentTypeParser.subtypeParse(inputData4));
+        assertThrows(NotFoundContentTypeSeparatorException.class, () -> ContentTypeParser.subtypeParse(inputData1));
+        assertThrows(NotFoundContentTypeSeparatorException.class, () -> ContentTypeParser.subtypeParse(inputData2));
+        assertThrows(NotFoundContentTypeSeparatorException.class, () -> ContentTypeParser.subtypeParse(inputData3));
+        assertThrows(NotFoundContentTypeSeparatorException.class, () -> ContentTypeParser.subtypeParse(inputData4));
     }
 }

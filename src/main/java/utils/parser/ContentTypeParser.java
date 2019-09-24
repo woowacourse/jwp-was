@@ -1,6 +1,6 @@
 package utils.parser;
 
-import utils.exception.NotFoundSlashException;
+import utils.exception.NotFoundContentTypeSeparatorException;
 import webserver.http.headerfields.HttpContentType.Chemical;
 
 import java.util.Arrays;
@@ -29,7 +29,7 @@ public class ContentTypeParser extends SimpleStringParser {
             return Chemical.valueOf(line.substring(START_INDEX, slashIndex).toUpperCase());
         }
 
-        throw new NotFoundSlashException();
+        throw new NotFoundContentTypeSeparatorException();
     }
 
     public static String subtypeParse(String line) {
@@ -38,7 +38,7 @@ public class ContentTypeParser extends SimpleStringParser {
             return line.substring(splitIndex);
         }
 
-        throw new NotFoundSlashException();
+        throw new NotFoundContentTypeSeparatorException();
     }
 
     private static boolean existSlash(String line) {

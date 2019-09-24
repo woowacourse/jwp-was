@@ -2,7 +2,7 @@ package webserver.http.headerfields;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.exception.NotFoundSlashException;
+import utils.exception.NotFoundContentTypeSeparatorException;
 import utils.parser.ContentTypeParser;
 import utils.parser.KeyValueParserFactory;
 
@@ -111,7 +111,7 @@ public class HttpContentType implements HttpHeaderField {
         try {
             CACHE.put(input, HttpContentType.of(ContentTypeParser.convertContentType(input)));
             return Optional.of(CACHE.get(input));
-        } catch (NotFoundSlashException | IllegalArgumentException e) {
+        } catch (NotFoundContentTypeSeparatorException | IllegalArgumentException e) {
             logger.debug(e.getMessage());
             return Optional.empty();
         }
