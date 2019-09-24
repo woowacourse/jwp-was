@@ -1,6 +1,7 @@
 package utils;
 
 import com.github.jknack.handlebars.internal.lang3.StringUtils;
+import http.supoort.IllegalHttpRequestException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,6 +33,7 @@ public class IOUtils {
             }
         } catch (IOException e) {
             e.getMessage();
+            throw new IllegalHttpRequestException();
         }
         return lines;
     }
