@@ -20,15 +20,10 @@ public enum HttpContentType {
         this.contentTypeChecker = contentTypeChecker;
     }
 
-    public static HttpContentType of(final String url) {
+    public static String findContentType(final String url) {
         return Arrays.stream(HttpContentType.values())
                 .filter(contentType -> contentType.contentTypeChecker.test(url))
                 .findFirst()
-                .orElseThrow(InvalidContentTypeException::new);
+                .orElseThrow(InvalidContentTypeException::new).contentType;
     }
-
-    public String getContentType() {
-        return contentType;
-    }
-
 }
