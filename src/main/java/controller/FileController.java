@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-public class FileController extends AbstractController {
+public class FileController extends Controller {
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 
     private FileController() {
@@ -25,12 +25,7 @@ public class FileController extends AbstractController {
     }
 
     @Override
-    void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-
-    }
-
-    @Override
-    void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+    protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         String uri = httpRequest.getUri();
 
         try {

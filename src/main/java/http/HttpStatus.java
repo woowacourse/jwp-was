@@ -5,7 +5,8 @@ import java.util.Arrays;
 public enum HttpStatus {
     OK("200", "OK"),
     FOUND("302", "FOUND"),
-    NOT_FOUND("404", "NOT FOUND");
+    NOT_FOUND("404", "NOT FOUND"),
+    METHOD_NOT_ALLOW("405", "Method Not Allowed");
 
     private String statusCode;
     private String reasonPhrase;

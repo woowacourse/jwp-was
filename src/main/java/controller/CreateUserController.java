@@ -7,18 +7,13 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CreateUserController extends AbstractController {
+public class CreateUserController extends Controller {
     private static final Logger logger = LoggerFactory.getLogger(CreateUserController.class);
 
     public static final String PATH = "/user/create";
 
     @Override
-    void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-
-    }
-
-    @Override
-    void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
+    protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         logger.debug("Saved UserId: {}", httpRequest.getQueryValue("userId"));
         save(httpRequest.getQueryValue("userId"), httpRequest.getQueryValue("password"),
                 httpRequest.getQueryValue("name"), httpRequest.getQueryValue("email"));
