@@ -3,7 +3,9 @@ package http;
 public enum ContentType {
     HTML("text/html", "html"),
     CSS("text/css", "css"),
-    JAVASCRIPT("application/js", "js");
+    JAVASCRIPT("application/js", "js"),
+    ICON("image/x-icon", "ico");
+
 
     private static final String PATH_DELIMITER = "\\.";
 
