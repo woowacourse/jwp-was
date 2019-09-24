@@ -51,6 +51,6 @@ public class HttpRequestParser {
     }
 
     private static boolean isValidLine(String line) {
-        return line != null && StringUtils.isEmpty(line) && StringUtils.isBlank(line);
+        return line != null && !StringUtils.isEmpty(line) && !StringUtils.isBlank(line);
     }
 }

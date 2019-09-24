@@ -15,7 +15,7 @@ import org.apache.tika.Tika;
 public class IndexController implements Controller {
 
     public static final String INDEX_PATH = "/index.html";
-    private static final RequestMapping INDEX_REQUEST_MAPPING=RequestMapping.of(HttpMethod.GET, HttpUriParser.parse(INDEX_PATH));;
+    private static final RequestMapping INDEX_REQUEST_MAPPING = RequestMapping.of(HttpMethod.GET, HttpUriParser.parse(INDEX_PATH));
 
     @Override
     public HttpResponse service(final HttpRequest httpRequest) {

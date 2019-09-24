@@ -25,7 +25,8 @@ public class ResourceController implements Controller {
         HttpHeader responseHeader = new HttpHeader();
         responseHeader.putHeader("Content-Type", contentType);
         responseHeader.putHeader("Content-Length", Integer.toString(responseBody.getLength()));
-        return new Response200(statusLine, responseHeader, responseBody);    }
+        return new Response200(statusLine, responseHeader, responseBody);
+    }
 
     @Override
     public boolean isMapping(final RequestMapping requestMapping) {

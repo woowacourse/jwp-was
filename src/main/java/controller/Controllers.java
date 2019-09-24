@@ -6,7 +6,7 @@ import http.response.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-public  class Controllers {
+public class Controllers {
 
     private static final List<Controller> CONTROLLERS = new ArrayList<>();
 
