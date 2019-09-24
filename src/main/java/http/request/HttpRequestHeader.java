@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class HttpRequestHeader {
+    private static final String CONTENT_LENGTH = "Content-Length";
     private Map<String, String> fields;
 
     public HttpRequestHeader(Map<String, String> fields) {
@@ -24,8 +25,8 @@ public class HttpRequestHeader {
     public int getContentLength() {
         int length = 0;
 
-        if (fields.containsKey("Content-Length")) {
-            length = Integer.parseInt(fields.get("Content-Length"));
+        if (fields.containsKey(CONTENT_LENGTH)) {
+            length = Integer.parseInt(fields.get(CONTENT_LENGTH));
         }
 
         return length;
