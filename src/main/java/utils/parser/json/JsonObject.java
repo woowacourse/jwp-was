@@ -29,7 +29,7 @@ public class JsonObject extends JsonValue<Map<String, JsonValue<?>>> {
         return super.val.entrySet();
     }
 
-    int size() {
+    public int size() {
         return super.val.size();
     }
 

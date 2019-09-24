@@ -68,10 +68,12 @@ public class Triplet<A, B, C> implements Tuple<A, B> {
         this.trd = trd;
     }
 
+    @Override
     public A fst() {
         return this.fst;
     }
 
+    @Override
     public B snd() {
         return this.snd;
     }

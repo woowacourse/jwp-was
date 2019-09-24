@@ -94,10 +94,12 @@ public class Pair<A, B> implements Tuple<A, B> {
         this.snd = snd;
     }
 
+    @Override
     public A fst() {
         return this.fst;
     }
 
+    @Override
     public B snd() {
         return this.snd;
     }

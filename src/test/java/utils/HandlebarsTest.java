@@ -14,15 +14,13 @@ public class HandlebarsTest {
 
     @Test
     void name() throws Exception {
-        TemplateLoader loader = new ClassPathTemplateLoader();
-        loader.setPrefix("/templates");
+        final TemplateLoader loader = new ClassPathTemplateLoader();
+        loader.setPrefix("/static");
         loader.setSuffix(".html");
-        Handlebars handlebars = new Handlebars(loader);
-
-        Template template = handlebars.compile("user/profile");
-
-        User user = new User("javajigi", "password", "자바지기", "javajigi@gmail.com");
-        String profilePage = template.apply(user);
+        final Handlebars handlebars = new Handlebars(loader);
+        final Template template = handlebars.compile("user/profile");
+        final User user = new User("javajigi", "password", "자바지기", "javajigi@gmail.com");
+        final String profilePage = template.apply(user);
         log.debug("ProfilePage : {}", profilePage);
     }
 }

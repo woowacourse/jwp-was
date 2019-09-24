@@ -77,6 +77,10 @@ class JsonParserTest {
                 "    \"/\" : {\n" +
                 "      \"controller\": \"IndexController\",\n" +
                 "      \"method\": \"index\"\n" +
+                "    },\n" +
+                "    \"/test/{num}\" : {\n" +
+                "      \"controller\": \"TestController\",\n" +
+                "      \"method\": \"test\"\n" +
                 "    }\n" +
                 "  },\n" +
                 "\n" +
@@ -86,12 +90,30 @@ class JsonParserTest {
                 "      \"method\": \"signUp\"\n" +
                 "    }\n" +
                 "  },\n" +
-                "  \n" +
+                "\n" +
                 "  \"PUT\": {},\n" +
-                "  \n" +
+                "\n" +
                 "  \"DELETE\": {}\n" +
                 "}";
         final JsonObject result = jsonParser.interpret(CONFIG);
-        System.out.println(result);
+        assertThat(result.size()).isEqualTo(4);
+        final JsonObject get = (JsonObject) result.get("GET");
+        assertThat(get.size()).isEqualTo(2);
+        final JsonObject root = (JsonObject) get.get("/");
+        assertThat(root.size()).isEqualTo(2);
+        assertThat((String) root.get("controller").val()).isEqualTo("IndexController");
+        assertThat((String) root.get("method").val()).isEqualTo("index");
+        final JsonObject test_num = (JsonObject) get.get("/test/{num}");
+        assertThat(test_num.size()).isEqualTo(2);
+        assertThat((String) test_num.get("controller").val()).isEqualTo("TestController");
+        assertThat((String) test_num.get("method").val()).isEqualTo("test");
+        final JsonObject post = (JsonObject) result.get("POST");
+        assertThat(post.size()).isEqualTo(1);
+        final JsonObject user_create = (JsonObject) post.get("/user/create");
+        assertThat(user_create.size()).isEqualTo(2);
+        assertThat((String) user_create.get("controller").val()).isEqualTo("UserController");
+        assertThat((String) user_create.get("method").val()).isEqualTo("signUp");
+        assertThat(((JsonObject) result.get("PUT")).size()).isEqualTo(0);
+        assertThat(((JsonObject) result.get("DELETE")).size()).isEqualTo(0);
     }
 }

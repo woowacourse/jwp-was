@@ -44,9 +44,9 @@ public class Router {
     }
 
     private static HttpResponse serveStaticFiles(HttpRequest req) {
-        final String routedPath = "./static" + req.path();
-        logger.debug("Route: {} -> {}", req.path(), routedPath);
-        return FileIoUtils.loadFileFromClasspath(routedPath).map(body ->
+        final String dest = "./static" + req.path();
+        logger.debug("Route: {} -> {}", req.path(), dest);
+        return FileIoUtils.loadFileFromClasspath(dest).map(body ->
             HttpResponse.builder(extensionToContentType(req.path().extension()))
                         .extractFromRequest(req)
                         .body(body)

@@ -61,18 +61,18 @@ public class JsonParser implements KeyValueParser<JsonObject> {
     }
 
     private Triplet<String, ? extends JsonValue<?>, Integer> parseAttribute(String input, int begin) {
-        return Optional.ofNullable(tokenizeKey(input, jumpBlank(input, begin).get())).flatMap(key -> {
+        return Optional.ofNullable(lexKey(input, jumpBlank(input, begin).get())).flatMap(key -> {
             final int colonIndex = jumpBlank(input, key.snd() + 1).get();
             if (input.charAt(colonIndex) != ':') {
                 return Optional.empty();
             }
-            return Optional.ofNullable(tokenizeValue(input, jumpBlank(input, colonIndex + 1).get())).map(value ->
+            return Optional.ofNullable(lexValue(input, jumpBlank(input, colonIndex + 1).get())).map(value ->
                 new Triplet<>(key.fst(), value.fst(), value.snd())
             );
         }).orElse(null);
     }
 
-    private Pair<String, Integer> tokenizeKey(String input, int begin) {
+    private Pair<String, Integer> lexKey(String input, int begin) {
         if (input.charAt(begin) != '"') {
            return null;
         }
@@ -80,7 +80,7 @@ public class JsonParser implements KeyValueParser<JsonObject> {
         return (begin < end) ? new Pair<>(input.substring(begin + 1, end), end) : null;
     }
 
-    private Pair<? extends JsonValue<?>, Integer> tokenizeValue(String input, int begin) {
+    private Pair<? extends JsonValue<?>, Integer> lexValue(String input, int begin) {
         final char c = input.charAt(begin);
         if (c == '"') {
             final int end = tokenizeString(input, begin + 1);
@@ -168,21 +168,21 @@ public class JsonParser implements KeyValueParser<JsonObject> {
         return ((i + 3 < input.length()) && input.substring(i, i + 4).equalsIgnoreCase("null")) ? (i + 3) : -1;
     }
 
-    private TailRecursion<Integer> tokenizePossiblyNestedValue(String input, char endToken, int i, int depth) {
+    private TailRecursion<Integer> tokenizePossiblyNestedValue(String input, char closingToken, int i, int depth) {
         if (i == input.length()) {
             return (Done<Integer>) () -> -1;
         }
         final char c = input.charAt(i);
-        if (c == endToken && depth == 0) {
+        if (c == closingToken && depth == 0) {
             return (Done<Integer>) () -> i;
         }
         if (c == '{' || c == '[') {
-            return (TailCall<Integer>) () -> tokenizePossiblyNestedValue(input, endToken, i + 1, depth + 1);
+            return (TailCall<Integer>) () -> tokenizePossiblyNestedValue(input, closingToken, i + 1, depth + 1);
         }
         if (c == '}' || c == ']') {
-            return (TailCall<Integer>) () -> tokenizePossiblyNestedValue(input, endToken, i + 1, depth - 1);
+            return (TailCall<Integer>) () -> tokenizePossiblyNestedValue(input, closingToken, i + 1, depth - 1);
         }
-        return (TailCall<Integer>) () -> tokenizePossiblyNestedValue(input, endToken, i + 1, depth);
+        return (TailCall<Integer>) () -> tokenizePossiblyNestedValue(input, closingToken, i + 1, depth);
     }
 
     private int tokenizeObject(String input, int i) {

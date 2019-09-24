@@ -13,12 +13,13 @@ import java.util.Optional;
 public class WebServer {
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
 
-    private static final int DEFAULT_PORT = 8080;
+    private static final HttpPort DEFAULT_PORT = HttpPort.PORT_8080;
+
 
     public static void main(String[] args) throws Exception {
         final HttpPort port = Optional.ofNullable(args).filter(x -> x.length != 0)
                                                         .flatMap(x -> HttpPort.of(x[0]))
-                                                        .orElse(HttpPort.of(DEFAULT_PORT).get());
+                                                        .orElse(DEFAULT_PORT);
 
         // 서버소켓을 생성한다. 웹서버는 기본적으로 8080번 포트를 사용한다.
         try (final ServerSocket listener = new ServerSocket(port.number())) {
