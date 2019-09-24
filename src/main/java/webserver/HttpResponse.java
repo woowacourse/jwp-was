@@ -1,20 +1,22 @@
-package webserver.http;
+package webserver;
+
+import webserver.http.HttpConnection;
+import webserver.http.HttpContentType;
+import webserver.http.HttpStatusCode;
+import webserver.http.HttpVersion;
 
 public class HttpResponse {
-    public static final HttpResponse BAD_REQUEST =
-            HttpResponse.builder(HttpContentType.TEXT_PLAIN_UTF_8)
-                        .statusCode(HttpStatusCode.BAD_REQUEST)
-                        .build();
+    public static final HttpResponse BAD_REQUEST = HttpResponse.builder(HttpContentType.TEXT_PLAIN_UTF_8)
+                                                                .statusCode(HttpStatusCode.BAD_REQUEST)
+                                                                .build();
 
-    public static final HttpResponse NOT_FOUND =
-            HttpResponse.builder(HttpContentType.TEXT_PLAIN_UTF_8)
-                        .statusCode(HttpStatusCode.NOT_FOUND)
-                        .build();
+    public static final HttpResponse NOT_FOUND = HttpResponse.builder(HttpContentType.TEXT_PLAIN_UTF_8)
+                                                            .statusCode(HttpStatusCode.NOT_FOUND)
+                                                            .build();
 
-    public static final HttpResponse INTERNAL_SERVER_ERROR =
-            HttpResponse.builder(HttpContentType.TEXT_PLAIN_UTF_8)
-                        .statusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
-                        .build();
+    public static final HttpResponse INTERNAL_SERVER_ERROR = HttpResponse.builder(HttpContentType.TEXT_PLAIN_UTF_8)
+                                                                    .statusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                                                                    .build();
 
     private final HttpVersion version;
     private final HttpStatusCode statusCode;

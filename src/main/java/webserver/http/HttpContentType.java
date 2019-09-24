@@ -1,5 +1,7 @@
 package webserver.http;
 
+import utils.parser.MimeTypeWithParamsParser;
+
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.HashMap;
@@ -25,25 +27,23 @@ public class HttpContentType implements HttpHeaderField {
     private final String boundary;
 
     public static Optional<HttpContentType> of(String input) {
-        return Optional.ofNullable(input).flatMap(x -> {
-            final String noSpace = x.replaceAll("\\s+", "").toLowerCase();
+            final String noSpace = input.replaceAll("\\s+", "").toLowerCase();
             if (CACHE.containsKey(noSpace)) {
                 return Optional.of(CACHE.get(noSpace));
             }
-            return HttpMimeTypeWithParamsDTO.of(noSpace).filter(y -> !y.mimeType().subtype().equals("*"))
-                                                        .map(y -> {
-                                                            try {
-                                                                final HttpContentType contentType =
-                                                                        new HttpContentType(y.mimeType(), y.params());
-                                                                if (contentType.boundary == null) {
-                                                                    CACHE.put(noSpace, contentType);
-                                                                }
-                                                                return contentType;
-                                                            } catch (UnsupportedCharsetException e) {
-                                                                return null;
-                                                            }
-                                                        });
-        });
+            return MimeTypeWithParamsParser.interpret(noSpace).filter(y -> !y.fst().subtype().equals("*"))
+                                                                .map(y -> {
+                                                                    try {
+                                                                        final HttpContentType contentType =
+                                                                                new HttpContentType(y.fst(), y.snd());
+                                                                        if (contentType.boundary == null) {
+                                                                            CACHE.put(noSpace, contentType);
+                                                                        }
+                                                                        return contentType;
+                                                                    } catch (UnsupportedCharsetException e) {
+                                                                        return null;
+                                                                    }
+                                                                });
     }
 
     private HttpContentType(HttpMimeType mimeType, Map<String, String> params) {

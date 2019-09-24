@@ -10,16 +10,14 @@ class HttpHostTest {
 
     @Test
     void initTestA() {
-        final HttpHost host = HttpHost.of("localhost:8080").get();
-        assertThat(host.name()).isEqualTo("localhost");
-        assertThat(host.port()).isEqualTo(HttpPort.PORT_8080);
+        final HttpHost host = HttpHost.of(" localhost:8080").get();
+        assertThat(host.toString()).isEqualTo("localhost:8080");
     }
 
     @Test
     void initTestB() {
-        final HttpHost host = HttpHost.of("https://www.woowa.com:8080").get();
-        assertThat(host.name()).isEqualTo("www.woowa.com");
-        assertThat(host.port()).isEqualTo(HttpPort.PORT_8080);
+        final HttpHost host = HttpHost.of("https://www.woowa.com:7080").get();
+        assertThat(host.toString()).isEqualTo("https://www.woowa.com:7080");
     }
 
     @Test

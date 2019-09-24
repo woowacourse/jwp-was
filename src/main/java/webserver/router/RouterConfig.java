@@ -17,7 +17,7 @@ public class RouterConfig {
 
     private static final RouterConfig instance = new RouterConfig();
 
-    private final Map<HttpMethod, RouterPathMatcher> config;
+    private final Map<HttpMethod, Pathfinder> config;
 
     public static RouterConfig getInstance() {
         return instance;
@@ -30,7 +30,7 @@ public class RouterConfig {
                 config.attributeSet().stream().map(perMethodType ->
                         new Pair<>(
                                 HttpMethod.of(perMethodType.getKey()).get(),
-                                new RouterPathMatcher((JsonObject) perMethodType.getValue())
+                                new Pathfinder((JsonObject) perMethodType.getValue())
                         )
                 ).collect(
                         Collectors.collectingAndThen(
@@ -41,7 +41,7 @@ public class RouterConfig {
         ).orElse(Collections.emptyMap());
     }
 
-    public Optional<RouterMappedDestination> match(HttpMethod methodType, HttpPath queriedPath) {
+    public Optional<MappedDestination> match(HttpMethod methodType, HttpPath queriedPath) {
         return Optional.ofNullable(this.config.get(methodType)).map(matcher -> matcher.get(queriedPath));
     }
 }

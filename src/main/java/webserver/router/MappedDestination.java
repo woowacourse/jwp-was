@@ -5,18 +5,18 @@ import utils.parser.json.JsonObject;
 import java.util.Collections;
 import java.util.Map;
 
-public class RouterMappedDestination {
+public class MappedDestination {
     private final String controller;
     private final String method;
     private final Map<String, String> pathVars;
 
-    public RouterMappedDestination(JsonObject dest) {
+    public MappedDestination(JsonObject dest) {
         this.controller = (String) dest.get("controller").val();
         this.method = (String) dest.get("method").val();
         this.pathVars = Collections.emptyMap();
     }
 
-    public RouterMappedDestination(String controller, String method, Map<String, String> pathVars) {
+    public MappedDestination(String controller, String method, Map<String, String> pathVars) {
         this.controller = controller;
         this.method = method;
         this.pathVars = Collections.unmodifiableMap(pathVars);

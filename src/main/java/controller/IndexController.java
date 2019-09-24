@@ -1,8 +1,8 @@
 package controller;
 
 import utils.io.FileIoUtils;
-import webserver.http.HttpRequest;
-import webserver.http.HttpResponse;
+import webserver.HttpRequest;
+import webserver.HttpResponse;
 import webserver.http.HttpContentType;
 
 public class IndexController {

@@ -4,8 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.io.FileIoUtils;
 import webserver.http.HttpContentType;
-import webserver.http.HttpRequest;
-import webserver.http.HttpResponse;
+import webserver.HttpRequest;
+import webserver.HttpResponse;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;

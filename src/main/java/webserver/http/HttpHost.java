@@ -8,6 +8,7 @@ import java.util.Optional;
 public class HttpHost implements HttpHeaderField {
     private static final Map<String, HttpHost> CACHE = new HashMap<>();
 
+    private final String protocol;
     private final String name;
     private final HttpPort port;
 
@@ -16,40 +17,34 @@ public class HttpHost implements HttpHeaderField {
         if (CACHE.containsKey(trimmed)) {
             return Optional.of(CACHE.get(trimmed));
         }
-        final String[] hostnameAndPort = trimmed.contains("://")
-                ? trimmed.substring(trimmed.indexOf("://") + 3).split("\\s*:\\s*")
-                : trimmed.split("\\s*:\\s*");
+        final String protocol = input.contains("://") ? trimmed.split("://")[0] : null;
+        final String[] hostnameAndPort = (protocol != null)
+                ? trimmed.substring(trimmed.indexOf("://") + 3).split(":")
+                : trimmed.split(":");
         if (hostnameAndPort.length == 1) {
             if (hostnameAndPort[0].split("\\s+").length > 1) {
                 return Optional.empty();
             }
-            final HttpHost host = new HttpHost(trimmed, HttpPort.PORT_80);
-            CACHE.put(trimmed, host);
+            final HttpHost host = new HttpHost(protocol, hostnameAndPort[0], HttpPort.PORT_80);
+            CACHE.put(hostnameAndPort[0], host);
             return Optional.of(host);
         }
         return HttpPort.of(hostnameAndPort[1]).map(port -> {
-            final HttpHost host = new HttpHost(hostnameAndPort[0], port);
+            final HttpHost host = new HttpHost(protocol, hostnameAndPort[0], port);
             CACHE.put(trimmed, host);
             return host;
         });
     }
 
-    private HttpHost(String name, HttpPort port) {
+    private HttpHost(String protocol, String name, HttpPort port) {
+        this.protocol = protocol;
         this.name = name;
         this.port = port;
     }
 
-    public String name() {
-        return this.name;
-    }
-
-    public HttpPort port() {
-        return this.port;
-    }
-
     @Override
     public String toString() {
-        return this.name + ":" + this.port;
+        return (this.protocol != null ? protocol + "://" : "") + this.name + ":" + this.port;
     }
 
     @Override

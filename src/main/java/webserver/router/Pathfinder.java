@@ -9,15 +9,16 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class RouterPathMatcher {
+public class Pathfinder {
+    //미구현
     private static final Pattern PATH_VAR = Pattern.compile("\\{[\\w\\W]*}");
-    private final Map<String, RouterMappedDestination> config;
+    private final Map<String, MappedDestination> config;
 
-    public RouterPathMatcher(JsonObject routes) {
+    public Pathfinder(JsonObject routes) {
         this.config = routes.attributeSet().stream().map(perRoute ->
                 new Pair<>(
                         perRoute.getKey(),
-                        new RouterMappedDestination((JsonObject) perRoute.getValue())
+                        new MappedDestination((JsonObject) perRoute.getValue())
                 )
         ).collect(
                 Collectors.collectingAndThen(
@@ -27,7 +28,7 @@ public class RouterPathMatcher {
         );
     }
 
-    public RouterMappedDestination get(HttpPath path) {
+    public MappedDestination get(HttpPath path) {
         return this.config.get(path.toString());
     }
 }

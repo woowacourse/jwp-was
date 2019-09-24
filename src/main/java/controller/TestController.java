@@ -1,7 +1,7 @@
 package controller;
 
-import webserver.http.HttpRequest;
-import webserver.http.HttpResponse;
+import webserver.HttpRequest;
+import webserver.HttpResponse;
 import webserver.http.HttpContentType;
 
 import java.util.Map;
