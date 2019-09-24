@@ -1,13 +1,31 @@
 package http.response;
-
 import http.common.HttpHeader;
+import http.common.HttpVersion;
+
+import java.util.Arrays;
 
 public class HttpResponse {
     private StartLine startLine;
     private HttpHeader httpHeader;
     private HttpResponseBody httpResponseBody;
 
-    public HttpResponse(final StartLine startLine, final HttpHeader httpHeader, final HttpResponseBody httpResponseBody) {
+    public void redirect(final String url) {
+        this.init(
+                new StartLine(HttpVersion.HTTP_1_1, HttpStatus.FOUND),
+                HttpHeader.of(Arrays.asList("Location: " + url)),
+                HttpResponseBody.empty()
+        );
+    }
+
+    public void forward(final String url, final byte[] file) {
+        this.init(
+                new StartLine(HttpVersion.HTTP_1_1, HttpStatus.OK),
+                HttpHeader.of(Arrays.asList("Content-Type: " + HttpContentType.findContentType(url))),
+                HttpResponseBody.of(file)
+        );
+    }
+
+    private void init(final StartLine startLine, final HttpHeader httpHeader, final HttpResponseBody httpResponseBody) {
         this.startLine = startLine;
         this.httpHeader = httpHeader;
         this.httpResponseBody = httpResponseBody;
