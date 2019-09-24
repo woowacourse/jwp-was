@@ -1,9 +1,9 @@
-package http.request;
+package http.request.parser;
 
 import com.github.jknack.handlebars.internal.lang3.StringUtils;
+import http.request.RequestInformation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.IOUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -2,14 +2,17 @@ package webserver;
 
 import controller.Controller;
 import controller.ControllerFactory;
-import http.request.*;
+import http.request.Request;
+import http.request.RequestInformation;
+import http.request.RequestMethod;
+import http.request.RequestUrl;
+import http.request.parser.HttpParser;
 import http.response.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 
 public class RequestHandler implements Runnable {
@@ -39,7 +42,7 @@ public class RequestHandler implements Runnable {
 
             DataOutputStream dos = new DataOutputStream(out);
             response.doResponse(dos);
-        } catch (IOException | URISyntaxException e) {
+        } catch (Exception e) {
             log.error(e.getMessage());
         }
     }

@@ -1,4 +1,4 @@
-package http.request;
+package http.request.parser;
 
 import java.io.BufferedReader;
 import java.util.Map;
