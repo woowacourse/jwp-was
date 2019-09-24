@@ -50,6 +50,28 @@ public class HttpRequestTest {
                     "\n" +
                     "userId=park&password=1234&name=sungbum&email=park%40naver.com";
 
+    public static final String LOGIN_REQUEST =
+            "POST /user/login HTTP/1.1\n" +
+                    "Host: localhost:8080\n" +
+                    "Connection: keep-alive\n" +
+                    "Content-Length: 27\n" +
+                    "Pragma: no-cache\n" +
+                    "Cache-Control: no-cache\n" +
+                    "Origin: http://localhost:8080\n" +
+                    "Upgrade-Insecure-Requests: 1\n" +
+                    "Content-Type: application/x-www-form-urlencoded\n" +
+                    "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36\n" +
+                    "Sec-Fetch-Mode: navigate\n" +
+                    "Sec-Fetch-User: ?1\n" +
+                    "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3\n" +
+                    "Sec-Fetch-Site: same-origin\n" +
+                    "Referer: http://localhost:8080/user/login.html\n" +
+                    "Accept-Encoding: gzip, deflate, br\n" +
+                    "Accept-Language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7\n" +
+                    "Cookie: JSESSIONID=9958D573F2F86368E8D937C1439CB39C; Idea-daed433e=7b28f4e9-9efc-49f6-b857-2e1fd083330a\n" +
+                    "\n" +
+                    "userId=%s&password=%s\n";
+
     HttpRequest request;
 
     @BeforeEach

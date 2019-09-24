@@ -1,6 +1,8 @@
 package webserver;
 
+import db.DataBase;
 import http.*;
+import model.User;
 import org.junit.jupiter.api.Test;
 import utils.FileIoUtils;
 
@@ -8,11 +10,19 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import static http.HttpHeader.CONTENT_TYPE;
+import static http.HttpRequestTest.LOGIN_REQUEST;
 import static http.HttpRequestTest.POST_REQUEST;
+import static model.UserTest.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static utils.IOUtils.convertStringToInputStream;
 
 class DispatcherServletTest {
+    static {
+        if (!DataBase.findUserById(ID).isPresent()) {
+            DataBase.addUser(new User(ID, PASSWORD, NAME, EMAIL));
+        }
+    }
+
     @Test
     void static_파일_요청() throws IOException, URISyntaxException {
         String filePath = "/css/styles.css";
@@ -49,5 +59,27 @@ class DispatcherServletTest {
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
         assertThat(response.getHeader("Location")).isEqualTo("/index.html");
+    }
+
+    @Test
+    void 로그인_존재하지않는_유저_Redirect_처리() throws IOException {
+        HttpRequest request = HttpRequestParser.parse(convertStringToInputStream(String.format(LOGIN_REQUEST, "ABC", PASSWORD)));
+        HttpResponse response = new HttpResponse();
+
+        DispatcherServlet.doDispatch(request, response);
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
+        assertThat(response.getHeader("Location")).isEqualTo("/user/login_failed.html");
+    }
+
+    @Test
+    void 로그인_비밀번호_에러시_Redirect_처리() throws IOException {
+        HttpRequest request = HttpRequestParser.parse(convertStringToInputStream(String.format(LOGIN_REQUEST, ID, "ABC")));
+        HttpResponse response = new HttpResponse();
+
+        DispatcherServlet.doDispatch(request, response);
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
+        assertThat(response.getHeader("Location")).isEqualTo("/user/login_failed.html");
     }
 }

@@ -1,6 +1,7 @@
 package webserver;
 
 import controller.CreateUserController;
+import controller.LoginController;
 import http.HttpMethod;
 import http.HttpRequest;
 import http.HttpStartLine;
@@ -14,10 +15,19 @@ class HandlerMappingTest {
     @Test
     void 유저_생성_URL_맵핑() {
         HttpRequest httpRequest = new HttpRequest.HttpRequestBuilder()
-                .startLine(new HttpStartLine("/user/create", HttpMethod.GET))
+                .startLine(new HttpStartLine("/user/create", HttpMethod.POST))
                 .build();
 
         assertThat(HandlerMapping.handle(httpRequest) instanceof CreateUserController).isTrue();
+    }
+
+    @Test
+    void 로그인_URL_맵핑() {
+        HttpRequest httpRequest = new HttpRequest.HttpRequestBuilder()
+                .startLine(new HttpStartLine("/user/login", HttpMethod.POST))
+                .build();
+
+        assertThat(HandlerMapping.handle(httpRequest) instanceof LoginController).isTrue();
     }
 
     @Test

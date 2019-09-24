@@ -1,5 +1,7 @@
 package model;
 
+import model.exception.InvalidPasswordException;
+
 public class User {
     private String userId;
     private String password;
@@ -27,6 +29,12 @@ public class User {
 
     public String getEmail() {
         return email;
+    }
+
+    public void matchPassword(String password) {
+        if (!this.password.equals(password)) {
+            throw new InvalidPasswordException();
+        }
     }
 
     @Override

@@ -2,6 +2,7 @@ package webserver;
 
 import controller.Controller;
 import controller.CreateUserController;
+import controller.LoginController;
 import http.HttpRequest;
 import webserver.exception.InvalidUriException;
 
@@ -13,6 +14,7 @@ public class HandlerMapping {
 
     static {
         uriMapping.put("/user/create", new CreateUserController());
+        uriMapping.put("/user/login", new LoginController());
     }
 
     public static Controller handle(HttpRequest httpRequest) {

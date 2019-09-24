@@ -2,6 +2,7 @@ package webserver;
 
 import controller.Controller;
 import controller.exception.HttpMethodNotAllowedException;
+import controller.exception.NotFoundUserIdException;
 import controller.exception.URINotFoundException;
 import http.HttpRequest;
 import http.HttpResponse;
@@ -47,11 +48,12 @@ public class DispatcherServlet {
         } catch (NotFoundResourceException | InvalidUriException | URINotFoundException e) {
             log.error(e.getMessage());
             httpResponse.setStatus(404);
-        } catch (InvalidPasswordException e) {
+        } catch (InvalidPasswordException | NotFoundUserIdException e) {
             log.error(e.getMessage());
-            View view = new RedirectView("user/login.html");
+            View view = new RedirectView("user/login_failed.html");
             view.render(httpRequest, httpResponse);
-        } catch (Exception e) {
+        } catch
+        (Exception e) {
             log.error(e.getMessage());
             httpResponse.setStatus(500);
         }

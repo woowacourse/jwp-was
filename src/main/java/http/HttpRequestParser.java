@@ -86,7 +86,6 @@ public class HttpRequestParser {
                 break;
             }
             lines.add(line);
-            System.out.println(line);
             line = br.readLine();
         }
 
