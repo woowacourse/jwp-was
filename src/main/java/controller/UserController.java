@@ -12,6 +12,7 @@ import java.util.List;
 public class UserController implements Controller {
     private final List<String> allowedMappers = Arrays.asList(
             RequestMethod.valueOf("GET").getMethod() + " ../resources/templates/user/form.html",
+            RequestMethod.valueOf("GET").getMethod() + " ../resources/templates/user/login.html",
             RequestMethod.valueOf("GET").getMethod() + " ../resources/templates/user/create",
             RequestMethod.valueOf("POST").getMethod() + " ../resources/templates/user/create"
     );
