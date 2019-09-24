@@ -1,7 +1,5 @@
 package webserver.router;
 
-import webserver.controller.StaticController;
-import webserver.controller.TemplatesController;
 import webserver.controller.UserController;
 
 public class RouterFactory {
@@ -12,9 +10,6 @@ public class RouterFactory {
         OrderedRouter orderedRouter = OrderedRouter.getInstance();
 
         Router basicRouter = BasicRouter.getInstance()
-                .addController(path -> path.contains(".html"), new TemplatesController())
-                .addController(path -> path.contains(".css"), new StaticController())
-                .addController(path -> path.contains(".js"), new StaticController())
                 .addController(pattern -> pattern.equals("/user/create"), new UserController());
 
         // register routers in order

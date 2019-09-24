@@ -7,6 +7,7 @@ import utils.FileIoUtils;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import java.util.Objects;
 
 public class FileIOController extends AbstractController {
     private final String prefix;
@@ -26,5 +27,18 @@ public class FileIOController extends AbstractController {
     @Override
     public void doPost(HttpRequest request, HttpResponse response) throws UnsupportedEncodingException {
         super.doPost(request, response);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FileIOController that = (FileIOController) o;
+        return Objects.equals(prefix, that.prefix);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(prefix);
     }
 }

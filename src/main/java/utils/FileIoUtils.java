@@ -16,7 +16,6 @@ public class FileIoUtils {
         return Files.readAllBytes(path);
     }
 
-
     public static boolean canUseResourceFromFilePath(String filePath) {
         return getUrlFromFilePath(filePath)
                 .map(url -> true)

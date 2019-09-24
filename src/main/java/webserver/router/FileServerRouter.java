@@ -15,6 +15,7 @@ public class FileServerRouter implements Router {
     private static final Logger log = LoggerFactory.getLogger(FileServerRouter.class);
 
     private final List<String> directoryPrefixes = Arrays.asList(
+            "",
             "static",
             "templates"
     );

@@ -5,10 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.ProxyFactory;
 import proxy.AccessLoggingAdvice;
 import proxy.ElapsedTimeAdvice;
-import webserver.controller.StaticController;
-import webserver.controller.TemplatesController;
-import webserver.controller.UserController;
-import webserver.router.BasicRouter;
 
 import java.io.IOException;
 import java.net.ServerSocket;
