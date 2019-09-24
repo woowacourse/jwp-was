@@ -19,14 +19,10 @@ public enum HttpRequestType {
         this.requestTypeChecker = requestTypeChecker;
     }
 
-    public static HttpRequestType of(String url) {
+    public static String redefineUrl(final String url) {
         return Arrays.stream(HttpRequestType.values())
                 .filter(httpRequestType -> httpRequestType.requestTypeChecker.test(url))
                 .findFirst()
-                .orElseThrow(InvalidHttpRequestType::new);
-    }
-
-    public String getPrefix() {
-        return prefix;
+                .orElseThrow(InvalidHttpRequestType::new).prefix + url;
     }
 }
