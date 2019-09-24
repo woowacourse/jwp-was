@@ -1,6 +1,7 @@
 package webserver.controller;
 
 import webserver.HttpRequest;
+import webserver.HttpResponse;
 
 public class WelcomePageController extends AbstractController {
     public static final String PATH = "/";
@@ -11,7 +12,7 @@ public class WelcomePageController extends AbstractController {
     }
 
     @Override
-    protected String doGet(HttpRequest httpRequest) {
+    protected String doGet(HttpRequest httpRequest, HttpResponse response) {
         return "/index.html";
     }
 }

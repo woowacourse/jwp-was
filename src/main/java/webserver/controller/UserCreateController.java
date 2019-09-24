@@ -3,6 +3,7 @@ package webserver.controller;
 import db.DataBase;
 import model.User;
 import webserver.HttpRequest;
+import webserver.HttpResponse;
 
 public class UserCreateController extends AbstractController {
     public static final String PATH = "/user/create";
@@ -13,7 +14,7 @@ public class UserCreateController extends AbstractController {
     }
 
     @Override
-    protected String doPost(HttpRequest request) {
+    protected String doPost(HttpRequest request, HttpResponse response) {
         User user = User.Builder.anUser()
                 .userId(request.getParam("userId"))
                 .email(request.getParam("email"))
