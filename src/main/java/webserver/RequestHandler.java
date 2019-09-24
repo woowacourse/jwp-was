@@ -1,10 +1,9 @@
 package webserver;
 
 import http.request.HttpRequest;
-import http.request.HttpRequestParams;
 import http.request.HttpRequestParser;
-import http.response.HttpResponseGenerator;
-import model.User;
+import http.response.HttpResponse;
+import http.response.HttpResponseParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,31 +19,27 @@ public class RequestHandler implements Runnable {
 
     private Socket connection;
 
-    public RequestHandler(Socket connectionSocket) {
+    public RequestHandler(final Socket connectionSocket) {
         this.connection = connectionSocket;
     }
 
     public void run() {
-        logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
+        logger.debug("New Client Connect! Connected IP : {}, Port : {}/. ", connection.getInetAddress(),
                 connection.getPort());
 
-        try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            HttpRequest httpRequest = HttpRequestParser.parse(in);
-            logger.info("{}", httpRequest);
-            DataOutputStream dos = new DataOutputStream(out);
+        try (InputStream inputStream = connection.getInputStream();
+             OutputStream outputStream = connection.getOutputStream()) {
 
-            if (httpRequest.getRequestLine().getOriginUrl().equals("/user/create")) {
-                HttpRequestParams parameters = httpRequest.getHttpRequestParams();
-                User user = new User(parameters.get("userId"), parameters.get("password"),
-                        parameters.get("name"), parameters.get("email"));
+            DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+            HttpRequest httpRequest = HttpRequestParser.parse(inputStream);
+            HttpResponse httpResponse = new HttpResponse();
+            Dispatcher.dispatch(httpRequest, httpResponse);
 
-                logger.info("{}", user);
-                HttpResponseGenerator.redirect(dos, httpRequest.getHttpHeader().get("Origin"), "/index.html");
-            } else {
-                HttpResponseGenerator.forward(dos, httpRequest.getRequestLine().getFullUrl());
-            }
+            logger.debug("{}", httpResponse);
+            HttpResponseParser.send(dataOutputStream, httpResponse);
+
         } catch (IOException | URISyntaxException e) {
-            logger.error(e.getMessage());
+            logger.debug(e.getMessage());
         }
     }
 }
