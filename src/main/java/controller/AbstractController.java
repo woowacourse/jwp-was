@@ -8,7 +8,7 @@ import utils.HttpStatus;
 public abstract class AbstractController implements Controller {
     @Override
     public void service(HttpRequest request, HttpResponse response) {
-        if (HttpMethod.GET.equals(request.getHttpMethod())) {
+        if (HttpMethod.GET == request.getHttpMethod()) {
             doGet(request, response);
             return;
         }

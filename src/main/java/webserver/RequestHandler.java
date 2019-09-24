@@ -1,10 +1,10 @@
 package webserver;
 
-import handler.Handler;
-import handler.HandlerList;
+import controller.Controller;
+import controller.Controllers;
+import controller.exception.NotFoundUrlException;
 import model.http.HttpRequest;
 import model.http.HttpResponse;
-import model.http.ModelAndView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
@@ -34,20 +34,25 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = RequestHeaderParser.parseRequest(new InputStreamReader(in, StandardCharsets.UTF_8));
             HttpResponse httpResponse = HttpResponse.of();
 
-            Handler mappingHandler = getHandler(httpRequest);
-            if (mappingHandler == null) {
-                // TODO httpResponse.sendError("no handler found");
-                throw new RuntimeException();
-            }
+            Controller controller = findController(httpRequest);
+            controller.service(httpRequest, httpResponse);
 
-            ModelAndView mav = mappingHandler.handle(httpRequest, httpResponse);
             httpResponse = checkResponse(httpResponse);
-            handleOutputStream(out, mav, httpResponse);
+            handleOutputStream(out, httpResponse);
+
         } catch (IOException e) {
             logger.error(e.getMessage());
         } catch (URISyntaxException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
+            throw new NotFoundUrlException(e);
         }
+    }
+
+    private Controller findController(HttpRequest httpRequest) {
+        return Controllers.LIST.stream()
+                .filter(target -> target.isMapping(httpRequest))
+                .findFirst()
+                .orElseThrow(NotFoundUrlException::new);
     }
 
     private HttpResponse checkResponse(HttpResponse httpResponse) {
@@ -57,28 +62,15 @@ public class RequestHandler implements Runnable {
         return httpResponse;
     }
 
-    private Handler getHandler(HttpRequest httpRequest) {
-        for (Handler handler : HandlerList.LIST) {
-            // TODO optional
-            String temp = httpRequest.getDirectory();
-            Handler targetHandler = handler.getHandler(temp);
-            if (targetHandler != null) {
-                return targetHandler;
-            }
-        }
-        return null;
-    }
-
-    private void handleOutputStream(OutputStream out, ModelAndView mav, HttpResponse httpResponse) throws IOException
-            , URISyntaxException {
+    private void handleOutputStream(OutputStream out, HttpResponse httpResponse) throws IOException, URISyntaxException {
         DataOutputStream dos = new DataOutputStream(out);
         if (httpResponse.isNotInitialized() || httpResponse.hasError()) {
             byte[] body = FileIoUtils.loadFileFromClasspath("./templates/error.html");
             createResponse(httpResponse, dos, body);
             return;
         }
-        byte[] body = FileIoUtils.loadFileFromClasspath(mav.getFullPath());
 
+        byte[] body = FileIoUtils.loadFileFromClasspath(httpResponse.getPath());
         createResponse(httpResponse, dos, body);
     }
 
@@ -91,7 +83,7 @@ public class RequestHandler implements Runnable {
         try {
             dos.writeBytes("HTTP/1.1 " + response.getHttpStatusCode() + " " + response.getHttpReasonPhrase() + " \r\n");
             if (response.isRedirect()) {
-                dos.writeBytes("Location: " + response.getLocation() + " \r\n");
+                dos.writeBytes("Location: " + response.getResourceName() + " \r\n");
             }
             dos.writeBytes("Content-Type: " + response.getMediaType() + ";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");

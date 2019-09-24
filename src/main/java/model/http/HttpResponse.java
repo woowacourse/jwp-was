@@ -9,11 +9,10 @@ import java.util.Map;
 public class HttpResponse {
     // TODO model 맵의 역할
     private Map<String, String> body = new HashMap<>();
-    private String resource;
-    private String location;
+    private String path;
     private HttpStatus httpStatus;
     private MediaType mediaType;
-    private String errorMsg;
+    private String errorMessage;
 
     private HttpResponse() {
         this.httpStatus = HttpStatus.DEFAULT;
@@ -25,44 +24,29 @@ public class HttpResponse {
 
     public static HttpResponse createErrorResponse() {
         HttpResponse httpResponse = new HttpResponse();
-        httpResponse.resource = "error.html";
+        httpResponse.path = ViewLocation.TEMPLATE + "/error.html";
         httpResponse.httpStatus = HttpStatus.NOT_FOUND;
         httpResponse.mediaType = MediaType.HTML;
-        httpResponse.location = "templates";
         return httpResponse;
     }
 
-    public void sendRedirect(String location, HttpStatus httpStatus) {
-        this.location = location;
+    public void sendRedirect(String path, HttpStatus httpStatus) {
+        this.path = path;
         this.httpStatus = httpStatus;
-        this.mediaType = MediaType.find(location.substring(location.lastIndexOf(".") + 1).toUpperCase());
-    }
-
-    public void forward(String resource, HttpStatus httpStatus) {
-        this.resource = resource;
-        this.httpStatus = httpStatus;
-        this.mediaType = MediaType.find(resource.substring(resource.lastIndexOf(".") + 1).toUpperCase());
-    }
-
-    public String getForward() {
-        return resource;
-    }
-
-    public String getSendRedirect() {
-        return location;
+        this.mediaType = MediaType.find(path.substring(path.lastIndexOf(".") + 1).toUpperCase());
     }
 
     public void sendError(HttpStatus httpStatus, String msg) {
         this.httpStatus = httpStatus;
-        this.errorMsg = msg;
+        this.errorMessage = msg;
     }
 
     public boolean hasError() {
         return httpStatus.isError();
     }
 
-    public String getLocation() {
-        return location;
+    public String getPath() {
+        return path;
     }
 
     public int getHttpStatusCode() {
@@ -77,8 +61,12 @@ public class HttpResponse {
         return mediaType.getContentType();
     }
 
+    public String getResourceName() {
+        return path.substring(path.lastIndexOf("/"));
+    }
+
     public boolean isRedirect() {
-        return httpStatus.equals(HttpStatus.REDIRECT);
+        return httpStatus == HttpStatus.REDIRECT;
     }
 
     public boolean isNotInitialized() {
