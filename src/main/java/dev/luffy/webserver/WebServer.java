@@ -5,17 +5,16 @@ import org.reflections.scanners.MethodAnnotationsScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Set;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
+import dev.luffy.annotation.Controller;
 import dev.luffy.annotation.RequestMapping;
-import dev.luffy.annotation.WsController;
-import dev.luffy.http.ControllerMapper;
+import dev.luffy.http.RequestMapper;
 
 public class WebServer {
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
@@ -23,34 +22,7 @@ public class WebServer {
     private static final int DEFAULT_PORT = 8080;
 
     public static void main(String args[]) throws Exception {
-        int i = 0;
-        Reflections reflections = new Reflections("dev.luffy");
-        Set<Class<?>> wsControllerClasses = reflections.getTypesAnnotatedWith(WsController.class);
-        Method controllerAdder = ControllerMapper.class.getMethod("add", String.class, Method.class);
-        wsControllerClasses.stream()
-                .map((Function<Class<?>, Set<?>>) aClass ->
-                        new Reflections(aClass.getPackage().getName(),
-                                new MethodAnnotationsScanner()).getMethodsAnnotatedWith(RequestMapping.class))
-                .forEach(objects -> {
-                    Set<Method> methods = (Set<Method>) objects;
-                    methods.forEach(new Consumer<Method>() {
-                        @Override
-                        public void accept(Method method) {
-//                            try {
-//                                controllerAdder.invoke(method.getAnnotation(RequestMapping.class), method);
-//                            } catch (IllegalAccessException | InvocationTargetException e) {
-//                                e.printStackTrace();
-//                            }
-                            logger.debug("path {} : method Name - {}", method.getAnnotation(RequestMapping.class).value(), method.getName());
-                        }
-                    });
-                });
-
-        Field controllerMapper = ControllerMapper.class.getDeclaredField("map");
-        controllerMapper.setAccessible(true);
-
-//        Map<?, ?> map = reflections.
-
+        requestMappingProcess();
 
         int port = 0;
         if (args == null || args.length == 0) {
@@ -70,5 +42,23 @@ public class WebServer {
                 thread.start();
             }
         }
+    }
+
+    private static void requestMappingProcess() throws NoSuchMethodException {
+        Reflections reflections = new Reflections("dev.luffy");
+        Set<Class<?>> controllerClasses = reflections.getTypesAnnotatedWith(Controller.class);
+        Method requestMapAddMethod = RequestMapper.class.getMethod("add", String.class, Method.class);
+        controllerClasses
+                .stream()
+                .map((Function<Class<?>, Set<?>>) aClass ->
+                        new Reflections(aClass.getName(), new MethodAnnotationsScanner())
+                                .getMethodsAnnotatedWith(RequestMapping.class))
+                .forEach(objects -> ((Set<Method>) objects).forEach(method -> {
+                    try {
+                        requestMapAddMethod.invoke(null, method.getAnnotation(RequestMapping.class).value(), method);
+                    } catch (IllegalAccessException | InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
+                }));
     }
 }
