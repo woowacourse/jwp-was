@@ -21,7 +21,7 @@ public class UserController {
     public Responsive goForm() {
         return (request, response) -> {
             response.setContentType("text/html");
-            response.setView("/user/form.html");
+            response.forward("/user/form.html");
         };
     }
 
@@ -35,7 +35,7 @@ public class UserController {
             );
             logger.debug("user : {}", user);
 
-            response.sendRedirect("/index.html");
+            response.sendRedirect("/");
         };
     }
 }
