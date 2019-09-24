@@ -1,23 +1,22 @@
 package webserver.controller;
 
-import utils.FilePathUtils;
-import webserver.response.HttpResponse;
-import webserver.response.ResponseBody;
-import webserver.response.ResponseHeaders;
-import webserver.response.ResponseStatus;
-
 public class IndexController {
-    public static Responsive goIndex() {
-        return request -> {
-            ResponseHeaders responseHeaders = new ResponseHeaders();
-            String path = request.getPath();
+    private IndexController() {
+    }
 
-            HttpResponse httpResponse = new HttpResponse(
-                    ResponseStatus.OK, responseHeaders, new ResponseBody(path)
-            );
+    private static class IndexControllerHolder {
+        private static final IndexController INSTANCE = new IndexController();
+    }
 
-            httpResponse.buildGetHeader(FilePathUtils.getExtension(path));
-            return httpResponse;
+    public static IndexController getInstance() {
+        return IndexControllerHolder.INSTANCE;
+    }
+
+    public Responsive goIndex() {
+        return (request, response) -> {
+            int a = 1 / 0;
+            response.setContentType("text/html");
+            response.setView("/index.html");
         };
     }
 }

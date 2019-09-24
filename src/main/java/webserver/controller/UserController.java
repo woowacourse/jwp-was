@@ -3,31 +3,30 @@ package webserver.controller;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.FilePathUtils;
-import webserver.response.HttpResponse;
-import webserver.response.ResponseBody;
-import webserver.response.ResponseHeaders;
-import webserver.response.ResponseStatus;
 
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    public static Responsive goForm() {
-        return request -> {
-            ResponseHeaders responseHeaders = new ResponseHeaders();
-            String path = request.getPath();
+    private UserController() {
+    }
 
-            HttpResponse httpResponse = new HttpResponse(
-                    ResponseStatus.OK, responseHeaders, new ResponseBody(path)
-            );
+    private static class UserControllerHolder {
+        private static final UserController INSTANCE = new UserController();
+    }
 
-            httpResponse.buildGetHeader(FilePathUtils.getExtension(path));
-            return httpResponse;
+    public static UserController getInstance() {
+        return UserControllerHolder.INSTANCE;
+    }
+
+    public Responsive goForm() {
+        return (request, response) -> {
+            response.setContentType("text/html");
+            response.setView("/user/form.html");
         };
     }
 
-    public static Responsive createUser() {
-        return request -> {
+    public Responsive createUser() {
+        return (request, response) -> {
             User user = new User(
                     request.getBody("userId"),
                     request.getBody("password"),
@@ -36,13 +35,7 @@ public class UserController {
             );
             logger.debug("user : {}", user);
 
-            ResponseHeaders responseHeaders = new ResponseHeaders();
-            HttpResponse httpResponse = new HttpResponse(
-                    ResponseStatus.FOUND, responseHeaders, null
-            );
-            httpResponse.buildRedirectHeader("/index.html");
-
-            return httpResponse;
+            response.sendRedirect("/index.html");
         };
     }
 }
