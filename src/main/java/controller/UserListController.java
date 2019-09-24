@@ -3,6 +3,7 @@ package controller;
 import http.HTTP;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import http.response.ResponseResolver;
 import http.response.view.ModelAndView;
 import http.response.view.RedirectView;
 import model.User;
@@ -29,7 +30,7 @@ public class UserListController extends AbstractController {
             showUsers(response);
             return;
         }
-        response.render(new RedirectView("/user/login.html"));
+        ResponseResolver.resolve(new RedirectView("/user/login.html"), response);
     }
 
     private void showUsers(HttpResponse response) {
@@ -39,7 +40,7 @@ public class UserListController extends AbstractController {
         model.put("users", users);
 
         try {
-            response.render(new ModelAndView("/user/list.html", model));
+            ResponseResolver.resolve(new ModelAndView("/user/list.html", model), response);
         } catch (IOException e) {
             log.error(e.getMessage());
         }

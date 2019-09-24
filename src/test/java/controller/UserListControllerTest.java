@@ -19,7 +19,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 class UserListControllerTest {
     private static final String ID_1 = "qweqweqwazxc";
     private static final String ID_2 = "icqeqsdasdqw";
-    private HttpRequest request;
 
     @Test
     void 비로그인_list_접근() throws IOException, URISyntaxException {
@@ -46,8 +45,8 @@ class UserListControllerTest {
                 "Cookie: " + httpSession.getId();
 
         HttpResponse response = createResponse(requestSting);
-        assertThat(new String(response.getBody()).contains(ID_1)).isTrue();
-        assertThat(new String(response.getBody()).contains(ID_2)).isTrue();
+        assertThat(response.getBody().contains(ID_1)).isTrue();
+        assertThat(response.getBody().contains(ID_2)).isTrue();
     }
 
     private HttpResponse createResponse(String requestSting) throws IOException {

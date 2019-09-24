@@ -3,6 +3,7 @@ package webserver;
 import controller.AbstractController;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import http.response.ResponseResolver;
 import http.response.ResponseStatus;
 import http.response.view.DefaultView;
 import http.response.view.ErrorView;
@@ -50,9 +51,9 @@ public class RequestHandler implements Runnable {
                 maybeController.get().service(httpRequest, httpResponse);
                 return;
             }
-            httpResponse.render(new DefaultView(httpRequest.getPath()));
+            ResponseResolver.resolve(new DefaultView(httpRequest.getPath()), httpResponse);
         } catch (URISyntaxException | UrlNotFoundException e) {
-            httpResponse.render(new ErrorView(ResponseStatus.NOT_FOUND, "Not Found"));
+            ResponseResolver.resolve(new ErrorView(ResponseStatus.NOT_FOUND, "Not Found"), httpResponse);
         }
     }
 }

@@ -1,9 +1,7 @@
 package webserver;
 
-import db.DataBase;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import model.User;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -32,47 +30,5 @@ class ControllerContainerTest {
         HttpResponse httpResponse = new HttpResponse(out);
 
     }
-
-    @Test
-    void 유저_로그인_성공() throws IOException, URISyntaxException {
-        DataBase.addUser(new User("javajigi", "password", "박재성", "javajigi@slipp.net"));
-
-        String request = "POST /user/login HTTP/1.1\n" +
-                "Host: localhost:8080\n" +
-                "Connection: keep-alive\n" +
-                "Content-Length: 33\n" +
-                "Content-Type: application/x-www-form-urlencoded\n" +
-                "Accept: */*\n" +
-                "\n" +
-                "userId=javajigi&password=password";
-
-        InputStream in = new ByteArrayInputStream(request.getBytes());
-
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        HttpRequest httpRequest = new HttpRequest(in);
-        HttpResponse httpResponse = new HttpResponse(out);
-
-    }
-
-    @Test
-    void 유저_로그인_실패() throws IOException, URISyntaxException {
-        DataBase.addUser(new User("javajigi", "password", "박재성", "javajigi@slipp.net"));
-
-        String request = "POST /user/login HTTP/1.1\n" +
-                "Host: localhost:8080\n" +
-                "Connection: keep-alive\n" +
-                "Content-Length: 33\n" +
-                "Content-Type: application/x-www-form-urlencoded\n" +
-                "Accept: */*\n" +
-                "\n" +
-                "userId=fail&password=password";
-
-        InputStream in = new ByteArrayInputStream(request.getBytes());
-
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        HttpRequest httpRequest = new HttpRequest(in);
-        HttpResponse httpResponse = new HttpResponse(out);
-    }
-
 
 }

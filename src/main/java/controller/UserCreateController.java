@@ -3,6 +3,7 @@ package controller;
 import db.DataBase;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import http.response.ResponseResolver;
 import http.response.view.RedirectView;
 import model.User;
 import org.slf4j.Logger;
@@ -26,6 +27,6 @@ public class UserCreateController extends AbstractController {
                 query.get("name"), query.get("email"));
 
         DataBase.addUser(user);
-        response.render(new RedirectView("/index.html"));
+        ResponseResolver.resolve(new RedirectView("/index.html"), response);
     }
 }

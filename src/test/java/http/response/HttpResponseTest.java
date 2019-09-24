@@ -21,7 +21,7 @@ class HttpResponseTest {
         HttpRequest httpRequest = createRequest(request);
         HttpResponse response = createResponse(new DefaultView(httpRequest.getPath()));
 
-        assertThat(response.getBody()).isEqualTo(FileIoUtils.loadFileFromClasspath(httpRequest.getPath()));
+        assertThat(response.getBody()).isEqualTo(new String(FileIoUtils.loadFileFromClasspath(httpRequest.getPath())));
     }
 
     @Test
@@ -30,7 +30,7 @@ class HttpResponseTest {
         HttpRequest httpRequest = createRequest(request);
         HttpResponse response = createResponse(new DefaultView(httpRequest.getPath()));
 
-        assertThat(response.getBody()).isEqualTo(FileIoUtils.loadFileFromClasspath(httpRequest.getPath()));
+        assertThat(response.getBody()).isEqualTo(new String(FileIoUtils.loadFileFromClasspath(httpRequest.getPath())));
     }
 
     @Test
@@ -39,7 +39,7 @@ class HttpResponseTest {
         HttpRequest httpRequest = createRequest(request);
         HttpResponse response = createResponse(new DefaultView(httpRequest.getPath()));
 
-        assertThat(response.getBody()).isEqualTo(FileIoUtils.loadFileFromClasspath(httpRequest.getPath()));
+        assertThat(response.getBody()).isEqualTo(new String(FileIoUtils.loadFileFromClasspath(httpRequest.getPath())));
     }
 
     @Test
@@ -99,7 +99,7 @@ class HttpResponseTest {
     private HttpResponse createResponse(View view) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         HttpResponse response = new HttpResponse(out);
-        response.render(view);
+        ResponseResolver.resolve(view, response);
 
         return response;
     }

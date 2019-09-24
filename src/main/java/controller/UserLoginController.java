@@ -3,6 +3,7 @@ package controller;
 import http.HTTP;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import http.response.ResponseResolver;
 import http.response.view.RedirectView;
 import model.AuthorizationFailException;
 import model.User;
@@ -28,12 +29,12 @@ public class UserLoginController extends AbstractController {
             User foundUser = userService.login(userId, password);
 
             HttpSession httpSession = HttpSessionFactory.create();
-            httpSession.setAttribute("login-user", foundUser);
-            response.render(new RedirectView("/index.html"));
             response.addHeader(HTTP.SET_COOKIE, httpSession.getId());
 
+            httpSession.setAttribute("login-user", foundUser);
+            ResponseResolver.resolve(new RedirectView("/index.html"), response);
         } catch (AuthorizationFailException e) {
-            response.render(new RedirectView("/user/login_failed.html"));
+            ResponseResolver.resolve(new RedirectView("/user/login_failed.html"), response);
         }
     }
 }

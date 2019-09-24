@@ -24,15 +24,9 @@ public abstract class View {
         return responseStatus;
     }
 
-    public void addHeader(HTTP key, String value) {
-        header.put(key, value);
+    public Map<HTTP, String> getHeader() {
+        return header;
     }
 
-    public boolean checkHeader(HTTP http) {
-        return header.containsKey(http);
-    }
-
-    public String getHeaderContents(HTTP http) {
-        return header.getOrDefault(http, "");
-    }
+    ;
 }

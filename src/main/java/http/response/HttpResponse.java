@@ -1,51 +1,57 @@
 package http.response;
 
 import http.HTTP;
-import http.response.view.View;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Map;
 
 public class HttpResponse implements AutoCloseable {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
     private static final String NEW_LINE = "\r\n";
-    private static final String HEADER_DELIMITER = ": ";
-    private static final String FIRST_LINE_DELIMITER = " ";
 
-    private View view;
+    private ResponseFirstLine responseFirstLine;
+    private ResponseHeader header;
+    private ResponseBody body;
+
     private final DataOutputStream dataOutputStream;
 
     public HttpResponse(final OutputStream out) {
-        dataOutputStream = new DataOutputStream(out);
+        this.responseFirstLine = new ResponseFirstLine();
+        this.header = new ResponseHeader();
+        this.body = new ResponseBody();
+        this.dataOutputStream = new DataOutputStream(out);
     }
 
-    public void render(View view) {
-        this.view = view;
+    public void addStatusCode(ResponseStatus responseStatus) {
+        this.responseFirstLine = new ResponseFirstLine(responseStatus);
+    }
+
+    public void addHeader(Map<HTTP, String> header) {
+        this.header.add(header);
     }
 
     public void addHeader(HTTP http, String value) {
-        view.addHeader(http, value);
+        header.addContents(http, value);
+    }
+
+    public void addBody(byte[] body) {
+        this.body = new ResponseBody(body);
     }
 
     public String getHeader() {
         StringBuffer sb = new StringBuffer();
-        sb.append(HTTP.VERSION.getPhrase()).append(FIRST_LINE_DELIMITER).append(view.getResponseStatus().getInfo()).append(NEW_LINE);
-
-        for (HTTP key : HTTP.values()) {
-            if (view.checkHeader(key)) {
-                sb.append(key.getPhrase()).append(HEADER_DELIMITER).append(view.getHeaderContents(key)).append(NEW_LINE);
-            }
-        }
-        sb.append(NEW_LINE);
+        sb.append(responseFirstLine.getResponse()).append(NEW_LINE);
+        sb.append(header.getResponse()).append(NEW_LINE);
 
         return sb.toString();
     }
 
-    public byte[] getBody() {
-        return view.getBody();
+    public String getBody() {
+        return new String(body.getContents());
     }
 
     @Override
@@ -56,7 +62,7 @@ public class HttpResponse implements AutoCloseable {
     }
 
     private void writeBody() throws IOException {
-        dataOutputStream.write(view.getBody(), 0, view.getBody().length);
+        dataOutputStream.write(body.getContents(), 0, body.getContents().length);
         dataOutputStream.flush();
     }
 
@@ -65,6 +71,7 @@ public class HttpResponse implements AutoCloseable {
     }
 
     public String getHeaderContents(HTTP http) {
-        return view.getHeaderContents(http);
+        return header.getContents(http);
     }
+
 }
