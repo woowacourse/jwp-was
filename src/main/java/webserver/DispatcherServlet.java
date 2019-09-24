@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import view.RedirectView;
 import view.View;
-import view.ViewResolver;
 import webserver.exception.InvalidUriException;
 import webserver.exception.NotFoundResourceException;
 
@@ -29,7 +28,7 @@ public class DispatcherServlet {
     private static final String TEMPLATES_PATH = "./templates";
     private static final String STATIC_PATH = "./static";
 
-    public static void doDispatch(HttpRequest httpRequest, HttpResponse httpResponse) {
+    public static void doDispatch(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         try {
             if (httpRequest.isStaticRequest()) {
                 handleStaticRequest(httpRequest, httpResponse);
@@ -38,9 +37,6 @@ public class DispatcherServlet {
 
             Controller controller = HandlerMapping.handle(httpRequest);
             View view = controller.service(httpRequest, httpResponse);
-            if (!view.isRedirectView()) {
-                httpResponse.setBody(ViewResolver.resolve(view.getViewName()));
-            }
             view.render(httpRequest, httpResponse);
         } catch (NotFoundMethodException | HttpMethodNotAllowedException e) {
             log.error(e.getMessage());
@@ -53,8 +49,7 @@ public class DispatcherServlet {
             httpResponse.addHeader("Set-Cookie", "logined=false; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
             View view = new RedirectView("user/login_failed.html");
             view.render(httpRequest, httpResponse);
-        } catch
-        (Exception e) {
+        } catch (Exception e) {
             log.error(e.getMessage());
             httpResponse.setStatus(500);
         }
