@@ -19,7 +19,7 @@ class UserListControllerTest {
 
     @Test
     void 로그인_상태가_아니라면_login_페이지로_리다이렉트한다() throws IOException {
-        InputStream in = new FileInputStream(new File(testDirectory + "logined_Http_Header.txt"));
+        InputStream in = new FileInputStream(new File(testDirectory + "not_Logined_Http_Header.txt"));
         HttpRequest request = HttpRequestFactory.createHttpRequest(in);
 
         HttpResponse response = new HttpResponse();
@@ -41,5 +41,10 @@ class UserListControllerTest {
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
         assertThat(response.getCookie("logined")).isEqualTo(new Cookie("logined","false"));
+    }
+
+    @Test
+    void 로그인된_유저가_요청시_유저_목록이_나오는지_확인한다() {
+
     }
 }
