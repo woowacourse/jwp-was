@@ -1,7 +1,11 @@
 package webserver;
 
-import http.request.HttpRequest;
+import http.request.ServerErrorException;
+import http.response.HttpResponse;
+import utils.FileIoUtils;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Set;
 
 public class ResourceResolverRegistration {
@@ -13,14 +17,23 @@ public class ResourceResolverRegistration {
         this.resourcePath = resourcePath;
     }
 
-    public String resolve(HttpRequest httpRequest) {
-        if (!isTarget(httpRequest.getPath())) {
-            throw new IllegalArgumentException("Not Supported Extension, " + httpRequest.getPath());
-        }
-        return resourcePath + httpRequest.getPath();
+    public boolean existExtension(String contentType) {
+        return extensionSet.contains(contentType);
     }
 
-    public boolean isTarget(String path) {
-        return extensionSet.contains(FileUtils.getExtension(path));
+    public String findFilePath(String path) {
+        return resourcePath + path;
+    }
+
+    public void resolve(String path, String contentType, HttpResponse httpResponse) {
+        try {
+            byte[] body = FileIoUtils.loadFileFromClasspath(findFilePath(path));
+            httpResponse.okResponse(contentType, body);
+        } catch (IOException e) {
+            throw new NotFoundException();
+        } catch (URISyntaxException e) {
+            throw new ServerErrorException("URISyntax 에러 입니다.");
+        }
+
     }
 }

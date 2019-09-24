@@ -6,37 +6,42 @@ import utils.FileIoUtils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class ResourceRequestResolver {
-    private String TEMPLATE_PATH = "./template";
-    private String STATIC_PATH = "./static";
+    private static final String TEMPLATE_PATH = "./templates";
+    private static final String STATIC_PATH = "./static";
+    private static final String PATH_SPLITTER = "\\.";
+    private static final List<ResourceResolverRegistration> resourceResolverRegistrations = new ArrayList<>();
+    private static final Set<String> templateExtensions = new HashSet<>(Arrays.asList("html", "ico"));
+    private static final Set<String> staticExtensions = new HashSet<>(Arrays.asList("css", "js", "img", "ttf", "woff"));
 
-    private List<ResourceResolverRegistration> resourceResolverRegistrations = new ArrayList<>();
+    static {
+        resourceResolverRegistrations.add(new ResourceResolverRegistration(templateExtensions, TEMPLATE_PATH));
+        resourceResolverRegistrations.add(new ResourceResolverRegistration(staticExtensions, STATIC_PATH));
+    }
 
-//파일 가져오는 기능(얘가 스테틱인지 템플릿인지는 알 필요X)
-    public void resolve(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+    public void resolve(HttpRequest httpRequest, HttpResponse httpResponse) {
         try {
-            byte[] body;
+            String[] splittedPath = httpRequest.getPath().split(PATH_SPLITTER);
+            String contentType = splittedPath[splittedPath.length - 1];
 
+            ResourceResolverRegistration resourceResolverRegistration = resourceResolverRegistrations.stream()
+                    .filter(r -> r.existExtension(contentType))
+                    .findAny().orElseThrow(NotFoundException::new);
 
-            body = FileIoUtils.loadFileFromClasspath(String.format("./templates%s", httpRequest.getPath()));
-            String[] splitPath = httpRequest.getPath().split("\\.");
-            String contentType = splitPath[splitPath.length - 1];
-            // html 찾기;
-            if (body != null) {
-                httpResponse.okResponse(contentType, body);
-            }
+            resourceResolverRegistration.resolve(httpRequest.getPath());
+            String filePath = resourceResolverRegistration.findFilePath(httpRequest);
+            byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
 
-            //css,js 찾기
-            body = FileIoUtils.loadFileFromClasspath(String.format("./static%s", httpRequest.getPath()));
-            if (body == null) {
-                throw new NotFoundException();
-            }
             httpResponse.okResponse(contentType, body);
+
         } catch (NotFoundException e) {
             httpResponse.notFound();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
         }
     }
 }
