@@ -2,12 +2,9 @@ package controller;
 
 import db.DataBase;
 import http.request.HttpRequest;
+import http.request.QueryParameter;
 import http.response.HttpResponse;
 import model.User;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 public class CreateUserController extends AbstractController {
     private CreateUserController() {
@@ -30,13 +27,10 @@ public class CreateUserController extends AbstractController {
     @Override
     void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         String requestBody = new String(httpRequest.getHttpRequestBody());
-        String[] tokens = requestBody.split("&");
-        Map<String, String> parameters = new HashMap<>();
-
-        Arrays.stream(tokens)
-                .forEach(s -> parameters.put(s.split("=")[0], s.split("=")[1]));
-
-        save(parameters.get("userId"), parameters.get("password"), parameters.get("name"), parameters.get("email"));
+        QueryParameter parameters = QueryParameter.of(requestBody);
+        //TODO: 프레임워크 로직으로 빼야함
+        save(parameters.getValue("userId"), parameters.getValue("password"),
+                parameters.getValue("name"), parameters.getValue("email"));
         httpResponse.sendRedirect("index.html");
     }
 
