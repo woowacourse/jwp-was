@@ -21,6 +21,8 @@ public class ControllerFactory {
             if ("경로를 찾을 수 없습니다.".equals(e.getMessage())) {
                 return new ExceptionController();
             }
+
+            //todo: 다른 분기 처리도 exception 적용.
             throw new PathNotFoundException();
 
         }
