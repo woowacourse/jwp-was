@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class UserCreateServletTest {
     @DisplayName("유저 생성")
     @Test
-    void doPost() throws IOException {
+    void doPost_userDataByBody_redirect() throws IOException {
         BufferedReader bufferedReader = IOHelper.createBuffer(
                 "POST /user/create HTTP/1.1",
                 "Host: localhost:8080",

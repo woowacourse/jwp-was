@@ -31,7 +31,6 @@ class HomeServletTest {
                 "Host: localhost:8080",
                 "Connection: keep-alive",
                 "Accept: text/html,*/*"
-
         ));
         HttpRequest httpRequest = HttpRequestParser.parse(bufferedReader);
         HomeServlet homeServlet = new HomeServlet();

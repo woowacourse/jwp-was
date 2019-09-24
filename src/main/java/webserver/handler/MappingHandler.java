@@ -16,7 +16,7 @@ public class MappingHandler {
     static {
         servlets.put("/", new HomeServlet());
         servlets.put("/user/create", new UserCreateServlet());
-        FileServlet fileServlet = new FileServlet();
+        fileServlet = new FileServlet();
     }
 
     public static HttpServlet getServlets(String absPath) {

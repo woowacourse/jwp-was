@@ -1,6 +1,7 @@
 package webserver;
 
 import helper.IOHelper;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import utils.HttpRequestUtils;
 import webserver.parser.HttpRequestParser;
@@ -19,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class HttpRequestTest {
     final String INDEX_URL = "/index.html";
 
+    @DisplayName("절대경로 확인")
     @Test
     void getPath_indexUrl_true() throws IOException {
         BufferedReader bufferedReader = IOHelper.createBuffer(
@@ -28,9 +30,10 @@ class HttpRequestTest {
                 "Accept: text/html,*/*"
         );
         HttpRequest request = HttpRequestParser.parse(bufferedReader);
-        assertThat(request.getFilePath()).isEqualTo(HttpRequestUtils.ROOT_TEMPLATE_FILE_PATH + INDEX_URL);
+        assertThat(request.getAbsPath()).isEqualTo(INDEX_URL);
     }
 
+    @DisplayName("파라미터 파싱 확인")
     @Test
     void getParameter_userInfo_true() throws IOException {
         BufferedReader bufferedReader = IOHelper.createBuffer(
@@ -45,6 +48,7 @@ class HttpRequestTest {
         assertThat(request.getParam("name")).isEqualTo("gyu");
     }
 
+    @DisplayName("메소드 얻기 확인")
     @Test
     void getMethod_post_true() throws IOException {
         BufferedReader bufferedReader = IOHelper.createBuffer(
@@ -61,6 +65,7 @@ class HttpRequestTest {
         assertThat(request.getMethod()).isEqualTo(RequestMethod.POST);
     }
 
+    @DisplayName("바디 파싱 확인")
     @Test
     void getBody_userId_true() throws IOException {
         BufferedReader bufferedReader = IOHelper.createBuffer(

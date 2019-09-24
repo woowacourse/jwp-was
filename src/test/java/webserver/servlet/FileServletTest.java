@@ -22,6 +22,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static utils.HttpRequestUtils.generateTemplateFilePath;
 
 class FileServletTest {
     @DisplayName("정적 html파일 가져오기")
@@ -35,11 +36,12 @@ class FileServletTest {
         );
         HttpRequest httpRequest = HttpRequestParser.parse(bufferedReader);
         FileServlet fileServlet = new FileServlet();
-        byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getFilePath());
+        String filePath = generateTemplateFilePath( "/index.html");
+        byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
         HttpResponse httpResponse = fileServlet.run(httpRequest);
         Map<String, Object> header = new HashMap<>();
         header.put("Content-Length", body.length);
-        header.put("Content-Type", FileIoUtils.loadMIMEFromClasspath(httpRequest.getFilePath()));
+        header.put("Content-Type", FileIoUtils.loadMIMEFromClasspath(filePath));
         assertThat(httpResponse).isEqualTo(new HttpResponse(HttpStatus.OK, header, body));
     }
 }
