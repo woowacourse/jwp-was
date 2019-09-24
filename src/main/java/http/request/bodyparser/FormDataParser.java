@@ -9,6 +9,7 @@ import java.util.Map;
 public class FormDataParser implements MessageBodyParser {
     private static final String FORM_DATA_DELIMITER = "&";
     private static final String VALUE_DELIMITER = "=";
+    private static final String NONE_VALUE = "";
 
     @Override
     public Map<String, String> parse(HttpRequestBody body) {
@@ -18,7 +19,7 @@ public class FormDataParser implements MessageBodyParser {
         for (String value : values) {
             String[] token = value.split(VALUE_DELIMITER);
             if (token.length != 2) {
-                formData.put(token[0], "");
+                formData.put(token[0], NONE_VALUE);
             } else {
                 formData.put(token[0], token[1]);
             }

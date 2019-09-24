@@ -14,6 +14,7 @@ import java.util.List;
 public class HttpRequestParser {
     public static final String QUERY_STRING_DELIMITER = "\\?";
     private static final String BLANK = " ";
+    private static final String LAST_HEADER_LINE = "";
 
     public static HttpRequest parse(final InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -52,7 +53,7 @@ public class HttpRequestParser {
         List<String> headerLines = new ArrayList<>();
         String line;
 
-        while (!(line = bufferedReader.readLine()).equals("")) {
+        while (!(line = bufferedReader.readLine()).equals(LAST_HEADER_LINE)) {
             headerLines.add(line);
         }
 
