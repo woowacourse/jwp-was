@@ -21,6 +21,7 @@ public class UserListController extends AbstractController {
             Cookie cookie = request.getCookie("logined");
             if (cookie.getValue().equals("false")) {
                 setNotLoginedResponse(response);
+                return;
             }
 
             String profilePage = renderingPage();

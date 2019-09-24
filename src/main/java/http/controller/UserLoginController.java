@@ -34,7 +34,7 @@ public class UserLoginController extends AbstractController {
     private void setLoginSuccessResponse(HttpResponse response) {
         response.addCookie("logined", "true");
         response.addCookieOption("logined", "Path", "/");
-        response.sendRedirect("/user/login_failed.html");
+        response.sendRedirect("/index.html");
     }
 
     private void setLoginFailResponse(HttpResponse response) {
