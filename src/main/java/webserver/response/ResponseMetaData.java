@@ -8,12 +8,14 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static webserver.response.ResponseHeaderFieldKeys.*;
+
 public class ResponseMetaData {
 
     private static final String VERSION = "HTTP/1.1";
     private static final String HEADER_DELIMITER = ": ";
     public static final String HEADER_NEW_LINE = "\r\n";
-    private static final String DEFAULT_CHARSET = "utf-8";
+    public static final String FIELD_SEPARATOR = ";";
     private static final int MINIMUM_BODY_LENGTH = 0;
 
     private final HttpRequest httpRequest;
@@ -36,7 +38,7 @@ public class ResponseMetaData {
     }
 
     private void appendContentLengthToHeaderFields(final int bodyLength) {
-        this.responseHeaderFields.put("Content-Length", String.valueOf(bodyLength));
+        this.responseHeaderFields.put(CONTENT_LENGTH, String.valueOf(bodyLength));
     }
 
     public HttpStatus getHttpStatus() {
@@ -73,7 +75,6 @@ public class ResponseMetaData {
         return String.join(" ", getVersion(), String.valueOf(httpStatus.getNumber()), httpStatus.name());
     }
 
-
     public static final class Builder {
         private final Map<String, String> responseHeaderFields = new HashMap<>();
         private HttpRequest httpRequest;
@@ -82,20 +83,35 @@ public class ResponseMetaData {
         private Builder(HttpRequest httpRequest, HttpStatus httpStatus) {
             this.httpRequest = httpRequest;
             this.httpStatus = httpStatus;
-            responseHeaderFields.put("Content-Type", "text/html;charset=utf-8");
+            responseHeaderFields.put(CONTENT_TYPE, "text/html" + FIELD_SEPARATOR + "charset=utf-8");
         }
 
-        public static Builder aResponseMeatData2(HttpRequest httpRequest, HttpStatus httpStatus) {
+        public static Builder builder(HttpRequest httpRequest, HttpStatus httpStatus) {
             return new Builder(httpRequest, httpStatus);
         }
 
         public Builder contentType(String contentType) {
-            responseHeaderFields.put("Content-Type", contentType + ";charset=" + DEFAULT_CHARSET);
+            responseHeaderFields.put(CONTENT_TYPE, contentType);
+            return this;
+        }
+
+        public Builder contentType(String contentType, String charset) {
+            responseHeaderFields.put(CONTENT_TYPE, contentType + FIELD_SEPARATOR + "charset=" + charset);
             return this;
         }
 
         public Builder location(String location) {
-            responseHeaderFields.put("Location", location);
+            responseHeaderFields.put(LOCATION, location);
+            return this;
+        }
+
+        public Builder setCookie(String cookie) {
+            responseHeaderFields.put(SET_COOKIE, cookie);
+            return this;
+        }
+
+        public Builder setCookie(String cookie, String path) {
+            responseHeaderFields.put(SET_COOKIE, cookie + FIELD_SEPARATOR + "Path=" + path);
             return this;
         }
 

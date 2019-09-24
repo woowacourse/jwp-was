@@ -14,7 +14,7 @@ public class UserSignUpController extends AbstractController {
     @Override
     public void service(final HttpRequest request, final HttpResponse response) throws IOException {
         ResponseMetaData responseMetaData = ResponseMetaData.Builder
-                .aResponseMeatData2(request, HttpStatus.FOUND)
+                .builder(request, HttpStatus.FOUND)
                 .location("/index.html")
                 .build();
         response.setResponseMetaData(responseMetaData);

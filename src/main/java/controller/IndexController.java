@@ -12,7 +12,7 @@ public class IndexController extends AbstractController {
     @Override
     public void service(final HttpRequest request, final HttpResponse response) throws IOException {
         ResponseMetaData responseMetaData = ResponseMetaData.Builder
-                .aResponseMeatData2(request, HttpStatus.OK)
+                .builder(request, HttpStatus.OK)
                 .contentType(request.findContentType())
                 .build();
         response.setResponseMetaData(responseMetaData);
