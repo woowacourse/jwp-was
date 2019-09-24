@@ -4,9 +4,11 @@ import controller.Controller;
 import controller.IndexController;
 import controller.UserController;
 import controller.UserFormController;
+import webserver.exception.ResourceNotFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class HandlerMapping {
     private static final Map<String, Controller> HANDLER_MAP = new HashMap<>();
@@ -18,7 +20,8 @@ public class HandlerMapping {
     }
 
     public Controller getHandler(String path) {
-        return HANDLER_MAP.get(path);
+        return Optional.ofNullable(HANDLER_MAP.get(path))
+                .orElseThrow(ResourceNotFoundException::new);
     }
 
     private static class HandlerMappingLazyHolder {

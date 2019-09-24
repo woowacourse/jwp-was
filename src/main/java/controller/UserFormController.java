@@ -15,13 +15,11 @@ public class UserFormController extends AbstractController {
 
     @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        httpResponse.setResponseStatus(ResponseStatus.OK);
-        httpResponse.addHeaderAttribute("Content-Type", "text/html;charset=utf-8");
         try {
             httpResponse.setBody(FileIoUtils.loadFileFromClasspath("./templates" + "/user/form" + ".html"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
+            httpResponse.setResponseStatus(ResponseStatus.OK);
+            httpResponse.addHeaderAttribute("Content-Type", "text/html;charset=utf-8");
+        } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
         }
     }

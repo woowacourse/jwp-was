@@ -5,6 +5,7 @@ import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.response.ResponseStatus;
 import utils.FileIoUtils;
+import webserver.exception.ResourceNotFoundException;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -16,14 +17,18 @@ public class ResourceHttpRequestHandler {
         private static final ResourceHttpRequestHandler INSTANCE = new ResourceHttpRequestHandler();
     }
 
-    public void handleHttpRequest(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+    public void handleHttpRequest(HttpRequest httpRequest, HttpResponse httpResponse) {
         String filePath = STATIC_RESOURCE_PATH_PREFIX + httpRequest.getPath();
-        byte[] file = FileIoUtils.loadFileFromClasspath(filePath);
+        try {
+            byte[] file = FileIoUtils.loadFileFromClasspath(filePath);
 
-        httpResponse.setResponseStatus(ResponseStatus.OK);
-        httpResponse.addHeaderAttribute("Content-Type", ContentTypeMapper.getContentType(filePath));
-        httpResponse.addHeaderAttribute("Content-Length", String.valueOf(file.length));
-        httpResponse.setBody(file);
+            httpResponse.setResponseStatus(ResponseStatus.OK);
+            httpResponse.addHeaderAttribute("Content-Type", ContentTypeMapper.getContentType(filePath));
+            httpResponse.addHeaderAttribute("Content-Length", String.valueOf(file.length));
+            httpResponse.setBody(file);
+        } catch (IOException | URISyntaxException | NullPointerException e) {
+            throw new ResourceNotFoundException();
+        }
     }
 
     public boolean canHandle(HttpRequest httpRequest) {
