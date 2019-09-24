@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class HttpRequestTest {
-    private static final String GET_REQUEST =
+    public static final String GET_REQUEST =
             "GET /index.html HTTP/1.1\n" +
                     "Host: localhost:8080\n" +
                     "Connection: keep-alive\n" +
