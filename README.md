@@ -60,5 +60,5 @@
 - [x] 파일 경로 붙여주는걸 HttpRequest에서 하지 말고 Servlet에서 하게 변경(```HttpRequestUtils.generateTemplateFilePath```)
 - [ ] RequestUri는 자바에서 제공하는 URI 클래스 사용해보기
 - [x] http status가 OK가 아니면 dos.flush()가 수행되지 않는 문제 해결 -> docs.flush()를 맨 뒤로 빼기
-- [ ] 서블릿에서 사용할 response header 클래스 만들어보기
+- [x] 서블릿에서 사용할 response header 클래스 만들어보기
 - [x] doPost에서 사용 안하는 body 변수 제거

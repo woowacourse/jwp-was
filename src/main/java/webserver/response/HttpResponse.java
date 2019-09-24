@@ -8,10 +8,10 @@ import java.util.Objects;
 
 public class HttpResponse {
     private HttpStatus httpStatus;
-    private Map<String, Object> header;
+    private ResponseHeader header;
     private byte[] body;
 
-    public HttpResponse(HttpStatus httpStatus, Map<String, Object> header, byte[] body) {
+    public HttpResponse(HttpStatus httpStatus, ResponseHeader header, byte[] body) {
         this.httpStatus = httpStatus;
         this.header = header;
         this.body = body;

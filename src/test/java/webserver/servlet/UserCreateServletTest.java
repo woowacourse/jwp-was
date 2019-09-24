@@ -5,6 +5,7 @@ import webserver.parser.HttpRequestParser;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 import webserver.response.HttpStatus;
+import webserver.response.ResponseHeader;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,8 +27,8 @@ class UserCreateServletTest {
         HttpRequest httpRequest = HttpRequestParser.parse(new BufferedReader(new InputStreamReader(inputStream)));
         UserCreateServlet userCreateServlet = UserCreateServlet.getInstance();
         byte[] body = null;
-        Map<String, Object> header = new HashMap<>();
-        header.put("Location", "/index.html");
-        assertThat(userCreateServlet.doPost(httpRequest)).isEqualTo(new HttpResponse(HttpStatus.FOUND, header, body));
+        ResponseHeader header = new ResponseHeader();
+        header.setLocation("/index.html");
+        assertThat(userCreateServlet.doPost(httpRequest)).isEqualTo(new HttpResponse(HttpStatus.FOUND, header, null));
     }
 }

@@ -7,6 +7,7 @@ import webserver.parser.HttpRequestParser;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 import webserver.response.HttpStatus;
+import webserver.response.ResponseHeader;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -32,9 +33,8 @@ class FileServletTest {
         FileServlet fileServlet = FileServlet.getInstance();
         byte[] body = FileIoUtils.loadFileFromClasspath(HttpRequestUtils.generateTemplateFilePath(httpRequest.getAbsPath()));
         HttpResponse httpResponse = fileServlet.run(httpRequest);
-        Map<String, Object> header = new HashMap<>();
-        header.put("Content-Length", body.length);
-        header.put("Content-Type", FileIoUtils.loadMIMEFromClasspath(HttpRequestUtils.generateTemplateFilePath(httpRequest.getAbsPath())));
+        ResponseHeader header = new ResponseHeader();
+        header.setContentLegthAndType(body.length, FileIoUtils.loadMIMEFromClasspath(HttpRequestUtils.generateTemplateFilePath(httpRequest.getAbsPath())));
         assertThat(httpResponse).isEqualTo(new HttpResponse(HttpStatus.OK,header, body));
     }
 }

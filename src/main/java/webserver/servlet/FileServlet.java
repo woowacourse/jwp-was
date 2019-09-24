@@ -5,6 +5,7 @@ import utils.HttpRequestUtils;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 import webserver.response.HttpStatus;
+import webserver.response.ResponseHeader;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -28,9 +29,8 @@ public class FileServlet implements HttpServlet {
     public HttpResponse run(HttpRequest httpRequest) throws IOException, URISyntaxException {
         String filePath = generateFilePath(httpRequest);
         byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
-        Map<String, Object> header = new HashMap<>();
-        header.put("Content-Length", body.length);
-        header.put("Content-Type", FileIoUtils.loadMIMEFromClasspath(filePath));
+        ResponseHeader header = new ResponseHeader();
+        header.setContentLegthAndType(body.length, FileIoUtils.loadMIMEFromClasspath(filePath));
         return new HttpResponse(HttpStatus.OK, header, body);
     }
 

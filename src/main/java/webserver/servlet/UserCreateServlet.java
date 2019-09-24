@@ -7,6 +7,7 @@ import webserver.RequestHandler;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 import webserver.response.HttpStatus;
+import webserver.response.ResponseHeader;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,8 +30,8 @@ public class UserCreateServlet extends RequestServlet {
     public HttpResponse doPost(HttpRequest httpRequest) {
         User user = new User(httpRequest.getBody("userId"), httpRequest.getBody("password"), httpRequest.getBody("name"), httpRequest.getBody("email"));
         logger.debug(">>> User : {}", user);
-        Map<String, Object> header = new HashMap<>();
-        header.put("Location", "/index.html");
+        ResponseHeader header = new ResponseHeader();
+        header.setLocation("/index.html");
         return new HttpResponse(HttpStatus.FOUND, header, null);
     }
 }
