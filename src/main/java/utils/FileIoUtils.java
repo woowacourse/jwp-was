@@ -11,11 +11,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class FileIoUtils {
-    public static byte[] loadFileFromClasspath(String filePath) throws IOException, URISyntaxException {
+    public static byte[] loadFileFromClasspath(String filePath) throws IOException {
         try {
             Path path = Paths.get(FileIoUtils.class.getClassLoader().getResource(filePath).toURI());
             return Files.readAllBytes(path);
-        } catch (NullPointerException e) {
+        } catch (URISyntaxException e) {
             throw new NotFoundException("없는 경로입니다.", HttpStatus.NOT_FOUND);
         }
     }

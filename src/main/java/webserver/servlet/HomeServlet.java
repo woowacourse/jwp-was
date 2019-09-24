@@ -14,7 +14,7 @@ import static utils.HttpRequestUtils.generateTemplateFilePath;
 
 public class HomeServlet extends RequestServlet {
     @Override
-    public HttpResponse doGet(HttpRequest httpRequest) throws IOException, URISyntaxException {
+    public HttpResponse doGet(HttpRequest httpRequest) throws IOException {
         String filePath = generateTemplateFilePath(httpRequest.getAbsPath() + "index.html");
         byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
         Map<String, Object> header = new HashMap<>();

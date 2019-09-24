@@ -13,7 +13,7 @@ public abstract class RequestServlet implements HttpServlet {
     private static final String METHOD_NOT_ALLOW_MESSAGE = "지원하지 않는 메소드 입니다.";
 
     @Override
-    public HttpResponse run(HttpRequest httpRequest) throws IOException, URISyntaxException {
+    public HttpResponse run(HttpRequest httpRequest) throws IOException {
         if (httpRequest.getMethod() == RequestMethod.GET) {
             return doGet(httpRequest);
         }
@@ -24,7 +24,7 @@ public abstract class RequestServlet implements HttpServlet {
         throw new MethodNotAllowedException(METHOD_NOT_ALLOW_MESSAGE, HttpStatus.METHOD_NOT_ALLOW);
     }
 
-    public HttpResponse doGet(HttpRequest httpRequest) throws IOException, URISyntaxException {
+    public HttpResponse doGet(HttpRequest httpRequest) throws IOException {
         throw new MethodNotAllowedException(METHOD_NOT_ALLOW_MESSAGE, HttpStatus.METHOD_NOT_ALLOW);
     }
 
