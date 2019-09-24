@@ -6,7 +6,6 @@ import model.UserController;
 
 public class CreateUserController extends HttpController {
     private static final String HTML = "html";
-    public static final int REDIRECT_STATUS_CODE = 302;
 
     @Override
     protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {

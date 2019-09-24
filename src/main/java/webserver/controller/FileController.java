@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class FileController extends HttpController {
-    private static final int OK_STATUS_CODE = 200;
 
     @Override
     protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
