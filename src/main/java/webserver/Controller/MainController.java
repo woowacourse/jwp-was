@@ -20,6 +20,8 @@ public class MainController implements Controller {
 
         if (httpResponse.addBody(staticFile)) {
             httpResponse.addStatusLine(httpRequest, "200", "OK");
+            httpResponse.addHeader("Content-Type", "text/html;charset=utf-8");
+            httpResponse.addHeader("Content-Length", String.valueOf(staticFile.length));
         }
     }
 
