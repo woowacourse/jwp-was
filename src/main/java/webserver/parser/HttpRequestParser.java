@@ -39,9 +39,12 @@ public class HttpRequestParser {
     }
 
     private static RequestLine parseRequestLine(List<String> lines) throws URISyntaxException {
-        String method = lines.get(REQUEST_LINES_REQUESTLINE_INDEX).split(" ")[KEY_INDEX];
-        String uri = lines.get(REQUEST_LINES_REQUESTLINE_INDEX).split(" ")[VALUE_INDEX];
-        return new RequestLine(method, uri);
+        if (lines.size() > REQUEST_LINES_REQUESTLINE_INDEX ) {
+            String method = lines.get(REQUEST_LINES_REQUESTLINE_INDEX).split(" ")[KEY_INDEX];
+            String uri = lines.get(REQUEST_LINES_REQUESTLINE_INDEX).split(" ")[VALUE_INDEX];
+            return new RequestLine(method, uri);
+        }
+        return null;
     }
 
     private static RequestHeader parseRequestHeader(List<String> lines) {
