@@ -3,9 +3,6 @@ package http.request;
 import java.util.Map;
 
 public class Request {
-    private static final String ROOT_URL = "/";
-    private static final String INDEX_HTML = "/index.html";
-
     private final RequestLine requestLine;
     private final RequestHeader requestHeader;
     private final RequestBody requestBody;
@@ -29,22 +26,11 @@ public class Request {
     }
 
     public String extractUrl() {
-        return requestLine.getUrl().split("\\?")[0];
-    }
-
-    public String extractMethod() {
-        return requestLine.getMethod();
+        return requestLine.getUrl();
     }
 
     public String extractHttpVersion(){
         return requestLine.getHttpVersion();
-    }
-
-    private String validate(String url) {
-        if (url.equals(ROOT_URL)) {
-            return INDEX_HTML;
-        }
-        return url;
     }
 
     public String extractHeader(String key) {

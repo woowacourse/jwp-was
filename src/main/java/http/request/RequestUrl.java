@@ -6,7 +6,8 @@ import java.util.Objects;
 
 public class RequestUrl {
     private static final String BLANK = "";
-    private static final String START_POINT_OF_QUERY_PARAMETER = "\\?";
+    private static final String START_POINT_OF_QUERY_PARAMETER = "?";
+    private static final String REGEX_START_POINT_OF_QUERY_PARAMETER = "\\?";
     private static final String ROOT_URL = "/";
     private static final String INDEX_HTML = "/index.html";
     private static final int INDEX_OF_URL = 0;
@@ -36,7 +37,7 @@ public class RequestUrl {
     }
 
     private String validateRequestUrl(String requestUrl, int urlOrQuery) {
-        String[] splitedReqeustUrl = requestUrl.split(START_POINT_OF_QUERY_PARAMETER, 2);
+        String[] splitedReqeustUrl = requestUrl.split(REGEX_START_POINT_OF_QUERY_PARAMETER, 2);
 
         if (splitedReqeustUrl.length != 2) {
             throw new InvalidRequestUrlException();
