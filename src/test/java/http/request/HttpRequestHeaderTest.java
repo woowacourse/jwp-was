@@ -10,13 +10,13 @@ class HttpRequestHeaderTest {
 
     @Test
     void ContentLength_있음() {
-        HttpRequestHeader httpRequestHeader = new HttpRequestHeader(Collections.singletonList("Content-Length: 6902"));
+        HttpRequestHeader httpRequestHeader = new HttpRequestHeader(Collections.singletonMap("Content-Length", "6902"));
         assertThat(httpRequestHeader.getContentLength()).isEqualTo(6902);
     }
 
     @Test
     void ContentLength_없음() {
-        HttpRequestHeader httpRequestHeader = new HttpRequestHeader(Collections.singletonList("Content-Type: text/html;charset=utf-8"));
+        HttpRequestHeader httpRequestHeader = new HttpRequestHeader(Collections.singletonMap("Content-Type", "text/html;charset=utf-8"));
         assertThat(httpRequestHeader.getContentLength()).isEqualTo(0);
     }
 }
