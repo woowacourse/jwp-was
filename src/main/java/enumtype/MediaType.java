@@ -1,4 +1,4 @@
-package enumType;
+package enumtype;
 
 import java.util.Arrays;
 import java.util.Collections;

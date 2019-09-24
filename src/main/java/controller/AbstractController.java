@@ -13,16 +13,16 @@ public abstract class AbstractController implements Controller {
 
     @Override
     public void service(Request request, Response response) {
-        if (!isSupportMethod(request.getMethod())) {
-            response.forward(request.getPath(), HttpStatus.METHOD_NOT_ALLOWED);
+        if (request.getMethod().contains(HttpMethod.POST.name())) {
+            doPost(request, response);
             return;
         }
 
-        if (request.getMethod().contains(HttpMethod.POST.name())) {
-            doPost(request, response); return;
-        }
-
         doGet(request, response);
+
+        if (!isSupportMethod(request.getMethod())) {
+            response.forward(request.getPath(), HttpStatus.METHOD_NOT_ALLOWED);
+        }
     }
 
     private boolean isSupportMethod(String method) {

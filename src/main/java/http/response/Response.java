@@ -1,6 +1,6 @@
 package http.response;
 
-import enumType.MediaType;
+import enumtype.MediaType;
 import http.support.HttpStatus;
 import utils.ExtractInformationUtils;
 import utils.FileIoUtils;
@@ -30,7 +30,7 @@ public class Response {
     public void forward(String location, HttpStatus httpStatus) {
         byte[] body = FileIoUtils.loadFileFromClasspath(location);
         String mimeType = MediaType.of(ExtractInformationUtils.extractExtension(location)).getMediaType();
-        setBody(body);
+        this.body = body;
         setHttpStatus(httpStatus);
         addHeader(CONTENT_TYPE, String.format(CONTENT_TYPE_FORMAT, mimeType));
         addHeader(CONTENT_LENGTH, body.length + NEST_LINE);
@@ -64,10 +64,6 @@ public class Response {
 
     private void addHeader(String key, String value) {
         header.put(key, value);
-    }
-
-    private void setBody(byte[] body) {
-        this.body = body;
     }
 
     public void notfound() {

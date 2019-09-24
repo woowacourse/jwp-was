@@ -22,7 +22,10 @@ public class CreateUserController extends AbstractController {
     }
 
     private void saveUser(Request request) {
-        User user = new User(request.getParameter(USER_ID), request.getParameter(PASSWORD), request.getParameter(NAME), request.getParameter(EMAIL));
-        DataBase.addUser(user);
+        DataBase.addUser(getUser(request));
+    }
+
+    private User getUser(Request request) {
+        return new User(request.getParameter(USER_ID), request.getParameter(PASSWORD), request.getParameter(NAME), request.getParameter(EMAIL));
     }
 }
