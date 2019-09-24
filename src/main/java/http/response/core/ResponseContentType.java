@@ -1,8 +1,6 @@
 package http.response.core;
 
 import http.request.core.RequestPath;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 
@@ -10,7 +8,7 @@ public enum ResponseContentType {
     CSS("/css", "Content-Type: text/css;charset=utf-8\r\n"),
     JS("/js", "Content-Type: application/javascript;charset=utf-8\r\n"),
     FONTS("/fonts", "Content-Type: font/opentype;charset=utf-8\r\n"),
-    IMAGES("/images", "Content-Type: image/jpeg\r\n"),
+    IMAGES("/images", "Content-Type: image/jpeg;charset=utf-8\r\n"),
     UNDEFINED("undefined", "Content-Type: text/html;charset=utf-8\r\n");
 
     private String type;

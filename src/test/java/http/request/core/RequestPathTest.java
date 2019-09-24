@@ -3,7 +3,7 @@ package http.request.core;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static utils.StringUtils.*;
+import static utils.UtilData.*;
 
 class RequestPathTest {
     private RequestPrefixPath requestPrefixPath;

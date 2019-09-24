@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static utils.ParseString.parseFirstLine;
-import static utils.StringUtils.*;
+import static utils.UtilData.*;
 
 class RequestMethodTest {
 

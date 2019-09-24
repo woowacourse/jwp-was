@@ -5,9 +5,6 @@ import http.request.core.RequestPath;
 import http.response.core.Response;
 import http.response.core.ResponseBody;
 import http.response.core.ResponseCreator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import utils.FileIoUtils;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -32,10 +29,11 @@ public class HttpResponseFactory {
     }
 
     private static void doResponse(DataOutputStream dos, ResponseBody body) throws IOException, URISyntaxException {
-        List<Object> byteBody = body.getBody();
-        dos.writeBytes(String.valueOf(byteBody.get(0)));
-        if (byteBody.size() == 2) {
-           dos.write((byte[]) byteBody.get(1), 0, ((byte[]) byteBody.get(1)).length);
+        List<Object> bodyInfo = body.getBody();
+        dos.writeBytes(String.valueOf(bodyInfo.get(0)));
+        if (bodyInfo.size() == 2) {
+            byte[] byteBody = (byte[]) bodyInfo.get(1);
+            dos.write(byteBody, 0, byteBody.length);
         }
         dos.flush();
     }

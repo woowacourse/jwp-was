@@ -6,7 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static utils.StringUtils.*;
+import static utils.UtilData.*;
 
 class ResponseContentTypeTest {
     private ResponseContentType responseContentType;

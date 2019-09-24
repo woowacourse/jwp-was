@@ -12,18 +12,18 @@ public class RequestData {
 
     public RequestData(RequestPath url) {
         String[] params = url.getFullPath().split("\\?");
-        if(params.length == 1) {
+        if (params.length == 1) {
             throw new CanNotParseDataException();
         }
-         extractParameter(params[1].split("&"));
+        extractParameter(params[1].split("&"));
     }
 
     public RequestData(String bodyData) {
         String[] params = bodyData.split("&");
-        if(params.length == 0) {
+        if (params.length == 0) {
             throw new CanNotParseDataException();
         }
-         extractParameter(params);
+        extractParameter(params);
     }
 
     private void extractParameter(String[] params) {

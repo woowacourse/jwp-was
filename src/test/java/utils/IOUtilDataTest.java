@@ -7,8 +7,8 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedReader;
 import java.io.StringReader;
 
-public class IOUtilsTest {
-    private static final Logger logger = LoggerFactory.getLogger(IOUtilsTest.class);
+public class IOUtilDataTest {
+    private static final Logger logger = LoggerFactory.getLogger(IOUtilDataTest.class);
 
     @Test
     public void readData() throws Exception {

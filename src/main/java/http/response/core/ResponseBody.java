@@ -28,7 +28,7 @@ public class ResponseBody {
         body.append(version.getVersion()).append(" ");
         body.append(responseStatus.getResponseStatusHeader());
         body.append(headerLine);
-        if(responseStatus.getHttpStatusCode() == 302) {
+        if (responseStatus.getHttpStatusCode() == 302) {
             return Collections.singletonList(body);
         }
         byte[] byteBodyData = getByteBody();

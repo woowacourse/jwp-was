@@ -36,7 +36,7 @@ public class HttpRequestFactory {
         List<String> parseHeaderLines = new ArrayList<>();
         String headerLine = br.readLine();
 
-        while("".equals(br.readLine())) {
+        while ("".equals(br.readLine())) {
             parseHeaderLines.add(headerLine);
             headerLine = br.readLine();
         }
@@ -48,11 +48,11 @@ public class HttpRequestFactory {
         RequestMethod method = (RequestMethod) firstLineTokens.get(0);
         RequestPath url = (RequestPath) firstLineTokens.get(1);
 
-        if(method.isGet()) {
+        if (method.isGet()) {
             return url.getFullPath().contains("?") ? new RequestData(url).getData() : Collections.emptyMap();
         }
 
-        if(method.isPost()) {
+        if (method.isPost()) {
             String Content_Length = headers.getContentLength();
             String bodyData = IOUtils.readData(br, Integer.parseInt(Content_Length));
             return new RequestData(bodyData).getData();

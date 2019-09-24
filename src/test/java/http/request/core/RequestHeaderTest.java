@@ -11,7 +11,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static utils.ParseString.parseHeaderData;
-import static utils.StringUtils.LINE;
+import static utils.UtilData.LINE;
 
 class RequestHeaderTest {
     private Map<String, String> headers = new HashMap<>();

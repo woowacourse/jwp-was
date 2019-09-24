@@ -5,7 +5,7 @@ import java.util.Arrays;
 public enum ResponseStatus {
     OK(200, "OK"),
     FOUND(302, "Found"),
-    FORBIDDEN( 403, "Forbidden"),
+    FORBIDDEN(403, "Forbidden"),
     NOT_FOUND(404, "Not Found"),
     INTERNAL_SERVER_ERROR(500, "Internal Server Error");
 
