@@ -1,19 +1,12 @@
 package http.request;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class HttpRequestHeader {
     private Map<String, String> fields;
 
-    public HttpRequestHeader(List<String> headers) {
-        this.fields = new HashMap<>();
-
-        headers.forEach(header -> {
-            String[] keyValue = header.split(": ");
-            this.fields.put(keyValue[0], keyValue[1]);
-        });
+    public HttpRequestHeader(Map<String, String> fields) {
+        this.fields = fields;
     }
 
     public int getContentLength() {

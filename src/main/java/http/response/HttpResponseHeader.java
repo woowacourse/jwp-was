@@ -4,11 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HttpResponseHeader {
-    private Map<String, String> fields;
-
-    public HttpResponseHeader() {
-        fields = new HashMap<>();
-    }
+    private Map<String, String> fields = new HashMap<>();
 
     public void addHeader(String key, String value) {
         fields.put(key, value);

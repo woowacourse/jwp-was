@@ -25,7 +25,6 @@ public class RequestHandler implements Runnable {
     static {
         controllers = new HashMap<>();
         controllers.put("/user/create", CreateUserController.getInstance());
-        controllers.put("/", FileController.getInstance());
     }
 
     private Socket connection;
@@ -42,8 +41,9 @@ public class RequestHandler implements Runnable {
              OutputStream outputStream = connection.getOutputStream()) {
 
             DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-            HttpRequest httpRequest = new HttpRequest(RequestParser.parse(inputStream));
+            HttpRequest httpRequest = RequestParser.parse(inputStream);
             HttpResponse httpResponse = new HttpResponse();
+            logger.debug("RequestLine: {} ", httpRequest.getHttpRequestLine());
 
             route(httpRequest, httpResponse);
 
@@ -56,7 +56,7 @@ public class RequestHandler implements Runnable {
 
     private void route(HttpRequest httpRequest, HttpResponse httpResponse) {
         if (httpRequest.isContainExtension()) {
-            controllers.get("/").service(httpRequest, httpResponse);
+            FileController.getInstance().service(httpRequest, httpResponse);
             return;
         }
 
