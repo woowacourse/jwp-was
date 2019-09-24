@@ -1,23 +1,17 @@
 package webserver;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class HttpSession {
 
     private final String id;
     private final Map<String, String> attributes;
-    private boolean validity;
+    private boolean valid;
 
-    private HttpSession(String id, Map<String, String> attributes) {
+    HttpSession(String id, Map<String, String> attributes) {
         this.id = id;
         this.attributes = attributes;
-        validity = true;
-    }
-
-    public static HttpSession createSession() {
-        return new HttpSession(UUID.randomUUID().toString(), new HashMap<>());
+        valid = true;
     }
 
     public String getId() {
@@ -33,10 +27,10 @@ public class HttpSession {
     }
 
     public boolean isInvalid() {
-        return !validity;
+        return !valid;
     }
 
     public void invalidate() {
-        validity = false;
+        valid = false;
     }
 }

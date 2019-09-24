@@ -35,11 +35,8 @@ public class HttpRequest {
     }
 
     public HttpSession getSession() {
-        if (session == null || session.isInvalid()) {
-            HttpSession oldSession = session;
-            session = HttpSession.createSession();
-            SessionManager.addSession(session);
-            SessionManager.removeSession(oldSession);
+        if (session == null) {
+            session = SessionManager.getSession(cookies.get(SID_ATTR_KEY));
         }
         return session;
     }
