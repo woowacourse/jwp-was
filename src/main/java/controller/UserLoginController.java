@@ -7,6 +7,8 @@ import http.response.view.RedirectView;
 import model.AuthorizationFailException;
 import model.User;
 import service.UserService;
+import session.HttpSession;
+import session.HttpSessionFactory;
 import utils.QueryStringUtils;
 
 public class UserLoginController extends AbstractController {
@@ -24,11 +26,14 @@ public class UserLoginController extends AbstractController {
         String password = QueryStringUtils.parse(request.getBody()).get("password");
         try {
             User foundUser = userService.login(userId, password);
+
+            HttpSession httpSession = HttpSessionFactory.create();
+            httpSession.setAttribute("login-user", foundUser);
             response.render(new RedirectView("/index.html"));
-            response.addHeader(HTTP.SET_COOKIE, "logined=true");
+            response.addHeader(HTTP.SET_COOKIE, httpSession.getId());
+
         } catch (AuthorizationFailException e) {
             response.render(new RedirectView("/user/login_failed.html"));
-            response.addHeader(HTTP.SET_COOKIE, "logined=false");
         }
     }
 }

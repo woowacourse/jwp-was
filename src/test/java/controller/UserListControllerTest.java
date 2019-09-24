@@ -5,6 +5,8 @@ import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.User;
 import org.junit.jupiter.api.Test;
+import session.HttpSession;
+import session.HttpSessionFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -15,8 +17,8 @@ import java.net.URISyntaxException;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UserListControllerTest {
-    private static final String ID_1 = "id1";
-    private static final String ID_2 = "id2";
+    private static final String ID_1 = "qweqweqwazxc";
+    private static final String ID_2 = "icqeqsdasdqw";
     private HttpRequest request;
 
     @Test
@@ -36,10 +38,12 @@ class UserListControllerTest {
         DataBase.addUser(user1);
         DataBase.addUser(user2);
 
+        HttpSession httpSession = HttpSessionFactory.create();
+        httpSession.setAttribute("login-user", user1);
 
         String requestSting = "GET /user/list HTTP/1.1\n" +
                 "Host: localhost:8080\n" +
-                "Cookie: logined=true";
+                "Cookie: " + httpSession.getId();
 
         HttpResponse response = createResponse(requestSting);
         assertThat(new String(response.getBody()).contains(ID_1)).isTrue();

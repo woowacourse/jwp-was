@@ -9,6 +9,8 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
+import session.HttpSession;
+import session.SessionDB;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -22,7 +24,8 @@ public class UserListController extends AbstractController {
 
     @Override
     void doGet(HttpRequest request, HttpResponse response) {
-        if (request.getHeaderContents(HTTP.COOKIE).contains("true")) {
+        HttpSession session = SessionDB.getSession(request.getHeaderContents(HTTP.COOKIE));
+        if (session != null && session.getAttributes("login-user") != null) {
             showUsers(response);
             return;
         }

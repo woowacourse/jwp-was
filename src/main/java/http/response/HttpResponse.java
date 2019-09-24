@@ -63,4 +63,8 @@ public class HttpResponse implements AutoCloseable {
     private void writeHeader() throws IOException {
         dataOutputStream.writeBytes(getHeader());
     }
+
+    public String getHeaderContents(HTTP http) {
+        return view.getHeaderContents(http);
+    }
 }
