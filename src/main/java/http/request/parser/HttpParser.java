@@ -56,8 +56,4 @@ public class HttpParser {
                     }
                 });
     }
-
-    private static boolean search(Map<String, String> requestLines, String key) {
-        return requestLines.get(key) != null;
-    }
 }
