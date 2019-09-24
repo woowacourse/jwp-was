@@ -3,6 +3,8 @@ package http;
 import http.common.HttpStatus;
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class HttpResponseTest {
@@ -28,5 +30,6 @@ public class HttpResponseTest {
         response.forward("/index.html");
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK);
         assertThat(response.getHeader("Content-Type")).isEqualTo("text/html;charset=utf-8");
+
     }
 }

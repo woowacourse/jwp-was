@@ -5,7 +5,7 @@ import http.HttpResponse;
 import http.request.HttpRequest;
 import model.UserFactory;
 
-public class CreateUserController extends AbstractController {
+public class UserCreateController extends AbstractController {
     @Override
     public void doGet(HttpRequest request, HttpResponse response) {
         addUser(request, response);

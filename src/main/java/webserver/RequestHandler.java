@@ -2,15 +2,13 @@ package webserver;
 
 import http.HttpResponse;
 import http.controller.Controller;
-import http.controller.CreateUserController;
-import http.controller.ResourcesController;
+import http.controller.UserCreateController;
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
 import org.apache.commons.collections4.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.naming.ldap.Control;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,7 +22,7 @@ public class RequestHandler implements Runnable {
     private static final Map<String, Controller> controllers = new HashedMap<>();
 
     static {
-        controllers.put("/user/create", new CreateUserController());
+        controllers.put("/user/create", new UserCreateController());
     }
 
     private Socket connection;
