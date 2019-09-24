@@ -23,8 +23,8 @@ public class HttpHeader {
         );
     }
 
-    public static HttpHeader redirect(final String host, final String redirectUrl) {
-        return HttpHeader.of(Collections.singletonList("Location: " + host + redirectUrl));
+    public static HttpHeader redirect(final String redirectUrl) {
+        return HttpHeader.of(Collections.singletonList("Location: " + redirectUrl));
     }
 
     public String get(final String key) {

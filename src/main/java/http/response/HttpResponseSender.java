@@ -7,22 +7,14 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Map;
 
-public class HttpResponseConverter {
-    private static final Logger logger = LoggerFactory.getLogger(HttpResponseConverter.class);
+public class HttpResponseSender {
+    private static final Logger logger = LoggerFactory.getLogger(HttpResponseSender.class);
 
-    public static void response3xx(final DataOutputStream dos, final HttpResponse httpResponse) {
-        try {
-            responseHeader(dos, httpResponse);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    public static void response2xx(final DataOutputStream dos, final HttpResponse httpResponse) {
+    public static void send(final DataOutputStream dos, final HttpResponse httpResponse) {
         try {
             responseHeader(dos, httpResponse);
             responseBody(dos, httpResponse.getHttpResponseBody());
+            dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
