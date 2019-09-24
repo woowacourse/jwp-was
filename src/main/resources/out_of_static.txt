@@ -1,0 +1,2 @@
+out of static directory
+end of 'out_of_static.txt'
