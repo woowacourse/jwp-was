@@ -7,6 +7,8 @@ import java.util.Map;
 
 public class HttpResponse {
     private static final String CONTENT_TYPE = "Content-Type";
+    private static final String CONTENT_LENGTH = "Content-Length";
+    private static final String LOCATION = "Location";
 
     private Map<String, String> header = new HashMap<>();
     private HttpStatus httpStatus;
@@ -23,11 +25,27 @@ public class HttpResponse {
         return contentType;
     }
 
-    public void setContentType(String contentType) {
-        header.put(CONTENT_TYPE, contentType);
+    public void setContentType(MimeType contentType) {
+        header.put(CONTENT_TYPE, contentType.mimeType);
+    }
+
+    public void setContentLength(int length) {
+        header.put(CONTENT_LENGTH, String.valueOf(length));
+    }
+
+    public void setLocation(String location) {
+        header.put(LOCATION, location);
     }
 
     public String getStatusCodeAndMessage() {
         return httpStatus.getCodeAndMessage();
+    }
+
+    public Map<String, String> getHeaders() {
+        return header;
+    }
+
+    public void setCookie(String cookie) {
+        header.put("Set-Cookie", cookie);
     }
 }
