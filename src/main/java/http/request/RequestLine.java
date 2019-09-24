@@ -45,6 +45,10 @@ public class RequestLine {
         return EMPTY;
     }
 
+    public HttpMethod getHttpMethod() {
+        return httpMethod;
+    }
+
     public String getOriginUrl() {
         return url.getOriginUrl();
     }
