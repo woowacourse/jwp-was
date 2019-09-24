@@ -10,14 +10,12 @@ public class URL {
     private final String path;
     private final String queryString;
 
-    public URL(String path, String queryString) {
+    private URL(String path, String queryString) {
         checkValidatePath(path);
-        checkEmptyUrl(queryString);
         this.path = path;
         this.queryString = queryString;
     }
 
-    //todo: path 검증 로직 추가해서 생성_실패 테스트 케이스에서 확인
     private void checkValidatePath(String path) {
         if (StringUtils.isEmpty(path)) {
             throw new InvalidURLException();
