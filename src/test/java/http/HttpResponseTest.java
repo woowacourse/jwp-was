@@ -15,7 +15,7 @@ public class HttpResponseTest {
 
     @Test
     @DisplayName("정적 파일 Forwarding")
-    public void HtmlPageForwarding() throws IOException, URISyntaxException {
+    public void StaticResourceForwarding() throws IOException, URISyntaxException {
         ByteArrayOutputStream byteArrayOutputStream = createOutPutStream();
         HttpResponse httpResponse = new HttpResponse(byteArrayOutputStream);
         httpResponse.addHeader("Content-Type", "text/html");
@@ -25,7 +25,7 @@ public class HttpResponseTest {
 
     @Test
     @DisplayName("Redirect")
-    public void Redirect() throws IOException {
+    public void sendRedirect() throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = createOutPutStream();
         HttpResponse httpResponse = new HttpResponse(byteArrayOutputStream);
         httpResponse.addHeader("Content-Type", "text/html");
