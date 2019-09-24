@@ -14,6 +14,10 @@ public class FilePathUtils {
     }
 
     public static boolean isStaticFile(String path) {
-        return !path.endsWith(".html");
+        return !isTemplateFile(path);
+    }
+
+    public static boolean isTemplateFile(String path) {
+        return path.endsWith(".html");
     }
 }
