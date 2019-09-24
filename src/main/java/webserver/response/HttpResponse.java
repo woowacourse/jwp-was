@@ -6,7 +6,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import static webserver.response.AbstractResponseMetaData.HEADER_NEW_LINE;
+import static webserver.response.ResponseMetaData.HEADER_NEW_LINE;
 
 public class HttpResponse {
 
@@ -25,12 +25,10 @@ public class HttpResponse {
         dos.writeBytes(responseMetaData.getResponseLine() + HEADER_NEW_LINE);
         dos.writeBytes(responseMetaData.getHttpResponseHeaderFields());
 
-        if (responseMetaData.hasBody()) {
-            responseBody(responseMetaData.getBody());
-        }
+        writeResponseBody(responseMetaData.getBody());
     }
 
-    private void responseBody(byte[] body) throws IOException {
+    private void writeResponseBody(byte[] body) throws IOException {
         dos.write(body, 0, body.length);
         dos.flush();
     }

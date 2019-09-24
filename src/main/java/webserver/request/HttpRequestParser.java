@@ -71,7 +71,7 @@ public class HttpRequestParser {
 
     private static HttpRequestBody parseHttpRequestBody(final BufferedReader br, final int contentLength) throws IOException {
         String line = IOUtils.readData(br, contentLength);
-        log.debug("request : {}", line);
+        log.debug("request body : {}", line);
 
         QueryParams queryParams = QueryStringParser.parseQueryParams(line);
         return new HttpRequestBody(queryParams);

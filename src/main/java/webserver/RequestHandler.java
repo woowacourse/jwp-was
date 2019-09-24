@@ -10,7 +10,6 @@ import webserver.response.HttpResponse;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 
 public class RequestHandler implements Runnable {
@@ -37,7 +36,7 @@ public class RequestHandler implements Runnable {
 
             controller.service(httpRequest, httpResponse);
 
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
