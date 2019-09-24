@@ -13,20 +13,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
-class RouterTest {
+class BasicRouterTest {
     @Test
     void 싱글톤인지() {
-        assertThat(Router.getInstance() == Router.getInstance()).isTrue();
+        assertThat(BasicRouter.getInstance() == BasicRouter.getInstance()).isTrue();
     }
 
     @Test
     @DisplayName("찾으려는 패턴의 컨트롤러가 존재하지 않을 경우")
     void retrieveController_hasNoMatchingPattern() {
-        List<Router.PredicatorControllerMatch> matches = Arrays.asList(
-                new Router.PredicatorControllerMatch((pattern) -> false, mock(Controller.class)),
-                new Router.PredicatorControllerMatch((pattern) -> false, mock(Controller.class))
+        List<PredicatorControllerMatch> matches = Arrays.asList(
+                PredicatorControllerMatch.from((pattern) -> false, mock(Controller.class)),
+                PredicatorControllerMatch.from((pattern) -> false, mock(Controller.class))
         );
-        Router router = new Router(matches);
+        BasicRouter router = new BasicRouter(matches);
 
         assertThrows(BadRequestException.class, () -> router.retrieveController("not matching pattern"));
     }
@@ -35,20 +35,20 @@ class RouterTest {
     @DisplayName("찾으려는 패턴의 컨트롤러를 반환")
     void addAndRetrieve_hasMatchingPattern() {
         int matchingIdx = 1;
-        List<Router.PredicatorControllerMatch> matches = Arrays.asList(
-                new Router.PredicatorControllerMatch((pattern) -> false, mock(Controller.class)),
-                new Router.PredicatorControllerMatch((pattern) -> true, mock(Controller.class))
+        List<PredicatorControllerMatch> matches = Arrays.asList(
+                PredicatorControllerMatch.from((pattern) -> false, mock(Controller.class)),
+                PredicatorControllerMatch.from((pattern) -> true, mock(Controller.class))
         );
-        Router router = new Router(matches);
+        BasicRouter router = new BasicRouter(matches);
 
-        assertThat(router.retrieveController("matching pattern with idx 1")).isEqualTo(matches.get(matchingIdx).controller);
+        assertThat(router.retrieveController("matching pattern with idx 1")).isEqualTo(matches.get(matchingIdx).getController());
     }
 
     @Test
     @DisplayName("추가한 컨트롤러가 잘 반환되는지")
     void addController_retrieveThatController() {
-        List<Router.PredicatorControllerMatch> matches = new ArrayList<>();
-        Router router = new Router(matches);
+        List<PredicatorControllerMatch> matches = new ArrayList<>();
+        BasicRouter router = new BasicRouter(matches);
 
         String specificPattern = "salkfjasf";
         Controller expectedController = mock(Controller.class);

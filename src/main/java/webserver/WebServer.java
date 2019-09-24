@@ -8,7 +8,7 @@ import proxy.ElapsedTimeAdvice;
 import webserver.controller.StaticController;
 import webserver.controller.TemplatesController;
 import webserver.controller.UserController;
-import webserver.router.Router;
+import webserver.router.BasicRouter;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -28,7 +28,7 @@ public class WebServer {
     }
 
     private static void registerControllers() {
-        Router.getInstance()
+        BasicRouter.getInstance()
                 .addController(path -> path.contains(".html"), new TemplatesController())
                 .addController(path -> path.contains(".css"), new StaticController())
                 .addController(path -> path.contains(".js"), new StaticController())

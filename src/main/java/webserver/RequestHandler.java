@@ -6,7 +6,7 @@ import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.controller.Controller;
-import webserver.router.Router;
+import webserver.router.BasicRouter;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -45,6 +45,6 @@ public class RequestHandler implements Runnable {
     private Controller route(HttpRequest httpRequest) {
         String path = httpRequest.getPath();
 
-        return Router.getInstance().retrieveController(path);
+        return BasicRouter.getInstance().retrieveController(path);
     }
 }
