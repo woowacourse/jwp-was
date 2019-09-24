@@ -1,6 +1,7 @@
 package http.request;
 
 import http.common.HttpHeader;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,6 +51,6 @@ public class HttpRequestParser {
     }
 
     private static boolean isValidLine(String line) {
-        return line != null && !EMPTY.equals(line) && !BLANK.equals(line);
+        return line != null && StringUtils.isEmpty(line) && StringUtils.isBlank(line);
     }
 }
