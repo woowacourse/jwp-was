@@ -24,7 +24,7 @@ public class UserController implements Controller {
     }
 
     private boolean isAllowedUrlPath(String originalUrlPath) {
-        return allowedUrlPath.contains(allowedUrlPath);
+        return allowedUrlPath.contains(originalUrlPath);
     }
 
     private boolean isAllowedMethod(RequestMethod requestMethod) {
