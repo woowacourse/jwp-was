@@ -1,0 +1,7 @@
+POST /user/login HTTP/1.1
+Host: localhost:8080
+Content-Length: 33
+Connection: keep-alive
+Accept: */*
+
+userId=van123&password=1234123123

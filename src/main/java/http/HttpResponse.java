@@ -45,6 +45,12 @@ public class HttpResponse {
         headerFields.addHeader("Location", location);
     }
 
+    public void setLoginSuccess(String path) {
+        status = HttpStatus.OK;
+        headerFields.addHeader("Content-Type", "text/html");
+        headerFields.addHeader("Set-Cookie", "logined=true; Path=" + path);
+    }
+
     public String convert() {
         if (StringUtils.isEmpty(body)) {
             return convertHeader();
