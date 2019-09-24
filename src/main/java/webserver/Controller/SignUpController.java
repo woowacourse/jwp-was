@@ -24,7 +24,8 @@ public class SignUpController implements Controller {
                 httpRequest.getParameter("name"),
                 httpRequest.getParameter("email"));
         DataBase.addUser(user);
-        httpResponse.addHeader(httpRequest, "200", "OK");
+        httpResponse.addStatusLine(httpRequest, "200", "OK");
+        httpResponse.addHeader("Content-Type", "text/html;charset=utf-8");
     }
 
     private void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
@@ -34,6 +35,7 @@ public class SignUpController implements Controller {
                 httpRequest.getParameter("name"),
                 httpRequest.getParameter("email"));
         DataBase.addUser(user);
-        httpResponse.addHeader(httpRequest, "200", "OK");
+        httpResponse.addStatusLine(httpRequest, "302", "Found");
+        httpResponse.addHeader("Location", httpRequest.getRequestHeader().get("Origin") + "/index.html");
     }
 }
