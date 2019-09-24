@@ -15,7 +15,7 @@ class HttpSessionManagerTest {
     void 고유_세션_아이디인지() {
         Set<HttpSession> httpSessions = new HashSet<>();
         for (int i = 0; i < 100000; i++) {
-            httpSessions.add(httpSessionManager.getSession());
+            httpSessions.add(httpSessionManager.newSession());
         }
 
         assertThat(httpSessions.size()).isEqualTo(100000);
@@ -23,7 +23,7 @@ class HttpSessionManagerTest {
 
     @Test
     void 세션_조작() {
-        HttpSession httpSession = httpSessionManager.getSession();
+        HttpSession httpSession = httpSessionManager.newSession();
 
         String id = httpSession.getId();
         httpSession.setAttribute("1+1", 2);
@@ -39,6 +39,6 @@ class HttpSessionManagerTest {
 
         });
 
-        assertThat(httpSessionManager.getSession().getId()).isNotNull();
+        assertThat(httpSessionManager.newSession().getId()).isNotNull();
     }
 }

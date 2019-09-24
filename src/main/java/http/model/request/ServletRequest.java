@@ -9,7 +9,6 @@ import http.session.SessionManager;
 import java.util.Map;
 
 public class ServletRequest {
-    private static final String COOKIE = "Cookie";
     private SessionManager sessionManager;
     private HttpMethod httpMethod;
     private HttpUri httpUri;
@@ -45,7 +44,7 @@ public class ServletRequest {
     }
 
     public HttpSession getSession() {
-        return this.sessionManager.getSession();
+        return this.sessionManager.newSession();
     }
 
     public void bindSessionManager(SessionManager sessionManager) {
@@ -120,7 +119,8 @@ public class ServletRequest {
             if (httpCookie == null) {
                 httpCookie = new HttpCookie();
             }
-            return new ServletRequest(this.httpMethod, this.httpUri, this.httpProtocols, this.httpHeaders, this.httpParameters, this.httpCookie);
+            return new ServletRequest(this.httpMethod, this.httpUri,
+                    this.httpProtocols, this.httpHeaders, this.httpParameters, this.httpCookie);
         }
     }
 }

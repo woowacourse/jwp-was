@@ -27,8 +27,13 @@ public class HttpSessionManager implements SessionManager {
     }
 
     @Override
-    public HttpSession getSession() {
+    public HttpSession newSession() {
         return generate();
+    }
+
+    @Override
+    public boolean validate(String id) {
+        return sessions.containsKey(id);
     }
 
     private HttpSession generate() {
