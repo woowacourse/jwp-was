@@ -44,23 +44,30 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = new HttpRequest(RequestParser.parse(inputStream));
             HttpResponse httpResponse = new HttpResponse();
 
-            logger.debug("RequestLine: {}", httpRequest.getHttpRequestLine().toString());
+            route(httpRequest, httpResponse);
 
-            if (httpRequest.isContainExtension()) {
-                controllers.get("/").service(httpRequest, httpResponse);
-            } else {
-                controllers.get(httpRequest.getUri()).service(httpRequest, httpResponse);
-            }
-
-            dataOutputStream.writeBytes(httpResponse.getHttpStatusLine().toString());
-            dataOutputStream.writeBytes(httpResponse.getHttpResponseHeader().toString());
-
-            if (httpResponse.getHttpResponseBody() != null) {
-                responseBody(dataOutputStream, httpResponse.getHttpResponseBody().getBody());
-            }
+            writeResponse(dataOutputStream, httpResponse);
 
         } catch (IOException e) {
             logger.error(e.getMessage());
+        }
+    }
+
+    private void route(HttpRequest httpRequest, HttpResponse httpResponse) {
+        if (httpRequest.isContainExtension()) {
+            controllers.get("/").service(httpRequest, httpResponse);
+            return;
+        }
+
+        controllers.get(httpRequest.getUri()).service(httpRequest, httpResponse);
+    }
+
+    private void writeResponse(DataOutputStream dataOutputStream, HttpResponse httpResponse) throws IOException {
+        dataOutputStream.writeBytes(httpResponse.getHttpStatusLine().toString());
+        dataOutputStream.writeBytes(httpResponse.getHttpResponseHeader().toString());
+
+        if (httpResponse.getHttpResponseBody() != null) {
+            responseBody(dataOutputStream, httpResponse.getHttpResponseBody().getBody());
         }
     }
 
