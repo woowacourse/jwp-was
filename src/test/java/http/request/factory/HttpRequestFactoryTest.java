@@ -1,11 +1,10 @@
 package http.request.factory;
 
-import http.HttpMethod;
+import http.HttpRequestMethod;
 import http.HttpVersion;
-import http.request.HttpRequest;
-import http.request.HttpRequestBody;
-import http.request.HttpRequestHeader;
-import http.request.HttpRequestLine;
+import http.MediaType;
+import http.QueryString;
+import http.request.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -16,7 +15,8 @@ class HttpRequestFactoryTest {
 
     @Test
     void create_Body가_있는_경우() {
-        HttpRequestLine httpRequestLine = new HttpRequestLine(HttpMethod.POST, "/", HttpVersion.HTTP_1_1);
+        HttpRequestTarget httpRequestTarget = new HttpRequestTarget(new Resource("/", "index", MediaType.HTML ), new QueryString(""));
+        HttpRequestStartLine httpRequestStartLine = new HttpRequestStartLine(HttpRequestMethod.POST, httpRequestTarget, HttpVersion.HTTP_1_1);
 
         Map<String, String> map = new HashMap<>();
         map.put("Host", "localhost:8080");
@@ -24,25 +24,24 @@ class HttpRequestFactoryTest {
         map.put("Content-Length", "345");
         HttpRequestHeader httpRequestHeader = new HttpRequestHeader(map);
 
-        List<String> bodyLines = Arrays.asList("body line1", "body line2");
-        HttpRequestBody httpRequestBody = new HttpRequestBody(bodyLines);
+        HttpRequestBody httpRequestBody = new HttpRequestBody("id=2222&pw=1234");
 
         List<String> lines = Arrays.asList(
-                "POST / HTTP/1.1",
+                "POST /index.html HTTP/1.1",
                 "Host: localhost:8080",
                 "Connection: keep-alive",
                 "Content-Length: 345",
                 "",
-                "body line1",
-                "body line2"
+                "id=2222&pw=1234"
         );
 
-        assertThat(HttpRequestFactory.create(lines)).isEqualTo(new HttpRequest(httpRequestLine, httpRequestHeader, httpRequestBody));
+        assertThat(HttpRequestFactory.create(lines)).isEqualTo(new HttpRequest(httpRequestStartLine, httpRequestHeader, httpRequestBody));
     }
 
     @Test
     void create_Body가_없는_경우() {
-        HttpRequestLine httpRequestLine = new HttpRequestLine(HttpMethod.GET, "/", HttpVersion.HTTP_1_1);
+        HttpRequestTarget httpRequestTarget = new HttpRequestTarget(new Resource("/", "index", MediaType.HTML ), new QueryString("id=2222&pw=1234"));
+        HttpRequestStartLine httpRequestStartLine = new HttpRequestStartLine(HttpRequestMethod.GET, httpRequestTarget, HttpVersion.HTTP_1_1);
 
         Map<String, String> map = new HashMap<>();
         map.put("Host", "localhost:8080");
@@ -50,15 +49,15 @@ class HttpRequestFactoryTest {
         map.put("Content-Length", "345");
         HttpRequestHeader httpRequestHeader = new HttpRequestHeader(map);
 
-        HttpRequestBody httpRequestBody = new HttpRequestBody(new ArrayList<>());
+        HttpRequestBody httpRequestBody = new HttpRequestBody("");
 
         List<String> lines = Arrays.asList(
-                "GET / HTTP/1.1",
+                "GET /index.html?id=2222&pw=1234 HTTP/1.1",
                 "Host: localhost:8080",
                 "Connection: keep-alive",
                 "Content-Length: 345"
         );
 
-        assertThat(HttpRequestFactory.create(lines)).isEqualTo(new HttpRequest(httpRequestLine, httpRequestHeader, httpRequestBody));
+        assertThat(HttpRequestFactory.create(lines)).isEqualTo(new HttpRequest(httpRequestStartLine, httpRequestHeader, httpRequestBody));
     }
 }
