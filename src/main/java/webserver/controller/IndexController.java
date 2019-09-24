@@ -15,7 +15,7 @@ public class IndexController {
     public Responsive goIndex() {
         return (request, response) -> {
             response.setContentType("text/html");
-            response.setView("/index.html");
+            response.forward("/index.html");
         };
     }
 }
