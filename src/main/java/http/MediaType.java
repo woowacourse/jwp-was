@@ -20,7 +20,7 @@ public enum MediaType {
 
     public static String getFullPath(String uri) {
         return Arrays.stream(values())
-                .filter(value -> uri.contains(value.extension))
+                .filter(value -> uri.endsWith(value.extension))
                 .map(value -> "./" + value.path + uri)
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);
