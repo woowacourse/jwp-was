@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class LoginController extends AbstractController {
 
-    private static final String USER_LOGIN_URL = "/user/login";
+    public static final String USER_LOGIN_URL = "/user/login";
 
     private static final String USER_ID = "userId";
     private static final String PASSWORD = "password";

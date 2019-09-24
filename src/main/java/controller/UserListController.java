@@ -11,7 +11,8 @@ import java.util.Map;
 
 public class UserListController extends AbstractController {
 
-    private static final String USER_LIST_URL = "/user/list";
+    public static final String USER_LIST_URL = "/user/list";
+
     private static final String LOGINED_ATTR_KEY = "logined";
 
     @Override

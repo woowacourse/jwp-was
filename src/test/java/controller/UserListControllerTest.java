@@ -1,39 +1,63 @@
 package controller;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import webserver.HttpResponse;
-import webserver.HttpStatus;
-import webserver.RequestDispatcher;
-import webserver.RequestParser;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.BodyInserters;
+import webserver.WebServer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserListControllerTest {
 
-    private static final String TEST_DIRECTORY = "./src/test/resources";
+    private WebTestClient webTestClient;
+    private Thread serverThread;
 
-    @Test
-    void loggedIn() throws IOException {
-        InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "/GetUserList.txt"));
-        HttpResponse res = new HttpResponse();
-        new UserListController().service(RequestParser.parse(in), res);
+    @BeforeEach
+    void setup() {
+        webTestClient = WebTestClient.bindToServer().baseUrl("http://localhost:8080").build();
+        serverThread = new Thread(() -> WebServer.main(new String[0]));
+        serverThread.start();
+        webTestClient.post()
+            .uri(SignUpController.USER_CREATE_URL)
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+            .body(BodyInserters.fromFormData("userId", "john123")
+                .with("password", "p@ssW0rd")
+                .with("name", "john")
+                .with("email", "john@example.com"))
+            .exchange()
+            .expectStatus().is3xxRedirection()
+            .expectHeader().valueMatches("Location", "/index.html")
+            .expectBody().returnResult();
+    }
 
-        assertThat(res.getStatus()).isEqualTo(HttpStatus.OK);
-        assertThat(new String(res.getBody())).contains("이메일");
+    @AfterEach
+    void cleanup() {
+        serverThread.interrupt();
     }
 
     @Test
-    void loggedIn_failed() throws IOException {
-        InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "/GetUserListFailed.txt"));
-        HttpResponse res = new HttpResponse();
-        new UserListController().service(RequestParser.parse(in), res);
+    void logged_id() {
+        webTestClient.get()
+            .uri(UserListController.USER_LIST_URL)
+            .cookie("logined", "true")
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody()
+            .consumeWith(res -> {
+                assertThat(new String(res.getResponseBody()))
+                    .contains("이메일");
+            });
+    }
 
-        assertThat(res.getStatus()).isEqualTo(HttpStatus.FOUND);
-        assertThat(res.getHeader("Location")).isEqualTo("/user/login.html");
+    @Test
+    void logged_in_failed() {
+        webTestClient.get()
+            .uri(UserListController.USER_LIST_URL)
+            .exchange()
+            .expectStatus().is3xxRedirection()
+            .expectHeader().valueMatches("Location", "/user/login.html");
     }
 }

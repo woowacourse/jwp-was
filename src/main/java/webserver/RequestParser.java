@@ -34,8 +34,9 @@ public class RequestParser {
         if (buf.length == 0) {
             return Collections.emptyMap();
         }
-        return RequestContentType.from(headers.get("Content-Type"))
-            .orElseThrow(() -> new UnsupportedContentType(headers.get("Content-Type")))
+        String contentType = headers.get("Content-Type").split(";")[0];
+        return RequestContentType.from(contentType)
+            .orElseThrow(() -> new UnsupportedContentType(contentType))
             .parse(buf);
     }
 
@@ -53,6 +54,10 @@ public class RequestParser {
 
     private static Map<String, String> parseCookie(Map<String, String> headers) {
         String cookieHeader = headers.get("Cookie");
+
+        if (cookieHeader == null) {
+            cookieHeader = headers.get("cookie");
+        }
 
         if (cookieHeader != null) {
             return Arrays.stream(cookieHeader.split("; "))
