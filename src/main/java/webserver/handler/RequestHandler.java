@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -31,10 +30,8 @@ public class RequestHandler implements Runnable {
                 new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
              DataOutputStream dos = new DataOutputStream(connection.getOutputStream())) {
 
-            List<String> lines = RequestParser.parse(bufferedReader);
-
-            HttpRequest httpRequest = new HttpRequest(lines);
-            HttpResponse httpResponse = RequestMapper.controller(httpRequest);
+            HttpRequest httpRequest = new HttpRequest(RequestParser.parse(bufferedReader));
+            HttpResponse httpResponse = RequestMapper.getInstance().service(httpRequest, new HttpResponse());
 
             Renderer.render(dos, httpResponse.responseBuilder());
         } catch (IOException e) {
