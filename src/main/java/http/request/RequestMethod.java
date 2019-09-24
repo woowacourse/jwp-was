@@ -5,10 +5,7 @@ import exception.NoMatchHttpMethodException;
 import java.util.Arrays;
 
 public enum RequestMethod {
-    GET(),
-    POST(),
-    PUT(),
-    DELETE();
+    GET, POST, PUT, DELETE;
 
     public static RequestMethod from(String requestMethod) {
         return Arrays.stream(values())
