@@ -1,6 +1,7 @@
 package http.request.core;
 
 import http.exception.CanNotParseDataException;
+import http.request.RequestData;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -42,7 +43,7 @@ class RequestDataTest {
         requestPath = new RequestPath(RequestPrefixPath.of(GET_PARAMS_PATH), GET_PARAMS_PATH);
         requestData = new RequestData(requestPath);
         requestData.getData().keySet()
-                .forEach( key -> assertThat(requestData.getData().get(key)).isEqualTo(data.get(key)));
+                .forEach(key -> assertThat(requestData.getData().get(key)).isEqualTo(data.get(key)));
     }
 
     @Test
@@ -50,7 +51,7 @@ class RequestDataTest {
     void RequestPostHasParam() {
         requestData = new RequestData(POST_BODY);
         requestData.getData().keySet()
-                .forEach( key -> assertThat(requestData.getData().get(key)).isEqualTo(data.get(key)));
+                .forEach(key -> assertThat(requestData.getData().get(key)).isEqualTo(data.get(key)));
     }
 
     @AfterEach
