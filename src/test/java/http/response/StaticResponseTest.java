@@ -26,7 +26,7 @@ class StaticResponseTest {
     void CssResponseTest() throws IOException, URISyntaxException {
         requestPath = new RequestPath(RequestPrefixPath.of(CSS_PATH), CSS_PATH);
 
-        firstLineTokens = Arrays.asList(GET_METHOD, requestPath, REQUEST_VERSION);
+        firstLineTokens = Arrays.asList(GET_REQUEST_METHOD, requestPath, REQUEST_VERSION);
         httpRequest = new HttpRequest(firstLineTokens, GET_REQUEST_HEADER, DATA);
         Response response = new StaticResponseCreator().create(httpRequest);
         ResponseBody responseBody = response.doResponse();
@@ -39,7 +39,7 @@ class StaticResponseTest {
     void JsResponseTest() throws IOException, URISyntaxException {
         requestPath = new RequestPath(RequestPrefixPath.of(JS_PATH), JS_PATH);
 
-        firstLineTokens = Arrays.asList(GET_METHOD, requestPath, REQUEST_VERSION);
+        firstLineTokens = Arrays.asList(GET_REQUEST_METHOD, requestPath, REQUEST_VERSION);
         httpRequest = new HttpRequest(firstLineTokens, GET_REQUEST_HEADER, DATA);
         Response response = new StaticResponseCreator().create(httpRequest);
         ResponseBody responseBody = response.doResponse();
@@ -52,7 +52,7 @@ class StaticResponseTest {
     void FontsResponseTest() throws IOException, URISyntaxException {
         requestPath = new RequestPath(RequestPrefixPath.of(FONT_PATH), FONT_PATH);
 
-        firstLineTokens = Arrays.asList(GET_METHOD, requestPath, REQUEST_VERSION);
+        firstLineTokens = Arrays.asList(GET_REQUEST_METHOD, requestPath, REQUEST_VERSION);
         httpRequest = new HttpRequest(firstLineTokens, GET_REQUEST_HEADER, DATA);
         Response response = new StaticResponseCreator().create(httpRequest);
         ResponseBody responseBody = response.doResponse();
@@ -65,7 +65,7 @@ class StaticResponseTest {
     void ImagesResponseTest() throws IOException, URISyntaxException {
         requestPath = new RequestPath(RequestPrefixPath.of(IMAGES_PATH), IMAGES_PATH);
 
-        firstLineTokens = Arrays.asList(GET_METHOD, requestPath, REQUEST_VERSION);
+        firstLineTokens = Arrays.asList(GET_REQUEST_METHOD, requestPath, REQUEST_VERSION);
         httpRequest = new HttpRequest(firstLineTokens, GET_REQUEST_HEADER, DATA);
         Response response = new StaticResponseCreator().create(httpRequest);
         ResponseBody responseBody = response.doResponse();

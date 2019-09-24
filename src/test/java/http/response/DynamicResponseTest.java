@@ -31,7 +31,7 @@ class DynamicResponseTest {
     @Test
     @DisplayName("파라미터를 가지고 있는 경우 GET 동적 파일 테스트")
     void hasParamDynamicGetTest() throws IOException, URISyntaxException {
-        firstLineTokens = Arrays.asList(GET_METHOD, REQUEST_GET_PARAM_PATH, REQUEST_VERSION);
+        firstLineTokens = Arrays.asList(GET_REQUEST_METHOD, REQUEST_GET_PARAM_PATH, REQUEST_VERSION);
         httpRequest = new HttpRequest(firstLineTokens, GET_REQUEST_HEADER, DATA);
         Response response = new DynamicResponseCreator().create(httpRequest);
         ResponseBody responseBody = response.doResponse();
@@ -42,7 +42,7 @@ class DynamicResponseTest {
     @Test
     @DisplayName("파라미터를 가지고 있지 경우 POST 동적 파일 테스트")
     void hasDynamicPostTest() throws IOException, URISyntaxException {
-        firstLineTokens = Arrays.asList(POST_METHOD, REQUEST_POST_PATH, REQUEST_VERSION);
+        firstLineTokens = Arrays.asList(POST_REQUEST_METHOD, REQUEST_POST_PATH, REQUEST_VERSION);
         httpRequest = new HttpRequest(firstLineTokens, POST_REQUEST_HEADER, DATA);
         Response response = new DynamicResponseCreator().create(httpRequest);
         ResponseBody responseBody = response.doResponse();
@@ -54,7 +54,7 @@ class DynamicResponseTest {
     @DisplayName("파라미터를 가지고 있지 않는 경우 동적 파일 테스트")
     void hasNotDynamicTest() throws IOException, URISyntaxException {
         DATA.clear();
-        firstLineTokens = Arrays.asList(GET_METHOD, REQUEST_GET_PATH, REQUEST_VERSION);
+        firstLineTokens = Arrays.asList(GET_REQUEST_METHOD, REQUEST_GET_PATH, REQUEST_VERSION);
         httpRequest = new HttpRequest(firstLineTokens, GET_REQUEST_HEADER, DATA);
         Response response = new DynamicResponseCreator().create(httpRequest);
         ResponseBody responseBody = response.doResponse();
