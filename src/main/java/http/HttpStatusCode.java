@@ -1,24 +1,27 @@
 package http;
 
+
 import java.util.Arrays;
 
-public enum HttpStatus {
-    OK("200", "Ok"),
-    FOUND("302", "Found");
+public enum HttpStatusCode {
+    OK("200", "OK"),
+    FOUND("302", "Found"),
+    NOT_FOUND("404", "Not Found");
 
     private String statusCode;
     private String reasonPhrase;
 
-    HttpStatus(String statusCode, String reasonPhrase) {
+    HttpStatusCode(String statusCode, String reasonPhrase) {
         this.statusCode = statusCode;
         this.reasonPhrase = reasonPhrase;
     }
 
-    public static HttpStatus of(String code) {
+    public static HttpStatusCode of(String code) {
         return Arrays.stream(values())
                 .filter(value -> value.statusCode.equals(code))
                 .findFirst()
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(IllegalArgumentException::new)
+                ;
     }
 
     public String getReasonPhrase() {
