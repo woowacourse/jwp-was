@@ -1,7 +1,7 @@
 package http.request.core;
 
 public class RequestPath {
-    private static final String indexUrl = "/index.html";
+    private static final String INDEX_URL = "/index.html";
 
     private RequestPrefixPath requestPrefixPath;
     private String url;
@@ -12,7 +12,7 @@ public class RequestPath {
     }
 
     private String parsingIndexUrl(String url) {
-        return url.equals("/") ? indexUrl : url;
+        return url.equals("/") ? INDEX_URL : url;
     }
 
     public String getFullPath() {
