@@ -13,10 +13,10 @@ public class LoginController extends AbstractController {
 
     private static final String USER_ID = "userId";
     private static final String PASSWORD = "password";
-    private static final String LOGINED_COOKIE_KEY = "logined";
+    private static final String LOGINED_ATTR_KEY = "logined";
 
     private static boolean verifyUser(Map<String, String> parsedBody, User found) {
-        return found != null && found.matchPassword(parsedBody.get(PASSWORD));
+        return found != null && found.verify(parsedBody.get(PASSWORD));
     }
 
     @Override
@@ -33,7 +33,7 @@ public class LoginController extends AbstractController {
 
         if (verifyUser(parsedBody, found)) {
             redirectUrl = "/index.html";
-            response.addCookie("logined", "true");
+            response.addCookie(LOGINED_ATTR_KEY, "true");
         }
 
         response.redirect(redirectUrl);
