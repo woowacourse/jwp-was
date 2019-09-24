@@ -6,6 +6,7 @@ import webserver.request.HttpRequest;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Map;
 
 public class HttpResponse {
     private static final Logger log = LoggerFactory.getLogger(HttpResponse.class);
@@ -23,14 +24,36 @@ public class HttpResponse {
         return this.body.addBody(body);
     }
 
-    public void addHeader(HttpRequest httpRequest, String statusCode, String statusText) {
+    public void addStatusLine(HttpRequest httpRequest, String statusCode, String statusText) {
         statusLine = ResponseStatusLine.of(httpRequest, statusCode, statusText);
     }
 
-    public void send(DataOutputStream dos) throws IOException {
+    public boolean addHeader(String key, String value) {
+        return header.addAttribute(key, value);
+    }
+
+    public void render(DataOutputStream dos) throws IOException {
+        renderStatusLine(dos);
+        renderHeader(dos);
+        renderBody(dos);
+    }
+
+    private void renderStatusLine(DataOutputStream dos) throws IOException {
         dos.writeBytes(statusLine.response());
-        dos.writeBytes(header.response("Content-Type"));
-        dos.writeBytes("Content-Length: " + body.getLengthOfContent() + "\r\n");
+    }
+
+    private void renderHeader(DataOutputStream dos) throws IOException {
+        Map<String, String> attributes = header.getAttributes();
+        for (String attributeName : attributes.keySet()) {
+            dos.writeBytes(attributeName + ": " + attributes.get(attributeName) + "\r\n");
+        }
+    }
+
+    private void renderBody(DataOutputStream dos) throws IOException {
+        if (body.isEmpty()) {
+            return;
+        }
+
         dos.writeBytes("\r\n");
         try {
             dos.write(body.getContent(), 0, body.getLengthOfContent());
