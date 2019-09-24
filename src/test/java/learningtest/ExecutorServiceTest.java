@@ -34,7 +34,7 @@ public class ExecutorServiceTest {
             });
         }
 
-        executor.awaitTermination(10, TimeUnit.MINUTES);
+        executor.awaitTermination(10, TimeUnit.SECONDS);
     }
 
     @Test
