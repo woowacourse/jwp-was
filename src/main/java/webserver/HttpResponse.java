@@ -12,6 +12,7 @@ public class HttpResponse {
 
     private Map<String, String> header = new HashMap<>();
     private HttpStatus httpStatus;
+    private ResponseBody body;
 
     public void setHttpStatus(HttpStatus httpStatus) {
         this.httpStatus = httpStatus;
@@ -47,5 +48,23 @@ public class HttpResponse {
 
     public void setCookie(String cookie) {
         header.put("Set-Cookie", cookie);
+    }
+
+    public void addModel(String key, Object data) {
+        body = new ResponseBody(key, data);
+    }
+
+    public String getBodyKey() {
+        if (body == null) {
+            return "";
+        }
+        return body.getKey();
+    }
+
+    public Object getBodyValue() {
+        if (body == null) {
+            return "";
+        }
+        return body.getValue();
     }
 }
