@@ -1,7 +1,5 @@
 package webserver.request;
 
-import utils.HttpRequestUtils;
-
 public class HttpRequest {
     private RequestLine requestLine;
     private RequestHeader header;
@@ -17,11 +15,8 @@ public class HttpRequest {
         return requestLine.getAbsPath();
     }
 
-    public String getFilePath() {
-        if (header.getHeader("Accept").contains("text/html")) {
-            return HttpRequestUtils.generateTemplateFilePath(requestLine.getAbsPath());
-        }
-        return HttpRequestUtils.generateStaticFilePath(requestLine.getAbsPath());
+    public boolean isAcceptContainsHtml() {
+        return header.getHeader("Accept").contains("text/html");
     }
 
     public String getParam(String key) {

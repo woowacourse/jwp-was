@@ -20,13 +20,6 @@ class HttpRequestTest {
     final String INDEX_URL = "/index.html";
 
     @Test
-    void getPath_indexUrl_true() throws IOException {
-        InputStream inputStream = new FileInputStream(new File(testDirectory + "request_index_test.txt"));
-        HttpRequest request = HttpRequestParser.parse(new BufferedReader(new InputStreamReader(inputStream)));
-        assertThat(request.getFilePath()).isEqualTo(HttpRequestUtils.ROOT_TEMPLATE_FILE_PATH + INDEX_URL);
-    }
-
-    @Test
     void getParameter_userInfo_true() throws IOException {
         InputStream inputStream = new FileInputStream(new File(testDirectory + "request_form_param_test.txt"));
         HttpRequest request = HttpRequestParser.parse(new BufferedReader(new InputStreamReader(inputStream)));

@@ -1,6 +1,7 @@
 package webserver.servlet;
 
 import utils.FileIoUtils;
+import utils.HttpRequestUtils;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 import webserver.response.HttpStatus;
@@ -25,10 +26,18 @@ public class FileServlet implements HttpServlet {
 
     @Override
     public HttpResponse run(HttpRequest httpRequest) throws IOException, URISyntaxException {
-        byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getFilePath());
+        String filePath = generateFilePath(httpRequest);
+        byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
         Map<String, Object> header = new HashMap<>();
         header.put("Content-Length", body.length);
-        header.put("Content-Type", FileIoUtils.loadMIMEFromClasspath(httpRequest.getFilePath()));
+        header.put("Content-Type", FileIoUtils.loadMIMEFromClasspath(filePath));
         return new HttpResponse(HttpStatus.OK, header, body);
+    }
+
+    private String generateFilePath(HttpRequest httpRequest) {
+        if (httpRequest.isAcceptContainsHtml()) {
+            return HttpRequestUtils.generateTemplateFilePath(httpRequest.getAbsPath());
+        }
+        return HttpRequestUtils.generateStaticFilePath(httpRequest.getAbsPath());
     }
 }
