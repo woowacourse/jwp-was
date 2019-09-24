@@ -22,10 +22,11 @@ public class RequestParser {
         HttpRequestHeader httpRequestHeader = readHeaders(bufferedReader);
 
         HttpRequestBody httpRequestBody = new HttpRequestBody(new byte[0]);
+        QueryParameter queryParameter = QueryParameter.empty();
         if (httpRequestHeader.getContentLength() != 0) {
             httpRequestBody = readBody(bufferedReader, httpRequestHeader.getContentLength());
+            queryParameter = QueryParameter.of(new String(httpRequestBody.getBody()));
         }
-        QueryParameter queryParameter = QueryParameter.of(new String(httpRequestBody.getBody()));
         return new HttpRequest(httpRequestLine, httpRequestHeader, queryParameter, httpRequestBody);
     }
 
