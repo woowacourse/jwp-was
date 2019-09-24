@@ -8,12 +8,12 @@ public class HttpSession {
 
     private final String id;
     private final Map<String, Object> attributes;
-    private boolean validity;
+    private boolean isValid;
 
     private HttpSession(String id, Map<String, Object> attributes) {
         this.id = id;
         this.attributes = attributes;
-        validity = true;
+        isValid = true;
     }
 
     public static HttpSession create() {
@@ -30,7 +30,7 @@ public class HttpSession {
 
     public void invalidate() {
         attributes.clear();
-        validity = false;
+        isValid = false;
     }
 
     public String getId() {
@@ -42,6 +42,6 @@ public class HttpSession {
     }
 
     public boolean isValid() {
-        return validity;
+        return isValid;
     }
 }

@@ -3,6 +3,7 @@ package controller;
 import db.DataBase;
 import model.User;
 import utils.UrlEncodedParser;
+import webserver.CookieLoginStatus;
 import webserver.Request;
 import webserver.Response;
 
@@ -31,11 +32,11 @@ public class LoginController extends AbstractController {
         User user = DataBase.findUserById(parsedBody.get(USER_ID));
 
         String redirectUrl = "/user/login_failed.html";
-        String loginedCookie = "false";
+        String loginedCookie = CookieLoginStatus.False.getText();
 
         if (verify(user, parsedBody.get(PASSWORD))) {
             redirectUrl = "/index.html";
-            loginedCookie = "true";
+            loginedCookie = CookieLoginStatus.TRUE.getText();
         }
 
         return Response.ResponseBuilder.redirect(redirectUrl)

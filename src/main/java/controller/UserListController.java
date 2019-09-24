@@ -2,6 +2,7 @@ package controller;
 
 import db.DataBase;
 import model.User;
+import webserver.CookieLoginStatus;
 import webserver.Request;
 import webserver.Response;
 
@@ -16,7 +17,7 @@ public class UserListController extends AbstractController {
 
     @Override
     public Response doGet(Request request) {
-        if ("true".equals(request.getCookie(LOGINED_COOKIE_KEY))) {
+        if (CookieLoginStatus.match(CookieLoginStatus.TRUE, request.getCookie(LOGINED_COOKIE_KEY))) {
             Map<String, Collection<User>> params = new HashMap<>();
             params.put("users", DataBase.findAll());
             return Response.ResponseBuilder.forward("/user/list", params)
