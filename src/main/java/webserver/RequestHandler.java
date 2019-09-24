@@ -1,11 +1,12 @@
 package webserver;
 
+import controller.Controller;
+import controller.UserController;
 import http.request.HttpRequest;
 import http.request.HttpRequestCreator;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.FileIoUtils;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -13,12 +14,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.List;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private final UserController userController = UserController.getInstance();
+    private final ResourceHttpRequestHandler resourceHttpRequestHandler = ResourceHttpRequestHandler.getInstance();
+    private final HandlerMapping handlerMapping = HandlerMapping.getInstance();
     private Socket connection;
 
     public RequestHandler(Socket connectionSocket) {
@@ -30,38 +31,24 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream inputStream = connection.getInputStream(); OutputStream outputStream = connection.getOutputStream()) {
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             HttpRequest httpRequest = HttpRequestCreator.create(inputStream);
-            sendResponse(outputStream, getHttpResponse(httpRequest));
+            HttpResponse httpResponse = new HttpResponse();
 
+            handleRequest(httpRequest, httpResponse);
+            sendResponse(outputStream, httpResponse);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private HttpResponse getHttpResponse(HttpRequest httpRequest) throws IOException, URISyntaxException {
-        List<String> resources = Arrays.asList("/index.html", "/user/create", "/user/form.html");
-        String path = httpRequest.getPath();
-        if (resources.contains(path)) {
-            String result = "";
-            if ("/user/create".equals(path)) {
-                result = userController.create(httpRequest.getRequestParameter());
-            }
-
-            if (result.startsWith("redirect: ")) {
-                String location = result.substring(result.indexOf(" ") + 1);
-                return HttpResponse.found(location);
-            }
-
-            return create200Response("./templates/" + path);
+    private void handleRequest(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+        if (resourceHttpRequestHandler.canHandle(httpRequest)) {
+            resourceHttpRequestHandler.handleHttpRequest(httpRequest, httpResponse);
+            return;
         }
-        return create200Response("./static/" + path);
-    }
 
-    private HttpResponse create200Response(String path) throws IOException, URISyntaxException {
-        byte[] body = FileIoUtils.loadFileFromClasspath(path);
-        String[] extension = path.split("[.]");
-        return HttpResponse.ok(body, extension[extension.length - 1]);
+        Controller controller = handlerMapping.getHandler(httpRequest.getPath());
+        controller.service(httpRequest, httpResponse);
     }
 
     private void sendResponse(OutputStream out, HttpResponse httpResponse) {
