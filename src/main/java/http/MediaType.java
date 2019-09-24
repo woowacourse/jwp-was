@@ -6,7 +6,9 @@ public enum MediaType {
     HTML("html", "templates", "text/html"),
     CSS("css", "static", "text/css"),
     JS("js", "static", "application/js"),
-    ICO("ico", "static", "image/x-icon");
+    ICO("ico", "static", "image/x-icon"),
+    WOFF("woff", "static", "application/x-font-woff"),
+    TTF("ttf", "static", "application/x-font-ttf");
 
     private String extension;
     private String path;
