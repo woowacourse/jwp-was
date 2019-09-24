@@ -1,6 +1,7 @@
 package webserver.http.request;
 
 import org.junit.jupiter.api.Test;
+import webserver.http.HttpHeaders;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -30,9 +31,9 @@ public class HttpRequestFactoryTest {
         assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.POST);
         assertThat(httpRequest.getPath()).isEqualTo("/user/create");
         assertThat(httpRequest.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
-        assertThat(httpRequest.getHeader("Host")).isEqualTo("localhost:8080");
-        assertThat(httpRequest.getHeader("Connection")).isEqualTo("keep-alive");
-        assertThat(httpRequest.getHeader("Accept")).isEqualTo("*/*");
+        assertThat(httpRequest.getHeader(HttpHeaders.HOST)).isEqualTo("localhost:8080");
+        assertThat(httpRequest.getHeader(HttpHeaders.CONNECTION)).isEqualTo("keep-alive");
+        assertThat(httpRequest.getHeader(HttpHeaders.ACCEPT)).isEqualTo("*/*");
         assertThat(httpRequest.getParameter("id")).isEqualTo("1");
         assertThat(httpRequest.getParameter("userId")).isEqualTo("javajigi");
         assertThat(httpRequest.getParameter("password")).isEqualTo("password");
@@ -58,9 +59,9 @@ public class HttpRequestFactoryTest {
         assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.GET);
         assertThat(httpRequest.getPath()).isEqualTo("/user/create");
         assertThat(httpRequest.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
-        assertThat(httpRequest.getHeader("Host")).isEqualTo("localhost:8080");
-        assertThat(httpRequest.getHeader("Connection")).isEqualTo("keep-alive");
-        assertThat(httpRequest.getHeader("Accept")).isEqualTo("*/*");
+        assertThat(httpRequest.getHeader(HttpHeaders.HOST)).isEqualTo("localhost:8080");
+        assertThat(httpRequest.getHeader(HttpHeaders.CONNECTION)).isEqualTo("keep-alive");
+        assertThat(httpRequest.getHeader(HttpHeaders.ACCEPT)).isEqualTo("*/*");
         assertThat(httpRequest.getParameter("id")).isEqualTo("1");
         assertThat(httpRequest.sizeOfParameters()).isEqualTo(1);
     }

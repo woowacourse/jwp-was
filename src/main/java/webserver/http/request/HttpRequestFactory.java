@@ -3,6 +3,7 @@ package webserver.http.request;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.http.Cookie;
 import webserver.http.HttpHeaders;
 import webserver.http.utils.HttpUtils;
 import webserver.http.utils.IOUtils;
@@ -27,21 +28,22 @@ public class HttpRequestFactory {
             final BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
             final RequestLine requestLine = new RequestLine(br.readLine());
-            final Parameters parameters = readParameters(requestLine.getParameters());
+            final Parameters parameters = new Parameters(requestLine.getParameters());
             final RequestHeaders requestHeaders = readHeaders(br);
+            final Cookie cookie = new Cookie(requestHeaders.get(HttpHeaders.COOKIE));
+
             readBody(br, parameters, requestHeaders);
 
-            return HttpRequest.of(requestLine, requestHeaders, parameters);
+            return HttpRequest.builder()
+                    .requestLine(requestLine)
+                    .headers(requestHeaders)
+                    .parameters(parameters)
+                    .cookie(cookie)
+                    .build();
         } catch (IOException e) {
             log.error(e.getMessage());
             throw new IllegalArgumentException(e.getMessage());
         }
-    }
-
-    private static Parameters readParameters(final String parameters) {
-        final Parameters parameter = new Parameters();
-        parameter.addAll(HttpUtils.parseQueryString(parameters));
-        return parameter;
     }
 
     private static RequestHeaders readHeaders(final BufferedReader br) throws IOException {
@@ -57,7 +59,7 @@ public class HttpRequestFactory {
 
     private static void readBody(final BufferedReader br, final Parameters parameters, final RequestHeaders requestHeaders) throws IOException {
         if (requestHeaders.contains(HttpHeaders.CONTENT_LENGTH)) {
-            final String contentLength = requestHeaders.getHeader(HttpHeaders.CONTENT_LENGTH);
+            final String contentLength = requestHeaders.get(HttpHeaders.CONTENT_LENGTH);
             final String params = IOUtils.readData(br, Integer.parseInt(contentLength));
             parameters.addAll(HttpUtils.parseQueryString(params));
         }

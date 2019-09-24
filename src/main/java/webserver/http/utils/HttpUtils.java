@@ -8,7 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -18,13 +18,15 @@ public class HttpUtils {
     private static final String DELIMITER_QUERY = "&";
     private static final String DELIMITER_QUERY_PAIR = "=";
     private static final String DELIMITER_HEADER = ": ";
+    private static final String DELIMITER_COOKIE = "; ";
+    private static final String DELIMITER_COOKIE_PAIR = "=";
 
     private HttpUtils() {
     }
 
     public static Map<String, String> parseQueryString(final String queryParamsText) {
         if (StringUtils.isEmpty(queryParamsText)) {
-            return Collections.EMPTY_MAP;
+            return new HashMap<>();
         }
 
         try {
@@ -40,6 +42,16 @@ public class HttpUtils {
 
     public static Pair parseHeader(final String header) {
         return parseKeyValue(header, DELIMITER_HEADER);
+    }
+
+    public static Map<String, String> parseCookie(final String cookieText) {
+        if (StringUtils.isEmpty(cookieText)) {
+            return new HashMap<>();
+        }
+
+        return Arrays.stream(cookieText.split(DELIMITER_COOKIE))
+                .map(cookie -> parseKeyValue(cookie, DELIMITER_COOKIE_PAIR))
+                .collect(Collectors.toMap(Pair::getKey, Pair::getValue));
     }
 
     private static Pair parseKeyValue(final String text, final String delimiter) {

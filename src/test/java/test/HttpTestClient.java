@@ -3,6 +3,8 @@ package test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.WebServer;
+import webserver.http.Cookie;
+import webserver.http.HttpHeaders;
 import webserver.http.HttpStatus;
 import webserver.http.request.HttpMethod;
 import webserver.http.request.HttpVersion;
@@ -23,7 +25,7 @@ import static webserver.http.response.HttpResponse.DEFAULT_HTTP_VERSION;
 
 public class HttpTestClient {
     private static final Logger log = LoggerFactory.getLogger(HttpTestClient.class);
-
+    public static final int DEFAULT_PORT = WebServer.DEFAULT_PORT;
     private static final String LOCALHOST = "localhost";
 
     private final BufferedReader in;
@@ -110,6 +112,10 @@ public class HttpTestClient {
         public ResponseSpec exchange() {
             StringBuilder sb = new StringBuilder();
             sb.append(String.format("%s %s %s\n", method, uri, protocolVersion));
+
+            if (StringUtils.isNotEmpty(body)) {
+                headers.put(HttpHeaders.CONTENT_LENGTH, String.valueOf(body.length()));
+            }
             for (final String key : headers.keySet()) {
                 sb.append(String.format("%s: %s\n", key, headers.get(key)));
             }
@@ -122,26 +128,38 @@ public class HttpTestClient {
         }
     }
 
-    // TODO 리팩토링 많이 필요!
+    // TODO 리팩토링 많이 필요!`
     public class ResponseSpec {
         private final HttpVersion httpVersion;
         private final HttpStatus httpStatus;
         private final Map<String, String> headers = new HashMap<>();
         private final String body;
+        private final Cookie cookie;
 
         public ResponseSpec(final String response) {
             final String[] split = response.split("\n");
 
+            // response line
             final String[] responseLine = split[0].split(" ");
             this.httpVersion = HttpVersion.of(responseLine[0]);
             this.httpStatus = HttpStatus.from(responseLine[1]);
 
+            // header
             int i = 1;
-            for (String line = split[i]; StringUtils.isNotEmpty(line) && i < split.length; line = split[i++]) {
+            String line;
+            while (StringUtils.isNotEmpty(line = split[i++])) {
                 final Pair pair = HttpUtils.parseHeader(line);
                 headers.put(pair.getKey(), pair.getValue());
+                if (i >= split.length) {
+                    break;
+                }
             }
 
+            // cookie
+            cookie = new Cookie(headers.get(HttpHeaders.COOKIE));
+
+
+            // body
             final StringBuilder sb = new StringBuilder();
             while (i < split.length) {
                 sb.append(split[i]);
@@ -168,6 +186,11 @@ public class HttpTestClient {
 
         public ResponseSpec containsBody(final String body) {
             assertThat(this.body.contains(body)).isTrue();
+            return this;
+        }
+
+        public ResponseSpec matchCookie(final String key, final String value) {
+            assertThat(cookie.get(key)).isEqualTo(value);
             return this;
         }
     }

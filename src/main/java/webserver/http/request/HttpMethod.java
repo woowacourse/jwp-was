@@ -24,4 +24,5 @@ public enum HttpMethod {
     public static HttpMethod of(final String httpMethod) {
         return mappings.get(httpMethod.toUpperCase());
     }
+
 }

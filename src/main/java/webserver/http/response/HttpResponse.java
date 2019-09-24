@@ -2,6 +2,8 @@ package webserver.http.response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.http.Cookie;
+import webserver.http.HttpHeaders;
 import webserver.http.HttpStatus;
 import webserver.http.MimeType;
 import webserver.http.request.HttpVersion;
@@ -11,25 +13,28 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static webserver.http.HttpHeaders.*;
 
 public class HttpResponse {
     private static final Logger log = LoggerFactory.getLogger(HttpResponse.class);
-    public static final HttpVersion DEFAULT_HTTP_VERSION = HttpVersion.of("HTTP/1.1");
+    public static final HttpVersion DEFAULT_HTTP_VERSION = HttpVersion.HTTP_1_1;
     private static final String DEFAULT_ERROR_MESSAGE = "";
 
     private final Map<String, String> headers = new HashMap<>();
     private final OutputStream out;
+    private final Cookie cookie;
     private HttpStatus httpStatus;
-    private HttpVersion httpVersion;
+    private HttpVersion httpVersion = DEFAULT_HTTP_VERSION;
     private byte[] body;
 
     public HttpResponse(final OutputStream out) {
         this.out = out;
-        this.httpVersion = DEFAULT_HTTP_VERSION;
+        this.cookie = new Cookie();
     }
 
     public void forward(final String resource) {
@@ -49,6 +54,7 @@ public class HttpResponse {
         }
     }
 
+    // todo HttpUtils 로 빼기
     private String parseExtension(final String resource) {
         int beginIndex = resource.lastIndexOf(".") + 1;
         return resource.substring(beginIndex);
@@ -78,6 +84,7 @@ public class HttpResponse {
     private void write() {
         try (DataOutputStream dos = new DataOutputStream(out)) {
             writeStartLine(dos);
+            writeCookie(dos);
             writeHeader(dos);
             writeBody(dos);
         } catch (IOException e) {
@@ -96,6 +103,19 @@ public class HttpResponse {
         dos.writeBytes("\n");
     }
 
+    // todo 이렇게 하는게 맞을까? header에 넣을까? 리팩토링
+    private void writeCookie(final DataOutputStream dos) throws IOException {
+        if (cookie.isEmpty()) {
+            return;
+        }
+        List<String> list = new ArrayList<>();
+        for (final String key : cookie.keySet()) {
+            list.add(String.format("%s=%s", key, cookie.get(key)));
+        }
+        final String cookies = String.join("; ", list);
+        dos.writeBytes(String.format("%s: %s\n", HttpHeaders.COOKIE, cookies));
+    }
+
     private void writeBody(final DataOutputStream dos) throws IOException {
         if (body != null) {
             dos.write(body, 0, body.length);
@@ -108,6 +128,10 @@ public class HttpResponse {
 
     public void setHeader(final String name, final String value) {
         headers.put(name, value);
+    }
+
+    public void setCookie(final String key, final Object value) {
+        cookie.put(key, String.valueOf(value));
     }
 
     public void setBody(byte[] body) {

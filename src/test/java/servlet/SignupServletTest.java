@@ -2,12 +2,11 @@ package servlet;
 
 import org.junit.jupiter.api.Test;
 import test.HttpTestClient;
-import webserver.WebServer;
 import webserver.http.HttpHeaders;
 import webserver.http.HttpStatus;
 
 class SignupServletTest {
-    private HttpTestClient httpTestClient = new HttpTestClient(WebServer.DEFAULT_PORT);
+    private HttpTestClient httpTestClient = new HttpTestClient(HttpTestClient.DEFAULT_PORT);
 
     @Test
     void get() {

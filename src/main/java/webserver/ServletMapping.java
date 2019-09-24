@@ -1,6 +1,7 @@
 package webserver;
 
 import servlet.IndexServlet;
+import servlet.LoginServlet;
 import servlet.SignupServlet;
 import webserver.http.servlet.Servlet;
 
@@ -15,6 +16,7 @@ public class ServletMapping {
 
         servlets.put("/", new IndexServlet());
         servlets.put("/user/create", new SignupServlet());
+        servlets.put("/user/login", new LoginServlet());
     }
 
     Servlet getServlet(String path) {

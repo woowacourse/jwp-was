@@ -14,11 +14,11 @@ public class RequestHeaders {
         this.headers = headers;
     }
 
-    void addHeader(final String name, final String value) {
+    void put(final String name, final String value) {
         headers.put(name, value);
     }
 
-    String getHeader(final String name) {
+    String get(final String name) {
         return headers.get(name);
     }
 

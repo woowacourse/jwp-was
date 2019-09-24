@@ -1,12 +1,14 @@
 package webserver.http.request;
 
-import java.util.HashMap;
+import webserver.http.utils.HttpUtils;
+
 import java.util.Map;
 
 public class Parameters {
-    private final Map<String, String> parameters = new HashMap<>();
+    private final Map<String, String> parameters;
 
-    Parameters() {
+    Parameters(final String parameters) {
+        this.parameters = HttpUtils.parseQueryString(parameters);
     }
 
     void add(final String key, final String value) {
