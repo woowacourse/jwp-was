@@ -2,6 +2,7 @@ package webserver;
 
 import webserver.controller.LoginController;
 import webserver.controller.UserCreateController;
+import webserver.controller.UserListController;
 import webserver.controller.WelcomePageController;
 import webserver.exception.NotSupportedHttpMethodException;
 
@@ -15,6 +16,7 @@ public class UrlMapper {
         map.put(UserCreateController.PATH, UserCreateController.getInstance());
         map.put(WelcomePageController.PATH, WelcomePageController.getInstance());
         map.put(LoginController.PATH, LoginController.getInstance());
+        map.put(UserListController.PATH, UserListController.getInstance());
     }
 
     public String service(HttpRequest request, HttpResponse response) {
