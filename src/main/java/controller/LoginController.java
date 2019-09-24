@@ -36,6 +36,11 @@ public class LoginController implements Controller {
         return USER_LOGIN_URL;
     }
 
+    @Override
+    public boolean isMapping(Request request) {
+        return methods.containsKey(request.getMethod());
+    }
+
     private enum HandleHttpMethod {
         POST {
             Response method(Request request) {

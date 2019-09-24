@@ -31,6 +31,11 @@ public class SignUpController implements Controller {
         return USER_CREATE_URL;
     }
 
+    @Override
+    public boolean isMapping(Request request) {
+        return methods.containsKey(request.getMethod());
+    }
+
     private enum HandleHttpMethod {
         POST {
             Response method(Request request) {

@@ -8,4 +8,6 @@ public interface Controller {
     Response service(Request request);
 
     String getPath();
+
+    boolean isMapping(Request request);
 }

@@ -44,7 +44,7 @@ public class RequestDispatcher {
             }
 
             Controller toServe = controllers.get(path);
-            if (toServe != null) {
+            if (toServe != null && toServe.isMapping(request)) {
                 return toServe.service(request);
             }
         } catch (Exception e) {

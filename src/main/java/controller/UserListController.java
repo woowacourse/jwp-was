@@ -33,6 +33,11 @@ public class UserListController implements Controller {
         return USER_LIST_URL;
     }
 
+    @Override
+    public boolean isMapping(Request request) {
+        return methods.containsKey(request.getMethod());
+    }
+
     private enum HandleHttpMethod {
         GET {
             Response method(Request request) {
