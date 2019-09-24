@@ -45,6 +45,7 @@ public class HttpParser {
     }
 
     private static void putParametersIfPresent(BufferedReader br, Map<String, String> requestInformation) throws IOException {
+
         parsers.stream()
                 .filter(parser -> parser.isParseable(requestInformation))
                 .forEach(parser -> {
@@ -54,30 +55,6 @@ public class HttpParser {
                         log.error(e.getMessage());
                     }
                 });
-//        String requestLine = requestInformation.get("Request-Line:");
-//        String[] tokens = requestLine.split(" ");
-//        String path = tokens[1];
-//        String queryParameters = requestInformation.get("Query-Parameters:");
-//        String contentLength = requestInformation.get("Content-Length:");
-//
-//        excuteParameters(path, queryParameters, contentLength);
-//        if (path.contains("//?")) {
-//            tokens = path.split("//?");
-//            String query = tokens[1];
-//            requestInformation.put("Query-Parameters:", query);
-//        }
-////
-//        if (search(requestInformation, "Content-Length:") && requestInformation.get("Query-Parameters:") != null) {
-//            String bodyContents = IOUtils.readData(br, Integer.parseInt(requestInformation.get("Content-Length:")));
-//            String queryParameters = requestInformation.get("Query-Parameters:");
-//            String newQueryParameters = bodyContents + queryParameters;
-//            requestInformation.put("Query-Parameters:", newQueryParameters);
-//        }
-//
-//        if (search(requestInformation, "Content-Length:") && requestInformation.get("Query-Parameters:") == null) {
-//            String bodyContents = IOUtils.readData(br, Integer.parseInt(requestInformation.get("Content-Length:")));
-//            requestInformation.put("Query-Parameters:", bodyContents);
-////        }
     }
 
     private static boolean search(Map<String, String> requestLines, String key) {
