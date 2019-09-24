@@ -11,15 +11,17 @@ import java.io.InputStreamReader;
 public class HttpRequestCreator {
     private static final String BLANK = "";
     private static final String CONTENT_LENGTH = "Content-Length";
+    private static final String CONTENT_TYPE = "Content-Type";
 
     public static HttpRequest create(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         RequestLine requestLine = new RequestLine(bufferedReader.readLine());
         HttpHeader httpHeader = new HttpHeader(IOUtils.readBeforeBlankLine(bufferedReader));
-
         String body = extractBody(bufferedReader, requestLine.getMethod(), httpHeader);
 
-        return new HttpRequest(requestLine, httpHeader, body);
+        RequestBody requestBody = new RequestBody(body, httpHeader.get(CONTENT_TYPE));
+
+        return new HttpRequest(requestLine, httpHeader, requestBody);
     }
 
     private static String extractBody(BufferedReader bufferedReader, RequestMethod requestMethod, HttpHeader httpHeader) throws IOException {

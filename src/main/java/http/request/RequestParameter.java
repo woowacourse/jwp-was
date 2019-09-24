@@ -1,6 +1,5 @@
 package http.request;
 
-import http.request.exception.InvalidQueryStringException;
 import http.request.exception.ParameterNotFoundException;
 import utils.StringUtils;
 
@@ -13,6 +12,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class RequestParameter {
+    public static final RequestParameter EMPTY = new RequestParameter("");
     private static final String REQUEST_PARAMETER_DELIMITER = "&";
     private static final String KEY_VALUE_DELIMITER = "=";
     private static final int REQUEST_PARAMETER_KEY_INDEX = 0;
@@ -21,13 +21,8 @@ public class RequestParameter {
     private final Map<String, String> requestParameters = new HashMap<>();
 
     public RequestParameter(String queryString) {
-        checkValidQueryString(queryString);
-        parse(queryString);
-    }
-
-    private void checkValidQueryString(String queryString) {
-        if (queryString == null) {
-            throw new InvalidQueryStringException();
+        if (StringUtils.isNotEmpty(queryString)) {
+            parse(queryString);
         }
     }
 

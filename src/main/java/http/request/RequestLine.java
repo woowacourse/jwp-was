@@ -14,12 +14,14 @@ public class RequestLine {
     private final RequestMethod method;
     private final URL url;
     private final HttpVersion version;
+    private final RequestParameter queryParams;
 
     public RequestLine(String requestLine) {
         String[] requestLineFields = splitRequestLine(requestLine);
-        method = RequestMethod.of(requestLineFields[REQUEST_METHOD_INDEX]);
-        url = URL.of(requestLineFields[URL_INDEX]);
-        version = HttpVersion.of(requestLineFields[HTTP_VERSION_INDEX]);
+        this.method = RequestMethod.of(requestLineFields[REQUEST_METHOD_INDEX]);
+        this.url = URL.of(requestLineFields[URL_INDEX]);
+        this.version = HttpVersion.of(requestLineFields[HTTP_VERSION_INDEX]);
+        this.queryParams = new RequestParameter(url.getQueryString());
     }
 
     private String[] splitRequestLine(String requestLine) {
@@ -34,6 +36,10 @@ public class RequestLine {
 
     private boolean isValidRequestLine(String[] requestLineFields) {
         return requestLineFields == null || requestLineFields.length != REQUEST_LINE_SIZE;
+    }
+
+    public String getQueryParameter(String key) {
+        return queryParams.getParameter(key);
     }
 
     public RequestMethod getMethod() {
