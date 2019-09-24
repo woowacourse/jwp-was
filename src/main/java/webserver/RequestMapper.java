@@ -1,9 +1,6 @@
 package webserver;
 
-import http.controller.Controller;
-import http.controller.UserCreateController;
-import http.controller.ResourcesController;
-import http.controller.UserLoginController;
+import http.controller.*;
 import org.apache.commons.collections4.map.HashedMap;
 
 import java.util.Map;
@@ -14,6 +11,7 @@ public class RequestMapper {
     static {
         controllers.put("/user/create", new UserCreateController());
         controllers.put("/user/login", new UserLoginController());
+        controllers.put("/user/list", new UserListController());
     }
 
     public static Controller mappingController(String path) {

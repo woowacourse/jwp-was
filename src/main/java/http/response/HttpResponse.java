@@ -41,6 +41,14 @@ public class HttpResponse {
         }
     }
 
+    public void forward(byte[] body) {
+        status = HttpStatus.OK;
+        this.body = body;
+
+        headerFields.addHeader("Content-Type", "text/html;charset=utf-8");
+        headerFields.addHeader("Content-Length", String.valueOf(body.length));
+    }
+
     public void sendRedirect(String location) {
         status = HttpStatus.FOUND;
         headerFields.addHeader("Location", location);
