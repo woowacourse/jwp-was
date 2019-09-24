@@ -8,6 +8,7 @@ import webserver.http.HttpStatus;
 import webserver.http.MimeType;
 import webserver.http.request.HttpVersion;
 import webserver.http.utils.FileIoUtils;
+import webserver.http.utils.HttpUtils;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -45,19 +46,13 @@ public class HttpResponse {
         try {
             byte[] body = FileIoUtils.loadFileFromClasspath(resource);
             setStatus(httpStatus);
-            setHeader(CONTENT_TYPE, MimeType.getType(parseExtension(resource)));
+            setHeader(CONTENT_TYPE, MimeType.getType(HttpUtils.parseExtension(resource)));
             setHeader(CONTENT_LENGTH, String.valueOf(body.length));
             setBody(body);
             write();
         } catch (IOException | URISyntaxException e) {
             log.error(e.getMessage());
         }
-    }
-
-    // todo HttpUtils 로 빼기
-    private String parseExtension(final String resource) {
-        int beginIndex = resource.lastIndexOf(".") + 1;
-        return resource.substring(beginIndex);
     }
 
     public void sendRedirect(final String location) {

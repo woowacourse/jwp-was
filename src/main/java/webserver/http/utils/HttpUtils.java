@@ -20,6 +20,8 @@ public class HttpUtils {
     private static final String DELIMITER_HEADER = ": ";
     private static final String DELIMITER_COOKIE = "; ";
     private static final String DELIMITER_COOKIE_PAIR = "=";
+    private static final String DELIMITER_EXTENSION = ".";
+    private static final int NOT_EXISTS_EXTENSION = 0;
 
     private HttpUtils() {
     }
@@ -52,6 +54,14 @@ public class HttpUtils {
         return Arrays.stream(cookieText.split(DELIMITER_COOKIE))
                 .map(cookie -> parseKeyValue(cookie, DELIMITER_COOKIE_PAIR))
                 .collect(Collectors.toMap(Pair::getKey, Pair::getValue));
+    }
+
+    public static String parseExtension(final String resource) {
+        int beginIndex = resource.lastIndexOf(DELIMITER_EXTENSION) + 1;
+        if(beginIndex <= NOT_EXISTS_EXTENSION){
+            throw new IllegalArgumentException("not exists extension");
+        }
+        return resource.substring(beginIndex);
     }
 
     private static Pair parseKeyValue(final String text, final String delimiter) {

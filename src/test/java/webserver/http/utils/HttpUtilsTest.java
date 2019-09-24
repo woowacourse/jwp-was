@@ -79,4 +79,19 @@ class HttpUtilsTest {
         // then
         assertThat(cookie).isEqualTo(Collections.EMPTY_MAP);
     }
+
+    @Test
+    void parseExtension_정상_작동() {
+        // when
+        final String extension = HttpUtils.parseExtension("test.css");
+
+        // given
+        assertThat(extension).isEqualTo("css");
+    }
+
+    @Test
+    void parseExtension_invalid_예외처리() {
+        // when
+        assertThrows(IllegalArgumentException.class, () -> HttpUtils.parseExtension("test|css"));
+    }
 }
