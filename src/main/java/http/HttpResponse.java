@@ -61,4 +61,16 @@ public class HttpResponse {
         sb.append(HTTP_NEW_LINE);
         return sb.toString();
     }
+
+    public HttpStatus getStatus() {
+        return status;
+    }
+
+    public String getHeader(String key) {
+        return header.getValue(key);
+    }
+
+    public byte[] getBody() {
+        return body;
+    }
 }

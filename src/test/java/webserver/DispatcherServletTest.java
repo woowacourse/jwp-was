@@ -1,52 +1,57 @@
 package webserver;
 
-import http.HttpMethod;
-import http.HttpRequest;
-import http.HttpResponse;
-import http.RequestParameter;
+import http.*;
 import org.junit.jupiter.api.Test;
-import webserver.exception.NotFoundResourceException;
+import utils.FileIoUtils;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static http.HttpHeader.CONTENT_TYPE;
+import static http.HttpRequestTest.POST_REQUEST;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class DispatcherServletTest {
     @Test
-    void static_파일_요청() {
+    void static_파일_요청() throws IOException, URISyntaxException {
+        String filePath = "/css/styles.css";
         HttpRequest request = new HttpRequest.HttpRequestBuilder()
-                .method(HttpMethod.GET)
-                .uri("/css/styles.css")
+                .startLine(new HttpStartLine(filePath, HttpMethod.GET))
                 .build();
         HttpResponse response = new HttpResponse();
-        assertDoesNotThrow(() -> DispatcherServlet.doDispatch(request, response));
+
+        DispatcherServlet.doDispatch(request, response);
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getHeader(CONTENT_TYPE)).isEqualTo(MimeType.of(filePath));
+        assertThat(response.getBody()).isEqualTo(FileIoUtils.loadFileFromClasspath("./static" + filePath));
     }
 
     @Test
     void 존재하지않는_static_파일_요청() {
         HttpRequest request = new HttpRequest.HttpRequestBuilder()
-                .method(HttpMethod.GET)
-                .uri("/css/styles.cs")
+                .startLine(new HttpStartLine("/css/styles.cs", HttpMethod.GET))
                 .build();
         HttpResponse response = new HttpResponse();
-        assertThrows(NotFoundResourceException.class, () -> DispatcherServlet.doDispatch(request, response));
+
+        DispatcherServlet.doDispatch(request, response);
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
     @Test
-    void 일반_URL_요청() {
-        Map<String, String> userInfo = new HashMap<>();
-        userInfo.put("userId", "easy");
-        userInfo.put("name", "easy");
-        userInfo.put("password", "easyeasy");
-        userInfo.put("email", "easy@gmail.com");
-        HttpRequest request = new HttpRequest.HttpRequestBuilder()
-                .method(HttpMethod.GET)
-                .uri("/user/create")
-                .requestParameter(new RequestParameter(userInfo))
-                .build();
+    void 동적_URL_요청() throws UnsupportedEncodingException {
+        String uri = "/user/create";
+        List<String> postRequestLines = Arrays.asList(POST_REQUEST.split("\n"));
+        HttpRequest request = HttpRequestParser.parse(postRequestLines);
         HttpResponse response = new HttpResponse();
-        assertDoesNotThrow(() -> DispatcherServlet.doDispatch(request, response));
+
+        DispatcherServlet.doDispatch(request, response);
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
+        assertThat(response.getHeader("Location")).isEqualTo("/index.html");
     }
 }

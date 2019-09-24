@@ -4,15 +4,16 @@ import http.exception.NotFoundMethodException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class HttpRequestTest {
     private static final String GET_REQUEST =
-                    "GET /index.html HTTP/1.1\n" +
+            "GET /index.html HTTP/1.1\n" +
                     "Host: localhost:8080\n" +
                     "Connection: keep-alive\n" +
                     "Cache-Control: max-age=0\n" +
@@ -26,8 +27,8 @@ public class HttpRequestTest {
                     "Accept-Language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7\n" +
                     "Cookie: Idea-c5a8acf3=c2c6d2e2-54d7-47a9-8e2a-b0ff8e06a759; JSESSIONID=55F183C31FC99489F6D47D0794FD685F\n";
 
-    private static final String POST_REQUEST =
-                    "POST /user/create HTTP/1.1\n" +
+    public static final String POST_REQUEST =
+            "POST /user/create HTTP/1.1\n" +
                     "Host: localhost:8080\n" +
                     "Connection: keep-alive\n" +
                     "Content-Length: 61\n" +
@@ -51,15 +52,19 @@ public class HttpRequestTest {
     HttpRequest request;
 
     @BeforeEach
-    void setUp() {
-        request = HttpRequestParser.parse(new ByteArrayInputStream(GET_REQUEST.getBytes(UTF_8)));
+    void setUp() throws IOException {
+        List<String> requestLines = readStringLines(GET_REQUEST);
+        request = HttpRequestParser.parse(requestLines);
     }
 
     @Test
-    void 존재하지_않는_Method_생성_오류() {
+    void 존재하지_않는_Method_생성_오류() throws IOException {
         String undefinedHeader = "NONE /index.html HTTP/1.1";
+
+        List<String> requestLines = readStringLines(undefinedHeader);
+
         assertThrows(NotFoundMethodException.class,
-                () -> HttpRequestParser.parse(new ByteArrayInputStream(undefinedHeader.getBytes(UTF_8))));
+                () -> HttpRequestParser.parse(requestLines));
     }
 
     @Test
@@ -68,9 +73,12 @@ public class HttpRequestTest {
     }
 
     @Test
-    void 헤더_Request_Parameter_가져오기() {
+    void 헤더_Request_Parameter_가져오기() throws IOException {
         String request = "GET /index.html?a=b&c=d HTTP/1.1";
-        HttpRequest httpRequest = HttpRequestParser.parse(new ByteArrayInputStream(request.getBytes(UTF_8)));
+        List<String> requestLines = readStringLines(request);
+
+        HttpRequest httpRequest = HttpRequestParser.parse(requestLines);
+
         assertThat(httpRequest.getParameter("a")).isEqualTo("b");
         assertThat(httpRequest.getParameter("c")).isEqualTo("d");
     }
@@ -102,11 +110,18 @@ public class HttpRequestTest {
     }
 
     @Test
-    void POST_요청_body_가져오기() {
-        HttpRequest postRequest = HttpRequestParser.parse(new ByteArrayInputStream(POST_REQUEST.getBytes(UTF_8)));
+    void POST_요청_body_가져오기() throws IOException {
+        List<String> requestLines = readStringLines(POST_REQUEST);
+
+        HttpRequest postRequest = HttpRequestParser.parse(requestLines);
+
         assertThat(postRequest.getRequestBody("userId")).isEqualTo("park");
         assertThat(postRequest.getRequestBody("password")).isEqualTo("1234");
         assertThat(postRequest.getRequestBody("name")).isEqualTo("sungbum");
         assertThat(postRequest.getRequestBody("email")).isEqualTo("park@naver.com");
+    }
+
+    private List<String> readStringLines(String target) {
+        return Arrays.asList(target.split("\n"));
     }
 }
