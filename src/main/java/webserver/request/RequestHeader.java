@@ -34,8 +34,4 @@ public class RequestHeader {
         }
         return 0;
     }
-
-    public String getHost() {
-        return headerAttributes.get("Host");
-    }
 }

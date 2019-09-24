@@ -44,7 +44,7 @@ public class RequestHandler implements Runnable {
             HttpResponse httpResponse = new HttpResponse();
 
             urlMapper.get(httpRequest.getSource()).service(httpRequest, httpResponse);
-            httpResponse.send(dos);
+            httpResponse.render(dos);
 
         } catch (IOException e) {
             logger.error(e.getMessage());

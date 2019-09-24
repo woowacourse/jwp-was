@@ -20,7 +20,7 @@ public class UserController implements Controller {
         byte[] staticFile = getStaticFile(httpRequest);
 
         if (httpResponse.addBody(staticFile)) {
-            httpResponse.addHeader(httpRequest, "200", "OK");
+            httpResponse.addStatusLine(httpRequest, "200", "OK");
         }
     }
 
