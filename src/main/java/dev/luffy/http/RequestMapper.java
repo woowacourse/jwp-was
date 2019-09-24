@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ControllerMapper {
+public class RequestMapper {
 
     private static final Map<String, Method> map;
 
