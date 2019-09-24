@@ -17,9 +17,13 @@ public enum HttpVersion {
 
     public static HttpVersion of(final String name) {
         return Arrays.stream(HttpVersion.values())
-                .filter(version -> version.value.equals(name))
+                .filter(version -> version.match(name))
                 .findAny()
                 .orElseThrow(IllegalHttpVersionException::new);
+    }
+
+    private boolean match(final String value) {
+        return this.value.equals(value);
     }
 
     @Override
