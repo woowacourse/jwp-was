@@ -13,8 +13,6 @@ public enum ResponseContentType {
     IMAGES("/images", "Content-Type: image/jpeg\r\n"),
     UNDEFINED("undefined", "Content-Type: text/html;charset=utf-8\r\n");
 
-    private static final Logger log = LoggerFactory.getLogger(ResponseContentType.class);
-
     private String type;
     private String contentType;
 
@@ -32,7 +30,6 @@ public enum ResponseContentType {
     }
 
     public String getContentType() {
-        log.debug("ContentType : {}", contentType);
         return contentType;
     }
 }

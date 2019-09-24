@@ -3,28 +3,32 @@ package http.response.core;
 import java.util.Arrays;
 
 public enum ResponseStatus {
-    OK("OK", 200),
-    FOUND("Found", 302),
-    FORBIDDEN("Forbidden", 403),
-    NOT_FOUND("Not Found", 404),
-    INTERNAL_SERVER_ERROR("Internal Server Error", 500);
+    OK(200, "OK"),
+    FOUND(302, "Found"),
+    FORBIDDEN( 403, "Forbidden"),
+    NOT_FOUND(404, "Not Found"),
+    INTERNAL_SERVER_ERROR(500, "Internal Server Error");
 
-    private String httpStatus;
     private int httpStatusCode;
+    private String httpStatus;
 
-    ResponseStatus(String httpStatus, int httpStatusCode) {
-        this.httpStatus = httpStatus;
+    ResponseStatus(int httpStatusCode, String httpStatus) {
         this.httpStatusCode = httpStatusCode;
+        this.httpStatus = httpStatus;
     }
 
-    public static ResponseStatus of(String httpStatus) {
+    public static ResponseStatus of(int httpStatusCode) {
         return Arrays.stream(values())
-                .filter(value -> value.httpStatus.equals(httpStatus))
+                .filter(value -> value.httpStatusCode == httpStatusCode)
                 .findAny()
                 .orElseThrow(IllegalArgumentException::new);
     }
 
+    public int getHttpStatusCode() {
+        return httpStatusCode;
+    }
+
     public String getResponseStatusHeader() {
-        return httpStatusCode + httpStatus + " \r\n";
+        return httpStatusCode + " " + httpStatus + " \r\n";
     }
 }

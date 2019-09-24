@@ -1,11 +1,11 @@
 package http.response;
 
 import http.request.HttpRequest;
+import http.response.core.ResponseBody;
 import http.response.core.Response;
 import http.response.core.ResponseContentType;
 import http.response.core.ResponseStatus;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
@@ -17,16 +17,14 @@ public class DynamicResponse extends Response {
     }
 
     @Override
-    public void doResponse(DataOutputStream dos) throws IOException, URISyntaxException {
+    public ResponseBody doResponse() {
         if (httpRequest.getData().isEmpty()) {
-            ResponseStatus responseStatus = ResponseStatus.of("OK");
+            ResponseStatus responseStatus = ResponseStatus.of(200);
             ResponseContentType contentType = ResponseContentType.of(httpRequest.getRequestPath());
-            responseHeader(dos, responseStatus, contentType.getContentType());
-        } else {
-            ResponseStatus responseStatus = ResponseStatus.of("Found");
-            responseHeader(dos, responseStatus, REDIRECT_URL);
+            return new ResponseBody(httpRequest, responseStatus, contentType.getContentType());
         }
-
+        ResponseStatus responseStatus = ResponseStatus.of(302);
+        return new ResponseBody(httpRequest, responseStatus, REDIRECT_URL);
     }
 
 
