@@ -55,7 +55,7 @@
 피드백
 
 - [x] servlet 싱글톤 생성으로 변경
-- [ ] map에서 get() 대신 getOrDefault() 사용으로 변경
+- [x] map에서 get() 대신 getOrDefault() 사용으로 변경
 - [ ] ```header.getHeader("Accept").contains("text/html")``` 개선 -> header에 함수 추가
 - [ ] 파일 경로 붙여주는걸 HttpRequest에서 하지 말고 Servlet에서 하게 변경(```HttpRequestUtils.generateTemplateFilePath```)
 - [ ] RequestUri는 자바에서 제공하는 URI 클래스 사용해보기

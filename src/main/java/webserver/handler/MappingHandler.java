@@ -7,7 +7,6 @@ import webserver.servlet.UserCreateServlet;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public class MappingHandler {
     private static Map<String, Object> servlets = new HashMap<>();
@@ -18,7 +17,6 @@ public class MappingHandler {
     }
 
     public static HttpServlet getServlets(String absPath) {
-        Optional path = Optional.ofNullable(servlets.get(absPath));
-        return (HttpServlet) path.orElse(FileServlet.getInstance());
+        return (HttpServlet)servlets.getOrDefault(absPath, FileServlet.getInstance());
     }
 }
