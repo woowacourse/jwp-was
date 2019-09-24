@@ -11,6 +11,7 @@ public class HttpResponse {
     private HttpResponseBody httpResponseBody;
 
     public HttpResponse() {
+        this.httpResponseHeader = new HttpResponseHeader();
     }
 
     public HttpStatusLine getHttpStatusLine() {
@@ -27,7 +28,7 @@ public class HttpResponse {
 
     public void sendRedirect(String uri) {
         this.httpStatusLine = new HttpStatusLine("HTTP/1.1 302 FOUND \r\n");
-        this.httpResponseHeader = new HttpResponseHeader("Location: /" + uri + "\r\n");
+        httpResponseHeader.addHeader("Location", "/" + uri);
     }
 
     public void send200Ok(String uri) throws IOException, URISyntaxException {
@@ -35,8 +36,7 @@ public class HttpResponse {
 
         this.httpStatusLine = new HttpStatusLine("HTTP/1.1 200 OK \r\n");
         this.httpResponseBody = new HttpResponseBody(uri);
-        this.httpResponseHeader = new HttpResponseHeader(
-                "Content-Type: " + contentType + ";charset=utf-8\r\n"
-                        + "Content-Length: " + httpResponseBody.getBodyLength());
+        httpResponseHeader.addHeader("Content-Type", contentType + ";charset=utf-8");
+        httpResponseHeader.addHeader("Content-Length", String.valueOf(httpResponseBody.getBodyLength()));
     }
 }

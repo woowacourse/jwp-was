@@ -6,14 +6,12 @@ import java.util.Map;
 public class HttpResponseHeader {
     private Map<String, String> fields;
 
-    public HttpResponseHeader(final String headers) {
-        this.fields = new HashMap<>();
-        String[] field = headers.split("\n");
+    public HttpResponseHeader() {
+        fields = new HashMap<>();
+    }
 
-        for (String s : field) {
-            String[] keyValue = s.split(": ");
-            this.fields.put(keyValue[0], keyValue[1]);
-        }
+    public void addHeader(String key, String value) {
+        fields.put(key, value);
     }
 
     @Override

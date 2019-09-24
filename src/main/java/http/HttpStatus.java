@@ -21,10 +21,6 @@ public enum HttpStatus {
                 .orElseThrow(IllegalArgumentException::new);
     }
 
-    public String getReasonPhrase() {
-        return reasonPhrase;
-    }
-
     @Override
     public String toString() {
         return statusCode + " " + reasonPhrase;
