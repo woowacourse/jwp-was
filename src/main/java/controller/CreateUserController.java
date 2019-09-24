@@ -29,7 +29,7 @@ public class CreateUserController extends AbstractController {
 
     @Override
     void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        String requestBody = httpRequest.getHttpRequestBody().get(0);
+        String requestBody = new String(httpRequest.getHttpRequestBody());
         String[] tokens = requestBody.split("&");
         Map<String, String> parameters = new HashMap<>();
 

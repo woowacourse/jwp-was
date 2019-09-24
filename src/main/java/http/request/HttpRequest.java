@@ -2,14 +2,8 @@ package http.request;
 
 import http.HttpMethod;
 import http.MediaType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 public class HttpRequest {
-    private static final Logger log = LoggerFactory.getLogger(HttpRequest.class);
-
     private HttpRequestLine httpRequestLine;
     private HttpRequestHeader httpRequestHeader;
     private HttpRequestBody httpRequestBody;
@@ -28,7 +22,7 @@ public class HttpRequest {
         return MediaType.isContain(httpRequestLine.getUri());
     }
 
-    public List<String> getHttpRequestBody() {
+    public byte[] getHttpRequestBody() {
         return httpRequestBody.getBody();
     }
 
