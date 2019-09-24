@@ -3,6 +3,7 @@ package webserver;
 import controller.Controller;
 import controller.CreateUserController;
 import controller.FileController;
+import controller.HomeController;
 import http.HttpStatus;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -26,7 +27,8 @@ public class RequestHandler implements Runnable {
 
     static {
         controllers = new HashMap<>();
-        controllers.put("/user/create", CreateUserController.getInstance());
+        controllers.put(CreateUserController.PATH, new CreateUserController());
+        controllers.put(HomeController.PATH, new HomeController());
     }
 
     private Socket connection;

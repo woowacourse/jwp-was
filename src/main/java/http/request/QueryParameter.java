@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class QueryParameter {
     private Map<String, String> parameters;
@@ -21,7 +22,9 @@ public class QueryParameter {
 
             return new QueryParameter(querys);
         }
-        return empty();
+        return new QueryParameter(Collections.singletonMap(
+                queryString.split("=")[0],
+                queryString.split("=")[1]));
     }
 
     public static QueryParameter empty() {
@@ -30,5 +33,18 @@ public class QueryParameter {
 
     public String getValue(String key) {
         return parameters.get(key);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        QueryParameter that = (QueryParameter) o;
+        return Objects.equals(parameters, that.parameters);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(parameters);
     }
 }

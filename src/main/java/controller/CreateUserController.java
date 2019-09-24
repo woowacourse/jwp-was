@@ -4,19 +4,13 @@ import db.DataBase;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CreateUserController extends AbstractController {
-    private CreateUserController() {
+    private static final Logger logger = LoggerFactory.getLogger(CreateUserController.class);
 
-    }
-
-    public static CreateUserController getInstance() {
-        return LazyHolder.INSTANCE;
-    }
-
-    private static class LazyHolder {
-        private static final CreateUserController INSTANCE = new CreateUserController();
-    }
+    public static final String PATH = "/user/create";
 
     @Override
     void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
@@ -25,6 +19,7 @@ public class CreateUserController extends AbstractController {
 
     @Override
     void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
+        logger.debug("Saved UserId: {}", httpRequest.getQueryValue("userId"));
         save(httpRequest.getQueryValue("userId"), httpRequest.getQueryValue("password"),
                 httpRequest.getQueryValue("name"), httpRequest.getQueryValue("email"));
         httpResponse.redirect("index.html");
