@@ -8,6 +8,7 @@ import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.RequestParser;
+import utils.ResponseWriter;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -47,7 +48,7 @@ public class RequestHandler implements Runnable {
 
             route(httpRequest, httpResponse);
 
-            writeResponse(dataOutputStream, httpResponse);
+            ResponseWriter.write(dataOutputStream, httpResponse);
 
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -66,24 +67,6 @@ public class RequestHandler implements Runnable {
                     .service(httpRequest, httpResponse);
         } catch (ControllerNotFoundException e) {
             httpResponse.send404Error();
-        }
-    }
-
-    private void writeResponse(DataOutputStream dataOutputStream, HttpResponse httpResponse) throws IOException {
-        dataOutputStream.writeBytes(httpResponse.getHttpStatusLine().toString());
-        dataOutputStream.writeBytes(httpResponse.getHttpResponseHeader().toString());
-
-        if (httpResponse.getHttpResponseBody() != null) {
-            responseBody(dataOutputStream, httpResponse.getHttpResponseBody().getBody());
-        }
-    }
-
-    private void responseBody(DataOutputStream dataOutputStream, byte[] body) {
-        try {
-            dataOutputStream.write(body, 0, body.length);
-            dataOutputStream.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
         }
     }
 }
