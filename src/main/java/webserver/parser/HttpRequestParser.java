@@ -8,6 +8,7 @@ import webserver.request.RequestLine;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +20,7 @@ public class HttpRequestParser {
     private static final int KEY_INDEX = 0;
     private static final int VALUE_INDEX = 1;
 
-    public static HttpRequest parse(BufferedReader bufferedReader) throws IOException {
+    public static HttpRequest parse(BufferedReader bufferedReader) throws IOException, URISyntaxException {
         List<String> requestLines = parseRequestBuffer(bufferedReader);
         RequestLine requestLine = parseRequestLine(requestLines);
         RequestHeader requestHeader = parseRequestHeader(requestLines);
@@ -37,7 +38,7 @@ public class HttpRequestParser {
         return lines;
     }
 
-    private static RequestLine parseRequestLine(List<String> lines) {
+    private static RequestLine parseRequestLine(List<String> lines) throws URISyntaxException {
         String method = lines.get(REQUEST_LINES_REQUESTLINE_INDEX).split(" ")[KEY_INDEX];
         String uri = lines.get(REQUEST_LINES_REQUESTLINE_INDEX).split(" ")[VALUE_INDEX];
         return new RequestLine(method, uri);

@@ -13,8 +13,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
+import java.net.URISyntaxException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,11 +21,10 @@ class UserCreateServletTest {
     private String testDirectory = "./src/test/resources/";
 
     @Test
-    void doPost() throws IOException {
+    void doPost() throws IOException, URISyntaxException {
         InputStream inputStream = new FileInputStream(new File(testDirectory + "request_form_post_test.txt"));
         HttpRequest httpRequest = HttpRequestParser.parse(new BufferedReader(new InputStreamReader(inputStream)));
         UserCreateServlet userCreateServlet = UserCreateServlet.getInstance();
-        byte[] body = null;
         ResponseHeader header = new ResponseHeader();
         header.setLocation("/index.html");
         assertThat(userCreateServlet.doPost(httpRequest)).isEqualTo(new HttpResponse(HttpStatus.FOUND, header, null));

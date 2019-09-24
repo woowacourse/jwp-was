@@ -3,6 +3,7 @@ package webserver.response;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class ResponseHeader implements Map<String, Object> {
@@ -80,5 +81,20 @@ public class ResponseHeader implements Map<String, Object> {
     @Override
     public Set<Entry<String, Object>> entrySet() {
         return header.entrySet();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ResponseHeader that = (ResponseHeader) o;
+
+        return Objects.equals(header, that.header);
+    }
+
+    @Override
+    public int hashCode() {
+        return header != null ? header.hashCode() : 0;
     }
 }

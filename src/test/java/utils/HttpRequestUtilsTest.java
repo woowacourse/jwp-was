@@ -21,9 +21,7 @@ public class HttpRequestUtilsTest {
 
     @Test
     void parseQueryString_noQueryString_empty() {
-        String noQueryString = "/user/create";
-
-        Map<String, String> params = HttpRequestUtils.parseQueryString(noQueryString);
+        Map<String, String> params = HttpRequestUtils.parseQueryString(null);
         assertThat(params.size()).isEqualTo(0);
 
     }
