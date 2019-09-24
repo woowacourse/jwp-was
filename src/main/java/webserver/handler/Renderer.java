@@ -18,7 +18,6 @@ public class Renderer {
             dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
-
         }
     }
 }
