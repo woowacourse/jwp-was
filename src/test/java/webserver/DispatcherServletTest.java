@@ -62,6 +62,18 @@ class DispatcherServletTest {
     }
 
     @Test
+    void 로그인_요청() throws IOException {
+        HttpRequest request = HttpRequestParser.parse(convertStringToInputStream(String.format(LOGIN_REQUEST, ID, PASSWORD)));
+        HttpResponse response = new HttpResponse();
+
+        DispatcherServlet.doDispatch(request, response);
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
+        assertThat(response.getHeader("Location")).isEqualTo("/index.html");
+        assertThat(response.getHeader("Set-Cookie")).contains("logined=true");
+    }
+
+    @Test
     void 로그인_존재하지않는_유저_Redirect_처리() throws IOException {
         HttpRequest request = HttpRequestParser.parse(convertStringToInputStream(String.format(LOGIN_REQUEST, "ABC", PASSWORD)));
         HttpResponse response = new HttpResponse();
@@ -70,6 +82,7 @@ class DispatcherServletTest {
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
         assertThat(response.getHeader("Location")).isEqualTo("/user/login_failed.html");
+        assertThat(response.getHeader("Set-Cookie")).contains("logined=false");
     }
 
     @Test
@@ -81,5 +94,6 @@ class DispatcherServletTest {
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
         assertThat(response.getHeader("Location")).isEqualTo("/user/login_failed.html");
+        assertThat(response.getHeader("Set-Cookie")).contains("logined=false");
     }
 }

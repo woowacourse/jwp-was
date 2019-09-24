@@ -50,6 +50,7 @@ public class DispatcherServlet {
             httpResponse.setStatus(404);
         } catch (InvalidPasswordException | NotFoundUserIdException e) {
             log.error(e.getMessage());
+            httpResponse.addHeader("Set-Cookie", "logined=false; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
             View view = new RedirectView("user/login_failed.html");
             view.render(httpRequest, httpResponse);
         } catch

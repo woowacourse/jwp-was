@@ -15,6 +15,7 @@ public class LoginController extends AbstractController {
                 .orElseThrow(NotFoundUserIdException::new);
 
         user.matchPassword(httpRequest.getRequestBody("password"));
+        httpResponse.addHeader("Set-Cookie", "logined=true; Path=/");
 
         return new RedirectView("index.html");
     }
