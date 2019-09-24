@@ -5,14 +5,14 @@ import http.common.HttpHeader;
 public class HttpRequest {
     private RequestLine requestLine;
     private HttpHeader httpHeader;
-    private HttpRequestParams httpRequestParams;
+    private QueryStringParams queryStringParams;
 
     public HttpRequest(final RequestLine requestLine,
                        final HttpHeader httpHeader,
-                       final HttpRequestParams httpRequestParams) {
+                       final QueryStringParams queryStringParams) {
         this.requestLine = requestLine;
         this.httpHeader = httpHeader;
-        this.httpRequestParams = httpRequestParams;
+        this.queryStringParams = queryStringParams;
     }
 
     public RequestLine getRequestLine() {
@@ -23,8 +23,8 @@ public class HttpRequest {
         return httpHeader;
     }
 
-    public HttpRequestParams getHttpRequestParams() {
-        return httpRequestParams;
+    public QueryStringParams getQueryStringParams() {
+        return queryStringParams;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class HttpRequest {
         return "HttpRequest{" +
                 "requestLine=" + requestLine +
                 ", httpHeader=" + httpHeader +
-                ", httpRequestParams=" + httpRequestParams +
+                ", httpRequestParams=" + queryStringParams +
                 '}';
     }
 }

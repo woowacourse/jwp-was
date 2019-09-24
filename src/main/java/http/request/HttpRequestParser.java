@@ -15,9 +15,9 @@ public class HttpRequestParser {
 
         RequestLine requestLine = RequestLine.of(bufferedReader.readLine());
         HttpHeader httpHeader = HttpHeader.of(convertHeaderLines(bufferedReader));
-        HttpRequestParams httpRequestParams = HttpRequestParamsParser.parse(bufferedReader, requestLine, httpHeader);
+        QueryStringParams queryStringParams = QueryStringParamsParser.parse(bufferedReader, requestLine, httpHeader);
 
-        return new HttpRequest(requestLine, httpHeader, httpRequestParams);
+        return new HttpRequest(requestLine, httpHeader, queryStringParams);
     }
 
     private static List<String> convertHeaderLines(final BufferedReader bufferedReader) throws IOException {

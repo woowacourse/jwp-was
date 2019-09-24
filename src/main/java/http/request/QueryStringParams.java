@@ -5,19 +5,19 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class HttpRequestParams {
+public class QueryStringParams {
     private static final String QUERY_PARAM_DELIMITER = "&";
     private static final String KEY_VALUE_DELIMITER = "=";
     private static final String EMPTY = "";
 
     private Map<String, String> queryParams;
 
-    private HttpRequestParams(final Map<String, String> queryParams) {
+    private QueryStringParams(final Map<String, String> queryParams) {
         this.queryParams = Collections.unmodifiableMap(queryParams);
     }
 
-    public static HttpRequestParams of(final String queryString) {
-        return new HttpRequestParams(extractQueryParams(queryString));
+    public static QueryStringParams of(final String queryString) {
+        return new QueryStringParams(extractQueryParams(queryString));
     }
 
     private static Map<String, String> extractQueryParams(final String queryString) {
@@ -31,7 +31,7 @@ public class HttpRequestParams {
     private static Map<String, String> generateQueryParams(final String queryString) {
         return Arrays.stream(queryString.split(QUERY_PARAM_DELIMITER))
                 .map(param -> param.split(KEY_VALUE_DELIMITER))
-                .collect(Collectors.toMap(param -> param[0], HttpRequestParams::parseParamValue))
+                .collect(Collectors.toMap(param -> param[0], QueryStringParams::parseParamValue))
                 ;
     }
 
