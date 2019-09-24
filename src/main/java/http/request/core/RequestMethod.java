@@ -23,6 +23,10 @@ public enum RequestMethod {
                 .orElseThrow(HttpRequestMethodException::new);
     }
 
+    public String getMethod() {
+        return method;
+    }
+
     public boolean isGet() {
         return "GET".equals(method);
     }
