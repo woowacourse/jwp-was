@@ -1,87 +1,56 @@
 package http;
 
+import com.google.common.base.Charsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.FileIoUtils;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
-    private final HttpResponseHeader header;
-    private HttpResponseBody body;
+    private Map<String, String> headers = new HashMap<>();
+    private OutputStream outputStream;
 
-    public HttpResponse(HttpResponseHeader header, HttpResponseBody body) {
-        this.header = header;
-        this.body = body;
+    public HttpResponse(OutputStream outputStream) {
+        this.outputStream = outputStream;
     }
 
-    public HttpResponse(HttpResponseHeader header) {
-        this.header = header;
+    public void addHeader(String key, String value) {
+        headers.put(key, value);
     }
 
-    public void setStatusCode(int statusCode) {
-        header.setStatusCode(statusCode);
+    public void forward(String path) throws IOException, URISyntaxException {
+        logger.debug("Forwarding Path : {}", path);
+
+        byte[] body = FileIoUtils.loadFileFromClasspath(path);
+        addHeader("Content-Length", Integer.toString(body.length));
+
+        outputStream.write("HTTP/1.1 200 OK \r\n".getBytes(Charsets.UTF_8));
+        writeHeaders();
+
+        outputStream.write(body, 0, body.length);
+        outputStream.flush();
     }
 
-    public void setLocation(String location) {
-        header.setLocation(location);
+    public void sendRedirect() throws IOException {
+        outputStream.write("HTTP/1.1 302 FOUND \r\n".getBytes(Charsets.UTF_8));
+        writeHeaders();
+        outputStream.flush();
     }
 
-    public void setType(String type) {
-        header.setType(type);
-    }
-
-    public void setUrl(String url) {
-        header.setUrl(url);
-    }
-
-    public void setBody(byte[] body) {
-        this.body = new HttpResponseBody(body);
-    }
-
-    public String getHeaderUrl() {
-        return header.getUrl();
-    }
-
-    public void writeMessage(DataOutputStream dos) {
-        if (header.isOk()) {
-            writeHeader(dos, response200Header());
-            writeBody(dos);
-            return;
+    private void writeHeaders() throws IOException {
+        for (String key : headers.keySet()) {
+            outputStream.write(key.getBytes(Charsets.UTF_8));
+            outputStream.write(": ".getBytes(Charsets.UTF_8));
+            outputStream.write(headers.get(key).getBytes(Charsets.UTF_8));
+            outputStream.write("\r\n".getBytes(Charsets.UTF_8));
         }
-        writeHeader(dos, response302Header());
-    }
-
-    private String response200Header() {
-        return "HTTP/1.1 200 OK \r\n" +
-                "Content-Type: " + header.getType() + ";charset=utf-8\r\n" +
-                "Content-Length: " + body.getBody().length + "\r\n" +
-                "\r\n";
-    }
-
-    private String response302Header() {
-        return "HTTP/1.1 302 FOUND \r\n" +
-                "Content-Type: " + header.getType() + ";charset=utf-8\r\n" +
-                "Location: " + header.getLocation() + "\r\n" +
-                "\r\n";
-    }
-
-    private void writeHeader(DataOutputStream dos, String message) {
-        try {
-            dos.writeBytes(message);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void writeBody(DataOutputStream dos) {
-        try {
-            dos.write(body.getBody(), 0, body.getBody().length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+        outputStream.write("\r\n".getBytes(Charsets.UTF_8));
     }
 }

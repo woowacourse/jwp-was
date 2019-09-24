@@ -36,13 +36,11 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest httpRequest = readRequestUrl(in);
-            HttpResponse httpResponse = new HttpResponse(new HttpResponseHeader());
+            HttpResponse httpResponse = new HttpResponse(new DataOutputStream(out));
 
             Controller controller = Optional.ofNullable(api.get(httpRequest.getResourcePath()))
                     .orElseGet(FileController::new);
             controller.service(httpRequest, httpResponse);
-
-            httpResponse.writeMessage(new DataOutputStream(out));
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
@@ -53,7 +51,6 @@ public class RequestHandler implements Runnable {
         BufferedReader br = new BufferedReader(inputStreamReader);
         HttpRequestHeader header = new HttpRequestHeader(IOUtils.parseHeader(br));
 
-        // @TODO 메시지 보내듯이 수정
         if ("POST".equals(header.getMethod())) {
             String body = IOUtils.readData(br, Integer.parseInt(header.get("content-length")));
             HttpRequestBody httpRequestBody = new HttpRequestBody(body);

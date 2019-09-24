@@ -4,15 +4,16 @@ import http.HttpRequest;
 import http.HttpResponse;
 import model.UserController;
 
+import java.io.IOException;
+
 public class CreateUserController extends HttpController {
-    private static final String HTML = "html";
 
     @Override
-    protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
+    protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         String location = new UserController().addUser(httpRequest);
 
-        httpResponse.setLocation(location);
-        httpResponse.setType(HTML);
-        httpResponse.setStatusCode(REDIRECT_STATUS_CODE);
+        httpResponse.addHeader("Location", location);
+        httpResponse.addHeader("Content-Type", "text/html");
+        httpResponse.sendRedirect();
     }
 }

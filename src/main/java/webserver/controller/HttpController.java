@@ -17,6 +17,6 @@ public abstract class HttpController implements Controller {
     protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
     }
 
-    protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
+    protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
     }
 }
