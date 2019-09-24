@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class MainController implements Controller {
+
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
         if (httpRequest.isGet()) {
