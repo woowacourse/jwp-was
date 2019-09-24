@@ -1,17 +1,23 @@
 package http.request;
 
-import java.util.List;
 import java.util.Objects;
 
 public class HttpRequestBody {
-    List<String> body;
+    private String body;
 
-    public HttpRequestBody(List<String> body) {
+    public HttpRequestBody(String body) {
         this.body = body;
     }
 
-    public List<String> getBody() {
+    public String getBody() {
         return body;
+    }
+
+    @Override
+    public String toString() {
+        return "HttpRequestBody{" +
+                "body='" + body + '\'' +
+                '}';
     }
 
     @Override
