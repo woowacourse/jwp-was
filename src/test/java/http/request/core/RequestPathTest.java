@@ -39,8 +39,8 @@ class RequestPathTest {
 
     @Test
     void Dynamic_path() {
-        requestPrefixPath = RequestPrefixPath.of(FILE_PATH);
-        requestPath = new RequestPath(requestPrefixPath, FILE_PATH);
-        assertThat(requestPath.getFullPath()).isEqualTo(DYNAMIC_PREFIX_PATH + FILE_PATH);
+        requestPrefixPath = RequestPrefixPath.of(GET_PATH);
+        requestPath = new RequestPath(requestPrefixPath, GET_PATH);
+        assertThat(requestPath.getFullPath()).isEqualTo(DYNAMIC_PREFIX_PATH + GET_PATH);
     }
 }

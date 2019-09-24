@@ -13,7 +13,7 @@ public class HttpRequest {
     private Map<String, String> headers;
     private Map<String, String> data;
 
-    HttpRequest(List<Object> firstLineTokens, RequestHeader headers, Map<String, String> data) {
+    public HttpRequest(List<Object> firstLineTokens, RequestHeader headers, Map<String, String> data) {
         this.firstLineTokens = firstLineTokens;
         this.headers = headers.getHeaders();
         this.data = data;

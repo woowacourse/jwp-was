@@ -47,7 +47,7 @@ class ResponseContentTypeTest {
     @Test
     @DisplayName("동적 type 이 올경우 동적 content-type 으로 맞게 타입 리턴")
     void dynamicType() {
-        requestPath = new RequestPath(RequestPrefixPath.of(FILE_PATH), FILE_PATH);
+        requestPath = new RequestPath(RequestPrefixPath.of(GET_PATH), GET_PATH);
         responseContentType = ResponseContentType.of(requestPath);
         assertThat(responseContentType.getContentType()).isEqualTo(DYNAMIC_CONTENT_TYPE);
     }

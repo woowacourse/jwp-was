@@ -32,7 +32,7 @@ class RequestDataTest {
     @Test
     @DisplayName("파라미터 없는 GET 으로 요청 할 경우 예외처리 한다.")
     void RequestGet() {
-        requestPath = new RequestPath(RequestPrefixPath.of(FILE_PATH), FILE_PATH);
+        requestPath = new RequestPath(RequestPrefixPath.of(GET_PATH), GET_PATH);
         assertThrows(CanNotParseDataException.class, () -> requestData = new RequestData(requestPath));
 
     }

@@ -19,7 +19,7 @@ class RequestPrefixPathTest {
     @Test
     @DisplayName("동적 파일을 제대로 파싱하는지 테스트한다.")
     void dynamic_path() {
-        requestPrefixPath = RequestPrefixPath.of(FILE_PATH);
+        requestPrefixPath = RequestPrefixPath.of(GET_PATH);
         assertThat(requestPrefixPath.getPathPrefix()).isEqualTo("../resources/templates");
     }
 }
