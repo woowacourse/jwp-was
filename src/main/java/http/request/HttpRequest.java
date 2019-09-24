@@ -41,9 +41,7 @@ public class HttpRequest {
     }
 
     public boolean isContainExtension() {
-        int lastIndex = httpRequestLine.getUri().lastIndexOf("/");
-        String extension = httpRequestLine.getUri().substring(lastIndex + 1);
-        return MediaType.isContain(extension);
+        return MediaType.isContain(httpRequestLine.getUri());
     }
 
     public List<String> getHttpRequestBody() {

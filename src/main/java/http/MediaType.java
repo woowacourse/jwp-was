@@ -36,12 +36,14 @@ public enum MediaType {
                 .orElseThrow(IllegalArgumentException::new);
     }
 
-    public static boolean isContain(String extension) {
+    public static boolean isContain(String uri) {
+        int lastIndex = uri.lastIndexOf("/");
+        String extension = uri.substring(lastIndex + 1);
+
         return Arrays.stream(values())
                 .map(value -> extension.contains(value.extension))
                 .filter(value -> value)
                 .findFirst()
                 .orElse(false);
-
     }
 }
