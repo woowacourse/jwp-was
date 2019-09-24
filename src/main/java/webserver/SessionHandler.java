@@ -11,6 +11,4 @@ public class SessionHandler {
     public SessionHandler() {
         session = new HashMap<>();
     }
-
-
 }
