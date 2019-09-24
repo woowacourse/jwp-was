@@ -3,27 +3,29 @@ package http.request.factory;
 import http.request.HttpRequest;
 import http.request.HttpRequestBody;
 import http.request.HttpRequestHeader;
-import http.request.HttpRequestLine;
+import http.request.HttpRequestStartLine;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class HttpRequestFactory {
-    public static HttpRequest create(List<String> lines) {
-        int emptyLineIndex = lines.indexOf("");
+    private static final String EMPTY = "";
+    private static final int START_LINE_INDEX = 0;
+    private static final int HEADER_START_INDEX = 1;
 
-        HttpRequestBody httpRequestBody = HttpRequestBodyFactory.create(new ArrayList<>());;
+    public static HttpRequest create(List<String> lines) {
+        int emptyLineIndex = lines.indexOf(EMPTY);
+
         if (emptyLineIndex == -1) {
             emptyLineIndex = lines.size();
         }
 
-        HttpRequestLine httpRequestLine = HttpRequestLineFactory.create(lines.get(0));
-        HttpRequestHeader httpRequestHeader = HttpRequestHeaderFactory.create(lines.subList(1, emptyLineIndex));
+        HttpRequestStartLine httpRequestStartLine = HttpRequestStartLineFactory.create(lines.get(START_LINE_INDEX));
+        HttpRequestHeader httpRequestHeader = HttpRequestHeaderFactory.create(lines.subList(HEADER_START_INDEX, emptyLineIndex));
+        HttpRequestBody httpRequestBody = HttpRequestBodyFactory.create(EMPTY);
 
-        if (emptyLineIndex != lines.size()) {
-            httpRequestBody = HttpRequestBodyFactory.create(lines.subList(emptyLineIndex + 1, lines.size()));
+        if (httpRequestStartLine.hasBody()) {
+            httpRequestBody = HttpRequestBodyFactory.create(lines.get(lines.size() - 1));
         }
-
-        return new HttpRequest(httpRequestLine, httpRequestHeader, httpRequestBody);
+        return new HttpRequest(httpRequestStartLine, httpRequestHeader, httpRequestBody);
     }
 }
