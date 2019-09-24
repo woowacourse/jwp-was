@@ -47,6 +47,18 @@
 - [x] response header의 Content-Type 값을 보내주는 파일의 타입으로 설정하게 변경
 
 리팩토링
+
 - [x] servlet 생성
 - [x] http response status code enum으로 변경
 - [x] 쓰레드 풀 변경
+
+피드백
+
+- [ ] servlet 싱글톤 생성으로 변경
+- [ ] map에서 get() 대신 getOrDefault() 사용으로 변경
+- [ ] ```header.getHeader("Accept").contains("text/html")``` 개선 -> header에 함수 추가
+- [ ] 파일 경로 붙여주는걸 HttpRequest에서 하지 말고 Servlet에서 하게 변경(```HttpRequestUtils.generateTemplateFilePath```)
+- [ ] RequestUri는 자바에서 제공하는 URI 클래스 사용해보기
+- [ ] http status가 OK가 아니면 dos.flush()가 수행되지 않는 문제 해결 -> docs.flush()를 맨 뒤로 빼기
+- [ ] 서블릿에서 사용할 response header 클래스 만들어보기
+- [ ] doPost에서 사용 안하는 body 변수 제거
