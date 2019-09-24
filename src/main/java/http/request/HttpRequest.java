@@ -1,68 +1,58 @@
 package http.request;
 
-import http.HttpMethod;
+import http.HttpRequestMethod;
 import http.MediaType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.util.List;
 import java.util.Objects;
 
 public class HttpRequest {
-    private static final Logger log = LoggerFactory.getLogger(HttpRequest.class);
-
-    private HttpRequestLine httpRequestLine;
+    private HttpRequestStartLine httpRequestStartLine;
     private HttpRequestHeader httpRequestHeader;
     private HttpRequestBody httpRequestBody;
+    private Parameters parameters;
 
-    public HttpRequest(HttpRequestLine httpRequestLine, HttpRequestHeader httpRequestHeader, HttpRequestBody httpRequestBody) {
-        this.httpRequestLine = httpRequestLine;
+    public HttpRequest(HttpRequestStartLine httpRequestStartLine, HttpRequestHeader httpRequestHeader, HttpRequestBody httpRequestBody) {
+        this.httpRequestStartLine = httpRequestStartLine;
         this.httpRequestHeader = httpRequestHeader;
         this.httpRequestBody = httpRequestBody;
-    }
 
-    public HttpRequest(List<String> lines) {
-        this.httpRequestLine = new HttpRequestLine(lines.get(0));
-        this.httpRequestHeader = new HttpRequestHeader(lines.subList(1, getToIndex(lines)));
-        log.debug("Request Header: {}", httpRequestHeader);
-
-        if (httpRequestHeader.getContentLength() != 0) {
-            this.httpRequestBody = new HttpRequestBody(lines.subList(getToIndex(lines) + 1, lines.size()));
-            log.debug("Request Body: {}", httpRequestBody.getBody());
+        if (httpRequestStartLine.hasBody()) {
+            parameters = new Parameters(httpRequestBody.getBody());
+            return;
         }
+        parameters = new Parameters(httpRequestStartLine.getQueryString());
     }
 
-    private int getToIndex(List<String> lines) {
-        int lastIndex = 0;
-        String line = lines.get(0);
-        while (!"".equals(line)) {
-            lastIndex++;
-            line = lines.get(lastIndex);
-        }
-
-        return lastIndex;
-    }
-
-    public HttpRequestLine getHttpRequestLine() {
-        return httpRequestLine;
+    public HttpRequestStartLine getHttpRequestStartLine() {
+        return httpRequestStartLine;
     }
 
     public boolean isContainExtension() {
-        int lastIndex = httpRequestLine.getUri().lastIndexOf("/");
-        String extension = httpRequestLine.getUri().substring(lastIndex + 1);
+        int lastIndex = httpRequestStartLine.getUri().lastIndexOf("/");
+        String extension = httpRequestStartLine.getUri().substring(lastIndex + 1);
         return MediaType.isContain(extension);
     }
 
-    public List<String> getHttpRequestBody() {
-        return httpRequestBody.getBody();
+    public String getParameter(String key) {
+        return parameters.getParameter(key);
     }
 
-    public HttpMethod getMethod() {
-        return httpRequestLine.getMethod();
+    public HttpRequestMethod getMethod() {
+        return httpRequestStartLine.getHttpRequestMethod();
     }
 
     public String getUri() {
-        return httpRequestLine.getUri();
+        return httpRequestStartLine.getUri();
+    }
+
+    @Override
+    public String toString() {
+        return "HttpRequest{" +
+                "httpRequestStartLine=" + httpRequestStartLine +
+                ", httpRequestHeader=" + httpRequestHeader +
+                ", httpRequestBody=" + httpRequestBody +
+                ", parameters=" + parameters +
+                '}';
     }
 
     @Override
@@ -70,13 +60,13 @@ public class HttpRequest {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         HttpRequest that = (HttpRequest) o;
-        return httpRequestLine.equals(that.httpRequestLine) &&
+        return httpRequestStartLine.equals(that.httpRequestStartLine) &&
                 httpRequestHeader.equals(that.httpRequestHeader) &&
                 httpRequestBody.equals(that.httpRequestBody);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(httpRequestLine, httpRequestHeader, httpRequestBody);
+        return Objects.hash(httpRequestStartLine, httpRequestHeader, httpRequestBody);
     }
 }
