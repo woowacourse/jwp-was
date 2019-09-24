@@ -11,8 +11,8 @@ public class FigureFactoryTest {
     @Test
     public void line() {
         List<Point> points = Arrays.asList(
-                Point.of(1, 2),
-                Point.of(2, 3));
+            Point.of(1, 2),
+            Point.of(2, 3));
 
         Figure figure = FigureFactory.getInstance(points);
         assertThat(figure).isInstanceOfAny(Line.class);
@@ -22,9 +22,9 @@ public class FigureFactoryTest {
     @Test
     public void triangle() {
         List<Point> points = Arrays.asList(
-                Point.of(1, 1),
-                Point.of(4, 1),
-                Point.of(1, 4));
+            Point.of(1, 1),
+            Point.of(4, 1),
+            Point.of(1, 4));
 
         Figure figure = FigureFactory.getInstance(points);
         assertThat(figure).isInstanceOfAny(Triangle.class);
@@ -34,10 +34,10 @@ public class FigureFactoryTest {
     @Test
     public void rectangle() {
         List<Point> points = Arrays.asList(
-                Point.of(1, 1),
-                Point.of(4, 1),
-                Point.of(1, 4),
-                Point.of(4, 4));
+            Point.of(1, 1),
+            Point.of(4, 1),
+            Point.of(1, 4),
+            Point.of(4, 4));
 
         Figure figure = FigureFactory.getInstance(points);
         assertThat(figure).isInstanceOfAny(Rectangle.class);

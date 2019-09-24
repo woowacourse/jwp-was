@@ -51,7 +51,7 @@ public class Point {
         if (o == null || getClass() != o.getClass()) return false;
         Point point = (Point) o;
         return x == point.x &&
-                y == point.y;
+            y == point.y;
     }
 
     @Override
