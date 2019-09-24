@@ -4,11 +4,13 @@ import webserver.httpRequest.HttpStatus;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Map;
 
 public class ResponseProcessor {
 
     private static final String HTTP_VERSION = "HTTP/1.1 ";
     private static final String HEADER_LINE_SEPARATOR = "\r\n";
+    private static final String HEADER_SEPARATOR = ": ";
 
     private ResponseProcessor() {
     }
@@ -20,54 +22,48 @@ public class ResponseProcessor {
     public void forward(DataOutputStream dos, byte[] bytes, HttpResponse httpResponse) {
         try {
             httpResponse.setHttpStatus(HttpStatus.OK);
-            response200Header(dos, bytes.length, httpResponse);
-            responseBody(dos, bytes);
+            writeResponseHeader(dos, httpResponse);
+            writeResponseBody(dos, bytes);
         } catch (IOException e) {
             throw new IllegalArgumentException();
         }
     }
 
-    private void response200Header(DataOutputStream dos, int contentLength, HttpResponse httpResponse) throws IOException {
+    private void writeResponseHeader(DataOutputStream dos, HttpResponse httpResponse) throws IOException {
         dos.writeBytes(HTTP_VERSION + httpResponse.getStatusCodeAndMessage() + HEADER_LINE_SEPARATOR);
-        dos.writeBytes("Content-Type: " + httpResponse.getContentType() + HEADER_LINE_SEPARATOR);
-        dos.writeBytes("Content-Length: " + contentLength + HEADER_LINE_SEPARATOR);
+        writeResponseHeaders(dos, httpResponse);
         dos.writeBytes(HEADER_LINE_SEPARATOR);
     }
 
-    private void responseBody(DataOutputStream dos, byte[] body) throws IOException {
+    private void writeResponseHeaders(DataOutputStream dos, HttpResponse httpResponse) throws IOException {
+        for (Map.Entry<String, String> stringStringEntry : httpResponse.getHeaders().entrySet()) {
+            String key = stringStringEntry.getKey();
+            String value = stringStringEntry.getValue();
+            dos.writeBytes(key + HEADER_SEPARATOR + value + HEADER_LINE_SEPARATOR);
+        }
+    }
+
+    private void writeResponseBody(DataOutputStream dos, byte[] body) throws IOException {
         dos.write(body, 0, body.length);
         dos.flush();
     }
 
-    public void sendRedirect(DataOutputStream dos, String location, HttpResponse httpResponse) {
+    public void sendRedirect(DataOutputStream dos, HttpResponse httpResponse) {
         httpResponse.setHttpStatus(HttpStatus.FOUND);
         try {
-            response300Header(dos, location, httpResponse);
+            writeResponseHeader(dos, httpResponse);
         } catch (IOException e) {
             throw new IllegalArgumentException();
         }
-    }
-
-    private void response300Header(DataOutputStream dos, String location, HttpResponse httpResponse) throws IOException {
-        dos.writeBytes(HTTP_VERSION + httpResponse.getStatusCodeAndMessage() + HEADER_LINE_SEPARATOR);
-        dos.writeBytes("Location: " + location + HEADER_LINE_SEPARATOR);
-        dos.writeBytes(HEADER_LINE_SEPARATOR);
-        dos.flush();
     }
 
     public void sendError(DataOutputStream dos, String errorCode, HttpResponse httpResponse) {
         httpResponse.setHttpStatus(HttpStatus.values(errorCode));
         try {
-            response400Header(dos, httpResponse);
+            writeResponseHeader(dos, httpResponse);
         } catch (IOException e) {
             throw new IllegalArgumentException();
         }
-    }
-
-    private void response400Header(DataOutputStream dos, HttpResponse httpResponse) throws IOException {
-        dos.writeBytes(HTTP_VERSION + httpResponse.getStatusCodeAndMessage() + HEADER_LINE_SEPARATOR);
-        dos.writeBytes(HEADER_LINE_SEPARATOR);
-        dos.flush();
     }
 
     private static class LazyHolder {
