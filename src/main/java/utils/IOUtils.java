@@ -1,11 +1,11 @@
 package utils;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class IOUtils {
     /**
@@ -20,19 +20,8 @@ public class IOUtils {
         return String.copyValueOf(body);
     }
 
-    public static List<String> readInputStream(InputStream in) throws IOException {
-        List<String> inputs = new ArrayList<>();
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(in));
-
-        String line = br.readLine();
-        while(!"".equals(line)) {
-            if (line == null) {
-                break;
-            }
-            inputs.add(line);
-            line = br.readLine();
-        }
-        return inputs;
+    public static InputStream convertStringToInputStream(String target) {
+        return new ByteArrayInputStream(target.getBytes(UTF_8));
     }
 }

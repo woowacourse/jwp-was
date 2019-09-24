@@ -1,19 +1,19 @@
 package http;
 
-import jdk.internal.joptsimple.internal.Strings;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import utils.IOUtils;
 
-import java.io.UnsupportedEncodingException;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class HttpRequestParser {
-    private static final Logger log = LoggerFactory.getLogger(HttpRequestParser.class);
-
     private static final String QUERY_STRING_MULTIPLE_PARAMETER_SEPARATOR = "&";
     private static final String QUERY_STRING_SEPARATOR_REGEX = "\\?";
     private static final String QUERY_STRING_SEPARATOR = "?";
@@ -23,17 +23,17 @@ public class HttpRequestParser {
     private static final String NEW_LINE = "\n";
     private static final String UTF_8 = "UTF-8";
 
-    public static HttpRequest parse(List<String> httpRequestLines) throws UnsupportedEncodingException {
-        log.info(String.join(NEW_LINE, httpRequestLines));
+    public static HttpRequest parse(InputStream in) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
-        HttpStartLine startLine = parseStartLine(httpRequestLines.get(0));
+        HttpStartLine startLine = parseStartLine(br);
 
-        HttpHeader headers = parseHeaders(httpRequestLines);
+        HttpHeader headers = parseHeaders(br);
 
         HttpBody body = null;
 
         if (headers.containContentLength()) {
-            body = parseBody(httpRequestLines.subList(httpRequestLines.indexOf(Strings.EMPTY) + 1, httpRequestLines.size()), startLine, headers);
+            body = parseBody(br, startLine, headers);
         }
 
         return new HttpRequest.HttpRequestBuilder()
@@ -43,7 +43,8 @@ public class HttpRequestParser {
                 .build();
     }
 
-    private static HttpStartLine parseStartLine(String startLine) {
+    private static HttpStartLine parseStartLine(BufferedReader br) throws IOException {
+        String startLine = br.readLine();
         String[] startLineTokens = startLine.split(WHITE_SPACE);
         HttpMethod method = HttpMethod.of(startLineTokens[0]);
         if (startLineTokens[1].contains(QUERY_STRING_SEPARATOR)) {
@@ -61,24 +62,34 @@ public class HttpRequestParser {
                 ;
     }
 
-    private static HttpHeader parseHeaders(List<String> httpRequestLines) {
-        int lastIndex;
-
-        if ((lastIndex = httpRequestLines.indexOf(Strings.EMPTY)) == -1) {
-            lastIndex = httpRequestLines.size();
-        }
-
-        return new HttpHeader(httpRequestLines.subList(1, lastIndex));
+    private static HttpHeader parseHeaders(BufferedReader br) throws IOException {
+        return new HttpHeader(readLinesBeforeEmptyLine(br));
     }
 
-    private static HttpBody parseBody(List<String> bodyLines, HttpStartLine startLine, HttpHeader headers) throws UnsupportedEncodingException {
+    private static HttpBody parseBody(BufferedReader br, HttpStartLine startLine, HttpHeader headers) throws IOException {
+        String body = URLDecoder.decode(IOUtils.readData(br, headers.getContentLength()), UTF_8);
+
         if (startLine.matchMethod(HttpMethod.POST) && headers.matchContentType(FORM_CONTENT_TYPE_VALUE)) {
-            String body = bodyLines.get(bodyLines.size() - 1);
-            String queryString = URLDecoder.decode(body, UTF_8);
-            RequestParameter requestBody = new RequestParameter(parseQueryString(queryString));
+            RequestParameter requestBody = new RequestParameter(parseQueryString(body));
             return new HttpBody(requestBody, body);
         }
 
-        return new HttpBody(bodyLines);
+        return new HttpBody(body);
+    }
+
+    private static List<String> readLinesBeforeEmptyLine(BufferedReader br) throws IOException {
+        List<String> lines = new ArrayList<>();
+
+        String line = br.readLine();
+        while (!"".equals(line)) {
+            if (line == null) {
+                break;
+            }
+            lines.add(line);
+            System.out.println(line);
+            line = br.readLine();
+        }
+
+        return lines;
     }
 }

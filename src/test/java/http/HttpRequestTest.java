@@ -4,12 +4,13 @@ import http.exception.NotFoundMethodException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static utils.IOUtils.convertStringToInputStream;
 
 public class HttpRequestTest {
     public static final String GET_REQUEST =
@@ -53,18 +54,15 @@ public class HttpRequestTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        List<String> requestLines = readStringLines(GET_REQUEST);
-        request = HttpRequestParser.parse(requestLines);
+        request = HttpRequestParser.parse(new ByteArrayInputStream(GET_REQUEST.getBytes(UTF_8)));
     }
 
     @Test
     void 존재하지_않는_Method_생성_오류() throws IOException {
         String undefinedHeader = "NONE /index.html HTTP/1.1";
 
-        List<String> requestLines = readStringLines(undefinedHeader);
-
         assertThrows(NotFoundMethodException.class,
-                () -> HttpRequestParser.parse(requestLines));
+                () -> HttpRequestParser.parse(convertStringToInputStream(undefinedHeader)));
     }
 
     @Test
@@ -75,9 +73,8 @@ public class HttpRequestTest {
     @Test
     void 헤더_Request_Parameter_가져오기() throws IOException {
         String request = "GET /index.html?a=b&c=d HTTP/1.1";
-        List<String> requestLines = readStringLines(request);
 
-        HttpRequest httpRequest = HttpRequestParser.parse(requestLines);
+        HttpRequest httpRequest = HttpRequestParser.parse(convertStringToInputStream(request));
 
         assertThat(httpRequest.getParameter("a")).isEqualTo("b");
         assertThat(httpRequest.getParameter("c")).isEqualTo("d");
@@ -111,17 +108,11 @@ public class HttpRequestTest {
 
     @Test
     void POST_요청_body_가져오기() throws IOException {
-        List<String> requestLines = readStringLines(POST_REQUEST);
-
-        HttpRequest postRequest = HttpRequestParser.parse(requestLines);
+        HttpRequest postRequest = HttpRequestParser.parse(convertStringToInputStream(POST_REQUEST));
 
         assertThat(postRequest.getRequestBody("userId")).isEqualTo("park");
         assertThat(postRequest.getRequestBody("password")).isEqualTo("1234");
         assertThat(postRequest.getRequestBody("name")).isEqualTo("sungbum");
         assertThat(postRequest.getRequestBody("email")).isEqualTo("park@naver.com");
-    }
-
-    private List<String> readStringLines(String target) {
-        return Arrays.asList(target.split("\n"));
     }
 }

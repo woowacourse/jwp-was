@@ -8,23 +8,21 @@ import http.HttpResponse;
 import org.junit.jupiter.api.Test;
 import view.View;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
-import java.util.List;
+import java.io.IOException;
 
 import static http.HttpRequestTest.GET_REQUEST;
 import static http.HttpRequestTest.POST_REQUEST;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static utils.IOUtils.convertStringToInputStream;
 
 public class CreateUserControllerTest {
     private CreateUserController createUserController = new CreateUserController();
 
     @Test
-    void 유저_생성() throws UnsupportedEncodingException {
+    void 유저_생성() throws IOException {
         int size = DataBase.findAll().size();
-        List<String> postRequestLines = Arrays.asList(POST_REQUEST.split("\n"));
-        HttpRequest request = HttpRequestParser.parse(postRequestLines);
+        HttpRequest request = HttpRequestParser.parse(convertStringToInputStream(POST_REQUEST));
         HttpResponse response = new HttpResponse();
 
         View view = createUserController.service(request, response);
@@ -35,9 +33,8 @@ public class CreateUserControllerTest {
     }
 
     @Test
-    void GET_메소드_에러() throws UnsupportedEncodingException {
-        List<String> getRequestLines = Arrays.asList(GET_REQUEST.split("\n"));
-        HttpRequest request = HttpRequestParser.parse(getRequestLines);
+    void GET_메소드_에러() throws IOException {
+        HttpRequest request = HttpRequestParser.parse(convertStringToInputStream(GET_REQUEST));
         HttpResponse response = new HttpResponse();
 
         assertThrows(URINotFoundException.class, () -> createUserController.service(request, response));

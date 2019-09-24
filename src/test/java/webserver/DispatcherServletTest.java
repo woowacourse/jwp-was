@@ -5,14 +5,12 @@ import org.junit.jupiter.api.Test;
 import utils.FileIoUtils;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.List;
 
 import static http.HttpHeader.CONTENT_TYPE;
 import static http.HttpRequestTest.POST_REQUEST;
 import static org.assertj.core.api.Assertions.assertThat;
+import static utils.IOUtils.convertStringToInputStream;
 
 class DispatcherServletTest {
     @Test
@@ -43,10 +41,8 @@ class DispatcherServletTest {
     }
 
     @Test
-    void 동적_URL_요청() throws UnsupportedEncodingException {
-        String uri = "/user/create";
-        List<String> postRequestLines = Arrays.asList(POST_REQUEST.split("\n"));
-        HttpRequest request = HttpRequestParser.parse(postRequestLines);
+    void 동적_URL_요청() throws IOException {
+        HttpRequest request = HttpRequestParser.parse(convertStringToInputStream(POST_REQUEST));
         HttpResponse response = new HttpResponse();
 
         DispatcherServlet.doDispatch(request, response);

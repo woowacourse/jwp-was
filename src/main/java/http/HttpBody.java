@@ -1,9 +1,5 @@
 package http;
 
-import jdk.internal.joptsimple.internal.Strings;
-
-import java.util.List;
-
 public class HttpBody {
     private static final String NEW_LINE = "\n";
 
@@ -15,8 +11,8 @@ public class HttpBody {
         this.body = body;
     }
 
-    public HttpBody(List<String> bodyLines) {
-        this(null, Strings.join(bodyLines, NEW_LINE));
+    public HttpBody(String body) {
+        this(null, body);
     }
 
     public String getParameter(String key) {

@@ -7,9 +7,11 @@ import http.HttpRequest;
 import http.HttpResponse;
 import http.MimeType;
 import http.exception.NotFoundMethodException;
+import model.exception.InvalidPasswordException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
+import view.RedirectView;
 import view.View;
 import view.ViewResolver;
 import webserver.exception.InvalidUriException;
@@ -45,6 +47,10 @@ public class DispatcherServlet {
         } catch (NotFoundResourceException | InvalidUriException | URINotFoundException e) {
             log.error(e.getMessage());
             httpResponse.setStatus(404);
+        } catch (InvalidPasswordException e) {
+            log.error(e.getMessage());
+            View view = new RedirectView("user/login.html");
+            view.render(httpRequest, httpResponse);
         } catch (Exception e) {
             log.error(e.getMessage());
             httpResponse.setStatus(500);
