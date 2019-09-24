@@ -7,9 +7,7 @@ import utils.fp.tuple.Pair;
 import utils.fp.tuple.Triplet;
 import utils.parser.simple.KeyValueParser;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,10 +24,6 @@ public class JsonParser implements KeyValueParser<JsonObject> {
         return null;
     }
 
-    private String unwrapEnclosure(String input) {
-        return input.substring(1, input.length() - 1).trim();
-    }
-
     private TailRecursion<Integer> jumpBlank(String input, int i) {
         return (input.substring(i, i + 1).matches("\\s"))
                 ? (TailCall<Integer>) () -> jumpBlank(input, i + 1)
@@ -37,7 +31,7 @@ public class JsonParser implements KeyValueParser<JsonObject> {
     }
 
     private JsonObject parseObject(String input, int begin, int end) {
-        if (unwrapEnclosure(input.substring(begin, end + 1)).trim().isEmpty()) {
+        if (input.substring(begin + 1, end).trim().isEmpty()) {
             return new JsonObject();
         }
         return Optional.ofNullable(parseAttributes(input, begin + 1, new HashMap<>()).get())
@@ -68,13 +62,13 @@ public class JsonParser implements KeyValueParser<JsonObject> {
 
     private Triplet<String, ? extends JsonValue<?>, Integer> parseAttribute(String input, int begin) {
         return Optional.ofNullable(lexKey(input, jumpBlank(input, begin).get())).flatMap(key -> {
-            final int colonIndex = jumpBlank(input, key.snd() + 1).get();
-            if (input.charAt(colonIndex) != ':') {
-                return Optional.empty();
-            }
-            return Optional.ofNullable(lexValue(input, jumpBlank(input, colonIndex + 1).get())).map(value ->
-                new Triplet<>(key.fst(), value.fst(), value.snd())
-            );
+        final int colonIndex = jumpBlank(input, key.snd() + 1).get();
+        if (input.charAt(colonIndex) != ':') {
+            return Optional.empty();
+        }
+        return Optional.ofNullable(lexValue(input, jumpBlank(input, colonIndex + 1).get())).map(value ->
+            new Triplet<>(key.fst(), value.fst(), value.snd())
+        );
         }).orElse(null);
     }
 
@@ -88,10 +82,11 @@ public class JsonParser implements KeyValueParser<JsonObject> {
 
     private Pair<? extends JsonValue<?>, Integer> lexValue(String input, int begin) {
         final char c = input.charAt(begin);
-        if ('0' <= c && c <= '9') {
-            return lexNumber(input, begin);
-        }
         switch (c) {
+            case '{':
+                return lexObject(input, begin);
+            case '[':
+                return lexArray(input, begin);
             case '"':
                 return lexString(input, begin);
             case '-':
@@ -103,13 +98,94 @@ public class JsonParser implements KeyValueParser<JsonObject> {
                 return lexBoolean(input, begin);
             case 'n':
                 return lexNull(input, begin);
-            case '{':
-                return lexObject(input, begin);
-            case '[':
-                return lexArray(input, begin);
             default:
-                return null;
+                return ('0' <= c && c <= '9') ? lexNumber(input, begin) : null;
         }
+    }
+
+    private TailRecursion<Integer> tokenizePossiblyNestedValue(
+            String input,
+            char openingToken,
+            char closingToken,
+            int i,
+            int depth,
+            boolean isInsideString
+    ) {
+        if (i == input.length()) {
+            return (Done<Integer>) () -> -1;
+        }
+        final char c = input.charAt(i);
+        if (c == '"' && input.charAt(i - 1) != '\\') {
+            return (TailCall<Integer>) () ->
+                    tokenizePossiblyNestedValue(input, openingToken, closingToken, i + 1, depth, !isInsideString);
+        }
+        if (c == closingToken && depth == 0 && !isInsideString) {
+            return (Done<Integer>) () -> i;
+        }
+        if (c == openingToken && !isInsideString) {
+            return (TailCall<Integer>) () ->
+                    tokenizePossiblyNestedValue(input, openingToken, closingToken, i + 1, depth + 1, isInsideString);
+        }
+        if (c == closingToken && !isInsideString) {
+            return (TailCall<Integer>) () ->
+                    tokenizePossiblyNestedValue(input, openingToken, closingToken, i + 1, depth - 1, isInsideString);
+        }
+        return (TailCall<Integer>) () ->
+                tokenizePossiblyNestedValue(input, openingToken, closingToken, i + 1, depth, isInsideString);
+    }
+
+    private Pair<? extends JsonValue<?>, Integer> lexObject(String input, int begin) {
+        final int end = tokenizeObject(input, begin + 1);
+        return (begin < end) ? new Pair<>(parseObject(input, begin, end), end) : null;
+    }
+
+    private int tokenizeObject(String input, int i) {
+        return tokenizePossiblyNestedValue(input, '{', '}', i, 0, false).get();
+    }
+
+    private JsonArray parseArray(String input, int begin, int end) {
+        if (input.substring(begin + 1, end).trim().isEmpty()) {
+            return new JsonArray();
+        }
+        return Optional.ofNullable(parseArrayElements(input, begin + 1, new ArrayList<>()).get())
+                        .map(JsonArray::new)
+                        .orElseGet(JsonArray::new);
+    }
+
+    private TailRecursion<List<JsonValue<?>>> parseArrayElements(
+            String input,
+            int begin,
+            List<JsonValue<?>> acc
+    ) {
+        return Optional.ofNullable(parseArrayElement(input, begin)).map(el -> {
+            acc.add(el.fst());
+            final int nextLetterIndex = jumpBlank(input, el.snd() + 1).get();
+            if (input.charAt(nextLetterIndex) == ']') {
+                return (Done<List<JsonValue<?>>>) () -> acc;
+            }
+            if (input.charAt(nextLetterIndex) == ',') {
+                final int nextNextLetterIndex = jumpBlank(input, nextLetterIndex + 1).get();
+                return (input.charAt(nextNextLetterIndex) != ']')
+                        ? (TailCall<List<JsonValue<?>>>) () -> parseArrayElements(input, nextNextLetterIndex, acc)
+                        : (Done<List<JsonValue<?>>>) () -> acc;
+            }
+            return null;
+        }).orElse(null);
+    }
+
+    private Pair<? extends JsonValue<?>, Integer> parseArrayElement(String input, int begin) {
+        return Optional.ofNullable(lexValue(input, jumpBlank(input, begin).get())).map(value ->
+            new Pair<>(value.fst(), value.snd())
+        ).orElse(null);
+    }
+
+    private Pair<? extends JsonValue<?>, Integer> lexArray(String input, int begin) {
+        final int end = tokenizeArray(input, begin + 1);
+        return (begin < end) ? new Pair<>(parseArray(input, begin, end), end) : null;
+    }
+
+    private int tokenizeArray(String input, int i) {
+        return tokenizePossiblyNestedValue(input, '[', ']', i, 0, false).get();
     }
 
     private Pair<? extends JsonValue<?>, Integer> lexString(String input, int begin) {
@@ -136,17 +212,22 @@ public class JsonParser implements KeyValueParser<JsonObject> {
         if (realExpNotationMatcher.find() && realExpNotationMatcher.start() == 0) {
             return new Pair<>(
                     new JsonReal(Double.parseDouble(realExpNotationMatcher.group())),
-                    realExpNotationMatcher.end() + begin
+                    realExpNotationMatcher.end() - 1 + begin
             );
         }
         final Matcher realMatcher = REAL.matcher(input.substring(begin));
         if (realMatcher.find() && realMatcher.start() == 0) {
-            return new Pair<>(new JsonReal(Double.parseDouble(realMatcher.group())), realMatcher.end() + begin);
+            return new Pair<>(new JsonReal(Double.parseDouble(realMatcher.group())), realMatcher.end() - 1 + begin);
         }
         final int end = tokenizeInteger(input, begin + 1).get();
-        return (begin < end)
-                ? new Pair<>(new JsonInteger(Integer.parseInt(input.substring(begin, end))), end)
-                : null;
+        if (end < 0) {
+            return null;
+        }
+        try {
+            return new Pair<>(new JsonInteger(Integer.parseInt(input.substring(begin, end))), end);
+        } catch (NumberFormatException e) {
+            return new Pair<>(new JsonLong(Long.parseLong(input.substring(begin, end))), end);
+        }
     }
 
     private TailRecursion<Integer> tokenizeInteger(String input, int i) {
@@ -188,39 +269,5 @@ public class JsonParser implements KeyValueParser<JsonObject> {
 
     private int tokenizeNull(String input, int i) {
         return ((i + 3 < input.length()) && input.substring(i, i + 4).equalsIgnoreCase("null")) ? (i + 3) : -1;
-    }
-
-    private Pair<? extends JsonValue<?>, Integer> lexObject(String input, int begin) {
-        final int end = tokenizeObject(input, begin + 1);
-        return (begin < end) ? new Pair<>(parseObject(input, begin, end), end) : null;
-    }
-
-    private Pair<? extends JsonValue<?>, Integer> lexArray(String input, int begin) {
-        return null;
-    }
-
-    private TailRecursion<Integer> tokenizePossiblyNestedValue(String input, char closingToken, int i, int depth) {
-        if (i == input.length()) {
-            return (Done<Integer>) () -> -1;
-        }
-        final char c = input.charAt(i);
-        if (c == closingToken && depth == 0) {
-            return (Done<Integer>) () -> i;
-        }
-        if (c == '{' || c == '[') {
-            return (TailCall<Integer>) () -> tokenizePossiblyNestedValue(input, closingToken, i + 1, depth + 1);
-        }
-        if (c == '}' || c == ']') {
-            return (TailCall<Integer>) () -> tokenizePossiblyNestedValue(input, closingToken, i + 1, depth - 1);
-        }
-        return (TailCall<Integer>) () -> tokenizePossiblyNestedValue(input, closingToken, i + 1, depth);
-    }
-
-    private int tokenizeObject(String input, int i) {
-        return tokenizePossiblyNestedValue(input, '}', i, 0).get();
-    }
-
-    private int tokenizeArray(String input, int i) {
-        return tokenizePossiblyNestedValue(input, ']', i, 0).get();
     }
 }

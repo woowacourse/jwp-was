@@ -39,9 +39,9 @@ public class JsonArray extends JsonValue<List<JsonValue<?>>> {
                             .map(el -> "[" + el.toString() + "]")
                             .collect(Collectors.joining());
         }
-        return "{" + super.val.stream()
+        return "[" + super.val.stream()
                                 .map(JsonValue::toString)
                                 .reduce((a, b) -> a + ", " + b)
-                                .get() + "}";
+                                .get() + "]";
     }
 }

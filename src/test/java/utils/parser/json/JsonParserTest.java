@@ -28,20 +28,20 @@ class JsonParserTest {
 
     @Test
     void doubleAttributesTest() {
-        final String DOUBLE_ATTRIBUTES = "{   \"Name\" :  \"Woowa\", \"Level\":  3   }   ";
+        final String DOUBLE_ATTRIBUTES = "{   \"Name\" :  \"Woowa\", \"Level\":  1.1e-1,   }   ";
         final JsonObject result = jsonParser.interpret(DOUBLE_ATTRIBUTES);
         System.out.println(result);
         assertThat(result.get("Name").val()).isEqualTo("Woowa");
-        assertThat(result.get("Level").val()).isEqualTo(3);
+        assertThat(result.get("Level").val()).isEqualTo(0.11);
         assertThat(result.size()).isEqualTo(2);
     }
 
     @Test
     void multipleAttributesTest() {
-        final String MULTIPLE_ATTRIBUTES = "{   \"Name\" :null ,\"Level\":-6 , \"cat\" : false, \"Wheel\": 3.5e-5,  } ";
+        final String MULTIPLE_ATTRIBUTES = "{ \"Name\" :\"{\" ,\"Level\":-6 , \"cat\" : false, \"Wheel\": 3.5e-5, } ";
         final JsonObject result = jsonParser.interpret(MULTIPLE_ATTRIBUTES);
         System.out.println(result);
-        assertThat(result.get("Name").val()).isEqualTo(null);
+        assertThat(result.get("Name").val()).isEqualTo("{");
         assertThat(result.get("Level").val()).isEqualTo(-6);
         assertThat(result.get("cat").val()).isEqualTo(false);
         assertThat(result.get("Wheel").val()).isEqualTo(0.000035);
@@ -50,20 +50,19 @@ class JsonParserTest {
 
     @Test
     void nestedAttributesTest() {
-        final String NESTED_ATTRIBUTES = "{\"Name\" :{ \"Level\":-998 , \"cat\" : false} } ";
+        final String NESTED_ATTRIBUTES = "{\"Name\" :{ \"Level}}\":-998 , \"cat\" : false} } ";
         final JsonObject result = jsonParser.interpret(NESTED_ATTRIBUTES);
         final JsonObject innerKey = (JsonObject) result.get("Name");
         System.out.println(result);
-        assertThat(innerKey.get("Level").val()).isEqualTo(-998);
+        assertThat(innerKey.get("Level}}").val()).isEqualTo(-998);
         assertThat(innerKey.get("cat").val()).isEqualTo(false);
         assertThat(result.size()).isEqualTo(1);
         assertThat(innerKey.size()).isEqualTo(2);
     }
 
-    //아직 구현 안 함
     @Test
-    void array() {
-        final String ARRAY = "{  \"Name\" : [null ,-6 , \"cat\",false, 3.5e-5] } ";
+    void arrayTest() {
+        final String ARRAY = "{\"Name\" : [null ,-6 , \"cat\",false, 3.5e-5, {}]} ";
         final JsonObject result = jsonParser.interpret(ARRAY);
         System.out.println(result);
         assertThat(result.size()).isEqualTo(1);
