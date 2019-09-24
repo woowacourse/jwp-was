@@ -47,6 +47,6 @@ public class HttpRequestFactory {
         if (contentLength != 0) {
             bodyData = IOUtils.readData(br, contentLength);
         }
-        return new RequestBody(requestLine.getQueryString(), bodyData);
+        return new RequestBody(bodyData);
     }
 }

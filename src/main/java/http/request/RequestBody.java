@@ -18,9 +18,8 @@ public class RequestBody {
 
     private final Map<String, String> datas;
 
-    public RequestBody(String queryString, String bodyData) {
+    public RequestBody(String bodyData) {
         datas = new HashedMap<>();
-        addDataIfExist(queryString);
         addDataIfExist(bodyData);
     }
 
