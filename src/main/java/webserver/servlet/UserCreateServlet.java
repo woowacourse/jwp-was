@@ -16,11 +16,10 @@ public class UserCreateServlet extends RequestServlet {
 
     @Override
     public HttpResponse doPost(HttpRequest httpRequest) {
-        byte[] body = null;
         User user = new User(httpRequest.getBody("userId"), httpRequest.getBody("password"), httpRequest.getBody("name"), httpRequest.getBody("email"));
         logger.debug(">>> User : {}", user);
         Map<String, Object> header = new HashMap<>();
         header.put("Location", "/index.html");
-        return new HttpResponse(HttpStatus.FOUND, header, body);
+        return new HttpResponse(HttpStatus.FOUND, header, null);
     }
 }
