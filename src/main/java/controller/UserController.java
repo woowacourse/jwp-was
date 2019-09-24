@@ -9,6 +9,8 @@ import webserver.http.headerfields.HttpContentType;
 import webserver.http.headerfields.HttpStatusCode;
 
 public class UserController {
+    private static final String TEXT_HTML = "text/html";
+    private static final String TEXT_PLAIN = "text/plain";
     private static final String USER_ID = "userId";
     private static final String USER_PASSWORD = "password";
     private static final String USER_NAME = "name";
@@ -16,7 +18,7 @@ public class UserController {
 
     public static HttpResponse showSignUpPage(HttpRequest request) {
         return FileIoUtils.loadFileFromClasspath("./templates/user/form.html").map(body ->
-            HttpResponse.builder(HttpContentType.TEXT_HTML())
+            HttpResponse.builder(HttpContentType.getHttpContentType(TEXT_HTML))
                         .version(request.version())
                         .connection(request.connection().orElse(null))
                         .body(body)
@@ -33,7 +35,7 @@ public class UserController {
                         request.getParam(USER_EMAIL)
                 )
         );
-        return HttpResponse.builder(HttpContentType.TEXT_PLAIN())
+        return HttpResponse.builder(HttpContentType.getHttpContentType(TEXT_PLAIN))
                             .version(request.version())
                             .statusCode(HttpStatusCode.FOUND)
                             .connection(request.connection().orElse(null))

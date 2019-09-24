@@ -13,6 +13,7 @@ public class HttpContentType implements HttpHeaderField {
 
     private static final int CONTENT_TYPE_INDEX = 0;
     private static final int CONTENT_TYPE_PARAMS_INDEX = 1;
+
     private static final String APPLICATION_JSON = "application/json";
     private static final String APPLICATION_X_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded";
     private static final String MULTIPART_FORM_DATA = "multipart/form-data";
@@ -24,6 +25,7 @@ public class HttpContentType implements HttpHeaderField {
     private static final String IMAGE_JPEG = "image/jpeg";
     private static final String IMAGE_PNG = "image/png";
     private static final String IMAGE_X_ICON = "image/x-icon";
+
     private static final Map<String, String> DEFAULT_PARAMS = new HashMap<String, String>() {{
         put("charset", "utf-8");
     }};
@@ -45,50 +47,6 @@ public class HttpContentType implements HttpHeaderField {
     private final Chemical chemical;
     private final String subtype;
     private final Map<String, String> params;
-
-    public static HttpContentType APPLICATION_JSON() {
-        return CACHE.get(APPLICATION_JSON);
-    }
-
-    public static HttpContentType APPLICATION_X_WWW_FORM_URLENCODED() {
-        return CACHE.get(APPLICATION_X_WWW_FORM_URLENCODED);
-    }
-
-    public static HttpContentType MULTIPART_FORM_DATA() {
-        return CACHE.get(MULTIPART_FORM_DATA);
-    }
-
-    public static HttpContentType TEXT_HTML() {
-        return CACHE.get(TEXT_HTML);
-    }
-
-    public static HttpContentType TEXT_CSS() {
-        return CACHE.get(TEXT_CSS);
-    }
-
-    public static HttpContentType TEXT_PLAIN() {
-        return CACHE.get(TEXT_PLAIN);
-    }
-
-    public static HttpContentType APPLICATION_JAVASCRIPT() {
-        return CACHE.get(APPLICATION_JAVASCRIPT);
-    }
-
-    public static HttpContentType IMAGE_GIF() {
-        return CACHE.get(IMAGE_GIF);
-    }
-
-    public static HttpContentType IMAGE_PNG() {
-        return CACHE.get(IMAGE_PNG);
-    }
-
-    public static HttpContentType IMAGE_JPEG() {
-        return CACHE.get(IMAGE_JPEG);
-    }
-
-    public static HttpContentType IMAGE_X_ICON() {
-        return CACHE.get(IMAGE_X_ICON);
-    }
 
     public static Optional<HttpContentType> of(String input) {
         if (CACHE.containsKey(input)) {
@@ -132,7 +90,11 @@ public class HttpContentType implements HttpHeaderField {
     public static HttpContentType extensionToContentType(String extension) {
         extension = extension.toLowerCase();
 
-        return Extension.extensionToContentType(extension).orElse(TEXT_PLAIN());
+        return Extension.extensionToContentType(extension).orElse(getHttpContentType(TEXT_PLAIN));
+    }
+
+    public static HttpContentType getHttpContentType(String key) {
+        return CACHE.get(key);
     }
 
     @Override

@@ -6,18 +6,20 @@ import webserver.http.headerfields.HttpStatusCode;
 import webserver.http.headerfields.HttpVersion;
 
 public class HttpResponse {
+    private static final String TEXT_PLAIN = "text/plain";
+
     public static final HttpResponse BAD_REQUEST =
-            HttpResponse.builder(HttpContentType.TEXT_PLAIN())
+            HttpResponse.builder(HttpContentType.getHttpContentType(TEXT_PLAIN))
                         .statusCode(HttpStatusCode.BAD_REQUEST)
                         .build();
 
     public static final HttpResponse NOT_FOUND =
-            HttpResponse.builder(HttpContentType.TEXT_PLAIN())
+            HttpResponse.builder(HttpContentType.getHttpContentType(TEXT_PLAIN))
                         .statusCode(HttpStatusCode.NOT_FOUND)
                         .build();
 
     public static final HttpResponse INTERNAL_SERVER_ERROR =
-            HttpResponse.builder(HttpContentType.TEXT_PLAIN())
+            HttpResponse.builder(HttpContentType.getHttpContentType(TEXT_PLAIN))
                         .statusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
                         .build();
 

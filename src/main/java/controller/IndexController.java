@@ -6,9 +6,11 @@ import webserver.http.HttpResponse;
 import webserver.http.headerfields.HttpContentType;
 
 public class IndexController {
+private static final String TEXT_HTML = "text/html";
+
 public static HttpResponse index(HttpRequest request) {
         return FileIoUtils.loadFileFromClasspath("./templates/index.html").map(body ->
-            HttpResponse.builder(HttpContentType.TEXT_HTML())
+            HttpResponse.builder(HttpContentType.getHttpContentType(TEXT_HTML))
                         .version(request.version())
                         .connection(request.connection().orElse(null))
                         .body(body)

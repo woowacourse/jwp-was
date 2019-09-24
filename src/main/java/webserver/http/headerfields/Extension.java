@@ -4,13 +4,13 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public enum Extension {
-    CSS("css", HttpContentType.TEXT_CSS()),
-    JS("js", HttpContentType.APPLICATION_JAVASCRIPT()),
-    GIF("gif", HttpContentType.IMAGE_GIF()),
-    JPG("jpg", HttpContentType.IMAGE_JPEG()),
-    PNG("png", HttpContentType.IMAGE_PNG()),
-    ICO("ico", HttpContentType.IMAGE_X_ICON()),
-    TXT("txt", HttpContentType.TEXT_PLAIN());
+    CSS("css", HttpContentType.getHttpContentType("text/css")),
+    JS("js", HttpContentType.getHttpContentType("application/javascript")),
+    GIF("gif", HttpContentType.getHttpContentType("image/gif")),
+    JPG("jpg", HttpContentType.getHttpContentType("image/jpeg")),
+    PNG("png", HttpContentType.getHttpContentType("image/png")),
+    ICO("ico", HttpContentType.getHttpContentType("image/x-icon")),
+    TXT("txt", HttpContentType.getHttpContentType("text/plain"));
 
     private final String extension;
     private final HttpContentType httpContentType;
