@@ -14,6 +14,6 @@ public class HttpStatusLine {
 
     @Override
     public String toString() {
-        return httpVersion + " " + httpStatus.toString() + "\n";
+        return httpVersion + " " + httpStatus.toString() + "\r\n";
     }
 }

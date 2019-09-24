@@ -16,6 +16,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -59,7 +60,13 @@ public class RequestHandler implements Runnable {
             return;
         }
 
-        controllers.get(httpRequest.getUri()).service(httpRequest, httpResponse);
+        try {
+            Optional.ofNullable(controllers.get(httpRequest.getUri()))
+                    .orElseThrow(() -> new ControllerNotFoundException(httpRequest.getUri()))
+                    .service(httpRequest, httpResponse);
+        } catch (ControllerNotFoundException e) {
+            httpResponse.send404Error();
+        }
     }
 
     private void writeResponse(DataOutputStream dataOutputStream, HttpResponse httpResponse) throws IOException {

@@ -3,8 +3,9 @@ package http;
 import java.util.Arrays;
 
 public enum HttpStatus {
-    OK("200", "Ok"),
-    FOUND("302", "Found");
+    OK("200", "OK"),
+    FOUND("302", "FOUND"),
+    NOT_FOUND("404", "NOT FOUND");
 
     private String statusCode;
     private String reasonPhrase;
