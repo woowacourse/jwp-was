@@ -16,10 +16,13 @@ public class ErrorViewProcessor implements ViewProcessor {
     }
 
     @Override
-    public void process(DataOutputStream dos, String viewName) {
+    public void process(DataOutputStream dos, String viewName, HttpResponse httpResponse) {
         ResponseProcessor responseProcessor = ResponseProcessor.getInstance();
-        HttpResponse httpResponse = new HttpResponse();
-        String errorCode = viewName.split(ERROR_CODE_SEPARATOR)[1];
+        String errorCode = getErrorCode(viewName);
         responseProcessor.sendError(dos, errorCode, httpResponse);
+    }
+
+    private String getErrorCode(String viewName) {
+        return viewName.split(ERROR_CODE_SEPARATOR)[1];
     }
 }

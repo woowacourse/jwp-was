@@ -20,17 +20,17 @@ public class ResourceViewProcessor implements ViewProcessor {
     }
 
     @Override
-    public void process(DataOutputStream dos, String viewName) {
-        HttpResponse httpResponse = new HttpResponse();
+    public void process(DataOutputStream dos, String viewName, HttpResponse httpResponse) {
         ResponseProcessor responseProcessor = ResponseProcessor.getInstance();
         String filePath = STATIC_FILE_ROUTE + viewName;
+        byte[] bytes = null;
         try {
-            byte[] bytes = FileIoUtils.loadFileFromClasspath(filePath);
-            String type = MimeType.values(filePath);
-            httpResponse.setContentType(type);
-            responseProcessor.forward(dos, bytes, httpResponse);
-        } catch (IOException | URISyntaxException e) {
+            bytes = FileIoUtils.loadFileFromClasspath(filePath);
+        } catch (IOException | URISyntaxException | IllegalArgumentException e) {
             responseProcessor.sendError(dos, "404", httpResponse);
         }
+        httpResponse.setContentType(MimeType.values(filePath));
+        httpResponse.setContentLength(bytes.length);
+        responseProcessor.forward(dos, bytes, httpResponse);
     }
 }

@@ -16,11 +16,14 @@ public class RedirectViewProcessor implements ViewProcessor {
     }
 
     @Override
-    public void process(DataOutputStream dos, String viewName) {
+    public void process(DataOutputStream dos, String viewName, HttpResponse httpResponse) {
         ResponseProcessor responseProcessor = ResponseProcessor.getInstance();
-        HttpResponse httpResponse = new HttpResponse();
-        String[] split = viewName.split(REDIRECT_SEPARATOR);
-        String path = split[1];
-        responseProcessor.sendRedirect(dos, path, httpResponse);
+        String location = getLocation(viewName);
+        httpResponse.setLocation(location);
+        responseProcessor.sendRedirect(dos, httpResponse);
+    }
+
+    private String getLocation(String viewName) {
+        return viewName.split(REDIRECT_SEPARATOR)[1];
     }
 }

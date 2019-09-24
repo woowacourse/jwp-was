@@ -20,17 +20,21 @@ public class HtmlViewProcessor implements ViewProcessor {
     }
 
     @Override
-    public void process(DataOutputStream dos, String viewName) {
-        HttpResponse httpResponse = new HttpResponse();
+    public void process(DataOutputStream dos, String viewName, HttpResponse httpResponse) {
         ResponseProcessor responseProcessor = ResponseProcessor.getInstance();
         String filePath = HTML_ROUTE + viewName;
+        byte[] bytes = null;
         try {
-            byte[] bytes = FileIoUtils.loadFileFromClasspath(filePath);
-            String type = MimeType.values(filePath);
-            httpResponse.setContentType(type);
-            responseProcessor.forward(dos, bytes, httpResponse);
-        } catch (IOException | URISyntaxException e) {
+            bytes = FileIoUtils.loadFileFromClasspath(filePath);
+        } catch (IOException | URISyntaxException | IllegalArgumentException e) {
             throw new IllegalArgumentException();
         }
+        setResponseBody(httpResponse, filePath, bytes);
+        responseProcessor.forward(dos, bytes, httpResponse);
+    }
+
+    private void setResponseBody(HttpResponse httpResponse, String filePath, byte[] bytes) {
+        httpResponse.setContentType(MimeType.values(filePath));
+        httpResponse.setContentLength(bytes.length);
     }
 }
