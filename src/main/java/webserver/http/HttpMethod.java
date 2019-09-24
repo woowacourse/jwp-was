@@ -16,7 +16,7 @@ public enum HttpMethod {
 
     public static Optional<HttpMethod> of(String name) {
         return Stream.of(values())
-                    .filter(x -> x.name().equalsIgnoreCase(name))
+                    .filter(x -> x.name().equalsIgnoreCase(name.trim()))
                     .findAny();
     }
 

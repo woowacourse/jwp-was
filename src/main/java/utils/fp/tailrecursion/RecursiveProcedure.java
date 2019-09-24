@@ -1,4 +1,4 @@
-package utils.fp;
+package utils.fp.tailrecursion;
 
 @FunctionalInterface
 public interface RecursiveProcedure {

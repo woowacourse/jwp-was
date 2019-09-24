@@ -1,4 +1,4 @@
-package utils.fp;
+package utils.fp.tuple;
 
 import java.util.List;
 import java.util.Objects;

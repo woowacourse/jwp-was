@@ -1,8 +1,8 @@
 package utils.io;
 
-import utils.fp.Done;
-import utils.fp.TailCall;
-import utils.fp.TailRecursion;
+import utils.fp.tailrecursion.Done;
+import utils.fp.tailrecursion.TailCall;
+import utils.fp.tailrecursion.TailRecursion;
 
 import java.util.Iterator;
 import java.util.function.Predicate;

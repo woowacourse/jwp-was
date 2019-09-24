@@ -1,4 +1,4 @@
-package webserver;
+package webserver.router;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,14 +13,18 @@ import java.util.Map;
 public class Router {
     private static final Logger logger = LoggerFactory.getLogger(Router.class);
 
-    private static final RouterConfig config = RouterConfig.getInstance();
+    private static final Router instance = new Router();
 
-    public static HttpResponse serve(HttpRequest req) {
+    public static Router getInstance() {
+        return instance;
+    }
+
+    public HttpResponse serve(HttpRequest req) {
         return (req.path().extension().isEmpty()) ? route(req) : serveStaticFiles(req);
     }
 
-    private static HttpResponse route(HttpRequest req) {
-        return config.match(req.method(), req.path()).map(dest -> {
+    private HttpResponse route(HttpRequest req) {
+        return RouterConfig.getInstance().match(req.method(), req.path()).map(dest -> {
             logger.debug("Route: {} -> {}", req.path(), dest);
             try {
                 if (dest.pathVars().isEmpty()) {
@@ -43,7 +47,7 @@ public class Router {
         }).orElse(HttpResponse.NOT_FOUND);
     }
 
-    private static HttpResponse serveStaticFiles(HttpRequest req) {
+    private HttpResponse serveStaticFiles(HttpRequest req) {
         final String dest = "./static" + req.path();
         logger.debug("Route: {} -> {}", req.path(), dest);
         return FileIoUtils.loadFileFromClasspath(dest).map(body ->
@@ -54,7 +58,7 @@ public class Router {
         ).orElse(HttpResponse.NOT_FOUND);
     }
 
-    private static HttpContentType extensionToContentType(String extension) {
+    private HttpContentType extensionToContentType(String extension) {
         switch (extension) {
             case "html":
                 return HttpContentType.TEXT_HTML_UTF_8;

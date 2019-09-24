@@ -1,13 +1,16 @@
-package utils.parser;
+package utils.parser.simple;
 
 import org.junit.jupiter.api.Test;
+import utils.parser.simple.ContentTypeParser;
+import utils.parser.simple.KeyValueParserFactory;
+import utils.parser.simple.SimpleStringParser;
 
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ContentTypeParserTest {
-    private final ContentTypeParser contentTypeParser = new ContentTypeParser();
+    private final SimpleStringParser contentTypeParser = KeyValueParserFactory.contentTypeParser();
 
     @Test
     void parseContentType() {

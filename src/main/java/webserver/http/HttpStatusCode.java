@@ -121,6 +121,6 @@ public enum HttpStatusCode {
 
     @Override
     public String toString() {
-        return toName() + "(" + number() + ")";
+        return number() + " " + toName();
     }
 }

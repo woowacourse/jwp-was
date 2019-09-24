@@ -1,13 +1,16 @@
-package utils.parser;
+package utils.parser.simple;
 
 import org.junit.jupiter.api.Test;
+import utils.parser.simple.HttpHeaderFieldsParser;
+import utils.parser.simple.KeyValueParserFactory;
+import utils.parser.simple.SimpleStringParser;
 
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class HttpHeaderFieldsParserTest {
-    final HttpHeaderFieldsParser httpHeaderFieldsParser = new HttpHeaderFieldsParser();
+    final SimpleStringParser httpHeaderFieldsParser = KeyValueParserFactory.httpHeaderFieldsParser();
 
     @Test
     void parseHttpRequestHeader() {

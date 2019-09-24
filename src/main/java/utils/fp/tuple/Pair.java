@@ -1,4 +1,4 @@
-package utils.fp;
+package utils.fp.tuple;
 
 import java.util.Arrays;
 import java.util.List;

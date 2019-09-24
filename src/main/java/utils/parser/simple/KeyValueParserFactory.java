@@ -1,4 +1,4 @@
-package utils.parser;
+package utils.parser.simple;
 
 import utils.parser.json.JsonParser;
 

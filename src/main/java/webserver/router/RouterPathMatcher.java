@@ -1,6 +1,6 @@
-package webserver;
+package webserver.router;
 
-import utils.fp.Pair;
+import utils.fp.tuple.Pair;
 import utils.parser.json.JsonObject;
 import webserver.http.HttpPath;
 

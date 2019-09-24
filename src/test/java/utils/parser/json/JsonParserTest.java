@@ -8,7 +8,7 @@ class JsonParserTest {
     private final JsonParser jsonParser = new JsonParser();
 
     @Test
-    void empty() {
+    void emptyTest() {
         final String EMPTY = " {   }";
         final JsonObject result = jsonParser.interpret(EMPTY);
         System.out.println(result);
@@ -17,7 +17,7 @@ class JsonParserTest {
     }
 
     @Test
-    void singleAttributeObject() {
+    void singleAttributeObjectTest() {
         final String SINGLE_ATTRIBUTE = "{      \"Woowa\" :   \"Why not Wooa?\" ,}   ";
         final JsonObject result = jsonParser.interpret(SINGLE_ATTRIBUTE);
         System.out.println(result);
@@ -27,7 +27,7 @@ class JsonParserTest {
     }
 
     @Test
-    void doubleAttributes() {
+    void doubleAttributesTest() {
         final String DOUBLE_ATTRIBUTES = "{   \"Name\" :  \"Woowa\", \"Level\":  3   }   ";
         final JsonObject result = jsonParser.interpret(DOUBLE_ATTRIBUTES);
         System.out.println(result);
@@ -37,7 +37,7 @@ class JsonParserTest {
     }
 
     @Test
-    void multipleAttributes() {
+    void multipleAttributesTest() {
         final String MULTIPLE_ATTRIBUTES = "{   \"Name\" :null ,\"Level\":-6 , \"cat\" : false, \"Wheel\": 3.5e-5,  } ";
         final JsonObject result = jsonParser.interpret(MULTIPLE_ATTRIBUTES);
         System.out.println(result);
@@ -49,7 +49,7 @@ class JsonParserTest {
     }
 
     @Test
-    void nestedAttributes() {
+    void nestedAttributesTest() {
         final String NESTED_ATTRIBUTES = "{\"Name\" :{ \"Level\":-998 , \"cat\" : false} } ";
         final JsonObject result = jsonParser.interpret(NESTED_ATTRIBUTES);
         final JsonObject innerKey = (JsonObject) result.get("Name");
@@ -70,7 +70,7 @@ class JsonParserTest {
     }
 
     @Test
-    void routerConfig() {
+    void routerConfigTest() {
         final String CONFIG =
                 "{\n" +
                 "  \"GET\": {\n" +

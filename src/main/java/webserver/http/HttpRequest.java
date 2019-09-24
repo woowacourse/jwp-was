@@ -3,7 +3,7 @@ package webserver.http;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.io.NetworkIO;
-import utils.parser.KeyValueParserFactory;
+import utils.parser.simple.KeyValueParserFactory;
 
 import java.util.Collections;
 import java.util.HashMap;

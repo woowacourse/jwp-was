@@ -1,8 +1,8 @@
-package webserver;
+package webserver.router;
 
-import utils.fp.Pair;
+import utils.fp.tuple.Pair;
 import utils.io.FileIoUtils;
-import utils.parser.KeyValueParserFactory;
+import utils.parser.simple.KeyValueParserFactory;
 import utils.parser.json.JsonObject;
 import webserver.http.HttpMethod;
 import webserver.http.HttpPath;
@@ -38,7 +38,7 @@ public class RouterConfig {
                                 Collections::unmodifiableMap
                         )
                 )
-        ).orElse(null);
+        ).orElse(Collections.emptyMap());
     }
 
     public Optional<RouterMappedDestination> match(HttpMethod methodType, HttpPath queriedPath) {

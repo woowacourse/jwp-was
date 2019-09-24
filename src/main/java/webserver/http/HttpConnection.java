@@ -10,7 +10,7 @@ public enum HttpConnection implements HttpHeaderField {
 
     public static Optional<HttpConnection> of(String name) {
         return Stream.of(values())
-                    .filter(x -> x.name().replaceAll("_", "-").equalsIgnoreCase(name))
+                    .filter(x -> x.name().replaceAll("_", "-").equalsIgnoreCase(name.trim()))
                     .findAny();
     }
 

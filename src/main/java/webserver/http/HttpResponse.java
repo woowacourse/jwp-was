@@ -97,12 +97,11 @@ public class HttpResponse {
 
     private String serializeMandatory() {
         return String.format(
-                "%s %d %s\r\n" +
+                "%s %s\r\n" +
                 "Content-Type: %s\r\n" +
                 "Content-Length: %d\r\n",
                 this.version,
-                this.statusCode.number(),
-                this.statusCode.toName(),
+                this.statusCode,
                 this.contentType,
                 this.body.length()
         );

@@ -1,7 +1,11 @@
 package utils.parser.json;
 
-import utils.fp.*;
-import utils.parser.KeyValueParser;
+import utils.fp.tailrecursion.Done;
+import utils.fp.tailrecursion.TailCall;
+import utils.fp.tailrecursion.TailRecursion;
+import utils.fp.tuple.Pair;
+import utils.fp.tuple.Triplet;
+import utils.parser.simple.KeyValueParser;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +40,9 @@ public class JsonParser implements KeyValueParser<JsonObject> {
         if (unwrapEnclosure(input.substring(begin, end + 1)).trim().isEmpty()) {
             return new JsonObject();
         }
-        return new JsonObject(parseAttributes(input, begin + 1, new HashMap<>()).get());
+        return Optional.ofNullable(parseAttributes(input, begin + 1, new HashMap<>()).get())
+                        .map(JsonObject::new)
+                        .orElseGet(JsonObject::new);
     }
 
     private TailRecursion<Map<String, JsonValue<?>>> parseAttributes(
@@ -82,56 +88,33 @@ public class JsonParser implements KeyValueParser<JsonObject> {
 
     private Pair<? extends JsonValue<?>, Integer> lexValue(String input, int begin) {
         final char c = input.charAt(begin);
-        if (c == '"') {
-            final int end = tokenizeString(input, begin + 1);
-            return (begin < end) ? new Pair<>(new JsonString(input.substring(begin + 1, end)), end) : null;
+        if ('0' <= c && c <= '9') {
+            return lexNumber(input, begin);
         }
-        if (c == '-' || ('0' <= c && c <= '9')) {
-            final Matcher realExpNotationMatcher = REAL_EXP_NOTATION.matcher(input.substring(begin));
-            if (realExpNotationMatcher.find() && realExpNotationMatcher.start() == 0) {
-                return new Pair<>(
-                        new JsonReal(Double.parseDouble(realExpNotationMatcher.group())),
-                        realExpNotationMatcher.end() + begin
-                );
-            }
-            final Matcher realMatcher = REAL.matcher(input.substring(begin));
-            if (realMatcher.find() && realMatcher.start() == 0) {
-                return new Pair<>(new JsonReal(Double.parseDouble(realMatcher.group())), realMatcher.end() + begin);
-            }
-            final int end = tokenizeInteger(input, begin + 1).get();
-            return (begin < end)
-                    ? new Pair<>(new JsonInteger(Integer.parseInt(input.substring(begin, end))), end)
-                    : null;
+        switch (c) {
+            case '"':
+                return lexString(input, begin);
+            case '-':
+                return lexNumber(input, begin);
+            case 't':
+            case 'T':
+            case 'f':
+            case 'F':
+                return lexBoolean(input, begin);
+            case 'n':
+                return lexNull(input, begin);
+            case '{':
+                return lexObject(input, begin);
+            case '[':
+                return lexArray(input, begin);
+            default:
+                return null;
         }
-        if (c == 't' || c == 'T' || c == 'f' || c == 'F') {
-            final int end = tokenizeBoolean(input, begin);
-            switch (end - begin) {
-                case 3:
-                    return new Pair<>(new JsonBoolean(true), end);
-                case 4:
-                    return new Pair<>(new JsonBoolean(false), end);
-                default:
-                    return null;
-            }
-        }
-        if (c == '{') {
-            final int end = tokenizeObject(input, begin + 1);
-            return (begin < end) ? new Pair<>(parseObject(input, begin, end), end) : null;
-        }
-        //미구현
-        if (c == '[') {
-            final int end = tokenizeArray(input, begin + 1);
-            return (begin < end) ? new Pair<>(JsonValue.NULL(), end) : null;
-        }
-        if (c == 'n') {
-            final int end = tokenizeNull(input, begin);
-            return (begin < end) ? new Pair<>(JsonValue.NULL(), end) : null;
-        }
-        return null;
     }
 
-    private int tokenizeString(String input, int i) {
-        return tokenizeString(input, i, '"').get();
+    private Pair<? extends JsonValue<?>, Integer> lexString(String input, int begin) {
+        final int end = tokenizeString(input, begin + 1);
+        return (begin < end) ? new Pair<>(new JsonString(input.substring(begin + 1, end)), end) : null;
     }
 
     private TailRecursion<Integer> tokenizeString(String input, int i, char lookbehind) {
@@ -144,6 +127,28 @@ public class JsonParser implements KeyValueParser<JsonObject> {
                 : (TailCall<Integer>) () -> tokenizeString(input, i + 1, c);
     }
 
+    private int tokenizeString(String input, int i) {
+        return tokenizeString(input, i, '"').get();
+    }
+
+    private Pair<? extends JsonValue<?>, Integer> lexNumber(String input, int begin) {
+        final Matcher realExpNotationMatcher = REAL_EXP_NOTATION.matcher(input.substring(begin));
+        if (realExpNotationMatcher.find() && realExpNotationMatcher.start() == 0) {
+            return new Pair<>(
+                    new JsonReal(Double.parseDouble(realExpNotationMatcher.group())),
+                    realExpNotationMatcher.end() + begin
+            );
+        }
+        final Matcher realMatcher = REAL.matcher(input.substring(begin));
+        if (realMatcher.find() && realMatcher.start() == 0) {
+            return new Pair<>(new JsonReal(Double.parseDouble(realMatcher.group())), realMatcher.end() + begin);
+        }
+        final int end = tokenizeInteger(input, begin + 1).get();
+        return (begin < end)
+                ? new Pair<>(new JsonInteger(Integer.parseInt(input.substring(begin, end))), end)
+                : null;
+    }
+
     private TailRecursion<Integer> tokenizeInteger(String input, int i) {
         if (i == input.length()) {
             return (Done<Integer>) () -> -1;
@@ -152,6 +157,18 @@ public class JsonParser implements KeyValueParser<JsonObject> {
         return ('0' <= c && c <= '9')
                 ? (TailCall<Integer>) () -> tokenizeInteger(input, i + 1)
                 : (Done<Integer>) () -> i;
+    }
+
+    private Pair<? extends JsonValue<?>, Integer> lexBoolean(String input, int begin) {
+        final int end = tokenizeBoolean(input, begin);
+        switch (end - begin) {
+            case 3:
+                return new Pair<>(new JsonBoolean(true), end);
+            case 4:
+                return new Pair<>(new JsonBoolean(false), end);
+            default:
+                return null;
+        }
     }
 
     private int tokenizeBoolean(String input, int i) {
@@ -164,8 +181,22 @@ public class JsonParser implements KeyValueParser<JsonObject> {
         return -1;
     }
 
+    private Pair<? extends JsonValue<?>, Integer> lexNull(String input, int begin) {
+        final int end = tokenizeNull(input, begin);
+        return (begin < end) ? new Pair<>(JsonValue.NULL(), end) : null;
+    }
+
     private int tokenizeNull(String input, int i) {
         return ((i + 3 < input.length()) && input.substring(i, i + 4).equalsIgnoreCase("null")) ? (i + 3) : -1;
+    }
+
+    private Pair<? extends JsonValue<?>, Integer> lexObject(String input, int begin) {
+        final int end = tokenizeObject(input, begin + 1);
+        return (begin < end) ? new Pair<>(parseObject(input, begin, end), end) : null;
+    }
+
+    private Pair<? extends JsonValue<?>, Integer> lexArray(String input, int begin) {
+        return null;
     }
 
     private TailRecursion<Integer> tokenizePossiblyNestedValue(String input, char closingToken, int i, int depth) {

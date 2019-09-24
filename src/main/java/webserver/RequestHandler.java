@@ -6,6 +6,7 @@ import utils.io.NetworkBlockingIO;
 import utils.io.NetworkIO;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
+import webserver.router.Router;
 
 import java.net.Socket;
 
@@ -26,7 +27,8 @@ public class RequestHandler implements Runnable {
         );
 
         NetworkBlockingIO.init(this.connection).ifPresent(io -> {
-            sendResponse(io, HttpRequest.deserialize(io).map(Router::serve).orElse(HttpResponse.BAD_REQUEST));
+            sendResponse(io, HttpRequest.deserialize(io).map(req -> Router.getInstance().serve(req))
+                                                        .orElse(HttpResponse.BAD_REQUEST));
             io.close();
         });
     }

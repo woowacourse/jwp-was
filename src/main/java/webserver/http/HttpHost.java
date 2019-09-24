@@ -12,23 +12,24 @@ public class HttpHost implements HttpHeaderField {
     private final HttpPort port;
 
     public static Optional<HttpHost> of(String input) {
-        if (CACHE.containsKey(input)) {
-            return Optional.of(CACHE.get(input));
+        final String trimmed = input.trim();
+        if (CACHE.containsKey(trimmed)) {
+            return Optional.of(CACHE.get(trimmed));
         }
-        final String[] hostnameAndPort = input.contains("://")
-                ? input.substring(input.indexOf("://") + 3).split(":")
-                : input.trim().split("\\s*:\\s*");
+        final String[] hostnameAndPort = trimmed.contains("://")
+                ? trimmed.substring(trimmed.indexOf("://") + 3).split("\\s*:\\s*")
+                : trimmed.split("\\s*:\\s*");
         if (hostnameAndPort.length == 1) {
             if (hostnameAndPort[0].split("\\s+").length > 1) {
                 return Optional.empty();
             }
-            final HttpHost host = new HttpHost(input, HttpPort.PORT_80);
-            CACHE.put(input, host);
+            final HttpHost host = new HttpHost(trimmed, HttpPort.PORT_80);
+            CACHE.put(trimmed, host);
             return Optional.of(host);
         }
         return HttpPort.of(hostnameAndPort[1]).map(port -> {
             final HttpHost host = new HttpHost(hostnameAndPort[0], port);
-            CACHE.put(input, host);
+            CACHE.put(trimmed, host);
             return host;
         });
     }

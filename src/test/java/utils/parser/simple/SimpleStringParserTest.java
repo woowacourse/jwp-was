@@ -1,7 +1,8 @@
-package utils.parser;
+package utils.parser.simple;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import utils.parser.simple.SimpleStringParser;
 
 import java.util.Map;
 

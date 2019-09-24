@@ -1,4 +1,4 @@
-package utils.fp;
+package utils.fp.tuple;
 
 public interface Tuple<A, B> {
     int size();

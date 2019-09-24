@@ -1,6 +1,9 @@
-package utils.parser;
+package utils.parser.simple;
 
 import org.junit.jupiter.api.Test;
+import utils.parser.simple.KeyValueParserFactory;
+import utils.parser.simple.QueryStringParser;
+import utils.parser.simple.SimpleStringParser;
 
 import java.util.Map;
 
@@ -21,7 +24,7 @@ class QueryStringParserTest {
 
     @Test
     void queryStringParser() {
-        final QueryStringParser queryStringParser = new QueryStringParser();
+        final SimpleStringParser queryStringParser = KeyValueParserFactory.queryStringParser();
         final Map<String, String> result = queryStringParser.interpret(ENCODED_QUERY_STRING);
         assertThat(result.get(USER_ID_KEY_NAME)).isEqualTo(USER_ID_VALUE);
         assertThat(result.get(PASSWORD_KEY_NAME)).isEqualTo(PASSWORD_VALUE);
