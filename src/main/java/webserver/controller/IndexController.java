@@ -14,7 +14,6 @@ public class IndexController {
 
     public Responsive goIndex() {
         return (request, response) -> {
-            int a = 1 / 0;
             response.setContentType("text/html");
             response.setView("/index.html");
         };
