@@ -8,29 +8,50 @@ public class HttpResponse {
     private ResponseHeaders responseHeaders;
     private ResponseBody responseBody;
 
+    public HttpResponse() {
+        this.responseStatus = ResponseStatus.OK;
+        this.responseHeaders = new ResponseHeaders();
+    }
+
     public HttpResponse(ResponseStatus responseStatus, ResponseHeaders responseHeaders, ResponseBody responseBody) {
         this.responseStatus = responseStatus;
         this.responseHeaders = responseHeaders;
         this.responseBody = responseBody;
     }
 
-    public void buildGetHeader(String extension) {
-        responseHeaders.put("Content-Type", MediaType.of(extension).getMediaType());
+    public static HttpResponse sendErrorResponse(ResponseStatus responseStatus) {
+        return new HttpResponse(
+                responseStatus, new ResponseHeaders(), new ResponseBody(String.format("error/%d.html", responseStatus.getCode())));
+    }
+
+    public void forward(String filePath) {
+        responseBody = new ResponseBody(filePath);
         responseHeaders.put("Content-Length", responseBody.getLength());
     }
 
-    public void buildRedirectHeader(String redirectUri) {
-        responseHeaders.put("Location", redirectUri);
+    public Object getHeader(String key) {
+        return responseHeaders.get(key);
+    }
+
+    public void setContentType(String contentType) {
+        responseHeaders.put("Content-Type", contentType);
+    }
+
+    public void setContentType(MediaType contentType) {
+        responseHeaders.put("Content-Type", contentType.getMediaType());
+    }
+
+    public void sendRedirect(String uriPath) {
+        responseHeaders.put("Location", uriPath);
+        setResponseStatus(ResponseStatus.FOUND);
     }
 
     public List<String> responseBuilder() {
         List<String> responseExport = new ArrayList<>();
 
         responseExport.add(String.format("HTTP/1.1 %d %s\r\n", responseStatus.getCode(), responseStatus.name()));
-
-        for (String key : responseHeaders.keySet()) {
-            responseExport.add(String.format("%s: %s\r\n", key, responseHeaders.get(key)));
-        }
+        responseHeaders.keySet().forEach(key ->
+                responseExport.add(String.format("%s: %s\r\n", key, responseHeaders.get(key))));
         responseExport.add("\r\n");
 
         if (responseBody != null) {
@@ -39,11 +60,11 @@ public class HttpResponse {
         return responseExport;
     }
 
-    public Object getHeader(String key) {
-        return responseHeaders.get(key);
-    }
-
     public ResponseStatus getResponseStatus() {
         return responseStatus;
+    }
+
+    private void setResponseStatus(ResponseStatus responseStatus) {
+        this.responseStatus = responseStatus;
     }
 }
