@@ -7,21 +7,15 @@ import http.model.response.ServletResponse;
 import http.supoort.RequestMapping;
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayOutputStream;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-class FileResourceControllerTest {
+class FileResourceControllerTest extends BaseControllerTest {
     private Controller controller = new FileResourceController(RequestMapping.GET("/index.html"));
 
     @Test
     void 파일리소스_응답이_적절한지() {
-        ServletRequest request = ServletRequest.builder()
-                .requestLine(HttpMethod.GET, "/index.html", "HTTP/1.1")
-                .build();
-
-
-        ServletResponse response = new ServletResponse(new ByteArrayOutputStream());
+        ServletRequest request = getDefaultRequest(HttpMethod.GET, "/index.html").build();
+        ServletResponse response = getDefaultResponse();
 
         assertThat(controller.canHandle(request)).isTrue();
 

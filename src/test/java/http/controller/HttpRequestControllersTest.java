@@ -1,6 +1,7 @@
 package http.controller;
 
 import http.exceptions.IllegalRequestMappingException;
+import http.model.request.HttpMethod;
 import http.model.request.ServletRequest;
 import http.model.response.HttpStatus;
 import http.model.response.ServletResponse;
@@ -9,13 +10,12 @@ import http.supoort.converter.request.RequestConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-class HttpRequestControllersTest {
+class HttpRequestControllersTest extends BaseControllerTest {
     private RequestConverter converter = new RequestConverter();
     private HttpRequestControllers handlers = new HttpRequestControllers(new FileResourceController(RequestMapping.GET("/*")));
 
@@ -26,9 +26,8 @@ class HttpRequestControllersTest {
 
     @Test
     void 유저핸들러_선택() {
-        String requestMessage = "GET /user/create?key=value HTTP/1.1";
-        ServletRequest request = converter.parse(new ByteArrayInputStream(requestMessage.getBytes()));
-        ServletResponse response = new ServletResponse(new ByteArrayOutputStream());
+        ServletRequest request = getDefaultRequest(HttpMethod.GET, "/user/create?key=value").build();
+        ServletResponse response = getDefaultResponse();
 
         handlers.doService(request, response);
 
@@ -38,8 +37,7 @@ class HttpRequestControllersTest {
 
     @Test
     void 파일리소스핸들러_선택() {
-        String requestMessage = "GET /index.html HTTP/1.1";
-        ServletRequest request = converter.parse(new ByteArrayInputStream(requestMessage.getBytes()));
+        ServletRequest request = getDefaultRequest(HttpMethod.GET, "/index.html").build();
         ServletResponse response = new ServletResponse(new ByteArrayOutputStream());
 
         handlers.doService(request, response);

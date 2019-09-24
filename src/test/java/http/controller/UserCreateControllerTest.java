@@ -8,20 +8,18 @@ import http.supoort.RequestMapping;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-class UserCreateControllerTest {
+class UserCreateControllerTest extends BaseControllerTest {
     private Controller controller = new UserCreateController(RequestMapping.POST("/user/create"));
     private ServletRequest request;
     private ServletResponse response;
 
     @BeforeEach
     void setUp() {
-        request = ServletRequest.builder()
-                .requestLine(HttpMethod.POST, "/user/create", "HTTP/1.1")
+        request = getDefaultRequest(HttpMethod.POST, "/user/create")
                 .params(new HashMap<String, String>() {{
                     put("userId", "userId");
                     put("password", "password");
@@ -29,7 +27,7 @@ class UserCreateControllerTest {
                     put("email", "email");
                 }})
                 .build();
-        response = new ServletResponse(new ByteArrayOutputStream());
+        response = getDefaultResponse();
     }
 
     @Test
