@@ -10,6 +10,4 @@ public class GetRequestConverter extends AbstractHttpRequestConverter {
     public ServletRequest convert(String uri, String protocol, BufferedReader bufferedReader) {
         return convertWithoutBody(HttpMethod.GET, uri, protocol, bufferedReader);
     }
-
-
 }

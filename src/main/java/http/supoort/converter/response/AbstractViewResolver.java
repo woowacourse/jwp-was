@@ -36,5 +36,4 @@ public abstract class AbstractViewResolver implements ViewResolver {
         dataOutputStream.write(body.getBytes());
         dataOutputStream.flush();
     }
-
 }

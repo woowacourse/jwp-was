@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -26,7 +27,11 @@ class HttpRequestControllersTest extends BaseControllerTest {
 
     @Test
     void 유저핸들러_선택() {
-        ServletRequest request = getDefaultRequest(HttpMethod.GET, "/user/create?key=value").build();
+        ServletRequest request = getDefaultRequest(HttpMethod.GET, "/user/create")
+                .params(new HashMap<String, String>() {{
+                    put("key", "value");
+                }})
+                .build();
         ServletResponse response = getDefaultResponse();
 
         handlers.doService(request, response);
