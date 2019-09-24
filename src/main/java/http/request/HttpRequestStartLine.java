@@ -32,6 +32,10 @@ public class HttpRequestStartLine {
         return httpRequestTarget.getUri();
     }
 
+    public HttpVersion getHttpVersion() {
+        return httpVersion;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
