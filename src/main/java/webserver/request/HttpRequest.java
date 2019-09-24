@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Map;
 
 public class HttpRequest {
     private final RequestLine requestLine;
@@ -48,8 +49,8 @@ public class HttpRequest {
         return requestLine.hasParameters();
     }
 
-    public boolean isPost() {
-        return requestLine.isPost();
+    public Map<String, String> getParameters() {
+        return requestLine.getParameters();
     }
 
     public String getHttpVersion() {

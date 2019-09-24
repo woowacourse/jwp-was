@@ -16,6 +16,14 @@ public class MainController implements Controller {
     }
 
     private void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+        byte[] staticFile = getStaticFile(httpRequest);
+
+        if (httpResponse.addBody(staticFile)) {
+            httpResponse.addHeader(httpRequest, "200", "OK");
+        }
+    }
+
+    private byte[] getStaticFile(HttpRequest httpRequest) {
         String file = httpRequest.getSource();
         byte[] body = new byte[0];
         try {
@@ -23,9 +31,6 @@ public class MainController implements Controller {
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
         }
-
-        if (httpResponse.addBody(body)) {
-            httpResponse.addHeader(httpRequest, "200", "OK");
-        }
+        return body;
     }
 }
