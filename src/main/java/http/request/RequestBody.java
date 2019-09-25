@@ -1,25 +1,27 @@
 package http.request;
 
-import http.utils.HttpUtils;
-
-import java.util.HashMap;
-import java.util.Map;
-
 public class RequestBody {
-    private Map<String, String> entity;
+    public static final String FOM_DATA_TYPE = "application/x-www-form-urlencoded";
 
-    private RequestBody(Map<String, String> entity) {
-        this.entity = entity;
+    private byte[] body;
+
+    private RequestBody(byte[] body) {
+        this.body = body;
     }
 
-    public static RequestBody of(String requestBodyString) {
-        if (requestBodyString.isEmpty()) {
-            return new RequestBody(new HashMap<>());
+    public static RequestBody of(byte[] body) {
+        return new RequestBody(body);
+    }
+
+    public byte[] getBody() {
+        return body;
+    }
+
+    public String getFormData(RequestHeader requestHeader) {
+        if (FOM_DATA_TYPE.equals(requestHeader.getHeader(HttpRequest.CONTENT_TYPE_NAME))) {
+            return new String(body);
         }
-        return new RequestBody(HttpUtils.parseQuery(requestBodyString));
-    }
 
-    public String getEntityValue(String key) {
-        return entity.get(key);
+        return null;
     }
 }
