@@ -93,4 +93,15 @@ class HttpRequestTest {
 
         assertThat(httpRequest.getUri()).isEqualTo("/index.html");
     }
+
+    @Test
+    @DisplayName("쿠키 값 검사")
+    void findCookie() {
+        HttpRequestLine httpRequestLine = new HttpRequestLine("GET /index.html HTTP/1.1");
+        HttpRequestHeader httpRequestHeader = new HttpRequestHeader(Collections.singletonMap("Cookie", "srftoken=VLcTfULqEDjd5LMaY4fTDxSYaZUHFnEhWDY4uioygZOLVyzHTIerHILgDiiWf0NO; logined=true"));
+        HttpRequestBody httpRequestBody = new HttpRequestBody(new byte[0]);
+        HttpRequest httpRequest = new HttpRequest(httpRequestLine, httpRequestHeader,
+                QueryParameter.empty(), httpRequestBody);
+        assertThat(httpRequest.getCookie("logined")).isEqualTo("true");
+    }
 }

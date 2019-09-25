@@ -16,4 +16,10 @@ class HttpResponseBodyTest {
         HttpResponseBody httpResponseBody = new HttpResponseBody(FileIoUtils.loadFileFromClasspath(MediaType.getFullPath("/index.html")));
         assertThat(httpResponseBody.getBodyLength()).isEqualTo(6902);
     }
+
+    @Test
+    void getBody() {
+        HttpResponseBody httpResponseBody = new HttpResponseBody("test".getBytes());
+        assertThat(httpResponseBody.getBody()).isEqualTo("test".getBytes());
+    }
 }

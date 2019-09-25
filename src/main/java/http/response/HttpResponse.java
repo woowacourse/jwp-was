@@ -7,6 +7,13 @@ import utils.FileIoUtils;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+//TODO: static of Method 고려 해볼 것
+
+/**
+ * 그렇네요:) of와 같은 static 메서드를 만들어 HttpStatus, uri, header 등의 정보를 받아
+ * httpResponse 인스턴스를 반환해주는 건 어떨까요~? HttpStatus라는 클래스가 하나 더 생길 수 있겠네요.
+ * 의견 부탁드립니다:)
+ */
 public class HttpResponse {
     private HttpStatusLine httpStatusLine;
     private HttpResponseHeader httpResponseHeader;
