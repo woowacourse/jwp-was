@@ -1,6 +1,6 @@
 package webserver;
 
-import http.HttpMIMEType;
+import http.HttpMimeType;
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
 import http.response.HttpResponse;
@@ -49,7 +49,7 @@ public class RequestHandler implements Runnable {
         if (responseEntity.hasBody()) {
             String path = responseEntity.getViewTemplatePath();
             byte[] body = FileIoUtils.loadFileFromClasspath(path);
-            HttpMIMEType type = request.getMIMEType();
+            HttpMimeType type = request.getMimeType();
             httpResponse.setBody(body, type);
         }
         return httpResponse;

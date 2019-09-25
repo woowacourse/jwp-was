@@ -1,7 +1,7 @@
 package http.request;
 
 import http.HttpHeaders;
-import http.HttpMIMEType;
+import http.HttpMimeType;
 import http.HttpVersion;
 import utils.ExtensionParser;
 
@@ -39,10 +39,10 @@ public class HttpRequest {
         return QueryParams.of(body);
     }
 
-    public HttpMIMEType getMIMEType() {
+    public HttpMimeType getMimeType() {
         String accept = headers.getHeader("Accept");
         String extension = ExtensionParser.parse(requestLine.getUri().getPath());
-        return HttpMIMEType.getMIMETypeFrom(accept, extension);
+        return HttpMimeType.getMimeTypeFrom(accept, extension);
     }
 
     public String getBody() {
