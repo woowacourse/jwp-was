@@ -81,25 +81,25 @@ public class Response {
     }
 
     public void configureOkResponse(ModelAndView modelAndView) throws IOException, URISyntaxException {
-        String url = modelAndView.getView();
         setStatusCode(200);
         setReasonPhrase("OK");
-        setContentType(ContentTypeHandler.type(url));
-        configureResponseBody(url, modelAndView.getModels());
+        setContentType(ContentTypeHandler.type(modelAndView.getView()));
+        configureResponseBody(modelAndView);
     }
 
-    private void configureResponseBody(String url, Map<String, Object> model) throws IOException, URISyntaxException {
+    private void configureResponseBody(ModelAndView modelAndView) throws IOException, URISyntaxException {
         byte[] body;
+        String view = modelAndView.getView();
+        Map<String, Object> model = modelAndView.getModels();
 
         if (model.isEmpty()) {
-            String absoluteUrl = PathHandler.path(url);
+            String absoluteUrl = PathHandler.path(view);
             body = FileIoUtils.loadFileFromClasspath(absoluteUrl);
             setResponseBody(body);
             return;
         }
 
-        body = HandlebarsRenderer.render(url, model);
-
+        body = HandlebarsRenderer.render(view, model);
         setResponseBody(body);
     }
 

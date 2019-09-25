@@ -23,7 +23,7 @@ public class UserListController extends HttpController {
     @Override
     protected void doGet(Request request, Response response) throws IOException, URISyntaxException {
         List<User> users = new UserService().findAll();
-        ModelAndView modelAndView = new ModelAndView(request.extractUrl());
+        ModelAndView modelAndView = new ModelAndView("/user/list.html");
         modelAndView.setModels("users", users);
         response.configureOkResponse(modelAndView);
     }
