@@ -25,7 +25,10 @@ public class RequestHeader {
     }
 
     public String get(String attributeName) {
-        return headerAttributes.get(attributeName);
+        if (headerAttributes.containsKey(attributeName)) {
+            return headerAttributes.get(attributeName);
+        }
+        throw new IllegalArgumentException("Not Found Header Attribute");
     }
 
     public int getContentLength() {
