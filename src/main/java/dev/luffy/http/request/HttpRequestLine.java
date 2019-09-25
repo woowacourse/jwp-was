@@ -35,20 +35,24 @@ public class HttpRequestLine {
         return url;
     }
 
-    public String getPath() {
-        return url.getPath();
-    }
-
     public HttpProtocol getProtocol() {
         return protocol;
     }
 
-    public boolean hasExtension() {
-        return url.hasExtension();
+    String getPath() {
+        return url.getPath();
     }
 
-    public String getExtension() {
+    String getExtension() {
         return url.getExtension();
+    }
+
+    boolean isStaticContent() {
+        return url.hasExtension() && !nonStaticContent();
+    }
+
+    private boolean nonStaticContent() {
+        return getPath().contains(".html");
     }
 
     @Override

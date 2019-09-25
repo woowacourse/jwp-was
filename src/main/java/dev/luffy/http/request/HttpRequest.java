@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import dev.luffy.http.HttpProtocol;
 import dev.luffy.http.excption.NotSupportedHttpRequestException;
 import dev.luffy.utils.HttpRequestUtils;
 import dev.luffy.utils.IOUtils;
@@ -83,6 +84,10 @@ public class HttpRequest {
         return httpRequestLine.getMethod();
     }
 
+    public HttpProtocol getProtocol() {
+        return httpRequestLine.getProtocol();
+    }
+
     public String getPath() {
         return httpRequestLine.getPath();
     }
@@ -100,7 +105,7 @@ public class HttpRequest {
     }
 
     public boolean isStaticRequest() {
-        return httpRequestLine.hasExtension() && !httpRequestLine.getPath().contains(".html");
+        return httpRequestLine.isStaticContent();
     }
 
     public String pathExtension() {
@@ -115,9 +120,5 @@ public class HttpRequest {
                 ", httpRequestHeader=" + httpRequestHeader + "\n" +
                 ", httpRequestBody=" + httpRequestBody + "\n" +
                 '}';
-    }
-
-    public boolean isPathEquals(String requestPath) {
-        return requestPath.equals(getPath());
     }
 }
