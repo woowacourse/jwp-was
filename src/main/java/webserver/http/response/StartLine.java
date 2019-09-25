@@ -6,8 +6,11 @@ public class StartLine {
     private HttpVersion httpVersion;
     private HttpStatus httpStatus;
 
-    public StartLine(final HttpVersion httpVersion, final HttpStatus httpStatus) {
+    public StartLine(final HttpVersion httpVersion) {
         this.httpVersion = httpVersion;
+    }
+
+    public void setHttpStatus(final HttpStatus httpStatus) {
         this.httpStatus = httpStatus;
     }
 
