@@ -14,10 +14,6 @@ public class LoginController extends HttpController {
         return LazyHolder.INSTANCE;
     }
 
-    private static class LazyHolder {
-        private static final LoginController INSTANCE = new LoginController();
-    }
-
     @Override
     protected void doGet(Request request, Response response) {
         throw new InvalidRequestMethodException();
@@ -33,5 +29,9 @@ public class LoginController extends HttpController {
             response.configureFoundResponse("/user/login_failed.html");
             response.setCookie("logined=false; Path=/");
         }
+    }
+
+    private static class LazyHolder {
+        private static final LoginController INSTANCE = new LoginController();
     }
 }
