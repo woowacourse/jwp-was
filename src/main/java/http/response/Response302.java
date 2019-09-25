@@ -18,6 +18,9 @@ public class Response302 extends HttpResponse {
         try {
             dos.writeBytes(statusLine.getHttpVersion() + BLANK + statusLine.getCodeAndStatus() + "\r\n");
             dos.writeBytes("Location: " + responseHeader.findHeader("Location") + "\r\n");
+
+            dos.writeBytes("Set-Cookie: "+responseHeader.findHeader("Set-Cookie")+"\r\n");  // 1번
+            dos.writeBytes("Set-Cookie: "+responseCookie.getCookie()+"\r\n");       // 2번
             dos.writeBytes("\r\n");
             responseBody(dos, responseBody.getBody());
         } catch (IOException e) {

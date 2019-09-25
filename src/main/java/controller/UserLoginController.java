@@ -28,18 +28,21 @@ public class UserLoginController implements Controller {
         HttpHeader responseHeader = new HttpHeader();
 
         if (user == null || !user.isPasswordEquals(password)) {
-            responseHeader.putHeader("Set-Cookie", "logined=false");
             responseHeader.putHeader("Location", LOGIN_FAIL_PATH);
+            responseHeader.putHeader("Set-Cookie", "logined=false");
             return new Response302(statusLine, responseHeader, null);
         }
 
-        responseHeader.putHeader("Set-Cookie", "logined=true");
         responseHeader.putHeader("Location", LOGIN_PATH);
+
+        responseHeader.putHeader("Set-Cookie", "logined=true; Path=/"); // 1
+        responseCookie.setCookie(새로운 쿠키);       // 2
+
         return new Response302(statusLine, responseHeader, null);
     }
 
     @Override
     public boolean isMapping(final RequestMapping requestMapping) {
-        return false;
+        return LOGIN_REQUEST_MAPPING.equals(requestMapping);
     }
 }

@@ -23,16 +23,9 @@ public class Controllers {
     public HttpResponse service(HttpRequest httpRequest) {
         RequestMapping requestMapping = RequestMapping.of(httpRequest.getHttpMethod(), httpRequest.getUri());
 
-        for (final Controller controller : CONTROLLERS) {
-            if(controller.isMapping(requestMapping)){
-                return controller.service(httpRequest);
-            }
-        }
-        return null;
-
-//        return CONTROLLERS.stream().filter(controller -> controller.isMapping(requestMapping))
-//            .findFirst()
-//            .map(controller -> controller.service(httpRequest))
-//            .orElse(null);      // TODO: null -> 405 response로 변경
+        return CONTROLLERS.stream().filter(controller -> controller.isMapping(requestMapping))
+            .findFirst()
+            .map(controller -> controller.service(httpRequest))
+            .orElse(null);      // TODO: null -> 405 response로 변경
     }
 }
