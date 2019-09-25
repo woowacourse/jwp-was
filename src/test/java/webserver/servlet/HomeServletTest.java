@@ -15,8 +15,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static utils.HttpRequestUtils.generateTemplateFilePath;
@@ -28,7 +26,7 @@ class HomeServletTest {
     void doGet() throws IOException, URISyntaxException {
         InputStream inputStream = new FileInputStream(new File(testDirectory + "request_root_test.txt"));
         HttpRequest httpRequest = HttpRequestParser.parse(new BufferedReader(new InputStreamReader(inputStream)));
-        HomeServlet homeServlet = HomeServlet.getInstance();
+        HomeServlet homeServlet = new HomeServlet();
         String filePath = generateTemplateFilePath(httpRequest.getAbsPath() + "index.html");
         byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
         ResponseHeader header = new ResponseHeader();

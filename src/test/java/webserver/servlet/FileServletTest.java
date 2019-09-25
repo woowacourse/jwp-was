@@ -30,7 +30,7 @@ class FileServletTest {
     void run () throws IOException, URISyntaxException {
         InputStream inputStream = new FileInputStream(new File(testDirectory + "request_index_test.txt"));
         HttpRequest httpRequest = HttpRequestParser.parse(new BufferedReader(new InputStreamReader(inputStream)));
-        FileServlet fileServlet = FileServlet.getInstance();
+        FileServlet fileServlet = new FileServlet();
         byte[] body = FileIoUtils.loadFileFromClasspath(HttpRequestUtils.generateTemplateFilePath(httpRequest.getAbsPath()));
         HttpResponse httpResponse = fileServlet.run(httpRequest);
         ResponseHeader header = new ResponseHeader();

@@ -65,7 +65,8 @@
 
 피드백
 
-- [ ] servlet 싱글톤 다시 변경
-- [ ] FileServlet 한 번만 생성되게 변경
+- [x] servlet 싱글톤 다시 변경
+- [x] FileServlet 한 번만 생성되게 변경
 - [ ] file일 경우만 FileServlet으로 가게 변경
 - [x] response 만드는 부분 메소드 추출하기
+- [x] mappingHandler의 servlets Map의 value 타입을 Object -> HttpServlet으로 바꾸기

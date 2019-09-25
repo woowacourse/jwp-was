@@ -9,14 +9,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MappingHandler {
-    private static Map<String, Object> servlets = new HashMap<>();
+    private static Map<String, HttpServlet> servlets = new HashMap<>();
+    private static HttpServlet fileServlet;
 
     static {
-        servlets.put("/", HomeServlet.getInstance());
-        servlets.put("/user/create", UserCreateServlet.getInstance());
+        servlets.put("/", new HomeServlet());
+        servlets.put("/user/create", new UserCreateServlet());
+        fileServlet = new FileServlet();
     }
 
     public static HttpServlet getServlets(String absPath) {
-        return (HttpServlet) servlets.getOrDefault(absPath, FileServlet.getInstance());
+        return servlets.getOrDefault(absPath, fileServlet);
     }
 }

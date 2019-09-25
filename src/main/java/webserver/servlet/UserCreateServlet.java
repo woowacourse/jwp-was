@@ -11,17 +11,6 @@ import webserver.response.ResponseHeader;
 
 public class UserCreateServlet extends RequestServlet {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private static UserCreateServlet instance = null;
-
-    private UserCreateServlet() {
-    }
-
-    public static UserCreateServlet getInstance() {
-        if (instance == null) {
-            instance = new UserCreateServlet();
-        }
-        return instance;
-    }
 
     @Override
     public HttpResponse doPost(HttpRequest httpRequest) {
