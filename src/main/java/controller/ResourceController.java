@@ -30,6 +30,6 @@ public class ResourceController implements Controller {
 
     @Override
     public boolean isMapping(final RequestMapping requestMapping) {
-        return requestMapping.isMatches(RESOURCE_FILE_REGEX);
+        return requestMapping.isEquals(requestMapping, RESOURCE_FILE_REGEX);
     }
 }

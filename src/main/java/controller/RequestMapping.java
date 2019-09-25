@@ -19,12 +19,8 @@ public class RequestMapping {
         return new RequestMapping(httpMethod, uri);
     }
 
-    public boolean isMethodEqual(RequestMapping another) {
-        return httpMethod.equals(another.httpMethod);
-    }
-
-    public boolean isMatches(String regex) {
-        return uri.isMatches(regex);
+    public boolean isEquals(RequestMapping another, String regex) {
+        return httpMethod.equals(another.httpMethod) && uri.isMatches(regex);
     }
 
     @Override
