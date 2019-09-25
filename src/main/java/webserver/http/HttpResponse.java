@@ -1,5 +1,6 @@
 package webserver.http;
 
+import utils.io.FileIoUtils;
 import webserver.http.headerfields.HttpConnection;
 import webserver.http.headerfields.HttpContentType;
 import webserver.http.headerfields.HttpStatusCode;
@@ -29,14 +30,14 @@ public class HttpResponse {
     private final HttpVersion version;
     private final HttpStatusCode statusCode;
     private final HttpContentType contentType;
-    private Map<String, String> optionField;
+    private final Map<String, String> optionFields;
     private final String body;
 
     public static class HttpResponseBuilder {
         private HttpVersion version = HttpVersion.HTTP_1_1;
         private HttpStatusCode statusCode = HttpStatusCode.OK;
-        private final HttpContentType contentType;
-        private Map<String, String> optionField = new HashMap<>();
+        private HttpContentType contentType;
+        private Map<String, String> optionFields = new HashMap<>();
         private String body = "";
 
         public HttpResponseBuilder(HttpContentType contentType) {
@@ -54,12 +55,12 @@ public class HttpResponse {
         }
 
         public HttpResponseBuilder connection(HttpConnection connection) {
-            optionField.put("Connection", connection.toString());
+            optionFields.put("Connection", connection.toString());
             return this;
         }
 
         public HttpResponseBuilder location(String location) {
-            optionField.put("Location", location);
+            optionFields.put("Location", location);
             return this;
         }
 
@@ -81,7 +82,7 @@ public class HttpResponse {
         this.version = builder.version;
         this.statusCode = builder.statusCode;
         this.contentType = builder.contentType;
-        this.optionField = builder.optionField;
+        this.optionFields = builder.optionFields;
         this.body = builder.body;
     }
 
@@ -102,10 +103,20 @@ public class HttpResponse {
                 .build();
     }
 
+    public static HttpResponse staticFiles(HttpRequest request) {
+        return FileIoUtils.loadFileFromClasspath("./static" + request.path()).map(body ->
+                HttpResponse.builder(HttpContentType.extensionToContentType(request.path().extension()))
+                        .version(request.version())
+                        .connection(request.connection())
+                        .body(body)
+                        .build()
+        ).orElse(HttpResponse.NOT_FOUND);
+    }
+
     public String serializeHeader() {
         final StringBuilder header = new StringBuilder(serializeMandatory());
 
-        optionField.keySet().forEach(key -> header.append(headerParse(key, optionField.get(key))));
+        optionFields.keySet().forEach(key -> header.append(headerParse(key, optionFields.get(key))));
 
         return header.toString();
     }
