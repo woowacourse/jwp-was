@@ -1,17 +1,24 @@
 package webserver;
 
+import controller.Controller;
+import http.request.HttpRequest;
+import http.request.HttpRequestCreator;
+import http.response.HttpResponse;
+import http.response.ResponseStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import webserver.exception.ResourceNotFoundException;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-
+    private final ResourceHttpRequestHandler resourceHttpRequestHandler = ResourceHttpRequestHandler.getInstance();
+    private final HandlerMapping handlerMapping = HandlerMapping.getInstance();
     private Socket connection;
 
     public RequestHandler(Socket connectionSocket) {
@@ -22,31 +29,39 @@ public class RequestHandler implements Runnable {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
 
-        try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
-            DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = "Hello World".getBytes();
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+        //TODO : IOException 처리
+        try (InputStream inputStream = connection.getInputStream(); OutputStream outputStream = connection.getOutputStream()) {
+            HttpResponse httpResponse = new HttpResponse();
+
+            HttpRequest httpRequest = HttpRequestCreator.create(inputStream);
+            handleRequest(httpRequest, httpResponse);
+
+            sendResponse(outputStream, httpResponse);
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            e.printStackTrace();
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void handleRequest(HttpRequest httpRequest, HttpResponse httpResponse) {
         try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
+            if (resourceHttpRequestHandler.canHandle(httpRequest.getPath())) {
+                resourceHttpRequestHandler.handleHttpRequest(httpRequest, httpResponse);
+                return;
+            }
+
+            Controller controller = handlerMapping.getHandler(httpRequest.getPath());
+            controller.service(httpRequest, httpResponse);
+        } catch (ResourceNotFoundException e) {
+            httpResponse.setResponseStatus(ResponseStatus.NOT_FOUND);
         }
     }
 
-    private void responseBody(DataOutputStream dos, byte[] body) {
+    private void sendResponse(OutputStream out, HttpResponse httpResponse) {
+        DataOutputStream dos = new DataOutputStream(out);
+
         try {
-            dos.write(body, 0, body.length);
+            byte[] response = httpResponse.serialize();
+            dos.write(response, 0, response.length);
             dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
