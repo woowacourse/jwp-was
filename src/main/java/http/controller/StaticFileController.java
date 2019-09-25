@@ -1,6 +1,5 @@
 package http.controller;
 
-import http.exception.NotFoundException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
@@ -12,20 +11,19 @@ import java.net.URISyntaxException;
 
 public class StaticFileController extends AbstractController {
     private static final Logger logger = LoggerFactory.getLogger(StaticFileController.class);
+    private static final String DIR_TEMPLATES = "./templates";
+    private static final String DIR_STATIC = "./static";
 
     @Override
     protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        String dir = "./static";
-        if (httpRequest.getPath().matches("^.+\\.(html)$")) {
-            dir = "./templates";
-        }
+        String dir = httpRequest.getPath().matches("^.+\\.(html)$") ? DIR_TEMPLATES : DIR_STATIC;
 
         try {
             byte[] body = FileIoUtils.loadFileFromClasspath(dir + httpRequest.getPath());
             httpResponse.setResponseBody(body, httpRequest.getPath());
         } catch (java.io.FileNotFoundException e) {
             logger.debug(e.getMessage());
-            throw new NotFoundException("파일을 찾을 수 없습니다.");
+            httpResponse.sendNotFound();
         }
         catch (URISyntaxException | IOException e) {
             logger.debug(e.getMessage());
