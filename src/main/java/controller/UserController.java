@@ -4,6 +4,7 @@ import http.request.Request;
 import http.request.RequestMethod;
 import http.response.RedirectResponse;
 import http.response.Response;
+import http.response.Response2;
 import service.UserService;
 
 import java.util.Arrays;
@@ -23,6 +24,15 @@ public class UserController implements Controller {
                 && isAllowedUrlPath(controllerMapper.getOriginalUrlPath()));
     }
 
+    @Override
+    public void processResponse(Request request, Response2 response) {
+        createUserAndRedirect(request, response);
+    }
+
+    private Response createUserAndRedirect(Request request, Response2 response) {
+        request.get
+    }
+
     private boolean isAllowedUrlPath(String originalUrlPath) {
         return allowedUrlPath.contains(originalUrlPath);
     }
@@ -32,21 +42,21 @@ public class UserController implements Controller {
                 .anyMatch(method -> method == requestMethod);
     }
 
-    @Override
-    public Response createResponse(Request request) {
-        return createPostResponse(request);
-    }
-
-    public Response createPostResponse(Request request) {
-        Map<String, String> params = new HashMap<>();
-        String queryParams = request.getRequestInformation().extractQueryParameters();
-        String[] tokens = queryParams.split("&");
-        Arrays.stream(tokens)
-                .forEach(token -> {
-                    String[] keyValues = token.split("=");
-                    params.put(keyValues[0], keyValues[1]);
-                });
-        userService.createUser(params);
-        return new RedirectResponse();
-    }
+//    @Override
+//    public Response createResponse(Request request) {
+//        return createPostResponse(request);
+//    }
+//
+//    public Response createPostResponse(Request request) {
+//        Map<String, String> params = new HashMap<>();
+//        String queryParams = request.getRequestInformation().extractQueryParameters();
+//        String[] tokens = queryParams.split("&");
+//        Arrays.stream(tokens)
+//                .forEach(token -> {
+//                    String[] keyValues = token.split("=");
+//                    params.put(keyValues[0], keyValues[1]);
+//                });
+//        userService.createUser(params);
+//        return new RedirectResponse();
+//    }
 }

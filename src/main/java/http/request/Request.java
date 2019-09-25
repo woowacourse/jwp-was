@@ -10,6 +10,7 @@ public class Request {
     public Request(RequestMethod requestMethod, RequestUrl url, RequestInformation requestInformation) {
         this.requestMethod = requestMethod;
         this.url = url;
+        
         this.requestInformation = requestInformation;
     }
 

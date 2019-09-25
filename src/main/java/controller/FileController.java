@@ -28,17 +28,12 @@ public class FileController implements Controller {
     }
 
     @Override
-    public Response createResponse(Request request) {
+    public void createResponse(Request request) {
         return createGetResponse(request);
     }
 
     public Response createGetResponse(Request request) {
         return new FileResponse(request.getUrl().getDestinationFolderUrlPath(), request.getUrl().getRequestContentType().getContentType());
     }
-
-//    private boolean isCorrectRequestContentType(Request request) {
-//        return Arrays.stream(RequestContentType.values())
-//                .anyMatch(type -> request.getUrl().getRequestContentType() == type);
-//    }
 
 }
