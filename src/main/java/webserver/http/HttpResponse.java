@@ -88,7 +88,7 @@ public class HttpResponse {
     public static HttpResponse success(HttpRequest request, String contentType, String body) {
         return HttpResponse.builder(HttpContentType.getHttpContentType(contentType))
                 .version(request.version())
-                .connection(request.connection().orElse(null))
+                .connection(request.connection())
                 .body(body)
                 .build();
     }
@@ -97,7 +97,7 @@ public class HttpResponse {
         return HttpResponse.builder(HttpContentType.getHttpContentType(contentType))
                 .version(request.version())
                 .statusCode(HttpStatusCode.FOUND)
-                .connection(request.connection().orElse(null))
+                .connection(request.connection())
                 .location(location)
                 .build();
     }

@@ -58,7 +58,7 @@ public class Router {
         return FileIoUtils.loadFileFromClasspath("./static" + request.path()).map(body ->
             HttpResponse.builder(HttpContentType.extensionToContentType(request.path().extension()))
                         .version(request.version())
-                        .connection(request.connection().orElse(null))
+                        .connection(request.connection())
                         .body(body)
                         .build()
         ).orElse(HttpResponse.NOT_FOUND);

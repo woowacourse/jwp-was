@@ -17,6 +17,12 @@ public class SimpleStringParser implements KeyValueParser {
         this.keyValueDelimiter = keyValueDelimiter;
     }
 
+    public static String debugString(Map<String, String> x) {
+        final StringBuilder acc = new StringBuilder();
+        x.forEach((key, value) -> acc.append(String.format("%s: %s\r\n", key, value)));
+        return acc.toString();
+    }
+
     @Override
     public Map<String, String> toMap(String input) {
         return Stream.of(input.split(this.pairDelimiter))
