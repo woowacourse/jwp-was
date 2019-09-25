@@ -1,17 +1,19 @@
 package http.response;
 
 public enum ResponseStatus {
-    OK(200),
-    FOUND(302),
-    NOT_FOUND(404),
-    METHOD_NOT_ALLOWED(405),
-    INTERNAL_SERVER_ERROR(500);
+    OK(200, "OK"),
+    FOUND(302, "Found"),
+    NOT_FOUND(404, "Not Found"),
+    METHOD_NOT_ALLOWED(405, "Method Not Allowed"),
+    INTERNAL_SERVER_ERROR(500, "Internal Server Error");
 
-    private static final String RESPONSE_STATUS_FORMAT = "%s %s";
+    private static final String RESPONSE_STATUS_FORMAT = "%d %s";
     private final int statusCode;
+    private final String responsePhrase;
 
-    ResponseStatus(int statusCode) {
+    ResponseStatus(int statusCode, String responsePhrase) {
         this.statusCode = statusCode;
+        this.responsePhrase = responsePhrase;
     }
 
     public int getStatusCode() {
@@ -19,6 +21,6 @@ public enum ResponseStatus {
     }
 
     public String serialize() {
-        return String.format(RESPONSE_STATUS_FORMAT, String.valueOf(statusCode), this.name());
+        return String.format(RESPONSE_STATUS_FORMAT, statusCode, responsePhrase);
     }
 }
