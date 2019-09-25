@@ -33,7 +33,7 @@ public class HttpRequestStartLine {
         String path = splitUrl[0];
         HttpRequestParameter httpRequestParameters = parseHttpRequestParameter(splitUrl);
 
-        HttpVersion httpVersion = HttpVersion.valueOf(startLineValues[2]);
+        HttpVersion httpVersion = HttpVersion.findVersion(startLineValues[2]);
 
         return new HttpRequestStartLine(httpMethodType, path, httpRequestParameters, httpVersion);
     }
