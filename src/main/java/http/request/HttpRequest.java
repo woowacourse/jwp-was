@@ -37,7 +37,15 @@ public class HttpRequest {
         return requestLine.getQuery();
     }
 
-    public String findParam(String name) {
+    public Map<String, String> getUriQueryParam() {
+        return requestLine.getQueryParam();
+    }
+
+    public String findUriParam(String name) {
+        return requestBody.findParam(name);
+    }
+
+    public String findBodyParam(String name) {
         return requestBody.findParam(name);
     }
 
@@ -49,7 +57,4 @@ public class HttpRequest {
         return requestLine.findPathPrefix();
     }
 
-    public Map<String, String> getQueryParam() {
-        return requestLine.getQueryParam();
-    }
 }

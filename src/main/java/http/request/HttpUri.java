@@ -37,4 +37,8 @@ public class HttpUri {
     public Map<String, String> getQueryParam() {
         return QueryParamsParser.parse(uri.getQuery());
     }
+
+    public boolean isEqualsPath(final HttpUri aUri) {
+        return uri.getPath().equals(aUri.getPath());
+    }
 }

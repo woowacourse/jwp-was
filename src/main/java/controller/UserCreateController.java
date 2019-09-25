@@ -20,10 +20,10 @@ public class UserCreateController implements Controller {
 
     @Override
     public HttpResponse service(final HttpRequest httpRequest) {
-        String userId = httpRequest.findParam("userId");
-        String password = httpRequest.findParam("password");
-        String name = httpRequest.findParam("name");
-        String email = httpRequest.findParam("email");
+        String userId = httpRequest.findUriParam("userId");
+        String password = httpRequest.findUriParam("password");
+        String name = httpRequest.findUriParam("name");
+        String email = httpRequest.findUriParam("email");
 
         User user = new User(userId, password, name, email);
         DataBase.addUser(user);

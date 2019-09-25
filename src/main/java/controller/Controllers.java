@@ -14,6 +14,7 @@ public class Controllers {
         CONTROLLERS.add(new IndexController());
         CONTROLLERS.add(new UserCreateController());
         CONTROLLERS.add(new ResourceController());
+        CONTROLLERS.add(new UserLoginController());
     }
 
     public Controllers() {
@@ -22,9 +23,16 @@ public class Controllers {
     public HttpResponse service(HttpRequest httpRequest) {
         RequestMapping requestMapping = RequestMapping.of(httpRequest.getHttpMethod(), httpRequest.getUri());
 
-        return CONTROLLERS.stream().filter(controller -> controller.isMapping(requestMapping))
-            .findFirst()
-            .map(controller -> controller.service(httpRequest))
-            .orElse(null);      // TODO: null -> 404 response로 변경
+        for (final Controller controller : CONTROLLERS) {
+            if(controller.isMapping(requestMapping)){
+                return controller.service(httpRequest);
+            }
+        }
+        return null;
+
+//        return CONTROLLERS.stream().filter(controller -> controller.isMapping(requestMapping))
+//            .findFirst()
+//            .map(controller -> controller.service(httpRequest))
+//            .orElse(null);      // TODO: null -> 405 response로 변경
     }
 }

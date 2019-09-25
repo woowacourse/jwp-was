@@ -30,7 +30,6 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest httpRequest = HttpRequestParser.parse(in);
-
             HttpResponse httpResponse = new Controllers().service(httpRequest);
 
             DataOutputStream dos = new DataOutputStream(out);

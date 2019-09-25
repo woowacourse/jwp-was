@@ -29,7 +29,7 @@ public class RequestMapping {
         if (o == null || getClass() != o.getClass()) return false;
         final RequestMapping that = (RequestMapping) o;
         return httpMethod == that.httpMethod &&
-            Objects.equals(uri, that.uri);
+            uri.isEqualsPath(that.uri);
     }
 
     @Override
