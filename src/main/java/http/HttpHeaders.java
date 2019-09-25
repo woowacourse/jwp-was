@@ -5,6 +5,11 @@ import java.util.Map;
 import java.util.Objects;
 
 public class HttpHeaders {
+    public static final String ACCEPT = "ACCEPT";
+    public static final String CONTENT_TYPE = "Content-Type";
+    public static final String CONTENT_LENGTH = "Content-Length";
+    public static final String LOCATION = "Location";
+
     private Map<String, String> headers;
 
     public HttpHeaders() {
@@ -15,16 +20,16 @@ public class HttpHeaders {
         this.headers = headers;
     }
 
+    public boolean existHeader(String header) {
+        return headers.containsKey(header);
+    }
+
     public String getHeader(String key) {
         return headers.get(key);
     }
 
     public String put(String key, String value) {
         return headers.put(key, value);
-    }
-
-    public boolean hasContentLength() {
-        return headers.get("Content-Length") != null;
     }
 
     @Override

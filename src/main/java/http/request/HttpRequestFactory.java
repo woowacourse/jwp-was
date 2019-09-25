@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static http.HttpHeaders.CONTENT_LENGTH;
 import static java.net.URLDecoder.decode;
 
 public class HttpRequestFactory {
@@ -84,8 +85,8 @@ public class HttpRequestFactory {
 
     private static String getBody(BufferedReader buffer, HttpHeaders headers) throws IOException {
         String body = EMPTY;
-        if (headers.hasContentLength()) {
-            int contentLength = Integer.parseInt(headers.getHeader("Content-Length"));
+        if (headers.existHeader(CONTENT_LENGTH)) {
+            int contentLength = Integer.parseInt(headers.getHeader(CONTENT_LENGTH));
             body = decode(IOUtils.readData(buffer, contentLength), StandardCharsets.UTF_8.name());
         }
         return body;

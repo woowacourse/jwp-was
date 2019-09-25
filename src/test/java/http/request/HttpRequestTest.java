@@ -66,21 +66,19 @@ class HttpRequestTest {
     void QueryParams_GET() throws IOException {
         InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "Http_GET.txt"));
         HttpRequest httpRequest = HttpRequestFactory.makeHttpRequest(in);
-        QueryParams queryParams = httpRequest.getQueryParams();
 
-        assertThat(queryParams.getParam("userId")).isEqualTo("woowa");
-        assertThat(queryParams.getParam("password")).isEqualTo("password");
-        assertThat(queryParams.getParam("name")).isEqualTo("woo");
+        assertThat(httpRequest.getParam("userId")).isEqualTo("woowa");
+        assertThat(httpRequest.getParam("password")).isEqualTo("password");
+        assertThat(httpRequest.getParam("name")).isEqualTo("woo");
     }
 
     @Test
     void QueryParams_POST() throws IOException {
         InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "Http_POST.txt"));
         HttpRequest httpRequest = HttpRequestFactory.makeHttpRequest(in);
-        QueryParams queryParams = httpRequest.getQueryParams();
 
-        assertThat(queryParams.getParam("userId")).isEqualTo("woowa");
-        assertThat(queryParams.getParam("password")).isEqualTo("password");
-        assertThat(queryParams.getParam("name")).isEqualTo("woo");
+        assertThat(httpRequest.getParam("userId")).isEqualTo("woowa");
+        assertThat(httpRequest.getParam("password")).isEqualTo("password");
+        assertThat(httpRequest.getParam("name")).isEqualTo("woo");
     }
 }

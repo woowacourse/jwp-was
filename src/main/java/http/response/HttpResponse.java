@@ -3,6 +3,9 @@ package http.response;
 import http.HttpHeaders;
 import http.HttpMimeType;
 
+import static http.HttpHeaders.CONTENT_LENGTH;
+import static http.HttpHeaders.CONTENT_TYPE;
+
 public class HttpResponse {
     public static final String CRLF = "\r\n";
 
@@ -24,8 +27,8 @@ public class HttpResponse {
 
     public void setBody(byte[] body, HttpMimeType mediaType) {
         if (body != null) {
-            headers.put("Content-Type", mediaType.toString());
-            headers.put("Content-Length", Integer.toString(body.length));
+            headers.put(CONTENT_TYPE, mediaType.toString());
+            headers.put(CONTENT_LENGTH, Integer.toString(body.length));
             this.body = body;
         }
     }

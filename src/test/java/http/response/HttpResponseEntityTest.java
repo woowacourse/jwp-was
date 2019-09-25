@@ -3,6 +3,7 @@ package http.response;
 import http.HttpHeaders;
 import org.junit.jupiter.api.Test;
 
+import static http.HttpHeaders.LOCATION;
 import static http.response.HttpResponseEntity.METHOD_NOT_ALLOWED_PATH;
 import static http.response.HttpResponseEntity.NOT_FOUND_PATH;
 import static http.response.HttpStatus.*;
@@ -25,7 +26,7 @@ class HttpResponseEntityTest {
         String location = "/test.html";
         HttpResponseEntity httpResponseEntity = HttpResponseEntity.get302Response(location);
         HttpHeaders headers = new HttpHeaders();
-        headers.put("Location", location);
+        headers.put(LOCATION, location);
 
         assertThat(httpResponseEntity.getStatus()).isEqualTo(FOUND);
         assertThat(httpResponseEntity.getHeaders()).isEqualTo(headers);

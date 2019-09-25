@@ -2,6 +2,7 @@ package http.response;
 
 import http.HttpHeaders;
 
+import static http.HttpHeaders.LOCATION;
 import static http.response.HttpStatus.*;
 
 public class HttpResponseEntity {
@@ -25,7 +26,7 @@ public class HttpResponseEntity {
 
     public static HttpResponseEntity get302Response(String location) {
         HttpHeaders headers = new HttpHeaders();
-        headers.put("Location", location);
+        headers.put(LOCATION, location);
         return new HttpResponseEntity(FOUND, headers, null);
     }
 

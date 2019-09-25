@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 
+import static http.HttpHeaders.CONTENT_LENGTH;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class HttpHeadersTest {
@@ -24,10 +25,10 @@ class HttpHeadersTest {
         HttpHeaders httpHeaders;
         Map<String, String> headers = new HashMap<>();
 
-        headers.put("Content-Length", "5");
+        headers.put(CONTENT_LENGTH, "5");
         httpHeaders = new HttpHeaders(headers);
 
-        assertThat(httpHeaders.hasContentLength()).isTrue();
+        assertThat(httpHeaders.existHeader(CONTENT_LENGTH)).isTrue();
     }
 
     @Test
@@ -37,6 +38,6 @@ class HttpHeadersTest {
 
         httpHeaders = new HttpHeaders(headers);
 
-        assertThat(httpHeaders.hasContentLength()).isFalse();
+        assertThat(httpHeaders.existHeader(CONTENT_LENGTH)).isFalse();
     }
 }
