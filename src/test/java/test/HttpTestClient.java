@@ -28,36 +28,36 @@ public class HttpTestClient {
     public static final int DEFAULT_PORT = WebServer.DEFAULT_PORT;
     private static final String LOCALHOST = "localhost";
 
-    private final BufferedReader in;
-    private final PrintWriter out;
     private final int port;
+    private String host;
 
     public HttpTestClient(int port) {
         this(LOCALHOST, port);
     }
 
     public HttpTestClient(String host, int port) {
-        try {
-            this.port = port;
-            WebServer webServer = new WebServer(port);
-            Thread thread = new Thread(webServer);
-            thread.start();
+        this.host = host;
+        this.port = port;
+        WebServer webServer = new WebServer(port);
+        Thread thread = new Thread(webServer);
+        thread.start();
+    }
 
+    public String send(String request) {
+        try {
             Socket socket = new Socket(host, port);
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())));
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())));
+
+            out.print(request);
+            out.flush();
+
+            List<String> lines = in.lines().collect(Collectors.toList());
+            return String.join("\n", lines);
         } catch (IOException e) {
             e.printStackTrace();
             throw new IllegalArgumentException();
         }
-    }
-
-    public String send(String request) {
-        out.print(request);
-        out.flush();
-
-        List<String> lines = in.lines().collect(Collectors.toList());
-        return String.join("\n", lines);
     }
 
     public HttpRequestBuilder get() {
@@ -76,6 +76,7 @@ public class HttpTestClient {
         return new HttpRequestBuilder(HttpMethod.DELETE.name());
     }
 
+    // todo Cookie 설정 가능하게 추가
     public class HttpRequestBuilder {
         private String method;
         private String uri;
@@ -156,7 +157,7 @@ public class HttpTestClient {
             }
 
             // cookies
-            cookies = new Cookies(headers.get(HttpHeaders.COOKIE));
+            cookies = new Cookies(headers.get(HttpHeaders.SET_COOKIE));
 
 
             // body
@@ -192,6 +193,10 @@ public class HttpTestClient {
         public ResponseSpec matchCookie(final String key, final String value) {
             assertThat(cookies.get(key)).isEqualTo(value);
             return this;
+        }
+
+        public String getCookie(final String key) {
+            return cookies.get(key);
         }
     }
 }

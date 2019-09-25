@@ -10,6 +10,11 @@ public class LoginServlet extends AbstractServlet {
     public static final String LOGINED = "logined";
 
     @Override
+    protected void doGet(final HttpRequest request, final HttpResponse response) {
+        response.forward("./templates/user/login.html");
+    }
+
+    @Override
     protected void doPost(final HttpRequest request, final HttpResponse response) {
         final String userId = request.getParameter("userId");
         final String password = request.getParameter("password");
@@ -18,7 +23,6 @@ public class LoginServlet extends AbstractServlet {
         // todo 리팩토링
         if (user != null && user.matchPassword(password)) {
             response.setCookie(LOGINED, true);
-            response.setCookie("Path", "/");
             response.sendRedirect("/");
         } else {
             response.setCookie(LOGINED, false);

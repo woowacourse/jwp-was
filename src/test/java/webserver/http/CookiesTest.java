@@ -56,12 +56,28 @@ public class CookiesTest {
     void 모든_쿠키_String으로_얻기() {
         // given
         final String text = "JSESSIONID=123; logined=true";
+        final String actual = text+"; Path=/";
         final Cookies cookies = new Cookies(text);
 
         // when
         final String expected = cookies.getAllCookiesAsString();
 
         // then
-        assertThat(text).isEqualTo(expected);
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void Path_설정_확인() {
+        // given
+        final String text = "JSESSIONID=123; logined=true";
+        final String actual = text+"; Path=/test";
+        final Cookies cookies = new Cookies(text);
+        cookies.setPath("/test");
+
+        // when
+        final String expected = cookies.getAllCookiesAsString();
+
+        // then
+        assertThat(actual).isEqualTo(expected);
     }
 }

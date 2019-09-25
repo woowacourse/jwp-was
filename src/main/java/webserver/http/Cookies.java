@@ -4,17 +4,17 @@ import webserver.http.request.Pair;
 import webserver.http.utils.HttpUtils;
 import webserver.http.utils.StringUtils;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Cookies {
     private static final String DELIMITER_COOKIE = "; ";
     private static final String DELIMITER_COOKIE_PAIR = "=";
+    private static final String PATH_KEY_NAME = "Path";
+    private static final String DEFAULT_PATH = "/";
 
     private final Map<String, String> map;
+    private String path = DEFAULT_PATH;
 
     public Cookies() {
         this.map = new HashMap<>();
@@ -27,7 +27,7 @@ public class Cookies {
     // todo 유효하지 않은 값 예외처리도 해줘야할까? ex) login/true
     private static Map<String, String> parseCookie(final String cookieText) {
         if (StringUtils.isEmpty(cookieText)) {
-            return new HashMap<>();
+            return new LinkedHashMap<>();
         }
 
         return Arrays.stream(cookieText.split(DELIMITER_COOKIE))
@@ -39,7 +39,12 @@ public class Cookies {
     public String getAllCookiesAsString() {
         return map.keySet().stream()
                 .map(key -> key + DELIMITER_COOKIE_PAIR + map.get(key))
-                .collect(Collectors.joining(DELIMITER_COOKIE));
+                .collect(Collectors.joining(DELIMITER_COOKIE))
+                + String.format("%s%s%s%s", DELIMITER_COOKIE, PATH_KEY_NAME, DELIMITER_COOKIE_PAIR, path);
+    }
+
+    public void setPath(final String path) {
+        this.path = path;
     }
 
     public String get(final String key) {
@@ -62,7 +67,7 @@ public class Cookies {
         return map.isEmpty();
     }
 
-    public boolean isNotEmpty(){
+    public boolean isNotEmpty() {
         return !isEmpty();
     }
 }

@@ -77,7 +77,7 @@ public class HttpResponse {
     private void write() {
         // todo 쿠키 어떻게 입력?
         if (cookies.isNotEmpty()) {
-            setHeader(HttpHeaders.COOKIE, cookies.getAllCookiesAsString());
+            setHeader(HttpHeaders.SET_COOKIE, cookies.getAllCookiesAsString());
         }
         try (DataOutputStream dos = new DataOutputStream(out)) {
             writeStartLine(dos);
