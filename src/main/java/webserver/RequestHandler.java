@@ -2,8 +2,9 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.controller.AbstractController;
 import webserver.controller.request.HttpRequest;
-import webserver.controller.request.RequestMapper;
+import webserver.controller.request.MimeType;
 import webserver.controller.response.HttpResponse;
 
 import java.io.IOException;
@@ -26,10 +27,12 @@ public class RequestHandler implements Runnable {
 
         try (InputStream inputStream = connection.getInputStream(); OutputStream outputStream = connection.getOutputStream()) {
             HttpRequest httpRequest = new HttpRequest(inputStream);
-            HttpResponse httpResponse = new HttpResponse(outputStream);
-            RequestMapper requestMapper = new RequestMapper();
-            requestMapper.executeMapping(httpRequest, httpResponse);
-        } catch (IOException e) {
+            HttpResponse httpResponse = new HttpResponse(httpRequest);
+
+            Router.route(httpRequest,httpResponse);
+            Renderer renderer = Renderer.getInstance();
+            renderer.render(outputStream,httpResponse);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
