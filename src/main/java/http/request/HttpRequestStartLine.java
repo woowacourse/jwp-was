@@ -13,11 +13,13 @@ public class HttpRequestStartLine {
     private final HttpMethodType httpMethodType;
     private final String path;
     private final HttpRequestParameter httpRequestParameters;
+    private HttpVersion httpVersion;
 
-    private HttpRequestStartLine(HttpMethodType httpMethodType, String path, HttpRequestParameter httpRequestParameters) {
+    private HttpRequestStartLine(HttpMethodType httpMethodType, String path, HttpRequestParameter httpRequestParameters, HttpVersion httpVersion) {
         this.httpMethodType = httpMethodType;
         this.path = path;
         this.httpRequestParameters = httpRequestParameters;
+        this.httpVersion = httpVersion;
     }
 
     public static HttpRequestStartLine of(String startLine) throws UnsupportedEncodingException {
@@ -26,12 +28,14 @@ public class HttpRequestStartLine {
         HttpMethodType httpMethodType = HttpMethodType.valueOf(startLineValues[0]);
 
         String url = startLineValues[1];
-        String[] splittedUrl = url.split(QUERY_SPLITTER);
+        String[] splitUrl = url.split(QUERY_SPLITTER);
 
-        String path = splittedUrl[0];
-        HttpRequestParameter httpRequestParameters = parseHttpRequestParameter(splittedUrl);
+        String path = splitUrl[0];
+        HttpRequestParameter httpRequestParameters = parseHttpRequestParameter(splitUrl);
 
-        return new HttpRequestStartLine(httpMethodType, path, httpRequestParameters);
+        HttpVersion httpVersion = HttpVersion.valueOf(startLineValues[2]);
+
+        return new HttpRequestStartLine(httpMethodType, path, httpRequestParameters, httpVersion);
     }
 
     private static HttpRequestParameter parseHttpRequestParameter(String[] splittedUrl) throws UnsupportedEncodingException {
@@ -52,6 +56,10 @@ public class HttpRequestStartLine {
 
     String getParameter(String key) {
         return httpRequestParameters.getParameter(key);
+    }
+
+    HttpVersion getHttpVersion() {
+        return httpVersion;
     }
 
     boolean hasParameters() {

@@ -23,8 +23,8 @@ public class HttpResponse {
         header = new HttpHeader(headers);
     }
 
-    public void okResponse(String contentType, byte[] body) {
-        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.OK, HttpVersion.HTTP_1_1);
+    public void okResponse(String contentType, HttpVersion httpVersion, byte[] body) {
+        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.OK, httpVersion);
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "text/" + contentType + ";charset=utf-8");
         headers.put("Content-Length", "" + body.length);
@@ -32,34 +32,34 @@ public class HttpResponse {
         this.body = body;
     }
 
-    public void redirectResponse(String location) {
-        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.FOUND, HttpVersion.HTTP_1_1);
+    public void redirectResponse(HttpVersion httpVersion, String location) {
+        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.FOUND, httpVersion);
         Map<String, String> header = new HashMap<>();
         header.put("Location", location);
         addHeader(header);
         this.body = new byte[]{};
     }
 
-    public void badRequest() {
-        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.BAD_REQUEST, HttpVersion.HTTP_1_1);
+    public void badRequest(HttpVersion httpVersion) {
+        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.BAD_REQUEST, httpVersion);
         addHeader(new HashMap<>());
         this.body = new byte[]{};
     }
 
-    public void notFound() {
-        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.NOT_FOUND, HttpVersion.HTTP_1_1);
+    public void notFound(HttpVersion httpVersion) {
+        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.NOT_FOUND, httpVersion);
         addHeader(new HashMap<>());
         this.body = new byte[]{};
     }
 
-    public void methodNotAllow() {
-        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.METHOD_NOT_FOUND, HttpVersion.HTTP_1_1);
+    public void methodNotAllow(HttpVersion httpVersion) {
+        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.METHOD_NOT_FOUND, httpVersion);
         addHeader(new HashMap<>());
         this.body = new byte[]{};
     }
 
-    public void internalServerError() {
-        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.INTERNAL_SERVER_ERROR, HttpVersion.HTTP_1_1);
+    public void internalServerError(HttpVersion httpVersion) {
+        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.INTERNAL_SERVER_ERROR, httpVersion);
         addHeader(new HashMap<>());
         this.body = new byte[]{};
     }

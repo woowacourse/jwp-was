@@ -52,4 +52,7 @@ public class HttpRequest {
         return httpBody;
     }
 
+    public HttpVersion getVersion() {
+        return httpRequestStartLine.getHttpVersion();
+    }
 }

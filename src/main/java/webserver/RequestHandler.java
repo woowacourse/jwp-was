@@ -2,6 +2,7 @@ package webserver;
 
 import http.NotSupportedHttpMethodException;
 import http.request.HttpRequest;
+import http.request.HttpVersion;
 import http.request.RequestFactory;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
@@ -38,19 +39,19 @@ public class RequestHandler implements Runnable {
 
         } catch (BadRequestException e) {
             logger.error(e.getMessage());
-            httpResponse.badRequest();
+            httpResponse.badRequest(HttpVersion.HTTP_1_1);
 
         } catch (NotFoundException e) {
             logger.error(e.getMessage());
-            httpResponse.notFound();
+            httpResponse.notFound(HttpVersion.HTTP_1_1);
 
         } catch (NotSupportedHttpMethodException e) {
             logger.error(e.getMessage());
-            httpResponse.methodNotAllow();
+            httpResponse.methodNotAllow(HttpVersion.HTTP_1_1);
 
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
-            httpResponse.internalServerError();
+            httpResponse.internalServerError(HttpVersion.HTTP_1_1);
         }
     }
 }
