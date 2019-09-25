@@ -31,6 +31,10 @@ public class HttpRequest {
         return body.getBody(key);
     }
 
+    public String getCookie(String key) {
+        return header.getCookie(key);
+    }
+
     public boolean isFile() {
         return requestLine.isFile();
     }

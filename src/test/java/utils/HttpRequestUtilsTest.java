@@ -11,7 +11,7 @@ public class HttpRequestUtilsTest {
     void parseParamToMap() {
         String rawParams = "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
 
-        Map<String, String> params = HttpRequestUtils.parseParamToMap(rawParams);
+        Map<String, String> params = HttpRequestUtils.parseBodyParamToMap(rawParams);
 
         assertThat(params.get("userId")).isEqualTo("javajigi");
         assertThat(params.get("password")).isEqualTo("password");
