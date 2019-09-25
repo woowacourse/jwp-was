@@ -31,6 +31,6 @@ public class UserListController extends AbstractController {
     }
 
     private boolean hasAuth(ServletRequest servletRequest) {
-        return !servletRequest.hasCookie() || !"true".equals(servletRequest.getCookie("logined"));
+        return servletRequest.hasCookie() && "true".equals(servletRequest.getCookie("logined"));
     }
 }
