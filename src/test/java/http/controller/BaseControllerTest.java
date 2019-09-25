@@ -15,4 +15,8 @@ public abstract class BaseControllerTest {
     protected ServletResponse getDefaultResponse() {
         return new ServletResponse(new ByteArrayOutputStream());
     }
+
+    protected boolean isLogin(ServletResponse servletResponse) {
+        return servletResponse.getHeader("Set-Cookie").equals("logined=true; Path=/");
+    }
 }

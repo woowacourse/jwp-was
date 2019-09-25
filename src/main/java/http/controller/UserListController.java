@@ -19,15 +19,18 @@ public class UserListController extends AbstractController {
 
     @Override
     public void handle(ServletRequest servletRequest, ServletResponse servletResponse) {
-        if (!servletRequest.hasCookie() || !"true".equals(servletRequest.getCookie("logined"))) {
-            servletResponse.redirect("/index.html");
+        if (hasAuth(servletRequest)) {
+            Map<String, Object> model = new HashMap<String, Object>() {{
+                put("users", DataBase.findAll());
+            }};
+            servletResponse.ok("/user/list", model);
             return;
         }
 
-        Map<String, Object> model = new HashMap<String, Object>() {{
-            put("users", DataBase.findAll());
-        }};
+        servletResponse.redirect("/index.html");
+    }
 
-        servletResponse.ok("/user/list", model);
+    private boolean hasAuth(ServletRequest servletRequest) {
+        return !servletRequest.hasCookie() || !"true".equals(servletRequest.getCookie("logined"));
     }
 }

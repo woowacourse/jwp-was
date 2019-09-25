@@ -34,7 +34,7 @@ class LoginControllerTest extends BaseControllerTest {
     void 로그인_실패() {
         controller.handle(request, response);
 
-        assertThat(response.getHeader("Set-Cookie")).isEqualTo("logined=false");
+        assertThat(isLogin(response)).isFalse();
         assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
     }
 
@@ -49,7 +49,7 @@ class LoginControllerTest extends BaseControllerTest {
 
         controller.handle(request, response);
 
-        assertThat(response.getHeader("Set-Cookie")).isEqualTo("logined=true; Path=/");
+        assertThat(isLogin(response)).isTrue();
         assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
 
         DataBase.deleteById("userId");

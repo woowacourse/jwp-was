@@ -22,13 +22,17 @@ public class LoginController extends AbstractController {
 
         User user = DataBase.findUserById(userId);
 
-        if (user == null || !user.matchPassword(password)) {
-            servletResponse.setCookie("logined=false");
-            servletResponse.redirect("/user/login.html");
+        if (login(user, password)) {
+            servletResponse.setCookie("logined=true; Path=/");
+            servletResponse.redirect("/index.html");
             return;
         }
 
-        servletResponse.setCookie("logined=true; Path=/");
-        servletResponse.redirect("/index.html");
+        servletResponse.setCookie("logined=false");
+        servletResponse.redirect("/user/login.html");
+    }
+
+    private boolean login(User user, String password) {
+        return user == null || !user.matchPassword(password);
     }
 }
