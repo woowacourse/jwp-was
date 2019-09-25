@@ -24,7 +24,9 @@ public class RequestHeader {
 
     private void put(String headerLine) {
         String[] tokens = headerLine.split(HEADER_DELIMITER);
-        requestHeader.put(tokens[0], tokens[1]);
+        if (tokens.length == 2) {
+            requestHeader.put(tokens[0], tokens[1]);
+        }
     }
 
     public String getHeader(String key) {
