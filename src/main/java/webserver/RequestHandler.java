@@ -1,9 +1,9 @@
 package webserver;
 
-import http.request.HttpRequest;
-import http.request.HttpRequestParser;
-import http.response.HttpResponse;
-import http.response.HttpResponseParser;
+import webserver.http.request.HttpRequest;
+import webserver.http.request.HttpRequestParser;
+import webserver.http.response.HttpResponse;
+import webserver.http.response.HttpResponseParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

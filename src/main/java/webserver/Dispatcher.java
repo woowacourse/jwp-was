@@ -1,7 +1,8 @@
 package webserver;
 
-import http.request.HttpRequest;
-import http.response.HttpResponse;
+import was.HandlerMapping;
+import webserver.http.request.HttpRequest;
+import webserver.http.response.HttpResponse;
 import utils.FileIoUtils;
 
 import java.io.IOException;
