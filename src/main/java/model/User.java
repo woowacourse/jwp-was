@@ -15,6 +15,12 @@ public class User {
         this.email = email;
     }
 
+    public void matchPassword(String password) {
+        if (!this.password.equals(password)) {
+            throw new InvalidPasswordException();
+        }
+    }
+
     public String getUserId() {
         return userId;
     }
@@ -29,12 +35,6 @@ public class User {
 
     public String getEmail() {
         return email;
-    }
-
-    public void matchPassword(String password) {
-        if (!this.password.equals(password)) {
-            throw new InvalidPasswordException();
-        }
     }
 
     @Override

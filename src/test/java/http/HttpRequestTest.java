@@ -95,7 +95,7 @@ public class HttpRequestTest {
     }
 
     @Test
-    void 존재하지_않는_Method_생성_오류() throws IOException {
+    void 존재하지_않는_Method_생성_오류() {
         String undefinedHeader = "NONE /index.html HTTP/1.1";
 
         assertThrows(NotFoundMethodException.class,

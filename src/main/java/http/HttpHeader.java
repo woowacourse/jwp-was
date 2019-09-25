@@ -12,7 +12,6 @@ import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
 
 public class HttpHeader {
     public static final String UPGRADE_INSECURE_REQUESTS = "Upgrade-Insecure-Requests";
-    public static final String SET_FETCH_MODE = "Set-Fetch-Mode";
     private static final String HEADER_DELIMITER = ":";
 
     private Map<String, String> headers = new HashMap<>();
@@ -32,27 +31,27 @@ public class HttpHeader {
         }
     }
 
-    public String getValue(String key) {
-        return headers.get(key);
+    public void addHeader(String key, String value) {
+        headers.put(key, value);
     }
 
     public boolean matchContentType(String contentType) {
         return headers.get(CONTENT_TYPE).equals(contentType);
     }
 
-    public int getContentLength() {
-        return Integer.parseInt(headers.getOrDefault(CONTENT_LENGTH, "-1"));
-    }
-
     public boolean containContentLength() {
         return headers.containsKey(CONTENT_LENGTH);
     }
 
-    public void addHeader(String key, String value) {
-        headers.put(key, value);
-    }
-
     public Set<Map.Entry<String, String>> getHeaders() {
         return headers.entrySet();
+    }
+
+    public String getValue(String key) {
+        return headers.get(key);
+    }
+
+    public int getContentLength() {
+        return Integer.parseInt(headers.getOrDefault(CONTENT_LENGTH, "-1"));
     }
 }

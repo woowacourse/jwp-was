@@ -2,7 +2,9 @@ package view;
 
 import http.HttpRequest;
 import http.HttpResponse;
+import utils.FileIoUtils;
 import webserver.TemplatesFileLoader;
+import webserver.exception.NotFoundResourceException;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -16,10 +18,8 @@ public class ModelAndView implements View {
         this.viewName = viewName;
     }
 
-    @Override
-    public void render(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
-        httpResponse.setStatus(200);
-        httpResponse.setBody(TemplatesFileLoader.load(viewName, model).getBytes());
+    public void addAttribute(String attributeName, Object attributeValue) {
+        model.put(attributeName, attributeValue);
     }
 
     @Override
@@ -32,7 +32,17 @@ public class ModelAndView implements View {
         return viewName;
     }
 
-    public void addAttribute(String attributeName, Object attributeValue) {
-        model.put(attributeName, attributeValue);
+    @Override
+    public void render(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+        validateFileExist();
+        httpResponse.setStatus(200);
+        httpResponse.setBody(TemplatesFileLoader.load(viewName, model).getBytes());
+    }
+
+    private void validateFileExist() {
+        String path = "./templates" + viewName;
+        if (!FileIoUtils.isExistFile(path)) {
+            throw new NotFoundResourceException();
+        }
     }
 }

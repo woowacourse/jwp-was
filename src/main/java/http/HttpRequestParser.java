@@ -66,17 +66,6 @@ public class HttpRequestParser {
         return new HttpHeader(readLinesBeforeEmptyLine(br));
     }
 
-    private static HttpBody parseBody(BufferedReader br, HttpStartLine startLine, HttpHeader headers) throws IOException {
-        String body = URLDecoder.decode(IOUtils.readData(br, headers.getContentLength()), UTF_8);
-
-        if (startLine.matchMethod(HttpMethod.POST) && headers.matchContentType(FORM_CONTENT_TYPE_VALUE)) {
-            RequestParameter requestBody = new RequestParameter(parseQueryString(body));
-            return new HttpBody(requestBody, body);
-        }
-
-        return new HttpBody(body);
-    }
-
     private static List<String> readLinesBeforeEmptyLine(BufferedReader br) throws IOException {
         List<String> lines = new ArrayList<>();
 
@@ -90,5 +79,16 @@ public class HttpRequestParser {
         }
 
         return lines;
+    }
+
+    private static HttpBody parseBody(BufferedReader br, HttpStartLine startLine, HttpHeader headers) throws IOException {
+        String body = URLDecoder.decode(IOUtils.readData(br, headers.getContentLength()), UTF_8);
+
+        if (startLine.matchMethod(HttpMethod.POST) && headers.matchContentType(FORM_CONTENT_TYPE_VALUE)) {
+            RequestParameter requestBody = new RequestParameter(parseQueryString(body));
+            return new HttpBody(requestBody, body);
+        }
+
+        return new HttpBody(body);
     }
 }

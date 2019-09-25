@@ -7,6 +7,10 @@ public class HttpStartLine {
     private HttpMethod method;
     private RequestParameter requestParameter;
 
+    public HttpStartLine(String uri, HttpMethod method) {
+        this(uri, method, null);
+    }
+
     public HttpStartLine(String uri, HttpMethod method, RequestParameter requestParameter) {
         validateNull(uri);
 
@@ -21,27 +25,23 @@ public class HttpStartLine {
         }
     }
 
-    public HttpStartLine(String uri, HttpMethod method) {
-        this(uri, method, null);
+    public boolean isStaticUri() {
+        return uri.contains(".");
     }
 
     public boolean matchMethod(HttpMethod method) {
         return this.method.equals(method);
     }
 
-    public boolean isStaticUri() {
-        return uri.contains(".");
-    }
-
-    public String getParameter(String key) {
-        return requestParameter.getParameter(key);
+    public String getUri() {
+        return uri;
     }
 
     public HttpMethod getMethod() {
         return method;
     }
 
-    public String getUri() {
-        return uri;
+    public String getParameter(String key) {
+        return requestParameter.getParameter(key);
     }
 }

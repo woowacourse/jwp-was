@@ -24,17 +24,17 @@ public class HttpResponse {
     public HttpResponse() {
     }
 
-    public void setStatus(int statusCode) {
-        status = HttpStatus.of(statusCode);
-    }
-
     public void addHeader(String key, String value) {
         header.addHeader(key, value);
     }
 
-    public void setBody(byte[] body) {
-        this.body = body;
-        header.addHeader(CONTENT_LENGTH, String.valueOf(body.length));
+    private String makeHeaderLines() {
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<String, String> header : header.getHeaders()) {
+            sb.append(header.getKey() + HEADER_DELIMITER + header.getValue() + HTTP_NEW_LINE);
+        }
+        sb.append(HTTP_NEW_LINE);
+        return sb.toString();
     }
 
     public void send(DataOutputStream dos) {
@@ -53,15 +53,6 @@ public class HttpResponse {
         }
     }
 
-    private String makeHeaderLines() {
-        StringBuilder sb = new StringBuilder();
-        for (Map.Entry<String, String> header : header.getHeaders()) {
-            sb.append(header.getKey() + HEADER_DELIMITER + header.getValue() + HTTP_NEW_LINE);
-        }
-        sb.append(HTTP_NEW_LINE);
-        return sb.toString();
-    }
-
     public HttpStatus getStatus() {
         return status;
     }
@@ -72,5 +63,14 @@ public class HttpResponse {
 
     public byte[] getBody() {
         return body;
+    }
+
+    public void setStatus(int statusCode) {
+        status = HttpStatus.of(statusCode);
+    }
+
+    public void setBody(byte[] body) {
+        this.body = body;
+        header.addHeader(CONTENT_LENGTH, String.valueOf(body.length));
     }
 }

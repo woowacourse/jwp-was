@@ -39,17 +39,17 @@ public class DispatcherServlet {
             Controller controller = HandlerMapping.handle(httpRequest);
             View view = controller.service(httpRequest, httpResponse);
             view.render(httpRequest, httpResponse);
+        } catch (InvalidPasswordException | NotFoundUserIdException e) {
+            log.error(e.getMessage());
+            httpResponse.addHeader(SET_COOKIE, "SESSIONID=''; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
+            View view = new RedirectView("user/login_failed.html");
+            view.render(httpRequest, httpResponse);
         } catch (NotFoundMethodException | HttpMethodNotAllowedException e) {
             log.error(e.getMessage());
             httpResponse.setStatus(405);
         } catch (NotFoundResourceException | InvalidUriException | URINotFoundException e) {
             log.error(e.getMessage());
             httpResponse.setStatus(404);
-        } catch (InvalidPasswordException | NotFoundUserIdException e) {
-            log.error(e.getMessage());
-            httpResponse.addHeader(SET_COOKIE, "SESSIONID=''; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
-            View view = new RedirectView("user/login_failed.html");
-            view.render(httpRequest, httpResponse);
         } catch (Exception e) {
             log.error(e.getMessage());
             httpResponse.setStatus(500);
@@ -57,6 +57,15 @@ public class DispatcherServlet {
     }
 
     private static void handleStaticRequest(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+        String path = validatePath(httpRequest);
+        byte[] body = FileIoUtils.loadFileFromClasspath(path);
+
+        httpResponse.setStatus(200);
+        httpResponse.addHeader(CONTENT_TYPE, MimeType.of(httpRequest.getUri()));
+        httpResponse.setBody(body);
+    }
+
+    private static String validatePath(HttpRequest httpRequest) {
         String path = STATIC_PATH + httpRequest.getUri();
         if (!FileIoUtils.isExistFile(path)) {
             path = TEMPLATES_PATH + httpRequest.getUri();
@@ -64,10 +73,6 @@ public class DispatcherServlet {
                 throw new NotFoundResourceException();
             }
         }
-        byte[] body = FileIoUtils.loadFileFromClasspath(path);
-
-        httpResponse.setStatus(200);
-        httpResponse.addHeader(CONTENT_TYPE, MimeType.of(httpRequest.getUri()));
-        httpResponse.setBody(body);
+        return path;
     }
 }

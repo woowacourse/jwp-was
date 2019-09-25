@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class HttpHeaderTest {
+    private static final String NEW_LINE = "\n";
     private static final String HEADER_FORM = "Host: localhost:8080\n" +
             "Connection: keep-alive\n" +
             "Cache-Control: max-age=0\n" +
@@ -26,14 +27,13 @@ public class HttpHeaderTest {
 
     @Test
     void 헤더_정상_생성() {
-        List<String> headerLines = Arrays.asList(HEADER_FORM.split("\n"));
-
+        List<String> headerLines = Arrays.asList(HEADER_FORM.split(NEW_LINE));
         assertDoesNotThrow(() -> new HttpHeader(headerLines));
     }
 
     @Test
     void 헤더_형식_에러() {
-        List<String> headerLines = new ArrayList<>(Arrays.asList(HEADER_FORM.split("\n")));
+        List<String> headerLines = new ArrayList<>(Arrays.asList(HEADER_FORM.split(NEW_LINE)));
         headerLines.add("HEADER");
 
         assertThrows(InvalidHeaderFormatException.class, () -> new HttpHeader(headerLines));

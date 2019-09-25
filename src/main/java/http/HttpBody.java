@@ -1,8 +1,6 @@
 package http;
 
 public class HttpBody {
-    private static final String NEW_LINE = "\n";
-
     private RequestParameter requestBody;
     private String body;
 
