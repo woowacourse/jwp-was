@@ -18,6 +18,6 @@ public class IndexController {
 
         logger.debug("request : {} & response : {}", request, response);
 
-        response.send200(request);
+        response.ok(request);
     }
 }

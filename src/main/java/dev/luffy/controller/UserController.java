@@ -18,7 +18,7 @@ public class UserController {
     public static void formUser(HttpRequest request, HttpResponse response) {
         logger.debug("request : {} & response : {}", request, response);
 
-        response.send200(request);
+        response.ok(request);
     }
 
     @RequestMapping("/user/create")
@@ -35,6 +35,6 @@ public class UserController {
 
         logger.debug("Generated User : {}", user);
 
-        response.send302("/index.html");
+        response.redirect(request, "/index.html");
     }
 }

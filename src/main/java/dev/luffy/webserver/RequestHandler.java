@@ -34,14 +34,14 @@ public class RequestHandler implements Runnable {
             HttpResponse response = new HttpResponse(out);
 
             if (request.isStaticRequest()) {
-                response.staticFileResource(request);
+                response.ok(request);
                 return;
             }
 
             Method controllerMethod = RequestMapper.get(request.getPath());
 
             if (controllerMethod == null) {
-                response.send404();
+                response.notFound(request);
                 return;
             }
 
