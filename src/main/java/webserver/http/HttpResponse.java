@@ -85,6 +85,23 @@ public class HttpResponse {
         this.body = builder.body;
     }
 
+    public static HttpResponse success(HttpRequest request, String contentType, String body) {
+        return HttpResponse.builder(HttpContentType.getHttpContentType(contentType))
+                .version(request.version())
+                .connection(request.connection().orElse(null))
+                .body(body)
+                .build();
+    }
+
+    public static HttpResponse redirection(HttpRequest request, String contentType, String location) {
+        return HttpResponse.builder(HttpContentType.getHttpContentType(contentType))
+                .version(request.version())
+                .statusCode(HttpStatusCode.FOUND)
+                .connection(request.connection().orElse(null))
+                .location(location)
+                .build();
+    }
+
     public String serializeHeader() {
         final StringBuilder header = new StringBuilder(serializeMandatory());
         if (this.connection != null) {

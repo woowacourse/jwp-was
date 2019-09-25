@@ -1,14 +1,34 @@
 package model;
 
+import webserver.http.HttpRequest;
+
 import java.util.Objects;
 
 public class User {
+    private static final String USER_ID = "userId";
+    private static final String USER_PASSWORD = "password";
+    private static final String USER_NAME = "name";
+    private static final String USER_EMAIL = "email";
+
     private String id;
     private String password;
     private String name;
     private String email;
 
-    public User(String id, String password, String name, String email) {
+    public static User of(HttpRequest request) {
+        return User.of(
+                request.getParam(USER_ID),
+                request.getParam(USER_PASSWORD),
+                request.getParam(USER_NAME),
+                request.getParam(USER_EMAIL)
+        );
+    }
+
+    public static User of(String id, String password, String name, String email) {
+        return new User(id, password, name, email);
+    }
+
+    private User(String id, String password, String name, String email) {
         this.id = id;
         this.password = password;
         this.name = name;
