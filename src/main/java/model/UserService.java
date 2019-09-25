@@ -4,6 +4,8 @@ import db.DataBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class UserService {
@@ -16,5 +18,9 @@ public class UserService {
         logger.debug("user list : {}", DataBase.findAll());
 
         return "/index.html";
+    }
+
+    public List<User> findAll() {
+        return new ArrayList<>(DataBase.findAll());
     }
 }
