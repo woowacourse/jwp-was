@@ -1,6 +1,5 @@
 package http.request;
 
-import http.request.exception.ParameterNotFoundException;
 import utils.StringUtils;
 
 import java.io.UnsupportedEncodingException;
@@ -9,7 +8,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 
 public class RequestParameter {
     public static final RequestParameter EMPTY = new RequestParameter("");
@@ -51,8 +49,7 @@ public class RequestParameter {
     }
 
     public String getParameter(String key) {
-        return Optional.ofNullable(requestParameters.get(key))
-                .orElseThrow(ParameterNotFoundException::new);
+        return requestParameters.get(key);
     }
 
     @Override
