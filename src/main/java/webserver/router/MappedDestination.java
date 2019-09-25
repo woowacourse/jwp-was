@@ -1,36 +1,63 @@
 package webserver.router;
 
-import utils.parser.json.JsonObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import webserver.HttpRequest;
+import webserver.HttpResponse;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 
 public class MappedDestination {
-    private final String controller;
-    private final String method;
+    private static final Logger logger = LoggerFactory.getLogger(MappedDestination.class);
+
+    private final Method controller;
     private final Map<String, String> pathVars;
 
-    public MappedDestination(JsonObject dest) {
-        this.controller = (String) dest.get("controller").val();
-        this.method = (String) dest.get("method").val();
-        this.pathVars = Collections.emptyMap();
+    public static Optional<MappedDestination> of(String className, String methodName, Map<String, String> pathVars) {
+        try {
+            if (pathVars.isEmpty()) {
+                return Optional.of(
+                        new MappedDestination(
+                                Class.forName(className).getMethod(methodName, HttpRequest.class),
+                                pathVars
+                        )
+                );
+            }
+            return Optional.of(
+                    new MappedDestination(
+                            Class.forName(className).getMethod(methodName, HttpRequest.class, Map.class),
+                            pathVars
+                    )
+            );
+        } catch (ClassNotFoundException | NoSuchMethodException e) {
+            logger.error("No controller matches the name: " + className + "." + methodName);
+            return Optional.empty();
+        }
     }
 
-    public MappedDestination(String controller, String method, Map<String, String> pathVars) {
+    public static Optional<MappedDestination> of(String className, String methodName) {
+        return of(className, methodName, Collections.emptyMap());
+    }
+
+    private MappedDestination(Method controller, Map<String, String> pathVars) {
         this.controller = controller;
-        this.method = method;
         this.pathVars = Collections.unmodifiableMap(pathVars);
     }
 
-    public String controller() {
-        return this.controller;
-    }
-
-    public String method() {
-        return this.method;
-    }
-
-    public Map<String, String> pathVars() {
-        return this.pathVars;
+    public HttpResponse execute(HttpRequest req) {
+        try {
+            return (HttpResponse) (
+                    (this.pathVars.isEmpty())
+                            ? this.controller.invoke(null, req)
+                            : this.controller.invoke(null, req, pathVars)
+            );
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            logger.error(e.getMessage());
+            return HttpResponse.INTERNAL_SERVER_ERROR;
+        }
     }
 }

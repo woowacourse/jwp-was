@@ -1,19 +1,21 @@
 {
-  "GET": {
-    "/" : {
-      "controller": "IndexController",
+  "GET": [
+    { "path" : "/",
+      "class": "controller.IndexController",
       "method": "index"
     },
-    "/test/{num}" : {
-      "controller": "TestController",
+    {
+      "path": "/test/{num}",
+      "class": "controller.TestController",
       "method": "test"
     }
-  },
+  ],
 
-  "POST": {
-    "/user/create": {
-      "controller": "UserController",
+  "POST": [
+    {
+      "path": "/user/create",
+      "class": "controller.UserController",
       "method": "signUp"
     }
-  }
+  ]
 }

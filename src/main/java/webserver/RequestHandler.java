@@ -11,7 +11,13 @@ import java.net.Socket;
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
+    private static Router router;
+
     private final Socket connection;
+
+    public static void setRouter(Router _router) {
+        router = _router;
+    }
 
     public RequestHandler(Socket connection) {
         this.connection = connection;
@@ -25,7 +31,7 @@ public class RequestHandler implements Runnable {
         );
 
         NetworkBlockingIO.init(this.connection).ifPresent(io -> {
-            sendResponse(io, HttpRequest.deserialize(io).map(req -> Router.getInstance().serve(req))
+            sendResponse(io, HttpRequest.deserialize(io).map(router::serve)
                                                         .orElse(HttpResponse.BAD_REQUEST));
             io.close();
         });

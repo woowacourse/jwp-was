@@ -3,20 +3,25 @@ package webserver.router;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.io.FileIoUtils;
-import webserver.http.HttpContentType;
 import webserver.HttpRequest;
 import webserver.HttpResponse;
+import webserver.http.HttpContentType;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
+import java.util.Optional;
 
 public class Router {
     private static final Logger logger = LoggerFactory.getLogger(Router.class);
 
-    private static final Router instance = new Router();
+    private static final Router instance = RouterConfig.init().map(Router::new).orElse(null);
 
-    public static Router getInstance() {
-        return instance;
+    private final RouterConfig config;
+
+    public static Optional<Router> init() {
+        return Optional.ofNullable(instance);
+    }
+
+    private Router(RouterConfig config) {
+        this.config = config;
     }
 
     public HttpResponse serve(HttpRequest req) {
@@ -24,26 +29,9 @@ public class Router {
     }
 
     private HttpResponse route(HttpRequest req) {
-        return RouterConfig.getInstance().match(req.method(), req.path()).map(dest -> {
+        return config.match(req.method(), req.path()).map(dest -> {
             logger.debug("Route: {} -> {}", req.path(), dest);
-            try {
-                if (dest.pathVars().isEmpty()) {
-                    return (HttpResponse) Class.forName("controller." + dest.controller())
-                                                .getMethod(dest.method(), HttpRequest.class)
-                                                .invoke(null, req);
-                }
-                return (HttpResponse) Class.forName("controller." + dest.controller())
-                                            .getMethod(dest.method(), HttpRequest.class, Map.class)
-                                            .invoke(null, req, dest.pathVars());
-            } catch (
-                    ClassNotFoundException |
-                    NoSuchMethodException |
-                    IllegalAccessException |
-                    InvocationTargetException e
-            ) {
-                logger.error(e.getMessage());
-                return HttpResponse.INTERNAL_SERVER_ERROR;
-            }
+            return dest.execute(req);
         }).orElse(HttpResponse.NOT_FOUND);
     }
 

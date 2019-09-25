@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class JsonArray extends JsonValue<List<JsonValue<?>>> {
     public JsonArray() {
@@ -25,7 +26,11 @@ public class JsonArray extends JsonValue<List<JsonValue<?>>> {
                         .map(val -> val.get(i));
     }
 
-    int size() {
+    public Stream<JsonValue<?>> stream() {
+        return super.val.stream();
+    }
+
+    public int size() {
         return super.val.size();
     }
 
