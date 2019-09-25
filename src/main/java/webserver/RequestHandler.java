@@ -44,7 +44,7 @@ public class RequestHandler implements Runnable {
 
     private void handleRequest(HttpRequest httpRequest, HttpResponse httpResponse) {
         try {
-            if (resourceHttpRequestHandler.canHandle(httpRequest)) {
+            if (resourceHttpRequestHandler.canHandle(httpRequest.getPath())) {
                 resourceHttpRequestHandler.handleHttpRequest(httpRequest, httpResponse);
                 return;
             }

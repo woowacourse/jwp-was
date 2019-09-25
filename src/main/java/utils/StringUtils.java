@@ -23,4 +23,8 @@ public class StringUtils {
     public static boolean isNull(String str) {
         return str == null;
     }
+
+    public static boolean isNotBlank(String[] url) {
+        return url != null && url.length > 0;
+    }
 }
