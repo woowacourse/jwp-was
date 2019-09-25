@@ -7,13 +7,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class FilePathUtilsTest {
     @Test
+    @DisplayName("path 에서 extension 추출")
     void getExtension() {
         String path = "/index.html";
         assertThat(FilePathUtils.getExtension(path)).isEqualTo("html");
     }
 
-    @DisplayName("prefix 확인 후 path 반환")
     @Test
+    @DisplayName("prefix 확인 후 path 반환")
     void getResourcePath() {
         String pathWithPrefix = "/index.html";
         String pathWithoutPrefix = "index.html";

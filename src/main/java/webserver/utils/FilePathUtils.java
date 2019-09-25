@@ -13,11 +13,11 @@ public class FilePathUtils {
                 String.format("./static/%s", path) : String.format("./templates/%s", path);
     }
 
-    public static boolean isStaticFile(String path) {
+    private static boolean isStaticFile(String path) {
         return !isTemplateFile(path);
     }
 
-    public static boolean isTemplateFile(String path) {
+    private static boolean isTemplateFile(String path) {
         return path.endsWith(".html");
     }
 }
