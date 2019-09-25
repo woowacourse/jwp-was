@@ -1,8 +1,11 @@
 package webserver.controller.request;
 
-import exception.ContentTypeNotFoundException;
-import webserver.controller.request.header.ContentType;
-import webserver.controller.request.header.HttpBeginningHeader;
+import jdk.jfr.ContentType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import webserver.controller.request.body.HttpRequestBody;
+import webserver.controller.request.header.HttpMethod;
+import webserver.controller.request.header.HttpRequestLine;
 import webserver.controller.request.header.HttpHeaderFields;
 
 import java.io.BufferedReader;
@@ -10,32 +13,50 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 public class HttpRequest {
-    private final BufferedReader bufferedReader;
-    private final HttpBeginningHeader httpBeginningHeader;
+    private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
+    private final HttpRequestLine httpRequestLine;
     private final HttpHeaderFields httpHeaderFields;
+    private final Map<String, String> httpRequestBodyFields;
 
-    public HttpRequest(final InputStream inputStream) throws IOException {
-        this.bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        this.httpBeginningHeader = new HttpBeginningHeader(bufferedReader);
-        this.httpHeaderFields = new HttpHeaderFields(bufferedReader);
+    public HttpRequest(InputStream inputStream) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        String[] requestline = HttpRequestParser.parseRequestLine(bufferedReader);
+        this.httpRequestLine = new HttpRequestLine(requestline);
+
+        this.httpHeaderFields = new HttpHeaderFields(HttpRequestParser.parseHeaderFields(bufferedReader));
+        this.httpRequestBodyFields = setRequestBody(bufferedReader);
     }
 
-    public byte[] getResponseBody(ContentType contentType) throws IOException, URISyntaxException {
-        return httpBeginningHeader.getResponseBody(contentType);
+    private Map<String, String> setRequestBody(BufferedReader bufferedReader) throws IOException {
+        HttpMethod httpMethod =  httpRequestLine.getHttpMethod();
+        if(httpMethod == HttpMethod.POST || httpMethod == HttpMethod.PUT) {
+            return HttpRequestParser.parseBody(bufferedReader, httpHeaderFields.getContentLength());
+        }
+        return new HashMap<>();
     }
 
-    public ContentType getContentType() throws ContentTypeNotFoundException {
-        return httpBeginningHeader.getContentType();
-    }
-
-    public String readData() throws IOException {
-        return httpHeaderFields.readData(bufferedReader);
+    public MimeType getMimeType() {
+        return httpRequestLine.getMimeType();
     }
 
     public String getPath() {
-        return httpBeginningHeader.getUrl();
+        return httpRequestLine.getUrl();
+    }
+
+    public String getVersion() {
+        return httpRequestLine.getVersion();
+    }
+
+    public HttpMethod getHttpMethod() {
+        return httpRequestLine.getHttpMethod();
+    }
+
+    public Map<String, String> getBodyFields() {
+        return this.httpRequestBodyFields;
     }
 }
