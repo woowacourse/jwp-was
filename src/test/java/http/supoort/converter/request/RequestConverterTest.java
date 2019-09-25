@@ -49,19 +49,19 @@ class RequestConverterTest {
     }
 
     @Test
-    void 올바른_HTTP_요청_아닌_경우1() {
+    void URI_PROTOCOL_잘못된_경우() {
         InputStream in = new ByteArrayInputStream("GET /index.html?name=coogi&age=25HTTP/1.1\r\nHost: localhost:8080/".getBytes());
         assertThatThrownBy(() -> requestConverter.parse(in)).isInstanceOf(IllegalHttpRequestException.class);
     }
 
     @Test
-    void 올바른_HTTP_요청_아닌_경우2() {
+    void 메서드_URI_잘못된_경우() {
         InputStream in = new ByteArrayInputStream("GET/index.html?name=coogi&age=25 HTTP/1.1\r\nHost: localhost:8080/".getBytes());
         assertThatThrownBy(() -> requestConverter.parse(in)).isInstanceOf(IllegalHttpRequestException.class);
     }
 
     @Test
-    void 올바른_HTTP_요청_아닌_경우3() {
+    void 리퀘스트라인_없을_경우() {
         InputStream in = new ByteArrayInputStream("".getBytes());
         assertThatThrownBy(() -> requestConverter.parse(in)).isInstanceOf(IllegalHttpRequestException.class);
     }
