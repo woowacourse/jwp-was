@@ -1,6 +1,6 @@
 package http.request;
 
-import controller.exception.NotAllowedMethodException;
+import controller.exception.MethodNotAllowedException;
 
 import java.util.Arrays;
 
@@ -20,7 +20,7 @@ public enum HttpMethod {
         return Arrays.stream(HttpMethod.values())
                 .filter(httpMethod -> httpMethod.match(value))
                 .findFirst()
-                .orElseThrow(NotAllowedMethodException::new)
+                .orElseThrow(MethodNotAllowedException::new)
                 ;
     }
 

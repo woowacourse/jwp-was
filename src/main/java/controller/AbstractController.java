@@ -1,6 +1,6 @@
 package controller;
 
-import controller.exception.NotAllowedMethodException;
+import controller.exception.MethodNotAllowedException;
 import http.request.HttpMethod;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -23,10 +23,10 @@ public abstract class AbstractController implements Controller {
     }
 
     void doGet(final HttpRequest httpRequest, final HttpResponse httpResponse) {
-        throw new NotAllowedMethodException();
+        throw new MethodNotAllowedException();
     }
 
     void doPost(final HttpRequest httpRequest, final HttpResponse httpResponse) {
-        throw new NotAllowedMethodException();
+        throw new MethodNotAllowedException();
     }
 }
