@@ -57,6 +57,10 @@ public class RequestLine {
         return url.getFullUrl();
     }
 
+    public HttpVersion getHttpVersion() {
+        return httpVersion;
+    }
+
     @Override
     public String toString() {
         return "RequestLine{" +

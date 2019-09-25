@@ -6,7 +6,7 @@ public class Url {
 
     public Url(final String originUrl) {
         this.originUrl = originUrl;
-        this.fullUrl = HttpRequestType.redefineUrl(originUrl);
+        this.fullUrl = HttpRequestType.redefineUrl(originUrl.split("\\?")[0]);
     }
 
     public String getOriginUrl() {
