@@ -1,6 +1,5 @@
 package http.request;
 
-import http.request.exception.ParameterNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -10,7 +9,6 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class RequestParameterTest {
     @Test
@@ -23,7 +21,7 @@ class RequestParameterTest {
     }
 
     @Test
-    void 생성_에러_query_string이_null() {
+    void query_string이_null일_때_빈_Request_parameter_생성() {
         assertEquals(new RequestParameter(null), new RequestParameter(""));
     }
 
@@ -34,13 +32,6 @@ class RequestParameterTest {
         RequestParameter requestParameter = new RequestParameter(String.format("%s=%s", key, value));
 
         assertThat(requestParameter.getParameter(key)).isEqualTo(value);
-    }
-
-    @Test
-    void getParameter_value가_없을_때() {
-        RequestParameter requestParameter = new RequestParameter("1=");
-
-        assertThrows(ParameterNotFoundException.class, () -> requestParameter.getParameter("1"));
     }
 
     @ParameterizedTest

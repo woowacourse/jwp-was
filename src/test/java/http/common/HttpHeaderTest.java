@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class HttpHeaderTest {
     @Test
-    void 잘못된_생성_header가_null일_때() {
+    void header가_null일_때_빈_HttpHeader_생성() {
         assertThat(new HttpHeader(null)).isEqualTo(new HttpHeader(new ArrayList<>()));
     }
 
@@ -33,7 +33,7 @@ class HttpHeaderTest {
     }
 
     @Test
-    void get_성공() {
+    void header_필드_조회() {
         String contentType = "Content-type";
         String textHTML = "text/html";
 
