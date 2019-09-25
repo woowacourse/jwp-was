@@ -28,7 +28,7 @@ public class LoginController extends AbstractController {
         final Optional<User> user = DataBase.findUserById(userId);
 
         if (!matchesUser(user, password)) {
-            return new Response.Builder().redirectUrl(LOGIN_FAILED_PAGE_URL).build();
+            return new Response.Builder().redirectUrl(LOGIN_FAILED_PAGE_URL).setCookie("logined=false; Path=/").build();
         }
 
         /* TODO ExceptionResolver를 통해 예외를 받아서 처리하도록 수정하기
@@ -37,7 +37,10 @@ public class LoginController extends AbstractController {
         validLoginUser(user, password);
         */
 
-        return new Response.Builder().redirectUrl(INDEX_PAGE_URL).build();
+        return new Response.Builder()
+                .redirectUrl(INDEX_PAGE_URL)
+                .setCookie("logined=true; Path=/")
+                .build();
     }
 
     private boolean matchesUser(Optional<User> user, String password) {

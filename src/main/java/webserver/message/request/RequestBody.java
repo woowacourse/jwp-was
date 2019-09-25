@@ -44,7 +44,7 @@ public class RequestBody {
         return keyValue.length == 2 && !keyValue[0].isEmpty() && !keyValue[1].isEmpty();
     }
 
-    private String urlDecode(final String encodedString) {
+    private static String urlDecode(final String encodedString) {
         try {
             return URLDecoder.decode(encodedString, UTF_8);
         } catch (UnsupportedEncodingException e) {

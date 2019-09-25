@@ -1,6 +1,5 @@
 package web.controller.impl;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,6 +20,16 @@ class LoginControllerTest extends RequestHelper {
     private static final String INDEX_PAGE_URL = "/";
     private static final String LOGIN_FAILED_PAGE_URL = "/user/login_failed.html";
 
+    protected final String requestPostWithWeirdQuery =
+            "POST /user/create HTTP/1.1\n" +
+                    "Host: localhost:8080\n" +
+                    "Connection: keep-alive\n" +
+                    "Content-Length: 59\n" +
+                    "Content-Type: application/x-www-form-urlencoded\n" +
+                    "Accept: */*\n" +
+                    "\n" +
+                    "userId=java&password=pass&a=b";
+
     private Request request;
     private LoginController loginController;
 
@@ -36,14 +45,22 @@ class LoginControllerTest extends RequestHelper {
         DataBase.addUser(new User("javajigi", "password", "포비", "pobi@pobi.com"));
 
         assertThat(loginController.doPost(request).toBytes())
-                .isEqualTo(new Response.Builder().redirectUrl(INDEX_PAGE_URL).build().toBytes());
+                .isEqualTo(new Response.Builder()
+                        .redirectUrl(INDEX_PAGE_URL)
+                        .setCookie("logined=true; Path=/")
+                        .build().toBytes());
     }
 
     @Test
     @DisplayName("존재하지 않는 userId로 로그인할 때 리다이렉트 확인")
-    void loginException1() {
+    void loginException1() throws IOException, URISyntaxException {
+        Request request = new Request(ioUtils(requestPostWithWeirdQuery));
+
         assertThat(loginController.doPost(request).toBytes())
-                .isEqualTo(new Response.Builder().redirectUrl(LOGIN_FAILED_PAGE_URL).build().toBytes());
+                .isEqualTo(new Response.Builder()
+                        .redirectUrl(LOGIN_FAILED_PAGE_URL)
+                        .setCookie("logined=false; Path=/")
+                        .build().toBytes());
     }
 
     @Test
@@ -52,7 +69,10 @@ class LoginControllerTest extends RequestHelper {
         DataBase.addUser(new User("javajigi", "1234", "포비", "pobi@pobi.com"));
 
         assertThat(loginController.doPost(request).toBytes())
-                .isEqualTo(new Response.Builder().redirectUrl(LOGIN_FAILED_PAGE_URL).build().toBytes());
+                .isEqualTo(new Response.Builder()
+                        .redirectUrl(LOGIN_FAILED_PAGE_URL)
+                        .setCookie("logined=false; Path=/")
+                        .build().toBytes());
     }
 
     /*@Test
@@ -70,9 +90,4 @@ class LoginControllerTest extends RequestHelper {
         LoginException thrown = assertThrows(LoginException.class, () -> loginController.doPost(request));
         assertEquals(thrown.getMessage(), UNMATCHED_USER_MESSAGE);
     }*/
-
-    @AfterEach
-    void tearDown() {
-        DataBase.deleteAll();
-    }
 }

@@ -25,6 +25,7 @@ public class Response {
     public static class Builder {
         private static final String CONTENT_TYPE = "Content-Type";
         private static final String LOCATION = "Location";
+        private static final String SET_COOKIE = "Set-Cookie";
 
         private HttpVersion httpVersion;
         private HttpStatus httpStatus;
@@ -77,6 +78,10 @@ public class Response {
         public Builder contentType(final MediaType contentType) {
             this.responseFields.replace(CONTENT_TYPE, contentType.getMediaType());
             return this;
+        }
+
+        public Builder setCookie(final String cookie) {
+            return putField(SET_COOKIE, cookie);
         }
 
         public Builder body(final String body) {
