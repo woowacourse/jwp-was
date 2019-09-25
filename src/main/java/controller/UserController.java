@@ -12,6 +12,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 public class UserController {
     private static final Logger LOG = getLogger(UserController.class);
+    private static final String URL_ROOT = "/";
 
     public static Response createUser(final Request request) {
         final Map<String, String> queries = request.getQueryParameters();
@@ -24,6 +25,6 @@ public class UserController {
         DataBase.addUser(user);
         LOG.debug(user.toString());
 
-        return new Response.Builder().redirectUrl("/").build();
+        return new Response.Builder().redirectUrl(URL_ROOT).build();
     }
 }

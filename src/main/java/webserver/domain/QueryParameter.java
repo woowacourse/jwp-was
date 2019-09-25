@@ -9,13 +9,17 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class QueryParameter {
+    private static final String UTF_8 = "UTF-8";
+    private static final String EMPTY = "";
+    private static final String QUERY_DELIMITER = "&";
+    private static final String KEY_VALUE_DELIMITER = "=";
     private final Map<String, String> queries;
 
     public QueryParameter(final String rawQuery) {
         this.queries = extractQueries(rawQuery);
     }
 
-    public void putByRawQueries(final String rawQueries) {
+    void putByRawQueries(final String rawQueries) {
         this.queries.putAll(extractQueries(rawQueries));
     }
 
@@ -23,8 +27,8 @@ public class QueryParameter {
         if (Objects.isNull(rawQuery)) {
             return new HashMap<>();
         }
-        return Arrays.stream(rawQuery.split("&"))
-                .map(query -> query.split("=", 2))
+        return Arrays.stream(rawQuery.split(QUERY_DELIMITER))
+                .map(query -> query.split(KEY_VALUE_DELIMITER, 2))
                 .filter(this::queryFilter)
                 .collect(Collectors.toMap(array -> urlDecode(array[0]), array -> urlDecode(array[1])));
     }
@@ -35,9 +39,9 @@ public class QueryParameter {
 
     private String urlDecode(final String encodedString) {
         try {
-            return URLDecoder.decode(encodedString, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            return "";
+            return URLDecoder.decode(encodedString, UTF_8);
+        } catch (final UnsupportedEncodingException e) {
+            return EMPTY;
         }
     }
 
@@ -46,7 +50,7 @@ public class QueryParameter {
     }
 
     public String getValue(final String key) {
-        return queries.getOrDefault(key, "");
+        return queries.getOrDefault(key, EMPTY);
     }
 
     @Override

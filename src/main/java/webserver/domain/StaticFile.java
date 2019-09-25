@@ -7,6 +7,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class StaticFile {
+    private static final String URL_DELIMITER = "/";
+    private static final String EXTENSION_DELIMITER = "\\.";
+    private static final String EMPTY = "";
+
     private final String path;
     private final String name;
     private final String extension;
@@ -22,13 +26,13 @@ public class StaticFile {
     }
 
     private String extractName(final String path) {
-        final String[] pathFragments = path.split("/");
+        final String[] pathFragments = path.split(URL_DELIMITER);
         return pathFragments[pathFragments.length - 1];
     }
 
     private String extractExtension(final String fileName) {
-        final String[] namePieces = fileName.split("\\.");
-        return namePieces.length == 1 ? "" : namePieces[namePieces.length - 1];
+        final String[] namePieces = fileName.split(EXTENSION_DELIMITER);
+        return namePieces.length == 1 ? EMPTY : namePieces[namePieces.length - 1];
     }
 
     public String getPath() {

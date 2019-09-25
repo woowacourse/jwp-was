@@ -1,5 +1,7 @@
 package webserver.domain;
 
+import org.slf4j.Logger;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -8,7 +10,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 public class Response {
+    private static final Logger LOG = getLogger(Response.class);
     private static final byte[] NEW_LINE = "\r\n".getBytes();
 
     private ResponseHeader header;
@@ -92,7 +97,7 @@ public class Response {
         }
     }
 
-    public byte[] toBytes() {
+    private byte[] toBytes() {
         final int bodyLength = this.body.length();
         final byte[] header = this.header.make(bodyLength).getBytes(StandardCharsets.ISO_8859_1); // 이 인코딩을 명시적으로 지정하면 Charset 변환과정 없이 array 복사만 한다.
 
@@ -109,7 +114,7 @@ public class Response {
             dataOutputStream.write(body, 0, body.length);
             dataOutputStream.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage());
         }
     }
 }

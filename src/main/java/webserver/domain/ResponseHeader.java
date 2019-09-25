@@ -38,7 +38,6 @@ public class ResponseHeader {
         return this.responseFields.getOrDefault(fieldKey, EMPTY);
     }
 
-    // TODO 이름 바꾸자
     String make(final int contentLength) {
         setContentLength(contentLength);
         final StringBuilder builder = makeFirstLine();
