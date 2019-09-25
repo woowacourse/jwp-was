@@ -5,6 +5,9 @@ import webserver.http.headerfields.HttpContentType;
 import webserver.http.headerfields.HttpStatusCode;
 import webserver.http.headerfields.HttpVersion;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class HttpResponse {
     private static final String TEXT_PLAIN = "text/plain";
 
@@ -26,16 +29,14 @@ public class HttpResponse {
     private final HttpVersion version;
     private final HttpStatusCode statusCode;
     private final HttpContentType contentType;
-    private final HttpConnection connection;
-    private String location;
+    private Map<String, String> optionField;
     private final String body;
 
     public static class HttpResponseBuilder {
         private HttpVersion version = HttpVersion.HTTP_1_1;
         private HttpStatusCode statusCode = HttpStatusCode.OK;
         private final HttpContentType contentType;
-        private HttpConnection connection;
-        private String location;
+        private Map<String, String> optionField = new HashMap<>();
         private String body = "";
 
         public HttpResponseBuilder(HttpContentType contentType) {
@@ -52,13 +53,13 @@ public class HttpResponse {
             return this;
         }
 
-        public HttpResponseBuilder connection(HttpConnection httpConnection) {
-            this.connection = httpConnection;
+        public HttpResponseBuilder connection(HttpConnection connection) {
+            optionField.put("Connection", connection.toString());
             return this;
         }
 
         public HttpResponseBuilder location(String location) {
-            this.location = location;
+            optionField.put("Location", location);
             return this;
         }
 
@@ -80,8 +81,7 @@ public class HttpResponse {
         this.version = builder.version;
         this.statusCode = builder.statusCode;
         this.contentType = builder.contentType;
-        this.connection = builder.connection;
-        this.location = builder.location;
+        this.optionField = builder.optionField;
         this.body = builder.body;
     }
 
@@ -104,13 +104,14 @@ public class HttpResponse {
 
     public String serializeHeader() {
         final StringBuilder header = new StringBuilder(serializeMandatory());
-        if (this.connection != null) {
-            header.append("Connection: " + this.connection + "\r\n");
-        }
-        if (this.location != null) {
-            header.append("Location: " + this.location + "\r\n");
-        }
+
+        optionField.keySet().forEach(key -> header.append(headerParse(key, optionField.get(key))));
+
         return header.toString();
+    }
+
+    private String headerParse(String fieldName, String fieldValue) {
+        return fieldName + ": " + fieldValue + "\r\n";
     }
 
     private String serializeMandatory() {
