@@ -73,7 +73,8 @@ public class RequestHandler implements Runnable {
         response.getCookieKeys().forEach(key -> {
             logger.info("[cookie] {}={}", key, response.getCookie(key));
             writeHeaderLine(dos, String.format("%s: %s=%s; Path=/", SET_COOKIE_HEADER_KEY, key, response.getCookie(key)));
-            writeHeaderLine(dos, String.format("%s: %s=%s; Path=/", SET_COOKIE_HEADER_KEY, Request.SESSION_COOKIE_KEY, request.getSession().getId()));
+            writeHeaderLine(dos, String.format("%s: %s=%s; Path=/", SET_COOKIE_HEADER_KEY, Request.SESSION_COOKIE_KEY,
+                    request.getSession().getId()));
         });
     }
 

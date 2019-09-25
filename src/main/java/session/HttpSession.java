@@ -2,7 +2,6 @@ package session;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class HttpSession {
 
@@ -16,8 +15,8 @@ public class HttpSession {
         isValid = true;
     }
 
-    public static HttpSession create() {
-        return new HttpSession(UUID.randomUUID().toString(), new HashMap<>());
+    public static HttpSession create(SessionUtils sessionUtils) {
+        return new HttpSession(sessionUtils.createId(), new HashMap<>());
     }
 
     public void setAttribute(String name, Object object) {

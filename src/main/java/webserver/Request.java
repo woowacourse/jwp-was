@@ -26,10 +26,6 @@ public class Request {
         this.body = body;
     }
 
-    public boolean matchMethod(HttpMethod method) {
-        return this.method.equals(method);
-    }
-
     public HttpMethod getMethod() {
         return method;
     }
@@ -55,25 +51,15 @@ public class Request {
     }
 
     public HttpSession getSession() {
-        if (session == null) {
-            session = getValidSession();
-        }
-
-        return session;
-    }
-
-    private HttpSession getValidSession() {
-        HttpSession currentSession = HttpSessionManager.getSession(cookies.get(SESSION_COOKIE_KEY));
-        if (currentSession != null && currentSession.isValid()) {
+        if (session != null) {
             return session;
         }
 
-        return createNewSession();
-    }
+        String sessionId = cookies.get(SESSION_COOKIE_KEY);
+        if (HttpSessionManager.isMappingValidSession(sessionId)) {
+            return HttpSessionManager.getSession(sessionId);
+        }
 
-    private HttpSession createNewSession() {
-        HttpSession newSession = HttpSession.create();
-        HttpSessionManager.addSession(newSession);
-        return newSession;
+        return HttpSessionManager.createSession();
     }
 }
