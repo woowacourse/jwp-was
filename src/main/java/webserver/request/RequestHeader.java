@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class RequestHeader {
     private final Map<String, String> headerAttributes;
@@ -36,5 +37,18 @@ public class RequestHeader {
             return Integer.parseInt(headerAttributes.get("Content-Length"));
         }
         return 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RequestHeader that = (RequestHeader) o;
+        return Objects.equals(headerAttributes, that.headerAttributes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(headerAttributes);
     }
 }

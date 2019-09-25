@@ -6,6 +6,7 @@ import java.net.URLDecoder;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class RequestLine {
     private final String method;
@@ -93,5 +94,21 @@ public class RequestLine {
 
     public String getHttpVersion() {
         return httpVersion;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RequestLine that = (RequestLine) o;
+        return Objects.equals(method, that.method) &&
+                Objects.equals(target, that.target) &&
+                Objects.equals(httpVersion, that.httpVersion) &&
+                Objects.equals(parameters, that.parameters);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(method, target, httpVersion, parameters);
     }
 }

@@ -11,7 +11,7 @@ public class BaseTest {
             "POST /user/create HTTP/1.1\n" +
                     "Host: localhost:8080\n" +
                     "Connection: keep-alive\n" +
-                    "Content-Length: 59\n" +
+                    "Content-Length: 93\n" +
                     "Content-Type: application/x-www-form-urlencoded\n" +
                     "Accept: */*\n" +
                     "\n" +

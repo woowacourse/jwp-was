@@ -18,8 +18,8 @@ public class RequestBodyTest extends BaseTest {
     void of() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(POST_REQUEST_MESSAGE.getBytes())));
         RequestLine.of(br);
-        RequestHeader.of(br);
-        RequestBody requestBody = RequestBody.of(br, 93);
+        RequestHeader requestHeader = RequestHeader.of(br);
+        RequestBody requestBody = RequestBody.of(br, requestHeader.getContentLength());
 
         assertThat(requestBody.get("userId")).isEqualTo("javajigi");
         assertThat(requestBody.get("password")).isEqualTo("password");

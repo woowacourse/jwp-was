@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class RequestBody {
     private final Map<String, String> parameters;
@@ -47,5 +48,18 @@ public class RequestBody {
             return parameters.get(key);
         }
         throw new IllegalArgumentException("Not Found Body parameter");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RequestBody that = (RequestBody) o;
+        return Objects.equals(parameters, that.parameters);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(parameters);
     }
 }

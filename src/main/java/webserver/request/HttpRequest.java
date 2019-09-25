@@ -24,22 +24,6 @@ public class HttpRequest {
         return new HttpRequest(requestLine, requestHeader, requestBody);
     }
 
-    public String getMethod() {
-        return requestLine.getMethod();
-    }
-
-    public RequestLine getRequestLine() {
-        return requestLine;
-    }
-
-    public RequestHeader getRequestHeader() {
-        return requestHeader;
-    }
-
-    public RequestBody getRequestBody() {
-        return requestBody;
-    }
-
     public boolean isGet() {
         return requestLine.isGet();
     }
@@ -67,4 +51,15 @@ public class HttpRequest {
         return requestLine.getPath();
     }
 
+    public RequestLine getRequestLine() {
+        return requestLine;
+    }
+
+    public RequestHeader getRequestHeader() {
+        return requestHeader;
+    }
+
+    public RequestBody getRequestBody() {
+        return requestBody;
+    }
 }

@@ -31,7 +31,7 @@ public class RequestHeaderTest extends BaseTest {
     void of() {
         assertThat(requestLineOfPostMessage.get("Host")).isEqualTo("localhost:8080");
         assertThat(requestLineOfPostMessage.get("Connection")).isEqualTo("keep-alive");
-        assertThat(requestLineOfPostMessage.get("Content-Length")).isEqualTo("59");
+        assertThat(requestLineOfPostMessage.get("Content-Length")).isEqualTo("93");
         assertThat(requestLineOfPostMessage.get("Content-Type")).isEqualTo("application/x-www-form-urlencoded");
         assertThat(requestLineOfPostMessage.get("Accept")).isEqualTo("*/*");
         assertThatExceptionOfType(IllegalArgumentException.class)
@@ -41,7 +41,7 @@ public class RequestHeaderTest extends BaseTest {
     @DisplayName("contentLength 추출")
     @Test
     void getContentLength() {
-        assertThat(requestLineOfPostMessage.getContentLength()).isEqualTo(59);
+        assertThat(requestLineOfPostMessage.getContentLength()).isEqualTo(93);
         assertThat(requestLineOfGetMessage.getContentLength()).isEqualTo(0);
     }
 }
