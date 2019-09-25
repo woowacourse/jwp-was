@@ -2,7 +2,7 @@ package utils.parser.simple;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import utils.parser.simple.SimpleStringParser;
+import utils.parser.SimpleStringParser;
 
 import java.util.Map;
 

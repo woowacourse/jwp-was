@@ -1,4 +1,4 @@
-package utils.parser.json;
+package utils.parser.jsonelements;
 
 public class JsonInteger extends JsonValue<Integer> {
     public JsonInteger(int val) {

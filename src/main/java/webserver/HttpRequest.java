@@ -3,7 +3,7 @@ package webserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.io.NetworkIO;
-import utils.parser.simple.KeyValueParserFactory;
+import utils.parser.KeyValueParserFactory;
 import webserver.httpelement.*;
 
 import java.util.Collections;
@@ -37,7 +37,7 @@ public class HttpRequest {
                 return paramsInURL(method, path, version, header, startLine[1].split("\\?")[1]);
             }
             if (method == HttpMethod.POST || method == HttpMethod.PUT) {
-                return withBody(method, path, version, header, io.readAllLeft());
+                return withBody(method, path, version, header, io);
             }
             return new HttpRequest(method, path, version, header, Collections.emptyMap(), null);
         }))));
@@ -63,14 +63,14 @@ public class HttpRequest {
             HttpPath path,
             HttpVersion version,
             HttpRequestHeader header,
-            String body
+            NetworkIO io
     ) {
         return header.contentType().map(contentType -> {
             if (contentType.mimeType() == HttpMimeType.APPLICATION_X_WWW_FORM_URLENCODED) {
                 return new HttpRequest(
                         method, path, version,
                         header,
-                        KeyValueParserFactory.queryStringParser().interpret(body),
+                        KeyValueParserFactory.queryStringParser().interpret(io.readAllLeft()),
                         null
                 );
             }
@@ -80,7 +80,7 @@ public class HttpRequest {
                 return null;
             }
             return null;
-        }).orElseGet(() -> new HttpRequest(method, path, version, header, Collections.emptyMap(), body));
+        }).orElseGet(() -> new HttpRequest(method, path, version, header, Collections.emptyMap(), io.readAllLeft()));
     }
 
     private HttpRequest(

@@ -1,6 +1,7 @@
-package utils.parser.json;
+package utils.parser.jsonelements;
 
 import org.junit.jupiter.api.Test;
+import utils.parser.JsonParser;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

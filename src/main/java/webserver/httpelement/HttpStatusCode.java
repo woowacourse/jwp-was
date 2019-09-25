@@ -104,6 +104,8 @@ public enum HttpStatusCode {
 
     public String toName() {
         switch (this) {
+            case OK:
+                return "OK";
             case IM_USED:
                 return "IM Used";
             case I_M_A_TEAPOT:

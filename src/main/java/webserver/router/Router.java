@@ -18,8 +18,8 @@ public class Router {
 
     private final RouterConfig config;
 
-    public static Optional<Router> init() {
-        return Optional.ofNullable(instance);
+    public static Router getInstance() {
+        return Optional.ofNullable(instance).orElseThrow(WrongRouterConfigException::new);
     }
 
     private Router(RouterConfig config) {
@@ -27,7 +27,7 @@ public class Router {
     }
 
     public HttpResponse serve(HttpRequest req) {
-        return (req.path().extension().isEmpty()) ? routeTo(req) : serveStaticFiles(req);
+        return (req.path().extension().isNone()) ? routeTo(req) : serveStaticFiles(req);
     }
 
     private HttpResponse routeTo(HttpRequest req) {

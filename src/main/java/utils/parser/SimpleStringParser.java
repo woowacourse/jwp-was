@@ -1,4 +1,4 @@
-package utils.parser.simple;
+package utils.parser;
 
 import java.util.Map;
 import java.util.stream.Collectors;

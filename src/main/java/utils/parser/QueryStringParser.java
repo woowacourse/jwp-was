@@ -1,4 +1,4 @@
-package utils.parser.simple;
+package utils.parser;
 
 import java.net.URLDecoder;
 import java.util.Map;

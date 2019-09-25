@@ -1,7 +1,6 @@
 package utils.parser;
 
 import utils.fp.tuple.Pair;
-import utils.parser.simple.KeyValueParserFactory;
 import webserver.httpelement.HttpMimeType;
 
 import java.util.Map;

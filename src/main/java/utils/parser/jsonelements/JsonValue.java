@@ -1,4 +1,4 @@
-package utils.parser.json;
+package utils.parser.jsonelements;
 
 import java.util.Objects;
 import java.util.function.Predicate;

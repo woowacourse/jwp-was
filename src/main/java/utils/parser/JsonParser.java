@@ -1,11 +1,11 @@
-package utils.parser.json;
+package utils.parser;
 
 import utils.fp.tailrecursion.Done;
 import utils.fp.tailrecursion.TailCall;
 import utils.fp.tailrecursion.TailRecursion;
 import utils.fp.tuple.Pair;
 import utils.fp.tuple.Triplet;
-import utils.parser.simple.KeyValueParser;
+import utils.parser.jsonelements.*;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -15,6 +15,8 @@ public class JsonParser implements KeyValueParser<JsonObject> {
     private static final Pattern REAL_EXP_NOTATION = Pattern.compile("-?[0-9]\\.[0-9]+[eE][+\\-][0-9]+");
     private static final Pattern REAL = Pattern.compile("-?[0-9]+\\.[0-9]+");
 
+    protected JsonParser() {}
+
     @Override
     public JsonObject interpret(String input) {
         final String trimmed = input.trim();
@@ -22,6 +24,10 @@ public class JsonParser implements KeyValueParser<JsonObject> {
             return parseObject(trimmed, 0, trimmed.length() - 1);
         }
         return null;
+    }
+
+    public JsonObject interpret(byte[] input) {
+        return interpret(new String(input));
     }
 
     private TailRecursion<Integer> jumpBlank(String input, int i) {

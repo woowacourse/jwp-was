@@ -1,5 +1,6 @@
 package webserver.httpelement;
 
+import utils.io.FileExtension;
 import utils.parser.MimeTypeWithParamsParser;
 
 import java.nio.charset.Charset;
@@ -46,8 +47,8 @@ public class HttpContentType implements HttpHeaderField {
                                                                 });
     }
 
-    public static HttpContentType fromFileExtension(String extension) {
-        switch (extension) {
+    public static HttpContentType fromFileExtension(FileExtension extension) {
+        switch (extension.get()) {
             case "html":
                 return TEXT_HTML_UTF_8;
             case "css":

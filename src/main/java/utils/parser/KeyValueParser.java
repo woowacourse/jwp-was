@@ -1,4 +1,4 @@
-package utils.parser.simple;
+package utils.parser;
 
 public interface KeyValueParser<T> {
      T interpret(String input);

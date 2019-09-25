@@ -1,5 +1,7 @@
 package webserver.httpelement;
 
+import utils.io.FileExtension;
+
 import java.net.URLDecoder;
 import java.util.Objects;
 import java.util.Optional;
@@ -21,8 +23,8 @@ public class HttpPath {
         this.path = path;
     }
 
-    public String extension() {
-        return (this.path.contains(".")) ? this.path.substring(this.path.lastIndexOf(".") + 1) : "";
+    public FileExtension extension() {
+        return new FileExtension(this.path);
     }
 
     public String encoded() {

@@ -1,9 +1,8 @@
 package utils.parser.simple;
 
 import org.junit.jupiter.api.Test;
-import utils.parser.simple.KeyValueParserFactory;
-import utils.parser.simple.QueryStringParser;
-import utils.parser.simple.SimpleStringParser;
+import utils.parser.KeyValueParserFactory;
+import utils.parser.SimpleStringParser;
 
 import java.util.Map;
 

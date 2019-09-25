@@ -1,5 +1,6 @@
 package controller;
 
+import utils.io.FileExtension;
 import utils.io.FileIoUtils;
 import webserver.HttpRequest;
 import webserver.HttpResponse;
@@ -10,10 +11,9 @@ import webserver.router.Router;
 public abstract class Controller {
     protected static HttpResponse serveStaticFile(String filePath, HttpRequest req) {
         return FileIoUtils.loadFileFromClasspath(Router.STATIC_FILE_PATH + filePath).map(body ->
-            HttpResponse.builder(HttpContentType.fromFileExtension(filePath.substring(filePath.lastIndexOf('.'))))
-                        .extractFieldsFromRequest(req)
-                        .body(body)
-                        .build()
+            HttpResponse.builder(
+                    HttpContentType.fromFileExtension(new FileExtension(filePath))
+            ).extractFieldsFromRequest(req).body(body).build()
         ).orElse(HttpResponse.INTERNAL_SERVER_ERROR);
     }
 

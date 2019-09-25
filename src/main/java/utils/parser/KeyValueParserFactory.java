@@ -1,6 +1,4 @@
-package utils.parser.simple;
-
-import utils.parser.json.JsonParser;
+package utils.parser;
 
 public class KeyValueParserFactory {
     private static final JsonParser jsonParser = new JsonParser();

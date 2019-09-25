@@ -1,4 +1,4 @@
-package utils.parser.simple;
+package utils.parser;
 
 public class HttpHeaderFieldsParser extends SimpleStringParser {
     protected HttpHeaderFieldsParser() {

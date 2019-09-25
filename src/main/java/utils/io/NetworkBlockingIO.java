@@ -100,7 +100,7 @@ public class NetworkBlockingIO implements NetworkIO {
     @Override
     public void write(String body) {
         try {
-            this.writer.write(body.getBytes());
+            this.writer.write(body.getBytes(StandardCharsets.UTF_8));
             this.writer.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
