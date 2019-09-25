@@ -62,3 +62,10 @@
 - [x] http status가 OK가 아니면 dos.flush()가 수행되지 않는 문제 해결 -> docs.flush()를 맨 뒤로 빼기
 - [x] 서블릿에서 사용할 response header 클래스 만들어보기
 - [x] doPost에서 사용 안하는 body 변수 제거
+
+피드백
+
+- [ ] servlet 싱글톤 다시 변경
+- [ ] FileServlet 한 번만 생성되게 변경
+- [ ] file일 경우만 FileServlet으로 가게 변경
+- [x] response 만드는 부분 메소드 추출하기

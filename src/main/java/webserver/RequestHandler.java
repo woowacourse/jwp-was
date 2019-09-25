@@ -35,15 +35,19 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest request = HttpRequestParser.parse(new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
             HttpServlet httpServlet = MappingHandler.getServlets(request.getAbsPath());
-            try {
-                HttpResponse httpResponse = httpServlet.run(request);
-                httpResponse.render(new DataOutputStream(out));
-            } catch (ErrorResponseException e) {
-                HttpResponse httpResponse = httpServlet.error(e.getHttpStatus(), e.getMessage());
-                httpResponse.render(new DataOutputStream(out));
-            }
+            renderResponse(out, request, httpServlet);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
+        }
+    }
+
+    private void renderResponse(OutputStream out, HttpRequest request, HttpServlet httpServlet) throws IOException, URISyntaxException {
+        try {
+            HttpResponse httpResponse = httpServlet.run(request);
+            httpResponse.render(new DataOutputStream(out));
+        } catch (ErrorResponseException e) {
+            HttpResponse httpResponse = httpServlet.error(e.getHttpStatus(), e.getMessage());
+            httpResponse.render(new DataOutputStream(out));
         }
     }
 }
