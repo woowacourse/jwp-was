@@ -40,7 +40,12 @@ class LoginControllerTest extends BaseControllerTest {
 
     @Test
     void 로그인_성공() {
-        DataBase.addUser(new User("userId", "password", "andole", "andole@andole.com"));
+        DataBase.addUser(User.builder()
+                .userId("userId")
+                .password("password")
+                .name("name")
+                .email("mail@mail.com")
+                .build());
 
         controller.handle(request, response);
 

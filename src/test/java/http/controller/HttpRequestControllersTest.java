@@ -27,7 +27,10 @@ class HttpRequestControllersTest extends BaseControllerTest {
     void 유저핸들러_선택() {
         ServletRequest request = getDefaultRequest(HttpMethod.GET, "/user/create")
                 .params(new HashMap<String, String>() {{
-                    put("key", "value");
+                    put("userId", "userId");
+                    put("password", "password");
+                    put("name", "name");
+                    put("email", "email");
                 }})
                 .build();
         ServletResponse response = getDefaultResponse();

@@ -26,7 +26,14 @@ class HttpSessionTest {
         session.removeAttribute("some");
         assertThat(session.getAttribute("some")).isNull();
 
-        session.setAttribute("object", new User("userId", "password", "name", "email"));
+        User user = User.builder()
+                .userId("userId")
+                .password("password")
+                .name("name")
+                .email("email")
+                .build();
+
+        session.setAttribute("object", user);
         assertDoesNotThrow(() -> (User) session.getAttribute("object"));
 
         session.invalidate();

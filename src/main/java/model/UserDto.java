@@ -21,6 +21,11 @@ public class UserDto {
     }
 
     public User toEntity() {
-        return new User(userId, password, name, email);
+        return User.builder()
+                .userId(userId)
+                .password(password)
+                .name(name)
+                .email(email)
+                .build();
     }
 }

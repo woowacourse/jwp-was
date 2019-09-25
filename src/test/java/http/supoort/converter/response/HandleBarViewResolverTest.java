@@ -20,8 +20,18 @@ class HandleBarViewResolverTest {
     @BeforeEach
     void setUp() {
         users = new ArrayList<>();
-        users.add(new User("andole", "password", "andole", "andole@andole.com"));
-        users.add(new User("coogi", "password", "coogi", "coogi@coogi.com"));
+        users.add(User.builder()
+                .userId("andole")
+                .password("pass")
+                .name("andole")
+                .email("andole@andole.com")
+                .build());
+        users.add(User.builder()
+                .userId("coogi")
+                .password("pass")
+                .name("coogi")
+                .email("coogi@coogi.com")
+                .build());
     }
 
     @Test
