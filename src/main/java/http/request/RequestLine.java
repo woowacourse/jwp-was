@@ -1,11 +1,9 @@
 package http.request;
 
 import http.common.HttpMethod;
-import http.utils.HttpUtils;
 
 import java.io.IOException;
 import java.net.URLDecoder;
-import java.util.Map;
 
 public class RequestLine {
     private static final String QUERY_FLAG = "\\?";
