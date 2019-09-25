@@ -18,9 +18,7 @@ public class HttpPath {
 
     public static HttpPath of(String path) {
         try {
-            path = (path.contains("?") && path.lastIndexOf("?") > path.lastIndexOf("/"))
-                    ? URLDecoder.decode(path.substring(0, path.lastIndexOf("?")), UTF_8)
-                    : URLDecoder.decode(path, UTF_8);
+            path = URLDecoder.decode(path.split("\\?")[0], UTF_8);
             return Optional.of(new HttpPath(path)).orElseThrow(InvalidHttpPathException::new);
         } catch (UnsupportedEncodingException e) {
             logger.debug(e.getMessage());
