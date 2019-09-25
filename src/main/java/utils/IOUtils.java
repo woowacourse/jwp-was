@@ -1,5 +1,7 @@
 package utils;
 
+import http.HttpRequestHeader;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,6 +19,13 @@ public class IOUtils {
      * @throws IOException
      */
     public static String readData(BufferedReader br, int contentLength) throws IOException {
+        char[] body = new char[contentLength];
+        br.read(body, 0, contentLength);
+        return String.copyValueOf(body);
+    }
+
+    public static String readData(BufferedReader br, HttpRequestHeader httpRequestHeader) throws IOException {
+        int contentLength = Integer.parseInt(httpRequestHeader.get("Content-Length"));
         char[] body = new char[contentLength];
         br.read(body, 0, contentLength);
         return String.copyValueOf(body);
