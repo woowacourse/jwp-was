@@ -39,17 +39,6 @@ public class RequestLine {
         return path;
     }
 
-    public String getDirectory() {
-        if (isRootDirectoryRequest()) {
-            return "/";
-        }
-        return path.substring(0, path.lastIndexOf("/"));
-    }
-
-    private boolean isRootDirectoryRequest() {
-        return path.substring(0, path.lastIndexOf("/")).length() == 0;
-    }
-
     public String getResource() {
         if (isRootRequest()) {
             return "index.html";

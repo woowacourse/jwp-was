@@ -38,6 +38,7 @@ public class OutputStreamHandler {
         try {
             dos.writeBytes("HTTP/1.1 " + response.getHttpStatusCode() + " " + response.getHttpReasonPhrase() + " \r\n");
             if (response.isRedirect()) {
+                // TODO : templates/어떤디렉토리 안에 있는 파일은 접근 못하고 있음. lastIndexOf(/)로 잘라서 생긴 문제
                 dos.writeBytes("Location: " + response.getResourceName() + " \r\n");
             }
             dos.writeBytes("Content-Type: " + response.getMediaType() + ";charset=utf-8\r\n");

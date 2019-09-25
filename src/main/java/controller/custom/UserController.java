@@ -13,7 +13,7 @@ import java.util.Map;
 public class UserController extends AbstractController {
     private static final String MAPPING_URL = "/user";
     private static final String INDEX_PAGE = "/index.html";
-    private static final String LOGIN_FAILED_PAGE = "/login_failed.html";
+    private static final String LOGIN_FAILED_PAGE = "/user/login_failed.html";
 
     @Override
     protected void doPost(HttpRequest request, HttpResponse response) {
@@ -35,7 +35,6 @@ public class UserController extends AbstractController {
                 return;
             }
             response.sendRedirect(ViewLocation.TEMPLATE.getLocation() + LOGIN_FAILED_PAGE, HttpStatus.REDIRECT);
-            return;
         }
     }
 
