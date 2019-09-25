@@ -1,9 +1,6 @@
 package webserver.support;
 
-import webserver.controller.Controller;
-import webserver.controller.CreateUserController;
-import webserver.controller.FileController;
-import webserver.controller.LoginController;
+import webserver.controller.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +17,7 @@ public class ControllerMapper {
         api = new HashMap<>();
         api.put("/user/create", CreateUserController.getInstance());
         api.put("/user/login", LoginController.getInstance());
+        api.put("/user/list", UserListController.getInstance());
     }
 
     public Controller map(String url) {

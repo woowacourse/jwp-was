@@ -3,6 +3,7 @@ package webserver.controller;
 import http.request.Request;
 import http.response.Response;
 import webserver.exception.InvalidRequestMethodException;
+import webserver.support.ModelAndView;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -19,7 +20,7 @@ public class FileController extends HttpController {
     @Override
     protected void doGet(Request request, Response response) throws IOException, URISyntaxException {
         String url = request.extractUrl();
-        response.configureOkResponse(url);
+        response.configureOkResponse(new ModelAndView(url));
     }
 
     @Override

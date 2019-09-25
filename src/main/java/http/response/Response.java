@@ -2,10 +2,13 @@ package http.response;
 
 import utils.FileIoUtils;
 import webserver.support.ContentTypeHandler;
+import webserver.support.HandlebarsRenderer;
+import webserver.support.ModelAndView;
 import webserver.support.PathHandler;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Map;
 
 public class Response {
     private StatusLine statusLine;
@@ -45,7 +48,7 @@ public class Response {
         return statusLine.getStatusCode();
     }
 
-    public void setStatusCode(int statusCode) {
+    private void setStatusCode(int statusCode) {
         statusLine.setStatusCode(statusCode);
     }
 
@@ -53,7 +56,7 @@ public class Response {
         return statusLine.getReasonPhrase();
     }
 
-    public void setReasonPhrase(String reasonPhrase) {
+    private void setReasonPhrase(String reasonPhrase) {
         statusLine.setReasonPhrase(reasonPhrase);
     }
 
@@ -65,7 +68,7 @@ public class Response {
         return responseHeader.getLocation();
     }
 
-    public void setLocation(String location) {
+    private void setLocation(String location) {
         responseHeader.setLocation(location);
     }
 
@@ -77,16 +80,26 @@ public class Response {
         responseHeader.setCookie(cookie);
     }
 
-    public void configureOkResponse(String url) throws IOException, URISyntaxException {
+    public void configureOkResponse(ModelAndView modelAndView) throws IOException, URISyntaxException {
+        String url = modelAndView.getView();
         setStatusCode(200);
         setReasonPhrase("OK");
-        setContentType(ContentTypeHandler.type(url.substring(url.lastIndexOf(".") + 1)));
-        configureResponseBody(url);
+        setContentType(ContentTypeHandler.type(url));
+        configureResponseBody(url, modelAndView.getModels());
     }
 
-    private void configureResponseBody(String url) throws IOException, URISyntaxException {
-        String absoluteUrl = PathHandler.path(url);
-        byte[] body = FileIoUtils.loadFileFromClasspath(absoluteUrl);
+    private void configureResponseBody(String url, Map<String, Object> model) throws IOException, URISyntaxException {
+        byte[] body;
+
+        if (model.isEmpty()) {
+            String absoluteUrl = PathHandler.path(url);
+            body = FileIoUtils.loadFileFromClasspath(absoluteUrl);
+            setResponseBody(body);
+            return;
+        }
+
+        body = HandlebarsRenderer.render(url, model);
+
         setResponseBody(body);
     }
 
@@ -94,9 +107,5 @@ public class Response {
         setStatusCode(302);
         setReasonPhrase("FOUND");
         setLocation(location);
-    }
-
-    public void configureCookie(String cookie) {
-        setCookie(cookie);
     }
 }
