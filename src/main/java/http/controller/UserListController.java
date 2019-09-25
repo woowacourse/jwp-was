@@ -28,7 +28,6 @@ public class UserListController extends AbstractController {
             put("users", DataBase.findAll());
         }};
 
-        servletResponse.ok("/user/list");
-        servletResponse.setModel(model);
+        servletResponse.ok("/user/list", model);
     }
 }

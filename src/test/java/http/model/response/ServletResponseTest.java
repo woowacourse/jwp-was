@@ -30,7 +30,7 @@ class ServletResponseTest {
 
     @Test
     void 뷰_있는_경우() {
-        response.setView("/index.html");
+        response.ok("/index.html");
         assertThat(response.hasResource()).isTrue();
     }
 
@@ -41,7 +41,7 @@ class ServletResponseTest {
 
     @Test
     void 모델_있는_경우() {
-        response.setModel(new Object());
+        response.ok("/index.html", new Object());
         assertThat(response.hasModel()).isTrue();
     }
 

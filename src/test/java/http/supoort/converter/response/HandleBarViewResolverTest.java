@@ -29,8 +29,7 @@ class HandleBarViewResolverTest {
         ServletResponse servletResponse = new ServletResponse(new ByteArrayOutputStream());
         DataOutputStream outputStream = new DataOutputStream(new ByteArrayOutputStream());
 
-        servletResponse.ok("/user/list");
-        servletResponse.setModel(new HashMap<String, Object>() {{
+        servletResponse.ok("/user/list", new HashMap<String, Object>() {{
             put("users", users);
         }});
 

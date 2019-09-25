@@ -27,6 +27,11 @@ public class ServletResponse {
         this.view = resource;
     }
 
+    public void ok(String resource, Object model) {
+        ok(resource);
+        this.model = model;
+    }
+
     public void addHeader(String key, String value) {
         this.httpHeaders.addHeader(key, value);
     }
@@ -34,10 +39,6 @@ public class ServletResponse {
     public void redirect(String uri) {
         this.httpStatus = HttpStatus.FOUND;
         addHeader(LOCATION, uri);
-    }
-
-    private void setHTTP1() {
-        this.setProtocols(HttpProtocols.HTTP1);
     }
 
     public void setCookie(String value) {
@@ -60,16 +61,8 @@ public class ServletResponse {
         return model;
     }
 
-    public void setModel(Object model) {
-        this.model = model;
-    }
-
     public String getView() {
         return view;
-    }
-
-    public void setView(String view) {
-        this.view = view;
     }
 
     public String getHeader(String key) {
@@ -84,19 +77,19 @@ public class ServletResponse {
         return protocols;
     }
 
-    public void setProtocols(HttpProtocols protocols) {
-        this.protocols = protocols;
-    }
-
     public HttpStatus getHttpStatus() {
         return httpStatus;
     }
 
-    public void setHttpStatus(HttpStatus httpStatus) {
-        this.httpStatus = httpStatus;
+    public void error() {
+        this.httpStatus = HttpStatus.ERROR;
     }
 
     public void unauthorized() {
         this.httpStatus = HttpStatus.UNAUTHORIZED;
+    }
+
+    private void setHTTP1() {
+        this.protocols = HttpProtocols.HTTP1;
     }
 }

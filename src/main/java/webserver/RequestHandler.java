@@ -2,7 +2,6 @@ package webserver;
 
 import http.controller.HttpRequestControllers;
 import http.model.request.ServletRequest;
-import http.model.response.HttpStatus;
 import http.model.response.ServletResponse;
 import http.session.SessionManager;
 import http.supoort.converter.HttpMessageConverter;
@@ -67,7 +66,7 @@ public class RequestHandler implements Runnable {
 
     private void sendError(OutputStream out) {
         ServletResponse response = new ServletResponse(out);
-        response.setHttpStatus(HttpStatus.ERROR);
+        response.error();
         converter.response(response);
     }
 }
