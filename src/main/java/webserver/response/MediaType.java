@@ -14,7 +14,7 @@ public enum MediaType {
     FONT_WOFF("woff", "application/x-font-woff"),
     FONT_TTF("ttf", "application/x-font-ttf"),
     IMAGE_X_ICON_VALUE("ico", "image/x-icon"),
-    DEFAULT("*", "application/octet-stream");
+    DEFAULT("**", "application/octet-stream");
 
     private String extension;
     private String mediaType;
