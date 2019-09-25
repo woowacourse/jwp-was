@@ -29,7 +29,7 @@ public class Request {
         return requestLine.getUrl();
     }
 
-    public String extractHttpVersion(){
+    public String extractHttpVersion() {
         return requestLine.getHttpVersion();
     }
 
