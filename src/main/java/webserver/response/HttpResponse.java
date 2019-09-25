@@ -1,8 +1,9 @@
 package webserver.response;
 
+import webserver.request.HttpVersion;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class HttpResponse {
     private HttpVersion httpVersion;
@@ -10,8 +11,8 @@ public class HttpResponse {
     private ResponseHeaders responseHeaders;
     private ResponseBody responseBody;
 
-    public HttpResponse() {
-        this.httpVersion = HttpVersion.HTTP_1_1;
+    public HttpResponse(HttpVersion version) {
+        this.httpVersion = version;
         this.responseStatus = ResponseStatus.OK;
         this.responseHeaders = new ResponseHeaders();
     }

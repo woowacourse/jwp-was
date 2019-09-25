@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static webserver.request.HttpVersion.HTTP_1_1;
 
 class RequestLineTest {
 
@@ -35,7 +36,7 @@ class RequestLineTest {
 
         assertThat(requestLine.getMethod()).isEqualTo(GET);
         assertThat(requestLine.getFullUri()).isEqualTo(String.format("%s?%s", URI, PARAMS));
-        assertThat(requestLine.getVersion()).isEqualTo(HTTP_1_1);
+        assertThat(requestLine.getVersion()).isEqualTo(HttpVersion.HTTP_1_1);
         assertThat(requestLine.hasParams()).isTrue();
         assertThat(requestLine.getQueryString()).isEqualTo(PARAMS);
     }

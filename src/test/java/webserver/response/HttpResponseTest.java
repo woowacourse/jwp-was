@@ -2,11 +2,13 @@ package webserver.response;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import webserver.request.HttpVersion;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static webserver.request.HttpVersion.*;
 import static webserver.response.ResponseStatus.*;
 
 class HttpResponseTest {
@@ -28,7 +30,7 @@ class HttpResponseTest {
     @Test
     void forward() {
         String filePath = "/index.html";
-        HttpResponse response = new HttpResponse();
+        HttpResponse response = new HttpResponse(HTTP_1_1);
         response.forward(filePath);
 
         assertThat(response.getViewPath()).isEqualTo(new ResponseBody(filePath).getPath());
@@ -38,7 +40,7 @@ class HttpResponseTest {
     @Test
     void setContentType() {
         String contentType = "text/html";
-        HttpResponse response = new HttpResponse();
+        HttpResponse response = new HttpResponse(HTTP_1_1);
 
         response.setContentType(contentType);
         assertThat(response.getHeader("Content-Type")).isEqualTo(contentType);
@@ -49,7 +51,7 @@ class HttpResponseTest {
 
     @Test
     void sendRedirect() {
-        HttpResponse response = new HttpResponse();
+        HttpResponse response = new HttpResponse(HTTP_1_1);
         response.sendRedirect("/");
 
         assertThat(response.getHeader("Location")).isEqualTo("/");
@@ -58,7 +60,7 @@ class HttpResponseTest {
 
     @Test
     void responseBuilder() {
-        HttpResponse response = new HttpResponse();
+        HttpResponse response = new HttpResponse(HTTP_1_1);
         response.sendRedirect("/");
 
         List<String> parsedResponse = Arrays.asList(

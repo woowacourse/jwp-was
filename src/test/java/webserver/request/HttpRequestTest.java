@@ -1,12 +1,12 @@
 package webserver.request;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static webserver.request.HttpVersion.HTTP_1_1;
 
 class HttpRequestTest {
 
@@ -14,7 +14,7 @@ class HttpRequestTest {
     void confirmGetRequestContent() {
         HttpRequest normalGetRequest = getNormalGetRequest();
         assertThat(normalGetRequest.getHeader("Accept")).isEqualTo("*/*");
-        assertThat(getNormalGetRequest().getVersion()).isEqualTo("HTTP/1.1");
+        assertThat(getNormalGetRequest().getVersion()).isEqualTo(HTTP_1_1);
         assertThat(getNormalGetRequest().getMethod()).isEqualTo("GET");
 
         assertThat(normalGetRequest.getParam("userId")).isEqualTo("javajigi");

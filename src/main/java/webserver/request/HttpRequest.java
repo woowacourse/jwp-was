@@ -79,7 +79,7 @@ public class HttpRequest {
         return requestLine.getUri();
     }
 
-    public String getVersion() {
+    public HttpVersion getVersion() {
         return requestLine.getVersion();
     }
 }

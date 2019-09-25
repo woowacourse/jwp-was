@@ -8,14 +8,14 @@ public class RequestLine {
 
     private String method;
     private String uri;
-    private String version;
+    private HttpVersion version;
 
     public RequestLine(String requestLine) {
         String[] splitFirstLine = requestLine.split(SPACE);
         checkRequestFirstLine(splitFirstLine);
         this.method = splitFirstLine[0];
         this.uri = splitFirstLine[1];
-        this.version = splitFirstLine[2];
+        this.version = HttpVersion.of(splitFirstLine[2]);
     }
 
     private void checkRequestFirstLine(String[] splitFirstLine) {
@@ -44,7 +44,7 @@ public class RequestLine {
         return uri;
     }
 
-    public String getVersion() {
+    public HttpVersion getVersion() {
         return version;
     }
 }

@@ -43,7 +43,7 @@ public class RequestMapper {
     }
 
     public HttpResponse service(HttpRequest request) {
-        HttpResponse response = new HttpResponse();
+        HttpResponse response = new HttpResponse(request.getVersion());
         RequestMapping requestMapping = request.getRequestMapping();
 
         Responsive responsive;
