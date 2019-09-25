@@ -1,9 +1,6 @@
 package webserver;
 
-import controller.Controller;
-import controller.IndexController;
-import controller.UserController;
-import controller.UserFormController;
+import controller.*;
 import webserver.exception.ResourceNotFoundException;
 
 import java.util.HashMap;
@@ -16,6 +13,8 @@ public class HandlerMapping {
     static {
         HANDLER_MAP.put("/user/create", UserController.getInstance());
         HANDLER_MAP.put("/user/form", UserFormController.getInstance());
+        HANDLER_MAP.put("/user/login", LoginController.getInstance());
+        HANDLER_MAP.put("/user/login_failed", LoginFailedController.getInstance());
         HANDLER_MAP.put("/", IndexController.getInstance());
     }
 
