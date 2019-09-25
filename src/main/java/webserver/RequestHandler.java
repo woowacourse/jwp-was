@@ -4,6 +4,7 @@ import controller.Controller;
 import controller.CreateUserController;
 import controller.FileController;
 import controller.HomeController;
+import controller.LoginController;
 import http.HttpStatus;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -29,6 +30,7 @@ public class RequestHandler implements Runnable {
         controllers = new HashMap<>();
         controllers.put(CreateUserController.PATH, new CreateUserController());
         controllers.put(HomeController.PATH, new HomeController());
+        controllers.put(LoginController.PATH, new LoginController());
     }
 
     private Socket connection;

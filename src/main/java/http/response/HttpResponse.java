@@ -29,7 +29,7 @@ public class HttpResponse {
 
     public void redirect(String uri) {
         this.httpStatusLine = new HttpStatusLine(HttpStatus.FOUND);
-        httpResponseHeader.addHeader("Location", "/" + uri);
+        httpResponseHeader.addHeader("Location", uri);
     }
 
     public void setStatusCode(HttpStatus httpStatus) {
@@ -42,5 +42,9 @@ public class HttpResponse {
         this.httpResponseBody = new HttpResponseBody(uri);
         httpResponseHeader.addHeader("Content-Type", contentType + ";charset=utf-8");
         httpResponseHeader.addHeader("Content-Length", String.valueOf(httpResponseBody.getBodyLength()));
+    }
+
+    public void setCookie(String cookie) {
+        httpResponseHeader.addHeader("Set-Cookie", cookie);
     }
 }

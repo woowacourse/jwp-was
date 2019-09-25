@@ -17,7 +17,7 @@ public class CreateUserController extends Controller {
         logger.debug("Saved UserId: {}", httpRequest.getQueryValue("userId"));
         save(httpRequest.getQueryValue("userId"), httpRequest.getQueryValue("password"),
                 httpRequest.getQueryValue("name"), httpRequest.getQueryValue("email"));
-        httpResponse.redirect("index.html");
+        httpResponse.redirect("/index.html");
     }
 
     private void save(String userId, String password, String name, String email) {
