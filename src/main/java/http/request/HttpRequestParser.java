@@ -10,14 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HttpRequestParser {
-    public static HttpRequest parse(final InputStream inputStream) throws IOException {
+    public static void parse(final InputStream inputStream, final HttpRequest httpRequest) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
         RequestLine requestLine = RequestLine.of(bufferedReader.readLine());
         HttpHeader httpHeader = HttpHeader.of(convertHeaderLines(bufferedReader));
         QueryStringParams queryStringParams = QueryStringParamsParser.parse(bufferedReader, requestLine, httpHeader);
 
-        return new HttpRequest(requestLine, httpHeader, queryStringParams);
+        httpRequest.init(requestLine, httpHeader, queryStringParams);
     }
 
     private static List<String> convertHeaderLines(final BufferedReader bufferedReader) throws IOException {

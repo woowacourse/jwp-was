@@ -12,15 +12,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.net.URISyntaxException;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
+    private HttpRequest httpRequest;
+    private HttpResponse httpResponse;
 
     public RequestHandler(final Socket connectionSocket) {
         this.connection = connectionSocket;
+        this.httpRequest = new HttpRequest();
+        this.httpResponse = new HttpResponse();
     }
 
     public void run() {
@@ -29,17 +32,25 @@ public class RequestHandler implements Runnable {
 
         try (InputStream inputStream = connection.getInputStream();
              OutputStream outputStream = connection.getOutputStream()) {
-
-            DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-            HttpRequest httpRequest = HttpRequestParser.parse(inputStream);
-            HttpResponse httpResponse = new HttpResponse();
-            Dispatcher.dispatch(httpRequest, httpResponse);
-
-            logger.debug("{}", httpResponse);
-            HttpResponseParser.send(dataOutputStream, httpResponse);
-
-        } catch (IOException | URISyntaxException e) {
+            receiveRequest(inputStream);
+            sendResponse(outputStream);
+        } catch (IOException e) {
             logger.debug(e.getMessage());
         }
+    }
+
+    private void receiveRequest(final InputStream inputStream) {
+        try {
+            HttpRequestParser.parse(inputStream, httpRequest);
+            Dispatcher.dispatch(httpRequest, httpResponse);
+        } catch (Exception e) {
+            // TODO : 에러에 맞는 response 보내기
+            httpResponse.redirect("/404.html");
+        }
+    }
+
+    private void sendResponse(final OutputStream outputStream) throws IOException {
+        DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+        HttpResponseParser.send(dataOutputStream, httpResponse);
     }
 }

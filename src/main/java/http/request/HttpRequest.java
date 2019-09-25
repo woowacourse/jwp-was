@@ -7,7 +7,7 @@ public class HttpRequest {
     private HttpHeader httpHeader;
     private QueryStringParams queryStringParams;
 
-    public HttpRequest(final RequestLine requestLine,
+    public void init(final RequestLine requestLine,
                        final HttpHeader httpHeader,
                        final QueryStringParams queryStringParams) {
         this.requestLine = requestLine;
