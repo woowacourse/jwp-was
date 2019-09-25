@@ -11,6 +11,8 @@ public class ControllerHandler {
     static {
         controllers.put("^.+\\.([a-z]+)$", new StaticFileController());
         controllers.put("^/user/create$", new CreateUserController());
+        controllers.put("^/user/login$", new LoginUserController());
+        controllers.put("^/user/list$", new UserListController());
     }
 
     public static Controller findByPath(String path) throws NotFoundException {
@@ -18,7 +20,7 @@ public class ControllerHandler {
                 .filter(path::matches)
                 .map(controllers::get)
                 .findAny()
-                .orElseThrow(NotFoundException::new)
+                .orElse(new DefaultController())
                 ;
     }
 }
