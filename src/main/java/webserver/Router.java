@@ -3,7 +3,7 @@ package webserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.io.FileIoUtils;
-import utils.parser.KeyValueParserFactory;
+import utils.parser.WWMLParser;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
 import webserver.http.headerfields.HttpContentType;
@@ -17,13 +17,9 @@ public class Router {
     private static final Logger logger = LoggerFactory.getLogger(Router.class);
 
     private static final Map<String, String> GET_ROUTER =
-            FileIoUtils.loadFileFromClasspath("./get-route.wwml").map(config ->
-                    KeyValueParserFactory.routerParser().toMap(config)
-            ).orElse(null);
+            FileIoUtils.loadFileFromClasspath("./get-route.wwml").map(WWMLParser::toMap).orElse(null);
     private static final Map<String, String> POST_ROUTER =
-            FileIoUtils.loadFileFromClasspath("./post-route.wwml").map(config ->
-                    KeyValueParserFactory.routerParser().toMap(config)
-            ).orElse(null);
+            FileIoUtils.loadFileFromClasspath("./post-route.wwml").map(WWMLParser::toMap).orElse(null);
 
     public static HttpResponse serve(HttpRequest req) {
         if (req.path().extension().equals("html") || req.path().extension().isEmpty()) {

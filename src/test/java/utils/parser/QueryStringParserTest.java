@@ -23,8 +23,7 @@ class QueryStringParserTest {
     @Test
     @DisplayName("encode된 값을 key value로 설정하는데 성공한다.")
     void queryStringParser() {
-        QueryStringParser queryStringParser = new QueryStringParser();
-        Map<String, String> result = queryStringParser.toMap(ENCODE_KEY_VALUE);
+        Map<String, String> result = QueryStringParser.toMap(ENCODE_KEY_VALUE);
 
         assertThat(result.get(USER_ID)).isEqualTo(USER_ID_VALUE);
         assertThat(result.get(PASSWORD)).isEqualTo(PASSWORD_VALUE);

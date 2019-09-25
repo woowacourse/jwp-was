@@ -15,9 +15,8 @@ class ContentTypeParserTest {
     @Test
     @DisplayName("헤더의 Content-Type의 매개변수를 key value로 설정한다.")
     void contentTypeParser() {
-        ContentTypeParser contentTypeParser = new ContentTypeParser();
         String inputData = "Content-Type: application/x-www-form-urlencoded; charset=utf-8";
-        Map<String, String> result = contentTypeParser.toMap(inputData);
+        Map<String, String> result = ContentTypeParser.toMap(inputData);
 
         assertThat(result.get("charset")).isEqualTo("utf-8");
     }

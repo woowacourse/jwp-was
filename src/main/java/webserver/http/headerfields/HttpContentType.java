@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.exception.NotFoundContentTypeSeparatorException;
 import utils.parser.ContentTypeParser;
-import utils.parser.KeyValueParserFactory;
 
 import java.util.*;
 
@@ -28,7 +27,6 @@ public class HttpContentType implements HttpHeaderField {
         put(MimeType.IMAGE_PNG.getName(), new HttpContentType(Chemical.IMAGE, "png"));
         put(MimeType.IMAGE_X_ICON.getName(), new HttpContentType(Chemical.IMAGE, "x-icon"));
     }};
-
 
     private static final int CONTENT_TYPE_INDEX = 0;
     private static final int CONTENT_TYPE_PARAMS_INDEX = 1;
@@ -58,7 +56,7 @@ public class HttpContentType implements HttpHeaderField {
         Map<String, String> params = DEFAULT_PARAMS;
 
         if (input.size() > CONTENT_TYPE_PARAMS_INDEX) {
-            params.putAll(KeyValueParserFactory.contentTypeParser().toMap(input.get(CONTENT_TYPE_PARAMS_INDEX)));
+            params.putAll(ContentTypeParser.toMap(input.get(CONTENT_TYPE_PARAMS_INDEX)));
         }
 
         return new HttpContentType(chemical, subtype, params);

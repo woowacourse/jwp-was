@@ -1,6 +1,6 @@
 package webserver.http.headerfields;
 
-import utils.parser.SimpleStringParser;
+import utils.parser.KeyValueParser;
 
 import java.util.Collections;
 import java.util.Map;
@@ -21,7 +21,7 @@ public class HttpHeaderFields{
     }
 
     public String debugString() {
-        return SimpleStringParser.debugString(this.headerFields);
+        return KeyValueParser.debugString(this.headerFields);
     }
 
     public String value(String key) {

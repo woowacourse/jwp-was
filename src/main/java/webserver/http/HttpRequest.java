@@ -3,8 +3,9 @@ package webserver.http;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.io.NetworkIO;
-import utils.parser.KeyValueParserFactory;
-import utils.parser.SimpleStringParser;
+import utils.parser.HttpHeaderFieldsParser;
+import utils.parser.KeyValueParser;
+import utils.parser.QueryStringParser;
 import webserver.http.exception.InvalidHttpTypeException;
 import webserver.http.headerfields.*;
 
@@ -32,7 +33,7 @@ public class HttpRequest {
                         HttpVersion version,
                         HttpHeaderFields headerFields,
                         Map<String, String> params) {
-        logger.debug("\r\n{}: {} {}\r\n{}\r\n{}", method, path, version, headerFields.debugString(), SimpleStringParser.debugString(params));
+        logger.debug("\r\n{}: {} {}\r\n{}\r\n{}", method, path, version, headerFields.debugString(), KeyValueParser.debugString(params));
 
         this.method = method;
         this.path = path;
@@ -59,12 +60,12 @@ public class HttpRequest {
     }
 
     private static Map<String, String> parseHeaderFields(NetworkIO io) {
-        return KeyValueParserFactory.httpHeaderFieldsParser().toMap(io.readWhile(line -> line.length() > ZERO));
+        return HttpHeaderFieldsParser.toMap(io.readWhile(line -> line.length() > ZERO));
     }
 
     public static Map<String, String> parseParams(HttpMethod method, String fullPath, NetworkIO io, String contentLength) {
         String params = paramsLine(method, fullPath, io, contentLength);
-        return KeyValueParserFactory.queryStringParser().toMap(params);
+        return QueryStringParser.toMap(params);
     }
 
     private static String paramsLine(HttpMethod method, String fullPath, NetworkIO io, String contentLength) {

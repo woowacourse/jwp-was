@@ -1,7 +1,12 @@
 package utils.parser;
 
-public class HttpHeaderFieldsParser extends URLParser {
-    protected HttpHeaderFieldsParser() {
-        super("(\\r\\n|\\r|\\n)", ": ");
+import java.util.Map;
+
+public class HttpHeaderFieldsParser extends KeyValueParser {
+    private static final String PAIR_DELIMITER = "(\\r\\n|\\r|\\n)";
+    private static final String KEY_VALUE_DELIMITER = ": ";
+
+    public static Map<String, String> toMap(String input) {
+        return toMapByDecode(PAIR_DELIMITER, KEY_VALUE_DELIMITER, input);
     }
 }
