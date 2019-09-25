@@ -1,40 +1,22 @@
 package controller;
 
-import http.request.GetRequest;
-import http.request.PostRequest;
-import http.request.Request;
+import controller.core.Controller;
+import controller.exception.PathNotFoundException;
+import http.request.HttpRequest;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
+import java.util.List;
 
 public class ControllerFactory {
-    private static Map<Class<? extends Request>, ControllerCreator> controllerCreators = new HashMap<>();
-    private static Map<String, String> parameters;
+    private static final List<Controller> controllers = Arrays.asList(
+            new HomeController(),
+            new UserController()
+    );
 
-    static {
-        controllerCreators.put(GetRequest.class, new FileControllerCreator());
-        controllerCreators.put(PostRequest.class, new DataControllerCreator());
-    }
-
-    public static Controller getController(Request request, Map<String, String> params) {
-        parameters = params;
-        ControllerCreator controllerCreator = controllerCreators.get(request.getClass());
-        return controllerCreator.create(request);
-    }
-
-    static class FileControllerCreator implements ControllerCreator {
-        @Override
-        public Controller create(Request request) {
-            return new FileController(request);
-        }
-    }
-
-    static class DataControllerCreator implements ControllerCreator {
-        @Override
-        public Controller create(Request request) {
-            Controller controller =  new PostDataController(request, parameters);
-            parameters.clear();
-            return controller;
-        }
+    public static Controller mappingController(HttpRequest httpRequest) {
+        return controllers.stream()
+                .filter(controller -> controller.isMapping(httpRequest))
+                .findAny()
+                .orElseThrow(PathNotFoundException::new);
     }
 }

@@ -1,43 +1,66 @@
 package http.request;
 
+import http.exception.CanNotParseDataException;
+import http.request.core.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import utils.IOUtils;
+
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 public class HttpRequestFactory {
-    private static final Map<RequestMethod, RequestCreator> requestCreators = new HashMap<>();
+    public static HttpRequest parseHttpRequest(InputStream in) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
 
-    static {
-        requestCreators.put(RequestMethod.GET, new GetRequestCreator());
-        requestCreators.put(RequestMethod.POST, new PostRequestCreator());
+        List<Object> firstLineTokens = parseFirstLine(br);
+        RequestHeader headers = parseHeader(br);
+        Map<String, String> data = parseData(firstLineTokens, br, headers);
+
+        return new HttpRequest(firstLineTokens, headers, data);
     }
 
-    public static Request getRequest(String firstLine, List<String> lines) throws IOException {
-        String[] tokens = getTokens(firstLine);
+    private static List<Object> parseFirstLine(BufferedReader br) throws IOException {
+        String[] tokens = br.readLine().split(" ");
 
-        RequestCreator requestCreator = requestCreators.get(RequestMethod.from(tokens[0]));
-        return requestCreator.create(lines, tokens);
+        return Arrays.asList(
+                RequestMethod.of(tokens[0]),
+                new RequestPath(RequestPrefixPath.of(tokens[1]), tokens[1]),
+                RequestVersion.of(tokens[2])
+        );
     }
 
-    private static String[] getTokens(String line) {
-        return line.split(" ");
-    }
+    private static RequestHeader parseHeader(BufferedReader br) throws IOException {
+        List<String> parseHeaderLines = new ArrayList<>();
+        String headerLine = br.readLine();
 
-    static class GetRequestCreator implements RequestCreator {
-        @Override
-        public Request create(List<String> lines, String[] tokens) {
-            return new GetRequest(lines, tokens);
+        while (!"".equals(headerLine)) {
+            parseHeaderLines.add(headerLine);
+            headerLine = br.readLine();
         }
+
+        return new RequestHeader(parseHeaderLines);
     }
 
-    static class PostRequestCreator implements RequestCreator {
-        @Override
-        public Request create(List<String> lines, String[] tokens) {
-            return new PostRequest(lines, tokens);
+    private static Map<String, String> parseData(List<Object> firstLineTokens, BufferedReader br, RequestHeader headers) throws IOException {
+        RequestMethod method = (RequestMethod) firstLineTokens.get(0);
+        RequestPath url = (RequestPath) firstLineTokens.get(1);
+
+        if (method.isGet()) {
+            return url.getFullPath().contains("?") ? new RequestData(url).getData() : Collections.emptyMap();
         }
+
+        if (method.isPost()) {
+            String contentLength = headers.getContentLength();
+            String bodyData = IOUtils.readData(br, Integer.parseInt(contentLength));
+            return new RequestData(bodyData).getData();
+        }
+
+        throw new CanNotParseDataException();
     }
+
 }
-
-
-
