@@ -7,9 +7,9 @@ import dev.luffy.http.excption.NotFoundExtensionException;
 public class HttpRequestUrl {
 
     private static final String QUERY_STRING_DELIMITER = "?";
-    public static final String EMPTY_STRING = "";
-    public static final String EXTENSION_DELIMITER = ".";
-    public static final String NOT_FOUND_EXTENSION_MESSAGE = "확장자가 없습니다.";
+    private static final String EMPTY_STRING = "";
+    private static final String EXTENSION_DELIMITER = ".";
+    private static final String NOT_FOUND_EXTENSION_MESSAGE = "확장자가 없습니다.";
 
     private String url;
 

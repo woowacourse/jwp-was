@@ -15,6 +15,7 @@ import dev.luffy.utils.HttpRequestUtils;
 
 public class HttpResponse {
 
+    private static final String NOT_FOUND_404_FILE_PATH = "./templates/error/404.html";
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
     private HttpResponseLine httpResponseLine;
@@ -58,7 +59,10 @@ public class HttpResponse {
         }
     }
 
-    private void responseBuilder(HttpRequest httpRequest, HttpStatus httpStatus, MimeType mimeType, String filePath) throws IOException, URISyntaxException {
+    private void responseBuilder(HttpRequest httpRequest,
+                                 HttpStatus httpStatus,
+                                 MimeType mimeType,
+                                 String filePath) throws IOException, URISyntaxException {
         httpResponseBody = new HttpResponseBody(FileIoUtils.loadFileFromClasspath(filePath));
 
         httpResponseHeader.addHeader("Content-Type", mimeType.getMimeType() + ";charset=utf-8");
@@ -80,7 +84,7 @@ public class HttpResponse {
 
     public void notFound(HttpRequest httpRequest) {
         try {
-            responseBuilder(httpRequest, HttpStatus.NOT_FOUND, MimeType.HTML, "./templates/error/404.html");
+            responseBuilder(httpRequest, HttpStatus.NOT_FOUND, MimeType.HTML, NOT_FOUND_404_FILE_PATH);
             send();
         } catch (IOException | URISyntaxException e) {
             logger.error("NotFound Error : {}", e.getMessage());

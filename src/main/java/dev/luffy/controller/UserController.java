@@ -16,6 +16,7 @@ public class UserController {
 
     @RequestMapping("/user/form.html")
     public static void formUser(HttpRequest request, HttpResponse response) {
+
         logger.debug("request : {} & response : {}", request, response);
 
         response.ok(request);

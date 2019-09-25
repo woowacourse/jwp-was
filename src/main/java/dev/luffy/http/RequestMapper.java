@@ -10,7 +10,6 @@ public class RequestMapper {
 
     static {
         map = new HashMap<>();
-
     }
 
     public static void add(String path, Method method) {

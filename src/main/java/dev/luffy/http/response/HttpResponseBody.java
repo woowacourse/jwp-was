@@ -1,10 +1,13 @@
 package dev.luffy.http.response;
 
 public class HttpResponseBody {
+
+    private static final int EMPTY_BODY = 0;
+
     private final byte[] body;
 
     public HttpResponseBody() {
-        this.body = new byte[0];
+        this.body = new byte[EMPTY_BODY];
     }
 
     public HttpResponseBody(byte[] body) {

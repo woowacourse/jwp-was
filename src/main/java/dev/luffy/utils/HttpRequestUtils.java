@@ -9,6 +9,9 @@ import dev.luffy.http.request.HttpRequestUrl;
 
 public class HttpRequestUtils {
 
+    private static final String STATIC_BASE_PATH = "./static";
+    private static final String TEMPLATES_BASE_PATH = "./templates";
+
     public static Map<String, String> parse(List<String> lines) {
         return buildHeaders(lines, new HashMap<>());
     }
@@ -48,8 +51,8 @@ public class HttpRequestUtils {
 
     public static String filePathBuilder(String path, MimeType mimeType) {
         if (!mimeType.isHtml()) {
-            return "./static" + path;
+            return STATIC_BASE_PATH + path;
         }
-        return "./templates" + path;
+        return TEMPLATES_BASE_PATH + path;
     }
 }

@@ -9,6 +9,8 @@ public enum HttpStatus {
     FOUND(302),
     NOT_FOUND(404);
 
+    private static final String NOT_SUPPORTED_HTTP_STATUS = "지원하지 않는 응답 코드입니다.";
+
     private int statusCode;
 
     HttpStatus(int statusCode) {
@@ -19,7 +21,7 @@ public enum HttpStatus {
         return Arrays.stream(values())
                 .filter(httpStatus -> httpStatus.statusCode == statusCode)
                 .findFirst()
-                .orElseThrow(() -> new NotSupportedHttpResponseStatus("지원하지 않는 응답 코드입니다."));
+                .orElseThrow(() -> new NotSupportedHttpResponseStatus(NOT_SUPPORTED_HTTP_STATUS));
     }
 
     public String getResponseLine() {

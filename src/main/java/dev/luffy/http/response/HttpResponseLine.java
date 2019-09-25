@@ -3,6 +3,7 @@ package dev.luffy.http.response;
 import dev.luffy.http.HttpProtocol;
 
 public class HttpResponseLine {
+
     private final HttpProtocol httpProtocol;
     private final HttpStatus httpStatus;
 

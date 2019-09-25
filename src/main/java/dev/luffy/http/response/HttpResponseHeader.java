@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 
 public class HttpResponseHeader {
 
+    private static final String HEADER_DELIMITER = "\r\n";
+
     private Map<String, String> headers;
 
     public HttpResponseHeader() {
@@ -19,7 +21,7 @@ public class HttpResponseHeader {
     public String combine() {
         String combined = headers.keySet().stream()
                 .map(key -> String.format("%s: %s", key, headers.get(key)))
-                .collect(Collectors.joining("\r\n"));
-        return String.format("%s\r\n", combined);
+                .collect(Collectors.joining(HEADER_DELIMITER));
+        return combined + HEADER_DELIMITER;
     }
 }
