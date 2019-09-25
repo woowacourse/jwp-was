@@ -3,8 +3,9 @@ package webserver.domain;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class QueryParameter {
@@ -19,6 +20,9 @@ public class QueryParameter {
     }
 
     private Map<String, String> extractQueries(final String rawQuery) {
+        if (Objects.isNull(rawQuery)) {
+            return new HashMap<>();
+        }
         return Arrays.stream(rawQuery.split("&"))
                 .map(query -> query.split("=", 2))
                 .filter(this::queryFilter)
@@ -33,16 +37,20 @@ public class QueryParameter {
         try {
             return URLDecoder.decode(encodedString, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
             return "";
         }
     }
 
     public Map<String, String> getQueries() {
-        return Collections.unmodifiableMap(queries);
+        return queries;
     }
 
     public String getValue(final String key) {
         return queries.getOrDefault(key, "");
+    }
+
+    @Override
+    public String toString() {
+        return queries.toString();
     }
 }

@@ -8,6 +8,8 @@ import webserver.view.NetworkInput;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -15,35 +17,35 @@ class RequestTest extends RequestHelper {
 
     @Test
     @DisplayName("쿼리없는 객체 생성 테스트")
-    void create() throws IOException {
-        InputStream expectedInputStream = new ByteArrayInputStream(requestInput.getBytes());
-        NetworkInput expectedNetworkInput = new NetworkInput(expectedInputStream);
+    void create() throws IOException, URISyntaxException {
+        final InputStream expectedInputStream = new ByteArrayInputStream(requestInput.getBytes());
+        final NetworkInput expectedNetworkInput = new NetworkInput(expectedInputStream);
 
-        Request request = new Request(this.networkInput);
-        Request expected = new Request(expectedNetworkInput);
+        final Request request = new Request(this.networkInput);
+        final Request expected = new Request(expectedNetworkInput);
 
         assertThat(request.getHttpMethod()).isEqualTo(expected.getHttpMethod());
         assertThat(request.getPath()).isEqualTo(expected.getPath());
         assertThat(request.getProtocol()).isEqualTo(expected.getProtocol());
-        assertThat(request.getRequestFields()).isEqualTo(expected.getRequestFields());
+        assertThat(request.getHeader()).isEqualTo(expected.getHeader());
     }
 
     @Test
     @DisplayName("쿼리가 있는 객체 생성 테스트")
-    void createWithQueryString() throws IOException {
-        InputStream expectedInputStream = new ByteArrayInputStream(requestInputWithQueryString.getBytes());
-        NetworkInput expectedNetworkInput = new NetworkInput(expectedInputStream);
+    void createWithQueryString() throws IOException, URISyntaxException {
+        final InputStream expectedInputStream = new ByteArrayInputStream(requestInputWithQueryString.getBytes());
+        final NetworkInput expectedNetworkInput = new NetworkInput(expectedInputStream);
 
-        Request request = new Request(this.networkInputWithQueryString);
-        Request expected = new Request(expectedNetworkInput);
-        QueryParameter queryParameter = request.getQueryParameter();
-        QueryParameter expectedQueryParameter = expected.getQueryParameter();
+        final Request request = new Request(this.networkInputWithQueryString);
+        final Request expected = new Request(expectedNetworkInput);
+        final Map<String, String> queryParameter = request.getQueryParameters();
+        final Map<String, String> expectedQueryParameter = expected.getQueryParameters();
 
         assertThat(request.getHttpMethod()).isEqualTo(expected.getHttpMethod());
         assertThat(request.getPath()).isEqualTo(expected.getPath());
         assertThat(request.getProtocol()).isEqualTo(expected.getProtocol());
-        assertThat(request.getRequestFields()).isEqualTo(expected.getRequestFields());
-        assertThat(queryParameter.getValue("userId")).isEqualTo(expectedQueryParameter.getValue("userId"));
-        assertThat(queryParameter.getValue("name")).isEqualTo(expectedQueryParameter.getValue("name"));
+        assertThat(request.getHeader()).isEqualTo(expected.getHeader());
+        assertThat(queryParameter.get("userId")).isEqualTo(expectedQueryParameter.get("userId"));
+        assertThat(queryParameter.get("name")).isEqualTo(expectedQueryParameter.get("name"));
     }
 }

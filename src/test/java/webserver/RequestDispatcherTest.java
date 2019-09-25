@@ -7,6 +7,7 @@ import webserver.domain.Response;
 import webserver.support.RequestHelper;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -14,7 +15,7 @@ class RequestDispatcherTest extends RequestHelper {
 
     @Test
     @DisplayName("url 분기처리를 제대로 하는지 확인")
-    void forward() throws IOException {
+    void forward() throws IOException, URISyntaxException {
         final Request request = new Request(networkInputWithQueryString);
         final Response response = RequestDispatcher.forward(request);
         assertThat(response.toBytes()).isEqualTo(new Response.Builder()

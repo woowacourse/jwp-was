@@ -18,8 +18,8 @@ class QueryParameterTest {
     void makeQueryObject() {
         assertThat(queryParameter.getValue("userId")).isEqualTo("javajigi");
         assertThat(queryParameter.getValue("password")).isEqualTo("password");
-        assertThat(queryParameter.getValue("name")).isEqualTo("%EB%B0%95%EC%9E%AC%EC%84%B1");
-        assertThat(queryParameter.getValue("email")).isEqualTo("javajigi%40slipp.net");
+        assertThat(queryParameter.getValue("name")).isEqualTo("박재성");
+        assertThat(queryParameter.getValue("email")).isEqualTo("javajigi@slipp.net");
     }
 
     @Test

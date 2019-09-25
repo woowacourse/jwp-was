@@ -25,6 +25,6 @@ class MediaTypeTest {
     @DisplayName("미디어타입을 잘 반환하는지 확인")
     void getMediaType() {
         String extension = "htm";
-        assertThat(MediaType.of(extension).is()).isEqualTo("text/html");
+        assertThat(MediaType.of(extension).is()).isEqualTo("text/html; charset=utf-8");
     }
 }

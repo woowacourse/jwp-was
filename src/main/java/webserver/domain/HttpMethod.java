@@ -9,4 +9,8 @@ public enum HttpMethod {
     HEAD,
     TRACE,
     CONNECT;
+
+    public static HttpMethod of(final String string) {
+        return valueOf(string.toUpperCase());
+    }
 }

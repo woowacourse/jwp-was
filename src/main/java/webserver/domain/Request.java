@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import webserver.view.NetworkInput;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,65 +13,66 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 public class Request {
     private static final Logger LOG = getLogger(Request.class);
-    private static final String KEY_VALUE_DELIMETER = ":";
+    private static final String KEY_VALUE_DELIMITER = ":";
     private static final String EMPTY = "";
     private static final String CONTENT_LENGTH = "content-length";
     private static final String ZERO_LENGTH = "0";
     private static final String SPACE_DELIMITER = " ";
-    private static final String QUERY_DELIMITER = "\\?";
-    private static final int KEY_INDEX = 0;
-    private static final int VALUE_INDEX = 1;
-    private static final int URL_INDEX = 1;
-    private static final int PATH_INDEX = 0;
-    private static final int QUERY_INDEX = 0;
-    private static final int METHOD_INDEX = 0;
-    private static final int PROTOCOL_INDEX = 2;
     private static final int ZERO = 0;
-    private static final int NO_QUERY = 1;
+    private static final int KEY_INDEX = ZERO;
+    private static final int VALUE_INDEX = 1;
+    private static final int METHOD_INDEX = 0;
+    private static final int URL_INDEX = 1;
+    private static final int PROTOCOL_INDEX = 2;
 
     private final HttpMethod httpMethod;
-    private final String path;
-    private final String protocol;
+    private final HttpVersion protocol;
+    private final Url url;
+    private final Map<String, String> header;
     private final String body;
-    private final QueryParameter queryParameter;
-    private final Map<String, String> requestFields;
 
-    public Request(final NetworkInput networkInput) throws IOException {
-        final String[] httpMethodAndPath = networkInput.iterator().next().split(SPACE_DELIMITER);
-        final String[] pathAndQuery = httpMethodAndPath[URL_INDEX].split(QUERY_DELIMITER);
+    public Request(final NetworkInput networkInput) throws IOException, URISyntaxException {
+        final String[] requestLine = networkInput.iterator().next().split(SPACE_DELIMITER);
+        this.url = new Url(requestLine[URL_INDEX]);
+        this.httpMethod = HttpMethod.valueOf(requestLine[METHOD_INDEX].toUpperCase());
+        this.protocol = HttpVersion.of(requestLine[PROTOCOL_INDEX]);
+        this.header = makeHeader(networkInput);
+        this.body = readBody(networkInput);
+        printLog();
+    }
 
-        this.httpMethod = HttpMethod.valueOf(httpMethodAndPath[METHOD_INDEX]);
-        this.protocol = httpMethodAndPath[PROTOCOL_INDEX];
-        this.path = pathAndQuery[PATH_INDEX];
-        this.queryParameter = new QueryParameter((pathAndQuery.length == NO_QUERY) ? EMPTY : pathAndQuery[QUERY_INDEX]);
-        this.requestFields = makeFields(networkInput);
-
-        final int contentLength = Integer.parseInt(requestFields.getOrDefault(CONTENT_LENGTH, ZERO_LENGTH));
-        this.body = (contentLength > ZERO) ? networkInput.readBody(contentLength) : EMPTY;
-        this.queryParameter.putByRawQueries(this.body);
-
-        LOG.debug("Request - protocol: {}, method: {}, path: {}, parameter: {}\nbody: {}",
+    private void printLog() {
+        LOG.debug("Request - protocol: {}, method: {}, path: {}, parameter: {}\nbody: \n{}",
                 this.protocol,
                 this.httpMethod,
-                this.path,
-                this.queryParameter.getQueries().toString(),
+                this.url.getPath(),
+                this.url.getQueries().toString(),
                 this.body);
     }
 
-    private Map<String, String> makeFields(final NetworkInput networkInput) {
+    private String readBody(final NetworkInput networkInput) throws IOException {
+        final int contentLength = Integer.parseInt(header.getOrDefault(CONTENT_LENGTH, ZERO_LENGTH));
+        return (contentLength > ZERO) ? networkInput.readBody(contentLength) : EMPTY;
+    }
+
+    private Map<String, String> makeHeader(final NetworkInput networkInput) {
         final Map<String, String> fields = new HashMap<>();
-        for (String input : networkInput) {
+        for (final String input : networkInput) {
             fields.put(makeKey(input), makeValue(input));
         }
         return Collections.unmodifiableMap(fields);
     }
 
+    private String splitAndTrim(final String rawField, final int index) {
+        return rawField.split(KEY_VALUE_DELIMITER)[index].trim();
+    }
+
     private String makeKey(final String rawField) {
-        return rawField.split(KEY_VALUE_DELIMETER)[KEY_INDEX].trim().toLowerCase();
+        return splitAndTrim(rawField, KEY_INDEX).toLowerCase();
     }
 
     private String makeValue(final String rawField) {
-        return rawField.split(KEY_VALUE_DELIMETER)[VALUE_INDEX].trim();
+        return splitAndTrim(rawField, VALUE_INDEX);
     }
 
     public String getHttpMethod() {
@@ -78,22 +80,26 @@ public class Request {
     }
 
     public String getPath() {
-        return path;
+        return this.url.getPath();
     }
 
-    public String getProtocol() {
+    public HttpVersion getProtocol() {
         return protocol;
     }
 
-    public QueryParameter getQueryParameter() {
-        return queryParameter;
+    public Map<String, String> getQueryParameters() {
+        final QueryParameter queries = this.url.getQueries();
+        if (this.httpMethod == HttpMethod.POST) {
+            queries.putByRawQueries(this.body);
+        }
+        return queries.getQueries();
     }
 
-    public Map<String, String> getRequestFields() {
-        return requestFields;
+    public Map<String, String> getHeader() {
+        return header;
     }
 
-    public String getFieldsValue(final String key) {
-        return requestFields.getOrDefault(key, EMPTY);
+    public String getHeaderValue(final String key) {
+        return header.getOrDefault(key, EMPTY);
     }
 }
