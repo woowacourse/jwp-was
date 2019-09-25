@@ -32,4 +32,8 @@ public class HttpRequestLine {
     public String findUri() {
         return requestUri.getUri();
     }
+
+    public String getVersion() {
+        return version;
+    }
 }

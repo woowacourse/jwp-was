@@ -9,6 +9,9 @@ public class QueryStringParser {
     private static final String QUERY_STRING_DELIMITER = "&";
     private static final String PARAM_DELIMITER = "=";
 
+    private QueryStringParser() {
+    }
+
     public static QueryParams parseQueryParams(String queryString) {
         QueryParams queryParams = new QueryParams();
         String[] queryTokens = queryString.split(QUERY_STRING_DELIMITER);
