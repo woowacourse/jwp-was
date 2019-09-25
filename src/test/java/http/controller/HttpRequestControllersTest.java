@@ -14,6 +14,7 @@ import java.util.HashMap;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class HttpRequestControllersTest extends BaseControllerTest {
     private HttpRequestControllers handlers = new HttpRequestControllers(new FileResourceController(RequestMapping.GET("/*")));
@@ -53,10 +54,28 @@ class HttpRequestControllersTest extends BaseControllerTest {
     }
 
     @Test
-    void 리퀘스트매핑_중복_등록() {
+    void 동일_리퀘스트매핑이_이미_존재할경우() {
         HttpRequestControllers handlers = new HttpRequestControllers(new FileResourceController(RequestMapping.GET("/")));
         handlers.addHandler(new FileResourceController(RequestMapping.GET("/index.html")));
         assertThatThrownBy(() -> handlers.addHandler(new FileResourceController(RequestMapping.GET("/index.html"))))
                 .isInstanceOf(IllegalRequestMappingException.class);
+    }
+
+    @Test
+    void 리퀘스트매핑_URI만_중복인경우() {
+        HttpRequestControllers handlers = new HttpRequestControllers(new FileResourceController(RequestMapping.GET("/")));
+        handlers.addHandler(new FileResourceController(RequestMapping.GET("/index.html")));
+        assertDoesNotThrow(() -> handlers.addHandler(new FileResourceController(RequestMapping.POST("/index.html"))));
+    }
+
+    @Test
+    void 리퀘스트매핑_메서드만_중복인경우() {
+        HttpRequestControllers handlers = new HttpRequestControllers(new FileResourceController(RequestMapping.GET("/")));
+        handlers.addHandler(new FileResourceController(RequestMapping.GET("/index.html")));
+        assertDoesNotThrow(() -> handlers.addHandler(new FileResourceController(RequestMapping.GET("/another.html"))));
+    }
+
+    @Test
+    void name() {
     }
 }
