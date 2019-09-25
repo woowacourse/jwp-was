@@ -1,26 +1,36 @@
 package webserver.http.request;
 
+import webserver.http.Cookie;
 import webserver.http.Cookies;
+import webserver.http.HttpSession;
+import webserver.http.HttpSessionManager;
 
 public class HttpRequest {
     private final RequestLine requestLine;
     private final RequestHeaders headers;
     private final Parameters parameters;
     private final Cookies cookies;
+    private final HttpSessionManager sessionManager;
+    private HttpSession httpSession;
 
-    public HttpRequest(final RequestLine requestLine, final RequestHeaders headers, final Parameters parameters, final Cookies cookies) {
+    HttpRequest(final RequestLine requestLine, final RequestHeaders headers, final Parameters parameters, final Cookies cookies) {
         this.requestLine = requestLine;
         this.headers = headers;
         this.parameters = parameters;
         this.cookies = cookies;
+        sessionManager = HttpSessionManager.getInstance();
     }
 
     public HttpMethod getMethod() {
         return requestLine.getMethod();
     }
 
-    public String getCookie(final String key) {
-        return cookies.get(key);
+    public Cookie getCookie(final String name) {
+        return cookies.get(name);
+    }
+
+    public Cookies getCookies() {
+        return cookies;
     }
 
     public String getHeader(final String name) {
@@ -41,6 +51,19 @@ public class HttpRequest {
 
     public int sizeOfParameters() {
         return parameters.size();
+    }
+
+    public HttpSession getSession() {
+        return httpSession == null
+                ? this.httpSession = createSession()
+                : httpSession;
+    }
+
+    private HttpSession createSession() {
+        final Cookie cookie = cookies.get(Cookies.JSESSIONID);
+        return cookie == null
+                ? sessionManager.getSession()
+                : sessionManager.getSession(cookie.getValue());
     }
 
     public static HttpRequestBuilder builder() {

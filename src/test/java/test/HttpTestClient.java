@@ -196,7 +196,7 @@ public class HttpTestClient {
         }
 
         public String getCookie(final String key) {
-            return cookies.get(key);
+            return cookies.get(key).getValue();
         }
     }
 }

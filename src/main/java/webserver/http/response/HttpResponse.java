@@ -2,8 +2,8 @@ package webserver.http.response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.http.Cookie;
 import webserver.http.Cookies;
-import webserver.http.HttpHeaders;
 import webserver.http.HttpStatus;
 import webserver.http.MimeType;
 import webserver.http.request.HttpVersion;
@@ -75,16 +75,18 @@ public class HttpResponse {
     }
 
     private void write() {
-        // todo 쿠키 어떻게 입력?
-        if (cookies.isNotEmpty()) {
-            setHeader(HttpHeaders.SET_COOKIE, cookies.getAllCookiesAsString());
-        }
         try (DataOutputStream dos = new DataOutputStream(out)) {
             writeStartLine(dos);
             writeHeader(dos);
             writeBody(dos);
         } catch (IOException e) {
             log.error(e.getMessage());
+        }
+    }
+
+    private void writeSetCookie(final DataOutputStream dos) throws IOException {
+        for (final String name : cookies.keySet()) {
+            dos.writeBytes(String.format("%s: %s\n", SET_COOKIE, cookies.get(name).parseInfoAsString()));
         }
     }
 
@@ -96,6 +98,11 @@ public class HttpResponse {
         for (String key : headers.keySet()) {
             dos.writeBytes(String.format("%s: %s\n", key, headers.get(key)));
         }
+
+        if (cookies.isNotEmpty()) {
+            writeSetCookie(dos);
+        }
+
         dos.writeBytes("\n");
     }
 
@@ -105,16 +112,16 @@ public class HttpResponse {
         }
     }
 
+    public void addCookie(final Cookie cookie) {
+        cookies.add(cookie);
+    }
+
     public void setHttpVersion(final HttpVersion httpVersion) {
         this.httpVersion = httpVersion;
     }
 
     public void setHeader(final String name, final String value) {
         headers.put(name, value);
-    }
-
-    public void setCookie(final String key, final Object value) {
-        cookies.put(key, String.valueOf(value));
     }
 
     public void setBody(byte[] body) {

@@ -46,7 +46,7 @@ public class HttpUtils {
 
     public static String parseExtension(final String resource) {
         int beginIndex = resource.lastIndexOf(DELIMITER_EXTENSION) + 1;
-        if(beginIndex <= NOT_EXISTS_EXTENSION){
+        if (beginIndex <= NOT_EXISTS_EXTENSION) {
             throw new IllegalArgumentException("not exists extension");
         }
         return resource.substring(beginIndex);
