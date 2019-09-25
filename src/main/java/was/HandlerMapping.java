@@ -2,6 +2,7 @@ package was;
 
 import was.controller.Controller;
 import was.controller.CreateUserController;
+import was.controller.LoginUserController;
 import was.controller.MainController;
 import webserver.http.exception.NotFoundException;
 import webserver.http.request.HttpRequest;
@@ -17,6 +18,7 @@ public class HandlerMapping {
     static {
         map.put("/", MainController.getInstance());
         map.put("/user/create", CreateUserController.getInstance());
+        map.put("/user/login", LoginUserController.getInstance());
     }
 
     public static Controller getHandler(final HttpRequest httpRequest) {

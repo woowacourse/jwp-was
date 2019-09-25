@@ -15,6 +15,10 @@ public class HttpRequest {
         this.queryStringParams = queryStringParams;
     }
 
+    public void addHeader(final String key, final String value) {
+        httpHeader.put(key, value);
+    }
+
     public RequestLine getRequestLine() {
         return requestLine;
     }
