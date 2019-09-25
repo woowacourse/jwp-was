@@ -43,4 +43,9 @@ public class RequestInformation {
         }
         return new QueryParameters(params);
     }
+
+    public String getParameter(String key) {
+        String value = requestInformation.get(key);
+        return value;
+    }
 }

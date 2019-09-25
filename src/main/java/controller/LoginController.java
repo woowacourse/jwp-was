@@ -35,7 +35,8 @@ public class LoginController implements Controller {
             response.setResponseHeaders(new ResponseHeaders());
             response.setEmptyResponseBody();
             response.addResponseHeaders("Location: ", "http://localhost:8080/index.html");
-            response.addResponseHeaders("Set-Cookie: ", "logined=true; Path=/");
+//            response.addResponseHeaders("Set-Cookie: ", "logined=true; Path=/");
+            response.addResponseHeaders("Set-Cookie: ", "logined=true; Path=/; Max-Age=5");
         }
         if (user == null || !user.isCorrectPassWord(request.getQueryParameters().getParameter("password"))) {
             response.setResponseStatus(ResponseStatus.FOUND);
