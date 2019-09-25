@@ -4,16 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HttpResponse {
+    private HttpVersion httpVersion;
     private ResponseStatus responseStatus;
     private ResponseHeaders responseHeaders;
     private ResponseBody responseBody;
 
     public HttpResponse() {
+        this.httpVersion = HttpVersion.HTTP_1_1;
         this.responseStatus = ResponseStatus.OK;
         this.responseHeaders = new ResponseHeaders();
     }
 
     public HttpResponse(ResponseStatus responseStatus, ResponseHeaders responseHeaders, ResponseBody responseBody) {
+        this.httpVersion = HttpVersion.HTTP_1_1;
         this.responseStatus = responseStatus;
         this.responseHeaders = responseHeaders;
         this.responseBody = responseBody;
@@ -21,7 +24,9 @@ public class HttpResponse {
 
     public static HttpResponse sendErrorResponse(ResponseStatus responseStatus) {
         return new HttpResponse(
-                responseStatus, new ResponseHeaders(), new ResponseBody(String.format("error/%d.html", responseStatus.getCode())));
+                responseStatus,
+                new ResponseHeaders(),
+                new ResponseBody(String.format("error/%d.html", responseStatus.getCode())));
     }
 
     public void forward(String filePath) {
@@ -49,7 +54,8 @@ public class HttpResponse {
     public List<String> responseBuilder() {
         List<String> responseExport = new ArrayList<>();
 
-        responseExport.add(String.format("HTTP/1.1 %d %s\r\n", responseStatus.getCode(), responseStatus.name()));
+        responseExport.add(
+                String.format("%s %d %s\r\n", httpVersion.getVersion(), responseStatus.getCode(), responseStatus.name()));
         responseHeaders.keySet().forEach(key ->
                 responseExport.add(String.format("%s: %s\r\n", key, responseHeaders.get(key))));
         responseExport.add("\r\n");
