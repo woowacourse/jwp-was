@@ -1,19 +1,28 @@
 package webserver.controller;
 
-import webserver.exception.InternalServerException;
+import utils.FilePathUtils;
 import webserver.exception.MethodNotAllowedException;
-import webserver.request.HttpRequest;
-import webserver.response.HttpResponse;
+import webserver.response.MediaType;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiConsumer;
+
+import static webserver.controller.RequestMapping.getMapping;
 
 public class ControllerHandler {
     private Map<RequestMapping, Responsive> controllerMapping;
 
     public ControllerHandler() {
         this.controllerMapping = new HashMap<>();
+
+        // static file controller
+        controllerMapping.put(getMapping("/*"), (request, response) -> {
+            String path = request.getPath();
+            response.forward(path);
+
+            String extension = FilePathUtils.getExtension(path);
+            response.setContentType(MediaType.of(extension));
+        });
     }
 
     public void put(RequestMapping requestMapping, Responsive responsive) {
@@ -24,14 +33,14 @@ public class ControllerHandler {
         return controllerMapping.containsKey(requestMapping);
     }
 
-    public BiConsumer<HttpRequest, HttpResponse> get(RequestMapping requestMapping) {
+    public Responsive get(RequestMapping requestMapping) {
         if (containsKey(requestMapping)) {
             return controllerMapping.get(requestMapping);
         }
         if (containsUri(requestMapping)) {
             throw new MethodNotAllowedException("지원하지 않는 method");
         }
-        throw new InternalServerException("잘 못된 요청");
+        return controllerMapping.get(getMapping("/*"));
     }
 
     private boolean containsUri(RequestMapping requestMapping) {
