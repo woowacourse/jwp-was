@@ -6,6 +6,8 @@ import webserver.handler.RequestHandler;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class WebServer {
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
@@ -25,9 +27,9 @@ public class WebServer {
 
             // 클라이언트가 연결될때까지 대기한다.
             Socket connection;
+            ExecutorService executor = Executors.newFixedThreadPool(10);
             while ((connection = listenSocket.accept()) != null) {
-                Thread thread = new Thread(new RequestHandler(connection));
-                thread.start();
+                executor.execute(new RequestHandler(connection));
             }
         }
     }
