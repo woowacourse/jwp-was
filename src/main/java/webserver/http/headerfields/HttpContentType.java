@@ -11,38 +11,27 @@ import java.util.*;
 public class HttpContentType implements HttpHeaderField {
     private static final Logger logger = LoggerFactory.getLogger(HttpContentType.class);
 
-    private static final int CONTENT_TYPE_INDEX = 0;
-    private static final int CONTENT_TYPE_PARAMS_INDEX = 1;
-
-    private static final String APPLICATION_JSON = "application/json";
-    private static final String APPLICATION_X_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded";
-    private static final String MULTIPART_FORM_DATA = "multipart/form-data";
-    private static final String TEXT_HTML = "text/html";
-    private static final String TEXT_CSS = "text/css";
-    private static final String TEXT_PLAIN = "text/plain";
-    private static final String APPLICATION_JAVASCRIPT = "application/javascript";
-    private static final String IMAGE_GIF = "image/gif";
-    private static final String IMAGE_JPEG = "image/jpeg";
-    private static final String IMAGE_PNG = "image/png";
-    private static final String IMAGE_X_ICON = "image/x-icon";
-
     private static final Map<String, String> DEFAULT_PARAMS = new HashMap<String, String>() {{
         put("charset", "utf-8");
     }};
 
     private static final Map<String, HttpContentType> CACHE = new HashMap<String, HttpContentType>() {{
-        put(APPLICATION_JSON, new HttpContentType(Chemical.APPLICATION, "json"));
-        put(APPLICATION_X_WWW_FORM_URLENCODED, new HttpContentType(Chemical.APPLICATION, "x-www-form-urlencoded"));
-        put(MULTIPART_FORM_DATA, new HttpContentType(Chemical.MULTIPART, "form-data"));
-        put(TEXT_HTML, new HttpContentType(Chemical.TEXT, "html"));
-        put(TEXT_CSS, new HttpContentType(Chemical.TEXT, "css"));
-        put(TEXT_PLAIN, new HttpContentType(Chemical.TEXT, "plain"));
-        put(APPLICATION_JAVASCRIPT, new HttpContentType(Chemical.APPLICATION, "javascript"));
-        put(IMAGE_GIF, new HttpContentType(Chemical.IMAGE, "gif"));
-        put(IMAGE_JPEG, new HttpContentType(Chemical.IMAGE, "jpeg"));
-        put(IMAGE_PNG, new HttpContentType(Chemical.IMAGE, "png"));
-        put(IMAGE_X_ICON, new HttpContentType(Chemical.IMAGE, "x-icon"));
+        put(MimeType.APPLICATION_JSON.getName(), new HttpContentType(Chemical.APPLICATION, "json"));
+        put(MimeType.APPLICATION_X_WWW_FORM_URLENCODED.getName(), new HttpContentType(Chemical.APPLICATION, "x-www-form-urlencoded"));
+        put(MimeType.MULTIPART_FORM_DATA.getName(), new HttpContentType(Chemical.MULTIPART, "form-data"));
+        put(MimeType.TEXT_HTML.getName(), new HttpContentType(Chemical.TEXT, "html"));
+        put(MimeType.TEXT_CSS.getName(), new HttpContentType(Chemical.TEXT, "css"));
+        put(MimeType.TEXT_PLAIN.getName(), new HttpContentType(Chemical.TEXT, "plain"));
+        put(MimeType.APPLICATION_JAVASCRIPT.getName(), new HttpContentType(Chemical.APPLICATION, "javascript"));
+        put(MimeType.IMAGE_GIF.getName(), new HttpContentType(Chemical.IMAGE, "gif"));
+        put(MimeType.IMAGE_JPEG.getName(), new HttpContentType(Chemical.IMAGE, "jpeg"));
+        put(MimeType.IMAGE_PNG.getName(), new HttpContentType(Chemical.IMAGE, "png"));
+        put(MimeType.IMAGE_X_ICON.getName(), new HttpContentType(Chemical.IMAGE, "x-icon"));
     }};
+
+
+    private static final int CONTENT_TYPE_INDEX = 0;
+    private static final int CONTENT_TYPE_PARAMS_INDEX = 1;
 
     private final Chemical chemical;
     private final String subtype;
@@ -90,7 +79,7 @@ public class HttpContentType implements HttpHeaderField {
     public static HttpContentType extensionToContentType(String extension) {
         extension = extension.toLowerCase();
 
-        return Extension.extensionToContentType(extension).orElse(getHttpContentType(TEXT_PLAIN));
+        return Extension.extensionToContentType(extension).orElse(getHttpContentType(MimeType.TEXT_PLAIN.getName()));
     }
 
     public static HttpContentType getHttpContentType(String key) {
