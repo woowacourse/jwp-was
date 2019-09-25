@@ -15,4 +15,8 @@ public class RequestBody {
     public Map<String, String> getBody() {
         return Collections.unmodifiableMap(body);
     }
+
+    public String getValueBy(String key) {
+        return body.get(key);
+    }
 }

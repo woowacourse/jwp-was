@@ -7,7 +7,6 @@ import model.http.ViewLocation;
 import utils.HttpStatus;
 
 public class TemplateController extends AbstractController {
-
     private static final String TEMPLATE_FILE_EXTENSION = ".html";
 
     @Override

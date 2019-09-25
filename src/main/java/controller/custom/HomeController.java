@@ -7,7 +7,6 @@ import model.http.ViewLocation;
 import utils.HttpStatus;
 
 public class HomeController extends AbstractController {
-
     private static final String ROOT_URL = "/";
     private static final String INDEX_PAGE = "/index.html";
 

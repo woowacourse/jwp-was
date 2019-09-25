@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HttpResponse {
+    private static final String ERROR_PAGE = "/error.html";
     // TODO model 맵의 역할
     private Map<String, String> body = new HashMap<>();
     private String path;
@@ -24,7 +25,7 @@ public class HttpResponse {
 
     public static HttpResponse createErrorResponse() {
         HttpResponse httpResponse = new HttpResponse();
-        httpResponse.path = ViewLocation.TEMPLATE + "/error.html";
+        httpResponse.path = ViewLocation.TEMPLATE + ERROR_PAGE;
         httpResponse.httpStatus = HttpStatus.NOT_FOUND;
         httpResponse.mediaType = MediaType.HTML;
         return httpResponse;

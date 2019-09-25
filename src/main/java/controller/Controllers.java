@@ -11,10 +11,10 @@ import java.util.List;
 
 public class Controllers {
     private static final Controller[] CONTROLLERS = {
-            new HomeController(),
-            new UserController(),
             new TemplateController(),
             new ResourceController(),
+            new UserController(),
+            new HomeController(),
     };
 
     public static List<Controller> LIST = Collections.unmodifiableList(Arrays.asList(CONTROLLERS));

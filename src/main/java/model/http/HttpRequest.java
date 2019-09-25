@@ -32,14 +32,6 @@ public class HttpRequest {
         return requestLine.getPath();
     }
 
-    public String getDirectory() {
-        return requestLine.getDirectory();
-    }
-
-    public Map<String, String> getQueryParams() {
-        return requestLine.getQueryParams();
-    }
-
     public HttpMethod getHttpMethod() {
         return requestLine.getMethod();
     }
@@ -50,5 +42,9 @@ public class HttpRequest {
 
     public Map<String, String> getBody() {
         return requestBody.getBody();
+    }
+
+    public String getBodyValueBy(String key) {
+        return requestBody.getValueBy(key);
     }
 }

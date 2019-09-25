@@ -1,33 +1,20 @@
-package webserver;
+package utils;
 
-import controller.Controller;
-import controller.ControllerMapper;
-import model.http.HttpRequest;
 import model.http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.FileIoUtils;
+import webserver.RequestHandler;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
 
-public class RequestDispatcher {
+public class OutputStreamHandler {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
-    public static void handle(HttpRequest httpRequest, HttpResponse httpResponse, OutputStream out) throws IOException, URISyntaxException {
-        Controller controller = ControllerMapper.mapping(httpRequest);
-        controller.service(httpRequest, httpResponse);
-        httpResponse = checkResponse(httpResponse);
+    public static void handle(OutputStream out, HttpResponse httpResponse) throws IOException, URISyntaxException {
         handleOutputStream(out, httpResponse);
-    }
-
-    private static HttpResponse checkResponse(HttpResponse httpResponse) {
-        if (httpResponse.isNotInitialized()) {
-            httpResponse = HttpResponse.createErrorResponse();
-        }
-        return httpResponse;
     }
 
     private static void handleOutputStream(OutputStream out, HttpResponse httpResponse) throws IOException, URISyntaxException {
@@ -69,5 +56,4 @@ public class RequestDispatcher {
             logger.error(e.getMessage());
         }
     }
-
 }

@@ -8,6 +8,7 @@ public enum MediaType {
     CSS("text/css"),
     JS("text/html"),
     WOFF("text/html"),
+    WOFF2("text/html"),
     TTF("text/html"),
     NOT_SUPPORT("none");
 
