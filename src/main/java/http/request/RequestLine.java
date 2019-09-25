@@ -50,8 +50,4 @@ public class RequestLine {
     public String getProtocol() {
         return httpVersion.split(SLASH)[0].toLowerCase();
     }
-
-    public Map<String, String> getQuery() {
-        return HttpUtils.parseQuery(getQueryString());
-    }
 }
