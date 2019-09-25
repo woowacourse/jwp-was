@@ -1,5 +1,6 @@
 package web.controller;
 
+import domain.db.DataBase;
 import domain.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,28 @@ public class UserController {
                     request.getBody("email")
             );
             logger.debug("user : {}", user);
+            DataBase.addUser(user);
+
+            response.sendRedirect("/");
+        };
+    }
+
+    public Responsive goLoginForm() {
+        return (request, response) -> {
+            response.setContentType("text/html");
+            response.forward("/user/login.html");
+        };
+    }
+
+    public Responsive goLoginFail() {
+        return (request, response) -> {
+            response.setContentType("text/html");
+            response.forward("/user/login_failed.html");
+        };
+    }
+
+    public Responsive login() {
+        return (request, response) -> {
 
             response.sendRedirect("/");
         };

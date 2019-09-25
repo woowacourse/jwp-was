@@ -32,6 +32,9 @@ public class RequestMapper {
         get("/", IndexController.getInstance().goIndex());
         get("/user/form", UserController.getInstance().goForm());
         post("/user/create", UserController.getInstance().createUser());
+        get("/login", UserController.getInstance().goLoginForm());
+        get("/login-fail", UserController.getInstance().goLoginForm());
+        post("/login", UserController.getInstance().login());
     }
 
     private static void get(String uri, Responsive responsive) {
