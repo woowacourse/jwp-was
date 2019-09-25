@@ -17,84 +17,73 @@ public class HttpResponse {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
+    private HttpResponseLine httpResponseLine;
+    private HttpResponseHeader httpResponseHeader;
+    private HttpResponseBody httpResponseBody;
+
     private DataOutputStream dos;
 
     public HttpResponse(OutputStream out) {
         dos = new DataOutputStream(out);
+
+        httpResponseLine = new HttpResponseLine();
+        httpResponseHeader = new HttpResponseHeader();
+        httpResponseBody = new HttpResponseBody();
     }
 
-    public void staticFileResource(HttpRequest httpRequest) {
-        send200(httpRequest);
-    }
-
-    public void send200(HttpRequest httpRequest) {
+    public void ok(HttpRequest httpRequest) {
         MimeType mimeType = MimeType.of(httpRequest.pathExtension());
         String filePath = HttpRequestUtils.filePathBuilder(httpRequest.getPath(), mimeType);
 
         try {
-            byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
-            response200Header(dos, body.length, mimeType);
-            responseBody(dos, body);
+            responseBuilder(httpRequest, HttpStatus.OK, mimeType, filePath);
+            send();
+
         } catch (IOException | URISyntaxException e) {
-            e.printStackTrace();
+            logger.error("OK Error : {}", e.getMessage());
         }
     }
 
-    public void send302(String location) {
-        response302Header(dos, location);
+    private void send() throws IOException {
+        dos.writeBytes(httpResponseLine.combine());
+        dos.writeBytes(httpResponseHeader.combine());
+        writeBody();
+        dos.flush();
     }
 
-    private void response302Header(DataOutputStream dos, String location) {
-        try {
-            dos.writeBytes("HTTP/1.1 302 Found \r\n");
-            dos.writeBytes("Location: " + location + "\r\n");
+    private void writeBody() throws IOException {
+        if (httpResponseBody.getBodyLength() != 0) {
             dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
+            dos.write(httpResponseBody.getBody(), 0, httpResponseBody.getBodyLength());
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, MimeType mimeType) {
+    private void responseBuilder(HttpRequest httpRequest, HttpStatus httpStatus, MimeType mimeType, String filePath) throws IOException, URISyntaxException {
+        httpResponseBody = new HttpResponseBody(FileIoUtils.loadFileFromClasspath(filePath));
+
+        httpResponseHeader.addHeader("Content-Type", mimeType.getMimeType() + ";charset=utf-8");
+        httpResponseHeader.addHeader("Content-Length", String.valueOf(httpResponseBody.getBodyLength()));
+
+        httpResponseLine = new HttpResponseLine(httpRequest.getProtocol(), httpStatus);
+    }
+
+    public void redirect(HttpRequest request, String location) {
+        httpResponseHeader.addHeader("Location", location);
+
+        httpResponseLine = new HttpResponseLine(request.getProtocol(), HttpStatus.FOUND);
         try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: " + mimeType.getMimeType() + ";charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
+            send();
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            logger.error("Redirect Error : {}", e.getMessage());
         }
     }
 
-    private void responseBody(DataOutputStream dos, byte[] body) {
+    public void notFound(HttpRequest httpRequest) {
         try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    public void send404() {
-        byte[] body = new byte[0];
-        try {
-            body = FileIoUtils.loadFileFromClasspath("./templates/error/404.html");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        response404Header(dos, body.length, MimeType.HTML);
-        responseBody(dos, body);
-    }
-
-    private void response404Header(DataOutputStream dos, int lengthOfBodyContent, MimeType mimeType) {
-        try {
-            dos.writeBytes("HTTP/1.1 404 NOT FOUND \r\n");
-            dos.writeBytes("Content-Type: " + mimeType.getMimeType() + ";charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
+            responseBuilder(httpRequest, HttpStatus.NOT_FOUND, MimeType.HTML, "./templates/error/404.html");
+            send();
+        } catch (IOException | URISyntaxException e) {
+            logger.error("NotFound Error : {}", e.getMessage());
         }
     }
 }
