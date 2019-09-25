@@ -31,7 +31,7 @@ public class RequestHandler implements Runnable {
              DataOutputStream dos = new DataOutputStream(connection.getOutputStream())) {
 
             HttpRequest httpRequest = new HttpRequest(RequestParser.parse(bufferedReader));
-            HttpResponse httpResponse = RequestMapper.getInstance().service(httpRequest, new HttpResponse());
+            HttpResponse httpResponse = RequestMapper.getInstance().service(httpRequest);
 
             Renderer.render(dos, httpResponse.responseBuilder());
         } catch (IOException e) {

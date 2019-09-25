@@ -2,6 +2,7 @@ package webserver.response;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class HttpResponse {
     private HttpVersion httpVersion;
@@ -31,7 +32,7 @@ public class HttpResponse {
 
     public void forward(String filePath) {
         responseBody = new ResponseBody(filePath);
-        responseHeaders.put("Content-Length", responseBody.getLength());
+        responseHeaders.put("Content-Length", responseBody.getBodyLength());
     }
 
     public Object getHeader(String key) {
@@ -72,5 +73,13 @@ public class HttpResponse {
 
     private void setResponseStatus(ResponseStatus responseStatus) {
         this.responseStatus = responseStatus;
+    }
+
+    public String getViewPath() {
+        return responseBody.getPath();
+    }
+
+    public boolean hasNotContent() {
+        return Objects.isNull(responseBody);
     }
 }
