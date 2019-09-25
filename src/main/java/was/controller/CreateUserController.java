@@ -1,10 +1,10 @@
 package was.controller;
 
 import db.DataBase;
+import was.model.User;
 import webserver.http.request.HttpRequest;
 import webserver.http.request.QueryStringParams;
 import webserver.http.response.HttpResponse;
-import was.model.User;
 
 public class CreateUserController extends AbstractController {
     private CreateUserController() {}

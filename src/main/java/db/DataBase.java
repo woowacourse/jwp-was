@@ -1,7 +1,7 @@
 package db;
 
-import was.model.User;
 import com.google.common.collect.Maps;
+import was.model.User;
 
 import java.util.Collection;
 import java.util.Map;

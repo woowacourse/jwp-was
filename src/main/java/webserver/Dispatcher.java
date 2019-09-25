@@ -1,9 +1,9 @@
 package webserver;
 
+import utils.FileIoUtils;
 import was.HandlerMapping;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
-import utils.FileIoUtils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
