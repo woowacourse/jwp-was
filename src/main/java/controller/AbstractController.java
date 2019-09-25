@@ -21,6 +21,7 @@ public abstract class AbstractController implements Controller {
         try {
             methodMap.get(httpRequest.getMethod()).service(httpRequest, httpResponse);
         } catch (Exception e) {
+            e.printStackTrace();
             httpResponse.setResponseStatus(ResponseStatus.INTERNAL_SERVER_ERROR);
         }
     }
