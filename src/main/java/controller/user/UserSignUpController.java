@@ -25,14 +25,19 @@ public class UserSignUpController extends AbstractController {
 
     @Override
     protected void doPost(final HttpRequest request, final HttpResponse response) throws IOException {
+        User user = createUser(request);
+
+        DataBase.addUser(user);
+
+        response.makeResponse();
+    }
+
+    private User createUser(final HttpRequest request) {
         String userId = request.findRequestBodyParam("userId");
         String password = request.findRequestBodyParam("password");
         String name = request.findRequestBodyParam("name");
         String email = request.findRequestBodyParam("email");
 
-        User user = new User(userId, password, name, email);
-        DataBase.addUser(user);
-
-        response.makeResponse();
+        return new User(userId, password, name, email);
     }
 }

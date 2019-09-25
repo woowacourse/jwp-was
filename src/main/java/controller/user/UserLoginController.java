@@ -5,6 +5,8 @@ import db.DataBase;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import session.HttpSession;
+import session.HttpSessionRepository;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 import webserver.response.HttpStatus;
@@ -30,7 +32,8 @@ public class UserLoginController extends AbstractController {
 
             if (user.matchPassword(password)) {
                 log.debug("login success : userId={}", userId);
-                responseMetaData = buildSuccessfulResponseMetaData(request);
+                HttpSession httpSession = createHttpSession();
+                responseMetaData = buildSuccessfulResponseMetaData(request, httpSession.getId());
             }
         }
 
@@ -46,13 +49,21 @@ public class UserLoginController extends AbstractController {
                 .build();
     }
 
-    private ResponseMetaData buildSuccessfulResponseMetaData(final HttpRequest request) {
+    private ResponseMetaData buildSuccessfulResponseMetaData(final HttpRequest request, final String sessionId) {
         final ResponseMetaData responseMetaData;
         responseMetaData = ResponseMetaData.Builder
                 .builder(request, HttpStatus.FOUND)
-                .setCookie("logined=true", "/")
+                .setCookie("JSESSIONID=" + sessionId, "/")
                 .location("/index.html")
                 .build();
         return responseMetaData;
+    }
+
+    private HttpSession createHttpSession() {
+        HttpSession httpSession = new HttpSession();
+        String sessionId = httpSession.getId();
+        HttpSessionRepository.setSession(sessionId, httpSession);
+
+        return httpSession;
     }
 }

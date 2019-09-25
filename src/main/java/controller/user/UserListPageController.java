@@ -10,29 +10,36 @@ import webserver.response.ResponseMetaData;
 
 import java.io.IOException;
 
-import static webserver.request.RequestHeaderFieldKeys.LOGINED;
+import static webserver.request.RequestHeaderFieldKeys.JSESSIONID;
 
-public class UserListController extends AbstractController {
+public class UserListPageController extends AbstractController {
 
     @Override
     public void service(final HttpRequest request, final HttpResponse response) throws IOException {
-        ResponseMetaData responseMetaData = ResponseMetaData.Builder
-                .builder(request, HttpStatus.FOUND)
-                .location("/user/login.html")
-                .build();
-        if ("true".equals(request.findHeaderField(LOGINED))) {
-            responseMetaData = buildSuccessResponseMetaData(request);
+        ResponseMetaData responseMetaData = buildSuccessfulResponseMetaData(request);
+        if (isNotLogin(request)) {
+            responseMetaData = buildFailedResponseMetaData(request);
         }
-
 
         response.setResponseMetaData(responseMetaData);
         doGet(request, response);
     }
 
-    private ResponseMetaData buildSuccessResponseMetaData(final HttpRequest request) {
+    private boolean isNotLogin(final HttpRequest request) {
+        return request.findHeaderField(JSESSIONID) == null;
+    }
+
+    private ResponseMetaData buildSuccessfulResponseMetaData(final HttpRequest request) {
         return ResponseMetaData.Builder
                 .builder(request, HttpStatus.OK)
                 .contentType(request.findContentType())
+                .build();
+    }
+
+    private ResponseMetaData buildFailedResponseMetaData(final HttpRequest request) {
+        return ResponseMetaData.Builder
+                .builder(request, HttpStatus.FOUND)
+                .location("/user/login.html")
                 .build();
     }
 
@@ -47,9 +54,5 @@ public class UserListController extends AbstractController {
         objectsForHandlebars.put("users", DataBase.findAll());
 
         response.makeResponse(objectsForHandlebars);
-    }
-
-    private boolean isNotLogin(final HttpRequest request) {
-        return !"true".equals(request.findHeaderField(LOGINED));
     }
 }

@@ -1,8 +1,6 @@
 package controller;
 
-import controller.user.UserListController;
-import controller.user.UserLoginController;
-import controller.user.UserSignUpController;
+import controller.user.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,9 +11,12 @@ public class ControllerFinder {
 
     static {
         controllers.put("/index.html", new IndexController());
+        controllers.put("/user/login.html", new UserLoginPageController());
+        controllers.put("/user/form.html", new UserSignUpPageController());
+        controllers.put("/user/list.html", new UserListPageController());
+
         controllers.put("/user/create", new UserSignUpController());
         controllers.put("/user/login", new UserLoginController());
-        controllers.put("/user/list.html", new UserListController());
     }
 
     private ControllerFinder() {
