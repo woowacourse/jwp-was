@@ -1,4 +1,4 @@
-package webserver.handler;
+package webserver.request;
 
 import webserver.utils.IOUtils;
 
