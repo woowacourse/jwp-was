@@ -3,6 +3,7 @@ package webserver.http.common;
 import webserver.http.common.exception.InvalidHeaderLines;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -13,38 +14,44 @@ public class HttpHeader {
 
     private Map<String, String> headers;
 
-    private HttpHeader(final Map<String, String> headers) {
-        this.headers = Collections.unmodifiableMap(headers);
+    // Response 관련 객체가 사용
+    public HttpHeader() {
+        headers = new HashMap<>();
     }
 
-    public static HttpHeader of(final List<String> headerLines) {
+    // Request 관련 객체가 사용
+    public HttpHeader(final List<String> headerLines) {
         validHeaderLines(headerLines);
-        return new HttpHeader(init(headerLines));
+        headers = parse(headerLines);
     }
 
-    private static void validHeaderLines(final List<String> headerLines) {
+    private void validHeaderLines(final List<String> headerLines) {
         if (headerLines == null) {
             throw new InvalidHeaderLines();
         }
     }
 
-    private static Map<String, String> init(final List<String> headerLines) {
+    private Map<String, String> parse(final List<String> headerLines) {
         if (headerLines.size() == 0) {
             return Collections.emptyMap();
         }
 
         return headerLines.stream()
                 .map(line -> line.split(HEADER_LINE_DELIMITER))
-                .filter(HttpHeader::correctLength)
+                .filter(this::correctLength)
                 .collect(Collectors.toMap(token -> token[0], token -> token[1]));
     }
 
-    private static boolean correctLength(String[] tokens) {
+    private boolean correctLength(String[] tokens) {
         return tokens.length == HEADER_LENGTH;
     }
 
     public String get(final String key) {
         return headers.get(key);
+    }
+
+    public void put(final String key, final String value) {
+        headers.put(key, value);
     }
 
     public Map<String, String> getHeaders() {

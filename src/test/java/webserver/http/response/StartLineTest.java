@@ -9,10 +9,10 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 class StartLineTest {
 
     @ParameterizedTest
-    @CsvSource(value = {"HTTP_1_1|OK", "HTTP_2_0|FOUND"}, delimiter = '|')
-    void 생성(HttpVersion httpVersion, HttpStatus httpStatus) {
+    @CsvSource(value = {"HTTP_1_1", "HTTP_2_0"})
+    void 생성(HttpVersion httpVersion) {
         assertDoesNotThrow(() ->
-                new StartLine(httpVersion, httpStatus)
+                new StartLine(httpVersion)
         );
     }
 }

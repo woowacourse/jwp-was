@@ -14,7 +14,7 @@ public class HttpRequestParser {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
         RequestLine requestLine = RequestLine.of(bufferedReader.readLine());
-        HttpHeader httpHeader = HttpHeader.of(convertHeaderLines(bufferedReader));
+        HttpHeader httpHeader = new HttpHeader(convertHeaderLines(bufferedReader));
         QueryStringParams queryStringParams = QueryStringParamsParser.parse(bufferedReader, requestLine, httpHeader);
 
         httpRequest.init(requestLine, httpHeader, queryStringParams);

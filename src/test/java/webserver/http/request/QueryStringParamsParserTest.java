@@ -22,7 +22,7 @@ class QueryStringParamsParserTest {
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(httpBody.getBytes());
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(byteArrayInputStream));
 
-        QueryStringParams queryStringParams = QueryStringParamsParser.parse(bufferedReader, RequestLine.of(httpRequestLine), HttpHeader.of(headerLines));
+        QueryStringParams queryStringParams = QueryStringParamsParser.parse(bufferedReader, RequestLine.of(httpRequestLine), new HttpHeader(headerLines));
 
         assertEquals(queryStringParams.toString(), QueryStringParams.of(getParameterLines(httpRequestLine.split(" "))).toString());
     }
@@ -63,7 +63,7 @@ class QueryStringParamsParserTest {
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(httpBody.getBytes());
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(byteArrayInputStream));
 
-        QueryStringParams queryStringParams = QueryStringParamsParser.parse(bufferedReader, RequestLine.of(httpRequestLine), HttpHeader.of(headerLines));
+        QueryStringParams queryStringParams = QueryStringParamsParser.parse(bufferedReader, RequestLine.of(httpRequestLine), new HttpHeader(headerLines));
 
         assertEquals(queryStringParams.toString(), QueryStringParams.of(httpBody).toString());
     }
