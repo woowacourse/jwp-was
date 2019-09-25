@@ -2,6 +2,7 @@ package webserver.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class RequestLine {
         String requestLine = br.readLine();
         String[] splitRequestLine = requestLine.split(" ");
         String method = splitRequestLine[0];
-        String target = splitRequestLine[1];
+        String target = URLDecoder.decode(splitRequestLine[1], "UTF-8");
         String httpVersion = splitRequestLine[2];
 
         return new RequestLine(method, target, httpVersion, getParameters(target));
@@ -35,8 +36,8 @@ public class RequestLine {
         }
 
         Map<String, String> parameters = new HashMap<>();
-        String[] split = target.split("\\?")[1].split("&");
-        for (String pair : split) {
+        String[] queryString = target.split("\\?")[1].split("&");
+        for (String pair : queryString) {
             addAttribute(parameters, pair);
         }
         return parameters;
@@ -69,14 +70,6 @@ public class RequestLine {
         return "POST".equals(method);
     }
 
-    public boolean isPut() {
-        return "PUT".equals(method);
-    }
-
-    public boolean isDelete() {
-        return "DELETE".equals(method);
-    }
-
     public boolean hasParameters() {
         return target.split("\\?").length == 2;
     }
@@ -86,11 +79,8 @@ public class RequestLine {
         return target.split("\\?")[0];
     }
 
-    public String getContentType() {
-        System.out.println("getPath() = " + getPath());
-        String[] split = getPath().split("\\.");
-        int length = split.length;
-        return split[length - 1];
+    public String get(String attributeName) {
+        return parameters.get(attributeName);
     }
 
     public String getMethod() {
@@ -103,9 +93,5 @@ public class RequestLine {
 
     public String getHttpVersion() {
         return httpVersion;
-    }
-
-    public String get(String attributeName) {
-        return parameters.get(attributeName);
     }
 }
