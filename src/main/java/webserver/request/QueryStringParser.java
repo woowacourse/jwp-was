@@ -1,7 +1,10 @@
 package webserver.request;
 
+import exception.ParamDecodeException;
 import webserver.request.requestline.QueryParams;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Arrays;
 
 public class QueryStringParser {
@@ -21,7 +24,11 @@ public class QueryStringParser {
             String key = paramTokens[0];
             String value = paramTokens[1];
 
-            queryParams.addParam(key, value);
+            try {
+                queryParams.addParam(key, URLDecoder.decode(value, "UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                throw new ParamDecodeException(e);
+            }
         });
 
         return queryParams;

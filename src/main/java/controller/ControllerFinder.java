@@ -11,6 +11,10 @@ public class ControllerFinder {
         controllers.put("/index.html", new IndexController());
         controllers.put("/user/create", new UserSignUpController());
         controllers.put("/user/login", new UserLoginController());
+        controllers.put("/user/list.html", new UserListController());
+    }
+
+    private ControllerFinder() {
     }
 
     public static Controller findController(String uri) {

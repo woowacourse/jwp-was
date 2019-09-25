@@ -18,14 +18,24 @@ public class HttpResponse {
     }
 
     public void makeResponse() throws IOException {
+        writeResponseHeader();
+
+        writeResponseBody(responseMetaData.getBody());
+    }
+
+    public void makeResponse(ObjectsForHandlebars objectsForHandlebars) throws IOException {
+        writeResponseHeader();
+
+        writeResponseBody(responseMetaData.getBodyWithHandlebars(objectsForHandlebars));
+    }
+
+    private void writeResponseHeader() throws IOException {
         if (responseMetaData == null) {
             throw new NotInitializedResponseMetaDataException();
         }
 
         dos.writeBytes(responseMetaData.getResponseLine() + HEADER_NEW_LINE);
         dos.writeBytes(responseMetaData.getHttpResponseHeaderFields());
-
-        writeResponseBody(responseMetaData.getBody());
     }
 
     private void writeResponseBody(byte[] body) throws IOException {
