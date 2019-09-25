@@ -2,24 +2,36 @@ package webserver;
 
 import db.DataBase;
 import http.*;
+import jdk.internal.joptsimple.internal.Strings;
 import model.User;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import utils.FileIoUtils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import static http.HttpHeader.CONTENT_TYPE;
+import static com.google.common.net.HttpHeaders.*;
 import static http.HttpRequestTest.*;
 import static model.UserTest.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static utils.IOUtils.convertStringToInputStream;
 
 class DispatcherServletTest {
+    private String sessionId;
+
     static {
         if (!DataBase.findUserById(ID).isPresent()) {
             DataBase.addUser(new User(ID, PASSWORD, NAME, EMAIL));
         }
+    }
+
+    @BeforeEach
+    void setUp() {
+        HttpSession session = SessionManager.createEmptySession();
+        session.setAttributes("user", DataBase.findUserById(ID).get());
+        sessionId = session.getId();
+        SessionManager.addSession(session);
     }
 
     @Test
@@ -57,7 +69,7 @@ class DispatcherServletTest {
         DispatcherServlet.doDispatch(request, response);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
-        assertThat(response.getHeader("Location")).isEqualTo("/index.html");
+        assertThat(response.getHeader(LOCATION)).isEqualTo("/index.html");
     }
 
     @Test
@@ -68,8 +80,8 @@ class DispatcherServletTest {
         DispatcherServlet.doDispatch(request, response);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
-        assertThat(response.getHeader("Location")).isEqualTo("/index.html");
-        assertThat(response.getHeader("Set-Cookie")).contains("logined=true");
+        assertThat(response.getHeader(LOCATION)).isEqualTo("/index.html");
+        assertThat(response.getHeader(SET_COOKIE)).contains("SESSIONID=");
     }
 
     @Test
@@ -80,8 +92,8 @@ class DispatcherServletTest {
         DispatcherServlet.doDispatch(request, response);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
-        assertThat(response.getHeader("Location")).isEqualTo("/user/login_failed.html");
-        assertThat(response.getHeader("Set-Cookie")).contains("logined=false");
+        assertThat(response.getHeader(LOCATION)).isEqualTo("/user/login_failed.html");
+        assertThat(response.getHeader(SET_COOKIE)).contains("SESSIONID=''; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
     }
 
     @Test
@@ -92,14 +104,14 @@ class DispatcherServletTest {
         DispatcherServlet.doDispatch(request, response);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
-        assertThat(response.getHeader("Location")).isEqualTo("/user/login_failed.html");
-        assertThat(response.getHeader("Set-Cookie")).contains("logined=false");
+        assertThat(response.getHeader(LOCATION)).isEqualTo("/user/login_failed.html");
+        assertThat(response.getHeader(SET_COOKIE)).contains("SESSIONID=''; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
     }
 
 
     @Test
     void 로그인시_유저_목록_조회_처리() throws IOException {
-        HttpRequest request = HttpRequestParser.parse(convertStringToInputStream(String.format(USER_LIST_REQUEST, TRUE)));
+        HttpRequest request = HttpRequestParser.parse(convertStringToInputStream(String.format(USER_LIST_REQUEST, "Cookie: SESSIONID=" + sessionId)));
         HttpResponse response = new HttpResponse();
 
         DispatcherServlet.doDispatch(request, response);
@@ -110,12 +122,12 @@ class DispatcherServletTest {
 
     @Test
     void 비로그인시_유저_목록_조회_처리() throws IOException {
-        HttpRequest request = HttpRequestParser.parse(convertStringToInputStream(String.format(USER_LIST_REQUEST, FALSE)));
+        HttpRequest request = HttpRequestParser.parse(convertStringToInputStream(String.format(USER_LIST_REQUEST, Strings.EMPTY)));
         HttpResponse response = new HttpResponse();
 
         DispatcherServlet.doDispatch(request, response);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
-        assertThat(response.getHeader("Location")).isEqualTo("/user/login.html");
+        assertThat(response.getHeader(LOCATION)).isEqualTo("/user/login.html");
     }
 }

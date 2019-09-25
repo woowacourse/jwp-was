@@ -1,6 +1,6 @@
 package http;
 
-import static http.HttpHeader.COOKIE;
+import static com.google.common.net.HttpHeaders.COOKIE;
 
 public class HttpRequest {
     private static final String COOKIE_DELIMITER = ";";

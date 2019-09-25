@@ -8,7 +8,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Map;
 
-import static http.HttpHeader.CONTENT_LENGTH_KEY;
+import static com.google.common.net.HttpHeaders.CONTENT_LENGTH;
 
 public class HttpResponse {
     private static final Logger log = LoggerFactory.getLogger(HttpResponse.class);
@@ -34,7 +34,7 @@ public class HttpResponse {
 
     public void setBody(byte[] body) {
         this.body = body;
-        header.addHeader(CONTENT_LENGTH_KEY, String.valueOf(body.length));
+        header.addHeader(CONTENT_LENGTH, String.valueOf(body.length));
     }
 
     public void send(DataOutputStream dos) {

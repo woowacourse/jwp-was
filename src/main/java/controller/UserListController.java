@@ -22,6 +22,6 @@ public class UserListController extends AbstractController {
 
     private boolean isLogined(HttpRequest httpRequest) {
         return Arrays.stream(httpRequest.getCookies())
-                .anyMatch(cookie -> cookie.contains("logined=true"));
+                .anyMatch(cookie -> cookie.contains("SESSIONID="));
     }
 }

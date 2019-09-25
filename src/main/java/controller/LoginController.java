@@ -4,9 +4,13 @@ import controller.exception.NotFoundUserIdException;
 import db.DataBase;
 import http.HttpRequest;
 import http.HttpResponse;
+import http.HttpSession;
 import model.User;
 import view.RedirectView;
 import view.View;
+import webserver.SessionManager;
+
+import static com.google.common.net.HttpHeaders.SET_COOKIE;
 
 public class LoginController extends AbstractController {
     @Override
@@ -15,7 +19,10 @@ public class LoginController extends AbstractController {
                 .orElseThrow(NotFoundUserIdException::new);
 
         user.matchPassword(httpRequest.getRequestBody("password"));
-        httpResponse.addHeader("Set-Cookie", "logined=true; Path=/");
+        HttpSession session = SessionManager.createEmptySession();
+        session.setAttributes("user", user);
+        SessionManager.addSession(session);
+        httpResponse.addHeader(SET_COOKIE, String.format("SESSIONID=%s; Path=/", session.getId()));
 
         return new RedirectView("index.html");
     }

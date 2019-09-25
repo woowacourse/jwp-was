@@ -7,10 +7,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.google.common.net.HttpHeaders.CONTENT_LENGTH;
+import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
+
 public class HttpHeader {
-    public static final String COOKIE = "Cookie";
-    public static final String CONTENT_TYPE = "Content-Type";
-    public static final String CONTENT_LENGTH_KEY = "Content-Length";
+    public static final String UPGRADE_INSECURE_REQUESTS = "Upgrade-Insecure-Requests";
+    public static final String SET_FETCH_MODE = "Set-Fetch-Mode";
     private static final String HEADER_DELIMITER = ":";
 
     private Map<String, String> headers = new HashMap<>();
@@ -39,11 +41,11 @@ public class HttpHeader {
     }
 
     public int getContentLength() {
-        return Integer.parseInt(headers.getOrDefault(CONTENT_LENGTH_KEY, "-1"));
+        return Integer.parseInt(headers.getOrDefault(CONTENT_LENGTH, "-1"));
     }
 
     public boolean containContentLength() {
-        return headers.containsKey(CONTENT_LENGTH_KEY);
+        return headers.containsKey(CONTENT_LENGTH);
     }
 
     public void addHeader(String key, String value) {

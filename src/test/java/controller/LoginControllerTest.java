@@ -13,6 +13,7 @@ import view.View;
 
 import java.io.IOException;
 
+import static com.google.common.net.HttpHeaders.SET_COOKIE;
 import static http.HttpRequestTest.GET_REQUEST;
 import static http.HttpRequestTest.LOGIN_REQUEST;
 import static model.UserTest.*;
@@ -39,6 +40,7 @@ public class LoginControllerTest {
 
         assertThat(view.isRedirectView()).isTrue();
         assertThat(view.getViewName()).isEqualTo("index.html");
+        assertThat(response.getHeader(SET_COOKIE)).contains("SESSIONID=");
     }
 
     @Test

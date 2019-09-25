@@ -20,7 +20,8 @@ import webserver.exception.NotFoundResourceException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import static http.HttpHeader.CONTENT_TYPE;
+import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
+import static com.google.common.net.HttpHeaders.SET_COOKIE;
 
 public class DispatcherServlet {
     private static final Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
@@ -46,7 +47,7 @@ public class DispatcherServlet {
             httpResponse.setStatus(404);
         } catch (InvalidPasswordException | NotFoundUserIdException e) {
             log.error(e.getMessage());
-            httpResponse.addHeader("Set-Cookie", "logined=false; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
+            httpResponse.addHeader(SET_COOKIE, "SESSIONID=''; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
             View view = new RedirectView("user/login_failed.html");
             view.render(httpRequest, httpResponse);
         } catch (Exception e) {
