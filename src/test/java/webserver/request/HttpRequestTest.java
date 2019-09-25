@@ -10,10 +10,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class HttpRequestTest {
 
-    @DisplayName("Version 을 확인한다.")
     @Test
-    void getVersion() {
+    void confirmGetRequestContent() {
+        HttpRequest normalGetRequest = getNormalGetRequest();
+        assertThat(normalGetRequest.getHeader("Accept")).isEqualTo("*/*");
         assertThat(getNormalGetRequest().getVersion()).isEqualTo("HTTP/1.1");
+        assertThat(getNormalGetRequest().getMethod()).isEqualTo("GET");
+
+        assertThat(normalGetRequest.getParam("userId")).isEqualTo("javajigi");
+        assertThat(normalGetRequest.getParam("password")).isEqualTo("password");
+        assertThat(normalGetRequest.getParam("name")).isEqualTo("박재성");
+        assertThat(normalGetRequest.getParam("email")).isEqualTo("javajigi@slipp.net");
     }
 
     private HttpRequest getNormalGetRequest() {
@@ -27,32 +34,11 @@ class HttpRequestTest {
         return new HttpRequest(lines);
     }
 
-    @DisplayName("Header 를 확인한다.")
     @Test
-    void getHeader() {
-        assertThat(getNormalGetRequest().getHeader("Accept")).isEqualTo("*/*");
-    }
-
-    @DisplayName("Method 를 확인한다.")
-    @Test
-    void getMethod() {
-        assertThat(getNormalGetRequest().getMethod()).isEqualTo("GET");
-    }
-
-    @DisplayName("Param 을 확인한다.")
-    @Test
-    void getParam() {
-        HttpRequest httpRequest = getNormalGetRequest();
-        assertThat(httpRequest.getParam("userId")).isEqualTo("javajigi");
-        assertThat(httpRequest.getParam("password")).isEqualTo("password");
-        assertThat(httpRequest.getParam("name")).isEqualTo("박재성");
-        assertThat(httpRequest.getParam("email")).isEqualTo("javajigi@slipp.net");
-    }
-
-    @DisplayName("Body 를 확인한다.")
-    @Test
-    void getBody() {
+    void confirmPostRequestContent() {
         HttpRequest requestWithContents = getNormalPostRequest();
+
+        assertThat(requestWithContents.getPath()).isEqualTo("/user/create");
 
         assertThat(requestWithContents.getBody("userId")).isEqualTo("javajigi");
         assertThat(requestWithContents.getBody("password")).isEqualTo("password");
@@ -71,11 +57,5 @@ class HttpRequestTest {
         lines.add("userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net");
 
         return new HttpRequest(lines);
-    }
-
-    @DisplayName("Path 를 확인한다.")
-    @Test
-    void getPath() {
-        assertThat(getNormalGetRequest().getPath()).isEqualTo("/user/create");
     }
 }
