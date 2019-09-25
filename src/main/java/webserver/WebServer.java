@@ -14,7 +14,7 @@ public class WebServer {
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
     private static final int DEFAULT_PORT = 8080;
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         int port = getPort(args);
 
         ExecutorService executorService = Executors.newFixedThreadPool(100);
@@ -28,10 +28,12 @@ public class WebServer {
             while ((connection = listenSocket.accept()) != null) {
                 executorService.execute(new RequestHandler(connection));
             }
-        }
 
-        executorService.shutdown();
-        executorService.awaitTermination(100, TimeUnit.SECONDS);
+            executorService.shutdown();
+            executorService.awaitTermination(100, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            logger.error("Server error", e);
+        }
     }
 
     private static int getPort(String[] args) {

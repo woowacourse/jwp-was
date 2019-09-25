@@ -6,19 +6,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
-import webserver.HttpResponse;
-import webserver.HttpStatus;
-import webserver.RequestParser;
 import webserver.WebServer;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SingUpControllerTest {
+public class UserListControllerTest {
 
     private WebTestClient webTestClient;
     private Thread serverThread;
@@ -28,15 +20,6 @@ public class SingUpControllerTest {
         webTestClient = WebTestClient.bindToServer().baseUrl("http://localhost:8080").build();
         serverThread = new Thread(() -> WebServer.main(new String[0]));
         serverThread.start();
-    }
-
-    @AfterEach
-    void cleanup() {
-        serverThread.interrupt();
-    }
-
-    @Test
-    void create() {
         webTestClient.post()
             .uri(SignUpController.USER_CREATE_URL)
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -50,4 +33,31 @@ public class SingUpControllerTest {
             .expectBody().returnResult();
     }
 
+    @AfterEach
+    void cleanup() {
+        serverThread.interrupt();
+    }
+
+    @Test
+    void logged_id() {
+        webTestClient.get()
+            .uri(UserListController.USER_LIST_URL)
+            .cookie("logined", "true")
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody()
+            .consumeWith(res -> {
+                assertThat(new String(res.getResponseBody()))
+                    .contains("이메일");
+            });
+    }
+
+    @Test
+    void logged_in_failed() {
+        webTestClient.get()
+            .uri(UserListController.USER_LIST_URL)
+            .exchange()
+            .expectStatus().is3xxRedirection()
+            .expectHeader().valueMatches("Location", "/user/login.html");
+    }
 }

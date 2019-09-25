@@ -18,7 +18,7 @@ import java.io.InputStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SingUpControllerTest {
+public class LoginControllerTest {
 
     private WebTestClient webTestClient;
     private Thread serverThread;
@@ -28,15 +28,6 @@ public class SingUpControllerTest {
         webTestClient = WebTestClient.bindToServer().baseUrl("http://localhost:8080").build();
         serverThread = new Thread(() -> WebServer.main(new String[0]));
         serverThread.start();
-    }
-
-    @AfterEach
-    void cleanup() {
-        serverThread.interrupt();
-    }
-
-    @Test
-    void create() {
         webTestClient.post()
             .uri(SignUpController.USER_CREATE_URL)
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -50,4 +41,32 @@ public class SingUpControllerTest {
             .expectBody().returnResult();
     }
 
+    @AfterEach
+    void cleanup() {
+        serverThread.interrupt();
+    }
+
+    @Test
+    void login() {
+        webTestClient.post()
+            .uri(LoginController.USER_LOGIN_URL)
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+            .body(BodyInserters.fromFormData("userId", "john123")
+                .with("password", "p@ssW0rd"))
+            .exchange()
+            .expectStatus().is3xxRedirection()
+            .expectHeader().valueMatches("Location", "/index.html");
+    }
+
+    @Test
+    void login_failed2() {
+        webTestClient.post()
+            .uri(LoginController.USER_LOGIN_URL)
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+            .body(BodyInserters.fromFormData("userId", "john123")
+            .with("password", "p@ssW0r"))
+            .exchange()
+            .expectStatus().is3xxRedirection()
+            .expectHeader().valueMatches("Location", "/user/login_failed.html");
+    }
 }
