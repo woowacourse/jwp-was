@@ -1,4 +1,4 @@
-package mvc.controller;
+package web.controller;
 
 import webserver.message.exception.NotFoundFileException;
 import webserver.message.request.Request;

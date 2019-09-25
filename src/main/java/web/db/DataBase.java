@@ -1,7 +1,7 @@
-package mvc.db;
+package web.db;
 
 import com.google.common.collect.Maps;
-import mvc.model.User;
+import web.model.User;
 
 import java.util.Collection;
 import java.util.Map;

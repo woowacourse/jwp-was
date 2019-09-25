@@ -1,4 +1,4 @@
-package mvc.model;
+package web.model;
 
 public class User {
     private String userId;

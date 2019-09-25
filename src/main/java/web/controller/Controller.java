@@ -1,4 +1,4 @@
-package mvc.controller;
+package web.controller;
 
 import webserver.message.request.Request;
 import webserver.message.response.Response;

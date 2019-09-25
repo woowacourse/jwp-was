@@ -1,4 +1,4 @@
-package mvc.exception;
+package web.exception;
 
 public class LoginException extends RuntimeException {
     public LoginException() {

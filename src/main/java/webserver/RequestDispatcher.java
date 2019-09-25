@@ -1,13 +1,13 @@
 package webserver;
 
-import mvc.controller.Controller;
-import mvc.controller.impl.LoginController;
-import mvc.controller.impl.UserController;
 import utils.DataConverter;
 import utils.FileIoUtils;
 import utils.FileLoader;
 import utils.IOUtils;
 import utils.exception.InvalidFileAccessException;
+import web.controller.Controller;
+import web.controller.impl.LoginController;
+import web.controller.impl.UserController;
 import webserver.message.exception.NotFoundFileException;
 import webserver.message.exception.UrlDecodeException;
 import webserver.message.request.Request;

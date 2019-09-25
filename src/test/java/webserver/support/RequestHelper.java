@@ -33,7 +33,7 @@ public class RequestHelper {
                     "Content-Type: application/x-www-form-urlencoded\n" +
                     "Accept: */*\n" +
                     "\n" +
-                    "userId=javajigi&password=password";
+                    "userId=javajigi&password=password&a=b";
 
     protected InputStream inputStream(final String requestInput) {
         return new ByteArrayInputStream(requestInput.getBytes());

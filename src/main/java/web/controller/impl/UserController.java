@@ -1,9 +1,9 @@
-package mvc.controller.impl;
+package web.controller.impl;
 
-import mvc.controller.AbstractController;
-import mvc.db.DataBase;
-import mvc.model.User;
 import org.slf4j.Logger;
+import web.controller.AbstractController;
+import web.db.DataBase;
+import web.model.User;
 import webserver.message.request.Request;
 import webserver.message.request.RequestBody;
 import webserver.message.response.Response;
