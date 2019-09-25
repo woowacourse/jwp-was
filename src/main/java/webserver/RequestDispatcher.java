@@ -20,9 +20,15 @@ public class RequestDispatcher {
     private static final String STATIC_PATH = "./static";
     private static final String NOT_FOUND_PAGE_PATH = TEMPLATES_PATH + "/error/404_not_found.html";
     private static final Map<String, Function<Request, Response>> requestUrls = new HashMap<>();
+    private static StaticFile NOT_FOUND_PAGE;
 
     static {
         requestUrls.put("/user/create", UserController::createUser);
+        try {
+            NOT_FOUND_PAGE = new StaticFile(NOT_FOUND_PAGE_PATH);
+        } catch (IOException | URISyntaxException e) {
+            NOT_FOUND_PAGE = null;
+        }
     }
 
     public static Response forward(final Request request) {
@@ -37,13 +43,8 @@ public class RequestDispatcher {
         StaticFile file;
         try {
             file = tryStaticFileRead(request);
-        } catch (IOException | URISyntaxException | NullPointerException e) {
-            try {
-                file = new StaticFile(NOT_FOUND_PAGE_PATH);
-            } catch (IOException | URISyntaxException ex) {
-                LOG.debug(ex.getMessage());
-                file = null;
-            }
+        } catch (IOException | NullPointerException | URISyntaxException e) {
+            file = NOT_FOUND_PAGE;
         }
         return file;
     }
@@ -64,6 +65,6 @@ public class RequestDispatcher {
     }
 
     private static Response convertToResponse(final StaticFile file) {
-        return new Response.Builder().body(file).build();
+        return new Response.Builder().body(file).contentType(file.getMediaType()).build();
     }
 }
