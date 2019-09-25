@@ -4,12 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.io.NetworkIO;
 import utils.parser.simple.KeyValueParserFactory;
-import webserver.http.*;
+import webserver.httpelement.*;
 
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 public class HttpRequest {
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
@@ -66,8 +65,6 @@ public class HttpRequest {
             HttpRequestHeader header,
             String body
     ) {
-        final Supplier<HttpRequest> bodyWithNoParams = () ->
-                new HttpRequest(method, path, version, header, Collections.emptyMap(), body);
         return header.contentType().map(contentType -> {
             if (contentType.mimeType() == HttpMimeType.APPLICATION_X_WWW_FORM_URLENCODED) {
                 return new HttpRequest(
@@ -79,10 +76,11 @@ public class HttpRequest {
             }
             //미구현
             if (contentType.mimeType() == HttpMimeType.MULTIPART_FORM_DATA) {
+                contentType.boundary();
                 return null;
             }
-            return bodyWithNoParams.get();
-        }).orElseGet(bodyWithNoParams);
+            return null;
+        }).orElseGet(() -> new HttpRequest(method, path, version, header, Collections.emptyMap(), body));
     }
 
     private HttpRequest(

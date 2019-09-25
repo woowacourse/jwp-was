@@ -1,4 +1,4 @@
-package webserver.http;
+package webserver.httpelement;
 
 import java.net.URLDecoder;
 import java.util.Objects;

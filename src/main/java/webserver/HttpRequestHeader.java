@@ -1,9 +1,9 @@
 package webserver;
 
-import webserver.http.HttpConnection;
-import webserver.http.HttpContentType;
-import webserver.http.HttpHeaderField;
-import webserver.http.HttpHost;
+import webserver.httpelement.HttpConnection;
+import webserver.httpelement.HttpContentType;
+import webserver.httpelement.HttpHeaderField;
+import webserver.httpelement.HttpHost;
 
 import java.util.Collections;
 import java.util.Map;

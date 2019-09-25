@@ -4,8 +4,8 @@ import utils.fp.tuple.Pair;
 import utils.io.FileIoUtils;
 import utils.parser.json.JsonArray;
 import utils.parser.simple.KeyValueParserFactory;
-import webserver.http.HttpMethod;
-import webserver.http.HttpPath;
+import webserver.httpelement.HttpMethod;
+import webserver.httpelement.HttpPath;
 
 import java.util.Collections;
 import java.util.Map;

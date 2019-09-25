@@ -1,4 +1,4 @@
-package webserver.http;
+package webserver.httpelement;
 
 import utils.parser.MimeTypeWithParamsParser;
 
@@ -46,6 +46,30 @@ public class HttpContentType implements HttpHeaderField {
                                                                 });
     }
 
+    public static HttpContentType fromFileExtension(String extension) {
+        switch (extension) {
+            case "html":
+                return TEXT_HTML_UTF_8;
+            case "css":
+                return TEXT_CSS_UTF_8;
+            case "js":
+                return APPLICATION_JAVASCRIPT_UTF_8;
+            case "bmp":
+                return IMAGE_BMP;
+            case "gif":
+                return IMAGE_GIF;
+            case "jpg":
+                return IMAGE_JPEG;
+            case "png":
+                return IMAGE_PNG;
+            case "ico":
+                return IMAGE_X_ICON;
+            case "txt":
+            default:
+                return TEXT_PLAIN_UTF_8;
+        }
+    }
+
     private HttpContentType(HttpMimeType mimeType, Map<String, String> params) {
         this.mimeType = mimeType;
         this.charset = params.containsKey("charset") ? Charset.forName(params.get("charset")) : null;
@@ -54,6 +78,10 @@ public class HttpContentType implements HttpHeaderField {
 
     public HttpMimeType mimeType() {
         return this.mimeType;
+    }
+
+    public String boundary() {
+        return this.boundary;
     }
 
     @Override

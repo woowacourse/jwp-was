@@ -1,4 +1,4 @@
-package webserver.http;
+package webserver.httpelement;
 
 import utils.StringUtils;
 
@@ -103,12 +103,12 @@ public enum HttpStatusCode {
     }
 
     public String toName() {
-        switch (this.code) {
-            case 226:
+        switch (this) {
+            case IM_USED:
                 return "IM Used";
-            case 418:
+            case I_M_A_TEAPOT:
                 return "I'm a teapot";
-            case 505:
+            case HTTP_VERSION_NOT_SUPPORTED:
                 return "HTTP Version Not Supported";
             default:
                 return StringUtils.screamingSnakeCaseToStartCase(name());

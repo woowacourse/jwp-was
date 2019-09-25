@@ -1,9 +1,9 @@
 package webserver;
 
-import webserver.http.HttpConnection;
-import webserver.http.HttpContentType;
-import webserver.http.HttpStatusCode;
-import webserver.http.HttpVersion;
+import webserver.httpelement.HttpConnection;
+import webserver.httpelement.HttpContentType;
+import webserver.httpelement.HttpStatusCode;
+import webserver.httpelement.HttpVersion;
 
 public class HttpResponse {
     public static final HttpResponse BAD_REQUEST = HttpResponse.builder(HttpContentType.TEXT_PLAIN_UTF_8)
