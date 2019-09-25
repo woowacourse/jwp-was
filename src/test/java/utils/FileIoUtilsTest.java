@@ -1,15 +1,15 @@
 package utils;
 
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class FileIoUtilsTest {
-    private static final Logger log = LoggerFactory.getLogger(FileIoUtilsTest.class);
+    public static final String INDEX_PAGE_CONTENT = "국내에서 Ruby on Rails와 Play가 활성화되기 힘든 이유는 뭘까?";
 
     @Test
     void loadFileFromClasspath() throws Exception {
         byte[] body = FileIoUtils.loadFileFromClasspath("./templates/index.html");
-        log.debug("file : {}", new String(body));
+        assertThat(new String(body)).contains(INDEX_PAGE_CONTENT);
     }
 }
