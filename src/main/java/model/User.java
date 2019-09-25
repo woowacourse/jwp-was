@@ -1,5 +1,7 @@
 package model;
 
+import db.exception.WrongPasswordException;
+
 public class User {
     private String userId;
     private String password;
@@ -27,6 +29,17 @@ public class User {
 
     public String getEmail() {
         return email;
+    }
+
+    public User getCheckUserIdAndPassword(String userId, String password) {
+        if (!sameUserIdAndPassword(userId, password)) {
+            throw new WrongPasswordException();
+        }
+        return this;
+    }
+
+    public boolean sameUserIdAndPassword(String userId, String password) {
+        return this.userId.equals(userId) && this.password.equals(password);
     }
 
     @Override
