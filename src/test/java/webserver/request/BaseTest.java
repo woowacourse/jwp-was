@@ -18,7 +18,7 @@ public class BaseTest {
                     "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
 
     public static final String GET_REQUEST_MESSAGE_WITH_QUERY_STRING =
-            "GET /user/create?userId=done&password=12345678&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=done%40slipp.net HTTP/1.1\n" +
+            "GET /user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net HTTP/1.1\n" +
                     "Host: localhost:8080\n" +
                     "Connection: keep-alive\n" +
                     "Accept: */*";

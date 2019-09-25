@@ -68,9 +68,9 @@ public class RequestLineTest extends BaseTest {
     @DisplayName("query string으로 전달된 데이터 조회")
     @Test
     void get() {
-        assertThat(requestLineWithQueryString.get("userId")).isEqualTo("done");
-        assertThat(requestLineWithQueryString.get("password")).isEqualTo("12345678");
+        assertThat(requestLineWithQueryString.get("userId")).isEqualTo("javajigi");
+        assertThat(requestLineWithQueryString.get("password")).isEqualTo("password");
         assertThat(requestLineWithQueryString.get("name")).isEqualTo("박재성");
-        assertThat(requestLineWithQueryString.get("email")).isEqualTo("done@slipp.net");
+        assertThat(requestLineWithQueryString.get("email")).isEqualTo("javajigi@slipp.net");
     }
 }
