@@ -23,11 +23,23 @@ public class HttpResponse {
         this.responseBody = responseBody;
     }
 
-    public static HttpResponse sendErrorResponse(ResponseStatus responseStatus) {
+    private static HttpResponse sendErrorResponse(ResponseStatus responseStatus) {
         return new HttpResponse(
                 responseStatus,
                 new ResponseHeaders(),
                 new ResponseBody(String.format("error/%d.html", responseStatus.getCode())));
+    }
+
+    public static HttpResponse notFound() {
+        return sendErrorResponse(ResponseStatus.NOT_FOUND);
+    }
+
+    public static HttpResponse internalServerError() {
+        return sendErrorResponse(ResponseStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    public static HttpResponse methodNotAllowed() {
+        return sendErrorResponse(ResponseStatus.METHOD_NOT_ALLOWED);
     }
 
     public void forward(String filePath) {
@@ -75,7 +87,7 @@ public class HttpResponse {
         return responseBody.getPath();
     }
 
-    public boolean hasNotContent() {
-        return Objects.isNull(responseBody);
+    public ResponseStatus getResponseStatus() {
+        return responseStatus;
     }
 }

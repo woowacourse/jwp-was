@@ -3,6 +3,9 @@ package webserver.response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static webserver.response.ResponseStatus.*;
 
@@ -16,33 +19,53 @@ class HttpResponseTest {
     }
 
     @Test
-    void buildGetHeader_html() {
-        httpResponse.buildGetHeader("html");
-        assertThat(httpResponse.getHeader("Content-Type")).isEqualTo("text/html");
+    void sendErrorResponse() {
+        assertThat(HttpResponse.notFound().getResponseStatus()).isEqualTo(NOT_FOUND);
+        assertThat(HttpResponse.internalServerError().getResponseStatus()).isEqualTo(INTERNAL_SERVER_ERROR);
+        assertThat(HttpResponse.methodNotAllowed().getResponseStatus()).isEqualTo(METHOD_NOT_ALLOWED);
     }
 
     @Test
-    void buildGetHeader_css() {
-        httpResponse.buildGetHeader("css");
-        assertThat(httpResponse.getHeader("Content-Type")).isEqualTo("text/css");
+    void forward() {
+        String filePath = "/index.html";
+        HttpResponse response = new HttpResponse();
+        response.forward(filePath);
+
+        assertThat(response.getViewPath()).isEqualTo(new ResponseBody(filePath).getPath());
+    }
+
+
+    @Test
+    void setContentType() {
+        String contentType = "text/html";
+        HttpResponse response = new HttpResponse();
+
+        response.setContentType(contentType);
+        assertThat(response.getHeader("Content-Type")).isEqualTo(contentType);
+
+        response.setContentType(MediaType.TEXT_HTML_VALUE);
+        assertThat(response.getHeader("Content-Type")).isEqualTo(contentType);
     }
 
     @Test
-    void createRedirectResponse() {
-        ResponseStatus found = FOUND;
-        HttpResponse redirectResponse =
-                new HttpResponse(found, new ResponseHeaders(), null);
+    void sendRedirect() {
+        HttpResponse response = new HttpResponse();
+        response.sendRedirect("/");
 
-        String location = "/index.html";
-        redirectResponse.buildRedirectHeader(location);
-
-        assertThat(redirectResponse.getHeader("Location")).isEqualTo(location);
-        assertThat(redirectResponse.getResponseStatus()).isEqualTo(found);
+        assertThat(response.getHeader("Location")).isEqualTo("/");
+        assertThat(response.getResponseStatus()).isEqualTo(FOUND);
     }
 
     @Test
     void responseBuilder() {
-        httpResponse.buildGetHeader("html");
-        assertThat(httpResponse.responseBuilder()).contains("HTTP/1.1 200 OK\r\n", "Content-Type: text/html\r\n");
+        HttpResponse response = new HttpResponse();
+        response.sendRedirect("/");
+
+        List<String> parsedResponse = Arrays.asList(
+                "HTTP/1.1 302 FOUND\r\n",
+                "Location: /\r\n",
+                "\r\n");
+
+        assertThat(response.responseBuilder()).isEqualTo(parsedResponse);
     }
 }
