@@ -8,9 +8,6 @@ import utils.FileIoUtils;
 import utils.StringUtils;
 import webserver.exception.ResourceNotFoundException;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-
 import static utils.StringUtils.isNotBlank;
 
 public class ResourceHttpRequestHandler {
@@ -29,7 +26,7 @@ public class ResourceHttpRequestHandler {
             httpResponse.addHeaderAttribute("Content-Type", ContentTypeMapper.getContentType(filePath));
             httpResponse.addHeaderAttribute("Content-Length", String.valueOf(file.length));
             httpResponse.setBody(file);
-        } catch (IOException | URISyntaxException | NullPointerException e) {
+        } catch (NullPointerException e) {
             throw new ResourceNotFoundException();
         }
     }
