@@ -15,8 +15,8 @@ public class HandlerMapping {
     private HandlerMapping() {}
 
     static {
-        map.put("/", new MainController());
-        map.put("/user/create", new CreateUserController());
+        map.put("/", MainController.getInstance());
+        map.put("/user/create", CreateUserController.getInstance());
     }
 
     public static Controller getHandler(final HttpRequest httpRequest) {

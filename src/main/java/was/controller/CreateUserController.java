@@ -7,6 +7,15 @@ import webserver.http.response.HttpResponse;
 import was.model.User;
 
 public class CreateUserController extends AbstractController {
+    private CreateUserController() {}
+
+    public static CreateUserController getInstance() {
+        return CreateUserController.LazyHolder.INSTANCE;
+    }
+
+    public static class LazyHolder {
+        private static final CreateUserController INSTANCE = new CreateUserController();
+    }
 
     @Override
     void doPost(final HttpRequest httpRequest, final HttpResponse httpResponse) {

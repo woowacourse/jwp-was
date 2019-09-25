@@ -22,7 +22,7 @@ class CreateUserControllerTest {
     @ParameterizedTest
     @MethodSource("createHttpPostRequest")
     void 사용자_생성(InputStream inputStream) throws Exception {
-        Controller controller = new CreateUserController();
+        Controller controller = CreateUserController.getInstance();
         HttpRequest httpRequest = new HttpRequest();
         HttpResponse httpResponse = new HttpResponse();
 
@@ -55,7 +55,7 @@ class CreateUserControllerTest {
     @ParameterizedTest
     @MethodSource("createHttpGetRequest")
     void 지원하지_않는_메서드_요청(InputStream inputStream) throws Exception {
-        Controller controller = new CreateUserController();
+        Controller controller = CreateUserController.getInstance();
         HttpRequest httpRequest = new HttpRequest();
         HttpResponse httpResponse = new HttpResponse();
 
