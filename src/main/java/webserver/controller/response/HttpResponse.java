@@ -2,61 +2,86 @@ package webserver.controller.response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.controller.request.header.ContentType;
+import utils.FileIoUtils;
+import webserver.controller.request.HttpRequest;
+import webserver.controller.request.MimeType;
+import webserver.controller.request.header.HttpMethod;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.net.URISyntaxException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
-    private final DataOutputStream dataOutputStream;
+    private static final String STATIC_FILE_PATH = "./static/";
+    private static final String NON_STATIC_FILE_PATH = "./templates/";
+    private HttpStatus httpStatus;
+    private String version;
+    private HashMap<String, String> headerFields;
+    private Optional<byte[]> body;
 
-    public HttpResponse(OutputStream outputStream) {
-        this.dataOutputStream = new DataOutputStream(outputStream);
+    public HttpResponse(HttpRequest httpRequest) throws IOException, URISyntaxException {
+        headerFields = new HashMap<>();
+        setResponseLine(httpRequest, HttpStatus.OK);
     }
 
-    public void response200Header(int lengthOfBodyContent, ContentType contentType) {
-        try {
-            dataOutputStream.writeBytes("HTTP/1.1 200 OK \r\n");
-            dataOutputStream.writeBytes("Content-Type: text/" + contentType + ";charset=utf-8\r\n");
-            dataOutputStream.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dataOutputStream.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
+    public void setHttpStatus(HttpStatus httpStatus) {
+        this.httpStatus = httpStatus;
+    }
+
+    public void responseOK(HttpRequest httpRequest) {
+        headerFields.put("Content-Type", httpRequest.getMimeType().getMimeType() + ";charset=utf-8\r\n");
+        headerFields.put("Content-Length", String.valueOf(body.get().length));
+    }
+
+    private byte[] getResponseBody(HttpRequest httpRequest) throws IOException, URISyntaxException {
+        MimeType mimeType = httpRequest.getMimeType();
+        String path = httpRequest.getPath();
+        logger.debug("path : >>{}", path);
+        if (mimeType == MimeType.HTML || mimeType == MimeType.ICO) {
+            return FileIoUtils.loadFileFromClasspath(NON_STATIC_FILE_PATH + path);
         }
+        return FileIoUtils.loadFileFromClasspath(STATIC_FILE_PATH + path);
     }
 
-    public void responseBody(byte[] body) {
-        try {
-            dataOutputStream.write(body, 0, body.length);
-            dataOutputStream.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+    public void responseBadRequest(String errorMessage) {
+        setHttpStatus(HttpStatus.BAD_REQUEST);
+        headerFields.put("Server", "jwp-was");
+        headerFields.put("Connection", "close");
+        headerFields.put("message", errorMessage);
     }
 
-    public void redirect302Found(String redirectUrl) {
-        logger.debug("redirect302Found >>>");
-        try {
-            dataOutputStream.writeBytes("HTTP/1.1 302 FOUND \r\n");
-            dataOutputStream.writeBytes("Location: " + redirectUrl + "\r\n");
-            dataOutputStream.writeBytes("Connection: close \r\n");
-            dataOutputStream.writeBytes("\r\n");
-            dataOutputStream.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+    public void sendRedirect(String saveRedirectUrl) {
+        setHttpStatus(HttpStatus.FOUND);
+        headerFields.put("Location", saveRedirectUrl);
+        headerFields.put("Connection", "close");
     }
 
-    public void badRequest(String errorMessage) {
-        try {
-            dataOutputStream.writeBytes("HTTP/1.1 400 BAD REQUEST" + errorMessage + "\r\n");
-            dataOutputStream.writeBytes("Server: jwp-was(robby) \r\n");
-            dataOutputStream.writeBytes("Connection: close \r\n");
-            dataOutputStream.flush();
-        } catch (IOException ex) {
-            ex.printStackTrace();
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public Map<String, String> getHeaderFields() {
+        return Collections.unmodifiableMap(headerFields);
+    }
+
+    public Optional<byte[]> getBody() {
+        return body;
+    }
+
+    public void setResponseLine(HttpRequest httpRequest, HttpStatus httpStatus) throws IOException, URISyntaxException {
+        HttpMethod httpMethod = httpRequest.getHttpMethod();
+        this.httpStatus = httpStatus;
+        this.version = httpRequest.getVersion();
+        if(httpMethod != HttpMethod.POST && httpMethod != HttpMethod.PUT) {
+            this.body = Optional.of(getResponseBody(httpRequest));
         }
     }
 }
