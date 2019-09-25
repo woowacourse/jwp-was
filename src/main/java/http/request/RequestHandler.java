@@ -26,25 +26,28 @@ public class RequestHandler {
         return HttpRequest.of(requestLine, requestHeader, requestBody);
     }
 
-    private RequestBody createRequestBody(RequestHeader requestHeader) throws IOException {
-        String body = "";
-        if (requestHeader.getHeader("Content-Length") != null) {
-            body = IOUtils.readData(br, Integer.parseInt(requestHeader.getHeader("Content-Length")));
-        }
-        return RequestBody.of(body);
+    private RequestLine createRequestStartLine() throws IOException {
+        String startLine = br.readLine();
+        return RequestLine.of(startLine);
     }
 
     private RequestHeader createRequestHeader() throws IOException {
         List<String> header = new ArrayList<>();
         String line;
-        while (!(line = br.readLine()).equals("")) {
+        while (!("".equals(line = br.readLine()))) {
             header.add(line);
+            logger.debug("requestHeader: {}", line);
         }
+
         return RequestHeader.of(header);
     }
 
-    private RequestLine createRequestStartLine() throws IOException {
-        String startLine = br.readLine();
-        return RequestLine.of(startLine);
+    private RequestBody createRequestBody(RequestHeader requestHeader) throws IOException {
+        if (requestHeader.getHeader(HttpRequest.CONTENT_LENGTH_NAME) != null) {
+            byte[] body = IOUtils.readData(br, Integer.parseInt(requestHeader.getHeader(HttpRequest.CONTENT_LENGTH_NAME))).getBytes();
+            return RequestBody.of(body);
+        }
+
+        return RequestBody.of("".getBytes());
     }
 }
