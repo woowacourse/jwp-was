@@ -3,6 +3,8 @@ package http;
 import java.util.Arrays;
 
 public enum HttpMimeType {
+    X_WWW_FORM_URLENCODED("application/x-www-form-urlencoded", ""),
+    XML("application/xml", "xml"),
     PLAIN("text/plain", "txt"),
     HTML("text/html", "html"),
     CSS("text/css", "css"),
@@ -12,13 +14,15 @@ public enum HttpMimeType {
     WEBP("image/webp", "webp"),
     APNG("image/apng", "apng"),
     MP4("video/mp4", "mp4"),
-    XML("application/xml", "xml"),
     WOFF("font/woff", "woff"),
     TTF("font/ttf", "ttf"),
     OTF("font/otf", "otf");
 
     public static final HttpMimeType DEFAULT_MEDIA_TYPE = PLAIN;
+
     private static final String ALL_TYPE = "*/*";
+    private static final String ACCEPT_DELIMITER = ",";
+    private static final String VARIANT_DELIMITER = ";";
 
     private String mimeType;
     private String extension;
@@ -37,7 +41,7 @@ public enum HttpMimeType {
     }
 
     private static String extractBestVariantFrom(String accept) {
-        String[] variants = accept.split(",");
+        String[] variants = accept.split(ACCEPT_DELIMITER);
         if (variants.length > 0) {
             return extractMimeType(variants[0]);
         }
@@ -45,7 +49,7 @@ public enum HttpMimeType {
     }
 
     private static String extractMimeType(String variant) {
-        String[] splicedVariant = variant.split(";");
+        String[] splicedVariant = variant.split(VARIANT_DELIMITER);
         if (splicedVariant.length > 0) {
             return splicedVariant[0];
         }
@@ -64,6 +68,10 @@ public enum HttpMimeType {
                 .filter(mimeType -> mimeType.extension.equals(extension))
                 .findFirst()
                 .orElse(PLAIN);
+    }
+
+    public boolean match(String mimeType) {
+        return this.mimeType.equals(mimeType);
     }
 
     @Override

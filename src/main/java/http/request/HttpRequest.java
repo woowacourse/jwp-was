@@ -7,6 +7,7 @@ import utils.ExtensionParser;
 
 import static http.HttpHeaders.ACCEPT;
 import static http.HttpHeaders.CONTENT_TYPE;
+import static http.HttpMimeType.X_WWW_FORM_URLENCODED;
 
 public class HttpRequest {
     private HttpRequestLine requestLine;
@@ -25,10 +26,14 @@ public class HttpRequest {
         if (HttpMethod.GET.match(requestLine.getMethod())) {
             return requestLine.getUri().getQueryParams();
         }
-        if ("application/x-www-form-urlencoded".equals(headers.getHeader(CONTENT_TYPE))) {
+        if (existQueryParamsInBody()) {
             return body;
         }
         return null;
+    }
+
+    private boolean existQueryParamsInBody() {
+        return X_WWW_FORM_URLENCODED.match(headers.getHeader(CONTENT_TYPE));
     }
 
     public HttpMethod getMethod() {
