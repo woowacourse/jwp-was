@@ -11,9 +11,11 @@ import java.net.URISyntaxException;
 public class ResponseBody {
     private static final Logger log = LoggerFactory.getLogger(ResponseBody.class);
 
+    private String path;
     private byte[] body;
 
     public ResponseBody(String path) {
+        this.path = path;
         try {
             this.body = FileIoUtils.loadFileFromClasspath(FilePathUtils.getResourcePath(path));
         } catch (IOException | URISyntaxException e) {
@@ -21,11 +23,15 @@ public class ResponseBody {
         }
     }
 
-    public int getLength() {
+    public int getBodyLength() {
         return body.length;
     }
 
     public byte[] getBody() {
         return body;
+    }
+
+    public String getPath() {
+        return path;
     }
 }
