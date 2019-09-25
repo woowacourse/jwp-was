@@ -1,19 +1,25 @@
 package webserver.controller;
 
 import webserver.controller.request.HttpRequest;
-import webserver.controller.request.header.ContentType;
+import webserver.controller.request.header.HttpMethod;
 import webserver.controller.response.HttpResponse;
 
-public class AbstractController {
-    public static void movePage(HttpRequest httpRequest, HttpResponse httpResponse) {
-        try {
-            ContentType contentType = httpRequest.getContentType();
-            byte[] body = httpRequest.getResponseBody(contentType);
-            httpResponse.response200Header(body.length, contentType);
-            httpResponse.responseBody(body);
-        } catch (Exception e) {
-            httpResponse.badRequest(e.getMessage());
-        }
+import java.util.HashMap;
+
+public abstract class AbstractController implements Controller {
+    private HashMap<HttpMethod, Controller> controllerMethods = new HashMap<>();
+
+    AbstractController() {
+        controllerMethods.put(HttpMethod.GET, this::doGet);
+        controllerMethods.put(HttpMethod.POST, this::doPost);
     }
 
+    @Override
+    public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
+        controllerMethods.get(httpRequest.getHttpMethod()).service(httpRequest,httpResponse);
+    }
+
+    public abstract void doGet(HttpRequest httpRequest, HttpResponse httpResponse);
+
+    public abstract void doPost(HttpRequest httpRequest, HttpResponse httpResponse);
 }
