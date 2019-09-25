@@ -1,6 +1,7 @@
 package http.request;
 
 import java.util.Map;
+import java.util.Optional;
 
 public class HttpRequestHeader {
     private Map<String, String> fields;
@@ -17,6 +18,14 @@ public class HttpRequestHeader {
         }
 
         return length;
+    }
+
+    public String getHeader(String key) {
+        return Optional.ofNullable(this.fields.get(key)).orElseThrow(IllegalArgumentException::new);
+    }
+
+    public boolean isContainKey(String key) {
+        return fields.containsKey(key);
     }
 
     @Override

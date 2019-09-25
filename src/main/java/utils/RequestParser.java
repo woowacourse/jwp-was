@@ -15,6 +15,9 @@ import java.util.Map;
 
 public class RequestParser {
 
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String FORM_DATA_HEADER = "application/x-www-form-urlencoded";
+
     public static HttpRequest parse(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
@@ -22,11 +25,16 @@ public class RequestParser {
         HttpRequestHeader httpRequestHeader = readHeaders(bufferedReader);
 
         HttpRequestBody httpRequestBody = new HttpRequestBody(new byte[0]);
-        QueryParameter queryParameter = QueryParameter.empty();
         if (httpRequestHeader.getContentLength() != 0) {
             httpRequestBody = readBody(bufferedReader, httpRequestHeader.getContentLength());
+        }
+
+        QueryParameter queryParameter = QueryParameter.empty();
+        if (httpRequestHeader.isContainKey(CONTENT_TYPE)
+                && httpRequestHeader.getHeader(CONTENT_TYPE).equals(FORM_DATA_HEADER)) {
             queryParameter = QueryParameter.of(new String(httpRequestBody.getBody()));
         }
+
         return new HttpRequest(httpRequestLine, httpRequestHeader, queryParameter, httpRequestBody);
     }
 
