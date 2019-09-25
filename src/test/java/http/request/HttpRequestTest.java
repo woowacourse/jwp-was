@@ -19,13 +19,16 @@ public class HttpRequestTest {
 
         HttpRequest httpRequest = HttpRequestParser.parse(in);
 
-        assertThat(httpRequest.getRequestLine()).isEqualTo(new RequestLine(
-                new Url("/user/create"), HttpMethod.GET, HttpVersion.HTTP_1_1));
+        RequestLine requestLine = httpRequest.getRequestLine();
+        assertThat(requestLine.getHttpMethod()).isEqualTo(HttpMethod.GET);
+        assertThat(requestLine.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
+        assertThat(requestLine.getUrl()).isEqualTo(new Url("/user/create?userId=javajigi&password=password&name=JaeSung"));
+
         assertThat(httpRequest.getHttpHeader().get("Host")).isEqualTo("localhost:8080");
         assertThat(httpRequest.getHttpHeader().get("Connection")).isEqualTo("keep-alive");
         assertThat(httpRequest.getHttpHeader().get("Accept")).isEqualTo("*/*");
         assertThat(httpRequest.getHttpRequestParams()).isEqualTo(HttpRequestParams.of("userId=javajigi&password=password&name=JaeSung"));
-        assertThat(httpRequest.getHttpRequestBody()).isEqualTo(new HttpRequestBody(""));
+        assertThat(httpRequest.getHttpRequestBody().getBody()).isEqualTo("");
     }
 
     @Test
@@ -34,8 +37,11 @@ public class HttpRequestTest {
 
         HttpRequest httpRequest = HttpRequestParser.parse(in);
 
-        assertThat(httpRequest.getRequestLine()).isEqualTo(new RequestLine(
-                new Url("/user/create"), HttpMethod.POST, HttpVersion.HTTP_1_1));
+        RequestLine requestLine = httpRequest.getRequestLine();
+        assertThat(requestLine.getHttpMethod()).isEqualTo(HttpMethod.POST);
+        assertThat(requestLine.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
+        assertThat(requestLine.getUrl()).isEqualTo(new Url("/user/create"));
+
         assertThat(httpRequest.getHttpHeader().get("Host")).isEqualTo("localhost:8080");
         assertThat(httpRequest.getHttpHeader().get("Connection")).isEqualTo("keep-alive");
         assertThat(httpRequest.getHttpHeader().get("Content-Length")).isEqualTo("46");
