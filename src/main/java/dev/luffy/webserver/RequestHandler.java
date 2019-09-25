@@ -6,11 +6,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.Socket;
 
-import dev.luffy.http.RequestMapper;
 import dev.luffy.http.request.HttpRequest;
 import dev.luffy.http.response.HttpResponse;
 
@@ -33,21 +30,9 @@ public class RequestHandler implements Runnable {
             HttpRequest request = new HttpRequest(in);
             HttpResponse response = new HttpResponse(out);
 
-            if (request.isStaticRequest()) {
-                response.ok(request);
-                return;
-            }
+            ResponseHandler.run(request, response);
 
-            Method controllerMethod = RequestMapper.get(request.getPath());
-
-            if (controllerMethod == null) {
-                response.notFound(request);
-                return;
-            }
-
-            controllerMethod.invoke(null, request, response);
-
-        } catch (IOException | IllegalAccessException | InvocationTargetException e) {
+        } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
