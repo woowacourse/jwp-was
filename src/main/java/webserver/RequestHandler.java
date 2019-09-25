@@ -35,13 +35,15 @@ public class RequestHandler implements Runnable {
             RequestUrl url = requestInformation.extractUrl();
             log.debug("this is the url ==> {}", url.getDestinationFolderUrlPath());
             Request request = new Request(method, url, requestInformation);
+            Response response = new Response();
 
             ControllerFactory factory = new ControllerFactory();
             Controller controller = factory.mappingController(request);
-            Response response = controller.createResponse(request);
+            controller.processResponse(request, response);
 
             DataOutputStream dos = new DataOutputStream(out);
-            response.doResponse(dos);
+            dos.write(response.createBytes());
+            dos.flush();
         } catch (Exception e) {
             log.error(e.getMessage());
         }

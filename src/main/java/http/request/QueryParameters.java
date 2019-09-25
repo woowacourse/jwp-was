@@ -1,5 +1,6 @@
 package http.request;
 
+import java.util.Collections;
 import java.util.Map;
 
 public class QueryParameters {
@@ -11,5 +12,9 @@ public class QueryParameters {
 
     public String getParameter(String key) {
         return queryParameters.get(key);
+    }
+
+    public Map<String, String> getQueryParameters() {
+        return Collections.unmodifiableMap(queryParameters);
     }
 }

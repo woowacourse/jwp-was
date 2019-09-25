@@ -2,15 +2,11 @@ package controller;
 
 import http.request.Request;
 import http.request.RequestMethod;
-import http.response.RedirectResponse;
-import http.response.Response;
-import http.response.Response2;
+import http.response.*;
 import service.UserService;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class UserController implements Controller {
     private List<RequestMethod> allowedMethods = Arrays.asList(RequestMethod.POST);
@@ -25,12 +21,16 @@ public class UserController implements Controller {
     }
 
     @Override
-    public void processResponse(Request request, Response2 response) {
+    public void processResponse(Request request, Response response) {
         createUserAndRedirect(request, response);
     }
 
-    private Response createUserAndRedirect(Request request, Response2 response) {
-        request.get
+    private void createUserAndRedirect(Request request, Response response) {
+        userService.createUser(request.getQueryParameters().getQueryParameters());
+        response.setResponseStatus(ResponseStatus.FOUND);
+        response.setResponseHeaders(new ResponseHeaders());
+        response.setEmptyResponseBody();
+        response.addResponseHeaders("Location: ", "http://localhost:8080/index.html");
     }
 
     private boolean isAllowedUrlPath(String originalUrlPath) {

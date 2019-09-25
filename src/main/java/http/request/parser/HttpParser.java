@@ -44,7 +44,7 @@ public class HttpParser {
         }
     }
 
-    private static void putParametersIfPresent(BufferedReader br, Map<String, String> requestInformation) throws IOException {
+    private static void putParametersIfPresent(BufferedReader br, Map<String, String> requestInformation) {
 
         parsers.stream()
                 .filter(parser -> parser.isParseable(requestInformation))

@@ -15,6 +15,10 @@ public class Request {
         this.requestInformation = requestInformation;
     }
 
+    public ControllerMapper createControllerMapper() {
+        return new ControllerMapper(requestMethod, url.getOriginalUrlPath());
+    }
+
     public RequestUrl getUrl() {
         return url;
     }
@@ -23,7 +27,7 @@ public class Request {
         return requestInformation;
     }
 
-    public ControllerMapper createControllerMapper() {
-        return new ControllerMapper(requestMethod, url.getOriginalUrlPath());
+    public QueryParameters getQueryParameters() {
+        return queryParameters;
     }
 }

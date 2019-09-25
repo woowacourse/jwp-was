@@ -31,16 +31,16 @@ public class RequestInformation {
     }
 
     public QueryParameters createQueryParametes() {
-
         Map<String, String> params = new HashMap<>();
-        String queryParams = requestInformation.get("Query-Parameters:");
-        String[] tokens = queryParams.split("&");
-        Arrays.stream(tokens)
-                .forEach(token -> {
-                    String[] keyValues = token.split("=");
-                    params.put(keyValues[0], keyValues[1]);
-                });
-
+        if (requestInformation.get("Query-Parameters:") != null) {
+            String queryParams = requestInformation.get("Query-Parameters:");
+            String[] tokens = queryParams.split("&");
+            Arrays.stream(tokens)
+                    .forEach(token -> {
+                        String[] keyValues = token.split("=");
+                        params.put(keyValues[0], keyValues[1]);
+                    });
+        }
         return new QueryParameters(params);
     }
 }
