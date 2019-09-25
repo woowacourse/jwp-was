@@ -10,35 +10,33 @@ import webserver.response.ResponseMetaDataGenerator;
 
 import java.io.IOException;
 
-import static webserver.request.RequestHeaderFieldKeys.JSESSIONID;
-
 public class UserListPageController extends AbstractController {
 
     @Override
     public void service(final HttpRequest request, final HttpResponse response) throws IOException {
-        ResponseMetaData responseMetaData = ResponseMetaDataGenerator.buildDefaultOkMetaData(request);
-        if (isNotLogin(request)) {
-            responseMetaData = ResponseMetaDataGenerator.buildDefaultFoundMetaData(request, "/user/login.html");
+        ResponseMetaData responseMetaData = ResponseMetaDataGenerator.buildDefaultFoundMetaData(request, "/user/login.html");
+        if (isLogin(request)) {
+            responseMetaData = ResponseMetaDataGenerator.buildDefaultOkMetaData(request);
         }
 
         response.setResponseMetaData(responseMetaData);
         doGet(request, response);
     }
 
-    private boolean isNotLogin(final HttpRequest request) {
-        return request.findHeaderField(JSESSIONID) == null;
+    private boolean isLogin(final HttpRequest request) {
+        return request.hasJSessionId();
     }
 
     @Override
     protected void doGet(final HttpRequest request, final HttpResponse response) throws IOException {
-        if (isNotLogin(request)) {
-            response.makeResponse();
+        if (isLogin(request)) {
+            ObjectsForHandlebars objectsForHandlebars = new ObjectsForHandlebars();
+            objectsForHandlebars.put("users", DataBase.findAll());
+
+            response.makeResponse(objectsForHandlebars);
             return;
         }
 
-        ObjectsForHandlebars objectsForHandlebars = new ObjectsForHandlebars();
-        objectsForHandlebars.put("users", DataBase.findAll());
-
-        response.makeResponse(objectsForHandlebars);
+        response.makeResponse();
     }
 }
