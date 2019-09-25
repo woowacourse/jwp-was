@@ -25,6 +25,16 @@ public class RequestHelper {
                     "Connection: keep-alive\n" +
                     "Accept: */*";
 
+    protected final String requestPostWithQuery =
+            "POST /user/create HTTP/1.1\n" +
+                    "Host: localhost:8080\n" +
+                    "Connection: keep-alive\n" +
+                    "Content-Length: 59\n" +
+                    "Content-Type: application/x-www-form-urlencoded\n" +
+                    "Accept: */*\n" +
+                    "\n" +
+                    "userId=javajigi&password=password";
+
     protected InputStream inputStream(final String requestInput) {
         return new ByteArrayInputStream(requestInput.getBytes());
     }

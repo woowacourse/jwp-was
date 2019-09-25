@@ -1,7 +1,8 @@
 package webserver;
 
-import controller.Controller;
-import controller.UserController;
+import mvc.controller.Controller;
+import mvc.controller.impl.LoginController;
+import mvc.controller.impl.UserController;
 import utils.DataConverter;
 import utils.FileIoUtils;
 import utils.FileLoader;
@@ -26,6 +27,7 @@ public class RequestDispatcher {
 
     static {
         requestUrls.put("/user/create", new UserController());
+        requestUrls.put("/user/login", new LoginController());
     }
 
     public static byte[] forward(final IOUtils ioUtils) {

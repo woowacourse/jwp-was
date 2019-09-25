@@ -1,7 +1,8 @@
-package controller;
+package mvc.controller.impl;
 
-import db.DataBase;
-import model.User;
+import mvc.controller.AbstractController;
+import mvc.db.DataBase;
+import mvc.model.User;
 import org.slf4j.Logger;
 import webserver.message.request.Request;
 import webserver.message.request.RequestBody;
@@ -12,6 +13,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class UserController extends AbstractController {
     private static final Logger LOG = getLogger(UserController.class);
 
+    @Override
     protected Response doPost(final Request request) {
         final RequestBody body = request.getBody();
         final String userId = body.getQueryValue("userId");
