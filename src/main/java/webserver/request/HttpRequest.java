@@ -31,7 +31,7 @@ public class HttpRequest {
         return body.getBody(key);
     }
 
-    public String getHeader(String key) {
-        return header.getHeader(key);
+    public boolean isFile() {
+        return requestLine.isFile();
     }
 }

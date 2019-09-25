@@ -26,6 +26,10 @@ public class RequestUri {
         return queryStrings.get(key);
     }
 
+    public boolean isFile() {
+        return absPath.split("\\.").length >= 2;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
