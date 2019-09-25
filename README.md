@@ -70,4 +70,4 @@
 - [x] file일 경우만 FileServlet으로 가게 변경
 - [x] response 만드는 부분 메소드 추출하기
 - [x] mappingHandler의 servlets Map의 value 타입을 Object -> HttpServlet으로 바꾸기
-- [ ] response 생성 방식 변경 (requestHandler에서 generateErrorResponse 함수를 제거해보자)
+- [x] response 생성 방식 변경 (requestHandler에서 generateErrorResponse 함수를 제거해보자)

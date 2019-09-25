@@ -7,8 +7,6 @@ import webserver.handler.MappingHandler;
 import webserver.parser.HttpRequestParser;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
-import webserver.response.HttpStatus;
-import webserver.response.ResponseHeader;
 import webserver.servlet.HttpServlet;
 
 import java.io.BufferedReader;
@@ -48,15 +46,8 @@ public class RequestHandler implements Runnable {
             HttpResponse httpResponse = httpServlet.run(request);
             httpResponse.render(new DataOutputStream(out));
         } catch (ErrorResponseException e) {
-            HttpResponse httpResponse = generateErrorResponse(e.getHttpStatus(), e.getMessage());
+            HttpResponse httpResponse = HttpResponse.error(e.getHttpStatus(), e.getMessage());
             httpResponse.render(new DataOutputStream(out));
         }
-    }
-
-    private HttpResponse generateErrorResponse(HttpStatus status, String errorMessage) {
-        byte[] body = errorMessage.getBytes();
-        ResponseHeader responseHeader = new ResponseHeader();
-        responseHeader.setContentLegthAndType(body.length, "text/html;charset=utf-8");
-        return new HttpResponse(status, responseHeader, body);
     }
 }

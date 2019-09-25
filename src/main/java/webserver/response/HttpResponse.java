@@ -17,6 +17,12 @@ public class HttpResponse {
         this.body = body;
     }
 
+    public static HttpResponse error(HttpStatus httpStatus, String message) {
+        byte[] body = message.getBytes();
+        ResponseHeader header = ResponseHeader.error(body.length);
+        return new HttpResponse(httpStatus, header, body);
+    }
+
     public void render(DataOutputStream dos) throws IOException {
         responseLine(dos);
         responseHeader(dos);
