@@ -67,10 +67,6 @@ public class HttpResponse {
         return responseExport;
     }
 
-    public ResponseStatus getResponseStatus() {
-        return responseStatus;
-    }
-
     private void setResponseStatus(ResponseStatus responseStatus) {
         this.responseStatus = responseStatus;
     }

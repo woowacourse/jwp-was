@@ -2,9 +2,7 @@ package webserver.response;
 
 import java.util.Arrays;
 
-// TODO: 2019-09-19 개선 방안 찾아보기
 public enum MediaType {
-
     ALL_VALUE("*", "*/*"),
     IMAGE_GIF_VALUE("gif", "image/gif"),
     IMAGE_JPEG_VALUE("jpeg", "image/jpeg"),
