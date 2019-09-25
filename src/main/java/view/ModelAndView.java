@@ -40,7 +40,7 @@ public class ModelAndView implements View {
     }
 
     private void validateFileExist() {
-        String path = "./templates" + viewName;
+        String path = "./templates/" + viewName;
         if (!FileIoUtils.isExistFile(path)) {
             throw new NotFoundResourceException();
         }
