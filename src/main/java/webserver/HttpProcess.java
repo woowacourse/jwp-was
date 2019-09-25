@@ -2,7 +2,6 @@ package webserver;
 
 import http.controller.Controller;
 import http.controller.ControllerHandler;
-import http.exception.NotFoundException;
 import http.request.HttpRequest;
 import http.request.RequestHandler;
 import http.response.HttpResponse;
@@ -26,16 +25,13 @@ public class HttpProcess implements Runnable {
     public void run() {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
-        HttpRequest httpRequest = null;
-        HttpResponse httpResponse = null;
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            RequestHandler requestHandler = new RequestHandler(new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
-            httpRequest = requestHandler.create();
-            logger.debug("request path : {}", httpRequest.getPath());
 
-            ResponseHandler responseHandler = new ResponseHandler();
-            httpResponse = responseHandler.create();
+            RequestHandler requestHandler = new RequestHandler(new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
+            HttpRequest httpRequest = requestHandler.create();
+            HttpResponse httpResponse = ResponseHandler.create(httpRequest);
+            logger.debug("request path : {}", httpRequest.getPath());
 
             Controller controller = ControllerHandler.findByPath(httpRequest.getPath());
             controller.service(httpRequest, httpResponse);
@@ -43,9 +39,6 @@ public class HttpProcess implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
             dos.writeBytes(httpResponse.toString());
             responseBody(dos, httpResponse.getBody());
-
-        } catch (NotFoundException e) {
-            httpResponse.sendNotFound();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
