@@ -1,5 +1,8 @@
 package webserver.domain;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -98,5 +101,16 @@ public class Response {
                 .allocate(header.length + NEW_LINE.length + bodyLength)
                 .put(header).put(NEW_LINE).put(this.body.getBody())
                 .array();
+    }
+
+    public void sendToClient(final OutputStream outputStream) {
+        final DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+        final byte[] body = this.toBytes();
+        try {
+            dataOutputStream.write(body, 0, body.length);
+            dataOutputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
