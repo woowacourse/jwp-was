@@ -1,7 +1,6 @@
 package controller;
 
 import http.request.Request;
-import http.response.ExceptionResponse;
 import http.response.Response;
 
 import java.io.IOException;

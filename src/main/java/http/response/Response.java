@@ -46,4 +46,16 @@ public class Response {
     public void setEmptyResponseBody() {
         this.responseBody = new ResponseBody(null);
     }
+
+    public ResponseStatus getResponseStatus() {
+        return responseStatus;
+    }
+
+    public ResponseHeaders getResponseHeaders() {
+        return responseHeaders;
+    }
+
+    public ResponseBody getResponseBody() {
+        return responseBody;
+    }
 }

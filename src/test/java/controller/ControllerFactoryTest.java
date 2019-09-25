@@ -4,9 +4,12 @@ import http.request.Request;
 import http.request.RequestInformation;
 import http.request.RequestMethod;
 import http.request.RequestUrl;
+import http.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +19,7 @@ public class ControllerFactoryTest {
 
     @Test
     @DisplayName("get request 넣었을 시 원하는 Controller가 나오는지 테스트")
-    void createFileController() {
+    void createFileController() throws IOException, URISyntaxException {
         RequestMethod method = RequestMethod.GET;
         RequestUrl url = RequestUrl.from("/index.html");
         Map<String, String> information = new HashMap<>();
@@ -26,8 +29,13 @@ public class ControllerFactoryTest {
         RequestInformation requestInformation = new RequestInformation(information);
 
         Request request = new Request(method, url, requestInformation);
+        Response response = new Response();
 
         ControllerFactory factory = new ControllerFactory();
+        Controller controller = factory.mappingController(request);
+
+        controller.processResponse(request, response);
+
         assertThat(factory.mappingController(request).getClass()).isEqualTo(FileController.class);
     }
 

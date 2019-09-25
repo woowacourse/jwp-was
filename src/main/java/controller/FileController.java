@@ -41,9 +41,4 @@ public class FileController implements Controller {
         return allowedMethods.stream()
                 .anyMatch(method -> controllerMapper.getRequestMethod() == method);
     }
-
-
-    public Response createGetResponse(Request request) {
-        return new FileResponse(request.getUrl().getDestinationFolderUrlPath(), request.getUrl().getRequestContentType().getContentType());
-    }
 }
