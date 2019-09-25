@@ -1,12 +1,12 @@
-package controller.user;
+package controller.page;
 
 import controller.AbstractController;
 import db.DataBase;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
-import webserver.response.HttpStatus;
 import webserver.response.ObjectsForHandlebars;
 import webserver.response.ResponseMetaData;
+import webserver.response.ResponseMetaDataGenerator;
 
 import java.io.IOException;
 
@@ -16,9 +16,9 @@ public class UserListPageController extends AbstractController {
 
     @Override
     public void service(final HttpRequest request, final HttpResponse response) throws IOException {
-        ResponseMetaData responseMetaData = buildSuccessfulResponseMetaData(request);
+        ResponseMetaData responseMetaData = ResponseMetaDataGenerator.buildDefaultOkMetaData(request);
         if (isNotLogin(request)) {
-            responseMetaData = buildFailedResponseMetaData(request);
+            responseMetaData = ResponseMetaDataGenerator.buildDefaultFoundMetaData(request, "/user/login.html");
         }
 
         response.setResponseMetaData(responseMetaData);
@@ -27,20 +27,6 @@ public class UserListPageController extends AbstractController {
 
     private boolean isNotLogin(final HttpRequest request) {
         return request.findHeaderField(JSESSIONID) == null;
-    }
-
-    private ResponseMetaData buildSuccessfulResponseMetaData(final HttpRequest request) {
-        return ResponseMetaData.Builder
-                .builder(request, HttpStatus.OK)
-                .contentType(request.findContentType())
-                .build();
-    }
-
-    private ResponseMetaData buildFailedResponseMetaData(final HttpRequest request) {
-        return ResponseMetaData.Builder
-                .builder(request, HttpStatus.FOUND)
-                .location("/user/login.html")
-                .build();
     }
 
     @Override

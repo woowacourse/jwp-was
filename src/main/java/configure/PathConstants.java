@@ -8,4 +8,7 @@ public class PathConstants {
     public static final String ERROR_PAGE_PATH = "/error.html";
 
     public static final String DEFAULT_REDIRECT_LOCATION = "/index.html";
+
+    private PathConstants() {
+    }
 }

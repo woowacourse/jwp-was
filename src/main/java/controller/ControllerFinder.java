@@ -1,6 +1,11 @@
 package controller;
 
-import controller.user.*;
+import controller.page.IndexPageController;
+import controller.page.UserListPageController;
+import controller.page.UserLoginPageController;
+import controller.page.UserSignUpPageController;
+import controller.user.UserLoginController;
+import controller.user.UserSignUpController;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +15,7 @@ public class ControllerFinder {
     private static Map<String, Controller> controllers = new HashMap<>();
 
     static {
-        controllers.put("/index.html", new IndexController());
+        controllers.put("/index.html", new IndexPageController());
         controllers.put("/user/login.html", new UserLoginPageController());
         controllers.put("/user/form.html", new UserSignUpPageController());
         controllers.put("/user/list.html", new UserListPageController());

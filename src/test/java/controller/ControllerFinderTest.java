@@ -1,5 +1,6 @@
 package controller;
 
+import controller.page.IndexPageController;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -9,7 +10,7 @@ class ControllerFinderTest {
     @Test
     void findController() {
         Controller controller = ControllerFinder.findController("/index.html");
-        assertThat(controller).isExactlyInstanceOf(IndexController.class);
+        assertThat(controller).isExactlyInstanceOf(IndexPageController.class);
     }
 
     @Test

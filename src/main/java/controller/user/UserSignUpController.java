@@ -5,8 +5,8 @@ import db.DataBase;
 import model.User;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
-import webserver.response.HttpStatus;
 import webserver.response.ResponseMetaData;
+import webserver.response.ResponseMetaDataGenerator;
 
 import java.io.IOException;
 
@@ -14,10 +14,7 @@ public class UserSignUpController extends AbstractController {
 
     @Override
     public void service(final HttpRequest request, final HttpResponse response) throws IOException {
-        ResponseMetaData responseMetaData = ResponseMetaData.Builder
-                .builder(request, HttpStatus.FOUND)
-                .location("/index.html")
-                .build();
+        ResponseMetaData responseMetaData = ResponseMetaDataGenerator.buildDefaultFoundMetaData(request, "/index.html");
         response.setResponseMetaData(responseMetaData);
 
         doPost(request, response);
