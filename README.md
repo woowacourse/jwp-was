@@ -82,3 +82,11 @@
 - [x] loginservlet에서 아이디/비번이 일치하면 Set-Cookie: logined=true; Path=/
 - [x] loginservlet에서 아이디/비번이 일치하면 /user/login_failed.html 리다이렉트
 - [x] loginservlet에서 아이디/비번이 일치하지 않으면 Set-Cookie: logined=false; Path=/
+
+요구사항 2
+
+- [x] /user/list.html로 가는 버튼의 url 값을 /user/list로 변경
+- [ ] /user/list.html에 handlebars 적용
+- [ ] UserListServelt 만들기(get, /user/list)
+- [ ] request header의 Set-Cookie가 logined=true일 경우 UserList를 /user/list.html에 뿌려서 전달한다. (handlebars 이용)
+- [ ] 로그인 안한 상태면 /login.html로 리다이렉트 시킨다.
