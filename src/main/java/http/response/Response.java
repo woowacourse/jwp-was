@@ -39,7 +39,7 @@ public class Response {
         if (responseBody.hasBody()) {
             sb.append(new String(responseBody.getBody()));
         }
-        System.out.println("hello");
+        
         return sb.toString().getBytes();
     }
 
