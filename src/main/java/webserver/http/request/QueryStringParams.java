@@ -21,7 +21,7 @@ public class QueryStringParams {
     }
 
     private static Map<String, String> extractQueryParams(final String queryString) {
-        if (EMPTY.equals(queryString)) {
+        if (EMPTY.equals(queryString) || queryString == null) {
             return Collections.emptyMap();
         }
 
@@ -45,6 +45,10 @@ public class QueryStringParams {
 
     public String get(final String key) {
         return queryParams.get(key);
+    }
+
+    public Map<String, String> getQueryParams() {
+        return queryParams;
     }
 
     @Override
