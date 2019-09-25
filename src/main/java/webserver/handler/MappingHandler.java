@@ -6,6 +6,7 @@ import webserver.response.HttpStatus;
 import webserver.servlet.FileServlet;
 import webserver.servlet.HomeServlet;
 import webserver.servlet.HttpServlet;
+import webserver.servlet.LoginServlet;
 import webserver.servlet.UserCreateServlet;
 
 import java.util.HashMap;
@@ -19,6 +20,7 @@ public class MappingHandler {
     static {
         servlets.put("/", new HomeServlet());
         servlets.put("/user/create", new UserCreateServlet());
+        servlets.put("/user/login", new LoginServlet());
         fileServlet = new FileServlet();
     }
 

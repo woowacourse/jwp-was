@@ -13,8 +13,8 @@ public class User {
         this.email = email;
     }
 
-    public boolean isMatchLoginInfo(String targetId, String targetPassword) {
-        return userId.equals(targetId) && password.equals(targetPassword);
+    public boolean isMatchPassword(String targetPassword) {
+        return password.equals(targetPassword);
     }
 
     public String getUserId() {

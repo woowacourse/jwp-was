@@ -20,16 +20,11 @@ class UserTest {
 
     @Test
     void login_true() {
-        assertTrue(signupUser.isMatchLoginInfo(USER_ID, USER_PASSWORD));
-    }
-
-    @Test
-    void login_false_id() {
-        assertFalse(signupUser.isMatchLoginInfo(USER_ID + "a", USER_PASSWORD));
+        assertTrue(signupUser.isMatchPassword(USER_PASSWORD));
     }
 
     @Test
     void login_false_password() {
-        assertFalse(signupUser.isMatchLoginInfo(USER_ID, USER_PASSWORD + "a"));
+        assertFalse(signupUser.isMatchPassword(USER_PASSWORD + "a"));
     }
 }
