@@ -77,7 +77,7 @@
 
 - [x] 회원가입에 DataBase.addUser() 로직 추가
 - [ ] LoginServelt 만들기(post, /user/login, userId=&password=)
-- [ ] User에 아이디와 비밀번호가 일치하는지 확인하는 함수 추가
+- [x] User에 아이디와 비밀번호가 일치하는지 확인하는 함수 추가
 - [ ] loginservlet에서 아이디/비번이 일치하면 /index.html 리다이렉트
 - [ ] loginservlet에서 아이디/비번이 일치하면 Set-Cookie: logined=true; Path=/
 - [ ] loginservlet에서 아이디/비번이 일치하면 /user/login_failed.html 리다이렉트
