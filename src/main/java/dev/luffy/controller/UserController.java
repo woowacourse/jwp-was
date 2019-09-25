@@ -14,6 +14,13 @@ public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
+    @RequestMapping("/user/form.html")
+    public static void formUser(HttpRequest request, HttpResponse response) {
+        logger.debug("request : {} & response : {}", request, response);
+
+        response.send200(request);
+    }
+
     @RequestMapping("/user/create")
     public static void createUser(HttpRequest request, HttpResponse response) {
 
