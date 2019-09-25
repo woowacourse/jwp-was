@@ -10,7 +10,13 @@ public class ContentTypeHandler {
     private static final String APPLICATION_CONTENT_TYPE_FORMAT = "application/%s";
     private static final String IMAGE_CONTENT_TYPE_FORMAT = "image/%s";
 
-    public static String type(String contentType) {
+    public static String type(String url) {
+        if (!url.contains(".")) {
+            url += ".html";
+        }
+
+        String contentType = url.substring(url.lastIndexOf(".") + 1);
+
         if (contentType.matches(REGEX_FOR_TEXT_CONTENT_TYPE)) {
             return String.format(TEXT_CONTENT_TYPE_FORMAT, contentType);
         }
