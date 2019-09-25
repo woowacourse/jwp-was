@@ -33,4 +33,10 @@ public class User {
     public String toString() {
         return "User [userId=" + userId + ", password=" + password + ", name=" + name + ", email=" + email + "]";
     }
+
+    public void checkPassword(String password) {
+        if (!this.password.equals(password)) {
+            throw new InvalidUserException();
+        }
+    }
 }

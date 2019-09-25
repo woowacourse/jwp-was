@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 
 public class DataBase {
     private static final Logger log = LoggerFactory.getLogger(DataBase.class);
@@ -18,7 +19,7 @@ public class DataBase {
     }
 
     public static User findUserById(String userId) {
-        return users.get(userId);
+        return Optional.ofNullable(users.get(userId)).orElseThrow(NotFoundEntityException::new);
     }
 
     public static Collection<User> findAll() {

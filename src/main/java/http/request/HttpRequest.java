@@ -55,4 +55,5 @@ public class HttpRequest {
     public HttpVersion getVersion() {
         return httpRequestStartLine.getHttpVersion();
     }
+
 }

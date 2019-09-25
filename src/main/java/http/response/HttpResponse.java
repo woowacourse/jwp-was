@@ -58,6 +58,15 @@ public class HttpResponse {
         this.body = new byte[]{};
     }
 
+    public void redirectResponseWithCookie(HttpVersion httpVersion, boolean cookie, String location) {
+        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.FOUND, httpVersion);
+        Map<String, String> header = new HashMap<>();
+        header.put("Location", location);
+        header.put("Set-Cookie", "logined=" + cookie + "; Path=/");
+        addHeader(header);
+        this.body = new byte[]{};
+    }
+
     public void internalServerError(HttpVersion httpVersion) {
         this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.INTERNAL_SERVER_ERROR, httpVersion);
         addHeader(new HashMap<>());
