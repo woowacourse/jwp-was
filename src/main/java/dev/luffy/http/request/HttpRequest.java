@@ -99,8 +99,8 @@ public class HttpRequest {
         return httpRequestBody.get(parameter);
     }
 
-    public boolean pathHasExtension() {
-        return httpRequestLine.hasExtension();
+    public boolean isStaticRequest() {
+        return httpRequestLine.hasExtension() && !httpRequestLine.getPath().contains(".html");
     }
 
     public String pathExtension() {

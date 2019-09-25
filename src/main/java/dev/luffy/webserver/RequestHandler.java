@@ -29,22 +29,23 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream();
              OutputStream out = connection.getOutputStream()) {
-            HttpRequest httpRequest = new HttpRequest(in);
-            HttpResponse httpResponse = new HttpResponse(out);
 
-            if (httpRequest.pathHasExtension()) {
-                httpResponse.staticFileResource(httpRequest);
+            HttpRequest request = new HttpRequest(in);
+            HttpResponse response = new HttpResponse(out);
+
+            if (request.isStaticRequest()) {
+                response.staticFileResource(request);
                 return;
             }
 
-            Method controllerMethod = RequestMapper.get(httpRequest.getPath());
+            Method controllerMethod = RequestMapper.get(request.getPath());
 
             if (controllerMethod == null) {
-                httpResponse.send404();
+                response.send404();
                 return;
             }
 
-            controllerMethod.invoke(null, httpRequest, httpResponse);
+            controllerMethod.invoke(null, request, response);
 
         } catch (IOException | IllegalAccessException | InvocationTargetException e) {
             logger.error(e.getMessage());
