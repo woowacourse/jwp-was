@@ -3,7 +3,6 @@ package webserver.controller.request.header;
 import exception.HttpMethodNotFoundException;
 
 import java.util.Arrays;
-import java.util.stream.Stream;
 
 public enum HttpMethod {
     GET("GET"),

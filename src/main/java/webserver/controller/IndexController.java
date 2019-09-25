@@ -1,14 +1,12 @@
 package webserver.controller;
 
-import exception.UnregisteredURLException;
 import exception.UnsupportedMethodException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import webserver.controller.request.HttpRequest;
 import webserver.controller.response.HttpResponse;
 
 public class IndexController extends AbstractController {
-    private IndexController() { }
+    private IndexController() {
+    }
 
     public static IndexController getInstance() {
         return LazyHolder.INSTANCE;
@@ -29,6 +27,6 @@ public class IndexController extends AbstractController {
 
     @Override
     public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        throw new UnregisteredURLException();
+        throw new UnsupportedMethodException();
     }
 }

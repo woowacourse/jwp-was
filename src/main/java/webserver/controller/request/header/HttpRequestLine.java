@@ -1,13 +1,6 @@
 package webserver.controller.request.header;
 
-import exception.ContentTypeNotFoundException;
-import jdk.jfr.ContentType;
-import utils.FileIoUtils;
 import webserver.controller.request.MimeType;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.net.URISyntaxException;
 
 public class HttpRequestLine {
     private final HttpMethod httpMethod;

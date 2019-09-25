@@ -1,7 +1,5 @@
 package webserver;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import webserver.controller.response.HttpResponse;
 import webserver.controller.response.HttpStatus;
 
@@ -12,7 +10,6 @@ import java.util.Map;
 import java.util.Optional;
 
 public class Renderer {
-    private static final Logger logger = LoggerFactory.getLogger(Renderer.class);
     private Renderer() {
     }
 
@@ -35,9 +32,9 @@ public class Renderer {
 
     private void renderResponseBody(HttpResponse httpResponse, DataOutputStream dataOutputStream) throws IOException {
         Optional<byte[]> maybeBody = httpResponse.getBody();
-        if(maybeBody.isPresent()) {
+        if (maybeBody.isPresent()) {
             byte[] body = maybeBody.get();
-            dataOutputStream.write(body,0,body.length);
+            dataOutputStream.write(body, 0, body.length);
             dataOutputStream.flush();
             return;
         }
@@ -52,7 +49,6 @@ public class Renderer {
     }
 
     private void renderResponseLine(HttpResponse httpResponse, DataOutputStream dataOutputStream, HttpStatus httpStatus) throws IOException {
-        logger.debug("{}", httpResponse.getVersion());
         dataOutputStream.writeBytes(httpResponse.getVersion() + " " + httpStatus.getStatusCode() + " " + httpStatus.getStatus() + " \r\n");
     }
 }

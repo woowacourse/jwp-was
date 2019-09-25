@@ -1,6 +1,5 @@
 package webserver.controller.response;
 
-import exception.HttpMethodNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import webserver.controller.request.HttpRequest;
@@ -9,7 +8,6 @@ import webserver.controller.request.header.HttpMethod;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.HashMap;
 import java.util.Map;
 
 import static exception.HttpMethodNotFoundException.HTTP_METHOD_NOT_FOUND_MESSAGE;
@@ -36,7 +34,7 @@ public class HttpResponseTests {
         httpResponse.responseOK(httpRequest);
 
         Map<String, String> responseHeaderFields = httpResponse.getHeaderFields();
-        assertThat(responseHeaderFields.get("Content-Type")).isEqualTo(MimeType.HTML.getMimeType()+";charset=utf-8\r\n");
+        assertThat(responseHeaderFields.get("Content-Type")).isEqualTo(MimeType.HTML.getMimeType() + ";charset=utf-8\r\n");
     }
 
     @Test
@@ -45,7 +43,7 @@ public class HttpResponseTests {
         when(httpRequest.getHttpMethod()).thenReturn(HttpMethod.POST);
         httpResponse = new HttpResponse(httpRequest);
         httpResponse.sendRedirect(redirectUrl);
-        Map<String,String> responseHeaderFields = httpResponse.getHeaderFields();
+        Map<String, String> responseHeaderFields = httpResponse.getHeaderFields();
         assertThat(responseHeaderFields.get("Location")).isEqualTo(redirectUrl);
         assertThat(responseHeaderFields.get("Connection")).isEqualTo("close");
     }
@@ -55,7 +53,7 @@ public class HttpResponseTests {
         when(httpRequest.getHttpMethod()).thenReturn(HttpMethod.POST);
         httpResponse = new HttpResponse(httpRequest);
         httpResponse.responseBadRequest(HTTP_METHOD_NOT_FOUND_MESSAGE);
-        Map<String,String> responseHeaderFields = httpResponse.getHeaderFields();
+        Map<String, String> responseHeaderFields = httpResponse.getHeaderFields();
         assertThat(responseHeaderFields.get("Server")).isEqualTo("jwp-was");
         assertThat(responseHeaderFields.get("Connection")).isEqualTo("close");
         assertThat(responseHeaderFields.get("message")).isEqualTo(HTTP_METHOD_NOT_FOUND_MESSAGE);

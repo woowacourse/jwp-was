@@ -16,7 +16,7 @@ public abstract class AbstractController implements Controller {
 
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
-        controllerMethods.get(httpRequest.getHttpMethod()).service(httpRequest,httpResponse);
+        controllerMethods.get(httpRequest.getHttpMethod()).service(httpRequest, httpResponse);
     }
 
     public abstract void doGet(HttpRequest httpRequest, HttpResponse httpResponse);

@@ -2,12 +2,9 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.controller.AbstractController;
 import webserver.controller.request.HttpRequest;
-import webserver.controller.request.MimeType;
 import webserver.controller.response.HttpResponse;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -29,9 +26,9 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = new HttpRequest(inputStream);
             HttpResponse httpResponse = new HttpResponse(httpRequest);
 
-            Router.route(httpRequest,httpResponse);
+            Router.route(httpRequest, httpResponse);
             Renderer renderer = Renderer.getInstance();
-            renderer.render(outputStream,httpResponse);
+            renderer.render(outputStream, httpResponse);
         } catch (Exception e) {
             e.printStackTrace();
         }

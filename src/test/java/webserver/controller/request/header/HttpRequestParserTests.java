@@ -1,6 +1,5 @@
 package webserver.controller.request.header;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import webserver.controller.request.HttpRequestParser;
 
@@ -47,7 +46,7 @@ public class HttpRequestParserTests {
     @Test
     void parseRequestBody() throws IOException {
         setTestData("responseBodyData.txt");
-        HashMap<String,String> bodyFields = HttpRequestParser.parseBody(bufferedReader,47);
+        HashMap<String, String> bodyFields = HttpRequestParser.parseBody(bufferedReader, 47);
         assertThat(bodyFields.get("userId")).isEqualTo("kangmin46");
         assertThat(bodyFields.get("password")).isEqualTo("password");
         assertThat(bodyFields.get("name")).isEqualTo("kangmin");

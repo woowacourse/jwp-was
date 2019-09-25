@@ -1,7 +1,5 @@
 package webserver.controller.response;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import webserver.controller.request.HttpRequest;
 import webserver.controller.request.MimeType;
@@ -15,7 +13,6 @@ import java.util.Map;
 import java.util.Optional;
 
 public class HttpResponse {
-    private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
     private static final String STATIC_FILE_PATH = "./static/";
     private static final String NON_STATIC_FILE_PATH = "./templates/";
     private HttpStatus httpStatus;
@@ -28,8 +25,13 @@ public class HttpResponse {
         setResponseLine(httpRequest, HttpStatus.OK);
     }
 
-    public void setHttpStatus(HttpStatus httpStatus) {
+    private void setResponseLine(HttpRequest httpRequest, HttpStatus httpStatus) throws IOException, URISyntaxException {
+        HttpMethod httpMethod = httpRequest.getHttpMethod();
         this.httpStatus = httpStatus;
+        this.version = httpRequest.getVersion();
+        if (httpMethod != HttpMethod.POST && httpMethod != HttpMethod.PUT) {
+            this.body = Optional.of(getResponseBody(httpRequest));
+        }
     }
 
     public void responseOK(HttpRequest httpRequest) {
@@ -40,7 +42,6 @@ public class HttpResponse {
     private byte[] getResponseBody(HttpRequest httpRequest) throws IOException, URISyntaxException {
         MimeType mimeType = httpRequest.getMimeType();
         String path = httpRequest.getPath();
-        logger.debug("path : >>{}", path);
         if (mimeType == MimeType.HTML || mimeType == MimeType.ICO) {
             return FileIoUtils.loadFileFromClasspath(NON_STATIC_FILE_PATH + path);
         }
@@ -76,12 +77,7 @@ public class HttpResponse {
         return body;
     }
 
-    public void setResponseLine(HttpRequest httpRequest, HttpStatus httpStatus) throws IOException, URISyntaxException {
-        HttpMethod httpMethod = httpRequest.getHttpMethod();
+    public void setHttpStatus(HttpStatus httpStatus) {
         this.httpStatus = httpStatus;
-        this.version = httpRequest.getVersion();
-        if(httpMethod != HttpMethod.POST && httpMethod != HttpMethod.PUT) {
-            this.body = Optional.of(getResponseBody(httpRequest));
-        }
     }
 }

@@ -3,7 +3,6 @@ package webserver.controller.request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.IOUtils;
-import webserver.controller.request.header.HttpHeaderFields;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,8 +24,8 @@ public class HttpRequestParser {
 
     public static HashMap<String, String> parseBody(BufferedReader bufferedReader, int contentLength) throws IOException {
         HashMap<String, String> bodyFields = new HashMap<>();
-        String requestParams =  IOUtils.readData(bufferedReader, contentLength);
-        requestParams = URLDecoder.decode(requestParams, "UTF-8");
+        String requestParams = IOUtils.readData(bufferedReader, contentLength);
+        requestParams = URLDecoder.decode(requestParams, StandardCharsets.UTF_8);
         String[] splitedParams = requestParams.split(BODY_FIELD_SEPERATE_DELEMETER);
 
         for (String splitedParam : splitedParams) {

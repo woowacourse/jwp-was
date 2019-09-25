@@ -1,14 +1,9 @@
 package webserver.controller.response;
 
-import webserver.controller.request.HttpRequest;
-
-import java.util.HashMap;
-import java.util.function.BiConsumer;
-
 public enum HttpStatus {
-    OK("OK",200),
-    FOUND("FOUND",302),
-    BAD_REQUEST("BAD REQUEST",400);
+    OK("OK", 200),
+    FOUND("FOUND", 302),
+    BAD_REQUEST("BAD REQUEST", 400);
 
     private final String status;
     private final int statusCode;
