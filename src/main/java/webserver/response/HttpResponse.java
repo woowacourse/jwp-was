@@ -17,6 +17,14 @@ public class HttpResponse {
         this.body = body;
     }
 
+    public static HttpResponse ok(ResponseHeader header, byte[] body) {
+        return new HttpResponse(HttpStatus.OK, header, body);
+    }
+
+    public static HttpResponse found(ResponseHeader header) {
+        return new HttpResponse(HttpStatus.FOUND, header, null);
+    }
+
     public static HttpResponse error(HttpStatus httpStatus, String message) {
         byte[] body = message.getBytes();
         ResponseHeader header = ResponseHeader.error(body.length);

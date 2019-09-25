@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import webserver.RequestHandler;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
-import webserver.response.HttpStatus;
 import webserver.response.ResponseHeader;
 
 public class UserCreateServlet extends RequestServlet {
@@ -18,6 +17,6 @@ public class UserCreateServlet extends RequestServlet {
         logger.debug(">>> User : {}", user);
         ResponseHeader header = new ResponseHeader();
         header.setLocation("/index.html");
-        return new HttpResponse(HttpStatus.FOUND, header, null);
+        return HttpResponse.found(header);
     }
 }
