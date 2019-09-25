@@ -2,6 +2,8 @@ package http.response;
 
 import http.common.HttpHeader;
 import http.common.HttpVersion;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 
 import java.io.IOException;
@@ -9,6 +11,8 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 
 public class HttpResponse {
+    private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
+
     private StatusLine statusLine;
     private HttpHeader httpHeader;
     private HttpResponseBody httpResponseBody;
@@ -32,7 +36,7 @@ public class HttpResponse {
         try {
             this.httpResponseBody = HttpResponseBody.of(FileIoUtils.loadFileFromClasspath(url));
         } catch (IOException | URISyntaxException e) {
-            e.printStackTrace();
+            logger.error("{}", e.getMessage());
         }
     }
 
