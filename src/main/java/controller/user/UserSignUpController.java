@@ -1,5 +1,6 @@
-package controller;
+package controller.user;
 
+import controller.AbstractController;
 import db.DataBase;
 import model.User;
 import webserver.request.HttpRequest;
@@ -23,7 +24,7 @@ public class UserSignUpController extends AbstractController {
     }
 
     @Override
-    void doPost(final HttpRequest request, final HttpResponse response) throws IOException {
+    protected void doPost(final HttpRequest request, final HttpResponse response) throws IOException {
         String userId = request.findRequestBodyParam("userId");
         String password = request.findRequestBodyParam("password");
         String name = request.findRequestBodyParam("name");

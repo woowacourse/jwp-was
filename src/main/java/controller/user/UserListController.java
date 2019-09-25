@@ -1,5 +1,6 @@
-package controller;
+package controller.user;
 
+import controller.AbstractController;
 import db.DataBase;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
@@ -36,7 +37,7 @@ public class UserListController extends AbstractController {
     }
 
     @Override
-    void doGet(final HttpRequest request, final HttpResponse response) throws IOException {
+    protected void doGet(final HttpRequest request, final HttpResponse response) throws IOException {
         if (isNotLogin(request)) {
             response.makeResponse();
             return;
