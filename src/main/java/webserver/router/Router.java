@@ -14,7 +14,7 @@ public class Router {
 
     private static final Router instance = RouterConfig.init().map(Router::new).orElse(null);
 
-    private static final String STATIC_FILE_PATH = "./static/";
+    public static final String STATIC_FILE_PATH = "./static";
 
     private final RouterConfig config;
 
@@ -42,7 +42,7 @@ public class Router {
         logger.debug("Route: {} -> {}", req.path(), dest);
         return FileIoUtils.loadFileFromClasspath(dest).map(body ->
             HttpResponse.builder(HttpContentType.fromFileExtension(req.path().extension()))
-                        .extractFromRequest(req)
+                        .extractFieldsFromRequest(req)
                         .body(body)
                         .build()
         ).orElse(HttpResponse.NOT_FOUND);

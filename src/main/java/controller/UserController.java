@@ -10,6 +10,6 @@ public class UserController extends Controller{
         Database.addUser(
                 new User(req.getParam("id"), req.getParam("password"), req.getParam("name"), req.getParam("email"))
         );
-        return redirectTo(req, "/index.html");
+        return redirectTo("/index.html", req);
     }
 }

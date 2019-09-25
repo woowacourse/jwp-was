@@ -37,7 +37,7 @@ public class HttpResponse {
             this.contentType = contentType;
         }
 
-        public HttpResponseBuilder extractFromRequest(HttpRequest req) {
+        public HttpResponseBuilder extractFieldsFromRequest(HttpRequest req) {
             this.version = req.version();
             req.connection().ifPresent(connection -> this.connection = connection);
             return this;
