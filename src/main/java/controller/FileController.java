@@ -31,16 +31,15 @@ public class FileController extends AbstractController {
             httpResponseStatusLine = new HttpResponseStatusLine(httpRequest.getHttpVersion(), HttpStatusCode.of("200"));
             HttpResponseHeader = new HttpResponseHeader("Location: /" + httpRequest.getUri());
             httpResponseBody = new HttpResponseBody(uri);
-            httpResponse.send200Ok(uri);
         } catch (IOException | URISyntaxException e) {
-//            httpResponseStatusLine = new HttpResponseStatusLine(httpRequest.getHttpVersion(), HttpStatusCode.of("404"));
-//            HttpResponseHeader = new HttpResponseHeader("");
-//            httpResponseBody = new HttpResponseBody("");
+            httpResponseStatusLine = new HttpResponseStatusLine(httpRequest.getHttpVersion(), HttpStatusCode.of("404"));
+            HttpResponseHeader = new HttpResponseHeader("");
+            httpResponseBody = new HttpResponseBody("");
             logger.error(e.getMessage());
         }
 
-//        httpResponse.setHttpResponseStatusLine(httpResponseStatusLine);
-//        httpResponse.setHttpResponseHeader(HttpResponseHeader);
-//        httpResponse.setHttpResponseBody(httpResponseBody);
+        httpResponse.setHttpResponseStatusLine(httpResponseStatusLine);
+        httpResponse.setHttpResponseHeader(HttpResponseHeader);
+        httpResponse.setHttpResponseBody(httpResponseBody);
     }
 }
