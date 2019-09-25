@@ -5,12 +5,13 @@ import controller.ControllerMapper;
 public class Request {
     private RequestMethod requestMethod;
     private RequestUrl url;
+    private QueryParameters queryParameters;
     private RequestInformation requestInformation;
 
     public Request(RequestMethod requestMethod, RequestUrl url, RequestInformation requestInformation) {
         this.requestMethod = requestMethod;
         this.url = url;
-        
+        this.queryParameters = requestInformation.createQueryParametes();
         this.requestInformation = requestInformation;
     }
 
