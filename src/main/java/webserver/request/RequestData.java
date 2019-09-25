@@ -1,6 +1,6 @@
 package webserver.request;
 
-import utils.DecoderUtils;
+import webserver.utils.DecoderUtils;
 
 import java.util.HashMap;
 import java.util.Map;

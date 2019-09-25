@@ -1,7 +1,7 @@
-package db;
+package domain.db;
 
 import com.google.common.collect.Maps;
-import model.User;
+import domain.model.User;
 
 import java.util.Collection;
 import java.util.Map;

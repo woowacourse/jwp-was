@@ -2,7 +2,9 @@ package webserver.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.FilePathUtils;
+import web.controller.IndexController;
+import web.controller.UserController;
+import webserver.utils.FilePathUtils;
 import webserver.exception.MethodNotAllowedException;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
@@ -28,6 +30,7 @@ public class RequestMapper {
 
     private static final ControllerHandler CONTROLLER_HANDLER = new ControllerHandler();
 
+    // TODO: 2019-09-26 사용자 부분으로 추출
     static {
         get("/", IndexController.getInstance().goIndex());
         get("/user/form", UserController.getInstance().goForm());

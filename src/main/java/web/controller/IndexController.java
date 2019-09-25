@@ -1,4 +1,6 @@
-package webserver.controller;
+package web.controller;
+
+import webserver.controller.Responsive;
 
 public class IndexController {
     private IndexController() {

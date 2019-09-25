@@ -1,6 +1,6 @@
 package webserver.controller;
 
-import utils.FilePathUtils;
+import webserver.utils.FilePathUtils;
 import webserver.exception.MethodNotAllowedException;
 import webserver.response.MediaType;
 

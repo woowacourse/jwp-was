@@ -1,4 +1,4 @@
-package utils;
+package webserver.utils;
 
 public class FilePathUtils {
     public static String getExtension(String path) {
