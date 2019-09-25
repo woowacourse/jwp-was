@@ -13,7 +13,7 @@ public class StaticFile {
     private final MediaType mediaType;
     private final byte[] body;
 
-    public StaticFile(final String path) throws IOException, URISyntaxException {
+    public StaticFile(final String path) throws IOException, IllegalArgumentException {
         this.path = path;
         this.name = extractName(path);
         this.extension = extractExtension(this.name);
@@ -55,8 +55,12 @@ public class StaticFile {
         return body.length;
     }
 
-    private static byte[] loadFileFromPath(final String filePath) throws IOException, URISyntaxException {
-        final URL url = StaticFile.class.getClassLoader().getResource(filePath);
-        return Files.readAllBytes(Paths.get(url.toURI()));
+    private static byte[] loadFileFromPath(final String filePath) throws IOException {
+        try {
+            final URL url = StaticFile.class.getClassLoader().getResource(filePath);
+            return Files.readAllBytes(Paths.get(url.toURI()));
+        } catch (final URISyntaxException | NullPointerException e) {
+            throw new IllegalArgumentException();
+        }
     }
 }

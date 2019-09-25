@@ -27,10 +27,9 @@ public class Response {
         private HttpStatus httpStatus;
         private Map<String, String> responseFields = new HashMap<>();
 
-        public Builder(final HttpVersion protocol, final HttpStatus httpStatus) {
+        Builder(final HttpVersion protocol, final HttpStatus httpStatus) {
             this.protocol = protocol;
             this.httpStatus = httpStatus;
-            this.responseFields.put(CONTENT_TYPE, MediaType.APPLICATION_BINARY.is());
         }
 
         public Builder(final HttpVersion protocol) {
@@ -82,7 +81,7 @@ public class Response {
         }
 
         public Builder body(final StaticFile file) {
-            this.responseFields.replace(CONTENT_TYPE, MediaType.of(file.getExtension()).is());
+            this.responseFields.put(CONTENT_TYPE, MediaType.of(file.getExtension()).is());
             this.body = new ResponseBody(file.getBody());
             return this;
         }
