@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 public class HttpHeader {
     private static final String HEADER_LINE_DELIMITER = ": ";
     private static final String CONTENT_LENGTH = "Content-Length";
+    private static final int NONE_LENGTH = 0;
 
     private Map<String, String> headers;
 
@@ -36,7 +37,7 @@ public class HttpHeader {
             return Integer.parseInt(headers.get(CONTENT_LENGTH));
         }
 
-        return 0;
+        return NONE_LENGTH;
     }
 
     public Map<String, String> getHeaders() {
