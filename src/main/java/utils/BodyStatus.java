@@ -1,12 +1,12 @@
 package utils;
 
-public enum Body {
+public enum BodyStatus {
     EXISTS(true),
     NOT_EXISTS(false);
 
     private final boolean isExist;
 
-    Body(boolean isExist) {
+    BodyStatus(boolean isExist) {
         this.isExist = isExist;
     }
 

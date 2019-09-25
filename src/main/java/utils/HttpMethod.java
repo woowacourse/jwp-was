@@ -1,23 +1,23 @@
 package utils;
 
 public enum HttpMethod {
-    GET(Body.NOT_EXISTS),
-    POST(Body.EXISTS),
-    PUT(Body.EXISTS),
-    DELETE(Body.NOT_EXISTS),
-    HEAD(Body.NOT_EXISTS),
-    CONNECT(Body.NOT_EXISTS),
-    OPTION(Body.NOT_EXISTS),
-    TRACE(Body.NOT_EXISTS),
-    PATCH(Body.EXISTS);
+    GET(BodyStatus.NOT_EXISTS),
+    POST(BodyStatus.EXISTS),
+    PUT(BodyStatus.EXISTS),
+    DELETE(BodyStatus.NOT_EXISTS),
+    HEAD(BodyStatus.NOT_EXISTS),
+    CONNECT(BodyStatus.NOT_EXISTS),
+    OPTION(BodyStatus.NOT_EXISTS),
+    TRACE(BodyStatus.NOT_EXISTS),
+    PATCH(BodyStatus.EXISTS);
 
-    private final Body body;
+    private final BodyStatus bodyStatus;
 
-    HttpMethod(Body body) {
-        this.body = body;
+    HttpMethod(BodyStatus bodyStatus) {
+        this.bodyStatus = bodyStatus;
     }
 
     public boolean isBodyExists() {
-        return body.isExists();
+        return bodyStatus.isExists();
     }
 }
