@@ -43,6 +43,9 @@ public class RequestBody {
     }
 
     public String get(String key) {
-        return parameters.get(key);
+        if (parameters.containsKey(key)) {
+            return parameters.get(key);
+        }
+        throw new IllegalArgumentException("Not Found Body parameter");
     }
 }
