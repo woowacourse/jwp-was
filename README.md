@@ -22,7 +22,20 @@
         - execute()
     - BasicThreadPool 객체
 
-- [ ] 세션 기능
+- [x] 세션 기능
     - UUID 클래스를 사용해 세션 고유 아이디 생성
     - Session 객체는 Map<String, Object> 를 갖는 일급 컬레션
     - Map<UUID, Session> 을 갖는 SessionHandler 클래스
+    
+- [x] 로그인 서블릿
+    - ID, PASSWORD 검증
+    - 세션에 생성하고 세션 ID Response Header 에 추가
+
+- [ ] View, ViewResolver 클래스 생성
+    - RedirectView, ForwardView 등
+    - Servlet 에서 리턴하고, View 가 HttpResponse 를 생성하는 역할을 맡는다.
+
+- [ ] 예외 처리
+    - AbstractServlet 을 상속받는 RestController, Controller 클래스 생성
+    - RestController 클래스는 발생한 예외를 RestException 으로 감싸서 리턴한다.
+    - ErrorView, ErrorHandler 클래스 생성

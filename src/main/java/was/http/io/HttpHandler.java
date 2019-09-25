@@ -10,7 +10,9 @@ import was.utils.IOUtils;
 import java.io.*;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class HttpHandler {
@@ -53,7 +55,11 @@ public class HttpHandler {
         String line;
         while (!"".equals(line = br.readLine()) && line != null) {
             String[] splitHeader = line.split(": ");
-            headers.put(splitHeader[0], splitHeader[1]);
+            if (splitHeader.length > 1) {
+                headers.put(splitHeader[0], splitHeader[1]);
+            } else {
+                headers.put(splitHeader[0], "");
+            }
         }
         return headers;
     }
@@ -90,7 +96,20 @@ public class HttpHandler {
         for (String key : headers.keySet()) {
             dos.writeBytes(String.format("%s: %s\n", key, headers.get(key)));
         }
+        if (response.hasCookies()) {
+            writeCookies(dos, response);
+        }
         dos.writeBytes("\n");
+    }
+
+    private static void writeCookies(DataOutputStream dos, HttpResponse response) throws IOException {
+        Map<String, String> cookies = response.getCookies();
+        List<String> formattedCookies = new ArrayList<>();
+        for (String key : cookies.keySet()) {
+            formattedCookies.add(String.format("%s=%s", key, cookies.get(key)));
+        }
+        formattedCookies.add(String.format("%s=%s", "Path", "/"));
+        dos.writeBytes(String.format("%s: %s\n", "Set-Cookie", String.join("; ", formattedCookies)));
     }
 
     private static void writeBody(final DataOutputStream dos, HttpResponse response) throws IOException {

@@ -15,6 +15,7 @@ public class HttpResponse {
     private String httpVersion;
     private HttpStatus httpStatus;
     private final Map<String, String> headers = new HashMap<>();
+    private final Map<String, String> cookies = new HashMap<>();
     private byte[] body;
 
     public void forward(String resource) {
@@ -69,5 +70,17 @@ public class HttpResponse {
 
     public byte[] getBody() {
         return body;
+    }
+
+    public void setCookie(String key, String value) {
+        this.cookies.put(key, value);
+    }
+
+    public Map<String, String> getCookies() {
+        return this.cookies;
+    }
+
+    public boolean hasCookies() {
+        return !cookies.isEmpty();
     }
 }

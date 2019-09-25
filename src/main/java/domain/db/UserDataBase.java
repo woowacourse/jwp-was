@@ -1,4 +1,4 @@
-package was.db;
+package domain.db;
 
 import com.google.common.collect.Maps;
 import domain.model.User;
@@ -6,7 +6,7 @@ import domain.model.User;
 import java.util.Collection;
 import java.util.Map;
 
-public class DataBase {
+public class UserDataBase {
     private static Map<String, User> users = Maps.newHashMap();
 
     public static void addUser(User user) {

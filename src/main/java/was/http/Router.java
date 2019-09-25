@@ -17,7 +17,7 @@ public class Router {
         // TODO: 설정 파일로부터 읽어오거나 Component Scan 방식으로 자동 입력하도록
         MAP.put("/", new IndexServlet());
         MAP.put("/signup", new SignupServlet());
-        MAP.put("/login", new LoginServlet());
+        MAP.put("/user/login", new LoginServlet());
     }
 
     public Servlet getServlet(String path) {

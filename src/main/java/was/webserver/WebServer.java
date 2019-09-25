@@ -28,7 +28,9 @@ public class WebServer implements Runnable {
         try (ServerSocket listenSocket = new ServerSocket(port)) {
             LOGGER.info("Web Application Server started {} port.", port);
             Socket connection;
-            while ((connection = listenSocket.accept()) != null) {
+//            while ((connection = listenSocket.accept()) != null) {
+            while (true) {
+                connection = listenSocket.accept();
                 THREAD_POOL.execute(new Thread(new RequestHandler(connection)));
             }
         } catch (IOException e) {
