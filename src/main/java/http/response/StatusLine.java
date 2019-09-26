@@ -11,11 +11,6 @@ public class StatusLine {
     public StatusLine() {
     }
 
-    public StatusLine(final HttpVersion httpVersion, final HttpStatus httpStatus) {
-        this.httpVersion = httpVersion;
-        this.httpStatus = httpStatus;
-    }
-
     public void setHttpVersion(final HttpVersion httpVersion) {
         this.httpVersion = httpVersion;
     }

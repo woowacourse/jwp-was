@@ -17,8 +17,7 @@ import java.util.List;
 public class HttpRequestParser {
 
     private static final Logger log = LoggerFactory.getLogger(HttpRequestParser.class);
-    private static final String EMPTY = "";
-    private static final String BLANK = " ";
+    public static final String CONTENT_LENGTH = "Content-Length";
 
     public static HttpRequest parse(InputStream in) throws IOException, URISyntaxException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
@@ -32,7 +31,7 @@ public class HttpRequestParser {
 
         RequestBody requestBody = null;
         if (br.ready()) {
-            requestBody = RequestBodyParser.parse(br, requestHeader.findHeader("Content-Length"));
+            requestBody = RequestBodyParser.parse(br, requestHeader.findHeader(CONTENT_LENGTH));
         }
         return new HttpRequest(requestLine, requestHeader, requestBody);
     }

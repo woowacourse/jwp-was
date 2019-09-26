@@ -15,21 +15,13 @@ public class Cookies {
         cookies.add(cookie);
     }
 
-    public boolean isExist() {
-        return cookies.size() != 0;
-    }
-
-    public int getSize() {
-        return cookies.size();
-    }
-
     public Cookie getCookie(int index) {
         return cookies.get(index);
     }
 
     public String getAllCookiesString() {
         StringBuilder stringBuilder = new StringBuilder();
-        cookies.forEach(cookie -> stringBuilder.append(cookies).append(NEW_LINE));
+        cookies.forEach(cookie -> stringBuilder.append(cookie.getCookieAttributeString()).append(NEW_LINE));
         return stringBuilder.toString();
     }
 }

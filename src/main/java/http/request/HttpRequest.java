@@ -57,4 +57,8 @@ public class HttpRequest {
         return requestLine.findPathPrefix();
     }
 
+    public String getClassPath() {
+        return requestLine.getClassPath();
+    }
+
 }

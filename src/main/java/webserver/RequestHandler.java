@@ -33,7 +33,7 @@ public class RequestHandler implements Runnable {
 
             HttpRequest httpRequest = HttpRequestParser.parse(in);
             HttpResponse httpResponse = new HttpResponse(httpRequest, dos);
-            new Controllers().service(httpRequest,httpResponse);
+            new Controllers().service(httpRequest, httpResponse);
             httpResponse.response();
 
         } catch (IOException | URISyntaxException e) {

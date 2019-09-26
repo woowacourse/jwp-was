@@ -29,7 +29,7 @@ public class UserLoginController implements Controller {
         }
 
         httpResponse.addCookie(CookieParser.parse("logined=false"));
-        httpResponse.redirect(LOGIN_PATH);
+        httpResponse.redirect(LOGIN_FAIL_PATH);
     }
 
     private boolean isLoginSuccess(final User user, final String password) {
