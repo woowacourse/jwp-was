@@ -16,4 +16,9 @@ public class Common {
 
         return new FileInputStream(new File(absolutePath));
     }
+
+    public static BufferedReader test(final OutputStream outputStream) {
+        InputStream inputStream = new ByteArrayInputStream(((ByteArrayOutputStream) outputStream).toByteArray());
+        return new BufferedReader(new InputStreamReader(inputStream));
+    }
 }

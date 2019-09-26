@@ -12,6 +12,7 @@ public class ResourceTypeFactory {
 
     public static ResourceType getInstance(String path) {
         String extension = path.substring(path.lastIndexOf(".") + 1);
+
         if (TEXT_EXTENSIONS.contains(extension)) {
             return new TextResourceType(extension);
         }

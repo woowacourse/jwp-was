@@ -8,11 +8,14 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import testhelper.Common;
+import webserver.controller.exception.Page404NotFoundException;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class FileControllerTest {
     private static final Logger logger = LoggerFactory.getLogger(FileControllerTest.class);
@@ -30,7 +33,6 @@ public class FileControllerTest {
 
         logger.info("\n" + byteArrayOutputStream.toString());
     }
-
 
     @Test
     @DisplayName("HTML 파일을 Response로 전달한다")

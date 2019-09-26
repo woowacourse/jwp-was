@@ -28,16 +28,21 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            InputStreamReader inputStreamReader = new InputStreamReader(in);
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            BufferedReader bufferedReader = getBufferedReader(in);
 
             HttpRequest httpRequest = HttpRequestFactory.create(bufferedReader);
             HttpResponse httpResponse = new HttpResponse(new DataOutputStream(out));
 
+            // @TODO 계층을 하나 추가하는 것 고려하기
             Controller controller = controllerFinder.find(httpRequest);
             controller.service(httpRequest, httpResponse);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private BufferedReader getBufferedReader(InputStream inputStream) {
+        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+        return new BufferedReader(inputStreamReader);
     }
 }

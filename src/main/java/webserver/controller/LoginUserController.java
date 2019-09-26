@@ -20,6 +20,7 @@ public class LoginUserController extends HttpController {
 
         if (path.contains("redirect:")) {
             httpResponse.addHeader("Location", redirectPath);
+            httpResponse.addHeader("Content-Type", "text/html");
             httpResponse.addHeader("Set-Cookie", "logined=true; Path=/");
             httpResponse.sendRedirect();
             return;
