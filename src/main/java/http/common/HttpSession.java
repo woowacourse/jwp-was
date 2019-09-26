@@ -25,6 +25,10 @@ public class HttpSession {
         session.remove(name);
     }
 
+    public UUID getUuid() {
+        return uuid;
+    }
+
     public void invalidate() {
         HttpSessionHandler.removeSession(uuid);
     }

@@ -17,8 +17,8 @@ public class HttpSessionHandler {
         return sessionsContext.get(uuid);
     }
 
-    public static String getSessionId() {
-        return UUID.randomUUID().toString();
+    public static HttpSession getSession(UUID uuid) {
+        return sessionsContext.get(uuid);
     }
 
     public static void removeSession(UUID uuid) {
