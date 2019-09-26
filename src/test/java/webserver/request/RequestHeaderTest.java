@@ -1,6 +1,5 @@
 package webserver.request;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -28,17 +27,12 @@ public class RequestHeaderTest {
     private RequestHeader requestLineOfPostMessage;
     private RequestHeader requestLineOfGetMessage;
 
-    @BeforeEach
-    void setUp() throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(POST_REQUEST_HEADER.getBytes())));
-        requestLineOfPostMessage = RequestHeader.of(br);
-        br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(GET_REQUEST_HEADER.getBytes())));
-        requestLineOfGetMessage = RequestHeader.of(br);
-    }
-
     @DisplayName("HttpRequestHeader 생성")
     @Test
-    void of() {
+    void of() throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(POST_REQUEST_HEADER.getBytes())));
+        requestLineOfPostMessage = RequestHeader.of(br);
+
         assertThat(requestLineOfPostMessage.getHeaderFieldValue("Host")).isEqualTo("localhost:8080");
         assertThat(requestLineOfPostMessage.getHeaderFieldValue("Connection")).isEqualTo("keep-alive");
         assertThat(requestLineOfPostMessage.getHeaderFieldValue("Content-Length")).isEqualTo("93");
@@ -50,7 +44,12 @@ public class RequestHeaderTest {
 
     @DisplayName("contentLength 추출")
     @Test
-    void getContentLength() {
+    void getContentLength() throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(POST_REQUEST_HEADER.getBytes())));
+        requestLineOfPostMessage = RequestHeader.of(br);
+        br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(GET_REQUEST_HEADER.getBytes())));
+        requestLineOfGetMessage = RequestHeader.of(br);
+
         assertThat(requestLineOfPostMessage.getContentLength()).isEqualTo(93);
         assertThat(requestLineOfGetMessage.getContentLength()).isEqualTo(0);
     }
