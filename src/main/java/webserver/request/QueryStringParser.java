@@ -5,6 +5,7 @@ import webserver.request.requestline.QueryParams;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public class QueryStringParser {
@@ -25,7 +26,7 @@ public class QueryStringParser {
             String value = paramTokens[1];
 
             try {
-                queryParams.addParam(key, URLDecoder.decode(value, "UTF-8"));
+                queryParams.addParam(key, URLDecoder.decode(value, StandardCharsets.UTF_8.name()));
             } catch (UnsupportedEncodingException e) {
                 throw new ParamDecodeException(e);
             }
