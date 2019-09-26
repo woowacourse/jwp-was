@@ -34,12 +34,12 @@ public class UserListController extends HttpController {
             List<User> users = new UserService().findAll();
             modelAndView = new ModelAndView("user/list");
             modelAndView.setModels("users", users);
-            response.configureOkResponse(modelAndView);
+            response.forward(modelAndView);
             return;
         }
 
         modelAndView = new ModelAndView("/user/login.html");
-        response.configureOkResponse(modelAndView);
+        response.forward(modelAndView);
     }
 
     @Override

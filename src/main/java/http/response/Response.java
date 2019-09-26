@@ -81,7 +81,7 @@ public class Response {
         responseHeader.setCookie(key, cookie);
     }
 
-    public void configureOkResponse(ModelAndView modelAndView) throws IOException, URISyntaxException {
+    public void forward(ModelAndView modelAndView) throws IOException, URISyntaxException {
         setStatusCode(200);
         setReasonPhrase("OK");
         setContentType(ContentTypeHandler.type(modelAndView.getView()));
@@ -104,7 +104,7 @@ public class Response {
         setResponseBody(body);
     }
 
-    public void configureFoundResponse(String location) {
+    public void redirect(String location) {
         setStatusCode(302);
         setReasonPhrase("FOUND");
         setLocation(location);

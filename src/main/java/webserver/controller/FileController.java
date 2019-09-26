@@ -20,7 +20,7 @@ public class FileController extends HttpController {
     @Override
     protected void doGet(Request request, Response response) throws IOException, URISyntaxException {
         String url = request.extractUrl();
-        response.configureOkResponse(new ModelAndView(url));
+        response.forward(new ModelAndView(url));
     }
 
     @Override
