@@ -1,17 +1,22 @@
 package controller;
 
+import com.github.jknack.handlebars.Handlebars;
+import com.github.jknack.handlebars.Template;
+import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
+import com.github.jknack.handlebars.io.TemplateLoader;
+import db.DataBase;
 import http.request.Request;
 import http.request.RequestMethod;
 import http.response.Response;
 import http.response.ResponseHeaders;
 import http.response.ResponseStatus;
+import model.User;
 import service.UserService;
 import utils.FileIoUtils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class UserController implements Controller {
     private List<RequestMethod> allowedMethods = Arrays.asList(RequestMethod.POST, RequestMethod.GET);
@@ -37,11 +42,24 @@ public class UserController implements Controller {
 
     private void getUserList(Request request, Response response) throws IOException, URISyntaxException {
         if (request.getRequestInformation().getParameter("Cookie:") != null && request.getRequestInformation().getParameter("Cookie:").equals("logined=true")) {
+
+            TemplateLoader loader = new ClassPathTemplateLoader();
+            loader.setPrefix("/templates");
+            loader.setSuffix(".html");
+            Handlebars handlebars = new Handlebars(loader);
+            Template template = handlebars.compile("user/list");
+            Map<String, List<User>> users = new HashMap<>();
+            List<User> userList = new ArrayList<>(DataBase.findAll());
+            users.put("users", userList);
+
+            String listPage = template.apply(users);
+
+
             response.setResponseStatus(ResponseStatus.OK);
             response.setResponseHeaders(new ResponseHeaders());
             response.addResponseHeaders("Content-Type: ", "text/html");
-            byte[] body = FileIoUtils.loadFileFromClasspath("../resources/templates/user/list.html");
-            response.setResponseBody(body);
+//            byte[] body = FileIoUtils.loadFileFromClasspath("../resources/templates/user/list.html");
+            response.setResponseBody(listPage.getBytes());
         }
 
         if (request.getRequestInformation().getParameter("Cookie:") == null || !request.getRequestInformation().getParameter("Cookie:").equals("logined=true")) {
