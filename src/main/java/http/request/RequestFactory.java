@@ -40,6 +40,7 @@ public class RequestFactory {
             if (line == null || line.equals(LAST_LINE)) {
                 break;
             }
+            log.debug("{}", line);
             httpRequestHeaderLines.add(line);
         }
         return HttpHeader.of(httpRequestHeaderLines);

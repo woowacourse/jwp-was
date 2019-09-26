@@ -3,6 +3,7 @@ package webserver.resolver;
 import controller.Controller;
 import controller.LoginController;
 import controller.UserController;
+import controller.UserListController;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 
@@ -18,6 +19,7 @@ public class NormalRequestResolver {
     static {
         controllers.put("/user/create", new UserController());
         controllers.put("/user/login", new LoginController());
+        controllers.put("/user/list", new UserListController());
     }
 
     static void resolve(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {

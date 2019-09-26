@@ -23,6 +23,7 @@ public class HttpRequestStartLine {
     }
 
     public static HttpRequestStartLine of(String startLine) throws UnsupportedEncodingException {
+        log.debug(startLine);
         String[] startLineValues = startLine.split(LINE_SPLITTER);
 
         HttpMethodType httpMethodType = HttpMethodType.valueOf(startLineValues[0]);

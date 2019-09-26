@@ -35,6 +35,16 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
             httpRequest = RequestFactory.createHttpRequest(in);
             RequestResolver.route(httpRequest, httpResponse);
+
+//            //렌더링
+//            TemplateLoader loader = new ClassPathTemplateLoader();
+//            loader.setPrefix("/templates");
+//            loader.setSuffix(".html");
+//            Handlebars handlebars = new Handlebars(loader);
+//            Template template = handlebars.compile("user/list");
+//            User user = new User("javajigi", "password", "자바지기", "javajigi@gmail.com");
+//            String profilePage = template.apply(user);
+
             httpResponse.forward(dos);
 
         } catch (BadRequestException e) {
