@@ -12,7 +12,7 @@ import java.util.Optional;
 public class Router {
     private static final Logger logger = LoggerFactory.getLogger(Router.class);
 
-    private static final Router instance = RouterConfig.init().map(Router::new).orElse(null);
+    private static final Router instance = new Router(RouterConfigAnnotation.init());
 
     public static final String STATIC_FILE_PATH = "./static";
 

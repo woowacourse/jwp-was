@@ -17,7 +17,7 @@ public class MappedDestination {
     private final Method controller;
     private final Map<String, String> pathVars;
 
-    public static Optional<MappedDestination> of(String className, String methodName, Map<String, String> pathVars) {
+    protected static Optional<MappedDestination> of(String className, String methodName, Map<String, String> pathVars) {
         try {
             if (pathVars.isEmpty()) {
                 return Optional.of(
@@ -39,11 +39,7 @@ public class MappedDestination {
         }
     }
 
-    public static Optional<MappedDestination> of(String className, String methodName) {
-        return of(className, methodName, Collections.emptyMap());
-    }
-
-    private MappedDestination(Method controller, Map<String, String> pathVars) {
+    protected MappedDestination(Method controller, Map<String, String> pathVars) {
         this.controller = controller;
         this.pathVars = Collections.unmodifiableMap(pathVars);
     }

@@ -8,8 +8,8 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ContentTypeParserTest {
-    private final SimpleStringParser contentTypeParser = KeyValueParserFactory.contentTypeParser();
+class HttpHeaderFieldAttrParserTest {
+    private final SimpleStringParser contentTypeParser = KeyValueParserFactory.httpHeaderFieldAttrParser();
 
     @Test
     void parseContentType() {

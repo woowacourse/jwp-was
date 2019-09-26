@@ -16,13 +16,14 @@ public class Pathfinder {
     private static final Pattern PATH_VAR = Pattern.compile("\\{[\\w\\W]*}");
     private final Map<String, MappedDestination> mappings;
 
-    public static Optional<Pathfinder> of(JsonArray routes) {
+    protected static Optional<Pathfinder> of(JsonArray routes) {
         final Map<String, MappedDestination> mappings = routes.stream()
                                                                 .map(x -> (JsonObject) x)
                                                                 .map(x ->
                                                                     MappedDestination.of(
                                                                             (String) x.get("class").val(),
-                                                                            (String) x.get("method").val()
+                                                                            (String) x.get("method").val(),
+                                                                            Collections.emptyMap()
                                                                     ).map(dest ->
                                                                             new Pair<>(
                                                                                     (String) x.get("path").val(),
@@ -40,7 +41,9 @@ public class Pathfinder {
         return (routes.size() == mappings.size()) ? Optional.of(new Pathfinder(mappings)) : Optional.empty();
     }
 
-    private Pathfinder(Map<String, MappedDestination> mappings) {
+
+
+    protected Pathfinder(Map<String, MappedDestination> mappings) {
         this.mappings = mappings;
     }
 
