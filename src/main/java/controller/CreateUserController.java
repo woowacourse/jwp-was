@@ -15,7 +15,7 @@ public class CreateUserController extends AbstractController {
 	public void doPost(HttpRequest httpRequest, DataOutputStream dos) {
 		try {
 			UserService.saveUser(httpRequest.getHttpRequestBody());
-			String redirectPath = "http://localhost:8080/index.html";
+			String redirectPath = "/index.html";
 			HttpResponse httpResponse = new HttpResponse(HttpResponseGenerator.response302Header(redirectPath));
 			httpResponse.sendRedirect(dos);
 		} catch (IOException e) {
