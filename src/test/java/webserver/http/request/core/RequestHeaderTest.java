@@ -1,9 +1,10 @@
-package http.request.core;
+package webserver.http.request.core;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import webserver.http.request.core.RequestHeader;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,9 +31,9 @@ class RequestHeaderTest {
     void parseHeader() {
         lines = parseHeaderData(LINE);
         requestHeader = new RequestHeader(lines);
-
-        requestHeader.getHeaders().keySet()
-                .forEach(key -> assertThat(requestHeader.getHeaders().get(key)).isEqualTo(headers.get(key)));
+        assertThat(requestHeader.getHeadersKey("Host")).isEqualTo("localhost:8080");
+        assertThat(requestHeader.getHeadersKey("Connection")).isEqualTo("keep-alive");
+        assertThat(requestHeader.getHeadersKey("Accept")).isEqualTo("*/*");
     }
 
 
