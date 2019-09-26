@@ -1,7 +1,6 @@
 package controller;
 
 import db.DataBase;
-import http.HTTP;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.User;
@@ -10,8 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import session.HttpSession;
-import session.SessionDB;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -45,10 +42,7 @@ class UserLoginControllerTest {
                 "userId=javajigi&password=password";
 
         HttpResponse response = createResponse(requestSting);
-        String id = response.getHeaderContents(HTTP.SET_COOKIE);
-        HttpSession httpSession = SessionDB.getSession(id);
-
-        assertThat(httpSession.getAttributes("login-user")).isEqualTo(user);
+        assertThat(response.getHeader().contains("/index.html")).isTrue();
     }
 
     @Test

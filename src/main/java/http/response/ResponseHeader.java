@@ -11,6 +11,7 @@ public class ResponseHeader {
 
     private final Map<HTTP, String> contents = new HashMap<>();
 
+
     public void addContents(HTTP http, String value) {
         contents.put(http, value);
 

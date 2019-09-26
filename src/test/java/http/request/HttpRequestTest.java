@@ -23,7 +23,7 @@ class HttpRequestTest {
 
     @Test
     void POST_확인() throws IOException {
-        String request = "POST /user/create HTTP/1.1\n" +
+        String request = "POST /user/createSession HTTP/1.1\n" +
                 "Host: localhost:8080\n" +
                 "Connection: keep-alive\n" +
                 "Content-Length: 59\n" +
@@ -40,7 +40,7 @@ class HttpRequestTest {
 
     @Test
     void POST_body_확인() throws IOException {
-        String request = "POST /user/create HTTP/1.1\n" +
+        String request = "POST /user/createSession HTTP/1.1\n" +
                 "Host: localhost:8080\n" +
                 "Connection: keep-alive\n" +
                 "Content-Length: 93\n" +
@@ -67,7 +67,7 @@ class HttpRequestTest {
 
     @Test
     void QueryString_확인() throws IOException {
-        String request = "GET /user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net HTTP/1.1\nHost: localhost:8080\nConnection: keep-alive\nAccept: */*";
+        String request = "GET /user/createSession?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net HTTP/1.1\nHost: localhost:8080\nConnection: keep-alive\nAccept: */*";
 
         InputStream in = new ByteArrayInputStream(request.getBytes());
         HttpRequest httpRequest = new HttpRequest(in);

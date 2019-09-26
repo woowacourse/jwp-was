@@ -1,6 +1,7 @@
 package http.response;
 
 import http.HTTP;
+import http.HttpCookie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +17,7 @@ public class HttpResponse implements AutoCloseable {
     private ResponseFirstLine responseFirstLine;
     private ResponseHeader header;
     private ResponseBody body;
+
 
     private final DataOutputStream dataOutputStream;
 
@@ -36,6 +38,10 @@ public class HttpResponse implements AutoCloseable {
 
     public void addHeader(HTTP http, String value) {
         header.addContents(http, value);
+    }
+
+    public void addHeader(HttpCookie httpCookie) {
+        header.addContents(HTTP.SET_COOKIE, httpCookie.getResponse());
     }
 
     public void addBody(byte[] body) {

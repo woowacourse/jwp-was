@@ -1,6 +1,5 @@
 package controller;
 
-import http.HTTP;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.response.ResponseResolver;
@@ -11,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
 import session.HttpSession;
-import session.SessionDB;
+import session.HttpSessionDB;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -25,7 +24,7 @@ public class UserListController extends AbstractController {
 
     @Override
     void doGet(HttpRequest request, HttpResponse response) {
-        HttpSession session = SessionDB.getSession(request.getHeaderContents(HTTP.COOKIE));
+        HttpSession session = HttpSessionDB.getInstance().findOrCreateSession(request.getSessionId());
         if (session != null && session.getAttributes("login-user") != null) {
             showUsers(response);
             return;

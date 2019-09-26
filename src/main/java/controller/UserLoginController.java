@@ -1,6 +1,6 @@
 package controller;
 
-import http.HTTP;
+import http.HttpCookie;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.response.ResponseResolver;
@@ -9,7 +9,7 @@ import model.AuthorizationFailException;
 import model.User;
 import service.UserService;
 import session.HttpSession;
-import session.HttpSessionFactory;
+import session.HttpSessionDB;
 import utils.QueryStringUtils;
 
 public class UserLoginController extends AbstractController {
@@ -28,13 +28,20 @@ public class UserLoginController extends AbstractController {
         try {
             User foundUser = userService.login(userId, password);
 
-            HttpSession httpSession = HttpSessionFactory.create();
-            response.addHeader(HTTP.SET_COOKIE, httpSession.getId());
+            HttpSession httpSession = HttpSessionDB.getInstance().findOrCreateSession(request.getSessionId());
+            setCookie(response, httpSession);
 
             httpSession.setAttribute("login-user", foundUser);
             ResponseResolver.resolve(new RedirectView("/index.html"), response);
         } catch (AuthorizationFailException e) {
             ResponseResolver.resolve(new RedirectView("/user/login_failed.html"), response);
         }
+    }
+
+    private void setCookie(HttpResponse response, HttpSession httpSession) {
+        HttpCookie httpCookie = new HttpCookie();
+        httpCookie.setAttribute(HttpCookie.Option.SESSION_ID.getPhrase(), httpSession.getId());
+        httpCookie.setAttribute(HttpCookie.Option.PATH.getPhrase(), "/");
+        response.addHeader(httpCookie);
     }
 }

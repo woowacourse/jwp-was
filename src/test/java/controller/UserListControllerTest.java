@@ -6,7 +6,7 @@ import http.response.HttpResponse;
 import model.User;
 import org.junit.jupiter.api.Test;
 import session.HttpSession;
-import session.HttpSessionFactory;
+import session.HttpSessionDB;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -37,12 +37,12 @@ class UserListControllerTest {
         DataBase.addUser(user1);
         DataBase.addUser(user2);
 
-        HttpSession httpSession = HttpSessionFactory.create();
+        HttpSession httpSession = HttpSessionDB.getInstance().createSession();
         httpSession.setAttribute("login-user", user1);
 
         String requestSting = "GET /user/list HTTP/1.1\n" +
                 "Host: localhost:8080\n" +
-                "Cookie: " + httpSession.getId();
+                "Cookie: SessionId=" + httpSession.getId();
 
         HttpResponse response = createResponse(requestSting);
         assertThat(response.getBody().contains(ID_1)).isTrue();
