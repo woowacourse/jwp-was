@@ -3,8 +3,8 @@ package utils.parser.jsonelements;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class JsonObject extends JsonValue<Map<String, JsonValue<?>>> {
     public JsonObject() {
@@ -25,8 +25,8 @@ public class JsonObject extends JsonValue<Map<String, JsonValue<?>>> {
         return super.val.get(key);
     }
 
-    public Set<Map.Entry<String, JsonValue<?>>> attributeSet() {
-        return super.val.entrySet();
+    public Stream<Map.Entry<String, JsonValue<?>>> stream() {
+        return super.val.entrySet().stream();
     }
 
     public int size() {

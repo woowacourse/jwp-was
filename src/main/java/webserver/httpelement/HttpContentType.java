@@ -50,6 +50,7 @@ public class HttpContentType implements HttpHeaderField {
     public static HttpContentType fromFileExtension(FileExtension extension) {
         switch (extension.get()) {
             case "html":
+            case "htm":
                 return TEXT_HTML_UTF_8;
             case "css":
                 return TEXT_CSS_UTF_8;

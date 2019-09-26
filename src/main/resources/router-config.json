@@ -3,11 +3,6 @@
     { "path" : "/",
       "class": "controller.IndexController",
       "method": "index"
-    },
-    {
-      "path": "/test/{num}",
-      "class": "controller.TestController",
-      "method": "test"
     }
   ],
 

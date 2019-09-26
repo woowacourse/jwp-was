@@ -21,12 +21,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
-                "id='" + this.id + '\'' +
-                ", password='" + this.password + '\'' +
-                ", name='" + this.name + '\'' +
-                ", email='" + this.email + '\'' +
-                '}';
+        return String.format("User(%s, %s, %s, %s)", this.id, this.password, this.name, this.email);
     }
 
     @Override

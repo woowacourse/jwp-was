@@ -35,6 +35,17 @@ public class JsonArray extends JsonValue<List<JsonValue<?>>> {
     }
 
     @Override
+    public String serialize() {
+        if (super.val.size() <= 1) {
+            return toString();
+        }
+        return "[" + super.val.stream()
+                                .map(JsonValue::toString)
+                                .reduce((a, b) -> a + "," + b)
+                                .get() + "]";
+    }
+
+    @Override
     public String toString() {
         if (super.val.isEmpty()) {
             return "[]";

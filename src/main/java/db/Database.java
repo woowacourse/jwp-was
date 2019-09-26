@@ -13,8 +13,8 @@ public class Database {
         users.put(user.id(), user);
     }
 
-    public static User findUserById(String id) {
-        return users.get(id);
+    public static User findUserById(String userId) {
+        return users.get(userId);
     }
 
     public static Collection<User> findAll() {

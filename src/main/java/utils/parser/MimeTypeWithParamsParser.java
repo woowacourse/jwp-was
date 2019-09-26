@@ -13,7 +13,7 @@ public class MimeTypeWithParamsParser {
         ).map(mimeType ->
                 new Pair<>(
                         mimeType,
-                        KeyValueParserFactory.contentTypeParser().interpret(input)
+                        KeyValueParserFactory.httpHeaderFieldAttrParser().interpret(input)
                 )
         );
     }

@@ -8,8 +8,8 @@ import webserver.httpelement.HttpContentType;
 import webserver.httpelement.HttpStatusCode;
 import webserver.router.Router;
 
-public abstract class Controller {
-    protected static HttpResponse serveStaticFile(String filePath, HttpRequest req) {
+public class BaseController {
+    public static HttpResponse serveStaticFile(String filePath, HttpRequest req) {
         return FileIoUtils.loadFileFromClasspath(Router.STATIC_FILE_PATH + filePath).map(body ->
             HttpResponse.builder(
                     HttpContentType.fromFileExtension(new FileExtension(filePath))
@@ -17,7 +17,7 @@ public abstract class Controller {
         ).orElse(HttpResponse.INTERNAL_SERVER_ERROR);
     }
 
-    protected static HttpResponse redirectTo(String redirectPath, HttpRequest req) {
+    public static HttpResponse redirectTo(String redirectPath, HttpRequest req) {
         return HttpResponse.builder(HttpContentType.TEXT_PLAIN_UTF_8)
                             .extractFieldsFromRequest(req)
                             .statusCode(HttpStatusCode.FOUND)

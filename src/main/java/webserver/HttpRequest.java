@@ -48,12 +48,12 @@ public class HttpRequest {
             HttpPath path,
             HttpVersion version,
             HttpRequestHeader header,
-            String queryString
+            String paramsQueryString
     ) {
         return new HttpRequest(
                 method, path, version,
                 header,
-                KeyValueParserFactory.queryStringParser().interpret(queryString),
+                KeyValueParserFactory.queryStringParser().interpret(paramsQueryString),
                 null
         );
     }
@@ -111,6 +111,10 @@ public class HttpRequest {
 
     public HttpVersion version() {
         return this.version;
+    }
+
+    public String getCookie(String key) {
+        return this.header.getCookie(key);
     }
 
     public Optional<HttpConnection> connection() {

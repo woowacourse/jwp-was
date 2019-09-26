@@ -1,25 +1,23 @@
 package webserver;
 
-import webserver.httpelement.HttpConnection;
-import webserver.httpelement.HttpContentType;
-import webserver.httpelement.HttpStatusCode;
-import webserver.httpelement.HttpVersion;
+import webserver.httpelement.*;
+
+import java.util.stream.Stream;
 
 public class HttpResponse {
     public static final HttpResponse BAD_REQUEST = HttpResponse.builder(HttpContentType.TEXT_PLAIN_UTF_8)
                                                                 .statusCode(HttpStatusCode.BAD_REQUEST)
                                                                 .build();
-
     public static final HttpResponse NOT_FOUND = HttpResponse.builder(HttpContentType.TEXT_PLAIN_UTF_8)
                                                             .statusCode(HttpStatusCode.NOT_FOUND)
                                                             .build();
-
     public static final HttpResponse INTERNAL_SERVER_ERROR = HttpResponse.builder(HttpContentType.TEXT_PLAIN_UTF_8)
                                                                     .statusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
                                                                     .build();
 
     private final HttpVersion version;
     private final HttpStatusCode statusCode;
+    private final HttpCookie cookie;
     private final HttpContentType contentType;
     private final HttpConnection connection;
     private final String location;
@@ -28,6 +26,7 @@ public class HttpResponse {
     public static class HttpResponseBuilder {
         private HttpVersion version = HttpVersion.HTTP_1_1;
         private HttpStatusCode statusCode = HttpStatusCode.OK;
+        private HttpCookie cookie;
         private final HttpContentType contentType;
         private HttpConnection connection;
         private String location;
@@ -50,6 +49,11 @@ public class HttpResponse {
 
         public HttpResponseBuilder statusCode(HttpStatusCode statusCode) {
             this.statusCode = statusCode;
+            return this;
+        }
+
+        public HttpResponseBuilder cookie(HttpCookie cookie) {
+            this.cookie = cookie;
             return this;
         }
 
@@ -80,6 +84,7 @@ public class HttpResponse {
     private HttpResponse(HttpResponseBuilder builder) {
         this.version = builder.version;
         this.statusCode = builder.statusCode;
+        this.cookie = builder.cookie;
         this.contentType = builder.contentType;
         this.connection = builder.connection;
         this.location = builder.location;
@@ -88,9 +93,7 @@ public class HttpResponse {
 
     public String serializeHeader() {
         final StringBuilder header = new StringBuilder(serializeMandatory());
-        if (this.connection != null) {
-            header.append(this.connection.fieldName() + ": " + this.connection + "\r\n");
-        }
+        serializeOptionals(header, this.cookie, this.connection);
         if (this.location != null) {
             header.append("Location: " + this.location + "\r\n");
         }
@@ -107,6 +110,15 @@ public class HttpResponse {
                 this.contentType,
                 this.body.length()
         );
+    }
+
+    private StringBuilder serializeOptionals(StringBuilder header, HttpHeaderField... fields) {
+        Stream.of(fields).forEach(field -> {
+            if (field != null) {
+                header.append(field.fieldName() + ": " + field + "\r\n");
+            }
+        });
+        return header;
     }
 
     public String serialize() {
