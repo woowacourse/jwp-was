@@ -1,39 +1,28 @@
 package http.controller;
 
-import com.github.jknack.handlebars.Handlebars;
-import com.github.jknack.handlebars.Template;
-import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
-import com.github.jknack.handlebars.io.TemplateLoader;
 import db.DataBase;
 import http.common.HttpCookie;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import model.User;
+import utils.HandleBarModelAndView;
+import utils.ModelAndView;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 public class UserListController extends AbstractController {
+    private static final String LOCATION = "/user/list";
+    private static final String LOGIN_NAME = "logined";
+
     @Override
     protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         HttpCookie requestHttpCookie = httpRequest.getHttpCookie();
-        if ("true".equals(requestHttpCookie.getCookie("logined"))) {
+        if ("true".equals(requestHttpCookie.getCookie(LOGIN_NAME))) {
             try {
-                Map<String, Object> data = new HashMap<>();
-                Collection<User> users = DataBase.findAll();
-                data.put("users", users);
+                ModelAndView modelAndView = new HandleBarModelAndView();
+                modelAndView.putData("users", DataBase.findAll());
 
-                TemplateLoader loader = new ClassPathTemplateLoader();
-                loader.setPrefix("/templates");
-                loader.setSuffix(".html");
-                loader.setCharset(StandardCharsets.UTF_8);
+                httpResponse.setResponseBody(modelAndView.render(LOCATION), LOCATION + modelAndView.getSufFix());
 
-                Handlebars handlebars = new Handlebars(loader);
-                Template template = handlebars.compile("/user/list");
-                httpResponse.setResponseBody(template.apply(data).getBytes(), "/user/list.html");
                 return;
             } catch (IOException e) {
                 e.printStackTrace();
