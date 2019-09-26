@@ -45,6 +45,24 @@ public class HttpResponse {
         }
     }
 
+    public void ok(HttpRequest httpRequest, String templateBody) {
+        MimeType mimeType = MimeType.of(httpRequest.pathExtension());
+
+        try {
+            httpResponseBody = new HttpResponseBody(templateBody.getBytes());
+
+            httpResponseHeader.addHeader("Content-Type", mimeType.getMimeType() + ";charset=utf-8");
+            httpResponseHeader.addHeader("Content-Length", String.valueOf(httpResponseBody.getBodyLength()));
+
+            httpResponseLine = new HttpResponseLine(httpRequest.getProtocol(), HttpStatus.OK);
+
+            send();
+
+        } catch (IOException e) {
+            logger.error("OK Error : {}", e.getMessage());
+        }
+    }
+
     private void send() throws IOException {
         dos.writeBytes(httpResponseLine.combine());
         dos.writeBytes(httpResponseHeader.combine());

@@ -1,7 +1,14 @@
 package dev.luffy.controller;
 
+import com.github.jknack.handlebars.Handlebars;
+import com.github.jknack.handlebars.Template;
+import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
+import com.github.jknack.handlebars.io.TemplateLoader;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 import dev.luffy.annotation.Controller;
 import dev.luffy.annotation.RequestMapping;
@@ -9,6 +16,7 @@ import dev.luffy.db.DataBase;
 import dev.luffy.http.request.HttpRequest;
 import dev.luffy.http.response.HttpResponse;
 import dev.luffy.model.User;
+import dev.luffy.model.UserCollection;
 
 @Controller
 public class UserController {
@@ -52,7 +60,7 @@ public class UserController {
     }
 
     @RequestMapping("/user/list.html")
-    public static void list(HttpRequest request, HttpResponse response) {
+    public static void list(HttpRequest request, HttpResponse response) throws IOException {
         logger.debug("request : {}", request);
 
         if (!request.isLoggedIn()) {
@@ -61,7 +69,16 @@ public class UserController {
         }
 
         if (request.isGet()) {
-            response.ok(request);
+            TemplateLoader loader = new ClassPathTemplateLoader();
+            loader.setPrefix("/templates");
+            loader.setSuffix(".html");
+            Handlebars handlebars = new Handlebars(loader);
+            handlebars.registerHelper("index", (value, option) -> {
+                Integer intValue = (Integer) value;
+                return intValue + 1;
+            });
+            Template template = handlebars.compile("user/list");
+            response.ok(request, template.apply(new UserCollection(DataBase.findAll())));
             return;
         }
 
@@ -106,7 +123,6 @@ public class UserController {
             } else {
                 response.addHeader("Set-Cookie", "logined=false; Path=/");
             }
-
             response.redirect(request, "/index.html");
             return;
         }

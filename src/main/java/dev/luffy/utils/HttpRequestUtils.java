@@ -1,8 +1,7 @@
 package dev.luffy.utils;
 
-import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
-import com.sun.org.apache.xml.internal.security.utils.Base64;
-
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +31,7 @@ public class HttpRequestUtils {
         if (!url.hasParams() || url.isEmptyParams()) {
             return params;
         }
-        return buildParams(url.getParams(), params);
+        return buildParams(HttpRequestUtils.decode(url.getParams()), params);
     }
 
     private static Map<String, String> buildParams(String dataSequence, Map<String, String> params) {
@@ -49,7 +48,7 @@ public class HttpRequestUtils {
         if ("".equals(bodyData)) {
             return body;
         }
-        return buildParams(bodyData, body);
+        return buildParams(HttpRequestUtils.decode(bodyData), body);
     }
 
     public static String filePathBuilder(String path, MimeType mimeType) {
@@ -69,12 +68,11 @@ public class HttpRequestUtils {
         return cookies;
     }
 
-    public static String decode(String encoded) {
+    private static String decode(String unicode) {
         try {
-            return new String(Base64.decode(encoded));
-        } catch (Base64DecodingException e) {
-            e.printStackTrace();
-            throw new IllegalArgumentException("변환 불가");
+            return URLDecoder.decode(unicode, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            return "";
         }
     }
 }
