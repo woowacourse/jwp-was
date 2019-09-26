@@ -20,7 +20,7 @@ public abstract class AbstractController implements Controller {
     protected static final String CONTENT_TYPE_HTML = "text/html;charset=utf-8";
     protected static final String CONTENT_TYPE_CSS = "text/css";
 
-    private static final String TEMPLATES_PATH = "./templates/";
+    private static final String TEMPLATES_PATH = "./templates";
 
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) throws FileNotFoundException {
