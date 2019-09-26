@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class UserCreateServlet extends RequestServlet {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    String url = "/user/create";
+    private final String url = "/user/create";
 
     @Override
     public View doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {

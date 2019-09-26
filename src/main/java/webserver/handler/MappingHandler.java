@@ -3,12 +3,10 @@ package webserver.handler;
 import exceptions.NotFoundURIException;
 import webserver.http.request.RequestUri;
 import webserver.resolver.FileResolver;
+import webserver.resolver.HandlebarsViewResolver;
 import webserver.resolver.HtmlViewResolver;
 import webserver.resolver.Resolver;
-import webserver.servlet.FileServlet;
-import webserver.servlet.HomeServlet;
-import webserver.servlet.HttpServlet;
-import webserver.servlet.UserCreateServlet;
+import webserver.servlet.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +17,8 @@ public class MappingHandler {
     static {
         servlets.put(new HomeServlet(), new HtmlViewResolver());
         servlets.put(new UserCreateServlet(), new HtmlViewResolver());
+        servlets.put(new UserListServlet(), new HandlebarsViewResolver());
+        servlets.put(new UserLoginServelet(),new HtmlViewResolver());
         servlets.put(new FileServlet(), new FileResolver());
     }
 

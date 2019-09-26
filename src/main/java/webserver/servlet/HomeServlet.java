@@ -8,7 +8,7 @@ import webserver.view.View;
 import java.io.IOException;
 
 public class HomeServlet extends RequestServlet {
-    private String url = "/";
+    private final String url = "/";
 
     @Override
     public View doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
