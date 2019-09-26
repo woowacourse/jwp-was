@@ -20,16 +20,22 @@ public class SessionRepository {
     }
 
     public Session getSession(String sessionId) {
-        return sessions.get(sessionId);
+        return sessions.containsKey(sessionId) ? sessions.get(sessionId) : createSession();
     }
 
-    public Session createSession() {
-        String uuid = UUID.randomUUID().toString();
+    private Session createSession() {
+        String sessionId = createUniqueSessionId();
+        Session session = new Session(sessionId);
+        sessions.put(sessionId, session);
+        return session;
+    }
 
+    private String createUniqueSessionId() {
+        String uuid = UUID.randomUUID().toString();
         while (sessions.get(uuid) != null) {
             uuid = UUID.randomUUID().toString();
         }
 
-        return new Session(uuid);
+        return uuid;
     }
 }
