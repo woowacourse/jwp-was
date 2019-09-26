@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import webserver.controller.Controller;
 import webserver.controller.ControllerFinder;
 import webserver.controller.CreateUserController;
+import webserver.controller.LoginUserController;
 
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -23,6 +24,7 @@ public class WebServer {
     static {
         api = new HashMap<>();
         api.put("/user/create", new CreateUserController());
+        api.put("/user/login", new LoginUserController());
     }
 
     public static void main(String args[]) throws Exception {

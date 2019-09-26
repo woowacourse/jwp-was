@@ -13,6 +13,10 @@ public class User {
         this.email = email;
     }
 
+    public boolean match(User other) {
+        return (this.userId.equals(other.userId) && this.password.equals(other.password));
+    }
+
     public String getUserId() {
         return userId;
     }

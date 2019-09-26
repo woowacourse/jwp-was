@@ -18,7 +18,6 @@ public class RequestHandler implements Runnable {
 
     private Socket connection;
 
-
     public RequestHandler(Socket connectionSocket, ControllerFinder controllerFinder) {
         this.connection = connectionSocket;
         this.controllerFinder = controllerFinder;
