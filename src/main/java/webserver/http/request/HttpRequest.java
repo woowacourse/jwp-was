@@ -58,14 +58,17 @@ public class HttpRequest {
     }
 
     private HttpSession createSession() {
-        final Cookie cookie = cookies.get(Cookies.JSESSIONID);
-        return cookie == null
-                ? sessionManager.getSession()
-                : sessionManager.getSession(cookie.getValue());
+        final HttpSession session = sessionManager.getSession();
+        cookies.add(new Cookie(Cookies.JSESSIONID, session.getId()));
+        return session;
     }
 
     public static HttpRequestBuilder builder() {
         return new HttpRequestBuilder();
+    }
+
+    public boolean hasSession() {
+        return cookies.contains(Cookies.JSESSIONID);
     }
 
     public static final class HttpRequestBuilder {

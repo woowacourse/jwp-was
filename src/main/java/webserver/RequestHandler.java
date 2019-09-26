@@ -8,6 +8,8 @@ import view.internal.HandlerBarsViewResolver;
 import view.internal.InternalResourceViewResolver;
 import view.statics.StaticResourceMapping;
 import view.statics.StaticViewResolver;
+import webserver.http.Cookie;
+import webserver.http.Cookies;
 import webserver.http.HttpStatus;
 import webserver.http.request.HttpRequest;
 import webserver.http.request.HttpRequestFactory;
@@ -43,6 +45,9 @@ public class RequestHandler implements Runnable {
             final HttpRequest httpRequest = HttpRequestFactory.generate(in);
             final HttpResponse httpResponse = new HttpResponse(out);
 
+            // todo 세션이 필요할 때 생성 후 자동으로 cookie에 set 해주기
+            initSession(httpRequest, httpResponse);
+
             final View view = renderView(httpRequest, httpResponse);
 
             if (view.isNotEmpty()) {
@@ -52,6 +57,16 @@ public class RequestHandler implements Runnable {
             httpResponse.write();
         } catch (Exception e) {
             log.error(e.getMessage());
+        }
+    }
+
+    private void initSession(final HttpRequest httpRequest, final HttpResponse httpResponse) {
+        if(!httpRequest.hasSession()){
+            final Cookie sessionCookie = new Cookie(Cookies.JSESSIONID, httpRequest.getSession().getId());
+
+            sessionCookie.setPath("/");
+            sessionCookie.setHttpOnly(true);
+            httpResponse.addCookie(sessionCookie);
         }
     }
 
