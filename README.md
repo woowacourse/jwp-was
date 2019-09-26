@@ -89,4 +89,11 @@
 - [x] /user/list.html에 handlebars 적용
 - [x] UserListServelt 만들기(get, /user/list)
 - [x] request header의 Set-Cookie가 logined=true일 경우 UserList를 /user/list.html에 뿌려서 전달한다. (handlebars 이용)
-- [x] 로그인 안한 상태면(logined=false) /login.html로 이동
+- [x] 로그인 안한 상태면(logined=false) /login.html로 이동- [x] 로그인 안한 상태면(logined=false) /login.html로 이동
+
+요구사항 3
+
+- [x] HttpSession class 생성
+- [ ] 로그인시 session 생성 및 userId 추가 (```HttpSession userSession = HttpSessionHelper.create("user_session"); userSession.put("userId","id")```)
+- [ ] 로그인시 cookie에 user_session 넣기 ()
+- [ ] logined cookie를 user_session으로 바꾸기 (로그인, userlist)
