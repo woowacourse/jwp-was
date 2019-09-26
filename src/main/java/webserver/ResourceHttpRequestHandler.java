@@ -8,8 +8,6 @@ import utils.FileIoUtils;
 import utils.StringUtils;
 import webserver.exception.ResourceNotFoundException;
 
-import static utils.StringUtils.isNotBlank;
-
 public class ResourceHttpRequestHandler {
     private static final String STATIC_RESOURCE_PATH_PREFIX = "./static";
 
@@ -33,7 +31,7 @@ public class ResourceHttpRequestHandler {
 
     public boolean canHandle(String path) {
         String[] url = StringUtils.split(path, "/");
-        return isNotBlank(url) && url[url.length - 1].matches("^[^/:*?<>|\"\\\\]+[.][a-zA-Z0-9]+$");
+        return StringUtils.isNotBlank(url) && url[url.length - 1].matches("^[^/:*?<>|\"\\\\]+[.][a-zA-Z0-9]+$");
     }
 
     public static ResourceHttpRequestHandler getInstance() {
