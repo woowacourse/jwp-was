@@ -1,6 +1,6 @@
 package http.model;
 
-import http.supoort.IllegalHttpRequestException;
+import http.controller.NotFoundException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Java6Assertions.assertThatThrownBy;
@@ -14,7 +14,7 @@ class HttpProtocolsTest {
 
     @Test
     void HTTP_프로토콜이_아닌경우() {
-        assertThatThrownBy(() -> HttpProtocols.of("1.1")).isInstanceOf(IllegalHttpRequestException.class);
+        assertThatThrownBy(() -> HttpProtocols.of("1.1")).isInstanceOf(NotFoundException.class);
     }
 
     @Test

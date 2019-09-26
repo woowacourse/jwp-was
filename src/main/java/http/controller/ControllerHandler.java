@@ -2,8 +2,6 @@ package http.controller;
 
 import http.model.HttpRequest;
 import http.model.HttpResponse;
-import http.supoort.ControllerMapping;
-import http.supoort.NotSupportedRequestException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +32,7 @@ public class ControllerHandler {
 
     private ControllerMapping resolveRequestMapping(List<ControllerMapping> controllerMappings) {
         if (controllerMappings.isEmpty()) {
-            throw new NotSupportedRequestException();
+            throw new NotFoundException();
         }
         return controllerMappings.get(0);
     }

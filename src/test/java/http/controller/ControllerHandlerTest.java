@@ -3,7 +3,6 @@ package http.controller;
 import http.model.HttpMethod;
 import http.model.HttpRequest;
 import http.model.HttpStatus;
-import http.supoort.ControllerMapping;
 import http.supoort.HttpRequestParser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,8 +11,10 @@ import java.io.ByteArrayInputStream;
 
 import static com.google.common.net.HttpHeaders.LOCATION;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ControllerHandlerTest {
+    private static final String ROOT_URI = "http://localhost:8080";
     private ControllerHandler handlers = new ControllerHandler();
     private FileResourceController fileResourceController;
     private SignUpController signUpController;
@@ -32,7 +33,7 @@ class ControllerHandlerTest {
         String request = "GET /user/create?key=value HTTP/1.1";
         HttpRequest httpRequest = HttpRequestParser.parse(new ByteArrayInputStream(request.getBytes()));
 
-        assertThat(handlers.doService(httpRequest).getHeader(LOCATION)).isEqualTo("./templates/index.html");
+        assertThat(handlers.doService(httpRequest).getHeader(LOCATION)).isEqualTo(ROOT_URI + "/index.html");
     }
 
     @Test
@@ -47,7 +48,7 @@ class ControllerHandlerTest {
                 "userId=javajigi&password=password&email=a@b.c\r\n";
         HttpRequest httpRequest = HttpRequestParser.parse(new ByteArrayInputStream(request.getBytes()));
 
-        assertThat(handlers.doService(httpRequest).getHeader(LOCATION)).isEqualTo("./templates/index.html");
+        assertThat(handlers.doService(httpRequest).getHeader(LOCATION)).isEqualTo(ROOT_URI + "/index.html");
     }
 
     @Test
@@ -64,5 +65,13 @@ class ControllerHandlerTest {
         HttpRequest httpRequest = HttpRequestParser.parse(new ByteArrayInputStream(request.getBytes()));
 
         assertThat(handlers.doService(httpRequest).getStatusLine().getHttpStatus()).isEqualTo(HttpStatus.OK);
+    }
+
+    @Test
+    void NOT_FOUND() {
+        String request = "GET /user/coogie.html HTTP/1.1";
+
+        HttpRequest httpRequest = HttpRequestParser.parse(new ByteArrayInputStream(request.getBytes()));
+        assertThatThrownBy(() -> handlers.doService(httpRequest)).isInstanceOf(NotFoundException.class);
     }
 }

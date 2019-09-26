@@ -28,6 +28,10 @@ public class HttpResponse {
         return body;
     }
 
+    public HttpHeaders getHttpHeaders() {
+        return httpHeaders;
+    }
+
     public static class Builder {
         private HttpProtocols httpProtocols;
         private HttpStatus httpStatus;

@@ -1,5 +1,6 @@
 package http.supoort;
 
+import http.controller.NotFoundException;
 import http.model.*;
 import utils.IOUtils;
 
@@ -34,7 +35,7 @@ public class HttpRequestParser {
                 httpParameters = new HttpParameters();
                 headers = new HttpHeaders(parseHeaders(headerLines));
             } else {
-                throw new IllegalHttpRequestException();
+                throw new NotFoundException();
             }
 
             HttpUri httpUri = parseUri(requestLineTokens[1], httpParameters);
@@ -42,13 +43,13 @@ public class HttpRequestParser {
             return new HttpRequest(requestLine, httpParameters, headers);
 
         } catch (IndexOutOfBoundsException e) {
-            throw new IllegalHttpRequestException(e.getMessage());
+            throw new NotFoundException();
         }
     }
 
     private static void validate(List<String> requestLines) {
         if (requestLines.isEmpty()) {
-            throw new IllegalHttpRequestException();
+            throw new NotFoundException();
         }
     }
 

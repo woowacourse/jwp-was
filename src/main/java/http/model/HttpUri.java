@@ -1,6 +1,6 @@
 package http.model;
 
-import http.supoort.IllegalHttpRequestException;
+import http.controller.NotFoundException;
 
 import java.util.Objects;
 
@@ -14,7 +14,7 @@ public class HttpUri {
 
     private void validate(String resourceLocation) {
         if (!resourceLocation.startsWith("/")) {
-            throw new IllegalHttpRequestException();
+            throw new NotFoundException();
         }
     }
 

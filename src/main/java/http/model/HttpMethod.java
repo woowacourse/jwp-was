@@ -1,6 +1,6 @@
 package http.model;
 
-import http.supoort.IllegalHttpRequestException;
+import http.controller.NotFoundException;
 
 import java.util.Arrays;
 
@@ -14,6 +14,6 @@ public enum HttpMethod {
         return Arrays.asList(HttpMethod.values()).stream()
                 .filter(value -> method.toUpperCase().equals(value.name()))
                 .findAny()
-                .orElseThrow(IllegalHttpRequestException::new);
+                .orElseThrow(NotFoundException::new);
     }
 }

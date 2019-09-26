@@ -1,5 +1,6 @@
 package http.supoort;
 
+import http.controller.NotFoundException;
 import http.model.*;
 import org.junit.jupiter.api.Test;
 
@@ -43,19 +44,19 @@ class HttpRequestParserTest {
     @Test
     void 올바른_HTTP_요청_아닌_경우1() {
         InputStream in = new ByteArrayInputStream("GET /index.html?name=coogi&age=25HTTP/1.1\r\nHost: localhost:8080/".getBytes());
-        assertThatThrownBy(() -> HttpRequestParser.parse(in)).isInstanceOf(IllegalHttpRequestException.class);
+        assertThatThrownBy(() -> HttpRequestParser.parse(in)).isInstanceOf(NotFoundException.class);
     }
 
     @Test
     void 올바른_HTTP_요청_아닌_경우2() {
         InputStream in = new ByteArrayInputStream("GET/index.html?name=coogi&age=25 HTTP/1.1\r\nHost: localhost:8080/".getBytes());
-        assertThatThrownBy(() -> HttpRequestParser.parse(in)).isInstanceOf(IllegalHttpRequestException.class);
+        assertThatThrownBy(() -> HttpRequestParser.parse(in)).isInstanceOf(NotFoundException.class);
     }
 
     @Test
     void 올바른_HTTP_요청_아닌_경우3() {
         InputStream in = new ByteArrayInputStream("".getBytes());
-        assertThatThrownBy(() -> HttpRequestParser.parse(in)).isInstanceOf(IllegalHttpRequestException.class);
+        assertThatThrownBy(() -> HttpRequestParser.parse(in)).isInstanceOf(NotFoundException.class);
     }
 
     @Test
