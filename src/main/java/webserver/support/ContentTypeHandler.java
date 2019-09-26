@@ -31,6 +31,6 @@ public class ContentTypeHandler {
             return String.format(IMAGE_CONTENT_TYPE_FORMAT, contentType);
         }
 
-        throw new InvalidContentTypeException("invalid content type");
+        throw new InvalidContentTypeException();
     }
 }
