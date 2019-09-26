@@ -12,4 +12,8 @@ public class HttpHeaderFields {
     public int getContentLength() {
         return Integer.parseInt(headerFields.get("Content-Length"));
     }
+
+    public String getHeaderFieldValue(String key) {
+        return headerFields.get(key);
+    }
 }
