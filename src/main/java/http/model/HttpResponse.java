@@ -1,5 +1,7 @@
 package http.model;
 
+import utils.FileIoUtils;
+
 public class HttpResponse {
     private StatusLine statusLine;
     private HttpHeaders httpHeaders;
@@ -21,6 +23,15 @@ public class HttpResponse {
 
     public byte[] getBody() {
         return body;
+    }
+
+    public void forward(String filePath) {
+        this.body = FileIoUtils.loadFileFromClasspath(filePath);
+        httpHeaders.addHeader("Content-Length", Integer.toString(body.length));
+    }
+
+    public void sendRedirect(String filePath) {
+        httpHeaders.addHeader("Location", filePath);
     }
 
     public static class Builder {
