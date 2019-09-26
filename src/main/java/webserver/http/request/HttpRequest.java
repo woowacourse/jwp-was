@@ -18,7 +18,7 @@ public class HttpRequest {
         this.headers = headers;
         this.parameters = parameters;
         this.cookies = cookies;
-        sessionManager = HttpSessionManager.getInstance();
+        sessionManager = HttpSessionManager.getInstance(); // todo di
     }
 
     public HttpMethod getMethod() {

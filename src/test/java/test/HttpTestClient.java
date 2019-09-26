@@ -3,6 +3,7 @@ package test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.WebServer;
+import webserver.http.Cookie;
 import webserver.http.Cookies;
 import webserver.http.HttpHeaders;
 import webserver.http.HttpStatus;
@@ -135,7 +136,7 @@ public class HttpTestClient {
         private final HttpStatus httpStatus;
         private final Map<String, String> headers = new HashMap<>();
         private final String body;
-        private final Cookies cookies;
+        private final Cookies cookies = new Cookies();
 
         public ResponseSpec(final String response) {
             final String[] split = response.split("\n");
@@ -150,15 +151,19 @@ public class HttpTestClient {
             String line;
             while (StringUtils.isNotEmpty(line = split[i++])) {
                 final Pair pair = HttpUtils.parseHeader(line);
-                headers.put(pair.getKey(), pair.getValue());
+
+                if (pair.getKey().equals(HttpHeaders.SET_COOKIE)) {
+                    final String value = pair.getValue().split(Cookies.DELIMITER)[0];
+                    final Pair cookiePair = HttpUtils.parseKeyValue(value, Cookies.DELIMITER_PAIR);
+                    cookies.add(new Cookie(cookiePair.getKey(), cookiePair.getValue()));
+                } else {
+                    headers.put(pair.getKey(), pair.getValue());
+                }
+
                 if (i >= split.length) {
                     break;
                 }
             }
-
-            // cookies
-            cookies = new Cookies(headers.get(HttpHeaders.SET_COOKIE));
-
 
             // body
             final StringBuilder sb = new StringBuilder();
@@ -191,7 +196,7 @@ public class HttpTestClient {
         }
 
         public ResponseSpec matchCookie(final String key, final String value) {
-            assertThat(cookies.get(key)).isEqualTo(value);
+            assertThat(cookies.get(key).getValue()).isEqualTo(value);
             return this;
         }
 

@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 
 public class Cookies {
     public static final String JSESSIONID = "JSESSIONID";
-    static final String DELIMITER = "; ";
-    static final String DELIMITER_PAIR = "=";
+    public static final String DELIMITER = "; ";
+    public static final String DELIMITER_PAIR = "=";
 
     private final Map<String, Cookie> cookies;
 

@@ -84,12 +84,6 @@ public class HttpResponse {
         }
     }
 
-    private void writeSetCookie(final DataOutputStream dos) throws IOException {
-        for (final String name : cookies.keySet()) {
-            dos.writeBytes(String.format("%s: %s\n", SET_COOKIE, cookies.get(name).parseInfoAsString()));
-        }
-    }
-
     private void writeStartLine(final DataOutputStream dos) throws IOException {
         dos.writeBytes(String.format("%s %s %s\n", httpVersion.getHttpVersion(), httpStatus.getCode(), httpStatus.getPhrase()));
     }
@@ -104,6 +98,12 @@ public class HttpResponse {
         }
 
         dos.writeBytes("\n");
+    }
+
+    private void writeSetCookie(final DataOutputStream dos) throws IOException {
+        for (final String name : cookies.keySet()) {
+            dos.writeBytes(String.format("%s: %s\n", SET_COOKIE, cookies.get(name).parseInfoAsString()));
+        }
     }
 
     private void writeBody(final DataOutputStream dos) throws IOException {
