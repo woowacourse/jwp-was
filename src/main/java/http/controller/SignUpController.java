@@ -7,7 +7,7 @@ import model.User;
 import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
 
 public class SignUpController implements Controller {
-    private final static String TEMPLATES_PATH = "./templates";
+    private final static String ROOT_URI = "http://localhost:8080";
 
     @Override
     public HttpResponse service(HttpRequest httpRequest) {
@@ -21,7 +21,7 @@ public class SignUpController implements Controller {
         DataBase.addUser(user);
 
         return new HttpResponse.Builder()
-                .sendRedirect(TEMPLATES_PATH + "/index.html")
+                .sendRedirect(ROOT_URI + "/index.html")
                 .protocols(HttpProtocols.HTTP1_1)
                 .status(HttpStatus.FOUND)
                 .addHeader(CONTENT_TYPE, ContentType.HTML.getType())
