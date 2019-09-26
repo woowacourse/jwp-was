@@ -4,6 +4,7 @@ import db.DataBase;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.response.ResponseStatus;
+import http.session.Session;
 import model.User;
 import utils.FileIoUtils;
 
@@ -20,7 +21,7 @@ public class LoginController extends AbstractController {
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         httpResponse.setBody(FileIoUtils.loadFileFromClasspath("./templates" + "/user/login" + ".html"));
         httpResponse.setResponseStatus(ResponseStatus.OK);
-        httpResponse.addHeaderAttribute("Content-Type", "text/html;charset=utf-8");
+        httpResponse.addHeaderAttribute("Content-Type", "text/html; charset=utf-8");
     }
 
     @Override
@@ -29,10 +30,13 @@ public class LoginController extends AbstractController {
         String password = httpRequest.getFormDataParameter("password");
 
         User user = DataBase.findUserById(userId);
-        if (user.matchPassword(password)) {
+        if (user != null && user.matchPassword(password)) {
             httpResponse.setResponseStatus(ResponseStatus.FOUND);
             httpResponse.addHeaderAttribute("Location", "/");
-            httpResponse.addHeaderAttribute("Set-Cookie", "logined=true; Path=/");
+
+            Session session = httpRequest.getSession();
+            session.setAttribute("user", user);
+            httpResponse.addHeaderAttribute("Set-Cookie", "SessionID=" + session.getId() + "; Path=/");
             return;
         }
         httpResponse.setResponseStatus(ResponseStatus.FOUND);
