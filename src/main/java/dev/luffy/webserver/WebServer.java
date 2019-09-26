@@ -22,9 +22,10 @@ public class WebServer {
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
 
     private static final int DEFAULT_PORT = 8080;
+    private static final int THREAD_POOL = 100;
 
     public static void main(String args[]) throws Exception {
-        requestMappingProcess();
+        scanRequestMapping();
 
         int port = 0;
         if (args == null || args.length == 0) {
@@ -33,7 +34,7 @@ public class WebServer {
             port = Integer.parseInt(args[0]);
         }
 
-        ExecutorService executor = Executors.newFixedThreadPool(100);
+        ExecutorService executor = Executors.newFixedThreadPool(THREAD_POOL);
         // 서버소켓을 생성한다. 웹서버는 기본적으로 8080번 포트를 사용한다.
         try (ServerSocket listenSocket = new ServerSocket(port)) {
             logger.info("Web Application Server started {} port.", port);
@@ -42,8 +43,7 @@ public class WebServer {
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
                 Socket finalConnection = connection;
-                executor.execute(() ->
-                {
+                executor.execute(() -> {
                     String threadName = Thread.currentThread().getName();
                     logger.debug("Thread - {}", threadName);
                     Thread thread = new Thread(new RequestHandler(finalConnection));
@@ -53,7 +53,7 @@ public class WebServer {
         }
     }
 
-    private static void requestMappingProcess() throws NoSuchMethodException {
+    private static void scanRequestMapping() throws NoSuchMethodException {
         Reflections reflections = new Reflections("dev.luffy");
         Set<Class<?>> controllerClasses = reflections.getTypesAnnotatedWith(Controller.class);
         Method requestMapAddMethod = RequestMapper.class.getMethod("add", String.class, Method.class);
