@@ -1,4 +1,4 @@
-package http.response.core;
+package webserver.http.response.core;
 
 import java.util.Arrays;
 
@@ -28,7 +28,7 @@ public enum ResponseStatus {
         return httpStatusCode;
     }
 
-    public String getResponseStatusHeader() {
-        return httpStatusCode + " " + httpStatus + " \r\n";
+    public String getHttpStatus() {
+        return httpStatus;
     }
 }
