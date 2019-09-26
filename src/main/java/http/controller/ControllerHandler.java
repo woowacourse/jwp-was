@@ -1,41 +1,41 @@
 package http.controller;
 
 import http.model.HttpRequest;
+import http.model.HttpResponse;
+import http.supoort.ControllerMapping;
 import http.supoort.NotSupportedRequestException;
-import http.supoort.RequestMapping;
-import http.view.ModelAndView;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class HttpRequestHandlers {
-    private Map<RequestMapping, HttpRequestHandler> handlers;
+public class ControllerHandler {
+    private Map<ControllerMapping, Controller> handlers;
 
-    public HttpRequestHandlers() {
+    public ControllerHandler() {
         handlers = new HashMap<>();
     }
 
-    public void addHandler(RequestMapping mapping, HttpRequestHandler handler) {
+    public void addController(ControllerMapping mapping, Controller handler) {
         handlers.put(mapping, handler);
     }
 
-    public ModelAndView doService(HttpRequest httpRequest) {
+    public HttpResponse doService(HttpRequest httpRequest) {
         return handlers.get(resolveRequestMapping(getCandidate(httpRequest))).handle(httpRequest);
     }
 
-    private List<RequestMapping> getCandidate(HttpRequest httpRequest) {
+    private List<ControllerMapping> getCandidate(HttpRequest httpRequest) {
         return handlers.keySet().stream()
                 .filter(key -> key.match(httpRequest))
                 .sorted()
                 .collect(Collectors.toList());
     }
 
-    private RequestMapping resolveRequestMapping(List<RequestMapping> requestMappings) {
-        if (requestMappings.isEmpty()) {
+    private ControllerMapping resolveRequestMapping(List<ControllerMapping> controllerMappings) {
+        if (controllerMappings.isEmpty()) {
             throw new NotSupportedRequestException();
         }
-        return requestMappings.get(0);
+        return controllerMappings.get(0);
     }
 }

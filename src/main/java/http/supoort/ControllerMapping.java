@@ -7,12 +7,12 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class RequestMapping implements Comparable<RequestMapping> {
+public class ControllerMapping implements Comparable<ControllerMapping> {
     private final HttpMethod method;
     private final String regex;
     private final Pattern pattern;
 
-    public RequestMapping(HttpMethod method, String regex) {
+    public ControllerMapping(HttpMethod method, String regex) {
         this.method = method;
         this.regex = regex;
         this.pattern = Pattern.compile(regex);
@@ -28,7 +28,7 @@ public class RequestMapping implements Comparable<RequestMapping> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RequestMapping that = (RequestMapping) o;
+        ControllerMapping that = (ControllerMapping) o;
         return method == that.method &&
                 Objects.equals(regex, that.regex);
     }
@@ -39,7 +39,7 @@ public class RequestMapping implements Comparable<RequestMapping> {
     }
 
     @Override
-    public int compareTo(RequestMapping requestMapping) {
-        return requestMapping.regex.length() - this.regex.length();
+    public int compareTo(ControllerMapping controllerMapping) {
+        return controllerMapping.regex.length() - this.regex.length();
     }
 }

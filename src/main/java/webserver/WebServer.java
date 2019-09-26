@@ -1,11 +1,11 @@
 package webserver;
 
-import http.controller.FileResourceRequestHandler;
-import http.controller.HttpRequestHandler;
-import http.controller.HttpRequestHandlers;
-import http.controller.UserRequestHandler;
+import http.controller.Controller;
+import http.controller.ControllerHandler;
+import http.controller.FileResourceController;
+import http.controller.SignUpController;
 import http.model.HttpMethod;
-import http.supoort.RequestMapping;
+import http.supoort.ControllerMapping;
 import http.supoort.ResolverMapping;
 import http.view.ViewHandler;
 import http.view.ViewStaticResolver;
@@ -28,7 +28,7 @@ public class WebServer {
     public static void main(String[] args) throws Exception {
         int port = getPort(args);
 
-        HttpRequestHandlers httpRequestHandlers = initRequestHandlers();
+        ControllerHandler controllerHandler = initControllerHandler();
         ViewHandler viewHandler = initViewHandlers();
 
         ExecutorService es = Executors.newFixedThreadPool(100);
@@ -40,7 +40,7 @@ public class WebServer {
             // 클라이언트가 연결될때까지 대기한다.
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
-                es.execute(new RequestHandler(connection, httpRequestHandlers, viewHandler));
+                es.execute(new RequestHandler(connection, controllerHandler, viewHandler));
             }
         }
         es.shutdown();
@@ -57,15 +57,15 @@ public class WebServer {
         return port;
     }
 
-    private static HttpRequestHandlers initRequestHandlers() {
-        HttpRequestHandlers httpRequestHandlers = new HttpRequestHandlers();
-        HttpRequestHandler fileHandler = new FileResourceRequestHandler();
-        HttpRequestHandler userRequestHandler = new UserRequestHandler();
+    private static ControllerHandler initControllerHandler() {
+        ControllerHandler controllerHandler = new ControllerHandler();
+        Controller fileResourceController = new FileResourceController();
+        Controller signUpController = new SignUpController();
 
-        httpRequestHandlers.addHandler(new RequestMapping(HttpMethod.GET, "/*"), fileHandler);
-        httpRequestHandlers.addHandler(new RequestMapping(HttpMethod.GET, "/user/create"), userRequestHandler);
-        httpRequestHandlers.addHandler(new RequestMapping(HttpMethod.POST, "/user/create"), userRequestHandler);
-        return httpRequestHandlers;
+        controllerHandler.addController(new ControllerMapping(HttpMethod.GET, "/*"), fileResourceController);
+        controllerHandler.addController(new ControllerMapping(HttpMethod.GET, "/user/create"), signUpController);
+        controllerHandler.addController(new ControllerMapping(HttpMethod.POST, "/user/create"), signUpController);
+        return controllerHandler;
     }
 
     private static ViewHandler initViewHandlers() {

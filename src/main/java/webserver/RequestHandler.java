@@ -1,13 +1,12 @@
 package webserver;
 
-import http.controller.HttpRequestHandlers;
+import http.controller.ControllerHandler;
 import http.model.HttpProtocols;
 import http.model.HttpRequest;
 import http.model.HttpResponse;
 import http.model.HttpStatus;
 import http.supoort.HttpRequestParser;
 import http.supoort.ResponseMessageConverter;
-import http.view.ModelAndView;
 import http.view.ViewHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,12 +21,12 @@ public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
-    private HttpRequestHandlers httpRequestHandlers;
+    private ControllerHandler controllerHandler;
     private ViewHandler viewHandler;
 
-    public RequestHandler(Socket connectionSocket, HttpRequestHandlers httpRequestHandlers, ViewHandler viewHandler) {
+    public RequestHandler(Socket connectionSocket, ControllerHandler controllerHandler, ViewHandler viewHandler) {
         this.connection = connectionSocket;
-        this.httpRequestHandlers = httpRequestHandlers;
+        this.controllerHandler = controllerHandler;
         this.viewHandler = viewHandler;
     }
 
@@ -44,13 +43,11 @@ public class RequestHandler implements Runnable {
 
     private void handleRequest(InputStream in, OutputStream out) {
         try {
-            HttpRequest httpRequest;
-            HttpResponse httpResponse;
-            httpRequest = HttpRequestParser.parse(in);
+            HttpRequest httpRequest = HttpRequestParser.parse(in);
 
-            ModelAndView modelAndView = httpRequestHandlers.doService(httpRequest);
+            HttpResponse httpResponse = controllerHandler.doService(httpRequest);
 
-            response(viewHandler.handle(modelAndView), out);
+//            response(viewHandler.handle(modelAndView), out);
 
         } catch (Exception e) {
             logger.error(e.getMessage());

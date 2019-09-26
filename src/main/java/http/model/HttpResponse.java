@@ -2,6 +2,9 @@ package http.model;
 
 import utils.FileIoUtils;
 
+import static com.google.common.net.HttpHeaders.CONTENT_LENGTH;
+import static com.google.common.net.HttpHeaders.LOCATION;
+
 public class HttpResponse {
     private StatusLine statusLine;
     private HttpHeaders httpHeaders;
@@ -23,15 +26,6 @@ public class HttpResponse {
 
     public byte[] getBody() {
         return body;
-    }
-
-    public void forward(String filePath) {
-        this.body = FileIoUtils.loadFileFromClasspath(filePath);
-        httpHeaders.addHeader("Content-Length", Integer.toString(body.length));
-    }
-
-    public void sendRedirect(String filePath) {
-        httpHeaders.addHeader("Location", filePath);
     }
 
     public static class Builder {
@@ -62,6 +56,17 @@ public class HttpResponse {
 
         public Builder addHeader(String key, String value) {
             httpHeaders.addHeader(key, value);
+            return this;
+        }
+
+        public Builder forward(String filePath) {
+            this.body = FileIoUtils.loadFileFromClasspath(filePath);
+            httpHeaders.addHeader(CONTENT_LENGTH, Integer.toString(body.length));
+            return this;
+        }
+
+        public Builder sendRedirect(String filePath) {
+            httpHeaders.addHeader(LOCATION, filePath);
             return this;
         }
 
