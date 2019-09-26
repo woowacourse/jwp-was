@@ -24,13 +24,6 @@ public class HttpResponse {
         this.responseBody = responseBody;
     }
 
-    private static HttpResponse sendErrorResponse(ResponseStatus responseStatus) {
-        return new HttpResponse(
-                responseStatus,
-                new ResponseHeaders(),
-                new ResponseBody(String.format("error/%d.html", responseStatus.getCode())));
-    }
-
     public static HttpResponse notFound() {
         return sendErrorResponse(ResponseStatus.NOT_FOUND);
     }
@@ -43,13 +36,26 @@ public class HttpResponse {
         return sendErrorResponse(ResponseStatus.METHOD_NOT_ALLOWED);
     }
 
+    private static HttpResponse sendErrorResponse(ResponseStatus responseStatus) {
+        return new HttpResponse(
+                responseStatus,
+                new ResponseHeaders(),
+                new ResponseBody(String.format("error/%d.html", responseStatus.getCode())));
+    }
+
     public void forward(String filePath) {
         responseBody = new ResponseBody(filePath);
         responseHeaders.put("Content-Length", responseBody.getBodyLength());
     }
 
+
+
     public Object getHeader(String key) {
         return responseHeaders.get(key);
+    }
+
+    public void addHeader(String key, String value) {
+        responseHeaders.put(key, value);
     }
 
     public void setContentType(String contentType) {
@@ -90,5 +96,10 @@ public class HttpResponse {
 
     public ResponseStatus getResponseStatus() {
         return responseStatus;
+    }
+
+    public void templateForward(String aa) {
+        responseBody = new ResponseBody(aa.getBytes());
+        responseHeaders.put("Content-Length", responseBody.getBodyLength());
     }
 }

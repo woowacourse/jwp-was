@@ -31,9 +31,11 @@ public class RequestMapper {
     static {
         get("/", IndexController.getInstance().goIndex());
         get("/user/form", UserController.getInstance().goForm());
-        post("/user/create", UserController.getInstance().createUser());
         get("/login", UserController.getInstance().goLoginForm());
-        get("/login-fail", UserController.getInstance().goLoginForm());
+        get("/login-fail", UserController.getInstance().goLoginFail());
+        get("/user/list", UserController.getInstance().goUserList());
+
+        post("/user/create", UserController.getInstance().createUser());
         post("/login", UserController.getInstance().login());
     }
 

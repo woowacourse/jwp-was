@@ -1,10 +1,18 @@
 package web.controller;
 
+import com.github.jknack.handlebars.Handlebars;
+import com.github.jknack.handlebars.Template;
+import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
+import com.github.jknack.handlebars.io.TemplateLoader;
 import domain.db.DataBase;
 import domain.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.controller.Responsive;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -58,8 +66,55 @@ public class UserController {
 
     public Responsive login() {
         return (request, response) -> {
+            String userId = request.getBody("userId");
+            String password = request.getBody("password");
 
-            response.sendRedirect("/");
+            User user = DataBase.findUserById(userId);
+
+            if (user.checkPassword(password)) {
+                response.addHeader("Set-Cookie", "loggedIn=true; Path=/");
+                response.sendRedirect("/");
+                return;
+            }
+
+            response.addHeader("Set-Cookie", "loggedIn=false;");
+            response.sendRedirect("/login");
+        };
+    }
+
+    public Responsive goUserList() {
+        return (request, response) -> {
+            String cookies = request.getCookie();
+            String[] pieceOfCookie = cookies.split("; ");
+            Map<String, String> cookieMenu = new HashMap<>();
+
+            for (String cookie : pieceOfCookie) {
+                String[] brokenCookie = cookie.split("=");
+                cookieMenu.put(brokenCookie[0], brokenCookie[1]);
+            }
+
+            boolean loggedIn = Boolean.parseBoolean(cookieMenu.get("loggedIn"));
+            if (!loggedIn) {
+                response.sendRedirect("/login");
+                return;
+            }
+
+            Map<String, Object> map = new HashMap<>();
+            map.put("users", DataBase.findAll());
+
+            try {
+                TemplateLoader loader = new ClassPathTemplateLoader();
+                loader.setPrefix("/templates");
+                loader.setSuffix(".html");
+                Handlebars handlebars = new Handlebars(loader);
+                handlebars.registerHelper("coogie", (context, options) -> (Integer) context + 1);
+
+                Template template = handlebars.compile("user/list");
+                String aa = template.apply(map);
+                response.templateForward(aa);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         };
     }
 }

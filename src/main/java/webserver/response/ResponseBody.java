@@ -25,6 +25,10 @@ public class ResponseBody {
         }
     }
 
+    public ResponseBody(byte[] body) {
+        this.body = body;
+    }
+
     public int getBodyLength() {
         return body.length;
     }

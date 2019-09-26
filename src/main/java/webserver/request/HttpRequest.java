@@ -52,6 +52,10 @@ public class HttpRequest {
         requestBody.put(bodyLine);
     }
 
+    public String getCookie() {
+        return requestHeaders.get("Cookie");
+    }
+
     public RequestMapping getRequestMapping() {
         return new RequestMapping(getMethod(), getPath());
     }
