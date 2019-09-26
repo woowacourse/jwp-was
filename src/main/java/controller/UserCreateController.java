@@ -7,7 +7,6 @@ import http.request.HttpRequest;
 import http.request.HttpUriParser;
 import http.response.HttpResponse;
 import http.response.HttpStatus;
-import http.response.Response302;
 import http.response.StatusLine;
 import model.User;
 
@@ -19,20 +18,20 @@ public class UserCreateController implements Controller {
     private static final RequestMapping USER_CREATE_REQUEST_MAPPING = RequestMapping.of(HttpMethod.POST, HttpUriParser.parse(USER_CREATE_PATH));
 
     @Override
-    public HttpResponse service(final HttpRequest httpRequest) {
-        String userId = httpRequest.findUriParam("userId");
-        String password = httpRequest.findUriParam("password");
-        String name = httpRequest.findUriParam("name");
-        String email = httpRequest.findUriParam("email");
+    public void service(final HttpRequest httpRequest, final HttpResponse httpResponse) {
+        String userId = httpRequest.findBodyParam("userId");
+        String password = httpRequest.findBodyParam("password");
+        String name = httpRequest.findBodyParam("name");
+        String email = httpRequest.findBodyParam("email");
 
-        User user = new User(userId, password, name, email);
-        DataBase.addUser(user);
+        DataBase.addUser(new User(userId, password, name, email));
 
         StatusLine statusLine = new StatusLine(httpRequest.getHttpVersion(), HttpStatus.FOUND);
         HttpHeader responseHeader = new HttpHeader();
         responseHeader.putHeader("Location", INDEX_PATH);
 
-        return new Response302(statusLine, responseHeader, null);
+        httpResponse.setStatusLine(statusLine);
+        httpResponse.setResponseHeader(responseHeader);
     }
 
     @Override

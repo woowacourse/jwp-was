@@ -1,6 +1,5 @@
 package webserver;
 
-import controller.Controllers;
 import http.request.HttpRequest;
 import http.request.HttpRequestParser;
 import http.response.HttpResponse;
@@ -30,10 +29,11 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest httpRequest = HttpRequestParser.parse(in);
-            HttpResponse httpResponse = new Controllers().service(httpRequest);
-
+//            HttpResponse httpResponse = new Controllers().service(httpRequest);
             DataOutputStream dos = new DataOutputStream(out);
-            httpResponse.writeResponse(dos);
+            HttpResponse httpResponse = new HttpResponse(dos);
+
+
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }

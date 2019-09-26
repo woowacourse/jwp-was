@@ -20,12 +20,12 @@ public class Controllers {
     public Controllers() {
     }
 
-    public HttpResponse service(HttpRequest httpRequest) {
+    public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
+
         RequestMapping requestMapping = RequestMapping.of(httpRequest.getHttpMethod(), httpRequest.getUri());
 
-        return CONTROLLERS.stream().filter(controller -> controller.isMapping(requestMapping))
+        CONTROLLERS.stream().filter(controller -> controller.isMapping(requestMapping))
             .findFirst()
-            .map(controller -> controller.service(httpRequest))
-            .orElse(null);      // TODO: null -> 405 response로 변경
+            .ifPresentOrElse(controller -> controller.service(httpRequest,httpResponse), httpResponse::notFound);
     }
 }

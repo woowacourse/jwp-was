@@ -10,8 +10,9 @@ import java.util.Map;
 public class CookieParser {
 
     private static final String LAST_IS_SEMICOLON_REGEX = "^[a-zA-Z0-9]+;$";
-    public static final String ATTRIBUTE_DELIMITER = "=";
-    public static final String COOKIE_DELIMITER = " ";
+    private static final String ATTRIBUTE_DELIMITER = "=";
+    private static final String COOKIE_DELIMITER = " ";
+    public static final int START_INDEX = 0;
 
     public static Cookie parse(String line) {
         String[] cookieTokens = Arrays.stream(line.split(COOKIE_DELIMITER)).map(String::trim)
@@ -24,10 +25,7 @@ public class CookieParser {
             putAttributes(attributeWithValue, attributeWithoutValue, cookieToken);
         });
 
-        return CookieBuilder.create()
-            .withAttributeWithValue(attributeWithValue)
-            .withAttributeWithoutValue(attributeWithoutValue)
-            .build();
+        return new Cookie(attributeWithValue, attributeWithoutValue);
     }
 
     private static void putAttributes(final Map<String, String> attributeWithValue, final List<String> attributeWithoutValue, final String cookieToken) {
@@ -41,7 +39,8 @@ public class CookieParser {
 
     private static String deleteSemicolon(String cookieToken) {
         if (cookieToken.matches(LAST_IS_SEMICOLON_REGEX)) {
-            cookieToken = cookieToken.substring(0, cookieToken.length() - 1);
+            int lastIndex = cookieToken.length() - 1;
+            cookieToken = cookieToken.substring(START_INDEX, lastIndex);
         }
         return cookieToken;
     }

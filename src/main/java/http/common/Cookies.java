@@ -1,13 +1,24 @@
 package http.common;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Cookies {
 
     private List<Cookie> cookies;
 
-    public Cookies(final List<Cookie> cookies) {
-        this.cookies = cookies;
+    private Cookies() {
+        this.cookies = new ArrayList<>();
+    }
+
+
+    public static Cookies create(){
+        return new Cookies();
+    }
+
+    public Cookies addCookie(Cookie cookie) {
+        cookies.add(cookie);
+        return this;
     }
 
     public boolean isExist() {
@@ -21,6 +32,7 @@ public class Cookies {
     public Cookie getCookie(int index) {
         return cookies.get(index);
     }
+
 
     @Override
     public String toString() {

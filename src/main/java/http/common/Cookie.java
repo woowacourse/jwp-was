@@ -10,7 +10,6 @@ public class Cookie {
     private final Map<String, String> attributeWithValue;
     private final List<String> attributeWithoutValue;
 
-
     public Cookie(final Map<String, String> attributeWithValue, final List<String> attributeWithoutValue) {
         this.attributeWithValue = attributeWithValue;
         this.attributeWithoutValue = attributeWithoutValue;
