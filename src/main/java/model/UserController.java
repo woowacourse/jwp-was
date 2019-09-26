@@ -1,7 +1,7 @@
 package model;
 
 import db.DataBase;
-import http.HttpRequest;
+import http.request.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

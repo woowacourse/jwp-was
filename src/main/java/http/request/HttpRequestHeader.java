@@ -1,4 +1,4 @@
-package http;
+package http.request;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +14,7 @@ public class HttpRequestHeader {
     private final HttpRequestStartLine httpRequestStartLine;
     private final Map<String, String> headers = new HashMap<>();
 
-    public HttpRequestHeader(List<String> inputs) {
-        logger.debug("Show inputs : {}", inputs);
+    public HttpRequestHeader(final List<String> inputs) {
         httpRequestStartLine = new HttpRequestStartLine(inputs.get(0));
         for (String header : inputs.subList(1, inputs.size())) {
             int indexOfDelimiter = header.indexOf(DELIMITER_OF_HEADER);

@@ -1,6 +1,6 @@
 package utils;
 
-import http.HttpRequestHeader;
+import http.request.HttpRequestHeader;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -48,6 +48,16 @@ public class IOUtils {
         while (!BLANK.equals(line) && Objects.nonNull(line)) {
             inputs.add(line);
             line = br.readLine();
+        }
+        return inputs;
+    }
+
+    public static List<String> parseAllLine(BufferedReader bufferedReader) throws IOException {
+        List<String> inputs = new ArrayList<>();
+        String line = bufferedReader.readLine();
+        while (Objects.nonNull(line)) {
+            inputs.add(line);
+            line = bufferedReader.readLine();
         }
         return inputs;
     }

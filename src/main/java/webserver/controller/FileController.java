@@ -1,7 +1,7 @@
 package webserver.controller;
 
-import http.HttpRequest;
 import http.HttpResponse;
+import http.request.HttpRequest;
 import http.support.resource.ResourceType;
 import http.support.resource.ResourceTypeFactory;
 import webserver.support.PathHandler;

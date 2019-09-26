@@ -1,4 +1,4 @@
-package http;
+package http.request;
 
 import com.github.jknack.handlebars.internal.lang3.StringUtils;
 
