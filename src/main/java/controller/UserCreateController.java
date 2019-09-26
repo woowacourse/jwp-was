@@ -1,7 +1,6 @@
 package controller;
 
 import db.DataBase;
-import http.common.HttpHeader;
 import http.request.HttpMethod;
 import http.request.HttpRequest;
 import http.request.HttpUriParser;
@@ -27,11 +26,9 @@ public class UserCreateController implements Controller {
         DataBase.addUser(new User(userId, password, name, email));
 
         StatusLine statusLine = new StatusLine(httpRequest.getHttpVersion(), HttpStatus.FOUND);
-        HttpHeader responseHeader = new HttpHeader();
-        responseHeader.putHeader("Location", INDEX_PATH);
+        httpResponse.putHeader("Location", INDEX_PATH);
 
         httpResponse.setStatusLine(statusLine);
-        httpResponse.setResponseHeader(responseHeader);
     }
 
     @Override

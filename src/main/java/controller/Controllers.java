@@ -5,6 +5,7 @@ import http.response.HttpResponse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Controllers {
 
@@ -24,8 +25,15 @@ public class Controllers {
 
         RequestMapping requestMapping = RequestMapping.of(httpRequest.getHttpMethod(), httpRequest.getUri());
 
-        CONTROLLERS.stream().filter(controller -> controller.isMapping(requestMapping))
-            .findFirst()
-            .ifPresentOrElse(controller -> controller.service(httpRequest,httpResponse), httpResponse::notFound);
+        Optional<Controller> FoundController = CONTROLLERS.stream().filter(controller -> controller.isMapping(requestMapping))
+            .findFirst();
+
+        if (FoundController.isPresent()) {
+            FoundController.get().service(httpRequest, httpResponse);
+            return;
+        }
+
+        // Todo : 404 status 넘기기
+        httpResponse.notFound();
     }
 }

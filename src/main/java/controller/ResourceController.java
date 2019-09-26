@@ -1,6 +1,5 @@
 package controller;
 
-import http.common.HttpHeader;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.response.HttpStatus;
@@ -20,10 +19,8 @@ public class ResourceController implements Controller {
         httpResponse.setResponseBody(ResponseBodyParser.parse(filePath));
 
         String contentType = new Tika().detect(filePath);
-        HttpHeader responseHeader = new HttpHeader();
-        responseHeader.putHeader("Content-Type", contentType);
-        responseHeader.putHeader("Content-Length", Integer.toString(httpResponse.getBodyLength()));
-        httpResponse.setResponseHeader(responseHeader);
+        httpResponse.putHeader("Content-Type", contentType);
+        httpResponse.putHeader("Content-Length", Integer.toString(httpResponse.getBodyLength()));
     }
 
     @Override

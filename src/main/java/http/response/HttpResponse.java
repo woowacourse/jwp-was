@@ -12,7 +12,7 @@ public class HttpResponse {
     private static final Logger log = LoggerFactory.getLogger(HttpResponse.class);
     private DataOutputStream dos;
     private StatusLine statusLine;
-    private HttpHeader responseHeader;
+    private HttpHeader responseHeader = new HttpHeader();
     private Cookies cookies;
     private ResponseBody responseBody;
 

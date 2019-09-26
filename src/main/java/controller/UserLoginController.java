@@ -3,7 +3,6 @@ package controller;
 import db.DataBase;
 import http.common.CookieParser;
 import http.common.Cookies;
-import http.common.HttpHeader;
 import http.request.HttpMethod;
 import http.request.HttpRequest;
 import http.request.HttpUriParser;
@@ -28,21 +27,18 @@ public class UserLoginController implements Controller {
         User user = DataBase.findUserById(userId);
 
         httpResponse.setStatusLine(new StatusLine(httpRequest.getHttpVersion(), HttpStatus.FOUND));
-        HttpHeader responseHeader = new HttpHeader();
 
         if (nonNull(user) && user.isPasswordEquals(password)) {
-            responseHeader.putHeader("Location", LOGIN_PATH);
-            Cookies cookies = Cookies.create().addCookie(CookieParser.parse("logined=true; Path=/"));
+            httpResponse.putHeader("Location", LOGIN_PATH);
 
-            httpResponse.setResponseHeader(responseHeader);
+            Cookies cookies = Cookies.create().addCookie(CookieParser.parse("logined=true; Path=/"));
             httpResponse.setCookies(cookies);
             return;
         }
 
-        responseHeader.putHeader("Location", LOGIN_FAIL_PATH);
-        Cookies cookies = Cookies.create().addCookie(CookieParser.parse("logined=false"));
+        httpResponse.putHeader("Location", LOGIN_FAIL_PATH);
 
-        httpResponse.setResponseHeader(responseHeader);
+        Cookies cookies = Cookies.create().addCookie(CookieParser.parse("logined=false"));
         httpResponse.setCookies(cookies);
     }
 
