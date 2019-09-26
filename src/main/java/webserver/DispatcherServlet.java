@@ -36,11 +36,6 @@ public class DispatcherServlet {
             Controller controller = HandlerMapping.handle(httpRequest);
             View view = controller.service(httpRequest, httpResponse);
             view.render(httpRequest, httpResponse);
-        } catch (InvalidPasswordException | NotFoundUserIdException e) {
-            log.error(e.getMessage());
-            httpResponse.addHeader(SET_COOKIE, "SESSIONID=''; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
-            View view = new RedirectView("user/login_failed.html");
-            view.render(httpRequest, httpResponse);
         } catch (AbstractHttpException e) {
             log.error(e.getMessage());
             httpResponse.sendError(e);
