@@ -12,6 +12,8 @@ import session.HttpSession;
 import session.HttpSessionDB;
 import utils.QueryStringUtils;
 
+import java.util.Map;
+
 public class UserLoginController extends AbstractController {
     public static final String SESSION_ID = "SessionId";
 
@@ -24,10 +26,10 @@ public class UserLoginController extends AbstractController {
 
     @Override
     void doPost(HttpRequest request, HttpResponse response) {
-        String userId = QueryStringUtils.parse(request.getBody()).get("userId");
-        String password = QueryStringUtils.parse(request.getBody()).get("password");
+        Map<String, String> body = QueryStringUtils.parse(request.getBody());
+
         try {
-            User foundUser = userService.login(userId, password);
+            User foundUser = userService.login(body.get("userId"), body.get("password"));
 
             HttpSession httpSession = HttpSessionDB.getInstance().findOrCreateSession(request.getCookieValue(SESSION_ID));
             setCookie(response, httpSession);
