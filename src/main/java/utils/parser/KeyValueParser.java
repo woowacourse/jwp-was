@@ -41,4 +41,8 @@ public class KeyValueParser {
             return new HashMap<>();
         }
     }
+
+    public static String line(String key, String value) {
+        return key + "=" + value;
+    }
 }
