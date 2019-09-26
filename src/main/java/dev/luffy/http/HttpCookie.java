@@ -1,15 +1,15 @@
-package dev.luffy.http.request;
+package dev.luffy.http;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import dev.luffy.http.excption.NotFoundCookieException;
 
-public class HttpRequestCookie {
+public class HttpCookie {
 
     private Map<String, String> cookie;
 
-    public HttpRequestCookie() {
+    public HttpCookie() {
         cookie = new HashMap<>();
     }
 
@@ -26,7 +26,7 @@ public class HttpRequestCookie {
 
     @Override
     public String toString() {
-        return "HttpRequestCookie{" +
+        return "HttpCookie{" +
                 "cookie=" + cookie +
                 '}';
     }

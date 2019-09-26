@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import dev.luffy.http.HttpCookie;
 import dev.luffy.http.HttpProtocol;
 import dev.luffy.http.excption.NotFoundCookieException;
 import dev.luffy.http.excption.NotSupportedHttpRequestException;
@@ -24,7 +25,7 @@ public class HttpRequest {
     private final HttpRequestParam httpRequestParam;
     private final HttpRequestHeader httpRequestHeader;
     private final HttpRequestBody httpRequestBody;
-    private final HttpRequestCookie httpRequestCookie;
+    private final HttpCookie httpCookie;
 
     public HttpRequest(InputStream in) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
@@ -38,10 +39,10 @@ public class HttpRequest {
         this.httpRequestParam = httpRequestParam;
         this.httpRequestHeader = httpRequestHeader;
         this.httpRequestBody = httpRequestBody;
-        this.httpRequestCookie = new HttpRequestCookie();
+        this.httpCookie = new HttpCookie();
 
         if (hasCookie()) {
-            this.httpRequestCookie.addCookies(HttpRequestUtils.parseCookie(this.httpRequestHeader.get("Cookie")));
+            this.httpCookie.addCookies(HttpRequestUtils.parseCookie(this.httpRequestHeader.get("Cookie")));
         }
     }
 
@@ -117,7 +118,7 @@ public class HttpRequest {
 
     public String getCookie(String key) {
         try {
-            return httpRequestCookie.get(key);
+            return httpCookie.get(key);
         } catch (NotFoundCookieException e) {
             return "";
         }
