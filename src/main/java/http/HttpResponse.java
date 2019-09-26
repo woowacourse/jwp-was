@@ -3,6 +3,7 @@ package http;
 import http.exception.EmptyStatusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.exception.AbstractHttpException;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -51,6 +52,10 @@ public class HttpResponse {
         } catch (IOException e) {
             log.error(e.getMessage());
         }
+    }
+
+    public void sendError(AbstractHttpException e) {
+        status = e.getStatus();
     }
 
     public HttpStatus getStatus() {

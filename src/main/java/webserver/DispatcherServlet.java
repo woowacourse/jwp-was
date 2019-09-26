@@ -1,20 +1,17 @@
 package webserver;
 
 import controller.Controller;
-import controller.exception.HttpMethodNotAllowedException;
 import controller.exception.NotFoundUserIdException;
-import controller.exception.URINotFoundException;
 import http.HttpRequest;
 import http.HttpResponse;
 import http.MimeType;
-import http.exception.NotFoundMethodException;
 import model.exception.InvalidPasswordException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import view.RedirectView;
 import view.View;
-import webserver.exception.InvalidUriException;
+import webserver.exception.AbstractHttpException;
 import webserver.exception.NotFoundResourceException;
 
 import java.io.IOException;
@@ -44,15 +41,11 @@ public class DispatcherServlet {
             httpResponse.addHeader(SET_COOKIE, "SESSIONID=''; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
             View view = new RedirectView("user/login_failed.html");
             view.render(httpRequest, httpResponse);
-        } catch (NotFoundMethodException | HttpMethodNotAllowedException e) {
+        } catch (AbstractHttpException e) {
             log.error(e.getMessage());
-            httpResponse.setStatus(405);
-        } catch (NotFoundResourceException | InvalidUriException | URINotFoundException e) {
+            httpResponse.sendError(e);
+        } catch (URISyntaxException e) {
             log.error(e.getMessage());
-            httpResponse.setStatus(404);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            httpResponse.setStatus(500);
         }
     }
 

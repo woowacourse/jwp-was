@@ -1,13 +1,11 @@
 package controller;
 
-import controller.exception.NotFoundUserIdException;
 import controller.exception.URINotFoundException;
 import db.DataBase;
 import http.HttpRequest;
 import http.HttpRequestParser;
 import http.HttpResponse;
 import model.User;
-import model.exception.InvalidPasswordException;
 import org.junit.jupiter.api.Test;
 import view.View;
 
@@ -22,6 +20,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static utils.IOUtils.convertStringToInputStream;
 
 public class LoginControllerTest {
+    private static final String LOGIN_SUCCESS_REDIRECT_URL_PATTERN = "SESSIONID=[A-Za-z0-9-]+; Path=\\/";
+    private static final String LOGIN_FAILURE_REDIRECT_URL_PATTERN = "SESSIONID=''; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+
     private LoginController loginController = new LoginController();
 
     static {
@@ -40,7 +41,7 @@ public class LoginControllerTest {
 
         assertThat(view.isRedirectView()).isTrue();
         assertThat(view.getViewName()).isEqualTo("index.html");
-        assertThat(response.getHeader(SET_COOKIE)).contains("SESSIONID=");
+        assertThat(response.getHeader(SET_COOKIE)).containsPattern(LOGIN_SUCCESS_REDIRECT_URL_PATTERN);
     }
 
     @Test
@@ -49,7 +50,11 @@ public class LoginControllerTest {
                 convertStringToInputStream(String.format(LOGIN_REQUEST, "ABC", PASSWORD)));
         HttpResponse response = new HttpResponse();
 
-        assertThrows(NotFoundUserIdException.class, () -> loginController.service(request, response));
+        View view = loginController.service(request, response);
+
+        assertThat(view.isRedirectView()).isTrue();
+        assertThat(view.getViewName()).isEqualTo("user/login_failed.html");
+        assertThat(response.getHeader(SET_COOKIE)).containsPattern(LOGIN_FAILURE_REDIRECT_URL_PATTERN);
     }
 
     @Test
@@ -58,7 +63,11 @@ public class LoginControllerTest {
                 convertStringToInputStream(String.format(LOGIN_REQUEST, ID, "PASS")));
         HttpResponse response = new HttpResponse();
 
-        assertThrows(InvalidPasswordException.class, () -> loginController.service(request, response));
+        View view = loginController.service(request, response);
+
+        assertThat(view.isRedirectView()).isTrue();
+        assertThat(view.getViewName()).isEqualTo("user/login_failed.html");
+        assertThat(response.getHeader(SET_COOKIE)).containsPattern(LOGIN_FAILURE_REDIRECT_URL_PATTERN);
     }
 
     @Test
