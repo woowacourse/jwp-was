@@ -1,5 +1,6 @@
 package utils;
 
+import http.response.view.HandlebarResolver;
 import model.User;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -28,7 +29,7 @@ class HandlebarResolverTest {
         Map<String, Object> model = new HashMap<>();
         model.put("users", users);
 
-        String body = HandlebarResolver.getBody(path, model);
+        String body = new HandlebarResolver().getBody(path, model);
 
         assertThat(body.contains(ID_1)).isTrue();
         assertThat(body.contains(ID_2)).isTrue();
