@@ -9,13 +9,15 @@ public class ContentTypeHandler {
     private static final String TEXT_CONTENT_TYPE_FORMAT = "text/%s ;charset=utf-8";
     private static final String APPLICATION_CONTENT_TYPE_FORMAT = "application/%s";
     private static final String IMAGE_CONTENT_TYPE_FORMAT = "image/%s";
+    private static final String DOT = ".";
+    private static final String HTML_EXTENSION = ".html";
 
     public static String type(String url) {
-        if (!url.contains(".")) {
-            url += ".html";
+        if (!url.contains(DOT)) {
+            url += HTML_EXTENSION;
         }
 
-        String contentType = url.substring(url.lastIndexOf(".") + 1);
+        String contentType = url.substring(url.lastIndexOf(DOT) + 1);
 
         if (contentType.matches(REGEX_FOR_TEXT_CONTENT_TYPE)) {
             return String.format(TEXT_CONTENT_TYPE_FORMAT, contentType);

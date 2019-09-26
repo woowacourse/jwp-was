@@ -18,7 +18,7 @@ public class HandlebarsRenderer {
         loader.setSuffix(HTML_EXTENSION);
         Handlebars handlebars = new Handlebars(loader);
 
-        Template template = handlebars.compile(url.substring(1));
+        Template template = handlebars.compile(url);
 
         return template.apply(model).getBytes();
     }
