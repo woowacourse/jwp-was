@@ -1,6 +1,9 @@
 package webserver.controller.response;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
+import webserver.controller.HttpCookie;
 import webserver.controller.request.HttpRequest;
 import webserver.controller.request.MimeType;
 import webserver.controller.request.header.HttpMethod;
@@ -13,16 +16,22 @@ import java.util.Map;
 import java.util.Optional;
 
 public class HttpResponse {
+    private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
+    private static final String DEFAULT_COOKIE_PATH = "/";
     private static final String STATIC_FILE_PATH = "./static/";
     private static final String NON_STATIC_FILE_PATH = "./templates/";
     private HttpStatus httpStatus;
     private String version;
     private HashMap<String, String> headerFields;
-    private Optional<byte[]> body;
+    private byte[] body="".getBytes();
 
     public HttpResponse(HttpRequest httpRequest) throws IOException, URISyntaxException {
         headerFields = new HashMap<>();
         setResponseLine(httpRequest, HttpStatus.OK);
+    }
+
+    public byte[] getBody() {
+        return body;
     }
 
     private void setResponseLine(HttpRequest httpRequest, HttpStatus httpStatus) throws IOException, URISyntaxException {
@@ -30,13 +39,13 @@ public class HttpResponse {
         this.httpStatus = httpStatus;
         this.version = httpRequest.getVersion();
         if (httpMethod != HttpMethod.POST && httpMethod != HttpMethod.PUT) {
-            this.body = Optional.of(getResponseBody(httpRequest));
+            this.body = getResponseBody(httpRequest);
         }
     }
 
     public void responseOK(HttpRequest httpRequest) {
         headerFields.put("Content-Type", httpRequest.getMimeType().getMimeType() + ";charset=utf-8\r\n");
-        headerFields.put("Content-Length", String.valueOf(body.get().length));
+        headerFields.put("Content-Length", String.valueOf(body.length));
     }
 
     private byte[] getResponseBody(HttpRequest httpRequest) throws IOException, URISyntaxException {
@@ -55,14 +64,21 @@ public class HttpResponse {
         headerFields.put("message", errorMessage);
     }
 
-    public void sendRedirect(String saveRedirectUrl) {
+    public void sendRedirect(String saveRedirectUrl, boolean logined) {
         setHttpStatus(HttpStatus.FOUND);
+        HttpCookie httpCookie = new HttpCookie();
+        httpCookie.loginCookie(logined, DEFAULT_COOKIE_PATH);
         headerFields.put("Location", saveRedirectUrl);
         headerFields.put("Connection", "close");
+        headerFields.put("Set-Cookie", httpCookie.joinSetCookie());
     }
 
     public HttpStatus getHttpStatus() {
         return httpStatus;
+    }
+
+    private void setHttpStatus(HttpStatus httpStatus) {
+        this.httpStatus = httpStatus;
     }
 
     public String getVersion() {
@@ -71,13 +87,5 @@ public class HttpResponse {
 
     public Map<String, String> getHeaderFields() {
         return Collections.unmodifiableMap(headerFields);
-    }
-
-    public Optional<byte[]> getBody() {
-        return body;
-    }
-
-    public void setHttpStatus(HttpStatus httpStatus) {
-        this.httpStatus = httpStatus;
     }
 }

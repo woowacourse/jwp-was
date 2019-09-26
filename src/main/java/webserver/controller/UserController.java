@@ -9,7 +9,7 @@ import webserver.controller.response.HttpResponse;
 import java.util.Map;
 
 public class UserController extends AbstractController {
-    public static final String SAVE_REDIRECT_URL = "/index.html";
+    private static final String SAVE_REDIRECT_URL = "/index.html";
 
     private UserController() {
     }
@@ -27,6 +27,6 @@ public class UserController extends AbstractController {
         Map<String, String> requestBodyFields = httpRequest.getBodyFields();
         User user = UserFactory.of(requestBodyFields);
         DataBase.addUser(user);
-        httpResponse.sendRedirect(SAVE_REDIRECT_URL);
+        httpResponse.sendRedirect(SAVE_REDIRECT_URL,false);
     }
 }
