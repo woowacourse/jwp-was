@@ -19,9 +19,11 @@ public class HttpRequestBody {
     }
 
     private void splitRequestBody(String[] queryParams) {
+        String[] keyAndValue;
         for (String queryParam : queryParams) {
-            String key = queryParam.split(DELIMITER_OF_FORM_PARAMETER)[0];
-            String value = queryParam.split(DELIMITER_OF_FORM_PARAMETER)[1];
+            keyAndValue = queryParam.split(DELIMITER_OF_FORM_PARAMETER);
+            String key = keyAndValue[0];
+            String value = keyAndValue[1];
 
             parameters.put(key, value);
         }
