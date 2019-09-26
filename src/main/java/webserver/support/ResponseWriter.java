@@ -1,11 +1,13 @@
 package webserver.support;
 
+import http.response.Cookie;
 import http.response.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Map;
 
 public class ResponseWriter {
     private static final Logger logger = LoggerFactory.getLogger(ResponseWriter.class);
@@ -29,8 +31,16 @@ public class ResponseWriter {
     private static String response302Header(Response response) {
         return response.getHttpVersion() + " " + response.getStatusCode() + " " + response.getReasonPhrase() + "\r\n" +
                 "Location: " + response.getLocation() + "\r\n" +
-                "Set-Cookie: " + response.getCookie() + "\r\n" +
+                writeCookies(response) +
                 "\r\n";
+    }
+
+    private static String writeCookies(Response response) {
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<String, Cookie> cookie : response.getCookie()) {
+            sb.append(cookie.getValue().toString());
+        }
+        return sb.toString();
     }
 
     private static void writeHeader(DataOutputStream dos, String message) {
@@ -40,6 +50,7 @@ public class ResponseWriter {
             logger.error(e.getMessage());
         }
     }
+
 
     private static void writeBody(DataOutputStream dos, Response response) {
         try {

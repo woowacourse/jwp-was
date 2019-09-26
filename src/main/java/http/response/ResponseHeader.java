@@ -1,11 +1,13 @@
 package http.response;
 
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 public class ResponseHeader {
     private String type;
     private String location;
-    private String cookie;
+    private Cookies cookies = new Cookies();
 
     public String getType() {
         return type;
@@ -23,12 +25,12 @@ public class ResponseHeader {
         this.location = location;
     }
 
-    public String getCookie() {
-        return cookie;
+    public Set<Map.Entry<String, Cookie>> getCookie() {
+        return cookies.getCookies();
     }
 
-    public void setCookie(String cookie) {
-        this.cookie = cookie;
+    public void setCookie(String key, Cookie cookie) {
+        cookies.setCookie(key, cookie);
     }
 
     @Override

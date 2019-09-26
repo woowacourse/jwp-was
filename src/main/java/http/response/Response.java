@@ -9,6 +9,7 @@ import webserver.support.PathHandler;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Map;
+import java.util.Set;
 
 public class Response {
     private StatusLine statusLine;
@@ -72,12 +73,12 @@ public class Response {
         responseHeader.setLocation(location);
     }
 
-    public String getCookie() {
+    public Set<Map.Entry<String, Cookie>> getCookie() {
         return responseHeader.getCookie();
     }
 
-    public void setCookie(String cookie) {
-        responseHeader.setCookie(cookie);
+    public void setCookie(String key, Cookie cookie) {
+        responseHeader.setCookie(key, cookie);
     }
 
     public void configureOkResponse(ModelAndView modelAndView) throws IOException, URISyntaxException {
