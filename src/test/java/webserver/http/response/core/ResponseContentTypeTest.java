@@ -1,7 +1,7 @@
-package http.response.core;
+package webserver.http.response.core;
 
-import http.request.core.RequestPath;
-import http.request.core.RequestPrefixPath;
+import webserver.http.request.core.RequestPrefixPath;
+import webserver.http.request.core.RequestPath;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
