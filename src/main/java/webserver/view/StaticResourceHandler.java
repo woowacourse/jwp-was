@@ -1,4 +1,4 @@
-package webserver.http.handler;
+package webserver.view;
 
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;

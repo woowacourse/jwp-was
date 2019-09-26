@@ -1,4 +1,4 @@
-package webserver.http.handler;
+package webserver.view;
 
 import java.util.Objects;
 

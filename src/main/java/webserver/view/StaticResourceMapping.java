@@ -1,4 +1,4 @@
-package webserver.http.handler;
+package webserver.view;
 
 import webserver.http.MimeType;
 
@@ -26,6 +26,14 @@ public class StaticResourceMapping {
         resources.put(extension, StaticResource.of(extension, location));
     }
 
+    public boolean isMapping(final String path){
+        return contains(parseToExtension(path));
+    }
+
+    private String parseToExtension(final String path) {
+        return path.substring(path.lastIndexOf(".") + 1);
+    }
+
     public boolean contains(final String extension) {
         return resources.containsKey(extension);
     }
@@ -41,5 +49,10 @@ public class StaticResourceMapping {
     public String getLocation(final String extension) {
         final StaticResource staticResource = resources.get(extension);
         return staticResource.getLocation();
+    }
+
+    public String addPrefix(final String viewName) {
+        final StaticResource staticResource = resources.get(viewName);
+        return staticResource.getLocation() + viewName;
     }
 }

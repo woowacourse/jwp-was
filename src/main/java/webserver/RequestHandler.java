@@ -2,9 +2,8 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.view.*;
 import webserver.http.HttpStatus;
-import webserver.http.handler.StaticResourceHandler;
-import webserver.http.handler.StaticResourceMapping;
 import webserver.http.request.HttpRequest;
 import webserver.http.request.HttpRequestFactory;
 import webserver.http.response.HttpResponse;
@@ -21,6 +20,8 @@ public class RequestHandler implements Runnable {
     private Socket connection;
     private StaticResourceHandler staticResourceHandler;
     private ServletMapping servletMapping;
+    private StaticViewResolver staticViewResolver;
+    private InternalResourceViewResolver internalResourceViewResolver;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -37,18 +38,22 @@ public class RequestHandler implements Runnable {
             final HttpResponse httpResponse = new HttpResponse(out);
 
             final String path = httpRequest.getPath();
-            if (staticResourceHandler.isMapping(path)) {
-                staticResourceHandler.handle(httpRequest, httpResponse);
-                return;
-            }
-
-            if (servletMapping.isMapping(path)) {
+            View view;
+            if (staticViewResolver.isStaticFile(path)) {
+                view = staticViewResolver.resolveViewName(path);
+            } else if (servletMapping.isMapping(path)) {
                 final Servlet servlet = servletMapping.getServlet(path);
                 servlet.service(httpRequest, httpResponse);
-                return;
+                view = internalResourceViewResolver.resolveViewName(httpResponse.g);
+            } else {
+                httpResponse.sendError(HttpStatus.NOT_FOUND);
             }
 
-            httpResponse.sendError(HttpStatus.NOT_FOUND);
+
+
+            // isMapping
+            // viewResolver.resolveViewName(path)
+            // .. 바디 있고 없음에 따라 다르게 호출
 
         } catch (IOException e) {
             log.error(e.getMessage());
