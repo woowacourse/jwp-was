@@ -1,10 +1,10 @@
-package http.request.core;
+package webserver.http;
 
-import http.exception.HttpRequestVersionException;
+import webserver.http.exception.HttpRequestVersionException;
 
 import java.util.Arrays;
 
-public enum RequestVersion {
+public enum HttpVersion {
     HTTP_VERSION_0_9("HTTP/0.9"),
     HTTP_VERSION_1_0("HTTP/1.0"),
     HTTP_VERSION_1_1("HTTP/1.1"),
@@ -12,13 +12,13 @@ public enum RequestVersion {
 
     private final String version;
 
-    RequestVersion(final String version) {
+    HttpVersion(final String version) {
         this.version = version;
     }
 
-    public static RequestVersion of(String requestVersion) {
+    public static HttpVersion of(String httpVersion) {
         return Arrays.stream(values())
-                .filter(value -> value.version.equals(requestVersion))
+                .filter(value -> value.version.equals(httpVersion))
                 .findAny()
                 .orElseThrow(HttpRequestVersionException::new);
     }

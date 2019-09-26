@@ -1,4 +1,4 @@
-package http.exception;
+package webserver.http.exception;
 
 public class CanNotParseDataException extends RuntimeException {
     public CanNotParseDataException() {

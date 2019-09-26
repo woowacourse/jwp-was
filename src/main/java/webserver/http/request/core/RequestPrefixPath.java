@@ -1,4 +1,4 @@
-package http.request.core;
+package webserver.http.request.core;
 
 import java.util.Arrays;
 

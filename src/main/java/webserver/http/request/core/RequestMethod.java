@@ -1,6 +1,6 @@
-package http.request.core;
+package webserver.http.request.core;
 
-import http.exception.HttpRequestMethodException;
+import webserver.http.exception.HttpRequestMethodException;
 
 import java.util.Arrays;
 
