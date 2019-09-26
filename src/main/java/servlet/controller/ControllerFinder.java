@@ -1,4 +1,4 @@
-package webserver.controller;
+package servlet.controller;
 
 import http.request.HttpRequest;
 

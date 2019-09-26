@@ -1,57 +1,31 @@
 package webserver;
 
-import http.request.HttpRequest;
-import http.request.HttpRequestFactory;
-import model.UserController;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import testhelper.Common;
-import webserver.controller.Controller;
-import webserver.controller.ControllerFinder;
-import webserver.controller.CreateUserController;
-import webserver.controller.LoginUserController;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static testhelper.Common.getControllerFinder;
 
 public class RequestHandlerTest {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandlerTest.class);
-    private static Map<String, Controller> api;
-
-    static {
-        api = new HashMap<>();
-        api.put("/user/create", new CreateUserController());
-        api.put("/user/login", new LoginUserController());
-
-        try {
-            HttpRequest httpRequest =
-                    HttpRequestFactory.create(Common.getBufferedReaderOfText("HTTP_POST_USER_CREATE.txt"));
-            new UserController().addUser(httpRequest);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    ControllerFinder controllerFinder = new ControllerFinder(Collections.unmodifiableMap(api));
-
+    
     @Test
     @DisplayName("정적 파일 반환")
     public void staticFile() throws IOException {
         Socket loginSocket = mock(Socket.class);
         when(loginSocket.getInputStream()).thenReturn(Common.getInputStream("HTTP_GET_CSS.txt"));
         when(loginSocket.getOutputStream()).thenReturn(new ByteArrayOutputStream());
-        RequestHandler requestHandler = new RequestHandler(loginSocket, controllerFinder);
+        RequestHandler requestHandler = new RequestHandler(loginSocket, getControllerFinder());
         requestHandler.run();
 
         BufferedReader bufferedReader = Common.test(loginSocket.getOutputStream());
@@ -65,7 +39,7 @@ public class RequestHandlerTest {
         Socket loginSocket = mock(Socket.class);
         when(loginSocket.getInputStream()).thenReturn(Common.getInputStream("HTTP_POST_USER_LOGIN_FAIL_PASSWORD.txt"));
         when(loginSocket.getOutputStream()).thenReturn(new ByteArrayOutputStream());
-        RequestHandler requestHandler = new RequestHandler(loginSocket, controllerFinder);
+        RequestHandler requestHandler = new RequestHandler(loginSocket, getControllerFinder());
         requestHandler.run();
 
         BufferedReader bufferedReader = Common.test(loginSocket.getOutputStream());
@@ -79,7 +53,7 @@ public class RequestHandlerTest {
         Socket loginSocket = mock(Socket.class);
         when(loginSocket.getInputStream()).thenReturn(Common.getInputStream("HTTP_POST_USER_LOGIN.txt"));
         when(loginSocket.getOutputStream()).thenReturn(new ByteArrayOutputStream());
-        RequestHandler requestHandler = new RequestHandler(loginSocket, controllerFinder);
+        RequestHandler requestHandler = new RequestHandler(loginSocket, getControllerFinder());
         requestHandler.run();
 
         BufferedReader bufferedReader = Common.test(loginSocket.getOutputStream());

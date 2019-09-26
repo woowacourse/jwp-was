@@ -2,10 +2,10 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.controller.Controller;
-import webserver.controller.ControllerFinder;
-import webserver.controller.CreateUserController;
-import webserver.controller.LoginUserController;
+import servlet.controller.Controller;
+import servlet.controller.ControllerFinder;
+import servlet.controller.CreateUserController;
+import servlet.controller.LoginUserController;
 
 import java.net.ServerSocket;
 import java.net.Socket;

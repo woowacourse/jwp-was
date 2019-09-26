@@ -1,4 +1,4 @@
-package webserver.controller;
+package servlet.controller;
 
 import http.HttpResponse;
 import http.request.HttpRequest;

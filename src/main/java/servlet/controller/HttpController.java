@@ -1,4 +1,4 @@
-package webserver.controller;
+package servlet.controller;
 
 import http.HttpResponse;
 import http.request.HttpRequest;
@@ -10,7 +10,9 @@ public abstract class HttpController implements Controller {
 
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
-        doGet(httpRequest, httpResponse);
+        if ("GET".equals(httpRequest.getMethod())) {
+            doGet(httpRequest, httpResponse);
+        }
         doPost(httpRequest, httpResponse);
     }
 

@@ -8,6 +8,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import servlet.controller.Controller;
+import servlet.controller.LoginUserController;
 import testhelper.Common;
 
 import java.io.ByteArrayOutputStream;
