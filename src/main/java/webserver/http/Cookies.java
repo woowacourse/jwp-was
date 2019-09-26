@@ -61,4 +61,9 @@ public class Cookies {
     public boolean contains(final String name) {
         return cookies.containsKey(name);
     }
+
+    public String getSessionId() {
+        final Cookie cookie = cookies.get(JSESSIONID);
+        return cookie == null ? null : cookie.getValue();
+    }
 }

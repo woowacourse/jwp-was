@@ -24,8 +24,7 @@ public class LoginServletTest {
                 .body("userId=javajigi&password=password")
                 .exchange()
                 .matchHttpStatus(HttpStatus.FOUND)
-                .matchHeader(HttpHeaders.LOCATION, "/")
-                .matchCookie(LoginServlet.LOGINED, "true");
+                .matchHeader(HttpHeaders.LOCATION, "/");
     }
 
     @Test

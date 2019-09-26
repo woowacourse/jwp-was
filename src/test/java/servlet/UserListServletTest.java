@@ -4,6 +4,7 @@ import db.DataBase;
 import model.User;
 import org.junit.jupiter.api.Test;
 import test.HttpTestClient;
+import webserver.http.Cookies;
 import webserver.http.HttpHeaders;
 import webserver.http.HttpStatus;
 
@@ -15,14 +16,14 @@ class UserListServletTest {
         // given
         DataBase.addUser(new User("bedi", "password", "bedi", "bedi@gmail.com"));
 
-//        final String jSessionId = httpTestClient.post().uri("/user/login")
-//                .body("userId=bedi&password=password")
-//                .exchange()
-//                .getCookie(HttpHeaders.JSESSIONID);
+        final String jSessionId = httpTestClient.post().uri("/user/login")
+                .body("userId=bedi&password=password")
+                .exchange()
+                .getCookie(Cookies.JSESSIONID);
 
         // when & then
         httpTestClient.get().uri("/user/list")
-                .addHeader(HttpHeaders.COOKIE, "logined=true")
+                .addCookie(Cookies.JSESSIONID, jSessionId)
                 .exchange()
                 .matchHttpStatus(HttpStatus.OK);
     }

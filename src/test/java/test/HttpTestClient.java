@@ -83,7 +83,8 @@ public class HttpTestClient {
         private String uri;
         private String protocolVersion;
         private Map<String, String> headers = new HashMap<>();
-        private String body;
+        private Map<String, Object> cookies = new HashMap<>();
+        private String body = "";
 
         HttpRequestBuilder(String method) {
             this.method = method;
@@ -111,18 +112,32 @@ public class HttpTestClient {
             return this;
         }
 
+        public HttpRequestBuilder addCookie(String key, String value) {
+            cookies.put(key, value);
+            return this;
+        }
+
         public ResponseSpec exchange() {
             StringBuilder sb = new StringBuilder();
             sb.append(String.format("%s %s %s\n", method, uri, protocolVersion));
 
+            // 요청라인
             if (StringUtils.isNotEmpty(body)) {
                 headers.put(HttpHeaders.CONTENT_LENGTH, String.valueOf(body.length()));
             }
+            // 헤더
             for (final String key : headers.keySet()) {
                 sb.append(String.format("%s: %s\n", key, headers.get(key)));
             }
+            // 쿠키
+            sb.append(cookies.isEmpty() ? "" : "Cookie: ");
+            for (final String key : cookies.keySet()) {
+                sb.append(String.format("%s=%s; ", key, cookies.get(key)));
+            }
+            sb.append(cookies.isEmpty() ? "" : "\n");
+
             sb.append("\n");
-            sb.append(body);
+            sb.append(body.isEmpty() ? "" : body);
 
             log.debug("\n" + sb.toString());
             final String response = send(sb.toString());

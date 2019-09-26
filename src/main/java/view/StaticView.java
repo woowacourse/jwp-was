@@ -1,4 +1,4 @@
-package webserver.view;
+package view;
 
 
 import org.slf4j.Logger;

@@ -7,7 +7,7 @@ import webserver.http.request.HttpRequest;
 import webserver.http.request.HttpRequestFactory;
 import webserver.http.response.HttpResponse;
 import webserver.http.servlet.Servlet;
-import webserver.view.*;
+import view.*;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -8,7 +8,6 @@ public class HttpRequest {
     private final Parameters parameters;
     private final Cookies cookies;
     private final SessionManager sessionManager;
-    private HttpSession httpSession;
 
     HttpRequest(final RequestLine requestLine, final HttpHeaders headers, final Parameters parameters, final Cookies cookies, final SessionManager sessionManager) {
         this.requestLine = requestLine;
@@ -51,8 +50,10 @@ public class HttpRequest {
     }
 
     public HttpSession getSession() {
+        final String jSessionId = cookies.getSessionId();
+        final HttpSession httpSession = sessionManager.getSession(jSessionId);
         return httpSession == null
-                ? this.httpSession = createSession()
+                ? createSession()
                 : httpSession;
     }
 
