@@ -7,6 +7,7 @@ import com.github.jknack.handlebars.io.TemplateLoader;
 import db.DataBase;
 import http.common.Cookie;
 import http.common.HttpSession;
+import http.common.HttpStatus;
 import http.exception.InvalidHeaderException;
 import http.exception.NotExistSessionValue;
 import http.request.HttpRequest;
@@ -48,7 +49,7 @@ public class UserListController extends AbstractController {
 
     @Override
     public void doPost(HttpRequest request, HttpResponse response) {
-        //Todo
+        response.forwardErrorPage(HttpStatus.NOT_FOUND);
     }
 
     private void setNotLoginedResponse(HttpResponse response) {

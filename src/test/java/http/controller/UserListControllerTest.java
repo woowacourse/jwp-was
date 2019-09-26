@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.*;
 
+import static http.common.HttpStatus.NOT_FOUND;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -58,5 +59,23 @@ class UserListControllerTest {
 
         assertThat(new String(listResponse.getBody())).contains("van");
         assertThat(new String(listResponse.getBody())).contains("van1234");
+    }
+
+    @Test
+    void POST요청시_404에러를_발생한다() throws IOException {
+        String userListRequest = "POST /user/login HTTP/1.1\n" +
+                "Host: localhost:8080\n" +
+                "Connection: keep-alive\n" +
+                "Accept: */*\n";
+
+        InputStream in = new ByteArrayInputStream(userListRequest.getBytes(UTF_8));
+
+        HttpRequest request = HttpRequestFactory.createHttpRequest(in);
+        HttpResponse response = new HttpResponse();
+
+        UserListController controller = new UserListController();
+        controller.service(request, response);
+
+        assertThat(response.getStatus()).isEqualTo(NOT_FOUND);
     }
 }

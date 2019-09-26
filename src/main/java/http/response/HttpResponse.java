@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
+import static http.common.HttpStatus.NOT_FOUND;
+
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
     public static final String CONTENT_TYPE = "Content-Type";
@@ -41,8 +43,19 @@ public class HttpResponse {
             headerFields.addHeader(CONTENT_LENGTH, String.valueOf(body.length));
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
-            status = HttpStatus.NOT_FOUND;
-            // todo: error page
+            forwardErrorPage(NOT_FOUND);
+        }
+    }
+
+    public void forwardErrorPage(HttpStatus status) {
+        this.status = status;
+        try {
+            body = FileIoUtils.loadFileFromClasspath("/error.html");
+
+            headerFields.addHeader(CONTENT_TYPE, "text/html;" + CHARSET_UTF_8);
+            headerFields.addHeader(CONTENT_LENGTH, String.valueOf(body.length));
+        } catch (IOException | URISyntaxException e) {
+            logger.error(e.getMessage());
         }
     }
 
