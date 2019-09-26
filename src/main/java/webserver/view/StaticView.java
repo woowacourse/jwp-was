@@ -12,17 +12,10 @@ public class StaticView extends AbstractView {
     private static final Logger log = LoggerFactory.getLogger(StaticView.class);
 
     public StaticView(final String path) {
-        setPath(path);
-        setResponseBody();
+        setResponseBody(path);
     }
 
-    @Override
-    protected void setPath(final String path) {
-        this.path = path;
-    }
-
-    @Override
-    protected void setResponseBody() {
+    protected void setResponseBody(final String path) {
         try {
             responseBody = FileIoUtils.loadFileFromClasspath(path);
         } catch (IOException | URISyntaxException e) {

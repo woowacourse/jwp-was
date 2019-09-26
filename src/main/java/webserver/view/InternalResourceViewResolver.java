@@ -1,8 +1,15 @@
 package webserver.view;
 
-public class InternalResourceViewResolver implements ViewResolver {
-    @Override
-    public View resolveViewName(final String name) {
-        return null;
-    }
+import webserver.http.response.HttpResponse;
+
+import java.io.IOException;
+import java.util.Map;
+
+public interface InternalResourceViewResolver extends ViewResolver {
+
+    View resolveViewName(final HttpResponse httpResponse) throws IOException;
+
+    void setPrefix(final String prefix);
+
+    void setSuffix(final String suffix);
 }

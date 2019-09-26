@@ -1,6 +1,7 @@
 package webserver.view;
 
 import webserver.http.MimeType;
+import webserver.http.utils.HttpUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -52,7 +53,7 @@ public class StaticResourceMapping {
     }
 
     public String addPrefix(final String viewName) {
-        final StaticResource staticResource = resources.get(viewName);
+        final StaticResource staticResource = resources.get(HttpUtils.parseExtension(viewName));
         return staticResource.getLocation() + viewName;
     }
 }

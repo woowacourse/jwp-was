@@ -2,12 +2,7 @@ package webserver.view;
 
 public abstract class AbstractView implements View {
 
-    protected String path;
     protected byte[] responseBody;
-
-    protected abstract void setPath(final String path);
-
-    protected abstract void setResponseBody();
 
     @Override
     public byte[] getBody() {
@@ -17,5 +12,10 @@ public abstract class AbstractView implements View {
     @Override
     public int getContentLength() {
         return responseBody.length;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return responseBody.length == 0;
     }
 }

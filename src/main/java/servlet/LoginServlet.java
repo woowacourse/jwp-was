@@ -14,7 +14,7 @@ public class LoginServlet extends AbstractServlet {
 
     @Override
     protected void doGet(final HttpRequest request, final HttpResponse response) {
-        response.forward("./templates/user/login.html");
+        response.forward("/user/login");
     }
 
     @Override
