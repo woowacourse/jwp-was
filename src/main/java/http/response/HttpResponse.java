@@ -41,9 +41,9 @@ public class HttpResponse {
         responseHeader.put(key, value);
     }
 
-    public void setResponseBody(byte[] body, String path) {
+    public void setResponseBody(byte[] body, String sufFix) {
         this.responseBody = ResponseBody.of(body);
-        putHeader(ResponseHeader.CONTENT_TYPE_NAME, MimeType.findByPath(path).getContentType());
+        putHeader(ResponseHeader.CONTENT_TYPE_NAME, MimeType.findBySufFix(sufFix).getContentType());
         putHeader(ResponseHeader.CONTENT_LENGTH_NAME, String.valueOf(body.length));
     }
 
