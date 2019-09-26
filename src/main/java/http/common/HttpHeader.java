@@ -1,6 +1,7 @@
 package http.common;
 
 import com.google.common.collect.Lists;
+import http.Cookie;
 import http.common.exception.InvalidHeaderKeyException;
 import http.common.exception.InvalidHttpHeaderException;
 import utils.StringUtils;
@@ -14,9 +15,12 @@ public class HttpHeader {
     private static final String HEADER_FIELD_FORMAT = "%s: %s\r\n";
     private static final int HEADER_FIELD_KEY_INDEX = 0;
     private static final int HEADER_FIELD_VALUE_INDEX = 1;
-    public static final String HEADER_FIELD_DELIMITER = "; ";
+    private static final String HEADER_FIELD_DELIMITER = "; ";
+    private static final String COOKIE = "Cookie";
+    private static final String SESSIONID = "SessionID";
 
     private final Map<String, List<String>> httpHeader = new HashMap<>();
+    private final Cookie cookie = new Cookie();
 
     public HttpHeader() {
     }
@@ -24,6 +28,7 @@ public class HttpHeader {
     public HttpHeader(List<String> header) {
         if (header != null) {
             header.forEach(this::addHeader);
+            cookie.addAll(httpHeader.get(COOKIE));
         }
     }
 
@@ -63,6 +68,10 @@ public class HttpHeader {
         }
 
         return String.join(HEADER_FIELD_DELIMITER, httpHeader.get(key));
+    }
+
+    public String getSessionId() {
+        return cookie.get(SESSIONID);
     }
 
     public String serialize() {
