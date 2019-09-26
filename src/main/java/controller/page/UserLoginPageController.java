@@ -20,8 +20,4 @@ public class UserLoginPageController extends AbstractController {
 
         doGet(request, response);
     }
-
-    private boolean isLogin(final HttpRequest request) {
-        return request.hasJSessionId();
-    }
 }

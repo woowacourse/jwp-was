@@ -23,10 +23,6 @@ public class UserListPageController extends AbstractController {
         doGet(request, response);
     }
 
-    private boolean isLogin(final HttpRequest request) {
-        return request.hasJSessionId();
-    }
-
     @Override
     protected void doGet(final HttpRequest request, final HttpResponse response) throws IOException {
         if (isLogin(request)) {

@@ -14,4 +14,8 @@ public abstract class AbstractController implements Controller {
     protected void doPost(final HttpRequest request, final HttpResponse response) throws IOException {
         response.makeResponse();
     }
+
+    protected boolean isLogin(final HttpRequest request) {
+        return request.hasJSessionId();
+    }
 }
