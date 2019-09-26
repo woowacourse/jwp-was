@@ -3,7 +3,6 @@ package http.common;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class CookiesTest {
 
@@ -12,7 +11,7 @@ class CookiesTest {
         Cookie cookie1 = CookieParser.parse("Set-Cookie: logined=true; HttpOnly; Path=/");
         Cookie cookie2 = CookieParser.parse("Set-Cookie: logined=false; Path=/");
 
-        Cookies cookies=new Cookies();
+        Cookies cookies = new Cookies();
         cookies.addCookie(cookie1);
         cookies.addCookie(cookie2);
 

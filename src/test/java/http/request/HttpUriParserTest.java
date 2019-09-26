@@ -3,7 +3,7 @@ package http.request;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class HttpUriParserTest {
 
@@ -11,7 +11,7 @@ class HttpUriParserTest {
     void parse() {
         String uriString = "/user/create?userId=conas&password=1234&name=conatuseus&email=conatuseus@gmail.com";
 
-        assertDoesNotThrow(()->HttpUriParser.parse(uriString));
+        assertDoesNotThrow(() -> HttpUriParser.parse(uriString));
 
         HttpUri uri = HttpUriParser.parse(uriString);
         assertThat(uri.getPath()).isEqualTo("/user/create");

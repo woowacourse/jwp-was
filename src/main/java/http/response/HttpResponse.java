@@ -3,6 +3,7 @@ package http.response;
 import http.common.Cookie;
 import http.common.Cookies;
 import http.common.HttpHeader;
+import http.common.HttpVersion;
 import http.request.HttpRequest;
 import org.apache.tika.Tika;
 import org.slf4j.Logger;
@@ -14,7 +15,7 @@ import java.io.IOException;
 public class HttpResponse {
 
     private static final Logger log = LoggerFactory.getLogger(HttpResponse.class);
-    private static final String LOCATION = "LOCATION";
+    private static final String LOCATION = "Location";
     private static final String NEW_LINE = "\r\n";
     private static final String CONTENT_LENGTH = "Content-Length";
     private static final String CONTENT_TYPE = "Content-Type";
@@ -24,11 +25,26 @@ public class HttpResponse {
     private Cookies cookies = new Cookies();
     private ResponseBody responseBody;
 
+    public HttpResponse(){
+    }
+
     public HttpResponse(final HttpRequest httpRequest, final DataOutputStream dos) {
-        this.statusLine.setHttpVersion(httpRequest.getHttpVersion());
+        this.setHttpVersion(httpRequest.getHttpVersion());
         this.dos = dos;
 
         this.putHeader(CONTENT_TYPE, new Tika().detect(httpRequest.getClassPath()));
+    }
+
+    private void setHttpVersion(HttpVersion httpVersion) {
+        this.statusLine.setHttpVersion(httpVersion);
+    }
+
+    public HttpStatus getHttpStatus() {
+        return this.statusLine.getHttpStatus();
+    }
+
+    public ResponseBody getResponseBody() {
+        return this.responseBody;
     }
 
     public void addCookie(final Cookie cookie) {
@@ -37,6 +53,10 @@ public class HttpResponse {
 
     public void putHeader(String name, String value) {
         responseHeader.putHeader(name, value);
+    }
+
+    public String getHeader(String name) {
+        return responseHeader.findHeader(name);
     }
 
     public void ok(ResponseBody responseBody) {

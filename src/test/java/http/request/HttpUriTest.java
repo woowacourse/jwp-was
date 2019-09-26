@@ -46,4 +46,10 @@ class HttpUriTest {
 
         assertThat(uri.isMatches(regex)).isFalse();
     }
+
+    @Test
+    void isEqualsPath() {
+        HttpUri uri = HttpUriParser.parse("/index.html");
+        assertThat(uri.isEqualsPath(HttpUriParser.parse("/index.html"))).isTrue();
+    }
 }
