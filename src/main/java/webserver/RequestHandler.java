@@ -24,9 +24,9 @@ public class RequestHandler implements Runnable {
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
-        servletMapping = ServletMapping.getInstance();
-        staticViewResolver = new StaticViewResolver(new StaticResourceMapping());
-        internalResourceViewResolver = new HandlerBarsViewResolver();
+        this.servletMapping = ServletMapping.getInstance();
+        this.staticViewResolver = new StaticViewResolver(new StaticResourceMapping());
+        this.internalResourceViewResolver = new HandlerBarsViewResolver();
 
     }
 

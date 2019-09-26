@@ -36,7 +36,7 @@ public class HttpHeaders {
         return headers.size();
     }
 
-    public Set<String> keySet(){
+    public Set<String> keySet() {
         return headers.keySet();
     }
 

@@ -20,14 +20,12 @@ public class LoginServletTest {
 
     @Test
     void 로그인_성공() {
-        //todo body 문자열말고 객체로 전송할 수 있게
         httpTestClient.post().uri("/user/login")
                 .body("userId=javajigi&password=password")
                 .exchange()
                 .matchHttpStatus(HttpStatus.FOUND)
                 .matchHeader(HttpHeaders.LOCATION, "/")
-                .matchCookie(LoginServlet.LOGINED, "true")
-        ;
+                .matchCookie(LoginServlet.LOGINED, "true");
     }
 
     @Test
@@ -35,8 +33,7 @@ public class LoginServletTest {
         httpTestClient.post().uri("/user/login")
                 .body("userId=javajigi&password=fail")
                 .exchange()
-                .matchHttpStatus(HttpStatus.OK)
-        ;
+                .matchHttpStatus(HttpStatus.OK);
     }
 
 

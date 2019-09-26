@@ -24,12 +24,10 @@ public class Cookies {
         this.cookies = parseCookies(cookies);
     }
 
-    // todo 유효하지 않은 값 예외처리도 해줘야할까? ex) login/true
     private static Map<String, Cookie> parseCookies(final String cookieText) {
         if (StringUtils.isEmpty(cookieText)) {
             return new HashMap<>();
         }
-
         return Arrays.stream(cookieText.split(DELIMITER))
                 .map(cookie -> HttpUtils.parseKeyValue(cookie, DELIMITER_PAIR))
                 .map(pair -> new Cookie(pair.getKey(), pair.getValue()))

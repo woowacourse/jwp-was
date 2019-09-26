@@ -3,7 +3,6 @@ package webserver.http.utils;
 import org.junit.jupiter.api.Test;
 import webserver.http.request.Pair;
 
-import java.util.Collections;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;

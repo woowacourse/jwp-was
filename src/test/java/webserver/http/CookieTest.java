@@ -2,7 +2,6 @@ package webserver.http;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CookieTest {
@@ -10,7 +9,7 @@ class CookieTest {
     @Test
     void 쿠키_정보_문자열_확인() {
         // given
-        final Cookie cookie = new Cookie("name" , "value");
+        final Cookie cookie = new Cookie("name", "value");
         cookie.setMaxAge(12);
         cookie.setPath("/");
         cookie.setSecure(true);

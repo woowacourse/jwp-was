@@ -4,13 +4,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import webserver.http.HttpStatus;
-import webserver.http.MimeType;
 import webserver.http.request.HttpVersion;
 
 import java.io.ByteArrayOutputStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static webserver.http.HttpHeaders.CONTENT_TYPE;
 import static webserver.http.HttpHeaders.LOCATION;
 
 class HttpResponseTest {

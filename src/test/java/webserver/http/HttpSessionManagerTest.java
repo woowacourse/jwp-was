@@ -1,8 +1,6 @@
 package webserver.http;
 
 import org.junit.jupiter.api.Test;
-import webserver.http.HttpSession;
-import webserver.http.HttpSessionManager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
