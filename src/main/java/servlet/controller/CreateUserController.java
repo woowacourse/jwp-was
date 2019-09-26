@@ -2,7 +2,8 @@ package servlet.controller;
 
 import http.HttpResponse;
 import http.request.HttpRequest;
-import model.UserController;
+import model.UserService;
+import servlet.resolver.UserResolver;
 
 import java.io.IOException;
 
@@ -10,9 +11,9 @@ public class CreateUserController extends HttpController {
 
     @Override
     protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
-        String location = new UserController().addUser(httpRequest);
+        new UserService().addUser(UserResolver.resolve(httpRequest));
 
-        httpResponse.addHeader("Location", location);
+        httpResponse.addHeader("Location", "/index.html");
         httpResponse.addHeader("Content-Type", "text/html");
         httpResponse.sendRedirect();
     }

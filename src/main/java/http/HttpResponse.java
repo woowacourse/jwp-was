@@ -28,13 +28,13 @@ public class HttpResponse {
         headers.put(key, value);
     }
 
+    //@TODO
     public void forward(String path) throws IOException, URISyntaxException {
         logger.debug("Forwarding Path : {}", path);
 
         byte[] body = FileIoUtils.loadFileFromClasspath(path);
         addHeader("Content-Length", Integer.toString(body.length));
 
-        // @TODO 수정 고려 StatusCode 부분
         writeStartLine(StatusCode.OK);
         writeHeaders();
 
@@ -42,6 +42,7 @@ public class HttpResponse {
         outputStream.flush();
     }
 
+    // @TODO
     public void sendRedirect() throws IOException {
         writeStartLine(StatusCode.FOUND);
         writeHeaders();

@@ -2,13 +2,14 @@ package testhelper;
 
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
-import model.UserController;
+import model.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import servlet.controller.Controller;
 import servlet.controller.ControllerFinder;
 import servlet.controller.CreateUserController;
 import servlet.controller.LoginUserController;
+import servlet.resolver.UserResolver;
 
 import java.io.*;
 import java.util.Collections;
@@ -29,7 +30,7 @@ public class Common {
         try {
             HttpRequest httpRequest =
                     HttpRequestFactory.create(Common.getBufferedReaderOfText("HTTP_POST_USER_CREATE.txt"));
-            new UserController().addUser(httpRequest);
+            new UserService().addUser(UserResolver.resolve(httpRequest));
         } catch (IOException e) {
             logger.error(e.getMessage());
         }

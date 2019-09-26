@@ -10,7 +10,7 @@ public class PathHandler {
     private static final String STATIC_URL_FORMAT = "./static%s";
     private static final String START_POINT_OF_URL = "/";
     private static final String REGEX_FOR_TEMPLATES = "/?[A-Za-z0-9/.\\-_]+\\.(html|ico)";
-    private static final String REGEX_FOR_STATIC = "/?[A-Za-z0-9/.\\-_]+\\.(css|js|ttf|woff)";
+    private static final String REGEX_FOR_STATIC = "/?[A-Za-z0-9/.\\-_]+\\.(css|js|ttf|woff|png)";
 
     public static String path(String url) {
         log.debug("url in PathHandler : {}", url);

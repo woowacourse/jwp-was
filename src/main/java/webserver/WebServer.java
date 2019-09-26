@@ -46,7 +46,7 @@ public class WebServer {
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
                 executorService.execute(new RequestHandler(connection, controllerFinder));
-                logger.debug("remain Thread Count : {}", THREAD_POOL_COUNT - executorService.getActiveCount());
+                logger.info("remain Thread Count : {}", THREAD_POOL_COUNT - executorService.getActiveCount());
             }
         }
 

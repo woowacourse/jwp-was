@@ -6,23 +6,23 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import servlet.resolver.UserResolver;
 import testhelper.Common;
 
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UserControllerTest {
-    private static final Logger logger = LoggerFactory.getLogger(UserControllerTest.class);
-    private static final String SUCCESS_HTML = "redirect:/index.html";
-    private static final String FAILED_HTML = "/user/login_failed.html";
+public class UserServiceTest {
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceTest.class);
 
-    private static UserController userController = new UserController();
+    private static UserService userService = new UserService();
 
     static {
         try {
-            userController.addUser(HttpRequestFactory.create(
-                    Common.getBufferedReaderOfText("HTTP_POST_USER_CREATE.txt")));
+            HttpRequest httpRequest = HttpRequestFactory.create(
+                    Common.getBufferedReaderOfText("HTTP_POST_USER_CREATE.txt"));
+            userService.addUser(UserResolver.resolve(httpRequest));
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -33,22 +33,22 @@ public class UserControllerTest {
     public void loginSuccess() throws IOException {
         HttpRequest httpRequest = HttpRequestFactory.create(
                 Common.getBufferedReaderOfText("HTTP_POST_USER_LOGIN.txt"));
-        assertThat(userController.login(httpRequest)).isEqualTo(SUCCESS_HTML);
+        assertThat(userService.login(UserResolver.resolve(httpRequest))).isEqualTo(true);
     }
 
     @Test
-    @DisplayName("비밀번호가 틀릴 때 예외를 발생시킨다")
+    @DisplayName("비밀번호가 틀릴 때 false를 반환한다")
     public void loginFailWhenPasswordNotMatch() throws IOException {
         HttpRequest httpRequest = HttpRequestFactory.create(
                 Common.getBufferedReaderOfText("HTTP_POST_USER_LOGIN_FAIL_PASSWORD.txt"));
-        assertThat(userController.login(httpRequest)).isEqualTo(FAILED_HTML);
+        assertThat(userService.login(UserResolver.resolve(httpRequest))).isEqualTo(false);
     }
 
     @Test
-    @DisplayName("유저가 없을 때 예외를 발생시킨다")
+    @DisplayName("유저가 없을 때 false를 발생시킨다")
     public void loginFailWhenUserNotFound() throws IOException {
         HttpRequest httpRequest = HttpRequestFactory.create(
                 Common.getBufferedReaderOfText("HTTP_POST_USER_LOGIN_FAIL_NOT_FOUND.txt"));
-        assertThat(userController.login(httpRequest)).isEqualTo(FAILED_HTML);
+        assertThat(userService.login(UserResolver.resolve(httpRequest))).isEqualTo(false);
     }
 }

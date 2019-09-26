@@ -38,15 +38,9 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = HttpRequestFactory.create(bufferedReader);
             HttpResponse httpResponse = new HttpResponse(new DataOutputStream(out));
 
-            // HttpRequest가 정적 파일을 요구하는지 확인 (if)
             if (!fileContainer.process(httpRequest, httpResponse)) {
-                // 아니면 동적으로 HttpRequestServlet 에서 처리하는 부분임(else)
-//                Controller controller = controllerFinder.find(httpRequest);
-//                controller.service(httpRequest, httpResponse);
                 servletContainer.process(httpRequest, httpResponse);
             }
-            // 3. 다 처리하면 웹서버가 할 일을 해줄 것 (웹서버는 응답을 한다. 세션도 지정한다?)
-
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }

@@ -2,7 +2,8 @@ package servlet.controller;
 
 import http.HttpResponse;
 import http.request.HttpRequest;
-import model.UserController;
+import model.UserService;
+import servlet.resolver.UserResolver;
 import webserver.support.PathHandler;
 
 import java.io.IOException;
@@ -13,20 +14,16 @@ public class LoginUserController extends HttpController {
     //@TODO 리팩토링
     @Override
     protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
-        UserController userController = new UserController();
-        String path = userController.login(httpRequest);
-        int index = path.indexOf("redirect:") + "redirect".length();
-        String redirectPath = path.substring(index + 1);
+        UserService userService = new UserService();
 
-        if (path.contains("redirect:")) {
-            httpResponse.addHeader("Location", redirectPath);
+        if (userService.login(UserResolver.resolve(httpRequest))) {
+            httpResponse.addHeader("Location", "/index.html");
             httpResponse.addHeader("Content-Type", "text/html");
             httpResponse.addHeader("Set-Cookie", "logined=true; Path=/");
             httpResponse.sendRedirect();
             return;
         }
-
         httpResponse.addHeader("Set-Cookie", "logined=false; Path=/");
-        httpResponse.forward(PathHandler.path(path));
+        httpResponse.forward(PathHandler.path("/user/login_failed.html"));
     }
 }
