@@ -17,7 +17,7 @@ class HttpSessionManagerTest {
     }
 
     @Test
-    void 싱글톤_테스트() {
+    void 싱글톤_확인() {
         assertThat(manager == HttpSessionManager.getInstance()).isTrue();
     }
 }

@@ -14,7 +14,7 @@ class IndexServletTest {
     }
 
     @Test
-    void get() {
+    void 인덱스_페이지_호출() {
         httpTestClient.get().uri("/")
                 .exchange()
                 .matchHttpStatus(HttpStatus.OK)

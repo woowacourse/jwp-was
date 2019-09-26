@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class HttpMethodTest {
     @Test
-    void getHttpMethodTest() {
+    void 문자열로_객체_생성되는지_확인() {
         HttpMethod httpMethod = HttpMethod.of("GET");
 
         assertThat(httpMethod).isEqualTo(HttpMethod.GET);

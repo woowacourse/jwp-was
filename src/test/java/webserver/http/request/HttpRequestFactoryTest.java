@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class HttpRequestFactoryTest {
 
     @Test
-    void 생성_테스트() {
+    void 파싱_되는지_확인() {
         // given
         final String plainTextRequest = "POST /user/create?id=1 HTTP/1.1\n" +
                 "Host: localhost:8080\n" +
@@ -41,7 +41,7 @@ public class HttpRequestFactoryTest {
     }
 
     @Test
-    void Body는_없고_쿼리스트링만_있는_경우() {
+    void Body는_없고_QueryString만_있는_경우() {
         // given
         final String plainTextRequest = "GET /user/create?id=1 HTTP/1.1\n" +
                 "Host: localhost:8080\n" +

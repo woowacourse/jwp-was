@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class HttpStatusTest {
 
     @Test
-    void getter_테스트() {
+    void getter_확인() {
         assertThat(HttpStatus.OK.getCode()).isEqualTo(200);
         assertThat(HttpStatus.OK.getPhrase()).isEqualTo("OK");
     }
