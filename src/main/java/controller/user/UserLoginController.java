@@ -27,18 +27,19 @@ public class UserLoginController extends AbstractController {
 
         ResponseMetaData responseMetaData = buildFailedResponseMetaData(request);
 
-        if (DataBase.hasUser(userId)) {
-            User user = DataBase.findUserById(userId);
-
-            if (user.matchPassword(password)) {
-                log.debug("login success : userId={}", userId);
-                HttpSession httpSession = createHttpSession();
-                responseMetaData = buildSuccessfulResponseMetaData(request, httpSession.getId());
-            }
+        User user = DataBase.findUserById(userId);
+        if (isValidLogin(user, password)) {
+            log.debug("login success : userId={}", userId);
+            HttpSession httpSession = createHttpSession();
+            responseMetaData = buildSuccessfulResponseMetaData(request, httpSession.getId());
         }
 
         response.setResponseMetaData(responseMetaData);
         doPost(request, response);
+    }
+
+    private boolean isValidLogin(final User user, final String password) {
+        return user != null && user.matchPassword(password);
     }
 
     private ResponseMetaData buildFailedResponseMetaData(final HttpRequest request) {
