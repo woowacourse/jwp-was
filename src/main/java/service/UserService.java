@@ -10,9 +10,8 @@ import java.util.List;
 public class UserService {
 
     public User login(String id, String password) {
-
         User user = DataBase.findUserById(id);
-        if (user == null || !user.getPassword().equals(password)) {
+        if (user == null || !user.matchPassword(password)) {
             throw new AuthorizationFailException();
         }
 
