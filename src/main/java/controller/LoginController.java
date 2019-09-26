@@ -7,9 +7,8 @@ import webserver.*;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
-public class LoginController implements Controller {
+public class LoginController extends AbstractController {
 
     private static final String USER_LOGIN_URL = "/user/login";
 
@@ -17,52 +16,29 @@ public class LoginController implements Controller {
     private static final String PASSWORD = "password";
     private static final String LOGINED_COOKIE_KEY = "logined";
 
-    private static Map<RequestMapping, HandleHttpMethod> methods;
-
-    static {
+    public LoginController() {
         methods = new HashMap<>();
-        methods.put(new RequestMapping(HttpMethod.POST, USER_LOGIN_URL), HandleHttpMethod.POST);
+        methods.put(new RequestMapping(HttpMethod.POST, USER_LOGIN_URL), this::doPost);
     }
 
-    @Override
-    public Response service(Request request) {
-        return methods.get(request.getRequestMapping()).method(request);
-    }
+    private Response doPost(Request request) {
+        Map<String, String> parsedBody = UrlEncodedParser.parse(new String(request.getBody()));
+        User user = DataBase.findUserById(parsedBody.get(USER_ID));
 
-    @Override
-    public Set<RequestMapping> getMethodKeys() {
-        return methods.keySet();
-    }
+        String redirectUrl = "/user/login_failed.html";
+        String loginedCookie = CookieLoginStatus.False.getText();
 
-    @Override
-    public boolean isMapping(Request request) {
-        return methods.containsKey(request.getRequestMapping());
-    }
-
-    private enum HandleHttpMethod {
-        POST {
-            Response method(Request request) {
-                Map<String, String> parsedBody = UrlEncodedParser.parse(new String(request.getBody()));
-                User user = DataBase.findUserById(parsedBody.get(USER_ID));
-
-                String redirectUrl = "/user/login_failed.html";
-                String loginedCookie = CookieLoginStatus.False.getText();
-
-                if (verify(user, parsedBody.get(PASSWORD))) {
-                    redirectUrl = "/index.html";
-                    loginedCookie = CookieLoginStatus.TRUE.getText();
-                }
-
-                return Response.ResponseBuilder.redirect(redirectUrl)
-                        .withCookie(LOGINED_COOKIE_KEY, loginedCookie)
-                        .build();
-            }
-        };
-
-        private static boolean verify(User user, String password) {
-            return user != null && user.matchPassword(password);
+        if (verify(user, parsedBody.get(PASSWORD))) {
+            redirectUrl = "/index.html";
+            loginedCookie = CookieLoginStatus.TRUE.getText();
         }
 
-        abstract Response method(Request request);
+        return Response.ResponseBuilder.redirect(redirectUrl)
+                .withCookie(LOGINED_COOKIE_KEY, loginedCookie)
+                .build();
+    }
+
+    private boolean verify(User user, String password) {
+        return user != null && user.matchPassword(password);
     }
 }

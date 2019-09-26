@@ -11,6 +11,4 @@ public interface Controller {
     Response service(Request request);
 
     Set<RequestMapping> getMethodKeys();
-
-    boolean isMapping(Request request);
 }
