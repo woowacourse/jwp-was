@@ -3,6 +3,7 @@ package servlet;
 import db.DataBase;
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
+import http.response.HttpResponse;
 import model.User;
 import org.junit.jupiter.api.Test;
 
@@ -21,8 +22,9 @@ class UserServletTest {
     @Test
     void user_생성() throws IOException {
         InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "Http_POST.txt"));
-        HttpRequest httpRequest = HttpRequestFactory.makeHttpRequest(in);
-        userController.doPost(httpRequest);
+        HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
+        HttpResponse response = new HttpResponse();
+        userController.doPost(request, response);
 
         User user = DataBase.findUserById("woowa");
 

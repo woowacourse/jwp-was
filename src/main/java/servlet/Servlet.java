@@ -1,10 +1,11 @@
 package servlet;
 
 import http.request.HttpRequest;
-import http.response.HttpResponseEntity;
+import http.response.HttpResponse;
 
+import java.io.IOException;
 import java.net.URISyntaxException;
 
 public interface Servlet {
-    HttpResponseEntity handle(HttpRequest httpRequest) throws URISyntaxException;
+    void handle(HttpRequest request, HttpResponse response) throws URISyntaxException, IOException;
 }

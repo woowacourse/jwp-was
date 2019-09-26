@@ -4,7 +4,7 @@ import db.DataBase;
 import http.HttpMimeType;
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
-import http.response.HttpResponseEntity;
+import http.response.HttpResponse;
 import model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -43,10 +43,12 @@ public class LoginServletTest {
                 + body;
         InputStream in = new ByteArrayInputStream(requestMessage.getBytes());
         HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
-        HttpResponseEntity responseEntity = loginServlet.handle(request);
+        HttpResponse response = new HttpResponse();
 
-        assertThat(responseEntity.getStatus()).isEqualTo(FOUND);
-        assertThat(responseEntity.getHeaders().getHeader(LOCATION))
+        loginServlet.handle(request, response);
+
+        assertThat(response.getStatus()).isEqualTo(FOUND);
+        assertThat(response.getHeaders().getHeader(LOCATION))
                 .isEqualTo("/index.html");
     }
 
@@ -64,10 +66,12 @@ public class LoginServletTest {
                 + body;
         InputStream in = new ByteArrayInputStream(requestMessage.getBytes());
         HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
-        HttpResponseEntity responseEntity = loginServlet.handle(request);
+        HttpResponse response = new HttpResponse();
 
-        assertThat(responseEntity.getStatus()).isEqualTo(FOUND);
-        assertThat(responseEntity.getHeaders().getHeader(LOCATION))
+        loginServlet.handle(request, response);
+
+        assertThat(response.getStatus()).isEqualTo(FOUND);
+        assertThat(response.getHeaders().getHeader(LOCATION))
                 .isEqualTo("/user/login_failed.html");
     }
 
@@ -85,10 +89,12 @@ public class LoginServletTest {
                 + body;
         InputStream in = new ByteArrayInputStream(requestMessage.getBytes());
         HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
-        HttpResponseEntity responseEntity = loginServlet.handle(request);
+        HttpResponse response = new HttpResponse();
 
-        assertThat(responseEntity.getStatus()).isEqualTo(FOUND);
-        assertThat(responseEntity.getHeaders().getHeader(LOCATION))
+        loginServlet.handle(request, response);
+
+        assertThat(response.getStatus()).isEqualTo(FOUND);
+        assertThat(response.getHeaders().getHeader(LOCATION))
                 .isEqualTo("/user/login_failed.html");
     }
 }

@@ -6,7 +6,6 @@ import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -30,18 +29,11 @@ public class RequestHandler implements Runnable {
             HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
             logger.debug(request.toString());
 
-            HttpResponse response = ServletHandler.handle(request);
-            writeResponse(out, response);
+            HttpResponse response = new HttpResponse();
+            ServletHandler.handle(request, response);
+            ResponseSender.send(out, response);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
-        }
-    }
-
-    private void writeResponse(OutputStream out, HttpResponse response) throws IOException {
-        DataOutputStream dos = new DataOutputStream(out);
-        dos.writeBytes(response.getHeaderMessage());
-        if (response.hasBody()) {
-            dos.write(response.getBody());
         }
     }
 }

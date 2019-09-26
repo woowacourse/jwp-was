@@ -2,25 +2,26 @@ package servlet;
 
 import http.request.HttpMethod;
 import http.request.HttpRequest;
-import http.response.HttpResponseEntity;
+import http.response.HttpResponse;
+import http.response.HttpStatus;
 
 public abstract class AbstractServlet implements Servlet {
     @Override
-    public HttpResponseEntity handle(HttpRequest httpRequest) {
-        if (HttpMethod.GET.match(httpRequest.getMethod())) {
-            return doGet(httpRequest);
+    public void handle(HttpRequest request, HttpResponse response) {
+        if (HttpMethod.GET.match(request.getMethod())) {
+            doGet(request, response);
+            return;
         }
-        if (HttpMethod.POST.match(httpRequest.getMethod())) {
-            return doPost(httpRequest);
+        if (HttpMethod.POST.match(request.getMethod())) {
+            doPost(request, response);
+            return;
         }
-        return HttpResponseEntity.get405Response();
+        response.error(HttpStatus.METHOD_NOT_ALLOWED);
     }
 
-    protected HttpResponseEntity doGet(HttpRequest httpRequest) {
-        return HttpResponseEntity.get405Response();
+    protected void doGet(HttpRequest request, HttpResponse response) {
     }
 
-    protected HttpResponseEntity doPost(HttpRequest httpRequest) {
-        return HttpResponseEntity.get405Response();
+    protected void doPost(HttpRequest request, HttpResponse response) {
     }
 }

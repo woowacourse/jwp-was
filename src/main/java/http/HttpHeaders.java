@@ -9,6 +9,7 @@ public class HttpHeaders {
     public static final String CONTENT_TYPE = "Content-Type";
     public static final String CONTENT_LENGTH = "Content-Length";
     public static final String LOCATION = "Location";
+    public static final String SET_COOKIE = "Set-Cookie";
 
     private Map<String, String> headers;
 
@@ -30,6 +31,10 @@ public class HttpHeaders {
 
     public String put(String key, String value) {
         return headers.put(key, value);
+    }
+
+    public void clear() {
+        headers.clear();
     }
 
     @Override

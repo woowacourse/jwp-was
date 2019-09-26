@@ -1,10 +1,10 @@
 package servlet;
 
-import http.HttpHeaders;
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
-import http.response.HttpResponseEntity;
+import http.response.HttpResponse;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -32,15 +32,15 @@ class DefaultServletTest {
                 + "Accept: */*";
         InputStream in = new ByteArrayInputStream(requestMessage.getBytes());
         HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
+        HttpResponse response = new HttpResponse();
 
-        HttpResponseEntity responseEntity = defaultServlet.handle(request);
+        defaultServlet.handle(request, response);
 
-        assertThat(responseEntity.getStatus()).isEqualTo(OK);
-        assertThat(responseEntity.getHeaders()).isEqualTo(new HttpHeaders());
-        assertThat(responseEntity.getViewPath()).isEqualTo("./templates/index.html");
+        assertThat(response.getStatus()).isEqualTo(OK);
     }
 
     @Test
+    @DisplayName("Request URI에 해당하는 리소스가 Static에 있는 경우 200 OK")
     void Request_URI에_해당하는_리소스가_Static에_있는_경우() throws IOException, URISyntaxException {
         String requestMessage = "GET /css/styles.css HTTP/1.1\n"
                 + "Host: localhost:8080\n"
@@ -48,27 +48,26 @@ class DefaultServletTest {
                 + "Accept: */*";
         InputStream in = new ByteArrayInputStream(requestMessage.getBytes());
         HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
+        HttpResponse response = new HttpResponse();
 
-        HttpResponseEntity responseEntity = defaultServlet.handle(request);
+        defaultServlet.handle(request, response);
 
-        assertThat(responseEntity.getStatus()).isEqualTo(OK);
-        assertThat(responseEntity.getHeaders()).isEqualTo(new HttpHeaders());
-        assertThat(responseEntity.getViewPath()).isEqualTo("./static/css/styles.css");
+        assertThat(response.getStatus()).isEqualTo(OK);
     }
 
     @Test
-    void Request_URI에_해당하는_리소스가_없는_경우() throws IOException, URISyntaxException {
+    @DisplayName("Request URL에 해당하는 리소스가 없는 경우 404 Not Found")
+    void resourceNotExist() throws IOException, URISyntaxException {
         String requestMessage = "GET /not_exist.html HTTP/1.1\n"
                 + "Host: localhost:8080\n"
                 + "Connection: keep-alive\n"
                 + "Accept: */*";
         InputStream in = new ByteArrayInputStream(requestMessage.getBytes());
         HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
+        HttpResponse response = new HttpResponse();
 
-        HttpResponseEntity responseEntity = defaultServlet.handle(request);
+        defaultServlet.handle(request, response);
 
-        assertThat(responseEntity.getStatus()).isEqualTo(NOT_FOUND);
-        assertThat(responseEntity.getHeaders()).isEqualTo(new HttpHeaders());
-        assertThat(responseEntity.getViewPath()).isEqualTo("./templates/error/404.html");
+        assertThat(response.getStatus()).isEqualTo(NOT_FOUND);
     }
 }

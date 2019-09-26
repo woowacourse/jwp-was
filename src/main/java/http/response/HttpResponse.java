@@ -2,27 +2,51 @@ package http.response;
 
 import http.HttpHeaders;
 import http.HttpMimeType;
+import http.HttpVersion;
 
-import static http.HttpHeaders.CONTENT_LENGTH;
-import static http.HttpHeaders.CONTENT_TYPE;
+import static http.HttpHeaders.*;
+import static http.HttpVersion.DEFAULT_VERSION;
+import static http.response.HttpStatus.FOUND;
+import static http.response.HttpStatus.OK;
 
 public class HttpResponse {
-    public static final String CRLF = "\r\n";
-
-    private HttpStatusLine statusLine;
+    private HttpVersion version;
+    private HttpStatus status;
     private HttpHeaders headers;
     private byte[] body;
 
-    public HttpResponse(HttpStatusLine statusLine, HttpHeaders headers) {
-        this.statusLine = statusLine;
-        this.headers = headers;
-        this.body = null;
+    public HttpResponse() {
+        this.version = DEFAULT_VERSION;
+        this.status = OK;
+        this.headers = new HttpHeaders();
     }
 
-    public String getHeaderMessage() {
-        return statusLine + CRLF
-                + headers
-                + CRLF;
+    public void redirect(String location) {
+        status = FOUND;
+        headers.put(LOCATION, location);
+        body = null;
+    }
+
+    public void error(HttpStatus status) {
+        this.status = status;
+        headers.clear();
+        setBody(status.getMessage().getBytes(), HttpMimeType.HTML);
+    }
+
+    public HttpVersion getVersion() {
+        return version;
+    }
+
+    public HttpStatus getStatus() {
+        return status;
+    }
+
+    public void setHeader(String key, String value) {
+        headers.put(key, value);
+    }
+
+    public HttpHeaders getHeaders() {
+        return headers;
     }
 
     public void setBody(byte[] body, HttpMimeType mediaType) {
@@ -35,21 +59,5 @@ public class HttpResponse {
 
     public byte[] getBody() {
         return body;
-    }
-
-    @Override
-    public String toString() {
-        return statusLine + CRLF
-                + headers
-                + CRLF
-                + getBodyMessage();
-    }
-
-    private String getBodyMessage() {
-        return hasBody() ? new String(body) : null;
-    }
-
-    public boolean hasBody() {
-        return body != null;
     }
 }

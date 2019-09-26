@@ -1,12 +1,16 @@
 package servlet;
 
 import http.request.HttpRequest;
-import http.response.HttpResponseEntity;
+import http.response.HttpResponse;
 import utils.FileIoUtils;
+import webserver.ViewResolver;
 
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static http.response.HttpStatus.NOT_FOUND;
 
 public class DefaultServlet implements Servlet {
     private static final List<String> FILE_PATH_PREFIXES;
@@ -18,13 +22,14 @@ public class DefaultServlet implements Servlet {
     }
 
     @Override
-    public HttpResponseEntity handle(HttpRequest httpRequest) throws URISyntaxException {
+    public void handle(HttpRequest request, HttpResponse response) throws URISyntaxException, IOException {
         for (String prefix : FILE_PATH_PREFIXES) {
-            String staticFilePath = prefix + httpRequest.getUri().getPath();
+            String staticFilePath = prefix + request.getUri().getPath();
             if (FileIoUtils.existFileInClasspath(staticFilePath)) {
-                return HttpResponseEntity.get200Response(staticFilePath);
+                ViewResolver.resolve(request, response, staticFilePath);
+                return;
             }
         }
-        return HttpResponseEntity.get404Response();
+        response.error(NOT_FOUND);
     }
 }
