@@ -2,7 +2,6 @@ package webserver.controller;
 
 import http.request.Request;
 import http.response.Response;
-import webserver.exception.InvalidRequestMethodException;
 import webserver.support.ModelAndView;
 
 import java.io.IOException;

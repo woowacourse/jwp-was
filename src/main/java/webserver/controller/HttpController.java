@@ -27,5 +27,5 @@ public abstract class HttpController implements Controller {
 
     protected void doPost(Request request, Response response) {
         throw new InvalidRequestMethodException();
-    };
+    }
 }
