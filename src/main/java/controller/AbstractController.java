@@ -13,12 +13,12 @@ public abstract class AbstractController implements Controller {
     protected Map<RequestMapping, Function<Request, Response>> methods;
 
     @Override
-    public Response service(Request request) {
+    public final Response service(Request request) {
         return methods.get(request.getRequestMapping()).apply(request);
     }
 
     @Override
-    public Set<RequestMapping> getMethodKeys() {
+    public final Set<RequestMapping> getMethodKeys() {
         return methods.keySet();
     }
 }
