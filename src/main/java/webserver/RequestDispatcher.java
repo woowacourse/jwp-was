@@ -41,7 +41,12 @@ public class RequestDispatcher {
 
     private static byte[] processResponse(final Request request) throws IOException, URISyntaxException {
         try {
-            final Response response = requestUrls.getOrDefault(request.getPath(), RequestDispatcher::serveResponse).service(request);
+            final Response response = requestUrls.entrySet().stream()
+                    .filter(entry -> entry.getKey().equals(request.getPath()))
+                    .findFirst()
+                    .map(Map.Entry::getValue)
+                    .orElseGet(() -> RequestDispatcher::serveResponse)
+                    .service(request);
             return Objects.nonNull(response) ? DataConverter.convertToBytes(response) :
                     DataConverter.convertToBytes(FileIoUtils.loadFileFromClasspath(makeFilePath(request, STATIC_PATH)));
         } catch (IOException | URISyntaxException | NullPointerException e) {
