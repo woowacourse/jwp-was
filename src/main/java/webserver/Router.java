@@ -1,7 +1,6 @@
 package webserver;
 
 import webserver.controller.AbstractController;
-import webserver.controller.IndexController;
 import webserver.controller.UserController;
 import webserver.controller.request.HttpRequest;
 import webserver.controller.response.HttpResponse;
@@ -14,8 +13,6 @@ public class Router {
 
     static {
         controllers.put("/user/create", UserController.getInstance());
-        controllers.put("/user/form.html", UserController.getInstance());
-        controllers.put("/index.html", IndexController.getInstance());
     }
 
     public static void route(HttpRequest httpRequest, HttpResponse httpResponse) {

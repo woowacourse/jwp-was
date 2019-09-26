@@ -19,7 +19,13 @@ public abstract class AbstractController implements Controller {
         controllerMethods.get(httpRequest.getHttpMethod()).service(httpRequest, httpResponse);
     }
 
-    public abstract void doGet(HttpRequest httpRequest, HttpResponse httpResponse);
+    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+        try {
+            httpResponse.responseOK(httpRequest);
+        } catch (Exception e) {
+            httpResponse.responseBadRequest(e.getMessage());
+        }
+    };
 
-    public abstract void doPost(HttpRequest httpRequest, HttpResponse httpResponse);
+    public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) { };
 }

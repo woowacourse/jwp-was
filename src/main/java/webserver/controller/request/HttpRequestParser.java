@@ -25,7 +25,7 @@ public class HttpRequestParser {
     public static HashMap<String, String> parseBody(BufferedReader bufferedReader, int contentLength) throws IOException {
         HashMap<String, String> bodyFields = new HashMap<>();
         String requestParams = IOUtils.readData(bufferedReader, contentLength);
-        requestParams = URLDecoder.decode(requestParams, StandardCharsets.UTF_8);
+        requestParams = URLDecoder.decode(requestParams, StandardCharsets.UTF_8.name());
         String[] splitedParams = requestParams.split(BODY_FIELD_SEPERATE_DELEMETER);
 
         for (String splitedParam : splitedParams) {

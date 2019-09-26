@@ -23,15 +23,6 @@ public class UserController extends AbstractController {
     }
 
     @Override
-    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        try {
-            httpResponse.responseOK(httpRequest);
-        } catch (Exception e) {
-            httpResponse.responseBadRequest(e.getMessage());
-        }
-    }
-
-    @Override
     public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         Map<String, String> requestBodyFields = httpRequest.getBodyFields();
         User user = UserFactory.of(requestBodyFields);
