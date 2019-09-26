@@ -22,7 +22,7 @@ public class UserControllerTest {
     static {
         try {
             userController.addUser(HttpRequestFactory.create(
-                    Common.getBufferedReader("HTTP_POST_USER_CREATE.txt")));
+                    Common.getBufferedReaderOfText("HTTP_POST_USER_CREATE.txt")));
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -32,7 +32,7 @@ public class UserControllerTest {
     @DisplayName("로그인 성공 후 /index.html을 반환한다")
     public void loginSuccess() throws IOException {
         HttpRequest httpRequest = HttpRequestFactory.create(
-                Common.getBufferedReader("HTTP_POST_USER_LOGIN.txt"));
+                Common.getBufferedReaderOfText("HTTP_POST_USER_LOGIN.txt"));
         assertThat(userController.login(httpRequest)).isEqualTo(SUCCESS_HTML);
     }
 
@@ -40,7 +40,7 @@ public class UserControllerTest {
     @DisplayName("비밀번호가 틀릴 때 예외를 발생시킨다")
     public void loginFailWhenPasswordNotMatch() throws IOException {
         HttpRequest httpRequest = HttpRequestFactory.create(
-                Common.getBufferedReader("HTTP_POST_USER_LOGIN_FAIL_PASSWORD.txt"));
+                Common.getBufferedReaderOfText("HTTP_POST_USER_LOGIN_FAIL_PASSWORD.txt"));
         assertThat(userController.login(httpRequest)).isEqualTo(FAILED_HTML);
     }
 
@@ -48,7 +48,7 @@ public class UserControllerTest {
     @DisplayName("유저가 없을 때 예외를 발생시킨다")
     public void loginFailWhenUserNotFound() throws IOException {
         HttpRequest httpRequest = HttpRequestFactory.create(
-                Common.getBufferedReader("HTTP_POST_USER_LOGIN_FAIL_NOT_FOUND.txt"));
+                Common.getBufferedReaderOfText("HTTP_POST_USER_LOGIN_FAIL_NOT_FOUND.txt"));
         assertThat(userController.login(httpRequest)).isEqualTo(FAILED_HTML);
     }
 }

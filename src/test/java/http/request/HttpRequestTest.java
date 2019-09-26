@@ -13,7 +13,7 @@ public class HttpRequestTest {
     @Test
     @DisplayName("HTTP GET 요청")
     public void httpGetRequest() throws IOException {
-        HttpRequest httpRequest = HttpRequestFactory.create(Common.getBufferedReader("HTTP_GET_QUERY_STRING.txt"));
+        HttpRequest httpRequest = HttpRequestFactory.create(Common.getBufferedReaderOfText("HTTP_GET_QUERY_STRING.txt"));
 
         assertThat(httpRequest.getMethod()).isEqualTo("GET");
         assertThat(httpRequest.getResourcePath()).isEqualTo("/user/create");
@@ -24,7 +24,7 @@ public class HttpRequestTest {
     @Test
     @DisplayName("HTTP POST 요청")
     public void httpPostRequest() throws IOException {
-        HttpRequest httpRequest = HttpRequestFactory.create(Common.getBufferedReader("HTTP_POST_USER_CREATE.txt"));
+        HttpRequest httpRequest = HttpRequestFactory.create(Common.getBufferedReaderOfText("HTTP_POST_USER_CREATE.txt"));
 
         assertThat(httpRequest.getMethod()).isEqualTo("POST");
         assertThat(httpRequest.getResourcePath()).isEqualTo("/user/create");

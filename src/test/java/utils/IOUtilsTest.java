@@ -51,7 +51,7 @@ public class IOUtilsTest {
                 "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net"
         );
 
-        BufferedReader bufferedReader = Common.getBufferedReader("HTTP_POST_USER_CREATE.txt");
+        BufferedReader bufferedReader = Common.getBufferedReaderOfText("HTTP_POST_USER_CREATE.txt");
         List<String> lines = IOUtils.parseAllLine(bufferedReader);
         assertThat(lines).isEqualTo(actual);
     }
@@ -65,7 +65,7 @@ public class IOUtilsTest {
                 "Accept: */*"
         );
 
-        BufferedReader bufferedReader = Common.getBufferedReader("HTTP_GET_INDEX_HTML.txt");
+        BufferedReader bufferedReader = Common.getBufferedReaderOfText("HTTP_GET_INDEX_HTML.txt");
         List<String> lines = IOUtils.parseAllLine(bufferedReader);
         assertThat(lines).isEqualTo(actual);
     }

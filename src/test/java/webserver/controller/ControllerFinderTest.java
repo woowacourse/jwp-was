@@ -25,7 +25,7 @@ public class ControllerFinderTest {
     @DisplayName("/user/create에 해당하는 컨트롤러를 반환한다")
     public void getControllerWhenPostUserCreate() throws IOException {
         HttpRequest httpRequest = HttpRequestFactory.create(
-                Common.getBufferedReader("HTTP_POST_USER_CREATE.txt"));
+                Common.getBufferedReaderOfText("HTTP_POST_USER_CREATE.txt"));
         assertThat(controllerFinder.find(httpRequest)).isEqualTo(api.get("/user/create"));
     }
 }

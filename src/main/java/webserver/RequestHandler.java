@@ -33,7 +33,9 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = HttpRequestFactory.create(bufferedReader);
             HttpResponse httpResponse = new HttpResponse(new DataOutputStream(out));
 
-            // @TODO 계층을 하나 추가하는 것 고려하기
+            // HttpRequest가 정적 파일을 요구하는지 확인 (if)
+            // HttpRequestServlet 처리할 것(else)
+            // 3. 다 처리하면 웹서버가 할 일을 해줄 것 (웹서버는 응답을 한다. 세션도 지정한다?)
             Controller controller = controllerFinder.find(httpRequest);
             controller.service(httpRequest, httpResponse);
         } catch (IOException | URISyntaxException e) {

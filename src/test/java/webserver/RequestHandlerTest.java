@@ -13,7 +13,9 @@ import webserver.controller.ControllerFinder;
 import webserver.controller.CreateUserController;
 import webserver.controller.LoginUserController;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 import java.util.Collections;
 import java.util.HashMap;
@@ -34,7 +36,7 @@ public class RequestHandlerTest {
 
         try {
             HttpRequest httpRequest =
-                    HttpRequestFactory.create(Common.getBufferedReader("HTTP_POST_USER_CREATE.txt"));
+                    HttpRequestFactory.create(Common.getBufferedReaderOfText("HTTP_POST_USER_CREATE.txt"));
             new UserController().addUser(httpRequest);
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -42,6 +44,20 @@ public class RequestHandlerTest {
     }
 
     ControllerFinder controllerFinder = new ControllerFinder(Collections.unmodifiableMap(api));
+
+    @Test
+    @DisplayName("정적 파일 반환")
+    public void staticFile() throws IOException {
+        Socket loginSocket = mock(Socket.class);
+        when(loginSocket.getInputStream()).thenReturn(Common.getInputStream("HTTP_GET_CSS.txt"));
+        when(loginSocket.getOutputStream()).thenReturn(new ByteArrayOutputStream());
+        RequestHandler requestHandler = new RequestHandler(loginSocket, controllerFinder);
+        requestHandler.run();
+
+        BufferedReader bufferedReader = Common.test(loginSocket.getOutputStream());
+        logger.info("\n" + loginSocket.getOutputStream().toString());
+        assertThat(bufferedReader.readLine()).isEqualTo("HTTP/1.1 200 OK");
+    }
 
     @Test
     @DisplayName("로그인 실패")
@@ -52,9 +68,7 @@ public class RequestHandlerTest {
         RequestHandler requestHandler = new RequestHandler(loginSocket, controllerFinder);
         requestHandler.run();
 
-        InputStream inputStream = new ByteArrayInputStream(((ByteArrayOutputStream) loginSocket.getOutputStream()).toByteArray());
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-
+        BufferedReader bufferedReader = Common.test(loginSocket.getOutputStream());
         logger.info("\n" + loginSocket.getOutputStream().toString());
         assertThat(bufferedReader.readLine()).isEqualTo("HTTP/1.1 200 OK");
     }
@@ -68,9 +82,7 @@ public class RequestHandlerTest {
         RequestHandler requestHandler = new RequestHandler(loginSocket, controllerFinder);
         requestHandler.run();
 
-        InputStream inputStream = new ByteArrayInputStream(((ByteArrayOutputStream) loginSocket.getOutputStream()).toByteArray());
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-
+        BufferedReader bufferedReader = Common.test(loginSocket.getOutputStream());
         logger.info("\n" + loginSocket.getOutputStream().toString());
         assertThat(bufferedReader.readLine()).isEqualTo("HTTP/1.1 302 FOUND");
         assertThat(bufferedReader.readLine()).isEqualTo("Set-Cookie: logined=true; Path=/");

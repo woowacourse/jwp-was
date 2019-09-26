@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import testhelper.Common;
-import webserver.controller.exception.Page404NotFoundException;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -25,7 +24,7 @@ public class FileControllerTest {
     public void doGetCssResource() throws IOException, URISyntaxException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-        BufferedReader bufferedReader = Common.getBufferedReader("HTTP_GET_CSS.txt");
+        BufferedReader bufferedReader = Common.getBufferedReaderOfText("HTTP_GET_CSS.txt");
         HttpRequest httpRequest = HttpRequestFactory.create(bufferedReader);
         HttpResponse httpResponse = new HttpResponse(byteArrayOutputStream);
         Controller controller = new FileController();
@@ -39,7 +38,7 @@ public class FileControllerTest {
     public void doGetHtmlResource() throws IOException, URISyntaxException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-        BufferedReader bufferedReader = Common.getBufferedReader("HTTP_GET_INDEX_HTML.txt");
+        BufferedReader bufferedReader = Common.getBufferedReaderOfText("HTTP_GET_INDEX_HTML.txt");
         HttpRequest httpRequest = HttpRequestFactory.create(bufferedReader);
         HttpResponse httpResponse = new HttpResponse(byteArrayOutputStream);
         Controller controller = new FileController();

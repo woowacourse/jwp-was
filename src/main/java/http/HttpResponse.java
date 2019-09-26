@@ -34,6 +34,7 @@ public class HttpResponse {
         byte[] body = FileIoUtils.loadFileFromClasspath(path);
         addHeader("Content-Length", Integer.toString(body.length));
 
+        // @TODO 수정 고려 StatusCode 부분
         writeStartLine(StatusCode.OK);
         writeHeaders();
 
