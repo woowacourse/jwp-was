@@ -119,29 +119,39 @@ public class HttpTestClient {
 
         public ResponseSpec exchange() {
             StringBuilder sb = new StringBuilder();
-            sb.append(String.format("%s %s %s\n", method, uri, protocolVersion));
 
-            // 요청라인
+            renderRequestLine(sb);
+            renderHeaders(sb);
+            renderBody(sb);
+
+            log.debug("\n{}", sb.toString());
+            final String response = send(sb.toString());
+            return new ResponseSpec(response);
+        }
+
+        private void renderRequestLine(final StringBuilder sb) {
+            sb.append(String.format("%s %s %s\n", method, uri, protocolVersion));
+        }
+
+        private void renderHeaders(final StringBuilder sb) {
             if (StringUtils.isNotEmpty(body)) {
                 headers.put(HttpHeaders.CONTENT_LENGTH, String.valueOf(body.length()));
             }
-            // 헤더
             for (final String key : headers.keySet()) {
                 sb.append(String.format("%s: %s\n", key, headers.get(key)));
             }
-            // 쿠키
+
+            // cookie
             sb.append(cookies.isEmpty() ? "" : "Cookie: ");
             for (final String key : cookies.keySet()) {
                 sb.append(String.format("%s=%s; ", key, cookies.get(key)));
             }
             sb.append(cookies.isEmpty() ? "" : "\n");
-
             sb.append("\n");
-            sb.append(body.isEmpty() ? "" : body);
+        }
 
-            log.debug("\n" + sb.toString());
-            final String response = send(sb.toString());
-            return new ResponseSpec(response);
+        private void renderBody(final StringBuilder sb) {
+            sb.append(body.isEmpty() ? "" : body);
         }
     }
 
