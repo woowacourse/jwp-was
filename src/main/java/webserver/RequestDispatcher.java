@@ -21,7 +21,7 @@ public class RequestDispatcher {
     private static final String MESSAGE_UNSUPPORTED_EXTENSION = "지원되지 않는 확장자 입니다.";
     private static final String EXTENSION_DELIMITER = "\\.";
 
-    private static final Map<String, Controller> controllers;
+    private static final Map<RequestMapping, Controller> controllers;
 
     static {
         controllers = new HashMap<>();
@@ -29,21 +29,20 @@ public class RequestDispatcher {
         LoginController loginController = new LoginController();
         UserListController userListController = new UserListController();
 
-        controllers.put(signUpController.getPath(), signUpController);
-        controllers.put(loginController.getPath(), loginController);
-        controllers.put(userListController.getPath(), userListController);
+        signUpController.getMethodKeys().forEach(requestMapping -> controllers.put(requestMapping, signUpController));
+        loginController.getMethodKeys().forEach(requestMapping -> controllers.put(requestMapping, loginController));
+        userListController.getMethodKeys().forEach(requestMapping -> controllers.put(requestMapping, userListController));
     }
 
     public static Response handle(Request request) {
         try {
-            String path = request.getPath();
-            Optional<File> file = ResourceLoadUtils.detectFile(path);
+            Optional<File> file = ResourceLoadUtils.detectFile(request.getRequestMapping().getUri());
 
             if (file.isPresent()) {
                 return serveFile(file.get());
             }
 
-            Controller toServe = controllers.get(path);
+            Controller toServe = controllers.get(request.getRequestMapping());
             if (toServe != null && toServe.isMapping(request)) {
                 return toServe.service(request);
             }

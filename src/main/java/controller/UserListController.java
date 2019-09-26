@@ -2,40 +2,38 @@ package controller;
 
 import db.DataBase;
 import model.User;
-import webserver.CookieLoginStatus;
-import webserver.HttpMethod;
-import webserver.Request;
-import webserver.Response;
+import webserver.*;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class UserListController implements Controller {
 
     private static final String USER_LIST_URL = "/user/list";
     private static final String LOGINED_COOKIE_KEY = "logined";
 
-    private static Map<HttpMethod, HandleHttpMethod> methods;
+    private static Map<RequestMapping, HandleHttpMethod> methods;
 
     static {
         methods = new HashMap<>();
-        methods.put(HttpMethod.GET, HandleHttpMethod.GET);
+        methods.put(new RequestMapping(HttpMethod.GET, USER_LIST_URL), HandleHttpMethod.GET);
     }
 
     @Override
     public Response service(Request request) {
-        return methods.get(request.getMethod()).method(request);
+        return methods.get(request.getRequestMapping()).method(request);
     }
 
     @Override
-    public String getPath() {
-        return USER_LIST_URL;
+    public Set<RequestMapping> getMethodKeys() {
+        return methods.keySet();
     }
 
     @Override
     public boolean isMapping(Request request) {
-        return methods.containsKey(request.getMethod());
+        return methods.containsKey(request.getRequestMapping());
     }
 
     private enum HandleHttpMethod {

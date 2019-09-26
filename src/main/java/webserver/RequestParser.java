@@ -29,13 +29,14 @@ public class RequestParser {
         String[] firstLine = br.readLine().split(FIRST_LINE_DELIMITER);
         HttpMethod method = HttpMethod.from(firstLine[0])
                 .orElseThrow(() -> new IllegalArgumentException("Unsupported http method: " + firstLine[0]));
-        String url = firstLine[1].split(PATH_QUERY_DELIMITER_REGEX)[0];
+        String uri = firstLine[1].split(PATH_QUERY_DELIMITER_REGEX)[0];
+        RequestMapping requestMapping = new RequestMapping(method, uri);
         Map<String, String> queries = parseQueryString(firstLine[1]);
         Map<String, String> headers = parseHeader(br);
         Map<String, String> cookies = parseCookie(headers);
         byte[] body = getBody(br, headers);
 
-        return new Request(method, url, queries, headers, cookies, body);
+        return new Request(requestMapping, queries, headers, cookies, body);
     }
 
     private static Map<String, String> parseQueryString(String pair) {

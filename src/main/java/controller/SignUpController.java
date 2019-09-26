@@ -5,35 +5,37 @@ import model.UserAssembler;
 import utils.UrlEncodedParser;
 import webserver.HttpMethod;
 import webserver.Request;
+import webserver.RequestMapping;
 import webserver.Response;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class SignUpController implements Controller {
 
     private static final String USER_CREATE_URL = "/user/create";
 
-    private static Map<HttpMethod, HandleHttpMethod> methods;
+    private static Map<RequestMapping, HandleHttpMethod> methods;
 
     static {
         methods = new HashMap<>();
-        methods.put(HttpMethod.POST, HandleHttpMethod.POST);
+        methods.put(new RequestMapping(HttpMethod.POST, USER_CREATE_URL), HandleHttpMethod.POST);
     }
 
     @Override
     public Response service(Request request) {
-        return methods.get(request.getMethod()).method(request);
+        return methods.get(request.getRequestMapping()).method(request);
     }
 
     @Override
-    public String getPath() {
-        return USER_CREATE_URL;
+    public Set<RequestMapping> getMethodKeys() {
+        return methods.keySet();
     }
 
     @Override
     public boolean isMapping(Request request) {
-        return methods.containsKey(request.getMethod());
+        return methods.containsKey(request.getRequestMapping());
     }
 
     private enum HandleHttpMethod {

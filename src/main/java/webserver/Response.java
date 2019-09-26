@@ -80,17 +80,17 @@ public class Response {
             return new ResponseBuilder();
         }
 
-        public static ResponseBuilder redirect(String url) {
+        public static ResponseBuilder redirect(String uri) {
             return createBuilder()
                     .withStatus(Status.FOUND)
-                    .withHeader("Location", url);
+                    .withHeader("Location", uri);
         }
 
-        public static ResponseBuilder forward(String url, Object object) {
+        public static ResponseBuilder forward(String uri, Object object) {
             try {
                 return createBuilder()
                         .withStatus(Status.OK)
-                        .withBody(createTemplate(url).apply(object).getBytes());
+                        .withBody(createTemplate(uri).apply(object).getBytes());
             } catch (IOException e) {
                 logger.error("Error while forward: ", e);
             }

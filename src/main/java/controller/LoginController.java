@@ -3,13 +3,11 @@ package controller;
 import db.DataBase;
 import model.User;
 import utils.UrlEncodedParser;
-import webserver.CookieLoginStatus;
-import webserver.HttpMethod;
-import webserver.Request;
-import webserver.Response;
+import webserver.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class LoginController implements Controller {
 
@@ -19,26 +17,26 @@ public class LoginController implements Controller {
     private static final String PASSWORD = "password";
     private static final String LOGINED_COOKIE_KEY = "logined";
 
-    private static Map<HttpMethod, HandleHttpMethod> methods;
+    private static Map<RequestMapping, HandleHttpMethod> methods;
 
     static {
         methods = new HashMap<>();
-        methods.put(HttpMethod.POST, HandleHttpMethod.POST);
+        methods.put(new RequestMapping(HttpMethod.POST, USER_LOGIN_URL), HandleHttpMethod.POST);
     }
 
     @Override
     public Response service(Request request) {
-        return methods.get(request.getMethod()).method(request);
+        return methods.get(request.getRequestMapping()).method(request);
     }
 
     @Override
-    public String getPath() {
-        return USER_LOGIN_URL;
+    public Set<RequestMapping> getMethodKeys() {
+        return methods.keySet();
     }
 
     @Override
     public boolean isMapping(Request request) {
-        return methods.containsKey(request.getMethod());
+        return methods.containsKey(request.getRequestMapping());
     }
 
     private enum HandleHttpMethod {

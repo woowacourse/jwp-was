@@ -30,8 +30,8 @@ public class RequestParserTest {
     void parse() throws IOException {
         Request req = RequestParser.parse(new ByteArrayInputStream(REQUEST_BYTE));
 
-        assertThat(req.getMethod()).isEqualTo(HttpMethod.POST);
-        assertThat(req.getPath()).isEqualTo("/");
+        assertThat(req.getRequestMapping().getHttpMethod()).isEqualTo(HttpMethod.POST);
+        assertThat(req.getRequestMapping().getUri()).isEqualTo("/");
         assertThat(req.getHeader("Content-Length")).isEqualTo("26");
         assertThat(new String(req.getBody()).trim()).isEqualTo("This is body");
     }
@@ -41,7 +41,7 @@ public class RequestParserTest {
     void querystring() throws IOException {
         Request req = RequestParser.parse(new ByteArrayInputStream("GET /some-resource?q=abcde&email=john%40example.com".getBytes()));
 
-        assertThat(req.getPath()).isEqualTo("/some-resource");
+        assertThat(req.getRequestMapping().getUri()).isEqualTo("/some-resource");
         assertThat(req.getQuery("q")).isEqualTo("abcde");
         assertThat(req.getQuery("email")).isEqualTo("john@example.com");
     }
