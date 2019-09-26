@@ -3,7 +3,6 @@ package webserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.http.HttpRequest;
-import webserver.http.HttpRequestFactory;
 import webserver.http.HttpResponse;
 
 import java.io.DataOutputStream;
@@ -30,7 +29,7 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             DataOutputStream dos = new DataOutputStream(out);
 
-            HttpRequest httpRequest = HttpRequestFactory.getInstance().getHttpRequest(in);
+            HttpRequest httpRequest = HttpRequest.of(in);
             HttpResponse httpResponse = new HttpResponse();
 
             String view = urlMapper.service(httpRequest, httpResponse);
