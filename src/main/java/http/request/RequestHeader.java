@@ -22,7 +22,7 @@ public class RequestHeader {
         return requestHeader;
     }
 
-    private void put(String headerLine) {
+    protected void put(String headerLine) {
         String[] tokens = headerLine.split(HEADER_DELIMITER);
         if (tokens.length == 2) {
             requestHeader.put(tokens[0], tokens[1]);
