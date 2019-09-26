@@ -21,7 +21,7 @@ public class HttpRequestHeader {
         this.cookies = cookies;
     }
 
-    public static HttpRequestHeader of(String header) {
+    public static HttpRequestHeader create(String header) {
         HashMap<String, String> headers = new HashMap<>();
         Cookies cookies = new Cookies();
         parseBody(header, headers, cookies);

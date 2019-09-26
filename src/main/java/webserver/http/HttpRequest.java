@@ -28,13 +28,13 @@ public class HttpRequest {
         this.httpRequestBody = httpRequestBody;
     }
 
-    public static HttpRequest of(InputStream in) {
+    public static HttpRequest create(InputStream in) {
         BufferedReader br = getBufferedReader(in);
 
         String startLine = parseStartLine(br);
         String header = parseHeader(br);
-        HttpStartLine httpStartLine = HttpStartLine.of(startLine);
-        HttpRequestHeader httpRequestHeader = HttpRequestHeader.of(header);
+        HttpStartLine httpStartLine = HttpStartLine.create(startLine);
+        HttpRequestHeader httpRequestHeader = HttpRequestHeader.create(header);
         HttpRequestBody httpRequestBody = getHttpRequestBody(br, httpStartLine, httpRequestHeader);
 
         return new HttpRequest(httpStartLine, httpRequestHeader, httpRequestBody);
@@ -85,7 +85,7 @@ public class HttpRequest {
         }
 
         String body = parseBody(br, httpRequestHeader.getContentLength());
-        return HttpRequestBody.of(body);
+        return HttpRequestBody.create(body);
     }
 
     private static String parseBody(BufferedReader br, int contentLength) {

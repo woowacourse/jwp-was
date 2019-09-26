@@ -22,7 +22,7 @@ public class HttpStartLine {
         this.httpVersion = httpVersion;
     }
 
-    public static HttpStartLine of(String startLine) {
+    public static HttpStartLine create(String startLine) {
         String[] splitStartLine = startLine.split(START_LINE_SEPARATOR);
 
         Map<String, String> queryParams = new HashMap<>();

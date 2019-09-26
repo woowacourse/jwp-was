@@ -19,7 +19,7 @@ class HttpRequestHeaderTest {
 
     @Test
     void 객체_생성후_HOST_확인_테스트() {
-        HttpRequestHeader httpRequestHeader = HttpRequestHeader.of(header);
+        HttpRequestHeader httpRequestHeader = HttpRequestHeader.create(header);
         String host = httpRequestHeader.getHost();
         assertThat(host).isEqualTo("localhost:8080");
     }

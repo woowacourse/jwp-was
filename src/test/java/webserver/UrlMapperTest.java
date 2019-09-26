@@ -30,9 +30,9 @@ class UrlMapperTest {
     @Test
     void 컨트롤러_가지_않는_요청_테스트() {
         UrlMapper urlMapper = new UrlMapper();
-        HttpStartLine httpStartLine = HttpStartLine.of(getStartLine);
-        HttpRequestHeader httpRequestHeader = HttpRequestHeader.of(header);
-        HttpRequestBody httpRequestBody = HttpRequestBody.of(body);
+        HttpStartLine httpStartLine = HttpStartLine.create(getStartLine);
+        HttpRequestHeader httpRequestHeader = HttpRequestHeader.create(header);
+        HttpRequestBody httpRequestBody = HttpRequestBody.create(body);
         HttpRequest httpRequest = new HttpRequest(httpStartLine, httpRequestHeader, httpRequestBody);
 
 

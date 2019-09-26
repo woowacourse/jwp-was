@@ -15,7 +15,7 @@ public class HttpRequestBody {
         this.parameters = parameters;
     }
 
-    public static HttpRequestBody of(String body) {
+    public static HttpRequestBody create(String body) {
         Map<String, String> params = new HashMap<>();
         parseBody(body, params);
 
