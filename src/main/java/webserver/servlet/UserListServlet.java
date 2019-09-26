@@ -19,18 +19,22 @@ import java.util.Map;
 public class UserListServlet extends RequestServlet {
     @Override
     public HttpResponse doGet(HttpRequest httpRequest) throws IOException {
-        String requestUserSessionId = httpRequest.getCookie("user_session");
-        HttpSession session = HttpSessionHelper.get("user_session");
-        ResponseHeader header = new ResponseHeader();
-        if (requestUserSessionId != null && session != null && requestUserSessionId.equals(session.getId())) {
-            byte[] body = generateBody();
-            header.setContentLegthAndType(body.length, "text/html;charset=utf-8");
-            return HttpResponse.ok(header, body);
+        if (isSessionValid(httpRequest.getCookie("user_session"))) {
+            return viewList();
         }
+        return redirectHome();
+    }
 
-        header.removeCookie("user_session");
-        header.setLocation("/user/login.html");
-        return HttpResponse.found(header);
+    private boolean isSessionValid(String requestUserSessionId) {
+        HttpSession session = HttpSessionHelper.get("user_session");
+        return requestUserSessionId != null && session != null && requestUserSessionId.equals(session.getId());
+    }
+
+    private HttpResponse viewList() throws IOException {
+        ResponseHeader header = new ResponseHeader();
+        byte[] body = generateBody();
+        header.setContentLegthAndType(body.length, "text/html;charset=utf-8");
+        return HttpResponse.ok(header, body);
     }
 
     public byte[] generateBody() throws IOException {
@@ -47,5 +51,12 @@ public class UserListServlet extends RequestServlet {
         handlebars.registerHelper("inc", (Helper<Integer>) (context, options) -> context + 1);
         Template template = handlebars.compile("user/list");
         return template.apply(value);
+    }
+
+    private HttpResponse redirectHome() {
+        ResponseHeader header = new ResponseHeader();
+        header.removeCookie("user_session");
+        header.setLocation("/user/login.html");
+        return HttpResponse.found(header);
     }
 }
