@@ -3,9 +3,14 @@ package webserver.controller;
 import http.request.Request;
 import http.response.Cookie;
 import http.response.Response;
+import http.session.Session;
+import http.session.Sessions;
 import model.LoginService;
 import model.exception.LoginFailException;
 import webserver.exception.InvalidRequestMethodException;
+import webserver.support.CookieParser;
+
+import java.util.Map;
 
 public class LoginController extends HttpController {
     private LoginController() {
@@ -22,13 +27,17 @@ public class LoginController extends HttpController {
 
     @Override
     protected void doPost(Request request, Response response) {
+        Map<String, String> cookies = CookieParser.parse(request.extractHeader("Cookie"));
+        Session session = Sessions.getInstance().getSession(cookies.get("JSESSIONID"));
         try {
             String location = new LoginService().login(request.extractFormData());
             response.configureFoundResponse(location);
-            response.setCookie("logined", new Cookie("logined", "true", "/"));
+            session.setSessionAttribute("logined", "true");
+            response.setCookie("JSESSIONID", new Cookie("JSESSIONID", session.getSessionId(), "/"));
         } catch (LoginFailException e) {
             response.configureFoundResponse("/user/login_failed.html");
-            response.setCookie("logined", new Cookie("logined", "false", "/"));
+            session.setSessionAttribute("logined", "false");
+            response.setCookie("JSESSIONID", new Cookie("JSESSIONID", session.getSessionId(), "/"));
         }
     }
 

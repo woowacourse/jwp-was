@@ -2,6 +2,8 @@ package webserver.controller;
 
 import http.request.Request;
 import http.response.Response;
+import http.session.Session;
+import http.session.Sessions;
 import model.User;
 import model.UserService;
 import webserver.exception.InvalidRequestMethodException;
@@ -25,17 +27,18 @@ public class UserListController extends HttpController {
     @Override
     protected void doGet(Request request, Response response) throws IOException, URISyntaxException {
         ModelAndView modelAndView;
-        try {
-            Map<String, String> cookies = CookieParser.parse(request.extractHeader("Cookie"));
-            if (!"true".equals(cookies.get("logined"))) {
-                throw new IllegalArgumentException();
-            }
+        Map<String, String> cookies = CookieParser.parse(request.extractHeader("Cookie"));
+        Session session = Sessions.getInstance().getSession(cookies.get("JSESSIONID"));
+
+        if ("true".equals(session.getSessionAttribute("logined"))) {
             List<User> users = new UserService().findAll();
             modelAndView = new ModelAndView("user/list");
             modelAndView.setModels("users", users);
-        } catch (RuntimeException e) {
-            modelAndView = new ModelAndView("/user/login.html");
+            response.configureOkResponse(modelAndView);
+            return;
         }
+
+        modelAndView = new ModelAndView("/user/login.html");
         response.configureOkResponse(modelAndView);
     }
 
