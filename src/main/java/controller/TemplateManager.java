@@ -30,8 +30,8 @@ public class TemplateManager {
         LOADER.setSuffix(TEMPLATES_SUFFIX);
     }
 
-    public byte[] render(ModelAndView modelAndView) throws IOException {
+    public String render(ModelAndView modelAndView) throws IOException {
         Template template = HANDLEBARS.compile(modelAndView.getViewName());
-        return template.apply(modelAndView.getModelMap()).getBytes();
+        return template.apply(modelAndView.getModelMap());
     }
 }
