@@ -16,10 +16,11 @@ class HttpRequestParserTest {
     @Test
     void 올바른_입력_파싱_확인() {
         InputStream in = new ByteArrayInputStream("GET /index.html HTTP/1.1\r\nHost: localhost:8080/".getBytes());
-        HttpRequest httpRequest = new HttpRequest(HttpMethod.GET, new HttpUri("/index.html"), null, HttpProtocols.of("HTTP/1.1"), null);
+        RequestLine requestLine = new RequestLine(HttpMethod.GET, HttpProtocols.of("HTTP/1.1"), new HttpUri("/index.html"));
+        HttpRequest httpRequest = new HttpRequest(requestLine, null, null);
         HttpRequest parsedRequest = HttpRequestParser.parse(in);
-        assertThat(parsedRequest.getHttpMethod()).isEqualTo(httpRequest.getHttpMethod());
-        assertThat(parsedRequest.getHttpUri()).isEqualTo(httpRequest.getHttpUri());
+        assertThat(parsedRequest.getRequestLine().getHttpMethod()).isEqualTo(httpRequest.getRequestLine().getHttpMethod());
+        assertThat(parsedRequest.getRequestLine().getHttpUri()).isEqualTo(httpRequest.getRequestLine().getHttpUri());
     }
 
     @Test
@@ -30,11 +31,12 @@ class HttpRequestParserTest {
         parameters.put("age", "25");
 
         HttpParameters httpParameters = new HttpParameters(parameters);
-        HttpRequest httpRequest = new HttpRequest(HttpMethod.GET, new HttpUri("/index.html"), httpParameters, HttpProtocols.of("HTTP/1.1"), null);
+        RequestLine requestLine = new RequestLine(HttpMethod.GET, HttpProtocols.of("HTTP/1.1"), new HttpUri("/index.html"));
+        HttpRequest httpRequest = new HttpRequest(requestLine, null, null);
         HttpRequest parsedRequest = HttpRequestParser.parse(in);
 
-        assertThat(parsedRequest.getHttpMethod()).isEqualTo(httpRequest.getHttpMethod());
-        assertThat(parsedRequest.getHttpUri()).isEqualTo(httpRequest.getHttpUri());
+        assertThat(parsedRequest.getRequestLine().getHttpMethod()).isEqualTo(httpRequest.getRequestLine().getHttpMethod());
+        assertThat(parsedRequest.getRequestLine().getHttpUri()).isEqualTo(httpRequest.getRequestLine().getHttpUri());
         assertThat(parsedRequest.getParameters()).isEqualTo(httpParameters);
     }
 
@@ -68,8 +70,8 @@ class HttpRequestParserTest {
                 "userId=javajigi&password=password&name=JaeSung\r\n").getBytes());
         HttpRequest request = HttpRequestParser.parse(in);
 
-        assertThat(request.getHttpMethod()).isEqualTo(HttpMethod.POST);
-        assertThat(request.getHttpUri().getResourceLocation()).isEqualTo("/user/create");
+        assertThat(request.getRequestLine().getHttpMethod()).isEqualTo(HttpMethod.POST);
+        assertThat(request.getRequestLine().getHttpUri().getResourceLocation()).isEqualTo("/user/create");
         assertThat(request.getHeaders().getHeader("Connection")).isEqualTo("keep-alive");
         assertThat(request.getParameters().getParameter("id")).isEqualTo("1");
         assertThat(request.getParameters().getParameter("userId")).isEqualTo("javajigi");

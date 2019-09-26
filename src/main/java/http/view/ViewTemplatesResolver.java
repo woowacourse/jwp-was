@@ -1,9 +1,6 @@
 package http.view;
 
-import http.model.ContentType;
-import http.model.HttpProtocols;
-import http.model.HttpResponse;
-import http.model.HttpStatus;
+import http.model.*;
 import utils.FileIoUtils;
 
 public class ViewTemplatesResolver implements Resolver {
@@ -14,9 +11,11 @@ public class ViewTemplatesResolver implements Resolver {
     public HttpResponse resolve(ModelAndView modelAndView) {
         String resource = modelAndView.getViewLocation();
         if (resource.startsWith(REDIRECT_PREFIX)) {
-            return new HttpResponse(HttpProtocols.HTTP1_1, HttpStatus.FOUND, ContentType.HTML);
+            StatusLine statusLine = new StatusLine(HttpProtocols.HTTP1_1, HttpStatus.FOUND);
+            return new HttpResponse(statusLine, ContentType.HTML);
         }
         ContentType contentType = getContentType(modelAndView);
-        return new HttpResponse(HttpProtocols.HTTP1_1, HttpStatus.OK, contentType, FileIoUtils.loadFileFromClasspath(HTML_PATH + modelAndView.getViewLocation()));
+        StatusLine statusLine = new StatusLine(HttpProtocols.HTTP1_1, HttpStatus.OK);
+        return new HttpResponse(statusLine, contentType, FileIoUtils.loadFileFromClasspath(HTML_PATH + modelAndView.getViewLocation()));
     }
 }

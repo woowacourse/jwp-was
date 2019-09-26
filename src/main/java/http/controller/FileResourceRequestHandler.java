@@ -9,7 +9,7 @@ public class FileResourceRequestHandler implements HttpRequestHandler {
 
     @Override
     public ModelAndView handle(HttpRequest httpRequest) {
-        return new ModelAndView(getViewByUri(httpRequest.getUri()));
+        return new ModelAndView(getViewByUri(httpRequest.getRequestLine().getHttpUri()));
     }
 
     private View getViewByUri(HttpUri uri) {

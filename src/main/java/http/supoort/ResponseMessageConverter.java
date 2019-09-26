@@ -15,18 +15,18 @@ public class ResponseMessageConverter {
     private static final String LOCATION_TO_ROOT_URI = "Location: http://localhost:8080/index.html";
 
     public static void convert(HttpResponse httpResponse, DataOutputStream dos) {
-        if (httpResponse.getHttpStatus() == HttpStatus.OK) {
+        if (httpResponse.getStatusLine().getHttpStatus() == HttpStatus.OK) {
             responseHeader(httpResponse, dos);
             responseBody(httpResponse.getBody(), dos);
         }
-        if (httpResponse.getHttpStatus() == HttpStatus.FOUND) {
+        if (httpResponse.getStatusLine().getHttpStatus() == HttpStatus.FOUND) {
             responseRedirectHeader(httpResponse, dos);
         }
     }
 
     private static void responseRedirectHeader(HttpResponse httpResponse, DataOutputStream dos) {
         try {
-            dos.writeBytes(httpResponse.getProtocol().getProtocol() + SEPARATOR + httpResponse.getHttpStatus().getMessage() + LINE_BREAK);
+            dos.writeBytes(httpResponse.getStatusLine().getHttpProtocols() + SEPARATOR + httpResponse.getStatusLine().getHttpStatus().getMessage() + LINE_BREAK);
             dos.writeBytes(LOCATION_TO_ROOT_URI + LINE_BREAK);
             dos.writeBytes("Content-Type: " + httpResponse.getContentType() + LINE_BREAK);
             dos.writeBytes(LINE_BREAK);
@@ -39,7 +39,7 @@ public class ResponseMessageConverter {
 
     private static void responseHeader(HttpResponse httpResponse, DataOutputStream dos) {
         try {
-            dos.writeBytes(httpResponse.getProtocol().getProtocol() + " " + httpResponse.getHttpStatus().getMessage() + LINE_BREAK);
+            dos.writeBytes(httpResponse.getStatusLine().getHttpProtocols() + " " + httpResponse.getStatusLine().getHttpStatus().getMessage() + LINE_BREAK);
             dos.writeBytes("Content-Type: " + httpResponse.getContentType().getType() + LINE_BREAK);
             dos.writeBytes("Content-Length: " + httpResponse.getBody().length + LINE_BREAK);
             dos.writeBytes(LINE_BREAK);

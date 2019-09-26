@@ -18,10 +18,10 @@ public class HttpRequestParser {
     public static HttpRequest parse(InputStream inputStream) {
         List<String> requestMessages = IOUtils.readData(inputStream);
         validate(requestMessages);
-        String requestLine = requestMessages.get(0);
+        String requestLineMessage = requestMessages.get(0);
         List<String> headerLines = requestMessages.subList(1, requestMessages.size());
         try {
-            String[] requestLineTokens = requestLine.split(SEPARATOR);
+            String[] requestLineTokens = requestLineMessage.split(SEPARATOR);
             HttpMethod method = HttpMethod.of(requestLineTokens[0]);
             HttpProtocols httpProtocol = HttpProtocols.of(requestLineTokens[2]);
             HttpParameters httpParameters;
@@ -38,7 +38,8 @@ public class HttpRequestParser {
             }
 
             HttpUri httpUri = parseUri(requestLineTokens[1], httpParameters);
-            return new HttpRequest(method, httpUri, httpParameters, httpProtocol, headers);
+            RequestLine requestLine = new RequestLine(method, httpProtocol, httpUri);
+            return new HttpRequest(requestLine, httpParameters, headers);
 
         } catch (IndexOutOfBoundsException e) {
             throw new IllegalHttpRequestException(e.getMessage());

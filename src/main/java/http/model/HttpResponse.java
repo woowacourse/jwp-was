@@ -1,30 +1,23 @@
 package http.model;
 
 public class HttpResponse {
-    private HttpProtocols protocol;
-    private HttpStatus httpStatus;
-    private ContentType contentType;
+    private final StatusLine statusLine;
+    private final ContentType contentType;
     private byte[] body;
 
-    public HttpResponse(HttpProtocols protocol, HttpStatus httpStatus, ContentType contentType, byte[] body) {
-        this.protocol = protocol;
-        this.httpStatus = httpStatus;
+    public HttpResponse(StatusLine statusLine, ContentType contentType, byte[] body) {
+        this.statusLine = statusLine;
         this.contentType = contentType;
         this.body = body;
     }
 
-    public HttpResponse(HttpProtocols protocol, HttpStatus httpStatus, ContentType contentType) {
-        this.protocol = protocol;
-        this.httpStatus = httpStatus;
+    public HttpResponse(StatusLine statusLine, ContentType contentType) {
+        this.statusLine = statusLine;
         this.contentType = contentType;
     }
 
-    public HttpProtocols getProtocol() {
-        return protocol;
-    }
-
-    public HttpStatus getHttpStatus() {
-        return httpStatus;
+    public StatusLine getStatusLine() {
+        return statusLine;
     }
 
     public ContentType getContentType() {

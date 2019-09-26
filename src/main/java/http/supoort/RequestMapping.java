@@ -19,8 +19,8 @@ public class RequestMapping implements Comparable<RequestMapping> {
     }
 
     public boolean match(HttpRequest httpRequest) {
-        Matcher matcher = pattern.matcher(httpRequest.getUri().getResourceLocation());
-        return httpRequest.getHttpMethod() == method
+        Matcher matcher = pattern.matcher(httpRequest.getRequestLine().getHttpUri().getResourceLocation());
+        return httpRequest.getRequestLine().getHttpMethod() == method
                 && matcher.find();
     }
 
