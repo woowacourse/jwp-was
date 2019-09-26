@@ -29,18 +29,18 @@ public class UserListServlet extends RequestServlet {
     }
 
     public byte[] generateBody() throws IOException {
-        Template template = generateTemplate();
         Map<String, Object> users = new HashMap<>();
         users.put("users", DataBase.findAll());
-        return template.apply(users).getBytes();
+        return applyTemplate(users).getBytes();
     }
 
-    private Template generateTemplate() throws IOException {
+    private String applyTemplate(Map<String, Object> value) throws IOException {
         TemplateLoader loader = new ClassPathTemplateLoader();
         loader.setPrefix("/templates");
         loader.setSuffix(".html");
         Handlebars handlebars = new Handlebars(loader);
         handlebars.registerHelper("inc", (Helper<Integer>) (context, options) -> context + 1);
-        return handlebars.compile("user/list");
+        Template template = handlebars.compile("user/list");
+        return template.apply(value);
     }
 }
