@@ -1,6 +1,7 @@
 package webserver;
 
 import webserver.controller.AbstractController;
+import webserver.controller.LoginController;
 import webserver.controller.UserController;
 import webserver.controller.request.HttpRequest;
 import webserver.controller.response.HttpResponse;
@@ -13,6 +14,7 @@ public class Router {
 
     static {
         controllers.put("/user/create", UserController.getInstance());
+        controllers.put("/user/login", LoginController.getInstance());
     }
 
     public static void route(HttpRequest httpRequest, HttpResponse httpResponse) {
