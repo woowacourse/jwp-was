@@ -25,7 +25,7 @@ class DefaultControllerTest {
     private HttpResponse httpResponse;
 
     @Test
-    public void doPostTest() throws Exception {
+    public void doGetTest() throws Exception {
         InputStream in = new ByteArrayInputStream(REQUEST_STRING.getBytes(StandardCharsets.UTF_8));
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         httpRequest = new RequestHandler(br).create();
