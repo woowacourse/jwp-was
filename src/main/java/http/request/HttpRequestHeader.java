@@ -18,9 +18,11 @@ public class HttpRequestHeader {
 
     public static HttpRequestHeader of(List<String> headerLines) {
         Map<String, String> headers = headerLines.stream()
+                .map(headerLine -> headerLine.split(HEADER_SPLITTER))
+                .filter(splittedStrings -> 2 <= splittedStrings.length)
                 .collect(Collectors.toMap(
-                        headerLine -> headerLine.split(HEADER_SPLITTER)[0],
-                        headerLine -> headerLine.split(HEADER_SPLITTER)[1]
+                        splittedStrings -> splittedStrings[0],
+                        splittedStrings -> splittedStrings[1]
                 ));
 
         return new HttpRequestHeader(headers);

@@ -1,4 +1,4 @@
-package utils;
+package http.parameter;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,8 +12,11 @@ public class ParameterParser {
     public static Map<String, String> parse(String queryString) {
         List<String> parameterLines = Arrays.asList(queryString.split(PARAMETER_LINE_SPLITTER));
 
-        return parameterLines.stream().collect(Collectors.toMap(
-                parameter -> parameter.split(PARAMETER_SPLITTER)[0],
-                parameter -> parameter.split(PARAMETER_SPLITTER)[1]));
+        return parameterLines.stream()
+                .map(parameterLine -> parameterLine.split(PARAMETER_SPLITTER))
+                .filter(splittedParameter -> 2 <= splittedParameter.length)
+                .collect(Collectors.toMap(
+                        splittedParameter -> splittedParameter[0],
+                        splittedParameter -> splittedParameter[1]));
     }
 }

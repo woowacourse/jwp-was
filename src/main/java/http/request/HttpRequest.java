@@ -1,5 +1,6 @@
 package http.request;
 
+import http.parameter.Parameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.IOUtils;
@@ -21,6 +22,8 @@ public class HttpRequest {
     private HttpRequestHeader httpRequestHeader;
     private HttpBody httpBody;
 
+    private Parameters parameters;
+
     private HttpRequest(InputStream in) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 
@@ -39,6 +42,8 @@ public class HttpRequest {
         String startLine = br.readLine();
 
         httpRequestStartLine = HttpRequestStartLine.of(startLine);
+
+        parameters = httpRequestStartLine.getParameters();
     }
 
     private void initializeHeader(BufferedReader br) throws IOException {
@@ -57,20 +62,27 @@ public class HttpRequest {
     }
 
     private void initializeBody(BufferedReader br) throws IOException {
-        if(!httpRequestHeader.contains(CONTENT_LENGTH)) {
+        // body 존재 여부 확인
+        if (!httpRequestHeader.contains(CONTENT_LENGTH)) {
             log.debug("body가 없습니다.");
             return;
         }
         int contentLength = Integer.parseInt(httpRequestHeader.getHeader(CONTENT_LENGTH));
         httpBody = HttpBody.of(IOUtils.readData(br, contentLength));
+
+        // body 가 application/x-www-form-urlencoded 일 경우
+        // 이렇게 엔티티 타입이 다양해질텐데... 어떤식으로 구성해놓으면 확장에 유연할까?
+        if (httpRequestHeader.getHeader("Content-Type").equals("application/x-www-form-urlencoded")){
+            parameters = parameters.plus(Parameters.fromQueryString(httpBody.toString()));
+        }
     }
 
     public boolean hasParameters() {
-        return httpRequestStartLine.hasParamaters();
+        return !parameters.isEmpty();
     }
 
     public boolean hasBody() {
-        return !httpBody.equals(HttpBody.EMPTY_BODY);
+        return !HttpBody.EMPTY_BODY.equals(httpBody);
     }
 
     public HttpMethod getHttpMethod() {
@@ -86,7 +98,7 @@ public class HttpRequest {
     }
 
     public String getParameter(String key) {
-        return httpRequestStartLine.getParameter(key);
+        return parameters.getParameter(key);
     }
 
     public HttpBody getBody() {

@@ -1,7 +1,7 @@
 package http.request;
 
 import http.request.exception.NotFoundHttpRequestParameter;
-import utils.ParameterParser;
+import http.parameter.ParameterParser;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -31,5 +31,4 @@ public class HttpRequestParameter {
         return Optional.ofNullable(parameters.get(key))
                 .orElseThrow(() -> new NotFoundHttpRequestParameter(key));
     }
-
 }

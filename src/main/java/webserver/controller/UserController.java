@@ -4,7 +4,7 @@ import db.DataBase;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.User;
-import utils.ParameterParser;
+import http.parameter.ParameterParser;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
