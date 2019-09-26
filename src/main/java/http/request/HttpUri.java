@@ -5,6 +5,7 @@ import http.common.UriExtension;
 
 import java.net.URI;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,5 +41,18 @@ public class HttpUri {
 
     public boolean isEqualsPath(final HttpUri aUri) {
         return uri.getPath().equals(aUri.getPath());
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final HttpUri uri1 = (HttpUri) o;
+        return uri.equals(uri1.uri);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uri);
     }
 }

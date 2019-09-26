@@ -35,14 +35,6 @@ public class HttpResponse {
         this.cookies.addCookie(cookie);
     }
 
-//    public void setResponseBody(final ResponseBody responseBody) {
-//        this.responseBody = responseBody;
-//    }
-
-//    public int getBodyLength() {
-//        return responseBody.getLength();
-//    }
-
     public void putHeader(String name, String value) {
         responseHeader.putHeader(name, value);
     }

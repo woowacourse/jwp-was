@@ -1,0 +1,25 @@
+package http.request;
+
+import http.common.HttpHeader;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
+
+class RequestHeaderParserTest {
+
+    @Test
+    void parse() {
+        List<String> requestLines = Arrays.asList("Host: localhost:8080","Connection: keep-alive");
+
+        assertDoesNotThrow(()->RequestHeaderParser.parse(requestLines));
+
+        HttpHeader requestHeader=RequestHeaderParser.parse(requestLines);
+        assertThat(requestHeader.findHeader("Host")).isEqualTo("localhost:8080");
+        assertThat(requestHeader.findHeader("Connection")).isEqualTo("keep-alive");
+    }
+
+}

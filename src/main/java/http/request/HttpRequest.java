@@ -3,8 +3,6 @@ package http.request;
 import http.common.HttpHeader;
 import http.common.HttpVersion;
 
-import java.util.Map;
-
 public class HttpRequest {
 
     private RequestLine requestLine;
@@ -37,12 +35,8 @@ public class HttpRequest {
         return requestLine.getQuery();
     }
 
-    public Map<String, String> getUriQueryParam() {
-        return requestLine.getQueryParam();
-    }
-
     public String findUriParam(String name) {
-        return requestBody.findParam(name);
+        return requestLine.getQueryParam().get(name);
     }
 
     public String findBodyParam(String name) {
