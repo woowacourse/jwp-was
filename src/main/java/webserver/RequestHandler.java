@@ -17,7 +17,6 @@ public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
-    private SessionHandler sessionHandler = new SessionHandler();
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;

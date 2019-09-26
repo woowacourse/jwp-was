@@ -40,7 +40,7 @@ class UserLoginControllerTest {
 
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
-        assertThat(response.getCookie("logined")).isEqualTo(cookie);
+        assertThat(response.getCookie("sessionId")).isEqualTo(cookie);
     }
 
     @Test

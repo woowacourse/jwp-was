@@ -2,15 +2,18 @@ package http.controller;
 
 import db.DataBase;
 import http.common.Cookie;
+import http.common.HttpSession;
 import http.exception.NotFoundUserException;
 import http.exception.NotMatchPasswordException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.User;
+import webserver.SessionHandler;
 
 import java.util.Optional;
 
-import static http.common.Cookie.*;
+import static http.common.Cookie.LOGINED;
+import static http.common.Cookie.LOGINED_TRUE;
 
 public class UserLoginController extends AbstractController {
     public static final String URL = "/user/login";
@@ -24,11 +27,11 @@ public class UserLoginController extends AbstractController {
     public void doPost(HttpRequest request, HttpResponse response) {
         String requestUserId = request.getData("userId");
         String requestPassword = request.getData("password");
-        checkUserLogin(response, requestUserId, requestPassword);
+        checkLogin(response, requestUserId, requestPassword);
         setLoginSuccessResponse(response);
     }
 
-    private void checkUserLogin(HttpResponse response, String requestUserId, String requestPassword) {
+    private void checkLogin(HttpResponse response, String requestUserId, String requestPassword) {
         Optional<User> mayBeUser = Optional.ofNullable(DataBase.findUserById(requestUserId));
         User user = mayBeUser.orElseThrow(() -> {
             setLoginFailResponse(response);
@@ -41,14 +44,20 @@ public class UserLoginController extends AbstractController {
     }
 
     private void setLoginSuccessResponse(HttpResponse response) {
-        response.addCookie(LOGINED, LOGINED_TRUE);
-        response.addCookieOption(LOGINED, Cookie.PATH, "/");
+        //Todo 세션을 담아보자
+        HttpSession session = new HttpSession();
+        Cookie loginedCookie = new Cookie(LOGINED, LOGINED_TRUE);
+        loginedCookie.addOption(Cookie.PATH, "/");
+        session.setAttribute(loginedCookie.getName(), loginedCookie);
+//        SessionHandle
+        response.addCookie("sessionId", session.getId());
+//        response.addCookieOption(LOGINED, Cookie.PATH, "/");
         response.sendRedirect("/index.html");
     }
 
     private void setLoginFailResponse(HttpResponse response) {
-        response.addCookie(LOGINED, LOGINED_FALSE);
-        response.addCookieOption(LOGINED, Cookie.PATH, "/");
+//        response.addCookie(LOGINED, LOGINED_FALSE);
+//        response.addCookieOption(LOGINED, Cookie.PATH, "/");
         response.sendRedirect("/user/login_failed.html");
     }
 
