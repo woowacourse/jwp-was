@@ -1,10 +1,10 @@
 package webserver.viewProcessor;
 
 import utils.FileIoUtils;
-import webserver.HttpResponse;
 import webserver.MimeType;
 import webserver.ResponseProcessor;
 import webserver.ViewProcessor;
+import webserver.http.HttpResponse;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

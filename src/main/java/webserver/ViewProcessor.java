@@ -1,5 +1,7 @@
 package webserver;
 
+import webserver.http.HttpResponse;
+
 import java.io.DataOutputStream;
 
 public interface ViewProcessor {

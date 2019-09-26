@@ -1,10 +1,12 @@
 package webserver.viewProcessor;
 
-import webserver.HttpResponse;
 import webserver.ResponseProcessor;
 import webserver.ViewProcessor;
+import webserver.http.HttpResponse;
 
 import java.io.DataOutputStream;
+
+import static webserver.controller.AbstractController.REDIRECT_VIEW;
 
 public class RedirectViewProcessor implements ViewProcessor {
 
@@ -12,7 +14,7 @@ public class RedirectViewProcessor implements ViewProcessor {
 
     @Override
     public boolean isSupported(String viewName) {
-        return viewName.startsWith("/redirect:");
+        return viewName.startsWith(REDIRECT_VIEW);
     }
 
     @Override

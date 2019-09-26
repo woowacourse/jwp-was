@@ -1,11 +1,11 @@
-package webserver;
+package webserver.http;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.IOUtils;
-import webserver.httpRequest.HttpRequestBody;
-import webserver.httpRequest.HttpRequestHeader;
-import webserver.httpRequest.HttpStartLine;
+import webserver.http.httpRequest.HttpRequestBody;
+import webserver.http.httpRequest.HttpRequestHeader;
+import webserver.http.httpRequest.HttpStartLine;
 
 import java.io.*;
 import java.net.URLDecoder;
@@ -21,37 +21,25 @@ public class HttpRequestFactory {
         return LazyHolder.INSTANCE;
     }
 
-    private static class LazyHolder {
-        private static final HttpRequestFactory INSTANCE = new HttpRequestFactory();
+    public HttpRequest getHttpRequest(InputStream in) throws IOException {
+        BufferedReader br = getBufferedReader(in);
+
+        String startLine = parseStartLine(br);
+        String header = parseHeader(br);
+        HttpStartLine httpStartLine = HttpStartLine.of(startLine);
+        HttpRequestHeader httpRequestHeader = HttpRequestHeader.of(header);
+        HttpRequestBody httpRequestBody = getHttpRequestBody(br, httpStartLine, httpRequestHeader);
+
+        return new HttpRequest(httpStartLine, httpRequestHeader, httpRequestBody);
     }
 
-    public HttpRequest getHttpRequest(InputStream in) throws IOException {
-        BufferedReader br = null;
+    private BufferedReader getBufferedReader(InputStream in) {
         try {
-            br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+            return new BufferedReader(new InputStreamReader(in, "UTF-8"));
         } catch (UnsupportedEncodingException e) {
             log.error("{} 클래스 에러 발생", TAG);
             throw new IllegalArgumentException("올바르지 않은 요청입니다.");
         }
-
-        String startLine = parseStartLine(br);
-        HttpStartLine httpStartLine = HttpStartLine.of(startLine);
-
-        String header = parseHeader(br);
-
-        HttpRequestHeader httpRequestHeader = HttpRequestHeader.of(header);
-
-        HttpRequestBody httpRequestBody = null;
-        if (httpStartLine.checkMethod(HttpMethod.GET)) {
-            httpRequestBody = HttpRequestBody.empty();
-        }
-
-        if (httpStartLine.checkMethod(HttpMethod.POST)) {
-            String body = parseBody(br, httpRequestHeader.getContentLength());
-            httpRequestBody = HttpRequestBody.of(body);
-        }
-
-        return new HttpRequest(httpStartLine, httpRequestHeader, httpRequestBody);
     }
 
     private String parseStartLine(BufferedReader br) throws IOException {
@@ -68,6 +56,15 @@ public class HttpRequestFactory {
         }
         sb.append("\n");
         return sb.toString();
+    }
+
+    private HttpRequestBody getHttpRequestBody(BufferedReader br, HttpStartLine httpStartLine, HttpRequestHeader httpRequestHeader) {
+        if (httpStartLine.checkMethod(HttpMethod.GET)) {
+            return HttpRequestBody.empty();
+        }
+
+        String body = parseBody(br, httpRequestHeader.getContentLength());
+        return HttpRequestBody.of(body);
     }
 
     private String parseBody(BufferedReader br, int contentLength) {
@@ -93,4 +90,18 @@ public class HttpRequestFactory {
             throw new IllegalArgumentException();
         }
     }
+
+    private static class LazyHolder {
+        private static final HttpRequestFactory INSTANCE = new HttpRequestFactory();
+    }
+
 }
+
+
+
+
+
+
+
+
+

@@ -1,9 +1,15 @@
-package webserver;
+package webserver.http;
 
-import webserver.httpRequest.HttpStatus;
+import webserver.MimeType;
+import webserver.http.cookie.Cookie;
+import webserver.http.cookie.Cookies;
+import webserver.http.httpRequest.HttpStatus;
+import webserver.http.httpResponse.ResponseBody;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static webserver.http.HttpRequest.JSESSION_ID;
 
 public class HttpResponse {
     private static final String CONTENT_TYPE = "Content-Type";
@@ -13,21 +19,14 @@ public class HttpResponse {
     private Map<String, String> header = new HashMap<>();
     private HttpStatus httpStatus;
     private ResponseBody body;
+    private Cookies cookies = new Cookies();
 
     public void setHttpStatus(HttpStatus httpStatus) {
         this.httpStatus = httpStatus;
     }
 
-    public String getContentType() {
-        String contentType = header.get(CONTENT_TYPE);
-        if (contentType == null) {
-            return "text/plain";
-        }
-        return contentType;
-    }
-
     public void setContentType(MimeType contentType) {
-        header.put(CONTENT_TYPE, contentType.mimeType);
+        header.put(CONTENT_TYPE, contentType.getMimeType());
     }
 
     public void setContentLength(int length) {
@@ -46,8 +45,16 @@ public class HttpResponse {
         return header;
     }
 
-    public void setCookie(String cookie) {
-        header.put("Set-Cookie", cookie);
+    public void setCookie(String key, String value) {
+        cookies.addCookie(key, value);
+    }
+
+    public void setSession(String uuid) {
+        cookies.addCookie(JSESSION_ID, uuid);
+    }
+
+    public Map<String, Cookie> getCookies() {
+        return cookies.getCookies();
     }
 
     public void addModel(String key, Object data) {

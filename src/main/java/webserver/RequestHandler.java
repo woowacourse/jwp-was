@@ -2,6 +2,9 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.http.HttpRequest;
+import webserver.http.HttpRequestFactory;
+import webserver.http.HttpResponse;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

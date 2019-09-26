@@ -5,9 +5,13 @@ import webserver.controller.UserCreateController;
 import webserver.controller.UserListController;
 import webserver.controller.WelcomePageController;
 import webserver.exception.NotSupportedHttpMethodException;
+import webserver.http.HttpRequest;
+import webserver.http.HttpResponse;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static webserver.controller.AbstractController.ERROR_VIEW;
 
 public class UrlMapper {
     private static Map<String, Controller> map = new HashMap<>();
@@ -33,7 +37,7 @@ public class UrlMapper {
         try {
             return controller.service(request, response);
         } catch (NotSupportedHttpMethodException e) {
-            return "/error:405";
+            return ERROR_VIEW + "405";
         }
     }
 }

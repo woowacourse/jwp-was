@@ -1,10 +1,12 @@
 package webserver.viewProcessor;
 
-import webserver.HttpResponse;
 import webserver.ResponseProcessor;
 import webserver.ViewProcessor;
+import webserver.http.HttpResponse;
 
 import java.io.DataOutputStream;
+
+import static webserver.controller.AbstractController.ERROR_VIEW;
 
 public class ErrorViewProcessor implements ViewProcessor {
 
@@ -12,7 +14,7 @@ public class ErrorViewProcessor implements ViewProcessor {
 
     @Override
     public boolean isSupported(String viewName) {
-        return viewName.startsWith("/error:");
+        return viewName.startsWith(ERROR_VIEW);
     }
 
     @Override

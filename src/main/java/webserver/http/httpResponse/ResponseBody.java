@@ -1,4 +1,4 @@
-package webserver;
+package webserver.http.httpResponse;
 
 public class ResponseBody {
     private String key;

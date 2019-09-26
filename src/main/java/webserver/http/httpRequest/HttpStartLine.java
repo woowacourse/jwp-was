@@ -1,6 +1,6 @@
-package webserver.httpRequest;
+package webserver.http.httpRequest;
 
-import webserver.HttpMethod;
+import webserver.http.HttpMethod;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,12 +1,13 @@
-package webserver;
+package webserver.http;
 
-import webserver.httpRequest.HttpRequestBody;
-import webserver.httpRequest.HttpRequestHeader;
-import webserver.httpRequest.HttpStartLine;
+import webserver.http.httpRequest.HttpRequestBody;
+import webserver.http.httpRequest.HttpRequestHeader;
+import webserver.http.httpRequest.HttpStartLine;
 
 public class HttpRequest {
     public static final String CONTENT_LENGTH = "Content-Length";
     public static final String CONTENT_TYPE = "Content-Type";
+    public static final String JSESSION_ID = "JSESSIONID";
 
     private HttpStartLine httpStartLine;
     private HttpRequestHeader httpRequestHeader;
@@ -36,5 +37,9 @@ public class HttpRequest {
 
     public String getCookie() {
         return httpRequestHeader.getCookie();
+    }
+
+    public String getSessionId() {
+        return httpRequestHeader.getSessionId();
     }
 }
