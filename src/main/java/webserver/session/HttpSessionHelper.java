@@ -8,10 +8,10 @@ public class HttpSessionHelper {
     private HttpSessionHelper() {
     }
 
-    public static HttpSession create(String key) {
-        HttpSession session = new HttpSession(createSessionId());
-        sessions.put(key, session);
-        return session;
+    public static String create(HttpSession session) {
+        String sessionId = createSessionId();
+        sessions.put(sessionId, session);
+        return sessionId;
     }
 
     public static HttpSession get(String key) {

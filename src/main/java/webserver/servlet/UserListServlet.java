@@ -26,8 +26,8 @@ public class UserListServlet extends RequestServlet {
     }
 
     private boolean isSessionValid(String requestUserSessionId) {
-        HttpSession session = HttpSessionHelper.get("user_session");
-        return requestUserSessionId != null && session != null && requestUserSessionId.equals(session.getId());
+        HttpSession session = HttpSessionHelper.get(requestUserSessionId);
+        return requestUserSessionId != null && session != null;
     }
 
     private HttpResponse viewList() throws IOException {

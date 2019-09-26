@@ -28,9 +28,9 @@ public class LoginServlet extends RequestServlet {
     }
 
     private String getSessionId(User user) {
-        HttpSession userSession = HttpSessionHelper.create("user_session");
+        HttpSession userSession = new HttpSession();
         userSession.setAttribute("userId", user.getUserId());
-        return userSession.getId();
+        return HttpSessionHelper.create(userSession);
     }
 
     private HttpResponse loginFail() {

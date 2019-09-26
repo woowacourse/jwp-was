@@ -94,6 +94,6 @@
 요구사항 3
 
 - [x] HttpSession class 생성
-- [x] 로그인시 session 생성 및 userId 추가 (```HttpSession userSession = HttpSessionHelper.create("user_session"); userSession.put("userId","id")```)
+- [x] 로그인시 session 생성 및 userId 추가 (```HttpSession userSession = new HttpSession(); userSession.put("userId", "id"); HttpSessionHelper.create(userSession);```)
 - [x] 로그인시 cookie에 user_session 넣기 ()
 - [x] logined cookie를 user_session으로 바꾸기 (로그인, userlist)

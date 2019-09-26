@@ -9,14 +9,15 @@ class HttpSessionHelperTest {
     @Test
     void create() {
         HttpSessionHelper.clear();
-        HttpSession userSession = HttpSessionHelper.create("user_session");
+        HttpSession userSession = new HttpSession();
         userSession.setAttribute("userId", "id");
+        String userSessionId = HttpSessionHelper.create(userSession);
 
-        HttpSession userSession2 = HttpSessionHelper.get("user_session");
+        HttpSession userSession2 = HttpSessionHelper.get(userSessionId);
 
         assertThat(userSession).isEqualTo(userSession2);
         assertThat(userSession2.getAttribute("userId")).isEqualTo("id");
         HttpSessionHelper.clear();
-        assertThat(HttpSessionHelper.get("user_session")).isEqualTo(null);
+        assertThat(HttpSessionHelper.get(userSessionId)).isEqualTo(null);
     }
 }

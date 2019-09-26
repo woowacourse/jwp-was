@@ -4,16 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HttpSession {
-    private final String id;
     private Map<String, Object> session;
 
-    protected HttpSession(String id) {
-        this.id = id;
+    public HttpSession() {
         this.session = new HashMap<>();
-    }
-
-    public String getId() {
-        return id;
     }
 
     public Object getAttribute(String name) {
