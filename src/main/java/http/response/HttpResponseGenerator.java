@@ -20,7 +20,8 @@ public class HttpResponseGenerator {
 			Map<Header, String> header = new LinkedHashMap<>();
 
 			String mimeType = Files.probeContentType(Paths.get(path));
-			String headerLine = String.format("%s/%s 200 OK\r\n", Header.PROTOCOL.getElement(), Header.PROTOCOL_VERSION.getElement());
+			String headerLine = String.format("%s/%s %s %s\r\n", Header.PROTOCOL.getElement(),
+					Header.PROTOCOL_VERSION.getElement(), ResponseStatus.OK.getCode(), ResponseStatus.OK.getDescription());
 			saveResponseHeader(headerLine, header, mimeType, bodyLength);
 			return header;
 		} catch (IOException e) {
@@ -41,8 +42,8 @@ public class HttpResponseGenerator {
 	public static Map<Header, String> response302Header(String location) {
 		Map<Header, String> header = new LinkedHashMap<>();
 		header.put(Header.PROTOCOL, "HTTP/1.1");
-		header.put(Header.CODE, "302");
-		header.put(Header.DESCRIPTION, "Found");
+		header.put(Header.DESCRIPTION, ResponseStatus.FOUND.getDescription());
+		header.put(Header.CODE, ResponseStatus.FOUND.getCode());
 		header.put(Header.LOCATION, location);
 		return header;
 	}
