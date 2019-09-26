@@ -11,18 +11,23 @@ import java.io.InputStreamReader;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class RequestStatusLineTest extends BaseTest {
+public class RequestStatusLineTest {
+    private static final String GET_REQUEST_STATUS_LINE = "GET /index.html HTTP/1.1\n";
+    private static final String POST_REQUEST_STATUS_LINE = "POST /user/create HTTP/1.1\n";
+    private static final String GET_REQUEST_STATUS_LINE_WITH_QUERY_STRING =
+            "GET /user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net HTTP/1.1\n";
+
     private RequestStatusLine requestStatusLineOfGetMessage;
     private RequestStatusLine requestStatusLineOfPostMessage;
     private RequestStatusLine requestStatusLineWithQueryString;
 
     @BeforeEach
     void setUp() throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(GET_REQUEST_MESSAGE.getBytes())));
+        BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(GET_REQUEST_STATUS_LINE.getBytes())));
         requestStatusLineOfGetMessage = RequestStatusLine.of(br);
-        br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(POST_REQUEST_MESSAGE.getBytes())));
+        br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(POST_REQUEST_STATUS_LINE.getBytes())));
         requestStatusLineOfPostMessage = RequestStatusLine.of(br);
-        br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(GET_REQUEST_MESSAGE_WITH_QUERY_STRING.getBytes())));
+        br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(GET_REQUEST_STATUS_LINE_WITH_QUERY_STRING.getBytes())));
         requestStatusLineWithQueryString = RequestStatusLine.of(br);
     }
 

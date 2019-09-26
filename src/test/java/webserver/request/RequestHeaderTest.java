@@ -12,17 +12,27 @@ import java.io.InputStreamReader;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-public class RequestHeaderTest extends BaseTest {
+public class RequestHeaderTest {
+    private static final String GET_REQUEST_HEADER =
+            "Host: localhost:8080\n" +
+                    "Connection: keep-alive\n" +
+                    "Accept: */*";
+
+    private static final String POST_REQUEST_HEADER =
+            "Host: localhost:8080\n" +
+                    "Connection: keep-alive\n" +
+                    "Content-Length: 93\n" +
+                    "Content-Type: application/x-www-form-urlencoded\n" +
+                    "Accept: */*\n";
+
     private RequestHeader requestLineOfPostMessage;
     private RequestHeader requestLineOfGetMessage;
 
     @BeforeEach
     void setUp() throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(POST_REQUEST_MESSAGE.getBytes())));
-        br.readLine();
+        BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(POST_REQUEST_HEADER.getBytes())));
         requestLineOfPostMessage = RequestHeader.of(br);
-        br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(GET_REQUEST_MESSAGE.getBytes())));
-        br.readLine();
+        br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(GET_REQUEST_HEADER.getBytes())));
         requestLineOfGetMessage = RequestHeader.of(br);
     }
 

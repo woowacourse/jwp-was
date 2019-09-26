@@ -11,15 +11,16 @@ import java.io.InputStreamReader;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-public class RequestBodyTest extends BaseTest {
+public class RequestBodyTest {
+    private static final String POST_REQUEST_BODY =
+            "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
+    private static final int BODY_CONTENT_LENGTH = 93;
 
     @DisplayName("HttpRequestBody 생성")
     @Test
     void of() throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(POST_REQUEST_MESSAGE.getBytes())));
-        RequestStatusLine.of(br);
-        RequestHeader requestHeader = RequestHeader.of(br);
-        RequestBody requestBody = RequestBody.of(br, requestHeader.getContentLength());
+        BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(POST_REQUEST_BODY.getBytes())));
+        RequestBody requestBody = RequestBody.of(br, BODY_CONTENT_LENGTH);
 
         assertThat(requestBody.getParameterValue("userId")).isEqualTo("javajigi");
         assertThat(requestBody.getParameterValue("password")).isEqualTo("password");
