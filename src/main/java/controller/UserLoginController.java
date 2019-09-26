@@ -2,13 +2,10 @@ package controller;
 
 import db.DataBase;
 import http.common.CookieParser;
-import http.common.Cookies;
 import http.request.HttpMethod;
 import http.request.HttpRequest;
 import http.request.HttpUriParser;
 import http.response.HttpResponse;
-import http.response.HttpStatus;
-import http.response.StatusLine;
 import model.User;
 
 import static java.util.Objects.nonNull;
@@ -20,26 +17,23 @@ public class UserLoginController implements Controller {
     private static final RequestMapping LOGIN_REQUEST_MAPPING = RequestMapping.of(HttpMethod.POST, HttpUriParser.parse("/user/login"));
 
     @Override
-    public void service(final HttpRequest httpRequest,final HttpResponse httpResponse) {
+    public void service(final HttpRequest httpRequest, final HttpResponse httpResponse) {
         String userId = httpRequest.findBodyParam("userId");
         String password = httpRequest.findBodyParam("password");
-
         User user = DataBase.findUserById(userId);
 
-        httpResponse.setStatusLine(new StatusLine(httpRequest.getHttpVersion(), HttpStatus.FOUND));
-
-        if (nonNull(user) && user.isPasswordEquals(password)) {
-            httpResponse.putHeader("Location", LOGIN_PATH);
-
-            Cookies cookies = Cookies.create().addCookie(CookieParser.parse("logined=true; Path=/"));
-            httpResponse.setCookies(cookies);
+        if (isLoginSuccess(user, password)) {
+            httpResponse.addCookie(CookieParser.parse("logined=true; Path=/"));
+            httpResponse.redirect(LOGIN_PATH);
             return;
         }
 
-        httpResponse.putHeader("Location", LOGIN_FAIL_PATH);
+        httpResponse.addCookie(CookieParser.parse("logined=false"));
+        httpResponse.redirect(LOGIN_PATH);
+    }
 
-        Cookies cookies = Cookies.create().addCookie(CookieParser.parse("logined=false"));
-        httpResponse.setCookies(cookies);
+    private boolean isLoginSuccess(final User user, final String password) {
+        return nonNull(user) && user.isPasswordEquals(password);
     }
 
     @Override

@@ -4,11 +4,23 @@ import http.common.HttpVersion;
 
 public class StatusLine {
 
+    public static final String STATUS_LINE_DELIMITER = " ";
     private HttpVersion httpVersion;
     private HttpStatus httpStatus;
 
+    public StatusLine() {
+    }
+
     public StatusLine(final HttpVersion httpVersion, final HttpStatus httpStatus) {
         this.httpVersion = httpVersion;
+        this.httpStatus = httpStatus;
+    }
+
+    public void setHttpVersion(final HttpVersion httpVersion) {
+        this.httpVersion = httpVersion;
+    }
+
+    public void setHttpStatus(final HttpStatus httpStatus) {
         this.httpStatus = httpStatus;
     }
 
@@ -20,7 +32,11 @@ public class StatusLine {
         return httpStatus;
     }
 
-    public String getCodeAndStatus() {
-        return httpStatus.getCodeAndStatus();
+    public String getVersionAndStatusString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        return stringBuilder.append(httpVersion.getVersion())
+            .append(STATUS_LINE_DELIMITER)
+            .append(httpStatus.getCodeAndStatus())
+            .toString();
     }
 }

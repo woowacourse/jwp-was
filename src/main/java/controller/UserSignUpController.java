@@ -5,13 +5,11 @@ import http.request.HttpMethod;
 import http.request.HttpRequest;
 import http.request.HttpUriParser;
 import http.response.HttpResponse;
-import http.response.HttpStatus;
-import http.response.StatusLine;
 import model.User;
 
 import static controller.IndexController.INDEX_PATH;
 
-public class UserCreateController implements Controller {
+public class UserSignUpController implements Controller {
 
     private static final String USER_CREATE_PATH = "/user/create";
     private static final RequestMapping USER_CREATE_REQUEST_MAPPING = RequestMapping.of(HttpMethod.POST, HttpUriParser.parse(USER_CREATE_PATH));
@@ -25,10 +23,7 @@ public class UserCreateController implements Controller {
 
         DataBase.addUser(new User(userId, password, name, email));
 
-        StatusLine statusLine = new StatusLine(httpRequest.getHttpVersion(), HttpStatus.FOUND);
-        httpResponse.putHeader("Location", INDEX_PATH);
-
-        httpResponse.setStatusLine(statusLine);
+        httpResponse.redirect(INDEX_PATH);
     }
 
     @Override

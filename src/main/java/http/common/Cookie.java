@@ -15,8 +15,7 @@ public class Cookie {
         this.attributeWithoutValue = attributeWithoutValue;
     }
 
-    @Override
-    public String toString() {
+    public String getCookieAttributeString() {
         StringBuilder stringBuilder = new StringBuilder();
         attributeWithValue.forEach((key, value) -> {
             stringBuilder.append(key).append(ATTRIBUTE_TOKENS_DELIMITER).append(value).append(ATTRIBUTE_DELIMITER);

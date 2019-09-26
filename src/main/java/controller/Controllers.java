@@ -13,7 +13,7 @@ public class Controllers {
 
     static {
         CONTROLLERS.add(new IndexController());
-        CONTROLLERS.add(new UserCreateController());
+        CONTROLLERS.add(new UserSignUpController());
         CONTROLLERS.add(new ResourceController());
         CONTROLLERS.add(new UserLoginController());
     }

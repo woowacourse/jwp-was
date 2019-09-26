@@ -5,20 +5,14 @@ import java.util.List;
 
 public class Cookies {
 
-    private List<Cookie> cookies;
+    private static final String NEW_LINE = "\r\n";
+    private List<Cookie> cookies = new ArrayList<>();
 
-    private Cookies() {
-        this.cookies = new ArrayList<>();
+    public Cookies() {
     }
 
-
-    public static Cookies create(){
-        return new Cookies();
-    }
-
-    public Cookies addCookie(Cookie cookie) {
+    public void addCookie(Cookie cookie) {
         cookies.add(cookie);
-        return this;
     }
 
     public boolean isExist() {
@@ -33,11 +27,9 @@ public class Cookies {
         return cookies.get(index);
     }
 
-
-    @Override
-    public String toString() {
+    public String getAllCookiesString() {
         StringBuilder stringBuilder = new StringBuilder();
-        cookies.forEach(cookie -> stringBuilder.append(cookie).append("\r\n"));
+        cookies.forEach(cookie -> stringBuilder.append(cookies).append(NEW_LINE));
         return stringBuilder.toString();
     }
 }

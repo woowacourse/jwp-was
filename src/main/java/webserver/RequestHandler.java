@@ -1,5 +1,6 @@
 package webserver;
 
+import controller.Controllers;
 import http.request.HttpRequest;
 import http.request.HttpRequestParser;
 import http.response.HttpResponse;
@@ -28,11 +29,12 @@ public class RequestHandler implements Runnable {
             connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            HttpRequest httpRequest = HttpRequestParser.parse(in);
-//            HttpResponse httpResponse = new Controllers().service(httpRequest);
             DataOutputStream dos = new DataOutputStream(out);
-            HttpResponse httpResponse = new HttpResponse(dos);
 
+            HttpRequest httpRequest = HttpRequestParser.parse(in);
+            HttpResponse httpResponse = new HttpResponse(httpRequest, dos);
+            new Controllers().service(httpRequest,httpResponse);
+            httpResponse.response();
 
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
