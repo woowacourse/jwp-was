@@ -1,11 +1,14 @@
 package webserver.servlet;
 
-import webserver.request.HttpRequest;
-import webserver.response.HttpResponse;
+import webserver.http.request.HttpRequest;
+import webserver.http.request.RequestUri;
+import webserver.http.response.HttpResponse;
+import webserver.view.View;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 public interface HttpServlet {
-    HttpResponse run(HttpRequest httpRequest) throws IOException;
+    boolean canMapping(RequestUri requestUri);
+
+    View run(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException;
 }

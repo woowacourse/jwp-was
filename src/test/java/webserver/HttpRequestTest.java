@@ -3,17 +3,12 @@ package webserver;
 import helper.IOHelper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import utils.HttpRequestUtils;
 import webserver.parser.HttpRequestParser;
-import webserver.request.HttpRequest;
-import webserver.request.RequestMethod;
+import webserver.http.request.HttpRequest;
+import webserver.http.request.RequestMethod;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

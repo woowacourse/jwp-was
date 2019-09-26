@@ -1,6 +1,6 @@
 package exceptions;
 
-import webserver.request.RequestMethod;
+import webserver.http.request.RequestMethod;
 
 public class MethodNotAllowedException extends RuntimeException{
     public MethodNotAllowedException(RequestMethod requestMethod) {

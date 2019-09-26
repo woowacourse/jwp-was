@@ -1,9 +1,9 @@
 package exceptions;
 
-import webserver.response.HttpStatus;
+import webserver.http.request.RequestUri;
 
 public class NotFoundURIException extends RuntimeException {
-    public NotFoundURIException(String uri) {
-        super("없는 경로 입니다: " + uri);
+    public NotFoundURIException(RequestUri requestUri) {
+        super("없는 경로 입니다: " + requestUri.getAbsPath());
     }
 }

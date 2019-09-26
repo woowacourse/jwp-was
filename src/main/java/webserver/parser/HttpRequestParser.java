@@ -2,10 +2,10 @@ package webserver.parser;
 
 import utils.HttpRequestUtils;
 import utils.IOUtils;
-import webserver.request.HttpRequest;
-import webserver.request.RequestBody;
-import webserver.request.RequestHeader;
-import webserver.request.RequestLine;
+import webserver.http.request.HttpRequest;
+import webserver.http.request.RequestBody;
+import webserver.http.request.RequestHeader;
+import webserver.http.request.RequestLine;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -2,11 +2,11 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.handler.MappingHandler;
+import webserver.dispatcher.RequestDispatcher;
+import webserver.http.request.HttpRequest;
+import webserver.http.response.HttpResponse;
+import webserver.http.response.HttpVersion;
 import webserver.parser.HttpRequestParser;
-import webserver.request.HttpRequest;
-import webserver.response.HttpResponse;
-import webserver.servlet.HttpServlet;
 
 import java.io.*;
 import java.net.Socket;
@@ -26,10 +26,9 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            HttpRequest request = HttpRequestParser.parse(new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
-            HttpServlet httpServlet = MappingHandler.getServlets(request.getUri());
-            HttpResponse httpResponse = httpServlet.run(request);
-            httpResponse.send(new DataOutputStream(out));
+            HttpRequest httpRequest = HttpRequestParser.parse(new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
+            HttpResponse httpResponse = new HttpResponse(new DataOutputStream(out), HttpVersion.HTTP1);
+            RequestDispatcher.dispatch(httpRequest, httpResponse);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }

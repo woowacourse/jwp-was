@@ -1,7 +1,9 @@
 package webserver.handler;
 
 import exceptions.NotFoundURIException;
-import webserver.request.RequestUri;
+import webserver.http.request.RequestUri;
+import webserver.resolver.HtmlViewResolver;
+import webserver.resolver.ViewResolver;
 import webserver.servlet.FileServlet;
 import webserver.servlet.HomeServlet;
 import webserver.servlet.HttpServlet;
@@ -9,23 +11,24 @@ import webserver.servlet.UserCreateServlet;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public class MappingHandler {
-    private static Map<String, HttpServlet> servlets = new HashMap<>();
+    private static Map<HttpServlet, ViewResolver> servlets = new HashMap<>();
     private static FileServlet fileServlet;
 
     static {
-        servlets.put("/", new HomeServlet());
-        servlets.put("/user/create", new UserCreateServlet());
+        servlets.put(new HomeServlet(), new HtmlViewResolver());
+        servlets.put(new UserCreateServlet(), new HtmlViewResolver());
         fileServlet = new FileServlet();
     }
 
     public static HttpServlet getServlets(RequestUri requestUri) {
-        if (requestUri.isFile()) {
+        if (fileServlet.canMapping(requestUri)) {
             return fileServlet;
         }
-        return Optional.ofNullable(servlets.get(requestUri.getAbsPath()))
-                .orElseThrow(() -> new NotFoundURIException(requestUri.getAbsPath()));
+        return servlets.keySet().stream()
+                .filter(s -> s.canMapping(requestUri))
+                .findAny()
+                .orElseThrow(() -> new NotFoundURIException(requestUri));
     }
 }

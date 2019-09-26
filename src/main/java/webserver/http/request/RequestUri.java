@@ -1,4 +1,4 @@
-package webserver.request;
+package webserver.http.request;
 
 import utils.HttpRequestUtils;
 
@@ -27,5 +27,9 @@ public class RequestUri {
 
     public boolean isFile() {
         return absPath.contains(FILE_EXTENSION_DELIMITER);
+    }
+
+    public boolean isSameAbsPath(String targetAbsPath){
+        return absPath.equals(targetAbsPath);
     }
 }

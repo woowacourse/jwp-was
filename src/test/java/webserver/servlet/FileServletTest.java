@@ -5,23 +5,17 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import utils.FileIoUtils;
 import webserver.parser.HttpRequestParser;
-import webserver.request.HttpRequest;
-import webserver.response.HttpResponse;
-import webserver.response.HttpStatus;
+import webserver.http.request.HttpRequest;
+import webserver.http.response.HttpResponse;
+import webserver.http.response.HttpStatus;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static utils.HttpRequestUtils.generateTemplateFilePath;
 
 class FileServletTest {
