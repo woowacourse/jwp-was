@@ -14,6 +14,6 @@ public class ControllerFinder {
 
     public Controller find(HttpRequest httpRequest) {
         return Optional.ofNullable(uriConfig.get(httpRequest.getResourcePath()))
-                .orElseGet(FileController::new);
+                .orElseThrow(() -> new IllegalArgumentException("Url에 해당하는 컨트롤러 X"));
     }
 }

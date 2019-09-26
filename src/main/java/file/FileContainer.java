@@ -13,8 +13,7 @@ import java.net.URISyntaxException;
 public class FileContainer {
     private static final Logger logger = LoggerFactory.getLogger(FileContainer.class);
 
-    public boolean process(
-            HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+    public boolean process(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         try {
             String absoluteUrl = PathHandler.path(httpRequest.getResourcePath());
             logger.debug("정적 파일 경로 : {}", absoluteUrl);
