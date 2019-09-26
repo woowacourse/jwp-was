@@ -7,7 +7,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
-import java.util.Optional;
 
 public class Renderer {
     private Renderer() {
@@ -30,15 +29,8 @@ public class Renderer {
         renderResponseBody(httpResponse, dataOutputStream);
     }
 
-    private void renderResponseBody(HttpResponse httpResponse, DataOutputStream dataOutputStream) throws IOException {
-        Optional<byte[]> maybeBody = httpResponse.getBody();
-        if (maybeBody.isPresent()) {
-            byte[] body = maybeBody.get();
-            dataOutputStream.write(body, 0, body.length);
-            dataOutputStream.flush();
-            return;
-        }
-        dataOutputStream.flush();
+    private void renderResponseLine(HttpResponse httpResponse, DataOutputStream dataOutputStream, HttpStatus httpStatus) throws IOException {
+        dataOutputStream.writeBytes(httpResponse.getVersion() + " " + httpStatus.getStatusCode() + " " + httpStatus.getStatus() + " \r\n");
     }
 
     private void renderResponseFields(DataOutputStream dataOutputStream, Map<String, String> responseHeaderFields) throws IOException {
@@ -48,7 +40,9 @@ public class Renderer {
         dataOutputStream.writeBytes("\r\n");
     }
 
-    private void renderResponseLine(HttpResponse httpResponse, DataOutputStream dataOutputStream, HttpStatus httpStatus) throws IOException {
-        dataOutputStream.writeBytes(httpResponse.getVersion() + " " + httpStatus.getStatusCode() + " " + httpStatus.getStatus() + " \r\n");
+    private void renderResponseBody(HttpResponse httpResponse, DataOutputStream dataOutputStream) throws IOException {
+        byte[] body = httpResponse.getBody();
+        dataOutputStream.write(body, 0, body.length);
+        dataOutputStream.flush();
     }
 }
