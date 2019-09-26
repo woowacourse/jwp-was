@@ -1,11 +1,8 @@
 package http.request;
 
-import http.exception.NotFoundHeaderException;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 
 public class RequestHeader {
     private static final String DELIMITER_OF_HEADER = ":";
@@ -30,6 +27,6 @@ public class RequestHeader {
     }
 
     public String get(String key) {
-        return Optional.ofNullable(headers.get(key.toLowerCase())).orElseThrow(NotFoundHeaderException::new);
+        return headers.get(key.toLowerCase());
     }
 }
