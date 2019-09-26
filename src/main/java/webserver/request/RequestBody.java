@@ -36,11 +36,10 @@ public class RequestBody {
     }
 
     private static String determineValue(String[] splitAttribute) {
-        String value = "";
         if (splitAttribute.length == 2) {
-            value = splitAttribute[1];
+            return splitAttribute[1];
         }
-        return value;
+        return "";
     }
 
     public String get(String key) {

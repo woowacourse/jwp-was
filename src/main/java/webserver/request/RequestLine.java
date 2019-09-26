@@ -56,11 +56,10 @@ public class RequestLine {
     }
 
     private static String determineValue(String[] split1) {
-        String value = "";
         if (split1.length == 2) {
-            value = split1[1];
+            return split1[1];
         }
-        return value;
+        return "";
     }
 
     public boolean isGet() {
