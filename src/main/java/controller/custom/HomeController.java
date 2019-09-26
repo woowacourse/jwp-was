@@ -10,6 +10,10 @@ public class HomeController extends AbstractController {
     private static final String ROOT_URL = "/";
     private static final String INDEX_PAGE = "/index.html";
 
+    private void rootRequest(HttpRequest request, HttpResponse response) {
+        response.sendRedirect(ViewLocation.TEMPLATE.getLocation() + INDEX_PAGE, HttpStatus.OK);
+    }
+
     @Override
     protected void doGet(HttpRequest request, HttpResponse response) {
         response.sendRedirect(ViewLocation.TEMPLATE.getLocation() + INDEX_PAGE, HttpStatus.OK);

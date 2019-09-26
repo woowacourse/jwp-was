@@ -5,6 +5,8 @@ import model.http.HttpResponse;
 import utils.HttpMethod;
 import utils.HttpStatus;
 
+import java.lang.reflect.InvocationTargetException;
+
 public abstract class AbstractController implements Controller {
     @Override
     public void service(HttpRequest request, HttpResponse response) {
@@ -12,7 +14,16 @@ public abstract class AbstractController implements Controller {
             doGet(request, response);
             return;
         }
-        doPost(request, response);
+
+        try {
+            doPost(request, response);
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -36,7 +47,7 @@ public abstract class AbstractController implements Controller {
      * @param request
      * @param response
      */
-    protected void doPost(HttpRequest request, HttpResponse response) {
+    protected void doPost(HttpRequest request, HttpResponse response) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         if (request.getHttpMethod() != HttpMethod.POST) {
             response.sendError(HttpStatus.NOT_ALLOWED, "지원하지 않는 http method 형식입니다");
         }

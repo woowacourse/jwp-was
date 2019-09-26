@@ -14,14 +14,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URISyntaxException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserControllerTest {
     public static final String TEST_DATA_DIRECTORY = "src/test/java/data";
 
-    private HttpRequest successRequest;
+    private HttpRequest request;
     private HttpResponse response;
     private User loginTargetUser;
     private User otherUser;
@@ -29,19 +28,27 @@ public class UserControllerTest {
     @BeforeEach
     void setUp() throws IOException {
         // 회원가입
-        loginTargetUser = new User("sloth", "sloth", "sloth", "sloth@woowa.com");
+        loginTargetUser = new User("javajigi", "password", "sloth", "javajigi@slipp.net");
         otherUser = new User("tiger", "tiger", "tiger", "tiger@sugar.haohe");
 
-        successRequest = RequestHeaderParser.parseRequest(
+        request = RequestHeaderParser.parseRequest(
                 new InputStreamReader(new FileInputStream(new File(TEST_DATA_DIRECTORY + "/LoginHttpRequest.txt"))));
         response = HttpResponse.of();
     }
 
     @Test
-    void Login_success() throws IOException, URISyntaxException {
+    void Login_success() {
         DataBase.addUser(loginTargetUser);
-        response = RequestDispatcher.handle(successRequest, response);
+        response = RequestDispatcher.handle(request, response);
 
-        assertThat(response.getHttpStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.REDIRECT);
+    }
+
+    @Test
+    void Login_fail() {
+        DataBase.addUser(otherUser);
+        response = RequestDispatcher.handle(request, response);
+
+        assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.FORBIDDEN);
     }
 }

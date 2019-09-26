@@ -73,4 +73,8 @@ public class HttpResponse {
     public boolean isNotInitialized() {
         return httpStatus.isNotInitialized();
     }
+
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
+    }
 }
