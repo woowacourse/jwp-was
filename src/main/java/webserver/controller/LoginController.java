@@ -7,6 +7,7 @@ import http.session.Session;
 import http.session.Sessions;
 import model.LoginService;
 import model.exception.LoginFailException;
+import org.checkerframework.checker.units.qual.C;
 import webserver.exception.InvalidRequestMethodException;
 import webserver.support.CookieParser;
 
@@ -31,13 +32,15 @@ public class LoginController extends HttpController {
         Session session = Sessions.getInstance().getSession(cookies.get("JSESSIONID"));
         try {
             String location = new LoginService().login(request.extractFormData());
-            response.configureFoundResponse(location);
             session.setSessionAttribute("logined", "true");
-            response.setCookie("JSESSIONID", new Cookie("JSESSIONID", session.getSessionId(), "/"));
+            response.setCookie("JSESSIONID",
+                    Cookie.builder().name("JSESSIONID").value(session.getSessionId()).path("/").build());
+            response.redirect(location);
         } catch (LoginFailException e) {
-            response.configureFoundResponse("/user/login_failed.html");
             session.setSessionAttribute("logined", "false");
-            response.setCookie("JSESSIONID", new Cookie("JSESSIONID", session.getSessionId(), "/"));
+            response.setCookie("JSESSIONID",
+                    Cookie.builder().name("JSESSIONID").value(session.getSessionId()).path("/").build());
+            response.redirect("/user/login_failed.html");
         }
     }
 
