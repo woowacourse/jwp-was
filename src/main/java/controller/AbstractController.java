@@ -6,11 +6,13 @@ import java.io.OutputStream;
 import http.method.HttpMethod;
 import http.request.HttpRequest;
 
+import static http.request.HttpRequestHeaderReader.REQUEST_METHOD;
+
 public abstract class AbstractController implements Controller {
 	@Override
 	public void service(HttpRequest httpRequest, OutputStream out) {
 		DataOutputStream dos = new DataOutputStream(out);
-		if (HttpMethod.GET.isSameMethod(httpRequest.getRequestHeaderElement("Method"))) {
+		if (HttpMethod.GET.isSameMethod(httpRequest.getRequestHeaderElement(REQUEST_METHOD))) {
 			doGet(httpRequest, dos);
 			return;
 		}

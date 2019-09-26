@@ -13,14 +13,22 @@ import webserver.RequestHandler;
 
 public class HttpResponseGenerator {
 	private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+	//TODO : status code, description ENUM으로 빼기
+	public static final String RESPONSE_PROTOCOL = "HTTP";
+	public static final String RESPONSE_PROTOCOL_VERSION = "1.1";
+	public static final String RESPONSE_CODE = "Code";
+	public static final String RESPONSE_DESCRIPTION = "Description";
+	public static final String RESPONSE_CONTENT_TYPE = "Content-Type";
+	public static final String RESPONSE_CONTENT_LENGTH = "Content-Length";
+	public static final String RESPONSE_LOCATION = "Location";
 
 	public static Map<String, String> response200Header(String path, int bodyLength) {
 		try {
 			Map<String, String> header = new LinkedHashMap<>();
 
 			String mimeType = Files.probeContentType(Paths.get(path));
-
-			saveResponseHeader("HTTP/1.1 200 OK \r\n", header, mimeType, bodyLength);
+			String headerLine = String.format("%s/%s 200 OK\r\n", RESPONSE_PROTOCOL, RESPONSE_PROTOCOL_VERSION);
+			saveResponseHeader(headerLine, header, mimeType, bodyLength);
 			return header;
 		} catch (IOException e) {
 			logger.error(e.getMessage());
@@ -30,19 +38,19 @@ public class HttpResponseGenerator {
 
 	private static void saveResponseHeader(String headerLine, Map<String, String> header, String mimeType, int lengthOfBodyContent) {
 		String[] info = headerLine.split(" ");
-		header.put("Http", info[0]);
-		header.put("Code", info[1]);
-		header.put("Description", info[2]);
-		header.put("Content-Type", mimeType + ";charset=utf-8\r\n");
-		header.put("Content-Length", lengthOfBodyContent + "\r\n");
+		header.put(RESPONSE_PROTOCOL, info[0]);
+		header.put(RESPONSE_CODE, info[1]);
+		header.put(RESPONSE_DESCRIPTION, info[2]);
+		header.put(RESPONSE_CONTENT_TYPE, mimeType + ";charset=utf-8\r\n");
+		header.put(RESPONSE_CONTENT_LENGTH, lengthOfBodyContent + "\r\n");
 	}
 
 	public static Map<String, String> response302Header(String location) {
 		Map<String, String> header = new LinkedHashMap<>();
-		header.put("Http", "HTTP/1.1");
-		header.put("Code", "302");
-		header.put("Description", "Found");
-		header.put("Location", location);
+		header.put(RESPONSE_PROTOCOL, "HTTP/1.1");
+		header.put(RESPONSE_CODE, "302");
+		header.put(RESPONSE_DESCRIPTION, "Found");
+		header.put(RESPONSE_LOCATION, location);
 		return header;
 	}
 }

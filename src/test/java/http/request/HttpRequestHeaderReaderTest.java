@@ -5,6 +5,7 @@ import java.io.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static http.request.HttpRequestHeaderReader.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class HttpRequestHeaderReaderTest {
@@ -17,9 +18,9 @@ class HttpRequestHeaderReaderTest {
 				new FileInputStream(new File(fileDirectory + "request_GET.txt"))))) {
 			HttpRequest httpRequest = HttpRequestReader.readHttpRequest(bufferedReader);
 
-			assertThat(httpRequest.getRequestHeaderElement("Method")).isEqualTo("GET");
-			assertThat(httpRequest.getRequestHeaderElement("Path")).isEqualTo("/index.html");
-			assertThat(httpRequest.getRequestHeaderElement("Http")).isEqualTo("HTTP/1.1");
+			assertThat(httpRequest.getRequestHeaderElement(REQUEST_METHOD)).isEqualTo("GET");
+			assertThat(httpRequest.getRequestHeaderElement(REQUEST_PATH)).isEqualTo("/index.html");
+			assertThat(httpRequest.getRequestHeaderElement(REQUEST_PROTOCOL)).isEqualTo("HTTP/1.1");
 			assertThat(httpRequest.getRequestHeaderElement("Host")).isEqualTo("localhost:8080");
 			assertThat(httpRequest.getRequestHeaderElement("Connection")).isEqualTo("keep-alive");
 			assertThat(httpRequest.getRequestHeaderElement("Accept")).isEqualTo("*/*");
@@ -32,9 +33,9 @@ class HttpRequestHeaderReaderTest {
 		try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(fileDirectory + "request_POST.txt")))) {
 			HttpRequest httpRequest = HttpRequestReader.readHttpRequest(bufferedReader);
 
-			assertThat(httpRequest.getRequestHeaderElement("Method")).isEqualTo("POST");
-			assertThat(httpRequest.getRequestHeaderElement("Path")).isEqualTo("/user/create");
-			assertThat(httpRequest.getRequestHeaderElement("Http")).isEqualTo("HTTP/1.1");
+			assertThat(httpRequest.getRequestHeaderElement(REQUEST_METHOD)).isEqualTo("POST");
+			assertThat(httpRequest.getRequestHeaderElement(REQUEST_PATH)).isEqualTo("/user/create");
+			assertThat(httpRequest.getRequestHeaderElement(REQUEST_PROTOCOL)).isEqualTo("HTTP/1.1");
 			assertThat(httpRequest.getRequestHeaderElement("Host")).isEqualTo("localhost:8080");
 			assertThat(httpRequest.getRequestHeaderElement("Connection")).isEqualTo("keep-alive");
 			assertThat(httpRequest.getRequestHeaderElement("Content-Length")).isEqualTo("46");

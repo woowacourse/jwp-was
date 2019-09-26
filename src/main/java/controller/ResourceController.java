@@ -13,6 +13,8 @@ import http.response.HttpResponseGenerator;
 import utils.FileIoUtils;
 import utils.ResourcePathUtils;
 
+import static http.request.HttpRequestHeaderReader.REQUEST_PATH;
+
 public class ResourceController extends AbstractController {
 	@Override
 	public void doPost(HttpRequest httpRequest, DataOutputStream dos) {
@@ -22,7 +24,7 @@ public class ResourceController extends AbstractController {
 	@Override
 	public void doGet(HttpRequest httpRequest, DataOutputStream dos) {
 		try {
-			String path = ResourcePathUtils.getResourcePath(httpRequest.getRequestHeaderElement("Path"));
+			String path = ResourcePathUtils.getResourcePath(httpRequest.getRequestHeaderElement(REQUEST_PATH));
 			byte[] responseBody = FileIoUtils.loadFileFromClasspath(path);
 			HttpResponse httpResponse = new HttpResponse(HttpResponseGenerator.response200Header(path, responseBody.length));
 			httpResponse.forward(responseBody, dos);

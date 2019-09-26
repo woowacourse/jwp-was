@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.RequestHandler;
 
+import static http.response.HttpResponseGenerator.*;
+
 public class HttpResponse {
 	private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 	private final Map<String, String> header;
@@ -17,9 +19,9 @@ public class HttpResponse {
 	}
 
 	public void sendRedirect(DataOutputStream dos) throws IOException {
-		dos.writeBytes(String.format("%s %s %s\r\n", header.get("Http"), header.get("Code")
-				, header.get("Description")));
-		dos.writeBytes(String.format("Location: %s\r\n", header.get("Location")));
+		dos.writeBytes(String.format("%s %s %s\r\n", header.get(RESPONSE_PROTOCOL), header.get(RESPONSE_CODE)
+				, header.get(RESPONSE_DESCRIPTION)));
+		dos.writeBytes(String.format("%s: %s\r\n", RESPONSE_LOCATION, header.get(RESPONSE_LOCATION)));
 		dos.writeBytes("\r\n");
 		dos.flush();
 	}

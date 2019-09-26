@@ -15,7 +15,7 @@ public class HttpRequestHeaderReader {
 
 	public static final String REQUEST_METHOD = "Method";
 	public static final String REQUEST_PATH = "Path";
-	public static final String REQUEST_HTTP = "Http";
+	public static final String REQUEST_PROTOCOL = "HTTP";
 	public static final String REQUEST_SEPARATOR = ": ";
 
 	public static Map<String, String> readRequest(BufferedReader bufferedReader) throws IOException {
@@ -43,6 +43,6 @@ public class HttpRequestHeaderReader {
 		String[] infos = requestLine.split(" ");
 		requests.put(REQUEST_METHOD, infos[0]);
 		requests.put(REQUEST_PATH, infos[1]);
-		requests.put(REQUEST_HTTP, infos[2]);
+		requests.put(REQUEST_PROTOCOL, infos[2]);
 	}
 }
