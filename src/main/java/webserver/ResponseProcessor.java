@@ -1,6 +1,8 @@
 package webserver;
 
-import webserver.httpRequest.HttpStatus;
+import webserver.http.HttpResponse;
+import webserver.http.cookie.Cookie;
+import webserver.http.httpRequest.HttpStatus;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -32,6 +34,7 @@ public class ResponseProcessor {
     private void writeResponseHeader(DataOutputStream dos, HttpResponse httpResponse) throws IOException {
         dos.writeBytes(HTTP_VERSION + httpResponse.getStatusCodeAndMessage() + HEADER_LINE_SEPARATOR);
         writeResponseHeaders(dos, httpResponse);
+        writeCookies(dos, httpResponse);
         dos.writeBytes(HEADER_LINE_SEPARATOR);
     }
 
@@ -40,6 +43,13 @@ public class ResponseProcessor {
             String key = stringStringEntry.getKey();
             String value = stringStringEntry.getValue();
             dos.writeBytes(key + HEADER_SEPARATOR + value + HEADER_LINE_SEPARATOR);
+        }
+    }
+
+    private void writeCookies(DataOutputStream dos, HttpResponse httpResponse) throws IOException {
+        Map<String, Cookie> cookies = httpResponse.getCookies();
+        for (Map.Entry<String, Cookie> stringCookieEntry : cookies.entrySet()) {
+            dos.writeBytes(stringCookieEntry.getValue().toString() + HEADER_LINE_SEPARATOR);
         }
     }
 
