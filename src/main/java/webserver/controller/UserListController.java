@@ -6,7 +6,6 @@ import http.session.Session;
 import http.session.Sessions;
 import model.User;
 import model.UserService;
-import webserver.exception.InvalidRequestMethodException;
 import webserver.support.CookieParser;
 import webserver.support.ModelAndView;
 
@@ -30,7 +29,7 @@ public class UserListController extends HttpController {
         Map<String, String> cookies = CookieParser.parse(request.extractHeader("Cookie"));
         Session session = Sessions.getInstance().getSession(cookies.get("JSESSIONID"));
 
-        if ("true".equals(session.getSessionAttribute("logined"))) {
+        if ("true".equals(session.getAttribute("logined"))) {
             List<User> users = new UserService().findAll();
             modelAndView = new ModelAndView("user/list");
             modelAndView.setModels("users", users);

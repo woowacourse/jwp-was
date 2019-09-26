@@ -16,15 +16,15 @@ public class Session {
         return this.sessionId;
     }
 
-    public void setSessionAttribute(String key, Object value) {
+    public void setAttribute(String key, Object value) {
         this.sessionData.put(key, value);
     }
 
-    public Object getSessionAttribute(String key) {
+    public Object getAttribute(String key) {
         return this.sessionData.get(key);
     }
 
-    public void removeSessionAttribute(String key) {
+    public void removeAttribute(String key) {
         this.sessionData.remove(key);
     }
 

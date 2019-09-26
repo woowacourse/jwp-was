@@ -7,7 +7,6 @@ import http.session.Session;
 import http.session.Sessions;
 import model.LoginService;
 import model.exception.LoginFailException;
-import webserver.exception.InvalidRequestMethodException;
 import webserver.support.CookieParser;
 
 import java.util.Map;
@@ -26,12 +25,12 @@ public class LoginController extends HttpController {
         Session session = Sessions.getInstance().getSession(cookies.get("JSESSIONID"));
         try {
             String location = new LoginService().login(request.extractFormData());
-            session.setSessionAttribute("logined", "true");
+            session.setAttribute("logined", "true");
             response.setCookie("JSESSIONID",
                     Cookie.builder().name("JSESSIONID").value(session.getSessionId()).path("/").build());
             response.redirect(location);
         } catch (LoginFailException e) {
-            session.setSessionAttribute("logined", "false");
+            session.setAttribute("logined", "false");
             response.setCookie("JSESSIONID",
                     Cookie.builder().name("JSESSIONID").value(session.getSessionId()).path("/").build());
             response.redirect("/user/login_failed.html");
