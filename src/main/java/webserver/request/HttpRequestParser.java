@@ -79,9 +79,7 @@ public class HttpRequestParser {
         if (COOKIE.equals(key)) {
             for (String subValue : value.split(VALUE_DELIMITER)) {
                 String[] subValueTokens = subValue.trim().split(SUB_VALUE_DELIMITER);
-                String keyOfSubValue = key + KEY_OF_SUB_VALUE_EXTENSION + subValueTokens[0];
-
-                httpRequestHeaderFields.addField(keyOfSubValue, subValueTokens[1]);
+                httpRequestHeaderFields.addCookieField(subValueTokens[0], subValueTokens[1]);
             }
         }
     }

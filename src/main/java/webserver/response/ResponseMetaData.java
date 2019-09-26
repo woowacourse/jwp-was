@@ -125,11 +125,6 @@ public class ResponseMetaData {
             return this;
         }
 
-        public Builder setCookie(String cookie, String path) {
-            responseHeaderFields.put(SET_COOKIE, cookie + FIELD_SEPARATOR + "Path=" + path);
-            return this;
-        }
-
         public ResponseMetaData build() {
             return new ResponseMetaData(httpRequest, httpStatus, responseHeaderFields);
         }
