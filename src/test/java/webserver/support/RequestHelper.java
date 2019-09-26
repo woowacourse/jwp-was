@@ -19,6 +19,22 @@ public class RequestHelper {
                     "Host: localhost:8080\n" +
                     "Connection: keep-alive\n" +
                     "Accept: */*";
+    protected final String requestGetLogin =
+            "GET /user/login HTTP/1.1\n" +
+                    "Host: localhost:8080\n" +
+                    "Connection: keep-alive\n" +
+                    "Accept: */*";
+    protected final String requestGetHeaderWithCookie =
+            "GET /user/create HTTP/1.1\n" +
+                    "Host: localhost:8080\n" +
+                    "Connection: keep-alive\n" +
+                    "Accept: */*\n" +
+                    "Cookie: logined=true";
+    protected final String requestGetUserListWithoutLogin =
+            "GET /user/list HTTP/1.1\n" +
+                    "Host: localhost:8080\n" +
+                    "Connection: keep-alive\n" +
+                    "Accept: */*";
     protected final String requestNotFoundHeader =
             "GET /weirdPath HTTP/1.1\n" +
                     "Host: localhost:8080\n" +

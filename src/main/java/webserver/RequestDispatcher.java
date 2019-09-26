@@ -8,6 +8,7 @@ import utils.exception.InvalidFileAccessException;
 import web.controller.Controller;
 import web.controller.impl.LoginController;
 import web.controller.impl.UserController;
+import web.controller.impl.UserListController;
 import webserver.message.exception.NotFoundFileException;
 import webserver.message.exception.UrlDecodeException;
 import webserver.message.request.Request;
@@ -28,6 +29,7 @@ public class RequestDispatcher {
     static {
         requestUrls.put("/user/create", new UserController());
         requestUrls.put("/user/login", new LoginController());
+        requestUrls.put("/user/list", new UserListController());
     }
 
     public static byte[] forward(final IOUtils ioUtils) {

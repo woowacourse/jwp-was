@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import web.db.DataBase;
 import web.model.User;
+import webserver.StaticFile;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
 import webserver.support.RequestHelper;
@@ -19,6 +20,8 @@ class LoginControllerTest extends RequestHelper {
     private static final String UNMATCHED_USER_MESSAGE = "비밀번호가 일치하지 않습니다.";
     private static final String INDEX_PAGE_URL = "/";
     private static final String LOGIN_FAILED_PAGE_URL = "/user/login_failed.html";
+    private static final String TEMPLATES_PATH = "./templates";
+    private static final String USER_LOGIN_PAGE = "/user/login.html";
 
     protected final String requestPostWithWeirdQuery =
             "POST /user/create HTTP/1.1\n" +
@@ -30,13 +33,25 @@ class LoginControllerTest extends RequestHelper {
                     "\n" +
                     "userId=java&password=pass&a=b";
 
-    private Request request;
+    private Request getRequest;
+    private Request postRequest;
     private LoginController loginController;
 
     @BeforeEach
     void setUp() throws IOException, URISyntaxException {
-        this.request = new Request(ioUtils(requestPostWithQuery));
+        this.getRequest = new Request(ioUtils(requestGetLogin));
+        this.postRequest = new Request(ioUtils(requestPostWithQuery));
         this.loginController = new LoginController();
+    }
+
+    @Test
+    @DisplayName("로그인 페이지 get")
+    void getLogin() throws IOException, URISyntaxException {
+        assertThat(loginController.doGet(getRequest).toBytes())
+                .isEqualTo(new Response.Builder()
+                        .body(new StaticFile(TEMPLATES_PATH + USER_LOGIN_PAGE))
+                        .build()
+                        .toBytes());
     }
 
     @Test
@@ -44,7 +59,7 @@ class LoginControllerTest extends RequestHelper {
     void login() {
         DataBase.addUser(new User("javajigi", "password", "포비", "pobi@pobi.com"));
 
-        assertThat(loginController.doPost(request).toBytes())
+        assertThat(loginController.doPost(postRequest).toBytes())
                 .isEqualTo(new Response.Builder()
                         .redirectUrl(INDEX_PAGE_URL)
                         .setCookie("logined=true; Path=/")
@@ -68,7 +83,7 @@ class LoginControllerTest extends RequestHelper {
     void loginException2() {
         DataBase.addUser(new User("javajigi", "1234", "포비", "pobi@pobi.com"));
 
-        assertThat(loginController.doPost(request).toBytes())
+        assertThat(loginController.doPost(postRequest).toBytes())
                 .isEqualTo(new Response.Builder()
                         .redirectUrl(LOGIN_FAILED_PAGE_URL)
                         .setCookie("logined=false; Path=/")
@@ -78,7 +93,7 @@ class LoginControllerTest extends RequestHelper {
     /*@Test
     @DisplayName("존재하지 않는 userId로 로그인할 때 예외처리")
     void loginException1() {
-        LoginException thrown = assertThrows(LoginException.class, () -> loginController.doPost(request));
+        LoginException thrown = assertThrows(LoginException.class, () -> loginController.doPost(postRequest));
         assertEquals(thrown.getMessage(), NOT_FOUND_USER_ID_MESSAGE);
     }
 
@@ -87,7 +102,7 @@ class LoginControllerTest extends RequestHelper {
     void loginException2() {
         DataBase.addUser(new User("javajigi", "1234", "포비", "pobi@pobi.com"));
 
-        LoginException thrown = assertThrows(LoginException.class, () -> loginController.doPost(request));
+        LoginException thrown = assertThrows(LoginException.class, () -> loginController.doPost(postRequest));
         assertEquals(thrown.getMessage(), UNMATCHED_USER_MESSAGE);
     }*/
 }
