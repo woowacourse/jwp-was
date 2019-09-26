@@ -36,7 +36,7 @@ public class RequestHandler implements Runnable {
             httpRequest = HttpRequest.of(in);
             Controller controller = UrlMapper.getController(httpRequest);
             controller.service(httpRequest, httpResponse);
-            httpResponse.render(dos);
+            Renderer.render(dos, httpResponse);
         } catch (IOException e) {
             logger.error(e.getMessage());
             httpResponse.addStatusLine(httpRequest, "500", "Internal Server error");

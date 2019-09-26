@@ -1,6 +1,5 @@
 package webserver.response;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,7 +18,11 @@ public class ResponseHeader {
         return true;
     }
 
-    public Map<String, String> getAttributes() {
-        return Collections.unmodifiableMap(attributes);
+    public String response() {
+        StringBuilder str = new StringBuilder();
+        for (String attributeName : attributes.keySet()) {
+            str.append(attributeName).append(": ").append(attributes.get(attributeName)).append("\r\n");
+        }
+        return str.toString();
     }
 }
