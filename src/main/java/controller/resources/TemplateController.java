@@ -1,21 +1,16 @@
 package controller.resources;
 
-import controller.AbstractController;
+import annotation.RequestMapping;
+import controller.Controller;
 import model.http.HttpRequest;
 import model.http.HttpResponse;
 import model.http.ViewLocation;
+import utils.HttpMethod;
 import utils.HttpStatus;
 
-public class TemplateController extends AbstractController {
-    private static final String TEMPLATE_FILE_EXTENSION = ".html";
-
-    @Override
-    protected void doGet(HttpRequest request, HttpResponse response) {
+public class TemplateController implements Controller {
+    @RequestMapping(method = HttpMethod.GET, url = "templates")
+    public void templateResourceRequest(HttpRequest request, HttpResponse response) {
         response.sendRedirect(ViewLocation.TEMPLATE.getLocation() + request.getPath(), HttpStatus.OK);
-    }
-
-    @Override
-    public boolean isMapping(HttpRequest request) {
-        return request.getPath().endsWith(TEMPLATE_FILE_EXTENSION);
     }
 }

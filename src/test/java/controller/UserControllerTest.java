@@ -7,8 +7,8 @@ import model.http.HttpResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import utils.HttpStatus;
-import utils.RequestHeaderParser;
 import utils.RequestDispatcher;
+import utils.RequestHeaderParser;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,7 +18,7 @@ import java.io.InputStreamReader;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserControllerTest {
-    public static final String TEST_DATA_DIRECTORY = "src/test/java/data";
+    private static final String TEST_DATA_DIRECTORY = "src/test/java/data";
 
     private HttpRequest request;
     private HttpResponse response;
