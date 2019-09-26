@@ -55,13 +55,8 @@ public class HttpResponse {
         if (body.isEmpty()) {
             return;
         }
-
         dos.writeBytes("\r\n");
-        try {
-            dos.write(body.getContent(), 0, body.getLengthOfContent());
-            dos.flush();
-        } catch (IOException e) {
-            log.error(e.getMessage());
-        }
+        dos.write(body.getContent(), 0, body.getLengthOfContent());
+        dos.flush();
     }
 }

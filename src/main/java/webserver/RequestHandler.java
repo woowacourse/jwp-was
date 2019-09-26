@@ -39,6 +39,7 @@ public class RequestHandler implements Runnable {
             httpResponse.render(dos);
         } catch (IOException e) {
             logger.error(e.getMessage());
+            httpResponse.addStatusLine(httpRequest, "500", "Internal Server error");
         } catch (NotFoundException e) {
             logger.debug(e.getMessage());
             httpResponse.addStatusLine(httpRequest, "404", "Not Found");
