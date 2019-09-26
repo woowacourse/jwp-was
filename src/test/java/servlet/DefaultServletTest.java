@@ -1,9 +1,10 @@
-package webserver;
+package servlet;
 
 import http.HttpHeaders;
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
 import http.response.HttpResponseEntity;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -15,7 +16,14 @@ import static http.response.HttpStatus.NOT_FOUND;
 import static http.response.HttpStatus.OK;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ResourceMapperTest {
+class DefaultServletTest {
+    private DefaultServlet defaultServlet;
+
+    @BeforeEach
+    void setUp() {
+        defaultServlet = new DefaultServlet();
+    }
+
     @Test
     void Request_URI에_해당하는_리소스가_Templates에_있는_경우() throws IOException, URISyntaxException {
         String requestMessage = "GET /index.html HTTP/1.1\n"
@@ -25,11 +33,11 @@ class ResourceMapperTest {
         InputStream in = new ByteArrayInputStream(requestMessage.getBytes());
         HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
 
-        HttpResponseEntity responseEntity = ResourceMapper.map(request);
+        HttpResponseEntity responseEntity = defaultServlet.handle(request);
 
         assertThat(responseEntity.getStatus()).isEqualTo(OK);
         assertThat(responseEntity.getHeaders()).isEqualTo(new HttpHeaders());
-        assertThat(responseEntity.getViewTemplatePath()).isEqualTo("./templates/index.html");
+        assertThat(responseEntity.getViewPath()).isEqualTo("./templates/index.html");
     }
 
     @Test
@@ -41,11 +49,11 @@ class ResourceMapperTest {
         InputStream in = new ByteArrayInputStream(requestMessage.getBytes());
         HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
 
-        HttpResponseEntity responseEntity = ResourceMapper.map(request);
+        HttpResponseEntity responseEntity = defaultServlet.handle(request);
 
         assertThat(responseEntity.getStatus()).isEqualTo(OK);
         assertThat(responseEntity.getHeaders()).isEqualTo(new HttpHeaders());
-        assertThat(responseEntity.getViewTemplatePath()).isEqualTo("./static/css/styles.css");
+        assertThat(responseEntity.getViewPath()).isEqualTo("./static/css/styles.css");
     }
 
     @Test
@@ -57,10 +65,10 @@ class ResourceMapperTest {
         InputStream in = new ByteArrayInputStream(requestMessage.getBytes());
         HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
 
-        HttpResponseEntity responseEntity = ResourceMapper.map(request);
+        HttpResponseEntity responseEntity = defaultServlet.handle(request);
 
         assertThat(responseEntity.getStatus()).isEqualTo(NOT_FOUND);
         assertThat(responseEntity.getHeaders()).isEqualTo(new HttpHeaders());
-        assertThat(responseEntity.getViewTemplatePath()).isEqualTo("./templates/error/404.html");
+        assertThat(responseEntity.getViewPath()).isEqualTo("./templates/error/404.html");
     }
 }

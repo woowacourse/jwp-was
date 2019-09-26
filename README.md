@@ -31,7 +31,7 @@
 2. Response 생성 기능 분리
     - [x] Status에 따라 Http Response 만드는 기능 분리
 3. RequestHandler 리펙토링
-    - [x] controller 분리
+    - [x] servlet 분리
     - [x] ResponseEntity 분리
 4. 다수의 사용자 처리
     - [ ] 다수의 사용자 요청에 대해 Queue 에 저장한 후 순차적으로 처리가 가능하도록 해야 한다.

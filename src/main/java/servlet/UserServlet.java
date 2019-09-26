@@ -1,11 +1,11 @@
-package controller;
+package servlet;
 
 import db.DataBase;
 import http.request.HttpRequest;
 import http.response.HttpResponseEntity;
 import model.User;
 
-public class UserController extends AbstractController {
+public class UserServlet extends AbstractServlet {
     @Override
     protected HttpResponseEntity doPost(HttpRequest httpRequest) {
         User user = new User(httpRequest.getParam("userId"), httpRequest.getParam("password"),

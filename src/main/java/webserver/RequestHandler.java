@@ -1,14 +1,10 @@
 package webserver;
 
-import http.HttpMimeType;
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
 import http.response.HttpResponse;
-import http.response.HttpResponseEntity;
-import http.response.HttpResponseFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.FileIoUtils;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -34,25 +30,11 @@ public class RequestHandler implements Runnable {
             HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
             logger.debug(request.toString());
 
-            HttpResponse response = getResponse(request);
-
+            HttpResponse response = ServletHandler.handle(request);
             writeResponse(out, response);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
-    }
-
-    private HttpResponse getResponse(HttpRequest request) throws IOException, URISyntaxException {
-        HttpResponseEntity responseEntity = ResourceMapper.map(request);
-        HttpResponse httpResponse = HttpResponseFactory.makeResponse(responseEntity);
-
-        if (responseEntity.hasBody()) {
-            String path = responseEntity.getViewTemplatePath();
-            byte[] body = FileIoUtils.loadFileFromClasspath(path);
-            HttpMimeType type = request.getMimeType();
-            httpResponse.setBody(body, type);
-        }
-        return httpResponse;
     }
 
     private void writeResponse(OutputStream out, HttpResponse response) throws IOException {

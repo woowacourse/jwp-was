@@ -1,16 +1,16 @@
-package controller;
+package servlet;
 
 import http.request.HttpMethod;
 import http.request.HttpRequest;
 import http.response.HttpResponseEntity;
 
-public abstract class AbstractController implements Controller {
+public abstract class AbstractServlet implements Servlet {
     @Override
     public HttpResponseEntity handle(HttpRequest httpRequest) {
-        if (httpRequest.getMethod().match(HttpMethod.GET)) {
+        if (HttpMethod.GET.match(httpRequest.getMethod())) {
             return doGet(httpRequest);
         }
-        if (httpRequest.getMethod().match(HttpMethod.POST)) {
+        if (HttpMethod.POST.match(httpRequest.getMethod())) {
             return doPost(httpRequest);
         }
         return HttpResponseEntity.get405Response();

@@ -18,7 +18,7 @@ class HttpResponseEntityTest {
 
         assertThat(httpResponseEntity.getStatus()).isEqualTo(OK);
         assertThat(httpResponseEntity.getHeaders()).isEqualTo(headers);
-        assertThat(httpResponseEntity.getViewTemplatePath()).isEqualTo(viewTemplatePath);
+        assertThat(httpResponseEntity.getViewPath()).isEqualTo(viewTemplatePath);
     }
 
     @Test
@@ -30,7 +30,7 @@ class HttpResponseEntityTest {
 
         assertThat(httpResponseEntity.getStatus()).isEqualTo(FOUND);
         assertThat(httpResponseEntity.getHeaders()).isEqualTo(headers);
-        assertThat(httpResponseEntity.getViewTemplatePath()).isNull();
+        assertThat(httpResponseEntity.getViewPath()).isNull();
     }
 
     @Test
@@ -40,7 +40,7 @@ class HttpResponseEntityTest {
 
         assertThat(httpResponseEntity.getStatus()).isEqualTo(NOT_FOUND);
         assertThat(httpResponseEntity.getHeaders()).isEqualTo(headers);
-        assertThat(httpResponseEntity.getViewTemplatePath()).isEqualTo(NOT_FOUND_PATH);
+        assertThat(httpResponseEntity.getViewPath()).isEqualTo(NOT_FOUND_PATH);
     }
 
     @Test
@@ -50,6 +50,6 @@ class HttpResponseEntityTest {
 
         assertThat(httpResponseEntity.getStatus()).isEqualTo(METHOD_NOT_ALLOWED);
         assertThat(httpResponseEntity.getHeaders()).isEqualTo(headers);
-        assertThat(httpResponseEntity.getViewTemplatePath()).isEqualTo(METHOD_NOT_ALLOWED_PATH);
+        assertThat(httpResponseEntity.getViewPath()).isEqualTo(METHOD_NOT_ALLOWED_PATH);
     }
 }

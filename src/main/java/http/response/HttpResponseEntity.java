@@ -11,10 +11,10 @@ public class HttpResponseEntity {
 
     private HttpStatus status;
     private HttpHeaders headers;
-    private String viewTemplatePath;
+    private String viewPath;
 
-    private HttpResponseEntity(HttpStatus status, HttpHeaders headers, String viewTemplatePath) {
-        this.viewTemplatePath = viewTemplatePath;
+    private HttpResponseEntity(HttpStatus status, HttpHeaders headers, String viewPath) {
+        this.viewPath = viewPath;
         this.status = status;
         this.headers = headers;
     }
@@ -48,11 +48,7 @@ public class HttpResponseEntity {
         return headers;
     }
 
-    public String getViewTemplatePath() {
-        return viewTemplatePath;
-    }
-
-    public boolean hasBody() {
-        return viewTemplatePath != null;
+    public String getViewPath() {
+        return viewPath;
     }
 }

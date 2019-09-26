@@ -46,7 +46,7 @@ public class HttpResponse {
     }
 
     private String getBodyMessage() {
-        return (body == null) ? "" : new String(body);
+        return hasBody() ? new String(body) : null;
     }
 
     public boolean hasBody() {

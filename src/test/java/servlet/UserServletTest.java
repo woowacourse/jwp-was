@@ -1,4 +1,4 @@
-package controller;
+package servlet;
 
 import db.DataBase;
 import http.request.HttpRequest;
@@ -13,10 +13,10 @@ import java.io.InputStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class UserControllerTest {
+class UserServletTest {
     private static final String TEST_DIRECTORY = "./src/test/resources/";
 
-    private UserController userController = new UserController();
+    private UserServlet userController = new UserServlet();
 
     @Test
     void user_생성() throws IOException {
