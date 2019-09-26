@@ -19,7 +19,7 @@ public class SessionRepository {
     }
 
     public Session getSession(String sessionId) {
-        return sessions.get(sessionId);
+        return sessions.containsKey(sessionId) ? sessions.get(sessionId) : createSession();
     }
 
     public Session createSession() {
@@ -27,6 +27,10 @@ public class SessionRepository {
         while (sessions.get(uuid) != null) {
             uuid = UUID.randomUUID().toString();
         }
-        return new Session(uuid);
+
+        Session session = new Session(uuid);
+        sessions.put(session.getSessionId(), session);
+
+        return session;
     }
 }

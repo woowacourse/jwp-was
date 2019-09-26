@@ -20,6 +20,14 @@ public class Session {
     }
 
     public void removeAttribute(String name) {
+        attributes.remove(name);
+    }
 
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void invalidate() {
+        attributes = new HashMap<>();
     }
 }

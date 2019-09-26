@@ -10,9 +10,9 @@ import http.request.RequestMethod;
 import http.response.Response;
 import http.response.ResponseHeaders;
 import http.response.ResponseStatus;
+import http.session.Session;
 import model.User;
 import service.UserService;
-import utils.FileIoUtils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -41,7 +41,8 @@ public class UserController implements Controller {
     }
 
     private void getUserList(Request request, Response response) throws IOException, URISyntaxException {
-        if (request.getRequestInformation().getParameter("Cookie:") != null && request.getRequestInformation().getParameter("Cookie:").equals("logined=true")) {
+        Session session = request.getSession();
+        if (session.getAttriubte("user") != null) {
 
             TemplateLoader loader = new ClassPathTemplateLoader();
             loader.setPrefix("/templates");
@@ -62,7 +63,7 @@ public class UserController implements Controller {
             response.setResponseBody(listPage.getBytes());
         }
 
-        if (request.getRequestInformation().getParameter("Cookie:") == null || !request.getRequestInformation().getParameter("Cookie:").equals("logined=true")) {
+        if (session.getAttriubte("user") == null) {
             response.setResponseStatus(ResponseStatus.FOUND);
             response.setResponseHeaders(new ResponseHeaders());
             response.setEmptyResponseBody();

@@ -6,6 +6,8 @@ import http.request.RequestMethod;
 import http.response.Response;
 import http.response.ResponseHeaders;
 import http.response.ResponseStatus;
+import http.session.Session;
+import http.session.SessionRepository;
 import model.User;
 
 import java.io.IOException;
@@ -30,14 +32,17 @@ public class LoginController implements Controller {
 
     private void processLogin(Request request, Response response) {
         User user = DataBase.findUserById(request.getQueryParameters().getParameter("userId"));
+
         if (user != null && user.isCorrectPassWord(request.getQueryParameters().getParameter("password"))) {
             response.setResponseStatus(ResponseStatus.FOUND);
             response.setResponseHeaders(new ResponseHeaders());
             response.setEmptyResponseBody();
             response.addResponseHeaders("Location: ", "http://localhost:8080/index.html");
-            response.addResponseHeaders("Set-Cookie: ", "logined=true; Path=/");
-//            response.addResponseHeaders("Set-Cookie: ", "logined=true; Path=/; Max-Age=5");
+            Session session = request.getSession();
+            session.setAttribute("user", user.getUserId());
+            response.addResponseHeaders("Set-Cookie: Session-Id=", session.getSessionId() + "; Path=/");
         }
+
         if (user == null || !user.isCorrectPassWord(request.getQueryParameters().getParameter("password"))) {
             response.setResponseStatus(ResponseStatus.FOUND);
             response.setResponseHeaders(new ResponseHeaders());
