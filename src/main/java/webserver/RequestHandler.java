@@ -5,11 +5,11 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
 import controller.Controller;
+import controller.ControllerGenerator;
 import http.request.HttpRequest;
 import http.request.HttpRequestReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import controller.ControllerGenerator;
 
 public class RequestHandler implements Runnable {
 	private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
