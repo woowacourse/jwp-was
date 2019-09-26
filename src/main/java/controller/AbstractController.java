@@ -1,10 +1,12 @@
 package controller;
 
+import http.common.ContentType;
 import http.request.HttpRequest;
 import http.request.RequestMethod;
 import http.response.HttpResponse;
 import http.response.ResponseStatus;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,5 +34,19 @@ public abstract class AbstractController implements Controller {
 
     public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         httpResponse.setResponseStatus(ResponseStatus.METHOD_NOT_ALLOWED);
+    }
+
+    protected void setHttpResponse(ModelAndView modelAndView, HttpResponse httpResponse) throws IOException {
+        String viewName = modelAndView.getViewName();
+        if (viewName.startsWith("redirect: ")) {
+            httpResponse.setResponseStatus(ResponseStatus.FOUND);
+            httpResponse.addHeaderAttribute("Location", viewName.replace("redirect: ", ""));
+            return;
+        }
+        byte[] body = TemplateManager.getInstance().render(modelAndView).getBytes();
+        httpResponse.setResponseStatus(ResponseStatus.OK);
+        httpResponse.addHeaderAttribute("Content-Type", ContentType.HTML + ";charset=utf-8");
+        httpResponse.addHeaderAttribute("Content-Length", String.valueOf(body.length));
+        httpResponse.setBody(body);
     }
 }
