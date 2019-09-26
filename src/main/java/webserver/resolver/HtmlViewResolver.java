@@ -5,10 +5,15 @@ import utils.FileIoUtils;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-public class HtmlViewResolver implements ViewResolver {
+public class HtmlViewResolver implements Resolver {
+    final String PREFIX = "/";
+    final String POSTFIX = ".html";
+
     @Override
     public byte[] resolve(String path) throws IOException, URISyntaxException {
-        return FileIoUtils.loadFileFromClasspath(path + ".html");
+        if (path == null) {
+            return null;
+        }
+        return FileIoUtils.loadHtmlFile(PREFIX + path + POSTFIX);
     }
-
 }

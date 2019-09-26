@@ -10,6 +10,7 @@ import webserver.parser.HttpRequestParser;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 
 public class RequestHandler implements Runnable {
@@ -28,8 +29,11 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest httpRequest = HttpRequestParser.parse(new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
             HttpResponse httpResponse = new HttpResponse(new DataOutputStream(out), HttpVersion.HTTP1);
-            RequestDispatcher.dispatch(httpRequest, httpResponse);
+            RequestDispatcher requestDispatcher = new RequestDispatcher(httpResponse);
+            requestDispatcher.dispatch(httpRequest);
         } catch (IOException e) {
+            logger.error(e.getMessage());
+        } catch (URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }

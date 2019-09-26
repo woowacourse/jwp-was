@@ -1,6 +1,7 @@
 package webserver.servlet;
 
 import webserver.http.request.HttpRequest;
+import webserver.http.response.FileType;
 import webserver.http.response.HttpResponse;
 import webserver.view.View;
 
@@ -12,6 +13,7 @@ public class HomeServlet extends RequestServlet {
     @Override
     public View doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         httpResponse.ok();
+        httpResponse.appendHeader("Content-Type", FileType.HTML + "; charset=utf-8");
         return new View("index");
     }
 

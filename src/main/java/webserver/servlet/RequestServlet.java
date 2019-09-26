@@ -11,11 +11,10 @@ import java.io.IOException;
 
 public abstract class RequestServlet implements HttpServlet {
     public static final String METHOD_NOT_ALLOW_MESSAGE = "지원하지 않는 메소드 입니다.";
-    public String url;
 
     @Override
     public boolean canMapping(RequestUri requestUri) {
-        return requestUri.isSameAbsPath(url);
+        return requestUri.isSameAbsPath(getUrl());
     }
 
     @Override

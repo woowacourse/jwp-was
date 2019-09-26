@@ -2,6 +2,7 @@ package webserver.servlet;
 
 import webserver.http.request.HttpRequest;
 import webserver.http.request.RequestUri;
+import webserver.http.response.FileType;
 import webserver.http.response.HttpResponse;
 import webserver.view.View;
 
@@ -10,9 +11,10 @@ import java.io.IOException;
 import static webserver.http.response.FileType.isSupportedFile;
 
 public class FileServlet implements HttpServlet {
+    String fileExtension;
     @Override
     public boolean canMapping(RequestUri requestUri) {
-        String fileExtension = parseFileExtension(requestUri.getAbsPath());
+        fileExtension = parseFileExtension(requestUri.getAbsPath());
         return isSupportedFile(fileExtension);
     }
 
@@ -23,6 +25,7 @@ public class FileServlet implements HttpServlet {
     @Override
     public View run(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         httpResponse.ok();
-        return new View(null);
+        httpResponse.appendContentType(FileType.getTypeByExtension(fileExtension));
+        return new View(httpRequest.getAbsPath());
     }
 }

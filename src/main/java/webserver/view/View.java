@@ -1,9 +1,13 @@
 package webserver.view;
 
 public class View {
-    String name;
+    private final String name;
 
     public View(String name) {
         this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 }
