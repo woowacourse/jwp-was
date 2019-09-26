@@ -22,7 +22,7 @@ public class ControllerHandler {
     }
 
     public HttpResponse doService(HttpRequest httpRequest) {
-        return handlers.get(resolveRequestMapping(getCandidate(httpRequest))).handle(httpRequest);
+        return handlers.get(resolveRequestMapping(getCandidate(httpRequest))).service(httpRequest);
     }
 
     private List<ControllerMapping> getCandidate(HttpRequest httpRequest) {

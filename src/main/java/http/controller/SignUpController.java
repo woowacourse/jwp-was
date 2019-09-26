@@ -10,7 +10,7 @@ public class SignUpController implements Controller {
     private final static String TEMPLATES_PATH = "./templates";
 
     @Override
-    public HttpResponse handle(HttpRequest httpRequest) {
+    public HttpResponse service(HttpRequest httpRequest) {
         HttpParameters httpParameters = httpRequest.getParameters();
 
         User user = new User(httpParameters.getParameter("userId"),

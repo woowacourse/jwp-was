@@ -10,7 +10,7 @@ public class FileResourceController implements Controller {
     private final static String TEMPLATES_PATH = "./templates";
 
     @Override
-    public HttpResponse handle(HttpRequest httpRequest) {
+    public HttpResponse service(HttpRequest httpRequest) {
         String uri = getViewByUri(httpRequest.getRequestLine().getHttpUri());
         ContentType contentType = getContentType(uri);
         String path = getPath(contentType, uri);
