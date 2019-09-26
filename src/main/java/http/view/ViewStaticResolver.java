@@ -1,6 +1,9 @@
 package http.view;
 
-import http.model.*;
+import http.model.ContentType;
+import http.model.HttpProtocols;
+import http.model.HttpResponse;
+import http.model.HttpStatus;
 import utils.FileIoUtils;
 
 public class ViewStaticResolver implements Resolver {
@@ -9,7 +12,11 @@ public class ViewStaticResolver implements Resolver {
     @Override
     public HttpResponse resolve(ModelAndView modelAndView) {
         ContentType contentType = getContentType(modelAndView);
-        StatusLine statusLine = new StatusLine(HttpProtocols.HTTP1_1, HttpStatus.OK);
-        return new HttpResponse(statusLine, contentType, FileIoUtils.loadFileFromClasspath(STATIC_PATH + modelAndView.getViewLocation()));
+        return new HttpResponse.Builder()
+                .protocols(HttpProtocols.HTTP1_1)
+                .status(HttpStatus.OK)
+                .addHeader("Content-Type", contentType.getType())
+                .body(FileIoUtils.loadFileFromClasspath(STATIC_PATH + modelAndView.getViewLocation()))
+                .build();
     }
 }

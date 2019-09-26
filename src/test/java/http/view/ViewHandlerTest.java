@@ -21,13 +21,13 @@ class ViewHandlerTest {
     void ViewStaticResolver_선택() {
         View view = new View("/css/bootstrap.min.css");
         ModelAndView modelAndView = new ModelAndView(view);
-        assertThat(viewHandler.handle(modelAndView).getContentType()).isEqualTo(ContentType.CSS);
+        assertThat(viewHandler.handle(modelAndView).getHeader("Content-Type")).isEqualTo(ContentType.CSS.getType());
     }
 
     @Test
     void ViewTemplatesResolver_선택() {
         View view = new View("/index.html");
         ModelAndView modelAndView = new ModelAndView(view);
-        assertThat(viewHandler.handle(modelAndView).getContentType()).isEqualTo(ContentType.HTML);
+        assertThat(viewHandler.handle(modelAndView).getHeader("Content-Type")).isEqualTo(ContentType.HTML.getType());
     }
 }

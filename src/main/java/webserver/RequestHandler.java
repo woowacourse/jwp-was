@@ -44,9 +44,11 @@ public class RequestHandler implements Runnable {
 
     private void handleRequest(InputStream in, OutputStream out) {
         try {
-            HttpRequest request = HttpRequestParser.parse(in);
+            HttpRequest httpRequest;
+            HttpResponse httpResponse;
+            httpRequest = HttpRequestParser.parse(in);
 
-            ModelAndView modelAndView = httpRequestHandlers.doService(request);
+            ModelAndView modelAndView = httpRequestHandlers.doService(httpRequest);
 
             response(viewHandler.handle(modelAndView), out);
 
