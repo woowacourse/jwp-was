@@ -10,6 +10,10 @@ import java.util.Map;
 import java.util.Objects;
 
 public class RequestBody {
+    private static final String PARAMETER_SEPARATOR = "&";
+    private static final String ATTRIBUTE_SEPARATOR = "=";
+    private static final String BLANK = "";
+
     private final Map<String, String> parameters;
 
     private RequestBody(Map<String, String> parameters) {
@@ -21,7 +25,7 @@ public class RequestBody {
         String body = IOUtils.readData(br, contentLength);
         body = URLDecoder.decode(body, "UTF-8");
 
-        String[] attributes = body.split("&");
+        String[] attributes = body.split(PARAMETER_SEPARATOR);
         for (String attribute : attributes) {
             addAttribute(parameters, attribute);
         }
@@ -29,22 +33,26 @@ public class RequestBody {
     }
 
     private static void addAttribute(Map<String, String> parameters, String attribute) {
-        String[] splitAttribute = attribute.split("=");
+        String[] splitAttribute = attribute.split(ATTRIBUTE_SEPARATOR);
         String key = splitAttribute[0];
         String value = determineValue(splitAttribute);
         parameters.put(key, value);
     }
 
-    private static String determineValue(String[] splitAttribute) {
-        if (splitAttribute.length == 2) {
-            return splitAttribute[1];
+    private static String determineValue(String[] attribute) {
+        if (isNotBlankValue(attribute)) {
+            return attribute[1];
         }
-        return "";
+        return BLANK;
     }
 
-    public String get(String key) {
-        if (parameters.containsKey(key)) {
-            return parameters.get(key);
+    private static boolean isNotBlankValue(String[] attribute) {
+        return attribute.length == 2;
+    }
+
+    public String getParameterValue(String parameterName) {
+        if (parameters.containsKey(parameterName)) {
+            return parameters.get(parameterName);
         }
         throw new IllegalArgumentException("Not Found Body parameter");
     }

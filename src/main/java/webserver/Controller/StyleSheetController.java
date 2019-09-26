@@ -13,7 +13,7 @@ public class StyleSheetController extends AbstractController {
         byte[] staticFile = getStaticFile(httpRequest);
         if (httpResponse.addBody(staticFile)) {
             httpResponse.addStatusLine(httpRequest, "200", "OK");
-            httpResponse.addHeader("Content-Type", "text/css");
+            httpResponse.addHeader(HEADER_FIELD_CONTENT_TYPE, CONTENT_TYPE_CSS);
         }
     }
 

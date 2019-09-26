@@ -3,6 +3,8 @@ package webserver.response;
 import webserver.request.HttpRequest;
 
 public class ResponseStatusLine {
+    private static final String STATUS_LINE_SEPARATOR = " ";
+
     private final String httpVersion;
     private final String statusCode;
     private final String statusText;
@@ -19,6 +21,6 @@ public class ResponseStatusLine {
     }
 
     public String response() {
-        return httpVersion + " " + statusCode + " " + statusText + "\r\n";
+        return httpVersion + STATUS_LINE_SEPARATOR + statusCode + STATUS_LINE_SEPARATOR + statusText + "\r\n";
     }
 }

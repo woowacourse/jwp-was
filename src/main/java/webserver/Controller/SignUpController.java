@@ -16,7 +16,7 @@ public class SignUpController extends AbstractController {
                 httpRequest.getParameter("email"));
         DataBase.addUser(user);
         httpResponse.addStatusLine(httpRequest, "200", "OK");
-        httpResponse.addHeader("Content-Type", "text/html;charset=utf-8");
+        httpResponse.addHeader(HEADER_FIELD_CONTENT_TYPE, CONTENT_TYPE_HTML);
     }
 
     @Override
@@ -28,6 +28,6 @@ public class SignUpController extends AbstractController {
                 httpRequest.getParameter("email"));
         DataBase.addUser(user);
         httpResponse.addStatusLine(httpRequest, "302", "Found");
-        httpResponse.addHeader("Location", httpRequest.getRequestHeader().get("Origin") + "/index.html");
+        httpResponse.addHeader(HEADER_FIELD_LOCATION, httpRequest.getRequestHeader().getHeaderFieldValue(HEADER_FIELD_ORIGIN) + "/index.html");
     }
 }

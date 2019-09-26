@@ -17,15 +17,15 @@ public class RequestBodyTest extends BaseTest {
     @Test
     void of() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(POST_REQUEST_MESSAGE.getBytes())));
-        RequestLine.of(br);
+        RequestStatusLine.of(br);
         RequestHeader requestHeader = RequestHeader.of(br);
         RequestBody requestBody = RequestBody.of(br, requestHeader.getContentLength());
 
-        assertThat(requestBody.get("userId")).isEqualTo("javajigi");
-        assertThat(requestBody.get("password")).isEqualTo("password");
-        assertThat(requestBody.get("name")).isEqualTo("박재성");
-        assertThat(requestBody.get("email")).isEqualTo("javajigi@slipp.net");
+        assertThat(requestBody.getParameterValue("userId")).isEqualTo("javajigi");
+        assertThat(requestBody.getParameterValue("password")).isEqualTo("password");
+        assertThat(requestBody.getParameterValue("name")).isEqualTo("박재성");
+        assertThat(requestBody.getParameterValue("email")).isEqualTo("javajigi@slipp.net");
         assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> requestBody.get("NotContains"));
+                .isThrownBy(() -> requestBody.getParameterValue("NotContains"));
     }
 }

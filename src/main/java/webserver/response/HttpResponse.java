@@ -11,6 +11,8 @@ import java.util.Map;
 public class HttpResponse {
     private static final Logger log = LoggerFactory.getLogger(HttpResponse.class);
 
+    private static final String HEADER_FIELD_SEPARATOR = ": ";
+
     private ResponseStatusLine statusLine;
     private ResponseHeader header;
     private ResponseBody body;
@@ -45,7 +47,7 @@ public class HttpResponse {
     private void renderHeader(DataOutputStream dos) throws IOException {
         Map<String, String> attributes = header.getAttributes();
         for (String attributeName : attributes.keySet()) {
-            dos.writeBytes(attributeName + ": " + attributes.get(attributeName) + "\r\n");
+            dos.writeBytes(attributeName + HEADER_FIELD_SEPARATOR + attributes.get(attributeName) + "\r\n");
         }
     }
 

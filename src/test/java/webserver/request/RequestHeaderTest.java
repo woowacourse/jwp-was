@@ -29,13 +29,13 @@ public class RequestHeaderTest extends BaseTest {
     @DisplayName("HttpRequestHeader 생성")
     @Test
     void of() {
-        assertThat(requestLineOfPostMessage.get("Host")).isEqualTo("localhost:8080");
-        assertThat(requestLineOfPostMessage.get("Connection")).isEqualTo("keep-alive");
-        assertThat(requestLineOfPostMessage.get("Content-Length")).isEqualTo("93");
-        assertThat(requestLineOfPostMessage.get("Content-Type")).isEqualTo("application/x-www-form-urlencoded");
-        assertThat(requestLineOfPostMessage.get("Accept")).isEqualTo("*/*");
+        assertThat(requestLineOfPostMessage.getHeaderFieldValue("Host")).isEqualTo("localhost:8080");
+        assertThat(requestLineOfPostMessage.getHeaderFieldValue("Connection")).isEqualTo("keep-alive");
+        assertThat(requestLineOfPostMessage.getHeaderFieldValue("Content-Length")).isEqualTo("93");
+        assertThat(requestLineOfPostMessage.getHeaderFieldValue("Content-Type")).isEqualTo("application/x-www-form-urlencoded");
+        assertThat(requestLineOfPostMessage.getHeaderFieldValue("Accept")).isEqualTo("*/*");
         assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> requestLineOfPostMessage.get("NotContains"));
+                .isThrownBy(() -> requestLineOfPostMessage.getHeaderFieldValue("NotContains"));
     }
 
     @DisplayName("contentLength 추출")

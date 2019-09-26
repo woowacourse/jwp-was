@@ -7,36 +7,40 @@ import java.util.Map;
 import java.util.Objects;
 
 public class RequestHeader {
-    private final Map<String, String> headerAttributes;
+    private static final String HEADER_FIELD_CONTENT_LENGTH = "Content-Length";
+    private static final String HEADER_FIELD_SEPARATOR = ": ";
+    private static final int INIT_CONTENT_LENGTH = 0;
 
-    private RequestHeader(Map<String, String> headerAttributes) {
-        this.headerAttributes = headerAttributes;
+    private final Map<String, String> headerFields;
+
+    private RequestHeader(Map<String, String> headerFields) {
+        this.headerFields = headerFields;
     }
 
     public static RequestHeader of(BufferedReader br) throws IOException {
-        Map<String, String> headerAttributes = new HashMap<>();
+        Map<String, String> headerFields = new HashMap<>();
         String line = br.readLine();
 
         while (!"".equals(line) && line != null) {
-            String[] attribute = line.split(": ");
-            headerAttributes.put(attribute[0], attribute[1]);
+            String[] headerField = line.split(HEADER_FIELD_SEPARATOR);
+            headerFields.put(headerField[0], headerField[1]);
             line = br.readLine();
         }
-        return new RequestHeader(headerAttributes);
+        return new RequestHeader(headerFields);
     }
 
-    public String get(String attributeName) {
-        if (headerAttributes.containsKey(attributeName)) {
-            return headerAttributes.get(attributeName);
+    public String getHeaderFieldValue(String fieldName) {
+        if (headerFields.containsKey(fieldName)) {
+            return headerFields.get(fieldName);
         }
         throw new IllegalArgumentException("Not Found Header Attribute");
     }
 
     public int getContentLength() {
-        if (headerAttributes.containsKey("Content-Length")) {
-            return Integer.parseInt(headerAttributes.get("Content-Length"));
+        if (headerFields.containsKey(HEADER_FIELD_CONTENT_LENGTH)) {
+            return Integer.parseInt(headerFields.get(HEADER_FIELD_CONTENT_LENGTH));
         }
-        return 0;
+        return INIT_CONTENT_LENGTH;
     }
 
     @Override
@@ -44,11 +48,11 @@ public class RequestHeader {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RequestHeader that = (RequestHeader) o;
-        return Objects.equals(headerAttributes, that.headerAttributes);
+        return Objects.equals(headerFields, that.headerFields);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(headerAttributes);
+        return Objects.hash(headerFields);
     }
 }

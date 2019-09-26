@@ -13,6 +13,15 @@ import java.net.URISyntaxException;
 public abstract class AbstractController implements Controller {
     private static final Logger log = LoggerFactory.getLogger(AbstractController.class);
 
+    protected static final String HEADER_FIELD_CONTENT_TYPE = "Content-Type";
+    protected static final String HEADER_FIELD_CONTENT_LENGTH = "Content-Length";
+    protected static final String HEADER_FIELD_LOCATION = "Location";
+    protected static final String HEADER_FIELD_ORIGIN = "Origin";
+    protected static final String CONTENT_TYPE_HTML = "text/html;charset=utf-8";
+    protected static final String CONTENT_TYPE_CSS = "text/css";
+
+    private static final String TEMPLATES_PATH = "./templates/";
+
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) throws FileNotFoundException {
         if (httpRequest.isGet()) {
@@ -26,7 +35,7 @@ public abstract class AbstractController implements Controller {
     protected byte[] getStaticFile(HttpRequest httpRequest) throws FileNotFoundException {
         String file = httpRequest.getSource();
         try {
-            return FileIoUtils.loadFileFromClasspath("./templates/" + file);
+            return FileIoUtils.loadFileFromClasspath(TEMPLATES_PATH + file);
         } catch (IOException | URISyntaxException e) {
             log.debug("fail to load file", e);
         }

@@ -13,8 +13,8 @@ public class UserController extends AbstractController {
         byte[] staticFile = getStaticFile(httpRequest);
         if (httpResponse.addBody(staticFile)) {
             httpResponse.addStatusLine(httpRequest, "200", "OK");
-            httpResponse.addHeader("Content-Type", "text/html;charset=utf-8");
-            httpResponse.addHeader("Content-Length", String.valueOf(staticFile.length));
+            httpResponse.addHeader(HEADER_FIELD_CONTENT_TYPE, CONTENT_TYPE_HTML);
+            httpResponse.addHeader(HEADER_FIELD_CONTENT_LENGTH, String.valueOf(staticFile.length));
         }
     }
 
