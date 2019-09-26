@@ -38,8 +38,8 @@ public enum Header {
 	}
 
 	public static Header getHeader(String element) {
-		for(Header header : Header.values()) {
-			if(header.getElement().equals(element)) {
+		for (Header header : Header.values()) {
+			if (header.getElement().equals(element)) {
 				return header;
 			}
 		}

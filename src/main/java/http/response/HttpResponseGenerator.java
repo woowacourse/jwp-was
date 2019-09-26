@@ -14,7 +14,6 @@ import webserver.RequestHandler;
 
 public class HttpResponseGenerator {
 	private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-	//TODO : status code, description ENUM으로 빼기
 
 	public static Map<Header, String> response200Header(String path, int bodyLength) {
 		try {
