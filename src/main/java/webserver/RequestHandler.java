@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 
 import controller.Controller;
 import controller.ControllerGenerator;
+import http.Header;
 import http.request.HttpRequest;
 import http.request.HttpRequestReader;
 import org.slf4j.Logger;
@@ -27,7 +28,7 @@ public class RequestHandler implements Runnable {
 		try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
 			HttpRequest httpRequest = HttpRequestReader.readHttpRequest(bufferedReader);
-			Controller controller = ControllerGenerator.generateController(httpRequest.getRequestHeaderElement("Path"));
+			Controller controller = ControllerGenerator.generateController(httpRequest.getRequestHeaderElement(Header.PATH));
 			controller.service(httpRequest, out);
 		} catch (IOException e) {
 			logger.error(e.getMessage());

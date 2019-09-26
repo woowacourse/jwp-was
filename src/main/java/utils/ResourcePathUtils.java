@@ -1,7 +1,6 @@
 package utils;
 
 public class ResourcePathUtils {
-
 	public static final String FILE_EXTENSION_SEPARATOR = ".";
 
 	public static String getResourcePath(String path) {
