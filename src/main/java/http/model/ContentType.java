@@ -2,6 +2,8 @@ package http.model;
 
 import http.supoort.IllegalHttpRequestException;
 
+import java.util.Arrays;
+
 public enum ContentType {
     HTML("text/html"),
     CSS("text/css"),
@@ -15,11 +17,10 @@ public enum ContentType {
     }
 
     public static ContentType of(String type) {
-        try {
-            return ContentType.valueOf(type.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new IllegalHttpRequestException(e.getMessage());
-        }
+        return Arrays.stream(ContentType.values())
+                .filter(value -> type.toUpperCase().equals(value.name()))
+                .findAny()
+                .orElseThrow(IllegalHttpRequestException::new);
     }
 
     public String getType() {

@@ -19,7 +19,6 @@ public enum HttpProtocols {
                 .filter(value -> value.getProtocol().equals(protocol))
                 .findAny()
                 .orElseThrow(IllegalHttpRequestException::new);
-
     }
 
     public String getProtocol() {
