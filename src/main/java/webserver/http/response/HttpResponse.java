@@ -11,21 +11,25 @@ public class HttpResponse {
     private final String LINE_DELIMITER = " ";
     private HttpVersion httpVersion;
     private DataOutputStream dos;
+    private HttpStatus httpStatus;
     private Map<String, Object> headers = new HashMap<>();
 
     public HttpResponse(DataOutputStream dos, HttpVersion httpVersion) {
         this.dos = dos;
         this.httpVersion = httpVersion;
-
     }
 
     public void ok() throws IOException {
-        writeLine(HttpStatus.OK);
+        httpStatus = HttpStatus.OK;
     }
 
     public void redirect(String location) throws IOException {
-        writeLine(HttpStatus.FOUND);
+        httpStatus = HttpStatus.FOUND;
         appendHeader("Location", location);
+    }
+
+    public void error() {
+
     }
 
     public void appendHeader(String key, Object value) {
@@ -36,7 +40,7 @@ public class HttpResponse {
         appendHeader("CONTENT_TYPE", fileType.getMemeName());
     }
 
-    public void writeLine(HttpStatus httpStatus) throws IOException {
+    public void writeLine() throws IOException {
         dos.writeBytes(httpVersion.name() + LINE_DELIMITER + httpStatus.getCode() + LINE_DELIMITER + httpStatus.getName() + NEW_LINE);
     }
 
@@ -54,7 +58,6 @@ public class HttpResponse {
     public void end() throws IOException {
         dos.flush();
     }
-
 }
 
 

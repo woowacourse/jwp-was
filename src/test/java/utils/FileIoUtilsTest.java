@@ -17,14 +17,6 @@ public class FileIoUtilsTest {
         log.debug("file : {}", new String(body));
         assertThat(new String(body).length() > 0).isTrue();
     }
-
-    @Test
-    void loadFileFromClasspath_notExistsFilePath_error() {
-        assertThrows(NotFoundException.class, ()-> {
-            FileIoUtils.loadFileFromClasspath("./templates/notFoundTest.html");
-        });
-    }
-
     @Test
     void loadMIMEFromClasspath_html_true() {
         String type = FileIoUtils.loadMIMEFromClasspath("./templates/index.html");

@@ -17,20 +17,33 @@ public class RequestDispatcher {
         this.httpResponse = httpResponse;
     }
 
-    public void dispatch(HttpRequest httpRequest) throws IOException, URISyntaxException {
+    public void dispatch(HttpRequest httpRequest) throws IOException {
         HttpServlet httpServlet = MappingHandler.getServlets(httpRequest.getUri());
         View view = httpServlet.run(httpRequest, httpResponse);
         Resolver resolver = MappingHandler.getResolver(httpServlet);
-        render(view, resolver);
+        byte[] body = getBytes(view, resolver);
+        render(body);
     }
 
-    private void render(View view, Resolver resolver) throws IOException, URISyntaxException {
-        byte[] body = resolver.resolve(view.getName());
-        if (body != null) {
+    private void render(byte[] body) throws IOException {
+        httpResponse.writeLine();
+        if (body.length > 0) {
             httpResponse.appendHeader("content-length", body.length);
         }
         httpResponse.writeHeader();
         httpResponse.writeBody(body);
         httpResponse.end();
+    }
+
+    private byte[] getBytes(View view, Resolver resolver) throws IOException {
+        byte[] body = null;
+        try {
+            body = resolver.resolve(view.getName());
+        } catch (NullPointerException e) {
+            httpResponse.error();
+        } catch (URISyntaxException e) {
+            httpResponse.error();
+        }
+        return body;
     }
 }

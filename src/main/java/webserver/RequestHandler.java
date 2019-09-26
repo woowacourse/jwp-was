@@ -33,8 +33,6 @@ public class RequestHandler implements Runnable {
             requestDispatcher.dispatch(httpRequest);
         } catch (IOException e) {
             logger.error(e.getMessage());
-        } catch (URISyntaxException e) {
-            logger.error(e.getMessage());
         }
     }
 }
