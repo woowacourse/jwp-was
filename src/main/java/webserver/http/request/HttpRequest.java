@@ -1,19 +1,16 @@
 package webserver.http.request;
 
-import webserver.http.Cookie;
-import webserver.http.Cookies;
-import webserver.http.HttpSession;
-import webserver.http.HttpSessionManager;
+import webserver.http.*;
 
 public class HttpRequest {
     private final RequestLine requestLine;
-    private final RequestHeaders headers;
+    private final HttpHeaders headers;
     private final Parameters parameters;
     private final Cookies cookies;
     private final HttpSessionManager sessionManager;
     private HttpSession httpSession;
 
-    HttpRequest(final RequestLine requestLine, final RequestHeaders headers, final Parameters parameters, final Cookies cookies) {
+    HttpRequest(final RequestLine requestLine, final HttpHeaders headers, final Parameters parameters, final Cookies cookies) {
         this.requestLine = requestLine;
         this.headers = headers;
         this.parameters = parameters;
@@ -72,7 +69,7 @@ public class HttpRequest {
 
     public static final class HttpRequestBuilder {
         private RequestLine requestLine;
-        private RequestHeaders headers;
+        private HttpHeaders headers;
         private Parameters parameters;
         private Cookies cookies;
 
@@ -84,7 +81,7 @@ public class HttpRequest {
             return this;
         }
 
-        HttpRequestBuilder headers(RequestHeaders headers) {
+        HttpRequestBuilder headers(HttpHeaders headers) {
             this.headers = headers;
             return this;
         }

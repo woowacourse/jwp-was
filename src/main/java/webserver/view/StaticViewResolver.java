@@ -12,7 +12,7 @@ public class StaticViewResolver implements ViewResolver {
         this.mapping = mapping;
     }
 
-    public boolean isStaticFile(final String name){
+    public boolean isStaticFile(final String name) {
         return mapping.isMapping(name);
     }
 

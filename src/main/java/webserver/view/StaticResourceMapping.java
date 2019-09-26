@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class StaticResourceMapping {
-    protected static final String DEFAULT_HTML_LOCATION = "./templates";
+    static final String DEFAULT_HTML_LOCATION = "./templates";
     private static final String HTM = "htm";
     private static final String HTML = "html";
 
@@ -27,7 +27,7 @@ public class StaticResourceMapping {
         resources.put(extension, StaticResource.of(extension, location));
     }
 
-    public boolean isMapping(final String path){
+    public boolean isMapping(final String path) {
         return contains(parseToExtension(path));
     }
 
