@@ -4,15 +4,14 @@ import http.exception.InvalidHeaderException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class HeaderFields {
     private static final Logger logger = LoggerFactory.getLogger(HeaderFields.class);
     private static final String HEADER_FIELD_KEY_VALUE_DELIMITER = ":";
     public static final String COOKIE_KEY_NAME = "Cookie";
+    public static final String REQUEST_COOKIE_DELIMITER = ";";
+    public static final String REQUEST_COOKIE_KEY_VALUE_DELIMITER = "=";
 
     private final Map<String, String> headerFields;
     private Map<String, Cookie> cookies;
@@ -32,11 +31,20 @@ public class HeaderFields {
         String key = headerField.substring(0, headerField.indexOf(HEADER_FIELD_KEY_VALUE_DELIMITER));
         String value = headerField.substring(headerField.indexOf(HEADER_FIELD_KEY_VALUE_DELIMITER) + 2);
         if (COOKIE_KEY_NAME.equals(key)) {
-            Cookie cookie = new Cookie(value);
-            cookies.put(cookie.getName(), cookie);
+            parsingCookie(value);
             return;
         }
         headerFields.put(key, value);
+    }
+
+    private void parsingCookie(String cookieLine) {
+        List<String> cookies = Arrays.asList(cookieLine.split(REQUEST_COOKIE_DELIMITER));
+        for (String cookie : cookies) {
+            cookie = cookie.trim();
+            String key = cookie.split(REQUEST_COOKIE_KEY_VALUE_DELIMITER)[0];
+            String value = cookie.split(REQUEST_COOKIE_KEY_VALUE_DELIMITER)[1];
+            this.cookies.put(key, new Cookie(key, value));
+        }
     }
 
     public String convert() {

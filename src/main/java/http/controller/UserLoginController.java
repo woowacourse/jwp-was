@@ -32,7 +32,7 @@ public class UserLoginController extends AbstractController {
         Optional<User> mayBeUser = Optional.ofNullable(DataBase.findUserById(requestUserId));
         User user = mayBeUser.orElseThrow(() -> {
             setLoginFailResponse(response);
-            throw new NotFoundUserException("존재하지 않는 유저입니다.");
+            return new NotFoundUserException("존재하지 않는 유저입니다.");
         });
         if (!user.isEqualPassword(requestPassword)) {
             setLoginFailResponse(response);
