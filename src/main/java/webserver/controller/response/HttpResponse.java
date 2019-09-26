@@ -13,7 +13,6 @@ import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
@@ -35,12 +34,8 @@ public class HttpResponse {
     }
 
     private void setResponseLine(HttpRequest httpRequest, HttpStatus httpStatus) throws IOException, URISyntaxException {
-        HttpMethod httpMethod = httpRequest.getHttpMethod();
         this.httpStatus = httpStatus;
         this.version = httpRequest.getVersion();
-        if (httpMethod != HttpMethod.POST && httpMethod != HttpMethod.PUT) {
-            this.body = getResponseBody(httpRequest);
-        }
     }
 
     public void responseOK(HttpRequest httpRequest) {
@@ -48,13 +43,14 @@ public class HttpResponse {
         headerFields.put("Content-Length", String.valueOf(body.length));
     }
 
-    private byte[] getResponseBody(HttpRequest httpRequest) throws IOException, URISyntaxException {
+    public void setResponseBody(HttpRequest httpRequest) throws IOException, URISyntaxException {
         MimeType mimeType = httpRequest.getMimeType();
         String path = httpRequest.getPath();
         if (mimeType == MimeType.HTML || mimeType == MimeType.ICO) {
-            return FileIoUtils.loadFileFromClasspath(NON_STATIC_FILE_PATH + path);
+            body = FileIoUtils.loadFileFromClasspath(NON_STATIC_FILE_PATH + path);
+            return;
         }
-        return FileIoUtils.loadFileFromClasspath(STATIC_FILE_PATH + path);
+        body = FileIoUtils.loadFileFromClasspath(STATIC_FILE_PATH + path);
     }
 
     public void responseBadRequest(String errorMessage) {

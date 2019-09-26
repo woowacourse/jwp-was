@@ -52,4 +52,8 @@ public class HttpRequest {
     public Map<String, String> getBodyFields() {
         return this.httpRequestBodyFields;
     }
+
+    public String getHeaderFieldValue(String key) {
+        return httpHeaderFields.getHeaderFieldValue(key);
+    }
 }
