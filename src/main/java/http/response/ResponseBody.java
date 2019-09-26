@@ -14,4 +14,9 @@ public class ResponseBody {
     public byte[] getContents() {
         return body;
     }
+
+    public int length() {
+        return body.length;
+    }
+
 }

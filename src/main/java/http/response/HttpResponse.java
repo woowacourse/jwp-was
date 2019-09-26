@@ -67,7 +67,7 @@ public class HttpResponse implements AutoCloseable {
     }
 
     private void writeBody() throws IOException {
-        dataOutputStream.write(body.getContents(), 0, body.getContents().length);
+        dataOutputStream.write(body.getContents(), 0, body.length());
         dataOutputStream.flush();
     }
 
