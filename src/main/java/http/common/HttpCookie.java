@@ -14,10 +14,11 @@ public class HttpCookie {
     private static final String CRLF = "\r\n";
 
     private final Map<String, String> cookies;
-    private String path = "/";
+    private String path;
 
     private HttpCookie(Map<String, String> cookie) {
         this.cookies = cookie;
+        path = "/";
     }
 
     public static HttpCookie of(String cookieString) {
@@ -56,7 +57,7 @@ public class HttpCookie {
                     .map(entry -> entry.getKey() + COOKIE_VALUE_DELIMITER + entry.getValue())
                     .collect(Collectors.joining(COOKIE_DELIMITER))
             );
-            sb.append(String.format("; Path=%s", path)).append(CRLF);
+            sb.append(String.format("%sPath%s%s", COOKIE_DELIMITER, COOKIE_VALUE_DELIMITER, path)).append(CRLF);
         }
 
         return sb.toString();
