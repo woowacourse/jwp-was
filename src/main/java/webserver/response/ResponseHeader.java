@@ -32,6 +32,10 @@ public class ResponseHeader implements Map<String, Object> {
         header.put("Set-Cookie", key + "=" + value + "; Path=/");
     }
 
+    public void removeCookie(String key) {
+        header.put("Set-Cookie", key + "=; Path=/; max-age=0");
+    }
+
     @Override
     public int size() {
         return 0;

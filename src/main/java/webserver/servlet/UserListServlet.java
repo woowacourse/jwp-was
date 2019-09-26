@@ -28,6 +28,7 @@ public class UserListServlet extends RequestServlet {
             return HttpResponse.ok(header, body);
         }
 
+        header.removeCookie("user_session");
         header.setLocation("/user/login.html");
         return HttpResponse.found(header);
     }

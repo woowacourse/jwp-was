@@ -35,6 +35,7 @@ public class LoginServlet extends RequestServlet {
 
     private HttpResponse loginFail() {
         ResponseHeader header = new ResponseHeader();
+        header.removeCookie("user_session");
         header.setLocation("/user/login_failed.html");
         return HttpResponse.found(header);
     }
