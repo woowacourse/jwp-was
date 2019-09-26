@@ -1,6 +1,6 @@
 package webserver;
 
-import controller.AbstractController;
+import controller.Controller;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.response.ResponseResolver;
@@ -16,7 +16,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
-import java.util.Optional;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -45,12 +44,18 @@ public class RequestHandler implements Runnable {
     }
 
     private void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
-        Optional<AbstractController> maybeController = ControllerContainer.findController(httpRequest.getPath());
+        Controller controller = ControllerContainer.findController(httpRequest.getPath());
+
+        if (controller != null) {
+            controller.service(httpRequest, httpResponse);
+            return;
+        }
+
+        resolveFiles(httpRequest, httpResponse);
+    }
+
+    private void resolveFiles(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         try {
-            if (maybeController.isPresent()) {
-                maybeController.get().service(httpRequest, httpResponse);
-                return;
-            }
             ResponseResolver.resolve(new DefaultView(httpRequest.getPath()), httpResponse);
         } catch (URISyntaxException | UrlNotFoundException e) {
             ResponseResolver.resolve(new ErrorView(ResponseStatus.NOT_FOUND, "Not Found"), httpResponse);
