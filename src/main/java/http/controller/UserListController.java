@@ -17,9 +17,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class UserListController extends AbstractController {
+    public static final String URL = "/user/list";
     private static final Logger log = LoggerFactory.getLogger(UserListController.class);
-
-    public static final String LOGIN_COOKIE_KEY = "logined";
+    private static final String LOGIN_COOKIE_KEY = "logined";
 
     @Override
     public void doGet(HttpRequest request, HttpResponse response) {

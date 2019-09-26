@@ -10,6 +10,8 @@ import model.User;
 import java.util.Optional;
 
 public class UserLoginController extends AbstractController {
+    public static final String URL = "/user/login";
+
     @Override
     public void doGet(HttpRequest request, HttpResponse response) {
         //Todo 에러 페이지
