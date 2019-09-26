@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import dev.luffy.http.HttpProtocol;
+import dev.luffy.http.excption.NotFoundCookieException;
 import dev.luffy.http.excption.NotSupportedHttpRequestException;
 import dev.luffy.utils.HttpRequestUtils;
 import dev.luffy.utils.IOUtils;
@@ -23,6 +24,7 @@ public class HttpRequest {
     private final HttpRequestParam httpRequestParam;
     private final HttpRequestHeader httpRequestHeader;
     private final HttpRequestBody httpRequestBody;
+    private final HttpRequestCookie httpRequestCookie;
 
     public HttpRequest(InputStream in) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
@@ -36,6 +38,11 @@ public class HttpRequest {
         this.httpRequestParam = httpRequestParam;
         this.httpRequestHeader = httpRequestHeader;
         this.httpRequestBody = httpRequestBody;
+        this.httpRequestCookie = new HttpRequestCookie();
+
+        if (hasCookie()) {
+            this.httpRequestCookie.addCookies(HttpRequestUtils.parseCookie(this.httpRequestHeader.get("Cookie")));
+        }
     }
 
     private HttpRequestLine getHttpRequestLine(BufferedReader bufferedReader) throws IOException {
@@ -72,6 +79,10 @@ public class HttpRequest {
         return new HttpRequestBody(body);
     }
 
+    private boolean hasCookie() {
+        return httpRequestHeader.hasCookie();
+    }
+
     public boolean isGet() {
         return HttpRequestMethod.GET.equals(getMethod());
     }
@@ -104,6 +115,14 @@ public class HttpRequest {
         return httpRequestBody.get(parameter);
     }
 
+    public String getCookie(String key) {
+        try {
+            return httpRequestCookie.get(key);
+        } catch (NotFoundCookieException e) {
+            return "";
+        }
+    }
+
     public boolean isStaticRequest() {
         return httpRequestLine.isStaticContent();
     }
@@ -120,5 +139,9 @@ public class HttpRequest {
                 ", httpRequestHeader=" + httpRequestHeader + "\n" +
                 ", httpRequestBody=" + httpRequestBody + "\n" +
                 '}';
+    }
+
+    public boolean isLoggedIn() {
+        return getCookie("logined").equals("true");
     }
 }

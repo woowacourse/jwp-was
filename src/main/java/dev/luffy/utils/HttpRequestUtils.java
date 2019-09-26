@@ -1,5 +1,8 @@
 package dev.luffy.utils;
 
+import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
+import com.sun.org.apache.xml.internal.security.utils.Base64;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,5 +57,24 @@ public class HttpRequestUtils {
             return STATIC_BASE_PATH + path;
         }
         return TEMPLATES_BASE_PATH + path;
+    }
+
+    public static Map<String, String> parseCookie(String sequence) {
+        String[] tokens = sequence.split("; ");
+        Map<String, String> cookies = new HashMap<>();
+        for (String token : tokens) {
+            String[] splitToken = token.split("=");
+            cookies.put(splitToken[0], splitToken[1]);
+        }
+        return cookies;
+    }
+
+    public static String decode(String encoded) {
+        try {
+            return new String(Base64.decode(encoded));
+        } catch (Base64DecodingException e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException("변환 불가");
+        }
     }
 }

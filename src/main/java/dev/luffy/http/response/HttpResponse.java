@@ -90,4 +90,8 @@ public class HttpResponse {
             logger.error("NotFound Error : {}", e.getMessage());
         }
     }
+
+    public void addHeader(String key, String value) {
+        httpResponseHeader.addHeader(key, value);
+    }
 }

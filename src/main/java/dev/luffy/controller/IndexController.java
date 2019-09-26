@@ -16,7 +16,7 @@ public class IndexController {
     @RequestMapping("/index.html")
     public static void index(HttpRequest request, HttpResponse response) {
 
-        logger.debug("request : {} & response : {}", request, response);
+        logger.debug("request : {}", request);
 
         response.ok(request);
     }

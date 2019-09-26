@@ -33,6 +33,10 @@ public class HttpRequestHeader {
         return 0;
     }
 
+    public boolean hasCookie() {
+        return headers.containsKey("Cookie");
+    }
+
     @Override
     public String toString() {
         return "HttpRequestHeader{" +
