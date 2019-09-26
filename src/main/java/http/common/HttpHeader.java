@@ -11,10 +11,10 @@ import java.util.stream.Collectors;
 
 public class HttpHeader {
     private static final int HTTP_HEADER_PARAMETER_SIZE = 2;
-    private static final String HEADER_FIELD_SPLIT_DELIMITER = ": ";
-    private static final String HEADER_FIELD_FORMAT = "%s: %s\r\n";
     private static final int HEADER_FIELD_KEY_INDEX = 0;
     private static final int HEADER_FIELD_VALUE_INDEX = 1;
+    private static final String HEADER_FIELD_FORMAT = "%s: %s\r\n";
+    private static final String HEADER_FIELD_SPLIT_DELIMITER = ": ";
     private static final String HEADER_FIELD_DELIMITER = "; ";
     private static final String COOKIE = "Cookie";
     private static final String SESSIONID = "SessionID";
@@ -62,12 +62,14 @@ public class HttpHeader {
         httpHeader.put(key, Lists.newArrayList(value));
     }
 
+    //TODO: return type을 List로 변환하기
     public String getHeaderAttribute(String key) {
         if (StringUtils.isEmpty(key)) {
             throw new InvalidHeaderKeyException();
         }
 
-        return String.join(HEADER_FIELD_DELIMITER, httpHeader.get(key));
+        List<String> value = httpHeader.get(key);
+        return value != null ? String.join(HEADER_FIELD_DELIMITER, httpHeader.get(key)) : null;
     }
 
     public String getSessionId() {
@@ -76,8 +78,13 @@ public class HttpHeader {
 
     public String serialize() {
         return httpHeader.entrySet().stream()
-                .map(entry -> String.format(HEADER_FIELD_FORMAT, entry.getKey(), entry.getValue()))
+                .map(this::getFormattedHeader)
                 .collect(Collectors.joining());
+    }
+
+    private String getFormattedHeader(Map.Entry<String, List<String>> entry) {
+        return String.format(HEADER_FIELD_FORMAT,
+                entry.getKey(), String.join(HEADER_FIELD_DELIMITER, entry.getValue()));
     }
 
     @Override
