@@ -86,7 +86,7 @@
 요구사항 2
 
 - [x] /user/list.html로 가는 버튼의 url 값을 /user/list로 변경
-- [ ] /user/list.html에 handlebars 적용
+- [x] /user/list.html에 handlebars 적용
 - [x] UserListServelt 만들기(get, /user/list)
 - [x] request header의 Set-Cookie가 logined=true일 경우 UserList를 /user/list.html에 뿌려서 전달한다. (handlebars 이용)
 - [x] 로그인 안한 상태면(logined=false) /login.html로 이동

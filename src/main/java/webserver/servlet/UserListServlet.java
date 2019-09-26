@@ -1,17 +1,18 @@
 package webserver.servlet;
 
 import com.github.jknack.handlebars.Handlebars;
+import com.github.jknack.handlebars.Helper;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import db.DataBase;
-import model.User;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 import webserver.response.ResponseHeader;
 
 import java.io.IOException;
-import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserListServlet extends RequestServlet {
     @Override
@@ -27,9 +28,10 @@ public class UserListServlet extends RequestServlet {
         return HttpResponse.found(header);
     }
 
-    private byte[] generateBody() throws IOException {
+    public byte[] generateBody() throws IOException {
         Template template = generateTemplate();
-        Collection<User> users = DataBase.findAll();
+        Map<String, Object> users = new HashMap<>();
+        users.put("users", DataBase.findAll());
         return template.apply(users).getBytes();
     }
 
@@ -38,6 +40,7 @@ public class UserListServlet extends RequestServlet {
         loader.setPrefix("/templates");
         loader.setSuffix(".html");
         Handlebars handlebars = new Handlebars(loader);
+        handlebars.registerHelper("inc", (Helper<Integer>) (context, options) -> context + 1);
         return handlebars.compile("user/list");
     }
 }
