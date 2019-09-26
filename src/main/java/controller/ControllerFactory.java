@@ -1,22 +1,41 @@
 package controller;
 
-import controller.core.Controller;
+import controller.core.AbstractController;
 import controller.exception.PathNotFoundException;
-import http.request.HttpRequest;
+import webserver.http.request.HttpRequest;
+import webserver.http.request.core.RequestMethod;
+import webserver.http.request.core.RequestPath;
+import webserver.http.response.HttpResponse;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ControllerFactory {
-    private static final List<Controller> controllers = Arrays.asList(
-            new HomeController(),
-            new UserController()
-    );
+    private static final Map<String, AbstractController> controllers = new HashMap<>();
 
-    public static Controller mappingController(HttpRequest httpRequest) {
-        return controllers.stream()
-                .filter(controller -> controller.isMapping(httpRequest))
-                .findAny()
-                .orElseThrow(PathNotFoundException::new);
+    static {
+        controllers.put(RequestMethod.GET + "/", resourceController());
+        controllers.put(RequestMethod.GET + "/index.html", resourceController());
+        controllers.put(RequestMethod.GET + "/user/form.html", resourceController());
+        controllers.put(RequestMethod.POST + "/user/create", createUserController());
+        controllers.put(RequestMethod.GET + "/user/login.html", resourceController());
+    }
+
+    private static AbstractController resourceController() {
+        return new ResourceController();
+    }
+
+    private static AbstractController createUserController() {
+        return new CreateUserController();
+    }
+
+    public static AbstractController mappingController(HttpRequest httpRequest, HttpResponse httpResponse) {
+        RequestMethod method = httpRequest.getRequestMethod();
+        RequestPath path = httpRequest.getRequestPath();
+        try {
+            return controllers.get(method.getMethod() + path.getPath()).init(httpRequest, httpResponse);
+        } catch (NullPointerException e) {
+            throw new PathNotFoundException();
+        }
     }
 }
