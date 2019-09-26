@@ -3,8 +3,8 @@ package webserver.http.response;
 import java.util.Arrays;
 
 public enum FileType {
-    CSS("css", "text/css"), JAVASCRIPT("js", "application/javascript"
-    ), HTML("html", "text/html");
+    ALL("*", "*/*"), CSS("css", "text/css"), JAVASCRIPT("js", "application/javascript"
+    ), HTML("html", "text/html"), WOFF("woff", "application/font-woff"), TTF("ttf", "application/x-font-ttf");
 
     private final String extensionName;
     private final String memeName;
@@ -22,7 +22,7 @@ public enum FileType {
     public static FileType getTypeByExtension(String target) {
         return Arrays.stream(FileType.values())
                 .filter(type -> target.equals(type.getExtensionName()))
-                .findFirst().get();
+                .findFirst().orElse(FileType.ALL);
     }
 
     public String getExtensionName() {
@@ -32,5 +32,4 @@ public enum FileType {
     public String getMemeName() {
         return memeName;
     }
-
 }
