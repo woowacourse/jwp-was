@@ -42,11 +42,6 @@ public class UserListController extends HttpController {
         response.forward(modelAndView);
     }
 
-    @Override
-    protected void doPost(Request request, Response response) {
-        throw new InvalidRequestMethodException();
-    }
-
     private static class LazyHolder {
         private static final UserListController INSTANCE = new UserListController();
     }

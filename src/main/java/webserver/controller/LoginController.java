@@ -21,11 +21,6 @@ public class LoginController extends HttpController {
     }
 
     @Override
-    protected void doGet(Request request, Response response) {
-        throw new InvalidRequestMethodException();
-    }
-
-    @Override
     protected void doPost(Request request, Response response) {
         Map<String, String> cookies = CookieParser.parse(request.extractHeader("Cookie"));
         Session session = Sessions.getInstance().getSession(cookies.get("JSESSIONID"));

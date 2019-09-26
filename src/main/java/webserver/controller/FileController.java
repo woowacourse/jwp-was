@@ -23,11 +23,6 @@ public class FileController extends HttpController {
         response.forward(new ModelAndView(url));
     }
 
-    @Override
-    protected void doPost(Request request, Response response) {
-        throw new InvalidRequestMethodException();
-    }
-
     private static class LazyHolder {
         private static final FileController INSTANCE = new FileController();
     }
