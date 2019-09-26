@@ -21,16 +21,20 @@ public class UserLoginController extends AbstractController {
     public void doPost(HttpRequest request, HttpResponse response) {
         String requestUserId = request.getData("userId");
         String requestPassword = request.getData("password");
+        checkUserLogin(response, requestUserId, requestPassword);
+        setLoginSuccessResponse(response);
+    }
+
+    private void checkUserLogin(HttpResponse response, String requestUserId, String requestPassword) {
         Optional<User> mayBeUser = Optional.ofNullable(DataBase.findUserById(requestUserId));
         User user = mayBeUser.orElseThrow(() -> {
             setLoginFailResponse(response);
-            return new NotFoundUserException("존재하지 않는 유저입니다.");
+            throw new NotFoundUserException("존재하지 않는 유저입니다.");
         });
         if (!user.isEqualPassword(requestPassword)) {
             setLoginFailResponse(response);
             throw new NotMatchPasswordException("비밀번호가 일치하지 않습니다.");
         }
-        setLoginSuccessResponse(response);
     }
 
     private void setLoginSuccessResponse(HttpResponse response) {
