@@ -11,6 +11,10 @@ public class Cookie {
         this.path = path;
     }
 
+    public static CookieBuilder builder() {
+        return new CookieBuilder();
+    }
+
     public String getName() {
         return name;
     }
@@ -31,8 +35,9 @@ public class Cookie {
         this.path = path;
     }
 
-    public static CookieBuilder builder() {
-        return new CookieBuilder();
+    @Override
+    public String toString() {
+        return "Set-Cookie: " + name + "=" + value + "; " + "Path=" + path + "\r\n";
     }
 
     public static class CookieBuilder {
@@ -40,7 +45,8 @@ public class Cookie {
         private String value;
         private String path;
 
-        private CookieBuilder() {}
+        private CookieBuilder() {
+        }
 
         public CookieBuilder name(String name) {
             this.name = name;
@@ -60,10 +66,5 @@ public class Cookie {
         public Cookie build() {
             return new Cookie(this.name, this.value, this.path);
         }
-    }
-
-    @Override
-    public String toString() {
-        return "Set-Cookie: " + name + "=" + value + "; " + "Path=" + path + "\r\n";
     }
 }
