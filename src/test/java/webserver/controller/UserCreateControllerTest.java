@@ -1,10 +1,10 @@
 package webserver.controller;
 
 import org.junit.jupiter.api.Test;
-import webserver.HttpRequest;
-import webserver.httpRequest.HttpRequestBody;
-import webserver.httpRequest.HttpRequestHeader;
-import webserver.httpRequest.HttpStartLine;
+import webserver.http.HttpRequest;
+import webserver.http.httpRequest.HttpRequestBody;
+import webserver.http.httpRequest.HttpRequestHeader;
+import webserver.http.httpRequest.HttpStartLine;
 
 import java.util.HashMap;
 

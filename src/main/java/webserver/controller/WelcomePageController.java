@@ -1,7 +1,7 @@
 package webserver.controller;
 
-import webserver.HttpRequest;
-import webserver.HttpResponse;
+import webserver.http.HttpRequest;
+import webserver.http.HttpResponse;
 
 public class WelcomePageController extends AbstractController {
     public static final String PATH = "/";

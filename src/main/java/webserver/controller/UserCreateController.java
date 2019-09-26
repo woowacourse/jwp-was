@@ -2,8 +2,8 @@ package webserver.controller;
 
 import db.DataBase;
 import model.User;
-import webserver.HttpRequest;
-import webserver.HttpResponse;
+import webserver.http.HttpRequest;
+import webserver.http.HttpResponse;
 
 public class UserCreateController extends AbstractController {
     public static final String PATH = "/user/create";
@@ -24,6 +24,6 @@ public class UserCreateController extends AbstractController {
 
         DataBase.addUser(user);
 
-        return "/redirect:/index.html";
+        return REDIRECT_VIEW + "/index.html";
     }
 }

@@ -2,11 +2,12 @@ package webserver.controller;
 
 import db.DataBase;
 import model.User;
-import webserver.HttpRequest;
-import webserver.HttpResponse;
+import webserver.http.HttpRequest;
+import webserver.http.HttpResponse;
 
 public class LoginController extends AbstractController {
     public static final String PATH = "/user/login";
+    public static final String LOGINED = "logined";
     private static final LoginController INSTANCE = new LoginController();
 
     public static LoginController getInstance() {
@@ -19,19 +20,11 @@ public class LoginController extends AbstractController {
         String password = request.getParam("password");
         User user = DataBase.findUserById(userId);
         if (validateUser(password, user)) {
-            setLoginSuccessCookie(response);
-            return "/redirect:/index.html";
+            setSession(request, response, LOGINED, "true");
+            return REDIRECT_VIEW + "/index.html";
         }
-        setLoginFailedCookie(response);
-        return "/redirect:/user/login_failed.html";
-    }
-
-    private void setLoginFailedCookie(HttpResponse response) {
-        response.setCookie("logined=false; Path=/");
-    }
-
-    private void setLoginSuccessCookie(HttpResponse response) {
-        response.setCookie("logined=true; Path=/");
+        setSession(request, response, LOGINED, "false");
+        return REDIRECT_VIEW + "/user/login_failed.html ";
     }
 
     private boolean validateUser(String password, User user) {

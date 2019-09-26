@@ -2,9 +2,10 @@ package webserver;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import webserver.httpRequest.HttpRequestBody;
-import webserver.httpRequest.HttpRequestHeader;
-import webserver.httpRequest.HttpStartLine;
+import webserver.http.HttpRequest;
+import webserver.http.httpRequest.HttpRequestBody;
+import webserver.http.httpRequest.HttpRequestHeader;
+import webserver.http.httpRequest.HttpStartLine;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
