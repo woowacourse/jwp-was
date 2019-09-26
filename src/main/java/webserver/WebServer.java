@@ -1,15 +1,7 @@
 package webserver;
 
-import http.controller.Controller;
-import http.controller.ControllerHandler;
-import http.controller.FileResourceController;
-import http.controller.SignUpController;
+import http.controller.*;
 import http.model.HttpMethod;
-import http.supoort.ControllerMapping;
-import http.supoort.ResolverMapping;
-import http.view.ViewHandler;
-import http.view.ViewStaticResolver;
-import http.view.ViewTemplatesResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +21,6 @@ public class WebServer {
         int port = getPort(args);
 
         ControllerHandler controllerHandler = initControllerHandler();
-        ViewHandler viewHandler = initViewHandlers();
 
         ExecutorService es = Executors.newFixedThreadPool(100);
 
@@ -40,7 +31,7 @@ public class WebServer {
             // 클라이언트가 연결될때까지 대기한다.
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
-                es.execute(new RequestHandler(connection, controllerHandler, viewHandler));
+                es.execute(new RequestHandler(connection, controllerHandler));
             }
         }
         es.shutdown();
@@ -66,13 +57,5 @@ public class WebServer {
         controllerHandler.addController(new ControllerMapping(HttpMethod.GET, "/user/create"), signUpController);
         controllerHandler.addController(new ControllerMapping(HttpMethod.POST, "/user/create"), signUpController);
         return controllerHandler;
-    }
-
-    private static ViewHandler initViewHandlers() {
-        ViewHandler viewHandler = new ViewHandler();
-        viewHandler.addResolver(new ResolverMapping("\\/.*\\.html"), new ViewTemplatesResolver());
-        viewHandler.addResolver(new ResolverMapping("\\/.*\\.(css|js|png)"), new ViewStaticResolver());
-//        viewHandler.addResolver(new ModelResolver());
-        return viewHandler;
     }
 }

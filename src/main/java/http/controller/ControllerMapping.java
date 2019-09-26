@@ -1,4 +1,4 @@
-package http.supoort;
+package http.controller;
 
 import http.model.HttpMethod;
 import http.model.HttpRequest;
