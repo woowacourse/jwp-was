@@ -22,7 +22,7 @@ class CreateUserControllerTest {
         InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "Http_POST.txt"));
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         httpRequest = new RequestHandler(br).create();
-        httpResponse = new ResponseHandler().create();
+        httpResponse = new ResponseHandler().create(httpRequest);
 
         CreateUserController createUserController = new CreateUserController();
         createUserController.doPost(httpRequest, httpResponse);

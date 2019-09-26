@@ -1,5 +1,6 @@
 package http.response;
 
+import http.common.HttpCookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +11,8 @@ class HttpResponseTest {
 
     @BeforeEach
     public void setUp() {
-        httpResponse = new ResponseHandler().create();
+        HttpCookie httpCookie = HttpCookie.of();
+        httpResponse = HttpResponse.of(httpCookie);
     }
 
     @Test

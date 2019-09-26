@@ -33,12 +33,4 @@ class RequestLineTest {
     public void getProtocolTest() {
         assertThat(requestLine.getProtocol()).isEqualTo("http");
     }
-
-    @Test
-    public void getQueryTest() {
-        assertThat(requestLine.getQuery().get("userId")).isEqualTo("aiden");
-        assertThat(requestLine.getQuery().get("password")).isEqualTo("password");
-        assertThat(requestLine.getQuery().get("name")).isEqualTo("aiden");
-        assertThat(requestLine.getQuery().get("email")).isEqualTo("aiden@aiden.com");
-    }
 }
