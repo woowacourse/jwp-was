@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import exception.FailResponseException;
+import http.Header;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.RequestHandler;
@@ -14,13 +15,14 @@ import webserver.RequestHandler;
 public class HttpResponseGenerator {
 	private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
-	public static Map<String, String> response200Header(String path, int bodyLength) {
+	public static Map<Header, String> response200Header(String path, int bodyLength) {
 		try {
-			Map<String, String> header = new LinkedHashMap<>();
+			Map<Header, String> header = new LinkedHashMap<>();
 
 			String mimeType = Files.probeContentType(Paths.get(path));
-
-			saveResponseHeader("HTTP/1.1 200 OK \r\n", header, mimeType, bodyLength);
+			String headerLine = String.format("%s/%s %s %s\r\n", Header.PROTOCOL.getElement(),
+					Header.PROTOCOL_VERSION.getElement(), ResponseStatus.OK.getCode(), ResponseStatus.OK.getDescription());
+			saveResponseHeader(headerLine, header, mimeType, bodyLength);
 			return header;
 		} catch (IOException e) {
 			logger.error(e.getMessage());
@@ -28,21 +30,21 @@ public class HttpResponseGenerator {
 		throw new FailResponseException();
 	}
 
-	private static void saveResponseHeader(String headerLine, Map<String, String> header, String mimeType, int lengthOfBodyContent) {
-		String[] info = headerLine.split(" ");
-		header.put("Http", info[0]);
-		header.put("Code", info[1]);
-		header.put("Description", info[2]);
-		header.put("Content-Type", mimeType + ";charset=utf-8\r\n");
-		header.put("Content-Length", lengthOfBodyContent + "\r\n");
+	private static void saveResponseHeader(String headerLine, Map<Header, String> header, String mimeType, int lengthOfBodyContent) {
+		String[] headerLines = headerLine.split(" ");
+		header.put(Header.PROTOCOL, headerLines[0]);
+		header.put(Header.CODE, headerLines[1]);
+		header.put(Header.DESCRIPTION, headerLines[2]);
+		header.put(Header.CONTENT_TYPE, mimeType + ";charset=utf-8\r\n");
+		header.put(Header.CONTENT_LENGTH, lengthOfBodyContent + "\r\n");
 	}
 
-	public static Map<String, String> response302Header(String location) {
-		Map<String, String> header = new LinkedHashMap<>();
-		header.put("Http", "HTTP/1.1");
-		header.put("Code", "302");
-		header.put("Description", "Found");
-		header.put("Location", location);
+	public static Map<Header, String> response302Header(String location) {
+		Map<Header, String> header = new LinkedHashMap<>();
+		header.put(Header.PROTOCOL, "HTTP/1.1");
+		header.put(Header.DESCRIPTION, ResponseStatus.FOUND.getDescription());
+		header.put(Header.CODE, ResponseStatus.FOUND.getCode());
+		header.put(Header.LOCATION, location);
 		return header;
 	}
 }

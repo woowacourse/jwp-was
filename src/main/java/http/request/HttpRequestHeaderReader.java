@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import http.Header;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.RequestHandler;
@@ -13,13 +14,10 @@ import webserver.RequestHandler;
 public class HttpRequestHeaderReader {
 	private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
-	public static final String REQUEST_METHOD = "Method";
-	public static final String REQUEST_PATH = "Path";
-	public static final String REQUEST_HTTP = "Http";
 	public static final String REQUEST_SEPARATOR = ": ";
 
-	public static Map<String, String> readRequest(BufferedReader bufferedReader) throws IOException {
-		Map<String, String> requests = new HashMap<>();
+	public static Map<Header, String> readRequest(BufferedReader bufferedReader) throws IOException {
+		Map<Header, String> requests = new HashMap<>();
 		String requestLine = bufferedReader.readLine();
 
 		logger.info("request header - {}", requestLine);
@@ -33,16 +31,16 @@ public class HttpRequestHeaderReader {
 				break;
 			}
 			String[] request = requestLine.split(REQUEST_SEPARATOR);
-			requests.put(request[0].trim(), request[1].trim());
+			requests.put(Header.getHeader(request[0].trim()), request[1].trim());
 		}
 
 		return requests;
 	}
 
-	private static void saveRequestURL(String requestLine, Map<String, String> requests) {
-		String[] infos = requestLine.split(" ");
-		requests.put(REQUEST_METHOD, infos[0]);
-		requests.put(REQUEST_PATH, infos[1]);
-		requests.put(REQUEST_HTTP, infos[2]);
+	private static void saveRequestURL(String requestLine, Map<Header, String> requests) {
+		String[] requestLines = requestLine.split(" ");
+		requests.put(Header.METHOD, requestLines[0]);
+		requests.put(Header.PATH, requestLines[1]);
+		requests.put(Header.PROTOCOL, requestLines[2]);
 	}
 }

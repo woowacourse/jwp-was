@@ -2,6 +2,7 @@ package http.request;
 
 import java.io.*;
 
+import http.Header;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -17,12 +18,12 @@ class HttpRequestHeaderReaderTest {
 				new FileInputStream(new File(fileDirectory + "request_GET.txt"))))) {
 			HttpRequest httpRequest = HttpRequestReader.readHttpRequest(bufferedReader);
 
-			assertThat(httpRequest.getRequestHeaderElement("Method")).isEqualTo("GET");
-			assertThat(httpRequest.getRequestHeaderElement("Path")).isEqualTo("/index.html");
-			assertThat(httpRequest.getRequestHeaderElement("Http")).isEqualTo("HTTP/1.1");
-			assertThat(httpRequest.getRequestHeaderElement("Host")).isEqualTo("localhost:8080");
-			assertThat(httpRequest.getRequestHeaderElement("Connection")).isEqualTo("keep-alive");
-			assertThat(httpRequest.getRequestHeaderElement("Accept")).isEqualTo("*/*");
+			assertThat(httpRequest.getRequestHeaderElement(Header.METHOD)).isEqualTo("GET");
+			assertThat(httpRequest.getRequestHeaderElement(Header.PATH)).isEqualTo("/index.html");
+			assertThat(httpRequest.getRequestHeaderElement(Header.PROTOCOL)).isEqualTo("HTTP/1.1");
+			assertThat(httpRequest.getRequestHeaderElement(Header.HOST)).isEqualTo("localhost:8080");
+			assertThat(httpRequest.getRequestHeaderElement(Header.CONNECTION)).isEqualTo("keep-alive");
+			assertThat(httpRequest.getRequestHeaderElement(Header.ACCEPT)).isEqualTo("*/*");
 		}
 	}
 
@@ -32,14 +33,15 @@ class HttpRequestHeaderReaderTest {
 		try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(fileDirectory + "request_POST.txt")))) {
 			HttpRequest httpRequest = HttpRequestReader.readHttpRequest(bufferedReader);
 
-			assertThat(httpRequest.getRequestHeaderElement("Method")).isEqualTo("POST");
-			assertThat(httpRequest.getRequestHeaderElement("Path")).isEqualTo("/user/create");
-			assertThat(httpRequest.getRequestHeaderElement("Http")).isEqualTo("HTTP/1.1");
-			assertThat(httpRequest.getRequestHeaderElement("Host")).isEqualTo("localhost:8080");
-			assertThat(httpRequest.getRequestHeaderElement("Connection")).isEqualTo("keep-alive");
-			assertThat(httpRequest.getRequestHeaderElement("Content-Length")).isEqualTo("46");
-			assertThat(httpRequest.getRequestHeaderElement("Content-Type")).isEqualTo("application/x-www-form-urlencoded");
-			assertThat(httpRequest.getRequestHeaderElement("Accept")).isEqualTo("*/*");
+			assertThat(httpRequest.getRequestHeaderElement(Header.METHOD)).isEqualTo("POST");
+			assertThat(httpRequest.getRequestHeaderElement(Header.PATH)).isEqualTo("/user/create");
+			assertThat(httpRequest.getRequestHeaderElement(Header.PROTOCOL)).isEqualTo("HTTP/1.1");
+			assertThat(httpRequest.getRequestHeaderElement(Header.HOST)).isEqualTo("localhost:8080");
+			assertThat(httpRequest.getRequestHeaderElement(Header.CONNECTION)).isEqualTo("keep-alive");
+			assertThat(httpRequest.getRequestHeaderElement(Header.ACCEPT)).isEqualTo("*/*");
+			assertThat(httpRequest.getRequestHeaderElement(Header.CONTENT_LENGTH)).isEqualTo("46");
+			assertThat(httpRequest.getRequestHeaderElement(Header.CONTENT_TYPE)).isEqualTo("application/x-www-form-urlencoded");
+			assertThat(httpRequest.getRequestHeaderElement(Header.ACCEPT)).isEqualTo("*/*");
 		}
 	}
 }
