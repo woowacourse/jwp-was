@@ -28,10 +28,9 @@ public class ResponseHeader implements Map<String, Object> {
         header.put("Location", location);
     }
 
-    public void setCookieLogined(boolean value) {
-        header.put("Set-Cookie", "logined="+value+"; Path=/");
+    public void setCookie(String key, String value) {
+        header.put("Set-Cookie", key + "=" + value + "; Path=/");
     }
-
 
     @Override
     public int size() {

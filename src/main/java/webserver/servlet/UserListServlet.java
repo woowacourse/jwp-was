@@ -9,6 +9,8 @@ import db.DataBase;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 import webserver.response.ResponseHeader;
+import webserver.session.HttpSession;
+import webserver.session.HttpSessionHelper;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -17,8 +19,10 @@ import java.util.Map;
 public class UserListServlet extends RequestServlet {
     @Override
     public HttpResponse doGet(HttpRequest httpRequest) throws IOException {
+        String requestUserSessionId = httpRequest.getCookie("user_session");
+        HttpSession session = HttpSessionHelper.get("user_session");
         ResponseHeader header = new ResponseHeader();
-        if ("true".equals(httpRequest.getCookie("logined"))) {
+        if (requestUserSessionId != null && session != null && requestUserSessionId.equals(session.getId())) {
             byte[] body = generateBody();
             header.setContentLegthAndType(body.length, "text/html;charset=utf-8");
             return HttpResponse.ok(header, body);
