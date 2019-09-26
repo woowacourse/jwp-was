@@ -1,10 +1,10 @@
 package http.controller;
 
-import http.model.HttpRequest;
-import http.view.ModelAndView;
+import http.model.request.ServletRequest;
+import http.model.response.ServletResponse;
 
 public interface Controller {
-    ModelAndView handle(HttpRequest httpRequest);
+    void handle(ServletRequest servletRequest, ServletResponse servletResponse);
 
-    boolean canHandle(HttpRequest httpRequest);
+    boolean canHandle(ServletRequest servletRequest);
 }

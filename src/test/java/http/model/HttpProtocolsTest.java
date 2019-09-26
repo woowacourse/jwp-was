@@ -1,6 +1,7 @@
 package http.model;
 
 import http.exceptions.IllegalHttpRequestException;
+import http.model.common.HttpProtocols;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Java6Assertions.assertThatThrownBy;

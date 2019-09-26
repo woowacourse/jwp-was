@@ -1,14 +1,13 @@
 package http.controller;
 
-import http.model.HttpRequest;
-import http.model.HttpUri;
+import http.model.request.ServletRequest;
+import http.model.response.ServletResponse;
 import http.supoort.RequestMapping;
-import http.view.ModelAndView;
-import http.view.View;
 
 public class FileResourceController extends AbstractController {
-    public FileResourceController(RequestMapping requestMapping) {
-        super(requestMapping);
+
+    public FileResourceController(RequestMapping mapping) {
+        super(mapping);
     }
 
     public FileResourceController(RequestMapping... mappings) {
@@ -16,11 +15,9 @@ public class FileResourceController extends AbstractController {
     }
 
     @Override
-    public ModelAndView handle(HttpRequest httpRequest) {
-        return new ModelAndView(getViewByUri(httpRequest.getUri()));
-    }
+    public void handle(ServletRequest servletRequest, ServletResponse servletResponse) {
+        String resource = servletRequest.getHttpUri().getResourceLocation();
 
-    private View getViewByUri(HttpUri uri) {
-        return new View(uri.getResourceLocation());
+        servletResponse.ok(resource);
     }
 }

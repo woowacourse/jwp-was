@@ -1,35 +1,27 @@
 package http.controller;
 
-import http.model.HttpMethod;
-import http.model.HttpProtocols;
-import http.model.HttpRequest;
-import http.model.HttpUri;
+import http.model.request.HttpMethod;
+import http.model.request.ServletRequest;
+import http.model.response.HttpStatus;
+import http.model.response.ServletResponse;
 import http.supoort.RequestMapping;
-import http.view.ModelAndView;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-class FileResourceControllerTest {
+class FileResourceControllerTest extends BaseControllerTest {
     private Controller controller = new FileResourceController(RequestMapping.GET("/index.html"));
 
     @Test
-    void 파일리소스_컨트롤러_처리_결과가_리소스_위치가_맞는지() {
-        HttpRequest httpRequest = new HttpRequest(HttpMethod.GET, new HttpUri("/index.html"),
-                HttpProtocols.HTTP1, null, null);
+    void 파일리소스_응답이_적절한지() {
+        ServletRequest request = getDefaultRequest(HttpMethod.GET, "/index.html").build();
+        ServletResponse response = getDefaultResponse();
 
-        ModelAndView modelAndView = controller.handle(httpRequest);
+        assertThat(controller.canHandle(request)).isTrue();
 
-        assertThat(modelAndView.getViewLocation()).isEqualTo("/index.html");
-    }
+        controller.handle(request, response);
 
-    @Test
-    void 파일리소스_컨트롤러_처리_결과가_리소스_위치가_맞는지2() {
-        HttpRequest httpRequest = new HttpRequest(HttpMethod.GET, new HttpUri("/abc/def/test.test"),
-                HttpProtocols.HTTP1, null, null);
-
-        ModelAndView modelAndView = controller.handle(httpRequest);
-
-        assertThat(modelAndView.getViewLocation()).isEqualTo("/abc/def/test.test");
+        assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getView()).isNotEmpty();
     }
 }

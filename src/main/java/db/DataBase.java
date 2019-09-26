@@ -20,4 +20,8 @@ public class DataBase {
     public static Collection<User> findAll() {
         return users.values();
     }
+
+    public static void deleteById(String userId) {
+        users.remove(userId);
+    }
 }

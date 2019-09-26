@@ -1,12 +1,15 @@
 package webserver;
 
-import http.controller.Controller;
-import http.controller.FileResourceController;
-import http.controller.HttpRequestHandlers;
-import http.controller.UserController;
+import http.controller.*;
+import http.session.HttpSessionManager;
+import http.session.RandomGenerateStrategy;
+import http.session.SessionManager;
 import http.supoort.RequestMapping;
-import http.view.FileResourceViewResolver;
-import http.view.ViewResolver;
+import http.supoort.converter.HttpMessageConverter;
+import http.supoort.converter.request.RequestConverter;
+import http.supoort.converter.response.HandleBarViewResolver;
+import http.supoort.converter.response.ResponseConverter;
+import http.supoort.converter.response.ViewResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,8 +26,9 @@ public class WebServer {
     public static void main(String[] args) throws Exception {
         int port = getPort(args);
 
-        HttpRequestHandlers httpRequestHandlers = initRequestHandlers();
-        ViewResolver viewResolver = initViewResolver();
+        HttpRequestControllers requestHandlers = initRequestHandlers();
+        SessionManager sessionManager = initSessionManager();
+        HttpMessageConverter converter = initConverter();
 
         ExecutorService es = Executors.newFixedThreadPool(100);
 
@@ -35,7 +39,7 @@ public class WebServer {
             // 클라이언트가 연결될때까지 대기한다.
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
-                es.execute(new RequestHandler(connection, httpRequestHandlers, viewResolver));
+                es.execute(new RequestHandler(connection, requestHandlers, sessionManager, converter));
             }
         }
         es.shutdown();
@@ -52,16 +56,27 @@ public class WebServer {
         return port;
     }
 
-    private static HttpRequestHandlers initRequestHandlers() {
-        HttpRequestHandlers httpRequestHandlers = new HttpRequestHandlers(new FileResourceController(RequestMapping.GET("/*")));
-        Controller userRequestHandler = new UserController(RequestMapping.GET("/user/create"), RequestMapping.POST("/user/create"));
+    private static HttpRequestControllers initRequestHandlers() {
+        HttpRequestControllers httpRequestControllers = new HttpRequestControllers(new FileResourceController(RequestMapping.GET("/*")));
+        Controller userCreateController = new UserCreateController(RequestMapping.POST("/user/create"));
+        Controller loginController = new LoginController(RequestMapping.POST("/user/login"));
+        Controller userListController = new UserListController(RequestMapping.GET("/user/list"));
 
-        httpRequestHandlers.addHandler(userRequestHandler);
-        return httpRequestHandlers;
+        httpRequestControllers.addHandler(userCreateController);
+        httpRequestControllers.addHandler(loginController);
+        httpRequestControllers.addHandler(userListController);
+        return httpRequestControllers;
+    }
+
+    private static HttpMessageConverter initConverter() {
+        return new HttpMessageConverter(new RequestConverter(), new ResponseConverter(initViewResolver()));
     }
 
     private static ViewResolver initViewResolver() {
-        return new FileResourceViewResolver();
+        return new HandleBarViewResolver();
     }
 
+    private static SessionManager initSessionManager() {
+        return new HttpSessionManager(new RandomGenerateStrategy());
+    }
 }

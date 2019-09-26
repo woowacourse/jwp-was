@@ -1,35 +1,24 @@
 package http.controller;
 
-import http.exceptions.IllegalRequestMappingException;
-import http.model.HttpRequest;
+import http.model.request.ServletRequest;
 import http.supoort.RequestMapping;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 public abstract class AbstractController implements Controller {
-    private final Set<RequestMapping> mappings = new HashSet<>();
+    private final RequestMappings mappings;
 
     public AbstractController(RequestMapping mapping) {
-        this.mappings.add(mapping);
+        this.mappings = new RequestMappings(mapping);
     }
 
     public AbstractController(RequestMapping... mappings) {
-        if (mappings.length != new HashSet<>(Arrays.asList(mappings)).size()) {
-            throw new IllegalRequestMappingException("Ambiguous RequestMapping");
-        }
-        if (this.mappings.containsAll(Arrays.asList(mappings))) {
-            throw new IllegalRequestMappingException("Ambiguous RequestMapping");
-        }
-        this.mappings.addAll(Arrays.asList(mappings));
+        this.mappings = new RequestMappings(mappings);
     }
 
     @Override
-    public boolean canHandle(HttpRequest httpRequest) {
-        return mappings.stream()
-                .anyMatch(mapping -> mapping.match(httpRequest));
+    public boolean canHandle(ServletRequest request) {
+        return mappings.hasMapping(request);
     }
 
     @Override
