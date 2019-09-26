@@ -1,16 +1,20 @@
 package webserver.Controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
 public abstract class AbstractController implements Controller {
+    private static final Logger log = LoggerFactory.getLogger(AbstractController.class);
 
     @Override
-    public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
+    public void service(HttpRequest httpRequest, HttpResponse httpResponse) throws FileNotFoundException {
         if (httpRequest.isGet()) {
             doGet(httpRequest, httpResponse);
         }
@@ -19,18 +23,17 @@ public abstract class AbstractController implements Controller {
         }
     }
 
-    protected byte[] getStaticFile(HttpRequest httpRequest) {
+    protected byte[] getStaticFile(HttpRequest httpRequest) throws FileNotFoundException {
         String file = httpRequest.getSource();
-        byte[] body = new byte[0];
         try {
-            body = FileIoUtils.loadFileFromClasspath("./templates/" + file);
+            return FileIoUtils.loadFileFromClasspath("./templates/" + file);
         } catch (IOException | URISyntaxException e) {
-            e.printStackTrace();
+            log.debug("fail to load file", e);
         }
-        return body;
+        throw new FileNotFoundException("fail to find file.");
     }
 
-    protected abstract void doGet(HttpRequest httpRequest, HttpResponse httpResponse);
+    protected abstract void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws FileNotFoundException;
 
     protected abstract void doPost(HttpRequest httpRequest, HttpResponse httpResponse);
 }

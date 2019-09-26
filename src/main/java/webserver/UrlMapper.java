@@ -1,6 +1,7 @@
 package webserver;
 
 import webserver.Controller.*;
+import webserver.Controller.exception.ResourceNotFoundException;
 import webserver.request.HttpRequest;
 
 import java.util.HashMap;
@@ -25,6 +26,6 @@ public class UrlMapper {
         if (urlMapper.containsKey(source)) {
             return urlMapper.get(source);
         }
-        throw new IllegalArgumentException("404");
+        throw new ResourceNotFoundException("Resource Not found.");
     }
 }

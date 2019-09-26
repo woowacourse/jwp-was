@@ -1,14 +1,16 @@
 package webserver.Controller;
 
+import webserver.Controller.exception.MethodNotAllowedException;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
+
+import java.io.FileNotFoundException;
 
 public class StyleSheetController extends AbstractController {
 
     @Override
-    protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+    protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws FileNotFoundException {
         byte[] staticFile = getStaticFile(httpRequest);
-
         if (httpResponse.addBody(staticFile)) {
             httpResponse.addStatusLine(httpRequest, "200", "OK");
             httpResponse.addHeader("Content-Type", "text/css");
@@ -17,6 +19,6 @@ public class StyleSheetController extends AbstractController {
 
     @Override
     protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        throw new IllegalArgumentException("404");
+        throw new MethodNotAllowedException("fail to match method.");
     }
 }
