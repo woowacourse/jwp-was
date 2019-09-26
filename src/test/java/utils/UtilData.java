@@ -1,10 +1,9 @@
 package utils;
 
-import http.request.core.*;
+import webserver.http.HttpVersion;
+import webserver.http.request.core.*;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 public class UtilData {
     public static final String GET_METHOD = "GET";
@@ -25,11 +24,11 @@ public class UtilData {
     public static final String JS_PATH = "/js/scripts.js";
     public static final String IMAGES_PATH = "/images/80-text.png";
     public static final String FONT_PATH = "/fonts/glyphicons-halflings-regular.eot";
-    public static final String CSS_CONTENT_TYPE = "Content-Type: text/css;charset=utf-8\r\n";
-    public static final String JS_CONTENT_TYPE = "Content-Type: application/javascript;charset=utf-8\r\n";
-    public static final String FONTS_CONTENT_TYPE = "Content-Type: font/opentype;charset=utf-8\r\n";
-    public static final String IMAGES_CONTENT_TYPE = "Content-Type: image/jpeg;charset=utf-8\r\n";
-    public static final String DYNAMIC_CONTENT_TYPE = "Content-Type: text/html;charset=utf-8\r\n";
+    public static final String CSS_CONTENT_TYPE = "text/css;charset=utf-8";
+    public static final String JS_CONTENT_TYPE = "application/javascript;charset=utf-8";
+    public static final String FONTS_CONTENT_TYPE = "font/opentype;charset=utf-8";
+    public static final String IMAGES_CONTENT_TYPE = "image/jpeg;charset=utf-8";
+    public static final String DYNAMIC_CONTENT_TYPE = "text/html;charset=utf-8";
     public static final RequestHeader GET_REQUEST_HEADER = new RequestHeader(Arrays.asList(
             "Host: localhost:8080 \n",
             "Connection: keep-alive \n",
@@ -42,37 +41,20 @@ public class UtilData {
             "Content-Type: application/x-www-form-urlencoded \n",
             "Accept: */*"
     ));
-    public static final String OK_BODY = "HTTP/1.1 200 OK \r\n" +
-            "Content-Type: text/html;charset=utf-8\r\n" +
-            "Content-Length: 6902\r\n\r\n";
-    public static final String OK_CSS_BODY = "HTTP/1.1 200 OK \r\n" +
-            "Content-Type: text/css;charset=utf-8\r\n" +
-            "Content-Length: 7065\r\n\r\n";
-    public static final String OK_JS_BODY = "HTTP/1.1 200 OK \r\n" +
-            "Content-Type: application/javascript;charset=utf-8\r\n" +
-            "Content-Length: 226\r\n\r\n";
-    public static final String OK_FONTS_BODY = "HTTP/1.1 200 OK \r\n" +
-            "Content-Type: font/opentype;charset=utf-8\r\n" +
-            "Content-Length: 20127\r\n\r\n";
-    public static final String OK_IMAGES_BODY = "HTTP/1.1 200 OK \r\n" +
-            "Content-Type: image/jpeg;charset=utf-8\r\n" +
-            "Content-Length: 3478\r\n\r\n";
-    public static final String FOUND_BODY = "HTTP/1.1 302 Found \r\n" +
-            "Location: http://localhost:8080/\r\n";
-    public static final RequestPath REQUEST_GET_PATH = new RequestPath(
-            RequestPrefixPath.of(GET_PATH), GET_PATH);
     public static final RequestPath REQUEST_GET_PARAM_PATH = new RequestPath(
             RequestPrefixPath.of(GET_PARAMS_PATH), GET_PARAMS_PATH);
-    public static final Map<String, String> DATA = new HashMap<>();
-    public static final RequestMethod GET_REQUEST_METHOD = RequestMethod.of(GET_METHOD);
-    private static final String POST_METHOD = "POST";
-    public static final RequestMethod POST_REQUEST_METHOD = RequestMethod.of(POST_METHOD);
+
+    public static final RequestData QUERY_DATA = new RequestQueryString(REQUEST_GET_PARAM_PATH);
+    public static final RequestData BODY_DATA = new RequestBody(POST_BODY);
+
+    public static final String POST_METHOD = "POST";
     private static final String POST_PATH = "/user/create";
     public static final RequestPath REQUEST_POST_PATH = new RequestPath(
             RequestPrefixPath.of(POST_PATH), POST_PATH);
     private static final String WRONG_PATH = "/index1.html";
     public static final RequestPath REQUEST_WRONG_PATH = new RequestPath(
             RequestPrefixPath.of(WRONG_PATH), WRONG_PATH);
+
     private static final String VERSION = "HTTP/1.1";
-    public static final RequestVersion REQUEST_VERSION = RequestVersion.of(VERSION);
+    public static final HttpVersion REQUEST_VERSION = HttpVersion.of(VERSION);
 }
