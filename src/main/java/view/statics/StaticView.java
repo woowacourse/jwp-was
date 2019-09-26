@@ -1,8 +1,9 @@
-package view;
+package view.statics;
 
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import view.AbstractView;
 import webserver.http.utils.FileIoUtils;
 
 import java.io.IOException;

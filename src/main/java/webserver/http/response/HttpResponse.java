@@ -90,11 +90,9 @@ public class HttpResponse {
         for (String key : headers.keySet()) {
             dos.writeBytes(String.format("%s: %s\n", key, headers.get(key)));
         }
-
         if (cookies.isNotEmpty()) {
             writeSetCookie(dos);
         }
-
         dos.writeBytes("\n");
     }
 

@@ -1,5 +1,7 @@
-package view;
+package view.statics;
 
+import view.View;
+import view.ViewResolver;
 import webserver.http.HttpHeaders;
 import webserver.http.MimeType;
 import webserver.http.response.HttpResponse;
@@ -16,7 +18,7 @@ public class StaticViewResolver implements ViewResolver {
         return mapping.isMapping(name);
     }
 
-    public View resolveViewName(final String name, final HttpResponse httpResponse) {
+    public View resolveView(final String name, final HttpResponse httpResponse) {
         final String viewName = mapping.addPrefix(name);
         final StaticView view = new StaticView(viewName);
         httpResponse.setHeader(HttpHeaders.CONTENT_TYPE, MimeType.getType(HttpUtils.parseExtension(viewName)));

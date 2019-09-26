@@ -1,9 +1,10 @@
-package view;
+package view.statics;
 
 import org.junit.jupiter.api.Test;
+import view.statics.StaticResourceMapping;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static view.StaticResourceMapping.DEFAULT_HTML_LOCATION;
+import static view.statics.StaticResourceMapping.DEFAULT_HTML_LOCATION;
 
 class StaticResourceMappingTest {
     private StaticResourceMapping mapping = new StaticResourceMapping();

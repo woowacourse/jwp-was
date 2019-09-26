@@ -1,4 +1,4 @@
-package view;
+package view.statics;
 
 import webserver.http.MimeType;
 import webserver.http.utils.HttpUtils;

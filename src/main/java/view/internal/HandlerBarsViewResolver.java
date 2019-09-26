@@ -1,8 +1,10 @@
-package view;
+package view.internal;
 
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
+import view.EmptyView;
+import view.View;
 import webserver.http.HttpHeaders;
 import webserver.http.MimeType;
 import webserver.http.response.HttpResponse;
@@ -27,7 +29,7 @@ public class HandlerBarsViewResolver implements InternalResourceViewResolver {
     }
 
     @Override
-    public View resolveViewName(final HttpResponse httpResponse) throws IOException {
+    public View resolveView(final HttpResponse httpResponse) throws IOException {
         final String resource = httpResponse.getResource();
 
         if (resource == null) {

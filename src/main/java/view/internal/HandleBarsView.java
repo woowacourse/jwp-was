@@ -1,7 +1,8 @@
-package view;
+package view.internal;
 
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
+import view.AbstractView;
 
 import java.io.IOException;
 import java.util.Map;

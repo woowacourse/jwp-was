@@ -1,4 +1,4 @@
-package view;
+package view.statics;
 
 import java.util.Objects;
 

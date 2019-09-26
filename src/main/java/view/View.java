@@ -6,4 +6,6 @@ public interface View {
     int getContentLength();
 
     boolean isEmpty();
+
+    boolean isNotEmpty();
 }
