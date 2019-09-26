@@ -1,6 +1,7 @@
 package webserver.controller;
 
 import http.request.Request;
+import http.response.Cookie;
 import http.response.Response;
 import model.LoginService;
 import model.exception.LoginFailException;
@@ -24,10 +25,10 @@ public class LoginController extends HttpController {
         try {
             String location = new LoginService().login(request.extractFormData());
             response.configureFoundResponse(location);
-            response.setCookie("logined=true; Path=/");
+            response.setCookie("logined", new Cookie("logined", "true", "/"));
         } catch (LoginFailException e) {
             response.configureFoundResponse("/user/login_failed.html");
-            response.setCookie("logined=false; Path=/");
+            response.setCookie("logined", new Cookie("logined", "false", "/"));
         }
     }
 
