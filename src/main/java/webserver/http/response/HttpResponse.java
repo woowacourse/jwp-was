@@ -46,7 +46,7 @@ public class HttpResponse {
         setStatus(httpStatus);
     }
 
-    public void sendRedirect(final String location) {
+    public void     sendRedirect(final String location) {
         sendRedirect(location, HttpStatus.FOUND);
     }
 

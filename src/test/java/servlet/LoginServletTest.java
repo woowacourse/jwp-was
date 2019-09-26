@@ -35,9 +35,7 @@ public class LoginServletTest {
         httpTestClient.post().uri("/user/login")
                 .body("userId=javajigi&password=fail")
                 .exchange()
-                .matchHttpStatus(HttpStatus.FOUND)
-                .matchHeader(HttpHeaders.LOCATION, "/user/login_failed.html")
-                .matchCookie(LoginServlet.LOGINED, "false")
+                .matchHttpStatus(HttpStatus.OK)
         ;
     }
 

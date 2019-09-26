@@ -33,16 +33,13 @@ public class LoginServlet extends AbstractServlet {
 
         // todo 리팩토링
         if (user != null && user.matchPassword(password)) {
-            final Cookie aTrue = new Cookie(LOGINED, "true");
-            aTrue.setPath("/");
-            aTrue.setHttpOnly(true);
-            response.addCookie((new Cookie("asd","asd")));
-            response.addCookie((new Cookie("qwe","asd")));
-            response.addCookie(aTrue);
+            final Cookie cookie = new Cookie(LOGINED, "true");
+            cookie.setPath("/");
+            cookie.setHttpOnly(true);
+            response.addCookie(cookie);
             response.sendRedirect("/");
         } else {
-            response.addCookie(new Cookie(LOGINED, "false"));
-            response.sendRedirect("/user/login_failed.html");
+            response.forward("/user/login_failed");
         }
     }
 }

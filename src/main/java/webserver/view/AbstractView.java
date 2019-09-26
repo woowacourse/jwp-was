@@ -16,6 +16,6 @@ public abstract class AbstractView implements View {
 
     @Override
     public boolean isEmpty() {
-        return responseBody.length == 0;
+        return responseBody == null || responseBody.length == 0;
     }
 }

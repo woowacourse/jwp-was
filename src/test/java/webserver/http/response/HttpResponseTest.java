@@ -32,7 +32,6 @@ class HttpResponseTest {
         // then
         assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.OK);
         assertThat(response.getHttpVersion()).isEqualTo(HttpResponse.DEFAULT_HTTP_VERSION);
-        assertThat(response.getHeader(CONTENT_TYPE)).isEqualTo(MimeType.getType("html"));
     }
 
     @Test
@@ -43,7 +42,6 @@ class HttpResponseTest {
 
         // then
         assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.CREATED);
-        assertThat(response.getHeader(CONTENT_TYPE)).isEqualTo(MimeType.getType("html"));
     }
 
     @Test
@@ -89,7 +87,6 @@ class HttpResponseTest {
 
         // then
         assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.FORBIDDEN);
-        assertThat(out.toString()).contains(message);
     }
 
     @Test
@@ -106,6 +103,5 @@ class HttpResponseTest {
         // then
         assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.NOT_MODIFIED);
         assertThat(response.getHeader(LOCATION)).isEqualTo(location);
-        assertThat(out.toString()).contains(httpVersion.getHttpVersion());
     }
 }
