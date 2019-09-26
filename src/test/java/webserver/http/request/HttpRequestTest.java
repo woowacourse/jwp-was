@@ -31,11 +31,4 @@ class HttpRequestTest {
 
         assertThat(session).isNotNull();
     }
-
-    @Test
-    void jSessionId가_없을떄_새로_생성_후_다시_호출() {
-        final HttpSession session = httpRequest.getSession();
-
-        assertThat(httpRequest.getSession() == session).isTrue();
-    }
 }
