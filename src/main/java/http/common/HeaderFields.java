@@ -12,6 +12,7 @@ import java.util.Objects;
 public class HeaderFields {
     private static final Logger logger = LoggerFactory.getLogger(HeaderFields.class);
     private static final String HEADER_FIELD_KEY_VALUE_DELIMITER = ":";
+    public static final String COOKIE_KEY_NAME = "Cookie";
 
     private final Map<String, String> headerFields;
     private Map<String, Cookie> cookies;
@@ -23,15 +24,19 @@ public class HeaderFields {
         this.headerFields = new HashMap<>();
         this.cookies = new HashMap<>();
         for (String headerField : headerFields) {
-            String key = headerField.substring(0, headerField.indexOf(HEADER_FIELD_KEY_VALUE_DELIMITER));
-            String value = headerField.substring(headerField.indexOf(HEADER_FIELD_KEY_VALUE_DELIMITER) + 2);
-            if(key.equals("Cookie")) {
-                Cookie cookie =  new Cookie(value);
-                cookies.put(cookie.getName(), cookie);
-            } else{
-                this.headerFields.put(key, value);
-            }
+            parsingField(headerField);
         }
+    }
+
+    private void parsingField(String headerField) {
+        String key = headerField.substring(0, headerField.indexOf(HEADER_FIELD_KEY_VALUE_DELIMITER));
+        String value = headerField.substring(headerField.indexOf(HEADER_FIELD_KEY_VALUE_DELIMITER) + 2);
+        if (COOKIE_KEY_NAME.equals(key)) {
+            Cookie cookie = new Cookie(value);
+            cookies.put(cookie.getName(), cookie);
+            return;
+        }
+        headerFields.put(key, value);
     }
 
     public String convert() {
