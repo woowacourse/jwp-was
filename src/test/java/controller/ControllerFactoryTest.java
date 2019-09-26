@@ -1,8 +1,6 @@
 package controller;
 
 import http.request.Request;
-import http.request.RequestInformation;
-import http.request.RequestMethod;
 import http.request.RequestUrl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,7 +8,6 @@ import test.BaseTest;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -40,6 +37,23 @@ public class ControllerFactoryTest extends BaseTest {
         //given
         RequestUrl url = RequestUrl.from("/user/create");
         List<String> headerValues = Arrays.asList("POST /user/create HTTP/1.1", "59",
+                "application/x-www-form-urlencoded",
+                "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net");
+
+        //when
+        Request request = createPostRequest(url, headerValues);
+
+        //then
+        assertThat(factory.mappingController(request).getClass()).isEqualTo(UserController.class);
+    }
+
+    @Test
+    @DisplayName("GET /user/list request를 보낼시 원하는 Controller가 나오는지 테스트")
+    void mapUserController2() {
+
+        //given
+        RequestUrl url = RequestUrl.from("/user/list");
+        List<String> headerValues = Arrays.asList("GET /user/list HTTP/1.1", "59",
                 "application/x-www-form-urlencoded",
                 "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net");
 

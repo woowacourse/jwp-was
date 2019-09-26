@@ -2,71 +2,60 @@ package http;
 
 import controller.Controller;
 import controller.ControllerFactory;
+import db.DataBase;
 import http.request.Request;
 import http.request.RequestInformation;
 import http.request.RequestMethod;
 import http.request.RequestUrl;
 import http.response.Response;
 import http.response.ResponseStatus;
+import model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import test.BaseTest;
 import utils.FileIoUtils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ResponseTest {
+public class ResponseTest extends BaseTest {
+    private ControllerFactory factory = new ControllerFactory();
 
     @Test
     @DisplayName("Get File 요청시 Response 확인")
     void getFileResponseTest() throws IOException, URISyntaxException {
-        RequestMethod method = RequestMethod.GET;
+        //given
         RequestUrl url = RequestUrl.from("/index.html");
-        Map<String, String> information = new HashMap<>();
-        information.put("Request-Line:", "GET /index.html HTTP/1.1");
-        information.put("Host:", "localhost:8080");
-        information.put("Connection:", "keep-alive");
-        RequestInformation requestInformation = new RequestInformation(information);
-
-        Request request = new Request(method, url, requestInformation);
+        List<String> headerValues = Arrays.asList("GET /index.html HTTP/1.1");
+        Request request = createGetRequest(url, headerValues);
         Response response = new Response();
 
-        ControllerFactory factory = new ControllerFactory();
+        //when
         Controller controller = factory.mappingController(request);
-
         controller.processResponse(request, response);
 
-        Map<String, String> confirmMap = new LinkedHashMap<>();
-        confirmMap.put("Content-Type: ", "text/html");
-        confirmMap.put("Content-Length: ", "7049");
-
+        //then
+        Map<String, String> testconfirmMap = new LinkedHashMap<>();
+        testconfirmMap.put("Content-Type: ", "text/html");
+        testconfirmMap.put("Content-Length: ", "7049");
         byte[] confirmBody = FileIoUtils.loadFileFromClasspath("../resources/templates/index.html");
-
         assertThat(response.getResponseStatus()).isEqualTo(ResponseStatus.OK);
-        assertThat(response.getResponseHeaders().getResponseHeaders()).isEqualTo(confirmMap);
+        assertThat(response.getResponseHeaders().getResponseHeaders()).isEqualTo(testconfirmMap);
         assertThat(response.getResponseBody().getBody()).isEqualTo(confirmBody);
     }
 
     @Test
     @DisplayName("Post user/create 요청시 Response 확인")
     void postResponseTest() throws IOException, URISyntaxException {
-        RequestMethod method = RequestMethod.POST;
-        RequestUrl url = RequestUrl.from("/user/create");
-        Map<String, String> information = new HashMap<>();
-        information.put("Request-Line:", "POST /user/create HTTP/1.1");
-        information.put("Host:", "localhost:8080");
-        information.put("Connection:", "keep-alive");
-        RequestInformation requestInformation = new RequestInformation(information);
 
-        Request request = new Request(method, url, requestInformation);
+        RequestUrl url = RequestUrl.from("/user/create");
+        List<String> headerValues = Arrays.asList("POST /user/create HTTP/1.1");
+        Request request = createPostRequest(url, headerValues);
         Response response = new Response();
 
-        ControllerFactory factory = new ControllerFactory();
         Controller controller = factory.mappingController(request);
 
         controller.processResponse(request, response);
@@ -74,8 +63,68 @@ public class ResponseTest {
         Map<String, String> confirmMap = new LinkedHashMap<>();
         confirmMap.put("Location: ", "http://localhost:8080/index.html");
 
-
         assertThat(response.getResponseStatus()).isEqualTo(ResponseStatus.FOUND);
         assertThat(response.getResponseHeaders().getResponseHeaders()).isEqualTo(confirmMap);
+    }
+
+    @Test
+    @DisplayName("로그인 성공시 response 확인 테스트")
+    void loginTest() throws IOException, URISyntaxException {
+        // given
+        User user = new User("kjm", "kjm", "kjm", "kjm@gmail.com");
+        DataBase.addUser(user);
+
+        // when
+        RequestUrl url = RequestUrl.from("/user/login");
+        List<String> headerValues = Arrays.asList("POST /user/login HTTP/1.1", "59",
+                "application/x-www-form-urlencoded",
+                "userId=kjm&password=kjm");
+        Request request = createPostRequest(url, headerValues);
+        Response response = new Response();
+        Controller controller = factory.mappingController(request);
+        controller.processResponse(request, response);
+
+
+        //then
+        assertThat(response.getResponseStatus()).isEqualTo(ResponseStatus.FOUND);
+        assertThat(response.getResponseHeaders().getResponseHeaders().get("Location: ")).isEqualTo("http://localhost:8080/index.html");
+
+        DataBase.deleteUser(user);
+    }
+
+    @Test
+    @DisplayName("로그인 실패시 response 확인 테스트")
+    void loginFailTest() throws IOException, URISyntaxException {
+
+        RequestUrl url = RequestUrl.from("/user/login");
+        List<String> headerValues = Arrays.asList("POST /user/login HTTP/1.1", "59",
+                "application/x-www-form-urlencoded",
+                "userId=kjm&password=kjm");
+        Request request = createPostRequest(url, headerValues);
+        Response response = new Response();
+        Controller controller = factory.mappingController(request);
+        controller.processResponse(request, response);
+
+
+        //then
+        assertThat(response.getResponseStatus()).isEqualTo(ResponseStatus.FOUND);
+        assertThat(response.getResponseHeaders().getResponseHeaders().get("Location: ")).isEqualTo("http://localhost:8080/user/login_failed.html");
+    }
+
+    @Test
+    @DisplayName("로그인 후 유저목록 가져오기 테스트")
+    void getUserListTest() {
+
+    }
+
+    @Test
+    @DisplayName("로그인없이 유저목록 가져오기 실패 테스트")
+    void getUserListWithoutLoginTest() {
+        // given
+
+        // when
+
+        //then
+
     }
 }

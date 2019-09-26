@@ -1,9 +1,7 @@
 package http.request;
 
 import controller.ControllerMapper;
-import http.session.Cookie;
-import http.session.Session;
-import http.session.SessionRepository;
+import http.session.*;
 
 public class Request {
     private RequestMethod requestMethod;
@@ -28,16 +26,12 @@ public class Request {
         return url;
     }
 
-    public RequestInformation getRequestInformation() {
-        return requestInformation;
-    }
 
     public QueryParameters getQueryParameters() {
         return queryParameters;
     }
 
     public Session getSession() {
-//        String sessionId = queryParameters.getParameter("Cookie:");
         String sessionId = this.cookie.getSessionId();
         return SessionRepository.getInstance().getSession(sessionId);
     }
