@@ -2,9 +2,9 @@ package controller.page;
 
 import controller.AbstractController;
 import db.DataBase;
+import view.ModelAndView;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
-import webserver.response.ObjectsForHandlebars;
 import webserver.response.ResponseMetaData;
 import webserver.response.ResponseMetaDataGenerator;
 
@@ -26,10 +26,10 @@ public class UserListPageController extends AbstractController {
     @Override
     protected void doGet(final HttpRequest request, final HttpResponse response) throws IOException {
         if (isLogin(request)) {
-            ObjectsForHandlebars objectsForHandlebars = new ObjectsForHandlebars();
-            objectsForHandlebars.put("users", DataBase.findAll());
+            ModelAndView modelAndView = new ModelAndView(request.findUri());
+            modelAndView.addObject("users", DataBase.findAll());
 
-            response.makeResponse(objectsForHandlebars);
+            response.makeResponse(modelAndView);
             return;
         }
 

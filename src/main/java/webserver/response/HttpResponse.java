@@ -1,6 +1,7 @@
 package webserver.response;
 
 import exception.NotInitializedResponseMetaDataException;
+import view.ModelAndView;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -23,10 +24,10 @@ public class HttpResponse {
         writeResponseBody(responseMetaData.getBody());
     }
 
-    public void makeResponse(ObjectsForHandlebars objectsForHandlebars) throws IOException {
+    public void makeResponse(ModelAndView modelAndView) throws IOException {
         writeResponseHeader();
 
-        writeResponseBody(responseMetaData.getBodyWithHandlebars(objectsForHandlebars));
+        writeResponseBody(modelAndView.buildView());
     }
 
     private void writeResponseHeader() throws IOException {

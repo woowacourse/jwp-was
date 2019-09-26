@@ -1,10 +1,5 @@
 package webserver.response;
 
-import com.github.jknack.handlebars.Handlebars;
-import com.github.jknack.handlebars.Helper;
-import com.github.jknack.handlebars.Template;
-import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
-import com.github.jknack.handlebars.io.TemplateLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
@@ -12,11 +7,9 @@ import webserver.request.HttpRequest;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-import static configure.PathConstants.TEMPLATE_HANDLEBARS_PREFIX;
 import static webserver.response.ResponseHeaderFieldKeys.*;
 
 public class ResponseMetaData {
@@ -49,25 +42,6 @@ public class ResponseMetaData {
         try {
             return FileIoUtils.loadFileFromClasspath(httpRequest.findFilePath());
         } catch (IOException | URISyntaxException e) {
-            return new byte[0];
-        }
-    }
-
-    public byte[] getBodyWithHandlebars(ObjectsForHandlebars objectsForHandlebars) {
-        log.debug("handlebars rendering start");
-        try {
-            TemplateLoader loader = new ClassPathTemplateLoader();
-            loader.setPrefix(TEMPLATE_HANDLEBARS_PREFIX);
-            loader.setSuffix("");
-            loader.setCharset(StandardCharsets.UTF_8);
-            Handlebars handlebars = new Handlebars(loader);
-            handlebars.registerHelper("inc", (Helper<Integer>) (context, options) -> context + 1);
-
-            Template template = handlebars.compile(httpRequest.findUri());
-
-            return template.apply(objectsForHandlebars.getObjects()).getBytes();
-        } catch (IOException e) {
-            log.debug("error at getBodyWithHandlebars()");
             return new byte[0];
         }
     }
