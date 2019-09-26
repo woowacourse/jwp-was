@@ -15,7 +15,6 @@ public class LoginUserController extends AbstractController {
 
     @Override
     protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        HttpCookie requestHttpCookie = httpRequest.getHttpCookie();
         HttpCookie responseHttpCookie = httpResponse.getHttpCookie();
 
         try {

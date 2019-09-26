@@ -21,7 +21,7 @@ public class UserListController extends AbstractController {
                 ModelAndView modelAndView = new HandleBarModelAndView();
                 modelAndView.putData("users", DataBase.findAll());
 
-                httpResponse.setResponseBody(modelAndView.render(LOCATION), LOCATION + modelAndView.getSufFix());
+                httpResponse.sendOk(modelAndView.render(LOCATION), LOCATION + modelAndView.getSufFix());
 
                 return;
             } catch (IOException e) {

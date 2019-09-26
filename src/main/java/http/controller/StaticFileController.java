@@ -20,7 +20,7 @@ public class StaticFileController extends AbstractController {
 
         try {
             byte[] body = FileIoUtils.loadFileFromClasspath(dir + httpRequest.getPath());
-            httpResponse.setResponseBody(body, httpRequest.getPath());
+            httpResponse.sendOk(body, httpRequest.getPath());
         } catch (java.io.FileNotFoundException e) {
             logger.debug(e.getMessage());
             httpResponse.sendNotFound();
