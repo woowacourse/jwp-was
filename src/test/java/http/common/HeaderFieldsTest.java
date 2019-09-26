@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class HeaderFieldsTest {
     private HeaderFields fields;
@@ -78,7 +78,7 @@ class HeaderFieldsTest {
     void testToString() {
         String stringToCompare =
                 "Content-Length: 13309\r\n" +
-                "Content-Type: text/html; charset=utf-8\r\n";
+                        "Content-Type: text/html; charset=utf-8\r\n";
         assertThat(fields.toString()).isEqualTo(stringToCompare);
     }
 }

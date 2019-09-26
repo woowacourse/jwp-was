@@ -3,6 +3,7 @@ package http.response;
 import http.common.Cookie;
 import http.common.HeaderFields;
 import http.common.HttpStatus;
+import http.common.HttpVersion;
 import org.apache.tika.Tika;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,10 @@ import java.util.Objects;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
+    public static final String CONTENT_TYPE = "Content-Type";
+    public static final String CONTENT_LENGTH = "Content-Length";
+    public static final String LOCATION = "Location";
+    public static final String CHARSET_UTF_8 = "charset=utf-8";
 
     private HttpStatus status;
     private final HeaderFields headerFields;
@@ -32,8 +37,8 @@ public class HttpResponse {
             body = FileIoUtils.loadFileFromClasspath(path);
             String type = new Tika().detect(path);
 
-            headerFields.addHeader("Content-Type", type + ";charset=utf-8");
-            headerFields.addHeader("Content-Length", String.valueOf(body.length));
+            headerFields.addHeader(CONTENT_TYPE, type + ";" + CHARSET_UTF_8);
+            headerFields.addHeader(CONTENT_LENGTH, String.valueOf(body.length));
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
             status = HttpStatus.NOT_FOUND;
@@ -44,14 +49,15 @@ public class HttpResponse {
     public void forward(byte[] body) {
         status = HttpStatus.OK;
         this.body = body;
+        String type = new Tika().detect(body);
 
-        headerFields.addHeader("Content-Type", "text/html;charset=utf-8");
-        headerFields.addHeader("Content-Length", String.valueOf(body.length));
+        headerFields.addHeader(CONTENT_TYPE, type + ";" + CHARSET_UTF_8);
+        headerFields.addHeader(CONTENT_LENGTH, String.valueOf(body.length));
     }
 
     public void sendRedirect(String location) {
         status = HttpStatus.FOUND;
-        headerFields.addHeader("Location", location);
+        headerFields.addHeader(LOCATION, location);
     }
 
     public String convert() {
@@ -63,7 +69,9 @@ public class HttpResponse {
 
     private String convertHeader() {
         StringBuilder sb = new StringBuilder();
-        sb.append("HTTP/1.1 ").append(status.getStatusCode()).append(" ").append(status.getStatusName()).append("\r\n");
+        sb.append(HttpVersion.HTTP_1_1.getVersion()).append(" ")
+                .append(status.getStatusCode()).append(" ")
+                .append(status.getStatusName()).append("\r\n");
         sb.append(headerFields.convert());
         sb.append("\r\n");
 

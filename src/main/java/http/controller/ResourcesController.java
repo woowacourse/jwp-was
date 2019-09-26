@@ -1,7 +1,7 @@
 package http.controller;
 
-import http.response.HttpResponse;
 import http.request.HttpRequest;
+import http.response.HttpResponse;
 
 public class ResourcesController extends AbstractController {
     @Override

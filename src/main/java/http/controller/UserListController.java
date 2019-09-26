@@ -16,6 +16,9 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static http.common.Cookie.LOGINED;
+import static http.common.Cookie.LOGINED_FALSE;
+
 public class UserListController extends AbstractController {
     public static final String URL = "/user/list";
     private static final Logger log = LoggerFactory.getLogger(UserListController.class);
@@ -47,7 +50,7 @@ public class UserListController extends AbstractController {
 
     private void setNotLoginedResponse(HttpResponse response) {
         response.sendRedirect("/user/login.html");
-        response.addCookie("logined", "false");
+        response.addCookie(LOGINED, LOGINED_FALSE);
     }
 
     private String renderingPage() throws IOException {

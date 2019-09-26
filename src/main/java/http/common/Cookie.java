@@ -5,6 +5,10 @@ import java.util.Map;
 import java.util.Objects;
 
 public class Cookie {
+    public static final String LOGINED = "logined";
+    public static final String LOGINED_TRUE = "true";
+    public static final String LOGINED_FALSE = "false";
+    public static final String PATH = "Path";
     private static final String COOKIE_DELIMITER = "=";
     private String name;
     private String value;

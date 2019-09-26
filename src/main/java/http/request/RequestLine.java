@@ -78,7 +78,7 @@ public class RequestLine {
     }
 
     public String getQueryString(String name) {
-        if(!isExistValue(name)) {
+        if (!isExistValue(name)) {
             throw new InvalidHeaderException(name + "은 존재하지 않는 값입니다.");
         }
         return queryStringValues.get(name);

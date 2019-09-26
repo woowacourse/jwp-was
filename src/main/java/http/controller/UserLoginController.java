@@ -1,6 +1,7 @@
 package http.controller;
 
 import db.DataBase;
+import http.common.Cookie;
 import http.exception.NotFoundUserException;
 import http.exception.NotMatchPasswordException;
 import http.request.HttpRequest;
@@ -8,6 +9,8 @@ import http.response.HttpResponse;
 import model.User;
 
 import java.util.Optional;
+
+import static http.common.Cookie.*;
 
 public class UserLoginController extends AbstractController {
     public static final String URL = "/user/login";
@@ -38,14 +41,14 @@ public class UserLoginController extends AbstractController {
     }
 
     private void setLoginSuccessResponse(HttpResponse response) {
-        response.addCookie("logined", "true");
-        response.addCookieOption("logined", "Path", "/");
+        response.addCookie(LOGINED, LOGINED_TRUE);
+        response.addCookieOption(LOGINED, Cookie.PATH, "/");
         response.sendRedirect("/index.html");
     }
 
     private void setLoginFailResponse(HttpResponse response) {
-        response.addCookie("logined", "false");
-        response.addCookieOption("logined", "Path", "/");
+        response.addCookie(LOGINED, LOGINED_FALSE);
+        response.addCookieOption(LOGINED, Cookie.PATH, "/");
         response.sendRedirect("/user/login_failed.html");
     }
 

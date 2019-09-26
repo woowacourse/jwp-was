@@ -27,7 +27,7 @@ public class HttpRequest {
     }
 
     public String getData(String fieldName) {
-        if(requestLine.isExistValue(fieldName)) {
+        if (requestLine.isExistValue(fieldName)) {
             return requestLine.getQueryString(fieldName);
         }
         return datas.getData(fieldName);
