@@ -15,7 +15,7 @@ public class LoginService {
         String userId = map.get("userId");
         String password = map.get("password");
 
-        User user = Optional.of(DataBase.findUserById(userId))
+        User user = Optional.ofNullable(DataBase.findUserById(userId))
                 .orElseThrow(() -> new LoginFailException("Not Exist User ID!"));
 
         if (!user.isSamePassword(password)) {
