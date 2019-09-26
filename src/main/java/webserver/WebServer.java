@@ -2,10 +2,7 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import servlet.controller.Controller;
-import servlet.controller.ControllerFinder;
-import servlet.controller.CreateUserController;
-import servlet.controller.LoginUserController;
+import servlet.controller.*;
 
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -23,8 +20,9 @@ public class WebServer {
 
     static {
         api = new HashMap<>();
-        api.put("/user/create", new CreateUserController());
-        api.put("/user/login", new LoginUserController());
+        api.put("/user/create", new UserCreateController());
+        api.put("/user/login", new UserLoginController());
+        api.put("/user/list", new UserListController());
     }
 
     public static void main(String args[]) throws Exception {

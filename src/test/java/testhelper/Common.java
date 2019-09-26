@@ -5,10 +5,7 @@ import http.request.HttpRequestFactory;
 import model.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import servlet.controller.Controller;
-import servlet.controller.ControllerFinder;
-import servlet.controller.CreateUserController;
-import servlet.controller.LoginUserController;
+import servlet.controller.*;
 import servlet.resolver.UserResolver;
 
 import java.io.*;
@@ -24,8 +21,9 @@ public class Common {
 
     static {
         api = new HashMap<>();
-        api.put("/user/create", new CreateUserController());
-        api.put("/user/login", new LoginUserController());
+        api.put("/user/create", new UserCreateController());
+        api.put("/user/login", new UserLoginController());
+        api.put("/user/list", new UserListController());
 
         try {
             HttpRequest httpRequest =
@@ -37,24 +35,21 @@ public class Common {
     }
 
     public static BufferedReader getBufferedReaderOfText(final String path) throws FileNotFoundException {
-
         InputStreamReader inputStreamReader = new InputStreamReader(getInputStream(path));
         return new BufferedReader(inputStreamReader);
     }
 
     public static InputStream getInputStream(final String path) throws FileNotFoundException {
         String absolutePath = TEST_DIRECTORY_PATH + path;
-
         return new FileInputStream(new File(absolutePath));
     }
 
-    public static BufferedReader test(final OutputStream outputStream) {
+    public static BufferedReader convertToBufferedReader(final OutputStream outputStream) {
         InputStream inputStream = new ByteArrayInputStream(((ByteArrayOutputStream) outputStream).toByteArray());
         return new BufferedReader(new InputStreamReader(inputStream));
     }
 
     public static ControllerFinder getControllerFinder() {
-        ControllerFinder controllerFinder = new ControllerFinder(Collections.unmodifiableMap(api));
-        return controllerFinder;
+        return new ControllerFinder(Collections.unmodifiableMap(api));
     }
 }

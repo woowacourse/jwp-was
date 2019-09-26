@@ -18,7 +18,7 @@ public class ServletContainer {
     public HttpResponse process(
             final HttpRequest httpRequest, final HttpResponse httpResponse) throws IOException, URISyntaxException {
         Controller controller = controllerMapper.find(httpRequest);
-        controller.service(httpRequest, httpResponse);          // HttpResponse에 헤더 추가
+        controller.service(httpRequest, httpResponse);
 
         return httpResponse;
     }

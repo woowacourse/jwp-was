@@ -1,5 +1,9 @@
 package http;
 
+import com.github.jknack.handlebars.Handlebars;
+import com.github.jknack.handlebars.Template;
+import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
+import com.github.jknack.handlebars.io.TemplateLoader;
 import com.google.common.base.Charsets;
 import http.support.StatusCode;
 import org.slf4j.Logger;
@@ -17,6 +21,9 @@ public class HttpResponse {
     private static final String HTTP_VERSION = "HTTP/1.1 ";
     private static final String DELIMITER_OF_RESPONSE_HEADER = ": ";
 
+    // @TODO Model 지우기
+    private Map<String, Object> model = null;
+
     private Map<String, String> headers = new HashMap<>();
     private OutputStream outputStream;
 
@@ -28,7 +35,10 @@ public class HttpResponse {
         headers.put(key, value);
     }
 
-    //@TODO
+    public void addModel(Map<String, Object> model) {
+        this.model = model;
+    }
+
     public void forward(String path) throws IOException, URISyntaxException {
         logger.debug("Forwarding Path : {}", path);
 
@@ -38,11 +48,24 @@ public class HttpResponse {
         writeStartLine(StatusCode.OK);
         writeHeaders();
 
-        outputStream.write(body, 0, body.length);
+        if (model == null) {
+            outputStream.write(body, 0, body.length);
+        } else {
+            TemplateLoader loader = new ClassPathTemplateLoader();
+            loader.setPrefix("/templates");
+            loader.setSuffix(".html");
+            Handlebars handlebars = new Handlebars(loader);
+
+            Template template = handlebars.compile("user/list");
+
+            Map<String, Object> map = new HashMap<>();
+            map.put("users", model.get("users"));
+            String profilePage = template.apply(map);
+            outputStream.write(profilePage.getBytes(), 0, profilePage.getBytes().length);
+        }
         outputStream.flush();
     }
 
-    // @TODO
     public void sendRedirect() throws IOException {
         writeStartLine(StatusCode.FOUND);
         writeHeaders();
@@ -68,5 +91,9 @@ public class HttpResponse {
             outputStream.write("\r\n".getBytes(Charsets.UTF_8));
         }
         outputStream.write("\r\n".getBytes(Charsets.UTF_8));
+    }
+
+    public Object getModel() {
+        return model;
     }
 }

@@ -28,7 +28,7 @@ public class RequestHandlerTest {
         RequestHandler requestHandler = new RequestHandler(loginSocket, getControllerFinder());
         requestHandler.run();
 
-        BufferedReader bufferedReader = Common.test(loginSocket.getOutputStream());
+        BufferedReader bufferedReader = Common.convertToBufferedReader(loginSocket.getOutputStream());
         logger.info("\n" + loginSocket.getOutputStream().toString());
         assertThat(bufferedReader.readLine()).isEqualTo("HTTP/1.1 200 OK");
     }
@@ -42,7 +42,7 @@ public class RequestHandlerTest {
         RequestHandler requestHandler = new RequestHandler(loginSocket, getControllerFinder());
         requestHandler.run();
 
-        BufferedReader bufferedReader = Common.test(loginSocket.getOutputStream());
+        BufferedReader bufferedReader = Common.convertToBufferedReader(loginSocket.getOutputStream());
         logger.info("\n" + loginSocket.getOutputStream().toString());
         assertThat(bufferedReader.readLine()).isEqualTo("HTTP/1.1 200 OK");
     }
@@ -56,10 +56,24 @@ public class RequestHandlerTest {
         RequestHandler requestHandler = new RequestHandler(loginSocket, getControllerFinder());
         requestHandler.run();
 
-        BufferedReader bufferedReader = Common.test(loginSocket.getOutputStream());
+        BufferedReader bufferedReader = Common.convertToBufferedReader(loginSocket.getOutputStream());
         logger.info("\n" + loginSocket.getOutputStream().toString());
         assertThat(bufferedReader.readLine()).isEqualTo("HTTP/1.1 302 FOUND");
         assertThat(bufferedReader.readLine()).isEqualTo("Set-Cookie: logined=true; Path=/");
         assertThat(bufferedReader.readLine()).isEqualTo("Location: /index.html");
+    }
+
+    @Test
+    @DisplayName("로그인 상태에서 /user/list 요청")
+    public void userList() throws IOException {
+        Socket loginSocket = mock(Socket.class);
+        when(loginSocket.getInputStream()).thenReturn(Common.getInputStream("HTTP_GET_USER_LIST_LOGIN.txt"));
+        when(loginSocket.getOutputStream()).thenReturn(new ByteArrayOutputStream());
+        RequestHandler requestHandler = new RequestHandler(loginSocket, getControllerFinder());
+        requestHandler.run();
+
+        BufferedReader bufferedReader = Common.convertToBufferedReader(loginSocket.getOutputStream());
+        logger.info("\n" + loginSocket.getOutputStream().toString());
+        assertThat(bufferedReader.readLine()).isEqualTo("HTTP/1.1 200 OK");
     }
 }

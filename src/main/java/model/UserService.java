@@ -1,10 +1,10 @@
 package model;
 
 import db.DataBase;
-import http.request.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -29,5 +29,9 @@ public class UserService {
         } catch (NoSuchElementException e) {
             return false;
         }
+    }
+
+    public Collection<User> findAll() {
+        return DataBase.findAll();
     }
 }

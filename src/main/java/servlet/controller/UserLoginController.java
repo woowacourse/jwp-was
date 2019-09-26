@@ -9,7 +9,7 @@ import webserver.support.PathHandler;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-public class LoginUserController extends HttpController {
+public class UserLoginController extends HttpController {
 
     //@TODO 리팩토링
     @Override

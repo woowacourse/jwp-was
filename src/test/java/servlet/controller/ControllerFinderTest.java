@@ -1,4 +1,4 @@
-package webserver.controller;
+package servlet.controller;
 
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
@@ -6,7 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import servlet.controller.Controller;
 import servlet.controller.ControllerFinder;
-import servlet.controller.CreateUserController;
+import servlet.controller.UserCreateController;
 import testhelper.Common;
 
 import java.io.IOException;
@@ -20,7 +20,7 @@ public class ControllerFinderTest {
     private static Map<String, Controller> api = new HashMap<>();
 
     static {
-        api.put("/user/create", new CreateUserController());
+        api.put("/user/create", new UserCreateController());
         controllerFinder = new ControllerFinder(api);
     }
 

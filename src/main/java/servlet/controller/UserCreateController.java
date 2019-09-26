@@ -7,7 +7,7 @@ import servlet.resolver.UserResolver;
 
 import java.io.IOException;
 
-public class CreateUserController extends HttpController {
+public class UserCreateController extends HttpController {
 
     @Override
     protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
