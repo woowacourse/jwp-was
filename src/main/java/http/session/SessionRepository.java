@@ -32,7 +32,7 @@ public class SessionRepository {
 
     private String createUniqueSessionId() {
         String uuid = UUID.randomUUID().toString();
-        while (sessions.get(uuid) != null) {
+        while (sessions.containsKey(uuid)) {
             uuid = UUID.randomUUID().toString();
         }
 
