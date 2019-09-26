@@ -54,12 +54,10 @@ public class UserController implements Controller {
             users.put("users", userList);
 
             String listPage = template.apply(users);
-
-
             response.setResponseStatus(ResponseStatus.OK);
             response.setResponseHeaders(new ResponseHeaders());
             response.addResponseHeaders("Content-Type: ", "text/html");
-//            byte[] body = FileIoUtils.loadFileFromClasspath("../resources/templates/user/list.html");
+
             response.setResponseBody(listPage.getBytes());
         }
 
