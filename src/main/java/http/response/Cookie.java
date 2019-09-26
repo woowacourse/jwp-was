@@ -11,14 +11,6 @@ public class Cookie {
         this.path = path;
     }
 
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
     public String getName() {
         return name;
     }
@@ -27,8 +19,16 @@ public class Cookie {
         return value;
     }
 
+    public void setValue(String value) {
+        this.value = value;
+    }
+
     public String getPath() {
         return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     @Override
