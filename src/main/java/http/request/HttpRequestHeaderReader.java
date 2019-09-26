@@ -40,9 +40,9 @@ public class HttpRequestHeaderReader {
 	}
 
 	private static void saveRequestURL(String requestLine, Map<String, String> requests) {
-		String[] infos = requestLine.split(" ");
-		requests.put(REQUEST_METHOD, infos[0]);
-		requests.put(REQUEST_PATH, infos[1]);
-		requests.put(REQUEST_PROTOCOL, infos[2]);
+		String[] requestLines = requestLine.split(" ");
+		requests.put(REQUEST_METHOD, requestLines[0]);
+		requests.put(REQUEST_PATH, requestLines[1]);
+		requests.put(REQUEST_PROTOCOL, requestLines[2]);
 	}
 }

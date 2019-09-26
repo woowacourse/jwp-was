@@ -37,10 +37,10 @@ public class HttpResponseGenerator {
 	}
 
 	private static void saveResponseHeader(String headerLine, Map<String, String> header, String mimeType, int lengthOfBodyContent) {
-		String[] info = headerLine.split(" ");
-		header.put(RESPONSE_PROTOCOL, info[0]);
-		header.put(RESPONSE_CODE, info[1]);
-		header.put(RESPONSE_DESCRIPTION, info[2]);
+		String[] headerLines = headerLine.split(" ");
+		header.put(RESPONSE_PROTOCOL, headerLines[0]);
+		header.put(RESPONSE_CODE, headerLines[1]);
+		header.put(RESPONSE_DESCRIPTION, headerLines[2]);
 		header.put(RESPONSE_CONTENT_TYPE, mimeType + ";charset=utf-8\r\n");
 		header.put(RESPONSE_CONTENT_LENGTH, lengthOfBodyContent + "\r\n");
 	}
