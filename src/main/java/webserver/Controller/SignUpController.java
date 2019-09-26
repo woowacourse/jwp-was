@@ -5,19 +5,10 @@ import model.User;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 
-public class SignUpController implements Controller {
+public class SignUpController extends AbstractController {
 
     @Override
-    public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
-        if (httpRequest.isGet()) {
-            doGet(httpRequest, httpResponse);
-        }
-        if (httpRequest.isPost()) {
-            doPost(httpRequest, httpResponse);
-        }
-    }
-
-    private void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+    protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         User user = new User(
                 httpRequest.getParameter("userId"),
                 httpRequest.getParameter("password"),
@@ -28,7 +19,8 @@ public class SignUpController implements Controller {
         httpResponse.addHeader("Content-Type", "text/html;charset=utf-8");
     }
 
-    private void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
+    @Override
+    protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         User user = new User(
                 httpRequest.getParameter("userId"),
                 httpRequest.getParameter("password"),
