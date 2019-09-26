@@ -18,7 +18,6 @@ public class HttpResponse implements AutoCloseable {
     private ResponseHeader header;
     private ResponseBody body;
 
-
     private final DataOutputStream dataOutputStream;
 
     public HttpResponse(final OutputStream out) {
@@ -40,8 +39,8 @@ public class HttpResponse implements AutoCloseable {
         header.addContents(http, value);
     }
 
-    public void addHeader(HttpCookie httpCookie) {
-        header.addContents(HTTP.SET_COOKIE, httpCookie.getResponse());
+    public void addCookie(HttpCookie httpCookie) {
+        header.addCookie(httpCookie);
     }
 
     public void addBody(byte[] body) {

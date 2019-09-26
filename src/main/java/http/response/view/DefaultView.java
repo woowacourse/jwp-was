@@ -22,7 +22,6 @@ public class DefaultView extends View {
 
     private byte[] findBody(String path) throws IOException, URISyntaxException {
         byte[] body = FileIoUtils.loadFileFromClasspath(path);
-        logger.info("response body : {}", body);
         return body;
     }
 }

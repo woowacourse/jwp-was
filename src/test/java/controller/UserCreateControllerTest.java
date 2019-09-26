@@ -18,7 +18,7 @@ class UserCreateControllerTest {
     void user_create_요청() throws IOException {
         User user = new User("javajigi", "password", "박재성", "javajigi@slipp.net");
 
-        String request = "POST /user/createSession HTTP/1.1\n" +
+        String request = "POST /user/create HTTP/1.1\n" +
                 "Host: localhost:8080\n" +
                 "Connection: keep-alive\n" +
                 "Content-Length: 93\n" +

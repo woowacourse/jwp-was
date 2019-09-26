@@ -1,6 +1,8 @@
 package http.response;
 
 import http.HTTP;
+import http.HttpCookie;
+import http.request.HttpCookies;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,11 +12,10 @@ public class ResponseHeader {
     private static final String HEADER_DELIMITER = ": ";
 
     private final Map<HTTP, String> contents = new HashMap<>();
-
+    private HttpCookies httpCookies = new HttpCookies();
 
     public void addContents(HTTP http, String value) {
         contents.put(http, value);
-
     }
 
     public void add(Map<HTTP, String> header) {
@@ -36,6 +37,14 @@ public class ResponseHeader {
                 sb.append(key.getPhrase()).append(HEADER_DELIMITER).append(contents.get(key)).append(NEW_LINE);
             }
         }
+
+        for (HttpCookie cookie : httpCookies.getCookies()) {
+            sb.append(HTTP.SET_COOKIE.getPhrase()).append(HEADER_DELIMITER).append(cookie.getResponse()).append(NEW_LINE);
+        }
         return sb.toString();
+    }
+
+    public void addCookie(HttpCookie cookie) {
+        httpCookies.addCookie(cookie);
     }
 }

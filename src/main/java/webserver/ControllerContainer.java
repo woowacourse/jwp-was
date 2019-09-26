@@ -13,7 +13,7 @@ public class ControllerContainer {
     private static Map<String, AbstractController> controllers = Maps.newHashMap();
 
     static {
-        controllers.put("/user/createSession", new UserCreateController());
+        controllers.put("/user/create", new UserCreateController());
         controllers.put("/user/login", new UserLoginController());
         controllers.put("/user/list", new UserListController());
     }

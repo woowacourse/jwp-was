@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static controller.UserLoginController.SESSION_ID;
+
 public class UserListController extends AbstractController {
     private static final Logger log = LoggerFactory.getLogger(UserListController.class);
 
@@ -24,7 +26,7 @@ public class UserListController extends AbstractController {
 
     @Override
     void doGet(HttpRequest request, HttpResponse response) {
-        HttpSession session = HttpSessionDB.getInstance().findOrCreateSession(request.getSessionId());
+        HttpSession session = HttpSessionDB.getInstance().findOrCreateSession(request.getCookieValue(SESSION_ID));
         if (session != null && session.getAttributes("login-user") != null) {
             showUsers(response);
             return;

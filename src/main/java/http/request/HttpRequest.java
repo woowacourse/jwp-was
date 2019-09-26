@@ -30,8 +30,8 @@ public class HttpRequest implements AutoCloseable {
         return requestHeader.getHeaderContents(http.getPhrase());
     }
 
-    public String getSessionId() {
-        return requestHeader.getSessionId();
+    public String getCookieValue(String name) {
+        return requestHeader.getCookieValue(name);
     }
 
     public boolean checkMethod(RequestMethod requestMethod) {

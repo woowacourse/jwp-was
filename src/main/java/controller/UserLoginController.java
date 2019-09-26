@@ -13,6 +13,7 @@ import session.HttpSessionDB;
 import utils.QueryStringUtils;
 
 public class UserLoginController extends AbstractController {
+    public static final String SESSION_ID = "SessionId";
 
     private UserService userService = new UserService();
 
@@ -28,7 +29,7 @@ public class UserLoginController extends AbstractController {
         try {
             User foundUser = userService.login(userId, password);
 
-            HttpSession httpSession = HttpSessionDB.getInstance().findOrCreateSession(request.getSessionId());
+            HttpSession httpSession = HttpSessionDB.getInstance().findOrCreateSession(request.getCookieValue(SESSION_ID));
             setCookie(response, httpSession);
 
             httpSession.setAttribute("login-user", foundUser);
@@ -39,9 +40,8 @@ public class UserLoginController extends AbstractController {
     }
 
     private void setCookie(HttpResponse response, HttpSession httpSession) {
-        HttpCookie httpCookie = new HttpCookie();
-        httpCookie.setAttribute(HttpCookie.Option.SESSION_ID.getPhrase(), httpSession.getId());
-        httpCookie.setAttribute(HttpCookie.Option.PATH.getPhrase(), "/");
-        response.addHeader(httpCookie);
+        HttpCookie httpCookie = new HttpCookie(SESSION_ID, httpSession.getId());
+        httpCookie.setPath("/");
+        response.addCookie(httpCookie);
     }
 }

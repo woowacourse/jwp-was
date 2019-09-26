@@ -2,18 +2,61 @@ package http;
 
 import com.google.common.collect.Maps;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class HttpCookie {
+    private static final String ATTRIBUTE_DELIMITER = "=";
+    private static final String ATTRIBUTE_END = "; ";
+    private static final String EMPTY_STRING = "";
+
+    private Map<Option, String> options = Maps.newHashMap();
+    private String key;
+    private String value;
+
+    public HttpCookie(String line) {
+        String[] tokens = line.split(ATTRIBUTE_DELIMITER);
+        this.key = tokens[0];
+        this.value = tokens[1];
+    }
+
+    public HttpCookie(String key, String value) {
+        this.key = key;
+        this.value = value;
+    }
+
+    public static HttpCookie emptyInstance() {
+        return new HttpCookie(EMPTY_STRING, EMPTY_STRING);
+    }
+
+    public void setPath(String path) {
+        options.put(Option.PATH, path);
+    }
+
+    public String getAttribute(Option option) {
+        return options.getOrDefault(option, EMPTY_STRING);
+    }
+
+    public boolean checkName(String key) {
+        return this.key.equals(key);
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public String getResponse() {
+        StringBuffer sb = new StringBuffer();
+        sb.append(key).append(ATTRIBUTE_DELIMITER).append(value).append(ATTRIBUTE_END);
+
+        for (Option key : options.keySet()) {
+            sb.append(key.phrase).append(ATTRIBUTE_DELIMITER).append(options.get(key)).append(ATTRIBUTE_END);
+        }
+
+        return sb.toString();
+    }
+
     public enum Option {
-        MAX_AGE("Max-Age"),
-        DOMAIN("Domain"),
-        PATH("Path"),
-        SECURE("Secure"),
-        HTTP_ONLY("HttpOnly"),
-        SESSION_ID("SessionId");
+        PATH("Path");
 
         private String phrase;
 
@@ -33,55 +76,5 @@ public class HttpCookie {
         public String getPhrase() {
             return phrase;
         }
-    }
-
-    private static final String ATTRIBUTE_DELIMITER = "=";
-    private static final String ATTRIBUTE_END = "; ";
-    private static final String EMPTY_STRING = "";
-
-
-    private Map<String, String> contents = Maps.newHashMap();
-    private List<Option> options = new ArrayList<>();
-
-    public HttpCookie() {
-    }
-
-    public HttpCookie(String line) {
-        for (String keyValue : line.split(ATTRIBUTE_END)) {
-            String[] tokens = keyValue.split(ATTRIBUTE_DELIMITER);
-            if (tokens.length == 2) {
-                contents.put(tokens[0], tokens[1]);
-                continue;
-            }
-            options.add(Option.valueOfPhrase(tokens[0]));
-        }
-    }
-
-    public void setAttribute(String key, String value) {
-        contents.put(key, value);
-    }
-
-    public void useSecure() {
-        options.add(Option.SECURE);
-    }
-
-    public void useHttpOnly() {
-        options.add(Option.HTTP_ONLY);
-    }
-
-    public String getAttribute(String key) {
-        return contents.getOrDefault(key, EMPTY_STRING);
-    }
-
-    public String getResponse() {
-        StringBuffer sb = new StringBuffer();
-        for (String key : contents.values()) {
-            sb.append(key).append(ATTRIBUTE_DELIMITER).append(contents.get(key)).append(ATTRIBUTE_END);
-        }
-        for (Option option : options) {
-            sb.append(option.phrase).append(ATTRIBUTE_END);
-        }
-
-        return sb.toString();
     }
 }

@@ -2,7 +2,6 @@ package http.request;
 
 import com.google.common.collect.Maps;
 import http.HTTP;
-import http.HttpCookie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,8 +15,7 @@ public class RequestHeader {
     private static final String EMPTY_STRING = "";
 
     private final Map<String, String> headerContents = Maps.newHashMap();
-    private HttpCookie cookie;
-
+    private HttpCookies cookies;
 
     public RequestHeader(BufferedReader bufferedReader) throws IOException {
         createHeader(bufferedReader);
@@ -26,7 +24,7 @@ public class RequestHeader {
 
     private void createCookie() {
         if (headerContents.containsKey(HTTP.COOKIE.getPhrase())) {
-            this.cookie = new HttpCookie(headerContents.get(HTTP.COOKIE.getPhrase()));
+            this.cookies = new HttpCookies(headerContents.get(HTTP.COOKIE.getPhrase()));
         }
     }
 
@@ -53,9 +51,9 @@ public class RequestHeader {
         return headerContents.getOrDefault(key, EMPTY_STRING);
     }
 
-    public String getSessionId() {
-        if (cookie != null) {
-            return cookie.getAttribute(HttpCookie.Option.SESSION_ID.getPhrase());
+    public String getCookieValue(String name) {
+        if (cookies != null) {
+            return cookies.findValueBy(name);
         }
         return EMPTY_STRING;
     }
