@@ -1,6 +1,6 @@
 package http.model;
 
-import http.supoort.IllegalHttpRequestException;
+import http.controller.NotFoundException;
 
 import java.util.Arrays;
 
@@ -8,7 +8,11 @@ public enum ContentType {
     HTML("text/html"),
     CSS("text/css"),
     JS("application/js"),
-    PNG("image/png");
+    PNG("image/png"),
+    TTF("application/x-font-ttf"),
+    WOFF("application/x-font-woff"),
+    ICO("image/x-icon");
+
 
     private String type;
 
@@ -20,7 +24,7 @@ public enum ContentType {
         return Arrays.stream(ContentType.values())
                 .filter(value -> type.toUpperCase().equals(value.name()))
                 .findAny()
-                .orElseThrow(IllegalHttpRequestException::new);
+                .orElseThrow(NotFoundException::new);
     }
 
     public String getType() {
