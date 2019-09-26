@@ -41,7 +41,7 @@
     - [x] 로그인 성공시 index.html로 이동
     - [x] 로그인 실패시 /user/login_failed.html로 이동
     - [x] 앞에서 회원가입한 사용자로 로그인할 수 있어야 한다.
-    - [ ] 로그인이 성공하면 cookie를 활용해 로그인 상태를 유지할 수 있어야 한다.
+    - [x] 로그인이 성공하면 cookie를 활용해 로그인 상태를 유지할 수 있어야 한다.
 
 ## 의문사항
 - HTTP response version이 어떻게 결정되는지? request로 온 HTTP버전에 맞춰서 결정되는지 아니면 server에서 정해진 버전으로만 응답하는지?
