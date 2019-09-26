@@ -18,6 +18,7 @@ public class UserLoginServlet extends RequestServlet {
         User user = DataBase.findUserById(id);
         if (canLogin(password, user)) {
             httpResponse.redirect("/");
+            return new View(null);
         }
         httpResponse.redirect("/user/login_failed.html");
         return new View(null);
@@ -29,6 +30,6 @@ public class UserLoginServlet extends RequestServlet {
 
     @Override
     protected String getUrl() {
-        return null;
+        return url;
     }
 }

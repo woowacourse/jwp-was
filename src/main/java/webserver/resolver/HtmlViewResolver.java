@@ -12,7 +12,7 @@ public class HtmlViewResolver implements Resolver {
     @Override
     public byte[] resolve(String path) throws IOException, URISyntaxException {
         if (path == null) {
-            return null;
+            return new byte[0];
         }
         return FileIoUtils.loadHtmlFile(PREFIX + path + POSTFIX);
     }
