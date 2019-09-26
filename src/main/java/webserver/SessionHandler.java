@@ -16,7 +16,8 @@ public class SessionHandler {
 
     public static SessionHandler getInstance() {
         if (sessionHandler == null) {
-            return new SessionHandler();
+            sessionHandler = new SessionHandler();
+            return sessionHandler;
         }
         return sessionHandler;
     }
@@ -26,7 +27,7 @@ public class SessionHandler {
     }
 
     public HttpSession getSession(String sessionId) {
-        if(session.containsKey(sessionId)) {
+        if (session.containsKey(sessionId)) {
             return session.get(sessionId);
         }
         throw new InvalidSessionExceptioon("존재하지 않는 세션 ID 입니다.");

@@ -44,20 +44,17 @@ public class UserLoginController extends AbstractController {
     }
 
     private void setLoginSuccessResponse(HttpResponse response) {
-        //Todo 세션을 담아보자
         HttpSession session = new HttpSession();
         Cookie loginedCookie = new Cookie(LOGINED, LOGINED_TRUE);
         loginedCookie.addOption(Cookie.PATH, "/");
         session.setAttribute(loginedCookie.getName(), loginedCookie);
-//        SessionHandle
+        SessionHandler.getInstance().addSession(session.getId(), session);
+
         response.addCookie("sessionId", session.getId());
-//        response.addCookieOption(LOGINED, Cookie.PATH, "/");
         response.sendRedirect("/index.html");
     }
 
     private void setLoginFailResponse(HttpResponse response) {
-//        response.addCookie(LOGINED, LOGINED_FALSE);
-//        response.addCookieOption(LOGINED, Cookie.PATH, "/");
         response.sendRedirect("/user/login_failed.html");
     }
 

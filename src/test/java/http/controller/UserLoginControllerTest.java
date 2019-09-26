@@ -2,6 +2,7 @@ package http.controller;
 
 import db.DataBase;
 import http.common.Cookie;
+import http.common.HttpSession;
 import http.common.HttpStatus;
 import http.exception.NotFoundUserException;
 import http.exception.NotMatchPasswordException;
@@ -11,12 +12,15 @@ import http.response.HttpResponse;
 import model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import webserver.SessionHandler;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static http.common.Cookie.LOGINED;
+import static http.common.Cookie.LOGINED_TRUE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -36,11 +40,12 @@ class UserLoginControllerTest {
         UserLoginController controller = new UserLoginController();
         HttpResponse response = new HttpResponse();
         controller.doPost(request, response);
-        Cookie cookie = new Cookie("logined", "true");
-
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
-        assertThat(response.getCookie("sessionId")).isEqualTo(cookie);
+        String sessionId = response.getCookie("sessionId").getValue();
+        HttpSession session = SessionHandler.getInstance().getSession(sessionId);
+        Cookie mayBeCookie = (Cookie) session.getAttribute(LOGINED);
+        assertThat(mayBeCookie.getValue()).isEqualTo(LOGINED_TRUE);
     }
 
     @Test
@@ -50,11 +55,8 @@ class UserLoginControllerTest {
         UserLoginController controller = new UserLoginController();
         HttpResponse response = new HttpResponse();
         assertThrows(NotMatchPasswordException.class, () -> controller.doPost(request, response));
-        Cookie cookie = new Cookie("logined", "false");
-
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
-        assertThat(response.getCookie("logined")).isEqualTo(cookie);
         assertThat(response.getHeader("Location")).isEqualTo("/user/login_failed.html");
     }
 
@@ -65,10 +67,8 @@ class UserLoginControllerTest {
         UserLoginController controller = new UserLoginController();
         HttpResponse response = new HttpResponse();
         assertThrows(NotFoundUserException.class, () -> controller.doPost(request, response));
-        Cookie cookie = new Cookie("logined", "false");
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
-        assertThat(response.getCookie("logined")).isEqualTo(cookie);
         assertThat(response.getHeader("Location")).isEqualTo("/user/login_failed.html");
     }
 }
