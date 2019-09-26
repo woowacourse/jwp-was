@@ -7,15 +7,15 @@ public class HttpRequest {
     private final HttpHeaders headers;
     private final Parameters parameters;
     private final Cookies cookies;
-    private final HttpSessionManager sessionManager;
+    private final SessionManager sessionManager;
     private HttpSession httpSession;
 
-    HttpRequest(final RequestLine requestLine, final HttpHeaders headers, final Parameters parameters, final Cookies cookies) {
+    HttpRequest(final RequestLine requestLine, final HttpHeaders headers, final Parameters parameters, final Cookies cookies, final SessionManager sessionManager) {
         this.requestLine = requestLine;
         this.headers = headers;
         this.parameters = parameters;
         this.cookies = cookies;
-        sessionManager = HttpSessionManager.getInstance(); // todo di
+        this.sessionManager = sessionManager;
     }
 
     public HttpMethod getMethod() {
@@ -72,6 +72,7 @@ public class HttpRequest {
         private HttpHeaders headers;
         private Parameters parameters;
         private Cookies cookies;
+        private SessionManager sessionManager;
 
         HttpRequestBuilder() {
         }
@@ -96,8 +97,13 @@ public class HttpRequest {
             return this;
         }
 
+        HttpRequestBuilder sessionManager(SessionManager sessionManager) {
+            this.sessionManager = sessionManager;
+            return this;
+        }
+
         HttpRequest build() {
-            return new HttpRequest(requestLine, headers, parameters, cookies);
+            return new HttpRequest(requestLine, headers, parameters, cookies, sessionManager);
         }
     }
 

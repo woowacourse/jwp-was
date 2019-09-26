@@ -5,6 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.http.Cookies;
 import webserver.http.HttpHeaders;
+import webserver.http.HttpSessionManager;
+import webserver.http.SessionManager;
 import webserver.http.utils.HttpUtils;
 import webserver.http.utils.IOUtils;
 import webserver.http.utils.StringUtils;
@@ -23,6 +25,10 @@ public class HttpRequestFactory {
     }
 
     public static HttpRequest generate(final InputStream in) {
+        return generate(in, HttpSessionManager.getInstance());
+    }
+
+    public static HttpRequest generate(final InputStream in, final SessionManager sessionManager) {
 
         try {
             final BufferedReader br = new BufferedReader(new InputStreamReader(in));
@@ -39,6 +45,7 @@ public class HttpRequestFactory {
                     .headers(httpHeaders)
                     .parameters(parameters)
                     .cookies(cookies)
+                    .sessionManager(sessionManager)
                     .build();
         } catch (IOException e) {
             log.error(e.getMessage());
