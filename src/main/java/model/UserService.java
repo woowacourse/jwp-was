@@ -17,10 +17,8 @@ public class UserService {
         logger.debug("user list : {}", DataBase.findAll());
     }
 
-    // @TODO
     public boolean login(final User loginUser) {
         User other;
-
         try {
             other = Optional.ofNullable(DataBase.findUserById(loginUser.getUserId()))
                     .orElseThrow(NoSuchElementException::new);

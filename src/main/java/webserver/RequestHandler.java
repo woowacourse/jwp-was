@@ -28,7 +28,6 @@ public class RequestHandler implements Runnable {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
 
-        // @TODO DI로 구현
         FileContainer fileContainer = new FileContainer();
         ServletContainer servletContainer = new ServletContainer(controllerFinder);
 

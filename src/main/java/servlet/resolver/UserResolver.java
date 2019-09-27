@@ -7,7 +7,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Optional;
 
-//@TODO 나중에 스태틱 -> 객체
 public class UserResolver {
     public static User resolve(HttpRequest httpRequest) throws UnsupportedEncodingException {
         return new User(

@@ -46,6 +46,7 @@ public class HttpResponse {
         writeHeaders();
         writeCookies();
         writeNewLine();
+
         outputStream.write(body, 0, body.length);
         outputStream.flush();
     }
@@ -55,8 +56,6 @@ public class HttpResponse {
     }
 
     public void forward(String path) throws IOException, URISyntaxException {
-        logger.debug("Forward Path : {}", path);
-
         byte[] body = FileIoUtils.loadFileFromClasspath(path);
         addHeader("Content-Length", Integer.toString(body.length));
 
