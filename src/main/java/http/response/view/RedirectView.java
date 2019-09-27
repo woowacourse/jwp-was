@@ -1,15 +1,30 @@
 package http.response.view;
 
+import com.google.common.collect.Maps;
 import http.HTTP;
 import http.response.ResponseStatus;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class RedirectView extends View {
-    private static final Logger log = LoggerFactory.getLogger(RedirectView.class);
+import java.util.Map;
+
+public class RedirectView implements View {
+    private final Map<HTTP, String> header = Maps.newHashMap();
 
     public RedirectView(String path) {
-        super(ResponseStatus.FOUND);
         header.put(HTTP.LOCATION, path);
+    }
+
+    @Override
+    public ResponseStatus getResponseStatus() {
+        return ResponseStatus.FOUND;
+    }
+
+    @Override
+    public Map<HTTP, String> getHeader() {
+        return header;
+    }
+
+    @Override
+    public byte[] getBody() {
+        return "".getBytes();
     }
 }

@@ -1,27 +1,41 @@
 package http.response.view;
 
+import com.google.common.collect.Maps;
 import http.ContentType;
 import http.HTTP;
 import http.response.ResponseStatus;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Map;
 
-public class DefaultView extends View {
-    private static final Logger logger = LoggerFactory.getLogger(DefaultView.class);
+public class DefaultView implements View {
+    private final Map<HTTP, String> header = Maps.newHashMap();
+    private final byte[] body;
 
     public DefaultView(String path) throws IOException, URISyntaxException {
-        super(ResponseStatus.OK);
         this.body = findBody(path);
         header.put(HTTP.CONTENT_TYPE, ContentType.valueByPath(path).getContents() + ";charset=utf-8");
         header.put(HTTP.CONTENT_LENGTH, String.valueOf(body.length));
     }
 
     private byte[] findBody(String path) throws IOException, URISyntaxException {
-        byte[] body = FileIoUtils.loadFileFromClasspath(path);
+        return FileIoUtils.loadFileFromClasspath(path);
+    }
+
+    @Override
+    public ResponseStatus getResponseStatus() {
+        return ResponseStatus.OK;
+    }
+
+    @Override
+    public Map<HTTP, String> getHeader() {
+        return header;
+    }
+
+    @Override
+    public byte[] getBody() {
         return body;
     }
 }
