@@ -1,7 +1,7 @@
 package servlet.controller;
 
-import http.response.HttpResponse;
 import http.request.HttpRequest;
+import http.response.HttpResponse;
 import model.UserService;
 import servlet.resolver.UserResolver;
 

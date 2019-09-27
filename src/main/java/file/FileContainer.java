@@ -1,7 +1,7 @@
 package file;
 
-import http.response.HttpResponse;
 import http.request.HttpRequest;
+import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.exception.NotMatchUrlException;
@@ -16,7 +16,7 @@ public class FileContainer {
     public boolean process(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         try {
             String absoluteUrl = PathHandler.path(httpRequest.getResourcePath());
-            logger.debug("정적 파일 경로 : {}", absoluteUrl);
+            logger.debug("static file path : {}", absoluteUrl);
             httpResponse.forward(absoluteUrl);
             return true;
         } catch (NotMatchUrlException e) {

@@ -59,8 +59,8 @@ public class RequestHandlerTest {
         BufferedReader bufferedReader = Common.convertToBufferedReader(loginSocket.getOutputStream());
         logger.info("\n" + loginSocket.getOutputStream().toString());
         assertThat(bufferedReader.readLine()).isEqualTo("HTTP/1.1 302 FOUND");
-        assertThat(bufferedReader.readLine()).isEqualTo("Set-Cookie: logined=true; Path=/");
         assertThat(bufferedReader.readLine()).isEqualTo("Location: /index.html");
+        assertThat(bufferedReader.readLine()).isEqualTo("Content-Type: text/html");
     }
 
     @Test

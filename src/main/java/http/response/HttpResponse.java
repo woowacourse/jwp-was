@@ -11,7 +11,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class HttpResponse {
@@ -20,15 +22,20 @@ public class HttpResponse {
     private static final String DELIMITER_OF_RESPONSE_HEADER = ": ";
     private static final Charset DEFAULT_CHARSET = Charsets.UTF_8;
 
-    private Map<String, String> headers = new HashMap<>();
-    private OutputStream outputStream;
+    private final Map<String, String> headers = new HashMap<>();
+    private final List<String> cookies = new ArrayList<>();
+    private final OutputStream outputStream;
 
-    public HttpResponse(OutputStream outputStream) {
+    public HttpResponse(final OutputStream outputStream) {
         this.outputStream = outputStream;
     }
 
-    public void addHeader(String key, String value) {
+    public void addHeader(final String key, final String value) {
         headers.put(key, value);
+    }
+
+    public void addCookie(final String key, final String value) {
+        cookies.add(key + "=" + value);
     }
 
     public void forward(final View view) throws IOException {
@@ -37,8 +44,14 @@ public class HttpResponse {
 
         writeStartLine(StatusCode.OK);
         writeHeaders();
+        writeCookies();
+        writeNewLine();
         outputStream.write(body, 0, body.length);
         outputStream.flush();
+    }
+
+    private void writeNewLine() throws IOException {
+        outputStream.write("\r\n".getBytes(Charsets.UTF_8));
     }
 
     public void forward(String path) throws IOException, URISyntaxException {
@@ -49,6 +62,8 @@ public class HttpResponse {
 
         writeStartLine(StatusCode.OK);
         writeHeaders();
+        writeCookies();
+        writeNewLine();
 
         outputStream.write(body, 0, body.length);
         outputStream.flush();
@@ -57,6 +72,7 @@ public class HttpResponse {
     public void sendRedirect() throws IOException {
         writeStartLine(StatusCode.FOUND);
         writeHeaders();
+        writeCookies();
         outputStream.flush();
     }
 
@@ -77,6 +93,11 @@ public class HttpResponse {
             outputStream.write(headers.get(key).getBytes(Charsets.UTF_8));
             outputStream.write("\r\n".getBytes(Charsets.UTF_8));
         }
-        outputStream.write("\r\n".getBytes(Charsets.UTF_8));
+    }
+
+    private void writeCookies() throws IOException {
+        String cookies = String.join("; ", this.cookies);
+        outputStream.write(String.format("Set-Cookie: %s", cookies).getBytes());
+        writeNewLine();
     }
 }

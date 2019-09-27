@@ -1,12 +1,6 @@
 package testhelper;
 
-import http.request.HttpRequest;
-import http.request.HttpRequestFactory;
-import model.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import servlet.controller.*;
-import servlet.resolver.UserResolver;
 
 import java.io.*;
 import java.util.Collections;

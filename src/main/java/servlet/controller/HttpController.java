@@ -1,7 +1,7 @@
 package servlet.controller;
 
-import http.response.HttpResponse;
 import http.request.HttpRequest;
+import http.response.HttpResponse;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -16,9 +16,9 @@ public abstract class HttpController implements Controller {
         doPost(httpRequest, httpResponse);
     }
 
-    protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+    protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
     }
 
-    protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+    protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
     }
 }

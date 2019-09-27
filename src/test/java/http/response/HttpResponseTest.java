@@ -34,6 +34,19 @@ public class HttpResponseTest {
         log.info("{}", byteArrayOutputStream.toString());
     }
 
+    @Test
+    @DisplayName("Cookie Test")
+    public void addCookie() throws IOException {
+        ByteArrayOutputStream byteArrayOutputStream = createOutPutStream();
+        HttpResponse httpResponse = new HttpResponse(byteArrayOutputStream);
+        httpResponse.addHeader("Content-Type", "text/html");
+        httpResponse.addHeader("Location", "/index.html");
+        httpResponse.addCookie("logined", "true");
+        httpResponse.addCookie("Path", "/");
+        httpResponse.sendRedirect();
+        log.info("{}", byteArrayOutputStream.toString());
+    }
+
     private ByteArrayOutputStream createOutPutStream() {
         return new ByteArrayOutputStream();
     }

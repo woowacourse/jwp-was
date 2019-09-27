@@ -6,14 +6,13 @@ import model.UserService;
 import servlet.view.View;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 import static servlet.view.ViewResolver.resolve;
 
 public class UserListController extends HttpController {
 
     @Override
-    protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+    protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         UserService userService = new UserService();
 
         if ("true".equals(httpRequest.getCookie("logined"))) {
