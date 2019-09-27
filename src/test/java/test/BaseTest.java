@@ -1,18 +1,37 @@
 package test;
 
+import com.github.jknack.handlebars.Handlebars;
+import com.github.jknack.handlebars.Template;
+import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
+import com.github.jknack.handlebars.io.TemplateLoader;
+import db.DataBase;
 import http.request.Request;
 import http.request.RequestInformation;
 import http.request.RequestMethod;
 import http.request.RequestUrl;
+import model.User;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.util.*;
 
 public class BaseTest {
 
-    public Map<String, String> makePostHeader(String ... values) {
+    public byte[] createWithTemplateEngine() throws IOException {
+        TemplateLoader loader = new ClassPathTemplateLoader();
+        loader.setPrefix("/templates");
+        loader.setSuffix(".html");
+        Handlebars handlebars = new Handlebars(loader);
+        Template template = handlebars.compile("user/list");
+        Map<String, List<User>> users = new HashMap<>();
+        List<User> userList = new ArrayList<>(DataBase.findAll());
+        users.put("users", userList);
+
+        String listPage = template.apply(users);
+        byte[] confirmBody = listPage.getBytes();
+        return confirmBody;
+    }
+
+    public Map<String, String> makePostHeader(String... values) {
         Map<String, String> header = new HashMap<>();
         List<String> keys = Arrays.asList("Request-Line:", "Content-Length:", "Content-Type:", "Query-Parameters:");
         for (int i = 0; i < values.length; i++) {
@@ -36,7 +55,7 @@ public class BaseTest {
         return new Request(method, url, requestHeader);
     }
 
-    public Map<String, String> makeGetHeader(String ... values) {
+    public Map<String, String> makeGetHeader(String... values) {
         Map<String, String> header = new HashMap<>();
         List<String> keys = Arrays.asList("Request-Line:");
         for (int i = 0; i < values.length; i++) {

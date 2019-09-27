@@ -29,4 +29,8 @@ public class DataBase {
     public static void deleteUser(User user) {
         users.remove(user.getUserId());
     }
+
+    public static void deleteUser(String key) {
+        users.remove(key);
+    }
 }

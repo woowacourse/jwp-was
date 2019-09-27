@@ -1,18 +1,11 @@
 package controller;
 
-import com.github.jknack.handlebars.Handlebars;
-import com.github.jknack.handlebars.Template;
-import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
-import com.github.jknack.handlebars.io.TemplateLoader;
-import controller.Controller;
-import controller.ControllerFactory;
 import db.DataBase;
 import http.request.Request;
 import http.request.RequestInformation;
 import http.request.RequestMethod;
 import http.request.RequestUrl;
 import http.response.Response;
-import http.response.ResponseHeaders;
 import http.response.ResponseStatus;
 import http.session.Session;
 import http.session.SessionRepository;
@@ -22,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import test.BaseTest;
 import utils.FileIoUtils;
 
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.*;
@@ -135,7 +127,7 @@ public class ControllerIntegerationTest extends BaseTest {
         RequestUrl url = RequestUrl.from("/user/list");
         Map<String, String> header = new HashMap<>();
         header.put("Request-Line:", "GET /user/list HTTP/1.1");
-        header.put("Cookie:", "Session-Id="+session.getSessionId());
+        header.put("Cookie:", "Session-Id=" + session.getSessionId());
 
         Request request = new Request(method, url, new RequestInformation(header));
         Response response = new Response();
@@ -143,17 +135,7 @@ public class ControllerIntegerationTest extends BaseTest {
         Controller controller = factory.mappingController(request);
         controller.processResponse(request, response);
 
-        TemplateLoader loader = new ClassPathTemplateLoader();
-        loader.setPrefix("/templates");
-        loader.setSuffix(".html");
-        Handlebars handlebars = new Handlebars(loader);
-        Template template = handlebars.compile("user/list");
-        Map<String, List<User>> users = new HashMap<>();
-        List<User> userList = new ArrayList<>(DataBase.findAll());
-        users.put("users", userList);
-
-        String listPage = template.apply(users);
-        byte[] confirmBody = listPage.getBytes();
+        byte[] confirmBody = createWithTemplateEngine();
 
         Map<String, String> confirmMap = new LinkedHashMap<>();
         confirmMap.put("Content-Type: ", "text/html");
@@ -181,7 +163,7 @@ public class ControllerIntegerationTest extends BaseTest {
         RequestUrl url = RequestUrl.from("/user/list");
         Map<String, String> header = new HashMap<>();
         header.put("Request-Line:", "GET /user/list HTTP/1.1");
-        header.put("Cookie:", "Session-Id="+12345610);
+        header.put("Cookie:", "Session-Id=" + SessionRepository.getInstance().createSession());
 
         Request request = new Request(method, url, new RequestInformation(header));
         Response response = new Response();

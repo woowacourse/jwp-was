@@ -2,7 +2,6 @@ package http;
 
 import controller.ControllerMapper;
 import http.request.Request;
-import http.request.RequestInformation;
 import http.request.RequestMethod;
 import http.request.RequestUrl;
 import org.junit.jupiter.api.DisplayName;
@@ -10,9 +9,7 @@ import org.junit.jupiter.api.Test;
 import test.BaseTest;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

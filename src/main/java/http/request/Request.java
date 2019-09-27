@@ -1,7 +1,9 @@
 package http.request;
 
 import controller.ControllerMapper;
-import http.session.*;
+import http.session.Cookie;
+import http.session.Session;
+import http.session.SessionRepository;
 
 public class Request {
     private RequestMethod requestMethod;
