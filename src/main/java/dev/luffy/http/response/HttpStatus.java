@@ -10,6 +10,7 @@ public enum HttpStatus {
     NOT_FOUND(404);
 
     private static final String NOT_SUPPORTED_HTTP_STATUS = "지원하지 않는 응답 코드입니다.";
+    private static final String COMBINE_FORMAT = "%d %s";
 
     private int statusCode;
 
@@ -25,6 +26,6 @@ public enum HttpStatus {
     }
 
     public String getResponseLine() {
-        return String.format("%d %s", statusCode, name().replace("_", " "));
+        return String.format(COMBINE_FORMAT, statusCode, name().replace("_", " "));
     }
 }

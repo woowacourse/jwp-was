@@ -24,6 +24,8 @@ public class WebServer {
 
     private static final int DEFAULT_PORT = 8080;
     private static final int THREAD_POOL = 100;
+    public static final String PACKAGE_NAME = "dev.luffy";
+    public static final String ADD_METHOD = "add";
 
     public static void main(String args[]) throws Exception {
         scanRequestMapping();
@@ -55,9 +57,9 @@ public class WebServer {
     }
 
     private static void scanRequestMapping() throws NoSuchMethodException {
-        Reflections reflections = new Reflections("dev.luffy");
+        Reflections reflections = new Reflections(PACKAGE_NAME);
         Set<Class<?>> controllerClasses = reflections.getTypesAnnotatedWith(Controller.class);
-        Method requestMapAddMethod = RequestMapper.class.getMethod("add", String.class, Method.class);
+        Method requestMapAddMethod = RequestMapper.class.getMethod(ADD_METHOD, String.class, Method.class);
         controllerClasses
                 .stream()
                 .map(requestMappingAnnotatedMethodScannerMapper())

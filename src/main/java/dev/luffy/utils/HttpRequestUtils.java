@@ -13,6 +13,12 @@ public class HttpRequestUtils {
 
     private static final String STATIC_BASE_PATH = "./static";
     private static final String TEMPLATES_BASE_PATH = "./templates";
+    private static final String COOKIE_KEY_VALUE_DELIMITER = "=";
+    private static final String HEADER_DELIMITER = ": ";
+    private static final String PARAM_DELIMITER = "&";
+    private static final String COOKIE_DELIMITER = "; ";
+    private static final String PARAM_KEY_VALUE_DELIMITER = "=";
+    public static final String UTF_8 = "UTF-8";
 
     public static Map<String, String> parse(List<String> lines) {
         return buildHeaders(lines, new HashMap<>());
@@ -20,7 +26,7 @@ public class HttpRequestUtils {
 
     private static Map<String, String> buildHeaders(List<String> lines, Map<String, String> headers) {
         for (String line : lines) {
-            String[] splitLine = line.split(": ");
+            String[] splitLine = line.split(HEADER_DELIMITER);
             headers.put(splitLine[0], splitLine[1]);
         }
         return headers;
@@ -35,9 +41,9 @@ public class HttpRequestUtils {
     }
 
     private static Map<String, String> buildParams(String dataSequence, Map<String, String> params) {
-        String[] tokens = dataSequence.split("&");
+        String[] tokens = dataSequence.split(PARAM_DELIMITER);
         for (String token : tokens) {
-            String[] paramKeyValue = token.split("=");
+            String[] paramKeyValue = token.split(PARAM_KEY_VALUE_DELIMITER);
             params.put(paramKeyValue[0], paramKeyValue[1]);
         }
         return params;
@@ -59,10 +65,10 @@ public class HttpRequestUtils {
     }
 
     public static Map<String, String> parseCookie(String sequence) {
-        String[] tokens = sequence.split("; ");
+        String[] tokens = sequence.split(COOKIE_DELIMITER);
         Map<String, String> cookies = new HashMap<>();
         for (String token : tokens) {
-            String[] splitToken = token.split("=");
+            String[] splitToken = token.split(COOKIE_KEY_VALUE_DELIMITER);
             cookies.put(splitToken[0], splitToken[1]);
         }
         return cookies;
@@ -70,7 +76,7 @@ public class HttpRequestUtils {
 
     private static String decode(String unicode) {
         try {
-            return URLDecoder.decode(unicode, "UTF-8");
+            return URLDecoder.decode(unicode, UTF_8);
         } catch (UnsupportedEncodingException e) {
             return "";
         }

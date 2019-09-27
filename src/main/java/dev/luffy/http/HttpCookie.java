@@ -7,6 +7,8 @@ import dev.luffy.http.excption.NotFoundCookieException;
 
 public class HttpCookie {
 
+    private static final String NOT_FOUND_COOKIE_MESSAGE = "그런 쿠키가 없어요.";
+
     private Map<String, String> cookie;
 
     public HttpCookie() {
@@ -19,7 +21,7 @@ public class HttpCookie {
 
     public String get(String key) {
         if (!cookie.containsKey(key)) {
-            throw new NotFoundCookieException("그런 쿠키가 없어요.");
+            throw new NotFoundCookieException(NOT_FOUND_COOKIE_MESSAGE);
         }
         return cookie.get(key);
     }

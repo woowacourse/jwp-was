@@ -4,6 +4,8 @@ import dev.luffy.http.HttpProtocol;
 
 public class HttpResponseLine {
 
+    private static final String COMBINE_FORMAT = "%s %s \r\n";
+
     private final HttpProtocol httpProtocol;
     private final HttpStatus httpStatus;
 
@@ -21,6 +23,6 @@ public class HttpResponseLine {
     }
 
     public String combine() {
-        return String.format("%s %s \r\n", httpProtocol.getProtocol(), httpStatus.getResponseLine());
+        return String.format(COMBINE_FORMAT, httpProtocol.getProtocol(), httpStatus.getResponseLine());
     }
 }

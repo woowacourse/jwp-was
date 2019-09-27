@@ -17,6 +17,10 @@ public class HttpResponse {
 
     private static final String NOT_FOUND_404_FILE_PATH = "./templates/error/404.html";
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String CONTENT_LENGTH = "Content-Length";
+    private static final String CHARSET_UTF_8 = ";charset=utf-8";
+    private static final String LOCATION = "Location";
 
     private HttpResponseLine httpResponseLine;
     private HttpResponseHeader httpResponseHeader;
@@ -51,8 +55,8 @@ public class HttpResponse {
         try {
             httpResponseBody = new HttpResponseBody(templateBody.getBytes());
 
-            httpResponseHeader.addHeader("Content-Type", mimeType.getMimeType() + ";charset=utf-8");
-            httpResponseHeader.addHeader("Content-Length", String.valueOf(httpResponseBody.getBodyLength()));
+            httpResponseHeader.addHeader(CONTENT_TYPE, mimeType.getMimeType() + CHARSET_UTF_8);
+            httpResponseHeader.addHeader(CONTENT_LENGTH, String.valueOf(httpResponseBody.getBodyLength()));
 
             httpResponseLine = new HttpResponseLine(httpRequest.getProtocol(), HttpStatus.OK);
 
@@ -83,14 +87,14 @@ public class HttpResponse {
                                  String filePath) throws IOException, URISyntaxException {
         httpResponseBody = new HttpResponseBody(FileIoUtils.loadFileFromClasspath(filePath));
 
-        httpResponseHeader.addHeader("Content-Type", mimeType.getMimeType() + ";charset=utf-8");
-        httpResponseHeader.addHeader("Content-Length", String.valueOf(httpResponseBody.getBodyLength()));
+        httpResponseHeader.addHeader(CONTENT_TYPE, mimeType.getMimeType() + CHARSET_UTF_8);
+        httpResponseHeader.addHeader(CONTENT_LENGTH, String.valueOf(httpResponseBody.getBodyLength()));
 
         httpResponseLine = new HttpResponseLine(httpRequest.getProtocol(), httpStatus);
     }
 
     public void redirect(HttpRequest request, String location) {
-        httpResponseHeader.addHeader("Location", location);
+        httpResponseHeader.addHeader(LOCATION, location);
 
         httpResponseLine = new HttpResponseLine(request.getProtocol(), HttpStatus.FOUND);
         try {
