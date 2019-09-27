@@ -12,7 +12,6 @@ import java.util.List;
 import static webserver.controller.LoginController.LOGINED;
 
 public class UserListController extends AbstractController {
-
     public static final String PATH = "/user/list";
     private static final UserListController INSTANCE = new UserListController();
 

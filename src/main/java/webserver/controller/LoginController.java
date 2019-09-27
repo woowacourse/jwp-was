@@ -5,6 +5,8 @@ import model.User;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
 
+import java.util.Objects;
+
 public class LoginController extends AbstractController {
     public static final String PATH = "/user/login";
     public static final String LOGINED = "logined";
@@ -36,6 +38,6 @@ public class LoginController extends AbstractController {
     }
 
     private boolean isExistUser(User user) {
-        return user != null;
+        return Objects.nonNull(user);
     }
 }

@@ -33,29 +33,28 @@ public abstract class AbstractController implements Controller {
         throw new NotSupportedHttpMethodException();
     }
 
-    //TODO 이 메서드가 여기 있어도 괜찮은가
+    //TODO 이 메서드가 여기 있어도 괜찮은가, 아니면 HttpRequest, HttpResponse와 각각 의존성을 맺는 게 더 좋을까?
     protected HttpSession getSession(HttpRequest httpRequest, HttpResponse httpResponse) {
         //TODO SessionManager와 의존하는 부분을 이렇게 놔두어도 괜찮을까?
-        SessionManager sessionManager = SessionManager.getInstance();
         String sessionId = httpRequest.getSessionId();
-        if (checkSession(sessionManager, sessionId)) {
-            sessionId = sessionManager.createSession();
+        if (checkSession(sessionId)) {
+            sessionId = SessionManager.createSession();
         }
         //TODO 이 메서드에서 set까지 해버리는건 이상하지 않을까?
         httpResponse.setSession(sessionId);
-        return sessionManager.getSession(sessionId);
+        return SessionManager.getSession(sessionId);
     }
 
-    private boolean checkSession(SessionManager sessionManager, String sessionId) {
-        return hasSession(sessionId) || validateSession(sessionManager, sessionId);
+    private boolean checkSession(String sessionId) {
+        return hasSession(sessionId) || validateSession(sessionId);
     }
 
     private boolean hasSession(String sessionId) {
         return sessionId == null;
     }
 
-    private boolean validateSession(SessionManager sessionManager, String sessionId) {
-        return sessionManager.getSession(sessionId) == null;
+    private boolean validateSession(String sessionId) {
+        return SessionManager.getSession(sessionId) == null;
     }
 
     protected void setSession(HttpRequest httpRequest, HttpResponse httpResponse, String name, Object value) {
