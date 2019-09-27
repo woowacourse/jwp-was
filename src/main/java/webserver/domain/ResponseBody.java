@@ -15,7 +15,7 @@ public class ResponseBody {
         this.body = body.getBytes(StandardCharsets.UTF_8);
     }
 
-    public byte[] getBody() {
+    public byte[] getBytes() {
         return body;
     }
 

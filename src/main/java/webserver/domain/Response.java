@@ -5,8 +5,6 @@ import org.slf4j.Logger;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -97,24 +95,19 @@ public class Response {
         }
     }
 
-    private byte[] toBytes() {
-        final int bodyLength = this.body.length();
-        final byte[] header = this.header.make(bodyLength).getBytes(StandardCharsets.ISO_8859_1); // 이 인코딩을 명시적으로 지정하면 Charset 변환과정 없이 array 복사만 한다.
-
-        return ByteBuffer
-                .allocate(header.length + NEW_LINE.length + bodyLength)
-                .put(header).put(NEW_LINE).put(this.body.getBody())
-                .array();
-    }
-
     public void sendToClient(final OutputStream outputStream) {
         final DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-        final byte[] body = this.toBytes();
         try {
-            dataOutputStream.write(body, 0, body.length);
+            writeTo(dataOutputStream, this.header.getBytes(this.body.length()));
+            writeTo(dataOutputStream, NEW_LINE);
+            writeTo(dataOutputStream, this.body.getBytes());
             dataOutputStream.flush();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             LOG.error(e.getMessage());
         }
+    }
+
+    private void writeTo(final OutputStream stream, final byte[] data) throws IOException {
+        stream.write(data, 0, data.length);
     }
 }

@@ -1,5 +1,6 @@
 package webserver.domain;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 public class ResponseHeader {
@@ -38,11 +39,13 @@ public class ResponseHeader {
         return this.responseFields.getOrDefault(fieldKey, EMPTY);
     }
 
-    String make(final int contentLength) {
-        setContentLength(contentLength);
+    byte[] getBytes(final int bodyContentLength) {
+        setContentLength(bodyContentLength);
         final StringBuilder builder = makeFirstLine();
         addRestLine(builder);
-        return builder.toString();
+        return builder
+                .toString()
+                .getBytes(StandardCharsets.ISO_8859_1); // 이 인코딩을 명시적으로 지정하면 Charset 변환과정 없이 array 복사만 한다.
     }
 
     private void setContentLength(final int contentLength) {
