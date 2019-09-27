@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 public class ResponseHeader {
     private static final String NEW_LINE = "\r\n";
+    private static final String EMPTY = "";
 
     private final Map<String, String> responseFields;
 
@@ -18,7 +19,7 @@ public class ResponseHeader {
     }
 
     public String getFieldValue(final String fieldKey) {
-        return this.responseFields.getOrDefault(fieldKey, "");
+        return this.responseFields.getOrDefault(fieldKey, EMPTY);
     }
 
     public byte[] toBytes(final int contentLength) {

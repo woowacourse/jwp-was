@@ -29,7 +29,12 @@ public class RequestHelper {
                     "Host: localhost:8080\n" +
                     "Connection: keep-alive\n" +
                     "Accept: */*\n" +
-                    "Cookie: logined=true";
+                    "HttpCookie: logined=true";
+    protected final String requestHeaderWithCookie =
+            "Host: localhost:8080\n" +
+                    "Connection: keep-alive\n" +
+                    "Accept: */*\n" +
+                    "HttpCookie: logined=true; Path=/";
     protected final String requestGetUserListWithoutLogin =
             "GET /user/list HTTP/1.1\n" +
                     "Host: localhost:8080\n" +

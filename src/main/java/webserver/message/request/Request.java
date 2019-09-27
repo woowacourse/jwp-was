@@ -2,6 +2,7 @@ package webserver.message.request;
 
 import org.slf4j.Logger;
 import utils.IOUtils;
+import webserver.message.HttpCookie;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -53,6 +54,14 @@ public class Request {
 
     public String getHeaderValue(final String key) {
         return header.getFieldsValue(key);
+    }
+
+    public HttpCookie getCookie() {
+        return header.getHttpCookie();
+    }
+
+    public String getCookieAttributeValue(final String key) {
+        return header.getCookieValue(key);
     }
 
     public String getQueryValue(final String key) {

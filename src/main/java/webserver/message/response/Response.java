@@ -25,7 +25,7 @@ public class Response {
     public static class Builder {
         private static final String CONTENT_TYPE = "Content-Type";
         private static final String LOCATION = "Location";
-        private static final String SET_COOKIE = "Set-Cookie";
+        private static final String SET_COOKIE = "Set-HttpCookie";
 
         private HttpVersion httpVersion;
         private HttpStatus httpStatus;
@@ -35,7 +35,7 @@ public class Response {
         public Builder(final HttpVersion httpVersion, final HttpStatus httpStatus) {
             this.httpVersion = httpVersion;
             this.httpStatus = httpStatus;
-            this.responseFields.put(CONTENT_TYPE, MediaType.APPLICATION_BINARY.getMediaType());
+            this.responseFields.put(CONTENT_TYPE, MediaType.TEXT_HTML.getMediaType());
         }
 
         public Builder(final String httpVersion) {

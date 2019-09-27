@@ -2,6 +2,7 @@ package webserver.message.request;
 
 import org.slf4j.Logger;
 import utils.IOUtils;
+import webserver.message.HttpCookie;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,7 +13,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class RequestHeader {
     private static final Logger LOG = getLogger(RequestHeader.class);
 
-    private static final String KEY_VALUE_DELIMITER = ":";
+    private static final String HEADER_KEY_VALUE_DELIMITER = ":";
     private static final String EMPTY = "";
     private static final String CONTENT_LENGTH = "content-length";
     private static final String ZERO_LENGTH = "0";
@@ -20,9 +21,11 @@ public class RequestHeader {
     private static final int VALUE_INDEX = 1;
 
     private final Map<String, String> requestFields;
+    private final HttpCookie httpCookie;
 
     public RequestHeader(final IOUtils IOUtils) {
         this.requestFields = makeFields(IOUtils);
+        this.httpCookie = new HttpCookie(requestFields.get("httpCookie"));
     }
 
     private Map<String, String> makeFields(final IOUtils IOUtils) {
@@ -34,11 +37,11 @@ public class RequestHeader {
     }
 
     private String makeKey(final String rawField) {
-        return rawField.split(KEY_VALUE_DELIMITER)[KEY_INDEX].trim().toLowerCase();
+        return rawField.split(HEADER_KEY_VALUE_DELIMITER)[KEY_INDEX].trim().toLowerCase();
     }
 
     private String makeValue(final String rawField) {
-        return rawField.split(KEY_VALUE_DELIMITER)[VALUE_INDEX].trim();
+        return rawField.split(HEADER_KEY_VALUE_DELIMITER)[VALUE_INDEX].trim();
     }
 
     public int getContentLength() {
@@ -53,4 +56,11 @@ public class RequestHeader {
         return requestFields.getOrDefault(key, EMPTY);
     }
 
+    public HttpCookie getHttpCookie() {
+        return this.httpCookie;
+    }
+
+    public String getCookieValue(final String key) {
+        return this.httpCookie.getCookieValue(key);
+    }
 }
