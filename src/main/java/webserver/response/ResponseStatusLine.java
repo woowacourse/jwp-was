@@ -2,6 +2,8 @@ package webserver.response;
 
 import webserver.request.HttpRequest;
 
+import java.util.Objects;
+
 public class ResponseStatusLine {
     private static final String STATUS_LINE_SEPARATOR = " ";
 
@@ -22,5 +24,20 @@ public class ResponseStatusLine {
 
     public String response() {
         return httpVersion + STATUS_LINE_SEPARATOR + statusCode + STATUS_LINE_SEPARATOR + statusText + "\r\n";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ResponseStatusLine that = (ResponseStatusLine) o;
+        return Objects.equals(httpVersion, that.httpVersion) &&
+                Objects.equals(statusCode, that.statusCode) &&
+                Objects.equals(statusText, that.statusText);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(httpVersion, statusCode, statusText);
     }
 }

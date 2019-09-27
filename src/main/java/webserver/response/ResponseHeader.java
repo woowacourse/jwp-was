@@ -2,6 +2,7 @@ package webserver.response;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class ResponseHeader {
     private static final String HEADER_FIELD_SEPARATOR = ": ";
@@ -26,5 +27,18 @@ public class ResponseHeader {
             str.append(attributeName).append(HEADER_FIELD_SEPARATOR).append(attributes.get(attributeName)).append("\r\n");
         }
         return str.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ResponseHeader that = (ResponseHeader) o;
+        return Objects.equals(attributes, that.attributes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(attributes);
     }
 }

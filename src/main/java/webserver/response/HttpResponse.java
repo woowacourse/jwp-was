@@ -2,6 +2,8 @@ package webserver.response;
 
 import webserver.request.HttpRequest;
 
+import java.util.Objects;
+
 public class HttpResponse {
     private ResponseStatusLine statusLine;
     private ResponseHeader header;
@@ -38,5 +40,20 @@ public class HttpResponse {
 
     public ResponseBody getBody() {
         return body;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HttpResponse that = (HttpResponse) o;
+        return Objects.equals(statusLine, that.statusLine) &&
+                Objects.equals(header, that.header) &&
+                Objects.equals(body, that.body);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(statusLine, header, body);
     }
 }

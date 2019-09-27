@@ -1,5 +1,6 @@
 package webserver.response;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 public class ResponseBody {
@@ -23,5 +24,18 @@ public class ResponseBody {
 
     public byte[] getContent() {
         return body;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ResponseBody that = (ResponseBody) o;
+        return Arrays.equals(body, that.body);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(body);
     }
 }
