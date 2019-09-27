@@ -1,7 +1,7 @@
 package webserver;
 
-import webserver.Controller.*;
-import webserver.Controller.exception.ResourceNotFoundException;
+import webserver.controller.*;
+import webserver.controller.exception.ResourceNotFoundException;
 import webserver.request.HttpRequest;
 
 import java.util.HashMap;

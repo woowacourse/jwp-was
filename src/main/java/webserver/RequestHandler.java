@@ -2,9 +2,9 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.Controller.Controller;
-import webserver.Controller.exception.MethodNotAllowedException;
-import webserver.Controller.exception.NotFoundException;
+import webserver.controller.Controller;
+import webserver.controller.exception.MethodNotAllowedException;
+import webserver.controller.exception.NotFoundException;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 

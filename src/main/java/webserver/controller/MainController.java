@@ -1,6 +1,6 @@
-package webserver.Controller;
+package webserver.controller;
 
-import webserver.Controller.exception.MethodNotAllowedException;
+import webserver.controller.exception.MethodNotAllowedException;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 

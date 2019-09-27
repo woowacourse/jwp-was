@@ -1,4 +1,4 @@
-package webserver.Controller;
+package webserver.controller;
 
 import db.DataBase;
 import model.User;

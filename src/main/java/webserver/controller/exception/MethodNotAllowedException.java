@@ -1,4 +1,4 @@
-package webserver.Controller.exception;
+package webserver.controller.exception;
 
 public class MethodNotAllowedException extends RuntimeException {
     public MethodNotAllowedException(String message) {
