@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class TemplateEngineTest {
     @Test
     @DisplayName("TemplateEngine으로 뷰에 모델 적용")
-    void templateEngine() throws Exception {
+    void templateEngine() {
         User user = new User("javajigi", "password",
                 "자바지기", "javajigi@gmail.com");
 
@@ -21,6 +21,6 @@ class TemplateEngineTest {
         String profilePage = TemplateEngine.applyModelInView("user/profile", model);
 
         assertThat(profilePage).contains("자바지기");
-        assertThat(profilePage).contains("email");
+        assertThat(profilePage).contains("javajigi@gmail.com");
     }
 }
