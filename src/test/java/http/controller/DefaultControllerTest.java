@@ -4,7 +4,9 @@ import http.request.HttpRequest;
 import http.request.RequestHandler;
 import http.response.HttpResponse;
 import http.response.ResponseHandler;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import utils.RequestClientTest;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -15,18 +17,16 @@ import java.nio.charset.StandardCharsets;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class DefaultControllerTest {
-    private static final String REQUEST_STRING =
-            "GET /test HTTP/1.1" + "\r\n" +
-            "Host: localhost:8080" + "\r\n" +
-            "Connection: keep-alive" + "\r\n" +
-            "\r\n";
-
+    private RequestClientTest requestClient;
     private HttpRequest httpRequest;
     private HttpResponse httpResponse;
 
     @Test
+    @DisplayName("요청 path가 없는 경우")
     public void doGetTest() throws Exception {
-        InputStream in = new ByteArrayInputStream(REQUEST_STRING.getBytes(StandardCharsets.UTF_8));
+        requestClient = RequestClientTest.get("/test");
+
+        InputStream in = new ByteArrayInputStream(requestClient.toString().getBytes(StandardCharsets.UTF_8));
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         httpRequest = new RequestHandler(br).create();
         httpResponse = new ResponseHandler().create(httpRequest);

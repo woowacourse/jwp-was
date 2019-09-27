@@ -5,21 +5,27 @@ import http.request.RequestHandler;
 import http.response.HttpResponse;
 import http.response.ResponseHandler;
 import org.junit.jupiter.api.Test;
+import utils.RequestClientTest;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CreateUserControllerTest {
-    private static final String TEST_DIRECTORY = "./src/test/resources/";
-
+    private RequestClientTest requestClient;
     private HttpRequest httpRequest;
     private HttpResponse httpResponse;
 
     @Test
     public void doPostTest() throws Exception {
-        InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "Http_POST.txt"));
+        requestClient = RequestClientTest.post("/user/create")
+                .setFormBody("userId=aiden&password=password&name=aiden&email=aiden@aiden.com");
+
+        InputStream in = new ByteArrayInputStream(requestClient.toString().getBytes(StandardCharsets.UTF_8));
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         httpRequest = new RequestHandler(br).create();
         httpResponse = new ResponseHandler().create(httpRequest);

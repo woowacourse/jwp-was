@@ -9,24 +9,19 @@ import model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import utils.RequestClientTest;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UserListControllerTest {
-    private String requestForm =
-            "POST /user/list HTTP/1.1" + "\r\n" +
-                    "Host: localhost:8080" + "\r\n" +
-                    "Connection: keep-alive" + "\r\n" +
-                    "%s" + "\r\n" +
-                    "\r\n";
-    ;
-
+    private RequestClientTest requestClient;
     private HttpRequest httpRequest;
     private HttpResponse httpResponse;
 
@@ -39,9 +34,14 @@ class UserListControllerTest {
     @Test
     @DisplayName("로그인 성공시 리스트 출력")
     public void loginSuccess() throws Exception {
-        String request = String.format(requestForm, "Cookie: logined=true");
+        requestClient = RequestClientTest.get("/user/list")
+                .setCookie(new HashMap<String, String>() {
+                    {
+                        put("logined", "true");
+                    }
+                });
 
-        InputStream in = new ByteArrayInputStream(request.getBytes(StandardCharsets.UTF_8));
+        InputStream in = new ByteArrayInputStream(requestClient.toString().getBytes(StandardCharsets.UTF_8));
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         httpRequest = new RequestHandler(br).create();
         httpResponse = new ResponseHandler().create(httpRequest);
@@ -56,9 +56,14 @@ class UserListControllerTest {
     @Test
     @DisplayName("로그인 실패시 리다이렉트")
     public void loginFail() throws Exception {
-        String request = String.format(requestForm, "Cookie: logined=false");
+        requestClient = RequestClientTest.get("/user/list")
+                .setCookie(new HashMap<String, String>() {
+                    {
+                        put("logined", "false");
+                    }
+                });
 
-        InputStream in = new ByteArrayInputStream(request.getBytes(StandardCharsets.UTF_8));
+        InputStream in = new ByteArrayInputStream(requestClient.toString().getBytes(StandardCharsets.UTF_8));
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         httpRequest = new RequestHandler(br).create();
         httpResponse = new ResponseHandler().create(httpRequest);
