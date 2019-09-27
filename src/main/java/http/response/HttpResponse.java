@@ -8,6 +8,7 @@ import com.google.common.base.Charsets;
 import http.support.StatusCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import servlet.view.View;
 import utils.FileIoUtils;
 
 import java.io.IOException;
@@ -37,6 +38,16 @@ public class HttpResponse {
 
     public void addModel(Map<String, Object> model) {
         this.model = model;
+    }
+
+    public void forward(final View view) throws IOException {
+        byte[] body = view.getPage().getBytes(Charsets.UTF_8);
+        addHeader("Content-Length", Integer.toString(body.length));
+
+        writeStartLine(StatusCode.OK);
+        writeHeaders();
+        outputStream.write(body, 0, body.length);
+        outputStream.flush();
     }
 
     public void forward(String path) throws IOException, URISyntaxException {

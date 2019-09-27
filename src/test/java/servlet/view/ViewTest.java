@@ -22,7 +22,7 @@ public class ViewTest {
         httpServletResponse.forward("/user/profile.html");
         httpServletResponse.addParameter("name", "자바지기");
         httpServletResponse.addParameter("email", "javajigi@gmail.com");
-        View view = new View(httpServletResponse);
+        View view = ViewResolver.resolve(httpServletResponse);
         logger.info(view.getPage());
     }
 
@@ -38,7 +38,7 @@ public class ViewTest {
         List<User> users = new ArrayList<>(DataBase.findAll());
 
         httpServletResponse.addParameter("users", users);
-        View view = new View(httpServletResponse);
+        View view = ViewResolver.resolve(httpServletResponse);
         logger.info(view.getPage());
     }
 
@@ -47,7 +47,7 @@ public class ViewTest {
     public void viewIndex() throws IOException {
         HttpServletResponse httpServletResponse  = new HttpServletResponse();
         httpServletResponse.forward("/index.html");
-        View view = new View(httpServletResponse);
+        View view = ViewResolver.resolve(httpServletResponse);
         logger.info(view.getPage());
     }
 }
