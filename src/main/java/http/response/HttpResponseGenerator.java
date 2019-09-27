@@ -30,6 +30,17 @@ public class HttpResponseGenerator {
 		throw new FailResponseException();
 	}
 
+	public static Map<Header, String> responseLoginSuccess(String path, int bodyLength) {
+		Map<Header, String> header = response200Header(path, bodyLength);
+		generateCookie(header);
+		return header;
+	}
+
+	private static void generateCookie(Map<Header, String> header) {
+		String cookie = String.format("logined=true; %s=/\r\n", Header.PATH.getElement());
+		header.put(Header.SET_COOKIE, cookie);
+	}
+
 	private static void saveResponseHeader(String headerLine, Map<Header, String> header, String mimeType, int lengthOfBodyContent) {
 		String[] headerLines = headerLine.split(" ");
 		header.put(Header.PROTOCOL, headerLines[0]);
@@ -47,4 +58,5 @@ public class HttpResponseGenerator {
 		header.put(Header.LOCATION, location);
 		return header;
 	}
+
 }

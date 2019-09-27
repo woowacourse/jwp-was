@@ -25,7 +25,9 @@ public enum Header {
 	ACCEPT_ENCODING("Accept-Encoding"),
 	ACCEPT_LANGUAGE("Accept-Language"),
 	COOKIE("Cookie"),
-	ORIGIN("Origin");
+	SET_COOKIE("Set-Cookie"),
+	ORIGIN("Origin"),
+	PRAGMA("Pragma");
 
 	private final String element;
 

@@ -21,4 +21,12 @@ class ControllerGeneratorTest {
 		Controller controller = ControllerGenerator.generateController(path);
 		assertThat(controller).isInstanceOf(CreateUserController.class);
 	}
+
+	@DisplayName("로그인 시 UserLoginController 생성")
+	@Test
+	void generateControllerWhenUserLogin() {
+		String path = "/user/login";
+		Controller controller = ControllerGenerator.generateController(path);
+		assertThat(controller).isInstanceOf(UserLoginController.class);
+	}
 }

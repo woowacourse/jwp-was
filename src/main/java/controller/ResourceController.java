@@ -25,7 +25,7 @@ public class ResourceController extends AbstractController {
 		try {
 			String path = ResourcePathUtils.getResourcePath(httpRequest.getRequestHeaderElement(Header.PATH));
 			byte[] responseBody = FileIoUtils.loadFileFromClasspath(path);
-			HttpResponse httpResponse = new HttpResponse(HttpResponseGenerator.response200Header(path, responseBody.length));
+			HttpResponse httpResponse = new HttpResponse(HttpResponseGenerator.response200Header(httpRequest.getRequestHeaderElement(Header.PATH), responseBody.length));
 			httpResponse.forward(responseBody, dos);
 		} catch (IOException e) {
 			throw new FailedForwardException();
