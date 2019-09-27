@@ -2,11 +2,14 @@ package http.request;
 
 import http.HttpMethod;
 import http.MediaType;
+import http.session.HttpSession;
+import http.session.HttpSessionManager;
 
 public class HttpRequest {
     private HttpRequestLine httpRequestLine;
     private HttpRequestHeader httpRequestHeader;
     private HttpCookie httpCookie;
+    private HttpSession httpSession;
     private QueryParameter queryParameter;
     private HttpRequestBody httpRequestBody;
 
@@ -15,8 +18,15 @@ public class HttpRequest {
         this.httpRequestLine = httpRequestLine;
         this.httpRequestHeader = httpRequestHeader;
         this.httpCookie = HttpCookie.of(findCookie());
+        checkSession();
         this.queryParameter = queryParameter;
         this.httpRequestBody = httpRequestBody;
+    }
+
+    private void checkSession() {
+        if (httpCookie.contains("JSESSIONID")) {
+            this.httpSession = HttpSessionManager.getInstance().getSession(httpCookie.getCookie("JSESSIONID"));
+        }
     }
 
     private String findCookie() {
@@ -52,5 +62,13 @@ public class HttpRequest {
 
     public String getCookie(String key) {
         return this.httpCookie.getCookie(key);
+    }
+
+    public HttpSession getHttpSession() {
+        if (httpSession == null) {
+            this.httpSession = HttpSessionManager.getInstance().createSession();
+        }
+        this.httpSession = HttpSessionManager.getInstance().getSession(this.httpSession.getId());
+        return httpSession;
     }
 }

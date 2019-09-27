@@ -8,6 +8,7 @@ import db.DataBase;
 import http.HttpStatus;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import http.session.HttpSession;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +25,10 @@ public class UserListController extends Controller {
 
     @Override
     protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        if ("true".equals(httpRequest.getCookie("logined"))) {
+        HttpSession httpSession = httpRequest.getHttpSession();
+        String logined = (String) httpSession.getAttribute("logined");
+
+        if ("true".equals(logined)) {
             try {
                 String htmlBody = makeBody();
                 httpResponse.setStatusCode(HttpStatus.OK);

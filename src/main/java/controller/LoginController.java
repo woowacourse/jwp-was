@@ -4,6 +4,7 @@ import controller.exception.NotFoundUserException;
 import db.DataBase;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import http.session.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,11 +24,13 @@ public class LoginController extends Controller {
             Optional.ofNullable(DataBase.findUserById(userId))
                     .filter(user -> user.matchPassword(userPassword))
                     .orElseThrow(() -> new NotFoundUserException(userId));
+            HttpSession httpSession = httpRequest.getHttpSession();
+            httpSession.setAttribute("logined", "true");
+            httpResponse.setCookie("JSESSIONID=" + httpSession.getId() + "; Path=/");
             httpResponse.redirect("/index.html");
-            httpResponse.setCookie("logined=true;");
         } catch (NotFoundUserException e) {
             logger.debug(e.getMessage());
-            httpResponse.setCookie("logined=false;");
+            httpRequest.getHttpSession().invalidate();
             httpResponse.redirect("/user/login_failed.html");
         }
     }
