@@ -37,6 +37,10 @@ public class HttpRequestParams {
 
         for (String q : queryString.split(URLDecoder.decode(QUERY_DELIMITER, "UTF-8"))) {
             String[] token = q.split(PARAM_DELIMITER);
+            if (result.containsKey(token[0]) || token.length != 2) {
+                continue;
+            }
+            System.out.println("parseQuery" + token[0]);
             result.put(token[0], token[1]);
         }
 
