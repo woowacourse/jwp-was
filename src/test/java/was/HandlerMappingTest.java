@@ -21,7 +21,7 @@ class HandlerMappingTest {
 
     @ParameterizedTest
     @MethodSource("createValidLocationRequest")
-    void 존재하는_경로(InputStream inputStream, Controller controller) throws Exception {
+    void 존재하는_경로(InputStream inputStream, Controller controller) {
         HttpRequest httpRequest = new HttpRequest();
 
         HttpRequestParser.parse(inputStream, httpRequest);
@@ -41,7 +41,7 @@ class HandlerMappingTest {
 
     @ParameterizedTest
     @MethodSource("createInvalidLocationRequest")
-    void 존재하지_않는_경로(InputStream inputStream) throws Exception {
+    void 존재하지_않는_경로(InputStream inputStream) {
         HttpRequest httpRequest = new HttpRequest();
 
         HttpRequestParser.parse(inputStream, httpRequest);

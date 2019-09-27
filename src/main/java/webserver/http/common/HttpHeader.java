@@ -54,6 +54,10 @@ public class HttpHeader {
         headers.put(key, value);
     }
 
+    public void remove(final String key) {
+        headers.remove(key);
+    }
+
     public Map<String, String> getHeaders() {
         return Collections.unmodifiableMap(headers);
     }

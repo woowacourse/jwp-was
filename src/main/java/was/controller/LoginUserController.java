@@ -7,6 +7,9 @@ import webserver.http.request.QueryStringParams;
 import webserver.http.response.HttpResponse;
 
 public class LoginUserController extends AbstractController {
+    private static final String COOKIE = "Cookie";
+    private static final String SET_COOKIE = "Set-Cookie";
+
     private LoginUserController() {}
 
     public static LoginUserController getInstance() {
@@ -21,8 +24,6 @@ public class LoginUserController extends AbstractController {
     void doPost(final HttpRequest httpRequest, final HttpResponse httpResponse) {
         QueryStringParams httpsParameters = httpRequest.getQueryStringParams();
 
-        httpRequest.addHeader("Cookie", "logined=true");
-
         User user = new User(
                 httpsParameters.get("userId"),
                 httpsParameters.get("password"),
@@ -31,12 +32,21 @@ public class LoginUserController extends AbstractController {
         );
 
         if (DataBase.findAll().contains(user)) {
-            httpResponse.addHeader("Set-Cookie", httpRequest.getHttpHeader().get("Cookie") + "; Path=/");
+            removeCookie(httpRequest);
+
+            httpRequest.addHeader(COOKIE, "logined=true");
+            httpResponse.addHeader(SET_COOKIE, httpRequest.getHttpHeader().get(COOKIE) + "; Path=/");
             httpResponse.redirect("/index.html");
             return;
         }
 
-        httpResponse.addHeader("Set-Cookie", "logined=false; Path=/");
+        httpResponse.addHeader(SET_COOKIE, "logined=false; Path=/");
         httpResponse.redirect("/user/login_failed.html");
+    }
+
+    private void removeCookie(final HttpRequest httpRequest) {
+        if (httpRequest.getHttpHeader().getHeaders().containsKey(COOKIE)) {
+            httpRequest.removeHeader(COOKIE);
+        }
     }
 }

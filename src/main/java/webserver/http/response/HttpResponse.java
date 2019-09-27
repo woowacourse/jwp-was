@@ -1,7 +1,9 @@
 package webserver.http.response;
 
+import utils.FileIoUtils;
 import webserver.http.common.HttpHeader;
 import webserver.http.common.HttpVersion;
+import webserver.http.request.HttpRequestType;
 
 public class HttpResponse {
     private StartLine startLine;
@@ -20,8 +22,15 @@ public class HttpResponse {
     }
 
     public void forward(final String url, final byte[] file) {
+        setContentType(url);
         setHttpStatus(HttpStatus.OK);
         httpResponseBody = HttpResponseBody.of(file);
+    }
+    public void forward(final String url) {
+        forward(url, FileIoUtils.loadFileFromClasspath(HttpRequestType.redefineUrl(url)));
+    }
+
+    public void setContentType(final String url) {
         addHeader("Content-Type", HttpContentType.findContentType(url));
     }
 

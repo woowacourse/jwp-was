@@ -19,6 +19,10 @@ public class HttpRequest {
         httpHeader.put(key, value);
     }
 
+    public void removeHeader(final String key) {
+        httpHeader.remove(key);
+    }
+
     public RequestLine getRequestLine() {
         return requestLine;
     }
