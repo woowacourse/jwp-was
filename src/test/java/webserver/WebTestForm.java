@@ -21,7 +21,7 @@ public class WebTestForm {
                 "Pragma: no-cache\n" +
                 "Cache-Control: no-cache\n" +
                 "Content-Length: 26\n" +
-                "Cookie: userId=alswns;name=alswns;password=pwd;email=a@a;JSESSIONID=550e8400-e29b-41d4-a716-446655440000\n" +
+                "Cookie: userId=alswns;세션_생성_확인=alswns;password=pwd;email=a@a;JSESSIONID=550e8400-e29b-41d4-a716-446655440000\n" +
                 "Sec-Fetch-Mode: no-cors\n" +
                 "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36\n" +
                 "Accept: image/webp,image/apng,image/*,*/*;q=0.8\n" +
@@ -37,7 +37,7 @@ public class WebTestForm {
                 "Pragma: no-cache\n" +
                 "Cache-Control: no-cache\n" +
                 "Content-Length: 26\n" +
-                "Cookie: userId=alswns;name=alswns;password=pwd;email=a@a;JSESSIONID=550e8400-e29b-41d4-a716-446655440000\n" +
+                "Cookie: userId=alswns;세션_생성_확인=alswns;password=pwd;email=a@a;JSESSIONID=550e8400-e29b-41d4-a716-446655440000\n" +
                 "Sec-Fetch-Mode: no-cors\n" +
                 "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36\n" +
                 "Accept: image/webp,image/apng,image/*,*/*;q=0.8\n" +
