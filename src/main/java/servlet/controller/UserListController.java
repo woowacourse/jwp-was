@@ -1,31 +1,26 @@
 package servlet.controller;
 
-import http.response.HttpResponse;
 import http.request.HttpRequest;
-import model.User;
+import http.response.HttpResponse;
 import model.UserService;
-import webserver.support.PathHandler;
+import servlet.view.View;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+
+import static servlet.view.ViewResolver.resolve;
 
 public class UserListController extends HttpController {
 
     @Override
-    //@TODO refactoring
     protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         UserService userService = new UserService();
 
         if ("true".equals(httpRequest.getCookie("logined"))) {
-            Collection<User> users = userService.findAll();
-            Map<String, Object> model = new HashMap<>();
-            model.put("users", users);
-            httpResponse.addModel(model);
-            httpResponse.forward(PathHandler.path("/user/list.html"));
+            View view = resolve("/user/list.html");
+            view.addModel("users", userService.findAll());
+            httpResponse.forward(view);
         }
-        httpResponse.forward(PathHandler.path("/index.html"));
+        httpResponse.forward(resolve("/index.html"));
     }
 }

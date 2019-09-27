@@ -4,6 +4,7 @@ import http.response.HttpResponse;
 import http.request.HttpRequest;
 import model.UserService;
 import servlet.resolver.UserResolver;
+import servlet.view.ViewResolver;
 import webserver.support.PathHandler;
 
 import java.io.IOException;
@@ -11,7 +12,6 @@ import java.net.URISyntaxException;
 
 public class UserLoginController extends HttpController {
 
-    //@TODO 리팩토링
     @Override
     protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         UserService userService = new UserService();
@@ -24,6 +24,6 @@ public class UserLoginController extends HttpController {
             return;
         }
         httpResponse.addHeader("Set-Cookie", "logined=false; Path=/");
-        httpResponse.forward(PathHandler.path("/user/login_failed.html"));
+        httpResponse.forward(ViewResolver.resolve("/user/login_failed.html"));
     }
 }

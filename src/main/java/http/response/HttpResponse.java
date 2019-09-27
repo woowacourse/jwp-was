@@ -1,9 +1,5 @@
 package http.response;
 
-import com.github.jknack.handlebars.Handlebars;
-import com.github.jknack.handlebars.Template;
-import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
-import com.github.jknack.handlebars.io.TemplateLoader;
 import com.google.common.base.Charsets;
 import http.support.StatusCode;
 import org.slf4j.Logger;
@@ -14,6 +10,7 @@ import utils.FileIoUtils;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,9 +18,7 @@ public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
     private static final String HTTP_VERSION = "HTTP/1.1 ";
     private static final String DELIMITER_OF_RESPONSE_HEADER = ": ";
-
-    // @TODO Model 지우기
-    private Map<String, Object> model = null;
+    private static final Charset DEFAULT_CHARSET = Charsets.UTF_8;
 
     private Map<String, String> headers = new HashMap<>();
     private OutputStream outputStream;
@@ -36,12 +31,8 @@ public class HttpResponse {
         headers.put(key, value);
     }
 
-    public void addModel(Map<String, Object> model) {
-        this.model = model;
-    }
-
     public void forward(final View view) throws IOException {
-        byte[] body = view.render().getBytes(Charsets.UTF_8);
+        byte[] body = view.render().getBytes(DEFAULT_CHARSET);
         addHeader("Content-Length", Integer.toString(body.length));
 
         writeStartLine(StatusCode.OK);
@@ -59,21 +50,7 @@ public class HttpResponse {
         writeStartLine(StatusCode.OK);
         writeHeaders();
 
-        if (model == null) {
-            outputStream.write(body, 0, body.length);
-        } else {
-            TemplateLoader loader = new ClassPathTemplateLoader();
-            loader.setPrefix("/templates");
-            loader.setSuffix(".html");
-            Handlebars handlebars = new Handlebars(loader);
-
-            Template template = handlebars.compile("user/list");
-
-            Map<String, Object> map = new HashMap<>();
-            map.put("users", model.get("users"));
-            String profilePage = template.apply(map);
-            outputStream.write(profilePage.getBytes(Charsets.UTF_8), 0, profilePage.getBytes().length);
-        }
+        outputStream.write(body, 0, body.length);
         outputStream.flush();
     }
 
@@ -101,9 +78,5 @@ public class HttpResponse {
             outputStream.write("\r\n".getBytes(Charsets.UTF_8));
         }
         outputStream.write("\r\n".getBytes(Charsets.UTF_8));
-    }
-
-    public Object getModel() {
-        return model;
     }
 }

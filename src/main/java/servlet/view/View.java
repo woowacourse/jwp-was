@@ -10,7 +10,7 @@ public class View {
     private final Template templateView;
     private final Map<String, Object> model = new HashMap<>();
 
-    public View(Template templateView) {
+    public View(final Template templateView) {
         this.templateView = templateView;
     }
 

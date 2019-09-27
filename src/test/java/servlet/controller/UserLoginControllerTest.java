@@ -1,42 +1,42 @@
 package servlet.controller;
 
-import http.response.HttpResponse;
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
+import http.response.HttpResponse;
+import model.User;
 import model.UserService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import servlet.resolver.UserResolver;
 import testhelper.Common;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import static testhelper.Common.getBufferedReaderOfTextFile;
+
 public class UserLoginControllerTest {
     private static final Logger logger = LoggerFactory.getLogger(UserLoginControllerTest.class);
 
-    private static UserService userService = new UserService();
+    private UserService userService = new UserService();
 
-    static {
-        try {
-            HttpRequest httpRequest = HttpRequestFactory.create(
-                    Common.getBufferedReaderOfTextFile("HTTP_POST_USER_CREATE.txt"));
-            userService.addUser(UserResolver.resolve(httpRequest));
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+    @BeforeEach
+    public void setUp() {
+        userService.addUser(
+                new User("javajigi", "password", "name", "javajigi@mail.com"));
     }
 
     @Test
     @DisplayName("/user/login에 대한 POST 요청 성공시 /index.html로 redirect")
-    public void doPost() throws IOException, URISyntaxException {
+    public void doPostWhenLoginSuccess() throws IOException, URISyntaxException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
         Controller controller = new UserLoginController();
-        HttpRequest httpRequest = HttpRequestFactory.create(Common.getBufferedReaderOfTextFile("HTTP_POST_USER_LOGIN.txt"));
+        HttpRequest httpRequest = HttpRequestFactory.create(
+                getBufferedReaderOfTextFile("HTTP_POST_USER_LOGIN.txt"));
         HttpResponse httpResponse = new HttpResponse(byteArrayOutputStream);
         controller.service(httpRequest, httpResponse);
 
@@ -50,7 +50,7 @@ public class UserLoginControllerTest {
 
         Controller controller = new UserLoginController();
         HttpRequest httpRequest = HttpRequestFactory.create(
-                Common.getBufferedReaderOfTextFile("HTTP_POST_USER_LOGIN_FAIL_PASSWORD.txt"));
+                getBufferedReaderOfTextFile("HTTP_POST_USER_LOGIN_FAIL_PASSWORD.txt"));
         HttpResponse httpResponse = new HttpResponse(byteArrayOutputStream);
         controller.service(httpRequest, httpResponse);
 

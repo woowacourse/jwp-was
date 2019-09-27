@@ -17,7 +17,7 @@ public class UserListControllerTest {
     private static final Logger logger = LoggerFactory.getLogger(UserListControllerTest.class);
 
     @Test
-    public void doGet() throws IOException, URISyntaxException {
+    public void doGetWhenLogin() throws IOException, URISyntaxException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         HttpRequest httpRequest = HttpRequestFactory.create(
                 getBufferedReaderOfTextFile("HTTP_GET_USER_LIST_LOGIN.txt"));
@@ -26,7 +26,7 @@ public class UserListControllerTest {
         Controller controller = new UserListController();
         controller.service(httpRequest, httpResponse);
 
-        logger.info(byteArrayOutputStream.toString());
+        logger.info("\n" + byteArrayOutputStream.toString());
     }
 
     @Test
@@ -39,6 +39,6 @@ public class UserListControllerTest {
         Controller controller = new UserListController();
         controller.service(httpRequest, httpResponse);
 
-        logger.info(byteArrayOutputStream.toString());
+        logger.info("\n" + byteArrayOutputStream.toString());
     }
 }
