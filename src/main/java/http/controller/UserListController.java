@@ -4,12 +4,16 @@ import db.DataBase;
 import http.common.HttpCookie;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.HandleBarModelAndView;
 import utils.ModelAndView;
 
 import java.io.IOException;
 
 public class UserListController extends AbstractController {
+    private static final Logger logger = LoggerFactory.getLogger(UserListController.class);
+
     private static final String LOCATION = "/user/list";
     private static final String LOGIN_NAME = "logined";
 
@@ -25,7 +29,7 @@ public class UserListController extends AbstractController {
 
                 return;
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("/user/list IOException : {}", e.getMessage());
             }
         }
 

@@ -22,11 +22,11 @@ public class StaticFileController extends AbstractController {
             byte[] body = FileIoUtils.loadFileFromClasspath(dir + httpRequest.getPath());
             httpResponse.sendOk(body, httpRequest.getPath());
         } catch (java.io.FileNotFoundException e) {
-            logger.debug(e.getMessage());
+            logger.error("정적 파일 존재 하지 않음: {}", e.getMessage());
             httpResponse.sendNotFound();
         }
         catch (URISyntaxException | IOException e) {
-            logger.debug(e.getMessage());
+            logger.error("정적 파일 IOException: {}", e.getMessage());
         }
     }
 }
