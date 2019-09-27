@@ -118,11 +118,13 @@ public class UserController {
 
             logger.debug("login User : {}", loginUser);
 
+            String logined = "false";
+
             if (loginUser.matchPassword(request.getBodyParameter("password"))) {
-                response.addHeader("Set-Cookie", "logined=true; Path=/");
-            } else {
-                response.addHeader("Set-Cookie", "logined=false; Path=/");
+                logined = "true";
             }
+
+            response.addHeader("Set-Cookie", String.format("logined=%s; Path=/", logined));
             response.redirect(request, "/index.html");
             return;
         }
