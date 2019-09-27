@@ -75,6 +75,10 @@ public class Response {
         cookies.add(cookie);
     }
 
+    public void setBody(byte[] body) {
+        this.body = body;
+    }
+
     private void addHeader(String key, String value) {
         header.put(key, value);
     }
