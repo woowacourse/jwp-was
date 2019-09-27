@@ -1,7 +1,8 @@
-package utils.parser.jsonelements;
+package utils.parser;
 
 import org.junit.jupiter.api.Test;
-import utils.parser.JsonParser;
+import utils.parser.jsonelements.JsonArray;
+import utils.parser.jsonelements.JsonObject;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -29,7 +30,7 @@ class JsonParserTest {
 
     @Test
     void doubleAttributesTest() {
-        final String DOUBLE_ATTRIBUTES = "{   \"Name\" :  \"Woowa\", \"Level\":  1.1e-1,   }   ";
+        final String DOUBLE_ATTRIBUTES = "{   \"Name\" :  \"Woowa\", \"Level\":  1.1e-1}   ";
         final JsonObject result = jsonParser.interpret(DOUBLE_ATTRIBUTES);
         System.out.println(result);
         assertThat(result.get("Name").val()).isEqualTo("Woowa");
@@ -63,10 +64,11 @@ class JsonParserTest {
 
     @Test
     void arrayTest() {
-        final String ARRAY = "{\"Name\" : [null ,-6 , \"cat\",false, 3.5e-5, {}]} ";
+        final String ARRAY = "{\"Name\" : [null ,-6 , \"cat\",false, 3.5e-5, { \"\": 6}]} ";
         final JsonObject result = jsonParser.interpret(ARRAY);
         System.out.println(result);
         assertThat(result.size()).isEqualTo(1);
+        assertThat(((JsonArray) result.get("Name")).size()).isEqualTo(6);
     }
 
     @Test
@@ -96,6 +98,7 @@ class JsonParserTest {
                 "  \"DELETE\": {}\n" +
                 "}";
         final JsonObject result = jsonParser.interpret(CONFIG);
+        System.out.println(result);
         assertThat(result.size()).isEqualTo(4);
         final JsonObject get = (JsonObject) result.get("GET");
         assertThat(get.size()).isEqualTo(2);

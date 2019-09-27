@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class JsonArray extends JsonValue<List<JsonValue<?>>> {
@@ -40,24 +39,23 @@ public class JsonArray extends JsonValue<List<JsonValue<?>>> {
             return toString();
         }
         return "[" + super.val.stream()
-                                .map(JsonValue::toString)
+                                .map(JsonValue::serialize)
                                 .reduce((a, b) -> a + "," + b)
                                 .get() + "]";
     }
 
     @Override
     public String toString() {
-        if (super.val.isEmpty()) {
-            return "[]";
+        switch (super.val.size()) {
+            case 0:
+                return "[]";
+            case 1:
+                return "[" + super.val.get(0) + "]";
+            default:
+                return "[" + super.val.stream()
+                                        .map(JsonValue::toString)
+                                        .reduce((a, b) -> a + ", " + b)
+                                        .get() + "]";
         }
-        if (super.val.size() == 1) {
-            return super.val.stream()
-                            .map(el -> "[" + el.toString() + "]")
-                            .collect(Collectors.joining());
-        }
-        return "[" + super.val.stream()
-                                .map(JsonValue::toString)
-                                .reduce((a, b) -> a + ", " + b)
-                                .get() + "]";
     }
 }

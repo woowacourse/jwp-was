@@ -22,10 +22,6 @@ public class JsonValue<T> {
         return val;
     };
 
-    public boolean test(Predicate<T> cond) {
-        return cond.test(this.val);
-    }
-
     public String serialize() {
         return toString();
     }

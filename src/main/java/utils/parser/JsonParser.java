@@ -53,12 +53,14 @@ public class JsonParser implements KeyValueParser<JsonObject> {
         return Optional.ofNullable(parseAttribute(input, begin)).map(attr -> {
             acc.put(attr.fst(), attr.snd());
             final int nextLetterIndex = jumpBlank(input, attr.trd() + 1).get();
-            if (input.charAt(nextLetterIndex) == '}') {
+            final char nextLetter = input.charAt(nextLetterIndex);
+            if (nextLetter == '}' || nextLetter == ']') {
                 return (Done<Map<String, JsonValue<?>>>) () -> acc;
             }
             if (input.charAt(nextLetterIndex) == ',') {
                 final int nextNextLetterIndex = jumpBlank(input, nextLetterIndex + 1).get();
-                return (input.charAt(nextNextLetterIndex) != '}')
+                final char nextNextLetter = input.charAt(nextNextLetterIndex);
+                return (nextNextLetter != '}' && nextNextLetter != ']')
                         ? (TailCall<Map<String, JsonValue<?>>>) () -> parseAttributes(input, nextNextLetterIndex, acc)
                         : (Done<Map<String, JsonValue<?>>>) () -> acc;
             }
@@ -79,7 +81,7 @@ public class JsonParser implements KeyValueParser<JsonObject> {
     }
 
     private Pair<String, Integer> lexKey(String input, int begin) {
-        if (input.charAt(begin) != '"') {
+        if (input.charAt(begin) != '"' ) {
            return null;
         }
         final int end = tokenizeString(input, begin + 1);
