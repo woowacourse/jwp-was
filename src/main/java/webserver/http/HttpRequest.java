@@ -10,6 +10,8 @@ import webserver.http.httpRequest.HttpStartLine;
 import java.io.*;
 import java.net.URLDecoder;
 
+import static webserver.http.httpRequest.HttpRequestHeader.HEADER_LINE_SEPARATOR;
+
 public class HttpRequest {
     private static final Logger log = LoggerFactory.getLogger(HttpRequest.class);
     private static final String TAG = "HttpRequest";
@@ -17,6 +19,7 @@ public class HttpRequest {
     public static final String CONTENT_LENGTH = "Content-Length";
     public static final String CONTENT_TYPE = "Content-Type";
     public static final String JSESSION_ID = "JSESSIONID";
+    public static final String UTF_8 = "UTF-8";
 
     private HttpStartLine httpStartLine;
     private HttpRequestHeader httpRequestHeader;
@@ -28,11 +31,11 @@ public class HttpRequest {
         this.httpRequestBody = httpRequestBody;
     }
 
-    public static HttpRequest create(InputStream in) {
+    public static HttpRequest create(InputStream in) throws IOException {
         BufferedReader br = getBufferedReader(in);
-
         String startLine = parseStartLine(br);
         String header = parseHeader(br);
+
         HttpStartLine httpStartLine = HttpStartLine.create(startLine);
         HttpRequestHeader httpRequestHeader = HttpRequestHeader.create(header);
         HttpRequestBody httpRequestBody = getHttpRequestBody(br, httpStartLine, httpRequestHeader);
@@ -40,46 +43,32 @@ public class HttpRequest {
         return new HttpRequest(httpStartLine, httpRequestHeader, httpRequestBody);
     }
 
-    private static BufferedReader getBufferedReader(InputStream in) {
-        try {
-            return new BufferedReader(new InputStreamReader(in, "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            log.error("{} 클래스 에러 발생", TAG);
-            throw new IllegalArgumentException("올바르지 않은 요청입니다.");
-        }
+    private static BufferedReader getBufferedReader(InputStream in) throws UnsupportedEncodingException {
+        return new BufferedReader(new InputStreamReader(in, "UTF-8"));
     }
 
-    private static String parseStartLine(BufferedReader br) {
-        try {
-            return br.readLine();
-        } catch (IOException e) {
-            throw new IllegalArgumentException("올바르지 않은 입력 StartLine 입니다.");
-        }
+    private static String parseStartLine(BufferedReader br) throws IOException {
+        String startLine = br.readLine();
+        log.debug("startLine : {}", startLine);
+        return startLine;
     }
 
-    private static String parseHeader(BufferedReader br) {
+    private static String parseHeader(BufferedReader br) throws IOException {
         StringBuilder sb = new StringBuilder();
-        String headerLine = null;
-        try {
-            headerLine = br.readLine();
-        } catch (IOException e) {
-            throw new IllegalArgumentException("올바르지 않은 입력 StartLine 입니다.");
-        }
+        String headerLine = br.readLine();
 
         while (!"".equals(headerLine)) {
             sb.append(headerLine);
-            sb.append("\n");
-            try {
-                headerLine = br.readLine();
-            } catch (IOException e) {
-                throw new IllegalArgumentException("올바르지 않은 입력 StartLine 입니다.");
-            }
+            sb.append(HEADER_LINE_SEPARATOR);
+            headerLine = br.readLine();
         }
-        sb.append("\n");
-        return sb.toString();
+        sb.append(HEADER_LINE_SEPARATOR);
+        String header = sb.toString();
+        log.debug("header : {}", header);
+        return header;
     }
 
-    private static HttpRequestBody getHttpRequestBody(BufferedReader br, HttpStartLine httpStartLine, HttpRequestHeader httpRequestHeader) {
+    private static HttpRequestBody getHttpRequestBody(BufferedReader br, HttpStartLine httpStartLine, HttpRequestHeader httpRequestHeader) throws IOException {
         if (httpStartLine.checkMethod(HttpMethod.GET)) {
             return HttpRequestBody.empty();
         }
@@ -88,28 +77,19 @@ public class HttpRequest {
         return HttpRequestBody.create(body);
     }
 
-    private static String parseBody(BufferedReader br, int contentLength) {
+    private static String parseBody(BufferedReader br, int contentLength) throws IOException {
         String body = readBody(br, contentLength);
-        return decodeBody(body);
+        String decodedBody = decodeBody(body);
+        log.debug("decodedBody : {}", decodedBody);
+        return decodedBody;
     }
 
-    private static String readBody(BufferedReader br, int contentLength) {
-        try {
-            return IOUtils.readData(br, contentLength);
-        } catch (IOException e) {
-            log.error("{} 클래스 {} 메서드 오류", TAG, "parseBody");
-            throw new IllegalArgumentException();
-        }
+    private static String readBody(BufferedReader br, int contentLength) throws IOException {
+        return IOUtils.readData(br, contentLength);
     }
 
-    private static String decodeBody(String body) {
-        try {
-            String decode = URLDecoder.decode(body, "UTF-8");
-            return decode;
-        } catch (UnsupportedEncodingException e) {
-            log.error("{} 클래스 {} 메서드 오류", TAG, "decodeBody");
-            throw new IllegalArgumentException();
-        }
+    private static String decodeBody(String body) throws UnsupportedEncodingException {
+        return URLDecoder.decode(body, UTF_8);
     }
 
     public boolean checkMethod(HttpMethod httpMethod) {
