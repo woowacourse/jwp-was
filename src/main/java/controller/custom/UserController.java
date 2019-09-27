@@ -4,6 +4,7 @@ import annotation.RequestMapping;
 import controller.Controller;
 import db.DataBase;
 import model.User;
+import model.http.Cookie;
 import model.http.HttpRequest;
 import model.http.HttpResponse;
 import model.http.ViewLocation;
@@ -27,9 +28,9 @@ public class UserController implements Controller {
     @RequestMapping(method = HttpMethod.POST, url = "/user/login")
     private void login(HttpRequest request, HttpResponse response) {
         User user = DataBase.findUserById(request.getBodyValueBy("userId"));
-
         if (isSignedUpUser(request, user)) {
             response.sendRedirect(ViewLocation.TEMPLATE.getLocation() + INDEX_PAGE, HttpStatus.REDIRECT);
+            response.addCookie(new Cookie("logined", "true"));
             return;
         }
         response.sendRedirect(ViewLocation.TEMPLATE.getLocation() + LOGIN_FAILED_PAGE, HttpStatus.FORBIDDEN);

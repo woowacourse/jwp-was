@@ -2,6 +2,7 @@ package controller;
 
 import db.DataBase;
 import model.User;
+import model.http.Cookie;
 import model.http.HttpRequest;
 import model.http.HttpResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,6 +34,7 @@ public class UserControllerTest {
 
         request = RequestHeaderParser.parseRequest(
                 new InputStreamReader(new FileInputStream(new File(TEST_DATA_DIRECTORY + "/LoginHttpRequest.txt"))));
+
         response = HttpResponse.of();
     }
 
@@ -42,6 +44,8 @@ public class UserControllerTest {
         response = RequestDispatcher.handle(request, response);
 
         assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.REDIRECT);
+        assertThat(response.getCookies().get("logined")).isEqualTo(new Cookie("logined", "true"));
+        assertThat(response.getPath()).isEqualTo("./templates/index.html");
     }
 
     @Test
@@ -50,5 +54,7 @@ public class UserControllerTest {
         response = RequestDispatcher.handle(request, response);
 
         assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.FORBIDDEN);
+        assertThat(response.getCookies().get("logined")).isEqualTo(new Cookie("logined", "false"));
+        assertThat(response.getPath()).isEqualTo("./templates/user/login_failed.html");
     }
 }

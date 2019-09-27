@@ -10,6 +10,7 @@ public class HttpResponse {
     private static final String ERROR_PAGE = "/error.html";
     // TODO model 맵의 역할
     private Map<String, String> body = new HashMap<>();
+    private Map<String, Cookie> cookies = new HashMap<>();
     private String path;
     private HttpStatus httpStatus;
     private MediaType mediaType;
@@ -17,6 +18,7 @@ public class HttpResponse {
 
     private HttpResponse() {
         this.httpStatus = HttpStatus.DEFAULT;
+        addCookie(new Cookie("logined", "false"));
     }
 
     public static HttpResponse of() {
@@ -76,5 +78,13 @@ public class HttpResponse {
 
     public HttpStatus getHttpStatus() {
         return httpStatus;
+    }
+
+    public void addCookie(Cookie cookie) {
+        cookies.put(cookie.getName(), cookie);
+    }
+
+    public Map<String, Cookie> getCookies() {
+        return cookies;
     }
 }

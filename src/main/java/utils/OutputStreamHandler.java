@@ -1,5 +1,6 @@
 package utils;
 
+import model.http.Cookie;
 import model.http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +10,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
+import java.util.Map;
 
 public class OutputStreamHandler {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -43,9 +45,17 @@ public class OutputStreamHandler {
             }
             dos.writeBytes("Content-Type: " + response.getMediaType() + ";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            addCookie(response, dos);
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
+        }
+    }
+
+    private static void addCookie(HttpResponse response, DataOutputStream dos) throws IOException {
+        Map<String, Cookie> cookies = response.getCookies();
+        for (Cookie cookie : cookies.values()) {
+            dos.writeBytes(cookie.toStringForHttpResponseHeader() + "\r\n");
         }
     }
 
