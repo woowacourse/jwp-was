@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ResponseHeader {
+    private static final String HEADER_FIELD_SEPARATOR = ": ";
+
     private Map<String, String> attributes;
 
     public ResponseHeader() {
@@ -21,7 +23,7 @@ public class ResponseHeader {
     public String response() {
         StringBuilder str = new StringBuilder();
         for (String attributeName : attributes.keySet()) {
-            str.append(attributeName).append(": ").append(attributes.get(attributeName)).append("\r\n");
+            str.append(attributeName).append(HEADER_FIELD_SEPARATOR).append(attributes.get(attributeName)).append("\r\n");
         }
         return str.toString();
     }

@@ -3,8 +3,6 @@ package webserver.response;
 import webserver.request.HttpRequest;
 
 public class HttpResponse {
-    private static final String HEADER_FIELD_SEPARATOR = ": ";
-
     private ResponseStatusLine statusLine;
     private ResponseHeader header;
     private ResponseBody body;
