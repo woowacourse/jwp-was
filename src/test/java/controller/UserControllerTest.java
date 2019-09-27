@@ -3,6 +3,7 @@ package controller;
 import db.DataBase;
 import http.common.ContentType;
 import http.common.HttpHeader;
+import http.common.HttpVersion;
 import http.request.HttpRequest;
 import http.request.RequestBody;
 import http.request.RequestLine;
@@ -33,7 +34,7 @@ class UserControllerTest {
 
     @BeforeEach
     void setUp() {
-        httpResponse = new HttpResponse();
+        httpResponse = new HttpResponse(HttpVersion.HTTP_1_1);
     }
 
     @Test

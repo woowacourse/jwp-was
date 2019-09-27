@@ -1,7 +1,5 @@
 package http.common;
 
-import http.common.exception.HttpVersionNotFoundException;
-
 import java.util.Arrays;
 
 public enum HttpVersion {
@@ -9,8 +7,10 @@ public enum HttpVersion {
     HTTP_1_0("HTTP/1.0"),
     HTTP_1_1("HTTP/1.1"),
     HTTP_2_0("HTTP/2.0"),
-    HTTP_3_0("HTTP/3.0");
+    HTTP_3_0("HTTP/3.0"),
+    NOT_SUPPORTED_VERSION("NOT_SUPPORTED_VERSION");
 
+    private static final HttpVersion DEFAULT_HTTP_VERSION = HTTP_1_1;
     private final String version;
 
     HttpVersion(String version) {
@@ -21,11 +21,20 @@ public enum HttpVersion {
         return Arrays.stream(values())
                 .filter(value -> value.version.equals(version))
                 .findAny()
-                .orElseThrow(HttpVersionNotFoundException::new)
+                .orElse(NOT_SUPPORTED_VERSION)
+                //.orElseThrow(HttpVersionNotFoundException::new)
                 ;
     }
 
     public String getVersion() {
         return version;
+    }
+
+    public String serialize() {
+        return this.isNotSupportedVersion() ? DEFAULT_HTTP_VERSION.version : version;
+    }
+
+    public boolean isNotSupportedVersion() {
+        return NOT_SUPPORTED_VERSION.equals(this);
     }
 }

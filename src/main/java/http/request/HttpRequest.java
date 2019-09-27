@@ -1,6 +1,7 @@
 package http.request;
 
 import http.common.HttpHeader;
+import http.common.HttpVersion;
 import http.common.URL;
 import http.request.exception.InvalidHttpRequestException;
 import http.session.Session;
@@ -43,6 +44,10 @@ public class HttpRequest {
 
     public RequestMethod getMethod() {
         return requestLine.getMethod();
+    }
+
+    public HttpVersion getHttpVersion() {
+        return requestLine.getVersion();
     }
 
     public Session getSession() {
