@@ -7,7 +7,7 @@ import model.User;
 
 import static model.User.*;
 
-public class UserServlet extends AbstractServlet {
+public class UserCreateServlet extends AbstractServlet {
     @Override
     protected void doPost(HttpRequest httpRequest, HttpResponse response) {
         User user = new User(

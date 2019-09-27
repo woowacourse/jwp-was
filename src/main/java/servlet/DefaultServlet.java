@@ -5,8 +5,6 @@ import http.response.HttpResponse;
 import utils.FileIoUtils;
 import webserver.ViewResolver;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,11 +20,11 @@ public class DefaultServlet implements Servlet {
     }
 
     @Override
-    public void handle(HttpRequest request, HttpResponse response) throws URISyntaxException, IOException {
+    public void handle(HttpRequest request, HttpResponse response) {
         for (String prefix : FILE_PATH_PREFIXES) {
             String staticFilePath = prefix + request.getUri().getPath();
             if (FileIoUtils.existFileInClasspath(staticFilePath)) {
-                ViewResolver.resolve(request, response, staticFilePath);
+                ViewResolver.resolveWithViewPath(request, response, staticFilePath);
                 return;
             }
         }

@@ -14,10 +14,10 @@ import java.io.InputStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class UserServletTest {
+class UserCreateServletTest {
     private static final String TEST_DIRECTORY = "./src/test/resources/";
 
-    private UserServlet userController = new UserServlet();
+    private UserCreateServlet userController = new UserCreateServlet();
 
     @Test
     void user_생성() throws IOException {
