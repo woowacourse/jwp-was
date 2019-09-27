@@ -27,11 +27,11 @@ public class FileController implements Controller {
     }
 
     private void getFileResponse(Request request, Response response) throws IOException, URISyntaxException {
-        response.setResponseStatus(ResponseStatus.OK);
-        response.setResponseHeaders(new ResponseHeaders());
-        response.addResponseHeaders("Content-Type: ", request.getUrl().getRequestContentType().getContentType());
         byte[] body = FileIoUtils.loadFileFromClasspath(request.getUrl().getDestinationFolderUrlPath());
-        response.setResponseBody(body);
+
+        response.ok()
+                .putResponseHeaders("Content-Type: ", request.getUrl().getRequestContentType().getContentType())
+                .body(body);
     }
 
     private boolean isAllowedPath(ControllerMapper controllerMapper) {

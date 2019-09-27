@@ -33,7 +33,7 @@ public class UserController implements Controller {
     @Override
     public void processResponse(Request request, Response response) throws IOException, URISyntaxException {
         if (request.getUrl().getOriginalUrlPath().equals("/user/create")) {
-            createUserAndRedirect(request, response);
+            createUser(request, response);
         }
         if (request.getUrl().getOriginalUrlPath().equals("/user/list")) {
             getUserList(request, response);
@@ -52,29 +52,30 @@ public class UserController implements Controller {
             Map<String, List<User>> users = new HashMap<>();
             List<User> userList = new ArrayList<>(DataBase.findAll());
             users.put("users", userList);
-
             String listPage = template.apply(users);
-            response.setResponseStatus(ResponseStatus.OK);
-            response.setResponseHeaders(new ResponseHeaders());
-            response.addResponseHeaders("Content-Type: ", "text/html");
 
-            response.setResponseBody(listPage.getBytes());
+            response.ok()
+                    .putResponseHeaders("Content-Type: ", "text/html")
+                    .body(listPage.getBytes());
+
+//            response.setResponseStatus(ResponseStatus.OK);
+//            response.setResponseHeaders(new ResponseHeaders());
+//            response.addResponseHeaders("Content-Type: ", "text/html");
+//            response.setResponseBody(listPage.getBytes());
         }
 
         if (session.getAttriubte("user") == null) {
-            response.setResponseStatus(ResponseStatus.FOUND);
-            response.setResponseHeaders(new ResponseHeaders());
-            response.setEmptyResponseBody();
-            response.addResponseHeaders("Location: ", "http://localhost:8080/user/login.html");
+            response.found()
+                    .putResponseHeaders("Location: ", "http://localhost:8080/user/login.html");
+//            response.redirectTo("http://localhost:8080/user/login.html");
         }
     }
 
-    private void createUserAndRedirect(Request request, Response response) {
+    private void createUser(Request request, Response response) {
         userService.createUser(request.getQueryParameters().getQueryParameters());
-        response.setResponseStatus(ResponseStatus.FOUND);
-        response.setResponseHeaders(new ResponseHeaders());
-        response.setEmptyResponseBody();
-        response.addResponseHeaders("Location: ", "http://localhost:8080/index.html");
+//        response.redirectTo("http://localhost:8080/index.html");
+        response.found()
+                .putResponseHeaders("Location: ", "http://localhost:8080/index.html");
     }
 
     private boolean isAllowedUrlPath(String originalUrlPath) {

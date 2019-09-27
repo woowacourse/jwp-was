@@ -4,8 +4,6 @@ import db.DataBase;
 import http.request.Request;
 import http.request.RequestMethod;
 import http.response.Response;
-import http.response.ResponseHeaders;
-import http.response.ResponseStatus;
 import http.session.Session;
 import model.User;
 
@@ -33,20 +31,17 @@ public class LoginController implements Controller {
         User user = DataBase.findUserById(request.getQueryParameters().getParameter("userId"));
 
         if (user != null && user.isCorrectPassWord(request.getQueryParameters().getParameter("password"))) {
-            response.setResponseStatus(ResponseStatus.FOUND);
-            response.setResponseHeaders(new ResponseHeaders());
-            response.setEmptyResponseBody();
-            response.addResponseHeaders("Location: ", "http://localhost:8080/index.html");
             Session session = request.getSession();
             session.setAttribute("user", user.getUserId());
-            response.addResponseHeaders("Set-Cookie: Session-Id=", session.getSessionId() + "; Path=/");
+
+            response.found()
+                    .putResponseHeaders("Location: ", "http://localhost:8080/index.html")
+                    .putResponseHeaders("Set-Cookie: Session-Id=", session.getSessionId() + "; Path=/");
         }
 
         if (user == null || !user.isCorrectPassWord(request.getQueryParameters().getParameter("password"))) {
-            response.setResponseStatus(ResponseStatus.FOUND);
-            response.setResponseHeaders(new ResponseHeaders());
-            response.setEmptyResponseBody();
-            response.addResponseHeaders("Location: ", "http://localhost:8080/user/login_failed.html");
+            response.found()
+                    .putResponseHeaders("Location: ", "http://localhost:8080/user/login_failed.html");
         }
     }
 
