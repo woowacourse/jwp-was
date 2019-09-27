@@ -8,6 +8,7 @@ import http.response.HttpResponse;
 import http.response.HttpResponseEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.LoggingUtils;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -37,6 +38,7 @@ public class RequestHandler implements Runnable {
 
             writeResponse(out, response);
         } catch (IOException | URISyntaxException e) {
+            LoggingUtils.logStackTrace(logger, e);
             logger.error(e.getMessage());
         }
     }
