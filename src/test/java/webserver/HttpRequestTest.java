@@ -3,9 +3,9 @@ package webserver;
 import helper.IOHelper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import webserver.parser.HttpRequestParser;
 import webserver.http.request.HttpRequest;
 import webserver.http.request.RequestMethod;
+import webserver.parser.HttpRequestParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;

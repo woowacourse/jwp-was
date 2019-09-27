@@ -1,33 +1,54 @@
 package webserver.dispatcher;
 
+import exceptions.MethodNotAllowedException;
+import exceptions.NotFoundFileException;
+import exceptions.NotFoundURIException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import webserver.handler.MappingHandler;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
+import webserver.http.response.HttpStatus;
 import webserver.resolver.Resolver;
 import webserver.servlet.HttpServlet;
+import webserver.view.ModelAndView;
 import webserver.view.View;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class RequestDispatcher {
-    HttpResponse httpResponse;
+    private static final Logger logger = LoggerFactory.getLogger(RequestDispatcher.class);
+    private HttpResponse httpResponse;
 
     public RequestDispatcher(HttpResponse httpResponse) {
         this.httpResponse = httpResponse;
     }
 
     public void dispatch(HttpRequest httpRequest) throws IOException {
-        HttpServlet httpServlet = MappingHandler.getServlets(httpRequest.getUri());
-        View view = httpServlet.run(httpRequest, httpResponse);
-        Resolver resolver = MappingHandler.getResolver(httpServlet);
-        byte[] body = getBytes(view, resolver);
-        render(body);
+        View view = new View();
+        try {
+            HttpServlet httpServlet = MappingHandler.getServlets(httpRequest.getUri());
+            ModelAndView modelAndView = httpServlet.run(httpRequest, httpResponse);
+            Resolver resolver = MappingHandler.getResolver(httpServlet);
+            view = resolver.resolve(modelAndView);
+        } catch (NotFoundFileException | NotFoundURIException e) {
+            logger.error(e.getMessage());
+            httpResponse.error(HttpStatus.NOT_FOUND);
+        } catch (MethodNotAllowedException e) {
+            logger.error(e.getMessage());
+            httpResponse.error(HttpStatus.METHOD_NOT_ALLOW);
+        } catch (URISyntaxException e) {
+            logger.error(e.getMessage());
+            httpResponse.error(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        render(view);
     }
 
-    private void render(byte[] body) throws IOException {
+    private void render(View view) throws IOException {
+        byte[] body = view.getBody();
         httpResponse.writeLine();
-        if (body.length > 0) {
+        if (view.isViewExists()) {
             httpResponse.appendHeader("content-length", body.length);
         }
         httpResponse.writeHeader();
@@ -35,15 +56,4 @@ public class RequestDispatcher {
         httpResponse.end();
     }
 
-    private byte[] getBytes(View view, Resolver resolver) throws IOException {
-        byte[] body = null;
-        try {
-            body = resolver.resolve(view.getName());
-        } catch (NullPointerException e) {
-            httpResponse.error();
-        } catch (URISyntaxException e) {
-            httpResponse.error();
-        }
-        return body;
-    }
 }

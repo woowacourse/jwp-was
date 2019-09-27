@@ -5,6 +5,7 @@ import webserver.http.request.HttpRequest;
 import webserver.http.request.RequestMethod;
 import webserver.http.request.RequestUri;
 import webserver.http.response.HttpResponse;
+import webserver.view.ModelAndView;
 import webserver.view.View;
 
 import java.io.IOException;
@@ -18,7 +19,7 @@ public abstract class RequestServlet implements HttpServlet {
     }
 
     @Override
-    public View run(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+    public ModelAndView run(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         if (httpRequest.getMethod() == RequestMethod.GET) {
             return doGet(httpRequest, httpResponse);
         }
@@ -29,11 +30,11 @@ public abstract class RequestServlet implements HttpServlet {
         throw new MethodNotAllowedException(httpRequest.getMethod());
     }
 
-    public View doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+    public ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         throw new MethodNotAllowedException(httpRequest.getMethod());
     }
 
-    public View doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+    public ModelAndView doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         throw new MethodNotAllowedException(httpRequest.getMethod());
     }
 

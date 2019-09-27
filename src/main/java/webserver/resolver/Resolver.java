@@ -1,8 +1,11 @@
 package webserver.resolver;
 
+import webserver.view.ModelAndView;
+import webserver.view.View;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 
 public interface Resolver {
-    byte[] resolve(String path) throws IOException, URISyntaxException;
+    View resolve(ModelAndView modelAndView) throws IOException, URISyntaxException;
 }

@@ -1,5 +1,7 @@
 package webserver.http.response;
 
+import exceptions.NotSupportedFileType;
+
 import java.util.Arrays;
 
 public enum FileType {
@@ -22,7 +24,7 @@ public enum FileType {
     public static FileType getTypeByExtension(String target) {
         return Arrays.stream(FileType.values())
                 .filter(type -> target.equals(type.getExtensionName()))
-                .findFirst().orElse(FileType.ALL);
+                .findFirst().orElseThrow(() -> new NotSupportedFileType(target));
     }
 
     public String getExtensionName() {

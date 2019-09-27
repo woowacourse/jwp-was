@@ -1,13 +1,21 @@
 package webserver.view;
 
 public class View {
-    private final String name;
+    private final byte[] body;
 
-    public View(String name) {
-        this.name = name;
+    public View(byte[] body) {
+        this.body = body;
     }
 
-    public String getName() {
-        return name;
+    public View() {
+        this.body = new byte[0];
+    }
+
+    public byte[] getBody() {
+        return body;
+    }
+
+    public boolean isViewExists() {
+        return body == null || body.length == 0;
     }
 }

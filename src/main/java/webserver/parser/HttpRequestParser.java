@@ -15,12 +15,12 @@ import java.util.List;
 import java.util.Map;
 
 public class HttpRequestParser {
+    public static final String HEADER_KEY_VALUE_DELIMETER = ": ";
+    public static final String REQUEST_LINE_DELIMETER = " ";
     private static final int REQUEST_LINES_REQUESTLINE_INDEX = 0;
     private static final int REQUEST_LINES_HEADER_INDEX = 1;
     private static final int KEY_INDEX = 0;
     private static final int VALUE_INDEX = 1;
-    public static final String HEADER_KEY_VALUE_DELIMETER = ": ";
-    public static final String REQUEST_LINE_DELIMETER = " ";
 
     public static HttpRequest parse(BufferedReader bufferedReader) throws IOException {
         List<String> requestLines = parseRequestBuffer(bufferedReader);
@@ -32,7 +32,6 @@ public class HttpRequestParser {
 
     private static List<String> parseRequestBuffer(BufferedReader bufferedReader) throws IOException {
         List<String> lines = new ArrayList<>();
-
         for (String line = bufferedReader.readLine(); HttpRequestUtils.isLineEmpty(line); line = bufferedReader.readLine()) {
             lines.add(line);
         }

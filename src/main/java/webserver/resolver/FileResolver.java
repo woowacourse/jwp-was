@@ -1,16 +1,19 @@
 package webserver.resolver;
 
 import utils.FileIoUtils;
+import webserver.view.ModelAndView;
+import webserver.view.View;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class FileResolver implements Resolver {
     @Override
-    public byte[] resolve(String path) throws IOException, URISyntaxException {
-        if (path.contains(".html")) {
-            return FileIoUtils.loadHtmlFile(path);
+    public View resolve(ModelAndView modelAndView) throws IOException, URISyntaxException {
+        String viewName = modelAndView.getViewName();
+        if (viewName.contains(".html")) {
+            return new View(FileIoUtils.loadHtmlFile(viewName));
         }
-        return FileIoUtils.loadStaticFile(path);
+        return new View(FileIoUtils.loadStaticFile(viewName));
     }
 }

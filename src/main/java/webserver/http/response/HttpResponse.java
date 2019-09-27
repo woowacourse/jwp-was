@@ -19,17 +19,17 @@ public class HttpResponse {
         this.httpVersion = httpVersion;
     }
 
-    public void ok() throws IOException {
+    public void ok() {
         httpStatus = HttpStatus.OK;
     }
 
-    public void redirect(String location) throws IOException {
+    public void redirect(String location) {
         httpStatus = HttpStatus.FOUND;
         appendHeader("Location", location);
     }
 
-    public void error() {
-
+    public void error(HttpStatus httpStatus) {
+        this.httpStatus = httpStatus;
     }
 
     public void appendHeader(String key, Object value) {
