@@ -4,8 +4,6 @@ import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import servlet.resolver.UserResolver;
 import testhelper.Common;
 
@@ -20,7 +18,7 @@ public class UserServiceTest {
     @DisplayName("로그인 성공 후 /index.html을 반환한다")
     public void loginSuccess() throws IOException {
         HttpRequest httpRequest = HttpRequestFactory.create(
-                Common.getBufferedReaderOfText("HTTP_POST_USER_LOGIN.txt"));
+                Common.getBufferedReaderOfTextFile("HTTP_POST_USER_LOGIN.txt"));
         assertThat(userService.login(UserResolver.resolve(httpRequest))).isEqualTo(true);
     }
 
@@ -28,7 +26,7 @@ public class UserServiceTest {
     @DisplayName("비밀번호가 틀릴 때 false를 반환한다")
     public void loginFailWhenPasswordNotMatch() throws IOException {
         HttpRequest httpRequest = HttpRequestFactory.create(
-                Common.getBufferedReaderOfText("HTTP_POST_USER_LOGIN_FAIL_PASSWORD.txt"));
+                Common.getBufferedReaderOfTextFile("HTTP_POST_USER_LOGIN_FAIL_PASSWORD.txt"));
         assertThat(userService.login(UserResolver.resolve(httpRequest))).isEqualTo(false);
     }
 
@@ -36,7 +34,7 @@ public class UserServiceTest {
     @DisplayName("유저가 없을 때 false를 발생시킨다")
     public void loginFailWhenUserNotFound() throws IOException {
         HttpRequest httpRequest = HttpRequestFactory.create(
-                Common.getBufferedReaderOfText("HTTP_POST_USER_LOGIN_FAIL_NOT_FOUND.txt"));
+                Common.getBufferedReaderOfTextFile("HTTP_POST_USER_LOGIN_FAIL_NOT_FOUND.txt"));
         assertThat(userService.login(UserResolver.resolve(httpRequest))).isEqualTo(false);
     }
 }

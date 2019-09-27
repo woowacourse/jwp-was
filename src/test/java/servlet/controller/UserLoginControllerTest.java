@@ -23,7 +23,7 @@ public class UserLoginControllerTest {
     static {
         try {
             HttpRequest httpRequest = HttpRequestFactory.create(
-                    Common.getBufferedReaderOfText("HTTP_POST_USER_CREATE.txt"));
+                    Common.getBufferedReaderOfTextFile("HTTP_POST_USER_CREATE.txt"));
             userService.addUser(UserResolver.resolve(httpRequest));
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -36,7 +36,7 @@ public class UserLoginControllerTest {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
         Controller controller = new UserLoginController();
-        HttpRequest httpRequest = HttpRequestFactory.create(Common.getBufferedReaderOfText("HTTP_POST_USER_LOGIN.txt"));
+        HttpRequest httpRequest = HttpRequestFactory.create(Common.getBufferedReaderOfTextFile("HTTP_POST_USER_LOGIN.txt"));
         HttpResponse httpResponse = new HttpResponse(byteArrayOutputStream);
         controller.service(httpRequest, httpResponse);
 
@@ -50,7 +50,7 @@ public class UserLoginControllerTest {
 
         Controller controller = new UserLoginController();
         HttpRequest httpRequest = HttpRequestFactory.create(
-                Common.getBufferedReaderOfText("HTTP_POST_USER_LOGIN_FAIL_PASSWORD.txt"));
+                Common.getBufferedReaderOfTextFile("HTTP_POST_USER_LOGIN_FAIL_PASSWORD.txt"));
         HttpResponse httpResponse = new HttpResponse(byteArrayOutputStream);
         controller.service(httpRequest, httpResponse);
 

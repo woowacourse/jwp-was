@@ -41,7 +41,7 @@ public class HttpResponse {
     }
 
     public void forward(final View view) throws IOException {
-        byte[] body = view.getPage().getBytes(Charsets.UTF_8);
+        byte[] body = view.render().getBytes(Charsets.UTF_8);
         addHeader("Content-Length", Integer.toString(body.length));
 
         writeStartLine(StatusCode.OK);

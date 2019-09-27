@@ -22,7 +22,7 @@ public class UserCreateControllerTest {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
         Controller controller = new UserCreateController();
-        HttpRequest httpRequest = HttpRequestFactory.create(Common.getBufferedReaderOfText("HTTP_POST_USER_CREATE.txt"));
+        HttpRequest httpRequest = HttpRequestFactory.create(Common.getBufferedReaderOfTextFile("HTTP_POST_USER_CREATE.txt"));
         HttpResponse httpResponse = new HttpResponse(byteArrayOutputStream);
         controller.service(httpRequest, httpResponse);
 

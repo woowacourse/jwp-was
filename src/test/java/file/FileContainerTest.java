@@ -22,7 +22,7 @@ public class FileContainerTest {
     @DisplayName("정적파일에 대한 페이지를 true를 반환한다")
     public void processStaticFileWhenSuccess() throws IOException, URISyntaxException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        HttpRequest httpRequest = HttpRequestFactory.create(Common.getBufferedReaderOfText("HTTP_GET_CSS.txt"));
+        HttpRequest httpRequest = HttpRequestFactory.create(Common.getBufferedReaderOfTextFile("HTTP_GET_CSS.txt"));
         HttpResponse httpResponse = new HttpResponse(byteArrayOutputStream);
         FileContainer fileContainer = new FileContainer();
         assertThat(fileContainer.process(httpRequest, httpResponse)).isEqualTo(true);
@@ -35,7 +35,7 @@ public class FileContainerTest {
     public void processStaticFileWhenFail() throws IOException, URISyntaxException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         HttpRequest httpRequest = HttpRequestFactory.create(
-                Common.getBufferedReaderOfText("HTTP_GET_QUERY_STRING.txt"));
+                Common.getBufferedReaderOfTextFile("HTTP_GET_QUERY_STRING.txt"));
         HttpResponse httpResponse = new HttpResponse(byteArrayOutputStream);
         FileContainer fileContainer = new FileContainer();
         assertThat(fileContainer.process(httpRequest, httpResponse)).isEqualTo(false);

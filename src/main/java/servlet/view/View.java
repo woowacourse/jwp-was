@@ -1,13 +1,24 @@
 package servlet.view;
 
-public class View {
-    private final String page;
+import com.github.jknack.handlebars.Template;
 
-    public View(String pageValue) {
-        this.page = pageValue;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+public class View {
+    private final Template templateView;
+    private final Map<String, Object> model = new HashMap<>();
+
+    public View(Template templateView) {
+        this.templateView = templateView;
     }
 
-    public String getPage() {
-        return page;
+    public void addModel(final String key, final Object value) {
+        model.put(key, value);
+    }
+
+    public String render() throws IOException {
+        return templateView.apply(model);
     }
 }

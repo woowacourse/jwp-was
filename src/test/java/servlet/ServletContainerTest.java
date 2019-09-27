@@ -23,7 +23,7 @@ public class ServletContainerTest {
     public void processCreateUser() throws IOException, URISyntaxException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         HttpRequest httpRequest = HttpRequestFactory.create(
-                Common.getBufferedReaderOfText("HTTP_POST_USER_CREATE.txt"));
+                Common.getBufferedReaderOfTextFile("HTTP_POST_USER_CREATE.txt"));
         HttpResponse httpResponse = new HttpResponse(byteArrayOutputStream);
         ServletContainer servletContainer = new ServletContainer(getControllerFinder());
         servletContainer.process(httpRequest, httpResponse);

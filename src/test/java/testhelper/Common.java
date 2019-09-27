@@ -24,7 +24,7 @@ public class Common {
         api.put("/user/list", new UserListController());
     }
 
-    public static BufferedReader getBufferedReaderOfText(final String path) throws FileNotFoundException {
+    public static BufferedReader getBufferedReaderOfTextFile(final String path) throws FileNotFoundException {
         InputStreamReader inputStreamReader = new InputStreamReader(getInputStream(path));
         return new BufferedReader(inputStreamReader);
     }
