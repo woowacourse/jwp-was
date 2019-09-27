@@ -10,7 +10,7 @@ public class MainController extends AbstractController {
         return LazyHolder.INSTANCE;
     }
 
-    public static class LazyHolder {
+    private static class LazyHolder {
         private static final MainController INSTANCE = new MainController();
     }
 

@@ -13,7 +13,7 @@ public class LoginUserController extends AbstractController {
     private LoginUserController() {}
 
     public static LoginUserController getInstance() {
-        return LoginUserController.LazyHolder.INSTANCE;
+        return LazyHolder.INSTANCE;
     }
 
     private static class LazyHolder {

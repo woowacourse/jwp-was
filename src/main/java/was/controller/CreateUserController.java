@@ -10,10 +10,10 @@ public class CreateUserController extends AbstractController {
     private CreateUserController() {}
 
     public static CreateUserController getInstance() {
-        return CreateUserController.LazyHolder.INSTANCE;
+        return LazyHolder.INSTANCE;
     }
 
-    public static class LazyHolder {
+    private static class LazyHolder {
         private static final CreateUserController INSTANCE = new CreateUserController();
     }
 

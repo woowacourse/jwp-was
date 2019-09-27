@@ -9,7 +9,7 @@ public class ListUserController extends AbstractController {
     private ListUserController() {}
 
     public static ListUserController getInstance() {
-        return ListUserController.LazyHolder.INSTANCE;
+        return LazyHolder.INSTANCE;
     }
 
     private static class LazyHolder {
