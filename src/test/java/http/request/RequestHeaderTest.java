@@ -1,7 +1,6 @@
 package http.request;
 
 import http.exception.NotFoundHeaderException;
-import http.request.RequestHeader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,7 +14,7 @@ public class RequestHeaderTest {
     @BeforeEach
     public void setUp() {
         requestHeader = new RequestHeader(
-                        "Host: localhost:8080\n" +
+                "Host: localhost:8080\n" +
                         "Connection: keep-alive\n" +
                         "Accept: */*\n");
     }

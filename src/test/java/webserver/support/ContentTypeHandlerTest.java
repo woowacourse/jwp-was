@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import webserver.exception.InvalidContentTypeException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ContentTypeHandlerTest {
 

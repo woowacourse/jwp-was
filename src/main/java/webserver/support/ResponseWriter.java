@@ -51,7 +51,6 @@ public class ResponseWriter {
         }
     }
 
-
     private static void writeBody(DataOutputStream dos, Response response) {
         try {
             dos.write(response.getContentBody(), 0, response.getContentLength());
