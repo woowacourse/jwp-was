@@ -31,6 +31,16 @@
     - ID, PASSWORD 검증
     - 세션에 생성하고 세션 ID Response Header 에 추가
 
+- [x] RequestMapping 기능 구현
+    - 자바 리플렉션으로 어노테이션 스캔
+    
+- [x] 쿠키 파싱
+    - HttpRequest 에서 헤더를 파싱할 때 쿠키를 별도로 파싱하여 맵으로 관리
+
+- [ ] 세션 생성 시기 리팩토링
+    - 세션을 도메인 코드가 처음 사용할 때 생성하도록 (굳이 로그인이 아니어도)
+    - getSession() 할때 만들면 될듯
+
 - [ ] View, ViewResolver 클래스 생성
     - RedirectView, ForwardView 등
     - Servlet 에서 리턴하고, View 가 HttpResponse 를 생성하는 역할을 맡는다.
@@ -39,3 +49,11 @@
     - AbstractServlet 을 상속받는 RestController, Controller 클래스 생성
     - RestController 클래스는 발생한 예외를 RestException 으로 감싸서 리턴한다.
     - ErrorView, ErrorHandler 클래스 생성
+    - Servlet 이 View 를 리턴하도록 리팩토링
+    - RequestHandler 에서 View 를 이용해 HttpResponse 를 생성하도록 리팩토링
+
+- [ ] 테스트 코드 보강
+    - 컨트롤러 테스트 (인수 테스트)
+    - mvc 테스트
+    - was 테스트
+    - web server 테스트

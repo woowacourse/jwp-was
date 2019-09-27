@@ -1,7 +1,7 @@
-package was.http.resource;
+package server.http.resource;
 
-import was.http.response.HttpResponse;
-import was.http.request.HttpRequest;
+import server.http.response.HttpResponse;
+import server.http.request.HttpRequest;
 
 public interface ResourceHandler {
     HttpResponse handle(HttpRequest httpRequest);

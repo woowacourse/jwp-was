@@ -1,4 +1,4 @@
-package was.http.resource;
+package server.http.resource;
 
 public class StaticResourceHandlingFailException extends RuntimeException {
     public StaticResourceHandlingFailException() {

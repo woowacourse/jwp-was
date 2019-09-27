@@ -1,6 +1,7 @@
 package was.http;
 
 import domain.servlet.LoginServlet;
+import mvc.controller.Controller;
 import was.http.servlet.Servlet;
 import domain.servlet.IndexServlet;
 import domain.servlet.SignupServlet;
@@ -15,9 +16,9 @@ public class Router {
 
     static {
         // TODO: 설정 파일로부터 읽어오거나 Component Scan 방식으로 자동 입력하도록
-        MAP.put("/", new IndexServlet());
-        MAP.put("/signup", new SignupServlet());
-        MAP.put("/user/login", new LoginServlet());
+//        MAP.put("/", new IndexServlet());
+//        MAP.put("/signup", new SignupServlet());
+//        MAP.put("/user/login", new LoginServlet());
     }
 
     public Servlet getServlet(String path) {
@@ -26,6 +27,10 @@ public class Router {
 
     public static Router getInstance() {
         return LazyHolder.INSTANCE;
+    }
+
+    public void addServlet(String urlPath, Controller controller) {
+        MAP.put(urlPath, controller);
     }
 
     public static class LazyHolder {

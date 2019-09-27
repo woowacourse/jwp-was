@@ -1,4 +1,4 @@
-package was.http.response;
+package server.http.response;
 
 import was.http.HttpStatus;
 import was.http.MimeType;

@@ -1,7 +1,7 @@
 package was.http.servlet;
 
-import was.http.request.HttpRequest;
-import was.http.response.HttpResponse;
+import server.http.request.HttpRequest;
+import server.http.response.HttpResponse;
 
 public interface Servlet {
     HttpResponse service(HttpRequest httpRequest);

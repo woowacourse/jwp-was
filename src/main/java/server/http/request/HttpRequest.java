@@ -1,4 +1,4 @@
-package was.http.request;
+package server.http.request;
 
 import java.util.Map;
 
@@ -6,10 +6,12 @@ public class HttpRequest {
     private final HttpRequestLine requestLine;
     private final Map<String, String> headers;
     private final Map<String, String> body;
+    private final Map<String, String> cookies;
 
-    public HttpRequest(final HttpRequestLine requestLine, final Map<String, String> headers, final Map<String, String> body) {
+    public HttpRequest(final HttpRequestLine requestLine, Map<String, String> cookies, final Map<String, String> headers, final Map<String, String> body) {
         this.requestLine = requestLine;
         this.headers = headers;
+        this.cookies = cookies;
         this.body = body;
     }
 
@@ -36,4 +38,6 @@ public class HttpRequest {
     public String getBody(final String key) {
         return body.get(key);
     }
+
+    public String getCookie(final String key) { return cookies.get(key); }
 }

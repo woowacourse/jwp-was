@@ -1,8 +1,8 @@
-package was.http.io;
+package server.http.io;
 
-import was.http.request.HttpRequest;
-import was.http.request.HttpRequestLine;
-import was.http.response.HttpResponse;
+import server.http.request.HttpRequest;
+import server.http.request.HttpRequestLine;
+import server.http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import was.utils.IOUtils;
@@ -23,10 +23,19 @@ public class HttpHandler {
         HttpRequestLine httpRequestLine = parseStartLine(br);
         Map<String, String> headers = parseHeaders(br);
         Map<String, String> body = new HashMap<>();
+        Map<String, String> cookies = new HashMap<>();
         if (headers.containsKey("Content-Length")) {
             body = parseBody(br, Integer.valueOf(headers.get("Content-Length")));
         }
-        return new HttpRequest(httpRequestLine, headers, body);
+        if (headers.containsKey("Cookie") && !headers.get("Cookie").equals("")) {
+            cookies = parseCookies(headers.get("Cookie"));
+        }
+        return new HttpRequest(httpRequestLine, headers, cookies, body);
+    }
+
+    private static Map<String, String> parseCookies(String cookieString) {
+        String[] cookies = cookieString.split("; ");
+        return parseMultiValueString(cookies);
     }
 
     private static HttpRequestLine parseStartLine(BufferedReader br) throws IOException {
@@ -55,20 +64,27 @@ public class HttpHandler {
         String line;
         while (!"".equals(line = br.readLine()) && line != null) {
             String[] splitHeader = line.split(": ");
+            String key = splitHeader[0];
+
             if (splitHeader.length > 1) {
-                headers.put(splitHeader[0], splitHeader[1]);
+                String value = splitHeader[1];
+                headers.put(key, value);
             } else {
-                headers.put(splitHeader[0], "");
+                headers.put(key, "");
             }
         }
         return headers;
     }
 
     private static Map<String, String> parseBody(BufferedReader br, Integer contentLength) throws IOException {
-        Map<String, String> body = new HashMap<>();
         String requestBody = IOUtils.readData(br, contentLength);
         String decodedBody = URLDecoder.decode(requestBody, StandardCharsets.UTF_8.toString());
         String[] bodyPairs = decodedBody.split("&");
+        return parseMultiValueString(bodyPairs);
+    }
+
+    private static Map<String, String> parseMultiValueString(String[] bodyPairs) {
+        Map<String, String> body = new HashMap<>();
         for (String bodyPair : bodyPairs) {
             String[] pair = bodyPair.split("=");
             body.put(pair[0], pair[1]);

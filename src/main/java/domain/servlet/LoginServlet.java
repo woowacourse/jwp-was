@@ -3,8 +3,8 @@ package domain.servlet;
 import domain.service.LoginService;
 import was.http.context.BasicSessionHandler;
 import was.http.context.SessionHandler;
-import was.http.request.HttpRequest;
-import was.http.response.HttpResponse;
+import server.http.request.HttpRequest;
+import server.http.response.HttpResponse;
 import was.http.servlet.AbstractServlet;
 
 import java.util.UUID;

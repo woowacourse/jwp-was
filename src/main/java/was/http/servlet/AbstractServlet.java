@@ -1,7 +1,7 @@
 package was.http.servlet;
 
-import was.http.request.HttpRequest;
-import was.http.response.HttpResponse;
+import server.http.request.HttpRequest;
+import server.http.response.HttpResponse;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +14,8 @@ public abstract class AbstractServlet implements Servlet {
         MAP.put("POST", this::doPost);
     }
 
-    public HttpResponse service(final HttpRequest request) {
+    @Override
+    public final HttpResponse service(final HttpRequest request) {
         String method = request.getMethod();
         return MAP.get(method).service(request);
     }

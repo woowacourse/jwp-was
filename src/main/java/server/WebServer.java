@@ -1,9 +1,9 @@
-package was.webserver;
+package server;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import was.concurrency.FixedThreadPool;
-import was.concurrency.ThreadPool;
+import server.concurrency.FixedThreadPool;
+import server.concurrency.ThreadPool;
 
 import java.io.IOException;
 import java.net.ServerSocket;

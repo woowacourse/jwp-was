@@ -1,6 +1,6 @@
 package support;
 
-import was.webserver.WebServer;
+import server.WebServer;
 
 import java.io.*;
 import java.net.Socket;
