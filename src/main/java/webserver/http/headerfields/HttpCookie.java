@@ -6,6 +6,7 @@ import java.util.*;
 
 public class HttpCookie {
     private static final Map<Boolean, String> LOGINED_VALUE = new HashMap<>();
+
     static {
         LOGINED_VALUE.put(true, "true");
         LOGINED_VALUE.put(false, "false");

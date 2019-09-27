@@ -1,10 +1,7 @@
 package webserver.http;
 
 import utils.io.FileIoUtils;
-import webserver.http.headerfields.HttpConnection;
-import webserver.http.headerfields.HttpContentType;
-import webserver.http.headerfields.HttpStatusCode;
-import webserver.http.headerfields.HttpVersion;
+import webserver.http.headerfields.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -111,6 +108,15 @@ public class HttpResponse {
                         .body(body)
                         .build()
         ).orElse(HttpResponse.NOT_FOUND);
+    }
+
+    public HttpResponse applyLoginCookie(HttpResponse httpResponse, boolean login) {
+        HttpCookie cookie = new HttpCookie();
+
+        cookie.loginCookie(login, "/");
+        httpResponse.optionFields.put("Set-Cookie", cookie.line());
+
+        return httpResponse;
     }
 
     public String serializeHeader() {

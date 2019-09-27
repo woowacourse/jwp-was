@@ -20,6 +20,7 @@ public class FileIoUtils {
     static {
         DEFAULT_PATH.put("/index.html", TEMPLATES_PACKAGE);
         DEFAULT_PATH.put("/user/form.html", TEMPLATES_PACKAGE);
+        DEFAULT_PATH.put("/user/login.html", TEMPLATES_PACKAGE);
     }
 
     public static Optional<String> loadFileFromClasspath(String filePath) {

@@ -35,6 +35,10 @@ public class User {
         this.email = email;
     }
 
+    public boolean isMatchPassword(String password) {
+        return this.password.equals(password);
+    }
+
     public String id() {
         return this.id;
     }
