@@ -33,6 +33,10 @@ public class Request {
         return queryParameters;
     }
 
+    public RequestMethod getRequestMethod() {
+        return requestMethod;
+    }
+
     public Session getSession() {
         String sessionId = this.cookie.getSessionId();
         return SessionRepository.getInstance().getSession(sessionId);
