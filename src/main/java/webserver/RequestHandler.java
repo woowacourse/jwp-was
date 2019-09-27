@@ -39,6 +39,7 @@ public class RequestHandler implements Runnable {
 
         } catch (IOException e) {
             logger.error(e.getMessage());
+            throw new NetworkException();
         }
 
     }
