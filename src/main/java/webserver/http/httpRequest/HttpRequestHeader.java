@@ -4,16 +4,18 @@ import webserver.http.cookie.Cookies;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static webserver.http.HttpRequest.CONTENT_LENGTH;
 import static webserver.http.HttpRequest.JSESSION_ID;
 
 public class HttpRequestHeader {
-    private static final String HEADER_LINE_SEPARATOR = "\n";
+    public static final String HEADER_LINE_SEPARATOR = "\n";
+    public static final String COOKIE = "Cookie";
     private static final String HEADER_SEPARATOR = ": ";
+    private static final String COOKIE_SEPARATOR = "=";
 
     private final Map<String, String> headers;
-
     private final Cookies cookies;
 
     private HttpRequestHeader(Map<String, String> headers, Cookies cookies) {
@@ -24,23 +26,27 @@ public class HttpRequestHeader {
     public static HttpRequestHeader create(String header) {
         HashMap<String, String> headers = new HashMap<>();
         Cookies cookies = new Cookies();
-        parseBody(header, headers, cookies);
+        parseHeader(header, headers, cookies);
 
         return new HttpRequestHeader(headers, cookies);
     }
 
-    private static void parseBody(String header, HashMap<String, String> headers, Cookies cookies) {
+    private static void parseHeader(String header, HashMap<String, String> headers, Cookies cookies) {
         String[] headerLines = header.split(HEADER_LINE_SEPARATOR);
         for (String headerLine : headerLines) {
             String[] headerLinePair = headerLine.split(HEADER_SEPARATOR);
-            if (headerLinePair[0].equals("Cookie")) {
-                String[] inputCookies = headerLinePair[1].split("=");
-                String cookieKey = inputCookies[0];
-                String cookieValue = inputCookies[1];
-                cookies.addCookie(cookieKey, cookieValue);
-            } else {
-                headers.put(headerLinePair[0], headerLinePair[1]);
-            }
+            headers.put(headerLinePair[0], headerLinePair[1]);
+        }
+        parseCookie(headers, cookies);
+    }
+
+    private static void parseCookie(HashMap<String, String> headers, Cookies cookies) {
+        String headerCookie = headers.get(COOKIE);
+        if (Objects.nonNull(headerCookie)) {
+            String[] cookie = headerCookie.split(COOKIE_SEPARATOR);
+            String cookieKey = cookie[0];
+            String cookieValue = cookie[1];
+            cookies.addCookie(cookieKey, cookieValue);
         }
     }
 
