@@ -1,5 +1,7 @@
 package utils;
 
+import utils.exception.InvalidBodyException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 
@@ -12,9 +14,13 @@ public class IOUtils {
      * @return
      * @throws IOException
      */
-    public static String readData(BufferedReader br, int contentLength) throws IOException {
-        char[] body = new char[contentLength];
-        br.read(body, 0, contentLength);
-        return String.copyValueOf(body);
+    public static String readData(BufferedReader br, int contentLength) {
+        try {
+            char[] body = new char[contentLength];
+            br.read(body, 0, contentLength);
+            return String.copyValueOf(body);
+        } catch (IOException e) {
+            throw new InvalidBodyException();
+        }
     }
 }

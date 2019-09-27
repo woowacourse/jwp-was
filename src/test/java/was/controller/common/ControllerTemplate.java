@@ -1,6 +1,5 @@
 package was.controller.common;
 
-import org.junit.jupiter.api.BeforeEach;
 import was.controller.Controller;
 import was.controller.CreateUserController;
 import was.controller.LoginUserController;
@@ -23,13 +22,9 @@ public class ControllerTemplate {
     protected HttpRequest httpRequest;
     protected HttpResponse httpResponse;
 
-    @BeforeEach
-    public void setUp() throws Exception {
-        httpRequest = new HttpRequest();
-        httpResponse = new HttpResponse();
-    }
+    public void signUp() {
+        init();
 
-    public void signUp() throws Exception {
         String signUp = "POST /user/create HTTP/1.1\n" +
                 "Host: localhost:8080\n" +
                 "Connection: keep-alive\n" +
@@ -45,7 +40,9 @@ public class ControllerTemplate {
         controller.service(httpRequest, httpResponse);
     }
 
-    public void signIn() throws Exception {
+    public void signIn() {
+        init();
+
         String signIn =
                 "POST /user/login HTTP/1.1\n" +
                         "Host: localhost:8080\n" +
@@ -62,14 +59,16 @@ public class ControllerTemplate {
         controller.service(httpRequest, httpResponse);
     }
 
-    public void singInFailed() throws Exception {
+    public void singInFailed() {
+        init();
+
         String signIn =
                 "POST /user/login HTTP/1.1\n" +
                         "Host: localhost:8080\n" +
                         "Connection: keep-alive\n" +
                         "Content-Length: " + CONTENT_LENGTH + "\n" +
                         "Accept: */*\n" +
-                        "Cookie: logined=true\n" +
+                        "Cookie: logined=false\n" +
                         "\n" +
                         ANOTHER_USER_INFO + "\n\r";
 
@@ -79,7 +78,21 @@ public class ControllerTemplate {
         controller.service(httpRequest, httpResponse);
     }
 
-    public void allowedNotMethod(HttpMethod httpMethod, Controller controller) throws Exception {
+    public void movePage(String url, String header) {
+        String page =
+                "GET " + url + " HTTP/1.1\n" +
+                        "Host: localhost:8080\n" +
+                        "Connection: keep-alive\n" +
+                        "Accept: */*\n" +
+                        "Cookie: " + header + "\n\r";
+
+        InputStream inputStream = new ByteArrayInputStream(page.getBytes());
+        HttpRequestParser.parse(inputStream, httpRequest);
+    }
+
+    public void allowedNotMethod(HttpMethod httpMethod, Controller controller) {
+        init();
+
         String notAllowedMethod = httpMethod.name() + " /user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net HTTP/1.1\n" +
                         "Host: localhost:8080\n" +
                         "Connection: keep-alive\n" +
@@ -91,5 +104,10 @@ public class ControllerTemplate {
         assertThrows(MethodNotAllowedException.class, () -> {
             controller.service(httpRequest, httpResponse);
         });
+    }
+
+    public void init() {
+        this.httpRequest = new HttpRequest();
+        this.httpResponse = new HttpResponse();
     }
 }

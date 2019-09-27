@@ -43,9 +43,9 @@ public class RequestHandler implements Runnable {
         try {
             HttpRequestParser.parse(inputStream, httpRequest);
             Dispatcher.dispatch(httpRequest, httpResponse);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             // TODO : 에러에 맞는 response 보내기
-            logger.error("에러 메시지 " + e.getMessage());
+            logger.error("에러 메시지 : " + e.getMessage());
             httpResponse.redirect("/404.html");
         }
     }

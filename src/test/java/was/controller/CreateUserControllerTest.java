@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class CreateUserControllerTest extends ControllerTemplate {
 
     @Test
-    void 사용자_생성() throws Exception {
+    void 사용자_생성() {
         signUp();
 
         assertEquals(
@@ -21,7 +21,7 @@ class CreateUserControllerTest extends ControllerTemplate {
     }
 
     @Test
-    void 지원하지_않는_메서드_요청() throws Exception {
+    void 지원하지_않는_메서드_요청() {
         allowedNotMethod(HttpMethod.GET, CreateUserController.getInstance());
     }
 }

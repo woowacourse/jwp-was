@@ -5,15 +5,12 @@ import was.HandlerMapping;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-
 public class Dispatcher {
-    public static void dispatch(final HttpRequest httpRequest, final HttpResponse httpResponse) throws IOException, URISyntaxException {
+    public static void dispatch(final HttpRequest httpRequest, final HttpResponse httpResponse) {
         String fullUrl = httpRequest.getRequestLine().getFullUrl();
 
         if (fullUrl.startsWith("./")) {
-            httpResponse.forward(fullUrl, FileIoUtils.loadFileFromClasspath(fullUrl));
+            httpResponse.forward(fullUrl , FileIoUtils.loadFileFromClasspath(fullUrl));
             return;
         }
 
