@@ -13,13 +13,13 @@ public class ModelAndView implements View {
     private final byte[] body;
 
     public ModelAndView(String path, Map<String, Object> model) throws IOException {
-        this.body = createBody(path, model, new HandlebarResolver());
-        header.put(HTTP.CONTENT_TYPE, ContentType.valueByPath(path).getContents() + ";charset=utf-8");
-        header.put(HTTP.CONTENT_LENGTH, String.valueOf(body.length));
+        this(path, model, new HandlebarResolver());
     }
 
     public ModelAndView(String path, Map<String, Object> model, TemplateResolver templateResolver) throws IOException {
         this.body = createBody(path, model, templateResolver);
+        header.put(HTTP.CONTENT_TYPE, ContentType.valueByPath(path).getContents() + ";charset=utf-8");
+        header.put(HTTP.CONTENT_LENGTH, String.valueOf(body.length));
     }
 
     private byte[] createBody(String path, Map<String, Object> model, TemplateResolver templateResolver) throws IOException {
