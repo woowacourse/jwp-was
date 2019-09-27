@@ -2,17 +2,17 @@ package http.response;
 
 import http.HTTP;
 
-public class ResponseFirstLine {
+public class StatusLine {
     private ResponseStatus responseStatus;
     private static final String FIRST_LINE_DELIMITER = " ";
 
 
-    public ResponseFirstLine() {
+    public StatusLine() {
         this.responseStatus = ResponseStatus.NOT_FOUND;
     }
 
 
-    public ResponseFirstLine(ResponseStatus responseStatus) {
+    public StatusLine(ResponseStatus responseStatus) {
         this.responseStatus = responseStatus;
     }
 

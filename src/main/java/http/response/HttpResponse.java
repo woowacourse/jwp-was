@@ -14,21 +14,21 @@ public class HttpResponse implements AutoCloseable {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
     private static final String NEW_LINE = "\r\n";
 
-    private ResponseFirstLine responseFirstLine;
+    private StatusLine statusLine;
     private ResponseHeader header;
     private ResponseBody body;
 
     private final DataOutputStream dataOutputStream;
 
     public HttpResponse(final OutputStream out) {
-        this.responseFirstLine = new ResponseFirstLine();
+        this.statusLine = new StatusLine();
         this.header = new ResponseHeader();
         this.body = new ResponseBody();
         this.dataOutputStream = new DataOutputStream(out);
     }
 
     public void addStatusCode(ResponseStatus responseStatus) {
-        this.responseFirstLine = new ResponseFirstLine(responseStatus);
+        this.statusLine = new StatusLine(responseStatus);
     }
 
     public void addHeader(Map<HTTP, String> header) {
@@ -49,7 +49,7 @@ public class HttpResponse implements AutoCloseable {
 
     public String getHeader() {
         StringBuffer sb = new StringBuffer();
-        sb.append(responseFirstLine.getResponse()).append(NEW_LINE);
+        sb.append(statusLine.getResponse()).append(NEW_LINE);
         sb.append(header.getResponse()).append(NEW_LINE);
 
         return sb.toString();
