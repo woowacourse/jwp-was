@@ -2,21 +2,16 @@ package servlet.response;
 
 import http.support.StatusCode;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class HttpServletResponse {
-    private String resourcePath = "";
+    private String resourcePath = "/";
     private StatusCode statusCode = StatusCode.NOT_FOUND;
     private Map<String, String> headers = new HashMap<>();
     private Map<String, Object> model = new HashMap<>();
-    private Map<String, String> cookies = new HashMap<>();
+    private List<String> cookies = new ArrayList<>();
 
     public HttpServletResponse() {
-    }
-
-    public HttpServletResponse(final String path) {
-        this.resourcePath = path;
     }
 
     public void forward(final String path) {
@@ -24,8 +19,8 @@ public class HttpServletResponse {
         this.statusCode = StatusCode.OK;
     }
 
-    public void sendRedirect(String path) {
-        this.resourcePath = path;
+    public void sendRedirect(final String path) {
+        headers.put("Location", path);
         this.statusCode = StatusCode.FOUND;
     }
 
@@ -38,10 +33,14 @@ public class HttpServletResponse {
     }
 
     public void addCookie(final String key, final String cookie) {
-        cookies.put(key, cookie);
+        cookies.add(key + "=" + cookie);
+    }
+
+    public String getCookie() {
+        return String.join("; ", cookies);
     }
 
     public String getResourcePath() {
-        return null;
+        return resourcePath;
     }
 }
