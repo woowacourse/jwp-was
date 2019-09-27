@@ -32,18 +32,4 @@ public class HttpSession {
     public String getId() {
         return id;
     }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        HttpSession that = (HttpSession) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(session, that.session);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, session);
-    }
 }
