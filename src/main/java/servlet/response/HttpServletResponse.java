@@ -9,6 +9,8 @@ public class HttpServletResponse {
     private StatusCode statusCode = StatusCode.NOT_FOUND;
     private Map<String, String> headers = new HashMap<>();
     private Map<String, Object> model = new HashMap<>();
+
+    //@TODO 또 다른 객체로 뺄 것
     private List<String> cookies = new ArrayList<>();
 
     public HttpServletResponse() {
@@ -38,6 +40,10 @@ public class HttpServletResponse {
 
     public String getCookie() {
         return String.join("; ", cookies);
+    }
+
+    public Map<String, Object> getModel() {
+        return Collections.unmodifiableMap(model);
     }
 
     public String getResourcePath() {

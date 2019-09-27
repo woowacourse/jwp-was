@@ -34,6 +34,8 @@ public class HttpResponseTest {
         log.info("{}", byteArrayOutputStream.toString());
     }
 
+    @Test
+
     private ByteArrayOutputStream createOutPutStream() {
         return new ByteArrayOutputStream();
     }
