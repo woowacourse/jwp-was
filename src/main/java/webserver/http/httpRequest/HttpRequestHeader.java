@@ -13,7 +13,8 @@ public class HttpRequestHeader {
     public static final String HEADER_LINE_SEPARATOR = "\n";
     public static final String COOKIE = "Cookie";
     private static final String HEADER_SEPARATOR = ": ";
-    private static final String COOKIE_SEPARATOR = "=";
+    private static final String COOKIE_SEPARATOR = ";";
+    private static final String COOKIE_PAIR_SEPARATOR = "=";
 
     private final Map<String, String> headers;
     private final Cookies cookies;
@@ -43,10 +44,13 @@ public class HttpRequestHeader {
     private static void parseCookie(HashMap<String, String> headers, Cookies cookies) {
         String headerCookie = headers.get(COOKIE);
         if (Objects.nonNull(headerCookie)) {
-            String[] cookie = headerCookie.split(COOKIE_SEPARATOR);
-            String cookieKey = cookie[0];
-            String cookieValue = cookie[1];
-            cookies.addCookie(cookieKey, cookieValue);
+            String[] inputCookies = headerCookie.split(COOKIE_SEPARATOR);
+            for (String cookiePairs : inputCookies) {
+                String[] cookiePair = cookiePairs.split(COOKIE_PAIR_SEPARATOR);
+                String key = cookiePair[0];
+                String value = cookiePair[1];
+                cookies.addCookie(key, value);
+            }
         }
     }
 
