@@ -4,6 +4,9 @@ import model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class TemplateEngineTest {
@@ -12,7 +15,10 @@ class TemplateEngineTest {
     void templateEngine() throws Exception {
         User user = new User("javajigi", "password",
                 "자바지기", "javajigi@gmail.com");
-        String profilePage = TemplateEngine.applyModelInView("user/profile", user);
+
+        Map<String, Object> model = new HashMap<>();
+        model.put("user", user);
+        String profilePage = TemplateEngine.applyModelInView("user/profile", model);
 
         assertThat(profilePage).contains("자바지기");
         assertThat(profilePage).contains("email");

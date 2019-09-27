@@ -27,8 +27,7 @@ public class ViewResolver {
         }
     }
 
-    public static void resolveWithBody(HttpRequest request, HttpResponse response,
-                                       byte[] body) {
+    public static void resolveWithBody(HttpRequest request, HttpResponse response, byte[] body) {
         if (body != null) {
             HttpMimeType type = request.getMimeType();
             response.setBody(body, type);

@@ -1,9 +1,6 @@
 package webserver;
 
-import servlet.DefaultServlet;
-import servlet.Servlet;
-import servlet.UserCreateServlet;
-import servlet.LoginServlet;
+import servlet.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +14,7 @@ public class ServletMapper {
         DEFAULT_SERVLET = new DefaultServlet();
         SERVLETS.put("/user/create", new UserCreateServlet());
         SERVLETS.put("/user/login", new LoginServlet());
+        SERVLETS.put("/user/list", new UserListServlet());
     }
 
     public static Servlet getServlet(String path) {
