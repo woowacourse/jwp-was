@@ -26,12 +26,16 @@ public class UserListController extends AbstractController {
 
     @Override
     void doGet(HttpRequest request, HttpResponse response) {
-        HttpSession session = HttpSessionDB.getInstance().findOrCreateSession(request.getCookieValue(SESSION_ID));
-        if (session != null && session.getAttributes("login-user") != null) {
+        if (checkLogin(request)) {
             showUsers(response);
             return;
         }
         ResponseResolver.resolve(new RedirectView("/user/login.html"), response);
+    }
+
+    private boolean checkLogin(HttpRequest request) {
+        HttpSession session = HttpSessionDB.getInstance().findOrCreateSession(request.getCookieValue(SESSION_ID));
+        return session != null && session.getAttributes("login-user") != null;
     }
 
     private void showUsers(HttpResponse response) {
