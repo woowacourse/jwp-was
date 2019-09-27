@@ -1,4 +1,4 @@
-package utils;
+package webserver.support;
 
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
@@ -14,8 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class HandlebarsTest {
-    private static final Logger log = LoggerFactory.getLogger(HandlebarsTest.class);
+public class HandlebarsRendererTest {
+    private static final Logger log = LoggerFactory.getLogger(HandlebarsRendererTest.class);
 
     @Test
     public void name() throws Exception {
