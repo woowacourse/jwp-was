@@ -12,6 +12,7 @@ import java.net.Socket;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import dev.luffy.annotation.Controller;
@@ -59,15 +60,23 @@ public class WebServer {
         Method requestMapAddMethod = RequestMapper.class.getMethod("add", String.class, Method.class);
         controllerClasses
                 .stream()
-                .map((Function<Class<?>, Set<?>>) aClass ->
-                        new Reflections(aClass.getName(), new MethodAnnotationsScanner())
-                                .getMethodsAnnotatedWith(RequestMapping.class))
-                .forEach(objects -> ((Set<Method>) objects).forEach(method -> {
+                .map(requestMappingAnnotatedMethodScannerMapper())
+                .forEach(addRequestMapper(requestMapAddMethod));
+    }
+
+    private static Function<Class<?>, Set<?>> requestMappingAnnotatedMethodScannerMapper() {
+        return aClass ->
+                new Reflections(aClass.getName(), new MethodAnnotationsScanner()).getMethodsAnnotatedWith(RequestMapping.class);
+    }
+
+    private static Consumer<Set<?>> addRequestMapper(Method requestMapAddMethod) {
+        return objects -> ((Set<Method>) objects)
+                .forEach(method -> {
                     try {
                         requestMapAddMethod.invoke(null, method.getAnnotation(RequestMapping.class).value(), method);
                     } catch (IllegalAccessException | InvocationTargetException e) {
                         e.printStackTrace();
                     }
-                }));
+                });
     }
 }
