@@ -50,9 +50,4 @@ public class UserListController extends AbstractController {
             log.error(e.getMessage());
         }
     }
-
-    @Override
-    void doPost(HttpRequest request, HttpResponse response) {
-
-    }
 }

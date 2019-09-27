@@ -16,10 +16,6 @@ public class UserCreateController extends AbstractController {
     private static final Logger log = LoggerFactory.getLogger(UserCreateController.class);
 
     @Override
-    void doGet(HttpRequest request, HttpResponse response) {
-    }
-
-    @Override
     void doPost(HttpRequest request, HttpResponse response) {
 
         Map<String, String> query = QueryStringUtils.parse(request.getBody());

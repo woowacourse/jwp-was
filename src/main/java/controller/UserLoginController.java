@@ -20,11 +20,6 @@ public class UserLoginController extends AbstractController {
     private UserService userService = new UserService();
 
     @Override
-    void doGet(HttpRequest request, HttpResponse response) {
-
-    }
-
-    @Override
     void doPost(HttpRequest request, HttpResponse response) {
         Map<String, String> body = QueryStringUtils.parse(request.getBody());
 
