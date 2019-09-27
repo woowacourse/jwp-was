@@ -1,4 +1,4 @@
-package exception;
+package exceptions;
 
 public class InvalidUriException extends IllegalArgumentException {
 

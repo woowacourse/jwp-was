@@ -25,7 +25,7 @@ public class HttpResponse {
     private Cookies cookies = new Cookies();
     private ResponseBody responseBody;
 
-    public HttpResponse(){
+    public HttpResponse() {
     }
 
     public HttpResponse(final HttpRequest httpRequest, final DataOutputStream dos) {
