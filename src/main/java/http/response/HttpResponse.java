@@ -1,4 +1,4 @@
-package http;
+package http.response;
 
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
@@ -40,7 +40,7 @@ public class HttpResponse {
     }
 
     public void forward(String path) throws IOException, URISyntaxException {
-        logger.debug("Forwarding Path : {}", path);
+        logger.debug("Forward Path : {}", path);
 
         byte[] body = FileIoUtils.loadFileFromClasspath(path);
         addHeader("Content-Length", Integer.toString(body.length));
@@ -61,7 +61,7 @@ public class HttpResponse {
             Map<String, Object> map = new HashMap<>();
             map.put("users", model.get("users"));
             String profilePage = template.apply(map);
-            outputStream.write(profilePage.getBytes(), 0, profilePage.getBytes().length);
+            outputStream.write(profilePage.getBytes(Charsets.UTF_8), 0, profilePage.getBytes().length);
         }
         outputStream.flush();
     }
@@ -74,7 +74,6 @@ public class HttpResponse {
 
     private void writeStartLine(StatusCode statusCode) throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
-
         stringBuilder.append(HTTP_VERSION);
         stringBuilder.append(statusCode.getStatusCode());
         stringBuilder.append(" ");

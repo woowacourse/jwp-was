@@ -1,11 +1,7 @@
 package webserver;
 
-import com.github.jknack.handlebars.Handlebars;
-import com.github.jknack.handlebars.Template;
-import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
-import com.github.jknack.handlebars.io.TemplateLoader;
 import file.FileContainer;
-import http.HttpResponse;
+import http.response.HttpResponse;
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
 import org.slf4j.Logger;
@@ -16,8 +12,6 @@ import servlet.controller.ControllerFinder;
 import java.io.*;
 import java.net.Socket;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);

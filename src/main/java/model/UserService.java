@@ -17,12 +17,11 @@ public class UserService {
         logger.debug("user list : {}", DataBase.findAll());
     }
 
-    // @TODO 리팩토링
+    // @TODO
     public boolean login(final User loginUser) {
         User other;
 
         try {
-            // @TODO 사용자 지정 Exception 고려
             other = Optional.ofNullable(DataBase.findUserById(loginUser.getUserId()))
                     .orElseThrow(NoSuchElementException::new);
             return loginUser.match(other);

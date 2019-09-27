@@ -2,7 +2,8 @@ package http.support;
 
 public enum StatusCode {
     OK(200),
-    FOUND(302);
+    FOUND(302),
+    NOT_FOUND(404);
 
     private int statusCode;
 

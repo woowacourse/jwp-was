@@ -1,6 +1,6 @@
 package servlet.controller;
 
-import http.HttpResponse;
+import http.response.HttpResponse;
 import http.request.HttpRequest;
 
 import java.io.IOException;

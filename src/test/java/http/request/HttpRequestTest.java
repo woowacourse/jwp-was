@@ -28,7 +28,7 @@ public class HttpRequestTest {
 
         assertThat(httpRequest.getMethod()).isEqualTo("POST");
         assertThat(httpRequest.getResourcePath()).isEqualTo("/user/create");
-        assertThat(httpRequest.getHeader("Content-Length")).isEqualTo("59");
+        assertThat(httpRequest.getHeader("Content-Length")).isEqualTo("91");
         assertThat(httpRequest.getHeader("Content-Type")).isEqualTo("application/x-www-form-urlencoded");
         assertThat(httpRequest.getParameter("password")).isEqualTo("password");
     }
