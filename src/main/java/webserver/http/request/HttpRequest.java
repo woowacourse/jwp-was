@@ -11,24 +11,23 @@ public class HttpRequest {
     private QueryStringParams queryStringParams;
     private HttpSession httpSession;
 
-    public HttpRequest() {
-        httpSession = createSession();
-    }
-
-    private HttpSession createSession() {
-        if (httpHeader.get("Cookie").contains("JSESSIONID")) {
-            return Session.getInstance().getHttpSession(httpSession.getId());
-        }
-
-        return Session.getInstance().createSession(new GeneratedSessionIdStrategy());
-    }
-
     public void init(final RequestLine requestLine,
                        final HttpHeader httpHeader,
                        final QueryStringParams queryStringParams) {
         this.requestLine = requestLine;
         this.httpHeader = httpHeader;
         this.queryStringParams = queryStringParams;
+        this.httpSession = createSession();
+    }
+
+    private HttpSession createSession() {
+        String cookie = httpHeader.get("Cookie");
+
+        if (cookie != null && cookie.contains("JSESSIONID")) {
+            return Session.getInstance().getHttpSession(httpSession.getId());
+        }
+
+        return Session.getInstance().createSession(new GeneratedSessionIdStrategy());
     }
 
     public void addHeader(final String key, final String value) {
