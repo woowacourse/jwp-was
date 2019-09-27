@@ -8,13 +8,13 @@ public class Sessions {
     private static Map<String, Session> sessions = new HashMap<>();
 
     public static Session getSession(String jSessionId) {
-        return Optional.ofNullable(sessions.get(jSessionId)).orElse(Session.of());
+        return Optional.ofNullable(sessions.get(jSessionId)).orElse(create());
     }
 
-    public static String create() {
+    public static Session create() {
         Session session = Session.of();
         sessions.put(session.getId(), session);
-        return session.getId();
+        return session;
     }
 
 }

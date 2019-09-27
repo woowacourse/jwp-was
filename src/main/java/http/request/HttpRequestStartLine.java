@@ -13,7 +13,7 @@ public class HttpRequestStartLine {
     private final HttpMethodType httpMethodType;
     private final String path;
     private final HttpRequestParameter httpRequestParameters;
-    private HttpVersion httpVersion;
+    private final HttpVersion httpVersion;
 
     private HttpRequestStartLine(HttpMethodType httpMethodType, String path, HttpRequestParameter httpRequestParameters, HttpVersion httpVersion) {
         this.httpMethodType = httpMethodType;

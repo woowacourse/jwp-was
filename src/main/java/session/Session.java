@@ -17,23 +17,23 @@ public class Session {
         return new Session(UUID.randomUUID().toString());
     }
 
-    String getId() {
+    public String getId() {
         return sessionId;
     }
 
-    void setAttribute(String name, Object value) {
+    public void setAttribute(String name, Object value) {
         session.put(name, value);
     }
 
-    Object getAttribute(String name) {
+    public Object getAttribute(String name) {
         return session.get(name);
     }
 
-    void removeAttribute(String name) {
+    public void removeAttribute(String name) {
         session.remove(name);
     }
 
-    void invalidate() {
+    public void invalidate() {
         session.clear();
     }
 }

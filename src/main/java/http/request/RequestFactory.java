@@ -14,7 +14,6 @@ import java.util.List;
 
 public class RequestFactory {
     private static final Logger log = LoggerFactory.getLogger(RequestFactory.class);
-    private static final String TAG = "RequestFactory";
     private static final String LAST_LINE = "";
     private static final String CONTENT_LENGTH = "Content-Length";
 
@@ -34,7 +33,7 @@ public class RequestFactory {
 
     private static HttpHeader initializeHeader(BufferedReader br) throws IOException {
         List<String> httpRequestHeaderLines = new ArrayList<>();
-
+        HttpHeader httpHeader = new HttpHeader();
         while (true) {
             String line = br.readLine();
             if (line == null || line.equals(LAST_LINE)) {
@@ -43,7 +42,8 @@ public class RequestFactory {
             log.debug("{}", line);
             httpRequestHeaderLines.add(line);
         }
-        return HttpHeader.of(httpRequestHeaderLines);
+        httpHeader.create(httpRequestHeaderLines);
+        return httpHeader;
     }
 
     private static HttpBody initializeBody(BufferedReader br, HttpHeader httpHeader) throws IOException {

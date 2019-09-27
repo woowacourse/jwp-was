@@ -6,16 +6,17 @@ import java.util.List;
 import java.util.Map;
 
 public class Cookie {
-    public static final String EQUAL_SIGN = "=";
+    private static final String EQUAL_SIGN = "=";
     private static final String SEMI_COLON = ";";
     private static final int NAME_INDEX = 0;
     private static final int VALUE_INDEX = 1;
+    private static final String JSESSIONID = "JSESSIONID";
     private Map<String, String> cookies = new HashMap<>();
 
     public Cookie() {
     }
 
-    public void parse(String line) {
+    void parse(String line) {
         String[] tokens = line.split(SEMI_COLON);
         for (String token : tokens) {
             String[] subTokens = token.trim().split(EQUAL_SIGN);
@@ -28,7 +29,7 @@ public class Cookie {
     }
 
     public boolean isLogined() {
-        return cookies.containsKey("JSESSIONID");
+        return cookies.containsKey(JSESSIONID);
     }
 
     public String build() {
@@ -42,5 +43,13 @@ public class Cookie {
             lines.add(line);
         }
         return String.join("; ", lines);
+    }
+
+    public boolean isEmpty() {
+        return cookies.isEmpty();
+    }
+
+    public String getCookieValue(String name) {
+        return cookies.get(name);
     }
 }

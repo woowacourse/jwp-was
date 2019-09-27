@@ -10,11 +10,13 @@ public class HttpRequest {
     private HttpRequestStartLine httpRequestStartLine;
     private HttpHeader httpHeader;
     private HttpBody httpBody;
+    private Cookie cookie;
 
     public HttpRequest(HttpRequestStartLine httpRequestStartLine, HttpHeader httpHeader, HttpBody httpBody) {
         this.httpRequestStartLine = httpRequestStartLine;
         this.httpHeader = httpHeader;
         this.httpBody = httpBody;
+        this.cookie = createCookie();
     }
 
     public Map<String, String> convertBodyToMap() {
@@ -31,6 +33,16 @@ public class HttpRequest {
 
     public boolean isFileRequest() {
         return getPath().contains(POINT);
+    }
+
+    private Cookie createCookie() {
+        Cookie cookie = new Cookie();
+        try {
+            cookie.parse(getHeader("Cookie"));
+            return cookie;
+        } catch (NotFoundHttpRequestHeader e) {
+            return cookie;
+        }
     }
 
     public HttpMethodType getHttpMethod() {
@@ -57,13 +69,8 @@ public class HttpRequest {
         return httpRequestStartLine.getHttpVersion();
     }
 
-    public Cookie createCookie() {
-        Cookie cookie = new Cookie();
-        try {
-            cookie.parse(getHeader("Cookie"));
-            return cookie;
-        } catch (NotFoundHttpRequestHeader e) {
-            return cookie;
-        }
+    public String getCookieValue(String name) {
+        return cookie.getCookieValue(name);
+
     }
 }

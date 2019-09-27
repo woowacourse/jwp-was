@@ -9,66 +9,51 @@ import org.slf4j.LoggerFactory;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
     private StatusCode statusCode;
     private HttpVersion httpVersion;
-    private HttpHeader header;
+    private HttpHeader header = new HttpHeader();
     private byte[] body = new byte[]{};
+    private Cookie cookie = new Cookie();
 
     public HttpResponse(HttpRequest httpRequest) {
         this.httpVersion = httpRequest.getVersion();
     }
 
-    void addHeader(Map<String, String> headers) {
-        header = new HttpHeader(headers);
-    }
-
     public void okResponse(String contentType, byte[] body) {
         this.statusCode = StatusCode.OK;
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Content-Type", "text/" + contentType + ";charset=utf-8");
-        headers.put("Content-Length", "" + body.length);
-        addHeader(headers);
+        header.addHeader("Content-Type", "text/" + contentType + ";charset=utf-8");
+        header.addHeader("Content-Length", "" + body.length);
+        if (!cookie.isEmpty()) {
+            header.addHeader("Set-Cookie", cookie.build());
+        }
         this.body = body;
     }
 
-    public void redirectResponse(String location) {
+    public void redirect(String location) {
         this.statusCode = StatusCode.FOUND;
-        Map<String, String> header = new HashMap<>();
-        header.put("Location", location);
-        addHeader(header);
+        header.addHeader("Location", location);
+        if (!cookie.isEmpty()) {
+            header.addHeader("Set-Cookie", cookie.build());
+        }
     }
 
     public void badRequest() {
         this.statusCode = StatusCode.BAD_REQUEST;
-        addHeader(new HashMap<>());
     }
 
     public void notFound() {
         this.statusCode = StatusCode.NOT_FOUND;
-        addHeader(new HashMap<>());
     }
 
     public void methodNotAllow() {
         this.statusCode = StatusCode.METHOD_NOT_FOUND;
-        addHeader(new HashMap<>());
-    }
-
-    public void redirectResponseWithCookie(Cookie cookie, String location) {
-        this.statusCode = StatusCode.FOUND;
-        Map<String, String> header = new HashMap<>();
-        header.put("Location", location);
-        header.put("Set-Cookie", cookie.build());
-        addHeader(header);
     }
 
     public void internalServerError() {
         this.statusCode = StatusCode.INTERNAL_SERVER_ERROR;
-        addHeader(new HashMap<>());
     }
 
     private void writeStartLine(DataOutputStream dos) throws IOException {
@@ -104,5 +89,9 @@ public class HttpResponse {
         writeStartLine(dos);
         writeHeader(dos);
         writeBody(dos);
+    }
+
+    public void addCookie(String name, String value) {
+        cookie.addCookie(name, value);
     }
 }
