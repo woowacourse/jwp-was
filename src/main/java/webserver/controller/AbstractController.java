@@ -33,14 +33,11 @@ public abstract class AbstractController implements Controller {
         throw new NotSupportedHttpMethodException();
     }
 
-    //TODO 이 메서드가 여기 있어도 괜찮은가, 아니면 HttpRequest, HttpResponse와 각각 의존성을 맺는 게 더 좋을까?
     protected HttpSession getSession(HttpRequest httpRequest, HttpResponse httpResponse) {
-        //TODO SessionManager와 의존하는 부분을 이렇게 놔두어도 괜찮을까?
         String sessionId = httpRequest.getSessionId();
         if (checkSession(sessionId)) {
             sessionId = SessionManager.createSession();
         }
-        //TODO 이 메서드에서 set까지 해버리는건 이상하지 않을까?
         httpResponse.setSession(sessionId);
         return SessionManager.getSession(sessionId);
     }
