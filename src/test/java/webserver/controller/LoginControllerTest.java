@@ -15,7 +15,7 @@ class LoginControllerTest extends WebTestForm {
 
     @Test
     void 로그인_실패_테스트() throws IOException {
-        HttpRequest httpRequest = getHttpPostRequest("/user/login");
+        HttpRequest httpRequest = getHttpPostRequestWithBody("/user/login");
         HttpResponse httpResponse = new HttpResponse();
 
         User user = User.Builder.anUser()
