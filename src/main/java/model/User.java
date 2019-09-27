@@ -14,6 +14,10 @@ public class User {
         this.email = email;
     }
 
+    public boolean matchPassword(String password) {
+        return this.password.equals(password);
+    }
+
     public String getUserId() {
         return userId;
     }

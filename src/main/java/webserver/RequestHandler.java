@@ -15,6 +15,7 @@ public class RequestHandler implements Runnable {
     private static final String HTTP_VERSION = "HTTP/1.1";
     private static final String CONTENT_TYPE_HEADER_KEY = "Content-type";
     private static final String NEXT_LINE = "\r\n";
+    private static final String SET_COOKIE_HEADER_KEY = "Set-Cookie";
 
     private Socket connection;
 
@@ -24,20 +25,23 @@ public class RequestHandler implements Runnable {
 
     public void run() {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
-            connection.getPort());
+                connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             DataOutputStream dos = new DataOutputStream(out);
-            Response res = RequestDispatcher.handle(RequestParser.parse(in));
-            writeResponse(dos, res);
+            Request req = RequestParser.parse(in);
+            Response res = RequestDispatcher.handle(req);
+            writeResponse(dos, req, res);
         } catch (IOException e) {
             logger.error("Error: ", e);
         }
     }
 
-    private void writeResponse(DataOutputStream dos, Response response) {
+    private void writeResponse(DataOutputStream dos, Request request, Response response) {
         try {
             writeHeader(dos, response);
+            writeCookie(dos, request, response);
+            dos.writeBytes(NEXT_LINE);
             writeBody(dos, response);
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -48,8 +52,7 @@ public class RequestHandler implements Runnable {
         dos.writeBytes(String.format("%s %d %s%s", HTTP_VERSION, response.getStatus().getCode(), response.getStatus().getText(), NEXT_LINE));
         writeContentType(dos, response);
         response.getHeaderKeys()
-            .forEach(k -> writeHeaderLine(dos, k + ": " + response.getHeader(k)));
-        dos.writeBytes(NEXT_LINE);
+                .forEach(k -> writeHeaderLine(dos, k + ": " + response.getHeader(k)));
     }
 
     private void writeContentType(DataOutputStream dos, Response response) {
@@ -64,6 +67,15 @@ public class RequestHandler implements Runnable {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private void writeCookie(DataOutputStream dos, Request request, Response response) {
+        response.getCookieKeys().forEach(key -> {
+            logger.info("[cookie] {}={}", key, response.getCookie(key));
+            writeHeaderLine(dos, String.format("%s: %s=%s; Path=/", SET_COOKIE_HEADER_KEY, key, response.getCookie(key)));
+            writeHeaderLine(dos, String.format("%s: %s=%s; Path=/", SET_COOKIE_HEADER_KEY, Request.SESSION_COOKIE_KEY,
+                    request.getSession().getId()));
+        });
     }
 
     private void writeBody(DataOutputStream dos, Response response) {
