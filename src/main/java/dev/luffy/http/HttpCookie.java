@@ -24,14 +24,14 @@ public class HttpCookie {
         return cookie.get(key);
     }
 
+    public void addCookies(Map<String, String> cookie) {
+        cookie.forEach(this.cookie::put);
+    }
+
     @Override
     public String toString() {
         return "HttpCookie{" +
                 "cookie=" + cookie +
                 '}';
-    }
-
-    public void addCookies(Map<String, String> cookie) {
-        cookie.forEach(this.cookie::put);
     }
 }

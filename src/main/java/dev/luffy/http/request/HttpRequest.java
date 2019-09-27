@@ -41,9 +41,7 @@ public class HttpRequest {
         this.httpRequestBody = httpRequestBody;
         this.httpCookie = new HttpCookie();
 
-        if (hasCookie()) {
-            this.httpCookie.addCookies(HttpRequestUtils.parseCookie(this.httpRequestHeader.get("Cookie")));
-        }
+        addRequestCookies();
     }
 
     private HttpRequestLine getHttpRequestLine(BufferedReader bufferedReader) throws IOException {
@@ -82,6 +80,12 @@ public class HttpRequest {
 
     private boolean hasCookie() {
         return httpRequestHeader.hasCookie();
+    }
+
+    private void addRequestCookies() {
+        if (hasCookie()) {
+            this.httpCookie.addCookies(HttpRequestUtils.parseCookie(this.httpRequestHeader.get("Cookie")));
+        }
     }
 
     public boolean isGet() {
@@ -124,6 +128,10 @@ public class HttpRequest {
         }
     }
 
+    public boolean isLoggedIn() {
+        return getCookie("logined").equals("true");
+    }
+
     public boolean isStaticRequest() {
         return httpRequestLine.isStaticContent();
     }
@@ -140,9 +148,5 @@ public class HttpRequest {
                 ", httpRequestHeader=" + httpRequestHeader + "\n" +
                 ", httpRequestBody=" + httpRequestBody + "\n" +
                 '}';
-    }
-
-    public boolean isLoggedIn() {
-        return getCookie("logined").equals("true");
     }
 }
