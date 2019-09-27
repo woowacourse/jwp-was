@@ -18,7 +18,7 @@ class ControllerTest {
     private final String testDirectory = "./src/test/resources/";
 
     @Test
-    @DisplayName("허용하지 않는 메서드")
+    @DisplayName("허용하지 않는 메서드 POST")
     void doPost() throws IOException {
         String input = "POST /user/create HTTP/1.1\r\n" +
                 "Content-Type: application/x-www-form-urlencoded\r\n" +
@@ -36,7 +36,7 @@ class ControllerTest {
     }
 
     @Test
-    @DisplayName("허용하지 않는 메서드")
+    @DisplayName("허용하지 않는 메서드 GET")
     void doGet() throws IOException {
         InputStream inputStream = new FileInputStream(new File(testDirectory + "Http_GET.txt"));
         HttpRequest httpRequest = RequestParser.parse(inputStream);

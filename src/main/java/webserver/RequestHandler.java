@@ -53,7 +53,6 @@ public class RequestHandler implements Runnable {
             logger.debug("RequestLine: {} ", httpRequest.getHttpRequestLine());
 
             ResponseWriter.write(dataOutputStream, route(httpRequest));
-            //TODO: 무슨 장점이 있을까?
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
