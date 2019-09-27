@@ -1,7 +1,7 @@
 package view;
 
 import db.DataBase;
-import model.User;
+import domain.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;

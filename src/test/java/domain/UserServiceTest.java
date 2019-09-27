@@ -1,4 +1,4 @@
-package model;
+package domain;
 
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;

@@ -1,4 +1,4 @@
-package model;
+package domain;
 
 import db.DataBase;
 import org.slf4j.Logger;
