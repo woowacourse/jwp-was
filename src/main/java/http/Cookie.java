@@ -1,4 +1,4 @@
-package http.request;
+package http;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,13 +10,12 @@ public class Cookie {
     private static final String SEMI_COLON = ";";
     private static final int NAME_INDEX = 0;
     private static final int VALUE_INDEX = 1;
-    private static final String JSESSIONID = "JSESSIONID";
     private Map<String, String> cookies = new HashMap<>();
 
     public Cookie() {
     }
 
-    void parse(String line) {
+    public void parse(String line) {
         String[] tokens = line.split(SEMI_COLON);
         for (String token : tokens) {
             String[] subTokens = token.trim().split(EQUAL_SIGN);
@@ -28,18 +27,12 @@ public class Cookie {
         cookies.put(name, value);
     }
 
-    public boolean isLogined() {
-        return cookies.containsKey(JSESSIONID);
-    }
-
     public String build() {
         List<String> lines = new ArrayList<>();
         for (String key : cookies.keySet()) {
-            StringBuilder stringBuilder = new StringBuilder()
-                    .append(key)
-                    .append(EQUAL_SIGN)
-                    .append(cookies.get(key));
-            String line = stringBuilder.toString();
+            String line = key +
+                    EQUAL_SIGN +
+                    cookies.get(key);
             lines.add(line);
         }
         return String.join("; ", lines);

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class Sessions {
+public class SessionRepository {
     private static Map<String, Session> sessions = new HashMap<>();
 
     public static Session getSession(String jSessionId) {

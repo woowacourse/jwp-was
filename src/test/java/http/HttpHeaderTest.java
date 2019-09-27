@@ -20,7 +20,7 @@ class HttpHeaderTest {
                 "Connection: keep-alive",
                 "Accept: */*"
         );
-        HttpHeader httpHeader = HttpHeader.create(headerLines);
+        HttpHeader httpHeader = new HttpHeader().create(headerLines);
 
         Map<String, String> expectedHeaders = new HashMap<>();
         expectedHeaders.put("Host", "localhost:8080");
@@ -38,7 +38,7 @@ class HttpHeaderTest {
         List<String> headerLines =
                 Arrays.asList("Content-Type: text/html;charset=utf-8\r\n",
                         "Content-Length: 10\r\n");
-        HttpHeader httpHeader = HttpHeader.create(headerLines);
+        HttpHeader httpHeader = new HttpHeader().create(headerLines);
 
         Map<String, String> expectedHeaders = new HashMap<>();
         expectedHeaders.put("Content-Type", "text/html;charset=utf-8\r\n");
@@ -57,7 +57,7 @@ class HttpHeaderTest {
                 "Connection: keep-alive",
                 "Accept: */*"
         );
-        HttpHeader httpHeader = HttpHeader.create(headerLines);
+        HttpHeader httpHeader = new HttpHeader().create(headerLines);
 
         String notExistKey = "notExist";
         assertThrows(NotFoundHttpRequestHeader.class, () -> httpHeader.getHeader(notExistKey));

@@ -1,4 +1,6 @@
-package http.request;
+package http;
+
+import http.request.NotSupportedHttpVersionException;
 
 import java.util.Arrays;
 

@@ -28,7 +28,6 @@ public class RequestFactory {
 
     private static HttpRequestStartLine initializeStart(BufferedReader br) throws IOException {
         return HttpRequestStartLine.of(br.readLine());
-
     }
 
     private static HttpHeader initializeHeader(BufferedReader br) throws IOException {

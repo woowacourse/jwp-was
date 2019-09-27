@@ -1,6 +1,8 @@
 package http.request;
 
+import http.Cookie;
 import http.HttpHeader;
+import http.HttpVersion;
 import http.request.exception.NotFoundHttpRequestHeader;
 
 import java.util.Map;

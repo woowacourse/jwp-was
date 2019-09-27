@@ -1,5 +1,6 @@
 package http.request;
 
+import http.HttpVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,10 +40,10 @@ public class HttpRequestStartLine {
         return new HttpRequestStartLine(httpMethodType, path, httpRequestParameters, httpVersion);
     }
 
-    private static HttpRequestParameter parseHttpRequestParameter(String[] splittedUrl) throws UnsupportedEncodingException {
+    private static HttpRequestParameter parseHttpRequestParameter(String[] splitUrl) throws UnsupportedEncodingException {
         HttpRequestParameter httpRequestParameters = HttpRequestParameter.EMPTY_PARAMETER;
-        if (1 < splittedUrl.length) {
-            httpRequestParameters = HttpRequestParameter.of(splittedUrl[1]);
+        if (1 < splitUrl.length) {
+            httpRequestParameters = HttpRequestParameter.of(splitUrl[1]);
         }
         return httpRequestParameters;
     }

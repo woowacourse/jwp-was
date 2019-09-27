@@ -1,9 +1,9 @@
 package http.response;
 
+import http.Cookie;
 import http.HttpHeader;
-import http.request.Cookie;
+import http.HttpVersion;
 import http.request.HttpRequest;
-import http.request.HttpVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
