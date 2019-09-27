@@ -1,7 +1,9 @@
 package http.request;
 
 import exception.NotFoundRequestElementException;
+import http.Cookie;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -9,15 +11,21 @@ public class Request {
     private static final String METHOD = "Method";
     private static final String BODY_PARAMETER_SEPARATOR = "?";
     private static final String HEADER_SEPARATOR = " ";
+    private static final String COOKIE = "Cookie";
+    private static final String SEMI_REGEX = ";";
+    private static final String SEPARATOR = "=";
     private static final int METHOD_FIRST = 0;
     private static final int PATH = 1;
 
     private Map<String, String> header;
     private Map<String, String> parameter;
+    private Map<String, Cookie> cookies;
 
     public Request(Map<String, String> header, Map<String, String> parameter) {
         this.header = header;
         this.parameter = parameter;
+        this.cookies = new HashMap<>();
+        containsCookie(header);
     }
 
     public String getMethod() {
@@ -45,5 +53,16 @@ public class Request {
 
     public String getParameter(String key) {
         return parameter.get(key);
+    }
+
+    private void containsCookie(Map<String, String> header) {
+        if (header.containsKey(COOKIE)) {
+            String[] cookies = header.get(COOKIE).split(SEMI_REGEX);
+            for (String value : cookies) {
+                String[] cookieInfo = value.trim().split(SEPARATOR);
+                Cookie cookie = new Cookie(cookieInfo[0], cookieInfo[1]);
+                this.cookies.put(cookie.getName(), cookie);
+            }
+        }
     }
 }

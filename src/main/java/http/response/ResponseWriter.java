@@ -31,12 +31,18 @@ public class ResponseWriter {
     }
 
     private void responseStatus(DataOutputStream dos, Response response) throws IOException {
-        dos.writeBytes(String.format(STATUS_FORMAT, HTTP_1_1, response.getHttpStatus().getStatusCode(), response.getHttpStatus().getMessage(), NEST_LINE));
+        int statusCode = response.getHttpStatus().getStatusCode();
+        String message = response.getHttpStatus().getMessage();
+        dos.writeBytes(String.format(STATUS_FORMAT, HTTP_1_1, statusCode, message, NEST_LINE));
     }
 
     private void responseBody(DataOutputStream dos, Response response) throws IOException {
-        byte[] body = response.getBody();
-        dos.write(body, 0, body.length);
+        if (response.getBody() != null) {
+            byte[] body = response.getBody();
+            dos.write(body, 0, body.length);
+            dos.write(body, 0, body.length);
+        }
+
         dos.flush();
     }
 

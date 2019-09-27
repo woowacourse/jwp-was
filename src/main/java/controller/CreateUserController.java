@@ -7,7 +7,6 @@ import http.support.HttpStatus;
 import model.User;
 
 public class CreateUserController extends AbstractController {
-    private static final String ORIGIN = "Origin";
     private static final String USER_ID = "userId";
     private static final String PASSWORD = "password";
     private static final String NAME = "name";
@@ -18,7 +17,7 @@ public class CreateUserController extends AbstractController {
     public void doPost(Request request, Response response) {
         saveUser(request);
         response.setHttpStatus(HttpStatus.FOUND);
-        response.sendRedirect(request.getHeader(ORIGIN) + INDEX_HTML, HttpStatus.FOUND);
+        response.sendRedirect(INDEX_HTML, HttpStatus.FOUND);
     }
 
     private void saveUser(Request request) {
