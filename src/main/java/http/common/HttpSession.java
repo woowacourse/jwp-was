@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.UUID;
 
 public class HttpSession {
+    public static final String SESSION_NAME = "JSESSIONID";
+
     private final UUID uuid;
     private final Map<String, Object> session;
 

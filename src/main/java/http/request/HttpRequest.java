@@ -2,8 +2,11 @@ package http.request;
 
 import http.common.HttpCookie;
 import http.common.HttpMethod;
+import http.common.HttpSession;
+import http.common.HttpSessionHandler;
 
 import java.io.IOException;
+import java.util.UUID;
 
 public class HttpRequest {
     public static final String CONTENT_LENGTH_NAME = "Content-Length";
@@ -42,6 +45,10 @@ public class HttpRequest {
         return new HttpRequest(requestLine, requestHeader, requestBody, httpCookie, httpRequestParams);
     }
 
+    public String getHeader(String headerKey) {
+        return requestHeader.getHeader(headerKey);
+    }
+
     public String getUrl() {
         String path = requestLine.getPath();
         String protocol = requestLine.getProtocol();
@@ -58,6 +65,16 @@ public class HttpRequest {
         return httpCookie;
     }
 
+    public HttpSession getSession() {
+        String sessionId = httpCookie.getCookie(HttpSession.SESSION_NAME);
+        if (sessionId == null) {
+            HttpSession session = HttpSessionHandler.createSession();
+            httpCookie.put(HttpSession.SESSION_NAME, session.getUuid().toString());
+            return session;
+        }
+        return HttpSessionHandler.getSession(UUID.fromString(sessionId));
+    }
+
     public String getPath() {
         return requestLine.getPath();
     }
@@ -68,9 +85,5 @@ public class HttpRequest {
 
     public boolean isPost() {
         return requestLine.getMethod().equals(HttpMethod.POST);
-    }
-
-    public String getHeader(String headerKey) {
-        return requestHeader.getHeader(headerKey);
     }
 }
