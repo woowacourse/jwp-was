@@ -3,6 +3,7 @@ package controller;
 import db.DataBase;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import http.session.HttpSession;
 import model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class LoginControllerTest {
 
@@ -34,8 +37,11 @@ class LoginControllerTest {
         HttpResponse httpResponse = new HttpResponse();
         loginController.doPost(httpRequest, httpResponse);
 
-        assertEquals(httpResponse.getHttpResponseHeader().getHeader("Set-Cookie"), "logined=true;");
+        HttpSession httpSession = httpRequest.getHttpSession();
+        String sessionId = httpSession.getId();
+        assertEquals(httpResponse.getHttpResponseHeader().getHeader("Set-Cookie"), "JSESSIONID=" + sessionId + "; Path=/");
         assertEquals(httpResponse.getHttpStatusLine().toString(), "HTTP/1.1 302 FOUND\r\n");
+        assertThat(httpSession.getAttribute("logined")).isEqualTo("true");
         DataBase.removeUser(user);
     }
 
@@ -54,7 +60,7 @@ class LoginControllerTest {
         HttpResponse httpResponse = new HttpResponse();
         loginController.doPost(httpRequest, httpResponse);
 
-        assertEquals(httpResponse.getHttpResponseHeader().getHeader("Set-Cookie"), "logined=false;");
         assertEquals(httpResponse.getHttpStatusLine().toString(), "HTTP/1.1 302 FOUND\r\n");
+        assertNull(httpResponse.getHttpResponseBody());
     }
 }
