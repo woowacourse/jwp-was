@@ -16,7 +16,8 @@ public class UserController extends BasicController {
     public void doGet(HttpRequest request, HttpResponse response) {
         if (request.hasParameters()) {
             DataBase.addUser(createUser(request));
-            response.redirectResponse(request.getVersion(), "/index.html");
+//            response.redirectResponse(request.getVersion(), "/index.html");
+            response.redirectResponse("/index.html");
         }
     }
 
@@ -26,7 +27,8 @@ public class UserController extends BasicController {
 
         if (request.hasBody()) {
             DataBase.addUser(createUser(request.convertBodyToMap()));
-            response.redirectResponse(request.getVersion(), "/index.html");
+//            response.redirectResponse(request.getVersion(), "/index.html");
+            response.redirectResponse("/index.html");
         }
     }
 

@@ -1,6 +1,7 @@
 package http.request;
 
 import http.HttpHeader;
+import http.request.exception.NotFoundHttpRequestHeader;
 
 import java.util.Map;
 
@@ -56,4 +57,13 @@ public class HttpRequest {
         return httpRequestStartLine.getHttpVersion();
     }
 
+    public Cookie createCookie() {
+        Cookie cookie = new Cookie();
+        try {
+            cookie.parse(getHeader("Cookie"));
+            return cookie;
+        } catch (NotFoundHttpRequestHeader e) {
+            return cookie;
+        }
+    }
 }

@@ -2,15 +2,15 @@ package controller;
 
 import db.DataBase;
 import db.NotFoundEntityException;
+import http.request.Cookie;
 import http.request.HttpRequest;
-import http.request.HttpVersion;
 import http.response.HttpResponse;
 import model.InvalidUserException;
 import model.User;
+import session.Sessions;
 import webserver.resolver.BadRequestException;
 
 import java.util.Map;
-import java.util.Optional;
 
 public class LoginController extends BasicController {
 
@@ -21,15 +21,22 @@ public class LoginController extends BasicController {
 
     @Override
     public void doPost(HttpRequest request, HttpResponse response) {
-        HttpVersion version = request.getVersion();
         Map<String, String> bodyData = request.convertBodyToMap();
+        Cookie cookie = new Cookie();
+
         try {
-            User user = Optional.ofNullable(DataBase.findUserById(bodyData.get("userId")))
-                    .orElseThrow(NotFoundEntityException::new);
-            user.checkPassword(bodyData.get("password"));
-            response.redirectResponseWithCookie(version, true, "/index.html");
+            User user = DataBase.findUserById(bodyData.get("userId"));
+            if (user.equalPassword(bodyData.get("password"))) {
+                String jSessionId = Sessions.create();
+                cookie.addCookie("JSESSIONID", jSessionId);
+                cookie.addCookie("logined", "true");
+
+                response.redirectResponseWithCookie(cookie, "/index.html");
+            }
         } catch (NotFoundEntityException | InvalidUserException e) {
-            response.redirectResponseWithCookie(version, false, "/user/login_failed.html");
+            cookie.addCookie("logined", "false");
+
+            response.redirectResponseWithCookie(cookie, "/user/login_failed.html");
         }
     }
 }

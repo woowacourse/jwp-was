@@ -8,23 +8,23 @@ public class ModelAndView {
     private Map<String, Object> objects;
     private String view;
 
-    public ModelAndView() {
+    ModelAndView() {
         objects = new HashMap<>();
     }
 
-    public void put(String key, Object value) {
+    void put(String key, Object value) {
         objects.put(key, value);
     }
 
-    public void addView(String view) {
+    void addView(String view) {
         this.view = view;
     }
 
-    public Map<String, Object> getObjects() {
+    Map<String, Object> getObjects() {
         return objects;
     }
 
-    public String getView() {
+    String getView() {
         return view;
     }
 }

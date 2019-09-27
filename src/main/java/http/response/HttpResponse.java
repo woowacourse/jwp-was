@@ -1,6 +1,8 @@
 package http.response;
 
 import http.HttpHeader;
+import http.request.Cookie;
+import http.request.HttpRequest;
 import http.request.HttpVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,19 +14,21 @@ import java.util.Map;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
-    private HttpResponseStartLine httpResponseStartLine;
+    private StatusCode statusCode;
+    private HttpVersion httpVersion;
     private HttpHeader header;
-    private byte[] body;
+    private byte[] body = new byte[]{};
 
-    public HttpResponse() {
+    public HttpResponse(HttpRequest httpRequest) {
+        this.httpVersion = httpRequest.getVersion();
     }
 
     void addHeader(Map<String, String> headers) {
         header = new HttpHeader(headers);
     }
 
-    public void okResponse(String contentType, HttpVersion httpVersion, byte[] body) {
-        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.OK, httpVersion);
+    public void okResponse(String contentType, byte[] body) {
+        this.statusCode = StatusCode.OK;
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "text/" + contentType + ";charset=utf-8");
         headers.put("Content-Length", "" + body.length);
@@ -32,50 +36,46 @@ public class HttpResponse {
         this.body = body;
     }
 
-    public void redirectResponse(HttpVersion httpVersion, String location) {
-        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.FOUND, httpVersion);
+    public void redirectResponse(String location) {
+        this.statusCode = StatusCode.FOUND;
         Map<String, String> header = new HashMap<>();
         header.put("Location", location);
         addHeader(header);
-        this.body = new byte[]{};
     }
 
-    public void badRequest(HttpVersion httpVersion) {
-        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.BAD_REQUEST, httpVersion);
+    public void badRequest() {
+        this.statusCode = StatusCode.BAD_REQUEST;
         addHeader(new HashMap<>());
-        this.body = new byte[]{};
     }
 
-    public void notFound(HttpVersion httpVersion) {
-        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.NOT_FOUND, httpVersion);
+    public void notFound() {
+        this.statusCode = StatusCode.NOT_FOUND;
         addHeader(new HashMap<>());
-        this.body = new byte[]{};
     }
 
-    public void methodNotAllow(HttpVersion httpVersion) {
-        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.METHOD_NOT_FOUND, httpVersion);
+    public void methodNotAllow() {
+        this.statusCode = StatusCode.METHOD_NOT_FOUND;
         addHeader(new HashMap<>());
-        this.body = new byte[]{};
     }
 
-    public void redirectResponseWithCookie(HttpVersion httpVersion, boolean cookie, String location) {
-        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.FOUND, httpVersion);
+    public void redirectResponseWithCookie(Cookie cookie, String location) {
+        this.statusCode = StatusCode.FOUND;
         Map<String, String> header = new HashMap<>();
         header.put("Location", location);
-        header.put("Set-Cookie", "logined=" + cookie + "; Path=/");
+        header.put("Set-Cookie", cookie.build());
         addHeader(header);
-        this.body = new byte[]{};
     }
 
-    public void internalServerError(HttpVersion httpVersion) {
-        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.INTERNAL_SERVER_ERROR, httpVersion);
+    public void internalServerError() {
+        this.statusCode = StatusCode.INTERNAL_SERVER_ERROR;
         addHeader(new HashMap<>());
-        this.body = new byte[]{};
     }
 
     private void writeStartLine(DataOutputStream dos) throws IOException {
-        logger.debug("{}", httpResponseStartLine.convertLineToString() + "\r\n");
-        String line = httpResponseStartLine.convertLineToString();
+        String line = httpVersion.getVersion() + " "
+                + statusCode.getStatusValue() + " "
+                + statusCode.getStatus();
+        logger.debug("{}", line + "\r\n");
         dos.writeBytes(line + "\r\n");
     }
 

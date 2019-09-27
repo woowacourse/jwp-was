@@ -31,6 +31,7 @@ public class ResourceRequestResolver {
 
         String filePath = resourceResolverRegistration.findFilePath(httpRequest.getPath());
         byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
-        httpResponse.okResponse(contentType, httpRequest.getVersion(), body);
+//        httpResponse.okResponse(contentType, httpRequest.getVersion(), body);
+        httpResponse.okResponse(contentType, body);
     }
 }
