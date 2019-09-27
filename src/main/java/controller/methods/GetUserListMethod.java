@@ -4,6 +4,7 @@ import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
+import controller.support.TemplateManager;
 import db.DataBase;
 import http.request.Request;
 import http.request.RequestMethod;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 public class GetUserListMethod implements ControllerMethod {
+
     @Override
     public boolean isMapping(Request request) {
         return (RequestMethod.GET == request.getRequestMethod()
@@ -29,19 +31,10 @@ public class GetUserListMethod implements ControllerMethod {
         Session session = request.getSession();
         if (session.getAttriubte("user") != null) {
 
-            TemplateLoader loader = new ClassPathTemplateLoader();
-            loader.setPrefix("/templates");
-            loader.setSuffix(".html");
-            Handlebars handlebars = new Handlebars(loader);
-            Template template = handlebars.compile("user/list");
-            Map<String, List<User>> users = new HashMap<>();
-            List<User> userList = new ArrayList<>(DataBase.findAll());
-            users.put("users", userList);
-            String listPage = template.apply(users);
-
+            String page = TemplateManager.getTemplateProcessedPage();
             response.ok()
                     .putResponseHeaders("Content-Type: ", "text/html")
-                    .body(listPage.getBytes());
+                    .body(page.getBytes());
         }
 
         if (session.getAttriubte("user") == null) {

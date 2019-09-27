@@ -1,6 +1,6 @@
 package http;
 
-import controller.ControllerMapper;
+import controller.controllermapper.ControllerMapper;
 import http.request.Request;
 import http.request.RequestMethod;
 import http.request.RequestUrl;

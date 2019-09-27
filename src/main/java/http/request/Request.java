@@ -1,6 +1,6 @@
 package http.request;
 
-import controller.ControllerMapper;
+import controller.controllermapper.ControllerMapper;
 import http.session.Cookie;
 import http.session.Session;
 import http.session.SessionRepository;

@@ -1,7 +1,7 @@
 package webserver;
 
 import controller.Controller;
-import controller.ControllerFactory;
+import controller.controllermapper.ControllerFactory;
 import http.request.Request;
 import http.request.RequestInformation;
 import http.request.RequestMethod;
