@@ -6,6 +6,9 @@ import http.session.HttpSession;
 import http.session.HttpSessionManager;
 
 public class HttpRequest {
+    public static final String SESSION_ID = "JSESSIONID";
+    private static final String COOKIE = "Cookie";
+
     private HttpRequestLine httpRequestLine;
     private HttpRequestHeader httpRequestHeader;
     private HttpCookie httpCookie;
@@ -24,14 +27,14 @@ public class HttpRequest {
     }
 
     private void checkSession() {
-        if (httpCookie.contains("JSESSIONID")) {
-            this.httpSession = HttpSessionManager.getInstance().getSession(httpCookie.getCookie("JSESSIONID"));
+        if (httpCookie.contains(SESSION_ID)) {
+            this.httpSession = HttpSessionManager.getInstance().getSession(httpCookie.getCookie(SESSION_ID));
         }
     }
 
     private String findCookie() {
-        if (httpRequestHeader.isContainKey("Cookie")) {
-            return this.httpRequestHeader.getHeader("Cookie");
+        if (httpRequestHeader.isContainKey(COOKIE)) {
+            return this.httpRequestHeader.getHeader(COOKIE);
         }
         return "";
     }

@@ -18,6 +18,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import static controller.LoginController.LOGIN_FALSE;
+import static controller.LoginController.LOGIN_KEY;
+import static controller.LoginController.LOGIN_TRUE;
+
 public class UserListController extends Controller {
     private static final Logger logger = LoggerFactory.getLogger(UserListController.class);
 
@@ -26,9 +30,9 @@ public class UserListController extends Controller {
     @Override
     protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         HttpSession httpSession = httpRequest.getHttpSession();
-        String logined = (String) httpSession.getAttribute("logined");
+        String logined = (String) httpSession.getAttribute(LOGIN_KEY);
 
-        if ("true".equals(logined)) {
+        if (LOGIN_TRUE.equals(logined)) {
             try {
                 String htmlBody = makeBody();
                 httpResponse.setStatusCode(HttpStatus.OK);
@@ -41,6 +45,7 @@ public class UserListController extends Controller {
             }
         }
         httpResponse.setStatusCode(HttpStatus.FOUND);
+        httpSession.setAttribute(LOGIN_KEY, LOGIN_FALSE);
         httpResponse.redirect("/user/login.html");
     }
 
