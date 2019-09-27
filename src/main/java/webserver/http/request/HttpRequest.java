@@ -1,11 +1,27 @@
 package webserver.http.request;
 
 import webserver.http.common.HttpHeader;
+import webserver.http.response.GeneratedSessionIdStrategy;
+import webserver.http.response.HttpSession;
+import webserver.http.response.Session;
 
 public class HttpRequest {
     private RequestLine requestLine;
     private HttpHeader httpHeader;
     private QueryStringParams queryStringParams;
+    private HttpSession httpSession;
+
+    public HttpRequest() {
+        httpSession = createSession();
+    }
+
+    private HttpSession createSession() {
+        if (httpHeader.get("Cookie").contains("JSESSIONID")) {
+            return Session.getInstance().getHttpSession(httpSession.getId());
+        }
+
+        return Session.getInstance().createSession(new GeneratedSessionIdStrategy());
+    }
 
     public void init(final RequestLine requestLine,
                        final HttpHeader httpHeader,
