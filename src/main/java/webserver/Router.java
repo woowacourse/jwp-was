@@ -1,9 +1,6 @@
 package webserver;
 
-import controller.Controller;
-import controller.IndexController;
-import controller.LoginController;
-import controller.UserController;
+import controller.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.http.HttpRequest;
@@ -18,12 +15,14 @@ public class Router {
     private static final Controller INDEX_CONTROLLER = new IndexController();
     private static final Controller USER_CONTROLLER = new UserController();
     private static final Controller LOGIN_CONTROLLER = new LoginController();
+    private static final Controller USER_LIST_CONTROLLER = new UserListController();
 
     private static final Map<String, Controller> controllers = new HashMap<>();
     static {
         controllers.put("/", INDEX_CONTROLLER);
         controllers.put("/user/create", USER_CONTROLLER);
         controllers.put("/user/login", LOGIN_CONTROLLER);
+        controllers.put("/user/list", USER_LIST_CONTROLLER);
         controllers.put("/index.html", INDEX_CONTROLLER);
         controllers.put("/user/form.html", USER_CONTROLLER);
         controllers.put("/user/login.html", LOGIN_CONTROLLER);

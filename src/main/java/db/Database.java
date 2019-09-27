@@ -11,7 +11,7 @@ public class Database {
     private static Map<String, User> users = new ConcurrentHashMap<>();
 
     public static void addUser(User user) {
-        users.put(user.id(), user);
+        users.put(user.getId(), user);
     }
 
     public static Optional<User> findUserById(String id) {
