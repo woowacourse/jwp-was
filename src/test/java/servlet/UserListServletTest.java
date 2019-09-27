@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 
 import static http.HttpHeaders.LOCATION;
 import static http.response.HttpStatus.FOUND;
@@ -39,7 +38,7 @@ class UserListServletTest {
                 + "Cookie: logined=true";
         InputStream in = new ByteArrayInputStream(requestMessage.getBytes());
         HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
-        HttpResponse response = new HttpResponse();
+        HttpResponse response = new HttpResponse(request.getVersion());
 
         userListServlet.handle(request, response);
 
@@ -59,7 +58,7 @@ class UserListServletTest {
                 + "Cookie: logined=false";
         InputStream in = new ByteArrayInputStream(requestMessage.getBytes());
         HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
-        HttpResponse response = new HttpResponse();
+        HttpResponse response = new HttpResponse(request.getVersion());
 
         userListServlet.handle(request, response);
 

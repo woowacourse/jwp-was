@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 class ResponseSender {
-    public static final String CRLF = "\r\n";
-
     static void send(OutputStream out, HttpResponse response) throws IOException {
         DataOutputStream dos = new DataOutputStream(out);
         dos.writeBytes(makeHeaderMessages(response));
@@ -20,8 +18,8 @@ class ResponseSender {
     }
 
     private static String makeHeaderMessages(HttpResponse response) {
-        return response.getVersion().toString() + " " + response.getStatus().getMessage() + CRLF
+        return response.getVersion().toString() + " " + response.getStatus().getMessage() + "\r\n"
                 + response.getHeaders()
-                + CRLF;
+                + "\r\n";
     }
 }

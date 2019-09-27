@@ -31,7 +31,7 @@ class DefaultServletTest {
                 + "Accept: */*";
         InputStream in = new ByteArrayInputStream(requestMessage.getBytes());
         HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
-        HttpResponse response = new HttpResponse();
+        HttpResponse response = new HttpResponse(request.getVersion());
 
         defaultServlet.handle(request, response);
 
@@ -47,7 +47,7 @@ class DefaultServletTest {
                 + "Accept: */*";
         InputStream in = new ByteArrayInputStream(requestMessage.getBytes());
         HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
-        HttpResponse response = new HttpResponse();
+        HttpResponse response = new HttpResponse(request.getVersion());
 
         defaultServlet.handle(request, response);
 
@@ -63,7 +63,7 @@ class DefaultServletTest {
                 + "Accept: */*";
         InputStream in = new ByteArrayInputStream(requestMessage.getBytes());
         HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
-        HttpResponse response = new HttpResponse();
+        HttpResponse response = new HttpResponse(request.getVersion());
 
         defaultServlet.handle(request, response);
 

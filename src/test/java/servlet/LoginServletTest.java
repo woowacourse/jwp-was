@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
 
 import static http.HttpHeaders.LOCATION;
 import static http.HttpHeaders.SET_COOKIE;
@@ -32,11 +31,11 @@ public class LoginServletTest {
 
     @Test
     @DisplayName("로그인 성공시 index.html로 이동")
-    void loginSuccess() throws URISyntaxException, IOException {
+    void loginSuccess() throws IOException {
         String requestMessage = makeLoginRequestMessage("id", "password");
         InputStream in = new ByteArrayInputStream(requestMessage.getBytes());
         HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
-        HttpResponse response = new HttpResponse();
+        HttpResponse response = new HttpResponse(request.getVersion());
 
         loginServlet.handle(request, response);
 
@@ -49,11 +48,11 @@ public class LoginServletTest {
 
     @Test
     @DisplayName("비밀번호 불일치시 /user/login_failed.html 이동")
-    void loginFailPasswordMismatch() throws URISyntaxException, IOException {
+    void loginFailPasswordMismatch() throws IOException {
         String requestMessage = makeLoginRequestMessage("id", "passwor");
         InputStream in = new ByteArrayInputStream(requestMessage.getBytes());
         HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
-        HttpResponse response = new HttpResponse();
+        HttpResponse response = new HttpResponse(request.getVersion());
 
         loginServlet.handle(request, response);
 
@@ -66,11 +65,11 @@ public class LoginServletTest {
 
     @Test
     @DisplayName("유저가 없을 때 /user/login_failed.html 이동")
-    void loginFailNotFoundUser() throws URISyntaxException, IOException {
+    void loginFailNotFoundUser() throws IOException {
         String requestMessage = makeLoginRequestMessage("notFoundUser", "password");
         InputStream in = new ByteArrayInputStream(requestMessage.getBytes());
         HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
-        HttpResponse response = new HttpResponse();
+        HttpResponse response = new HttpResponse(request.getVersion());
 
         loginServlet.handle(request, response);
 

@@ -5,7 +5,6 @@ import http.HttpMimeType;
 import http.HttpVersion;
 
 import static http.HttpHeaders.*;
-import static http.HttpVersion.DEFAULT_VERSION;
 import static http.response.HttpStatus.FOUND;
 import static http.response.HttpStatus.OK;
 
@@ -15,8 +14,8 @@ public class HttpResponse {
     private HttpHeaders headers;
     private byte[] body;
 
-    public HttpResponse() {
-        this.version = DEFAULT_VERSION;
+    public HttpResponse(HttpVersion version) {
+        this.version = version;
         this.status = OK;
         this.headers = new HttpHeaders();
     }

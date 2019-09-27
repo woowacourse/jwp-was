@@ -23,7 +23,7 @@ class UserCreateServletTest {
     void user_생성() throws IOException {
         InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "Http_POST.txt"));
         HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
-        HttpResponse response = new HttpResponse();
+        HttpResponse response = new HttpResponse(request.getVersion());
         userController.doPost(request, response);
 
         User user = DataBase.findUserById("woowa");
