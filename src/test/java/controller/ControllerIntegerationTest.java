@@ -1,5 +1,9 @@
-package http;
+package controller;
 
+import com.github.jknack.handlebars.Handlebars;
+import com.github.jknack.handlebars.Template;
+import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
+import com.github.jknack.handlebars.io.TemplateLoader;
 import controller.Controller;
 import controller.ControllerFactory;
 import db.DataBase;
@@ -8,20 +12,24 @@ import http.request.RequestInformation;
 import http.request.RequestMethod;
 import http.request.RequestUrl;
 import http.response.Response;
+import http.response.ResponseHeaders;
 import http.response.ResponseStatus;
+import http.session.Session;
+import http.session.SessionRepository;
 import model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import test.BaseTest;
 import utils.FileIoUtils;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ResponseTest extends BaseTest {
+public class ControllerIntegerationTest extends BaseTest {
     private ControllerFactory factory = new ControllerFactory();
 
     @Test
@@ -105,7 +113,6 @@ public class ResponseTest extends BaseTest {
         Controller controller = factory.mappingController(request);
         controller.processResponse(request, response);
 
-
         //then
         assertThat(response.getResponseStatus()).isEqualTo(ResponseStatus.FOUND);
         assertThat(response.getResponseHeaders().getResponseHeaders().get("Location: ")).isEqualTo("http://localhost:8080/user/login_failed.html");
@@ -113,14 +120,56 @@ public class ResponseTest extends BaseTest {
 
     @Test
     @DisplayName("로그인 후 유저목록 가져오기 테스트")
-    void getUserListTest() {
+    void getUserListTest() throws IOException, URISyntaxException {
 
+        // given
+        User user1 = new User("easy", "easy", "easy", "easy@gmail.com");
+        User user2 = new User("kjm", "kjm", "kjm", "kjm@gmail.com");
+        DataBase.addUser(user1);
+        DataBase.addUser(user2);
+        Session session = SessionRepository.getInstance().createSession();
+        session.setAttribute("user", user2.getUserId());
+
+        //when
+        RequestMethod method = RequestMethod.GET;
+        RequestUrl url = RequestUrl.from("/user/list");
+        Map<String, String> header = new HashMap<>();
+        header.put("Request-Line:", "GET /user/list HTTP/1.1");
+        header.put("Cookie:", "Session-Id="+session.getSessionId());
+
+        Request request = new Request(method, url, new RequestInformation(header));
+        Response response = new Response();
+
+        Controller controller = factory.mappingController(request);
+        controller.processResponse(request, response);
+
+        TemplateLoader loader = new ClassPathTemplateLoader();
+        loader.setPrefix("/templates");
+        loader.setSuffix(".html");
+        Handlebars handlebars = new Handlebars(loader);
+        Template template = handlebars.compile("user/list");
+        Map<String, List<User>> users = new HashMap<>();
+        List<User> userList = new ArrayList<>(DataBase.findAll());
+        users.put("users", userList);
+
+        String listPage = template.apply(users);
+        byte[] confirmBody = listPage.getBytes();
+
+        Map<String, String> confirmMap = new LinkedHashMap<>();
+        confirmMap.put("Content-Type: ", "text/html");
+        confirmMap.put("Content-Length: ", "4914");
+
+
+        assertThat(response.getResponseStatus()).isEqualTo(ResponseStatus.OK);
+        assertThat(response.getResponseHeaders().getResponseHeaders()).isEqualTo(confirmMap);
+        assertThat(response.getResponseBody().getBody().length).isEqualTo(confirmBody.length);
     }
 
     @Test
     @DisplayName("로그인없이 유저목록 가져오기 실패 테스트")
     void getUserListWithoutLoginTest() {
-        // given
+
+
 
         // when
 

@@ -1,10 +1,7 @@
 package controller;
 
 import db.DataBase;
-import http.ResponseTest;
 import http.request.Request;
-import http.request.RequestInformation;
-import http.request.RequestMethod;
 import http.request.RequestUrl;
 import http.response.Response;
 import model.User;
@@ -15,9 +12,7 @@ import test.BaseTest;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -27,6 +22,7 @@ public class UserControllerTest extends BaseTest {
     @Test
     @DisplayName("POST /user/create 요청 보낼 시 RedirectResponse 생성 확인")
     void createPostUserResponse() throws IOException, URISyntaxException {
+        User user = new User("javajigi", "password", "이인권", "podo@gmail.com");
 
         RequestUrl url = RequestUrl.from("/user/create");
         List<String> headerValues = Arrays.asList("POST /user/create HTTP/1.1",
@@ -39,5 +35,6 @@ public class UserControllerTest extends BaseTest {
         controller.processResponse(request, response);
 
         assertThat(DataBase.findUserById("javajigi")).isEqualTo(new User("javajigi", "password", "이인권", "podo@gmail.com"));
+        DataBase.deleteUser(user);
     }
 }
