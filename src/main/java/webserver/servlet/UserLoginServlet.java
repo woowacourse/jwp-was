@@ -24,6 +24,7 @@ public class UserLoginServlet extends RequestServlet {
         User user = DataBase.findUserById(id);
         if (canLogin(password, user)) {
             httpResponse.redirect("/");
+            httpResponse.setCookie();
             return new ModelAndView(null);
         }
         httpResponse.redirect("/user/login_failed.html");

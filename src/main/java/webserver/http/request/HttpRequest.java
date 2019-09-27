@@ -1,5 +1,8 @@
 package webserver.http.request;
 
+import webserver.http.response.HttpStatus;
+import webserver.http.response.HttpVersion;
+
 public class HttpRequest {
     private RequestLine requestLine;
     private RequestHeader header;
@@ -27,15 +30,12 @@ public class HttpRequest {
         return body.getBody(key);
     }
 
-    public String getHeader(String key) {
-        return header.getHeader(key);
-    }
-
     public RequestUri getUri() {
         return requestLine.getUri();
     }
 
-    public boolean isHeaderContain(String key, String value) {
-        return header.getHeader(key).contains(value);
+    public HttpVersion getHttpVersion(){
+        return requestLine.getHttpVersion();
     }
+
 }

@@ -18,7 +18,7 @@ public class MappingHandler {
         servlets.put(new HomeServlet(), new HtmlViewResolver());
         servlets.put(new UserCreateServlet(), new HtmlViewResolver());
         servlets.put(new UserListServlet(), new HandlebarsViewResolver());
-        servlets.put(new UserLoginServlet(),new HtmlViewResolver());
+        servlets.put(new UserLoginServlet(), new HtmlViewResolver());
         servlets.put(new FileServlet(), new FileResolver());
     }
 

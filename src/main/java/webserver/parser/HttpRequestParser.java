@@ -21,6 +21,10 @@ public class HttpRequestParser {
     private static final int REQUEST_LINES_HEADER_INDEX = 1;
     private static final int KEY_INDEX = 0;
     private static final int VALUE_INDEX = 1;
+    private static final int METHOD_INDEX = 0;
+    private static final int URL_INDEX = 1;
+    private static final int VERSION_INDEX = 1;
+
 
     public static HttpRequest parse(BufferedReader bufferedReader) throws IOException {
         List<String> requestLines = parseRequestBuffer(bufferedReader);
@@ -39,9 +43,10 @@ public class HttpRequestParser {
     }
 
     private static RequestLine parseRequestLine(List<String> lines) {
-        String method = lines.get(REQUEST_LINES_REQUESTLINE_INDEX).split(REQUEST_LINE_DELIMETER)[KEY_INDEX];
-        String uri = lines.get(REQUEST_LINES_REQUESTLINE_INDEX).split(REQUEST_LINE_DELIMETER)[VALUE_INDEX];
-        return new RequestLine(method, uri);
+        String method = lines.get(REQUEST_LINES_REQUESTLINE_INDEX).split(REQUEST_LINE_DELIMETER)[METHOD_INDEX];
+        String uri = lines.get(REQUEST_LINES_REQUESTLINE_INDEX).split(REQUEST_LINE_DELIMETER)[URL_INDEX];
+        String httpVersion = lines.get(REQUEST_LINES_REQUESTLINE_INDEX).split(REQUEST_LINE_DELIMETER)[VERSION_INDEX];
+        return new RequestLine(method, uri, httpVersion);
     }
 
     private static RequestHeader parseRequestHeader(List<String> lines) {

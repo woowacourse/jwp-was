@@ -58,6 +58,10 @@ public class HttpResponse {
     public void end() throws IOException {
         dos.flush();
     }
+
+    public void setCookie() {
+        appendHeader("Set-Cookie","logined=true; Path=/");
+    }
 }
 
 
