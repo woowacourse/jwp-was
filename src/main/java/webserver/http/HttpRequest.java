@@ -44,7 +44,7 @@ public class HttpRequest {
     }
 
     private static BufferedReader getBufferedReader(InputStream in) throws UnsupportedEncodingException {
-        return new BufferedReader(new InputStreamReader(in, "UTF-8"));
+        return new BufferedReader(new InputStreamReader(in, UTF_8));
     }
 
     private static String parseStartLine(BufferedReader br) throws IOException {
