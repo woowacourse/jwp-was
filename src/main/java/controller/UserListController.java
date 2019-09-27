@@ -3,10 +3,8 @@ package controller;
 import db.DataBase;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import http.response.ResponseStatus;
 import http.session.Session;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
 
@@ -29,12 +27,7 @@ public class UserListController extends AbstractController {
             modelAndView = new ModelAndView("redirect: /");
         }
 
-        try {
-            setHttpResponse(modelAndView, httpResponse);
-        } catch (IOException e) {
-            e.printStackTrace();
-            httpResponse.setResponseStatus(ResponseStatus.INTERNAL_SERVER_ERROR);
-        }
+        handle(modelAndView, httpResponse);
     }
 
     private boolean isLoginedUser(Session session) {

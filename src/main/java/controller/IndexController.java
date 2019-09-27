@@ -2,8 +2,6 @@ package controller;
 
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import http.response.ResponseStatus;
-import utils.FileIoUtils;
 
 public class IndexController extends AbstractController {
     private static class IndexControllerLazyHolder {
@@ -16,8 +14,6 @@ public class IndexController extends AbstractController {
 
     @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        httpResponse.setBody(FileIoUtils.loadFileFromClasspath("./templates" + "/index" + ".html"));
-        httpResponse.setResponseStatus(ResponseStatus.OK);
-        httpResponse.addHeaderAttribute("Content-Type", "text/html;charset=utf-8");
+        handle(new ModelAndView("/index"), httpResponse);
     }
 }
