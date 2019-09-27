@@ -3,7 +3,7 @@ package controller;
 import db.DataBase;
 import http.request.HttpMethod;
 import http.request.HttpRequest;
-import http.request.HttpUriParser;
+import http.parser.HttpUriParser;
 import http.response.HttpResponse;
 import model.User;
 

@@ -1,10 +1,10 @@
 package controller;
 
 import db.DataBase;
-import http.common.CookieParser;
+import http.parser.CookieParser;
 import http.request.HttpMethod;
 import http.request.HttpRequest;
-import http.request.HttpUriParser;
+import http.parser.HttpUriParser;
 import http.response.HttpResponse;
 import model.User;
 
@@ -14,7 +14,8 @@ public class UserLoginController implements Controller {
 
     private static final String LOGIN_PATH = "/index.html";
     private static final String LOGIN_FAIL_PATH = "/user/login_failed.html";
-    private static final RequestMapping LOGIN_REQUEST_MAPPING = RequestMapping.of(HttpMethod.POST, HttpUriParser.parse("/user/login"));
+    private static final String USER_LOGIN_URI = "/user/login";
+    private static final RequestMapping LOGIN_REQUEST_MAPPING = RequestMapping.of(HttpMethod.POST, HttpUriParser.parse(USER_LOGIN_URI));
 
     @Override
     public void service(final HttpRequest httpRequest, final HttpResponse httpResponse) {

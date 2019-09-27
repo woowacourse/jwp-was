@@ -1,6 +1,6 @@
 package http.common;
 
-import http.request.RequestHeaderParser;
+import http.parser.RequestHeaderParser;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

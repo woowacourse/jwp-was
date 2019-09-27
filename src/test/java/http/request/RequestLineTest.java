@@ -1,6 +1,8 @@
 package http.request;
 
 import http.common.HttpVersion;
+import http.parser.HttpUriParser;
+import http.parser.RequestLineParser;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

@@ -1,5 +1,6 @@
 package http.request;
 
+import http.common.Cookies;
 import http.common.HttpHeader;
 import http.common.HttpVersion;
 
@@ -7,11 +8,13 @@ public class HttpRequest {
 
     private RequestLine requestLine;
     private HttpHeader requestHeader;
+    private Cookies cookies;
     private RequestBody requestBody;
 
-    public HttpRequest(final RequestLine requestLine, final HttpHeader requestHeader, final RequestBody requestBody) {
+    public HttpRequest(final RequestLine requestLine, final HttpHeader requestHeader, final Cookies cookies, final RequestBody requestBody) {
         this.requestLine = requestLine;
         this.requestHeader = requestHeader;
+        this.cookies = cookies;
         this.requestBody = requestBody;
     }
 
@@ -55,4 +58,45 @@ public class HttpRequest {
         return requestLine.getClassPath();
     }
 
+    public boolean isLogined() {
+        return cookies.isLogined();
+    }
+
+    public static final class HttpRequestBuilder {
+        private RequestLine requestLine;
+        private HttpHeader requestHeader;
+        private Cookies cookies = new Cookies();
+        private RequestBody requestBody;
+
+        private HttpRequestBuilder() {
+        }
+
+        public static HttpRequestBuilder builder() {
+            return new HttpRequestBuilder();
+        }
+
+        public HttpRequestBuilder withRequestLine(RequestLine requestLine) {
+            this.requestLine = requestLine;
+            return this;
+        }
+
+        public HttpRequestBuilder withRequestHeader(HttpHeader requestHeader) {
+            this.requestHeader = requestHeader;
+            return this;
+        }
+
+        public HttpRequestBuilder withCookies(Cookies cookies) {
+            this.cookies = cookies;
+            return this;
+        }
+
+        public HttpRequestBuilder withRequestBody(RequestBody requestBody) {
+            this.requestBody = requestBody;
+            return this;
+        }
+
+        public HttpRequest build() {
+            return new HttpRequest(requestLine, requestHeader, cookies, requestBody);
+        }
+    }
 }

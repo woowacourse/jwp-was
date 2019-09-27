@@ -1,22 +1,28 @@
 package http.request;
 
 import http.common.HttpVersion;
+import http.parser.HttpUriParser;
+import http.parser.RequestHeaderParser;
+import http.parser.RequestLineParser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.HashMap;
 
+import static http.request.HttpRequest.HttpRequestBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class HttpRequestTest {
 
-    private HttpRequest httpRequest = new HttpRequest(RequestLineParser.parse("GET /user/create?id=conas&password=1234 HTTP/1.1"),
-        RequestHeaderParser.parse(Arrays.asList("Host: localhost:8080", "Connection: keep-alive")),
-        new RequestBody(new HashMap<String, String>() {{
+    private HttpRequest httpRequest = HttpRequestBuilder.builder()
+        .withRequestLine(RequestLineParser.parse("GET /user/create?id=conas&password=1234 HTTP/1.1"))
+        .withRequestHeader(RequestHeaderParser.parse(Arrays.asList("Host: localhost:8080", "Connection: keep-alive")))
+        .withRequestBody(new RequestBody(new HashMap<String, String>() {{
             put("name", "conatuseus");
             put("email", "conatuseus@gmail.com");
-        }}));
+        }}))
+        .build();
 
     @Test
     void getHttpVersion() {
