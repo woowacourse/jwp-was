@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,7 +13,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 public class Response {
     private static final Logger LOG = getLogger(Response.class);
-    private static final byte[] NEW_LINE = "\r\n".getBytes();
+    private static final byte[] NEW_LINE = "\r\n".getBytes(StandardCharsets.ISO_8859_1);
 
     private ResponseHeader header;
     private ResponseBody body;

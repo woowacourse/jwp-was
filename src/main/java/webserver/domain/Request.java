@@ -87,12 +87,12 @@ public class Request {
         return protocol;
     }
 
-    public Map<String, String> getQueryParameters() {
+    public QueryParameter getQueryParameters() {
         final QueryParameter queries = this.url.getQueries();
         if (this.httpMethod == HttpMethod.POST) {
             queries.putByRawQueries(this.body);
         }
-        return queries.getQueries();
+        return queries;
     }
 
     public Map<String, String> getHeader() {
