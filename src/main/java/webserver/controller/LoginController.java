@@ -26,7 +26,7 @@ public class LoginController extends AbstractController {
             return REDIRECT_VIEW + "/index.html";
         }
         setSession(request, response, LOGINED, "false");
-        return REDIRECT_VIEW + "/user/login_failed.html ";
+        return REDIRECT_VIEW + "/user/login_failed.html";
     }
 
     private boolean validateUser(String password, User user) {
