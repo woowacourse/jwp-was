@@ -15,7 +15,7 @@ class HttpRequestParserTest {
 
     @ParameterizedTest
     @MethodSource("createHttpRequest")
-    void HttpRequest_생성(InputStream inputStream) throws Exception {
+    void HttpRequest_생성(InputStream inputStream) {
         HttpRequest httpRequest = new HttpRequest();
         HttpRequestParser.parse(inputStream, httpRequest);
 

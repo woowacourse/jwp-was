@@ -1,14 +1,20 @@
 package webserver.http.response;
 
+import webserver.http.request.exception.IntervalServerException;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Map;
 
 public class HttpResponseParser {
-    public static void send(final DataOutputStream dataOutputStream, final HttpResponse httpResponse) throws IOException {
-        responseHeader(dataOutputStream, httpResponse);
-        writeResponseBody(dataOutputStream, httpResponse);
-        dataOutputStream.flush();
+    public static void send(final DataOutputStream dataOutputStream, final HttpResponse httpResponse) {
+        try {
+            responseHeader(dataOutputStream, httpResponse);
+            writeResponseBody(dataOutputStream, httpResponse);
+            dataOutputStream.flush();
+        } catch (IOException e) {
+            throw new IntervalServerException();
+        }
     }
 
     private static void writeResponseBody(final DataOutputStream dataOutputStream, final HttpResponse httpResponse) throws IOException {

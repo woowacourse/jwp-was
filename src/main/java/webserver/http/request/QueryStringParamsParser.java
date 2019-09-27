@@ -11,7 +11,7 @@ public class QueryStringParamsParser {
 
     public static QueryStringParams parse(final BufferedReader bufferedReader,
                                           final RequestLine requestLine,
-                                          final HttpHeader httpHeader) throws IOException {
+                                          final HttpHeader httpHeader) {
         if (httpHeader.get(CONTENT_LENGTH) == null) {
             return QueryStringParams.of(requestLine.splitQueryString());
         }
