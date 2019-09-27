@@ -5,17 +5,17 @@ import com.google.common.collect.Maps;
 import java.util.Map;
 import java.util.UUID;
 
-public class HttpSessionDB {
+public class HttpSessionManager {
     private static Map<String, HttpSession> sessions;
-    private static HttpSessionDB instance;
+    private static HttpSessionManager instance;
 
-    private HttpSessionDB() {
+    private HttpSessionManager() {
         sessions = Maps.newHashMap();
     }
 
-    public static HttpSessionDB getInstance() {
+    public static HttpSessionManager getInstance() {
         if (instance == null) {
-            instance = new HttpSessionDB();
+            instance = new HttpSessionManager();
         }
         return instance;
     }

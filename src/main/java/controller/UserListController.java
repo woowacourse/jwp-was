@@ -10,13 +10,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
 import session.HttpSession;
-import session.HttpSessionDB;
+import session.HttpSessionManager;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static controller.UserLoginController.LOGIN_USER;
 import static controller.UserLoginController.SESSION_ID;
 
 public class UserListController extends AbstractController {
@@ -34,8 +35,8 @@ public class UserListController extends AbstractController {
     }
 
     private boolean checkLogin(HttpRequest request) {
-        HttpSession session = HttpSessionDB.getInstance().findOrCreateSession(request.getCookieValue(SESSION_ID));
-        return session != null && session.getAttributes("login-user") != null;
+        HttpSession session = HttpSessionManager.getInstance().findOrCreateSession(request.getCookieValue(SESSION_ID));
+        return session != null && session.getAttributes(LOGIN_USER) != null;
     }
 
     private void showUsers(HttpResponse response) {

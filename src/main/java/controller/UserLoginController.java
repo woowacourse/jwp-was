@@ -9,13 +9,14 @@ import model.AuthorizationFailException;
 import model.User;
 import service.UserService;
 import session.HttpSession;
-import session.HttpSessionDB;
+import session.HttpSessionManager;
 import utils.QueryStringUtils;
 
 import java.util.Map;
 
 public class UserLoginController extends AbstractController {
     public static final String SESSION_ID = "SessionId";
+    public static final String LOGIN_USER = "login-user";
 
     private UserService userService = new UserService();
 
@@ -26,10 +27,10 @@ public class UserLoginController extends AbstractController {
         try {
             User foundUser = userService.login(body.get("userId"), body.get("password"));
 
-            HttpSession httpSession = HttpSessionDB.getInstance().findOrCreateSession(request.getCookieValue(SESSION_ID));
+            HttpSession httpSession = HttpSessionManager.getInstance().findOrCreateSession(request.getCookieValue(SESSION_ID));
             setCookie(response, httpSession);
 
-            httpSession.setAttribute("login-user", foundUser);
+            httpSession.setAttribute(LOGIN_USER, foundUser);
             ResponseResolver.resolve(new RedirectView("/index.html"), response);
         } catch (AuthorizationFailException e) {
             ResponseResolver.resolve(new RedirectView("/user/login_failed.html"), response);
