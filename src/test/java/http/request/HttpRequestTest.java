@@ -7,13 +7,14 @@ import testhelper.Common;
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static testhelper.Common.getBufferedReaderOfText;
 
 public class HttpRequestTest {
 
     @Test
     @DisplayName("HTTP GET 요청")
     public void httpGetRequest() throws IOException {
-        HttpRequest httpRequest = HttpRequestFactory.create(Common.getBufferedReaderOfText("HTTP_GET_QUERY_STRING.txt"));
+        HttpRequest httpRequest = HttpRequestFactory.create(getBufferedReaderOfText("HTTP_GET_QUERY_STRING.txt"));
 
         assertThat(httpRequest.getMethod()).isEqualTo("GET");
         assertThat(httpRequest.getResourcePath()).isEqualTo("/user/create");
@@ -24,7 +25,7 @@ public class HttpRequestTest {
     @Test
     @DisplayName("HTTP POST 요청")
     public void httpPostRequest() throws IOException {
-        HttpRequest httpRequest = HttpRequestFactory.create(Common.getBufferedReaderOfText("HTTP_POST_USER_CREATE.txt"));
+        HttpRequest httpRequest = HttpRequestFactory.create(getBufferedReaderOfText("HTTP_POST_USER_CREATE.txt"));
 
         assertThat(httpRequest.getMethod()).isEqualTo("POST");
         assertThat(httpRequest.getResourcePath()).isEqualTo("/user/create");
@@ -33,14 +34,14 @@ public class HttpRequestTest {
         assertThat(httpRequest.getParameter("password")).isEqualTo("password");
     }
 
-//    @Test
-//    @DisplayName("HTTP Cookie Test")
-//    public void httpRequestCookie() throws IOException {
-//        HttpRequest httpRequest = HttpRequestFactory.create(Common.getBufferedReaderOfText("HTTP_GET_USER_LIST.txt"));
-//
-//        assertThat(httpRequest.getMethod()).isEqualTo("GET");
-//        assertThat(httpRequest.getResourcePath()).isEqualTo("/user/list");
-//        assertThat(httpRequest.getCookie("logined")).isEqualTo("true");
-//        assertThat(httpRequest.getCookie("Path")).isEqualTo("/");
-//    }
+    @Test
+    @DisplayName("HTTP Cookie Test")
+    public void httpRequestCookie() throws IOException {
+        HttpRequest httpRequest = HttpRequestFactory.create(getBufferedReaderOfText("HTTP_GET_USER_LIST_LOGIN.txt"));
+
+        assertThat(httpRequest.getMethod()).isEqualTo("GET");
+        assertThat(httpRequest.getResourcePath()).isEqualTo("/user/list");
+        assertThat(httpRequest.getCookie("logined")).isEqualTo("true");
+        assertThat(httpRequest.getCookie("Path")).isEqualTo("/");
+    }
 }

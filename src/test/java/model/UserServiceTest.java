@@ -14,19 +14,7 @@ import java.io.IOException;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserServiceTest {
-    private static final Logger logger = LoggerFactory.getLogger(UserServiceTest.class);
-
-    private static UserService userService = new UserService();
-
-    static {
-        try {
-            HttpRequest httpRequest = HttpRequestFactory.create(
-                    Common.getBufferedReaderOfText("HTTP_POST_USER_CREATE.txt"));
-            userService.addUser(UserResolver.resolve(httpRequest));
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
+    private UserService userService = new UserService();
 
     @Test
     @DisplayName("로그인 성공 후 /index.html을 반환한다")

@@ -1,8 +1,8 @@
 package servlet;
 
-import http.response.HttpResponse;
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
+import http.response.HttpResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;

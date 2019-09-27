@@ -7,6 +7,9 @@ import java.util.Map;
 public class HttpCookie {
     Map<String, String> cookies = new HashMap<>();
 
+    public HttpCookie() {
+    }
+
     public HttpCookie(final String cookies) {
         Arrays.stream(cookies.split(";"))
                 .map(line -> line.trim())

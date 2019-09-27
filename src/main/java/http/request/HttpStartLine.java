@@ -33,7 +33,7 @@ public class HttpStartLine {
         return version;
     }
 
-    String getQueryParameter(String key) {
+    public String getParameter(String key) {
         return requestUrl.getQueryParameter(key);
     }
 }

@@ -14,8 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Common {
-    private static final Logger logger = LoggerFactory.getLogger(Common.class);
-
     private static final String TEST_DIRECTORY_PATH = "./src/test/resources/";
     private static Map<String, Controller> api;
 
@@ -24,14 +22,6 @@ public class Common {
         api.put("/user/create", new UserCreateController());
         api.put("/user/login", new UserLoginController());
         api.put("/user/list", new UserListController());
-
-        try {
-            HttpRequest httpRequest =
-                    HttpRequestFactory.create(Common.getBufferedReaderOfText("HTTP_POST_USER_CREATE.txt"));
-            new UserService().addUser(UserResolver.resolve(httpRequest));
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
     }
 
     public static BufferedReader getBufferedReaderOfText(final String path) throws FileNotFoundException {

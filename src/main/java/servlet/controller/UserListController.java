@@ -19,7 +19,7 @@ public class UserListController extends HttpController {
     protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         UserService userService = new UserService();
 
-        if (httpRequest.getHeader("Cookie").contains("logined=true")) {
+        if ("true".equals(httpRequest.getCookie("logined"))) {
             Collection<User> users = userService.findAll();
             Map<String, Object> model = new HashMap<>();
             model.put("users", users);
