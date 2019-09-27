@@ -41,22 +41,4 @@ public class LoginController implements Controller {
 
         controllerMethod.processResponse(request, response);
     }
-
-//    private void processLogin(Request request, Response response) {
-//        User user = DataBase.findUserById(request.getQueryParameters().getParameter("userId"));
-//
-//        if (user != null && user.isCorrectPassWord(request.getQueryParameters().getParameter("password"))) {
-//            Session session = request.getSession();
-//            session.setAttribute("user", user.getUserId());
-//
-//            response.found()
-//                    .putResponseHeaders("Location: ", "http://localhost:8080/index.html")
-//                    .putResponseHeaders("Set-Cookie: Session-Id=", session.getSessionId() + "; Path=/");
-//        }
-//
-//        if (user == null || !user.isCorrectPassWord(request.getQueryParameters().getParameter("password"))) {
-//            response.found()
-//                    .putResponseHeaders("Location: ", "http://localhost:8080/user/login_failed.html");
-//        }
-//    }
 }
