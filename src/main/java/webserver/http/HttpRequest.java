@@ -103,6 +103,10 @@ public class HttpRequest {
         return headerFields.connection().orElse(null);
     }
 
+    public String cookie() {
+        return headerFields.value("Cookie");
+    }
+
     public String getParam(String key) {
         return this.params.get(key);
     }
