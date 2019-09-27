@@ -13,14 +13,12 @@ import java.net.URLDecoder;
 import static webserver.http.httpRequest.HttpRequestHeader.HEADER_LINE_SEPARATOR;
 
 public class HttpRequest {
-    private static final Logger log = LoggerFactory.getLogger(HttpRequest.class);
-    private static final String TAG = "HttpRequest";
-
     public static final String CONTENT_LENGTH = "Content-Length";
     public static final String CONTENT_TYPE = "Content-Type";
     public static final String JSESSION_ID = "JSESSIONID";
     public static final String UTF_8 = "UTF-8";
-
+    private static final Logger log = LoggerFactory.getLogger(HttpRequest.class);
+    private static final String TAG = "HttpRequest";
     private HttpStartLine httpStartLine;
     private HttpRequestHeader httpRequestHeader;
     private HttpRequestBody httpRequestBody;
@@ -62,9 +60,9 @@ public class HttpRequest {
             sb.append(HEADER_LINE_SEPARATOR);
             headerLine = br.readLine();
         }
-        sb.append(HEADER_LINE_SEPARATOR);
         String header = sb.toString();
-        log.debug("header : {}", header);
+        System.out.println("header = " + header);
+        log.info("header : {}", header);
         return header;
     }
 

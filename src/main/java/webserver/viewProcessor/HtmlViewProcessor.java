@@ -16,8 +16,8 @@ import java.util.Map;
 
 public class HtmlViewProcessor implements ViewProcessor {
 
-    private static final String HTML_ROUTE = "/templates";
     public static final String HTML_SUFFIX = ".html";
+    private static final String HTML_ROUTE = "/templates";
 
     @Override
     public boolean isSupported(String viewName) {
