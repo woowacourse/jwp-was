@@ -7,11 +7,11 @@ import java.util.Map;
 public class HttpRequestHeader {
     private static final String DELIMITER_OF_HEADER = ":";
 
-    private final HttpRequestStartLine httpRequestStartLine;
+    private final HttpStartLine httpStartLine;
     private final Map<String, String> headers = new HashMap<>();
 
     public HttpRequestHeader(final List<String> inputs) {
-        httpRequestStartLine = new HttpRequestStartLine(inputs.get(0));
+        httpStartLine = new HttpStartLine(inputs.get(0));
         for (String header : inputs.subList(1, inputs.size())) {
             int indexOfDelimiter = header.indexOf(DELIMITER_OF_HEADER);
             String key = header.substring(0, indexOfDelimiter).trim().toLowerCase();
@@ -22,15 +22,15 @@ public class HttpRequestHeader {
     }
 
     public String getMethod() {
-        return httpRequestStartLine.getMethod();
+        return httpStartLine.getMethod();
     }
 
     public String getResourcePath() {
-        return httpRequestStartLine.getResourcePath();
+        return httpStartLine.getResourcePath();
     }
 
     public String getVersion() {
-        return httpRequestStartLine.getVersion();
+        return httpStartLine.getVersion();
     }
 
     public String get(String key) {
@@ -38,6 +38,6 @@ public class HttpRequestHeader {
     }
 
     String getParameter(String key) {
-        return httpRequestStartLine.getQueryParameter(key);
+        return httpStartLine.getQueryParameter(key);
     }
 }

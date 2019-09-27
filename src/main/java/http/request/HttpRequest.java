@@ -1,7 +1,11 @@
 package http.request;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class HttpRequest {
     private final HttpRequestHeader httpRequestHeader;
+    private final Map<String, String> cookies = new HashMap<>();
     private final HttpRequestBody httpRequestBody;
 
     public HttpRequest(HttpRequestHeader httpRequestHeader, HttpRequestBody httpRequestBody) {
@@ -19,6 +23,10 @@ public class HttpRequest {
 
     public String getHeader(String key) {
         return httpRequestHeader.get(key);
+    }
+
+    public String getCookie(String key) {
+        return null;
     }
 
     public String getResourcePath() {

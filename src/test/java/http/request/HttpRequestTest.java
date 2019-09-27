@@ -32,4 +32,15 @@ public class HttpRequestTest {
         assertThat(httpRequest.getHeader("Content-Type")).isEqualTo("application/x-www-form-urlencoded");
         assertThat(httpRequest.getParameter("password")).isEqualTo("password");
     }
+
+//    @Test
+//    @DisplayName("HTTP Cookie Test")
+//    public void httpRequestCookie() throws IOException {
+//        HttpRequest httpRequest = HttpRequestFactory.create(Common.getBufferedReaderOfText("HTTP_GET_USER_LIST.txt"));
+//
+//        assertThat(httpRequest.getMethod()).isEqualTo("GET");
+//        assertThat(httpRequest.getResourcePath()).isEqualTo("/user/list");
+//        assertThat(httpRequest.getCookie("logined")).isEqualTo("true");
+//        assertThat(httpRequest.getCookie("Path")).isEqualTo("/");
+//    }
 }

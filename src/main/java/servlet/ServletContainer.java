@@ -19,9 +19,7 @@ public class ServletContainer {
             final HttpRequest httpRequest, final HttpResponse httpResponse) throws IOException, URISyntaxException {
         Controller controller = controllerMapper.find(httpRequest);
         controller.service(httpRequest, httpResponse);
-        // ServletHttpResponse 으로
 
-        // view가 HttpResponse를 인자로 받는다
         return httpResponse;
     }
 
