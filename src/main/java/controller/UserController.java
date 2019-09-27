@@ -17,7 +17,7 @@ public class UserController implements Controller {
     private List<RequestMethod> allowedMethods = Arrays.asList(RequestMethod.POST, RequestMethod.GET);
     private List<String> allowedUrlPaths = Arrays.asList("/user/create", "/user/list");
     private UserService userService = UserService.getInstance();
-    private List<ControllerMethod> controllerMethods = Arrays.asList(new CreateUserMethod(userService), new GetUserListMethod());
+    private List<ControllerMethod> userControllerMethods = Arrays.asList(new CreateUserMethod(userService), new GetUserListMethod());
 
     @Override
     public boolean isMapping(ControllerMapper controllerMapper) {
@@ -37,7 +37,7 @@ public class UserController implements Controller {
 
     @Override
     public void processResponse(Request request, Response response) throws IOException, URISyntaxException {
-        ControllerMethod controllerMethod = controllerMethods.stream()
+        ControllerMethod controllerMethod = userControllerMethods.stream()
                 .filter(method -> method.isMapping(request))
                 .findAny()
                 .orElseThrow(IllegalAccessError::new);

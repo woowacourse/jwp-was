@@ -14,7 +14,7 @@ import java.util.List;
 public class LoginController implements Controller {
     private List<RequestMethod> allowedMethods = Arrays.asList(RequestMethod.POST);
     private List<String> allowedUrlPaths = Arrays.asList("/user/login");
-    private List<ControllerMethod> allowedControllerMethods = Arrays.asList(new ProcessLoginMethod());
+    private List<ControllerMethod> loginControllerMethods = Arrays.asList(new ProcessLoginMethod());
 
     @Override
     public boolean isMapping(ControllerMapper controllerMapper) {
@@ -34,7 +34,7 @@ public class LoginController implements Controller {
 
     @Override
     public void processResponse(Request request, Response response) throws IOException, URISyntaxException {
-        ControllerMethod controllerMethod = allowedControllerMethods.stream()
+        ControllerMethod controllerMethod = loginControllerMethods.stream()
                 .filter(method -> method.isMapping(request))
                 .findAny()
                 .orElseThrow(IllegalAccessError::new);

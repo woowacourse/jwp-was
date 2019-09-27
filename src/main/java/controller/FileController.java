@@ -1,11 +1,10 @@
 package controller;
 
+import controller.methods.ControllerMethod;
+import controller.methods.GetFileControllerMethod;
 import http.request.Request;
 import http.request.RequestMethod;
 import http.response.Response;
-import http.response.ResponseHeaders;
-import http.response.ResponseStatus;
-import utils.FileIoUtils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -15,23 +14,11 @@ import java.util.List;
 public class FileController implements Controller {
     private List<RequestMethod> allowedMethods = Arrays.asList(RequestMethod.GET);
     private List<String> allowedUrlPaths = Arrays.asList(".html", ".css", ".html", ".ico", ".woff", ".ttf", ".js");
+    private List<ControllerMethod> fileControllerMethods = Arrays.asList(new GetFileControllerMethod());
 
     @Override
     public boolean isMapping(ControllerMapper controllerMapper) {
         return (isAllowedMethod(controllerMapper) && isAllowedPath(controllerMapper));
-    }
-
-    @Override
-    public void processResponse(Request request, Response response) throws IOException, URISyntaxException {
-        getFileResponse(request, response);
-    }
-
-    private void getFileResponse(Request request, Response response) throws IOException, URISyntaxException {
-        byte[] body = FileIoUtils.loadFileFromClasspath(request.getUrl().getDestinationFolderUrlPath());
-
-        response.ok()
-                .putResponseHeaders("Content-Type: ", request.getUrl().getRequestContentType().getContentType())
-                .body(body);
     }
 
     private boolean isAllowedPath(ControllerMapper controllerMapper) {
@@ -42,5 +29,15 @@ public class FileController implements Controller {
     private boolean isAllowedMethod(ControllerMapper controllerMapper) {
         return allowedMethods.stream()
                 .anyMatch(method -> controllerMapper.getRequestMethod() == method);
+    }
+
+    @Override
+    public void processResponse(Request request, Response response) throws IOException, URISyntaxException {
+        ControllerMethod controllerMethod = fileControllerMethods.stream()
+                .filter(method -> method.isMapping(request))
+                .findAny()
+                .orElseThrow(IllegalArgumentException::new);
+
+        controllerMethod.processResponse(request, response);
     }
 }
