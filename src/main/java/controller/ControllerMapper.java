@@ -22,10 +22,7 @@ public class ControllerMapper {
 
         try {
             method.invoke(Controllers.REQUEST_MAPPING_CONTROLLERS.get(method), request, response);
-        } catch (IllegalAccessException e) {
-            logger.error(e.getMessage());
-            throw new NotFoundUrlException(e);
-        } catch (InvocationTargetException e) {
+        } catch (IllegalAccessException | InvocationTargetException e) {
             logger.error(e.getMessage());
             throw new NotFoundUrlException(e);
         }
