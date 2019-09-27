@@ -32,7 +32,7 @@ public class StyleSheetController extends AbstractController {
     protected byte[] getStaticFile(HttpRequest httpRequest) throws FileNotFoundException {
         String file = httpRequest.getSource();
         try {
-            return FileIoUtils.loadFileFromClasspath("./static" + file);
+            return FileIoUtils.loadFileFromClasspath("./static/" + file);
         } catch (IOException | URISyntaxException e) {
             log.debug("fail to load file", e);
         }

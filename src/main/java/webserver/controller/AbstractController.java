@@ -16,9 +16,10 @@ public abstract class AbstractController implements Controller {
     protected static final String HEADER_FIELD_CONTENT_TYPE = "Content-Type";
     protected static final String HEADER_FIELD_CONTENT_LENGTH = "Content-Length";
     protected static final String HEADER_FIELD_LOCATION = "Location";
-    protected static final String HEADER_FIELD_ORIGIN = "Origin";
+    protected static final String HEADER_FIELD_HOST = "Host";
     protected static final String CONTENT_TYPE_HTML = "text/html;charset=utf-8";
     protected static final String CONTENT_TYPE_CSS = "text/css";
+    protected static final String HTTP_PROTOCOL = "http://";
 
     private static final String TEMPLATES_PATH = "./templates";
 
