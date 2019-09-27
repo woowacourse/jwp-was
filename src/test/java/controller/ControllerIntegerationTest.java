@@ -162,18 +162,38 @@ public class ControllerIntegerationTest extends BaseTest {
 
         assertThat(response.getResponseStatus()).isEqualTo(ResponseStatus.OK);
         assertThat(response.getResponseHeaders().getResponseHeaders()).isEqualTo(confirmMap);
-        assertThat(response.getResponseBody().getBody().length).isEqualTo(confirmBody.length);
+        assertThat(response.getResponseBody().getBody()).isEqualTo(confirmBody);
     }
 
     @Test
     @DisplayName("로그인없이 유저목록 가져오기 실패 테스트")
-    void getUserListWithoutLoginTest() {
+    void getUserListWithoutLoginTest() throws IOException, URISyntaxException {
+
+        User user1 = new User("easy", "easy", "easy", "easy@gmail.com");
+        User user2 = new User("kjm", "kjm", "kjm", "kjm@gmail.com");
+        DataBase.addUser(user1);
+        DataBase.addUser(user2);
+        Session session = SessionRepository.getInstance().createSession();
+        session.setAttribute("user", user2.getUserId());
+
+        //when
+        RequestMethod method = RequestMethod.GET;
+        RequestUrl url = RequestUrl.from("/user/list");
+        Map<String, String> header = new HashMap<>();
+        header.put("Request-Line:", "GET /user/list HTTP/1.1");
+        header.put("Cookie:", "Session-Id="+12345610);
+
+        Request request = new Request(method, url, new RequestInformation(header));
+        Response response = new Response();
+
+        Controller controller = factory.mappingController(request);
+        controller.processResponse(request, response);
+
+        Map<String, String> confirmMap = new LinkedHashMap<>();
+        confirmMap.put("Location: ", "http://localhost:8080/user/login.html");
 
 
-
-        // when
-
-        //then
-
+        assertThat(response.getResponseStatus()).isEqualTo(ResponseStatus.FOUND);
+        assertThat(response.getResponseHeaders().getResponseHeaders()).isEqualTo(confirmMap);
     }
 }
