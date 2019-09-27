@@ -24,7 +24,7 @@ public class HttpResponseParser {
     }
 
     private static void responseHeader(final DataOutputStream dataOutputStream, final HttpResponse httpResponse) throws IOException {
-        dataOutputStream.writeBytes(httpResponse.getStartLine() + "\r\n");
+        dataOutputStream.writeBytes(httpResponse.getStatusLine() + "\r\n");
 
         for (Map.Entry<String, String> element : httpResponse.getHttpHeader().getHeaders().entrySet()) {
             dataOutputStream.writeBytes(element.getKey() + ": " + element.getValue() + "\r\n");

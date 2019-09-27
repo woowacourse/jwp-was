@@ -1,8 +1,7 @@
-package webserver.http.response;
+package webserver.http.session;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class HttpSession {
     private final String id;

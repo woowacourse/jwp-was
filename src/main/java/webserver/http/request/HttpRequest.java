@@ -1,9 +1,9 @@
 package webserver.http.request;
 
 import webserver.http.common.HttpHeader;
-import webserver.http.response.GeneratedSessionIdStrategy;
-import webserver.http.response.HttpSession;
-import webserver.http.response.Session;
+import webserver.http.session.GeneratedSessionIdStrategy;
+import webserver.http.session.HttpSession;
+import webserver.http.session.Session;
 
 public class HttpRequest {
     private RequestLine requestLine;

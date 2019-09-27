@@ -2,11 +2,11 @@ package webserver.http.response;
 
 import webserver.http.common.HttpVersion;
 
-public class StartLine {
+public class StatusLine {
     private HttpVersion httpVersion;
     private HttpStatus httpStatus;
 
-    public StartLine(final HttpVersion httpVersion) {
+    public StatusLine(final HttpVersion httpVersion) {
         this.httpVersion = httpVersion;
     }
 

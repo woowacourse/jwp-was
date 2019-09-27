@@ -6,12 +6,12 @@ import webserver.http.common.HttpVersion;
 import webserver.http.request.HttpRequestType;
 
 public class HttpResponse {
-    private StartLine startLine;
+    private StatusLine statusLine;
     private HttpHeader httpHeader;
     private HttpResponseBody httpResponseBody;
 
     public HttpResponse() {
-        startLine = new StartLine(HttpVersion.HTTP_1_1);
+        statusLine = new StatusLine(HttpVersion.HTTP_1_1);
         httpHeader = new HttpHeader();
         httpResponseBody = HttpResponseBody.empty();
     }
@@ -39,11 +39,11 @@ public class HttpResponse {
     }
 
     public void setHttpStatus(final HttpStatus httpStatus) {
-        this.startLine.setHttpStatus(httpStatus);
+        this.statusLine.setHttpStatus(httpStatus);
     }
 
-    public StartLine getStartLine() {
-        return startLine;
+    public StatusLine getStatusLine() {
+        return statusLine;
     }
 
     public HttpHeader getHttpHeader() {
@@ -57,7 +57,7 @@ public class HttpResponse {
     @Override
     public String toString() {
         return "HttpResponse{" +
-                "startLine=" + startLine +
+                "startLine=" + statusLine +
                 ", httpHeader=" + httpHeader +
                 ", httpResponseBody=" + httpResponseBody +
                 '}';

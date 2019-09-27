@@ -1,4 +1,4 @@
-package webserver.http.response;
+package webserver.http.session;
 
 @FunctionalInterface
 public interface GeneratedId {
