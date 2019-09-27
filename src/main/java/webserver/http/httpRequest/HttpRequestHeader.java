@@ -63,7 +63,7 @@ public class HttpRequestHeader {
     }
 
     public String getCookie() {
-        return headers.get("Cookie");
+        return headers.get(COOKIE);
     }
 
     public String getSessionId() {
