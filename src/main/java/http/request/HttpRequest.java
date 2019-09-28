@@ -1,8 +1,10 @@
 package http.request;
 
-import http.HttpBody;
-import http.HttpHeader;
-import http.QueryString;
+import http.*;
+
+import java.util.Arrays;
+
+import static http.HttpHeader.*;
 
 public class HttpRequest {
     private final HttpRequestLine requestLine;
@@ -48,6 +50,19 @@ public class HttpRequest {
         public HttpRequest build() {
             return new HttpRequest(requestLine, header, body);
         }
+    }
+
+    public HttpSession getSession() {
+        String cookie = header.getValue(COOKIE_KEY);
+        return Arrays.stream(cookie.split(VALUES_DELIMITER))
+                .filter(value -> value.contains(JSESSIONID))
+                .findAny()
+                .map(id -> {
+                    String[] tokens = id.split(KEY_VALUE_DELIMITER);
+                    return HttpSessionManager.getSession(tokens[1].trim());
+                })
+                .orElseGet(HttpSessionManager::createSession)
+                ;
     }
 
     public boolean isStaticRequest() {
