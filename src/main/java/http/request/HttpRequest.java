@@ -40,6 +40,7 @@ public class HttpRequest {
 
     private void initializeStart(BufferedReader br) throws IOException {
         String startLine = br.readLine();
+        log.debug(startLine);
 
         httpRequestStartLine = HttpRequestStartLine.of(startLine);
 

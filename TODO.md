@@ -10,9 +10,10 @@
     - [ ] 경로에 따른 파일 전달 (파일이 존재하는지 확인하고 있으면 전달하자)
         - [x] 입력으로 들어온 경로에 파일이 존재하는지 확인 (어느 위치에서 이 역할을 해줄까? -> 컨트롤러도 설정)
         - [x] static + templates 경로
-        - [ ] 파일 확장자에 따른 Content-Type 셋팅 (일단은  css, javascript)
+        - [x] 파일 확장자에 따른 Content-Type 셋팅 (일단은  css, javascript)
             - .png -> image/png
-            - .js -> application/javascript
+            - .jpg -> image/jpeg
+            - .js -> application/javascript // EI 를 위해선 text/javascript 를 써야하는 것 같구먼
             - .css -> text/css
             - .html -> text/html
         - [ ] 자바 프로그램 내부에서 경로를 어떻게 파악하는지 조사
@@ -26,9 +27,20 @@
     
 - [ ] http
     - [ ] statusCode
-    - [ ] contentType 파악 
+    - [ ] contentType 생각하기 (참고 - https://webhint.io/docs/user-guide/hints/hint-content-type/)
+        - [ ] Accept 요구사항 맞추기 (ex. Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3)
+            - [ ] 클라이언트에서 원하는 타입순으로 정리
+                - [x] 일단 Accept 에서 첫번째 항목으로 적용
+                - [x] 여러 개 처리 ("," 로 나눠짐 ";" 는 부가정보를 위함) 
+                - [ ] q 를 통한 우선 순위 처리 (https://restfulapi.net/q-parameter-in-http-accept-header/)
+                - [ ] charSet 처리 (일단은 UTF-8 로 적용하자)
+                - [x] "*/*" 처리
+            - [ ] 서버에서 지원할 수 있는 타입들
+                - [x] 파일 확장자
+                - [ ] 서버에 힌트를 주기, ex. 특정 정규표현식을 만족하는 경우 (*/js/*) (+)
+            - [x] 클라이언트 - 서버 타입들에서 최적 타입 찾기 
         - [ ] 타입 살펴보고 body 에서 적용할 타입을 추려보기
-        - [ ] 여러 타입을 지원하는 api 만들기(+)
+        - [ ] 여러 타입을 지원하는 api 만들기(+) (ex. 특정 요청에 대해서 json 도 지원하고 xml 도 지원하는)
     - [ ] body 파악
         - [ ] body 를 완성하고 연관된 정보 헤더에 셋팅
             - [ ] Content-Length
@@ -45,6 +57,23 @@
 - [ ] 쿠기 
     - [ ] 헤더에 path 설정 (https://docs.microsoft.com/en-us/windows/win32/wininet/http-cookies),
 
+- [ ] 애러처리
+    - [ ] 에러 페이지 (for 클라이언트)
+        - [ ] 익셉션과 애러코드 매칭
+        - [ ] 해당 메세지 화면에 보여주기
+        - [ ] 재미있는 그림 보여주기 (+ image/png 적용)
+    - [ ] 에러 메시지 로깅
+        - [ ] 파일에 남기기
+
+
+### 해당값을 결정하는 순서
+    ContentTypeFactory
+         - accept 전달
+         - contentTypesGeneratorSupportedByServer 전달
+         1. 클라이언트가 원하는 타입들 구하기 (accept 사용)
+         2. 서버가 지원하는 타입들 구하기 (이건.. 서버에서 넘겨주어야, 이 부분이 제일 많이 변할듯. 콜백사용해서 생성하는 로직을 넘겨주자)
+         3. 그 중에서 최적의 값 구하기 (클라이언트가 원하는 타입 중에서 서버가 지원할 수 있는, 클라이언트가 원하는 순)
+
 
 ### 고려할 상황들 (추가되는 요구사항들?? 이렇게 요구사항을 추가해가면서 리팩토링 하면 좋을 듯..!!)
 - [ ] 에러 상황 처리
@@ -52,7 +81,7 @@
 - [x] post 에서 url 에도 파라미터가 존재하고, 바디에도 존재할경우 (Content-Type: application/x-www-form-urlencoded)
 - [ ] json 형태로 요청이 올 경우 ()
 - [ ] 압축을 해달라고 요청이 올 경우 (gzip 같은 경우 지원해보자..! 그리고 브라우저에서 확인하기)
-    - 이 경우 효과가 있는지 elapsedTime 을 측정해봐도 좋을
+    - 이 경우 효과가 있는지 elapsedTime 을 측정해봐도 좋을듯
 
 ### 흐름?
 결국엔 두 프로그램 간에서 서로 통신을 하기 위한?
@@ -64,6 +93,7 @@
 일단 내가 전달하고 싶은 타입들을 정해보아야 할 듯
 그리고 그에 맞게 필요한 정보들이 무엇인지 확인 (먼가 사용하는 곳이 있어야 짜고 싶은 마음도 생기고 좀 더 에 맞는 설계가 나올 것 같음)
 
+
+
 ### 미뤄놓은 똥들..
-HttpResponse , HttpRequest 테스트 메소드 명 변경
 Post에 body 가 없는 경우 어떻게 처리되는게 맞을지?

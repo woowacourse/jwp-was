@@ -25,4 +25,18 @@ public class FileIoUtils {
     private static Optional<URL> getUrlFromFilePath(String filePath) {
         return Optional.ofNullable(FileIoUtils.class.getClassLoader().getResource(filePath));
     }
+
+    public static String parseExtensionFromFilePath(String filePath) {
+        // [TODO] Windows 도 고려해야 함
+        String absoluteFilePath = Paths.get("/", filePath)
+                .normalize()
+                .toAbsolutePath()
+                .toString();
+
+        String[] splittedPath = absoluteFilePath.split("\\.");
+        if (splittedPath.length < 2) {
+            return "";
+        }
+        return splittedPath[splittedPath.length - 1];
+    }
 }

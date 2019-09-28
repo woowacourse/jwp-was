@@ -80,4 +80,20 @@ public class FileIoUtilsTest {
 
         assertThat(FileIoUtils.canUseResourceFromFilePath(existFilePath)).isTrue();
     }
+
+    @Test
+    void parseExtensionFromFilePath_hasExtension() {
+        String filePathEndWithExtension = "./hello.html";
+
+        assertThat(FileIoUtils.parseExtensionFromFilePath(filePathEndWithExtension)).isEqualTo("html");
+    }
+
+    @Test
+    void parseExtensionFromFilePath_hasNotExtension() {
+        String absoluteFilePathWithoutExtension = "/hello";
+        assertThat(FileIoUtils.parseExtensionFromFilePath(absoluteFilePathWithoutExtension)).isEqualTo("");
+
+        String relativeFilePathWithoutExtension = "./hello";
+        assertThat(FileIoUtils.parseExtensionFromFilePath(relativeFilePathWithoutExtension)).isEqualTo("");
+    }
 }

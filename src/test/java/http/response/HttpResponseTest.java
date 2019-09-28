@@ -1,5 +1,6 @@
 package http.response;
 
+import http.ContentType;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 
@@ -22,7 +23,7 @@ class HttpResponseTest {
                 "\r\n");
 
         // builder 사용해서 타입 정하고 charset 정하면 좋을듯..!
-        response.response200Header(expectedLenghtOfBodyContent, "text/html;charset=utf-8");
+        response.response200Header(expectedLenghtOfBodyContent, ContentType.HTML);
 
         for(String line : expectedHeader) {
             verify(dos).writeBytes(line);

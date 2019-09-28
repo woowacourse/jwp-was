@@ -1,5 +1,6 @@
 package http.response;
 
+import http.ContentType;
 import http.StatusCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,12 +31,11 @@ public class HttpResponse {
 
    //  public void response200Header(int lengthOfBodyContent, String contentType) {
 
-    public void response200Header(int lengthOfBodyContent, String contentType) {
+    public void response200Header(int lengthOfBodyContent, ContentType contentType) {
         try {
             List<String> lines = Arrays.asList(
                     String.format("HTTP/1.1 %d %s \r\n", 200, "OK"),
-
-                    "Content-Type: " + contentType + ";charset=utf-8\r\n",
+                    contentType.toHeaderValue() + "\r\n",
                     "Content-Length: " + lengthOfBodyContent + "\r\n",
                     "\r\n");
 
