@@ -29,10 +29,6 @@ public class ControllerHandler {
         controllerMapping.put(requestMapping, responsive);
     }
 
-    public boolean containsKey(RequestMapping requestMapping) {
-        return controllerMapping.containsKey(requestMapping);
-    }
-
     public Responsive get(RequestMapping requestMapping) {
         if (containsKey(requestMapping)) {
             return controllerMapping.get(requestMapping);
@@ -41,6 +37,10 @@ public class ControllerHandler {
             throw new MethodNotAllowedException("지원하지 않는 method");
         }
         return controllerMapping.get(getMapping("/*"));
+    }
+
+    private boolean containsKey(RequestMapping requestMapping) {
+        return controllerMapping.containsKey(requestMapping);
     }
 
     private boolean containsUri(RequestMapping requestMapping) {
