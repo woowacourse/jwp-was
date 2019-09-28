@@ -4,8 +4,8 @@ import domain.db.DataBase;
 import domain.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.request.HttpRequest;
 import web.support.HandlebarsTemplateEngine;
+import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 import webserver.response.ModelAndView;
 import webserver.storage.HttpSession;
@@ -58,7 +58,7 @@ public class UserController {
         }
 
         HttpSession httpSession = request.getSession();
-        // TODO: 2019-09-29 Hmm... 
+        // TODO: 2019-09-29 Hmm...
         response.addHeader("Set-Cookie", "JSESSIONID=" + httpSession.getId() + "; Path=/");
         httpSession.setAttribute("user", user);
         response.sendRedirect("/");

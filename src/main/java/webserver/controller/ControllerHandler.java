@@ -1,8 +1,8 @@
 package webserver.controller;
 
-import webserver.utils.FilePathUtils;
 import webserver.exception.MethodNotAllowedException;
 import webserver.response.MediaType;
+import webserver.utils.FilePathUtils;
 
 import java.util.HashMap;
 import java.util.Map;
