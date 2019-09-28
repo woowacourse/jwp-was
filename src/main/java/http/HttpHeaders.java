@@ -18,10 +18,6 @@ public class HttpHeaders {
         headers = new LinkedHashMap<>();
     }
 
-    public HttpHeaders(Map<String, String> headers) {
-        this.headers = headers;
-    }
-
     public boolean existHeader(String header) {
         return headers.containsKey(header);
     }

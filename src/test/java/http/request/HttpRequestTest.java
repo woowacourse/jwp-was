@@ -4,6 +4,7 @@ import http.HttpHeaders;
 import http.HttpVersion;
 import http.exception.EmptyHttpRequestException;
 import http.exception.RequestLineException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -55,8 +56,10 @@ class HttpRequestTest {
 
     @Test
     void request_line_parsing_결과가_3개가_아니면_예외_발생() {
-        String request = "GET /index.html\n" + "Host: localhost:8080\n" +
-                "Connection: keep-alive\n" + "Accept: */*";
+        String request = "GET /index.html\n"
+                + "Host: localhost:8080\n"
+                + "Connection: keep-alive\n"
+                + "Accept: */*";
         InputStream in = new ByteArrayInputStream(request.getBytes());
 
         assertThatThrownBy(() -> HttpRequestFactory.makeHttpRequest(in)).isInstanceOf(RequestLineException.class);
@@ -80,5 +83,17 @@ class HttpRequestTest {
         assertThat(httpRequest.getParam("userId")).isEqualTo("woowa");
         assertThat(httpRequest.getParam("password")).isEqualTo("password");
         assertThat(httpRequest.getParam("name")).isEqualTo("woo");
+    }
+
+    @Test
+    @DisplayName("Request Header에 Cookie가 있는 경우 Cookie 객체 생성")
+    void getCookie() throws IOException {
+        String request = "GET /index.html HTTP/1.1\n"
+                + "Cookie: key1=value1;key2=value2";
+        InputStream in = new ByteArrayInputStream(request.getBytes());
+        HttpRequest httpRequest = HttpRequestFactory.makeHttpRequest(in);
+
+        assertThat(httpRequest.matchCookie("key1", "value1")).isTrue();
+        assertThat(httpRequest.matchCookie("key2", "value2")).isTrue();
     }
 }

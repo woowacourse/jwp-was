@@ -9,12 +9,10 @@ import webserver.ViewResolver;
 import java.util.HashMap;
 import java.util.Map;
 
-import static http.HttpHeaders.COOKIE;
-
 public class UserListServlet extends AbstractServlet {
     @Override
     protected void doGet(HttpRequest request, HttpResponse response) {
-        if (isLogin(request)) {
+        if (request.matchCookie("logined", "true")) {
             Map<String, Object> model = new HashMap<>();
             model.put("users", DataBase.findAll());
             String view = TemplateEngine.applyModelInView("/user/list", model);
@@ -22,13 +20,5 @@ public class UserListServlet extends AbstractServlet {
             return;
         }
         response.redirect("/index.html");
-    }
-
-    private boolean isLogin(HttpRequest request) {
-        String cookie = request.getHeaders().getHeader(COOKIE);
-        if (cookie != null && cookie.contains("logined=true")) {
-            return true;
-        }
-        return false;
     }
 }

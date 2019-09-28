@@ -1,12 +1,12 @@
 package http.request;
 
+import http.HttpCookie;
 import http.HttpHeaders;
 import http.HttpMimeType;
 import http.HttpVersion;
 import utils.ExtensionParser;
 
-import static http.HttpHeaders.ACCEPT;
-import static http.HttpHeaders.CONTENT_TYPE;
+import static http.HttpHeaders.*;
 import static http.HttpMimeType.X_WWW_FORM_URLENCODED;
 
 public class HttpRequest {
@@ -14,12 +14,14 @@ public class HttpRequest {
     private HttpHeaders headers;
     private String body;
     private QueryParams queryParams;
+    private HttpCookie cookie;
 
     HttpRequest(HttpRequestLine requestLine, HttpHeaders headers, String body) {
         this.requestLine = requestLine;
         this.headers = headers;
         this.body = body;
         this.queryParams = QueryParams.of(getParams());
+        this.cookie = HttpCookie.of(headers.getHeader(COOKIE));
     }
 
     private String getParams() {
@@ -64,6 +66,14 @@ public class HttpRequest {
 
     public String getBody() {
         return body;
+    }
+
+    public boolean matchCookie(String key, String value) {
+        String cookieValue = cookie.get(key);
+        if (cookie == null || cookieValue == null) {
+            return false;
+        }
+        return cookieValue.equals(value);
     }
 
     @Override

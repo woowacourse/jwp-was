@@ -69,12 +69,12 @@ public class HttpRequestFactory {
     }
 
     private static HttpHeaders parseHttpHeaders(List<String> lines) {
-        Map<String, String> headers = new HashMap<>();
+        HttpHeaders httpHeaders = new HttpHeaders();
         for (String header : lines) {
             String[] splicedHeader = header.split(HEADER_DELIMITER);
-            headers.put(splicedHeader[KEY_INDEX], splicedHeader[VALUE_INDEX]);
+            httpHeaders.put(splicedHeader[KEY_INDEX], splicedHeader[VALUE_INDEX]);
         }
-        return new HttpHeaders(headers);
+        return httpHeaders;
     }
 
     private static void checkStartLine(String[] parsedStartLine) {

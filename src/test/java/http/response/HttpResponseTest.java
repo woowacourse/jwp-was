@@ -4,6 +4,7 @@ import http.HttpHeaders;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static http.HttpHeaders.COOKIE;
 import static http.HttpVersion.DEFAULT_VERSION;
 import static http.response.HttpStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
