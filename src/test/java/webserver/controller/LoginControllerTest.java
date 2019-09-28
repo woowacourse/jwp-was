@@ -4,14 +4,26 @@ import db.DataBase;
 import model.User;
 import org.junit.jupiter.api.Test;
 import webserver.WebTestForm;
+import webserver.exception.NotSupportedHttpMethodException;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
 
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class LoginControllerTest extends WebTestForm {
+
+    LoginController loginController = LoginController.getInstance();
+
+    @Test
+    void 로그인_GET_요청_에러_처리() throws IOException {
+        HttpRequest httpRequest = getHttpGetRequest("/user/login");
+        HttpResponse httpResponse = new HttpResponse();
+
+        assertThrows(NotSupportedHttpMethodException.class, () -> loginController.service(httpRequest, httpResponse));
+    }
 
     @Test
     void 로그인_실패_테스트() throws IOException {
@@ -26,7 +38,7 @@ class LoginControllerTest extends WebTestForm {
                 .build();
 
         DataBase.addUser(user);
-        String view = LoginController.getInstance().service(httpRequest, httpResponse);
+        String view = loginController.service(httpRequest, httpResponse);
         assertThat(view).isEqualTo("/redirect:/user/login_failed.html");
     }
 
@@ -42,7 +54,7 @@ class LoginControllerTest extends WebTestForm {
                 .build();
 
         DataBase.addUser(user);
-        String view = LoginController.getInstance().service(httpRequest, httpResponse);
+        String view = loginController.service(httpRequest, httpResponse);
         assertThat(view).isEqualTo("/redirect:/index.html");
     }
 }
