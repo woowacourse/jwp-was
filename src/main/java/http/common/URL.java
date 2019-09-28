@@ -1,6 +1,5 @@
 package http.common;
 
-import http.common.exception.InvalidURLException;
 import utils.StringUtils;
 
 import java.util.Objects;
