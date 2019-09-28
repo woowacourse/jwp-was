@@ -5,6 +5,7 @@ import http.common.ContentType;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.response.ResponseStatus;
+import http.session.Session;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -21,7 +22,7 @@ public class UserListController extends AbstractController {
 
     @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        if (httpRequest.getHttpHeader().getHeaderAttribute("Cookie").contains("logined=true")) {
+        if (isLoginedUser(httpRequest.getSession())) {
             TemplateManager templateManager = TemplateManager.getInstance();
             Map<String, Object> users = Collections.singletonMap("users", DataBase.findAll());
 
@@ -40,5 +41,9 @@ public class UserListController extends AbstractController {
         }
         httpResponse.setResponseStatus(ResponseStatus.FOUND);
         httpResponse.addHeaderAttribute("Location", "/");
+    }
+
+    private boolean isLoginedUser(Session session) {
+        return session.getAttribute("user") != null;
     }
 }

@@ -3,6 +3,8 @@ package http.request;
 import http.common.HttpHeader;
 import http.common.URL;
 import http.request.exception.InvalidHttpRequestException;
+import http.session.Session;
+import http.session.SessionRepository;
 
 import java.util.Objects;
 
@@ -47,5 +49,10 @@ public class HttpRequest {
 
     public RequestMethod getMethod() {
         return requestLine.getMethod();
+    }
+
+    public Session getSession() {
+        String sessionId = httpHeader.getSessionId();
+        return SessionRepository.getInstance().getSession(sessionId);
     }
 }

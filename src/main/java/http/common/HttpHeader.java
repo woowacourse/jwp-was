@@ -14,6 +14,7 @@ public class HttpHeader {
     private static final String HEADER_LINE_DELIMITER = ": ";
     private static final String HEADER_VALUES_DELIMITER = "; ";
     private static final String COOKIE = "Cookie";
+    private static final String SESSIONID = "SessionID";
     private static final String HEADER_FIELD_FORMAT = "%s: %s\r\n";
     private static final int HTTP_HEADER_PARAMETER_SIZE = 2;
     private static final int HEADER_FIELD_KEY_INDEX = 0;
@@ -70,6 +71,10 @@ public class HttpHeader {
 
         List<String> values = httpHeader.get(key);
         return values != null ? String.join(HEADER_VALUES_DELIMITER, values) : null;
+    }
+
+    public String getSessionId() {
+        return cookie.get(SESSIONID);
     }
 
     public String serialize() {
