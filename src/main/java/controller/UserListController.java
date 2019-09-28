@@ -8,6 +8,8 @@ import http.session.Session;
 import java.util.Collections;
 import java.util.Map;
 
+import static view.ViewResolver.REDIRECT_SIGNATURE;
+
 public class UserListController extends AbstractController {
     private static class UserListControllerLazyHolder {
         private static final UserListController INSTANCE = new UserListController();
@@ -22,9 +24,9 @@ public class UserListController extends AbstractController {
         ModelAndView modelAndView;
         if (isLoginedUser(httpRequest.getSession())) {
             Map<String, Object> users = Collections.singletonMap("users", DataBase.findAll());
-            modelAndView = new ModelAndView("user/list", users);
+            modelAndView = new ModelAndView("/user/list", users);
         } else {
-            modelAndView = new ModelAndView("redirect: /");
+            modelAndView = new ModelAndView(String.format("%s%s", REDIRECT_SIGNATURE, "/"));
         }
 
         handle(modelAndView, httpResponse);

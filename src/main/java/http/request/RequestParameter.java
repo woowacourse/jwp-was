@@ -9,8 +9,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import static utils.StringUtils.BLANK;
+
 public class RequestParameter {
-    public static final RequestParameter EMPTY = new RequestParameter("");
+    public static final RequestParameter EMPTY = new RequestParameter(BLANK);
     private static final String REQUEST_PARAMETER_DELIMITER = "&";
     private static final String KEY_VALUE_DELIMITER = "=";
     private static final int REQUEST_PARAMETER_KEY_INDEX = 0;

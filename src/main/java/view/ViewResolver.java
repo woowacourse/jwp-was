@@ -6,14 +6,14 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class ViewResolver {
+    public static final String REDIRECT_SIGNATURE = "redirect: ";
     private static final String TEMPLATES_PREFIX = "/templates";
     private static final String TEMPLATES_SUFFIX = ".html";
     private static final String PATH_FORMAT = "%s%s%s";
-    private static final String REDIRECT = "redirect: ";
     private static final Map<Predicate<String>, Function<String, View>> VIEWS = new HashMap<>();
 
     static {
-        VIEWS.put(viewName -> viewName.startsWith(REDIRECT), RedirectView::new);
+        VIEWS.put(viewName -> viewName.startsWith(REDIRECT_SIGNATURE), RedirectView::new);
     }
 
     private static class ViewResolverLazyHolder {

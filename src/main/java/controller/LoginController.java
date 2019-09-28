@@ -6,6 +6,8 @@ import http.response.HttpResponse;
 import http.session.Session;
 import model.User;
 
+import static view.ViewResolver.REDIRECT_SIGNATURE;
+
 public class LoginController extends AbstractController {
     private static class LoginControllerLazyHolder {
         private static final LoginController INSTANCE = new LoginController();
@@ -32,9 +34,9 @@ public class LoginController extends AbstractController {
             Session session = httpRequest.getSession();
             session.setAttribute("user", user);
             httpResponse.addHeaderAttribute("Set-Cookie", "SessionID=" + session.getId() + "; Path=/");
-            modelAndView = new ModelAndView("redirect: /");
+            modelAndView = new ModelAndView(String.format("%s%s", REDIRECT_SIGNATURE, "/"));
         } else {
-            modelAndView = new ModelAndView("redirect: /user/login_failed");
+            modelAndView = new ModelAndView(String.format("%s%s", REDIRECT_SIGNATURE, "/user/login_failed"));
         }
 
         handle(modelAndView, httpResponse);
