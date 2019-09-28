@@ -10,6 +10,8 @@ import http.session.SessionRepository;
 import java.util.Objects;
 
 public class HttpRequest {
+    public static final String SESSIONID = "SessionID";
+
     private final RequestLine requestLine;
     private final HttpHeader httpHeader;
     private final RequestBody body;
@@ -57,7 +59,7 @@ public class HttpRequest {
     }
 
     public Session getSession() {
-        String sessionId = httpHeader.getSessionId();
+        String sessionId = httpHeader.getCookieAttribute(SESSIONID);
         return SessionRepository.getInstance().getSession(sessionId);
     }
 }

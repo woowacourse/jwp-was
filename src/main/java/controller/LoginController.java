@@ -6,10 +6,13 @@ import http.response.HttpResponse;
 import http.session.Session;
 import model.User;
 
-import static http.common.HttpHeader.SESSIONID;
+import static http.request.HttpRequest.SESSIONID;
 import static view.ViewResolver.REDIRECT_SIGNATURE;
 
 public class LoginController extends AbstractController {
+    public static final String LOGIN_SUCCESS_REDIRECT_LOCATION = "/";
+    public static final String LOGIN_FAILED_REDIRECT_LOCATION = "/user/login_failed";
+
     public static LoginController getInstance() {
         return LoginControllerLazyHolder.INSTANCE;
     }
@@ -30,11 +33,11 @@ public class LoginController extends AbstractController {
         if (user != null && user.matchPassword(password)) {
             Session session = httpRequest.getSession();
             session.setAttribute("user", user);
-            httpResponse.addCookie(SESSIONID, session.getId());
-            httpResponse.addCookie("Path", "/");
-            modelAndView = new ModelAndView(String.format("%s%s", REDIRECT_SIGNATURE, "/"));
+            httpResponse.addCookieAttribute(SESSIONID, session.getId());
+            httpResponse.addCookieAttribute("Path", "/");
+            modelAndView = new ModelAndView(String.format("%s%s", REDIRECT_SIGNATURE, LOGIN_SUCCESS_REDIRECT_LOCATION));
         } else {
-            modelAndView = new ModelAndView(String.format("%s%s", REDIRECT_SIGNATURE, "/user/login_failed"));
+            modelAndView = new ModelAndView(String.format("%s%s", REDIRECT_SIGNATURE, LOGIN_FAILED_REDIRECT_LOCATION));
         }
 
         handle(modelAndView, httpResponse);

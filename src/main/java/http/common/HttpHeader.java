@@ -10,10 +10,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.google.common.net.HttpHeaders.COOKIE;
+import static com.google.common.net.HttpHeaders.SET_COOKIE;
 
 public class HttpHeader {
-    public static final String SESSIONID = "SessionID";
-
     private static final String EMPTY_HEADER_NAME_ERROR_MESSAGE = "헤더 이름의 값이 필요합니다.";
     private static final String HEADER_LINE_DELIMITER = ": ";
     private static final String HEADER_VALUES_DELIMITER = ";";
@@ -76,8 +75,13 @@ public class HttpHeader {
         return values != null ? String.join(HEADER_VALUES_DELIMITER, values) : null;
     }
 
-    public String getSessionId() {
-        return cookie.get(SESSIONID);
+    public void addCookieAttribute(String name, String value) {
+        cookie.add(name, value);
+        addHeaderAttribute(SET_COOKIE, String.format("%s=%s", name, value));
+    }
+
+    public String getCookieAttribute(String name) {
+        return cookie.get(name);
     }
 
     public String serialize() {

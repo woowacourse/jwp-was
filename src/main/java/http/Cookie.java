@@ -22,7 +22,7 @@ public class Cookie {
     private void addCookie(String cookieEntry) {
         int delimiterIndex = getDelimiterIndex(cookieEntry);
         if (delimiterIndex > BEGIN_INDEX) {
-            cookie.put(cookieEntry.substring(BEGIN_INDEX, delimiterIndex),
+            add(cookieEntry.substring(BEGIN_INDEX, delimiterIndex),
                     extractCookieValue(cookieEntry, delimiterIndex + 1));
         }
     }
@@ -41,5 +41,9 @@ public class Cookie {
 
     public String get(String key) {
         return cookie.get(key);
+    }
+
+    public void add(String name, String value) {
+        cookie.put(name, value);
     }
 }

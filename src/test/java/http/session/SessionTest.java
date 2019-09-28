@@ -4,13 +4,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static http.common.HttpHeader.SESSIONID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SessionTest {
     private static final String NAME = "name";
     private static final String VALUE = "value";
-    private Session session = new Session(SESSIONID);
+    private static final String SESSION_ID = "test session";
+    private Session session = new Session(SESSION_ID);
 
     @BeforeEach
     void setUp() {
