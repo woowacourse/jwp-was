@@ -20,6 +20,12 @@ class RequestLineTest {
     }
 
     @Test
+    void 지원하지_않는_버전() {
+        RequestLine requestLine = new RequestLine("GET / HTTP/0.0");
+        assertThat(requestLine.getVersion()).isEqualTo(HttpVersion.NOT_SUPPORTED_VERSION);
+    }
+
+    @Test
     void 잘못된_메서드() {
         assertThrows(InvalidRequestLineException.class, () -> new RequestLine("WRONG / HTTP/1.1"));
     }

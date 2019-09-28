@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static utils.StringUtils.BLANK;
 
 class RequestParameterTest {
     private static Stream<Arguments> provideInputOutputs() {
@@ -29,8 +30,18 @@ class RequestParameterTest {
     }
 
     @Test
+    void 정상_생성2() {
+        String queryString = "id=1&password=pw&name=";
+        RequestParameter requestParameter = new RequestParameter(queryString);
+
+        assertThat(requestParameter.getParameter("id")).isEqualTo("1");
+        assertThat(requestParameter.getParameter("name")).isNull();
+        assertThat(requestParameter.getParameter("address")).isNull();
+    }
+
+    @Test
     void query_string이_null일_때_빈_Request_parameter_생성() {
-        assertEquals(new RequestParameter(null), new RequestParameter(""));
+        assertEquals(new RequestParameter(null), new RequestParameter(BLANK));
     }
 
     @Test
