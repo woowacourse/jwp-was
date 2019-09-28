@@ -1,6 +1,7 @@
 package webserver;
 
 import controller.Controller;
+import fileloader.ResourceFileLoader;
 import http.request.HttpRequest;
 import http.request.HttpRequestCreator;
 import http.request.exception.InvalidHttpRequestException;
@@ -19,11 +20,14 @@ import java.net.Socket;
 
 public class RequestHandler implements Runnable {
     private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
-    private final ResourceHttpRequestHandler resourceHttpRequestHandler = ResourceHttpRequestHandler.getInstance();
+
+    private static final String STATIC_RESOURCE_PATH_PREFIX = "./static";
+    private final ResourceHttpRequestHandler resourceHttpRequestHandler =
+            new ResourceHttpRequestHandler(new ResourceFileLoader(STATIC_RESOURCE_PATH_PREFIX));
     private final HandlerMapping handlerMapping = HandlerMapping.getInstance();
     private Socket connection;
 
-    public RequestHandler(Socket connectionSocket) {
+    RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
     }
 
