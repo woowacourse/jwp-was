@@ -1,7 +1,6 @@
 package servlet;
 
 import http.request.HttpRequest;
-import http.request.support.HttpRequestFactory;
 import http.response.HttpResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,8 +21,7 @@ public class ServletContainerTest {
     @DisplayName("/user/create에 대한 HttpResponse를 반환한다")
     public void processCreateUser() throws IOException, URISyntaxException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        HttpRequest httpRequest = HttpRequestFactory.create(
-                Common.getBufferedReaderOfTextFile("HTTP_POST_USER_CREATE.txt"));
+        HttpRequest httpRequest = Common.getHttpRequest("HTTP_POST_USER_CREATE.txt");
         HttpResponse httpResponse = new HttpResponse(byteArrayOutputStream);
         ServletContainer servletContainer = new ServletContainer(getControllerFinder());
         servletContainer.process(httpRequest, httpResponse);

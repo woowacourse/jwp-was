@@ -12,23 +12,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class HttpRequestFactory {
-    public static HttpRequest create(BufferedReader bufferedReader) throws IOException {
-        List<String> lines = IOUtils.parseHeader(bufferedReader);
-
-        HttpStartLine httpStartLine = new HttpStartLine(lines.get(0));
-
-        Map<String, String> headers = getHeaders(lines.subList(1, lines.size()));
-        HttpCookie cookie = getCookie(headers);
-        HttpRequestHeader header = new HttpRequestHeader(headers);
-
-        if ("POST".equals(httpStartLine.getMethod())) {
-            String body = IOUtils.readData(bufferedReader, Integer.parseInt(header.getHeader("Content-Length")));
-            HttpRequestBody httpRequestBody = new HttpRequestBody(body);
-            return new HttpRequest(httpStartLine, header, cookie, httpRequestBody);
-        }
-        return new HttpRequest(httpStartLine, header, cookie);
-    }
-
     public static HttpRequest create(BufferedReader bufferedReader, SessionManager sessionManager) throws IOException {
         List<String> lines = IOUtils.parseHeader(bufferedReader);
 

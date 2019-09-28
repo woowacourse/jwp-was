@@ -1,7 +1,6 @@
 package servlet.controller;
 
 import http.request.HttpRequest;
-import http.request.support.HttpRequestFactory;
 import http.response.HttpResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,7 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import static testhelper.Common.getBufferedReaderOfTextFile;
+import static testhelper.Common.getHttpRequest;
 
 public class UserCreateControllerTest {
     private static final Logger logger = LoggerFactory.getLogger(UserCreateControllerTest.class);
@@ -23,8 +22,7 @@ public class UserCreateControllerTest {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
         Controller controller = new UserCreateController();
-        HttpRequest httpRequest = HttpRequestFactory.create(
-                getBufferedReaderOfTextFile("HTTP_POST_USER_CREATE.txt"));
+        HttpRequest httpRequest = getHttpRequest("HTTP_POST_USER_CREATE.txt");
         HttpResponse httpResponse = new HttpResponse(byteArrayOutputStream);
         controller.service(httpRequest, httpResponse);
 

@@ -1,7 +1,6 @@
 package servlet.controller;
 
 import http.request.HttpRequest;
-import http.request.support.HttpRequestFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import testhelper.Common;
@@ -24,8 +23,7 @@ public class ControllerFinderTest {
     @Test
     @DisplayName("/user/create에 해당하는 컨트롤러를 반환한다")
     public void getControllerWhenPostUserCreate() throws IOException {
-        HttpRequest httpRequest = HttpRequestFactory.create(
-                Common.getBufferedReaderOfTextFile("HTTP_POST_USER_CREATE.txt"));
+        HttpRequest httpRequest = Common.getHttpRequest("HTTP_POST_USER_CREATE.txt");
         assertThat(controllerFinder.find(httpRequest)).isEqualTo(api.get("/user/create"));
     }
 }

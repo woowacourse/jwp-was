@@ -4,7 +4,6 @@ import file.FileContainer;
 import http.request.HttpRequest;
 import http.request.support.HttpRequestFactory;
 import http.response.HttpResponse;
-import http.session.HttpSession;
 import http.session.support.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

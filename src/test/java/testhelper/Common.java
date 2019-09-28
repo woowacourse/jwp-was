@@ -1,5 +1,8 @@
 package testhelper;
 
+import http.request.HttpRequest;
+import http.request.support.HttpRequestFactory;
+import http.session.support.SessionManager;
 import servlet.controller.*;
 
 import java.io.*;
@@ -35,5 +38,13 @@ public class Common {
 
     public static ControllerFinder getControllerFinder() {
         return new ControllerFinder(Collections.unmodifiableMap(api));
+    }
+
+    public static HttpRequest getHttpRequest(final String path) throws IOException {
+        return HttpRequestFactory.create(getBufferedReaderOfTextFile(path), getSessionManager());
+    }
+
+    private static SessionManager getSessionManager() {
+        return new SessionManager();
     }
 }

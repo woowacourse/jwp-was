@@ -1,9 +1,5 @@
 package webserver;
 
-import db.DataBase;
-import domain.User;
-import http.request.HttpCookie;
-import http.session.HttpSession;
 import http.session.support.SessionManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

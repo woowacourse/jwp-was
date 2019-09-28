@@ -1,7 +1,7 @@
 package servlet.resolver;
 
-import http.request.HttpRequest;
 import domain.User;
+import http.request.HttpRequest;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;

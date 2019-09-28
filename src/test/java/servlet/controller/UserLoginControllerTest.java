@@ -1,10 +1,10 @@
 package servlet.controller;
 
+import domain.User;
+import domain.UserService;
 import http.request.HttpRequest;
 import http.request.support.HttpRequestFactory;
 import http.response.HttpResponse;
-import domain.User;
-import domain.UserService;
 import http.session.support.SessionManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

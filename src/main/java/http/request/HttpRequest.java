@@ -9,18 +9,6 @@ public class HttpRequest {
     private HttpSession httpSession;
     private final HttpRequestBody httpRequestBody;
 
-    public HttpRequest(HttpStartLine httpStartLine, HttpRequestHeader httpRequestHeader,
-                       HttpCookie httpCookie, HttpRequestBody httpRequestBody) {
-        this.httpStartLine = httpStartLine;
-        this.httpRequestHeader = httpRequestHeader;
-        this.httpCookie = httpCookie;
-        this.httpRequestBody = httpRequestBody;
-    }
-
-    public HttpRequest(HttpStartLine httpStartLine, HttpRequestHeader header, HttpCookie httpCookie) {
-        this(httpStartLine, header, httpCookie, new HttpRequestBody(""));
-    }
-
     public HttpRequest(HttpStartLine httpStartLine,
                        HttpRequestHeader httpRequestHeader,
                        HttpCookie httpCookie,

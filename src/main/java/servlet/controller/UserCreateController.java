@@ -1,8 +1,8 @@
 package servlet.controller;
 
+import domain.UserService;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import domain.UserService;
 import servlet.resolver.UserResolver;
 
 import java.io.IOException;
