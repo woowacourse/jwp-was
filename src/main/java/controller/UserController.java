@@ -7,6 +7,11 @@ import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
 
 public class UserController extends AbstractController {
+    private static final String USER_ID = "userId";
+    private static final String USER_PASSWORD = "password";
+    private static final String USER_NAME = "name";
+    private static final String USER_EMAIL = "email";
+
     private static final String TEXT_HTML = "text/html";
     private static final String TEXT_PLAIN = "text/plain";
     private static final String INDEX_HTML = "/index.html";
@@ -22,7 +27,12 @@ public class UserController extends AbstractController {
 
     @Override
     protected HttpResponse postMapping(HttpRequest request) {
-        Database.addUser(User.of(request));
+        Database.addUser(User.of(
+                request.getParam(USER_ID),
+                request.getParam(USER_PASSWORD),
+                request.getParam(USER_NAME),
+                request.getParam(USER_EMAIL)
+        ));
 
         return HttpResponse.redirection(request, TEXT_PLAIN, INDEX_HTML);
     }
