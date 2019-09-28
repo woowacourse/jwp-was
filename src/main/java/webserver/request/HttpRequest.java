@@ -51,6 +51,14 @@ public class HttpRequest {
         return requestStatusLine.getPath();
     }
 
+    public boolean containHeaderField(String headerField, String value) {
+        return requestHeader.contains(headerField, value);
+    }
+
+    public String getHeaderFieldValue(String headerField) {
+        return requestHeader.getHeaderFieldValue(headerField);
+    }
+
     public RequestStatusLine getRequestStatusLine() {
         return requestStatusLine;
     }

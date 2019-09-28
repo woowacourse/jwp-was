@@ -21,7 +21,7 @@ public class UrlMapper {
     }
 
     public static Controller getController(HttpRequest httpRequest) {
-        if (httpRequest.getRequestHeader().getHeaderFieldValue(HEADER_FIELD_ACCEPT).contains(CONTENT_TYPE_CSS)) {
+        if (httpRequest.containHeaderField(HEADER_FIELD_ACCEPT, CONTENT_TYPE_CSS)) {
             return urlMapper.get(PATH_CSS);
         }
 

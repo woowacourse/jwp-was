@@ -21,6 +21,6 @@ public class SignUpController extends AbstractController {
                 httpRequest.getParameter("email"));
         DataBase.addUser(user);
         httpResponse.addStatusLine(httpRequest, "302", "Found");
-        httpResponse.addHeader(HEADER_FIELD_LOCATION, HTTP_PROTOCOL + httpRequest.getRequestHeader().getHeaderFieldValue(HEADER_FIELD_HOST) + "/index.html");
+        httpResponse.addHeader(HEADER_FIELD_LOCATION, HTTP_PROTOCOL + httpRequest.getHeaderFieldValue(HEADER_FIELD_HOST) + "/index.html");
     }
 }

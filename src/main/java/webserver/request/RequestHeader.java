@@ -29,6 +29,11 @@ public class RequestHeader {
         return new RequestHeader(headerFields);
     }
 
+    public boolean contains(String headerField, String value) {
+        String headerFieldValue = getHeaderFieldValue(headerField);
+        return headerFieldValue.contains(value);
+    }
+
     public String getHeaderFieldValue(String fieldName) {
         if (headerFields.containsKey(fieldName)) {
             return headerFields.get(fieldName);
