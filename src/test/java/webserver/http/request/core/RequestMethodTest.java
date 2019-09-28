@@ -1,9 +1,8 @@
 package webserver.http.request.core;
 
-import webserver.http.exception.HttpRequestMethodException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import webserver.http.request.core.RequestMethod;
+import webserver.http.exception.HttpRequestMethodException;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;

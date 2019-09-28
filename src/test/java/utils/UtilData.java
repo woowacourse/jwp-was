@@ -8,7 +8,6 @@ import java.util.Arrays;
 public class UtilData {
     public static final String GET_METHOD = "GET";
     public static final String GET_PATH = "/index.html";
-    private static final String GET_PARAMS_PATH = "/user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
     public static final String POST_BODY = "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
     public static final String WRONG_POST_BODY_1 = "userId1javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
     public static final String WRONG_POST_BODY_2 = "userId1=javajigipassword=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
@@ -43,13 +42,12 @@ public class UtilData {
             "Content-Type: application/x-www-form-urlencoded \n",
             "Accept: */*"
     ));
-    public static final RequestPath REQUEST_GET_PARAM_PATH = new RequestPath(
-            RequestPrefixPath.of(GET_PARAMS_PATH), GET_PARAMS_PATH);
-
     public static final RequestData QUERY_DATA = new RequestQueryString(REQUEST_GET_PARAM_PATH);
     public static final RequestData BODY_DATA = new RequestBody(POST_BODY);
-
     public static final String POST_METHOD = "POST";
+    private static final String GET_PARAMS_PATH = "/user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
+    public static final RequestPath REQUEST_GET_PARAM_PATH = new RequestPath(
+            RequestPrefixPath.of(GET_PARAMS_PATH), GET_PARAMS_PATH);
     private static final String POST_PATH = "/user/create";
     public static final RequestPath REQUEST_POST_PATH = new RequestPath(
             RequestPrefixPath.of(POST_PATH), POST_PATH);

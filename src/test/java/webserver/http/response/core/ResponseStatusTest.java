@@ -2,7 +2,6 @@ package webserver.http.response.core;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import webserver.http.response.core.ResponseStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

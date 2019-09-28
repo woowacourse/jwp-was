@@ -9,9 +9,6 @@ import webserver.http.request.HttpRequest;
 import webserver.http.request.core.RequestLine;
 import webserver.http.request.core.RequestMethod;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static utils.UtilData.*;
 

@@ -12,7 +12,6 @@ import webserver.http.request.core.RequestPath;
 import webserver.http.response.HttpResponse;
 import webserver.http.response.core.ResponseContentType;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;

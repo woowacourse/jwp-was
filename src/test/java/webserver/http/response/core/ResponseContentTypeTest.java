@@ -1,9 +1,9 @@
 package webserver.http.response.core;
 
-import webserver.http.request.core.RequestPrefixPath;
-import webserver.http.request.core.RequestPath;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import webserver.http.request.core.RequestPath;
+import webserver.http.request.core.RequestPrefixPath;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static utils.UtilData.*;

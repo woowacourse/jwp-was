@@ -1,10 +1,8 @@
 package controller.core;
 
-import webserver.http.HttpHeaderField;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
@@ -25,7 +23,9 @@ public abstract class AbstractController implements Controller {
     @Override
     public abstract void service(OutputStream out, HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException;
 
-    protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) { }
+    protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
+    }
 
-    protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) { }
+    protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+    }
 }

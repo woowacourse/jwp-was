@@ -1,12 +1,12 @@
 package controller;
 
 import controller.exception.PathNotFoundException;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import webserver.http.HttpVersion;
 import webserver.http.request.HttpRequest;
 import webserver.http.request.core.RequestLine;
 import webserver.http.request.core.RequestMethod;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import webserver.http.response.HttpResponse;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;

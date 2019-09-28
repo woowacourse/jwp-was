@@ -6,7 +6,6 @@ import webserver.http.exception.CanNotParseDataException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static utils.UtilData.POST_BODY;
 import static utils.UtilData.*;
 
 class RequestBodyTest {

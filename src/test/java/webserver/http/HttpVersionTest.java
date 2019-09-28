@@ -1,9 +1,8 @@
 package webserver.http;
 
-import webserver.http.exception.HttpRequestVersionException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import webserver.http.HttpVersion;
+import webserver.http.exception.HttpRequestVersionException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
