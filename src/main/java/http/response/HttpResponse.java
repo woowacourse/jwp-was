@@ -55,4 +55,8 @@ public class HttpResponse {
     public HttpHeader getHttpHeader() {
         return httpHeader;
     }
+
+    public byte[] getBody() {
+        return body;
+    }
 }
