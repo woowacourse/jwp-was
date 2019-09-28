@@ -2,6 +2,7 @@ package http.session;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 public class HttpSession {
@@ -34,5 +35,17 @@ public class HttpSession {
 
     public void invalidate() {
         attributes.clear();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        HttpSession that = (HttpSession) o;
+        return (id.compareTo(that.id) == 0);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

@@ -16,11 +16,10 @@ public class HttpRequestFactory {
 
         Map<String, String> headers = getHeaders(lines.subList(1, lines.size()));
         HttpCookie cookie = getCookie(headers);
-
         HttpRequestHeader header = new HttpRequestHeader(headers);
 
         if ("POST".equals(httpStartLine.getMethod())) {
-            String body = IOUtils.readData(bufferedReader, Integer.parseInt(header.getHeader("content-length")));
+            String body = IOUtils.readData(bufferedReader, Integer.parseInt(header.getHeader("Content-Length")));
             HttpRequestBody httpRequestBody = new HttpRequestBody(body);
             return new HttpRequest(httpStartLine, header, cookie, httpRequestBody);
         }
@@ -28,9 +27,9 @@ public class HttpRequestFactory {
     }
 
     private static HttpCookie getCookie(final Map<String, String> headers) {
-        if (headers.containsKey("cookie")) {
-            String cookie = headers.get("cookie");
-            headers.remove("cookie");
+        if (headers.containsKey("Cookie")) {
+            String cookie = headers.get("Cookie");
+            headers.remove("Cookie");
             return new HttpCookie(cookie);
         }
         return new HttpCookie();

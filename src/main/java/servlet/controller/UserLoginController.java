@@ -13,10 +13,10 @@ public class UserLoginController extends HttpController {
     @Override
     protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         UserService userService = new UserService();
+        httpResponse.addHeader("Content-Type", "text/html");
 
         if (userService.login(UserResolver.resolve(httpRequest))) {
             httpResponse.addHeader("Location", "/index.html");
-            httpResponse.addHeader("Content-Type", "text/html");
             httpResponse.addCookie("logined", "true");
             httpResponse.addCookie("Path", "/");
             httpResponse.sendRedirect();

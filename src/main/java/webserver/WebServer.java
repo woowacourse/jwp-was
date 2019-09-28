@@ -1,5 +1,6 @@
 package webserver;
 
+import http.session.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import servlet.controller.*;
@@ -16,6 +17,8 @@ public class WebServer {
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
     private static final int DEFAULT_PORT = 8080;
     private static final int THREAD_POOL_COUNT = 100;
+    private static final String SESSION_NAME = "SESSIONID";
+
     private static Map<String, Controller> api;
 
     static {
@@ -28,6 +31,7 @@ public class WebServer {
     public static void main(String args[]) throws Exception {
         ThreadPoolExecutor executorService = (ThreadPoolExecutor) Executors.newFixedThreadPool(THREAD_POOL_COUNT);
         ControllerFinder controllerFinder = new ControllerFinder(Collections.unmodifiableMap(api));
+        SessionManager sessionManager = new SessionManager();
 
         int port = 0;
         if (args == null || args.length == 0) {
@@ -43,7 +47,7 @@ public class WebServer {
             // 클라이언트가 연결될때까지 대기한다.
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
-                executorService.execute(new RequestHandler(connection, controllerFinder));
+                executorService.execute(new RequestHandler(connection, controllerFinder, sessionManager));
                 logger.info("remain Thread Count : {}", THREAD_POOL_COUNT - executorService.getActiveCount());
             }
         }

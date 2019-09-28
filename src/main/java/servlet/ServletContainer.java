@@ -22,8 +22,4 @@ public class ServletContainer {
 
         return httpResponse;
     }
-
-    // HttpRequest => HttpServletRequest
-    // HttpServletRequest는 getCookie(), getHeader()
-    // HttpServletResponse는 Redirect나 Forward를 결정해주고 Model을 집어넣어주는 구조가 되고 쿠키를 설정해주는게 될듯 싶다
 }

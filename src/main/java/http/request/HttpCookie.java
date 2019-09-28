@@ -11,10 +11,12 @@ public class HttpCookie {
     }
 
     public HttpCookie(final String cookies) {
-        Arrays.stream(cookies.split(";"))
-                .map(line -> line.trim())
-                .map(line -> Arrays.asList(line.split("=")))
-                .forEach(line -> this.cookies.put(line.get(0), line.get(1)));
+        if (!cookies.equals("")) {
+            Arrays.stream(cookies.split(";"))
+                    .map(line -> line.trim())
+                    .map(line -> Arrays.asList(line.split("=")))
+                    .forEach(line -> this.cookies.put(line.get(0), line.get(1)));
+        }
     }
 
     public String getValue(String key) {

@@ -27,7 +27,7 @@ public class HttpRequest {
     }
 
     public String getCookie(String key) {
-        return httpCookie.getValue(key.toLowerCase());
+        return httpCookie.getValue(key);
     }
 
     public String getResourcePath() {

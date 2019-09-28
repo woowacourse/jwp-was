@@ -19,6 +19,7 @@ public class UserListController extends HttpController {
             View view = resolve("/user/list.html");
             view.addModel("users", userService.findAll());
             httpResponse.forward(view);
+            return;
         }
         httpResponse.forward(resolve("/index.html"));
     }

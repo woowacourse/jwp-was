@@ -11,6 +11,6 @@ public class HttpRequestHeader {
     }
 
     public String getHeader(final String key) {
-        return headers.get(key.toLowerCase());
+        return headers.get(key);
     }
 }

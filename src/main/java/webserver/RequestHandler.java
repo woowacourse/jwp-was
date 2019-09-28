@@ -4,6 +4,8 @@ import file.FileContainer;
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
 import http.response.HttpResponse;
+import http.session.HttpSession;
+import http.session.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import servlet.ServletContainer;
@@ -16,12 +18,14 @@ import java.net.URISyntaxException;
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private final ControllerFinder controllerFinder;
+    private final SessionManager sessionManager;
 
     private Socket connection;
 
-    public RequestHandler(Socket connectionSocket, ControllerFinder controllerFinder) {
+    public RequestHandler(Socket connectionSocket, ControllerFinder controllerFinder, SessionManager sessionManager) {
         this.connection = connectionSocket;
         this.controllerFinder = controllerFinder;
+        this.sessionManager = sessionManager;
     }
 
     public void run() {
@@ -35,7 +39,9 @@ public class RequestHandler implements Runnable {
             BufferedReader bufferedReader = getBufferedReader(in);
 
             HttpRequest httpRequest = HttpRequestFactory.create(bufferedReader);
+            HttpSession httpSession = sessionManager.getSession(httpRequest);
             HttpResponse httpResponse = new HttpResponse(new DataOutputStream(out));
+            httpResponse.addCookie(SessionManager.SESSION_NAME, httpSession.getId().toString());
 
             if (!fileContainer.process(httpRequest, httpResponse)) {
                 servletContainer.process(httpRequest, httpResponse);

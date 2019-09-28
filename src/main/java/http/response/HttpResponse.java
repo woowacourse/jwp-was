@@ -1,33 +1,39 @@
 package http.response;
 
 import com.google.common.base.Charsets;
+import http.session.HttpSession;
 import http.support.StatusCode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import servlet.view.View;
 import utils.FileIoUtils;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.stream.Collectors.toList;
+
 public class HttpResponse {
-    private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
     private static final String HTTP_VERSION = "HTTP/1.1 ";
     private static final String DELIMITER_OF_RESPONSE_HEADER = ": ";
     private static final Charset DEFAULT_CHARSET = Charsets.UTF_8;
 
     private final Map<String, String> headers = new HashMap<>();
-    private final List<String> cookies = new ArrayList<>();
+    private final Map<String, String> cookies = new HashMap<>();
     private final OutputStream outputStream;
+    private HttpSession httpSession;
 
     public HttpResponse(final OutputStream outputStream) {
         this.outputStream = outputStream;
+    }
+
+    public HttpResponse(DataOutputStream outputStream, HttpSession httpSession) {
+        this.outputStream = outputStream;
+        this.httpSession = httpSession;
     }
 
     public void addHeader(final String key, final String value) {
@@ -35,7 +41,7 @@ public class HttpResponse {
     }
 
     public void addCookie(final String key, final String value) {
-        cookies.add(key + "=" + value);
+        cookies.put(key, value);
     }
 
     public void forward(final View view) throws IOException {
@@ -49,10 +55,6 @@ public class HttpResponse {
 
         outputStream.write(body, 0, body.length);
         outputStream.flush();
-    }
-
-    private void writeNewLine() throws IOException {
-        outputStream.write("\r\n".getBytes(Charsets.UTF_8));
     }
 
     public void forward(String path) throws IOException, URISyntaxException {
@@ -95,8 +97,15 @@ public class HttpResponse {
     }
 
     private void writeCookies() throws IOException {
-        String cookies = String.join("; ", this.cookies);
+        List<String> temp = this.cookies.entrySet().stream()
+                .map(entry -> entry.getKey() + "=" + entry.getValue())
+                .collect(toList());
+        String cookies = String.join("; ", temp);
         outputStream.write(String.format("Set-Cookie: %s", cookies).getBytes());
         writeNewLine();
+    }
+
+    private void writeNewLine() throws IOException {
+        outputStream.write("\r\n".getBytes(Charsets.UTF_8));
     }
 }

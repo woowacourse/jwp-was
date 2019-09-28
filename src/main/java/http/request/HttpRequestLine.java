@@ -8,8 +8,8 @@ public class HttpRequestLine {
 
     public HttpRequestLine(final String line) {
         int index = line.indexOf(DELIMITER_OF_REQUEST_LINE);
-        this.key = line.substring(0, index).toLowerCase();
-        this.value = line.substring(index + 1).toLowerCase();
+        this.key = line.substring(0, index);
+        this.value = line.substring(index + 1);
     }
 
     public String getKey() {

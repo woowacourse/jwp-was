@@ -1,5 +1,6 @@
 package domain;
 
+import db.DataBase;
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +18,7 @@ public class UserServiceTest {
     @Test
     @DisplayName("로그인 성공 후 /index.html을 반환한다")
     public void loginSuccess() throws IOException {
+        DataBase.addUser(new User("javajigi", "password", "name", "java@slipp.net"));
         HttpRequest httpRequest = HttpRequestFactory.create(
                 Common.getBufferedReaderOfTextFile("HTTP_POST_USER_LOGIN.txt"));
         assertThat(userService.login(UserResolver.resolve(httpRequest))).isEqualTo(true);
