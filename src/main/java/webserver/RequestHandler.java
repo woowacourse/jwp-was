@@ -46,13 +46,10 @@ public class RequestHandler implements Runnable {
 
     private void handleRequest(HttpRequest httpRequest, HttpResponse httpResponse) {
         try {
-            if (resourceHttpRequestHandler.canHandle(httpRequest.getPath())) {
-                resourceHttpRequestHandler.handleHttpRequest(httpRequest, httpResponse);
-                return;
+            if (!resourceHttpRequestHandler.handleHttpRequest(httpRequest, httpResponse)) {
+                Controller controller = handlerMapping.getHandler(httpRequest.getPath());
+                controller.service(httpRequest, httpResponse);
             }
-
-            Controller controller = handlerMapping.getHandler(httpRequest.getPath());
-            controller.service(httpRequest, httpResponse);
         } catch (ResourceNotFoundException e) {
             log.error(e.getMessage(), e.getCause());
             httpResponse.setResponseStatus(ResponseStatus.NOT_FOUND);
