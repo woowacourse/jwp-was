@@ -3,7 +3,6 @@ package http.response;
 import http.common.HttpHeader;
 import http.common.HttpVersion;
 import http.request.HttpRequest;
-import http.response.exception.HttpVersionNotSupportedException;
 
 public class HttpResponse {
     private static final String LINE_FEED_AND_CARRIAGE_RETURN = "\r\n";
@@ -20,12 +19,7 @@ public class HttpResponse {
 
     public void setResponseStatus(ResponseStatus responseStatus) {
         HttpVersion httpVersion = httpRequest.getHttpVersion();
-
         this.statusLine = new StatusLine(httpVersion, responseStatus);
-
-        if (httpVersion.isNotSupportedVersion()) {
-            throw new HttpVersionNotSupportedException();
-        }
     }
 
     public void addHeaderAttribute(String key, String value) {

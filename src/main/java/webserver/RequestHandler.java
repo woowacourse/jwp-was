@@ -46,6 +46,7 @@ public class RequestHandler implements Runnable {
 
     private void handleRequest(HttpRequest httpRequest, HttpResponse httpResponse) {
         try {
+            checkHttpVersion(httpRequest);
             if (!resourceHttpRequestHandler.handleHttpRequest(httpRequest, httpResponse)) {
                 Controller controller = handlerMapping.getHandler(httpRequest.getPath());
                 controller.service(httpRequest, httpResponse);
@@ -59,6 +60,12 @@ public class RequestHandler implements Runnable {
         } catch (RuntimeException e) {
             log.error(e.getMessage(), e.getCause());
             httpResponse.setResponseStatus(ResponseStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private void checkHttpVersion(HttpRequest httpRequest) {
+        if (httpRequest.getHttpVersion().isNotSupportedVersion()) {
+            throw new HttpVersionNotSupportedException();
         }
     }
 
