@@ -1,15 +1,22 @@
 package http;
 
 public class HttpRequest {
-
     private final HttpRequestLine requestLine;
     private final HttpHeader header;
     private final HttpBody body;
+    private QueryString queryString;
 
     public HttpRequest(HttpRequestLine requestLine, HttpHeader header, HttpBody body) {
         this.requestLine = requestLine;
         this.header = header;
         this.body = body;
+        this.queryString = new QueryString();
+        addQueryString();
+    }
+
+    private void addQueryString() {
+        requestLine.getUri().addQueryString(queryString);
+        body.addQueryString(header, queryString);
     }
 
     public static class HttpRequestBuilder {
@@ -53,5 +60,9 @@ public class HttpRequest {
 
     public String getHeaderAttribute(String key) {
         return header.getValue(key);
+    }
+
+    public String getQueryParameter(String key) {
+        return queryString.getParameter(key);
     }
 }
