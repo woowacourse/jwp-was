@@ -2,7 +2,7 @@ package webserver;
 
 import controller.Controller;
 import controller.CreateUserController;
-import http.HttpRequest;
+import http.request.HttpRequest;
 
 import java.util.HashMap;
 import java.util.Map;

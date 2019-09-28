@@ -1,7 +1,7 @@
 package view;
 
-import http.HttpRequest;
-import http.HttpResponse;
+import http.request.HttpRequest;
+import http.response.HttpResponse;
 
 public class RedirectView implements View {
     private String viewName;

@@ -1,5 +1,8 @@
-package http;
+package http.request;
 
+import http.HttpBody;
+import http.HttpHeader;
+import http.HttpVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.IOUtils;
@@ -42,8 +45,8 @@ public class HttpRequestParser {
     private static HttpRequestLine parseRequestLine(BufferedReader br) throws IOException {
         String startLine = br.readLine();
         String[] startLineTokens = startLine.split(START_LINE_DELIMITER);
-        HttpMethod method = HttpMethod.of(startLineTokens[0]);
-        HttpUri uri = new HttpUri(startLineTokens[1]);
+        HttpRequestMethod method = HttpRequestMethod.of(startLineTokens[0]);
+        HttpRequestUri uri = new HttpRequestUri(startLineTokens[1]);
         HttpVersion version = HttpVersion.of(startLineTokens[2]);
         return new HttpRequestLine(method, uri, version);
     }

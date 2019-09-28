@@ -1,9 +1,9 @@
 package webserver;
 
 import controller.Controller;
-import http.HttpRequest;
-import http.HttpResponse;
 import http.MimeType;
+import http.request.HttpRequest;
+import http.response.HttpResponse;
 import view.View;
 import view.ViewResolver;
 

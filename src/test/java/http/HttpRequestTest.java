@@ -1,5 +1,9 @@
 package http;
 
+import http.request.HttpRequest;
+import http.request.HttpRequestLine;
+import http.request.HttpRequestMethod;
+import http.request.HttpRequestUri;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -12,8 +16,8 @@ public class HttpRequestTest {
     @Test
     void GET_Request_정상_생성() {
         HttpRequestLine requestLine = new HttpRequestLine(
-                HttpMethod.GET,
-                new HttpUri("/index.html"),
+                HttpRequestMethod.GET,
+                new HttpRequestUri("/index.html"),
                 HttpVersion.V_1_1);
 
         List<String> headerLines = Arrays.asList(
@@ -26,15 +30,15 @@ public class HttpRequestTest {
         HttpRequest httpRequest = new HttpRequest(requestLine, header, body);
 
         assertTrue(httpRequest.isStaticRequest());
-        assertEquals(httpRequest.getMethod(), HttpMethod.GET);
+        assertEquals(httpRequest.getMethod(), HttpRequestMethod.GET);
         assertEquals(httpRequest.getUri(), "/index.html");
     }
 
     @Test
     void POST_Request_정상_생성_build() {
         HttpRequestLine requestLine = new HttpRequestLine(
-                HttpMethod.POST,
-                new HttpUri("/user/create"),
+                HttpRequestMethod.POST,
+                new HttpRequestUri("/user/create"),
                 HttpVersion.V_1_1);
 
         List<String> headerLines = Arrays.asList(
@@ -55,7 +59,7 @@ public class HttpRequestTest {
                 .build();
 
         assertFalse(httpRequest.isStaticRequest());
-        assertEquals(httpRequest.getMethod(), HttpMethod.POST);
+        assertEquals(httpRequest.getMethod(), HttpRequestMethod.POST);
         assertEquals(httpRequest.getUri(), "/user/create");
     }
 }

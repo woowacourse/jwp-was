@@ -1,24 +1,24 @@
-package http;
+package http.response;
 
 import http.exception.NotFoundStatusException;
 
 import java.util.Arrays;
 
-public enum HttpStatus {
+public enum HttpResponseStatus {
     OK(200, "OK"),
     FOUND(302, "FOUND");
 
     private int statusCode;
     private String status;
 
-    HttpStatus(int statusCode, String status) {
+    HttpResponseStatus(int statusCode, String status) {
         this.statusCode = statusCode;
         this.status = status;
     }
 
-    public static HttpStatus of(int statusCode) {
-        return Arrays.stream(HttpStatus.values())
-                .filter(httpStatus -> httpStatus.statusCode == statusCode)
+    public static HttpResponseStatus of(int statusCode) {
+        return Arrays.stream(HttpResponseStatus.values())
+                .filter(httpResponseStatus -> httpResponseStatus.statusCode == statusCode)
                 .findAny()
                 .orElseThrow(NotFoundStatusException::new)
                 ;

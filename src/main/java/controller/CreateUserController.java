@@ -1,18 +1,15 @@
 package controller;
 
-import db.DataBase;
-import http.HttpMethod;
-import http.HttpRequest;
-import http.HttpResponse;
-import model.User;
-import view.RedirectView;
+import http.request.HttpRequest;
+import http.request.HttpRequestMethod;
+import http.response.HttpResponse;
 import view.View;
 
 public class CreateUserController extends AbstractController {
 
     @Override
     public View service(HttpRequest httpRequest, HttpResponse httpResponse) {
-        if (httpRequest.getMethod().equals(HttpMethod.GET)) {
+        if (httpRequest.getMethod().equals(HttpRequestMethod.GET)) {
             return doGet(httpRequest, httpResponse);
         }
 
@@ -21,25 +18,11 @@ public class CreateUserController extends AbstractController {
 
     @Override
     public View doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        User user = new User(
-                httpRequest.getParameter("userId"),
-                httpRequest.getParameter("password"),
-                httpRequest.getParameter("name"),
-                httpRequest.getParameter("email"));
-        DataBase.addUser(user);
-
-        return new RedirectView("index.html");
+        return null;
     }
 
     @Override
     public View doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        User user = new User(
-                httpRequest.getRequestBody("userId"),
-                httpRequest.getRequestBody("password"),
-                httpRequest.getRequestBody("name"),
-                httpRequest.getRequestBody("email"));
-        DataBase.addUser(user);
-
-        return new RedirectView("index.html");
+        return null;
     }
 }

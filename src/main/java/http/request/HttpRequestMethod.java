@@ -1,21 +1,21 @@
-package http;
+package http.request;
 
 import http.exception.NotFoundMethodException;
 
 import java.util.Arrays;
 
-public enum HttpMethod {
+public enum HttpRequestMethod {
     GET("GET"),
     POST("POST");
 
     private String method;
 
-    HttpMethod(String method) {
+    HttpRequestMethod(String method) {
         this.method = method;
     }
 
-    public static HttpMethod of(String method) {
-        return Arrays.stream(HttpMethod.values())
+    public static HttpRequestMethod of(String method) {
+        return Arrays.stream(HttpRequestMethod.values())
                 .filter(httpMethod -> httpMethod.method.equals(method))
                 .findAny()
                 .orElseThrow(NotFoundMethodException::new);

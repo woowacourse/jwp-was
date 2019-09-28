@@ -1,4 +1,8 @@
-package http;
+package http.request;
+
+import http.HttpBody;
+import http.HttpHeader;
+import http.QueryString;
 
 public class HttpRequest {
     private final HttpRequestLine requestLine;
@@ -54,7 +58,7 @@ public class HttpRequest {
         return requestLine.getUri().toString();
     }
 
-    public HttpMethod getMethod() {
+    public HttpRequestMethod getMethod() {
         return requestLine.getMethod();
     }
 

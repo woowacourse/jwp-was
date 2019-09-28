@@ -1,4 +1,7 @@
-package http;
+package http.response;
+
+import http.HttpHeader;
+import http.HttpVersion;
 
 public class HttpResponse {
     private static final String CRLF = "\r\n";
@@ -8,7 +11,7 @@ public class HttpResponse {
     private static final int OK_CODE = 200;
     private static final int FOUND_CODE = 302;
 
-    private HttpStatus status;
+    private HttpResponseStatus status;
     private HttpHeader header = new HttpHeader();
     private byte[] body;
 
@@ -31,7 +34,7 @@ public class HttpResponse {
     }
 
     public void setStatus(int statusCode) {
-        status = HttpStatus.of(statusCode);
+        status = HttpResponseStatus.of(statusCode);
     }
 
     public void setBody(byte[] body) {
@@ -50,7 +53,7 @@ public class HttpResponse {
                 CRLF;
     }
 
-    public HttpStatus getStatus() {
+    public HttpResponseStatus getStatus() {
         return status;
     }
 
