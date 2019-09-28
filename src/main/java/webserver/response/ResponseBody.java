@@ -28,7 +28,11 @@ public class ResponseBody {
         }
     }
 
-    public ResponseBody(byte[] body) {
+    public static ResponseBody of(String content) {
+        return new ResponseBody((content.getBytes()));
+    }
+
+    private ResponseBody(byte[] body) {
         this.body = body;
     }
 

@@ -5,6 +5,9 @@ import java.util.Map;
 import java.util.Set;
 
 public class ResponseHeaders {
+    public static final String CONTENT_TYPE = "Content-Type";
+    public static final String CONTENT_LENGTH = "Content-Length";
+    public static final String LOCATION = "Location";
 
     private Map<String, Object> headers;
 

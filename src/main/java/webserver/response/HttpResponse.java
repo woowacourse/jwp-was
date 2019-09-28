@@ -1,20 +1,14 @@
 package webserver.response;
 
-import com.github.jknack.handlebars.Handlebars;
-import com.github.jknack.handlebars.Template;
-import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
-import com.github.jknack.handlebars.io.TemplateLoader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import webserver.request.HttpVersion;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+
+import static webserver.response.ResponseHeaders.*;
 
 public class HttpResponse {
-    private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
+    private static final String ERROR_VIEW_FORMAT = "error/%d.html";
 
     private HttpVersion httpVersion;
     private ResponseStatus responseStatus;
@@ -38,14 +32,8 @@ public class HttpResponse {
         return new HttpResponse(
                 responseStatus,
                 new ResponseHeaders(),
-                new ResponseBody(String.format("error/%d.html", responseStatus.getCode())));
+                new ResponseBody(String.format(ERROR_VIEW_FORMAT, responseStatus.getCode())));
     }
-
-    public void forward(String filePath) {
-        responseBody = new ResponseBody(filePath);
-        responseHeaders.put("Content-Length", responseBody.getBodyLength());
-    }
-
 
     public Object getHeader(String key) {
         return responseHeaders.get(key);
@@ -56,16 +44,38 @@ public class HttpResponse {
     }
 
     public void setContentType(String contentType) {
-        responseHeaders.put("Content-Type", contentType);
+        responseHeaders.put(CONTENT_TYPE, contentType);
     }
 
     public void setContentType(MediaType contentType) {
-        responseHeaders.put("Content-Type", contentType.getMediaType());
+        responseHeaders.put(CONTENT_TYPE, contentType.getMediaType());
     }
 
     public void sendRedirect(String uriPath) {
-        responseHeaders.put("Location", uriPath);
+        responseHeaders.put(LOCATION, uriPath);
         setResponseStatus(ResponseStatus.FOUND);
+    }
+
+    public void setResponseStatus(ResponseStatus responseStatus) {
+        this.responseStatus = responseStatus;
+    }
+
+    public String getViewPath() {
+        return responseBody.getPath();
+    }
+
+    public ResponseStatus getResponseStatus() {
+        return responseStatus;
+    }
+
+    public void forward(String filePath) {
+        responseBody = new ResponseBody(filePath);
+        responseHeaders.put(CONTENT_LENGTH, responseBody.getBodyLength());
+    }
+
+    public void templateForward(String content) {
+        responseBody = ResponseBody.of(content);
+        responseHeaders.put(CONTENT_LENGTH, responseBody.getBodyLength());
     }
 
     public List<String> responseBuilder() {
@@ -81,39 +91,6 @@ public class HttpResponse {
             responseExport.add(new String(responseBody.getBody()));
         }
         return responseExport;
-    }
-
-    public void setResponseStatus(ResponseStatus responseStatus) {
-        this.responseStatus = responseStatus;
-    }
-
-    public String getViewPath() {
-        return responseBody.getPath();
-    }
-
-    public ResponseStatus getResponseStatus() {
-        return responseStatus;
-    }
-
-    public void templateForward(String filePath, Map<String, Object> model) {
-        String appliedTemplate = null;
-        try {
-            Template template = getHandlebars().compile(filePath);
-            appliedTemplate = template.apply(model);
-        } catch (IOException e) {
-            logger.error("filePath : {}, model: {}", filePath, model);
-        }
-        responseBody = new ResponseBody(appliedTemplate.getBytes());
-        responseHeaders.put("Content-Length", responseBody.getBodyLength());
-    }
-
-    private Handlebars getHandlebars() {
-        TemplateLoader loader = new ClassPathTemplateLoader();
-        loader.setPrefix("/templates");
-        loader.setSuffix("");
-        Handlebars handlebars = new Handlebars(loader);
-        handlebars.registerHelper("plusOne", (context, options) -> (Integer) context + 1);
-        return handlebars;
     }
 
     @Override
