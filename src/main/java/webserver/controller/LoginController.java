@@ -4,12 +4,8 @@ import http.request.Request;
 import http.response.Cookie;
 import http.response.Response;
 import http.session.Session;
-import http.session.Sessions;
 import model.LoginService;
 import model.exception.LoginFailException;
-import webserver.support.CookieParser;
-
-import java.util.Map;
 
 public class LoginController extends HttpController {
     private LoginController() {
@@ -21,8 +17,7 @@ public class LoginController extends HttpController {
 
     @Override
     protected void doPost(Request request, Response response) {
-        Map<String, String> cookies = CookieParser.parse(request.extractHeader("Cookie"));
-        Session session = Sessions.getInstance().getSession(cookies.get("JSESSIONID"));
+        Session session = request.getSession();
         try {
             String location = new LoginService().login(request.extractFormData());
             session.setAttribute("logined", "true");

@@ -3,16 +3,13 @@ package webserver.controller;
 import http.request.Request;
 import http.response.Response;
 import http.session.Session;
-import http.session.Sessions;
 import model.User;
 import model.UserService;
-import webserver.support.CookieParser;
 import webserver.support.ModelAndView;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Map;
 
 public class UserListController extends HttpController {
 
@@ -25,19 +22,17 @@ public class UserListController extends HttpController {
 
     @Override
     protected void doGet(Request request, Response response) throws IOException, URISyntaxException {
-        ModelAndView modelAndView;
-        Map<String, String> cookies = CookieParser.parse(request.extractHeader("Cookie"));
-        Session session = Sessions.getInstance().getSession(cookies.get("JSESSIONID"));
+        Session session = request.getSession();
 
         if ("true".equals(session.getAttribute("logined"))) {
             List<User> users = new UserService().findAll();
-            modelAndView = new ModelAndView("user/list");
+            ModelAndView modelAndView = new ModelAndView("user/list");
             modelAndView.setModels("users", users);
             response.forward(modelAndView);
             return;
         }
 
-        modelAndView = new ModelAndView("/user/login.html");
+        ModelAndView modelAndView = new ModelAndView("/user/login.html");
         response.forward(modelAndView);
     }
 

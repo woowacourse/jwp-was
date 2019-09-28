@@ -5,7 +5,11 @@ import http.request.Request;
 import http.request.RequestBody;
 import http.request.RequestHeader;
 import http.request.RequestLine;
+import http.response.CookieCollection;
+import http.session.Session;
+import http.session.SessionStorage;
 import utils.IOUtils;
+import webserver.support.CookieParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,11 +28,14 @@ public class RequestFactory {
         RequestLine requestLine = new RequestLine(requestData[0]);
         RequestHeader requestHeader = new RequestHeader(requestData[1]);
 
-        if (requestLine.isPost()) {
-            return makeRequestWithBody(br, requestLine, requestHeader);
-        }
+        CookieCollection cookies = new CookieCollection(CookieParser.parse(requestHeader.get("Cookie")));
+        Session session = SessionStorage.getInstance().getSession(
+                cookies.findCookie("JSESSIONID").getValue());
 
-        return new Request(requestLine, requestHeader);
+        if (requestLine.isPost()) {
+            return makeRequestWithBody(br, requestLine, requestHeader, cookies, session);
+        }
+        return new Request(requestLine, requestHeader, cookies, session);
     }
 
     private static String[] validateRequest(String parsedData) {
@@ -41,9 +48,10 @@ public class RequestFactory {
         return requestData;
     }
 
-    private static Request makeRequestWithBody(BufferedReader br, RequestLine requestLine, RequestHeader requestHeader) throws IOException {
+    private static Request makeRequestWithBody(BufferedReader br, RequestLine requestLine, RequestHeader requestHeader,
+                                               CookieCollection cookie, Session session) throws IOException {
         String body = IOUtils.readData(br, Integer.parseInt(requestHeader.get("content-length")));
         RequestBody requestBody = new RequestBody(body);
-        return new Request(requestLine, requestHeader, requestBody);
+        return new Request(requestLine, requestHeader, requestBody, cookie, session);
     }
 }
