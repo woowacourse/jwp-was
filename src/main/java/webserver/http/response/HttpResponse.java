@@ -5,12 +5,15 @@ import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import webserver.http.HttpHeaderField;
 import webserver.http.HttpVersion;
+import webserver.http.request.HttpRequest;
 import webserver.http.response.core.ResponseContentType;
 import webserver.http.response.core.ResponseHeader;
 import webserver.http.response.core.ResponseStatus;
 import webserver.http.response.core.ResponseStatusLine;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URISyntaxException;
 
 public class HttpResponse {
@@ -49,11 +52,22 @@ public class HttpResponse {
                 responseHeader.getResponseHeaders() + CRLF + CRLF;
     }
 
-    public byte[] responseBody(String path) throws IOException, URISyntaxException {
+    public void sendResponse(OutputStream out, HttpRequest httpRequest) throws IOException, URISyntaxException {
+        DataOutputStream dos = new DataOutputStream(out);
+        dos.writeBytes(doResponse());
+        if (isOK()) {
+            byte[] body = responseBody(httpRequest.getRequestPath().getFullPath());
+            addHeader(HttpHeaderField.CONTENT_LENGTH, String.valueOf(body.length));
+            dos.write(body, 0, body.length);
+        }
+        dos.flush();
+    }
+
+    private byte[] responseBody(String path) throws IOException, URISyntaxException {
         return FileIoUtils.loadFileFromClasspath(path);
     }
 
-    public boolean hasField(String contentLength) {
-        return responseHeader.hasResponseField(contentLength);
+    private boolean isOK() {
+        return responseStatusLine.getResponseStatusCode() == ResponseStatus.OK.getHttpStatusCode();
     }
 }

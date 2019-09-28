@@ -21,9 +21,8 @@ public class CreateUserController extends AbstractController {
 
     @Override
     public void service(OutputStream out, HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
-        DataOutputStream dos = new DataOutputStream(out);
         doPost(httpRequest, httpResponse);
-        sendResponse(dos);
+        httpResponse.sendResponse(out, httpRequest);
     }
 
     @Override

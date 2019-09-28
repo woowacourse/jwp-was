@@ -29,15 +29,6 @@ public class RequestHandler implements Runnable {
         this.connection = connectionSocket;
     }
 
-    private static void sendResponse(OutputStream out, HttpResponse httpResponse, HttpRequest httpRequest) throws IOException, URISyntaxException {
-        DataOutputStream dos = new DataOutputStream(out);
-        byte[] body = httpResponse.responseBody(httpRequest.getRequestPath().getFullPath());
-        httpResponse.addHeader(HttpHeaderField.CONTENT_LENGTH, String.valueOf(body.length));
-        dos.writeBytes(httpResponse.doResponse());
-        dos.write(body, 0, body.length);
-        dos.flush();
-    }
-
     public void run() {
         log.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
@@ -49,7 +40,7 @@ public class RequestHandler implements Runnable {
             if (isStaticFile(httpRequest.getRequestPath())) {
                 httpResponse.addStatus();
                 httpResponse.addHeader(HttpHeaderField.of("Content-Type:"), ResponseContentType.of(httpRequest.getRequestPath()));
-                sendResponse(out, httpResponse, httpRequest);
+                httpResponse.sendResponse(out, httpRequest);
             } else {
                 AbstractController controller = ControllerFactory.mappingController(httpRequest, httpResponse);
                 controller.service(out, httpRequest, httpResponse);
