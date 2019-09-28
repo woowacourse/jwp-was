@@ -23,5 +23,6 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.10'
 
     compile 'org.apache.commons:commons-lang3:3.9'
+    compile 'org.apache.tika:tika-core:1.22';
 
 }

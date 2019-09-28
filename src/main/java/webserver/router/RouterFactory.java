@@ -1,6 +1,7 @@
 package webserver.router;
 
 import webserver.controller.UserController;
+import webserver.controller.UserListController;
 
 public class RouterFactory {
     private static Router GLOBAL_ROUTER;
@@ -10,7 +11,8 @@ public class RouterFactory {
         OrderedRouter orderedRouter = OrderedRouter.getInstance();
 
         Router basicRouter = BasicRouter.getInstance()
-                .addController(pattern -> pattern.equals("/user/create"), new UserController());
+                .addController(pattern -> pattern.equals("/user/create"), new UserController())
+                .addController(pattern -> pattern.equals("/user/list"), new UserListController());
 
         // register routers in order
         orderedRouter.pushBack(FileServerRouter.getInstance());

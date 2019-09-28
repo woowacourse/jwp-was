@@ -37,6 +37,7 @@ public class HttpResponse {
                     String.format("HTTP/1.1 %d %s \r\n", 200, "OK"),
                     contentType.toHeaderValue() + "\r\n",
                     "Content-Length: " + lengthOfBodyContent + "\r\n",
+                    "Set-Cookie: logined=true; Path=/ \r\n",
                     "\r\n");
 
             for (String line : lines) {

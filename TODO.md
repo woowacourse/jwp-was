@@ -60,10 +60,16 @@
 - [ ] 애러처리
     - [ ] 에러 페이지 (for 클라이언트)
         - [ ] 익셉션과 애러코드 매칭
-        - [ ] 해당 메세지 화면에 보여주기
+        - [ ] 해당 메세지 화면에 보여주기 (애러코드에 따른 에러페이지를 두어도 좋을)
         - [ ] 재미있는 그림 보여주기 (+ image/png 적용)
     - [ ] 에러 메시지 로깅
         - [ ] 파일에 남기기
+        
+ - [x] 템플릿이 적용된 페이지 처리
+    - [x] /user/list 핸들바 사용해서 요청처리
+    - [ ] /user/profile 핸들바 사용해서 요청처리 (2페이지 정도는 동적으로 만들어야 공통된 로직을 빼고 싶을 것 같아서)
+    - [x] tika 사용해서 mimeType 알아내기 (ex. .hbs 확장자 지원)
+    - [ ] 템플릿 적용할 컨트롤러를 위해서 공통되는 로직 모으기
 
 
 ### 해당값을 결정하는 순서
@@ -82,6 +88,19 @@
 - [ ] json 형태로 요청이 올 경우 ()
 - [ ] 압축을 해달라고 요청이 올 경우 (gzip 같은 경우 지원해보자..! 그리고 브라우저에서 확인하기)
     - 이 경우 효과가 있는지 elapsedTime 을 측정해봐도 좋을듯
+
+### 참고
+- 아파치에서는 어떤것들을 지원해주는지 
+    - 설정파일을 통해 살펴보기, https://www.sitepoint.com/htaccess-for-all/
+- MimeType
+    - https://developer.mozilla.org/ko/docs/Web/HTTP/Basics_of_HTTP/MIME_types
+    - 파일에서 MimeType 알아내기, https://www.baeldung.com/java-file-mime-type
+- 쿠키와 세션
+    - https://docs.microsoft.com/en-us/windows/win32/wininet/http-cookies
+    - https://docs.microsoft.com/en-us/windows/win32/wininet/http-sessions
+- Content negotiation
+    - 각 브라우저에서 Accept 헤더 기본 값, https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation/List_of_default_Accept_values
+    - https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation
 
 ### 흐름?
 결국엔 두 프로그램 간에서 서로 통신을 하기 위한?

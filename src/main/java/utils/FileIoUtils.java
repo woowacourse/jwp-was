@@ -1,6 +1,7 @@
 package utils;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -24,6 +25,17 @@ public class FileIoUtils {
 
     private static Optional<URL> getUrlFromFilePath(String filePath) {
         return Optional.ofNullable(FileIoUtils.class.getClassLoader().getResource(filePath));
+    }
+
+    public static Optional<URI> getUriFromFilePath(String filePath) {
+        return Optional.ofNullable(FileIoUtils.class.getClassLoader().getResource(filePath))
+                .map(url -> {
+                    try {
+                        return url.toURI();
+                    } catch (URISyntaxException e) {
+                        return null;
+                    }
+                });
     }
 
     public static String parseExtensionFromFilePath(String filePath) {
