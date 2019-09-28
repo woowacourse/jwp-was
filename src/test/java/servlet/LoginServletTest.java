@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import test.HttpTestClient;
 import webserver.http.HttpHeaders;
-import webserver.http.HttpStatus;
+import webserver.http.response.HttpStatus;
 
 public class LoginServletTest {
     private HttpTestClient httpTestClient = new HttpTestClient(HttpTestClient.DEFAULT_PORT);

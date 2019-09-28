@@ -2,11 +2,7 @@ package webserver.http.response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.http.Cookie;
-import webserver.http.Cookies;
-import webserver.http.HttpHeaders;
-import webserver.http.HttpStatus;
-import webserver.http.HttpVersion;
+import webserver.http.*;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -27,13 +23,13 @@ public class HttpResponse {
     private final HttpHeaders headers = new HttpHeaders();
     private final OutputStream out;
     private final Cookies cookies;
-    private HttpStatus httpStatus;
-    private HttpVersion httpVersion = DEFAULT_HTTP_VERSION;
+    private StatusLine statusLine;
     private String resource;
 
     public HttpResponse(final OutputStream out) {
         this.out = out;
         this.cookies = new Cookies();
+        this.statusLine = new StatusLine();
     }
 
     public void forward(final String resource) {
@@ -83,6 +79,8 @@ public class HttpResponse {
 
 
     private void writeStartLine(final DataOutputStream dos) throws IOException {
+        final HttpVersion httpVersion = statusLine.getHttpVersion();
+        final HttpStatus httpStatus = statusLine.getHttpStatus();
         dos.writeBytes(String.format("%s %s %s\n", httpVersion.getHttpVersion(), httpStatus.getCode(), httpStatus.getPhrase()));
     }
 
@@ -121,7 +119,7 @@ public class HttpResponse {
     }
 
     public void setHttpVersion(final HttpVersion httpVersion) {
-        this.httpVersion = httpVersion;
+        statusLine.setHttpVersion(httpVersion);
     }
 
     public void setHeader(final String name, final String value) {
@@ -129,7 +127,7 @@ public class HttpResponse {
     }
 
     public void setStatus(final HttpStatus httpStatus) {
-        this.httpStatus = httpStatus;
+        statusLine.setHttpStatus(httpStatus);
     }
 
     public String getResource() {
@@ -137,7 +135,7 @@ public class HttpResponse {
     }
 
     public HttpStatus getHttpStatus() {
-        return httpStatus;
+        return statusLine.getHttpStatus();
     }
 
     public String getHeader(final String name) {
@@ -145,6 +143,6 @@ public class HttpResponse {
     }
 
     public HttpVersion getHttpVersion() {
-        return httpVersion;
+        return statusLine.getHttpVersion();
     }
 }

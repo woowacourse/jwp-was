@@ -2,7 +2,7 @@ package view.excpetion;
 
 import view.View;
 import view.ViewResolver;
-import webserver.http.HttpStatus;
+import webserver.http.response.HttpStatus;
 import webserver.http.response.HttpResponse;
 
 public class ExceptionViewResolver implements ViewResolver {

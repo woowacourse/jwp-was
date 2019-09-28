@@ -6,7 +6,7 @@ import webserver.WebServer;
 import webserver.http.Cookie;
 import webserver.http.Cookies;
 import webserver.http.HttpHeaders;
-import webserver.http.HttpStatus;
+import webserver.http.response.HttpStatus;
 import webserver.http.request.HttpMethod;
 import webserver.http.HttpVersion;
 import webserver.http.Pair;

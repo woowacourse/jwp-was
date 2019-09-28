@@ -10,7 +10,7 @@ import view.statics.StaticResourceMapping;
 import view.statics.StaticViewResolver;
 import webserver.http.Cookie;
 import webserver.http.Cookies;
-import webserver.http.HttpStatus;
+import webserver.http.response.HttpStatus;
 import webserver.http.request.HttpRequest;
 import webserver.http.request.HttpRequestFactory;
 import webserver.http.response.HttpResponse;

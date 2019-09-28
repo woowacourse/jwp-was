@@ -3,7 +3,7 @@ package webserver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import test.HttpTestClient;
-import webserver.http.HttpStatus;
+import webserver.http.response.HttpStatus;
 
 import java.io.IOException;
 

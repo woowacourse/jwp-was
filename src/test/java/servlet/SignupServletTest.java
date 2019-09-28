@@ -3,7 +3,7 @@ package servlet;
 import org.junit.jupiter.api.Test;
 import test.HttpTestClient;
 import webserver.http.HttpHeaders;
-import webserver.http.HttpStatus;
+import webserver.http.response.HttpStatus;
 
 class SignupServletTest {
     private HttpTestClient httpTestClient = new HttpTestClient(HttpTestClient.DEFAULT_PORT);

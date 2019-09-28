@@ -3,7 +3,7 @@ package servlet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import test.HttpTestClient;
-import webserver.http.HttpStatus;
+import webserver.http.response.HttpStatus;
 
 class IndexServletTest {
     private HttpTestClient httpTestClient;
