@@ -33,12 +33,15 @@ public class DispatcherServlet {
         } catch (NotFoundFileException | NotFoundURIException e) {
             logger.error(e.getMessage());
             httpResponse.error(HttpStatus.NOT_FOUND);
+            httpResponse.errorWrite();
         } catch (MethodNotAllowedException e) {
             logger.error(e.getMessage());
             httpResponse.error(HttpStatus.METHOD_NOT_ALLOW);
+            httpResponse.errorWrite();
         } catch (URISyntaxException e) {
             logger.error(e.getMessage());
             httpResponse.error(HttpStatus.INTERNAL_SERVER_ERROR);
+            httpResponse.errorWrite();
         }
     }
 }

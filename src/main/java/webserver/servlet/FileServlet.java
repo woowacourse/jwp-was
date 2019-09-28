@@ -11,6 +11,8 @@ import java.io.IOException;
 import static webserver.http.response.FileType.isSupportedFile;
 
 public class FileServlet implements HttpServlet {
+    public static final String EXTENSION_DELIMITER = ".";
+    public static final int SUBSTRING_INDEX = 1;
     private String fileExtension;
     private Resolver resolver;
 
@@ -25,7 +27,7 @@ public class FileServlet implements HttpServlet {
     }
 
     private String parseFileExtension(String url) {
-        return url.substring(url.lastIndexOf(".") + 1);
+        return url.substring(url.lastIndexOf(EXTENSION_DELIMITER) + SUBSTRING_INDEX);
     }
 
     @Override

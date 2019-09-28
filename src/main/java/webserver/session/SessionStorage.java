@@ -1,4 +1,4 @@
-package db;
+package webserver.session;
 
 import webserver.session.HttpSession;
 

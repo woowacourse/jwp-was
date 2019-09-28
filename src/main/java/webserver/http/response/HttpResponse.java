@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 
 public class HttpResponse {
     private static final String NEW_LINE = "\r\n";
+    public static final String COOKIE_KEY_VALUE_DELIMITER = "=";
+    public static final String COOKIE_VALUES_DELIMITER = ";";
     private final String HEADER_DELIMITER = ": ";
     private final String LINE_DELIMITER = " ";
     private Map<String, String> cookies = new HashMap<>();
@@ -34,6 +36,11 @@ public class HttpResponse {
         this.httpStatus = httpStatus;
     }
 
+    public void errorWrite() throws IOException {
+        writeLine();
+        writeHeader();
+        end();
+    }
     public void appendHeader(String key, Object value) {
         headers.put(key, value);
     }
@@ -49,7 +56,7 @@ public class HttpResponse {
 
     private String parseCookies(Map<String, String> cookies) {
         return cookies.entrySet().stream()
-                .map(s -> String.join("=", s.getKey(), s.getValue(), ";"))
+                .map(s -> String.join(COOKIE_KEY_VALUE_DELIMITER, s.getKey(), s.getValue()) + COOKIE_VALUES_DELIMITER)
                 .collect(Collectors.joining(" "));
     }
 
@@ -66,7 +73,7 @@ public class HttpResponse {
 
     private void appendCookieHeader() {
         if (!cookies.isEmpty()) {
-            appendHeader("Set-Cookie", parseCookies(cookies) + "Path=/");
+            appendHeader("Set-Cookie", parseCookies(cookies) + " Path=/");
         }
     }
 

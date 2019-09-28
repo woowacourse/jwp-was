@@ -4,7 +4,9 @@ import db.DataBase;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 import webserver.resolver.Resolver;
+import webserver.session.HttpSession;
 import webserver.view.ModelAndView;
+import webserver.view.RedirectView;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -21,8 +23,13 @@ public class UserListServlet extends AbstractRequestServlet {
     @Override
     public ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         Map<String, Object> model = new HashMap<>();
-        model.put("users", DataBase.findAll());
-        return new ModelAndView(resolver.createView("/user/list"), model);
+        HttpSession httpSession = httpRequest.getSession();
+        if (httpSession.getAttribute("user") != null) {
+            model.put("users", DataBase.findAll());
+            return new ModelAndView(resolver.createView("/user/list"), model);
+        }
+        return new ModelAndView(new RedirectView("/user/login"));
+
     }
 
     @Override

@@ -1,6 +1,6 @@
 package webserver.http.request;
 
-import db.SessionStorage;
+import webserver.session.SessionStorage;
 import webserver.http.response.HttpVersion;
 import webserver.session.HttpSession;
 
@@ -21,10 +21,14 @@ public class HttpRequest {
 
     private HttpSession setSession() {
         String sessionId = cookie.getSessionId();
-        if (sessionId != null && SessionStorage.exists(sessionId)) {
+        if (isSessionExists(sessionId)) {
             return SessionStorage.get(sessionId);
         }
         return SessionStorage.create();
+    }
+
+    private boolean isSessionExists(String sessionId) {
+        return sessionId != null && SessionStorage.exists(sessionId);
     }
 
     public HttpSession getSession() {

@@ -20,11 +20,6 @@ public class UserCreateServlet extends AbstractRequestServlet {
     }
 
     @Override
-    public ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
-        return new ModelAndView(resolver.createView(url));
-    }
-
-    @Override
     public ModelAndView doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         User user = new User(httpRequest.getBody("userId"), httpRequest.getBody("password"), httpRequest.getBody("name"), httpRequest.getBody("email"));
         logger.debug(">>> User : {}", user);
