@@ -6,6 +6,7 @@ import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import db.DataBase;
 import http.common.Cookie;
+import http.common.SessionManager;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.User;
@@ -18,13 +19,12 @@ import java.util.*;
 public class UserListController extends AbstractController {
     private static final Logger logger = LoggerFactory.getLogger(UserListController.class);
 
+    private static final String LOGINED = "logined";
+    private static final String JSESSIONID = "JSESSIONID";
+
     @Override
     protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        List<Cookie> cookies = httpRequest.getCookies();
-        Optional<Cookie> loginedCookie = cookies.stream()
-                .filter(cookie -> cookie.getName().equals("logined"))
-                .findFirst();
-        if (loginedCookie.isPresent() && loginedCookie.get().getValue().equals("true")) {
+        if (isLogined(httpRequest)) {
             TemplateLoader loader = new ClassPathTemplateLoader();
             loader.setPrefix("/templates");
             loader.setSuffix(".html");
@@ -49,5 +49,14 @@ public class UserListController extends AbstractController {
             return;
         }
         httpResponse.redirect("/user/login.html");
+    }
+
+    private boolean isLogined(HttpRequest httpRequest) {
+        List<Cookie> cookies = httpRequest.getCookies();
+        Optional<Cookie> cookieOptional = cookies.stream()
+                .filter(cookie -> cookie.getName().equals(JSESSIONID))
+                .findFirst();
+        return cookieOptional.isPresent() &&
+                "true".equals(SessionManager.getSession(cookieOptional.get().getValue()).getAttribute(LOGINED));
     }
 }
