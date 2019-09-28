@@ -1,9 +1,5 @@
 package web.controller;
 
-import com.github.jknack.handlebars.Handlebars;
-import com.github.jknack.handlebars.Template;
-import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
-import com.github.jknack.handlebars.io.TemplateLoader;
 import domain.db.DataBase;
 import domain.model.User;
 import org.slf4j.Logger;
@@ -12,7 +8,6 @@ import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 import webserver.storage.HttpSession;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,19 +30,16 @@ public class UserController {
         DataBase.addUser(user);
 
         response.sendRedirect("/");
-
     }
 
     public static void goLoginForm(HttpRequest request, HttpResponse response) {
         response.setContentType("text/html");
         response.forward("/user/login.html");
-
     }
 
     public static void goLoginFail(HttpRequest request, HttpResponse response) {
         response.setContentType("text/html");
         response.forward("/user/login_failed.html");
-
     }
 
     public static void login(HttpRequest request, HttpResponse response) {
@@ -65,7 +57,6 @@ public class UserController {
         response.addHeader("Set-Cookie", "JSESSIONID=" + httpSession.getId() + "; Path=/");
         httpSession.setAttribute("user", user);
         response.sendRedirect("/");
-
     }
 
     public static void goUserList(HttpRequest request, HttpResponse response) {
@@ -80,18 +71,6 @@ public class UserController {
         Map<String, Object> model = new HashMap<>();
         model.put("users", DataBase.findAll());
 
-        try {
-            TemplateLoader loader = new ClassPathTemplateLoader();
-            loader.setPrefix("/templates");
-            loader.setSuffix(".html");
-            Handlebars handlebars = new Handlebars(loader);
-            handlebars.registerHelper("plusOne", (context, options) -> (Integer) context + 1);
-
-            Template template = handlebars.compile("user/list");
-            String aa = template.apply(model);
-            response.templateForward(aa);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        response.templateForward("user/list.html", model);
     }
 }

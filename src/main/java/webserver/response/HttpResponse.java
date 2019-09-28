@@ -1,9 +1,15 @@
 package webserver.response;
 
+import com.github.jknack.handlebars.Handlebars;
+import com.github.jknack.handlebars.Template;
+import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
+import com.github.jknack.handlebars.io.TemplateLoader;
 import webserver.request.HttpVersion;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class HttpResponse {
     private HttpVersion httpVersion;
@@ -17,26 +23,14 @@ public class HttpResponse {
         this.responseHeaders = new ResponseHeaders();
     }
 
-    public HttpResponse(ResponseStatus responseStatus, ResponseHeaders responseHeaders, ResponseBody responseBody) {
+    private HttpResponse(ResponseStatus responseStatus, ResponseHeaders responseHeaders, ResponseBody responseBody) {
         this.httpVersion = HttpVersion.HTTP_1_1;
         this.responseStatus = responseStatus;
         this.responseHeaders = responseHeaders;
         this.responseBody = responseBody;
     }
 
-    public static HttpResponse notFound() {
-        return sendErrorResponse(ResponseStatus.NOT_FOUND);
-    }
-
-    public static HttpResponse internalServerError() {
-        return sendErrorResponse(ResponseStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    public static HttpResponse methodNotAllowed() {
-        return sendErrorResponse(ResponseStatus.METHOD_NOT_ALLOWED);
-    }
-
-    private static HttpResponse sendErrorResponse(ResponseStatus responseStatus) {
+    public static HttpResponse sendErrorResponse(ResponseStatus responseStatus) {
         return new HttpResponse(
                 responseStatus,
                 new ResponseHeaders(),
@@ -47,7 +41,6 @@ public class HttpResponse {
         responseBody = new ResponseBody(filePath);
         responseHeaders.put("Content-Length", responseBody.getBodyLength());
     }
-
 
 
     public Object getHeader(String key) {
@@ -98,8 +91,23 @@ public class HttpResponse {
         return responseStatus;
     }
 
-    public void templateForward(String aa) {
-        responseBody = new ResponseBody(aa.getBytes());
+    public void templateForward(String filePath, Map<String, Object> model) {
+        String appliedTemplate = null;
+        try {
+            Template template = getHandlebars().compile(filePath);
+            appliedTemplate = template.apply(model);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        responseBody = new ResponseBody(appliedTemplate.getBytes());
         responseHeaders.put("Content-Length", responseBody.getBodyLength());
+    }
+
+    private Handlebars getHandlebars() {
+        TemplateLoader loader = new ClassPathTemplateLoader();
+        loader.setPrefix("/templates");
+        Handlebars handlebars = new Handlebars(loader);
+        handlebars.registerHelper("plusOne", (context, options) -> (Integer) context + 1);
+        return handlebars;
     }
 }
