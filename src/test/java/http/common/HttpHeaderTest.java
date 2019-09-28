@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.google.common.net.HttpHeaders.CONTENT_LENGTH;
+import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static utils.StringUtils.BLANK;
@@ -22,7 +23,7 @@ class HttpHeaderTest {
     @Test
     void 잘못된_생성_header_parameter가_null일_때() {
         List<String> header = new ArrayList<>();
-        header.add("Content-type: text/html");
+        header.add(String.format("%s: %s", CONTENT_TYPE, ContentType.HTML));
         header.add(null);
         assertThrows(InvalidHttpHeaderException.class, () -> new HttpHeader(header));
     }
@@ -30,21 +31,18 @@ class HttpHeaderTest {
     @Test
     void 잘못된_생성_header_parameter_형식이_잘못된_경우() {
         List<String> header = new ArrayList<>();
-        header.add("Content-type");
+        header.add(CONTENT_TYPE);
         assertThrows(InvalidHttpHeaderException.class, () -> new HttpHeader(header));
     }
 
     @Test
     void header_필드_조회() {
-        String contentType = "Content-type";
-        String textHTML = "text/html";
-
         List<String> header = new ArrayList<>();
-        header.add(String.format("%s: %s", contentType, textHTML));
+        header.add(String.format("%s: %s", CONTENT_TYPE, ContentType.HTML));
         header.add(String.format("%s: ", CONTENT_LENGTH));
         HttpHeader httpHeader = new HttpHeader(header);
 
-        assertThat(httpHeader.getHeaderAttribute(contentType)).isEqualTo(textHTML);
+        assertThat(httpHeader.getHeaderAttribute(CONTENT_TYPE)).isEqualTo(ContentType.HTML);
         assertThat(httpHeader.getHeaderAttribute(CONTENT_LENGTH)).isEqualTo(BLANK);
     }
 

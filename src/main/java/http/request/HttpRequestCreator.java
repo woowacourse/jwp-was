@@ -11,11 +11,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class HttpRequestCreator {
-    private static final String BLANK = "";
-    private static final String CONTENT_LENGTH = "Content-Length";
-    private static final String CONTENT_TYPE = "Content-Type";
+import static com.google.common.net.HttpHeaders.CONTENT_LENGTH;
+import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
+import static utils.StringUtils.BLANK;
 
+public class HttpRequestCreator {
     public static HttpRequest create(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 

@@ -4,6 +4,8 @@ import http.common.HttpHeader;
 import http.common.HttpVersion;
 import http.request.HttpRequest;
 
+import static com.google.common.net.HttpHeaders.SET_COOKIE;
+
 public class HttpResponse {
     private static final String LINE_FEED_AND_CARRIAGE_RETURN = "\r\n";
     private static final String RESPONSE_HEADER_SERIALIZE_FORMAT = "%s" + LINE_FEED_AND_CARRIAGE_RETURN + "%s";
@@ -26,7 +28,7 @@ public class HttpResponse {
     }
 
     public void addCookie(String name, String value) {
-        addHeaderAttribute("Set-Cookie", String.format("%s=%s", name, value));
+        addHeaderAttribute(SET_COOKIE, String.format("%s=%s", name, value));
     }
 
     public byte[] serialize() {

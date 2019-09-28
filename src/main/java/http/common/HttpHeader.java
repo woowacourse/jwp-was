@@ -9,17 +9,18 @@ import utils.StringUtils;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.google.common.net.HttpHeaders.COOKIE;
+
 public class HttpHeader {
     public static final String SESSIONID = "SessionID";
 
     private static final String EMPTY_HEADER_NAME_ERROR_MESSAGE = "헤더 이름의 값이 필요합니다.";
     private static final String HEADER_LINE_DELIMITER = ": ";
     private static final String HEADER_VALUES_DELIMITER = ";";
-    private static final String COOKIE = "Cookie";
     private static final String HEADER_FIELD_FORMAT = "%s: %s\r\n";
     private static final int LINE_DELIMITER_LENGTH = HEADER_LINE_DELIMITER.length();
     private static final int ZERO = 0;
-    public static final int INVALID_SEPARATOR_POSITION = -1;
+    private static final int INVALID_SEPARATOR_POSITION = -1;
 
     private final Map<String, List<String>> httpHeader = new HashMap<>();
     private final Cookie cookie = new Cookie();
