@@ -4,6 +4,8 @@ import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import webserver.request.HttpVersion;
 
 import java.io.IOException;
@@ -12,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 public class HttpResponse {
+    private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
+
     private HttpVersion httpVersion;
     private ResponseStatus responseStatus;
     private ResponseHeaders responseHeaders;
@@ -97,7 +101,7 @@ public class HttpResponse {
             Template template = getHandlebars().compile(filePath);
             appliedTemplate = template.apply(model);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("filePath : {}, model: {}", filePath, model);
         }
         responseBody = new ResponseBody(appliedTemplate.getBytes());
         responseHeaders.put("Content-Length", responseBody.getBodyLength());
@@ -106,6 +110,7 @@ public class HttpResponse {
     private Handlebars getHandlebars() {
         TemplateLoader loader = new ClassPathTemplateLoader();
         loader.setPrefix("/templates");
+        loader.setSuffix("");
         Handlebars handlebars = new Handlebars(loader);
         handlebars.registerHelper("plusOne", (context, options) -> (Integer) context + 1);
         return handlebars;
