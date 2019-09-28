@@ -1,8 +1,12 @@
 package webserver.request;
 
 import webserver.controller.RequestMapping;
+import webserver.storage.Cookie;
+import webserver.storage.HttpSession;
+import webserver.storage.SessionManager;
 
 import java.util.List;
+import java.util.Optional;
 
 public class HttpRequest {
     private static final String BLANK = "";
@@ -52,8 +56,8 @@ public class HttpRequest {
         requestBody.put(bodyLine);
     }
 
-    public String getCookie() {
-        return requestHeaders.get("Cookie");
+    public Cookie getCookie() {
+        return new Cookie(requestHeaders.get("Cookie"));
     }
 
     public RequestMapping getRequestMapping() {
@@ -85,5 +89,11 @@ public class HttpRequest {
 
     public HttpVersion getVersion() {
         return requestLine.getVersion();
+    }
+
+    public HttpSession getSession() {
+        return Optional.ofNullable(getCookie().get("JESESSIONID"))
+                .map(id -> SessionManager.getInstance().getSession(id))
+                .orElse(SessionManager.getInstance().createSession());
     }
 }
