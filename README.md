@@ -50,7 +50,7 @@
     - [x] String getId() 구현
     - [x] void setAttribute(String name, Object value) 구현
     - [x] Object getAttribute(String name) 구현
-    - [ ] removeAttribute(String name) 구현
-    - [ ] void invalidate() 구현
+    - [x] removeAttribute(String name) 구현
+    - [x] void invalidate() 구현
 ## 의문사항
 - HTTP response version이 어떻게 결정되는지? request로 온 HTTP버전에 맞춰서 결정되는지 아니면 server에서 정해진 버전으로만 응답하는지?
