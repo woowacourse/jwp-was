@@ -8,6 +8,8 @@ import webserver.message.exception.NotFoundFileException;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
 import webserver.message.response.ResponseCookie;
+import webserver.session.HttpSession;
+import webserver.session.SessionContextHolder;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -22,6 +24,7 @@ public class LoginController extends AbstractController {
     private static final String TEMPLATES_PATH = "./templates";
     private static final String USER_LOGIN_PAGE = "/user/login.html";
     private static final String LOGIN_FAILED_PAGE = "/user/login_failed.html";
+    private static final String SESSION_ID = "sessionId";
 
     @Override
     protected Response doGet(Request request) {
@@ -46,6 +49,7 @@ public class LoginController extends AbstractController {
         return new Response.Builder()
                 .redirectUrl(INDEX_PAGE_URL)
                 .addCookie(createCookie("logined", "true"))
+                .addCookie(createCookie(SESSION_ID, enrollSession(userId).getId()))
                 .build();
     }
 
@@ -57,5 +61,12 @@ public class LoginController extends AbstractController {
 
     private ResponseCookie createCookie(final String key, final String value) {
         return new ResponseCookie.Builder(key, value).path("/").build();
+    }
+
+    private HttpSession enrollSession(final String userId) {
+        HttpSession session = HttpSession.newInstance();
+        session.setAttribute("user", DataBase.findUserById(userId).get());
+        SessionContextHolder.addSession(session);
+        return session;
     }
 }
