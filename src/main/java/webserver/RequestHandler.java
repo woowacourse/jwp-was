@@ -35,10 +35,8 @@ public class RequestHandler implements Runnable {
             DispatcherServlet.doDispatch(httpRequest, httpResponse);
             HttpResponseSender.send(httpResponse, dos);
             dos.close();
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
         }
     }
 }

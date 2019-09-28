@@ -37,10 +37,6 @@ public class HttpResponse {
         header.addHeader(CONTENT_LENGTH_KEY, String.valueOf(body.length));
     }
 
-    public String getHeaderLines() {
-        return header.toString();
-    }
-
     public String getStatusLine() {
         return HttpVersion.V_1_1.getVersion() + WHITE_SPACE +
                 status.getStatusCode() + WHITE_SPACE +
@@ -50,6 +46,14 @@ public class HttpResponse {
 
     public HttpResponseStatus getStatus() {
         return status;
+    }
+
+    public String getHeaderLines() {
+        return header.toString();
+    }
+
+    public String getHeaderAttribute(String key) {
+        return header.getValue(key);
     }
 
     public byte[] getBody() {

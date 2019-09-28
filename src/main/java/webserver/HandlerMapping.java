@@ -2,6 +2,7 @@ package webserver;
 
 import controller.Controller;
 import controller.CreateUserController;
+import controller.LoginUserController;
 import http.request.HttpRequest;
 
 import java.util.HashMap;
@@ -12,6 +13,7 @@ public class HandlerMapping {
 
     static {
         uriMapping.put("/user/create", new CreateUserController());
+        uriMapping.put("/user/login", new LoginUserController());
     }
 
     public static Controller handle(HttpRequest httpRequest) {

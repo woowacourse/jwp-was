@@ -12,8 +12,7 @@ public class RedirectView implements View {
 
     @Override
     public void render(HttpRequest httpRequest, HttpResponse httpResponse) {
-        httpResponse.setStatus(302);
-        httpResponse.addHeader("Location", "/" + viewName);
+        httpResponse.response3xx(viewName);
     }
 
     @Override
