@@ -16,11 +16,13 @@ public class LoginServlet extends AbstractServlet {
         String password = httpRequest.getParam(USER_PASSWORD_KEY);
         if (login(userId, password)) {
             response.redirect("/index.html");
-            response.setHeader(SET_COOKIE, "logined=true; Path=/");
+            response.setCookie("logined", "true");
+            response.setCookie("Path", "/");
             return;
         }
         response.redirect("/user/login_failed.html");
-        response.setHeader(SET_COOKIE, "logined=false; Path=/");
+        response.setCookie("logined", "false");
+        response.setCookie("Path", "/");
     }
 
     private boolean login(String userId, String password) {

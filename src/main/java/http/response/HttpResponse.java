@@ -9,6 +9,9 @@ import static http.response.HttpStatus.FOUND;
 import static http.response.HttpStatus.OK;
 
 public class HttpResponse {
+    private static final String COOKIE_DELIMITER = "; ";
+    private static final String KEY_VALUE_DELIMITER = "=";
+
     private HttpVersion version;
     private HttpStatus status;
     private HttpHeaders headers;
@@ -46,6 +49,14 @@ public class HttpResponse {
 
     public HttpHeaders getHeaders() {
         return headers;
+    }
+
+    public void setCookie(String key, String value) {
+        String cookie = key + KEY_VALUE_DELIMITER + value;
+        if (headers.existHeader(SET_COOKIE)) {
+            cookie = headers.getHeader(SET_COOKIE) + COOKIE_DELIMITER + cookie;
+        }
+        headers.put(SET_COOKIE, cookie);
     }
 
     public void setBody(byte[] body, HttpMimeType mediaType) {
