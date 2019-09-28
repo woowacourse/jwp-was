@@ -5,7 +5,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static http.HttpString.CONTENT_LENGTH_KEY;
+
 public class HttpHeader {
+    private static final String NOT_EXIST_BODY = "-1";
+
     private Map<String, String> headers = new HashMap<>();
 
     public HttpHeader() {
@@ -25,7 +29,7 @@ public class HttpHeader {
     }
 
     public int getContentLength() {
-        return Integer.parseInt(headers.getOrDefault("Content-Length", "-1"));
+        return Integer.parseInt(headers.getOrDefault(CONTENT_LENGTH_KEY, NOT_EXIST_BODY));
     }
 
     public void addHeader(String key, String value) {

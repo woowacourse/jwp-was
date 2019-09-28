@@ -2,6 +2,9 @@ package http.request;
 
 import http.HttpVersion;
 
+import static http.HttpString.CRLF;
+import static http.HttpString.WHITE_SPACE;
+
 public class HttpRequestLine {
 
     private final HttpRequestMethod method;
@@ -28,8 +31,8 @@ public class HttpRequestLine {
 
     @Override
     public String toString() {
-        return method.getMethod() + " " +
-                uri.toString() + " " +
-                version.getVersion() + "\r\n";
+        return method.getMethod() + WHITE_SPACE +
+                uri.toString() + WHITE_SPACE +
+                version.getVersion() + CRLF;
     }
 }

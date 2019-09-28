@@ -1,9 +1,9 @@
 package http;
 
-public class HttpBody {
-    private static final String QUERY_STRING_CONTENT_TYPE = "application/x-www-form-urlencoded";
-    private static final String CONTENT_TYPE_KEY = "Content-Type";
+import static http.HttpString.CONTENT_TYPE_KEY;
+import static http.HttpString.QUERY_STRING_CONTENT_TYPE;
 
+public class HttpBody {
     private final String body;
 
     public HttpBody(String body) {
