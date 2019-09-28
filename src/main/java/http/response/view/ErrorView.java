@@ -6,16 +6,19 @@ import http.response.ResponseStatus;
 
 import java.util.Map;
 
-public class RedirectView implements View {
+public class ErrorView implements View {
+    private final ResponseStatus responseStatus;
     private final Map<HTTP, String> header = Maps.newHashMap();
+    private final byte[] body;
 
-    public RedirectView(String path) {
-        header.put(HTTP.LOCATION, path);
+    public ErrorView(ResponseStatus responseStatus, String message) {
+        this.responseStatus = responseStatus;
+        this.body = message.getBytes();
     }
 
     @Override
     public ResponseStatus getResponseStatus() {
-        return ResponseStatus.FOUND;
+        return ResponseStatus.NOT_FOUND;
     }
 
     @Override
@@ -25,6 +28,6 @@ public class RedirectView implements View {
 
     @Override
     public byte[] getBody() {
-        return "".getBytes();
+        return body;
     }
 }

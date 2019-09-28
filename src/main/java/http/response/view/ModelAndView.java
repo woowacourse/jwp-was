@@ -4,24 +4,26 @@ import com.google.common.collect.Maps;
 import http.ContentType;
 import http.HTTP;
 import http.response.ResponseStatus;
-import utils.FileIoUtils;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Map;
 
-public class DefaultView implements View {
+public class ModelAndView implements View {
     private final Map<HTTP, String> header = Maps.newHashMap();
     private final byte[] body;
 
-    public DefaultView(String path) throws IOException, URISyntaxException {
-        this.body = findBody(path);
+    public ModelAndView(String path, Map<String, Object> model) throws IOException {
+        this(path, model, new HandlebarResolver());
+    }
+
+    public ModelAndView(String path, Map<String, Object> model, TemplateResolver templateResolver) throws IOException {
+        this.body = createBody(path, model, templateResolver);
         header.put(HTTP.CONTENT_TYPE, ContentType.valueByPath(path).getContents() + ";charset=utf-8");
         header.put(HTTP.CONTENT_LENGTH, String.valueOf(body.length));
     }
 
-    private byte[] findBody(String path) throws IOException, URISyntaxException {
-        return FileIoUtils.loadFileFromClasspath(path);
+    private byte[] createBody(String path, Map<String, Object> model, TemplateResolver templateResolver) throws IOException {
+        return templateResolver.getBody(path, model).getBytes();
     }
 
     @Override

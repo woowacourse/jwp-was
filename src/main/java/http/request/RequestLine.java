@@ -4,8 +4,8 @@ import http.RequestMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class RequestFirstLine {
-    private static final Logger logger = LoggerFactory.getLogger(RequestFirstLine.class);
+public class RequestLine {
+    private static final Logger logger = LoggerFactory.getLogger(RequestLine.class);
     private static final String FIRST_LINE_DELIMITER = " ";
     private static final String URL_DELIMITER = "\\?";
 
@@ -14,8 +14,8 @@ public class RequestFirstLine {
     private String query;
     private final String version;
 
-    public RequestFirstLine(String firstLine) {
-        logger.info("request firstLine contents: {}", firstLine);
+    public RequestLine(String firstLine) {
+        logger.info("request-line contents: {}", firstLine);
         String[] tokens = firstLine.split(FIRST_LINE_DELIMITER);
         this.requestMethod = RequestMethod.valueOf(tokens[0]);
         urlParse(tokens[1]);

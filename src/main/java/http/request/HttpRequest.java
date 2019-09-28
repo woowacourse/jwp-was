@@ -8,7 +8,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
 public class HttpRequest implements AutoCloseable {
-    private RequestFirstLine requestFirstLine;
+    private RequestLine requestLine;
     private RequestHeader requestHeader;
     private RequestBody requestBody;
 
@@ -16,7 +16,7 @@ public class HttpRequest implements AutoCloseable {
 
     public HttpRequest(InputStream in) throws IOException {
         bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-        this.requestFirstLine = new RequestFirstLine(bufferedReader.readLine());
+        this.requestLine = new RequestLine(bufferedReader.readLine());
 
         this.requestHeader = new RequestHeader(bufferedReader);
 
@@ -26,16 +26,24 @@ public class HttpRequest implements AutoCloseable {
         }
     }
 
+    public String getHeaderContents(HTTP http) {
+        return requestHeader.getHeaderContents(http.getPhrase());
+    }
+
+    public String getCookieValue(String name) {
+        return requestHeader.getCookieValue(name);
+    }
+
     public boolean checkMethod(RequestMethod requestMethod) {
-        return requestFirstLine.getMethod().equals(requestMethod);
+        return requestLine.getMethod().equals(requestMethod);
     }
 
     public String getPath() {
-        return requestFirstLine.getPath();
+        return requestLine.getPath();
     }
 
     public String getQueryString() {
-        return decode(requestFirstLine.getQuery());
+        return decode(requestLine.getQuery());
     }
 
     public String getBody() {

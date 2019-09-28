@@ -3,6 +3,9 @@ package controller;
 import http.RequestMethod;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import http.response.ResponseResolver;
+import http.response.ResponseStatus;
+import http.response.view.ErrorView;
 
 public abstract class AbstractController implements Controller {
 
@@ -15,7 +18,17 @@ public abstract class AbstractController implements Controller {
         doPost(request, response);
     }
 
-    abstract void doGet(HttpRequest request, HttpResponse response);
+    void doGet(HttpRequest request, HttpResponse response) {
+        resolveMethodNotFound(response);
+    }
 
-    abstract void doPost(HttpRequest request, HttpResponse response);
+
+    void doPost(HttpRequest request, HttpResponse response) {
+        resolveMethodNotFound(response);
+    }
+
+
+    private void resolveMethodNotFound(HttpResponse response) {
+        ResponseResolver.resolve(new ErrorView(ResponseStatus.METHOD_NOT_ALLOWED, "Method not allowed"), response);
+    }
 }
