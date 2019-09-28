@@ -8,6 +8,7 @@ public class Cookie {
     public Cookie(String name, String value) {
         this.name = name;
         this.value = value;
+        this.path = "/";
     }
 
     public String getName() {

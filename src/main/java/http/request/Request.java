@@ -2,6 +2,7 @@ package http.request;
 
 import exception.NotFoundRequestElementException;
 import http.Cookie;
+import http.Session;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +21,7 @@ public class Request {
     private Map<String, String> header;
     private Map<String, String> parameter;
     private Map<String, Cookie> cookies;
+    private Session session;
 
     public Request(Map<String, String> header, Map<String, String> parameter) {
         this.header = header;
@@ -53,6 +55,18 @@ public class Request {
 
     public String getParameter(String key) {
         return parameter.get(key);
+    }
+
+    public Cookie getCookie(String sessionId) {
+        return cookies.get(sessionId);
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
+
+    public void setSessionValue(String name, Object value) {
+        session.setAttribute(name, value);
     }
 
     private void containsCookie(Map<String, String> header) {

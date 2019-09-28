@@ -21,18 +21,16 @@ public class UserLoginController extends AbstractController {
     public void doPost(Request request, Response response) {
         String userId = request.getParameter(USER_ID);
         String password = request.getParameter(PASSWORD);
-        Cookie cookie = new Cookie(LOGINED, TRUE);
-        cookie.setPath(PATH);
 
         if (!DataBase.isContainId(userId) || !DataBase.isRightPassword(userId, password)) {
-            cookie.setValue(FALSE);
-            response.addCookie(cookie);
+            request.setSessionValue(LOGINED, false);
             response.setHttpStatus(HttpStatus.FOUND);
             response.sendRedirect(USER_LOGIN_FAILED_URL, HttpStatus.FOUND);
             return;
         }
 
-        response.addCookie(cookie);
+        request.setSessionValue("logined", true);
+        request.setSessionValue("userId", userId);
         response.setHttpStatus(HttpStatus.FOUND);
         response.sendRedirect(INDEX_URL, HttpStatus.FOUND);
     }

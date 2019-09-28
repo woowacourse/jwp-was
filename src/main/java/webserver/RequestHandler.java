@@ -2,6 +2,9 @@ package webserver;
 
 import controller.Controller;
 import controller.ControllerHandler;
+import http.Cookie;
+import http.Session;
+import http.SessionStore;
 import http.request.Request;
 import http.request.RequestParser;
 import http.response.Response;
@@ -16,7 +19,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -42,25 +48,30 @@ public class RequestHandler implements Runnable {
             RequestParser requestParser = new RequestParser(in);
             Request request = new Request(requestParser.getHeaderInfo(), requestParser.getParameter());
 
-            String url = request.getPath();
-            String extension = ExtractInformationUtils.extractExtension(url);
-
             Response response = new Response();
             ResponseWriter responseWriter = new ResponseWriter();
-
-            setResponse(request, url, extension, response);
+            setResponse(request, response);
             responseWriter.send(dos, response);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void setResponse(Request request, String url, String extension, Response response) {
+    private void setResponse(Request request, Response response) {
+        String url = request.getPath();
+        String extension = ExtractInformationUtils.extractExtension(url);
+
+        if (extension.equals(HTML) || extension.startsWith(PREFIX_SLASH)) {
+            SessionStore.setSession(request, response);
+            System.out.println(SessionStore.getSessionSize() + "세션사이즈");
+        }
+
         if (!extension.startsWith(PREFIX_SLASH)) {
             String classPath = getClassPath(url, extension);
             response.forward(classPath, HttpStatus.OK);
             return;
         }
+
 
         Optional<Controller> controller = controllerHandler.getController(request.getPath());
         if (controller.isPresent()) {
