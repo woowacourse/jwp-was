@@ -5,6 +5,8 @@ import http.response.ResponseStatus;
 
 import java.util.Map;
 
+import static com.google.common.net.HttpHeaders.LOCATION;
+
 public class RedirectView implements View {
     private final String viewName;
 
@@ -15,6 +17,6 @@ public class RedirectView implements View {
     @Override
     public void render(Map<String, Object> model, HttpResponse httpResponse) {
         httpResponse.setResponseStatus(ResponseStatus.FOUND);
-        httpResponse.addHeaderAttribute("Location", viewName.replace("redirect: ", ""));
+        httpResponse.addHeaderAttribute(LOCATION, viewName.replace("redirect: ", ""));
     }
 }
