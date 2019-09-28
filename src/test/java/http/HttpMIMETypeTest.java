@@ -1,5 +1,6 @@
 package http;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static http.HttpMimeType.CSS;
@@ -8,7 +9,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class HttpMimeTypeTest {
     @Test
-    void Accept의_첫번째_Mime_TYPE_추출() {
+    @DisplayName("Accept의 첫번째 MIME Type 추출")
+    void getMimeTypeFromAccept() {
         String accept = "text/html,application/xhtml+xml,application/xml;q=0.9," +
                 "image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3";
         String extension = "html";
@@ -19,7 +21,8 @@ class HttpMimeTypeTest {
     }
 
     @Test
-    void 해당하는_Mime_TYPE이_없는_경우_확장자를_보고_판단() {
+    @DisplayName("Accept가 */*인 경우 확장자를 보고 판단")
+    void allAccept() {
         String accept = "*/*";
         String extension = "css";
 

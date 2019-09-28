@@ -1,5 +1,6 @@
 package http;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static http.HttpHeaders.CONTENT_LENGTH;
@@ -7,7 +8,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class HttpHeadersTest {
     @Test
-    void header_속성에_해당하는_값을_가져온다() {
+    @DisplayName("header 속성에 해당하는 값을 가져온다")
+    void getHeader() {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.put("Host", "localhost:8080");
 
@@ -15,7 +17,8 @@ class HttpHeadersTest {
     }
 
     @Test
-    void content_length_속성이_있는_경우() {
+    @DisplayName("header가 있는 경우")
+    void existHeader() {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.put(CONTENT_LENGTH, "5");
 
@@ -23,7 +26,8 @@ class HttpHeadersTest {
     }
 
     @Test
-    void content_length_속성이_없는_경우() {
+    @DisplayName("header가 없는 경우")
+    void notExistHeader() {
         HttpHeaders httpHeaders = new HttpHeaders();
 
         assertThat(httpHeaders.existHeader(CONTENT_LENGTH)).isFalse();

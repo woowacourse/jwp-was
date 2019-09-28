@@ -5,6 +5,7 @@ import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
 import http.response.HttpResponse;
 import model.User;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -20,7 +21,8 @@ class UserCreateServletTest {
     private UserCreateServlet userController = new UserCreateServlet();
 
     @Test
-    void user_생성() throws IOException {
+    @DisplayName("User 생성")
+    void create() throws IOException {
         InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "Http_POST.txt"));
         HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
         HttpResponse response = new HttpResponse(request.getVersion());

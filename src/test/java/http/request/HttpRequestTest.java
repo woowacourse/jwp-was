@@ -16,7 +16,8 @@ class HttpRequestTest {
     private static final String TEST_DIRECTORY = "./src/test/resources/";
 
     @Test
-    void HttpRequest_GET_생성() throws IOException {
+    @DisplayName("HttpRequest GET 생성")
+    void createGetRequest() throws IOException {
         InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "Http_GET.txt"));
         HttpRequest httpRequest = HttpRequestFactory.makeHttpRequest(in);
         HttpHeaders httpHeaders = httpRequest.getHeaders();
@@ -31,7 +32,8 @@ class HttpRequestTest {
     }
 
     @Test
-    void HttpRequest_POST_생성() throws IOException {
+    @DisplayName("HttpRequest Post 생성")
+    void createPostRequest() throws IOException {
         InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "Http_POST.txt"));
         HttpRequest httpRequest = HttpRequestFactory.makeHttpRequest(in);
         HttpHeaders httpHeaders = httpRequest.getHeaders();
@@ -48,14 +50,17 @@ class HttpRequestTest {
     }
 
     @Test
-    void Request가_비어있을_때_예외_발생() {
+    @DisplayName("Requset가 비어있을 때 EmptyHttpRequestException 발생")
+    void emptyRequest() {
         InputStream in = new ByteArrayInputStream("".getBytes());
 
-        assertThatThrownBy(() -> HttpRequestFactory.makeHttpRequest(in)).isInstanceOf(EmptyHttpRequestException.class);
+        assertThatThrownBy(() -> HttpRequestFactory.makeHttpRequest(in))
+                .isInstanceOf(EmptyHttpRequestException.class);
     }
 
     @Test
-    void request_line_parsing_결과가_3개가_아니면_예외_발생() {
+    @DisplayName("Request line parsing 결과가 3개가 아니면 예외 발생")
+    void requestLineException() {
         String request = "GET /index.html\n"
                 + "Host: localhost:8080\n"
                 + "Connection: keep-alive\n"
@@ -66,6 +71,7 @@ class HttpRequestTest {
     }
 
     @Test
+    @DisplayName("Query params GET (URL에 붙은 경우)")
     void QueryParams_GET() throws IOException {
         InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "Http_GET.txt"));
         HttpRequest httpRequest = HttpRequestFactory.makeHttpRequest(in);
@@ -76,6 +82,7 @@ class HttpRequestTest {
     }
 
     @Test
+    @DisplayName("Query params GET (body에 붙은 경우)")
     void QueryParams_POST() throws IOException {
         InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "Http_POST.txt"));
         HttpRequest httpRequest = HttpRequestFactory.makeHttpRequest(in);

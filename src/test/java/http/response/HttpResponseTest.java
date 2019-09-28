@@ -4,7 +4,6 @@ import http.HttpHeaders;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static http.HttpHeaders.COOKIE;
 import static http.HttpHeaders.SET_COOKIE;
 import static http.HttpVersion.DEFAULT_VERSION;
 import static http.response.HttpStatus.*;
@@ -54,8 +53,8 @@ public class HttpResponseTest {
     @DisplayName("response에 set-cookie 값 추가시 key, value로 추가")
     void setCookie() {
         HttpResponse response = new HttpResponse(DEFAULT_VERSION);
-        response.setCookie("key1","value1");
-        response.setCookie("key2","value2");
+        response.setCookie("key1", "value1");
+        response.setCookie("key2", "value2");
 
         assertThat(response.getHeaders().getHeader(SET_COOKIE))
                 .isEqualTo("key1=value1; key2=value2");
