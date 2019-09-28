@@ -10,10 +10,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class HttpHeader {
-    public static final String EMPTY_HEADER_NAME_ERROR_MESSAGE = "헤더 이름의 값이 필요합니다.";
-
+    private static final String EMPTY_HEADER_NAME_ERROR_MESSAGE = "헤더 이름의 값이 필요합니다.";
     private static final String HEADER_LINE_DELIMITER = ": ";
-    public static final String HEADER_VALUES_DELIMITER = "; ";
+    private static final String HEADER_VALUES_DELIMITER = "; ";
     private static final String COOKIE = "Cookie";
     private static final String HEADER_FIELD_FORMAT = "%s: %s\r\n";
     private static final int HTTP_HEADER_PARAMETER_SIZE = 2;
@@ -63,18 +62,25 @@ public class HttpHeader {
         httpHeader.put(key, Lists.newArrayList(value));
     }
 
+    //TODO: return type을 List로 변환하기
     public String getHeaderAttribute(String key) {
         if (StringUtils.isEmpty(key)) {
             throw new InvalidHeaderKeyException(EMPTY_HEADER_NAME_ERROR_MESSAGE);
         }
 
-        return String.join(HEADER_VALUES_DELIMITER, httpHeader.get(key));
+        List<String> values = httpHeader.get(key);
+        return values != null ? String.join(HEADER_VALUES_DELIMITER, values) : null;
     }
 
     public String serialize() {
         return httpHeader.entrySet().stream()
-                .map(entry -> String.format(HEADER_FIELD_FORMAT, entry.getKey(), entry.getValue()))
+                .map(this::getFormattedHeader)
                 .collect(Collectors.joining());
+    }
+
+    private String getFormattedHeader(Map.Entry<String, List<String>> entry) {
+        return String.format(HEADER_FIELD_FORMAT,
+                entry.getKey(), String.join(HEADER_VALUES_DELIMITER, entry.getValue()));
     }
 
     @Override
