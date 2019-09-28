@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class HttpRequestTest {
+public class HttpRequestTest {
     private static final String CONTENT_TYPE = "Content-Type";
     private RequestLine getRequestLine;
     private RequestLine postRequestLine;

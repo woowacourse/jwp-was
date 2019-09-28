@@ -1,34 +1,41 @@
 package webserver;
 
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import fileloader.TestFileLoader;
+import http.common.HttpHeader;
+import http.request.HttpRequest;
+import http.request.RequestBody;
+import http.request.RequestLine;
+import http.response.HttpResponse;
+import http.response.ResponseStatus;
+import org.junit.jupiter.api.Test;
 
-import java.util.stream.Stream;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Java6Assertions.assertThat;
+import static utils.StringUtils.BLANK;
 
 class ResourceHttpRequestHandlerTest {
-    private ResourceHttpRequestHandler resourceHttpRequestHandler = ResourceHttpRequestHandler.getInstance();
+    private ResourceHttpRequestHandler resourceHttpRequestHandler =
+            new ResourceHttpRequestHandler(new TestFileLoader());
 
-    @ParameterizedTest
-    @MethodSource("providePathAndExpectations")
-    void canHandle(String path, boolean expectation) {
-        assertThat(resourceHttpRequestHandler.canHandle(path)).isEqualTo(expectation);
+    @Test
+    void 요청처리_성공() {
+        HttpRequest httpRequest = new HttpRequest(
+                new RequestLine("GET /index.html HTTP/1.1"),
+                new HttpHeader(),
+                new RequestBody(BLANK, BLANK));
+        HttpResponse httpResponse = new HttpResponse(httpRequest);
+
+        assertThat(resourceHttpRequestHandler.handleHttpRequest(httpRequest, httpResponse)).isTrue();
+        assertThat(httpResponse.getResponseStatus()).isEqualTo(ResponseStatus.OK);
     }
 
-    private static Stream<Arguments> providePathAndExpectations() {
-        return Stream.of(
-                Arguments.of("a.css", true),
-                Arguments.of("a.html", true),
-                Arguments.of("a.png", true),
-                Arguments.of("a.woff", true),
-                Arguments.of("a.js", true),
-                Arguments.of("/", false),
-                Arguments.of("", false),
-                Arguments.of("/user", false),
-                Arguments.of("/index", false),
-                Arguments.of(null, false)
-        );
+    @Test
+    void 요청처리_실패() {
+        HttpRequest httpRequest = new HttpRequest(
+                new RequestLine("GET " + TestFileLoader.WRONG_PATH + " HTTP/1.1"),
+                new HttpHeader(),
+                new RequestBody(BLANK, BLANK));
+        HttpResponse httpResponse = new HttpResponse(httpRequest);
+
+        assertThat(resourceHttpRequestHandler.handleHttpRequest(httpRequest, httpResponse)).isFalse();
     }
 }

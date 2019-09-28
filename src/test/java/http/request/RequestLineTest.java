@@ -2,8 +2,7 @@ package http.request;
 
 import http.common.HttpVersion;
 import http.common.URL;
-import http.request.exception.InvalidRequestException;
-import http.request.exception.InvalidRequestMethodException;
+import http.request.exception.InvalidRequestLineException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,13 +21,13 @@ class RequestLineTest {
 
     @Test
     void 잘못된_메서드() {
-        assertThrows(InvalidRequestMethodException.class, () -> new RequestLine("WRONG / HTTP/1.1"));
+        assertThrows(InvalidRequestLineException.class, () -> new RequestLine("WRONG / HTTP/1.1"));
     }
 
     //Todo : 테스트 케이스 추가하기 (parameterized)
     @Test
     void 잘못된_request_line_패턴() {
-        assertThrows(InvalidRequestException.class, () -> new RequestLine("GET /"));
+        assertThrows(InvalidRequestLineException.class, () -> new RequestLine("GET /"));
     }
 
 }
