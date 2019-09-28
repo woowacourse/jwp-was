@@ -1,5 +1,7 @@
 package webserver.http.request;
 
+import webserver.http.HttpVersion;
+
 public class RequestLine {
     private static final String DELIMITER_FOR_CREATE = " ";
     private static final String DELIMITER_URL_TO_PATH_AND_PARAMETERS = "?";

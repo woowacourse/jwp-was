@@ -2,6 +2,7 @@ package webserver.http.request;
 
 import org.junit.jupiter.api.Test;
 import webserver.http.HttpHeaders;
+import webserver.http.HttpVersion;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

@@ -6,7 +6,7 @@ import webserver.http.Cookie;
 import webserver.http.Cookies;
 import webserver.http.HttpHeaders;
 import webserver.http.HttpStatus;
-import webserver.http.request.HttpVersion;
+import webserver.http.HttpVersion;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

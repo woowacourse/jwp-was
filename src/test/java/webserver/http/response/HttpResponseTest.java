@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import webserver.http.HttpStatus;
-import webserver.http.request.HttpVersion;
+import webserver.http.HttpVersion;
 
 import java.io.ByteArrayOutputStream;
 

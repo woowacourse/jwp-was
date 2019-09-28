@@ -8,8 +8,8 @@ import webserver.http.Cookies;
 import webserver.http.HttpHeaders;
 import webserver.http.HttpStatus;
 import webserver.http.request.HttpMethod;
-import webserver.http.request.HttpVersion;
-import webserver.http.request.Pair;
+import webserver.http.HttpVersion;
+import webserver.http.Pair;
 import webserver.http.utils.HttpUtils;
 import webserver.http.utils.StringUtils;
 
@@ -18,7 +18,6 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;

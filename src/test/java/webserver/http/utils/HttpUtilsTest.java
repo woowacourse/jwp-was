@@ -1,7 +1,7 @@
 package webserver.http.utils;
 
 import org.junit.jupiter.api.Test;
-import webserver.http.request.Pair;
+import webserver.http.Pair;
 
 import java.util.Map;
 

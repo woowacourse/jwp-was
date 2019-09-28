@@ -1,6 +1,7 @@
-package webserver.http.request;
+package webserver.http;
 
 import org.junit.jupiter.api.Test;
+import webserver.http.HttpVersion;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
