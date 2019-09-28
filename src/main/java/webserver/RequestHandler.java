@@ -6,9 +6,9 @@ import http.request.HttpRequestCreator;
 import http.request.exception.InvalidHttpRequestException;
 import http.response.HttpResponse;
 import http.response.ResponseStatus;
+import http.response.exception.HttpVersionNotSupportedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.exception.LoadFileFailedException;
 import webserver.exception.ResourceNotFoundException;
 
 import java.io.DataOutputStream;
@@ -33,9 +33,9 @@ public class RequestHandler implements Runnable {
 
         //TODO : IOException 처리
         try (InputStream inputStream = connection.getInputStream(); OutputStream outputStream = connection.getOutputStream()) {
-            HttpResponse httpResponse = new HttpResponse();
-
             HttpRequest httpRequest = HttpRequestCreator.create(inputStream);
+            HttpResponse httpResponse = new HttpResponse(httpRequest);
+
             handleRequest(httpRequest, httpResponse);
 
             sendResponse(outputStream, httpResponse);
@@ -56,8 +56,11 @@ public class RequestHandler implements Runnable {
         } catch (ResourceNotFoundException e) {
             log.error(e.getMessage(), e.getCause());
             httpResponse.setResponseStatus(ResponseStatus.NOT_FOUND);
-        } catch (LoadFileFailedException e) {
+        } catch (HttpVersionNotSupportedException e) {
             log.error(e.getMessage(), e.getCause());
+            httpResponse.setResponseStatus(ResponseStatus.HTTP_VERSION_NOT_SUPPORTED);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
             httpResponse.setResponseStatus(ResponseStatus.INTERNAL_SERVER_ERROR);
         }
     }
