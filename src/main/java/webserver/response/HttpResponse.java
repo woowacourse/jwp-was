@@ -5,41 +5,37 @@ import webserver.request.HttpRequest;
 import java.util.Objects;
 
 public class HttpResponse {
-    private ResponseStatusLine statusLine;
-    private ResponseHeader header;
-    private ResponseBody body;
+    private ResponseStatusLine responseStatusLine;
+    private ResponseHeader responseHeader;
+    private ResponseBody responseBody;
 
     public HttpResponse() {
-        this.header = new ResponseHeader();
-        this.body = new ResponseBody();
+        this.responseHeader = new ResponseHeader();
+        this.responseBody = new ResponseBody();
     }
 
     public boolean addBody(byte[] body) {
-        return this.body.addBody(body);
+        return this.responseBody.addBody(body);
     }
 
     public void addStatusLine(HttpRequest httpRequest, String statusCode, String statusText) {
-        statusLine = ResponseStatusLine.of(httpRequest, statusCode, statusText);
+        responseStatusLine = ResponseStatusLine.of(httpRequest, statusCode, statusText);
     }
 
     public boolean addHeader(String key, String value) {
-        return header.addAttribute(key, value);
+        return responseHeader.addAttribute(key, value);
     }
 
     public String responseLine() {
-        return statusLine.response();
+        return responseStatusLine.response();
     }
 
     public String responseHeader() {
-        return header.response();
+        return responseHeader.response();
     }
 
-    public ResponseHeader getHeader() {
-        return header;
-    }
-
-    public ResponseBody getBody() {
-        return body;
+    public ResponseBody getResponseBody() {
+        return responseBody;
     }
 
     @Override
@@ -47,13 +43,13 @@ public class HttpResponse {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         HttpResponse that = (HttpResponse) o;
-        return Objects.equals(statusLine, that.statusLine) &&
-                Objects.equals(header, that.header) &&
-                Objects.equals(body, that.body);
+        return Objects.equals(responseStatusLine, that.responseStatusLine) &&
+                Objects.equals(responseHeader, that.responseHeader) &&
+                Objects.equals(responseBody, that.responseBody);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(statusLine, header, body);
+        return Objects.hash(responseStatusLine, responseHeader, responseBody);
     }
 }

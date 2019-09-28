@@ -6,49 +6,49 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class HttpRequest {
-    private final RequestStatusLine requestStatusLine;
+    private final RequestLine requestLine;
     private final RequestHeader requestHeader;
     private final RequestBody requestBody;
 
-    private HttpRequest(RequestStatusLine requestStatusLine, RequestHeader requestHeader, RequestBody requestBody) {
-        this.requestStatusLine = requestStatusLine;
+    private HttpRequest(RequestLine requestLine, RequestHeader requestHeader, RequestBody requestBody) {
+        this.requestLine = requestLine;
         this.requestHeader = requestHeader;
         this.requestBody = requestBody;
     }
 
     public static HttpRequest of(InputStream in) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
-        RequestStatusLine requestStatusLine = RequestStatusLine.of(br);
+        RequestLine requestLine = RequestLine.of(br);
         RequestHeader requestHeader = RequestHeader.of(br);
         RequestBody requestBody = RequestBody.of(br, requestHeader.getContentLength());
-        return new HttpRequest(requestStatusLine, requestHeader, requestBody);
+        return new HttpRequest(requestLine, requestHeader, requestBody);
     }
 
     public boolean isGet() {
-        return requestStatusLine.isGet();
+        return requestLine.isGet();
     }
 
     public boolean isPost() {
-        return requestStatusLine.isPost();
+        return requestLine.isPost();
     }
 
     public boolean hasParameters() {
-        return requestStatusLine.hasParameters();
+        return requestLine.hasParameters();
     }
 
     public String getParameter(String attributeName) {
         if (hasParameters()) {
-            return requestStatusLine.getParameterValue(attributeName);
+            return requestLine.getParameterValue(attributeName);
         }
         return requestBody.getParameterValue(attributeName);
     }
 
     public String getHttpVersion() {
-        return requestStatusLine.getHttpVersion();
+        return requestLine.getHttpVersion();
     }
 
     public String getSource() {
-        return requestStatusLine.getPath();
+        return requestLine.getPath();
     }
 
     public boolean containHeaderField(String headerField, String value) {
@@ -59,8 +59,8 @@ public class HttpRequest {
         return requestHeader.getHeaderFieldValue(headerField);
     }
 
-    public RequestStatusLine getRequestStatusLine() {
-        return requestStatusLine;
+    public RequestLine getRequestLine() {
+        return requestLine;
     }
 
     public RequestHeader getRequestHeader() {

@@ -38,11 +38,11 @@ public class HttpRequestTest {
     void of() throws IOException {
         HttpRequest httpRequest = HttpRequest.of(new ByteArrayInputStream(GET_REQUEST_MESSAGE.getBytes()));
         BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(GET_REQUEST_MESSAGE.getBytes())));
-        RequestStatusLine requestStatusLine = RequestStatusLine.of(br);
+        RequestLine requestLine = RequestLine.of(br);
         RequestHeader requestHeader = RequestHeader.of(br);
         RequestBody requestBody = RequestBody.of(br, requestHeader.getContentLength());
 
-        assertThat(httpRequest.getRequestStatusLine()).isEqualTo(requestStatusLine);
+        assertThat(httpRequest.getRequestLine()).isEqualTo(requestLine);
         assertThat(httpRequest.getRequestHeader()).isEqualTo(requestHeader);
         assertThat(httpRequest.getRequestBody()).isEqualTo(requestBody);
     }
