@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.exception.PageNotFoundException;
 import webserver.response.ModelAndView;
-import webserver.response.TemplateEngine;
+import webserver.view.TemplateEngine;
 
 import java.io.IOException;
 

@@ -6,6 +6,7 @@ import webserver.controller.RequestMapper;
 import webserver.request.HttpRequest;
 import webserver.request.RequestParser;
 import webserver.response.HttpResponse;
+import webserver.view.Renderer;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
