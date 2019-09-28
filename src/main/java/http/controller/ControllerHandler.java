@@ -8,6 +8,8 @@ public class ControllerHandler {
     private static final Map<String, Controller> controllers = Maps.newHashMap();
 
     static {
+        controllers.put("^/user/login$", new LoginController());
+        controllers.put("^/user/list.html$", new UserListController());
         controllers.put("^.+\\.([a-z]+)$", new StaticFileController());
         controllers.put("^/user/create$", new CreateUserController());
     }
@@ -16,7 +18,7 @@ public class ControllerHandler {
         return controllers.keySet().stream()
                 .filter(path::matches)
                 .map(controllers::get)
-                .findAny()
+                .findFirst()
                 .orElseThrow(IllegalArgumentException::new)
                 ;
     }

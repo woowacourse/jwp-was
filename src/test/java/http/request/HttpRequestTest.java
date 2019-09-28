@@ -1,5 +1,6 @@
 package http.request;
 
+import http.common.Cookie;
 import http.common.Parameters;
 import http.utils.HttpUtils;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -7,6 +8,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +41,8 @@ class HttpRequestTest {
                                 String url, boolean isGet, String userId) throws IOException {
         Parameters parameters = new Parameters();
         parameters.addAll(params);
-        HttpRequest httpRequest = HttpRequest.of(RequestLine.of(requestLine), RequestHeader.of(header), parameters);
+        List<Cookie> cookies = new ArrayList<>();
+        HttpRequest httpRequest = HttpRequest.of(RequestLine.of(requestLine), RequestHeader.of(header), parameters, cookies);
 
         assertThat(httpRequest.getUrl()).isEqualTo(url);
         assertThat(httpRequest.isGet()).isEqualTo(isGet);
