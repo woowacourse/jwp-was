@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import web.controller.IndexController;
 import web.controller.UserController;
 import webserver.exception.MethodNotAllowedException;
+import webserver.exception.PageNotFoundException;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 
@@ -65,7 +66,7 @@ public class RequestMapper {
         try {
             responsive.accept(request, response);
             return response;
-        } catch (NullPointerException e) {
+        } catch (PageNotFoundException e) {
             logger.error("path: {}, 존재하지 않는 path 요청", request.getPath());
             return HttpResponse.notFound();
         }
