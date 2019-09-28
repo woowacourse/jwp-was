@@ -8,8 +8,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.google.common.net.HttpHeaders.CONTENT_LENGTH;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static utils.StringUtils.BLANK;
 
 class HttpHeaderTest {
     @Test
@@ -26,7 +28,7 @@ class HttpHeaderTest {
     }
 
     @Test
-    void 잘못된_생성_header_parameter의_크기가_2가_아닐_때() {
+    void 잘못된_생성_header_parameter_형식이_잘못된_경우() {
         List<String> header = new ArrayList<>();
         header.add("Content-type");
         assertThrows(InvalidHttpHeaderException.class, () -> new HttpHeader(header));
@@ -39,9 +41,11 @@ class HttpHeaderTest {
 
         List<String> header = new ArrayList<>();
         header.add(String.format("%s: %s", contentType, textHTML));
+        header.add(String.format("%s: ", CONTENT_LENGTH));
         HttpHeader httpHeader = new HttpHeader(header);
 
         assertThat(httpHeader.getHeaderAttribute(contentType)).isEqualTo(textHTML);
+        assertThat(httpHeader.getHeaderAttribute(CONTENT_LENGTH)).isEqualTo(BLANK);
     }
 
     @Test

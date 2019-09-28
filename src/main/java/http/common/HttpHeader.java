@@ -17,9 +17,9 @@ public class HttpHeader {
     private static final String HEADER_VALUES_DELIMITER = ";";
     private static final String COOKIE = "Cookie";
     private static final String HEADER_FIELD_FORMAT = "%s: %s\r\n";
-    private static final int HTTP_HEADER_PARAMETER_SIZE = 2;
-    private static final int HEADER_FIELD_KEY_INDEX = 0;
-    private static final int HEADER_FIELD_VALUE_INDEX = 1;
+    private static final int LINE_DELIMITER_LENGTH = HEADER_LINE_DELIMITER.length();
+    private static final int ZERO = 0;
+    public static final int INVALID_SEPARATOR_POSITION = -1;
 
     private final Map<String, List<String>> httpHeader = new HashMap<>();
     private final Cookie cookie = new Cookie();
@@ -35,10 +35,16 @@ public class HttpHeader {
     }
 
     private void addHeader(String line) {
-        String[] tokens = StringUtils.split(line, HEADER_LINE_DELIMITER);
-        checkHeaderParameter(tokens);
+        int separatorPosition = getSeparatorPosition(line);
+        if (separatorPosition <= ZERO) {
+            throw new InvalidHttpHeaderException();
+        }
+        httpHeader.put(line.substring(ZERO, separatorPosition),
+                parseHeaderField(line.substring(separatorPosition + LINE_DELIMITER_LENGTH)));
+    }
 
-        httpHeader.put(tokens[HEADER_FIELD_KEY_INDEX], parseHeaderField(tokens[HEADER_FIELD_VALUE_INDEX]));
+    private int getSeparatorPosition(String line) {
+        return StringUtils.isEmpty(line) ? INVALID_SEPARATOR_POSITION : line.indexOf(HEADER_LINE_DELIMITER);
     }
 
     private List<String> parseHeaderField(String headerField) {
@@ -48,12 +54,6 @@ public class HttpHeader {
                 .map(String::trim)
                 .filter(StringUtils::isNotEmpty)
                 .collect(Collectors.toList());
-    }
-
-    private void checkHeaderParameter(String[] tokens) {
-        if (tokens == null || tokens.length != HTTP_HEADER_PARAMETER_SIZE) {
-            throw new InvalidHttpHeaderException();
-        }
     }
 
     public void addHeaderAttribute(String key, String value) {
