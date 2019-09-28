@@ -19,7 +19,6 @@ public class ControllerHandler {
                 .filter(path::matches)
                 .map(controllers::get)
                 .findFirst()
-                .orElseThrow(IllegalArgumentException::new)
-                ;
+                .orElseThrow(IllegalArgumentException::new);
     }
 }

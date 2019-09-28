@@ -5,6 +5,7 @@ public class Cookie {
     private static final String PATH = "Path";
     private static final String EQUAL = "=";
     private static final String SEMICOLON = ";";
+    private static final String BLANK = " ";
 
     private String name;
     private String value;
@@ -36,9 +37,9 @@ public class Cookie {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(name).append(EQUAL).append(value);
-        stringBuilder.append(SEMICOLON).append(" ").append(MAX_AGE).append(EQUAL).append(maxAge);
+        stringBuilder.append(SEMICOLON).append(BLANK).append(MAX_AGE).append(EQUAL).append(maxAge);
         if (path != null) {
-            stringBuilder.append(SEMICOLON).append(" ").append(PATH).append(EQUAL).append(path);
+            stringBuilder.append(SEMICOLON).append(BLANK).append(PATH).append(EQUAL).append(path);
         }
         return stringBuilder.toString();
     }

@@ -1,7 +1,6 @@
 package http.controller;
 
 import db.DataBase;
-import http.common.Cookie;
 import http.common.HttpSession;
 import http.common.SessionManager;
 import http.request.HttpRequest;
@@ -14,8 +13,6 @@ public class LoginController extends AbstractController {
 
     private static final String LOGINED = "logined";
     private static final String TRUE = "true";
-    private static final String JSESSIONID = "JSESSIONID";
-    private static final int ONE_DAY = 60 * 60 * 24;
 
     @Override
     protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
@@ -34,9 +31,6 @@ public class LoginController extends AbstractController {
     private void setSession(HttpResponse httpResponse) {
         HttpSession httpSession = SessionManager.createSession();
         httpSession.setAttribute(LOGINED, TRUE);
-        Cookie cookie = new Cookie(JSESSIONID, httpSession.getId());
-        cookie.setMaxAge(ONE_DAY);
-        cookie.setPath("/");
-        httpResponse.addCookie(cookie);
+        SessionManager.sendSession(httpResponse, httpSession);
     }
 }

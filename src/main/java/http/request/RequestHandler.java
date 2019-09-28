@@ -7,6 +7,7 @@ import utils.IOUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +19,7 @@ public class RequestHandler {
     private static final String SEMICOLON = ";";
     private static final String COOKIE = "Cookie: ";
     private static final String CONTENT_LENGTH_KEY = "Content-Length";
+    private static final String UTF_8 = "UTF-8";
 
     private final BufferedReader br;
 
@@ -79,6 +81,7 @@ public class RequestHandler {
         String contentLength = requestHeader.getHeader(CONTENT_LENGTH_KEY);
         if (contentLength != null) {
             String params = IOUtils.readData(br, Integer.parseInt(contentLength));
+            params = URLDecoder.decode(params, UTF_8);
             parameters.addAll(HttpUtils.parseQuery(params));
         }
     }

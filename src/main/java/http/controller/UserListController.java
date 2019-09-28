@@ -25,27 +25,7 @@ public class UserListController extends AbstractController {
     @Override
     protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         if (isLogined(httpRequest)) {
-            TemplateLoader loader = new ClassPathTemplateLoader();
-            loader.setPrefix("/templates");
-            loader.setSuffix(".html");
-            Handlebars handlebars = new Handlebars(loader);
-            Template template;
-            try {
-                template = handlebars.compile("user/list");
-            } catch (IOException e) {
-                logger.error(e.getMessage());
-                httpResponse.sendNotFound();
-                return;
-            }
-            Map<String, Collection<User>> params = new HashMap<>();
-            Collection<User> users = DataBase.findAll();
-            params.put("users", users);
-            try {
-                String userListPage = template.apply(params);
-                httpResponse.ok(userListPage.getBytes());
-            } catch (IOException e) {
-                logger.error(e.getMessage());
-            }
+            renderUserListPage(httpResponse);
             return;
         }
         httpResponse.redirect("/user/login.html");
@@ -58,5 +38,22 @@ public class UserListController extends AbstractController {
                 .findFirst();
         return cookieOptional.isPresent() &&
                 "true".equals(SessionManager.getSession(cookieOptional.get().getValue()).getAttribute(LOGINED));
+    }
+
+    private void renderUserListPage(HttpResponse httpResponse) {
+        TemplateLoader loader = new ClassPathTemplateLoader();
+        loader.setPrefix("/templates");
+        loader.setSuffix(".html");
+        Handlebars handlebars = new Handlebars(loader);
+        handlebars.registerHelper("increment", (context, options) -> (Integer) context + 1);
+        try {
+            Template template = handlebars.compile("user/list");
+            Map<String, Collection<User>> model = new HashMap<>();
+            model.put("users", DataBase.findAll());
+            httpResponse.ok(template.apply(model).getBytes());
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+            httpResponse.sendInternalServerError();
+        }
     }
 }

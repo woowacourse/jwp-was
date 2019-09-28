@@ -65,6 +65,10 @@ public class HttpResponse {
         statusLine.setHttpStatus(HttpStatus.METHOD_NOT_ALLOWED);
     }
 
+    public void sendInternalServerError() {
+        statusLine.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     public byte[] getBody() {
         return responseBody.getBody();
     }

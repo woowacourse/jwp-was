@@ -7,6 +7,9 @@ import http.common.Parameters;
 import java.util.List;
 
 public class HttpRequest {
+    private static final String URL_FORMAT = "%s://%s%s";
+    private static final String HOST_KEY = "Host";
+
     private RequestLine requestLine;
     private RequestHeader requestHeader;
     private Parameters parameters;
@@ -35,9 +38,9 @@ public class HttpRequest {
     public String getUrl() {
         String path = requestLine.getPath();
         String protocol = requestLine.getProtocol();
-        String host = requestHeader.getHeader("Host");
+        String host = requestHeader.getHeader(HOST_KEY);
 
-        return String.format("%s://%s%s", protocol, host, path);
+        return String.format(URL_FORMAT, protocol, host, path);
     }
 
     public String getPath() {
