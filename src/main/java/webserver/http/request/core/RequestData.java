@@ -1,5 +1,7 @@
 package webserver.http.request.core;
 
+import webserver.http.exception.CanNotParseDataException;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +17,9 @@ public abstract class RequestData {
         Arrays.stream(params)
                 .forEach(param -> {
                     String[] keyValues = param.split("=");
+                    if (keyValues.length != 2) {
+                        throw new CanNotParseDataException();
+                    }
                     requestBodyData.put(keyValues[0], keyValues[1]);
                 });
     }

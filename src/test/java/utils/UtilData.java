@@ -8,8 +8,10 @@ import java.util.Arrays;
 public class UtilData {
     public static final String GET_METHOD = "GET";
     public static final String GET_PATH = "/index.html";
-    public static final String GET_PARAMS_PATH = "/user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
+    private static final String GET_PARAMS_PATH = "/user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
     public static final String POST_BODY = "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
+    public static final String WRONG_POST_BODY_1 = "userId1javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
+    public static final String WRONG_POST_BODY_2 = "userId1=javajigipassword=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
     public static final String LINE = "Host: localhost:8080\r\n" +
             "Connection: keep-alive\r\n" +
             "Accept: */*";
