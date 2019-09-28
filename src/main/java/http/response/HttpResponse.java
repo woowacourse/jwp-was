@@ -51,4 +51,8 @@ public class HttpResponse {
 
         return responseHeader.getBytes();
     }
+
+    public void addCookie(String name, String value) {
+        addHeaderAttribute("Set-Cookie", String.format("%s=%s", name, value));
+    }
 }

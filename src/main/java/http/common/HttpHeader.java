@@ -10,11 +10,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class HttpHeader {
+    public static final String SESSIONID = "SessionID";
+
     private static final String EMPTY_HEADER_NAME_ERROR_MESSAGE = "헤더 이름의 값이 필요합니다.";
     private static final String HEADER_LINE_DELIMITER = ": ";
     private static final String HEADER_VALUES_DELIMITER = "; ";
     private static final String COOKIE = "Cookie";
-    private static final String SESSIONID = "SessionID";
     private static final String HEADER_FIELD_FORMAT = "%s: %s\r\n";
     private static final int HTTP_HEADER_PARAMETER_SIZE = 2;
     private static final int HEADER_FIELD_KEY_INDEX = 0;
