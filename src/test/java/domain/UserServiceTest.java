@@ -2,7 +2,7 @@ package domain;
 
 import db.DataBase;
 import http.request.HttpRequest;
-import http.request.HttpRequestFactory;
+import http.request.support.HttpRequestFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import servlet.resolver.UserResolver;

@@ -2,10 +2,10 @@ package webserver;
 
 import file.FileContainer;
 import http.request.HttpRequest;
-import http.request.HttpRequestFactory;
+import http.request.support.HttpRequestFactory;
 import http.response.HttpResponse;
 import http.session.HttpSession;
-import http.session.SessionManager;
+import http.session.support.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import servlet.ServletContainer;
@@ -38,7 +38,7 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader bufferedReader = getBufferedReader(in);
 
-            HttpRequest httpRequest = HttpRequestFactory.create(bufferedReader);
+            HttpRequest httpRequest = HttpRequestFactory.create(bufferedReader, sessionManager);
             HttpSession httpSession = sessionManager.getSession(httpRequest);
             HttpResponse httpResponse = new HttpResponse(new DataOutputStream(out));
             httpResponse.addCookie(SessionManager.SESSION_NAME, httpSession.getId().toString());

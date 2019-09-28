@@ -1,7 +1,8 @@
 package http.session;
 
 import http.request.HttpRequest;
-import http.request.HttpRequestFactory;
+import http.request.support.HttpRequestFactory;
+import http.session.support.SessionManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

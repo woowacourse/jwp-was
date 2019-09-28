@@ -1,7 +1,6 @@
 package http.response;
 
 import com.google.common.base.Charsets;
-import http.session.HttpSession;
 import http.support.StatusCode;
 import servlet.view.View;
 import utils.FileIoUtils;
@@ -25,15 +24,13 @@ public class HttpResponse {
     private final Map<String, String> headers = new HashMap<>();
     private final Map<String, String> cookies = new HashMap<>();
     private final OutputStream outputStream;
-    private HttpSession httpSession;
 
     public HttpResponse(final OutputStream outputStream) {
         this.outputStream = outputStream;
     }
 
-    public HttpResponse(DataOutputStream outputStream, HttpSession httpSession) {
+    public HttpResponse(DataOutputStream outputStream) {
         this.outputStream = outputStream;
-        this.httpSession = httpSession;
     }
 
     public void addHeader(final String key, final String value) {

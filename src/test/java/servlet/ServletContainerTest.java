@@ -1,7 +1,7 @@
 package servlet;
 
 import http.request.HttpRequest;
-import http.request.HttpRequestFactory;
+import http.request.support.HttpRequestFactory;
 import http.response.HttpResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

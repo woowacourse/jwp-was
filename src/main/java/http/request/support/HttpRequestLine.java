@@ -1,4 +1,4 @@
-package http.request;
+package http.request.support;
 
 public class HttpRequestLine {
     public static final String DELIMITER_OF_REQUEST_LINE = ":";

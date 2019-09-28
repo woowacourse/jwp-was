@@ -21,15 +21,15 @@ public class HttpStartLine {
         this.version = lines.get(INDEX_OF_VERSION);
     }
 
-    String getMethod() {
+    public String getMethod() {
         return method;
     }
 
-    String getResourcePath() {
+    public String getResourcePath() {
         return requestUrl.getResourcePath();
     }
 
-    String getVersion() {
+    public String getVersion() {
         return version;
     }
 

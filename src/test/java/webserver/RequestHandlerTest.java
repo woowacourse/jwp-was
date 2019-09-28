@@ -2,7 +2,7 @@ package webserver;
 
 import db.DataBase;
 import domain.User;
-import http.session.SessionManager;
+import http.session.support.SessionManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -95,7 +95,7 @@ public class RequestHandlerTest {
         BufferedReader bufferedReader = Common.convertToBufferedReader(loginSocket.getOutputStream());
         logger.info("\n" + loginSocket.getOutputStream().toString());
         assertThat(bufferedReader.readLine()).isEqualTo("HTTP/1.1 200 OK");
-        assertThat(bufferedReader.readLine()).isEqualTo("Content-Length: 5657");
+        assertThat(bufferedReader.readLine()).isEqualTo("Content-Length: 5675");
         assertThat(bufferedReader.readLine().contains("SESSIONID=")).isTrue();
     }
 

@@ -1,5 +1,8 @@
-package http.request;
+package http.request.support;
 
+import http.request.*;
+import http.session.HttpSession;
+import http.session.support.SessionManager;
 import utils.IOUtils;
 
 import java.io.BufferedReader;
@@ -24,6 +27,23 @@ public class HttpRequestFactory {
             return new HttpRequest(httpStartLine, header, cookie, httpRequestBody);
         }
         return new HttpRequest(httpStartLine, header, cookie);
+    }
+
+    public static HttpRequest create(BufferedReader bufferedReader, SessionManager sessionManager) throws IOException {
+        List<String> lines = IOUtils.parseHeader(bufferedReader);
+
+        HttpStartLine httpStartLine = new HttpStartLine(lines.get(0));
+        Map<String, String> headers = getHeaders(lines.subList(1, lines.size()));
+        HttpCookie cookie = getCookie(headers);
+        HttpRequestHeader header = new HttpRequestHeader(headers);
+        HttpSession httpSession = sessionManager.getSession(cookie);
+
+        if ("POST".equals(httpStartLine.getMethod())) {
+            String body = IOUtils.readData(bufferedReader, Integer.parseInt(header.getHeader("Content-Length")));
+            HttpRequestBody httpRequestBody = new HttpRequestBody(body);
+            return new HttpRequest(httpStartLine, header, cookie, httpSession, httpRequestBody);
+        }
+        return new HttpRequest(httpStartLine, header, cookie, httpSession);
     }
 
     private static HttpCookie getCookie(final Map<String, String> headers) {

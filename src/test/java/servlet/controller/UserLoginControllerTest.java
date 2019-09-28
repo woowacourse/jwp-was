@@ -1,7 +1,7 @@
 package servlet.controller;
 
 import http.request.HttpRequest;
-import http.request.HttpRequestFactory;
+import http.request.support.HttpRequestFactory;
 import http.response.HttpResponse;
 import domain.User;
 import domain.UserService;

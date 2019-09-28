@@ -1,6 +1,6 @@
 package webserver;
 
-import http.session.SessionManager;
+import http.session.support.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import servlet.controller.*;
@@ -17,7 +17,6 @@ public class WebServer {
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
     private static final int DEFAULT_PORT = 8080;
     private static final int THREAD_POOL_COUNT = 100;
-    private static final String SESSION_NAME = "SESSIONID";
 
     private static Map<String, Controller> api;
 
