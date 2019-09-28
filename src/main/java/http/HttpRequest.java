@@ -1,93 +1,57 @@
 package http;
 
 public class HttpRequest {
-    private String uri;
-    private HttpMethod method;
-    private HttpHeader headers;
-    private RequestParameter requestParameter;
-    private RequestParameter requestBody;
-    private String body;
 
-    public HttpRequest(String uri, HttpMethod method, HttpHeader headers, RequestParameter requestParameter, RequestParameter requestBody, String body) {
-        this.uri = uri;
-        this.method = method;
-        this.headers = headers;
-        this.requestParameter = requestParameter;
-        this.requestBody = requestBody;
+    private final HttpRequestLine requestLine;
+    private final HttpHeader header;
+    private final HttpBody body;
+
+    public HttpRequest(HttpRequestLine requestLine, HttpHeader header, HttpBody body) {
+        this.requestLine = requestLine;
+        this.header = header;
         this.body = body;
     }
 
     public static class HttpRequestBuilder {
-        private String uri;
-        private HttpMethod method;
-        private HttpHeader headers;
-        private RequestParameter requestParameter;
-        private RequestParameter requestBody;
-        private String body;
+        private HttpRequestLine requestLine;
+        private HttpHeader header;
+        private HttpBody body;
 
-        public HttpRequestBuilder() {
-        }
+        public HttpRequestBuilder() { }
 
-        public HttpRequestBuilder uri(String uri) {
-            this.uri = uri;
+        public HttpRequestBuilder requestLine(HttpRequestLine requestLine) {
+            this.requestLine = requestLine;
             return this;
         }
 
-        public HttpRequestBuilder method(HttpMethod method) {
-            this.method = method;
+        public HttpRequestBuilder header(HttpHeader header) {
+            this.header = header;
             return this;
         }
 
-        public HttpRequestBuilder headers(HttpHeader headers) {
-            this.headers = headers;
-            return this;
-        }
-
-        public HttpRequestBuilder requestParameter(RequestParameter requestParameter) {
-            this.requestParameter = requestParameter;
-            return this;
-        }
-
-        public HttpRequestBuilder requestBody(RequestParameter requestBody) {
-            this.requestBody = requestBody;
-            return this;
-        }
-
-        public HttpRequestBuilder body(String body) {
+        public HttpRequestBuilder body(HttpBody body) {
             this.body = body;
             return this;
         }
 
         public HttpRequest build() {
-            return new HttpRequest(uri, method, headers, requestParameter, requestBody, body);
+            return new HttpRequest(requestLine, header, body);
         }
     }
 
     public boolean isStaticRequest() {
-        return uri.contains(".");
+        return requestLine.getUri().isFileUri();
     }
 
     public String getUri() {
-        return uri;
+        return requestLine.getUri().toString();
     }
 
     public HttpMethod getMethod() {
-        return method;
+        return requestLine.getMethod();
     }
 
-    public String getHeader(String key) {
-        return headers.getValue(key);
-    }
-
-    public String getBody() {
-        return body;
-    }
-
-    public String getParameter(String key) {
-        return requestParameter.getParameter(key);
-    }
-
-    public String getRequestBody(String key) {
-        return requestBody.getParameter(key);
+    public String getHeaderAttribute(String key) {
+        return header.getValue(key);
     }
 }
