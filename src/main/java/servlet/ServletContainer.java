@@ -15,11 +15,9 @@ public class ServletContainer {
         this.controllerMapper = controllerMapper;
     }
 
-    public HttpResponse process(
+    public void process(
             final HttpRequest httpRequest, final HttpResponse httpResponse) throws IOException, URISyntaxException {
         Controller controller = controllerMapper.find(httpRequest);
         controller.service(httpRequest, httpResponse);
-
-        return httpResponse;
     }
 }
