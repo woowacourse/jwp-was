@@ -1,6 +1,6 @@
 package http.request;
 
-import http.response.CookieCollection;
+import http.response.Cookies;
 import http.session.Session;
 
 import java.util.Map;
@@ -9,11 +9,11 @@ public class Request {
     private final RequestLine requestLine;
     private final RequestHeader requestHeader;
     private final RequestBody requestBody;
-    private final CookieCollection cookies;
+    private final Cookies cookies;
     private final Session session;
 
     public Request(RequestLine requestLine, RequestHeader requestHeader, RequestBody requestBody,
-                   CookieCollection cookies, Session session) {
+                   Cookies cookies, Session session) {
         this.requestLine = requestLine;
         this.requestHeader = requestHeader;
         this.requestBody = requestBody;
@@ -21,11 +21,11 @@ public class Request {
         this.session = session;
     }
 
-    public Request(RequestLine requestLine, RequestHeader requestHeader, CookieCollection cookies, Session session) {
+    public Request(RequestLine requestLine, RequestHeader requestHeader, Cookies cookies, Session session) {
         this(requestLine, requestHeader, new RequestBody(""), cookies, session);
     }
 
-    public CookieCollection getCookie() {
+    public Cookies getCookie() {
         return this.cookies;
     }
 

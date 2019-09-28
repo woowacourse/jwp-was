@@ -21,13 +21,11 @@ public class LoginController extends HttpController {
         try {
             String location = new LoginService().login(request.extractFormData());
             session.setAttribute("logined", "true");
-            response.setCookie("JSESSIONID",
-                    Cookie.builder().name("JSESSIONID").value(session.getSessionId()).path("/").build());
+            response.setCookie(Cookie.builder().name("JSESSIONID").value(session.getSessionId()).path("/").build());
             response.redirect(location);
         } catch (LoginFailException e) {
             session.setAttribute("logined", "false");
-            response.setCookie("JSESSIONID",
-                    Cookie.builder().name("JSESSIONID").value(session.getSessionId()).path("/").build());
+            response.setCookie(Cookie.builder().name("JSESSIONID").value(session.getSessionId()).path("/").build());
             response.redirect("/user/login_failed.html");
         }
     }

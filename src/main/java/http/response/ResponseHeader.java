@@ -1,13 +1,18 @@
 package http.response;
 
-import java.util.Map;
+import com.google.common.collect.Lists;
+
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 public class ResponseHeader {
     private String type;
     private String location;
-    private Cookies cookies = new Cookies();
+    private Cookies cookies;
+
+    public ResponseHeader() {
+        this.cookies = new Cookies(Lists.newArrayList());
+    }
 
     public String getType() {
         return type;
@@ -25,12 +30,12 @@ public class ResponseHeader {
         this.location = location;
     }
 
-    public Set<Map.Entry<String, Cookie>> getCookie() {
-        return cookies.getCookies();
+    public List<Cookie> getCookies() {
+        return this.cookies.getCookies();
     }
 
-    public void setCookie(String key, Cookie cookie) {
-        cookies.setCookie(key, cookie);
+    public void setCookie(Cookie cookie) {
+        this.cookies.add(cookie);
     }
 
     @Override

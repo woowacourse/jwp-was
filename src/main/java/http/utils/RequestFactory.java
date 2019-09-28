@@ -5,7 +5,7 @@ import http.request.Request;
 import http.request.RequestBody;
 import http.request.RequestHeader;
 import http.request.RequestLine;
-import http.response.CookieCollection;
+import http.response.Cookies;
 import http.session.Session;
 import http.session.SessionStorage;
 import utils.IOUtils;
@@ -28,7 +28,7 @@ public class RequestFactory {
         RequestLine requestLine = new RequestLine(requestData[0]);
         RequestHeader requestHeader = new RequestHeader(requestData[1]);
 
-        CookieCollection cookies = new CookieCollection(CookieParser.parse(requestHeader.get("Cookie")));
+        Cookies cookies = new Cookies(CookieParser.parse(requestHeader.get("Cookie")));
         Session session = SessionStorage.getInstance().getSession(
                 cookies.findCookie("JSESSIONID").getValue());
 
@@ -49,7 +49,7 @@ public class RequestFactory {
     }
 
     private static Request makeRequestWithBody(BufferedReader br, RequestLine requestLine, RequestHeader requestHeader,
-                                               CookieCollection cookie, Session session) throws IOException {
+                                               Cookies cookie, Session session) throws IOException {
         String body = IOUtils.readData(br, Integer.parseInt(requestHeader.get("content-length")));
         RequestBody requestBody = new RequestBody(body);
         return new Request(requestLine, requestHeader, requestBody, cookie, session);

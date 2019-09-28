@@ -8,8 +8,8 @@ import webserver.support.PathHandler;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class Response {
     private StatusLine statusLine;
@@ -73,12 +73,12 @@ public class Response {
         responseHeader.setLocation(location);
     }
 
-    public Set<Map.Entry<String, Cookie>> getCookie() {
-        return responseHeader.getCookie();
+    public List<Cookie> getCookies() {
+        return responseHeader.getCookies();
     }
 
-    public void setCookie(String key, Cookie cookie) {
-        responseHeader.setCookie(key, cookie);
+    public void setCookie(Cookie cookie) {
+        responseHeader.setCookie(cookie);
     }
 
     public void forward(ModelAndView modelAndView) throws IOException, URISyntaxException {

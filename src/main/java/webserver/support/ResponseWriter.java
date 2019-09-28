@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.Map;
 
 public class ResponseWriter {
     private static final Logger logger = LoggerFactory.getLogger(ResponseWriter.class);
@@ -37,8 +36,8 @@ public class ResponseWriter {
 
     private static String writeCookies(Response response) {
         StringBuilder sb = new StringBuilder();
-        for (Map.Entry<String, Cookie> cookie : response.getCookie()) {
-            sb.append(cookie.getValue().toString());
+        for (Cookie cookie : response.getCookies()) {
+            sb.append(cookie.toString());
         }
         return sb.toString();
     }
