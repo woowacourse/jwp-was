@@ -29,14 +29,14 @@ public class RequestMapper {
 
     // TODO: 2019-09-26 사용자 부분으로 추출
     static {
-        get("/", IndexController.getInstance().goIndex());
-        get("/user/form", UserController.getInstance().goForm());
-        get("/login", UserController.getInstance().goLoginForm());
-        get("/login-fail", UserController.getInstance().goLoginFail());
-        get("/user/list", UserController.getInstance().goUserList());
+        get("/", IndexController::goIndex);
+        get("/user/form", UserController::goForm);
+        get("/login", UserController::goLoginForm);
+        get("/login-fail", UserController::goLoginFail);
+        get("/user/list", UserController::goUserList);
 
-        post("/user/create", UserController.getInstance().createUser());
-        post("/login", UserController.getInstance().login());
+        post("/user/create", UserController::createUser);
+        post("/login", UserController::login);
     }
 
     private static void get(String uri, Responsive responsive) {

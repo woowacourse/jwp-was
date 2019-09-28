@@ -8,7 +8,8 @@ import domain.db.DataBase;
 import domain.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.controller.Responsive;
+import webserver.request.HttpRequest;
+import webserver.response.HttpResponse;
 import webserver.storage.HttpSession;
 
 import java.io.IOException;
@@ -18,98 +19,79 @@ import java.util.Map;
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    private UserController() {
+    public static void goForm(HttpRequest request, HttpResponse response) {
+        response.setContentType("text/html");
+        response.forward("/user/form.html");
     }
 
-    private static class UserControllerHolder {
-        private static final UserController INSTANCE = new UserController();
+    public static void createUser(HttpRequest request, HttpResponse response) {
+        User user = new User(
+                request.getBody("userId"),
+                request.getBody("password"),
+                request.getBody("name"),
+                request.getBody("email")
+        );
+        logger.debug("user : {}", user);
+        DataBase.addUser(user);
+
+        response.sendRedirect("/");
+
     }
 
-    public static UserController getInstance() {
-        return UserControllerHolder.INSTANCE;
+    public static void goLoginForm(HttpRequest request, HttpResponse response) {
+        response.setContentType("text/html");
+        response.forward("/user/login.html");
+
     }
 
-    public Responsive goForm() {
-        return (request, response) -> {
-            response.setContentType("text/html");
-            response.forward("/user/form.html");
-        };
+    public static void goLoginFail(HttpRequest request, HttpResponse response) {
+        response.setContentType("text/html");
+        response.forward("/user/login_failed.html");
+
     }
 
-    public Responsive createUser() {
-        return (request, response) -> {
-            User user = new User(
-                    request.getBody("userId"),
-                    request.getBody("password"),
-                    request.getBody("name"),
-                    request.getBody("email")
-            );
-            logger.debug("user : {}", user);
-            DataBase.addUser(user);
+    public static void login(HttpRequest request, HttpResponse response) {
+        String userId = request.getBody("userId");
+        String password = request.getBody("password");
 
-            response.sendRedirect("/");
-        };
+        User user = DataBase.findUserById(userId);
+
+        if (user.notMatchPassword(password)) {
+            response.sendRedirect("/login-fail");
+            return;
+        }
+
+        HttpSession httpSession = request.getSession();
+        response.addHeader("Set-Cookie", "JSESSIONID=" + httpSession.getId() + "; Path=/");
+        httpSession.setAttribute("user", user);
+        response.sendRedirect("/");
+
     }
 
-    public Responsive goLoginForm() {
-        return (request, response) -> {
-            response.setContentType("text/html");
-            response.forward("/user/login.html");
-        };
-    }
+    public static void goUserList(HttpRequest request, HttpResponse response) {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
 
-    public Responsive goLoginFail() {
-        return (request, response) -> {
-            response.setContentType("text/html");
-            response.forward("/user/login_failed.html");
-        };
-    }
+        if (user == null) {
+            response.sendRedirect("/login");
+            return;
+        }
 
-    public Responsive login() {
-        return (request, response) -> {
-            String userId = request.getBody("userId");
-            String password = request.getBody("password");
+        Map<String, Object> model = new HashMap<>();
+        model.put("users", DataBase.findAll());
 
-            User user = DataBase.findUserById(userId);
+        try {
+            TemplateLoader loader = new ClassPathTemplateLoader();
+            loader.setPrefix("/templates");
+            loader.setSuffix(".html");
+            Handlebars handlebars = new Handlebars(loader);
+            handlebars.registerHelper("plusOne", (context, options) -> (Integer) context + 1);
 
-            if (user.notMatchPassword(password)) {
-                response.sendRedirect("/login-fail");
-                return;
-            }
-
-            HttpSession httpSession = request.getSession();
-            response.addHeader("Set-Cookie", "JSESSIONID=" + httpSession.getId() + "; Path=/");
-            httpSession.setAttribute("user", user);
-            response.sendRedirect("/");
-        };
-    }
-
-    public Responsive goUserList() {
-        return (request, response) -> {
-            HttpSession session = request.getSession();
-            User user = (User) session.getAttribute("user");
-
-            if (user == null) {
-                response.sendRedirect("/login");
-                return;
-            }
-
-            Map<String, Object> model = new HashMap<>();
-            model.put("users", DataBase.findAll());
-
-            try {
-                TemplateLoader loader = new ClassPathTemplateLoader();
-                loader.setPrefix("/templates");
-                loader.setSuffix(".html");
-                Handlebars handlebars = new Handlebars(loader);
-                handlebars.registerHelper("plusOne", (context, options) -> (Integer) context + 1);
-
-                Template template = handlebars.compile("user/list");
-                String aa = template.apply(model);
-                response.templateForward(aa);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        };
+            Template template = handlebars.compile("user/list");
+            String aa = template.apply(model);
+            response.templateForward(aa);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
