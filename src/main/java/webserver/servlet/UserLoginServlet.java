@@ -37,7 +37,6 @@ public class UserLoginServlet extends AbstractRequestServlet {
             httpResponse.setCookie("logined","true");
             return new ModelAndView(resolver.createView("redirect:/"));
         }
-        logger.debug(">>> LOGIN FAILED : {}", user);
         httpResponse.setCookie("logined","false");
         return new ModelAndView(resolver.createView("redirect:/user/login-failed.html"));
     }

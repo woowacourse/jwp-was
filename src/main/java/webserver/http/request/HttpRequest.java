@@ -21,7 +21,7 @@ public class HttpRequest {
 
     private HttpSession setSession() {
         String sessionId = cookie.getSessionId();
-        if (SessionStorage.exists(sessionId)) {
+        if (sessionId != null && SessionStorage.exists(sessionId)) {
             return SessionStorage.get(sessionId);
         }
         return SessionStorage.create();

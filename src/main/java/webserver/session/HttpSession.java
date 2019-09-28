@@ -1,10 +1,11 @@
 package webserver.session;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class HttpSession {
     private final String id;
-    private Map<String, Object> attributes;
+    private Map<String, Object> attributes= new HashMap<>();
 
     public HttpSession(String id) {
         this.id = id;
