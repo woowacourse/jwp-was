@@ -1,55 +1,67 @@
 package webserver;
 
+import controller.ControllerFactory;
+import controller.core.AbstractController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import webserver.http.HttpHeaderField;
+import webserver.http.HttpVersion;
+import webserver.http.request.HttpRequest;
+import webserver.http.request.HttpRequestFactory;
+import webserver.http.request.core.RequestPath;
+import webserver.http.response.HttpResponse;
+import webserver.http.response.core.ResponseContentType;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.net.URISyntaxException;
+import java.util.stream.Stream;
 
 public class RequestHandler implements Runnable {
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
 
-    public RequestHandler(Socket connectionSocket) {
+    RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
     }
 
+    private static void sendResponse(OutputStream out, HttpResponse httpResponse, HttpRequest httpRequest) throws IOException, URISyntaxException {
+        DataOutputStream dos = new DataOutputStream(out);
+        byte[] body = httpResponse.responseBody(httpRequest.getRequestPath().getFullPath());
+        httpResponse.addHeader(HttpHeaderField.CONTENT_LENGTH, String.valueOf(body.length));
+        dos.writeBytes(httpResponse.doResponse());
+        dos.write(body, 0, body.length);
+        dos.flush();
+    }
+
     public void run() {
-        logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
+        log.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
-            DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = "Hello World".getBytes();
-            response200Header(dos, body.length);
-            responseBody(dos, body);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
+            HttpRequest httpRequest = HttpRequestFactory.create(in);
+            HttpResponse httpResponse = new HttpResponse(HttpVersion.HTTP_VERSION_1_1);
+
+            if (isStaticFile(httpRequest.getRequestPath())) {
+                httpResponse.addStatus();
+                httpResponse.addHeader(HttpHeaderField.of("Content-Type:"), ResponseContentType.of(httpRequest.getRequestPath()));
+                sendResponse(out, httpResponse, httpRequest);
+            } else {
+                AbstractController controller = ControllerFactory.mappingController(httpRequest, httpResponse);
+                controller.service(out, httpRequest, httpResponse);
+            }
+
+        } catch (IOException | URISyntaxException e) {
+            log.error(e.getMessage());
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+    private boolean isStaticFile(RequestPath path) {
+        return Stream.of(".css", ".js", ".png", ".ico", ".eot", ".svg", ".ttf", ".woff", ".woff2")
+                .anyMatch(extension -> path.getPath().contains(extension));
     }
 }
