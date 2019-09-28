@@ -60,7 +60,7 @@ public class RequestHandler implements Runnable {
             log.error(e.getMessage(), e.getCause());
             httpResponse.setResponseStatus(ResponseStatus.HTTP_VERSION_NOT_SUPPORTED);
         } catch (RuntimeException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e.getCause());
             httpResponse.setResponseStatus(ResponseStatus.INTERNAL_SERVER_ERROR);
         }
     }
