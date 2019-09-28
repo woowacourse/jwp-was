@@ -1,6 +1,8 @@
 package controller;
 
+import controller.exception.NotSupportMethod;
 import http.HttpRequestMethod;
+import http.HttpStatusCode;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 
@@ -11,13 +13,18 @@ public abstract class AbstractController implements Controller {
 
     @Override
     public void service(HttpRequest request, HttpResponse response) throws IOException, URISyntaxException {
-        if (request.getMethod().equals(HttpRequestMethod.GET)) {
-            doGet(request, response);
+        try {
+            if (request.getMethod().equals(HttpRequestMethod.GET)) {
+                doGet(request, response);
+            }
+
+            if (request.getMethod().equals(HttpRequestMethod.POST)) {
+                doPost(request, response);
+            }
+        } catch (NotSupportMethod e) {
+            response.setStatusCode(HttpStatusCode.NOT_FOUND);
         }
 
-        if (request.getMethod().equals(HttpRequestMethod.POST)) {
-            doPost(request, response);
-        }
     }
 
     abstract void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException;
