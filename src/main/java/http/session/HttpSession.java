@@ -23,4 +23,8 @@ public class HttpSession {
     public void setAttribute(String name, Object value) {
         attributes.put(name, value);
     }
+
+    public void removeAttribute(String name) {
+        attributes.remove(name);
+    }
 }

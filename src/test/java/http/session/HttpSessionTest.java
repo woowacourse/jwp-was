@@ -16,12 +16,24 @@ class HttpSessionTest {
 
     @Test
     @DisplayName("현재 세션에 value 인자로 전달되는 객체를 name 인자 이름으로 저장")
-    void setAttribute() {
+    void attribute() {
         HttpSession session = new HttpSession("id");
         Object value = new Object();
 
         session.setAttribute("name", value);
 
         assertThat(session.getAttribute("name")).isEqualTo(value);
+    }
+
+    @Test
+    @DisplayName("현재 세션에 name 인자로 저장되어 있는 객체 값을 삭제")
+    void removeAttribute() {
+        HttpSession session = new HttpSession("id");
+        Object value = new Object();
+
+        session.setAttribute("name", value);
+        session.removeAttribute("name");
+
+        assertThat(session.getAttribute("name")).isNull();
     }
 }
