@@ -5,9 +5,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static http.HttpString.*;
-
 public class HttpHeader {
+    public static final String CONTENT_TYPE_KEY = "Content-Type";
+    public static final String CONTENT_LENGTH_KEY = "Content-Length";
+    public static final String LOCATION_KEY = "Location";
+
+    public static final String QUERY_STRING_CONTENT_TYPE = "application/x-www-form-urlencoded";
+
     private static final String NOT_EXIST_BODY = "-1";
     private static final String KEY_VALUE_DELIMITER = ":";
 
@@ -45,10 +49,10 @@ public class HttpHeader {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, String> header : headers.entrySet()) {
-            sb.append(header.getKey() + KEY_VALUE_DELIMITER + WHITE_SPACE +
-                    header.getValue() + CRLF);
+            sb.append(String.format("%s%s %s\r\n", header.getKey(),
+                    KEY_VALUE_DELIMITER, header.getValue()));
         }
-        sb.append(CRLF);
+        sb.append("\r\n");
 
         return sb.toString();
     }

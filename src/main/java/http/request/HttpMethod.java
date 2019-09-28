@@ -4,18 +4,18 @@ import http.exception.NotFoundMethodException;
 
 import java.util.Arrays;
 
-public enum HttpRequestMethod {
+public enum HttpMethod {
     GET("GET"),
     POST("POST");
 
     private String method;
 
-    HttpRequestMethod(String method) {
+    HttpMethod(String method) {
         this.method = method;
     }
 
-    public static HttpRequestMethod of(String method) {
-        return Arrays.stream(HttpRequestMethod.values())
+    public static HttpMethod of(String method) {
+        return Arrays.stream(HttpMethod.values())
                 .filter(httpMethod -> httpMethod.method.equals(method))
                 .findAny()
                 .orElseThrow(NotFoundMethodException::new);

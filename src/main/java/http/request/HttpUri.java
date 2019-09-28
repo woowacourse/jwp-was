@@ -3,16 +3,14 @@ package http.request;
 import http.QueryString;
 import http.exception.EmptyUriException;
 
-import static http.HttpString.EMPTY;
-
-public class HttpRequestUri {
+public class HttpUri {
     private static final String QUERY_STRING_DELIMITER = "?";
     private static final String FILE_EXTENSION_DELIMITER = ".";
 
     private final String uri;
 
-    public HttpRequestUri(String uri) {
-        if (EMPTY.equals(uri) || uri == null) {
+    public HttpUri(String uri) {
+        if ("".equals(uri) || uri == null) {
             throw new EmptyUriException();
         }
 

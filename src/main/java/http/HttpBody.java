@@ -1,7 +1,7 @@
 package http;
 
-import static http.HttpString.CONTENT_TYPE_KEY;
-import static http.HttpString.QUERY_STRING_CONTENT_TYPE;
+import static http.HttpHeader.CONTENT_TYPE_KEY;
+import static http.HttpHeader.QUERY_STRING_CONTENT_TYPE;
 
 public class HttpBody {
     private final String body;

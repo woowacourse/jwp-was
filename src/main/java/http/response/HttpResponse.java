@@ -3,10 +3,10 @@ package http.response;
 import http.HttpHeader;
 import http.HttpVersion;
 
-import static http.HttpString.*;
+import static http.HttpHeader.*;
 
 public class HttpResponse {
-    private HttpResponseStatus status;
+    private HttpStatus status;
     private HttpHeader header = new HttpHeader();
     private byte[] body;
 
@@ -14,14 +14,14 @@ public class HttpResponse {
     }
 
     public void response2xx(byte[] body, String mimeType) {
-        setStatus(OK_CODE);
+        setStatus(HttpStatus.OK.getStatusCode());
         addHeader(CONTENT_TYPE_KEY, mimeType);
         setBody(body);
     }
 
     public void response3xx(String viewName) {
-        setStatus(FOUND_CODE);
-        addHeader(LOCATION_KEY, SLASH + viewName);
+        setStatus(HttpStatus.FOUND.getStatusCode());
+        addHeader(LOCATION_KEY, "/" + viewName);
     }
 
     public void addHeader(String key, String value) {
@@ -29,7 +29,7 @@ public class HttpResponse {
     }
 
     public void setStatus(int statusCode) {
-        status = HttpResponseStatus.of(statusCode);
+        status = HttpStatus.of(statusCode);
     }
 
     public void setBody(byte[] body) {
@@ -38,13 +38,13 @@ public class HttpResponse {
     }
 
     public String getStatusLine() {
-        return HttpVersion.V_1_1.getVersion() + WHITE_SPACE +
-                status.getStatusCode() + WHITE_SPACE +
-                status.getStatus() +
-                CRLF;
+        return String.format("%s %s %s\r\n",
+                HttpVersion.V_1_1.getVersion(),
+                status.getStatusCode(),
+                status.getStatus());
     }
 
-    public HttpResponseStatus getStatus() {
+    public HttpStatus getStatus() {
         return status;
     }
 

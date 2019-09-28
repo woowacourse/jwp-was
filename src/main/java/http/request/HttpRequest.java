@@ -58,7 +58,7 @@ public class HttpRequest {
         return requestLine.getUri().toString();
     }
 
-    public HttpRequestMethod getMethod() {
+    public HttpMethod getMethod() {
         return requestLine.getMethod();
     }
 

@@ -4,20 +4,20 @@ import http.exception.NotFoundStatusException;
 
 import java.util.Arrays;
 
-public enum HttpResponseStatus {
+public enum HttpStatus {
     OK(200, "OK"),
     FOUND(302, "FOUND");
 
     private int statusCode;
     private String status;
 
-    HttpResponseStatus(int statusCode, String status) {
+    HttpStatus(int statusCode, String status) {
         this.statusCode = statusCode;
         this.status = status;
     }
 
-    public static HttpResponseStatus of(int statusCode) {
-        return Arrays.stream(HttpResponseStatus.values())
+    public static HttpStatus of(int statusCode) {
+        return Arrays.stream(HttpStatus.values())
                 .filter(httpResponseStatus -> httpResponseStatus.statusCode == statusCode)
                 .findAny()
                 .orElseThrow(NotFoundStatusException::new)

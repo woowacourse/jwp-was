@@ -2,26 +2,23 @@ package http.request;
 
 import http.HttpVersion;
 
-import static http.HttpString.CRLF;
-import static http.HttpString.WHITE_SPACE;
-
 public class HttpRequestLine {
 
-    private final HttpRequestMethod method;
-    private final HttpRequestUri uri;
+    private final HttpMethod method;
+    private final HttpUri uri;
     private final HttpVersion version;
 
-    public HttpRequestLine(HttpRequestMethod method, HttpRequestUri uri, HttpVersion version) {
+    public HttpRequestLine(HttpMethod method, HttpUri uri, HttpVersion version) {
         this.method = method;
         this.uri = uri;
         this.version = version;
     }
 
-    public HttpRequestMethod getMethod() {
+    public HttpMethod getMethod() {
         return method;
     }
 
-    public HttpRequestUri getUri() {
+    public HttpUri getUri() {
         return uri;
     }
 
@@ -31,8 +28,7 @@ public class HttpRequestLine {
 
     @Override
     public String toString() {
-        return method.getMethod() + WHITE_SPACE +
-                uri.toString() + WHITE_SPACE +
-                version.getVersion() + CRLF;
+        return String.format("%s %s %s\r\n", method.getMethod(),
+                uri.toString(), version.getVersion());
     }
 }

@@ -14,8 +14,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import static http.HttpString.EMPTY;
-
 public class HttpRequestParser {
     private static final Logger log = LoggerFactory.getLogger(HttpRequestParser.class);
 
@@ -47,8 +45,8 @@ public class HttpRequestParser {
     private static HttpRequestLine parseRequestLine(BufferedReader br) throws IOException {
         String startLine = br.readLine();
         String[] startLineTokens = startLine.split(START_LINE_DELIMITER);
-        HttpRequestMethod method = HttpRequestMethod.of(startLineTokens[0]);
-        HttpRequestUri uri = new HttpRequestUri(startLineTokens[1]);
+        HttpMethod method = HttpMethod.of(startLineTokens[0]);
+        HttpUri uri = new HttpUri(startLineTokens[1]);
         HttpVersion version = HttpVersion.of(startLineTokens[2]);
         return new HttpRequestLine(method, uri, version);
     }
@@ -56,7 +54,7 @@ public class HttpRequestParser {
     private static HttpHeader parseHeader(BufferedReader br) throws IOException {
         List<String> headerLines = new ArrayList<>();
         String header = br.readLine();
-        while (!EMPTY.equals(header)) {
+        while (!"".equals(header)) {
             if (header == null) {
                 break;
             }
@@ -70,7 +68,7 @@ public class HttpRequestParser {
 
     private static HttpBody parserBody(BufferedReader br, HttpHeader httpHeader) throws IOException {
         if (httpHeader.getContentLength() <= 0) {
-            return new HttpBody(EMPTY);
+            return new HttpBody("");
         }
 
         return new HttpBody(IOUtils.readData(br, httpHeader.getContentLength()));

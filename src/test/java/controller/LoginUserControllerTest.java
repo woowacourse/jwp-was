@@ -3,7 +3,7 @@ package controller;
 import http.request.HttpRequest;
 import http.request.HttpRequestParser;
 import http.response.HttpResponse;
-import http.response.HttpResponseStatus;
+import http.response.HttpStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import webserver.DispatcherServlet;
@@ -61,7 +61,7 @@ public class LoginUserControllerTest {
 
         DispatcherServlet.doDispatch(httpRequest, httpResponse);
 
-        assertEquals(httpResponse.getStatus(), HttpResponseStatus.FOUND);
+        assertEquals(httpResponse.getStatus(), HttpStatus.FOUND);
         assertEquals(httpResponse.getHeaderAttribute("Location"), "/index.html");
     }
 
@@ -88,7 +88,7 @@ public class LoginUserControllerTest {
 
         DispatcherServlet.doDispatch(httpRequest, httpResponse);
 
-        assertEquals(httpResponse.getStatus(), HttpResponseStatus.FOUND);
+        assertEquals(httpResponse.getStatus(), HttpStatus.FOUND);
         assertEquals(httpResponse.getHeaderAttribute("Location"), "/user/login_failed.html");
     }
 }
