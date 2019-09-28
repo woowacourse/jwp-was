@@ -10,7 +10,7 @@ public class UserFormController extends AbstractController {
 
     @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        ModelAndView modelAndView = new ModelAndView("/users/form");
+        ModelAndView modelAndView = new ModelAndView("/user/form");
         handle(modelAndView, httpResponse);
     }
 
