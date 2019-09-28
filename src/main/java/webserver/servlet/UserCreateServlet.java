@@ -7,8 +7,8 @@ import org.slf4j.LoggerFactory;
 import webserver.RequestHandler;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
+import webserver.resolver.Resolver;
 import webserver.view.ModelAndView;
-import webserver.view.View;
 
 import java.io.IOException;
 
@@ -16,13 +16,16 @@ public class UserCreateServlet extends RequestServlet {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private final String url = "/user/create";
 
+    public UserCreateServlet(Resolver resolver) {
+        super(resolver);
+    }
+
     @Override
     public ModelAndView doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         User user = new User(httpRequest.getBody("userId"), httpRequest.getBody("password"), httpRequest.getBody("name"), httpRequest.getBody("email"));
         logger.debug(">>> User : {}", user);
         DataBase.addUser(user);
-        httpResponse.redirect("/");
-        return new ModelAndView(null);
+        return new ModelAndView(resolver.createView("redirect:" + url));
     }
 
     @Override

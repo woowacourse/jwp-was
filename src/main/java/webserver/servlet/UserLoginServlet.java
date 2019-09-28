@@ -4,6 +4,7 @@ import db.DataBase;
 import model.User;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
+import webserver.resolver.Resolver;
 import webserver.view.ModelAndView;
 
 import java.io.IOException;
@@ -11,10 +12,13 @@ import java.io.IOException;
 public class UserLoginServlet extends RequestServlet {
     private final String url = "/user/login";
 
+    public UserLoginServlet(Resolver resolver) {
+        super(resolver);
+    }
+
     @Override
     public ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
-        httpResponse.ok();
-        return new ModelAndView(url);
+        return null;
     }
 
     @Override
@@ -23,12 +27,10 @@ public class UserLoginServlet extends RequestServlet {
         String password = httpRequest.getBody("password");
         User user = DataBase.findUserById(id);
         if (canLogin(password, user)) {
-            httpResponse.redirect("/");
             httpResponse.setCookie();
-            return new ModelAndView(null);
+            return new ModelAndView(resolver.createView("redirect:/"));
         }
-        httpResponse.redirect("/user/login_failed.html");
-        return new ModelAndView(null);
+        return new ModelAndView(resolver.createView("redirect:/user/login-failed.html"));
     }
 
     private boolean canLogin(String password, User user) {

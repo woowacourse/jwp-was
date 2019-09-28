@@ -25,10 +25,6 @@ public class RequestUri {
         return queryStrings.get(key);
     }
 
-    public boolean isFile() {
-        return absPath.contains(FILE_EXTENSION_DELIMITER);
-    }
-
     public boolean isSameAbsPath(String targetAbsPath){
         return absPath.equals(targetAbsPath);
     }

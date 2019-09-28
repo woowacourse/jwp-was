@@ -25,7 +25,7 @@ public abstract class RequestServlet implements HttpServlet {
     }
 
     @Override
-    public ModelAndView run(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+    public ModelAndView run(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         if (httpRequest.getMethod() == RequestMethod.GET) {
             return doGet(httpRequest, httpResponse);
         }

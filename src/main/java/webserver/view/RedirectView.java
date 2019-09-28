@@ -14,6 +14,6 @@ public class RedirectView implements View {
 
     @Override
     public void render(Map<String, Object> model, HttpRequest httpRequest, HttpResponse httpResponse) {
-
+        
     }
 }
