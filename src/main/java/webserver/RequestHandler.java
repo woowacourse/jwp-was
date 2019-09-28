@@ -1,6 +1,8 @@
 package webserver;
 
+import controller.Controller;
 import controller.ControllerContainer;
+import controller.exception.ControllerNotFoundException;
 import http.request.HttpRequest;
 import http.request.factory.HttpRequestFactory;
 import http.response.HttpResponse;
@@ -16,36 +18,33 @@ import java.net.Socket;
 import java.net.URISyntaxException;
 
 public class RequestHandler implements Runnable {
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private Socket connection;
+	private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+	private Socket connection;
 
-    public RequestHandler(Socket connectionSocket) {
-        this.connection = connectionSocket;
-    }
+	public RequestHandler(Socket connectionSocket) {
+		this.connection = connectionSocket;
+	}
 
-    public void run() {
-        logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
-                connection.getPort());
+	public void run() {
+		logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(), connection.getPort());
 
-        try (InputStream inputStream = connection.getInputStream();
-             OutputStream outputStream = connection.getOutputStream()) {
+		try (InputStream inputStream = connection.getInputStream();
+		     OutputStream outputStream = connection.getOutputStream()) {
 
-            DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-            HttpRequest httpRequest = HttpRequestFactory.create(RequestParser.lineParse(inputStream));
-            HttpResponse httpResponse = new HttpResponse();
+			DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
 
-            logger.debug("RequestLine: {}", httpRequest.getHttpRequestStartLine().toString());
+			HttpRequest httpRequest = HttpRequestFactory.create(RequestParser.lineParse(inputStream));
+			HttpResponse httpResponse = HttpResponse.of(httpRequest);
 
-            if (httpRequest.isContainExtension()) {
-                ControllerContainer.getController("/").service(httpRequest, httpResponse);
-            } else {
-                ControllerContainer.getController(httpRequest.getUri()).service(httpRequest, httpResponse);
-            }
+			logger.debug("Request: {}", httpRequest.toString());
 
-            httpResponse.sendResponse(dataOutputStream);
+			Controller controller = ControllerContainer.getController(httpRequest.isContainExtension(), httpRequest.getUri());
+			controller.service(httpRequest, httpResponse);
 
-        } catch (IOException | URISyntaxException e) {
-            logger.error(e.getMessage());
-        }
-    }
+			httpResponse.writeResponse(dataOutputStream);
+
+		} catch (IOException | URISyntaxException | ControllerNotFoundException e) {
+			logger.error(e.getMessage());
+		}
+	}
 }
