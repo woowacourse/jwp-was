@@ -6,7 +6,7 @@ import http.response.HttpResponse;
 import model.User;
 import org.junit.jupiter.api.Test;
 import session.HttpSession;
-import session.HttpSessionDB;
+import session.HttpSessionManager;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -37,7 +37,7 @@ class UserListControllerTest {
         DataBase.addUser(user1);
         DataBase.addUser(user2);
 
-        HttpSession httpSession = HttpSessionDB.getInstance().createSession();
+        HttpSession httpSession = HttpSessionManager.getInstance().createSession();
         httpSession.setAttribute("login-user", user1);
 
         String requestSting = "GET /user/list HTTP/1.1\n" +
