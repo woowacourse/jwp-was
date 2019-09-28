@@ -24,7 +24,7 @@ public class DispatcherServlet {
         this.httpResponse = httpResponse;
     }
 
-    public void dispatch(HttpRequest httpRequest) throws IOException {
+    public void doDispatch(HttpRequest httpRequest) throws IOException {
         try {
             HttpServlet httpServlet = MappingHandler.getServlets(httpRequest.getUri());
             ModelAndView modelAndView = httpServlet.run(httpRequest, httpResponse);

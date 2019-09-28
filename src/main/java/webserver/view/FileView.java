@@ -2,6 +2,7 @@ package webserver.view;
 
 import utils.FileIoUtils;
 import webserver.http.request.HttpRequest;
+import webserver.http.response.FileType;
 import webserver.http.response.HttpResponse;
 
 import java.io.IOException;
@@ -18,16 +19,8 @@ public class FileView implements View {
     @Override
     public void render(Map<String, Object> model, HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         byte[] body = FileIoUtils.loadFileFromClasspath(name);
-
         httpResponse.ok();
-        httpResponse.writeLine();
-
-        httpResponse.appendHeader("content-type", "text/html");
-        httpResponse.appendHeader("content-length", body.length);
-        httpResponse.writeHeader();
-
-        httpResponse.writeBody(body);
-
-        httpResponse.end();
+        httpResponse.appendContentHeader(FileIoUtils.loadMIMEFromClasspath(name), body.length);
+        send(httpResponse,body);
     }
 }

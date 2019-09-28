@@ -1,8 +1,12 @@
 package webserver.view;
 
+import utils.FileIoUtils;
 import webserver.http.request.HttpRequest;
+import webserver.http.response.FileType;
 import webserver.http.response.HttpResponse;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Map;
 
 public class RedirectView implements View {
@@ -13,7 +17,8 @@ public class RedirectView implements View {
     }
 
     @Override
-    public void render(Map<String, Object> model, HttpRequest httpRequest, HttpResponse httpResponse) {
-        
+    public void render(Map<String, Object> model, HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+        httpResponse.redirect(name);
+        send(httpResponse);
     }
 }

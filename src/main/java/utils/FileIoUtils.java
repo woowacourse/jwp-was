@@ -26,14 +26,6 @@ public class FileIoUtils {
         return new Tika().detect(filePath);
     }
 
-    public static byte[] loadHtmlFile(String path) throws IOException, URISyntaxException {
-        return loadFileFromClasspath(generateHtmlFilePath(path));
-    }
-
-    public static byte[] loadStaticFile(String path) throws IOException, URISyntaxException {
-        return loadFileFromClasspath(generateStaticFilePath(path));
-    }
-
     public static String generateHtmlFilePath(String absPath) {
         return ROOT_TEMPLATE_FILE_PATH + absPath;
     }

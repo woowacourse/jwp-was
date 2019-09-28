@@ -36,8 +36,9 @@ public class HttpResponse {
         headers.put(key, value);
     }
 
-    public void appendContentType(FileType fileType) {
-        appendHeader("CONTENT_TYPE", fileType.getMemeName());
+    public void appendContentHeader(String memeName, int length) {
+        appendHeader("Content-Type", memeName);
+        appendHeader("Content-Length", length);
     }
 
     public void writeLine() throws IOException {
@@ -60,8 +61,10 @@ public class HttpResponse {
     }
 
     public void setCookie() {
-        appendHeader("Set-Cookie","logined=true; Path=/");
+        appendHeader("Set-Cookie", "logined=true; Path=/");
     }
+
+
 }
 
 
