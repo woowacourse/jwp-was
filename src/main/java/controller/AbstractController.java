@@ -13,22 +13,23 @@ public abstract class AbstractController implements Controller {
 
     @Override
     public void service(Request request, Response response) {
+        if (isNotSupportMethod(request.getMethod())) {
+            response.forward(request.getPath(), HttpStatus.METHOD_NOT_ALLOWED);
+            return;
+        }
+
         if (request.getMethod().contains(HttpMethod.POST.name())) {
             doPost(request, response);
             return;
         }
 
         doGet(request, response);
-
-        if (!isSupportMethod(request.getMethod())) {
-            response.forward(request.getPath(), HttpStatus.METHOD_NOT_ALLOWED);
-        }
     }
 
-    private boolean isSupportMethod(String method) {
+    private boolean isNotSupportMethod(String method) {
         return supportMethod.stream()
                 .map(Enum::name)
-                .anyMatch(name -> name.equals(method));
+                .noneMatch(name -> name.equals(method));
     }
 
     public void doPost(Request request, Response response) {

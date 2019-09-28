@@ -17,9 +17,6 @@ public class ResponseWriter {
     private static final String STATUS_FORMAT = "%s %d %s %s";
     private static final String NEST_LINE = "\r\n";
 
-    public ResponseWriter() {
-    }
-
     public void send(OutputStream out, Response response) {
         try (DataOutputStream dos = new DataOutputStream(out)) {
             responseStatus(dos, response);

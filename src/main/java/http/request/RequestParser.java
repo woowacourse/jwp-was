@@ -34,6 +34,14 @@ public class RequestParser {
         parseRequest(bufferedReader);
     }
 
+    public Map<String, String> getHeaderInfo() {
+        return header;
+    }
+
+    public Map<String, String> getParameter() {
+        return parameter;
+    }
+
     private void parseRequest(BufferedReader bufferedReader) throws IOException {
         String line = bufferedReader.readLine();
         header.put(METHOD, line);
@@ -77,13 +85,5 @@ public class RequestParser {
                     .extractInformation(url.substring(url.lastIndexOf(QUERY_STRING_SEPARATOR) + NEXT_INT));
             parameter.putAll(queryParams);
         }
-    }
-
-    public Map<String, String> getHeaderInfo() {
-        return header;
-    }
-
-    public Map<String, String> getParameter() {
-        return parameter;
     }
 }

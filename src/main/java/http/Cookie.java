@@ -1,6 +1,7 @@
 package http;
 
 public class Cookie {
+    private static final String DEFAULT_PATH = "/";
     private String name;
     private String value;
     private String path;
@@ -8,7 +9,7 @@ public class Cookie {
     public Cookie(String name, String value) {
         this.name = name;
         this.value = value;
-        this.path = "/";
+        this.path = DEFAULT_PATH;
     }
 
     public String getName() {

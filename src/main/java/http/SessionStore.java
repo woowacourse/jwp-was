@@ -8,34 +8,42 @@ import java.util.Map;
 import java.util.UUID;
 
 public class SessionStore {
+    private static String JSESSION = "JSESSION";
+
     private static Map<String, Session> sessions = new HashMap<>();
 
-    public static void addSessions(String sessionId, Session session) {
-        sessions.put(sessionId, session);
-    }
-
-    public static void getSession(String sessionId) {
-        sessions.get(sessionId);
-    }
-
-    public static int getSessionSize() {
-        return sessions.size();
-    }
-
     public static void setSession(Request request, Response response) {
-        if (request.getCookie("JSESSION") == null || !sessions.containsKey(request.getCookie("JSESSION").getValue())) {
-            System.out.println("하이");
-            String sessionId = UUID.randomUUID().toString();
-            Session session = new Session(sessionId);
-            System.out.println(session);
-            sessions.put(sessionId, session);
-            request.setSession(session);
-            response.addCookie(new Cookie("JSESSION", sessionId));
+        Cookie requestCookie = request.getCookie(JSESSION);
+
+        if (haveSession(requestCookie)) {
+            maintainSession(request, requestCookie);
         }
 
-        if (request.getCookie("JSESSION") != null && sessions.containsKey(request.getCookie("JSESSION").getValue())) {
-            System.out.println("하하");
-            request.setSession(sessions.get(request.getCookie("JSESSION").getValue()));
+        if (haveNotSession(requestCookie)) {
+            makeSession(request, response, requestCookie);
         }
+    }
+
+    private static boolean haveSession(Cookie requestCookie) {
+        return requestCookie != null
+                && sessions.containsKey(requestCookie.getValue());
+    }
+
+    private static boolean haveNotSession(Cookie requestCookie) {
+        return requestCookie == null
+                || !sessions.containsKey(requestCookie.getValue());
+    }
+
+    private static void makeSession(Request request, Response response, Cookie requestCookie) {
+        String sessionId = UUID.randomUUID().toString();
+        Session session = new Session(sessionId);
+
+        sessions.put(sessionId, session);
+        request.setSession(session);
+        response.addCookie(new Cookie(JSESSION, sessionId));
+    }
+
+    private static void maintainSession(Request request, Cookie requestCookie) {
+        request.setSession(sessions.get(requestCookie.getValue()));
     }
 }

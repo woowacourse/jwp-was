@@ -72,11 +72,15 @@ public class Request {
     private void containsCookie(Map<String, String> header) {
         if (header.containsKey(COOKIE)) {
             String[] cookies = header.get(COOKIE).split(SEMI_REGEX);
-            for (String value : cookies) {
-                String[] cookieInfo = value.trim().split(SEPARATOR);
-                Cookie cookie = new Cookie(cookieInfo[0], cookieInfo[1]);
-                this.cookies.put(cookie.getName(), cookie);
-            }
+            addCookie(cookies);
+        }
+    }
+
+    private void addCookie(String[] cookies) {
+        for (String value : cookies) {
+            String[] cookieInfo = value.trim().split(SEPARATOR);
+            Cookie cookie = new Cookie(cookieInfo[0], cookieInfo[1]);
+            this.cookies.put(cookie.getName(), cookie);
         }
     }
 }

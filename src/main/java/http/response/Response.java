@@ -30,15 +30,19 @@ public class Response {
     }
 
     public void forward(String location, HttpStatus httpStatus) {
-        if (body == null) {
-            this.body = FileIoUtils.loadFileFromClasspath(location);
-            mimeType = MediaType.of(ExtractInformationUtils.extractExtension(location)).getMediaType();
-        }
+        setMimeType(location);
         setHttpStatus(httpStatus);
         addHeader(CONTENT_TYPE, String.format(CONTENT_TYPE_FORMAT, mimeType));
         addHeader(CONTENT_LENGTH, String.format(CONTENT_LENGTH_FORMAT, body.length));
 
         addCookieHeader();
+    }
+
+    private void setMimeType(String location) {
+        if (body == null) {
+            this.body = FileIoUtils.loadFileFromClasspath(location);
+            mimeType = MediaType.of(ExtractInformationUtils.extractExtension(location)).getMediaType();
+        }
     }
 
     public void sendRedirect(String location, HttpStatus httpStatus) {
