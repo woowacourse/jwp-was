@@ -27,6 +27,10 @@ public class HttpCookie {
         this.pairOption.put("Path", path);
     }
 
+    public void sessionCookie(String sessionId) {
+        this.pair.put("JSESSIONID", sessionId);
+    }
+
     public String line() {
         StringJoiner stringJoiner = new StringJoiner("; ");
 

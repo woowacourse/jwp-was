@@ -8,6 +8,7 @@ import java.util.Map;
 
 public class HttpResponse {
     private static final String TEXT_PLAIN = "text/plain";
+    private static final String SET_COOKIE = "Set-Cookie";
 
     public static final HttpResponse BAD_REQUEST =
             HttpResponse.builder(HttpContentType.getHttpContentType(TEXT_PLAIN))
@@ -27,6 +28,7 @@ public class HttpResponse {
     private final HttpVersion version;
     private final HttpStatusCode statusCode;
     private final HttpContentType contentType;
+    private final HttpCookies httpCookies;
     private final Map<String, String> optionFields;
     private final String body;
 
@@ -34,6 +36,7 @@ public class HttpResponse {
         private HttpVersion version = HttpVersion.HTTP_1_1;
         private HttpStatusCode statusCode = HttpStatusCode.OK;
         private HttpContentType contentType;
+        private HttpCookies httpCookies = new HttpCookies();
         private Map<String, String> optionFields = new HashMap<>();
         private String body = "";
 
@@ -79,6 +82,7 @@ public class HttpResponse {
         this.version = builder.version;
         this.statusCode = builder.statusCode;
         this.contentType = builder.contentType;
+        this.httpCookies = builder.httpCookies;
         this.optionFields = builder.optionFields;
         this.body = builder.body;
     }
@@ -110,19 +114,25 @@ public class HttpResponse {
         ).orElse(HttpResponse.NOT_FOUND);
     }
 
-    public HttpResponse applyLoginCookie(HttpResponse httpResponse, boolean login) {
+    public void applySessionCookie(String sessionId) {
         HttpCookie cookie = new HttpCookie();
+        cookie.sessionCookie(sessionId);
 
+        httpCookies.add(cookie);
+    }
+
+    public void applyLoginCookie(boolean login) {
+        HttpCookie cookie = new HttpCookie();
         cookie.loginCookie(login, "/");
-        httpResponse.optionFields.put("Set-Cookie", cookie.line());
 
-        return httpResponse;
+        httpCookies.add(cookie);
     }
 
     public String serializeHeader() {
         final StringBuilder header = new StringBuilder(serializeMandatory());
 
         optionFields.keySet().forEach(key -> header.append(headerParse(key, optionFields.get(key))));
+        httpCookies.cookies().forEach(cookie -> header.append(headerParse(SET_COOKIE, cookie.line())));
 
         return header.toString();
     }
