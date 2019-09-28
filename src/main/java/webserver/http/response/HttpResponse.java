@@ -4,11 +4,13 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class HttpResponse {
     private static final String NEW_LINE = "\r\n";
     private final String HEADER_DELIMITER = ": ";
     private final String LINE_DELIMITER = " ";
+    private Map<String, String> cookies = new HashMap<>();
     private HttpVersion httpVersion;
     private DataOutputStream dos;
     private HttpStatus httpStatus;
@@ -41,12 +43,14 @@ public class HttpResponse {
         appendHeader("Content-Length", length);
     }
 
-    public void addCookie(Map) {
-        appendHeader("Set-Cookie", "logined=true; Path=/");
+    public void setCookie(String key, String value) {
+        cookies.put(key, value);
     }
 
-    public void setCookie() {
-        appendHeader("Set-Cookie", "logined=true; Path=/");
+    private String parseCookies(Map<String, String> cookies) {
+        return cookies.entrySet().stream()
+                .map(s -> String.join("=", s.getKey(), s.getValue(), ";"))
+                .collect(Collectors.joining(" "));
     }
 
     public void writeLine() throws IOException {
@@ -54,8 +58,15 @@ public class HttpResponse {
     }
 
     public void writeHeader() throws IOException {
+        appendCookieHeader();
         for (Map.Entry<String, Object> entry : headers.entrySet()) {
             dos.writeBytes(entry.getKey() + HEADER_DELIMITER + entry.getValue() + NEW_LINE);
+        }
+    }
+
+    private void appendCookieHeader() {
+        if (!cookies.isEmpty()) {
+            appendHeader("Set-Cookie", parseCookies(cookies) + "Path=/");
         }
     }
 

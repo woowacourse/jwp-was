@@ -10,4 +10,11 @@ public class HttpSession {
         this.id = id;
     }
 
+    public void setAttribute(String name, Object attribute) {
+        attributes.put(name, attribute);
+    }
+
+    public void getAttribute(String name) {
+        attributes.get(name);
+    }
 }

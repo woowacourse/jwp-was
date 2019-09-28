@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 import webserver.resolver.Resolver;
+import webserver.session.HttpSession;
 import webserver.view.ModelAndView;
 
 import java.io.IOException;
@@ -30,12 +31,14 @@ public class UserLoginServlet extends AbstractRequestServlet {
         String id = httpRequest.getBody("userId");
         String password = httpRequest.getBody("password");
         User user = DataBase.findUserById(id);
+        HttpSession httpSession = httpRequest.getSession();
         if (canLogin(password, user)) {
-            httpResponse.setCookie();
-
+            httpSession.setAttribute("user", user);
+            httpResponse.setCookie("logined","true");
             return new ModelAndView(resolver.createView("redirect:/"));
         }
         logger.debug(">>> LOGIN FAILED : {}", user);
+        httpResponse.setCookie("logined","false");
         return new ModelAndView(resolver.createView("redirect:/user/login-failed.html"));
     }
 
