@@ -3,7 +3,7 @@ package http.request;
 import java.util.Map;
 import java.util.Objects;
 
-import http.Header;
+import http.HeaderElement;
 
 public class HttpRequest {
 	private HttpRequestHeader httpRequestHeader;
@@ -18,7 +18,7 @@ public class HttpRequest {
 		this.httpRequestBody = httpRequestBody;
 	}
 
-	public String getRequestHeaderElement(Header attribute) {
+	public String getRequestHeaderElement(HeaderElement attribute) {
 		return httpRequestHeader.getRequestElement(attribute);
 	}
 
