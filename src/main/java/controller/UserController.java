@@ -3,7 +3,6 @@ package controller;
 import db.DataBase;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import http.response.ResponseStatus;
 import model.User;
 
 public class UserController extends AbstractController {
@@ -22,8 +21,7 @@ public class UserController extends AbstractController {
 
         DataBase.addUser(user);
 
-        httpResponse.setResponseStatus(ResponseStatus.FOUND);
-        httpResponse.addHeaderAttribute("Location", "/");
+        handle(new ModelAndView("redirect: /"), httpResponse);
     }
 
     private static class UserControllerLazyHolder {

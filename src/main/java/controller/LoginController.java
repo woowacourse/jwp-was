@@ -3,10 +3,8 @@ package controller;
 import db.DataBase;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import http.response.ResponseStatus;
 import http.session.Session;
 import model.User;
-import utils.FileIoUtils;
 
 public class LoginController extends AbstractController {
     private static class LoginControllerLazyHolder {
@@ -19,9 +17,7 @@ public class LoginController extends AbstractController {
 
     @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        httpResponse.setBody(FileIoUtils.loadFileFromClasspath("./templates" + "/user/login" + ".html"));
-        httpResponse.setResponseStatus(ResponseStatus.OK);
-        httpResponse.addHeaderAttribute("Content-Type", "text/html; charset=utf-8");
+        handle(new ModelAndView("/user/login"), httpResponse);
     }
 
     @Override
@@ -30,17 +26,17 @@ public class LoginController extends AbstractController {
         String password = httpRequest.getFormDataParameter("password");
 
         User user = DataBase.findUserById(userId);
-        if (user != null && user.matchPassword(password)) {
-            httpResponse.setResponseStatus(ResponseStatus.FOUND);
-            httpResponse.addHeaderAttribute("Location", "/");
+        ModelAndView modelAndView;
 
+        if (user != null && user.matchPassword(password)) {
             Session session = httpRequest.getSession();
             session.setAttribute("user", user);
             httpResponse.addHeaderAttribute("Set-Cookie", "SessionID=" + session.getId() + "; Path=/");
-            return;
+            modelAndView = new ModelAndView("redirect: /");
+        } else {
+            modelAndView = new ModelAndView("redirect: /user/login_failed");
         }
-        httpResponse.setResponseStatus(ResponseStatus.FOUND);
-        httpResponse.addHeaderAttribute("Location", "/user/login_failed");
-        httpResponse.addHeaderAttribute("Set-Cookie", "logined=false; Path=/");
+
+        handle(modelAndView, httpResponse);
     }
 }
