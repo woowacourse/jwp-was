@@ -15,7 +15,7 @@ public class RequestLine {
     private final String version;
 
     public RequestLine(String firstLine) {
-        logger.info("request-line contents: {}", firstLine);
+        logger.debug("request-line contents: {}", firstLine);
         String[] tokens = firstLine.split(FIRST_LINE_DELIMITER);
         this.requestMethod = RequestMethod.valueOf(tokens[0]);
         urlParse(tokens[1]);

@@ -39,7 +39,7 @@ public class RequestHeader {
 
             String[] keyValue = line.split(HEADER_DELIMITER);
             headerContents.put(keyValue[0], keyValue[1]);
-            logger.info("request header contents: {}", line);
+            logger.debug("request header contents: {}", line);
         }
     }
 
