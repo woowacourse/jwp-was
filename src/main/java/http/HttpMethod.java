@@ -20,4 +20,8 @@ public enum HttpMethod {
                 .findAny()
                 .orElseThrow(NotFoundMethodException::new);
     }
+
+    public String getMethod() {
+        return method;
+    }
 }
