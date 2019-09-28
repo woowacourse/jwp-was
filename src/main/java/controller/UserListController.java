@@ -11,10 +11,6 @@ import java.util.Map;
 import static view.ViewResolver.REDIRECT_SIGNATURE;
 
 public class UserListController extends AbstractController {
-    private static class UserListControllerLazyHolder {
-        private static final UserListController INSTANCE = new UserListController();
-    }
-
     public static UserListController getInstance() {
         return UserListControllerLazyHolder.INSTANCE;
     }
@@ -34,5 +30,9 @@ public class UserListController extends AbstractController {
 
     private boolean isLoginedUser(Session session) {
         return session.getAttribute("user") != null;
+    }
+
+    private static class UserListControllerLazyHolder {
+        private static final UserListController INSTANCE = new UserListController();
     }
 }

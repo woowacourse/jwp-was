@@ -11,7 +11,7 @@ class HandlerMappingTest {
 
     @Test
     void handler_존재하는_경우() {
-        assertDoesNotThrow(() ->handlerMapping.getHandler("/"));
+        assertDoesNotThrow(() -> handlerMapping.getHandler("/"));
     }
 
     @Test

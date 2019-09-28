@@ -11,6 +11,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RequestParameterTest {
+    private static Stream<Arguments> provideInputOutputs() {
+        RequestParameter requestParameter = new RequestParameter("");
+        return Stream.of(
+                Arguments.of("&", requestParameter),
+                Arguments.of("=", requestParameter)
+        );
+    }
+
     @Test
     void 정상_생성() {
         String queryString1 = "id=1&password=abcd1234";
@@ -38,13 +46,5 @@ class RequestParameterTest {
     @MethodSource("provideInputOutputs")
     void parse(String input, RequestParameter requestParameter) {
         assertThat(new RequestParameter(input)).isEqualTo(requestParameter);
-    }
-
-    private static Stream<Arguments> provideInputOutputs() {
-        RequestParameter requestParameter = new RequestParameter("");
-        return Stream.of(
-                Arguments.of("&", requestParameter),
-                Arguments.of("=", requestParameter)
-        );
     }
 }

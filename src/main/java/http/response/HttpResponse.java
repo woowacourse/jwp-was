@@ -8,8 +8,8 @@ public class HttpResponse {
     private static final String LINE_FEED_AND_CARRIAGE_RETURN = "\r\n";
     private static final String RESPONSE_HEADER_SERIALIZE_FORMAT = "%s" + LINE_FEED_AND_CARRIAGE_RETURN + "%s";
     private final HttpRequest httpRequest;
-    private StatusLine statusLine;
     private final HttpHeader httpHeader;
+    private StatusLine statusLine;
     private byte[] body;
 
     public HttpResponse(HttpRequest httpRequest) {
@@ -17,21 +17,16 @@ public class HttpResponse {
         this.httpHeader = new HttpHeader();
     }
 
-    public void setResponseStatus(ResponseStatus responseStatus) {
-        HttpVersion httpVersion = httpRequest.getHttpVersion();
-        this.statusLine = new StatusLine(httpVersion, responseStatus);
+    public void setBody(byte[] body) {
+        this.body = body;
     }
 
     public void addHeaderAttribute(String key, String value) {
         this.httpHeader.addHeaderAttribute(key, value);
     }
 
-    public void setBody(byte[] body) {
-        this.body = body;
-    }
-
-    public ResponseStatus getResponseStatus() {
-        return statusLine.getResponseStatus();
+    public void addCookie(String name, String value) {
+        addHeaderAttribute("Set-Cookie", String.format("%s=%s", name, value));
     }
 
     public byte[] serialize() {
@@ -46,7 +41,16 @@ public class HttpResponse {
         return responseHeader.getBytes();
     }
 
-    public void addCookie(String name, String value) {
-        addHeaderAttribute("Set-Cookie", String.format("%s=%s", name, value));
+    public ResponseStatus getResponseStatus() {
+        return statusLine.getResponseStatus();
+    }
+
+    public void setResponseStatus(ResponseStatus responseStatus) {
+        HttpVersion httpVersion = httpRequest.getHttpVersion();
+        this.statusLine = new StatusLine(httpVersion, responseStatus);
+    }
+
+    public HttpHeader getHttpHeader() {
+        return httpHeader;
     }
 }

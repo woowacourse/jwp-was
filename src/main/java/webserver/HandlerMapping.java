@@ -19,6 +19,10 @@ public class HandlerMapping {
         HANDLER_MAP.put("/", IndexController.getInstance());
     }
 
+    public static HandlerMapping getInstance() {
+        return HandlerMappingLazyHolder.INSTANCE;
+    }
+
     public Controller getHandler(String path) {
         return Optional.ofNullable(HANDLER_MAP.get(path))
                 .orElseThrow(ResourceNotFoundException::new);
@@ -26,9 +30,5 @@ public class HandlerMapping {
 
     private static class HandlerMappingLazyHolder {
         private static final HandlerMapping INSTANCE = new HandlerMapping();
-    }
-
-    public static HandlerMapping getInstance() {
-        return HandlerMappingLazyHolder.INSTANCE;
     }
 }

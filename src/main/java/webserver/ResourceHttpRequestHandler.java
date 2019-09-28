@@ -18,7 +18,7 @@ public class ResourceHttpRequestHandler {
     /**
      * 정적 자원에 대한 HTTP 요청을 처리
      *
-     * @param httpRequest HTTP 요청을 나타내는 객체
+     * @param httpRequest  HTTP 요청을 나타내는 객체
      * @param httpResponse HTTP 응답을 나타내는 객체
      * @return {@code true} handle 성공, {@code false} 해당 자원이 없어 handle 실패
      * @throws LoadFileFailedException 파일 IO에서 오류가 날 경우 발생.

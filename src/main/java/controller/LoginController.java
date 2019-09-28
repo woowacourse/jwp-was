@@ -10,10 +10,6 @@ import static http.common.HttpHeader.SESSIONID;
 import static view.ViewResolver.REDIRECT_SIGNATURE;
 
 public class LoginController extends AbstractController {
-    private static class LoginControllerLazyHolder {
-        private static final LoginController INSTANCE = new LoginController();
-    }
-
     public static LoginController getInstance() {
         return LoginControllerLazyHolder.INSTANCE;
     }
@@ -42,5 +38,9 @@ public class LoginController extends AbstractController {
         }
 
         handle(modelAndView, httpResponse);
+    }
+
+    private static class LoginControllerLazyHolder {
+        private static final LoginController INSTANCE = new LoginController();
     }
 }

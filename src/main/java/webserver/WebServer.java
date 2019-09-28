@@ -9,9 +9,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class WebServer {
+    public static final int N_THREADS = 100;
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
     private static final int DEFAULT_PORT = 8080;
-    public static final int N_THREADS = 100;
 
     public static void main(String args[]) throws Exception {
         ExecutorService executorService = Executors.newFixedThreadPool(N_THREADS);

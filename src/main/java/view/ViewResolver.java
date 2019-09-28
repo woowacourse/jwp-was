@@ -16,15 +16,11 @@ public class ViewResolver {
         VIEWS.put(viewName -> viewName.startsWith(REDIRECT_SIGNATURE), RedirectView::new);
     }
 
-    private static class ViewResolverLazyHolder {
-        private static final ViewResolver INSTANCE = new ViewResolver();
+    private ViewResolver() {
     }
 
     public static ViewResolver getInstance() {
         return ViewResolverLazyHolder.INSTANCE;
-    }
-
-    private ViewResolver() {
     }
 
     public View resolve(String viewName) {
@@ -37,5 +33,9 @@ public class ViewResolver {
 
     private String buildPath(String viewName) {
         return String.format(PATH_FORMAT, TEMPLATES_PREFIX, viewName, TEMPLATES_SUFFIX);
+    }
+
+    private static class ViewResolverLazyHolder {
+        private static final ViewResolver INSTANCE = new ViewResolver();
     }
 }

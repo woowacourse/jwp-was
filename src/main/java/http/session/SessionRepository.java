@@ -11,10 +11,6 @@ public class SessionRepository {
     private SessionRepository() {
     }
 
-    private static class SessionRepositoryLazyHolder {
-        private static final SessionRepository INSTANCE = new SessionRepository();
-    }
-
     public static SessionRepository getInstance() {
         return SessionRepositoryLazyHolder.INSTANCE;
     }
@@ -37,5 +33,9 @@ public class SessionRepository {
         }
 
         return uuid;
+    }
+
+    private static class SessionRepositoryLazyHolder {
+        private static final SessionRepository INSTANCE = new SessionRepository();
     }
 }

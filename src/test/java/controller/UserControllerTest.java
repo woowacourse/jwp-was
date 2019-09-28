@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UserControllerTest {
-    private UserController userController = UserController.getInstance();
     private static final String USER_ID = "olaf";
     private static final String PASSWORD = "bmo";
     private static final String NAME = "bhy";
@@ -26,8 +25,8 @@ class UserControllerTest {
                     + "&password=" + PASSWORD
                     + "&name=" + NAME
                     + "&email=" + EMAIL;
-
     private static final User USER = new User(USER_ID, PASSWORD, NAME, EMAIL);
+    private UserController userController = UserController.getInstance();
 
     @Test
     void 유저생성() {

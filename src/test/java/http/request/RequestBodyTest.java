@@ -12,18 +12,18 @@ import static http.common.ContentType.FORM_URLENCODED;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RequestBodyTest {
-    @ParameterizedTest
-    @MethodSource("provideBodyAndContentType")
-    void request_body_생성(String body, String contentType) {
-        assertDoesNotThrow(() -> new RequestBody(body, contentType));
-    }
-
     private static Stream<Arguments> provideBodyAndContentType() {
         return Stream.of(
                 Arguments.of("", ""),
                 Arguments.of(null, null),
                 Arguments.of(null, FORM_URLENCODED)
         );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideBodyAndContentType")
+    void request_body_생성(String body, String contentType) {
+        assertDoesNotThrow(() -> new RequestBody(body, contentType));
     }
 
     @Test
