@@ -48,8 +48,8 @@
 3. HttpSession 구현
     - [x] HttpRequest 생성시 HttpSession 생성
     - [x] String getId() 구현
-    - [ ] void setAttribute(String name, Object value) 구현
-    - [ ] Object getAttribute(String name) 구현
+    - [x] void setAttribute(String name, Object value) 구현
+    - [x] Object getAttribute(String name) 구현
     - [ ] removeAttribute(String name) 구현
     - [ ] void invalidate() 구현
 ## 의문사항

@@ -13,4 +13,15 @@ class HttpSessionTest {
 
         assertThat(session.getId()).isEqualTo("id");
     }
+
+    @Test
+    @DisplayName("현재 세션에 value 인자로 전달되는 객체를 name 인자 이름으로 저장")
+    void setAttribute() {
+        HttpSession session = new HttpSession("id");
+        Object value = new Object();
+
+        session.setAttribute("name", value);
+
+        assertThat(session.getAttribute("name")).isEqualTo(value);
+    }
 }
