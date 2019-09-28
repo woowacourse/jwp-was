@@ -1,15 +1,11 @@
 package http.request;
 
-import http.exception.InvalidRequestException;
-import http.request.Request;
-import http.request.RequestBody;
-import http.request.RequestHeader;
-import http.request.RequestLine;
+import http.cookie.CookieParser;
 import http.cookie.Cookies;
+import http.exception.InvalidRequestException;
 import http.session.Session;
 import http.session.SessionStorage;
 import utils.IOUtils;
-import webserver.support.CookieParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;

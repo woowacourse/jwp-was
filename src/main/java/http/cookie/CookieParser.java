@@ -1,8 +1,7 @@
-package webserver.support;
+package http.cookie;
 
 import com.github.jknack.handlebars.internal.lang3.StringUtils;
 import com.google.common.collect.Lists;
-import http.cookie.Cookie;
 
 import java.util.Collections;
 import java.util.List;
