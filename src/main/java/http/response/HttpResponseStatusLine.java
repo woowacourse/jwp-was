@@ -7,8 +7,11 @@ public class HttpResponseStatusLine {
     private HttpVersion httpVersion;
     private HttpStatusCode httpStatusCode;
 
-    public HttpResponseStatusLine(HttpVersion httpVersion, HttpStatusCode httpStatusCode) {
+    public HttpResponseStatusLine(HttpVersion httpVersion) {
         this.httpVersion = httpVersion;
+    }
+
+    public void setHttpStatusCode(HttpStatusCode httpStatusCode) {
         this.httpStatusCode = httpStatusCode;
     }
 

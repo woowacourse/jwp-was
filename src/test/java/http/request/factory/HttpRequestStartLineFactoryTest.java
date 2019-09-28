@@ -15,7 +15,7 @@ class HttpRequestStartLineFactoryTest {
 
     @Test
     void create() {
-        HttpRequestTarget httpRequestTarget = new HttpRequestTarget(new Resource("/", "index", MediaType.HTML ), new QueryString(""));
+        HttpRequestTarget httpRequestTarget = new HttpRequestTarget(new Resource("/", "index.html", MediaType.HTML ), new QueryString(""));
         HttpRequestStartLine httpRequestStartLine = new HttpRequestStartLine(HttpRequestMethod.POST, httpRequestTarget, HttpVersion.HTTP_1_1);
         assertThat(HttpRequestStartLineFactory.create("POST /index.html HTTP/1.1")).isEqualTo(httpRequestStartLine);
     }

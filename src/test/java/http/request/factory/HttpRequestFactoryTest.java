@@ -15,7 +15,7 @@ class HttpRequestFactoryTest {
 
     @Test
     void create_Body가_있는_경우() {
-        HttpRequestTarget httpRequestTarget = new HttpRequestTarget(new Resource("/", "index", MediaType.HTML ), new QueryString(""));
+        HttpRequestTarget httpRequestTarget = new HttpRequestTarget(new Resource("/", "index.html", MediaType.HTML ), new QueryString(""));
         HttpRequestStartLine httpRequestStartLine = new HttpRequestStartLine(HttpRequestMethod.POST, httpRequestTarget, HttpVersion.HTTP_1_1);
 
         Map<String, String> map = new HashMap<>();
@@ -40,7 +40,7 @@ class HttpRequestFactoryTest {
 
     @Test
     void create_Body가_없는_경우() {
-        HttpRequestTarget httpRequestTarget = new HttpRequestTarget(new Resource("/", "index", MediaType.HTML ), new QueryString("id=2222&pw=1234"));
+        HttpRequestTarget httpRequestTarget = new HttpRequestTarget(new Resource("/", "index.html", MediaType.HTML ), new QueryString("id=2222&pw=1234"));
         HttpRequestStartLine httpRequestStartLine = new HttpRequestStartLine(HttpRequestMethod.GET, httpRequestTarget, HttpVersion.HTTP_1_1);
 
         Map<String, String> map = new HashMap<>();
