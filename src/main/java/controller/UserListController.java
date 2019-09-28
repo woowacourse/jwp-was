@@ -1,7 +1,6 @@
 package controller;
 
 import db.DataBase;
-import http.common.ContentType;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.response.ResponseStatus;
@@ -22,25 +21,20 @@ public class UserListController extends AbstractController {
 
     @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+        ModelAndView modelAndView;
         if (isLoginedUser(httpRequest.getSession())) {
-            TemplateManager templateManager = TemplateManager.getInstance();
             Map<String, Object> users = Collections.singletonMap("users", DataBase.findAll());
-
-            try {
-                byte[] result = templateManager.render(new ModelAndView("user/list", users));
-                httpResponse.addHeaderAttribute("Content-Type", ContentType.HTML + ";charset=utf-8");
-                httpResponse.addHeaderAttribute("Content-Length", String.valueOf(result.length));
-                httpResponse.setResponseStatus(ResponseStatus.OK);
-                httpResponse.setBody(result);
-            } catch (IOException e) {
-                e.printStackTrace();
-                httpResponse.setResponseStatus(ResponseStatus.INTERNAL_SERVER_ERROR);
-            }
-
-            return;
+            modelAndView = new ModelAndView("user/list", users);
+        } else {
+            modelAndView = new ModelAndView("redirect: /");
         }
-        httpResponse.setResponseStatus(ResponseStatus.FOUND);
-        httpResponse.addHeaderAttribute("Location", "/");
+
+        try {
+            setHttpResponse(modelAndView, httpResponse);
+        } catch (IOException e) {
+            e.printStackTrace();
+            httpResponse.setResponseStatus(ResponseStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     private boolean isLoginedUser(Session session) {
