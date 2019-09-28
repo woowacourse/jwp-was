@@ -8,6 +8,7 @@ import http.response.HttpResponse;
 import http.response.ResponseStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.exception.LoadFileFailedException;
 import webserver.exception.ResourceNotFoundException;
 
 import java.io.DataOutputStream;
@@ -55,6 +56,9 @@ public class RequestHandler implements Runnable {
         } catch (ResourceNotFoundException e) {
             log.error(e.getMessage(), e.getCause());
             httpResponse.setResponseStatus(ResponseStatus.NOT_FOUND);
+        } catch (LoadFileFailedException e) {
+            log.error(e.getMessage(), e.getCause());
+            httpResponse.setResponseStatus(ResponseStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
