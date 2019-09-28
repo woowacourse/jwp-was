@@ -4,6 +4,8 @@ import webserver.request.requestline.HttpMethod;
 import webserver.request.requestline.HttpRequestLine;
 import webserver.request.requestline.QueryParams;
 
+import static webserver.Cookie.JSESSIONID;
+
 public class HttpRequest {
 
     private HttpRequestLine httpRequestLine;
@@ -42,5 +44,13 @@ public class HttpRequest {
 
     public String findHeaderField(String name) {
         return httpRequestHeaderFields.findField(name);
+    }
+
+    public String findCookieField(String name) {
+        return httpRequestHeaderFields.findCookieField(name);
+    }
+
+    public boolean hasJSessionId() {
+        return findCookieField(JSESSIONID) != null;
     }
 }

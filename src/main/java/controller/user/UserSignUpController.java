@@ -1,11 +1,12 @@
-package controller;
+package controller.user;
 
+import controller.AbstractController;
 import db.DataBase;
 import model.User;
 import webserver.request.HttpRequest;
-import webserver.response.FoundResponseMetaData;
 import webserver.response.HttpResponse;
 import webserver.response.ResponseMetaData;
+import webserver.response.ResponseMetaDataGenerator;
 
 import java.io.IOException;
 
@@ -13,22 +14,27 @@ public class UserSignUpController extends AbstractController {
 
     @Override
     public void service(final HttpRequest request, final HttpResponse response) throws IOException {
-        ResponseMetaData responseMetaData = new FoundResponseMetaData(request, "/index.html");
+        ResponseMetaData responseMetaData = ResponseMetaDataGenerator.buildDefaultFoundMetaData(request, "/index.html");
         response.setResponseMetaData(responseMetaData);
 
         doPost(request, response);
     }
 
     @Override
-    void doPost(final HttpRequest request, final HttpResponse response) throws IOException {
+    protected void doPost(final HttpRequest request, final HttpResponse response) throws IOException {
+        User user = createUser(request);
+
+        DataBase.addUser(user);
+
+        response.makeResponse();
+    }
+
+    private User createUser(final HttpRequest request) {
         String userId = request.findRequestBodyParam("userId");
         String password = request.findRequestBodyParam("password");
         String name = request.findRequestBodyParam("name");
         String email = request.findRequestBodyParam("email");
 
-        User user = new User(userId, password, name, email);
-        DataBase.addUser(user);
-
-        response.makeResponse();
+        return new User(userId, password, name, email);
     }
 }

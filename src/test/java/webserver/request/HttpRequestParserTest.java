@@ -3,15 +3,12 @@ package webserver.request;
 import org.junit.jupiter.api.Test;
 import webserver.request.requestline.HttpMethod;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static webserver.Cookie.*;
+import static webserver.request.RequestHeaderFieldKeys.USER_AGENT;
 
 class HttpRequestParserTest {
 
@@ -27,5 +24,10 @@ class HttpRequestParserTest {
         assertThat(httpRequest.findMethod()).isEqualByComparingTo(HttpMethod.GET);
         assertThat(httpRequest.findUri()).isEqualTo("/user/create?userId=javajigi&password=password&name=JaeSung");
         assertThat(httpRequest.findHeaderField("Host")).isEqualTo("localhost:8080");
+        assertThat(httpRequest.findCookieField(END_POINT)).isEqualTo("991d27d9-b24f-44b0-b373-1f05c2bacd89");
+        assertThat(httpRequest.findCookieField(JSESSIONID)).isEqualTo("C46C9A085D907B5D12F7568E0A692145");
+        assertThat(httpRequest.findCookieField(LOGINED)).isEqualTo("true");
+        assertThat(httpRequest.findHeaderField(USER_AGENT)).isEqualTo("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6)" +
+                " AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36");
     }
 }

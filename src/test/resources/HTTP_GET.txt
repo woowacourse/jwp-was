@@ -2,3 +2,5 @@ GET /user/create?userId=javajigi&password=password&name=JaeSung HTTP/1.1
 Host: localhost:8080
 Connection: keep-alive
 Accept: */*
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36
+Cookie: endpoint=991d27d9-b24f-44b0-b373-1f05c2bacd89; JSESSIONID=C46C9A085D907B5D12F7568E0A692145; logined=true
