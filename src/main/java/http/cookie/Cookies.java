@@ -1,4 +1,4 @@
-package http.response;
+package http.cookie;
 
 import java.util.Collections;
 import java.util.List;

@@ -1,6 +1,6 @@
 package webserver.support;
 
-import http.response.Cookie;
+import http.cookie.Cookie;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

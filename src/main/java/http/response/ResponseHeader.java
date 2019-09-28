@@ -1,6 +1,8 @@
 package http.response;
 
 import com.google.common.collect.Lists;
+import http.cookie.Cookie;
+import http.cookie.Cookies;
 
 import java.util.List;
 import java.util.Objects;

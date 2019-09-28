@@ -1,6 +1,6 @@
 package webserver.support;
 
-import http.response.Cookie;
+import http.cookie.Cookie;
 import http.response.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

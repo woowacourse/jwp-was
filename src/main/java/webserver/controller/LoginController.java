@@ -1,7 +1,7 @@
 package webserver.controller;
 
 import http.request.Request;
-import http.response.Cookie;
+import http.cookie.Cookie;
 import http.response.Response;
 import http.session.Session;
 import model.LoginService;

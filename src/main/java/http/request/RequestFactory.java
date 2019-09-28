@@ -1,11 +1,11 @@
-package http.utils;
+package http.request;
 
 import http.exception.InvalidRequestException;
 import http.request.Request;
 import http.request.RequestBody;
 import http.request.RequestHeader;
 import http.request.RequestLine;
-import http.response.Cookies;
+import http.cookie.Cookies;
 import http.session.Session;
 import http.session.SessionStorage;
 import utils.IOUtils;

@@ -1,6 +1,6 @@
 package http.session;
 
-import http.response.Cookie;
+import http.cookie.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

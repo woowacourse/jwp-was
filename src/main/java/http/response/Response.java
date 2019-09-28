@@ -1,5 +1,6 @@
 package http.response;
 
+import http.cookie.Cookie;
 import utils.FileIoUtils;
 import webserver.support.ContentTypeHandler;
 import webserver.support.HandlebarsRenderer;
