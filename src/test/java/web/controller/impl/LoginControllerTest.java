@@ -24,7 +24,7 @@ class LoginControllerTest extends RequestHelper {
     private static final String TEMPLATES_PATH = "./templates";
     private static final String USER_LOGIN_PAGE = "/user/login.html";
 
-    protected final String requestPostWithWeirdQuery =
+    private final String requestPostWithWeirdQuery =
             "POST /user/create HTTP/1.1\n" +
                     "Host: localhost:8080\n" +
                     "Connection: keep-alive\n" +

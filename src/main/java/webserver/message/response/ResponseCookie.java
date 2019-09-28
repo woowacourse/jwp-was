@@ -44,12 +44,12 @@ public class ResponseCookie {
             return this;
         }
 
-        public Builder secure(final String path) {
+        public Builder secure() {
             this.options.append("Secure" + OPTION_DELIMITER);
             return this;
         }
 
-        public Builder httpOnly(final String path) {
+        public Builder httpOnly() {
             this.options.append("HttpOnly" + OPTION_DELIMITER);
             return this;
         }
