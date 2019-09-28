@@ -37,7 +37,7 @@ public class HttpResponse {
     }
 
     public void appendContentHeader(String memeName, int length) {
-        appendHeader("Content-Type", memeName);
+        appendHeader("Content-Type", memeName+"; charset=utf-8");
         appendHeader("Content-Length", length);
     }
 
