@@ -31,4 +31,11 @@ public class Cookie {
     public String get(String key) {
         return cookies.get(key);
     }
+
+    @Override
+    public String toString() {
+        return "Cookie{" +
+                "cookies=" + cookies +
+                '}';
+    }
 }

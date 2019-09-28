@@ -92,7 +92,7 @@ public class HttpRequest {
     }
 
     public HttpSession getSession() {
-        return Optional.ofNullable(getCookie().get("JESESSIONID"))
+        return Optional.ofNullable(getCookie().get("JSESSIONID"))
                 .map(id -> SessionManager.getInstance().getSession(id))
                 .orElse(SessionManager.getInstance().createSession());
     }

@@ -31,4 +31,12 @@ public class HttpSession {
     public String getId() {
         return sessionId;
     }
+
+    @Override
+    public String toString() {
+        return "HttpSession{" +
+                "session=" + session +
+                ", sessionId='" + sessionId + '\'' +
+                '}';
+    }
 }
