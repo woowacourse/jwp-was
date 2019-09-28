@@ -39,9 +39,8 @@ public class RequestHandler implements Runnable {
             BufferedReader bufferedReader = getBufferedReader(in);
 
             HttpRequest httpRequest = HttpRequestFactory.create(bufferedReader, sessionManager);
-            HttpSession httpSession = sessionManager.getSession(httpRequest);
             HttpResponse httpResponse = new HttpResponse(new DataOutputStream(out));
-            httpResponse.addCookie(SessionManager.SESSION_NAME, httpSession.getId().toString());
+            httpResponse.addCookie(SessionManager.SESSION_NAME, httpRequest.getSessionId());
 
             if (!fileContainer.process(httpRequest, httpResponse)) {
                 servletContainer.process(httpRequest, httpResponse);

@@ -68,6 +68,10 @@ public class HttpRequest {
         return httpCookie.getValue(key);
     }
 
+    public String getSessionId() {
+        return httpSession.getId().toString();
+    }
+
     public String getResourcePath() {
         return httpStartLine.getResourcePath();
     }
