@@ -11,11 +11,10 @@ public class UserController extends AbstractController {
     @Override
     protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws FileNotFoundException {
         byte[] staticFile = getStaticFile(httpRequest);
-        if (httpResponse.addBody(staticFile)) {
-            httpResponse.addStatusLine(httpRequest, "200", "OK");
-            httpResponse.addHeader(HEADER_FIELD_CONTENT_TYPE, CONTENT_TYPE_HTML);
-            httpResponse.addHeader(HEADER_FIELD_CONTENT_LENGTH, String.valueOf(staticFile.length));
-        }
+        httpResponse.addStatusLine(httpRequest, "200", "OK");
+        httpResponse.addHeader(HEADER_FIELD_CONTENT_TYPE, CONTENT_TYPE_HTML);
+        httpResponse.addHeader(HEADER_FIELD_CONTENT_LENGTH, String.valueOf(staticFile.length));
+        httpResponse.addBody(staticFile);
     }
 
     @Override
