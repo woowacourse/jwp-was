@@ -18,6 +18,7 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -137,14 +138,14 @@ public class HttpTestClient {
             if (StringUtils.isNotEmpty(body)) {
                 headers.put(HttpHeaders.CONTENT_LENGTH, String.valueOf(body.length()));
             }
-            for (final String key : headers.keySet()) {
-                sb.append(String.format("%s: %s\n", key, headers.get(key)));
+            for (Map.Entry<String, String> entry : headers.entrySet()) {
+                sb.append(String.format("%s: %s\n", entry.getKey(), entry.getValue()));
             }
 
             // cookie
             sb.append(cookies.isEmpty() ? "" : "Cookie: ");
-            for (final String key : cookies.keySet()) {
-                sb.append(String.format("%s=%s; ", key, cookies.get(key)));
+            for (Map.Entry<String, Object> entry : cookies.entrySet()) {
+                sb.append(String.format("%s=%s; ", entry.getKey(), entry.getValue()));
             }
             sb.append(cookies.isEmpty() ? "" : "\n");
             sb.append("\n");

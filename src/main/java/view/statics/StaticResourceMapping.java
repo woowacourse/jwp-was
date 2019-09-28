@@ -40,11 +40,10 @@ public class StaticResourceMapping {
     }
 
     public void setAllLocations(final String location) {
-        for (final String key : resources.keySet()) {
-            if (!(key.equals(HTM) || key.equals(HTML))) {
-                resources.get(key).changeLocation(location);
-            }
-        }
+        resources.entrySet()
+                .stream()
+                .filter(entry -> !(entry.getKey().equals(HTM) || entry.getKey().equals(HTML)))
+                .forEach(entry -> entry.getValue().changeLocation(location));
     }
 
     public String getLocation(final String extension) {

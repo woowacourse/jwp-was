@@ -87,8 +87,8 @@ public class HttpResponse {
     }
 
     private void writeHeader(final DataOutputStream dos) throws IOException {
-        for (String key : headers.keySet()) {
-            dos.writeBytes(String.format("%s: %s\n", key, headers.get(key)));
+        for (Map.Entry<String, String> entry : headers.entrySet()) {
+            dos.writeBytes(String.format("%s: %s\n", entry.getKey(), entry.getValue()));
         }
         if (cookies.isNotEmpty()) {
             writeSetCookie(dos);
@@ -97,8 +97,8 @@ public class HttpResponse {
     }
 
     private void writeSetCookie(final DataOutputStream dos) throws IOException {
-        for (final String name : cookies.keySet()) {
-            dos.writeBytes(String.format("%s: %s\n", SET_COOKIE, cookies.get(name).parseInfoAsString()));
+        for (Cookie cookie : cookies.values()) {
+            dos.writeBytes(String.format("%s: %s\n", SET_COOKIE, cookie.parseInfoAsString()));
         }
     }
 

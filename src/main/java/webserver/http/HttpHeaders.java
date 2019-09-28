@@ -40,6 +40,10 @@ public class HttpHeaders {
         return headers.keySet();
     }
 
+    public Set<Map.Entry<String, String>> entrySet() {
+        return headers.entrySet();
+    }
+
     public boolean contains(final String name) {
         return headers.containsKey(name);
     }

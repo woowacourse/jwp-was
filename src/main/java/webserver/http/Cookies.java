@@ -3,10 +3,7 @@ package webserver.http;
 import webserver.http.utils.HttpUtils;
 import webserver.http.utils.StringUtils;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Cookies {
@@ -50,16 +47,24 @@ public class Cookies {
         return cookies.keySet();
     }
 
+    public Collection<Cookie> values() {
+        return cookies.values();
+    }
+
+    public Set<Map.Entry<String, Cookie>> entrySet() {
+        return cookies.entrySet();
+    }
+
+    public boolean contains(final String name) {
+        return cookies.containsKey(name);
+    }
+
     public boolean isEmpty() {
         return cookies.isEmpty();
     }
 
     public boolean isNotEmpty() {
         return !isEmpty();
-    }
-
-    public boolean contains(final String name) {
-        return cookies.containsKey(name);
     }
 
     public String getSessionId() {

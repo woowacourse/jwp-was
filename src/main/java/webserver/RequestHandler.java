@@ -2,7 +2,7 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import view.*;
+import view.View;
 import view.excpetion.ExceptionViewResolver;
 import view.internal.HandlerBarsViewResolver;
 import view.internal.InternalResourceViewResolver;
@@ -61,7 +61,7 @@ public class RequestHandler implements Runnable {
     }
 
     private void initSession(final HttpRequest httpRequest, final HttpResponse httpResponse) {
-        if(!httpRequest.hasSession()){
+        if (!httpRequest.hasSession()) {
             final Cookie sessionCookie = new Cookie(Cookies.JSESSIONID, httpRequest.getSession().getId());
 
             sessionCookie.setPath("/");
