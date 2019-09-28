@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HttpCookie {
+    public static final String SESSION_ID_KEY = "sessionId";
+
     private static final String COOKIE_DELIMITER = ";";
     private static final String KEY_VALUE_DELIMITER = "=";
     private static final int KEY_INDEX = 0;

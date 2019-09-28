@@ -4,8 +4,12 @@ import http.HttpCookie;
 import http.HttpHeaders;
 import http.HttpMimeType;
 import http.HttpVersion;
+import http.session.HttpSession;
+import http.session.HttpSessionTable;
+import http.session.UuidStrategy;
 import utils.ExtensionParser;
 
+import static http.HttpCookie.SESSION_ID_KEY;
 import static http.HttpHeaders.*;
 import static http.HttpMimeType.X_WWW_FORM_URLENCODED;
 
@@ -15,6 +19,7 @@ public class HttpRequest {
     private String body;
     private QueryParams queryParams;
     private HttpCookie cookie;
+    private HttpSession session;
 
     HttpRequest(HttpRequestLine requestLine, HttpHeaders headers, String body) {
         this.requestLine = requestLine;
@@ -22,6 +27,8 @@ public class HttpRequest {
         this.body = body;
         this.queryParams = QueryParams.of(getParams());
         this.cookie = HttpCookie.of(headers.getHeader(COOKIE));
+        this.session =
+                HttpSessionTable.getSession(cookie.get(SESSION_ID_KEY), new UuidStrategy());
     }
 
     private String getParams() {

@@ -45,6 +45,12 @@
 2. 동적 html 생성
     - [x] template engine 구현
     - [x] “로그인” 상태일 경우(Cookie 값이 logined=true) 경우 http://localhost:8080/user/list 로 접근했을 때 사용자 목록을 출력, 로그인하지 않은 상태라면 로그인 페이지(login.html)로 이동한다.
-
+3. HttpSession 구현
+    - [x] HttpRequest 생성시 HttpSession 생성
+    - [ ] String getId() 구현
+    - [ ] void setAttribute(String name, Object value) 구현
+    - [ ] Object getAttribute(String name) 구현
+    - [ ] removeAttribute(String name) 구현
+    - [ ] void invalidate() 구현
 ## 의문사항
 - HTTP response version이 어떻게 결정되는지? request로 온 HTTP버전에 맞춰서 결정되는지 아니면 server에서 정해진 버전으로만 응답하는지?
