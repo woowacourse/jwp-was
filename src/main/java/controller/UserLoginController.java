@@ -14,8 +14,9 @@ import utils.QueryStringUtils;
 
 import java.util.Map;
 
+import static session.HttpSession.SESSION_ID;
+
 public class UserLoginController extends AbstractController {
-    public static final String SESSION_ID = "SessionId";
     public static final String LOGIN_USER = "login-user";
 
     private UserService userService = new UserService();
@@ -27,7 +28,7 @@ public class UserLoginController extends AbstractController {
         try {
             User foundUser = userService.login(body.get("userId"), body.get("password"));
 
-            HttpSession httpSession = HttpSessionManager.getInstance().findOrCreateSession(request.getCookieValue(SESSION_ID));
+            HttpSession httpSession = request.getSession(HttpSessionManager.getInstance());
             setCookie(response, httpSession);
 
             httpSession.setAttribute(LOGIN_USER, foundUser);

@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HttpSession {
+    public static final String SESSION_ID = "SessionId";
+
     private final Map<String, Object> info = new HashMap<>();
     private final String id;
 

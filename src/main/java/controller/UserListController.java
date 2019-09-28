@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import static controller.UserLoginController.LOGIN_USER;
-import static controller.UserLoginController.SESSION_ID;
+import static session.HttpSession.SESSION_ID;
 
 public class UserListController extends AbstractController {
     private static final Logger log = LoggerFactory.getLogger(UserListController.class);

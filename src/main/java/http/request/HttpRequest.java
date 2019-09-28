@@ -2,10 +2,14 @@ package http.request;
 
 import http.HTTP;
 import http.RequestMethod;
+import session.HttpSession;
+import session.HttpSessionManager;
 
 import java.io.*;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+
+import static session.HttpSession.SESSION_ID;
 
 public class HttpRequest implements AutoCloseable {
     private RequestLine requestLine;
@@ -64,5 +68,10 @@ public class HttpRequest implements AutoCloseable {
     @Override
     public void close() throws IOException {
         bufferedReader.close();
+    }
+
+    public HttpSession getSession(HttpSessionManager httpSessionManager) {
+        String sessionId = this.getCookieValue(SESSION_ID);
+        return httpSessionManager.findOrCreateSession(sessionId);
     }
 }
