@@ -1,4 +1,4 @@
-package session;
+package http.session;
 
 import com.google.common.collect.Maps;
 
