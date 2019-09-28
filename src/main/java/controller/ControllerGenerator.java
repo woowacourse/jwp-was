@@ -9,6 +9,7 @@ public class ControllerGenerator {
 	static {
 		controllers.put("resource", new ResourceController());
 		controllers.put("/user/create", new CreateUserController());
+		controllers.put("/user/login", new UserLoginController());
 	}
 
 	public static Controller generateController(String path) {
