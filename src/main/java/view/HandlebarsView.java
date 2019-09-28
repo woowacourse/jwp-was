@@ -11,8 +11,10 @@ import http.response.ResponseStatus;
 import java.io.IOException;
 import java.util.Map;
 
+import static utils.StringUtils.BLANK;
+
 public class HandlebarsView implements View {
-    private static final TemplateLoader LOADER = new ClassPathTemplateLoader();
+    private static final TemplateLoader LOADER = new ClassPathTemplateLoader(BLANK, BLANK);
     private static final Handlebars HANDLEBARS = new Handlebars(LOADER);
     private static final String CONTENT_TYPE = "Content-Type";
     private static final String CONTENT_LENGTH = "Content-Length";
