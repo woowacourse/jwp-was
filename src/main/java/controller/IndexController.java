@@ -3,12 +3,16 @@ package controller;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.response.ResponseStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class IndexController extends AbstractController {
+    private static final Logger log = LoggerFactory.getLogger(IndexController.class);
+
     private static class IndexControllerLazyHolder {
         private static final IndexController INSTANCE = new IndexController();
     }
@@ -24,7 +28,7 @@ public class IndexController extends AbstractController {
             httpResponse.setResponseStatus(ResponseStatus.OK);
             httpResponse.addHeaderAttribute("Content-Type", "text/html;charset=utf-8");
         } catch (IOException | URISyntaxException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e.getCause());
         }
     }
 }

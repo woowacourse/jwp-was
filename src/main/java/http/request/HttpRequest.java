@@ -4,6 +4,8 @@ import http.common.HttpHeader;
 import http.common.URL;
 import http.request.exception.InvalidHttpRequestException;
 
+import java.util.Objects;
+
 public class HttpRequest {
     private final RequestLine requestLine;
     private final HttpHeader httpHeader;
@@ -17,8 +19,12 @@ public class HttpRequest {
     }
 
     private void checkValidHttpRequest(RequestLine requestLine, HttpHeader httpHeader, RequestBody body) {
-        if (requestLine == null || httpHeader == null || body == null) {
-            throw new InvalidHttpRequestException();
+        try {
+            Objects.requireNonNull(requestLine, "요청 라인이 NULL 입니다.");
+            Objects.requireNonNull(httpHeader, "HTTP 요청 헤더가 NULL 입니다");
+            Objects.requireNonNull(body, "HTTP 요청 바디가 NULL 입니다.");
+        } catch (NullPointerException e) {
+            throw new InvalidHttpRequestException(e);
         }
     }
 

@@ -4,11 +4,15 @@ import http.request.HttpRequest;
 import http.request.RequestMethod;
 import http.response.HttpResponse;
 import http.response.ResponseStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public abstract class AbstractController implements Controller {
+    private static final Logger log = LoggerFactory.getLogger(AbstractController.class);
+
     private final Map<RequestMethod, Controller> methodMap = new HashMap<>();
 
     {
@@ -21,6 +25,7 @@ public abstract class AbstractController implements Controller {
         try {
             methodMap.get(httpRequest.getMethod()).service(httpRequest, httpResponse);
         } catch (Exception e) {
+            log.error(e.getMessage(), e.getCause());
             httpResponse.setResponseStatus(ResponseStatus.INTERNAL_SERVER_ERROR);
         }
     }

@@ -32,12 +32,14 @@ public class RequestParameter {
 
     private void putRequestParameter(String[] requestParameters) {
         if (isValidRequestParameter(requestParameters)) {
-            this.requestParameters.put(decodeUTF8(requestParameters[REQUEST_PARAMETER_KEY_INDEX]), decodeUTF8(requestParameters[REQUEST_PARAMETER_VALUE_INDEX]));
+            this.requestParameters.put(decodeUTF8(requestParameters[REQUEST_PARAMETER_KEY_INDEX]),
+                    decodeUTF8(requestParameters[REQUEST_PARAMETER_VALUE_INDEX]));
         }
     }
 
     private boolean isValidRequestParameter(String[] requestParameter) {
-        return requestParameter.length == REQUEST_PARAMETER_SIZE && !StringUtils.isEmpty(requestParameter[REQUEST_PARAMETER_KEY_INDEX]);
+        return requestParameter.length == REQUEST_PARAMETER_SIZE &&
+                !StringUtils.isEmpty(requestParameter[REQUEST_PARAMETER_KEY_INDEX]);
     }
 
     private String decodeUTF8(String encodedString) {

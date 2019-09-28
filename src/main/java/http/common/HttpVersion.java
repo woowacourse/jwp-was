@@ -1,6 +1,6 @@
 package http.common;
 
-import http.common.exception.HttpVersionNotFoundException;
+import http.common.exception.NonExistentHttpVersionException;
 
 import java.util.Arrays;
 
@@ -21,7 +21,7 @@ public enum HttpVersion {
         return Arrays.stream(values())
                 .filter(value -> value.version.equals(version))
                 .findAny()
-                .orElseThrow(HttpVersionNotFoundException::new)
+                .orElseThrow(NonExistentHttpVersionException::new)
                 ;
     }
 

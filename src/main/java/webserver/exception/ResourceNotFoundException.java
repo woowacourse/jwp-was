@@ -6,4 +6,8 @@ public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException() {
         super(RESOURCE_NOT_FOUND_EXCEPTION_MESSAGE);
     }
+
+    public ResourceNotFoundException(Throwable cause) {
+        super(RESOURCE_NOT_FOUND_EXCEPTION_MESSAGE, cause);
+    }
 }

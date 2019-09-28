@@ -30,7 +30,7 @@ public class ResourceHttpRequestHandler {
             httpResponse.addHeaderAttribute("Content-Length", String.valueOf(file.length));
             httpResponse.setBody(file);
         } catch (IOException | URISyntaxException | NullPointerException e) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(e);
         }
     }
 

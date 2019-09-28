@@ -3,6 +3,7 @@ package webserver;
 import controller.Controller;
 import http.request.HttpRequest;
 import http.request.HttpRequestCreator;
+import http.request.exception.InvalidHttpRequestException;
 import http.response.HttpResponse;
 import http.response.ResponseStatus;
 import org.slf4j.Logger;
@@ -16,7 +17,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 public class RequestHandler implements Runnable {
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
     private final ResourceHttpRequestHandler resourceHttpRequestHandler = ResourceHttpRequestHandler.getInstance();
     private final HandlerMapping handlerMapping = HandlerMapping.getInstance();
     private Socket connection;
@@ -26,7 +27,7 @@ public class RequestHandler implements Runnable {
     }
 
     public void run() {
-        logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
+        log.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
 
         //TODO : IOException 처리
@@ -37,8 +38,8 @@ public class RequestHandler implements Runnable {
             handleRequest(httpRequest, httpResponse);
 
             sendResponse(outputStream, httpResponse);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException | InvalidHttpRequestException e) {
+            log.error(e.getMessage(), e.getCause());
         }
     }
 
@@ -52,6 +53,7 @@ public class RequestHandler implements Runnable {
             Controller controller = handlerMapping.getHandler(httpRequest.getPath());
             controller.service(httpRequest, httpResponse);
         } catch (ResourceNotFoundException e) {
+            log.error(e.getMessage(), e.getCause());
             httpResponse.setResponseStatus(ResponseStatus.NOT_FOUND);
         }
     }
@@ -64,7 +66,7 @@ public class RequestHandler implements Runnable {
             dos.write(response, 0, response.length);
             dos.flush();
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage(), e.getCause());
         }
     }
 }
