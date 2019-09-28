@@ -29,7 +29,7 @@ public class HandlebarsView implements View {
     @Override
     public void render(Map<String, Object> model, HttpResponse httpResponse) {
         try {
-            byte[] body = render(model);
+            byte[] body = getCompiledTemplate(model).getBytes();
             httpResponse.setResponseStatus(ResponseStatus.OK);
             httpResponse.addHeaderAttribute(CONTENT_TYPE, ContentType.HTML + CHARSET_UTF_8);
             httpResponse.addHeaderAttribute(CONTENT_LENGTH, String.valueOf(body.length));
@@ -39,8 +39,8 @@ public class HandlebarsView implements View {
         }
     }
 
-    private byte[] render(Map<String, Object> model) throws IOException {
+    private String getCompiledTemplate(Map<String, Object> model) throws IOException {
         Template template = HANDLEBARS.compile(viewName);
-        return template.apply(model).getBytes();
+        return template.apply(model);
     }
 }
