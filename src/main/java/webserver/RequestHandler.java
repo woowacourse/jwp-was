@@ -2,6 +2,7 @@ package webserver;
 
 import controller.Controller;
 import controller.ControllerHandler;
+import http.Cookie;
 import http.SessionStore;
 import http.request.Request;
 import http.request.RequestParser;
@@ -25,6 +26,7 @@ public class RequestHandler implements Runnable {
     private static final String HTML = "html";
     private static final String TEMPLATES = "./templates";
     private static final String STATIC = "./static";
+    private static final String JSESSION = "JSESSION";
 
     private Socket connection;
     private ControllerHandler controllerHandler;
@@ -74,11 +76,20 @@ public class RequestHandler implements Runnable {
     }
 
     private void setSession(Request request, Response response, String extension) {
+        Cookie requestCookie = request.getCookie(JSESSION);
+
         if (!isHtmlOrNotFile(extension)) {
             return;
         }
 
-        SessionStore.setSession(request, response);
+        if (requestCookie != null) {
+            request.setSession(SessionStore.getSession(request.getCookie(JSESSION).getValue()));
+        }
+
+        if (requestCookie == null) {
+            request.setSession(SessionStore.getSession(request.getCookie(JSESSION).getValue()));
+            response.addCookie(new Cookie(JSESSION, request.getCookie(JSESSION).getValue()));
+        }
     }
 
     private boolean isHtmlOrNotFile(String extension) {
