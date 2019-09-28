@@ -44,15 +44,6 @@ public class Request {
         return path;
     }
 
-    public String getHeader(String key) {
-        String element = header.get(key);
-
-        if (Objects.isNull(element)) {
-            throw new NotFoundRequestElementException();
-        }
-        return element;
-    }
-
     public String getParameter(String key) {
         return parameter.get(key);
     }
@@ -67,6 +58,15 @@ public class Request {
 
     public void setSessionValue(String name, Object value) {
         session.setAttribute(name, value);
+    }
+
+    public String getHeader(String key) {
+        String element = header.get(key);
+
+        if (Objects.isNull(element)) {
+            throw new NotFoundRequestElementException();
+        }
+        return element;
     }
 
     private void containsCookie(Map<String, String> header) {
