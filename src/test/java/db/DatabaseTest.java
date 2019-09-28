@@ -4,7 +4,10 @@ import model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DatabaseTest {
@@ -26,5 +29,27 @@ class DatabaseTest {
         Database.addUser(DIFFERENT_USER);
 
         assertTrue(Database.findAll().size() >= 2);
+    }
+
+    @Test
+    @DisplayName("아이디와 비밀번호로 유저를 찾는다.")
+    void findUserByIdAndPassword() {
+        Database.addUser(DEFAULT_USER);
+        Optional<User> maybeUser = Database.findUserByIdAndPassword(DEFAULT_USER.getId(), DEFAULT_USER.getPassword());
+        assertThat(maybeUser.get()).isEqualTo(DEFAULT_USER);
+    }
+
+    @Test
+    @DisplayName("비밀번호가 다른 경우 유저를 찾지 못한다.")
+    void findUserByIdAndPasswordFail() {
+        Database.addUser(DEFAULT_USER);
+        assertFalse(Database.findUserByIdAndPassword(DEFAULT_USER.getId(), DIFFERENT_USER.getPassword()).isPresent());
+    }
+
+    @Test
+    @DisplayName("아이디가 다른 경우 유저를 찾지 못한다.")
+    void findUserByIdAndPasswordFail2() {
+        Database.addUser(DEFAULT_USER);
+        assertFalse(Database.findUserByIdAndPassword(DIFFERENT_USER.getId(), DEFAULT_USER.getPassword()).isPresent());
     }
 }
