@@ -11,11 +11,13 @@ import webserver.storage.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
+import static webserver.response.MediaType.TEXT_HTML_VALUE;
+
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     public static void goForm(HttpRequest request, HttpResponse response) {
-        response.setContentType("text/html");
+        response.setContentType(TEXT_HTML_VALUE);
         response.forward("/user/form.html");
     }
 
@@ -33,12 +35,12 @@ public class UserController {
     }
 
     public static void goLoginForm(HttpRequest request, HttpResponse response) {
-        response.setContentType("text/html");
+        response.setContentType(TEXT_HTML_VALUE);
         response.forward("/user/login.html");
     }
 
     public static void goLoginFail(HttpRequest request, HttpResponse response) {
-        response.setContentType("text/html");
+        response.setContentType(TEXT_HTML_VALUE);
         response.forward("/user/login_failed.html");
     }
 
@@ -71,6 +73,7 @@ public class UserController {
         Map<String, Object> model = new HashMap<>();
         model.put("users", DataBase.findAll());
 
+        response.setContentType(TEXT_HTML_VALUE);
         response.templateForward("user/list.html", model);
     }
 }
