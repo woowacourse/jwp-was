@@ -3,6 +3,7 @@ package controller;
 import http.request.HttpMethod;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import view.RedirectView;
 import view.View;
 
 import java.util.HashMap;
@@ -10,7 +11,6 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 public abstract class AbstractController implements Controller {
-
     private Map<HttpMethod, BiFunction<HttpRequest, HttpResponse, View>> methodMapping = new HashMap<>();
 
     @Override
@@ -22,9 +22,9 @@ public abstract class AbstractController implements Controller {
     }
 
     public View doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        return null;
+        return new RedirectView("index.html");
     }
     public View doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        return null;
+        return new RedirectView("index.html");
     }
 }
