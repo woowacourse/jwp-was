@@ -18,6 +18,15 @@ public class Database {
         return Optional.of(users.get(id));
     }
 
+    public static Optional<User> findUserByIdAndPassword(String id, String password) {
+        Optional<User> maybeUser = findUserById(id);
+        if (maybeUser.isPresent()) {
+            return maybeUser.filter(user -> user.isMatchPassword(password));
+        }
+
+        return Optional.empty();
+    }
+
     public static Collection<User> findAll() {
         return users.values();
     }
