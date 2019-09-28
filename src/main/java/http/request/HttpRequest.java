@@ -23,9 +23,9 @@ public class HttpRequest {
 	}
 
 	public Map<String, String> getHttpRequestBody() {
-		if (Objects.isNull(httpRequestBody)) {
-			throw new NullPointerException();
+		if (Objects.nonNull(httpRequestBody)) {
+			return httpRequestBody.getBody();
 		}
-		return httpRequestBody.getBody();
+		throw new NullPointerException();
 	}
 }

@@ -15,7 +15,7 @@ public class StatusLine {
 	public String getElementValue(String elementName) {
 		String elementValue = statusLine.get(elementName);
 
-		if(!Objects.isNull(elementName)) {
+		if(Objects.nonNull(elementName)) {
 			return elementValue;
 		}
 		throw new NotFoundElementException();

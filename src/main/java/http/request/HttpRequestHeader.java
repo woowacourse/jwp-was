@@ -15,9 +15,9 @@ public class HttpRequestHeader {
 
 	public String getRequestElement(HeaderElement attribute) {
 		String value = header.get(attribute);
-		if (Objects.isNull(value)) {
-			throw new NotFoundElementException();
+		if (Objects.nonNull(value)) {
+			return value;
 		}
-		return value;
+		throw new NotFoundElementException();
 	}
 }
