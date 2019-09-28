@@ -1,6 +1,5 @@
 package webserver.http.request;
 
-import webserver.http.response.HttpStatus;
 import webserver.http.response.HttpVersion;
 
 public class HttpRequest {
@@ -34,7 +33,7 @@ public class HttpRequest {
         return requestLine.getUri();
     }
 
-    public HttpVersion getHttpVersion(){
+    public HttpVersion getHttpVersion() {
         return requestLine.getHttpVersion();
     }
 

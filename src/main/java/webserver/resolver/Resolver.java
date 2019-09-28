@@ -7,5 +7,5 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 public interface Resolver {
-    View resolve(ModelAndView modelAndView) throws IOException, URISyntaxException;
+    View createView(String viewName) throws IOException, URISyntaxException;
 }

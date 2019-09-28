@@ -1,21 +1,10 @@
 package webserver.view;
 
-public class View {
-    private final byte[] body;
+import webserver.http.request.HttpRequest;
+import webserver.http.response.HttpResponse;
 
-    public View(byte[] body) {
-        this.body = body;
-    }
+import java.util.Map;
 
-    public View() {
-        this.body = new byte[0];
-    }
-
-    public byte[] getBody() {
-        return body;
-    }
-
-    public boolean isViewExists() {
-        return body == null || body.length == 0;
-    }
+public interface View {
+    void render(Map<String, Object> model, HttpRequest httpRequest, HttpResponse httpResponse);
 }

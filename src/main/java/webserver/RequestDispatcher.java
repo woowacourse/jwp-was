@@ -1,4 +1,4 @@
-package webserver.dispatcher;
+package webserver;
 
 import exceptions.MethodNotAllowedException;
 import exceptions.NotFoundFileException;
@@ -9,7 +9,6 @@ import webserver.handler.MappingHandler;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 import webserver.http.response.HttpStatus;
-import webserver.resolver.Resolver;
 import webserver.servlet.HttpServlet;
 import webserver.view.ModelAndView;
 import webserver.view.View;
@@ -26,12 +25,12 @@ public class RequestDispatcher {
     }
 
     public void dispatch(HttpRequest httpRequest) throws IOException {
-        View view = new View();
         try {
             HttpServlet httpServlet = MappingHandler.getServlets(httpRequest.getUri());
             ModelAndView modelAndView = httpServlet.run(httpRequest, httpResponse);
-            Resolver resolver = MappingHandler.getResolver(httpServlet);
-            view = resolver.resolve(modelAndView);
+            View view = modelAndView.getView();
+            view.render(modelAndView.getModelMap(), httpRequest, httpResponse);
+
         } catch (NotFoundFileException | NotFoundURIException e) {
             logger.error(e.getMessage());
             httpResponse.error(HttpStatus.NOT_FOUND);
@@ -42,18 +41,10 @@ public class RequestDispatcher {
             logger.error(e.getMessage());
             httpResponse.error(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        render(view);
     }
 
     private void render(View view) throws IOException {
-        byte[] body = view.getBody();
-        httpResponse.writeLine();
-        if (view.isViewExists()) {
-            httpResponse.appendHeader("content-length", body.length);
-        }
-        httpResponse.writeHeader();
-        httpResponse.writeBody(body);
-        httpResponse.end();
+
     }
 
 }

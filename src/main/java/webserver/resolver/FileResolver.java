@@ -1,7 +1,7 @@
 package webserver.resolver;
 
 import utils.FileIoUtils;
-import webserver.view.ModelAndView;
+import webserver.view.FileView;
 import webserver.view.View;
 
 import java.io.IOException;
@@ -9,11 +9,10 @@ import java.net.URISyntaxException;
 
 public class FileResolver implements Resolver {
     @Override
-    public View resolve(ModelAndView modelAndView) throws IOException, URISyntaxException {
-        String viewName = modelAndView.getViewName();
+    public View createView(String viewName){
         if (viewName.contains(".html")) {
-            return new View(FileIoUtils.loadHtmlFile(viewName));
+            return new FileView(FileIoUtils.generateHtmlFilePath(viewName));
         }
-        return new View(FileIoUtils.loadStaticFile(viewName));
+        return new FileView(FileIoUtils.generateStaticFilePath(viewName));
     }
 }

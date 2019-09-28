@@ -5,13 +5,19 @@ import webserver.http.request.HttpRequest;
 import webserver.http.request.RequestMethod;
 import webserver.http.request.RequestUri;
 import webserver.http.response.HttpResponse;
+import webserver.resolver.Resolver;
 import webserver.view.ModelAndView;
-import webserver.view.View;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 public abstract class RequestServlet implements HttpServlet {
     public static final String METHOD_NOT_ALLOW_MESSAGE = "지원하지 않는 메소드 입니다.";
+    Resolver resolver;
+
+    public RequestServlet(Resolver resolver) {
+        this.resolver = resolver;
+    }
 
     @Override
     public boolean canMapping(RequestUri requestUri) {
@@ -30,13 +36,14 @@ public abstract class RequestServlet implements HttpServlet {
         throw new MethodNotAllowedException(httpRequest.getMethod());
     }
 
-    public ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+    protected ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         throw new MethodNotAllowedException(httpRequest.getMethod());
     }
 
-    public ModelAndView doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+    protected ModelAndView doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         throw new MethodNotAllowedException(httpRequest.getMethod());
     }
+
 
     protected abstract String getUrl();
 

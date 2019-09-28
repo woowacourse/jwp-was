@@ -34,11 +34,11 @@ public class FileIoUtils {
         return loadFileFromClasspath(generateStaticFilePath(path));
     }
 
-    private static String generateHtmlFilePath(String absPath) {
+    public static String generateHtmlFilePath(String absPath) {
         return ROOT_TEMPLATE_FILE_PATH + absPath;
     }
 
-    private static String generateStaticFilePath(String absPath) {
+    public static String generateStaticFilePath(String absPath) {
         return ROOT_STATIC_FILE_PATH + absPath;
     }
 }

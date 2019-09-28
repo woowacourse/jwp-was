@@ -1,17 +1,25 @@
 package webserver.view;
 
+import java.util.Map;
+
 public class ModelAndView {
-    String viewName;
+    View view;
+    Map<String, Object> modelMap;
 
-    public ModelAndView(String viewName) {
-        this.viewName = viewName;
+    public ModelAndView(View view) {
+        this.view = view;
     }
 
-    public String getViewName() {
-        return viewName;
+    public ModelAndView(View view, Map<String, Object> modelMap) {
+        this.view = view;
+        this.modelMap = modelMap;
     }
 
-    public boolean isViewExists() {
-        return viewName != null;
+    public View getView() {
+        return view;
+    }
+
+    public Map<String, Object> getModelMap() {
+        return modelMap;
     }
 }

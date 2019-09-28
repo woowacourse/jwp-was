@@ -30,7 +30,7 @@ public class User {
     }
 
     public boolean isCorrectPassword(String targetPassword) {
-        return this.password == targetPassword;
+        return targetPassword.equals(this.password);
     }
 
     @Override

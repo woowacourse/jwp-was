@@ -2,10 +2,8 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.dispatcher.RequestDispatcher;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
-import webserver.http.response.HttpVersion;
 import webserver.parser.HttpRequestParser;
 
 import java.io.*;
