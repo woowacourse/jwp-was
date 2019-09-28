@@ -1,15 +1,12 @@
 package http;
 
-import http.exception.EmptyStatusException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.Map;
-
 public class HttpResponse {
-    private static final Logger log = LoggerFactory.getLogger(HttpResponse.class);
+    private static final String CRLF = "\r\n";
+    private static final String CONTENT_TYPE_KEY = "Content-Type";
+    private static final String CONTENT_LENGTH_KEY = "Content-Length";
+    private static final String LOCATION_KEY = "Location";
+    private static final int OK_CODE = 200;
+    private static final int FOUND_CODE = 302;
 
     private HttpStatus status;
     private HttpHeader header = new HttpHeader();
@@ -18,41 +15,46 @@ public class HttpResponse {
     public HttpResponse() {
     }
 
-    public void setStatus(int statusCode) {
-        status = HttpStatus.of(statusCode);
+    public void response2xx(byte[] body, String mimeType) {
+        setStatus(OK_CODE);
+        addHeader(CONTENT_TYPE_KEY, mimeType);
+        setBody(body);
+    }
+
+    public void response3xx(String viewName) {
+        setStatus(FOUND_CODE);
+        addHeader(LOCATION_KEY, "/" + viewName);
     }
 
     public void addHeader(String key, String value) {
         header.addHeader(key, value);
     }
 
+    public void setStatus(int statusCode) {
+        status = HttpStatus.of(statusCode);
+    }
+
     public void setBody(byte[] body) {
         this.body = body;
-        header.addHeader("Content-Length", String.valueOf(body.length));
+        header.addHeader(CONTENT_LENGTH_KEY, String.valueOf(body.length));
     }
 
-    public void send(DataOutputStream dos) {
-        if (status == null) {
-            throw new EmptyStatusException();
-        }
-        try {
-            dos.writeBytes("HTTP/1.1 " + status.getStatusCode() + " " + status.getStatus() + "\r\n");
-            dos.writeBytes(makeHeaderLines());
-            if (body != null) {
-                dos.write(body, 0, body.length);
-            }
-            dos.flush();
-        } catch (IOException e) {
-            log.error(e.getMessage());
-        }
+    public String getHeaderLines() {
+        return header.toString();
     }
 
-    private String makeHeaderLines() {
-        StringBuilder sb = new StringBuilder();
-        for (Map.Entry<String, String> header : header.getHeaders()) {
-            sb.append(header.getKey() + ": " + header.getValue() + "\r\n");
-        }
-        sb.append("\r\n");
-        return sb.toString();
+    public String getStatusLine() {
+        return HttpVersion.V_1_1.getVersion() + " " +
+                status.getStatusCode() + " " +
+                status.getStatus() +
+                CRLF;
+    }
+
+    public HttpStatus getStatus() {
+        return status;
+    }
+
+    public byte[] getBody() {
+        return body;
     }
 }

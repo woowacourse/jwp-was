@@ -3,6 +3,7 @@ package webserver;
 import http.HttpRequest;
 import http.HttpRequestParser;
 import http.HttpResponse;
+import http.HttpResponseSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +33,7 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
 
             DispatcherServlet.doDispatch(httpRequest, httpResponse);
-            httpResponse.send(dos);
+            HttpResponseSender.send(httpResponse, dos);
             dos.close();
         } catch (IOException e) {
             logger.error(e.getMessage());
