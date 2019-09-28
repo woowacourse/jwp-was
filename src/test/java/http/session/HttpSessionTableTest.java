@@ -7,12 +7,14 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class HttpSessionTableTest {
-    private SessionIdStrategy testStrategy;
     private static final String DEFAULT_ID = "1";
+
+    private SessionIdStrategy testStrategy;
 
     @BeforeEach
     void setUp() {
         testStrategy = () -> DEFAULT_ID;
+        HttpSessionTable.getSession(DEFAULT_ID, testStrategy);
     }
 
     @Test
@@ -20,14 +22,22 @@ class HttpSessionTableTest {
     void getExistSession() {
         HttpSession session = HttpSessionTable.getSession(DEFAULT_ID, testStrategy);
 
-        assertThat(HttpSessionTable.getSession(DEFAULT_ID, testStrategy)).isEqualTo(session);
+        assertThat(session.getId()).isEqualTo(DEFAULT_ID);
     }
 
     @Test
     @DisplayName("Session table에 없는 sessionId로 getSession하는 경우 새로 생성")
     void getNotExistSession() {
-        HttpSession session = HttpSessionTable.getSession(DEFAULT_ID, testStrategy);
+        HttpSession session = HttpSessionTable.getSession("2", testStrategy);
 
-        assertThat(HttpSessionTable.getSession("2", testStrategy)).isNotEqualTo(session);
+        assertThat(session.getId()).isEqualTo(DEFAULT_ID);
+    }
+
+    @Test
+    @DisplayName("sessionId가 null인 경우 새로 생성")
+    void getSessionWithNull() {
+        HttpSession session = HttpSessionTable.getSession(null, testStrategy);
+
+        assertThat(session.getId()).isEqualTo(DEFAULT_ID);
     }
 }

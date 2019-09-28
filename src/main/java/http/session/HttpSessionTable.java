@@ -9,8 +9,9 @@ public class HttpSessionTable {
     public static HttpSession getSession(String sessionId, SessionIdStrategy strategy) {
         HttpSession session = sessionTable.get(sessionId);
         if (session == null) {
-            session = new HttpSession();
-            sessionTable.put(strategy.generateSessionId(), session);
+            String id = strategy.generateSessionId();
+            session = new HttpSession(id);
+            sessionTable.put(id, session);
         }
         return session;
     }

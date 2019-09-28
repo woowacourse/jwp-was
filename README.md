@@ -47,7 +47,7 @@
     - [x] “로그인” 상태일 경우(Cookie 값이 logined=true) 경우 http://localhost:8080/user/list 로 접근했을 때 사용자 목록을 출력, 로그인하지 않은 상태라면 로그인 페이지(login.html)로 이동한다.
 3. HttpSession 구현
     - [x] HttpRequest 생성시 HttpSession 생성
-    - [ ] String getId() 구현
+    - [x] String getId() 구현
     - [ ] void setAttribute(String name, Object value) 구현
     - [ ] Object getAttribute(String name) 구현
     - [ ] removeAttribute(String name) 구현
