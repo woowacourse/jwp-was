@@ -33,5 +33,12 @@ public class RequestData {
     public boolean isEmpty() {
         return data.isEmpty();
     }
+
+    @Override
+    public String toString() {
+        return "RequestData{" +
+                "data=" + data +
+                '}';
+    }
 }
 

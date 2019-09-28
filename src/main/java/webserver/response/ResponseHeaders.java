@@ -23,4 +23,11 @@ public class ResponseHeaders {
     public Set<String> keySet() {
         return this.headers.keySet();
     }
+
+    @Override
+    public String toString() {
+        return "ResponseHeaders{" +
+                "headers=" + headers +
+                '}';
+    }
 }

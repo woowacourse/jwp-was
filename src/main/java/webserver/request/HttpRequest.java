@@ -96,4 +96,14 @@ public class HttpRequest {
                 .map(id -> SessionManager.getInstance().getSession(id))
                 .orElse(SessionManager.getInstance().createSession());
     }
+
+    @Override
+    public String toString() {
+        return "HttpRequest{" +
+                "requestLine=" + requestLine +
+                ", requestHeaders=" + requestHeaders +
+                ", requestParams=" + requestParams +
+                ", requestBody=" + requestBody +
+                '}';
+    }
 }

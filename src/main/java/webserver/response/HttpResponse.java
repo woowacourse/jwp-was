@@ -115,4 +115,14 @@ public class HttpResponse {
         handlebars.registerHelper("plusOne", (context, options) -> (Integer) context + 1);
         return handlebars;
     }
+
+    @Override
+    public String toString() {
+        return "HttpResponse{" +
+                "httpVersion=" + httpVersion +
+                ", responseStatus=" + responseStatus +
+                ", responseHeaders=" + responseHeaders +
+                ", responseBody=" + responseBody +
+                '}';
+    }
 }
