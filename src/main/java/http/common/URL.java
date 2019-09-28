@@ -7,8 +7,8 @@ import java.util.Objects;
 import static utils.StringUtils.BLANK;
 
 public class URL {
+    public static final URL EMPTY_URL = new URL(BLANK, BLANK);
     private static final String QUERY_STRING_DELIMITER = "?";
-    public static final String DEFAULT_PATH = "/";
     private final String path;
     private final String queryString;
 
@@ -19,7 +19,7 @@ public class URL {
 
     public static URL of(String url) {
         if (StringUtils.isEmpty(url)) {
-            return new URL(DEFAULT_PATH, BLANK);
+            return EMPTY_URL;
         }
 
         int separatorPosition = getSeparatorPosition(url);
