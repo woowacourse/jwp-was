@@ -11,9 +11,6 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class HttpHeadersTest {
-    // TODO: 2019-09-23 root directory 중복 제거
-    private static final String TEST_DIRECTORY = "./src/test/resources/";
-
     @Test
     void header_속성에_해당하는_값을_가져온다() {
         HttpHeaders httpHeaders;

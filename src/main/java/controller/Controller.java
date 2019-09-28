@@ -1,8 +1,8 @@
 package controller;
 
 import http.request.HttpRequest;
-import http.response.HttpResponseEntity;
+import http.response.HttpResponse;
 
 public interface Controller {
-    HttpResponseEntity handle(HttpRequest httpRequest);
+    void handle(HttpRequest httpRequest, HttpResponse httpResponse);
 }

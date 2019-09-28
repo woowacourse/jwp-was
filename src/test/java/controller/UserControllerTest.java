@@ -2,8 +2,7 @@ package controller;
 
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
-import http.response.Http302ResponseEntity;
-import http.response.HttpResponseEntity;
+import http.response.HttpResponse;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -11,6 +10,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static http.response.HttpStatus.FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UserControllerTest {
@@ -21,10 +21,13 @@ class UserControllerTest {
     @Test
     void user_생성() throws IOException {
         InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "Http_POST.txt"));
-        HttpRequest httpRequest = HttpRequestFactory.getHttpRequest(in);
+        HttpRequest request = HttpRequestFactory.getHttpRequest(in);
+        HttpResponse response = HttpResponse.of(request.getVersion());
 
-        HttpResponseEntity responseEntity = userController.doPost(httpRequest);
+        userController.doPost(request, response);
 
-        assertThat(responseEntity).isEqualTo(new Http302ResponseEntity("/index.html"));
+        assertThat(response.getMessageHeader())
+                .isEqualTo(request.getVersion() + " " + FOUND.getMessage() + "\r\n"
+                        + "Location: /index.html\r\n");
     }
 }

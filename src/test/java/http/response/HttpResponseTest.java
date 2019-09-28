@@ -1,60 +1,54 @@
 package http.response;
 
-import http.HttpHeaders;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import utils.FileIoUtils;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 import static http.HttpVersion.HTTP_1_1;
-import static http.response.HttpResponse.CRLF;
 import static http.response.HttpStatus.OK;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 class HttpResponseTest {
-    private static final String BODY = "body";
+    @Test
+    void httpResponse_생성() {
+        assertThatCode(() -> HttpResponse.of(HTTP_1_1)).doesNotThrowAnyException();
+    }
 
-    private HttpStatusLine statusLine;
-    private HttpHeaders headers;
-    private byte[] body;
-    private HttpResponse httpResponse;
+    @Test
+    void httpResponse_forward() throws IOException, URISyntaxException {
+        String directory = "./templates";
+        String resourceName = "/index.html";
+        HttpResponse response = HttpResponse.of(HTTP_1_1);
+        byte[] expectedBody = FileIoUtils.loadFileFromClasspath(directory + resourceName);
 
-    @BeforeEach
-    void setUp() {
-        statusLine = new HttpStatusLine(HTTP_1_1, OK);
-        headers = new HttpHeaders();
-        body = BODY.getBytes();
+        response.setStatus(OK);
+        response.forward(resourceName);
+
+        assertThat(response.getMessageHeader()).isEqualTo("HTTP/1.1 200 OK\r\n");
+        assertThat(response.getBody()).isEqualTo(expectedBody);
+    }
+
+    @Test
+    void httpResponse_Redirect() {
+        HttpResponse response = HttpResponse.of(HTTP_1_1);
+        String redirected = "/index.html";
+
+        response.sendRedirect(redirected);
+
+        assertThat(response.getMessageHeader()).isEqualTo("HTTP/1.1 302 Found\r\n"
+                + "Location: " + redirected + "\r\n");
     }
 
     @Test
     void hasBody() {
-        httpResponse = new HttpResponse(statusLine, headers, body);
+        HttpResponse response = HttpResponse.of(HTTP_1_1);
+        byte[] body = "body".getBytes();
 
-        assertThat(httpResponse.hasBody()).isTrue();
-    }
+        response.setBody(body);
 
-    @Test
-    void HttpResponse메시지_생성() {
-        httpResponse = new HttpResponse(statusLine, headers, body);
-        headers.put("key", "value");
-
-        String responseMessage = httpResponse.toString();
-
-        assertThat(responseMessage).isEqualTo("HTTP/1.1 200 OK" + CRLF
-                + "key: value" + CRLF
-                + CRLF
-                + BODY);
-    }
-
-    @Test
-    void HttpREsponse_헤더_메시지_생성() {
-        httpResponse = new HttpResponse(statusLine, headers, body);
-        headers.put("key1", "value1");
-        headers.put("key2", "value2");
-
-        String headerMessge = httpResponse.getHeaderMessage();
-
-        assertThat(headerMessge).isEqualTo("HTTP/1.1 200 OK" + CRLF
-                + "key1: value1" + CRLF
-                + "key2: value2" + CRLF
-                + CRLF);
+        assertThat(response.hasBody()).isTrue();
     }
 }

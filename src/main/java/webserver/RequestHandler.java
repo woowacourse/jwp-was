@@ -1,11 +1,10 @@
 package webserver;
 
+import http.HttpVersion;
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
 import http.request.HttpUri;
-import http.response.Http200ResponseEntity;
 import http.response.HttpResponse;
-import http.response.HttpResponseEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.LoggingUtils;
@@ -16,6 +15,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
+
+import static http.response.HttpResponse.CRLF;
+import static http.response.HttpStatus.OK;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -36,18 +38,24 @@ public class RequestHandler implements Runnable {
 
             HttpResponse response = getResponseOf(request);
 
-            writeResponse(out, response);
+            writeResponse(response, out);
         } catch (IOException | URISyntaxException e) {
-            LoggingUtils.logStackTrace(logger, e);
             logger.error(e.getMessage());
+            LoggingUtils.logStackTrace(logger, e);
         }
     }
 
     private HttpResponse getResponseOf(HttpRequest request) throws IOException, URISyntaxException {
-        HttpResponseEntity responseEntity = isStaticContentRequest(request)
-                ? new Http200ResponseEntity(request.getUri().getPath())
-                : ControllerMapper.map(request);
-        return responseEntity.makeResponse();
+        HttpVersion version = request.getVersion();
+        HttpResponse response = HttpResponse.of(version);
+
+        if (isStaticContentRequest(request)) {
+            response.setStatus(OK);
+            response.forward(request.getUri().getPath());
+        } else {
+            ControllerMapper.map(request, response);
+        }
+        return response;
     }
 
     private boolean isStaticContentRequest(HttpRequest request) {
@@ -55,9 +63,11 @@ public class RequestHandler implements Runnable {
         return uri.hasExtension();
     }
 
-    private void writeResponse(OutputStream out, HttpResponse response) throws IOException {
+    private void writeResponse(HttpResponse response, OutputStream out) throws IOException {
         DataOutputStream dos = new DataOutputStream(out);
-        dos.writeBytes(response.getHeaderMessage());
+
+        dos.writeBytes(response.getMessageHeader());
+        dos.writeBytes(CRLF);
         if (response.hasBody()) {
             dos.write(response.getBody());
         }
