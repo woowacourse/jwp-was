@@ -15,6 +15,7 @@ public class HandlerMapping {
         HANDLER_MAP.put("/user/form", UserFormController.getInstance());
         HANDLER_MAP.put("/user/login", LoginController.getInstance());
         HANDLER_MAP.put("/user/login_failed", LoginFailedController.getInstance());
+        HANDLER_MAP.put("/user/list", UserListController.getInstance());
         HANDLER_MAP.put("/", IndexController.getInstance());
     }
 
