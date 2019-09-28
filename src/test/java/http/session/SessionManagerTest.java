@@ -1,15 +1,12 @@
 package http.session;
 
-import http.request.HttpRequest;
+import http.request.HttpCookie;
 import http.session.support.SessionManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static testhelper.Common.getHttpRequest;
 
 public class SessionManagerTest {
     private SessionManager sessionManager;
@@ -21,11 +18,11 @@ public class SessionManagerTest {
 
     @Test
     @DisplayName("세션이 없을 때 새로운 세션을 발급한다")
-    public void getNewSession() throws IOException {
-        HttpRequest httpRequest = getHttpRequest("HTTP_GET_INDEX_HTML.txt");
+    public void getNewSession() {
+        HttpCookie httpCookie = new HttpCookie("SESSIOONID=24f92f0e-eaad-4da6-9f68-cc019ecdfa37;");
 
-        HttpSession httpSession1 = sessionManager.getSession(httpRequest);
-        HttpSession httpSession2 = sessionManager.getSession(httpRequest);
+        HttpSession httpSession1 = sessionManager.getSession(httpCookie);
+        HttpSession httpSession2 = sessionManager.getSession(httpCookie);
 
         assertThat(httpSession1).isNotEqualTo(httpSession2);
     }

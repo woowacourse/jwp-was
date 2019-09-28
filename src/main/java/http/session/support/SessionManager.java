@@ -12,20 +12,7 @@ public class SessionManager {
     public static final String SESSION_NAME = "SESSIONID";
 
     private final Map<String, HttpSession> httpSessions = new HashMap<>();
-
-    public HttpSession getSession(final HttpRequest httpRequest) {
-        String sessionId = httpRequest.getCookie(SESSION_NAME);
-
-        if (sessionId == null) {
-            return makeNewSession();
-        }
-
-        if (httpSessions.containsKey(sessionId)) {
-            return httpSessions.get(sessionId);
-        }
-        return new HttpSession(UUID.fromString(sessionId));
-    }
-
+    
     public HttpSession getSession(final HttpCookie cookie) {
         String sessionId = cookie.getValue(SESSION_NAME);
 

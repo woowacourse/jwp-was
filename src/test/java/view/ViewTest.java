@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import servlet.view.View;
-import servlet.view.ViewResolver;
+import servlet.view.support.ViewResolver;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -4,7 +4,7 @@ import domain.UserService;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import servlet.resolver.UserResolver;
-import servlet.view.ViewResolver;
+import servlet.view.support.ViewResolver;
 
 import java.io.IOException;
 

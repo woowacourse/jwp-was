@@ -8,7 +8,7 @@ import servlet.view.View;
 import java.io.IOException;
 import java.util.Optional;
 
-import static servlet.view.ViewResolver.resolve;
+import static servlet.view.support.ViewResolver.resolve;
 
 public class UserListController extends HttpController {
 
