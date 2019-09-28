@@ -11,6 +11,7 @@ import webserver.response.HttpResponse;
 
 import static webserver.controller.RequestMapping.getMapping;
 import static webserver.controller.RequestMapping.postMapping;
+import static webserver.response.ResponseStatus.*;
 
 public class RequestMapper {
     private RequestMapper() {
@@ -57,10 +58,10 @@ public class RequestMapper {
             responsive = CONTROLLER_HANDLER.get(requestMapping);
         } catch (MethodNotAllowedException e) {
             logger.error("path: {}, {}", requestMapping, e.getMessage());
-            return HttpResponse.methodNotAllowed();
+            return HttpResponse.sendErrorResponse(METHOD_NOT_ALLOWED);
         } catch (Exception e) {
             logger.error("path: {}, {}", requestMapping, e.getMessage());
-            return HttpResponse.internalServerError();
+            return HttpResponse.sendErrorResponse(INTERNAL_SERVER_ERROR);
         }
 
         try {
@@ -68,7 +69,7 @@ public class RequestMapper {
             return response;
         } catch (PageNotFoundException e) {
             logger.error("path: {}, 존재하지 않는 path 요청", request.getPath());
-            return HttpResponse.notFound();
+            return HttpResponse.sendErrorResponse(NOT_FOUND);
         }
     }
 }
