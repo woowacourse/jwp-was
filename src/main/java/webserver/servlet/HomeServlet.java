@@ -4,11 +4,10 @@ import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 import webserver.resolver.Resolver;
 import webserver.view.ModelAndView;
-import webserver.view.View;
 
 import java.io.IOException;
 
-public class HomeServlet extends RequestServlet {
+public class HomeServlet extends AbstractRequestServlet {
     private final String url = "/";
 
     public HomeServlet(Resolver resolver) {

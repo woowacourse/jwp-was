@@ -6,14 +6,14 @@ import java.util.Arrays;
 
 public enum FileType {
     ALL("*", "*/*"), CSS("css", "text/css"), JAVASCRIPT("js", "application/javascript"
-    ), HTML("html", "text/html"), WOFF("woff", "application/font-woff"), TTF("ttf", "application/x-font-ttf");
+    ), HTML("html", "text/html"), WOFF("woff", "application/font-woff"), TTF("ttf", "application/x-font-ttf"), ICO("ico", "image/x-icon");
 
     private final String extensionName;
-    private final String memeName;
+    private final String mimeName;
 
-    FileType(String extensionName, String memeName) {
+    FileType(String extensionName, String mimeName) {
         this.extensionName = extensionName;
-        this.memeName = memeName;
+        this.mimeName = mimeName;
     }
 
     public static boolean isSupportedFile(String target) {
@@ -31,7 +31,7 @@ public enum FileType {
         return extensionName;
     }
 
-    public String getMemeName() {
-        return memeName;
+    public String getMimeName() {
+        return mimeName;
     }
 }

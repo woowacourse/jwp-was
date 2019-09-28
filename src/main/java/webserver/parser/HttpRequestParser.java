@@ -2,10 +2,7 @@ package webserver.parser;
 
 import utils.HttpRequestUtils;
 import utils.IOUtils;
-import webserver.http.request.HttpRequest;
-import webserver.http.request.RequestBody;
-import webserver.http.request.RequestHeader;
-import webserver.http.request.RequestLine;
+import webserver.http.request.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,6 +21,7 @@ public class HttpRequestParser {
     private static final int METHOD_INDEX = 0;
     private static final int URL_INDEX = 1;
     private static final int VERSION_INDEX = 1;
+    private static final String COOKIE_KEY = "Cookie";
 
 
     public static HttpRequest parse(BufferedReader bufferedReader) throws IOException {
@@ -31,7 +29,8 @@ public class HttpRequestParser {
         RequestLine requestLine = parseRequestLine(requestLines);
         RequestHeader requestHeader = parseRequestHeader(requestLines);
         RequestBody requestBody = parseRequestBody(bufferedReader, requestHeader.getHeader("Content-Length"));
-        return new HttpRequest(requestLine, requestHeader, requestBody);
+        Cookie cookie = parseCookie(requestHeader.getHeader(COOKIE_KEY));
+        return new HttpRequest(requestLine, requestHeader, requestBody, cookie);
     }
 
     private static List<String> parseRequestBuffer(BufferedReader bufferedReader) throws IOException {
@@ -63,5 +62,9 @@ public class HttpRequestParser {
             requestBody = new RequestBody(IOUtils.readData(bufferedReader, Integer.parseInt(bodyLength)));
         }
         return requestBody;
+    }
+
+    private static Cookie parseCookie(String line){
+        return new Cookie(line);
     }
 }

@@ -1,16 +1,34 @@
 package webserver.http.request;
 
+import db.SessionStorage;
 import webserver.http.response.HttpVersion;
+import webserver.session.HttpSession;
 
 public class HttpRequest {
     private RequestLine requestLine;
     private RequestHeader header;
     private RequestBody body;
+    private Cookie cookie;
+    private HttpSession session;
 
-    public HttpRequest(RequestLine requestLine, RequestHeader header, RequestBody body) {
+    public HttpRequest(RequestLine requestLine, RequestHeader header, RequestBody body, Cookie cookie) {
         this.requestLine = requestLine;
         this.header = header;
         this.body = body;
+        this.cookie = cookie;
+        this.session = setSession();
+    }
+
+    private HttpSession setSession() {
+        String sessionId = cookie.getSessionId();
+        if (SessionStorage.exists(sessionId)) {
+            return SessionStorage.get(sessionId);
+        }
+        return SessionStorage.create();
+    }
+
+    public HttpSession getSession() {
+        return session;
     }
 
     public String getAbsPath() {

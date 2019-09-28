@@ -11,11 +11,11 @@ import webserver.view.ModelAndView;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-public abstract class RequestServlet implements HttpServlet {
+public abstract class AbstractRequestServlet implements HttpServlet {
     public static final String METHOD_NOT_ALLOW_MESSAGE = "지원하지 않는 메소드 입니다.";
     Resolver resolver;
 
-    public RequestServlet(Resolver resolver) {
+    public AbstractRequestServlet(Resolver resolver) {
         this.resolver = resolver;
     }
 

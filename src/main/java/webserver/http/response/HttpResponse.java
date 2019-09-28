@@ -37,8 +37,16 @@ public class HttpResponse {
     }
 
     public void appendContentHeader(String memeName, int length) {
-        appendHeader("Content-Type", memeName+"; charset=utf-8");
+        appendHeader("Content-Type", memeName + "; charset=utf-8");
         appendHeader("Content-Length", length);
+    }
+
+    public void addCookie(Map) {
+        appendHeader("Set-Cookie", "logined=true; Path=/");
+    }
+
+    public void setCookie() {
+        appendHeader("Set-Cookie", "logined=true; Path=/");
     }
 
     public void writeLine() throws IOException {
@@ -59,11 +67,6 @@ public class HttpResponse {
     public void end() throws IOException {
         dos.flush();
     }
-
-    public void setCookie() {
-        appendHeader("Set-Cookie", "logined=true; Path=/");
-    }
-
 
 }
 

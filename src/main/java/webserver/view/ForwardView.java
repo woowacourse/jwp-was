@@ -20,7 +20,7 @@ public class ForwardView implements View {
     public void render(Map<String, Object> model, HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         byte[] body = FileIoUtils.loadFileFromClasspath(name);
         httpResponse.ok();
-        httpResponse.appendContentHeader(FileType.HTML.getMemeName(), body.length);
+        httpResponse.appendContentHeader(FileType.HTML.getMimeName(), body.length);
         send(httpResponse,body);
     }
 }

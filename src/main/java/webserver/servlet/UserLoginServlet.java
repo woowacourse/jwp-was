@@ -4,7 +4,6 @@ import db.DataBase;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.RequestHandler;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 import webserver.resolver.Resolver;
@@ -12,8 +11,8 @@ import webserver.view.ModelAndView;
 
 import java.io.IOException;
 
-public class UserLoginServlet extends RequestServlet {
-    private static final Logger logger = LoggerFactory.getLogger(RequestServlet.class);
+public class UserLoginServlet extends AbstractRequestServlet {
+    private static final Logger logger = LoggerFactory.getLogger(AbstractRequestServlet.class);
 
     private final String url = "/user/login";
 
@@ -33,7 +32,7 @@ public class UserLoginServlet extends RequestServlet {
         User user = DataBase.findUserById(id);
         if (canLogin(password, user)) {
             httpResponse.setCookie();
-            logger.debug(">>> LOGIN SUCCESS : {}", user);
+
             return new ModelAndView(resolver.createView("redirect:/"));
         }
         logger.debug(">>> LOGIN FAILED : {}", user);

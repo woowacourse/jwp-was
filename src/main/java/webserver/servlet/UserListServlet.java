@@ -11,7 +11,7 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserListServlet extends RequestServlet {
+public class UserListServlet extends AbstractRequestServlet {
     private final String url = "/user/list";
 
     public UserListServlet(Resolver resolver) {

@@ -21,7 +21,7 @@ public class HandlebarView implements View {
     public void render(Map<String, Object> model, HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         byte[] body = template.apply(model).getBytes();
         httpResponse.ok();
-        httpResponse.appendContentHeader(FileType.HTML.getMemeName(), body.length);
+        httpResponse.appendContentHeader(FileType.HTML.getMimeName(), body.length);
         send(httpResponse, body);
     }
 
