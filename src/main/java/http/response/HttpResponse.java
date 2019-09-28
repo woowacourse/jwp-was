@@ -31,7 +31,7 @@ public class HttpResponse {
     }
 
     public void addHeaderAttribute(String key, String value) {
-        this.httpHeader.add(key, value);
+        this.httpHeader.addHeaderAttribute(key, value);
     }
 
     public void setBody(byte[] body) {
