@@ -6,6 +6,7 @@ import java.util.Map;
 public class Cookie {
     private static final String COOKIE_SEPARATOR = "; ";
     private static final String EQUALS_SIGN = "=";
+    private static final String JSESSIONID = "JSESSIONID";
 
     private Map<String, String> cookies;
 
@@ -30,6 +31,10 @@ public class Cookie {
 
     public String get(String key) {
         return cookies.get(key);
+    }
+
+    public String getJSessionId() {
+        return cookies.get(JSESSIONID);
     }
 
     @Override
