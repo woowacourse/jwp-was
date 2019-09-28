@@ -3,11 +3,6 @@ package model;
 import java.util.Objects;
 
 public class User {
-    private static final String USER_ID = "userId";
-    private static final String USER_PASSWORD = "password";
-    private static final String USER_NAME = "name";
-    private static final String USER_EMAIL = "email";
-
     private String id;
     private String password;
     private String name;
