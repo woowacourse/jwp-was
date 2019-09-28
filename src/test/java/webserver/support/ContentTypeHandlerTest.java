@@ -16,7 +16,7 @@ class ContentTypeHandlerTest {
 
     @Test
     public void typeException() {
-        String errorType = "none";
+        String errorType = "none.none";
         assertThrows(InvalidContentTypeException.class, () -> ContentTypeHandler.type(errorType));
     }
 }

@@ -1,6 +1,7 @@
 package webserver.controller;
 
 import db.DataBase;
+import http.response.Cookies;
 import model.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,7 +39,8 @@ class UserListControllerTest {
                 .returnResult()
                 .getResponseHeaders().get("Set-Cookie").get(0);
 
-        jSessionId = CookieParser.parse(cookie).get("JSESSIONID");
+        Cookies cookies = new Cookies(CookieParser.parse(cookie));
+        jSessionId = cookies.findCookie("JSESSIONID").getValue();
     }
 
     @Test
