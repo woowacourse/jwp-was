@@ -15,7 +15,7 @@ public class Database {
     }
 
     public static Optional<User> findUserById(String id) {
-        return Optional.of(users.get(id));
+        return Optional.ofNullable(users.get(id));
     }
 
     public static Optional<User> findUserByIdAndPassword(String id, String password) {
