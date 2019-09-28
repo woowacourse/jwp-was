@@ -19,6 +19,7 @@ public class ControllerFactory {
         controllers.put(RequestMethod.GET + "/user/form.html", resourceController());
         controllers.put(RequestMethod.POST + "/user/create", createUserController());
         controllers.put(RequestMethod.GET + "/user/login.html", resourceController());
+        controllers.put(RequestMethod.POST + "/user/login", loginController());
     }
 
     private static AbstractController resourceController() {
@@ -27,6 +28,10 @@ public class ControllerFactory {
 
     private static AbstractController createUserController() {
         return new CreateUserController();
+    }
+
+    private static AbstractController loginController() {
+        return new LoginController();
     }
 
     public static AbstractController mappingController(HttpRequest httpRequest, HttpResponse httpResponse) {

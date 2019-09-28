@@ -19,6 +19,11 @@ public class ResponseHeader {
         responseHeaders.put(httpHeaderField, contentType.getContentType());
     }
 
+    public boolean hasResponseField(final String field) {
+        return responseHeaders.keySet().stream()
+                .anyMatch(key -> key.getField().equals(field));
+    }
+
     public String getResponseHeaders() {
         return responseHeaders.entrySet().stream()
                 .map(map -> map.getKey().getField() + COLON + map.getValue())

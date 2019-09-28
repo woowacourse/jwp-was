@@ -24,9 +24,9 @@ public enum HttpHeaderField {
     PROXY_AUTHENTICATE("Proxy-Authenticate"), RETRY_AFTER("Retry-After"), SERVER("Server"), VARY("Vary"),
     WWW_AUTHENTICATE("WWW-Authenticate");
 
-    private String field;
+    private final String field;
 
-    HttpHeaderField(String field) {
+    HttpHeaderField(final String field) {
         this.field = field;
     }
 

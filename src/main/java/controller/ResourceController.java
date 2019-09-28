@@ -14,19 +14,11 @@ import java.net.URISyntaxException;
 
 public class ResourceController extends AbstractController {
 
-    private static void send200Response(DataOutputStream dos, HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
-        byte[] body = httpResponse.responseBody(httpRequest.getRequestPath().getFullPath());
-        httpResponse.addHeader(HttpHeaderField.CONTENT_LENGTH, String.valueOf(body.length));
-        dos.writeBytes(httpResponse.doResponse());
-        dos.write(body, 0, body.length);
-        dos.flush();
-    }
-
     @Override
     public void service(OutputStream out, HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         DataOutputStream dos = new DataOutputStream(out);
         doGet(httpRequest, httpResponse);
-        send200Response(dos, httpRequest, httpResponse);
+        sendResponse(dos);
     }
 
     @Override

@@ -14,8 +14,9 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class HttpResponse {
-    private static final String CRLF = "\r\n";
     private static final Logger log = LoggerFactory.getLogger(HttpResponse.class);
+    private static final String CRLF = "\r\n";
+
     private HttpVersion httpVersion;
     private ResponseStatusLine responseStatusLine;
     private ResponseHeader responseHeader;
@@ -50,5 +51,9 @@ public class HttpResponse {
 
     public byte[] responseBody(String path) throws IOException, URISyntaxException {
         return FileIoUtils.loadFileFromClasspath(path);
+    }
+
+    public boolean hasField(String contentLength) {
+        return responseHeader.hasResponseField(contentLength);
     }
 }
