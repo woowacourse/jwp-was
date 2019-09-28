@@ -1,5 +1,9 @@
 package model;
 
+import webserver.exception.UserPasswordMismatchException;
+
+import java.util.Objects;
+
 public class User {
     private String userId;
     private String password;
@@ -11,6 +15,12 @@ public class User {
         this.password = password;
         this.name = name;
         this.email = email;
+    }
+
+    public void checkPassword(String password) {
+        if (!this.password.equals(password)) {
+            throw new UserPasswordMismatchException("비밀번호가 틀렸습니다");
+        }
     }
 
     public String getUserId() {
@@ -27,6 +37,23 @@ public class User {
 
     public String getEmail() {
         return email;
+    }
+
+    public boolean isPasswordMatch(String password) {
+        return this.password.equals(password);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(userId, user.userId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId);
     }
 
     @Override

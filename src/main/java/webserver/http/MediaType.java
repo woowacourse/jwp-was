@@ -21,9 +21,9 @@ public enum MediaType {
         return contentType;
     }
 
-    public static MediaType find(String name) {
+    public static MediaType find(String path) {
         return Arrays.stream(values())
-                .filter(mediaType -> mediaType.equals(valueOf(name)))
+                .filter(mediaType -> mediaType.equals(valueOf(path)))
                 .findFirst()
                 .orElse(MediaType.NOT_SUPPORT);
     }

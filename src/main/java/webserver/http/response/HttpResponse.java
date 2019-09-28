@@ -2,31 +2,25 @@ package webserver.http.response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.FileIoUtils;
 import webserver.http.HttpStatus;
 import webserver.http.MediaType;
+import webserver.view.ViewResolveResult;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
     private static final String EXTENSION_DELIMITER = ".";
-    private static final String SLASH = "/";
 
-    // TODO model 맵의 역할
-    private Map<String, String> model = new HashMap<>();
-    private Map<String, String> headers = new HashMap<>();
-    private String path;
+    private ResponseHeader responseHeader = new ResponseHeader();
+    private Cookie cookie = Cookie.newInstance();
     private HttpStatus httpStatus;
     private MediaType mediaType;
     private String errorMsg;
-    private byte[] body;
+    private ViewResolveResult viewResolveResult;
 
     private HttpResponse() {
         this.httpStatus = HttpStatus.DEFAULT;
@@ -36,11 +30,24 @@ public class HttpResponse {
         return new HttpResponse();
     }
 
-    public void send(String path, HttpStatus httpStatus) throws IOException, URISyntaxException {
-        this.path = path;
-        this.body = FileIoUtils.loadFileFromClasspath(path);
-        this.httpStatus = httpStatus;
-        this.mediaType = MediaType.find(extractExtensions(path));
+    public void notFound(String path) {
+        this.viewResolveResult = new ViewResolveResult(new byte[0], path);
+        this.httpStatus = HttpStatus.NOT_FOUND;
+        this.mediaType = MediaType.HTML;
+        createHeader();
+    }
+
+    public void notFound(ViewResolveResult viewResolveResult) {
+        this.viewResolveResult = viewResolveResult;
+        this.httpStatus = HttpStatus.NOT_FOUND;
+        this.mediaType = MediaType.find(extractExtensions(viewResolveResult.getPath()));
+        createHeader();
+    }
+
+    public void ok(ViewResolveResult viewResolveResult) {
+        this.viewResolveResult = viewResolveResult;
+        this.httpStatus = HttpStatus.OK;
+        this.mediaType = MediaType.find(extractExtensions(viewResolveResult.getPath()));
         createHeader();
     }
 
@@ -50,14 +57,24 @@ public class HttpResponse {
 
     private void createHeader() {
         if (isRedirect()) {
-            headers.put("Location", excludePathPrefix(path) + "\r\n");
+            responseHeader.add("Location", viewResolveResult.getPath());
         }
-        headers.put("Content-Type", mediaType.getContentType() + ";charset=utf-8\r\n");
-        headers.put("Content-Length", body.length + ";charset=utf-8\r\n");
+        if (cookie.isCookieExists()) {
+            responseHeader.add("Set-Cookie", cookie.create());
+        }
+        responseHeader.add("Content-Type", mediaType.getContentType());
+        responseHeader.add("Content-Length", viewResolveResult.getBodyLength() + ";charset=utf-8\r\n");
     }
 
-    private String excludePathPrefix(String path) {
-        return path.substring(path.indexOf(SLASH));
+    private boolean isRedirect() {
+        return httpStatus.equals(HttpStatus.REDIRECT);
+    }
+
+    public void redirect(ViewResolveResult viewResolveResult) {
+        this.viewResolveResult = viewResolveResult;
+        this.httpStatus = HttpStatus.REDIRECT;
+        this.mediaType = MediaType.find(extractExtensions(viewResolveResult.getPath()));
+        createHeader();
     }
 
     public void sendError(HttpStatus httpStatus, String msg) {
@@ -65,43 +82,61 @@ public class HttpResponse {
         this.errorMsg = msg;
     }
 
-    private boolean isRedirect() {
-        return httpStatus.equals(HttpStatus.REDIRECT);
+    public void addCookie(String key, String value) {
+        cookie.add(key, value);
+    }
+
+    public void addCookieValues(String key, String addValue) {
+        cookie.addAttribute(key, addValue);
+    }
+
+    public void setCookieHttpOnly(String key) {
+        cookie.setHttpOnly(key);
     }
 
     public int getHttpStatusCode() {
         return httpStatus.getValue();
     }
 
-    public String getMediaType() {
-        return mediaType.getContentType();
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void flush(OutputStream out) {
+    public void send(OutputStream out) {
         DataOutputStream dos = new DataOutputStream(out);
         createResponse(dos);
     }
 
+    public String getHeaders(String key) {
+        return responseHeader.get(key);
+    }
+
+    public String getPath() {
+        return viewResolveResult.getPath();
+    }
+
     private void createResponse(DataOutputStream dos) {
         responseHeader(dos);
-        responseBody(dos, this.body);
+        responseBody(dos, viewResolveResult.getBody());
     }
 
     private void responseHeader(DataOutputStream dos) {
         try {
             dos.writeBytes("HTTP/1.1 " + httpStatus.getValue() + " " + httpStatus.getReasonPhrase() + " \r\n");
-            if (isRedirect()) {
-                dos.writeBytes("Location: " + headers.get("Location"));
+            if (responseHeader.contains("Location")) {
+                dos.writeBytes("Location: " + responseHeader.get("Location") + "\r\n");
             }
-            dos.writeBytes("Content-Type: " + headers.get("Content-Type") + ";charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + headers.get("Content-Length") + "\r\n");
+            if (responseHeader.contains("Set-Cookie")) {
+                setEachCookie(dos);
+            }
+            dos.writeBytes("Content-Type: " + responseHeader.get("Content-Type") + ";charset=utf-8\r\n");
+            dos.writeBytes("Content-Length: " + viewResolveResult.getBodyLength() + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
+        }
+    }
+
+    private void setEachCookie(DataOutputStream dos) throws IOException {
+        String[] split = responseHeader.get("Set-Cookie").split("\r\n");
+        for (String s : split) {
+            dos.writeBytes("Set-Cookie: " + s + "\r\n");
         }
     }
 

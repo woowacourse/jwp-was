@@ -1,7 +1,6 @@
 package webserver.handler.controller.custom;
 
 import webserver.handler.controller.AbstractController;
-import webserver.http.HttpStatus;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 import webserver.view.ViewResolver;
@@ -14,8 +13,8 @@ public class HomeController extends AbstractController {
     }
 
     @Override
-    protected void doGet(HttpRequest request, HttpResponse response) throws Exception{
-        response.send(viewResolver.resolve("/index.html"), HttpStatus.OK);
+    protected void doGet(HttpRequest request, HttpResponse response) {
+        response.ok(viewResolver.resolve("/index.html"));
     }
 
     @Override

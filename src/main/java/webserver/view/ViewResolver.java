@@ -1,12 +1,22 @@
 package webserver.view;
 
-public interface ViewResolver {
+import java.util.Map;
 
+public interface ViewResolver {
     /**
-     * path 에 따라 맞는 폴더를 prefix 에 붙여준다.
+     * 내려줄 데이터가 없는 경우 설정을 해준다.
      *
      * @param path 요청 path
-     * @return prefix 를 포함한 전체 path
+     * @return ViewResolveResult
      */
-    String resolve(String path);
+    ViewResolveResult resolve(String path);
+
+    /**
+     * 내려줄 데이터가 있는 경우 설정을 해준다.
+     *
+     * @param path  요청 path
+     * @param model 데이터
+     * @return ViewResolveResult
+     */
+    ViewResolveResult resolve(String path, Map<String, Object> model);
 }
