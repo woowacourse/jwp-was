@@ -3,13 +3,10 @@ package http;
 import exception.NotFoundHeaderException;
 
 public enum HeaderElement {
-	CODE("Code"),
-	DESCRIPTION("description"),
 	CONTENT_TYPE("Content-Type"),
 	CONTENT_LENGTH("Content-Length"),
 	LOCATION("Location"),
 	PATH("Path"),
-	METHOD("Method"),
 	HOST("Host"),
 	CONNECTION("Connection"),
 	ACCEPT("Accept"),

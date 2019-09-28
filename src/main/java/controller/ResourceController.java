@@ -7,12 +7,13 @@ import java.net.URISyntaxException;
 import exception.FailedForwardException;
 import exception.UnauthorizedRequestException;
 import exception.WrongPathException;
-import http.HeaderElement;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.response.HttpResponseGenerator;
 import utils.FileIoUtils;
 import utils.ResourcePathUtils;
+
+import static http.request.HttpRequestReader.REQUEST_URI;
 
 public class ResourceController extends AbstractController {
 	@Override
@@ -23,10 +24,10 @@ public class ResourceController extends AbstractController {
 	@Override
 	public void doGet(HttpRequest httpRequest, DataOutputStream dos) {
 		try {
-			String path = ResourcePathUtils.getResourcePath(httpRequest.getRequestHeaderElement(HeaderElement.PATH));
+			String path = ResourcePathUtils.getResourcePath(httpRequest.getRequestLineElement(REQUEST_URI));
 			byte[] responseBody = FileIoUtils.loadFileFromClasspath(path);
 			HttpResponse httpResponse = HttpResponseGenerator.response200Header(
-					httpRequest.getRequestHeaderElement(HeaderElement.PATH), responseBody.length);
+					httpRequest.getRequestLineElement(REQUEST_URI), responseBody.length);
 			httpResponse.forward(responseBody, dos);
 		} catch (IOException e) {
 			throw new FailedForwardException();

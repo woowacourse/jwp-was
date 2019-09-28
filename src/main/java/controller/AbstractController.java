@@ -3,15 +3,17 @@ package controller;
 import java.io.DataOutputStream;
 import java.io.OutputStream;
 
-import http.HeaderElement;
 import http.method.HttpMethod;
 import http.request.HttpRequest;
+
+import static http.request.HttpRequestReader.HTTP_METHOD;
+
 
 public abstract class AbstractController implements Controller {
 	@Override
 	public void service(HttpRequest httpRequest, OutputStream out) {
 		DataOutputStream dos = new DataOutputStream(out);
-		if (HttpMethod.GET.isSameMethod(httpRequest.getRequestHeaderElement(HeaderElement.METHOD))) {
+		if (HttpMethod.GET.isSameMethod(httpRequest.getRequestLineElement(HTTP_METHOD))) {
 			doGet(httpRequest, dos);
 			return;
 		}

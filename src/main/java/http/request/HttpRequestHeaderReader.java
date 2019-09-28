@@ -20,26 +20,16 @@ public class HttpRequestHeaderReader {
 		Map<HeaderElement, String> requests = new HashMap<>();
 		String requestLine = bufferedReader.readLine();
 
-		logger.info("request header - {}", requestLine);
-
-		saveRequestURL(requestLine, requests);
-
 		while (!Objects.isNull(requestLine) && !requestLine.isEmpty()) {
-			requestLine = bufferedReader.readLine();
 			logger.info("request header - {}", requestLine);
 			if (requestLine.isEmpty() || Objects.isNull(requestLine)) {
 				break;
 			}
 			String[] request = requestLine.split(REQUEST_SEPARATOR);
 			requests.put(HeaderElement.getHeader(request[0].trim()), request[1].trim());
+			requestLine = bufferedReader.readLine();
 		}
 
 		return requests;
-	}
-
-	private static void saveRequestURL(String requestLine, Map<HeaderElement, String> requests) {
-		String[] requestLines = requestLine.split(" ");
-		requests.put(HeaderElement.METHOD, requestLines[0]);
-		requests.put(HeaderElement.PATH, requestLines[1]);
 	}
 }
