@@ -25,4 +25,8 @@ public enum MimeType {
                 .orElse(MimeType.DEFAULT.mimeType)
                 ;
     }
+
+    public String getMimeType() {
+        return mimeType;
+    }
 }
