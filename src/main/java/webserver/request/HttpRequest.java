@@ -61,7 +61,7 @@ public class HttpRequest {
     }
 
     public RequestMapping getRequestMapping() {
-        return new RequestMapping(getMethod(), getPath());
+        return new RequestMapping(Method.valueOf(getMethod()), getPath());
     }
 
     public String getMethod() {
