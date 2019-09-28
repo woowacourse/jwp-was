@@ -17,10 +17,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static controller.UserLoginController.LOGIN_USER;
 
 public class UserListController extends AbstractController {
+    private static final String LOGIN_USER = "login-user";
     private static final Logger log = LoggerFactory.getLogger(UserListController.class);
+    private static final String USERS = "users";
 
     private UserService userService = new UserService();
 
@@ -42,7 +43,7 @@ public class UserListController extends AbstractController {
         List<User> users = userService.findAll();
 
         Map<String, Object> model = new HashMap<>();
-        model.put("users", users);
+        model.put(USERS, users);
 
         try {
             ResponseResolver.resolve(new ModelAndView("/user/list.html", model), response);

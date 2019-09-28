@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import static session.HttpSession.SESSION_ID;
 
 public class HttpRequest implements AutoCloseable {
+    private static final String EMPTY_STRING = "";
     private RequestLine requestLine;
     private RequestHeader requestHeader;
     private RequestBody requestBody;
@@ -52,7 +53,7 @@ public class HttpRequest implements AutoCloseable {
 
     public String getBody() {
         if (requestBody == null) {
-            return "";
+            return EMPTY_STRING;
         }
         return decode(requestBody.getBody());
     }

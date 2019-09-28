@@ -7,6 +7,7 @@ import http.response.ResponseStatus;
 import java.util.Map;
 
 public class RedirectView implements View {
+    private static final String EMPTY_STRING = "";
     private final Map<HTTP, String> header = Maps.newHashMap();
 
     public RedirectView(String path) {
@@ -25,6 +26,6 @@ public class RedirectView implements View {
 
     @Override
     public byte[] getBody() {
-        return "".getBytes();
+        return EMPTY_STRING.getBytes();
     }
 }

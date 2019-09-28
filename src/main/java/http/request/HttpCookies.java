@@ -6,13 +6,14 @@ import http.HttpCookie;
 import java.util.List;
 
 public class HttpCookies {
+    private static final String DELIMITER = "; ";
     private List<HttpCookie> cookies = Lists.newArrayList();
 
     public HttpCookies() {
     }
 
     public HttpCookies(String line) {
-        for (String nameValue : line.split("; ")) {
+        for (String nameValue : line.split(DELIMITER)) {
             cookies.add(new HttpCookie(nameValue));
         }
     }

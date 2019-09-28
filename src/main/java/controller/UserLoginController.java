@@ -15,7 +15,8 @@ import utils.QueryStringUtils;
 import java.util.Map;
 
 public class UserLoginController extends AbstractController {
-    public static final String LOGIN_USER = "login-user";
+    private static final String LOGIN_USER = "login-user";
+    private static final String EVERYWHERE = "/";
 
     private UserService userService = new UserService();
 
@@ -38,7 +39,7 @@ public class UserLoginController extends AbstractController {
 
     private void setSessionToCookie(HttpResponse response, HttpSession httpSession) {
         HttpCookie httpCookie = new HttpCookie(httpSession);
-        httpCookie.setPath("/");
+        httpCookie.setPath(EVERYWHERE);
         response.addCookie(httpCookie);
     }
 }

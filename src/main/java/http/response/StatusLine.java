@@ -18,7 +18,7 @@ public class StatusLine {
 
     public String getResponse() {
         StringBuffer sb = new StringBuffer();
-        sb.append(HTTP.VERSION.getPhrase()).append(FIRST_LINE_DELIMITER).append(responseStatus.getInfo());
+        sb.append(HTTP.VERSION.getPhrase()).append(FIRST_LINE_DELIMITER).append(responseStatus.getCodeAndPhrase());
         return sb.toString();
     }
 }
