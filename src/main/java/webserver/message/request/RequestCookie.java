@@ -1,11 +1,11 @@
-package webserver.message;
+package webserver.message.request;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class HttpCookie {
+public class RequestCookie {
     private static final String ATTRIBUTE_DELIMITER = ";";
     private static final String COOKIE_KEY_VALUE_DELIMITER = "=";
     private static final String EMPTY = "";
@@ -14,7 +14,7 @@ public class HttpCookie {
 
     private final Map<String, String> cookie;
 
-    public HttpCookie(final String rawCookie) {
+    public RequestCookie(final String rawCookie) {
         this.cookie = (rawCookie == null) ? new HashMap<>() : makeCookie(rawCookie);
     }
 

@@ -2,7 +2,6 @@ package webserver.message.request;
 
 import org.slf4j.Logger;
 import utils.IOUtils;
-import webserver.message.HttpCookie;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -21,11 +20,11 @@ public class RequestHeader {
     private static final int VALUE_INDEX = 1;
 
     private final Map<String, String> requestFields;
-    private final HttpCookie httpCookie;
+    private final RequestCookie requestCookie;
 
     public RequestHeader(final IOUtils IOUtils) {
         this.requestFields = makeFields(IOUtils);
-        this.httpCookie = new HttpCookie(requestFields.get("httpCookie"));
+        this.requestCookie = new RequestCookie(requestFields.get("cookie"));
     }
 
     private Map<String, String> makeFields(final IOUtils IOUtils) {
@@ -56,11 +55,11 @@ public class RequestHeader {
         return requestFields.getOrDefault(key, EMPTY);
     }
 
-    public HttpCookie getHttpCookie() {
-        return this.httpCookie;
+    public RequestCookie getRequestCookie() {
+        return this.requestCookie;
     }
 
     public String getCookieValue(final String key) {
-        return this.httpCookie.getCookieValue(key);
+        return this.requestCookie.getCookieValue(key);
     }
 }

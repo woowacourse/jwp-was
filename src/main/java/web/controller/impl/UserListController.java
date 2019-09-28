@@ -11,6 +11,7 @@ import web.model.User;
 import webserver.message.exception.NotFoundFileException;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
+import webserver.session.SessionContextHolder;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,12 +21,14 @@ import java.util.Map;
 
 public class UserListController extends AbstractController {
     private static final String TEMPLATES_PATH = "/templates";
-    private static final String USER_LIST_PAGE = "/user/list.html";
+    private static final String LOGIN_PATH = "/user/login";
+    private static final String USER_LIST_PATH = "/user/list";
+    private static final String LOGINED = "logined";
 
     @Override
     protected Response doGet(final Request request) {
-        if (!request.getCookie().getCookieValue("logined").equals("true")) {
-            return new Response.Builder().redirectUrl("/user/login").build();
+        if (!isLogined(request)) {
+            return new Response.Builder().redirectUrl(LOGIN_PATH).build();
         }
 
         List<User> users = new ArrayList<>(DataBase.findAll());
@@ -40,12 +43,17 @@ public class UserListController extends AbstractController {
         handlebars.registerHelper("inc", (Helper<Integer>) (value, options) -> value + 1);
 
         try {
-            Template template = handlebars.compile("user/list");
+            Template template = handlebars.compile(USER_LIST_PATH);
             String profilePage = template.apply(map);
 
             return new Response.Builder().body(profilePage).build();
         } catch (IOException e) {
             throw new NotFoundFileException();
         }
+    }
+
+    private boolean isLogined(Request request) {
+        return request.getCookieValue(LOGINED).equals("true")
+                && SessionContextHolder.findSessionById(request.getCookieValue("sessionId")).isPresent();
     }
 }

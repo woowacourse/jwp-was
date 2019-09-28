@@ -49,7 +49,7 @@ public class RequestStartLine {
         return httpVersion.getVersion();
     }
 
-    boolean matchesMethod(String method) {
+    boolean matchesMethod(HttpMethod method) {
         return this.httpMethod.matchesMethod(method);
     }
 }

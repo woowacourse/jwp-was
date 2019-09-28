@@ -7,10 +7,10 @@ import webserver.StaticFile;
 import webserver.message.exception.NotFoundFileException;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
+import webserver.message.response.ResponseCookie;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Optional;
 
 import static org.slf4j.LoggerFactory.getLogger;
 

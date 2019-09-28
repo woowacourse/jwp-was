@@ -60,10 +60,14 @@ class LoginControllerTest extends RequestHelper {
     void login() {
         DataBase.addUser(new User("javajigi", "password", "포비", "pobi@pobi.com"));
 
+        HttpSession session = HttpSession.newInstance();
+        SessionContextHolder.addSession(session);
+
         assertThat(loginController.doPost(postRequest).toBytes())
                 .isEqualTo(new Response.Builder()
                         .redirectUrl(INDEX_PAGE_URL)
-                        .setCookie("logined=true; Path=/")
+                        .addCookie(new ResponseCookie.Builder("logined", "true").path("/").build())
+                        .addCookie(new ResponseCookie.Builder("sessionId", session.getId()).path("/").build())
                         .build().toBytes());
     }
 
