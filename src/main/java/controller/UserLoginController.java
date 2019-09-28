@@ -14,8 +14,6 @@ import utils.QueryStringUtils;
 
 import java.util.Map;
 
-import static session.HttpSession.SESSION_ID;
-
 public class UserLoginController extends AbstractController {
     public static final String LOGIN_USER = "login-user";
 
@@ -29,7 +27,7 @@ public class UserLoginController extends AbstractController {
             User foundUser = userService.login(body.get("userId"), body.get("password"));
 
             HttpSession httpSession = request.getSession(HttpSessionManager.getInstance());
-            setCookie(response, httpSession);
+            setSessionToCookie(response, httpSession);
 
             httpSession.setAttribute(LOGIN_USER, foundUser);
             ResponseResolver.resolve(new RedirectView("/index.html"), response);
@@ -38,8 +36,8 @@ public class UserLoginController extends AbstractController {
         }
     }
 
-    private void setCookie(HttpResponse response, HttpSession httpSession) {
-        HttpCookie httpCookie = new HttpCookie(SESSION_ID, httpSession.getId());
+    private void setSessionToCookie(HttpResponse response, HttpSession httpSession) {
+        HttpCookie httpCookie = new HttpCookie(httpSession);
         httpCookie.setPath("/");
         response.addCookie(httpCookie);
     }

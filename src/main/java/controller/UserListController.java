@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 
 import static controller.UserLoginController.LOGIN_USER;
-import static session.HttpSession.SESSION_ID;
 
 public class UserListController extends AbstractController {
     private static final Logger log = LoggerFactory.getLogger(UserListController.class);
@@ -35,8 +34,8 @@ public class UserListController extends AbstractController {
     }
 
     private boolean checkLogin(HttpRequest request) {
-        HttpSession session = HttpSessionManager.getInstance().findOrCreateSession(request.getCookieValue(SESSION_ID));
-        return session != null && session.getAttributes(LOGIN_USER) != null;
+        HttpSession session = request.getSession(HttpSessionManager.getInstance());
+        return session.getAttributes(LOGIN_USER) != null;
     }
 
     private void showUsers(HttpResponse response) {
