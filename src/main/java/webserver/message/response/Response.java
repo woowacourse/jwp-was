@@ -6,7 +6,9 @@ import webserver.message.HttpVersion;
 import webserver.message.MediaType;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Response {
@@ -25,12 +27,12 @@ public class Response {
     public static class Builder {
         private static final String CONTENT_TYPE = "Content-Type";
         private static final String LOCATION = "Location";
-        private static final String SET_COOKIE = "Set-HttpCookie";
 
         private HttpVersion httpVersion;
         private HttpStatus httpStatus;
         private ResponseBody body = new ResponseBody();
         private Map<String, String> responseFields = new HashMap<>();
+        private List<ResponseCookie> cookies = new ArrayList<>();
 
         public Builder(final HttpVersion httpVersion, final HttpStatus httpStatus) {
             this.httpVersion = httpVersion;
@@ -80,8 +82,9 @@ public class Response {
             return this;
         }
 
-        public Builder setCookie(final String cookie) {
-            return putField(SET_COOKIE, cookie);
+        public Builder addCookie(final ResponseCookie cookie) {
+            this.cookies.add(cookie);
+            return this;
         }
 
         public Builder body(final String body) {
@@ -102,7 +105,7 @@ public class Response {
 
         public Response build() {
             final ResponseStatusLine statusLine = new ResponseStatusLine(this.httpVersion, this.httpStatus);
-            final ResponseHeader header = new ResponseHeader(this.responseFields);
+            final ResponseHeader header = new ResponseHeader(this.responseFields, this.cookies);
             return new Response(statusLine, header, this.body);
         }
     }

@@ -43,8 +43,6 @@ class RequestDispatcherTest extends RequestHelper {
         final byte[] response = RequestDispatcher.forward(null);
         final StaticFile staticFile = new StaticFile("./templates/error/500_internal_error.html");
 
-        System.out.println(new String(response));
-
         assertThat(response).isEqualTo(new Response.Builder()
                 .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(staticFile)

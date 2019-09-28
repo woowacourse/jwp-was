@@ -3,7 +3,8 @@ package webserver.message.response;
 public class ResponseBody {
     private byte[] body = new byte[0];
 
-    ResponseBody() {}
+    ResponseBody() {
+    }
 
     ResponseBody(final byte[] body) {
         this.body = body;

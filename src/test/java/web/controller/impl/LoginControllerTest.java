@@ -8,6 +8,9 @@ import web.model.User;
 import webserver.StaticFile;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
+import webserver.message.response.ResponseCookie;
+import webserver.session.HttpSession;
+import webserver.session.SessionContextHolder;
 import webserver.support.RequestHelper;
 
 import java.io.IOException;
@@ -16,8 +19,6 @@ import java.net.URISyntaxException;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class LoginControllerTest extends RequestHelper {
-    private static final String NOT_FOUND_USER_ID_MESSAGE = "해당 사용자가 존재하지 않습니다.";
-    private static final String UNMATCHED_USER_MESSAGE = "비밀번호가 일치하지 않습니다.";
     private static final String INDEX_PAGE_URL = "/";
     private static final String LOGIN_FAILED_PAGE_URL = "/user/login_failed.html";
     private static final String TEMPLATES_PATH = "./templates";
@@ -74,7 +75,7 @@ class LoginControllerTest extends RequestHelper {
         assertThat(loginController.doPost(request).toBytes())
                 .isEqualTo(new Response.Builder()
                         .redirectUrl(LOGIN_FAILED_PAGE_URL)
-                        .setCookie("logined=false; Path=/")
+                        .addCookie(new ResponseCookie.Builder("logined", "false").path("/").build())
                         .build().toBytes());
     }
 
@@ -86,23 +87,7 @@ class LoginControllerTest extends RequestHelper {
         assertThat(loginController.doPost(postRequest).toBytes())
                 .isEqualTo(new Response.Builder()
                         .redirectUrl(LOGIN_FAILED_PAGE_URL)
-                        .setCookie("logined=false; Path=/")
+                        .addCookie(new ResponseCookie.Builder("logined", "false").path("/").build())
                         .build().toBytes());
     }
-
-    /*@Test
-    @DisplayName("존재하지 않는 userId로 로그인할 때 예외처리")
-    void loginException1() {
-        LoginException thrown = assertThrows(LoginException.class, () -> loginController.doPost(postRequest));
-        assertEquals(thrown.getMessage(), NOT_FOUND_USER_ID_MESSAGE);
-    }
-
-    @Test
-    @DisplayName("비밀번호가 틀렸을 때 예외처리")
-    void loginException2() {
-        DataBase.addUser(new User("javajigi", "1234", "포비", "pobi@pobi.com"));
-
-        LoginException thrown = assertThrows(LoginException.class, () -> loginController.doPost(postRequest));
-        assertEquals(thrown.getMessage(), UNMATCHED_USER_MESSAGE);
-    }*/
 }

@@ -29,12 +29,12 @@ public class RequestHelper {
                     "Host: localhost:8080\n" +
                     "Connection: keep-alive\n" +
                     "Accept: */*\n" +
-                    "HttpCookie: logined=true";
+                    "Cookie: logined=true; Path=/";
     protected final String requestHeaderWithCookie =
             "Host: localhost:8080\n" +
                     "Connection: keep-alive\n" +
                     "Accept: */*\n" +
-                    "HttpCookie: logined=true; Path=/";
+                    "Cookie: logined=true; Path=/";
     protected final String requestGetUserListWithoutLogin =
             "GET /user/list HTTP/1.1\n" +
                     "Host: localhost:8080\n" +
@@ -53,6 +53,7 @@ public class RequestHelper {
                     "Content-Length: 59\n" +
                     "Content-Type: application/x-www-form-urlencoded\n" +
                     "Accept: */*\n" +
+                    "Cookie: sessionId=1234567890; Path=/\n" +
                     "\n" +
                     "userId=javajigi&password=password&a=b";
 

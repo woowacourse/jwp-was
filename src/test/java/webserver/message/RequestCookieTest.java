@@ -10,7 +10,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class HttpCookieTest extends RequestHelper {
+class RequestCookieTest extends RequestHelper {
     @Test
     @DisplayName("쿠키 파싱을 제대로 하는지 테스트")
     void getCookie() {
@@ -19,7 +19,7 @@ class HttpCookieTest extends RequestHelper {
         map.put("logined", "true");
         map.put("Path", "/");
 
-        assertThat(requestHeader.getHttpCookie().getCookie()).isEqualTo(map);
+        assertThat(requestHeader.getRequestCookie().getCookie()).isEqualTo(map);
     }
 
 }

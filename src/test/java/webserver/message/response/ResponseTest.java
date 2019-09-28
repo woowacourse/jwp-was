@@ -25,7 +25,7 @@ class ResponseTest {
     void toBytes() {
         byte[] expect = ("HTTP/1.1 200 OK\r\n" +
                 "Content-Length: 11\r\n" +
-                "Content-Type: application/octet-stream\r\n" +
+                "Content-Type: text/html; charset=utf-8\r\n" +
                 "\r\n" +
                 "<h1>HI</h1>").getBytes();
 
