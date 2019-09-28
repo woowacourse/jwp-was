@@ -14,7 +14,7 @@ public class HttpHeader {
 
     private static final String EMPTY_HEADER_NAME_ERROR_MESSAGE = "헤더 이름의 값이 필요합니다.";
     private static final String HEADER_LINE_DELIMITER = ": ";
-    private static final String HEADER_VALUES_DELIMITER = "; ";
+    private static final String HEADER_VALUES_DELIMITER = ";";
     private static final String COOKIE = "Cookie";
     private static final String HEADER_FIELD_FORMAT = "%s: %s\r\n";
     private static final int HTTP_HEADER_PARAMETER_SIZE = 2;
@@ -45,6 +45,7 @@ public class HttpHeader {
         String[] tokens = StringUtils.split(headerField, HEADER_VALUES_DELIMITER);
 
         return Arrays.stream(tokens)
+                .map(String::trim)
                 .filter(StringUtils::isNotEmpty)
                 .collect(Collectors.toList());
     }
