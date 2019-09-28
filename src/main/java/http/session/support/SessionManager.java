@@ -10,6 +10,7 @@ import java.util.UUID;
 
 public class SessionManager {
     public static final String SESSION_NAME = "SESSIONID";
+
     private final Map<String, HttpSession> httpSessions = new HashMap<>();
 
     public HttpSession getSession(final HttpRequest httpRequest) {
@@ -35,7 +36,7 @@ public class SessionManager {
         if (httpSessions.containsKey(sessionId)) {
             return httpSessions.get(sessionId);
         }
-        return new HttpSession(UUID.fromString(sessionId));
+        return makeNewSession();
     }
 
     private HttpSession makeNewSession() {
@@ -43,5 +44,9 @@ public class SessionManager {
         HttpSession httpSession = new HttpSession(uuid);
         httpSessions.put(uuid.toString(), httpSession);
         return httpSession;
+    }
+
+    public void clearSession() {
+        httpSessions.clear();
     }
 }

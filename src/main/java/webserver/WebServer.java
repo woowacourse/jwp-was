@@ -51,6 +51,7 @@ public class WebServer {
             }
         }
 
+        sessionManager.clearSession();
         executorService.shutdown();
     }
 }
