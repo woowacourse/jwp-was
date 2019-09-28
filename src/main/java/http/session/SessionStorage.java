@@ -6,13 +6,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-public class Sessions {
+public class SessionStorage {
     private final Map<String, Session> sessions = Maps.newHashMap();
 
-    private Sessions() {
+    private SessionStorage() {
     }
 
-    public static Sessions getInstance() {
+    public static SessionStorage getInstance() {
         return SessionsLazyHolder.INSTANCE;
     }
 
@@ -28,6 +28,6 @@ public class Sessions {
     }
 
     private static class SessionsLazyHolder {
-        private static final Sessions INSTANCE = new Sessions();
+        private static final SessionStorage INSTANCE = new SessionStorage();
     }
 }
