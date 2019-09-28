@@ -5,7 +5,7 @@ import com.google.common.collect.Maps;
 import java.util.Map;
 
 public class Session {
-    private Map<String, Object> attributes = Maps.newHashMap();
+    private final Map<String, Object> attributes = Maps.newHashMap();
     private final String sessionId;
 
     public Session(String sessionId) {
@@ -29,6 +29,6 @@ public class Session {
     }
 
     public void invalidate() {
-        attributes = Maps.newHashMap();
+        attributes.clear();
     }
 }
