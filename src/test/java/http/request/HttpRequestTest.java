@@ -41,7 +41,6 @@ public class HttpRequestTest {
 
         assertThat(httpRequest.getMethod()).isEqualTo("GET");
         assertThat(httpRequest.getResourcePath()).isEqualTo("/user/list");
-        assertThat(httpRequest.getCookie("logined")).isEqualTo("true");
         assertThat(httpRequest.getCookie("Path")).isEqualTo("/");
     }
 }

@@ -6,6 +6,7 @@ import domain.UserService;
 import servlet.view.View;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import static servlet.view.ViewResolver.resolve;
 
@@ -15,12 +16,15 @@ public class UserListController extends HttpController {
     protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         UserService userService = new UserService();
 
-        if ("true".equals(httpRequest.getCookie("logined"))) {
+        boolean isLogin = Optional.ofNullable(httpRequest.getSessionAttribute("logined")).isPresent();
+
+        if (isLogin) {
             View view = resolve("/user/list.html");
             view.addModel("users", userService.findAll());
             httpResponse.forward(view);
             return;
         }
-        httpResponse.forward(resolve("/index.html"));
+        httpResponse.addHeader("Location", "/index.html");
+        httpResponse.sendRedirect();
     }
 }

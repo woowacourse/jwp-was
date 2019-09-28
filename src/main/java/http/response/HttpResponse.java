@@ -94,11 +94,11 @@ public class HttpResponse {
     }
 
     private void writeCookies() throws IOException {
-        List<String> temp = this.cookies.entrySet().stream()
-                .map(entry -> entry.getKey() + "=" + entry.getValue())
+        final List<String> parsedCookies = this.cookies.entrySet().stream()
+                .map(entry -> entry.getKey() + "=" + entry.getValue() + ";")
                 .collect(toList());
-        String cookies = String.join("; ", temp);
-        outputStream.write(String.format("Set-Cookie: %s", cookies).getBytes());
+        final String result = String.join(" ", parsedCookies);
+        outputStream.write(String.format("Set-Cookie: %s", result).getBytes());
         writeNewLine();
     }
 

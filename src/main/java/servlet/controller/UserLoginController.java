@@ -17,12 +17,12 @@ public class UserLoginController extends HttpController {
 
         if (userService.login(UserResolver.resolve(httpRequest))) {
             httpResponse.addHeader("Location", "/index.html");
-            httpResponse.addCookie("logined", "true");
+            httpRequest.addSessionAttribute("logined", "true");
             httpResponse.addCookie("Path", "/");
             httpResponse.sendRedirect();
             return;
         }
-        httpResponse.addCookie("logined", "false");
+        httpRequest.addSessionAttribute("logined", "false");
         httpResponse.addCookie("Path", "/");
         httpResponse.forward(ViewResolver.resolve("/user/login_failed.html"));
     }

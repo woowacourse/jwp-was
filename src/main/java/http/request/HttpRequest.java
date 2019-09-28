@@ -52,8 +52,8 @@ public class HttpRequest {
         httpSession.invalidate();
     }
 
-    public void getSessionAttribute(final String name) {
-        httpSession.getAttribute(name);
+    public Object getSessionAttribute(final String name) {
+        return httpSession.getAttribute(name);
     }
 
     public String getMethod() {
