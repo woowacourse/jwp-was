@@ -1,5 +1,7 @@
 package http.response;
 
+import java.util.Objects;
+
 public class Cookie {
     private String name;
     private String value;
@@ -27,12 +29,19 @@ public class Cookie {
         this.value = value;
     }
 
-    public String getPath() {
-        return path;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cookie cookie = (Cookie) o;
+        return Objects.equals(name, cookie.name) &&
+                Objects.equals(value, cookie.value) &&
+                Objects.equals(path, cookie.path);
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, value, path);
     }
 
     @Override
