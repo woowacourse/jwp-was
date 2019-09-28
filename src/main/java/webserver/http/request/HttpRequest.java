@@ -17,6 +17,28 @@ public class HttpRequest {
         this.sessionManager = sessionManager;
     }
 
+    public int sizeOfParameters() {
+        return parameters.size();
+    }
+
+    private HttpSession createSession() {
+        final HttpSession session = sessionManager.getSession();
+        cookies.add(new Cookie(Cookies.JSESSIONID, session.getId()));
+        return session;
+    }
+
+    public HttpSession getSession() {
+        final String jSessionId = cookies.getSessionId();
+        final HttpSession httpSession = sessionManager.getSession(jSessionId);
+        return httpSession == null
+                ? createSession()
+                : httpSession;
+    }
+
+    public boolean hasSession() {
+        return cookies.contains(Cookies.JSESSIONID);
+    }
+
     public HttpMethod getMethod() {
         return requestLine.getMethod();
     }
@@ -45,30 +67,8 @@ public class HttpRequest {
         return parameters.getParameter(key);
     }
 
-    public int sizeOfParameters() {
-        return parameters.size();
-    }
-
-    public HttpSession getSession() {
-        final String jSessionId = cookies.getSessionId();
-        final HttpSession httpSession = sessionManager.getSession(jSessionId);
-        return httpSession == null
-                ? createSession()
-                : httpSession;
-    }
-
-    private HttpSession createSession() {
-        final HttpSession session = sessionManager.getSession();
-        cookies.add(new Cookie(Cookies.JSESSIONID, session.getId()));
-        return session;
-    }
-
     public static HttpRequestBuilder builder() {
         return new HttpRequestBuilder();
-    }
-
-    public boolean hasSession() {
-        return cookies.contains(Cookies.JSESSIONID);
     }
 
     public static final class HttpRequestBuilder {

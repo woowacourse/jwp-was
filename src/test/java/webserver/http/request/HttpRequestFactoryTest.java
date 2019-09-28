@@ -55,7 +55,6 @@ public class HttpRequestFactoryTest {
 
         // when
         final HttpRequest httpRequest = HttpRequestFactory.generate(in);
-
         // then
         assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.GET);
         assertThat(httpRequest.getPath()).isEqualTo("/user/create");

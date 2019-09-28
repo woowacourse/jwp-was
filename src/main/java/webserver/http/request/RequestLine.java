@@ -54,5 +54,8 @@ public class RequestLine {
         return httpVersion;
     }
 
-
+    @Override
+    public String toString() {
+        return String.format("%s %s %s", method.name(), url, httpVersion.getHttpVersion());
+    }
 }

@@ -71,4 +71,13 @@ public class Cookies {
         final Cookie cookie = cookies.get(JSESSIONID);
         return cookie == null ? null : cookie.getValue();
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        for (final Cookie cookie : cookies.values()) {
+            sb.append(cookie).append("\n");
+        }
+        return sb.toString();
+    }
 }

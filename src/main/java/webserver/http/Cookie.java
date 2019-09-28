@@ -110,6 +110,11 @@ public class Cookie {
         return Objects.hash(name);
     }
 
+    @Override
+    public String toString() {
+        return parseInfoAsString();
+    }
+
     public static final class CookieBuilder {
         private String name;
         private String value;

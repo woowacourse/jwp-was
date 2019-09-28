@@ -47,4 +47,13 @@ public class HttpHeaders {
     public boolean contains(final String name) {
         return headers.containsKey(name);
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        for (Map.Entry<String, String> entry : headers.entrySet()) {
+            sb.append(String.format("%s=%s;\n", entry.getKey(), entry.getValue()));
+        }
+        return sb.toString();
+    }
 }
