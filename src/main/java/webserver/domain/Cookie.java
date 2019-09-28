@@ -10,48 +10,40 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 // Reference: https://developer.mozilla.org/ko/docs/Web/HTTP/Headers/Set-Cookie
 // TODO: __Secure- 프리픽스 기능
 // TODO: __Host- 프리픽스 기능
 public class Cookie {
+    private static final int KEY_INDEX = 0;
+    private static final int VALUE_INDEX = 1;
     private static final int ONE_YEAR = 60 * 60 * 24 * 365;
     private static final int DEFAULT_COOKIE_STRING_LENGTH = 256;
+    private static final String TRUE = "true";
     private static final String EMPTY = "";
     private static final String UTF_8 = "UTF-8";
     private static final String EXPIRES = "Expires";
     private static final String MAX_AGE = "Max-Age";
-    private static final String SECURE = "Secure";
-    private static final String HTTP_ONLY = "HttpOnly";
+    private static final String QUOTE_MARK = "\"";
     private static final String COOKIE_DELIMITER = "; ";
     private static final String KEY_VALUE_DELIMITER = "=";
-    private static final String EXPIRES_DELIMITER = EXPIRES + KEY_VALUE_DELIMITER;
-    private static final String MAX_AGE_DELIMITER = MAX_AGE + KEY_VALUE_DELIMITER;
-    private static final String SECURE_DELIMITER = SECURE + COOKIE_DELIMITER;
-    private static final String HTTP_ONLY_DELIMITER = HTTP_ONLY + COOKIE_DELIMITER;
     private static final Escaper URL_ESCAPER = UrlEscapers.urlFragmentEscaper();
     private static final DateTimeFormatter HTML_TIME_FORMATTER = DateTimeFormatter.RFC_1123_DATE_TIME.withZone(ZoneOffset.UTC);
-    private static final int KEY_INDEX = 0;
-    private static final int VALUE_INDEX = 1;
 
     private final Map<String, String> cookieJar;
+    private final Set<String> options;
     private ZonedDateTime expires = null;
     private Integer maxAgeSecond = null;
-    private boolean isSecure = false;
-    private boolean isHttpOnly = false;
 
     public Cookie() {
         this.cookieJar = new HashMap<>();
+        this.options = new HashSet<>();
     }
 
     public Cookie(final String cookieString) {
         this();
         final String[] fragments = cookieString.split(COOKIE_DELIMITER);
-
         for (final String fragment : fragments) {
             processFragment(fragment);
         }
@@ -63,62 +55,72 @@ public class Cookie {
             processTuple(maybeTuple);
             return;
         }
-        switch (maybeTuple[KEY_INDEX]) {
-            case SECURE:
-                setSecure(true);
-                break;
-            case HTTP_ONLY:
-                setHttpOnly(true);
-                break;
-            default:
-                break;
-        }
+        options.add(maybeTuple[KEY_INDEX]);
     }
 
     private void processTuple(final String[] tuple) {
-        switch (tuple[KEY_INDEX]) {
+        final String key = tuple[KEY_INDEX];
+        final String value = tuple[VALUE_INDEX];
+        switch (key) {
             case EXPIRES:
-                setExpires(parseExpires(tuple[1]));
+                setExpires(parseExpires(value));
                 break;
             case MAX_AGE:
-                setMaxAge(Integer.parseInt(tuple[1]));
+                setMaxAge(Integer.parseInt(value));
                 break;
             default:
-                this.set(urlDecode(tuple[KEY_INDEX]), urlDecode(tuple[VALUE_INDEX]));
+                set(urlDecode(key), urlDecode(value));
                 break;
         }
     }
 
-    public String get(final String key) {
-        return this.cookieJar.getOrDefault(key, EMPTY);
+    // TODO: expires 관련
+    public String get(final String keyOrOption) {
+        if (options.contains(keyOrOption)) {
+            return TRUE;
+        }
+        return cookieJar.getOrDefault(keyOrOption, EMPTY);
+    }
+
+    public void set(final String option) {
+        options.add(option);
     }
 
     public void set(final String key, final String value) {
-        this.cookieJar.put(key, value);
+        cookieJar.put(key, value);
     }
 
-    public String remove(final String key) {
-        return this.cookieJar.remove(key);
+    public String remove(final String keyOrOption) {
+        if (options.contains(keyOrOption)) {
+            options.remove(keyOrOption);
+            return TRUE;
+        }
+        return this.cookieJar.remove(keyOrOption);
     }
 
     public void clear() {
-        this.cookieJar.clear();
+        cookieJar.clear();
+        options.clear();
     }
 
     public boolean isEmpty() {
-        return this.cookieJar.isEmpty();
+        return cookieJar.isEmpty() && options.isEmpty();
     }
 
-    public boolean containsKey(final String key) {
-        return this.cookieJar.containsKey(key);
+    public boolean containsKey(final String keyOrOption) {
+        return cookieJar.containsKey(keyOrOption) && options.contains(keyOrOption);
     }
 
     public int size() {
-        return this.cookieJar.size();
+        return cookieJar.size() + options.size();
     }
 
     public Map<String, String> entries() {
-        return Collections.unmodifiableMap(this.cookieJar);
+        final Map<String, String> result = new HashMap<>(cookieJar);
+        for (final String item : options) {
+            result.put(item, TRUE);
+        }
+        return Collections.unmodifiableMap(result);
     }
 
     @Nullable
@@ -142,59 +144,27 @@ public class Cookie {
         this.maxAgeSecond = maxAgeSecond;
     }
 
-    public boolean isSecure() {
-        return isSecure;
-    }
-
-    public void setSecure(final boolean secure) {
-        isSecure = secure;
-    }
-
-    public boolean isHttpOnly() {
-        return isHttpOnly;
-    }
-
-    public void setHttpOnly(final boolean httpOnly) {
-        isHttpOnly = httpOnly;
-    }
-
     private ZonedDateTime parseExpires(final String text) throws DateTimeParseException {
         return ZonedDateTime.parse(text, HTML_TIME_FORMATTER);
     }
 
-    // TODO: 반복 코드의 중복 제거 리팩토링 방안 찾아보기
     private String expiresToString(final ZonedDateTime expires) {
-        return Objects.isNull(expires) ? EMPTY
-                : EXPIRES_DELIMITER + expires.format(HTML_TIME_FORMATTER) + COOKIE_DELIMITER;
+        return Objects.isNull(expires) ? EMPTY : expires.format(HTML_TIME_FORMATTER);
     }
 
     private String maxAgeToString(final Integer maxAgeSecond) {
-        return Objects.isNull(maxAgeSecond) ? EMPTY
-                : MAX_AGE_DELIMITER + maxAgeSecond.toString() + COOKIE_DELIMITER;
-    }
-
-    private String secureToString() {
-        return isSecure ? SECURE_DELIMITER : EMPTY;
-    }
-
-    private String httpOnlyToString() {
-        return isHttpOnly ? HTTP_ONLY_DELIMITER : EMPTY;
+        return Objects.isNull(maxAgeSecond) ? EMPTY : maxAgeSecond.toString();
     }
 
     // StringJoiner 사용 실패 - 대신 StringBuilder 사용
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder(DEFAULT_COOKIE_STRING_LENGTH);
-
         cookieJarToString(builder);
-        builder.append(expiresToString(this.expires));
-        builder.append(maxAgeToString(this.maxAgeSecond));
-        builder.append(secureToString());
-        builder.append(httpOnlyToString());
-
-        if (builder.length() > 0) {
-            builder.setLength(builder.length() - COOKIE_DELIMITER.length()); // 마지막 부분의 delimiter 빼주기
-        }
+        toStringHelper(builder, EXPIRES, expiresToString(expires));
+        toStringHelper(builder, MAX_AGE, maxAgeToString(maxAgeSecond));
+        itemsToString(builder, options);
+        removeLastDelimiter(builder);
         return builder.toString();
     }
 
@@ -203,10 +173,33 @@ public class Cookie {
             builder
                     .append(URL_ESCAPER.escape(key))
                     .append(KEY_VALUE_DELIMITER)
-                    .append("\"")
+                    .append(QUOTE_MARK)
                     .append(URL_ESCAPER.escape(cookieJar.get(key)))
-                    .append("\"")
+                    .append(QUOTE_MARK)
                     .append(COOKIE_DELIMITER);
+        }
+    }
+
+    private void toStringHelper(final StringBuilder builder, final String key, final String value) {
+        if (EMPTY.equals(value)) {
+            return;
+        }
+        builder
+                .append(key)
+                .append(KEY_VALUE_DELIMITER)
+                .append(value)
+                .append(COOKIE_DELIMITER);
+    }
+
+    private void itemsToString(final StringBuilder builder, final Iterable<String> items) {
+        for (final String item : items) {
+            builder.append(item).append(COOKIE_DELIMITER);
+        }
+    }
+
+    private void removeLastDelimiter(final StringBuilder builder) {
+        if (builder.length() > 0) {
+            builder.setLength(builder.length() - COOKIE_DELIMITER.length());
         }
     }
 
