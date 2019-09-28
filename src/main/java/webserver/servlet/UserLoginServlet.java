@@ -38,7 +38,7 @@ public class UserLoginServlet extends AbstractRequestServlet {
             httpResponse.setCookie(Cookie.SESSION_ID_KEY, httpSession.getId());
             return new ModelAndView(resolver.createView("redirect:/"));
         }
-        return new ModelAndView(resolver.createView("redirect:/user/login-failed.html"));
+        return new ModelAndView(resolver.createView("redirect:/user/login_failed.html"));
     }
 
     private boolean canLogin(String password, User user) {
