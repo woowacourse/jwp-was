@@ -1,5 +1,7 @@
 package webserver.httpelement;
 
+import webserver.Port;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -10,7 +12,7 @@ public class HttpHost implements HttpHeaderField {
 
     private final String protocol;
     private final String name;
-    private final HttpPort port;
+    private final Port port;
 
     public static Optional<HttpHost> of(String input) {
         final String trimmed = input.trim();
@@ -25,18 +27,18 @@ public class HttpHost implements HttpHeaderField {
             if (hostnameAndPort[0].split("\\s+").length > 1) {
                 return Optional.empty();
             }
-            final HttpHost host = new HttpHost(protocol, hostnameAndPort[0], HttpPort.PORT_80);
+            final HttpHost host = new HttpHost(protocol, hostnameAndPort[0], Port.PORT_80);
             CACHE.put(hostnameAndPort[0], host);
             return Optional.of(host);
         }
-        return HttpPort.of(hostnameAndPort[1]).map(port -> {
+        return Port.of(hostnameAndPort[1]).map(port -> {
             final HttpHost host = new HttpHost(protocol, hostnameAndPort[0], port);
             CACHE.put(trimmed, host);
             return host;
         });
     }
 
-    private HttpHost(String protocol, String name, HttpPort port) {
+    private HttpHost(String protocol, String name, Port port) {
         this.protocol = protocol;
         this.name = name;
         this.port = port;

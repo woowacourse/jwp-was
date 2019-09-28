@@ -33,6 +33,6 @@ public class RequestHandler implements Runnable {
 
     public void sendResponse(NetworkIO io, HttpResponse res) {
         io.write(res.serialize());
-        logger.debug("Response:\r\n" + res.serializeHeader());
+        logger.debug("Response:\r\n{}", res.printHeader());
     }
 }

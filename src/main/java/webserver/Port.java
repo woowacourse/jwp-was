@@ -1,34 +1,34 @@
-package webserver.httpelement;
+package webserver;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-public class HttpPort {
+public class Port {
     private static final int PORT_MIN = 0;
     private static final int PORT_MAX = 65_535;
 
-    private static final Map<Integer, HttpPort> CACHE = new HashMap<>();
-    public static final HttpPort PORT_80 = of(80).get();
-    public static final HttpPort PORT_443 = of(443).get();
-    public static final HttpPort PORT_8080 = of(8080).get();
+    private static final Map<Integer, Port> CACHE = new HashMap<>();
+    public static final Port PORT_80 = of(80).get();
+    public static final Port PORT_443 = of(443).get();
+    public static final Port PORT_8080 = of(8080).get();
 
     private final int number;
 
-    public static Optional<HttpPort> of(int number) {
+    public static Optional<Port> of(int number) {
         if (CACHE.containsKey(number)) {
             return Optional.of(CACHE.get(number));
         }
         if (PORT_MIN <= number && number <= PORT_MAX) {
-            final HttpPort port = new HttpPort(number);
+            final Port port = new Port(number);
             CACHE.put(number, port);
             return Optional.of(port);
         }
         return Optional.empty();
     }
 
-    public static Optional<HttpPort> of(String number) {
+    public static Optional<Port> of(String number) {
         try {
             return of(Integer.parseInt(number.trim()));
         } catch (NumberFormatException e) {
@@ -36,7 +36,7 @@ public class HttpPort {
         }
     }
 
-    private HttpPort(int number) {
+    private Port(int number) {
         this.number = number;
     }
 
@@ -54,10 +54,10 @@ public class HttpPort {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof HttpPort)) {
+        if (!(o instanceof Port)) {
             return false;
         }
-        final HttpPort rhs = (HttpPort) o;
+        final Port rhs = (Port) o;
         return this.number == rhs.number;
     }
 

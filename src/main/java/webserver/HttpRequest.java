@@ -48,12 +48,12 @@ public class HttpRequest {
             HttpPath path,
             HttpVersion version,
             HttpRequestHeader header,
-            String paramsQueryString
+            String encodedQueryParams
     ) {
         return new HttpRequest(
                 method, path, version,
                 header,
-                KeyValueParserFactory.queryStringParser().interpret(paramsQueryString),
+                KeyValueParserFactory.queryStringParser().interpret(encodedQueryParams),
                 null
         );
     }

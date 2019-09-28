@@ -5,6 +5,7 @@ import utils.io.FileIoUtils;
 import webserver.HttpRequest;
 import webserver.HttpResponse;
 import webserver.httpelement.HttpContentType;
+import webserver.httpelement.HttpLocation;
 import webserver.httpelement.HttpStatusCode;
 import webserver.router.Router;
 
@@ -21,7 +22,7 @@ public class BaseController {
         return HttpResponse.builder(HttpContentType.TEXT_PLAIN_UTF_8)
                             .extractFieldsFromRequest(req)
                             .statusCode(HttpStatusCode.FOUND)
-                            .location(redirectPath)
+                            .location(new HttpLocation(redirectPath))
                             .build();
     }
 }

@@ -20,7 +20,7 @@ public class HttpResponse {
     private final HttpCookie cookie;
     private final HttpContentType contentType;
     private final HttpConnection connection;
-    private final String location;
+    private final HttpLocation location;
     private final String body;
 
     public static class HttpResponseBuilder {
@@ -29,7 +29,7 @@ public class HttpResponse {
         private HttpCookie cookie;
         private final HttpContentType contentType;
         private HttpConnection connection;
-        private String location;
+        private HttpLocation location;
         private String body = "";
 
         public HttpResponseBuilder(HttpContentType contentType) {
@@ -62,7 +62,7 @@ public class HttpResponse {
             return this;
         }
 
-        public HttpResponseBuilder location(String location) {
+        public HttpResponseBuilder location(HttpLocation location) {
             this.location = location;
             return this;
         }
@@ -91,20 +91,18 @@ public class HttpResponse {
         this.body = builder.body;
     }
 
-    public String serializeHeader() {
-        final StringBuilder header = new StringBuilder(serializeMandatory());
-        serializeOptionals(header, this.cookie, this.connection);
-        if (this.location != null) {
-            header.append("Location: " + this.location + "\r\n");
-        }
-        return header.toString();
+    private StringBuilder serializeHeader() {
+        return serializeOptionals(
+                new StringBuilder(serializeMandatory()),
+                this.cookie,
+                this.connection,
+                this.location
+        );
     }
 
     private String serializeMandatory() {
         return String.format(
-                "%s %s\r\n" +
-                "Content-Type: %s\r\n" +
-                "Content-Length: %d\r\n",
+                "%s %s\r\nContent-Type: %s\r\nContent-Length: %d\r\n",
                 this.version,
                 this.statusCode,
                 this.contentType,
@@ -115,16 +113,19 @@ public class HttpResponse {
     private StringBuilder serializeOptionals(StringBuilder header, HttpHeaderField... fields) {
         Stream.of(fields).forEach(field -> {
             if (field != null) {
-                header.append(field.fieldName() + ": " + field + "\r\n");
+                header.append(String.format("%s: %s\r\n", field.fieldName(), field));
             }
         });
         return header;
     }
 
     public String serialize() {
-        return serializeHeader() + "\r\n" + this.body;
+        return serializeHeader().append("\r\n").append(this.body).toString();
     }
 
+    public String printHeader() {
+        return serializeHeader().toString();
+    }
     @Override
     public String toString() {
         return serialize();

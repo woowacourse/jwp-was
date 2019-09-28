@@ -2,7 +2,6 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.httpelement.HttpPort;
 import webserver.router.Router;
 
 import java.net.ServerSocket;
@@ -12,12 +11,12 @@ import java.util.Optional;
 public class WebServer {
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
 
-    private static final HttpPort DEFAULT_PORT = HttpPort.PORT_8080;
+    private static final Port DEFAULT_PORT = Port.PORT_8080;
 
     public static void main(String[] args) throws Exception {
         Router.getInstance();
-        final HttpPort port = Optional.ofNullable(args).filter(x -> x.length != 0)
-                                                        .flatMap(x -> HttpPort.of(x[0]))
+        final Port port = Optional.ofNullable(args).filter(x -> x.length != 0)
+                                                        .flatMap(x -> Port.of(x[0]))
                                                         .orElse(DEFAULT_PORT);
 
         // 서버소켓을 생성한다. 웹서버는 기본적으로 8080번 포트를 사용한다.

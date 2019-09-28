@@ -34,7 +34,7 @@ public class MappedDestination {
                     )
             );
         } catch (ClassNotFoundException | NoSuchMethodException e) {
-            logger.error("No controller matches the name: " + className + "." + methodName);
+            logger.error("No controller matches the name: {}.{}", className, methodName);
             return Optional.empty();
         }
     }
