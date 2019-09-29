@@ -4,7 +4,6 @@ import webserver.MimeType;
 import webserver.http.cookie.Cookie;
 import webserver.http.cookie.Cookies;
 import webserver.http.httpRequest.HttpStatus;
-import webserver.http.httpResponse.ResponseBody;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,8 +17,13 @@ public class HttpResponse {
 
     private Map<String, String> header = new HashMap<>();
     private HttpStatus httpStatus;
-    private ResponseBody body;
     private Cookies cookies = new Cookies();
+
+    public HttpResponse(HttpRequest httpRequest) {
+        if (httpRequest.hasSession()) {
+            cookies.addCookie(JSESSION_ID, httpRequest.getSessionId());
+        }
+    }
 
     public void setHttpStatus(HttpStatus httpStatus) {
         this.httpStatus = httpStatus;

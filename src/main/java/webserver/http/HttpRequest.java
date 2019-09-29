@@ -3,6 +3,7 @@ package webserver.http;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.IOUtils;
+import webserver.SessionManager;
 import webserver.http.httpRequest.HttpRequestBody;
 import webserver.http.httpRequest.HttpRequestHeader;
 import webserver.http.httpRequest.HttpStartLine;
@@ -61,7 +62,6 @@ public class HttpRequest {
             headerLine = br.readLine();
         }
         String header = sb.toString();
-        System.out.println("header = " + header);
         log.info("header : {}", header);
         return header;
     }
@@ -110,7 +110,26 @@ public class HttpRequest {
         return httpRequestHeader.getCookie();
     }
 
+    public void addSessionAttr(String key, String value) {
+        HttpSession session = getHttpSession();
+        session.setAttributes(key, value);
+    }
+
+    private HttpSession getHttpSession() {
+        String sessionId = getSessionId();
+        return SessionManager.getSession(sessionId);
+    }
+
     public String getSessionId() {
         return httpRequestHeader.getSessionId();
+    }
+
+    public boolean checkSessionAttribute(String key, String value) {
+        HttpSession session = getHttpSession();
+        return session.checkAttribute(key, value);
+    }
+
+    public boolean hasSession() {
+        return httpRequestHeader.hasSession();
     }
 }

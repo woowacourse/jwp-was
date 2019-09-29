@@ -30,10 +30,10 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
 
             HttpRequest httpRequest = HttpRequest.create(in);
-            HttpResponse httpResponse = new HttpResponse();
+            View view = urlMapper.service(httpRequest);
 
-            View view = urlMapper.service(httpRequest, httpResponse);
 
+            HttpResponse httpResponse = new HttpResponse(httpRequest);
             ViewProcessor viewProcessor = ViewProcessorFactory.getInstance().getViewProcessor(view);
             viewProcessor.process(dos, view, httpResponse);
         } catch (IOException e) {

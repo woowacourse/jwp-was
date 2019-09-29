@@ -6,7 +6,6 @@ import webserver.controller.UserListController;
 import webserver.controller.WelcomePageController;
 import webserver.exception.NotSupportedHttpMethodException;
 import webserver.http.HttpRequest;
-import webserver.http.HttpResponse;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,21 +22,21 @@ public class UrlMapper {
         map.put(UserListController.PATH, UserListController.getInstance());
     }
 
-    public String service(HttpRequest request, HttpResponse response) {
+    public View service(HttpRequest request) {
         String url = request.getPath();
         if (map.containsKey(url)) {
-            return getService(request, response, url);
+            return getService(request, url);
         }
 
-        return url;
+        return new View(url);
     }
 
-    private String getService(HttpRequest request, HttpResponse response, String url) {
+    private View getService(HttpRequest request, String url) {
         Controller controller = map.get(url);
         try {
-            return controller.service(request, response);
+            return controller.service(request);
         } catch (NotSupportedHttpMethodException e) {
-            return ERROR_VIEW + "405";
+            return new View(ERROR_VIEW + "405");
         }
     }
 }

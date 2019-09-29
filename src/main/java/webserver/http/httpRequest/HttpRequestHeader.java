@@ -1,5 +1,6 @@
 package webserver.http.httpRequest;
 
+import webserver.SessionManager;
 import webserver.http.cookie.Cookies;
 
 import java.util.HashMap;
@@ -67,6 +68,16 @@ public class HttpRequestHeader {
     }
 
     public String getSessionId() {
-        return cookies.getCookieBy(JSESSION_ID);
+        String sessionId = cookies.getCookieBy(JSESSION_ID);
+
+        if (Objects.isNull(sessionId) || Objects.isNull(SessionManager.getSession(sessionId))) {
+            sessionId = SessionManager.createSession();
+            cookies.addCookie(JSESSION_ID, sessionId);
+        }
+        return sessionId;
+    }
+
+    public boolean hasSession() {
+        return Objects.nonNull(cookies.getCookieBy(JSESSION_ID));
     }
 }
