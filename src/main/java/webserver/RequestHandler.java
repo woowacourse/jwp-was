@@ -82,11 +82,15 @@ public class RequestHandler implements Runnable {
             return;
         }
 
-        if (requestCookie != null) {
+        if (request.getCookie(JSESSION) != null) {
             request.setSession(SessionStore.getSession(request.getCookie(JSESSION).getValue()));
+
+            if (SessionStore.getSession(request.getCookie(JSESSION).getValue()).equals(requestCookie.getValue())) {
+                response.addCookie(new Cookie(JSESSION, request.getCookie(JSESSION).getValue()));
+            }
         }
 
-        if (requestCookie == null) {
+        if (request.getCookie(JSESSION) == null) {
             request.setSession(SessionStore.getSession(request.getCookie(JSESSION).getValue()));
             response.addCookie(new Cookie(JSESSION, request.getCookie(JSESSION).getValue()));
         }

@@ -17,7 +17,6 @@ public class Session {
     }
 
     public String getId() {
-        isSessionInvalid();
         return id;
     }
 
