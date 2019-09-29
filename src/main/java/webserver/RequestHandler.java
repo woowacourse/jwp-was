@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.controller.Controller;
 import webserver.controller.exception.MethodNotAllowedException;
-import webserver.controller.exception.NotFoundException;
+import webserver.controller.exception.ResourceNotFoundException;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 
@@ -40,7 +40,7 @@ public class RequestHandler implements Runnable {
         } catch (IOException e) {
             logger.error(e.getMessage());
             httpResponse.addStatusLine(httpRequest, HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (NotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             logger.debug(e.getMessage());
             httpResponse.addStatusLine(httpRequest, HttpStatus.NOT_FOUND);
         } catch (MethodNotAllowedException e) {

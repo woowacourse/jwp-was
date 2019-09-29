@@ -52,6 +52,6 @@ public class StyleSheetControllerTest {
         Controller controller = new StyleSheetController();
         assertThatExceptionOfType(MethodNotAllowedException.class)
                 .isThrownBy(() -> controller.service(httpRequest, httpResponse))
-                .withMessage("fail to match method.");
+                .withMessage("405 Method Not Allowed");
     }
 }

@@ -29,6 +29,6 @@ public class UrlMapper {
         if (urlMapper.containsKey(source)) {
             return urlMapper.get(source);
         }
-        throw new ResourceNotFoundException("Resource Not found.");
+        throw new ResourceNotFoundException();
     }
 }

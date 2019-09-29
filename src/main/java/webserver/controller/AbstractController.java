@@ -45,10 +45,10 @@ public abstract class AbstractController implements Controller {
     }
 
     protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws FileNotFoundException {
-        throw new MethodNotAllowedException("fail to match method.");
+        throw new MethodNotAllowedException();
     }
 
     protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        throw new MethodNotAllowedException("fail to match method.");
+        throw new MethodNotAllowedException();
     }
 }

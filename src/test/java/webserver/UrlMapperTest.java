@@ -52,6 +52,6 @@ public class UrlMapperTest {
         HttpRequest httpRequest = HttpRequest.of(new ByteArrayInputStream(FAIL_GET_REQUEST_MESSAGE.getBytes()));
         assertThatExceptionOfType(ResourceNotFoundException.class)
                 .isThrownBy(() -> UrlMapper.getController(httpRequest))
-                .withMessage("Resource Not found.");
+                .withMessage("404 Not Found");
     }
 }
