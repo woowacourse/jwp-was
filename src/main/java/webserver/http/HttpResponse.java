@@ -87,12 +87,18 @@ public class HttpResponse {
         this.body = builder.body;
     }
 
-    public static HttpResponse success(HttpRequest request, String contentType, String body) {
+    public static HttpResponse successByBody(HttpRequest request, String contentType, String body) {
         return HttpResponse.builder(HttpContentType.getHttpContentType(contentType))
                 .version(request.version())
                 .connection(request.connection())
                 .body(body)
                 .build();
+    }
+
+    public static HttpResponse successByFilePath(HttpRequest request, String contentType, String filePath) {
+        return FileIoUtils.loadFileFromClasspath(filePath)
+                .map(body -> successByBody(request, contentType, body))
+                .orElse(INTERNAL_SERVER_ERROR);
     }
 
     public static HttpResponse redirection(HttpRequest request, String contentType, String location) {

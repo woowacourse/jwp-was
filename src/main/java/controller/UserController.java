@@ -2,7 +2,6 @@ package controller;
 
 import db.Database;
 import model.User;
-import utils.io.FileIoUtils;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
 
@@ -14,15 +13,13 @@ public class UserController extends AbstractController {
 
     private static final String TEXT_HTML = "text/html";
     private static final String TEXT_PLAIN = "text/plain";
-    private static final String INDEX_HTML = "/index.html";
+
+    private static final String INDEX_PAGE_LOCATION = "/index.html";
+    private static final String USER_FORM_PAGE_LOCATION = "/user/form.html";
 
     @Override
     public HttpResponse getMapping(HttpRequest request) {
-        String filePath = FileIoUtils.convertPath("/user/form.html");
-
-        return FileIoUtils.loadFileFromClasspath(filePath)
-                .map(body -> HttpResponse.success(request, TEXT_HTML, body))
-                .orElse(HttpResponse.INTERNAL_SERVER_ERROR);
+        return HttpResponse.successByFilePath(request, TEXT_HTML, USER_FORM_PAGE_LOCATION);
     }
 
     @Override
@@ -34,6 +31,6 @@ public class UserController extends AbstractController {
                 request.getParam(USER_EMAIL)
         ));
 
-        return HttpResponse.redirection(request, TEXT_PLAIN, INDEX_HTML);
+        return HttpResponse.redirection(request, TEXT_PLAIN, INDEX_PAGE_LOCATION);
     }
 }
