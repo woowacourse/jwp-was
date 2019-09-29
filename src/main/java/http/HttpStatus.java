@@ -1,7 +1,5 @@
 package http;
 
-import java.util.Arrays;
-
 public enum HttpStatus {
     OK("200", "OK"),
     FOUND("302", "FOUND"),
@@ -14,13 +12,6 @@ public enum HttpStatus {
     HttpStatus(String statusCode, String reasonPhrase) {
         this.statusCode = statusCode;
         this.reasonPhrase = reasonPhrase;
-    }
-
-    public static HttpStatus of(String code) {
-        return Arrays.stream(values())
-                .filter(value -> value.statusCode.equals(code))
-                .findFirst()
-                .orElseThrow(IllegalArgumentException::new);
     }
 
     @Override

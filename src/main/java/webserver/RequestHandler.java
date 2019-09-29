@@ -4,6 +4,8 @@ import controller.Controller;
 import controller.CreateUserController;
 import controller.FileController;
 import controller.HomeController;
+import controller.LoginController;
+import controller.UserListController;
 import http.HttpStatus;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -29,6 +31,8 @@ public class RequestHandler implements Runnable {
         controllers = new HashMap<>();
         controllers.put(CreateUserController.PATH, new CreateUserController());
         controllers.put(HomeController.PATH, new HomeController());
+        controllers.put(LoginController.PATH, new LoginController());
+        controllers.put(UserListController.PATH, new UserListController());
     }
 
     private Socket connection;
@@ -46,22 +50,19 @@ public class RequestHandler implements Runnable {
 
             DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
             HttpRequest httpRequest = RequestParser.parse(inputStream);
-            HttpResponse httpResponse = new HttpResponse();
             logger.debug("RequestLine: {} ", httpRequest.getHttpRequestLine());
 
-            route(httpRequest, httpResponse);
-
-            ResponseWriter.write(dataOutputStream, httpResponse);
-
+            ResponseWriter.write(dataOutputStream, route(httpRequest));
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void route(HttpRequest httpRequest, HttpResponse httpResponse) {
+    private HttpResponse route(HttpRequest httpRequest) {
+        HttpResponse httpResponse = new HttpResponse();
         if (httpRequest.isContainExtension()) {
             FileController.getInstance().service(httpRequest, httpResponse);
-            return;
+            return httpResponse;
         }
 
         try {
@@ -71,5 +72,6 @@ public class RequestHandler implements Runnable {
         } catch (ControllerNotFoundException e) {
             httpResponse.setStatusCode(HttpStatus.NOT_FOUND);
         }
+        return httpResponse;
     }
 }

@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Objects;
 
 public class QueryParameter {
+    private static final String QUERY_STRING_DELIMITER = "&";
+    private static final String KEY_VALUE_DELIMITER = "=";
     private Map<String, String> parameters;
 
     private QueryParameter(Map<String, String> parameters) {
@@ -14,17 +16,17 @@ public class QueryParameter {
     }
 
     public static QueryParameter of(String queryString) {
-        if (queryString.contains("&")) {
-            String[] tokens = queryString.split("&");
+        if (queryString.contains(QUERY_STRING_DELIMITER)) {
+            String[] tokens = queryString.split(QUERY_STRING_DELIMITER);
             Map<String, String> querys = new HashMap<>();
             Arrays.stream(tokens)
-                    .forEach(s -> querys.put(s.split("=")[0], s.split("=")[1]));
+                    .forEach(s -> querys.put(s.split(KEY_VALUE_DELIMITER)[0], s.split(KEY_VALUE_DELIMITER)[1]));
 
             return new QueryParameter(querys);
         }
         return new QueryParameter(Collections.singletonMap(
-                queryString.split("=")[0],
-                queryString.split("=")[1]));
+                queryString.split(KEY_VALUE_DELIMITER)[0],
+                queryString.split(KEY_VALUE_DELIMITER)[1]));
     }
 
     public static QueryParameter empty() {

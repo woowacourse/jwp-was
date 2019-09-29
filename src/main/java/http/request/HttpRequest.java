@@ -2,19 +2,42 @@ package http.request;
 
 import http.HttpMethod;
 import http.MediaType;
+import http.session.HttpSession;
+import http.session.HttpSessionManager;
+import http.session.SessionKeyGenerator;
 
 public class HttpRequest {
+    public static final String SESSION_ID = "JSESSIONID";
+    private static final String COOKIE = "Cookie";
+
     private HttpRequestLine httpRequestLine;
     private HttpRequestHeader httpRequestHeader;
-    private QueryParameter queryParameter; //TODO: queryParameter 가 여기 있는게 맞을까?
+    private HttpCookie httpCookie;
+    private HttpSession httpSession;
+    private QueryParameter queryParameter;
     private HttpRequestBody httpRequestBody;
 
     public HttpRequest(HttpRequestLine httpRequestLine, HttpRequestHeader httpRequestHeader,
                        QueryParameter queryParameter, HttpRequestBody httpRequestBody) {
         this.httpRequestLine = httpRequestLine;
         this.httpRequestHeader = httpRequestHeader;
+        this.httpCookie = HttpCookie.of(findCookie());
+        checkSession();
         this.queryParameter = queryParameter;
         this.httpRequestBody = httpRequestBody;
+    }
+
+    private void checkSession() {
+        if (httpCookie.contains(SESSION_ID)) {
+            this.httpSession = HttpSessionManager.getInstance().getSession(httpCookie.getCookie(SESSION_ID));
+        }
+    }
+
+    private String findCookie() {
+        if (httpRequestHeader.isContainKey(COOKIE)) {
+            return this.httpRequestHeader.getHeader(COOKIE);
+        }
+        return "";
     }
 
     public HttpRequestLine getHttpRequestLine() {
@@ -39,5 +62,17 @@ public class HttpRequest {
 
     public String getUri() {
         return httpRequestLine.getPath();
+    }
+
+    public String getCookie(String key) {
+        return this.httpCookie.getCookie(key);
+    }
+
+    public HttpSession getHttpSession(SessionKeyGenerator sessionKeyGenerator) {
+        if (httpSession == null) {
+            this.httpSession = HttpSessionManager.getInstance().createSession(sessionKeyGenerator);
+        }
+        this.httpSession = HttpSessionManager.getInstance().getSession(this.httpSession.getSessionId());
+        return httpSession;
     }
 }

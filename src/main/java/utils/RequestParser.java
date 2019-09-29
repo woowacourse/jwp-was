@@ -1,5 +1,6 @@
 package utils;
 
+import com.github.jknack.handlebars.internal.lang3.StringUtils;
 import http.request.HttpRequest;
 import http.request.HttpRequestBody;
 import http.request.HttpRequestHeader;
@@ -46,7 +47,7 @@ public class RequestParser {
         String line = bufferedReader.readLine();
         Map<String, String> headers = new HashMap<>();
 
-        while (!"".equals(line)) {
+        while (!StringUtils.isBlank(line)) {
             String[] keyValue = line.split(": ");
             headers.put(keyValue[0], keyValue[1]);
             line = bufferedReader.readLine();
