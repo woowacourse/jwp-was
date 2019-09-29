@@ -1,6 +1,6 @@
 package utils;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class QueryStringSeparator {
@@ -8,7 +8,7 @@ public class QueryStringSeparator {
 	public static final String QUERY_PARAM_SEPARATOR = "=";
 
 	public static Map<String, String> separate(String queryString) {
-		Map<String, String> params = new HashMap<>();
+		Map<String, String> params = new LinkedHashMap<>();
 		String[] queryParams = queryString.split(QUERY_PARAMS_SEPARATOR);
 
 		for (String queryParam : queryParams) {
