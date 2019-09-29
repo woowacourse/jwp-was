@@ -36,4 +36,8 @@ public class HttpRequest {
 		}
 		throw new NullPointerException();
 	}
+
+	public boolean isLogin() {
+		return httpRequestHeader.isCookieValue();
+	}
 }

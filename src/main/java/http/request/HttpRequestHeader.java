@@ -20,4 +20,13 @@ public class HttpRequestHeader {
 		}
 		throw new NotFoundElementException();
 	}
+
+	public boolean isCookieValue() {
+		try {
+			getRequestElement(HeaderElement.COOKIE);
+			return true;
+		} catch (NotFoundElementException e) {
+			return false;
+		}
+	}
 }

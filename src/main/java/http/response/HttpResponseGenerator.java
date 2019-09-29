@@ -44,7 +44,7 @@ public class HttpResponseGenerator {
 			StatusLine statusLine = new StatusLine(getStatusLines(OK));
 
 			Map<HeaderElement, String> headerElement = getHeaderElement(bodyLength, mimeType);
-
+			//TODO : Cookie에 담는 정보가 여러 개라면 어떻게 할 지 고려해보기.
 			String cookie = String.format("logined=true; %s=/\r\n", HeaderElement.PATH.getElement());
 			headerElement.put(HeaderElement.SET_COOKIE, cookie);
 			Header header = new Header(headerElement);
