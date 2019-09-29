@@ -17,8 +17,6 @@ import java.io.InputStream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CreateUserControllerTest {
-    private static final String TEST_RESOURCES = "./src/test/resources";
-
     private Controller controller;
     private InputStream in;
 
@@ -29,7 +27,7 @@ class CreateUserControllerTest {
 
     @Test
     void 유저_생성_정상_흐름() throws IOException {
-        InputStream in = new FileInputStream(TEST_RESOURCES + "/http_post.txt");
+        in = new FileInputStream(BasicControllerTest.TEST_RESOURCES + "/http_post.txt");
 
         HttpRequest httpRequest = HttpRequestParser.parse(in);
         HttpResponse httpResponse = new HttpResponse();

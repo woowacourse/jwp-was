@@ -27,7 +27,6 @@ public class LoginControllerTest {
     private static final String INDEX_HTML = "./templates/index.html";
     private static final String LOGIN_FAILED_HTML = "./templates/user/login_failed.html";
 
-    private String testResources = "./src/test/resources";
     private LoginController loginController;
 
     @BeforeEach
@@ -38,7 +37,7 @@ public class LoginControllerTest {
 
     @Test
     void login_정상_흐름_테스트() throws IOException, URISyntaxException {
-        InputStream in = new FileInputStream(testResources + "/http_login.txt");
+        InputStream in = new FileInputStream(BasicControllerTest.TEST_RESOURCES + "/http_login.txt");
         HttpRequest httpRequest = HttpRequestParser.parse(in);
         HttpResponse httpResponse = new HttpResponse();
 
@@ -61,7 +60,7 @@ public class LoginControllerTest {
 
     @Test
     void login_실패_흐름_테스트() throws IOException, URISyntaxException {
-        InputStream in = new FileInputStream(testResources + "/http_login_failed.txt");
+        InputStream in = new FileInputStream(BasicControllerTest.TEST_RESOURCES + "/http_login_failed.txt");
         HttpRequest httpRequest = HttpRequestParser.parse(in);
         HttpResponse httpResponse = new HttpResponse();
 

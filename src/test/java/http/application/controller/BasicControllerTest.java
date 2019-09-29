@@ -12,20 +12,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BasicControllerTest {
-    private static final String TEST_RESOURCES = "./src/test/resources";
+    public static final String TEST_RESOURCES = "./src/test/resources";
 
-    Controller controller;
-    InputStream in;
+    private Controller controller;
+    private InputStream in;
 
     @BeforeEach
-    void setUp() throws FileNotFoundException {
+    void setUp() {
         controller = new BasicController();
     }
 
