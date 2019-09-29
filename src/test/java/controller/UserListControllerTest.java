@@ -7,9 +7,9 @@ import http.request.HttpRequestHeader;
 import http.request.HttpRequestLine;
 import http.request.QueryParameter;
 import http.response.HttpResponse;
+import http.session.FixedSessionKeyStrategy;
 import http.session.HttpSession;
 import http.session.HttpSessionManager;
-import http.session.UUIDSessionKeyStrategy;
 import model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,14 +27,14 @@ class UserListControllerTest {
     void doGet() {
         User user = new User("testUser", "test", "test", "test");
         DataBase.addUser(user);
-        HttpSession httpSession = HttpSessionManager.getInstance().createSession(new UUIDSessionKeyStrategy());
+        HttpSession httpSession = HttpSessionManager.getInstance().createSession(new FixedSessionKeyStrategy());
 
         httpSession.setAttribute("logined", "true");
 
         HttpRequestLine httpRequestLine = new HttpRequestLine("GET /user/list HTTP/1.1");
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "text/html");
-        headers.put("Cookie", "JSESSIONID=" + httpSession.getSessionId());
+        headers.put("Cookie", "JSESSIONID=FixedSessionKey");
         HttpRequestHeader httpRequestHeader = new HttpRequestHeader(headers);
         HttpRequestBody httpRequestBody = new HttpRequestBody(new byte[0]);
         HttpRequest httpRequest = new HttpRequest(httpRequestLine, httpRequestHeader, QueryParameter.empty(), httpRequestBody);
