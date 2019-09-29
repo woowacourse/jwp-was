@@ -10,20 +10,20 @@ public class HttpUri {
     private static final int QUERY_INDEX = 1;
     private static final int PATH_WITH_QUERY_PARAMS = 2;
 
-    private static final String QUERY_STRING_SEPARATOR = "\\?";
+    private static final char PATH_DELIMITER = '/';
+    private static final String QUERY_STRING_DELIMITER = "\\?";
+    private static final String DOT = ".";
+    private static final String EMPTY = "";
 
     private String path;
     private String queryParams;
 
     public HttpUri(String uri) throws UnsupportedEncodingException {
         String decodedUri = decode(uri, StandardCharsets.UTF_8.name());
-        String[] splicedUri = decodedUri.split(QUERY_STRING_SEPARATOR);
+        String[] splicedUri = decodedUri.split(QUERY_STRING_DELIMITER);
 
         path = splicedUri[PATH_INDEX];
-
-        if (hasQueryParams(splicedUri)) {
-            queryParams = splicedUri[QUERY_INDEX];
-        }
+        queryParams = hasQueryParams(splicedUri) ? splicedUri[QUERY_INDEX] : EMPTY;
     }
 
     private boolean hasQueryParams(String[] queryString) {
@@ -31,8 +31,8 @@ public class HttpUri {
     }
 
     public boolean hasExtension() {
-        String fileName = path.substring(path.lastIndexOf('/') + 1, path.length());
-        return fileName.contains(".");
+        String fileName = path.substring(path.lastIndexOf(PATH_DELIMITER) + 1);
+        return fileName.contains(DOT);
     }
 
     public String getPath() {
@@ -45,9 +45,6 @@ public class HttpUri {
 
     @Override
     public String toString() {
-        return "HttpUri{" +
-                "path='" + path + '\'' +
-                ", queryParams=" + queryParams +
-                '}';
+        return path + (queryParams.isEmpty() ? EMPTY : "?" + queryParams);
     }
 }

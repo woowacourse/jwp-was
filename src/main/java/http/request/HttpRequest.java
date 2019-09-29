@@ -3,6 +3,8 @@ package http.request;
 import http.HttpHeaders;
 import http.HttpVersion;
 
+import static http.request.HttpMethod.GET;
+
 public class HttpRequest {
     private HttpRequestLine requestLine;
     private HttpHeaders headers;
@@ -13,6 +15,13 @@ public class HttpRequest {
         this.requestLine = requestLine;
         this.headers = headers;
         this.body = body;
+        this.queryParams = splitQueryParams();
+    }
+
+    private QueryParams splitQueryParams() {
+        return GET.equals(requestLine.getHttpMethod())
+                ? QueryParams.of(requestLine.getQueryParams())
+                : QueryParams.of(body);
     }
 
     public boolean isStaticContentRequest() {
@@ -21,7 +30,7 @@ public class HttpRequest {
     }
 
     public HttpMethod getMethod() {
-        return requestLine.getMethod();
+        return requestLine.getHttpMethod();
     }
 
     public String getPath() {
@@ -38,10 +47,7 @@ public class HttpRequest {
     }
 
     public QueryParams getQueryParams() {
-        if (HttpMethod.GET.match(requestLine.getMethod())) {
-            return QueryParams.of(requestLine.getUri().getQueryParams());
-        }
-        return QueryParams.of(body);
+        return queryParams;
     }
 
     public String getBody() {

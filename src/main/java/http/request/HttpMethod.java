@@ -24,8 +24,4 @@ public enum HttpMethod {
         }
         return httpMethod;
     }
-
-    public boolean match(HttpMethod httpMethod) {
-        return this == httpMethod;
-    }
 }

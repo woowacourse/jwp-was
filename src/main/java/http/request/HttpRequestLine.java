@@ -23,27 +23,31 @@ public class HttpRequestLine {
     }
 
     static HttpRequestLine of(String requestLine) throws UnsupportedEncodingException {
-        String[] parsedStartLine = requestLine.split(REQUEST_LINE_DELIMITER);
-        checkStartLine(parsedStartLine);
+        String[] parsedRequestLine = requestLine.split(REQUEST_LINE_DELIMITER);
+        checkRequestLine(parsedRequestLine);
 
-        HttpMethod method = HttpMethod.resolve(parsedStartLine[HTTP_METHOD_INDEX]);
-        HttpUri url = new HttpUri(parsedStartLine[PATH_INDEX]);
-        HttpVersion version = HttpVersion.resolve(parsedStartLine[HTTP_VERSION_INDEX]);
+        HttpMethod method = HttpMethod.resolve(parsedRequestLine[HTTP_METHOD_INDEX]);
+        HttpUri url = new HttpUri(parsedRequestLine[PATH_INDEX]);
+        HttpVersion version = HttpVersion.resolve(parsedRequestLine[HTTP_VERSION_INDEX]);
         return new HttpRequestLine(method, url, version);
     }
 
-    private static void checkStartLine(String[] parsedStartLine) {
-        if (parsedStartLine.length != START_LINE_SIZE) {
+    private static void checkRequestLine(String[] parsedRequestLine) {
+        if (parsedRequestLine.length != START_LINE_SIZE) {
             throw new RequestLineException();
         }
     }
 
-    HttpMethod getMethod() {
+    HttpMethod getHttpMethod() {
         return method;
     }
 
     HttpUri getUri() {
         return uri;
+    }
+
+    String getQueryParams() {
+        return uri.getQueryParams();
     }
 
     HttpVersion getVersion() {
@@ -52,6 +56,6 @@ public class HttpRequestLine {
 
     @Override
     public String toString() {
-        return "\n" + method + " " + uri.getPath() + " " + version;
+        return "\n" + method + " " + uri + " " + version;
     }
 }
