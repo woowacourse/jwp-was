@@ -20,7 +20,7 @@ public class HttpRequestFactory {
         }
 
         HttpRequestStartLine httpRequestStartLine = HttpRequestStartLineFactory.create(lines.get(START_LINE_INDEX));
-        HttpRequestHeader httpRequestHeader = HttpRequestHeaderFactory.create(lines.subList(HEADER_START_INDEX, emptyLineIndex));
+        HttpRequestHeader httpRequestHeader = HttpRequestHeaderFactory.createHttpCookieStore(lines.subList(HEADER_START_INDEX, emptyLineIndex));
         HttpRequestBody httpRequestBody = HttpRequestBodyFactory.create(EMPTY);
 
         if (httpRequestStartLine.hasBody()) {
