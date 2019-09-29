@@ -45,6 +45,6 @@ public class HttpRequestStartLineFactory {
 			return new Resource(path, target, mediaType);
 		}
 		logger.debug("Create Resource is not file: {}", path + target);
-		return new Resource(path + target, "", MediaType.NONE);
+		return new Resource(path, target, MediaType.NONE);
 	}
 }
