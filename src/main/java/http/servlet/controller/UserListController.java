@@ -1,15 +1,15 @@
-package servlet.controller;
+package http.servlet.controller;
 
 import com.google.common.base.Charsets;
 import domain.UserService;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import servlet.view.View;
+import http.servlet.view.View;
 
 import java.io.IOException;
 import java.util.Optional;
 
-import static servlet.view.support.ViewResolver.resolve;
+import static http.servlet.view.support.ViewResolver.resolve;
 
 public class UserListController extends HttpController {
 

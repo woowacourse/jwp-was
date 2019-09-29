@@ -2,9 +2,9 @@ package testhelper;
 
 import http.request.HttpRequest;
 import http.request.support.HttpRequestFactory;
+import http.servlet.controller.*;
 import http.session.support.RandomKeyGenerator;
 import http.session.support.SessionManager;
-import servlet.controller.*;
 
 import java.io.*;
 import java.util.Collections;

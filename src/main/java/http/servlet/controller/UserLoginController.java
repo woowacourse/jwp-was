@@ -1,12 +1,12 @@
-package servlet.controller;
+package http.servlet.controller;
 
 import com.google.common.base.Charsets;
 import domain.UserService;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import servlet.resolver.UserResolver;
-import servlet.view.View;
-import servlet.view.support.ViewResolver;
+import http.servlet.view.View;
+import http.servlet.resolver.UserResolver;
+import http.servlet.view.support.ViewResolver;
 
 import java.io.IOException;
 

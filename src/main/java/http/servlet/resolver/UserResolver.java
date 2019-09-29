@@ -1,4 +1,4 @@
-package servlet.resolver;
+package http.servlet.resolver;
 
 import domain.User;
 import http.request.HttpRequest;

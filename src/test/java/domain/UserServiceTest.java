@@ -4,7 +4,7 @@ import db.DataBase;
 import http.request.HttpRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import servlet.resolver.UserResolver;
+import http.servlet.resolver.UserResolver;
 import testhelper.Common;
 
 import java.io.IOException;

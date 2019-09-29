@@ -1,4 +1,4 @@
-package servlet.view;
+package http.servlet.view;
 
 import com.github.jknack.handlebars.Template;
 

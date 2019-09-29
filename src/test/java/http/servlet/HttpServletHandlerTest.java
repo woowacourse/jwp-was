@@ -1,4 +1,4 @@
-package servlet;
+package http.servlet;
 
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -14,8 +14,8 @@ import java.net.URISyntaxException;
 
 import static testhelper.Common.getControllerFinder;
 
-public class HttpRequestHandlerTest {
-    private static final Logger logger = LoggerFactory.getLogger(HttpRequestHandlerTest.class);
+public class HttpServletHandlerTest {
+    private static final Logger logger = LoggerFactory.getLogger(HttpServletHandlerTest.class);
 
     @Test
     @DisplayName("/user/create에 대한 HttpResponse를 반환한다")
@@ -23,8 +23,8 @@ public class HttpRequestHandlerTest {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         HttpRequest httpRequest = Common.getHttpRequest("HTTP_POST_USER_CREATE.txt");
         HttpResponse httpResponse = new HttpResponse(byteArrayOutputStream);
-        HttpRequestHandler httpRequestHandler = new HttpRequestHandler(getControllerFinder());
-        httpRequestHandler.process(httpRequest, httpResponse);
+        HttpServletHandler httpServletHandler = new HttpServletHandler(getControllerFinder());
+        httpServletHandler.process(httpRequest, httpResponse);
 
         logger.info("\n" + byteArrayOutputStream.toString());
     }

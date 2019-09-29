@@ -1,12 +1,12 @@
-package servlet.view.support;
+package http.servlet.view.support;
 
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
+import http.servlet.view.View;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import servlet.view.View;
 
 import java.io.IOException;
 

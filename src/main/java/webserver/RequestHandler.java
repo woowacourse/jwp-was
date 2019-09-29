@@ -7,9 +7,8 @@ import http.response.HttpResponse;
 import http.session.support.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import servlet.ServletContainer;
-import servlet.HttpRequestHandler;
-import servlet.controller.ControllerFinder;
+import http.servlet.HttpServletHandler;
+import http.servlet.controller.ControllerFinder;
 
 import java.io.*;
 import java.net.Socket;
@@ -33,8 +32,8 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         FileContainer fileContainer = new FileContainer();
-        HttpRequestHandler httpRequestHandler = new HttpRequestHandler(controllerFinder);
-        ServletContainer servletContainer = new ServletContainer(fileContainer, httpRequestHandler);
+        HttpServletHandler httpServletHandler = new HttpServletHandler(controllerFinder);
+        ServletContainer servletContainer = new ServletContainer(fileContainer, httpServletHandler);
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader bufferedReader = getBufferedReader(in);

@@ -1,4 +1,4 @@
-package view;
+package http.servlet.view;
 
 import com.google.common.base.Charsets;
 import db.DataBase;
@@ -7,8 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import servlet.view.View;
-import servlet.view.support.ViewResolver;
+import http.servlet.view.support.ViewResolver;
 
 import java.io.IOException;
 import java.util.ArrayList;

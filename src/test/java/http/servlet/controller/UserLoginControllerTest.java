@@ -1,4 +1,4 @@
-package servlet.controller;
+package http.servlet.controller;
 
 import domain.User;
 import domain.UserService;
