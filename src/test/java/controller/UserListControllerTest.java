@@ -3,6 +3,8 @@ package controller;
 import db.DataBase;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import http.response.ResponseResolver;
+import http.response.view.View;
 import model.User;
 import org.junit.jupiter.api.Test;
 import session.HttpSession;
@@ -55,7 +57,8 @@ class UserListControllerTest {
         HttpRequest request = new HttpRequest(in);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         HttpResponse response = new HttpResponse(out);
-        controller.service(request, response);
+        View view = controller.service(request, response);
+        ResponseResolver.resolve(view, response);
 
         return response;
     }

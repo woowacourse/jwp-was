@@ -1,4 +1,4 @@
-package http.response.view;
+package http.response.template;
 
 import java.io.IOException;
 import java.util.Map;

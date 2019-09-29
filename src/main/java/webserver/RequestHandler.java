@@ -7,6 +7,7 @@ import http.response.ResponseResolver;
 import http.response.ResponseStatus;
 import http.response.view.DefaultView;
 import http.response.view.ErrorView;
+import http.response.view.View;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.UrlNotFoundException;
@@ -35,31 +36,31 @@ public class RequestHandler implements Runnable {
              HttpRequest httpRequest = new HttpRequest(in);
              HttpResponse httpResponse = new HttpResponse(out)) {
 
-            service(httpRequest, httpResponse);
+            View view = service(httpRequest, httpResponse);
+            ResponseResolver.resolve(view, httpResponse);
 
         } catch (IOException e) {
             logger.error(e.getMessage());
-            throw new NetworkException("네트워크 에러");
+            throw new NetworkException("네트워크 예외");
         }
 
     }
 
-    private void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+    private View service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         Controller controller = ControllerContainer.findController(httpRequest.getPath());
 
         if (controller != null) {
-            controller.service(httpRequest, httpResponse);
-            return;
+            return controller.service(httpRequest, httpResponse);
         }
 
-        resolveFiles(httpRequest, httpResponse);
+        return resolveFiles(httpRequest);
     }
 
-    private void resolveFiles(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+    private View resolveFiles(HttpRequest httpRequest) throws IOException {
         try {
-            ResponseResolver.resolve(new DefaultView(httpRequest.getPath()), httpResponse);
+            return new DefaultView(httpRequest.getPath());
         } catch (URISyntaxException | UrlNotFoundException e) {
-            ResponseResolver.resolve(new ErrorView(ResponseStatus.NOT_FOUND, "Not Found"), httpResponse);
+            return new ErrorView(ResponseStatus.NOT_FOUND, "Not Found");
         }
     }
 }

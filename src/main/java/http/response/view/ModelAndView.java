@@ -4,6 +4,8 @@ import com.google.common.collect.Maps;
 import http.ContentType;
 import http.HTTP;
 import http.response.ResponseStatus;
+import http.response.template.HandlebarResolver;
+import http.response.template.TemplateResolver;
 
 import java.io.IOException;
 import java.util.Map;

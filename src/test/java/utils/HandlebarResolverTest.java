@@ -1,6 +1,6 @@
 package utils;
 
-import http.response.view.HandlebarResolver;
+import http.response.template.HandlebarResolver;
 import model.User;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
