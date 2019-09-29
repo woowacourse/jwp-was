@@ -6,6 +6,7 @@ import utils.IOUtils;
 import webserver.http.HttpVersion;
 import webserver.http.exception.NoMatchHeaderFieldException;
 import webserver.http.request.core.*;
+import webserver.session.Cookie;
 
 import java.io.BufferedReader;
 import java.io.IOException;
