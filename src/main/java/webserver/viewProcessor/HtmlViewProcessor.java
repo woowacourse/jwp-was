@@ -47,14 +47,19 @@ public class HtmlViewProcessor implements ViewProcessor {
     private byte[] getTemplateView(View view) {
         Handlebars handlebars = initHandlebar();
         Template template = initTemplate(view.getName(), handlebars);
+        Map<String, Object> templateData = initTemplateData(view);
 
-        Map<String, Object> templateData = new HashMap<>();
-        templateData.put(view.getModelKey(), view.getModelValue());
         try {
             return template.apply(templateData).getBytes();
         } catch (IOException e) {
             throw new IllegalArgumentException("올바르지 않는 뷰 모델 입니다.");
         }
+    }
+
+    private Map<String, Object> initTemplateData(View view) {
+        Map<String, Object> templateData = new HashMap<>();
+        templateData.put(view.getModelKey(), view.getModelValue());
+        return templateData;
     }
 
     private Handlebars initHandlebar() {
