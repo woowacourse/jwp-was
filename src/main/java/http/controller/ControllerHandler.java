@@ -9,22 +9,22 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ControllerHandler {
-    private Map<ControllerMapping, Controller> handlers;
+    private Map<ControllerMapping, Controller> controllers;
 
     public ControllerHandler() {
-        handlers = new HashMap<>();
+        controllers = new HashMap<>();
     }
 
     public void addController(ControllerMapping mapping, Controller handler) {
-        handlers.put(mapping, handler);
+        controllers.put(mapping, handler);
     }
 
     public HttpResponse doService(HttpRequest httpRequest) {
-        return handlers.get(resolveRequestMapping(getCandidate(httpRequest))).service(httpRequest);
+        return controllers.get(resolveRequestMapping(getCandidate(httpRequest))).service(httpRequest);
     }
 
     private List<ControllerMapping> getCandidate(HttpRequest httpRequest) {
-        return handlers.keySet().stream()
+        return controllers.keySet().stream()
                 .filter(key -> key.match(httpRequest))
                 .sorted()
                 .collect(Collectors.toList());
