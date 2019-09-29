@@ -32,18 +32,6 @@ public class Response {
         return sb.toString().getBytes();
     }
 
-    public ResponseStatus getResponseStatus() {
-        return responseStatus;
-    }
-
-    public ResponseHeaders getResponseHeaders() {
-        return responseHeaders;
-    }
-
-    public ResponseBody getResponseBody() {
-        return responseBody;
-    }
-
     public Response ok() {
         this.responseStatus = ResponseStatus.OK;
         return this;
@@ -63,5 +51,17 @@ public class Response {
         this.responseBody = new ResponseBody(body);
         this.addResponseHeaders("Content-Length: ", String.valueOf(body.length));
         return this;
+    }
+
+    public ResponseStatus getResponseStatus() {
+        return responseStatus;
+    }
+
+    public ResponseHeaders getResponseHeaders() {
+        return responseHeaders;
+    }
+
+    public ResponseBody getResponseBody() {
+        return responseBody;
     }
 }
