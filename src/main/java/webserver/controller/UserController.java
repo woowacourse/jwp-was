@@ -3,30 +3,33 @@ package webserver.controller;
 import db.DataBase;
 import factory.UserFactory;
 import model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import utils.FileIoUtils;
 import webserver.controller.request.HttpRequest;
 import webserver.controller.response.HttpResponse;
 
 import java.util.Map;
+import java.util.Optional;
 
 public class UserController extends AbstractController {
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private static final String SAVE_REDIRECT_URL = "/index.html";
 
-    private UserController() {
-    }
+    @Override
+    public HttpResponse doGet(HttpRequest httpRequest) {
+        String path = NON_STATIC_FILE_PATH + httpRequest.getPath();
+        Optional<byte []> maybeBody = FileIoUtils.loadFileFromClasspath(path);
 
-    public static UserController getInstance() {
-        return LazyHolder.INSTANCE;
-    }
-
-    private static class LazyHolder {
-        private static final UserController INSTANCE = new UserController();
+        return HttpResponse.ok(httpRequest,maybeBody.get());
     }
 
     @Override
-    public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
+    public HttpResponse doPost(HttpRequest httpRequest) {
+        logger.debug("userDebug ");
         Map<String, String> requestBodyFields = httpRequest.getBodyFields();
         User user = UserFactory.of(requestBodyFields);
         DataBase.addUser(user);
-        httpResponse.sendRedirect(SAVE_REDIRECT_URL,false);
+        return HttpResponse.sendRedirect(httpRequest, SAVE_REDIRECT_URL,false);
     }
 }
