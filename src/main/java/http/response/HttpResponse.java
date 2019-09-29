@@ -29,6 +29,10 @@ public class HttpResponse {
 		this.httpResponseHeader = httpResponseHeader;
 	}
 
+	public void setCookie(String cookieValue) {
+		httpResponseHeader.addField("Set-cookie", cookieValue);
+	}
+
 	public void setStatusCode(HttpStatusCode httpStatusCode) {
 		httpResponseStatusLine.setHttpStatusCode(httpStatusCode);
 	}
