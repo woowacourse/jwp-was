@@ -3,10 +3,11 @@ package http.session;
 import com.google.common.collect.Maps;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 public class SessionStorage {
+    public static final String JSESSIONID = "JSESSIONID";
+
     private final Map<String, Session> sessions = Maps.newHashMap();
 
     private SessionStorage() {
@@ -17,7 +18,6 @@ public class SessionStorage {
     }
 
     public Session getSession(String sessionId) {
-//        return Optional.ofNullable(sessions.get(sessionId)).orElseGet(this::createSession);
         return sessions.get(sessionId);
     }
 

@@ -4,8 +4,11 @@ import http.request.Request;
 import http.cookie.Cookie;
 import http.response.Response;
 import http.session.Session;
+import http.session.SessionStorage;
 import model.LoginService;
 import model.exception.LoginFailException;
+
+import static http.session.SessionStorage.*;
 
 public class LoginController extends HttpController {
     private LoginController() {
@@ -21,11 +24,11 @@ public class LoginController extends HttpController {
         try {
             LoginService.getInstance().login(request.extractFormData());
             session.setAttribute("logined", "true");
-            response.setCookie(Cookie.builder().name("JSESSIONID").value(session.getSessionId()).path("/").build());
+            response.setCookie(Cookie.builder().name(JSESSIONID).value(session.getSessionId()).path("/").build());
             response.redirect("/index.html");
         } catch (LoginFailException e) {
             session.setAttribute("logined", "false");
-            response.setCookie(Cookie.builder().name("JSESSIONID").value(session.getSessionId()).path("/").build());
+            response.setCookie(Cookie.builder().name(JSESSIONID).value(session.getSessionId()).path("/").build());
             response.redirect("/user/login_failed.html");
         }
     }
