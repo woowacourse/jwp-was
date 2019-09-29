@@ -4,10 +4,6 @@ import db.DataBase;
 import model.User;
 import webserver.http.request.HttpRequest;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
 public class UserService {
     public static UserService getInstance() {
         return UserServiceHolder.INSTANCE;
@@ -28,10 +24,12 @@ public class UserService {
         String password = httpRequest.getBodyValue("password");
         User user = DataBase.findUserById(userId);
 
-        if (user != null && user.isMatch(password)) {
-            return true;
-        }
-        return false;
+        return user != null && user.isMatch(password);
+    }
+
+    public User getUser(HttpRequest httpRequest) {
+        String userId = httpRequest.getBodyValue("userId");
+        return DataBase.findUserById(userId);
     }
 
     private static class UserServiceHolder {
