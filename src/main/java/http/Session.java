@@ -39,7 +39,7 @@ public class Session {
         this.invalid = true;
     }
 
-    public boolean isInvalidTrue() {
+    public boolean isInvalid() {
         return invalid;
     }
 

@@ -7,6 +7,7 @@ import webserver.RequestHandler;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Objects;
 
 public class ResponseWriter {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -34,7 +35,7 @@ public class ResponseWriter {
     }
 
     private void responseBody(DataOutputStream dos, Response response) throws IOException {
-        if (response.getBody() != null) {
+        if (Objects.nonNull(response.getBody())) {
             byte[] body = response.getBody();
             dos.write(body, 0, body.length);
             dos.write(body, 0, body.length);

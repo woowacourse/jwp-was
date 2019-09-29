@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class RequestParser {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -50,7 +51,7 @@ public class RequestParser {
         while (!EMPTY_STRING.equals(line)) {
             line = bufferedReader.readLine();
 
-            if (line == null || line.equals(EMPTY_STRING)) {
+            if (Objects.isNull(line) || line.equals(EMPTY_STRING)) {
                 processPostRequest(bufferedReader);
                 return;
             }

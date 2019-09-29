@@ -39,7 +39,7 @@ public class Response {
     }
 
     private void setMimeType(String location) {
-        if (body == null) {
+        if (Objects.isNull(body)) {
             this.body = FileIoUtils.loadFileFromClasspath(location);
             mimeType = MediaType.of(ExtractInformationUtils.extractExtension(location)).getMediaType();
         }

@@ -59,7 +59,7 @@ public class Request {
     }
 
     public boolean notContainSession() {
-        return getCookie(JSESSION) == null;
+        return Objects.isNull(getCookie(JSESSION));
     }
 
     public void setSessionValue(String name, Object value) {

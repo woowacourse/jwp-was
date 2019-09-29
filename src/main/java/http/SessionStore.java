@@ -1,11 +1,10 @@
 package http;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SessionStore {
-    private static Map<String, Session> sessions = new HashMap<>();
+    private static ConcurrentHashMap<String, Session> sessions = new ConcurrentHashMap<>();
 
     public static Session getSession(String sessionId) {
         sessionId = makeSession(sessionId);
@@ -13,7 +12,7 @@ public class SessionStore {
     }
 
     private static String makeSession(String sessionId) {
-        if (isNotContainSession(sessionId) || sessions.get(sessionId).isInvalidTrue()) {
+        if (isNotContainSession(sessionId) || sessions.get(sessionId).isInvalid()) {
             sessionId = UUID.randomUUID().toString();
             Session session = new Session(sessionId);
             sessions.put(sessionId, session);
