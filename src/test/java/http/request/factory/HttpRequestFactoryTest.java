@@ -22,7 +22,7 @@ class HttpRequestFactoryTest {
         map.put("Host", "localhost:8080");
         map.put("Connection", "keep-alive");
         map.put("Content-Length", "345");
-        HttpRequestHeader httpRequestHeader = new HttpRequestHeader(map);
+        HttpRequestHeader httpRequestHeader = new HttpRequestHeader(map, new HttpCookieStore(Collections.EMPTY_LIST));
 
         HttpRequestBody httpRequestBody = new HttpRequestBody("id=2222&pw=1234");
 
@@ -47,7 +47,7 @@ class HttpRequestFactoryTest {
         map.put("Host", "localhost:8080");
         map.put("Connection", "keep-alive");
         map.put("Content-Length", "345");
-        HttpRequestHeader httpRequestHeader = new HttpRequestHeader(map);
+        HttpRequestHeader httpRequestHeader = new HttpRequestHeader(map, new HttpCookieStore(Collections.EMPTY_LIST));
 
         HttpRequestBody httpRequestBody = new HttpRequestBody("");
 
