@@ -1,14 +1,12 @@
 package db;
 
 import com.google.common.collect.Maps;
-import db.exception.UserNotFoundException;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.Optional;
 
 public class DataBase {
     private static final Logger log = LoggerFactory.getLogger(DataBase.class);
@@ -21,7 +19,7 @@ public class DataBase {
     }
 
     public static User findUserById(String userId) {
-        return Optional.of(users.get(userId)).orElseThrow(UserNotFoundException::new);
+        return users.get(userId);
     }
 
     public static Collection<User> findAll() {

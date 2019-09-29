@@ -1,7 +1,6 @@
 package service;
 
 import db.DataBase;
-import db.exception.UserNotFoundException;
 import model.User;
 import webserver.http.request.HttpRequest;
 
@@ -22,13 +21,13 @@ public class UserService {
 
     public boolean loginUser(HttpRequest httpRequest) {
         String userId = httpRequest.getBodyValue("userId");
-        try {
-            User user = DataBase.findUserById(userId);
-            String password = httpRequest.getBodyValue("password");
-            return user.getPassword().equals(password);
-        } catch (UserNotFoundException e) {
-            return false;
+        String password = httpRequest.getBodyValue("password");
+        User user = DataBase.findUserById(userId);
+
+        if (user != null && user.isMatch(password)) {
+            return true;
         }
+        return false;
     }
 
     private static class UserServiceHolder {
