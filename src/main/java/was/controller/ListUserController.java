@@ -18,7 +18,7 @@ public class ListUserController extends AbstractController {
 
     @Override
     void doGet(final HttpRequest httpRequest, final HttpResponse httpResponse) {
-        if (httpRequest.getHttpHeader().get("Cookie").contains("logined=true")) {
+        if (httpRequest.getHttpHeader().hasLoginCookie()) {
             HandlebarTemplates handlebarTemplates = new HandlebarTemplates("/templates", "user/list", ".html");
 
             handlebarTemplates.put("users", DataBase.findAll());

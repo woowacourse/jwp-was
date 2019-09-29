@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 public class HttpHeader {
     private static final String HEADER_LINE_DELIMITER = ": ";
     private static final int HEADER_LENGTH = 2;
+    private static final String COOKIE = "Cookie";
+    private static final String LOGINED_TRUE = "logined=true";
 
     private Map<String, String> headers;
 
@@ -48,6 +50,10 @@ public class HttpHeader {
 
     public String get(final String key) {
         return headers.get(key);
+    }
+
+    public boolean hasLoginCookie() {
+        return get(COOKIE).contains(LOGINED_TRUE);
     }
 
     public void put(final String key, final String value) {
