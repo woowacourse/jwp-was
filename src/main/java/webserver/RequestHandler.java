@@ -1,49 +1,57 @@
 package webserver;
 
-import http.request.HttpRequest;
-import http.request.HttpRequestParams;
-import http.request.HttpRequestParser;
-import http.response.HttpResponseGenerator;
-import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.http.request.HttpRequest;
+import webserver.http.request.HttpRequestParser;
+import webserver.http.response.HttpResponse;
+import webserver.http.response.HttpResponseParser;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.net.URISyntaxException;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
+    private HttpRequest httpRequest;
+    private HttpResponse httpResponse;
 
-    public RequestHandler(Socket connectionSocket) {
+    public RequestHandler(final Socket connectionSocket) {
         this.connection = connectionSocket;
+        this.httpRequest = new HttpRequest();
+        this.httpResponse = new HttpResponse();
     }
 
     public void run() {
-        logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
+        logger.debug("New Client Connect! Connected IP : {}, Port : {}/. ", connection.getInetAddress(),
                 connection.getPort());
 
-        try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            HttpRequest httpRequest = HttpRequestParser.parse(in);
-            DataOutputStream dos = new DataOutputStream(out);
-
-            if (httpRequest.getUrl().equals("/user/create")) {
-                HttpRequestParams parameters = httpRequest.getHttpRequestParams();
-                User user = new User(parameters.get("userId"), parameters.get("password"),
-                        parameters.get("name"), parameters.get("email"));
-
-                logger.info("{}", user);
-                HttpResponseGenerator.redirect(dos, httpRequest.getHttpHeader().get("Origin"), "/index.html");
-            } else {
-                HttpResponseGenerator.forward(dos, httpRequest.getUrl());
-            }
-        } catch (IOException | URISyntaxException e) {
-            logger.error(e.getMessage());
+        try (InputStream inputStream = connection.getInputStream();
+             OutputStream outputStream = connection.getOutputStream()) {
+            receiveRequest(inputStream);
+            sendResponse(outputStream);
+        } catch (IOException e) {
+            logger.error("서버 에러 " + e);
         }
+    }
+
+    private void receiveRequest(final InputStream inputStream) {
+        try {
+            HttpRequestParser.parse(inputStream, httpRequest);
+            Dispatcher.dispatch(httpRequest, httpResponse);
+        } catch (RuntimeException e) {
+            // TODO : 에러에 맞는 response 보내기
+            logger.error("에러 메시지 : " + e.getMessage());
+            httpResponse.redirect("/error/404.html");
+        }
+    }
+
+    private void sendResponse(final OutputStream outputStream) {
+        DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+        HttpResponseParser.send(dataOutputStream, httpResponse);
     }
 }
