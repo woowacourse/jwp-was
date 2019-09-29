@@ -23,6 +23,5 @@ public class ResourceController extends AbstractController {
     protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         httpResponse.addStatus(ResponseStatus.of(200));
         httpResponse.addHeader(HttpHeaderField.CONTENT_TYPE, ResponseContentType.of(httpRequest.getRequestPath()));
-
     }
 }

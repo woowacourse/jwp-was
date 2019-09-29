@@ -2,6 +2,7 @@ package controller;
 
 import controller.core.AbstractController;
 import service.UserService;
+import webserver.http.HttpHeaderField;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 import webserver.http.response.core.ResponseStatus;
@@ -28,11 +29,12 @@ public class LoginController extends AbstractController {
         super.doPost(httpRequest, httpResponse);
         if (!userService.loginUser(httpRequest)) {
             httpResponse.addStatus(ResponseStatus.of(302));
-//            httpResponse.addHeader(HttpHeaderField.SET_COOKIE, "logined=false path=/user/login_failed.html");
-        } else {
-            httpResponse.addStatus(ResponseStatus.of(302));
-//            httpResponse.addHeader(HttpHeaderField.SET_COOKIE, "logined=true; path=/");
+            httpResponse.addHeader(HttpHeaderField.SET_COOKIE, "logined=false; path=/user/login_failed.html");
+            httpResponse.addHeader(HttpHeaderField.LOCATION, LOGIN_FAILED);
+            return;
         }
-//        httpResponse.addHeader(HttpHeaderField.LOCATION, LOGIN_FAILED);
+        httpResponse.addStatus(ResponseStatus.of(302));
+        httpResponse.addHeader(HttpHeaderField.SET_COOKIE, "logined=true; path=/");
+        httpResponse.addHeader(HttpHeaderField.LOCATION, DEFAULT_PAGE);
     }
 }

@@ -19,6 +19,7 @@ public class ControllerFactory {
         controllers.put(RequestMethod.GET + "/user/form.html", resourceController());
         controllers.put(RequestMethod.POST + "/user/create", createUserController());
         controllers.put(RequestMethod.GET + "/user/login.html", resourceController());
+        controllers.put(RequestMethod.GET + "/user/login_failed.html", resourceController());
         controllers.put(RequestMethod.POST + "/user/login", loginController());
     }
 
