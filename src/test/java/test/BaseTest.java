@@ -9,6 +9,8 @@ import http.request.Request;
 import http.request.RequestInformation;
 import http.request.RequestMethod;
 import http.request.RequestUrl;
+import http.session.Session;
+import http.session.SessionRepository;
 import model.User;
 
 import java.io.IOException;
@@ -31,14 +33,6 @@ public class BaseTest {
         return confirmBody;
     }
 
-    public Map<String, String> makePostHeader(String... values) {
-        Map<String, String> header = new HashMap<>();
-        List<String> keys = Arrays.asList("Request-Line:", "Content-Length:", "Content-Type:", "Query-Parameters:");
-        for (int i = 0; i < values.length; i++) {
-            header.put(keys.get(i), values[i]);
-        }
-        return header;
-    }
 
     public Request createPostRequest(RequestUrl url, List<String> headerValues) {
         RequestMethod method = RequestMethod.POST;
@@ -55,14 +49,6 @@ public class BaseTest {
         return new Request(method, url, requestHeader);
     }
 
-    public Map<String, String> makeGetHeader(String... values) {
-        Map<String, String> header = new HashMap<>();
-        List<String> keys = Arrays.asList("Request-Line:");
-        for (int i = 0; i < values.length; i++) {
-            header.put(keys.get(i), values[i]);
-        }
-        return header;
-    }
 
     public Request createGetRequest(RequestUrl url, List<String> headerValues) {
         RequestMethod method = RequestMethod.GET;
@@ -77,13 +63,26 @@ public class BaseTest {
         return new Request(method, url, requestHeader);
     }
 
-    //        RequestMethod method = RequestMethod.GET;
-//        RequestUrl url = RequestUrl.from("/index.html");
-//        Map<String, String > header = makeGetHeader("GET /index.html HTTP/1.1");
-//
-//        RequestInformation requestInformation = new RequestInformation(header);
-//        Request request = new Request(method, url, requestInformation);
-//
+    public Session signUpAndLogin() {
+        User user1 = new User("easy", "easy", "easy", "easy@gmail.com");
+        User user2 = new User("kjm", "kjm", "kjm", "kjm@gmail.com");
+        DataBase.addUser(user1);
+        DataBase.addUser(user2);
+        Session session = SessionRepository.getInstance().createSession();
+        session.setAttribute("user", user2.getUserId());
 
+        return session;
+    }
+
+    public Request createGetRequestWithSession(String sessionId) {
+        RequestMethod method = RequestMethod.GET;
+        RequestUrl url = RequestUrl.from("/user/list");
+        Map<String, String> header = new HashMap<>();
+        header.put("Request-Line:", "GET /user/list HTTP/1.1");
+        header.put("Cookie:", "Session-Id=" + sessionId);
+        RequestInformation requestInformation = new RequestInformation(header);
+
+        return new Request(method, url,requestInformation);
+    }
 
 }
