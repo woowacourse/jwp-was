@@ -1,27 +1,22 @@
 package webserver.controller.response;
 
-    import org.junit.jupiter.api.BeforeEach;
-    import org.junit.jupiter.api.DisplayName;
-    import org.junit.jupiter.api.Test;
-    import utils.FileIoUtils;
-    import webserver.controller.HttpCookie;
-    import webserver.controller.request.HttpRequest;
-    import webserver.controller.request.MimeType;
-    import webserver.controller.request.header.HttpMethod;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import utils.FileIoUtils;
+import webserver.controller.HttpCookie;
+import webserver.controller.request.HttpRequest;
+import webserver.controller.request.MimeType;
 
-    import java.io.IOException;
-    import java.net.URISyntaxException;
-    import java.util.Map;
-    import java.util.Optional;
+import java.util.Map;
 
-    import static org.assertj.core.api.Assertions.assertThat;
-    import static org.mockito.Mockito.mock;
-    import static org.mockito.Mockito.when;
-    import static webserver.ModelAndView.NON_STATIC_FILE_PATH;
-    import static webserver.controller.response.HttpResponse.BAD_REQUEST_ERROR_MESSAGE;
-    import static webserver.controller.response.HttpResponse.STATIC_FILE_PATH;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static webserver.ModelAndView.NON_STATIC_FILE_PATH;
+import static webserver.controller.response.HttpResponse.STATIC_FILE_PATH;
 
 public class HttpResponseTests {
+    private static final String TEST_MESSAGE = "올바르지 않은 요청입니다.";
     HttpRequest httpRequest;
 
     @BeforeEach
@@ -33,7 +28,7 @@ public class HttpResponseTests {
     @Test
     void ok() {
         when(httpRequest.getMimeType()).thenReturn(MimeType.HTML);
-        byte[] body = FileIoUtils.loadFileFromClasspath(NON_STATIC_FILE_PATH+"/index.html").get();
+        byte[] body = FileIoUtils.loadFileFromClasspath("." + NON_STATIC_FILE_PATH + "/index.html").get();
         HttpResponse httpResponse = HttpResponse.ok(httpRequest, body);
         assertThat(httpResponse.getVersion()).isEqualTo("HTTP/1.1");
         assertThat(httpResponse.getHttpStatus()).isEqualTo(HttpStatus.OK);
@@ -43,7 +38,7 @@ public class HttpResponseTests {
     @Test
     void staticFile_ok() {
         when(httpRequest.getMimeType()).thenReturn(MimeType.CSS);
-        byte[] body = FileIoUtils.loadFileFromClasspath(STATIC_FILE_PATH+"/css/bootstrap.min.css").get();
+        byte[] body = FileIoUtils.loadFileFromClasspath(STATIC_FILE_PATH + "/css/bootstrap.min.css").get();
         HttpResponse httpResponse = HttpResponse.ok(httpRequest, body);
         assertThat(httpResponse.getVersion()).isEqualTo("HTTP/1.1");
         assertThat(httpResponse.getHttpStatus()).isEqualTo(HttpStatus.OK);
@@ -56,8 +51,8 @@ public class HttpResponseTests {
         httpCookie.loginCookie(false, "/");
 
         String redirectUrl = "/user/login_failed.html";
-        HttpResponse httpResponse = HttpResponse.sendRedirect(httpRequest, redirectUrl,false);
-        Map<String,String> responseHeaderFields = httpResponse.getHeaderFields();
+        HttpResponse httpResponse = HttpResponse.sendRedirect(httpRequest, redirectUrl, false);
+        Map<String, String> responseHeaderFields = httpResponse.getHeaderFields();
 
         assertThat(responseHeaderFields.get("Location")).isEqualTo(redirectUrl);
         assertThat(responseHeaderFields.get("Set-Cookie")).isEqualTo("logined=false; Path=/");
@@ -70,8 +65,8 @@ public class HttpResponseTests {
         httpCookie.loginCookie(false, "/");
 
         String redirectUrl = "/index.html";
-        HttpResponse httpResponse = HttpResponse.sendRedirect(httpRequest, redirectUrl,false);
-        Map<String,String> responseHeaderFields = httpResponse.getHeaderFields();
+        HttpResponse httpResponse = HttpResponse.sendRedirect(httpRequest, redirectUrl, false);
+        Map<String, String> responseHeaderFields = httpResponse.getHeaderFields();
 
         assertThat(responseHeaderFields.get("Location")).isEqualTo(redirectUrl);
         assertThat(responseHeaderFields.get("Set-Cookie")).isEqualTo("logined=false; Path=/");
@@ -84,8 +79,8 @@ public class HttpResponseTests {
         httpCookie.loginCookie(true, "/");
 
         String redirectUrl = "/user/list";
-        HttpResponse httpResponse = HttpResponse.sendRedirect(httpRequest, redirectUrl,true);
-        Map<String,String> responseHeaderFields = httpResponse.getHeaderFields();
+        HttpResponse httpResponse = HttpResponse.sendRedirect(httpRequest, redirectUrl, true);
+        Map<String, String> responseHeaderFields = httpResponse.getHeaderFields();
 
         assertThat(responseHeaderFields.get("Location")).isEqualTo(redirectUrl);
         assertThat(responseHeaderFields.get("Set-Cookie")).isEqualTo("logined=true; Path=/");
@@ -94,10 +89,11 @@ public class HttpResponseTests {
 
     @Test
     void badRequest() {
-        HttpResponse httpResponse = HttpResponse.badRequest(httpRequest);
+        HttpResponse httpResponse = HttpResponse.badRequest(TEST_MESSAGE);
         Map<String, String> responseHeaderFields = httpResponse.getHeaderFields();
 
         assertThat(responseHeaderFields.get("Connection")).isEqualTo("close");
-        assertThat(responseHeaderFields.get("message")).isEqualTo(BAD_REQUEST_ERROR_MESSAGE);
+        assertThat(httpResponse.getHttpStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(responseHeaderFields.get("message")).isEqualTo(TEST_MESSAGE);
     }
 }

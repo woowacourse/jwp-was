@@ -1,5 +1,6 @@
 package webserver.controller.request.header;
 
+import exception.HttpMethodNotFoundException;
 import webserver.controller.request.MimeType;
 
 public class HttpRequestLine {
@@ -7,7 +8,7 @@ public class HttpRequestLine {
     private final String url;
     private final String version;
 
-    public HttpRequestLine(String[] requestLine) {
+    public HttpRequestLine(String[] requestLine) throws HttpMethodNotFoundException {
         this.httpMethod = HttpMethod.match(requestLine[0]);
         this.url = requestLine[1];
         this.version = requestLine[2];

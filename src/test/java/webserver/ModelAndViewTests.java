@@ -20,6 +20,7 @@ public class ModelAndViewTests {
             return name;
         }
     }
+
     @BeforeEach
     void setUp() {
         modelAndView = new ModelAndView();

@@ -8,7 +8,6 @@ import model.User;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.controller.request.HttpRequest;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -29,7 +28,7 @@ public class HandlebarsTest {
         Map<String, Object> models = new HashMap<>();
         User user = new User("javajigi", "password", "자바지기", "javajigi@gmail.com");
         User user2 = new User("kangmin", "password", "김강민", "kangmin@gmail.com");
-        models.put("users", Arrays.asList(user,user2));
+        models.put("users", Arrays.asList(user, user2));
         String profilePage = template.apply(user);
         log.debug("ProfilePage : {}", profilePage);
     }

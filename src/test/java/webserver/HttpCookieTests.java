@@ -22,7 +22,7 @@ public class HttpCookieTests {
     void login_cookie() {
         String path = "/";
         httpCookie.loginCookie(true, path);
-        Map<String, String> frontField =  httpCookie.getFrontField();
+        Map<String, String> frontField = httpCookie.getFrontField();
         Map<String, String> pairOption = httpCookie.getPairOption();
         assertThat(pairOption.get("Path")).isEqualTo(path);
         assertThat(frontField.get("logined")).isEqualTo(TRUE);
@@ -32,7 +32,7 @@ public class HttpCookieTests {
     void not_login_cookie() {
         String path = "/";
         httpCookie.loginCookie(false, path);
-        Map<String, String> frontField =  httpCookie.getFrontField();
+        Map<String, String> frontField = httpCookie.getFrontField();
         Map<String, String> pairOption = httpCookie.getPairOption();
         assertThat(pairOption.get("Path")).isEqualTo(path);
         assertThat(frontField.get("logined")).isEqualTo(FALSE);

@@ -17,7 +17,7 @@ public abstract class AbstractController implements Controller {
     }
 
     @Override
-    public HttpResponse service(HttpRequest httpRequest) throws IOException{
+    public HttpResponse service(HttpRequest httpRequest) throws IOException {
         return controllerMethods.get(httpRequest.getHttpMethod()).service(httpRequest);
     }
 
@@ -27,5 +27,6 @@ public abstract class AbstractController implements Controller {
 
     protected HttpResponse doPost(HttpRequest httpRequest) {
         throw new UnsupportedMethodException();
-    };
+    }
+
 }

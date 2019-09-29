@@ -26,7 +26,7 @@ public class Renderer {
         Map<String, String> responseHeaderFields = httpResponse.getHeaderFields();
         renderResponseLine(httpResponse, dataOutputStream, httpStatus);
         renderResponseFields(dataOutputStream, responseHeaderFields);
-        if(httpResponse.hasBody()) {
+        if (httpResponse.hasBody()) {
             renderResponseBody(httpResponse, dataOutputStream);
         }
         dataOutputStream.flush();

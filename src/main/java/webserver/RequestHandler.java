@@ -21,17 +21,16 @@ public class RequestHandler implements Runnable {
     public void run() {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
             connection.getPort());
-
         try (InputStream inputStream = connection.getInputStream(); OutputStream outputStream = connection.getOutputStream()) {
             HttpRequest httpRequest = new HttpRequest(inputStream);
 
             Router router = Router.getInstance();
             HttpResponse httpResponse = router.serve(httpRequest);
-            //TemplateEngine.covert(modelAndView);
+
             Renderer renderer = Renderer.getInstance();
             renderer.render(outputStream, httpResponse);
         } catch (Exception e) {
-            e.printStackTrace();
+            HttpResponse.badRequest(e.getMessage());
         }
     }
 }

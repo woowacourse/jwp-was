@@ -1,5 +1,6 @@
 package webserver;
 
+import exception.UnregisteredURLException;
 import webserver.controller.AbstractController;
 import webserver.controller.IndexController;
 import webserver.controller.LoginController;
@@ -19,7 +20,8 @@ public class Router {
     private static final UserListController USER_LIST_CONTROLLER = new UserListController();
     private static final LoginController LOGIN_CONTROLLER = new LoginController();
 
-    private Router(){ }
+    private Router() {
+    }
 
     public static Router getInstance() {
         return LazyHolder.INSTANCE;
@@ -42,7 +44,7 @@ public class Router {
         String path = httpRequest.getPath();
         String extension = httpRequest.getMimeType().getExtension();
 
-        if(extension.equals(".html") || extension.equals("")) {
+        if (extension.equals(".html") || extension.equals("")) {
             return route(httpRequest);
         }
 
@@ -54,6 +56,6 @@ public class Router {
         if (controllers.containsKey(path)) {
             return controllers.get(path).service(httpRequest);
         }
-        return HttpResponse.badRequest(httpRequest);
+        throw new UnregisteredURLException();
     }
 }

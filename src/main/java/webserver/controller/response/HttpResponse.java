@@ -14,7 +14,6 @@ import java.util.Map;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
-    public static final String BAD_REQUEST_ERROR_MESSAGE = "올바른 요청이 아닙니다.";
     private static final String DEFAULT_COOKIE_PATH = "/";
     public static final String STATIC_FILE_PATH = "static";
     private HttpStatus httpStatus;
@@ -55,12 +54,11 @@ public class HttpResponse {
             .build();
     }
 
-    public static HttpResponse badRequest(HttpRequest httpRequest) {
+    public static HttpResponse badRequest(String message) {
         return HttpResponse.builder()
-            .version(httpRequest.getVersion())
             .httpStatus(HttpStatus.BAD_REQUEST)
             .connection("close")
-            .message(BAD_REQUEST_ERROR_MESSAGE)
+            .message(message)
             .build();
     }
 
@@ -100,7 +98,7 @@ public class HttpResponse {
         private String version;
         private HttpStatus httpStatus;
         private Map<String, String> headerFields = new HashMap<>();
-        private byte[] body = "".getBytes();
+        private byte[] body = "" .getBytes();
 
         private ResponseBuilder httpStatus(HttpStatus httpStatus) {
             this.httpStatus = httpStatus;

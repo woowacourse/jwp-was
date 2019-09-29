@@ -1,10 +1,9 @@
 package webserver.session;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import webserver.controller.UUIDGenerator;
 import webserver.controller.session.HttpSession;
+import webserver.controller.session.UUIDGenerator;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -40,6 +39,7 @@ public class HttpSessionTests {
             return Objects.hash(name);
         }
     }
+
     @BeforeEach
     void setUp() {
         uuid = UUIDGenerator.generateUUID();

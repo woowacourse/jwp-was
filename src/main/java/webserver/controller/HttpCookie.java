@@ -34,7 +34,7 @@ public class HttpCookie {
 
     public String joinSetCookie() {
         StringJoiner stringJoiner = new StringJoiner("; ");
-        frontField.keySet().forEach(key ->stringJoiner.add(key + "=" + frontField.get(key)));
+        frontField.keySet().forEach(key -> stringJoiner.add(key + "=" + frontField.get(key)));
         pairOption.keySet().forEach(key -> stringJoiner.add(key + "=" + pairOption.get(key)));
         singleOption.forEach(stringJoiner::add);
         return stringJoiner.toString();
