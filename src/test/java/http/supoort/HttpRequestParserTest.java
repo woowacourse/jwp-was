@@ -67,8 +67,8 @@ class HttpRequestParserTest {
                 "Content-Length: 46\r\n" +
                 "Content-Type: application/x-www-form-urlencoded\r\n" +
                 "Accept: */*\r\n" +
-                " \r\n" +
-                "userId=javajigi&password=password&name=JaeSung\r\n").getBytes());
+                "\r\n" +
+                "userId=javajigi&password=password&name=JaeSung").getBytes());
         HttpRequest request = HttpRequestParser.parse(in);
 
         assertThat(request.getRequestLine().getHttpMethod()).isEqualTo(HttpMethod.POST);

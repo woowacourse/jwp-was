@@ -44,8 +44,8 @@ class ControllerHandlerTest {
                 "Content-Length: 46\r\n" +
                 "Content-Type: application/x-www-form-urlencoded\r\n" +
                 "Accept: */*\r\n" +
-                " \r\n" +
-                "userId=javajigi&password=password&email=a@b.c\r\n";
+                "\r\n" +
+                "userId=javajigi&password=password&email=a@b.c";
         HttpRequest httpRequest = HttpRequestParser.parse(new ByteArrayInputStream(request.getBytes()));
 
         assertThat(handlers.doService(httpRequest).getHeader(LOCATION)).isEqualTo(ROOT_URI + "/index.html");
