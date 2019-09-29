@@ -7,6 +7,7 @@ import com.github.jknack.handlebars.io.TemplateLoader;
 import utils.FileIoUtils;
 import webserver.MimeType;
 import webserver.ResponseProcessor;
+import webserver.View;
 import webserver.ViewProcessor;
 import webserver.http.HttpResponse;
 
@@ -22,40 +23,33 @@ public class HtmlViewProcessor implements ViewProcessor {
     private static final String HTML_ROUTE = "/templates";
 
     @Override
-    public boolean isSupported(String viewName) {
-        return viewName.endsWith(HTML_SUFFIX);
+    public boolean isSupported(View view) {
+        return view.nameEndedWith(HTML_SUFFIX);
     }
 
     @Override
-    public void process(DataOutputStream dos, String viewName, HttpResponse httpResponse) {
+    public void process(DataOutputStream dos, View view, HttpResponse httpResponse) {
         ResponseProcessor responseProcessor = ResponseProcessor.getInstance();
 
-        byte[] bytes = initViewData(httpResponse, viewName);
-        setResponseBody(httpResponse, viewName, bytes);
+        byte[] bytes = initViewData(view);
+        setResponseBody(httpResponse, view, bytes);
         responseProcessor.forward(dos, bytes, httpResponse);
     }
 
-    private byte[] initViewData(HttpResponse response, String viewName) {
-        if (response.hasBody()) {
-            String view = viewName.split("\\.")[0];
-            String key = response.getBodyKey();
-            Object data = response.getBodyValue();
-            return getTemplateData(view, key, data);
+    private byte[] initViewData(View view) {
+        if (view.isTemplate()) {
+            return getTemplateView(view);
         }
 
-        try {
-            return FileIoUtils.loadFileFromClasspath("." + HTML_ROUTE + viewName);
-        } catch (IOException | URISyntaxException e) {
-            throw new IllegalArgumentException("파일을 찾을 수 없습니다.");
-        }
+        return getNonTemplateView(view);
     }
 
-    private byte[] getTemplateData(String view, String key, Object value) {
+    private byte[] getTemplateView(View view) {
         Handlebars handlebars = initHandlebar();
-        Template template = initTemplate(view, handlebars);
+        Template template = initTemplate(view.getName(), handlebars);
 
         Map<String, Object> templateData = new HashMap<>();
-        templateData.put(key, value);
+        templateData.put(view.getModelKey(), view.getModelValue());
         try {
             return template.apply(templateData).getBytes();
         } catch (IOException e) {
@@ -78,8 +72,17 @@ public class HtmlViewProcessor implements ViewProcessor {
         }
     }
 
-    private void setResponseBody(HttpResponse httpResponse, String viewName, byte[] bytes) {
-        httpResponse.setContentType(MimeType.values(viewName));
+    private byte[] getNonTemplateView(View view) {
+        try {
+            return FileIoUtils.loadFileFromClasspath("." + HTML_ROUTE + view.getName());
+        } catch (IOException | URISyntaxException e) {
+
+            throw new IllegalArgumentException("파일을 찾을 수 없습니다.");
+        }
+    }
+
+    private void setResponseBody(HttpResponse httpResponse, View view, byte[] bytes) {
+        httpResponse.setContentType(MimeType.values(view.getName()));
         httpResponse.setContentLength(bytes.length);
     }
 }

@@ -26,9 +26,9 @@ public class ViewProcessorFactory {
         viewProcessors.add(new ResourceViewProcessor());
     }
 
-    public ViewProcessor getViewProcessor(String name) {
+    public ViewProcessor getViewProcessor(View view) {
         for (ViewProcessor viewProcessor : viewProcessors) {
-            if (viewProcessor.isSupported(name)) {
+            if (viewProcessor.isSupported(view)) {
                 return viewProcessor;
             }
         }

@@ -1,6 +1,7 @@
 package webserver.controller;
 
 import org.junit.jupiter.api.Test;
+import webserver.View;
 import webserver.WebTestForm;
 import webserver.exception.NotSupportedHttpMethodException;
 import webserver.http.HttpRequest;
@@ -28,7 +29,7 @@ class UserCreateControllerTest extends WebTestForm {
         HttpRequest httpRequest = getHttpPostRequestWithBody("/user/create");
         HttpResponse httpResponse = new HttpResponse();
 
-        String view = userCreateController.service(httpRequest, httpResponse);
-        assertThat(view).isEqualTo("/redirect:/index.html");
+        View view = userCreateController.service(httpRequest, httpResponse);
+        assertThat(view.getName()).isEqualTo("/redirect:/index.html");
     }
 }

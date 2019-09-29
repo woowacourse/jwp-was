@@ -3,6 +3,7 @@ package webserver.viewProcessor;
 import utils.FileIoUtils;
 import webserver.MimeType;
 import webserver.ResponseProcessor;
+import webserver.View;
 import webserver.ViewProcessor;
 import webserver.http.HttpResponse;
 
@@ -15,14 +16,14 @@ public class ResourceViewProcessor implements ViewProcessor {
     private static final String STATIC_FILE_ROUTE = "./static";
 
     @Override
-    public boolean isSupported(String viewName) {
+    public boolean isSupported(View view) {
         return true;
     }
 
     @Override
-    public void process(DataOutputStream dos, String viewName, HttpResponse httpResponse) {
+    public void process(DataOutputStream dos, View view, HttpResponse httpResponse) {
         ResponseProcessor responseProcessor = ResponseProcessor.getInstance();
-        String filePath = STATIC_FILE_ROUTE + viewName;
+        String filePath = STATIC_FILE_ROUTE + view.getName();
         byte[] bytes = null;
         try {
             bytes = FileIoUtils.loadFileFromClasspath(filePath);

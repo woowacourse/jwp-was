@@ -1,6 +1,7 @@
 package webserver.controller;
 
 import org.junit.jupiter.api.Test;
+import webserver.View;
 import webserver.WebTestForm;
 import webserver.exception.NotSupportedHttpMethodException;
 import webserver.http.HttpRequest;
@@ -20,8 +21,8 @@ class WelcomePageControllerTest extends WebTestForm {
         HttpRequest httpRequest = getHttpGetRequest("/");
         HttpResponse httpResponse = new HttpResponse();
 
-        String view = welcomePageController.service(httpRequest, httpResponse);
-        assertThat(view).isEqualTo("/index.html");
+        View view = welcomePageController.service(httpRequest, httpResponse);
+        assertThat(view.getName()).isEqualTo("/index.html");
     }
 
     @Test

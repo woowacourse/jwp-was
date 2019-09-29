@@ -2,6 +2,7 @@ package webserver.controller;
 
 import db.DataBase;
 import model.User;
+import webserver.View;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
 
@@ -17,16 +18,17 @@ public class LoginController extends AbstractController {
     }
 
     @Override
-    protected String doPost(HttpRequest request, HttpResponse response) {
+    protected View doPost(HttpRequest request, HttpResponse response) {
         String userId = request.getParam("userId");
         String password = request.getParam("password");
         User user = DataBase.findUserById(userId);
         if (validateUser(password, user)) {
             setSession(request, response, LOGINED, "true");
-            return REDIRECT_VIEW + "/index.html";
+            return new View(REDIRECT_VIEW + "/index.html");
+
         }
         setSession(request, response, LOGINED, "false");
-        return REDIRECT_VIEW + "/user/login_failed.html";
+        return new View(REDIRECT_VIEW + "/user/login_failed.html");
     }
 
     private boolean validateUser(String password, User user) {

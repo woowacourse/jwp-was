@@ -3,6 +3,7 @@ package webserver.controller;
 import db.DataBase;
 import model.User;
 import org.junit.jupiter.api.Test;
+import webserver.View;
 import webserver.WebTestForm;
 import webserver.exception.NotSupportedHttpMethodException;
 import webserver.http.HttpRequest;
@@ -38,8 +39,8 @@ class LoginControllerTest extends WebTestForm {
                 .build();
 
         DataBase.addUser(user);
-        String view = loginController.service(httpRequest, httpResponse);
-        assertThat(view).isEqualTo("/redirect:/user/login_failed.html");
+        View view = loginController.service(httpRequest, httpResponse);
+        assertThat(view.getName()).isEqualTo("/redirect:/user/login_failed.html");
     }
 
     @Test
@@ -54,7 +55,7 @@ class LoginControllerTest extends WebTestForm {
                 .build();
 
         DataBase.addUser(user);
-        String view = loginController.service(httpRequest, httpResponse);
-        assertThat(view).isEqualTo("/redirect:/index.html");
+        View view = loginController.service(httpRequest, httpResponse);
+        assertThat(view.getName()).isEqualTo("/redirect:/index.html");
     }
 }

@@ -5,7 +5,7 @@ import webserver.http.HttpResponse;
 import java.io.DataOutputStream;
 
 public interface ViewProcessor {
-    boolean isSupported(String viewName);
+    boolean isSupported(View view);
 
-    void process(DataOutputStream dos, String viewName, HttpResponse httpResponse);
+    void process(DataOutputStream dos, View view, HttpResponse httpResponse);
 }

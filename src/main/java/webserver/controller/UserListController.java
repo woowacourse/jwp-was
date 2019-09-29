@@ -2,6 +2,7 @@ package webserver.controller;
 
 import db.DataBase;
 import model.User;
+import webserver.View;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
 import webserver.http.HttpSession;
@@ -20,14 +21,13 @@ public class UserListController extends AbstractController {
     }
 
     @Override
-    protected String doGet(HttpRequest request, HttpResponse response) {
+    protected View doGet(HttpRequest request, HttpResponse response) {
         if (isNotLoggedIn(request, response)) {
-            return REDIRECT_VIEW + "/user/login.html";
+            return new View(REDIRECT_VIEW + "/user/login.html");
         }
         List<User> users = new ArrayList<>(DataBase.findAll());
-        response.addModel("user", users);
 
-        return "/user/list.html";
+        return new View("/user/list.html", "user", users);
     }
 
     private boolean isNotLoggedIn(HttpRequest httpRequest, HttpResponse httpResponse) {

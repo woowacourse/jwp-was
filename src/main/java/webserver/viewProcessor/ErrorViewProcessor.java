@@ -1,6 +1,7 @@
 package webserver.viewProcessor;
 
 import webserver.ResponseProcessor;
+import webserver.View;
 import webserver.ViewProcessor;
 import webserver.http.HttpResponse;
 
@@ -13,18 +14,19 @@ public class ErrorViewProcessor implements ViewProcessor {
     private static final String ERROR_CODE_SEPARATOR = ":";
 
     @Override
-    public boolean isSupported(String viewName) {
-        return viewName.startsWith(ERROR_VIEW);
+    public boolean isSupported(View view) {
+        return view.nameStartedWith(ERROR_VIEW);
     }
 
     @Override
-    public void process(DataOutputStream dos, String viewName, HttpResponse httpResponse) {
+    public void process(DataOutputStream dos, View view, HttpResponse httpResponse) {
         ResponseProcessor responseProcessor = ResponseProcessor.getInstance();
-        String errorCode = getErrorCode(viewName);
+        String errorCode = getErrorCode(view);
         responseProcessor.sendError(dos, errorCode, httpResponse);
     }
 
-    private String getErrorCode(String viewName) {
+    private String getErrorCode(View view) {
+        String viewName = view.getName();
         return viewName.split(ERROR_CODE_SEPARATOR)[1];
     }
 }

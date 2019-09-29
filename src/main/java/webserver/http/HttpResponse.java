@@ -56,22 +56,4 @@ public class HttpResponse {
     public Map<String, Cookie> getCookies() {
         return cookies.getCookies();
     }
-
-    public void addModel(String key, Object data) {
-        body = new ResponseBody(key, data);
-    }
-
-    public String getBodyKey() {
-        if (body == null) {
-            return "";
-        }
-        return body.getKey();
-    }
-
-    public Object getBodyValue() {
-        if (body == null) {
-            return "";
-        }
-        return body.getValue();
-    }
 }

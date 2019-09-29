@@ -1,5 +1,6 @@
 package webserver.controller;
 
+import webserver.View;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
 
@@ -12,7 +13,7 @@ public class WelcomePageController extends AbstractController {
     }
 
     @Override
-    protected String doGet(HttpRequest httpRequest, HttpResponse response) {
-        return "/index.html";
+    protected View doGet(HttpRequest httpRequest, HttpResponse response) {
+        return new View("/index.html");
     }
 }

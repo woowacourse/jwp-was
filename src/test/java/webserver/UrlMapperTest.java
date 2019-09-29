@@ -15,7 +15,7 @@ class UrlMapperTest extends WebTestForm {
         HttpRequest httpRequest = getHttpGetRequest("/css/bootstrap.css");
         HttpResponse httpResponse = new HttpResponse();
         UrlMapper urlMapper = new UrlMapper();
-        String viewPath = urlMapper.service(httpRequest, httpResponse);
-        assertThat(viewPath).isEqualTo("/css/bootstrap.css");
+        View view = urlMapper.service(httpRequest, httpResponse);
+        assertThat(view.getName()).isEqualTo("/css/bootstrap.css");
     }
 }
