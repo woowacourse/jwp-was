@@ -4,25 +4,14 @@ package http.response;
 public class Response {
 
     private ResponseStatus responseStatus;
-    private ResponseHeaders responseHeaders;
-    private ResponseBody responseBody;
+    private ResponseHeaders responseHeaders = new ResponseHeaders();
+    private ResponseBody responseBody = new ResponseBody();
 
-
-    public void setResponseStatus(ResponseStatus responseStatus) {
-        this.responseStatus = responseStatus;
-    }
-
-    public void setResponseHeaders(ResponseHeaders responseHeaders) {
-        this.responseHeaders = responseHeaders;
+    public Response() {
     }
 
     public void addResponseHeaders(String key, String value) {
         this.responseHeaders.addResponseHeaders(key, value);
-    }
-
-    public void setResponseBody(byte[] body) {
-        this.responseBody = new ResponseBody(body);
-        this.responseHeaders.addResponseHeaders("Content-Length: ", String.valueOf(body.length));
     }
 
     public byte[] createBytes() {
@@ -39,12 +28,29 @@ public class Response {
         if (responseBody.hasBody()) {
             sb.append(new String(responseBody.getBody()));
         }
-        
+
         return sb.toString().getBytes();
     }
 
-    public void setEmptyResponseBody() {
-        this.responseBody = new ResponseBody(null);
+    public Response ok() {
+        this.responseStatus = ResponseStatus.OK;
+        return this;
+    }
+
+    public Response found() {
+        this.responseStatus = ResponseStatus.FOUND;
+        return this;
+    }
+
+    public Response putResponseHeaders(String key, String value) {
+        this.responseHeaders.addResponseHeaders(key, value);
+        return this;
+    }
+
+    public Response body(byte[] body) {
+        this.responseBody = new ResponseBody(body);
+        this.addResponseHeaders("Content-Length: ", String.valueOf(body.length));
+        return this;
     }
 
     public ResponseStatus getResponseStatus() {

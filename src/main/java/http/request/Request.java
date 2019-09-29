@@ -1,17 +1,23 @@
 package http.request;
 
-import controller.ControllerMapper;
+import controller.controllermapper.ControllerMapper;
+import http.session.Cookie;
+import http.session.Session;
+import http.session.SessionRepository;
+import http.session.sessionkeygenerator.SessionKeyGenerator;
 
 public class Request {
     private RequestMethod requestMethod;
     private RequestUrl url;
     private QueryParameters queryParameters;
+    private Cookie cookie;
     private RequestInformation requestInformation;
 
     public Request(RequestMethod requestMethod, RequestUrl url, RequestInformation requestInformation) {
         this.requestMethod = requestMethod;
         this.url = url;
         this.queryParameters = requestInformation.createQueryParametes();
+        this.cookie = requestInformation.createCookie();
         this.requestInformation = requestInformation;
     }
 
@@ -23,11 +29,17 @@ public class Request {
         return url;
     }
 
-    public RequestInformation getRequestInformation() {
-        return requestInformation;
-    }
 
     public QueryParameters getQueryParameters() {
         return queryParameters;
+    }
+
+    public RequestMethod getRequestMethod() {
+        return requestMethod;
+    }
+
+    public Session getSession(SessionKeyGenerator sessionKeyGenerator) {
+        String sessionId = this.cookie.getSessionId();
+        return SessionRepository.getInstance().getSession(sessionId, sessionKeyGenerator);
     }
 }

@@ -1,5 +1,6 @@
-package controller;
+package controller.controllermapper;
 
+import controller.*;
 import exception.PathNotFoundException;
 import http.request.Request;
 
@@ -8,7 +9,7 @@ import java.util.List;
 
 public class ControllerFactory {
 
-    private List<Controller> controllers = Arrays.asList(new UserController(), new FileController());
+    private List<Controller> controllers = Arrays.asList(new CreateUserController(), new FileController(), new LoginController(), new GetUserListController());
 
     public Controller mappingController(Request request) {
         try {

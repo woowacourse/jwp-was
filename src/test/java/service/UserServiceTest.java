@@ -43,5 +43,8 @@ public class UserServiceTest {
 
         assertThat(DataBase.findUserById("pododang")).isEqualTo(new User("pododang", "password", "이인권", "podo@gmail.com"));
         assertThat(DataBase.findUserById("jm")).isEqualTo(new User("jm", "password!", "김정민", "jm@gmail.com"));
+
+        DataBase.deleteUser("pododang");
+        DataBase.deleteUser("jm");
     }
 }

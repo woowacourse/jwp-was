@@ -1,5 +1,7 @@
 package http.request;
 
+import http.session.Cookie;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,5 +44,29 @@ public class RequestInformation {
                     });
         }
         return new QueryParameters(params);
+    }
+
+    public String getParameter(String key) {
+        String value = requestInformation.get(key);
+        return value;
+    }
+
+    public Cookie createCookie() {
+        if (requestInformation.get("Cookie:") == null) {
+            return new Cookie();
+        }
+        String cookie = requestInformation.get("Cookie:");
+        Map<String, String> cookieInformation = new HashMap<>();
+        parseCookie(cookie, cookieInformation);
+        return new Cookie(cookieInformation);
+    }
+
+    private void parseCookie(String cookie, Map<String, String> cookieInformation) {
+        String[] tokens = cookie.split("; ");
+        Arrays.stream(tokens)
+                .forEach(token -> {
+                    String[] keyValues = token.split("=");
+                    cookieInformation.put(keyValues[0], keyValues[1]);
+                });
     }
 }

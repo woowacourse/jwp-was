@@ -1,10 +1,9 @@
 package controller;
 
+import controller.controllermapper.ControllerMapper;
 import http.request.Request;
 import http.request.RequestMethod;
 import http.response.Response;
-import http.response.ResponseHeaders;
-import http.response.ResponseStatus;
 import utils.FileIoUtils;
 
 import java.io.IOException;
@@ -21,19 +20,6 @@ public class FileController implements Controller {
         return (isAllowedMethod(controllerMapper) && isAllowedPath(controllerMapper));
     }
 
-    @Override
-    public void processResponse(Request request, Response response) throws IOException, URISyntaxException {
-        getFileResponse(request, response);
-    }
-
-    private void getFileResponse(Request request, Response response) throws IOException, URISyntaxException {
-        response.setResponseStatus(ResponseStatus.OK);
-        response.setResponseHeaders(new ResponseHeaders());
-        response.addResponseHeaders("Content-Type: ", request.getUrl().getRequestContentType().getContentType());
-        byte[] body = FileIoUtils.loadFileFromClasspath(request.getUrl().getDestinationFolderUrlPath());
-        response.setResponseBody(body);
-    }
-
     private boolean isAllowedPath(ControllerMapper controllerMapper) {
         return allowedUrlPaths.stream()
                 .anyMatch(path -> controllerMapper.getOriginalUrlPath().contains(path));
@@ -42,5 +28,14 @@ public class FileController implements Controller {
     private boolean isAllowedMethod(ControllerMapper controllerMapper) {
         return allowedMethods.stream()
                 .anyMatch(method -> controllerMapper.getRequestMethod() == method);
+    }
+
+    @Override
+    public void processResponse(Request request, Response response) throws IOException, URISyntaxException {
+        byte[] body = FileIoUtils.loadFileFromClasspath(request.getUrl().getDestinationFolderUrlPath());
+
+        response.ok()
+                .putResponseHeaders("Content-Type: ", request.getUrl().getRequestContentType().getContentType())
+                .body(body);
     }
 }

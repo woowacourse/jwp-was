@@ -1,7 +1,7 @@
 package webserver;
 
 import controller.Controller;
-import controller.ControllerFactory;
+import controller.controllermapper.ControllerFactory;
 import http.request.Request;
 import http.request.RequestInformation;
 import http.request.RequestMethod;
@@ -27,7 +27,10 @@ public class RequestHandler implements Runnable {
         log.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
 
-        try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
+        try (InputStream in = connection.getInputStream();
+             OutputStream out = connection.getOutputStream();
+             DataOutputStream dos = new DataOutputStream(out)) {
+
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             RequestInformation requestInformation = HttpParser.parse(br);
 
@@ -41,9 +44,7 @@ public class RequestHandler implements Runnable {
             Controller controller = factory.mappingController(request);
             controller.processResponse(request, response);
 
-            DataOutputStream dos = new DataOutputStream(out);
             dos.write(response.createBytes());
-            dos.flush();
         } catch (Exception e) {
             log.error(e.getMessage());
         }
