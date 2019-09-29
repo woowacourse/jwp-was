@@ -1,7 +1,6 @@
 package http;
 
 import com.google.common.collect.Maps;
-import session.HttpSession;
 
 import java.util.Map;
 
@@ -23,11 +22,6 @@ public class HttpCookie {
     public HttpCookie(String key, String value) {
         this.key = key;
         this.value = value;
-    }
-
-    public HttpCookie(HttpSession httpSession) {
-        this.key = HttpSession.SESSION_ID;
-        this.value = httpSession.getId();
     }
 
     public static HttpCookie emptyInstance() {

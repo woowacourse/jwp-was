@@ -9,7 +9,7 @@ import model.AuthorizationFailException;
 import model.User;
 import service.UserService;
 import session.HttpSession;
-import session.HttpSessionManager;
+import session.InMemoryHttpSessionManager;
 import utils.QueryStringUtils;
 
 import java.util.Map;
@@ -27,7 +27,11 @@ public class UserLoginController extends AbstractController {
         try {
             User foundUser = userService.login(body.get("userId"), body.get("password"));
 
-            HttpSession httpSession = request.getSession(HttpSessionManager.getInstance());
+            HttpSession httpSession = request.getSession(InMemoryHttpSessionManager.getInstance());
+            if (httpSession == null) {
+                httpSession = InMemoryHttpSessionManager.getInstance().createSession();
+            }
+
             setSessionToCookie(response, httpSession);
 
             httpSession.setAttribute(LOGIN_USER, foundUser);
@@ -38,7 +42,7 @@ public class UserLoginController extends AbstractController {
     }
 
     private void setSessionToCookie(HttpResponse response, HttpSession httpSession) {
-        HttpCookie httpCookie = new HttpCookie(httpSession);
+        HttpCookie httpCookie = new HttpCookie(HttpSession.SESSION_ID, httpSession.getId());
         httpCookie.setPath(EVERYWHERE);
         response.addCookie(httpCookie);
     }

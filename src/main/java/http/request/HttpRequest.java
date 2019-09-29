@@ -73,6 +73,6 @@ public class HttpRequest implements AutoCloseable {
 
     public HttpSession getSession(HttpSessionManager httpSessionManager) {
         String sessionId = this.getCookieValue(SESSION_ID);
-        return httpSessionManager.findOrCreateSession(sessionId);
+        return httpSessionManager.findSession(sessionId);
     }
 }
