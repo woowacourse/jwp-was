@@ -5,6 +5,7 @@ import domain.UserService;
 import http.request.HttpRequest;
 import http.request.support.HttpRequestFactory;
 import http.response.HttpResponse;
+import http.session.support.RandomKeyGenerator;
 import http.session.support.SessionManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,8 +25,9 @@ import static testhelper.Common.getBufferedReaderOfTextFile;
 public class UserLoginControllerTest {
     private static final Logger logger = LoggerFactory.getLogger(UserLoginControllerTest.class);
 
+    private static SessionManager sessionManager = new SessionManager(new RandomKeyGenerator());
+
     private UserService userService = new UserService();
-    private static SessionManager sessionManager = new SessionManager();
 
     @BeforeEach
     public void setUp() {

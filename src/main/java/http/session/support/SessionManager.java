@@ -1,33 +1,33 @@
 package http.session.support;
 
 import http.request.HttpCookie;
-import http.request.HttpRequest;
 import http.session.HttpSession;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SessionManager {
     public static final String SESSION_NAME = "SESSIONID";
 
-    private final Map<String, HttpSession> httpSessions = new HashMap<>();
-    
+    private final Map<String, HttpSession> httpSessions = new ConcurrentHashMap<>();
+    private SessionKeyGenerator generator;
+
+    public SessionManager(final SessionKeyGenerator generator) {
+        this.generator = generator;
+    }
+
     public HttpSession getSession(final HttpCookie cookie) {
         String sessionId = cookie.getValue(SESSION_NAME);
 
-        if (sessionId == null) {
-            return makeNewSession();
+        if (sessionId == null || !httpSessions.containsKey(sessionId)) {
+            return makeNewSession(sessionId);
         }
-
-        if (httpSessions.containsKey(sessionId)) {
-            return httpSessions.get(sessionId);
-        }
-        return makeNewSession();
+        return httpSessions.get(sessionId);
     }
 
-    private HttpSession makeNewSession() {
-        UUID uuid =  UUID.randomUUID();
+    private HttpSession makeNewSession(final String sessionId) {
+        UUID uuid = generator.generate(sessionId);
         HttpSession httpSession = new HttpSession(uuid);
         httpSessions.put(uuid.toString(), httpSession);
         return httpSession;

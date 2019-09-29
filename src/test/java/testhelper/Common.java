@@ -2,6 +2,7 @@ package testhelper;
 
 import http.request.HttpRequest;
 import http.request.support.HttpRequestFactory;
+import http.session.support.RandomKeyGenerator;
 import http.session.support.SessionManager;
 import servlet.controller.*;
 
@@ -45,6 +46,6 @@ public class Common {
     }
 
     private static SessionManager getSessionManager() {
-        return new SessionManager();
+        return new SessionManager(new RandomKeyGenerator());
     }
 }

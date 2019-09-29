@@ -1,7 +1,6 @@
 package servlet.controller;
 
 import http.request.HttpRequest;
-import http.request.support.HttpRequestFactory;
 import http.response.HttpResponse;
 import http.session.support.SessionManager;
 import org.junit.jupiter.api.Test;
@@ -15,17 +14,14 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static testhelper.Common.getBufferedReaderOfTextFile;
 
 public class UserListControllerTest {
     private static final Logger logger = LoggerFactory.getLogger(UserListControllerTest.class);
-    private static SessionManager sessionManager = new SessionManager();
 
     @Test
     public void doGetWhenLogin() throws IOException, URISyntaxException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        HttpRequest httpRequest = HttpRequestFactory.create(
-                getBufferedReaderOfTextFile("HTTP_GET_USER_LIST_LOGIN.txt"), sessionManager);
+        HttpRequest httpRequest = Common.getHttpRequest("HTTP_GET_USER_LIST_LOGIN.txt");
         HttpResponse httpResponse = new HttpResponse(byteArrayOutputStream);
         httpRequest.addSessionAttribute("logined", "true");
 
@@ -40,8 +36,7 @@ public class UserListControllerTest {
     @Test
     public void doGetWhenLogout() throws IOException, URISyntaxException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        HttpRequest httpRequest = HttpRequestFactory.create(
-                getBufferedReaderOfTextFile("HTTP_GET_USER_LIST_LOGOUT.txt"), sessionManager);
+        HttpRequest httpRequest = Common.getHttpRequest("HTTP_GET_USER_LIST_LOGOUT.txt");
         HttpResponse httpResponse = new HttpResponse(byteArrayOutputStream);
 
         Controller controller = new UserListController();

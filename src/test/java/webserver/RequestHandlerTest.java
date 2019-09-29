@@ -1,5 +1,6 @@
 package webserver;
 
+import http.session.support.RandomKeyGenerator;
 import http.session.support.SessionManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,7 @@ import static testhelper.Common.getControllerFinder;
 public class RequestHandlerTest {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandlerTest.class);
 
-    private static SessionManager sessionManager = new SessionManager();
+    private static SessionManager sessionManager = new SessionManager(new RandomKeyGenerator());
     
     @Test
     @DisplayName("정적 파일 반환")

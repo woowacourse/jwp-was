@@ -1,5 +1,6 @@
 package webserver;
 
+import http.session.support.RandomKeyGenerator;
 import http.session.support.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +31,7 @@ public class WebServer {
     public static void main(String args[]) throws Exception {
         ThreadPoolExecutor executorService = (ThreadPoolExecutor) Executors.newFixedThreadPool(THREAD_POOL_COUNT);
         ControllerFinder controllerFinder = new ControllerFinder(Collections.unmodifiableMap(api));
-        SessionManager sessionManager = new SessionManager();
+        SessionManager sessionManager = new SessionManager(new RandomKeyGenerator());
 
         int port = 0;
         if (args == null || args.length == 0) {
