@@ -26,9 +26,8 @@ public class CreateUserController extends AbstractController {
 
     @Override
     protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        super.doPost(httpRequest, httpResponse);
         userService.createUser(httpRequest);
-        httpResponse.addStatus(ResponseStatus.of(302));
-        httpResponse.addHeader(HttpHeaderField.LOCATION, DEFAULT_PAGE);
+        httpResponse.addStatus(ResponseStatus.of(302))
+                .addHeader(HttpHeaderField.LOCATION, DEFAULT_PAGE);
     }
 }
