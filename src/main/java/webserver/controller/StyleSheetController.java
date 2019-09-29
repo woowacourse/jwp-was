@@ -3,6 +3,7 @@ package webserver.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
+import webserver.HttpStatus;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 
@@ -16,7 +17,7 @@ public class StyleSheetController extends AbstractController {
     @Override
     protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws FileNotFoundException {
         byte[] staticFile = getStaticFile(httpRequest);
-        httpResponse.addStatusLine(httpRequest, "200", "OK");
+        httpResponse.addStatusLine(httpRequest, HttpStatus.OK);
         httpResponse.addHeader(HEADER_FIELD_CONTENT_TYPE, CONTENT_TYPE_CSS);
         httpResponse.addBody(staticFile);
     }

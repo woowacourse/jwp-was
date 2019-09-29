@@ -2,6 +2,7 @@ package webserver.controller;
 
 import db.DataBase;
 import model.User;
+import webserver.HttpStatus;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 
@@ -20,7 +21,7 @@ public class SignUpController extends AbstractController {
                 httpRequest.getParameter("name"),
                 httpRequest.getParameter("email"));
         DataBase.addUser(user);
-        httpResponse.addStatusLine(httpRequest, "302", "Found");
+        httpResponse.addStatusLine(httpRequest, HttpStatus.FOUND);
         httpResponse.addHeader(HEADER_FIELD_LOCATION, HTTP_PROTOCOL + httpRequest.getHeaderFieldValue(HEADER_FIELD_HOST) + "/index.html");
     }
 }

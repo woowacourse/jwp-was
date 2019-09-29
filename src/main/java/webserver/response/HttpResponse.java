@@ -1,5 +1,6 @@
 package webserver.response;
 
+import webserver.HttpStatus;
 import webserver.request.HttpRequest;
 
 import java.util.Objects;
@@ -18,8 +19,8 @@ public class HttpResponse {
         return this.responseBody.addBody(body);
     }
 
-    public void addStatusLine(HttpRequest httpRequest, String statusCode, String statusText) {
-        responseStatusLine = ResponseStatusLine.of(httpRequest, statusCode, statusText);
+    public void addStatusLine(HttpRequest httpRequest, HttpStatus httpStatus) {
+        responseStatusLine = ResponseStatusLine.of(httpRequest, httpStatus);
     }
 
     public boolean addHeader(String key, String value) {

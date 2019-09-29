@@ -3,6 +3,7 @@ package webserver.controller;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import utils.FileIoUtils;
+import webserver.HttpStatus;
 import webserver.controller.exception.MethodNotAllowedException;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
@@ -36,7 +37,7 @@ public class StyleSheetControllerTest {
         controller.service(httpRequest, httpResponse);
 
         HttpResponse httpResponseToCompare = new HttpResponse();
-        httpResponseToCompare.addStatusLine(httpRequest, "200", "OK");
+        httpResponseToCompare.addStatusLine(httpRequest, HttpStatus.OK);
         httpResponseToCompare.addHeader("Content-Type", "text/css");
         httpResponseToCompare.addBody(FileIoUtils.loadFileFromClasspath("./static" + "/css/styles.css"));
 

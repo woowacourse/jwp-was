@@ -39,13 +39,13 @@ public class RequestHandler implements Runnable {
             Renderer.render(dos, httpResponse);
         } catch (IOException e) {
             logger.error(e.getMessage());
-            httpResponse.addStatusLine(httpRequest, "500", "Internal Server error");
+            httpResponse.addStatusLine(httpRequest, HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (NotFoundException e) {
             logger.debug(e.getMessage());
-            httpResponse.addStatusLine(httpRequest, "404", "Not Found");
+            httpResponse.addStatusLine(httpRequest, HttpStatus.NOT_FOUND);
         } catch (MethodNotAllowedException e) {
             logger.debug(e.getMessage());
-            httpResponse.addStatusLine(httpRequest, "405", "Method Not Allowed");
+            httpResponse.addStatusLine(httpRequest, HttpStatus.METHOD_NOT_ALLOWED);
         }
     }
 }

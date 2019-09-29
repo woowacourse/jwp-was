@@ -2,6 +2,7 @@ package webserver.response;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import webserver.HttpStatus;
 import webserver.request.HttpRequest;
 
 import java.io.ByteArrayInputStream;
@@ -20,7 +21,7 @@ public class ResponseStatusLineTest {
     @Test
     void of() throws IOException {
         HttpRequest httpRequest = HttpRequest.of(new ByteArrayInputStream(GET_REQUEST_MESSAGE.getBytes()));
-        ResponseStatusLine statusLine = ResponseStatusLine.of(httpRequest, "200", "OK");
+        ResponseStatusLine statusLine = ResponseStatusLine.of(httpRequest, HttpStatus.OK);
         assertThat(statusLine.response()).isEqualTo("HTTP/1.1 200 OK\r\n");
     }
 }

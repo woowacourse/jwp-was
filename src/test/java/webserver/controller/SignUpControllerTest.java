@@ -2,6 +2,7 @@ package webserver.controller;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import webserver.HttpStatus;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 
@@ -40,7 +41,7 @@ public class SignUpControllerTest {
         controller.service(httpRequest, httpResponse);
 
         HttpResponse httpResponseToCompare = new HttpResponse();
-        httpResponseToCompare.addStatusLine(httpRequest, "302", "Found");
+        httpResponseToCompare.addStatusLine(httpRequest, HttpStatus.FOUND);
         httpResponseToCompare.addHeader("Location", "http://localhost:8080/index.html");
 
         assertThat(httpResponse).isEqualTo(httpResponseToCompare);
@@ -55,7 +56,7 @@ public class SignUpControllerTest {
         controller.service(httpRequest, httpResponse);
 
         HttpResponse httpResponseToCompare = new HttpResponse();
-        httpResponseToCompare.addStatusLine(httpRequest, "302", "Found");
+        httpResponseToCompare.addStatusLine(httpRequest, HttpStatus.FOUND);
         httpResponseToCompare.addHeader("Location", "http://localhost:8080/index.html");
 
         assertThat(httpResponse).isEqualTo(httpResponseToCompare);
