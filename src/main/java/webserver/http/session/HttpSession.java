@@ -1,15 +1,15 @@
-package webserver.session;
+package webserver.http.session;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class Session {
+public class HttpSession {
     private final Map<String, Object> sessionValues = new HashMap<>();
 
     private final String uuid;
 
-    Session() {
+    HttpSession() {
         uuid = UUID.randomUUID().toString();
     }
 
