@@ -11,8 +11,8 @@ public class SessionStorage {
         sessions = new ConcurrentHashMap<>();
     }
 
-    public static HttpSession create() {
-        String randomId = UUID.randomUUID().toString();
+    public static HttpSession create(IdGenerationStrategy generator) {
+        String randomId = generator.generate();
         HttpSession session = new HttpSession(randomId);
         sessions.put(randomId, session);
         return session;

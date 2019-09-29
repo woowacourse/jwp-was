@@ -3,6 +3,7 @@ package webserver.http.request;
 import webserver.http.response.HttpVersion;
 import webserver.session.HttpSession;
 import webserver.session.SessionStorage;
+import webserver.session.UUIDGenerationStrategy;
 
 public class HttpRequest {
     private RequestLine requestLine;
@@ -24,7 +25,7 @@ public class HttpRequest {
         if (isSessionExists(sessionId)) {
             return SessionStorage.get(sessionId);
         }
-        return SessionStorage.create();
+        return SessionStorage.create(new UUIDGenerationStrategy());
     }
 
     private boolean isSessionExists(String sessionId) {
