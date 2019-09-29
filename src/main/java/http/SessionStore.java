@@ -13,7 +13,7 @@ public class SessionStore {
     }
 
     private static String makeSession(String sessionId) {
-        if (isNotContainSession(sessionId)) {
+        if (isNotContainSession(sessionId) || sessions.get(sessionId).isInvalidTrue()) {
             sessionId = UUID.randomUUID().toString();
             Session session = new Session(sessionId);
             sessions.put(sessionId, session);
