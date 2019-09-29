@@ -8,6 +8,7 @@ import http.session.support.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import servlet.ServletContainer;
+import servlet.HttpRequestHandler;
 import servlet.controller.ControllerFinder;
 
 import java.io.*;
@@ -32,7 +33,8 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         FileContainer fileContainer = new FileContainer();
-        ServletContainer servletContainer = new ServletContainer(controllerFinder);
+        HttpRequestHandler httpRequestHandler = new HttpRequestHandler(controllerFinder);
+        ServletContainer servletContainer = new ServletContainer(fileContainer, httpRequestHandler);
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader bufferedReader = getBufferedReader(in);
@@ -41,9 +43,7 @@ public class RequestHandler implements Runnable {
             HttpResponse httpResponse = new HttpResponse(new DataOutputStream(out));
             httpResponse.addCookie(SessionManager.SESSION_NAME, httpRequest.getSessionId());
 
-            if (!fileContainer.process(httpRequest, httpResponse)) {
-                servletContainer.process(httpRequest, httpResponse);
-            }
+            servletContainer.process(httpRequest, httpResponse);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
