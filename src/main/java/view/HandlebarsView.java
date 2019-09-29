@@ -1,4 +1,4 @@
-package controller;
+package view;
 
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
@@ -11,8 +11,10 @@ import http.response.ResponseStatus;
 import java.io.IOException;
 import java.util.Map;
 
+import static utils.StringUtils.BLANK;
+
 public class HandlebarsView implements View {
-    private static final TemplateLoader LOADER = new ClassPathTemplateLoader();
+    private static final TemplateLoader LOADER = new ClassPathTemplateLoader(BLANK, BLANK);
     private static final Handlebars HANDLEBARS = new Handlebars(LOADER);
     private static final String CONTENT_TYPE = "Content-Type";
     private static final String CONTENT_LENGTH = "Content-Length";
@@ -27,7 +29,7 @@ public class HandlebarsView implements View {
     @Override
     public void render(Map<String, Object> model, HttpResponse httpResponse) {
         try {
-            byte[] body = render(model);
+            byte[] body = renderModel(model);
             httpResponse.setResponseStatus(ResponseStatus.OK);
             httpResponse.addHeaderAttribute(CONTENT_TYPE, ContentType.HTML + CHARSET_UTF_8);
             httpResponse.addHeaderAttribute(CONTENT_LENGTH, String.valueOf(body.length));
@@ -37,7 +39,7 @@ public class HandlebarsView implements View {
         }
     }
 
-    private byte[] render(Map<String, Object> model) throws IOException {
+    private byte[] renderModel(Map<String, Object> model) throws IOException {
         Template template = HANDLEBARS.compile(viewName);
         return template.apply(model).getBytes();
     }

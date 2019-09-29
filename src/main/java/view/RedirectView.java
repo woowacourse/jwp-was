@@ -1,4 +1,4 @@
-package controller;
+package view;
 
 import http.response.HttpResponse;
 import http.response.ResponseStatus;

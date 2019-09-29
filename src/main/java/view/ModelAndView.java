@@ -1,4 +1,4 @@
-package controller;
+package view;
 
 import java.util.Collections;
 import java.util.Map;
