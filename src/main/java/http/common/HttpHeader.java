@@ -13,7 +13,7 @@ public class HttpHeader {
     private Map<String, String> headers;
 
     private HttpHeader(final Map<String, String> headers) {
-        this.headers = Collections.unmodifiableMap(headers);
+        this.headers = headers;
     }
 
     public static HttpHeader of(final List<String> headerLines) {
@@ -30,6 +30,10 @@ public class HttpHeader {
 
     public String get(final String key) {
         return headers.get(key);
+    }
+
+    public void setHeader(final String key, String value) {
+        headers.put(key, value);
     }
 
     public int getContentLength() {
