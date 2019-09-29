@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
 import session.HttpSession;
-import session.InMemoryHttpSessionManager;
+import session.InMemoryHttpSessionContainer;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -35,7 +35,7 @@ public class UserListController extends AbstractController {
     }
 
     private boolean checkLogin(HttpRequest request) {
-        HttpSession session = request.getSession(InMemoryHttpSessionManager.getInstance());
+        HttpSession session = request.getSession(InMemoryHttpSessionContainer.getInstance());
         return session != null && session.getAttributes(LOGIN_USER) != null;
     }
 

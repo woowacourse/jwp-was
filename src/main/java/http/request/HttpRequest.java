@@ -3,7 +3,7 @@ package http.request;
 import http.HTTP;
 import http.RequestMethod;
 import session.HttpSession;
-import session.HttpSessionManager;
+import session.HttpSessionContainer;
 
 import java.io.*;
 import java.net.URLDecoder;
@@ -71,8 +71,8 @@ public class HttpRequest implements AutoCloseable {
         bufferedReader.close();
     }
 
-    public HttpSession getSession(HttpSessionManager httpSessionManager) {
+    public HttpSession getSession(HttpSessionContainer httpSessionContainer) {
         String sessionId = this.getCookieValue(SESSION_ID);
-        return httpSessionManager.findSession(sessionId);
+        return httpSessionContainer.findSession(sessionId);
     }
 }

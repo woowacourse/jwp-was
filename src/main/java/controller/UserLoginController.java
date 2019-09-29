@@ -8,7 +8,7 @@ import model.AuthorizationFailException;
 import model.User;
 import service.UserService;
 import session.HttpSession;
-import session.InMemoryHttpSessionManager;
+import session.InMemoryHttpSessionContainer;
 import utils.QueryStringUtils;
 
 import java.util.Map;
@@ -26,9 +26,9 @@ public class UserLoginController extends AbstractController {
         try {
             User foundUser = userService.login(body.get("userId"), body.get("password"));
 
-            HttpSession httpSession = request.getSession(InMemoryHttpSessionManager.getInstance());
+            HttpSession httpSession = request.getSession(InMemoryHttpSessionContainer.getInstance());
             if (httpSession == null) {
-                httpSession = InMemoryHttpSessionManager.getInstance().createSession();
+                httpSession = InMemoryHttpSessionContainer.getInstance().createSession();
             }
 
             response.addSession(httpSession);

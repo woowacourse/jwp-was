@@ -1,6 +1,6 @@
 package session;
 
-public interface HttpSessionManager {
+public interface HttpSessionContainer {
     public HttpSession findSession(String sessionId);
 
     public HttpSession createSession();

@@ -5,17 +5,17 @@ import com.google.common.collect.Maps;
 import java.util.Map;
 import java.util.UUID;
 
-public class InMemoryHttpSessionManager implements HttpSessionManager {
+public class InMemoryHttpSessionContainer implements HttpSessionContainer {
     private static Map<String, HttpSession> sessions;
-    private static InMemoryHttpSessionManager instance;
+    private static InMemoryHttpSessionContainer instance;
 
-    private InMemoryHttpSessionManager() {
+    private InMemoryHttpSessionContainer() {
         sessions = Maps.newHashMap();
     }
 
-    public static InMemoryHttpSessionManager getInstance() {
+    public static InMemoryHttpSessionContainer getInstance() {
         if (instance == null) {
-            instance = new InMemoryHttpSessionManager();
+            instance = new InMemoryHttpSessionContainer();
         }
         return instance;
     }
