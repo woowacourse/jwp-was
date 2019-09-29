@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class BasicControllerTest {
     static final String TEST_RESOURCES = "./src/test/resources";
-    private final String BASIC_CONTROLLER_DIR = "/controller";
+    private final String BASIC_CONTROLLER_DIR = "/controller/basic";
 
     private Controller controller;
     private InputStream in;
