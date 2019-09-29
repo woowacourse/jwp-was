@@ -25,7 +25,7 @@ public class LoginController extends AbstractController {
             request.addSessionAttr(LOGINED, "true");
             return new View(REDIRECT_VIEW + "/index.html");
         }
-        request.addSessionAttr(LOGINED, "true");
+        request.addSessionAttr(LOGINED, "false");
         return new View(REDIRECT_VIEW + "/user/login_failed.html");
     }
 
