@@ -24,6 +24,10 @@ public class UserLoginController extends AbstractController {
             return;
         }
 
+        processResponse(request, response, userId);
+    }
+
+    private void processResponse(Request request, Response response, String userId) {
         request.setSessionValue(LOGINED, true);
         request.setSessionValue(USER_ID, userId);
         response.setHttpStatus(HttpStatus.FOUND);
