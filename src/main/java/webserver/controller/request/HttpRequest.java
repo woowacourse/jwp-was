@@ -1,5 +1,7 @@
 package webserver.controller.request;
 
+import webserver.controller.UUIDGenerator;
+import webserver.controller.session.HttpSession;
 import webserver.controller.request.header.HttpHeaderFields;
 import webserver.controller.request.header.HttpMethod;
 import webserver.controller.request.header.HttpRequestLine;
@@ -55,5 +57,9 @@ public class HttpRequest {
 
     public String getHeaderFieldValue(String key) {
         return httpHeaderFields.getHeaderFieldValue(key);
+    }
+
+    public HttpSession getSession() {
+        return new HttpSession(UUIDGenerator.generateUUID());
     }
 }

@@ -14,11 +14,10 @@ package webserver.controller.response;
     import java.util.Map;
     import java.util.Optional;
 
-    import static exception.HttpMethodNotFoundException.HTTP_METHOD_NOT_FOUND_MESSAGE;
     import static org.assertj.core.api.Assertions.assertThat;
     import static org.mockito.Mockito.mock;
     import static org.mockito.Mockito.when;
-    import static webserver.controller.AbstractController.NON_STATIC_FILE_PATH;
+    import static webserver.ModelAndView.NON_STATIC_FILE_PATH;
     import static webserver.controller.response.HttpResponse.BAD_REQUEST_ERROR_MESSAGE;
     import static webserver.controller.response.HttpResponse.STATIC_FILE_PATH;
 
