@@ -33,6 +33,6 @@
 3. RequestHandler 리펙토링
     - [x] controller 분리
     - [x] ResponseEntity 분리
-
-## 의문사항
-- HTTP response version이 어떻게 결정되는지? request로 온 HTTP버전에 맞춰서 결정되는지 아니면 server에서 정해진 버전으로만 응답하는지?
+4. ResponseEntity 제거
+    - [x] Contorller에서 request와 response를 직접 받도록 수정
+5. StaticResourceHandler에서 response를 forward하도록 수정
