@@ -1,5 +1,6 @@
 package webserver.controller;
 
+import exception.UnsupportedMethodException;
 import webserver.controller.request.HttpRequest;
 import webserver.controller.request.header.HttpMethod;
 import webserver.controller.response.HttpResponse;
@@ -7,6 +8,7 @@ import webserver.controller.response.HttpResponse;
 import java.util.HashMap;
 
 public abstract class AbstractController implements Controller {
+    public static final String NON_STATIC_FILE_PATH = "./templates/";
     private HashMap<HttpMethod, Controller> controllerMethods = new HashMap<>();
 
     AbstractController() {
@@ -15,17 +17,15 @@ public abstract class AbstractController implements Controller {
     }
 
     @Override
-    public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
-        controllerMethods.get(httpRequest.getHttpMethod()).service(httpRequest, httpResponse);
+    public HttpResponse service(HttpRequest httpRequest) {
+        return controllerMethods.get(httpRequest.getHttpMethod()).service(httpRequest);
     }
 
-    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        try {
-            httpResponse.responseOK(httpRequest);
-        } catch (Exception e) {
-            httpResponse.responseBadRequest(e.getMessage());
-        }
-    };
+    protected HttpResponse doGet(HttpRequest httpRequest) {
+        throw new UnsupportedMethodException();
+    }
 
-    public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) { };
+    protected HttpResponse doPost(HttpRequest httpRequest) {
+        throw new UnsupportedMethodException();
+    };
 }
