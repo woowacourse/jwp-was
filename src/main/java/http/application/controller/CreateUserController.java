@@ -1,20 +1,14 @@
 package http.application.controller;
 
-import db.DataBase;
-import http.request.ContentType;
+import http.application.Service;
+import http.application.service.CreateUserService;
 import http.request.HttpRequest;
-import http.request.MessageBodyParser;
-import http.request.bodyparser.FormDataParser;
 import http.response.HttpResponse;
-import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Map;
-
 public class CreateUserController extends AbstractController {
     private static final Logger logger = LoggerFactory.getLogger(CreateUserController.class);
-    private static final String CONTENT_TYPE = "Content-Type";
 
     @Override
     void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
@@ -23,16 +17,9 @@ public class CreateUserController extends AbstractController {
 
     @Override
     void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        ContentType contentType = ContentType.of(httpRequest.getHttpHeader().get(CONTENT_TYPE));
-        MessageBodyParser bodyParser = new FormDataParser();
+        logger.info("request is {}", httpRequest);
 
-        Map<String, String> formData = bodyParser.parse(httpRequest.getHttpRequestBody());
-
-        User user = new User(formData.get("userId"), formData.get("password"),
-                formData.get("name"), formData.get("email"));
-
-        DataBase.addUser(user);
-        logger.info("user created: {}", user);
-        httpResponse.redirect("/index.html");
+        Service createUserService = new CreateUserService();
+        createUserService.execute(httpRequest, httpResponse);
     }
 }
