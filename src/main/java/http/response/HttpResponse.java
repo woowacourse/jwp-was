@@ -43,4 +43,8 @@ public class HttpResponse {
 
         return responseHeader.getBytes();
     }
+
+    public byte[] getBody() {
+        return this.body;
+    }
 }
