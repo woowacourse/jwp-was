@@ -12,36 +12,33 @@ import webserver.view.View;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class FileServletTest extends AbstractServletTest {
-    HttpResponse httpResponse;
     FileServlet fileServlet;
-    FileResolver fileResolver;
-
     @BeforeEach
     void setup() throws IOException {
-
         httpResponse = new HttpResponse(new DataOutputStream(null), HttpVersion.HTTP1);
-        fileResolver = new FileResolver();
-        fileServlet = new FileServlet(new FileResolver());
+        resolver = new FileResolver();
+        fileServlet = new FileServlet(resolver);
     }
 
     @DisplayName("정적 html파일 가져오기")
     @Test
-    void run_httpFileRequest_ok() throws IOException {
-        HttpRequest httpRequest = getFileRequest("/index.html");
-        View view = fileResolver.createView("/index.html");
+    void run_httpFileRequest_ok() throws IOException, URISyntaxException {
+        HttpRequest httpRequest = getCommonGetRequest("/index.html");
+        View view = resolver.createView("/index.html");
         assertThat(fileServlet.run(httpRequest, httpResponse)).isEqualTo(new ModelAndView(view));
     }
 
 
     @DisplayName("정적 css파일 가져오기")
     @Test
-    void run_() throws IOException {
-        HttpRequest httpRequest = getFileRequest("/css.css");
-        View view = fileResolver.createView("/css.css");
+    void run_() throws IOException, URISyntaxException {
+        HttpRequest httpRequest = getCommonGetRequest("/css.css");
+        View view = resolver.createView("/css.css");
         assertThat(fileServlet.run(httpRequest, httpResponse)).isEqualTo(new ModelAndView(view));
     }
 
