@@ -2,9 +2,9 @@ package domain;
 
 import db.DataBase;
 import http.request.HttpRequest;
+import http.servlet.resolver.UserResolver;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import http.servlet.resolver.UserResolver;
 import testhelper.Common;
 
 import java.io.IOException;

@@ -3,11 +3,11 @@ package http.servlet.view;
 import com.google.common.base.Charsets;
 import db.DataBase;
 import domain.User;
+import http.servlet.view.support.ViewResolver;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import http.servlet.view.support.ViewResolver;
 
 import java.io.IOException;
 import java.util.ArrayList;
