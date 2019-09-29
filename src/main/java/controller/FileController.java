@@ -1,11 +1,10 @@
 package controller;
 
 import controller.controllermapper.ControllerMapper;
-import controller.methods.ControllerMethod;
-import controller.methods.GetFileControllerMethod;
 import http.request.Request;
 import http.request.RequestMethod;
 import http.response.Response;
+import utils.FileIoUtils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -15,7 +14,6 @@ import java.util.List;
 public class FileController implements Controller {
     private List<RequestMethod> allowedMethods = Arrays.asList(RequestMethod.GET);
     private List<String> allowedUrlPaths = Arrays.asList(".html", ".css", ".html", ".ico", ".woff", ".ttf", ".js");
-    private List<ControllerMethod> fileControllerMethods = Arrays.asList(new GetFileControllerMethod());
 
     @Override
     public boolean isMapping(ControllerMapper controllerMapper) {
@@ -34,11 +32,10 @@ public class FileController implements Controller {
 
     @Override
     public void processResponse(Request request, Response response) throws IOException, URISyntaxException {
-        ControllerMethod controllerMethod = fileControllerMethods.stream()
-                .filter(method -> method.isMapping(request))
-                .findAny()
-                .orElseThrow(IllegalArgumentException::new);
+        byte[] body = FileIoUtils.loadFileFromClasspath(request.getUrl().getDestinationFolderUrlPath());
 
-        controllerMethod.processResponse(request, response);
+        response.ok()
+                .putResponseHeaders("Content-Type: ", request.getUrl().getRequestContentType().getContentType())
+                .body(body);
     }
 }

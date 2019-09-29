@@ -17,7 +17,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UserControllerTest extends BaseTest {
+public class CreateUserControllerTest extends BaseTest {
     private ControllerFactory factory = new ControllerFactory();
 
     @Test

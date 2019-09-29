@@ -45,7 +45,7 @@ public class ControllerFactoryTest extends BaseTest {
         Request request = createPostRequest(url, headerValues);
 
         //then
-        assertThat(factory.mappingController(request).getClass()).isEqualTo(UserController.class);
+        assertThat(factory.mappingController(request).getClass()).isEqualTo(CreateUserController.class);
     }
 
     @Test
@@ -59,10 +59,10 @@ public class ControllerFactoryTest extends BaseTest {
                 "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net");
 
         //when
-        Request request = createPostRequest(url, headerValues);
+        Request request = createGetRequest(url, headerValues);
 
         //then
-        assertThat(factory.mappingController(request).getClass()).isEqualTo(UserController.class);
+        assertThat(factory.mappingController(request).getClass()).isEqualTo(GetUserListController.class);
     }
 
 

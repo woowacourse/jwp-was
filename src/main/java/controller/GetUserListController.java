@@ -1,5 +1,6 @@
-package controller.methods;
+package controller;
 
+import controller.controllermapper.ControllerMapper;
 import controller.support.TemplateManager;
 import http.request.Request;
 import http.request.RequestMethod;
@@ -8,12 +9,12 @@ import http.session.Session;
 
 import java.io.IOException;
 
-public class GetUserListMethod implements ControllerMethod {
+public class GetUserListController implements Controller {
+    private final RequestMapping requestMapping = new RequestMapping(RequestMethod.GET, "/user/list");
 
     @Override
-    public boolean isMapping(Request request) {
-        return (RequestMethod.GET == request.getRequestMethod()
-                && "/user/list".equals(request.getUrl().getOriginalUrlPath()));
+    public boolean isMapping(ControllerMapper controllerMapper) {
+        return requestMapping.isCorrectMapping(controllerMapper);
     }
 
     @Override
@@ -31,5 +32,6 @@ public class GetUserListMethod implements ControllerMethod {
             response.found()
                     .putResponseHeaders("Location: ", "http://localhost:8080/user/login.html");
         }
+
     }
 }

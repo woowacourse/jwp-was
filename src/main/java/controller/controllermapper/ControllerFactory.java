@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ControllerFactory {
 
-    private List<Controller> controllers = Arrays.asList(new UserController(), new FileController(), new LoginController());
+    private List<Controller> controllers = Arrays.asList(new CreateUserController(), new FileController(), new LoginController(), new GetUserListController());
 
     public Controller mappingController(Request request) {
         try {
