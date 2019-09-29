@@ -12,8 +12,8 @@ public class SessionStorageTest {
 
     @BeforeEach
     public void setUp() {
-        Session session = sessionStorage.getSession("");
-        cookie = Cookie.builder().name("JSESSIONID").value(session.getSessionId()).build();
+        Session session = sessionStorage.createSession();
+        cookie = Cookie.builder().name(SessionStorage.JSESSIONID).value(session.getSessionId()).build();
         session.setAttribute("logined", "true");
     }
 

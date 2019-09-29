@@ -24,11 +24,9 @@ public class LoginController extends HttpController {
         try {
             LoginService.getInstance().login(request.extractFormData());
             session.setAttribute("logined", "true");
-            response.setCookie(Cookie.builder().name(JSESSIONID).value(session.getSessionId()).path("/").build());
             response.redirect("/index.html");
         } catch (LoginFailException e) {
             session.setAttribute("logined", "false");
-            response.setCookie(Cookie.builder().name(JSESSIONID).value(session.getSessionId()).path("/").build());
             response.redirect("/user/login_failed.html");
         }
     }

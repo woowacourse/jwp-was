@@ -1,6 +1,7 @@
 package http.response;
 
 import http.cookie.Cookie;
+import http.request.Request;
 import utils.FileIoUtils;
 import webserver.support.ContentTypeHandler;
 import webserver.support.HandlebarsRenderer;
@@ -12,12 +13,16 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 
+import static http.session.SessionStorage.JSESSIONID;
+
 public class Response {
+    private Request request;
     private StatusLine statusLine;
     private ResponseHeader responseHeader;
     private ResponseBody responseBody;
 
-    public Response(StatusLine statusLine, ResponseHeader responseHeader) {
+    public Response(Request request, StatusLine statusLine, ResponseHeader responseHeader) {
+        this.request = request;
         this.statusLine = statusLine;
         this.responseHeader = responseHeader;
     }
@@ -78,30 +83,33 @@ public class Response {
         return responseHeader.getCookies();
     }
 
-    public void setCookie(Cookie cookie) {
-        responseHeader.setCookie(cookie);
+    public void setCookie() {
+        if (!request.hasSession()) {
+            responseHeader.setCookie(
+                    Cookie.builder().name(JSESSIONID).value(request.getSession().getSessionId()).path("/").build());
+        }
     }
 
     public void forward(ModelAndView modelAndView) throws IOException, URISyntaxException {
         setStatusCode(200);
         setReasonPhrase("OK");
         setContentType(ContentTypeHandler.type(modelAndView.getView()));
+        setCookie();
         configureResponseBody(modelAndView);
     }
 
     private void configureResponseBody(ModelAndView modelAndView) throws IOException, URISyntaxException {
-        byte[] body;
         String view = modelAndView.getView();
         Map<String, Object> model = modelAndView.getModels();
 
         if (model.isEmpty()) {
             String absoluteUrl = PathHandler.path(view);
-            body = FileIoUtils.loadFileFromClasspath(absoluteUrl);
+            byte[] body = FileIoUtils.loadFileFromClasspath(absoluteUrl);
             setResponseBody(body);
             return;
         }
 
-        body = HandlebarsRenderer.render(view, model);
+        byte[] body = HandlebarsRenderer.render(view, model);
         setResponseBody(body);
     }
 
@@ -109,5 +117,6 @@ public class Response {
         setStatusCode(302);
         setReasonPhrase("FOUND");
         setLocation(location);
+        setCookie();
     }
 }

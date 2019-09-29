@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import static http.session.SessionStorage.JSESSIONID;
+
 public class RequestFactory {
     private static final String DELIMITER_OF_REQUEST = "\n";
     private static final int REQUEST_SIZE = 2;
@@ -26,7 +28,7 @@ public class RequestFactory {
 
         Cookies cookies = new Cookies(CookieParser.parse(requestHeader.get("Cookie")));
         Session session = SessionStorage.getInstance().getSession(
-                cookies.findCookie("JSESSIONID").getValue());
+                cookies.findCookie(JSESSIONID).getValue());
 
         if (requestLine.isPost()) {
             return makeRequestWithBody(br, requestLine, requestHeader, cookies, session);

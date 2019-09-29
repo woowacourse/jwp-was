@@ -1,5 +1,6 @@
 package http.request;
 
+import http.cookie.Cookie;
 import http.cookie.Cookies;
 import http.session.Session;
 import http.session.SessionStorage;
@@ -12,7 +13,7 @@ public class Request {
     private final RequestHeader requestHeader;
     private final RequestBody requestBody;
     private final Cookies cookies;
-    private final Session session;
+    private Session session;
 
     public Request(RequestLine requestLine, RequestHeader requestHeader, RequestBody requestBody,
                    Cookies cookies, Session session) {
@@ -32,7 +33,12 @@ public class Request {
     }
 
     public Session getSession() {
-        return Optional.ofNullable(this.session).orElseGet(SessionStorage.getInstance()::createSession);
+        this.session = Optional.ofNullable(this.session).orElseGet(SessionStorage.getInstance()::createSession);
+        return this.session;
+    }
+
+    public boolean hasSession() {
+        return !cookies.findCookie(SessionStorage.JSESSIONID).equals(Cookie.builder().build());
     }
 
     public boolean isGetMethod() {
