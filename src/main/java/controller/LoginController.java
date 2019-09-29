@@ -31,7 +31,7 @@ public class LoginController extends Controller {
                     .orElseThrow(() -> new NotFoundUserException(userId));
             HttpSession httpSession = httpRequest.getHttpSession();
             httpSession.setAttribute(LOGIN_KEY, LOGIN_TRUE);
-            httpResponse.setCookie(SESSION_ID + "=" + httpSession.getId() + "; Path=/");
+            httpResponse.setCookie(SESSION_ID + "=" + httpSession.getSessionId() + "; Path=/");
             httpResponse.redirect("/index.html");
         } catch (NotFoundUserException e) {
             logger.debug(e.getMessage());

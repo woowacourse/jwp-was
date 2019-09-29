@@ -71,7 +71,7 @@ public class HttpRequest {
         if (httpSession == null) {
             this.httpSession = HttpSessionManager.getInstance().createSession();
         }
-        this.httpSession = HttpSessionManager.getInstance().getSession(this.httpSession.getId());
+        this.httpSession = HttpSessionManager.getInstance().getSession(this.httpSession.getSessionId());
         return httpSession;
     }
 }

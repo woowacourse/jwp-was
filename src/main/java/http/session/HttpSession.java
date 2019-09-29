@@ -4,27 +4,27 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HttpSession {
-    private String id;
+    private String sessionId;
     private Map<String, Object> attributes = new HashMap<>();
 
-    public HttpSession(String id) {
-        this.id = id;
+    public HttpSession(String sessionId) {
+        this.sessionId = sessionId;
     }
 
-    public String getId() {
-        return id;
+    public String getSessionId() {
+        return sessionId;
     }
 
-    public void setAttribute(String key, Object value) {
-        attributes.put(key, value);
+    public void setAttribute(String name, Object value) {
+        attributes.put(name, value);
     }
 
-    public Object getAttribute(String key) {
-        return attributes.get(key);
+    public Object getAttribute(String name) {
+        return attributes.get(name);
     }
 
-    public void removeAttribute(String key) {
-        attributes.remove(key);
+    public void removeAttribute(String name) {
+        attributes.remove(name);
     }
 
     public void invalidate() {

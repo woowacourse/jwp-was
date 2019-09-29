@@ -38,7 +38,7 @@ class LoginControllerTest {
         loginController.doPost(httpRequest, httpResponse);
 
         HttpSession httpSession = httpRequest.getHttpSession();
-        String sessionId = httpSession.getId();
+        String sessionId = httpSession.getSessionId();
         assertEquals(httpResponse.getHttpResponseHeader().getHeader("Set-Cookie"), "JSESSIONID=" + sessionId + "; Path=/");
         assertEquals(httpResponse.getHttpStatusLine().toString(), "HTTP/1.1 302 FOUND\r\n");
         assertThat(httpSession.getAttribute("logined")).isEqualTo("true");

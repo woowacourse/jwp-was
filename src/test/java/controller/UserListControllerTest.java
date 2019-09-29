@@ -33,7 +33,7 @@ class UserListControllerTest {
         HttpRequestLine httpRequestLine = new HttpRequestLine("GET /user/list HTTP/1.1");
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "text/html");
-        headers.put("Cookie", "JSESSIONID=" + httpSession.getId());
+        headers.put("Cookie", "JSESSIONID=" + httpSession.getSessionId());
         HttpRequestHeader httpRequestHeader = new HttpRequestHeader(headers);
         HttpRequestBody httpRequestBody = new HttpRequestBody(new byte[0]);
         HttpRequest httpRequest = new HttpRequest(httpRequestLine, httpRequestHeader, QueryParameter.empty(), httpRequestBody);
