@@ -22,7 +22,7 @@ public class RequestLine {
         String[] values = line.split(BLANK);
         validRequestLine(values);
 
-        return new RequestLine(HttpMethod.valueOf(values[0]), new Url(values[1]), HttpVersion.of(values[2]));
+        return new RequestLine(HttpMethod.of(values[0]), new Url(values[1]), HttpVersion.of(values[2]));
     }
 
     private static void validRequestLine(final String[] values) {

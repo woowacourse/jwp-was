@@ -5,16 +5,10 @@ import was.exception.MethodNotAllowedException;
 import java.util.Arrays;
 
 public enum HttpMethod {
-    GET("GET"),
-    POST("POST"),
-    PUT("PUT"),
-    DELETE("DELETE");
-
-    private final String method;
-
-    HttpMethod(final String method) {
-        this.method = method;
-    }
+    GET(),
+    POST(),
+    PUT(),
+    DELETE();
 
     public static HttpMethod of(final String value) {
         return Arrays.stream(HttpMethod.values())
@@ -25,6 +19,6 @@ public enum HttpMethod {
     }
 
     private boolean match(final String value) {
-        return this.method.equals(value);
+        return this.name().equals(value);
     }
 }
