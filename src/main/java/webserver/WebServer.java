@@ -50,12 +50,12 @@ public class WebServer {
 
     private static ControllerHandler initControllerHandler() {
         ControllerHandler controllerHandler = new ControllerHandler();
-        Controller fileResourceController = new FileResourceController();
-        Controller signUpController = new SignUpController();
 
-        controllerHandler.addController(new ControllerMapping(HttpMethod.GET, "/*"), fileResourceController);
-        controllerHandler.addController(new ControllerMapping(HttpMethod.GET, "/user/create"), signUpController);
-        controllerHandler.addController(new ControllerMapping(HttpMethod.POST, "/user/create"), signUpController);
+        controllerHandler.addController(new ControllerMapping(HttpMethod.GET, "/*"), new FileResourceController());
+        controllerHandler.addController(new ControllerMapping(HttpMethod.GET, "/user/create"), new SignUpController());
+        controllerHandler.addController(new ControllerMapping(HttpMethod.POST, "/user/create"), new SignUpController());
+        controllerHandler.addController(new ControllerMapping(HttpMethod.POST, "/user/login"), new LoginController());
+        controllerHandler.addController(new ControllerMapping(HttpMethod.GET, "/user/list"), new ListController());
         return controllerHandler;
     }
 }
