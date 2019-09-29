@@ -2,7 +2,6 @@ package controller;
 
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import http.response.HttpStatus;
 import webserver.StaticResourceHandler;
 
 import static http.request.HttpMethod.GET;
@@ -20,11 +19,16 @@ public abstract class AbstractController implements Controller {
         }
     }
 
-    protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        StaticResourceHandler.handle404NotFound(httpResponse);
+    protected void doGet(HttpRequest request, HttpResponse response) {
+        forwardErrorPage(response);
     }
 
-    protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        StaticResourceHandler.handle404NotFound(httpResponse);
+    protected void doPost(HttpRequest request, HttpResponse response) {
+        forwardErrorPage(response);
+    }
+
+    private void forwardErrorPage(HttpResponse response) {
+        response.setStatus(METHOD_NOT_ALLOWED);
+        StaticResourceHandler.forwardErrorPage(response);
     }
 }

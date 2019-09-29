@@ -3,15 +3,12 @@ package webserver;
 import controller.Controller;
 import controller.UserController;
 import http.request.HttpRequest;
-import http.request.HttpUri;
 import http.response.HttpResponse;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static http.response.HttpStatus.NOT_FOUND;
+import static http.response.HttpStatus.METHOD_NOT_ALLOWED;
 
 public class ControllerMapper {
     private static final Map<String, Controller> controllers;
@@ -21,14 +18,14 @@ public class ControllerMapper {
         controllers.put("/user/create", new UserController());
     }
 
-    public static void map(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
-        String path = httpRequest.getPath();
+    public static void map(HttpRequest request, HttpResponse response) {
+        String path = request.getPath();
         Controller controller = controllers.get(path);
 
         if (controller == null) {
-            StaticResourceHandler.handle404NotFound(httpResponse);
+            response.setStatus(METHOD_NOT_ALLOWED);
             return;
         }
-        controller.handle(httpRequest, httpResponse);
+        controller.handle(request, response);
     }
 }

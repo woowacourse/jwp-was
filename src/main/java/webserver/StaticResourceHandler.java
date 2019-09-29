@@ -2,6 +2,7 @@ package webserver;
 
 import http.HttpHeaders;
 import http.MediaType;
+import http.exception.MediaTypeNotDefinedException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.response.ResponseBody;
@@ -14,7 +15,6 @@ import java.net.URISyntaxException;
 import static http.HttpHeaders.ACCEPT;
 import static http.MediaType.HTML;
 import static http.response.HttpStatus.INTERNAL_SERVER_ERROR;
-import static http.response.HttpStatus.NOT_FOUND;
 
 public class StaticResourceHandler {
     public static final String VIEW_TEMPLATE_PATH = "./templates";
@@ -22,6 +22,7 @@ public class StaticResourceHandler {
 
     private static final Integer MOST_PREFERRED = 0;
     private static final String ERROR_PAGE = "/error.html";
+    private static final String INTERNAL_ERROR_PAGE = "/server-error.html";
     private static final String ACCEPT_HEADER_DELIMITER = ",";
 
     public static void forward(HttpRequest request, HttpResponse response) {
@@ -32,7 +33,7 @@ public class StaticResourceHandler {
             content = loadFile(request);
             response.setBody(new ResponseBody(content, type));
         } catch (FileNotFoundException e) {
-            handle404NotFound(response);
+            forwardErrorPage(response);
         } catch (IOException | URISyntaxException e) {
             response.setStatus(INTERNAL_SERVER_ERROR);
         }
@@ -54,17 +55,17 @@ public class StaticResourceHandler {
         try {
             String[] accepts = acceptHeader.split(ACCEPT_HEADER_DELIMITER);
             return MediaType.of(accepts[MOST_PREFERRED]);
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | MediaTypeNotDefinedException e) {
             return HTML;
         }
     }
 
-    public static void handle404NotFound(HttpResponse response) {
+    public static void forwardErrorPage(HttpResponse response) {
         byte[] content;
+
         try {
             content = FileIoUtils.loadFileFromClasspath(VIEW_TEMPLATE_PATH + ERROR_PAGE);
             response.setBody(content);
-            response.setStatus(NOT_FOUND);
         } catch (IOException | URISyntaxException e) {
             response.setStatus(INTERNAL_SERVER_ERROR);
         }
