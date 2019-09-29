@@ -1,6 +1,7 @@
 package webserver.view;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class ModelAndView {
     View view;
@@ -21,5 +22,19 @@ public class ModelAndView {
 
     public Map<String, Object> getModelMap() {
         return modelMap;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ModelAndView that = (ModelAndView) o;
+        return Objects.equals(view, that.view) &&
+                Objects.equals(modelMap, that.modelMap);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(view, modelMap);
     }
 }
