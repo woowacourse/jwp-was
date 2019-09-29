@@ -1,61 +1,104 @@
 package webserver.controller.response;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import webserver.controller.request.HttpRequest;
-import webserver.controller.request.MimeType;
-import webserver.controller.request.header.HttpMethod;
+    import org.junit.jupiter.api.BeforeEach;
+    import org.junit.jupiter.api.DisplayName;
+    import org.junit.jupiter.api.Test;
+    import utils.FileIoUtils;
+    import webserver.controller.HttpCookie;
+    import webserver.controller.request.HttpRequest;
+    import webserver.controller.request.MimeType;
+    import webserver.controller.request.header.HttpMethod;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.Map;
+    import java.io.IOException;
+    import java.net.URISyntaxException;
+    import java.util.Map;
+    import java.util.Optional;
 
-import static exception.HttpMethodNotFoundException.HTTP_METHOD_NOT_FOUND_MESSAGE;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+    import static exception.HttpMethodNotFoundException.HTTP_METHOD_NOT_FOUND_MESSAGE;
+    import static org.assertj.core.api.Assertions.assertThat;
+    import static org.mockito.Mockito.mock;
+    import static org.mockito.Mockito.when;
+    import static webserver.controller.AbstractController.NON_STATIC_FILE_PATH;
+    import static webserver.controller.response.HttpResponse.BAD_REQUEST_ERROR_MESSAGE;
+    import static webserver.controller.response.HttpResponse.STATIC_FILE_PATH;
 
 public class HttpResponseTests {
-    HttpResponse httpResponse;
     HttpRequest httpRequest;
 
     @BeforeEach
     void setUp() {
         httpRequest = mock(HttpRequest.class);
-        when(httpRequest.getVersion()).thenReturn("HTTP 1.1");
+        when(httpRequest.getVersion()).thenReturn("HTTP/1.1");
     }
 
     @Test
-    void Ok() throws IOException, URISyntaxException {
+    void ok() {
         when(httpRequest.getMimeType()).thenReturn(MimeType.HTML);
-        when(httpRequest.getPath()).thenReturn("index.html");
-        when(httpRequest.getHttpMethod()).thenReturn(HttpMethod.GET);
-        httpResponse = new HttpResponse(httpRequest);
-        httpResponse.responseOK(httpRequest);
-
-        Map<String, String> responseHeaderFields = httpResponse.getHeaderFields();
-        assertThat(responseHeaderFields.get("Content-Type")).isEqualTo(MimeType.HTML.getMimeType() + ";charset=utf-8\r\n");
+        byte[] body = FileIoUtils.loadFileFromClasspath(NON_STATIC_FILE_PATH+"/index.html").get();
+        HttpResponse httpResponse = HttpResponse.ok(httpRequest, body);
+        assertThat(httpResponse.getVersion()).isEqualTo("HTTP/1.1");
+        assertThat(httpResponse.getHttpStatus()).isEqualTo(HttpStatus.OK);
+        assertThat(httpResponse.getBody()).isEqualTo(body);
     }
 
     @Test
-    void Redirect() throws IOException, URISyntaxException {
-        String redirectUrl = "/index.html";
-        when(httpRequest.getHttpMethod()).thenReturn(HttpMethod.POST);
-        httpResponse = new HttpResponse(httpRequest);
-        httpResponse.sendRedirect(redirectUrl);
-        Map<String, String> responseHeaderFields = httpResponse.getHeaderFields();
+    void staticFile_ok() {
+        when(httpRequest.getMimeType()).thenReturn(MimeType.CSS);
+        byte[] body = FileIoUtils.loadFileFromClasspath(STATIC_FILE_PATH+"/css/bootstrap.min.css").get();
+        HttpResponse httpResponse = HttpResponse.ok(httpRequest, body);
+        assertThat(httpResponse.getVersion()).isEqualTo("HTTP/1.1");
+        assertThat(httpResponse.getHttpStatus()).isEqualTo(HttpStatus.OK);
+        assertThat(httpResponse.getBody()).isEqualTo(body);
+    }
+
+    @Test
+    void login_fail_redirect() {
+        HttpCookie httpCookie = new HttpCookie();
+        httpCookie.loginCookie(false, "/");
+
+        String redirectUrl = "/user/login_failed.html";
+        HttpResponse httpResponse = HttpResponse.sendRedirect(httpRequest, redirectUrl,false);
+        Map<String,String> responseHeaderFields = httpResponse.getHeaderFields();
+
         assertThat(responseHeaderFields.get("Location")).isEqualTo(redirectUrl);
-        assertThat(responseHeaderFields.get("Connection")).isEqualTo("close");
+        assertThat(responseHeaderFields.get("Set-Cookie")).isEqualTo("logined=false; Path=/");
+        assertThat(httpResponse.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
     }
 
     @Test
-    void BadRequest() throws IOException, URISyntaxException {
-        when(httpRequest.getHttpMethod()).thenReturn(HttpMethod.POST);
-        httpResponse = new HttpResponse(httpRequest);
-        httpResponse.responseBadRequest(HTTP_METHOD_NOT_FOUND_MESSAGE);
+    void non_login_redirect() {
+        HttpCookie httpCookie = new HttpCookie();
+        httpCookie.loginCookie(false, "/");
+
+        String redirectUrl = "/index.html";
+        HttpResponse httpResponse = HttpResponse.sendRedirect(httpRequest, redirectUrl,false);
+        Map<String,String> responseHeaderFields = httpResponse.getHeaderFields();
+
+        assertThat(responseHeaderFields.get("Location")).isEqualTo(redirectUrl);
+        assertThat(responseHeaderFields.get("Set-Cookie")).isEqualTo("logined=false; Path=/");
+        assertThat(httpResponse.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
+    }
+
+    @Test
+    void login_sucess_redirect() {
+        HttpCookie httpCookie = new HttpCookie();
+        httpCookie.loginCookie(true, "/");
+
+        String redirectUrl = "/user/list";
+        HttpResponse httpResponse = HttpResponse.sendRedirect(httpRequest, redirectUrl,true);
+        Map<String,String> responseHeaderFields = httpResponse.getHeaderFields();
+
+        assertThat(responseHeaderFields.get("Location")).isEqualTo(redirectUrl);
+        assertThat(responseHeaderFields.get("Set-Cookie")).isEqualTo("logined=true; Path=/");
+        assertThat(httpResponse.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
+    }
+
+    @Test
+    void badRequest() {
+        HttpResponse httpResponse = HttpResponse.badRequest(httpRequest);
         Map<String, String> responseHeaderFields = httpResponse.getHeaderFields();
-        assertThat(responseHeaderFields.get("Server")).isEqualTo("jwp-was");
+
         assertThat(responseHeaderFields.get("Connection")).isEqualTo("close");
-        assertThat(responseHeaderFields.get("message")).isEqualTo(HTTP_METHOD_NOT_FOUND_MESSAGE);
+        assertThat(responseHeaderFields.get("message")).isEqualTo(BAD_REQUEST_ERROR_MESSAGE);
     }
 }
