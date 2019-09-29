@@ -14,6 +14,6 @@ public class UserController extends AbstractController {
                 queryParams.getParam("name"), queryParams.getParam("email"));
 
         DataBase.addUser(user);
-        httpResponse.sendRedirect("/index.html");
+        httpResponse.redirect("/index.html");
     }
 }

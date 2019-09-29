@@ -22,13 +22,11 @@ public class ControllerMapper {
     }
 
     public static void map(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
-        HttpUri uri = httpRequest.getUri();
-        String path = uri.getPath();
+        String path = httpRequest.getPath();
         Controller controller = controllers.get(path);
 
         if (controller == null) {
-            httpResponse.setStatus(NOT_FOUND);
-            httpResponse.forward("/error.html");
+            StaticResourceHandler.handle404NotFound(httpResponse);
             return;
         }
         controller.handle(httpRequest, httpResponse);

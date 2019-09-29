@@ -7,6 +7,7 @@ public class HttpRequest {
     private HttpRequestLine requestLine;
     private HttpHeaders headers;
     private String body;
+    private QueryParams queryParams;
 
     HttpRequest(HttpRequestLine requestLine, HttpHeaders headers, String body) {
         this.requestLine = requestLine;
@@ -14,12 +15,18 @@ public class HttpRequest {
         this.body = body;
     }
 
+    public boolean isStaticContentRequest() {
+        HttpUri uri = requestLine.getUri();
+        return uri.hasExtension();
+    }
+
     public HttpMethod getMethod() {
         return requestLine.getMethod();
     }
 
-    public HttpUri getUri() {
-        return requestLine.getUri();
+    public String getPath() {
+        HttpUri uri = requestLine.getUri();
+        return uri.getPath();
     }
 
     public HttpVersion getVersion() {

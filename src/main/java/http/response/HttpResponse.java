@@ -2,19 +2,14 @@ package http.response;
 
 import http.HttpHeaders;
 import http.HttpVersion;
-import utils.FileIoUtils;
+import http.MediaType;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URISyntaxException;
-
+import static http.HttpHeaders.*;
 import static http.response.HttpStatus.FOUND;
 import static http.response.HttpStatus.OK;
 
 public class HttpResponse {
     public static final String CRLF = "\r\n";
-    private static final String DEFAULT_PATH = "./templates";
-    private static final String STATIC_PATH = "./static";
 
     private HttpVersion version;
     private HttpStatus status;
@@ -31,18 +26,9 @@ public class HttpResponse {
         return new HttpResponse(version, new HttpHeaders());
     }
 
-    public void forward(String path) throws IOException, URISyntaxException {
-        try {
-            body = FileIoUtils.loadFileFromClasspath(DEFAULT_PATH + path);
-        } catch (FileNotFoundException e) {
-            body = FileIoUtils.loadFileFromClasspath(STATIC_PATH + path);
-        }
-        // TODO: 2019-09-28 contents type과 contents length 헤더를 만들어줘야 한다
-    }
-
-    public void sendRedirect(String location) {
+    public void redirect(String location) {
         setStatus(FOUND);
-        addHeader("Location", location);
+        addHeader(LOCATION, location);
     }
 
     public void addHeader(String key, String value) {
@@ -50,13 +36,8 @@ public class HttpResponse {
     }
 
     public String getMessageHeader() {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(version).append(" ").append(status.getMessage());
-        if (headers != null) {
-            sb.append(CRLF).append(headers.toString());
-        }
-        return sb.toString();
+        return version + " " + status.getMessage() + CRLF
+                + headers.toString();
     }
 
     public boolean hasBody() {
@@ -73,5 +54,16 @@ public class HttpResponse {
 
     public void setBody(byte[] body) {
         this.body = body;
+        addHeader(CONTENT_LENGTH, String.valueOf(body.length));
+    }
+
+    public void setBody(ResponseBody body) {
+        byte[] content = body.getContent();
+        String length = String.valueOf(content.length);
+        MediaType type = body.getMediaType();
+
+        this.body = content;
+        addHeader(CONTENT_TYPE, type.getValue());
+        addHeader(CONTENT_LENGTH, length);
     }
 }

@@ -10,7 +10,12 @@ public class HttpHeaders {
     private static final int VALUE_INDEX = 1;
     private static final String HEADER_DELIMITER = ":\\s+";
     private static final String CRLF = "\r\n";
-    private static final String HEADER_KEY_VALUE_DELIMITER = ": ";
+    private static final String COLON_AND_WHITESPACE = ": ";
+
+    public static final String ACCEPT = "Accept";
+    public static final String CONTENT_TYPE = "Content-Type";
+    public static final String CONTENT_LENGTH = "Content-Length";
+    public static final String LOCATION = "Location";
 
     private Map<String, String> headers;
 
@@ -42,7 +47,7 @@ public class HttpHeaders {
     }
 
     public boolean hasContentLength() {
-        return headers.get("Content-Length") != null;
+        return headers.get(CONTENT_LENGTH) != null;
     }
 
     @Override
@@ -50,7 +55,8 @@ public class HttpHeaders {
         StringBuilder sb = new StringBuilder();
 
         for (String key : headers.keySet()) {
-            sb.append(key).append(HEADER_KEY_VALUE_DELIMITER).append(headers.get(key)).append(CRLF);
+            sb.append(key).append(COLON_AND_WHITESPACE)
+                    .append(headers.get(key)).append(CRLF);
         }
         return sb.toString();
     }

@@ -11,7 +11,7 @@ public class HttpStatusLine {
         this.status = status;
     }
 
-      @Override
+    @Override
     public String toString() {
         return version + " " + status.getMessage();
     }

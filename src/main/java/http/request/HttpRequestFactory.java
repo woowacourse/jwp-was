@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import static http.HttpHeaders.CONTENT_LENGTH;
 import static java.net.URLDecoder.decode;
 
 public class HttpRequestFactory {
@@ -38,14 +39,15 @@ public class HttpRequestFactory {
     private static List<String> getHeaderLines(BufferedReader buffer) throws IOException {
         List<String> lines = new ArrayList<>();
         String line;
+
         while (!EMPTY.equals(line = buffer.readLine()) && line != null) {
             lines.add(line);
         }
-        checkEmptyHttpRequest(lines);
+        checkEmpty(lines);
         return lines;
     }
 
-    private static void checkEmptyHttpRequest(List<String> lines) {
+    private static void checkEmpty(List<String> lines) {
         if (lines.isEmpty()) {
             throw new EmptyHttpRequestException();
         }
@@ -60,7 +62,7 @@ public class HttpRequestFactory {
             return EMPTY;
         }
 
-        int contentLength = Integer.parseInt(headers.getHeader("Content-Length"));
+        int contentLength = Integer.parseInt(headers.getHeader(CONTENT_LENGTH));
         return decode(IOUtils.readData(buffer, contentLength), StandardCharsets.UTF_8.name());
     }
 }

@@ -3,7 +3,6 @@ package webserver;
 import http.HttpVersion;
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
-import http.request.HttpUri;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +16,6 @@ import java.net.Socket;
 import java.net.URISyntaxException;
 
 import static http.response.HttpResponse.CRLF;
-import static http.response.HttpStatus.OK;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -36,7 +34,7 @@ public class RequestHandler implements Runnable {
             HttpRequest request = HttpRequestFactory.getHttpRequest(in);
             logger.debug(request.toString());
 
-            HttpResponse response = getResponseOf(request);
+            HttpResponse response = responseOf(request);
 
             writeResponse(response, out);
         } catch (IOException | URISyntaxException e) {
@@ -45,22 +43,16 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private HttpResponse getResponseOf(HttpRequest request) throws IOException, URISyntaxException {
+    private HttpResponse responseOf(HttpRequest request) throws IOException, URISyntaxException {
         HttpVersion version = request.getVersion();
         HttpResponse response = HttpResponse.of(version);
 
-        if (isStaticContentRequest(request)) {
-            response.setStatus(OK);
-            response.forward(request.getUri().getPath());
+        if (request.isStaticContentRequest()) {
+            StaticResourceHandler.forward(request, response);
         } else {
             ControllerMapper.map(request, response);
         }
         return response;
-    }
-
-    private boolean isStaticContentRequest(HttpRequest request) {
-        HttpUri uri = request.getUri();
-        return uri.hasExtension();
     }
 
     private void writeResponse(HttpResponse response, OutputStream out) throws IOException {
