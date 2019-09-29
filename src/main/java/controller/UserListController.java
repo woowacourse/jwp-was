@@ -1,6 +1,7 @@
 package controller;
 
 import db.DataBase;
+import http.HandlebarView;
 import http.ModelAndView;
 import http.request.Request;
 import http.response.Response;
@@ -16,16 +17,20 @@ public class UserListController extends AbstractController {
 
     @Override
     public void doGet(Request request, Response response) {
-        ModelAndView modelAndView = new ModelAndView();
-        Map<String, Collection> map = new HashMap<>();
+        ModelAndView modelAndView = new ModelAndView(new HandlebarView(USER_LIST));
 
+        Map<String, Collection> map = new HashMap<>();
         map.put(MODEL_NAME, DataBase.findAll());
-        modelAndView.setView(USER_LIST);
+        processResponse(response, modelAndView, map);
+    }
+
+    private void processResponse(Response response, ModelAndView modelAndView, Map<String, Collection> map) {
         modelAndView.addAllObjects(map);
+
         String apply = modelAndView.render();
 
         response.setHttpStatus(HttpStatus.OK);
         response.setBody(apply.getBytes());
-        response.forward(USER_LIST, HttpStatus.OK);
+        response.forward(modelAndView.getViewName(), HttpStatus.OK);
     }
 }
