@@ -3,6 +3,8 @@ package http.request.support;
 import http.request.*;
 import http.session.HttpSession;
 import http.session.support.SessionManager;
+import http.support.HttpCookie;
+import http.support.HttpHeader;
 import utils.IOUtils;
 
 import java.io.BufferedReader;
@@ -37,7 +39,7 @@ public class HttpRequestFactory {
             headers.remove("Cookie");
             return new HttpCookie(cookie);
         }
-        return new HttpCookie();
+        return HttpCookie.empty();
     }
 
     private static Map<String, String> getHeaders(final List<String> lines) {

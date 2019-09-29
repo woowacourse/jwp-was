@@ -1,5 +1,6 @@
 package http.request;
 
+import http.support.HttpCookie;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

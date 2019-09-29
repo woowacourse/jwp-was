@@ -1,4 +1,4 @@
-package http.request;
+package http.support;
 
 import java.util.HashMap;
 import java.util.List;

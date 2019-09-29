@@ -1,4 +1,4 @@
-package http.request;
+package http.support;
 
 import com.github.jknack.handlebars.internal.lang3.StringUtils;
 
@@ -16,7 +16,11 @@ public class HttpCookie {
 
     private final Map<String, String> cookies = new HashMap<>();
 
-    public HttpCookie() {
+    public static HttpCookie empty() {
+        return new HttpCookie();
+    }
+
+    private HttpCookie() {
     }
 
     public HttpCookie(final String cookies) {

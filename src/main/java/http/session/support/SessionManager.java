@@ -1,6 +1,6 @@
 package http.session.support;
 
-import http.request.HttpCookie;
+import http.support.HttpCookie;
 import http.session.HttpSession;
 
 import java.util.Map;

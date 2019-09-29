@@ -1,6 +1,6 @@
 package http.session;
 
-import http.request.HttpCookie;
+import http.support.HttpCookie;
 import http.session.support.SessionManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -48,7 +48,7 @@ public class SessionManagerTest {
         final String sessionIdValue = "24f92f0e-eaad-4da6-9f68-cc019ecdfa37";
         sessionManager = new SessionManager(id -> UUID.fromString(sessionIdValue));
 
-        HttpCookie httpCookie = new HttpCookie();
+        HttpCookie httpCookie = HttpCookie.empty();
         HttpSession httpSession = sessionManager.getSession(httpCookie);
 
         assertThat(httpSession.getId()).isEqualTo(UUID.fromString("24f92f0e-eaad-4da6-9f68-cc019ecdfa37"));

@@ -2,6 +2,8 @@ package http.request;
 
 import http.request.support.HttpMethod;
 import http.session.HttpSession;
+import http.support.HttpCookie;
+import http.support.HttpHeader;
 
 public class HttpRequest {
     private final HttpStartLine httpStartLine;

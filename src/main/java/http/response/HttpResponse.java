@@ -1,8 +1,8 @@
 package http.response;
 
 import com.google.common.base.Charsets;
-import http.request.HttpCookie;
-import http.request.HttpHeader;
+import http.support.HttpCookie;
+import http.support.HttpHeader;
 import http.support.StatusCode;
 
 import java.io.IOException;
@@ -14,7 +14,7 @@ public class HttpResponse {
     private static final Charset DEFAULT_CHARSET = Charsets.UTF_8;
 
     private final HttpHeader httpHeader = HttpHeader.empty();
-    private final HttpCookie httpCookie = new HttpCookie();
+    private final HttpCookie httpCookie = HttpCookie.empty();
     private final OutputStream outputStream;
 
     public HttpResponse(final OutputStream outputStream) {
