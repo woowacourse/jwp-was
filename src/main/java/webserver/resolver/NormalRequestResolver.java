@@ -6,6 +6,8 @@ import controller.UserController;
 import controller.UserListController;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import view.ModelAndView;
+import view.ViewResolver;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -26,6 +28,13 @@ public class NormalRequestResolver {
         String path = httpRequest.getPath();
         Controller controller = Optional.ofNullable(controllers.get(path)).orElseThrow(BadRequestException::new);
 
-        controller.service(httpRequest, httpResponse);
+        ModelAndView modelAndView = controller.service(httpRequest, httpResponse);
+        byte[] body = ViewResolver.render(modelAndView);
+
+        if(modelAndView.isRedirect()){
+            httpResponse.redirect(modelAndView.getView());
+            return;
+        }
+        httpResponse.okResponse("html", body);
     }
 }

@@ -1,38 +1,37 @@
 package controller;
 
+import com.google.common.collect.Maps;
 import db.DataBase;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.User;
 import session.Session;
-import template.HandlebarsGenerator;
-import template.ModelAndView;
+import view.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
-import static controller.LoginController.LOGINED;
+import static http.Cookie.LOGINED;
+
 
 public class UserListController extends BasicController {
     @Override
-    public void doGet(HttpRequest request, HttpResponse response) {
-        ModelAndView modelAndView = new ModelAndView();
-        Session session = request.getSession();
+    public ModelAndView doGet(HttpRequest request, HttpResponse response) {
+        Session session = request.getSession(response);
 
         if (isLogined(session)) {
             List<User> users = new ArrayList<>(DataBase.findAll());
-            modelAndView.put("users", users);
-            modelAndView.addView("/user/list");
-        } else {
-            modelAndView.addView("/user/login");
+            Map<String, Object> model = Maps.newHashMap();
+            model.put("users", users);
+            return new ModelAndView("/user/list", model);
         }
-
-        byte[] body = HandlebarsGenerator.render(modelAndView);
-        response.okResponse("html", body);
+            return new ModelAndView("/user/login.html");
     }
 
     private Boolean isLogined(Session session) {
         Object attribute = session.getAttribute(LOGINED);
-        return attribute != null && (Boolean) attribute;
+        return Objects.nonNull(attribute) && (Boolean) attribute;
     }
 }

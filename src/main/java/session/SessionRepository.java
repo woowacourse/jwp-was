@@ -1,13 +1,14 @@
 package session;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 public class SessionRepository {
-    private static Map<String, Session> sessions = new HashMap<>();
+    private static final Map<String, Session> sessions = Collections.synchronizedMap(new HashMap<>());
 
-    public static Session getSession(String jSessionId) {
+    public synchronized static Session getSession(String jSessionId) {
         return Optional.ofNullable(sessions.get(jSessionId)).orElse(create());
     }
 

@@ -4,28 +4,27 @@ import http.NotSupportedHttpMethodException;
 import http.request.HttpMethodType;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import view.ModelAndView;
 import webserver.resolver.BadRequestException;
 
 public abstract class BasicController implements Controller {
 
     @Override
-    public void service(HttpRequest request, HttpResponse response) {
+    public ModelAndView service(HttpRequest request, HttpResponse response) {
         if (HttpMethodType.GET.equals(request.getHttpMethod())) {
-            doGet(request, response);
-            return;
+            return doGet(request, response);
         }
         if (HttpMethodType.POST.equals(request.getHttpMethod())) {
-            doPost(request, response);
-            return;
+            return doPost(request, response);
         }
         throw new NotSupportedHttpMethodException();
     }
 
-    protected void doGet(HttpRequest request, HttpResponse response) {
+    protected ModelAndView doGet(HttpRequest request, HttpResponse response) {
         throw new BadRequestException();
     }
 
-    protected void doPost(HttpRequest request, HttpResponse response) {
+    protected ModelAndView doPost(HttpRequest request, HttpResponse response) {
         throw new BadRequestException();
     }
 }

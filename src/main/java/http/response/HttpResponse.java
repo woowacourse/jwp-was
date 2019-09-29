@@ -33,7 +33,7 @@ public class HttpResponse {
 
     public void okResponse(String contentType, byte[] body) {
         this.statusCode = StatusCode.OK;
-        header.addHeader(CONTENT_TYPE, "text/" + contentType + ";charset=utf-8");
+        header.addHeader(CONTENT_TYPE, String.format("text/%s; charset=utf-8", contentType));
         header.addHeader(CONTENT_LENGTH,  Integer.toString(body.length));
         hasCookie();
         this.body = body;

@@ -1,7 +1,7 @@
 package http;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +12,7 @@ public class Cookie {
     public static final String LOGINED = "logined";
     private static final int NAME_INDEX = 0;
     private static final int VALUE_INDEX = 1;
-    private Map<String, String> cookies = new HashMap<>();
+    private Map<String, String> cookies = new LinkedHashMap<>();
 
     public Cookie() {
     }

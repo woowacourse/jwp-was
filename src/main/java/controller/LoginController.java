@@ -7,31 +7,27 @@ import http.response.HttpResponse;
 import model.InvalidUserException;
 import model.User;
 import session.Session;
+import view.ModelAndView;
 
 import java.util.Map;
 
-import static http.Cookie.JSESSIONID;
 import static http.Cookie.LOGINED;
 
 public class LoginController extends BasicController {
-
     @Override
-    public void doPost(HttpRequest request, HttpResponse response) {
+    public ModelAndView doPost(HttpRequest request, HttpResponse response) {
         Map<String, String> bodyData = request.convertBodyToMap();
-        Session session = request.getSession();
+        Session session = request.getSession(response);
         try {
             User user = DataBase.findUserById(bodyData.get("userId"));
             if (user.matchPassword(bodyData.get("password"))) {
                 session.setAttribute(LOGINED, true);
-
-                response.addCookie(JSESSIONID, session.getId());
-
-                response.redirect("/index.html");
+                return new ModelAndView("/index.html");
             }
+            return new ModelAndView("/user/login_failed.html");
         } catch (NotFoundEntityException | InvalidUserException e) {
             session.setAttribute(LOGINED, false);
-
-            response.redirect("/user/login_failed.html");
+            return new ModelAndView("/user/login_failed.html");
         }
     }
 }
