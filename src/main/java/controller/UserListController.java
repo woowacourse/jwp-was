@@ -5,10 +5,8 @@ import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.User;
 import session.Session;
-import session.SessionRepository;
 import template.HandlebarsGenerator;
 import template.ModelAndView;
-import webserver.resolver.BadRequestException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +17,9 @@ public class UserListController extends BasicController {
     @Override
     public void doGet(HttpRequest request, HttpResponse response) {
         ModelAndView modelAndView = new ModelAndView();
-        Session session = SessionRepository.getSession(request.getCookieValue("JSESSIONID"));
+        Session session = request.getSession();
 
-        if(isLogined(session)) {
+        if (isLogined(session)) {
             List<User> users = new ArrayList<>(DataBase.findAll());
             modelAndView.put("users", users);
             modelAndView.addView("/user/list");
@@ -37,10 +35,4 @@ public class UserListController extends BasicController {
         Object attribute = session.getAttribute(LOGINED);
         return attribute != null && (Boolean) attribute;
     }
-
-    @Override
-    public void doPost(HttpRequest request, HttpResponse response) {
-        throw new BadRequestException();
-    }
-
 }

@@ -12,6 +12,11 @@ import java.io.IOException;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String CONTENT_LENGTH = "Content-Length";
+    private static final String LOCATION = "Location";
+    private static final String SET_COOKIE = "Set-Cookie";
+
     private StatusCode statusCode;
     private HttpVersion httpVersion;
     private HttpHeader header = new HttpHeader();
@@ -22,22 +27,22 @@ public class HttpResponse {
         this.httpVersion = httpRequest.getVersion();
     }
 
+    public void addCookie(String name, String value) {
+        cookie.addCookie(name, value);
+    }
+
     public void okResponse(String contentType, byte[] body) {
         this.statusCode = StatusCode.OK;
-        header.addHeader("Content-Type", "text/" + contentType + ";charset=utf-8");
-        header.addHeader("Content-Length", "" + body.length);
-        if (!cookie.isEmpty()) {
-            header.addHeader("Set-Cookie", cookie.build());
-        }
+        header.addHeader(CONTENT_TYPE, "text/" + contentType + ";charset=utf-8");
+        header.addHeader(CONTENT_LENGTH,  Integer.toString(body.length));
+        hasCookie();
         this.body = body;
     }
 
     public void redirect(String location) {
         this.statusCode = StatusCode.FOUND;
-        header.addHeader("Location", location);
-        if (!cookie.isEmpty()) {
-            header.addHeader("Set-Cookie", cookie.build());
-        }
+        header.addHeader(LOCATION, location);
+        hasCookie();
     }
 
     public void badRequest() {
@@ -54,6 +59,12 @@ public class HttpResponse {
 
     public void internalServerError() {
         this.statusCode = StatusCode.INTERNAL_SERVER_ERROR;
+    }
+
+    private void hasCookie() {
+        if (!cookie.isEmpty()) {
+            header.addHeader(SET_COOKIE, cookie.build());
+        }
     }
 
     private void writeStartLine(DataOutputStream dos) throws IOException {
@@ -85,13 +96,9 @@ public class HttpResponse {
         }
     }
 
-    public void forward(DataOutputStream dos) throws IOException {
+    public void write(DataOutputStream dos) throws IOException {
         writeStartLine(dos);
         writeHeader(dos);
         writeBody(dos);
-    }
-
-    public void addCookie(String name, String value) {
-        cookie.addCookie(name, value);
     }
 }

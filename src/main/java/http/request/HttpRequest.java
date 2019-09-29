@@ -4,11 +4,14 @@ import http.Cookie;
 import http.HttpHeader;
 import http.HttpVersion;
 import http.request.exception.NotFoundHttpRequestHeader;
+import session.Session;
+import session.SessionRepository;
 
 import java.util.Map;
 
 public class HttpRequest {
     private static final String POINT = ".";
+    public static final String COOKIE = "Cookie";
     private HttpRequestStartLine httpRequestStartLine;
     private HttpHeader httpHeader;
     private HttpBody httpBody;
@@ -37,10 +40,15 @@ public class HttpRequest {
         return getPath().contains(POINT);
     }
 
+    public Session getSession() {
+        String sessionId = cookie.getCookieValue(Cookie.JSESSIONID);
+        return SessionRepository.getSession(sessionId);
+    }
+
     private Cookie createCookie() {
         Cookie cookie = new Cookie();
         try {
-            cookie.parse(getHeader("Cookie"));
+            cookie.parse(getHeader(COOKIE));
             return cookie;
         } catch (NotFoundHttpRequestHeader e) {
             return cookie;
@@ -69,10 +77,5 @@ public class HttpRequest {
 
     public HttpVersion getVersion() {
         return httpRequestStartLine.getHttpVersion();
-    }
-
-    public String getCookieValue(String name) {
-        return cookie.getCookieValue(name);
-
     }
 }

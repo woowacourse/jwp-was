@@ -4,6 +4,7 @@ import http.NotSupportedHttpMethodException;
 import http.request.HttpMethodType;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import webserver.resolver.BadRequestException;
 
 public abstract class BasicController implements Controller {
 
@@ -20,7 +21,11 @@ public abstract class BasicController implements Controller {
         throw new NotSupportedHttpMethodException();
     }
 
-    public abstract void doGet(HttpRequest request, HttpResponse response);
+    protected void doGet(HttpRequest request, HttpResponse response) {
+        throw new BadRequestException();
+    }
 
-    public abstract void doPost(HttpRequest request, HttpResponse response);
+    protected void doPost(HttpRequest request, HttpResponse response) {
+        throw new BadRequestException();
+    }
 }
