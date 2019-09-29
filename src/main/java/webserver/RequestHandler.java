@@ -24,9 +24,10 @@ public class RequestHandler implements Runnable {
 
         try (InputStream inputStream = connection.getInputStream(); OutputStream outputStream = connection.getOutputStream()) {
             HttpRequest httpRequest = new HttpRequest(inputStream);
-            HttpResponse httpResponse = new HttpResponse(httpRequest);
 
-            Router.route(httpRequest, httpResponse);
+            Router router = Router.getInstance();
+            HttpResponse httpResponse = router.serve(httpRequest);
+            //TemplateEngine.covert(modelAndView);
             Renderer renderer = Renderer.getInstance();
             renderer.render(outputStream, httpResponse);
         } catch (Exception e) {
