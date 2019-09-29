@@ -1,9 +1,14 @@
 package webserver.http.request;
 
 import webserver.http.request.core.*;
-import webserver.session.Cookie;
+import webserver.http.session.Cookie;
+import webserver.http.session.HttpSession;
+import webserver.http.session.SessionManager;
 
 public class HttpRequest {
+    private static final String COOKIE = "Cookie";
+    private static final String JSESSIONID = "JSESSIONID";
+
     private RequestLine requestLine;
     private RequestHeader requestHeader;
     private RequestData requestData;
@@ -22,12 +27,14 @@ public class HttpRequest {
         hasCookie();
     }
 
-    public String getBodyValue(String key) {
-        return requestData.getValue(key);
+    private void hasCookie() {
+        if (requestHeader.hasCookie()) {
+            createCookie(requestHeader.getHeadersKey(COOKIE));
+        }
     }
 
-    public String getLogin() {
-        return cookie == null ? null : cookie.getCookies("logined");
+    private void createCookie(String cookie) {
+        this.cookie = new Cookie(cookie);
     }
 
     public RequestMethod getRequestMethod() {
@@ -38,13 +45,15 @@ public class HttpRequest {
         return requestLine.getRequestPath();
     }
 
-    private void hasCookie() {
-        if (requestHeader.hasCookie()) {
-            createCookie(requestHeader.getHeadersKey("Cookie"));
-        }
+    public String getBodyValue(String key) {
+        return requestData.getValue(key);
     }
 
-    private void createCookie(String cookie) {
-        this.cookie = new Cookie(cookie);
+    public HttpSession getSession() {
+        if (cookie == null) {
+            return null;
+        }
+        String uuid = this.cookie.getCookies(JSESSIONID);
+        return SessionManager.getSession(uuid);
     }
 }

@@ -1,6 +1,7 @@
 package webserver.http.request.core;
 
 import webserver.http.HttpHeaderField;
+import webserver.http.exception.CanNotParseTokensException;
 import webserver.http.exception.HeaderParsingException;
 import webserver.http.exception.NoMatchHeaderFieldException;
 
@@ -24,6 +25,9 @@ public class RequestHeader {
                 .filter(HttpHeaderField::hasField)
                 .forEach(line -> {
                     String[] tokens = parseLineTokens(line);
+                    if (tokens.length != 2) {
+                        throw new CanNotParseTokensException();
+                    }
                     HttpHeaderField key = HttpHeaderField.of(tokens[KEY_TOKEN]);
                     String value = tokens[VALUE_TOKEN];
                     requestHeaders.put(key, value);
