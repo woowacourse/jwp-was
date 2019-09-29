@@ -25,10 +25,6 @@ public class HttpServletRequestHandler extends AbstractHttpRequestHandler {
     private HttpServletRequestHandler() {
     }
 
-    public static HttpServletRequestHandler getInstance() {
-        return DynamicHttpRequestHandlerLazyHolder.INSTANCE;
-    }
-
     @Override
     public boolean canHandle(String path) {
         return HANDLERS.containsKey(path);
@@ -42,7 +38,11 @@ public class HttpServletRequestHandler extends AbstractHttpRequestHandler {
         view.render(modelAndView.getModelMap(), httpResponse);
     }
 
-    private static class DynamicHttpRequestHandlerLazyHolder {
+    public static HttpServletRequestHandler getInstance() {
+        return HttpServletRequestHandlerLazyHolder.INSTANCE;
+    }
+
+    private static class HttpServletRequestHandlerLazyHolder {
         private static final HttpServletRequestHandler INSTANCE = new HttpServletRequestHandler();
     }
 }

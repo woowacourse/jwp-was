@@ -1,37 +1,37 @@
 package webserver.httprequesthandler;
 
+import com.github.jknack.handlebars.io.TemplateLoader;
 import controller.exception.MethodNotAllowedException;
 import http.common.ContentTypeMapper;
 import http.request.HttpRequest;
 import http.request.RequestMethod;
 import http.response.HttpResponse;
 import http.response.ResponseStatus;
-import utils.FileIoUtils;
 import utils.StringUtils;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+
 public class HttpResourceRequestHandler extends AbstractHttpRequestHandler {
-    private static final String STATIC_RESOURCE_PATH_PREFIX = "./static";
+    private final TemplateLoader fileLoader;
 
-    private HttpResourceRequestHandler() {
-    }
-
-    public static HttpResourceRequestHandler getInstance() {
-        return StaticResourceHttpRequestHandlerLazyHolder.INSTANCE;
+    public HttpResourceRequestHandler(TemplateLoader fileLoader) {
+        this.fileLoader = fileLoader;
+        fileLoader.setPrefix("/static");
+        fileLoader.setSuffix("");
     }
 
     @Override
     public void handleInternal(HttpRequest httpRequest, HttpResponse httpResponse) {
         checkRequestMethod(httpRequest.getMethod());
-
-        String filePath = STATIC_RESOURCE_PATH_PREFIX + httpRequest.getPath();
         try {
-            byte[] file = FileIoUtils.loadFileFromClasspath(filePath);
-
+            String filePath = httpRequest.getPath();
+            byte[] file = fileLoader.sourceAt(filePath).content(Charset.defaultCharset()).getBytes();
             httpResponse.setResponseStatus(ResponseStatus.OK);
             httpResponse.addHeaderAttribute("Content-Type", ContentTypeMapper.getContentType(filePath));
             httpResponse.addHeaderAttribute("Content-Length", String.valueOf(file.length));
             httpResponse.setBody(file);
-        } catch (NullPointerException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             httpResponse.setResponseStatus(ResponseStatus.NOT_FOUND);
         }
@@ -47,9 +47,5 @@ public class HttpResourceRequestHandler extends AbstractHttpRequestHandler {
     public boolean canHandle(String path) {
         String[] url = StringUtils.split(path, "/");
         return StringUtils.isNotBlank(url) && url[url.length - 1].matches("^[^/:*?<>|\"\\\\]+[.][a-zA-Z0-9]+$");
-    }
-
-    private static class StaticResourceHttpRequestHandlerLazyHolder {
-        private static final HttpResourceRequestHandler INSTANCE = new HttpResourceRequestHandler();
     }
 }
