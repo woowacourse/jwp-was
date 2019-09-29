@@ -1,14 +1,8 @@
 package http.method;
 
 public enum HttpMethod {
-    GET("GET"),
-    POST("POST");
-
-    private final String method;
-
-    HttpMethod(String method) {
-        this.method = method;
-    }
+    GET,
+    POST;
 
     public boolean isGet() {
         return this.equals(GET);
