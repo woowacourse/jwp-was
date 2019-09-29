@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.net.URISyntaxException;
 
 import static http.response.HttpResponse.CRLF;
 
@@ -37,21 +36,21 @@ public class RequestHandler implements Runnable {
             HttpResponse response = responseOf(request);
 
             writeResponse(response, out);
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException e) {
             logger.error(e.getMessage());
             LoggingUtils.logStackTrace(logger, e);
         }
     }
 
-    private HttpResponse responseOf(HttpRequest request) throws IOException, URISyntaxException {
+    private HttpResponse responseOf(HttpRequest request) {
         HttpVersion version = request.getVersion();
         HttpResponse response = HttpResponse.of(version);
 
         if (request.isStaticContentRequest()) {
             StaticResourceHandler.forward(request, response);
-        } else {
-            ControllerMapper.map(request, response);
+            return response;
         }
+        ControllerMapper.map(request, response);
         return response;
     }
 
