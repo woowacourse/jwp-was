@@ -3,7 +3,7 @@ package webserver.http.request;
 import webserver.http.common.HttpHeader;
 import webserver.http.session.GeneratedSessionIdStrategy;
 import webserver.http.session.HttpSession;
-import webserver.http.session.Session;
+import webserver.http.session.HttpSessionManager;
 
 public class HttpRequest {
     private RequestLine requestLine;
@@ -21,13 +21,7 @@ public class HttpRequest {
     }
 
     private HttpSession createSession() {
-        String cookie = httpHeader.get("Cookie");
-
-        if (cookie != null && cookie.contains("JSESSIONID")) {
-            return Session.getInstance().getHttpSession(httpSession.getId());
-        }
-
-        return Session.getInstance().createSession(new GeneratedSessionIdStrategy());
+        return HttpSessionManager.getInstance().createSession(new GeneratedSessionIdStrategy());
     }
 
     public void addHeader(final String key, final String value) {
