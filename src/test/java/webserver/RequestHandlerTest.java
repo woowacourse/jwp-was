@@ -92,4 +92,18 @@ public class RequestHandlerTest {
         logger.info("\n" + loginSocket.getOutputStream().toString());
         assertThat(bufferedReader.readLine()).isEqualTo("HTTP/1.1 200 OK");
     }
+
+    @Test
+    @DisplayName("404 PAGE NOT FOUND")
+    public void pageNotFound() throws IOException {
+        Socket loginSocket = mock(Socket.class);
+        when(loginSocket.getInputStream()).thenReturn(Common.getInputStream("PAGE_NOT_FOUND.txt"));
+        when(loginSocket.getOutputStream()).thenReturn(new ByteArrayOutputStream());
+        RequestHandler requestHandler = new RequestHandler(loginSocket, getControllerFinder(), sessionManager);
+        requestHandler.run();
+
+        BufferedReader bufferedReader = Common.convertToBufferedReader(loginSocket.getOutputStream());
+        logger.info("\n" + loginSocket.getOutputStream().toString());
+        assertThat(bufferedReader.readLine()).isEqualTo("HTTP/1.1 404 Not Found");
+    }
 }

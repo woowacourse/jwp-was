@@ -14,6 +14,7 @@ public abstract class HttpController implements Controller {
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         if (GET.equals(httpRequest.getMethod())) {
             doGet(httpRequest, httpResponse);
+            return;
         }
         doPost(httpRequest, httpResponse);
     }

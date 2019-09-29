@@ -50,6 +50,15 @@ public class HttpResponseTest {
         log.info("{}", byteArrayOutputStream.toString());
     }
 
+    @Test
+    @DisplayName("Page Not Found")
+    public void pageNotFound() throws IOException {
+        ByteArrayOutputStream byteArrayOutputStream = createOutPutStream();
+        HttpResponse httpResponse = new HttpResponse(byteArrayOutputStream);
+        httpResponse.pageNotFound("404 ERROR".getBytes());
+        log.info("\n{}", byteArrayOutputStream.toString());
+    }
+
     private ByteArrayOutputStream createOutPutStream() {
         return new ByteArrayOutputStream();
     }

@@ -4,6 +4,7 @@ import com.google.common.base.Charsets;
 import domain.UserService;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import http.servlet.controller.exception.Page404NotFoundException;
 import http.servlet.resolver.UserResolver;
 import http.servlet.view.View;
 import http.servlet.view.support.ViewResolver;
@@ -11,6 +12,11 @@ import http.servlet.view.support.ViewResolver;
 import java.io.IOException;
 
 public class UserLoginController extends HttpController {
+
+    @Override
+    protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+        throw new Page404NotFoundException();
+    }
 
     @Override
     protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {

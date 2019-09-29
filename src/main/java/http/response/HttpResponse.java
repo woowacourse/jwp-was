@@ -48,8 +48,19 @@ public class HttpResponse {
         outputStream.flush();
     }
 
+    public void pageNotFound(final byte[] body) throws IOException {
+        addHeader("Content-Length", Integer.toString(body.length));
+
+        writeStartLine(StatusCode.NOT_FOUND);
+        writeHeaders();
+        writeNewLine();
+        outputStream.write(body, 0, body.length);
+        outputStream.flush();
+    }
+
     private void writeStartLine(final StatusCode statusCode) throws IOException {
-        String startLine = String.format("%s %s %s\r\n", HTTP_VERSION, statusCode.getStatusCode(), statusCode);
+        String startLine = String.format(
+                "%s %s %s\r\n", HTTP_VERSION, statusCode.getStatusCode(), statusCode.getStatusName());
         outputStream.write(startLine.getBytes(DEFAULT_CHARSET));
     }
 

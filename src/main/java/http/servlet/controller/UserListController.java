@@ -4,6 +4,7 @@ import com.google.common.base.Charsets;
 import domain.UserService;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import http.servlet.controller.exception.Page404NotFoundException;
 import http.servlet.view.View;
 
 import java.io.IOException;
@@ -27,5 +28,10 @@ public class UserListController extends HttpController {
         }
         httpResponse.addHeader("Location", "/index.html");
         httpResponse.sendRedirect();
+    }
+
+    @Override
+    protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+        throw new Page404NotFoundException();
     }
 }
