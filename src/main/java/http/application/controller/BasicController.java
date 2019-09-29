@@ -1,4 +1,4 @@
-package http.application;
+package http.application.controller;
 
 import http.request.HttpRequest;
 import http.request.Url;
