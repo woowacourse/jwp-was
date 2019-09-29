@@ -23,6 +23,10 @@ public class HttpCookie {
 		return path;
 	}
 
+	public String getValue() {
+		return value;
+	}
+
 	public void setPath(String path) {
 		this.path = path;
 	}
