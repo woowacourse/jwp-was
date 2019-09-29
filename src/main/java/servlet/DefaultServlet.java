@@ -3,7 +3,8 @@ package servlet;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import utils.FileIoUtils;
-import webserver.ViewResolver;
+import view.StaticView;
+import view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,8 @@ public class DefaultServlet implements Servlet {
         for (String prefix : FILE_PATH_PREFIXES) {
             String staticFilePath = prefix + request.getUri().getPath();
             if (FileIoUtils.existFileInClasspath(staticFilePath)) {
-                ViewResolver.resolveWithViewPath(request, response, staticFilePath);
+                View view = new StaticView(staticFilePath);
+                response.setBody(view, request.getMimeType());
                 return;
             }
         }

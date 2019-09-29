@@ -3,6 +3,8 @@ package http.response;
 import http.HttpHeaders;
 import http.HttpMimeType;
 import http.HttpVersion;
+import view.SimpleView;
+import view.View;
 
 import static http.HttpHeaders.*;
 import static http.response.HttpStatus.FOUND;
@@ -32,7 +34,7 @@ public class HttpResponse {
     public void error(HttpStatus status) {
         this.status = status;
         headers.clear();
-        setBody(status.getMessage().getBytes(), HttpMimeType.HTML);
+        setBody(new SimpleView(status.getMessage()), HttpMimeType.HTML);
     }
 
     public HttpVersion getVersion() {
@@ -59,7 +61,8 @@ public class HttpResponse {
         headers.put(SET_COOKIE, cookie);
     }
 
-    public void setBody(byte[] body, HttpMimeType mediaType) {
+    public void setBody(View view, HttpMimeType mediaType) {
+        byte[] body = view.render();
         if (body != null) {
             headers.put(CONTENT_TYPE, mediaType.toString());
             headers.put(CONTENT_LENGTH, Integer.toString(body.length));
