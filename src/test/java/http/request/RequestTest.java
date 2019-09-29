@@ -19,6 +19,7 @@ class RequestTest {
                 "Content-Length: 46\n" +
                 "Content-Type: application/x-www-form-urlencoded\n" +
                 "Accept: */*\n" +
+                "Cookie: JSESSION=abcd\n" +
                 "\n" +
                 "userId=javajigi&password=password&name=JaeSung";
 
@@ -30,6 +31,7 @@ class RequestTest {
         assertThat(request.getHeader("Connection")).isEqualTo("keep-alive");
         assertThat(request.getPath()).isEqualTo("/user/create");
         assertThat(requestParser.getParameter().get("userId")).isEqualTo("javajigi");
+        assertThat(request.getCookie("JSESSION").getValue()).isEqualTo("abcd");
     }
 
     @Test
