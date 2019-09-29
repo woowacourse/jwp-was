@@ -3,18 +3,19 @@ package webserver;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import webserver.httprequesthandler.HttpResourceRequestHandler;
 
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ResourceHttpRequestHandlerTest {
-    private ResourceHttpRequestHandler resourceHttpRequestHandler = ResourceHttpRequestHandler.getInstance();
+class HttpResourceRequestHandlerTest {
+    private HttpResourceRequestHandler httpResourceRequestHandler = HttpResourceRequestHandler.getInstance();
 
     @ParameterizedTest
     @MethodSource("providePathAndExpectations")
     void canHandle(String path, boolean expectation) {
-        assertThat(resourceHttpRequestHandler.canHandle(path)).isEqualTo(expectation);
+        assertThat(httpResourceRequestHandler.canHandle(path)).isEqualTo(expectation);
     }
 
     private static Stream<Arguments> providePathAndExpectations() {

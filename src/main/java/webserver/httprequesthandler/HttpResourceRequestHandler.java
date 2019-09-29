@@ -1,21 +1,28 @@
-package webserver;
+package webserver.httprequesthandler;
 
+import controller.exception.MethodNotAllowedException;
 import http.common.ContentTypeMapper;
 import http.request.HttpRequest;
+import http.request.RequestMethod;
 import http.response.HttpResponse;
 import http.response.ResponseStatus;
 import utils.FileIoUtils;
 import utils.StringUtils;
-import webserver.exception.ResourceNotFoundException;
 
-public class ResourceHttpRequestHandler {
+public class HttpResourceRequestHandler extends AbstractHttpRequestHandler {
     private static final String STATIC_RESOURCE_PATH_PREFIX = "./static";
 
-    private static class StaticResourceHttpRequestHandlerLazyHolder {
-        private static final ResourceHttpRequestHandler INSTANCE = new ResourceHttpRequestHandler();
+    private HttpResourceRequestHandler() {
     }
 
-    public void handleHttpRequest(HttpRequest httpRequest, HttpResponse httpResponse) {
+    public static HttpResourceRequestHandler getInstance() {
+        return StaticResourceHttpRequestHandlerLazyHolder.INSTANCE;
+    }
+
+    @Override
+    public void handleInternal(HttpRequest httpRequest, HttpResponse httpResponse) {
+        checkRequestMethod(httpRequest.getMethod());
+
         String filePath = STATIC_RESOURCE_PATH_PREFIX + httpRequest.getPath();
         try {
             byte[] file = FileIoUtils.loadFileFromClasspath(filePath);
@@ -25,16 +32,24 @@ public class ResourceHttpRequestHandler {
             httpResponse.addHeaderAttribute("Content-Length", String.valueOf(file.length));
             httpResponse.setBody(file);
         } catch (NullPointerException e) {
-            throw new ResourceNotFoundException();
+            e.printStackTrace();
+            httpResponse.setResponseStatus(ResponseStatus.NOT_FOUND);
         }
     }
 
+    private void checkRequestMethod(RequestMethod method) {
+        if (!RequestMethod.GET.equals(method)) {
+            throw new MethodNotAllowedException();
+        }
+    }
+
+    @Override
     public boolean canHandle(String path) {
         String[] url = StringUtils.split(path, "/");
         return StringUtils.isNotBlank(url) && url[url.length - 1].matches("^[^/:*?<>|\"\\\\]+[.][a-zA-Z0-9]+$");
     }
 
-    public static ResourceHttpRequestHandler getInstance() {
-        return StaticResourceHttpRequestHandlerLazyHolder.INSTANCE;
+    private static class StaticResourceHttpRequestHandlerLazyHolder {
+        private static final HttpResourceRequestHandler INSTANCE = new HttpResourceRequestHandler();
     }
 }
