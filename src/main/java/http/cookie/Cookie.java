@@ -48,11 +48,6 @@ public class Cookie {
         return Objects.hash(name, value, path);
     }
 
-    @Override
-    public String toString() {
-        return "Set-Cookie: " + name + "=" + value + "; " + "Path=" + path + "\r\n";
-    }
-
     public static class CookieBuilder {
         private String name;
         private String value;
