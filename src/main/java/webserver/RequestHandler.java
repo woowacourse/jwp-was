@@ -1,61 +1,55 @@
 package webserver;
 
-import http.*;
+import file.FileContainer;
+import http.request.HttpRequest;
+import http.request.support.HttpRequestFactory;
+import http.response.HttpResponse;
+import http.servlet.HttpServletHandler;
+import http.servlet.controller.ControllerFinder;
+import http.session.support.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.IOUtils;
-import webserver.controller.Controller;
-import webserver.controller.CreateUserController;
-import webserver.controller.FileController;
 
 import java.io.*;
 import java.net.Socket;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private final ControllerFinder controllerFinder;
+    private final SessionManager sessionManager;
 
     private Socket connection;
-    private static Map<String, Controller> api;
 
-    static {
-        api = new HashMap<>();
-        api.put("/user/create", new CreateUserController());
-    }
-
-    public RequestHandler(Socket connectionSocket) {
+    public RequestHandler(Socket connectionSocket, ControllerFinder controllerFinder, SessionManager sessionManager) {
         this.connection = connectionSocket;
+        this.controllerFinder = controllerFinder;
+        this.sessionManager = sessionManager;
     }
 
     public void run() {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
 
-        try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            HttpRequest httpRequest = readRequestUrl(in);
-            HttpResponse httpResponse = new HttpResponse(new DataOutputStream(out));
+        FileContainer fileContainer = new FileContainer();
+        HttpServletHandler httpServletHandler = new HttpServletHandler(controllerFinder);
+        ServletContainer servletContainer = new ServletContainer(fileContainer, httpServletHandler);
 
-            Controller controller = Optional.ofNullable(api.get(httpRequest.getResourcePath()))
-                    .orElseGet(FileController::new);
-            controller.service(httpRequest, httpResponse);
+        try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
+            BufferedReader bufferedReader = getBufferedReader(in);
+
+            HttpRequest httpRequest = HttpRequestFactory.create(bufferedReader, sessionManager);
+            HttpResponse httpResponse = new HttpResponse(new DataOutputStream(out));
+            httpResponse.addCookie(SessionManager.SESSION_NAME, httpRequest.getSessionId());
+
+            servletContainer.process(httpRequest, httpResponse);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private HttpRequest readRequestUrl(InputStream in) throws IOException {
-        InputStreamReader inputStreamReader = new InputStreamReader(in);
-        BufferedReader br = new BufferedReader(inputStreamReader);
-        HttpRequestHeader header = new HttpRequestHeader(IOUtils.parseHeader(br));
-
-        if ("POST".equals(header.getMethod())) {
-            String body = IOUtils.readData(br, Integer.parseInt(header.get("content-length")));
-            HttpRequestBody httpRequestBody = new HttpRequestBody(body);
-            return new HttpRequest(header, httpRequestBody);
-        }
-        return new HttpRequest(header);
+    private BufferedReader getBufferedReader(InputStream inputStream) {
+        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+        return new BufferedReader(inputStreamReader);
     }
 }

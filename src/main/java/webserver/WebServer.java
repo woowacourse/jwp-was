@@ -1,10 +1,16 @@
 package webserver;
 
+import http.servlet.controller.*;
+import http.session.support.RandomKeyGenerator;
+import http.session.support.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -13,8 +19,19 @@ public class WebServer {
     private static final int DEFAULT_PORT = 8080;
     private static final int THREAD_POOL_COUNT = 100;
 
+    private static Map<String, Controller> api;
+
+    static {
+        api = new HashMap<>();
+        api.put("/user/create", new UserCreateController());
+        api.put("/user/login", new UserLoginController());
+        api.put("/user/list", new UserListController());
+    }
+
     public static void main(String args[]) throws Exception {
         ThreadPoolExecutor executorService = (ThreadPoolExecutor) Executors.newFixedThreadPool(THREAD_POOL_COUNT);
+        ControllerFinder controllerFinder = new ControllerFinder(Collections.unmodifiableMap(api));
+        SessionManager sessionManager = new SessionManager(new RandomKeyGenerator());
 
         int port = 0;
         if (args == null || args.length == 0) {
@@ -30,11 +47,12 @@ public class WebServer {
             // 클라이언트가 연결될때까지 대기한다.
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
-                executorService.execute(new RequestHandler(connection));
-                logger.debug("remain Thread Count : {}", THREAD_POOL_COUNT - executorService.getActiveCount());
+                executorService.execute(new RequestHandler(connection, controllerFinder, sessionManager));
+                logger.info("remain Thread Count : {}", THREAD_POOL_COUNT - executorService.getActiveCount());
             }
         }
 
+        sessionManager.clearSession();
         executorService.shutdown();
     }
 }
