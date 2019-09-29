@@ -1,19 +1,21 @@
-package utils;
+package http;
 
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import model.User;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class HandlebarsTest {
-    private static final Logger log = LoggerFactory.getLogger(HandlebarsTest.class);
+class HandlebarViewTest {
+    private static final Logger log = LoggerFactory.getLogger(HandlebarViewTest.class);
 
     @Test
-    void name() throws Exception {
+    @DisplayName("핸들바 테스트")
+    void handlebar_test() throws Exception {
         TemplateLoader loader = new ClassPathTemplateLoader();
         loader.setPrefix("/templates");
         loader.setSuffix(".html");
