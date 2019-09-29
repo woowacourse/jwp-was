@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public class ControllerFinder {
-    Map<String, Controller> uriConfig;
+    private final Map<String, Controller> uriConfig;
 
     public ControllerFinder(Map<String, Controller> uriConfig) {
         this.uriConfig = uriConfig;
