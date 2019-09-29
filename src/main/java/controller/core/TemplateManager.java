@@ -8,7 +8,9 @@ import db.DataBase;
 import model.User;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TemplateManager {
     private static final String TEMPLATE_PREFIX = "/templates";

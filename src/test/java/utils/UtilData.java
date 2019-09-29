@@ -42,12 +42,20 @@ public class UtilData {
             "Content-Type: application/x-www-form-urlencoded \n",
             "Accept: */*"
     ));
-    public static final RequestData QUERY_DATA = new RequestQueryString(REQUEST_GET_PARAM_PATH);
     public static final RequestData BODY_DATA = new RequestBody(POST_BODY);
     public static final String POST_METHOD = "POST";
     private static final String GET_PARAMS_PATH = "/user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
+    private static final String GET_LOGIN_PARAMS_PATH = "/user/login?userId=javajigi&password=password";
+    private static final String GET_LOGIN_WRONG_PARAMS_PATH = "/user/login?userId=javajigi1&password=password1";
+
     public static final RequestPath REQUEST_GET_PARAM_PATH = new RequestPath(
             RequestPrefixPath.of(GET_PARAMS_PATH), GET_PARAMS_PATH);
+    public static final RequestPath REQUEST_LOGIN_GET_PARAM_PATH = new RequestPath(
+            RequestPrefixPath.of(GET_LOGIN_PARAMS_PATH), GET_LOGIN_PARAMS_PATH);
+    public static final RequestPath REQUEST_LOGIN_WRONG_GET_PARAM_PATH = new RequestPath(
+            RequestPrefixPath.of(GET_LOGIN_WRONG_PARAMS_PATH), GET_LOGIN_WRONG_PARAMS_PATH);
+
+    public static final RequestData QUERY_DATA = new RequestQueryString(REQUEST_GET_PARAM_PATH);
     private static final String POST_PATH = "/user/create";
     public static final RequestPath REQUEST_POST_PATH = new RequestPath(
             RequestPrefixPath.of(POST_PATH), POST_PATH);
