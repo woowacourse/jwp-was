@@ -20,7 +20,7 @@ public class HttpRequestFactory {
         HttpStartLine httpStartLine = new HttpStartLine(lines.get(0));
         Map<String, String> headers = getHeaders(lines.subList(1, lines.size()));
         HttpCookie cookie = getCookie(headers);
-        HttpRequestHeader header = new HttpRequestHeader(headers);
+        HttpHeader header = new HttpHeader(headers);
         HttpSession httpSession = sessionManager.getSession(cookie);
 
         if (POST.equals(httpStartLine.getMethod())) {

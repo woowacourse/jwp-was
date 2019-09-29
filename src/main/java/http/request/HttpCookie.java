@@ -4,11 +4,15 @@ import com.github.jknack.handlebars.internal.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import static java.util.stream.Collectors.toList;
+
 public class HttpCookie {
-    public static final String DELIMITER_OF_COOKIES = ";";
-    public static final String DELIMITER_OF_COOKIE = "=";
+    private static final String DELIMITER_OF_COOKIES = ";";
+    private static final String DELIMITER_OF_COOKIE = "=";
+    private static final String SPACE_DELIMITER = " ";
 
     private final Map<String, String> cookies = new HashMap<>();
 
@@ -24,7 +28,21 @@ public class HttpCookie {
         }
     }
 
-    public String getValue(String key) {
-        return cookies.get(key);
+    public String getValue(String name) {
+        return cookies.get(name);
+    }
+
+    public void addCookie(final String name, final String value) {
+        cookies.put(name, value);
+    }
+
+    public String parse() {
+        return String.join(SPACE_DELIMITER, parseCookies());
+    }
+
+    private List<String> parseCookies() {
+        return this.cookies.entrySet().stream()
+                .map(entry -> entry.getKey() + DELIMITER_OF_COOKIE + entry.getValue() + DELIMITER_OF_COOKIES)
+                .collect(toList());
     }
 }

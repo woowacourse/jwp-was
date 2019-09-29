@@ -5,28 +5,28 @@ import http.session.HttpSession;
 
 public class HttpRequest {
     private final HttpStartLine httpStartLine;
-    private final HttpRequestHeader httpRequestHeader;
+    private final HttpHeader httpHeader;
     private final HttpCookie httpCookie;
-    private HttpSession httpSession;
+    private final HttpSession httpSession;
     private final HttpRequestBody httpRequestBody;
 
     public HttpRequest(HttpStartLine httpStartLine,
-                       HttpRequestHeader httpRequestHeader,
+                       HttpHeader httpHeader,
                        HttpCookie httpCookie,
                        HttpSession httpSession,
                        HttpRequestBody httpRequestBody) {
         this.httpStartLine = httpStartLine;
-        this.httpRequestHeader = httpRequestHeader;
+        this.httpHeader = httpHeader;
         this.httpCookie = httpCookie;
         this.httpSession = httpSession;
         this.httpRequestBody = httpRequestBody;
     }
 
     public HttpRequest(HttpStartLine httpStartLine,
-                       HttpRequestHeader httpRequestHeader,
+                       HttpHeader httpHeader,
                        HttpCookie httpCookie,
                        HttpSession httpSession) {
-        this(httpStartLine, httpRequestHeader, httpCookie, httpSession, new HttpRequestBody(""));
+        this(httpStartLine, httpHeader, httpCookie, httpSession, new HttpRequestBody(""));
     }
 
     public void addSessionAttribute(final String name, final Object attribute) {
@@ -50,7 +50,7 @@ public class HttpRequest {
     }
 
     public String getHeader(String key) {
-        return httpRequestHeader.getHeader(key);
+        return httpHeader.getHeader(key);
     }
 
     public String getCookie(String key) {

@@ -1,24 +1,20 @@
 package http.response;
 
 import com.google.common.base.Charsets;
+import http.request.HttpCookie;
+import http.request.HttpHeader;
 import http.support.StatusCode;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static java.util.stream.Collectors.toList;
 
 public class HttpResponse {
     private static final String HTTP_VERSION = "HTTP/1.1";
-    private static final String DELIMITER_OF_RESPONSE_HEADER = ": ";
     private static final Charset DEFAULT_CHARSET = Charsets.UTF_8;
 
-    private final Map<String, String> headers = new HashMap<>();
-    private final Map<String, String> cookies = new HashMap<>();
+    private final HttpHeader httpHeader = HttpHeader.empty();
+    private final HttpCookie httpCookie = new HttpCookie();
     private final OutputStream outputStream;
 
     public HttpResponse(final OutputStream outputStream) {
@@ -26,11 +22,11 @@ public class HttpResponse {
     }
 
     public void addHeader(final String key, final String value) {
-        headers.put(key, value);
+        httpHeader.addHeader(key, value);
     }
 
-    public void addCookie(final String key, final String value) {
-        cookies.put(key, value);
+    public void addCookie(final String name, final String value) {
+        httpCookie.addCookie(name, value);
     }
 
     public void forward(final byte[] body) throws IOException {
@@ -58,20 +54,11 @@ public class HttpResponse {
     }
 
     private void writeHeaders() throws IOException {
-        for (String key : headers.keySet()) {
-            outputStream.write(key.getBytes(DEFAULT_CHARSET));
-            outputStream.write(DELIMITER_OF_RESPONSE_HEADER.getBytes(DEFAULT_CHARSET));
-            outputStream.write(headers.get(key).getBytes(DEFAULT_CHARSET));
-            outputStream.write("\r\n".getBytes(DEFAULT_CHARSET));
-        }
+        outputStream.write(httpHeader.parse().getBytes(DEFAULT_CHARSET));
     }
 
     private void writeCookies() throws IOException {
-        final List<String> parsedCookies = this.cookies.entrySet().stream()
-                .map(entry -> entry.getKey() + "=" + entry.getValue() + ";")
-                .collect(toList());
-        final String result = String.join(" ", parsedCookies);
-        outputStream.write(String.format("Set-Cookie: %s", result).getBytes());
+        outputStream.write(String.format("Set-Cookie: %s", httpCookie.parse()).getBytes());
         writeNewLine();
     }
 
