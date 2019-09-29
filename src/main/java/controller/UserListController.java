@@ -23,8 +23,12 @@ public class UserListController extends AbstractController {
 	@Override
 	void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
 		LOGGER.debug("userList request get: {}", httpRequest.getUri());
-		httpResponse.setStatusCode(HttpStatusCode.OK);
-		httpResponse.forward(httpRequest.getPath() + "list.html");
+		if (httpRequest.getCookieValue("logined").equals("true")) {
+			httpResponse.setStatusCode(HttpStatusCode.OK);
+			httpResponse.forward(httpRequest.getPath() + "list.html");
+			return;
+		}
 
+		httpResponse.setStatusCode(HttpStatusCode.NOT_FOUND);
 	}
 }
