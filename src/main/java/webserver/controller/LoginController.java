@@ -1,14 +1,10 @@
 package webserver.controller;
 
 import http.request.Request;
-import http.cookie.Cookie;
 import http.response.Response;
 import http.session.Session;
-import http.session.SessionStorage;
 import model.LoginService;
 import model.exception.LoginFailException;
-
-import static http.session.SessionStorage.*;
 
 public class LoginController extends HttpController {
     private LoginController() {

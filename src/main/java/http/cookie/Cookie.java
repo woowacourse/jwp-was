@@ -24,13 +24,13 @@ public class Cookie {
     public String getValue() {
         return this.value;
     }
-    
-    public String getPath() {
-        return this.path;
-    }
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getPath() {
+        return this.path;
     }
 
     @Override

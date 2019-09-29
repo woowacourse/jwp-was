@@ -18,10 +18,6 @@ public class UserService {
         return UserServiceLazyHolder.INSTANCE;
     }
 
-    private static class UserServiceLazyHolder {
-        private static final UserService INSTANCE = new UserService();
-    }
-
     public void addUser(Map<String, String> map) {
         User user = new User(map.get("userId"), map.get("password"), map.get("name"), map.get("email"));
         DataBase.addUser(user);
@@ -31,5 +27,9 @@ public class UserService {
 
     public List<User> findAll() {
         return new ArrayList<>(DataBase.findAll());
+    }
+
+    private static class UserServiceLazyHolder {
+        private static final UserService INSTANCE = new UserService();
     }
 }

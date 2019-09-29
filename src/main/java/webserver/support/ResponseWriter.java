@@ -37,7 +37,6 @@ public class ResponseWriter {
     private static String writeCookies(Response response) {
         StringBuilder sb = new StringBuilder();
         for (Cookie cookie : response.getCookies()) {
-//            sb.append(cookie.toString());
             sb.append("Set-Cookie: ").append(cookie.getName()).append("=").append(cookie.getValue()).append("; ")
                     .append("Path=").append(cookie.getPath()).append("\r\n");
         }
