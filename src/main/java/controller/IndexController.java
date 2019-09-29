@@ -26,7 +26,7 @@ public class IndexController extends AbstractController {
 
 		try {
 			httpResponse.setStatusCode(HttpStatusCode.OK);
-			httpResponse.forward(httpRequest.getUri() + "index.html");
+			httpResponse.forward(httpRequest.getPath() + "index.html");
 		} catch (IOException | URISyntaxException e) {
 			httpResponse.setStatusCode(HttpStatusCode.NOT_FOUND);
 			e.printStackTrace();
