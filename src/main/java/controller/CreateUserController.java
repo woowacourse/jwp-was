@@ -16,7 +16,7 @@ public class CreateUserController extends AbstractController {
 		try {
 			UserService.saveUser(httpRequest.getHttpRequestBody());
 			String redirectPath = "/index.html";
-			HttpResponse httpResponse = new HttpResponse(HttpResponseGenerator.response302Header(redirectPath));
+			HttpResponse httpResponse = HttpResponseGenerator.response302Header(redirectPath);
 			httpResponse.sendRedirect(dos);
 		} catch (IOException e) {
 			throw new FailedRedirectException();

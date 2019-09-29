@@ -4,11 +4,11 @@ public enum ResponseStatus {
 	OK("OK", "200"),
 	FOUND("Found", "302");
 
-	private final String description;
+	private final String phrase;
 	private final String code;
 
-	ResponseStatus(final String description, final String code) {
-		this.description = description;
+	ResponseStatus(final String phrase, final String code) {
+		this.phrase = phrase;
 		this.code = code;
 	}
 
@@ -16,7 +16,7 @@ public enum ResponseStatus {
 		return this.code;
 	}
 
-	public String getDescription() {
-		return this.description;
+	public String getPhrase() {
+		return this.phrase;
 	}
 }

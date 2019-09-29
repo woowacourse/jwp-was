@@ -29,4 +29,12 @@ class ControllerGeneratorTest {
 		Controller controller = ControllerGenerator.generateController(path);
 		assertThat(controller).isInstanceOf(UserLoginController.class);
 	}
+
+	@DisplayName("회원 조회 시 UserListController 생성")
+	@Test
+	public void generateUserListController() {
+		String path = "/user/list";
+		Controller controller = ControllerGenerator.generateController(path);
+		assertThat(controller).isInstanceOf(UserListController.class);
+	}
 }

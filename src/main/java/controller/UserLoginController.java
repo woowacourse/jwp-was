@@ -24,7 +24,7 @@ public class UserLoginController extends AbstractController {
 			String location = (result) ? "/index.html" : "/user/login_failed.html";
 			String path = ResourcePathUtils.getResourcePath(location);
 			byte[] responseBody = FileIoUtils.loadFileFromClasspath(path);
-			HttpResponse httpResponse = new HttpResponse(HttpResponseGenerator.responseLoginSuccess(path, responseBody.length));
+			HttpResponse httpResponse = HttpResponseGenerator.responseLoginSuccess(path, responseBody.length);
 			httpResponse.forward(responseBody, dos);
 		} catch (IOException | URISyntaxException e) {
 			e.printStackTrace();

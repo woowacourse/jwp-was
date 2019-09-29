@@ -4,20 +4,29 @@ import java.util.Map;
 import java.util.Objects;
 
 import exception.NotFoundElementException;
-import http.Header;
+import http.HeaderElement;
 
 public class HttpRequestHeader {
-	private final Map<Header, String> header;
+	private final Map<HeaderElement, String> header;
 
-	public HttpRequestHeader(final Map<Header, String> header) {
+	public HttpRequestHeader(final Map<HeaderElement, String> header) {
 		this.header = header;
 	}
 
-	public String getRequestElement(Header attribute) {
+	public String getRequestElement(HeaderElement attribute) {
 		String value = header.get(attribute);
-		if (Objects.isNull(value)) {
-			throw new NotFoundElementException();
+		if (Objects.nonNull(value)) {
+			return value;
 		}
-		return value;
+		throw new NotFoundElementException();
+	}
+
+	public boolean isCookieValue() {
+		try {
+			getRequestElement(HeaderElement.COOKIE);
+			return true;
+		} catch (NotFoundElementException e) {
+			return false;
+		}
 	}
 }
