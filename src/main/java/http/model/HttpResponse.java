@@ -6,6 +6,8 @@ import static com.google.common.net.HttpHeaders.CONTENT_LENGTH;
 import static com.google.common.net.HttpHeaders.LOCATION;
 
 public class HttpResponse {
+    private final static String ROOT_URI = "http://localhost:8080";
+
     private StatusLine statusLine;
     private HttpHeaders httpHeaders;
     private byte[] body;
@@ -14,6 +16,10 @@ public class HttpResponse {
         this.statusLine = new StatusLine(builder.httpProtocols, builder.httpStatus);
         this.httpHeaders = builder.httpHeaders;
         this.body = builder.body;
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     public StatusLine getStatusLine() {
@@ -37,7 +43,6 @@ public class HttpResponse {
         private HttpStatus httpStatus;
         private HttpHeaders httpHeaders;
         private byte[] body;
-
 
         public Builder() {
             httpHeaders = new HttpHeaders();
@@ -70,7 +75,7 @@ public class HttpResponse {
         }
 
         public Builder sendRedirect(String filePath) {
-            httpHeaders.addHeader(LOCATION, filePath);
+            httpHeaders.addHeader(LOCATION, ROOT_URI + filePath);
             return this;
         }
 
