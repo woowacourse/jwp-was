@@ -4,9 +4,13 @@ public enum RequestMethod {
     GET("get"),
     POST("post");
 
-    private final String method;
+    private final String name;
 
-    RequestMethod(String method) {
-        this.method = method;
+    RequestMethod(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 }
