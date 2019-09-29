@@ -22,7 +22,7 @@ public class HandlerMapping {
     public static Controller getHandler(final HttpRequest httpRequest) {
         String fullUrl = httpRequest.getRequestLine().getFullUrl();
 
-        if (map.containsKey(fullUrl)) {
+        if (map.get(fullUrl) != null) {
             return map.get(fullUrl);
         }
 
