@@ -20,14 +20,18 @@ public class Header {
 		if(!Objects.isNull(element)) {
 			return elementValue;
 		}
-		throw new NotFoundElementException(); //TODO : 상황에 맞는 에러 메시지를 던질 것.
+		throw new NotFoundElementException();
 	}
 
 	public List<String> printHeader() {
 		List<String> headers = new LinkedList<>();
 		for (HeaderElement attribute : header.keySet()) {
-			headers.add(String.format("%s : %s", attribute.getElement(),  header.get(attribute)));
+			headers.add(String.format("%s : %s", attribute.getElement(), header.get(attribute)));
 		}
 		return headers;
+	}
+
+	public void setSessionId(String sessionId) {
+		header.put(HeaderElement.SET_COOKIE, String.format("%s=%s", "jsessionId", sessionId));
 	}
 }

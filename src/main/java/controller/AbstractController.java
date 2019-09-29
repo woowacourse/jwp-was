@@ -5,11 +5,14 @@ import java.io.OutputStream;
 
 import http.method.HttpMethod;
 import http.request.HttpRequest;
+import http.session.SessionManager;
 
 import static http.request.HttpRequestReader.HTTP_METHOD;
 
 
 public abstract class AbstractController implements Controller {
+	protected static final SessionManager sessionManager = new SessionManager();
+
 	@Override
 	public void service(HttpRequest httpRequest, OutputStream out) {
 		DataOutputStream dos = new DataOutputStream(out);

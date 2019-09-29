@@ -13,6 +13,7 @@ import http.response.HttpResponseGenerator;
 import utils.FileIoUtils;
 import utils.ResourcePathUtils;
 
+import static controller.CreateUserController.JSESSION_ID;
 import static http.request.HttpRequestReader.REQUEST_URI;
 
 public class ResourceController extends AbstractController {
@@ -28,6 +29,12 @@ public class ResourceController extends AbstractController {
 			byte[] responseBody = FileIoUtils.loadFileFromClasspath(path);
 			HttpResponse httpResponse = HttpResponseGenerator.response200Header(
 					httpRequest.getRequestLineElement(REQUEST_URI), responseBody.length);
+
+			if (!httpRequest.isCookieValue(JSESSION_ID)) {
+				String uuid = sessionManager.generateInitialSession();
+				httpResponse.setInitialSession(uuid);
+			}
+
 			httpResponse.forward(responseBody, dos);
 		} catch (IOException e) {
 			throw new FailedForwardException();

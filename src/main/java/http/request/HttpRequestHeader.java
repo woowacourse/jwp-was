@@ -3,7 +3,6 @@ package http.request;
 import java.util.Map;
 import java.util.Objects;
 
-import exception.NotFoundElementException;
 import http.HeaderElement;
 
 public class HttpRequestHeader {
@@ -14,19 +13,14 @@ public class HttpRequestHeader {
 	}
 
 	public String getRequestElement(HeaderElement attribute) {
-		String value = header.get(attribute);
-		if (Objects.nonNull(value)) {
-			return value;
-		}
-		throw new NotFoundElementException();
+		return header.get(attribute);
 	}
 
-	public boolean isCookieValue() {
-		try {
-			getRequestElement(HeaderElement.COOKIE);
+	public boolean isCookieValue(String cookieKey) {
+		String cookie = getRequestElement(HeaderElement.COOKIE);
+		if(Objects.nonNull(cookie) && cookie.contains(cookieKey)) {
 			return true;
-		} catch (NotFoundElementException e) {
-			return false;
 		}
+		return false;
 	}
 }

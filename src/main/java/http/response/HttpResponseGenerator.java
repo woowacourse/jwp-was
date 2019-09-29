@@ -38,14 +38,14 @@ public class HttpResponseGenerator {
 		throw new FailResponseException();
 	}
 
-	public static HttpResponse responseLoginSuccess(String path, int bodyLength) {
+	public static HttpResponse responseLoginSuccess(String path, int bodyLength, String sessionId) {
 		try {
 			String mimeType = Files.probeContentType(Paths.get(path));
 			StatusLine statusLine = new StatusLine(getStatusLines(OK));
 
 			Map<HeaderElement, String> headerElement = getHeaderElement(bodyLength, mimeType);
-			//TODO : Cookie에 담는 정보가 여러 개라면 어떻게 할 지 고려해보기.
-			String cookie = String.format("logined=true; %s=/\r\n", HeaderElement.PATH.getElement());
+
+			String cookie = getCookieValue(sessionId);
 			headerElement.put(HeaderElement.SET_COOKIE, cookie);
 			Header header = new Header(headerElement);
 
@@ -54,6 +54,10 @@ public class HttpResponseGenerator {
 			logger.error(e.getMessage());
 		}
 		throw new FailResponseException();
+	}
+
+	private static String getCookieValue(String sessionId) {
+		return String.format("logined=true; jsessionId=%s; %s=/\r\n", HeaderElement.PATH.getElement(), sessionId);
 	}
 
 	private static Map<HeaderElement, String> getHeaderElement(int bodyLength, String mimeType) {
