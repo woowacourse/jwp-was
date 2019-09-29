@@ -1,11 +1,17 @@
 package webserver.request;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import webserver.controller.exception.BadRequestException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class HttpRequest {
+    private static final Logger log = LoggerFactory.getLogger(HttpRequest.class);
+
     private final RequestLine requestLine;
     private final RequestHeader requestHeader;
     private final RequestBody requestBody;
@@ -16,12 +22,17 @@ public class HttpRequest {
         this.requestBody = requestBody;
     }
 
-    public static HttpRequest of(InputStream in) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(in));
-        RequestLine requestLine = RequestLine.of(br);
-        RequestHeader requestHeader = RequestHeader.of(br);
-        RequestBody requestBody = RequestBody.of(br, requestHeader.getContentLength());
-        return new HttpRequest(requestLine, requestHeader, requestBody);
+    public static HttpRequest of(InputStream in) {
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            RequestLine requestLine = RequestLine.of(br);
+            RequestHeader requestHeader = RequestHeader.of(br);
+            RequestBody requestBody = RequestBody.of(br, requestHeader.getContentLength());
+            return new HttpRequest(requestLine, requestHeader, requestBody);
+        } catch (IOException e) {
+            log.debug("fail to input HttpRequest message", e);
+        }
+        throw new BadRequestException();
     }
 
     public boolean isGet() {
