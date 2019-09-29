@@ -4,6 +4,8 @@ import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import webserver.http.request.exception.IntervalServerException;
 
 import java.io.IOException;
@@ -12,6 +14,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class HandlebarTemplates {
+    private static final Logger logger = LoggerFactory.getLogger(HandlebarTemplates.class);
+
     private TemplateLoader templateLoader;
     private Template template;
     private Handlebars handlebars;
@@ -44,6 +48,7 @@ public class HandlebarTemplates {
         try {
             return template.apply(handle);
         } catch (IOException e) {
+            logger.error("{}", e);
             throw new IntervalServerException();
         }
     }
@@ -56,6 +61,7 @@ public class HandlebarTemplates {
             exceptCollection(object);
             return template.apply(object);
         } catch (IOException e) {
+            logger.error("{}", e);
             throw new IntervalServerException();
         }
     }

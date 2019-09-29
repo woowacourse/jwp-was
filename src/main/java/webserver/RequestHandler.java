@@ -35,7 +35,7 @@ public class RequestHandler implements Runnable {
             receiveRequest(inputStream);
             sendResponse(outputStream);
         } catch (IOException e) {
-            logger.error("서버 에러 " + e.getMessage());
+            logger.error("서버 에러 " + e);
         }
     }
 
@@ -46,11 +46,11 @@ public class RequestHandler implements Runnable {
         } catch (RuntimeException e) {
             // TODO : 에러에 맞는 response 보내기
             logger.error("에러 메시지 : " + e.getMessage());
-            httpResponse.redirect("/404.html");
+            httpResponse.redirect("/error/404.html");
         }
     }
 
-    private void sendResponse(final OutputStream outputStream) throws IOException {
+    private void sendResponse(final OutputStream outputStream) {
         DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
         HttpResponseParser.send(dataOutputStream, httpResponse);
     }

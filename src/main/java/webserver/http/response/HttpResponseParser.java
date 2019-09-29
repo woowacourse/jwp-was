@@ -1,5 +1,7 @@
 package webserver.http.response;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import webserver.http.request.exception.IntervalServerException;
 
 import java.io.DataOutputStream;
@@ -7,12 +9,15 @@ import java.io.IOException;
 import java.util.Map;
 
 public class HttpResponseParser {
+    private static final Logger logger = LoggerFactory.getLogger(HttpResponseParser.class);
+
     public static void send(final DataOutputStream dataOutputStream, final HttpResponse httpResponse) {
         try {
             responseHeader(dataOutputStream, httpResponse);
             writeResponseBody(dataOutputStream, httpResponse);
             dataOutputStream.flush();
-        } catch (IOException e) {
+        }  (IOException e) {
+            logger.error("{}", e);
             throw new IntervalServerException();
         }
     }
