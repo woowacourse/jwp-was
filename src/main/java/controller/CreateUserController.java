@@ -27,7 +27,7 @@ public class CreateUserController extends AbstractController {
 				httpRequest.getParameter("email"));
 
 		httpResponse.setStatusCode(HttpStatusCode.FOUND);
-		httpResponse.redirect("/");
+		httpResponse.redirect("/index.html");
 	}
 
 	private void save(String userId, String password, String name, String email) {

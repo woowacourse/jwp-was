@@ -30,5 +30,6 @@ public class UserListController extends AbstractController {
 		}
 
 		httpResponse.setStatusCode(HttpStatusCode.NOT_FOUND);
+		httpResponse.forward("/index.html");
 	}
 }
