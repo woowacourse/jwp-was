@@ -1,5 +1,6 @@
-package http.application;
+package http.application.controller;
 
+import http.application.Controller;
 import http.exception.NotSupportHttpMethodException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
