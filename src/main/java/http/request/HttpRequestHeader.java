@@ -1,7 +1,5 @@
 package http.request;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -13,15 +11,6 @@ public class HttpRequestHeader {
     public HttpRequestHeader(Map<String, String> fields, HttpCookieStore httpCookieStore) {
         this.fields = fields;
         this.httpCookieStore = httpCookieStore;
-    }
-
-    public HttpRequestHeader(List<String> headers) {
-        this.fields = new HashMap<>();
-
-        headers.forEach(header -> {
-            String[] keyValue = header.split(": ");
-            this.fields.put(keyValue[0], keyValue[1]);
-        });
     }
 
     public int getContentLength() {
