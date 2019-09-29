@@ -2,6 +2,7 @@ package controller;
 
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import view.ModelAndView;
 
 public class UserFormController extends AbstractController {
     public static UserFormController getInstance() {
@@ -9,9 +10,8 @@ public class UserFormController extends AbstractController {
     }
 
     @Override
-    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        ModelAndView modelAndView = new ModelAndView("/users/form");
-        handle(modelAndView, httpResponse);
+    public ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+        return new ModelAndView("/user/form");
     }
 
     private static class UserFormControllerLazyHolder {

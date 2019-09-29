@@ -4,6 +4,7 @@ import db.DataBase;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.session.Session;
+import view.ModelAndView;
 
 import java.util.Collections;
 import java.util.Map;
@@ -18,16 +19,13 @@ public class UserListController extends AbstractController {
     }
 
     @Override
-    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        ModelAndView modelAndView;
+    public ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         if (isLoginedUser(httpRequest.getSession())) {
             Map<String, Object> users = Collections.singletonMap("users", DataBase.findAll());
-            modelAndView = new ModelAndView("user/list", users);
-        } else {
-            modelAndView = new ModelAndView("redirect: /");
+            return new ModelAndView("/user/list", users);
         }
 
-        handle(modelAndView, httpResponse);
+        return new ModelAndView("redirect: /");
     }
 
     private boolean isLoginedUser(Session session) {

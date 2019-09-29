@@ -2,6 +2,7 @@ package controller;
 
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import view.ModelAndView;
 
 public class LoginFailedController extends AbstractController {
     private static class LoginFailedControllerLazyHolder {
@@ -13,7 +14,7 @@ public class LoginFailedController extends AbstractController {
     }
 
     @Override
-    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        handle(new ModelAndView("/user/login_failed"), httpResponse);
+    public ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+        return new ModelAndView("/user/login_failed");
     }
 }
