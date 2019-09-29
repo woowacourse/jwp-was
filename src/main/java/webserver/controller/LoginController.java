@@ -19,10 +19,10 @@ public class LoginController extends HttpController {
     protected void doPost(Request request, Response response) {
         Session session = request.getSession();
         try {
-            String location = new LoginService().login(request.extractFormData());
+            LoginService.getInstance().login(request.extractFormData());
             session.setAttribute("logined", "true");
             response.setCookie(Cookie.builder().name("JSESSIONID").value(session.getSessionId()).path("/").build());
-            response.redirect(location);
+            response.redirect("/index.html");
         } catch (LoginFailException e) {
             session.setAttribute("logined", "false");
             response.setCookie(Cookie.builder().name("JSESSIONID").value(session.getSessionId()).path("/").build());

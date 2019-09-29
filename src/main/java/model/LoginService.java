@@ -11,7 +11,18 @@ import java.util.Optional;
 public class LoginService {
     private static final Logger logger = LoggerFactory.getLogger(LoginService.class);
 
-    public String login(Map<String, String> map) {
+    private LoginService() {
+    }
+
+    public static LoginService getInstance() {
+        return LoginServiceLazyHolder.INSTANCE;
+    }
+
+    private static class LoginServiceLazyHolder {
+        private static final LoginService INSTANCE = new LoginService();
+    }
+
+    public void login(Map<String, String> map) {
         String userId = map.get("userId");
         String password = map.get("password");
 
@@ -22,7 +33,5 @@ public class LoginService {
             throw new LoginFailException("Not Match User Password!");
         }
         logger.debug("login success : {}", user);
-
-        return "/index.html";
     }
 }

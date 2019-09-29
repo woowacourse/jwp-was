@@ -11,13 +11,22 @@ import java.util.Map;
 public class UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    public String addUser(Map<String, String> map) {
+    private UserService() {
+    }
+
+    public static UserService getInstance() {
+        return UserServiceLazyHolder.INSTANCE;
+    }
+
+    private static class UserServiceLazyHolder {
+        private static final UserService INSTANCE = new UserService();
+    }
+
+    public void addUser(Map<String, String> map) {
         User user = new User(map.get("userId"), map.get("password"), map.get("name"), map.get("email"));
         DataBase.addUser(user);
         logger.debug("insert user : {}", user);
         logger.debug("user list : {}", DataBase.findAll());
-
-        return "/index.html";
     }
 
     public List<User> findAll() {
