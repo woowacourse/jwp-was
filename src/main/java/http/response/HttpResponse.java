@@ -50,6 +50,14 @@ public class HttpResponse {
         logger.info("{}", this);
     }
 
+    public void forward(byte[] body) {
+        this.statusLine = new StatusLine(HttpStatus.OK, HttpVersion.HTTP_1_1);
+        this.httpHeader = HttpHeader.of(Arrays.asList("Content-Type: " + HttpContentType.HTML));
+        this.httpResponseBody = HttpResponseBody.of(body);
+
+        logger.info("{}", this);
+    }
+
     public void redirect(String url) {
         this.statusLine = new StatusLine(HttpStatus.FOUND, HttpVersion.HTTP_1_1);
         this.httpHeader = HttpHeader.redirect(url);
