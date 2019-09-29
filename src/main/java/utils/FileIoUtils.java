@@ -18,7 +18,6 @@ public class FileIoUtils {
         try {
             Path path = Paths.get(FileIoUtils.class.getClassLoader().getResource(filePath).toURI());
             return Files.readAllBytes(path);
-
         } catch (IOException | NullPointerException | URISyntaxException e) {
             log.error(e.getMessage());
             throw new NotFoundException();
