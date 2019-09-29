@@ -13,7 +13,7 @@ import webserver.http.utils.HttpUtils;
 import java.io.IOException;
 import java.util.Map;
 
-public class HandlerBarsViewResolver implements InternalResourceViewResolver {
+public class HandlerBarsViewResolver implements TemplateEngineViewResolver {
     private static final String DEFAULT_PREFIX = "/templates";
     private static final String DEFAULT_SUFFIX = ".html";
 
