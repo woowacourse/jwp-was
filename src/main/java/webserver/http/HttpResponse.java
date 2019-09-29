@@ -29,16 +29,19 @@ public class HttpResponse {
     private final HttpStatusCode statusCode;
     private final HttpContentType contentType;
     private final HttpCookies httpCookies;
-    private final Map<String, String> optionFields;
+    private final HttpHeaderFields headerFields;
     private final String body;
 
     public static class HttpResponseBuilder {
+        private HttpContentType contentType;
+        private HttpHeaderFields headerFields;
+
         private HttpVersion version = HttpVersion.HTTP_1_1;
         private HttpStatusCode statusCode = HttpStatusCode.OK;
-        private HttpContentType contentType;
         private HttpCookies httpCookies = new HttpCookies();
-        private Map<String, String> optionFields = new HashMap<>();
         private String body = "";
+
+        private Map<String, String> tempFields = new HashMap<>();
 
         public HttpResponseBuilder(HttpContentType contentType) {
             this.contentType = contentType;
@@ -54,22 +57,23 @@ public class HttpResponse {
             return this;
         }
 
-        public HttpResponseBuilder connection(HttpConnection connection) {
-            optionFields.put("Connection", connection.toString());
-            return this;
-        }
-
-        public HttpResponseBuilder location(String location) {
-            optionFields.put("Location", location);
-            return this;
-        }
-
         public HttpResponseBuilder body(String body) {
             this.body = body;
             return this;
         }
 
+        public HttpResponseBuilder connection(HttpConnection connection) {
+            tempFields.put("Connection", connection.toString());
+            return this;
+        }
+
+        public HttpResponseBuilder location(String location) {
+            tempFields.put("Location", location);
+            return this;
+        }
+
         public HttpResponse build() {
+            headerFields = HttpHeaderFields.init(tempFields);
             return new HttpResponse(this);
         }
     }
@@ -83,7 +87,7 @@ public class HttpResponse {
         this.statusCode = builder.statusCode;
         this.contentType = builder.contentType;
         this.httpCookies = builder.httpCookies;
-        this.optionFields = builder.optionFields;
+        this.headerFields = builder.headerFields;
         this.body = builder.body;
     }
 
@@ -137,21 +141,14 @@ public class HttpResponse {
     public String serializeHeader() {
         final StringBuilder header = new StringBuilder(serializeMandatory());
 
-        optionFields.keySet().forEach(key -> header.append(headerParse(key, optionFields.get(key))));
-        httpCookies.cookies().forEach(cookie -> header.append(headerParse(SET_COOKIE, cookie.line())));
-
+        headerFields.responseString().ifPresent(header::append);
+        httpCookies.responseString().ifPresent(header::append);
         return header.toString();
-    }
-
-    private String headerParse(String fieldName, String fieldValue) {
-        return fieldName + ": " + fieldValue + "\r\n";
     }
 
     private String serializeMandatory() {
         return String.format(
-                "%s %d %s\r\n" +
-                "Content-Type: %s\r\n" +
-                "Content-Length: %d\r\n",
+                "%s %d %s\r\n" + "Content-Type: %s\r\n" + "Content-Length: %d\r\n",
                 this.version,
                 this.statusCode.number(),
                 this.statusCode.text(),
