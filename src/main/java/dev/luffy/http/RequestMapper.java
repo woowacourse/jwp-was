@@ -6,17 +6,17 @@ import java.util.Map;
 
 public class RequestMapper {
 
-    private static final Map<String, Method> map;
+    private static final Map<RequestMapping, Method> map;
 
     static {
         map = new HashMap<>();
     }
 
-    public static void add(String path, Method method) {
-        map.put(path, method);
+    public static void add(RequestMapping request, Method method) {
+        map.put(request, method);
     }
 
-    public static Method get(String path) {
-        return map.get(path);
+    public static Method get(RequestMapping request) {
+        return map.get(request);
     }
 }

@@ -1,5 +1,6 @@
 package dev.luffy.controller;
 
+import dev.luffy.http.request.HttpRequestMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +14,10 @@ public class IndexController {
 
     private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
 
-    @RequestMapping("/index.html")
+    @RequestMapping(
+            path = "/index.html",
+            method = HttpRequestMethod.GET
+    )
     public static void index(HttpRequest request, HttpResponse response) {
 
         logger.debug("request : {}", request);

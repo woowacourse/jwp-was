@@ -1,5 +1,8 @@
 package dev.luffy.webserver;
 
+import dev.luffy.annotation.Controller;
+import dev.luffy.annotation.RequestMapping;
+import dev.luffy.http.RequestMapper;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
 import org.slf4j.Logger;
@@ -15,17 +18,13 @@ import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import dev.luffy.annotation.Controller;
-import dev.luffy.annotation.RequestMapping;
-import dev.luffy.http.RequestMapper;
-
 public class WebServer {
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
 
     private static final int DEFAULT_PORT = 8080;
     private static final int THREAD_POOL = 100;
-    public static final String PACKAGE_NAME = "dev.luffy";
-    public static final String ADD_METHOD = "add";
+    private static final String PACKAGE_NAME = "dev.luffy";
+    private static final String ADD_METHOD = "add";
 
     public static void main(String args[]) throws Exception {
         scanRequestMapping();
@@ -59,7 +58,7 @@ public class WebServer {
     private static void scanRequestMapping() throws NoSuchMethodException {
         Reflections reflections = new Reflections(PACKAGE_NAME);
         Set<Class<?>> controllerClasses = reflections.getTypesAnnotatedWith(Controller.class);
-        Method requestMapAddMethod = RequestMapper.class.getMethod(ADD_METHOD, String.class, Method.class);
+        Method requestMapAddMethod = RequestMapper.class.getMethod(ADD_METHOD, dev.luffy.http.RequestMapping.class, Method.class);
         controllerClasses
                 .stream()
                 .map(requestMappingAnnotatedMethodScannerMapper())
@@ -75,7 +74,9 @@ public class WebServer {
         return objects -> ((Set<Method>) objects)
                 .forEach(method -> {
                     try {
-                        requestMapAddMethod.invoke(null, method.getAnnotation(RequestMapping.class).value(), method);
+                        RequestMapping annotation = method.getAnnotation(RequestMapping.class);
+                        dev.luffy.http.RequestMapping requestMapping = new dev.luffy.http.RequestMapping(annotation.method(), annotation.path());
+                        requestMapAddMethod.invoke(null, requestMapping, method);
                     } catch (IllegalAccessException | InvocationTargetException e) {
                         e.printStackTrace();
                     }
