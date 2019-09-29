@@ -22,7 +22,8 @@ public enum HeaderElement {
 	COOKIE("Cookie"),
 	SET_COOKIE("Set-Cookie"),
 	ORIGIN("Origin"),
-	PRAGMA("Pragma");
+	PRAGMA("Pragma"),
+	PURPOSE("Purpose");
 
 	private final String element;
 
