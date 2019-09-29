@@ -1,6 +1,5 @@
 package controller;
 
-import http.HttpCookie;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.response.view.RedirectView;
@@ -32,18 +31,12 @@ public class UserLoginController extends AbstractController {
                 httpSession = InMemoryHttpSessionManager.getInstance().createSession();
             }
 
-            setSessionToCookie(response, httpSession);
+            response.addSession(httpSession);
 
             httpSession.setAttribute(LOGIN_USER, foundUser);
             return new RedirectView("/index.html");
         } catch (AuthorizationFailException e) {
             return new RedirectView("/user/login_failed.html");
         }
-    }
-
-    private void setSessionToCookie(HttpResponse response, HttpSession httpSession) {
-        HttpCookie httpCookie = new HttpCookie(HttpSession.SESSION_ID, httpSession.getId());
-        httpCookie.setPath(EVERYWHERE);
-        response.addCookie(httpCookie);
     }
 }

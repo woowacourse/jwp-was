@@ -4,6 +4,7 @@ import http.HTTP;
 import http.HttpCookie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import session.HttpSession;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -17,6 +18,7 @@ public class HttpResponse implements AutoCloseable {
     private StatusLine statusLine;
     private ResponseHeader header;
     private ResponseBody body;
+    private HttpSession httpSession;
 
     private final DataOutputStream dataOutputStream;
 
@@ -82,4 +84,11 @@ public class HttpResponse implements AutoCloseable {
         return header.getContents(http);
     }
 
+    public void addSession(HttpSession httpSession) {
+        this.httpSession = httpSession;
+    }
+
+    public HttpSession getSession() {
+        return httpSession;
+    }
 }
