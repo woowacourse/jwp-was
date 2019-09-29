@@ -59,10 +59,13 @@ public class HttpResponse implements AutoCloseable {
         return new String(body.getContents());
     }
 
-    @Override
-    public void close() throws IOException {
+    public void write() throws IOException {
         writeHeader();
         writeBody();
+    }
+
+    @Override
+    public void close() throws IOException {
         dataOutputStream.close();
     }
 

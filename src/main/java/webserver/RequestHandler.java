@@ -38,6 +38,7 @@ public class RequestHandler implements Runnable {
 
             View view = service(httpRequest, httpResponse);
             ResponseResolver.resolve(view, httpResponse);
+            httpResponse.write();
 
         } catch (IOException e) {
             logger.error(e.getMessage());
