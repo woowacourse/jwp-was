@@ -29,7 +29,7 @@ public class HttpRequestParser {
             HttpHeaders headers;
 
             if (method == HttpMethod.POST || method == HttpMethod.PUT) {
-                httpParameters = parsePostParameters(headerLines);
+                httpParameters = parseRequestBody(headerLines);
                 headers = new HttpHeaders(parseHeaders(getHeaderWithoutMessageBody(headerLines)));
             } else if (method == HttpMethod.GET || method == HttpMethod.DELETE) {
                 httpParameters = new HttpParameters();
@@ -53,16 +53,22 @@ public class HttpRequestParser {
         }
     }
 
-    private static HttpParameters parsePostParameters(List<String> headerLines) {
+    private static HttpParameters parseRequestBody(List<String> headerLines) {
         return new HttpParameters(parseParameter(getQueryStringFromHeaderLines(headerLines)));
     }
 
     private static String getQueryStringFromHeaderLines(List<String> headerLines) {
-        return headerLines.get(headerLines.size() - 1);
+        if ("".equals(headerLines.get(headerLines.size() - 2))) {
+            return headerLines.get(headerLines.size() - 1);
+        }
+        return "";
     }
 
     private static List<String> getHeaderWithoutMessageBody(List<String> headerLines) {
-        return headerLines.subList(0, headerLines.size() - 2);
+        if ("".equals(headerLines.get(headerLines.size() - 2))) {
+            return headerLines.subList(0, headerLines.size() - 2);
+        }
+        return headerLines.subList(0, headerLines.size());
     }
 
     private static Map<String, String> parseHeaders(List<String> headerLines) {
@@ -81,12 +87,17 @@ public class HttpRequestParser {
     }
 
     private static Map<String, String> parseParameter(String queryString) {
+        queryString = Decoder.decodeString(queryString);
         Map<String, String> parameters = new HashMap<>();
         addKeyAndValue(queryString, parameters);
         return parameters;
     }
 
     private static void addKeyAndValue(String queryString, Map<String, String> parameters) {
+        if (queryString.equals("")) {
+            return;
+        }
+        queryString = Decoder.decodeString(queryString);
         String[] details = queryString.split(QUERY_STRING_SEPARATOR);
         for (String detail : details) {
             String[] entry = detail.split(QUERY_STRING_DELIMITER);

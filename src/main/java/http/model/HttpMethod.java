@@ -16,4 +16,6 @@ public enum HttpMethod {
                 .findAny()
                 .orElseThrow(NotFoundException::new);
     }
+
+
 }
