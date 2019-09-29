@@ -17,10 +17,11 @@ public class SessionStorage {
     }
 
     public Session getSession(String sessionId) {
-        return Optional.ofNullable(sessions.get(sessionId)).orElseGet(this::createSession);
+//        return Optional.ofNullable(sessions.get(sessionId)).orElseGet(this::createSession);
+        return sessions.get(sessionId);
     }
 
-    private Session createSession() {
+    public Session createSession() {
         String sessionId = UUID.randomUUID().toString();
         Session session = new Session(sessionId);
         sessions.put(sessionId, session);

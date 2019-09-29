@@ -2,8 +2,10 @@ package http.request;
 
 import http.cookie.Cookies;
 import http.session.Session;
+import http.session.SessionStorage;
 
 import java.util.Map;
+import java.util.Optional;
 
 public class Request {
     private final RequestLine requestLine;
@@ -30,7 +32,7 @@ public class Request {
     }
 
     public Session getSession() {
-        return this.session;
+        return Optional.ofNullable(this.session).orElseGet(SessionStorage.getInstance()::createSession);
     }
 
     public boolean isGetMethod() {
