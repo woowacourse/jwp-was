@@ -98,6 +98,7 @@ public class HttpCookie {
             this.expires = expires;
             return this;
         }
+
         public HttpCookieBuilder maxAge(final int maxAge) {
             this.maxAge = maxAge;
             return this;

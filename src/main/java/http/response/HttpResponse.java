@@ -16,12 +16,11 @@ import java.util.List;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
-
+    private final HttpSession httpSession;
     private StatusLine statusLine;
     private HttpHeader httpHeader;
     private HttpResponseBody httpResponseBody;
     private List<HttpCookie> httpCookies = new ArrayList<>();
-    private final HttpSession httpSession;
 
     public HttpResponse(HttpSession httpSession) {
         this.httpSession = httpSession;
