@@ -29,6 +29,7 @@ class HttpRequestBodyReaderTest {
 		actualRequests.put("userId", "javajigi");
 		actualRequests.put("password", "password");
 		actualRequests.put("name", "JaeSung");
+		actualRequests.put("email", "javajigi@naver.com");
 		return actualRequests;
 	}
 }

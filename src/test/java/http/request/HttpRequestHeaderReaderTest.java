@@ -39,7 +39,7 @@ class HttpRequestHeaderReaderTest {
 			assertThat(httpRequest.getRequestHeaderElement(HeaderElement.HOST)).isEqualTo("localhost:8080");
 			assertThat(httpRequest.getRequestHeaderElement(HeaderElement.CONNECTION)).isEqualTo("keep-alive");
 			assertThat(httpRequest.getRequestHeaderElement(HeaderElement.ACCEPT)).isEqualTo("*/*");
-			assertThat(httpRequest.getRequestHeaderElement(HeaderElement.CONTENT_LENGTH)).isEqualTo("46");
+			assertThat(httpRequest.getRequestHeaderElement(HeaderElement.CONTENT_LENGTH)).isEqualTo("71");
 			assertThat(httpRequest.getRequestHeaderElement(HeaderElement.CONTENT_TYPE)).isEqualTo("application/x-www-form-urlencoded");
 			assertThat(httpRequest.getRequestHeaderElement(HeaderElement.ACCEPT)).isEqualTo("*/*");
 		}
