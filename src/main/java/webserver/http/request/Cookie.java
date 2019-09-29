@@ -9,12 +9,12 @@ public class Cookie {
     public static final String SESSION_ID_KEY = "JSESSIONID";
     private final String LINE_DELIMITER = ";";
     private final String KEY_VALUE_DELIMITER = "=";
-
     private Map<String, String> cookies;
 
     public Cookie(String line) {
         this.cookies = parseLine(line);
     }
+
 
     private Map<String, String> parseLine(String line) {
         if (line == null) {
@@ -28,6 +28,10 @@ public class Cookie {
 
     public String get(String key) {
         return cookies.get(key);
+    }
+
+    public Map<String, String> getCookies() {
+        return cookies;
     }
 
     public String getSessionId() {

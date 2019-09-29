@@ -3,10 +3,10 @@ package webserver.http.request;
 import utils.HttpRequestUtils;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class RequestUri {
     private static final int ABS_PATH_INDEX = 0;
-    private static final String FILE_EXTENSION_DELIMITER = ".";
     private final String absPathAndQuery;
     private final String absPath;
     private final Map<String, String> queryStrings;
@@ -25,7 +25,22 @@ public class RequestUri {
         return queryStrings.get(key);
     }
 
-    public boolean isSameAbsPath(String targetAbsPath){
+    public boolean isSameAbsPath(String targetAbsPath) {
         return absPath.equals(targetAbsPath);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RequestUri that = (RequestUri) o;
+        return Objects.equals(absPathAndQuery, that.absPathAndQuery) &&
+                Objects.equals(absPath, that.absPath) &&
+                Objects.equals(queryStrings, that.queryStrings);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(absPathAndQuery, absPath, queryStrings);
     }
 }

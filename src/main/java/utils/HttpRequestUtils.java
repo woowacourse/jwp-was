@@ -15,8 +15,8 @@ public class HttpRequestUtils {
 
     public static Map<String, String> parseParamToMap(String params) {
         return Arrays.stream(params.trim().split(PARAMS_DELIMITER))
-            .map(param -> param.split(KEY_VALUE_DELIMITER, 2))
-            .collect(Collectors.toMap(a -> a[0], a -> a.length > 1 ? a[1] : ""));
+                .map(param -> param.split(KEY_VALUE_DELIMITER, 2))
+                .collect(Collectors.toMap(a -> a[0], a -> a.length > 1 ? a[1] : ""));
     }
 
     public static Map<String, String> parseQueryString(String absPathAndQuery) {
@@ -31,7 +31,7 @@ public class HttpRequestUtils {
         return absPathAndQuery.split(ABS_PATH_QUERY_DELIMITER);
     }
 
-    public static boolean isLineEmpty(String line){
+    public static boolean isLineEmpty(String line) {
         return !"".equals(line) && null != line;
     }
 }

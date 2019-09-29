@@ -5,7 +5,6 @@ import webserver.http.request.RequestUri;
 import webserver.resolver.FileResolver;
 import webserver.resolver.HandlebarViewResolver;
 import webserver.resolver.HtmlViewResolver;
-import webserver.resolver.Resolver;
 import webserver.servlet.*;
 
 import java.util.ArrayList;

@@ -1,8 +1,6 @@
 package webserver.view;
 
-import utils.FileIoUtils;
 import webserver.http.request.HttpRequest;
-import webserver.http.response.FileType;
 import webserver.http.response.HttpResponse;
 
 import java.io.IOException;

@@ -41,6 +41,7 @@ public class HttpResponse {
         writeHeader();
         end();
     }
+
     public void appendHeader(String key, Object value) {
         headers.put(key, value);
     }

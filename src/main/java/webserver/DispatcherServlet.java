@@ -18,13 +18,8 @@ import java.net.URISyntaxException;
 
 public class DispatcherServlet {
     private static final Logger logger = LoggerFactory.getLogger(DispatcherServlet.class);
-    private HttpResponse httpResponse;
 
-    public DispatcherServlet(HttpResponse httpResponse) {
-        this.httpResponse = httpResponse;
-    }
-
-    public void doDispatch(HttpRequest httpRequest) throws IOException {
+    public void doDispatch(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         try {
             HttpServlet httpServlet = MappingHandler.getServlets(httpRequest.getUri());
             ModelAndView modelAndView = httpServlet.run(httpRequest, httpResponse);

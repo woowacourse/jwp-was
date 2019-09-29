@@ -12,8 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 public class HttpRequestParser {
-    public static final String HEADER_KEY_VALUE_DELIMETER = ": ";
-    public static final String REQUEST_LINE_DELIMETER = " ";
+    private static final String HEADER_KEY_VALUE_DELIMITER = ": ";
+    private static final String REQUEST_LINE_DELIMITER = " ";
+    private static final String CONTENT_LENGTH_KEY = "Content-Length";
     private static final int REQUEST_LINES_REQUESTLINE_INDEX = 0;
     private static final int REQUEST_LINES_HEADER_INDEX = 1;
     private static final int KEY_INDEX = 0;
@@ -23,12 +24,11 @@ public class HttpRequestParser {
     private static final int VERSION_INDEX = 1;
     private static final String COOKIE_KEY = "Cookie";
 
-
     public static HttpRequest parse(BufferedReader bufferedReader) throws IOException {
         List<String> requestLines = parseRequestBuffer(bufferedReader);
         RequestLine requestLine = parseRequestLine(requestLines);
         RequestHeader requestHeader = parseRequestHeader(requestLines);
-        RequestBody requestBody = parseRequestBody(bufferedReader, requestHeader.getHeader("Content-Length"));
+        RequestBody requestBody = parseRequestBody(bufferedReader, requestHeader.getHeader(CONTENT_LENGTH_KEY));
         Cookie cookie = parseCookie(requestHeader.getHeader(COOKIE_KEY));
         return new HttpRequest(requestLine, requestHeader, requestBody, cookie);
     }
@@ -42,16 +42,16 @@ public class HttpRequestParser {
     }
 
     private static RequestLine parseRequestLine(List<String> lines) {
-        String method = lines.get(REQUEST_LINES_REQUESTLINE_INDEX).split(REQUEST_LINE_DELIMETER)[METHOD_INDEX];
-        String uri = lines.get(REQUEST_LINES_REQUESTLINE_INDEX).split(REQUEST_LINE_DELIMETER)[URL_INDEX];
-        String httpVersion = lines.get(REQUEST_LINES_REQUESTLINE_INDEX).split(REQUEST_LINE_DELIMETER)[VERSION_INDEX];
+        String method = lines.get(REQUEST_LINES_REQUESTLINE_INDEX).split(REQUEST_LINE_DELIMITER)[METHOD_INDEX];
+        String uri = lines.get(REQUEST_LINES_REQUESTLINE_INDEX).split(REQUEST_LINE_DELIMITER)[URL_INDEX];
+        String httpVersion = lines.get(REQUEST_LINES_REQUESTLINE_INDEX).split(REQUEST_LINE_DELIMITER)[VERSION_INDEX];
         return new RequestLine(method, uri, httpVersion);
     }
 
     private static RequestHeader parseRequestHeader(List<String> lines) {
         Map<String, String> headers = new HashMap<>();
         for (int i = REQUEST_LINES_HEADER_INDEX; i < lines.size(); i++) {
-            headers.put(lines.get(i).split(HEADER_KEY_VALUE_DELIMETER)[KEY_INDEX], lines.get(i).split(HEADER_KEY_VALUE_DELIMETER)[VALUE_INDEX]);
+            headers.put(lines.get(i).split(HEADER_KEY_VALUE_DELIMITER)[KEY_INDEX], lines.get(i).split(HEADER_KEY_VALUE_DELIMITER)[VALUE_INDEX]);
         }
         return new RequestHeader(headers);
     }
@@ -64,7 +64,7 @@ public class HttpRequestParser {
         return requestBody;
     }
 
-    private static Cookie parseCookie(String line){
+    private static Cookie parseCookie(String line) {
         return new Cookie(line);
     }
 }

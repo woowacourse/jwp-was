@@ -13,7 +13,7 @@ public class HtmlViewResolver implements Resolver {
     @Override
     public View createView(String viewName) {
         if (viewName.startsWith(REDIRECT_PREFIX)) {
-            return new RedirectView(viewName.replace(REDIRECT_PREFIX,BLANK));
+            return new RedirectView(viewName.replace(REDIRECT_PREFIX, BLANK));
         }
         return new ForwardView(FileIoUtils.generateHtmlFilePath(viewName + POSTFIX));
     }

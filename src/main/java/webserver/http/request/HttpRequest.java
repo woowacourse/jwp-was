@@ -1,8 +1,8 @@
 package webserver.http.request;
 
-import webserver.session.SessionStorage;
 import webserver.http.response.HttpVersion;
 import webserver.session.HttpSession;
+import webserver.session.SessionStorage;
 
 public class HttpRequest {
     private RequestLine requestLine;
