@@ -26,9 +26,11 @@ public class HttpRequestParser {
         HashMap<String, String> bodyFields = new HashMap<>();
         String requestParams = IOUtils.readData(bufferedReader, contentLength);
         requestParams = URLDecoder.decode(requestParams, StandardCharsets.UTF_8.name());
+        logger.debug(requestParams);
         String[] splitedParams = requestParams.split(BODY_FIELD_SEPERATE_DELEMETER);
 
         for (String splitedParam : splitedParams) {
+            logger.debug(">>> splitedParam {}", splitedParam);
             String[] queryParam = splitedParam.split(BODY_KEY_VALUE_DELEMETER);
             bodyFields.put(queryParam[0], queryParam[1]);
         }

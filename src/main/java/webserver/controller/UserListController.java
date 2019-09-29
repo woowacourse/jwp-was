@@ -1,6 +1,5 @@
 package webserver.controller;
 
-import ch.qos.logback.core.db.dialect.DBUtil;
 import db.DataBase;
 import model.User;
 import org.slf4j.Logger;
@@ -10,8 +9,8 @@ import webserver.ModelAndView;
 import webserver.controller.request.HttpRequest;
 import webserver.controller.response.HttpResponse;
 
+import java.io.IOException;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 
 public class UserListController extends AbstractController {
@@ -21,18 +20,16 @@ public class UserListController extends AbstractController {
 
 
     @Override
-    protected HttpResponse doGet(HttpRequest httpRequest) {
+    protected HttpResponse doGet(HttpRequest httpRequest) throws IOException {
         String[] logined = httpRequest.getHeaderFieldValue("Cookie").split("=");
 
         if(logined[1].equals("true")) {
-            String path = NON_STATIC_FILE_PATH + USER_LIST_URL;
-            Optional<byte []> maybeBody = FileIoUtils.loadFileFromClasspath(path);
-
             Collection<User> users = DataBase.findAll();
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addModel("users", users);
-            modelAndView.setViewName(path);
-            return HttpResponse.ok(httpRequest,maybeBody.get());
+            modelAndView.applyTemplateEngine(USER_LIST_URL);
+
+            return HttpResponse.ok(httpRequest,modelAndView.getView());
         }
 
         return HttpResponse.sendRedirect(httpRequest, NON_LOGIN_REDIRECT_URL, false);

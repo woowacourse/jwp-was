@@ -1,6 +1,7 @@
 package webserver.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,5 +38,13 @@ public class HttpCookie {
         pairOption.keySet().forEach(key -> stringJoiner.add(key + "=" + pairOption.get(key)));
         singleOption.forEach(stringJoiner::add);
         return stringJoiner.toString();
+    }
+
+    public Map<String, String> getFrontField() {
+        return Collections.unmodifiableMap(frontField);
+    }
+
+    public Map<String, String> getPairOption() {
+        return Collections.unmodifiableMap(pairOption);
     }
 }

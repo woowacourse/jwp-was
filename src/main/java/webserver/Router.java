@@ -8,6 +8,7 @@ import webserver.controller.UserListController;
 import webserver.controller.request.HttpRequest;
 import webserver.controller.response.HttpResponse;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,7 +38,7 @@ public class Router {
         controllers.put("/user/login.html", LOGIN_CONTROLLER);
     }
 
-    public HttpResponse serve(HttpRequest httpRequest) {
+    public HttpResponse serve(HttpRequest httpRequest) throws IOException {
         String path = httpRequest.getPath();
         String extension = httpRequest.getMimeType().getExtension();
 
@@ -48,7 +49,7 @@ public class Router {
         return HttpResponse.staticFile(httpRequest, path);
     }
 
-    private HttpResponse route(HttpRequest httpRequest) {
+    private HttpResponse route(HttpRequest httpRequest) throws IOException {
         String path = httpRequest.getPath();
         if (controllers.containsKey(path)) {
             return controllers.get(path).service(httpRequest);

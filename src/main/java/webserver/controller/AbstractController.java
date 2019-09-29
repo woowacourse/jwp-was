@@ -5,10 +5,10 @@ import webserver.controller.request.HttpRequest;
 import webserver.controller.request.header.HttpMethod;
 import webserver.controller.response.HttpResponse;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 public abstract class AbstractController implements Controller {
-    public static final String NON_STATIC_FILE_PATH = "./templates/";
     private HashMap<HttpMethod, Controller> controllerMethods = new HashMap<>();
 
     AbstractController() {
@@ -17,11 +17,11 @@ public abstract class AbstractController implements Controller {
     }
 
     @Override
-    public HttpResponse service(HttpRequest httpRequest) {
+    public HttpResponse service(HttpRequest httpRequest) throws IOException{
         return controllerMethods.get(httpRequest.getHttpMethod()).service(httpRequest);
     }
 
-    protected HttpResponse doGet(HttpRequest httpRequest) {
+    protected HttpResponse doGet(HttpRequest httpRequest) throws IOException {
         throw new UnsupportedMethodException();
     }
 

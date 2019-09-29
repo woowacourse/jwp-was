@@ -6,9 +6,11 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
+import webserver.ModelAndView;
 import webserver.controller.request.HttpRequest;
 import webserver.controller.response.HttpResponse;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 
@@ -17,11 +19,11 @@ public class UserController extends AbstractController {
     private static final String SAVE_REDIRECT_URL = "/index.html";
 
     @Override
-    public HttpResponse doGet(HttpRequest httpRequest) {
-        String path = NON_STATIC_FILE_PATH + httpRequest.getPath();
-        Optional<byte []> maybeBody = FileIoUtils.loadFileFromClasspath(path);
+    public HttpResponse doGet(HttpRequest httpRequest) throws IOException {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.applyTemplateEngine(httpRequest.getPath());
 
-        return HttpResponse.ok(httpRequest,maybeBody.get());
+        return HttpResponse.ok(httpRequest,modelAndView.getView());
     }
 
     @Override

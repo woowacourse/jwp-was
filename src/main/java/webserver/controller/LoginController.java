@@ -4,10 +4,11 @@ import db.DataBase;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.FileIoUtils;
+import webserver.ModelAndView;
 import webserver.controller.request.HttpRequest;
 import webserver.controller.response.HttpResponse;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 
@@ -19,10 +20,10 @@ public class LoginController extends AbstractController {
     private static final String LOGIN_FAILED_INDEX = "/user/login_failed.html";
 
     @Override
-    public HttpResponse doGet(HttpRequest httpRequest) {
-        String path = NON_STATIC_FILE_PATH + httpRequest.getPath();
-        Optional<byte[]> maybeBody = FileIoUtils.loadFileFromClasspath(path);
-        return HttpResponse.ok(httpRequest,maybeBody.get());
+    public HttpResponse doGet(HttpRequest httpRequest) throws IOException {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.applyTemplateEngine(httpRequest.getPath());
+        return HttpResponse.ok(httpRequest,modelAndView.getView());
     }
 
     @Override
@@ -37,12 +38,8 @@ public class LoginController extends AbstractController {
     private HttpResponse sendLoginPage(HttpRequest httpRequest,String userId, String password) {
         Optional<User> maybeUser = DataBase.findUserById(userId);
 
-        if (maybeUser.isPresent()) {
-            User user = maybeUser.get();
-            boolean isMatchPassword = user.isMatchPassword(password);
-            return HttpResponse.sendRedirect(httpRequest, LOGIN_SUCCESS_INDEX, isMatchPassword);
-        }
-
-        return HttpResponse.sendRedirect(httpRequest, LOGIN_FAILED_INDEX, false);
+        return maybeUser.filter(user -> user.isMatchPassword(password))
+            .map(user -> HttpResponse.sendRedirect(httpRequest,LOGIN_SUCCESS_INDEX, true))
+            .orElse(HttpResponse.sendRedirect(httpRequest, LOGIN_FAILED_INDEX, false));
     }
 }
