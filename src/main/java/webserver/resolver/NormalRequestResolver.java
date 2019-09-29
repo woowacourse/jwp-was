@@ -2,7 +2,7 @@ package webserver.resolver;
 
 import controller.Controller;
 import controller.LoginController;
-import controller.UserController;
+import controller.SignUpController;
 import controller.UserListController;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -19,7 +19,7 @@ public class NormalRequestResolver {
     private static final Map<String, Controller> controllers = new HashMap<>();
 
     static {
-        controllers.put("/user/create", new UserController());
+        controllers.put("/user/create", new SignUpController());
         controllers.put("/user/login", new LoginController());
         controllers.put("/user/list", new UserListController());
     }

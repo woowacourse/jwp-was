@@ -11,8 +11,8 @@ import webserver.ServerErrorException;
 
 import java.util.Map;
 
-public class UserController extends BasicController {
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
+public class SignUpController extends BasicController {
+    private static final Logger log = LoggerFactory.getLogger(SignUpController.class);
 
     @Override
     public ModelAndView doGet(HttpRequest request, HttpResponse response) {
