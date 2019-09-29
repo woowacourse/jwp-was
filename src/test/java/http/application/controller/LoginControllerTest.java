@@ -2,6 +2,7 @@ package http.application.controller;
 
 import db.DataBase;
 import http.common.HttpHeader;
+import http.common.HttpSession;
 import http.common.HttpVersion;
 import http.request.HttpRequest;
 import http.request.HttpRequestParser;
@@ -18,6 +19,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -28,18 +30,21 @@ public class LoginControllerTest {
     private static final String LOGIN_FAILED_HTML = "./templates/user/login_failed.html";
 
     private LoginController loginController;
+    private HttpRequest httpRequest;
+    private HttpResponse httpResponse;
 
     @BeforeEach
     void setUp() {
         loginController = new LoginController();
+
+        httpResponse = new HttpResponse(new HttpSession(UUID.randomUUID()));
         DataBase.addUser(new User("pkch", "1234", "박경철", "chulsea@woowa.com"));
     }
 
     @Test
     void login_정상_흐름_테스트() throws IOException, URISyntaxException {
         InputStream in = new FileInputStream(BasicControllerTest.TEST_RESOURCES + "/http_login.txt");
-        HttpRequest httpRequest = HttpRequestParser.parse(in);
-        HttpResponse httpResponse = new HttpResponse();
+        httpRequest = HttpRequestParser.parse(in);
 
         loginController.service(httpRequest, httpResponse);
 
@@ -61,8 +66,7 @@ public class LoginControllerTest {
     @Test
     void login_실패_흐름_테스트() throws IOException, URISyntaxException {
         InputStream in = new FileInputStream(BasicControllerTest.TEST_RESOURCES + "/http_login_failed.txt");
-        HttpRequest httpRequest = HttpRequestParser.parse(in);
-        HttpResponse httpResponse = new HttpResponse();
+        httpRequest = HttpRequestParser.parse(in);
 
         loginController.service(httpRequest, httpResponse);
 
