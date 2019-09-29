@@ -12,7 +12,7 @@ public class HttpRequestHeaderFactory {
 	private static final int KEY = 0;
 	private static final int VALUE = 1;
 
-	public static HttpRequestHeader createHttpCookieStore(List<String> lines) {
+	public static HttpRequestHeader create(List<String> lines) {
 		Map<String, String> fields = new HashMap<>();
 		lines.forEach(line -> {
 			String[] element = line.split(": ");
@@ -20,7 +20,7 @@ public class HttpRequestHeaderFactory {
 		});
 
 		if (fields.containsKey("Cookie")) {
-            HttpCookieStore httpCookieStore = createHttpCookieStore(fields.get("Cookie"));
+			HttpCookieStore httpCookieStore = createHttpCookieStore(fields.get("Cookie"));
 			fields.remove("Cookie");
 			return new HttpRequestHeader(fields, httpCookieStore);
 		}
@@ -36,6 +36,6 @@ public class HttpRequestHeaderFactory {
 							return new HttpCookie(cookieKeyValue[0], cookieKeyValue[1]);
 						})
 						.collect(toList())
-        );
+		);
 	}
 }
