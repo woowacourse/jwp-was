@@ -41,21 +41,7 @@ public class HttpResponse {
         cookies.put(key, value);
     }
 
-    public void forward(final View view) throws IOException {
-        byte[] body = view.render().getBytes(DEFAULT_CHARSET);
-        addHeader("Content-Length", Integer.toString(body.length));
-
-        writeStartLine(StatusCode.OK);
-        writeHeaders();
-        writeCookies();
-        writeNewLine();
-
-        outputStream.write(body, 0, body.length);
-        outputStream.flush();
-    }
-
-    public void forward(String path) throws IOException, URISyntaxException {
-        byte[] body = FileIoUtils.loadFileFromClasspath(path);
+    public void forward(final byte[] body) throws IOException {
         addHeader("Content-Length", Integer.toString(body.length));
 
         writeStartLine(StatusCode.OK);

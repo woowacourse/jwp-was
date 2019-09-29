@@ -4,6 +4,7 @@ import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.FileIoUtils;
 import webserver.exception.NotMatchUrlException;
 import webserver.support.PathHandler;
 
@@ -17,7 +18,7 @@ public class FileContainer {
         try {
             String absoluteUrl = PathHandler.path(httpRequest.getResourcePath());
             logger.debug("static file path : {}", absoluteUrl);
-            httpResponse.forward(absoluteUrl);
+            httpResponse.forward(FileIoUtils.loadFileFromClasspath(absoluteUrl));
             return true;
         } catch (NotMatchUrlException e) {
             return false;

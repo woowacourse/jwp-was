@@ -3,6 +3,7 @@ package servlet.view;
 import com.github.jknack.handlebars.Template;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +19,7 @@ public class View {
         model.put(key, value);
     }
 
-    public String render() throws IOException {
-        return templateView.apply(model);
+    public byte[] render(final Charset charset) throws IOException {
+        return templateView.apply(model).getBytes(charset);
     }
 }

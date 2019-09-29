@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.FileIoUtils;
 import webserver.support.PathHandler;
 
 import java.io.ByteArrayOutputStream;
@@ -17,9 +18,11 @@ public class HttpResponseTest {
     @DisplayName("정적 파일 Forwarding")
     public void StaticResourceForwarding() throws IOException, URISyntaxException {
         ByteArrayOutputStream byteArrayOutputStream = createOutPutStream();
+        final String absoluteUrl = PathHandler.path("/index.html");
         HttpResponse httpResponse = new HttpResponse(byteArrayOutputStream);
         httpResponse.addHeader("Content-Type", "text/html");
-        httpResponse.forward(PathHandler.path("/index.html"));
+        httpResponse.forward(FileIoUtils.loadFileFromClasspath(absoluteUrl));
+
         log.info("{}", byteArrayOutputStream.toString());
     }
 

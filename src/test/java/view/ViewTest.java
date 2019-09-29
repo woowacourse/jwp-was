@@ -1,5 +1,6 @@
 package view;
 
+import com.google.common.base.Charsets;
 import db.DataBase;
 import domain.User;
 import org.junit.jupiter.api.DisplayName;
@@ -27,6 +28,6 @@ public class ViewTest {
 
         View view = ViewResolver.resolve("/user/list.html");
         view.addModel("users", users);
-        logger.info(view.render());
+        logger.info(view.render(Charsets.UTF_8).toString());
     }
 }

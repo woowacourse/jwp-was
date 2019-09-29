@@ -1,5 +1,6 @@
 package servlet.controller;
 
+import com.google.common.base.Charsets;
 import domain.UserService;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -21,7 +22,7 @@ public class UserListController extends HttpController {
         if (isLogin) {
             View view = resolve("/user/list.html");
             view.addModel("users", userService.findAll());
-            httpResponse.forward(view);
+            httpResponse.forward(view.render(Charsets.UTF_8));
             return;
         }
         httpResponse.addHeader("Location", "/index.html");
