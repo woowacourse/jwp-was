@@ -19,10 +19,6 @@ public class HttpCookies {
         cookies.add(cookie);
     }
 
-    public List<HttpCookie> cookies() {
-        return cookies;
-    }
-
     public Optional<String> responseString() {
         StringBuilder result = new StringBuilder();
 
