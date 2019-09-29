@@ -15,8 +15,8 @@ public class UserListServlet extends AbstractServlet {
         if (request.matchCookie("logined", "true")) {
             Map<String, Object> model = new HashMap<>();
             model.put("users", DataBase.findAll());
-            View view = new HandlebarsView("/user/list", model);
-            response.setBody(view, request.getMimeType());
+            View view = new HandlebarsView("/user/list", model, request.getMimeType());
+            response.setView(view);
             return;
         }
         response.redirect("/index.html");

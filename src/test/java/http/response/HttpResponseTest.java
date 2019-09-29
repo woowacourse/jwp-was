@@ -20,7 +20,7 @@ public class HttpResponseTest {
 
         assertThat(httpResponse.getStatus()).isEqualTo(FOUND);
         assertThat(httpResponse.getHeaders().getHeader(HttpHeaders.LOCATION)).isEqualTo(location);
-        assertThat(httpResponse.getBody()).isEqualTo(null);
+        assertThat(httpResponse.getView().render()).isEqualTo(null);
     }
 
     @Test
@@ -33,7 +33,7 @@ public class HttpResponseTest {
         httpResponse.error(error);
 
         assertThat(httpResponse.getStatus()).isEqualTo(NOT_FOUND);
-        assertThat(httpResponse.getBody()).isEqualTo(errorMessage);
+        assertThat(httpResponse.getView().render()).isEqualTo(errorMessage);
     }
 
     @Test
@@ -46,7 +46,7 @@ public class HttpResponseTest {
         httpResponse.error(error);
 
         assertThat(httpResponse.getStatus()).isEqualTo(METHOD_NOT_ALLOWED);
-        assertThat(httpResponse.getBody()).isEqualTo(errorMessage);
+        assertThat(httpResponse.getView().render()).isEqualTo(errorMessage);
     }
 
     @Test

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 
+import static http.HttpMimeType.DEFAULT_MEDIA_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class HandlebarsViewTest {
@@ -18,7 +19,7 @@ class HandlebarsViewTest {
 
         Map<String, Object> model = new HashMap<>();
         model.put("user", user);
-        View view = new HandlebarsView("user/profile", model);
+        View view = new HandlebarsView("user/profile", model, DEFAULT_MEDIA_TYPE);
 
         String body = new String(view.render());
         assertThat(body).contains("자바지기");

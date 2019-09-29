@@ -42,7 +42,7 @@ class UserListServletTest {
 
         userListServlet.handle(request, response);
 
-        String body = new String(response.getBody());
+        String body = new String(response.getView().render());
         assertThat(body).contains("userId");
         assertThat(body).contains("userName");
         assertThat(body).contains("email@woo.wa");

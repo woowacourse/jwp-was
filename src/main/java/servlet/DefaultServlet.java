@@ -25,8 +25,8 @@ public class DefaultServlet implements Servlet {
         for (String prefix : FILE_PATH_PREFIXES) {
             String staticFilePath = prefix + request.getUri().getPath();
             if (FileIoUtils.existFileInClasspath(staticFilePath)) {
-                View view = new StaticView(staticFilePath);
-                response.setBody(view, request.getMimeType());
+                View view = new StaticView(staticFilePath, request.getMimeType());
+                response.setView(view);
                 return;
             }
         }

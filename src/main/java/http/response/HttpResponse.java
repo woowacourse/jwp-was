@@ -1,12 +1,13 @@
 package http.response;
 
 import http.HttpHeaders;
-import http.HttpMimeType;
 import http.HttpVersion;
+import view.EmptyView;
 import view.SimpleView;
 import view.View;
 
-import static http.HttpHeaders.*;
+import static http.HttpHeaders.LOCATION;
+import static http.HttpHeaders.SET_COOKIE;
 import static http.response.HttpStatus.FOUND;
 import static http.response.HttpStatus.OK;
 
@@ -17,24 +18,25 @@ public class HttpResponse {
     private HttpVersion version;
     private HttpStatus status;
     private HttpHeaders headers;
-    private byte[] body;
+    private View view;
 
     public HttpResponse(HttpVersion version) {
         this.version = version;
         this.status = OK;
         this.headers = new HttpHeaders();
+        this.view = new EmptyView();
     }
 
     public void redirect(String location) {
         status = FOUND;
         headers.put(LOCATION, location);
-        body = null;
+        this.view = new EmptyView();
     }
 
     public void error(HttpStatus status) {
-        this.status = status;
         headers.clear();
-        setBody(new SimpleView(status.getMessage()), HttpMimeType.HTML);
+        this.status = status;
+        this.view = new SimpleView(status.getMessage());
     }
 
     public HttpVersion getVersion() {
@@ -61,16 +63,11 @@ public class HttpResponse {
         headers.put(SET_COOKIE, cookie);
     }
 
-    public void setBody(View view, HttpMimeType mediaType) {
-        byte[] body = view.render();
-        if (body != null) {
-            headers.put(CONTENT_TYPE, mediaType.toString());
-            headers.put(CONTENT_LENGTH, Integer.toString(body.length));
-            this.body = body;
-        }
+    public void setView(View view) {
+        this.view = view;
     }
 
-    public byte[] getBody() {
-        return body;
+    public View getView() {
+        return view;
     }
 }

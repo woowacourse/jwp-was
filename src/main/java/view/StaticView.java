@@ -1,5 +1,6 @@
 package view;
 
+import http.HttpMimeType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
@@ -11,9 +12,11 @@ public class StaticView implements View {
     private static final Logger log = LoggerFactory.getLogger(StaticView.class);
 
     private String viewPath;
+    private HttpMimeType mimeType;
 
-    public StaticView(String viewPath) {
+    public StaticView(String viewPath, HttpMimeType mimeType) {
         this.viewPath = viewPath;
+        this.mimeType = mimeType;
     }
 
     @Override
@@ -26,5 +29,10 @@ public class StaticView implements View {
             log.debug(e.getMessage());
         }
         return null;
+    }
+
+    @Override
+    public HttpMimeType getMimeType() {
+        return mimeType;
     }
 }
