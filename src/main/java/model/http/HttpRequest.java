@@ -4,6 +4,8 @@ import utils.HttpMethod;
 
 import java.util.Map;
 
+import static webserver.RequestHandler.sessionPool;
+
 public class HttpRequest {
     private RequestLine requestLine;
     private RequestHeader requestHeader;
@@ -51,4 +53,19 @@ public class HttpRequest {
     public String getBodyValueBy(String key) {
         return requestBody.getValueBy(key);
     }
+
+    // TODO : 리팩토링 필요
+    public HttpSession getHttpSession() {
+        if (requestHeader.getCookies() != null) {
+            for (Cookie cookie : requestHeader.getCookies()) {
+                if ("id".equals(cookie.getName()) && cookie.getValue() != null) {
+                    return sessionPool.get(cookie.getValue());
+                }
+            }
+        }
+        HttpSession session = new HttpSession();
+        sessionPool.put(session.getId(), session);
+        return session;
+    }
+
 }

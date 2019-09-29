@@ -3,6 +3,7 @@ package webserver;
 import controller.exception.NotFoundUrlException;
 import model.http.HttpRequest;
 import model.http.HttpResponse;
+import model.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.OutputStreamHandler;
@@ -16,10 +17,13 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private Socket connection;
+    public static Map<String, HttpSession> sessionPool = new HashMap<>();
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;

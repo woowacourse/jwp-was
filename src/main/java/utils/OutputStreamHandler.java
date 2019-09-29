@@ -21,13 +21,16 @@ public class OutputStreamHandler {
 
     private static void handleOutputStream(OutputStream out, HttpResponse httpResponse) throws IOException, URISyntaxException {
         DataOutputStream dos = new DataOutputStream(out);
+        byte[] body = new byte[0];
         if (httpResponse.isNotInitialized() || httpResponse.hasError()) {
-            byte[] body = FileIoUtils.loadFileFromClasspath("./templates/error.html");
+            body = FileIoUtils.loadFileFromClasspath("./templates/error.html");
             createResponse(httpResponse, dos, body);
             return;
         }
 
-        byte[] body = FileIoUtils.loadFileFromClasspath(httpResponse.getPath());
+        if (!httpResponse.isRedirect()) {
+            body = FileIoUtils.loadFileFromClasspath(httpResponse.getPath());
+        }
         createResponse(httpResponse, dos, body);
     }
 
@@ -40,8 +43,7 @@ public class OutputStreamHandler {
         try {
             dos.writeBytes("HTTP/1.1 " + response.getHttpStatusCode() + " " + response.getHttpReasonPhrase() + " \r\n");
             if (response.isRedirect()) {
-                // TODO : templates/어떤디렉토리 안에 있는 파일은 접근 못하고 있음. lastIndexOf(/)로 잘라서 생긴 문제
-                dos.writeBytes("Location: " + response.getResourceName() + " \r\n");
+                dos.writeBytes("Location: " + response.getPath() + " \r\n");
             }
             dos.writeBytes("Content-Type: " + response.getMediaType() + ";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");

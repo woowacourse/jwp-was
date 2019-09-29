@@ -52,6 +52,7 @@ public class RequestHeaderParser {
             String[] headers = line.split(HEADER_SEPARATOR);
             requestHeader.add(headers[HEADER_KEY], headers[HEADER_VALUE]);
         }
+
         return requestHeader;
     }
 }

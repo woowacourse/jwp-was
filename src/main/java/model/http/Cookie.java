@@ -68,6 +68,10 @@ public class Cookie {
         this.secure = secure;
     }
 
+    public boolean isLogined() {
+        return value.equals("true");
+    }
+
     public String toStringForHttpResponseHeader() {
         String cookieString = "Set-Cookie: " + name + "=" + value + "; ";
         if (expires != null) {
