@@ -1,5 +1,7 @@
 package webserver.http;
 
+import webserver.http.exception.NotExistSessionIdException;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -26,5 +28,12 @@ public class SessionManager {
 
         session.put(sessionId, httpSession);
         return sessionId;
+    }
+
+    public HttpSession getSession(String sessionId) {
+        if (!session.containsKey(sessionId)) {
+            throw new NotExistSessionIdException();
+        }
+        return session.get(sessionId);
     }
 }
