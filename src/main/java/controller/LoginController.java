@@ -6,6 +6,7 @@ import http.request.Request;
 import http.request.RequestMethod;
 import http.response.Response;
 import http.session.Session;
+import http.session.sessionkeygenerator.UUIDSessionKeyGenerator;
 import model.User;
 
 public class LoginController implements Controller {
@@ -22,7 +23,7 @@ public class LoginController implements Controller {
         User user = DataBase.findUserById(request.getQueryParameters().getParameter("userId"));
 
         if (user != null && user.isCorrectPassWord(request.getQueryParameters().getParameter("password"))) {
-            Session session = request.getSession();
+            Session session = request.getSession(new UUIDSessionKeyGenerator());
             session.setAttribute("user", user.getUserId());
 
             response.found()

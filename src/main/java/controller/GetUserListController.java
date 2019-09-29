@@ -6,6 +6,7 @@ import http.request.Request;
 import http.request.RequestMethod;
 import http.response.Response;
 import http.session.Session;
+import http.session.sessionkeygenerator.UUIDSessionKeyGenerator;
 
 import java.io.IOException;
 
@@ -19,7 +20,7 @@ public class GetUserListController implements Controller {
 
     @Override
     public void processResponse(Request request, Response response) throws IOException {
-        Session session = request.getSession();
+        Session session = request.getSession(new UUIDSessionKeyGenerator());
         if (session.getAttriubte("user") != null) {
 
             String page = TemplateManager.getTemplateProcessedPage();

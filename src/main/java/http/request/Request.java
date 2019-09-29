@@ -1,9 +1,8 @@
 package http.request;
 
 import controller.controllermapper.ControllerMapper;
-import http.session.Cookie;
-import http.session.Session;
-import http.session.SessionRepository;
+import http.session.*;
+import http.session.sessionkeygenerator.SessionKeyGenerator;
 
 public class Request {
     private RequestMethod requestMethod;
@@ -37,8 +36,8 @@ public class Request {
         return requestMethod;
     }
 
-    public Session getSession() {
+    public Session getSession(SessionKeyGenerator sessionKeyGenerator) {
         String sessionId = this.cookie.getSessionId();
-        return SessionRepository.getInstance().getSession(sessionId);
+        return SessionRepository.getInstance().getSession(sessionId, sessionKeyGenerator);
     }
 }

@@ -11,6 +11,7 @@ import http.request.RequestMethod;
 import http.request.RequestUrl;
 import http.session.Session;
 import http.session.SessionRepository;
+import http.session.sessionkeygenerator.UUIDSessionKeyGenerator;
 import model.User;
 
 import java.io.IOException;
@@ -68,7 +69,7 @@ public class BaseTest {
         User user2 = new User("kjm", "kjm", "kjm", "kjm@gmail.com");
         DataBase.addUser(user1);
         DataBase.addUser(user2);
-        Session session = SessionRepository.getInstance().createSession();
+        Session session = SessionRepository.getInstance().createSession(new UUIDSessionKeyGenerator());
         session.setAttribute("user", user2.getUserId());
 
         return session;

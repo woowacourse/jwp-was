@@ -3,11 +3,10 @@ package controller;
 import controller.controllermapper.ControllerFactory;
 import db.DataBase;
 import http.request.Request;
-import http.request.RequestInformation;
-import http.request.RequestMethod;
 import http.request.RequestUrl;
 import http.response.Response;
 import http.response.ResponseStatus;
+import http.session.sessionkeygenerator.CustomMadeSessionKeyGenerator;
 import http.session.Session;
 import http.session.SessionRepository;
 import model.User;
@@ -142,7 +141,7 @@ public class ControllerIntegerationTest extends BaseTest {
         Session session = signUpAndLogin();
 
         //when
-        Request request = createGetRequestWithSession(SessionRepository.getInstance().createSession().getSessionId());
+        Request request = createGetRequestWithSession(SessionRepository.getInstance().createSession(new CustomMadeSessionKeyGenerator()).getSessionId());
         Response response = new Response();
         Controller controller = factory.mappingController(request);
         controller.processResponse(request, response);
