@@ -8,9 +8,11 @@ import java.util.Objects;
 public class HttpRequestHeader {
     private static final String CONTENT_LENGTH = "Content-Length";
     private Map<String, String> fields;
+    private HttpCookieStore httpCookieStore;
 
-    public HttpRequestHeader(Map<String, String> fields) {
+    public HttpRequestHeader(Map<String, String> fields, HttpCookieStore httpCookieStore) {
         this.fields = fields;
+        this.httpCookieStore = httpCookieStore;
     }
 
     public HttpRequestHeader(List<String> headers) {
@@ -49,6 +51,7 @@ public class HttpRequestHeader {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         fields.forEach((key, value) -> stringBuilder.append(key).append(": ").append(value).append("\r\n"));
+        stringBuilder.append(httpCookieStore.toString());
         stringBuilder.append("\r\n");
 
         return stringBuilder.toString();
