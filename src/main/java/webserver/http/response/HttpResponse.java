@@ -29,20 +29,24 @@ public class HttpResponse {
         responseHeader = new ResponseHeader();
     }
 
-    public void addStatus() {
+    public HttpResponse addStatus() {
         responseStatusLine = new ResponseStatusLine(httpVersion);
+        return this;
     }
 
-    public void addStatus(ResponseStatus responseStatus) {
+    public HttpResponse addStatus(ResponseStatus responseStatus) {
         responseStatusLine = new ResponseStatusLine(httpVersion, responseStatus);
+        return this;
     }
 
-    public void addHeader(HttpHeaderField key, ResponseContentType contentType) {
+    public HttpResponse addHeader(HttpHeaderField key, ResponseContentType contentType) {
         responseHeader.addHeaders(key, contentType);
+        return this;
     }
 
-    public void addHeader(HttpHeaderField key, String value) {
+    public HttpResponse addHeader(HttpHeaderField key, String value) {
         responseHeader.addHeaders(key, value);
+        return this;
     }
 
     private String doResponse() {
