@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static http.request.support.HttpMethod.POST;
+
 public class HttpRequestFactory {
     public static HttpRequest create(BufferedReader bufferedReader, SessionManager sessionManager) throws IOException {
         List<String> lines = IOUtils.parseHeader(bufferedReader);
@@ -21,7 +23,7 @@ public class HttpRequestFactory {
         HttpRequestHeader header = new HttpRequestHeader(headers);
         HttpSession httpSession = sessionManager.getSession(cookie);
 
-        if ("POST".equals(httpStartLine.getMethod())) {
+        if (POST.equals(httpStartLine.getMethod())) {
             String body = IOUtils.readData(bufferedReader, Integer.parseInt(header.getHeader("Content-Length")));
             HttpRequestBody httpRequestBody = new HttpRequestBody(body);
             return new HttpRequest(httpStartLine, header, cookie, httpSession, httpRequestBody);

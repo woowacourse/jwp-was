@@ -1,5 +1,6 @@
 package http.request;
 
+import http.request.support.HttpMethod;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +16,7 @@ public class HttpRequestTest {
     public void httpGetRequest() throws IOException {
         HttpRequest httpRequest = getHttpRequest("HTTP_GET_QUERY_STRING.txt");
 
-        assertThat(httpRequest.getMethod()).isEqualTo("GET");
+        assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.GET);
         assertThat(httpRequest.getResourcePath()).isEqualTo("/user/create");
         assertThat(httpRequest.getHeader("Host")).isEqualTo("localhost:8080");
         assertThat(httpRequest.getParameter("password")).isEqualTo("password");
@@ -26,7 +27,7 @@ public class HttpRequestTest {
     public void httpPostRequest() throws IOException {
         HttpRequest httpRequest = getHttpRequest("HTTP_POST_USER_CREATE.txt");
 
-        assertThat(httpRequest.getMethod()).isEqualTo("POST");
+        assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.POST);
         assertThat(httpRequest.getResourcePath()).isEqualTo("/user/create");
         assertThat(httpRequest.getHeader("Content-Length")).isEqualTo("91");
         assertThat(httpRequest.getHeader("Content-Type")).isEqualTo("application/x-www-form-urlencoded");
@@ -38,7 +39,7 @@ public class HttpRequestTest {
     public void httpRequestCookie() throws IOException {
         HttpRequest httpRequest = getHttpRequest("HTTP_GET_USER_LIST_LOGIN.txt");
 
-        assertThat(httpRequest.getMethod()).isEqualTo("GET");
+        assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.GET);
         assertThat(httpRequest.getResourcePath()).isEqualTo("/user/list");
         assertThat(httpRequest.getCookie("Path")).isEqualTo("/");
     }

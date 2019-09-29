@@ -1,5 +1,6 @@
 package http.request;
 
+import http.request.support.HttpMethod;
 import http.session.HttpSession;
 
 public class HttpRequest {
@@ -44,7 +45,7 @@ public class HttpRequest {
         return httpSession.getAttribute(name);
     }
 
-    public String getMethod() {
+    public HttpMethod getMethod() {
         return httpStartLine.getMethod();
     }
 
@@ -64,9 +65,9 @@ public class HttpRequest {
         return httpStartLine.getResourcePath();
     }
 
-    public String getParameter(String key) {
-        String method = httpStartLine.getMethod();
-        if ("GET".equals(method)) {
+    public String getParameter(final String key) {
+        HttpMethod method = httpStartLine.getMethod();
+        if (HttpMethod.GET.equals(method)) {
             return httpStartLine.getParameter(key);
         }
         return httpRequestBody.getParameter(key);

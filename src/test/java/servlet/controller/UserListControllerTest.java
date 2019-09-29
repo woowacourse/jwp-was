@@ -2,7 +2,6 @@ package servlet.controller;
 
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import http.session.support.SessionManager;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
