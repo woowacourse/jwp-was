@@ -15,7 +15,7 @@ public class HttpRequest {
     private final HttpRequestParams httpRequestParams;
     private final HttpHeader httpHeader;
     private final HttpRequestBody httpRequestBody;
-    public List<HttpCookie> cookies;
+    private List<HttpCookie> cookies;
 
     public HttpRequest(final RequestLine requestLine,
                        final HttpRequestParams httpRequestParams,

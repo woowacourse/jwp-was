@@ -2,6 +2,7 @@ package http.response;
 
 import http.common.HttpCookie;
 import http.common.HttpHeader;
+import http.common.HttpSession;
 import http.common.HttpVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,11 @@ public class HttpResponse {
     private HttpHeader httpHeader;
     private HttpResponseBody httpResponseBody;
     private List<HttpCookie> httpCookies = new ArrayList<>();
+    private final HttpSession httpSession;
+
+    public HttpResponse(HttpSession httpSession) {
+        this.httpSession = httpSession;
+    }
 
     public StatusLine getStatusLine() {
         return statusLine;
@@ -35,6 +41,12 @@ public class HttpResponse {
 
     public List<HttpCookie> getHttpCookies() {
         return httpCookies;
+    }
+
+    public HttpSession getHttpSession() {
+        HttpCookie jSessionIdCookie = HttpCookie.builder("JSESSIONID", httpSession.getSessionId()).build();
+        httpCookies.add(jSessionIdCookie);
+        return httpSession;
     }
 
     public void forward(String url) {
