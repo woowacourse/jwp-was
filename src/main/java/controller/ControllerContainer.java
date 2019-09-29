@@ -13,6 +13,7 @@ public class ControllerContainer {
 		controllers.put(IndexController.PATH, new IndexController());
 		controllers.put(CreateUserController.PATH, new CreateUserController());
 		controllers.put(LoginUserController.PATH, new LoginUserController());
+		controllers.put(UserListController.PATH, new UserListController());
 		controllers.put("file", new FileController());
 	}
 
