@@ -7,16 +7,16 @@ import java.util.Map;
 import java.util.UUID;
 
 public class SessionManager {
-    private static Map<UUID, HttpSession> sessions = new HashMap<>();
+    private static Map<String, HttpSession> sessions = new HashMap<>();
 
     public static String createSession() {
-        UUID uuid = UUID.randomUUID();
+        String uuid = UUID.randomUUID().toString();
         HttpSession httpSession = new HttpSession(uuid);
         sessions.put(uuid, httpSession);
-        return uuid.toString();
+        return uuid;
     }
 
     public static HttpSession getSession(String uuid) {
-        return sessions.get(UUID.fromString(uuid));
+        return sessions.get(uuid);
     }
 }
