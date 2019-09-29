@@ -14,8 +14,8 @@ public class HttpSessionTest {
 
     @BeforeEach
     void setUp() {
-        httpSession = new HttpSession(uuid);
         uuid = UUID.randomUUID();
+        httpSession = new HttpSession(uuid);
     }
 
     @Test
