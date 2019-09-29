@@ -8,6 +8,7 @@ import webserver.http.response.HttpResponse;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Map;
+import java.util.Objects;
 
 public class HandlebarView implements View {
     String name;
@@ -27,5 +28,19 @@ public class HandlebarView implements View {
 
     public void setTemplate(Template template) {
         this.template = template;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HandlebarView that = (HandlebarView) o;
+        return Objects.equals(name, that.name) &&
+                Objects.equals(template, that.template);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, template);
     }
 }

@@ -8,6 +8,7 @@ import webserver.http.response.HttpResponse;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Map;
+import java.util.Objects;
 
 public class ForwardView implements View {
     String name;
@@ -22,5 +23,18 @@ public class ForwardView implements View {
         httpResponse.ok();
         httpResponse.appendContentHeader(FileType.HTML.getMimeName(), body.length);
         send(httpResponse, body);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ForwardView that = (ForwardView) o;
+        return Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }

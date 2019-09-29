@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class HomeServletTest extends AbstractServletTest {
     @BeforeEach
-    void setup() throws IOException {
+    void setup() {
         httpResponse = new HttpResponse(new DataOutputStream(null), HttpVersion.HTTP1);
         resolver = new HtmlViewResolver();
         httpServlet = new HomeServlet(resolver);
@@ -27,6 +27,6 @@ class HomeServletTest extends AbstractServletTest {
     void doGet() throws IOException, URISyntaxException {
         HttpRequest httpRequest = getCommonGetRequest("/");
         View view = resolver.createView("/index");
-        assertThat(httpServlet.doGet(httpRequest, httpResponse)).isEqualTo(new ModelAndView(view));
+        assertThat(httpServlet.doGet(httpRequest, httpResponse).getView()).isEqualTo(new ModelAndView(view).getView());
     }
 }

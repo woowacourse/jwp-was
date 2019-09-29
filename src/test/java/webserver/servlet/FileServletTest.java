@@ -18,8 +18,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class FileServletTest extends AbstractServletTest {
     FileServlet fileServlet;
+
     @BeforeEach
-    void setup() throws IOException {
+    void setup() {
         httpResponse = new HttpResponse(new DataOutputStream(null), HttpVersion.HTTP1);
         resolver = new FileResolver();
         fileServlet = new FileServlet(resolver);
