@@ -4,8 +4,8 @@ import java.util.Map;
 import java.util.Objects;
 
 public class ModelAndView {
-    View view;
-    Map<String, Object> modelMap;
+    private View view;
+    private Map<String, Object> modelMap;
 
     public ModelAndView(View view) {
         this.view = view;

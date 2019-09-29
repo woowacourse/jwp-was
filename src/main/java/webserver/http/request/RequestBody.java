@@ -7,7 +7,6 @@ import java.util.Map;
 
 public class RequestBody {
 
-
     private Map<String, String> bodies;
 
     public RequestBody(String rawBody) {

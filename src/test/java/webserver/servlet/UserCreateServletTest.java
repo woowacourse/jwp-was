@@ -1,25 +1,23 @@
 package webserver.servlet;
 
-import helper.IOHelper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import webserver.http.response.HttpResponse;
+import webserver.http.response.HttpVersion;
+import webserver.resolver.HtmlViewResolver;
 
-import java.io.BufferedReader;
-import java.io.IOException;
+import java.io.DataOutputStream;
 
-class UserCreateServletTest {
-    @DisplayName("유저 생성")
-    @Test
-    void doPost_userDataByBody_redirect() throws IOException {
-        BufferedReader bufferedReader = IOHelper.createBuffer(
-                "POST /user/create HTTP/1.1",
-                "Host: localhost:8080",
-                "Connection: keep-alive",
-                "Content-Length: 59",
-                "Content-Type: application/x-www-form-urlencoded",
-                "Accept: text/html,*/*",
-                "",
-                "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net"
-        );
+class UserCreateServletTest extends AbstractServletTest {
+    @BeforeEach
+    void setup() {
+        httpResponse = new HttpResponse(new DataOutputStream(null), HttpVersion.HTTP1);
+        resolver = new HtmlViewResolver();
+        httpServlet = new HomeServlet(resolver);
+    }
+
+    @DisplayName("유저 저장")
+    void doPost_userInformation_true() {
+
     }
 }

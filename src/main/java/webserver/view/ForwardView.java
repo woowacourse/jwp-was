@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class ForwardView implements View {
-    String name;
+    private String name;
 
     public ForwardView(String name) {
         this.name = name;

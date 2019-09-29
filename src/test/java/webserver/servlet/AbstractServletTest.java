@@ -1,6 +1,7 @@
 package webserver.servlet;
 
 import helper.IOHelper;
+import model.User;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 import webserver.parser.HttpRequestParser;
@@ -12,6 +13,8 @@ public abstract class AbstractServletTest {
     HttpResponse httpResponse;
     AbstractRequestServlet httpServlet;
     Resolver resolver;
+    User dummyUser = new User("id", "password", "name", "mail@mail");
+
 
     protected HttpRequest getCommonGetRequest(String url) throws IOException {
         return HttpRequestParser.parse(IOHelper.createBuffer(
@@ -21,4 +24,6 @@ public abstract class AbstractServletTest {
                 "Accept: */*"
         ));
     }
+
+
 }

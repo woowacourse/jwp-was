@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class FileView implements View {
-    String name;
+    private String name;
 
     public FileView(String name) {
         this.name = name;

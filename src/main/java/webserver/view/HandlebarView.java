@@ -11,8 +11,8 @@ import java.util.Map;
 import java.util.Objects;
 
 public class HandlebarView implements View {
-    String name;
-    Template template;
+    private String name;
+    private Template template;
 
     public HandlebarView(String name) {
         this.name = name;

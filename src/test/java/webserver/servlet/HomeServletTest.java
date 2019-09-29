@@ -1,6 +1,7 @@
 package webserver.servlet;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
@@ -23,6 +24,7 @@ class HomeServletTest extends AbstractServletTest {
         httpServlet = new HomeServlet(resolver);
     }
 
+    @DisplayName("index로 get요청")
     @Test
     void doGet() throws IOException, URISyntaxException {
         HttpRequest httpRequest = getCommonGetRequest("/");

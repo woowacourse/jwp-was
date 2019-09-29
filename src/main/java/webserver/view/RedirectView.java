@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class RedirectView implements View {
-    String name;
+    private String name;
 
     public RedirectView(String name) {
         this.name = name;
