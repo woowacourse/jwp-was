@@ -50,6 +50,10 @@ public class HttpRequest {
         return httpRequestStartLine.getHttpVersion();
     }
 
+	public String getCookieValue(String key) {
+		return httpRequestHeader.getCookieValue(key);
+	}
+
     @Override
     public String toString() {
         return "HttpRequest{" +

@@ -24,6 +24,10 @@ public class HttpCookieStore {
 		cookies.add(httpCookie);
 	}
 
+	public String getCookieValue(String key) {
+		return getCookie(key).getValue();
+	}
+
 	public HttpCookie getCookie(String key) {
 		return cookies.stream()
 				.filter(httpCookie -> httpCookie.hasValueByKey(key))

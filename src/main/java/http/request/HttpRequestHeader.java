@@ -23,6 +23,10 @@ public class HttpRequestHeader {
         return length;
     }
 
+    public String getCookieValue(String key) {
+        return httpCookieStore.getCookieValue(key);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
