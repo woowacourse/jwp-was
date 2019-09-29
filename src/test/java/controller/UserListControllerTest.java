@@ -9,6 +9,7 @@ import http.request.QueryParameter;
 import http.response.HttpResponse;
 import http.session.HttpSession;
 import http.session.HttpSessionManager;
+import http.session.UUIDSessionKeyStrategy;
 import model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,7 @@ class UserListControllerTest {
     void doGet() {
         User user = new User("testUser", "test", "test", "test");
         DataBase.addUser(user);
-        HttpSession httpSession = HttpSessionManager.getInstance().createSession();
+        HttpSession httpSession = HttpSessionManager.getInstance().createSession(new UUIDSessionKeyStrategy());
 
         httpSession.setAttribute("logined", "true");
 

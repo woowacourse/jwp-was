@@ -4,6 +4,7 @@ import http.HttpMethod;
 import http.MediaType;
 import http.session.HttpSession;
 import http.session.HttpSessionManager;
+import http.session.SessionKeyGenerator;
 
 public class HttpRequest {
     public static final String SESSION_ID = "JSESSIONID";
@@ -67,9 +68,9 @@ public class HttpRequest {
         return this.httpCookie.getCookie(key);
     }
 
-    public HttpSession getHttpSession() {
+    public HttpSession getHttpSession(SessionKeyGenerator sessionKeyGenerator) {
         if (httpSession == null) {
-            this.httpSession = HttpSessionManager.getInstance().createSession();
+            this.httpSession = HttpSessionManager.getInstance().createSession(sessionKeyGenerator);
         }
         this.httpSession = HttpSessionManager.getInstance().getSession(this.httpSession.getSessionId());
         return httpSession;

@@ -4,6 +4,7 @@ import db.DataBase;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.session.HttpSession;
+import http.session.UUIDSessionKeyStrategy;
 import model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,7 +38,7 @@ class LoginControllerTest {
         HttpResponse httpResponse = new HttpResponse();
         loginController.doPost(httpRequest, httpResponse);
 
-        HttpSession httpSession = httpRequest.getHttpSession();
+        HttpSession httpSession = httpRequest.getHttpSession(new UUIDSessionKeyStrategy());
         String sessionId = httpSession.getSessionId();
         assertEquals(httpResponse.getHttpResponseHeader().getHeader("Set-Cookie"), "JSESSIONID=" + sessionId + "; Path=/");
         assertEquals(httpResponse.getHttpStatusLine().toString(), "HTTP/1.1 302 FOUND\r\n");

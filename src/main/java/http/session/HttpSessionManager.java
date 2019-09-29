@@ -1,8 +1,6 @@
 package http.session;
 
 import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class HttpSessionManager {
@@ -21,14 +19,13 @@ public class HttpSessionManager {
     }
 
     public HttpSession getSession(String sessionId) {
-        return Optional.ofNullable(sessions.get(sessionId))
-                .orElseGet(this::createSession);
+        return sessions.get(sessionId);
     }
 
-    public HttpSession createSession() {
-        UUID uuid = UUID.randomUUID();
-        HttpSession httpSession = new HttpSession(uuid.toString());
-        sessions.put(uuid.toString(), httpSession);
+    public HttpSession createSession(SessionKeyGenerator sessionKeyGenerator) {
+        String sessionId = sessionKeyGenerator.create();
+        HttpSession httpSession = new HttpSession(sessionId);
+        sessions.put(sessionId, httpSession);
         return httpSession;
     }
 

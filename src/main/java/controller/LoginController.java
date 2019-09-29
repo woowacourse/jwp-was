@@ -5,6 +5,7 @@ import db.DataBase;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.session.HttpSession;
+import http.session.UUIDSessionKeyStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,18 +25,18 @@ public class LoginController extends Controller {
     protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         String userId = httpRequest.getQueryValue("userId");
         String userPassword = httpRequest.getQueryValue("password");
+        HttpSession httpSession = httpRequest.getHttpSession(new UUIDSessionKeyStrategy());
 
         try {
             Optional.ofNullable(DataBase.findUserById(userId))
                     .filter(user -> user.matchPassword(userPassword))
                     .orElseThrow(() -> new NotFoundUserException(userId));
-            HttpSession httpSession = httpRequest.getHttpSession();
             httpSession.setAttribute(LOGIN_KEY, LOGIN_TRUE);
             httpResponse.setCookie(SESSION_ID + "=" + httpSession.getSessionId() + "; Path=/");
             httpResponse.redirect("/index.html");
         } catch (NotFoundUserException e) {
             logger.debug(e.getMessage());
-            httpRequest.getHttpSession().invalidate();
+            httpSession.invalidate();
             httpResponse.redirect("/user/login_failed.html");
         }
     }
