@@ -39,10 +39,11 @@ public class ControllerIntegerationTest extends BaseTest {
         controller.processResponse(request, response);
 
         //then
+        byte[] confirmBody = FileIoUtils.loadFileFromClasspath("../resources/templates/index.html");
         Map<String, String> testconfirmMap = new LinkedHashMap<>();
         testconfirmMap.put("Content-Type: ", "text/html");
-        testconfirmMap.put("Content-Length: ", "7049");
-        byte[] confirmBody = FileIoUtils.loadFileFromClasspath("../resources/templates/index.html");
+        testconfirmMap.put("Content-Length: ", String.valueOf(confirmBody.length));
+
         assertThat(response.getResponseStatus()).isEqualTo(ResponseStatus.OK);
         assertThat(response.getResponseHeaders().getResponseHeaders()).isEqualTo(testconfirmMap);
         assertThat(response.getResponseBody().getBody()).isEqualTo(confirmBody);
@@ -127,7 +128,7 @@ public class ControllerIntegerationTest extends BaseTest {
         byte[] confirmBody = createWithTemplateEngine();
         Map<String, String> confirmMap = new LinkedHashMap<>();
         confirmMap.put("Content-Type: ", "text/html");
-        confirmMap.put("Content-Length: ", "4914");
+        confirmMap.put("Content-Length: ", String.valueOf(confirmBody.length));
 
         assertThat(response.getResponseStatus()).isEqualTo(ResponseStatus.OK);
         assertThat(response.getResponseHeaders().getResponseHeaders()).isEqualTo(confirmMap);
