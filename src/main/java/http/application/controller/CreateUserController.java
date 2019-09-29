@@ -1,5 +1,6 @@
-package http.application;
+package http.application.controller;
 
+import db.DataBase;
 import http.request.ContentType;
 import http.request.HttpRequest;
 import http.request.MessageBodyParser;
@@ -30,6 +31,7 @@ public class CreateUserController extends AbstractController {
         User user = new User(formData.get("userId"), formData.get("password"),
                 formData.get("name"), formData.get("email"));
 
+        DataBase.addUser(user);
         logger.info("user created: {}", user);
         httpResponse.redirect("/index.html");
     }
