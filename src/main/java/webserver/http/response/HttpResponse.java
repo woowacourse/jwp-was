@@ -45,7 +45,7 @@ public class HttpResponse {
         responseHeader.addHeaders(key, value);
     }
 
-    public String doResponse() {
+    private String doResponse() {
         log.debug("doResponse: {}", responseStatusLine.getStatusLine() +
                 responseHeader.getResponseHeaders() + CRLF + CRLF);
         return responseStatusLine.getStatusLine() +
@@ -60,6 +60,14 @@ public class HttpResponse {
             addHeader(HttpHeaderField.CONTENT_LENGTH, String.valueOf(body.length));
             dos.write(body, 0, body.length);
         }
+        dos.flush();
+    }
+
+    public void sendResponse(OutputStream out, byte[] body) throws IOException {
+        DataOutputStream dos = new DataOutputStream(out);
+        dos.writeBytes(doResponse());
+        addHeader(HttpHeaderField.CONTENT_LENGTH, String.valueOf(body.length));
+        dos.write(body, 0, body.length);
         dos.flush();
     }
 

@@ -20,6 +20,7 @@ public class ControllerFactory {
         controllers.put(RequestMethod.POST + "/user/create", createUserController());
         controllers.put(RequestMethod.GET + "/user/login.html", resourceController());
         controllers.put(RequestMethod.GET + "/user/login_failed.html", resourceController());
+        controllers.put(RequestMethod.GET + "/user/list.html", userListController());
         controllers.put(RequestMethod.POST + "/user/login", loginController());
     }
 
@@ -33,6 +34,10 @@ public class ControllerFactory {
 
     private static AbstractController loginController() {
         return new LoginController();
+    }
+
+    private static AbstractController userListController() {
+        return new UserListController();
     }
 
     public static AbstractController mappingController(HttpRequest httpRequest, HttpResponse httpResponse) {

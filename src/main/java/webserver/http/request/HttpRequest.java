@@ -1,14 +1,9 @@
 package webserver.http.request;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import webserver.http.exception.NoMatchHeaderFieldException;
 import webserver.http.request.core.*;
 import webserver.session.Cookie;
 
 public class HttpRequest {
-    private static final Logger log = LoggerFactory.getLogger(HttpRequest.class);
-
     private RequestLine requestLine;
     private RequestHeader requestHeader;
     private RequestData requestData;
@@ -31,8 +26,8 @@ public class HttpRequest {
         return requestData.getValue(key);
     }
 
-    public String getHttpCookieId() {
-        return cookie.getCookies("JSESSIONID");
+    public String getLogin() {
+        return cookie == null ? null : cookie.getCookies("logined");
     }
 
     public RequestMethod getRequestMethod() {
