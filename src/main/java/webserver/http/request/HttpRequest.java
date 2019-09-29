@@ -62,7 +62,7 @@ public class HttpRequest {
     }
 
     public String getParameter(final String key) {
-        return parameters.getParameter(key);
+        return parameters.get(key);
     }
 
     public static HttpRequestBuilder builder() {

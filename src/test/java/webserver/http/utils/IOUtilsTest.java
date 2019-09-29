@@ -16,6 +16,6 @@ public class IOUtilsTest {
         StringReader sr = new StringReader(data);
         BufferedReader br = new BufferedReader(sr);
 
-        logger.debug("parseQueryString body : {}", IOUtils.readData(br, data.length()));
+        logger.debug("parseToMap body : {}", IOUtils.readData(br, data.length()));
     }
 }

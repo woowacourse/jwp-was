@@ -65,7 +65,7 @@ public class HttpRequestFactory {
         if (httpHeaders.contains(HttpHeaders.CONTENT_LENGTH)) {
             final String contentLength = httpHeaders.get(HttpHeaders.CONTENT_LENGTH);
             final String params = IOUtils.readData(br, Integer.parseInt(contentLength));
-            parameters.addAll(HttpUtils.parseQueryString(params));
+            parameters.addByString(params);
         }
     }
 }

@@ -15,29 +15,11 @@ import java.util.stream.Collectors;
 public class HttpUtils {
     private static final Logger log = LoggerFactory.getLogger(HttpUtils.class);
 
-    private static final String DELIMITER_QUERY = "&";
-    private static final String DELIMITER_QUERY_PAIR = "=";
     private static final String DELIMITER_HEADER = ": ";
     private static final String DELIMITER_EXTENSION = ".";
     private static final int NOT_EXISTS_EXTENSION = 0;
 
     private HttpUtils() {
-    }
-
-    public static Map<String, String> parseQueryString(final String queryParamsText) {
-        if (StringUtils.isEmpty(queryParamsText)) {
-            return new HashMap<>();
-        }
-
-        try {
-            final String queryParams = URLDecoder.decode(queryParamsText, StandardCharsets.UTF_8.toString());
-            return Arrays.stream(queryParams.split(DELIMITER_QUERY))
-                    .map(queryParam -> parseKeyValue(queryParam, DELIMITER_QUERY_PAIR))
-                    .collect(Collectors.toMap(Pair::getKey, Pair::getValue));
-        } catch (UnsupportedEncodingException e) {
-            log.error(e.getMessage());
-            throw new IllegalArgumentException(e.getMessage());
-        }
     }
 
     public static Pair parseHeader(final String header) {
