@@ -3,6 +3,7 @@ package webserver.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
+import webserver.controller.exception.MethodNotAllowedException;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 
@@ -43,7 +44,11 @@ public abstract class AbstractController implements Controller {
         throw new FileNotFoundException("fail to find file.");
     }
 
-    protected abstract void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws FileNotFoundException;
+    protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws FileNotFoundException {
+        throw new MethodNotAllowedException("fail to match method.");
+    }
 
-    protected abstract void doPost(HttpRequest httpRequest, HttpResponse httpResponse);
+    protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
+        throw new MethodNotAllowedException("fail to match method.");
+    }
 }

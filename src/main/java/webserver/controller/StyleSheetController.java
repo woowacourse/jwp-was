@@ -3,7 +3,6 @@ package webserver.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
-import webserver.controller.exception.MethodNotAllowedException;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 
@@ -20,11 +19,6 @@ public class StyleSheetController extends AbstractController {
         httpResponse.addStatusLine(httpRequest, "200", "OK");
         httpResponse.addHeader(HEADER_FIELD_CONTENT_TYPE, CONTENT_TYPE_CSS);
         httpResponse.addBody(staticFile);
-    }
-
-    @Override
-    protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        throw new MethodNotAllowedException("fail to match method.");
     }
 
     @Override

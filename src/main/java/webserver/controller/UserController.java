@@ -1,6 +1,5 @@
 package webserver.controller;
 
-import webserver.controller.exception.MethodNotAllowedException;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 
@@ -15,10 +14,5 @@ public class UserController extends AbstractController {
         httpResponse.addHeader(HEADER_FIELD_CONTENT_TYPE, CONTENT_TYPE_HTML);
         httpResponse.addHeader(HEADER_FIELD_CONTENT_LENGTH, String.valueOf(staticFile.length));
         httpResponse.addBody(staticFile);
-    }
-
-    @Override
-    protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        throw new MethodNotAllowedException("fail to match method.");
     }
 }
