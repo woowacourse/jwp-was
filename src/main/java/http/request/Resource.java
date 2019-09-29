@@ -15,6 +15,10 @@ public class Resource {
 		this.mediaType = mediaType;
 	}
 
+	public String getPath() {
+		return path;
+	}
+
 	public String getUri() {
 		return path + target;
 	}

@@ -24,10 +24,6 @@ public class HttpRequest {
         parameters = new Parameters(httpRequestStartLine.getQueryString());
     }
 
-    public HttpRequestStartLine getHttpRequestStartLine() {
-        return httpRequestStartLine;
-    }
-
     public boolean isContainExtension() {
         int lastIndex = httpRequestStartLine.getUri().lastIndexOf("/");
         String extension = httpRequestStartLine.getUri().substring(lastIndex + 1);
@@ -40,6 +36,10 @@ public class HttpRequest {
 
     public HttpRequestMethod getMethod() {
         return httpRequestStartLine.getHttpRequestMethod();
+    }
+
+    public String getPath() {
+        return httpRequestStartLine.getPath();
     }
 
     public String getUri() {
