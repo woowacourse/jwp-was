@@ -22,6 +22,7 @@ import service.UserService;
 import utils.FileIoUtils;
 import utils.ResourcePathUtils;
 
+import static controller.CreateUserController.JSESSION_ID;
 import static http.request.HttpRequestReader.REQUEST_URI;
 
 public class UserListController extends AbstractController {
@@ -37,6 +38,12 @@ public class UserListController extends AbstractController {
 
 			HttpResponse httpResponse = HttpResponseGenerator.response200Header(
 					httpRequest.getRequestLineElement(REQUEST_URI), responseBody.length);
+
+			if(!httpRequest.isCookieValue(JSESSION_ID)) {
+				String uuid = sessionManager.generateInitialSession();
+				httpResponse.setInitialSession(uuid);
+			}
+
 			httpResponse.forward(responseBody, dos);
 		} catch (IOException e) {
 			throw new FailedForwardException();
@@ -46,7 +53,7 @@ public class UserListController extends AbstractController {
 	}
 
 	private byte[] getResponseBody(HttpRequest httpRequest) throws IOException, URISyntaxException {
-		if (httpRequest.isLogin()) {
+		if (httpRequest.isCookieValue("logined")) {
 			return generateDynamicResource();
 		}
 		return FileIoUtils.loadFileFromClasspath(ResourcePathUtils.getResourcePath("/user/login.html"));

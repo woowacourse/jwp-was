@@ -37,7 +37,11 @@ public class HttpRequest {
 		throw new NullPointerException();
 	}
 
-	public boolean isLogin() {
-		return httpRequestHeader.isCookieValue();
+	public boolean isCookieValue(String cookieKey) {
+		return httpRequestHeader.isCookieValue(cookieKey);
+	}
+
+	public String getCookieValue() {
+		return httpRequestHeader.getRequestElement(HeaderElement.COOKIE).split("=")[1];
 	}
 }

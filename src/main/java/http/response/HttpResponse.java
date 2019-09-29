@@ -62,4 +62,8 @@ public class HttpResponse {
 	public Header getHeader() {
 		return header;
 	}
+
+	public void setInitialSession(String sessionId) {
+		header.setSessionId(sessionId);
+	}
 }
