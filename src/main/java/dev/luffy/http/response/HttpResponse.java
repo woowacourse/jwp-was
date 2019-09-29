@@ -42,7 +42,7 @@ public class HttpResponse {
 
         try {
             responseBuilder(httpRequest, HttpStatus.OK, mimeType, filePath);
-            send();
+            write();
 
         } catch (IOException | URISyntaxException e) {
             logger.error("OK Error : {}", e.getMessage());
@@ -60,14 +60,14 @@ public class HttpResponse {
 
             httpResponseLine = new HttpResponseLine(httpRequest.getProtocol(), HttpStatus.OK);
 
-            send();
+            write();
 
         } catch (IOException e) {
             logger.error("OK Error : {}", e.getMessage());
         }
     }
 
-    private void send() throws IOException {
+    private void write() throws IOException {
         dos.writeBytes(httpResponseLine.combine());
         dos.writeBytes(httpResponseHeader.combine());
         writeBody();
@@ -98,7 +98,7 @@ public class HttpResponse {
 
         httpResponseLine = new HttpResponseLine(request.getProtocol(), HttpStatus.FOUND);
         try {
-            send();
+            write();
         } catch (IOException e) {
             logger.error("Redirect Error : {}", e.getMessage());
         }
@@ -107,7 +107,7 @@ public class HttpResponse {
     public void notFound(HttpRequest httpRequest) {
         try {
             responseBuilder(httpRequest, HttpStatus.NOT_FOUND, MimeType.HTML, NOT_FOUND_404_FILE_PATH);
-            send();
+            write();
         } catch (IOException | URISyntaxException e) {
             logger.error("NotFound Error : {}", e.getMessage());
         }
