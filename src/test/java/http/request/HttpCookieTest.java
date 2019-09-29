@@ -20,4 +20,11 @@ class HttpCookieTest {
         HttpCookie httpCookie = HttpCookie.of("logined=true");
         assertThat(httpCookie.getCookie("logined")).isEqualTo("true");
     }
+
+    @Test
+    @DisplayName("쿠키가 없을 때 (띄어쓰기 하나)")
+    void noCookie() {
+        HttpCookie httpCookie = HttpCookie.of(" ");
+        assertThat(httpCookie.getCookie(" ")).isNull();
+    }
 }

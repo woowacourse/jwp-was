@@ -1,5 +1,7 @@
 package http.request;
 
+import com.github.jknack.handlebars.internal.lang3.StringUtils;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,7 +20,8 @@ public class HttpCookie {
         String[] tokens = cookie.split(COOKIE_DELIMITER);
         Map<String, String> cookies = new HashMap<>();
 
-        if (!"".equals(cookie)) {
+
+        if (!StringUtils.isBlank(cookie)) {
             Arrays.stream(tokens)
                     .forEach(s ->
                             cookies.put(s.split(COOKIE_KEY_VALUE_DELIMITER)[0],
