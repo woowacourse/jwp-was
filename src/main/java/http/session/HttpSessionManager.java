@@ -1,12 +1,12 @@
 package http.session;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class HttpSessionManager {
-    private Map<String, HttpSession> sessions = new HashMap<>();
+    private Map<String, HttpSession> sessions = new ConcurrentHashMap<>();
 
     private HttpSessionManager() {
 
