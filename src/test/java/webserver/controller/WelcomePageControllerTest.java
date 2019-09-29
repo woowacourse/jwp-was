@@ -5,7 +5,6 @@ import webserver.View;
 import webserver.WebTestForm;
 import webserver.exception.NotSupportedHttpMethodException;
 import webserver.http.HttpRequest;
-import webserver.http.HttpResponse;
 
 import java.io.IOException;
 
@@ -19,17 +18,15 @@ class WelcomePageControllerTest extends WebTestForm {
     @Test
     void GET_정상처리() throws IOException {
         HttpRequest httpRequest = getHttpGetRequest("/");
-        HttpResponse httpResponse = new HttpResponse();
 
-        View view = welcomePageController.service(httpRequest, httpResponse);
+        View view = welcomePageController.service(httpRequest);
         assertThat(view.getName()).isEqualTo("/index.html");
     }
 
     @Test
     void POST_요청_에러_처리() throws IOException {
         HttpRequest httpRequest = getHttpPostRequestWithBody("/");
-        HttpResponse httpResponse = new HttpResponse();
 
-        assertThrows(NotSupportedHttpMethodException.class, () -> welcomePageController.service(httpRequest, httpResponse));
+        assertThrows(NotSupportedHttpMethodException.class, () -> welcomePageController.service(httpRequest));
     }
 }

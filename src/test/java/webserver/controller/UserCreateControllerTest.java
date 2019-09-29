@@ -5,7 +5,6 @@ import webserver.View;
 import webserver.WebTestForm;
 import webserver.exception.NotSupportedHttpMethodException;
 import webserver.http.HttpRequest;
-import webserver.http.HttpResponse;
 
 import java.io.IOException;
 
@@ -19,17 +18,15 @@ class UserCreateControllerTest extends WebTestForm {
     @Test
     void 회원가입_GET_요청_에러_처리() throws IOException {
         HttpRequest httpRequest = getHttpGetRequest("/user/create");
-        HttpResponse httpResponse = new HttpResponse();
 
-        assertThrows(NotSupportedHttpMethodException.class, () -> userCreateController.service(httpRequest, httpResponse));
+        assertThrows(NotSupportedHttpMethodException.class, () -> userCreateController.service(httpRequest));
     }
 
     @Test
     void 회원가입_성공_출력_테스트() throws IOException {
         HttpRequest httpRequest = getHttpPostRequestWithBody("/user/create");
-        HttpResponse httpResponse = new HttpResponse();
 
-        View view = userCreateController.service(httpRequest, httpResponse);
+        View view = userCreateController.service(httpRequest);
         assertThat(view.getName()).isEqualTo("/redirect:/index.html");
     }
 }

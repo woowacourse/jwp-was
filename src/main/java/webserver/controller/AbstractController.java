@@ -14,23 +14,23 @@ public abstract class AbstractController implements Controller {
     public static final String ERROR_VIEW = "/error:";
 
     @Override
-    public View service(HttpRequest request, HttpResponse response) {
+    public View service(HttpRequest request) {
         if (request.checkMethod(HttpMethod.GET)) {
-            return doGet(request, response);
+            return doGet(request);
         }
 
         if (request.checkMethod(HttpMethod.POST)) {
-            return doPost(request, response);
+            return doPost(request);
         }
 
         throw new NotSupportedHttpMethodException();
     }
 
-    protected View doGet(HttpRequest httpRequest, HttpResponse response) {
+    protected View doGet(HttpRequest httpRequest) {
         throw new NotSupportedHttpMethodException();
     }
 
-    protected View doPost(HttpRequest httpRequest, HttpResponse response) {
+    protected View doPost(HttpRequest httpRequest) {
         throw new NotSupportedHttpMethodException();
     }
 

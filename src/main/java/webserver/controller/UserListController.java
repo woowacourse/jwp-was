@@ -4,8 +4,6 @@ import db.DataBase;
 import model.User;
 import webserver.View;
 import webserver.http.HttpRequest;
-import webserver.http.HttpResponse;
-import webserver.http.HttpSession;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +19,8 @@ public class UserListController extends AbstractController {
     }
 
     @Override
-    protected View doGet(HttpRequest request, HttpResponse response) {
-        if (isNotLoggedIn(request, response)) {
+    protected View doGet(HttpRequest request) {
+        if (isNotLoggedIn(request)) {
             return new View(REDIRECT_VIEW + "/user/login.html");
         }
         List<User> users = new ArrayList<>(DataBase.findAll());
@@ -30,8 +28,7 @@ public class UserListController extends AbstractController {
         return new View("/user/list.html", "user", users);
     }
 
-    private boolean isNotLoggedIn(HttpRequest httpRequest, HttpResponse httpResponse) {
-        HttpSession session = getSession(httpRequest, httpResponse);
-        return !session.checkAttribute(LOGINED, "true");
+    private boolean isNotLoggedIn(HttpRequest httpRequest) {
+        return !httpRequest.checkSessionAttribute(LOGINED, "true");
     }
 }
