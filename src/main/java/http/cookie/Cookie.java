@@ -18,11 +18,15 @@ public class Cookie {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public String getValue() {
-        return value;
+        return this.value;
+    }
+    
+    public String getPath() {
+        return this.path;
     }
 
     public void setValue(String value) {

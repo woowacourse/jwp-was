@@ -84,7 +84,7 @@ public class Response {
     }
 
     public void setCookie() {
-        if (!request.hasSession()) {
+        if (!request.hasJSessionIdCookie() && request.hasSession()) {
             responseHeader.setCookie(
                     Cookie.builder().name(JSESSIONID).value(request.getSession().getSessionId()).path("/").build());
         }

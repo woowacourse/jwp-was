@@ -6,6 +6,7 @@ import http.session.Session;
 import http.session.SessionStorage;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 public class Request {
@@ -37,8 +38,12 @@ public class Request {
         return this.session;
     }
 
-    public boolean hasSession() {
+    public boolean hasJSessionIdCookie() {
         return !cookies.findCookie(SessionStorage.JSESSIONID).equals(Cookie.builder().build());
+    }
+
+    public boolean hasSession() {
+        return Objects.nonNull(this.session);
     }
 
     public boolean isGetMethod() {
