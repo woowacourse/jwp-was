@@ -26,10 +26,14 @@ public class Renderer {
         Map<String, String> responseHeaderFields = httpResponse.getHeaderFields();
         renderResponseLine(httpResponse, dataOutputStream, httpStatus);
         renderResponseFields(dataOutputStream, responseHeaderFields);
-        renderResponseBody(httpResponse, dataOutputStream);
+        if(httpResponse.hasBody()) {
+            renderResponseBody(httpResponse, dataOutputStream);
+        }
+        dataOutputStream.flush();
     }
 
     private void renderResponseLine(HttpResponse httpResponse, DataOutputStream dataOutputStream, HttpStatus httpStatus) throws IOException {
+
         dataOutputStream.writeBytes(httpResponse.getVersion() + " " + httpStatus.getStatusCode() + " " + httpStatus.getStatus() + " \r\n");
     }
 
@@ -42,7 +46,7 @@ public class Renderer {
 
     private void renderResponseBody(HttpResponse httpResponse, DataOutputStream dataOutputStream) throws IOException {
         byte[] body = httpResponse.getBody();
+
         dataOutputStream.write(body, 0, body.length);
-        dataOutputStream.flush();
     }
 }
