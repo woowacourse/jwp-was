@@ -21,22 +21,20 @@ public class HttpRequest {
         return parameters.size();
     }
 
+    public HttpSession getSession() {
+        final String jSessionId = cookies.getSessionId();
+        return sessionManager.getSession(jSessionId)
+                .orElse(createSession());
+    }
+
     private HttpSession createSession() {
-        final HttpSession session = sessionManager.getSession();
+        final HttpSession session = sessionManager.createSession();
         cookies.add(new Cookie(Cookies.JSESSIONID, session.getId()));
         return session;
     }
 
-    public HttpSession getSession() {
-        final String jSessionId = cookies.getSessionId();
-        final HttpSession httpSession = sessionManager.getSession(jSessionId);
-        return httpSession == null
-                ? createSession()
-                : httpSession;
-    }
-
-    public boolean hasSession() {
-        return cookies.contains(Cookies.JSESSIONID);
+    public boolean notHasSession() {
+        return !cookies.contains(Cookies.JSESSIONID);
     }
 
     public HttpMethod getMethod() {

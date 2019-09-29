@@ -2,6 +2,7 @@ package webserver.http;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class HttpSessionManager implements SessionManager {
     private final Map<String, HttpSession> map = new HashMap<>();
@@ -9,11 +10,11 @@ public class HttpSessionManager implements SessionManager {
     private HttpSessionManager() {
     }
 
-    public HttpSession getSession(final String sessionId) {
-        return map.get(sessionId);
+    public Optional<HttpSession> getSession(final String sessionId) {
+        return Optional.ofNullable(map.get(sessionId));
     }
 
-    public HttpSession getSession() {
+    public HttpSession createSession() {
         final HttpSession httpSession = new HttpSession();
         map.put(httpSession.getId(), httpSession);
         return httpSession;

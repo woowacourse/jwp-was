@@ -10,10 +10,10 @@ class HttpSessionManagerTest {
     @Test
     void session_생성후_조회_확인() {
         // given
-        final HttpSession session = manager.getSession();
+        final HttpSession session = manager.createSession();
 
         // when & then
-        assertThat(session).isEqualTo(manager.getSession(session.getId()));
+        assertThat(session).isEqualTo(manager.getSession(session.getId()).get());
     }
 
     @Test

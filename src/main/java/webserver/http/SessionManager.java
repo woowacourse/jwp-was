@@ -1,7 +1,9 @@
 package webserver.http;
 
-public interface SessionManager {
-    HttpSession getSession(final String sessionId);
+import java.util.Optional;
 
-    HttpSession getSession();
+public interface SessionManager {
+    Optional<HttpSession> getSession(final String sessionId);
+
+    HttpSession createSession();
 }

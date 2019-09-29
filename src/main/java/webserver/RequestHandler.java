@@ -61,9 +61,8 @@ public class RequestHandler implements Runnable {
     }
 
     private void initSession(final HttpRequest httpRequest, final HttpResponse httpResponse) {
-        if (!httpRequest.hasSession()) {
+        if (httpRequest.notHasSession()) {
             final Cookie sessionCookie = new Cookie(Cookies.JSESSIONID, httpRequest.getSession().getId());
-
             sessionCookie.setPath("/");
             sessionCookie.setHttpOnly(true);
             httpResponse.addCookie(sessionCookie);
