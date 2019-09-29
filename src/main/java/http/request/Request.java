@@ -3,6 +3,7 @@ package http.request;
 import exception.NotFoundRequestElementException;
 import http.Cookie;
 import http.Session;
+import http.SessionStore;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +16,7 @@ public class Request {
     private static final String COOKIE = "Cookie";
     private static final String SEMI_REGEX = ";";
     private static final String SEPARATOR = "=";
+    private static final String JSESSION = "JSESSION";
     private static final int METHOD_FIRST = 0;
     private static final int PATH = 1;
 
@@ -48,12 +50,16 @@ public class Request {
         return parameter.get(key);
     }
 
-    public Cookie getCookie(String sessionId) {
-        return cookies.get(sessionId);
+    public void setSession() {
+        this.session = SessionStore.getSession(getCookie(JSESSION).getValue());
     }
 
-    public void setSession(Session session) {
-        this.session = session;
+    public boolean mismatchSessionId() {
+        return !cookies.get(JSESSION).getValue().equals(session.getId());
+    }
+
+    public boolean notContainSession() {
+        return getCookie(JSESSION) == null;
     }
 
     public void setSessionValue(String name, Object value) {
@@ -67,6 +73,14 @@ public class Request {
             throw new NotFoundRequestElementException();
         }
         return element;
+    }
+
+    public String getSessionId() {
+        return session.getId();
+    }
+
+    protected Cookie getCookie(String key) {
+        return cookies.get(key);
     }
 
     private void containsCookie(Map<String, String> header) {

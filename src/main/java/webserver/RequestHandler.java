@@ -3,7 +3,6 @@ package webserver;
 import controller.Controller;
 import controller.ControllerHandler;
 import http.Cookie;
-import http.SessionStore;
 import http.request.Request;
 import http.request.RequestParser;
 import http.response.Response;
@@ -76,28 +75,19 @@ public class RequestHandler implements Runnable {
     }
 
     private void setSession(Request request, Response response, String extension) {
-        Cookie requestCookie = request.getCookie(JSESSION);
-
-        if (!isHtmlOrNotFile(extension)) {
+        if (isNotHtmlOrFile(extension)) {
             return;
         }
 
-        if (request.getCookie(JSESSION) != null) {
-            request.setSession(SessionStore.getSession(request.getCookie(JSESSION).getValue()));
+        request.setSession();
 
-            if (SessionStore.getSession(request.getCookie(JSESSION).getValue()).equals(requestCookie.getValue())) {
-                response.addCookie(new Cookie(JSESSION, request.getCookie(JSESSION).getValue()));
-            }
-        }
-
-        if (request.getCookie(JSESSION) == null) {
-            request.setSession(SessionStore.getSession(request.getCookie(JSESSION).getValue()));
-            response.addCookie(new Cookie(JSESSION, request.getCookie(JSESSION).getValue()));
+        if (request.notContainSession() || request.mismatchSessionId()) {
+            response.addCookie(new Cookie(JSESSION, request.getSessionId()));
         }
     }
 
-    private boolean isHtmlOrNotFile(String extension) {
-        return extension.equals(HTML) || extension.startsWith(PREFIX_SLASH);
+    private boolean isNotHtmlOrFile(String extension) {
+        return !(extension.equals(HTML) || extension.startsWith(PREFIX_SLASH));
     }
 
     private boolean isFile(String extension) {

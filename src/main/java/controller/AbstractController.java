@@ -1,12 +1,9 @@
 package controller;
 
-import com.google.common.collect.Lists;
 import http.request.Request;
 import http.response.Response;
 import http.support.HttpMethod;
 import http.support.HttpStatus;
-
-import java.util.List;
 
 public abstract class AbstractController implements Controller {
     @Override
@@ -22,7 +19,7 @@ public abstract class AbstractController implements Controller {
 
         response.forward(request.getPath(), HttpStatus.METHOD_NOT_ALLOWED);
     }
-    
+
     public void doPost(Request request, Response response) {
         response.forward(request.getPath(), HttpStatus.METHOD_NOT_ALLOWED);
     }
