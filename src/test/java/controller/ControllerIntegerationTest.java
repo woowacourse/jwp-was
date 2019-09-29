@@ -114,7 +114,6 @@ public class ControllerIntegerationTest extends BaseTest {
     @Test
     @DisplayName("로그인 후 유저목록 가져오기 테스트")
     void getUserListTest() throws IOException, URISyntaxException {
-
         // given
         Session session = signUpAndLogin();
 
