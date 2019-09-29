@@ -16,7 +16,7 @@ public class HttpResponseParser {
             responseHeader(dataOutputStream, httpResponse);
             writeResponseBody(dataOutputStream, httpResponse);
             dataOutputStream.flush();
-        }  (IOException e) {
+        } catch (IOException e) {
             logger.error("{}", e);
             throw new IntervalServerException();
         }

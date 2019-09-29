@@ -20,7 +20,7 @@ public class HttpRequestParser {
             QueryStringParams queryStringParams = QueryStringParamsParser.parse(bufferedReader, requestLine, httpHeader);
 
             httpRequest.init(requestLine, httpHeader, queryStringParams);
-        }  (IOException e) {
+        } catch (IOException e) {
             throw new IntervalServerException();
         }
     }
