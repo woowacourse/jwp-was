@@ -25,7 +25,7 @@ public class UserListController extends HttpController {
         Session session = request.getSession();
 
         if ("true".equals(session.getAttribute("logined"))) {
-            List<User> users = new UserService().findAll();
+            List<User> users = UserService.getInstance().findAll();
             ModelAndView modelAndView = new ModelAndView("user/list");
             modelAndView.setModels("users", users);
             response.forward(modelAndView);
