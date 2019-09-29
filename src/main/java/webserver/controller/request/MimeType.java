@@ -10,7 +10,7 @@ public enum MimeType {
     ICO(".ico", "image/x-icon"),
     TTF(".ttf", "application/x-font-ttf"),
     WOFF(".woff", "application/x-font-woff"),
-    NONE("", "");
+    NONE("", "text/html");
 
     private String extension;
     private String mimeType;
