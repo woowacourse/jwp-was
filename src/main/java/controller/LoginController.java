@@ -28,7 +28,7 @@ public class LoginController extends AbstractController {
 
         User user = DataBase.findUserById(userId);
 
-        if (user == null && !user.matchPassword(password)) {
+        if (user == null || !user.matchPassword(password)) {
             return new ModelAndView(String.format("%s%s", REDIRECT_SIGNATURE, LOGIN_FAILED_REDIRECT_LOCATION));
         }
 
