@@ -9,7 +9,7 @@ import utils.FileIoUtils;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-public class StaticFileController extends AbstractController {
+public class StaticFileController extends DefaultController {
     private static final Logger logger = LoggerFactory.getLogger(StaticFileController.class);
     private static final String DIR_TEMPLATES = "./templates";
     private static final String DIR_STATIC = "./static";

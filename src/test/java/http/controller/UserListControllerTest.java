@@ -46,7 +46,7 @@ class UserListControllerTest {
         HttpRequest httpRequest = RequestHandler.getInstance().create(br);
         HttpResponse httpResponse = ResponseHandler.getInstance().create(httpRequest);
 
-        AbstractController controller = new UserListController();
+        DefaultController controller = new UserListController();
         controller.doGet(httpRequest, httpResponse);
 
         assertThat(new String(httpResponse.getBody())).contains("aiden@naver.com");
@@ -68,7 +68,7 @@ class UserListControllerTest {
         httpRequest = RequestHandler.getInstance().create(br);
         httpResponse = ResponseHandler.getInstance().create(httpRequest);
 
-        AbstractController controller = new UserListController();
+        DefaultController controller = new UserListController();
         controller.doGet(httpRequest, httpResponse);
 
         assertThat(httpResponse.toString()).contains("Location: /index.html");

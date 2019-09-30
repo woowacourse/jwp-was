@@ -34,6 +34,22 @@ class DefaultControllerTest {
         DefaultController defaultController = new DefaultController();
         defaultController.doGet(httpRequest, httpResponse);
 
-        assertThat(httpResponse.toString()).contains("404 NOT FOUND");
+        assertThat(httpResponse.toString()).contains("405 Method Not Allowed");
+    }
+
+    @Test
+    @DisplayName("요청 path가 post 없는 경우")
+    public void doPostTest() throws Exception {
+        requestClient = RequestClientTest.get("/test");
+
+        InputStream in = new ByteArrayInputStream(requestClient.toString().getBytes(StandardCharsets.UTF_8));
+        BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+        httpRequest = RequestHandler.getInstance().create(br);
+        httpResponse = ResponseHandler.getInstance().create(httpRequest);
+
+        DefaultController defaultController = new DefaultController();
+        defaultController.doPost(httpRequest, httpResponse);
+
+        assertThat(httpResponse.toString()).contains("405 Method Not Allowed");
     }
 }

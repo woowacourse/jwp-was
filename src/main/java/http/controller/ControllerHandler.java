@@ -1,7 +1,6 @@
 package http.controller;
 
 import com.google.common.collect.Maps;
-import http.exception.NotFoundException;
 
 import java.util.Map;
 
@@ -15,7 +14,7 @@ public class ControllerHandler {
         controllers.put("^/user/list$", new UserListController());
     }
 
-    public static Controller findByPath(String path) throws NotFoundException {
+    public static Controller findByPath(String path) {
         return controllers.keySet().stream()
                 .filter(path::matches)
                 .map(controllers::get)

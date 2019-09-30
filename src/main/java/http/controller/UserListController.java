@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-public class UserListController extends AbstractController {
+public class UserListController extends DefaultController {
     private static final Logger logger = LoggerFactory.getLogger(UserListController.class);
 
     private static final String LOCATION = "/user/list";

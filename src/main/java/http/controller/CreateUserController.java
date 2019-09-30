@@ -5,7 +5,7 @@ import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.User;
 
-public class CreateUserController extends AbstractController {
+public class CreateUserController extends DefaultController {
     @Override
     protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         DataBase.addUser(createUser(httpRequest));

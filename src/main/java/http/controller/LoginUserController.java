@@ -10,7 +10,7 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class LoginUserController extends AbstractController {
+public class LoginUserController extends DefaultController {
     private static final Logger logger = LoggerFactory.getLogger(LoginUserController.class);
 
     @Override
