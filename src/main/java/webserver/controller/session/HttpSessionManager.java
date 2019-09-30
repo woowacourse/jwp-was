@@ -1,15 +1,18 @@
 package webserver.controller.session;
 
 
+import exception.invalidSessionIdException;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class HttpSessionManager {
     private final Map<String, HttpSession> sessions;
 
     private HttpSessionManager() {
-        sessions = new HashMap<>();
+        sessions = new ConcurrentHashMap<>();
     }
 
     public static HttpSessionManager getInstance() {
@@ -25,6 +28,9 @@ public class HttpSessionManager {
     }
 
     public void removeSession(UUID uuid) {
+        if(uuid == null) {
+            throw new invalidSessionIdException();
+        }
         sessions.remove(uuid.toString());
     }
 }
