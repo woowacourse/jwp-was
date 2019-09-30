@@ -15,11 +15,11 @@ public class ResponseHeader implements Map<String, Object> {
 
     public static ResponseHeader error(int length) {
         ResponseHeader header = new ResponseHeader();
-        header.setContentLegthAndType(length, "text/html;charset=utf-8");
+        header.setContentLengthAndType(length, "text/html;charset=utf-8");
         return header;
     }
 
-    public void setContentLegthAndType(int length, String type) {
+    public void setContentLengthAndType(int length, String type) {
         header.put("Content-Length", length);
         header.put("Content-Type", type);
     }

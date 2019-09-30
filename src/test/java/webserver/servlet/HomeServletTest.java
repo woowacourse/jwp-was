@@ -30,7 +30,7 @@ class HomeServletTest {
         String filePath = generateTemplateFilePath(httpRequest.getAbsPath() + "index.html");
         byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
         ResponseHeader header = new ResponseHeader();
-        header.setContentLegthAndType(body.length, FileIoUtils.loadMIMEFromClasspath(filePath));
+        header.setContentLengthAndType(body.length, FileIoUtils.loadMIMEFromClasspath(filePath));
         assertThat(homeServlet.doGet(httpRequest)).isEqualTo(new HttpResponse(HttpStatus.OK, header, body));
     }
 }

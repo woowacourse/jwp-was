@@ -18,7 +18,7 @@ public class HomeServlet extends RequestServlet {
         String filePath = generateTemplateFilePath(httpRequest.getAbsPath() + INDEX_HTML);
         byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
         ResponseHeader header = new ResponseHeader();
-        header.setContentLegthAndType(body.length, FileIoUtils.loadMIMEFromClasspath(filePath));
+        header.setContentLengthAndType(body.length, FileIoUtils.loadMIMEFromClasspath(filePath));
         return HttpResponse.ok(header, body);
     }
 }

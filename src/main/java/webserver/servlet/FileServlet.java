@@ -15,7 +15,7 @@ public class FileServlet implements HttpServlet {
         String filePath = generateFilePath(httpRequest);
         byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
         ResponseHeader header = new ResponseHeader();
-        header.setContentLegthAndType(body.length, FileIoUtils.loadMIMEFromClasspath(filePath));
+        header.setContentLengthAndType(body.length, FileIoUtils.loadMIMEFromClasspath(filePath));
         return HttpResponse.ok(header, body);
     }
 
