@@ -5,8 +5,7 @@ import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import db.DataBase;
-import http.common.Cookie;
-import http.common.SessionManager;
+import http.common.HttpSession;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.User;
@@ -14,13 +13,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserListController extends AbstractController {
     private static final Logger logger = LoggerFactory.getLogger(UserListController.class);
 
     private static final String LOGINED = "logined";
-    private static final String JSESSIONID = "JSESSIONID";
 
     @Override
     protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
@@ -32,12 +32,9 @@ public class UserListController extends AbstractController {
     }
 
     private boolean isLogined(HttpRequest httpRequest) {
-        List<Cookie> cookies = httpRequest.getCookies();
-        Optional<Cookie> cookieOptional = cookies.stream()
-                .filter(cookie -> cookie.getName().equals(JSESSIONID))
-                .findFirst();
-        return cookieOptional.isPresent() &&
-                "true".equals(SessionManager.getSession(cookieOptional.get().getValue()).getAttribute(LOGINED));
+        HttpSession httpSession = httpRequest.getSession();
+        Object logined = httpSession.getAttribute(LOGINED);
+        return logined != null && (boolean) logined;
     }
 
     private void renderUserListPage(HttpResponse httpResponse) {

@@ -36,8 +36,8 @@ class UserListControllerTest {
                 );
         httpResponse = HttpResponse.of();
 
-        httpSession.setAttribute("logined", "true");
-        SessionManager.sendSession(httpResponse, httpSession);
+        httpSession.setAttribute("logined", true);
+        httpResponse.setSession(httpSession);
 
         UserListController userListController = new UserListController();
         userListController.doGet(httpRequest, httpResponse);

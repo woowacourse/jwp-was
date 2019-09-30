@@ -1,6 +1,7 @@
 package http.response;
 
 import http.common.Cookie;
+import http.common.HttpSession;
 import http.common.HttpStatus;
 import http.common.MimeType;
 import http.request.HttpRequest;
@@ -15,6 +16,9 @@ public class HttpResponse {
     private static final String CONTENT_LENGTH_KEY = "Content-Length";
     private static final String LOCATION_KEY = "Location";
     private static final String SET_COOKIE_KEY = "Set-Cookie";
+    private static final String JSESSIONID = "JSESSIONID";
+    private static final String PATH_ROOT = "/";
+    private static final int ONE_DAY = 60 * 60 * 24;
 
     private StatusLine statusLine;
     private ResponseHeader responseHeader;
@@ -67,6 +71,13 @@ public class HttpResponse {
 
     public void sendInternalServerError() {
         statusLine.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    public void setSession(HttpSession httpSession) {
+        Cookie cookie = new Cookie(JSESSIONID, httpSession.getId());
+        cookie.setMaxAge(ONE_DAY);
+        cookie.setPath(PATH_ROOT);
+        cookies.add(cookie);
     }
 
     public byte[] getBody() {

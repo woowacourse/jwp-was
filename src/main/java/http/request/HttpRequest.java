@@ -1,14 +1,14 @@
 package http.request;
 
-import http.common.Cookie;
-import http.common.HttpMethod;
-import http.common.Parameters;
+import http.common.*;
 
 import java.util.List;
+import java.util.Optional;
 
 public class HttpRequest {
     private static final String URL_FORMAT = "%s://%s%s";
     private static final String HOST_KEY = "Host";
+    private static final String JSESSIONID = "JSESSIONID";
 
     private RequestLine requestLine;
     private RequestHeader requestHeader;
@@ -59,7 +59,13 @@ public class HttpRequest {
         return parameters.getParameter(key);
     }
 
-    public List<Cookie> getCookies() {
-        return cookies;
+    public HttpSession getSession() {
+        Optional<Cookie> cookie = cookies.stream()
+                .filter(c -> c.getName().equals(JSESSIONID))
+                .findAny();
+        if (cookie.isPresent()) {
+            return SessionManager.getSession(cookie.get().getValue());
+        }
+        return SessionManager.createSession();
     }
 }
