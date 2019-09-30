@@ -20,15 +20,18 @@ public class SignInController extends AbstractController {
         String password = httpRequest.getParameter("password");
 
         if (!DataBase.contains(userId)) {
+            httpResponse.addHeader("Set-Cookie", "logined=false; Path=/");
             log.debug("Not Found UserId");
             return "redirect:/user/login_failed.html";
         }
 
         if (DataBase.match(userId, password)) {
+            httpResponse.addHeader("Set-Cookie", "logined=true; Path=/");
             log.debug("{} login", userId);
             return "redirect:/index.html";
         }
 
+        httpResponse.addHeader("Set-Cookie", "logined=false; Path=/");
         log.debug("Not Match UserId And Password");
         return "redirect:/user/login_failed.html";
     }
