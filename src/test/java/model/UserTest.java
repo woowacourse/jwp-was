@@ -1,11 +1,9 @@
 package model;
 
-import model.exception.InvalidPasswordException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserTest {
     public static final String ID = "id";
@@ -22,11 +20,11 @@ public class UserTest {
 
     @Test
     void 로그인() {
-        assertDoesNotThrow(() -> user.matchPassword(PASSWORD));
+        assertThat(user.matchPassword(PASSWORD)).isTrue();
     }
 
     @Test
     void 다른_비밀번호로_로그인시_에러() {
-        assertThrows(InvalidPasswordException.class, () -> user.matchPassword("abc"));
+        assertThat(user.matchPassword("abc")).isFalse();
     }
 }

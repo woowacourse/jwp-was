@@ -1,7 +1,5 @@
 package model;
 
-import model.exception.InvalidPasswordException;
-
 public class User {
     private String userId;
     private String password;
@@ -15,10 +13,8 @@ public class User {
         this.email = email;
     }
 
-    public void matchPassword(String password) {
-        if (!this.password.equals(password)) {
-            throw new InvalidPasswordException();
-        }
+    public boolean matchPassword(String password) {
+        return this.password.equals(password);
     }
 
     public String getUserId() {
