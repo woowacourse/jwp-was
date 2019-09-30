@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Optional;
 
 public class LoginUserController extends AbstractController {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginUserController.class);
@@ -22,9 +23,10 @@ public class LoginUserController extends AbstractController {
     void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         String userId = httpRequest.getParameter("userId");
         String password = httpRequest.getParameter("password");
-        User user = DataBase.findUserById(userId);
 
         try {
+            User user = Optional.ofNullable(DataBase.findUserById(userId))
+                    .orElseThrow(() ->new LoginUserException("Not Found User"));
             if (!user.checkPassword(password)) {
                 throw new LoginUserException("password not match");
             }
@@ -33,9 +35,9 @@ public class LoginUserController extends AbstractController {
             httpResponse.setCookie("logined=true;path=/");
             httpResponse.redirect("/");
         } catch (LoginUserException e) {
-            httpResponse.setStatusCode(HttpStatusCode.NOT_FOUND);
+            httpResponse.setStatusCode(HttpStatusCode.FOUND);
             httpResponse.setCookie("logined=false");
-            httpResponse.forward("/index.html");
+            httpResponse.redirect("/");
             e.printStackTrace();
         }
     }
