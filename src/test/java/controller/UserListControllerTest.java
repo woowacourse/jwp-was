@@ -1,17 +1,19 @@
 package controller;
 
+import db.DataBase;
 import http.common.HttpHeader;
+import http.cookie.Cookie;
 import http.request.HttpRequest;
 import http.request.RequestBody;
 import http.request.RequestLine;
 import http.response.HttpResponse;
-import http.response.ResponseStatus;
 import model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.google.common.net.HttpHeaders.LOCATION;
-import static org.assertj.core.api.Assertions.assertThat;
+import java.util.Collections;
+
+import static http.request.HttpRequest.SESSIONID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static utils.StringUtils.BLANK;
 
@@ -26,19 +28,18 @@ class UserListControllerTest extends AbstractControllerTest {
 
     @Test
     void 로그인후_요청시_200_정상_응답() {
+        HttpHeader requestHeader = new HttpHeader();
+        requestHeader.addCookie(new Cookie.Builder(SESSIONID, getLoginSessionId(signUpUser.getUserId(), signUpUser.getPassword())).build());
         HttpRequest httpRequest = new HttpRequest(
                 new RequestLine("GET /user/list HTTP/1.1"),
-                getLoginHttpHeader(signUpUser.getUserId(), signUpUser.getPassword()),
+                requestHeader,
                 new RequestBody(BLANK, BLANK));
         HttpResponse httpResponse = new HttpResponse(httpRequest);
 
-        userListController.doGet(httpRequest, httpResponse);
-        String responseBody = new String(httpResponse.getBody());
+        ModelAndView modelAndView = userListController.doGet(httpRequest, httpResponse);
 
-        assertEquals(httpResponse.getResponseStatus(), ResponseStatus.OK);
-        assertThat(responseBody).contains(signUpUser.getUserId());
-        assertThat(responseBody).contains(signUpUser.getName());
-        assertThat(responseBody).contains(signUpUser.getEmail());
+        assertEquals(modelAndView.getViewName(), "/user/list");
+        assertEquals(modelAndView.getModelMap(), Collections.singletonMap("users", DataBase.findAll()));
     }
 
     @Test
@@ -49,10 +50,10 @@ class UserListControllerTest extends AbstractControllerTest {
                 new RequestBody(BLANK, BLANK));
         HttpResponse httpResponse = new HttpResponse(httpRequest);
 
-        userListController.doGet(httpRequest, httpResponse);
+        ModelAndView modelAndView = userListController.doGet(httpRequest, httpResponse);
 
-        assertEquals(httpResponse.getResponseStatus(), ResponseStatus.FOUND);
-        assertEquals(httpResponse.getHttpHeader().getHeaderAttribute(LOCATION), "/");
+        assertEquals(modelAndView.getViewName(), "redirect: /");
+        assertEquals(modelAndView.getModelMap(), Collections.emptyMap());
     }
 
 }

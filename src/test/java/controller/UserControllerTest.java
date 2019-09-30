@@ -1,47 +1,43 @@
 package controller;
 
+import controller.exception.MethodNotAllowedException;
 import db.DataBase;
-import http.common.ContentType;
 import http.common.HttpHeader;
 import http.request.HttpRequest;
 import http.request.RequestBody;
 import http.request.RequestLine;
 import http.response.HttpResponse;
-import http.response.ResponseStatus;
 import model.User;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static utils.StringUtils.BLANK;
 
-class UserControllerTest {
-    private static final String USER_ID = "olaf";
-    private static final String PASSWORD = "bmo";
-    private static final String NAME = "bhy";
-    private static final String EMAIL = "test@gmail.com";
-    private static final String QUERY_STRING =
-            "userId=" + USER_ID
-                    + "&password=" + PASSWORD
-                    + "&name=" + NAME
-                    + "&email=" + EMAIL;
-    private static final User USER = new User(USER_ID, PASSWORD, NAME, EMAIL);
+class UserControllerTest extends AbstractControllerTest {
     private UserController userController = UserController.getInstance();
 
     @Test
     void 유저생성() {
-        String url = "/user/create";
+        User user = new User("olaf", "bmo", "bhy", "test@gmail.com");
+        ModelAndView modelAndView = signUp(user);
 
-        RequestLine postRequestLine = new RequestLine("POST " + url + " HTTP/1.1");
-        HttpHeader httpHeader = new HttpHeader(new ArrayList<>());
-        RequestBody body = new RequestBody(QUERY_STRING, ContentType.FORM_URLENCODED);
-        HttpRequest httpRequest = new HttpRequest(postRequestLine, httpHeader, body);
+        assertEquals(DataBase.findUserById(user.getUserId()), user);
+        assertEquals(modelAndView.getViewName(), "redirect: /");
+        assertEquals(modelAndView.getModelMap(), Collections.emptyMap());
+    }
+
+    @Test
+    void doGetTest() {
+        HttpRequest httpRequest = new HttpRequest(
+                new RequestLine("GET /user/create HTTP/1.1"),
+                new HttpHeader(),
+                new RequestBody(BLANK, BLANK));
         HttpResponse httpResponse = new HttpResponse(httpRequest);
 
-        userController.doPost(httpRequest, httpResponse);
-
-        assertEquals(DataBase.findUserById(USER_ID), USER);
-        assertEquals(httpResponse.getResponseStatus(), ResponseStatus.FOUND);
-        assertEquals(httpResponse.getHttpHeader().getHeaderAttribute("Location"), "/");
+        assertThrows(MethodNotAllowedException.class, () ->
+                userController.doGet(httpRequest, httpResponse));
     }
 }

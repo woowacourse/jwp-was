@@ -9,9 +9,8 @@ public class UserFormController extends AbstractController {
     }
 
     @Override
-    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        ModelAndView modelAndView = new ModelAndView("/user/form");
-        handle(modelAndView, httpResponse);
+    public ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+        return new ModelAndView("/user/form");
     }
 
     private static class UserFormControllerLazyHolder {

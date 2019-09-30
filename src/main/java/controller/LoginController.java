@@ -17,27 +17,24 @@ public class LoginController extends AbstractController {
     }
 
     @Override
-    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        handle(new ModelAndView("/user/login"), httpResponse);
+    public ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+        return new ModelAndView("/user/login");
     }
 
     @Override
-    public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
+    public ModelAndView doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         String userId = httpRequest.getFormDataParameter("userId");
         String password = httpRequest.getFormDataParameter("password");
 
         User user = DataBase.findUserById(userId);
-        ModelAndView modelAndView;
 
-        if (user != null && user.matchPassword(password)) {
-            Session session = httpRequest.getSession();
-            session.setAttribute("user", user);
-            modelAndView = new ModelAndView(String.format("%s%s", REDIRECT_SIGNATURE, LOGIN_SUCCESS_REDIRECT_LOCATION));
-        } else {
-            modelAndView = new ModelAndView(String.format("%s%s", REDIRECT_SIGNATURE, LOGIN_FAILED_REDIRECT_LOCATION));
+        if (user == null && !user.matchPassword(password)) {
+            return new ModelAndView(String.format("%s%s", REDIRECT_SIGNATURE, LOGIN_FAILED_REDIRECT_LOCATION));
         }
 
-        handle(modelAndView, httpResponse);
+        Session session = httpRequest.getSession();
+        session.setAttribute("user", user);
+        return new ModelAndView(String.format("%s%s", REDIRECT_SIGNATURE, LOGIN_SUCCESS_REDIRECT_LOCATION));
     }
 
     private static class LoginControllerLazyHolder {

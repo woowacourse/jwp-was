@@ -16,16 +16,13 @@ public class UserListController extends AbstractController {
     }
 
     @Override
-    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        ModelAndView modelAndView;
+    public ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         if (isLoginedUser(httpRequest.getSession())) {
             Map<String, Object> users = Collections.singletonMap("users", DataBase.findAll());
-            modelAndView = new ModelAndView("/user/list", users);
-        } else {
-            modelAndView = new ModelAndView(String.format("%s%s", REDIRECT_SIGNATURE, "/"));
+            return new ModelAndView("/user/list", users);
         }
+        return new ModelAndView(String.format("%s%s", REDIRECT_SIGNATURE, "/"));
 
-        handle(modelAndView, httpResponse);
     }
 
     private boolean isLoginedUser(Session session) {

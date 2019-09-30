@@ -9,8 +9,8 @@ public class IndexController extends AbstractController {
     }
 
     @Override
-    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        handle(new ModelAndView("/index"), httpResponse);
+    public ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+        return new ModelAndView("/index");
     }
 
     private static class IndexControllerLazyHolder {

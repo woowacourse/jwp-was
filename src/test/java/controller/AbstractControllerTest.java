@@ -8,17 +8,14 @@ import http.request.RequestLine;
 import http.response.HttpResponse;
 import model.User;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.google.common.net.HttpHeaders.COOKIE;
 import static http.common.ContentType.FORM_URLENCODED;
-import static http.request.HttpRequest.SESSIONID;
 
 public abstract class AbstractControllerTest {
-    HttpResponse signUp(User user) {
+    ModelAndView signUp(User user) {
         Map<String, String> userData = new HashMap<>();
         userData.put("userId", user.getUserId());
         userData.put("password", user.getPassword());
@@ -32,12 +29,10 @@ public abstract class AbstractControllerTest {
         HttpResponse httpResponse = new HttpResponse(httpRequest);
 
         UserController userController = UserController.getInstance();
-        userController.doPost(httpRequest, httpResponse);
-
-        return httpResponse;
+        return userController.doPost(httpRequest, httpResponse);
     }
 
-    HttpResponse login(String id, String password) {
+    String getLoginSessionId(String id, String password) {
         Map<String, String> loginData = new HashMap<>();
         loginData.put("userId", id);
         loginData.put("password", password);
@@ -50,17 +45,11 @@ public abstract class AbstractControllerTest {
 
         LoginController loginController = LoginController.getInstance();
         loginController.doPost(httpRequest, httpResponse);
-        return httpResponse;
+
+        return httpRequest.getSession().getId();
     }
 
-    HttpHeader getLoginHttpHeader(String id, String password) {
-        HttpResponse httpResponse = login(id, password);
-        String loginSessionId = httpResponse.getSession().getId();
-
-        return new HttpHeader(Arrays.asList(String.format("%s: %s=%s", COOKIE, SESSIONID, loginSessionId)));
-    }
-
-    private String getQueryString(Map<String, String> data) {
+    String getQueryString(Map<String, String> data) {
         return data.keySet().stream()
                 .map(key -> String.format("%s=%s", key, data.get(key)))
                 .collect(Collectors.joining("&"));

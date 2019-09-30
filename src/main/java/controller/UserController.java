@@ -11,7 +11,7 @@ public class UserController extends AbstractController {
     }
 
     @Override
-    public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
+    public ModelAndView doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         String userId = httpRequest.getFormDataParameter("userId");
         String password = httpRequest.getFormDataParameter("password");
         String name = httpRequest.getFormDataParameter("name");
@@ -21,7 +21,7 @@ public class UserController extends AbstractController {
 
         DataBase.addUser(user);
 
-        handle(new ModelAndView("redirect: /"), httpResponse);
+        return new ModelAndView("redirect: /");
     }
 
     private static class UserControllerLazyHolder {
