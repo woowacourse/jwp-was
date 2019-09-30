@@ -45,13 +45,13 @@ public class RequestHandler implements Runnable {
         try {
             HttpRequest request = HttpRequestParser.parse(new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
             HttpServlet httpServlet = MappingHandler.getServlets(request);
-            HttpResponse response2 = new HttpResponse(new DataOutputStream(out));
-            View view = httpServlet.run(request, response2);
-            view.render(request, response2);
+            HttpResponse response = new HttpResponse(new DataOutputStream(out));
+            View view = httpServlet.run(request, response);
+            view.render(request, response);
         } catch (ErrorResponseException e) {
-            HttpResponse response2 = new HttpResponse(new DataOutputStream(out));
+            HttpResponse response = new HttpResponse(new DataOutputStream(out));
             View view = new ErrorView(e.getHttpStatus(), e.getMessage());
-            view.render(null, response2);
+            view.render(null, response);
         }
     }
 }
