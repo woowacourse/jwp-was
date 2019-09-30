@@ -1,5 +1,6 @@
 package webserver.session;
 
+import helper.StorageHelper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -7,25 +8,26 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class SessionStorageTest {
     String staticId = "id";
+    IdGenerationStrategy generator = StorageHelper.idGenerator(staticId);
 
     @DisplayName("세션 생성")
     @Test
     void create_staticId_equalId() {
-        HttpSession httpSession = SessionStorage.create(idGenerator());
+        HttpSession httpSession = SessionStorage.create(generator);
         assertThat(httpSession.getId()).isEqualTo("id");
     }
 
     @DisplayName("고정 아이디 세션 등록시 존재")
     @Test
     void get_staticId_exists() {
-        SessionStorage.create(idGenerator());
+        SessionStorage.create(generator);
         assertThat(SessionStorage.get(staticId)).isNotNull();
     }
 
     @DisplayName("존재하지 않는 아이디 찾을시 Null")
     @Test
     void get_notExistsId_null() {
-        SessionStorage.create(idGenerator());
+        SessionStorage.create(generator);
         assertThat(SessionStorage.get("abc")).isNull();
     }
 
@@ -38,7 +40,7 @@ class SessionStorageTest {
     @DisplayName("세션 아이디로 존재 여부 확인")
     @Test
     void exists_created_true() {
-        SessionStorage.create(idGenerator());
+        SessionStorage.create(generator);
         assertThat(SessionStorage.exists(staticId)).isTrue();
     }
 
@@ -47,10 +49,6 @@ class SessionStorageTest {
     void exists_uuid_exists() {
         HttpSession httpSession = SessionStorage.create(new UUIDGenerationStrategy());
         assertThat(SessionStorage.exists(httpSession.getId())).isTrue();
-    }
-
-    private IdGenerationStrategy idGenerator() {
-        return () -> staticId;
     }
 
 }

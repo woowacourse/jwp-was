@@ -12,7 +12,6 @@ import webserver.view.View;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,7 +27,7 @@ class FileServletTest extends AbstractServletTest {
 
     @DisplayName("정적 html파일 가져오기")
     @Test
-    void run_httpFileRequest_ok() throws IOException, URISyntaxException {
+    void run_httpFileRequest_ok() throws IOException {
         HttpRequest httpRequest = getCommonGetRequest("/index.html");
         View view = resolver.createView("/index.html");
         assertThat(fileServlet.run(httpRequest, httpResponse)).isEqualTo(new ModelAndView(view));
@@ -37,7 +36,7 @@ class FileServletTest extends AbstractServletTest {
 
     @DisplayName("정적 css파일 가져오기")
     @Test
-    void run_cssFileRequest_ok() throws IOException, URISyntaxException {
+    void run_cssFileRequest_ok() throws IOException {
         HttpRequest httpRequest = getCommonGetRequest("/css.css");
         View view = resolver.createView("/css.css");
         assertThat(fileServlet.run(httpRequest, httpResponse)).isEqualTo(new ModelAndView(view));
