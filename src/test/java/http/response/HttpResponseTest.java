@@ -21,6 +21,6 @@ class HttpResponseTest {
         httpResponse.setResponseStatus(ResponseStatus.OK);
         String httpResponseText = new String(httpResponse.serialize());
 
-        assertThat(httpResponseText).isEqualTo("HTTP/1.1 200 OK\r\n");
+        assertThat(httpResponseText).contains("HTTP/1.1 200 OK\r\n");
     }
 }

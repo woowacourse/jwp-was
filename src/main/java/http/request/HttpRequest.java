@@ -15,12 +15,19 @@ public class HttpRequest {
     private final RequestLine requestLine;
     private final HttpHeader httpHeader;
     private final RequestBody body;
+    private final Session session;
 
     public HttpRequest(RequestLine requestLine, HttpHeader httpHeader, RequestBody body) {
         checkValidHttpRequest(requestLine, httpHeader, body);
         this.requestLine = requestLine;
         this.httpHeader = httpHeader;
         this.body = body;
+        this.session = loadSession();
+    }
+
+    private Session loadSession() {
+        String sessionId = httpHeader.getCookieAttribute(SESSIONID);
+        return SessionRepository.getInstance().getSession(sessionId);
     }
 
     private void checkValidHttpRequest(RequestLine requestLine, HttpHeader httpHeader, RequestBody body) {
@@ -59,7 +66,6 @@ public class HttpRequest {
     }
 
     public Session getSession() {
-        String sessionId = httpHeader.getCookieAttribute(SESSIONID);
-        return SessionRepository.getInstance().getSession(sessionId);
+        return this.session;
     }
 }

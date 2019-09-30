@@ -20,14 +20,16 @@ public class HttpResponse {
     public HttpResponse(HttpRequest httpRequest) {
         this.httpRequest = httpRequest;
         this.httpHeader = new HttpHeader();
+        addSessionCookie();
+    }
+
+    private void addSessionCookie() {
+        Cookie cookie = new Cookie.Builder(SESSIONID, httpRequest.getSession().getId()).path("/").build();
+        httpHeader.addCookie(cookie);
     }
 
     public void addHeaderAttribute(String key, String value) {
         this.httpHeader.addHeaderAttribute(key, value);
-    }
-
-    public void addCookie(Cookie cookie) {
-        httpHeader.addCookie(cookie);
     }
 
     public byte[] serialize() {
