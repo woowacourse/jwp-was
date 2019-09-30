@@ -18,7 +18,7 @@ class HttpResponseTest {
     @Test
     void ok() {
         byte[] body = FileIoUtils.loadFileFromClasspath("./templates/index.html");
-        httpResponse.ok(new ResponseBody(body));
+        httpResponse.forward(new ResponseBody(body));
 
         assertThat(httpResponse.getHttpStatus()).isEqualByComparingTo(HttpStatus.OK);
         assertThat(httpResponse.getHeader("Content-Length")).isEqualTo(Integer.toString(body.length));
@@ -27,7 +27,7 @@ class HttpResponseTest {
 
     @Test
     void notFound() {
-        httpResponse.notFound();
+        httpResponse.error();
 
         assertThat(httpResponse.getHttpStatus()).isEqualByComparingTo(HttpStatus.NOT_FOUND);
     }

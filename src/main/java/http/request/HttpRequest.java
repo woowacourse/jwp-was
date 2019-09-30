@@ -6,6 +6,8 @@ import http.common.HttpVersion;
 
 public class HttpRequest {
 
+    private static final String ACCEPT_DELIMITER = ",";
+    private static final String ACCEPT = "Accept";
     private RequestLine requestLine;
     private HttpHeader requestHeader;
     private Cookies cookies;
@@ -23,7 +25,7 @@ public class HttpRequest {
     }
 
     public String findHeader(String name) {
-        return requestHeader.findHeader(name);
+        return requestHeader.getHeader(name);
     }
 
     public HttpUri getUri() {
@@ -60,6 +62,10 @@ public class HttpRequest {
 
     public boolean isLogined() {
         return cookies.isLogined();
+    }
+
+    public String getContentType() {
+        return requestHeader.getHeader(ACCEPT).split(ACCEPT_DELIMITER)[0];
     }
 
     public static final class HttpRequestBuilder {

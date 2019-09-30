@@ -17,7 +17,7 @@ public class HttpHeader {
         this.headers = headers;
     }
 
-    public String findHeader(String name) {
+    public String getHeader(String name) {
         return headers.get(name);
     }
 

@@ -20,7 +20,7 @@ public class StatusLine {
     }
 
     public HttpVersion getHttpVersion() {
-        return httpVersion;
+        return this.httpVersion;
     }
 
     public HttpStatus getHttpStatus() {

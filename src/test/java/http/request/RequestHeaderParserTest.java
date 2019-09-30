@@ -19,8 +19,8 @@ class RequestHeaderParserTest {
         assertDoesNotThrow(() -> RequestHeaderParser.parse(requestLines));
 
         HttpHeader requestHeader = RequestHeaderParser.parse(requestLines);
-        assertThat(requestHeader.findHeader("Host")).isEqualTo("localhost:8080");
-        assertThat(requestHeader.findHeader("Connection")).isEqualTo("keep-alive");
+        assertThat(requestHeader.getHeader("Host")).isEqualTo("localhost:8080");
+        assertThat(requestHeader.getHeader("Connection")).isEqualTo("keep-alive");
     }
 
 }

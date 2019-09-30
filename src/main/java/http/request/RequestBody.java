@@ -6,6 +6,9 @@ public class RequestBody {
 
     private Map<String, String> body;
 
+    public RequestBody() {
+    }
+
     public RequestBody(final Map<String, String> body) {
         this.body = body;
     }
