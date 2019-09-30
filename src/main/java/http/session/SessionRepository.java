@@ -16,7 +16,7 @@ public class SessionRepository {
     }
 
     public Session getSession(String sessionId) {
-        return sessions.containsKey(sessionId) ? sessions.get(sessionId) : createSession();
+        return sessions.getOrDefault(sessionId, createSession());
     }
 
     private Session createSession() {
@@ -27,10 +27,10 @@ public class SessionRepository {
     }
 
     private String createUniqueSessionId() {
-        String uuid = UUID.randomUUID().toString();
-        while (sessions.containsKey(uuid)) {
+        String uuid;
+        do {
             uuid = UUID.randomUUID().toString();
-        }
+        } while (sessions.containsKey(uuid));
 
         return uuid;
     }

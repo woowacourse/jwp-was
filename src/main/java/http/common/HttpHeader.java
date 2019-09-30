@@ -58,12 +58,9 @@ public class HttpHeader {
     }
 
     public void addHeaderAttribute(String key, String value) {
-        if (httpHeader.containsKey(key)) {
-            httpHeader.get(key).add(value);
-            return;
-        }
-
-        httpHeader.put(key, Lists.newArrayList(value));
+        List<String> values = httpHeader.getOrDefault(key, Lists.newArrayList());
+        values.add(value);
+        httpHeader.put(key, values);
     }
 
     //TODO: return type을 List로 변환하기
