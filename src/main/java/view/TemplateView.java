@@ -22,7 +22,7 @@ public class TemplateView implements View {
 
     @Override
     public void render(Map<String, Object> model, HttpResponse httpResponse) {
-        byte[] body = templateEngineManager.getCompiledTemplate(viewName, model).getBytes();
+        byte[] body = templateEngineManager.applyCompile(viewName, model);
         httpResponse.setResponseStatus(ResponseStatus.OK);
         httpResponse.addHeaderAttribute(CONTENT_TYPE, ContentType.HTML + CHARSET_UTF_8);
         httpResponse.addHeaderAttribute(CONTENT_LENGTH, String.valueOf(body.length));
