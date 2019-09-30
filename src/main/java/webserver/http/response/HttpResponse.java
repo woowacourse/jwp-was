@@ -24,7 +24,23 @@ public class HttpResponse {
     }
 
     public void addCookie(Cookie cookie) {
-        cookies.put(cookie.getName(), cookie);
+        responseHeader.addCookie(cookie);
+    }
+
+    public void updateStatusLine(HttpStatus httpStatus) {
+        statusLine.setHttpStatus(httpStatus);
+    }
+
+    public void updateResponseHeader(ModelAndView modelAndView) {
+        if (modelAndView.isRedirectView()) {
+            responseHeader.addHeader("Location: ", modelAndView.getView());
+        }
+        responseHeader.addHeader("Content-Type: ", modelAndView.getMediaType().getContentType() + ";charset=utf-8");
+        responseHeader.addHeader("Content-Length: ", String.valueOf(modelAndView.getByteView().length));
+    }
+
+    public void updateResponseBody(ModelAndView modelAndView) {
+        responseBody.setBody(modelAndView.getByteView());
     }
 
     public StatusLine getStatusLine() {
