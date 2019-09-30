@@ -12,6 +12,7 @@ public class Cookie {
     private static final String HTTP_ONLY = "HttpOnly";
     private static final String SECURE = "Secure";
     private static final String MAX_AGE = "max-age";
+    private static final int DEFAULT_MAX_AGE = -1;
 
     private final String name;
     private String value;
@@ -74,7 +75,7 @@ public class Cookie {
     }
 
     public boolean hasMaxAge() {
-        return maxAge != -1;
+        return maxAge != DEFAULT_MAX_AGE;
     }
 
     public boolean hasPath() {
@@ -118,7 +119,7 @@ public class Cookie {
     public static final class CookieBuilder {
         private String name;
         private String value;
-        private int maxAge;
+        private int maxAge = DEFAULT_MAX_AGE;
         private String path;
         private boolean secure;
         private boolean httpOnly;

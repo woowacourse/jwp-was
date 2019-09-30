@@ -4,20 +4,32 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import webserver.http.HttpVersion;
+import webserver.http.request.HttpRequest;
+import webserver.http.request.HttpRequestFactory;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static webserver.http.HttpHeaders.LOCATION;
 
 class HttpResponseTest {
-    private ByteArrayOutputStream out;
     private HttpResponse response;
 
     @BeforeEach
     void setUp() {
-        out = new ByteArrayOutputStream();
-        response = new HttpResponse(out);
+        final String plainTextRequest = "POST /user/create?id=1 HTTP/1.1\n" +
+                "Host: localhost:8080\n" +
+                "Connection: keep-alive\n" +
+                "Cookie: user=bedi;\n" +
+                "\n";
+
+        final InputStream in = new ByteArrayInputStream(plainTextRequest.getBytes());
+        final HttpRequest httpRequest = HttpRequestFactory.generate(in);
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        response = new HttpResponse(httpRequest, out);
     }
 
     @Test

@@ -31,4 +31,13 @@ class HttpRequestTest {
 
         assertThat(session).isNotNull();
     }
+
+    @Test
+    void 세션이_생성_확인_true() {
+        // when
+        httpRequest.getSession();
+
+        // then
+        assertThat(httpRequest.isCreatedSession()).isTrue();
+    }
 }

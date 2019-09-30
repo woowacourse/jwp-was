@@ -2,7 +2,11 @@ package webserver.http.response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.http.*;
+import webserver.http.Cookie;
+import webserver.http.Cookies;
+import webserver.http.HttpHeaders;
+import webserver.http.HttpVersion;
+import webserver.http.request.HttpRequest;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -23,10 +27,12 @@ public class HttpResponse {
     private final HttpHeaders headers = new HttpHeaders();
     private final OutputStream out;
     private final Cookies cookies;
+    private final HttpRequest httpRequest;
     private StatusLine statusLine;
     private String resource;
 
-    public HttpResponse(final OutputStream out) {
+    public HttpResponse(final HttpRequest httpRequest, final OutputStream out) {
+        this.httpRequest = httpRequest;
         this.out = out;
         this.cookies = new Cookies();
         this.statusLine = new StatusLine();
@@ -88,13 +94,18 @@ public class HttpResponse {
         for (Map.Entry<String, String> entry : headers.entrySet()) {
             dos.writeBytes(String.format("%s: %s\n", entry.getKey(), entry.getValue()));
         }
-        if (cookies.isNotEmpty()) {
-            writeSetCookie(dos);
-        }
+        writeSetCookie(dos);
         dos.writeBytes("\n");
     }
 
     private void writeSetCookie(final DataOutputStream dos) throws IOException {
+        if (httpRequest.isCreatedSession()) {
+            cookies.add(Cookie.builder(Cookies.JSESSIONID, httpRequest.getSessionId())
+                    .path("/")
+                    .httpOnly(true)
+                    .build());
+        }
+
         for (Cookie cookie : cookies.values()) {
             dos.writeBytes(String.format("%s: %s\n", SET_COOKIE, cookie.parseInfoAsString()));
         }

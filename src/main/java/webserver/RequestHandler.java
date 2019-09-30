@@ -43,10 +43,7 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             final HttpRequest httpRequest = HttpRequestFactory.generate(in);
-            final HttpResponse httpResponse = new HttpResponse(out);
-
-            // todo 세션이 필요할 때 생성 후 자동으로 cookie에 set 해주기
-            initSession(httpRequest, httpResponse);
+            final HttpResponse httpResponse = new HttpResponse(httpRequest, out);
 
             final View view = renderView(httpRequest, httpResponse);
 
@@ -57,15 +54,6 @@ public class RequestHandler implements Runnable {
             httpResponse.write();
         } catch (Exception e) {
             log.error(e.getMessage());
-        }
-    }
-
-    private void initSession(final HttpRequest httpRequest, final HttpResponse httpResponse) {
-        if (httpRequest.notHasSession()) {
-            final Cookie sessionCookie = new Cookie(Cookies.JSESSIONID, httpRequest.getSession().getId());
-            sessionCookie.setPath("/");
-            sessionCookie.setHttpOnly(true);
-            httpResponse.addCookie(sessionCookie);
         }
     }
 

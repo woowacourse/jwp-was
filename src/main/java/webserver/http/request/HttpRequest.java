@@ -2,12 +2,15 @@ package webserver.http.request;
 
 import webserver.http.*;
 
+import java.util.Objects;
+
 public class HttpRequest {
     private final RequestLine requestLine;
     private final HttpHeaders headers;
     private final Parameters parameters;
     private final Cookies cookies;
     private final SessionManager sessionManager;
+    private HttpSession httpSession;
 
     HttpRequest(final RequestLine requestLine, final HttpHeaders headers, final Parameters parameters, final Cookies cookies, final SessionManager sessionManager) {
         this.requestLine = requestLine;
@@ -15,6 +18,7 @@ public class HttpRequest {
         this.parameters = parameters;
         this.cookies = cookies;
         this.sessionManager = sessionManager;
+        this.httpSession = sessionManager.getSession(cookies.getSessionId()).orElse(null);
     }
 
     public int sizeOfParameters() {
@@ -22,19 +26,22 @@ public class HttpRequest {
     }
 
     public HttpSession getSession() {
-        final String jSessionId = cookies.getSessionId();
-        return sessionManager.getSession(jSessionId)
-                .orElse(createSession());
+        if(Objects.isNull(httpSession)){
+            httpSession = sessionManager.createSession();
+        }
+        return httpSession;
     }
 
-    private HttpSession createSession() {
-        final HttpSession session = sessionManager.createSession();
-        cookies.add(new Cookie(Cookies.JSESSIONID, session.getId()));
-        return session;
+    public String getSessionId(){
+        return httpSession.getId();
     }
 
     public boolean notHasSession() {
         return !cookies.contains(Cookies.JSESSIONID);
+    }
+
+    public boolean isCreatedSession() {
+        return cookies.getSessionId() == null && httpSession != null;
     }
 
     public HttpMethod getMethod() {
