@@ -1,4 +1,4 @@
-package model.http;
+package webserver.http;
 
 import java.util.Objects;
 
@@ -68,12 +68,12 @@ public class Cookie {
         this.secure = secure;
     }
 
-    public boolean isLogined() {
-        return value.equals("true");
+    public String getHeaderKey() {
+        return "Set-Cookie: " + name;
     }
 
-    public String toStringForHttpResponseHeader() {
-        String cookieString = "Set-Cookie: " + name + "=" + value + "; ";
+    public String getHeaderValues() {
+        String cookieString = "=" + value + "; ";
         if (expires != null) {
             cookieString += "expires=" + expires + "; ";
         }
