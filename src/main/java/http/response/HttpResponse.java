@@ -61,6 +61,10 @@ public class HttpResponse {
         httpResponseHeader.addField("Content-Length", String.valueOf(httpResponseBody.getBodyLength()));
     }
 
+    public void setHttpResponseBody(HttpResponseBody httpResponseBody) {
+        this.httpResponseBody = httpResponseBody;
+    }
+
     public void writeResponse(DataOutputStream dataOutputStream) throws IOException {
         logger.debug("response status line");
         logger.debug("response header");
