@@ -40,7 +40,6 @@ public class HttpRequestParams {
             if (result.containsKey(token[0]) || token.length != 2) {
                 continue;
             }
-            System.out.println("parseQuery" + token[0]);
             result.put(token[0], token[1]);
         }
 
