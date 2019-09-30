@@ -23,6 +23,14 @@ public class HttpRequestHeader {
         return length;
     }
 
+    public boolean hasSession() {
+        return httpCookieStore.containsValue("SessionId");
+    }
+
+    public String getSessionId() {
+        return httpCookieStore.getCookieValue("SessionId");
+    }
+
     public String getCookieValue(String key) {
         return httpCookieStore.getCookieValue(key);
     }

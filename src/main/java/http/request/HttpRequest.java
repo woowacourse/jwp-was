@@ -50,9 +50,17 @@ public class HttpRequest {
         return httpRequestStartLine.getHttpVersion();
     }
 
-	public String getCookieValue(String key) {
-		return httpRequestHeader.getCookieValue(key);
-	}
+    public String getCookieValue(String key) {
+        return httpRequestHeader.getCookieValue(key);
+    }
+
+    public boolean hasSession() {
+        return httpRequestHeader.hasSession();
+    }
+
+    public String getSessionId() {
+        return httpRequestHeader.getSessionId();
+    }
 
     @Override
     public String toString() {
