@@ -6,6 +6,7 @@ import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,20 +15,20 @@ public class HandleBarModelAndView implements ModelAndView {
     public static final String PRE_FIX = "/templates";
     public static final String SUF_FIX = ".html";
 
-    TemplateLoader loader;
-    Map<String, Object> data;
+    private TemplateLoader loader;
+    private Map<String, Object> data;
 
     public HandleBarModelAndView() {
-        loader = loader(PRE_FIX, SUF_FIX);
+        loader = loader(PRE_FIX, SUF_FIX, StandardCharsets.UTF_8);
         data = new HashMap<>();
     }
 
-    private TemplateLoader loader(String preFix, String sufFix) {
+    private TemplateLoader loader(String preFix, String sufFix, Charset charset) {
         loader = new ClassPathTemplateLoader();
 
-        loader.setPrefix(PRE_FIX);
-        loader.setSuffix(SUF_FIX);
-        loader.setCharset(StandardCharsets.UTF_8);
+        loader.setPrefix(preFix);
+        loader.setSuffix(sufFix);
+        loader.setCharset(charset);
 
         return loader;
     }
