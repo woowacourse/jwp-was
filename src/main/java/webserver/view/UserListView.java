@@ -31,7 +31,7 @@ public class UserListView implements View {
         users.put(TEMPLATE_VALUE_MODEL, request.getAttribute(TEMPLATE_VALUE_MODEL));
         byte[] body = applyTemplate(users).getBytes();
         response.setContentLengthAndType(body.length, "text/html");
-        response.setContentEncoding("utf-8");
+        response.setContentCharset("utf-8");
         response.ok(body);
     }
 

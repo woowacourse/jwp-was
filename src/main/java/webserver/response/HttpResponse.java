@@ -31,7 +31,7 @@ public class HttpResponse {
         this.httpStatus = httpStatus;
         this.body = message.getBytes();
         setContentLengthAndType(body.length, "text/html");
-        setContentEncoding("utf-8");
+        setContentCharset("utf-8");
         render();
     }
 
@@ -66,9 +66,9 @@ public class HttpResponse {
         header.setContentLengthAndType(length, type);
     }
 
-    public void setContentEncoding(String encoder) {
+    public void setContentCharset(String charset) {
         String type = (String) header.get("Content-Type");
-        type = type + ";charset=" + encoder;
+        type = type + ";charset=" + charset;
         header.put("Content-Type", type);
     }
 
