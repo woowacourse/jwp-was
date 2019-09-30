@@ -1,5 +1,6 @@
 package http;
 
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,6 +22,6 @@ public class SessionStore {
     }
 
     private static boolean isNotContainSession(String sessionId) {
-        return !sessions.containsKey(sessionId);
+        return Objects.isNull(sessionId) || !sessions.containsKey(sessionId);
     }
 }
