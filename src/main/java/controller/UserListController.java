@@ -7,8 +7,6 @@ import view.ModelAndView;
 import view.RedirectView;
 import view.View;
 
-import java.util.Arrays;
-
 public class UserListController extends AbstractController {
     @Override
     public View doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
@@ -21,7 +19,6 @@ public class UserListController extends AbstractController {
     }
 
     private boolean isLogined(HttpRequest httpRequest) {
-        return Arrays.stream(httpRequest.getCookies())
-                .anyMatch(cookie -> cookie.contains("SESSIONID="));
+        return "true".equals(httpRequest.getCookie().get("logined"));
     }
 }

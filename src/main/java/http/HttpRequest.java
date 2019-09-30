@@ -48,12 +48,17 @@ public class HttpRequest {
         return startLine.matchMethod(method);
     }
 
-    public String[] getCookies() {
+    public Cookie getCookie() {
         String cookies;
         if ((cookies = headers.getValue(COOKIE)) == null) {
-            return new String[0];
+            return new Cookie();
         }
-        return cookies.split(COOKIE_DELIMITER);
+        return new Cookie(headers.getValue(COOKIE));
+    }
+
+    public String getSessionId() {
+        Cookie cookie = getCookie();
+        return cookie.get("SESSIONID");
     }
 
     public String getUri() {

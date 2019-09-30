@@ -1,15 +1,12 @@
 package webserver;
 
 import controller.Controller;
-import controller.exception.NotFoundUserIdException;
 import http.HttpRequest;
 import http.HttpResponse;
 import http.MimeType;
-import model.exception.InvalidPasswordException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
-import view.RedirectView;
 import view.View;
 import webserver.exception.AbstractHttpException;
 import webserver.exception.NotFoundResourceException;
@@ -18,7 +15,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
-import static com.google.common.net.HttpHeaders.SET_COOKIE;
 
 public class DispatcherServlet {
     private static final Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
@@ -28,6 +24,7 @@ public class DispatcherServlet {
 
     public static void doDispatch(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         try {
+            SessionHandler.handle(httpRequest, httpResponse);
             if (httpRequest.isStaticRequest()) {
                 handleStaticRequest(httpRequest, httpResponse);
                 return;

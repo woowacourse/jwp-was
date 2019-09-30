@@ -58,6 +58,10 @@ public class HttpResponse {
         status = e.getStatus();
     }
 
+    public void addCookie(Cookie cookie) {
+        header.addCookie(cookie);
+    }
+
     public HttpStatus getStatus() {
         return status;
     }

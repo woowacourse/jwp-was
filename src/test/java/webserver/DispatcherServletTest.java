@@ -2,7 +2,6 @@ package webserver;
 
 import db.DataBase;
 import http.*;
-import jdk.internal.joptsimple.internal.Strings;
 import model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +9,7 @@ import utils.FileIoUtils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Collections;
 
 import static com.google.common.net.HttpHeaders.*;
 import static http.HttpRequestTest.*;
@@ -18,13 +18,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static utils.IOUtils.convertStringToInputStream;
 
 class DispatcherServletTest {
-    private String sessionId;
-
     static {
         if (!DataBase.findUserById(ID).isPresent()) {
             DataBase.addUser(new User(ID, PASSWORD, NAME, EMAIL));
         }
     }
+
+    private String sessionId;
 
     @BeforeEach
     void setUp() {
@@ -39,6 +39,7 @@ class DispatcherServletTest {
         String filePath = "/css/styles.css";
         HttpRequest request = new HttpRequest.HttpRequestBuilder()
                 .startLine(new HttpStartLine(filePath, HttpMethod.GET))
+                .headers(new HttpHeader(Collections.singletonList("Cookie: SESSIONID=" + sessionId)))
                 .build();
         HttpResponse response = new HttpResponse();
 
@@ -53,6 +54,7 @@ class DispatcherServletTest {
     void 존재하지않는_static_파일_요청() throws IOException {
         HttpRequest request = new HttpRequest.HttpRequestBuilder()
                 .startLine(new HttpStartLine("/css/styles.cs", HttpMethod.GET))
+                .headers(new HttpHeader(Collections.singletonList("Cookie: SESSIONID=" + sessionId)))
                 .build();
         HttpResponse response = new HttpResponse();
 
@@ -74,44 +76,44 @@ class DispatcherServletTest {
 
     @Test
     void 로그인_요청() throws IOException {
-        HttpRequest request = HttpRequestParser.parse(convertStringToInputStream(String.format(LOGIN_REQUEST, ID, PASSWORD)));
+        HttpRequest request = HttpRequestParser.parse(convertStringToInputStream(createLoginRequest(ID, PASSWORD)));
         HttpResponse response = new HttpResponse();
 
         DispatcherServlet.doDispatch(request, response);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
         assertThat(response.getHeader(LOCATION)).isEqualTo("/index.html");
-        assertThat(response.getHeader(SET_COOKIE)).contains("SESSIONID=");
+        assertThat(response.getHeader(SET_COOKIE)).contains("logined=true");
     }
 
     @Test
     void 로그인_존재하지않는_유저_Redirect_처리() throws IOException {
-        HttpRequest request = HttpRequestParser.parse(convertStringToInputStream(String.format(LOGIN_REQUEST, "ABC", PASSWORD)));
+        HttpRequest request = HttpRequestParser.parse(convertStringToInputStream(createLoginRequest("ABC", PASSWORD)));
         HttpResponse response = new HttpResponse();
 
         DispatcherServlet.doDispatch(request, response);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
         assertThat(response.getHeader(LOCATION)).isEqualTo("/user/login_failed.html");
-        assertThat(response.getHeader(SET_COOKIE)).contains("SESSIONID=''; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
+        assertThat(response.getHeader(SET_COOKIE)).contains("logined=false");
     }
 
     @Test
     void 로그인_비밀번호_에러시_Redirect_처리() throws IOException {
-        HttpRequest request = HttpRequestParser.parse(convertStringToInputStream(String.format(LOGIN_REQUEST, ID, "ABC")));
+        HttpRequest request = HttpRequestParser.parse(convertStringToInputStream(createLoginRequest(ID, "fail")));
         HttpResponse response = new HttpResponse();
 
         DispatcherServlet.doDispatch(request, response);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
         assertThat(response.getHeader(LOCATION)).isEqualTo("/user/login_failed.html");
-        assertThat(response.getHeader(SET_COOKIE)).contains("SESSIONID=''; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
+        assertThat(response.getHeader(SET_COOKIE)).contains("logined=false");
     }
 
 
     @Test
     void 로그인시_유저_목록_조회_처리() throws IOException {
-        HttpRequest request = HttpRequestParser.parse(convertStringToInputStream(String.format(USER_LIST_REQUEST, "Cookie: SESSIONID=" + sessionId)));
+        HttpRequest request = HttpRequestParser.parse(convertStringToInputStream(createUserListRequest(true)));
         HttpResponse response = new HttpResponse();
 
         DispatcherServlet.doDispatch(request, response);
@@ -122,12 +124,20 @@ class DispatcherServletTest {
 
     @Test
     void 비로그인시_유저_목록_조회_처리() throws IOException {
-        HttpRequest request = HttpRequestParser.parse(convertStringToInputStream(String.format(USER_LIST_REQUEST, Strings.EMPTY)));
+        HttpRequest request = HttpRequestParser.parse(convertStringToInputStream(createUserListRequest(false)));
         HttpResponse response = new HttpResponse();
 
         DispatcherServlet.doDispatch(request, response);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
         assertThat(response.getHeader(LOCATION)).isEqualTo("/user/login.html");
+    }
+
+    private String createLoginRequest(String id, String password) {
+        return String.format(LOGIN_REQUEST, "SESSIONID=" + sessionId, id, password);
+    }
+
+    private String createUserListRequest(boolean logined) {
+        return String.format(USER_LIST_REQUEST, COOKIE + ": SESSIONID=" + sessionId + "; logined=" + logined + "\n");
     }
 }

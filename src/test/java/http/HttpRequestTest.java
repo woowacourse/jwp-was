@@ -70,7 +70,7 @@ public class HttpRequestTest {
                     "Referer: http://localhost:8080/user/login.html\n" +
                     "Accept-Encoding: gzip, deflate, br\n" +
                     "Accept-Language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7\n" +
-                    "Cookie: Idea-daed433e=7b28f4e9-9efc-49f6-b857-2e1fd083330a\n" +
+                    "Cookie: %s\n" +
                     "\n" +
                     "userId=%s&password=%s\n";
 

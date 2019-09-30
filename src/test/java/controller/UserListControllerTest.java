@@ -6,7 +6,6 @@ import http.HttpRequest;
 import http.HttpRequestParser;
 import http.HttpResponse;
 import http.HttpSession;
-import jdk.internal.joptsimple.internal.Strings;
 import model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,15 +23,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static utils.IOUtils.convertStringToInputStream;
 
 public class UserListControllerTest {
-    private UserListController userListController = new UserListController();
-
-    private String sessionId;
-
     static {
         if (!DataBase.findUserById(ID).isPresent()) {
             DataBase.addUser(new User(ID, PASSWORD, NAME, EMAIL));
         }
     }
+
+    private UserListController userListController = new UserListController();
+    private String sessionId;
 
     @BeforeEach
     void setUp() {
@@ -45,7 +43,7 @@ public class UserListControllerTest {
     @Test
     void 유저_로그인시_유저_목록_접근() throws IOException {
         HttpRequest request = HttpRequestParser.parse(
-                convertStringToInputStream(String.format(USER_LIST_REQUEST, COOKIE + ": SESSIONID=" + sessionId)));
+                convertStringToInputStream(createCookieField(true)));
         HttpResponse response = new HttpResponse();
 
         View view = userListController.service(request, response);
@@ -57,7 +55,7 @@ public class UserListControllerTest {
     @Test
     void 유저_비로그인시_유저_목록_접근() throws IOException {
         HttpRequest request = HttpRequestParser.parse(
-                convertStringToInputStream(String.format(USER_LIST_REQUEST, Strings.EMPTY)));
+                convertStringToInputStream(createCookieField(false)));
         HttpResponse response = new HttpResponse();
 
         View view = userListController.service(request, response);
@@ -72,5 +70,9 @@ public class UserListControllerTest {
         HttpResponse response = new HttpResponse();
 
         assertThrows(URINotFoundException.class, () -> userListController.service(request, response));
+    }
+
+    private String createCookieField(boolean logined) {
+        return String.format(USER_LIST_REQUEST, COOKIE + ": SESSIONID=" + sessionId + "; logined=" + logined + "\n");
     }
 }

@@ -1,14 +1,14 @@
 package http;
 
 import http.exception.InvalidHeaderFormatException;
+import jdk.internal.joptsimple.internal.Strings;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.google.common.net.HttpHeaders.CONTENT_LENGTH;
-import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
+import static com.google.common.net.HttpHeaders.*;
 
 public class HttpHeader {
     public static final String UPGRADE_INSECURE_REQUESTS = "Upgrade-Insecure-Requests";
@@ -33,6 +33,10 @@ public class HttpHeader {
 
     public void addHeader(String key, String value) {
         headers.put(key, value);
+    }
+
+    public void addCookie(Cookie cookie) {
+        headers.put(SET_COOKIE, headers.getOrDefault(SET_COOKIE, Strings.EMPTY) + cookie.convertCookieToString());
     }
 
     public boolean matchContentType(String contentType) {
