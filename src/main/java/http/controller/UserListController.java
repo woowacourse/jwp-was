@@ -1,7 +1,7 @@
 package http.controller;
 
 import db.DataBase;
-import http.common.HttpCookie;
+import http.common.HttpSession;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import modelandview.HandleBarModelAndView;
@@ -19,8 +19,7 @@ public class UserListController extends DefaultController {
 
     @Override
     protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        HttpCookie requestHttpCookie = httpRequest.getHttpCookie();
-        if (isLogin(requestHttpCookie)) {
+        if (isLogin(httpRequest)) {
             try {
                 ModelAndView modelAndView = new HandleBarModelAndView();
                 modelAndView.putData("users", DataBase.findAll());
@@ -36,7 +35,8 @@ public class UserListController extends DefaultController {
         httpResponse.redirect("/index.html");
     }
 
-    private boolean isLogin(HttpCookie requestHttpCookie) {
-        return "true".equals(requestHttpCookie.getCookie(LOGIN_NAME));
+    private boolean isLogin(HttpRequest httpRequest) {
+        HttpSession session = httpRequest.getSession();
+        return session.getAttribute("user") != null;
     }
 }

@@ -1,6 +1,8 @@
 package http.controller;
 
 import db.DataBase;
+import http.common.HttpSession;
+import http.common.HttpSessionHandler;
 import http.request.HttpRequest;
 import http.request.RequestHandler;
 import http.response.HttpResponse;
@@ -21,23 +23,27 @@ import java.util.HashMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UserListControllerTest {
+    private User loginUser = new User("adien", "1234", "aiden", "aiden@naver.com");
     private RequestClientTest requestClient;
     private HttpRequest httpRequest;
     private HttpResponse httpResponse;
 
     @BeforeEach
     void setUp() {
-        DataBase.addUser(new User("adien", "1234", "aiden", "aiden@naver.com"));
+        DataBase.addUser(loginUser);
         DataBase.addUser(new User("roby", "1234", "roby", "roby@naver.com"));
     }
 
     @Test
     @DisplayName("로그인 성공시 리스트 출력")
     public void loginSuccess() throws Exception {
+        HttpSession httpSession = HttpSessionHandler.createSession();
+        httpSession.setAttribute("user", loginUser);
+
         requestClient = RequestClientTest.get("/user/list")
                 .setCookie(new HashMap<String, String>() {
                     {
-                        put("logined", "true");
+                        put(HttpSession.SESSION_NAME, httpSession.getUuid());
                     }
                 });
 
@@ -56,12 +62,7 @@ class UserListControllerTest {
     @Test
     @DisplayName("로그인 실패시 리다이렉트")
     public void loginFail() throws Exception {
-        requestClient = RequestClientTest.get("/user/list")
-                .setCookie(new HashMap<String, String>() {
-                    {
-                        put("logined", "false");
-                    }
-                });
+        requestClient = RequestClientTest.get("/user/list");
 
         InputStream in = new ByteArrayInputStream(requestClient.toString().getBytes(StandardCharsets.UTF_8));
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));

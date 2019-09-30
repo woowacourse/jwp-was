@@ -3,7 +3,7 @@ package http.controller;
 import db.DataBase;
 import db.exception.NotFoundException;
 import db.exception.WrongPasswordException;
-import http.common.HttpCookie;
+import http.common.HttpSession;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.User;
@@ -15,14 +15,13 @@ public class LoginUserController extends DefaultController {
 
     @Override
     protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        HttpCookie responseHttpCookie = httpResponse.getHttpCookie();
-
         try {
             User user = DataBase.findUserByIdAndPassword(httpRequest.getParameter("userId"), httpRequest.getParameter("password"));
-            responseHttpCookie.put("logined", "true");
+            HttpSession session = httpRequest.getSession();
+            session.setAttribute("user", user);
+
             httpResponse.redirect("/index.html");
         } catch (NotFoundException | WrongPasswordException e) {
-            responseHttpCookie.put("logined", "false");
             httpResponse.redirect("/user/login_failed.html");
         }
 
