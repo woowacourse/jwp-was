@@ -1,0 +1,35 @@
+package webserver.controller;
+
+import db.DataBase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import webserver.request.HttpRequest;
+import webserver.response.HttpResponse;
+
+public class SignInController extends AbstractController {
+    private static final Logger log = LoggerFactory.getLogger(SignInController.class);
+
+    @Override
+    public String doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+        return "/user/login.html";
+    }
+
+    @Override
+    public String doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
+        String userId = httpRequest.getParameter("userId");
+        String password = httpRequest.getParameter("password");
+
+        if (!DataBase.contains(userId)) {
+            log.debug("Not Found UserId");
+            return "redirect:/user/login_failed.html";
+        }
+
+        if (DataBase.match(userId, password)) {
+            log.debug("{} login", userId);
+            return "redirect:/index.html";
+        }
+
+        log.debug("Not Match UserId And Password");
+        return "redirect:/user/login_failed.html";
+    }
+}

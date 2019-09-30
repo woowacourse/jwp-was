@@ -42,14 +42,14 @@ public abstract class AbstractController implements Controller {
 
     private void resolveGet(HttpRequest httpRequest, HttpResponse httpResponse) throws FileNotFoundException {
         byte[] staticFile = {};
-        String fileName = doGet(httpRequest, httpResponse);
+        String filePath = doGet(httpRequest, httpResponse);
         if (httpRequest.containHeaderField(HEADER_FIELD_ACCEPT, CONTENT_TYPE_CSS)) {
             staticFile = getStaticFile(httpRequest);
             httpResponse.addHeader(HEADER_FIELD_CONTENT_TYPE, CONTENT_TYPE_CSS);
         }
 
         if (httpRequest.containHeaderField(HEADER_FIELD_ACCEPT, CONTENT_TYPE_HTML)) {
-            staticFile = getStaticFile(fileName);
+            staticFile = getStaticFile(filePath);
             httpResponse.addHeader(HEADER_FIELD_CONTENT_TYPE, CONTENT_TYPE_HTML + SEMICOLON + CHARSET_UTF8);
         }
 
