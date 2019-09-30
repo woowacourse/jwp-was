@@ -35,26 +35,21 @@ public class RequestDispatcher {
     public static byte[] forward(final IOUtils ioUtils) {
         try {
             final Request request = new Request(ioUtils);
-            return processResponse(request);
+            final Response response = processResponse(request);
+            return response.toBytes();
         } catch (IOException | URISyntaxException | NullPointerException | UrlDecodeException e) {
             return DataConverter.convertTo500Response(FileLoader.loadInternalServerErrorFile()).toBytes();
         }
     }
 
-    private static byte[] processResponse(final Request request) throws IOException, URISyntaxException {
+    private static Response processResponse(final Request request) throws IOException, URISyntaxException {
         try {
-            final Response response = requestUrls.entrySet().stream()
-                    .filter(entry -> entry.getKey().equals(request.getPath()))
-                    .findFirst()
-                    .map(Map.Entry::getValue)
-                    .orElseGet(() -> RequestDispatcher::serveResponse)
-                    .service(request);
-            return Objects.nonNull(response) ? DataConverter.convertToBytes(response) :
-                    DataConverter.convertToBytes(FileIoUtils.loadFileFromClasspath(makeFilePath(request, STATIC_PATH)));
+            final Response response = requestUrls.getOrDefault(request.getPath(), RequestDispatcher::serveResponse).service(request);
+            return Objects.nonNull(response) ? response : DataConverter.convertTo200Response(FileIoUtils.loadFileFromClasspath(makeFilePath(request, STATIC_PATH)));
         } catch (IOException | URISyntaxException | NullPointerException e) {
-            return DataConverter.convertToBytes(FileIoUtils.loadFileFromClasspath(makeFilePath(request, TEMPLATES_PATH)));
+            return DataConverter.convertTo200Response(FileIoUtils.loadFileFromClasspath(makeFilePath(request, TEMPLATES_PATH)));
         } catch (NotFoundFileException e) {
-            return DataConverter.convertTo404Response(FileLoader.loadNotFoundFile()).toBytes();
+            return DataConverter.convertTo404Response(FileLoader.loadNotFoundFile());
         }
     }
 

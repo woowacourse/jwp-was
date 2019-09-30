@@ -56,10 +56,6 @@ public class Request {
         return header.getFieldsValue(key);
     }
 
-    public RequestCookie getCookie() {
-        return header.getRequestCookie();
-    }
-
     public String getCookieValue(final String key) {
         return header.getCookieValue(key);
     }

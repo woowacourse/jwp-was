@@ -13,6 +13,10 @@ public class DataConverter {
         return new Response.Builder().body(bytes).build().toBytes();
     }
 
+    public static Response convertTo200Response(final byte[] bytes) {
+        return new Response.Builder().body(bytes).build();
+    }
+
     public static Response convertTo200Response(final StaticFile file) {
         return new Response.Builder().body(file).build();
     }
