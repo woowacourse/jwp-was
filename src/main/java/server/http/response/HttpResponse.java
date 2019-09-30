@@ -30,6 +30,13 @@ public class HttpResponse {
         setBody(body);
     }
 
+    public void forward(byte[] body) {
+        setStatus(HttpStatus.OK);
+        setHeader("Content-Type", MimeType.getType("html"));
+        setHeader("Content-Length", String.valueOf(body.length));
+        setBody(body);
+    }
+
     public void sendRedirect(String location) {
         sendRedirect(location, HttpStatus.FOUND);
     }

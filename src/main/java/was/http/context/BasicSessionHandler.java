@@ -1,7 +1,5 @@
 package was.http.context;
 
-import was.http.Router;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -12,8 +10,10 @@ public class BasicSessionHandler implements SessionHandler {
     private BasicSessionHandler() { }
 
     @Override
-    public void addSession(UUID sessionId) {
-        MAP.put(sessionId, new BasicSession());
+    public Session addNewSession(UUID sessionId) {
+        Session newSession = new BasicSession();
+        MAP.put(sessionId, newSession);
+        return newSession;
     }
 
     @Override
@@ -24,6 +24,11 @@ public class BasicSessionHandler implements SessionHandler {
     @Override
     public void invalidate(UUID sessionId) {
         MAP.remove(sessionId);
+    }
+
+    @Override
+    public boolean hasSession(UUID sessionId) {
+        return MAP.containsKey(sessionId);
     }
 
     public static SessionHandler getInstance() {

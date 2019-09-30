@@ -37,13 +37,17 @@
 - [x] 쿠키 파싱
     - HttpRequest 에서 헤더를 파싱할 때 쿠키를 별도로 파싱하여 맵으로 관리
 
-- [ ] 세션 생성 시기 리팩토링
+- [x] 세션 생성 시기 리팩토링
     - 세션을 도메인 코드가 처음 사용할 때 생성하도록 (굳이 로그인이 아니어도)
     - getSession() 할때 만들면 될듯
 
-- [ ] View, ViewResolver 클래스 생성
+- [x] View, ViewResolver 클래스 생성
     - RedirectView, ForwardView 등
     - Servlet 에서 리턴하고, View 가 HttpResponse 를 생성하는 역할을 맡는다.
+
+- [x] 템플릿 엔진
+    - 템플릿에 모델의 정보를 넣은 ModelAndView 생성
+    - 로그인 검증
 
 - [ ] 예외 처리
     - AbstractServlet 을 상속받는 RestController, Controller 클래스 생성

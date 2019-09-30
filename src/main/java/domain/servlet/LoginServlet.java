@@ -21,7 +21,7 @@ public class LoginServlet extends AbstractServlet {
     protected HttpResponse doPost(HttpRequest request) {
         SessionHandler sessionHandler = BasicSessionHandler.getInstance();
         UUID sessionId = UUID.randomUUID();
-        sessionHandler.addSession(sessionId);
+        sessionHandler.addNewSession(sessionId);
         HttpResponse httpResponse = new HttpResponse();
         LoginService loginService = LoginService.getInstance();
         if (loginService.validate(request.getBody("userId"), request.getBody("password"))) {

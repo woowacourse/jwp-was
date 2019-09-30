@@ -9,6 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class HandlebarsTest {
     private static final Logger log = LoggerFactory.getLogger(HandlebarsTest.class);
 
@@ -22,7 +25,11 @@ public class HandlebarsTest {
         Template template = handlebars.compile("user/profile");
 
         User user = new User("javajigi", "password", "자바지기", "javajigi@gmail.com");
-        String profilePage = template.apply(user);
+        List<User> users = Arrays.asList(
+                new User("moomin", "1234", "moomin", "moomin@woowahan.com"),
+                new User("baedi", "1234", "baedi", "baedi@woowahan.com")
+        );
+        String profilePage = template.apply(users);
         log.debug("ProfilePage : {}", profilePage);
     }
 }
