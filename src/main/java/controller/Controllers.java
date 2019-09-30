@@ -16,6 +16,7 @@ public class Controllers {
         CONTROLLERS.add(new UserSignUpController());
         CONTROLLERS.add(new ResourceController());
         CONTROLLERS.add(new UserLoginController());
+        CONTROLLERS.add(new UserListController());
     }
 
     public Controllers() {
@@ -34,6 +35,6 @@ public class Controllers {
         }
 
         // Todo : 404 status 넘기기
-        httpResponse.notFound();
+        httpResponse.error();
     }
 }
