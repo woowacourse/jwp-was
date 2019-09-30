@@ -13,8 +13,7 @@ import dev.luffy.http.HttpCookie;
 import dev.luffy.http.HttpProtocol;
 import dev.luffy.http.excption.NotFoundCookieException;
 import dev.luffy.http.excption.NotSupportedHttpRequestException;
-import dev.luffy.utils.HttpRequestUtils;
-import dev.luffy.utils.IOUtils;
+import dev.luffy.utils.*;
 
 public class HttpRequest {
 
@@ -50,7 +49,7 @@ public class HttpRequest {
     }
 
     private HttpRequestParam getHttpRequestParams(HttpRequestLine httpRequestLine) {
-        Map<String, String> params = HttpRequestUtils.parse(httpRequestLine.getUrl());
+        Map<String, String> params = UrlParameterParser.parse(httpRequestLine.getUrl());
         return new HttpRequestParam(params);
     }
 
@@ -62,7 +61,7 @@ public class HttpRequest {
             line = bufferedReader.readLine();
         }
         checkEmpty(lines);
-        Map<String, String> headers = HttpRequestUtils.parse(lines);
+        Map<String, String> headers = HeaderParser.parse(lines);
         return new HttpRequestHeader(headers);
     }
 
@@ -74,7 +73,7 @@ public class HttpRequest {
 
     private HttpRequestBody getHttpRequestBody(BufferedReader bufferedReader, int contentLength) throws IOException {
         String bodyData = IOUtils.readData(bufferedReader, contentLength);
-        Map<String, String> body = HttpRequestUtils.parse(bodyData);
+        Map<String, String> body = BodyDataParser.parse(bodyData);
         return new HttpRequestBody(body);
     }
 
@@ -84,7 +83,7 @@ public class HttpRequest {
 
     private void addRequestCookies() {
         if (hasCookie()) {
-            this.httpCookie.addCookies(HttpRequestUtils.parseCookie(this.httpRequestHeader.get("Cookie")));
+            this.httpCookie.addCookies(CookieParser.parse(this.httpRequestHeader.get("Cookie")));
         }
     }
 

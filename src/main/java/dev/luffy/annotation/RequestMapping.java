@@ -1,5 +1,7 @@
 package dev.luffy.annotation;
 
+import dev.luffy.http.request.HttpRequestMethod;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -11,5 +13,7 @@ import java.lang.annotation.Target;
 @Documented
 public @interface RequestMapping {
 
-    String value() default "";
+    String path() default "";
+
+    HttpRequestMethod method() default HttpRequestMethod.GET;
 }

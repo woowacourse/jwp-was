@@ -1,6 +1,7 @@
 package dev.luffy.webserver;
 
 import dev.luffy.http.RequestMapper;
+import dev.luffy.http.RequestMapping;
 import dev.luffy.http.request.HttpRequest;
 import dev.luffy.http.response.HttpResponse;
 import dev.luffy.http.session.HttpSessionStorage;
@@ -26,7 +27,7 @@ public class ResponseHandler {
             return;
         }
 
-        Method controllerMethod = RequestMapper.get(request.getPath());
+        Method controllerMethod = RequestMapper.get(new RequestMapping(request.getMethod(), request.getPath()));
 
         if (controllerMethod == null) {
             response.notFound(request);

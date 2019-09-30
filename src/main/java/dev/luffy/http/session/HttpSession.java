@@ -6,11 +6,11 @@ import java.util.Map;
 public class HttpSession implements Session {
 
     private String id;
-    private Map<String, Object> httpSession;
+    private Map<String, Object> sessionAttributes;
 
     HttpSession(String id) {
         this.id = id;
-        this.httpSession = new HashMap<>();
+        this.sessionAttributes = new HashMap<>();
     }
 
     @Override
@@ -20,21 +20,21 @@ public class HttpSession implements Session {
 
     @Override
     public void setAttribute(String name, Object value) {
-        httpSession.put(name, value);
+        sessionAttributes.put(name, value);
     }
 
     @Override
     public Object getAttribute(String name) {
-        return httpSession.get(name);
+        return sessionAttributes.get(name);
     }
 
     @Override
     public void removeAttribute(String name) {
-        httpSession.remove(name);
+        sessionAttributes.remove(name);
     }
 
     @Override
     public void invalidate() {
-        httpSession.clear();
+        sessionAttributes.clear();
     }
 }
