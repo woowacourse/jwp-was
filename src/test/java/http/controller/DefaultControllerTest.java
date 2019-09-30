@@ -28,8 +28,8 @@ class DefaultControllerTest {
 
         InputStream in = new ByteArrayInputStream(requestClient.toString().getBytes(StandardCharsets.UTF_8));
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-        httpRequest = new RequestHandler(br).create();
-        httpResponse = new ResponseHandler().create(httpRequest);
+        httpRequest = RequestHandler.getInstance().create(br);
+        httpResponse = ResponseHandler.getInstance().create(httpRequest);
 
         DefaultController defaultController = new DefaultController();
         defaultController.doGet(httpRequest, httpResponse);

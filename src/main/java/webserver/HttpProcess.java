@@ -27,9 +27,11 @@ public class HttpProcess implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
+            BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
 
-            HttpRequest httpRequest = RequestHandler.create(new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
-            HttpResponse httpResponse = ResponseHandler.create(httpRequest);
+            HttpRequest httpRequest = RequestHandler.getInstance().create(br);
+            HttpResponse httpResponse = ResponseHandler.getInstance().create(httpRequest);
+
             logger.debug("request path : {}", httpRequest.getPath());
 
             Controller controller = ControllerHandler.findByPath(httpRequest.getPath());

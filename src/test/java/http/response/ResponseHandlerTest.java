@@ -18,9 +18,9 @@ class ResponseHandlerTest {
     public void createTest() throws Exception {
         InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "Http_GET.txt"));
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-        RequestHandler requestHandler = new RequestHandler(br);
-        HttpRequest httpRequest = requestHandler.create();
-        HttpResponse httpResponse = ResponseHandler.create(httpRequest);
+
+        HttpRequest httpRequest = RequestHandler.getInstance().create(br);
+        HttpResponse httpResponse = ResponseHandler.getInstance().create(httpRequest);
 
         assertThat(httpResponse).isInstanceOf(HttpResponse.class);
     }

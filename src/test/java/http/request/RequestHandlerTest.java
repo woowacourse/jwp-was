@@ -16,8 +16,8 @@ class RequestHandlerTest {
     public void createTest() throws Exception {
         InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "Http_GET.txt"));
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-        RequestHandler requestHandler = new RequestHandler(br);
+        RequestHandler requestHandler = RequestHandler.getInstance();
 
-        assertThat(requestHandler.create()).isInstanceOf(HttpRequest.class);
+        assertThat(requestHandler.create(br)).isInstanceOf(HttpRequest.class);
     }
 }

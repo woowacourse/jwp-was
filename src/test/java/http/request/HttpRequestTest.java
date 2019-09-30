@@ -19,7 +19,7 @@ class HttpRequestTest {
         try {
             InputStream in = new FileInputStream(new File(String.format("%sHttp_%s.txt", TEST_DIRECTORY, method)));
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-            httpRequest = new RequestHandler(br).create();
+            httpRequest = RequestHandler.getInstance().create(br);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
