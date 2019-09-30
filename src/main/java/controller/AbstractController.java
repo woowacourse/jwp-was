@@ -36,7 +36,7 @@ public abstract class AbstractController implements Controller {
     }
 
     protected void checkLogin(HttpRequest request) {
-        if (request.cookie().contains("logined=true")) {
+        if (!request.cookie().contains("logined=true")) {
             throw new NonLoginException();
         }
     }
