@@ -3,6 +3,7 @@ package webserver.http.response;
 import webserver.http.HttpStatus;
 
 public class StatusLine {
+    private static final String SINGLE_BLANK = " ";
     private String version;
     private HttpStatus httpStatus;
 
@@ -24,7 +25,7 @@ public class StatusLine {
 
     @Override
     public String toString() {
-        return version + " " + httpStatus.getValue() + " " + httpStatus.getReasonPhrase();
+        return version + SINGLE_BLANK + httpStatus.getValue() + SINGLE_BLANK + httpStatus.getReasonPhrase();
     }
 }
 

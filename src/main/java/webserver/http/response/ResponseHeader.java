@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ResponseHeader {
+    private static final String NEW_LINE = "\r\n";
     private Map<String, String> headers = new HashMap<>();
 
     public void addHeader(String key, String value) {
@@ -20,7 +21,7 @@ public class ResponseHeader {
     public String toString() {
         String responseHeaders = "";
         for (String key : headers.keySet()) {
-            responseHeaders += (key + headers.get(key) + "\r\n");
+            responseHeaders += (key + headers.get(key) + NEW_LINE);
         }
         return responseHeaders;
     }

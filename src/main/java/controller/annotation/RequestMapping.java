@@ -11,5 +11,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface RequestMapping {
     HttpMethod method();
+
     String url();
 }

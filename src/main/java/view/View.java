@@ -8,10 +8,6 @@ public class View {
         this.viewPath = view;
     }
 
-    public View(byte[] viewData) {
-        this.viewData = viewData;
-    }
-
     public String getViewPath() {
         return viewPath;
     }
