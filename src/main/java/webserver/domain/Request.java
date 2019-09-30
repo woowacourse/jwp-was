@@ -14,7 +14,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class Request {
     private static final Logger LOG = getLogger(Request.class);
     private static final String KEY_VALUE_DELIMITER = ":";
-    private static final String COOKIE = "Cookie";
+    private static final String COOKIE = "cookie";
     private static final String EMPTY = "";
     private static final String CONTENT_LENGTH = "content-length";
     private static final String ZERO_LENGTH = "0";
@@ -78,8 +78,8 @@ public class Request {
         return splitAndTrim(rawField, VALUE_INDEX);
     }
 
-    public String getHttpMethod() {
-        return httpMethod.name();
+    public HttpMethod getHttpMethod() {
+        return httpMethod;
     }
 
     public String getPath() {

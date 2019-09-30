@@ -3,10 +3,8 @@ package controller;
 import db.Database;
 import model.User;
 import org.slf4j.Logger;
-import webserver.domain.Cookie;
-import webserver.domain.QueryParameter;
-import webserver.domain.Request;
-import webserver.domain.Response;
+import webserver.StaticFileServer;
+import webserver.domain.*;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -20,8 +18,8 @@ public class UserController {
     private static final String LOGINED = "logined";
     private static final String TRUE = "true";
     private static final String FALSE = "false";
-    private static final String INDEX_HTML = "/index.html";
-    private static final String LOGIN_FAILED_HTML = "/user/login_failed.html";
+    private static final String LOGIN_PAGE = "/user/login";
+    private static final String LOGIN_FAILED_PAGE = "/user/login_failed";
 
     public static Response createUser(final Request request) {
         final QueryParameter queries = request.getQueryParameters();
@@ -37,19 +35,35 @@ public class UserController {
         return new Response.Builder().redirect(URL_ROOT).build();
     }
 
+    // TODO: HTTP Method에 따른 컨트롤러 처리 기능
     public static Response login(final Request request) {
+        if (request.getHttpMethod() == HttpMethod.POST) {
+            return postLogin(request);
+        }
+        return StaticFileServer.get(request);
+    }
+
+    private static Response postLogin(final Request request) {
         final Cookie cookie = request.getCookie();
         final QueryParameter queries = request.getQueryParameters();
         final User tryingUser = new User(queries.getValue(USER_ID), queries.getValue(PASSWORD));
         final User existUser = Database.findUserById(queries.getValue(USER_ID));
         final Response.Builder response = new Response.Builder();
         cookie.set(LOGINED, FALSE);
-        response.redirect(LOGIN_FAILED_HTML);
+        response.redirect(LOGIN_FAILED_PAGE);
         if (tryingUser.equals(existUser)) {
             cookie.set(LOGINED, TRUE);
-            response.redirect(INDEX_HTML);
+            response.redirect(URL_ROOT);
         }
         response.setCookie(cookie);
         return response.build();
+    }
+
+    public static Response userList(final Request request) {
+        final Cookie cookie = request.getCookie();
+        if (TRUE.equals(cookie.get(LOGINED))) {
+            return StaticFileServer.get(request);
+        }
+        return new Response.Builder().redirect(LOGIN_PAGE).build();
     }
 }

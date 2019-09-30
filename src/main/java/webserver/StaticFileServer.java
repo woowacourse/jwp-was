@@ -11,7 +11,7 @@ import webserver.domain.StaticFile;
 
 import java.io.IOException;
 
-class StaticFileServer {
+public class StaticFileServer {
     private static final String EMPTY = "";
     private static final String STATIC_PATH = "./static";
     private static final String TEMPLATES_PATH = "/templates";
@@ -47,7 +47,7 @@ class StaticFileServer {
         }
     }
 
-    static Response makeResponse(final Request request) {
+    public static Response get(final Request request) {
         try {
             return tryStaticFileRead(request);
         } catch (final IOException | IllegalArgumentException e) {
@@ -57,15 +57,15 @@ class StaticFileServer {
 
     private static Response tryStaticFileRead(final Request request) throws IOException, IllegalArgumentException {
         try {
-            final StaticFile file = new StaticFile(makeFilePath(request, STATIC_PATH));
+            final StaticFile file = new StaticFile(makeRightPath(request, STATIC_PATH));
             return new Response.Builder().body(file).build();
         } catch (final IOException | IllegalArgumentException e) {
-            final Template template = HANDLEBARS.compile(makeFilePath(request, EMPTY));
+            final Template template = HANDLEBARS.compile(makeRightPath(request, EMPTY));
             return new Response.Builder().body(template.text()).build();
         }
     }
 
-    private static String makeFilePath(final Request request, final String prefix) {
+    private static String makeRightPath(final Request request, final String prefix) {
         final String requestPath = request.getPath();
         final String pathEnd = (requestPath.endsWith(URL_END_SUFFIX) || EMPTY.equals(requestPath)) ? INDEX : EMPTY;
         return prefix + requestPath + pathEnd;
