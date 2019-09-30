@@ -39,17 +39,18 @@ public class Cookie {
     // 각 필드들을 다른 자료구조 객체에 넣어보려 했지만, 오히려 복잡성이 증가하여 일단 이렇게 한다.
     private final Map<String, String> cookieJar;
     private final Set<String> booleanOptions;
-    private ZonedDateTime expires = null;
-    private Integer maxAgeSecond = null;
-    private String domain = EMPTY;
-    private String path = ROOT; // 기본값 주의
-    private String sameSite = EMPTY;
-    private boolean secure = false;
-    private boolean httpOnly = false;
+    private ZonedDateTime expires;
+    private Integer maxAgeSecond;
+    private String domain;
+    private String path;
+    private String sameSite;
+    private boolean secure;
+    private boolean httpOnly;
 
     public Cookie() {
         cookieJar = new HashMap<>();
         booleanOptions = new HashSet<>();
+        fieldsClear();
     }
 
     public Cookie(final String cookieString) {
@@ -134,6 +135,17 @@ public class Cookie {
     public void clear() {
         cookieJar.clear();
         booleanOptions.clear();
+        fieldsClear();
+    }
+
+    private void fieldsClear() {
+        expires = null;
+        maxAgeSecond = null;
+        domain = EMPTY;
+        path = ROOT; // 기본값 주의
+        sameSite = EMPTY;
+        secure = false;
+        httpOnly = false;
     }
 
     public boolean isEmpty() {

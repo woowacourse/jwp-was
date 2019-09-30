@@ -13,6 +13,7 @@ class RequestDispatcher {
 
     static {
         requestUrls.put("/user/create", UserController::createUser);
+        requestUrls.put("/user/login", UserController::login);
     }
 
     static Response forward(final Request request) {

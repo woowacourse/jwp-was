@@ -25,11 +25,14 @@ public class Response {
 
     public static class Builder {
         private static final String CONTENT_TYPE = "Content-Type";
+        private static final String SET_COOKIE = "Set-Cookie";
         private static final String LOCATION = "Location";
+        private static final String EMPTY = "";
+
+        private Map<String, String> fields = new HashMap<>();
         private ResponseBody body = new ResponseBody();
         private HttpVersion protocol;
         private HttpStatus httpStatus;
-        private Map<String, String> responseFields = new HashMap<>();
 
         Builder(final HttpVersion protocol, final HttpStatus httpStatus) {
             this.protocol = protocol;
@@ -58,24 +61,26 @@ public class Response {
             return this;
         }
 
-        public Builder putField(final String fieldName, String fieldValue) {
-            this.responseFields.put(fieldName, fieldValue);
+        public Builder putField(final String key, final String value) {
+            if (!EMPTY.equals(value)) {
+                this.fields.put(key, value);
+            }
             return this;
         }
 
-        public Builder redirectUrl(final String url) {
+        public Builder redirect(final String url) {
             this.httpStatus = HttpStatus.FOUND;
-            putField(LOCATION, url);
+            this.putField(LOCATION, url);
             return this;
         }
 
         public Builder contentType(final MediaType contentType) {
-            this.responseFields.replace(CONTENT_TYPE, contentType.is());
+            this.putField(CONTENT_TYPE, contentType.is());
             return this;
         }
 
-        public Builder body(final String body) {
-            this.body = new ResponseBody(body);
+        public Builder setCookie(final Cookie cookie) {
+            this.putField(SET_COOKIE, cookie.toString());
             return this;
         }
 
@@ -84,14 +89,19 @@ public class Response {
             return this;
         }
 
+        public Builder body(final String body) {
+            this.body = new ResponseBody(body.getBytes(StandardCharsets.UTF_8));
+            return this;
+        }
+
         public Builder body(final StaticFile file) {
-            this.responseFields.put(CONTENT_TYPE, MediaType.of(file.getExtension()).is());
+            this.putField(CONTENT_TYPE, MediaType.of(file.getExtension()).is());
             this.body = new ResponseBody(file.getBody());
             return this;
         }
 
         public Response build() {
-            final ResponseHeader header = new ResponseHeader(this.protocol, this.httpStatus, this.responseFields);
+            final ResponseHeader header = new ResponseHeader(this.protocol, this.httpStatus, this.fields);
             return new Response(header, this.body);
         }
     }
