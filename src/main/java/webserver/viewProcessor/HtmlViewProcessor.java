@@ -19,6 +19,7 @@ import java.util.Map;
 
 public class HtmlViewProcessor implements ViewProcessor {
 
+    //TODO public -> private
     public static final String HTML_SUFFIX = ".html";
     private static final String HTML_ROUTE = "/templates";
 
@@ -69,9 +70,10 @@ public class HtmlViewProcessor implements ViewProcessor {
         return new Handlebars(loader);
     }
 
-    private Template initTemplate(String view, Handlebars handlebars) {
+    private Template initTemplate(String viewName, Handlebars handlebars) {
         try {
-            return handlebars.compile(view);
+            String templateViewName = viewName.split("\\.")[0];
+            return handlebars.compile(templateViewName);
         } catch (IOException e) {
             throw new IllegalArgumentException("올바르지 않은 뷰 입니다.");
         }

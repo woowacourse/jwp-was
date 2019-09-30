@@ -24,7 +24,7 @@ public class HttpRequest {
     private HttpRequestHeader httpRequestHeader;
     private HttpRequestBody httpRequestBody;
 
-    public HttpRequest(HttpStartLine httpStartLine, HttpRequestHeader httpRequestHeader, HttpRequestBody httpRequestBody) {
+    private HttpRequest(HttpStartLine httpStartLine, HttpRequestHeader httpRequestHeader, HttpRequestBody httpRequestBody) {
         this.httpStartLine = httpStartLine;
         this.httpRequestHeader = httpRequestHeader;
         this.httpRequestBody = httpRequestBody;
