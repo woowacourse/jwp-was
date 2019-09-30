@@ -24,12 +24,16 @@ public class UserListServlet extends AbstractRequestServlet {
     public ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         Map<String, Object> model = new HashMap<>();
         HttpSession httpSession = httpRequest.getSession();
-        if (httpSession.getAttribute("user") != null) {
+        if (isLoggedIn(httpSession)) {
             model.put("users", DataBase.findAll());
             return new ModelAndView(resolver.createView("/user/list"), model);
         }
         return new ModelAndView(new RedirectView("/user/login"));
 
+    }
+
+    private boolean isLoggedIn(HttpSession httpSession) {
+        return httpSession.getAttribute("user") != null;
     }
 
     @Override
