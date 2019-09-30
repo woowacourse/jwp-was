@@ -1,40 +1,27 @@
 package http;
 
-public class HttpRequest {
-    private String uri;
-    private HttpMethod method;
-    private HttpHeader headers;
-    private RequestParameter requestParameter;
-    private RequestParameter requestBody;
-    private String body;
+import static com.google.common.net.HttpHeaders.COOKIE;
 
-    public HttpRequest(String uri, HttpMethod method, HttpHeader headers, RequestParameter requestParameter, RequestParameter requestBody, String body) {
-        this.uri = uri;
-        this.method = method;
+public class HttpRequest {
+    private static final String COOKIE_DELIMITER = ";";
+
+    private HttpStartLine startLine;
+    private HttpHeader headers;
+    private HttpBody body;
+
+    private HttpRequest(HttpStartLine startLine, HttpHeader headers, HttpBody body) {
+        this.startLine = startLine;
         this.headers = headers;
-        this.requestParameter = requestParameter;
-        this.requestBody = requestBody;
         this.body = body;
     }
 
     public static class HttpRequestBuilder {
-        private String uri;
-        private HttpMethod method;
+        private HttpStartLine startLine;
         private HttpHeader headers;
-        private RequestParameter requestParameter;
-        private RequestParameter requestBody;
-        private String body;
+        private HttpBody body;
 
-        public HttpRequestBuilder() {
-        }
-
-        public HttpRequestBuilder uri(String uri) {
-            this.uri = uri;
-            return this;
-        }
-
-        public HttpRequestBuilder method(HttpMethod method) {
-            this.method = method;
+        public HttpRequestBuilder startLine(HttpStartLine startLine) {
+            this.startLine = startLine;
             return this;
         }
 
@@ -43,36 +30,43 @@ public class HttpRequest {
             return this;
         }
 
-        public HttpRequestBuilder requestParameter(RequestParameter requestParameter) {
-            this.requestParameter = requestParameter;
-            return this;
-        }
-
-        public HttpRequestBuilder requestBody(RequestParameter requestBody) {
-            this.requestBody = requestBody;
-            return this;
-        }
-
-        public HttpRequestBuilder body(String body) {
+        public HttpRequestBuilder body(HttpBody body) {
             this.body = body;
             return this;
         }
 
         public HttpRequest build() {
-            return new HttpRequest(uri, method, headers, requestParameter, requestBody, body);
+            return new HttpRequest(startLine, headers, body);
         }
     }
 
     public boolean isStaticRequest() {
-        return uri.contains(".");
+        return startLine.isStaticUri();
+    }
+
+    public boolean matchMethod(HttpMethod method) {
+        return startLine.matchMethod(method);
+    }
+
+    public Cookie getCookie() {
+        String cookies;
+        if ((cookies = headers.getValue(COOKIE)) == null) {
+            return new Cookie();
+        }
+        return new Cookie(headers.getValue(COOKIE));
+    }
+
+    public String getSessionId() {
+        Cookie cookie = getCookie();
+        return cookie.get("SESSIONID");
     }
 
     public String getUri() {
-        return uri;
+        return startLine.getUri();
     }
 
     public HttpMethod getMethod() {
-        return method;
+        return startLine.getMethod();
     }
 
     public String getHeader(String key) {
@@ -80,14 +74,14 @@ public class HttpRequest {
     }
 
     public String getBody() {
-        return body;
+        return (body == null) ? null : body.getBody();
     }
 
     public String getParameter(String key) {
-        return requestParameter.getParameter(key);
+        return startLine.getParameter(key);
     }
 
     public String getRequestBody(String key) {
-        return requestBody.getParameter(key);
+        return (body == null) ? null : body.getParameter(key);
     }
 }

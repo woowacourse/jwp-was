@@ -1,7 +1,11 @@
 package utils;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class IOUtils {
     /**
@@ -14,5 +18,10 @@ public class IOUtils {
         char[] body = new char[contentLength];
         br.read(body, 0, contentLength);
         return String.copyValueOf(body);
+    }
+
+
+    public static InputStream convertStringToInputStream(String target) {
+        return new ByteArrayInputStream(target.getBytes(UTF_8));
     }
 }

@@ -8,6 +8,8 @@ public enum MimeType {
     JS("application/javascript"),
     CSS("text/css");
 
+    private static final String EXTENSION_DELIMITER = "\\.";
+
     private String mimeType;
 
     MimeType(String mimeType) {
@@ -15,7 +17,7 @@ public enum MimeType {
     }
 
     public static String of(String filePath) {
-        String[] extension = filePath.split("\\.");
+        String[] extension = filePath.split(EXTENSION_DELIMITER);
         return Arrays.stream(MimeType.values())
                 .filter(mimeType -> mimeType.name().toLowerCase().equals(extension[extension.length - 1]))
                 .map(mimeType -> mimeType.mimeType)

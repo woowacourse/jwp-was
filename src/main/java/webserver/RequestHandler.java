@@ -7,19 +7,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.net.URISyntaxException;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
+    private DispatcherServlet dispatcherServlet;
+    private SessionInitiator sessionInitiator;
     private Socket connection;
 
-    public RequestHandler(Socket connectionSocket) {
+    public RequestHandler(Socket connectionSocket, DispatcherServlet dispatcherServlet, SessionInitiator sessionInitiator) {
         this.connection = connectionSocket;
+        this.dispatcherServlet = dispatcherServlet;
+        this.sessionInitiator = sessionInitiator;
     }
 
     public void run() {
@@ -31,13 +33,12 @@ public class RequestHandler implements Runnable {
             HttpResponse httpResponse = new HttpResponse();
             DataOutputStream dos = new DataOutputStream(out);
 
-            DispatcherServlet.doDispatch(httpRequest, httpResponse);
+            sessionInitiator.handle(httpRequest, httpResponse);
+            dispatcherServlet.doDispatch(httpRequest, httpResponse);
             httpResponse.send(dos);
             dos.close();
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.error(e.getMessage());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
         }
     }
 }
