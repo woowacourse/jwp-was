@@ -1,16 +1,16 @@
-package webserver.message.response;
+package webserver.message;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ResponseCookieTest {
+class HttpCookieTest {
 
     @Test
     @DisplayName("쿠키 생성 테스트1")
     void create1() {
-        ResponseCookie cookie = new ResponseCookie
+        HttpCookie cookie = new HttpCookie
                 .Builder("sessionId", "1234")
                 .path("/")
                 .build();
@@ -21,7 +21,7 @@ class ResponseCookieTest {
     @Test
     @DisplayName("쿠키 생성 테스트2")
     void create2() {
-        ResponseCookie cookie = new ResponseCookie
+        HttpCookie cookie = new HttpCookie
                 .Builder("sessionId", "1234")
                 .httpOnly()
                 .build();
@@ -32,7 +32,7 @@ class ResponseCookieTest {
     @Test
     @DisplayName("쿠키 생성 테스트3")
     void create3() {
-        ResponseCookie cookie = new ResponseCookie
+        HttpCookie cookie = new HttpCookie
                 .Builder("sessionId", "1234")
                 .path("/")
                 .secure()

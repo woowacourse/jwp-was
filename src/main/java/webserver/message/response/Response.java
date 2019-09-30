@@ -1,6 +1,7 @@
 package webserver.message.response;
 
 import webserver.StaticFile;
+import webserver.message.HttpCookie;
 import webserver.message.HttpStatus;
 import webserver.message.HttpVersion;
 import webserver.message.MediaType;
@@ -32,7 +33,7 @@ public class Response {
         private HttpStatus httpStatus;
         private ResponseBody body = new ResponseBody();
         private Map<String, String> responseFields = new HashMap<>();
-        private List<ResponseCookie> cookies = new ArrayList<>();
+        private List<HttpCookie> cookies = new ArrayList<>();
 
         public Builder(final HttpVersion httpVersion, final HttpStatus httpStatus) {
             this.httpVersion = httpVersion;
@@ -82,7 +83,7 @@ public class Response {
             return this;
         }
 
-        public Builder addCookie(final ResponseCookie cookie) {
+        public Builder addCookie(final HttpCookie cookie) {
             this.cookies.add(cookie);
             return this;
         }

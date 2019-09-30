@@ -4,10 +4,10 @@ import org.slf4j.Logger;
 import web.controller.AbstractController;
 import web.db.DataBase;
 import webserver.StaticFile;
+import webserver.message.HttpCookie;
 import webserver.message.exception.NotFoundFileException;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
-import webserver.message.response.ResponseCookie;
 import webserver.session.HttpSession;
 import webserver.session.SessionContextHolder;
 
@@ -59,8 +59,8 @@ public class LoginController extends AbstractController {
                 .isPresent();
     }
 
-    private ResponseCookie createCookie(final String key, final String value) {
-        return new ResponseCookie.Builder(key, value).path("/").build();
+    private HttpCookie createCookie(final String key, final String value) {
+        return new HttpCookie.Builder(key, value).path("/").build();
     }
 
     private HttpSession enrollSession(final String userId) {

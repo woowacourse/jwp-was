@@ -6,9 +6,9 @@ import org.junit.jupiter.api.Test;
 import web.db.DataBase;
 import web.model.User;
 import webserver.StaticFile;
+import webserver.message.HttpCookie;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
-import webserver.message.response.ResponseCookie;
 import webserver.session.HttpSession;
 import webserver.session.SessionContextHolder;
 import webserver.support.RequestHelper;
@@ -66,8 +66,8 @@ class LoginControllerTest extends RequestHelper {
         assertThat(loginController.doPost(postRequest).toBytes())
                 .isEqualTo(new Response.Builder()
                         .redirectUrl(INDEX_PAGE_URL)
-                        .addCookie(new ResponseCookie.Builder("logined", "true").path("/").build())
-                        .addCookie(new ResponseCookie.Builder("sessionId", session.getId()).path("/").build())
+                        .addCookie(new HttpCookie.Builder("logined", "true").path("/").build())
+                        .addCookie(new HttpCookie.Builder("sessionId", session.getId()).path("/").build())
                         .build().toBytes());
     }
 
@@ -79,7 +79,7 @@ class LoginControllerTest extends RequestHelper {
         assertThat(loginController.doPost(request).toBytes())
                 .isEqualTo(new Response.Builder()
                         .redirectUrl(LOGIN_FAILED_PAGE_URL)
-                        .addCookie(new ResponseCookie.Builder("logined", "false").path("/").build())
+                        .addCookie(new HttpCookie.Builder("logined", "false").path("/").build())
                         .build().toBytes());
     }
 
@@ -91,7 +91,7 @@ class LoginControllerTest extends RequestHelper {
         assertThat(loginController.doPost(postRequest).toBytes())
                 .isEqualTo(new Response.Builder()
                         .redirectUrl(LOGIN_FAILED_PAGE_URL)
-                        .addCookie(new ResponseCookie.Builder("logined", "false").path("/").build())
+                        .addCookie(new HttpCookie.Builder("logined", "false").path("/").build())
                         .build().toBytes());
     }
 }

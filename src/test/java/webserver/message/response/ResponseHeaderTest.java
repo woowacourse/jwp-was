@@ -2,6 +2,7 @@ package webserver.message.response;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import webserver.message.HttpCookie;
 import webserver.message.MediaType;
 
 import java.util.*;
@@ -33,7 +34,7 @@ class ResponseHeaderTest {
         Map<String, String> responseFields = new HashMap<>();
         responseFields.put("Content-Type", MediaType.TEXT_HTML.getMediaType());
 
-        List<ResponseCookie> cookies = Collections.singletonList(new ResponseCookie.Builder("logined", "true").path("/").build());
+        List<HttpCookie> cookies = Collections.singletonList(new HttpCookie.Builder("logined", "true").path("/").build());
 
         // when
         ResponseHeader responseHeader = new ResponseHeader(responseFields, cookies);

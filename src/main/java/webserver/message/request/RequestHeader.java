@@ -2,9 +2,11 @@ package webserver.message.request;
 
 import org.slf4j.Logger;
 import utils.IOUtils;
+import webserver.message.HttpCookie;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -20,11 +22,11 @@ public class RequestHeader {
     private static final int VALUE_INDEX = 1;
 
     private final Map<String, String> requestFields;
-    private final RequestCookie requestCookie;
+    private final List<HttpCookie> requestCookies;
 
     public RequestHeader(final IOUtils IOUtils) {
         this.requestFields = makeFields(IOUtils);
-        this.requestCookie = new RequestCookie(requestFields.get("cookie"));
+        this.requestCookies = RequestCookieParser.parse(requestFields.get("cookie"));
     }
 
     private Map<String, String> makeFields(final IOUtils IOUtils) {
@@ -55,11 +57,15 @@ public class RequestHeader {
         return requestFields.getOrDefault(key, EMPTY);
     }
 
-    public RequestCookie getRequestCookie() {
-        return this.requestCookie;
+    public List<HttpCookie> getRequestCookie() {
+        return this.requestCookies;
     }
 
     public String getCookieValue(final String key) {
-        return this.requestCookie.getCookieValue(key);
+        return this.requestCookies.stream()
+                .filter(cookie -> cookie.matchesName(key))
+                .findFirst()
+                .orElseGet(() -> new HttpCookie.Builder("", "").build())
+                .getValue();
     }
 }
