@@ -10,6 +10,7 @@ import java.io.IOException;
 import static com.google.common.net.HttpHeaders.*;
 import static http.HttpHeader.UPGRADE_INSECURE_REQUESTS;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static model.UserTest.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static utils.IOUtils.convertStringToInputStream;
@@ -50,7 +51,7 @@ public class HttpRequestTest {
                     "Accept-Language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7\n" +
                     "Cookie: Idea-c5a8acf3=c2c6d2e2-54d7-47a9-8e2a-b0ff8e06a759\n" +
                     "\n" +
-                    "userId=park&password=1234&name=sungbum&email=park%40naver.com";
+                    "userId=" + ID + "&password=" + PASSWORD + "&name=" + NAME + "&email=" + EMAIL;
 
     public static final String LOGIN_REQUEST =
             "POST /user/login HTTP/1.1\n" +
@@ -145,11 +146,11 @@ public class HttpRequestTest {
 
     @Test
     void POST_요청_body_가져오기() throws IOException {
-        HttpRequest postRequest = HttpRequestParser.parse(convertStringToInputStream(POST_REQUEST));
+        HttpRequest postRequest = HttpRequestParser.parse(convertStringToInputStream(String.format(POST_REQUEST, ID, PASSWORD, NAME, EMAIL)));
 
-        assertThat(postRequest.getRequestBody("userId")).isEqualTo("park");
-        assertThat(postRequest.getRequestBody("password")).isEqualTo("1234");
-        assertThat(postRequest.getRequestBody("name")).isEqualTo("sungbum");
-        assertThat(postRequest.getRequestBody("email")).isEqualTo("park@naver.com");
+        assertThat(postRequest.getRequestBody("userId")).isEqualTo(ID);
+        assertThat(postRequest.getRequestBody("password")).isEqualTo(PASSWORD);
+        assertThat(postRequest.getRequestBody("name")).isEqualTo(NAME);
+        assertThat(postRequest.getRequestBody("email")).isEqualTo(EMAIL);
     }
 }
