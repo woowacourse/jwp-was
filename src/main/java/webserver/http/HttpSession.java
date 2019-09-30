@@ -1,19 +1,20 @@
-package model.http;
+package webserver.http;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public class HttpSession {
-    private String id;
+
+    private String JSESSIONID;
     private Map<String, Object> attribute = new HashMap<>();
 
     public HttpSession() {
-        id = UUID.randomUUID().toString();
+        JSESSIONID = UUID.randomUUID().toString();
     }
 
-    public String getId() {
-        return id;
+    public String getJSESSIONID() {
+        return JSESSIONID;
     }
 
     public void setAttribute(String name, Object value) {

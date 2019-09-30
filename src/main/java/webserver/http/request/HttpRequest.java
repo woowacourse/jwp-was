@@ -1,15 +1,18 @@
-package model.http;
+package webserver.http.request;
 
-import utils.HttpMethod;
+import webserver.http.Cookie;
+import webserver.http.HttpMethod;
+import webserver.http.HttpSession;
+import webserver.http.HttpSessionManager;
+import webserver.http.exception.NotFoundRequestCookieException;
 
 import java.util.Map;
-
-import static webserver.RequestHandler.sessionPool;
 
 public class HttpRequest {
     private RequestLine requestLine;
     private RequestHeader requestHeader;
     private RequestBody requestBody;
+    private HttpSession httpSession;
 
     public HttpRequest(RequestLine requestLine, RequestHeader requestHeader, RequestBody requestBody) {
         this.requestLine = requestLine;
@@ -31,6 +34,9 @@ public class HttpRequest {
     }
 
     public String getPath() {
+        if (requestLine.getPath().equals("/")) {
+            return "/index.html";
+        }
         return requestLine.getPath();
     }
 
@@ -54,18 +60,29 @@ public class HttpRequest {
         return requestBody.getValueBy(key);
     }
 
-    // TODO : 리팩토링 필요
-    public HttpSession getHttpSession() {
-        if (requestHeader.getCookies() != null) {
-            for (Cookie cookie : requestHeader.getCookies()) {
-                if ("id".equals(cookie.getName()) && cookie.getValue() != null) {
-                    return sessionPool.get(cookie.getValue());
-                }
-            }
-        }
-        HttpSession session = new HttpSession();
-        sessionPool.put(session.getId(), session);
-        return session;
+    public Cookie getCookie(String key) {
+        return requestHeader.getCookies().stream()
+                .filter(cookie -> cookie.getName().equals(key))
+                .findFirst()
+                .orElseThrow(NotFoundRequestCookieException::new)
+                ;
     }
 
+    public String getCookieValue(String key) {
+        return getCookie(key).getValue();
+    }
+
+    public HttpSession getHttpSession() {
+        if (requestHeader.isCookieExist()) {
+            this.httpSession = HttpSessionManager.getSession(getCookieValue("JSESSIONID"));
+            return this.httpSession;
+        }
+        this.httpSession = new HttpSession();
+        HttpSessionManager.setSession(httpSession.getJSESSIONID(), httpSession);
+        return this.httpSession;
+    }
+
+    public String getHttpVersion() {
+        return this.requestLine.getVersion();
+    }
 }
