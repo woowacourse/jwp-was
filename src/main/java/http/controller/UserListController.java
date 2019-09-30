@@ -20,7 +20,7 @@ public class UserListController extends DefaultController {
     @Override
     protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         HttpCookie requestHttpCookie = httpRequest.getHttpCookie();
-        if ("true".equals(requestHttpCookie.getCookie(LOGIN_NAME))) {
+        if (isLogin(requestHttpCookie)) {
             try {
                 ModelAndView modelAndView = new HandleBarModelAndView();
                 modelAndView.putData("users", DataBase.findAll());
@@ -34,5 +34,9 @@ public class UserListController extends DefaultController {
         }
 
         httpResponse.redirect("/index.html");
+    }
+
+    private boolean isLogin(HttpCookie requestHttpCookie) {
+        return "true".equals(requestHttpCookie.getCookie(LOGIN_NAME));
     }
 }
