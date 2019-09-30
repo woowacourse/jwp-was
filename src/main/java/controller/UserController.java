@@ -4,6 +4,7 @@ import db.Database;
 import model.User;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
+import webserver.http.headerfields.MimeType;
 
 public class UserController extends AbstractController {
     private static final String USER_ID = "userId";
@@ -11,15 +12,12 @@ public class UserController extends AbstractController {
     private static final String USER_NAME = "name";
     private static final String USER_EMAIL = "email";
 
-    private static final String TEXT_HTML = "text/html";
-    private static final String TEXT_PLAIN = "text/plain";
-
     private static final String INDEX_PAGE_LOCATION = "/index.html";
     private static final String USER_FORM_PAGE_LOCATION = "/user/form.html";
 
     @Override
     public HttpResponse getMapping(HttpRequest request) {
-        return HttpResponse.successByFilePath(request, TEXT_HTML, USER_FORM_PAGE_LOCATION);
+        return HttpResponse.successByFilePath(request, MimeType.TEXT_HTML, USER_FORM_PAGE_LOCATION);
     }
 
     @Override
@@ -31,6 +29,6 @@ public class UserController extends AbstractController {
                 request.getParam(USER_EMAIL)
         ));
 
-        return HttpResponse.redirection(request, TEXT_PLAIN, INDEX_PAGE_LOCATION);
+        return HttpResponse.redirection(request, MimeType.TEXT_PLAIN, INDEX_PAGE_LOCATION);
     }
 }

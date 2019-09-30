@@ -7,23 +7,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HttpResponse {
-    private static final String TEXT_PLAIN = "text/plain";
-    private static final String SET_COOKIE = "Set-Cookie";
-
     public static final HttpResponse BAD_REQUEST =
-            HttpResponse.builder(HttpContentType.getHttpContentType(TEXT_PLAIN))
-                        .statusCode(HttpStatusCode.BAD_REQUEST)
-                        .build();
+            HttpResponse.builder(HttpContentType.getHttpContentType(MimeType.TEXT_PLAIN))
+                    .statusCode(HttpStatusCode.BAD_REQUEST)
+                    .build();
 
     public static final HttpResponse NOT_FOUND =
-            HttpResponse.builder(HttpContentType.getHttpContentType(TEXT_PLAIN))
-                        .statusCode(HttpStatusCode.NOT_FOUND)
-                        .build();
+            HttpResponse.builder(HttpContentType.getHttpContentType(MimeType.TEXT_PLAIN))
+                    .statusCode(HttpStatusCode.NOT_FOUND)
+                    .build();
 
     public static final HttpResponse INTERNAL_SERVER_ERROR =
-            HttpResponse.builder(HttpContentType.getHttpContentType(TEXT_PLAIN))
-                        .statusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
-                        .build();
+            HttpResponse.builder(HttpContentType.getHttpContentType(MimeType.TEXT_PLAIN))
+                    .statusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                    .build();
 
     private final HttpVersion version;
     private final HttpStatusCode statusCode;
@@ -91,22 +88,22 @@ public class HttpResponse {
         this.body = builder.body;
     }
 
-    public static HttpResponse successByBody(HttpRequest request, String contentType, String body) {
-        return HttpResponse.builder(HttpContentType.getHttpContentType(contentType))
+    public static HttpResponse successByBody(HttpRequest request, MimeType mimeType, String body) {
+        return HttpResponse.builder(HttpContentType.getHttpContentType(mimeType))
                 .version(request.version())
                 .connection(request.connection())
                 .body(body)
                 .build();
     }
 
-    public static HttpResponse successByFilePath(HttpRequest request, String contentType, String filePath) {
+    public static HttpResponse successByFilePath(HttpRequest request, MimeType mimeType, String filePath) {
         return FileIoUtils.loadFileFromClasspath(filePath)
-                .map(body -> successByBody(request, contentType, body))
+                .map(body -> successByBody(request, mimeType, body))
                 .orElse(INTERNAL_SERVER_ERROR);
     }
 
-    public static HttpResponse redirection(HttpRequest request, String contentType, String location) {
-        return HttpResponse.builder(HttpContentType.getHttpContentType(contentType))
+    public static HttpResponse redirection(HttpRequest request, MimeType mimeType, String location) {
+        return HttpResponse.builder(HttpContentType.getHttpContentType(mimeType))
                 .version(request.version())
                 .statusCode(HttpStatusCode.FOUND)
                 .connection(request.connection())
