@@ -21,7 +21,7 @@ public class FileView implements View {
         byte[] body = FileIoUtils.loadFileFromClasspath(name);
         httpResponse.ok();
         httpResponse.appendContentHeader(FileIoUtils.loadMIMEFromClasspath(name), body.length);
-        send(httpResponse, body);
+        httpResponse.setBody(body);
     }
 
     @Override

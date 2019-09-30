@@ -22,7 +22,7 @@ public class ForwardView implements View {
         byte[] body = FileIoUtils.loadFileFromClasspath(name);
         httpResponse.ok();
         httpResponse.appendContentHeader(FileType.HTML.getMimeName(), body.length);
-        send(httpResponse, body);
+        httpResponse.setBody(body);
     }
 
     @Override

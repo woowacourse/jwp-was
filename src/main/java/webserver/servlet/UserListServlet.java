@@ -29,7 +29,6 @@ public class UserListServlet extends AbstractRequestServlet {
             return new ModelAndView(resolver.createView("/user/list"), model);
         }
         return new ModelAndView(new RedirectView("/user/login"));
-
     }
 
     private boolean isLoggedIn(HttpSession httpSession) {

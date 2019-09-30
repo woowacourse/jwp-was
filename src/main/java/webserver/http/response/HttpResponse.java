@@ -7,9 +7,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class HttpResponse {
+    private static final String COOKIE_KEY_VALUE_DELIMITER = "=";
+    private static final String COOKIE_VALUES_DELIMITER = ";";
     private static final String NEW_LINE = "\r\n";
-    public static final String COOKIE_KEY_VALUE_DELIMITER = "=";
-    public static final String COOKIE_VALUES_DELIMITER = ";";
     private final String HEADER_DELIMITER = ": ";
     private final String LINE_DELIMITER = " ";
     private Map<String, String> cookies = new HashMap<>();
@@ -17,6 +17,7 @@ public class HttpResponse {
     private DataOutputStream dos;
     private HttpStatus httpStatus;
     private Map<String, Object> headers = new HashMap<>();
+    private byte[] body = new byte[0];
 
     public HttpResponse(DataOutputStream dos, HttpVersion httpVersion) {
         this.dos = dos;
@@ -30,6 +31,10 @@ public class HttpResponse {
     public void redirect(String location) {
         httpStatus = HttpStatus.FOUND;
         appendHeader("Location", location);
+    }
+
+    public void setBody(byte[] body) {
+        this.body = body;
     }
 
     public void error(HttpStatus httpStatus) {
@@ -61,6 +66,13 @@ public class HttpResponse {
                 .collect(Collectors.joining(" "));
     }
 
+    public void send() throws IOException {
+        writeLine();
+        writeHeader();
+        writeBody(body);
+        end();
+    }
+
     public void writeLine() throws IOException {
         dos.writeBytes(httpVersion.name() + LINE_DELIMITER + httpStatus.getCode() + LINE_DELIMITER + httpStatus.getName() + NEW_LINE);
     }
@@ -83,9 +95,11 @@ public class HttpResponse {
         dos.write(body, 0, body.length);
     }
 
+
     public void end() throws IOException {
         dos.flush();
     }
+
 
 }
 

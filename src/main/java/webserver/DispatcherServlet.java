@@ -25,6 +25,7 @@ public class DispatcherServlet {
             ModelAndView modelAndView = httpServlet.run(httpRequest, httpResponse);
             View view = modelAndView.getView();
             view.render(modelAndView.getModelMap(), httpRequest, httpResponse);
+            httpResponse.send();
         } catch (NotFoundFileException | NotFoundURIException e) {
             logger.error(e.getMessage());
             httpResponse.error(HttpStatus.NOT_FOUND);

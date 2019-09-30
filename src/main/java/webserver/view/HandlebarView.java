@@ -23,7 +23,7 @@ public class HandlebarView implements View {
         byte[] body = template.apply(model).getBytes();
         httpResponse.ok();
         httpResponse.appendContentHeader(FileType.HTML.getMimeName(), body.length);
-        send(httpResponse, body);
+        httpResponse.setBody(body);
     }
 
     public void setTemplate(Template template) {

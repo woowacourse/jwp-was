@@ -18,7 +18,6 @@ public class RedirectView implements View {
     @Override
     public void render(Map<String, Object> model, HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         httpResponse.redirect(name);
-        send(httpResponse);
     }
 
     @Override
