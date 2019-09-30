@@ -1,6 +1,7 @@
 package http.request;
 
 import http.exception.InvalidRequestException;
+import http.method.HttpMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +22,7 @@ public class RequestLine {
     private static final int INDEX_OF_URL = 1;
     private static final int INDEX_OF_VERSION = 2;
 
-    private final String method;
+    private final HttpMethod method;
     private final RequestUrl requestUrl;
     private final String httpVersion;
 
@@ -29,7 +30,7 @@ public class RequestLine {
         Objects.requireNonNull(requestLine);
         String[] splitedRequestLine = validateRequestLine(requestLine);
 
-        method = splitedRequestLine[INDEX_OF_METHOD];
+        method = HttpMethod.valueOf(splitedRequestLine[INDEX_OF_METHOD]);
         requestUrl = new RequestUrl(splitedRequestLine[INDEX_OF_URL]);
         httpVersion = splitedRequestLine[INDEX_OF_VERSION];
     }
@@ -44,10 +45,6 @@ public class RequestLine {
         return requestLineData;
     }
 
-    public String getMethod() {
-        return method;
-    }
-
     public String getUrl() {
         return requestUrl.getUrl();
     }
@@ -57,11 +54,11 @@ public class RequestLine {
     }
 
     public boolean isGet() {
-        return "GET".equals(method);
+        return this.method.isGet();
     }
 
     public boolean isPost() {
-        return "POST".equals(method);
+        return this.method.isPost();
     }
 
     public Map<String, String> extractQueryParameter() {

@@ -2,6 +2,7 @@ package webserver.controller;
 
 import http.request.Request;
 import http.response.Response;
+import webserver.exception.InvalidRequestMethodException;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -20,7 +21,11 @@ public abstract class HttpController implements Controller {
         }
     }
 
-    protected abstract void doGet(Request request, Response response) throws IOException, URISyntaxException;
+    protected void doGet(Request request, Response response) throws IOException, URISyntaxException {
+        throw new InvalidRequestMethodException();
+    }
 
-    protected abstract void doPost(Request request, Response response);
+    protected void doPost(Request request, Response response) {
+        throw new InvalidRequestMethodException();
+    }
 }

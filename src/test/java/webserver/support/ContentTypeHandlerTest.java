@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import webserver.exception.InvalidContentTypeException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ContentTypeHandlerTest {
 
@@ -16,7 +16,7 @@ class ContentTypeHandlerTest {
 
     @Test
     public void typeException() {
-        String errorType = "none";
+        String errorType = "none.none";
         assertThrows(InvalidContentTypeException.class, () -> ContentTypeHandler.type(errorType));
     }
 }

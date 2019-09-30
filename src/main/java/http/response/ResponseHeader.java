@@ -1,10 +1,20 @@
 package http.response;
 
+import com.google.common.collect.Lists;
+import http.cookie.Cookie;
+import http.cookie.Cookies;
+
+import java.util.List;
 import java.util.Objects;
 
 public class ResponseHeader {
     private String type;
     private String location;
+    private Cookies cookies;
+
+    public ResponseHeader() {
+        this.cookies = new Cookies(Lists.newArrayList());
+    }
 
     public String getType() {
         return type;
@@ -20,6 +30,14 @@ public class ResponseHeader {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public List<Cookie> getCookies() {
+        return this.cookies.getCookies();
+    }
+
+    public void setCookie(Cookie cookie) {
+        this.cookies.add(cookie);
     }
 
     @Override

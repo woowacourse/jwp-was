@@ -1,5 +1,6 @@
 package webserver.support;
 
+import http.cookie.Cookie;
 import http.response.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +30,17 @@ public class ResponseWriter {
     private static String response302Header(Response response) {
         return response.getHttpVersion() + " " + response.getStatusCode() + " " + response.getReasonPhrase() + "\r\n" +
                 "Location: " + response.getLocation() + "\r\n" +
+                writeCookies(response) +
                 "\r\n";
+    }
+
+    private static String writeCookies(Response response) {
+        StringBuilder sb = new StringBuilder();
+        for (Cookie cookie : response.getCookies()) {
+            sb.append("Set-Cookie: ").append(cookie.getName()).append("=").append(cookie.getValue()).append("; ")
+                    .append("Path=").append(cookie.getPath()).append("\r\n");
+        }
+        return sb.toString();
     }
 
     private static void writeHeader(DataOutputStream dos, String message) {

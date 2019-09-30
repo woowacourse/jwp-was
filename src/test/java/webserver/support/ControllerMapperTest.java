@@ -6,7 +6,6 @@ import webserver.controller.CreateUserController;
 import webserver.controller.FileController;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class ControllerMapperTest {
     private ControllerMapper mapper;

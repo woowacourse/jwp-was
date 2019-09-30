@@ -2,7 +2,7 @@ package webserver.controller;
 
 import http.request.Request;
 import http.response.Response;
-import webserver.exception.InvalidRequestMethodException;
+import webserver.support.ModelAndView;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -19,12 +19,7 @@ public class FileController extends HttpController {
     @Override
     protected void doGet(Request request, Response response) throws IOException, URISyntaxException {
         String url = request.extractUrl();
-        response.configureOkResponse(url);
-    }
-
-    @Override
-    protected void doPost(Request request, Response response) {
-        throw new InvalidRequestMethodException();
+        response.forward(new ModelAndView(url));
     }
 
     private static class LazyHolder {

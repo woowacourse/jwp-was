@@ -1,16 +1,18 @@
-package http.utils;
+package http.request;
 
+import http.cookie.CookieParser;
+import http.cookie.Cookies;
 import http.exception.InvalidRequestException;
-import http.request.Request;
-import http.request.RequestBody;
-import http.request.RequestHeader;
-import http.request.RequestLine;
+import http.session.Session;
+import http.session.SessionStorage;
 import utils.IOUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import static http.session.SessionStorage.JSESSIONID;
 
 public class RequestFactory {
     private static final String DELIMITER_OF_REQUEST = "\n";
@@ -24,11 +26,14 @@ public class RequestFactory {
         RequestLine requestLine = new RequestLine(requestData[0]);
         RequestHeader requestHeader = new RequestHeader(requestData[1]);
 
-        if (requestLine.isPost()) {
-            return makeRequestWithBody(br, requestLine, requestHeader);
-        }
+        Cookies cookies = new Cookies(CookieParser.parse(requestHeader.get("Cookie")));
+        Session session = SessionStorage.getInstance().getSession(
+                cookies.findCookie(JSESSIONID).getValue());
 
-        return new Request(requestLine, requestHeader);
+        if (requestLine.isPost()) {
+            return makeRequestWithBody(br, requestLine, requestHeader, cookies, session);
+        }
+        return new Request(requestLine, requestHeader, cookies, session);
     }
 
     private static String[] validateRequest(String parsedData) {
@@ -41,9 +46,10 @@ public class RequestFactory {
         return requestData;
     }
 
-    private static Request makeRequestWithBody(BufferedReader br, RequestLine requestLine, RequestHeader requestHeader) throws IOException {
+    private static Request makeRequestWithBody(BufferedReader br, RequestLine requestLine, RequestHeader requestHeader,
+                                               Cookies cookie, Session session) throws IOException {
         String body = IOUtils.readData(br, Integer.parseInt(requestHeader.get("content-length")));
         RequestBody requestBody = new RequestBody(body);
-        return new Request(requestLine, requestHeader, requestBody);
+        return new Request(requestLine, requestHeader, requestBody, cookie, session);
     }
 }

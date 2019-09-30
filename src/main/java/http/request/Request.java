@@ -1,20 +1,49 @@
 package http.request;
 
+import http.cookie.Cookie;
+import http.cookie.Cookies;
+import http.session.Session;
+import http.session.SessionStorage;
+
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 public class Request {
     private final RequestLine requestLine;
     private final RequestHeader requestHeader;
     private final RequestBody requestBody;
+    private final Cookies cookies;
+    private Session session;
 
-    public Request(RequestLine requestLine, RequestHeader requestHeader, RequestBody requestBody) {
+    public Request(RequestLine requestLine, RequestHeader requestHeader, RequestBody requestBody,
+                   Cookies cookies, Session session) {
         this.requestLine = requestLine;
         this.requestHeader = requestHeader;
         this.requestBody = requestBody;
+        this.cookies = cookies;
+        this.session = session;
     }
 
-    public Request(RequestLine requestLine, RequestHeader requestHeader) {
-        this(requestLine, requestHeader, new RequestBody(""));
+    public Request(RequestLine requestLine, RequestHeader requestHeader, Cookies cookies, Session session) {
+        this(requestLine, requestHeader, new RequestBody(""), cookies, session);
+    }
+
+    public Cookies getCookie() {
+        return this.cookies;
+    }
+
+    public Session getSession() {
+        this.session = Optional.ofNullable(this.session).orElseGet(SessionStorage.getInstance()::createSession);
+        return this.session;
+    }
+
+    public boolean hasJSessionIdCookie() {
+        return !cookies.findCookie(SessionStorage.JSESSIONID).equals(Cookie.builder().build());
+    }
+
+    public boolean hasSession() {
+        return Objects.nonNull(this.session);
     }
 
     public boolean isGetMethod() {
@@ -29,7 +58,7 @@ public class Request {
         return requestLine.getUrl();
     }
 
-    public String extractHttpVersion(){
+    public String extractHttpVersion() {
         return requestLine.getHttpVersion();
     }
 

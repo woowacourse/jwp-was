@@ -13,7 +13,7 @@ public class WebServer {
     private static final int DEFAULT_PORT = 8080;
     private static final int THREAD_POOL_COUNT = 100;
 
-    public static void main(String args[]) throws Exception {
+    public static void main(String[] args) {
         ThreadPoolExecutor executorService = (ThreadPoolExecutor) Executors.newFixedThreadPool(THREAD_POOL_COUNT);
 
         int port = 0;
@@ -33,6 +33,8 @@ public class WebServer {
                 executorService.execute(new RequestHandler(connection));
                 logger.debug("remain Thread Count : {}", THREAD_POOL_COUNT - executorService.getActiveCount());
             }
+        } catch (Exception e) {
+            logger.error("Server error", e);
         }
 
         executorService.shutdown();
