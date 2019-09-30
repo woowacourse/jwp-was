@@ -9,7 +9,6 @@ import webserver.exception.PageNotFoundException;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 import webserver.storage.HttpSession;
-import webserver.storage.SessionManager;
 
 import static webserver.controller.RequestMapping.getMapping;
 import static webserver.controller.RequestMapping.postMapping;
@@ -53,11 +52,11 @@ public class RequestMapper {
 
     public HttpResponse service(HttpRequest request) {
         HttpResponse response = new HttpResponse(request.getVersion());
-        registerSession(request, response);
         RequestMapping requestMapping = request.getRequestMapping();
 
         try {
             CONTROLLER_HANDLER.get(requestMapping).accept(request, response);
+            registerSession(request, response);
             return response;
         } catch (MethodNotAllowedException e) {
             logger.error("METHOD_NOT_ALLOWED, path: {}, {}", requestMapping, e.getMessage());
@@ -72,21 +71,9 @@ public class RequestMapper {
     }
 
     private void registerSession(HttpRequest request, HttpResponse response) {
-        HttpSession session = createSession(request, response);
-        request.setSession(session);
-        response.registerSession(session.getId());
-    }
-
-    private HttpSession createSession(HttpRequest request, HttpResponse response) {
-        String jSessionId = request.getCookie().getJSessionId();
-        if (jSessionId == null) {
-            return request.createSession();
+        HttpSession session = request.getSession();
+        if (session != null) {
+            response.registerSession(session.getId());
         }
-
-        SessionManager sessionManager = SessionManager.getInstance();
-        if (sessionManager.containsKey(jSessionId)) {
-            return sessionManager.getSession(jSessionId);
-        }
-        return sessionManager.createSession(jSessionId);
     }
 }

@@ -92,17 +92,11 @@ public class HttpRequest {
         return requestLine.getVersion();
     }
 
-    public HttpSession createSession() {
-        return Optional.ofNullable(getCookie().getJSessionId())
+    public HttpSession getSession() {
+        HttpSession session = Optional.ofNullable(getCookie().getJSessionId())
                 .map(id -> SessionManager.getInstance().getSession(id))
                 .orElse(SessionManager.getInstance().createSession());
-    }
-
-    public void setSession(HttpSession session) {
         this.session = session;
-    }
-
-    public HttpSession getSession() {
         return session;
     }
 
