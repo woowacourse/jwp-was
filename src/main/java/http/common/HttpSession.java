@@ -2,15 +2,14 @@ package http.common;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class HttpSession {
     public static final String SESSION_NAME = "JSESSIONID";
 
-    private final UUID uuid;
+    private final String uuid;
     private final Map<String, Object> session;
 
-    HttpSession(UUID uuid) {
+    HttpSession(String uuid) {
         this.uuid = uuid;
         this.session = new HashMap<>();
     }
@@ -27,7 +26,7 @@ public class HttpSession {
         session.remove(name);
     }
 
-    public UUID getUuid() {
+    public String getUuid() {
         return uuid;
     }
 

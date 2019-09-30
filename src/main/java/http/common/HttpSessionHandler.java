@@ -5,23 +5,25 @@ import java.util.Map;
 import java.util.UUID;
 
 public class HttpSessionHandler {
-    private static final Map<UUID, HttpSession> sessionsContext;
+    private static final Map<String, HttpSession> sessionsContext;
 
     static {
         sessionsContext = new HashMap<>();
     }
 
     public static HttpSession createSession() {
-        UUID uuid = UUID.randomUUID();
-        sessionsContext.put(uuid, new HttpSession(uuid));
-        return sessionsContext.get(uuid);
+        String sessionId = UUID.randomUUID().toString();
+
+        sessionsContext.put(sessionId, new HttpSession(sessionId));
+
+        return sessionsContext.get(sessionId);
     }
 
-    public static HttpSession getSession(UUID uuid) {
-        return sessionsContext.get(uuid);
+    public static HttpSession getSession(String sessionId) {
+        return sessionsContext.get(sessionId);
     }
 
-    public static void removeSession(UUID uuid) {
-        sessionsContext.remove(uuid);
+    public static void removeSession(String sessionId) {
+        sessionsContext.remove(sessionId);
     }
 }

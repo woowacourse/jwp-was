@@ -4,8 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.UUID;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 class HttpSessionTest {
@@ -13,7 +11,7 @@ class HttpSessionTest {
 
     @BeforeEach
     void setUp() {
-        httpSession = new HttpSession(UUID.randomUUID());
+        httpSession = HttpSessionHandler.createSession();
     }
 
     @Test
@@ -36,7 +34,9 @@ class HttpSessionTest {
     @Test
     @DisplayName("invalidate() 테스트")
     void removeInvalidate() {
-        UUID uuid = httpSession.getUuid();
-        assertThat(HttpSessionHandler.getSession(uuid)).isEqualTo(null);
+        String sessionId = httpSession.getUuid();
+        httpSession.invalidate();
+
+        assertThat(HttpSessionHandler.getSession(sessionId)).isEqualTo(null);
     }
 }

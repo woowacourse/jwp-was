@@ -1,12 +1,12 @@
 package http.request;
 
+import com.google.common.base.Strings;
 import http.common.HttpCookie;
 import http.common.HttpMethod;
 import http.common.HttpSession;
 import http.common.HttpSessionHandler;
 
 import java.io.IOException;
-import java.util.UUID;
 
 public class HttpRequest {
     public static final String CONTENT_LENGTH_NAME = "Content-Length";
@@ -67,12 +67,14 @@ public class HttpRequest {
 
     public HttpSession getSession() {
         String sessionId = httpCookie.getCookie(HttpSession.SESSION_NAME);
-        if (sessionId == null) {
+        if (Strings.isNullOrEmpty(sessionId)) {
             HttpSession session = HttpSessionHandler.createSession();
-            httpCookie.put(HttpSession.SESSION_NAME, session.getUuid().toString());
+            httpCookie.put(HttpSession.SESSION_NAME, session.getUuid());
+
             return session;
         }
-        return HttpSessionHandler.getSession(UUID.fromString(sessionId));
+
+        return HttpSessionHandler.getSession(sessionId);
     }
 
     public String getPath() {
