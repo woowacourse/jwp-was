@@ -17,10 +17,10 @@ public class HttpRequest {
         this.header = header;
         this.body = body;
         this.cookie = cookie;
-        this.session = setSession();
+        this.session = initSession();
     }
 
-    private HttpSession setSession() {
+    private HttpSession initSession() {
         String sessionId = cookie.getSessionId();
         if (isSessionExists(sessionId)) {
             return SessionStorage.get(sessionId);
