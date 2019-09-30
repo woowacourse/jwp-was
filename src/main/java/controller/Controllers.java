@@ -1,6 +1,6 @@
 package controller;
 
-import annotation.RequestMapping;
+import controller.annotation.RequestMapping;
 import controller.custom.HomeController;
 import controller.custom.UserController;
 import controller.resources.ResourceController;
@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Controllers {
+    // TODO : refactoring 필요, 피드백 참고
     public static final Map<String, Method> REQUEST_MAPPING_METHODS = new HashMap<>();
     public static final Map<Method, Controller> REQUEST_MAPPING_CONTROLLERS = new HashMap<>();
 

@@ -1,15 +1,15 @@
 package utils;
 
-import model.http.HttpRequest;
-import model.http.RequestBody;
-import model.http.RequestHeader;
-import model.http.RequestLine;
+import webserver.http.request.HttpRequest;
+import webserver.http.request.RequestBody;
+import webserver.http.request.RequestHeader;
+import webserver.http.request.RequestLine;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class RequestHeaderParser {
+public class HttpRequestParser {
     private static final String BLANK = " ";
     private static final String HEADER_SEPARATOR = ": ";
     private static final String END_OF_REQUEST_HEADER = "";

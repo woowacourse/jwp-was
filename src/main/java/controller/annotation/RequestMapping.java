@@ -1,6 +1,6 @@
-package annotation;
+package controller.annotation;
 
-import utils.HttpMethod;
+import webserver.http.HttpMethod;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
