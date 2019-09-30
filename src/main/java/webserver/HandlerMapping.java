@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HandlerMapping {
-    private static Map<String, Controller> uriMapping = new HashMap<>();
+    private static final Map<String, Controller> uriMapping = new HashMap<>();
 
     static {
         uriMapping.put("/user/create", new CreateUserController());

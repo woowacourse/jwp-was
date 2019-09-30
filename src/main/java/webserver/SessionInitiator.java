@@ -7,8 +7,8 @@ import http.HttpSession;
 
 import static com.google.common.net.HttpHeaders.COOKIE;
 
-public class SessionHandler {
-    public static void handle(HttpRequest request, HttpResponse response) {
+public class SessionInitiator {
+    public void handle(HttpRequest request, HttpResponse response) {
         if (request.getHeader(COOKIE) == null || request.getSessionId() == null) {
             HttpSession session = SessionManager.createEmptySession();
             SessionManager.addSession(session);

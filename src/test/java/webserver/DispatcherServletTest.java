@@ -24,6 +24,7 @@ class DispatcherServletTest {
         }
     }
 
+    private DispatcherServlet dispatcherServlet = new DispatcherServlet();
     private String sessionId;
 
     @BeforeEach
@@ -43,7 +44,7 @@ class DispatcherServletTest {
                 .build();
         HttpResponse response = new HttpResponse();
 
-        DispatcherServlet.doDispatch(request, response);
+        dispatcherServlet.doDispatch(request, response);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK);
         assertThat(response.getHeader(CONTENT_TYPE)).isEqualTo(MimeType.of(filePath));
@@ -58,7 +59,7 @@ class DispatcherServletTest {
                 .build();
         HttpResponse response = new HttpResponse();
 
-        DispatcherServlet.doDispatch(request, response);
+        dispatcherServlet.doDispatch(request, response);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND);
     }
@@ -68,7 +69,7 @@ class DispatcherServletTest {
         HttpRequest request = HttpRequestParser.parse(convertStringToInputStream(POST_REQUEST));
         HttpResponse response = new HttpResponse();
 
-        DispatcherServlet.doDispatch(request, response);
+        dispatcherServlet.doDispatch(request, response);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
         assertThat(response.getHeader(LOCATION)).isEqualTo("/index.html");
@@ -79,7 +80,7 @@ class DispatcherServletTest {
         HttpRequest request = HttpRequestParser.parse(convertStringToInputStream(createLoginRequest(ID, PASSWORD)));
         HttpResponse response = new HttpResponse();
 
-        DispatcherServlet.doDispatch(request, response);
+        dispatcherServlet.doDispatch(request, response);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
         assertThat(response.getHeader(LOCATION)).isEqualTo("/index.html");
@@ -91,7 +92,7 @@ class DispatcherServletTest {
         HttpRequest request = HttpRequestParser.parse(convertStringToInputStream(createLoginRequest("ABC", PASSWORD)));
         HttpResponse response = new HttpResponse();
 
-        DispatcherServlet.doDispatch(request, response);
+        dispatcherServlet.doDispatch(request, response);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
         assertThat(response.getHeader(LOCATION)).isEqualTo("/user/login_failed.html");
@@ -103,7 +104,7 @@ class DispatcherServletTest {
         HttpRequest request = HttpRequestParser.parse(convertStringToInputStream(createLoginRequest(ID, "fail")));
         HttpResponse response = new HttpResponse();
 
-        DispatcherServlet.doDispatch(request, response);
+        dispatcherServlet.doDispatch(request, response);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
         assertThat(response.getHeader(LOCATION)).isEqualTo("/user/login_failed.html");
@@ -116,7 +117,7 @@ class DispatcherServletTest {
         HttpRequest request = HttpRequestParser.parse(convertStringToInputStream(createUserListRequest(true)));
         HttpResponse response = new HttpResponse();
 
-        DispatcherServlet.doDispatch(request, response);
+        dispatcherServlet.doDispatch(request, response);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK);
     }
@@ -127,7 +128,7 @@ class DispatcherServletTest {
         HttpRequest request = HttpRequestParser.parse(convertStringToInputStream(createUserListRequest(false)));
         HttpResponse response = new HttpResponse();
 
-        DispatcherServlet.doDispatch(request, response);
+        dispatcherServlet.doDispatch(request, response);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
         assertThat(response.getHeader(LOCATION)).isEqualTo("/user/login.html");

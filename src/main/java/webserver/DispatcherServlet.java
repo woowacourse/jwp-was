@@ -22,9 +22,8 @@ public class DispatcherServlet {
     private static final String TEMPLATES_PATH = "./templates";
     private static final String STATIC_PATH = "./static";
 
-    public static void doDispatch(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+    public void doDispatch(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         try {
-            SessionHandler.handle(httpRequest, httpResponse);
             if (httpRequest.isStaticRequest()) {
                 handleStaticRequest(httpRequest, httpResponse);
                 return;
@@ -41,7 +40,7 @@ public class DispatcherServlet {
         }
     }
 
-    private static void handleStaticRequest(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+    private void handleStaticRequest(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         String path = validatePath(httpRequest);
         byte[] body = FileIoUtils.loadFileFromClasspath(path);
 
@@ -50,7 +49,7 @@ public class DispatcherServlet {
         httpResponse.setBody(body);
     }
 
-    private static String validatePath(HttpRequest httpRequest) {
+    private String validatePath(HttpRequest httpRequest) {
         String path = STATIC_PATH + httpRequest.getUri();
         if (!FileIoUtils.isExistFile(path)) {
             path = TEMPLATES_PATH + httpRequest.getUri();

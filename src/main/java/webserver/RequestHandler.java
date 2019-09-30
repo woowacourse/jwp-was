@@ -14,10 +14,14 @@ import java.net.Socket;
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
+    private DispatcherServlet dispatcherServlet;
+    private SessionInitiator sessionInitiator;
     private Socket connection;
 
-    public RequestHandler(Socket connectionSocket) {
+    public RequestHandler(Socket connectionSocket, DispatcherServlet dispatcherServlet, SessionInitiator sessionInitiator) {
         this.connection = connectionSocket;
+        this.dispatcherServlet = dispatcherServlet;
+        this.sessionInitiator = sessionInitiator;
     }
 
     public void run() {
@@ -29,7 +33,8 @@ public class RequestHandler implements Runnable {
             HttpResponse httpResponse = new HttpResponse();
             DataOutputStream dos = new DataOutputStream(out);
 
-            DispatcherServlet.doDispatch(httpRequest, httpResponse);
+            sessionInitiator.handle(httpRequest, httpResponse);
+            dispatcherServlet.doDispatch(httpRequest, httpResponse);
             httpResponse.send(dos);
             dos.close();
         } catch (Exception e) {

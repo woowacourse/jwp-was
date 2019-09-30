@@ -26,10 +26,13 @@ public class WebServer {
             logger.info("Web Application Server started {} port.", port);
             ExecutorService es = Executors.newFixedThreadPool(100);
 
+            DispatcherServlet dispatcherServlet = new DispatcherServlet();
+            SessionInitiator initiator = new SessionInitiator();
+
             // 클라이언트가 연결될때까지 대기한다.
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
-                es.execute(new RequestHandler(connection));
+                es.execute(new RequestHandler(connection, dispatcherServlet, initiator));
             }
 
             es.shutdown();
