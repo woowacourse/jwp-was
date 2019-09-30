@@ -5,7 +5,6 @@ import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.User;
 
-import static http.HttpHeaders.SET_COOKIE;
 import static model.User.USER_ID_KEY;
 import static model.User.USER_PASSWORD_KEY;
 
