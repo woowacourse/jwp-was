@@ -2,32 +2,35 @@ package webserver;
 
 import webserver.httpelement.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Stream;
 
 public class HttpResponse {
     public static final HttpResponse BAD_REQUEST = HttpResponse.builder(HttpContentType.TEXT_PLAIN_UTF_8)
-                                                                .statusCode(HttpStatusCode.BAD_REQUEST)
+                                                                .statusCode(HttpStatus.BAD_REQUEST)
                                                                 .build();
     public static final HttpResponse NOT_FOUND = HttpResponse.builder(HttpContentType.TEXT_PLAIN_UTF_8)
-                                                            .statusCode(HttpStatusCode.NOT_FOUND)
+                                                            .statusCode(HttpStatus.NOT_FOUND)
                                                             .build();
     public static final HttpResponse INTERNAL_SERVER_ERROR = HttpResponse.builder(HttpContentType.TEXT_PLAIN_UTF_8)
-                                                                    .statusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                                                                    .statusCode(HttpStatus.INTERNAL_SERVER_ERROR)
                                                                     .build();
 
     private final HttpVersion version;
-    private final HttpStatusCode statusCode;
-    private final HttpCookie cookie;
+    private final HttpStatus statusCode;
     private final HttpContentType contentType;
+    private final List<HttpSetCookie> cookies;
     private final HttpConnection connection;
     private final HttpLocation location;
     private final String body;
 
     public static class HttpResponseBuilder {
         private HttpVersion version = HttpVersion.HTTP_1_1;
-        private HttpStatusCode statusCode = HttpStatusCode.OK;
-        private HttpCookie cookie;
+        private HttpStatus statusCode = HttpStatus.OK;
         private final HttpContentType contentType;
+        private List<HttpSetCookie> cookies = new ArrayList<>();
         private HttpConnection connection;
         private HttpLocation location;
         private String body = "";
@@ -47,13 +50,13 @@ public class HttpResponse {
             return this;
         }
 
-        public HttpResponseBuilder statusCode(HttpStatusCode statusCode) {
+        public HttpResponseBuilder statusCode(HttpStatus statusCode) {
             this.statusCode = statusCode;
             return this;
         }
 
-        public HttpResponseBuilder cookie(HttpCookie cookie) {
-            this.cookie = cookie;
+        public HttpResponseBuilder addCookie(HttpSetCookie cookie) {
+            this.cookies.add(cookie);
             return this;
         }
 
@@ -84,8 +87,8 @@ public class HttpResponse {
     private HttpResponse(HttpResponseBuilder builder) {
         this.version = builder.version;
         this.statusCode = builder.statusCode;
-        this.cookie = builder.cookie;
         this.contentType = builder.contentType;
+        this.cookies = (builder.cookies.isEmpty()) ? Collections.emptyList() : builder.cookies;
         this.connection = builder.connection;
         this.location = builder.location;
         this.body = builder.body;
@@ -94,7 +97,7 @@ public class HttpResponse {
     private StringBuilder serializeHeader() {
         return serializeOptionals(
                 new StringBuilder(serializeMandatory()),
-                this.cookie,
+                this.cookies,
                 this.connection,
                 this.location
         );
@@ -110,7 +113,14 @@ public class HttpResponse {
         );
     }
 
-    private StringBuilder serializeOptionals(StringBuilder header, HttpHeaderField... fields) {
+    private StringBuilder serializeOptionals(
+            StringBuilder header,
+            List<HttpSetCookie> cookies,
+            HttpHeaderField... fields
+    ) {
+        cookies.forEach(attr ->
+                header.append(String.format("%s: %s\r\n", HttpHeaderField.getName(HttpSetCookie.class), attr))
+        );
         Stream.of(fields).forEach(field -> {
             if (field != null) {
                 header.append(String.format("%s: %s\r\n", field.fieldName(), field));
