@@ -20,7 +20,7 @@ public class MainControllerTest {
             "GET /index.html HTTP/1.1\n" +
                     "Host: localhost:8080\n" +
                     "Connection: keep-alive\n" +
-                    "Accept: */*";
+                    "Accept: text/html";
 
     private static final String POST_REQUEST_MESSAGE =
             "POST /index.html HTTP/1.1\n" +
@@ -47,7 +47,7 @@ public class MainControllerTest {
 
     @DisplayName("/index.html POST 요청")
     @Test
-    void doPost() throws IOException {
+    void doPost() {
         HttpRequest httpRequest = HttpRequest.of(new ByteArrayInputStream(POST_REQUEST_MESSAGE.getBytes()));
         HttpResponse httpResponse = new HttpResponse();
         Controller controller = new MainController();

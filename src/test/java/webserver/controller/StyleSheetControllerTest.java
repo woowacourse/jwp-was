@@ -39,6 +39,7 @@ public class StyleSheetControllerTest {
         HttpResponse httpResponseToCompare = new HttpResponse();
         httpResponseToCompare.addStatusLine(httpRequest, HttpStatus.OK);
         httpResponseToCompare.addHeader("Content-Type", "text/css");
+        httpResponseToCompare.addHeader("Content-Length", String.valueOf(httpResponse.getResponseBody().getLengthOfContent()));
         httpResponseToCompare.addBody(FileIoUtils.loadFileFromClasspath("./static" + "/css/styles.css"));
 
         assertThat(httpResponse).isEqualTo(httpResponseToCompare);
@@ -46,7 +47,7 @@ public class StyleSheetControllerTest {
 
     @DisplayName("css타입의 파일을 POST 요청")
     @Test
-    void doPost() throws IOException {
+    void doPost() {
         HttpRequest httpRequest = HttpRequest.of(new ByteArrayInputStream(POST_REQUEST_MESSAGE.getBytes()));
         HttpResponse httpResponse = new HttpResponse();
         Controller controller = new StyleSheetController();

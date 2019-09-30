@@ -8,11 +8,6 @@ import webserver.response.HttpResponse;
 public class SignUpController extends AbstractController {
 
     @Override
-    protected String doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        return doPost(httpRequest, httpResponse);
-    }
-
-    @Override
     protected String doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         User user = new User(
                 httpRequest.getParameter("userId"),
