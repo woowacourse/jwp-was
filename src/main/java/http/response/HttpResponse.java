@@ -5,7 +5,6 @@ import http.common.Cookies;
 import http.common.HttpHeader;
 import http.common.HttpVersion;
 import http.request.HttpRequest;
-import org.apache.tika.Tika;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,8 +30,7 @@ public class HttpResponse {
     public HttpResponse(final HttpRequest httpRequest, final DataOutputStream dos) {
         this.setHttpVersion(httpRequest.getHttpVersion());
         this.dos = dos;
-
-        this.putHeader(CONTENT_TYPE, new Tika().detect(httpRequest.getClassPath()));
+        responseHeader.putHeader(CONTENT_TYPE, httpRequest.getContentType());
     }
 
     private void setHttpVersion(HttpVersion httpVersion) {
@@ -51,34 +49,29 @@ public class HttpResponse {
         this.cookies.addCookie(cookie);
     }
 
-    public void putHeader(String name, String value) {
-        responseHeader.putHeader(name, value);
-    }
-
     public String getHeader(String name) {
-        return responseHeader.findHeader(name);
+        return responseHeader.getHeader(name);
     }
 
-    public void ok(ResponseBody responseBody) {
+    public void forward(ResponseBody responseBody) {
         statusLine.setHttpStatus(HttpStatus.OK);
-        putHeader(CONTENT_LENGTH, Integer.toString(responseBody.getLength()));
+        responseHeader.putHeader(CONTENT_LENGTH, Integer.toString(responseBody.getLength()));
         this.responseBody = responseBody;
     }
 
-    public void notFound() {
-        statusLine.setHttpStatus(HttpStatus.NOT_FOUND);
+    public void redirect(final String location) {
+        statusLine.setHttpStatus(HttpStatus.FOUND);
+        responseHeader.putHeader(LOCATION, location);
     }
 
-    public void redirect(final String path) {
-        statusLine.setHttpStatus(HttpStatus.FOUND);
-        responseHeader.putHeader(LOCATION, path);
+    public void error() {
+        statusLine.setHttpStatus(HttpStatus.NOT_FOUND);
     }
 
     public void response() {
         try {
             writeStatusLine();
             writeHeaders();
-            writeCookies();
             writeBody();
         } catch (IOException e) {
             log.error(e.getMessage());
@@ -91,15 +84,18 @@ public class HttpResponse {
 
     private void writeHeaders() throws IOException {
         dos.writeBytes(responseHeader.getAllHeaderStrings());
+        writeSetCookies();
     }
 
-    private void writeCookies() throws IOException {
+    private void writeSetCookies() throws IOException {
         dos.writeBytes(cookies.getAllCookiesString());
     }
 
     private void writeBody() throws IOException {
-        dos.writeBytes(NEW_LINE);
-        dos.write(responseBody.getBody(), 0, responseBody.getLength());
+        if (responseBody!=null) {
+            dos.writeBytes(NEW_LINE);
+            dos.write(responseBody.getBody(), 0, responseBody.getLength());
+        }
         dos.flush();
     }
 }
