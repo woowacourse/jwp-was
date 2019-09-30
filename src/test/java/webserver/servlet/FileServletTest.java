@@ -37,7 +37,7 @@ class FileServletTest extends AbstractServletTest {
 
     @DisplayName("정적 css파일 가져오기")
     @Test
-    void run_() throws IOException, URISyntaxException {
+    void run_cssFileRequest_ok() throws IOException, URISyntaxException {
         HttpRequest httpRequest = getCommonGetRequest("/css.css");
         View view = resolver.createView("/css.css");
         assertThat(fileServlet.run(httpRequest, httpResponse)).isEqualTo(new ModelAndView(view));
