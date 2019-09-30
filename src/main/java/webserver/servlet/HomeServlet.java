@@ -11,9 +11,11 @@ import java.net.URISyntaxException;
 import static utils.HttpRequestUtils.generateTemplateFilePath;
 
 public class HomeServlet extends RequestServlet {
+    private static final String INDEX_HTML = "index.html";
+
     @Override
     public HttpResponse doGet(HttpRequest httpRequest) throws IOException, URISyntaxException {
-        String filePath = generateTemplateFilePath(httpRequest.getAbsPath() + "index.html");
+        String filePath = generateTemplateFilePath(httpRequest.getAbsPath() + INDEX_HTML);
         byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
         ResponseHeader header = new ResponseHeader();
         header.setContentLegthAndType(body.length, FileIoUtils.loadMIMEFromClasspath(filePath));
