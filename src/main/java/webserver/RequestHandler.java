@@ -48,6 +48,10 @@ public class RequestHandler implements Runnable {
             ResponseWriter responseWriter = new ResponseWriter();
 
             setResponse(request, response);
+
+            Optional<Controller> pathController = controllerHandler.getController(request.getPath());
+            pathController.ifPresent(controller -> controller.service(request, response));
+
             responseWriter.send(dos, response);
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -65,13 +69,9 @@ public class RequestHandler implements Runnable {
             return;
         }
 
-        Optional<Controller> controller = controllerHandler.getController(request.getPath());
-        if (controller.isPresent()) {
-            controller.get().service(request, response);
-            return;
+        if (!isFile(extension) && !extension.startsWith(PREFIX_SLASH)) {
+            response.notfound();
         }
-
-        response.notfound();
     }
 
     private void setSession(Request request, Response response, String extension) {
