@@ -7,8 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class DatabaseTest {
     private static final User DEFAULT_USER = User.of("id", "password", "name", "email");
@@ -51,5 +50,12 @@ class DatabaseTest {
     void findUserByIdAndPasswordFail2() {
         Database.addUser(DEFAULT_USER);
         assertFalse(Database.findUserByIdAndPassword(DIFFERENT_USER.getId(), DEFAULT_USER.getPassword()).isPresent());
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 ID로 유저를 찾지 못한다.")
+    void findUserByIdAndPasswordFail3() {
+        Optional<User> user = Database.findUserByIdAndPassword("testId", "testPassword");
+        assertFalse(user.isPresent());
     }
 }
