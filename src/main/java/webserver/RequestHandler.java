@@ -1,29 +1,29 @@
 package webserver;
 
+import controller.ControllerMapper;
+import controller.Controllers;
 import controller.exception.NotFoundUrlException;
-import model.http.HttpRequest;
-import model.http.HttpResponse;
-import model.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.OutputStreamHandler;
-import utils.RequestDispatcher;
-import utils.RequestHeaderParser;
+import utils.HttpRequestParser;
+import view.ViewResolver;
+import webserver.http.ModelAndView;
+import webserver.http.request.HttpRequest;
+import webserver.http.response.HttpResponse;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private Socket connection;
-    public static Map<String, HttpSession> sessionPool = new HashMap<>();
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -34,11 +34,13 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            HttpRequest httpRequest = RequestHeaderParser.parseRequest(new InputStreamReader(in, StandardCharsets.UTF_8));
-            HttpResponse httpResponse = HttpResponse.of();
+            HttpRequest httpRequest = HttpRequestParser.parseRequest(new InputStreamReader(in, StandardCharsets.UTF_8));
+            HttpResponse httpResponse = HttpResponse.of(httpRequest.getHttpVersion());
 
-            httpResponse = RequestDispatcher.handle(httpRequest, httpResponse);
-            OutputStreamHandler.handle(out, httpResponse);
+            Method method = ControllerMapper.mappingMethod(httpRequest, httpResponse);
+            ModelAndView modelAndView = executeMethod(httpRequest, httpResponse, method);
+            ViewResolver.resolve(modelAndView);
+            OutputStreamHandler.createResponse(httpResponse, modelAndView, out);
         } catch (IOException e) {
             logger.error(e.getMessage());
         } catch (URISyntaxException e) {
@@ -47,4 +49,12 @@ public class RequestHandler implements Runnable {
         }
     }
 
+    private ModelAndView executeMethod(HttpRequest httpRequest, HttpResponse httpResponse, Method method) {
+        try {
+            return (ModelAndView) method.invoke(Controllers.REQUEST_MAPPING_CONTROLLERS.get(method), httpRequest, httpResponse);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            logger.error(e.getMessage());
+            throw new NotFoundUrlException(e);
+        }
+    }
 }
