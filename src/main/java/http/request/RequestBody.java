@@ -18,7 +18,7 @@ public class RequestBody {
 
     private void createBody(BufferedReader bufferedReader, int contentLength) throws IOException {
         body = IOUtils.readData(bufferedReader, contentLength);
-        logger.info("request body contents: {}", body);
+        logger.debug("request body contents: {}", body);
     }
 
     public String getBody() {

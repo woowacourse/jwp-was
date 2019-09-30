@@ -4,8 +4,10 @@ public enum ResponseStatus {
     OK(200, "OK"),
     FOUND(302, "Found"),
     NOT_FOUND(404, "Not Found"),
-    INTERNAL_SERVER_ERROR(500, "Internal Server Error");
+    INTERNAL_SERVER_ERROR(500, "Internal Server Error"),
+    METHOD_NOT_ALLOWED(405, "Method Not Allowed");
 
+    private static final String BLANK = " ";
     private int code;
     private String phrase;
 
@@ -31,7 +33,7 @@ public enum ResponseStatus {
         return phrase;
     }
 
-    public String getInfo() {
-        return code + " " + phrase;
+    public String getCodeAndPhrase() {
+        return code + BLANK + phrase;
     }
 }

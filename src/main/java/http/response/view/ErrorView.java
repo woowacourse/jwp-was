@@ -1,18 +1,33 @@
 package http.response.view;
 
+import com.google.common.collect.Maps;
+import http.HTTP;
 import http.response.ResponseStatus;
 
-public class ErrorView extends View {
-    private final ResponseStatus responseStatus;
+import java.util.Map;
 
-    public ErrorView(int code, String message) {
-        this.responseStatus = ResponseStatus.byCode(code);
+public class ErrorView implements View {
+    private final ResponseStatus responseStatus;
+    private final Map<HTTP, String> header = Maps.newHashMap();
+    private final byte[] body;
+
+    public ErrorView(ResponseStatus responseStatus, String message) {
+        this.responseStatus = responseStatus;
         this.body = message.getBytes();
     }
 
     @Override
-    public String getHeader() {
-        return super.getHeader(responseStatus);
+    public ResponseStatus getResponseStatus() {
+        return ResponseStatus.NOT_FOUND;
     }
 
+    @Override
+    public Map<HTTP, String> getHeader() {
+        return header;
+    }
+
+    @Override
+    public byte[] getBody() {
+        return body;
+    }
 }

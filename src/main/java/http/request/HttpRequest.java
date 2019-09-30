@@ -2,17 +2,18 @@ package http.request;
 
 import http.HTTP;
 import http.RequestMethod;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import session.HttpSession;
+import session.HttpSessionContainer;
 
 import java.io.*;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
-public class HttpRequest implements AutoCloseable {
-    private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
+import static session.HttpSession.SESSION_ID;
 
-    private RequestFirstLine requestFirstLine;
+public class HttpRequest implements AutoCloseable {
+    private static final String EMPTY_STRING = "";
+    private RequestLine requestLine;
     private RequestHeader requestHeader;
     private RequestBody requestBody;
 
@@ -20,7 +21,7 @@ public class HttpRequest implements AutoCloseable {
 
     public HttpRequest(InputStream in) throws IOException {
         bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-        this.requestFirstLine = new RequestFirstLine(bufferedReader.readLine());
+        this.requestLine = new RequestLine(bufferedReader.readLine());
 
         this.requestHeader = new RequestHeader(bufferedReader);
 
@@ -30,21 +31,29 @@ public class HttpRequest implements AutoCloseable {
         }
     }
 
-    public RequestMethod getMethod() {
-        return requestFirstLine.getMethod();
+    public String getHeaderContents(HTTP http) {
+        return requestHeader.getHeaderContents(http.getPhrase());
+    }
+
+    public String getCookieValue(String name) {
+        return requestHeader.getCookieValue(name);
+    }
+
+    public boolean checkMethod(RequestMethod requestMethod) {
+        return requestLine.getMethod().equals(requestMethod);
     }
 
     public String getPath() {
-        return requestFirstLine.getPath();
+        return requestLine.getPath();
     }
 
     public String getQueryString() {
-        return decode(requestFirstLine.getQuery());
+        return decode(requestLine.getQuery());
     }
 
     public String getBody() {
         if (requestBody == null) {
-            return "";
+            return EMPTY_STRING;
         }
         return decode(requestBody.getBody());
     }
@@ -60,5 +69,10 @@ public class HttpRequest implements AutoCloseable {
     @Override
     public void close() throws IOException {
         bufferedReader.close();
+    }
+
+    public HttpSession getSession(HttpSessionContainer httpSessionContainer) {
+        String sessionId = this.getCookieValue(SESSION_ID);
+        return httpSessionContainer.findSession(sessionId);
     }
 }
