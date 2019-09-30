@@ -40,8 +40,20 @@ class RequestUriTest {
     }
 
     @Test
+    void uri_isFile_dot_true() throws URISyntaxException {
+        RequestUri fileRequestUri = new RequestUri("version/1.2/index.html");
+        assertTrue(fileRequestUri.isFile());
+    }
+
+    @Test
     void uri_isFile_false() throws URISyntaxException {
         RequestUri fileRequestUri = new RequestUri("/user/create");
+        assertFalse(fileRequestUri.isFile());
+    }
+
+    @Test
+    void uri_isFile_dot_false() throws URISyntaxException {
+        RequestUri fileRequestUri = new RequestUri("version/1.2/user/create");
         assertFalse(fileRequestUri.isFile());
     }
 

@@ -27,7 +27,9 @@ public class RequestUri {
     }
 
     public boolean isFile() {
-        return absPath.split("\\.").length >= 2;
+        String[] absPathArr = absPath.split("/");
+        String lastAbsPath = absPathArr[absPathArr.length - 1];
+        return lastAbsPath.split("\\.").length >= 2;
     }
 
     @Override
