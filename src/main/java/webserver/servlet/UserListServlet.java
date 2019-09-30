@@ -35,7 +35,8 @@ public class UserListServlet extends RequestServlet {
     private HttpResponse viewList() throws IOException {
         ResponseHeader header = new ResponseHeader();
         byte[] body = generateBody();
-        header.setContentLengthAndType(body.length, "text/html;charset=utf-8");
+        header.setContentLengthAndType(body.length, "text/html");
+        header.setContentEncoding("utf-8");
         return HttpResponse.ok(header, body);
     }
 
