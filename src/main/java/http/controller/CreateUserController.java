@@ -8,11 +8,15 @@ import model.User;
 public class CreateUserController extends AbstractController {
     @Override
     protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        User user = new User(httpRequest.getParameter("userId"),
+        DataBase.addUser(createUser(httpRequest));
+
+        httpResponse.redirect("/index.html");
+    }
+
+    private User createUser(HttpRequest httpRequest) {
+        return new User(httpRequest.getParameter("userId"),
                 httpRequest.getParameter("password"),
                 httpRequest.getParameter("name"),
                 httpRequest.getParameter("email"));
-        DataBase.addUser(user);
-        httpResponse.redirect("/index.html");
     }
 }
