@@ -31,10 +31,13 @@ class StaticResourceHandlerTest {
     void 정적_파일이_없는_경우_404응답() throws IOException, URISyntaxException {
         HttpRequest request = TestResourceLoader.getHttpRequest("Http_GET_Not_Exsisting_File.txt");
         HttpResponse response = HttpResponse.of(request.getVersion());
+        byte[] expectedBody = FileIoUtils.loadFileFromClasspath(VIEW_TEMPLATE_PATH + "/error.html");
 
         StaticResourceHandler.forward(request, response);
 
-        assertThat(response.getMessageHeader()).isEqualTo("HTTP/1.1 404 Not Found" + CRLF);
+        assertThat(response.getMessageHeader()).isEqualTo("HTTP/1.1 404 Not Found" + CRLF
+        + "Content-Type: text/html" + CRLF
+        + "Content-Length: " + expectedBody.length + CRLF);
     }
 
     @Test

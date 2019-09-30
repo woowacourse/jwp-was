@@ -1,5 +1,6 @@
 package http.response;
 
+import http.MediaType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -42,7 +43,9 @@ class HttpResponseTest {
 
     @Test
     void hasBody() {
-        byte[] body = "body".getBytes();
+        byte[] content = "body".getBytes();
+        MediaType type = HTML;
+        ResponseBody body = new ResponseBody(content, type);
 
         response.setBody(body);
 

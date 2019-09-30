@@ -20,15 +20,15 @@ public abstract class AbstractController implements Controller {
     }
 
     protected void doGet(HttpRequest request, HttpResponse response) {
-        forwardErrorPage(response);
+        forwardErrorPage(request, response);
     }
 
     protected void doPost(HttpRequest request, HttpResponse response) {
-        forwardErrorPage(response);
+        forwardErrorPage(request, response);
     }
 
-    private void forwardErrorPage(HttpResponse response) {
+    private void forwardErrorPage(HttpRequest request, HttpResponse response) {
         response.setStatus(METHOD_NOT_ALLOWED);
-        StaticResourceHandler.forwardErrorPage(response);
+        StaticResourceHandler.forwardErrorPage(request, response);
     }
 }
