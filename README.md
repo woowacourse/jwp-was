@@ -97,3 +97,13 @@
 - [x] 로그인시 session 생성 및 userId 추가 (```HttpSession userSession = new HttpSession(); userSession.put("userId", "id"); HttpSessionHelper.create(userSession);```)
 - [x] 로그인시 cookie에 user_session 넣기 ()
 - [x] logined cookie를 user_session으로 바꾸기 (로그인, userlist)
+
+피드백
+
+- [ ] Cookie 일급 컬렉션으로 묶기
+- [ ] RequestUri에서 static 요청인 경우 확인하는 로직을 .으로 하지 말고 다른것으로 바꾸기
+- [ ] 서블릿에서 하던 ```isSessionValid()``` 기능을 Session에서 제공하는 것으로 바꾸기
+- [ ] 서블릿에서 세션 부분을 상수로 빼기
+- [ ] "text/html;charset=utf-8" 상수 혹은 enum으로 빼보기
+- [x] 세션을 싱글톤 아니게 바꾸기
+- [ ] 뷰 만들기

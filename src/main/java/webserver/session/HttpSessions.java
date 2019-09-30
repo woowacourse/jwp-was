@@ -6,18 +6,10 @@ import java.util.Map;
 import java.util.Set;
 
 public class HttpSessions implements Map<String, HttpSession> {
-    private static HttpSessions instance = null;
     private Map<String, HttpSession> sessions;
 
-    private HttpSessions() {
+    public HttpSessions() {
         sessions = new HashMap<>();
-    }
-
-    public static HttpSessions getInstance() {
-        if (instance == null) {
-            return new HttpSessions();
-        }
-        return instance;
     }
 
     @Override

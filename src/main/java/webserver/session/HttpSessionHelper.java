@@ -3,7 +3,7 @@ package webserver.session;
 import java.util.UUID;
 
 public class HttpSessionHelper {
-    private static HttpSessions sessions = HttpSessions.getInstance();
+    private static HttpSessions sessions = new HttpSessions();
 
     private HttpSessionHelper() {
     }
