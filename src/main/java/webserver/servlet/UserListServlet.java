@@ -9,7 +9,6 @@ import db.DataBase;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 import webserver.response.ResponseHeader;
-import webserver.session.HttpSession;
 import webserver.session.HttpSessionHelper;
 
 import java.io.IOException;
@@ -19,15 +18,10 @@ import java.util.Map;
 public class UserListServlet extends RequestServlet {
     @Override
     public HttpResponse doGet(HttpRequest httpRequest) throws IOException {
-        if (isSessionValid(httpRequest.getCookie("user_session"))) {
+        if (HttpSessionHelper.isValid(httpRequest.getCookie("user_session"))) {
             return viewList();
         }
         return redirectHome();
-    }
-
-    private boolean isSessionValid(String requestUserSessionId) {
-        HttpSession session = HttpSessionHelper.get(requestUserSessionId);
-        return requestUserSessionId != null && session != null;
     }
 
     private HttpResponse viewList() throws IOException {
