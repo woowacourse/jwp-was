@@ -31,7 +31,7 @@ class LoginControllerTest extends AbstractControllerTest {
     void DoPost_로그인_성공() {
         ModelAndView modelAndView = doLogin(signUpUser.getUserId(), signUpUser.getPassword());
 
-        assertEquals(modelAndView.getViewName(), LOGIN_SUCCESS_REDIRECT_LOCATION);
+        assertEquals(modelAndView.getViewName(), String.format("redirect: %s", LOGIN_SUCCESS_REDIRECT_LOCATION));
         assertEquals(modelAndView.getModelMap(), Collections.emptyMap());
     }
 
@@ -39,7 +39,7 @@ class LoginControllerTest extends AbstractControllerTest {
     void DoPost_로그인_실패() {
         ModelAndView modelAndView = doLogin("none", "none");
 
-        assertEquals(modelAndView.getViewName(), LOGIN_FAILED_REDIRECT_LOCATION);
+        assertEquals(modelAndView.getViewName(), String.format("redirect: %s", LOGIN_FAILED_REDIRECT_LOCATION));
         assertEquals(modelAndView.getModelMap(), Collections.emptyMap());
     }
 

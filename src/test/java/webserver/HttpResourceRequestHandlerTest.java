@@ -8,13 +8,14 @@ import http.request.RequestLine;
 import http.response.HttpResponse;
 import http.response.ResponseStatus;
 import org.junit.jupiter.api.Test;
+import webserver.httphandler.HttpResourceRequestHandler;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static utils.StringUtils.BLANK;
 
-class ResourceHttpRequestHandlerTest {
-    private ResourceHttpRequestHandler resourceHttpRequestHandler =
-            new ResourceHttpRequestHandler(new TestFileLoader());
+class HttpResourceRequestHandlerTest {
+    private HttpResourceRequestHandler httpResourceRequestHandler =
+            new HttpResourceRequestHandler(new TestFileLoader());
 
     @Test
     void 요청처리_성공() {
@@ -24,7 +25,8 @@ class ResourceHttpRequestHandlerTest {
                 new RequestBody(BLANK, BLANK));
         HttpResponse httpResponse = new HttpResponse(httpRequest);
 
-        assertThat(resourceHttpRequestHandler.handleHttpRequest(httpRequest, httpResponse)).isTrue();
+        httpResourceRequestHandler.handleHttpRequest(httpRequest, httpResponse);
+
         assertThat(httpResponse.getResponseStatus()).isEqualTo(ResponseStatus.OK);
     }
 
@@ -36,6 +38,8 @@ class ResourceHttpRequestHandlerTest {
                 new RequestBody(BLANK, BLANK));
         HttpResponse httpResponse = new HttpResponse(httpRequest);
 
-        assertThat(resourceHttpRequestHandler.handleHttpRequest(httpRequest, httpResponse)).isFalse();
+        httpResourceRequestHandler.handleHttpRequest(httpRequest, httpResponse);
+
+        assertThat(httpResponse.getResponseStatus()).isEqualTo(ResponseStatus.NOT_FOUND);
     }
 }

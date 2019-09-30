@@ -16,7 +16,7 @@ import static utils.StringUtils.BLANK;
 
 class TemplateViewTest {
     private TemplateEngineManager testTemplateManager = (filePath, model) ->
-            String.format("%s : %s", filePath, model.toString());
+            String.format("%s : %s", filePath, model.toString()).getBytes();
     @Test
     void renderTest() {
         HttpRequest httpRequest = new HttpRequest(
@@ -32,8 +32,8 @@ class TemplateViewTest {
                 testTemplateManager, filePath);
         templateView.render(model, httpResponse);
 
-        String expectBody = testTemplateManager.getCompiledTemplate(filePath, model);
+        byte[] expectBody = testTemplateManager.applyCompile(filePath, model);
         assertEquals(httpResponse.getResponseStatus(), ResponseStatus.OK);
-        assertEquals(new String(httpResponse.getBody()), expectBody);
+        assertEquals(new String(httpResponse.getBody()), new String(expectBody));
     }
 }
