@@ -19,6 +19,7 @@ public class Request {
     private static final String CONTENT_LENGTH = "content-length";
     private static final String ZERO_LENGTH = "0";
     private static final String SPACE_DELIMITER = " ";
+    private static final String SESSION_ID = "SESSION_ID";
     private static final int ZERO = 0;
     private static final int KEY_INDEX = ZERO;
     private static final int VALUE_INDEX = 1;
@@ -31,6 +32,7 @@ public class Request {
     private final Url url;
     private final Map<String, String> header;
     private final Cookie cookie;
+    private final HttpSession session;
     private final String body;
 
     public Request(final NetworkInput networkInput) throws IOException, URISyntaxException {
@@ -40,6 +42,8 @@ public class Request {
         protocol = HttpVersion.of(requestLine[PROTOCOL_INDEX]);
         header = makeHeader(networkInput);
         cookie = new Cookie(header.getOrDefault(COOKIE, EMPTY));
+        session = HttpSession.get(cookie.get(SESSION_ID));
+        cookie.set(SESSION_ID, session.getId());
         body = readBody(networkInput);
         printLog();
     }
@@ -92,6 +96,10 @@ public class Request {
 
     public HttpVersion getProtocol() {
         return protocol;
+    }
+
+    public HttpSession getSession() {
+        return session;
     }
 
     public QueryParameter getQueryParameters() {

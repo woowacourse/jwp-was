@@ -318,4 +318,17 @@ public class Cookie {
             return EMPTY;
         }
     }
+
+    public Cookie add(final Cookie another) {
+        cookieJar.putAll(another.cookieJar);
+        booleanOptions.addAll(another.booleanOptions);
+        expires = Objects.nonNull(another.expires) ? another.expires : this.expires;
+        maxAgeSecond = Objects.nonNull(another.maxAgeSecond) ? another.maxAgeSecond : this.maxAgeSecond;
+        domain = !EMPTY.equals(another.domain) ? another.domain : this.domain;
+        path = !ROOT.equals(another.path) ? another.path : this.path; // 기본값 주의
+        sameSite = !EMPTY.equals(another.sameSite) ? another.sameSite : this.sameSite;
+        secure = another.secure || this.secure;
+        httpOnly = another.httpOnly || this.httpOnly;
+        return this;
+    }
 }

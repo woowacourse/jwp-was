@@ -58,10 +58,10 @@ public class StaticFileServer {
     private static Response tryStaticFileRead(final Request request) throws IOException, IllegalArgumentException {
         try {
             final StaticFile file = new StaticFile(makeRightPath(request, STATIC_PATH));
-            return new Response.Builder().body(file).build();
+            return new Response.Builder(request).body(file).build();
         } catch (final IOException | IllegalArgumentException e) {
             final Template template = HANDLEBARS.compile(makeRightPath(request, EMPTY));
-            return new Response.Builder().body(template.text()).build();
+            return new Response.Builder(request).body(template.text()).build();
         }
     }
 

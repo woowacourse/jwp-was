@@ -33,22 +33,28 @@ public class Response {
         private ResponseBody body = new ResponseBody();
         private HttpVersion protocol;
         private HttpStatus httpStatus;
+        private Cookie cookie;
 
-        Builder(final HttpVersion protocol, final HttpStatus httpStatus) {
+        Builder(final HttpVersion protocol, final HttpStatus httpStatus, final Cookie cookie) {
             this.protocol = protocol;
             this.httpStatus = httpStatus;
+            this.cookie = cookie;
         }
 
-        public Builder(final HttpVersion protocol) {
-            this(protocol, HttpStatus.OK);
+        public Builder(final HttpVersion protocol, final Request request) {
+            this(protocol, HttpStatus.OK, request.getCookie());
         }
 
-        public Builder(final HttpStatus httpStatus) {
-            this(HttpVersion._1_1, httpStatus);
+        public Builder(final HttpStatus httpStatus, final Request request) {
+            this(HttpVersion._1_1, httpStatus, request.getCookie());
+        }
+
+        public Builder(final Request request) {
+            this(HttpVersion._1_1, HttpStatus.OK, request.getCookie());
         }
 
         public Builder() {
-            this(HttpVersion._1_1, HttpStatus.OK);
+            this(HttpVersion._1_1, HttpStatus.OK, new Cookie());
         }
 
         public Builder protocol(final HttpVersion protocol) {
@@ -79,8 +85,8 @@ public class Response {
             return this;
         }
 
-        public Builder setCookie(final Cookie cookie) {
-            this.putField(SET_COOKIE, cookie.toString());
+        public Builder addCookie(final Cookie cookie) {
+            this.cookie.add(cookie);
             return this;
         }
 
@@ -101,6 +107,7 @@ public class Response {
         }
 
         public Response build() {
+            this.putField(SET_COOKIE, cookie.toString());
             final ResponseHeader header = new ResponseHeader(this.protocol, this.httpStatus, this.fields);
             return new Response(header, this.body);
         }

@@ -32,7 +32,7 @@ public class UserController {
         Database.addUser(user);
         LOG.debug(user.toString());
 
-        return new Response.Builder().redirect(URL_ROOT).build();
+        return new Response.Builder(request).redirect(URL_ROOT).build();
     }
 
     // TODO: HTTP Method에 따른 컨트롤러 처리 기능
@@ -48,14 +48,14 @@ public class UserController {
         final QueryParameter queries = request.getQueryParameters();
         final User tryingUser = new User(queries.getValue(USER_ID), queries.getValue(PASSWORD));
         final User existUser = Database.findUserById(queries.getValue(USER_ID));
-        final Response.Builder response = new Response.Builder();
+        final Response.Builder response = new Response.Builder(request);
         cookie.set(LOGINED, FALSE);
         response.redirect(LOGIN_FAILED_PAGE);
         if (tryingUser.equals(existUser)) {
             cookie.set(LOGINED, TRUE);
             response.redirect(URL_ROOT);
         }
-        response.setCookie(cookie);
+        response.addCookie(cookie);
         return response.build();
     }
 
@@ -64,6 +64,6 @@ public class UserController {
         if (TRUE.equals(cookie.get(LOGINED))) {
             return StaticFileServer.get(request);
         }
-        return new Response.Builder().redirect(LOGIN_PAGE).build();
+        return new Response.Builder(request).redirect(LOGIN_PAGE).build();
     }
 }
