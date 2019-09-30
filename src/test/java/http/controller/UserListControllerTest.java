@@ -35,6 +35,7 @@ class UserListControllerTest {
                 new ArrayList<>(Arrays.asList(new Cookie("JSESSIONID", httpSession.getId())))
                 );
         httpResponse = HttpResponse.of();
+        httpResponse.addHeaderFromRequest(httpRequest);
 
         httpSession.setAttribute("logined", true);
         httpResponse.setSession(httpSession);
