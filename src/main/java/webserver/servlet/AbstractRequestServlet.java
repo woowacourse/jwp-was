@@ -1,6 +1,6 @@
 package webserver.servlet;
 
-import exceptions.MethodNotAllowedException;
+import webserver.servlet.exception.MethodNotAllowedException;
 import webserver.http.request.HttpRequest;
 import webserver.http.request.RequestMethod;
 import webserver.http.request.RequestUri;

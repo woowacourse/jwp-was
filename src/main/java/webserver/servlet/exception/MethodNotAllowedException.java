@@ -1,4 +1,4 @@
-package exceptions;
+package webserver.servlet.exception;
 
 import webserver.http.request.RequestMethod;
 

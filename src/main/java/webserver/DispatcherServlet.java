@@ -1,8 +1,8 @@
 package webserver;
 
-import exceptions.MethodNotAllowedException;
-import exceptions.NotFoundFileException;
-import exceptions.NotFoundURIException;
+import webserver.servlet.exception.MethodNotAllowedException;
+import utils.exception.NotFoundFileException;
+import webserver.handler.exception.NotFoundURIException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.handler.MappingHandler;

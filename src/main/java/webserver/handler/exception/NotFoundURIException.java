@@ -1,4 +1,4 @@
-package exceptions;
+package webserver.handler.exception;
 
 import webserver.http.request.RequestUri;
 

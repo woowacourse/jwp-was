@@ -1,4 +1,4 @@
-package exceptions;
+package webserver.handler.exception;
 
 public class NotSupportedFileType extends RuntimeException {
     public NotSupportedFileType(String extension) {

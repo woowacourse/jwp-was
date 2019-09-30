@@ -1,4 +1,4 @@
-package exceptions;
+package utils.exception;
 
 public class NotFoundFileException extends RuntimeException {
     public NotFoundFileException(String filePath) {

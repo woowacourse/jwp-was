@@ -1,6 +1,6 @@
 package webserver.http.response;
 
-import exceptions.NotSupportedFileType;
+import webserver.handler.exception.NotSupportedFileType;
 
 import java.util.Arrays;
 

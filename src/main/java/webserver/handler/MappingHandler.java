@@ -1,6 +1,6 @@
 package webserver.handler;
 
-import exceptions.NotFoundURIException;
+import webserver.handler.exception.NotFoundURIException;
 import webserver.http.request.RequestUri;
 import webserver.resolver.FileResolver;
 import webserver.resolver.HandlebarViewResolver;
