@@ -7,29 +7,31 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class WebServer {
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
     private static final int DEFAULT_PORT = 8080;
     private static final int NUMBER_OF_THREAD = 100;
+    private static final int TIME_OUT = 100;
 
     public static void main(String args[]) throws Exception {
-        ExecutorService es = Executors.newFixedThreadPool(NUMBER_OF_THREAD);
+        ExecutorService executorService = Executors.newFixedThreadPool(NUMBER_OF_THREAD);
 
-        int port = 0;
-        if (args == null || args.length == 0) {
-            port = DEFAULT_PORT;
-        } else {
-            port = Integer.parseInt(args[0]);
-        }
+        int port = (args == null || args.length == 0)
+                ? DEFAULT_PORT
+                : Integer.parseInt(args[0]);
 
         try (ServerSocket listenSocket = new ServerSocket(port)) {
             logger.info("Web Application Server started {} port.", port);
 
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
-                es.execute(new RequestHandler((connection)));
+                executorService.execute(new RequestHandler((connection)));
             }
         }
+
+        executorService.shutdown();
+        executorService.awaitTermination(TIME_OUT, TimeUnit.SECONDS);
     }
 }
