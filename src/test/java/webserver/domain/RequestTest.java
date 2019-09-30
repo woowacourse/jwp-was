@@ -9,7 +9,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,14 +37,14 @@ class RequestTest extends RequestHelper {
 
         final Request request = new Request(this.networkInputWithQueryString);
         final Request expected = new Request(expectedNetworkInput);
-        final Map<String, String> queryParameter = request.getQueryParameters();
-        final Map<String, String> expectedQueryParameter = expected.getQueryParameters();
+        final QueryParameter queryParameter = request.getQueryParameters();
+        final QueryParameter expectedQueryParameter = expected.getQueryParameters();
 
         assertThat(request.getHttpMethod()).isEqualTo(expected.getHttpMethod());
         assertThat(request.getPath()).isEqualTo(expected.getPath());
         assertThat(request.getProtocol()).isEqualTo(expected.getProtocol());
         assertThat(request.getHeader()).isEqualTo(expected.getHeader());
-        assertThat(queryParameter.get("userId")).isEqualTo(expectedQueryParameter.get("userId"));
-        assertThat(queryParameter.get("name")).isEqualTo(expectedQueryParameter.get("name"));
+        assertThat(queryParameter.getValue("userId")).isEqualTo(expectedQueryParameter.getValue("userId"));
+        assertThat(queryParameter.getValue("name")).isEqualTo(expectedQueryParameter.getValue("name"));
     }
 }
