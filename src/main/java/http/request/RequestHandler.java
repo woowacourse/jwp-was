@@ -12,26 +12,21 @@ import java.util.List;
 public class RequestHandler {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
-    private final BufferedReader br;
+    public static HttpRequest create(BufferedReader br) throws IOException {
 
-    public RequestHandler(BufferedReader br) {
-        this.br = br;
-    }
-
-    public HttpRequest create() throws IOException {
-        RequestLine requestLine = createRequestStartLine();
-        RequestHeader requestHeader = createRequestHeader();
-        RequestBody requestBody = createRequestBody(requestHeader);
+        RequestLine requestLine = createRequestStartLine(br);
+        RequestHeader requestHeader = createRequestHeader(br);
+        RequestBody requestBody = createRequestBody(br, requestHeader);
 
         return HttpRequest.of(requestLine, requestHeader, requestBody);
     }
 
-    private RequestLine createRequestStartLine() throws IOException {
+    private static RequestLine createRequestStartLine(BufferedReader br) throws IOException {
         String startLine = br.readLine();
         return RequestLine.of(startLine);
     }
 
-    private RequestHeader createRequestHeader() throws IOException {
+    private static RequestHeader createRequestHeader(BufferedReader br) throws IOException {
         List<String> header = new ArrayList<>();
         String line;
         while (!("".equals(line = br.readLine()))) {
@@ -42,7 +37,7 @@ public class RequestHandler {
         return RequestHeader.of(header);
     }
 
-    private RequestBody createRequestBody(RequestHeader requestHeader) throws IOException {
+    private static RequestBody createRequestBody(BufferedReader br, RequestHeader requestHeader) throws IOException {
         if (requestHeader.getHeader(HttpRequest.CONTENT_LENGTH_NAME) != null) {
             byte[] body = IOUtils.readData(br, Integer.parseInt(requestHeader.getHeader(HttpRequest.CONTENT_LENGTH_NAME))).getBytes();
             return RequestBody.of(body);

@@ -28,8 +28,7 @@ public class HttpProcess implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
 
-            RequestHandler requestHandler = new RequestHandler(new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
-            HttpRequest httpRequest = requestHandler.create();
+            HttpRequest httpRequest = RequestHandler.create(new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
             HttpResponse httpResponse = ResponseHandler.create(httpRequest);
             logger.debug("request path : {}", httpRequest.getPath());
 
