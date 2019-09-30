@@ -8,10 +8,7 @@ import model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,7 +22,7 @@ class UserCreateServletTest {
     void create() throws IOException {
         InputStream in = new FileInputStream(new File(TEST_DIRECTORY + "Http_POST.txt"));
         HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
-        HttpResponse response = new HttpResponse(request.getVersion());
+        HttpResponse response = new HttpResponse(request.getVersion(), new PipedOutputStream());
         userController.doPost(request, response);
 
         User user = DataBase.findUserById("woowa");

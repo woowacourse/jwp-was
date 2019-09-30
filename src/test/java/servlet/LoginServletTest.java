@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PipedOutputStream;
 
 import static http.HttpHeaders.LOCATION;
 import static http.HttpHeaders.SET_COOKIE;
@@ -35,7 +36,7 @@ public class LoginServletTest {
         String requestMessage = makeLoginRequestMessage("id", "password");
         InputStream in = new ByteArrayInputStream(requestMessage.getBytes());
         HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
-        HttpResponse response = new HttpResponse(request.getVersion());
+        HttpResponse response = new HttpResponse(request.getVersion(), new PipedOutputStream());
 
         loginServlet.handle(request, response);
 
@@ -52,7 +53,7 @@ public class LoginServletTest {
         String requestMessage = makeLoginRequestMessage("id", "passwor");
         InputStream in = new ByteArrayInputStream(requestMessage.getBytes());
         HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
-        HttpResponse response = new HttpResponse(request.getVersion());
+        HttpResponse response = new HttpResponse(request.getVersion(), new PipedOutputStream());
 
         loginServlet.handle(request, response);
 
@@ -69,7 +70,7 @@ public class LoginServletTest {
         String requestMessage = makeLoginRequestMessage("notFoundUser", "password");
         InputStream in = new ByteArrayInputStream(requestMessage.getBytes());
         HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
-        HttpResponse response = new HttpResponse(request.getVersion());
+        HttpResponse response = new HttpResponse(request.getVersion(), new PipedOutputStream());
 
         loginServlet.handle(request, response);
 

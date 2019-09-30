@@ -16,14 +16,14 @@ public abstract class AbstractServlet implements Servlet {
             doPost(request, response);
             return;
         }
-        response.error(HttpStatus.METHOD_NOT_ALLOWED);
+        response.sendError(HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     protected void doGet(HttpRequest request, HttpResponse response) {
-        response.error(HttpStatus.METHOD_NOT_ALLOWED);
+        response.sendError(HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     protected void doPost(HttpRequest request, HttpResponse response) {
-        response.error(HttpStatus.METHOD_NOT_ALLOWED);
+        response.sendError(HttpStatus.METHOD_NOT_ALLOWED);
     }
 }

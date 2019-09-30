@@ -28,9 +28,8 @@ public class RequestHandler implements Runnable {
             HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
             logger.debug(request.toString());
 
-            HttpResponse response = new HttpResponse(request.getVersion());
+            HttpResponse response = new HttpResponse(request.getVersion(), out);
             ServletHandler.handle(request, response);
-            ResponseSender.send(out, response);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }

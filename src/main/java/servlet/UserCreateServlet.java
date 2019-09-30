@@ -17,6 +17,6 @@ public class UserCreateServlet extends AbstractServlet {
                 httpRequest.getParam(USER_EMAIL_KEY));
         DataBase.addUser(user);
 
-        response.redirect("/index.html");
+        response.sendRedirect("/index.html");
     }
 }

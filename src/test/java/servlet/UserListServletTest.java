@@ -12,9 +12,11 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PipedOutputStream;
 
 import static http.HttpHeaders.LOCATION;
 import static http.response.HttpStatus.FOUND;
+import static http.response.HttpStatus.OK;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UserListServletTest {
@@ -38,18 +40,15 @@ class UserListServletTest {
                 + "Cookie: logined=true";
         InputStream in = new ByteArrayInputStream(requestMessage.getBytes());
         HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
-        HttpResponse response = new HttpResponse(request.getVersion());
+        HttpResponse response = new HttpResponse(request.getVersion(), new PipedOutputStream());
 
         userListServlet.handle(request, response);
 
-        String body = new String(response.getView().render());
-        assertThat(body).contains("userId");
-        assertThat(body).contains("userName");
-        assertThat(body).contains("email@woo.wa");
+        assertThat(response.getStatus()).isEqualTo(OK);
     }
 
     @Test
-    @DisplayName("로그인 상태일 경우(Cookie 값이 logined=false) 경우 login.html로 이동")
+    @DisplayName("로그아웃 상태일 경우(Cookie 값이 logined=false) 경우 login.html로 이동")
     void showListWhenLogout() throws IOException {
         String requestMessage = "GET /user/list HTTP/1.1\n"
                 + "Host: localhost:8080\n"
@@ -58,7 +57,7 @@ class UserListServletTest {
                 + "Cookie: logined=false";
         InputStream in = new ByteArrayInputStream(requestMessage.getBytes());
         HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
-        HttpResponse response = new HttpResponse(request.getVersion());
+        HttpResponse response = new HttpResponse(request.getVersion(), new PipedOutputStream());
 
         userListServlet.handle(request, response);
 

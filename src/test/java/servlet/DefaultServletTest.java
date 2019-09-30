@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PipedOutputStream;
 
 import static http.response.HttpStatus.NOT_FOUND;
 import static http.response.HttpStatus.OK;
@@ -32,7 +33,7 @@ class DefaultServletTest {
                 + "Accept: */*";
         InputStream in = new ByteArrayInputStream(requestMessage.getBytes());
         HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
-        HttpResponse response = new HttpResponse(request.getVersion());
+        HttpResponse response = new HttpResponse(request.getVersion(), new PipedOutputStream());
 
         defaultServlet.handle(request, response);
 
@@ -48,7 +49,7 @@ class DefaultServletTest {
                 + "Accept: */*";
         InputStream in = new ByteArrayInputStream(requestMessage.getBytes());
         HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
-        HttpResponse response = new HttpResponse(request.getVersion());
+        HttpResponse response = new HttpResponse(request.getVersion(), new PipedOutputStream());
 
         defaultServlet.handle(request, response);
 
@@ -64,7 +65,7 @@ class DefaultServletTest {
                 + "Accept: */*";
         InputStream in = new ByteArrayInputStream(requestMessage.getBytes());
         HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
-        HttpResponse response = new HttpResponse(request.getVersion());
+        HttpResponse response = new HttpResponse(request.getVersion(), new PipedOutputStream());
 
         defaultServlet.handle(request, response);
 

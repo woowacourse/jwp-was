@@ -15,10 +15,10 @@ public class UserListServlet extends AbstractServlet {
         if (request.matchCookie("logined", "true")) {
             Map<String, Object> model = new HashMap<>();
             model.put("users", DataBase.findAll());
-            View view = new HandlebarsView("/user/list", model, request.getMimeType());
-            response.setView(view);
+            View view = new HandlebarsView("/user/list", model);
+            response.sendResponseWithView(view, request.getMimeType());
             return;
         }
-        response.redirect("/index.html");
+        response.sendRedirect("/index.html");
     }
 }

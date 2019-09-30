@@ -4,7 +4,6 @@ import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
-import http.HttpMimeType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +19,6 @@ public class HandlebarsView implements View {
 
     private String viewPath;
     private Map<String, Object> model;
-    private HttpMimeType mimeType;
 
     static {
         TemplateLoader loader = new ClassPathTemplateLoader();
@@ -29,10 +27,9 @@ public class HandlebarsView implements View {
         handlebars = new com.github.jknack.handlebars.Handlebars(loader);
     }
 
-    public HandlebarsView(String viewPath, Map<String, Object> model, HttpMimeType mimeType) {
+    public HandlebarsView(String viewPath, Map<String, Object> model) {
         this.viewPath = viewPath;
         this.model = model;
-        this.mimeType = mimeType;
     }
 
     @Override
@@ -47,10 +44,5 @@ public class HandlebarsView implements View {
             log.debug(e.getMessage());
         }
         return null;
-    }
-
-    @Override
-    public HttpMimeType getMimeType() {
-        return mimeType;
     }
 }
