@@ -7,7 +7,7 @@ public class Cookie {
 
     private static final String ATTRIBUTE_TOKENS_DELIMITER = "=";
     private static final String ATTRIBUTE_DELIMITER = ";";
-    public static final String BLANK = " ";
+    private static final String BLANK = " ";
     private final Map<String, String> attributeWithValue;
     private final List<String> attributeWithoutValue;
 
@@ -26,7 +26,6 @@ public class Cookie {
 
     public String getCookieAttributeString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Set-Cookie: ");
         attributeWithValue.forEach((key, value) -> stringBuilder.append(key)
             .append(ATTRIBUTE_TOKENS_DELIMITER)
             .append(value)
@@ -34,8 +33,17 @@ public class Cookie {
             .append(BLANK));
 
         stringBuilder.append(String.join(ATTRIBUTE_DELIMITER, attributeWithoutValue));
-        stringBuilder.deleteCharAt(stringBuilder.lastIndexOf(ATTRIBUTE_DELIMITER));
+        if (attributeWithValue.isEmpty()) {
+            stringBuilder.deleteCharAt(stringBuilder.lastIndexOf(ATTRIBUTE_DELIMITER));
+        }
         return stringBuilder.toString();
+    }
+
+    public boolean isLogined() {
+        if (attributeWithValue.containsKey("logined")) {
+            return "true".equals(attributeWithValue.get("logined"));
+        }
+        return false;
     }
 }
 

@@ -21,7 +21,11 @@ public class Cookies {
 
     public String getAllCookiesString() {
         StringBuilder stringBuilder = new StringBuilder();
-        cookies.forEach(cookie -> stringBuilder.append(cookie.getCookieAttributeString()).append(NEW_LINE));
+        cookies.forEach(cookie -> stringBuilder.append("Set-Cookie: ").append(cookie.getCookieAttributeString()).append(NEW_LINE));
         return stringBuilder.toString();
+    }
+
+    public boolean isLogined() {
+        return cookies.stream().anyMatch(Cookie::isLogined);
     }
 }
