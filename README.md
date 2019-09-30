@@ -100,7 +100,7 @@
 
 피드백
 
-- [ ] Cookie 일급 컬렉션으로 묶기
+- [x] request Cookie 일급 컬렉션으로 묶기
 - [x] RequestUri에서 static 요청인 경우 확인하는 로직을 .으로 하지 말고 다른것으로 바꾸기
 - [x] 서블릿에서 하던 ```isSessionValid()``` 기능을 Session에서 제공하는 것으로 바꾸기
 - [x] 서블릿에서 세션 부분을 상수로 빼기

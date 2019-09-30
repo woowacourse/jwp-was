@@ -3,11 +3,13 @@ package webserver.request;
 public class HttpRequest {
     private RequestLine requestLine;
     private RequestHeader header;
+    private RequestCookie cookie;
     private RequestBody body;
 
-    public HttpRequest(RequestLine requestLine, RequestHeader header, RequestBody body) {
+    public HttpRequest(RequestLine requestLine, RequestHeader header, RequestCookie cookie, RequestBody body) {
         this.requestLine = requestLine;
         this.header = header;
+        this.cookie = cookie;
         this.body = body;
     }
 
@@ -32,7 +34,7 @@ public class HttpRequest {
     }
 
     public String getCookie(String key) {
-        return header.getCookie(key);
+        return cookie.getCookie(key);
     }
 
     public boolean isFile() {
