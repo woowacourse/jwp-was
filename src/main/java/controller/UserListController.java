@@ -38,7 +38,7 @@ public class UserListController implements Controller {
             Handlebars handlebars = new Handlebars(loader);
             try {
                 Template template = handlebars.compile("user/list");
-                Map<String, Collection<User>> users = Collections.singletonMap("users",DataBase.findAll());
+                Map<String, Collection<User>> users = Collections.singletonMap("users", DataBase.findAll());
                 httpResponse.forward(new ResponseBody(template.apply(users).getBytes()));
                 return;
             } catch (IOException e) {

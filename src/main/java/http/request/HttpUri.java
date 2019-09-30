@@ -1,7 +1,7 @@
 package http.request;
 
-import http.parser.QueryParamsParser;
 import http.common.UriExtension;
+import http.parser.QueryParamsParser;
 
 import java.net.URI;
 import java.util.Map;

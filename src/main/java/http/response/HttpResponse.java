@@ -92,7 +92,7 @@ public class HttpResponse {
     }
 
     private void writeBody() throws IOException {
-        if (responseBody!=null) {
+        if (responseBody != null) {
             dos.writeBytes(NEW_LINE);
             dos.write(responseBody.getBody(), 0, responseBody.getLength());
         }

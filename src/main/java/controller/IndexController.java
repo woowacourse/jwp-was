@@ -1,10 +1,10 @@
 package controller;
 
+import http.parser.HttpUriParser;
+import http.parser.ResponseBodyParser;
 import http.request.HttpMethod;
 import http.request.HttpRequest;
-import http.parser.HttpUriParser;
 import http.response.HttpResponse;
-import http.parser.ResponseBodyParser;
 
 public class IndexController implements Controller {
 

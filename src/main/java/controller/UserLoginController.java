@@ -2,9 +2,9 @@ package controller;
 
 import db.DataBase;
 import http.parser.CookieParser;
+import http.parser.HttpUriParser;
 import http.request.HttpMethod;
 import http.request.HttpRequest;
-import http.parser.HttpUriParser;
 import http.response.HttpResponse;
 import model.User;
 
