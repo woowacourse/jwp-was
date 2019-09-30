@@ -3,7 +3,7 @@ package http.controller;
 import db.DataBase;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import model.UserFactory;
+import model.user.UserFactory;
 
 public class UserCreateController extends AbstractController {
     public static final String URL = "/user/create";

@@ -1,8 +1,10 @@
-package model;
+package model.user;
 
 import java.util.Objects;
 
 public class User {
+    public static final String USER_ID = "userId";
+
     private final String userId;
     private final String password;
     private final String name;

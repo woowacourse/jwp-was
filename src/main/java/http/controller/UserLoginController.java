@@ -1,19 +1,14 @@
 package http.controller;
 
 import db.DataBase;
-import http.common.Cookie;
 import http.common.HttpSession;
 import http.exception.NotFoundUserException;
 import http.exception.NotMatchPasswordException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import model.User;
-import webserver.SessionHandler;
+import model.user.User;
 
 import java.util.Optional;
-
-import static http.common.Cookie.LOGINED;
-import static http.common.Cookie.LOGINED_TRUE;
 
 public class UserLoginController extends AbstractController {
     public static final String URL = "/user/login";
@@ -28,7 +23,9 @@ public class UserLoginController extends AbstractController {
         String requestUserId = request.getData("userId");
         String requestPassword = request.getData("password");
         checkLogin(response, requestUserId, requestPassword);
-        setLoginSuccessResponse(response);
+        HttpSession session = request.getSession();
+
+        setLoginSuccessResponse(response, requestUserId, session);
     }
 
     private void checkLogin(HttpResponse response, String requestUserId, String requestPassword) {
@@ -43,12 +40,8 @@ public class UserLoginController extends AbstractController {
         }
     }
 
-    private void setLoginSuccessResponse(HttpResponse response) {
-        HttpSession session = new HttpSession();
-        Cookie loginedCookie = new Cookie(LOGINED, LOGINED_TRUE);
-        loginedCookie.addOption(Cookie.PATH, "/");
-        session.setAttribute(loginedCookie.getName(), loginedCookie);
-        SessionHandler.getInstance().addSession(session.getId(), session);
+    private void setLoginSuccessResponse(HttpResponse response, String requestUserId, HttpSession session) {
+        session.setAttribute("userId", requestUserId);
 
         response.addCookie("sessionId", session.getId());
         response.sendRedirect("/index.html");

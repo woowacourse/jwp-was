@@ -2,6 +2,9 @@ package model;
 
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
+import model.user.User;
+import model.user.UserCreateException;
+import model.user.UserFactory;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;

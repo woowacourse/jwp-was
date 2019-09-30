@@ -1,7 +1,7 @@
 package http.common;
 
 import http.exception.NotExistSessionValue;
-import model.User;
+import model.user.User;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

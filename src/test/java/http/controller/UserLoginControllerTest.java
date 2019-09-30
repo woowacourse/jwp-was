@@ -1,7 +1,6 @@
 package http.controller;
 
 import db.DataBase;
-import http.common.Cookie;
 import http.common.HttpSession;
 import http.common.HttpStatus;
 import http.exception.NotFoundUserException;
@@ -9,7 +8,7 @@ import http.exception.NotMatchPasswordException;
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
 import http.response.HttpResponse;
-import model.User;
+import model.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import webserver.SessionHandler;
@@ -19,8 +18,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static http.common.Cookie.LOGINED;
-import static http.common.Cookie.LOGINED_TRUE;
+import static model.user.User.USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -44,8 +42,8 @@ class UserLoginControllerTest {
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
         String sessionId = response.getCookie("sessionId").getValue();
         HttpSession session = SessionHandler.getInstance().getSession(sessionId);
-        Cookie mayBeCookie = (Cookie) session.getAttribute(LOGINED);
-        assertThat(mayBeCookie.getValue()).isEqualTo(LOGINED_TRUE);
+        String userId = (String) session.getAttribute(USER_ID);
+        assertThat(userId).isEqualTo("van");
     }
 
     @Test

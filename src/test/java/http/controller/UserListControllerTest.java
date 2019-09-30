@@ -5,7 +5,7 @@ import http.common.HttpStatus;
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
 import http.response.HttpResponse;
-import model.User;
+import model.user.User;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;

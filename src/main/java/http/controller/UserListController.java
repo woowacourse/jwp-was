@@ -5,40 +5,34 @@ import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import db.DataBase;
-import http.common.Cookie;
 import http.common.HttpSession;
 import http.common.HttpStatus;
 import http.exception.InvalidHeaderException;
 import http.exception.NotExistSessionValue;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import model.Users;
+import model.user.User;
+import model.user.Users;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.SessionHandler;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static http.common.Cookie.LOGINED;
-import static http.common.Cookie.LOGINED_TRUE;
+import static model.user.User.USER_ID;
 
 public class UserListController extends AbstractController {
     public static final String URL = "/user/list";
     private static final Logger log = LoggerFactory.getLogger(UserListController.class);
-    private static final String SESSION_ID = "sessionId";
 
     @Override
     public void doGet(HttpRequest request, HttpResponse response) {
         try {
-            Cookie cookie = request.getCookie(SESSION_ID);
-            String sessionId = cookie.getValue();
-            HttpSession session = SessionHandler.getInstance().getSession(sessionId);
-            Cookie loginedCookie = (Cookie) session.getAttribute(LOGINED);
-            if (loginedCookie.getValue().equals(LOGINED_TRUE)) {
-                String profilePage = renderingPage();
-                response.forward(profilePage.getBytes());
-            }
+            HttpSession session = request.getSession();
+            String userId = (String) session.getAttribute(USER_ID);
+            User user = DataBase.findUserById(userId);
+            String profilePage = renderingPage();
+            response.forward(profilePage.getBytes());
         } catch (InvalidHeaderException | NotExistSessionValue e) {
             log.error(e.getMessage());
             setNotLoginedResponse(response);

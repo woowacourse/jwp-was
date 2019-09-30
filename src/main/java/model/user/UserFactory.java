@@ -1,4 +1,4 @@
-package model;
+package model.user;
 
 import http.request.HttpRequest;
 import org.slf4j.Logger;
