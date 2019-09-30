@@ -33,7 +33,7 @@ public class HttpRequestHeaderFactory {
                 Arrays.stream(HeaderCookies.split(";"))
                         .map(token -> {
                             String[] cookieKeyValue = token.split("=");
-                            return new HttpCookie(cookieKeyValue[0], cookieKeyValue[1]);
+                            return new HttpCookie(cookieKeyValue[0].trim(), cookieKeyValue[1]);
                         })
                         .collect(toList())
         );

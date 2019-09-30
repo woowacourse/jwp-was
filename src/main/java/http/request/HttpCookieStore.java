@@ -29,7 +29,8 @@ public class HttpCookieStore {
     }
 
     public boolean containsValue(String key) {
-        return cookies.contains(key);
+        return cookies.stream()
+                .anyMatch(cookie -> cookie.hasValueByKey(key));
     }
 
     public HttpCookie getCookie(String key) {
