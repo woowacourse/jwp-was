@@ -1,18 +1,17 @@
 package controller.custom;
 
-import annotation.RequestMapping;
 import controller.Controller;
-import model.http.HttpRequest;
-import model.http.HttpResponse;
-import model.http.ViewLocation;
-import utils.HttpMethod;
-import utils.HttpStatus;
+import controller.annotation.RequestMapping;
+import webserver.http.HttpMethod;
+import webserver.http.HttpStatus;
+import webserver.http.ModelAndView;
+import webserver.http.request.HttpRequest;
+import webserver.http.response.HttpResponse;
 
-public class HomeController implements Controller {
-    private static final String INDEX_PAGE = "/index.html";
-
+public class
+HomeController implements Controller {
     @RequestMapping(method = HttpMethod.GET, url = "/")
-    private void rootRequest(HttpRequest request, HttpResponse response) {
-        response.sendRedirect(ViewLocation.TEMPLATE.getLocation() + INDEX_PAGE, HttpStatus.OK);
+    private ModelAndView rootRequest(HttpRequest request, HttpResponse response) {
+        return new ModelAndView("/index.html", HttpStatus.OK);
     }
 }
