@@ -9,48 +9,21 @@ import http.response.ResponseHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
-import java.net.Socket;
-import java.nio.charset.StandardCharsets;
+import java.io.BufferedReader;
+import java.io.IOException;
 
-public class HttpProcess implements Runnable {
+public class HttpProcess {
     private static final Logger logger = LoggerFactory.getLogger(HttpProcess.class);
 
-    private Socket connection;
+    public HttpResponse create(BufferedReader br) throws IOException {
+        HttpRequest httpRequest = RequestHandler.getInstance().create(br);
+        HttpResponse httpResponse = ResponseHandler.getInstance().create(httpRequest);
 
-    public HttpProcess(Socket connection) {
-        this.connection = connection;
-    }
+        logger.debug("request path : {}", httpRequest.getPath());
 
-    public void run() {
-        logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
-                connection.getPort());
+        Controller controller = ControllerHandler.findByPath(httpRequest.getPath());
+        controller.service(httpRequest, httpResponse);
 
-        try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-
-            HttpRequest httpRequest = RequestHandler.getInstance().create(br);
-            HttpResponse httpResponse = ResponseHandler.getInstance().create(httpRequest);
-
-            logger.debug("request path : {}", httpRequest.getPath());
-
-            Controller controller = ControllerHandler.findByPath(httpRequest.getPath());
-            controller.service(httpRequest, httpResponse);
-
-            DataOutputStream dos = new DataOutputStream(out);
-            dos.writeBytes(httpResponse.toString());
-            responseBody(dos, httpResponse.getBody());
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+        return httpResponse;
     }
 }

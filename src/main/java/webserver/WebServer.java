@@ -25,7 +25,7 @@ public class WebServer {
             // 클라이언트가 연결될때까지 대기한다.
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
-                Thread thread = new Thread(new HttpProcess(connection));
+                Thread thread = new Thread(new WebProcessor(connection));
                 thread.start();
             }
         }
