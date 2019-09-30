@@ -36,8 +36,9 @@ class UserLoginControllerTest {
         InputStream in = new FileInputStream(new File(testDirectory + "login_Http_Header.txt"));
         HttpRequest request = HttpRequestFactory.createHttpRequest(in);
         UserLoginController controller = new UserLoginController();
-        HttpResponse response = new HttpResponse();
+        HttpResponse response = new HttpResponse(request);
         controller.doPost(request, response);
+        response.convert();
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
         String sessionId = response.getCookie("sessionId").getValue();
@@ -51,7 +52,7 @@ class UserLoginControllerTest {
         InputStream in = new FileInputStream(new File(testDirectory + "login_fail_Http_Header.txt"));
         HttpRequest request = HttpRequestFactory.createHttpRequest(in);
         UserLoginController controller = new UserLoginController();
-        HttpResponse response = new HttpResponse();
+        HttpResponse response = new HttpResponse(request);
         assertThrows(NotMatchPasswordException.class, () -> controller.doPost(request, response));
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
@@ -63,7 +64,7 @@ class UserLoginControllerTest {
         InputStream in = new FileInputStream(new File(testDirectory + "login_NotExist_Http_Header.txt"));
         HttpRequest request = HttpRequestFactory.createHttpRequest(in);
         UserLoginController controller = new UserLoginController();
-        HttpResponse response = new HttpResponse();
+        HttpResponse response = new HttpResponse(request);
         assertThrows(NotFoundUserException.class, () -> controller.doPost(request, response));
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);

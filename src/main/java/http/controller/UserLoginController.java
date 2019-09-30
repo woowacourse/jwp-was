@@ -43,13 +43,10 @@ public class UserLoginController extends AbstractController {
     private void setLoginSuccessResponse(HttpResponse response, String requestUserId, HttpSession session) {
         session.setAttribute("userId", requestUserId);
 
-        response.addCookie("sessionId", session.getId());
         response.sendRedirect("/index.html");
     }
 
     private void setLoginFailResponse(HttpResponse response) {
         response.sendRedirect("/user/login_failed.html");
     }
-
-
 }

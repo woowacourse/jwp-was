@@ -22,7 +22,7 @@ class UserListControllerTest {
         InputStream in = new FileInputStream(new File(testDirectory + "cookie_notExist_Http_Header.txt"));
         HttpRequest request = HttpRequestFactory.createHttpRequest(in);
 
-        HttpResponse response = new HttpResponse();
+        HttpResponse response = new HttpResponse(request);
         UserListController controller = new UserListController();
         controller.service(request, response);
 
@@ -43,16 +43,17 @@ class UserListControllerTest {
         //로그인을 진행한다.
         InputStream in = new FileInputStream(new File(testDirectory + "login_Http_Header.txt"));
         HttpRequest request = HttpRequestFactory.createHttpRequest(in);
-        HttpResponse response = new HttpResponse();
+        HttpResponse response = new HttpResponse(request);
         UserLoginController loginController = new UserLoginController();
         loginController.service(request, response);
+        response.convert();
         String sessionId = response.getCookie("sessionId").getValue();
         userListRequest += sessionId + "\n";
 
         in = new ByteArrayInputStream(userListRequest.getBytes(UTF_8));
 
         HttpRequest listRequest = HttpRequestFactory.createHttpRequest(in);
-        HttpResponse listResponse = new HttpResponse();
+        HttpResponse listResponse = new HttpResponse(request);
 
         UserListController controller = new UserListController();
         controller.service(listRequest, listResponse);
@@ -71,7 +72,7 @@ class UserListControllerTest {
         InputStream in = new ByteArrayInputStream(userListRequest.getBytes(UTF_8));
 
         HttpRequest request = HttpRequestFactory.createHttpRequest(in);
-        HttpResponse response = new HttpResponse();
+        HttpResponse response = new HttpResponse(request);
 
         UserListController controller = new UserListController();
         controller.service(request, response);

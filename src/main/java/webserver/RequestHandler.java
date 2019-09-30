@@ -28,7 +28,7 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest request = HttpRequestFactory.createHttpRequest(in);
-            HttpResponse response = new HttpResponse();
+            HttpResponse response = new HttpResponse(request);
             DataOutputStream dos = new DataOutputStream(out);
 
             Controller controller = RequestMapper.mappingController(request.getPath());

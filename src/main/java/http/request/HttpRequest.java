@@ -10,6 +10,8 @@ public class HttpRequest {
     private final RequestLine requestLine;
     private final HeaderFields headerFields;
     private final RequestBody datas;
+    private HttpSession session;
+    private boolean sessionCreate = false;
 
     public HttpRequest(RequestLine requestLine, HeaderFields headerFields, RequestBody datas) {
         this.requestLine = requestLine;
@@ -45,13 +47,22 @@ public class HttpRequest {
     }
 
     public HttpSession getSession() {
-        try {
-            Cookie sessionCookie = headerFields.getCookie("sessionId");
-            return SessionHandler.getInstance().getSession(sessionCookie.getValue());
-        } catch (InvalidHeaderException e) {
-            HttpSession session = new HttpSession();
-            SessionHandler.getInstance().addSession(session.getId(), session);
+        if (session != null) {
             return session;
         }
+        try {
+            Cookie sessionCookie = headerFields.getCookie("sessionId");
+            session = SessionHandler.getInstance().getSession(sessionCookie.getValue());
+            return session;
+        } catch (InvalidHeaderException e) {
+            session = new HttpSession();
+            SessionHandler.getInstance().addSession(session.getId(), session);
+            sessionCreate = true;
+            return session;
+        }
+    }
+
+    public boolean isCreatedSession() {
+        return sessionCreate;
     }
 }

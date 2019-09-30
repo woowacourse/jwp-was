@@ -4,6 +4,7 @@ import http.common.Cookie;
 import http.common.HeaderFields;
 import http.common.HttpStatus;
 import http.common.HttpVersion;
+import http.request.HttpRequest;
 import org.apache.tika.Tika;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,11 +26,13 @@ public class HttpResponse {
     public static final String LOCATION = "Location";
     public static final String CHARSET_UTF_8 = "charset=utf-8";
 
+    private HttpRequest request;
     private HttpStatus status;
     private final HeaderFields headerFields;
     private byte[] body;
 
-    public HttpResponse() {
+    public HttpResponse(HttpRequest request) {
+        this.request = request;
         headerFields = new HeaderFields(new ArrayList<>());
     }
 
@@ -74,6 +77,7 @@ public class HttpResponse {
     }
 
     public String convert() {
+        setSessionIdCookie();
         if (StringUtils.isEmpty(body)) {
             return convertHeader();
         }
@@ -90,6 +94,12 @@ public class HttpResponse {
 
         logger.debug("\n--response Header--\n{}", sb.toString());
         return sb.toString();
+    }
+
+    private void setSessionIdCookie() {
+        if (request.isCreatedSession()) {
+            addCookie("sessionId", request.getSession().getId());
+        }
     }
 
     public void addHeader(String fieldName, String field) {
