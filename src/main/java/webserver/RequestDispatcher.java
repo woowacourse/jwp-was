@@ -16,15 +16,15 @@ import webserver.message.response.Response;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class RequestDispatcher {
     private static final String TEMPLATES_PATH = "./templates";
     private static final String STATIC_PATH = "./static";
 
-    private static final Map<String, Controller> requestUrls = new HashMap<>();
+    private static final Map<String, Controller> requestUrls = new ConcurrentHashMap<>();
 
     static {
         requestUrls.put("/user/create", new UserController());

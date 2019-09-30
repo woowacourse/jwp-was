@@ -1,15 +1,15 @@
 package web.db;
 
-import com.google.common.collect.Maps;
 import web.model.User;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public class DataBase {
-    private static Map<String, Optional<User>> users = Maps.newHashMap();
+    private static Map<String, Optional<User>> users = new ConcurrentHashMap<>();
 
     public static void addUser(User user) {
         users.put(user.getUserId(), Optional.of(user));
@@ -24,6 +24,6 @@ public class DataBase {
     }
 
     public static void deleteAll() {
-        users.values().forEach(users::remove);
+        users.clear();
     }
 }
