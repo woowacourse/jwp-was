@@ -68,6 +68,10 @@ public class HttpResponse {
         return responseStatus;
     }
 
+    public void registerSession(String jSessionId) {
+        addHeader("Set-Cookie", String.format("JSESSIONID=%s; Path=/", jSessionId));
+    }
+
     public void forward(String filePath) {
         responseBody = new ResponseBody(filePath);
         responseHeaders.put(CONTENT_LENGTH, responseBody.getBodyLength());

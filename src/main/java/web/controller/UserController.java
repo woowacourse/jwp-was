@@ -58,8 +58,6 @@ public class UserController {
         }
 
         HttpSession httpSession = request.getSession();
-        // TODO: 2019-09-29 Hmm...
-        response.addHeader("Set-Cookie", "JSESSIONID=" + httpSession.getId() + "; Path=/");
         httpSession.setAttribute("user", user);
         response.sendRedirect("/");
     }

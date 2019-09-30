@@ -8,6 +8,8 @@ import webserver.exception.MethodNotAllowedException;
 import webserver.exception.PageNotFoundException;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
+import webserver.storage.HttpSession;
+import webserver.storage.SessionManager;
 
 import static webserver.controller.RequestMapping.getMapping;
 import static webserver.controller.RequestMapping.postMapping;
@@ -51,20 +53,40 @@ public class RequestMapper {
 
     public HttpResponse service(HttpRequest request) {
         HttpResponse response = new HttpResponse(request.getVersion());
+        registerSession(request, response);
         RequestMapping requestMapping = request.getRequestMapping();
 
         try {
             CONTROLLER_HANDLER.get(requestMapping).accept(request, response);
             return response;
         } catch (MethodNotAllowedException e) {
-            logger.error("path: {}, {}", requestMapping, e.getMessage());
+            logger.error("METHOD_NOT_ALLOWED, path: {}, {}", requestMapping, e.getMessage());
             return HttpResponse.sendErrorResponse(METHOD_NOT_ALLOWED);
         } catch (PageNotFoundException e) {
-            logger.error("path: {}, 존재하지 않는 path 요청", request.getPath());
+            logger.error("NOT_FOUND, path: {}, 존재하지 않는 path 요청", request.getPath());
             return HttpResponse.sendErrorResponse(NOT_FOUND);
         } catch (Exception e) {
-            logger.error("path: {}, {}", requestMapping, e.getMessage());
+            logger.error("INTERNAL_SERVER_ERROR, path: {}, {}", requestMapping, e.getMessage());
             return HttpResponse.sendErrorResponse(INTERNAL_SERVER_ERROR);
         }
+    }
+
+    private void registerSession(HttpRequest request, HttpResponse response) {
+        HttpSession session = createSession(request, response);
+        request.setSession(session);
+        response.registerSession(session.getId());
+    }
+
+    private HttpSession createSession(HttpRequest request, HttpResponse response) {
+        String jSessionId = request.getCookie().getJSessionId();
+        if (jSessionId == null) {
+            return request.createSession();
+        }
+
+        SessionManager sessionManager = SessionManager.getInstance();
+        if (sessionManager.containsKey(jSessionId)) {
+            return sessionManager.getSession(jSessionId);
+        }
+        return sessionManager.createSession(jSessionId);
     }
 }

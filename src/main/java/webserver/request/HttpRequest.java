@@ -16,6 +16,7 @@ public class HttpRequest {
     private RequestHeaders requestHeaders;
     private RequestData requestParams;
     private RequestData requestBody;
+    private HttpSession session;
 
     public HttpRequest(List<String> lines) {
         this.requestLine = new RequestLine(lines.get(0));
@@ -91,10 +92,18 @@ public class HttpRequest {
         return requestLine.getVersion();
     }
 
-    public HttpSession getSession() {
+    public HttpSession createSession() {
         return Optional.ofNullable(getCookie().getJSessionId())
                 .map(id -> SessionManager.getInstance().getSession(id))
                 .orElse(SessionManager.getInstance().createSession());
+    }
+
+    public void setSession(HttpSession session) {
+        this.session = session;
+    }
+
+    public HttpSession getSession() {
+        return session;
     }
 
     @Override
