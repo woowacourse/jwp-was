@@ -1,7 +1,6 @@
 package webserver.session;
 
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SessionStorage {
@@ -11,10 +10,10 @@ public class SessionStorage {
         sessions = new ConcurrentHashMap<>();
     }
 
-    public static HttpSession create(IdGenerationStrategy generator) {
-        String randomId = generator.generate();
-        HttpSession session = new HttpSession(randomId);
-        sessions.put(randomId, session);
+    public static HttpSession create(IdGenerationStrategy idGenerator) {
+        String id = idGenerator.generate();
+        HttpSession session = new HttpSession(id);
+        sessions.put(id, session);
         return session;
     }
 
