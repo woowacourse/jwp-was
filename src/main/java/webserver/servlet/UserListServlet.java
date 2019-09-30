@@ -1,65 +1,34 @@
 package webserver.servlet;
 
-import com.github.jknack.handlebars.Handlebars;
-import com.github.jknack.handlebars.Helper;
-import com.github.jknack.handlebars.Template;
-import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
-import com.github.jknack.handlebars.io.TemplateLoader;
 import db.DataBase;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
-import webserver.response.ResponseHeader;
 import webserver.session.HttpSessionHelper;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import webserver.view.RedirectView;
+import webserver.view.UserListView;
+import webserver.view.View;
 
 public class UserListServlet extends RequestServlet {
     private static final String COOKIE_USER_SESSION = "user_session";
     private static final String VIEW_USER_LIST = "user/list";
     private static final String VIEW_LOGIN = "/user/login.html";
     private static final String TEMPLATE_VALUE_MODEL = "users";
-    private static final String TEMPLATE_VALUE_INDEX = "inc";
-    private static final String TEMPLATE_PREFIX = "/templates";
-    private static final String TEMPLATE_SUFFIX = ".html";
 
     @Override
-    public HttpResponse doGet(HttpRequest httpRequest) throws IOException {
-        if (HttpSessionHelper.isValid(httpRequest.getCookie(COOKIE_USER_SESSION))) {
-            return viewList();
+    public View doGet(HttpRequest request, HttpResponse response) {
+        if (HttpSessionHelper.isValid(request.getCookie(COOKIE_USER_SESSION))) {
+            return viewList(request);
         }
-        return redirectHome();
+        return redirectHome(response);
     }
 
-    private HttpResponse viewList() throws IOException {
-        ResponseHeader header = new ResponseHeader();
-        byte[] body = generateBody();
-        header.setContentLengthAndType(body.length, "text/html");
-        header.setContentEncoding("utf-8");
-        return HttpResponse.ok(header, body);
+    private View viewList(HttpRequest request) {
+        request.setAttribute(TEMPLATE_VALUE_MODEL, DataBase.findAll());
+        return new UserListView(VIEW_USER_LIST);
     }
 
-    public byte[] generateBody() throws IOException {
-        Map<String, Object> users = new HashMap<>();
-        users.put(TEMPLATE_VALUE_MODEL, DataBase.findAll());
-        return applyTemplate(users).getBytes();
-    }
-
-    private String applyTemplate(Map<String, Object> value) throws IOException {
-        TemplateLoader loader = new ClassPathTemplateLoader();
-        loader.setPrefix(TEMPLATE_PREFIX);
-        loader.setSuffix(TEMPLATE_SUFFIX);
-        Handlebars handlebars = new Handlebars(loader);
-        handlebars.registerHelper(TEMPLATE_VALUE_INDEX, (Helper<Integer>) (context, options) -> context + 1);
-        Template template = handlebars.compile(VIEW_USER_LIST);
-        return template.apply(value);
-    }
-
-    private HttpResponse redirectHome() {
-        ResponseHeader header = new ResponseHeader();
-        header.removeCookie(COOKIE_USER_SESSION);
-        header.setLocation(VIEW_LOGIN);
-        return HttpResponse.found(header);
+    private View redirectHome(HttpResponse response) {
+        response.removeCookie(COOKIE_USER_SESSION);
+        return new RedirectView(VIEW_LOGIN);
     }
 }

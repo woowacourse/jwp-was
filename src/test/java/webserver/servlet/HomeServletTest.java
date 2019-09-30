@@ -1,12 +1,11 @@
 package webserver.servlet;
 
 import org.junit.jupiter.api.Test;
-import utils.FileIoUtils;
 import webserver.parser.HttpRequestParser;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
-import webserver.response.HttpStatus;
-import webserver.response.ResponseHeader;
+import webserver.view.FileView;
+import webserver.view.View;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,11 +25,10 @@ class HomeServletTest {
     void doGet() throws IOException, URISyntaxException {
         InputStream inputStream = new FileInputStream(new File(testDirectory + "request_root_test.txt"));
         HttpRequest httpRequest = HttpRequestParser.parse(new BufferedReader(new InputStreamReader(inputStream)));
+        HttpResponse httpResponse = new HttpResponse(null);
         HomeServlet homeServlet = new HomeServlet();
+        View view = homeServlet.doGet(httpRequest, httpResponse);
         String filePath = generateTemplateFilePath(httpRequest.getAbsPath() + "index.html");
-        byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
-        ResponseHeader header = new ResponseHeader();
-        header.setContentLengthAndType(body.length, FileIoUtils.loadMIMEFromClasspath(filePath));
-        assertThat(homeServlet.doGet(httpRequest)).isEqualTo(new HttpResponse(HttpStatus.OK, header, body));
+        assertThat(view).isEqualTo(new FileView(filePath));
     }
 }

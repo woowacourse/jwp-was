@@ -7,7 +7,8 @@ import org.slf4j.LoggerFactory;
 import webserver.RequestHandler;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
-import webserver.response.ResponseHeader;
+import webserver.view.RedirectView;
+import webserver.view.View;
 
 public class UserCreateServlet extends RequestServlet {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -18,13 +19,11 @@ public class UserCreateServlet extends RequestServlet {
     private static final String VIEW_CREATE_SUCCESS = "/index.html";
 
     @Override
-    public HttpResponse doPost(HttpRequest httpRequest) {
-        User user = new User(httpRequest.getBody(REQUEST_PARAMS_USER_ID), httpRequest.getBody(REQUEST_PARAMS_USER_PASSWORD), httpRequest.getBody(REQUEST_PARAMS_USER_NAME), httpRequest.getBody(REQUEST_PARAMS_USER_EMAIL));
+    public View doPost(HttpRequest request, HttpResponse response) {
+        User user = new User(request.getBody(REQUEST_PARAMS_USER_ID), request.getBody(REQUEST_PARAMS_USER_PASSWORD), request.getBody(REQUEST_PARAMS_USER_NAME), request.getBody(REQUEST_PARAMS_USER_EMAIL));
         DataBase.addUser(user);
         logger.debug(">>> User : {}", user);
         logger.debug(">>> Saved User : {}", DataBase.findUserById(user.getUserId()));
-        ResponseHeader header = new ResponseHeader();
-        header.setLocation(VIEW_CREATE_SUCCESS);
-        return HttpResponse.found(header);
+        return new RedirectView(VIEW_CREATE_SUCCESS);
     }
 }

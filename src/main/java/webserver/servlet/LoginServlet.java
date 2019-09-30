@@ -4,9 +4,10 @@ import db.DataBase;
 import model.User;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
-import webserver.response.ResponseHeader;
 import webserver.session.HttpSession;
 import webserver.session.HttpSessionHelper;
+import webserver.view.RedirectView;
+import webserver.view.View;
 
 public class LoginServlet extends RequestServlet {
     private static final String REQUEST_PARAMS_USER_ID = "userId";
@@ -17,21 +18,20 @@ public class LoginServlet extends RequestServlet {
     private static final String SESSION_USER_NAME = "userId";
 
     @Override
-    public HttpResponse doPost(HttpRequest httpRequest) {
-        String loginId = httpRequest.getBody(REQUEST_PARAMS_USER_ID);
-        String loginPassword = httpRequest.getBody(REQUEST_PARAMS_PASSWORD);
+    public View doPost(HttpRequest request, HttpResponse response) {
+        String loginId = request.getBody(REQUEST_PARAMS_USER_ID);
+        String loginPassword = request.getBody(REQUEST_PARAMS_PASSWORD);
         User user = DataBase.findUserById(loginId);
         if (user != null && user.isMatchPassword(loginPassword)) {
-            return loginSuccess(user);
+            return loginSuccess(request, response, user);
         }
-        return loginFail();
+        return loginFail(response);
     }
 
-    private HttpResponse loginSuccess(User user) {
-        ResponseHeader header = new ResponseHeader();
-        header.setCookie(COOKIE_USER_SESSION, getSessionId(user));
-        header.setLocation(VIEW_LOGIN_SUCCESS);
-        return HttpResponse.found(header);
+    private View loginSuccess(HttpRequest request, HttpResponse response, User user) {
+        request.setAttribute("user", user);
+        response.setCookie(COOKIE_USER_SESSION, getSessionId(user));
+        return new RedirectView(VIEW_LOGIN_SUCCESS);
     }
 
     private String getSessionId(User user) {
@@ -40,10 +40,8 @@ public class LoginServlet extends RequestServlet {
         return HttpSessionHelper.create(userSession);
     }
 
-    private HttpResponse loginFail() {
-        ResponseHeader header = new ResponseHeader();
-        header.removeCookie(COOKIE_USER_SESSION);
-        header.setLocation(VIEW_LOGIN_FAIL);
-        return HttpResponse.found(header);
+    private View loginFail(HttpResponse response) {
+        response.removeCookie(COOKIE_USER_SESSION);
+        return new RedirectView(VIEW_LOGIN_FAIL);
     }
 }

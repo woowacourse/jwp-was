@@ -1,13 +1,12 @@
 package webserver.servlet;
 
 import org.junit.jupiter.api.Test;
-import utils.FileIoUtils;
 import utils.HttpRequestUtils;
 import webserver.parser.HttpRequestParser;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
-import webserver.response.HttpStatus;
-import webserver.response.ResponseHeader;
+import webserver.view.FileView;
+import webserver.view.View;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,11 +25,10 @@ class FileServletTest {
     void run () throws IOException, URISyntaxException {
         InputStream inputStream = new FileInputStream(new File(testDirectory + "request_index_test.txt"));
         HttpRequest httpRequest = HttpRequestParser.parse(new BufferedReader(new InputStreamReader(inputStream)));
+        HttpResponse httpResponse = new HttpResponse(null);
         FileServlet fileServlet = new FileServlet();
-        byte[] body = FileIoUtils.loadFileFromClasspath(HttpRequestUtils.generateTemplateFilePath(httpRequest.getAbsPath()));
-        HttpResponse httpResponse = fileServlet.run(httpRequest);
-        ResponseHeader header = new ResponseHeader();
-        header.setContentLengthAndType(body.length, FileIoUtils.loadMIMEFromClasspath(HttpRequestUtils.generateTemplateFilePath(httpRequest.getAbsPath())));
-        assertThat(httpResponse).isEqualTo(new HttpResponse(HttpStatus.OK,header, body));
+        View fileView = fileServlet.run(httpRequest, httpResponse);
+        String filePath = HttpRequestUtils.generateTemplateFilePath(httpRequest.getAbsPath());
+        assertThat(fileView).isEqualTo(new FileView(filePath));
     }
 }

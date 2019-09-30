@@ -2,10 +2,8 @@ package webserver.servlet;
 
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
+import webserver.view.View;
 
 public interface HttpServlet {
-    HttpResponse run(HttpRequest httpRequest) throws IOException, URISyntaxException;
+    View run(HttpRequest request, HttpResponse response);
 }

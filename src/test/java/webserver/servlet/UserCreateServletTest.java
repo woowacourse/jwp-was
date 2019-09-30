@@ -4,8 +4,7 @@ import org.junit.jupiter.api.Test;
 import webserver.parser.HttpRequestParser;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
-import webserver.response.HttpStatus;
-import webserver.response.ResponseHeader;
+import webserver.view.RedirectView;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,9 +23,8 @@ class UserCreateServletTest {
     void doPost() throws IOException, URISyntaxException {
         InputStream inputStream = new FileInputStream(new File(testDirectory + "request_form_post_test.txt"));
         HttpRequest httpRequest = HttpRequestParser.parse(new BufferedReader(new InputStreamReader(inputStream)));
+        HttpResponse httpResponse = new HttpResponse(null);
         UserCreateServlet userCreateServlet = new UserCreateServlet();
-        ResponseHeader header = new ResponseHeader();
-        header.setLocation("/index.html");
-        assertThat(userCreateServlet.doPost(httpRequest)).isEqualTo(new HttpResponse(HttpStatus.FOUND, header, null));
+        assertThat(userCreateServlet.doPost(httpRequest, httpResponse)).isEqualTo(new RedirectView("/index.html"));
     }
 }
