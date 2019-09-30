@@ -1,11 +1,11 @@
 package webserver.http;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class HttpSession {
-    private final Map<String, Object> map = new HashMap<>();
+    private final Map<String, Object> map = new ConcurrentHashMap<>();
 
     private final String id;
 
