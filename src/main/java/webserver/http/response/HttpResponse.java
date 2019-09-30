@@ -23,9 +23,11 @@ public class HttpResponse {
     private HttpVersion httpVersion;
     private ResponseStatusLine responseStatusLine;
     private ResponseHeader responseHeader;
+    private DataOutputStream dos;
 
-    public HttpResponse(HttpVersion httpVersion) {
+    public HttpResponse(HttpVersion httpVersion, OutputStream out) {
         this.httpVersion = httpVersion;
+        this.dos = new DataOutputStream(out);
         responseHeader = new ResponseHeader();
     }
 
@@ -56,8 +58,7 @@ public class HttpResponse {
                 responseHeader.getResponseHeaders() + CRLF + CRLF;
     }
 
-    public void sendResponse(OutputStream out, HttpRequest httpRequest) throws IOException, URISyntaxException {
-        DataOutputStream dos = new DataOutputStream(out);
+    public void sendResponse(HttpRequest httpRequest) throws IOException, URISyntaxException {
         dos.writeBytes(doResponse());
         if (isOK()) {
             byte[] body = responseBody(httpRequest.getRequestPath().getFullPath());
@@ -67,8 +68,7 @@ public class HttpResponse {
         dos.flush();
     }
 
-    public void sendResponse(OutputStream out, byte[] body) throws IOException {
-        DataOutputStream dos = new DataOutputStream(out);
+    public void sendResponse(byte[] body) throws IOException {
         dos.writeBytes(doResponse());
         addHeader(HttpHeaderField.CONTENT_LENGTH, String.valueOf(body.length));
         dos.write(body, 0, body.length);

@@ -17,24 +17,21 @@ public class HttpRequest {
     public HttpRequest(RequestLine requestLine, RequestHeader requestHeader) {
         this.requestLine = requestLine;
         this.requestHeader = requestHeader;
-        hasCookie();
+        this.cookie = createCookie();
     }
 
     public HttpRequest(RequestLine requestLine, RequestHeader requestHeader, RequestData requestData) {
         this.requestLine = requestLine;
         this.requestHeader = requestHeader;
         this.requestData = requestData;
-        hasCookie();
+        this.cookie = createCookie();
     }
 
-    private void hasCookie() {
-        if (requestHeader.hasCookie()) {
-            createCookie(requestHeader.getHeadersKey(COOKIE));
+    private Cookie createCookie() {
+        if (requestHeader.hasHeaderField(COOKIE)) {
+            return new Cookie(requestHeader.getHeadersKey(COOKIE));
         }
-    }
-
-    private void createCookie(String cookie) {
-        this.cookie = new Cookie(cookie);
+        return new Cookie();
     }
 
     public RequestMethod getRequestMethod() {

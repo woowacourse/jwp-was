@@ -10,7 +10,6 @@ import webserver.http.session.HttpSession;
 import webserver.http.session.SessionManager;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.URISyntaxException;
 
 public class LoginController extends AbstractController {
@@ -18,14 +17,14 @@ public class LoginController extends AbstractController {
     private static final String LOGIN_SUCCESS_SET_COOKIE = "JSESSIONID=%s; path=/";
     private final UserService userService;
 
-    public LoginController() {
+    LoginController() {
         userService = UserService.getInstance();
     }
 
     @Override
-    public void service(OutputStream out, HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+    public void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         doPost(httpRequest, httpResponse);
-        httpResponse.sendResponse(out, httpRequest);
+        httpResponse.sendResponse(httpRequest);
     }
 
     @Override

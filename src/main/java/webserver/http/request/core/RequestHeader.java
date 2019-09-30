@@ -50,8 +50,8 @@ public class RequestHeader {
         return requestHeaders.get(httpHeaderField);
     }
 
-    public boolean hasCookie() {
+    public boolean hasHeaderField(String cookie) {
         return requestHeaders.keySet().stream()
-                .anyMatch(key -> key.getField().equals("Cookie"));
+                .anyMatch(key -> key.getField().equals(cookie));
     }
 }

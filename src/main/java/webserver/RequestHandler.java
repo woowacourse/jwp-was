@@ -34,15 +34,15 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest httpRequest = HttpRequestFactory.create(in);
-            HttpResponse httpResponse = new HttpResponse(HttpVersion.HTTP_VERSION_1_1);
+            HttpResponse httpResponse = new HttpResponse(HttpVersion.HTTP_VERSION_1_1, out);
 
             if (isStaticFile(httpRequest.getRequestPath())) {
                 httpResponse.addStatus()
                         .addHeader(HttpHeaderField.of("Content-Type:"), ResponseContentType.of(httpRequest.getRequestPath()))
-                        .sendResponse(out, httpRequest);
+                        .sendResponse(httpRequest);
             } else {
                 AbstractController controller = ControllerFactory.mappingController(httpRequest, httpResponse);
-                controller.service(out, httpRequest, httpResponse);
+                controller.service(httpRequest, httpResponse);
             }
 
         } catch (IOException | URISyntaxException e) {

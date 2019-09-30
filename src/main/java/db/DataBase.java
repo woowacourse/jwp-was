@@ -15,8 +15,8 @@ public class DataBase {
 
     static {
         users.put("test1", new User("test1", "1234", "name", "test1@gmail.com"));
-        users.put("test2", new User("test2", "1234", "name", "test1@gmail.com"));
-        users.put("test3", new User("test3", "1234", "name", "test1@gmail.com"));
+        users.put("test2", new User("test2", "1234", "name", "test2@gmail.com"));
+        users.put("test3", new User("test3", "1234", "name", "test3@gmail.com"));
     }
 
     public static void addUser(User user) {

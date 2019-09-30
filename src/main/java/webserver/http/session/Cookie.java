@@ -14,6 +14,10 @@ public class Cookie {
 
     private final Map<String, String> cookies;
 
+    public Cookie() {
+        cookies = new HashMap<>();
+    }
+
     public Cookie(String cookieLine) {
         this.cookies = parseCookies(cookieLine);
     }

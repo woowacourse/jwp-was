@@ -22,7 +22,7 @@ public abstract class AbstractController implements Controller {
     }
 
     @Override
-    public abstract void service(OutputStream out, HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException;
+    public abstract void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException;
 
     protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
     }

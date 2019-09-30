@@ -19,13 +19,13 @@ public class UserListController extends AbstractController {
     private byte[] body;
 
     @Override
-    public void service(OutputStream out, HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+    public void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         doGet(httpRequest, httpResponse);
         if (body == null) {
-            httpResponse.sendResponse(out, httpRequest);
+            httpResponse.sendResponse(httpRequest);
             return;
         }
-        httpResponse.sendResponse(out, body);
+        httpResponse.sendResponse(body);
     }
 
     @Override

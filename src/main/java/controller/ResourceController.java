@@ -14,9 +14,9 @@ import java.net.URISyntaxException;
 public class ResourceController extends AbstractController {
 
     @Override
-    public void service(OutputStream out, HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+    public void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         doGet(httpRequest, httpResponse);
-        httpResponse.sendResponse(out, httpRequest);
+        httpResponse.sendResponse(httpRequest);
     }
 
     @Override
