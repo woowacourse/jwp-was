@@ -1,14 +1,14 @@
 package dev.luffy.http.session;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class HttpSessionStorage {
 
-    private Map<String, HttpSession> httpSessionStorage;
+    private ConcurrentMap<String, HttpSession> httpSessionStorage;
 
     private HttpSessionStorage() {
-        httpSessionStorage = new HashMap<>();
+        httpSessionStorage = new ConcurrentHashMap<>();
     }
 
     public static HttpSessionStorage getInstance() {
