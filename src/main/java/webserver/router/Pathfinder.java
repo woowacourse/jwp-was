@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 public class Pathfinder {
     //미구현
     private static final Pattern PATH_VAR = Pattern.compile("\\{[\\w\\W]*}");
+
     private final Map<String, MappedDestination> mappings;
 
     protected static Optional<Pathfinder> of(JsonArray routes) {

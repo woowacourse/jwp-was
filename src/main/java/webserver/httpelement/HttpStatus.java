@@ -5,7 +5,7 @@ import utils.StringUtils;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public enum HttpStatusCode {
+public enum HttpStatus {
     CONTINUE(100),
     SWITCHING_PROTOCOL(101),
     PROCESSING(102),
@@ -80,17 +80,17 @@ public enum HttpStatusCode {
 
     private final int code;
 
-    HttpStatusCode(int code) {
+    HttpStatus(int code) {
         this.code = code;
     }
 
-    public static Optional<HttpStatusCode> of(int code) {
+    public static Optional<HttpStatus> of(int code) {
         return Stream.of(values())
                     .filter(x -> x.code == code)
                     .findAny();
     }
 
-    public static Optional<HttpStatusCode> of(String code) {
+    public static Optional<HttpStatus> of(String code) {
         try {
             return of(Integer.parseInt(code.trim()));
         } catch (NumberFormatException e) {
@@ -98,7 +98,7 @@ public enum HttpStatusCode {
         }
     }
 
-    public HttpStatusCode.Group group() {
+    public HttpStatus.Group group() {
         return Group.values()[(this.code / 100 - 1)];
     }
 

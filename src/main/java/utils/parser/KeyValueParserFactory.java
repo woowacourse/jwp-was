@@ -2,9 +2,9 @@ package utils.parser;
 
 public class KeyValueParserFactory {
     private static final JsonParser jsonParser = new JsonParser();
-    private static final SimpleStringParser httpHeaderFieldsParser = new HttpHeaderFieldsParser();
+    private static final SimpleStringParser httpHeaderFieldsParser = new HttpHeaderParser();
     private static final SimpleStringParser queryStringParser = new QueryStringParser();
-    private static final SimpleStringParser httpHeaderFieldAttrParser = new HttpHeaderFieldAttrParser();
+    private static final SimpleStringParser httpHeaderFieldAttrParser = new HttpHeaderFieldParser();
 
     public static JsonParser jsonParser() {
         return jsonParser;

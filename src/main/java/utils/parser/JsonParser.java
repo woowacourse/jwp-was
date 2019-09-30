@@ -272,7 +272,7 @@ public class JsonParser implements KeyValueParser<JsonObject> {
 
     private Pair<? extends JsonValue<?>, Integer> lexNull(String input, int begin) {
         final int end = tokenizeNull(input, begin);
-        return (begin < end) ? new Pair<>(JsonValue.NULL(), end) : null;
+        return (begin < end) ? new Pair<>(JsonNull.get(), end) : null;
     }
 
     private int tokenizeNull(String input, int i) {

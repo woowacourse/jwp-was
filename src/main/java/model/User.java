@@ -15,8 +15,20 @@ public class User {
         this.email = email;
     }
 
-    public String id() {
+    public boolean authenticate(String password) {
+        return this.password.equals(password);
+    }
+
+    public String getId() {
         return this.id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getEmail() {
+        return this.email;
     }
 
     @Override

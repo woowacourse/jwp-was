@@ -1,16 +1,11 @@
 package utils.parser.jsonelements;
 
 import java.util.Objects;
-import java.util.function.Predicate;
 
-public class JsonValue<T> {
-    private static final JsonValue<Void> NULL = new JsonValue();
+public abstract class JsonValue<T> {
+    protected static final String TAB = "    ";
 
     protected T val;
-
-    public static JsonValue<Void> NULL() {
-        return NULL;
-    }
 
     public JsonValue(T val) {
         this.val = val;
@@ -22,13 +17,17 @@ public class JsonValue<T> {
         return val;
     };
 
+    public int size() {
+        return 1;
+    }
+
     public String serialize() {
         return toString();
     }
 
     @Override
     public String toString() {
-        return (this.val != null) ? this.val.toString() : "null";
+        return this.val.toString();
     }
 
     @Override

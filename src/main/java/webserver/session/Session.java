@@ -5,8 +5,11 @@ import java.util.Map;
 import java.util.Objects;
 
 public class Session {
+    public static final String COOKIE_IDENTIFIER = "DONUTSESSIONID";
+
     private final String id;
     private final Map<String, Object> attributes = new HashMap<>();
+    private boolean isValid = true;
 
     protected Session(String id) {
         this.id = id;
@@ -16,20 +19,25 @@ public class Session {
         return this.id;
     }
 
-    public void setAttribute(String name, Object value) {
-        this.attributes.put(name, value);
+    public Session setAttribute(String name, Object value) {
+        if (isValid) {
+            this.attributes.put(name, value);
+        }
+        return this;
     }
 
     public Object getAttribute(String name) {
-        return this.attributes.get(name);
+        return isValid ? this.attributes.get(name) : null;
     }
 
     public Object removeAttribute(String name) {
         return this.attributes.remove(name);
     }
 
-    public void invalidate() {
+    public Session invalidate() {
         this.attributes.clear();
+        isValid = false;
+        return this;
     }
 
     @Override

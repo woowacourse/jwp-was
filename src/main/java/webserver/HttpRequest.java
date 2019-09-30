@@ -98,7 +98,13 @@ public class HttpRequest {
         this.params = Collections.unmodifiableMap(params);
         this.body = body;
 
-        logger.debug("Request:\r\n{} {} {}\r\n{}\r\n{}", method, path, version, header, (body != null ? body : ""));
+        logger.debug(
+                "Request:\r\n{} {} {}\r\n{}\r\nParams: {}\r\n\r\n{}\r\n",
+                method, path, version,
+                header,
+                params,
+                (body != null ? body : "")
+        );
     }
 
     public HttpMethod method() {
@@ -113,8 +119,8 @@ public class HttpRequest {
         return this.version;
     }
 
-    public String getCookie(String key) {
-        return this.header.getCookie(key);
+    public String getCookieOf(String key) {
+        return this.header.getCookieOf(key);
     }
 
     public Optional<HttpConnection> connection() {

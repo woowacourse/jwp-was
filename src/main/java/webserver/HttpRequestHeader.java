@@ -36,7 +36,7 @@ public class HttpRequestHeader {
         return Optional.ofNullable(this.contentType);
     }
 
-    public String getCookie(String key) {
+    public String getCookieOf(String key) {
         return Optional.ofNullable(this.cookie)
                         .map(x -> x.get(key))
                         .orElse(null);

@@ -33,6 +33,10 @@ public class JsonArray extends JsonValue<List<JsonValue<?>>> {
         return super.val.size();
     }
 
+    public boolean isEmpty() {
+        return super.val.isEmpty();
+    }
+
     @Override
     public String serialize() {
         if (super.val.size() <= 1) {

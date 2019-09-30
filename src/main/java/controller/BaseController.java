@@ -6,7 +6,7 @@ import webserver.HttpRequest;
 import webserver.HttpResponse;
 import webserver.httpelement.HttpContentType;
 import webserver.httpelement.HttpLocation;
-import webserver.httpelement.HttpStatusCode;
+import webserver.httpelement.HttpStatus;
 import webserver.router.Router;
 
 public class BaseController {
@@ -21,7 +21,7 @@ public class BaseController {
     public static HttpResponse redirectTo(String redirectPath, HttpRequest req) {
         return HttpResponse.builder(HttpContentType.TEXT_PLAIN_UTF_8)
                             .extractFieldsFromRequest(req)
-                            .statusCode(HttpStatusCode.FOUND)
+                            .statusCode(HttpStatus.FOUND)
                             .location(new HttpLocation(redirectPath))
                             .build();
     }

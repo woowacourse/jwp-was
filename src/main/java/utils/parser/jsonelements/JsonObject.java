@@ -9,8 +9,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class JsonObject extends JsonValue<Map<String, JsonValue<?>>> {
-    private static final String TAB = "    ";
-
     public JsonObject() {
         super(Collections.emptyMap());
     }
@@ -33,13 +31,18 @@ public class JsonObject extends JsonValue<Map<String, JsonValue<?>>> {
         return super.val.entrySet().stream();
     }
 
+    @Override
     public int size() {
         return super.val.size();
     }
 
+    public boolean isEmpty() {
+        return super.val.isEmpty();
+    }
+
     @Override
     public String serialize() {
-        switch (super.val.size()) {
+        switch (size()) {
             case 0:
                 return "{}";
             case 1:
@@ -62,12 +65,10 @@ public class JsonObject extends JsonValue<Map<String, JsonValue<?>>> {
     }
 
     private String toString(int depth) {
-        if (super.val.isEmpty()) {
+        if (isEmpty()) {
             return "{}";
         }
-        if (super.val.size() == 1
-                && super.val.values().stream().filter(x -> x instanceof JsonObject)
-                                                .allMatch(x -> ((JsonObject) x).size() == 1)) {
+        if ((size() == 1) && super.val.values().stream().allMatch(x -> x.size() == 1)) {
             return super.val.entrySet()
                             .stream()
                             .map(o -> String.format("{\"%s\": %s}", o.getKey(), o.getValue()))
