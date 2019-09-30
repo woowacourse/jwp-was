@@ -2,6 +2,7 @@ package http.response;
 
 import http.common.HttpHeader;
 import http.common.HttpVersion;
+import http.cookie.Cookie;
 import http.request.HttpRequest;
 import http.session.Session;
 import http.session.SessionRepository;
@@ -25,8 +26,8 @@ public class HttpResponse {
         this.httpHeader.addHeaderAttribute(key, value);
     }
 
-    public void addCookieAttribute(String name, String value) {
-        this.httpHeader.addCookieAttribute(name, value);
+    public void addCookie(Cookie cookie) {
+        httpHeader.addCookie(cookie);
     }
 
     public byte[] serialize() {

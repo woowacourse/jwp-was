@@ -1,6 +1,7 @@
 package controller;
 
 import db.DataBase;
+import http.cookie.Cookie;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.session.Session;
@@ -33,8 +34,8 @@ public class LoginController extends AbstractController {
         if (user != null && user.matchPassword(password)) {
             Session session = httpRequest.getSession();
             session.setAttribute("user", user);
-            httpResponse.addCookieAttribute(SESSIONID, session.getId());
-            httpResponse.addCookieAttribute("Path", "/");
+            Cookie cookie = new Cookie.Builder(SESSIONID, session.getId()).path("/").build();
+            httpResponse.addCookie(cookie);
             modelAndView = new ModelAndView(String.format("%s%s", REDIRECT_SIGNATURE, LOGIN_SUCCESS_REDIRECT_LOCATION));
         } else {
             modelAndView = new ModelAndView(String.format("%s%s", REDIRECT_SIGNATURE, LOGIN_FAILED_REDIRECT_LOCATION));
