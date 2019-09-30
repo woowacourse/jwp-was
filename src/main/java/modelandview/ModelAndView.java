@@ -1,4 +1,4 @@
-package utils.modelandview;
+package modelandview;
 
 import java.io.IOException;
 

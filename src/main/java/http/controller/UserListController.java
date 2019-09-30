@@ -4,10 +4,10 @@ import db.DataBase;
 import http.common.HttpCookie;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import modelandview.HandleBarModelAndView;
+import modelandview.ModelAndView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.modelandview.HandleBarModelAndView;
-import utils.modelandview.ModelAndView;
 
 import java.io.IOException;
 

@@ -1,4 +1,4 @@
-package utils.modelandview.model;
+package modelandview.model;
 
 import java.util.Map;
 

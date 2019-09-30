@@ -1,10 +1,10 @@
-package utils.modelandview.view;
+package modelandview.view;
 
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
-import utils.modelandview.model.Model;
+import modelandview.model.Model;
 
 import java.io.IOException;
 import java.nio.charset.Charset;

@@ -1,9 +1,9 @@
-package utils.modelandview;
+package modelandview;
 
-import utils.modelandview.model.HandleBarModel;
-import utils.modelandview.model.Model;
-import utils.modelandview.view.HandleBarView;
-import utils.modelandview.view.View;
+import modelandview.model.HandleBarModel;
+import modelandview.model.Model;
+import modelandview.view.HandleBarView;
+import modelandview.view.View;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

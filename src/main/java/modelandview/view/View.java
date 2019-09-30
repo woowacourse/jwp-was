@@ -1,6 +1,6 @@
-package utils.modelandview.view;
+package modelandview.view;
 
-import utils.modelandview.model.Model;
+import modelandview.model.Model;
 
 import java.io.IOException;
 
