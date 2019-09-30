@@ -2,7 +2,7 @@ package controller;
 
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import http.response.ResponseBodyParser;
+import http.parser.ResponseBodyParser;
 
 public class ResourceController implements Controller {
 
@@ -10,7 +10,7 @@ public class ResourceController implements Controller {
 
     @Override
     public void service(final HttpRequest httpRequest, final HttpResponse httpResponse) {
-        httpResponse.ok(ResponseBodyParser.parse(httpRequest.getClassPath()));
+        httpResponse.forward(ResponseBodyParser.parse(httpRequest.getClassPath()));
     }
 
     @Override

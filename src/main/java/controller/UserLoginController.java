@@ -12,7 +12,7 @@ import static java.util.Objects.nonNull;
 
 public class UserLoginController implements Controller {
 
-    private static final String LOGIN_PATH = "/index.html";
+    private static final String INDEX_PATH = "/index.html";
     private static final String LOGIN_FAIL_PATH = "/user/login_failed.html";
     private static final String USER_LOGIN_URI = "/user/login";
     private static final RequestMapping LOGIN_REQUEST_MAPPING = RequestMapping.of(HttpMethod.POST, HttpUriParser.parse(USER_LOGIN_URI));
@@ -24,12 +24,12 @@ public class UserLoginController implements Controller {
         User user = DataBase.findUserById(userId);
 
         if (isLoginSuccess(user, password)) {
-            httpResponse.addCookie(CookieParser.parse("logined=true; Path=/"));
-            httpResponse.redirect(LOGIN_PATH);
+            httpResponse.addCookie(CookieParser.parse("Set-Cookie: logined=true; Path=/; HttpOnly"));
+            httpResponse.redirect(INDEX_PATH);
             return;
         }
 
-        httpResponse.addCookie(CookieParser.parse("logined=false"));
+        httpResponse.addCookie(CookieParser.parse("Set-Cookie: logined=false; HttpOnly"));
         httpResponse.redirect(LOGIN_FAIL_PATH);
     }
 

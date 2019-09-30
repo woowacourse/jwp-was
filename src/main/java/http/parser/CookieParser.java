@@ -4,7 +4,7 @@ import http.common.Cookie;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,14 +14,15 @@ public class CookieParser {
     private static final String LAST_IS_SEMICOLON_REGEX = "^[a-zA-Z0-9]+;$";
     private static final String ATTRIBUTE_KEY_VALUE_DELIMITER = "=";
     private static final String COOKIE_DELIMITER = ":";
-    private static final int START_INDEX = 0;
     private static final String ATTRIBUTE_DELIMITER = ";";
+    private static final int START_INDEX = 0;
 
     public static Cookie parse(String line) {
-        String[] cookieTokens = Arrays.stream(line.split(ATTRIBUTE_DELIMITER)).map(String::trim)
+        String attributes = line.split(COOKIE_DELIMITER)[1];
+        String[] cookieTokens = Arrays.stream(attributes.split(ATTRIBUTE_DELIMITER)).map(String::trim)
             .toArray(String[]::new);
 
-        Map<String, String> attributeWithValue = new HashMap<>();
+        Map<String, String> attributeWithValue = new LinkedHashMap<>();
         List<String> attributeWithoutValue = new ArrayList<>();
         Arrays.stream(cookieTokens).forEach(cookieToken -> {
             cookieToken = deleteSemicolon(cookieToken);

@@ -2,9 +2,9 @@ package controller;
 
 import http.request.HttpMethod;
 import http.request.HttpRequest;
-import http.request.HttpUriParser;
+import http.parser.HttpUriParser;
 import http.response.HttpResponse;
-import http.response.ResponseBodyParser;
+import http.parser.ResponseBodyParser;
 
 public class IndexController implements Controller {
 
@@ -13,7 +13,7 @@ public class IndexController implements Controller {
 
     @Override
     public void service(final HttpRequest httpRequest, final HttpResponse httpResponse) {
-        httpResponse.ok(ResponseBodyParser.parse(httpRequest.getClassPath()));
+        httpResponse.forward(ResponseBodyParser.parse(httpRequest.getClassPath()));
     }
 
     @Override

@@ -6,16 +6,16 @@ import java.util.List;
 
 public class CookiesParser {
 
-    private static final String SET_COOKIE_DELIMITER = ":";
-    private static final String SET_COOKIE = "Set-Cookie";
+    private static final String COOKIE_DELIMITER = ":";
+    private static final String COOKIE = "Cookie";
 
     public static Cookies parse(List<String> lines) {
         Cookies cookies = new Cookies();
 
         lines.forEach(line -> {
-            String[] lineTokens = line.split(SET_COOKIE_DELIMITER, 2);
+            String[] lineTokens = line.split(COOKIE_DELIMITER, 2);
             String name = lineTokens[0].trim();
-            if (SET_COOKIE.equals(name)) {
+            if (COOKIE.equals(name)) {
                 cookies.addCookie(CookieParser.parse(line));
             }
         });

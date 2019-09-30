@@ -37,7 +37,7 @@ public class HttpRequestParser {
 
         RequestBody requestBody = null;
         if (br.ready()) {
-            requestBody = RequestBodyParser.parse(br, requestHeader.findHeader(CONTENT_LENGTH));
+            requestBody = RequestBodyParser.parse(br, requestHeader.getHeader(CONTENT_LENGTH));
         }
 
         return HttpRequestBuilder.builder()
