@@ -1,4 +1,6 @@
-package model.http;
+package webserver.http.request;
+
+import webserver.http.Cookie;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,19 +22,22 @@ public class RequestHeader {
         return Integer.valueOf(headers.get("Content-Length"));
     }
 
-    // TODO : 리팩토링 필요
+    // TODO : refactor
     public List<Cookie> getCookies() {
         String cookieString = headers.get("Cookie");
         if (cookieString != null) {
-            String[] splicedCookieString = cookieString.split("; ");
             List<Cookie> cookies = new ArrayList<>();
 
-            for (String cookie : splicedCookieString) {
+            for (String cookie : cookieString.split("; ")) {
                 String[] splicedCookie = cookie.split("=");
                 cookies.add(new Cookie(splicedCookie[0], splicedCookie[1]));
             }
             return cookies;
         }
         return null;
+    }
+
+    public boolean isCookieExist() {
+        return headers.get("Cookie") != null;
     }
 }

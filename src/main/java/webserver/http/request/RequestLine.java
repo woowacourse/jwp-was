@@ -1,7 +1,7 @@
-package model.http;
+package webserver.http.request;
 
-import utils.HttpMethod;
 import utils.QueryParser;
+import webserver.http.HttpMethod;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -10,8 +10,8 @@ import java.util.Map;
 public class RequestLine {
     private HttpMethod method;
     private String path;
-    private Map<String, String> queryParams = new HashMap<>();
     private String version;
+    private Map<String, String> queryParams = new HashMap<>();
 
     public RequestLine(String method, String path, String version) {
         this.method = HttpMethod.valueOf(method);
@@ -43,7 +43,6 @@ public class RequestLine {
         if (isRootRequest()) {
             return "index.html";
         }
-
         return path.substring(path.lastIndexOf("/") + 1);
     }
 
@@ -57,5 +56,9 @@ public class RequestLine {
 
     public Map<String, String> getQueryParams() {
         return Collections.unmodifiableMap(queryParams);
+    }
+
+    public String getVersion() {
+        return this.version;
     }
 }

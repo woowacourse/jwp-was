@@ -1,4 +1,4 @@
-package utils;
+package webserver.http;
 
 import java.util.Arrays;
 
@@ -24,7 +24,7 @@ public enum MediaType {
 
     public static MediaType find(String name) {
         return Arrays.stream(values())
-                .filter(mediaType -> mediaType.equals(valueOf(name)))
+                .filter(mediaType -> mediaType.equals(valueOf(name.toUpperCase())))
                 .findFirst()
                 .orElse(MediaType.NOT_SUPPORT);
     }
