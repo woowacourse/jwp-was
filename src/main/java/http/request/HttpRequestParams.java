@@ -40,7 +40,7 @@ public class HttpRequestParams {
             if (result.containsKey(token[0]) || token.length != 2) {
                 continue;
             }
-            result.put(token[0], token[1]);
+            result.put(token[0], URLDecoder.decode(token[1], "UTF-8"));
         }
 
         return result;

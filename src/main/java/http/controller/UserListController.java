@@ -6,8 +6,8 @@ import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.HandleBarModelAndView;
-import utils.ModelAndView;
+import utils.modelandview.HandleBarModelAndView;
+import utils.modelandview.ModelAndView;
 
 import java.io.IOException;
 
