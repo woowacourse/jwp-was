@@ -74,7 +74,7 @@ public class Cookie {
         }
     }
 
-    // TODO: expires 관련
+    // TODO: expires 및 max-age 관련해서 기능 추가
     public String get(final String keyOrOption) {
         if (options.contains(keyOrOption)) {
             return TRUE;
@@ -156,7 +156,7 @@ public class Cookie {
         return Objects.isNull(maxAgeSecond) ? EMPTY : maxAgeSecond.toString();
     }
 
-    // StringJoiner 사용 실패 - 대신 StringBuilder 사용
+    // StringJoiner 사용이 되려 불편하다 - 대신 StringBuilder 사용
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder(DEFAULT_COOKIE_STRING_LENGTH);
