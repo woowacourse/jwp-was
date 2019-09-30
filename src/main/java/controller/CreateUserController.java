@@ -12,31 +12,31 @@ import java.net.URISyntaxException;
 
 public class CreateUserController extends AbstractController {
 
-	public static final String PATH = "/user/create";
+    public static final String PATH = "/user/create";
 
-	@Override
-	void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-		throw new NotSupportMethod("Not Support : " + httpRequest.getUri() + httpRequest.getMethod());
-	}
+    @Override
+    void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+        throw new NotSupportMethod("Not Support : " + httpRequest.getUri() + httpRequest.getMethod());
+    }
 
-	@Override
-	void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
-		save(httpRequest.getParameter("userId"),
-				httpRequest.getParameter("password"),
-				httpRequest.getParameter("name"),
-				httpRequest.getParameter("email"));
+    @Override
+    void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+        save(httpRequest.getParameter("userId"),
+                httpRequest.getParameter("password"),
+                httpRequest.getParameter("name"),
+                httpRequest.getParameter("email"));
 
-		httpResponse.setStatusCode(HttpStatusCode.FOUND);
-		httpResponse.redirect("/index.html");
-	}
+        httpResponse.setStatusCode(HttpStatusCode.FOUND);
+        httpResponse.redirect("/index.html");
+    }
 
-	private void save(String userId, String password, String name, String email) {
-		if (DataBase.findUserById(userId) == null) {
-			User user = new User(userId, password, name, email);
-			DataBase.addUser(user);
-			return;
-		}
+    private void save(String userId, String password, String name, String email) {
+        if (DataBase.findUserById(userId) == null) {
+            User user = new User(userId, password, name, email);
+            DataBase.addUser(user);
+            return;
+        }
 
-		throw new IllegalArgumentException();
-	}
+        throw new IllegalArgumentException();
+    }
 }

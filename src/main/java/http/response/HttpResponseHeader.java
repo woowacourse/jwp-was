@@ -9,7 +9,6 @@ import java.util.Map;
 public class HttpResponseHeader {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponseHeader.class);
 
-
     private Map<String, String> fields;
 
     public HttpResponseHeader() {

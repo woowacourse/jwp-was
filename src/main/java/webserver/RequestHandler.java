@@ -18,33 +18,33 @@ import java.net.Socket;
 import java.net.URISyntaxException;
 
 public class RequestHandler implements Runnable {
-	private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-	private Socket connection;
+    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private Socket connection;
 
-	public RequestHandler(Socket connectionSocket) {
-		this.connection = connectionSocket;
-	}
+    public RequestHandler(Socket connectionSocket) {
+        this.connection = connectionSocket;
+    }
 
-	public void run() {
-		logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(), connection.getPort());
+    public void run() {
+        logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(), connection.getPort());
 
-		try (InputStream inputStream = connection.getInputStream();
-		     OutputStream outputStream = connection.getOutputStream()) {
+        try (InputStream inputStream = connection.getInputStream();
+             OutputStream outputStream = connection.getOutputStream()) {
 
-			DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+            DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
 
-			HttpRequest httpRequest = HttpRequestFactory.create(RequestParser.lineParse(inputStream));
-			HttpResponse httpResponse = HttpResponse.of(httpRequest);
+            HttpRequest httpRequest = HttpRequestFactory.create(RequestParser.lineParse(inputStream));
+            HttpResponse httpResponse = HttpResponse.of(httpRequest);
 
-			logger.debug("Request: {}", httpRequest.toString());
+            logger.debug("Request: {}", httpRequest.toString());
 
-			Controller controller = ControllerContainer.getController(httpRequest.isContainExtension(), httpRequest.getUri());
-			controller.service(httpRequest, httpResponse);
+            Controller controller = ControllerContainer.getController(httpRequest.isContainExtension(), httpRequest.getUri());
+            controller.service(httpRequest, httpResponse);
 
-			httpResponse.writeResponse(dataOutputStream);
+            httpResponse.writeResponse(dataOutputStream);
 
-		} catch (IOException | URISyntaxException | ControllerNotFoundException e) {
-			logger.error(e.getMessage());
-		}
-	}
+        } catch (IOException | URISyntaxException | ControllerNotFoundException e) {
+            logger.error(e.getMessage());
+        }
+    }
 }

@@ -11,27 +11,27 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class FileController extends AbstractController {
-	private static final Logger logger = LoggerFactory.getLogger(FileController.class);
+    private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 
-	public FileController() {
-	}
+    public FileController() {
+    }
 
-	@Override
-	void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-		throw new NotSupportMethod("Not Support : " + httpRequest.getUri() + " " + httpRequest.getMethod());
-	}
+    @Override
+    void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
+        throw new NotSupportMethod("Not Support : " + httpRequest.getUri() + " " + httpRequest.getMethod());
+    }
 
-	@Override
-	void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-		logger.debug("request file: {}", httpRequest.getUri());
+    @Override
+    void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+        logger.debug("request file: {}", httpRequest.getUri());
 
-		try {
-			httpResponse.setStatusCode(HttpStatusCode.OK);
-			httpResponse.forward(httpRequest.getUri());
-		} catch (IOException | URISyntaxException e) {
-			httpResponse.setStatusCode(HttpStatusCode.NOT_FOUND);
-			e.printStackTrace();
-		}
-	}
+        try {
+            httpResponse.setStatusCode(HttpStatusCode.OK);
+            httpResponse.forward(httpRequest.getUri());
+        } catch (IOException | URISyntaxException e) {
+            httpResponse.setStatusCode(HttpStatusCode.NOT_FOUND);
+            e.printStackTrace();
+        }
+    }
 }
 
