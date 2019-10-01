@@ -40,8 +40,7 @@ public class LoginController extends AbstractController {
             HttpResponse response = HttpResponse.redirection(request, MimeType.TEXT_PLAIN, LOGIN_SUCCESS_PAGE_LOCATION);
             String sessionId = sessionManager.setAttribute("loginUser", maybeUser.get());
 
-            response.applySessionCookie(sessionId);
-            response.applyLoginCookie(true);
+            response.applyLoginCookie(sessionId, true);
             return response;
         }
 

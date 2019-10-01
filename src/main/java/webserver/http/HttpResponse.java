@@ -128,11 +128,12 @@ public class HttpResponse {
         httpCookies.add(cookie);
     }
 
-    public void applyLoginCookie(boolean login) {
+    public void applyLoginCookie(String sessionId, boolean login) {
         HttpCookie cookie = new HttpCookie();
         cookie.loginCookie(login, "/");
 
         httpCookies.add(cookie);
+        applySessionCookie(sessionId);
     }
 
     public String serializeHeader() {

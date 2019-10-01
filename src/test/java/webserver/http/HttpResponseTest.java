@@ -111,10 +111,10 @@ class HttpResponseTest {
 
         HttpResponse response = HttpResponse.redirection(httpRequest, MimeType.TEXT_HTML, "/index.html");
 
-        response.applyLoginCookie(true);
+        response.applyLoginCookie("sessionId", true);
         assertTrue(response.toString().contains("logined=true"));
 
-        response.applyLoginCookie(false);
+        response.applyLoginCookie("sessionId", false);
         assertTrue(response.toString().contains("logined=false"));
     }
 }
