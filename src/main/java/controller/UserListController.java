@@ -13,30 +13,30 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class UserListController extends AbstractController {
-    private static final String SESSION_USER_KEY = "user";
     private static final String USER_LIST_PATH = "user/list";
-    private byte[] body;
 
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
-        doGet(httpRequest, httpResponse);
+        HttpSession session = httpRequest.getSession();
+        byte[] body = (session != null && session.getAttribute(SESSION_USER_KEY) != null) ?
+                TemplateManager.getTemplatePage(USER_LIST_PATH).getBytes() : null;
+
+        doGet(httpRequest, httpResponse, body);
+
         if (body == null) {
             httpResponse.sendResponse(httpRequest);
-            return;
+            return ;
         }
         httpResponse.sendResponse(body);
+
     }
 
-    @Override
-    protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
-        HttpSession session = httpRequest.getSession();
-        if (session != null && session.getAttribute(SESSION_USER_KEY) != null) {
-            httpResponse.addStatus(ResponseStatus.of(STATUS_OK))
-                    .addHeader(HttpHeaderField.CONTENT_TYPE, ResponseContentType.of(httpRequest.getRequestPath()));
-            this.body = TemplateManager.getTemplatePage(USER_LIST_PATH).getBytes();
-            return;
+    private void doGet(HttpRequest httpRequest, HttpResponse httpResponse, byte[] body) {
+        if (body == null) {
+            httpResponse.addStatus(ResponseStatus.FOUND)
+                    .addHeader(HttpHeaderField.LOCATION, LOGIN_PAGE);
         }
-        httpResponse.addStatus(ResponseStatus.of(STATUS_FOUND))
-                .addHeader(HttpHeaderField.LOCATION, LOGIN_PAGE);
+        httpResponse.addStatus(ResponseStatus.OK)
+                .addHeader(HttpHeaderField.CONTENT_TYPE, ResponseContentType.of(httpRequest.getRequestPath()));
     }
 }
