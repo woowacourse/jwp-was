@@ -1,16 +1,20 @@
 package controller;
 
 import controller.core.AbstractController;
+import controller.core.Controller;
 import controller.exception.PathNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import webserver.http.request.HttpRequest;
 import webserver.http.request.core.RequestMethod;
 import webserver.http.request.core.RequestPath;
-import webserver.http.response.HttpResponse;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class ControllerFactory {
+    private static final Logger log = LoggerFactory.getLogger(ControllerFactory.class);
     private static final Map<String, AbstractController> controllers = new HashMap<>();
 
     static {
@@ -40,13 +44,10 @@ public class ControllerFactory {
         return new UserListController();
     }
 
-    public static AbstractController mappingController(HttpRequest httpRequest) {
+    public static Controller mappingController(HttpRequest httpRequest) {
         RequestMethod method = httpRequest.getRequestMethod();
         RequestPath path = httpRequest.getRequestPath();
-        try {
-            return controllers.get(method.getMethod() + path.getPath());
-        } catch (NullPointerException e) {
-            throw new PathNotFoundException();
-        }
+        return Optional.ofNullable(controllers.get(method.getMethod() + path.getPath()))
+                .orElseThrow(PathNotFoundException::new);
     }
 }
