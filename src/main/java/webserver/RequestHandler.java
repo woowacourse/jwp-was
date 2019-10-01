@@ -1,8 +1,8 @@
 package webserver;
 
 import controller.Controllers;
+import http.parser.HttpRequestParser;
 import http.request.HttpRequest;
-import http.request.HttpRequestParser;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.net.URISyntaxException;
 
 public class RequestHandler implements Runnable {
 
@@ -29,13 +28,14 @@ public class RequestHandler implements Runnable {
             connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            HttpRequest httpRequest = HttpRequestParser.parse(in);
-
-            HttpResponse httpResponse = new Controllers().service(httpRequest);
-
             DataOutputStream dos = new DataOutputStream(out);
-            httpResponse.writeResponse(dos);
-        } catch (IOException | URISyntaxException e) {
+
+            HttpRequest httpRequest = HttpRequestParser.parse(in);
+            HttpResponse httpResponse = new HttpResponse(httpRequest, dos);
+            new Controllers().service(httpRequest, httpResponse);
+            httpResponse.response();
+
+        } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }

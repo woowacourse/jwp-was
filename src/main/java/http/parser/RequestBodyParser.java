@@ -1,6 +1,6 @@
-package http.request;
+package http.parser;
 
-import http.common.QueryParamsParser;
+import http.request.RequestBody;
 import utils.IOUtils;
 
 import java.io.BufferedReader;

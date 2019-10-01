@@ -1,6 +1,9 @@
-package http.request;
+package http.parser;
 
 import http.common.HttpHeader;
+import http.request.HttpRequest;
+import http.request.RequestBody;
+import http.request.RequestLine;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,18 +12,19 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import static http.request.HttpRequest.HttpRequestBuilder;
+
 public class HttpRequestParser {
 
     private static final Logger log = LoggerFactory.getLogger(HttpRequestParser.class);
-    private static final String EMPTY = "";
-    private static final String BLANK = " ";
+    private static final String CONTENT_LENGTH = "Content-Length";
+    private static final String COOKIE = "Cookie";
 
-    public static HttpRequest parse(InputStream in) throws IOException, URISyntaxException {
+    public static HttpRequest parse(InputStream in) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
 
         String firstLine = br.readLine();
@@ -32,9 +36,14 @@ public class HttpRequestParser {
 
         RequestBody requestBody = null;
         if (br.ready()) {
-            requestBody = RequestBodyParser.parse(br, requestHeader.findHeader("Content-Length"));
+            requestBody = RequestBodyParser.parse(br, requestHeader.getHeader(CONTENT_LENGTH));
         }
-        return new HttpRequest(requestLine, requestHeader, requestBody);
+
+        return HttpRequestBuilder.builder()
+            .withRequestLine(requestLine)
+            .withRequestHeader(requestHeader)
+            .withRequestBody(requestBody)
+            .build();
     }
 
     private static List<String> toHeaderList(final BufferedReader br) throws IOException {

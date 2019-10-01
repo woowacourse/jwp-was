@@ -1,5 +1,6 @@
-package http.response;
+package http.parser;
 
+import http.response.ResponseBody;
 import utils.FileIoUtils;
 
 public class ResponseBodyParser {

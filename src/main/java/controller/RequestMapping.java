@@ -19,12 +19,8 @@ public class RequestMapping {
         return new RequestMapping(httpMethod, uri);
     }
 
-    public boolean isMethodEqual(RequestMapping another) {
-        return httpMethod.equals(another.httpMethod);
-    }
-
-    public boolean isMatches(String regex) {
-        return uri.isMatches(regex);
+    public boolean isEquals(RequestMapping another, String regex) {
+        return httpMethod.equals(another.httpMethod) && uri.isMatches(regex);
     }
 
     @Override
@@ -33,7 +29,7 @@ public class RequestMapping {
         if (o == null || getClass() != o.getClass()) return false;
         final RequestMapping that = (RequestMapping) o;
         return httpMethod == that.httpMethod &&
-            Objects.equals(uri, that.uri);
+            uri.isEqualsPath(that.uri);
     }
 
     @Override

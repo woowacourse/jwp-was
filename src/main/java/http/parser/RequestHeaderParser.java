@@ -1,4 +1,4 @@
-package http.request;
+package http.parser;
 
 import http.common.HttpHeader;
 
@@ -14,7 +14,7 @@ public class RequestHeaderParser {
         Map<String, String> headers = new HashMap<>();
 
         headerLines.forEach(headerLine -> {
-            String[] headerTokens = headerLine.split(HEADER_DELIMITER);
+            String[] headerTokens = headerLine.split(HEADER_DELIMITER, 2);
             String name = headerTokens[0].trim();
             String value = headerTokens[1].trim();
             headers.put(name, value);

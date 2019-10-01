@@ -1,6 +1,6 @@
 package utils;
 
-import exception.InvalidFilePathException;
+import exceptions.InvalidFilePathException;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

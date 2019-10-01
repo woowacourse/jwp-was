@@ -1,6 +1,6 @@
 package http.common;
 
-import exception.InvalidHttpVersionException;
+import exceptions.InvalidHttpVersionException;
 
 import java.util.Arrays;
 
@@ -17,5 +17,9 @@ public enum HttpVersion {
         return Arrays.stream(HttpVersion.values()).filter(httpVersion -> httpVersion.version.equals(version))
             .findFirst()
             .orElseThrow(InvalidHttpVersionException::new);
+    }
+
+    public String getVersion() {
+        return version;
     }
 }

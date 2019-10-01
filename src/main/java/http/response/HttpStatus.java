@@ -24,14 +24,6 @@ public enum HttpStatus {
         this.status = status;
     }
 
-    public int getStatusCode() {
-        return statusCode;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
     public String getCodeAndStatus() {
         return statusCode + BLANK + status;
     }

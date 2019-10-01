@@ -43,4 +43,8 @@ public class RequestLine {
     public Map<String, String> getQueryParam() {
         return httpUri.getQueryParam();
     }
+
+    public String getClassPath() {
+        return findPathPrefix() + getPath();
+    }
 }
