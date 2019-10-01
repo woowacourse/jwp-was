@@ -33,7 +33,7 @@ public class LoginController extends AbstractController {
                     .addHeader(HttpHeaderField.LOCATION, LOGIN_FAILED_PATH);
             return;
         }
-        HttpSession session = httpRequest.getSession();
+        HttpSession session = httpRequest.getHttpSession();
         session.setAttribute(SESSION_USER_KEY, userService.getUser(httpRequest));
 
         httpResponse.addStatus(ResponseStatus.FOUND)

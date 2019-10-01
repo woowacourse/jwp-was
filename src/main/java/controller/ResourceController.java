@@ -22,7 +22,7 @@ public class ResourceController extends AbstractController {
 
     @Override
     protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        HttpSession session = httpRequest.getSession();
+        HttpSession session = httpRequest.getHttpSession();
         httpResponse.addStatus(ResponseStatus.OK)
                 .addHeader(HttpHeaderField.CONTENT_TYPE, ResponseContentType.of(httpRequest.getRequestPath()))
                 .addCookie(String.format(SET_COOKIE_FORMAT, session.getId()));

@@ -3,11 +3,9 @@ package webserver.http.request;
 import webserver.http.request.core.*;
 import webserver.http.session.Cookie;
 import webserver.http.session.HttpSession;
-import webserver.http.session.SessionManager;
 
 public class HttpRequest {
     private static final String COOKIE = "Cookie";
-    private static final String JSESSIONID = "JSESSIONID";
 
     private RequestLine requestLine;
     private RequestHeader requestHeader;
@@ -44,8 +42,7 @@ public class HttpRequest {
         return requestData.getValue(key);
     }
 
-    public HttpSession getSession() {
-        String uuid = this.cookie.getCookies(JSESSIONID);
-        return SessionManager.getSession(uuid);
+    public HttpSession getHttpSession() {
+        return cookie.getHttpSession();
     }
 }

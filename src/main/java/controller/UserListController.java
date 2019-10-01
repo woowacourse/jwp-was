@@ -18,7 +18,7 @@ public class UserListController extends AbstractController {
 
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
-        HttpSession session = httpRequest.getSession();
+        HttpSession session = httpRequest.getHttpSession();
         byte[] body = (session != null && session.getAttribute(SESSION_USER_KEY) != null) ?
                 TemplateManager.getTemplatePage(USER_LIST_PATH).getBytes() : null;
 
