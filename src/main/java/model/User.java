@@ -29,6 +29,14 @@ public class User {
         return email;
     }
 
+    public boolean login(String password) {
+        return this.password.equals(password);
+    }
+
+    public boolean isSameUser(User user) {
+        return userId.equals(user.userId);
+    }
+
     @Override
     public String toString() {
         return "User [userId=" + userId + ", password=" + password + ", name=" + name + ", email=" + email + "]";
