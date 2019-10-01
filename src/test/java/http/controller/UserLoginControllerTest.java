@@ -18,6 +18,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static http.controller.UserLoginController.USER;
 import static model.user.User.USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -43,8 +44,8 @@ class UserLoginControllerTest {
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND);
         String sessionId = response.getCookie("sessionId").getValue();
         HttpSession session = SessionHandler.getInstance().getSession(sessionId);
-        String userId = (String) session.getAttribute(USER_ID);
-        assertThat(userId).isEqualTo("van");
+        User user = (User) session.getAttribute(USER);
+        assertThat(user.getUserId()).isEqualTo("van");
     }
 
     @Test

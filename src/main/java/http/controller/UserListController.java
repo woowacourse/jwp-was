@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static model.user.User.USER_ID;
+import static http.controller.UserLoginController.USER;
 
 public class UserListController extends AbstractController {
     public static final String URL = "/user/list";
@@ -29,8 +29,8 @@ public class UserListController extends AbstractController {
     public void doGet(HttpRequest request, HttpResponse response) {
         try {
             HttpSession session = request.getSession();
-            String userId = (String) session.getAttribute(USER_ID);
-            User user = DataBase.findUserById(userId);
+            User sessionUser = (User) session.getAttribute(USER);
+            User user = DataBase.findUserById(sessionUser.getUserId());
             String profilePage = renderingPage();
             response.forward(profilePage.getBytes());
         } catch (InvalidHeaderException | NotExistSessionValue e) {

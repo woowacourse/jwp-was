@@ -12,6 +12,7 @@ import java.util.Optional;
 
 public class UserLoginController extends AbstractController {
     public static final String URL = "/user/login";
+    public static final String USER = "user";
 
     @Override
     public void doGet(HttpRequest request, HttpResponse response) {
@@ -22,13 +23,13 @@ public class UserLoginController extends AbstractController {
     public void doPost(HttpRequest request, HttpResponse response) {
         String requestUserId = request.getData("userId");
         String requestPassword = request.getData("password");
-        checkLogin(response, requestUserId, requestPassword);
+        User user = checkLogin(response, requestUserId, requestPassword);
         HttpSession session = request.getSession();
 
-        setLoginSuccessResponse(response, requestUserId, session);
+        setLoginSuccessResponse(response, user, session);
     }
 
-    private void checkLogin(HttpResponse response, String requestUserId, String requestPassword) {
+    private User checkLogin(HttpResponse response, String requestUserId, String requestPassword) {
         Optional<User> mayBeUser = Optional.ofNullable(DataBase.findUserById(requestUserId));
         User user = mayBeUser.orElseThrow(() -> {
             setLoginFailResponse(response);
@@ -38,10 +39,11 @@ public class UserLoginController extends AbstractController {
             setLoginFailResponse(response);
             throw new NotMatchPasswordException("비밀번호가 일치하지 않습니다.");
         }
+        return user;
     }
 
-    private void setLoginSuccessResponse(HttpResponse response, String requestUserId, HttpSession session) {
-        session.setAttribute("userId", requestUserId);
+    private void setLoginSuccessResponse(HttpResponse response, User user, HttpSession session) {
+        session.setAttribute(USER, user);
 
         response.sendRedirect("/index.html");
     }
