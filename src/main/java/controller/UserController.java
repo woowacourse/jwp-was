@@ -5,6 +5,8 @@ import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.User;
 
+import static view.ViewResolver.REDIRECT_SIGNATURE;
+
 public class UserController extends AbstractController {
     public static UserController getInstance() {
         return UserControllerLazyHolder.INSTANCE;
@@ -21,7 +23,7 @@ public class UserController extends AbstractController {
 
         DataBase.addUser(user);
 
-        return new ModelAndView("redirect: /");
+        return new ModelAndView(String.format("%s%s", REDIRECT_SIGNATURE, "/"));
     }
 
     private static class UserControllerLazyHolder {
