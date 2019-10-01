@@ -42,11 +42,11 @@ public class RequestLine {
     }
 
     private static String setQueryString(String requestUrl) {
-        try {
-            return requestUrl.split(QUERY_FLAG)[1];
-        } catch (ArrayIndexOutOfBoundsException e) {
+        String[] queryString = requestUrl.split(QUERY_FLAG);
+        if (queryString.length == 1) {
             return "";
         }
+        return queryString[1];
     }
 
     public String getQueryString() {
