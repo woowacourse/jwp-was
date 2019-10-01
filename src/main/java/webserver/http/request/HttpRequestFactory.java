@@ -1,5 +1,7 @@
 package webserver.http.request;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.IOUtils;
 import webserver.http.HttpVersion;
 import webserver.http.exception.NoMatchHeaderFieldException;
@@ -14,12 +16,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HttpRequestFactory {
+    private static final Logger log = LoggerFactory.getLogger(HttpRequestFactory.class);
     private static final String CONTENT_LENGTH = "Content-Length";
 
     public static HttpRequest create(InputStream in) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
 
-        RequestLine requestLine = parseFirstLine(br);
+        RequestLine requestLine = parseRequestLine(br);
         RequestHeader requestHeader = parseHeader(br);
         RequestData requestData;
         try {
@@ -32,9 +35,9 @@ public class HttpRequestFactory {
         return requestData == null ? new HttpRequest(requestLine, requestHeader) : new HttpRequest(requestLine, requestHeader, requestData);
     }
 
-    private static RequestLine parseFirstLine(BufferedReader br) throws IOException {
+    private static RequestLine parseRequestLine(BufferedReader br) throws IOException {
         String[] tokens = br.readLine().split(" ");
-
+        log.debug("RequestHeader : {} {} {}", tokens[0], tokens[1], tokens[2]);
         return new RequestLine(
                 RequestMethod.of(tokens[0]),
                 new RequestPath(RequestPrefixPath.of(tokens[1]), tokens[1]),
@@ -47,6 +50,7 @@ public class HttpRequestFactory {
         String headerLine = br.readLine();
 
         while (!"".equals(headerLine)) {
+            log.debug("RequestHeader : {}", headerLine);
             parseHeaderLines.add(headerLine);
             headerLine = br.readLine();
         }

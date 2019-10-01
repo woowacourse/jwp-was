@@ -20,6 +20,10 @@ public class ResponseStatusLine {
         this.responseStatus = responseStatus;
     }
 
+    public int getResponseStatusCode() {
+        return responseStatus.getHttpStatusCode();
+    }
+
     public String getStatusLine() {
         return httpVersion.getVersion()
                 + BLANK

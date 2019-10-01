@@ -2,7 +2,6 @@ package webserver.http.request.core;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import webserver.http.request.core.RequestPrefixPath;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static utils.UtilData.CSS_PATH;

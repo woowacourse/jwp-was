@@ -14,8 +14,8 @@ class ResponseHeaderTest {
         ResponseHeader responseHeader = new ResponseHeader();
         responseHeader.addHeaders(HttpHeaderField.CONTENT_TYPE, ResponseContentType.CSS);
         responseHeader.addHeaders(HttpHeaderField.CONTENT_LENGTH, "6902");
-        String testHeader = "Content-Type: text/css;charset=utf-8\r\n" +
-                "Content-Length: 6902";
+        String testHeader = "Content-Length: 6902\r\n" +
+                "Content-Type: text/css;charset=utf-8";
         assertThat(responseHeader.getResponseHeaders()).isEqualTo(testHeader);
     }
 

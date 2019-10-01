@@ -7,12 +7,11 @@ import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 import webserver.http.response.core.ResponseStatus;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.URISyntaxException;
 
 public class CreateUserController extends AbstractController {
+    private static final String DEFAULT_PATH = "/index.html";
     private final UserService userService;
 
     CreateUserController() {
@@ -20,17 +19,15 @@ public class CreateUserController extends AbstractController {
     }
 
     @Override
-    public void service(OutputStream out, HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
-        DataOutputStream dos = new DataOutputStream(out);
+    public void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         doPost(httpRequest, httpResponse);
-        sendResponse(dos);
+        httpResponse.sendResponse(httpRequest);
     }
 
     @Override
     protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        super.doPost(httpRequest, httpResponse);
         userService.createUser(httpRequest);
-        httpResponse.addStatus(ResponseStatus.of(302));
-        httpResponse.addHeader(HttpHeaderField.LOCATION, DEFAULT_PAGE);
+        httpResponse.addStatus(ResponseStatus.FOUND)
+                .addHeader(HttpHeaderField.LOCATION, DEFAULT_PATH);
     }
 }
