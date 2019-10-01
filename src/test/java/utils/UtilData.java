@@ -65,4 +65,8 @@ public class UtilData {
 
     private static final String VERSION = "HTTP/1.1";
     public static final HttpVersion REQUEST_VERSION = HttpVersion.of(VERSION);
+
+    public static final String JSESSIONED_ID = "JSESSIONED";
+    public static final String JSESSIONED_VALUE = "e21a65fc-998f-4cdd-a3f6-25e77153db14";
+
 }
