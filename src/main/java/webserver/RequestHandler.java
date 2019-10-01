@@ -38,19 +38,14 @@ public class RequestHandler implements Runnable {
 
             sendResponse(outputStream, httpResponse);
         } catch (IOException | InvalidHttpRequestException e) {
-            log.error(e.getMessage(), e.getCause());
+            log.error("error : {}\n", e.toString(), e.getCause());
         }
     }
 
-    private void sendResponse(OutputStream out, HttpResponse httpResponse) {
+    private void sendResponse(OutputStream out, HttpResponse httpResponse) throws IOException {
         DataOutputStream dos = new DataOutputStream(out);
-
-        try {
-            byte[] response = httpResponse.serialize();
-            dos.write(response, 0, response.length);
-            dos.flush();
-        } catch (IOException e) {
-            log.error(e.getMessage(), e.getCause());
-        }
+        byte[] response = httpResponse.serialize();
+        dos.write(response, 0, response.length);
+        dos.flush();
     }
 }

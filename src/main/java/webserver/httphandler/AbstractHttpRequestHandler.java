@@ -23,16 +23,16 @@ public abstract class AbstractHttpRequestHandler implements HttpRequestHandler {
             checkHttpVersion(httpRequest);
             handleInternal(httpRequest, httpResponse);
         } catch (HttpVersionNotSupportedException e) {
-            log.error(e.getMessage(), e.getCause());
+            log.error("error : {}\n", e.toString(), e.getCause());
             httpResponse.setResponseStatus(ResponseStatus.HTTP_VERSION_NOT_SUPPORTED);
         } catch (ResourceNotFoundException e) {
-            log.error(e.getMessage(), e.getCause());
+            log.error("error : {}\n", e.toString(), e.getCause());
             httpResponse.setResponseStatus(ResponseStatus.NOT_FOUND);
         } catch (MethodNotAllowedException e) {
-            log.error(e.getMessage(), e.getCause());
+            log.error("error : {}\n", e.toString(), e.getCause());
             httpResponse.setResponseStatus(ResponseStatus.METHOD_NOT_ALLOWED);
         } catch (RuntimeException e) {
-            log.error(e.getMessage(), e.getCause());
+            log.error("error : {}\n", e.toString(), e.getCause());
             httpResponse.setResponseStatus(ResponseStatus.INTERNAL_SERVER_ERROR);
         }
     }
