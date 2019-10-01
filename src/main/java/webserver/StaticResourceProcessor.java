@@ -1,10 +1,7 @@
-package webserver.viewProcessor;
+package webserver;
 
 import utils.FileIoUtils;
-import webserver.MimeType;
-import webserver.ResponseProcessor;
-import webserver.View;
-import webserver.ViewProcessor;
+import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
 import webserver.http.httpRequest.HttpStatus;
 
@@ -12,19 +9,20 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-public class ResourceViewProcessor implements ViewProcessor {
+public class StaticResourceProcessor {
 
     private static final String STATIC_FILE_ROUTE = "./static";
+    private static final String STATIC_HTML_ROUTE = "./templates";
+    private static final String HTML_SUFFIX = ".html";
 
-    @Override
-    public boolean isSupported(View view) {
-        return true;
+    public boolean isSupported(HttpRequest httpRequest) {
+        return httpRequest.getPath().contains(".");
     }
 
-    @Override
-    public void process(DataOutputStream dos, View view, HttpResponse httpResponse) {
+    public void process(DataOutputStream dos, HttpRequest httpRequest) {
         ResponseProcessor responseProcessor = ResponseProcessor.getInstance();
-        String filePath = STATIC_FILE_ROUTE + view.getName();
+        HttpResponse httpResponse = new HttpResponse(httpRequest);
+        String filePath = getFullPath(httpRequest.getPath());
         byte[] bytes = null;
         try {
             bytes = FileIoUtils.loadFileFromClasspath(filePath);
@@ -34,5 +32,13 @@ public class ResourceViewProcessor implements ViewProcessor {
         httpResponse.setContentType(MimeType.values(filePath));
         httpResponse.setContentLength(bytes.length);
         responseProcessor.forward(dos, bytes, httpResponse);
+    }
+
+    private String getFullPath(String path) {
+        if (path.endsWith(HTML_SUFFIX)) {
+            return STATIC_HTML_ROUTE + path;
+        } else {
+            return STATIC_FILE_ROUTE + path;
+        }
     }
 }

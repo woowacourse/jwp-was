@@ -5,13 +5,11 @@ import model.User;
 import org.junit.jupiter.api.Test;
 import webserver.View;
 import webserver.WebTestForm;
-import webserver.exception.NotSupportedHttpMethodException;
 import webserver.http.HttpRequest;
 
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class LoginControllerTest extends WebTestForm {
 
@@ -20,8 +18,8 @@ class LoginControllerTest extends WebTestForm {
     @Test
     void 로그인_GET_요청_에러_처리() throws IOException {
         HttpRequest httpRequest = getHttpGetRequest("/user/login");
-
-        assertThrows(NotSupportedHttpMethodException.class, () -> loginController.service(httpRequest));
+        View view = loginController.service(httpRequest);
+        assertThat(view.getName()).isEqualTo("/error:METHOD_NOT_ALLOWED");
     }
 
     @Test

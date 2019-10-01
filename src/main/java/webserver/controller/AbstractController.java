@@ -2,9 +2,9 @@ package webserver.controller;
 
 import webserver.Controller;
 import webserver.View;
-import webserver.exception.NotSupportedHttpMethodException;
 import webserver.http.HttpMethod;
 import webserver.http.HttpRequest;
+import webserver.http.httpRequest.HttpStatus;
 
 public abstract class AbstractController implements Controller {
     public static final String REDIRECT_VIEW = "/redirect:";
@@ -20,14 +20,14 @@ public abstract class AbstractController implements Controller {
             return doPost(request);
         }
 
-        throw new NotSupportedHttpMethodException();
+        return new View(ERROR_VIEW + HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     protected View doGet(HttpRequest httpRequest) {
-        throw new NotSupportedHttpMethodException();
+        return new View(ERROR_VIEW + HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     protected View doPost(HttpRequest httpRequest) {
-        throw new NotSupportedHttpMethodException();
+        return new View(ERROR_VIEW + HttpStatus.METHOD_NOT_ALLOWED);
     }
 }

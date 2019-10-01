@@ -30,8 +30,15 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
 
             HttpRequest httpRequest = HttpRequest.create(in);
-            View view = urlMapper.service(httpRequest);
 
+            StaticResourceProcessor staticResourceProcessor = new StaticResourceProcessor();
+            if (staticResourceProcessor.isSupported(httpRequest)) {
+                staticResourceProcessor.process(dos, httpRequest);
+                return;
+            }
+
+            Controller controller = urlMapper.service(httpRequest);
+            View view = controller.service(httpRequest);
             HttpResponse httpResponse = new HttpResponse(httpRequest);
             ViewProcessor viewProcessor = ViewProcessorFactory.getInstance().getViewProcessor(view);
             viewProcessor.process(dos, view, httpResponse);

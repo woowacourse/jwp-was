@@ -19,13 +19,12 @@ import java.util.Map;
 
 public class HtmlViewProcessor implements ViewProcessor {
 
-    //TODO public -> private
-    public static final String HTML_SUFFIX = ".html";
+    private static final String HTML_SUFFIX = ".html";
     private static final String HTML_ROUTE = "/templates";
 
     @Override
     public boolean isSupported(View view) {
-        return view.nameEndedWith(HTML_SUFFIX);
+        return true;
     }
 
     @Override
@@ -33,7 +32,7 @@ public class HtmlViewProcessor implements ViewProcessor {
         ResponseProcessor responseProcessor = ResponseProcessor.getInstance();
 
         byte[] bytes = initViewData(view);
-        setResponseBody(httpResponse, view, bytes);
+        setResponseBody(httpResponse, bytes);
         responseProcessor.forward(dos, bytes, httpResponse);
     }
 
@@ -83,13 +82,12 @@ public class HtmlViewProcessor implements ViewProcessor {
         try {
             return FileIoUtils.loadFileFromClasspath("." + HTML_ROUTE + view.getName());
         } catch (IOException | URISyntaxException e) {
-
             throw new IllegalArgumentException("파일을 찾을 수 없습니다.");
         }
     }
 
-    private void setResponseBody(HttpResponse httpResponse, View view, byte[] bytes) {
-        httpResponse.setContentType(MimeType.values(view.getName()));
+    private void setResponseBody(HttpResponse httpResponse, byte[] bytes) {
+        httpResponse.setContentType(MimeType.HTML);
         httpResponse.setContentLength(bytes.length);
     }
 }
