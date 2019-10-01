@@ -1,4 +1,4 @@
-package controller.exception;
+package webserver.http.exception;
 
 public class NonLoginException extends RuntimeException {
     public NonLoginException() {

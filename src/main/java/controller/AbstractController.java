@@ -4,7 +4,6 @@ import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
-import controller.exception.NonLoginException;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
 import webserver.http.SessionManager;
@@ -33,12 +32,6 @@ public abstract class AbstractController implements Controller {
         Template template = handlebars.compile(filePath);
 
         return Optional.of(template.apply(object));
-    }
-
-    protected void checkLogin(HttpRequest request) {
-        if (!request.cookie().contains("logined=true")) {
-            throw new NonLoginException();
-        }
     }
 
     @Override

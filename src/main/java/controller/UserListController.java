@@ -1,11 +1,11 @@
 package controller;
 
-import controller.exception.NonLoginException;
 import db.Database;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
+import webserver.http.exception.NonLoginException;
 import webserver.http.headerfields.MimeType;
 
 import java.io.IOException;
@@ -29,7 +29,7 @@ public class UserListController extends AbstractController {
         try {
             Map<String, Object> users = new HashMap<>();
             users.put("users", Database.findAll());
-            super.checkLogin(request);
+            request.checkLogin();
 
             return templateEngine("user/list", users)
                     .map(body -> HttpResponse.successByBody(request, MimeType.TEXT_HTML, body))
