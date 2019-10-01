@@ -2,6 +2,7 @@ package webserver.http.session;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class SessionManager {
     private static final Map<String, HttpSession> sessionManager = new HashMap<>();
@@ -15,7 +16,7 @@ public class SessionManager {
     }
 
     private static HttpSession createSession() {
-        final HttpSession httpSession = new HttpSession();
+        final HttpSession httpSession = new HttpSession(UUID.randomUUID().toString());
         sessionManager.put(httpSession.getId(), httpSession);
         return httpSession;
     }
