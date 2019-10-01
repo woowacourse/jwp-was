@@ -8,18 +8,8 @@ import java.net.URISyntaxException;
 
 public abstract class AbstractController implements Controller {
     protected static final String SESSION_USER_KEY = "user";
-    protected static final String DEFAULT_PAGE = "http://localhost:8080/index.html";
-    protected static final String LOGIN_PAGE = "http://localhost:8080/user/login.html";
-    protected static final String LOGIN_FAILED = "http://localhost:8080/user/login_failed.html";
 
-    private HttpRequest httpRequest;
-    private HttpResponse httpResponse;
 
-    public AbstractController init(HttpRequest httpRequest, HttpResponse httpResponse) {
-        this.httpRequest = httpRequest;
-        this.httpResponse = httpResponse;
-        return this;
-    }
 
     @Override
     public abstract void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException;
