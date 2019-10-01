@@ -22,7 +22,6 @@ public enum HttpVersion {
                 .filter(value -> value.version.equals(version))
                 .findAny()
                 .orElse(NOT_SUPPORTED_VERSION)
-                //.orElseThrow(HttpVersionNotFoundException::new)
                 ;
     }
 
