@@ -17,6 +17,14 @@ public class LoginController extends AbstractController {
     private static final String LOGIN_FAILED_PAGE_LOCATION = "/user/login_failed.html";
     private static final String LOGIN_PAGE_LOCATION = "/user/login.html";
 
+    public static Controller getInstance() {
+        return LazyHolder.loginController;
+    }
+
+    private static class LazyHolder {
+        private static final Controller loginController = new LoginController();
+    }
+
     @Override
     public HttpResponse getMapping(HttpRequest request) {
         return HttpResponse.successByFilePath(request, MimeType.TEXT_HTML, LOGIN_PAGE_LOCATION);

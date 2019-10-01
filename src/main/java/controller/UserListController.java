@@ -16,6 +16,14 @@ public class UserListController extends AbstractController {
     private static final Logger logger = LoggerFactory.getLogger(UserListController.class);
     private static final String NOT_LOGIN_LOCATION = "/user/login.html";
 
+    public static Controller getInstance() {
+        return LazyHolder.userListController;
+    }
+
+    private static class LazyHolder {
+        private static final Controller userListController = new UserListController();
+    }
+
     @Override
     protected HttpResponse getMapping(HttpRequest request) {
         try {

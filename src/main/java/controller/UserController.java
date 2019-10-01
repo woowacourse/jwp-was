@@ -15,6 +15,14 @@ public class UserController extends AbstractController {
     private static final String INDEX_PAGE_LOCATION = "/index.html";
     private static final String USER_FORM_PAGE_LOCATION = "/user/form.html";
 
+    public static Controller getInstance() {
+        return LazyHolder.userController;
+    }
+
+    private static class LazyHolder {
+        private static final Controller userController = new UserController();
+    }
+
     @Override
     public HttpResponse getMapping(HttpRequest request) {
         return HttpResponse.successByFilePath(request, MimeType.TEXT_HTML, USER_FORM_PAGE_LOCATION);

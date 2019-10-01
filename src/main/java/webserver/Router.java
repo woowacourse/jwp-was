@@ -12,22 +12,17 @@ import java.util.Map;
 public class Router {
     private static final Logger logger = LoggerFactory.getLogger(Router.class);
 
-    private static final Controller INDEX_CONTROLLER = new IndexController();
-    private static final Controller USER_CONTROLLER = new UserController();
-    private static final Controller LOGIN_CONTROLLER = new LoginController();
-    private static final Controller LOGIN_FAILED_CONTROLLER = new LoginFailController();
-    private static final Controller USER_LIST_CONTROLLER = new UserListController();
-
     private static final Map<String, Controller> controllers = new HashMap<>();
+
     static {
-        controllers.put("/", INDEX_CONTROLLER);
-        controllers.put("/user/create", USER_CONTROLLER);
-        controllers.put("/user/login", LOGIN_CONTROLLER);
-        controllers.put("/user/list", USER_LIST_CONTROLLER);
-        controllers.put("/index.html", INDEX_CONTROLLER);
-        controllers.put("/user/form.html", USER_CONTROLLER);
-        controllers.put("/user/login.html", LOGIN_CONTROLLER);
-        controllers.put("/user/login_failed.html", LOGIN_FAILED_CONTROLLER);
+        controllers.put("/", IndexController.getInstance());
+        controllers.put("/user/create", UserController.getInstance());
+        controllers.put("/user/login", LoginController.getInstance());
+        controllers.put("/user/list", UserListController.getInstance());
+        controllers.put("/index.html", IndexController.getInstance());
+        controllers.put("/user/form.html", UserController.getInstance());
+        controllers.put("/user/login.html", LoginController.getInstance());
+        controllers.put("/user/login_failed.html", LoginFailController.getInstance());
     }
 
     public static HttpResponse serve(HttpRequest req) {
