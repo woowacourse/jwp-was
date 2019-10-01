@@ -36,6 +36,7 @@ public class UserListController extends AbstractController {
         if (body == null) {
             httpResponse.addStatus(ResponseStatus.FOUND)
                     .addHeader(HttpHeaderField.LOCATION, LOGIN_PAGE_PATH);
+            return;
         }
         httpResponse.addStatus(ResponseStatus.OK)
                 .addHeader(HttpHeaderField.CONTENT_TYPE, ResponseContentType.of(httpRequest.getRequestPath()));
