@@ -2,18 +2,15 @@ package view;
 
 import fileloader.TemplateFileLoader;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.function.Predicate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ViewResolver {
-    private static final String REDIRECT = "redirect: ";
-    private static final Map<Predicate<String>, Function<String, View>> VIEWS = new HashMap<>();
-    private static final TemplateManager TEMPLATE_MANAGER = new HandlebarsManager(TemplateFileLoader.getInstance());
+    private final List<ViewMatcher> VIEW_MATCHERS = new ArrayList<>();
+    private final TemplateManager TEMPLATE_MANAGER = new HandlebarsManager(TemplateFileLoader.getInstance());
 
-    static {
-        VIEWS.put(viewName -> viewName.startsWith(REDIRECT), RedirectView::new);
+    {
+        VIEW_MATCHERS.add(new RedirectViewMatcher());
     }
 
     private static class ViewResolverLazyHolder {
@@ -28,10 +25,10 @@ public class ViewResolver {
     }
 
     public View resolve(String viewName) {
-        return VIEWS.entrySet().stream()
-                .filter(entry -> entry.getKey().test(viewName))
-                .map(entry -> entry.getValue().apply(viewName))
+        return VIEW_MATCHERS.stream()
+                .filter(viewMatcher -> viewMatcher.match(viewName))
                 .findAny()
+                .map(viewMatcher -> viewMatcher.getView(viewName))
                 .orElse(new TemplateView(viewName, TEMPLATE_MANAGER));
     }
 }
