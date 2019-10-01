@@ -8,7 +8,6 @@ import webserver.http.response.HttpResponse;
 import webserver.http.response.core.ResponseStatus;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.URISyntaxException;
 
 public class CreateUserController extends AbstractController {
@@ -27,7 +26,7 @@ public class CreateUserController extends AbstractController {
     @Override
     protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         userService.createUser(httpRequest);
-        httpResponse.addStatus(ResponseStatus.of(302))
+        httpResponse.addStatus(ResponseStatus.of(STATUS_FOUND))
                 .addHeader(HttpHeaderField.LOCATION, DEFAULT_PAGE);
     }
 }

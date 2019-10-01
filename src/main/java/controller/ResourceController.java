@@ -8,7 +8,6 @@ import webserver.http.response.core.ResponseContentType;
 import webserver.http.response.core.ResponseStatus;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.URISyntaxException;
 
 public class ResourceController extends AbstractController {
@@ -21,7 +20,7 @@ public class ResourceController extends AbstractController {
 
     @Override
     protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        httpResponse.addStatus(ResponseStatus.of(200))
+        httpResponse.addStatus(ResponseStatus.of(STATUS_OK))
                 .addHeader(HttpHeaderField.CONTENT_TYPE, ResponseContentType.of(httpRequest.getRequestPath()));
     }
 }

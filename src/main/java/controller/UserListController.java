@@ -10,7 +10,6 @@ import webserver.http.response.core.ResponseStatus;
 import webserver.http.session.HttpSession;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.URISyntaxException;
 
 public class UserListController extends AbstractController {
@@ -32,12 +31,12 @@ public class UserListController extends AbstractController {
     protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         HttpSession session = httpRequest.getSession();
         if (session != null && session.getAttribute(SESSION_USER_KEY) != null) {
-            httpResponse.addStatus(ResponseStatus.of(200))
+            httpResponse.addStatus(ResponseStatus.of(STATUS_OK))
                     .addHeader(HttpHeaderField.CONTENT_TYPE, ResponseContentType.of(httpRequest.getRequestPath()));
             this.body = TemplateManager.getTemplatePage(USER_LIST_PATH).getBytes();
             return;
         }
-        httpResponse.addStatus(ResponseStatus.of(302))
+        httpResponse.addStatus(ResponseStatus.of(STATUS_FOUND))
                 .addHeader(HttpHeaderField.LOCATION, LOGIN_PAGE);
     }
 }

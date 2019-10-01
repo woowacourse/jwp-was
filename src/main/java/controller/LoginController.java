@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class LoginController extends AbstractController {
+    private static final String SESSION_USER_KEY = "user";
     private static final String LOGIN_FAILED_SET_COOKIE = "logined=false; path=/user/login_failed.html";
     private static final String LOGIN_SUCCESS_SET_COOKIE = "JSESSIONID=%s; path=/";
     private final UserService userService;
@@ -30,13 +31,13 @@ public class LoginController extends AbstractController {
     @Override
     protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         if (!userService.loginUser(httpRequest)) {
-            httpResponse.addStatus(ResponseStatus.of(302))
+            httpResponse.addStatus(ResponseStatus.of(STATUS_FOUND))
                     .addHeader(HttpHeaderField.LOCATION, LOGIN_FAILED)
                     .addHeader(HttpHeaderField.SET_COOKIE, LOGIN_FAILED_SET_COOKIE);
             return;
         }
         HttpSession session = SessionManager.getSession();
-        session.setAttribute("user", userService.getUser(httpRequest));
+        session.setAttribute(SESSION_USER_KEY, userService.getUser(httpRequest));
 
         httpResponse.addStatus(ResponseStatus.of(302))
                 .addHeader(HttpHeaderField.LOCATION, DEFAULT_PAGE)
