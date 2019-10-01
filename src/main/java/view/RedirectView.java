@@ -17,6 +17,6 @@ public class RedirectView implements View {
     @Override
     public void render(Map<String, Object> model, HttpResponse httpResponse) {
         httpResponse.setResponseStatus(ResponseStatus.FOUND);
-        httpResponse.addHeaderAttribute(LOCATION, viewName.replace("redirect: ", ""));
+        httpResponse.addHeaderAttribute(LOCATION, viewName);
     }
 }
