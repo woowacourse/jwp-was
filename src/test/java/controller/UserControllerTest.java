@@ -3,15 +3,13 @@ package controller;
 import db.DataBase;
 import http.common.ContentType;
 import http.common.HttpHeader;
-import http.common.HttpVersion;
 import http.request.HttpRequest;
 import http.request.RequestBody;
 import http.request.RequestLine;
 import http.response.HttpResponse;
-import http.response.ResponseStatus;
 import model.User;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import view.ModelAndView;
 
 import java.util.ArrayList;
 
@@ -19,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UserControllerTest {
     private UserController userController = UserController.getInstance();
-    private HttpResponse httpResponse;
     private static final String USER_ID = "olaf";
     private static final String PASSWORD = "bmo";
     private static final String NAME = "bhy";
@@ -32,11 +29,6 @@ class UserControllerTest {
 
     private static final User USER = new User(USER_ID, PASSWORD, NAME, EMAIL);
 
-    @BeforeEach
-    void setUp() {
-        httpResponse = new HttpResponse(HttpVersion.HTTP_1_1);
-    }
-
     @Test
     void 유저생성() {
         String url = "/user/create";
@@ -45,10 +37,11 @@ class UserControllerTest {
         HttpHeader httpHeader = new HttpHeader(new ArrayList<>());
         RequestBody body = new RequestBody(QUERY_STRING, ContentType.FORM_URLENCODED);
         HttpRequest httpRequest = new HttpRequest(postRequestLine, httpHeader, body);
+        HttpResponse httpResponse = new HttpResponse(httpRequest);
 
-        userController.doPost(httpRequest, httpResponse);
+        ModelAndView modelAndView = userController.doPost(httpRequest, httpResponse);
 
         assertEquals(DataBase.findUserById(USER_ID), USER);
-        assertEquals(httpResponse.getResponseStatus(), ResponseStatus.FOUND);
+        assertEquals(modelAndView.getViewName(), "redirect: /");
     }
 }
