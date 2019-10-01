@@ -5,7 +5,7 @@ import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.User;
 
-import static view.ViewResolver.REDIRECT_SIGNATURE;
+import static view.RedirectViewMatcher.REDIRECT_SIGNATURE;
 
 public class UserController extends AbstractController {
     public static UserController getInstance() {

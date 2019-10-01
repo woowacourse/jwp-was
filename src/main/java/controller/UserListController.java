@@ -8,7 +8,7 @@ import http.session.Session;
 import java.util.Collections;
 import java.util.Map;
 
-import static view.ViewResolver.REDIRECT_SIGNATURE;
+import static view.RedirectViewMatcher.REDIRECT_SIGNATURE;
 
 public class UserListController extends AbstractController {
     public static UserListController getInstance() {

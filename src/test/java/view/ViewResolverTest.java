@@ -3,7 +3,7 @@ package view;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static view.ViewResolver.REDIRECT_SIGNATURE;
+import static view.RedirectViewMatcher.REDIRECT_SIGNATURE;
 
 class ViewResolverTest {
     private ViewResolver viewResolver = ViewResolver.getInstance();

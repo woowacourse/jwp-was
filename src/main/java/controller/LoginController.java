@@ -6,7 +6,7 @@ import http.response.HttpResponse;
 import http.session.Session;
 import model.User;
 
-import static view.ViewResolver.REDIRECT_SIGNATURE;
+import static view.RedirectViewMatcher.REDIRECT_SIGNATURE;
 
 public class LoginController extends AbstractController {
     public static final String LOGIN_SUCCESS_REDIRECT_LOCATION = "/";
