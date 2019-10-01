@@ -1,5 +1,6 @@
 package http.controller;
 
+import exception.MethodNotAllowedException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
@@ -26,5 +27,10 @@ public class StaticFileController extends AbstractController {
             logger.debug(e.getMessage());
             httpResponse.sendNotFound();
         }
+    }
+
+    @Override
+    protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
+        throw new MethodNotAllowedException();
     }
 }
