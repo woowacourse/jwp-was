@@ -16,7 +16,7 @@ public class LoginController extends AbstractController {
     protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         String userId = httpRequest.getParameter("userId");
         String password = httpRequest.getParameter("password");
-        if (DataBase.findUserById(userId) != null && password.equals(DataBase.findUserById(userId).getPassword())) {
+        if (DataBase.findUserById(userId) != null && DataBase.findUserById(userId).matchPassword(password)) {
             setSession(httpRequest, httpResponse);
             httpResponse.redirect("/index.html");
             logger.debug("Successful Login: {}", userId);
