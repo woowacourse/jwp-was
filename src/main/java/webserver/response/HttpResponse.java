@@ -56,6 +56,7 @@ public class HttpResponse {
     public void forward(HttpRequest httpRequest, byte[] file) {
         addStatusLine(httpRequest, HttpStatus.OK);
         addHeader(HEADER_FIELD_CONTENT_TYPE, CONTENT_TYPE_CSS);
+        addHeader(HEADER_FIELD_CONTENT_LENGTH, String.valueOf(file.length));
         addBody(file);
     }
 
