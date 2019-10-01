@@ -51,6 +51,11 @@ public class HttpResponse {
         return this;
     }
 
+    public HttpResponse addCookie(String value) {
+        responseHeader.addCookies(value);
+        return this;
+    }
+
     private String doResponse() {
         log.debug("doResponse: {}", responseStatusLine.getStatusLine() +
                 responseHeader.getResponseHeaders() + CRLF + CRLF);

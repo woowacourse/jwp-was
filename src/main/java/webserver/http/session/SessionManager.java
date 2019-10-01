@@ -11,12 +11,7 @@ public class SessionManager {
     }
 
     public static HttpSession getSession(String uuid) {
-        return hasSessionKey(uuid) ? sessionManager.get(uuid) : createSession();
-    }
-
-    private static boolean hasSessionKey(String uuid) {
-        return sessionManager.keySet().stream()
-                .anyMatch(key -> key.equals(uuid));
+        return sessionManager.get(uuid);
     }
 
     private static HttpSession createSession() {

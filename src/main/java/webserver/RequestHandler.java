@@ -38,7 +38,7 @@ public class RequestHandler implements Runnable {
 
             if (isStaticFile(httpRequest.getRequestPath())) {
                 httpResponse.addStatus()
-                        .addHeader(HttpHeaderField.of("Content-Type:"), ResponseContentType.of(httpRequest.getRequestPath()))
+                        .addHeader(HttpHeaderField.CONTENT_TYPE, ResponseContentType.of(httpRequest.getRequestPath()))
                         .sendResponse(httpRequest);
             } else {
                 AbstractController controller = ControllerFactory.mappingController(httpRequest, httpResponse);

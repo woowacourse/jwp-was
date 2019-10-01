@@ -37,6 +37,6 @@ public class Cookie {
     }
 
     public String getCookies(String key) {
-        return cookies.get(key);
+        return cookies.getOrDefault(key, null);
     }
 }

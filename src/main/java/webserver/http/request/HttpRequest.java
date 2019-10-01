@@ -28,10 +28,8 @@ public class HttpRequest {
     }
 
     private Cookie createCookie() {
-        if (requestHeader.hasHeaderField(COOKIE)) {
-            return new Cookie(requestHeader.getHeadersKey(COOKIE));
-        }
-        return new Cookie();
+        return requestHeader.hasHeaderField(COOKIE) ?
+                new Cookie(requestHeader.getHeadersKey(COOKIE)) : new Cookie();
     }
 
     public RequestMethod getRequestMethod() {
@@ -47,10 +45,7 @@ public class HttpRequest {
     }
 
     public HttpSession getSession() {
-        if (cookie == null) {
-            return null;
-        }
         String uuid = this.cookie.getCookies(JSESSIONID);
-        return SessionManager.getSession(uuid);
+        return uuid != null ? SessionManager.getSession(uuid) : SessionManager.getSession();
     }
 }

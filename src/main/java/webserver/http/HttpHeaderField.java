@@ -28,7 +28,7 @@ public enum HttpHeaderField {
     //Response Header
     ACCEPT_RANGES("Accept-Ranges"), AGE("Age"), ETAG("ETag"), LOCATION("Location"),
     PROXY_AUTHENTICATE("Proxy-Authenticate"), RETRY_AFTER("Retry-After"), SERVER("Server"), VARY("Vary"),
-    WWW_AUTHENTICATE("WWW-Authenticate"), SET_COOKIE("Set-Cookie");
+    WWW_AUTHENTICATE("WWW-Authenticate");
 
     private final String field;
 
