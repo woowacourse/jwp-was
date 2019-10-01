@@ -41,7 +41,7 @@ public class RequestHandler implements Runnable {
                         .addHeader(HttpHeaderField.CONTENT_TYPE, ResponseContentType.of(httpRequest.getRequestPath()))
                         .sendResponse(httpRequest);
             } else {
-                AbstractController controller = ControllerFactory.mappingController(httpRequest, httpResponse);
+                AbstractController controller = ControllerFactory.mappingController(httpRequest);
                 controller.service(httpRequest, httpResponse);
             }
 

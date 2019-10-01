@@ -12,7 +12,7 @@ public class SessionManager {
     }
 
     public static HttpSession getSession(String uuid) {
-        return sessionManager.get(uuid);
+        return sessionManager.containsKey(uuid) ? sessionManager.get(uuid) : createSession();
     }
 
     private static HttpSession createSession() {

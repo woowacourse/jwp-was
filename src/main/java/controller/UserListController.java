@@ -14,6 +14,7 @@ import java.net.URISyntaxException;
 
 public class UserListController extends AbstractController {
     private static final String USER_LIST_PATH = "user/list";
+    private static final String LOGIN_PAGE_PATH = "/user/login.html";
 
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
@@ -34,7 +35,7 @@ public class UserListController extends AbstractController {
     private void doGet(HttpRequest httpRequest, HttpResponse httpResponse, byte[] body) {
         if (body == null) {
             httpResponse.addStatus(ResponseStatus.FOUND)
-                    .addHeader(HttpHeaderField.LOCATION, LOGIN_PAGE);
+                    .addHeader(HttpHeaderField.LOCATION, LOGIN_PAGE_PATH);
         }
         httpResponse.addStatus(ResponseStatus.OK)
                 .addHeader(HttpHeaderField.CONTENT_TYPE, ResponseContentType.of(httpRequest.getRequestPath()));

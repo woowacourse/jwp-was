@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class LoginController extends AbstractController {
+    private static final String DEFAULT_PATH = "/index.html";
+    private static final String LOGIN_FAILED_PATH = "/user/login_failed.html";
     private final UserService userService;
 
     LoginController() {
@@ -28,13 +30,13 @@ public class LoginController extends AbstractController {
     protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         if (!userService.loginUser(httpRequest)) {
             httpResponse.addStatus(ResponseStatus.FOUND)
-                    .addHeader(HttpHeaderField.LOCATION, LOGIN_FAILED);
+                    .addHeader(HttpHeaderField.LOCATION, LOGIN_FAILED_PATH);
             return;
         }
         HttpSession session = httpRequest.getSession();
         session.setAttribute(SESSION_USER_KEY, userService.getUser(httpRequest));
 
         httpResponse.addStatus(ResponseStatus.FOUND)
-                .addHeader(HttpHeaderField.LOCATION, DEFAULT_PAGE);
+                .addHeader(HttpHeaderField.LOCATION, DEFAULT_PATH);
     }
 }

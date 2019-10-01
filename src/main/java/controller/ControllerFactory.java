@@ -40,11 +40,11 @@ public class ControllerFactory {
         return new UserListController();
     }
 
-    public static AbstractController mappingController(HttpRequest httpRequest, HttpResponse httpResponse) {
+    public static AbstractController mappingController(HttpRequest httpRequest) {
         RequestMethod method = httpRequest.getRequestMethod();
         RequestPath path = httpRequest.getRequestPath();
         try {
-            return controllers.get(method.getMethod() + path.getPath()).init(httpRequest, httpResponse);
+            return controllers.get(method.getMethod() + path.getPath());
         } catch (NullPointerException e) {
             throw new PathNotFoundException();
         }

@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class CreateUserController extends AbstractController {
+    private static final String DEFAULT_PATH = "/index.html";
     private final UserService userService;
 
     CreateUserController() {
@@ -27,6 +28,6 @@ public class CreateUserController extends AbstractController {
     protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         userService.createUser(httpRequest);
         httpResponse.addStatus(ResponseStatus.FOUND)
-                .addHeader(HttpHeaderField.LOCATION, DEFAULT_PAGE);
+                .addHeader(HttpHeaderField.LOCATION, DEFAULT_PATH);
     }
 }
