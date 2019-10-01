@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
 import webserver.http.exception.NonLoginException;
-import webserver.http.headerfields.MimeType;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -32,12 +31,12 @@ public class UserListController extends AbstractController {
             request.checkLogin();
 
             return templateEngine("user/list", users)
-                    .map(body -> HttpResponse.successByBody(request, MimeType.TEXT_HTML, body))
+                    .map(body -> HttpResponse.successByBody(request, body))
                     .orElse(HttpResponse.INTERNAL_SERVER_ERROR);
         } catch (IOException e) {
             return HttpResponse.INTERNAL_SERVER_ERROR;
         } catch (NonLoginException e) {
-            return HttpResponse.redirection(request, MimeType.TEXT_PLAIN, NOT_LOGIN_LOCATION);
+            return HttpResponse.redirection(request, NOT_LOGIN_LOCATION);
         }
     }
 }

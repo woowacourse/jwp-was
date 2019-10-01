@@ -96,10 +96,18 @@ public class HttpResponse {
                 .build();
     }
 
+    public static HttpResponse successByBody(HttpRequest request, String body) {
+        return successByBody(request, MimeType.TEXT_HTML, body);
+    }
+
     public static HttpResponse successByFilePath(HttpRequest request, MimeType mimeType, String filePath) {
         return FileIoUtils.loadFileFromClasspath(filePath)
                 .map(body -> successByBody(request, mimeType, body))
                 .orElse(INTERNAL_SERVER_ERROR);
+    }
+
+    public static HttpResponse successByFilePath(HttpRequest request, String filePath) {
+        return successByFilePath(request, MimeType.TEXT_HTML, filePath);
     }
 
     public static HttpResponse redirection(HttpRequest request, MimeType mimeType, String location) {
@@ -109,6 +117,10 @@ public class HttpResponse {
                 .connection(request.connection())
                 .location(location)
                 .build();
+    }
+
+    public static HttpResponse redirection(HttpRequest request, String location) {
+        return redirection(request, MimeType.TEXT_PLAIN, location);
     }
 
     public static HttpResponse staticFiles(HttpRequest request) {

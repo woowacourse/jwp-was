@@ -39,7 +39,7 @@ class HttpResponseTest {
         given(httpRequest.version()).willReturn(HttpVersion.HTTP_1_1);
         given(httpRequest.connection()).willReturn(HttpConnection.KEEP_ALIVE);
 
-        HttpResponse response = HttpResponse.successByBody(httpRequest, MimeType.TEXT_HTML, "body");
+        HttpResponse response = HttpResponse.successByBody(httpRequest, "body");
 
         assertTrue(response.toString().contains("200 OK"));
     }
@@ -50,7 +50,7 @@ class HttpResponseTest {
         given(httpRequest.version()).willReturn(HttpVersion.HTTP_1_1);
         given(httpRequest.connection()).willReturn(HttpConnection.KEEP_ALIVE);
 
-        HttpResponse response = HttpResponse.successByFilePath(httpRequest, MimeType.TEXT_HTML, "/index.html");
+        HttpResponse response = HttpResponse.successByFilePath(httpRequest, "/index.html");
 
         assertTrue(response.toString().contains("200 OK"));
     }
@@ -61,7 +61,7 @@ class HttpResponseTest {
         given(httpRequest.version()).willReturn(HttpVersion.HTTP_1_1);
         given(httpRequest.connection()).willReturn(HttpConnection.KEEP_ALIVE);
 
-        HttpResponse response = HttpResponse.successByFilePath(httpRequest, MimeType.TEXT_HTML, "/index.html");
+        HttpResponse response = HttpResponse.successByFilePath(httpRequest, "/index.html");
 
         assertTrue(response.toString().length() > 0);
     }
@@ -72,7 +72,7 @@ class HttpResponseTest {
         given(httpRequest.version()).willReturn(HttpVersion.HTTP_1_1);
         given(httpRequest.connection()).willReturn(HttpConnection.KEEP_ALIVE);
 
-        HttpResponse response = HttpResponse.redirection(httpRequest, MimeType.TEXT_HTML, "/index.html");
+        HttpResponse response = HttpResponse.redirection(httpRequest, "/index.html");
 
         assertTrue(response.toString().contains("302 FOUND"));
     }
@@ -97,7 +97,7 @@ class HttpResponseTest {
         given(httpRequest.version()).willReturn(HttpVersion.HTTP_1_1);
         given(httpRequest.connection()).willReturn(HttpConnection.KEEP_ALIVE);
 
-        HttpResponse response = HttpResponse.redirection(httpRequest, MimeType.TEXT_HTML, "/index.html");
+        HttpResponse response = HttpResponse.redirection(httpRequest, "/index.html");
         response.applySessionCookie("testSessionId");
 
         assertTrue(response.toString().contains("testSessionId"));
@@ -109,7 +109,7 @@ class HttpResponseTest {
         given(httpRequest.version()).willReturn(HttpVersion.HTTP_1_1);
         given(httpRequest.connection()).willReturn(HttpConnection.KEEP_ALIVE);
 
-        HttpResponse response = HttpResponse.redirection(httpRequest, MimeType.TEXT_HTML, "/index.html");
+        HttpResponse response = HttpResponse.redirection(httpRequest, "/index.html");
 
         response.applyLoginCookie("sessionId", true);
         assertTrue(response.toString().contains("logined=true"));
