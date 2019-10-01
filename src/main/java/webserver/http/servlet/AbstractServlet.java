@@ -1,6 +1,6 @@
 package webserver.http.servlet;
 
-import webserver.http.HttpStatus;
+import webserver.http.response.HttpStatus;
 import webserver.http.request.HttpMethod;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;

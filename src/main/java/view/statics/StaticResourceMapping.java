@@ -1,12 +1,13 @@
-package webserver.http.handler;
+package view.statics;
 
 import webserver.http.MimeType;
+import webserver.http.utils.HttpUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class StaticResourceMapping {
-    protected static final String DEFAULT_HTML_LOCATION = "./templates";
+    static final String DEFAULT_HTML_LOCATION = "./templates";
     private static final String HTM = "htm";
     private static final String HTML = "html";
 
@@ -26,20 +27,32 @@ public class StaticResourceMapping {
         resources.put(extension, StaticResource.of(extension, location));
     }
 
+    public boolean isMapping(final String path) {
+        return contains(parseToExtension(path));
+    }
+
+    private String parseToExtension(final String path) {
+        return path.substring(path.lastIndexOf(".") + 1);
+    }
+
     public boolean contains(final String extension) {
         return resources.containsKey(extension);
     }
 
     public void setAllLocations(final String location) {
-        for (final String key : resources.keySet()) {
-            if (!(key.equals(HTM) || key.equals(HTML))) {
-                resources.get(key).changeLocation(location);
-            }
-        }
+        resources.entrySet()
+                .stream()
+                .filter(entry -> !(entry.getKey().equals(HTM) || entry.getKey().equals(HTML)))
+                .forEach(entry -> entry.getValue().changeLocation(location));
     }
 
     public String getLocation(final String extension) {
         final StaticResource staticResource = resources.get(extension);
         return staticResource.getLocation();
+    }
+
+    public String addPrefix(final String viewName) {
+        final StaticResource staticResource = resources.get(HttpUtils.parseExtension(viewName));
+        return staticResource.getLocation() + viewName;
     }
 }

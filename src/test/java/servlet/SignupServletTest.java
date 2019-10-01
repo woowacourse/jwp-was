@@ -2,12 +2,11 @@ package servlet;
 
 import org.junit.jupiter.api.Test;
 import test.HttpTestClient;
-import webserver.WebServer;
 import webserver.http.HttpHeaders;
-import webserver.http.HttpStatus;
+import webserver.http.response.HttpStatus;
 
 class SignupServletTest {
-    private HttpTestClient httpTestClient = new HttpTestClient(WebServer.DEFAULT_PORT);
+    private HttpTestClient httpTestClient = new HttpTestClient(HttpTestClient.DEFAULT_PORT);
 
     @Test
     void get() {
@@ -18,7 +17,7 @@ class SignupServletTest {
     }
 
     @Test
-    void post() {
+    void 회원가입_성공_후_리다이렉트() {
         httpTestClient.post().uri("/user/create")
                 .body("userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net")
                 .exchange()

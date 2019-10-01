@@ -3,21 +3,18 @@ package servlet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import test.HttpTestClient;
-import webserver.WebServer;
-import webserver.http.HttpStatus;
-
-import java.io.IOException;
+import webserver.http.response.HttpStatus;
 
 class IndexServletTest {
     private HttpTestClient httpTestClient;
 
     @BeforeEach
-    void setUp()  {
-        httpTestClient = new HttpTestClient(WebServer.DEFAULT_PORT);
+    void setUp() {
+        httpTestClient = new HttpTestClient(HttpTestClient.DEFAULT_PORT);
     }
 
     @Test
-    void get() {
+    void 인덱스_페이지_호출() {
         httpTestClient.get().uri("/")
                 .exchange()
                 .matchHttpStatus(HttpStatus.OK)

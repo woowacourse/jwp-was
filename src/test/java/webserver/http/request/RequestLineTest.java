@@ -1,12 +1,13 @@
 package webserver.http.request;
 
 import org.junit.jupiter.api.Test;
+import webserver.http.HttpVersion;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RequestLineTest {
     @Test
-    void 생성_테스트() {
+    void 문자열로_생성되는지_확인() {
         // given & when
         RequestLine requestLine = new RequestLine("GET /test HTTP/1.1");
 

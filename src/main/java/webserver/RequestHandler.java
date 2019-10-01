@@ -2,9 +2,15 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.http.HttpStatus;
-import webserver.http.handler.StaticResourceHandler;
-import webserver.http.handler.StaticResourceMapping;
+import view.View;
+import view.excpetion.ExceptionViewResolver;
+import view.internal.HandlerBarsViewResolver;
+import view.internal.InternalResourceViewResolver;
+import view.statics.StaticResourceMapping;
+import view.statics.StaticViewResolver;
+import webserver.http.Cookie;
+import webserver.http.Cookies;
+import webserver.http.response.HttpStatus;
 import webserver.http.request.HttpRequest;
 import webserver.http.request.HttpRequestFactory;
 import webserver.http.response.HttpResponse;
@@ -19,39 +25,50 @@ public class RequestHandler implements Runnable {
     private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
-    private StaticResourceHandler staticResourceHandler;
     private ServletMapping servletMapping;
+    private StaticViewResolver staticViewResolver;
+    private InternalResourceViewResolver internalResourceViewResolver;
+    private ExceptionViewResolver exceptionViewResolver;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
-        staticResourceHandler = new StaticResourceHandler(new StaticResourceMapping());
-        servletMapping = ServletMapping.getInstance();
+        this.servletMapping = ServletMapping.getInstance();
+        this.staticViewResolver = new StaticViewResolver(new StaticResourceMapping());
+        this.internalResourceViewResolver = new HandlerBarsViewResolver();
+        this.exceptionViewResolver = new ExceptionViewResolver();
     }
 
     public void run() {
-        log.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
-                connection.getPort());
+        log.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(), connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             final HttpRequest httpRequest = HttpRequestFactory.generate(in);
-            final HttpResponse httpResponse = new HttpResponse(out);
+            final HttpResponse httpResponse = new HttpResponse(httpRequest, out);
 
-            final String path = httpRequest.getPath();
-            if (staticResourceHandler.isMapping(path)) {
-                staticResourceHandler.handle(httpRequest, httpResponse);
+            final View view = renderView(httpRequest, httpResponse);
+
+            if (view.isNotEmpty()) {
+                httpResponse.write(view.getBody());
                 return;
             }
-
-            if (servletMapping.isMapping(path)) {
-                final Servlet servlet = servletMapping.getServlet(path);
-                servlet.service(httpRequest, httpResponse);
-                return;
-            }
-
-            httpResponse.sendError(HttpStatus.NOT_FOUND);
-
-        } catch (IOException e) {
+            httpResponse.write();
+        } catch (Exception e) {
             log.error(e.getMessage());
         }
+    }
+
+    private View renderView(final HttpRequest httpRequest, final HttpResponse httpResponse) throws IOException {
+        final String path = httpRequest.getPath();
+
+        if (staticViewResolver.isStaticFile(path)) {
+            return staticViewResolver.resolveView(path, httpResponse);
+        }
+
+        if (servletMapping.isMapping(path)) {
+            final Servlet servlet = servletMapping.getServlet(path);
+            servlet.service(httpRequest, httpResponse);
+            return internalResourceViewResolver.resolveView(httpResponse);
+        }
+        return exceptionViewResolver.resolveView(HttpStatus.NOT_FOUND, httpResponse);
     }
 }

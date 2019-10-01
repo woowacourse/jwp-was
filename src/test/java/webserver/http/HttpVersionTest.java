@@ -1,6 +1,7 @@
-package webserver.http.request;
+package webserver.http;
 
 import org.junit.jupiter.api.Test;
+import webserver.http.HttpVersion;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -8,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class HttpVersionTest {
 
     @Test
-    void 생성_테스트() {
+    void 문자열로_객체_생성되는지_확인() {
         // given & when
         final HttpVersion httpVersion = HttpVersion.of("HTTP/1.1");
 

@@ -3,24 +3,33 @@ package webserver.http.response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import webserver.http.HttpStatus;
-import webserver.http.MimeType;
-import webserver.http.request.HttpVersion;
+import webserver.http.HttpVersion;
+import webserver.http.request.HttpRequest;
+import webserver.http.request.HttpRequestFactory;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static webserver.http.HttpHeaders.CONTENT_TYPE;
 import static webserver.http.HttpHeaders.LOCATION;
 
 class HttpResponseTest {
-    private ByteArrayOutputStream out;
     private HttpResponse response;
 
     @BeforeEach
     void setUp() {
-        out = new ByteArrayOutputStream();
-        response = new HttpResponse(out);
+        final String plainTextRequest = "POST /user/create?id=1 HTTP/1.1\n" +
+                "Host: localhost:8080\n" +
+                "Connection: keep-alive\n" +
+                "Cookie: user=bedi;\n" +
+                "\n";
+
+        final InputStream in = new ByteArrayInputStream(plainTextRequest.getBytes());
+        final HttpRequest httpRequest = HttpRequestFactory.generate(in);
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        response = new HttpResponse(httpRequest, out);
     }
 
     @Test
@@ -32,7 +41,6 @@ class HttpResponseTest {
         // then
         assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.OK);
         assertThat(response.getHttpVersion()).isEqualTo(HttpResponse.DEFAULT_HTTP_VERSION);
-        assertThat(response.getHeader(CONTENT_TYPE)).isEqualTo(MimeType.getType("html"));
     }
 
     @Test
@@ -43,7 +51,6 @@ class HttpResponseTest {
 
         // then
         assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.CREATED);
-        assertThat(response.getHeader(CONTENT_TYPE)).isEqualTo(MimeType.getType("html"));
     }
 
     @Test
@@ -89,7 +96,6 @@ class HttpResponseTest {
 
         // then
         assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.FORBIDDEN);
-        assertThat(out.toString()).contains(message);
     }
 
     @Test
@@ -106,6 +112,5 @@ class HttpResponseTest {
         // then
         assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.NOT_MODIFIED);
         assertThat(response.getHeader(LOCATION)).isEqualTo(location);
-        assertThat(out.toString()).contains(httpVersion.getHttpVersion());
     }
 }

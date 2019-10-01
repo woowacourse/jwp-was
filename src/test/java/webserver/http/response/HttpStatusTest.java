@@ -1,6 +1,7 @@
-package webserver.http;
+package webserver.http.response;
 
 import org.junit.jupiter.api.Test;
+import webserver.http.response.HttpStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -8,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class HttpStatusTest {
 
     @Test
-    void getter_테스트() {
+    void getter_확인() {
         assertThat(HttpStatus.OK.getCode()).isEqualTo(200);
         assertThat(HttpStatus.OK.getPhrase()).isEqualTo("OK");
     }

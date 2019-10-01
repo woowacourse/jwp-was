@@ -1,7 +1,9 @@
 package webserver;
 
 import servlet.IndexServlet;
+import servlet.LoginServlet;
 import servlet.SignupServlet;
+import servlet.UserListServlet;
 import webserver.http.servlet.Servlet;
 
 import java.util.HashMap;
@@ -15,6 +17,8 @@ public class ServletMapping {
 
         servlets.put("/", new IndexServlet());
         servlets.put("/user/create", new SignupServlet());
+        servlets.put("/user/login", new LoginServlet());
+        servlets.put("/user/list", new UserListServlet());
     }
 
     Servlet getServlet(String path) {

@@ -20,6 +20,6 @@ public class SignupServlet extends AbstractServlet {
 
     @Override
     protected void doGet(final HttpRequest request, final HttpResponse response) {
-        response.forward("./templates/user/form.html");
+        response.forward("/user/form");
     }
 }

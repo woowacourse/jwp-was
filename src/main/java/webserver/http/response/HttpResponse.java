@@ -2,34 +2,40 @@ package webserver.http.response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.http.HttpStatus;
-import webserver.http.MimeType;
-import webserver.http.request.HttpVersion;
-import webserver.http.utils.FileIoUtils;
+import webserver.http.Cookie;
+import webserver.http.Cookies;
+import webserver.http.HttpHeaders;
+import webserver.http.HttpVersion;
+import webserver.http.request.HttpRequest;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URISyntaxException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static webserver.http.HttpHeaders.*;
+import static webserver.http.HttpHeaders.LOCATION;
+import static webserver.http.HttpHeaders.SET_COOKIE;
 
 public class HttpResponse {
     private static final Logger log = LoggerFactory.getLogger(HttpResponse.class);
-    public static final HttpVersion DEFAULT_HTTP_VERSION = HttpVersion.of("HTTP/1.1");
+    public static final HttpVersion DEFAULT_HTTP_VERSION = HttpVersion.HTTP_1_1;
     private static final String DEFAULT_ERROR_MESSAGE = "";
 
-    private final Map<String, String> headers = new HashMap<>();
+    private final Map<String, Object> attributes = new HashMap<>();
+    private final HttpHeaders headers = new HttpHeaders();
     private final OutputStream out;
-    private HttpStatus httpStatus;
-    private HttpVersion httpVersion;
-    private byte[] body;
+    private final Cookies cookies;
+    private final HttpRequest httpRequest;
+    private StatusLine statusLine;
+    private String resource;
 
-    public HttpResponse(final OutputStream out) {
+    public HttpResponse(final HttpRequest httpRequest, final OutputStream out) {
+        this.httpRequest = httpRequest;
         this.out = out;
-        this.httpVersion = DEFAULT_HTTP_VERSION;
+        this.cookies = new Cookies();
+        this.statusLine = new StatusLine();
     }
 
     public void forward(final String resource) {
@@ -37,21 +43,8 @@ public class HttpResponse {
     }
 
     public void forward(final String resource, final HttpStatus httpStatus) {
-        try {
-            byte[] body = FileIoUtils.loadFileFromClasspath(resource);
-            setStatus(httpStatus);
-            setHeader(CONTENT_TYPE, MimeType.getType(parseExtension(resource)));
-            setHeader(CONTENT_LENGTH, String.valueOf(body.length));
-            setBody(body);
-            write();
-        } catch (IOException | URISyntaxException e) {
-            log.error(e.getMessage());
-        }
-    }
-
-    private String parseExtension(final String resource) {
-        int beginIndex = resource.lastIndexOf(".") + 1;
-        return resource.substring(beginIndex);
+        this.resource = resource;
+        setStatus(httpStatus);
     }
 
     public void sendRedirect(final String location) {
@@ -61,7 +54,6 @@ public class HttpResponse {
     public void sendRedirect(final String location, final HttpStatus httpStatus) {
         setStatus(httpStatus);
         setHeader(LOCATION, location);
-        write();
     }
 
     public void sendError(final HttpStatus httpStatus) {
@@ -69,57 +61,92 @@ public class HttpResponse {
     }
 
     public void sendError(final HttpStatus httpStatus, final String message) {
-        log.error(message);
         setStatus(httpStatus);
-        setBody(message.getBytes());
-        write();
     }
 
-    private void write() {
+    public void write() {
         try (DataOutputStream dos = new DataOutputStream(out)) {
             writeStartLine(dos);
             writeHeader(dos);
-            writeBody(dos);
         } catch (IOException e) {
             log.error(e.getMessage());
         }
     }
 
+    public void write(final byte[] body) {
+        try (DataOutputStream dos = new DataOutputStream(out)) {
+            writeStartLine(dos);
+            writeHeader(dos);
+            writeBody(dos, body);
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+    }
+
+
     private void writeStartLine(final DataOutputStream dos) throws IOException {
+        final HttpVersion httpVersion = statusLine.getHttpVersion();
+        final HttpStatus httpStatus = statusLine.getHttpStatus();
         dos.writeBytes(String.format("%s %s %s\n", httpVersion.getHttpVersion(), httpStatus.getCode(), httpStatus.getPhrase()));
     }
 
     private void writeHeader(final DataOutputStream dos) throws IOException {
-        for (String key : headers.keySet()) {
-            dos.writeBytes(String.format("%s: %s\n", key, headers.get(key)));
+        for (Map.Entry<String, String> entry : headers.entrySet()) {
+            dos.writeBytes(String.format("%s: %s\n", entry.getKey(), entry.getValue()));
         }
+        writeSetCookie(dos);
         dos.writeBytes("\n");
     }
 
-    private void writeBody(final DataOutputStream dos) throws IOException {
+    private void writeSetCookie(final DataOutputStream dos) throws IOException {
+        if (httpRequest.isCreatedSession()) {
+            cookies.add(Cookie.builder(Cookies.JSESSIONID, httpRequest.getSessionId())
+                    .path("/")
+                    .httpOnly(true)
+                    .build());
+        }
+
+        for (Cookie cookie : cookies.values()) {
+            dos.writeBytes(String.format("%s: %s\n", SET_COOKIE, cookie.parseInfoAsString()));
+        }
+    }
+
+    private void writeBody(final DataOutputStream dos, final byte[] body) throws IOException {
         if (body != null) {
             dos.write(body, 0, body.length);
         }
     }
 
+    public void addCookie(final Cookie cookie) {
+        cookies.add(cookie);
+    }
+
+    public void setAttribute(final String key, final Object value) {
+        attributes.put(key, value);
+    }
+
+    public Map<String, Object> getAttributes() {
+        return Collections.unmodifiableMap(attributes);
+    }
+
     public void setHttpVersion(final HttpVersion httpVersion) {
-        this.httpVersion = httpVersion;
+        statusLine.setHttpVersion(httpVersion);
     }
 
     public void setHeader(final String name, final String value) {
         headers.put(name, value);
     }
 
-    public void setBody(byte[] body) {
-        this.body = body;
+    public void setStatus(final HttpStatus httpStatus) {
+        statusLine.setHttpStatus(httpStatus);
     }
 
-    public void setStatus(final HttpStatus httpStatus) {
-        this.httpStatus = httpStatus;
+    public String getResource() {
+        return resource;
     }
 
     public HttpStatus getHttpStatus() {
-        return httpStatus;
+        return statusLine.getHttpStatus();
     }
 
     public String getHeader(final String name) {
@@ -127,6 +154,6 @@ public class HttpResponse {
     }
 
     public HttpVersion getHttpVersion() {
-        return httpVersion;
+        return statusLine.getHttpVersion();
     }
 }

@@ -1,9 +1,10 @@
-package webserver.http.handler;
+package view.statics;
 
 import org.junit.jupiter.api.Test;
+import view.statics.StaticResourceMapping;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static webserver.http.handler.StaticResourceMapping.DEFAULT_HTML_LOCATION;
+import static view.statics.StaticResourceMapping.DEFAULT_HTML_LOCATION;
 
 class StaticResourceMappingTest {
     private StaticResourceMapping mapping = new StaticResourceMapping();
@@ -15,7 +16,7 @@ class StaticResourceMappingTest {
     }
 
     @Test
-    void setAllLocationsTest() {
+    void 모든_정적_파일_prefix_수정() {
         // when
         final String location = "/web";
         mapping.setAllLocations(location);
@@ -27,7 +28,7 @@ class StaticResourceMappingTest {
     }
 
     @Test
-    void addStaticResourceTest() {
+    void 정적파일_추가() {
         // given
         final String extension = "extension";
         final String location = "/static";

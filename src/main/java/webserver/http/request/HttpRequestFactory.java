@@ -3,7 +3,7 @@ package webserver.http.request;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.http.HttpHeaders;
+import webserver.http.*;
 import webserver.http.utils.HttpUtils;
 import webserver.http.utils.IOUtils;
 import webserver.http.utils.StringUtils;
@@ -22,29 +22,35 @@ public class HttpRequestFactory {
     }
 
     public static HttpRequest generate(final InputStream in) {
+        return generate(in, HttpSessionManager.getInstance());
+    }
+
+    public static HttpRequest generate(final InputStream in, final SessionManager sessionManager) {
 
         try {
             final BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
             final RequestLine requestLine = new RequestLine(br.readLine());
-            final Parameters parameters = readParameters(requestLine.getParameters());
-            final RequestHeaders requestHeaders = readHeaders(br);
-            readBody(br, parameters, requestHeaders);
+            final Parameters parameters = new Parameters(requestLine.getParameters());
+            final HttpHeaders httpHeaders = readHeaders(br);
+            final Cookies cookies = new Cookies(httpHeaders.get(HttpHeaders.COOKIE));
 
-            return HttpRequest.of(requestLine, requestHeaders, parameters);
+            readBody(br, parameters, httpHeaders);
+
+            return HttpRequest.builder()
+                    .requestLine(requestLine)
+                    .headers(httpHeaders)
+                    .parameters(parameters)
+                    .cookies(cookies)
+                    .sessionManager(sessionManager)
+                    .build();
         } catch (IOException e) {
             log.error(e.getMessage());
             throw new IllegalArgumentException(e.getMessage());
         }
     }
 
-    private static Parameters readParameters(final String parameters) {
-        final Parameters parameter = new Parameters();
-        parameter.addAll(HttpUtils.parseQueryString(parameters));
-        return parameter;
-    }
-
-    private static RequestHeaders readHeaders(final BufferedReader br) throws IOException {
+    private static HttpHeaders readHeaders(final BufferedReader br) throws IOException {
         final Map<String, String> headers = new HashMap<>();
 
         String line;
@@ -52,14 +58,14 @@ public class HttpRequestFactory {
             final Pair pair = HttpUtils.parseHeader(line);
             headers.put(pair.getKey(), pair.getValue());
         }
-        return new RequestHeaders(headers);
+        return new HttpHeaders(headers);
     }
 
-    private static void readBody(final BufferedReader br, final Parameters parameters, final RequestHeaders requestHeaders) throws IOException {
-        if (requestHeaders.contains(HttpHeaders.CONTENT_LENGTH)) {
-            final String contentLength = requestHeaders.getHeader(HttpHeaders.CONTENT_LENGTH);
+    private static void readBody(final BufferedReader br, final Parameters parameters, final HttpHeaders httpHeaders) throws IOException {
+        if (httpHeaders.contains(HttpHeaders.CONTENT_LENGTH)) {
+            final String contentLength = httpHeaders.get(HttpHeaders.CONTENT_LENGTH);
             final String params = IOUtils.readData(br, Integer.parseInt(contentLength));
-            parameters.addAll(HttpUtils.parseQueryString(params));
+            parameters.addByString(params);
         }
     }
 }
