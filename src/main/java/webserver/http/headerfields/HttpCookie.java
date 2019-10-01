@@ -5,13 +5,6 @@ import utils.parser.KeyValueParser;
 import java.util.*;
 
 public class HttpCookie {
-    private static final Map<Boolean, String> LOGINED_VALUE = new HashMap<>();
-
-    static {
-        LOGINED_VALUE.put(true, "true");
-        LOGINED_VALUE.put(false, "false");
-    }
-
     private Map<String, String> pair;
     private Map<String, String> pairOption;
     private List<String> singleOption;
@@ -23,7 +16,7 @@ public class HttpCookie {
     }
 
     public void loginCookie(boolean login, String path) {
-        this.pair.put("logined", LOGINED_VALUE.get(login));
+        this.pair.put("logined", String.valueOf(login));
         this.pairOption.put("Path", path);
     }
 
