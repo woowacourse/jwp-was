@@ -23,6 +23,10 @@ public enum HttpVersion {
         return false;
     }
 
+    public String getVersion() {
+        return version;
+    }
+
     public static HttpVersion getVersion(String version) {
         for (HttpVersion value : HttpVersion.values()) {
             if (value.version.equals(version)) {

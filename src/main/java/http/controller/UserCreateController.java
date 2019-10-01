@@ -1,11 +1,13 @@
 package http.controller;
 
 import db.DataBase;
-import http.HttpResponse;
 import http.request.HttpRequest;
-import model.UserFactory;
+import http.response.HttpResponse;
+import model.user.UserFactory;
 
-public class CreateUserController extends AbstractController {
+public class UserCreateController extends AbstractController {
+    public static final String URL = "/user/create";
+
     @Override
     public void doGet(HttpRequest request, HttpResponse response) {
         addUser(request, response);

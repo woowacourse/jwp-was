@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class HeaderFieldsTest {
     private HeaderFields fields;
@@ -78,7 +78,20 @@ class HeaderFieldsTest {
     void testToString() {
         String stringToCompare =
                 "Content-Length: 13309\r\n" +
-                "Content-Type: text/html; charset=utf-8\r\n";
+                        "Content-Type: text/html; charset=utf-8\r\n";
         assertThat(fields.toString()).isEqualTo(stringToCompare);
+    }
+
+    @Test
+    void 여러개의_쿠키값을_잘_저장하는지_확인() {
+        List<String> headerLines = Arrays.asList(
+                "Content-Length: 13309",
+                "Content-Type: text/html; charset=utf-8",
+                "Cookie: id=1234; van=1"
+        );
+        HeaderFields headerFields = new HeaderFields(headerLines);
+
+        assertThat(headerFields.getCookie("id").getValue()).isEqualTo("1234");
+        assertThat(headerFields.getCookie("van").getValue()).isEqualTo("1");
     }
 }

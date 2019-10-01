@@ -1,8 +1,10 @@
-package model;
+package model.user;
 
 import java.util.Objects;
 
 public class User {
+    public static final String USER_ID = "userId";
+
     private final String userId;
     private final String password;
     private final String name;
@@ -13,6 +15,10 @@ public class User {
         this.password = password;
         this.name = name;
         this.email = email;
+    }
+
+    public boolean isEqualPassword(String password) {
+        return this.password.equals(password);
     }
 
     public String getUserId() {

@@ -41,7 +41,7 @@ class RequestLineTest {
         String line = "GET /user/create?userId=seon&password=password&name=sos&email=sos@sos.sos HTTP/1.1";
         String queryString = "userId=seon&password=password&name=sos&email=sos@sos.sos";
         RequestLine requestLine = new RequestLine(line);
-        assertThat(requestLine.getQueryString()).isEqualTo(queryString);
+        assertThat(requestLine.getQueryString("userId")).isEqualTo("seon");
     }
 
     @Test
