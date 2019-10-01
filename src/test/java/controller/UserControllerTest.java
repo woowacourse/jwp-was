@@ -37,10 +37,10 @@ public class UserControllerTest {
         controller.service(httpRequest, httpResponse);
 
         HttpResponse httpResponseToCompare = new HttpResponse();
-        httpResponseToCompare.addStatusLine(httpRequest, HttpStatus.OK);
-        httpResponseToCompare.addHeader("Content-Type", "text/html;charset=utf-8");
-        httpResponseToCompare.addHeader("Content-Length", "5168");
-        httpResponseToCompare.addBody(FileIoUtils.loadFileFromClasspath("./templates" + "/user/form.html"));
+        httpResponseToCompare.setStatusLine(httpRequest, HttpStatus.OK);
+        httpResponseToCompare.setHeader("Content-Type", "text/html;charset=utf-8");
+        httpResponseToCompare.setHeader("Content-Length", "5168");
+        httpResponseToCompare.setBody(FileIoUtils.loadFileFromClasspath("./templates" + "/user/form.html"));
 
         assertThat(httpResponse).isEqualTo(httpResponseToCompare);
     }

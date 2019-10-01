@@ -47,8 +47,8 @@ public class SignUpControllerTest {
         controller.service(httpRequest, httpResponse);
 
         HttpResponse httpResponseToCompare = new HttpResponse();
-        httpResponseToCompare.addStatusLine(httpRequest, HttpStatus.FOUND);
-        httpResponseToCompare.addHeader("Location", "http://localhost:8080/index.html");
+        httpResponseToCompare.setStatusLine(httpRequest, HttpStatus.FOUND);
+        httpResponseToCompare.setHeader("Location", "http://localhost:8080/index.html");
 
         assertThat(httpResponse).isEqualTo(httpResponseToCompare);
     }

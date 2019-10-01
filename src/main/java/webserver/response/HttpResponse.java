@@ -36,37 +36,37 @@ public class HttpResponse {
         this.responseBody = new ResponseBody();
     }
 
-    public boolean addBody(byte[] body) {
-        return this.responseBody.addBody(body);
+    public boolean setBody(byte[] body) {
+        return this.responseBody.setBody(body);
     }
 
-    public void addStatusLine(HttpRequest httpRequest, HttpStatus httpStatus) {
+    public void setStatusLine(HttpRequest httpRequest, HttpStatus httpStatus) {
         responseStatusLine = ResponseStatusLine.of(httpRequest, httpStatus);
     }
 
-    public boolean addHeader(String key, String value) {
+    public boolean setHeader(String key, String value) {
         return responseHeader.addAttribute(key, value);
     }
 
     public void sendRedirect(HttpRequest httpRequest, String path) {
-        addStatusLine(httpRequest, HttpStatus.FOUND);
-        addHeader(HEADER_FIELD_LOCATION, HTTP_PROTOCOL + httpRequest.getHeaderFieldValue(HEADER_FIELD_HOST) + path.substring(REDIRECT_PREFIX.length()));
+        setStatusLine(httpRequest, HttpStatus.FOUND);
+        setHeader(HEADER_FIELD_LOCATION, HTTP_PROTOCOL + httpRequest.getHeaderFieldValue(HEADER_FIELD_HOST) + path.substring(REDIRECT_PREFIX.length()));
     }
 
     public void forward(HttpRequest httpRequest, byte[] file) {
-        addStatusLine(httpRequest, HttpStatus.OK);
-        addHeader(HEADER_FIELD_CONTENT_TYPE, CONTENT_TYPE_CSS);
-        addHeader(HEADER_FIELD_CONTENT_LENGTH, String.valueOf(file.length));
-        addBody(file);
+        setStatusLine(httpRequest, HttpStatus.OK);
+        setHeader(HEADER_FIELD_CONTENT_TYPE, CONTENT_TYPE_CSS);
+        setHeader(HEADER_FIELD_CONTENT_LENGTH, String.valueOf(file.length));
+        setBody(file);
     }
 
     public void forward(HttpRequest httpRequest, ModelAndView modelAndView) {
         byte[] file = getFile(modelAndView);
 
-        addStatusLine(httpRequest, HttpStatus.OK);
-        addHeader(HEADER_FIELD_CONTENT_TYPE, CONTENT_TYPE_HTML + SEMICOLON + CHARSET_UTF8);
-        addHeader(HEADER_FIELD_CONTENT_LENGTH, String.valueOf(file.length));
-        addBody(file);
+        setStatusLine(httpRequest, HttpStatus.OK);
+        setHeader(HEADER_FIELD_CONTENT_TYPE, CONTENT_TYPE_HTML + SEMICOLON + CHARSET_UTF8);
+        setHeader(HEADER_FIELD_CONTENT_LENGTH, String.valueOf(file.length));
+        setBody(file);
     }
 
     private byte[] getFile(ModelAndView modelAndView) {

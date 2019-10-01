@@ -42,8 +42,8 @@ public class UserListControllerTest {
         controller.service(httpRequest, httpResponse);
 
         HttpResponse httpResponseToCompare = new HttpResponse();
-        httpResponseToCompare.addStatusLine(httpRequest, HttpStatus.FOUND);
-        httpResponseToCompare.addHeader("Location", "http://localhost:8080/user/login.html");
+        httpResponseToCompare.setStatusLine(httpRequest, HttpStatus.FOUND);
+        httpResponseToCompare.setHeader("Location", "http://localhost:8080/user/login.html");
 
         assertThat(httpResponse).isEqualTo(httpResponseToCompare);
     }
@@ -68,10 +68,10 @@ public class UserListControllerTest {
         byte[] file = template.apply(model).getBytes();
 
         HttpResponse httpResponseToCompare = new HttpResponse();
-        httpResponseToCompare.addStatusLine(httpRequest, HttpStatus.OK);
-        httpResponseToCompare.addHeader("Content-Type", "text/html;charset=utf-8");
-        httpResponseToCompare.addHeader("Content-Length", "4356");
-        httpResponseToCompare.addBody(file);
+        httpResponseToCompare.setStatusLine(httpRequest, HttpStatus.OK);
+        httpResponseToCompare.setHeader("Content-Type", "text/html;charset=utf-8");
+        httpResponseToCompare.setHeader("Content-Length", "4356");
+        httpResponseToCompare.setBody(file);
 
         assertThat(httpResponse).isEqualTo(httpResponseToCompare);
     }

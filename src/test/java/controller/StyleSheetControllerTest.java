@@ -37,10 +37,10 @@ public class StyleSheetControllerTest {
         controller.service(httpRequest, httpResponse);
 
         HttpResponse httpResponseToCompare = new HttpResponse();
-        httpResponseToCompare.addStatusLine(httpRequest, HttpStatus.OK);
-        httpResponseToCompare.addHeader("Content-Type", "text/css");
-        httpResponseToCompare.addHeader("Content-Length", String.valueOf(httpResponse.getResponseBody().getLengthOfContent()));
-        httpResponseToCompare.addBody(FileIoUtils.loadFileFromClasspath("./static" + "/css/styles.css"));
+        httpResponseToCompare.setStatusLine(httpRequest, HttpStatus.OK);
+        httpResponseToCompare.setHeader("Content-Type", "text/css");
+        httpResponseToCompare.setHeader("Content-Length", String.valueOf(httpResponse.getResponseBody().getLengthOfContent()));
+        httpResponseToCompare.setBody(FileIoUtils.loadFileFromClasspath("./static" + "/css/styles.css"));
 
         assertThat(httpResponse).isEqualTo(httpResponseToCompare);
     }

@@ -23,7 +23,7 @@ public class ResponseBodyTest {
     void addBody() throws IOException, URISyntaxException {
         byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + "/index.html");
         ResponseBody responseBody = new ResponseBody();
-        assertThat(responseBody.addBody(body)).isTrue();
+        assertThat(responseBody.setBody(body)).isTrue();
         assertThat(responseBody.getContent())
                 .isEqualTo(FileIoUtils.loadFileFromClasspath("./templates" + "/index.html"));
     }
@@ -33,7 +33,7 @@ public class ResponseBodyTest {
     void getContentLength() throws IOException, URISyntaxException {
         byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + "/index.html");
         ResponseBody responseBody = new ResponseBody();
-        responseBody.addBody(body);
+        responseBody.setBody(body);
         assertThat(responseBody.getLengthOfContent()).isEqualTo(body.length);
     }
 }

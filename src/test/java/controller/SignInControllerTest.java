@@ -42,10 +42,10 @@ public class SignInControllerTest {
         controller.service(httpRequest, httpResponse);
 
         HttpResponse httpResponseToCompare = new HttpResponse();
-        httpResponseToCompare.addStatusLine(httpRequest, HttpStatus.OK);
-        httpResponseToCompare.addHeader("Content-Type", "text/html;charset=utf-8");
-        httpResponseToCompare.addHeader("Content-Length", String.valueOf(httpResponse.getResponseBody().getLengthOfContent()));
-        httpResponseToCompare.addBody(FileIoUtils.loadFileFromClasspath("./templates" + "/user/login.html"));
+        httpResponseToCompare.setStatusLine(httpRequest, HttpStatus.OK);
+        httpResponseToCompare.setHeader("Content-Type", "text/html;charset=utf-8");
+        httpResponseToCompare.setHeader("Content-Length", String.valueOf(httpResponse.getResponseBody().getLengthOfContent()));
+        httpResponseToCompare.setBody(FileIoUtils.loadFileFromClasspath("./templates" + "/user/login.html"));
 
         assertThat(httpResponse).isEqualTo(httpResponseToCompare);
     }
@@ -60,9 +60,9 @@ public class SignInControllerTest {
         controller.service(httpRequest, httpResponse);
 
         HttpResponse httpResponseToCompare = new HttpResponse();
-        httpResponseToCompare.addStatusLine(httpRequest, HttpStatus.FOUND);
-        httpResponseToCompare.addHeader("Set-Cookie", "logined=true; Path=/");
-        httpResponseToCompare.addHeader("Location", "http://localhost:8080/index.html");
+        httpResponseToCompare.setStatusLine(httpRequest, HttpStatus.FOUND);
+        httpResponseToCompare.setHeader("Set-Cookie", "logined=true; Path=/");
+        httpResponseToCompare.setHeader("Location", "http://localhost:8080/index.html");
 
         assertThat(httpResponse).isEqualTo(httpResponseToCompare);
     }
