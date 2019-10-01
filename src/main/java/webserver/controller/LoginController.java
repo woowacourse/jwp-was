@@ -10,11 +10,6 @@ import java.util.Objects;
 public class LoginController extends AbstractController {
     public static final String PATH = "/user/login";
     public static final String LOGINED = "logined";
-    private static final LoginController INSTANCE = new LoginController();
-
-    public static LoginController getInstance() {
-        return INSTANCE;
-    }
 
     @Override
     protected View doPost(HttpRequest request) {

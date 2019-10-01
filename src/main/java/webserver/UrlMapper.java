@@ -16,10 +16,10 @@ public class UrlMapper {
     private static Map<String, Controller> map = new HashMap<>();
 
     static {
-        map.put(UserCreateController.PATH, UserCreateController.getInstance());
-        map.put(WelcomePageController.PATH, WelcomePageController.getInstance());
-        map.put(LoginController.PATH, LoginController.getInstance());
-        map.put(UserListController.PATH, UserListController.getInstance());
+        map.put(UserCreateController.PATH, new UserCreateController());
+        map.put(WelcomePageController.PATH, new WelcomePageController());
+        map.put(LoginController.PATH, new LoginController());
+        map.put(UserListController.PATH, new UserListController());
     }
 
     public View service(HttpRequest request) {

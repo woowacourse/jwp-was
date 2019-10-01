@@ -12,11 +12,6 @@ import static webserver.controller.LoginController.LOGINED;
 
 public class UserListController extends AbstractController {
     public static final String PATH = "/user/list";
-    private static final UserListController INSTANCE = new UserListController();
-
-    public static UserListController getInstance() {
-        return INSTANCE;
-    }
 
     @Override
     protected View doGet(HttpRequest request) {
@@ -25,6 +20,7 @@ public class UserListController extends AbstractController {
         }
         List<User> users = new ArrayList<>(DataBase.findAll());
 
+        //TODO MODEL AND VIEW
         return new View("/user/list.html", "user", users);
     }
 

@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class UserCreateControllerTest extends WebTestForm {
 
-    UserCreateController userCreateController = UserCreateController.getInstance();
+    UserCreateController userCreateController = new UserCreateController();
 
     @Test
     void 회원가입_GET_요청_에러_처리() throws IOException {

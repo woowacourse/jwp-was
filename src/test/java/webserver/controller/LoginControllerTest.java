@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class LoginControllerTest extends WebTestForm {
 
-    LoginController loginController = LoginController.getInstance();
+    LoginController loginController = new LoginController();
 
     @Test
     void 로그인_GET_요청_에러_처리() throws IOException {

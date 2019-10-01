@@ -7,11 +7,6 @@ import webserver.http.HttpRequest;
 
 public class UserCreateController extends AbstractController {
     public static final String PATH = "/user/create";
-    private static final UserCreateController INSTANCE = new UserCreateController();
-
-    public static UserCreateController getInstance() {
-        return INSTANCE;
-    }
 
     @Override
     protected View doPost(HttpRequest request) {

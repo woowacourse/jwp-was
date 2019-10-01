@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class WelcomePageControllerTest extends WebTestForm {
 
-    WelcomePageController welcomePageController = WelcomePageController.getInstance();
+    WelcomePageController welcomePageController = new WelcomePageController();
 
     @Test
     void GET_정상처리() throws IOException {
