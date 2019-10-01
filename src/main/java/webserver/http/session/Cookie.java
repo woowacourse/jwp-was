@@ -29,7 +29,7 @@ public class Cookie {
 
     private Map<String, String> parseCookies(String cookieLine) {
         return StringUtils.isEmpty(cookieLine) ?
-             new HashMap<>() : extractCookies(cookieLine.split(COOKIE_LINE_REGEX));
+                new HashMap<>() : extractCookies(cookieLine.split(COOKIE_LINE_REGEX));
     }
 
     private Map<String, String> extractCookies(String[] attribute) {
