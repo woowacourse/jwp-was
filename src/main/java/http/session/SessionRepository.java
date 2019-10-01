@@ -2,13 +2,15 @@ package http.session;
 
 import com.google.common.collect.Maps;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 
 public class SessionRepository {
-    private final Map<String, Session> sessions = Maps.newHashMap();
+    private final Map<String, Session> sessions;
 
     private SessionRepository() {
+        sessions = Collections.synchronizedMap(Maps.newHashMap());
     }
 
     public static SessionRepository getInstance() {
