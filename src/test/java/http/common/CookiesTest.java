@@ -1,22 +1,35 @@
 package http.common;
 
-import http.parser.CookieParser;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CookiesTest {
 
+    private Cookies cookies;
+
+    @BeforeEach
+    void setUp() {
+        cookies = new Cookies("firstName=firstValue");
+    }
+
+    @Test
+    void getCookie() {
+        assertThat(cookies.getCookie("firstName")).isEqualTo("firstValue");
+    }
+
     @Test
     void addCookie() {
-        Cookie cookie1 = CookieParser.parse("Set-Cookie: logined=true; HttpOnly; Path=/");
-        Cookie cookie2 = CookieParser.parse("Set-Cookie: logined=false; Path=/");
+        cookies.addCookie(new Cookie("secondName", "secondValue"));
+        assertThat(cookies.getCookie("secondName")).isEqualTo("secondValue");
+    }
 
-        Cookies cookies = new Cookies();
-        cookies.addCookie(cookie1);
-        cookies.addCookie(cookie2);
+    @Test
+    void hasCookie() {
+        assertThat(cookies.hasCookie()).isTrue();
 
-        assertThat(cookies.getCookie(0)).isEqualTo(cookie1);
-        assertThat(cookies.getCookie(1)).isEqualTo(cookie2);
+        Cookies cookies2 = new Cookies();
+        assertThat(cookies2.hasCookie()).isFalse();
     }
 }
