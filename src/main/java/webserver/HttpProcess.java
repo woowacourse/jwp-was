@@ -41,17 +41,7 @@ public class HttpProcess implements Runnable {
 
             DataOutputStream dos = new DataOutputStream(out);
             dos.writeBytes(httpResponse.toString());
-            responseBody(dos, httpResponse.getBody());
-
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
+            httpResponse.write(dos);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }

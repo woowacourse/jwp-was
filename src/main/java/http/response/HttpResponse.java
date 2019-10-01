@@ -6,6 +6,8 @@ import http.common.HttpStatus;
 import http.common.MimeType;
 import http.request.HttpRequest;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,6 +80,12 @@ public class HttpResponse {
         cookie.setMaxAge(ONE_DAY);
         cookie.setPath(PATH_ROOT);
         cookies.add(cookie);
+    }
+
+    public void write(DataOutputStream dos) throws IOException {
+        byte[] body = responseBody.getBody();
+        dos.write(body, 0, body.length);
+        dos.flush();
     }
 
     public byte[] getBody() {
