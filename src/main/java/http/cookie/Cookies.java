@@ -1,4 +1,4 @@
-package http;
+package http.cookie;
 
 import java.util.HashMap;
 import java.util.List;
@@ -6,11 +6,11 @@ import java.util.Map;
 
 import static utils.StringUtils.BLANK;
 
-public class Cookie {
+public class Cookies {
     private static final String DELIMITER = "=";
     private static final int NULL_LINE_INDEX = -1;
     private static final int BEGIN_INDEX = 0;
-    private final Map<String, String> cookie = new HashMap<>();
+    private final Map<String, String> cookies = new HashMap<>();
 
     public void addAll(List<String> cookie) {
         if (cookie != null) {
@@ -21,7 +21,7 @@ public class Cookie {
     private void addCookie(String cookieEntry) {
         int delimiterIndex = getDelimiterIndex(cookieEntry);
         if (delimiterIndex > BEGIN_INDEX) {
-            cookie.put(cookieEntry.substring(BEGIN_INDEX, delimiterIndex),
+            cookies.put(cookieEntry.substring(BEGIN_INDEX, delimiterIndex),
                     extractCookieValue(cookieEntry, delimiterIndex + 1));
         }
     }
@@ -39,6 +39,10 @@ public class Cookie {
     }
 
     public String get(String key) {
-        return cookie.get(key);
+        return cookies.get(key);
+    }
+
+    public void addCookie(Cookie cookie) {
+//        cookies.put(cookie.getName(), cookie.getValue());
     }
 }

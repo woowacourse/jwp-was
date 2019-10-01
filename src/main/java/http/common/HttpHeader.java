@@ -1,9 +1,9 @@
 package http.common;
 
 import com.google.common.collect.Lists;
-import http.Cookie;
 import http.common.exception.InvalidHeaderKeyException;
 import http.common.exception.InvalidHttpHeaderException;
+import http.cookie.Cookies;
 import utils.StringUtils;
 
 import java.util.*;
@@ -20,7 +20,7 @@ public class HttpHeader {
     private static final String SESSIONID = "SessionID";
 
     private final Map<String, List<String>> httpHeader = new HashMap<>();
-    private final Cookie cookie = new Cookie();
+    private final Cookies cookie = new Cookies();
 
     public HttpHeader() {
     }
