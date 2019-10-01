@@ -1,5 +1,8 @@
 package utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -10,11 +13,24 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 public class FileIoUtils {
-    public static byte[] loadFileFromClasspath(String filePath) throws IOException, URISyntaxException {
-        URL url = getUrlFromFilePath(filePath).orElseThrow(() -> LoadingFileFailException.fromFilePath(filePath));
-        Path path = Paths.get(url.toURI());
+    private static final Logger log = LoggerFactory.getLogger(FileIoUtils.class);
 
-        return Files.readAllBytes(path);
+    public static byte[] loadFileFromClasspath(String filePath) {
+        URL url = getUrlFromFilePath(filePath).orElseThrow(() -> LoadingFileFailException.fromFilePath(filePath));
+        Path path = null;
+        try {
+            path = Paths.get(url.toURI());
+        } catch (URISyntaxException e) {
+            log.error("error: {}", e);
+            throw new RuntimeException(e);
+        }
+
+        try {
+            return Files.readAllBytes(path);
+        } catch (IOException e) {
+            log.error("error: {}", e);
+            throw new RuntimeException(e);
+        }
     }
 
     public static boolean canUseResourceFromFilePath(String filePath) {

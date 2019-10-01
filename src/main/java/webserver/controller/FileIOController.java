@@ -7,9 +7,6 @@ import http.request.HttpRequest;
 import http.response.HttpResponse;
 import utils.FileIoUtils;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Objects;
@@ -22,7 +19,7 @@ public class FileIOController extends AbstractController {
     }
 
     @Override
-    public void doGet(HttpRequest request, HttpResponse response) throws IOException, URISyntaxException {
+    public void doGet(HttpRequest request, HttpResponse response) {
         final String filePath = request.getPath();
         byte[] body = FileIoUtils.loadFileFromClasspath(String.format("./%s%s", directoryPrefix, filePath));
         String accept = request.getHeader("Accept");
@@ -55,7 +52,7 @@ public class FileIOController extends AbstractController {
     }
 
     @Override
-    public void doPost(HttpRequest request, HttpResponse response) throws UnsupportedEncodingException {
+    public void doPost(HttpRequest request, HttpResponse response) {
         super.doPost(request, response);
     }
 

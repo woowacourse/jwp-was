@@ -26,13 +26,6 @@ public class HttpResponse {
         return new HttpResponse(dos);
     }
 
-    public static HttpResponse ok(IDataOutputStream dos) {
-        // code = StatusCode.Ok;
-        return new HttpResponse(dos);
-    }
-
-    //  public void response200Header(int lengthOfBodyContent, String contentType) {
-
     public void response200Header() {
         try {
             List<String> lines = Arrays.asList(

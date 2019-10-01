@@ -38,10 +38,15 @@ public class UserController extends AbstractController {
     }
 
     @Override
-    public void doPost(HttpRequest request, HttpResponse response) throws UnsupportedEncodingException {
+    public void doPost(HttpRequest request, HttpResponse response) {
         if (request.hasBody()) {
             String body = request.getBody().toString();
-            body = URLDecoder.decode(body, "UTF-8");
+            try {
+                body = URLDecoder.decode(body, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                log.error("error: {}", e);
+                throw new RuntimeException(e);
+            }
             Map<String, String> bodyData = ParameterParser.parse(body);
 
             DataBase.addUser(createUser(bodyData));
