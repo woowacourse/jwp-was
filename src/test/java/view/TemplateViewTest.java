@@ -1,7 +1,9 @@
 package view;
 
 import http.common.HttpVersion;
+import http.request.HttpRequest;
 import http.response.HttpResponse;
+import http.session.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -15,7 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 
 class TemplateViewTest {
-    HttpResponse httpResponse;
+    @Mock
+    HttpRequest httpRequest;
 
     @Mock
     TemplateManager templateManager;
@@ -26,14 +29,15 @@ class TemplateViewTest {
     @BeforeEach
     void setup() {
         MockitoAnnotations.initMocks(this);
-        httpResponse = new HttpResponse(HttpVersion.HTTP_1_1);
     }
 
     @Test
     void render() {
         Map<String, Object> model = Collections.emptyMap();
         String testBody = "testBody";
-
+        given(httpRequest.getSession()).willReturn(new Session(""));
+        given(httpRequest.getHttpVersion()).willReturn(HttpVersion.HTTP_1_1);
+        HttpResponse httpResponse = new HttpResponse(httpRequest);
         given(templateManager.applyCompile(null, model)).willReturn(testBody.getBytes());
         templateView.render(model, httpResponse);
 

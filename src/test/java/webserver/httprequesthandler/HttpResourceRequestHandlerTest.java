@@ -6,6 +6,7 @@ import http.common.HttpVersion;
 import http.request.HttpRequest;
 import http.request.RequestMethod;
 import http.response.HttpResponse;
+import http.session.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,7 +42,6 @@ class HttpResourceRequestHandlerTest {
 
     @BeforeEach
     void setup() {
-        httpResponse = new HttpResponse(HttpVersion.HTTP_1_1);
         MockitoAnnotations.initMocks(this);
     }
 
@@ -65,9 +65,12 @@ class HttpResourceRequestHandlerTest {
     void handleInternal() throws IOException {
         given(httpRequest.getPath()).willReturn(TEST_PATH);
         given(httpRequest.getMethod()).willReturn(RequestMethod.GET);
+        given(httpRequest.getSession()).willReturn(new Session(""));
+        given(httpRequest.getHttpVersion()).willReturn(HttpVersion.HTTP_1_1);
         given(templateLoader.sourceAt(TEST_PATH)).willReturn(templateSource);
         given(templateSource.content(Charset.defaultCharset())).willReturn(TEST_BODY);
 
+        HttpResponse httpResponse = new HttpResponse(httpRequest);
         httpResourceRequestHandler.handleInternal(httpRequest, httpResponse);
         assertEquals(new String(httpResponse.getBody()), TEST_BODY);
     }
