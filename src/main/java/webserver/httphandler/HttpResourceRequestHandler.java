@@ -9,7 +9,6 @@ import http.request.HttpRequest;
 import http.request.RequestMethod;
 import http.response.HttpResponse;
 import http.response.ResponseStatus;
-import utils.StringUtils;
 import webserver.httphandler.exception.ResourceNotFoundException;
 
 import static com.google.common.net.HttpHeaders.CONTENT_LENGTH;
@@ -20,13 +19,6 @@ public class HttpResourceRequestHandler extends AbstractHttpRequestHandler {
 
     public HttpResourceRequestHandler(FileLoader fileLoader) {
         this.fileLoader = fileLoader;
-    }
-
-    @Override
-    public boolean canHandle(String path) {
-        String[] url = StringUtils.split(path, "/");
-        return StringUtils.isNotBlank(url) &&
-                url[url.length - 1].matches("^[^/:*?<>|\"\\\\]+[.][a-zA-Z0-9]+$");
     }
 
     /**
