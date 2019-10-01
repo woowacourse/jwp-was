@@ -31,7 +31,6 @@ public class LoginController extends AbstractController {
         if (user != null && user.matchPassword(password)) {
             Session session = httpRequest.getSession();
             session.setAttribute("user", user);
-            httpResponse.addHeaderAttribute("Set-Cookie", "SessionID=" + session.getId() + "; Path=/");
             return new ModelAndView("redirect: /");
         }
 

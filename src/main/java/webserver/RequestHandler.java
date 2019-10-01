@@ -30,7 +30,7 @@ public class RequestHandler implements Runnable {
         //TODO : IOException 처리
         try (InputStream inputStream = connection.getInputStream(); OutputStream outputStream = connection.getOutputStream()) {
             HttpRequest httpRequest = HttpRequestCreator.create(inputStream);
-            HttpResponse httpResponse = new HttpResponse(httpRequest.getHttpVersion());
+            HttpResponse httpResponse = new HttpResponse(httpRequest);
             HttpRequestHandler handler = handlerMapping.getHandler(httpRequest.getPath());
             handler.handle(httpRequest, httpResponse);
             sendResponse(outputStream, httpResponse);

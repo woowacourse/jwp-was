@@ -3,24 +3,27 @@ package http.common;
 import com.google.common.collect.Lists;
 import http.common.exception.InvalidHeaderKeyException;
 import http.common.exception.InvalidHttpHeaderException;
+import http.cookie.Cookie;
+import http.cookie.CookieParser;
 import http.cookie.Cookies;
 import utils.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.google.common.net.HttpHeaders.COOKIE;
+
 public class HttpHeader {
-    private static final int HTTP_HEADER_PARAMETER_SIZE = 2;
-    private static final int HEADER_FIELD_KEY_INDEX = 0;
-    private static final int HEADER_FIELD_VALUE_INDEX = 1;
-    private static final String HEADER_FIELD_FORMAT = "%s: %s\r\n";
-    private static final String HEADER_FIELD_SPLIT_DELIMITER = ": ";
-    private static final String HEADER_FIELD_DELIMITER = "; ";
-    private static final String COOKIE = "Cookie";
-    private static final String SESSIONID = "SessionID";
+    public static final String HEADER_FIELD_FORMAT = "%s: %s\r\n";
+    private static final String EMPTY_HEADER_NAME_ERROR_MESSAGE = "헤더 이름의 값이 필요합니다.";
+    private static final String HEADER_LINE_DELIMITER = ": ";
+    private static final String HEADER_VALUES_DELIMITER = ";";
+    private static final int LINE_DELIMITER_LENGTH = HEADER_LINE_DELIMITER.length();
+    private static final int ZERO = 0;
+    private static final int INVALID_SEPARATOR_POSITION = -1;
 
     private final Map<String, List<String>> httpHeader = new HashMap<>();
-    private final Cookies cookie = new Cookies();
+    private final Cookies cookies = new Cookies();
 
     public HttpHeader() {
     }
@@ -28,63 +31,69 @@ public class HttpHeader {
     public HttpHeader(List<String> header) {
         if (header != null) {
             header.forEach(this::addHeader);
-            cookie.addAll(httpHeader.get(COOKIE));
+            cookies.addAll(CookieParser.parse(httpHeader.get(COOKIE)));
         }
     }
 
     private void addHeader(String line) {
-        String[] tokens = StringUtils.split(line, HEADER_FIELD_SPLIT_DELIMITER);
-        checkHeaderParameter(tokens);
+        int separatorPosition = getSeparatorPosition(line);
+        if (separatorPosition <= ZERO) {
+            throw new InvalidHttpHeaderException();
+        }
+        httpHeader.put(line.substring(ZERO, separatorPosition),
+                parseHeaderField(line.substring(separatorPosition + LINE_DELIMITER_LENGTH)));
+    }
 
-        httpHeader.put(tokens[HEADER_FIELD_KEY_INDEX], parseHeaderField(tokens[HEADER_FIELD_VALUE_INDEX]));
+    private int getSeparatorPosition(String line) {
+        return StringUtils.isEmpty(line) ? INVALID_SEPARATOR_POSITION : line.indexOf(HEADER_LINE_DELIMITER);
     }
 
     private List<String> parseHeaderField(String headerField) {
-        String[] tokens = StringUtils.split(headerField, HEADER_FIELD_DELIMITER);
+        String[] tokens = StringUtils.split(headerField, HEADER_VALUES_DELIMITER);
 
         return Arrays.stream(tokens)
+                .map(String::trim)
                 .filter(StringUtils::isNotEmpty)
                 .collect(Collectors.toList());
     }
 
-    private void checkHeaderParameter(String[] tokens) {
-        if (tokens == null || tokens.length != HTTP_HEADER_PARAMETER_SIZE) {
-            throw new InvalidHttpHeaderException();
-        }
-    }
-
     public void addHeaderAttribute(String key, String value) {
-        if (httpHeader.containsKey(key)) {
-            httpHeader.get(key).add(value);
-            return;
-        }
-
-        httpHeader.put(key, Lists.newArrayList(value));
+        List<String> values = httpHeader.getOrDefault(key, Lists.newArrayList());
+        values.add(value);
+        httpHeader.put(key, values);
     }
 
     //TODO: return type을 List로 변환하기
     public String getHeaderAttribute(String key) {
         if (StringUtils.isEmpty(key)) {
-            throw new InvalidHeaderKeyException();
+            throw new InvalidHeaderKeyException(EMPTY_HEADER_NAME_ERROR_MESSAGE);
         }
 
-        List<String> value = httpHeader.get(key);
-        return value != null ? String.join(HEADER_FIELD_DELIMITER, httpHeader.get(key)) : null;
+        List<String> values = httpHeader.get(key);
+        return values != null ? String.join(HEADER_VALUES_DELIMITER, values) : null;
     }
 
-    public String getSessionId() {
-        return cookie.get(SESSIONID);
+    public void addCookie(Cookie cookie) {
+        if (cookie != null) {
+            cookies.add(cookie);
+        }
+    }
+
+    public String getCookieAttribute(String name) {
+        return cookies.getCookie(name).getValue();
     }
 
     public String serialize() {
-        return httpHeader.entrySet().stream()
+        String serializedHeader = httpHeader.entrySet().stream()
                 .map(this::getFormattedHeader)
                 .collect(Collectors.joining());
+
+        return serializedHeader + cookies.serialize();
     }
 
     private String getFormattedHeader(Map.Entry<String, List<String>> entry) {
         return String.format(HEADER_FIELD_FORMAT,
-                entry.getKey(), String.join(HEADER_FIELD_DELIMITER, entry.getValue()));
+                entry.getKey(), String.join(HEADER_VALUES_DELIMITER, entry.getValue()));
     }
 
     @Override
