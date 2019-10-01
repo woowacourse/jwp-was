@@ -67,8 +67,8 @@ public class ResponseProcessor {
         }
     }
 
-    public void sendError(DataOutputStream dos, String errorCode, HttpResponse httpResponse) {
-        httpResponse.setHttpStatus(HttpStatus.values(errorCode));
+    public void sendError(DataOutputStream dos, HttpStatus httpStatus, HttpResponse httpResponse) {
+        httpResponse.setHttpStatus(httpStatus);
         try {
             writeResponseHeader(dos, httpResponse);
         } catch (IOException e) {

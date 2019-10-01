@@ -6,6 +6,7 @@ import webserver.controller.UserListController;
 import webserver.controller.WelcomePageController;
 import webserver.exception.NotSupportedHttpMethodException;
 import webserver.http.HttpRequest;
+import webserver.http.httpRequest.HttpStatus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +37,7 @@ public class UrlMapper {
         try {
             return controller.service(request);
         } catch (NotSupportedHttpMethodException e) {
-            return new View(ERROR_VIEW + "405");
+            return new View(ERROR_VIEW + HttpStatus.METHOD_NOT_ALLOWED);
         }
     }
 }

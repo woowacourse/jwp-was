@@ -6,6 +6,7 @@ import webserver.ResponseProcessor;
 import webserver.View;
 import webserver.ViewProcessor;
 import webserver.http.HttpResponse;
+import webserver.http.httpRequest.HttpStatus;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -28,7 +29,7 @@ public class ResourceViewProcessor implements ViewProcessor {
         try {
             bytes = FileIoUtils.loadFileFromClasspath(filePath);
         } catch (IOException | URISyntaxException | IllegalArgumentException e) {
-            responseProcessor.sendError(dos, "404", httpResponse);
+            responseProcessor.sendError(dos, HttpStatus.NOT_FOUND, httpResponse);
         }
         httpResponse.setContentType(MimeType.values(filePath));
         httpResponse.setContentLength(bytes.length);

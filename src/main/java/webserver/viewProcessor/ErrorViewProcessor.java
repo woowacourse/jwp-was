@@ -4,6 +4,7 @@ import webserver.ResponseProcessor;
 import webserver.View;
 import webserver.ViewProcessor;
 import webserver.http.HttpResponse;
+import webserver.http.httpRequest.HttpStatus;
 
 import java.io.DataOutputStream;
 
@@ -21,12 +22,11 @@ public class ErrorViewProcessor implements ViewProcessor {
     @Override
     public void process(DataOutputStream dos, View view, HttpResponse httpResponse) {
         ResponseProcessor responseProcessor = ResponseProcessor.getInstance();
-        String errorCode = getErrorCode(view);
-        responseProcessor.sendError(dos, errorCode, httpResponse);
+        responseProcessor.sendError(dos, getErrorCode(view), httpResponse);
     }
 
-    private String getErrorCode(View view) {
+    private HttpStatus getErrorCode(View view) {
         String viewName = view.getName();
-        return viewName.split(ERROR_CODE_SEPARATOR)[1];
+        return HttpStatus.valueOf(viewName.split(ERROR_CODE_SEPARATOR)[1]);
     }
 }

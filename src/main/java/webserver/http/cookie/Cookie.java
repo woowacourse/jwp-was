@@ -3,7 +3,6 @@ package webserver.http.cookie;
 public class Cookie {
     private final static String DEFAULT_PATH = "/";
 
-    //Key를 굳이 저장해야 되나./
     private final String key;
     private final String value;
     private final String path;
@@ -26,6 +25,4 @@ public class Cookie {
     public String toString() {
         return "Set-Cookie: " + key + "=" + value + "; " + "Path" + "=" + path;
     }
-
-
 }
