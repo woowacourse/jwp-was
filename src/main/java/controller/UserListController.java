@@ -5,6 +5,7 @@ import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import db.DataBase;
+import http.common.HttpSession;
 import http.parser.HttpUriParser;
 import http.request.HttpMethod;
 import http.request.HttpRequest;
@@ -30,6 +31,7 @@ public class UserListController implements Controller {
     @Override
     public void service(final HttpRequest httpRequest, final HttpResponse httpResponse) {
 
+        HttpSession httpSession = httpRequest.getSession();
 
         if (isLogined(httpRequest)) {
             TemplateLoader loader = new ClassPathTemplateLoader();
@@ -50,7 +52,7 @@ public class UserListController implements Controller {
     }
 
     private boolean isLogined(final HttpRequest httpRequest) {
-        return httpRequest.isLogined();
+        return "true".equals(httpRequest.getCookie("logined"));
     }
 
     @Override

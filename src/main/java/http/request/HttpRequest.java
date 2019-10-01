@@ -1,22 +1,23 @@
 package http.request;
 
+import http.common.Cookie;
 import http.common.Cookies;
 import http.common.HttpHeader;
+import http.common.HttpSession;
+import http.common.HttpSessionManager;
 import http.common.HttpVersion;
+
+import static http.common.HttpSessionManager.JSESSIONID;
 
 public class HttpRequest {
 
-    private static final String ACCEPT_DELIMITER = ",";
-    private static final String ACCEPT = "Accept";
     private RequestLine requestLine;
     private HttpHeader requestHeader;
-    private Cookies cookies;
     private RequestBody requestBody;
 
-    public HttpRequest(final RequestLine requestLine, final HttpHeader requestHeader, final Cookies cookies, final RequestBody requestBody) {
+    public HttpRequest(final RequestLine requestLine, final HttpHeader requestHeader, final RequestBody requestBody) {
         this.requestLine = requestLine;
         this.requestHeader = requestHeader;
-        this.cookies = cookies;
         this.requestBody = requestBody;
     }
 
@@ -60,18 +61,29 @@ public class HttpRequest {
         return requestLine.getClassPath();
     }
 
-    public boolean isLogined() {
-        return cookies.isLogined();
+    public String getContentType() {
+        return requestHeader.getContentType();
     }
 
-    public String getContentType() {
-        return requestHeader.getHeader(ACCEPT).split(ACCEPT_DELIMITER)[0];
+    public Cookies getCookies() {
+        return requestHeader.getCookies();
+    }
+
+    public HttpSession getSession() {
+        Cookies cookies = getCookies();
+        String sessionId = cookies.getCookie(JSESSIONID);
+        HttpSession httpSession = HttpSessionManager.getSession(sessionId);
+        cookies.addCookie(new Cookie(JSESSIONID, httpSession.getId()));
+        return httpSession;
+    }
+
+    public String getCookie(final String name) {
+        return getCookies().getCookie(name);
     }
 
     public static final class HttpRequestBuilder {
         private RequestLine requestLine;
         private HttpHeader requestHeader;
-        private Cookies cookies = new Cookies();
         private RequestBody requestBody;
 
         private HttpRequestBuilder() {
@@ -91,18 +103,13 @@ public class HttpRequest {
             return this;
         }
 
-        public HttpRequestBuilder withCookies(Cookies cookies) {
-            this.cookies = cookies;
-            return this;
-        }
-
         public HttpRequestBuilder withRequestBody(RequestBody requestBody) {
             this.requestBody = requestBody;
             return this;
         }
 
         public HttpRequest build() {
-            return new HttpRequest(requestLine, requestHeader, cookies, requestBody);
+            return new HttpRequest(requestLine, requestHeader, requestBody);
         }
     }
 }

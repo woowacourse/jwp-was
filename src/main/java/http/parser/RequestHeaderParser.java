@@ -16,10 +16,8 @@ public class RequestHeaderParser {
         headerLines.forEach(headerLine -> {
             String[] headerTokens = headerLine.split(HEADER_DELIMITER, 2);
             String name = headerTokens[0].trim();
-            if (!"Set-Cookie".equals(name)) {
-                String value = headerTokens[1].trim();
-                headers.put(name, value);
-            }
+            String value = headerTokens[1].trim();
+            headers.put(name, value);
         });
         return new HttpHeader(headers);
     }

@@ -1,6 +1,5 @@
 package http.parser;
 
-import http.common.Cookies;
 import http.common.HttpHeader;
 import http.request.HttpRequest;
 import http.request.RequestBody;
@@ -23,6 +22,7 @@ public class HttpRequestParser {
 
     private static final Logger log = LoggerFactory.getLogger(HttpRequestParser.class);
     private static final String CONTENT_LENGTH = "Content-Length";
+    private static final String COOKIE = "Cookie";
 
     public static HttpRequest parse(InputStream in) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
@@ -33,7 +33,6 @@ public class HttpRequestParser {
 
         List<String> headerLines = toHeaderList(br);
         HttpHeader requestHeader = RequestHeaderParser.parse(headerLines);
-        Cookies cookies = CookiesParser.parse(headerLines);
 
         RequestBody requestBody = null;
         if (br.ready()) {
@@ -43,7 +42,6 @@ public class HttpRequestParser {
         return HttpRequestBuilder.builder()
             .withRequestLine(requestLine)
             .withRequestHeader(requestHeader)
-            .withCookies(cookies)
             .withRequestBody(requestBody)
             .build();
     }

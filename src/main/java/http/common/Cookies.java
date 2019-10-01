@@ -1,31 +1,37 @@
 package http.common;
 
-import java.util.ArrayList;
-import java.util.List;
+import http.parser.CookiesParser;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 public class Cookies {
 
-    private static final String NEW_LINE = "\r\n";
-    private List<Cookie> cookies = new ArrayList<>();
+    private final Map<String, String> cookies;
 
     public Cookies() {
+        cookies = new HashMap<>();
     }
 
-    public void addCookie(Cookie cookie) {
-        cookies.add(cookie);
+    public Cookies(String line) {
+        this.cookies = CookiesParser.parse(line);
     }
 
-    public Cookie getCookie(int index) {
-        return cookies.get(index);
+    public String getCookie(final String name) {
+        return cookies.get(name);
     }
 
-    public String getAllCookiesString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        cookies.forEach(cookie -> stringBuilder.append("Set-Cookie: ").append(cookie.getCookieAttributeString()).append(NEW_LINE));
-        return stringBuilder.toString();
+    public void addCookie(final Cookie cookie) {
+        cookies.put(cookie.getName(), cookie.getValue());
     }
 
-    public boolean isLogined() {
-        return cookies.stream().anyMatch(Cookie::isLogined);
+    public boolean hasCookie() {
+        return !cookies.isEmpty();
+    }
+
+    public Set<Entry<String,String>> toEntrySet() {
+        return cookies.entrySet();
     }
 }

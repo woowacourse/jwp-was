@@ -1,7 +1,7 @@
 package controller;
 
 import db.DataBase;
-import http.parser.CookieParser;
+import http.common.Cookie;
 import http.parser.HttpUriParser;
 import http.request.HttpMethod;
 import http.request.HttpRequest;
@@ -23,17 +23,16 @@ public class UserLoginController implements Controller {
         String password = httpRequest.findBodyParam("password");
         User user = DataBase.findUserById(userId);
 
-        if (isLoginSuccess(user, password)) {
-            httpResponse.addCookie(CookieParser.parse("Set-Cookie: logined=true; Path=/; HttpOnly"));
+        if (isValidUser(user, password)) {
+            httpResponse.addCookie(new Cookie("logined","true"));
             httpResponse.redirect(INDEX_PATH);
             return;
         }
 
-        httpResponse.addCookie(CookieParser.parse("Set-Cookie: logined=false; HttpOnly"));
         httpResponse.redirect(LOGIN_FAIL_PATH);
     }
 
-    private boolean isLoginSuccess(final User user, final String password) {
+    private boolean isValidUser(final User user, final String password) {
         return nonNull(user) && user.isPasswordEquals(password);
     }
 
