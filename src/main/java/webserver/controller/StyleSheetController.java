@@ -3,6 +3,7 @@ package webserver.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
+import webserver.ModelAndView;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 
@@ -14,8 +15,8 @@ public class StyleSheetController extends AbstractController {
     private static final Logger log = LoggerFactory.getLogger(StyleSheetController.class);
 
     @Override
-    protected String doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        return "";
+    protected ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+        return new ModelAndView();
     }
 
     @Override

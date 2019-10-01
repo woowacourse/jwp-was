@@ -3,6 +3,7 @@ package webserver.controller;
 import db.DataBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.ModelAndView;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 
@@ -10,8 +11,10 @@ public class SignInController extends AbstractController {
     private static final Logger log = LoggerFactory.getLogger(SignInController.class);
 
     @Override
-    public String doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        return "/user/login.html";
+    public ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setView("/user/login");
+        return modelAndView;
     }
 
     @Override

@@ -1,12 +1,15 @@
 package webserver.controller;
 
+import webserver.ModelAndView;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 
 public class FailToSignInController extends AbstractController {
 
     @Override
-    public String doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        return "/user/login_failed.html";
+    public ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setView("/user/login_failed");
+        return modelAndView;
     }
 }
