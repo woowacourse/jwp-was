@@ -46,6 +46,6 @@ public class HttpRequest {
 
     public HttpSession getSession() {
         String uuid = this.cookie.getCookies(JSESSIONID);
-        return uuid != null ? SessionManager.getSession(uuid) : SessionManager.getSession();
+        return SessionManager.getSession(uuid);
     }
 }

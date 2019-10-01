@@ -5,6 +5,7 @@ import org.springframework.util.StringUtils;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class Cookie {
@@ -37,6 +38,6 @@ public class Cookie {
     }
 
     public String getCookies(String key) {
-        return cookies.getOrDefault(key, null);
+        return cookies.getOrDefault(key, UUID.randomUUID().toString());
     }
 }
