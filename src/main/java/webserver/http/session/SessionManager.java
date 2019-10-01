@@ -19,4 +19,8 @@ public class SessionManager {
         sessionManager.put(httpSession.getId(), httpSession);
         return httpSession;
     }
+
+    static void remove(String uuid) {
+        sessionManager.remove(uuid);
+    }
 }

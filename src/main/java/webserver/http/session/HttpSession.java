@@ -27,6 +27,7 @@ public class HttpSession {
 
     public void invalidate() {
         sessionValues.clear();
+        SessionManager.remove(uuid);
     }
 
     public String getId() {
