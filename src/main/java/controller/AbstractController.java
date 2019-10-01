@@ -39,6 +39,7 @@ public abstract class AbstractController implements Controller {
 
         if (Objects.nonNull(filePath) && filePath.startsWith(REDIRECT_PREFIX)) {
             httpResponse.sendRedirect(httpRequest, filePath);
+            return;
         }
 
         if (httpRequest.containHeaderField(HEADER_FIELD_ACCEPT, CONTENT_TYPE_CSS)) {

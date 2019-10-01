@@ -33,4 +33,8 @@ public class DataBase {
         User user = findUserById(userId);
         return user.matchPassword(password);
     }
+
+    public static void removeAll() {
+        users = Maps.newHashMap();
+    }
 }

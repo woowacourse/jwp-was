@@ -1,6 +1,7 @@
 package controller;
 
 import controller.exception.MethodNotAllowedException;
+import db.DataBase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import webserver.common.HttpStatus;
@@ -38,6 +39,8 @@ public class SignUpControllerTest {
     @DisplayName("/user/create POST 요청")
     @Test
     void doPost() throws IOException {
+        DataBase.removeAll();
+
         HttpRequest httpRequest = HttpRequest.of(new ByteArrayInputStream(POST_REQUEST_MESSAGE.getBytes()));
         HttpResponse httpResponse = new HttpResponse();
         Controller controller = new SignUpController();
