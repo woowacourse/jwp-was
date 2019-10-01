@@ -1,4 +1,4 @@
-package webserver.controller.exception;
+package controller.exception;
 
 public class MethodNotAllowedException extends RuntimeException {
     private static final String CODE = "405";

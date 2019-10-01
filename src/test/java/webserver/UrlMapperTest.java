@@ -1,10 +1,10 @@
 package webserver;
 
+import controller.MainController;
+import controller.StyleSheetController;
+import controller.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import webserver.controller.MainController;
-import webserver.controller.StyleSheetController;
-import webserver.controller.exception.ResourceNotFoundException;
 import webserver.request.HttpRequest;
 
 import java.io.ByteArrayInputStream;

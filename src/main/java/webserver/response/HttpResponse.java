@@ -6,8 +6,8 @@ import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.HttpStatus;
-import webserver.ModelAndView;
+import webserver.common.HttpStatus;
+import webserver.common.ModelAndView;
 import webserver.request.HttpRequest;
 
 import java.io.IOException;

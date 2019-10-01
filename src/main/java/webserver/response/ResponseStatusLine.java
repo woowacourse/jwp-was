@@ -1,6 +1,6 @@
 package webserver.response;
 
-import webserver.HttpStatus;
+import webserver.common.HttpStatus;
 import webserver.request.HttpRequest;
 
 import java.util.Objects;

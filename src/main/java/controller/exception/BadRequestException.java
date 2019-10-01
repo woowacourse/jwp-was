@@ -1,4 +1,4 @@
-package webserver.controller.exception;
+package controller.exception;
 
 public class BadRequestException extends RuntimeException {
     private static final String CODE = "400";

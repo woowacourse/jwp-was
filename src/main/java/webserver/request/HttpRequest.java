@@ -1,8 +1,8 @@
 package webserver.request;
 
+import controller.exception.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.controller.exception.BadRequestException;
 
 import java.io.BufferedReader;
 import java.io.IOException;

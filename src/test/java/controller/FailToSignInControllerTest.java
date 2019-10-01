@@ -1,9 +1,9 @@
-package webserver.controller;
+package controller;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import utils.FileIoUtils;
-import webserver.HttpStatus;
+import webserver.common.HttpStatus;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 

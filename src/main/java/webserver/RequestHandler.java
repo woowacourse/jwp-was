@@ -1,11 +1,12 @@
 package webserver;
 
+import controller.Controller;
+import controller.exception.BadRequestException;
+import controller.exception.MethodNotAllowedException;
+import controller.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.controller.Controller;
-import webserver.controller.exception.BadRequestException;
-import webserver.controller.exception.MethodNotAllowedException;
-import webserver.controller.exception.ResourceNotFoundException;
+import webserver.common.HttpStatus;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 

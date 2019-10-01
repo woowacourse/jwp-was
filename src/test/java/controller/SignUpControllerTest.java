@@ -1,9 +1,9 @@
-package webserver.controller;
+package controller;
 
+import controller.exception.MethodNotAllowedException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import webserver.HttpStatus;
-import webserver.controller.exception.MethodNotAllowedException;
+import webserver.common.HttpStatus;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 

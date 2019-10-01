@@ -1,10 +1,10 @@
-package webserver.controller;
+package controller;
 
+import controller.exception.MethodNotAllowedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
-import webserver.ModelAndView;
-import webserver.controller.exception.MethodNotAllowedException;
+import webserver.common.ModelAndView;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 
