@@ -7,6 +7,7 @@ import webserver.RequestHandler;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Objects;
 
 public class ResponseWriter {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -16,9 +17,6 @@ public class ResponseWriter {
     private static final String HTTP_1_1 = "HTTP/1.1";
     private static final String STATUS_FORMAT = "%s %d %s %s";
     private static final String NEST_LINE = "\r\n";
-
-    public ResponseWriter() {
-    }
 
     public void send(OutputStream out, Response response) {
         try (DataOutputStream dos = new DataOutputStream(out)) {
@@ -31,12 +29,18 @@ public class ResponseWriter {
     }
 
     private void responseStatus(DataOutputStream dos, Response response) throws IOException {
-        dos.writeBytes(String.format(STATUS_FORMAT, HTTP_1_1, response.getHttpStatus().getStatusCode(), response.getHttpStatus().getMessage(), NEST_LINE));
+        int statusCode = response.getHttpStatus().getStatusCode();
+        String message = response.getHttpStatus().getMessage();
+        dos.writeBytes(String.format(STATUS_FORMAT, HTTP_1_1, statusCode, message, NEST_LINE));
     }
 
     private void responseBody(DataOutputStream dos, Response response) throws IOException {
-        byte[] body = response.getBody();
-        dos.write(body, 0, body.length);
+        if (Objects.nonNull(response.getBody())) {
+            byte[] body = response.getBody();
+            dos.write(body, 0, body.length);
+            dos.write(body, 0, body.length);
+        }
+
         dos.flush();
     }
 

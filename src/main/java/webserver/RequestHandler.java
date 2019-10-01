@@ -2,6 +2,7 @@ package webserver;
 
 import controller.Controller;
 import controller.ControllerHandler;
+import http.Cookie;
 import http.request.Request;
 import http.request.RequestParser;
 import http.response.Response;
@@ -24,6 +25,7 @@ public class RequestHandler implements Runnable {
     private static final String HTML = "html";
     private static final String TEMPLATES = "./templates";
     private static final String STATIC = "./static";
+    private static final String JSESSION = "JSESSION";
 
     private Socket connection;
     private ControllerHandler controllerHandler;
@@ -39,36 +41,57 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             DataOutputStream dos = new DataOutputStream(out);
+
             RequestParser requestParser = new RequestParser(in);
             Request request = new Request(requestParser.getHeaderInfo(), requestParser.getParameter());
-
-            String url = request.getPath();
-            String extension = ExtractInformationUtils.extractExtension(url);
-
             Response response = new Response();
             ResponseWriter responseWriter = new ResponseWriter();
 
-            setResponse(request, url, extension, response);
+            setResponse(request, response);
+
+            Optional<Controller> pathController = controllerHandler.getController(request.getPath());
+            pathController.ifPresent(controller -> controller.service(request, response));
+
             responseWriter.send(dos, response);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void setResponse(Request request, String url, String extension, Response response) {
-        if (!extension.startsWith(PREFIX_SLASH)) {
+    private void setResponse(Request request, Response response) {
+        String url = request.getPath();
+        String extension = ExtractInformationUtils.extractExtension(url);
+        setSession(request, response, extension);
+
+        if (isFile(extension)) {
             String classPath = getClassPath(url, extension);
             response.forward(classPath, HttpStatus.OK);
             return;
         }
 
-        Optional<Controller> controller = controllerHandler.getController(request.getPath());
-        if (controller.isPresent()) {
-            controller.get().service(request, response);
+        if (!isFile(extension) && !extension.startsWith(PREFIX_SLASH)) {
+            response.notfound();
+        }
+    }
+
+    private void setSession(Request request, Response response, String extension) {
+        if (isNotHtmlOrFile(extension)) {
             return;
         }
 
-        response.notfound();
+        request.setSession();
+
+        if (request.notContainSession() || request.mismatchSessionId()) {
+            response.addCookie(new Cookie(JSESSION, request.getSessionId()));
+        }
+    }
+
+    private boolean isNotHtmlOrFile(String extension) {
+        return !(extension.equals(HTML) || extension.startsWith(PREFIX_SLASH));
+    }
+
+    private boolean isFile(String extension) {
+        return !extension.startsWith(PREFIX_SLASH);
     }
 
     private String getClassPath(String url, String extension) {

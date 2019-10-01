@@ -20,4 +20,12 @@ public class DataBase {
     public static Collection<User> findAll() {
         return users.values();
     }
+
+    public static boolean isContainId(String userId) {
+        return users.containsKey(userId);
+    }
+
+    public static boolean isRightPassword(String userId, String password) {
+        return users.get(userId).getPassword().equals(password);
+    }
 }

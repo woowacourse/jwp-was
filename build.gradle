@@ -15,5 +15,5 @@ dependencies {
     implementation 'org.springframework:spring-core:5.1.8.RELEASE'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.5.1'
     testImplementation 'org.assertj:assertj-core:3.12.2'
-    compile group: 'org.apache.tika', name: 'tika-parsers', version: '1.7'
+    testCompile group: 'org.mockito', name: 'mockito-core', version: '2.1.0'
 }

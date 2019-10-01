@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class RequestParser {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -34,6 +35,14 @@ public class RequestParser {
         parseRequest(bufferedReader);
     }
 
+    public Map<String, String> getHeaderInfo() {
+        return header;
+    }
+
+    public Map<String, String> getParameter() {
+        return parameter;
+    }
+
     private void parseRequest(BufferedReader bufferedReader) throws IOException {
         String line = bufferedReader.readLine();
         header.put(METHOD, line);
@@ -42,7 +51,7 @@ public class RequestParser {
         while (!EMPTY_STRING.equals(line)) {
             line = bufferedReader.readLine();
 
-            if (line == null || line.equals(EMPTY_STRING)) {
+            if (Objects.isNull(line) || line.equals(EMPTY_STRING)) {
                 processPostRequest(bufferedReader);
                 return;
             }
@@ -77,13 +86,5 @@ public class RequestParser {
                     .extractInformation(url.substring(url.lastIndexOf(QUERY_STRING_SEPARATOR) + NEXT_INT));
             parameter.putAll(queryParams);
         }
-    }
-
-    public Map<String, String> getHeaderInfo() {
-        return header;
-    }
-
-    public Map<String, String> getParameter() {
-        return parameter;
     }
 }
