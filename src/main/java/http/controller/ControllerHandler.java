@@ -10,6 +10,8 @@ public class ControllerHandler {
     static {
         controllers.put("^.+\\.([a-z]+)$", new StaticFileController());
         controllers.put("^/user/create$", new CreateUserController());
+        controllers.put("^/user/login$", new LoginUserController());
+        controllers.put("^/user/list$", new UserListController());
     }
 
     public static Controller findByPath(String path) {
@@ -17,7 +19,7 @@ public class ControllerHandler {
                 .filter(path::matches)
                 .map(controllers::get)
                 .findAny()
-                .orElse(null)
+                .orElse(new DefaultController())
                 ;
     }
 }

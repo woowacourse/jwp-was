@@ -3,7 +3,7 @@ package http.controller;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 
-public abstract class AbstractController implements Controller {
+public class DefaultController implements Controller {
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
         if (httpRequest.isGet()) {
@@ -15,8 +15,10 @@ public abstract class AbstractController implements Controller {
     }
 
     protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+        httpResponse.sendNotAllowed();
     }
 
     protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
+        httpResponse.sendNotAllowed();
     }
 }

@@ -4,6 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ResponseHeader {
+    public static final String CONTENT_LENGTH_NAME = "Content-Length";
+    public static final String CONTENT_TYPE_NAME = "Content-Type";
+    public static final String LOCATION_NAME = "Location";
+    public static final String COOKIE_NAME = "Set-Cookie";
+
     private static final String HEADER_DELIMITER = ": ";
     private static final String CRLF = "\r\n";
 

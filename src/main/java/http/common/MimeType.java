@@ -19,7 +19,7 @@ public enum MimeType {
         this.regex = regex;
     }
 
-    public static MimeType findByPath(String path) {
+    public static MimeType findBySufFix(String path) {
         return Arrays.stream(MimeType.values())
                 .filter(mimeType -> path.matches(mimeType.regex))
                 .findAny()

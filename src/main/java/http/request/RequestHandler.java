@@ -12,39 +12,48 @@ import java.util.List;
 public class RequestHandler {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
-    private final BufferedReader br;
-
-    public RequestHandler(BufferedReader br) {
-        this.br = br;
+    private static class RequestHandlerHolder {
+        private static final RequestHandler instance = new RequestHandler();
     }
 
-    public HttpRequest create() throws IOException {
-        RequestStartLine requestStartLine = createRequestStartLine();
-        RequestHeader requestHeader = createRequestHeader();
-        RequestBody requestBody = createRequestBody(requestHeader);
-
-        return HttpRequest.of(requestStartLine, requestHeader, requestBody);
+    private RequestHandler() {
     }
 
-    private RequestBody createRequestBody(RequestHeader requestHeader) throws IOException {
-        String body = "";
-        if (requestHeader.getHeader("Content-Length") != null) {
-            body = IOUtils.readData(br, Integer.parseInt(requestHeader.getHeader("Content-Length")));
-        }
-        return RequestBody.of(body);
+    public static RequestHandler getInstance() {
+        return RequestHandlerHolder.instance;
     }
 
-    private RequestHeader createRequestHeader() throws IOException {
+    public HttpRequest create(BufferedReader br) throws IOException {
+
+        RequestLine requestLine = createRequestStartLine(br);
+        RequestHeader requestHeader = createRequestHeader(br);
+        RequestBody requestBody = createRequestBody(br, requestHeader);
+
+        return HttpRequest.of(requestLine, requestHeader, requestBody);
+    }
+
+    private RequestLine createRequestStartLine(BufferedReader br) throws IOException {
+        String startLine = br.readLine();
+        return RequestLine.of(startLine);
+    }
+
+    private RequestHeader createRequestHeader(BufferedReader br) throws IOException {
         List<String> header = new ArrayList<>();
         String line;
-        while (!(line = br.readLine()).equals("")) {
+        while (!("".equals(line = br.readLine()))) {
             header.add(line);
+            logger.debug("requestHeader: {}", line);
         }
+
         return RequestHeader.of(header);
     }
 
-    private RequestStartLine createRequestStartLine() throws IOException {
-        String startLine = br.readLine();
-        return RequestStartLine.of(startLine);
+    private RequestBody createRequestBody(BufferedReader br, RequestHeader requestHeader) throws IOException {
+        if (requestHeader.getHeader(HttpRequest.CONTENT_LENGTH_NAME) != null) {
+            byte[] body = IOUtils.readData(br, Integer.parseInt(requestHeader.getHeader(HttpRequest.CONTENT_LENGTH_NAME))).getBytes();
+            return RequestBody.of(body);
+        }
+
+        return RequestBody.of("".getBytes());
     }
 }
