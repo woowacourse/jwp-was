@@ -48,7 +48,9 @@ public class FileIOController extends AbstractController {
         // 응답을 보내는 부분
         ContentType contentType = ContentTypeFactory.create(accept, contentTypesSupplierFromFileExtension);
 
-        response.response200Header(body.length, contentType);
+        response.setHeader("Content-Type", contentType.toHeaderValue());
+        response.setHeader("Content-Length", Integer.toString(body.length));
+        response.response200Header();
         response.responseBody(body);
     }
 

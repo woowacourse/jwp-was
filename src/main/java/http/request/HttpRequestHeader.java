@@ -21,7 +21,7 @@ public class HttpRequestHeader {
                 .map(headerLine -> headerLine.split(HEADER_SPLITTER))
                 .filter(splittedStrings -> 2 <= splittedStrings.length)
                 .collect(Collectors.toMap(
-                        splittedStrings -> splittedStrings[0],
+                        splittedStrings -> splittedStrings[0].toLowerCase(),
                         splittedStrings -> splittedStrings[1]
                 ));
 
@@ -29,11 +29,11 @@ public class HttpRequestHeader {
     }
 
     public String getHeader(String key) {
-        return Optional.ofNullable(headers.get(key))
+        return Optional.ofNullable(headers.get(key.toLowerCase()))
                 .orElseThrow(() -> new NotFoundHttpRequestHeader(key));
     }
 
     public boolean contains(String key) {
-        return headers.containsKey(key);
+        return headers.containsKey(key.toLowerCase());
     }
 }

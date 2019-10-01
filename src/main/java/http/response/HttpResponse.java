@@ -1,6 +1,5 @@
 package http.response;
 
-import http.ContentType;
 import http.StatusCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,12 +11,15 @@ import java.util.List;
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
-    private StatusCode code;
-    //    private ResponseHeader responseHeader;
     private final IDataOutputStream dos;
+
+    private StatusCode code;
+    private final HttpResponseHeader httpResponseHeader;
 
     private HttpResponse(IDataOutputStream dos) {
         this.dos = dos;
+
+        httpResponseHeader = HttpResponseHeader.create();
     }
 
     public static HttpResponse of(IDataOutputStream dos) {
@@ -25,20 +27,17 @@ public class HttpResponse {
     }
 
     public static HttpResponse ok(IDataOutputStream dos) {
-       // code = StatusCode.Ok;
+        // code = StatusCode.Ok;
         return new HttpResponse(dos);
     }
 
-   //  public void response200Header(int lengthOfBodyContent, String contentType) {
+    //  public void response200Header(int lengthOfBodyContent, String contentType) {
 
-    public void response200Header(int lengthOfBodyContent, ContentType contentType) {
+    public void response200Header() {
         try {
             List<String> lines = Arrays.asList(
                     String.format("HTTP/1.1 %d %s \r\n", 200, "OK"),
-                    contentType.toHeaderValue() + "\r\n",
-                    "Content-Length: " + lengthOfBodyContent + "\r\n",
-                    "Set-Cookie: logined=true; Path=/ \r\n",
-                    "\r\n");
+                    toHeaderString());
 
             for (String line : lines) {
                 dos.writeBytes(line);
@@ -57,13 +56,24 @@ public class HttpResponse {
         }
     }
 
-    public void response302Header(String location) {
-        try{
-            String header = "HTTP/1.1 302 Found\n" +
-                    "Location: " + location;
-            dos.writeBytes(header);
+    public void response302Header() {
+        try {
+            dos.writeBytes("HTTP/1.1 302 Found\r\n" + toHeaderString());
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setHeader(String key, String toHeaderValue) {
+        httpResponseHeader.setHeader(key, toHeaderValue);
+    }
+
+    private String toHeaderString() {
+        StringBuilder sb = new StringBuilder();
+        for (String key : httpResponseHeader.keySet()) {
+            sb.append(String.format("%s: %s\r\n", key, httpResponseHeader.getHeader(key)));
+        }
+        sb.append("\r\n");
+        return sb.toString();
     }
 }

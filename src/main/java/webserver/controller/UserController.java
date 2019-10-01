@@ -25,13 +25,15 @@ public class UserController extends AbstractController {
             // 기존에 존재하던 파일을 제공 할 것인지..
             // 그렇다면... 우예할까??
             // 일단은 static, templates 에 존재하는 파일을 요청하는 부분에 집중해볼까??
-            response.response200Header(0, ContentType.fromMimeType("text/html").get());
+            response.response200Header();
             return;
         }
         String stringOfUtf_8 = "안녕";
         byte[] b = stringOfUtf_8.getBytes(StandardCharsets.UTF_8);
         log.debug("length: {}", b.length);
-        response.response200Header(b.length, ContentType.TXT);
+        response.setHeader("Content-Type", ContentType.TXT.toHeaderValue());
+        response.setHeader("Content-Length", Integer.toString(b.length));
+        response.response200Header();
         response.responseBody(b);
     }
 
@@ -45,8 +47,9 @@ public class UserController extends AbstractController {
             DataBase.addUser(createUser(bodyData));
 
             // response 만들기
-            response.response302Header("/index.html");
 
+            response.setHeader("Location", "/index.html");
+            response.response302Header();
         }
     }
 

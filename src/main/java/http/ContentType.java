@@ -82,6 +82,6 @@ public enum ContentType {
     }
 
     public String toHeaderValue() {
-        return String.format("Content-Type: %s;charset=%s", mimeType, DEFAULT_CHAR_SET);
+        return String.format("%s;charset=%s", mimeType, DEFAULT_CHAR_SET);
     }
 }

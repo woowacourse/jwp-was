@@ -48,14 +48,37 @@
             - [ ] Content-Encoding
         - [ ]
         - 엔터티를 어떻게 잘 보낼 것인지..
-    - [ ] response 
+    - [ ] response 리팩토링
         - 그냥 여러... controller 를 먼저 짜보면 어떻게 해야 좋은 형태가 될지 감이 올듯하다..
         
-- [ ] 테스트
+- [x] 테스트
     - [x] httpRequestTest -> 행위를 고려해서 테스트 작성하기
+    - [ ] 인수 테스트 작성 (or controller 테스트)
 
-- [ ] 쿠기 
-    - [ ] 헤더에 path 설정 (https://docs.microsoft.com/en-us/windows/win32/wininet/http-cookies),
+- [x] 쿠기 
+    - [x] Cookie 만들기
+        - [x] 헤더의 cookie 로 생성
+        - [x] Set-Cookie 를 위한 출력
+    - [x] 헤더에 path 설정 (https://docs.microsoft.com/en-us/windows/win32/wininet/http-cookies),
+    
+- [ ] 세션
+    - [x] 주어진 인터페이스에 맞게 구현
+        - [x] AbstractSession
+            - Session 에서 공통된 부분 모아놓음
+        - [x] MapSession
+        - [ ] ConcurrentMapSession
+    - [x] SessionManager: 세션을 생성하고 관리하는 역할
+        - [x] 생성
+        - [ ] 세션 만료? (생성된 세션이 언제 지워지면 될지 알아보자)
+        - [x] invalidate 된 애들 관리
+            - 일단 세션이 invalidate() 를 호출하면 SessionManager 에서 알 방법이 필요
+                - 일단은 콜백함수 이용 
+        - 시나리오
+            - 클라이언트가 서버에 존재하지 않는, 만료 or invalidate 된 SESSION_ID 로 접근할 경우 (그 SESSION_ID로 쓰는 건 말이 안되는 듯, 이런 경우 어디서 SESSION_ID 를 수정해주어야 할까?)
+                - SessionManager 에서 해당 SESSION_ID 에 대한 접근을 방지 (ex. Map 에서 해당 SESSION_ID 를 지우기)
+                - 그러면 기존의 SESSION_ID 가 없다고 생각하고 새로운 세션을 만들어서 쓰게됨
+    - [ ] 테스트
+        - [ ] 세션 만료 (해당 시간만큼 기다리게 하고, 실제로 만료 되었는지)
 
 - [ ] 애러처리
     - [ ] 에러 페이지 (for 클라이언트)
@@ -67,18 +90,10 @@
         
  - [x] 템플릿이 적용된 페이지 처리
     - [x] /user/list 핸들바 사용해서 요청처리
-    - [ ] /user/profile 핸들바 사용해서 요청처리 (2페이지 정도는 동적으로 만들어야 공통된 로직을 빼고 싶을 것 같아서)
+    - [x] /user/profile 핸들바 사용해서 요청처리 (2페이지 정도는 동적으로 만들어야 공통된 로직을 빼고 싶을 것 같아서)
+        - [x] 로그인 된 경우만 정보 보여주기, 아니면 login.html 로 리다이렉트
     - [x] tika 사용해서 mimeType 알아내기 (ex. .hbs 확장자 지원)
     - [ ] 템플릿 적용할 컨트롤러를 위해서 공통되는 로직 모으기
-
-
-### 해당값을 결정하는 순서
-    ContentTypeFactory
-         - accept 전달
-         - contentTypesGeneratorSupportedByServer 전달
-         1. 클라이언트가 원하는 타입들 구하기 (accept 사용)
-         2. 서버가 지원하는 타입들 구하기 (이건.. 서버에서 넘겨주어야, 이 부분이 제일 많이 변할듯. 콜백사용해서 생성하는 로직을 넘겨주자)
-         3. 그 중에서 최적의 값 구하기 (클라이언트가 원하는 타입 중에서 서버가 지원할 수 있는, 클라이언트가 원하는 순)
 
 
 ### 고려할 상황들 (추가되는 요구사항들?? 이렇게 요구사항을 추가해가면서 리팩토링 하면 좋을 듯..!!)
@@ -88,6 +103,21 @@
 - [ ] json 형태로 요청이 올 경우 ()
 - [ ] 압축을 해달라고 요청이 올 경우 (gzip 같은 경우 지원해보자..! 그리고 브라우저에서 확인하기)
     - 이 경우 효과가 있는지 elapsedTime 을 측정해봐도 좋을듯
+
+
+### 구현 우선순위
+- 세션 구현
+- 애러처리
+- PR 날리기
+- 컨트롤러에서 중복제거
+    - 어떻게 구현할지 감이 안와서 일단 어떤 부분이 어디 있으면 좋을지에 대한 고민을 많이 적용을 못했음
+
+### 질문 드리고 싶은 부분
+1. Optional 을 어떻게 사용하면 좋을지?? 
+    - 현재는 해당 값이 없을 수도 있구나 (null 이 될 수도 있는지)를 명시적으로 표현해야 할 것 같은 곳에서 사용 중
+        - 그런데 그만큼 사용하는데서 한 번은 벗겨내야해서 불편하기도?
+            - exception 을 던지면 괜찮은데 불편한 경우가 있기도 합니다.. ex. if(!optionalObject.isPresent()) { object = optionalObject.get() .... return  무언가; } 
+
 
 ### 참고
 - 아파치에서는 어떤것들을 지원해주는지 
