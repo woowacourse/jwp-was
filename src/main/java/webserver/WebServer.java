@@ -10,6 +10,8 @@ public class WebServer {
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
     private static final int DEFAULT_PORT = 8080;
 
+    private static final UrlMapper urlMapper = new UrlMapper();
+
     public static void main(String[] args) throws Exception {
         int port = 0;
         if (args == null || args.length == 0) {
@@ -25,7 +27,7 @@ public class WebServer {
             // 클라이언트가 연결될때까지 대기한다.
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
-                Thread thread = new Thread(new RequestHandler(connection, new UrlMapper()));
+                Thread thread = new Thread(new RequestHandler(connection, urlMapper));
                 thread.start();
             }
         }

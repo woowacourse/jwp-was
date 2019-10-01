@@ -32,7 +32,6 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = HttpRequest.create(in);
             View view = urlMapper.service(httpRequest);
 
-
             HttpResponse httpResponse = new HttpResponse(httpRequest);
             ViewProcessor viewProcessor = ViewProcessorFactory.getInstance().getViewProcessor(view);
             viewProcessor.process(dos, view, httpResponse);
