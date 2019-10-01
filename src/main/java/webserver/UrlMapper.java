@@ -20,6 +20,7 @@ public class UrlMapper {
         urlMapper.put(PATH_CSS, new StyleSheetController());
         urlMapper.put("/user/login", new SignInController());
         urlMapper.put("/user/login_failed", new FailToSignInController());
+        urlMapper.put("/user/list", new UserListController());
     }
 
     public static Controller getController(HttpRequest httpRequest) {
