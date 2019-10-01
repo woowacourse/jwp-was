@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static utils.UtilData.*;
+import static utils.UtilData.JSESSIONID_VALUE;
 
 class HttpSessionTest {
     private static final String KEY = "user";
@@ -26,7 +26,7 @@ class HttpSessionTest {
     @Test
     @DisplayName("Session에 잘들어가는지 검증 테스트")
     void getAttributeTest() {
-        HttpSession httpSession = new HttpSession(JSESSIONED_VALUE);
+        HttpSession httpSession = new HttpSession(JSESSIONID_VALUE);
         httpSession.setAttribute(KEY, USER);
         assertThat(httpSession.getAttribute(KEY)).isEqualTo(USER);
     }
@@ -34,14 +34,14 @@ class HttpSessionTest {
     @Test
     @DisplayName("Session Id 테스트")
     void getId() {
-        HttpSession httpSession = new HttpSession(JSESSIONED_VALUE);
-        assertThat(httpSession.getId()).isEqualTo(JSESSIONED_VALUE);
+        HttpSession httpSession = new HttpSession(JSESSIONID_VALUE);
+        assertThat(httpSession.getId()).isEqualTo(JSESSIONID_VALUE);
     }
 
     @Test
     @DisplayName("Session에 들어가 있는걸 잘 지우는지 테스트")
     void removeTest() {
-        HttpSession httpSession = new HttpSession(JSESSIONED_VALUE);
+        HttpSession httpSession = new HttpSession(JSESSIONID_VALUE);
         httpSession.setAttribute(KEY, USER);
         httpSession.removeAttribute(KEY);
         assertThat(httpSession.getAttribute(KEY)).isEqualTo(null);

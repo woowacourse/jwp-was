@@ -31,10 +31,10 @@ public class ResponseHeader {
 
     public String getResponseHeaders() {
         return responseCookies.size() != EMPTY_RESPONSE_COOKIES ?
-                    responseHeaders.entrySet().stream()
+                responseHeaders.entrySet().stream()
                         .map(map -> map.getKey().getField() + COLON + map.getValue())
                         .collect(Collectors.joining(CRLF)) + CRLF + String.join(CRLF, responseCookies) :
-                    responseHeaders.entrySet().stream()
+                responseHeaders.entrySet().stream()
                         .map(map -> map.getKey().getField() + COLON + map.getValue())
                         .collect(Collectors.joining(CRLF));
     }

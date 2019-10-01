@@ -25,7 +25,7 @@ public class UserListController extends AbstractController {
 
         if (body == null) {
             httpResponse.sendResponse(httpRequest);
-            return ;
+            return;
         }
         httpResponse.sendResponse(body);
 

@@ -10,7 +10,6 @@ import webserver.http.request.core.RequestMethod;
 import webserver.http.response.HttpResponse;
 
 import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.OutputStream;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;

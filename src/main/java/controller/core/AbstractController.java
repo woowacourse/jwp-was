@@ -4,7 +4,6 @@ import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.URISyntaxException;
 
 public abstract class AbstractController implements Controller {
