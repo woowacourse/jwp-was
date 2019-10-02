@@ -66,7 +66,7 @@ public class HttpRequest {
     }
 
     public boolean isStaticRequest() {
-        return requestLine.getUri().isFileUri();
+        return requestLine.includeFileUri();
     }
 
     public String getUri() {

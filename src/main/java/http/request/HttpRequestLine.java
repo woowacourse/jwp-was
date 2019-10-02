@@ -14,6 +14,10 @@ public class HttpRequestLine {
         this.version = version;
     }
 
+    public boolean includeFileUri() {
+        return uri.isFileUri();
+    }
+
     public HttpMethod getMethod() {
         return method;
     }
