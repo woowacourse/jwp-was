@@ -1,13 +1,13 @@
 package webserver;
 
-import controller.Controller;
 import http.request.HttpRequest;
 import http.request.HttpRequestCreator;
+import http.request.exception.InvalidHttpRequestException;
 import http.response.HttpResponse;
-import http.response.ResponseStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.exception.ResourceNotFoundException;
+import webserver.httphandler.HttpRequestHandler;
+import webserver.httphandler.HttpRequestHandlerMapping;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -16,55 +16,36 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 public class RequestHandler implements Runnable {
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private final ResourceHttpRequestHandler resourceHttpRequestHandler = ResourceHttpRequestHandler.getInstance();
-    private final HandlerMapping handlerMapping = HandlerMapping.getInstance();
+    private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
+
+    private final HttpRequestHandlerMapping httpRequestHandlerMapping = HttpRequestHandlerMapping.getInstance();
     private Socket connection;
 
-    public RequestHandler(Socket connectionSocket) {
+    RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
     }
 
     public void run() {
-        logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
+        log.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
 
-        //TODO : IOException 처리
         try (InputStream inputStream = connection.getInputStream(); OutputStream outputStream = connection.getOutputStream()) {
-            HttpResponse httpResponse = new HttpResponse();
-
             HttpRequest httpRequest = HttpRequestCreator.create(inputStream);
-            handleRequest(httpRequest, httpResponse);
+            HttpResponse httpResponse = new HttpResponse(httpRequest);
+
+            HttpRequestHandler httpRequestHandler = httpRequestHandlerMapping.getHandler(httpRequest.getPath());
+            httpRequestHandler.handleHttpRequest(httpRequest, httpResponse);
 
             sendResponse(outputStream, httpResponse);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException | InvalidHttpRequestException e) {
+            log.error("error : {}\n", e.toString(), e.getCause());
         }
     }
 
-    private void handleRequest(HttpRequest httpRequest, HttpResponse httpResponse) {
-        try {
-            if (resourceHttpRequestHandler.canHandle(httpRequest.getPath())) {
-                resourceHttpRequestHandler.handleHttpRequest(httpRequest, httpResponse);
-                return;
-            }
-
-            Controller controller = handlerMapping.getHandler(httpRequest.getPath());
-            controller.service(httpRequest, httpResponse);
-        } catch (ResourceNotFoundException e) {
-            httpResponse.setResponseStatus(ResponseStatus.NOT_FOUND);
-        }
-    }
-
-    private void sendResponse(OutputStream out, HttpResponse httpResponse) {
+    private void sendResponse(OutputStream out, HttpResponse httpResponse) throws IOException {
         DataOutputStream dos = new DataOutputStream(out);
-
-        try {
-            byte[] response = httpResponse.serialize();
-            dos.write(response, 0, response.length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+        byte[] response = httpResponse.serialize();
+        dos.write(response, 0, response.length);
+        dos.flush();
     }
 }

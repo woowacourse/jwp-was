@@ -12,12 +12,6 @@ import static http.common.ContentType.FORM_URLENCODED;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RequestBodyTest {
-    @ParameterizedTest
-    @MethodSource("provideBodyAndContentType")
-    void request_body_생성(String body, String contentType) {
-        assertDoesNotThrow(() -> new RequestBody(body, contentType));
-    }
-
     private static Stream<Arguments> provideBodyAndContentType() {
         return Stream.of(
                 Arguments.of("", ""),
@@ -26,12 +20,19 @@ class RequestBodyTest {
         );
     }
 
+    @ParameterizedTest
+    @MethodSource("provideBodyAndContentType")
+    void request_body_생성(String body, String contentType) {
+        assertDoesNotThrow(() -> new RequestBody(body, contentType));
+    }
+
     @Test
     void form_data_확인() {
-        RequestBody requestBody = new RequestBody("id=3&pw=pass", FORM_URLENCODED);
+        RequestBody requestBody = new RequestBody("id=3&pw=pass&name=", FORM_URLENCODED);
         assertEquals(requestBody.getFormData("id"), "3");
         assertEquals(requestBody.getFormData("pw"), "pass");
         assertNull(requestBody.getFormData("name"));
+        assertNull(requestBody.getFormData("address"));
         assertNull(requestBody.getFormData(null));
     }
 

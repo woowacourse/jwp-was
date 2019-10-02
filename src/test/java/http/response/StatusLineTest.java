@@ -17,10 +17,11 @@ class StatusLineTest {
 
     @Test
     void serialize_확인() {
-        String version = "HTTP/1.1";
-        StatusLine statusLine = new StatusLine(HttpVersion.HTTP_1_1, ResponseStatus.OK);
+        HttpVersion version = HttpVersion.HTTP_1_1;
+        StatusLine statusLine = new StatusLine(version, ResponseStatus.OK);
 
-        assertThat(statusLine.serialize()).isEqualTo(String.format("%s 200 OK", version));
+        assertThat(statusLine.serialize())
+                .isEqualTo(String.format("%s %s", version.getVersion(), ResponseStatus.OK.serialize()));
     }
 
 }

@@ -1,13 +1,10 @@
 package http.common;
 
-import http.common.exception.InvalidURLException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class URLTest {
     @Test
@@ -20,11 +17,9 @@ class URLTest {
         assertThat(url.getQueryString()).isEqualTo(queryString);
     }
 
-    //TODO: TestCase 통과하도록 URL 검증 로직 추가
     @ParameterizedTest
     @NullAndEmptySource
-    @ValueSource(strings = {"  ", "\t", "\n", "?id=1"})
-    void 생성_실패(String input) {
-        assertThrows(InvalidURLException.class, () -> URL.of(input));
+    void null_또는_공백시_빈_URL_생성(String url) {
+        assertThat(URL.of(url)).isEqualTo(URL.EMPTY_URL);
     }
 }

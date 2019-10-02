@@ -9,8 +9,17 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static utils.StringUtils.BLANK;
 
 class RequestParameterTest {
+    private static Stream<Arguments> provideInputOutputs() {
+        RequestParameter requestParameter = new RequestParameter("");
+        return Stream.of(
+                Arguments.of("&", requestParameter),
+                Arguments.of("=", requestParameter)
+        );
+    }
+
     @Test
     void 정상_생성() {
         String queryString1 = "id=1&password=abcd1234";
@@ -21,8 +30,18 @@ class RequestParameterTest {
     }
 
     @Test
+    void 정상_생성2() {
+        String queryString = "id=1&password=pw&name=";
+        RequestParameter requestParameter = new RequestParameter(queryString);
+
+        assertThat(requestParameter.getParameter("id")).isEqualTo("1");
+        assertThat(requestParameter.getParameter("name")).isNull();
+        assertThat(requestParameter.getParameter("address")).isNull();
+    }
+
+    @Test
     void query_string이_null일_때_빈_Request_parameter_생성() {
-        assertEquals(new RequestParameter(null), new RequestParameter(""));
+        assertEquals(new RequestParameter(null), new RequestParameter(BLANK));
     }
 
     @Test
@@ -38,13 +57,5 @@ class RequestParameterTest {
     @MethodSource("provideInputOutputs")
     void parse(String input, RequestParameter requestParameter) {
         assertThat(new RequestParameter(input)).isEqualTo(requestParameter);
-    }
-
-    private static Stream<Arguments> provideInputOutputs() {
-        RequestParameter requestParameter = new RequestParameter("");
-        return Stream.of(
-                Arguments.of("&", requestParameter),
-                Arguments.of("=", requestParameter)
-        );
     }
 }

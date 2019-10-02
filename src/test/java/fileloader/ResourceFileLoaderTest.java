@@ -1,0 +1,5 @@
+package fileloader;
+
+class ResourceFileLoaderTest {
+
+}

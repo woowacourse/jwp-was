@@ -1,6 +1,9 @@
 package http.request;
 
 import http.common.HttpHeader;
+import http.common.exception.InvalidHttpHeaderException;
+import http.request.exception.InvalidHttpRequestException;
+import http.request.exception.InvalidRequestLineException;
 import utils.IOUtils;
 
 import java.io.BufferedReader;
@@ -8,20 +11,25 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class HttpRequestCreator {
-    private static final String BLANK = "";
-    private static final String CONTENT_LENGTH = "Content-Length";
-    private static final String CONTENT_TYPE = "Content-Type";
+import static com.google.common.net.HttpHeaders.CONTENT_LENGTH;
+import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
+import static utils.StringUtils.BLANK;
 
+public class HttpRequestCreator {
     public static HttpRequest create(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-        RequestLine requestLine = new RequestLine(bufferedReader.readLine());
-        HttpHeader httpHeader = new HttpHeader(IOUtils.readBeforeBlankLine(bufferedReader));
-        String body = extractBody(bufferedReader, requestLine.getMethod(), httpHeader);
 
-        RequestBody requestBody = new RequestBody(body, httpHeader.getHeaderAttribute(CONTENT_TYPE));
+        try {
+            RequestLine requestLine = new RequestLine(bufferedReader.readLine());
+            HttpHeader httpHeader = new HttpHeader(IOUtils.readBeforeBlankLine(bufferedReader));
 
-        return new HttpRequest(requestLine, httpHeader, requestBody);
+            String body = extractBody(bufferedReader, requestLine.getMethod(), httpHeader);
+            RequestBody requestBody = new RequestBody(body, httpHeader.getHeaderAttribute(CONTENT_TYPE));
+
+            return new HttpRequest(requestLine, httpHeader, requestBody);
+        } catch (InvalidRequestLineException | InvalidHttpHeaderException e) {
+            throw new InvalidHttpRequestException(e);
+        }
     }
 
     private static String extractBody(BufferedReader bufferedReader, RequestMethod requestMethod, HttpHeader httpHeader) throws IOException {
