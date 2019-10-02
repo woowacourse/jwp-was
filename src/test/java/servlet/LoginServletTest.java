@@ -16,7 +16,6 @@ import java.io.InputStream;
 import java.io.PipedOutputStream;
 
 import static http.HttpHeaders.LOCATION;
-import static http.HttpHeaders.SET_COOKIE;
 import static http.response.HttpStatus.FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -43,8 +42,7 @@ public class LoginServletTest {
         assertThat(response.getStatus()).isEqualTo(FOUND);
         assertThat(response.getHeaders().getHeader(LOCATION))
                 .isEqualTo("/index.html");
-        assertThat(response.getHeaders().getHeader(SET_COOKIE))
-                .isEqualTo("logined=true; Path=/");
+        assertThat(request.getSession().getAttribute("logined")).isEqualTo("true");
     }
 
     @Test
@@ -60,8 +58,7 @@ public class LoginServletTest {
         assertThat(response.getStatus()).isEqualTo(FOUND);
         assertThat(response.getHeaders().getHeader(LOCATION))
                 .isEqualTo("/user/login_failed.html");
-        assertThat(response.getHeaders().getHeader(SET_COOKIE))
-                .isEqualTo("logined=false; Path=/");
+        assertThat(request.getSession().getAttribute("logined")).isEqualTo("false");
     }
 
     @Test
@@ -77,8 +74,7 @@ public class LoginServletTest {
         assertThat(response.getStatus()).isEqualTo(FOUND);
         assertThat(response.getHeaders().getHeader(LOCATION))
                 .isEqualTo("/user/login_failed.html");
-        assertThat(response.getHeaders().getHeader(SET_COOKIE))
-                .isEqualTo("logined=false; Path=/");
+        assertThat(request.getSession().getAttribute("logined")).isEqualTo("false");
     }
 
     private static String makeLoginRequestMessage(String userId, String password) {

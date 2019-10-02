@@ -3,6 +3,7 @@ package servlet;
 import db.DataBase;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import http.session.HttpSession;
 import model.User;
 
 import static model.User.USER_ID_KEY;
@@ -10,18 +11,23 @@ import static model.User.USER_PASSWORD_KEY;
 
 public class LoginServlet extends AbstractServlet {
     @Override
-    protected void doPost(HttpRequest httpRequest, HttpResponse response) {
-        String userId = httpRequest.getParam(USER_ID_KEY);
-        String password = httpRequest.getParam(USER_PASSWORD_KEY);
+    protected void doPost(HttpRequest request, HttpResponse response) {
+        String userId = request.getParam(USER_ID_KEY);
+        String password = request.getParam(USER_PASSWORD_KEY);
         if (login(userId, password)) {
-            response.setCookie("logined", "true");
-            response.setCookie("Path", "/");
+            setLoginInfo(request, response, true);
             response.sendRedirect("/index.html");
             return;
         }
-        response.setCookie("logined", "false");
-        response.setCookie("Path", "/");
+        setLoginInfo(request, response, false);
         response.sendRedirect("/user/login_failed.html");
+    }
+
+    private void setLoginInfo(HttpRequest request, HttpResponse response, boolean isLogin) {
+        String loginValue = isLogin ? "true" : "false";
+        HttpSession session = request.getSession();
+        session.setAttribute("logined", loginValue);
+        response.setCookie("sessionId", session.getId());
     }
 
     private boolean login(String userId, String password) {

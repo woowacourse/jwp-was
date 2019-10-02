@@ -83,6 +83,10 @@ public class HttpRequest {
         return cookieValue.equals(value);
     }
 
+    public HttpSession getSession() {
+        return session;
+    }
+
     @Override
     public String toString() {
         return requestLine + "\n" + headers + "\n";

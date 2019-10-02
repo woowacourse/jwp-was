@@ -4,6 +4,8 @@ import db.DataBase;
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
 import http.response.HttpResponse;
+import http.session.HttpSession;
+import http.session.HttpSessionTable;
 import model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -33,11 +35,14 @@ class UserListServletTest {
         User user = new User("userId", "password", "userName", "email@woo.wa");
         DataBase.addUser(user);
 
+        HttpSession session = HttpSessionTable.getSession("1", () -> String.valueOf(1));
+        session.setAttribute("logined", "true");
+
         String requestMessage = "GET /user/list HTTP/1.1\n"
                 + "Host: localhost:8080\n"
                 + "Connection: keep-alive\n"
                 + "Accept: */*\n"
-                + "Cookie: logined=true";
+                + "Cookie: sessionId=" + session.getId();
         InputStream in = new ByteArrayInputStream(requestMessage.getBytes());
         HttpRequest request = HttpRequestFactory.makeHttpRequest(in);
         HttpResponse response = new HttpResponse(request.getVersion(), new PipedOutputStream());
