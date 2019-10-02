@@ -11,7 +11,7 @@ public class LoginUserController extends AbstractController {
 
     public View doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         User loginUser = DataBase.findUserById(httpRequest.getQueryParameter("userId"));
-        if (loginUser == null) {
+        if (loginUser == null || loginUser.canLogin(httpRequest.getHeaderAttribute("password"))) {
             httpResponse.addHeader("Set-Cookie", "logined=false");
             return new RedirectView("user/login_failed.html");
         }
