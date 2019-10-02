@@ -9,6 +9,7 @@ import view.View;
 
 public class CreateUserController extends AbstractController {
 
+    @Override
     public View doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         User user = new User(
                 httpRequest.getQueryParameter("userId"),

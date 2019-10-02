@@ -13,6 +13,7 @@ import java.util.Collection;
 
 public class UserListController extends AbstractController {
 
+    @Override
     public View doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         String cookie = httpRequest.getHeaderAttribute("Cookie");
         if (cookie != null && cookie.contains("logined=true")) {

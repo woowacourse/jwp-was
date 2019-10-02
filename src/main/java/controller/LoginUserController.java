@@ -9,6 +9,7 @@ import view.View;
 
 public class LoginUserController extends AbstractController {
 
+    @Override
     public View doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         User loginUser = DataBase.findUserById(httpRequest.getQueryParameter("userId"));
         if (loginUser == null || loginUser.canLogin(httpRequest.getHeaderAttribute("password"))) {
