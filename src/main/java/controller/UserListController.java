@@ -39,7 +39,7 @@ public class UserListController extends AbstractController {
 			HttpResponse httpResponse = HttpResponseGenerator.response200Header(
 					httpRequest.getRequestLineElement(REQUEST_URI), responseBody.length);
 
-			if(!httpRequest.isCookieValue(JSESSION_ID)) {
+			if(!httpRequest.hasCookieValue(JSESSION_ID)) {
 				String uuid = sessionManager.generateInitialSession();
 				httpResponse.setInitialSession(uuid);
 			}
@@ -53,7 +53,7 @@ public class UserListController extends AbstractController {
 	}
 
 	private byte[] getResponseBody(HttpRequest httpRequest) throws IOException, URISyntaxException {
-		if (httpRequest.isCookieValue("logined")) {
+		if (httpRequest.hasCookieValue("logined")) {
 			return generateDynamicResource();
 		}
 		return FileIoUtils.loadFileFromClasspath(ResourcePathUtils.getResourcePath("/user/login.html"));

@@ -20,7 +20,7 @@ public class CreateUserController extends AbstractController {
 			String redirectPath = "/index.html";
 			HttpResponse httpResponse = HttpResponseGenerator.response302Header(redirectPath);
 
-			if(!httpRequest.isCookieValue(JSESSION_ID)) {
+			if(!httpRequest.hasCookieValue(JSESSION_ID)) {
 				String uuid = sessionManager.generateInitialSession();
 				httpResponse.setInitialSession(uuid);
 			}

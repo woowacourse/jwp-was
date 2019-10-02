@@ -30,7 +30,7 @@ public class ResourceController extends AbstractController {
 			HttpResponse httpResponse = HttpResponseGenerator.response200Header(
 					httpRequest.getRequestLineElement(REQUEST_URI), responseBody.length);
 
-			if (!httpRequest.isCookieValue(JSESSION_ID)) {
+			if (!httpRequest.hasCookieValue(JSESSION_ID)) {
 				String uuid = sessionManager.generateInitialSession();
 				httpResponse.setInitialSession(uuid);
 			}
