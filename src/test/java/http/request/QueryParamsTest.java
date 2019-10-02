@@ -1,5 +1,6 @@
 package http.request;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -8,7 +9,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class QueryParamsTest {
     @Test
-    void 생성() {
+    @DisplayName("생성")
+    void create() {
         QueryParams queryParams = QueryParams.of("userId=woowa&password=password&name=woo");
 
         assertThat(queryParams.getParam("userId")).isEqualTo("woowa");
@@ -17,7 +19,8 @@ class QueryParamsTest {
     }
 
     @Test
-    void 동일한_key가_여러개인_경우_getParam_메서드는_첫번째값_반환() {
+    @DisplayName("동일한 key가 여러개인 경우 getParam 메서드는 첫번째값 반환")
+    void getParam() {
         QueryParams queryParams = QueryParams.of("userId=woowa&userId=&userId=&password=password&name=woo");
 
         assertThat(queryParams.getParam("userId")).isEqualTo("woowa");
@@ -26,7 +29,8 @@ class QueryParamsTest {
     }
 
     @Test
-    void 동일한_key가_여러개인_경우_getParams_메서드는_리스트_반환() {
+    @DisplayName("동일한 key가 여러개인 경우 getParams 메서드는 리스트 반환")
+    void getParams() {
         QueryParams queryParams =
                 QueryParams.of("userId=woowa1&userId=woowa2&userId=woowa3&password=password&name=woo");
 

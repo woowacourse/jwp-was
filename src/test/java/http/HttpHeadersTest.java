@@ -1,42 +1,35 @@
 package http;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import static http.HttpHeaders.CONTENT_LENGTH;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class HttpHeadersTest {
     @Test
-    void header_속성에_해당하는_값을_가져온다() {
-        HttpHeaders httpHeaders;
-        Map<String, String> headers = new HashMap<>();
-
-        headers.put("Host", "localhost:8080");
-        httpHeaders = new HttpHeaders(headers);
+    @DisplayName("header 속성에 해당하는 값을 가져온다")
+    void getHeader() {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.put("Host", "localhost:8080");
 
         assertThat(httpHeaders.getHeader("Host")).isEqualTo("localhost:8080");
     }
 
     @Test
-    void content_length_속성이_있는_경우() {
-        HttpHeaders httpHeaders;
-        Map<String, String> headers = new HashMap<>();
+    @DisplayName("header가 있는 경우")
+    void existHeader() {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.put(CONTENT_LENGTH, "5");
 
-        headers.put("Content-Length", "5");
-        httpHeaders = new HttpHeaders(headers);
-
-        assertThat(httpHeaders.hasContentLength()).isTrue();
+        assertThat(httpHeaders.existHeader(CONTENT_LENGTH)).isTrue();
     }
 
     @Test
-    void content_length_속성이_없는_경우() {
-        HttpHeaders httpHeaders;
-        Map<String, String> headers = new HashMap<>();
+    @DisplayName("header가 없는 경우")
+    void notExistHeader() {
+        HttpHeaders httpHeaders = new HttpHeaders();
 
-        httpHeaders = new HttpHeaders(headers);
-
-        assertThat(httpHeaders.hasContentLength()).isFalse();
+        assertThat(httpHeaders.existHeader(CONTENT_LENGTH)).isFalse();
     }
 }

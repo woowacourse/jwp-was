@@ -1,6 +1,11 @@
 package model;
 
 public class User {
+    public static final String USER_ID_KEY = "userId";
+    public static final String USER_PASSWORD_KEY = "password";
+    public static final String USER_NAME_KEY = "name";
+    public static final String USER_EMAIL_KEY = "email";
+
     private String userId;
     private String password;
     private String name;
@@ -27,6 +32,10 @@ public class User {
 
     public String getEmail() {
         return email;
+    }
+
+    public boolean matchPassword(String password) {
+        return this.password.equals(password);
     }
 
     @Override

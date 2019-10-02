@@ -5,14 +5,21 @@ import java.util.Map;
 import java.util.Objects;
 
 public class HttpHeaders {
+    public static final String ACCEPT = "Accept";
+    public static final String CONTENT_TYPE = "Content-Type";
+    public static final String CONTENT_LENGTH = "Content-Length";
+    public static final String LOCATION = "Location";
+    public static final String SET_COOKIE = "Set-Cookie";
+    public static final String COOKIE = "Cookie";
+
     private Map<String, String> headers;
 
     public HttpHeaders() {
         headers = new LinkedHashMap<>();
     }
 
-    public HttpHeaders(Map<String, String> headers) {
-        this.headers = headers;
+    public boolean existHeader(String header) {
+        return headers.containsKey(header);
     }
 
     public String getHeader(String key) {
@@ -23,8 +30,8 @@ public class HttpHeaders {
         return headers.put(key, value);
     }
 
-    public boolean hasContentLength() {
-        return headers.get("Content-Length") != null;
+    public void clear() {
+        headers.clear();
     }
 
     @Override

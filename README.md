@@ -31,10 +31,26 @@
 2. Response 생성 기능 분리
     - [x] Status에 따라 Http Response 만드는 기능 분리
 3. RequestHandler 리펙토링
-    - [x] controller 분리
+    - [x] servlet 분리
     - [x] ResponseEntity 분리
 4. 다수의 사용자 처리
-    - [ ] 다수의 사용자 요청에 대해 Queue 에 저장한 후 순차적으로 처리가 가능하도록 해야 한다.
+    - [x] 다수의 사용자 요청에 대해 Queue 에 저장한 후 순차적으로 처리가 가능하도록 해야 한다.
 
+## 2단계 - 로그인 및 세션 구현
+1. 로그인
+    - [x] 로그인 성공시 index.html로 이동
+    - [x] 로그인 실패시 /user/login_failed.html로 이동
+    - [x] 앞에서 회원가입한 사용자로 로그인할 수 있어야 한다.
+    - [x] 로그인이 성공하면 cookie를 활용해 로그인 상태를 유지할 수 있어야 한다.
+2. 동적 html 생성
+    - [x] template engine 구현
+    - [x] “로그인” 상태일 경우(Cookie 값이 logined=true) 경우 http://localhost:8080/user/list 로 접근했을 때 사용자 목록을 출력, 로그인하지 않은 상태라면 로그인 페이지(login.html)로 이동한다.
+3. HttpSession 구현
+    - [x] HttpRequest 생성시 HttpSession 생성
+    - [x] String getId() 구현
+    - [x] void setAttribute(String name, Object value) 구현
+    - [x] Object getAttribute(String name) 구현
+    - [x] removeAttribute(String name) 구현
+    - [x] void invalidate() 구현
 ## 의문사항
 - HTTP response version이 어떻게 결정되는지? request로 온 HTTP버전에 맞춰서 결정되는지 아니면 server에서 정해진 버전으로만 응답하는지?

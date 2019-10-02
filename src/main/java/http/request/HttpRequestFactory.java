@@ -9,10 +9,9 @@ import utils.IOUtils;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import static http.HttpHeaders.CONTENT_LENGTH;
 import static java.net.URLDecoder.decode;
 
 public class HttpRequestFactory {
@@ -68,12 +67,12 @@ public class HttpRequestFactory {
     }
 
     private static HttpHeaders parseHttpHeaders(List<String> lines) {
-        Map<String, String> headers = new HashMap<>();
+        HttpHeaders httpHeaders = new HttpHeaders();
         for (String header : lines) {
             String[] splicedHeader = header.split(HEADER_DELIMITER);
-            headers.put(splicedHeader[KEY_INDEX], splicedHeader[VALUE_INDEX]);
+            httpHeaders.put(splicedHeader[KEY_INDEX], splicedHeader[VALUE_INDEX]);
         }
-        return new HttpHeaders(headers);
+        return httpHeaders;
     }
 
     private static void checkStartLine(String[] parsedStartLine) {
@@ -84,8 +83,8 @@ public class HttpRequestFactory {
 
     private static String getBody(BufferedReader buffer, HttpHeaders headers) throws IOException {
         String body = EMPTY;
-        if (headers.hasContentLength()) {
-            int contentLength = Integer.parseInt(headers.getHeader("Content-Length"));
+        if (headers.existHeader(CONTENT_LENGTH)) {
+            int contentLength = Integer.parseInt(headers.getHeader(CONTENT_LENGTH));
             body = decode(IOUtils.readData(buffer, contentLength), StandardCharsets.UTF_8.name());
         }
         return body;

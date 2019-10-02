@@ -19,7 +19,9 @@ public class QueryParams {
     }
 
     public static QueryParams of(String query) {
-        return new QueryParams(splitQueryParams(query));
+        return query == null
+                ? new QueryParams(new HashMap<>())
+                : new QueryParams(splitQueryParams(query));
     }
 
     private static Map<String, Params> splitQueryParams(String query) {

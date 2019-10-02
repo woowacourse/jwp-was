@@ -12,10 +12,10 @@ public class FileIoUtils {
         return Files.readAllBytes(path);
     }
 
-    public static boolean existFileInClasspath(String filePath) throws URISyntaxException {
+    public static boolean existFileInClasspath(String filePath) {
         try {
             Paths.get(FileIoUtils.class.getClassLoader().getResource(filePath).toURI());
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | URISyntaxException e) {
             return false;
         }
         return true;
