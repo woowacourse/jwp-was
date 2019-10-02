@@ -27,8 +27,6 @@ public class HttpRequest {
         this.body = body;
         this.queryParams = QueryParams.of(getParams());
         this.cookie = HttpCookie.of(headers.getHeader(COOKIE));
-        this.session =
-                HttpSessionTable.getSession(cookie.get(SESSION_ID_KEY), new UuidStrategy());
     }
 
     private String getParams() {
@@ -84,6 +82,9 @@ public class HttpRequest {
     }
 
     public HttpSession getSession() {
+        if (session == null) {
+            session = HttpSessionTable.getSession(cookie.get(SESSION_ID_KEY), new UuidStrategy());
+        }
         return session;
     }
 
