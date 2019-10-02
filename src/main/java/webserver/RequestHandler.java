@@ -1,5 +1,7 @@
 package webserver;
 
+import controller.Controller;
+import controller.exception.ControllerNotFoundException;
 import http.HttpVersion;
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
@@ -33,7 +35,7 @@ public class RequestHandler implements Runnable {
             HttpRequest request = HttpRequestFactory.getHttpRequest(in);
             logger.debug(request.toString());
 
-            HttpResponse response = responseOf(request);
+            HttpResponse response = responseOf2(request);
 
             writeResponse(response, out);
         } catch (IOException e) {
@@ -42,15 +44,16 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private HttpResponse responseOf(HttpRequest request) {
+    private HttpResponse responseOf2(HttpRequest request) {
         HttpVersion version = request.getVersion();
         HttpResponse response = HttpResponse.of(version);
 
-        if (request.isStaticContentRequest()) {
+        try {
+            Controller controller = ControllerMapper.map(request);
+            controller.handle(request, response);
+        } catch (ControllerNotFoundException e) {
             StaticResourceHandler.forward(request, response);
-            return response;
         }
-        ControllerMapper.map(request, response);
         return response;
     }
 

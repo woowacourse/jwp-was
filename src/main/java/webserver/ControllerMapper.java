@@ -2,13 +2,11 @@ package webserver;
 
 import controller.Controller;
 import controller.UserController;
+import controller.exception.ControllerNotFoundException;
 import http.request.HttpRequest;
-import http.response.HttpResponse;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static http.response.HttpStatus.METHOD_NOT_ALLOWED;
 
 public class ControllerMapper {
     private static final Map<String, Controller> controllers;
@@ -18,14 +16,16 @@ public class ControllerMapper {
         controllers.put("/user/create", new UserController());
     }
 
-    public static void map(HttpRequest request, HttpResponse response) {
+    public static Controller map(HttpRequest request) {
         String path = request.getPath();
-        Controller controller = controllers.get(path);
 
-        if (controller == null) {
-            response.setStatus(METHOD_NOT_ALLOWED);
-            return;
+        if (doesNotHaveMatchedController(path)) {
+            throw new ControllerNotFoundException();
         }
-        controller.handle(request, response);
+        return controllers.get(path);
+    }
+
+    private static boolean doesNotHaveMatchedController(String path) {
+        return controllers.get(path) == null;
     }
 }
