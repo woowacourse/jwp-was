@@ -2,6 +2,8 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.http.HttpRequest;
+import webserver.http.HttpResponse;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -27,12 +29,19 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             DataOutputStream dos = new DataOutputStream(out);
 
-            HttpRequest httpRequest = HttpRequestFactory.getInstance().getHttpRequest(in);
+            HttpRequest httpRequest = HttpRequest.create(in);
 
-            String view = urlMapper.service(httpRequest);
+            StaticResourceProcessor staticResourceProcessor = new StaticResourceProcessor();
+            if (staticResourceProcessor.isSupported(httpRequest)) {
+                staticResourceProcessor.process(dos, httpRequest);
+                return;
+            }
 
+            Controller controller = urlMapper.service(httpRequest);
+            View view = controller.service(httpRequest);
+            HttpResponse httpResponse = new HttpResponse(httpRequest);
             ViewProcessor viewProcessor = ViewProcessorFactory.getInstance().getViewProcessor(view);
-            viewProcessor.process(dos, view);
+            viewProcessor.process(dos, view, httpResponse);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }

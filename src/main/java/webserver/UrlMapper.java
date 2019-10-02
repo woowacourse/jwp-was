@@ -1,8 +1,7 @@
 package webserver;
 
-import webserver.controller.UserCreateController;
-import webserver.controller.WelcomePageController;
-import webserver.exception.NotSupportedHttpMethodException;
+import webserver.controller.*;
+import webserver.http.HttpRequest;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,25 +10,17 @@ public class UrlMapper {
     private static Map<String, Controller> map = new HashMap<>();
 
     static {
-        map.put(UserCreateController.PATH, UserCreateController.getInstance());
-        map.put(WelcomePageController.PATH, WelcomePageController.getInstance());
+        map.put(UserCreateController.PATH, new UserCreateController());
+        map.put(WelcomePageController.PATH, new WelcomePageController());
+        map.put(LoginController.PATH, new LoginController());
+        map.put(UserListController.PATH, new UserListController());
     }
 
-    public String service(HttpRequest request) {
+    public Controller service(HttpRequest request) {
         String url = request.getPath();
         if (map.containsKey(url)) {
-            return getService(request, url);
+            return map.get(url);
         }
-
-        return url;
-    }
-
-    private String getService(HttpRequest request, String url) {
-        Controller controller = map.get(url);
-        try {
-            return controller.service(request);
-        } catch (NotSupportedHttpMethodException e) {
-            return "/error:405";
-        }
+        return ErrorViewController.getInstance();
     }
 }

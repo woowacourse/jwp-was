@@ -2,18 +2,14 @@ package webserver.controller;
 
 import db.DataBase;
 import model.User;
-import webserver.HttpRequest;
+import webserver.View;
+import webserver.http.HttpRequest;
 
 public class UserCreateController extends AbstractController {
     public static final String PATH = "/user/create";
-    private static final UserCreateController INSTANCE = new UserCreateController();
-
-    public static UserCreateController getInstance() {
-        return INSTANCE;
-    }
 
     @Override
-    protected String doPost(HttpRequest request) {
+    protected View doPost(HttpRequest request) {
         User user = User.Builder.anUser()
                 .userId(request.getParam("userId"))
                 .email(request.getParam("email"))
@@ -23,6 +19,6 @@ public class UserCreateController extends AbstractController {
 
         DataBase.addUser(user);
 
-        return "/redirect:/index.html";
+        return new View(REDIRECT_VIEW + "/index.html");
     }
 }

@@ -1,5 +1,7 @@
 package webserver;
 
+import webserver.http.HttpRequest;
+
 public interface Controller {
-    String service(HttpRequest request);
+    View service(HttpRequest request);
 }

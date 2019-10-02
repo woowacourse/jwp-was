@@ -3,22 +3,27 @@ package webserver;
 public enum MimeType {
     HTML(".html", "text/html"),
     CSS(".css", "text/css"),
-    JS(".js", "application/javascript");
+    JS(".js", "application/javascript"),
+    PLAIN(".*", "text/plain");
 
-    String fileName;
-    String mimeType;
+    private String fileName;
+    private String mimeType;
 
     MimeType(String fileName, String mimeType) {
         this.fileName = fileName;
         this.mimeType = mimeType;
     }
 
-    public static String values(String path) {
+    public static MimeType values(String path) {
         for (MimeType value : values()) {
             if (path.endsWith(value.fileName)) {
-                return value.mimeType;
+                return value;
             }
         }
-        return "plain/text";
+        return PLAIN;
+    }
+
+    public String getMimeType() {
+        return mimeType;
     }
 }

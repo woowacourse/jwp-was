@@ -1,4 +1,4 @@
-package webserver.httpRequest;
+package webserver.http.httpRequest;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -15,7 +15,7 @@ public class HttpRequestBody {
         this.parameters = parameters;
     }
 
-    public static HttpRequestBody of(String body) {
+    public static HttpRequestBody create(String body) {
         Map<String, String> params = new HashMap<>();
         parseBody(body, params);
 

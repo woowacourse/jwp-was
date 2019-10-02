@@ -3,7 +3,6 @@ package webserver;
 import webserver.viewProcessor.ErrorViewProcessor;
 import webserver.viewProcessor.HtmlViewProcessor;
 import webserver.viewProcessor.RedirectViewProcessor;
-import webserver.viewProcessor.ResourceViewProcessor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +22,11 @@ public class ViewProcessorFactory {
         viewProcessors.add(new ErrorViewProcessor());
         viewProcessors.add(new RedirectViewProcessor());
         viewProcessors.add(new HtmlViewProcessor());
-        viewProcessors.add(new ResourceViewProcessor());
     }
 
-    public ViewProcessor getViewProcessor(String name) {
+    public ViewProcessor getViewProcessor(View view) {
         for (ViewProcessor viewProcessor : viewProcessors) {
-            if (viewProcessor.isSupported(name)) {
+            if (viewProcessor.isSupported(view)) {
                 return viewProcessor;
             }
         }
