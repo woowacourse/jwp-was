@@ -2,7 +2,8 @@ package controller;
 
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import view.ModelAndView;
 
 public interface Controller {
-    void service(HttpRequest httpRequest, HttpResponse httpResponse);
+    ModelAndView service(HttpRequest httpRequest, HttpResponse httpResponse);
 }

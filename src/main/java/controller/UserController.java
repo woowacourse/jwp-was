@@ -3,8 +3,8 @@ package controller;
 import db.DataBase;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import http.response.ResponseStatus;
 import model.User;
+import view.ModelAndView;
 
 public class UserController extends AbstractController {
     public static UserController getInstance() {
@@ -12,7 +12,7 @@ public class UserController extends AbstractController {
     }
 
     @Override
-    public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
+    public ModelAndView doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         String userId = httpRequest.getFormDataParameter("userId");
         String password = httpRequest.getFormDataParameter("password");
         String name = httpRequest.getFormDataParameter("name");
@@ -22,8 +22,7 @@ public class UserController extends AbstractController {
 
         DataBase.addUser(user);
 
-        httpResponse.setResponseStatus(ResponseStatus.FOUND);
-        httpResponse.addHeaderAttribute("Location", "/");
+        return new ModelAndView("redirect: /");
     }
 
     private static class UserControllerLazyHolder {
