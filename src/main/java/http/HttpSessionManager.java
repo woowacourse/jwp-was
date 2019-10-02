@@ -17,6 +17,6 @@ public class HttpSessionManager {
     }
 
     public static HttpSession getSession(String id) {
-        return sessions.get(id);
+        return sessions.getOrDefault(id, createSession());
     }
 }
