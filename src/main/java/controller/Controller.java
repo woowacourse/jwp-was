@@ -5,7 +5,7 @@ import http.response.HttpResponse;
 
 public interface Controller {
 
-    HttpResponse service(HttpRequest httpRequest);
+    void service(HttpRequest httpRequest, HttpResponse httpResponse);
 
     boolean isMapping(RequestMapping requestMapping);
 }

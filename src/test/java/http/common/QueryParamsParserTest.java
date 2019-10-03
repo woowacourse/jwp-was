@@ -1,5 +1,6 @@
 package http.common;
 
+import http.parser.QueryParamsParser;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;

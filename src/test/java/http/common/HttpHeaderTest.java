@@ -1,6 +1,6 @@
 package http.common;
 
-import http.request.RequestHeaderParser;
+import http.parser.RequestHeaderParser;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -31,13 +31,13 @@ class HttpHeaderTest {
     @Test
     void find_header() {
         HttpHeader httpHeader = RequestHeaderParser.parse(headers);
-        assertThat(httpHeader.findHeader("Connection")).isEqualTo("keep-alive");
+        assertThat(httpHeader.getHeader("Connection")).isEqualTo("keep-alive");
     }
 
     @Test
     void put_header() {
         HttpHeader httpHeader = new HttpHeader();
         httpHeader.putHeader("Host", "Conas");
-        assertThat(httpHeader.findHeader("Host")).isEqualTo("Conas");
+        assertThat(httpHeader.getHeader("Host")).isEqualTo("Conas");
     }
 }

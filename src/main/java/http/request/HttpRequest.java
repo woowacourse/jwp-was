@@ -1,9 +1,13 @@
 package http.request;
 
+import http.common.Cookie;
+import http.common.Cookies;
 import http.common.HttpHeader;
+import http.common.HttpSession;
+import http.common.HttpSessionManager;
 import http.common.HttpVersion;
 
-import java.util.Map;
+import static http.common.HttpSessionManager.JSESSIONID;
 
 public class HttpRequest {
 
@@ -22,7 +26,7 @@ public class HttpRequest {
     }
 
     public String findHeader(String name) {
-        return requestHeader.findHeader(name);
+        return requestHeader.getHeader(name);
     }
 
     public HttpUri getUri() {
@@ -37,7 +41,11 @@ public class HttpRequest {
         return requestLine.getQuery();
     }
 
-    public String findParam(String name) {
+    public String findUriParam(String name) {
+        return requestLine.getQueryParam().get(name);
+    }
+
+    public String findBodyParam(String name) {
         return requestBody.findParam(name);
     }
 
@@ -49,7 +57,59 @@ public class HttpRequest {
         return requestLine.findPathPrefix();
     }
 
-    public Map<String, String> getQueryParam() {
-        return requestLine.getQueryParam();
+    public String getClassPath() {
+        return requestLine.getClassPath();
+    }
+
+    public String getContentType() {
+        return requestHeader.getContentType();
+    }
+
+    public Cookies getCookies() {
+        return requestHeader.getCookies();
+    }
+
+    public HttpSession getSession() {
+        Cookies cookies = getCookies();
+        String sessionId = cookies.getCookie(JSESSIONID);
+        HttpSession httpSession = HttpSessionManager.getSession(sessionId);
+        cookies.addCookie(new Cookie(JSESSIONID, httpSession.getId()));
+        return httpSession;
+    }
+
+    public String getCookie(final String name) {
+        return getCookies().getCookie(name);
+    }
+
+    public static final class HttpRequestBuilder {
+        private RequestLine requestLine;
+        private HttpHeader requestHeader;
+        private RequestBody requestBody;
+
+        private HttpRequestBuilder() {
+        }
+
+        public static HttpRequestBuilder builder() {
+            return new HttpRequestBuilder();
+        }
+
+        public HttpRequestBuilder withRequestLine(RequestLine requestLine) {
+            this.requestLine = requestLine;
+            return this;
+        }
+
+        public HttpRequestBuilder withRequestHeader(HttpHeader requestHeader) {
+            this.requestHeader = requestHeader;
+            return this;
+        }
+
+        public HttpRequestBuilder withRequestBody(RequestBody requestBody) {
+            this.requestBody = requestBody;
+            return this;
+        }
+
+        public HttpRequest build() {
+            return new HttpRequest(requestLine, requestHeader, requestBody);
+        }
     }
 }

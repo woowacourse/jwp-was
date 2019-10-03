@@ -1,5 +1,6 @@
 package http.request;
 
+import http.parser.HttpUriParser;
 import org.junit.jupiter.api.Test;
 
 import java.net.URI;
@@ -45,5 +46,11 @@ class HttpUriTest {
         HttpUri uri = HttpUriParser.parse("abcdefg");
 
         assertThat(uri.isMatches(regex)).isFalse();
+    }
+
+    @Test
+    void isEqualsPath() {
+        HttpUri uri = HttpUriParser.parse("/index.html");
+        assertThat(uri.isEqualsPath(HttpUriParser.parse("/index.html"))).isTrue();
     }
 }

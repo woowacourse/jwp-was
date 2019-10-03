@@ -5,6 +5,7 @@ import http.response.HttpResponse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Controllers {
 
@@ -12,19 +13,28 @@ public class Controllers {
 
     static {
         CONTROLLERS.add(new IndexController());
-        CONTROLLERS.add(new UserCreateController());
+        CONTROLLERS.add(new UserSignUpController());
         CONTROLLERS.add(new ResourceController());
+        CONTROLLERS.add(new UserLoginController());
+        CONTROLLERS.add(new UserListController());
     }
 
     public Controllers() {
     }
 
-    public HttpResponse service(HttpRequest httpRequest) {
+    public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
+
         RequestMapping requestMapping = RequestMapping.of(httpRequest.getHttpMethod(), httpRequest.getUri());
 
-        return CONTROLLERS.stream().filter(controller -> controller.isMapping(requestMapping))
-            .findFirst()
-            .map(controller -> controller.service(httpRequest))
-            .orElse(null);      // TODO: null -> 404 response로 변경
+        Optional<Controller> FoundController = CONTROLLERS.stream().filter(controller -> controller.isMapping(requestMapping))
+            .findFirst();
+
+        if (FoundController.isPresent()) {
+            FoundController.get().service(httpRequest, httpResponse);
+            return;
+        }
+
+        // Todo : 404 status 넘기기
+        httpResponse.error();
     }
 }

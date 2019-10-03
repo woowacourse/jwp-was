@@ -1,4 +1,4 @@
-package http.common;
+package http.parser;
 
 import java.util.Arrays;
 import java.util.HashMap;

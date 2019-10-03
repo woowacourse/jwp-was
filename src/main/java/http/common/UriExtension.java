@@ -13,7 +13,6 @@ public enum UriExtension {
 
     private static final String TEMPLATE_URI_PREFIX = "./templates";
     private static final String STATIC_URI_PREFIX = "./static";
-
     private String extension;
     private String pathPrefix;
 

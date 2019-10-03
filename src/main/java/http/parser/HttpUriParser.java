@@ -1,6 +1,7 @@
-package http.request;
+package http.parser;
 
-import exception.InvalidUriException;
+import exceptions.InvalidUriException;
+import http.request.HttpUri;
 
 import java.net.URI;
 import java.net.URISyntaxException;
