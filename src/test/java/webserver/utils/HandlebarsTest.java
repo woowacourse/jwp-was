@@ -47,7 +47,7 @@ public class HandlebarsTest {
         loader.setPrefix("/templates");
         loader.setSuffix(".html");
         Handlebars handlebars = new Handlebars(loader);
-        handlebars.registerHelper("coogie", (context, options) -> (Integer) context + 1);
+        handlebars.registerHelper("plusOne", (context, options) -> (Integer) context + 1);
 
         Map<String, Object> map = new HashMap<>();
         List<User> users = Arrays.asList(new User("javajigi", "password", "자바지기", "javajigi@gmail.com"),
