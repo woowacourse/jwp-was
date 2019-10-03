@@ -15,6 +15,13 @@ public class HttpResponseSender {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponseSender.class);
     private static final String SET_COOKIE_PREFIX = "Set-Cookie: ";
     private static final String COOKIE_VALUE_DELIMITER = "=";
+    private static final String EXPIRES = "Expires=";
+    private static final String MAX_AGE = "Max-Age=";
+    private static final String DOMAIN = "Domain=";
+    private static final String PATH = "Path=";
+    private static final String SECURE = "Secure";
+    private static final String HTTP_ONLY = "HttpOnly";
+    private static final String COOKIE_PROPERTY_DELIMITER = "; ";
 
     public static void send(final DataOutputStream dos, final HttpResponse httpResponse) {
         try {
@@ -53,46 +60,46 @@ public class HttpResponseSender {
         LocalDateTime expires = httpCookie.getExpires();
         if (expires != null) {
             appendCookiePropertyDelimiter(stringBuilder)
-                    .append("Expires=")
+                    .append(EXPIRES)
                     .append(expires.format(DateTimeFormatter.RFC_1123_DATE_TIME));
         }
 
         int maxAge = httpCookie.getMaxAge();
         if (maxAge != -1) {
             appendCookiePropertyDelimiter(stringBuilder)
-                    .append("Max-Age=")
+                    .append(MAX_AGE)
                     .append(maxAge);
         }
 
         String domain = httpCookie.getDomain();
         if (domain != null) {
             appendCookiePropertyDelimiter(stringBuilder)
-                    .append("Domain=")
+                    .append(DOMAIN)
                     .append(domain);
         }
 
         String path = httpCookie.getPath();
         if (path != null) {
             appendCookiePropertyDelimiter(stringBuilder)
-                    .append("Path=")
+                    .append(PATH)
                     .append(path);
         }
 
         if (httpCookie.isSecure()) {
             appendCookiePropertyDelimiter(stringBuilder)
-                    .append("Secure");
+                    .append(SECURE);
         }
 
         if (httpCookie.isHttpOnly()) {
             appendCookiePropertyDelimiter(stringBuilder)
-                    .append("HttpOnly");
+                    .append(HTTP_ONLY);
         }
 
         return stringBuilder.toString();
     }
 
     private static StringBuilder appendCookiePropertyDelimiter(StringBuilder stringBuilder) {
-        return stringBuilder.append("; ");
+        return stringBuilder.append(COOKIE_PROPERTY_DELIMITER);
     }
 
     private static void responseBody(DataOutputStream dos, HttpResponseBody httpResponseBody) {
