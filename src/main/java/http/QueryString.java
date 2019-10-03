@@ -1,5 +1,7 @@
 package http;
 
+import http.exception.NotFoundParameterException;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,6 +31,11 @@ public class QueryString {
     }
 
     public String getParameter(String key) {
+        String parameter = parameters.get(key);
+        if (parameter == null) {
+            throw new NotFoundParameterException();
+        }
+
         return parameters.get(key);
     }
 }
