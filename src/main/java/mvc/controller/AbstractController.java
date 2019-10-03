@@ -1,11 +1,13 @@
 package mvc.controller;
 
+import mvc.support.Constants;
+import mvc.view.ErrorView;
 import mvc.view.View;
 import server.http.request.HttpRequest;
 import server.http.response.HttpResponse;
+import was.http.HttpStatus;
 import was.http.servlet.AbstractServlet;
 
-import java.io.UnsupportedEncodingException;
 import java.util.UUID;
 
 public class AbstractController extends AbstractServlet implements Controller {
@@ -25,22 +27,22 @@ public class AbstractController extends AbstractServlet implements Controller {
 
     @Override
     public View get(HttpRequest httpRequest) {
-        return null;
+        return new ErrorView(HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     @Override
     public View post(HttpRequest httpRequest) {
-        return null;
+        return new ErrorView(HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     @Override
     public View put(HttpRequest httpRequest) {
-        return null;
+        return new ErrorView(HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     @Override
     public View delete(HttpRequest httpRequest) {
-        return null;
+        return new ErrorView(HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     private void postProcess(HttpRequest request, HttpResponse response) {
@@ -50,7 +52,7 @@ public class AbstractController extends AbstractServlet implements Controller {
     private void addSessionIdInCookie(HttpRequest request, HttpResponse response) {
         UUID sessionId = request.getSessionId();
         if (sessionId != null) {
-            response.setCookie("SESSIONID", sessionId.toString());
+            response.setCookie(Constants.getCookieSessionKey(), sessionId.toString());
         }
     }
 }

@@ -1,5 +1,6 @@
 package server.http.request;
 
+import mvc.support.Constants;
 import was.http.context.BasicSessionHandler;
 import was.http.context.Session;
 import was.http.context.SessionHandler;
@@ -49,8 +50,8 @@ public class HttpRequest {
 
     public Session getSession() {
         SessionHandler sessionHandler = BasicSessionHandler.getInstance();
-        if (cookies.containsKey("SESSIONID")) {
-            UUID sessionIdFromRequest = UUID.fromString(cookies.get("SESSIONID"));
+        if (cookies.containsKey(Constants.getCookieSessionKey())) {
+            UUID sessionIdFromRequest = UUID.fromString(cookies.get(Constants.getCookieSessionKey()));
             if (sessionHandler.hasSession(sessionIdFromRequest)) {
                 this.sessionId = sessionIdFromRequest;
                 return sessionHandler.getSession(sessionIdFromRequest);
