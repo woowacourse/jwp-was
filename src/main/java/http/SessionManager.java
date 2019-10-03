@@ -37,12 +37,12 @@ public class SessionManager {
         return session;
     }
 
-    // id 가 없을때 생성을 한다면.. 주어진 id 로 만들어야 할까?
     public Optional<Session> getSession(String id, boolean canBeCreated) {
-        Session session = Optional.ofNullable(sessions.get(id))
-                .orElse(canBeCreated ? create() : null);
+        if (sessions.containsKey(id)) {
+            return Optional.of(sessions.get(id));
+        }
 
-        return Optional.ofNullable(session);
+        return Optional.ofNullable(canBeCreated ? create() : null);
     }
 
     private void remove(String id) {
