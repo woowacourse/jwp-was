@@ -17,6 +17,7 @@ import java.util.List;
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
     private static final String CONTENT_TYPE = "Content-Type: ";
+    private static final String JSESSIONID_COOKIE_PATH = "/";
 
     private StatusLine statusLine;
     private HttpHeader httpHeader;
@@ -75,7 +76,11 @@ public class HttpResponse {
             return;
         }
 
-        setCookie(HttpCookie.builder(SessionPool.SESSION_ID, jSessionId).build());
+        HttpCookie jSessionIdCookie = HttpCookie.builder(SessionPool.SESSION_ID, jSessionId)
+                .path(JSESSIONID_COOKIE_PATH)
+                .build();
+        setCookie(jSessionIdCookie);
+        logger.info("jSessionIdCookie: {}", jSessionIdCookie);
     }
 
     @Override
