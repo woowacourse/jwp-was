@@ -18,6 +18,7 @@ public class HttpHeader {
     public static final String KEY_VALUE_DELIMITER = "=";
     public static final String VALUES_DELIMITER = ";";
     public static final String NOT_EXIST_BODY = "-1";
+    private static final String EMPTY = "";
 
     private Map<String, String> headers = new HashMap<>();
 
@@ -34,7 +35,7 @@ public class HttpHeader {
     }
 
     public String getValue(String key) {
-        return headers.get(key);
+        return headers.getOrDefault(key, EMPTY);
     }
 
     public int getContentLength() {

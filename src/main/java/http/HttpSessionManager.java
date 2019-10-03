@@ -19,4 +19,8 @@ public class HttpSessionManager {
     public static HttpSession getSession(String id) {
         return sessions.getOrDefault(id, createSession());
     }
+
+    public static boolean existSession(String id) {
+        return sessions.get(id) != null;
+    }
 }

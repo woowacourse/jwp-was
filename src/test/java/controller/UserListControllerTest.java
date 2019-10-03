@@ -41,9 +41,25 @@ public class UserListControllerTest {
 
     @Test
     void 로그인_후_유저_리스트_페이지_이동() throws IOException, URISyntaxException {
+        String loginUserPostRequest = "POST /user/login HTTP/1.1\r\n" +
+                "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3\r\n" +
+                "Connection: keep-alive\r\n" +
+                "Host: localhost:8080\r\n" +
+                "Content-Length: 25\r\n" +
+                "Content-Type: application/x-www-form-urlencoded\r\n" +
+                "\r\n" +
+                "userId=codemcd&password=1234";
+
+        InputStream loginIn = new ByteArrayInputStream(loginUserPostRequest.getBytes(UTF_8));
+        HttpRequest loginRequest = HttpRequestParser.parse(loginIn);
+        HttpResponse loginResponse = new HttpResponse();
+
+        DispatcherServlet.doDispatch(loginRequest, loginResponse);
+        String JSessionId = loginResponse.getHeaderAttribute("Set-Cookie");
+
         String userListGetRequestAfterLogin =
                         "GET /user/list HTTP/1.1\n" +
-                        "Cookie: logined=true\n" +
+                        "Cookie: " + JSessionId + "\n" +
                         "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3\n" +
                         "Connection: keep-alive\n" +
                         "Host: localhost:8080\n";

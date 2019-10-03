@@ -1,6 +1,7 @@
 package controller;
 
 import db.DataBase;
+import http.HttpSession;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.User;
@@ -17,7 +18,9 @@ public class LoginUserController extends AbstractController {
             return new RedirectView("user/login_failed.html");
         }
 
-        httpResponse.addHeader("Set-Cookie", "logined=true; Path=/");
+        HttpSession session = httpRequest.getSession();
+        String cookieValue = String.format("JSESSIONID=%s; Path=/", session.getId());
+        httpResponse.addHeader("Set-Cookie", cookieValue);
         return new RedirectView("index.html");
     }
 }
