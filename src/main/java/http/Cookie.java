@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class Cookie {
@@ -15,9 +14,6 @@ public class Cookie {
     private static final String SEQUENCE_SPLITTER = "=";
 
     private final Map<String, String> values;
-
-    private static final Function<String, Map<String, String>> COOKIE_PARSER
-            = (cookie) -> KeyValuesParser.parse(cookie, SEQUENCES_SPLITTER, SEQUENCE_SPLITTER);
 
     private Cookie(Map<String, String> values) {
         this.values = values;
@@ -29,7 +25,11 @@ public class Cookie {
 
     public static Cookie fromCookie(String cookie) {
         String cookieWithoutSpace = cookie.replace(" ", "");
-        return new Cookie(COOKIE_PARSER.apply(cookieWithoutSpace));
+        return new Cookie(parse(cookieWithoutSpace));
+    }
+
+    private static Map<String, String> parse(String cookie) {
+        return KeyValuesParser.parse(cookie, SEQUENCES_SPLITTER, SEQUENCE_SPLITTER);
     }
 
     public Optional<String> getValue(String name) {
