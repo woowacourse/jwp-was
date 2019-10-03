@@ -2,7 +2,6 @@ package webserver;
 
 import http.application.Controller;
 import http.application.ControllerMapper;
-import http.common.HttpSession;
 import http.request.HttpRequest;
 import http.request.HttpRequestParser;
 import http.request.Url;
@@ -16,21 +15,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.util.UUID;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
 
-    public RequestHandler(Socket connectionSocket) {
+    RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
     }
 
     public void run() {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
-        HttpSession httpSession = new HttpSession(UUID.randomUUID());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest httpRequest = HttpRequestParser.parse(in);
@@ -40,8 +37,9 @@ public class RequestHandler implements Runnable {
             logger.info("request url: {}", requestUrl);
 
             Controller controller = ControllerMapper.controllerMapping(requestUrl.getUrl());
-            HttpResponse httpResponse = new HttpResponse(httpSession);
+            HttpResponse httpResponse = new HttpResponse();
             controller.service(httpRequest, httpResponse);
+            httpResponse.addJSessionId(httpRequest.getJSessionId());
 
             HttpResponseSender.send(dos, httpResponse);
         } catch (IOException e) {

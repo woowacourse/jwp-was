@@ -2,10 +2,13 @@ package http.request;
 
 import http.common.HttpCookie;
 import http.common.HttpHeader;
+import http.common.HttpSession;
+import http.common.SessionPool;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class HttpRequest {
@@ -16,6 +19,7 @@ public class HttpRequest {
     private final HttpHeader httpHeader;
     private final MessageBody messageBody;
     private List<HttpCookie> cookies;
+    private String jSessionId;
 
     public HttpRequest(final RequestLine requestLine,
                        final HttpRequestParams httpRequestParams,
@@ -41,6 +45,27 @@ public class HttpRequest {
 
     public MessageBody getMessageBody() {
         return messageBody;
+    }
+
+    public String getJSessionId() {
+        return jSessionId;
+    }
+
+    public HttpSession getHttpSession() {
+        HttpCookie jSessionId = getCookies().stream()
+                .filter(cookie -> SessionPool.SESSION_ID.equals(cookie.getName()))
+                .findFirst()
+                .orElse(null);
+
+        HttpSession httpSession;
+        if (jSessionId == null) {
+            httpSession = SessionPool.getSession();
+        } else {
+            httpSession = SessionPool.getSession(UUID.fromString(jSessionId.getValue()));
+        }
+
+        this.jSessionId = httpSession.getSessionId();
+        return httpSession;
     }
 
     public List<HttpCookie> getCookies() {
