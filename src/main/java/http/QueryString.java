@@ -31,8 +31,7 @@ public class QueryString {
     }
 
     public String getParameter(String key) {
-        String parameter = parameters.get(key);
-        if (parameter == null) {
+        if (!parameters.containsKey(key)) {
             throw new NotFoundParameterException();
         }
 
