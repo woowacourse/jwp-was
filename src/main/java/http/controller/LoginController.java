@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 
 public class LoginController extends AbstractController {
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
-
     private static final String LOGINED = "logined";
 
     @Override
