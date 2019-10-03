@@ -1,26 +1,28 @@
 package http.request;
 
-import java.util.Map;
 import java.util.Objects;
 
-import http.HeaderElement;
+import http.Header;
+
+import static http.request.HttpRequest.HEADER_REQUEST_COOKIE;
 
 public class HttpRequestHeader {
-	private final Map<HeaderElement, String> header;
+    private final Header header;
 
-	public HttpRequestHeader(final Map<HeaderElement, String> header) {
-		this.header = header;
-	}
+    public HttpRequestHeader(final Header header) {
+        this.header = header;
+    }
 
-	public String getRequestElement(HeaderElement attribute) {
-		return header.get(attribute);
-	}
+    public String getRequestElement(String elementKey) {
+        return header.get(elementKey);
+    }
 
-	public boolean isCookieValue(String cookieKey) {
-		String cookie = getRequestElement(HeaderElement.COOKIE);
-		if(Objects.nonNull(cookie) && cookie.contains(cookieKey)) {
-			return true;
-		}
-		return false;
-	}
+    public boolean isCookieValue(String cookieKey) {
+        String cookie = getRequestElement(HEADER_REQUEST_COOKIE);
+
+        if (Objects.nonNull(cookie) && cookie.contains(cookieKey)) {
+            return true;
+        }
+        return false;
+    }
 }

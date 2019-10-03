@@ -3,9 +3,9 @@ package http.request;
 import java.util.Map;
 import java.util.Objects;
 
-import http.HeaderElement;
-
 public class HttpRequest {
+    public static final String HEADER_REQUEST_COOKIE = "Cookie";
+
     private RequestLine requestLine;
     private HttpRequestHeader httpRequestHeader;
     private HttpRequestBody httpRequestBody;
@@ -26,8 +26,8 @@ public class HttpRequest {
         return requestLine.getElementValue(elementKey);
     }
 
-    public String getRequestHeaderElement(HeaderElement attribute) {
-        return httpRequestHeader.getRequestElement(attribute);
+    public String getRequestHeaderElement(String elementKey) {
+        return httpRequestHeader.getRequestElement(elementKey);
     }
 
     public Map<String, String> getHttpRequestBody() {
@@ -42,6 +42,6 @@ public class HttpRequest {
     }
 
     public String getCookieValue() {
-        return httpRequestHeader.getRequestElement(HeaderElement.COOKIE).split("=")[1];
+        return httpRequestHeader.getRequestElement(HEADER_REQUEST_COOKIE).split("=")[1];
     }
 }
