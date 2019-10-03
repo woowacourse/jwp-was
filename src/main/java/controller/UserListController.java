@@ -23,10 +23,11 @@ import java.util.Map;
 public class UserListController implements Controller {
 
     private static final Logger log = LoggerFactory.getLogger(UserListController.class);
-    private static final String USER_LIST_PATH = "/user/list.html";
     private static final String LOGIN_PATH = "/user/login.html";
     private static final String USER_LIST_URI = "/user/list";
     private static final RequestMapping REQUEST_MAPPING = RequestMapping.of(HttpMethod.GET, HttpUriParser.parse(USER_LIST_URI));
+    private TemplateLoader loader = new ClassPathTemplateLoader("/templates", ".html");
+    private Handlebars handlebars = new Handlebars(loader);
 
     @Override
     public void service(final HttpRequest httpRequest, final HttpResponse httpResponse) {
@@ -34,10 +35,6 @@ public class UserListController implements Controller {
         HttpSession httpSession = httpRequest.getSession();
 
         if (isLogined(httpRequest)) {
-            TemplateLoader loader = new ClassPathTemplateLoader();
-            loader.setPrefix("/templates");
-            loader.setSuffix(".html");
-            Handlebars handlebars = new Handlebars(loader);
             try {
                 Template template = handlebars.compile("user/list");
                 Map<String, Collection<User>> users = Collections.singletonMap("users", DataBase.findAll());
