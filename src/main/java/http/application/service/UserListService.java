@@ -31,7 +31,7 @@ public class UserListService implements Service {
 
     private boolean isLogined(List<HttpCookie> cookies) {
         return cookies.stream()
-                .filter(cookie -> cookie.getName().equals(LOGINED_COOKIE_KEY))
+                .filter(cookie -> LOGINED_COOKIE_KEY.equals(cookie.getName()))
                 .anyMatch(loginedCookie -> Boolean.parseBoolean(loginedCookie.getValue()));
     }
 }
