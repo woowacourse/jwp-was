@@ -10,10 +10,11 @@ public class HttpSessionManager {
     private static final Map<String, HttpSession> sessions = new HashMap<>();
 
     public static HttpSession getSession(String sessionId) {
-        if (sessions.get(sessionId) == null) {
+        HttpSession httpSession = sessions.get(sessionId);
+        if (httpSession == null) {
             return createSession();
         }
-        return sessions.get(sessionId);
+        return httpSession;
     }
 
     private static HttpSession createSession() {
