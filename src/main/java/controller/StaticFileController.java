@@ -1,4 +1,4 @@
-package http.controller;
+package controller;
 
 import exception.MethodNotAllowedException;
 import http.request.HttpRequest;

@@ -1,4 +1,4 @@
-package http.controller;
+package controller;
 
 import db.DataBase;
 import http.common.Cookie;
