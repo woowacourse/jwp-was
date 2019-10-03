@@ -12,17 +12,19 @@ public class HttpRequest {
     private RequestLine requestLine;
     private RequestHeader requestHeader;
     private RequestBody requestBody;
-    private HttpSession httpSession;
+    private HttpSessionManager sessionManager;
 
-    public HttpRequest(RequestLine requestLine, RequestHeader requestHeader, RequestBody requestBody) {
+    public HttpRequest(RequestLine requestLine, RequestHeader requestHeader, HttpSessionManager sessionManager) {
+        this.requestLine = requestLine;
+        this.requestHeader = requestHeader;
+        this.sessionManager = sessionManager;
+    }
+
+    public HttpRequest(RequestLine requestLine, RequestHeader requestHeader, RequestBody requestBody, HttpSessionManager sessionManager) {
         this.requestLine = requestLine;
         this.requestHeader = requestHeader;
         this.requestBody = requestBody;
-    }
-
-    public HttpRequest(RequestLine requestLine, RequestHeader requestHeader) {
-        this.requestLine = requestLine;
-        this.requestHeader = requestHeader;
+        this.sessionManager = sessionManager;
     }
 
     public boolean isSameHttpMethod(HttpMethod httpMethod) {
@@ -60,7 +62,16 @@ public class HttpRequest {
         return requestBody.getValueBy(key);
     }
 
-    public Cookie getCookie(String key) {
+    public HttpSession getHttpSession() {
+        if (requestHeader.isCookieExist()) {
+            return sessionManager.getSession(getCookieValue("JSESSIONID"));
+        }
+        HttpSession httpSession = new HttpSession();
+        sessionManager.setSession(httpSession.getJSESSIONID(), httpSession);
+        return httpSession;
+    }
+
+    private Cookie getCookie(String key) {
         return requestHeader.getCookies().stream()
                 .filter(cookie -> cookie.getName().equals(key))
                 .findFirst()
@@ -68,18 +79,8 @@ public class HttpRequest {
                 ;
     }
 
-    public String getCookieValue(String key) {
+    private String getCookieValue(String key) {
         return getCookie(key).getValue();
-    }
-
-    public HttpSession getHttpSession() {
-        if (requestHeader.isCookieExist()) {
-            this.httpSession = HttpSessionManager.getSession(getCookieValue("JSESSIONID"));
-            return this.httpSession;
-        }
-        this.httpSession = new HttpSession();
-        HttpSessionManager.setSession(httpSession.getJSESSIONID(), httpSession);
-        return this.httpSession;
     }
 
     public String getHttpVersion() {

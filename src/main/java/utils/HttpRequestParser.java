@@ -1,5 +1,6 @@
 package utils;
 
+import webserver.http.HttpSessionManager;
 import webserver.http.request.HttpRequest;
 import webserver.http.request.RequestBody;
 import webserver.http.request.RequestHeader;
@@ -19,7 +20,7 @@ public class HttpRequestParser {
     private static final int HEADER_KEY = 0;
     private static final int HEADER_VALUE = 1;
 
-    public static HttpRequest parseRequest(InputStreamReader inputStream) throws IOException {
+    public static HttpRequest parseRequest(InputStreamReader inputStream, HttpSessionManager sessionManager) throws IOException {
         BufferedReader br = new BufferedReader(inputStream);
         RequestLine requestLine = extractRequestLine(br);
         RequestHeader requestHeader = extractRequestHeaders(br);
@@ -28,10 +29,10 @@ public class HttpRequestParser {
             String body = IOUtils.readData(br, requestHeader.getContentLength());
             RequestBody requestBody = new RequestBody(body);
 
-            return new HttpRequest(requestLine, requestHeader, requestBody);
+            return new HttpRequest(requestLine, requestHeader, requestBody, sessionManager);
         }
 
-        return new HttpRequest(requestLine, requestHeader);
+        return new HttpRequest(requestLine, requestHeader, sessionManager);
     }
 
 

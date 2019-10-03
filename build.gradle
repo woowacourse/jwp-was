@@ -17,5 +17,5 @@ dependencies {
     testImplementation 'org.assertj:assertj-core:3.12.2'
 }
 
-// 소스 인코딩 지정방법 1
+// 소스 인코딩 지정방법
 [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'

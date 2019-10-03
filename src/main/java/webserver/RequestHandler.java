@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.HttpRequestParser;
 import view.ViewResolver;
+import webserver.http.HttpSessionManager;
 import webserver.http.ModelAndView;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
@@ -24,9 +25,11 @@ import java.nio.charset.StandardCharsets;
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private Socket connection;
+    private HttpSessionManager sessionManager;
 
-    public RequestHandler(Socket connectionSocket) {
+    public RequestHandler(Socket connectionSocket, HttpSessionManager sessionManager) {
         this.connection = connectionSocket;
+        this.sessionManager = sessionManager;
     }
 
     public void run() {
@@ -34,7 +37,7 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            HttpRequest httpRequest = HttpRequestParser.parseRequest(new InputStreamReader(in, StandardCharsets.UTF_8));
+            HttpRequest httpRequest = HttpRequestParser.parseRequest(new InputStreamReader(in, StandardCharsets.UTF_8), sessionManager);
             HttpResponse httpResponse = HttpResponse.of(httpRequest.getHttpVersion());
 
             Method method = ControllerMapper.mappingMethod(httpRequest, httpResponse);
