@@ -8,7 +8,7 @@ import java.util.Map;
 public class HttpFormDataMessageBody implements MessageBody {
     private final Map<String, String> formData;
 
-    HttpFormDataMessageBody(final String body) {
+    public HttpFormDataMessageBody(final String body) {
         this.formData = FormDataParser.getInstance().parse(body);
     }
 
