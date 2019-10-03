@@ -1,7 +1,6 @@
 package webserver.controller;
 
 import db.DataBase;
-import http.ContentType;
 import http.parameter.ParameterParser;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -11,34 +10,14 @@ import org.slf4j.LoggerFactory;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-public class UserController extends AbstractController {
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
-
-    @Override
-    public void doGet(HttpRequest request, HttpResponse response) {
-        if (request.hasParameters()) {
-            DataBase.addUser(createUser(request));
-
-            // 기존에 존재하던 파일을 제공 할 것인지..
-            // 그렇다면... 우예할까??
-            // 일단은 static, templates 에 존재하는 파일을 요청하는 부분에 집중해볼까??
-            response.response200Header();
-            return;
-        }
-        String stringOfUtf_8 = "안녕";
-        byte[] b = stringOfUtf_8.getBytes(StandardCharsets.UTF_8);
-        log.debug("length: {}", b.length);
-        response.setHeader("Content-Type", ContentType.TXT.toHeaderValue());
-        response.setHeader("Content-Length", Integer.toString(b.length));
-        response.response200Header();
-        response.responseBody(b);
-    }
+public class UserSignUpController extends AbstractController {
+    private static final Logger log = LoggerFactory.getLogger(UserSignUpController.class);
 
     @Override
     public void doPost(HttpRequest request, HttpResponse response) {
+        log.debug("begin");
         if (request.hasBody()) {
             String body = request.getBody().toString();
             try {
@@ -47,9 +26,12 @@ public class UserController extends AbstractController {
                 log.error("error: {}", e);
                 throw new RuntimeException(e);
             }
-            Map<String, String> bodyData = ParameterParser.parse(body);
+//            Map<String, String> bodyData = ParameterParser.parse(body);
 
-            DataBase.addUser(createUser(bodyData));
+//            DataBase.addUser(createUser(bodyData));
+            User user = createUser(request);
+            log.debug("user: {}", user);
+            DataBase.addUser(user);
 
             // response 만들기
 

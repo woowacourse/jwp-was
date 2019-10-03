@@ -10,7 +10,7 @@ public class RouterFactory {
         OrderedRouter orderedRouter = OrderedRouter.getInstance();
 
         Router basicRouter = BasicRouter.getInstance()
-                .addController(pattern -> pattern.equals("/user/create"), new UserController())
+                .addController(pattern -> pattern.equals("/user/create"), new UserSignUpController())
                 .addController(pattern -> pattern.equals("/user/list"), new UserListController())
                 .addController(pattern -> pattern.equals("/user/profile"), new UserProfileController())
                 .addController(pattern -> pattern.equals("/user/logout"), new LogoutController())
