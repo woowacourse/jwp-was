@@ -4,14 +4,11 @@ import db.DataBase;
 import http.application.Service;
 import http.common.HttpCookie;
 import http.request.HttpRequest;
-import http.request.MessageBodyParser;
-import http.request.bodyparser.FormDataParser;
+import http.request.MessageBody;
 import http.response.HttpResponse;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Map;
 
 public class LoginService implements Service {
     private static final Logger logger = LoggerFactory.getLogger(LoginService.class);
@@ -19,11 +16,9 @@ public class LoginService implements Service {
 
     @Override
     public void execute(HttpRequest httpRequest, HttpResponse httpResponse) {
-        MessageBodyParser formDataParser = new FormDataParser();
-        Map<String, String> formData = formDataParser.parse(httpRequest.getHttpRequestBody());
-
-        String userId = formData.get("userId");
-        String password = formData.get("password");
+        MessageBody messageBody = httpRequest.getMessageBody();
+        String userId = messageBody.get("userId");
+        String password = messageBody.get("password");
 
         User user = DataBase.findUserById(userId);
         boolean isAuthorized = authorize(user, password);
