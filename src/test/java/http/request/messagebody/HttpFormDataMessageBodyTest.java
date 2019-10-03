@@ -1,5 +1,6 @@
-package http.request;
+package http.request.messagebody;
 
+import http.request.MessageBody;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
