@@ -19,7 +19,7 @@ public class UserListController extends AbstractController {
     @Override
     public View get(HttpRequest httpRequest) {
         Session session = httpRequest.getSession();
-        if (session.get("login") != null && session.get("login").equals("true")) {
+        if (session.get("login") != null && "true".equals(session.get("login"))) {
             List<User> users = new ArrayList<>(UserDataBase.findAll());
             return new ModelAndView("user/profile", users);
         }
