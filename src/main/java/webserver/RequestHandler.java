@@ -4,14 +4,14 @@ import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
-import controller.Controller;
-import controller.ControllerGenerator;
-import http.request.HttpRequest;
-import http.request.HttpRequestReader;
+import webserver.controller.Controller;
+import webserver.controller.ControllerGenerator;
+import webserver.http.request.HttpRequest;
+import webserver.http.request.HttpRequestReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static http.request.HttpRequestReader.REQUEST_URI;
+import static webserver.http.request.HttpRequestReader.REQUEST_URI;
 
 public class RequestHandler implements Runnable {
 	private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
