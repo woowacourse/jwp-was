@@ -3,6 +3,7 @@ package http.application.service;
 import db.DataBase;
 import http.application.Service;
 import http.common.HttpCookie;
+import http.common.HttpSession;
 import http.request.HttpRequest;
 import http.request.MessageBody;
 import http.response.HttpResponse;
@@ -28,6 +29,10 @@ public class LoginService implements Service {
         httpResponse.redirect(redirectUrl);
         httpResponse.setCookie(HttpCookie.builder("logined", isAuthorized + "").path(COOKIE_PATH).build());
 
+        if (isAuthorized) {
+            HttpSession httpSession = httpRequest.getHttpSession();
+            httpSession.setAttribute("user", user);
+        }
         logger.info("login {}! redirect to {}", isAuthorized, redirectUrl);
     }
 
