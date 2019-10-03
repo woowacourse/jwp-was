@@ -7,8 +7,11 @@
             <outputPatternAsHeader>true</outputPatternAsHeader>
         </encoder>
     </appender>
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <!--<file>log/logFile.log</file>-->
+    <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- deny all events with a level below INFO, that is TRACE and DEBUG -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
             <fileNamePattern>log/logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
@@ -21,12 +24,10 @@
         </encoder>
     </appender>
 
-
-    <logger name="webserver" level="INFO">
-        <appender-ref ref="FILE"/>
-    </logger>
     <root level="DEBUG">
         <appender-ref ref="STDOUT"/>
+        <!-- INFO 이상의 로그는 파일에 적기 위함 -->
+        <appender-ref ref="INFO_FILE"/>
     </root>
 </configuration>
 
