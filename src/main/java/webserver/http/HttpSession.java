@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.UUID;
 
 public class HttpSession {
-
     private String JSESSIONID;
     private Map<String, Object> attribute = new HashMap<>();
 
