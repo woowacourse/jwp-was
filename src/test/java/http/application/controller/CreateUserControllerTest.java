@@ -1,7 +1,6 @@
 package http.application.controller;
 
 import http.application.Controller;
-import http.common.HttpSession;
 import http.common.HttpVersion;
 import http.request.HttpRequest;
 import http.request.HttpRequestParser;
@@ -15,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,7 +32,7 @@ class CreateUserControllerTest {
         in = new FileInputStream(BasicControllerTest.TEST_RESOURCES + "/http_post.txt");
 
         HttpRequest httpRequest = HttpRequestParser.parse(in);
-        HttpResponse httpResponse = new HttpResponse(new HttpSession(UUID.randomUUID()));
+        HttpResponse httpResponse = new HttpResponse();
         controller.service(httpRequest, httpResponse);
 
         StatusLine statusLine = httpResponse.getStatusLine();

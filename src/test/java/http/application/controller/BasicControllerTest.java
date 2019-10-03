@@ -1,7 +1,6 @@
 package http.application.controller;
 
 import http.application.Controller;
-import http.common.HttpSession;
 import http.common.HttpVersion;
 import http.request.HttpRequest;
 import http.request.HttpRequestParser;
@@ -16,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,7 +30,7 @@ public class BasicControllerTest {
     @BeforeEach
     void setUp() {
         controller = new BasicController();
-        httpResponse = new HttpResponse(new HttpSession(UUID.randomUUID()));
+        httpResponse = new HttpResponse();
     }
 
     @Test

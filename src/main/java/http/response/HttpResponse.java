@@ -2,8 +2,8 @@ package http.response;
 
 import http.common.HttpCookie;
 import http.common.HttpHeader;
-import http.common.HttpSession;
 import http.common.HttpVersion;
+import http.common.SessionPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
@@ -16,15 +16,12 @@ import java.util.List;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
-    private final HttpSession httpSession;
+    private static final String CONTENT_TYPE = "Content-Type: ";
+
     private StatusLine statusLine;
     private HttpHeader httpHeader;
     private HttpResponseBody httpResponseBody;
     private List<HttpCookie> httpCookies = new ArrayList<>();
-
-    public HttpResponse(HttpSession httpSession) {
-        this.httpSession = httpSession;
-    }
 
     public StatusLine getStatusLine() {
         return statusLine;
@@ -42,15 +39,9 @@ public class HttpResponse {
         return httpCookies;
     }
 
-    public HttpSession getHttpSession() {
-        HttpCookie jSessionIdCookie = HttpCookie.builder("JSESSIONID", httpSession.getSessionId()).build();
-        httpCookies.add(jSessionIdCookie);
-        return httpSession;
-    }
-
     public void forward(String url) {
         this.statusLine = new StatusLine(HttpStatus.OK, HttpVersion.HTTP_1_1);
-        this.httpHeader = HttpHeader.of(Arrays.asList("Content-Type: " + HttpContentType.of(url).getContentType()));
+        this.httpHeader = HttpHeader.of(Arrays.asList(CONTENT_TYPE + HttpContentType.of(url).getContentType()));
 
         try {
             this.httpResponseBody = HttpResponseBody.of(FileIoUtils.loadFileFromClasspath(url));
@@ -63,7 +54,7 @@ public class HttpResponse {
 
     public void forward(byte[] body) {
         this.statusLine = new StatusLine(HttpStatus.OK, HttpVersion.HTTP_1_1);
-        this.httpHeader = HttpHeader.of(Arrays.asList("Content-Type: " + HttpContentType.HTML));
+        this.httpHeader = HttpHeader.of(Arrays.asList(CONTENT_TYPE + HttpContentType.HTML));
         this.httpResponseBody = HttpResponseBody.of(body);
 
         logger.info("{}", this);
@@ -77,6 +68,14 @@ public class HttpResponse {
 
     public void setCookie(HttpCookie httpCookie) {
         httpCookies.add(httpCookie);
+    }
+
+    public void addJSessionId(String jSessionId) {
+        if (jSessionId == null) {
+            return;
+        }
+
+        setCookie(HttpCookie.builder(SessionPool.SESSION_ID, jSessionId).build());
     }
 
     @Override

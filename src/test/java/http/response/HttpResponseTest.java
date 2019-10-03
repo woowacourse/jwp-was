@@ -1,13 +1,9 @@
 package http.response;
 
 import http.common.HttpHeader;
-import http.common.HttpSession;
 import http.common.HttpVersion;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,7 +14,7 @@ class HttpResponseTest {
 
     @BeforeEach
     void setUp() {
-        httpResponse = new HttpResponse(new HttpSession(UUID.randomUUID()));
+        httpResponse = new HttpResponse();
     }
 
     @Test
@@ -44,15 +40,5 @@ class HttpResponseTest {
 
         HttpHeader httpResponseHeader = httpResponse.getHttpHeader();
         assertThat(httpResponseHeader.get("Location")).isEqualTo(INDEX_HTML);
-    }
-
-    @Test
-    @DisplayName("get했을때 생성되는 seesionId가 주입한 UUID와 같은지 테스트")
-    void 세션_id_생성_테스트() {
-        UUID uuid = UUID.randomUUID();
-        HttpResponse httpResponse = new HttpResponse(new HttpSession(uuid));
-        HttpSession httpSession = httpResponse.getHttpSession();
-
-        assertThat(httpSession.getSessionId()).isEqualTo(uuid.toString());
     }
 }

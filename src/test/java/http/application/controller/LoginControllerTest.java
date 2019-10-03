@@ -2,7 +2,6 @@ package http.application.controller;
 
 import db.DataBase;
 import http.common.HttpCookie;
-import http.common.HttpSession;
 import http.common.HttpVersion;
 import http.request.HttpRequest;
 import http.request.HttpRequestParser;
@@ -16,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,7 +29,7 @@ public class LoginControllerTest {
     void setUp() {
         loginController = new LoginController();
 
-        httpResponse = new HttpResponse(new HttpSession(UUID.randomUUID()));
+        httpResponse = new HttpResponse();
         DataBase.addUser(new User("pkch", "1234", "박경철", "chulsea@woowa.com"));
     }
 
@@ -46,11 +44,11 @@ public class LoginControllerTest {
         assertThat(statusLine.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
         assertThat(statusLine.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
 
-        HttpCookie httpCookie = httpResponse.getHttpCookies().get(LOGINED_COOKIE);
+        HttpCookie loginedCookie = httpResponse.getHttpCookies().get(LOGINED_COOKIE);
 
-        assertThat(httpCookie.getName()).isEqualTo("logined");
-        assertThat(httpCookie.getValue()).isEqualTo("true");
-        assertThat(httpCookie.getPath()).isEqualTo("/");
+        assertThat(loginedCookie.getName()).isEqualTo("logined");
+        assertThat(loginedCookie.getValue()).isEqualTo("true");
+        assertThat(loginedCookie.getPath()).isEqualTo("/");
     }
 
     @Test
