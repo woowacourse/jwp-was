@@ -8,7 +8,8 @@ import webserver.exception.MethodNotAllowedException;
 import webserver.exception.PageNotFoundException;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
-import webserver.storage.HttpSession;
+
+import java.util.Objects;
 
 import static webserver.controller.RequestMapping.getMapping;
 import static webserver.controller.RequestMapping.postMapping;
@@ -71,9 +72,9 @@ public class RequestMapper {
     }
 
     private void registerSession(HttpRequest request, HttpResponse response) {
-        HttpSession session = request.getSession();
-        if (session != null) {
-            response.registerSession(session.getId());
+        String sessionId = request.getSessionId();
+        if (Objects.nonNull(sessionId)) {
+            response.registerSession(sessionId);
         }
     }
 }

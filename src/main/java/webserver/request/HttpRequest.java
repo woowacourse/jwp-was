@@ -6,17 +6,19 @@ import webserver.storage.HttpSession;
 import webserver.storage.SessionManager;
 
 import java.util.List;
-import java.util.Optional;
 
 public class HttpRequest {
     private static final String BLANK = "";
     private static final String COLON = ":";
+    private static final String COOKIE = "Cookie";
+    private static final String JSESSIONID = "JSESSIONID";
 
     private RequestLine requestLine;
     private RequestHeaders requestHeaders;
     private RequestData requestParams;
     private RequestData requestBody;
-    private HttpSession session;
+    private Cookie cookie;
+    private String sessionId;
 
     public HttpRequest(List<String> lines) {
         this.requestLine = new RequestLine(lines.get(0));
@@ -24,6 +26,8 @@ public class HttpRequest {
         this.requestHeaders = new RequestHeaders();
         this.requestBody = new RequestData();
         setRequestHeaderAndBody(lines);
+        this.cookie = new Cookie(requestHeaders.get(COOKIE));
+        this.sessionId = cookie.get(JSESSIONID);
     }
 
     private static RequestData getRequestParams(RequestLine requestLine) {
@@ -58,7 +62,7 @@ public class HttpRequest {
     }
 
     public Cookie getCookie() {
-        return new Cookie(requestHeaders.get("Cookie"));
+        return cookie;
     }
 
     public RequestMapping getRequestMapping() {
@@ -80,6 +84,14 @@ public class HttpRequest {
         return requestParams.get(key);
     }
 
+    public HttpSession getSession() {
+        HttpSession session = SessionManager.getInstance().getSession(sessionId);
+        if (!session.isSameId(sessionId)) {
+            this.sessionId = session.getId();
+        }
+        return session;
+    }
+
     public String getBody(String key) {
         return requestBody.get(key);
     }
@@ -92,12 +104,8 @@ public class HttpRequest {
         return requestLine.getVersion();
     }
 
-    public HttpSession getSession() {
-        HttpSession session = Optional.ofNullable(getCookie().getJSessionId())
-                .map(id -> SessionManager.getInstance().getSession(id))
-                .orElse(SessionManager.getInstance().createSession());
-        this.session = session;
-        return session;
+    public String getSessionId() {
+        return sessionId;
     }
 
     @Override
@@ -107,6 +115,8 @@ public class HttpRequest {
                 ", requestHeaders=" + requestHeaders +
                 ", requestParams=" + requestParams +
                 ", requestBody=" + requestBody +
+                ", cookie=" + cookie +
+                ", sessionId='" + sessionId + '\'' +
                 '}';
     }
 }

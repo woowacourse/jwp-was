@@ -25,17 +25,7 @@ public class SessionManager {
         return httpSession;
     }
 
-    public HttpSession createSession(String key) {
-        HttpSession httpSession = new HttpSession(key);
-        sessionManager.put(key, httpSession);
-        return httpSession;
-    }
-
-    public boolean containsKey(String key) {
-        return sessionManager.containsKey(key);
-    }
-
     public HttpSession getSession(String sessionId) {
-        return sessionManager.get(sessionId);
+        return sessionManager.getOrDefault(sessionId, createSession());
     }
 }

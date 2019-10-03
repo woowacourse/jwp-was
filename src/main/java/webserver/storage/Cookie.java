@@ -2,11 +2,11 @@ package webserver.storage;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class Cookie {
     private static final String COOKIE_SEPARATOR = "; ";
     private static final String EQUALS_SIGN = "=";
-    private static final String JSESSIONID = "JSESSIONID";
 
     private Map<String, String> cookies;
 
@@ -17,6 +17,9 @@ public class Cookie {
     public Cookie(String cookiesToString) {
         cookies = new HashMap<>();
 
+        if (Objects.isNull(cookiesToString)) {
+            return;
+        }
         String[] pieceOfCookie = cookiesToString.split(COOKIE_SEPARATOR);
 
         for (String cookie : pieceOfCookie) {
@@ -31,10 +34,6 @@ public class Cookie {
 
     public String get(String key) {
         return cookies.get(key);
-    }
-
-    public String getJSessionId() {
-        return cookies.get(JSESSIONID);
     }
 
     @Override

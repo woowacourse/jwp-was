@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HttpSession {
+    public static final String JSESSIONID = "JSESSIONID";
+
     private Map<String, Object> session;
     private String sessionId;
 
@@ -30,6 +32,10 @@ public class HttpSession {
 
     public String getId() {
         return sessionId;
+    }
+
+    public boolean isSameId(String sessionId) {
+        return this.sessionId.equals(sessionId);
     }
 
     @Override
