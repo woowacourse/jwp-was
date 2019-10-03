@@ -1,21 +1,16 @@
 package http.common;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public class HttpSession {
-    private static final Logger logger = LoggerFactory.getLogger(HttpSession.class);
     private final String sessionId;
     private final Map<String, Object> sessionValues;
 
     public HttpSession(final UUID uuid) {
         this.sessionId = uuid.toString();
         this.sessionValues = new HashMap<>();
-        logger.info("session create {}", this);
     }
 
     public String getSessionId() {
