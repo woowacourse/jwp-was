@@ -14,17 +14,17 @@ public class HttpRequest {
     private final RequestLine requestLine;
     private final HttpRequestParams httpRequestParams;
     private final HttpHeader httpHeader;
-    private final HttpRequestBody httpRequestBody;
+    private final MessageBody messageBody;
     private List<HttpCookie> cookies;
 
     public HttpRequest(final RequestLine requestLine,
                        final HttpRequestParams httpRequestParams,
                        final HttpHeader httpHeader,
-                       final HttpRequestBody httpRequestBody) {
+                       final MessageBody messageBody) {
         this.requestLine = requestLine;
         this.httpRequestParams = httpRequestParams;
         this.httpHeader = httpHeader;
-        this.httpRequestBody = httpRequestBody;
+        this.messageBody = messageBody;
     }
 
     public RequestLine getRequestLine() {
@@ -39,8 +39,8 @@ public class HttpRequest {
         return httpHeader;
     }
 
-    public HttpRequestBody getHttpRequestBody() {
-        return httpRequestBody;
+    public MessageBody getMessageBody() {
+        return messageBody;
     }
 
     public List<HttpCookie> getCookies() {
@@ -61,6 +61,5 @@ public class HttpRequest {
                 .map(rawCookie -> rawCookie.split("="))
                 .map(splitedCookie -> HttpCookie.builder(splitedCookie[0], splitedCookie[1]).build())
                 .collect(Collectors.toList());
-
     }
 }

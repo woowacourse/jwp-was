@@ -28,7 +28,6 @@ public class HttpRequestTest {
         assertThat(httpRequest.getHttpHeader().get("Connection")).isEqualTo("keep-alive");
         assertThat(httpRequest.getHttpHeader().get("Accept")).isEqualTo("*/*");
         assertThat(httpRequest.getHttpRequestParams()).isEqualTo(HttpRequestParams.of("userId=javajigi&password=password&name=JaeSung"));
-        assertThat(httpRequest.getHttpRequestBody().getBody()).isEqualTo("");
     }
 
     @Test
@@ -48,6 +47,5 @@ public class HttpRequestTest {
         assertThat(httpRequest.getHttpHeader().get("Content-Type")).isEqualTo("application/x-www-form-urlencoded");
         assertThat(httpRequest.getHttpHeader().get("Accept")).isEqualTo("*/*");
         assertThat(httpRequest.getHttpRequestParams()).isEqualTo(HttpRequestParams.init());
-        assertThat(httpRequest.getHttpRequestBody().getBody()).isEqualTo("userId=javajigi&password=password&name=JaeSung");
     }
 }

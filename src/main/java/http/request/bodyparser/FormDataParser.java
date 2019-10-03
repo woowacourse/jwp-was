@@ -1,6 +1,5 @@
 package http.request.bodyparser;
 
-import http.request.HttpRequestBody;
 import http.request.MessageBodyParser;
 
 import java.util.HashMap;
@@ -14,10 +13,20 @@ public class FormDataParser implements MessageBodyParser {
     private static final int KEY_INDEX = 0;
     private static final int VALUE_INDEX = 1;
 
+    private static FormDataParser formDataParser;
+
+    public static FormDataParser getInstance() {
+        if (formDataParser == null) {
+            formDataParser = new FormDataParser();
+        }
+
+        return formDataParser;
+    }
+
     @Override
-    public Map<String, String> parse(HttpRequestBody body) {
+    public Map<String, String> parse(String body) {
         Map<String, String> formData = new HashMap<>();
-        String[] values = body.getBody().split(FORM_DATA_DELIMITER);
+        String[] values = body.split(FORM_DATA_DELIMITER);
 
         for (String value : values) {
             String[] token = value.split(VALUE_DELIMITER);
