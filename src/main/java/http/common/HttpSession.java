@@ -6,11 +6,11 @@ import java.util.Map;
 public class HttpSession {
 
     private String id;
-    private Map<String, Object> attribute;
+    private Map<String, Object> attributes;
 
     public HttpSession(final String id) {
         this.id = id;
-        this.attribute = new HashMap<>();
+        this.attributes = new HashMap<>();
     }
 
     public String getId() {
@@ -18,18 +18,18 @@ public class HttpSession {
     }
 
     public void setAttribute(String name, Object value) {
-        attribute.put(name, value);
+        attributes.put(name, value);
     }
 
     public Object getAttribute(String name) {
-        return attribute.get(name);
+        return attributes.get(name);
     }
 
     public void removeAttribute(String name) {
-        attribute.remove(name);
+        attributes.remove(name);
     }
 
     public void invalidate() {
-        attribute.clear();
+        attributes.clear();
     }
 }
