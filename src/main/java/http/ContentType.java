@@ -1,6 +1,7 @@
 package http;
 
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 public enum ContentType {
@@ -48,6 +49,18 @@ public enum ContentType {
 
     private static final String DEFAULT_CHAR_SET = "utf-8";
 
+    private static final Map<String, ContentType> contentTypesByMimeType = new HashMap<String, ContentType>() {{
+        for (ContentType type : ContentType.class.getEnumConstants()) {
+            put(type.mimeType, type);
+        }
+    }};
+
+    private static final Map<String, ContentType> contentTypesByExtension = new HashMap<String, ContentType>() {{
+        for (ContentType type : ContentType.class.getEnumConstants()) {
+            put(type.extension, type);
+        }
+    }};
+
     private final String mimeType;
     private final String extension;
 
@@ -57,21 +70,16 @@ public enum ContentType {
     }
 
     public static Optional<ContentType> fromMimeType(String mimeType) {
-        return Arrays.asList(values()).stream()
-                .filter(contentType -> contentType.mimeType.equals(mimeType))
-                .findFirst();
+        return Optional.ofNullable(contentTypesByMimeType.get(mimeType));
     }
 
     public static Optional<ContentType> fromExtension(String extension) {
-        return Arrays.asList(values()).stream()
-                .filter(contentType -> contentType.extension.equals(extension))
-                .findFirst();
+        System.out.println(contentTypesByExtension.toString());
+        return Optional.ofNullable(contentTypesByExtension.get(extension));
     }
 
     public static boolean isSupportedMimeType(String mimeType) {
-        System.out.println(mimeType);
-        return Arrays.asList(values()).stream()
-                .anyMatch(value -> value.mimeType.equals(mimeType));
+        return contentTypesByMimeType.containsKey(mimeType);
     }
 
     public boolean canAccept(ContentType contentType) {
