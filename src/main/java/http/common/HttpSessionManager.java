@@ -1,13 +1,13 @@
 package http.common;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class HttpSessionManager {
 
     public static final String JSESSIONID = "JSESSIONID";
-    private static final Map<String, HttpSession> sessions = new HashMap<>();
+    private static final ConcurrentMap<String, HttpSession> sessions = new ConcurrentHashMap<>();
 
     public static HttpSession getSession(String sessionId) {
         HttpSession httpSession = sessions.get(sessionId);
