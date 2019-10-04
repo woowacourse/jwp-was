@@ -3,6 +3,9 @@ package http.response;
 import http.common.HttpStatus;
 
 public class StatusLine {
+    private static final String HTTP_1_1 = "HTTP/1.1";
+    private static final String BLANK = " ";
+
     private String httpVersion;
     private HttpStatus httpStatus;
 
@@ -12,7 +15,7 @@ public class StatusLine {
     }
 
     public static StatusLine of() {
-        return new StatusLine("HTTP/1.1", HttpStatus.OK);
+        return new StatusLine(HTTP_1_1, HttpStatus.OK);
     }
 
     public void setHttpVersion(String httpVersion) {
@@ -25,6 +28,6 @@ public class StatusLine {
 
     @Override
     public String toString() {
-        return httpVersion + " " + httpStatus;
+        return httpVersion + BLANK + httpStatus;
     }
 }

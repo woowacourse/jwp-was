@@ -1,7 +1,7 @@
 package webserver;
 
-import http.controller.Controller;
-import http.controller.ControllerHandler;
+import controller.Controller;
+import controller.ControllerHandler;
 import http.request.HttpRequest;
 import http.request.RequestHandler;
 import http.response.HttpResponse;
@@ -33,8 +33,7 @@ public class HttpProcess implements Runnable {
             httpRequest = requestHandler.create();
             logger.debug("request path : {}", httpRequest.getPath());
 
-            ResponseHandler responseHandler = new ResponseHandler();
-            httpResponse = responseHandler.create();
+            httpResponse = new ResponseHandler().create();
             httpResponse.addHeaderFromRequest(httpRequest);
 
             Controller controller = ControllerHandler.findByPath(httpRequest.getPath());
@@ -42,17 +41,7 @@ public class HttpProcess implements Runnable {
 
             DataOutputStream dos = new DataOutputStream(out);
             dos.writeBytes(httpResponse.toString());
-            responseBody(dos, httpResponse.getBody());
-
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
+            httpResponse.write(dos);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }

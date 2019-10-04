@@ -1,18 +1,31 @@
 package http.response;
 
+import http.common.Cookie;
+import http.common.HttpSession;
 import http.common.HttpStatus;
 import http.common.MimeType;
 import http.request.HttpRequest;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class HttpResponse {
     private static final String CRLF = "\r\n";
+    private static final String HEADER_DELIMITER = ": ";
     private static final String CONTENT_TYPE_KEY = "Content-Type";
     private static final String CONTENT_LENGTH_KEY = "Content-Length";
     private static final String LOCATION_KEY = "Location";
+    private static final String SET_COOKIE_KEY = "Set-Cookie";
+    private static final String JSESSIONID = "JSESSIONID";
+    private static final String PATH_ROOT = "/";
+    private static final int ONE_DAY = 60 * 60 * 24;
 
     private StatusLine statusLine;
     private ResponseHeader responseHeader;
     private ResponseBody responseBody;
+    private List<Cookie> cookies = new ArrayList<>();
 
     private HttpResponse(StatusLine statusLine, ResponseHeader responseHeader, ResponseBody responseBody) {
         this.statusLine = statusLine;
@@ -24,8 +37,19 @@ public class HttpResponse {
         return new HttpResponse(StatusLine.of(), ResponseHeader.of(), ResponseBody.of());
     }
 
+    public void addHeaderFromRequest(HttpRequest httpRequest) {
+        statusLine.setHttpVersion(httpRequest.getHttpVersion());
+        if (httpRequest.isGet()) {
+            putHeader(CONTENT_TYPE_KEY, MimeType.findByPath(httpRequest.getPath()).getContentType());
+        }
+    }
+
     public void putHeader(String key, String value) {
         responseHeader.put(key, value);
+    }
+
+    public void addCookie(Cookie cookie) {
+        cookies.add(cookie);
     }
 
     public void ok(byte[] body) {
@@ -39,17 +63,6 @@ public class HttpResponse {
         putHeader(LOCATION_KEY, path);
     }
 
-    public void addHeaderFromRequest(HttpRequest httpRequest) {
-        statusLine.setHttpVersion(httpRequest.getHttpVersion());
-        if (httpRequest.isGet()) {
-            putHeader(CONTENT_TYPE_KEY, MimeType.findByPath(httpRequest.getPath()).getContentType());
-        }
-    }
-
-    public byte[] getBody() {
-        return responseBody.getBody();
-    }
-
     public void sendNotFound() {
         statusLine.setHttpStatus(HttpStatus.NOT_FOUND);
     }
@@ -58,8 +71,37 @@ public class HttpResponse {
         statusLine.setHttpStatus(HttpStatus.METHOD_NOT_ALLOWED);
     }
 
+    public void sendInternalServerError() {
+        statusLine.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    public void setSession(HttpSession httpSession) {
+        Cookie cookie = new Cookie(JSESSIONID, httpSession.getId());
+        cookie.setMaxAge(ONE_DAY);
+        cookie.setPath(PATH_ROOT);
+        cookies.add(cookie);
+    }
+
+    public void write(DataOutputStream dos) throws IOException {
+        byte[] body = responseBody.getBody();
+        dos.write(body, 0, body.length);
+        dos.flush();
+    }
+
+    public byte[] getBody() {
+        return responseBody.getBody();
+    }
+
     @Override
     public String toString() {
-        return statusLine + CRLF + responseHeader + CRLF;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(statusLine).append(CRLF).append(responseHeader);
+        if (cookies.size() > 0) {
+            cookies.forEach(
+                    cookie -> stringBuilder.append(SET_COOKIE_KEY).append(HEADER_DELIMITER).append(cookie)
+            );
+        }
+        stringBuilder.append(CRLF);
+        return stringBuilder.toString();
     }
 }

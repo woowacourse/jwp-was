@@ -1,4 +1,4 @@
-package http.controller;
+package controller;
 
 import http.request.HttpRequest;
 import http.request.RequestHandler;
@@ -23,6 +23,7 @@ class CreateUserControllerTest {
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         httpRequest = new RequestHandler(br).create();
         httpResponse = new ResponseHandler().create();
+        httpResponse.addHeaderFromRequest(httpRequest);
 
         CreateUserController createUserController = new CreateUserController();
         createUserController.doPost(httpRequest, httpResponse);
