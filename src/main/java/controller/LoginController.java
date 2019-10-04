@@ -1,7 +1,6 @@
 package controller;
 
 import db.DataBase;
-import exception.MethodNotAllowedException;
 import http.common.HttpSession;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -11,11 +10,6 @@ import org.slf4j.LoggerFactory;
 public class LoginController extends AbstractController {
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
     private static final String LOGINED = "logined";
-
-    @Override
-    protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        throw new MethodNotAllowedException();
-    }
 
     @Override
     protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {

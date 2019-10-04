@@ -1,7 +1,6 @@
 package controller;
 
 import db.DataBase;
-import exception.MethodNotAllowedException;
 import http.common.HttpSession;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -23,11 +22,6 @@ public class UserListController extends AbstractController {
             return;
         }
         httpResponse.redirect("/user/login.html");
-    }
-
-    @Override
-    protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        throw new MethodNotAllowedException();
     }
 
     private boolean isLogined(HttpRequest httpRequest) {
