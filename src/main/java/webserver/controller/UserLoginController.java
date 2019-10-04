@@ -2,16 +2,13 @@ package webserver.controller;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Map;
 
+import application.service.UserService;
 import webserver.exception.UnauthorizedRequestException;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 import webserver.http.response.HttpResponseGenerator;
-import application.service.UserService;
-import webserver.utils.FileIoUtils;
-import webserver.utils.ResourcePathUtils;
 
 public class UserLoginController extends AbstractController {
     @Override
@@ -25,21 +22,19 @@ public class UserLoginController extends AbstractController {
 
         try {
             String location = (result) ? "/index.html" : "/user/login_failed.html";
-            String path = ResourcePathUtils.getResourcePath(location);
-            byte[] responseBody = FileIoUtils.loadFileFromClasspath(path);
             HttpResponse httpResponse;
 
             if (result) {
                 String sessionId = httpRequest.getCookieValue();
                 sessionManager.addSessionAttribute(sessionId, "userId", userId);
-                httpResponse = HttpResponseGenerator.responseLoginSuccess(path, responseBody.length, sessionId);
-                httpResponse.forward(responseBody, dos);
+                httpResponse = HttpResponseGenerator.responseLoginSuccess(location, sessionId);
+                httpResponse.forward(dos);
                 return;
             }
 
-            httpResponse = HttpResponseGenerator.response200Header(path, responseBody.length);
-            httpResponse.forward(responseBody, dos);
-        } catch (IOException | URISyntaxException e) {
+            httpResponse = HttpResponseGenerator.response200Header(location);
+            httpResponse.forward(dos);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

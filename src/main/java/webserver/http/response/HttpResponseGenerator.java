@@ -1,16 +1,19 @@
 package webserver.http.response;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import webserver.exception.FailResponseException;
-import webserver.http.Header;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.RequestHandler;
+import webserver.exception.FailResponseException;
+import webserver.http.Header;
+import webserver.utils.FileIoUtils;
+import webserver.utils.ResourcePathUtils;
 
 import static webserver.http.HttpVersion.HTTP11;
 import static webserver.http.response.HttpResponse.HEADER_RESPONSE_LOCATION;
@@ -25,32 +28,6 @@ public class HttpResponseGenerator {
     public static final String REASON_PHRASE = "ReasonPhrase";
     public static final String HEADER_CONTENT_TYPE = "Content-Type";
     public static final String HEADER_CONTENT_LENGTH = "Content-Length";
-
-    public static HttpResponse response200Header(String path, int bodyLength) {
-        try {
-            String mimeType = Files.probeContentType(Paths.get(path));
-            StatusLine statusLine = new StatusLine(getStatusLines(OK));
-            Header header = new Header(addHeaderElement(bodyLength, mimeType));
-
-            return new HttpResponse(statusLine, header);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-        throw new FailResponseException();
-    }
-
-    public static HttpResponse responseLoginSuccess(String path, int bodyLength, String sessionId) {
-        try {
-            String mimeType = Files.probeContentType(Paths.get(path));
-            StatusLine statusLine = new StatusLine(getStatusLines(OK));
-			
-            Header header = new Header(addHeaderElementWithLoginFlag(bodyLength, mimeType, sessionId));
-            return new HttpResponse(statusLine, header);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-        throw new FailResponseException();
-    }
 
     private static String getCookieValue(String sessionId) {
         return String.format("logined=true; jsessionId=%s; %s=/\r\n", "Path", sessionId);
@@ -87,5 +64,47 @@ public class HttpResponseGenerator {
         Header header = new Header(headerElement);
 
         return new HttpResponse(statusLine, header);
+    }
+
+    public static HttpResponse responseLoginSuccess(String location, String sessionId) {
+        try {
+            String path = ResourcePathUtils.getResourcePath(location);
+            byte[] responseBody = FileIoUtils.loadFileFromClasspath(path);
+            String mimeType = Files.probeContentType(Paths.get(path));
+            StatusLine statusLine = new StatusLine(getStatusLines(OK));
+
+            Header header = new Header(addHeaderElementWithLoginFlag(responseBody.length, mimeType, sessionId));
+            return new HttpResponse(statusLine, header, responseBody);
+        } catch (IOException | URISyntaxException e) {
+            logger.error(e.getMessage());
+        }
+        throw new FailResponseException();
+    }
+
+    public static HttpResponse response200Header(String requestUri) {
+        try {
+            String path = ResourcePathUtils.getResourcePath(requestUri);
+            byte[] responseBody = FileIoUtils.loadFileFromClasspath(path);
+            String mimeType = Files.probeContentType(Paths.get(path));
+            StatusLine statusLine = new StatusLine(getStatusLines(OK));
+            Header header = new Header(addHeaderElement(responseBody.length, mimeType));
+
+            return new HttpResponse(statusLine, header, responseBody);
+        } catch (IOException | URISyntaxException e) {
+            logger.error(e.getMessage());
+        }
+        throw new FailResponseException();
+    }
+
+    public static HttpResponse dynamicResponse200Header(byte[] responseBody, String requestUri) {
+        try {
+            String mimeType = Files.probeContentType(Paths.get(requestUri));
+            StatusLine statusLine = new StatusLine(getStatusLines(OK));
+            Header header = new Header(addHeaderElement(responseBody.length, mimeType));
+            return new HttpResponse(statusLine, header, responseBody);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        throw new FailResponseException();
     }
 }

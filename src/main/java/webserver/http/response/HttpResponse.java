@@ -16,10 +16,16 @@ public class HttpResponse {
 
     private final StatusLine statusLine;
     private final Header header;
+    private final byte[] responseBody;
 
     public HttpResponse(final StatusLine statusLine, final Header header) {
+        this(statusLine, header, null);
+    }
+
+    public HttpResponse(StatusLine statusLine, Header header, byte[] responseBody) {
         this.statusLine = statusLine;
         this.header = header;
+        this.responseBody = responseBody;
     }
 
     public void sendRedirect(DataOutputStream dos) throws IOException {
@@ -33,7 +39,7 @@ public class HttpResponse {
         dos.flush();
     }
 
-    public void forward(byte[] body, DataOutputStream dos) throws IOException {
+    public void forward(DataOutputStream dos) throws IOException {
         String responseStatusLine = String.format("%s %s %s \r\n", statusLine.getElementValue(HTTP_VERSION)
                 , statusLine.getElementValue(STATUS_CODE), statusLine.getElementValue(REASON_PHRASE));
         dos.writeBytes(responseStatusLine);
@@ -43,12 +49,12 @@ public class HttpResponse {
         }
 
         dos.writeBytes("\r\n");
-        sendResponseBody(body, dos);
+        sendResponseBody(dos);
     }
 
-    private void sendResponseBody(byte[] body, DataOutputStream dos) {
+    private void sendResponseBody(DataOutputStream dos) {
         try {
-            dos.write(body, 0, body.length);
+            dos.write(responseBody, 0, responseBody.length);
             dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
