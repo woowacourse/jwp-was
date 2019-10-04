@@ -1,8 +1,8 @@
 package domain.servlet;
 
 import was.http.servlet.AbstractServlet;
-import was.http.request.HttpRequest;
-import was.http.response.HttpResponse;
+import server.http.request.HttpRequest;
+import server.http.response.HttpResponse;
 
 public class IndexServlet extends AbstractServlet {
     @Override

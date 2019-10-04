@@ -9,6 +9,8 @@ repositories {
 }
 
 dependencies {
+    compile group: 'com.google.code.gson', name: 'gson', version: '2.3.1'
+    compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
     implementation 'com.google.guava:guava:28.0-jre'
     implementation 'ch.qos.logback:logback-classic:1.2.3'
     implementation 'com.github.jknack:handlebars:4.1.2'

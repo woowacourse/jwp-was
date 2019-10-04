@@ -1,9 +1,9 @@
 package domain.servlet;
 
-import was.db.DataBase;
+import domain.db.UserDataBase;
 import was.http.servlet.AbstractServlet;
-import was.http.request.HttpRequest;
-import was.http.response.HttpResponse;
+import server.http.request.HttpRequest;
+import server.http.response.HttpResponse;
 import domain.model.User;
 
 public class SignupServlet extends AbstractServlet {
@@ -16,7 +16,7 @@ public class SignupServlet extends AbstractServlet {
 
     @Override
     protected HttpResponse doPost(final HttpRequest request) {
-        DataBase.addUser(new User(
+        UserDataBase.addUser(new User(
                 request.getBody("userId"),
                 request.getBody("password"),
                 request.getBody("name"),
@@ -26,5 +26,6 @@ public class SignupServlet extends AbstractServlet {
         HttpResponse httpResponse = new HttpResponse();
         httpResponse.sendRedirect("/");
         return httpResponse;
+//        return new RedirectView("/");
     }
 }

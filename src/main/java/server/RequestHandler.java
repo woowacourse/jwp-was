@@ -1,11 +1,11 @@
-package was.webserver;
+package server;
 
 import was.http.*;
-import was.http.io.HttpHandler;
-import was.http.request.HttpRequest;
-import was.http.resource.ResourceHandler;
-import was.http.resource.StaticResourceHandler;
-import was.http.response.HttpResponse;
+import server.http.io.HttpHandler;
+import server.http.request.HttpRequest;
+import server.http.resource.ResourceHandler;
+import server.http.resource.StaticResourceHandler;
+import server.http.response.HttpResponse;
 import was.http.servlet.Servlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

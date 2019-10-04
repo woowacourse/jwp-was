@@ -1,10 +1,12 @@
-import was.webserver.WebServer;
+import mvc.config.ControllerScanner;
+import server.WebServer;
 
 import java.io.IOException;
 
 public class Application {
+    public static void main(String[] args) {
+        ControllerScanner.scan();
 
-    public static void main(String[] args) throws IOException {
         WebServer webServer;
         if (args == null || args.length == 0) {
             webServer = new WebServer();

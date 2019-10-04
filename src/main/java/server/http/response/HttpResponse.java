@@ -1,4 +1,4 @@
-package was.http.response;
+package server.http.response;
 
 import was.http.HttpStatus;
 import was.http.MimeType;
@@ -15,6 +15,7 @@ public class HttpResponse {
     private String httpVersion;
     private HttpStatus httpStatus;
     private final Map<String, String> headers = new HashMap<>();
+    private final Map<String, String> cookies = new HashMap<>();
     private byte[] body;
 
     public void forward(String resource) {
@@ -25,6 +26,13 @@ public class HttpResponse {
         byte[] body = FileIoUtils.loadFileFromClasspath(resource);
         setStatus(httpStatus);
         setHeader("Content-Type", MimeType.getType(FileIoUtils.getFileExtension(resource)));
+        setHeader("Content-Length", String.valueOf(body.length));
+        setBody(body);
+    }
+
+    public void forward(byte[] body) {
+        setStatus(HttpStatus.OK);
+        setHeader("Content-Type", MimeType.getType("html"));
         setHeader("Content-Length", String.valueOf(body.length));
         setBody(body);
     }
@@ -69,5 +77,17 @@ public class HttpResponse {
 
     public byte[] getBody() {
         return body;
+    }
+
+    public void setCookie(String key, String value) {
+        this.cookies.put(key, value);
+    }
+
+    public Map<String, String> getCookies() {
+        return this.cookies;
+    }
+
+    public boolean hasCookies() {
+        return !cookies.isEmpty();
     }
 }

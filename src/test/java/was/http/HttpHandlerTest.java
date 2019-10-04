@@ -1,7 +1,7 @@
 package was.http;
 
-import was.http.io.HttpHandler;
-import was.http.request.HttpRequest;
+import server.http.io.HttpHandler;
+import server.http.request.HttpRequest;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;

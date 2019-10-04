@@ -1,8 +1,8 @@
-package was.http.resource;
+package server.http.resource;
 
-import was.http.response.HttpResponse;
+import server.http.response.HttpResponse;
 import was.http.MimeType;
-import was.http.request.HttpRequest;
+import server.http.request.HttpRequest;
 import was.utils.FileIoUtils;
 
 public class StaticResourceHandler implements ResourceHandler {

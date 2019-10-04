@@ -11,8 +11,8 @@ public class FileIoUtils {
         try {
             Path path = Paths.get(FileIoUtils.class.getClassLoader().getResource(filePath).toURI());
             return Files.readAllBytes(path);
-        } catch (IOException | URISyntaxException e) {
-            throw new FileLoadFailException();
+        } catch (Exception e) {
+            throw new FileLoadFailException(filePath);
         }
     }
 
