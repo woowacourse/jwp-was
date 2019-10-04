@@ -5,7 +5,11 @@ import webserver.request.HttpVersion;
 import java.util.ArrayList;
 import java.util.List;
 
+import static webserver.response.ResponseHeaders.*;
+
 public class HttpResponse {
+    private static final String ERROR_VIEW_FORMAT = "error/%d.html";
+
     private HttpVersion httpVersion;
     private ResponseStatus responseStatus;
     private ResponseHeaders responseHeaders;
@@ -17,52 +21,65 @@ public class HttpResponse {
         this.responseHeaders = new ResponseHeaders();
     }
 
-    public HttpResponse(ResponseStatus responseStatus, ResponseHeaders responseHeaders, ResponseBody responseBody) {
+    private HttpResponse(ResponseStatus responseStatus, ResponseHeaders responseHeaders, ResponseBody responseBody) {
         this.httpVersion = HttpVersion.HTTP_1_1;
         this.responseStatus = responseStatus;
         this.responseHeaders = responseHeaders;
         this.responseBody = responseBody;
     }
 
-    private static HttpResponse sendErrorResponse(ResponseStatus responseStatus) {
+    public static HttpResponse sendErrorResponse(ResponseStatus responseStatus) {
         return new HttpResponse(
                 responseStatus,
                 new ResponseHeaders(),
-                new ResponseBody(String.format("error/%d.html", responseStatus.getCode())));
-    }
-
-    public static HttpResponse notFound() {
-        return sendErrorResponse(ResponseStatus.NOT_FOUND);
-    }
-
-    public static HttpResponse internalServerError() {
-        return sendErrorResponse(ResponseStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    public static HttpResponse methodNotAllowed() {
-        return sendErrorResponse(ResponseStatus.METHOD_NOT_ALLOWED);
-    }
-
-    public void forward(String filePath) {
-        responseBody = new ResponseBody(filePath);
-        responseHeaders.put("Content-Length", responseBody.getBodyLength());
+                new ResponseBody(String.format(ERROR_VIEW_FORMAT, responseStatus.getCode())));
     }
 
     public Object getHeader(String key) {
         return responseHeaders.get(key);
     }
 
+    public void addHeader(String key, String value) {
+        responseHeaders.put(key, value);
+    }
+
     public void setContentType(String contentType) {
-        responseHeaders.put("Content-Type", contentType);
+        responseHeaders.put(CONTENT_TYPE, contentType);
     }
 
     public void setContentType(MediaType contentType) {
-        responseHeaders.put("Content-Type", contentType.getMediaType());
+        responseHeaders.put(CONTENT_TYPE, contentType.getMediaType());
     }
 
     public void sendRedirect(String uriPath) {
-        responseHeaders.put("Location", uriPath);
+        responseHeaders.put(LOCATION, uriPath);
         setResponseStatus(ResponseStatus.FOUND);
+    }
+
+    public void setResponseStatus(ResponseStatus responseStatus) {
+        this.responseStatus = responseStatus;
+    }
+
+    public String getViewPath() {
+        return responseBody.getPath();
+    }
+
+    public ResponseStatus getResponseStatus() {
+        return responseStatus;
+    }
+
+    public void registerSession(String jSessionId) {
+        addHeader("Set-Cookie", String.format("JSESSIONID=%s; Path=/", jSessionId));
+    }
+
+    public void forward(String filePath) {
+        responseBody = new ResponseBody(filePath);
+        responseHeaders.put(CONTENT_LENGTH, responseBody.getBodyLength());
+    }
+
+    public void templateForward(String content) {
+        responseBody = ResponseBody.of(content);
+        responseHeaders.put(CONTENT_LENGTH, responseBody.getBodyLength());
     }
 
     public List<String> responseBuilder() {
@@ -80,15 +97,13 @@ public class HttpResponse {
         return responseExport;
     }
 
-    public void setResponseStatus(ResponseStatus responseStatus) {
-        this.responseStatus = responseStatus;
-    }
-
-    public String getViewPath() {
-        return responseBody.getPath();
-    }
-
-    public ResponseStatus getResponseStatus() {
-        return responseStatus;
+    @Override
+    public String toString() {
+        return "HttpResponse{" +
+                "httpVersion=" + httpVersion +
+                ", responseStatus=" + responseStatus +
+                ", responseHeaders=" + responseHeaders +
+                ", responseBody=" + responseBody +
+                '}';
     }
 }

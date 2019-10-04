@@ -5,11 +5,15 @@ import org.slf4j.LoggerFactory;
 import web.controller.IndexController;
 import web.controller.UserController;
 import webserver.exception.MethodNotAllowedException;
+import webserver.exception.PageNotFoundException;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 
+import java.util.Objects;
+
 import static webserver.controller.RequestMapping.getMapping;
 import static webserver.controller.RequestMapping.postMapping;
+import static webserver.response.ResponseStatus.*;
 
 public class RequestMapper {
     private RequestMapper() {
@@ -29,12 +33,14 @@ public class RequestMapper {
 
     // TODO: 2019-09-26 사용자 부분으로 추출
     static {
-        get("/", IndexController.getInstance().goIndex());
-        get("/user/form", UserController.getInstance().goForm());
-        post("/user/create", UserController.getInstance().createUser());
-        get("/login", UserController.getInstance().goLoginForm());
-        get("/login-fail", UserController.getInstance().goLoginForm());
-        post("/login", UserController.getInstance().login());
+        get("/", IndexController::goIndex);
+        get("/user/form", UserController::goForm);
+        get("/login", UserController::goLoginForm);
+        get("/login-fail", UserController::goLoginFail);
+        get("/user/list", UserController::goUserList);
+
+        post("/user/create", UserController::createUser);
+        post("/login", UserController::login);
     }
 
     private static void get(String uri, Responsive responsive) {
@@ -49,23 +55,26 @@ public class RequestMapper {
         HttpResponse response = new HttpResponse(request.getVersion());
         RequestMapping requestMapping = request.getRequestMapping();
 
-        Responsive responsive;
         try {
-            responsive = CONTROLLER_HANDLER.get(requestMapping);
-        } catch (MethodNotAllowedException e) {
-            logger.error("path: {}, {}", requestMapping, e.getMessage());
-            return HttpResponse.methodNotAllowed();
-        } catch (Exception e) {
-            logger.error("path: {}, {}", requestMapping, e.getMessage());
-            return HttpResponse.internalServerError();
-        }
-
-        try {
-            responsive.accept(request, response);
+            CONTROLLER_HANDLER.get(requestMapping).accept(request, response);
+            registerSession(request, response);
             return response;
-        } catch (NullPointerException e) {
-            logger.error("path: {}, 존재하지 않는 path 요청", request.getPath());
-            return HttpResponse.notFound();
+        } catch (MethodNotAllowedException e) {
+            logger.error("METHOD_NOT_ALLOWED, path: {}, {}", requestMapping, e.getMessage());
+            return HttpResponse.sendErrorResponse(METHOD_NOT_ALLOWED);
+        } catch (PageNotFoundException e) {
+            logger.error("NOT_FOUND, path: {}, 존재하지 않는 path 요청", request.getPath());
+            return HttpResponse.sendErrorResponse(NOT_FOUND);
+        } catch (Exception e) {
+            logger.error("INTERNAL_SERVER_ERROR, path: {}, {}", requestMapping, e.getMessage());
+            return HttpResponse.sendErrorResponse(INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private void registerSession(HttpRequest request, HttpResponse response) {
+        String sessionId = request.getSessionId();
+        if (Objects.nonNull(sessionId)) {
+            response.registerSession(sessionId);
         }
     }
 }

@@ -2,6 +2,7 @@ package webserver.response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.exception.PageNotFoundException;
 import webserver.utils.FileIoUtils;
 import webserver.utils.FilePathUtils;
 
@@ -11,7 +12,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class ResponseBody {
-    private static final Logger log = LoggerFactory.getLogger(ResponseBody.class);
+    private static final Logger logger = LoggerFactory.getLogger(ResponseBody.class);
 
     private String path;
     private byte[] body;
@@ -21,8 +22,18 @@ public class ResponseBody {
         try {
             this.body = FileIoUtils.loadFileFromClasspath(FilePathUtils.getResourcePath(path));
         } catch (IOException | URISyntaxException e) {
-            log.error("{}, {}", path, e.getMessage());
+            logger.error("path: {}, {}", path, e.getMessage());
+        } catch (NullPointerException e) {
+            throw new PageNotFoundException(String.format("path: %s, 해당 경로의 페이지를 찾을 수 없습니다.", path));
         }
+    }
+
+    public static ResponseBody of(String content) {
+        return new ResponseBody((content.getBytes()));
+    }
+
+    private ResponseBody(byte[] body) {
+        this.body = body;
     }
 
     public int getBodyLength() {

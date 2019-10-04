@@ -1,15 +1,17 @@
 package webserver.controller;
 
+import webserver.request.Method;
+
 import java.util.Objects;
 
-public class RequestMapping {
-    private static final String GET = "GET";
-    private static final String POST = "POST";
+import static webserver.request.Method.GET;
+import static webserver.request.Method.POST;
 
-    private String method;
+public class RequestMapping {
+    private Method method;
     private String uri;
 
-    public RequestMapping(String method, String uri) {
+    public RequestMapping(Method method, String uri) {
         this.method = method;
         this.uri = uri;
     }

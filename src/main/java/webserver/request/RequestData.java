@@ -23,15 +23,22 @@ public class RequestData {
     }
 
     public void put(String body) {
-        String[] bodyParams = body.split(AMPERSAND);
+        String[] bodyParams = DecoderUtils.decodeString(body).split(AMPERSAND);
         for (String param : bodyParams) {
             String[] queryParam = param.split(EQUALS_SIGN);
-            this.data.put(DecoderUtils.decodeString(queryParam[0]), DecoderUtils.decodeString(queryParam[1]));
+            this.data.put(queryParam[0], queryParam[1]);
         }
     }
 
     public boolean isEmpty() {
         return data.isEmpty();
+    }
+
+    @Override
+    public String toString() {
+        return "RequestData{" +
+                "data=" + data +
+                '}';
     }
 }
 

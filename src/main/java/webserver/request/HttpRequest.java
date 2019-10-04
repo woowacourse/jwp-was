@@ -1,17 +1,24 @@
 package webserver.request;
 
 import webserver.controller.RequestMapping;
+import webserver.storage.Cookie;
+import webserver.storage.HttpSession;
+import webserver.storage.SessionManager;
 
 import java.util.List;
 
 public class HttpRequest {
     private static final String BLANK = "";
     private static final String COLON = ":";
+    private static final String COOKIE = "Cookie";
+    private static final String JSESSIONID = "JSESSIONID";
 
     private RequestLine requestLine;
     private RequestHeaders requestHeaders;
     private RequestData requestParams;
     private RequestData requestBody;
+    private Cookie cookie;
+    private String sessionId;
 
     public HttpRequest(List<String> lines) {
         this.requestLine = new RequestLine(lines.get(0));
@@ -19,6 +26,8 @@ public class HttpRequest {
         this.requestHeaders = new RequestHeaders();
         this.requestBody = new RequestData();
         setRequestHeaderAndBody(lines);
+        this.cookie = new Cookie(requestHeaders.get(COOKIE));
+        this.sessionId = cookie.get(JSESSIONID);
     }
 
     private static RequestData getRequestParams(RequestLine requestLine) {
@@ -52,8 +61,12 @@ public class HttpRequest {
         requestBody.put(bodyLine);
     }
 
+    public Cookie getCookie() {
+        return cookie;
+    }
+
     public RequestMapping getRequestMapping() {
-        return new RequestMapping(getMethod(), getPath());
+        return new RequestMapping(Method.valueOf(getMethod()), getPath());
     }
 
     public String getMethod() {
@@ -71,6 +84,14 @@ public class HttpRequest {
         return requestParams.get(key);
     }
 
+    public HttpSession getSession() {
+        HttpSession session = SessionManager.getInstance().getSession(sessionId);
+        if (!session.isSameId(sessionId)) {
+            this.sessionId = session.getId();
+        }
+        return session;
+    }
+
     public String getBody(String key) {
         return requestBody.get(key);
     }
@@ -81,5 +102,21 @@ public class HttpRequest {
 
     public HttpVersion getVersion() {
         return requestLine.getVersion();
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    @Override
+    public String toString() {
+        return "HttpRequest{" +
+                "requestLine=" + requestLine +
+                ", requestHeaders=" + requestHeaders +
+                ", requestParams=" + requestParams +
+                ", requestBody=" + requestBody +
+                ", cookie=" + cookie +
+                ", sessionId='" + sessionId + '\'' +
+                '}';
     }
 }
