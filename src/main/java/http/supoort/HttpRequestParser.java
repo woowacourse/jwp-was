@@ -41,7 +41,6 @@ public class HttpRequestParser {
             HttpUri httpUri = parseUri(requestLineTokens[1], httpParameters);
             RequestLine requestLine = new RequestLine(method, httpProtocol, httpUri);
             return new HttpRequest(requestLine, httpParameters, headers);
-
         } catch (IndexOutOfBoundsException e) {
             throw new NotFoundException();
         }
