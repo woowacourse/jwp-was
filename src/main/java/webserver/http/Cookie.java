@@ -15,7 +15,7 @@ public class Cookie {
     public Cookie(String name, String value) {
         this.name = name;
         this.value = value;
-        this.path = "/";
+        path = "/";
     }
 
     public String getName() {
@@ -69,12 +69,10 @@ public class Cookie {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format("%s=%s; ", name, value));
-        Arrays.stream(this.getClass().getDeclaredFields())
+        sb.append(String.format("%s=%s ;", name, value));
+        Arrays.stream(getClass().getDeclaredFields())
                 .filter(f -> isNotNull(f) && isNotNameAndValue(f))
-                .forEach(f -> {
-                    sb.append(String.format("%s=%s ;", f.getName(), getFieldValue(f)));
-                });
+                .forEach(f -> sb.append(String.format("%s=%s ;", f.getName(), getFieldValue(f))));
         return sb.toString();
     }
 
@@ -97,12 +95,10 @@ public class Cookie {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
         Cookie cookie = (Cookie) o;
         return Objects.equals(name, cookie.name) &&
                 Objects.equals(value, cookie.value) &&
