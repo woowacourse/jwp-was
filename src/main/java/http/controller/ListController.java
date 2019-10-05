@@ -19,11 +19,12 @@ import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
 public class ListController implements Controller {
     @Override
     public HttpResponse service(HttpRequest httpRequest) {
-        Map<String, String> cookieMap = getCookieMap(httpRequest);
+        Cookie cookie = new Cookie(httpRequest.getHeader("Cookie"));
 
-        if (cookieMap != null && cookieMap.get("JSESSIONID") != null) {
+        if (cookie.hasCookie("JSESSIONID")) {
             Handlebars handlebars = getHandlebars();
             try {
+
                 Template template = handlebars.compile("user/list");
 
                 List<User> users = new ArrayList<>(DataBase.findAll());
@@ -48,21 +49,6 @@ public class ListController implements Controller {
                 .status(HttpStatus.FOUND)
                 .addHeader(CONTENT_TYPE, ContentType.HTML.getType())
                 .build();
-    }
-
-    private Map<String, String> getCookieMap(HttpRequest httpRequest) {
-        String cookies = httpRequest.getHeader("Cookie");
-        if (cookies == null) {
-            return null;
-        }
-        String[] eachCookies = cookies.split("; ");
-
-        Map<String, String> cookieMap = new HashMap<>();
-        for (String eachCookie : eachCookies) {
-            String[] cookiePair = eachCookie.split("=");
-            cookieMap.put(cookiePair[0], cookiePair[1]);
-        }
-        return cookieMap;
     }
 
     private Handlebars getHandlebars() {
