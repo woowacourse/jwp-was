@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.exception.NotFoundContentTypeSeparatorException;
 import utils.parser.ContentTypeParser;
+import webserver.http.exception.NonexistentContentTypeException;
 
 import java.util.*;
 
@@ -77,11 +78,19 @@ public class HttpContentType implements HttpHeaderField {
     public static HttpContentType extensionToContentType(String extension) {
         extension = extension.toLowerCase();
 
-        return Extension.extensionToContentType(extension).orElse(getHttpContentType(MimeType.TEXT_PLAIN.getName()));
+        return Extension.extensionToContentType(extension).orElse(getHttpContentType(MimeType.TEXT_PLAIN));
     }
 
     public static HttpContentType getHttpContentType(String key) {
-        return CACHE.get(key);
+        if (CACHE.containsKey(key)) {
+            return CACHE.get(key);
+        }
+        throw new NonexistentContentTypeException();
+    }
+
+    public static HttpContentType getHttpContentType(MimeType key) {
+        String mimeTypeName = key.getName();
+        return getHttpContentType(mimeTypeName);
     }
 
     @Override

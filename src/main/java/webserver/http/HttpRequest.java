@@ -7,6 +7,7 @@ import utils.parser.HttpHeaderFieldsParser;
 import utils.parser.KeyValueParser;
 import utils.parser.QueryStringParser;
 import webserver.http.exception.InvalidHttpTypeException;
+import webserver.http.exception.NonLoginException;
 import webserver.http.headerfields.*;
 
 import java.io.IOException;
@@ -17,6 +18,8 @@ import java.util.Optional;
 public class HttpRequest {
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
 
+    private static final String LOGINED_TRUE = "logined=true";
+    private static final String COOKIE = "Cookie";
     private static final int METHOD_INDEX = 0;
     private static final int PATH_INDEX = 1;
     private static final int VERSION_INDEX = 2;
@@ -87,6 +90,12 @@ public class HttpRequest {
         throw new IllegalArgumentException();
     }
 
+    public void checkLogin() {
+        if (!headerFields.value(COOKIE).contains(LOGINED_TRUE)) {
+            throw new NonLoginException();
+        }
+    }
+
     public HttpMethod method() {
         return this.method;
     }
@@ -101,6 +110,10 @@ public class HttpRequest {
 
     public HttpConnection connection() {
         return headerFields.connection().orElse(null);
+    }
+
+    public String cookie() {
+        return headerFields.value(COOKIE);
     }
 
     public String getParam(String key) {

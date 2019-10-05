@@ -1,8 +1,6 @@
 package webserver;
 
-import controller.Controller;
-import controller.IndexController;
-import controller.UserController;
+import controller.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.http.HttpRequest;
@@ -14,15 +12,17 @@ import java.util.Map;
 public class Router {
     private static final Logger logger = LoggerFactory.getLogger(Router.class);
 
-    private static final Controller INDEX_CONTROLLER = new IndexController();
-    private static final Controller USER_CONTROLLER = new UserController();
-
     private static final Map<String, Controller> controllers = new HashMap<>();
+
     static {
-        controllers.put("/", INDEX_CONTROLLER);
-        controllers.put("/index.html", INDEX_CONTROLLER);
-        controllers.put("/user/form.html", USER_CONTROLLER);
-        controllers.put("/user/create", USER_CONTROLLER);
+        controllers.put("/", IndexController.getInstance());
+        controllers.put("/user/create", UserController.getInstance());
+        controllers.put("/user/login", LoginController.getInstance());
+        controllers.put("/user/list", UserListController.getInstance());
+        controllers.put("/index.html", IndexController.getInstance());
+        controllers.put("/user/form.html", UserController.getInstance());
+        controllers.put("/user/login.html", LoginController.getInstance());
+        controllers.put("/user/login_failed.html", LoginFailController.getInstance());
     }
 
     public static HttpResponse serve(HttpRequest req) {

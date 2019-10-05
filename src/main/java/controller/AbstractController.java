@@ -2,12 +2,14 @@ package controller;
 
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
+import webserver.http.SessionManager;
 import webserver.http.headerfields.HttpMethod;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public abstract class AbstractController implements Controller {
+    protected final SessionManager sessionManager = SessionManager.getInstance();
     private final Map<HttpMethod, Controller> mapping = new HashMap<>();
 
     {
