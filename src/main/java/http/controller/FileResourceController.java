@@ -1,25 +1,20 @@
 package http.controller;
 
-import http.model.*;
-
-import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
+import http.model.HttpRequest;
+import http.model.HttpResponse;
+import http.model.HttpUri;
 
 public class FileResourceController implements Controller {
-    private final static String EXTENSION_SEPARATOR = ".";
     private final static String STATIC_PATH = "./static";
     private final static String TEMPLATES_PATH = "./templates";
 
     @Override
     public HttpResponse service(HttpRequest httpRequest) {
         String uri = getViewByUri(httpRequest.getRequestLine().getHttpUri());
-        ContentType contentType = getContentType(uri);
-        String path = getPath(contentType, uri);
+        String path = getPath(uri);
 
         return new HttpResponse.Builder()
                 .forward(path)
-                .protocols(HttpProtocols.HTTP1_1)
-                .status(HttpStatus.OK)
-                .addHeader(CONTENT_TYPE, contentType.getType())
                 .build();
     }
 
@@ -27,13 +22,8 @@ public class FileResourceController implements Controller {
         return uri.getResourceLocation();
     }
 
-    private ContentType getContentType(String uri) {
-        String extension = uri.substring(uri.lastIndexOf(EXTENSION_SEPARATOR) + 1);
-        return ContentType.of(extension);
-    }
-
-    private String getPath(ContentType contentType, String uri) {
-        if (ContentType.HTML.equals(contentType)) {
+    private String getPath(String uri) {
+        if (uri.endsWith(".html")) {
             return TEMPLATES_PATH + uri;
         }
         return STATIC_PATH + uri;

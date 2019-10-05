@@ -63,6 +63,9 @@ public class HttpResponse {
 
         public Builder body(byte[] body) {
             this.body = body;
+            protocols(HttpProtocols.HTTP1_1);
+            status(HttpStatus.OK);
+            addHeader(CONTENT_TYPE, ContentType.HTML.getType());
             return this;
         }
 
@@ -74,6 +77,9 @@ public class HttpResponse {
         public Builder forward(String filePath) {
             this.body = FileIoUtils.loadFileFromClasspath(filePath);
             httpHeaders.addHeader(CONTENT_LENGTH, Integer.toString(body.length));
+            protocols(HttpProtocols.HTTP1_1);
+            status(HttpStatus.OK);
+            addHeader(CONTENT_TYPE, ContentType.getContentType(filePath));
             return this;
         }
 

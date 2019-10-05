@@ -5,7 +5,9 @@ import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import db.DataBase;
-import http.model.*;
+import http.model.Cookie;
+import http.model.HttpRequest;
+import http.model.HttpResponse;
 import model.User;
 
 import java.io.IOException;
@@ -13,8 +15,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
 
 public class ListController implements Controller {
     @Override
@@ -34,9 +34,6 @@ public class ListController implements Controller {
 
                 return new HttpResponse.Builder()
                         .body(listPage.getBytes())
-                        .protocols(HttpProtocols.HTTP1_1)
-                        .status(HttpStatus.OK)
-                        .addHeader(CONTENT_TYPE, ContentType.HTML.getType())
                         .build();
             } catch (IOException e) {
                 e.getStackTrace();

@@ -56,7 +56,6 @@ public class RequestHandler implements Runnable {
     private void error404(OutputStream out) {
         HttpResponse httpResponse = new HttpResponse.Builder()
                 .forward("./templates/404_ERROR.html")
-                .protocols(HttpProtocols.HTTP1_1)
                 .status(HttpStatus.NOT_FOUND)
                 .build();
         try {
@@ -68,9 +67,8 @@ public class RequestHandler implements Runnable {
 
     private void error500(OutputStream out) {
         HttpResponse httpResponse = new HttpResponse.Builder()
-                .forward("./templates/500_ERROR.html")
                 .protocols(HttpProtocols.HTTP1_1)
-                .status(HttpStatus.NOT_FOUND)
+                .status(HttpStatus.SERVER_ERROR)
                 .build();
         try {
             Renderer.render(httpResponse, new DataOutputStream(out));

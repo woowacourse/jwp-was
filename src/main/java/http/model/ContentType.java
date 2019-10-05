@@ -13,11 +13,16 @@ public enum ContentType {
     WOFF("application/x-font-woff"),
     ICO("image/x-icon");
 
-
+    private final static String EXTENSION_SEPARATOR = ".";
     private String type;
 
     ContentType(String type) {
         this.type = type;
+    }
+
+    public static String getContentType(String filePath) {
+        String extension = filePath.substring(filePath.lastIndexOf(EXTENSION_SEPARATOR) + 1);
+        return ContentType.of(extension).getType();
     }
 
     public static ContentType of(String type) {
