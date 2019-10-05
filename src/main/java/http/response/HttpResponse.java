@@ -1,5 +1,6 @@
 package http.response;
 
+import http.HttpCookie;
 import http.HttpSessionStore;
 import http.HttpStatusCode;
 import http.MediaType;
@@ -35,8 +36,8 @@ public class HttpResponse {
         this.httpResponseHeader = httpResponseHeader;
     }
 
-    public void setCookie(String cookieValue) {
-        httpResponseHeader.addField("Set-cookie", cookieValue);
+    public void setCookie(HttpCookie cookie) {
+        httpResponseHeader.addField("Set-cookie", cookie.toString());
     }
 
     public void setStatusCode(HttpStatusCode httpStatusCode) {

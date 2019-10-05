@@ -2,6 +2,7 @@ package controller;
 
 import controller.exception.LoginUserException;
 import db.DataBase;
+import http.HttpCookie;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.User;
@@ -29,10 +30,11 @@ public class LoginUserController extends AbstractController {
                 throw new LoginUserException("password not match");
             }
 
-            httpResponse.setCookie("logined=true;path=/");
+            httpResponse.setCookie(new HttpCookie("logined", "true"));
             httpResponse.redirect("/");
         } catch (LoginUserException e) {
-            httpResponse.setCookie("logined=false");
+
+            httpResponse.setCookie(new HttpCookie("logined", "false"));
             httpResponse.redirect("/");
             e.printStackTrace();
         }
