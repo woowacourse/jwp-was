@@ -1,6 +1,6 @@
 package webserver;
 
-import controller.Controller;
+import controller.ControllerAdapter;
 import controller.ControllerMapper;
 import controller.exception.NotFoundUrlException;
 import org.slf4j.Logger;
@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.Socket;
 import java.net.URISyntaxException;
@@ -28,10 +27,11 @@ public class RequestHandler implements Runnable {
     private HttpSessionManager sessionManager;
 
     public RequestHandler(Socket connectionSocket, HttpSessionManager sessionManager) {
-        this.connection = connectionSocket;
+        connection = connectionSocket;
         this.sessionManager = sessionManager;
     }
 
+    @Override
     public void run() {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
@@ -41,23 +41,12 @@ public class RequestHandler implements Runnable {
             HttpResponse httpResponse = HttpResponse.of(httpRequest.getHttpVersion());
 
             Method method = ControllerMapper.mappingMethod(httpRequest, httpResponse);
-            ModelAndView modelAndView = executeMethod(httpRequest, httpResponse, method);
+            ModelAndView modelAndView = ControllerAdapter.executeMethod(httpRequest, httpResponse, method);
             ViewResolver.resolve(modelAndView);
             OutputStreamHandler.createResponse(httpResponse, modelAndView, out);
         } catch (IOException e) {
             logger.error(e.getMessage());
         } catch (URISyntaxException e) {
-            logger.error(e.getMessage());
-            throw new NotFoundUrlException(e);
-        }
-    }
-
-    private ModelAndView executeMethod(HttpRequest httpRequest, HttpResponse httpResponse, Method method) {
-        try {
-            Controller clazz = (Controller) method.getDeclaringClass().getConstructor().newInstance();
-            return (ModelAndView) method.invoke(clazz, httpRequest, httpResponse);
-        } catch (IllegalAccessException | InvocationTargetException
-                | NoSuchMethodException | InstantiationException e) {
             logger.error(e.getMessage());
             throw new NotFoundUrlException(e);
         }
