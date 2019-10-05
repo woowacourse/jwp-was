@@ -27,7 +27,11 @@ public abstract class AbstractController implements Controller {
 
     }
 
-    abstract void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException;
+    void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+        throw new NotSupportMethod("Not Support : " + httpRequest.getUri() + httpRequest.getMethod());
+    }
 
-    abstract void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException;
+    void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+        throw new NotSupportMethod("Not Support : " + httpRequest.getUri() + httpRequest.getMethod());
+    }
 }
