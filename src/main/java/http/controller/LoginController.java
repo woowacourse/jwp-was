@@ -17,7 +17,7 @@ public class LoginController implements Controller {
 
         User user = DataBase.findUserById(userId);
 
-        if (!(user == null) && password.equals(user.getPassword())) {
+        if (!(user == null) && user.isValidPassword(password)) {
             HttpSession httpSession = httpRequest.getHttpSession();
             httpSession.setAttributes("user", user);
 
