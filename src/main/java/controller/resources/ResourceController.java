@@ -1,19 +1,17 @@
 package controller.resources;
 
-import annotation.RequestMapping;
 import controller.Controller;
-import model.http.HttpRequest;
-import model.http.HttpResponse;
-import model.http.ViewLocation;
-import utils.HttpMethod;
-import utils.HttpStatus;
+import controller.annotation.RequestMapping;
+import webserver.http.HttpMethod;
+import webserver.http.HttpStatus;
+import webserver.http.ModelAndView;
+import webserver.http.ViewLocation;
+import webserver.http.request.HttpRequest;
+import webserver.http.response.HttpResponse;
 
 public class ResourceController implements Controller {
-    private static final String TEMPLATE_FILE_EXTENSION = ".html";
-    private static final String RESOURCE_FILE_DELIMITER = ".";
-
     @RequestMapping(method = HttpMethod.GET, url = "static")
-    public void staticResourceRequest(HttpRequest request, HttpResponse response) {
-        response.sendRedirect(ViewLocation.STATIC.getLocation() + request.getPath(), HttpStatus.OK);
+    public ModelAndView staticResourceRequest(HttpRequest request, HttpResponse response) {
+        return new ModelAndView(ViewLocation.STATIC.getLocation() + request.getPath(), HttpStatus.OK);
     }
 }

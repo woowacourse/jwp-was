@@ -1,41 +1,63 @@
 package controller.custom;
 
-import annotation.RequestMapping;
 import controller.Controller;
+import controller.annotation.RequestMapping;
 import db.DataBase;
 import model.User;
-import model.http.HttpRequest;
-import model.http.HttpResponse;
-import model.http.ViewLocation;
-import utils.HttpMethod;
-import utils.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import webserver.RequestHandler;
+import webserver.http.*;
+import webserver.http.request.HttpRequest;
+import webserver.http.response.HttpResponse;
 
 import java.util.Map;
 
 public class UserController implements Controller {
-    private static final String INDEX_PAGE = "/index.html";
-    private static final String LOGIN_FAILED_PAGE = "/user/login_failed.html";
+    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final String INDEX_PAGE = "index";
 
     @RequestMapping(method = HttpMethod.POST, url = "/user/create")
-    private void create(HttpRequest request, HttpResponse response) {
+    private ModelAndView create(HttpRequest request, HttpResponse response) {
         Map<String, String> body = request.getBody();
         User user = new User(body.get("userId"), body.get("password"), body.get("name"), body.get("email"));
         DataBase.addUser(user);
-        response.sendRedirect(ViewLocation.TEMPLATE.getLocation() + INDEX_PAGE, HttpStatus.REDIRECT);
+        return new ModelAndView(INDEX_PAGE, HttpStatus.REDIRECT);
     }
 
     @RequestMapping(method = HttpMethod.POST, url = "/user/login")
-    private void login(HttpRequest request, HttpResponse response) {
+    private ModelAndView login(HttpRequest request, HttpResponse response) {
         User user = DataBase.findUserById(request.getBodyValueBy("userId"));
 
-        if (isSignedUpUser(request, user)) {
-            response.sendRedirect(ViewLocation.TEMPLATE.getLocation() + INDEX_PAGE, HttpStatus.REDIRECT);
-            return;
+        if (matchedUser(request, user)) {
+            HttpSession session = request.getHttpSession();
+            session.setAttribute("user", user);
+            response.addCookie(new Cookie("JSESSIONID", session.getJSESSIONID()));
+            return new ModelAndView(INDEX_PAGE, HttpStatus.REDIRECT);
         }
-        response.sendRedirect(ViewLocation.TEMPLATE.getLocation() + LOGIN_FAILED_PAGE, HttpStatus.FORBIDDEN);
+        return new ModelAndView("user/login_failed", HttpStatus.REDIRECT);
     }
 
-    private boolean isSignedUpUser(HttpRequest request, User user) {
-        return user != null && request.getBodyValueBy("password").equals(user.getPassword());
+    private boolean matchedUser(HttpRequest request, User user) {
+        return user != null && user.getPassword().equals(request.getBodyValueBy("password"));
+    }
+
+    @RequestMapping(method = HttpMethod.GET, url = "/user/list")
+    private ModelAndView getUserList(HttpRequest request, HttpResponse response) {
+        ModelAndView modelAndView = new ModelAndView();
+
+        if (isLoggedIn(request)) {
+            modelAndView.setModel("userList", DataBase.findAll());
+            modelAndView.setView("user/list");
+            modelAndView.setHttpStatus(HttpStatus.OK);
+            return modelAndView;
+        }
+        modelAndView.setView("user/login");
+        modelAndView.setHttpStatus(HttpStatus.REDIRECT);
+        return modelAndView;
+    }
+
+    private boolean isLoggedIn(HttpRequest request) {
+        return request.getHttpSession().getAttribute("user") != null;
     }
 }

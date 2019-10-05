@@ -1,8 +1,10 @@
 package utils;
 
-import model.http.HttpRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import webserver.http.HttpMethod;
+import webserver.http.HttpSessionManager;
+import webserver.http.request.HttpRequest;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -10,15 +12,15 @@ import java.io.InputStreamReader;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class RequestHeaderParserTest {
+class HttpRequestParserTest {
     private HttpRequest httpRequest;
 
     @BeforeEach
     void setUp() throws IOException {
-        FileInputStream fileInputStream = new FileInputStream("src/test/java/data/http_request.txt");
+        FileInputStream fileInputStream = new FileInputStream("src/test/java/data/HttpRequest.txt");
         InputStreamReader inputStream = new InputStreamReader(fileInputStream);
 
-        httpRequest = RequestHeaderParser.parseRequest(inputStream);
+        httpRequest = HttpRequestParser.parseRequest(inputStream, new HttpSessionManager());
     }
 
     @Test
