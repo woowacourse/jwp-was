@@ -4,12 +4,19 @@ import exception.UnregisteredURLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
-import webserver.controller.HttpCookie;
+import webserver.controller.cookie.HttpCookie;
 import webserver.controller.request.HttpRequest;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
+import java.util.stream.Stream;
+
+import static webserver.controller.LoginController.LOGIN_SUCCESS_INDEX;
 
 
 public class HttpResponse {
@@ -19,12 +26,14 @@ public class HttpResponse {
     private HttpStatus httpStatus;
     private String version;
     private Map<String, String> headerFields;
+    private List<String> cookieFields;
     private byte[] body;
 
     private HttpResponse(ResponseBuilder builder) {
         this.httpStatus = builder.httpStatus;
         this.version = builder.version;
         this.headerFields = builder.headerFields;
+        this.cookieFields = builder.cookieFields;
         this.body = builder.body;
     }
 
@@ -46,11 +55,20 @@ public class HttpResponse {
     }
 
     public static HttpResponse ok(HttpRequest httpRequest, byte[] body) {
+        if(httpRequest.isFirstRequest()) {
+            return HttpResponse.builder()
+                .version(httpRequest.getVersion())
+                .httpStatus(HttpStatus.OK)
+                .setCookie(httpRequest.getCookieFields())
+                .contentType(httpRequest.getMimeType().getMimeType())
+                .body(body)
+                .build();
+        }
         return HttpResponse.builder()
             .version(httpRequest.getVersion())
             .httpStatus(HttpStatus.OK)
-            .body(body)
             .contentType(httpRequest.getMimeType().getMimeType())
+            .body(body)
             .build();
     }
 
@@ -62,15 +80,22 @@ public class HttpResponse {
             .build();
     }
 
-    public static HttpResponse sendRedirect(HttpRequest httpRequest, String redirectUrl, boolean logined) {
-        HttpCookie httpCookie = new HttpCookie();
-        httpCookie.loginCookie(logined, DEFAULT_COOKIE_PATH);
+    public static HttpResponse sendRedirect(HttpRequest httpRequest, String redirectUrl) {
+        return redirectBuild(httpRequest, redirectUrl)
+            .build();
+    }
 
+
+    private static ResponseBuilder redirectBuild(HttpRequest httpRequest, String redirectUrl) {
         return HttpResponse.builder()
             .version(httpRequest.getVersion())
             .httpStatus(HttpStatus.FOUND)
-            .location(redirectUrl)
-            .setCookie(httpCookie.joinSetCookie())
+            .location(redirectUrl);
+    }
+
+    public static HttpResponse loginSuccessRedirect(HttpRequest httpRequest, String redirecUrl) {
+        return redirectBuild(httpRequest, redirecUrl)
+            .setCookie(httpRequest.getCookieFields())
             .build();
     }
 
@@ -94,10 +119,19 @@ public class HttpResponse {
         return !body.equals("");
     }
 
+    public boolean hasCookie() {
+        return !cookieFields.isEmpty();
+    }
+
+    public List<String> getCookieFields() {
+        return Collections.unmodifiableList(this.cookieFields);
+    }
+
     private static class ResponseBuilder {
         private String version;
         private HttpStatus httpStatus;
-        private Map<String, String> headerFields = new HashMap<>();
+        private Map<String, String> headerFields = new LinkedHashMap<>();
+        private List<String> cookieFields = new ArrayList<>();
         private byte[] body = "" .getBytes();
 
         private ResponseBuilder httpStatus(HttpStatus httpStatus) {
@@ -135,9 +169,10 @@ public class HttpResponse {
             return this;
         }
 
-
-        private ResponseBuilder setCookie(String joinSetCookie) {
-            headerFields.put("Set-Cookie", joinSetCookie);
+        private ResponseBuilder setCookie(Map<String, String> cookieValues) {
+            cookieValues.keySet()
+                .stream()
+                .forEach(key -> cookieFields.add(key+"="+cookieValues.get(key)));
             return this;
         }
 
@@ -145,5 +180,4 @@ public class HttpResponse {
             return new HttpResponse(this);
         }
     }
-
 }
