@@ -7,7 +7,7 @@ import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
-import exception.FailedRenderingException;
+import webserver.exception.FailedRenderingException;
 import webserver.utils.ResourcePathUtils;
 import webserver.view.ModelAndView;
 

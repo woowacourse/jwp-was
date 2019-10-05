@@ -1,4 +1,4 @@
-package exception;
+package webserver.exception;
 
 public class FailedRenderingException extends RuntimeException {
     public FailedRenderingException() {
