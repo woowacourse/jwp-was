@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -27,18 +25,15 @@ class HttpRequestParserTest {
     @Test
     void 올바른_입력_파라미터_존재_파싱_확인() {
         InputStream in = new ByteArrayInputStream("GET /index.html?name=coogi&age=25 HTTP/1.1\r\nHost: localhost:8080/".getBytes());
-        Map<String, String> parameters = new HashMap<>();
-        parameters.put("name", "coogi");
-        parameters.put("age", "25");
 
-        HttpParameters httpParameters = new HttpParameters(parameters);
         RequestLine requestLine = new RequestLine(HttpMethod.GET, HttpProtocols.of("HTTP/1.1"), new HttpUri("/index.html"));
         HttpRequest httpRequest = new HttpRequest(requestLine, null, null);
         HttpRequest parsedRequest = HttpRequestParser.parse(in);
 
         assertThat(parsedRequest.getRequestLine().getHttpMethod()).isEqualTo(httpRequest.getRequestLine().getHttpMethod());
         assertThat(parsedRequest.getRequestLine().getHttpUri()).isEqualTo(httpRequest.getRequestLine().getHttpUri());
-        assertThat(parsedRequest.getParameters()).isEqualTo(httpParameters);
+        assertThat(parsedRequest.getParameter("name")).isEqualTo("coogi");
+        assertThat(parsedRequest.getParameter("age")).isEqualTo("25");
     }
 
     @Test
@@ -74,7 +69,7 @@ class HttpRequestParserTest {
         assertThat(request.getRequestLine().getHttpMethod()).isEqualTo(HttpMethod.POST);
         assertThat(request.getRequestLine().getHttpUri().getResourceLocation()).isEqualTo("/user/create");
         assertThat(request.getHeaders().getHeader("Connection")).isEqualTo("keep-alive");
-        assertThat(request.getParameters().getParameter("id")).isEqualTo("1");
-        assertThat(request.getParameters().getParameter("userId")).isEqualTo("javajigi");
+        assertThat(request.getParameter("id")).isEqualTo("1");
+        assertThat(request.getParameter("userId")).isEqualTo("javajigi");
     }
 }

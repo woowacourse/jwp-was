@@ -10,10 +10,8 @@ import static com.google.common.net.HttpHeaders.SET_COOKIE;
 public class LoginController implements Controller {
     @Override
     public HttpResponse service(HttpRequest httpRequest) {
-        HttpParameters httpParameters = httpRequest.getParameters();
-
-        String userId = httpParameters.getParameter("userId");
-        String password = httpParameters.getParameter("password");
+        String userId = httpRequest.getParameter("userId");
+        String password = httpRequest.getParameter("password");
 
         User user = DataBase.findUserById(userId);
 

@@ -9,12 +9,10 @@ import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
 public class SignUpController implements Controller {
     @Override
     public HttpResponse service(HttpRequest httpRequest) {
-        HttpParameters httpParameters = httpRequest.getParameters();
-
-        User user = new User(httpParameters.getParameter("userId"),
-                httpParameters.getParameter("password"),
-                httpParameters.getParameter("name"),
-                httpParameters.getParameter("email"));
+        User user = new User(httpRequest.getParameter("userId"),
+                httpRequest.getParameter("password"),
+                httpRequest.getParameter("name"),
+                httpRequest.getParameter("email"));
 
         DataBase.addUser(user);
 

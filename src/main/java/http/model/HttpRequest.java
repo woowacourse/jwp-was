@@ -18,8 +18,8 @@ public class HttpRequest {
         return requestLine;
     }
 
-    public HttpParameters getParameters() {
-        return parameters;
+    public String getParameter(String key) {
+        return parameters.getParameter(key);
     }
 
     public HttpHeaders getHeaders() {
