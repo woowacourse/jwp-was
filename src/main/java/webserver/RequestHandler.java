@@ -1,8 +1,9 @@
 package webserver;
 
-import http.HttpRequest;
-import http.HttpRequestParser;
-import http.HttpResponse;
+import http.request.HttpRequest;
+import http.request.HttpRequestParser;
+import http.response.HttpResponse;
+import http.response.HttpResponseSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,12 +33,10 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
 
             DispatcherServlet.doDispatch(httpRequest, httpResponse);
-            httpResponse.send(dos);
+            HttpResponseSender.send(httpResponse, dos);
             dos.close();
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
         }
     }
 }

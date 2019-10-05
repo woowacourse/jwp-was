@@ -1,4 +1,4 @@
-package http;
+package http.response;
 
 import http.exception.NotFoundStatusException;
 
@@ -18,7 +18,7 @@ public enum HttpStatus {
 
     public static HttpStatus of(int statusCode) {
         return Arrays.stream(HttpStatus.values())
-                .filter(httpStatus -> httpStatus.statusCode == statusCode)
+                .filter(httpResponseStatus -> httpResponseStatus.statusCode == statusCode)
                 .findAny()
                 .orElseThrow(NotFoundStatusException::new)
                 ;

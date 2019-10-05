@@ -1,7 +1,7 @@
 package controller;
 
-import http.HttpRequest;
-import http.HttpResponse;
+import http.request.HttpRequest;
+import http.response.HttpResponse;
 import view.View;
 
 public interface Controller {

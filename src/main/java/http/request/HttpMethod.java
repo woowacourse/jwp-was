@@ -1,4 +1,4 @@
-package http;
+package http.request;
 
 import http.exception.NotFoundMethodException;
 
@@ -19,5 +19,9 @@ public enum HttpMethod {
                 .filter(httpMethod -> httpMethod.method.equals(method))
                 .findAny()
                 .orElseThrow(NotFoundMethodException::new);
+    }
+
+    public String getMethod() {
+        return method;
     }
 }

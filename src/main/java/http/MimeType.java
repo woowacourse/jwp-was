@@ -1,5 +1,7 @@
 package http;
 
+import utils.FileIoUtils;
+
 import java.util.Arrays;
 
 public enum MimeType {
@@ -15,12 +17,16 @@ public enum MimeType {
     }
 
     public static String of(String filePath) {
-        String[] extension = filePath.split("\\.");
+        String extension = FileIoUtils.getExtension(filePath).orElse("default");
         return Arrays.stream(MimeType.values())
-                .filter(mimeType -> mimeType.name().toLowerCase().equals(extension[extension.length - 1]))
+                .filter(mimeType -> mimeType.name().equals(extension.toUpperCase()))
                 .map(mimeType -> mimeType.mimeType)
                 .findAny()
                 .orElse(MimeType.DEFAULT.mimeType)
                 ;
+    }
+
+    public String getMimeType() {
+        return mimeType;
     }
 }
