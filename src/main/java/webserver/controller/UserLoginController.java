@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import application.service.UserService;
+import webserver.view.ModelAndView;
 import webserver.exception.UnauthorizedRequestException;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
@@ -24,15 +25,18 @@ public class UserLoginController extends AbstractController {
             String location = (result) ? "/index.html" : "/user/login_failed.html";
             HttpResponse httpResponse;
 
+            ModelAndView modelAndView = new ModelAndView(location);
+
             if (result) {
                 String sessionId = httpRequest.getCookieValue();
                 sessionManager.addSessionAttribute(sessionId, "userId", userId);
-                httpResponse = HttpResponseGenerator.responseLoginSuccess(location, sessionId);
+                httpResponse = HttpResponseGenerator.responseLoginSuccess(modelAndView, sessionId);
                 httpResponse.forward(dos);
                 return;
             }
 
-            httpResponse = HttpResponseGenerator.response200Header(location);
+            httpResponse = HttpResponseGenerator.response200Header(modelAndView);
+
             httpResponse.forward(dos);
         } catch (IOException e) {
             e.printStackTrace();

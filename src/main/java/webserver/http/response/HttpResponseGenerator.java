@@ -1,7 +1,6 @@
 package webserver.http.response;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.LinkedHashMap;
@@ -9,11 +8,12 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.view.ModelAndView;
 import webserver.RequestHandler;
 import webserver.exception.FailResponseException;
 import webserver.http.Header;
-import webserver.utils.FileIoUtils;
 import webserver.utils.ResourcePathUtils;
+import webserver.view.ViewResolver;
 
 import static webserver.http.HttpVersion.HTTP11;
 import static webserver.http.response.HttpResponse.HEADER_RESPONSE_LOCATION;
@@ -55,50 +55,25 @@ public class HttpResponseGenerator {
         return statusLines;
     }
 
-    public static HttpResponse response302Header(String location) {
-        StatusLine statusLine = new StatusLine(getStatusLines(FOUND));
-
-        Map<String, String> headerElement = new LinkedHashMap<>();
-        headerElement.put(HEADER_RESPONSE_LOCATION, location);
-
-        Header header = new Header(headerElement);
-
-        return new HttpResponse(statusLine, header);
-    }
-
-    public static HttpResponse responseLoginSuccess(String location, String sessionId) {
+    public static HttpResponse responseLoginSuccess(ModelAndView modelAndView, String sessionId) {
         try {
-            String path = ResourcePathUtils.getResourcePath(location);
-            byte[] responseBody = FileIoUtils.loadFileFromClasspath(path);
+            String path = ResourcePathUtils.getResourcePath(modelAndView.getViewName());
+            byte[] responseBody = ViewResolver.generateDynamicResource(modelAndView);
             String mimeType = Files.probeContentType(Paths.get(path));
             StatusLine statusLine = new StatusLine(getStatusLines(OK));
 
             Header header = new Header(addHeaderElementWithLoginFlag(responseBody.length, mimeType, sessionId));
             return new HttpResponse(statusLine, header, responseBody);
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException e) {
             logger.error(e.getMessage());
         }
         throw new FailResponseException();
     }
 
-    public static HttpResponse response200Header(String requestUri) {
+    public static HttpResponse response200Header(ModelAndView modelAndView) {
         try {
-            String path = ResourcePathUtils.getResourcePath(requestUri);
-            byte[] responseBody = FileIoUtils.loadFileFromClasspath(path);
-            String mimeType = Files.probeContentType(Paths.get(path));
-            StatusLine statusLine = new StatusLine(getStatusLines(OK));
-            Header header = new Header(addHeaderElement(responseBody.length, mimeType));
-
-            return new HttpResponse(statusLine, header, responseBody);
-        } catch (IOException | URISyntaxException e) {
-            logger.error(e.getMessage());
-        }
-        throw new FailResponseException();
-    }
-
-    public static HttpResponse dynamicResponse200Header(byte[] responseBody, String requestUri) {
-        try {
-            String mimeType = Files.probeContentType(Paths.get(requestUri));
+            byte[] responseBody = ViewResolver.generateDynamicResource(modelAndView);
+            String mimeType = Files.probeContentType(Paths.get(modelAndView.getViewName()));
             StatusLine statusLine = new StatusLine(getStatusLines(OK));
             Header header = new Header(addHeaderElement(responseBody.length, mimeType));
             return new HttpResponse(statusLine, header, responseBody);
@@ -106,5 +81,16 @@ public class HttpResponseGenerator {
             e.printStackTrace();
         }
         throw new FailResponseException();
+    }
+
+    public static HttpResponse response302Header(ModelAndView modelAndView) {
+        StatusLine statusLine = new StatusLine(getStatusLines(FOUND));
+
+        Map<String, String> headerElement = new LinkedHashMap<>();
+        headerElement.put(HEADER_RESPONSE_LOCATION, modelAndView.getViewName());
+
+        Header header = new Header(headerElement);
+
+        return new HttpResponse(statusLine, header);
     }
 }

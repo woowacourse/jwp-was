@@ -3,6 +3,7 @@ package webserver.controller;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import webserver.view.ModelAndView;
 import webserver.exception.FailedForwardException;
 import webserver.exception.UnauthorizedRequestException;
 import webserver.http.request.HttpRequest;
@@ -22,7 +23,10 @@ public class ResourceController extends AbstractController {
     public void doGet(HttpRequest httpRequest, DataOutputStream dos) {
         try {
             String requestUri = httpRequest.getRequestLineElement(REQUEST_URI);
-            HttpResponse httpResponse = HttpResponseGenerator.response200Header(requestUri);
+
+            ModelAndView modelAndView = new ModelAndView(requestUri);
+
+            HttpResponse httpResponse = HttpResponseGenerator.response200Header(modelAndView);
 
             if (!httpRequest.hasCookieValue(JSESSION_ID)) {
                 String uuid = sessionManager.generateInitialSession();
