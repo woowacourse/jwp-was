@@ -3,6 +3,7 @@ package utils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import webserver.http.HttpMethod;
+import webserver.http.HttpSessionManager;
 import webserver.http.request.HttpRequest;
 
 import java.io.FileInputStream;
@@ -19,7 +20,7 @@ class HttpRequestParserTest {
         FileInputStream fileInputStream = new FileInputStream("src/test/java/data/http_request.txt");
         InputStreamReader inputStream = new InputStreamReader(fileInputStream);
 
-        httpRequest = HttpRequestParser.parseRequest(inputStream);
+        httpRequest = HttpRequestParser.parseRequest(inputStream, new HttpSessionManager());
     }
 
     @Test

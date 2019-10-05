@@ -31,7 +31,7 @@ public class WebServer {
 
             HttpSessionManager sessionManager = new HttpSessionManager();
             while ((connection = listenSocket.accept()) != null) {
-                es.execute(new RequestHandler(connection, sessionManager);
+                es.execute(new RequestHandler(connection, sessionManager));
             }
         }
     }
