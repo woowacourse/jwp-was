@@ -8,6 +8,7 @@ import webserver.exception.UnauthorizedRequestException;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 import webserver.http.response.HttpResponseGenerator;
+import webserver.utils.FileExtension;
 import webserver.view.ModelAndView;
 
 import static webserver.http.request.HttpRequestReader.REQUEST_URI;
@@ -27,7 +28,7 @@ public class ResourceController extends AbstractController {
 
             HttpResponse httpResponse = HttpResponseGenerator.response200Header(modelAndView);
 
-            if (!httpRequest.hasSessionId()) {
+            if (isHtmlFile(requestUri) && !httpRequest.hasSessionId()) {
                 String uuid = sessionManager.generateInitialSession();
                 httpResponse.setInitialSession(uuid);
             }
@@ -36,5 +37,9 @@ public class ResourceController extends AbstractController {
         } catch (IOException e) {
             throw new FailedForwardException();
         }
+    }
+
+    private boolean isHtmlFile(String requestUri) {
+        return requestUri.contains(FileExtension.HTML.getFileExtension());
     }
 }
