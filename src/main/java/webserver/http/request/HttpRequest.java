@@ -3,6 +3,8 @@ package webserver.http.request;
 import java.util.Map;
 import java.util.Objects;
 
+import static webserver.http.Header.JSESSION_ID;
+
 public class HttpRequest {
     public static final String HEADER_REQUEST_COOKIE = "Cookie";
 
@@ -41,7 +43,11 @@ public class HttpRequest {
         return httpRequestHeader.isCookieValue(cookieKey);
     }
 
-    public String getCookieValue() {
+    public boolean hasSessionId() {
+        return httpRequestHeader.isCookieValue(JSESSION_ID);
+    }
+
+    public String getSessionId() {
         return httpRequestHeader.getRequestElement(HEADER_REQUEST_COOKIE).split("=")[1];
     }
 }

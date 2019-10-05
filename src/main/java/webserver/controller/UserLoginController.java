@@ -5,11 +5,11 @@ import java.io.IOException;
 import java.util.Map;
 
 import application.service.UserService;
-import webserver.view.ModelAndView;
 import webserver.exception.UnauthorizedRequestException;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 import webserver.http.response.HttpResponseGenerator;
+import webserver.view.ModelAndView;
 
 public class UserLoginController extends AbstractController {
     @Override
@@ -22,13 +22,13 @@ public class UserLoginController extends AbstractController {
         boolean result = userService.login(userId, password);
 
         try {
-            String location = (result) ? "/index.html" : "/user/login_failed.html";
+            String location = (result) ? "/index.html" : "/login_failed.html";
             HttpResponse httpResponse;
 
             ModelAndView modelAndView = new ModelAndView(location);
 
-            if (result) {
-                String sessionId = httpRequest.getCookieValue();
+            if (result && httpRequest.hasSessionId()) {
+                String sessionId = httpRequest.getSessionId();
                 sessionManager.addSessionAttribute(sessionId, "userId", userId);
                 httpResponse = HttpResponseGenerator.responseLoginSuccess(modelAndView, sessionId);
                 httpResponse.forward(dos);

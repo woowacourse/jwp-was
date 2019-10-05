@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 public class Header {
+    public static final String JSESSION_ID = "jsessionId";
+
     private Map<String, String> header;
 
     public Header(Map<String, String> header) {
@@ -24,6 +26,6 @@ public class Header {
     }
 
     public void setSessionId(String sessionId) {
-        header.put("Set-Cookie", String.format("%s=%s", "jsessionId", sessionId));
+        header.put("Set-Cookie", String.format("%s=%s", JSESSION_ID, sessionId));
     }
 }

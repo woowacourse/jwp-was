@@ -3,14 +3,13 @@ package webserver.controller;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import webserver.view.ModelAndView;
 import webserver.exception.FailedForwardException;
 import webserver.exception.UnauthorizedRequestException;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 import webserver.http.response.HttpResponseGenerator;
+import webserver.view.ModelAndView;
 
-import static webserver.controller.CreateUserController.JSESSION_ID;
 import static webserver.http.request.HttpRequestReader.REQUEST_URI;
 
 public class ResourceController extends AbstractController {
@@ -28,7 +27,7 @@ public class ResourceController extends AbstractController {
 
             HttpResponse httpResponse = HttpResponseGenerator.response200Header(modelAndView);
 
-            if (!httpRequest.hasCookieValue(JSESSION_ID)) {
+            if (!httpRequest.hasSessionId()) {
                 String uuid = sessionManager.generateInitialSession();
                 httpResponse.setInitialSession(uuid);
             }

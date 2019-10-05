@@ -4,16 +4,14 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import application.service.UserService;
-import webserver.view.ModelAndView;
 import webserver.exception.FailedRedirectException;
 import webserver.exception.UnauthorizedRequestException;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 import webserver.http.response.HttpResponseGenerator;
+import webserver.view.ModelAndView;
 
 public class CreateUserController extends AbstractController {
-    public static final String JSESSION_ID = "jsessionId";
-
     @Override
     public void doPost(HttpRequest httpRequest, DataOutputStream dos) {
         try {
@@ -24,7 +22,7 @@ public class CreateUserController extends AbstractController {
 
             HttpResponse httpResponse = HttpResponseGenerator.response302Header(modelAndView);
 
-            if (!httpRequest.hasCookieValue(JSESSION_ID)) {
+            if (!httpRequest.hasSessionId()) {
                 String uuid = sessionManager.generateInitialSession();
                 httpResponse.setInitialSession(uuid);
             }
