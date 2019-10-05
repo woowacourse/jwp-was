@@ -20,6 +20,7 @@ import webserver.view.ModelAndView;
 import webserver.view.template.HandlebarsHtmlTemplate;
 import webserver.view.template.HtmlTemplateEngine;
 
+import static webserver.http.Header.JSESSION_ID;
 import static webserver.http.HttpVersion.HTTP11;
 import static webserver.http.response.HttpResponse.HEADER_RESPONSE_LOCATION;
 import static webserver.http.response.ResponseStatus.FOUND;
@@ -36,7 +37,7 @@ public class HttpResponseGenerator {
     public static final String HEADER_CONTENT_LENGTH = "Content-Length";
 
     private static String getCookieValue(String sessionId) {
-        return String.format("logined=true; jsessionId=%s; %s=/\r\n", "Path", sessionId);
+        return String.format("logined=true; %s=%s; %s=/\r\n", JSESSION_ID, "Path", sessionId);
     }
 
     private static Map<String, String> addHeaderElementWithLoginFlag(int bodyLength, String mimeType, String sessionId) {
