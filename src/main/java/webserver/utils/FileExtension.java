@@ -21,4 +21,8 @@ public enum FileExtension {
 				.findFirst().orElse(ETC)
 				.filePath;
 	}
+
+	public String getFileExtension() {
+		return fileExtension;
+	}
 }

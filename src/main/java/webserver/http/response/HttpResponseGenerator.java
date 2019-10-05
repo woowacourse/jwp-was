@@ -1,6 +1,7 @@
 package webserver.http.response;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.LinkedHashMap;
@@ -8,12 +9,16 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.view.ModelAndView;
 import webserver.RequestHandler;
 import webserver.exception.FailResponseException;
+import webserver.exception.WrongUriException;
 import webserver.http.Header;
+import webserver.utils.FileExtension;
+import webserver.utils.FileIoUtils;
 import webserver.utils.ResourcePathUtils;
-import webserver.view.ViewResolver;
+import webserver.view.ModelAndView;
+import webserver.view.template.HandlebarsHtmlTemplate;
+import webserver.view.template.HtmlTemplateEngine;
 
 import static webserver.http.HttpVersion.HTTP11;
 import static webserver.http.response.HttpResponse.HEADER_RESPONSE_LOCATION;
@@ -22,6 +27,7 @@ import static webserver.http.response.ResponseStatus.OK;
 
 public class HttpResponseGenerator {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final HtmlTemplateEngine HTML_TEMPLATE_ENGINE = new HandlebarsHtmlTemplate();
 
     public static final String HTTP_VERSION = "HttpVersion";
     public static final String STATUS_CODE = "StatusCode";
@@ -58,7 +64,7 @@ public class HttpResponseGenerator {
     public static HttpResponse responseLoginSuccess(ModelAndView modelAndView, String sessionId) {
         try {
             String path = ResourcePathUtils.getResourcePath(modelAndView.getViewName());
-            byte[] responseBody = ViewResolver.generateDynamicResource(modelAndView);
+            byte[] responseBody = renderResponseBody(modelAndView);
             String mimeType = Files.probeContentType(Paths.get(path));
             StatusLine statusLine = new StatusLine(getStatusLines(OK));
 
@@ -72,7 +78,7 @@ public class HttpResponseGenerator {
 
     public static HttpResponse response200Header(ModelAndView modelAndView) {
         try {
-            byte[] responseBody = ViewResolver.generateDynamicResource(modelAndView);
+            byte[] responseBody = renderResponseBody(modelAndView);
             String mimeType = Files.probeContentType(Paths.get(modelAndView.getViewName()));
             StatusLine statusLine = new StatusLine(getStatusLines(OK));
             Header header = new Header(addHeaderElement(responseBody.length, mimeType));
@@ -81,6 +87,23 @@ public class HttpResponseGenerator {
             e.printStackTrace();
         }
         throw new FailResponseException();
+    }
+
+    private static byte[] renderResponseBody(ModelAndView modelAndView) throws IOException {
+        try {
+            if (isHtmlFile(modelAndView)) {
+                return HTML_TEMPLATE_ENGINE.render(modelAndView);
+            }
+
+            String path = ResourcePathUtils.getResourcePath(modelAndView.getViewName());
+            return FileIoUtils.loadFileFromClasspath(path);
+        } catch (URISyntaxException e) {
+            throw new WrongUriException();
+        }
+    }
+
+    private static boolean isHtmlFile(ModelAndView modelAndView) {
+        return modelAndView.isSameViewExtension(FileExtension.HTML.getFileExtension());
     }
 
     public static HttpResponse response302Header(ModelAndView modelAndView) {

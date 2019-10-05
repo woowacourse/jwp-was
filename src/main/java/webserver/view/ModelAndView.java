@@ -24,4 +24,8 @@ public class ModelAndView {
     public Map<String, Object> getModel() {
         return Collections.unmodifiableMap(model);
     }
+
+    public boolean isSameViewExtension(String fileExtension) {
+        return viewName.contains(fileExtension);
+    }
 }
