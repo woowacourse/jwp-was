@@ -17,7 +17,7 @@ class HttpRequestParserTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        FileInputStream fileInputStream = new FileInputStream("src/test/java/data/http_request.txt");
+        FileInputStream fileInputStream = new FileInputStream("src/test/java/data/HttpRequest.txt");
         InputStreamReader inputStream = new InputStreamReader(fileInputStream);
 
         httpRequest = HttpRequestParser.parseRequest(inputStream, new HttpSessionManager());
