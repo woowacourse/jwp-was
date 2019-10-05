@@ -18,4 +18,7 @@ public enum HttpMethod {
     }
 
 
+    public boolean match(HttpMethod method) {
+        return this.equals(method);
+    }
 }

@@ -3,6 +3,7 @@ package http.model;
 import http.controller.NotFoundException;
 
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 public class HttpUri {
     private String resourceLocation;
@@ -33,5 +34,9 @@ public class HttpUri {
     @Override
     public int hashCode() {
         return Objects.hash(resourceLocation);
+    }
+
+    public boolean match(Pattern pattern) {
+        return pattern.matcher(resourceLocation).find();
     }
 }

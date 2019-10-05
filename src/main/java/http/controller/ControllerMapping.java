@@ -4,7 +4,6 @@ import http.model.HttpMethod;
 import http.model.HttpRequest;
 
 import java.util.Objects;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ControllerMapping implements Comparable<ControllerMapping> {
@@ -19,9 +18,7 @@ public class ControllerMapping implements Comparable<ControllerMapping> {
     }
 
     public boolean match(HttpRequest httpRequest) {
-        Matcher matcher = pattern.matcher(httpRequest.getRequestLine().getHttpUri().getResourceLocation());
-        return httpRequest.getRequestLine().getHttpMethod() == method
-                && matcher.find();
+        return httpRequest.match(pattern, method);
     }
 
     @Override

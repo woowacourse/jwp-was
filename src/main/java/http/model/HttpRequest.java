@@ -2,6 +2,8 @@ package http.model;
 
 import http.supoort.SessionManager;
 
+import java.util.regex.Pattern;
+
 public class HttpRequest {
     private static final String COOKIE = "Cookie";
     private final RequestLine requestLine;
@@ -36,5 +38,9 @@ public class HttpRequest {
             return SessionManager.createSession();
         }
         return SessionManager.getSession(sessionId);
+    }
+
+    public boolean match(Pattern pattern, HttpMethod method) {
+        return requestLine.getHttpUri().match(pattern) && requestLine.getHttpMethod().match(method);
     }
 }
