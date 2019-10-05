@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Renderer {
     public static void render(HttpResponse httpResponse, DataOutputStream dos) throws IOException {
         String header = ResponseMessageConverter.convertHeader(httpResponse);
-        if (HttpStatus.FOUND.equals(httpResponse.getStatusLine().getHttpStatus())) {
+        if (httpResponse.isSameStatus(HttpStatus.FOUND)) {
             dos.writeBytes(header);
             dos.flush();
             return;

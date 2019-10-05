@@ -38,6 +38,10 @@ public class HttpResponse {
         return httpHeaders;
     }
 
+    public boolean isSameStatus(HttpStatus status) {
+        return statusLine.getHttpStatus().equals(status);
+    }
+
     public static class Builder {
         private HttpProtocols httpProtocols;
         private HttpStatus httpStatus;
