@@ -12,9 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Controllers {
-    // TODO : refactoring 필요, 피드백 참고
     public static final Map<String, Method> REQUEST_MAPPING_METHODS = new HashMap<>();
-    public static final Map<Method, Controller> REQUEST_MAPPING_CONTROLLERS = new HashMap<>();
 
     private static final Controller[] CONTROLLERS = {
             new ResourceController(),
@@ -26,14 +24,12 @@ public class Controllers {
     static {
         Arrays.stream(CONTROLLERS)
                 .forEach(controller -> Arrays.stream(controller.getClass().getDeclaredMethods())
-                        .forEach(method -> mappingMethodAndController(controller, method)));
+                        .forEach(Controllers::mappingMethodAndController));
     }
 
-    private static void mappingMethodAndController(Controller controller, Method method) {
+    private static void mappingMethodAndController(Method method) {
         if (method.isAnnotationPresent(RequestMapping.class)) {
             REQUEST_MAPPING_METHODS.put(method.getAnnotation(RequestMapping.class).url(), method);
-            REQUEST_MAPPING_CONTROLLERS.put(method, controller);
         }
     }
-
 }

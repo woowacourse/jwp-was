@@ -1,7 +1,7 @@
 package webserver;
 
+import controller.Controller;
 import controller.ControllerMapper;
-import controller.Controllers;
 import controller.exception.NotFoundUrlException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,8 +54,10 @@ public class RequestHandler implements Runnable {
 
     private ModelAndView executeMethod(HttpRequest httpRequest, HttpResponse httpResponse, Method method) {
         try {
-            return (ModelAndView) method.invoke(Controllers.REQUEST_MAPPING_CONTROLLERS.get(method), httpRequest, httpResponse);
-        } catch (IllegalAccessException | InvocationTargetException e) {
+            Controller clazz = (Controller) method.getDeclaringClass().getConstructor().newInstance();
+            return (ModelAndView) method.invoke(clazz, httpRequest, httpResponse);
+        } catch (IllegalAccessException | InvocationTargetException
+                | NoSuchMethodException | InstantiationException e) {
             logger.error(e.getMessage());
             throw new NotFoundUrlException(e);
         }
