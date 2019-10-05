@@ -25,7 +25,13 @@ public class StatusLine {
 
     @Override
     public String toString() {
-        return version + SINGLE_BLANK + httpStatus.getValue() + SINGLE_BLANK + httpStatus.getReasonPhrase();
+        StringBuilder sb = new StringBuilder();
+        sb.append(version);
+        sb.append(SINGLE_BLANK);
+        sb.append(httpStatus.getValue());
+        sb.append(SINGLE_BLANK);
+        sb.append(httpStatus.getReasonPhrase());
+        return sb.toString();
     }
 }
 

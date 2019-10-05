@@ -24,8 +24,9 @@ public class OutputStreamHandler {
     private static void flushDataOutputStream(HttpResponse httpResponse, OutputStream out) {
         DataOutputStream dos = new DataOutputStream(out);
         try {
-            dos.writeBytes(httpResponse.getStatusLine().toString() + NEW_LINE);
-            dos.writeBytes(httpResponse.getResponseHeader().toString());
+            dos.writeBytes(httpResponse.writeStatusLine());
+            dos.writeBytes(httpResponse.writeHeader());
+            dos.writeBytes(httpResponse.writeCookie());
             dos.writeBytes(NEW_LINE);
             dos.write(httpResponse.getResponseBody(), 0, httpResponse.getResponseBody().length);
             dos.flush();

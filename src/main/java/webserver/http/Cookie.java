@@ -1,5 +1,7 @@
 package webserver.http;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class Cookie {
@@ -9,10 +11,6 @@ public class Cookie {
     private String domain;
     private String path;
     private String secure;
-
-    public Cookie() {
-        this.path = "/";
-    }
 
     public Cookie(String name, String value) {
         this.name = name;
@@ -68,25 +66,33 @@ public class Cookie {
         this.secure = secure;
     }
 
-    public String getHeaderKey() {
-        return "Set-Cookie: " + name;
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("%s=%s; ", name, value));
+        Arrays.stream(this.getClass().getDeclaredFields())
+                .filter(f -> isNotNull(f) && isNotNameAndValue(f))
+                .forEach(f -> {
+                    sb.append(String.format("%s=%s ;", f.getName(), getFieldValue(f)));
+                });
+        return sb.toString();
     }
 
-    public String getHeaderValues() {
-        String cookieString = "=" + value + "; ";
-        if (expires != null) {
-            cookieString += "expires=" + expires + "; ";
+    private String getFieldValue(Field field) {
+        try {
+            return (String) field.get(this);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
-        if (domain != null) {
-            cookieString += "domain=" + domain + "; ";
-        }
-        if (path != null) {
-            cookieString += "Path=" + path + "; ";
-        }
-        if (secure != null) {
-            cookieString += "secure=" + secure + "; ";
-        }
-        return cookieString;
+        return null;
+    }
+
+    private boolean isNotNameAndValue(Field field) {
+        return (!"name".equals(field.getName())) && (!"value".equals(field.getName()));
+    }
+
+    private boolean isNotNull(Field field) {
+        return getFieldValue(field) != null;
     }
 
     @Override

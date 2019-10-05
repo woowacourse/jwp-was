@@ -1,7 +1,5 @@
 package webserver.http.response;
 
-import webserver.http.Cookie;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,16 +11,14 @@ public class ResponseHeader {
         headers.put(key, value);
     }
 
-    public void addCookie(Cookie cookie) {
-        headers.put(cookie.getHeaderKey(), cookie.getHeaderValues());
-    }
-
     @Override
     public String toString() {
-        String responseHeaders = "";
+        StringBuilder sb = new StringBuilder();
         for (String key : headers.keySet()) {
-            responseHeaders += (key + headers.get(key) + NEW_LINE);
+            sb.append(key);
+            sb.append(headers.get(key));
+            sb.append(NEW_LINE);
         }
-        return responseHeaders;
+        return sb.toString();
     }
 }

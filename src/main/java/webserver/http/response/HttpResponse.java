@@ -23,10 +23,6 @@ public class HttpResponse {
         return new HttpResponse(httpVersion);
     }
 
-    public void addCookie(Cookie cookie) {
-        responseHeader.addCookie(cookie);
-    }
-
     public void updateStatusLine(HttpStatus httpStatus) {
         statusLine.setHttpStatus(httpStatus);
     }
@@ -43,15 +39,28 @@ public class HttpResponse {
         responseBody.setBody(modelAndView.getByteView());
     }
 
-    public StatusLine getStatusLine() {
-        return statusLine;
-    }
-
-    public ResponseHeader getResponseHeader() {
-        return responseHeader;
-    }
-
     public byte[] getResponseBody() {
         return responseBody.getBody();
+    }
+
+    public void addCookie(Cookie cookie) {
+        cookies.put(cookie.getName(), cookie);
+    }
+
+    public String writeHeader() {
+        return this.responseHeader.toString();
+    }
+
+    public String writeStatusLine() {
+        return this.statusLine.toString() + "\r\n";
+    }
+
+    public String writeCookie() {
+        StringBuilder sb = new StringBuilder();
+        for (String key : cookies.keySet()) {
+            sb.append("Set-cookie: ");
+            sb.append(cookies.get(key).toString());
+        }
+        return sb.toString();
     }
 }
