@@ -1,10 +1,11 @@
 package http.controller;
 
 import db.DataBase;
-import http.model.*;
+import http.model.HttpRequest;
+import http.model.HttpResponse;
+import http.model.HttpSession;
 import model.User;
 
-import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
 import static com.google.common.net.HttpHeaders.SET_COOKIE;
 
 public class LoginController implements Controller {
@@ -21,17 +22,11 @@ public class LoginController implements Controller {
 
             return new HttpResponse.Builder()
                     .sendRedirect("/index.html")
-                    .protocols(HttpProtocols.HTTP1_1)
-                    .status(HttpStatus.FOUND)
-                    .addHeader(CONTENT_TYPE, ContentType.HTML.getType())
                     .addHeader(SET_COOKIE, "JSESSIONID=" + httpSession.getId() + "; Path=/")
                     .build();
         }
         return new HttpResponse.Builder()
                 .sendRedirect("/user/login_failed.html")
-                .protocols(HttpProtocols.HTTP1_1)
-                .status(HttpStatus.FOUND)
-                .addHeader(CONTENT_TYPE, ContentType.HTML.getType())
                 .build();
     }
 }

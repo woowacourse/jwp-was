@@ -1,10 +1,9 @@
 package http.controller;
 
 import db.DataBase;
-import http.model.*;
+import http.model.HttpRequest;
+import http.model.HttpResponse;
 import model.User;
-
-import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
 
 public class SignUpController implements Controller {
     @Override
@@ -18,9 +17,6 @@ public class SignUpController implements Controller {
 
         return new HttpResponse.Builder()
                 .sendRedirect("/index.html")
-                .protocols(HttpProtocols.HTTP1_1)
-                .status(HttpStatus.FOUND)
-                .addHeader(CONTENT_TYPE, ContentType.HTML.getType())
                 .build();
     }
 }

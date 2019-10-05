@@ -45,9 +45,6 @@ public class ListController implements Controller {
 
         return new HttpResponse.Builder()
                 .sendRedirect("/user/login.html")
-                .protocols(HttpProtocols.HTTP1_1)
-                .status(HttpStatus.FOUND)
-                .addHeader(CONTENT_TYPE, ContentType.HTML.getType())
                 .build();
     }
 

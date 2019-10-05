@@ -2,8 +2,7 @@ package http.model;
 
 import utils.FileIoUtils;
 
-import static com.google.common.net.HttpHeaders.CONTENT_LENGTH;
-import static com.google.common.net.HttpHeaders.LOCATION;
+import static com.google.common.net.HttpHeaders.*;
 
 public class HttpResponse {
     private final static String ROOT_URI = "http://localhost:8080";
@@ -80,6 +79,9 @@ public class HttpResponse {
 
         public Builder sendRedirect(String filePath) {
             httpHeaders.addHeader(LOCATION, ROOT_URI + filePath);
+            protocols(HttpProtocols.HTTP1_1);
+            status(HttpStatus.FOUND);
+            addHeader(CONTENT_TYPE, ContentType.HTML.getType());
             return this;
         }
 

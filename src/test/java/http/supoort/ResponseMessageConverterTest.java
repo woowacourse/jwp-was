@@ -25,9 +25,6 @@ class ResponseMessageConverterTest {
     void Redirect_convert_테스트() {
         HttpResponse httpResponse = HttpResponse.builder()
                 .sendRedirect("/index.html")
-                .protocols(HttpProtocols.HTTP1_1)
-                .status(HttpStatus.FOUND)
-                .addHeader(CONTENT_TYPE, ContentType.HTML.getType())
                 .build();
 
         assertThat(ResponseMessageConverter.convertHeader(httpResponse).contains("HTTP/1.1 302 Found")).isTrue();
