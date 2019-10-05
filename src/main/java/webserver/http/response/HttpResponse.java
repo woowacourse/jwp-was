@@ -14,9 +14,9 @@ public class HttpResponse {
     private Map<String, Cookie> cookies = new HashMap<>();
 
     private HttpResponse(String httpVersion) {
-        this.statusLine = new StatusLine(httpVersion);
-        this.responseHeader = new ResponseHeader();
-        this.responseBody = new ResponseBody();
+        statusLine = new StatusLine(httpVersion);
+        responseHeader = new ResponseHeader();
+        responseBody = new ResponseBody();
     }
 
     public static HttpResponse of(String httpVersion) {
@@ -47,12 +47,16 @@ public class HttpResponse {
         cookies.put(cookie.getName(), cookie);
     }
 
+    public Cookie getCookie(String cookieName) {
+        return cookies.get(cookieName);
+    }
+
     public String writeHeader() {
-        return this.responseHeader.toString();
+        return responseHeader.toString();
     }
 
     public String writeStatusLine() {
-        return this.statusLine.toString() + "\r\n";
+        return statusLine.toString() + "\r\n";
     }
 
     public String writeCookie() {

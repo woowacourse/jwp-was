@@ -84,6 +84,10 @@ public class HttpRequest {
     }
 
     public String getHttpVersion() {
-        return this.requestLine.getVersion();
+        return requestLine.getVersion();
+    }
+
+    public void addHeader(String key, String value) {
+        requestHeader.add(key, value);
     }
 }
