@@ -1,8 +1,6 @@
 package controller;
 
-import controller.exception.NotSupportMethod;
 import db.DataBase;
-import http.HttpStatusCode;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.User;
@@ -15,18 +13,12 @@ public class CreateUserController extends AbstractController {
     public static final String PATH = "/user/create";
 
     @Override
-    void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        throw new NotSupportMethod("Not Support : " + httpRequest.getUri() + httpRequest.getMethod());
-    }
-
-    @Override
     void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         save(httpRequest.getParameter("userId"),
                 httpRequest.getParameter("password"),
                 httpRequest.getParameter("name"),
                 httpRequest.getParameter("email"));
 
-        httpResponse.setStatusCode(HttpStatusCode.FOUND);
         httpResponse.redirect("/");
     }
 

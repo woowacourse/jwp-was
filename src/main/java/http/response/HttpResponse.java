@@ -45,6 +45,7 @@ public class HttpResponse {
 
     public void redirect(String uri) {
         String contentType = MediaType.getContentType(uri);
+        httpResponseStatusLine.setHttpStatusCode(HttpStatusCode.FOUND);
         httpResponseHeader.addField("Content-Type", contentType + ";charset=utf-8");
         httpResponseHeader.setLocation(uri);
     }
@@ -55,6 +56,8 @@ public class HttpResponse {
         logger.debug("request uri : {}", uri);
         logger.debug("request file full path : {}", MediaType.getFullPath(uri));
         logger.debug("request file contentType : {}", MediaType.getContentType(uri));
+
+        httpResponseStatusLine.setHttpStatusCode(HttpStatusCode.OK);
 
         this.httpResponseBody = new HttpResponseBody(FileIoUtils.loadFileFromClasspath(MediaType.getFullPath(uri)));
         httpResponseHeader.addField("Content-Type", contentType + ";charset=utf-8");
