@@ -10,7 +10,7 @@ class CookieTest {
         Cookie cookie = new Cookie("JSESSIONID", "sessionId");
         cookie.setDomain("woowa.com");
 
-        String expected = "name=JSESSIONID ;value=sessionId ;domain=woowa.com ;path=/ ;";
+        String expected = "JSESSIONID=sessionId ;domain=woowa.com ;path=/ ;";
         assertThat(cookie.toString()).isEqualTo(expected);
     }
 }
