@@ -11,7 +11,8 @@ class HttpRequestTest {
 
     @BeforeEach
     void setUp() {
-        RequestLine requestLine = new RequestLine(HttpMethod.GET, HttpProtocols.HTTP1_1, new HttpUri("/user/list"));
+        String requestMessage = "GET /user/list HTTP/1.1";
+        RequestLine requestLine = new RequestLine(requestMessage);
         HttpParameters httpParameters = new HttpParameters();
         HttpHeaders httpHeaders = new HttpHeaders();
         HttpRequest httpRequest = new HttpRequest(requestLine, httpParameters, httpHeaders);
@@ -21,7 +22,8 @@ class HttpRequestTest {
 
     @Test
     void 기존_세션으로_요청_getHttpSession() {
-        RequestLine requestLine = new RequestLine(HttpMethod.GET, HttpProtocols.HTTP1_1, new HttpUri("/user/list"));
+        String requestMessage = "GET /user/list HTTP/1.1";
+        RequestLine requestLine = new RequestLine(requestMessage);
         HttpParameters httpParameters = new HttpParameters();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.addHeader("Cookie", sessionId);
@@ -33,7 +35,8 @@ class HttpRequestTest {
 
     @Test
     void 세션없이_요청_getHttpSession() {
-        RequestLine requestLine = new RequestLine(HttpMethod.GET, HttpProtocols.HTTP1_1, new HttpUri("/user/list"));
+        String requestMessage = "GET /user/list HTTP/1.1";
+        RequestLine requestLine = new RequestLine(requestMessage);
         HttpParameters httpParameters = new HttpParameters();
         HttpHeaders httpHeaders = new HttpHeaders();
         HttpRequest httpRequest = new HttpRequest(requestLine, httpParameters, httpHeaders);

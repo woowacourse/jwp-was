@@ -30,7 +30,8 @@ class LoginControllerTest {
     @Test
     void 로그인_성공() {
         Controller controller = new LoginController();
-        RequestLine requestLine = new RequestLine(HttpMethod.POST, HttpProtocols.HTTP1_1, new HttpUri("/user/login"));
+        String requestMessage = "POST /user/login HTTP/1.1";
+        RequestLine requestLine = new RequestLine(requestMessage);
         HttpParameters httpParameters = new HttpParameters();
         httpParameters.addParameter("userId", "coogie");
         httpParameters.addParameter("password", "coogie");
@@ -45,7 +46,8 @@ class LoginControllerTest {
     @Test
     void 아이디_없는_경우() {
         Controller controller = new LoginController();
-        RequestLine requestLine = new RequestLine(HttpMethod.POST, HttpProtocols.HTTP1_1, new HttpUri("/user/login"));
+        String requestMessage = "POST /user/login HTTP/1.1";
+        RequestLine requestLine = new RequestLine(requestMessage);
         HttpParameters httpParameters = new HttpParameters();
         httpParameters.addParameter("userId", "coogi");
         httpParameters.addParameter("password", "coogie");
@@ -60,7 +62,8 @@ class LoginControllerTest {
     @Test
     void 비밀번호_틀린_경우() {
         Controller controller = new LoginController();
-        RequestLine requestLine = new RequestLine(HttpMethod.POST, HttpProtocols.HTTP1_1, new HttpUri("/user/login"));
+        String requestMessage = "POST /user/login HTTP/1.1";
+        RequestLine requestLine = new RequestLine(requestMessage);
         HttpParameters httpParameters = new HttpParameters();
         httpParameters.addParameter("userId", "coogie");
         httpParameters.addParameter("password", "coogi");

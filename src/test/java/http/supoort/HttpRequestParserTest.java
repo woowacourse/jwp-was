@@ -1,7 +1,9 @@
 package http.supoort;
 
 import http.controller.NotFoundException;
-import http.model.*;
+import http.model.HttpMethod;
+import http.model.HttpRequest;
+import http.model.RequestLine;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -15,7 +17,8 @@ class HttpRequestParserTest {
     @Test
     void 올바른_입력_파싱_확인() {
         InputStream in = new ByteArrayInputStream("GET /index.html HTTP/1.1\r\nHost: localhost:8080/".getBytes());
-        RequestLine requestLine = new RequestLine(HttpMethod.GET, HttpProtocols.of("HTTP/1.1"), new HttpUri("/index.html"));
+        String requestMessage = "GET /index.html HTTP/1.1";
+        RequestLine requestLine = new RequestLine(requestMessage);
         HttpRequest httpRequest = new HttpRequest(requestLine, null, null);
         HttpRequest parsedRequest = HttpRequestParser.parse(in);
         assertThat(parsedRequest.getRequestLine().getHttpMethod()).isEqualTo(httpRequest.getRequestLine().getHttpMethod());
@@ -25,8 +28,8 @@ class HttpRequestParserTest {
     @Test
     void 올바른_입력_파라미터_존재_파싱_확인() {
         InputStream in = new ByteArrayInputStream("GET /index.html?name=coogi&age=25 HTTP/1.1\r\nHost: localhost:8080/".getBytes());
-
-        RequestLine requestLine = new RequestLine(HttpMethod.GET, HttpProtocols.of("HTTP/1.1"), new HttpUri("/index.html"));
+        String requestMessage = "GET /index.html HTTP/1.1";
+        RequestLine requestLine = new RequestLine(requestMessage);
         HttpRequest httpRequest = new HttpRequest(requestLine, null, null);
         HttpRequest parsedRequest = HttpRequestParser.parse(in);
 
