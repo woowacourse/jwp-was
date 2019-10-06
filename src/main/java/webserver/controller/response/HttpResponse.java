@@ -4,19 +4,13 @@ import exception.UnregisteredURLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
-import webserver.controller.cookie.HttpCookie;
 import webserver.controller.request.HttpRequest;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.StringJoiner;
-import java.util.stream.Stream;
-
-import static webserver.controller.LoginController.LOGIN_SUCCESS_INDEX;
 
 
 public class HttpResponse {
@@ -35,6 +29,9 @@ public class HttpResponse {
         this.headerFields = builder.headerFields;
         this.cookieFields = builder.cookieFields;
         this.body = builder.body;
+    }
+
+    public HttpResponse() {
     }
 
     public static ResponseBuilder builder() {
@@ -73,8 +70,16 @@ public class HttpResponse {
     }
 
     public static HttpResponse badRequest(String message) {
+        return errorResponse(message, HttpStatus.BAD_REQUEST);
+    }
+
+    public static HttpResponse NotFound(String message) {
+        return errorResponse(message, HttpStatus.NOT_FOUND);
+    }
+
+    private static HttpResponse errorResponse(String message, HttpStatus httpStatus) {
         return HttpResponse.builder()
-            .httpStatus(HttpStatus.BAD_REQUEST)
+            .httpStatus(httpStatus)
             .connection("close")
             .message(message)
             .build();
@@ -97,6 +102,10 @@ public class HttpResponse {
         return redirectBuild(httpRequest, redirecUrl)
             .setCookie(httpRequest.getCookieFields())
             .build();
+    }
+
+    public static HttpResponse InternerServerError(String message) {
+        return errorResponse(message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     public HttpStatus getHttpStatus() {
