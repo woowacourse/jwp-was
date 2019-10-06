@@ -1,9 +1,7 @@
 package http.controller;
 
-import http.model.HttpHeaders;
-import http.model.HttpRequest;
-import http.model.HttpStatus;
-import http.model.RequestLine;
+import http.model.*;
+import model.User;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -15,8 +13,13 @@ class ListControllerTest {
         String requestMessage = "GET /user/list HTTP/1.1";
         RequestLine requestLine = new RequestLine(requestMessage);
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.addHeader("Cookie", "JSESSIONID=123456");
         HttpRequest httpRequest = new HttpRequest(requestLine, null, httpHeaders);
+
+
+        User user = new User("coogie123", "password", "coogie", "coogie@gmail.com");
+        HttpSession httpSession = httpRequest.getHttpSession();
+        httpSession.setAttributes("user", user);
+        httpHeaders.addHeader("Cookie", "JSESSIONID=" + httpSession.getId());
 
         assertThat(controller.service(httpRequest).getStatusLine().getHttpStatus()).isEqualTo(HttpStatus.OK);
     }

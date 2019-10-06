@@ -20,7 +20,7 @@ public class Cookie {
         }
     }
 
-    public boolean hasCookie(String key) {
-        return cookieMap != null && cookieMap.get(key) != null;
+    public String getCookieValue(String key) {
+        return cookieMap.get(key);
     }
 }

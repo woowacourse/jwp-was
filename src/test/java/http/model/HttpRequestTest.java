@@ -26,7 +26,7 @@ class HttpRequestTest {
         RequestLine requestLine = new RequestLine(requestMessage);
         HttpParameters httpParameters = new HttpParameters();
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.addHeader("Cookie", sessionId);
+        httpHeaders.addHeader("Cookie", "JSESSIONID=" + sessionId);
         HttpRequest httpRequest = new HttpRequest(requestLine, httpParameters, httpHeaders);
         HttpSession newSession = httpRequest.getHttpSession();
 
