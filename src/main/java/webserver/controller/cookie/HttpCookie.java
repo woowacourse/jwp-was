@@ -13,8 +13,8 @@ import java.util.StringJoiner;
 import java.util.UUID;
 
 public class HttpCookie {
-    private static final String TRUE = "true";
-    private static final String FALSE = "false";
+    public static final String TRUE = "true";
+    public static final String FALSE = "false";
     private Map<String, String> fields;
     private List<String> singleOption;
 
@@ -54,5 +54,9 @@ public class HttpCookie {
     public void setSessionId(String sessionId) {
         this.fields.put("sessionid", sessionId);
         this.fields.put("logined", TRUE);
+    }
+
+    public boolean isLogined() {
+        return this.fields.get("logined").equals(TRUE);
     }
 }
