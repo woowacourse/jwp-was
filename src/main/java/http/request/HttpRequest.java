@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class HttpRequest {
+public class HttpRequest implements HttpRequestAccessor {
     private static final Logger log = LoggerFactory.getLogger(HttpRequest.class);
 
     private static final String LAST_LINE = "";

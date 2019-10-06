@@ -5,11 +5,10 @@ import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import webserver.BadRequestException;
 import webserver.controller.Controller;
-import webserver.controller.FileIOController;
+import webserver.controller.PageTemplateController;
+import webserver.pageprovider.FilePageProvider;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class FileServerRouter implements Router {
     private static final Logger log = LoggerFactory.getLogger(FileServerRouter.class);
@@ -19,6 +18,12 @@ public class FileServerRouter implements Router {
             "static",
             "templates"
     );
+
+    private final Map<String, FilePageProvider> filePageProviders = new HashMap<String, FilePageProvider>() {{
+        for (String directoryPrefix : directoryPrefixes) {
+            put(directoryPrefix, FilePageProvider.fromDirectory(directoryPrefix));
+        }
+    }};
 
     private FileServerRouter() {
     }
@@ -37,7 +42,7 @@ public class FileServerRouter implements Router {
                 .orElseThrow(() -> BadRequestException.ofPattern(pattern));
         log.debug("prefix :{}, pattern: {}", prefix, pattern);
 
-        return new FileIOController(prefix);
+        return PageTemplateController.ofGetPageProvider(filePageProviders.get(prefix));
     }
 
     @Override

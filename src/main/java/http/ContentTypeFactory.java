@@ -47,4 +47,9 @@ public class ContentTypeFactory {
         }
         return Optional.empty();
     }
+
+    public static boolean canCreate(String accept, ContentType wantedContentType) {
+        return supplyContentTypesFromClient(accept).stream()
+                .anyMatch(contentType -> contentType.canAccept(wantedContentType));
+    }
 }

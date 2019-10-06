@@ -16,6 +16,7 @@ public enum ContentType {
     RSS("application/rss+xml", "rss"),
     MAP("application/json", "map"),
     MJS("text/javascript", "mjs"),
+    OCTET_STREAM("application/octet-stream", ""),
     // Manifest files
     WEBMANIFEST("application/manifest+json", "webmanifest"),
     APPCACHE("text/cache-manifest", "appcache"),

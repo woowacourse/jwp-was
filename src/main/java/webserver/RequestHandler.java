@@ -43,7 +43,6 @@ public class RequestHandler implements Runnable {
                 // 그렇다면... controller 에서 response 관련 해주어야 할 로직들이 이 곳에 모일 수 있을 것 같은데..
                 // (예를 들어 압축, 캐시, 템플릿 적용 등등)
             } catch (RuntimeException e) {
-                // show error page
                 logger.error("runtime error: ", e);
                 responseErrorPage(httpResponse, e);
             }
