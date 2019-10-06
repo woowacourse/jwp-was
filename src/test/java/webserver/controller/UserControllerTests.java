@@ -13,7 +13,7 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static webserver.ModelAndView.NON_STATIC_FILE_PATH;
 
-public class UserControllerTests extends BasicControllerTests {
+public class UserControllerTests extends BasicTests {
     private UserController userController;
 
     @BeforeEach

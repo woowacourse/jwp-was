@@ -11,7 +11,7 @@ import java.io.IOException;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static webserver.ModelAndView.NON_STATIC_FILE_PATH;
 
-public class IndexControllerTests extends BasicControllerTests {
+public class IndexControllerTests extends BasicTests {
     private IndexController indexController;
 
     @BeforeEach
