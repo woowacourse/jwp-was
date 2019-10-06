@@ -1,5 +1,6 @@
 package webserver.controller;
 
+import http.ContentType;
 import http.ContentTypeFactory;
 import http.NotAcceptableException;
 import http.request.HttpRequest;
@@ -67,16 +68,27 @@ public class PageTemplateController extends AbstractController {
 
     private void tryDo(PageProvider pageProvider, HttpRequest request, HttpResponse response) {
         Page page = pageProvider.provide(PageProviderRequest.from(request), PageProviderResponse.from(response));
-
-        String accept = request.getHeader("Accept");
-        if (!ContentTypeFactory.canCreate(accept, page.getContentType())) {
-            throw NotAcceptableException.from(accept);
+        if (page.isRedirectPage()) {
+            response.setHeader("Location", page.getLocation());
+            response.response302Header();
+            return;
         }
+
+        validateContentType(request, page.getContentType());
         response.setHeader("Content-Type", page.getContentType().toHeaderValue());
+
         byte[] body = page.getBody();
         response.setHeader("Content-Length", Integer.toString(body.length));
+
         response.response200Header();
         response.responseBody(body);
+    }
+
+    private void validateContentType(HttpRequest request, ContentType wantedContentType) {
+        String accept = request.getHeader("Accept");
+        if (!ContentTypeFactory.canCreate(accept, wantedContentType)) {
+            throw NotAcceptableException.from(accept);
+        }
     }
 
     @Override

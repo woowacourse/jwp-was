@@ -2,6 +2,7 @@ package webserver.router;
 
 import webserver.controller.*;
 import webserver.pageprovider.UserListPageProvider;
+import webserver.pageprovider.UserProfilePageProvider;
 
 public class RouterFactory {
     private static Router GLOBAL_ROUTER;
@@ -13,7 +14,7 @@ public class RouterFactory {
         Router basicRouter = BasicRouter.getInstance()
                 .addController(pattern -> pattern.equals("/user/create"), new UserSignUpController())
                 .addController(pattern -> pattern.equals("/user/list"), PageTemplateController.ofGetPageProvider(new UserListPageProvider()))
-                .addController(pattern -> pattern.equals("/user/profile"), new UserProfileController())
+                .addController(pattern -> pattern.equals("/user/profile"), PageTemplateController.ofGetPageProvider(new UserProfilePageProvider()))
                 .addController(pattern -> pattern.equals("/user/logout"), new LogoutController())
                 .addController(pattern -> pattern.equals("/user/login"), new LoginController());
 

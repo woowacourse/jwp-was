@@ -3,6 +3,8 @@ package webserver.page;
 import http.ContentType;
 
 public interface Page {
+    String EMPTY = "";
+
     // response 에서 page 를 가지고 바디를 만들어 낼 수 있어야 할 것임
     // - 필요한 것
     //      - contentType 알아내기
@@ -14,4 +16,12 @@ public interface Page {
     ContentType getContentType();
 
     byte[] getBody();
+
+    default boolean isRedirectPage() {
+        return false;
+    }
+
+    default String getLocation() {
+        return EMPTY;
+    }
 }
