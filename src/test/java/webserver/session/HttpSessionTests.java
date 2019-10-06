@@ -64,7 +64,7 @@ public class HttpSessionTests {
     void removeAttribute() {
         HttpSession newHttpSession = new HttpSession(UUID.randomUUID());
         newHttpSession.setAttributes("model", new Model("remove"));
-        newHttpSession.removeAttribue("model");
+        newHttpSession.removeAttribute("model");
         assertThat(newHttpSession.isEmpty()).isTrue();
     }
 
