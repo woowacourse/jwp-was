@@ -48,11 +48,11 @@ public class PageTemplateController extends AbstractController {
 
     @Override
     public void doPost(HttpRequest request, HttpResponse response) {
-        if (getPageProvider == null) {
+        if (postPageProvider == null) {
             super.doGet(request, response);
             return;
         }
-        doMethod(getPageProvider, request, response);
+        doMethod(postPageProvider, request, response);
     }
 
     private void doMethod(PageProvider pageProvider, HttpRequest request, HttpResponse response) {
