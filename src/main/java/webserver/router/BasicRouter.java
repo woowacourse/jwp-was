@@ -14,10 +14,6 @@ public class BasicRouter implements Router {
         this.matches = matches;
     }
 
-    private static class BillPughSingleton {
-        private static final BasicRouter INSTANCE = new BasicRouter(new ArrayList<>());
-    }
-
     public static BasicRouter getInstance() {
         return BillPughSingleton.INSTANCE;
     }
@@ -39,11 +35,15 @@ public class BasicRouter implements Router {
 
     @Override
     public boolean canHandle(String pattern) {
-        long numMatched =  matches.stream()
+        long numMatched = matches.stream()
                 .filter(match -> match.isMatched(pattern))
                 .count();
 
         return 0 < numMatched;
+    }
+
+    private static class BillPughSingleton {
+        private static final BasicRouter INSTANCE = new BasicRouter(new ArrayList<>());
     }
 }
 

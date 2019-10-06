@@ -12,10 +12,6 @@ public class ElapsedTimeAdvice implements MethodInterceptor {
     private ElapsedTimeAdvice() {
     }
 
-    private static class BillPughSingleton {
-        private static final ElapsedTimeAdvice INSTANCE = new ElapsedTimeAdvice();
-    }
-
     public static Advice getInstance() {
         return BillPughSingleton.INSTANCE;
     }
@@ -42,6 +38,10 @@ public class ElapsedTimeAdvice implements MethodInterceptor {
 
     private Object invokeUsingProceed(MethodInvocation invocation) throws Throwable {
         return invocation.proceed();
+    }
+
+    private static class BillPughSingleton {
+        private static final ElapsedTimeAdvice INSTANCE = new ElapsedTimeAdvice();
     }
 }
 

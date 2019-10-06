@@ -28,10 +28,6 @@ public class FileServerRouter implements Router {
     private FileServerRouter() {
     }
 
-    private static class BillPughSingleton {
-        private static final FileServerRouter INSTANCE = new FileServerRouter();
-    }
-
     public static Router getInstance() {
         return BillPughSingleton.INSTANCE;
     }
@@ -58,5 +54,9 @@ public class FileServerRouter implements Router {
 
     private boolean canHandleWithPrefix(String prefix, String pattern) {
         return FileIoUtils.canUseResourceFromFilePath(String.format("./%s%s", prefix, pattern));
+    }
+
+    private static class BillPughSingleton {
+        private static final FileServerRouter INSTANCE = new FileServerRouter();
     }
 }

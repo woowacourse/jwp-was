@@ -9,9 +9,8 @@ import java.net.URLDecoder;
 import java.util.*;
 
 public class Parameters {
-    private static final Logger log = LoggerFactory.getLogger(Parameters.class);
-
     public static final Parameters EMPTY_PARAMETERS = new Parameters(new HashMap<>());
+    private static final Logger log = LoggerFactory.getLogger(Parameters.class);
     private static final String UTF_8 = "utf-8";
 
     private final Map<String, String> parameters;

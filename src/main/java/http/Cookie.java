@@ -13,6 +13,8 @@ public class Cookie {
     private static final String SEQUENCES_SPLITTER = ";";
     private static final String SEQUENCE_SPLITTER = "=";
 
+    private static final String SESSION_ID_NAME = "JWP_WAS_SESSION_ID";
+
     private final Map<String, String> values;
 
     private Cookie(Map<String, String> values) {
@@ -26,6 +28,12 @@ public class Cookie {
     public static Cookie fromCookie(String cookie) {
         String cookieWithoutSpace = cookie.replace(" ", "");
         return new Cookie(parse(cookieWithoutSpace));
+    }
+
+    public static Cookie fromSession(Session session) {
+        Cookie cookie = create();
+        cookie.add(SESSION_ID_NAME, session.getId());
+        return cookie;
     }
 
     private static Map<String, String> parse(String cookie) {

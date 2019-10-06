@@ -9,18 +9,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class SessionManager {
-    private static final Logger log = LoggerFactory.getLogger(SessionManager.class);
-
     public static final String EMPTY_ID = "";
-
+    private static final Logger log = LoggerFactory.getLogger(SessionManager.class);
     private final Map<String, Session> sessions;
 
     SessionManager(Map<String, Session> sessions) {
         this.sessions = sessions;
-    }
-
-    private static class BillPughSingleton {
-        private static final SessionManager INSTANCE = new SessionManager(new HashMap<>());
     }
 
     public static SessionManager getInstance() {
@@ -47,5 +41,9 @@ public class SessionManager {
 
     private void remove(String id) {
         sessions.remove(id);
+    }
+
+    private static class BillPughSingleton {
+        private static final SessionManager INSTANCE = new SessionManager(new HashMap<>());
     }
 }

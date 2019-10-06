@@ -13,10 +13,6 @@ public class OrderedRouter implements Router {
         this.orderedRouters = orderedRouters;
     }
 
-    private static class BillPughSingleton {
-        private static final OrderedRouter INSTANCE = new OrderedRouter(new ArrayList<>());
-    }
-
     public static OrderedRouter getInstance() {
         return OrderedRouter.BillPughSingleton.INSTANCE;
     }
@@ -43,5 +39,9 @@ public class OrderedRouter implements Router {
                 .count();
 
         return 0 < numCanHandle;
+    }
+
+    private static class BillPughSingleton {
+        private static final OrderedRouter INSTANCE = new OrderedRouter(new ArrayList<>());
     }
 }

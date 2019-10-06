@@ -1,5 +1,6 @@
 package http.response;
 
+import http.Cookie;
 import http.StatusCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,13 +9,12 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-public class HttpResponse {
+public class HttpResponse implements HttpResponseAccessor {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
     private final IDataOutputStream dos;
-
-    private StatusCode code;
     private final HttpResponseHeader httpResponseHeader;
+    private StatusCode code;
 
     private HttpResponse(IDataOutputStream dos) {
         this.dos = dos;
@@ -68,5 +68,10 @@ public class HttpResponse {
         }
         sb.append("\r\n");
         return sb.toString();
+    }
+
+    @Override
+    public void setCookie(Cookie cookie) {
+        setHeader("Set-Cookie", cookie.toHeaderValue());
     }
 }

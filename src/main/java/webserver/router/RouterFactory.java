@@ -1,11 +1,7 @@
 package webserver.router;
 
-import webserver.controller.LoginController;
-import webserver.controller.LogoutController;
 import webserver.controller.PageTemplateController;
-import webserver.pageprovider.UserListPageProvider;
-import webserver.pageprovider.UserProfilePageProvider;
-import webserver.pageprovider.UserSignUpPageProvider;
+import webserver.pageprovider.*;
 
 public class RouterFactory {
     private static Router GLOBAL_ROUTER;
@@ -18,8 +14,8 @@ public class RouterFactory {
                 .addController(pattern -> pattern.equals("/user/create"), PageTemplateController.ofPostPageProvider(new UserSignUpPageProvider()))
                 .addController(pattern -> pattern.equals("/user/list"), PageTemplateController.ofGetPageProvider(new UserListPageProvider()))
                 .addController(pattern -> pattern.equals("/user/profile"), PageTemplateController.ofGetPageProvider(new UserProfilePageProvider()))
-                .addController(pattern -> pattern.equals("/user/logout"), new LogoutController())
-                .addController(pattern -> pattern.equals("/user/login"), new LoginController());
+                .addController(pattern -> pattern.equals("/user/logout"), PageTemplateController.ofGetPageProvider(new LogoutPageProvider()))
+                .addController(pattern -> pattern.equals("/user/login"), PageTemplateController.ofPostPageProvider(new LoginPageProvider()));
 
         // register routers in order
         orderedRouter.pushBack(FileServerRouter.getInstance());

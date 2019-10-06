@@ -75,7 +75,6 @@ public enum ContentType {
     }
 
     public static Optional<ContentType> fromExtension(String extension) {
-        System.out.println(contentTypesByExtension.toString());
         return Optional.ofNullable(contentTypesByExtension.get(extension));
     }
 
