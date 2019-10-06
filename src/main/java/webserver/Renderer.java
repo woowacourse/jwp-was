@@ -5,7 +5,6 @@ import webserver.controller.response.HttpStatus;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +21,7 @@ public class Renderer {
         HttpStatus httpStatus = httpResponse.getHttpStatus();
         renderResponseLine(httpResponse, dataOutputStream, httpStatus);
 
-        if(httpResponse.hasCookie()) {
+        if (httpResponse.hasCookie()) {
             renderResponseCookie(dataOutputStream, httpResponse.getCookieFields());
         }
 
@@ -37,7 +36,7 @@ public class Renderer {
 
     private void renderResponseCookie(DataOutputStream dataOutputStream, List<String> cookieFields) throws IOException {
         for (String cookieField : cookieFields) {
-            dataOutputStream.writeBytes("Set-Cookie: "+ cookieField +"; Path=/ \r\n");
+            dataOutputStream.writeBytes("Set-Cookie: " + cookieField + "; Path=/ \r\n");
         }
     }
 

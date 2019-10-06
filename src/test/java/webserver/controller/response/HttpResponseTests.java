@@ -1,14 +1,11 @@
 package webserver.controller.response;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import utils.FileIoUtils;
 import webserver.controller.BasicTests;
-import webserver.controller.cookie.HttpCookie;
 import webserver.controller.request.HttpRequest;
 import webserver.controller.request.MimeType;
 
-import java.io.IOException;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;

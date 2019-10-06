@@ -34,17 +34,13 @@ public class HttpRequest {
 
     private HttpCookie createCookie() {
         HttpSessionManager httpSessionManager = HttpSessionManager.getInstance();
-        if(isFirstRequest()) {
+        if (isFirstRequest()) {
             UUID uuid = UUIDGenerator.generateUUID();
             httpSessionManager.addSession(new HttpSession(uuid));
             return new HttpCookie(uuid);
         }
         String cookieValue = this.httpHeaderFields.getHeaderFieldValue("Cookie");
         return new HttpCookie(cookieValue);
-    }
-
-    public String getSessionId() {
-        return this.httpCookie.getSessionId();
     }
 
     public boolean isFirstRequest() {
@@ -87,16 +83,8 @@ public class HttpRequest {
         this.httpCookie.setSessionId(sessionId);
     }
 
-    public String getCookieValues() {
-        return this.httpCookie.getCookieValues();
-    }
-
     public Map<String, String> getCookieFields() {
         return this.httpCookie.getFields();
-    }
-
-    public HttpCookie getHttpCookie() {
-        return httpCookie;
     }
 
     public boolean isLogined() {

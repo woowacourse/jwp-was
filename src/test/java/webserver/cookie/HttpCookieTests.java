@@ -1,6 +1,5 @@
 package webserver.cookie;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import webserver.controller.BasicTests;
 import webserver.controller.cookie.HttpCookie;

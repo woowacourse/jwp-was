@@ -52,7 +52,7 @@ public class HttpResponse {
     }
 
     public static HttpResponse ok(HttpRequest httpRequest, byte[] body) {
-        if(httpRequest.isFirstRequest()) {
+        if (httpRequest.isFirstRequest()) {
             return HttpResponse.builder()
                 .version(httpRequest.getVersion())
                 .httpStatus(HttpStatus.OK)
@@ -141,7 +141,7 @@ public class HttpResponse {
         private HttpStatus httpStatus;
         private Map<String, String> headerFields = new LinkedHashMap<>();
         private List<String> cookieFields = new ArrayList<>();
-        private byte[] body = "" .getBytes();
+        private byte[] body = "".getBytes();
 
         private ResponseBuilder httpStatus(HttpStatus httpStatus) {
             this.httpStatus = httpStatus;
@@ -181,7 +181,7 @@ public class HttpResponse {
         private ResponseBuilder setCookie(Map<String, String> cookieValues) {
             cookieValues.keySet()
                 .stream()
-                .forEach(key -> cookieFields.add(key+"="+cookieValues.get(key)));
+                .forEach(key -> cookieFields.add(key + "=" + cookieValues.get(key)));
             return this;
         }
 

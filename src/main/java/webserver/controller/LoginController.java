@@ -2,10 +2,7 @@ package webserver.controller;
 
 import db.DataBase;
 import model.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import webserver.ModelAndView;
-import webserver.controller.cookie.HttpCookie;
 import webserver.controller.request.HttpRequest;
 import webserver.controller.response.HttpResponse;
 import webserver.controller.session.HttpSessionManager;
@@ -16,7 +13,6 @@ import java.util.Optional;
 
 public class LoginController extends AbstractController {
     public static final String LOGIN_SUCCESS_INDEX = "/index.html";
-    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
     private static final String USER_ID = "userId";
     private static final String PASSWORD = "password";
     private static final String LOGIN_FAILED_INDEX = "/user/login_failed.html";

@@ -1,6 +1,5 @@
 package webserver.controller;
 
-import ch.qos.logback.core.db.dialect.DBUtil;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
