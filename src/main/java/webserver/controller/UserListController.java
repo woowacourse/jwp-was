@@ -15,9 +15,7 @@ public class UserListController extends AbstractController {
 
     @Override
     protected HttpResponse doGet(HttpRequest httpRequest) throws IOException {
-        String[] logined = httpRequest.getHeaderFieldValue("Cookie").split("=");
-
-        if (logined[1].equals("true")) {
+        if (httpRequest.isLogined()) {
             Collection<User> users = DataBase.findAll();
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addModel("users", users);
@@ -26,6 +24,6 @@ public class UserListController extends AbstractController {
             return HttpResponse.ok(httpRequest, modelAndView.getView());
         }
 
-        return HttpResponse.sendRedirect(httpRequest, NON_LOGIN_REDIRECT_URL, false);
+        return HttpResponse.sendRedirect(httpRequest, NON_LOGIN_REDIRECT_URL);
     }
 }

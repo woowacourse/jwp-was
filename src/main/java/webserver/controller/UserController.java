@@ -26,6 +26,6 @@ public class UserController extends AbstractController {
         Map<String, String> requestBodyFields = httpRequest.getBodyFields();
         User user = UserFactory.of(requestBodyFields);
         DataBase.addUser(user);
-        return HttpResponse.sendRedirect(httpRequest, SAVE_REDIRECT_URL, false);
+        return HttpResponse.sendRedirect(httpRequest, SAVE_REDIRECT_URL);
     }
 }
