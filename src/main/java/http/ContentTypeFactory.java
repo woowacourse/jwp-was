@@ -14,11 +14,9 @@ public class ContentTypeFactory {
     private final static String ACCEPT_SPLITTER = ",";
     private final static String ACCEPT_ELEMENT_SPLITTER = ";";
 
-    public static ContentType create(String accept, ContentTypesSupplier contentTypesSupplierSupportedByServer) {
+    public static ContentType create(String accept, List<ContentType> contentTypesSupportedByServer) {
         List<ContentType> expectedContentTypesFromClient = supplyContentTypesFromClient(accept);
         log.debug("contentTypesFromClient: {}", Arrays.toString(expectedContentTypesFromClient.toArray()));
-
-        List<ContentType> contentTypesSupportedByServer = contentTypesSupplierSupportedByServer.get();
         log.debug("contentTypesFromServer: {}", Arrays.toString(contentTypesSupportedByServer.toArray()));
 
         return matchFrom(expectedContentTypesFromClient, contentTypesSupportedByServer)
