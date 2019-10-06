@@ -16,4 +16,8 @@ public class HttpHeaderFields {
     public String getHeaderFieldValue(String key) {
         return headerFields.get(key);
     }
+
+    public boolean doesNotHaveCookie() {
+        return headerFields.get("Cookie") == null;
+    }
 }

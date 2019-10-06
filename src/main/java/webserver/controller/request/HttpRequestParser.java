@@ -30,7 +30,6 @@ public class HttpRequestParser {
         String[] splitedParams = requestParams.split(BODY_FIELD_SEPERATE_DELEMETER);
 
         for (String splitedParam : splitedParams) {
-            logger.debug(">>> splitedParam {}", splitedParam);
             String[] queryParam = splitedParam.split(BODY_KEY_VALUE_DELEMETER);
             bodyFields.put(queryParam[0], queryParam[1]);
         }

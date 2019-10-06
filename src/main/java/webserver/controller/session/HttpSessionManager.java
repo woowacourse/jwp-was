@@ -2,6 +2,7 @@ package webserver.controller.session;
 
 
 import exception.invalidSessionIdException;
+import model.User;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,12 +20,20 @@ public class HttpSessionManager {
         return HttpSessionManager.LazyHolder.INSTANCE;
     }
 
+    public String setAttribute(String key , Object value) {
+        UUID uuid = UUIDGenerator.generateUUID();
+        HttpSession httpSession = new HttpSession(uuid);
+        httpSession.setAttributes(key, value);
+        this.sessions.put(uuid.toString(),httpSession);
+        return uuid.toString();
+    }
+
     private static class LazyHolder {
         private static final HttpSessionManager INSTANCE = new HttpSessionManager();
     }
 
-    public void addSession(UUID uuid, HttpSession httpSession) {
-        sessions.put(uuid.toString(), httpSession);
+    public void addSession(HttpSession httpSession) {
+        sessions.put(httpSession.getUuid().toString(), httpSession);
     }
 
     public void removeSession(UUID uuid) {

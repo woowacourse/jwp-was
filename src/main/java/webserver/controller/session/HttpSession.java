@@ -13,7 +13,6 @@ public class HttpSession {
         this.attributes = new HashMap<>();
         this.uuid = uuid;
         this.httpSessionManager = HttpSessionManager.getInstance();
-        httpSessionManager.addSession(uuid, this);
     }
 
     public UUID getUuid() {
@@ -28,7 +27,7 @@ public class HttpSession {
         return attributes.get(name);
     }
 
-    public void removeAttribue(String name) {
+    public void removeAttribute(String name) {
         attributes.remove(name);
     }
 

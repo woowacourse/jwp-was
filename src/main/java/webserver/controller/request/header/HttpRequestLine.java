@@ -4,9 +4,9 @@ import exception.HttpMethodNotFoundException;
 import webserver.controller.request.MimeType;
 
 public class HttpRequestLine {
-    private final HttpMethod httpMethod;
-    private final String url;
-    private final String version;
+    private HttpMethod httpMethod;
+    private String url;
+    private String version;
 
     public HttpRequestLine(String[] requestLine) throws HttpMethodNotFoundException {
         this.httpMethod = HttpMethod.match(requestLine[0]);
