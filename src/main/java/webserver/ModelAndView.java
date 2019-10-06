@@ -1,6 +1,6 @@
 package webserver;
 
-import webserver.engine.TemplateEngine;
+import webserver.engine.HandleBar;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -13,13 +13,13 @@ public class ModelAndView {
     private byte[] view;
 
     public void applyTemplateEngine(String viewName) throws IOException {
-        TemplateEngine templateEngine = new TemplateEngine();
+        HandleBar handleBar = new HandleBar();
 
-        templateEngine.setPrefix(NON_STATIC_FILE_PATH);
+        handleBar.setPrefix(NON_STATIC_FILE_PATH);
         String[] splitedViewName = viewName.split("\\.");
-        templateEngine.setSuffix("." + splitedViewName[1]);
-        templateEngine.compile(splitedViewName[0]);
-        view = templateEngine.apply(this.models);
+        handleBar.setSuffix("." + splitedViewName[1]);
+        handleBar.compile(splitedViewName[0]);
+        view = handleBar.apply(this.models);
     }
 
     public ModelAndView() {
