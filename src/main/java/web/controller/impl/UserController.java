@@ -6,6 +6,7 @@ import web.db.DataBase;
 import web.model.User;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
+import webserver.message.response.ResponseBuilder;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -23,6 +24,6 @@ public class UserController extends AbstractController {
         DataBase.addUser(user);
         LOG.debug(user.toString());
 
-        return new Response.Builder().redirectUrl("/").build();
+        return new ResponseBuilder().redirectUrl("/").build();
     }
 }

@@ -11,6 +11,7 @@ import web.model.User;
 import webserver.message.exception.NotFoundFileException;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
+import webserver.message.response.ResponseBuilder;
 import webserver.session.SessionContextHolder;
 
 import java.io.IOException;
@@ -28,7 +29,7 @@ public class UserListController extends AbstractController {
     @Override
     protected Response doGet(final Request request) {
         if (!isLogined(request)) {
-            return new Response.Builder().redirectUrl(LOGIN_PATH).build();
+            return new ResponseBuilder().redirectUrl(LOGIN_PATH).build();
         }
 
         List<User> users = new ArrayList<>(DataBase.findAll());
@@ -46,7 +47,7 @@ public class UserListController extends AbstractController {
             Template template = handlebars.compile(USER_LIST_PATH);
             String profilePage = template.apply(map);
 
-            return new Response.Builder().body(profilePage).build();
+            return new ResponseBuilder().body(profilePage).build();
         } catch (IOException e) {
             throw new NotFoundFileException();
         }

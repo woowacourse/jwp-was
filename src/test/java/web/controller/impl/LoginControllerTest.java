@@ -8,7 +8,7 @@ import web.model.User;
 import webserver.StaticFile;
 import webserver.message.HttpCookie;
 import webserver.message.request.Request;
-import webserver.message.response.Response;
+import webserver.message.response.ResponseBuilder;
 import webserver.session.HttpSession;
 import webserver.session.SessionContextHolder;
 import webserver.support.RequestHelper;
@@ -49,7 +49,7 @@ class LoginControllerTest extends RequestHelper {
     @DisplayName("로그인 페이지 get")
     void getLogin() throws IOException, URISyntaxException {
         assertThat(loginController.doGet(getRequest).toBytes())
-                .isEqualTo(new Response.Builder()
+                .isEqualTo(new ResponseBuilder()
                         .body(new StaticFile(TEMPLATES_PATH + USER_LOGIN_PAGE))
                         .build()
                         .toBytes());
@@ -64,7 +64,7 @@ class LoginControllerTest extends RequestHelper {
         SessionContextHolder.addSession(session);
 
         assertThat(loginController.doPost(postRequest).toBytes())
-                .isEqualTo(new Response.Builder()
+                .isEqualTo(new ResponseBuilder()
                         .redirectUrl(INDEX_PAGE_URL)
                         .addCookie(new HttpCookie.Builder("logined", "true").path("/").build())
                         .addCookie(new HttpCookie.Builder("sessionId", session.getId()).path("/").build())
@@ -77,7 +77,7 @@ class LoginControllerTest extends RequestHelper {
         Request request = new Request(ioUtils(requestPostWithWeirdQuery));
 
         assertThat(loginController.doPost(request).toBytes())
-                .isEqualTo(new Response.Builder()
+                .isEqualTo(new ResponseBuilder()
                         .redirectUrl(LOGIN_FAILED_PAGE_URL)
                         .addCookie(new HttpCookie.Builder("logined", "false").path("/").build())
                         .build().toBytes());
@@ -89,7 +89,7 @@ class LoginControllerTest extends RequestHelper {
         DataBase.addUser(new User("javajigi", "1234", "포비", "pobi@pobi.com"));
 
         assertThat(loginController.doPost(postRequest).toBytes())
-                .isEqualTo(new Response.Builder()
+                .isEqualTo(new ResponseBuilder()
                         .redirectUrl(LOGIN_FAILED_PAGE_URL)
                         .addCookie(new HttpCookie.Builder("logined", "false").path("/").build())
                         .build().toBytes());

@@ -8,8 +8,7 @@ import webserver.message.HttpCookie;
 import webserver.message.exception.NotFoundFileException;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
-import webserver.session.HttpSession;
-import webserver.session.SessionContextHolder;
+import webserver.message.response.ResponseBuilder;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -29,7 +28,7 @@ public class LoginController extends AbstractController {
     @Override
     protected Response doGet(Request request) {
         try {
-            return new Response.Builder().body(new StaticFile(TEMPLATES_PATH + USER_LOGIN_PAGE)).build();
+            return new ResponseBuilder().body(new StaticFile(TEMPLATES_PATH + USER_LOGIN_PAGE)).build();
         } catch (IOException | URISyntaxException e) {
             throw new NotFoundFileException();
         }
@@ -43,10 +42,10 @@ public class LoginController extends AbstractController {
         LOG.info("{} userId: {}, password: {}", TAG, userId, password);
 
         if (!matchesUser(userId, password)) {
-            return new Response.Builder().redirectUrl(LOGIN_FAILED_PAGE).addCookie(createCookie("logined", "false")).build();
+            return new ResponseBuilder().redirectUrl(LOGIN_FAILED_PAGE).addCookie(createCookie("logined", "false")).build();
         }
 
-        return new Response.Builder()
+        return new ResponseBuilder()
                 .redirectUrl(INDEX_PAGE_URL)
                 .addCookie(createCookie("logined", "true"))
                 .addCookie(createCookie(SESSION_ID, enrollSession(userId).getId()))

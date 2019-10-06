@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import web.db.DataBase;
 import web.model.User;
 import webserver.message.request.Request;
-import webserver.message.response.Response;
+import webserver.message.response.ResponseBuilder;
 import webserver.session.HttpSession;
 import webserver.session.SessionContextHolder;
 import webserver.support.RequestHelper;
@@ -51,6 +51,6 @@ class UserListControllerTest extends RequestHelper {
     @DisplayName("로그인이 안 된 상태에서 유저 리스트 페이지에 접근시 리다이렉트 확인")
     void loginFail() {
         assertThat(this.userListController.service(this.request).toBytes())
-                .isEqualTo(new Response.Builder().redirectUrl("/user/login").build().toBytes());
+                .isEqualTo(new ResponseBuilder().redirectUrl("/user/login").build().toBytes());
     }
 }

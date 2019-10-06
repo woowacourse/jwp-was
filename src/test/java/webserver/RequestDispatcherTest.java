@@ -3,7 +3,7 @@ package webserver;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import webserver.message.HttpStatus;
-import webserver.message.response.Response;
+import webserver.message.response.ResponseBuilder;
 import webserver.support.RequestHelper;
 
 import java.io.IOException;
@@ -18,7 +18,7 @@ class RequestDispatcherTest extends RequestHelper {
     void forwardIndex1() {
         final byte[] response = RequestDispatcher.forward(ioUtils(requestPostWithQuery));
 
-        assertThat(response).isEqualTo(new Response.Builder()
+        assertThat(response).isEqualTo(new ResponseBuilder()
                 .redirectUrl("/")
                 .build().toBytes());
     }
@@ -28,7 +28,7 @@ class RequestDispatcherTest extends RequestHelper {
     void forwardIndex2() {
         final byte[] response = RequestDispatcher.forward(ioUtils(requestPostWithQuery));
 
-        assertThat(response).isEqualTo(new Response.Builder()
+        assertThat(response).isEqualTo(new ResponseBuilder()
                 .redirectUrl("/")
                 .build().toBytes());
     }
@@ -39,7 +39,7 @@ class RequestDispatcherTest extends RequestHelper {
         final byte[] response = RequestDispatcher.forward(ioUtils(requestGetHeader));
         final StaticFile staticFile = new StaticFile("./templates/index.html");
 
-        assertThat(response).isEqualTo(new Response.Builder()
+        assertThat(response).isEqualTo(new ResponseBuilder()
                 .httpStatus(HttpStatus.OK)
                 .body(staticFile)
                 .build().toBytes());
@@ -51,7 +51,7 @@ class RequestDispatcherTest extends RequestHelper {
         final byte[] response = RequestDispatcher.forward(ioUtils(requestNotFoundHeader));
         final StaticFile staticFile = new StaticFile("./templates/error/404_not_found.html");
 
-        assertThat(response).isEqualTo(new Response.Builder()
+        assertThat(response).isEqualTo(new ResponseBuilder()
                 .httpStatus(HttpStatus.NOT_FOUND)
                 .body(staticFile)
                 .build().toBytes());
@@ -63,7 +63,7 @@ class RequestDispatcherTest extends RequestHelper {
         final byte[] response = RequestDispatcher.forward(null);
         final StaticFile staticFile = new StaticFile("./templates/error/500_internal_error.html");
 
-        assertThat(response).isEqualTo(new Response.Builder()
+        assertThat(response).isEqualTo(new ResponseBuilder()
                 .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(staticFile)
                 .build().toBytes());

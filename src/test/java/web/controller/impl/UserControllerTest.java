@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
+import webserver.message.response.ResponseBuilder;
 import webserver.support.RequestHelper;
 
 import java.io.IOException;
@@ -24,6 +25,6 @@ class UserControllerTest extends RequestHelper {
 
         // then
         assertThat(new String(response.toBytes()))
-                .isEqualTo(new String(new Response.Builder().redirectUrl("/").build().toBytes()));
+                .isEqualTo(new String(new ResponseBuilder().redirectUrl("/").build().toBytes()));
     }
 }

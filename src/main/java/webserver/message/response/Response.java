@@ -1,16 +1,8 @@
 package webserver.message.response;
 
-import webserver.StaticFile;
 import webserver.message.HttpCookie;
-import webserver.message.HttpStatus;
-import webserver.message.HttpVersion;
-import webserver.message.MediaType;
 
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class Response {
     private static final byte[] HEADER_BODY_DELIMITER_BYTES = "\r\n\r\n".getBytes();
@@ -19,7 +11,7 @@ public class Response {
     private final ResponseHeader header;
     private final ResponseBody body;
 
-    private Response(final ResponseStatusLine statusLine, final ResponseHeader header, final ResponseBody body) {
+    Response(final ResponseStatusLine statusLine, final ResponseHeader header, final ResponseBody body) {
         this.statusLine = statusLine;
         this.header = header;
         this.body = body;

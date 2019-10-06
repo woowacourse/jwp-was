@@ -14,8 +14,7 @@ class ResponseTest {
     @BeforeEach
     void setUp() {
         String body = "<h1>HI</h1>";
-        this.response = new Response
-                .Builder(HttpVersion.HTTP_1_1, HttpStatus.OK)
+        this.response = new ResponseBuilder(HttpVersion.HTTP_1_1, HttpStatus.OK)
                 .body(body)
                 .build();
     }
