@@ -7,25 +7,26 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class SessionPool {
+public class SessionManager {
     public static final String SESSION_ID = "JSESSIONID";
-    private static final Logger logger = LoggerFactory.getLogger(SessionPool.class);
-    private static final Map<UUID, HttpSession> sessionPool = new HashMap<>();
+    public static final int DEFAULT_EXPIRE_TIME = 30;
+    private static final Logger logger = LoggerFactory.getLogger(SessionManager.class);
+    private static final Map<UUID, HttpSession> managedSessions = new HashMap<>();
 
     public static HttpSession getSession() {
         UUID uuid = UUID.randomUUID();
-        HttpSession httpSession = new HttpSession(uuid);
-        sessionPool.put(uuid, httpSession);
+        HttpSession httpSession = new HttpSession(uuid, DEFAULT_EXPIRE_TIME);
+        managedSessions.put(uuid, httpSession);
 
         logger.info("session create {}", httpSession);
         return httpSession;
     }
 
     public static HttpSession getSession(UUID uuid) {
-        return sessionPool.get(uuid);
+        return managedSessions.get(uuid);
     }
 
     public static void removeSession(UUID uuid) {
-        sessionPool.remove(uuid);
+        managedSessions.remove(uuid);
     }
 }
