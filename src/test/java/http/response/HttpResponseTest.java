@@ -1,6 +1,7 @@
 package http.response;
 
 import http.ContentType;
+import http.StatusCode;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 
@@ -25,7 +26,7 @@ class HttpResponseTest {
         // builder 사용해서 타입 정하고 charset 정하면 좋을듯..!
         response.setHeader("Content-Type", ContentType.HTML.toHeaderValue());
         response.setHeader("Content-Length", Integer.toString(expectedLengthOfBodyContent));
-        response.response200Header();
+        response.responseHeader(StatusCode.OK);
 
         // [TODO] 검증 방식을 바꿔야 함
         for (String line : expectedHeader) {

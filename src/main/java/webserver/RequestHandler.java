@@ -52,8 +52,7 @@ public class RequestHandler implements Runnable {
             Page page = pageProvider.provide(PageProviderRequest.from(httpRequest), PageProviderResponse.from(httpResponse));
 
             if (page.isRedirectPage()) {
-                httpResponse.setHeader("Location", page.getLocation());
-                httpResponse.response302Header();
+                httpResponse.redirect(page.getLocation());
                 return;
             }
 
@@ -86,13 +85,8 @@ public class RequestHandler implements Runnable {
 
     private void respondPage(HttpRequest request, HttpResponse response, Page page) {
         validateContentType(request, page.getContentType());
-        response.setHeader("Content-Type", page.getContentType().toHeaderValue());
 
-        byte[] body = page.getBody();
-        response.setHeader("Content-Length", Integer.toString(body.length));
-
-        response.response200Header();
-        response.responseBody(body);
+        response.forward(page);
     }
 
     private void validateContentType(HttpRequest request, ContentType wantedContentType) {
