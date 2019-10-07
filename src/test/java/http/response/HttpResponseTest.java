@@ -20,9 +20,8 @@ class HttpResponseTest {
     void index페이지_forward() {
         httpResponse.forward(INDEX_HTML);
 
-        StatusLine statusLine = httpResponse.getStatusLine();
-        assertThat(statusLine.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
-        assertThat(statusLine.getHttpStatus()).isEqualTo(HttpStatus.OK);
+        assertThat(httpResponse.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
+        assertThat(httpResponse.getHttpStatus()).isEqualTo(HttpStatus.OK);
 
         assertThat(httpResponse.getHeader("Content-Length")).isEqualTo(0);
         assertThat(httpResponse.getHeader("Content-Type")).isEqualTo("text/html");
@@ -32,9 +31,8 @@ class HttpResponseTest {
     void index페이지_redirect() {
         httpResponse.redirect(INDEX_HTML);
 
-        StatusLine statusLine = httpResponse.getStatusLine();
-        assertThat(statusLine.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
-        assertThat(statusLine.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
+        assertThat(httpResponse.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
+        assertThat(httpResponse.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
 
         assertThat(httpResponse.getHeader("Location")).isEqualTo(INDEX_HTML);
     }

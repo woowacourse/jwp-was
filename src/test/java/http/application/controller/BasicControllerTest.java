@@ -7,7 +7,6 @@ import http.request.HttpRequestParser;
 import http.response.HttpContentType;
 import http.response.HttpResponse;
 import http.response.HttpStatus;
-import http.response.StatusLine;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,9 +40,8 @@ public class BasicControllerTest {
         httpRequest = HttpRequestParser.parse(in);
         controller.service(httpRequest, httpResponse);
 
-        StatusLine statusLine = httpResponse.getStatusLine();
-        assertThat(statusLine.getHttpStatus()).isEqualTo(HttpStatus.OK);
-        assertThat(statusLine.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
+        assertThat(httpResponse.getHttpStatus()).isEqualTo(HttpStatus.OK);
+        assertThat(httpResponse.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
 
         assertThat(httpResponse.getHeader(CONTENT_TYPE)).isEqualTo(HttpContentType.HTML.getContentType());
     }
@@ -56,9 +54,8 @@ public class BasicControllerTest {
 
         controller.service(httpRequest, httpResponse);
 
-        StatusLine statusLine = httpResponse.getStatusLine();
-        assertThat(statusLine.getHttpStatus()).isEqualTo(HttpStatus.OK);
-        assertThat(statusLine.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
+        assertThat(httpResponse.getHttpStatus()).isEqualTo(HttpStatus.OK);
+        assertThat(httpResponse.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
 
         assertThat(httpResponse.getHeader(CONTENT_TYPE)).isEqualTo(HttpContentType.CSS.getContentType());
     }
@@ -71,9 +68,8 @@ public class BasicControllerTest {
 
         controller.service(httpRequest, httpResponse);
 
-        StatusLine statusLine = httpResponse.getStatusLine();
-        assertThat(statusLine.getHttpStatus()).isEqualTo(HttpStatus.OK);
-        assertThat(statusLine.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
+        assertThat(httpResponse.getHttpStatus()).isEqualTo(HttpStatus.OK);
+        assertThat(httpResponse.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
 
         assertThat(httpResponse.getHeader(CONTENT_TYPE)).isEqualTo(HttpContentType.JS.getContentType());
     }
@@ -86,9 +82,8 @@ public class BasicControllerTest {
 
         controller.service(httpRequest, httpResponse);
 
-        StatusLine statusLine = httpResponse.getStatusLine();
-        assertThat(statusLine.getHttpStatus()).isEqualTo(HttpStatus.OK);
-        assertThat(statusLine.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
+        assertThat(httpResponse.getHttpStatus()).isEqualTo(HttpStatus.OK);
+        assertThat(httpResponse.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
 
         assertThat(httpResponse.getHeader(CONTENT_TYPE)).isEqualTo(HttpContentType.FONT.getContentType());
     }
@@ -101,9 +96,8 @@ public class BasicControllerTest {
 
         controller.service(httpRequest, httpResponse);
 
-        StatusLine statusLine = httpResponse.getStatusLine();
-        assertThat(statusLine.getHttpStatus()).isEqualTo(HttpStatus.OK);
-        assertThat(statusLine.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
+        assertThat(httpResponse.getHttpStatus()).isEqualTo(HttpStatus.OK);
+        assertThat(httpResponse.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
 
         assertThat(httpResponse.getHeader(CONTENT_TYPE)).isEqualTo(HttpContentType.IMG.getContentType());
     }

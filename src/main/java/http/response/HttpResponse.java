@@ -22,8 +22,12 @@ public class HttpResponse {
     private HttpResponseBody httpResponseBody;
     private List<HttpCookie> httpCookies = new ArrayList<>();
 
-    public StatusLine getStatusLine() {
-        return statusLine;
+    public HttpStatus getHttpStatus() {
+        return statusLine.getHttpStatus();
+    }
+
+    public HttpVersion getHttpVersion() {
+        return statusLine.getHttpVersion();
     }
 
     public String getHeader(String key) {

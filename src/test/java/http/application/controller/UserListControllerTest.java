@@ -7,7 +7,6 @@ import http.request.HttpRequest;
 import http.request.HttpRequestParser;
 import http.response.HttpResponse;
 import http.response.HttpStatus;
-import http.response.StatusLine;
 import model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,9 +44,8 @@ public class UserListControllerTest {
 
         controller.service(httpRequest, httpResponse);
 
-        StatusLine statusLine = httpResponse.getStatusLine();
-        assertThat(statusLine.getHttpStatus()).isEqualTo(HttpStatus.OK);
-        assertThat(statusLine.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
+        assertThat(httpResponse.getHttpStatus()).isEqualTo(HttpStatus.OK);
+        assertThat(httpResponse.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
 
         String httpResponseBody = new String(httpResponse.getHttpResponseBody().getBody());
         assertTrue(httpResponseBody.contains(user.getUserId()));
@@ -62,9 +60,8 @@ public class UserListControllerTest {
 
         controller.service(httpRequest, httpResponse);
 
-        StatusLine statusLine = httpResponse.getStatusLine();
-        assertThat(statusLine.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
-        assertThat(statusLine.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
+        assertThat(httpResponse.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
+        assertThat(httpResponse.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
         assertThat(httpResponse.getHeader("Location")).isEqualTo("/user/login.html");
     }
 }

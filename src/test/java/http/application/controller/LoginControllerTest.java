@@ -7,7 +7,6 @@ import http.request.HttpRequest;
 import http.request.HttpRequestParser;
 import http.response.HttpResponse;
 import http.response.HttpStatus;
-import http.response.StatusLine;
 import model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,9 +39,8 @@ public class LoginControllerTest {
 
         loginController.service(httpRequest, httpResponse);
 
-        StatusLine statusLine = httpResponse.getStatusLine();
-        assertThat(statusLine.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
-        assertThat(statusLine.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
+        assertThat(httpResponse.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
+        assertThat(httpResponse.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
 
         HttpCookie loginedCookie = httpResponse.getHttpCookies().get(LOGINED_COOKIE);
 
@@ -58,9 +56,8 @@ public class LoginControllerTest {
 
         loginController.service(httpRequest, httpResponse);
 
-        StatusLine statusLine = httpResponse.getStatusLine();
-        assertThat(statusLine.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
-        assertThat(statusLine.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
+        assertThat(httpResponse.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
+        assertThat(httpResponse.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
 
         HttpCookie httpCookie = httpResponse.getHttpCookies().get(LOGINED_COOKIE);
 
@@ -76,9 +73,8 @@ public class LoginControllerTest {
 
         loginController.service(httpRequest, httpResponse);
 
-        StatusLine statusLine = httpResponse.getStatusLine();
-        assertThat(statusLine.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
-        assertThat(statusLine.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
+        assertThat(httpResponse.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
+        assertThat(httpResponse.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
 
         assertThat(httpResponse.getHeader("Location")).isEqualTo("/index.html");
     }

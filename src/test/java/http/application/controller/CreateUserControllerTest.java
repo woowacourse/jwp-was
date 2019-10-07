@@ -6,7 +6,6 @@ import http.request.HttpRequest;
 import http.request.HttpRequestParser;
 import http.response.HttpResponse;
 import http.response.HttpStatus;
-import http.response.StatusLine;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,9 +34,8 @@ class CreateUserControllerTest {
         HttpResponse httpResponse = new HttpResponse();
         controller.service(httpRequest, httpResponse);
 
-        StatusLine statusLine = httpResponse.getStatusLine();
-        assertThat(statusLine.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
-        assertThat(statusLine.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
+        assertThat(httpResponse.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
+        assertThat(httpResponse.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
 
         assertThat(httpResponse.getHeader("Location")).isEqualTo("/index.html");
     }

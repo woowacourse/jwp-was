@@ -34,7 +34,7 @@ public class HttpResponseSender {
     }
 
     private static void responseHeader(final DataOutputStream dos, final HttpResponse httpResponse) throws IOException {
-        dos.writeBytes(httpResponse.getStatusLine().getHttpVersion() + " " + httpResponse.getStatusLine().getHttpStatus() + "\r\n");
+        dos.writeBytes(httpResponse.getHttpVersion() + " " + httpResponse.getHttpStatus() + "\r\n");
 
         for (Map.Entry<String, String> element : httpResponse.getHeaders()) {
             dos.writeBytes(element.getKey() + ": " + element.getValue() + "\r\n");
