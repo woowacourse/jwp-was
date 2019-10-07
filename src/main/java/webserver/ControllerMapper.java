@@ -1,6 +1,7 @@
 package webserver;
 
 import controller.Controller;
+import controller.LoginController;
 import controller.UserController;
 import controller.exception.ControllerNotFoundException;
 import http.request.HttpRequest;
@@ -14,6 +15,7 @@ public class ControllerMapper {
     static {
         controllers = new HashMap<>();
         controllers.put("/user/create", new UserController());
+        controllers.put("/user/login", new LoginController());
     }
 
     public static Controller map(HttpRequest request) {

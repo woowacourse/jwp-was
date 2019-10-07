@@ -48,6 +48,14 @@ public class HttpResponse {
         return body;
     }
 
+    public HttpStatus getStatus() {
+        return status;
+    }
+
+    public String getHeader(String fieldName) {
+        return headers.getHeader(fieldName);
+    }
+
     public void setStatus(HttpStatus status) {
         this.status = status;
     }
