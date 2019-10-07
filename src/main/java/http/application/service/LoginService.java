@@ -46,7 +46,12 @@ public class LoginService implements Service {
     }
 
     private boolean isLogined(HttpCookies httpCookies) {
-        return Boolean.parseBoolean(httpCookies.get(LOGINED_COOKIE).getValue());
+        HttpCookie httpCookie = httpCookies.get(LOGINED_COOKIE);
+        if (httpCookie != null) {
+            return Boolean.parseBoolean(httpCookie.getValue());
+        }
+
+        return false;
     }
 
     private boolean authorize(User user, String password) {

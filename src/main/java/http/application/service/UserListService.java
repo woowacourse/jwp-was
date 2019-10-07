@@ -2,6 +2,7 @@ package http.application.service;
 
 import db.DataBase;
 import http.application.Service;
+import http.common.HttpCookie;
 import http.common.TemplateApplier;
 import http.request.HttpCookies;
 import http.request.HttpRequest;
@@ -28,6 +29,11 @@ public class UserListService implements Service {
     }
 
     private boolean isLogined(HttpCookies cookies) {
-        return Boolean.parseBoolean(cookies.get(LOGINED_COOKIE_KEY).getValue());
+        HttpCookie httpCookie = cookies.get(LOGINED_COOKIE_KEY);
+        if (httpCookie != null) {
+            return Boolean.parseBoolean(httpCookie.getValue());
+        }
+
+        return false;
     }
 }

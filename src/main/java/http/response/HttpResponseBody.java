@@ -1,22 +1,14 @@
 package http.response;
 
 public class HttpResponseBody {
-    private byte[] body;
-
-    private HttpResponseBody(final byte[] body) {
-        this.body = body;
-    }
-
-    public static HttpResponseBody empty() {
-        return new HttpResponseBody(new byte[]{});
-    }
-
-    public static HttpResponseBody of(byte[] body) {
-        return new HttpResponseBody(body);
-    }
+    private byte[] body = new byte[]{};
 
     public byte[] getBody() {
         return body;
+    }
+
+    public void setBody(byte[] body) {
+        this.body = body;
     }
 
     public int getLength() {

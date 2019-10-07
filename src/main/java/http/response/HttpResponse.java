@@ -22,6 +22,12 @@ public class HttpResponse {
     private HttpResponseBody httpResponseBody;
     private List<HttpCookie> httpCookies = new ArrayList<>();
 
+    public HttpResponse() {
+        this.statusLine = new StatusLine();
+        this.httpHeader = HttpHeader.init();
+        this.httpResponseBody = new HttpResponseBody();
+    }
+
     public HttpStatus getHttpStatus() {
         return statusLine.getHttpStatus();
     }
@@ -47,11 +53,11 @@ public class HttpResponse {
     }
 
     public void forward(String url) {
-        this.statusLine = new StatusLine(HttpStatus.OK, HttpVersion.HTTP_1_1);
-        this.httpHeader = HttpHeader.of(Arrays.asList(CONTENT_TYPE + HttpContentType.of(url).getContentType()));
+        statusLine.setOk(HttpVersion.HTTP_1_1);
+        httpHeader = HttpHeader.of(Arrays.asList(CONTENT_TYPE + HttpContentType.of(url).getContentType()));
 
         try {
-            this.httpResponseBody = HttpResponseBody.of(FileIoUtils.loadFileFromClasspath(url));
+            httpResponseBody.setBody(FileIoUtils.loadFileFromClasspath(url));
         } catch (IOException | URISyntaxException e) {
             logger.error("{}", e.getMessage());
         }
@@ -60,17 +66,16 @@ public class HttpResponse {
     }
 
     public void forward(byte[] body) {
-        this.statusLine = new StatusLine(HttpStatus.OK, HttpVersion.HTTP_1_1);
-        this.httpHeader = HttpHeader.of(Arrays.asList(CONTENT_TYPE + HttpContentType.HTML));
-        this.httpResponseBody = HttpResponseBody.of(body);
+        statusLine.setOk(HttpVersion.HTTP_1_1);
+        httpHeader = HttpHeader.of(Arrays.asList(CONTENT_TYPE + HttpContentType.HTML));
+        httpResponseBody.setBody(body);
 
         logger.info("{}", this);
     }
 
     public void redirect(String url) {
-        this.statusLine = new StatusLine(HttpStatus.FOUND, HttpVersion.HTTP_1_1);
-        this.httpHeader = HttpHeader.redirect(url);
-        this.httpResponseBody = HttpResponseBody.empty();
+        statusLine.setRedirect(HttpVersion.HTTP_1_1);
+        httpHeader.redirect(url);
     }
 
     public void setCookie(HttpCookie httpCookie) {

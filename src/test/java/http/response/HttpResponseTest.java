@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class HttpResponseTest {
 
@@ -23,7 +24,7 @@ class HttpResponseTest {
         assertThat(httpResponse.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
         assertThat(httpResponse.getHttpStatus()).isEqualTo(HttpStatus.OK);
 
-        assertThat(httpResponse.getHeader("Content-Length")).isEqualTo(0);
+        assertNull(httpResponse.getHeader("Content-Length"));
         assertThat(httpResponse.getHeader("Content-Type")).isEqualTo("text/html");
     }
 

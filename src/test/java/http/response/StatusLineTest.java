@@ -9,7 +9,8 @@ public class StatusLineTest {
 
     @Test
     void 생성() {
-        StatusLine statusLine = new StatusLine(HttpStatus.OK, HttpVersion.HTTP_1_1);
+        StatusLine statusLine = new StatusLine();
+        statusLine.setOk(HttpVersion.HTTP_1_1);
 
         assertThat(statusLine.getHttpStatus()).isEqualTo(HttpStatus.OK);
         assertThat(statusLine.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
