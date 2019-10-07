@@ -18,10 +18,10 @@ class HttpSessionTest {
     }
 
     @Test
-    void setAttribute() {
+    void addAttribute() {
         String id = UUID.randomUUID().toString();
         HttpSession httpSession = new HttpSession(id);
-        httpSession.setAttribute("test", "zino");
+        httpSession.addAttribute("test", "zino");
         assertThat(httpSession.getAttributes("test")).isEqualTo("zino");
     }
 
@@ -29,7 +29,7 @@ class HttpSessionTest {
     void removeAttribute() {
         String id = UUID.randomUUID().toString();
         HttpSession httpSession = new HttpSession(id);
-        httpSession.setAttribute("test", "zino");
+        httpSession.addAttribute("test", "zino");
         httpSession.removeAttribute("test");
 
         assertThrows(NotFoundSessionAttributeException.class, () -> httpSession.getAttributes("test"));
@@ -39,7 +39,7 @@ class HttpSessionTest {
     void invalidate() {
         String id = UUID.randomUUID().toString();
         HttpSession httpSession = new HttpSession(id);
-        httpSession.setAttribute("test", "zino");
+        httpSession.addAttribute("test", "zino");
         httpSession.invalidate();
 
         assertThrows(NotFoundSessionAttributeException.class, () -> httpSession.getAttributes("test"));

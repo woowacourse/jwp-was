@@ -2,15 +2,14 @@ package controller;
 
 import controller.exception.LoginUserException;
 import db.DataBase;
-import http.HttpCookie;
+import http.HttpSession;
+import http.HttpSessionStore;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Optional;
 
 public class LoginUserController extends AbstractController {
@@ -19,9 +18,10 @@ public class LoginUserController extends AbstractController {
     public static final String PATH = "/user/login";
 
     @Override
-    void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+    void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         String userId = httpRequest.getParameter("userId");
         String password = httpRequest.getParameter("password");
+        HttpSession session = HttpSessionStore.getSession(httpRequest.getSessionId());
 
         try {
             User user = Optional.ofNullable(DataBase.findUserById(userId))
@@ -30,11 +30,11 @@ public class LoginUserController extends AbstractController {
                 throw new LoginUserException("password not match");
             }
 
-            httpResponse.setCookie(new HttpCookie("logined", "true"));
+            session.addAttribute("logined", "true");
             httpResponse.redirect("/");
         } catch (LoginUserException e) {
-
-            httpResponse.setCookie(new HttpCookie("logined", "false"));
+            LOGGER.debug("login error");
+            session.addAttribute("logined", "false");
             httpResponse.redirect("/");
             e.printStackTrace();
         }
