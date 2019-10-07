@@ -14,14 +14,9 @@ public class ControllerContainer {
         controllers.put(CreateUserController.PATH, new CreateUserController());
         controllers.put(LoginUserController.PATH, new LoginUserController());
         controllers.put(UserListController.PATH, new UserListController());
-        controllers.put("file", new FileController());
     }
 
     public static Controller getController(boolean isContainExtension, String uri) {
-        if (isContainExtension) {
-            return controllers.get("file");
-        }
-
         return Optional.ofNullable(controllers.get(uri))
                 .orElseThrow(() -> new ControllerNotFoundException("not found" + uri));
     }

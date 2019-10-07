@@ -54,13 +54,11 @@ public class HttpResponse {
     public void forward(String uri) throws IOException, URISyntaxException {
         String contentType = MediaType.getContentType(uri);
 
-        logger.debug("request uri : {}", uri);
-        logger.debug("request file full path : {}", MediaType.getFullPath(uri));
-        logger.debug("request file contentType : {}", MediaType.getContentType(uri));
-
         httpResponseStatusLine.setHttpStatusCode(HttpStatusCode.OK);
 
         this.httpResponseBody = new HttpResponseBody(FileIoUtils.loadFileFromClasspath(MediaType.getFullPath(uri)));
+
+        logger.debug("file full path: {}", MediaType.getFullPath(uri));
         httpResponseHeader.addField("Content-Type", contentType + ";charset=utf-8");
         httpResponseHeader.addField("Content-Length", String.valueOf(httpResponseBody.getBodyLength()));
     }
@@ -70,19 +68,10 @@ public class HttpResponse {
     }
 
     public void writeResponse(DataOutputStream dataOutputStream) throws IOException {
-        logger.debug("response status line");
-        logger.debug("response header");
-
-
         dataOutputStream.writeBytes(httpResponseStatusLine.toString());
         dataOutputStream.writeBytes(httpResponseHeader.toString());
 
-        logger.debug("response status line: {}", httpResponseStatusLine.toString());
-        logger.debug("response header: {}", httpResponseHeader.toString());
-
         if (httpResponseBody != null) {
-            logger.debug("response header: {}", this.httpResponseBody.getBody());
-
             dataOutputStream.write(this.httpResponseBody.getBody(), 0, this.httpResponseBody.getBodyLength());
         }
 

@@ -36,7 +36,11 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = HttpRequestFactory.create(RequestParser.lineParse(inputStream));
             HttpResponse httpResponse = HttpResponse.of(httpRequest);
 
-            logger.debug("Request: {}", httpRequest.toString());
+            if (httpRequest.isContainExtension()) {
+                httpResponse.forward(httpRequest.getUri());
+                httpResponse.writeResponse(dataOutputStream);
+                return;
+            }
 
             Controller controller = ControllerContainer.getController(httpRequest.isContainExtension(), httpRequest.getUri());
             controller.service(httpRequest, httpResponse);
