@@ -34,18 +34,14 @@ public class HttpSession {
         attributes.clear();
     }
 
-    public static HttpSession get() {
+    public static HttpSession makeNew() {
         final HttpSession session = new HttpSession();
         set(session);
         return session;
     }
 
     public static HttpSession get(final String sessionId) {
-        final HttpSession session = manager.get(sessionId);
-        if (Objects.isNull(session) || EMPTY.equals(sessionId)) {
-            return get();
-        }
-        return session;
+        return manager.getOrDefault(sessionId, makeNew());
     }
 
     public static HttpSession set(HttpSession session) {
