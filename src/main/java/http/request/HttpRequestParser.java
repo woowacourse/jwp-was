@@ -2,6 +2,8 @@ package http.request;
 
 import http.common.HttpHeader;
 import http.common.HttpVersion;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.IOUtils;
 
 import java.io.BufferedReader;
@@ -12,9 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HttpRequestParser {
-    public static final String QUERY_STRING_DELIMITER = "\\?";
+    static final String QUERY_STRING_DELIMITER = "\\?";
+    private static final Logger logger = LoggerFactory.getLogger(HttpRequestParser.class);
     private static final String BLANK = " ";
     private static final String LAST_HEADER_LINE = "";
+    private static final String CONTENT_TYPE = "Content-Type";
 
     public static HttpRequest parse(final InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -22,9 +26,11 @@ public class HttpRequestParser {
         RequestLine requestLine = parseRequestLine(bufferedReader.readLine());
         HttpRequestParams requestParams = parseQueryParams(requestLine);
         HttpHeader httpHeader = parseRequestHeader(convertHeaderLines(bufferedReader));
-        HttpRequestBody httpRequestBody = parseRequestBody(bufferedReader, httpHeader.getContentLength());
+        ContentType contentType = ContentType.of(httpHeader.get(CONTENT_TYPE));
+        MessageBody messageBody = parseMessageBody(bufferedReader, contentType, httpHeader.getContentLength());
 
-        return new HttpRequest(requestLine, requestParams, httpHeader, httpRequestBody);
+        logger.info("new Request: {}", requestLine);
+        return new HttpRequest(requestLine, requestParams, httpHeader, messageBody);
     }
 
     private static RequestLine parseRequestLine(String requestLine) {
@@ -60,8 +66,14 @@ public class HttpRequestParser {
         return headerLines;
     }
 
-    private static HttpRequestBody parseRequestBody(BufferedReader bufferedReader,
-                                                    int contentLength) throws IOException {
-        return new HttpRequestBody(IOUtils.readData(bufferedReader, contentLength));
+    private static MessageBody parseMessageBody(BufferedReader bufferedReader,
+                                                ContentType contentType,
+                                                int contentLength) throws IOException {
+        if (contentType == null) {
+            return null;
+        }
+
+        String body = IOUtils.readData(bufferedReader, contentLength);
+        return contentType.getMessageBodyGenerator().apply(body);
     }
 }

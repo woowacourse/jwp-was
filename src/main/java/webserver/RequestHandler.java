@@ -21,7 +21,7 @@ public class RequestHandler implements Runnable {
 
     private Socket connection;
 
-    public RequestHandler(Socket connectionSocket) {
+    RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
     }
 
@@ -33,12 +33,13 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = HttpRequestParser.parse(in);
             DataOutputStream dos = new DataOutputStream(out);
 
-            Url requestUrl = httpRequest.getRequestLine().getUrl();
+            Url requestUrl = httpRequest.getUrl();
             logger.info("request url: {}", requestUrl);
 
             Controller controller = ControllerMapper.controllerMapping(requestUrl.getUrl());
             HttpResponse httpResponse = new HttpResponse();
             controller.service(httpRequest, httpResponse);
+            httpResponse.addJSessionId(httpRequest.getJSessionId());
 
             HttpResponseSender.send(dos, httpResponse);
         } catch (IOException e) {

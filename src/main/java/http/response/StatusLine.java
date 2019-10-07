@@ -4,11 +4,21 @@ import http.common.HttpVersion;
 
 public class StatusLine {
 
-    private final HttpStatus httpStatus;
-    private final HttpVersion httpVersion;
+    private HttpStatus httpStatus;
+    private HttpVersion httpVersion;
 
-    public StatusLine(HttpStatus httpStatus, HttpVersion httpVersion) {
+    public void setStatusLine(HttpStatus httpStatus, HttpVersion httpVersion) {
         this.httpStatus = httpStatus;
+        this.httpVersion = httpVersion;
+    }
+
+    public void setOk(HttpVersion httpVersion) {
+        this.httpStatus = HttpStatus.OK;
+        this.httpVersion = httpVersion;
+    }
+
+    public void setRedirect(HttpVersion httpVersion) {
+        this.httpStatus = HttpStatus.FOUND;
         this.httpVersion = httpVersion;
     }
 

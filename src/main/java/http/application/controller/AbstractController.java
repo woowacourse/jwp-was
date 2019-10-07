@@ -1,5 +1,6 @@
-package http.application;
+package http.application.controller;
 
+import http.application.Controller;
 import http.exception.NotSupportHttpMethodException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -8,7 +9,7 @@ public abstract class AbstractController implements Controller {
 
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
-        switch (httpRequest.getRequestLine().getHttpMethod()) {
+        switch (httpRequest.getHttpMethod()) {
             case GET:
                 doGet(httpRequest, httpResponse);
                 return;

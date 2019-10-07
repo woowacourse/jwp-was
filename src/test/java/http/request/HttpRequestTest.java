@@ -19,13 +19,14 @@ public class HttpRequestTest {
 
         HttpRequest httpRequest = HttpRequestParser.parse(in);
 
-        assertThat(httpRequest.getRequestLine()).isEqualTo(new RequestLine(
-                new Url("/user/create"), HttpMethod.GET, HttpVersion.HTTP_1_1));
+        assertThat(httpRequest.getHttpMethod()).isEqualTo(HttpMethod.GET);
+        assertThat(httpRequest.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
+        assertThat(httpRequest.getUrl()).isEqualTo(new Url("/user/create?userId=javajigi&password=password&name=JaeSung"));
+
         assertThat(httpRequest.getHttpHeader().get("Host")).isEqualTo("localhost:8080");
         assertThat(httpRequest.getHttpHeader().get("Connection")).isEqualTo("keep-alive");
         assertThat(httpRequest.getHttpHeader().get("Accept")).isEqualTo("*/*");
         assertThat(httpRequest.getHttpRequestParams()).isEqualTo(HttpRequestParams.of("userId=javajigi&password=password&name=JaeSung"));
-        assertThat(httpRequest.getHttpRequestBody()).isEqualTo(new HttpRequestBody(""));
     }
 
     @Test
@@ -34,14 +35,15 @@ public class HttpRequestTest {
 
         HttpRequest httpRequest = HttpRequestParser.parse(in);
 
-        assertThat(httpRequest.getRequestLine()).isEqualTo(new RequestLine(
-                new Url("/user/create"), HttpMethod.POST, HttpVersion.HTTP_1_1));
+        assertThat(httpRequest.getHttpMethod()).isEqualTo(HttpMethod.POST);
+        assertThat(httpRequest.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
+        assertThat(httpRequest.getUrl()).isEqualTo(new Url("/user/create"));
+
         assertThat(httpRequest.getHttpHeader().get("Host")).isEqualTo("localhost:8080");
         assertThat(httpRequest.getHttpHeader().get("Connection")).isEqualTo("keep-alive");
         assertThat(httpRequest.getHttpHeader().get("Content-Length")).isEqualTo("46");
         assertThat(httpRequest.getHttpHeader().get("Content-Type")).isEqualTo("application/x-www-form-urlencoded");
         assertThat(httpRequest.getHttpHeader().get("Accept")).isEqualTo("*/*");
         assertThat(httpRequest.getHttpRequestParams()).isEqualTo(HttpRequestParams.init());
-        assertThat(httpRequest.getHttpRequestBody().getBody()).isEqualTo("userId=javajigi&password=password&name=JaeSung");
     }
 }

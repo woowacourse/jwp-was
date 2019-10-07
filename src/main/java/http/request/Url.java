@@ -33,18 +33,20 @@ public class Url {
         if (o == null || getClass() != o.getClass()) return false;
         Url url1 = (Url) o;
         return Objects.equals(url, url1.url) &&
+                Objects.equals(rawUrl, url1.rawUrl) &&
                 httpRequestType == url1.httpRequestType;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(url, httpRequestType);
+        return Objects.hash(url, rawUrl, httpRequestType);
     }
 
     @Override
     public String toString() {
         return "Url{" +
                 "url='" + url + '\'' +
+                ", rawUrl='" + rawUrl + '\'' +
                 ", httpRequestType=" + httpRequestType +
                 '}';
     }
