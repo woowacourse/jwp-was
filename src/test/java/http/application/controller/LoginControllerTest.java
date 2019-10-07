@@ -68,4 +68,18 @@ public class LoginControllerTest {
         assertThat(httpCookie.getValue()).isEqualTo("false");
         assertThat(httpCookie.getPath()).isEqualTo("/");
     }
+
+    @Test
+    void 이미_로그인_된_상태에서_로그인_테스트() throws IOException {
+        InputStream in = new FileInputStream(BasicControllerTest.TEST_RESOURCES + "/http_already_login.txt");
+        httpRequest = HttpRequestParser.parse(in);
+
+        loginController.service(httpRequest, httpResponse);
+
+        StatusLine statusLine = httpResponse.getStatusLine();
+        assertThat(statusLine.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
+        assertThat(statusLine.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
+
+        assertThat(httpResponse.getHeader("Location")).isEqualTo("/index.html");
+    }
 }

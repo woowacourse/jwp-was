@@ -11,12 +11,22 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 public class LoginService implements Service {
     private static final Logger logger = LoggerFactory.getLogger(LoginService.class);
     private static final String COOKIE_PATH = "/";
+    private static final String LOGINED_COOKIE = "logined";
+    private static final String LOGINED_REDIRECT_URL = "/index.html";
+    private static final String LOGIN_FAILED_URL = "/user/login_failed.html";
 
     @Override
     public void execute(HttpRequest httpRequest, HttpResponse httpResponse) {
+        if (isLogined(httpRequest.getCookies())) {
+            httpResponse.redirect(LOGINED_REDIRECT_URL);
+            return;
+        }
+
         MessageBody messageBody = httpRequest.getMessageBody();
         String userId = messageBody.get("userId");
         String password = messageBody.get("password");
@@ -24,16 +34,25 @@ public class LoginService implements Service {
         User user = DataBase.findUserById(userId);
         boolean isAuthorized = authorize(user, password);
 
-        String redirectUrl = isAuthorized ? "/index.html" : "/user/login_failed.html";
+        String redirectUrl = isAuthorized ? LOGINED_REDIRECT_URL : LOGIN_FAILED_URL;
 
         httpResponse.redirect(redirectUrl);
-        httpResponse.setCookie(HttpCookie.builder("logined", isAuthorized + "").path(COOKIE_PATH).build());
+        httpResponse.setCookie(HttpCookie.builder(LOGINED_COOKIE, isAuthorized + "").path(COOKIE_PATH).build());
 
         if (isAuthorized) {
             HttpSession httpSession = httpRequest.getHttpSession();
             httpSession.setAttribute("user", user);
         }
         logger.info("login {}! redirect to {}", isAuthorized, redirectUrl);
+    }
+
+    private boolean isLogined(List<HttpCookie> httpCookies) {
+        return httpCookies.stream()
+                .anyMatch(this::checkLogin);
+    }
+
+    private boolean checkLogin(HttpCookie httpCookie) {
+        return LOGINED_COOKIE.equals(httpCookie.getName()) && Boolean.parseBoolean(httpCookie.getValue());
     }
 
     private boolean authorize(User user, String password) {
