@@ -2,17 +2,15 @@ package http.application.service;
 
 import db.DataBase;
 import http.application.Service;
-import http.common.HttpCookie;
 import http.common.TemplateApplier;
+import http.request.HttpCookies;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 public class UserListService implements Service {
-
     private static final String REDIRECT_TEMPLATE = "/user/login.html";
     private static final String USER_LIST_TEMPLATE = "/user/list";
     private static final String LOGINED_COOKIE_KEY = "logined";
@@ -29,9 +27,7 @@ public class UserListService implements Service {
         httpResponse.redirect(REDIRECT_TEMPLATE);
     }
 
-    private boolean isLogined(List<HttpCookie> cookies) {
-        return cookies.stream()
-                .filter(cookie -> LOGINED_COOKIE_KEY.equals(cookie.getName()))
-                .anyMatch(loginedCookie -> Boolean.parseBoolean(loginedCookie.getValue()));
+    private boolean isLogined(HttpCookies cookies) {
+        return Boolean.parseBoolean(cookies.get(LOGINED_COOKIE_KEY).getValue());
     }
 }

@@ -4,14 +4,13 @@ import db.DataBase;
 import http.application.Service;
 import http.common.HttpCookie;
 import http.common.HttpSession;
+import http.request.HttpCookies;
 import http.request.HttpRequest;
 import http.request.MessageBody;
 import http.response.HttpResponse;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 public class LoginService implements Service {
     private static final Logger logger = LoggerFactory.getLogger(LoginService.class);
@@ -46,13 +45,8 @@ public class LoginService implements Service {
         logger.info("login {}! redirect to {}", isAuthorized, redirectUrl);
     }
 
-    private boolean isLogined(List<HttpCookie> httpCookies) {
-        return httpCookies.stream()
-                .anyMatch(this::checkLogin);
-    }
-
-    private boolean checkLogin(HttpCookie httpCookie) {
-        return LOGINED_COOKIE.equals(httpCookie.getName()) && Boolean.parseBoolean(httpCookie.getValue());
+    private boolean isLogined(HttpCookies httpCookies) {
+        return Boolean.parseBoolean(httpCookies.get(LOGINED_COOKIE).getValue());
     }
 
     private boolean authorize(User user, String password) {

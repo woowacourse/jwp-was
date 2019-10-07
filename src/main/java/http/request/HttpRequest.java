@@ -3,22 +3,23 @@ package http.request;
 import http.common.HttpCookie;
 import http.common.HttpHeader;
 import http.common.HttpSession;
-import http.common.SessionPool;
+import http.common.SessionManager;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class HttpRequest {
     private static final String COOKIE_HEADER = "Cookie";
     private static final String COOKIE_DELIMITER = "; ";
+    private static final String JSESSIONID = "JSESSIONID";
+    private static final String COOKIE_KEY_VALUE_DELIMITER = "=";
     private final RequestLine requestLine;
     private final HttpRequestParams httpRequestParams;
     private final HttpHeader httpHeader;
     private final MessageBody messageBody;
-    private List<HttpCookie> cookies;
+    private HttpCookies cookies;
     private String jSessionId;
 
     public HttpRequest(final RequestLine requestLine,
@@ -52,23 +53,20 @@ public class HttpRequest {
     }
 
     public HttpSession getHttpSession() {
-        HttpCookie jSessionId = getCookies().stream()
-                .filter(cookie -> SessionPool.SESSION_ID.equals(cookie.getName()))
-                .findFirst()
-                .orElse(null);
+        HttpCookie jSessionId = getCookies().get(JSESSIONID);
 
         HttpSession httpSession;
         if (jSessionId == null) {
-            httpSession = SessionPool.getSession();
+            httpSession = SessionManager.getSession();
         } else {
-            httpSession = SessionPool.getSession(UUID.fromString(jSessionId.getValue()));
+            httpSession = SessionManager.getSession(UUID.fromString(jSessionId.getValue()));
         }
 
         this.jSessionId = httpSession.getSessionId();
         return httpSession;
     }
 
-    public List<HttpCookie> getCookies() {
+    public HttpCookies getCookies() {
         if (cookies == null) {
             cookies = cookieParse();
         }
@@ -76,15 +74,15 @@ public class HttpRequest {
         return cookies;
     }
 
-    private List<HttpCookie> cookieParse() {
+    private HttpCookies cookieParse() {
         String rawCookies = httpHeader.get(COOKIE_HEADER);
         if (rawCookies == null) {
-            return Collections.emptyList();
+            return new HttpCookies(Collections.emptyMap());
         }
 
-        return Arrays.stream(rawCookies.split(COOKIE_DELIMITER))
-                .map(rawCookie -> rawCookie.split("="))
-                .map(splitedCookie -> HttpCookie.builder(splitedCookie[0], splitedCookie[1]).build())
-                .collect(Collectors.toList());
+        return new HttpCookies(Arrays.stream(rawCookies.split(COOKIE_DELIMITER))
+                .map(rawCookie -> rawCookie.split(COOKIE_KEY_VALUE_DELIMITER))
+                .collect(Collectors.toMap(cookie -> cookie[0],
+                        cookie -> HttpCookie.builder(cookie[0], cookie[1]).build())));
     }
 }
