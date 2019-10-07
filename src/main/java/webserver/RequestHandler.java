@@ -33,7 +33,7 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = HttpRequestParser.parse(in);
             DataOutputStream dos = new DataOutputStream(out);
 
-            Url requestUrl = httpRequest.getRequestLine().getUrl();
+            Url requestUrl = httpRequest.getUrl();
             logger.info("request url: {}", requestUrl);
 
             Controller controller = ControllerMapper.controllerMapping(requestUrl.getUrl());

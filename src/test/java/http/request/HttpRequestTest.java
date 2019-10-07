@@ -19,10 +19,9 @@ public class HttpRequestTest {
 
         HttpRequest httpRequest = HttpRequestParser.parse(in);
 
-        RequestLine requestLine = httpRequest.getRequestLine();
-        assertThat(requestLine.getHttpMethod()).isEqualTo(HttpMethod.GET);
-        assertThat(requestLine.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
-        assertThat(requestLine.getUrl()).isEqualTo(new Url("/user/create?userId=javajigi&password=password&name=JaeSung"));
+        assertThat(httpRequest.getHttpMethod()).isEqualTo(HttpMethod.GET);
+        assertThat(httpRequest.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
+        assertThat(httpRequest.getUrl()).isEqualTo(new Url("/user/create?userId=javajigi&password=password&name=JaeSung"));
 
         assertThat(httpRequest.getHttpHeader().get("Host")).isEqualTo("localhost:8080");
         assertThat(httpRequest.getHttpHeader().get("Connection")).isEqualTo("keep-alive");
@@ -36,10 +35,9 @@ public class HttpRequestTest {
 
         HttpRequest httpRequest = HttpRequestParser.parse(in);
 
-        RequestLine requestLine = httpRequest.getRequestLine();
-        assertThat(requestLine.getHttpMethod()).isEqualTo(HttpMethod.POST);
-        assertThat(requestLine.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
-        assertThat(requestLine.getUrl()).isEqualTo(new Url("/user/create"));
+        assertThat(httpRequest.getHttpMethod()).isEqualTo(HttpMethod.POST);
+        assertThat(httpRequest.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
+        assertThat(httpRequest.getUrl()).isEqualTo(new Url("/user/create"));
 
         assertThat(httpRequest.getHttpHeader().get("Host")).isEqualTo("localhost:8080");
         assertThat(httpRequest.getHttpHeader().get("Connection")).isEqualTo("keep-alive");

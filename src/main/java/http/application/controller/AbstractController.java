@@ -9,7 +9,7 @@ public abstract class AbstractController implements Controller {
 
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
-        switch (httpRequest.getRequestLine().getHttpMethod()) {
+        switch (httpRequest.getHttpMethod()) {
             case GET:
                 doGet(httpRequest, httpResponse);
                 return;

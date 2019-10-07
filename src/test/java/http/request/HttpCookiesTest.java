@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class HttpCookiesTest {
     private static final String JSESSIONID = "JSESSIONID";
@@ -26,5 +27,6 @@ class HttpCookiesTest {
 
         assertThat(httpCookies.get(JSESSIONID)).isEqualTo(jSessionIdCookie);
         assertThat(httpCookies.get(LOGINED)).isEqualTo(loginedCookie);
+        assertNull(httpCookies.get("none"));
     }
 }

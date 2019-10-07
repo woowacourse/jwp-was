@@ -1,9 +1,6 @@
 package http.request;
 
-import http.common.HttpCookie;
-import http.common.HttpHeader;
-import http.common.HttpSession;
-import http.common.SessionManager;
+import http.common.*;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -32,8 +29,16 @@ public class HttpRequest {
         this.messageBody = messageBody;
     }
 
-    public RequestLine getRequestLine() {
-        return requestLine;
+    public HttpMethod getHttpMethod() {
+        return requestLine.getHttpMethod();
+    }
+
+    public HttpVersion getHttpVersion() {
+        return requestLine.getHttpVersion();
+    }
+
+    public Url getUrl() {
+        return requestLine.getUrl();
     }
 
     public HttpRequestParams getHttpRequestParams() {
