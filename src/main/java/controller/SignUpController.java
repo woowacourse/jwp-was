@@ -18,7 +18,7 @@ public class SignUpController extends BasicController {
     public ModelAndView doGet(HttpRequest request, HttpResponse response) {
         if (request.hasParameters()) {
             DataBase.addUser(createUser(request));
-            return new ModelAndView("/index.html");
+            return new ModelAndView("redirect: /index.html");
         }
         throw new ServerErrorException("파라미터가 필요합니다.");
     }
@@ -29,7 +29,7 @@ public class SignUpController extends BasicController {
 
         if (request.hasBody()) {
             DataBase.addUser(createUser(request.convertBodyToMap()));
-            return new ModelAndView("/index.html");
+            return new ModelAndView("redirect: /index.html");
         }
         throw new ServerErrorException("바디가 필요합니다.");
     }

@@ -29,12 +29,7 @@ public class NormalRequestResolver {
         Controller controller = Optional.ofNullable(controllers.get(path)).orElseThrow(BadRequestException::new);
 
         ModelAndView modelAndView = controller.service(httpRequest, httpResponse);
-        byte[] body = ViewResolver.render(modelAndView);
 
-        if(modelAndView.isRedirect()){
-            httpResponse.redirect(modelAndView.getView());
-            return;
-        }
-        httpResponse.okResponse("html", body);
+        ViewResolver.render(modelAndView, httpResponse);
     }
 }

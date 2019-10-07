@@ -1,30 +1,26 @@
 package view;
 
-import com.github.jknack.handlebars.Handlebars;
-import com.github.jknack.handlebars.Template;
-import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
-import com.github.jknack.handlebars.io.TemplateLoader;
-import webserver.ServerErrorException;
+import http.response.HttpResponse;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ViewResolver {
-    public static byte[] render(ModelAndView modelAndView) {
-        TemplateLoader loader = new ClassPathTemplateLoader();
-        loader.setPrefix("/templates");
-        loader.setSuffix(".html");
-        Handlebars handlebars = new Handlebars(loader);
-        try {
-            if(modelAndView.isRedirect()) {
-                return new byte[]{};
-            }
-            Template template = handlebars.compile(modelAndView.getView());
-            String userListPage = template.apply(modelAndView.getModel());
-            return userListPage.getBytes();
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new ServerErrorException(e.getMessage());
-        }
+    private static List<ViewProcessor> viewProcessors = new ArrayList<>();
 
+    static {
+        viewProcessors.add(new TemplateViewProcessor());
+        viewProcessors.add(new RedirectViewProcessor());
+    }
+
+    public static byte[] render(ModelAndView modelAndView, HttpResponse response) {
+        String viewName = modelAndView.getView();
+
+        ViewProcessor viewProcessor = viewProcessors.stream()
+                .filter(pr -> pr.isSupported(viewName))
+                .findFirst()
+                .orElseThrow(NotSupportedViewProcessorException::new);
+
+        return viewProcessor.render(modelAndView, response);
     }
 }

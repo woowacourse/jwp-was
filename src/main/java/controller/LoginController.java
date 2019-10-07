@@ -22,12 +22,12 @@ public class LoginController extends BasicController {
             User user = DataBase.findUserById(bodyData.get("userId"));
             if (user.matchPassword(bodyData.get("password"))) {
                 session.setAttribute(LOGINED, true);
-                return new ModelAndView("/index.html");
+                return new ModelAndView("redirect: /index.html");
             }
-            return new ModelAndView("/user/login_failed.html");
+            return new ModelAndView("redirect: /user/login_failed.html");
         } catch (NotFoundEntityException | InvalidUserException e) {
             session.setAttribute(LOGINED, false);
-            return new ModelAndView("/user/login_failed.html");
+            return new ModelAndView("redirect: /user/login_failed.html");
         }
     }
 }

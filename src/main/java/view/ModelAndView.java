@@ -6,6 +6,7 @@ import java.util.Map;
 public class ModelAndView {
 
     private Map<String, Object> model;
+//    private View view;
     private String view;
     private boolean isRedirect;
 
