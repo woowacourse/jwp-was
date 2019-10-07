@@ -20,8 +20,12 @@ public class HttpRequestUtils {
         return ROOT_STATIC_FILE_PATH + absPath;
     }
 
-    public static Map<String, String> parseParamToMap(String params) {
-        return Arrays.stream(params.trim().split(PARAMS_DELIMITER))
+    public static Map<String, String> parseBodyParamToMap(String params) {
+        return parseParamToMap(params, PARAMS_DELIMITER);
+    }
+
+    public static Map<String, String> parseParamToMap(String params, String delimiter) {
+        return Arrays.stream(params.trim().split(delimiter))
             .map(s -> s.split(KEY_VALUE_DELIMITER, 2))
             .collect(Collectors.toMap(a -> a[0], a -> a.length > 1 ? a[1] : ""));
     }
@@ -30,7 +34,7 @@ public class HttpRequestUtils {
         if (query == null) {
             return new HashMap<>();
         }
-        return HttpRequestUtils.parseParamToMap(query);
+        return HttpRequestUtils.parseBodyParamToMap(query);
     }
 
     public static String[] parseAbsPathAndQuery(String absPathAndQuery) {

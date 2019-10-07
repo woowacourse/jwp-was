@@ -8,6 +8,8 @@ import webserver.parser.HttpRequestParser;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 import webserver.servlet.HttpServlet;
+import webserver.view.ErrorView;
+import webserver.view.View;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -33,17 +35,23 @@ public class RequestHandler implements Runnable {
             connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            HttpRequest request = HttpRequestParser.parse(new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
-            HttpServlet httpServlet = MappingHandler.getServlets(request.getAbsPath());
-            try {
-                HttpResponse httpResponse = httpServlet.run(request);
-                httpResponse.render(new DataOutputStream(out));
-            } catch (ErrorResponseException e) {
-                HttpResponse httpResponse = httpServlet.error(e.getHttpStatus(), e.getMessage());
-                httpResponse.render(new DataOutputStream(out));
-            }
+            generateResponse(in, out);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
+        }
+    }
+
+    private void generateResponse(InputStream in, OutputStream out) throws IOException, URISyntaxException {
+        try {
+            HttpRequest request = HttpRequestParser.parse(new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
+            HttpServlet httpServlet = MappingHandler.getServlets(request);
+            HttpResponse response = new HttpResponse(new DataOutputStream(out));
+            View view = httpServlet.run(request, response);
+            view.render(request, response);
+        } catch (ErrorResponseException e) {
+            HttpResponse response = new HttpResponse(new DataOutputStream(out));
+            View view = new ErrorView(e.getHttpStatus(), e.getMessage());
+            view.render(null, response);
         }
     }
 }

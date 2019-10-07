@@ -1,14 +1,23 @@
 package webserver.request;
 
+import model.User;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class HttpRequest {
     private RequestLine requestLine;
     private RequestHeader header;
+    private RequestCookie cookie;
     private RequestBody body;
+    private Map<String, Object> attribute;
 
-    public HttpRequest(RequestLine requestLine, RequestHeader header, RequestBody body) {
+    public HttpRequest(RequestLine requestLine, RequestHeader header, RequestCookie cookie, RequestBody body) {
         this.requestLine = requestLine;
         this.header = header;
+        this.cookie = cookie;
         this.body = body;
+        attribute = new HashMap<>();
     }
 
     public String getAbsPath() {
@@ -31,7 +40,19 @@ public class HttpRequest {
         return body.getBody(key);
     }
 
-    public String getHeader(String key) {
-        return header.getHeader(key);
+    public String getCookie(String key) {
+        return cookie.getCookie(key);
+    }
+
+    public boolean isFile() {
+        return requestLine.isFile();
+    }
+
+    public void setAttribute(String key, Object value) {
+        attribute.put(key, value);
+    }
+
+    public Object getAttribute(String key) {
+        return attribute.get(key);
     }
 }

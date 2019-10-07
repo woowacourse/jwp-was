@@ -13,6 +13,10 @@ public class User {
         this.email = email;
     }
 
+    public boolean isMatchPassword(String targetPassword) {
+        return password.equals(targetPassword);
+    }
+
     public String getUserId() {
         return userId;
     }

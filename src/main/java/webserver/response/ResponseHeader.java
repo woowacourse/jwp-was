@@ -13,8 +13,21 @@ public class ResponseHeader implements Map<String, Object> {
         header = new HashMap<>();
     }
 
-    public void setContentLegthAndType(int length, String type) {
+    public static ResponseHeader error(int length) {
+        ResponseHeader header = new ResponseHeader();
+        header.setContentLengthAndType(length, "text/html");
+        header.setContentEncoding("utf-8");
+        return header;
+    }
+
+    public void setContentLengthAndType(int length, String type) {
         header.put("Content-Length", length);
+        header.put("Content-Type", type);
+    }
+
+    public void setContentEncoding(String encoder) {
+        String type = (String) header.get("Content-Type");
+        type = type + ";charset=" + encoder;
         header.put("Content-Type", type);
     }
 
@@ -22,6 +35,13 @@ public class ResponseHeader implements Map<String, Object> {
         header.put("Location", location);
     }
 
+    public void setCookie(String key, String value) {
+        header.put("Set-Cookie", key + "=" + value + "; Path=/");
+    }
+
+    public void removeCookie(String key) {
+        header.put("Set-Cookie", key + "=; Path=/; max-age=0");
+    }
 
     @Override
     public int size() {

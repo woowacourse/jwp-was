@@ -9,6 +9,10 @@ public class RequestHeader {
         this.header = header;
     }
 
+    public String getRowCookie() {
+        return header.get("Cookie");
+    }
+
     public String getHeader(String key) {
         return header.get(key);
     }

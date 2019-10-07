@@ -15,7 +15,7 @@ public class RequestBody {
     private void parseBody(String rawBody) {
         body = new HashMap<>();
         if (rawBody != null) {
-            body = HttpRequestUtils.parseParamToMap(rawBody);
+            body = HttpRequestUtils.parseBodyParamToMap(rawBody);
         }
     }
 

@@ -26,6 +26,15 @@ public class RequestUri {
         return queryStrings.get(key);
     }
 
+    public boolean isFile() {
+        String[] absPathArr = absPath.split("/");
+        String lastAbsPath = "";
+        if (absPathArr.length > 1) {
+            lastAbsPath = absPathArr[absPathArr.length - 1];
+        }
+        return lastAbsPath.split("\\.").length >= 2;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
