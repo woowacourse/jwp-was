@@ -33,7 +33,7 @@ public class HttpCookie {
 
     @Override
     public String toString() {
-        return key + "=" + value;
+        return key + "=" + value + ("".equals(path) ? "" : ";" + path);
     }
 
     @Override
