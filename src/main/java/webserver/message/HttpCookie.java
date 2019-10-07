@@ -74,6 +74,10 @@ public class HttpCookie {
         return name.equals(this.name);
     }
 
+    public String getName() {
+        return name;
+    }
+
     public String getValue() {
         return value;
     }

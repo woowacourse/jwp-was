@@ -9,6 +9,8 @@ import webserver.message.exception.NotFoundFileException;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
 import webserver.message.response.ResponseBuilder;
+import webserver.session.HttpSession;
+import webserver.session.SessionContextHolder;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

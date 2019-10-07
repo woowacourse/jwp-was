@@ -1,11 +1,13 @@
 package webserver.message.response;
 
+import com.google.common.collect.Maps;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import webserver.message.HttpCookie;
 import webserver.message.MediaType;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,7 +20,7 @@ class ResponseHeaderTest {
         responseFields.put("Content-Type", MediaType.TEXT_HTML.getMediaType());
 
         // when
-        ResponseHeader responseHeader = new ResponseHeader(responseFields, new ArrayList<>());
+        ResponseHeader responseHeader = new ResponseHeader(responseFields, Maps.newHashMap());
         String result = new String(responseHeader.toBytes(5));
 
         // then
@@ -34,7 +36,8 @@ class ResponseHeaderTest {
         Map<String, String> responseFields = new HashMap<>();
         responseFields.put("Content-Type", MediaType.TEXT_HTML.getMediaType());
 
-        List<HttpCookie> cookies = Collections.singletonList(new HttpCookie.Builder("logined", "true").path("/").build());
+        Map<String, HttpCookie> cookies = Maps.newHashMap();
+        cookies.put("logined", new HttpCookie.Builder("logined", "true").path("/").build());
 
         // when
         ResponseHeader responseHeader = new ResponseHeader(responseFields, cookies);

@@ -1,7 +1,5 @@
 package webserver.message.response;
 
-import webserver.message.HttpCookie;
-
 import java.nio.ByteBuffer;
 
 public class Response {
@@ -15,92 +13,6 @@ public class Response {
         this.statusLine = statusLine;
         this.header = header;
         this.body = body;
-    }
-
-    public static class Builder {
-        private static final String CONTENT_TYPE = "Content-Type";
-        private static final String LOCATION = "Location";
-
-        private HttpVersion httpVersion;
-        private HttpStatus httpStatus;
-        private ResponseBody body = new ResponseBody();
-        private Map<String, String> responseFields = new HashMap<>();
-        private List<HttpCookie> cookies = new ArrayList<>();
-
-        public Builder(final HttpVersion httpVersion, final HttpStatus httpStatus) {
-            this.httpVersion = httpVersion;
-            this.httpStatus = httpStatus;
-            this.responseFields.put(CONTENT_TYPE, MediaType.TEXT_HTML.getMediaType());
-        }
-
-        public Builder(final String httpVersion) {
-            this(HttpVersion.of(httpVersion), HttpStatus.OK);
-        }
-
-        public Builder(final HttpVersion httpVersion) {
-            this(httpVersion, HttpStatus.OK);
-        }
-
-        public Builder(final HttpStatus httpStatus) {
-            this(HttpVersion.HTTP_1_1, httpStatus);
-        }
-
-        public Builder() {
-            this(HttpVersion.HTTP_1_1, HttpStatus.OK);
-        }
-
-        public Builder httpVersion(final String httpVersion) {
-            this.httpVersion = HttpVersion.of(httpVersion);
-            return this;
-        }
-
-        public Builder httpStatus(final HttpStatus httpStatus) {
-            this.httpStatus = httpStatus;
-            return this;
-        }
-
-        public Builder putField(final String fieldName, String fieldValue) {
-            this.responseFields.put(fieldName, fieldValue);
-            return this;
-        }
-
-        public Builder redirectUrl(final String url) {
-            this.httpStatus = HttpStatus.FOUND;
-            putField(LOCATION, url);
-            return this;
-        }
-
-        public Builder contentType(final MediaType contentType) {
-            this.responseFields.replace(CONTENT_TYPE, contentType.getMediaType());
-            return this;
-        }
-
-        public Builder addCookie(final HttpCookie cookie) {
-            this.cookies.add(cookie);
-            return this;
-        }
-
-        public Builder body(final String body) {
-            this.body = new ResponseBody(body);
-            return this;
-        }
-
-        public Builder body(final byte[] body) {
-            this.body = new ResponseBody(body);
-            return this;
-        }
-
-        public Builder body(final StaticFile file) {
-            this.responseFields.replace(CONTENT_TYPE, MediaType.of(file.getExtension()).getMediaType());
-            this.body = new ResponseBody(file.getBody());
-            return this;
-        }
-
-        public Response build() {
-            final ResponseStatusLine statusLine = new ResponseStatusLine(this.httpVersion, this.httpStatus);
-            final ResponseHeader header = new ResponseHeader(this.responseFields, this.cookies);
-            return new Response(statusLine, header, this.body);
-        }
     }
 
     public byte[] toBytes() {
