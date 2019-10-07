@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.fp.tuple.Pair;
 import utils.fp.tuple.Triplet;
+import webserver.WebServerConfig;
 import webserver.httpelement.HttpMethod;
 
 import java.lang.reflect.Method;
@@ -42,15 +43,11 @@ public class RouterConfigAnnotation extends RouterConfig {
     }
 
     private static Stream<Method> scanDestinationMethods() {
-        return scanAllClasses().flatMap(clazz ->
+        return WebServerConfig.getInstance().getAllClasses().flatMap(clazz ->
                 Stream.of(clazz.getMethods()).filter(method -> method.isAnnotationPresent(RequestMapping.class))
         );
     }
 
-    /* 나중에 구현 .... */
-    private static Stream<Class<?>> scanAllClasses() {
-        return Stream.of(IndexController.class, UserController.class);
-    }
 
     private RouterConfigAnnotation(Map<HttpMethod, Pathfinder> matcher) {
         super(matcher);

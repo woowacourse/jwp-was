@@ -43,7 +43,7 @@ public class BaseController {
     private static HttpResponseBuilder redirectResponseBuilder(String redirectPath, HttpRequest req) {
         return HttpResponse.builder(HttpContentType.TEXT_PLAIN_UTF_8)
                             .extractFieldsFromRequest(req)
-                            .statusCode(HttpStatus.FOUND)
+                            .status(HttpStatus.FOUND)
                             .location(new HttpLocation(redirectPath));
     }
 

@@ -9,17 +9,17 @@ import java.util.stream.Stream;
 
 public class HttpResponse {
     public static final HttpResponse BAD_REQUEST = HttpResponse.builder(HttpContentType.TEXT_PLAIN_UTF_8)
-                                                                .statusCode(HttpStatus.BAD_REQUEST)
+                                                                .status(HttpStatus.BAD_REQUEST)
                                                                 .build();
     public static final HttpResponse NOT_FOUND = HttpResponse.builder(HttpContentType.TEXT_PLAIN_UTF_8)
-                                                            .statusCode(HttpStatus.NOT_FOUND)
+                                                            .status(HttpStatus.NOT_FOUND)
                                                             .build();
     public static final HttpResponse INTERNAL_SERVER_ERROR = HttpResponse.builder(HttpContentType.TEXT_PLAIN_UTF_8)
-                                                                    .statusCode(HttpStatus.INTERNAL_SERVER_ERROR)
+                                                                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
                                                                     .build();
 
     private final HttpVersion version;
-    private final HttpStatus statusCode;
+    private final HttpStatus status;
     private final HttpContentType contentType;
     private final List<HttpSetCookie> cookies;
     private final HttpConnection connection;
@@ -28,7 +28,7 @@ public class HttpResponse {
 
     public static class HttpResponseBuilder {
         private HttpVersion version = HttpVersion.HTTP_1_1;
-        private HttpStatus statusCode = HttpStatus.OK;
+        private HttpStatus status = HttpStatus.OK;
         private final HttpContentType contentType;
         private List<HttpSetCookie> cookies = new ArrayList<>();
         private HttpConnection connection;
@@ -50,8 +50,8 @@ public class HttpResponse {
             return this;
         }
 
-        public HttpResponseBuilder statusCode(HttpStatus statusCode) {
-            this.statusCode = statusCode;
+        public HttpResponseBuilder status(HttpStatus status) {
+            this.status = status;
             return this;
         }
 
@@ -86,7 +86,7 @@ public class HttpResponse {
 
     private HttpResponse(HttpResponseBuilder builder) {
         this.version = builder.version;
-        this.statusCode = builder.statusCode;
+        this.status = builder.status;
         this.contentType = builder.contentType;
         this.cookies = (builder.cookies.isEmpty()) ? Collections.emptyList() : builder.cookies;
         this.connection = builder.connection;
@@ -107,7 +107,7 @@ public class HttpResponse {
         return String.format(
                 "%s %s\r\nContent-Type: %s\r\nContent-Length: %d\r\n",
                 this.version,
-                this.statusCode,
+                this.status,
                 this.contentType,
                 this.body.length()
         );

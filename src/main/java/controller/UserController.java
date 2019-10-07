@@ -41,7 +41,6 @@ public class UserController extends BaseController {
                         )
                     ).orElseGet(() -> redirectTo("/user/login_failed.html", req))
         );
-
     }
 
     @RequestMapping(method = HttpMethod.GET, path = "/user/list")
