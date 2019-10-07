@@ -3,6 +3,7 @@ package http.common;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -15,7 +16,7 @@ public class SessionManager {
 
     public static HttpSession getSession() {
         UUID uuid = UUID.randomUUID();
-        HttpSession httpSession = new HttpSession(uuid, DEFAULT_EXPIRE_TIME);
+        HttpSession httpSession = new HttpSession(uuid, LocalDateTime.now().plusMinutes(DEFAULT_EXPIRE_TIME));
         managedSessions.put(uuid, httpSession);
 
         logger.info("session create {}", httpSession);

@@ -3,6 +3,7 @@ package http.common;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -15,7 +16,7 @@ public class HttpSessionTest {
     @BeforeEach
     void setUp() {
         uuid = UUID.randomUUID();
-        httpSession = new HttpSession(uuid);
+        httpSession = new HttpSession(uuid, LocalDateTime.now().plusMinutes(SessionManager.DEFAULT_EXPIRE_TIME));
     }
 
     @Test
