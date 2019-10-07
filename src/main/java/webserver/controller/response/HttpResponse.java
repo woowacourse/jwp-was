@@ -1,64 +1,111 @@
 package webserver.controller.response;
 
+import exception.UnregisteredURLException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import webserver.controller.request.HttpRequest;
-import webserver.controller.request.MimeType;
-import webserver.controller.request.header.HttpMethod;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+
 
 public class HttpResponse {
-    private static final String STATIC_FILE_PATH = "./static/";
-    private static final String NON_STATIC_FILE_PATH = "./templates/";
+    private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
+    private static final String DEFAULT_COOKIE_PATH = "/";
+    public static final String STATIC_FILE_PATH = "static";
     private HttpStatus httpStatus;
     private String version;
-    private HashMap<String, String> headerFields;
-    private Optional<byte[]> body;
+    private Map<String, String> headerFields;
+    private List<String> cookieFields;
+    private byte[] body;
 
-    public HttpResponse(HttpRequest httpRequest) throws IOException, URISyntaxException {
-        headerFields = new HashMap<>();
-        setResponseLine(httpRequest, HttpStatus.OK);
+    private HttpResponse(ResponseBuilder builder) {
+        this.httpStatus = builder.httpStatus;
+        this.version = builder.version;
+        this.headerFields = builder.headerFields;
+        this.cookieFields = builder.cookieFields;
+        this.body = builder.body;
     }
 
-    private void setResponseLine(HttpRequest httpRequest, HttpStatus httpStatus) throws IOException, URISyntaxException {
-        HttpMethod httpMethod = httpRequest.getHttpMethod();
-        this.httpStatus = httpStatus;
-        this.version = httpRequest.getVersion();
-        if (httpMethod != HttpMethod.POST && httpMethod != HttpMethod.PUT) {
-            this.body = Optional.of(getResponseBody(httpRequest));
+    public HttpResponse() {
+    }
+
+    public static ResponseBuilder builder() {
+        return new ResponseBuilder();
+    }
+
+    public static HttpResponse staticFile(HttpRequest httpRequest, String path) {
+        logger.debug(">>path {}", path);
+        return FileIoUtils.loadFileFromClasspath(STATIC_FILE_PATH + path)
+            .map(b ->
+                HttpResponse.builder()
+                    .version(httpRequest.getVersion())
+                    .contentType(httpRequest.getMimeType().getMimeType())
+                    .body(b)
+                    .httpStatus(HttpStatus.OK)
+                    .build())
+            .orElseThrow(UnregisteredURLException::new);
+    }
+
+    public static HttpResponse ok(HttpRequest httpRequest, byte[] body) {
+        if (httpRequest.isFirstRequest()) {
+            return HttpResponse.builder()
+                .version(httpRequest.getVersion())
+                .httpStatus(HttpStatus.OK)
+                .setCookie(httpRequest.getCookieFields())
+                .contentType(httpRequest.getMimeType().getMimeType())
+                .body(body)
+                .build();
         }
+        return HttpResponse.builder()
+            .version(httpRequest.getVersion())
+            .httpStatus(HttpStatus.OK)
+            .contentType(httpRequest.getMimeType().getMimeType())
+            .body(body)
+            .build();
     }
 
-    public void responseOK(HttpRequest httpRequest) {
-        headerFields.put("Content-Type", httpRequest.getMimeType().getMimeType() + ";charset=utf-8\r\n");
-        headerFields.put("Content-Length", String.valueOf(body.get().length));
+    public static HttpResponse badRequest(String message) {
+        return errorResponse(message, HttpStatus.BAD_REQUEST);
     }
 
-    private byte[] getResponseBody(HttpRequest httpRequest) throws IOException, URISyntaxException {
-        MimeType mimeType = httpRequest.getMimeType();
-        String path = httpRequest.getPath();
-        if (mimeType == MimeType.HTML || mimeType == MimeType.ICO) {
-            return FileIoUtils.loadFileFromClasspath(NON_STATIC_FILE_PATH + path);
-        }
-        return FileIoUtils.loadFileFromClasspath(STATIC_FILE_PATH + path);
+    public static HttpResponse NotFound(String message) {
+        return errorResponse(message, HttpStatus.NOT_FOUND);
     }
 
-    public void responseBadRequest(String errorMessage) {
-        setHttpStatus(HttpStatus.BAD_REQUEST);
-        headerFields.put("Server", "jwp-was");
-        headerFields.put("Connection", "close");
-        headerFields.put("message", errorMessage);
+    private static HttpResponse errorResponse(String message, HttpStatus httpStatus) {
+        return HttpResponse.builder()
+            .httpStatus(httpStatus)
+            .connection("close")
+            .message(message)
+            .build();
     }
 
-    public void sendRedirect(String saveRedirectUrl) {
-        setHttpStatus(HttpStatus.FOUND);
-        headerFields.put("Location", saveRedirectUrl);
-        headerFields.put("Connection", "close");
+    public static HttpResponse sendRedirect(HttpRequest httpRequest, String redirectUrl) {
+        return redirectBuild(httpRequest, redirectUrl)
+            .build();
+    }
+
+
+    private static ResponseBuilder redirectBuild(HttpRequest httpRequest, String redirectUrl) {
+        return HttpResponse.builder()
+            .version(httpRequest.getVersion())
+            .httpStatus(HttpStatus.FOUND)
+            .location(redirectUrl);
+    }
+
+    public static HttpResponse loginSuccessRedirect(HttpRequest httpRequest, String redirecUrl) {
+        return redirectBuild(httpRequest, redirecUrl)
+            .setCookie(httpRequest.getCookieFields())
+            .build();
+    }
+
+    public static HttpResponse InternerServerError(String message) {
+        return errorResponse(message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     public HttpStatus getHttpStatus() {
@@ -73,11 +120,73 @@ public class HttpResponse {
         return Collections.unmodifiableMap(headerFields);
     }
 
-    public Optional<byte[]> getBody() {
+    public byte[] getBody() {
         return body;
     }
 
-    public void setHttpStatus(HttpStatus httpStatus) {
-        this.httpStatus = httpStatus;
+    public boolean hasBody() {
+        return !body.equals("");
+    }
+
+    public boolean hasCookie() {
+        return !cookieFields.isEmpty();
+    }
+
+    public List<String> getCookieFields() {
+        return Collections.unmodifiableList(this.cookieFields);
+    }
+
+    private static class ResponseBuilder {
+        private String version;
+        private HttpStatus httpStatus;
+        private Map<String, String> headerFields = new LinkedHashMap<>();
+        private List<String> cookieFields = new ArrayList<>();
+        private byte[] body = "".getBytes();
+
+        private ResponseBuilder httpStatus(HttpStatus httpStatus) {
+            this.httpStatus = httpStatus;
+            return this;
+        }
+
+        private ResponseBuilder version(String version) {
+            this.version = version;
+            return this;
+        }
+
+        private ResponseBuilder body(byte[] body) {
+            this.body = body;
+            return this;
+        }
+
+        private ResponseBuilder contentType(String mimeType) {
+            headerFields.put("Content-Type", mimeType + ";charset=utf-8\n");
+            return this;
+        }
+
+        private ResponseBuilder connection(String value) {
+            headerFields.put("Connection", value);
+            return this;
+        }
+
+        private ResponseBuilder location(String redirectUrl) {
+            headerFields.put("Location", redirectUrl);
+            return this;
+        }
+
+        private ResponseBuilder message(String value) {
+            headerFields.put("message", value);
+            return this;
+        }
+
+        private ResponseBuilder setCookie(Map<String, String> cookieValues) {
+            cookieValues.keySet()
+                .stream()
+                .forEach(key -> cookieFields.add(key + "=" + cookieValues.get(key)));
+            return this;
+        }
+
+        private HttpResponse build() {
+            return new HttpResponse(this);
+        }
     }
 }

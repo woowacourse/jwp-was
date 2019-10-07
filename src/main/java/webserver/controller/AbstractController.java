@@ -1,9 +1,11 @@
 package webserver.controller;
 
+import exception.UnsupportedMethodException;
 import webserver.controller.request.HttpRequest;
 import webserver.controller.request.header.HttpMethod;
 import webserver.controller.response.HttpResponse;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 public abstract class AbstractController implements Controller {
@@ -15,11 +17,16 @@ public abstract class AbstractController implements Controller {
     }
 
     @Override
-    public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
-        controllerMethods.get(httpRequest.getHttpMethod()).service(httpRequest, httpResponse);
+    public HttpResponse service(HttpRequest httpRequest) throws IOException {
+        return controllerMethods.get(httpRequest.getHttpMethod()).service(httpRequest);
     }
 
-    public abstract void doGet(HttpRequest httpRequest, HttpResponse httpResponse);
+    protected HttpResponse doGet(HttpRequest httpRequest) throws IOException {
+        throw new UnsupportedMethodException();
+    }
 
-    public abstract void doPost(HttpRequest httpRequest, HttpResponse httpResponse);
+    protected HttpResponse doPost(HttpRequest httpRequest) {
+        throw new UnsupportedMethodException();
+    }
+
 }

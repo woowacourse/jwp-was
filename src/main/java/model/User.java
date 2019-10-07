@@ -28,4 +28,8 @@ public class User {
     public String getEmail() {
         return email;
     }
+
+    public boolean isMatchPassword(String password) {
+        return this.password.equals(password);
+    }
 }
