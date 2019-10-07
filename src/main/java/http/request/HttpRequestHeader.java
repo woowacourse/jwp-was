@@ -18,20 +18,22 @@ public class HttpRequestHeader {
 
     public static HttpRequestHeader of(List<String> headerLines) {
         Map<String, String> headers = headerLines.stream()
+                .map(headerLine -> headerLine.split(HEADER_SPLITTER))
+                .filter(splittedStrings -> 2 <= splittedStrings.length)
                 .collect(Collectors.toMap(
-                        headerLine -> headerLine.split(HEADER_SPLITTER)[0],
-                        headerLine -> headerLine.split(HEADER_SPLITTER)[1]
+                        splittedStrings -> splittedStrings[0].toLowerCase(),
+                        splittedStrings -> splittedStrings[1]
                 ));
 
         return new HttpRequestHeader(headers);
     }
 
     public String getHeader(String key) {
-        return Optional.ofNullable(headers.get(key))
+        return Optional.ofNullable(headers.get(key.toLowerCase()))
                 .orElseThrow(() -> new NotFoundHttpRequestHeader(key));
     }
 
     public boolean contains(String key) {
-        return headers.containsKey(key);
+        return headers.containsKey(key.toLowerCase());
     }
 }

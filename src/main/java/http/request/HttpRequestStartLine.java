@@ -1,6 +1,6 @@
 package http.request;
 
-import java.io.UnsupportedEncodingException;
+import http.parameter.Parameters;
 
 public class HttpRequestStartLine {
     private static final String LINE_SPLITTER = " ";
@@ -8,34 +8,40 @@ public class HttpRequestStartLine {
 
     private final HttpMethod httpMethod;
     private final String path;
-    private final HttpRequestParameter httpRequestParameters;
+    private final Parameters parameters;
 
-    private HttpRequestStartLine(HttpMethod httpMethod, String path, HttpRequestParameter httpRequestParameters) {
+    public HttpRequestStartLine(HttpMethod httpMethod, String path, Parameters parameters) {
         this.httpMethod = httpMethod;
         this.path = path;
-        this.httpRequestParameters = httpRequestParameters;
+        this.parameters = parameters;
     }
 
-    public static HttpRequestStartLine of(String startLine) throws UnsupportedEncodingException {
-        String[] startlineValues = startLine.split(LINE_SPLITTER);
+    public static HttpRequestStartLine of(String startLine) {
+        String[] startLineValues = startLine.split(LINE_SPLITTER);
+        if (startLineValues.length != 3) {
+            throw InvalidHttpRequestStartLine.of(startLine);
+        }
 
-        HttpMethod httpMethod = HttpMethod.valueOf(startlineValues[0]);
-
-        String url = startlineValues[1];
+        String url = startLineValues[1];
         String[] splittedUrl = url.split(QUERY_SPLITTER);
 
-        String path = splittedUrl[0];
-        HttpRequestParameter httpRequestParameters = parseHttpRequestParameter(splittedUrl);
+        HttpMethod httpMethod = HttpMethod.fromMethodName(startLineValues[0]);
+        String path = getPath(splittedUrl);
+        Parameters parameters = getParameters(splittedUrl);
 
-        return new HttpRequestStartLine(httpMethod, path, httpRequestParameters);
+        return new HttpRequestStartLine(httpMethod, path, parameters);
     }
 
-    private static HttpRequestParameter parseHttpRequestParameter(String[] splittedUrl) throws UnsupportedEncodingException {
-        HttpRequestParameter httpRequestParameters = HttpRequestParameter.EMPTY_PARAMETER;
-        if (1 < splittedUrl.length) {
-            httpRequestParameters = HttpRequestParameter.of(splittedUrl[1]);
+
+    private static String getPath(String[] splittedUrl) {
+        return splittedUrl[0];
+    }
+
+    private static Parameters getParameters(String[] splittedUrl) {
+        if (splittedUrl.length < 2) {
+            return Parameters.EMPTY_PARAMETERS;
         }
-        return httpRequestParameters;
+        return Parameters.fromQueryString(splittedUrl[1]);
     }
 
     public HttpMethod getHttpMethod() {
@@ -46,11 +52,7 @@ public class HttpRequestStartLine {
         return path;
     }
 
-    public String getParameter(String key) {
-        return httpRequestParameters.getParameter(key);
-    }
-
-    public boolean hasParamaters() {
-        return !httpRequestParameters.equals(HttpRequestParameter.EMPTY_PARAMETER);
+    public Parameters getParameters() {
+        return parameters;
     }
 }

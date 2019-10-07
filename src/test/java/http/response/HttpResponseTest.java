@@ -1,5 +1,7 @@
 package http.response;
 
+import http.ContentType;
+import http.StatusCode;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 
@@ -14,17 +16,21 @@ class HttpResponseTest {
     void response200Header() throws IOException {
         IDataOutputStream dos = mock(IDataOutputStream.class);
         HttpResponse response = HttpResponse.of(dos);
-        int expectedLenghtOfBodyContent = 10;
+        int expectedLengthOfBodyContent = 10;
         List<String> expectedHeader = Arrays.asList(
                 "HTTP/1.1 200 OK \r\n",
                 "Content-Type: text/html;charset=utf-8\r\n",
-                "Content-Length: " + expectedLenghtOfBodyContent + "\r\n",
+                "Content-Length: " + expectedLengthOfBodyContent + "\r\n",
                 "\r\n");
 
         // builder 사용해서 타입 정하고 charset 정하면 좋을듯..!
-        response.response200Header(expectedLenghtOfBodyContent, "text/html;charset=utf-8");
+        response.setHeader("Content-Type", ContentType.HTML.toHeaderValue());
+        response.setHeader("Content-Length", Integer.toString(expectedLengthOfBodyContent));
+        response.responseHeader(StatusCode.OK);
 
-        for(String line : expectedHeader) {
+        // [TODO] 검증 방식을 바꿔야 함
+        for (String line : expectedHeader) {
+            System.out.println(line);
             verify(dos).writeBytes(line);
         }
     }

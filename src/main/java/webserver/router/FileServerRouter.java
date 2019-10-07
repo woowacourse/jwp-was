@@ -4,12 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import webserver.BadRequestException;
-import webserver.controller.Controller;
-import webserver.controller.FileIOController;
+import webserver.pageprovider.FilePageProvider;
+import webserver.pageprovider.PageProvider;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class FileServerRouter implements Router {
     private static final Logger log = LoggerFactory.getLogger(FileServerRouter.class);
@@ -20,11 +18,13 @@ public class FileServerRouter implements Router {
             "templates"
     );
 
-    private FileServerRouter() {
-    }
+    private final Map<String, FilePageProvider> filePageProviders = new HashMap<String, FilePageProvider>() {{
+        for (String directoryPrefix : directoryPrefixes) {
+            put(directoryPrefix, FilePageProvider.fromDirectory(directoryPrefix));
+        }
+    }};
 
-    private static class BillPughSingleton {
-        private static final FileServerRouter INSTANCE = new FileServerRouter();
+    private FileServerRouter() {
     }
 
     public static Router getInstance() {
@@ -32,12 +32,12 @@ public class FileServerRouter implements Router {
     }
 
     @Override
-    public Controller retrieveController(String pattern) {
+    public PageProvider retrieve(String pattern) {
         String prefix = findFirstPrefixCanHandle(pattern)
                 .orElseThrow(() -> BadRequestException.ofPattern(pattern));
         log.debug("prefix :{}, pattern: {}", prefix, pattern);
 
-        return new FileIOController(prefix);
+        return filePageProviders.get(prefix);
     }
 
     @Override
@@ -53,5 +53,9 @@ public class FileServerRouter implements Router {
 
     private boolean canHandleWithPrefix(String prefix, String pattern) {
         return FileIoUtils.canUseResourceFromFilePath(String.format("./%s%s", prefix, pattern));
+    }
+
+    private static class BillPughSingleton {
+        private static final FileServerRouter INSTANCE = new FileServerRouter();
     }
 }

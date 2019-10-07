@@ -1,6 +1,7 @@
 package http.request;
 
 import http.request.exception.NotFoundHttpRequestHeader;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -44,6 +45,34 @@ class HttpRequestHeaderTest {
 
         String notExistKey = "notExist";
         assertThrows(NotFoundHttpRequestHeader.class, () -> httpRequestHeader.getHeader(notExistKey));
+    }
 
+    @Test
+    @DisplayName("대소문자 구분없이 키 적용")
+    void _() {
+        String insertedKey = "Content-Length";
+        HttpRequestHeader header = HttpRequestHeader.of(Arrays.asList(
+                "Content-Length: 10"
+        ));
+        List<String> keys = Arrays.asList(
+                "Content-Length",
+                "Content-length",
+                "content-Length",
+                "content-length"
+        );
+
+        for (String key : keys) {
+            assertThat(header.contains(key)).isTrue();
+            assertThat(header.getHeader(key)).isEqualTo(header.getHeader(insertedKey));
+        }
     }
 }
+
+
+
+
+
+
+
+
+

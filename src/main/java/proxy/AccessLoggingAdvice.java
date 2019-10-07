@@ -12,10 +12,6 @@ public class AccessLoggingAdvice implements MethodInterceptor {
     private AccessLoggingAdvice() {
     }
 
-    private static class BillPughSingleton {
-        private static final AccessLoggingAdvice INSTANCE = new AccessLoggingAdvice();
-    }
-
     public static AccessLoggingAdvice getInstance() {
         return BillPughSingleton.INSTANCE;
     }
@@ -33,5 +29,9 @@ public class AccessLoggingAdvice implements MethodInterceptor {
         log.debug(END_MESSAGE);
 
         return ret;
+    }
+
+    private static class BillPughSingleton {
+        private static final AccessLoggingAdvice INSTANCE = new AccessLoggingAdvice();
     }
 }

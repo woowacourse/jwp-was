@@ -1,10 +1,11 @@
 package webserver.router;
 
 import webserver.BadRequestException;
-import webserver.controller.Controller;
+import webserver.pageprovider.PageProvider;
 
 public interface Router {
-    default Controller retrieveController(String pattern) {
+
+    default PageProvider retrieve(String pattern) {
         throw new BadRequestException(pattern);
     }
 

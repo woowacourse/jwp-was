@@ -1,7 +1,7 @@
 package webserver.router;
 
 import webserver.BadRequestException;
-import webserver.controller.Controller;
+import webserver.pageprovider.PageProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +13,6 @@ public class OrderedRouter implements Router {
         this.orderedRouters = orderedRouters;
     }
 
-    private static class BillPughSingleton {
-        private static final OrderedRouter INSTANCE = new OrderedRouter(new ArrayList<>());
-    }
-
     public static OrderedRouter getInstance() {
         return OrderedRouter.BillPughSingleton.INSTANCE;
     }
@@ -26,10 +22,10 @@ public class OrderedRouter implements Router {
     }
 
     @Override
-    public Controller retrieveController(String pattern) {
+    public PageProvider retrieve(String pattern) {
         for (Router router : orderedRouters) {
             if (router.canHandle(pattern)) {
-                return router.retrieveController(pattern);
+                return router.retrieve(pattern);
             }
         }
 
@@ -43,5 +39,9 @@ public class OrderedRouter implements Router {
                 .count();
 
         return 0 < numCanHandle;
+    }
+
+    private static class BillPughSingleton {
+        private static final OrderedRouter INSTANCE = new OrderedRouter(new ArrayList<>());
     }
 }

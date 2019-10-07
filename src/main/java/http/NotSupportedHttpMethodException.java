@@ -8,4 +8,8 @@ public class NotSupportedHttpMethodException extends RuntimeException {
     public NotSupportedHttpMethodException(String pattern) {
         super(String.format("지원하지 않는 메소드 타입입니다. (pattern: %s)", pattern));
     }
+
+    public static NotSupportedHttpMethodException of(String name) {
+        return new NotSupportedHttpMethodException(name);
+    }
 }
