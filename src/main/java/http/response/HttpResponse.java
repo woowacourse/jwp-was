@@ -3,16 +3,14 @@ package http.response;
 import http.common.HttpCookie;
 import http.common.HttpHeader;
 import http.common.HttpVersion;
-import http.common.SessionPool;
+import http.common.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
@@ -28,8 +26,12 @@ public class HttpResponse {
         return statusLine;
     }
 
-    public HttpHeader getHttpHeader() {
-        return httpHeader;
+    public String getHeader(String key) {
+        return httpHeader.get(key);
+    }
+
+    public Set<Map.Entry<String, String>> getHeaders() {
+        return httpHeader.getHeaders().entrySet();
     }
 
     public HttpResponseBody getHttpResponseBody() {
@@ -76,7 +78,7 @@ public class HttpResponse {
             return;
         }
 
-        HttpCookie jSessionIdCookie = HttpCookie.builder(SessionPool.SESSION_ID, jSessionId)
+        HttpCookie jSessionIdCookie = HttpCookie.builder(SessionManager.SESSION_ID, jSessionId)
                 .path(JSESSIONID_COOKIE_PATH)
                 .build();
         setCookie(jSessionIdCookie);

@@ -20,7 +20,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class BasicControllerTest {
     static final String TEST_RESOURCES = "./src/test/resources";
-    private final String BASIC_CONTROLLER_DIR = "/controller/basic";
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String BASIC_CONTROLLER_DIR = "/controller/basic";
 
     private Controller controller;
     private InputStream in;
@@ -44,7 +45,7 @@ public class BasicControllerTest {
         assertThat(statusLine.getHttpStatus()).isEqualTo(HttpStatus.OK);
         assertThat(statusLine.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
 
-        assertThat(httpResponse.getHttpHeader().get("Content-Type")).isEqualTo(HttpContentType.HTML.getContentType());
+        assertThat(httpResponse.getHeader(CONTENT_TYPE)).isEqualTo(HttpContentType.HTML.getContentType());
     }
 
     @Test
@@ -59,7 +60,7 @@ public class BasicControllerTest {
         assertThat(statusLine.getHttpStatus()).isEqualTo(HttpStatus.OK);
         assertThat(statusLine.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
 
-        assertThat(httpResponse.getHttpHeader().get("Content-Type")).isEqualTo(HttpContentType.CSS.getContentType());
+        assertThat(httpResponse.getHeader(CONTENT_TYPE)).isEqualTo(HttpContentType.CSS.getContentType());
     }
 
     @Test
@@ -74,7 +75,7 @@ public class BasicControllerTest {
         assertThat(statusLine.getHttpStatus()).isEqualTo(HttpStatus.OK);
         assertThat(statusLine.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
 
-        assertThat(httpResponse.getHttpHeader().get("Content-Type")).isEqualTo(HttpContentType.JS.getContentType());
+        assertThat(httpResponse.getHeader(CONTENT_TYPE)).isEqualTo(HttpContentType.JS.getContentType());
     }
 
     @Test
@@ -89,7 +90,7 @@ public class BasicControllerTest {
         assertThat(statusLine.getHttpStatus()).isEqualTo(HttpStatus.OK);
         assertThat(statusLine.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
 
-        assertThat(httpResponse.getHttpHeader().get("Content-Type")).isEqualTo(HttpContentType.FONT.getContentType());
+        assertThat(httpResponse.getHeader(CONTENT_TYPE)).isEqualTo(HttpContentType.FONT.getContentType());
     }
 
     @Test
@@ -104,6 +105,6 @@ public class BasicControllerTest {
         assertThat(statusLine.getHttpStatus()).isEqualTo(HttpStatus.OK);
         assertThat(statusLine.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
 
-        assertThat(httpResponse.getHttpHeader().get("Content-Type")).isEqualTo(HttpContentType.IMG.getContentType());
+        assertThat(httpResponse.getHeader(CONTENT_TYPE)).isEqualTo(HttpContentType.IMG.getContentType());
     }
 }

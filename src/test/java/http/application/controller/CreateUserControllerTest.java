@@ -39,6 +39,6 @@ class CreateUserControllerTest {
         assertThat(statusLine.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
         assertThat(statusLine.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
 
-        assertThat(httpResponse.getHttpHeader().get("Location")).isEqualTo("/index.html");
+        assertThat(httpResponse.getHeader("Location")).isEqualTo("/index.html");
     }
 }

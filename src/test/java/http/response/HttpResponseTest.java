@@ -1,6 +1,5 @@
 package http.response;
 
-import http.common.HttpHeader;
 import http.common.HttpVersion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,9 +24,8 @@ class HttpResponseTest {
         assertThat(statusLine.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
         assertThat(statusLine.getHttpStatus()).isEqualTo(HttpStatus.OK);
 
-        HttpHeader httpResponseHeader = httpResponse.getHttpHeader();
-        assertThat(httpResponseHeader.getContentLength()).isEqualTo(0);
-        assertThat(httpResponseHeader.get("Content-Type")).isEqualTo("text/html");
+        assertThat(httpResponse.getHeader("Content-Length")).isEqualTo(0);
+        assertThat(httpResponse.getHeader("Content-Type")).isEqualTo("text/html");
     }
 
     @Test
@@ -38,7 +36,6 @@ class HttpResponseTest {
         assertThat(statusLine.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
         assertThat(statusLine.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
 
-        HttpHeader httpResponseHeader = httpResponse.getHttpHeader();
-        assertThat(httpResponseHeader.get("Location")).isEqualTo(INDEX_HTML);
+        assertThat(httpResponse.getHeader("Location")).isEqualTo(INDEX_HTML);
     }
 }

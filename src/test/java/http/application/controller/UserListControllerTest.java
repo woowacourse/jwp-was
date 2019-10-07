@@ -65,6 +65,6 @@ public class UserListControllerTest {
         StatusLine statusLine = httpResponse.getStatusLine();
         assertThat(statusLine.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
         assertThat(statusLine.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1);
-        assertThat(httpResponse.getHttpHeader().get("Location")).isEqualTo("/user/login.html");
+        assertThat(httpResponse.getHeader("Location")).isEqualTo("/user/login.html");
     }
 }
