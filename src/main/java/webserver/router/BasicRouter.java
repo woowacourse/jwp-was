@@ -1,16 +1,16 @@
 package webserver.router;
 
 import webserver.BadRequestException;
-import webserver.controller.Controller;
+import webserver.pageprovider.PageProvider;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BasicRouter implements Router {
 
-    private List<PredicatorControllerMatch> matches;
+    private List<PredicatorPageProviderMatch> matches;
 
-    BasicRouter(List<PredicatorControllerMatch> matches) {
+    BasicRouter(List<PredicatorPageProviderMatch> matches) {
         this.matches = matches;
     }
 
@@ -18,17 +18,17 @@ public class BasicRouter implements Router {
         return BillPughSingleton.INSTANCE;
     }
 
-    public BasicRouter addController(ControllerPredicator predicator, Controller controller) {
-        matches.add(PredicatorControllerMatch.from(predicator, controller));
+    public BasicRouter addPageProvider(RouterPredicator predicator, PageProvider pageProvider) {
+        matches.add(PredicatorPageProviderMatch.from(predicator, pageProvider));
 
         return this;
     }
 
     @Override
-    public Controller retrieveController(String pattern) {
+    public PageProvider retrieve(String pattern) {
         return matches.stream()
                 .filter(match -> match.getPredicator().canHandle(pattern))
-                .map(match -> match.getController())
+                .map(match -> match.getPageProvider())
                 .findFirst()
                 .orElseThrow(() -> new BadRequestException(pattern));
     }

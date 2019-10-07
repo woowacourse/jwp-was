@@ -1,6 +1,6 @@
 package webserver.router;
 
 @FunctionalInterface
-public interface ControllerPredicator {
+public interface RouterPredicator {
     boolean canHandle(String pattern);
 }

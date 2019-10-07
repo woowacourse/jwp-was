@@ -1,20 +1,24 @@
 package webserver;
 
-import com.github.jknack.handlebars.Handlebars;
-import com.github.jknack.handlebars.Template;
-import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
-import com.github.jknack.handlebars.io.TemplateLoader;
 import http.ContentType;
+import http.ContentTypeFactory;
+import http.NotAcceptableException;
 import http.request.HttpRequest;
 import http.response.DataOutputStreamWrapper;
 import http.response.HttpResponse;
-import org.apache.tika.Tika;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.controller.Controller;
+import webserver.page.HandlebarsPage;
+import webserver.page.Page;
+import webserver.pageprovider.PageProvider;
+import webserver.pageprovider.PageProviderRequest;
+import webserver.pageprovider.PageProviderResponse;
 import webserver.router.RouterFactory;
 
-import java.io.*;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.util.HashMap;
 
@@ -36,51 +40,65 @@ public class RequestHandler implements Runnable {
             DataOutputStreamWrapper dos = new DataOutputStreamWrapper(new DataOutputStream(out));
             HttpResponse httpResponse = HttpResponse.of(dos);
 
-            try {
-                Controller controller = route(httpRequest);
-                controller.service(httpRequest, httpResponse);
-                // 여기서 response 를 보내는 역할을 할까??
-                // 그렇다면... controller 에서 response 관련 해주어야 할 로직들이 이 곳에 모일 수 있을 것 같은데..
-                // (예를 들어 압축, 캐시, 템플릿 적용 등등)
-            } catch (RuntimeException e) {
-                logger.error("runtime error: ", e);
-                responseErrorPage(httpResponse, e);
-            }
+            tryHandleRequest(httpRequest, httpResponse);
         } catch (IOException e) {
             logger.error(e.getMessage());
-        } catch (Exception e) {
-            logger.error("not handled error: ", e);
         }
     }
 
-    private Controller route(HttpRequest httpRequest) {
-        String path = httpRequest.getPath();
+    private void tryHandleRequest(HttpRequest httpRequest, HttpResponse httpResponse) {
+        try {
+            PageProvider pageProvider = route(httpRequest);
+            Page page = pageProvider.provide(PageProviderRequest.from(httpRequest), PageProviderResponse.from(httpResponse));
 
-        return RouterFactory.getRouter().retrieveController(path);
+            if (page.isRedirectPage()) {
+                httpResponse.setHeader("Location", page.getLocation());
+                httpResponse.response302Header();
+                return;
+            }
+
+            respondPage(httpRequest, httpResponse, page);
+        } catch (RuntimeException e) {
+            logger.error("runtime error: ", e);
+            respondErrorPage(httpRequest, httpResponse, e);
+        }
     }
 
-    private void responseErrorPage(HttpResponse response, RuntimeException re) {
-        TemplateLoader loader = new ClassPathTemplateLoader();
-        loader.setPrefix("/templates");
-        loader.setSuffix(".hbs");
-        Handlebars handlebars = new Handlebars(loader);
+    private PageProvider route(HttpRequest httpRequest) {
+        String path = httpRequest.getPath();
 
-        try {
-            Template template = handlebars.compile("error/error_500");
-            byte[] b = template.apply(new HashMap<String, String>() {{
-                put("error", re.getMessage());
-            }}).getBytes("UTF-8");
+        return RouterFactory.getRouter().retrieve(path);
+    }
 
-            Tika tika = new Tika();
-            String mimeType = tika.detect(new ByteArrayInputStream(b));
-            ContentType contentType = ContentType.fromMimeType(mimeType).get();
+    private void respondErrorPage(HttpRequest request, HttpResponse response, RuntimeException e) {
+        response.clear();
 
-            response.setHeader("Content-Type", contentType.toHeaderValue());
-            response.setHeader("Content-Length", Integer.toString(b.length));
-            response.response200Header();
-            response.responseBody(b);
-        } catch (IOException e) {
-            logger.error("error: ", e);
+        Page page = HandlebarsPage.locationWithObj("error/error_500", createHashMapWithError(e));
+
+        respondPage(request, response, page);
+    }
+
+    private HashMap<String, String> createHashMapWithError(RuntimeException e) {
+        return new HashMap<String, String>() {{
+            put("error", e.getMessage());
+        }};
+    }
+
+    private void respondPage(HttpRequest request, HttpResponse response, Page page) {
+        validateContentType(request, page.getContentType());
+        response.setHeader("Content-Type", page.getContentType().toHeaderValue());
+
+        byte[] body = page.getBody();
+        response.setHeader("Content-Length", Integer.toString(body.length));
+
+        response.response200Header();
+        response.responseBody(body);
+    }
+
+    private void validateContentType(HttpRequest request, ContentType wantedContentType) {
+        String accept = request.getHeader("Accept");
+        if (!ContentTypeFactory.canCreate(accept, wantedContentType)) {
+            throw NotAcceptableException.from(accept);
         }
     }
 }

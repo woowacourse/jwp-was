@@ -74,4 +74,8 @@ public class HttpResponse implements HttpResponseAccessor {
     public void setCookie(Cookie cookie) {
         setHeader("Set-Cookie", cookie.toHeaderValue());
     }
+
+    public void clear() {
+        httpResponseHeader.clear();
+    }
 }

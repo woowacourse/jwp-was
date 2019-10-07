@@ -36,4 +36,8 @@ public class HttpResponseHeader {
     public void setHeader(String key, String value) {
         headers.put(key, value);
     }
+
+    public void clear() {
+        headers.clear();
+    }
 }

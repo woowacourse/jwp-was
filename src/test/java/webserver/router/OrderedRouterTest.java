@@ -3,7 +3,7 @@ package webserver.router;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import webserver.BadRequestException;
-import webserver.controller.Controller;
+import webserver.pageprovider.PageProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,21 +37,21 @@ class OrderedRouterTest {
 
     @Test
     @DisplayName("해당 패턴을 만족하는 여러 컨트롤러 존재, 제일 먼저 등록된 컨트롤러 반환")
-    void retrieveController() {
-        Controller precedenceController = mock(Controller.class);
-        Controller postController = mock(Controller.class);
+    void retrievePageProvider() {
+        PageProvider precedencePageProvider = mock(PageProvider.class);
+        PageProvider postPageProvider = mock(PageProvider.class);
 
         List<Router> routers = Arrays.asList(
                 createNotMatchingRouter(),
                 createNotMatchingRouter(),
-                createMatchingRouter(precedenceController),
+                createMatchingRouter(precedencePageProvider),
                 createNotMatchingRouter(),
-                createMatchingRouter(postController)
+                createMatchingRouter(postPageProvider)
         );
 
         OrderedRouter orderedRouter = new OrderedRouter(routers);
 
-        assertThat(orderedRouter.retrieveController("right pattern")).isEqualTo(precedenceController);
+        assertThat(orderedRouter.retrieve("right pattern")).isEqualTo(precedencePageProvider);
 
     }
 
@@ -75,7 +75,7 @@ class OrderedRouterTest {
         List<Router> routers = Arrays.asList(
                 createNotMatchingRouter(),
                 createNotMatchingRouter(),
-                createMatchingRouter(mock(Controller.class))
+                createMatchingRouter(mock(PageProvider.class))
         );
 
         OrderedRouter orderedRouter = new OrderedRouter(routers);
@@ -86,14 +86,14 @@ class OrderedRouterTest {
     private Router createNotMatchingRouter() {
         Router router = mock(Router.class);
         given(router.canHandle(anyString())).willReturn(false);
-        given(router.retrieveController(anyString())).willThrow(BadRequestException.ofPattern(""));
+        given(router.retrieve(anyString())).willThrow(BadRequestException.ofPattern(""));
         return router;
     }
 
-    private Router createMatchingRouter(Controller controller) {
+    private Router createMatchingRouter(PageProvider pageProvider) {
         Router router = mock(Router.class);
         given(router.canHandle(anyString())).willReturn(true);
-        given(router.retrieveController(anyString())).willReturn(controller);
+        given(router.retrieve(anyString())).willReturn(pageProvider);
         return router;
     }
 }

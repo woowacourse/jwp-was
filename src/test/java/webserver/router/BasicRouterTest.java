@@ -3,7 +3,7 @@ package webserver.router;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import webserver.BadRequestException;
-import webserver.controller.Controller;
+import webserver.pageprovider.PageProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,39 +21,39 @@ class BasicRouterTest {
 
     @Test
     @DisplayName("찾으려는 패턴의 컨트롤러가 존재하지 않을 경우")
-    void retrieveController_hasNoMatchingPattern() {
-        List<PredicatorControllerMatch> matches = Arrays.asList(
-                PredicatorControllerMatch.from((pattern) -> false, mock(Controller.class)),
-                PredicatorControllerMatch.from((pattern) -> false, mock(Controller.class))
+    void retrieve_hasNoMatchingPattern() {
+        List<PredicatorPageProviderMatch> matches = Arrays.asList(
+                PredicatorPageProviderMatch.from((pattern) -> false, mock(PageProvider.class)),
+                PredicatorPageProviderMatch.from((pattern) -> false, mock(PageProvider.class))
         );
         BasicRouter router = new BasicRouter(matches);
 
-        assertThrows(BadRequestException.class, () -> router.retrieveController("not matching pattern"));
+        assertThrows(BadRequestException.class, () -> router.retrieve("not matching pattern"));
     }
 
     @Test
     @DisplayName("찾으려는 패턴의 컨트롤러를 반환")
     void addAndRetrieve_hasMatchingPattern() {
         int matchingIdx = 1;
-        List<PredicatorControllerMatch> matches = Arrays.asList(
-                PredicatorControllerMatch.from((pattern) -> false, mock(Controller.class)),
-                PredicatorControllerMatch.from((pattern) -> true, mock(Controller.class))
+        List<PredicatorPageProviderMatch> matches = Arrays.asList(
+                PredicatorPageProviderMatch.from((pattern) -> false, mock(PageProvider.class)),
+                PredicatorPageProviderMatch.from((pattern) -> true, mock(PageProvider.class))
         );
         BasicRouter router = new BasicRouter(matches);
 
-        assertThat(router.retrieveController("matching pattern with idx 1")).isEqualTo(matches.get(matchingIdx).getController());
+        assertThat(router.retrieve("matching pattern with idx 1")).isEqualTo(matches.get(matchingIdx).getPageProvider());
     }
 
     @Test
     @DisplayName("추가한 컨트롤러가 잘 반환되는지")
-    void addController_retrieveThatController() {
-        List<PredicatorControllerMatch> matches = new ArrayList<>();
+    void addPageProvider_retrieveThatPageProvider() {
+        List<PredicatorPageProviderMatch> matches = new ArrayList<>();
         BasicRouter router = new BasicRouter(matches);
 
         String specificPattern = "salkfjasf";
-        Controller expectedController = mock(Controller.class);
-        router.addController((pattern) -> specificPattern.equals(pattern), expectedController);
+        PageProvider expectedPageProvider = mock(PageProvider.class);
+        router.addPageProvider((pattern) -> specificPattern.equals(pattern), expectedPageProvider);
 
-        assertThat(router.retrieveController(specificPattern)).isEqualTo(expectedController);
+        assertThat(router.retrieve(specificPattern)).isEqualTo(expectedPageProvider);
     }
 }

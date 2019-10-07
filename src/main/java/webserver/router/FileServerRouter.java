@@ -4,9 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import webserver.BadRequestException;
-import webserver.controller.Controller;
-import webserver.controller.PageTemplateController;
 import webserver.pageprovider.FilePageProvider;
+import webserver.pageprovider.PageProvider;
 
 import java.util.*;
 
@@ -33,12 +32,12 @@ public class FileServerRouter implements Router {
     }
 
     @Override
-    public Controller retrieveController(String pattern) {
+    public PageProvider retrieve(String pattern) {
         String prefix = findFirstPrefixCanHandle(pattern)
                 .orElseThrow(() -> BadRequestException.ofPattern(pattern));
         log.debug("prefix :{}, pattern: {}", prefix, pattern);
 
-        return PageTemplateController.ofGetPageProvider(filePageProviders.get(prefix));
+        return filePageProviders.get(prefix);
     }
 
     @Override

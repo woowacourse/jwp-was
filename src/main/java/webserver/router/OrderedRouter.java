@@ -1,7 +1,7 @@
 package webserver.router;
 
 import webserver.BadRequestException;
-import webserver.controller.Controller;
+import webserver.pageprovider.PageProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +22,10 @@ public class OrderedRouter implements Router {
     }
 
     @Override
-    public Controller retrieveController(String pattern) {
+    public PageProvider retrieve(String pattern) {
         for (Router router : orderedRouters) {
             if (router.canHandle(pattern)) {
-                return router.retrieveController(pattern);
+                return router.retrieve(pattern);
             }
         }
 
