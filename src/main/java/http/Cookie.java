@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 public class Cookie {
-    private static final String EQUAL_SIGN = "=";
-    private static final String SEMI_COLON = ";";
     public static final String JSESSIONID = "JSESSIONID";
     public static final String LOGINED = "logined";
+    private static final String EQUAL_SIGN = "=";
+    private static final String SEMI_COLON = ";";
     private static final int NAME_INDEX = 0;
     private static final int VALUE_INDEX = 1;
     private Map<String, String> cookies = new LinkedHashMap<>();

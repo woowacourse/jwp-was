@@ -27,7 +27,7 @@ public class UserListController extends BasicController {
             model.put("users", users);
             return new ModelAndView("/user/list", model);
         }
-            return new ModelAndView("redirect: /user/login.html");
+        return new ModelAndView("redirect: /user/login.html");
     }
 
     private Boolean isLogined(Session session) {

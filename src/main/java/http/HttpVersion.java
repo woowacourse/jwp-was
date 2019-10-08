@@ -14,12 +14,12 @@ public enum HttpVersion {
         this.version = version;
     }
 
-    public String getVersion() {
-        return version;
-    }
-
     public static HttpVersion findVersion(String name) {
         return Arrays.stream(values()).filter(v -> v.getVersion().equals(name))
                 .findAny().orElseThrow(NotSupportedHttpVersionException::new);
+    }
+
+    public String getVersion() {
+        return version;
     }
 }
