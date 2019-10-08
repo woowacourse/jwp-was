@@ -90,7 +90,6 @@ public class HttpResponse {
         try {
             dos.writeBytes(NEW_LINE);
             dos.write(body, 0, body.length);
-            logger.debug("Body: {}", new String(body));
             dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
