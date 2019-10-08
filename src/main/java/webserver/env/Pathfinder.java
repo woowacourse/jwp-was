@@ -1,6 +1,7 @@
 package webserver.env;
 
 import utils.fp.tuple.Pair;
+import utils.fp.tuple.Triplet;
 import utils.parser.jsonelements.JsonArray;
 import utils.parser.jsonelements.JsonObject;
 import webserver.httpelement.HttpPath;
@@ -8,7 +9,7 @@ import webserver.httpelement.HttpPath;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
-import java.util.regex.Pattern;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public final class Pathfinder {
@@ -46,5 +47,11 @@ public final class Pathfinder {
 
     public MappedDestination get(HttpPath path) {
         return this.mappings.get(path.toString());
+    }
+
+    public Set<Triplet<String, String, String>> summary() {
+        return this.mappings.entrySet().stream().map(x ->
+            new Triplet<>(x.getKey(), x.getValue().className(), x.getValue().methodName())
+        ).collect(Collectors.toSet());
     }
 }

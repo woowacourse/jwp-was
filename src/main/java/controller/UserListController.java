@@ -21,7 +21,7 @@ public final class UserListController implements Controller {
         TemplateUtils.bake(
                 "/user/list",
                 new HashMap<String, Object>() {{
-                    put("users", Database.findAllUsers());
+                    this.put("users", Database.findAllUsers());
                 }}
         ).map(body ->
             HttpResponse.builder(HttpContentType.TEXT_HTML_UTF_8)

@@ -8,18 +8,18 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public final class JsonObject extends JsonValue<Map<String, JsonValue<?>>> {
+public final class JsonObject extends JsonValue<Map<String, ? extends JsonValue<?>>> {
     public JsonObject() {
         super(Collections.emptyMap());
     }
 
-    public JsonObject(Map<String, JsonValue<?>> val) {
+    public JsonObject(Map<String, ? extends JsonValue<?>> val) {
         super(val);
     }
 
-    public JsonObject(String key, JsonValue<?> value) {
+    public JsonObject(String k, JsonValue<?> v) {
         super(new HashMap<String, JsonValue<?>>() {{
-            put(key, value);
+            this.put(k, v);
         }});
     }
 
@@ -27,7 +27,7 @@ public final class JsonObject extends JsonValue<Map<String, JsonValue<?>>> {
         return super.val.get(key);
     }
 
-    public Stream<Map.Entry<String, JsonValue<?>>> stream() {
+    public Stream<? extends Map.Entry<String, ? extends JsonValue<?>>> stream() {
         return super.val.entrySet().stream();
     }
 

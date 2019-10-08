@@ -22,7 +22,7 @@ public final class WebServer {
         try (final ServerSocket listener = new ServerSocket(port.number())) {
             logger.info("Web Application Server started {} port.", port);
 
-            Env.router();
+            Env.init();
             // 클라이언트가 연결될때까지 대기한다.
             Socket connection;
             while ((connection = listener.accept()) != null) {
