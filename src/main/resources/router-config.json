@@ -1,0 +1,20 @@
+{
+    "POST": [{
+    "path": "/user/create",
+    "method": "handle",
+    "class": "controller.SignUpController"
+}, {
+    "path": "/user/login",
+    "method": "handle",
+    "class": "controller.LoginController"
+}],
+    "GET": [{
+    "path": "/user/list",
+    "method": "handle",
+    "class": "controller.UserListController"
+}, {
+    "path": "/",
+    "method": "handle",
+    "class": "controller.HomeController"
+}]
+}
