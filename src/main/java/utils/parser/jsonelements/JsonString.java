@@ -1,6 +1,6 @@
 package utils.parser.jsonelements;
 
-public class JsonString extends JsonValue<String> {
+public final class JsonString extends JsonValue<String> {
     public JsonString(String val) {
         super(val);
     }

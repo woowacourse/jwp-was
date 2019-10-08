@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-public class HttpHost implements HttpHeaderField {
+public final class HttpHost implements HttpHeaderField {
     private static final Map<String, HttpHost> CACHE = new HashMap<>();
 
     private final String protocol;
@@ -27,7 +27,7 @@ public class HttpHost implements HttpHeaderField {
             if (hostnameAndPort[0].split("\\s+").length > 1) {
                 return Optional.empty();
             }
-            final HttpHost host = new HttpHost(protocol, hostnameAndPort[0], Port.PORT_80);
+            final HttpHost host = new HttpHost(protocol, hostnameAndPort[0], Port.HTTP);
             CACHE.put(hostnameAndPort[0], host);
             return Optional.of(host);
         }

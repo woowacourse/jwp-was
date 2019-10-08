@@ -6,7 +6,7 @@ import java.net.URLDecoder;
 import java.util.Objects;
 import java.util.Optional;
 
-public class HttpPath {
+public final class HttpPath {
     private final String path;
 
     public static Optional<HttpPath> of(String path) {

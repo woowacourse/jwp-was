@@ -1,4 +1,4 @@
-package webserver.router;
+package webserver.env;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,22 +7,14 @@ import webserver.HttpRequest;
 import webserver.HttpResponse;
 import webserver.httpelement.HttpContentType;
 
-import java.util.Optional;
-
-public class Router {
+public final class Router {
     private static final Logger logger = LoggerFactory.getLogger(Router.class);
-
-    private static final Router instance = new Router(RouterConfigAnnotation.init());
 
     public static final String STATIC_FILE_PATH = "./static";
 
     private final RouterConfig config;
 
-    public static Router getInstance() {
-        return Optional.ofNullable(instance).orElseThrow(WrongRouterConfigException::new);
-    }
-
-    private Router(RouterConfig config) {
+    protected Router(RouterConfig config) {
         this.config = config;
     }
 

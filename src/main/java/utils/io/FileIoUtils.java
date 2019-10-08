@@ -9,7 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-public class FileIoUtils {
+public final class FileIoUtils {
     private static final Logger logger = LoggerFactory.getLogger(FileIoUtils.class);
 
     public static Optional<String> loadFileFromClasspath(String filePath) {

@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-public class HttpCookie implements HttpHeaderField {
+public final class HttpCookie implements HttpHeaderField {
     private final Map<String, String> cookie;
 
     public static Optional<HttpCookie> of(String input) {

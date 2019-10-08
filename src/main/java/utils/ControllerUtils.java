@@ -1,23 +1,23 @@
-package controller;
+package utils;
 
 import utils.io.FileExtension;
 import utils.io.FileIoUtils;
 import webserver.HttpRequest;
 import webserver.HttpResponse;
 import webserver.HttpResponse.HttpResponseBuilder;
+import webserver.env.Env;
+import webserver.env.Router;
+import webserver.env.Session;
 import webserver.httpelement.HttpContentType;
 import webserver.httpelement.HttpLocation;
 import webserver.httpelement.HttpSetCookie;
 import webserver.httpelement.HttpStatus;
-import webserver.router.Router;
-import webserver.session.Session;
-import webserver.session.SessionStorage;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public class BaseController {
+public final class ControllerUtils {
     public static HttpResponse serveStaticFile(String filePath, HttpRequest req) {
         return FileIoUtils.loadFileFromClasspath(Router.STATIC_FILE_PATH + filePath).map(body ->
             HttpResponse.builder(
@@ -49,7 +49,7 @@ public class BaseController {
 
     public static Optional<Session> ifLoggedIn(HttpRequest req) {
         return Optional.ofNullable(
-                SessionStorage.retrieve(req.getCookieOf(Session.COOKIE_IDENTIFIER))
+                Env.sessionStorage().retrieve(req.getCookieOf(Session.COOKIE_IDENTIFIER))
         );
     }
 }

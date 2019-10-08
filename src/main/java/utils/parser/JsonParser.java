@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class JsonParser implements KeyValueParser<JsonObject> {
+public final class JsonParser implements KeyValueParser<JsonObject> {
     private static final Pattern REAL_EXP_NOTATION = Pattern.compile("-?[0-9]\\.[0-9]+[eE][+\\-][0-9]+");
     private static final Pattern REAL = Pattern.compile("-?[0-9]+\\.[0-9]+");
 

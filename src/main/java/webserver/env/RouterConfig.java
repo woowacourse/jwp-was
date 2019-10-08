@@ -1,4 +1,4 @@
-package webserver.router;
+package webserver.env;
 
 import webserver.httpelement.HttpMethod;
 import webserver.httpelement.HttpPath;

@@ -3,7 +3,7 @@ package utils.parser;
 import java.net.URLDecoder;
 import java.util.Map;
 
-public class QueryStringParser extends SimpleStringParser {
+public final class QueryStringParser extends SimpleStringParser {
     protected QueryStringParser() {
         super("&", "=");
     }

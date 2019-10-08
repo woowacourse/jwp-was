@@ -6,7 +6,7 @@ import utils.fp.tailrecursion.TailRecursion;
 
 import java.util.stream.Stream;
 
-public class StringUtils {
+public final class StringUtils {
     public static String pascalToKebobCase(String s) {
         return (s.length() <= 1)
                 ? s.toUpperCase()

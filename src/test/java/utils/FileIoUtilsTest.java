@@ -6,11 +6,11 @@ import org.slf4j.LoggerFactory;
 import utils.io.FileIoUtils;
 
 public class FileIoUtilsTest {
-    private static final Logger log = LoggerFactory.getLogger(FileIoUtilsTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(FileIoUtilsTest.class);
 
     @Test
     void loadFileFromClasspath() throws Exception {
         String body = FileIoUtils.loadFileFromClasspath("./static/index.html").get();
-        log.debug("file : {}", body);
+        logger.debug("file : {}", body);
     }
 }

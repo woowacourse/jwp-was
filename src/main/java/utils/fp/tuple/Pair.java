@@ -7,9 +7,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public class Pair<A, B> implements Tuple<A, B> {
-    private static final int SIZE = 2;
-
+public final class Pair<A, B> implements Tuple<A, B> {
     private final A fst;
     private final B snd;
 
@@ -102,11 +100,6 @@ public class Pair<A, B> implements Tuple<A, B> {
     @Override
     public B snd() {
         return this.snd;
-    }
-
-    @Override
-    public int size() {
-        return SIZE;
     }
 
     @Override

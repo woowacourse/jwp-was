@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-public class HttpSetCookie implements HttpHeaderField {
+public final class HttpSetCookie implements HttpHeaderField {
     private enum SameSite {
         STRICT,
         LAX;

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class JsonArray extends JsonValue<List<JsonValue<?>>> {
+public final class JsonArray extends JsonValue<List<JsonValue<?>>> {
     public JsonArray() {
         super(Collections.emptyList());
     }

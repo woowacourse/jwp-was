@@ -1,4 +1,4 @@
-package webserver.router;
+package webserver.env;
 
 import utils.fp.tuple.Pair;
 import utils.parser.jsonelements.JsonArray;
@@ -11,10 +11,7 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class Pathfinder {
-    //미구현
-    private static final Pattern PATH_VAR = Pattern.compile("\\{[\\w\\W]*}");
-
+public final class Pathfinder {
     private final Map<String, MappedDestination> mappings;
 
     protected static Optional<Pathfinder> of(JsonArray routes) {
@@ -23,8 +20,7 @@ public class Pathfinder {
                                                                 .map(x ->
                                                                     MappedDestination.of(
                                                                             (String) x.get("class").val(),
-                                                                            (String) x.get("method").val(),
-                                                                            Collections.emptyMap()
+                                                                            (String) x.get("method").val()
                                                                     ).map(dest ->
                                                                             new Pair<>(
                                                                                     (String) x.get("path").val(),

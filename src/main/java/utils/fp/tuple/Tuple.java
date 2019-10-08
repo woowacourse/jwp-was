@@ -1,7 +1,11 @@
 package utils.fp.tuple;
 
 public interface Tuple<A, B> {
-    int size();
+    default int size() {
+        return 2;
+    };
+
     A fst();
+
     B snd();
 }

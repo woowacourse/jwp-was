@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-public class HttpMimeType {
+public final class HttpMimeType {
     private enum Chemical {
         ALL,
         APPLICATION,

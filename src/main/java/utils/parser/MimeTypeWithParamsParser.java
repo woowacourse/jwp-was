@@ -6,7 +6,7 @@ import webserver.httpelement.HttpMimeType;
 import java.util.Map;
 import java.util.Optional;
 
-public class MimeTypeWithParamsParser {
+public final class MimeTypeWithParamsParser {
     public static Optional<Pair<HttpMimeType, Map<String, String>>> interpret(String input) {
         return HttpMimeType.of(
                 input.contains(";") ? input.substring(0, input.indexOf(";")) : input

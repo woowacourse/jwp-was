@@ -1,6 +1,6 @@
 package utils.parser.jsonelements;
 
-public class JsonNull extends JsonValue<Void> {
+public final class JsonNull extends JsonValue<Void> {
     private static final JsonNull NULL = new JsonNull();
 
     public static JsonNull get() {

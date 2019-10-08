@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.Optional;
 
-public class TemplateUtils {
-    private static final Logger log = LoggerFactory.getLogger(TemplateUtils.class);
+public final class TemplateUtils {
+    private static final Logger logger = LoggerFactory.getLogger(TemplateUtils.class);
 
     private static final String TEMPLATE_FILES_DIRECTORY = "/templates";
 
@@ -26,7 +26,7 @@ public class TemplateUtils {
         try {
             return Optional.of(handlebars.compile(path).apply(input));
         } catch (IOException e) {
-            log.debug(e.getMessage());
+            logger.debug(e.getMessage());
             return Optional.empty();
         }
     }

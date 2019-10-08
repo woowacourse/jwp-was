@@ -2,7 +2,7 @@ package webserver.httpelement;
 
 import java.util.Objects;
 
-public class HttpLocation implements HttpHeaderField {
+public final class HttpLocation implements HttpHeaderField {
     private final String url;
 
     public HttpLocation(String url) {

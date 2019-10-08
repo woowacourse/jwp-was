@@ -2,7 +2,7 @@ package model;
 
 import java.util.Objects;
 
-public class User {
+public final class User {
     private String id;
     private String password;
     private String name;

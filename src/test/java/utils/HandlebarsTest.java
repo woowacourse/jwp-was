@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HandlebarsTest {
-    private static final Logger log = LoggerFactory.getLogger(HandlebarsTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(HandlebarsTest.class);
 
     @Test
     void name() throws Exception {
@@ -21,6 +21,6 @@ public class HandlebarsTest {
         final Template template = handlebars.compile("user/profile");
         final User user = new User("javajigi", "password", "자바지기", "javajigi@gmail.com");
         final String profilePage = template.apply(user);
-        log.debug("ProfilePage : {}", profilePage);
+        logger.debug("ProfilePage : {}", profilePage);
     }
 }

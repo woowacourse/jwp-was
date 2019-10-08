@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public class Triplet<A, B, C> implements Tuple<A, B> {
+public final class Triplet<A, B, C> implements Tuple<A, B> {
     private static final int SIZE = 3;
 
     private final A fst;

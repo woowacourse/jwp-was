@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
-public class HttpRequestHeader {
+public final class HttpRequestHeader {
     private final HttpHost host;
     private final HttpContentType contentType;
     private final HttpCookie cookie;

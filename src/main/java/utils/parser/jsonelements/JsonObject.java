@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class JsonObject extends JsonValue<Map<String, JsonValue<?>>> {
+public final class JsonObject extends JsonValue<Map<String, JsonValue<?>>> {
     public JsonObject() {
         super(Collections.emptyMap());
     }

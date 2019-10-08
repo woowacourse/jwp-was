@@ -4,11 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.io.NetworkBlockingIO;
 import utils.io.NetworkIO;
-import webserver.router.Router;
+import webserver.env.Env;
 
 import java.net.Socket;
 
-public class RequestHandler implements Runnable {
+public final class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private final Socket connection;
@@ -25,7 +25,7 @@ public class RequestHandler implements Runnable {
         );
 
         NetworkBlockingIO.init(this.connection).ifPresent(io -> {
-            sendResponse(io, HttpRequest.deserialize(io).map(req -> Router.getInstance().serve(req))
+            sendResponse(io, HttpRequest.deserialize(io).map(req -> Env.router().serve(req))
                                                         .orElse(HttpResponse.BAD_REQUEST));
             io.close();
         });

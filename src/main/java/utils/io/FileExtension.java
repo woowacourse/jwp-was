@@ -2,12 +2,12 @@ package utils.io;
 
 import java.util.Objects;
 
-public class FileExtension {
+public final class FileExtension {
     final String name;
 
     public FileExtension(String filePathOrName) {
         this.name = (filePathOrName.contains("."))
-                ? filePathOrName.substring(filePathOrName.lastIndexOf(".") + 1)
+                ? filePathOrName.substring(filePathOrName.lastIndexOf(".") + 1).toLowerCase()
                 : "";
     }
 

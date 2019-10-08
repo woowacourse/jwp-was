@@ -1,6 +1,6 @@
 package utils.parser;
 
-public class KeyValueParserFactory {
+public final class KeyValueParserFactory {
     private static final JsonParser jsonParser = new JsonParser();
     private static final SimpleStringParser httpHeaderFieldsParser = new HttpHeaderParser();
     private static final SimpleStringParser queryStringParser = new QueryStringParser();

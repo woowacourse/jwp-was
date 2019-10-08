@@ -11,7 +11,7 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
-public class NetworkBlockingIO implements NetworkIO {
+public final class NetworkBlockingIO implements NetworkIO {
     private static final Logger logger = LoggerFactory.getLogger(NetworkBlockingIO.class);
 
     private final InputStream in;

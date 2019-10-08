@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
-public class HttpRequest {
+public final class HttpRequest {
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
 
     private final HttpMethod method;

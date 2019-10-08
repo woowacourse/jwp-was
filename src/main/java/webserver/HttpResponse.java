@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class HttpResponse {
+public final class HttpResponse {
     public static final HttpResponse BAD_REQUEST = HttpResponse.builder(HttpContentType.TEXT_PLAIN_UTF_8)
                                                                 .status(HttpStatus.BAD_REQUEST)
                                                                 .build();

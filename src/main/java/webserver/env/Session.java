@@ -1,10 +1,10 @@
-package webserver.session;
+package webserver.env;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class Session {
+public final class Session {
     public static final String COOKIE_IDENTIFIER = "DONUTSESSIONID";
 
     private final String id;

@@ -5,13 +5,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-public class Port {
+public final class Port {
     private static final int PORT_MIN = 0;
     private static final int PORT_MAX = 65_535;
 
     private static final Map<Integer, Port> CACHE = new HashMap<>();
-    public static final Port PORT_80 = of(80).get();
-    public static final Port PORT_443 = of(443).get();
+    public static final Port HTTP = of(80).get();
+    public static final Port HTTPS = of(443).get();
     public static final Port PORT_8080 = of(8080).get();
 
     private final int number;

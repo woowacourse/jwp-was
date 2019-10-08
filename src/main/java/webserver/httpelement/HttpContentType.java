@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-public class HttpContentType implements HttpHeaderField {
+public final class HttpContentType implements HttpHeaderField {
     private static final Map<String, HttpContentType> CACHE = new HashMap<>();
     public static final HttpContentType APPLICATION_JAVASCRIPT_UTF_8 = of("application/javascript;charset=utf-8").get();
     public static final HttpContentType APPLICATION_JSON_UTF_8 = of("application/json;charset=utf-8").get();
