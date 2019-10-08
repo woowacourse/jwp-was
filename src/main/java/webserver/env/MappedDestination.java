@@ -42,4 +42,11 @@ public final class MappedDestination {
             return HttpResponse.INTERNAL_SERVER_ERROR;
         }
     }
+
+    public String className() {
+        return this.controller.getDeclaringClass().getName();
+    }
+    public String methodName() {
+        return this.controller.getName();
+    }
 }

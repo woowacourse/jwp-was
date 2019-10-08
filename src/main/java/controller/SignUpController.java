@@ -10,7 +10,7 @@ import webserver.env.Singleton;
 import webserver.httpelement.HttpMethod;
 
 @Singleton
-public final class UserController implements Controller {
+public final class SignUpController implements Controller {
     @Override
     @RequestMapping(method = HttpMethod.POST, path = "/user/create")
     public HttpResponse handle(HttpRequest req) {

@@ -8,10 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
@@ -20,6 +17,7 @@ import java.util.stream.Stream;
 public final class Reflections {
     private static final Logger logger = LoggerFactory.getLogger(Reflections.class);
 
+    private static final List<String> EXCLUSIONS = Arrays.asList("webserver");
     private static final String INNER_CLASS_SIGN = "$";
 
     private final List<Class<?>> classes;
@@ -60,7 +58,10 @@ public final class Reflections {
                     packageName.isEmpty() ? (packageName + file.getName()) : (packageName + "." + file.getName())
             );
         }
-        if (isClassFile(file.getName()) && !file.getName().contains(INNER_CLASS_SIGN)) {
+        if (isClassFile(file.getName())
+                && isUserDefinedClass(packageName)
+                    && !file.getName().contains(INNER_CLASS_SIGN)
+        ) {
             try {
                 return Stream.of(
                         Class.forName(
@@ -99,6 +100,10 @@ public final class Reflections {
 
     private boolean isJarFile(String path) {
         return new FileExtension(path).equals(new FileExtension(".jar"));
+    }
+
+    private boolean isUserDefinedClass(String packageName) {
+        return EXCLUSIONS.stream().noneMatch(packageName::startsWith);
     }
 
     public Stream<Class<?>> getAllClassesAnnotatedX(Class<? extends Annotation> x) {

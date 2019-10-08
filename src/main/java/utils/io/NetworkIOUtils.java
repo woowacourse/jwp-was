@@ -3,7 +3,7 @@ package utils.io;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-public final class IOUtils {
+public final class NetworkIOUtils {
     /**
      * @param BufferedReader는
      *            Request Body를 시작하는 시점이어야
@@ -18,5 +18,5 @@ public final class IOUtils {
         return String.copyValueOf(body);
     }
 
-    private IOUtils() {}
+    private NetworkIOUtils() {}
 }
