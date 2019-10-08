@@ -4,7 +4,6 @@ import http.Cookie;
 import http.HttpRequestHeader;
 import http.HttpVersion;
 import http.request.exception.NotFoundHttpRequestHeader;
-import http.response.HttpResponse;
 import session.Session;
 import session.SessionRepository;
 
@@ -42,16 +41,6 @@ public class HttpRequest {
 
     public boolean isFileRequest() {
         return getPath().contains(POINT);
-    }
-
-    public Session getSession2(HttpResponse response) {
-        String sessionId = cookie.getCookieValue(JSESSIONID);
-        Session session = SessionRepository.getSession(sessionId);
-        if(sessionId == null) {
-//            response.addCookie(JSESSIONID, session.getId());
-//            response.addCookie(PATH, "/");
-        }
-        return session;
     }
 
     public Session getSession() {

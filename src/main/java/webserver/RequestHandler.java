@@ -30,7 +30,9 @@ public class RequestHandler implements Runnable {
             HttpResponse httpResponse = new HttpResponse(httpRequest);
             DataOutputStream dos = new DataOutputStream(out);
             RequestResolver.route(httpRequest, httpResponse);
-            httpResponse.write(dos);
+
+            ResponseWriter responseWriter = new ResponseWriter(httpResponse, dos);
+            responseWriter.write();
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
