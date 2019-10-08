@@ -2,7 +2,6 @@ package controller;
 
 import db.DataBase;
 import db.NotFoundEntityException;
-import http.Cookie;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.InvalidUserException;
@@ -24,11 +23,6 @@ public class LoginController extends BasicController {
             User user = DataBase.findUserById(bodyData.get("userId"));
             if (user.matchPassword(bodyData.get("password"))) {
                 session.setAttribute(LOGINED, true);
-                Cookie cookie = new Cookie();
-                cookie.addCookie("logined", "true");
-                cookie.addCookie("Path", "/");
-                String build = cookie.build();
-
 
                 return new ModelAndView("redirect: /index.html");
             }
