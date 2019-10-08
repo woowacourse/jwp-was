@@ -48,6 +48,7 @@ public class RequestHandler implements Runnable {
         HttpVersion version = request.getVersion();
         HttpResponse response = HttpResponse.of(version);
 
+        // TODO: 2019-10-08 이 부분 예외 발생 너무 과하다.
         try {
             Controller controller = ControllerMapper.map(request);
             controller.handle(request, response);

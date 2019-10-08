@@ -13,8 +13,8 @@ class HttpCookieTest {
 
         HttpCookie cookies = HttpCookie.parse(cookiesInHeader);
 
-        assertThat(cookies.getCookie("logined")).isEqualTo("true");
-        assertThat(cookies.getCookie("Path")).isEqualTo("/");
+        assertThat(cookies.getCookieValue("logined")).isEqualTo("true");
+        assertThat(cookies.getCookieValue("Path")).isEqualTo("/");
     }
 
     @Test
@@ -40,8 +40,8 @@ class HttpCookieTest {
 
         HttpCookie cookies = HttpCookie.parse(cookiesInHeader);
 
-        assertThat(cookies.getCookie("logined")).isEqualTo(null);
-        assertThat(cookies.getCookie("Path")).isEqualTo("/");
+        assertThat(cookies.getCookieValue("logined")).isEqualTo(null);
+        assertThat(cookies.getCookieValue("Path")).isEqualTo("/");
     }
 
     @Test
@@ -51,8 +51,8 @@ class HttpCookieTest {
 
         HttpCookie cookies = HttpCookie.parse(cookiesInHeader);
 
-        assertThat(cookies.getCookie("logined")).isEqualTo("true");
-        assertThat(cookies.getCookie("Path")).isEqualTo(null);
+        assertThat(cookies.getCookieValue("logined")).isEqualTo("true");
+        assertThat(cookies.getCookieValue("Path")).isEqualTo(null);
 
     }
 }

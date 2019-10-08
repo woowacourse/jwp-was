@@ -4,13 +4,13 @@ import org.slf4j.Logger;
 
 public class LoggingUtils {
     public static void logStackTrace(Logger logger, Exception e) {
-        StringBuilder loggerBuilder = new StringBuilder();
+        StringBuilder logBuilder = new StringBuilder();
         StackTraceElement[] traces = e.getStackTrace();
 
-        loggerBuilder.append("Exception : \n");
         for (StackTraceElement traceElement : traces) {
-            loggerBuilder.append("\tat ").append(traceElement).append("\n");
+            logBuilder.append("\tat ").append(traceElement).append("\n");
         }
-        logger.debug(loggerBuilder.toString());
+        logBuilder.insert(0, "Exception : \n");
+        logger.error(logBuilder.toString());
     }
 }

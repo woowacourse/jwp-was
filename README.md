@@ -40,14 +40,14 @@
 ## 2단계 로그인 및 세션 구현
 1. 로그인 기능 구현
     - [x] '/user/login'으로 로그인 요청 받기
-    - [ ] 로그인이 성공하면 index.html로 이동
-    - [ ] Cookie 구현 
-    - [ ] 로그인이 성공하면 응답의 cookie header값을 logined=true로 전달
-    - [ ] 로그인이 실패하면 cookie header값을 logined=false로 전달
+    - [x] 로그인이 성공하면 index.html로 이동
+    - [x] Cookie 구현 
+    - [x] 로그인이 성공하면 응답의 cookie header값을 logined=true로 전달
+    - [x] 로그인이 실패하면 cookie header값을 logined=false로 전달
         
 2. 로그인상태일 경우 사용자 목록 출력
-    - [ ] '/user/list'로 요청 받기
-    - [ ] 유저 목록을 받아와 template 파일을 동적으로 생성
+    - [x] '/user/list'로 요청 받기
+    - [x] 유저 목록을 받아와 template 파일을 동적으로 생성
    
 3. HttpSession 구현
     - [ ] getId() 구현

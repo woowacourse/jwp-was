@@ -48,7 +48,7 @@ public class HttpCookie {
         }
     }
 
-    public String getCookie(String cookieName) {
+    public String getCookieValue(String cookieName) {
         return cookies.get(cookieName);
     }
 

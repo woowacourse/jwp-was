@@ -14,8 +14,10 @@ public class ControllerMapper {
 
     static {
         controllers = new HashMap<>();
+
         controllers.put("/user/create", new UserController());
         controllers.put("/user/login", new LoginController());
+        controllers.put("/user/list", new UserController());
     }
 
     public static Controller map(HttpRequest request) {

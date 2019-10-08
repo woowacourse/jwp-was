@@ -2,7 +2,9 @@ package http.request;
 
 import http.HttpHeaders;
 import http.HttpVersion;
+import http.session.HttpCookie;
 
+import static http.HttpHeaders.COOKIE;
 import static http.request.HttpMethod.GET;
 
 public class HttpRequest {
@@ -52,6 +54,11 @@ public class HttpRequest {
 
     public String getBody() {
         return body;
+    }
+
+    public HttpCookie getCookies() {
+        String cookieString = headers.getHeader(COOKIE);
+        return HttpCookie.parse(cookieString);
     }
 
     @Override
