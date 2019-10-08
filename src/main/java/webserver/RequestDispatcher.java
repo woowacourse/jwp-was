@@ -10,6 +10,7 @@ import java.util.function.Function;
 
 class RequestDispatcher {
     private static final Map<String, Function<Request, Response>> requestUrls = new HashMap<>();
+    private static final StaticFileServer STATIC_FILE_SERVER = new StaticFileServer();
 
     static {
         requestUrls.put("/user/create", UserController::createUser);
@@ -18,6 +19,6 @@ class RequestDispatcher {
     }
 
     static Response forward(final Request request) {
-        return requestUrls.getOrDefault(request.getPath(), StaticFileServer::get).apply(request);
+        return requestUrls.getOrDefault(request.getPath(), STATIC_FILE_SERVER::get).apply(request);
     }
 }

@@ -20,6 +20,7 @@ public class UserController {
     private static final String FALSE = "false";
     private static final String LOGIN_PAGE = "/user/login";
     private static final String LOGIN_FAILED_PAGE = "/user/login_failed";
+    private static final StaticFileServer STATIC_FILE_SERVER = new StaticFileServer();
 
     public static Response createUser(final Request request) {
         final QueryParameter queries = request.getQueryParameters();
@@ -40,7 +41,7 @@ public class UserController {
         if (request.getHttpMethod() == HttpMethod.POST) {
             return postLogin(request);
         }
-        return StaticFileServer.get(request);
+        return STATIC_FILE_SERVER.get(request);
     }
 
     private static Response postLogin(final Request request) {
@@ -62,7 +63,7 @@ public class UserController {
     public static Response userList(final Request request) {
         final Cookie cookie = request.getCookie();
         if (TRUE.equals(cookie.get(LOGINED))) {
-            return StaticFileServer.get(request);
+            return STATIC_FILE_SERVER.get(request);
         }
         return new Response.Builder(request).redirect(LOGIN_PAGE).build();
     }
