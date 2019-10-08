@@ -1,6 +1,6 @@
 package http.request;
 
-import http.HttpHeader;
+import http.HttpRequestHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.IOUtils;
@@ -20,19 +20,19 @@ public class RequestFactory {
     public static HttpRequest createHttpRequest(InputStream in) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
         HttpRequestStartLine httpRequestStartLine = initializeStart(br);
-        HttpHeader httpHeader = initializeHeader(br);
-        HttpBody httpBody = initializeBody(br, httpHeader);
+        HttpRequestHeader httpRequestHeader = initializeHeader(br);
+        HttpBody httpBody = initializeBody(br, httpRequestHeader);
 
-        return new HttpRequest(httpRequestStartLine, httpHeader, httpBody);
+        return new HttpRequest(httpRequestStartLine, httpRequestHeader, httpBody);
     }
 
     private static HttpRequestStartLine initializeStart(BufferedReader br) throws IOException {
         return HttpRequestStartLine.of(br.readLine());
     }
 
-    private static HttpHeader initializeHeader(BufferedReader br) throws IOException {
+    private static HttpRequestHeader initializeHeader(BufferedReader br) throws IOException {
         List<String> httpRequestHeaderLines = new ArrayList<>();
-        HttpHeader httpHeader = new HttpHeader();
+        HttpRequestHeader httpRequestHeader = new HttpRequestHeader();
         while (true) {
             String line = br.readLine();
             if (line == null || line.equals(LAST_LINE)) {
@@ -41,16 +41,16 @@ public class RequestFactory {
             log.debug("{}", line);
             httpRequestHeaderLines.add(line);
         }
-        httpHeader.create(httpRequestHeaderLines);
-        return httpHeader;
+        httpRequestHeader.create(httpRequestHeaderLines);
+        return httpRequestHeader;
     }
 
-    private static HttpBody initializeBody(BufferedReader br, HttpHeader httpHeader) throws IOException {
-        if (!httpHeader.contains(CONTENT_LENGTH)) {
+    private static HttpBody initializeBody(BufferedReader br, HttpRequestHeader httpRequestHeader) throws IOException {
+        if (!httpRequestHeader.contains(CONTENT_LENGTH)) {
             log.debug("body가 없습니다.");
             return HttpBody.EMPTY_BODY;
         }
-        int contentLength = Integer.parseInt(httpHeader.getHeader(CONTENT_LENGTH));
+        int contentLength = Integer.parseInt(httpRequestHeader.getHeader(CONTENT_LENGTH));
         return HttpBody.of(IOUtils.readData(br, contentLength));
     }
 

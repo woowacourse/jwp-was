@@ -17,7 +17,8 @@ public class LoginController extends BasicController {
     @Override
     public ModelAndView doPost(HttpRequest request, HttpResponse response) {
         Map<String, String> bodyData = request.convertBodyToMap();
-        Session session = request.getSession(response);
+        Session session = request.getSession();
+
         try {
             User user = DataBase.findUserById(bodyData.get("userId"));
             if (user.matchPassword(bodyData.get("password"))) {

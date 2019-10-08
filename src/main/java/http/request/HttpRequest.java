@@ -1,7 +1,7 @@
 package http.request;
 
 import http.Cookie;
-import http.HttpHeader;
+import http.HttpRequestHeader;
 import http.HttpVersion;
 import http.request.exception.NotFoundHttpRequestHeader;
 import http.response.HttpResponse;
@@ -10,18 +10,20 @@ import session.SessionRepository;
 
 import java.util.Map;
 
+import static http.Cookie.JSESSIONID;
+
 public class HttpRequest {
     private static final String POINT = ".";
     private static final String COOKIE = "Cookie";
     private static final String PATH = "Path";
     private HttpRequestStartLine httpRequestStartLine;
-    private HttpHeader httpHeader;
+    private HttpRequestHeader httpRequestHeader;
     private HttpBody httpBody;
     private Cookie cookie;
 
-    public HttpRequest(HttpRequestStartLine httpRequestStartLine, HttpHeader httpHeader, HttpBody httpBody) {
+    public HttpRequest(HttpRequestStartLine httpRequestStartLine, HttpRequestHeader httpRequestHeader, HttpBody httpBody) {
         this.httpRequestStartLine = httpRequestStartLine;
-        this.httpHeader = httpHeader;
+        this.httpRequestHeader = httpRequestHeader;
         this.httpBody = httpBody;
         this.cookie = createCookie();
     }
@@ -42,13 +44,23 @@ public class HttpRequest {
         return getPath().contains(POINT);
     }
 
-    public Session getSession(HttpResponse response) {
-        String sessionId = cookie.getCookieValue(Cookie.JSESSIONID);
+    public Session getSession2(HttpResponse response) {
+        String sessionId = cookie.getCookieValue(JSESSIONID);
         Session session = SessionRepository.getSession(sessionId);
         if(sessionId == null) {
-            response.addCookie(Cookie.JSESSIONID, session.getId());
-            response.addCookie(PATH, "/");
+//            response.addCookie(JSESSIONID, session.getId());
+//            response.addCookie(PATH, "/");
         }
+        return session;
+    }
+
+    public Session getSession() {
+        String sessionId = cookie.getCookieValue(JSESSIONID);
+        Session session = SessionRepository.getSession(sessionId);
+
+        cookie.addCookie(JSESSIONID, session.getId());
+        cookie.addCookie(PATH, "/");
+
         return session;
     }
 
@@ -71,7 +83,7 @@ public class HttpRequest {
     }
 
     public String getHeader(String key) {
-        return httpHeader.getHeader(key);
+        return httpRequestHeader.getHeader(key);
     }
 
     public String getParameter(String key) {
@@ -84,5 +96,9 @@ public class HttpRequest {
 
     public HttpVersion getVersion() {
         return httpRequestStartLine.getHttpVersion();
+    }
+
+    public Cookie getCookie() {
+        return cookie;
     }
 }

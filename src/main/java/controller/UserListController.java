@@ -19,7 +19,7 @@ import static http.Cookie.LOGINED;
 public class UserListController extends BasicController {
     @Override
     public ModelAndView doGet(HttpRequest request, HttpResponse response) {
-        Session session = request.getSession(response);
+        Session session = request.getSession();
 
         if (isLogined(session)) {
             List<User> users = new ArrayList<>(DataBase.findAll());
