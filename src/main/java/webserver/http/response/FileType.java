@@ -5,8 +5,13 @@ import webserver.handler.exception.NotSupportedFileType;
 import java.util.Arrays;
 
 public enum FileType {
-    ALL("*", "*/*"), CSS("css", "text/css"), JAVASCRIPT("js", "application/javascript"
-    ), HTML("html", "text/html"), WOFF("woff", "application/font-woff"), TTF("ttf", "application/x-font-ttf"), ICO("ico", "image/x-icon");
+    ALL("*", "*/*"),
+    CSS("css", "text/css"),
+    JAVASCRIPT("js", "application/javascript"),
+    HTML("html", "text/html"),
+    WOFF("woff", "application/font-woff"),
+    TTF("ttf", "application/x-font-ttf"),
+    ICO("ico", "image/x-icon");
 
     private final String extensionName;
     private final String mimeName;

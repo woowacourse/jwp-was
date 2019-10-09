@@ -20,23 +20,15 @@ public abstract class AbstractRequestServlet implements HttpServlet {
     }
 
     @Override
-    public void run(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+    public ModelAndView run(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         if (httpRequest.getMethod() == RequestMethod.GET) {
-            doGet(httpRequest, httpResponse);
-            return;
+            return doGet(httpRequest, httpResponse);
         }
 
         if (httpRequest.getMethod() == RequestMethod.POST) {
-            doPost(httpRequest, httpResponse);
-            return;
+            return doPost(httpRequest, httpResponse);
         }
         throw new MethodNotAllowedException(httpRequest.getMethod());
-    }
-
-    @Override
-    public void move(ModelAndView mv, HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
-        View view = mv.getView();
-        view.render(mv.getModelMap(), httpRequest, httpResponse);
     }
 
     protected ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {

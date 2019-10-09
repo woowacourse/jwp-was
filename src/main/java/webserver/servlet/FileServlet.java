@@ -11,8 +11,8 @@ import java.io.IOException;
 import static webserver.http.response.FileType.isSupportedFile;
 
 public class FileServlet implements HttpServlet {
-    public static final String EXTENSION_DELIMITER = ".";
-    public static final int SUBSTRING_INDEX = 1;
+    private static final String EXTENSION_DELIMITER = ".";
+    private static final int SUBSTRING_INDEX = 1;
     private String fileExtension;
     private Resolver resolver;
     public FileServlet(Resolver resolver) {

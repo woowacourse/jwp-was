@@ -1,31 +1,28 @@
 package webserver;
 
-import webserver.servlet.exception.MethodNotAllowedException;
-import utils.exception.NotFoundFileException;
-import webserver.handler.exception.NotFoundURIException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.exception.NotFoundFileException;
 import webserver.handler.MappingHandler;
+import webserver.handler.exception.NotFoundURIException;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 import webserver.http.response.HttpStatus;
 import webserver.servlet.HttpServlet;
+import webserver.servlet.exception.MethodNotAllowedException;
 import webserver.view.ModelAndView;
-import webserver.view.View;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-public class DispatcherServlet {
+class DispatcherServlet {
     private static final Logger logger = LoggerFactory.getLogger(DispatcherServlet.class);
 
     public void doDispatch(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         try {
             HttpServlet httpServlet = MappingHandler.getServlets(httpRequest.getUri());
-            ModelAndView modelAndView = httpServlet.run(httpRequest, httpResponse);
-            View view = modelAndView.getView();
-            view.render(modelAndView.getModelMap(), httpRequest, httpResponse);
-            httpResponse.send();
+            ModelAndView mv = httpServlet.run(httpRequest, httpResponse);
+            move(mv, httpRequest, httpResponse);
         } catch (NotFoundFileException | NotFoundURIException e) {
             logger.error(e.getMessage());
             httpResponse.error(HttpStatus.NOT_FOUND);
@@ -39,5 +36,9 @@ public class DispatcherServlet {
             httpResponse.error(HttpStatus.INTERNAL_SERVER_ERROR);
             httpResponse.errorWrite();
         }
+    }
+
+    private void move(ModelAndView mv, HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+        mv.getView().render(mv.getModelMap(), httpRequest, httpResponse);
     }
 }
