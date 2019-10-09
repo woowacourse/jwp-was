@@ -57,9 +57,13 @@ public class UserController {
 
     public static Response userList(final Request request) {
         final Cookie cookie = request.getCookie();
-        if (TRUE.equals(cookie.get(LOGINED))) {
+        if (isLogined(cookie)) {
             return STATIC_FILE_SERVER.get(request);
         }
         return new Response.Builder(request).redirect(LOGIN_PAGE).build();
+    }
+
+    private static boolean isLogined(final Cookie cookie) {
+        return TRUE.equals(cookie.get(LOGINED));
     }
 }
