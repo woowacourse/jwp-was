@@ -36,6 +36,10 @@ public abstract class AbstractRequestServlet implements HttpServlet {
         throw new MethodNotAllowedException(httpRequest.getMethod());
     }
 
+    public void move(http){
+
+    }
+
     protected ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         throw new MethodNotAllowedException(httpRequest.getMethod());
     }
