@@ -13,7 +13,7 @@ public class FileIoUtilsTest {
 
     @Test
     void loadFileFromClasspath() throws Exception {
-        byte[] body = FileIoUtils.loadFileFromClasspath("./templates/index.html");
+        byte[] body = FileIoUtils.loadFileFromClasspath("templates/index.html");
         assertThat(body).isNotNull();
         log.debug("file : {}", new String(body));
     }

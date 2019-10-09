@@ -2,6 +2,7 @@ package webserver.resolver;
 
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import utils.FileIoUtils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -28,6 +29,8 @@ public class ResourceRequestResolver {
                 .filter(r -> r.existExtension(contentType))
                 .findAny().orElseThrow(NotFoundException::new);
 
-        resourceResolverRegistration.resolve(httpRequest.getPath(), contentType, httpResponse);
+        String filePath = resourceResolverRegistration.findFilePath(httpRequest.getPath());
+        byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
+        httpResponse.okResponse(contentType, body);
     }
 }

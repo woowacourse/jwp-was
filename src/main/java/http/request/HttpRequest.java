@@ -1,19 +1,30 @@
 package http.request;
 
-import http.HttpHeader;
+import http.Cookie;
+import http.HttpRequestHeader;
+import http.HttpVersion;
+import http.request.exception.NotFoundHttpRequestHeader;
+import session.Session;
+import session.SessionRepository;
 
 import java.util.Map;
 
+import static http.Cookie.JSESSIONID;
+
 public class HttpRequest {
     private static final String POINT = ".";
+    private static final String COOKIE = "Cookie";
+    private static final String PATH = "Path";
     private HttpRequestStartLine httpRequestStartLine;
-    private HttpHeader httpHeader;
+    private HttpRequestHeader httpRequestHeader;
     private HttpBody httpBody;
+    private Cookie cookie;
 
-    public HttpRequest(HttpRequestStartLine httpRequestStartLine, HttpHeader httpHeader, HttpBody httpBody) {
+    public HttpRequest(HttpRequestStartLine httpRequestStartLine, HttpRequestHeader httpRequestHeader, HttpBody httpBody) {
         this.httpRequestStartLine = httpRequestStartLine;
-        this.httpHeader = httpHeader;
+        this.httpRequestHeader = httpRequestHeader;
         this.httpBody = httpBody;
+        this.cookie = createCookie();
     }
 
     public Map<String, String> convertBodyToMap() {
@@ -32,6 +43,26 @@ public class HttpRequest {
         return getPath().contains(POINT);
     }
 
+    public Session getSession() {
+        String sessionId = cookie.getCookieValue(JSESSIONID);
+        Session session = SessionRepository.getSession(sessionId);
+
+        cookie.addCookie(JSESSIONID, session.getId());
+        cookie.addCookie(PATH, "/");
+
+        return session;
+    }
+
+    private Cookie createCookie() {
+        Cookie cookie = new Cookie();
+        try {
+            cookie.parse(getHeader(COOKIE));
+            return cookie;
+        } catch (NotFoundHttpRequestHeader e) {
+            return cookie;
+        }
+    }
+
     public HttpMethodType getHttpMethod() {
         return httpRequestStartLine.getHttpMethodType();
     }
@@ -41,7 +72,7 @@ public class HttpRequest {
     }
 
     public String getHeader(String key) {
-        return httpHeader.getHeader(key);
+        return httpRequestHeader.getHeader(key);
     }
 
     public String getParameter(String key) {
@@ -52,4 +83,11 @@ public class HttpRequest {
         return httpBody;
     }
 
+    public HttpVersion getVersion() {
+        return httpRequestStartLine.getHttpVersion();
+    }
+
+    public Cookie getCookie() {
+        return cookie;
+    }
 }

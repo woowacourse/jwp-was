@@ -1,10 +1,5 @@
 package webserver.resolver;
 
-import http.response.HttpResponse;
-import utils.FileIoUtils;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Set;
 
 class ResourceResolverRegistration {
@@ -20,12 +15,7 @@ class ResourceResolverRegistration {
         return extensionSet.contains(contentType);
     }
 
-    private String findFilePath(String path) {
+    String findFilePath(String path) {
         return resourcePath + path;
-    }
-
-    void resolve(String path, String contentType, HttpResponse httpResponse) throws IOException, URISyntaxException {
-        byte[] body = FileIoUtils.loadFileFromClasspath(findFilePath(path));
-        httpResponse.okResponse(contentType, body);
     }
 }

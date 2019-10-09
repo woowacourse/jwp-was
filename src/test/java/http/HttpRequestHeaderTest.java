@@ -11,7 +11,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class HttpHeaderTest {
+class HttpRequestHeaderTest {
 
     @Test
     void request_헤더_생성() {
@@ -20,7 +20,7 @@ class HttpHeaderTest {
                 "Connection: keep-alive",
                 "Accept: */*"
         );
-        HttpHeader httpHeader = HttpHeader.of(headerLines);
+        HttpRequestHeader httpRequestHeader = new HttpRequestHeader().create(headerLines);
 
         Map<String, String> expectedHeaders = new HashMap<>();
         expectedHeaders.put("Host", "localhost:8080");
@@ -29,7 +29,7 @@ class HttpHeaderTest {
 
         for (String expectedKey : expectedHeaders.keySet()) {
             assertThat(expectedHeaders.get(expectedKey))
-                    .isEqualTo(httpHeader.getHeader(expectedKey));
+                    .isEqualTo(httpRequestHeader.getHeader(expectedKey));
         }
     }
 
@@ -38,7 +38,7 @@ class HttpHeaderTest {
         List<String> headerLines =
                 Arrays.asList("Content-Type: text/html;charset=utf-8\r\n",
                         "Content-Length: 10\r\n");
-        HttpHeader httpHeader = HttpHeader.of(headerLines);
+        HttpRequestHeader httpRequestHeader = new HttpRequestHeader().create(headerLines);
 
         Map<String, String> expectedHeaders = new HashMap<>();
         expectedHeaders.put("Content-Type", "text/html;charset=utf-8\r\n");
@@ -46,7 +46,7 @@ class HttpHeaderTest {
 
         for (String expectedKey : expectedHeaders.keySet()) {
             assertThat(expectedHeaders.get(expectedKey))
-                    .isEqualTo(httpHeader.getHeader(expectedKey));
+                    .isEqualTo(httpRequestHeader.getHeader(expectedKey));
         }
     }
 
@@ -57,10 +57,10 @@ class HttpHeaderTest {
                 "Connection: keep-alive",
                 "Accept: */*"
         );
-        HttpHeader httpHeader = HttpHeader.of(headerLines);
+        HttpRequestHeader httpRequestHeader = new HttpRequestHeader().create(headerLines);
 
         String notExistKey = "notExist";
-        assertThrows(NotFoundHttpRequestHeader.class, () -> httpHeader.getHeader(notExistKey));
+        assertThrows(NotFoundHttpRequestHeader.class, () -> httpRequestHeader.getHeader(notExistKey));
 
     }
 }

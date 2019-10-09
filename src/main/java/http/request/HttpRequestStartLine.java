@@ -1,5 +1,6 @@
 package http.request;
 
+import http.HttpVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,31 +14,36 @@ public class HttpRequestStartLine {
     private final HttpMethodType httpMethodType;
     private final String path;
     private final HttpRequestParameter httpRequestParameters;
+    private final HttpVersion httpVersion;
 
-    private HttpRequestStartLine(HttpMethodType httpMethodType, String path, HttpRequestParameter httpRequestParameters) {
+    private HttpRequestStartLine(HttpMethodType httpMethodType, String path, HttpRequestParameter httpRequestParameters, HttpVersion httpVersion) {
         this.httpMethodType = httpMethodType;
         this.path = path;
         this.httpRequestParameters = httpRequestParameters;
+        this.httpVersion = httpVersion;
     }
 
     public static HttpRequestStartLine of(String startLine) throws UnsupportedEncodingException {
+        log.debug(startLine);
         String[] startLineValues = startLine.split(LINE_SPLITTER);
 
         HttpMethodType httpMethodType = HttpMethodType.valueOf(startLineValues[0]);
 
         String url = startLineValues[1];
-        String[] splittedUrl = url.split(QUERY_SPLITTER);
+        String[] splitUrl = url.split(QUERY_SPLITTER);
 
-        String path = splittedUrl[0];
-        HttpRequestParameter httpRequestParameters = parseHttpRequestParameter(splittedUrl);
+        String path = splitUrl[0];
+        HttpRequestParameter httpRequestParameters = parseHttpRequestParameter(splitUrl);
 
-        return new HttpRequestStartLine(httpMethodType, path, httpRequestParameters);
+        HttpVersion httpVersion = HttpVersion.findVersion(startLineValues[2]);
+
+        return new HttpRequestStartLine(httpMethodType, path, httpRequestParameters, httpVersion);
     }
 
-    private static HttpRequestParameter parseHttpRequestParameter(String[] splittedUrl) throws UnsupportedEncodingException {
+    private static HttpRequestParameter parseHttpRequestParameter(String[] splitUrl) throws UnsupportedEncodingException {
         HttpRequestParameter httpRequestParameters = HttpRequestParameter.EMPTY_PARAMETER;
-        if (1 < splittedUrl.length) {
-            httpRequestParameters = HttpRequestParameter.of(splittedUrl[1]);
+        if (1 < splitUrl.length) {
+            httpRequestParameters = HttpRequestParameter.of(splitUrl[1]);
         }
         return httpRequestParameters;
     }
@@ -52,6 +58,10 @@ public class HttpRequestStartLine {
 
     String getParameter(String key) {
         return httpRequestParameters.getParameter(key);
+    }
+
+    HttpVersion getHttpVersion() {
+        return httpVersion;
     }
 
     boolean hasParameters() {

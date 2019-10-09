@@ -6,28 +6,32 @@ import http.response.HttpResponse;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import view.ModelAndView;
+import webserver.ServerErrorException;
 
 import java.util.Map;
 
-public class UserController extends BasicController {
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
+public class SignUpController extends BasicController {
+    private static final Logger log = LoggerFactory.getLogger(SignUpController.class);
 
     @Override
-    public void doGet(HttpRequest request, HttpResponse response) {
+    public ModelAndView doGet(HttpRequest request, HttpResponse response) {
         if (request.hasParameters()) {
             DataBase.addUser(createUser(request));
-            response.redirectResponse("/index.html");
+            return new ModelAndView("redirect: /index.html");
         }
+        throw new ServerErrorException("파라미터가 필요합니다.");
     }
 
     @Override
-    public void doPost(HttpRequest request, HttpResponse response) {
+    public ModelAndView doPost(HttpRequest request, HttpResponse response) {
         log.debug("{}", request.hasBody());
 
         if (request.hasBody()) {
             DataBase.addUser(createUser(request.convertBodyToMap()));
-            response.redirectResponse("/index.html");
+            return new ModelAndView("redirect: /index.html");
         }
+        throw new ServerErrorException("바디가 필요합니다.");
     }
 
     private User createUser(HttpRequest request) {

@@ -23,7 +23,7 @@ class ResourceRequestResolverTest {
         InputStream in = IOUtils.toInputStream(request, "UTF-8");
 
         HttpRequest httpRequest = RequestFactory.createHttpRequest(in);
-        HttpResponse httpResponse = new HttpResponse();
+        HttpResponse httpResponse = new HttpResponse(httpRequest);
 
         assertThrows(NotFoundException.class, () -> ResourceRequestResolver.resolve(httpRequest, httpResponse));
     }

@@ -1,9 +1,13 @@
 package webserver.resolver;
 
 import controller.Controller;
-import controller.UserController;
+import controller.LoginController;
+import controller.SignUpController;
+import controller.UserListController;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import view.ModelAndView;
+import view.ViewResolver;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -15,13 +19,17 @@ public class NormalRequestResolver {
     private static final Map<String, Controller> controllers = new HashMap<>();
 
     static {
-        controllers.put("/user/create", new UserController());
+        controllers.put("/user/create", new SignUpController());
+        controllers.put("/user/login", new LoginController());
+        controllers.put("/user/list", new UserListController());
     }
 
     static void resolve(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         String path = httpRequest.getPath();
         Controller controller = Optional.ofNullable(controllers.get(path)).orElseThrow(BadRequestException::new);
 
-        controller.service(httpRequest, httpResponse);
+        ModelAndView modelAndView = controller.service(httpRequest, httpResponse);
+
+        ViewResolver.render(modelAndView, httpResponse);
     }
 }

@@ -1,99 +1,78 @@
 package http.response;
 
-import http.HttpHeader;
-import http.request.HttpVersion;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import http.HttpVersion;
+import http.request.HttpRequest;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Set;
 
 public class HttpResponse {
-    private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
-    private HttpResponseStartLine httpResponseStartLine;
-    private HttpHeader header;
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String CONTENT_LENGTH = "Content-Length";
+    private static final String LOCATION = "Location";
+
+    private StatusCode statusCode;
+    private HttpVersion httpVersion;
+    private HttpResponseHeader header;
     private byte[] body;
 
-    public HttpResponse() {
-    }
-
-    void addHeader(Map<String, String> headers) {
-        header = new HttpHeader(headers);
+    public HttpResponse(HttpRequest httpRequest) {
+        this.httpVersion = httpRequest.getVersion();
+        this.header = new HttpResponseHeader(httpRequest.getCookie());
     }
 
     public void okResponse(String contentType, byte[] body) {
-        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.OK, HttpVersion.HTTP_1_1);
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Content-Type", "text/" + contentType + ";charset=utf-8");
-        headers.put("Content-Length", "" + body.length);
-        addHeader(headers);
+        this.statusCode = StatusCode.OK;
+        header.addHeader(CONTENT_TYPE, String.format("text/%s; charset=utf-8", contentType));
         this.body = body;
+        header.addHeader(CONTENT_LENGTH, String.valueOf(body.length));
     }
 
-    public void redirectResponse(String location) {
-        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.FOUND, HttpVersion.HTTP_1_1);
-        Map<String, String> header = new HashMap<>();
-        header.put("Location", location);
-        addHeader(header);
-        this.body = new byte[]{};
+    public void redirect(String location) {
+        this.statusCode = StatusCode.FOUND;
+        header.addHeader(LOCATION, location);
     }
 
     public void badRequest() {
-        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.BAD_REQUEST, HttpVersion.HTTP_1_1);
-        addHeader(new HashMap<>());
-        this.body = new byte[]{};
+        this.statusCode = StatusCode.BAD_REQUEST;
     }
 
     public void notFound() {
-        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.NOT_FOUND, HttpVersion.HTTP_1_1);
-        addHeader(new HashMap<>());
-        this.body = new byte[]{};
+        this.statusCode = StatusCode.NOT_FOUND;
     }
 
     public void methodNotAllow() {
-        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.METHOD_NOT_FOUND, HttpVersion.HTTP_1_1);
-        addHeader(new HashMap<>());
-        this.body = new byte[]{};
+        this.statusCode = StatusCode.METHOD_NOT_FOUND;
     }
 
     public void internalServerError() {
-        this.httpResponseStartLine = new HttpResponseStartLine(StatusCode.INTERNAL_SERVER_ERROR, HttpVersion.HTTP_1_1);
-        addHeader(new HashMap<>());
-        this.body = new byte[]{};
+        this.statusCode = StatusCode.INTERNAL_SERVER_ERROR;
     }
 
-    private void writeStartLine(DataOutputStream dos) throws IOException {
-        logger.debug("{}", httpResponseStartLine.convertLineToString() + "\r\n");
-        String line = httpResponseStartLine.convertLineToString();
-        dos.writeBytes(line + "\r\n");
+    public byte[] getBody() {
+        return this.body;
     }
 
-    private void writeHeader(DataOutputStream dos) {
-        try {
-            for (String line : header.getKeySet()) {
-                logger.debug("header {}", line + ": " + header.getHeader(line) + "\r\n");
-                dos.writeBytes(line + ": " + header.getHeader(line) + "\r\n");
-            }
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+    public boolean hasCookie() {
+        return header.hasCookie();
     }
 
-    private void writeBody(DataOutputStream dos) {
-        try {
-            dos.writeBytes("\r\n");
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+    public String getCookieValues() {
+        return header.getCookieValues();
     }
 
-    public void forward(DataOutputStream dos) throws IOException {
-        writeStartLine(dos);
-        writeHeader(dos);
-        writeBody(dos);
+    public HttpVersion getVersion() {
+        return httpVersion;
+    }
+
+    public StatusCode getStatus() {
+        return statusCode;
+    }
+
+    public Set<String> getHeaderKeys() {
+        return header.getKeySet();
+    }
+
+    public String getHeaderValue(String key) {
+        return header.getHeader(key);
     }
 }

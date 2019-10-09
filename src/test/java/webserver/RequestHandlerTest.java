@@ -3,7 +3,6 @@ package webserver;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import webserver.resolver.BadRequestException;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -11,7 +10,6 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -45,7 +43,7 @@ public class RequestHandlerTest {
 
     @Test
     void css_확인() throws IOException {
-        String request = "GET ./css/styles.css HTTP/1.1\n" +
+        String request = "GET /css/styles.css HTTP/1.1\n" +
                 "Host: localhost:8080\n" +
                 "Accept: text/css,*/*;q=0.1\n" +
                 "Connection: keep-alive\n";
@@ -77,13 +75,4 @@ public class RequestHandlerTest {
         requestHandler.run();
     }
 
-    @Test
-    void BadRequest_에러() throws IOException {
-        String request = "POST /index.html HTTP/1.1\n" +
-                "Host: localhost:8080\n" +
-                "Connection: keep-alive\n" +
-                "Accept: */*";
-        when(socket.getInputStream()).thenReturn(IOUtils.toInputStream(request, "UTF-8"));
-        assertThrows(BadRequestException.class, () -> requestHandler.run());
-    }
 }
