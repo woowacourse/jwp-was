@@ -1,12 +1,16 @@
 package webserver;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.DataConverter;
 import utils.FileLoader;
 import utils.IOUtils;
+import utils.exception.InvalidFileAccessException;
 import web.controller.Controller;
 import web.controller.impl.LoginController;
 import web.controller.impl.UserController;
 import web.controller.impl.UserListController;
+import webserver.message.HttpStatus;
 import webserver.message.exception.NotFoundFileException;
 import webserver.message.exception.UrlDecodeException;
 import webserver.message.request.Request;
@@ -17,11 +21,11 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class RequestDispatcher {
-    private static final String TEMPLATES_PATH = "./templates";
-    private static final String STATIC_PATH = "./static";
+    private static final Logger logger = LoggerFactory.getLogger(RequestDispatcher.class);
 
     private static final Map<String, Controller> requestUrls = new ConcurrentHashMap<>();
 
@@ -36,7 +40,7 @@ public class RequestDispatcher {
             final Request request = new Request(ioUtils);
             final Response response = new ResponseBuilder(request.getHttpVersion()).build();
 
-            getHandler(request, response);
+            processResponse(request, response);
 
             return response.toBytes();
         } catch (IOException | URISyntaxException | NullPointerException | UrlDecodeException e) {
@@ -44,35 +48,30 @@ public class RequestDispatcher {
         }
     }
 
-    private static void getHandler(final Request request, final Response response) {
+    private static void processResponse(final Request request, final Response response) {
         try {
-            requestUrls.keySet().stream()
-                    .filter(url -> url.equals(request.getPath()))
-                    .map(requestUrls::get)
-                    .findFirst()
-                    .get()
-                    .service(request, response);
-            ;
+            Optional<Controller> maybeHandler = getHandler(request);
+            maybeHandler.get().service(request, response);
         } catch (NoSuchElementException e) {
-            response.ok(makeFilePath(request, TEMPLATES_PATH));
-        } catch (NotFoundFileException e) {
-            response.notFound();
+            getStaticResponse(request, response);
         }
     }
 
-    /*private static Response serveResponse(Request request) {
+    private static void getStaticResponse(Request request, Response response) {
         try {
-            return DataConverter.convertTo200Response(FileLoader.loadStaticFile(request));
-        } catch (InvalidFileAccessException | NotFoundFileException e) {
-            return DataConverter.convertTo404Response(FileLoader.loadNotFoundFile());
-        } catch (NullPointerException | UrlDecodeException e) {
-            return DataConverter.convertTo500Response(FileLoader.loadInternalServerErrorFile());
-        }
-    }*/
+            response.body(FileLoader.loadStaticFile(request.getPath()));
+        } catch (NotFoundFileException | InvalidFileAccessException e) {
+            logger.debug("404 Not Found: {}", e.toString());
 
-    private static String makeFilePath(final Request request, final String prefix) {
-        final String requestPath = request.getPath();
-        final String pathEnd = (requestPath.endsWith("/") || "".equals(requestPath)) ? "index.html" : "";
-        return prefix + requestPath + pathEnd;
+            response.setHttpStatus(HttpStatus.NOT_FOUND);
+            response.body(FileLoader.loadNotFoundFile());
+        }
+    }
+
+    private static Optional<Controller> getHandler(final Request request) {
+        return requestUrls.keySet().stream()
+                .filter(url -> url.equals(request.getPath()))
+                .map(requestUrls::get)
+                .findFirst();
     }
 }
