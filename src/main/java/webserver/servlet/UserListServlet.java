@@ -15,9 +15,9 @@ import java.util.Map;
 
 public class UserListServlet extends AbstractRequestServlet {
     private final String url = "/user/list";
-
+    private Resolver resolver;
     public UserListServlet(Resolver resolver) {
-        super(resolver);
+        this.resolver = resolver;
     }
 
     @Override

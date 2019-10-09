@@ -1,5 +1,6 @@
 package webserver.servlet;
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import webserver.servlet.exception.MethodNotAllowedException;
 import webserver.http.request.HttpRequest;
 import webserver.http.request.RequestMethod;
@@ -13,11 +14,6 @@ import java.net.URISyntaxException;
 
 public abstract class AbstractRequestServlet implements HttpServlet {
     public static final String METHOD_NOT_ALLOW_MESSAGE = "지원하지 않는 메소드 입니다.";
-    Resolver resolver;
-
-    public AbstractRequestServlet(Resolver resolver) {
-        this.resolver = resolver;
-    }
 
     @Override
     public boolean canMapping(RequestUri requestUri) {
@@ -36,7 +32,8 @@ public abstract class AbstractRequestServlet implements HttpServlet {
         throw new MethodNotAllowedException(httpRequest.getMethod());
     }
 
-    public void move(http){
+    @Override
+    public void move(ModelAndView mv, HttpRequest httpRequest, HttpResponse httpResponse){
 
     }
 

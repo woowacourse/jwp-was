@@ -15,7 +15,6 @@ public class FileServlet implements HttpServlet {
     public static final int SUBSTRING_INDEX = 1;
     private String fileExtension;
     private Resolver resolver;
-
     public FileServlet(Resolver resolver) {
         this.resolver = resolver;
     }

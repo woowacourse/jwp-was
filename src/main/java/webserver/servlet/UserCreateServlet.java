@@ -14,9 +14,9 @@ import java.io.IOException;
 public class UserCreateServlet extends AbstractRequestServlet {
     private static final Logger logger = LoggerFactory.getLogger(AbstractRequestServlet.class);
     private final String url = "/user/create";
-
+    private Resolver resolver;
     public UserCreateServlet(Resolver resolver) {
-        super(resolver);
+        this.resolver = resolver;
     }
 
     @Override

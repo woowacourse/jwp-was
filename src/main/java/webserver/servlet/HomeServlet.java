@@ -9,9 +9,9 @@ import java.io.IOException;
 
 public class HomeServlet extends AbstractRequestServlet {
     private final String url = "/";
-
+    private Resolver resolver;
     public HomeServlet(Resolver resolver) {
-        super(resolver);
+        this.resolver = resolver;
     }
 
     @Override

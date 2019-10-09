@@ -17,9 +17,10 @@ public class UserLoginServlet extends AbstractRequestServlet {
     private static final Logger logger = LoggerFactory.getLogger(AbstractRequestServlet.class);
 
     private final String url = "/user/login";
+    private Resolver resolver;
 
     public UserLoginServlet(Resolver resolver) {
-        super(resolver);
+        this.resolver = resolver;
     }
 
     @Override
