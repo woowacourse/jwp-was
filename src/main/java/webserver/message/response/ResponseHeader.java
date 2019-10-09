@@ -17,6 +17,14 @@ public class ResponseHeader {
         this.cookies = cookies;
     }
 
+    void addResponseField(final String name, String value) {
+        this.responseFields.put(name, value);
+    }
+
+    void addCookie(final HttpCookie cookie) {
+        this.cookies.put(cookie.getName(), cookie);
+    }
+
     public byte[] toBytes(final int contentLength) {
         this.responseFields.put("Content-Length", Integer.toString(contentLength));
 
