@@ -3,17 +3,14 @@ package web.controller.impl;
 import org.slf4j.Logger;
 import web.controller.AbstractController;
 import web.db.DataBase;
-import webserver.StaticFile;
 import webserver.message.HttpCookie;
-import webserver.message.exception.NotFoundFileException;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
-import webserver.message.response.ResponseBuilder;
 import webserver.session.HttpSession;
 import webserver.session.SessionContextHolder;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
+import webserver.view.ModelAndView;
+import webserver.view.RedirectView;
+import webserver.view.UrlBasedResourceView;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -21,37 +18,29 @@ public class LoginController extends AbstractController {
     private static final Logger LOG = getLogger(LoginController.class);
     private static final String TAG = "[ LoginController ]";
 
-    private static final String INDEX_PAGE_URL = "/";
-    private static final String TEMPLATES_PATH = "./templates";
-    private static final String USER_LOGIN_PAGE = "/user/login.html";
-    private static final String LOGIN_FAILED_PAGE = "/user/login_failed.html";
     private static final String SESSION_ID = "sessionId";
 
     @Override
-    protected Response doGet(Request request) {
-        try {
-            return new ResponseBuilder().body(new StaticFile(TEMPLATES_PATH + USER_LOGIN_PAGE)).build();
-        } catch (IOException | URISyntaxException e) {
-            throw new NotFoundFileException();
-        }
+    protected ModelAndView doGet(final Request request, final Response response) {
+        return new ModelAndView(new UrlBasedResourceView("/user/login.html"));
     }
 
     @Override
-    protected Response doPost(final Request request) {
+    protected ModelAndView doPost(final Request request, final Response response) {
         final String userId = request.getQueryValue("userId");
         final String password = request.getQueryValue("password");
 
         LOG.info("{} userId: {}, password: {}", TAG, userId, password);
 
         if (!matchesUser(userId, password)) {
-            return new ResponseBuilder().redirectUrl(LOGIN_FAILED_PAGE).addCookie(createCookie("logined", "false")).build();
+            response.addCookie(createCookie("logined", "false"));
+            return new ModelAndView(new RedirectView("/user/login_failed.html"));
         }
 
-        return new ResponseBuilder()
-                .redirectUrl(INDEX_PAGE_URL)
-                .addCookie(createCookie("logined", "true"))
-                .addCookie(createCookie(SESSION_ID, enrollSession(userId).getId()))
-                .build();
+        response.addCookie(createCookie("logined", "true"));
+        response.addCookie(createCookie(SESSION_ID, enrollSession(userId).getId()));
+
+        return new ModelAndView(new RedirectView("/"));
     }
 
     private boolean matchesUser(final String userId, final String password) {

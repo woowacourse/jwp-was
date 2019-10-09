@@ -6,7 +6,8 @@ import web.db.DataBase;
 import web.model.User;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
-import webserver.message.response.ResponseBuilder;
+import webserver.view.ModelAndView;
+import webserver.view.RedirectView;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -14,7 +15,7 @@ public class UserController extends AbstractController {
     private static final Logger LOG = getLogger(UserController.class);
 
     @Override
-    protected Response doPost(final Request request) {
+    protected ModelAndView doPost(final Request request, final Response response) {
         final String userId = request.getQueryValue("userId");
         final String password = request.getQueryValue("password");
         final String name = request.getQueryValue("name");
@@ -24,6 +25,6 @@ public class UserController extends AbstractController {
         DataBase.addUser(user);
         LOG.debug(user.toString());
 
-        return new ResponseBuilder().redirectUrl("/").build();
+        return new ModelAndView(new RedirectView("/"));
     }
 }

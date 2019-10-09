@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import web.db.DataBase;
 import web.model.User;
 import webserver.message.request.Request;
+import webserver.message.response.Response;
+import webserver.message.response.ResponseBuilder;
 import webserver.session.HttpSession;
 import webserver.session.SessionContextHolder;
 import webserver.support.RequestHelper;
@@ -13,12 +15,9 @@ import webserver.support.RequestHelper;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-class LoginControllerTest extends RequestHelper {
-    private static final String INDEX_PAGE_URL = "/";
-    private static final String LOGIN_FAILED_PAGE_URL = "/user/login_failed.html";
-    private static final String TEMPLATES_PATH = "./templates";
-    private static final String USER_LOGIN_PAGE = "/user/login.html";
+import static org.assertj.core.api.Assertions.assertThat;
 
+class LoginControllerTest extends RequestHelper {
     private final String requestPostWithWeirdQuery =
             "POST /user/create HTTP/1.1\n" +
                     "Host: localhost:8080\n" +
@@ -29,64 +28,88 @@ class LoginControllerTest extends RequestHelper {
                     "\n" +
                     "userId=java&password=pass&a=b";
 
-    private Request getRequest;
-    private Request postRequest;
     private LoginController loginController;
 
     @BeforeEach
-    void setUp() throws IOException, URISyntaxException {
-        this.getRequest = new Request(ioUtils(requestGetLogin));
-        this.postRequest = new Request(ioUtils(requestPostWithQuery));
+    void setUp() {
         this.loginController = new LoginController();
     }
 
     @Test
     @DisplayName("로그인 페이지 get")
     void getLogin() throws IOException, URISyntaxException {
-        /*assertThat(loginController.doGet(getRequest).toBytes())
-                .isEqualTo(new ResponseBuilder()
-                        .body(new StaticFile(TEMPLATES_PATH + USER_LOGIN_PAGE))
-                        .build()
-                        .toBytes());*/
+        // given
+        Request request = new Request(ioUtils(requestGetLogin));
+        Response response = new ResponseBuilder().build();
+
+        // when
+        this.loginController.service(request, response);
+
+        String actual = new String(response.toBytes());
+
+        // then
+        assertThat(actual).contains("200 OK");
+        assertThat(actual).contains("<button type=\"submit\" class=\"btn btn-success clearfix pull-right\">로그인</button>");
     }
 
     @Test
     @DisplayName("로그인 테스트")
-    void login() {
+    void login() throws IOException, URISyntaxException {
+        // given
         DataBase.addUser(new User("javajigi", "password", "포비", "pobi@pobi.com"));
 
         HttpSession session = HttpSession.newInstance();
         SessionContextHolder.addSession(session);
 
-        /*assertThat(loginController.doPost(postRequest).toBytes())
-                .isEqualTo(new ResponseBuilder()
-                        .redirectUrl(INDEX_PAGE_URL)
-                        .addCookie(new HttpCookie.Builder("logined", "true").path("/").build())
-                        .addCookie(new HttpCookie.Builder("sessionId", session.getId()).path("/").build())
-                        .build().toBytes());*/
+        Request request = new Request(ioUtils(requestPostWithQuery));
+        Response response = new ResponseBuilder().build();
+
+        // when
+        this.loginController.service(request, response);
+
+        String actual = new String(response.toBytes());
+
+        // then
+        assertThat(actual).contains("302 Found");
+        assertThat(actual).contains("Location: /");
+        assertThat(actual).contains("Set-Cookie: logined=true; Path=/; ");
     }
 
     @Test
     @DisplayName("존재하지 않는 userId로 로그인할 때 리다이렉트 확인")
     void loginException1() throws IOException, URISyntaxException {
+        // given
         Request request = new Request(ioUtils(requestPostWithWeirdQuery));
+        Response response = new ResponseBuilder().build();
 
-        /*assertThat(loginController.doPost(request).toBytes())
-                .isEqualTo(new ResponseBuilder()
-                        .redirectUrl(LOGIN_FAILED_PAGE_URL)
-                        .addCookie(new HttpCookie.Builder("logined", "false").path("/").build())
-                        .build().toBytes());*/
+        // when
+        this.loginController.service(request, response);
+
+        String actual = new String(response.toBytes());
+
+        // then
+        assertThat(actual).contains("302 Found");
+        assertThat(actual).contains("Location: /user/login_failed.html");
+        assertThat(actual).contains("Set-Cookie: logined=false; Path=/; ");
     }
 
     @Test
     @DisplayName("비밀번호가 틀렸을 때 리다이렉트 확인")
-    void loginException2() {
+    void loginException2() throws IOException, URISyntaxException {
+        // given
         DataBase.addUser(new User("javajigi", "1234", "포비", "pobi@pobi.com"));
 
-        /*assertThat(loginController.doPost(postRequest).toBytes())
-                .isEqualTo(new ResponseBuilder()
-                        .redirectUrl(LOGIN_FAILED_PAGE_URL)
-                        .addCookie(new HttpCookie.Builder("logined", "false").path("/").build())
-                        .build().toBytes());*/
+        Request request = new Request(ioUtils(requestPostWithQuery));
+        Response response = new ResponseBuilder().build();
+
+        // when
+        this.loginController.service(request, response);
+
+        String actual = new String(response.toBytes());
+
+        // then
+        assertThat(actual).contains("302 Found");
+        assertThat(actual).contains("Location: /user/login_failed.html");
+        assertThat(actual).contains("Set-Cookie: logined=false; Path=/; ");
     }
 }

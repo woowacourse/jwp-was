@@ -2,11 +2,16 @@ package web.controller.impl;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import web.controller.Controller;
 import webserver.message.request.Request;
+import webserver.message.response.Response;
+import webserver.message.response.ResponseBuilder;
 import webserver.support.RequestHelper;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class UserControllerTest extends RequestHelper {
     @Test
@@ -14,13 +19,17 @@ class UserControllerTest extends RequestHelper {
     void name() throws IOException, URISyntaxException {
         // given
         Request request = new Request(ioUtils(requestPostWithUserEnrollQuery));
-        UserController userController = new UserController();
+        Response response = new ResponseBuilder().build();
+
+        Controller userController = new UserController();
 
         // when
-        /*Response response = userController.doPost(request);
+        userController.service(request, response);
+        String actual = new String(response.toBytes());
+        System.out.println(actual);
 
         // then
-        assertThat(new String(response.toBytes()))
-                .isEqualTo(new String(new ResponseBuilder().redirectUrl("/").build().toBytes()));*/
+        assertThat(actual).contains("302 Found");
+        assertThat(actual).contains("Location: /");
     }
 }
