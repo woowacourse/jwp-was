@@ -31,17 +31,17 @@ public abstract class AbstractServletTest {
                 new Cookie(null));
     }
 
-    HttpRequest getLoginPostRequest() {
+    HttpRequest getLoginPostRequest(String body) {
         return new HttpRequest(new RequestLine("POST", "/user/login", "HTTP/1.1")
                 , new RequestHeader(new HashMap<>()),
-                new RequestBody(loginBody()),
+                new RequestBody(body),
                 new Cookie(null));
     }
 
     HttpRequest getUserListRequest(String sessionId) {
         return new HttpRequest(new RequestLine("POST", "/user/list", "HTTP/1.1")
                 , new RequestHeader(new HashMap<>()),
-                new RequestBody(loginBody()),
+                new RequestBody(dummyLoginBody()),
                 new Cookie(Cookie.SESSION_ID_KEY + "=" + sessionId));
     }
 
@@ -52,11 +52,10 @@ public abstract class AbstractServletTest {
                 "&email=" + dummyUser.getEmail();
     }
 
-    String loginBody() {
+    String dummyLoginBody() {
         return "userId=" + dummyUser.getUserId() +
                 "&password=" + dummyUser.getPassword();
     }
-
 
     void signUpAndLogin(User user, String sessionId) {
         signUp(user);

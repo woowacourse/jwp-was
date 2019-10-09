@@ -15,6 +15,7 @@ public class RedirectView implements View {
         this.name = name;
     }
 
+
     @Override
     public void render(Map<String, Object> model, HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         httpResponse.redirect(name);
