@@ -1,6 +1,7 @@
 package webserver.handler;
 
 import webserver.handler.exception.NotFoundURIException;
+import webserver.http.request.HttpRequest;
 import webserver.http.request.RequestUri;
 import webserver.resolver.FileResolver;
 import webserver.resolver.HandlebarViewResolver;
@@ -21,10 +22,10 @@ public class MappingHandler {
         servlets.add(new FileServlet(new FileResolver()));
     }
 
-    public static HttpServlet getServlets(RequestUri requestUri) {
-        System.out.println(requestUri.getAbsPath());
+    public static HttpServlet getServlets(HttpRequest httpRequest) {
+        RequestUri requestUri = httpRequest.getUri();
         return servlets.stream()
-                .filter(s -> s.canMapping(requestUri))
+                .filter(s -> s.canMapping(httpRequest))
                 .findAny()
                 .orElseThrow(() -> new NotFoundURIException(requestUri));
     }

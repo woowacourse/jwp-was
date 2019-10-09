@@ -3,6 +3,7 @@ package webserver.http.response;
 import webserver.handler.exception.NotSupportedFileType;
 
 import java.util.Arrays;
+import java.util.List;
 
 public enum FileType {
     ALL("*", "*/*"),
@@ -21,9 +22,9 @@ public enum FileType {
         this.mimeName = mimeName;
     }
 
-    public static boolean isSupportedFile(String target) {
+    public static boolean isSupportedFile(List<String> target) {
         return Arrays.stream(FileType.values())
-                .anyMatch(type -> target.equals(type.extensionName));
+                .anyMatch(type -> target.contains(type.mimeName));
     }
 
     public static FileType getTypeByExtension(String target) {

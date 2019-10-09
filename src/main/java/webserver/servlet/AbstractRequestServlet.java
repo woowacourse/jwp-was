@@ -2,11 +2,9 @@ package webserver.servlet;
 
 import webserver.http.request.HttpRequest;
 import webserver.http.request.RequestMethod;
-import webserver.http.request.RequestUri;
 import webserver.http.response.HttpResponse;
 import webserver.servlet.exception.MethodNotAllowedException;
 import webserver.view.ModelAndView;
-import webserver.view.View;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -15,8 +13,8 @@ public abstract class AbstractRequestServlet implements HttpServlet {
     public static final String METHOD_NOT_ALLOW_MESSAGE = "지원하지 않는 메소드 입니다.";
 
     @Override
-    public boolean canMapping(RequestUri requestUri) {
-        return requestUri.isSameAbsPath(getUrl());
+    public boolean canMapping(HttpRequest httpRequest) {
+        return httpRequest.getUri().isSameAbsPath(getUrl());
     }
 
     @Override

@@ -20,7 +20,7 @@ class DispatcherServlet {
 
     public void doDispatch(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         try {
-            HttpServlet httpServlet = MappingHandler.getServlets(httpRequest.getUri());
+            HttpServlet httpServlet = MappingHandler.getServlets(httpRequest);
             ModelAndView mv = httpServlet.run(httpRequest, httpResponse);
             move(mv, httpRequest, httpResponse);
         } catch (NotFoundFileException | NotFoundURIException e) {
@@ -40,5 +40,6 @@ class DispatcherServlet {
 
     private void move(ModelAndView mv, HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         mv.getView().render(mv.getModelMap(), httpRequest, httpResponse);
+        httpResponse.send();
     }
 }

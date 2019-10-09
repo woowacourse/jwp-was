@@ -60,4 +60,7 @@ public class HttpRequest {
         return requestLine.getHttpVersion();
     }
 
+    public String getHeaderValue(String key) {
+        return header.getHeader(key);
+    }
 }

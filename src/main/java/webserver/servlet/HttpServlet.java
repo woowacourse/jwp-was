@@ -9,6 +9,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 public interface HttpServlet {
-    boolean canMapping(RequestUri requestUri);
+    boolean canMapping(HttpRequest httpRequest);
     ModelAndView run(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException;
 }
