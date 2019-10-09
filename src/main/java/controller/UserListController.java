@@ -30,7 +30,7 @@ public class UserListController extends AbstractController {
 
             if (sessionAttribute.equals("true")) {
 
-                ModelAndView modelAndView = new ModelAndView(new TemplateView(httpRequest.getPath() + "list.html"));
+                ModelAndView modelAndView = new ModelAndView(new TemplateView("list.html"));
                 modelAndView.addAttribute("UserList", HandlebarsHelper.apply(DataBase.findAll()));
 
                 return modelAndView;

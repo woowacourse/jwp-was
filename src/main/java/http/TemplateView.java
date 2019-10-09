@@ -14,6 +14,6 @@ public class TemplateView implements View {
 
     @Override
     public void render(Map<String, ?> models, HttpRequest request, HttpResponse response) throws Exception {
-        response.forward(path);
+        response.forward(request.getPath() + path);
     }
 }

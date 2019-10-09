@@ -19,6 +19,6 @@ public class IndexController extends AbstractController {
     View doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         httpResponse.forward(httpRequest.getPath() + "index.html");
 
-        return new TemplateView(httpRequest.getPath() + "index.html");
+        return new TemplateView("index.html");
     }
 }
