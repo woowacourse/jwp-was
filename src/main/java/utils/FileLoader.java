@@ -19,12 +19,12 @@ public class FileLoader {
     private static final String INTERNAL_SERVER_ERROR_PATH = TEMPLATES_PATH + "/error/500_internal_error.html";
     private static final String NOT_FOUND_FILE_MESSAGE = "해당 파일이 존재하지 않습니다.";
 
-    public static StaticFile loadStaticFile(final Request request) {
+    public static StaticFile loadStaticFile(final String path) {
         try {
-            return new StaticFile(makeFilePath(request, STATIC_PATH));
+            return new StaticFile(makeFilePath(path, STATIC_PATH));
         } catch (IOException | URISyntaxException | NullPointerException e) {
             try {
-                return new StaticFile(makeFilePath(request, TEMPLATES_PATH));
+                return new StaticFile(makeFilePath(path, TEMPLATES_PATH));
             } catch (IOException | URISyntaxException | NullPointerException ex) {
                 throw new InvalidFileAccessException();
             }
@@ -49,10 +49,9 @@ public class FileLoader {
         }
     }
 
-    private static String makeFilePath(final Request requestHeader, final String prefix) {
-        final String requestPath = requestHeader.getPath();
-        final String pathEnd = (requestPath.endsWith("/") || "".equals(requestPath)) ? "index.html" : "";
-        return prefix + requestPath + pathEnd;
+    private static String makeFilePath(final String path, final String prefix) {
+        final String pathEnd = (path.endsWith("/") || "".equals(path)) ? "index.html" : "";
+        return prefix + path + pathEnd;
     }
 
 }
