@@ -19,7 +19,6 @@ public class HttpCookie {
         this.options = options;
     }
 
-    // TODO Builder 굳이 안해도 될수도
     public static class Builder {
         private final String name;
         private final String value;

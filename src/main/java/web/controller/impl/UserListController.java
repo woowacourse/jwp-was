@@ -4,10 +4,12 @@ import web.controller.AbstractController;
 import web.db.DataBase;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
-import webserver.session.SessionContextHolder;
+import webserver.session.HttpSession;
 import webserver.view.HandleBarView;
 import webserver.view.ModelAndView;
 import webserver.view.RedirectView;
+
+import java.util.Objects;
 
 public class UserListController extends AbstractController {
     private static final String LOGINED = "logined";
@@ -25,7 +27,9 @@ public class UserListController extends AbstractController {
     }
 
     private boolean isLogined(Request request) {
-        return request.getCookieValue(LOGINED).equals("true")
-                && SessionContextHolder.findSessionById(request.getCookieValue("sessionId")).isPresent();
+        HttpSession session = request.getSession();
+        Object logined = session.getAttribute(LOGINED);
+        return Objects.nonNull(logined) && (boolean) logined;
+
     }
 }

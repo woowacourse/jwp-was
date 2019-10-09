@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import web.db.DataBase;
 import web.model.User;
+import webserver.message.HttpCookie;
 import webserver.message.HttpVersion;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
@@ -66,13 +67,14 @@ class LoginControllerTest extends RequestHelper {
 
         // when
         this.loginController.service(request, response);
+        response.addCookie(new HttpCookie.Builder("JSESSIONID", "12345").path("/").build());
 
         String actual = new String(response.toBytes());
 
         // then
         assertThat(actual).contains("302 Found");
         assertThat(actual).contains("Location: /");
-        assertThat(actual).contains("Set-Cookie: logined=true; Path=/; ");
+        assertThat(actual).contains("Set-Cookie: JSESSIONID=12345; Path=/; ");
     }
 
     @Test
@@ -85,12 +87,11 @@ class LoginControllerTest extends RequestHelper {
         // when
         this.loginController.service(request, response);
 
-        String actual = new String(response.toBytes());
-
         // then
+        String actual = new String(response.toBytes());
         assertThat(actual).contains("302 Found");
         assertThat(actual).contains("Location: /user/login_failed.html");
-        assertThat(actual).contains("Set-Cookie: logined=false; Path=/; ");
+        assertThat((boolean) request.getSession().getAttribute("logined")).isEqualTo(false);
     }
 
     @Test
@@ -105,11 +106,10 @@ class LoginControllerTest extends RequestHelper {
         // when
         this.loginController.service(request, response);
 
-        String actual = new String(response.toBytes());
-
         // then
+        String actual = new String(response.toBytes());
         assertThat(actual).contains("302 Found");
         assertThat(actual).contains("Location: /user/login_failed.html");
-        assertThat(actual).contains("Set-Cookie: logined=false; Path=/; ");
+        assertThat((boolean) request.getSession().getAttribute("logined")).isEqualTo(false);
     }
 }

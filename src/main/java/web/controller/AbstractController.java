@@ -1,9 +1,11 @@
 package web.controller;
 
 import webserver.exception.NotFoundFileException;
+import webserver.message.HttpCookie;
 import webserver.message.HttpMethod;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
+import webserver.session.HttpSession;
 import webserver.view.ModelAndView;
 import webserver.view.View;
 
@@ -13,6 +15,9 @@ public class AbstractController implements Controller {
 
     @Override
     public void service(final Request request, final Response response) {
+        final HttpSession session = request.getSession();
+        response.addCookie(new HttpCookie.Builder("JSESSIONID", session.getId()).path("/").build());
+
         ModelAndView mav = null;
         if (request.matchesMethod(HttpMethod.GET)) {
             mav = doGet(request, response);

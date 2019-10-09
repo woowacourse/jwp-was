@@ -16,29 +16,19 @@ class RequestDispatcherTest extends RequestHelper {
 
     @Test
     @DisplayName("url 분기처리를 제대로 하는지 확인")
-    void forwardIndex1() {
-        final byte[] actual = RequestDispatcher.forward(ioUtils(requestPostWithQuery));
+    void forwardIndex() {
+        final String actual = new String(RequestDispatcher.forward(ioUtils(requestPostWithQuery)));
 
         Response response = new Response(HttpVersion.HTTP_1_1);
         response.redirect("/");
 
-        assertThat(actual).isEqualTo(response.toBytes());
+        assertThat(actual).contains("302 Found");
+        assertThat(actual).contains("Location: /");
     }
 
     @Test
     @DisplayName("url 분기처리를 제대로 하는지 확인")
-    void forwardIndex2() {
-        final byte[] actual = RequestDispatcher.forward(ioUtils(requestPostWithQuery));
-
-        Response response = new Response(HttpVersion.HTTP_1_1);
-        response.redirect("/");
-
-        assertThat(actual).isEqualTo(response.toBytes());
-    }
-
-    @Test
-    @DisplayName("url 분기처리를 제대로 하는지 확인")
-    void forwardIndex3() throws IOException, URISyntaxException {
+    void forwardIndex2() throws IOException, URISyntaxException {
         final byte[] actual = RequestDispatcher.forward(ioUtils(requestGetHeader));
 
         final StaticFile staticFile = new StaticFile("./templates/index.html");

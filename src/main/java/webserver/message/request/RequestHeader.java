@@ -61,6 +61,10 @@ public class RequestHeader {
         return this.requestCookies;
     }
 
+    public void addCookie(HttpCookie cookie) {
+        this.requestCookies.add(cookie);
+    }
+
     protected String getCookieValue(final String key) {
         return this.requestCookies.stream()
                 .filter(cookie -> cookie.matchesName(key))
