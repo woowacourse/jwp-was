@@ -1,10 +1,8 @@
 package webserver;
 
 import utils.DataConverter;
-import utils.FileIoUtils;
 import utils.FileLoader;
 import utils.IOUtils;
-import utils.exception.InvalidFileAccessException;
 import web.controller.Controller;
 import web.controller.impl.LoginController;
 import web.controller.impl.UserController;
@@ -13,11 +11,12 @@ import webserver.message.exception.NotFoundFileException;
 import webserver.message.exception.UrlDecodeException;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
+import webserver.message.response.ResponseBuilder;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Map;
-import java.util.Objects;
+import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class RequestDispatcher {
@@ -35,25 +34,33 @@ public class RequestDispatcher {
     public static byte[] forward(final IOUtils ioUtils) {
         try {
             final Request request = new Request(ioUtils);
-            final Response response = processResponse(request);
+            final Response response = new ResponseBuilder(request.getHttpVersion()).build();
+
+            getHandler(request, response);
+
             return response.toBytes();
         } catch (IOException | URISyntaxException | NullPointerException | UrlDecodeException e) {
             return DataConverter.convertTo500Response(FileLoader.loadInternalServerErrorFile()).toBytes();
         }
     }
 
-    private static Response processResponse(final Request request) throws IOException, URISyntaxException {
+    private static void getHandler(final Request request, final Response response) {
         try {
-            final Response response = requestUrls.getOrDefault(request.getPath(), RequestDispatcher::serveResponse).service(request);
-            return Objects.nonNull(response) ? response : DataConverter.convertTo200Response(FileIoUtils.loadFileFromClasspath(makeFilePath(request, STATIC_PATH)));
-        } catch (IOException | URISyntaxException | NullPointerException e) {
-            return DataConverter.convertTo200Response(FileIoUtils.loadFileFromClasspath(makeFilePath(request, TEMPLATES_PATH)));
+            requestUrls.keySet().stream()
+                    .filter(url -> url.equals(request.getPath()))
+                    .map(requestUrls::get)
+                    .findFirst()
+                    .get()
+                    .service(request, response);
+            ;
+        } catch (NoSuchElementException e) {
+            response.ok(makeFilePath(request, TEMPLATES_PATH));
         } catch (NotFoundFileException e) {
-            return DataConverter.convertTo404Response(FileLoader.loadNotFoundFile());
+            response.notFound();
         }
     }
 
-    private static Response serveResponse(Request request) {
+    /*private static Response serveResponse(Request request) {
         try {
             return DataConverter.convertTo200Response(FileLoader.loadStaticFile(request));
         } catch (InvalidFileAccessException | NotFoundFileException e) {
@@ -61,10 +68,10 @@ public class RequestDispatcher {
         } catch (NullPointerException | UrlDecodeException e) {
             return DataConverter.convertTo500Response(FileLoader.loadInternalServerErrorFile());
         }
-    }
+    }*/
 
-    private static String makeFilePath(final Request requestHeader, final String prefix) {
-        final String requestPath = requestHeader.getPath();
+    private static String makeFilePath(final Request request, final String prefix) {
+        final String requestPath = request.getPath();
         final String pathEnd = (requestPath.endsWith("/") || "".equals(requestPath)) ? "index.html" : "";
         return prefix + requestPath + pathEnd;
     }

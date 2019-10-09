@@ -4,26 +4,36 @@ import webserver.message.HttpMethod;
 import webserver.message.exception.NotFoundFileException;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
+import webserver.view.ModelAndView;
+import webserver.view.View;
+
+import java.util.Objects;
 
 public class AbstractController implements Controller {
 
     @Override
-    public Response service(final Request request) {
+    public void service(final Request request, final Response response) {
+        ModelAndView mav = null;
         if (request.matchesMethod(HttpMethod.GET)) {
-            return doGet(request);
+            mav = doGet(request, response);
         }
         if (request.matchesMethod(HttpMethod.POST)) {
-            return doPost(request);
+            mav = doPost(request, response);
         }
 
+        if (Objects.isNull(mav)) {
+            throw new NotFoundFileException();
+        }
+
+        View view = mav.getView();
+        view.render(response, mav.getModels());
+    }
+
+    protected ModelAndView doGet(final Request request, final Response response) {
         throw new NotFoundFileException();
     }
 
-    protected Response doGet(final Request request) {
-        throw new NotFoundFileException();
-    }
-
-    protected Response doPost(final Request request) {
+    protected ModelAndView doPost(final Request request, final Response response) {
         throw new NotFoundFileException();
     }
 }
