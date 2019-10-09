@@ -1,13 +1,12 @@
 package webserver.servlet;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
-import webserver.servlet.exception.MethodNotAllowedException;
 import webserver.http.request.HttpRequest;
 import webserver.http.request.RequestMethod;
 import webserver.http.request.RequestUri;
 import webserver.http.response.HttpResponse;
-import webserver.resolver.Resolver;
+import webserver.servlet.exception.MethodNotAllowedException;
 import webserver.view.ModelAndView;
+import webserver.view.View;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -21,20 +20,23 @@ public abstract class AbstractRequestServlet implements HttpServlet {
     }
 
     @Override
-    public ModelAndView run(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+    public void run(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         if (httpRequest.getMethod() == RequestMethod.GET) {
-            return doGet(httpRequest, httpResponse);
+            doGet(httpRequest, httpResponse);
+            return;
         }
 
         if (httpRequest.getMethod() == RequestMethod.POST) {
-            return doPost(httpRequest, httpResponse);
+            doPost(httpRequest, httpResponse);
+            return;
         }
         throw new MethodNotAllowedException(httpRequest.getMethod());
     }
 
     @Override
-    public void move(ModelAndView mv, HttpRequest httpRequest, HttpResponse httpResponse){
-
+    public void move(ModelAndView mv, HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+        View view = mv.getView();
+        view.render(mv.getModelMap(), httpRequest, httpResponse);
     }
 
     protected ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
