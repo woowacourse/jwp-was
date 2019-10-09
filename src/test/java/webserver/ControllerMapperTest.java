@@ -2,7 +2,6 @@ package webserver;
 
 import controller.LoginController;
 import controller.UserController;
-import controller.exception.ControllerNotFoundException;
 import http.request.HttpRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,7 +10,6 @@ import utils.TestResourceLoader;
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ControllerMapperTest {
     @Test
@@ -29,9 +27,8 @@ class ControllerMapperTest {
     }
 
     @Test
-    void HttpRequest요청에_맞는_Controller가_없는_경우_예외처리() throws IOException {
+    void ControllerMapper가_요청을_처리할_수_있는지_확인() throws IOException {
         HttpRequest request = TestResourceLoader.getHttpRequest("Http_GET_Static.txt");
-        assertThatThrownBy(() -> ControllerMapper.map(request))
-                .isInstanceOf(ControllerNotFoundException.class);
+        assertThat(ControllerMapper.canHandle(request)).isFalse();
     }
 }

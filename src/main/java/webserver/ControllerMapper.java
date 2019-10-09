@@ -3,7 +3,6 @@ package webserver;
 import controller.Controller;
 import controller.LoginController;
 import controller.UserController;
-import controller.exception.ControllerNotFoundException;
 import http.request.HttpRequest;
 
 import java.util.HashMap;
@@ -23,13 +22,11 @@ public class ControllerMapper {
     public static Controller map(HttpRequest request) {
         String path = request.getPath();
 
-        if (doesNotHaveMatchedController(path)) {
-            throw new ControllerNotFoundException();
-        }
         return controllers.get(path);
     }
 
-    private static boolean doesNotHaveMatchedController(String path) {
-        return controllers.get(path) == null;
+    public static boolean canHandle(HttpRequest request) {
+        String path = request.getPath();
+        return controllers.get(path) != null;
     }
 }

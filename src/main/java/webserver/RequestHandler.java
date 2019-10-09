@@ -1,7 +1,6 @@
 package webserver;
 
 import controller.Controller;
-import controller.exception.ControllerNotFoundException;
 import http.HttpVersion;
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
@@ -9,6 +8,7 @@ import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.LoggingUtils;
+import webserver.exception.RequestHandlingFailException;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -32,29 +32,35 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            HttpRequest request = HttpRequestFactory.getHttpRequest(in);
-            logger.debug(request.toString());
-
-            HttpResponse response = responseOf2(request);
-
-            writeResponse(response, out);
+            handle(in, out);
         } catch (IOException e) {
-            logger.error(e.getMessage());
             LoggingUtils.logStackTrace(logger, e);
+            throw new RequestHandlingFailException();
         }
     }
 
-    private HttpResponse responseOf2(HttpRequest request) {
+    private void handle(InputStream in, OutputStream out) throws IOException {
+        HttpRequest request = HttpRequestFactory.getHttpRequest(in);
+        logRequest(request);
+
+        HttpResponse response = getResponseOf(request);
+        writeResponse(response, out);
+    }
+
+    private void logRequest(HttpRequest request) {
+        logger.debug(request.toString());
+    }
+
+    private HttpResponse getResponseOf(HttpRequest request) {
         HttpVersion version = request.getVersion();
         HttpResponse response = HttpResponse.of(version);
 
-        // TODO: 2019-10-08 이 부분 예외 발생 너무 과하다.
-        try {
+        if (ControllerMapper.canHandle(request)) {
             Controller controller = ControllerMapper.map(request);
             controller.handle(request, response);
-        } catch (ControllerNotFoundException e) {
-            StaticResourceHandler.forward(request, response);
+            return response;
         }
+        StaticResourceHandler.forward(request, response);
         return response;
     }
 

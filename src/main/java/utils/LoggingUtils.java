@@ -10,7 +10,7 @@ public class LoggingUtils {
         for (StackTraceElement traceElement : traces) {
             logBuilder.append("\tat ").append(traceElement).append("\n");
         }
-        logBuilder.insert(0, "Exception : \n");
+        logBuilder.insert(0, "Exception : " + e.getMessage() + "\n");
         logger.error(logBuilder.toString());
     }
 }
