@@ -14,11 +14,11 @@ public class ResponseBody {
         this.body = body.getBytes();
     }
 
-    public byte[] getBody() {
+    protected byte[] getBody() {
         return body;
     }
 
-    public int length() {
+    protected int length() {
         return this.body.length;
     }
 }

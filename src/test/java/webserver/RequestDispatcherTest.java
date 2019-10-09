@@ -3,6 +3,7 @@ package webserver;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import webserver.message.HttpStatus;
+import webserver.message.HttpVersion;
 import webserver.message.response.Response;
 import webserver.support.RequestHelper;
 
@@ -18,7 +19,7 @@ class RequestDispatcherTest extends RequestHelper {
     void forwardIndex1() {
         final byte[] actual = RequestDispatcher.forward(ioUtils(requestPostWithQuery));
 
-        Response response = new Response();
+        Response response = new Response(HttpVersion.HTTP_1_1);
         response.redirect("/");
 
         assertThat(actual).isEqualTo(response.toBytes());
@@ -29,7 +30,7 @@ class RequestDispatcherTest extends RequestHelper {
     void forwardIndex2() {
         final byte[] actual = RequestDispatcher.forward(ioUtils(requestPostWithQuery));
 
-        Response response = new Response();
+        Response response = new Response(HttpVersion.HTTP_1_1);
         response.redirect("/");
 
         assertThat(actual).isEqualTo(response.toBytes());
@@ -41,7 +42,7 @@ class RequestDispatcherTest extends RequestHelper {
         final byte[] actual = RequestDispatcher.forward(ioUtils(requestGetHeader));
 
         final StaticFile staticFile = new StaticFile("./templates/index.html");
-        final Response response = new Response();
+        final Response response = new Response(HttpVersion.HTTP_1_1);
         response.body(staticFile);
 
         assertThat(actual).isEqualTo(response.toBytes());
@@ -53,7 +54,7 @@ class RequestDispatcherTest extends RequestHelper {
         final byte[] actual = RequestDispatcher.forward(ioUtils(requestNotFoundHeader));
 
         final StaticFile staticFile = new StaticFile("./templates/error/404_not_found.html");
-        final Response response = new Response();
+        final Response response = new Response(HttpVersion.HTTP_1_1);
         response.setHttpStatus(HttpStatus.NOT_FOUND);
         response.body(staticFile);
 
@@ -66,7 +67,7 @@ class RequestDispatcherTest extends RequestHelper {
         final byte[] actual = RequestDispatcher.forward(null);
 
         final StaticFile staticFile = new StaticFile("./templates/error/500_internal_error.html");
-        final Response response = new Response();
+        final Response response = new Response(HttpVersion.HTTP_1_1);
         response.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         response.body(staticFile);
 

@@ -22,11 +22,11 @@ public class ResponseStatusLine {
         return httpStatus;
     }
 
-    public void setHttpVersion(HttpVersion httpVersion) {
+    protected void setHttpVersion(HttpVersion httpVersion) {
         this.httpVersion = httpVersion;
     }
 
-    public void setHttpStatus(HttpStatus httpStatus) {
+    protected void setHttpStatus(HttpStatus httpStatus) {
         this.httpStatus = httpStatus;
     }
 

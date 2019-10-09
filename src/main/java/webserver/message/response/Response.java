@@ -17,19 +17,11 @@ public class Response {
     private final ResponseHeader header;
     private ResponseBody body;
 
-    public Response() {
-        this(HttpVersion.HTTP_1_1);
-    }
-
     public Response(final HttpVersion httpVersion) {
-        this(new ResponseStatusLine(httpVersion, HttpStatus.OK), new ResponseHeader(), new ResponseBody());
+        this.statusLine = new ResponseStatusLine(httpVersion, HttpStatus.OK);
+        this.header = new ResponseHeader();
+        this.body = new ResponseBody();
         addResponseField(CONTENT_TYPE, MediaType.TEXT_HTML.getMediaType());
-    }
-
-    Response(final ResponseStatusLine statusLine, final ResponseHeader header, final ResponseBody body) {
-        this.statusLine = statusLine;
-        this.header = header;
-        this.body = body;
     }
 
     public void redirect(final String redirectUrl) {

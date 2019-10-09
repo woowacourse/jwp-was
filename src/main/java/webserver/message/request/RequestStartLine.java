@@ -29,27 +29,27 @@ public class RequestStartLine {
                 this.getHttpVersion(), this.getHttpMethod(), this.getPath());
     }
 
-    public String getHttpMethod() {
+    protected String getHttpMethod() {
         return httpMethod.name();
     }
 
-    public String getPath() {
+    protected String getPath() {
         return url.getPath();
     }
 
-    public String getQuery() {
+    protected String getQuery() {
         return url.getQuery();
     }
 
-    public String getUrl() {
+    protected String getUrl() {
         return url.toString();
     }
 
-    public String getHttpVersion() {
+    protected String getHttpVersion() {
         return httpVersion.getVersion();
     }
 
-    boolean matchesMethod(HttpMethod method) {
+    protected boolean matchesMethod(HttpMethod method) {
         return this.httpMethod.matchesMethod(method);
     }
 }

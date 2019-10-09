@@ -24,7 +24,7 @@ public class RequestHeader {
     private final Map<String, String> requestFields;
     private final List<HttpCookie> requestCookies;
 
-    public RequestHeader(final IOUtils IOUtils) {
+    RequestHeader(final IOUtils IOUtils) {
         this.requestFields = makeFields(IOUtils);
         this.requestCookies = RequestCookieParser.parse(requestFields.get("cookie"));
     }
@@ -45,23 +45,23 @@ public class RequestHeader {
         return rawField.split(HEADER_KEY_VALUE_DELIMITER)[VALUE_INDEX].trim();
     }
 
-    public int getContentLength() {
+    protected int getContentLength() {
         return Integer.parseInt(this.requestFields.getOrDefault(CONTENT_LENGTH, ZERO_LENGTH));
     }
 
-    public Map<String, String> getRequestFields() {
+    protected Map<String, String> getRequestFields() {
         return requestFields;
     }
 
-    public String getFieldsValue(final String key) {
+    protected String getFieldsValue(final String key) {
         return requestFields.getOrDefault(key, EMPTY);
     }
 
-    public List<HttpCookie> getRequestCookie() {
+    protected List<HttpCookie> getRequestCookie() {
         return this.requestCookies;
     }
 
-    public String getCookieValue(final String key) {
+    protected String getCookieValue(final String key) {
         return this.requestCookies.stream()
                 .filter(cookie -> cookie.matchesName(key))
                 .findFirst()

@@ -22,11 +22,11 @@ public class ResponseHeader {
         this.cookies = cookies;
     }
 
-    void addResponseField(final String name, String value) {
+    protected void addResponseField(final String name, String value) {
         this.responseFields.put(name, value);
     }
 
-    void addCookie(final HttpCookie cookie) {
+    protected void addCookie(final HttpCookie cookie) {
         this.cookies.put(cookie.getName(), cookie);
     }
 

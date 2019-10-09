@@ -29,7 +29,7 @@ public class RequestBody {
         this.queries = extractQueries(rawQuery);
     }
 
-    public void putQueryBy(final String rawQueries) {
+    protected void putQueryBy(final String rawQueries) {
         this.queries.putAll(extractQueries(rawQueries));
     }
 
