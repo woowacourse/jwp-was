@@ -1,4 +1,4 @@
-package webserver.message.exception;
+package webserver.exception;
 
 public class NotFoundFileException extends RuntimeException {
     public NotFoundFileException() {

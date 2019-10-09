@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import web.controller.Controller;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
-import webserver.message.response.ResponseBuilder;
 import webserver.support.RequestHelper;
 
 import java.io.IOException;
@@ -19,7 +18,7 @@ class UserControllerTest extends RequestHelper {
     void name() throws IOException, URISyntaxException {
         // given
         Request request = new Request(ioUtils(requestPostWithUserEnrollQuery));
-        Response response = new ResponseBuilder().build();
+        Response response = new Response();
 
         Controller userController = new UserController();
 

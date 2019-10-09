@@ -5,7 +5,7 @@ import com.github.jknack.handlebars.Helper;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
-import webserver.message.exception.NotFoundFileException;
+import webserver.exception.NotFoundFileException;
 import webserver.message.response.Response;
 
 import java.io.IOException;

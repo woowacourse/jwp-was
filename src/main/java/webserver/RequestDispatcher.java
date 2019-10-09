@@ -10,12 +10,12 @@ import web.controller.Controller;
 import web.controller.impl.LoginController;
 import web.controller.impl.UserController;
 import web.controller.impl.UserListController;
+import webserver.exception.NotFoundFileException;
 import webserver.message.HttpStatus;
-import webserver.message.exception.NotFoundFileException;
+import webserver.message.HttpVersion;
 import webserver.message.exception.UrlDecodeException;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
-import webserver.message.response.ResponseBuilder;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -36,15 +36,16 @@ public class RequestDispatcher {
     }
 
     public static byte[] forward(final IOUtils ioUtils) {
+        String httpVersion = null;
         try {
             final Request request = new Request(ioUtils);
-            final Response response = new ResponseBuilder(request.getHttpVersion()).build();
+            final Response response = new Response(HttpVersion.of(request.getHttpVersion()));
 
+            httpVersion = request.getHttpVersion();
             processResponse(request, response);
-
             return response.toBytes();
         } catch (IOException | URISyntaxException | NullPointerException | UrlDecodeException e) {
-            return DataConverter.convertTo500Response(FileLoader.loadInternalServerErrorFile()).toBytes();
+            return DataConverter.convertTo500Response(httpVersion, FileLoader.loadInternalServerErrorFile()).toBytes();
         }
     }
 

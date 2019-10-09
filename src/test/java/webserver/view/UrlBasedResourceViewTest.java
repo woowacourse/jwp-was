@@ -3,7 +3,6 @@ package webserver.view;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import webserver.message.response.Response;
-import webserver.message.response.ResponseBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +14,7 @@ class UrlBasedResourceViewTest {
     @Test
     @DisplayName("입력된 뷰에 해당하는 Body가 포함된 헤더를 잘 생성하는지 테스트")
     void urlBasedHeader() {
-        Response response = new ResponseBuilder().build();
+        Response response = new Response();
         View view = new UrlBasedResourceView("/user/login.html");
         Map<String, Object> models = new HashMap<>();
 

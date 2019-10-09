@@ -7,7 +7,6 @@ import web.db.DataBase;
 import web.model.User;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
-import webserver.message.response.ResponseBuilder;
 import webserver.session.HttpSession;
 import webserver.session.SessionContextHolder;
 import webserver.support.RequestHelper;
@@ -38,7 +37,7 @@ class UserListControllerTest extends RequestHelper {
 
         // when
         Request request = new Request(ioUtils(requestGetHeaderWithCookie + "; sessionId=" + session.getId()));
-        Response response = new ResponseBuilder().build();
+        Response response = new Response();
 
         this.userListController.service(request, response);
 
@@ -55,7 +54,7 @@ class UserListControllerTest extends RequestHelper {
     void loginFail() throws IOException, URISyntaxException {
         // given
         Request request = new Request(ioUtils(requestGetUserListWithoutLogin));
-        Response response = new ResponseBuilder().build();
+        Response response = new Response();
 
         // when
         this.userListController.service(request, response);

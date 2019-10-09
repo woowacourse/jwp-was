@@ -2,6 +2,7 @@ package webserver.message.response;
 
 import webserver.message.HttpCookie;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -11,6 +12,10 @@ public class ResponseHeader {
 
     private final Map<String, String> responseFields;
     private final Map<String, HttpCookie> cookies;
+
+    ResponseHeader() {
+        this(new HashMap<>(), new HashMap<>());
+    }
 
     ResponseHeader(final Map<String, String> responseFields, final Map<String, HttpCookie> cookies) {
         this.responseFields = responseFields;

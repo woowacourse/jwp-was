@@ -1,7 +1,7 @@
 package web.controller;
 
+import webserver.exception.NotFoundFileException;
 import webserver.message.HttpMethod;
-import webserver.message.exception.NotFoundFileException;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
 import webserver.view.ModelAndView;

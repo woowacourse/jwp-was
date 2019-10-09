@@ -2,8 +2,10 @@ package utils;
 
 import webserver.StaticFile;
 import webserver.message.HttpStatus;
+import webserver.message.HttpVersion;
 import webserver.message.response.Response;
-import webserver.message.response.ResponseBuilder;
+
+import java.util.Objects;
 
 public class DataConverter {
     public static byte[] convertToBytes(final Response response) {
@@ -11,22 +13,14 @@ public class DataConverter {
     }
 
     public static byte[] convertToBytes(final byte[] bytes) {
-        return new ResponseBuilder().body(bytes).build().toBytes();
+        return new Response(HttpVersion.HTTP_1_1).toBytes();
     }
 
-    public static Response convertTo200Response(final byte[] bytes) {
-        return new ResponseBuilder().body(bytes).build();
-    }
+    public static Response convertTo500Response(final String httpVersion, final StaticFile file) {
+        Response response = new Response(Objects.nonNull(httpVersion) ? HttpVersion.valueOf(httpVersion) : HttpVersion.HTTP_1_1);
+        response.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+        response.body(file);
 
-    public static Response convertTo200Response(final StaticFile file) {
-        return new ResponseBuilder().body(file).build();
-    }
-
-    public static Response convertTo404Response(final StaticFile file) {
-        return new ResponseBuilder().body(file).httpStatus(HttpStatus.NOT_FOUND).build();
-    }
-
-    public static Response convertTo500Response(final StaticFile file) {
-        return new ResponseBuilder().body(file).httpStatus(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        return response;
     }
 }
