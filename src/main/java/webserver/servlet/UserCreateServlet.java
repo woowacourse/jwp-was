@@ -13,12 +13,13 @@ import java.io.IOException;
 
 public class UserCreateServlet extends AbstractRequestServlet {
     private static final Logger logger = LoggerFactory.getLogger(AbstractRequestServlet.class);
-    public static final String USER_ID_KEY = "userId";
-    public static final String PASSWORD_KEY = "password";
-    public static final String NAME_KEY = "name";
-    public static final String EMAIL_KEY = "email";
+    private static final String USER_ID_KEY = "userId";
+    private static final String PASSWORD_KEY = "password";
+    private static final String NAME_KEY = "name";
+    private static final String EMAIL_KEY = "email";
     private final String url = "/user/create";
     private Resolver resolver;
+
     public UserCreateServlet(Resolver resolver) {
         this.resolver = resolver;
     }
@@ -31,7 +32,7 @@ public class UserCreateServlet extends AbstractRequestServlet {
         return new ModelAndView(resolver.createView("redirect:/user/login"));
     }
 
-    private User createUser(HttpRequest httpRequest){
+    private User createUser(HttpRequest httpRequest) {
         return new User(httpRequest.getBody(USER_ID_KEY), httpRequest.getBody(PASSWORD_KEY), httpRequest.getBody(NAME_KEY), httpRequest.getBody(EMAIL_KEY));
     }
 

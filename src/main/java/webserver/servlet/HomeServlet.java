@@ -10,6 +10,7 @@ import java.io.IOException;
 public class HomeServlet extends AbstractRequestServlet {
     private final String url = "/";
     private Resolver resolver;
+
     public HomeServlet(Resolver resolver) {
         this.resolver = resolver;
     }
