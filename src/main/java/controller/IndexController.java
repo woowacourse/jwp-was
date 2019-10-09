@@ -1,6 +1,7 @@
 package controller;
 
-import http.HttpStatusCode;
+import http.TemplateView;
+import http.View;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
@@ -15,14 +16,9 @@ public class IndexController extends AbstractController {
     public static final String PATH = "/";
 
     @Override
-    void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        logger.debug("request index page : {}", httpRequest.getUri());
+    View doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+        httpResponse.forward(httpRequest.getPath() + "index.html");
 
-        try {
-            httpResponse.forward(httpRequest.getPath() + "index.html");
-        } catch (IOException | URISyntaxException e) {
-            httpResponse.setStatusCode(HttpStatusCode.NOT_FOUND);
-            e.printStackTrace();
-        }
+        return new TemplateView(httpRequest.getPath() + "index.html");
     }
 }

@@ -7,5 +7,5 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 public interface Controller {
-    void service(HttpRequest request, HttpResponse response) throws IOException, URISyntaxException;
+    Object service(HttpRequest request, HttpResponse response) throws IOException, URISyntaxException;
 }

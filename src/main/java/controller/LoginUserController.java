@@ -4,6 +4,7 @@ import controller.exception.LoginUserException;
 import db.DataBase;
 import http.HttpSession;
 import http.HttpSessionStore;
+import http.RedirectView;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.User;
@@ -18,7 +19,7 @@ public class LoginUserController extends AbstractController {
     public static final String PATH = "/user/login";
 
     @Override
-    void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
+    RedirectView doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         String userId = httpRequest.getParameter("userId");
         String password = httpRequest.getParameter("password");
         HttpSession session = HttpSessionStore.getSession(httpRequest.getSessionId());
@@ -31,12 +32,12 @@ public class LoginUserController extends AbstractController {
             }
 
             session.addAttribute("logined", "true");
-            httpResponse.redirect("/");
         } catch (LoginUserException e) {
             LOGGER.debug("login error");
             session.addAttribute("logined", "false");
-            httpResponse.redirect("/");
             e.printStackTrace();
         }
+
+        return new RedirectView("/");
     }
 }

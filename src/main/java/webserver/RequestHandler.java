@@ -2,7 +2,7 @@ package webserver;
 
 import controller.Controller;
 import controller.ControllerContainer;
-import controller.exception.ControllerNotFoundException;
+import http.View;
 import http.request.HttpRequest;
 import http.request.factory.HttpRequestFactory;
 import http.response.HttpResponse;
@@ -11,11 +11,9 @@ import org.slf4j.LoggerFactory;
 import utils.RequestParser;
 
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.net.URISyntaxException;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -43,11 +41,16 @@ public class RequestHandler implements Runnable {
             }
 
             Controller controller = ControllerContainer.getController(httpRequest.isContainExtension(), httpRequest.getUri());
-            controller.service(httpRequest, httpResponse);
+            Object object = controller.service(httpRequest, httpResponse);
+
+
+            if (object instanceof View) {
+                ((View) object).render(httpRequest, httpResponse);
+            }
 
             httpResponse.writeResponse(dataOutputStream);
 
-        } catch (IOException | URISyntaxException | ControllerNotFoundException e) {
+        } catch (Exception e) {
             logger.error(e.getMessage());
         }
     }
