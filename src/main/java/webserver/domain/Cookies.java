@@ -35,7 +35,7 @@ public class Cookies {
 
     private final Map<String, Cookie> cookies;
 
-    private Cookies() {
+    public Cookies() {
         cookies = new HashMap<>();
     }
 
