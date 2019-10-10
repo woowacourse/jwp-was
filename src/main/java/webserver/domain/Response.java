@@ -33,9 +33,9 @@ public class Response {
         private ResponseBody body = new ResponseBody();
         private HttpVersion protocol;
         private HttpStatus httpStatus;
-        private Cookie cookie;
+        private _Cookie cookie;
 
-        Builder(final HttpVersion protocol, final HttpStatus httpStatus, final Cookie cookie) {
+        Builder(final HttpVersion protocol, final HttpStatus httpStatus, final _Cookie cookie) {
             this.protocol = protocol;
             this.httpStatus = httpStatus;
             this.cookie = cookie;
@@ -54,7 +54,7 @@ public class Response {
         }
 
         public Builder() {
-            this(HttpVersion._1_1, HttpStatus.OK, new Cookie());
+            this(HttpVersion._1_1, HttpStatus.OK, new _Cookie());
         }
 
         public Builder protocol(final HttpVersion protocol) {
@@ -85,7 +85,7 @@ public class Response {
             return this;
         }
 
-        public Builder addCookie(final Cookie cookie) {
+        public Builder addCookie(final _Cookie cookie) {
             this.cookie.add(cookie);
             return this;
         }

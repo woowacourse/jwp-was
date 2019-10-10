@@ -4,10 +4,10 @@ import db.Database;
 import model.User;
 import org.slf4j.Logger;
 import webserver.StaticFileServer;
-import webserver.domain.Cookie;
 import webserver.domain.QueryParameter;
 import webserver.domain.Request;
 import webserver.domain.Response;
+import webserver.domain._Cookie;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -40,7 +40,7 @@ public class UserController {
     }
 
     public static Response login(final Request request) {
-        final Cookie cookie = request.getCookie();
+        final _Cookie cookie = request.getCookie();
         final QueryParameter queries = request.getQueryParameters();
         final User tryingUser = new User(queries.getValue(USER_ID), queries.getValue(PASSWORD));
         final User existUser = Database.findUserById(queries.getValue(USER_ID));
@@ -56,14 +56,14 @@ public class UserController {
     }
 
     public static Response userList(final Request request) {
-        final Cookie cookie = request.getCookie();
+        final _Cookie cookie = request.getCookie();
         if (isLogined(cookie)) {
             return STATIC_FILE_SERVER.get(request);
         }
         return new Response.Builder(request).redirect(LOGIN_PAGE).build();
     }
 
-    private static boolean isLogined(final Cookie cookie) {
+    private static boolean isLogined(final _Cookie cookie) {
         return TRUE.equals(cookie.get(LOGINED));
     }
 }
