@@ -27,6 +27,6 @@ public class ModelAndView {
     }
 
     public void render(HttpRequest request, HttpResponse response) throws Exception {
-        view.render(this.model, request, response);
+        view.render(request, response);
     }
 }

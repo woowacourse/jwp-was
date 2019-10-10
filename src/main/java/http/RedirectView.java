@@ -3,8 +3,6 @@ package http;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 
-import java.util.Map;
-
 public class RedirectView implements View {
     private String path;
 
@@ -13,7 +11,7 @@ public class RedirectView implements View {
     }
 
     @Override
-    public void render(Map<String, ?> model, HttpRequest request, HttpResponse response) {
+    public void render( HttpRequest request, HttpResponse response) {
         response.redirect(path);
     }
 }

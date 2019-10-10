@@ -2,6 +2,7 @@ package webserver;
 
 import controller.Controller;
 import controller.ControllerContainer;
+import http.ModelAndView;
 import http.View;
 import http.request.HttpRequest;
 import http.request.factory.HttpRequestFactory;
@@ -43,6 +44,10 @@ public class RequestHandler implements Runnable {
             Controller controller = ControllerContainer.getController(httpRequest.isContainExtension(), httpRequest.getUri());
             Object object = controller.service(httpRequest, httpResponse);
 
+
+            if (object instanceof ModelAndView) {
+                ((ModelAndView) object).render(httpRequest, httpResponse);
+            }
 
             if (object instanceof View) {
                 ((View) object).render(httpRequest, httpResponse);

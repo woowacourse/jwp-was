@@ -5,6 +5,7 @@ import http.*;
 import http.exception.NotFoundSessionAttributeException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import http.response.HttpResponseBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.HandlebarsHelper;
@@ -31,8 +32,7 @@ public class UserListController extends AbstractController {
             if (sessionAttribute.equals("true")) {
 
                 ModelAndView modelAndView = new ModelAndView(new TemplateView("list.html"));
-                modelAndView.addAttribute("UserList", HandlebarsHelper.apply(DataBase.findAll()));
-
+                httpResponse.setHttpResponseBody(new HttpResponseBody(HandlebarsHelper.apply(DataBase.findAll())));
                 return modelAndView;
             }
         } catch (NotFoundSessionAttributeException e) {
