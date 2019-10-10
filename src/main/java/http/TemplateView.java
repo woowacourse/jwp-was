@@ -3,8 +3,6 @@ package http;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 
-import java.util.Map;
-
 public class TemplateView implements View {
     private String path;
 
@@ -13,7 +11,7 @@ public class TemplateView implements View {
     }
 
     @Override
-    public void render(Map<String, ?> models, HttpRequest request, HttpResponse response) throws Exception {
+    public void render(HttpRequest request, HttpResponse response) throws Exception {
         response.forward(request.getPath() + path);
     }
 }
