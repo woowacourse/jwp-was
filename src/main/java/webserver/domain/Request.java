@@ -31,7 +31,7 @@ public class Request {
     private final HttpVersion protocol;
     private final Url url;
     private final Map<String, String> header;
-    private final _Cookie cookie;
+    private final Cookies cookies;
     private final HttpSession session;
     private final String body;
 
@@ -41,9 +41,9 @@ public class Request {
         httpMethod = HttpMethod.valueOf(requestLine[METHOD_INDEX].toUpperCase());
         protocol = HttpVersion.of(requestLine[PROTOCOL_INDEX]);
         header = makeHeader(networkInput);
-        cookie = new _Cookie(header.getOrDefault(COOKIE, EMPTY));
-        session = HttpSession.get(cookie.get(SESSION_ID));
-        cookie.set(SESSION_ID, session.getId());
+        cookies = new Cookies(header.getOrDefault(COOKIE, EMPTY));
+        session = HttpSession.get(cookies.getCookieValue(SESSION_ID));
+        cookies.setCookieValue(SESSION_ID, session.getId());
         body = readBody(networkInput);
         printLog();
     }
@@ -90,8 +90,8 @@ public class Request {
         return url.getPath();
     }
 
-    public _Cookie getCookie() {
-        return cookie;
+    public Cookies getCookies() {
+        return cookies;
     }
 
     public HttpVersion getProtocol() {

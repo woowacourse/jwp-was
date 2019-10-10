@@ -4,14 +4,10 @@ import com.google.common.escape.Escaper;
 import com.google.common.net.UrlEscapers;
 
 import javax.annotation.Nullable;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.util.*;
-import java.util.function.BiFunction;
+import java.util.Objects;
 
 public class Cookie implements Cloneable {
     private static final int ONE_YEAR = 60 * 60 * 24 * 365;
@@ -28,17 +24,6 @@ public class Cookie implements Cloneable {
     private static final String MAX_AGE = "Max-Age";
     private static final Escaper URL_ESCAPER = UrlEscapers.urlFragmentEscaper();
     private static final DateTimeFormatter HTML_TIME_FORMATTER = DateTimeFormatter.RFC_1123_DATE_TIME.withZone(ZoneOffset.UTC);
-    private static final Map<String, BiFunction<String, Cookie, Cookie>> OPTION_MAPPER = new HashMap<>();
-
-    static {
-        OPTION_MAPPER.put(EXPIRES.toLowerCase(), (value, cookie) -> cookie.setExpires(parseExpires(value)));
-        OPTION_MAPPER.put(MAX_AGE.toLowerCase(), (value, cookie) -> cookie.setMaxAge(Integer.parseInt(value)));
-        OPTION_MAPPER.put(DOMAIN.toLowerCase(), (value, cookie) -> cookie.setDomain(value));
-        OPTION_MAPPER.put(PATH.toLowerCase(), (value, cookie) -> cookie.setPath(value));
-        OPTION_MAPPER.put(SECURE.toLowerCase(), (value, cookie) -> cookie.setSecure(true));
-        OPTION_MAPPER.put(HTTP_ONLY.toLowerCase(), (value, cookie) -> cookie.setHttpOnly(true));
-        OPTION_MAPPER.put(SAME_SITE.toLowerCase(), (value, cookie) -> cookie.setSameSite(value));
-    }
 
     private String name;
     private String value;
@@ -50,8 +35,14 @@ public class Cookie implements Cloneable {
     private boolean httpOnly;
     private String sameSite;
 
-    private Cookie() {
+    Cookie() {
         fieldsReset();
+    }
+
+    public Cookie(final String name, final String value) {
+        this();
+        setName(name);
+        setValue(value);
     }
 
     private void fieldsReset() {
@@ -210,80 +201,23 @@ public class Cookie implements Cloneable {
         return builder.toString();
     }
 
-    public List<Cookie> fromString(final String rawCookies) {
-        return new Maker(rawCookies).makeList();
+    @Override
+    public boolean equals(final Object another) {
+        if (this == another) return true;
+        if (another == null || getClass() != another.getClass()) return false;
+        final Cookie cookie = (Cookie) another;
+        return Objects.equals(name, cookie.name) &&
+                Objects.equals(value, cookie.value) &&
+                Objects.equals(domain, cookie.domain);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, value, domain);
     }
 
     @Override
     protected Cookie clone() throws CloneNotSupportedException {
         return (Cookie) super.clone();
-    }
-
-    private static ZonedDateTime parseExpires(final String text) throws DateTimeParseException {
-        return ZonedDateTime.parse(text, HTML_TIME_FORMATTER);
-    }
-
-    private class Maker {
-        private static final int KEY_INDEX = 0;
-        private static final int VALUE_INDEX = 1;
-        private static final int LIMIT = 2;
-        private static final String UTF_8 = "UTF-8";
-        private final Map<String, String> cookieJar = new HashMap<>();
-        private final Cookie optionCookie = new Cookie();
-
-        Maker(final String rawCookies) {
-            if (Objects.isNull(rawCookies)) {
-                return;
-            }
-            final String[] fragments = rawCookies.split(";");
-            for (final String fragment : fragments) {
-                processFragment(fragment.trim());
-            }
-        }
-
-        private void processFragment(final String fragment) {
-            final String[] maybeTuple = fragment.split(KEY_VALUE_DELIMITER, LIMIT);
-            if (maybeTuple.length == LIMIT) {
-                processTuple(maybeTuple);
-                return;
-            }
-            processBooleanOption(maybeTuple[KEY_INDEX]);
-        }
-
-        private void processTuple(final String[] tuple) {
-            final String key = tuple[KEY_INDEX];
-            final String value = tuple[VALUE_INDEX];
-            final String keyLowerCase = key.toLowerCase();
-            if (OPTION_MAPPER.containsKey(keyLowerCase)) {
-                OPTION_MAPPER.get(keyLowerCase).apply(value, optionCookie);
-                return;
-            }
-            cookieJar.put(urlDecode(key), urlDecode(value));
-        }
-
-        private void processBooleanOption(final String option) {
-            OPTION_MAPPER.getOrDefault(option.toLowerCase(), (value, cookie) -> cookie).apply(null, optionCookie);
-        }
-
-        private String urlDecode(final String encodedString) {
-            try {
-                return URLDecoder.decode(encodedString, UTF_8);
-            } catch (final UnsupportedEncodingException ignored) {
-                return EMPTY;
-            }
-        }
-
-        List<Cookie> makeList() {
-            final List<Cookie> cookies = new ArrayList<>();
-            try {
-                for (final String key : cookieJar.keySet()) {
-                    final Cookie item = optionCookie.clone();
-                    item.setName(key);
-                    item.setValue(cookieJar.get(key));
-                    cookies.add(item);
-                }
-            } catch (final CloneNotSupportedException ignored) {}
-            return cookies;
-        }
     }
 }
