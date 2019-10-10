@@ -4,7 +4,6 @@ import java.util.*;
 
 public class HttpSession {
     private static final Map<String, HttpSession> manager = new WeakHashMap<>();
-    private static final String EMPTY = "";
 
     private final String uuid;
     private final Map<String, Object> attributes;

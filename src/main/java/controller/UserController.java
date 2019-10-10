@@ -4,10 +4,10 @@ import db.Database;
 import model.User;
 import org.slf4j.Logger;
 import webserver.StaticFileServer;
+import webserver.domain.Cookies;
 import webserver.domain.QueryParameter;
 import webserver.domain.Request;
 import webserver.domain.Response;
-import webserver.domain._Cookie;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -40,30 +40,30 @@ public class UserController {
     }
 
     public static Response login(final Request request) {
-        final _Cookie cookie = request.getCookie();
+        final Cookies cookies = request.getCookies();
         final QueryParameter queries = request.getQueryParameters();
         final User tryingUser = new User(queries.getValue(USER_ID), queries.getValue(PASSWORD));
         final User existUser = Database.findUserById(queries.getValue(USER_ID));
         final Response.Builder response = new Response.Builder(request);
-        cookie.set(LOGINED, FALSE);
+        cookies.setCookieValue(LOGINED, FALSE);
         response.redirect(LOGIN_FAILED_PAGE);
         if (tryingUser.equals(existUser)) {
-            cookie.set(LOGINED, TRUE);
+            cookies.setCookieValue(LOGINED, TRUE);
             response.redirect(URL_ROOT);
         }
-        response.addCookie(cookie);
+        response.addCookies(cookies);
         return response.build();
     }
 
     public static Response userList(final Request request) {
-        final _Cookie cookie = request.getCookie();
-        if (isLogined(cookie)) {
+        final Cookies cookies = request.getCookies();
+        if (hasLogined(cookies)) {
             return STATIC_FILE_SERVER.get(request);
         }
         return new Response.Builder(request).redirect(LOGIN_PAGE).build();
     }
 
-    private static boolean isLogined(final _Cookie cookie) {
-        return TRUE.equals(cookie.get(LOGINED));
+    private static boolean hasLogined(final Cookies cookies) {
+        return TRUE.equals(cookies.getCookieValue(LOGINED));
     }
 }

@@ -25,7 +25,6 @@ public class Response {
 
     public static class Builder {
         private static final String CONTENT_TYPE = "Content-Type";
-        private static final String SET_COOKIE = "Set-Cookie";
         private static final String LOCATION = "Location";
         private static final String EMPTY = "";
 
@@ -33,28 +32,28 @@ public class Response {
         private ResponseBody body = new ResponseBody();
         private HttpVersion protocol;
         private HttpStatus httpStatus;
-        private _Cookie cookie;
+        private Cookies cookies;
 
-        Builder(final HttpVersion protocol, final HttpStatus httpStatus, final _Cookie cookie) {
+        Builder(final HttpVersion protocol, final HttpStatus httpStatus, final Cookies cookies) {
             this.protocol = protocol;
             this.httpStatus = httpStatus;
-            this.cookie = cookie;
+            this.cookies = cookies;
         }
 
         public Builder(final HttpVersion protocol, final Request request) {
-            this(protocol, HttpStatus.OK, request.getCookie());
+            this(protocol, HttpStatus.OK, request.getCookies());
         }
 
         public Builder(final HttpStatus httpStatus, final Request request) {
-            this(HttpVersion._1_1, httpStatus, request.getCookie());
+            this(HttpVersion._1_1, httpStatus, request.getCookies());
         }
 
         public Builder(final Request request) {
-            this(HttpVersion._1_1, HttpStatus.OK, request.getCookie());
+            this(HttpVersion._1_1, HttpStatus.OK, request.getCookies());
         }
 
         public Builder() {
-            this(HttpVersion._1_1, HttpStatus.OK, new _Cookie());
+            this(HttpVersion._1_1, HttpStatus.OK, new Cookies(EMPTY));
         }
 
         public Builder protocol(final HttpVersion protocol) {
@@ -85,8 +84,8 @@ public class Response {
             return this;
         }
 
-        public Builder addCookie(final _Cookie cookie) {
-            this.cookie.add(cookie);
+        public Builder addCookies(final Cookies cookies) {
+            this.cookies.merge(cookies);
             return this;
         }
 
@@ -107,8 +106,7 @@ public class Response {
         }
 
         public Response build() {
-            this.putField(SET_COOKIE, cookie.toString());
-            final ResponseHeader header = new ResponseHeader(this.protocol, this.httpStatus, this.fields);
+            final ResponseHeader header = new ResponseHeader(this.protocol, this.httpStatus, this.fields, this.cookies);
             return new Response(header, this.body);
         }
     }

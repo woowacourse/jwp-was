@@ -48,7 +48,7 @@ public class Cookies {
     }
 
     public Cookie getCookie(final String name) {
-        return cookies.getOrDefault(name, new Cookie());
+        return cookies.getOrDefault(name, new Cookie(name, EMPTY));
     }
 
     public Cookie addCookie(final Cookie cookie) {
@@ -65,7 +65,7 @@ public class Cookies {
 
     public Cookie setCookieValue(final String name, final String value) {
         final Cookie cookie = getCookie(name);
-        cookie.setValue(value);
+        addCookie(cookie.setValue(value));
         return cookie;
     }
 
