@@ -53,6 +53,5 @@ class HttpCookieTest {
 
         assertThat(cookies.getCookieValue("logined")).isEqualTo("true");
         assertThat(cookies.getCookieValue("Path")).isEqualTo(null);
-
     }
 }

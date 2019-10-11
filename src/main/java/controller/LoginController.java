@@ -17,13 +17,18 @@ public class LoginController extends AbstractController {
         User user = getUser(request);
         String inputPassword = getInputPassword(request);
 
-        if ((user != null) && user.hasSamePasswordWith(inputPassword)) {
-            response.addHeader(SET_COOKIE, LOGINED_TRUE);
-            response.redirect("/index.html");
+        if (failLogin(user, inputPassword)) {
+            response.addHeader(SET_COOKIE, LOGINED_FALSE);
+            response.redirect("/user/login_failed.html");
             return;
         }
-        response.addHeader(SET_COOKIE, LOGINED_FALSE);
-        response.redirect("/user/login_failed.html");
+        response.addHeader(SET_COOKIE, LOGINED_TRUE);
+        response.redirect("/index.html");
+        return;
+    }
+
+    private boolean failLogin(User user, String inputPassword) {
+        return (user == null) || !user.hasSamePasswordWith(inputPassword);
     }
 
     private User getUser(HttpRequest request) {

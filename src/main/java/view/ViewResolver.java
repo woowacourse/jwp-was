@@ -13,13 +13,13 @@ import utils.LoggingUtils;
 import java.io.IOException;
 import java.util.Map;
 
-public class TemplateRenderer {
-    private static final Logger logger = LoggerFactory.getLogger(TemplateRenderer.class);
+public class ViewResolver {
+    private static final Logger logger = LoggerFactory.getLogger(ViewResolver.class);
 
     private static final String TEMPLATE_DIRECTORY = "/templates/user";
     private static final String HTML = ".html";
 
-    public static String renderPage(Map model, String viewName) {
+    public static String resolve(Map model, String viewName) {
         TemplateLoader loader = new ClassPathTemplateLoader(TEMPLATE_DIRECTORY, HTML);
         Handlebars handlebars = new Handlebars(loader);
         handlebars.registerHelper("incremented", (Helper<Integer>) (context, options) -> context + 1);

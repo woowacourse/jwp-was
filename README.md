@@ -60,6 +60,8 @@
     - [ ] request에 getSession 구현
     - [ ] SessionManager 구현
 
-4. 리펙토링
+4. 리펙토링 및 테스트 추가
     - [ ] HttpReqeust에 빌더 패턴 적용해볼 것
-    
+    - [ ] LoginController: 로그인 하지 않은 유저가 로그인 요청할 때
+    - [ ] LoginController: 로그인한 유저가 다시 로그인 요청할 때
+    - [ ] LoginController: 로그인한 유저가 로그인 페이지에 접근할 때

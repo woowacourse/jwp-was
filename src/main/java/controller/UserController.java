@@ -8,7 +8,7 @@ import http.response.HttpResponse;
 import http.response.ResponseBody;
 import http.session.HttpCookie;
 import model.User;
-import view.TemplateRenderer;
+import view.ViewResolver;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -21,16 +21,15 @@ public class UserController extends AbstractController {
     protected void doGet(HttpRequest request, HttpResponse response) {
         HttpCookie cookies = request.getCookies();
 
-        if (isLogin(cookies)) {
-            Map<String, Collection<User>> model = new HashMap<>();
-            model.put("users", DataBase.findAll());
-            String content = TemplateRenderer.renderPage(model, "list");
-
-            ResponseBody body = new ResponseBody(content.getBytes(), MediaType.HTML);
-            response.setBody(body);
+        if (!isLogin(cookies)) {
+            response.redirect("/user/login.html");
             return;
         }
-        response.redirect("/user/login.html");
+
+        // TODO: 2019-10-08 리펙토링
+        Map<String, Collection<User>> model = new HashMap<>();
+        model.put("users", DataBase.findAll());
+        response.setBody(getResponseBody(model));
     }
 
     @Override
@@ -46,5 +45,10 @@ public class UserController extends AbstractController {
     private boolean isLogin(HttpCookie cookies) {
         String logined = cookies.getCookieValue("logined");
         return (logined != null) && logined.equals(TRUE);
+    }
+
+    private ResponseBody getResponseBody(Map<String, Collection<User>> model) {
+        String content = ViewResolver.resolve(model, "list");
+        return new ResponseBody(content.getBytes(), MediaType.HTML);
     }
 }

@@ -28,8 +28,7 @@ public class RequestHandler implements Runnable {
     }
 
     public void run() {
-        logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
-                connection.getPort());
+        logConnection();
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             handle(in, out);
@@ -39,29 +38,32 @@ public class RequestHandler implements Runnable {
         }
     }
 
+    private void logConnection() {
+        logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
+                connection.getPort());
+    }
+
     private void handle(InputStream in, OutputStream out) throws IOException {
         HttpRequest request = HttpRequestFactory.getHttpRequest(in);
-        logRequest(request);
+        HttpResponse response = getHttpResponseOf(request);
 
-        HttpResponse response = getResponseOf(request);
+        logger.debug(request.toString());
+        handle(request, response);
+
         writeResponse(response, out);
     }
 
-    private void logRequest(HttpRequest request) {
-        logger.debug(request.toString());
+    private HttpResponse getHttpResponseOf(HttpRequest request) {
+        HttpVersion version = request.getVersion();
+        return HttpResponse.of(version);
     }
 
-    private HttpResponse getResponseOf(HttpRequest request) {
-        HttpVersion version = request.getVersion();
-        HttpResponse response = HttpResponse.of(version);
-
+    private void handle(HttpRequest request, HttpResponse response) {
         if (ControllerMapper.canHandle(request)) {
             Controller controller = ControllerMapper.map(request);
             controller.handle(request, response);
-            return response;
         }
         StaticResourceHandler.forward(request, response);
-        return response;
     }
 
     private void writeResponse(HttpResponse response, OutputStream out) throws IOException {
