@@ -7,10 +7,9 @@ import java.util.*;
 import static http.common.HeaderFields.*;
 
 public class Parameters {
-    private final Map<String, String> parameters;
+    private final Map<String, String> parameters = new HashMap<>();
 
     public Parameters(String parameterString) {
-        parameters = new HashMap<>();
         if (StringUtils.isBlank(parameterString)) {
             return;
         }
@@ -48,9 +47,7 @@ public class Parameters {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (String param : parameters.keySet()) {
-            sb.append(param).append(COLON).append(BLANK).append(parameters.get(param)).append(NEWLINE);
-        }
+        parameters.forEach((key, value) -> sb.append(key).append(COLON + BLANK).append(value).append(NEWLINE));
         return sb.toString();
     }
 }

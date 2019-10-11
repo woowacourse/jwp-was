@@ -9,8 +9,6 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 import static http.common.HeaderFields.*;
-import static http.common.HttpMethod.GET;
-import static http.common.HttpMethod.POST;
 
 public class RequestLine {
     private static final Pattern HTTP_PATTERN = Pattern.compile("HTTP/.*");
@@ -34,7 +32,7 @@ public class RequestLine {
     }
 
     private static void validateRequestLine(String requestLine, List<String> tokens) {
-        if (tokens.size() != 3 || !HttpMethod.matches(tokens.get(0)) || !HTTP_PATTERN.matcher(tokens.get(2)).matches()) {
+        if (tokens.size() != 3 || !HttpMethod.matchName(tokens.get(0)) || !HTTP_PATTERN.matcher(tokens.get(2)).matches()) {
             throw new InvalidHttpHeaderException(requestLine + "은 유효하지않은 HttpRequest입니다.");
         }
     }
@@ -48,14 +46,6 @@ public class RequestLine {
         }
         path = pathWithQueryString;
         queryString = new Parameters("");
-    }
-
-    public boolean isGetMethod() {
-        return GET.equals(method);
-    }
-
-    public boolean isPostMethod() {
-        return POST.equals(method);
     }
 
     public boolean containsParameter(String parameter) {
