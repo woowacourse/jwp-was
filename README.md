@@ -55,4 +55,11 @@
     - [ ] getAttribute(String name) 구현
     - [ ] removeAttribute(String name) 구현
     - [ ] invalidate() 구현
-        
+    - [ ] 서버에서 요청에 대한 세션을 처음 필요로 하는 시점에 Session을 만들어준다.
+    - [ ] Header에 쿠키가 없거나, 쿠키 안에 JSESSIONID가 없으면 새로운 세션을 발급한다.
+    - [ ] request에 getSession 구현
+    - [ ] SessionManager 구현
+
+4. 리펙토링
+    - [ ] HttpReqeust에 빌더 패턴 적용해볼 것
+    
