@@ -1,37 +1,49 @@
 package webserver.servlet;
 
-import utils.FileIoUtils;
-import utils.HttpRequestUtils;
-import webserver.request.HttpRequest;
-import webserver.response.HttpResponse;
-import webserver.response.HttpStatus;
+import webserver.http.request.HttpRequest;
+import webserver.http.response.HttpResponse;
+import webserver.resolver.Resolver;
+import webserver.view.ModelAndView;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static webserver.http.response.FileType.isSupportedFile;
 
 public class FileServlet implements HttpServlet {
-    @Override
-    public HttpResponse run(HttpRequest httpRequest) throws IOException {
-        try {
-            String filePath = generateFilePath(httpRequest.getAbsPath(), httpRequest.isHeaderContain("Accept", "text/html"));
-            byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
-            Map<String, Object> header = new HashMap<>();
-            header.put("Content-Length", body.length);
-            header.put("Content-Type", FileIoUtils.loadMIMEFromClasspath(filePath));
-            return HttpResponse.ok(header, body);
-        } catch (URISyntaxException e) {
-            return HttpResponse.error(HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (NullPointerException e) {
-            return HttpResponse.error(HttpStatus.NOT_FOUND);
-        }
+    private static final String EXTENSION_DELIMITER = ".";
+    private static final int SUBSTRING_INDEX = 1;
+    private String fileExtension;
+    private Resolver resolver;
+
+    public FileServlet(Resolver resolver) {
+        this.resolver = resolver;
     }
 
-    private String generateFilePath(String absPath, boolean isHtml) {
-        if (isHtml) {
-            return HttpRequestUtils.generateTemplateFilePath(absPath);
+    @Override
+    public boolean canMapping(HttpRequest httpRequest) {
+        String rowAccept = httpRequest.getHeaderValue("Accept");
+        if (isExists(rowAccept)) {
+            List<String> accepts = parseAccept(rowAccept);
+            return isSupportedFile(accepts);
         }
-        return HttpRequestUtils.generateStaticFilePath(absPath);
+        return false;
+    }
+
+    private boolean isExists(String rowAccept) {
+        return rowAccept != null;
+    }
+
+    private List<String> parseAccept(String rowAccept) {
+        return Arrays.asList(rowAccept.split(",")).stream()
+                .map(accept -> accept.trim())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public ModelAndView run(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+        return new ModelAndView(resolver.createView(httpRequest.getAbsPath()));
     }
 }

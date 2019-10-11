@@ -15,8 +15,8 @@
 - [x] file 읽기
 - [x] localhost:8080 으로 접속해도 자동으로 /index.html로 렌더링
 - [x] HttpRequest class 생성(리팩토링)
-- [ ] httpRequestUrlPathException 생성
-- [ ] http error response 처리
+- [x] httpRequestUrlPathException 생성
+- [x] http error response 처리
 
 
 요구사항2
@@ -48,6 +48,3 @@
 - [x] servlet 생성
 - [x] http response status code enum으로 변경
 - [x] 쓰레드 풀 변경
-
-리뷰반영
--[ ] 에러 페이지 작성

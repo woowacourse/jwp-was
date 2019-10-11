@@ -1,8 +1,8 @@
 package webserver.request;
 
 import org.junit.jupiter.api.Test;
+import webserver.http.request.RequestHeader;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class RequestHeaderTest {
     @Test
-    void create_headerMap_true(){
+    void create_headerMap_true() {
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Length", "59");
         headers.put("Content-Type", "text/css");

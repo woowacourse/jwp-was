@@ -1,24 +1,43 @@
 package webserver.servlet;
 
+import db.DataBase;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.RequestHandler;
-import webserver.request.HttpRequest;
-import webserver.response.HttpResponse;
+import webserver.http.request.HttpRequest;
+import webserver.http.response.HttpResponse;
+import webserver.resolver.Resolver;
+import webserver.view.ModelAndView;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.IOException;
 
-public class UserCreateServlet extends RequestServlet {
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+public class UserCreateServlet extends AbstractRequestServlet {
+    private static final Logger logger = LoggerFactory.getLogger(AbstractRequestServlet.class);
+    private static final String USER_ID_KEY = "userId";
+    private static final String PASSWORD_KEY = "password";
+    private static final String NAME_KEY = "name";
+    private static final String EMAIL_KEY = "email";
+    private final String url = "/user/create";
+    private Resolver resolver;
+
+    public UserCreateServlet(Resolver resolver) {
+        this.resolver = resolver;
+    }
 
     @Override
-    public HttpResponse doPost(HttpRequest httpRequest) {
-        User user = new User(httpRequest.getBody("userId"), httpRequest.getBody("password"), httpRequest.getBody("name"), httpRequest.getBody("email"));
+    public ModelAndView doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+        User user = createUser(httpRequest);
         logger.debug(">>> User : {}", user);
-        Map<String, Object> header = new HashMap<>();
-        header.put("Location", "/index.html");
-        return HttpResponse.redirect(header, null);
+        DataBase.addUser(user);
+        return new ModelAndView(resolver.createView("redirect:/user/login"));
+    }
+
+    private User createUser(HttpRequest httpRequest) {
+        return new User(httpRequest.getBody(USER_ID_KEY), httpRequest.getBody(PASSWORD_KEY), httpRequest.getBody(NAME_KEY), httpRequest.getBody(EMAIL_KEY));
+    }
+
+    @Override
+    protected String getUrl() {
+        return url;
     }
 }

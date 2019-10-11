@@ -1,31 +1,32 @@
 package webserver.handler;
 
-import exceptions.NotFoundURIException;
-import webserver.request.RequestUri;
-import webserver.servlet.FileServlet;
-import webserver.servlet.HomeServlet;
-import webserver.servlet.HttpServlet;
-import webserver.servlet.UserCreateServlet;
+import webserver.handler.exception.NotFoundURIException;
+import webserver.http.request.HttpRequest;
+import webserver.http.request.RequestUri;
+import webserver.resolver.FileResolver;
+import webserver.resolver.HandlebarViewResolver;
+import webserver.resolver.HtmlViewResolver;
+import webserver.servlet.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MappingHandler {
-    private static Map<String, HttpServlet> servlets = new HashMap<>();
-    private static FileServlet fileServlet;
+    private static List<HttpServlet> servlets = new ArrayList<>();
 
     static {
-        servlets.put("/", new HomeServlet());
-        servlets.put("/user/create", new UserCreateServlet());
-        fileServlet = new FileServlet();
+        servlets.add(new HomeServlet(new HtmlViewResolver()));
+        servlets.add(new UserCreateServlet(new HtmlViewResolver()));
+        servlets.add(new UserListServlet(new HandlebarViewResolver()));
+        servlets.add(new UserLoginServlet(new HtmlViewResolver()));
+        servlets.add(new FileServlet(new FileResolver()));
     }
 
-    public static HttpServlet getServlets(RequestUri requestUri) {
-        if (requestUri.isFile()) {
-            return fileServlet;
-        }
-        return Optional.ofNullable(servlets.get(requestUri.getAbsPath()))
-                .orElseThrow(() -> new NotFoundURIException(requestUri.getAbsPath()));
+    public static HttpServlet getServlets(HttpRequest httpRequest) {
+        RequestUri requestUri = httpRequest.getUri();
+        return servlets.stream()
+                .filter(s -> s.canMapping(httpRequest))
+                .findAny()
+                .orElseThrow(() -> new NotFoundURIException(requestUri));
     }
 }

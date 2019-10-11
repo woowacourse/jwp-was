@@ -1,43 +1,47 @@
 package webserver.servlet;
 
-import helper.IOHelper;
+import db.DataBase;
+import model.User;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import webserver.parser.HttpRequestParser;
-import webserver.request.HttpRequest;
-import webserver.response.HttpResponse;
-import webserver.response.HttpStatus;
+import webserver.http.request.HttpRequest;
+import webserver.http.response.HttpResponse;
+import webserver.http.response.HttpVersion;
+import webserver.resolver.HtmlViewResolver;
+import webserver.view.ModelAndView;
+import webserver.view.RedirectView;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class UserCreateServletTest {
-    @DisplayName("유저 생성")
+class UserCreateServletTest extends AbstractServletTest {
+    @BeforeEach
+    void setup() {
+        httpResponse = new HttpResponse(new DataOutputStream(null), HttpVersion.HTTP1);
+        resolver = new HtmlViewResolver();
+        httpServlet = new UserCreateServlet(resolver);
+    }
+
+    @DisplayName("유저 저장")
     @Test
-    void doPost_userDataByBody_redirect() throws IOException {
-        BufferedReader bufferedReader = IOHelper.createBuffer(
-                "POST /user/create HTTP/1.1",
-                "Host: localhost:8080",
-                "Connection: keep-alive",
-                "Content-Length: 59",
-                "Content-Type: application/x-www-form-urlencoded",
-                "Accept: text/html,*/*",
-                "",
-                "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net"
-        );
-        HttpRequest httpRequest = HttpRequestParser.parse(bufferedReader);
-        UserCreateServlet userCreateServlet = new UserCreateServlet();
-        byte[] body = null;
-        Map<String, Object> header = new HashMap<>();
-        header.put("Location", "/index.html");
-        assertThat(userCreateServlet.doPost(httpRequest)).isEqualTo(new HttpResponse(HttpStatus.FOUND, header, body));
+    void doPost_userInformation_equalUserData() throws IOException {
+        HttpRequest httpRequest = getCreateUserPostRequest();
+        httpServlet.doPost(httpRequest, httpResponse);
+        User savedUser = DataBase.findUserById(dummyUser.getUserId());
+        assertThat(savedUser).isNotNull();
+        assertThat(savedUser.getUserId()).isEqualTo(dummyUser.getUserId());
+        assertThat(savedUser.getEmail()).isEqualTo(dummyUser.getEmail());
+        assertThat(savedUser.getName()).isEqualTo(dummyUser.getName());
+        assertThat(savedUser.getPassword()).isEqualTo(dummyUser.getPassword());
+    }
+    @DisplayName("유저 저장 후 로그인 페이지로 리다이렉트")
+    @Test
+    void doPost_addUser_redirect() throws IOException {
+        HttpRequest httpRequest = getCreateUserPostRequest();
+        ModelAndView modelAndView = httpServlet.doPost(httpRequest, httpResponse);
+        assertThat(modelAndView).isEqualTo(new ModelAndView(new RedirectView("/user/login")));
     }
 }
