@@ -5,6 +5,7 @@ import http.HttpVersion;
 import http.request.HttpRequest;
 import http.request.HttpRequestFactory;
 import http.response.HttpResponse;
+import http.session.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.exception.RequestHandlingFailException;
@@ -21,9 +22,11 @@ public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
+    private SessionManager sessionManager;
 
-    public RequestHandler(Socket connectionSocket) {
+    public RequestHandler(Socket connectionSocket, SessionManager sessionManager) {
         this.connection = connectionSocket;
+        this.sessionManager = sessionManager;
     }
 
     public void run() {
@@ -43,13 +46,19 @@ public class RequestHandler implements Runnable {
     }
 
     private void handle(InputStream in, OutputStream out) throws IOException {
-        HttpRequest request = HttpRequestFactory.getHttpRequest(in);
+        HttpRequest request = getHttpRequest(in);
         HttpResponse response = getHttpResponseOf(request);
 
         logger.debug(request.toString());
         handle(request, response);
 
         writeResponse(response, out);
+    }
+
+    private HttpRequest getHttpRequest(InputStream in) throws IOException {
+        HttpRequest request = HttpRequestFactory.getHttpRequest(in);
+        request.bindTo(sessionManager);
+        return request;
     }
 
     private HttpResponse getHttpResponseOf(HttpRequest request) {
@@ -63,7 +72,7 @@ public class RequestHandler implements Runnable {
             controller.handle(request, response);
             return;
         }
-        
+
         StaticResourceHandler.forward(request, response);
     }
 
