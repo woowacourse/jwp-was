@@ -24,14 +24,11 @@ public class RequestHeaderTest {
                     "Content-Type: application/x-www-form-urlencoded\n" +
                     "Accept: */*\n";
 
-    private RequestHeader requestLineOfPostMessage;
-    private RequestHeader requestLineOfGetMessage;
-
     @DisplayName("HttpRequestHeader 생성")
     @Test
     void of() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(POST_REQUEST_HEADER.getBytes())));
-        requestLineOfPostMessage = RequestHeader.of(br);
+        RequestHeader requestLineOfPostMessage = RequestHeader.of(br);
 
         assertThat(requestLineOfPostMessage.getHeaderFieldValue("Host")).isEqualTo("localhost:8080");
         assertThat(requestLineOfPostMessage.getHeaderFieldValue("Connection")).isEqualTo("keep-alive");
@@ -46,9 +43,9 @@ public class RequestHeaderTest {
     @Test
     void getContentLength() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(POST_REQUEST_HEADER.getBytes())));
-        requestLineOfPostMessage = RequestHeader.of(br);
+        RequestHeader requestLineOfPostMessage = RequestHeader.of(br);
         br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(GET_REQUEST_HEADER.getBytes())));
-        requestLineOfGetMessage = RequestHeader.of(br);
+        RequestHeader requestLineOfGetMessage = RequestHeader.of(br);
 
         assertThat(requestLineOfPostMessage.getContentLength()).isEqualTo(93);
         assertThat(requestLineOfGetMessage.getContentLength()).isEqualTo(0);

@@ -16,15 +16,12 @@ public class RequestLineTest {
     private static final String GET_REQUEST_STATUS_LINE_WITH_QUERY_STRING =
             "GET /user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net HTTP/1.1\n";
 
-    private RequestLine requestLineOfGetMessage;
-    private RequestLine requestLineOfPostMessage;
-    private RequestLine requestLineWithQueryString;
 
     @DisplayName("HttpRequestLine 생성")
     @Test
     void of() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(GET_REQUEST_STATUS_LINE.getBytes())));
-        requestLineOfGetMessage = RequestLine.of(br);
+        RequestLine requestLineOfGetMessage = RequestLine.of(br);
 
         assertThat(requestLineOfGetMessage.getMethod()).isEqualTo("GET");
         assertThat(requestLineOfGetMessage.getTarget()).isEqualTo("/index.html");
@@ -35,9 +32,9 @@ public class RequestLineTest {
     @Test
     void isGet() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(GET_REQUEST_STATUS_LINE.getBytes())));
-        requestLineOfGetMessage = RequestLine.of(br);
+        RequestLine requestLineOfGetMessage = RequestLine.of(br);
         br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(POST_REQUEST_STATUS_LINE.getBytes())));
-        requestLineOfPostMessage = RequestLine.of(br);
+        RequestLine requestLineOfPostMessage = RequestLine.of(br);
 
         assertThat(requestLineOfGetMessage.isGet()).isTrue();
         assertThat(requestLineOfPostMessage.isGet()).isFalse();
@@ -47,9 +44,9 @@ public class RequestLineTest {
     @Test
     void isPost() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(GET_REQUEST_STATUS_LINE.getBytes())));
-        requestLineOfGetMessage = RequestLine.of(br);
+        RequestLine requestLineOfGetMessage = RequestLine.of(br);
         br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(POST_REQUEST_STATUS_LINE.getBytes())));
-        requestLineOfPostMessage = RequestLine.of(br);
+        RequestLine requestLineOfPostMessage = RequestLine.of(br);
 
         assertThat(requestLineOfGetMessage.isPost()).isFalse();
         assertThat(requestLineOfPostMessage.isPost()).isTrue();
@@ -59,9 +56,9 @@ public class RequestLineTest {
     @Test
     void hasParameters() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(GET_REQUEST_STATUS_LINE.getBytes())));
-        requestLineOfGetMessage = RequestLine.of(br);
+        RequestLine requestLineOfGetMessage = RequestLine.of(br);
         br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(GET_REQUEST_STATUS_LINE_WITH_QUERY_STRING.getBytes())));
-        requestLineWithQueryString = RequestLine.of(br);
+        RequestLine requestLineWithQueryString = RequestLine.of(br);
 
         assertThat(requestLineWithQueryString.hasParameters()).isTrue();
         assertThat(requestLineOfGetMessage.hasParameters()).isFalse();
@@ -71,9 +68,9 @@ public class RequestLineTest {
     @Test
     void getPath() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(GET_REQUEST_STATUS_LINE.getBytes())));
-        requestLineOfGetMessage = RequestLine.of(br);
+        RequestLine requestLineOfGetMessage = RequestLine.of(br);
         br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(GET_REQUEST_STATUS_LINE_WITH_QUERY_STRING.getBytes())));
-        requestLineWithQueryString = RequestLine.of(br);
+        RequestLine requestLineWithQueryString = RequestLine.of(br);
 
         assertThat(requestLineOfGetMessage.getPath()).isEqualTo("/index.html");
         assertThat(requestLineWithQueryString.getPath()).isEqualTo("/user/create");
@@ -83,7 +80,7 @@ public class RequestLineTest {
     @Test
     void get() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(GET_REQUEST_STATUS_LINE_WITH_QUERY_STRING.getBytes())));
-        requestLineWithQueryString = RequestLine.of(br);
+        RequestLine requestLineWithQueryString = RequestLine.of(br);
 
         assertThat(requestLineWithQueryString.getParameterValue("userId")).isEqualTo("javajigi");
         assertThat(requestLineWithQueryString.getParameterValue("password")).isEqualTo("password");

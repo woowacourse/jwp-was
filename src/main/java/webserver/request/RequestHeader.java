@@ -30,13 +30,12 @@ public class RequestHeader {
     }
 
     public boolean contains(String headerField, String value) {
-        String headerFieldValue;
         try {
-            headerFieldValue = getHeaderFieldValue(headerField);
+            String headFieldValue = getHeaderFieldValue(headerField);
+            return headFieldValue.contains(value);
         } catch (IllegalArgumentException e) {
             return false;
         }
-        return headerFieldValue.contains(value);
     }
 
     public String getHeaderFieldValue(String fieldName) {
