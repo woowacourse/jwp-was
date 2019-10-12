@@ -1,17 +1,19 @@
 package controller;
 
 import db.DataBase;
-import http.*;
-import http.exception.NotFoundSessionAttributeException;
+import http.HttpSession;
+import http.HttpSessionStore;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import http.response.HttpResponseBody;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.HandlebarsHelper;
+import view.HandlebarView;
+import view.ModelAndView;
+import view.RedirectView;
+import view.View;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
+import java.util.Collection;
 
 public class UserListController extends AbstractController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserListController.class);
@@ -19,25 +21,26 @@ public class UserListController extends AbstractController {
     public static final String PATH = "/user/list";
 
     @Override
-    Object doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+    ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         LOGGER.debug("userList request get: {}", httpRequest.getUri());
-        try {
-            HttpSession session = HttpSessionStore.getSession(httpRequest.getSessionId());
-            LOGGER.debug("session id: {}", session.getId());
 
-            LOGGER.debug("session attribute, {}", (String) session.getAttributes("logined"));
+        ModelAndView modelAndView = new ModelAndView();
+        View view = new RedirectView("login_failed.html");
 
-            String sessionAttribute = (String) session.getAttributes("logined");
+        HttpSession session = HttpSessionStore.getSession(httpRequest.getSessionId());
+        String sessionAttribute = (String) session.getAttributes("logined");
 
-            if (sessionAttribute.equals("true")) {
+        LOGGER.debug("session id: {}", session.getId());
+        LOGGER.debug("session attribute, {}", sessionAttribute);
 
-                ModelAndView modelAndView = new ModelAndView(new TemplateView("list.html"));
-                httpResponse.setHttpResponseBody(new HttpResponseBody(HandlebarsHelper.apply(DataBase.findAll())));
-                return modelAndView;
-            }
-        } catch (NotFoundSessionAttributeException e) {
+        if (sessionAttribute.equals("true")) {
+            Collection<User> users = DataBase.findAll();
+            modelAndView.addAttribute("userList", users);
+
+            view = new HandlebarView("list.html");
         }
 
-        return new RedirectView("login_failed.html");
+        modelAndView.setView(view);
+        return modelAndView;
     }
 }
