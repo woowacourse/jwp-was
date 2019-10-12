@@ -11,6 +11,7 @@ import static java.util.stream.Collectors.toList;
 public class HttpRequestHeaderFactory {
     private static final int KEY = 0;
     private static final int VALUE = 1;
+    private static final String COOKIE = "Cookie";
 
     public static HttpRequestHeader create(List<String> lines) {
         Map<String, String> fields = new HashMap<>();
@@ -19,9 +20,9 @@ public class HttpRequestHeaderFactory {
             fields.put(element[KEY], element[VALUE]);
         });
 
-        if (fields.containsKey("Cookie")) {
-            HttpCookieStore httpCookieStore = createHttpCookieStore(fields.get("Cookie"));
-            fields.remove("Cookie");
+        if (fields.containsKey(COOKIE)) {
+            HttpCookieStore httpCookieStore = createHttpCookieStore(fields.get(COOKIE));
+            fields.remove(COOKIE);
             return new HttpRequestHeader(fields, httpCookieStore);
         }
 

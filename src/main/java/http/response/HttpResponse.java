@@ -16,6 +16,11 @@ import java.net.URISyntaxException;
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
+    private static final String CONTENT_TYPE_KEY = "Content-Type";
+    private static final String CONTENT_TYPE_ENCODING = ";charset=utf-8";
+    private static final String CONTENT_LENGTH_KEY = "Content-Length";
+    private static final String SET_COOKIE_KEY = "Set-cookie";
+
     private HttpResponseStatusLine httpResponseStatusLine;
     private HttpResponseHeader httpResponseHeader;
     private HttpResponseBody httpResponseBody;
@@ -37,7 +42,7 @@ public class HttpResponse {
     }
 
     public void setCookie(HttpCookie cookie) {
-        httpResponseHeader.addField("Set-cookie", cookie.toString());
+        httpResponseHeader.addField(SET_COOKIE_KEY, cookie.toString());
     }
 
     public void setStatusCode(HttpStatusCode httpStatusCode) {
@@ -47,7 +52,7 @@ public class HttpResponse {
     public void redirect(String uri) {
         String contentType = MediaType.getContentType(uri);
         httpResponseStatusLine.setHttpStatusCode(HttpStatusCode.FOUND);
-        httpResponseHeader.addField("Content-Type", contentType + ";charset=utf-8");
+        httpResponseHeader.addField(CONTENT_TYPE_KEY, contentType + CONTENT_TYPE_ENCODING);
         httpResponseHeader.setLocation(uri);
     }
 
@@ -59,8 +64,8 @@ public class HttpResponse {
         this.httpResponseBody = new HttpResponseBody(FileIoUtils.loadFileFromClasspath(MediaType.getFullPath(uri)));
 
         logger.debug("file full path: {}", MediaType.getFullPath(uri));
-        httpResponseHeader.addField("Content-Type", contentType + ";charset=utf-8");
-        httpResponseHeader.addField("Content-Length", String.valueOf(httpResponseBody.getBodyLength()));
+        httpResponseHeader.addField(CONTENT_TYPE_KEY, contentType + CONTENT_TYPE_ENCODING);
+        httpResponseHeader.addField(CONTENT_LENGTH_KEY, String.valueOf(httpResponseBody.getBodyLength()));
     }
 
     public void setHttpResponseBody(HttpResponseBody httpResponseBody) {
