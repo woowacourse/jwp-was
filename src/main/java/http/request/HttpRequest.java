@@ -62,10 +62,9 @@ public class HttpRequest {
         HttpCookie cookies = getCookies();
         String jSessionId = cookies.getCookieValue("JSESSIONID");
 
-        if (sessionManager.getHttpSession(jSessionId) == null) {
-            return sessionManager.getNewHttpSession();
-        }
-        return sessionManager.getHttpSession(jSessionId);
+        return sessionManager.getHttpSession(jSessionId) == null
+                ? sessionManager.getNewHttpSession()
+                : sessionManager.getHttpSession(jSessionId);
     }
 
     @Override
