@@ -2,14 +2,13 @@ package webserver;
 
 import controller.Controller;
 import controller.ControllerContainer;
-import http.ModelAndView;
-import http.View;
 import http.request.HttpRequest;
 import http.request.factory.HttpRequestFactory;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.RequestParser;
+import view.ModelAndView;
 
 import java.io.DataOutputStream;
 import java.io.InputStream;
@@ -44,13 +43,8 @@ public class RequestHandler implements Runnable {
             Controller controller = ControllerContainer.getController(httpRequest.isContainExtension(), httpRequest.getUri());
             Object object = controller.service(httpRequest, httpResponse);
 
-
             if (object instanceof ModelAndView) {
                 ((ModelAndView) object).render(httpRequest, httpResponse);
-            }
-
-            if (object instanceof View) {
-                ((View) object).render(httpRequest, httpResponse);
             }
 
             httpResponse.writeResponse(dataOutputStream);
