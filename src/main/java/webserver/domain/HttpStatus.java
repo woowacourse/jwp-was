@@ -3,7 +3,8 @@ package webserver.domain;
 public enum HttpStatus {
     OK(200, "OK"),
     FOUND(302, "Found"),
-    NOT_FOUND(404, "Not Found");
+    NOT_FOUND(404, "Not Found"),
+    INTERNAL_ERROR(500, "Internal Server Error");
 
     public static final String SPACE = " ";
     private final int code;

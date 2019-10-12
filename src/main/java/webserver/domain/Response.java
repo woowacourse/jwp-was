@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +13,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 public class Response {
     private static final Logger LOG = getLogger(Response.class);
-    private static final byte[] NEW_LINE = "\r\n".getBytes();
+    private static final byte[] NEW_LINE = "\r\n".getBytes(StandardCharsets.ISO_8859_1);
 
     private ResponseHeader header;
     private ResponseBody body;
@@ -27,26 +26,34 @@ public class Response {
     public static class Builder {
         private static final String CONTENT_TYPE = "Content-Type";
         private static final String LOCATION = "Location";
+        private static final String EMPTY = "";
+
+        private Map<String, String> fields = new HashMap<>();
         private ResponseBody body = new ResponseBody();
         private HttpVersion protocol;
         private HttpStatus httpStatus;
-        private Map<String, String> responseFields = new HashMap<>();
+        private Cookies cookies;
 
-        Builder(final HttpVersion protocol, final HttpStatus httpStatus) {
+        Builder(final HttpVersion protocol, final HttpStatus httpStatus, final Cookies cookies) {
             this.protocol = protocol;
             this.httpStatus = httpStatus;
+            this.cookies = cookies;
         }
 
-        public Builder(final HttpVersion protocol) {
-            this(protocol, HttpStatus.OK);
+        public Builder(final HttpVersion protocol, final Request request) {
+            this(protocol, HttpStatus.OK, request.getCookies());
         }
 
-        public Builder(final HttpStatus httpStatus) {
-            this(HttpVersion._1_1, httpStatus);
+        public Builder(final HttpStatus httpStatus, final Request request) {
+            this(HttpVersion._1_1, httpStatus, request.getCookies());
+        }
+
+        public Builder(final Request request) {
+            this(HttpVersion._1_1, HttpStatus.OK, request.getCookies());
         }
 
         public Builder() {
-            this(HttpVersion._1_1, HttpStatus.OK);
+            this(HttpVersion._1_1, HttpStatus.OK, new Cookies(EMPTY));
         }
 
         public Builder protocol(final HttpVersion protocol) {
@@ -59,24 +66,26 @@ public class Response {
             return this;
         }
 
-        public Builder putField(final String fieldName, String fieldValue) {
-            this.responseFields.put(fieldName, fieldValue);
+        public Builder putField(final String key, final String value) {
+            if (!EMPTY.equals(value)) {
+                this.fields.put(key, value);
+            }
             return this;
         }
 
-        public Builder redirectUrl(final String url) {
+        public Builder redirect(final String url) {
             this.httpStatus = HttpStatus.FOUND;
-            putField(LOCATION, url);
+            this.putField(LOCATION, url);
             return this;
         }
 
         public Builder contentType(final MediaType contentType) {
-            this.responseFields.replace(CONTENT_TYPE, contentType.is());
+            this.putField(CONTENT_TYPE, contentType.is());
             return this;
         }
 
-        public Builder body(final String body) {
-            this.body = new ResponseBody(body);
+        public Builder addCookies(final Cookies cookies) {
+            this.cookies.merge(cookies);
             return this;
         }
 
@@ -85,36 +94,36 @@ public class Response {
             return this;
         }
 
+        public Builder body(final String body) {
+            this.body = new ResponseBody(body.getBytes(StandardCharsets.UTF_8));
+            return this;
+        }
+
         public Builder body(final StaticFile file) {
-            this.responseFields.put(CONTENT_TYPE, MediaType.of(file.getExtension()).is());
+            this.putField(CONTENT_TYPE, MediaType.of(file.getExtension()).is());
             this.body = new ResponseBody(file.getBody());
             return this;
         }
 
         public Response build() {
-            final ResponseHeader header = new ResponseHeader(this.protocol, this.httpStatus, this.responseFields);
+            final ResponseHeader header = new ResponseHeader(this.protocol, this.httpStatus, this.fields, this.cookies);
             return new Response(header, this.body);
         }
     }
 
-    private byte[] toBytes() {
-        final int bodyLength = this.body.length();
-        final byte[] header = this.header.make(bodyLength).getBytes(StandardCharsets.ISO_8859_1); // 이 인코딩을 명시적으로 지정하면 Charset 변환과정 없이 array 복사만 한다.
-
-        return ByteBuffer
-                .allocate(header.length + NEW_LINE.length + bodyLength)
-                .put(header).put(NEW_LINE).put(this.body.getBody())
-                .array();
-    }
-
     public void sendToClient(final OutputStream outputStream) {
         final DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-        final byte[] body = this.toBytes();
         try {
-            dataOutputStream.write(body, 0, body.length);
+            writeTo(dataOutputStream, this.header.getBytes(this.body.length()));
+            writeTo(dataOutputStream, NEW_LINE);
+            writeTo(dataOutputStream, this.body.getBytes());
             dataOutputStream.flush();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             LOG.error(e.getMessage());
         }
+    }
+
+    private void writeTo(final OutputStream stream, final byte[] data) throws IOException {
+        stream.write(data, 0, data.length);
     }
 }
