@@ -28,7 +28,7 @@ class ControllerMapperTest {
 
     @Test
     void ControllerMapper가_요청을_처리할_수_있는지_확인() throws IOException {
-        HttpRequest request = TestResourceLoader.getHttpRequest("Http_GET_Static.txt");
+        HttpRequest request = TestResourceLoader.getHttpRequest("Http_GET_StaticResource.txt");
         assertThat(ControllerMapper.canHandle(request)).isFalse();
     }
 }

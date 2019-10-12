@@ -16,7 +16,7 @@ import static webserver.StaticResourceHandler.VIEW_TEMPLATE_PATH;
 class StaticResourceHandlerTest {
     @Test
     void forward() throws IOException, URISyntaxException {
-        HttpRequest request = TestResourceLoader.getHttpRequest("Http_GET_Static.txt");
+        HttpRequest request = TestResourceLoader.getHttpRequest("Http_GET_StaticResource.txt");
         HttpResponse response = HttpResponse.of(request.getVersion());
         byte[] expectedBody = FileIoUtils.loadFileFromClasspath(VIEW_TEMPLATE_PATH + "/index.html");
 
@@ -43,7 +43,7 @@ class StaticResourceHandlerTest {
     @Test
     void MediaType을_알_수_없는_경우_html로_응답() throws IOException, URISyntaxException {
         HttpRequest request = TestResourceLoader
-                .getHttpRequest("Http_GET_Static_Without_Accept_Header.txt");
+                .getHttpRequest("Http_GET_Without_Accept_Header.txt");
         HttpResponse response = HttpResponse.of(request.getVersion());
         byte[] expectedBody = FileIoUtils.loadFileFromClasspath(VIEW_TEMPLATE_PATH + "/index.html");
 
