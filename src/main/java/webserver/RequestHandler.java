@@ -35,6 +35,7 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             handle(in, out);
         } catch (IOException e) {
+            // TODO: 2019-10-13 예외일 경우 클라이언트쪽에 예외 페이지 보여주기 
             logger.debug(e.getMessage(), e);
             throw new RequestHandlingFailException();
         }
