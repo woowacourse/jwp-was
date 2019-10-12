@@ -1,4 +1,4 @@
-package http;
+package view;
 
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -22,11 +22,15 @@ public class ModelAndView {
         this.model = model;
     }
 
+    public void setView(View view) {
+        this.view = view;
+    }
+
     public void addAttribute(String attributeName, Object attribute) {
         model.put(attributeName, attribute);
     }
 
     public void render(HttpRequest request, HttpResponse response) throws Exception {
-        view.render(request, response);
+        view.render(model, request, response);
     }
 }
