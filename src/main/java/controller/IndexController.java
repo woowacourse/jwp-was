@@ -1,11 +1,11 @@
 package controller;
 
-import http.TemplateView;
-import http.View;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import view.ModelAndView;
+import view.TemplateView;
 
 public class IndexController extends AbstractController {
     private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
@@ -13,8 +13,8 @@ public class IndexController extends AbstractController {
     public static final String PATH = "/";
 
     @Override
-    View doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+    ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
 
-        return new TemplateView("index.html");
+        return new ModelAndView(new TemplateView("index.html"));
     }
 }

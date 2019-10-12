@@ -5,6 +5,7 @@ import http.HttpRequestMethod;
 import http.HttpStatusCode;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import view.ModelAndView;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -12,7 +13,7 @@ import java.net.URISyntaxException;
 public abstract class AbstractController implements Controller {
 
     @Override
-    public Object service(HttpRequest request, HttpResponse response) throws IOException, URISyntaxException {
+    public ModelAndView service(HttpRequest request, HttpResponse response) throws IOException, URISyntaxException {
         try {
             if (request.getMethod().equals(HttpRequestMethod.GET)) {
                 return doGet(request, response);
@@ -28,11 +29,11 @@ public abstract class AbstractController implements Controller {
         throw new NotSupportMethod("Not Support : " + request.getUri() + request.getMethod());
     }
 
-    Object doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+    ModelAndView doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         throw new NotSupportMethod("Not Support : " + httpRequest.getUri() + httpRequest.getMethod());
     }
 
-    Object doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+    ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         throw new NotSupportMethod("Not Support : " + httpRequest.getUri() + httpRequest.getMethod());
     }
 }

@@ -4,12 +4,13 @@ import controller.exception.LoginUserException;
 import db.DataBase;
 import http.HttpSession;
 import http.HttpSessionStore;
-import http.RedirectView;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import view.ModelAndView;
+import view.RedirectView;
 
 import java.util.Optional;
 
@@ -19,7 +20,7 @@ public class LoginUserController extends AbstractController {
     public static final String PATH = "/user/login";
 
     @Override
-    RedirectView doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
+    ModelAndView doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         String userId = httpRequest.getParameter("userId");
         String password = httpRequest.getParameter("password");
         HttpSession session = HttpSessionStore.getSession(httpRequest.getSessionId());
@@ -37,6 +38,6 @@ public class LoginUserController extends AbstractController {
             session.addAttribute("logined", "false");
         }
 
-        return new RedirectView("/");
+        return new ModelAndView(new RedirectView("/"));
     }
 }

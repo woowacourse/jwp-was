@@ -1,7 +1,8 @@
 package controller;
 
 import db.DataBase;
-import http.RedirectView;
+import view.ModelAndView;
+import view.RedirectView;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.User;
@@ -14,13 +15,13 @@ public class CreateUserController extends AbstractController {
     public static final String PATH = "/user/create";
 
     @Override
-    RedirectView doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+    ModelAndView doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         save(httpRequest.getParameter("userId"),
                 httpRequest.getParameter("password"),
                 httpRequest.getParameter("name"),
                 httpRequest.getParameter("email"));
 
-        return new RedirectView("/");
+        return new ModelAndView(new RedirectView("/"));
     }
 
     private void save(String userId, String password, String name, String email) {
