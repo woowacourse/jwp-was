@@ -35,7 +35,6 @@ public class LoginUserController extends AbstractController {
         } catch (LoginUserException e) {
             LOGGER.debug("login error");
             session.addAttribute("logined", "false");
-            e.printStackTrace();
         }
 
         return new RedirectView("/");
