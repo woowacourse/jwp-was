@@ -2,7 +2,6 @@ package http.session;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.LoggingUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +43,8 @@ public class HttpCookie {
         try {
             cookies.put(nameAndValue[COOKIE_NAME], nameAndValue[VALUE]);
         } catch (IndexOutOfBoundsException e) {
-            LoggingUtils.logStackTrace(logger, e);
+            // TODO: 2019-10-12 예외 처리
+            logger.debug(e.getMessage(), e);
         }
     }
 

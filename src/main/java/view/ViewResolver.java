@@ -8,7 +8,6 @@ import com.github.jknack.handlebars.io.TemplateLoader;
 import controller.TemplateRenderingFailException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.LoggingUtils;
 
 import java.io.IOException;
 import java.util.Map;
@@ -28,8 +27,7 @@ public class ViewResolver {
             Template template = handlebars.compile(viewName);
             return template.apply(model);
         } catch (IOException e) {
-            // TODO: 2019-10-07 예외처리, 로거 추가
-            LoggingUtils.logStackTrace(logger, e);
+            logger.debug(e.getMessage(), e);
             throw new TemplateRenderingFailException();
         }
     }

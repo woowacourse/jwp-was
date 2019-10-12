@@ -7,7 +7,6 @@ import http.request.HttpRequestFactory;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.LoggingUtils;
 import webserver.exception.RequestHandlingFailException;
 
 import java.io.DataOutputStream;
@@ -33,7 +32,7 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             handle(in, out);
         } catch (IOException e) {
-            LoggingUtils.logStackTrace(logger, e);
+            logger.debug(e.getMessage(), e);
             throw new RequestHandlingFailException();
         }
     }
@@ -62,7 +61,9 @@ public class RequestHandler implements Runnable {
         if (ControllerMapper.canHandle(request)) {
             Controller controller = ControllerMapper.map(request);
             controller.handle(request, response);
+            return;
         }
+        
         StaticResourceHandler.forward(request, response);
     }
 
