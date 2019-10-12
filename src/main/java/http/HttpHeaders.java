@@ -29,7 +29,7 @@ public class HttpHeaders {
         this.headers = headers;
     }
 
-    public static HttpHeaders of(List<String> lines) {
+    public static HttpHeaders parse(List<String> lines) {
         // TODO: 2019-09-23 Header field 포멧에 맞는지 확인해야 하지 않을까?
         Map<String, String> headers = new HashMap<>();
 

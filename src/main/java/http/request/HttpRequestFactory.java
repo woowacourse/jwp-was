@@ -4,10 +4,7 @@ import http.HttpHeaders;
 import http.exception.EmptyHttpRequestException;
 import utils.IOUtils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +27,11 @@ public class HttpRequestFactory {
         String requestLine = lines.get(REQUEST_LINE_INDEX);
         List<String> headerLines = extractHeaderLinesFrom(lines);
 
-        HttpRequestLine httpRequestLine = HttpRequestLine.of(requestLine);
-        HttpHeaders headers = HttpHeaders.of(headerLines);
+        HttpRequestLine httpRequestLine = HttpRequestLine.parse(requestLine);
+        HttpHeaders headers = HttpHeaders.parse(headerLines);
         String body = getBody(buffer, headers);
-        return new HttpRequest(httpRequestLine, headers, body);
+        QueryParams queryParams = getQueryParams(requestLine, body);
+        return new HttpRequest(httpRequestLine, headers, body, queryParams);
     }
 
     private static List<String> getHeaderLines(BufferedReader buffer) throws IOException {
@@ -64,5 +62,11 @@ public class HttpRequestFactory {
 
         int contentLength = Integer.parseInt(headers.getHeader(CONTENT_LENGTH));
         return decode(IOUtils.readData(buffer, contentLength), StandardCharsets.UTF_8.name());
+    }
+
+    private static QueryParams getQueryParams(String requestLine, String body) throws UnsupportedEncodingException {
+        return QueryParams.canParse(requestLine)
+                ? QueryParams.parseRequestLine(requestLine)
+                : QueryParams.parseBody(body);
     }
 }

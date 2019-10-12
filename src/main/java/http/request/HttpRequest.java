@@ -7,7 +7,6 @@ import http.session.HttpSession;
 import http.session.SessionManager;
 
 import static http.HttpHeaders.COOKIE;
-import static http.request.HttpMethod.GET;
 
 public class HttpRequest {
     private HttpRequestLine requestLine;
@@ -16,18 +15,12 @@ public class HttpRequest {
     private QueryParams queryParams;
     private SessionManager sessionManager;
 
-    // TODO: 2019-10-11 builder 패턴 적용 고려
-    HttpRequest(HttpRequestLine requestLine, HttpHeaders headers, String body) {
+    // TODO: 2019-10-11 builder 패턴 적용하여 리펙토링
+    HttpRequest(HttpRequestLine requestLine, HttpHeaders headers, String body, QueryParams queryParams) {
         this.requestLine = requestLine;
         this.headers = headers;
         this.body = body;
-        this.queryParams = splitQueryParams();
-    }
-
-    private QueryParams splitQueryParams() {
-        return GET.equals(requestLine.getHttpMethod())
-                ? QueryParams.of(requestLine.getQueryParams())
-                : QueryParams.of(body);
+        this.queryParams = queryParams;
     }
 
     public HttpMethod getMethod() {
@@ -35,7 +28,7 @@ public class HttpRequest {
     }
 
     public String getPath() {
-        HttpUri uri = requestLine.getUri();
+        HttpUri uri = requestLine.getPath();
         return uri.getPath();
     }
 

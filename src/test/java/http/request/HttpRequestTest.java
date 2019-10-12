@@ -95,6 +95,7 @@ class HttpRequestTest {
     @Test
     @DisplayName("cookie의 JSESSIONID에 해당하는 session이 있으면 해당 session을 반환한다.")
     void getSession_ifCookie_hasJSESSIONID() throws IOException {
+        // TODO: 2019-10-13 리펙토링
         // Given
         SessionManager sessionManager = new SessionManager(new TestIdGenerator());
         HttpSession session = startNewSession(sessionManager);
