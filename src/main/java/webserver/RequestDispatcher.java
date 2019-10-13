@@ -19,7 +19,6 @@ import webserver.message.response.Response;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -49,12 +48,9 @@ public class RequestDispatcher {
     }
 
     private static void processResponse(final Request request, final Response response) {
-        try {
-            Optional<Controller> maybeHandler = getHandler(request);
-            maybeHandler.orElseThrow().service(request, response);
-        } catch (NoSuchElementException e) {
-            getStaticResponse(request, response);
-        }
+        Optional<Controller> maybeHandler = getHandler(request);
+        maybeHandler.ifPresentOrElse(controller -> controller.service(request, response),
+                () -> getStaticResponse(request, response));
     }
 
     private static void getStaticResponse(Request request, Response response) {

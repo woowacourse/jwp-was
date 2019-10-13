@@ -16,7 +16,7 @@ public class File {
 
     File(final String prefix, final String path) throws IOException, URISyntaxException {
         this.path = makeFilePath(prefix, path);
-        this.name = extractName(path);
+        this.name = extractName(this.path);
         this.extension = extractExtension(this.name);
         this.body = FileIoUtils.loadFileFromClasspath(this.path);
     }
