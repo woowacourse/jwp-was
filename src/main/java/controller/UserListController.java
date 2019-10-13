@@ -4,6 +4,7 @@ import db.DataBase;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.HttpSessionUtils;
 import webserver.common.ModelAndView;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
@@ -18,7 +19,7 @@ public class UserListController extends AbstractController {
     @Override
     public ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         ModelAndView modelAndView = new ModelAndView();
-        if (httpRequest.containHeaderField("Cookie", "logined=true")) {
+        if (HttpSessionUtils.isLogined(httpRequest)) {
             log.debug("login success");
             Map<String, Object> model = new HashMap<>();
             Collection<User> users = DataBase.findAll();

@@ -29,11 +29,6 @@ public class DataBase {
         return users.containsKey(userId);
     }
 
-    public static boolean match(String userId, String password) {
-        User user = findUserById(userId);
-        return user.matchPassword(password);
-    }
-
     public static void removeAll() {
         users = Maps.newHashMap();
     }

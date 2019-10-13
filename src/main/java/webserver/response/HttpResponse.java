@@ -48,6 +48,10 @@ public class HttpResponse {
         return responseHeader.addAttribute(key, value);
     }
 
+    public void addCookie(String key, String value) {
+        setHeader("Set-Cookie", key + "=" + value);
+    }
+
     public void sendRedirect(HttpRequest httpRequest, String path) {
         setStatusLine(httpRequest, HttpStatus.FOUND);
         setHeader(HEADER_FIELD_LOCATION, HTTP_PROTOCOL + httpRequest.getHeaderFieldValue(HEADER_FIELD_HOST) + path.substring(REDIRECT_PREFIX.length()));
