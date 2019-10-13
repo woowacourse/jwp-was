@@ -2,7 +2,6 @@ package webserver.view;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import webserver.message.HttpVersion;
 import webserver.message.response.Response;
 
 import java.util.HashMap;
@@ -15,7 +14,7 @@ class RedirectViewTest {
     @Test
     @DisplayName("Redirect 헤더를 잘 생성하는지 테스트")
     void redirectHeader() {
-        Response response = new Response(HttpVersion.HTTP_1_1);
+        Response response = new Response();
         View view = new RedirectView("/index.html");
         Map<String, Object> models = new HashMap<>();
 

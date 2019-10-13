@@ -2,17 +2,15 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.DataConverter;
 import utils.FileLoader;
 import utils.IOUtils;
-import utils.exception.InvalidFileAccessException;
+import utils.exception.NoSuchFileException;
 import web.controller.Controller;
 import web.controller.impl.LoginController;
 import web.controller.impl.UserController;
 import web.controller.impl.UserListController;
 import webserver.message.HttpStatus;
 import webserver.message.HttpVersion;
-import webserver.message.exception.UrlDecodeException;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
 
@@ -34,34 +32,43 @@ public class RequestDispatcher {
     }
 
     public static byte[] forward(final IOUtils ioUtils) {
-        String httpVersion = null;
-        try {
-            final Request request = new Request(ioUtils);
-            final Response response = new Response(HttpVersion.of(request.getHttpVersion()));
+        final Request request;
+        final Response response = new Response();
 
-            httpVersion = request.getHttpVersion();
+        try {
+            request = new Request(ioUtils);
             processResponse(request, response);
-            return response.toBytes();
-        } catch (IOException | URISyntaxException | NullPointerException | UrlDecodeException e) {
-            return DataConverter.convertTo500Response(httpVersion, FileLoader.loadInternalServerErrorFile()).toBytes();
+        } catch (IOException | URISyntaxException | NullPointerException e) {
+            logger.debug("500 Internal Server Error: {}", e.toString());
+            internalServerError500Response(response);
         }
+        return response.toBytes();
     }
 
     private static void processResponse(final Request request, final Response response) {
+        response.setHttpVersion(HttpVersion.of(request.getHttpVersion()));
+
         Optional<Controller> maybeHandler = getHandler(request);
         maybeHandler.ifPresentOrElse(controller -> controller.service(request, response),
-                () -> getStaticResponse(request, response));
+                () -> processResponseBody(request, response));
     }
 
-    private static void getStaticResponse(Request request, Response response) {
+    private static void processResponseBody(final Request request, final Response response) {
         try {
             response.body(FileLoader.loadFile(request.getPath()));
-        } catch (IOException | URISyntaxException | InvalidFileAccessException e) {
+        } catch (NoSuchFileException e) {
             logger.debug("404 Not Found: {}", e.toString());
-
             response.setHttpStatus(HttpStatus.NOT_FOUND);
             response.body(FileLoader.loadNotFoundFile());
+        } catch (IOException | URISyntaxException e) {
+            logger.debug("500 Internal Server Error: {}", e.toString());
+            internalServerError500Response(response);
         }
+    }
+
+    private static void internalServerError500Response(final Response response) {
+        response.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+        response.body(FileLoader.loadInternalServerErrorFile());
     }
 
     private static Optional<Controller> getHandler(final Request request) {

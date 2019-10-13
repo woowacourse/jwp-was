@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import webserver.message.HttpStatus;
-import webserver.message.HttpVersion;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -14,7 +13,7 @@ class ResponseTest {
     @BeforeEach
     void setUp() {
         String body = "<h1>HI</h1>";
-        this.response = new Response(HttpVersion.HTTP_1_1);
+        this.response = new Response();
         this.response.setHttpStatus(HttpStatus.OK);
         this.response.body(body);
     }

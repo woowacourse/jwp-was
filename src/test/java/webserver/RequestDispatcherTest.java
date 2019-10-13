@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import webserver.file.DynamicFile;
 import webserver.file.File;
 import webserver.message.HttpStatus;
-import webserver.message.HttpVersion;
 import webserver.message.response.Response;
 import webserver.support.RequestHelper;
 
@@ -21,7 +20,7 @@ class RequestDispatcherTest extends RequestHelper {
     void forwardIndex() {
         final String actual = new String(RequestDispatcher.forward(ioUtils(requestPostWithQuery)));
 
-        Response response = new Response(HttpVersion.HTTP_1_1);
+        Response response = new Response();
         response.redirect("/");
 
         assertThat(actual).contains("302 Found");
@@ -34,7 +33,7 @@ class RequestDispatcherTest extends RequestHelper {
         final byte[] actual = RequestDispatcher.forward(ioUtils(requestGetHeader));
 
         final File file = new DynamicFile("/index.html");
-        final Response response = new Response(HttpVersion.HTTP_1_1);
+        final Response response = new Response();
         response.body(file);
 
         assertThat(actual).isEqualTo(response.toBytes());
@@ -46,7 +45,7 @@ class RequestDispatcherTest extends RequestHelper {
         final byte[] actual = RequestDispatcher.forward(ioUtils(requestNotFoundHeader));
 
         final File file = new DynamicFile("/error/404_not_found.html");
-        final Response response = new Response(HttpVersion.HTTP_1_1);
+        final Response response = new Response();
         response.setHttpStatus(HttpStatus.NOT_FOUND);
         response.body(file);
 
@@ -59,7 +58,7 @@ class RequestDispatcherTest extends RequestHelper {
         final byte[] actual = RequestDispatcher.forward(null);
 
         final File file = new DynamicFile("/error/500_internal_error.html");
-        final Response response = new Response(HttpVersion.HTTP_1_1);
+        final Response response = new Response();
         response.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         response.body(file);
 

@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import web.db.DataBase;
 import web.model.User;
 import webserver.message.HttpCookie;
-import webserver.message.HttpVersion;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
 import webserver.session.HttpSession;
@@ -41,7 +40,7 @@ class LoginControllerTest extends RequestHelper {
     void getLogin() throws IOException, URISyntaxException {
         // given
         Request request = new Request(ioUtils(requestGetLogin));
-        Response response = new Response(HttpVersion.HTTP_1_1);
+        Response response = new Response();
 
         // when
         this.loginController.service(request, response);
@@ -63,7 +62,7 @@ class LoginControllerTest extends RequestHelper {
         SessionContextHolder.addSession(session);
 
         Request request = new Request(ioUtils(requestPostWithQuery));
-        Response response = new Response(HttpVersion.HTTP_1_1);
+        Response response = new Response();
 
         // when
         this.loginController.service(request, response);
@@ -82,7 +81,7 @@ class LoginControllerTest extends RequestHelper {
     void loginException1() throws IOException, URISyntaxException {
         // given
         Request request = new Request(ioUtils(requestPostWithWeirdQuery));
-        Response response = new Response(HttpVersion.HTTP_1_1);
+        Response response = new Response();
 
         // when
         this.loginController.service(request, response);
@@ -101,7 +100,7 @@ class LoginControllerTest extends RequestHelper {
         DataBase.addUser(new User("javajigi", "1234", "포비", "pobi@pobi.com"));
 
         Request request = new Request(ioUtils(requestPostWithQuery));
-        Response response = new Response(HttpVersion.HTTP_1_1);
+        Response response = new Response();
 
         // when
         this.loginController.service(request, response);

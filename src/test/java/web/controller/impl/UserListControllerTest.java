@@ -5,11 +5,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import web.db.DataBase;
 import web.model.User;
-import webserver.message.HttpVersion;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
 import webserver.session.HttpSession;
-import webserver.session.SessionContextHolder;
 import webserver.support.RequestHelper;
 
 import java.io.IOException;
@@ -55,7 +53,7 @@ class UserListControllerTest extends RequestHelper {
     void loginFail() throws IOException, URISyntaxException {
         // given
         Request request = new Request(ioUtils(requestGetUserListWithoutLogin));
-        Response response = new Response(HttpVersion.HTTP_1_1);
+        Response response = new Response();
 
         // when
         this.userListController.service(request, response);

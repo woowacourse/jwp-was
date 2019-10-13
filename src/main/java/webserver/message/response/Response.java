@@ -17,8 +17,8 @@ public class Response {
     private final ResponseHeader header;
     private ResponseBody body;
 
-    public Response(final HttpVersion httpVersion) {
-        this.statusLine = new ResponseStatusLine(httpVersion, HttpStatus.OK);
+    public Response() {
+        this.statusLine = new ResponseStatusLine(HttpVersion.HTTP_1_1, HttpStatus.OK);
         this.header = new ResponseHeader();
         this.body = new ResponseBody();
         addResponseField(CONTENT_TYPE, MediaType.TEXT_HTML.getMediaType());
