@@ -5,7 +5,7 @@ import com.github.jknack.handlebars.Helper;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
-import webserver.exception.NotFoundFileException;
+import webserver.exception.NoSuchControllerException;
 import webserver.message.response.Response;
 
 import java.io.IOException;
@@ -33,7 +33,7 @@ public class HandleBarView implements View {
             String page = template.apply(models);
             response.body(page);
         } catch (IOException e) {
-            throw new NotFoundFileException();
+            throw new NoSuchControllerException();
         }
     }
 }

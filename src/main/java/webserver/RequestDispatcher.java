@@ -10,7 +10,6 @@ import web.controller.Controller;
 import web.controller.impl.LoginController;
 import web.controller.impl.UserController;
 import web.controller.impl.UserListController;
-import webserver.exception.NotFoundFileException;
 import webserver.message.HttpStatus;
 import webserver.message.HttpVersion;
 import webserver.message.exception.UrlDecodeException;
@@ -52,7 +51,7 @@ public class RequestDispatcher {
     private static void processResponse(final Request request, final Response response) {
         try {
             Optional<Controller> maybeHandler = getHandler(request);
-            maybeHandler.get().service(request, response);
+            maybeHandler.orElseThrow().service(request, response);
         } catch (NoSuchElementException e) {
             getStaticResponse(request, response);
         }
@@ -60,8 +59,8 @@ public class RequestDispatcher {
 
     private static void getStaticResponse(Request request, Response response) {
         try {
-            response.body(FileLoader.loadStaticFile(request.getPath()));
-        } catch (NotFoundFileException | InvalidFileAccessException e) {
+            response.body(FileLoader.loadFile(request.getPath()));
+        } catch (IOException | URISyntaxException | InvalidFileAccessException e) {
             logger.debug("404 Not Found: {}", e.toString());
 
             response.setHttpStatus(HttpStatus.NOT_FOUND);

@@ -1,6 +1,6 @@
 package utils;
 
-import webserver.StaticFile;
+import webserver.file.File;
 import webserver.message.HttpStatus;
 import webserver.message.HttpVersion;
 import webserver.message.response.Response;
@@ -16,7 +16,7 @@ public class DataConverter {
         return new Response(HttpVersion.HTTP_1_1).toBytes();
     }
 
-    public static Response convertTo500Response(final String httpVersion, final StaticFile file) {
+    public static Response convertTo500Response(final String httpVersion, final File file) {
         Response response = new Response(Objects.nonNull(httpVersion) ? HttpVersion.valueOf(httpVersion) : HttpVersion.HTTP_1_1);
         response.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         response.body(file);

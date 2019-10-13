@@ -2,6 +2,8 @@ package webserver;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import webserver.file.DynamicFile;
+import webserver.file.File;
 import webserver.message.HttpStatus;
 import webserver.message.HttpVersion;
 import webserver.message.response.Response;
@@ -31,9 +33,9 @@ class RequestDispatcherTest extends RequestHelper {
     void forwardIndex2() throws IOException, URISyntaxException {
         final byte[] actual = RequestDispatcher.forward(ioUtils(requestGetHeader));
 
-        final StaticFile staticFile = new StaticFile("./templates/index.html");
+        final File file = new DynamicFile("/index.html");
         final Response response = new Response(HttpVersion.HTTP_1_1);
-        response.body(staticFile);
+        response.body(file);
 
         assertThat(actual).isEqualTo(response.toBytes());
     }
@@ -43,10 +45,10 @@ class RequestDispatcherTest extends RequestHelper {
     void forwardNotFound() throws IOException, URISyntaxException {
         final byte[] actual = RequestDispatcher.forward(ioUtils(requestNotFoundHeader));
 
-        final StaticFile staticFile = new StaticFile("./templates/error/404_not_found.html");
+        final File file = new DynamicFile("/error/404_not_found.html");
         final Response response = new Response(HttpVersion.HTTP_1_1);
         response.setHttpStatus(HttpStatus.NOT_FOUND);
-        response.body(staticFile);
+        response.body(file);
 
         assertThat(actual).isEqualTo(response.toBytes());
     }
@@ -56,10 +58,10 @@ class RequestDispatcherTest extends RequestHelper {
     void forwardInternalServerError() throws IOException, URISyntaxException {
         final byte[] actual = RequestDispatcher.forward(null);
 
-        final StaticFile staticFile = new StaticFile("./templates/error/500_internal_error.html");
+        final File file = new DynamicFile("/error/500_internal_error.html");
         final Response response = new Response(HttpVersion.HTTP_1_1);
         response.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-        response.body(staticFile);
+        response.body(file);
 
         assertThat(actual).isEqualTo(response.toBytes());
     }

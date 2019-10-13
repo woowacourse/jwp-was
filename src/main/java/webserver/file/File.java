@@ -1,11 +1,11 @@
-package webserver;
+package webserver.file;
 
 import utils.FileIoUtils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-public class StaticFile {
+public class File {
     private static final String PATH_DELIMITER = "/";
     private static final String EXTENSION_DELIMITER = "\\.";
 
@@ -14,8 +14,8 @@ public class StaticFile {
     private final String extension;
     private final byte[] body;
 
-    public StaticFile(final String path) throws IOException, URISyntaxException {
-        this.path = path;
+    File(final String prefix, final String path) throws IOException, URISyntaxException {
+        this.path = makeFilePath(prefix, path);
         this.name = extractName(path);
         this.extension = extractExtension(this.name);
         this.body = FileIoUtils.loadFileFromClasspath(this.path);
@@ -50,4 +50,10 @@ public class StaticFile {
     public int getSize() {
         return body.length;
     }
+
+    static String makeFilePath(final String prefix, final String path) {
+        final String pathEnd = (path.endsWith("/") || "".equals(path)) ? "index.html" : "";
+        return prefix + path + pathEnd;
+    }
+
 }

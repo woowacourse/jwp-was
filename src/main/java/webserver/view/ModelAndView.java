@@ -1,5 +1,7 @@
 package webserver.view;
 
+import webserver.message.response.Response;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,5 +32,9 @@ public class ModelAndView {
 
     public void addModel(final String key, final Object value) {
         this.models.put(key, value);
+    }
+
+    public void render(final Response response) {
+        this.view.render(response, this.models);
     }
 }

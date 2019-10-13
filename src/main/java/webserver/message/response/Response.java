@@ -1,6 +1,6 @@
 package webserver.message.response;
 
-import webserver.StaticFile;
+import webserver.file.File;
 import webserver.message.HttpCookie;
 import webserver.message.HttpStatus;
 import webserver.message.HttpVersion;
@@ -57,7 +57,7 @@ public class Response {
         this.body = new ResponseBody(body);
     }
 
-    public void body(final StaticFile file) {
+    public void body(final File file) {
         this.addResponseField(CONTENT_TYPE, MediaType.of(file.getExtension()).getMediaType());
         this.body = new ResponseBody(file.getBody());
     }

@@ -1,13 +1,12 @@
 package web.controller;
 
-import webserver.exception.NotFoundFileException;
+import webserver.exception.NoSuchControllerException;
 import webserver.message.HttpCookie;
 import webserver.message.HttpMethod;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
 import webserver.session.HttpSession;
 import webserver.view.ModelAndView;
-import webserver.view.View;
 
 import java.util.Objects;
 
@@ -27,18 +26,17 @@ public class AbstractController implements Controller {
         }
 
         if (Objects.isNull(mav)) {
-            throw new NotFoundFileException();
+            throw new NoSuchControllerException();
         }
 
-        View view = mav.getView();
-        view.render(response, mav.getModels());
+        mav.render(response);
     }
 
     protected ModelAndView doGet(final Request request, final Response response) {
-        throw new NotFoundFileException();
+        throw new NoSuchControllerException();
     }
 
     protected ModelAndView doPost(final Request request, final Response response) {
-        throw new NotFoundFileException();
+        throw new NoSuchControllerException();
     }
 }
