@@ -1,16 +1,10 @@
 package webserver.response;
 
-import com.github.jknack.handlebars.Handlebars;
-import com.github.jknack.handlebars.Template;
-import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
-import com.github.jknack.handlebars.io.TemplateLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.common.HttpStatus;
-import webserver.common.ModelAndView;
 import webserver.request.HttpRequest;
 
-import java.io.IOException;
 import java.util.Objects;
 
 public class HttpResponse {
@@ -20,16 +14,11 @@ public class HttpResponse {
     private static final String HEADER_FIELD_CONTENT_LENGTH = "Content-Length";
     private static final String HEADER_FIELD_LOCATION = "Location";
     private static final String HTTP_PROTOCOL = "http://";
-    private static final String CONTENT_TYPE_HTML = "text/html";
-    private static final String CONTENT_TYPE_CSS = "text/css";
     private static final String HEADER_FIELD_HOST = "Host";
     private static final String REDIRECT_PREFIX = "redirect:";
-    private static final String CHARSET_UTF8 = "charset=utf-8";
     private static final String SEMICOLON = ";";
     private static final String HEAD_FIELD_SET_COOKIE = "Set-Cookie";
     private static final String DEFAULT_COOKIE_PATH = "Path=/";
-    private static final String PATH_PREFIX = "/templates";
-    private static final String HTML_SUFFIX = ".html";
     private static final String BLANK = " ";
     private static final String EQUAL_SIGN = "=";
 
@@ -63,37 +52,11 @@ public class HttpResponse {
         setHeader(HEADER_FIELD_LOCATION, HTTP_PROTOCOL + httpRequest.getHeaderFieldValue(HEADER_FIELD_HOST) + path.substring(REDIRECT_PREFIX.length()));
     }
 
-    public void forward(HttpRequest httpRequest, byte[] file) {
+    public void forward(HttpRequest httpRequest, byte[] file, String contentType) {
         setStatusLine(httpRequest, HttpStatus.OK);
-        setHeader(HEADER_FIELD_CONTENT_TYPE, CONTENT_TYPE_CSS);
+        setHeader(HEADER_FIELD_CONTENT_TYPE, contentType);
         setHeader(HEADER_FIELD_CONTENT_LENGTH, String.valueOf(file.length));
         setBody(file);
-    }
-
-    public void forward(HttpRequest httpRequest, ModelAndView modelAndView) {
-        byte[] file = getFile(modelAndView);
-
-        setStatusLine(httpRequest, HttpStatus.OK);
-        setHeader(HEADER_FIELD_CONTENT_TYPE, CONTENT_TYPE_HTML + SEMICOLON + CHARSET_UTF8);
-        setHeader(HEADER_FIELD_CONTENT_LENGTH, String.valueOf(file.length));
-        setBody(file);
-    }
-
-    private byte[] getFile(ModelAndView modelAndView) {
-        TemplateLoader loader = new ClassPathTemplateLoader();
-        loader.setPrefix(PATH_PREFIX);
-        loader.setSuffix(HTML_SUFFIX);
-        Handlebars handlebars = new Handlebars(loader);
-
-        byte[] file = null;
-        try {
-            String view = modelAndView.getView();
-            Template template = handlebars.compile(view);
-            file = template.apply(modelAndView.getModel()).getBytes();
-        } catch (IOException e) {
-            log.debug("fail to compile {}", e.getMessage());
-        }
-        return file;
     }
 
     public String responseLine() {
