@@ -40,7 +40,6 @@ class LoginControllerTest {
 
         HttpResponse httpResponse = controller.service(httpRequest);
         assertThat(httpResponse.getStatusLine().getHttpStatus()).isEqualTo(HttpStatus.FOUND);
-        assertThat(httpResponse.getHeader(SET_COOKIE)).isNotNull();
     }
 
     @Test

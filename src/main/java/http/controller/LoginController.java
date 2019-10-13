@@ -6,8 +6,6 @@ import http.model.HttpResponse;
 import http.model.HttpSession;
 import model.User;
 
-import static com.google.common.net.HttpHeaders.SET_COOKIE;
-
 public class LoginController implements Controller {
     @Override
     public HttpResponse service(HttpRequest httpRequest) {
@@ -22,7 +20,6 @@ public class LoginController implements Controller {
 
             return new HttpResponse.Builder()
                     .sendRedirect("/index.html")
-                    .addHeader(SET_COOKIE, "JSESSIONID=" + httpSession.getId() + "; Path=/")
                     .build();
         }
         return new HttpResponse.Builder()

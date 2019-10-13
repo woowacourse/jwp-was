@@ -6,6 +6,8 @@ import http.model.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.google.common.net.HttpHeaders.SET_COOKIE;
+
 public class ControllerHandler {
     private Map<ControllerMapping, Controller> controllers;
 
@@ -18,7 +20,9 @@ public class ControllerHandler {
     }
 
     public HttpResponse doService(HttpRequest httpRequest) {
-        return controllers.get((getCandidate(httpRequest))).service(httpRequest);
+        HttpResponse httpResponse = controllers.get((getCandidate(httpRequest))).service(httpRequest);
+        httpResponse.addHeader(SET_COOKIE, "JSESSIONID=" + httpRequest.getHttpSession().getId() + "; Path=/");
+        return httpResponse;
     }
 
     private ControllerMapping getCandidate(HttpRequest httpRequest) {

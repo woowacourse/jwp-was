@@ -48,6 +48,10 @@ public class HttpResponse {
         return statusLine.getHttpStatus().equals(status);
     }
 
+    public void addHeader(String key, String value) {
+        httpHeaders.addHeader(key, value);
+    }
+
     public static class Builder {
         private HttpProtocols httpProtocols;
         private HttpStatus httpStatus;
