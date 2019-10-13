@@ -7,8 +7,11 @@ import http.QueryString;
 import http.request.HttpRequestStartLine;
 import http.request.HttpRequestTarget;
 import http.request.Resource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HttpRequestStartLineFactory {
+    private static final Logger logger = LoggerFactory.getLogger(HttpRequestStartLineFactory.class);
 
     public static HttpRequestStartLine create(String line) {
         String[] requestLine = line.split(" ");
@@ -33,13 +36,15 @@ public class HttpRequestStartLineFactory {
     }
 
     private static Resource createResource(String url) {
-        String file = url.substring(url.lastIndexOf("/") + 1);
+        String target = url.substring(url.lastIndexOf("/") + 1);
         String path = url.substring(0, url.lastIndexOf("/") + 1);
 
-        MediaType mediaType = MediaType.of(file.substring(file.lastIndexOf(".") + 1));
-
-        String fileName = file.split("." + mediaType.getExtension())[0];
-
-        return new Resource(path, fileName, mediaType);
+        if (url.contains(".")) {
+            MediaType mediaType = MediaType.of(target.substring(target.lastIndexOf(".") + 1));
+            logger.debug("mediaType: {}", mediaType);
+            return new Resource(path, target, mediaType);
+        }
+        logger.debug("Create Resource is not file: {}", path + target);
+        return new Resource(path, target, MediaType.NONE);
     }
 }

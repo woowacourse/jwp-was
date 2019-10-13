@@ -1,12 +1,18 @@
 package http;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Arrays;
 
 public enum MediaType {
     HTML("html", "templates", "text/html"),
     CSS("css", "static", "text/css"),
     JS("js", "static", "application/js"),
-    ICO("ico", "static", "image/x-icon");
+    ICO("ico", "static", "image/x-icon"),
+    NONE("", "", ""),
+    WOFF("woff", "static", "application/x-font-woff"),
+    TTF("ttf", "static", "application/x-font-ttf");
 
     private String extension;
     private String path;
@@ -26,15 +32,11 @@ public enum MediaType {
                 ;
     }
 
-    public String getExtension() {
-        return extension;
-    }
-
-    public String getExtensionPath() {
-        return extension.equals("") ? "" : "." + getExtension();
-    }
-
     public static String getFullPath(String uri) {
+        Logger logger = LoggerFactory.getLogger(MediaType.class);
+
+        logger.debug("uri: {}", uri);
+
         return Arrays.stream(values())
                 .filter(value -> uri.contains(value.extension))
                 .map(value -> "./" + value.path + uri)
@@ -53,6 +55,10 @@ public enum MediaType {
     }
 
     public static boolean isContain(String extension) {
+        if (!extension.contains(".")) {
+            return false;
+        }
+
         return Arrays.stream(values())
                 .map(value -> extension.contains(value.extension))
                 .filter(value -> value)

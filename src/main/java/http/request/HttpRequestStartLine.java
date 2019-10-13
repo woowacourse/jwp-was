@@ -32,6 +32,10 @@ public class HttpRequestStartLine {
         return httpRequestTarget.getUri();
     }
 
+    public String getPath() {
+        return httpRequestTarget.getPath();
+    }
+
     public HttpVersion getHttpVersion() {
         return httpVersion;
     }

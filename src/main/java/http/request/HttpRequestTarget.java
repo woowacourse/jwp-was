@@ -17,6 +17,10 @@ public class HttpRequestTarget {
         return queryString.getQueryString();
     }
 
+    public String getPath() {
+        return resource.getPath();
+    }
+
     public String getUri() {
         return resource.getUri();
     }

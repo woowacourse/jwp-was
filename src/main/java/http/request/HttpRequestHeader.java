@@ -1,25 +1,16 @@
 package http.request;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 public class HttpRequestHeader {
     private static final String CONTENT_LENGTH = "Content-Length";
     private Map<String, String> fields;
+    private HttpCookieStore httpCookieStore;
 
-    public HttpRequestHeader(Map<String, String> fields) {
+    public HttpRequestHeader(Map<String, String> fields, HttpCookieStore httpCookieStore) {
         this.fields = fields;
-    }
-
-    public HttpRequestHeader(List<String> headers) {
-        this.fields = new HashMap<>();
-
-        headers.forEach(header -> {
-            String[] keyValue = header.split(": ");
-            this.fields.put(keyValue[0], keyValue[1]);
-        });
+        this.httpCookieStore = httpCookieStore;
     }
 
     public int getContentLength() {
@@ -30,6 +21,18 @@ public class HttpRequestHeader {
         }
 
         return length;
+    }
+
+    public boolean hasSession() {
+        return httpCookieStore.containsValue("SessionId");
+    }
+
+    public String getSessionId() {
+        return httpCookieStore.getCookieValue("SessionId");
+    }
+
+    public String getCookieValue(String key) {
+        return httpCookieStore.getCookieValue(key);
     }
 
     @Override
@@ -49,6 +52,7 @@ public class HttpRequestHeader {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         fields.forEach((key, value) -> stringBuilder.append(key).append(": ").append(value).append("\r\n"));
+        stringBuilder.append(httpCookieStore.toString());
         stringBuilder.append("\r\n");
 
         return stringBuilder.toString();

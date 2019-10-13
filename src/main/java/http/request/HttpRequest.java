@@ -24,10 +24,6 @@ public class HttpRequest {
         parameters = new Parameters(httpRequestStartLine.getQueryString());
     }
 
-    public HttpRequestStartLine getHttpRequestStartLine() {
-        return httpRequestStartLine;
-    }
-
     public boolean isContainExtension() {
         int lastIndex = httpRequestStartLine.getUri().lastIndexOf("/");
         String extension = httpRequestStartLine.getUri().substring(lastIndex + 1);
@@ -42,12 +38,28 @@ public class HttpRequest {
         return httpRequestStartLine.getHttpRequestMethod();
     }
 
+    public String getPath() {
+        return httpRequestStartLine.getPath();
+    }
+
     public String getUri() {
         return httpRequestStartLine.getUri();
     }
 
     public HttpVersion getHttpVersion() {
         return httpRequestStartLine.getHttpVersion();
+    }
+
+    public String getCookieValue(String key) {
+        return httpRequestHeader.getCookieValue(key);
+    }
+
+    public boolean hasSession() {
+        return httpRequestHeader.hasSession();
+    }
+
+    public String getSessionId() {
+        return httpRequestHeader.getSessionId();
     }
 
     @Override
