@@ -1,9 +1,5 @@
 package controller;
 
-import com.github.jknack.handlebars.Handlebars;
-import com.github.jknack.handlebars.Template;
-import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
-import com.github.jknack.handlebars.io.TemplateLoader;
 import controller.exception.HttpRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,10 +22,8 @@ public abstract class AbstractController implements Controller {
     private static final String TEMPLATES_PATH = "./templates";
     private static final String HEADER_FIELD_ACCEPT = "Accept";
     private static final String REDIRECT_PREFIX = "redirect:";
-    private static final String HTML_SUFFIX = ".html";
     private static final String CHARSET_UTF8 = "charset=utf-8";
     private static final String SEMICOLON = ";";
-    private static final String PATH_PREFIX = "/templates";
 
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) throws FileNotFoundException {
@@ -57,7 +51,8 @@ public abstract class AbstractController implements Controller {
         }
 
         if (httpRequest.containHeaderField(HEADER_FIELD_ACCEPT, CONTENT_TYPE_HTML)) {
-            httpResponse.forward(httpRequest, getFile(modelAndView), CONTENT_TYPE_HTML + SEMICOLON + CHARSET_UTF8);
+            httpResponse.forward(httpRequest, FileIoUtils.compileTemplate(modelAndView),
+                    CONTENT_TYPE_HTML + SEMICOLON + CHARSET_UTF8);
         }
     }
 
@@ -76,23 +71,6 @@ public abstract class AbstractController implements Controller {
             log.debug("fail to load file {}", e.getMessage());
         }
         throw new FileNotFoundException("fail to find file.");
-    }
-
-    private byte[] getFile(ModelAndView modelAndView) {
-        TemplateLoader loader = new ClassPathTemplateLoader();
-        loader.setPrefix(PATH_PREFIX);
-        loader.setSuffix(HTML_SUFFIX);
-        Handlebars handlebars = new Handlebars(loader);
-
-        byte[] file = null;
-        try {
-            String view = modelAndView.getView();
-            Template template = handlebars.compile(view);
-            file = template.apply(modelAndView.getModel()).getBytes();
-        } catch (IOException e) {
-            log.debug("fail to compile {}", e.getMessage());
-        }
-        return file;
     }
 
     protected ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
