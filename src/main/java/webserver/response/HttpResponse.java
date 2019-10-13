@@ -26,6 +26,12 @@ public class HttpResponse {
     private static final String REDIRECT_PREFIX = "redirect:";
     private static final String CHARSET_UTF8 = "charset=utf-8";
     private static final String SEMICOLON = ";";
+    private static final String HEAD_FIELD_SET_COOKIE = "Set-Cookie";
+    private static final String DEFAULT_COOKIE_PATH = "Path=/";
+    private static final String PATH_PREFIX = "/templates";
+    private static final String HTML_SUFFIX = ".html";
+    private static final String BLANK = " ";
+    private static final String EQUAL_SIGN = "=";
 
     private ResponseStatusLine responseStatusLine;
     private ResponseHeader responseHeader;
@@ -49,7 +55,7 @@ public class HttpResponse {
     }
 
     public void addCookie(String key, String value) {
-        setHeader("Set-Cookie", key + "=" + value);
+        setHeader(HEAD_FIELD_SET_COOKIE, key + EQUAL_SIGN + value + SEMICOLON + BLANK + DEFAULT_COOKIE_PATH);
     }
 
     public void sendRedirect(HttpRequest httpRequest, String path) {
@@ -75,8 +81,8 @@ public class HttpResponse {
 
     private byte[] getFile(ModelAndView modelAndView) {
         TemplateLoader loader = new ClassPathTemplateLoader();
-        loader.setPrefix("/templates");
-        loader.setSuffix(".html");
+        loader.setPrefix(PATH_PREFIX);
+        loader.setSuffix(HTML_SUFFIX);
         Handlebars handlebars = new Handlebars(loader);
 
         byte[] file = null;
