@@ -1,15 +1,11 @@
 package webserver.response;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import webserver.common.HttpStatus;
 import webserver.request.HttpRequest;
 
 import java.util.Objects;
 
 public class HttpResponse {
-    private static final Logger log = LoggerFactory.getLogger(HttpResponse.class);
-
     private static final String HEADER_FIELD_CONTENT_TYPE = "Content-Type";
     private static final String HEADER_FIELD_CONTENT_LENGTH = "Content-Length";
     private static final String HEADER_FIELD_LOCATION = "Location";
@@ -49,7 +45,12 @@ public class HttpResponse {
 
     public void sendRedirect(HttpRequest httpRequest, String path) {
         setStatusLine(httpRequest, HttpStatus.FOUND);
-        setHeader(HEADER_FIELD_LOCATION, HTTP_PROTOCOL + httpRequest.getHeaderFieldValue(HEADER_FIELD_HOST) + path.substring(REDIRECT_PREFIX.length()));
+        if (path.startsWith(REDIRECT_PREFIX)) {
+            setHeader(HEADER_FIELD_LOCATION, HTTP_PROTOCOL + httpRequest.getHeaderFieldValue(HEADER_FIELD_HOST)
+                    + path.substring(REDIRECT_PREFIX.length()));
+            return;
+        }
+        setHeader(HEADER_FIELD_LOCATION, HTTP_PROTOCOL + httpRequest.getHeaderFieldValue(HEADER_FIELD_HOST) + path);
     }
 
     public void forward(HttpRequest httpRequest, byte[] file, String contentType) {

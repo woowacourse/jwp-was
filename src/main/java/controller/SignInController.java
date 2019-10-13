@@ -10,6 +10,8 @@ import webserver.common.HttpSession;
 import webserver.common.ModelAndView;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
+import webserver.view.HtmlView;
+import webserver.view.RedirectView;
 
 public class SignInController extends AbstractController {
     private static final Logger log = LoggerFactory.getLogger(SignInController.class);
@@ -21,10 +23,10 @@ public class SignInController extends AbstractController {
     public ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         ModelAndView modelAndView = new ModelAndView();
         if (HttpSessionUtils.isLogined(httpRequest)) {
-            modelAndView.setView("redirect:/index.html");
+            modelAndView.setView(new RedirectView("/index.html"));
             return modelAndView;
         }
-        modelAndView.setView("/user/login");
+        modelAndView.setView(new HtmlView("/user/login"));
         return modelAndView;
     }
 

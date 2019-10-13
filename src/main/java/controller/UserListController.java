@@ -8,6 +8,8 @@ import utils.HttpSessionUtils;
 import webserver.common.ModelAndView;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
+import webserver.view.HtmlView;
+import webserver.view.RedirectView;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -25,11 +27,11 @@ public class UserListController extends AbstractController {
             Collection<User> users = DataBase.findAll();
             model.put("users", users);
 
-            modelAndView.setView("/user/list");
+            modelAndView.setView(new HtmlView("/user/list"));
             modelAndView.setModel(model);
             return modelAndView;
         }
-        modelAndView.setView("redirect:/user/login.html");
+        modelAndView.setView(new RedirectView("/user/login.html"));
         log.debug("login fail");
         return modelAndView;
     }
