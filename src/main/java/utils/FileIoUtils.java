@@ -33,8 +33,8 @@ public class FileIoUtils {
         Handlebars handlebars = new Handlebars(loader);
 
         try {
-            String view = modelAndView.getView();
-            Template template = handlebars.compile(view);
+            String viewName = modelAndView.getViewName();
+            Template template = handlebars.compile(viewName);
             return template.apply(modelAndView.getModel()).getBytes();
         } catch (IOException e) {
             log.debug("fail to compile {}", e.getMessage());

@@ -1,21 +1,27 @@
 package webserver.common;
 
+import webserver.view.View;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class ModelAndView {
-    private String view;
+    private View view;
     private Map<String, Object> model;
 
     public ModelAndView() {
         model = new HashMap<>();
     }
 
-    public String getView() {
+    public String getViewName() {
+        return view.getViewName();
+    }
+
+    public View getView() {
         return view;
     }
 
-    public void setView(String view) {
+    public void setView(View view) {
         this.view = view;
     }
 
