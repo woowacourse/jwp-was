@@ -56,6 +56,7 @@ public class WebServer {
         controllerHandler.addController(new ControllerMapping(HttpMethod.POST, "/user/create"), new SignUpController());
         controllerHandler.addController(new ControllerMapping(HttpMethod.POST, "/user/login"), new LoginController());
         controllerHandler.addController(new ControllerMapping(HttpMethod.GET, "/user/list"), new ListController());
+        controllerHandler.addController(new ControllerMapping(HttpMethod.GET, "/user/logout"), new LogoutController());
         return controllerHandler;
     }
 }
