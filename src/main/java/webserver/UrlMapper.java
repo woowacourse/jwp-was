@@ -1,7 +1,8 @@
 package webserver;
 
 import controller.*;
-import controller.exception.ResourceNotFoundException;
+import controller.exception.HttpRequestException;
+import webserver.common.HttpStatus;
 import webserver.request.HttpRequest;
 
 import java.util.HashMap;
@@ -32,6 +33,6 @@ public class UrlMapper {
         if (urlMapper.containsKey(source)) {
             return urlMapper.get(source);
         }
-        throw new ResourceNotFoundException();
+        throw new HttpRequestException(HttpStatus.NOT_FOUND);
     }
 }

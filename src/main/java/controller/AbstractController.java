@@ -1,9 +1,10 @@
 package controller;
 
-import controller.exception.MethodNotAllowedException;
+import controller.exception.HttpRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
+import webserver.common.HttpStatus;
 import webserver.common.ModelAndView;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
@@ -63,16 +64,16 @@ public abstract class AbstractController implements Controller {
         try {
             return FileIoUtils.loadFileFromClasspath(TEMPLATES_PATH + file);
         } catch (IOException | URISyntaxException e) {
-            log.debug("fail to load file", e);
+            log.debug("fail to load file {}", e.getMessage());
         }
         throw new FileNotFoundException("fail to find file.");
     }
 
     protected ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        throw new MethodNotAllowedException();
+        throw new HttpRequestException(HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     protected String doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        throw new MethodNotAllowedException();
+        throw new HttpRequestException(HttpStatus.METHOD_NOT_ALLOWED);
     }
 }

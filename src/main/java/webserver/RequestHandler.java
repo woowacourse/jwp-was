@@ -1,9 +1,7 @@
 package webserver;
 
 import controller.Controller;
-import controller.exception.BadRequestException;
-import controller.exception.MethodNotAllowedException;
-import controller.exception.ResourceNotFoundException;
+import controller.exception.HttpRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.common.HttpStatus;
@@ -40,17 +38,11 @@ public class RequestHandler implements Runnable {
             controller.service(httpRequest, httpResponse);
             Renderer.render(dos, httpResponse);
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            logger.error("IOException : {}", e.getMessage());
             httpResponse.setStatusLine(httpRequest, HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (BadRequestException e) {
-            logger.debug(e.getMessage());
-            httpResponse.setStatusLine(httpRequest, HttpStatus.BAD_REQUEST);
-        } catch (ResourceNotFoundException e) {
-            logger.debug(e.getMessage());
-            httpResponse.setStatusLine(httpRequest, HttpStatus.NOT_FOUND);
-        } catch (MethodNotAllowedException e) {
-            logger.debug(e.getMessage());
-            httpResponse.setStatusLine(httpRequest, HttpStatus.METHOD_NOT_ALLOWED);
+        } catch (HttpRequestException e) {
+            logger.debug("HttpException : {}", e.getMessage());
+            httpResponse.setStatusLine(httpRequest, HttpStatus.valueOfCode(e.getCode()));
         }
     }
 }

@@ -1,8 +1,9 @@
 package webserver.request;
 
-import controller.exception.BadRequestException;
+import controller.exception.HttpRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.common.HttpStatus;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,7 +33,7 @@ public class HttpRequest {
         } catch (IOException e) {
             log.debug("fail to input HttpRequest message", e);
         }
-        throw new BadRequestException();
+        throw new HttpRequestException(HttpStatus.BAD_REQUEST);
     }
 
     public boolean isGet() {

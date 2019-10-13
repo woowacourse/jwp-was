@@ -1,5 +1,7 @@
 package webserver.common;
 
+import java.util.Arrays;
+
 public enum HttpStatus {
     OK("200", "OK"),
     FOUND("302", "Found"),
@@ -14,6 +16,12 @@ public enum HttpStatus {
     HttpStatus(String code, String message) {
         this.code = code;
         this.message = message;
+    }
+
+    public static HttpStatus valueOfCode(String code) {
+        return Arrays.stream(values()).filter(httpStatus -> code.equals(httpStatus.getCode()))
+                .findFirst()
+                .orElse(INTERNAL_SERVER_ERROR);
     }
 
     public String getCode() {

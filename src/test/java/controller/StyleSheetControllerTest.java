@@ -1,6 +1,6 @@
 package controller;
 
-import controller.exception.MethodNotAllowedException;
+import controller.exception.HttpRequestException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import utils.FileIoUtils;
@@ -51,7 +51,7 @@ public class StyleSheetControllerTest {
         HttpRequest httpRequest = HttpRequest.of(new ByteArrayInputStream(POST_REQUEST_MESSAGE.getBytes()));
         HttpResponse httpResponse = new HttpResponse();
         Controller controller = new StyleSheetController();
-        assertThatExceptionOfType(MethodNotAllowedException.class)
+        assertThatExceptionOfType(HttpRequestException.class)
                 .isThrownBy(() -> controller.service(httpRequest, httpResponse))
                 .withMessage("405 Method Not Allowed");
     }
