@@ -111,8 +111,7 @@ class HttpRequestTest {
         HttpSession requestSession = request.getSession();
 
         // Then
-        assertThat(requestSession.getId()).isEqualTo(sessionId);
-        assertThat(requestSession.getAttribute("savedAttribute")).isEqualTo("savedValue");
+        assertThat(requestSession).isEqualTo(session);
     }
 
     private HttpSession startNewSession(SessionManager sessionManager) throws IOException {
