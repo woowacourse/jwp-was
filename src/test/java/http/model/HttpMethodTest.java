@@ -1,6 +1,6 @@
 package http.model;
 
-import http.supoort.IllegalHttpRequestException;
+import http.controller.NotFoundException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -9,7 +9,7 @@ import static org.assertj.core.api.Java6Assertions.assertThatThrownBy;
 class HttpMethodTest {
     @Test
     void HTTP_메서드가_아님() {
-        assertThatThrownBy(() -> HttpMethod.of("something")).isInstanceOf(IllegalHttpRequestException.class);
+        assertThatThrownBy(() -> HttpMethod.of("something")).isInstanceOf(NotFoundException.class);
     }
 
     @Test

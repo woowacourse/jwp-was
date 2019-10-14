@@ -5,7 +5,7 @@ public enum HttpStatus {
     FOUND("302 Found"),
     BAD_REQUEST("400 Bad Request"),
     NOT_FOUND("404 Not Found"),
-    ERROR("500 Internal Server Error");
+    SERVER_ERROR("500 Internal Server Error");
 
     private String message;
 

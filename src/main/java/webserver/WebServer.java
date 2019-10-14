@@ -1,15 +1,7 @@
 package webserver;
 
-import http.controller.FileResourceRequestHandler;
-import http.controller.HttpRequestHandler;
-import http.controller.HttpRequestHandlers;
-import http.controller.UserRequestHandler;
+import http.controller.*;
 import http.model.HttpMethod;
-import http.supoort.RequestMapping;
-import http.supoort.ResolverMapping;
-import http.view.ViewHandler;
-import http.view.ViewStaticResolver;
-import http.view.ViewTemplatesResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,8 +20,7 @@ public class WebServer {
     public static void main(String[] args) throws Exception {
         int port = getPort(args);
 
-        HttpRequestHandlers httpRequestHandlers = initRequestHandlers();
-        ViewHandler viewHandler = initViewHandlers();
+        ControllerHandler controllerHandler = initControllerHandler();
 
         ExecutorService es = Executors.newFixedThreadPool(100);
 
@@ -40,7 +31,7 @@ public class WebServer {
             // 클라이언트가 연결될때까지 대기한다.
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
-                es.execute(new RequestHandler(connection, httpRequestHandlers, viewHandler));
+                es.execute(new RequestHandler(connection, controllerHandler));
             }
         }
         es.shutdown();
@@ -57,22 +48,15 @@ public class WebServer {
         return port;
     }
 
-    private static HttpRequestHandlers initRequestHandlers() {
-        HttpRequestHandlers httpRequestHandlers = new HttpRequestHandlers();
-        HttpRequestHandler fileHandler = new FileResourceRequestHandler();
-        HttpRequestHandler userRequestHandler = new UserRequestHandler();
+    private static ControllerHandler initControllerHandler() {
+        ControllerHandler controllerHandler = new ControllerHandler();
 
-        httpRequestHandlers.addHandler(new RequestMapping(HttpMethod.GET, "/*"), fileHandler);
-        httpRequestHandlers.addHandler(new RequestMapping(HttpMethod.GET, "/user/create"), userRequestHandler);
-        httpRequestHandlers.addHandler(new RequestMapping(HttpMethod.POST, "/user/create"), userRequestHandler);
-        return httpRequestHandlers;
-    }
-
-    private static ViewHandler initViewHandlers() {
-        ViewHandler viewHandler = new ViewHandler();
-        viewHandler.addResolver(new ResolverMapping("\\/.*\\.html"), new ViewTemplatesResolver());
-        viewHandler.addResolver(new ResolverMapping("\\/.*\\.(css|js|png)"), new ViewStaticResolver());
-//        viewHandler.addResolver(new ModelResolver());
-        return viewHandler;
+        controllerHandler.addController(new ControllerMapping(HttpMethod.GET, "/*"), new FileResourceController());
+        controllerHandler.addController(new ControllerMapping(HttpMethod.GET, "/user/create"), new SignUpController());
+        controllerHandler.addController(new ControllerMapping(HttpMethod.POST, "/user/create"), new SignUpController());
+        controllerHandler.addController(new ControllerMapping(HttpMethod.POST, "/user/login"), new LoginController());
+        controllerHandler.addController(new ControllerMapping(HttpMethod.GET, "/user/list"), new ListController());
+        controllerHandler.addController(new ControllerMapping(HttpMethod.GET, "/user/logout"), new LogoutController());
+        return controllerHandler;
     }
 }

@@ -1,6 +1,8 @@
 package http.model;
 
-import http.supoort.IllegalHttpRequestException;
+import http.controller.NotFoundException;
+
+import java.util.Arrays;
 
 public enum HttpMethod {
     GET,
@@ -9,10 +11,14 @@ public enum HttpMethod {
     DELETE;
 
     public static HttpMethod of(String method) {
-        try {
-            return HttpMethod.valueOf(method);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalHttpRequestException(e.getMessage());
-        }
+        return Arrays.asList(HttpMethod.values()).stream()
+                .filter(value -> method.toUpperCase().equals(value.name()))
+                .findAny()
+                .orElseThrow(NotFoundException::new);
+    }
+
+
+    public boolean match(HttpMethod method) {
+        return this.equals(method);
     }
 }

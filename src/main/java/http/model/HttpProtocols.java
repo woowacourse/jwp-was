@@ -1,6 +1,6 @@
 package http.model;
 
-import http.supoort.IllegalHttpRequestException;
+import http.controller.NotFoundException;
 
 import java.util.Arrays;
 
@@ -18,8 +18,7 @@ public enum HttpProtocols {
         return Arrays.stream(HttpProtocols.values())
                 .filter(value -> value.getProtocol().equals(protocol))
                 .findAny()
-                .orElseThrow(IllegalHttpRequestException::new);
-
+                .orElseThrow(NotFoundException::new);
     }
 
     public String getProtocol() {

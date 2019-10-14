@@ -1,5 +1,6 @@
 package utils;
 
+import http.controller.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,18 +18,9 @@ public class FileIoUtils {
         try {
             Path path = Paths.get(FileIoUtils.class.getClassLoader().getResource(filePath).toURI());
             return Files.readAllBytes(path);
-
         } catch (IOException | NullPointerException | URISyntaxException e) {
             log.error(e.getMessage());
-            throw new NoSuchResource();
-        }
-    }
-
-    public static byte[] loadFileByPath(Path path) {
-        try {
-            return Files.readAllBytes(path);
-        } catch (IOException e) {
-            throw new NoSuchResource();
+            throw new NotFoundException();
         }
     }
 }

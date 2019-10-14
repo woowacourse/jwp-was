@@ -1,14 +1,13 @@
 package webserver;
 
-import http.controller.HttpRequestHandlers;
+import http.controller.ControllerHandler;
+import http.controller.NotFoundException;
 import http.model.HttpProtocols;
 import http.model.HttpRequest;
 import http.model.HttpResponse;
 import http.model.HttpStatus;
 import http.supoort.HttpRequestParser;
-import http.supoort.ResponseMessageConverter;
-import http.view.ModelAndView;
-import http.view.ViewHandler;
+import http.view.Renderer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,13 +21,11 @@ public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
-    private HttpRequestHandlers httpRequestHandlers;
-    private ViewHandler viewHandler;
+    private ControllerHandler controllerHandler;
 
-    public RequestHandler(Socket connectionSocket, HttpRequestHandlers httpRequestHandlers, ViewHandler viewHandler) {
+    public RequestHandler(Socket connectionSocket, ControllerHandler controllerHandler) {
         this.connection = connectionSocket;
-        this.httpRequestHandlers = httpRequestHandlers;
-        this.viewHandler = viewHandler;
+        this.controllerHandler = controllerHandler;
     }
 
     public void run() {
@@ -44,32 +41,39 @@ public class RequestHandler implements Runnable {
 
     private void handleRequest(InputStream in, OutputStream out) {
         try {
-            HttpRequest request = HttpRequestParser.parse(in);
-
-            ModelAndView modelAndView = httpRequestHandlers.doService(request);
-
-            response(viewHandler.handle(modelAndView), out);
-
+            HttpRequest httpRequest = HttpRequestParser.parse(in);
+            HttpResponse httpResponse = controllerHandler.doService(httpRequest);
+            Renderer.render(httpResponse, new DataOutputStream(out));
+        } catch (NotFoundException e) {
+            logger.error(e.getMessage());
+            error404(out);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            sendError(e.getMessage(), out);
+            error500(out);
         }
     }
 
-    private void sendError(String message, OutputStream out) {
-        DataOutputStream dos = new DataOutputStream(out);
+    private void error404(OutputStream out) {
+        HttpResponse httpResponse = new HttpResponse.Builder()
+                .forward("./templates/404_ERROR.html")
+                .status(HttpStatus.NOT_FOUND)
+                .build();
         try {
-            dos.writeBytes(HttpProtocols.HTTP1_1 + " " + HttpStatus.BAD_REQUEST + "\r\n");
-            dos.flush();
+            Renderer.render(httpResponse, new DataOutputStream(out));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void response(HttpResponse response, OutputStream out) {
-        DataOutputStream dos = new DataOutputStream(out);
-        ResponseMessageConverter.convert(response, dos);
+    private void error500(OutputStream out) {
+        HttpResponse httpResponse = new HttpResponse.Builder()
+                .protocols(HttpProtocols.HTTP1_1)
+                .status(HttpStatus.SERVER_ERROR)
+                .build();
+        try {
+            Renderer.render(httpResponse, new DataOutputStream(out));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-
-
 }
