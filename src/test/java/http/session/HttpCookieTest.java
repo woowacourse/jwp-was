@@ -22,7 +22,7 @@ class HttpCookieTest {
     void returnEmptyCookie_ifCookieHeader_doesNotExsist() {
         HttpCookie cookies = HttpCookie.parse(null);
 
-        assertThat(cookies.getCookies().size()).isEqualTo(0);
+        assertThat(cookies.getCookies()).isEmpty();
     }
 
     @Test
@@ -30,7 +30,7 @@ class HttpCookieTest {
     void returnEmptyCookie_ifNoCookie_inCookieHeader() {
         HttpCookie cookies = HttpCookie.parse("");
 
-        assertThat(cookies.getCookies().size()).isEqualTo(0);
+        assertThat(cookies.getCookies()).isEmpty();
     }
 
     @Test
