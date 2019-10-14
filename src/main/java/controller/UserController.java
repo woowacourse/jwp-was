@@ -44,7 +44,7 @@ public class UserController extends AbstractController {
 
     private boolean isLogin(HttpCookie cookies) {
         String logined = cookies.getCookieValue("logined");
-        return (logined != null) && logined.equals(TRUE);
+        return TRUE.equals(logined);
     }
 
     private ResponseBody getResponseBody(Map<String, Collection<User>> model) {
