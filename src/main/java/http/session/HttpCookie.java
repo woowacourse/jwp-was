@@ -44,7 +44,7 @@ public class HttpCookie {
             cookies.put(nameAndValue[COOKIE_NAME], nameAndValue[VALUE]);
         } catch (IndexOutOfBoundsException e) {
             // TODO: 2019-10-12 예외 처리
-            logger.debug(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
     }
 

@@ -4,13 +4,15 @@ import db.DataBase;
 import http.request.HttpRequest;
 import http.request.QueryParams;
 import http.response.HttpResponse;
+import http.session.Cookie;
 import model.User;
 
-import static http.HttpHeaders.SET_COOKIE;
-
 public class LoginController extends AbstractController {
-    public static final String LOGINED_TRUE = "logined=true; Path=/";
-    public static final String LOGINED_FALSE = "logined=false; Path=/";
+    private static final String LOGINED = "logined";
+    private static final String TRUE = "true";
+    private static final String FALSE = "false";
+    private static final String PATH = "Path";
+    private static final String ALL = "/";
 
     @Override
     protected void doPost(HttpRequest request, HttpResponse response) {
@@ -18,13 +20,13 @@ public class LoginController extends AbstractController {
         String inputPassword = getInputPassword(request);
 
         if (failLogin(user, inputPassword)) {
-            response.addHeader(SET_COOKIE, LOGINED_FALSE);
+            response.addCookie(new Cookie(LOGINED, FALSE));
             response.redirect("/user/login_failed.html");
             return;
         }
-        response.addHeader(SET_COOKIE, LOGINED_TRUE);
+        response.addCookie(new Cookie(LOGINED, TRUE));
+        response.addCookie(new Cookie(PATH, ALL));
         response.redirect("/index.html");
-        return;
     }
 
     private boolean failLogin(User user, String inputPassword) {

@@ -3,6 +3,10 @@ package http.response;
 import http.HttpHeaders;
 import http.HttpVersion;
 import http.MediaType;
+import http.session.Cookie;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static http.HttpHeaders.*;
 import static http.response.HttpStatus.FOUND;
@@ -15,15 +19,17 @@ public class HttpResponse {
     private HttpStatus status;
     private HttpHeaders headers;
     private byte[] body;
+    private List<Cookie> cookies;
+
+    public static HttpResponse of(HttpVersion version) {
+        return new HttpResponse(version, new HttpHeaders());
+    }
 
     private HttpResponse(HttpVersion version, HttpHeaders httpHeaders) {
         this.version = version;
         this.status = OK;
         this.headers = httpHeaders;
-    }
-
-    public static HttpResponse of(HttpVersion version) {
-        return new HttpResponse(version, new HttpHeaders());
+        cookies = new ArrayList<>();
     }
 
     public void redirect(String location) {
@@ -31,21 +37,34 @@ public class HttpResponse {
         addHeader(LOCATION, location);
     }
 
-    public void addHeader(String key, String value) {
+    private void addHeader(String key, String value) {
         headers.put(key, value);
-    }
-
-    public String getMessageHeader() {
-        return version + " " + status.getMessage() + CRLF
-                + headers.toString();
     }
 
     public boolean hasBody() {
         return body != null;
     }
 
-    public byte[] getBody() {
-        return body;
+    public void addCookie(Cookie cookie) {
+        cookies.add(cookie);
+    }
+
+    public String getMessageHeader() {
+        if (!cookies.isEmpty()) {
+            headers.put(SET_COOKIE, createSetCookieMessage());
+        }
+
+        return version + " " + status.getMessage() + CRLF
+                + headers.toString();
+    }
+
+    private String createSetCookieMessage() {
+        StringBuilder sb = new StringBuilder();
+
+        for (Cookie cookie : cookies) {
+            sb.append(cookie.getName()).append("=").append(cookie.getValue()).append("; ");
+        }
+        return sb.toString();
     }
 
     public HttpStatus getStatus() {
@@ -54,6 +73,14 @@ public class HttpResponse {
 
     public String getHeader(String fieldName) {
         return headers.getHeader(fieldName);
+    }
+
+    public byte[] getBody() {
+        return body;
+    }
+
+    public List<Cookie> getCookies() {
+        return cookies;
     }
 
     public void setStatus(HttpStatus status) {

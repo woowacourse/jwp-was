@@ -4,6 +4,7 @@ import db.DataBase;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.response.HttpStatus;
+import http.session.Cookie;
 import model.User;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -26,11 +27,13 @@ class LoginControllerTest {
     }
 
     @Test
-    @DisplayName("password가 일치하는 경우 response의 set-Cookie logined값을 true로 설정한다.")
+    @DisplayName("password가 일치하는 경우 response에 logined=true 쿠키를 추가한다.")
     void setCookie_ifUserPassword_isCorrect() throws IOException {
+        Cookie cookie = new Cookie("logined", "true");
+
         HttpResponse response = handleLoginRequest("Http_Post_Login_Success.txt");
 
-        assertThat(response.getHeader("Set-Cookie")).isEqualTo("logined=true; Path=/");
+        assertThat(response.getCookies()).contains(cookie);
     }
 
     @Test
@@ -43,11 +46,13 @@ class LoginControllerTest {
     }
 
     @Test
-    @DisplayName("password가 틀린 경우 response의 set-Cookie logined값을 flase로 설정한다.")
+    @DisplayName("password가 틀린 경우 response에 logined=false 쿠키를 추가한다.")
     void setCookie_ifUserPassword_isWrong() throws IOException {
+        Cookie cookie = new Cookie("logined", "false");
+
         HttpResponse response = handleLoginRequest("Http_Post_Login_Wrong_Password.txt");
 
-        assertThat(response.getHeader("Set-Cookie")).isEqualTo("logined=false; Path=/");
+        assertThat(response.getCookies()).contains(cookie);
     }
 
     @Test
@@ -60,11 +65,13 @@ class LoginControllerTest {
     }
 
     @Test
-    @DisplayName("유저 id가 없는 경우 response의 set-Cookie logined값을 flase로 설정한다.")
+    @DisplayName("유저 id가 없는 경우 response에 logined=false 쿠키를 추가한다.")
     void setCookie_ifUserId_isWrong() throws IOException {
+        Cookie cookie = new Cookie("logined", "false");
+
         HttpResponse response = handleLoginRequest("Http_Post_Login_Wrong_Id.txt");
 
-        assertThat(response.getHeader("Set-Cookie")).isEqualTo("logined=false; Path=/");
+        assertThat(response.getCookies()).contains(cookie);
     }
 
     @Test
