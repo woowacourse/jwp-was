@@ -16,7 +16,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class handlebarsStudyTest {
+public class HandlebarsStudyTest {
     private static String TEST_DIRECTORY = "/study/api";
 
     @Test
