@@ -15,17 +15,12 @@ import java.io.IOException;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class LoginControllerTest {
-    private static final String USER_ID = "loginTest";
-    private static final String PASSWORD = "password";
-    private static final String NAME = "Test Name";
-    private static final String EMAIL = "login@login.test";
-
     private static LoginController loginController;
 
     @BeforeAll
     static void setUpBeforeAll() {
         loginController = new LoginController();
-        User user = new User(USER_ID, PASSWORD, NAME, EMAIL);
+        User user = new User("loginTest", "password", "Test Name", "login@login.test");
 
         DataBase.addUser(user);
     }
