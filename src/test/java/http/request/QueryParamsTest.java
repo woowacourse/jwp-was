@@ -55,13 +55,4 @@ class QueryParamsTest {
         assertThat(queryParams.getParam(ATTR_1)).isEqualTo(VAL_1);
         assertThat(queryParams.getParam(ATTR_2)).isEqualTo(VAL_2);
     }
-
-//    @Test
-//    void 생성() {
-//        QueryParams queryParams = QueryParams.of(requestLine);
-//
-//        assertThat(queryParams.getParam("userId")).isEqualTo("woowa");
-//        assertThat(queryParams.getParam("password")).isEqualTo("password");
-//        assertThat(queryParams.getParam("name")).isEqualTo("woo");
-//    }
 }
