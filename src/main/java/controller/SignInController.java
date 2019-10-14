@@ -5,7 +5,6 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.HttpSessionUtils;
-import webserver.HttpSessionHandler;
 import webserver.common.HttpSession;
 import webserver.common.ModelAndView;
 import webserver.request.HttpRequest;
@@ -32,10 +31,6 @@ public class SignInController extends AbstractController {
 
     @Override
     public String doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        if (HttpSessionUtils.isLogined(httpRequest)) {
-            return "redirect:/index.html";
-        }
-
         String userId = httpRequest.getParameter("userId");
         String password = httpRequest.getParameter("password");
 
@@ -47,12 +42,10 @@ public class SignInController extends AbstractController {
 
         User user = DataBase.findUserById(userId);
         if (user.matchPassword(password)) {
-
-            HttpSession httpSession = HttpSessionHandler.createHttpSession();
+            HttpSession httpSession = httpRequest.getHttpSession();
             httpSession.setAttribute(LOGINED_KEY, LOGINED_VALUE_TRUE);
             httpSession.setAttribute("Path", "/");
 
-            httpResponse.addCookie(LOGINED_KEY, LOGINED_VALUE_TRUE);
             log.debug("{} login", userId);
             return "redirect:/index.html";
         }

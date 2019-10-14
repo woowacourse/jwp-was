@@ -1,15 +1,23 @@
 package webserver.request;
 
+import webserver.HttpSessionHandler;
+import webserver.common.HttpSession;
+
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 public class RequestHeader {
+    public static final String SESSION_KEY = "JSESSIONID";
     private static final String HEADER_FIELD_CONTENT_LENGTH = "Content-Length";
     private static final String HEADER_FIELD_SEPARATOR = ": ";
     private static final int INIT_CONTENT_LENGTH = 0;
+    private static final String COOKIE_SEPARATOR = "; ";
+    private static final String HEADER_FIELD_COOKIE = "Cookie";
+    private static final String EQUAL_SIGN = "=";
 
     private final Map<String, String> headerFields;
 
@@ -50,6 +58,29 @@ public class RequestHeader {
             return Integer.parseInt(headerFields.get(HEADER_FIELD_CONTENT_LENGTH));
         }
         return INIT_CONTENT_LENGTH;
+    }
+
+    public HttpSession getHttpSession() {
+        Map<String, String> cookies = getCookies();
+        if (cookies.containsKey(SESSION_KEY) && HttpSessionHandler.hasHttpSession(cookies.get(SESSION_KEY))) {
+            return HttpSessionHandler.getHttpSession(cookies.get(SESSION_KEY));
+        }
+        return HttpSessionHandler.createHttpSession();
+    }
+
+    private Map<String, String> getCookies() {
+        Map<String, String> cookies = new HashMap<>();
+        String[] cookieKeyAndValue;
+        try {
+            cookieKeyAndValue = getHeaderFieldValue(HEADER_FIELD_COOKIE).split(COOKIE_SEPARATOR);
+        } catch (IllegalArgumentException e) {
+            return Collections.emptyMap();
+        }
+
+        for (String cookie : cookieKeyAndValue) {
+            cookies.put(cookie.split(EQUAL_SIGN)[0], cookie.split(EQUAL_SIGN)[1]);
+        }
+        return cookies;
     }
 
     @Override

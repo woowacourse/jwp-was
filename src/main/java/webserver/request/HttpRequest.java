@@ -3,6 +3,7 @@ package webserver.request;
 import controller.exception.HttpRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.common.HttpSession;
 import webserver.common.HttpStatus;
 
 import java.io.BufferedReader;
@@ -61,6 +62,10 @@ public class HttpRequest {
 
     public String getSource() {
         return requestLine.getPath();
+    }
+
+    public HttpSession getHttpSession() {
+        return requestHeader.getHttpSession();
     }
 
     public boolean containHeaderField(String headerField, String value) {

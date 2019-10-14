@@ -4,7 +4,8 @@ import db.DataBase;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.HttpSessionUtils;
+import webserver.HttpSessionHandler;
+import webserver.common.HttpSession;
 import webserver.common.ModelAndView;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
@@ -21,7 +22,9 @@ public class UserListController extends AbstractController {
     @Override
     public ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         ModelAndView modelAndView = new ModelAndView();
-        if (HttpSessionUtils.isLogined(httpRequest)) {
+        HttpSession httpSession = httpRequest.getHttpSession();
+
+        if (HttpSessionHandler.hasHttpSession(httpSession.getId())) {
             log.debug("login success");
             Map<String, Object> model = new HashMap<>();
             Collection<User> users = DataBase.findAll();
