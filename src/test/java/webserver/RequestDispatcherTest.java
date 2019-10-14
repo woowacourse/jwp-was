@@ -2,6 +2,8 @@ package webserver;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import webserver.file.DynamicFile;
+import webserver.file.File;
 import webserver.message.HttpStatus;
 import webserver.message.response.Response;
 import webserver.support.RequestHelper;
@@ -15,39 +17,51 @@ class RequestDispatcherTest extends RequestHelper {
 
     @Test
     @DisplayName("url 분기처리를 제대로 하는지 확인")
-    void forwardIndex() throws IOException, URISyntaxException {
-        final byte[] response = RequestDispatcher.forward(ioUtils(requestGetHeader));
-        final StaticFile staticFile = new StaticFile("./templates/index.html");
+    void forwardIndex() {
+        final String actual = new String(RequestDispatcher.forward(ioUtils(requestPostWithQuery)));
 
-        assertThat(response).isEqualTo(new Response.Builder()
-                .httpStatus(HttpStatus.OK)
-                .body(staticFile)
-                .build().toBytes());
+        Response response = new Response();
+        response.redirect("/");
+
+        assertThat(actual).contains("302 Found");
+        assertThat(actual).contains("Location: /");
+    }
+
+    @Test
+    @DisplayName("url 분기처리를 제대로 하는지 확인")
+    void forwardIndex2() throws IOException, URISyntaxException {
+        final byte[] actual = RequestDispatcher.forward(ioUtils(requestGetHeader));
+
+        final File file = new DynamicFile("/index.html");
+        final Response response = new Response();
+        response.body(file);
+
+        assertThat(actual).isEqualTo(response.toBytes());
     }
 
     @Test
     @DisplayName("존재하지 않는 URL로 접근하였을 경우 처리")
     void forwardNotFound() throws IOException, URISyntaxException {
-        final byte[] response = RequestDispatcher.forward(ioUtils(requestNotFoundHeader));
-        final StaticFile staticFile = new StaticFile("./templates/error/404_not_found.html");
+        final byte[] actual = RequestDispatcher.forward(ioUtils(requestNotFoundHeader));
 
-        assertThat(response).isEqualTo(new Response.Builder()
-                .httpStatus(HttpStatus.NOT_FOUND)
-                .body(staticFile)
-                .build().toBytes());
+        final File file = new DynamicFile("/error/404_not_found.html");
+        final Response response = new Response();
+        response.setHttpStatus(HttpStatus.NOT_FOUND);
+        response.body(file);
+
+        assertThat(actual).isEqualTo(response.toBytes());
     }
 
     @Test
     @DisplayName("서버 오류 시 500 페이지가 출력되는지 확인")
     void forwardInternalServerError() throws IOException, URISyntaxException {
-        final byte[] response = RequestDispatcher.forward(null);
-        final StaticFile staticFile = new StaticFile("./templates/error/500_internal_error.html");
+        final byte[] actual = RequestDispatcher.forward(null);
 
-        System.out.println(new String(response));
+        final File file = new DynamicFile("/error/500_internal_error.html");
+        final Response response = new Response();
+        response.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+        response.body(file);
 
-        assertThat(response).isEqualTo(new Response.Builder()
-                .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(staticFile)
-                .build().toBytes());
+        assertThat(actual).isEqualTo(response.toBytes());
     }
 }

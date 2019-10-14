@@ -15,10 +15,10 @@ class MediaTypeTest {
     }
 
     @Test
-    @DisplayName("임의의 파일 확장자명에 대해 binary 객체를 반환하는지 확인")
+    @DisplayName("임의의 파일 확장자명에 대해 text 객체를 반환하는지 확인")
     void of2() {
         String extension = "kunggom";
-        assertThat(MediaType.of(extension)).isEqualTo(MediaType.APPLICATION_BINARY);
+        assertThat(MediaType.of(extension)).isEqualTo(MediaType.TEXT_PLAIN);
     }
 
     @Test

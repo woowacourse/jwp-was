@@ -1,105 +1,65 @@
 package webserver.message.response;
 
-import webserver.StaticFile;
+import webserver.file.File;
+import webserver.message.HttpCookie;
 import webserver.message.HttpStatus;
 import webserver.message.HttpVersion;
 import webserver.message.MediaType;
 
 import java.nio.ByteBuffer;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Response {
     private static final byte[] HEADER_BODY_DELIMITER_BYTES = "\r\n\r\n".getBytes();
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String LOCATION = "Location";
 
     private final ResponseStatusLine statusLine;
     private final ResponseHeader header;
-    private final ResponseBody body;
+    private ResponseBody body;
 
-    private Response(final ResponseStatusLine statusLine, final ResponseHeader header, final ResponseBody body) {
-        this.statusLine = statusLine;
-        this.header = header;
-        this.body = body;
+    public Response() {
+        this.statusLine = new ResponseStatusLine(HttpVersion.HTTP_1_1, HttpStatus.OK);
+        this.header = new ResponseHeader();
+        this.body = new ResponseBody();
+        addResponseField(CONTENT_TYPE, MediaType.TEXT_HTML.getMediaType());
     }
 
-    public static class Builder {
-        private static final String CONTENT_TYPE = "Content-Type";
-        private static final String LOCATION = "Location";
+    public void redirect(final String redirectUrl) {
+        setHttpStatus(HttpStatus.FOUND);
+        addResponseField(LOCATION, redirectUrl);
+    }
 
-        private HttpVersion httpVersion;
-        private HttpStatus httpStatus;
-        private ResponseBody body = new ResponseBody();
-        private Map<String, String> responseFields = new HashMap<>();
+    public void setHttpVersion(final HttpVersion httpVersion) {
+        this.statusLine.setHttpVersion(httpVersion);
+    }
 
-        public Builder(final HttpVersion httpVersion, final HttpStatus httpStatus) {
-            this.httpVersion = httpVersion;
-            this.httpStatus = httpStatus;
-            this.responseFields.put(CONTENT_TYPE, MediaType.APPLICATION_BINARY.getMediaType());
-        }
+    public void setHttpStatus(final HttpStatus httpStatus) {
+        this.statusLine.setHttpStatus(httpStatus);
+    }
 
-        public Builder(final String httpVersion) {
-            this(HttpVersion.of(httpVersion), HttpStatus.OK);
-        }
+    public void addResponseField(final String fieldName, String fieldValue) {
+        this.header.addResponseField(fieldName, fieldValue);
+    }
 
-        public Builder(final HttpVersion httpVersion) {
-            this(httpVersion, HttpStatus.OK);
-        }
+    public void addCookie(HttpCookie cookie) {
+        this.header.addCookie(cookie);
+    }
 
-        public Builder(final HttpStatus httpStatus) {
-            this(HttpVersion.HTTP_1_1, httpStatus);
-        }
+    public void setContentType(final MediaType contentType) {
+        this.addResponseField(CONTENT_TYPE, contentType.getMediaType());
+    }
 
-        public Builder() {
-            this(HttpVersion.HTTP_1_1, HttpStatus.OK);
-        }
+    public void body(final String body) {
+        this.body = new ResponseBody(body);
+    }
 
-        public Builder httpVersion(final String httpVersion) {
-            this.httpVersion = HttpVersion.of(httpVersion);
-            return this;
-        }
+    public void body(final byte[] body) {
+        this.body = new ResponseBody(body);
+    }
 
-        public Builder httpStatus(final HttpStatus httpStatus) {
-            this.httpStatus = httpStatus;
-            return this;
-        }
-
-        public Builder putField(final String fieldName, String fieldValue) {
-            this.responseFields.put(fieldName, fieldValue);
-            return this;
-        }
-
-        public Builder redirectUrl(final String url) {
-            this.httpStatus = HttpStatus.FOUND;
-            putField(LOCATION, url);
-            return this;
-        }
-
-        public Builder contentType(final MediaType contentType) {
-            this.responseFields.replace(CONTENT_TYPE, contentType.getMediaType());
-            return this;
-        }
-
-        public Builder body(final String body) {
-            this.body = new ResponseBody(body);
-            return this;
-        }
-
-        public Builder body(final byte[] body) {
-            this.body = new ResponseBody(body);
-            return this;
-        }
-
-        public Builder body(final StaticFile file) {
-            this.responseFields.replace(CONTENT_TYPE, MediaType.of(file.getExtension()).getMediaType());
-            this.body = new ResponseBody(file.getBody());
-            return this;
-        }
-
-        public Response build() {
-            final ResponseStatusLine statusLine = new ResponseStatusLine(this.httpVersion, this.httpStatus);
-            final ResponseHeader header = new ResponseHeader(this.responseFields);
-            return new Response(statusLine, header, this.body);
-        }
+    public void body(final File file) {
+        this.addResponseField(CONTENT_TYPE, MediaType.of(file.getExtension()).getMediaType());
+        this.body = new ResponseBody(file.getBody());
     }
 
     public byte[] toBytes() {

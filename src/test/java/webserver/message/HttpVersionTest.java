@@ -23,6 +23,12 @@ class HttpVersionTest {
     }
 
     @Test
+    @DisplayName("HTTP 버전이 null일 때 HTTP 1.1 enum 객체를 불러오는지 확인")
+    void nullHttpVersionOf() {
+        assertThat(HttpVersion.of(null)).isEqualTo(HttpVersion.HTTP_1_1);
+    }
+
+    @Test
     void getVersion() {
         assertThat(HttpVersion.of("HTTP/1.1").getVersion()).isEqualTo("HTTP/1.1");
     }

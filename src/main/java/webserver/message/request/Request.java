@@ -2,6 +2,10 @@ package webserver.message.request;
 
 import org.slf4j.Logger;
 import utils.IOUtils;
+import webserver.message.HttpCookie;
+import webserver.message.HttpMethod;
+import webserver.session.HttpSession;
+import webserver.session.SessionContextHolder;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -55,11 +59,24 @@ public class Request {
         return header.getFieldsValue(key);
     }
 
+    public String getCookieValue(final String key) {
+        return header.getCookieValue(key);
+    }
+
+    public HttpSession getSession() {
+        String sessionId = header.getCookieValue("JSESSIONID");
+        HttpSession session =  SessionContextHolder.findSessionById(sessionId).orElseGet(HttpSession::newInstance);
+        this.header.addCookie(new HttpCookie.Builder("JSESSIONID", session.getId()).build());
+        SessionContextHolder.addSession(session);
+
+        return session;
+    }
+
     public String getQueryValue(final String key) {
         return body.getQueryValue(key);
     }
 
-    public boolean matchesMethod(String method) {
+    public boolean matchesMethod(HttpMethod method) {
         return this.startLine.matchesMethod(method);
     }
 

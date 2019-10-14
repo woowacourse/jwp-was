@@ -22,6 +22,14 @@ public class ResponseStatusLine {
         return httpStatus;
     }
 
+    protected void setHttpVersion(HttpVersion httpVersion) {
+        this.httpVersion = httpVersion;
+    }
+
+    protected void setHttpStatus(HttpStatus httpStatus) {
+        this.httpStatus = httpStatus;
+    }
+
     public byte[] toBytes() {
         return (httpVersion.getVersion() + " " + httpStatus.toString() + NEW_LINE).getBytes();
     }

@@ -12,7 +12,7 @@ public enum HttpMethod {
         this.method = method;
     }
 
-    public boolean matchesMethod(String method) {
-        return this.method.equals(method);
+    public boolean matchesMethod(HttpMethod method) {
+        return this == method;
     }
 }

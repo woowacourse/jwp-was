@@ -1,67 +1,80 @@
 package webserver;
 
-import controller.Controller;
-import controller.UserController;
-import utils.DataConverter;
-import utils.FileIoUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.FileLoader;
 import utils.IOUtils;
-import utils.exception.InvalidFileAccessException;
-import webserver.message.exception.NotFoundFileException;
-import webserver.message.exception.UrlDecodeException;
+import utils.exception.NoSuchFileException;
+import web.controller.Controller;
+import web.controller.impl.LoginController;
+import web.controller.impl.UserController;
+import web.controller.impl.UserListController;
+import webserver.message.HttpStatus;
+import webserver.message.HttpVersion;
 import webserver.message.request.Request;
 import webserver.message.response.Response;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class RequestDispatcher {
-    private static final String TEMPLATES_PATH = "./templates";
-    private static final String STATIC_PATH = "./static";
+    private static final Logger logger = LoggerFactory.getLogger(RequestDispatcher.class);
 
-    private static final Map<String, Controller> requestUrls = new HashMap<>();
+    private static final Map<String, Controller> requestUrls = new ConcurrentHashMap<>();
 
     static {
         requestUrls.put("/user/create", new UserController());
+        requestUrls.put("/user/login", new LoginController());
+        requestUrls.put("/user/list", new UserListController());
     }
 
     public static byte[] forward(final IOUtils ioUtils) {
-        try {
-            final Request request = new Request(ioUtils);
-            return processResponse(request);
-        } catch (IOException | URISyntaxException | NullPointerException | UrlDecodeException e) {
-            return DataConverter.convertTo500Response(FileLoader.loadInternalServerErrorFile()).toBytes();
-        }
-    }
+        final Request request;
+        final Response response = new Response();
 
-    private static byte[] processResponse(final Request request) throws IOException, URISyntaxException {
         try {
-            final Response response = requestUrls.getOrDefault(request.getPath(), RequestDispatcher::serveResponse).service(request);
-            return Objects.nonNull(response) ? DataConverter.convertToBytes(response) :
-                    DataConverter.convertToBytes(FileIoUtils.loadFileFromClasspath(makeFilePath(request, STATIC_PATH)));
+            request = new Request(ioUtils);
+            processResponse(request, response);
         } catch (IOException | URISyntaxException | NullPointerException e) {
-            return DataConverter.convertToBytes(FileIoUtils.loadFileFromClasspath(makeFilePath(request, TEMPLATES_PATH)));
-        } catch (NotFoundFileException e) {
-            return DataConverter.convertTo404Response(FileLoader.loadNotFoundFile()).toBytes();
+            logger.debug("500 Internal Server Error: {}", e.toString());
+            internalServerError500Response(response);
         }
+        return response.toBytes();
     }
 
-    private static Response serveResponse(Request request) {
+    private static void processResponse(final Request request, final Response response) {
+        response.setHttpVersion(HttpVersion.of(request.getHttpVersion()));
+
+        Optional<Controller> maybeHandler = getHandler(request);
+        maybeHandler.ifPresentOrElse(controller -> controller.service(request, response),
+                () -> processResponseBody(request, response));
+    }
+
+    private static void processResponseBody(final Request request, final Response response) {
         try {
-            return DataConverter.convertTo200Response(FileLoader.loadStaticFile(request));
-        } catch (InvalidFileAccessException | NotFoundFileException e) {
-            return DataConverter.convertTo404Response(FileLoader.loadNotFoundFile());
-        } catch (NullPointerException | UrlDecodeException e) {
-            return DataConverter.convertTo500Response(FileLoader.loadInternalServerErrorFile());
+            response.body(FileLoader.loadFile(request.getPath()));
+        } catch (NoSuchFileException e) {
+            logger.debug("404 Not Found: {}", e.toString());
+            response.setHttpStatus(HttpStatus.NOT_FOUND);
+            response.body(FileLoader.loadNotFoundFile());
+        } catch (IOException | URISyntaxException e) {
+            logger.debug("500 Internal Server Error: {}", e.toString());
+            internalServerError500Response(response);
         }
     }
 
-    private static String makeFilePath(final Request requestHeader, final String prefix) {
-        final String requestPath = requestHeader.getPath();
-        final String pathEnd = (requestPath.endsWith("/") || "".equals(requestPath)) ? "index.html" : "";
-        return prefix + requestPath + pathEnd;
+    private static void internalServerError500Response(final Response response) {
+        response.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+        response.body(FileLoader.loadInternalServerErrorFile());
+    }
+
+    private static Optional<Controller> getHandler(final Request request) {
+        return requestUrls.keySet().stream()
+                .filter(url -> url.equals(request.getPath()))
+                .map(requestUrls::get)
+                .findFirst();
     }
 }

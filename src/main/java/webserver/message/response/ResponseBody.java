@@ -3,7 +3,8 @@ package webserver.message.response;
 public class ResponseBody {
     private byte[] body = new byte[0];
 
-    ResponseBody() {}
+    ResponseBody() {
+    }
 
     ResponseBody(final byte[] body) {
         this.body = body;
@@ -13,11 +14,11 @@ public class ResponseBody {
         this.body = body.getBytes();
     }
 
-    public byte[] getBody() {
+    protected byte[] getBody() {
         return body;
     }
 
-    public int length() {
+    protected int length() {
         return this.body.length;
     }
 }

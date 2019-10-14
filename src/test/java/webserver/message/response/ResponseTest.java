@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import webserver.message.HttpStatus;
-import webserver.message.HttpVersion;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -14,10 +13,9 @@ class ResponseTest {
     @BeforeEach
     void setUp() {
         String body = "<h1>HI</h1>";
-        this.response = new Response
-                .Builder(HttpVersion.HTTP_1_1, HttpStatus.OK)
-                .body(body)
-                .build();
+        this.response = new Response();
+        this.response.setHttpStatus(HttpStatus.OK);
+        this.response.body(body);
     }
 
     @Test
@@ -25,7 +23,7 @@ class ResponseTest {
     void toBytes() {
         byte[] expect = ("HTTP/1.1 200 OK\r\n" +
                 "Content-Length: 11\r\n" +
-                "Content-Type: application/octet-stream\r\n" +
+                "Content-Type: text/html; charset=utf-8\r\n" +
                 "\r\n" +
                 "<h1>HI</h1>").getBytes();
 
