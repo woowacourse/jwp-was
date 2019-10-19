@@ -3,6 +3,7 @@ package webserver.request;
 import controller.exception.HttpRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.HttpSessionHandler;
 import webserver.common.HttpSession;
 import webserver.common.HttpStatus;
 
@@ -10,6 +11,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import static webserver.request.RequestHeader.SESSION_KEY;
 
 public class HttpRequest {
     private static final Logger log = LoggerFactory.getLogger(HttpRequest.class);
@@ -65,7 +68,7 @@ public class HttpRequest {
     }
 
     public HttpSession getHttpSession() {
-        return requestHeader.getHttpSession();
+        return HttpSessionHandler.getHttpSession(requestHeader.getCookie(SESSION_KEY));
     }
 
     public boolean containHeaderField(String headerField, String value) {

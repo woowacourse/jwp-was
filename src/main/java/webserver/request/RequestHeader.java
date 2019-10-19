@@ -1,8 +1,5 @@
 package webserver.request;
 
-import webserver.HttpSessionHandler;
-import webserver.common.HttpSession;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Collections;
@@ -60,12 +57,12 @@ public class RequestHeader {
         return INIT_CONTENT_LENGTH;
     }
 
-    public HttpSession getHttpSession() {
+    public String getCookie(String key) {
         Map<String, String> cookies = getCookies();
-        if (cookies.containsKey(SESSION_KEY) && HttpSessionHandler.hasHttpSession(cookies.get(SESSION_KEY))) {
-            return HttpSessionHandler.getHttpSession(cookies.get(SESSION_KEY));
+        if (cookies.containsKey(key)) {
+            return getCookies().get(key);
         }
-        return HttpSessionHandler.createHttpSession();
+        return null;
     }
 
     private Map<String, String> getCookies() {

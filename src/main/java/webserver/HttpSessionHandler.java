@@ -10,7 +10,10 @@ public class HttpSessionHandler {
     private static final Map<String, HttpSession> sessionContext = Maps.newHashMap();
 
     public static HttpSession getHttpSession(String sessionId) {
-        return sessionContext.get(sessionId);
+        if (sessionContext.containsKey(sessionId)) {
+            return sessionContext.get(sessionId);
+        }
+        return createHttpSession();
     }
 
     public static HttpSession createHttpSession() {
