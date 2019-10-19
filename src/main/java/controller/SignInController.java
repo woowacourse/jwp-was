@@ -12,8 +12,6 @@ import webserver.response.HttpResponse;
 import webserver.view.HtmlView;
 import webserver.view.RedirectView;
 
-import static webserver.request.RequestHeader.SESSION_KEY;
-
 public class SignInController extends AbstractController {
     private static final Logger log = LoggerFactory.getLogger(SignInController.class);
     private static final String LOGINED_KEY = "logined";
@@ -47,7 +45,6 @@ public class SignInController extends AbstractController {
             HttpSession httpSession = httpRequest.getHttpSession();
             httpSession.setAttribute(LOGINED_KEY, LOGINED_VALUE_TRUE);
             httpSession.setAttribute("Path", "/");
-            httpResponse.addCookie(SESSION_KEY, httpSession.getId());
 
             log.debug("{} login", userId);
             return "redirect:/index.html";

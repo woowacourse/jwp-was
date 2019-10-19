@@ -20,6 +20,7 @@ public class HttpRequest {
     private final RequestLine requestLine;
     private final RequestHeader requestHeader;
     private final RequestBody requestBody;
+    private String sessionId;
 
     private HttpRequest(RequestLine requestLine, RequestHeader requestHeader, RequestBody requestBody) {
         this.requestLine = requestLine;
@@ -68,7 +69,13 @@ public class HttpRequest {
     }
 
     public HttpSession getHttpSession() {
-        return HttpSessionHandler.getHttpSession(requestHeader.getCookie(SESSION_KEY));
+        HttpSession httpSession = HttpSessionHandler.getHttpSession(requestHeader.getCookie(SESSION_KEY));
+        this.sessionId = httpSession.getId();
+        return httpSession;
+    }
+
+    public String getSessionId() {
+        return sessionId;
     }
 
     public boolean containHeaderField(String headerField, String value) {
