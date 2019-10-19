@@ -5,14 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static webserver.response.HttpResponse.EQUAL_SIGN;
-import static webserver.response.HttpResponse.HEAD_FIELD_SET_COOKIE;
+import static webserver.support.ConStants.*;
 
 public class ResponseHeader {
-    private static final String SESSION_KEY = "JSESSIONID";
-    private static final String HEADER_FIELD_SEPARATOR = ": ";
-    private static final String COOKIE_SEPARATOR = "; ";
-
     private Map<String, String> attributes;
 
     public ResponseHeader() {

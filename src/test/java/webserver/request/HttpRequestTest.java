@@ -8,7 +8,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import static controller.support.Constants.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static support.Constants.*;
 
 public class HttpRequestTest {
     private static final String GET_REQUEST_MESSAGE =
@@ -49,21 +51,21 @@ public class HttpRequestTest {
 
     @DisplayName("query string에 데이터가 있는 경우에 요청 메시지의 데이터를 조회하는지 확인")
     @Test
-    void getParametersInQueryString() throws IOException {
+    void getParametersInQueryString() {
         HttpRequest httpRequest = HttpRequest.of(new ByteArrayInputStream(GET_REQUEST_MESSAGE_WITH_QUERY_STRING.getBytes()));
-        assertThat(httpRequest.getParameter("userId")).isEqualTo("javajigi");
-        assertThat(httpRequest.getParameter("password")).isEqualTo("password");
-        assertThat(httpRequest.getParameter("name")).isEqualTo("박재성");
-        assertThat(httpRequest.getParameter("email")).isEqualTo("javajigi@slipp.net");
+        assertThat(httpRequest.getParameter(USER_ID)).isEqualTo(TEST_USER_ID);
+        assertThat(httpRequest.getParameter(USER_PASSWORD)).isEqualTo(TEST_USER_PASSWORD);
+        assertThat(httpRequest.getParameter(USER_NAME)).isEqualTo(TEST_USER_NAME);
+        assertThat(httpRequest.getParameter(USER_EMAIL)).isEqualTo(TEST_USER_EMAIL);
     }
 
     @DisplayName("요청 메시지의 바디에 데이터가 있는 경우에 요청 메시지의 데이터를 조회하는지 확인")
     @Test
-    void getParametersInRequestBody() throws IOException {
+    void getParametersInRequestBody() {
         HttpRequest httpRequest = HttpRequest.of(new ByteArrayInputStream(POST_REQUEST_MESSAGE.getBytes()));
-        assertThat(httpRequest.getParameter("userId")).isEqualTo("javajigi");
-        assertThat(httpRequest.getParameter("password")).isEqualTo("password");
-        assertThat(httpRequest.getParameter("name")).isEqualTo("박재성");
-        assertThat(httpRequest.getParameter("email")).isEqualTo("javajigi@slipp.net");
+        assertThat(httpRequest.getParameter(USER_ID)).isEqualTo(TEST_USER_ID);
+        assertThat(httpRequest.getParameter(USER_PASSWORD)).isEqualTo(TEST_USER_PASSWORD);
+        assertThat(httpRequest.getParameter(USER_NAME)).isEqualTo(TEST_USER_NAME);
+        assertThat(httpRequest.getParameter(USER_EMAIL)).isEqualTo(TEST_USER_EMAIL);
     }
 }

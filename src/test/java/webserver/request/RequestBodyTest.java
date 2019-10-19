@@ -8,8 +8,10 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import static controller.support.Constants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static support.Constants.*;
 
 public class RequestBodyTest {
     private static final String POST_REQUEST_BODY =
@@ -22,10 +24,10 @@ public class RequestBodyTest {
         BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(POST_REQUEST_BODY.getBytes())));
         RequestBody requestBody = RequestBody.of(br, BODY_CONTENT_LENGTH);
 
-        assertThat(requestBody.getParameterValue("userId")).isEqualTo("javajigi");
-        assertThat(requestBody.getParameterValue("password")).isEqualTo("password");
-        assertThat(requestBody.getParameterValue("name")).isEqualTo("박재성");
-        assertThat(requestBody.getParameterValue("email")).isEqualTo("javajigi@slipp.net");
+        assertThat(requestBody.getParameterValue(USER_ID)).isEqualTo(TEST_USER_ID);
+        assertThat(requestBody.getParameterValue(USER_PASSWORD)).isEqualTo(TEST_USER_PASSWORD);
+        assertThat(requestBody.getParameterValue(USER_NAME)).isEqualTo(TEST_USER_NAME);
+        assertThat(requestBody.getParameterValue(USER_EMAIL)).isEqualTo(TEST_USER_EMAIL);
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() -> requestBody.getParameterValue("NotContains"));
     }

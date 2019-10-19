@@ -8,14 +8,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import static webserver.support.ConStants.*;
+
 public class RequestLine {
-    private static final String METHOD_GET = "GET";
-    private static final String METHOD_POST = "POST";
-    private static final String BLANK = "";
     private static final String URL_SEPARATOR = "\\?";
-    private static final String PARAMETER_SEPARATOR = "&";
-    private static final String ATTRIBUTE_SEPARATOR = "=";
-    private static final String STATUS_LINE_SEPARATOR = " ";
 
     private final String method;
     private final String target;

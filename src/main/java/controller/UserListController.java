@@ -15,10 +15,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import static controller.support.Constants.LOGINED_KEY;
+import static controller.support.Constants.LOGINED_VALUE_TRUE;
+
 public class UserListController extends AbstractController {
     private static final Logger log = LoggerFactory.getLogger(UserListController.class);
-    private static final String LOGINED_KEY = "logined";
-    private static final String LOGINED_VALUE_TRUE = "true";
 
     @Override
     public ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) {

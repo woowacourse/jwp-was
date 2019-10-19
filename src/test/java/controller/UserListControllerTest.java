@@ -18,7 +18,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static controller.support.Constants.LOGINED_KEY;
+import static controller.support.Constants.LOGINED_VALUE_TRUE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static webserver.support.ConStants.*;
 
 public class UserListControllerTest {
     private static final String LOGIN_FALSE_GET_REQUEST_MESSAGE =
@@ -45,7 +48,7 @@ public class UserListControllerTest {
 
         HttpResponse httpResponseToCompare = new HttpResponse();
         httpResponseToCompare.setStatusLine(httpRequest, HttpStatus.FOUND);
-        httpResponseToCompare.setHeader("Location", "http://localhost:8080/user/login.html");
+        httpResponseToCompare.setHeader(HEADER_FIELD_LOCATION, "http://localhost:8080/user/login.html");
 
         assertThat(httpResponse).isEqualTo(httpResponseToCompare);
     }
@@ -56,7 +59,7 @@ public class UserListControllerTest {
         DataBase.removeAll();
         String uuid = "uuid";
         HttpSession session = HttpSessionHandler.createHttpSession(uuid);
-        session.setAttribute("logined", "true");
+        session.setAttribute(LOGINED_KEY, LOGINED_VALUE_TRUE);
         session.setAttribute("Path", "/");
 
         HttpRequest httpRequest = HttpRequest.of(new ByteArrayInputStream(LOGIN_TRUE_GET_REQUEST_MESSAGE.getBytes()));
@@ -75,8 +78,8 @@ public class UserListControllerTest {
 
         HttpResponse httpResponseToCompare = new HttpResponse();
         httpResponseToCompare.setStatusLine(httpRequest, HttpStatus.OK);
-        httpResponseToCompare.setHeader("Content-Type", "text/html;charset=utf-8");
-        httpResponseToCompare.setHeader("Content-Length", "4356");
+        httpResponseToCompare.setHeader(HEADER_FIELD_CONTENT_TYPE, "text/html;charset=utf-8");
+        httpResponseToCompare.setHeader(HEADER_FIELD_CONTENT_LENGTH, "4356");
         httpResponseToCompare.setBody(file);
 
         assertThat(httpResponse).isEqualTo(httpResponseToCompare);

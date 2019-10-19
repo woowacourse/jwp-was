@@ -11,11 +11,10 @@ import webserver.response.HttpResponse;
 import webserver.view.HtmlView;
 import webserver.view.RedirectView;
 
+import static controller.support.Constants.*;
+
 public class SignInController extends AbstractController {
     private static final Logger log = LoggerFactory.getLogger(SignInController.class);
-    private static final String LOGINED_KEY = "logined";
-    private static final String LOGINED_VALUE_TRUE = "true";
-    private static final String LOGINED_VALUE_FALSE = "false";
 
     @Override
     public ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
@@ -31,13 +30,13 @@ public class SignInController extends AbstractController {
 
     @Override
     public String doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        String userId = httpRequest.getParameter("userId");
-        String password = httpRequest.getParameter("password");
+        String userId = httpRequest.getParameter(USER_ID);
+        String password = httpRequest.getParameter(USER_PASSWORD);
 
         if (!DataBase.contains(userId)) {
             httpResponse.addCookie(LOGINED_KEY, LOGINED_VALUE_FALSE);
             log.debug("Not Found UserId");
-            return "redirect:/user/login_failed.html";
+            return REDIRECT_PREFIX + "/user/login_failed.html";
         }
 
         User user = DataBase.findUserById(userId);
@@ -47,11 +46,11 @@ public class SignInController extends AbstractController {
             httpSession.setAttribute("Path", "/");
 
             log.debug("{} login", userId);
-            return "redirect:/index.html";
+            return REDIRECT_PREFIX + "/index.html";
         }
 
         httpResponse.addCookie(LOGINED_KEY, LOGINED_VALUE_FALSE);
         log.debug("Not Match UserId And Password");
-        return "redirect:/user/login_failed.html";
+        return REDIRECT_PREFIX + "/user/login_failed.html";
     }
 }

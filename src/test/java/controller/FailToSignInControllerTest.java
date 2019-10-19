@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static webserver.support.ConStants.*;
 
 public class FailToSignInControllerTest {
     private static final String GET_REQUEST_MESSAGE =
@@ -30,9 +31,9 @@ public class FailToSignInControllerTest {
 
         HttpResponse httpResponseToCompare = new HttpResponse();
         httpResponseToCompare.setStatusLine(httpRequest, HttpStatus.OK);
-        httpResponseToCompare.setHeader("Content-Type", "text/html;charset=utf-8");
-        httpResponseToCompare.setHeader("Content-Length", String.valueOf(httpResponse.getResponseBody().getLengthOfContent()));
-        httpResponseToCompare.setBody(FileIoUtils.loadFileFromClasspath("./templates" + "/user/login_failed.html"));
+        httpResponseToCompare.setHeader(HEADER_FIELD_CONTENT_TYPE, "text/html;charset=utf-8");
+        httpResponseToCompare.setHeader(HEADER_FIELD_CONTENT_LENGTH, String.valueOf(httpResponse.getResponseBody().getLengthOfContent()));
+        httpResponseToCompare.setBody(FileIoUtils.loadFileFromClasspath(TEMPLATE_FILE_PATH + "/user/login_failed.html"));
 
         assertThat(httpResponse).isEqualTo(httpResponseToCompare);
     }

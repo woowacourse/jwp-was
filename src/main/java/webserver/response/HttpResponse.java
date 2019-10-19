@@ -5,18 +5,14 @@ import webserver.request.HttpRequest;
 
 import java.util.Objects;
 
+import static webserver.support.ConStants.*;
+
 public class HttpResponse {
-    public static final String HEAD_FIELD_SET_COOKIE = "Set-Cookie";
-    public static final String EQUAL_SIGN = "=";
-    private static final String HEADER_FIELD_CONTENT_TYPE = "Content-Type";
-    private static final String HEADER_FIELD_CONTENT_LENGTH = "Content-Length";
-    private static final String HEADER_FIELD_LOCATION = "Location";
     private static final String HTTP_PROTOCOL = "http://";
     private static final String HEADER_FIELD_HOST = "Host";
     private static final String REDIRECT_PREFIX = "redirect:";
     private static final String SEMICOLON = ";";
     private static final String DEFAULT_COOKIE_PATH = "Path=/";
-    private static final String BLANK = " ";
 
     private ResponseStatusLine responseStatusLine;
     private ResponseHeader responseHeader;

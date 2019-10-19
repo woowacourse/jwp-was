@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static webserver.support.ConStants.TEMPLATE_FILE_PATH;
 
 public class ResponseBodyTest {
 
@@ -21,17 +22,17 @@ public class ResponseBodyTest {
     @DisplayName("Response Body에 내용 추가")
     @Test
     void addBody() throws IOException, URISyntaxException {
-        byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + "/index.html");
+        byte[] body = FileIoUtils.loadFileFromClasspath(TEMPLATE_FILE_PATH + "/index.html");
         ResponseBody responseBody = new ResponseBody();
         assertThat(responseBody.setBody(body)).isTrue();
         assertThat(responseBody.getContent())
-                .isEqualTo(FileIoUtils.loadFileFromClasspath("./templates" + "/index.html"));
+                .isEqualTo(FileIoUtils.loadFileFromClasspath(TEMPLATE_FILE_PATH + "/index.html"));
     }
 
     @DisplayName("Response Body의 길이 조회")
     @Test
     void getContentLength() throws IOException, URISyntaxException {
-        byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + "/index.html");
+        byte[] body = FileIoUtils.loadFileFromClasspath(TEMPLATE_FILE_PATH + "/index.html");
         ResponseBody responseBody = new ResponseBody();
         responseBody.setBody(body);
         assertThat(responseBody.getLengthOfContent()).isEqualTo(body.length);

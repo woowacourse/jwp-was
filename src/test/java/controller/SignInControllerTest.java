@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static support.Constants.*;
+import static webserver.support.ConStants.*;
 
 public class SignInControllerTest {
     private static final String GET_REQUEST_MESSAGE =
@@ -43,9 +45,9 @@ public class SignInControllerTest {
 
         HttpResponse httpResponseToCompare = new HttpResponse();
         httpResponseToCompare.setStatusLine(httpRequest, HttpStatus.OK);
-        httpResponseToCompare.setHeader("Content-Type", "text/html;charset=utf-8");
-        httpResponseToCompare.setHeader("Content-Length", String.valueOf(httpResponse.getResponseBody().getLengthOfContent()));
-        httpResponseToCompare.setBody(FileIoUtils.loadFileFromClasspath("./templates" + "/user/login.html"));
+        httpResponseToCompare.setHeader(HEADER_FIELD_CONTENT_TYPE, "text/html;charset=utf-8");
+        httpResponseToCompare.setHeader(HEADER_FIELD_CONTENT_LENGTH, String.valueOf(httpResponse.getResponseBody().getLengthOfContent()));
+        httpResponseToCompare.setBody(FileIoUtils.loadFileFromClasspath(TEMPLATE_FILE_PATH + "/user/login.html"));
 
         assertThat(httpResponse).isEqualTo(httpResponseToCompare);
     }
@@ -53,7 +55,7 @@ public class SignInControllerTest {
     @DisplayName("/user/login POST 요청")
     @Test
     void doPost() throws FileNotFoundException {
-        DataBase.addUser(new User("javajigi", "password", "박재성", "javajigi@slipp.net"));
+        DataBase.addUser(new User(TEST_USER_ID, TEST_USER_PASSWORD, TEST_USER_NAME, TEST_USER_EMAIL));
         HttpRequest httpRequest = HttpRequest.of(new ByteArrayInputStream(POST_REQUEST_MESSAGE.getBytes()));
         HttpResponse httpResponse = new HttpResponse();
         Controller controller = new SignInController();
@@ -61,8 +63,8 @@ public class SignInControllerTest {
 
         HttpResponse httpResponseToCompare = new HttpResponse();
         httpResponseToCompare.setStatusLine(httpRequest, HttpStatus.FOUND);
-        httpResponseToCompare.setHeader("Set-Cookie", "JSESSIONID=" + httpResponse.getSessionId() + "; Path=/");
-        httpResponseToCompare.setHeader("Location", "http://localhost:8080/index.html");
+        httpResponseToCompare.setHeader(HEAD_FIELD_SET_COOKIE, "JSESSIONID=" + httpResponse.getSessionId() + "; Path=/");
+        httpResponseToCompare.setHeader(HEADER_FIELD_LOCATION, "http://localhost:8080/index.html");
 
         assertThat(httpResponse).isEqualTo(httpResponseToCompare);
     }

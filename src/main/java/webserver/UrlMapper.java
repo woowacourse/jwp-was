@@ -8,9 +8,10 @@ import webserver.request.HttpRequest;
 import java.util.HashMap;
 import java.util.Map;
 
+import static webserver.support.ConStants.CONTENT_TYPE_CSS;
+import static webserver.support.ConStants.HEADER_FIELD_ACCEPT;
+
 public class UrlMapper {
-    private static final String HEADER_FIELD_ACCEPT = "Accept";
-    private static final String CONTENT_TYPE_CSS = "text/css";
     private static final String PATH_CSS = "/static/css";
     private static Map<String, Controller> urlMapper = new HashMap<>();
 

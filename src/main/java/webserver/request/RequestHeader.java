@@ -7,14 +7,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import static webserver.support.ConStants.*;
+
 public class RequestHeader {
-    public static final String SESSION_KEY = "JSESSIONID";
-    private static final String HEADER_FIELD_CONTENT_LENGTH = "Content-Length";
-    private static final String HEADER_FIELD_SEPARATOR = ": ";
     private static final int INIT_CONTENT_LENGTH = 0;
-    private static final String COOKIE_SEPARATOR = "; ";
-    private static final String HEADER_FIELD_COOKIE = "Cookie";
-    private static final String EQUAL_SIGN = "=";
 
     private final Map<String, String> headerFields;
 

@@ -14,6 +14,7 @@ import java.net.URISyntaxException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static webserver.support.ConStants.*;
 
 public class StyleSheetControllerTest {
     private static final String GET_REQUEST_MESSAGE =
@@ -38,8 +39,8 @@ public class StyleSheetControllerTest {
 
         HttpResponse httpResponseToCompare = new HttpResponse();
         httpResponseToCompare.setStatusLine(httpRequest, HttpStatus.OK);
-        httpResponseToCompare.setHeader("Content-Type", "text/css");
-        httpResponseToCompare.setHeader("Content-Length", String.valueOf(httpResponse.getResponseBody().getLengthOfContent()));
+        httpResponseToCompare.setHeader(HEADER_FIELD_CONTENT_TYPE, CONTENT_TYPE_CSS);
+        httpResponseToCompare.setHeader(HEADER_FIELD_CONTENT_LENGTH, String.valueOf(httpResponse.getResponseBody().getLengthOfContent()));
         httpResponseToCompare.setBody(FileIoUtils.loadFileFromClasspath("./static" + "/css/styles.css"));
 
         assertThat(httpResponse).isEqualTo(httpResponseToCompare);

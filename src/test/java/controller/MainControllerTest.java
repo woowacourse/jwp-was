@@ -14,6 +14,7 @@ import java.net.URISyntaxException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static webserver.support.ConStants.*;
 
 public class MainControllerTest {
     private static final String GET_REQUEST_MESSAGE =
@@ -38,9 +39,9 @@ public class MainControllerTest {
 
         HttpResponse httpResponseToCompare = new HttpResponse();
         httpResponseToCompare.setStatusLine(httpRequest, HttpStatus.OK);
-        httpResponseToCompare.setHeader("Content-Type", "text/html;charset=utf-8");
-        httpResponseToCompare.setHeader("Content-Length", "6902");
-        httpResponseToCompare.setBody(FileIoUtils.loadFileFromClasspath("./templates" + "/index.html"));
+        httpResponseToCompare.setHeader(HEADER_FIELD_CONTENT_TYPE, "text/html;charset=utf-8");
+        httpResponseToCompare.setHeader(HEADER_FIELD_CONTENT_LENGTH, "6902");
+        httpResponseToCompare.setBody(FileIoUtils.loadFileFromClasspath(TEMPLATE_FILE_PATH + "/index.html"));
 
         assertThat(httpResponse).isEqualTo(httpResponseToCompare);
     }

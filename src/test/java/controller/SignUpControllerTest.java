@@ -13,6 +13,7 @@ import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static webserver.support.ConStants.HEADER_FIELD_LOCATION;
 
 public class SignUpControllerTest {
     private static final String POST_REQUEST_MESSAGE =
@@ -48,7 +49,7 @@ public class SignUpControllerTest {
 
         HttpResponse httpResponseToCompare = new HttpResponse();
         httpResponseToCompare.setStatusLine(httpRequest, HttpStatus.FOUND);
-        httpResponseToCompare.setHeader("Location", "http://localhost:8080/index.html");
+        httpResponseToCompare.setHeader(HEADER_FIELD_LOCATION, "http://localhost:8080/index.html");
 
         assertThat(httpResponse).isEqualTo(httpResponseToCompare);
     }

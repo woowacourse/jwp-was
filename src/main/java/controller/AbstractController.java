@@ -10,10 +10,10 @@ import webserver.view.View;
 import java.io.FileNotFoundException;
 import java.util.Objects;
 
-import static webserver.request.RequestHeader.SESSION_KEY;
+import static controller.support.Constants.REDIRECT_PREFIX;
+import static webserver.support.ConStants.SESSION_KEY;
 
 public abstract class AbstractController implements Controller {
-    private static final String REDIRECT_PREFIX = "redirect:";
 
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) throws FileNotFoundException {

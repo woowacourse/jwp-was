@@ -5,9 +5,9 @@ import webserver.request.HttpRequest;
 
 import java.util.Objects;
 
-public class ResponseStatusLine {
-    private static final String STATUS_LINE_SEPARATOR = " ";
+import static webserver.support.ConStants.STATUS_LINE_SEPARATOR;
 
+public class ResponseStatusLine {
     private final String httpVersion;
     private final String statusCode;
     private final String statusText;

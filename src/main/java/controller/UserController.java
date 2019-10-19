@@ -7,9 +7,10 @@ import webserver.response.HttpResponse;
 import webserver.view.HtmlView;
 import webserver.view.RedirectView;
 
+import static controller.support.Constants.LOGINED_KEY;
+import static controller.support.Constants.LOGINED_VALUE_TRUE;
+
 public class UserController extends AbstractController {
-    private static final String LOGINED_KEY = "logined";
-    private static final String LOGINED_VALUE_TRUE = "true";
 
     @Override
     protected ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
