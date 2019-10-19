@@ -4,7 +4,6 @@ import db.DataBase;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.HttpSessionHandler;
 import webserver.common.HttpSession;
 import webserver.common.ModelAndView;
 import webserver.request.HttpRequest;
@@ -18,13 +17,15 @@ import java.util.Map;
 
 public class UserListController extends AbstractController {
     private static final Logger log = LoggerFactory.getLogger(UserListController.class);
+    private static final String LOGINED_KEY = "logined";
+    private static final String LOGINED_VALUE_TRUE = "true";
 
     @Override
     public ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         ModelAndView modelAndView = new ModelAndView();
         HttpSession httpSession = httpRequest.getHttpSession();
 
-        if (HttpSessionHandler.hasHttpSession(httpSession.getId())) {
+        if (LOGINED_VALUE_TRUE.equals(httpSession.getAttribute(LOGINED_KEY))) {
             log.debug("login success");
             Map<String, Object> model = new HashMap<>();
             Collection<User> users = DataBase.findAll();

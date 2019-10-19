@@ -7,6 +7,8 @@ import com.github.jknack.handlebars.io.TemplateLoader;
 import db.DataBase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import webserver.HttpSessionHandler;
+import webserver.common.HttpSession;
 import webserver.common.HttpStatus;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
@@ -31,7 +33,7 @@ public class UserListControllerTest {
                     "Host: localhost:8080\n" +
                     "Connection: keep-alive\n" +
                     "Accept: text/html\n" +
-                    "Cookie: logined=true";
+                    "Cookie: logined=true; JSESSIONID=uuid";
 
     @DisplayName("Cookie 필드의 값이 logined=false 인 경우 /user/list GET 요청")
     @Test
@@ -52,6 +54,10 @@ public class UserListControllerTest {
     @Test
     void doGet_login_true() throws IOException {
         DataBase.removeAll();
+        String uuid = "uuid";
+        HttpSession session = HttpSessionHandler.createHttpSession(uuid);
+        session.setAttribute("logined", "true");
+        session.setAttribute("Path", "/");
 
         HttpRequest httpRequest = HttpRequest.of(new ByteArrayInputStream(LOGIN_TRUE_GET_REQUEST_MESSAGE.getBytes()));
         HttpResponse httpResponse = new HttpResponse();

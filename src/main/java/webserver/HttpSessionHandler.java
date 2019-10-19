@@ -13,11 +13,10 @@ public class HttpSessionHandler {
         if (sessionContext.containsKey(sessionId)) {
             return sessionContext.get(sessionId);
         }
-        return createHttpSession();
+        return createHttpSession(UUID.randomUUID().toString());
     }
 
-    public static HttpSession createHttpSession() {
-        String uuid = UUID.randomUUID().toString();
+    public static HttpSession createHttpSession(String uuid) {
         sessionContext.put(uuid, HttpSession.of(uuid));
         return sessionContext.get(uuid);
     }
