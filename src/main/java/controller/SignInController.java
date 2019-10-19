@@ -4,7 +4,6 @@ import db.DataBase;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.HttpSessionUtils;
 import webserver.common.HttpSession;
 import webserver.common.ModelAndView;
 import webserver.request.HttpRequest;
@@ -21,7 +20,8 @@ public class SignInController extends AbstractController {
     @Override
     public ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         ModelAndView modelAndView = new ModelAndView();
-        if (HttpSessionUtils.isLogined(httpRequest)) {
+        HttpSession httpSession = httpRequest.getHttpSession();
+        if (LOGINED_VALUE_TRUE.equals(httpSession.getAttribute(LOGINED_KEY))) {
             modelAndView.setView(new RedirectView("/index.html"));
             return modelAndView;
         }
