@@ -6,6 +6,8 @@ import webserver.request.HttpRequest;
 import java.util.Objects;
 
 public class HttpResponse {
+    public static final String HEAD_FIELD_SET_COOKIE = "Set-Cookie";
+    public static final String EQUAL_SIGN = "=";
     private static final String HEADER_FIELD_CONTENT_TYPE = "Content-Type";
     private static final String HEADER_FIELD_CONTENT_LENGTH = "Content-Length";
     private static final String HEADER_FIELD_LOCATION = "Location";
@@ -13,10 +15,8 @@ public class HttpResponse {
     private static final String HEADER_FIELD_HOST = "Host";
     private static final String REDIRECT_PREFIX = "redirect:";
     private static final String SEMICOLON = ";";
-    private static final String HEAD_FIELD_SET_COOKIE = "Set-Cookie";
     private static final String DEFAULT_COOKIE_PATH = "Path=/";
     private static final String BLANK = " ";
-    private static final String EQUAL_SIGN = "=";
 
     private ResponseStatusLine responseStatusLine;
     private ResponseHeader responseHeader;
@@ -41,6 +41,10 @@ public class HttpResponse {
 
     public void addCookie(String key, String value) {
         setHeader(HEAD_FIELD_SET_COOKIE, key + EQUAL_SIGN + value + SEMICOLON + BLANK + DEFAULT_COOKIE_PATH);
+    }
+
+    public String getSessionId() {
+        return responseHeader.getSessionId();
     }
 
     public void sendRedirect(HttpRequest httpRequest, String path) {

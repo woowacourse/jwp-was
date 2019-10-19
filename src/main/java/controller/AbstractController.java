@@ -9,8 +9,6 @@ import webserver.view.View;
 
 import java.io.FileNotFoundException;
 
-import static webserver.request.RequestHeader.SESSION_KEY;
-
 public abstract class AbstractController implements Controller {
     private static final String REDIRECT_PREFIX = "redirect:";
 
@@ -36,7 +34,6 @@ public abstract class AbstractController implements Controller {
         if (path.startsWith(REDIRECT_PREFIX)) {
             httpResponse.sendRedirect(httpRequest, path);
         }
-        httpResponse.addCookie(SESSION_KEY, httpRequest.getHttpSession().getId());
     }
 
     protected ModelAndView doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
