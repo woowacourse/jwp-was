@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Objects;
+
+import static webserver.support.ConStants.SESSION_KEY;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -36,6 +39,8 @@ public class RequestHandler implements Runnable {
             httpRequest = HttpRequest.of(in);
             Controller controller = UrlMapper.getController(httpRequest);
             controller.service(httpRequest, httpResponse);
+            addCookie(httpRequest, httpResponse);
+
             Renderer.render(dos, httpResponse);
         } catch (IOException e) {
             logger.error("IOException : {}", e.getMessage());
@@ -43,6 +48,12 @@ public class RequestHandler implements Runnable {
         } catch (HttpRequestException e) {
             logger.debug("HttpException : {}", e.getMessage());
             httpResponse.setStatusLine(httpRequest, HttpStatus.valueOfCode(e.getCode()));
+        }
+    }
+
+    private void addCookie(HttpRequest httpRequest, HttpResponse httpResponse) {
+        if (Objects.nonNull(httpRequest.getSessionId())) {
+            httpResponse.addCookie(SESSION_KEY, httpRequest.getSessionId());
         }
     }
 }

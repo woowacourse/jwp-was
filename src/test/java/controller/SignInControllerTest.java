@@ -63,7 +63,6 @@ public class SignInControllerTest {
 
         HttpResponse httpResponseToCompare = new HttpResponse();
         httpResponseToCompare.setStatusLine(httpRequest, HttpStatus.FOUND);
-        httpResponseToCompare.setHeader(HEAD_FIELD_SET_COOKIE, "JSESSIONID=" + httpRequest.getSessionId() + ";Path=/");
         httpResponseToCompare.setHeader(HEADER_FIELD_LOCATION, "http://localhost:8080/index.html");
 
         assertThat(httpResponse).isEqualTo(httpResponseToCompare);

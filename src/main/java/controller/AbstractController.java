@@ -8,10 +8,8 @@ import webserver.response.HttpResponse;
 import webserver.view.View;
 
 import java.io.FileNotFoundException;
-import java.util.Objects;
 
 import static controller.support.Constants.REDIRECT_PREFIX;
-import static webserver.support.ConStants.SESSION_KEY;
 
 public abstract class AbstractController implements Controller {
 
@@ -36,9 +34,6 @@ public abstract class AbstractController implements Controller {
         String path = doPost(httpRequest, httpResponse);
         if (path.startsWith(REDIRECT_PREFIX)) {
             httpResponse.sendRedirect(httpRequest, path);
-        }
-        if (Objects.nonNull(httpRequest.getSessionId())) {
-            httpResponse.addCookie(SESSION_KEY, httpRequest.getSessionId());
         }
     }
 
