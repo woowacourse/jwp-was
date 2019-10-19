@@ -39,10 +39,6 @@ public class HttpResponse {
         setHeader(HEAD_FIELD_SET_COOKIE, key + EQUAL_SIGN + value + SEMICOLON + BLANK + DEFAULT_COOKIE_PATH);
     }
 
-    public String getSessionId() {
-        return responseHeader.getSessionId();
-    }
-
     public void sendRedirect(HttpRequest httpRequest, String path) {
         setStatusLine(httpRequest, HttpStatus.FOUND);
         if (path.startsWith(REDIRECT_PREFIX)) {
