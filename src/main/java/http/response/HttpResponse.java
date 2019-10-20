@@ -5,21 +5,19 @@ import http.HttpVersion;
 import http.MediaType;
 import http.session.Cookie;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static http.HttpHeaders.*;
 import static http.response.HttpStatus.FOUND;
 import static http.response.HttpStatus.OK;
 
 public class HttpResponse {
     public static final String CRLF = "\r\n";
+    private static final HttpStatus DEFAULT = OK;
 
     private HttpVersion version;
     private HttpStatus status;
     private HttpHeaders headers;
     private byte[] body;
-    private List<Cookie> cookies;
+    private Cookie cookie;
 
     public static HttpResponse of(HttpVersion version) {
         return new HttpResponse(version, new HttpHeaders());
@@ -27,9 +25,9 @@ public class HttpResponse {
 
     private HttpResponse(HttpVersion version, HttpHeaders httpHeaders) {
         this.version = version;
-        this.status = OK;
+        this.status = DEFAULT;
         this.headers = httpHeaders;
-        cookies = new ArrayList<>();
+        cookie = Cookie.getEmptyCookie();
     }
 
     public void redirect(String location) {
@@ -45,12 +43,12 @@ public class HttpResponse {
         return body != null;
     }
 
-    public void addCookie(Cookie cookie) {
-        cookies.add(cookie);
+    public void addCookie(String key, String value) {
+        cookie.addAttribute(key, value);
     }
 
     public String getMessageHeader() {
-        if (!cookies.isEmpty()) {
+        if (!cookie.isEmpty()) {
             headers.put(SET_COOKIE, createSetCookieMessage());
         }
 
@@ -61,8 +59,9 @@ public class HttpResponse {
     private String createSetCookieMessage() {
         StringBuilder sb = new StringBuilder();
 
-        for (Cookie cookie : cookies) {
-            sb.append(cookie.getName()).append("=").append(cookie.getValue()).append("; ");
+        for (String cookieName : cookie.getAttributes().keySet()) {
+            sb.append(cookieName).append("=")
+                    .append(cookie.getAttribute(cookieName)).append("; ");
         }
         return sb.toString();
     }
@@ -79,8 +78,8 @@ public class HttpResponse {
         return body;
     }
 
-    public List<Cookie> getCookies() {
-        return cookies;
+    public String getCookieValue(String attributeName) {
+        return cookie.getAttribute(attributeName);
     }
 
     public void setStatus(HttpStatus status) {

@@ -64,4 +64,11 @@ class HttpResponseTest {
                 + "Content-Type: text/html" + CRLF
                 + "Content-Length: " + body.length + CRLF);
     }
+
+    @Test
+    void addCookie() {
+        response.addCookie("key", "val");
+
+        assertThat(response.getCookieValue("key")).isEqualTo("val");
+    }
 }

@@ -5,32 +5,32 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class HttpCookieTest {
+class CookieTest {
     @Test
     @DisplayName("Http request 헤더에서 쿠키 정보를 받아서 쿠키 객체를 만든다.")
     void parse() {
         String cookiesInHeader = "logined=true; Path=/";
 
-        HttpCookie cookies = HttpCookie.parse(cookiesInHeader);
+        Cookie cookies = Cookie.parse(cookiesInHeader);
 
-        assertThat(cookies.getCookieValue("logined")).isEqualTo("true");
-        assertThat(cookies.getCookieValue("Path")).isEqualTo("/");
+        assertThat(cookies.getAttribute("logined")).isEqualTo("true");
+        assertThat(cookies.getAttribute("Path")).isEqualTo("/");
     }
 
     @Test
     @DisplayName("쿠키 헤더가 없는 경우 빈 쿠키를 만든다.")
     void returnEmptyCookie_ifCookieHeader_doesNotExsist() {
-        HttpCookie cookies = HttpCookie.parse(null);
+        Cookie cookies = Cookie.parse(null);
 
-        assertThat(cookies.getCookies()).isEmpty();
+        assertThat(cookies.isEmpty()).isTrue();
     }
 
     @Test
     @DisplayName("쿠키 헤더는 있지만 쿠키가 하나도 없는 경우 빈 쿠키를 만든다.")
     void returnEmptyCookie_ifNoCookie_inCookieHeader() {
-        HttpCookie cookies = HttpCookie.parse("");
+        Cookie cookies = Cookie.parse("");
 
-        assertThat(cookies.getCookies()).isEmpty();
+        assertThat(cookies.isEmpty()).isTrue();
     }
 
     @Test
@@ -38,10 +38,10 @@ class HttpCookieTest {
     void passParsing_ifCookieName_doesNotExist() {
         String cookiesInHeader = "=true; Path=/";
 
-        HttpCookie cookies = HttpCookie.parse(cookiesInHeader);
+        Cookie cookies = Cookie.parse(cookiesInHeader);
 
-        assertThat(cookies.getCookieValue("logined")).isEqualTo(null);
-        assertThat(cookies.getCookieValue("Path")).isEqualTo("/");
+        assertThat(cookies.getAttribute("logined")).isEqualTo(null);
+        assertThat(cookies.getAttribute("Path")).isEqualTo("/");
     }
 
     @Test
@@ -49,9 +49,9 @@ class HttpCookieTest {
     void passParsing_ifCookieValue_doesNotExist() {
         String cookiesInHeader = "logined=true; Path=";
 
-        HttpCookie cookies = HttpCookie.parse(cookiesInHeader);
+        Cookie cookies = Cookie.parse(cookiesInHeader);
 
-        assertThat(cookies.getCookieValue("logined")).isEqualTo("true");
-        assertThat(cookies.getCookieValue("Path")).isEqualTo(null);
+        assertThat(cookies.getAttribute("logined")).isEqualTo("true");
+        assertThat(cookies.getAttribute("Path")).isEqualTo(null);
     }
 }

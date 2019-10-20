@@ -6,7 +6,7 @@ import http.request.HttpRequest;
 import http.request.QueryParams;
 import http.response.HttpResponse;
 import http.response.ResponseBody;
-import http.session.HttpCookie;
+import http.session.Cookie;
 import model.User;
 import view.ViewResolver;
 
@@ -19,14 +19,13 @@ public class UserController extends AbstractController {
 
     @Override
     protected void doGet(HttpRequest request, HttpResponse response) {
-        HttpCookie cookies = request.getCookies();
+        Cookie cookie = request.getCookie();
 
-        if (!isLogin(cookies)) {
+        if (!isLogin(cookie)) {
             response.redirect("/user/login.html");
             return;
         }
 
-        // TODO: 2019-10-08 리펙토링
         Map<String, Collection<User>> model = new HashMap<>();
         model.put("users", DataBase.findAll());
         response.setBody(getResponseBody(model));
@@ -42,8 +41,8 @@ public class UserController extends AbstractController {
         response.redirect("/index.html");
     }
 
-    private boolean isLogin(HttpCookie cookies) {
-        String logined = cookies.getCookieValue("logined");
+    private boolean isLogin(Cookie cookies) {
+        String logined = cookies.getAttribute("logined");
         return TRUE.equals(logined);
     }
 

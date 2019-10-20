@@ -107,7 +107,7 @@ class HttpRequestTest {
         HttpRequest request = TestResourceLoader.getHttpRequest("Http_GET_Userlist_When_Logout.txt");
 
         request.bindTo(sessionManager);
-        request.getHeaders().put("Cookie", "JSESSIONID=" + sessionId);
+        request.addCookie("JSESSIONID", sessionId);
         HttpSession requestSession = request.getSession();
 
         // Then

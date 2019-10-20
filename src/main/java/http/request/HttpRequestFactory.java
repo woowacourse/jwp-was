@@ -2,6 +2,7 @@ package http.request;
 
 import http.HttpHeaders;
 import http.exception.EmptyHttpRequestException;
+import http.session.Cookie;
 import utils.IOUtils;
 
 import java.io.*;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static http.HttpHeaders.CONTENT_LENGTH;
+import static http.HttpHeaders.COOKIE;
 import static java.net.URLDecoder.decode;
 
 public class HttpRequestFactory {
@@ -29,9 +31,13 @@ public class HttpRequestFactory {
 
         HttpRequestLine httpRequestLine = HttpRequestLine.parse(requestLine);
         HttpHeaders headers = HttpHeaders.parse(headerLines);
+
+        String cookieString = headers.getHeader(COOKIE);
+        Cookie cookies = Cookie.parse(cookieString);
+
         String body = getBody(buffer, headers);
         QueryParams queryParams = getQueryParams(requestLine, body);
-        return new HttpRequest(httpRequestLine, headers, body, queryParams);
+        return new HttpRequest(httpRequestLine, headers, body, queryParams, cookies);
     }
 
     private static List<String> getHeaderLines(BufferedReader buffer) throws IOException {

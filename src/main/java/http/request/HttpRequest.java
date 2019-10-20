@@ -2,25 +2,30 @@ package http.request;
 
 import http.HttpHeaders;
 import http.HttpVersion;
-import http.session.HttpCookie;
+import http.session.Cookie;
 import http.session.HttpSession;
 import http.session.SessionManager;
-
-import static http.HttpHeaders.COOKIE;
 
 public class HttpRequest {
     private HttpRequestLine requestLine;
     private HttpHeaders headers;
     private String body;
     private QueryParams queryParams;
+    private Cookie cookie;
     private SessionManager sessionManager;
 
     // TODO: 2019-10-11 builder 패턴 적용하여 리펙토링
-    HttpRequest(HttpRequestLine requestLine, HttpHeaders headers, String body, QueryParams queryParams) {
+    HttpRequest(HttpRequestLine requestLine, HttpHeaders headers,
+                String body, QueryParams queryParams, Cookie cookie) {
         this.requestLine = requestLine;
         this.headers = headers;
         this.body = body;
         this.queryParams = queryParams;
+        this.cookie = cookie;
+    }
+
+    public HttpRequestBuilder builder() {
+        return new HttpRequestBuilder();
     }
 
     public HttpMethod getMethod() {
@@ -48,10 +53,12 @@ public class HttpRequest {
         return body;
     }
 
-    // TODO: 2019-10-08 httpCookie 미리 만들어서 가지고 있도록 구현
-    public HttpCookie getCookies() {
-        String cookieString = headers.getHeader(COOKIE);
-        return HttpCookie.parse(cookieString);
+    public void addCookie(String key, String value) {
+        cookie.addAttribute(key, value);
+    }
+
+    public Cookie getCookie() {
+        return cookie;
     }
 
     public void bindTo(SessionManager sessionManager) {
@@ -59,8 +66,7 @@ public class HttpRequest {
     }
 
     public HttpSession getSession() {
-        HttpCookie cookies = getCookies();
-        String jSessionId = cookies.getCookieValue("JSESSIONID");
+        String jSessionId = cookie.getAttribute("JSESSIONID");
 
         return sessionManager.getHttpSession(jSessionId) == null
                 ? sessionManager.getNewHttpSession()

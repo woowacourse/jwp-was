@@ -4,13 +4,12 @@ import db.DataBase;
 import http.request.HttpRequest;
 import http.request.QueryParams;
 import http.response.HttpResponse;
-import http.session.Cookie;
 import model.User;
 
 public class LoginController extends AbstractController {
-    private static final String LOGINED = "logined";
-    private static final String TRUE = "true";
-    private static final String FALSE = "false";
+    static final String LOGINED = "logined";
+    static final String TRUE = "true";
+    static final String FALSE = "false";
     private static final String PATH = "Path";
     private static final String ALL = "/";
 
@@ -20,12 +19,12 @@ public class LoginController extends AbstractController {
         String inputPassword = getInputPassword(request);
 
         if (failLogin(user, inputPassword)) {
-            response.addCookie(new Cookie(LOGINED, FALSE));
+            response.addCookie(LOGINED, FALSE);
             response.redirect("/user/login_failed.html");
             return;
         }
-        response.addCookie(new Cookie(LOGINED, TRUE));
-        response.addCookie(new Cookie(PATH, ALL));
+        response.addCookie(LOGINED, TRUE);
+        response.addCookie(PATH, ALL);
         response.redirect("/index.html");
     }
 
