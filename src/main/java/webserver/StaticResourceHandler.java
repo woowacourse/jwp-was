@@ -22,7 +22,7 @@ public class StaticResourceHandler {
     public static final String STATIC_PATH = "./static";
 
     private static final Integer MOST_PREFERRED = 0;
-    private static final String ERROR_PAGE = "/error.html";
+    private static final String ERROR_PAGE = "/error-404.html";
     private static final String ACCEPT_HEADER_DELIMITER = ",";
 
     public static void forward(HttpRequest request, HttpResponse response) {

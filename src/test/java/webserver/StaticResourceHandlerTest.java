@@ -31,7 +31,7 @@ class StaticResourceHandlerTest {
     void 정적_파일이_없는_경우_404응답() throws IOException, URISyntaxException {
         HttpRequest request = TestResourceLoader.getHttpRequest("Http_GET_Not_Exsisting_File.txt");
         HttpResponse response = HttpResponse.of(request.getVersion());
-        byte[] expectedBody = FileIoUtils.loadFileFromClasspath(VIEW_TEMPLATE_PATH + "/error.html");
+        byte[] expectedBody = FileIoUtils.loadFileFromClasspath(VIEW_TEMPLATE_PATH + "/error-404.html");
 
         StaticResourceHandler.forward(request, response);
 

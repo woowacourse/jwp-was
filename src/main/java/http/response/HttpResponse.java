@@ -6,8 +6,7 @@ import http.MediaType;
 import http.session.Cookie;
 
 import static http.HttpHeaders.*;
-import static http.response.HttpStatus.FOUND;
-import static http.response.HttpStatus.OK;
+import static http.response.HttpStatus.*;
 
 public class HttpResponse {
     public static final String CRLF = "\r\n";
@@ -33,6 +32,10 @@ public class HttpResponse {
     public void redirect(String location) {
         setStatus(FOUND);
         addHeader(LOCATION, location);
+    }
+
+    public void sendError() {
+        setStatus(INTERNAL_SERVER_ERROR);
     }
 
     private void addHeader(String key, String value) {
