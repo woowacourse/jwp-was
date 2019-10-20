@@ -16,9 +16,10 @@ class SessionManagerTest {
     }
 
     @Test
-    @DisplayName("새 세션을 만들어준다.")
-    void getNewHttpSession_ifHttpSession_notExists() {
-        HttpSession newSession = sessionManager.getNewHttpSession();
+    @DisplayName("저장되어있는 세션이 없는 경우 새 세션을 만들어준다.")
+    void getNewHttpSession_ifHttpSession_notExists2() {
+        String id = "not exsisted";
+        HttpSession newSession = sessionManager.getHttpSession(id);
 
         assertThat(newSession).isNotNull();
     }
@@ -30,13 +31,5 @@ class SessionManagerTest {
         HttpSession foundSession = sessionManager.getHttpSession(GENERATED_TEST_ID);
 
         assertThat(foundSession.getId()).isEqualTo(GENERATED_TEST_ID);
-    }
-
-    @Test
-    @DisplayName("저장되어있는 세션을 찾지 못한 경우 null을 되돌려준다.")
-    void getHttpSession_IfSession_isNotExsist() {
-        HttpSession foundSession = sessionManager.getHttpSession("not exists id");
-
-        assertThat(foundSession).isNull();
     }
 }

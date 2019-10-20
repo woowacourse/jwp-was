@@ -83,13 +83,13 @@ class HttpRequestTest {
         SessionManager sessionManager = new SessionManager(new TestIdGenerator());
         HttpRequest request = TestResourceLoader.getHttpRequest("Http_GET_Userlist_When_Logout.txt");
 
-        // When
         request.bindTo(sessionManager);
-        assertThat(sessionManager.getHttpSession(GENERATED_TEST_ID)).isNull();
+
+        // When
+        HttpSession newSession = request.getSession();
 
         // Then
-        HttpSession newSession = request.getSession();
-        assertThat(newSession.getId()).isEqualTo(GENERATED_TEST_ID);
+        assertThat(newSession).isNotNull();
     }
 
     @Test

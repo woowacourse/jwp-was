@@ -12,19 +12,17 @@ public class SessionManager {
         this.idGenerator = idGenerator;
     }
 
-    public HttpSession getHttpSession(String sessionId) {
-        return sessionGroup.get(sessionId);
+    public HttpSession getHttpSession(String id) {
+        return sessionGroup.get(id) == null
+                ? getNewHttpSession()
+                : sessionGroup.get(id);
     }
 
     public HttpSession getNewHttpSession() {
         String id = idGenerator.generateId();
         HttpSession session = new HttpSession(id);
 
-        add(session);
-        return session;
-    }
-
-    private void add(HttpSession session) {
         sessionGroup.put(session.getId(), session);
+        return session;
     }
 }
