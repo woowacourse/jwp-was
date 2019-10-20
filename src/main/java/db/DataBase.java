@@ -1,11 +1,11 @@
 package db;
 
+import com.google.common.collect.Maps;
+import db.exception.UserNotFoundException;
+import model.User;
+
 import java.util.Collection;
 import java.util.Map;
-
-import com.google.common.collect.Maps;
-
-import model.User;
 
 public class DataBase {
     private static Map<String, User> users = Maps.newHashMap();
@@ -15,10 +15,21 @@ public class DataBase {
     }
 
     public static User findUserById(String userId) {
-        return users.get(userId);
+        if (users.containsKey(userId)) {
+            return users.get(userId);
+        }
+        throw new UserNotFoundException();
     }
 
     public static Collection<User> findAll() {
         return users.values();
+    }
+
+    public static boolean contains(String userId) {
+        return users.containsKey(userId);
+    }
+
+    public static void removeAll() {
+        users = Maps.newHashMap();
     }
 }

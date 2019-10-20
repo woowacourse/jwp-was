@@ -2,13 +2,14 @@ package webserver.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import static webserver.support.ConStants.*;
+
 public class RequestHeader {
-    private static final String HEADER_FIELD_CONTENT_LENGTH = "Content-Length";
-    private static final String HEADER_FIELD_SEPARATOR = ": ";
     private static final int INIT_CONTENT_LENGTH = 0;
 
     private final Map<String, String> headerFields;
@@ -29,6 +30,15 @@ public class RequestHeader {
         return new RequestHeader(headerFields);
     }
 
+    public boolean contains(String headerField, String value) {
+        try {
+            String headFieldValue = getHeaderFieldValue(headerField);
+            return headFieldValue.contains(value);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
+
     public String getHeaderFieldValue(String fieldName) {
         if (headerFields.containsKey(fieldName)) {
             return headerFields.get(fieldName);
@@ -41,6 +51,29 @@ public class RequestHeader {
             return Integer.parseInt(headerFields.get(HEADER_FIELD_CONTENT_LENGTH));
         }
         return INIT_CONTENT_LENGTH;
+    }
+
+    public String getCookie(String key) {
+        Map<String, String> cookies = getCookies();
+        if (cookies.containsKey(key)) {
+            return getCookies().get(key);
+        }
+        return null;
+    }
+
+    private Map<String, String> getCookies() {
+        Map<String, String> cookies = new HashMap<>();
+        String[] cookieKeyAndValue;
+        try {
+            cookieKeyAndValue = getHeaderFieldValue(HEADER_FIELD_COOKIE).split(COOKIE_SEPARATOR);
+        } catch (IllegalArgumentException e) {
+            return Collections.emptyMap();
+        }
+
+        for (String cookie : cookieKeyAndValue) {
+            cookies.put(cookie.split(EQUAL_SIGN)[0], cookie.split(EQUAL_SIGN)[1]);
+        }
+        return cookies;
     }
 
     @Override

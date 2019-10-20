@@ -1,9 +1,10 @@
-package webserver.controller;
+package controller;
 
+import controller.exception.HttpRequestException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import utils.FileIoUtils;
-import webserver.controller.exception.MethodNotAllowedException;
+import webserver.common.HttpStatus;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 
@@ -13,45 +14,46 @@ import java.net.URISyntaxException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static webserver.support.ConStants.*;
 
-public class MainControllerTest {
+public class StyleSheetControllerTest {
     private static final String GET_REQUEST_MESSAGE =
-            "GET /index.html HTTP/1.1\n" +
+            "GET ./css/styles.css HTTP/1.1\n" +
                     "Host: localhost:8080\n" +
-                    "Connection: keep-alive\n" +
-                    "Accept: */*";
+                    "Accept: text/css,*/*;q=0.1\n" +
+                    "Connection: keep-alive";
 
     private static final String POST_REQUEST_MESSAGE =
-            "POST /index.html HTTP/1.1\n" +
+            "POST ./css/styles.css HTTP/1.1\n" +
                     "Host: localhost:8080\n" +
-                    "Connection: keep-alive\n" +
-                    "Accept: */*";
+                    "Accept: text/css,*/*;q=0.1\n" +
+                    "Connection: keep-alive";
 
-    @DisplayName("/index.html GET 요청")
+    @DisplayName("css타입의 파일을 GET 요청")
     @Test
     void doGet() throws IOException, URISyntaxException {
         HttpRequest httpRequest = HttpRequest.of(new ByteArrayInputStream(GET_REQUEST_MESSAGE.getBytes()));
         HttpResponse httpResponse = new HttpResponse();
-        Controller controller = new MainController();
+        Controller controller = new StyleSheetController();
         controller.service(httpRequest, httpResponse);
 
         HttpResponse httpResponseToCompare = new HttpResponse();
-        httpResponseToCompare.addStatusLine(httpRequest, "200", "OK");
-        httpResponseToCompare.addHeader("Content-Type", "text/html;charset=utf-8");
-        httpResponseToCompare.addHeader("Content-Length", "6902");
-        httpResponseToCompare.addBody(FileIoUtils.loadFileFromClasspath("./templates" + "/index.html"));
+        httpResponseToCompare.setStatusLine(httpRequest, HttpStatus.OK);
+        httpResponseToCompare.setHeader(HEADER_FIELD_CONTENT_TYPE, CONTENT_TYPE_CSS);
+        httpResponseToCompare.setHeader(HEADER_FIELD_CONTENT_LENGTH, String.valueOf(httpResponse.getResponseBody().getLengthOfContent()));
+        httpResponseToCompare.setBody(FileIoUtils.loadFileFromClasspath("./static" + "/css/styles.css"));
 
         assertThat(httpResponse).isEqualTo(httpResponseToCompare);
     }
 
-    @DisplayName("/index.html POST 요청")
+    @DisplayName("css타입의 파일을 POST 요청")
     @Test
-    void doPost() throws IOException {
+    void doPost() {
         HttpRequest httpRequest = HttpRequest.of(new ByteArrayInputStream(POST_REQUEST_MESSAGE.getBytes()));
         HttpResponse httpResponse = new HttpResponse();
-        Controller controller = new MainController();
-        assertThatExceptionOfType(MethodNotAllowedException.class)
+        Controller controller = new StyleSheetController();
+        assertThatExceptionOfType(HttpRequestException.class)
                 .isThrownBy(() -> controller.service(httpRequest, httpResponse))
-                .withMessage("fail to match method.");
+                .withMessage("405 Method Not Allowed");
     }
 }

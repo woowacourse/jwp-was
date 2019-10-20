@@ -9,11 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class RequestBody {
-    private static final String PARAMETER_SEPARATOR = "&";
-    private static final String ATTRIBUTE_SEPARATOR = "=";
-    private static final String BLANK = "";
+import static webserver.support.ConStants.*;
 
+public class RequestBody {
     private final Map<String, String> parameters;
 
     private RequestBody(Map<String, String> parameters) {

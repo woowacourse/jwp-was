@@ -8,35 +8,31 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class RequestStatusLine {
-    private static final String METHOD_GET = "GET";
-    private static final String METHOD_POST = "POST";
-    private static final String BLANK = "";
+import static webserver.support.ConStants.*;
+
+public class RequestLine {
     private static final String URL_SEPARATOR = "\\?";
-    private static final String PARAMETER_SEPARATOR = "&";
-    private static final String ATTRIBUTE_SEPARATOR = "=";
-    private static final String STATUS_LINE_SEPARATOR = " ";
 
     private final String method;
     private final String target;
     private final String httpVersion;
     private final Map<String, String> parameters;
 
-    private RequestStatusLine(String method, String target, String httpVersion, Map<String, String> parameters) {
+    private RequestLine(String method, String target, String httpVersion, Map<String, String> parameters) {
         this.method = method;
         this.target = target;
         this.httpVersion = httpVersion;
         this.parameters = parameters;
     }
 
-    public static RequestStatusLine of(BufferedReader br) throws IOException {
+    public static RequestLine of(BufferedReader br) throws IOException {
         String requestLine = br.readLine();
         String[] splitRequestLine = requestLine.split(STATUS_LINE_SEPARATOR);
         String method = splitRequestLine[0];
         String target = URLDecoder.decode(splitRequestLine[1], "UTF-8");
         String httpVersion = splitRequestLine[2];
 
-        return new RequestStatusLine(method, target, httpVersion, getParameters(target));
+        return new RequestLine(method, target, httpVersion, getParameters(target));
     }
 
     private static Map<String, String> getParameters(String target) {
@@ -114,7 +110,7 @@ public class RequestStatusLine {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RequestStatusLine that = (RequestStatusLine) o;
+        RequestLine that = (RequestLine) o;
         return Objects.equals(method, that.method) &&
                 Objects.equals(target, that.target) &&
                 Objects.equals(httpVersion, that.httpVersion) &&

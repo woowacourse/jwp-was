@@ -1,10 +1,10 @@
 package webserver;
 
+import controller.Controller;
+import controller.exception.HttpRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.controller.Controller;
-import webserver.controller.exception.MethodNotAllowedException;
-import webserver.controller.exception.NotFoundException;
+import webserver.common.HttpStatus;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 
@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Objects;
+
+import static webserver.support.ConStants.SESSION_KEY;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -36,16 +39,21 @@ public class RequestHandler implements Runnable {
             httpRequest = HttpRequest.of(in);
             Controller controller = UrlMapper.getController(httpRequest);
             controller.service(httpRequest, httpResponse);
+            addCookie(httpRequest, httpResponse);
+
             Renderer.render(dos, httpResponse);
         } catch (IOException e) {
-            logger.error(e.getMessage());
-            httpResponse.addStatusLine(httpRequest, "500", "Internal Server error");
-        } catch (NotFoundException e) {
-            logger.debug(e.getMessage());
-            httpResponse.addStatusLine(httpRequest, "404", "Not Found");
-        } catch (MethodNotAllowedException e) {
-            logger.debug(e.getMessage());
-            httpResponse.addStatusLine(httpRequest, "405", "Method Not Allowed");
+            logger.error("IOException : {}", e.getMessage());
+            httpResponse.setStatusLine(httpRequest, HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (HttpRequestException e) {
+            logger.debug("HttpException : {}", e.getMessage());
+            httpResponse.setStatusLine(httpRequest, HttpStatus.valueOfCode(e.getCode()));
+        }
+    }
+
+    private void addCookie(HttpRequest httpRequest, HttpResponse httpResponse) {
+        if (Objects.nonNull(httpRequest.getSessionId())) {
+            httpResponse.addCookie(SESSION_KEY, httpRequest.getSessionId());
         }
     }
 }

@@ -22,7 +22,7 @@ public class Renderer {
     }
 
     private static void renderBody(DataOutputStream dos, HttpResponse httpResponse) throws IOException {
-        ResponseBody body = httpResponse.getBody();
+        ResponseBody body = httpResponse.getResponseBody();
         if (body.isEmpty()) {
             return;
         }

@@ -1,12 +1,13 @@
 package webserver.response;
 
+import webserver.common.HttpStatus;
 import webserver.request.HttpRequest;
 
 import java.util.Objects;
 
-public class ResponseStatusLine {
-    private static final String STATUS_LINE_SEPARATOR = " ";
+import static webserver.support.ConStants.STATUS_LINE_SEPARATOR;
 
+public class ResponseStatusLine {
     private final String httpVersion;
     private final String statusCode;
     private final String statusText;
@@ -17,9 +18,9 @@ public class ResponseStatusLine {
         this.statusText = statusText;
     }
 
-    public static ResponseStatusLine of(HttpRequest httpRequest, String statusCode, String statusText) {
+    public static ResponseStatusLine of(HttpRequest httpRequest, HttpStatus httpStatus) {
         String version = httpRequest.getHttpVersion();
-        return new ResponseStatusLine(version, statusCode, statusText);
+        return new ResponseStatusLine(version, httpStatus.getCode(), httpStatus.getMessage());
     }
 
     public String response() {

@@ -1,14 +1,13 @@
 package webserver;
 
+import controller.MainController;
+import controller.StyleSheetController;
+import controller.exception.HttpRequestException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import webserver.controller.MainController;
-import webserver.controller.StyleSheetController;
-import webserver.controller.exception.ResourceNotFoundException;
 import webserver.request.HttpRequest;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -34,24 +33,24 @@ public class UrlMapperTest {
 
     @DisplayName("요청과 매핑되어있는 컨트롤러 호출")
     @Test
-    void getController() throws IOException {
+    void getController() {
         HttpRequest httpRequest = HttpRequest.of(new ByteArrayInputStream(GET_REQUEST_MESSAGE.getBytes()));
         assertThat(UrlMapper.getController(httpRequest)).isInstanceOf(MainController.class);
     }
 
     @DisplayName("CSS 컨트롤러 호출")
     @Test
-    void getStyleSheetController() throws IOException {
+    void getStyleSheetController() {
         HttpRequest httpRequest = HttpRequest.of(new ByteArrayInputStream(GET_STYLESHEET_REQUEST_MESSAGE.getBytes()));
         assertThat(UrlMapper.getController(httpRequest)).isInstanceOf(StyleSheetController.class);
     }
 
     @DisplayName("요청과 매핑되어있는 컨트롤러가 없는 경우의 에러")
     @Test
-    void FailToGetController() throws IOException {
+    void FailToGetController() {
         HttpRequest httpRequest = HttpRequest.of(new ByteArrayInputStream(FAIL_GET_REQUEST_MESSAGE.getBytes()));
-        assertThatExceptionOfType(ResourceNotFoundException.class)
+        assertThatExceptionOfType(HttpRequestException.class)
                 .isThrownBy(() -> UrlMapper.getController(httpRequest))
-                .withMessage("Resource Not found.");
+                .withMessage("404 Not Found");
     }
 }

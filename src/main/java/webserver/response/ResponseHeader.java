@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class ResponseHeader {
-    private static final String HEADER_FIELD_SEPARATOR = ": ";
+import static webserver.support.ConStants.HEADER_FIELD_SEPARATOR;
 
+public class ResponseHeader {
     private Map<String, String> attributes;
 
     public ResponseHeader() {

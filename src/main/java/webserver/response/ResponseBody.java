@@ -10,7 +10,7 @@ public class ResponseBody {
         return Objects.isNull(body);
     }
 
-    public boolean addBody(byte[] body) {
+    public boolean setBody(byte[] body) {
         if (Objects.isNull(body)) {
             return false;
         }

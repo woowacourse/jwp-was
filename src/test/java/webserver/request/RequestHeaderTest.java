@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static webserver.support.ConStants.*;
 
 public class RequestHeaderTest {
     private static final String GET_REQUEST_HEADER =
@@ -24,20 +25,20 @@ public class RequestHeaderTest {
                     "Content-Type: application/x-www-form-urlencoded\n" +
                     "Accept: */*\n";
 
-    private RequestHeader requestLineOfPostMessage;
-    private RequestHeader requestLineOfGetMessage;
+    private static final String HEAD_FIELD_CONNECTION = "Connection";
+    private static final String HEADER_FIELD_HOST = "Host";
 
     @DisplayName("HttpRequestHeader 생성")
     @Test
     void of() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(POST_REQUEST_HEADER.getBytes())));
-        requestLineOfPostMessage = RequestHeader.of(br);
+        RequestHeader requestLineOfPostMessage = RequestHeader.of(br);
 
-        assertThat(requestLineOfPostMessage.getHeaderFieldValue("Host")).isEqualTo("localhost:8080");
-        assertThat(requestLineOfPostMessage.getHeaderFieldValue("Connection")).isEqualTo("keep-alive");
-        assertThat(requestLineOfPostMessage.getHeaderFieldValue("Content-Length")).isEqualTo("93");
-        assertThat(requestLineOfPostMessage.getHeaderFieldValue("Content-Type")).isEqualTo("application/x-www-form-urlencoded");
-        assertThat(requestLineOfPostMessage.getHeaderFieldValue("Accept")).isEqualTo("*/*");
+        assertThat(requestLineOfPostMessage.getHeaderFieldValue(HEADER_FIELD_HOST)).isEqualTo("localhost:8080");
+        assertThat(requestLineOfPostMessage.getHeaderFieldValue(HEAD_FIELD_CONNECTION)).isEqualTo("keep-alive");
+        assertThat(requestLineOfPostMessage.getHeaderFieldValue(HEADER_FIELD_CONTENT_LENGTH)).isEqualTo("93");
+        assertThat(requestLineOfPostMessage.getHeaderFieldValue(HEADER_FIELD_CONTENT_TYPE)).isEqualTo("application/x-www-form-urlencoded");
+        assertThat(requestLineOfPostMessage.getHeaderFieldValue(HEADER_FIELD_ACCEPT)).isEqualTo("*/*");
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() -> requestLineOfPostMessage.getHeaderFieldValue("NotContains"));
     }
@@ -46,9 +47,9 @@ public class RequestHeaderTest {
     @Test
     void getContentLength() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(POST_REQUEST_HEADER.getBytes())));
-        requestLineOfPostMessage = RequestHeader.of(br);
+        RequestHeader requestLineOfPostMessage = RequestHeader.of(br);
         br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(GET_REQUEST_HEADER.getBytes())));
-        requestLineOfGetMessage = RequestHeader.of(br);
+        RequestHeader requestLineOfGetMessage = RequestHeader.of(br);
 
         assertThat(requestLineOfPostMessage.getContentLength()).isEqualTo(93);
         assertThat(requestLineOfGetMessage.getContentLength()).isEqualTo(0);
