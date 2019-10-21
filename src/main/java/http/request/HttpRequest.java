@@ -14,7 +14,6 @@ public class HttpRequest {
     private Cookie cookie;
     private SessionManager sessionManager;
 
-    // TODO: 2019-10-11 builder 패턴 적용하여 리펙토링
     HttpRequest(HttpRequestLine requestLine, HttpHeaders headers,
                 String body, QueryParams queryParams, Cookie cookie) {
         this.requestLine = requestLine;

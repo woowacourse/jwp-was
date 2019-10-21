@@ -14,7 +14,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static http.session.TestIdGenerator.GENERATED_TEST_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -95,13 +94,10 @@ class HttpRequestTest {
     @Test
     @DisplayName("cookie의 JSESSIONID에 해당하는 session이 있으면 해당 session을 반환한다.")
     void getSession_ifCookie_hasJSESSIONID() throws IOException {
-        // TODO: 2019-10-13 리펙토링
         // Given
         SessionManager sessionManager = new SessionManager(new TestIdGenerator());
         HttpSession session = startNewSession(sessionManager);
         String sessionId = session.getId();
-
-        session.setAttribute("savedAttribute", "savedValue");
 
         // When
         HttpRequest request = TestResourceLoader.getHttpRequest("Http_GET_Userlist_When_Logout.txt");
