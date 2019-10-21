@@ -56,6 +56,7 @@ public class RequestHandler implements Runnable {
 
             writeResponse(response, out);
         } catch (Exception e) {
+            logger.error(e.getMessage(), e);
             sendError(out);
         }
     }
