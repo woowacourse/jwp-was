@@ -16,7 +16,7 @@ public class HttpRequestLine {
     private HttpUri path;
     private HttpVersion version;
 
-    private HttpRequestLine(HttpMethod method, HttpUri path, HttpVersion version) {
+    HttpRequestLine(HttpMethod method, HttpUri path, HttpVersion version) {
         this.method = method;
         this.path = path;
         this.version = version;

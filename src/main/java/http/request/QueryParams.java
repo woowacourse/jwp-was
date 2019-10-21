@@ -20,7 +20,7 @@ public class QueryParams {
 
     private Map<String, String> params;
 
-    private QueryParams(Map<String, String> params) {
+    QueryParams(Map<String, String> params) {
         this.params = params;
     }
 

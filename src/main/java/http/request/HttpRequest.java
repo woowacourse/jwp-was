@@ -23,7 +23,7 @@ public class HttpRequest {
         this.cookie = cookie;
     }
 
-    public HttpRequestBuilder builder() {
+    public static HttpRequestBuilder builder() {
         return new HttpRequestBuilder();
     }
 

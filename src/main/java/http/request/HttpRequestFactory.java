@@ -26,18 +26,25 @@ public class HttpRequestFactory {
         BufferedReader buffer = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8.name()));
         List<String> lines = getHeaderLines(buffer);
 
-        String requestLine = lines.get(REQUEST_LINE_INDEX);
+        String requestLineString = lines.get(REQUEST_LINE_INDEX);
         List<String> headerLines = extractHeaderLinesFrom(lines);
 
-        HttpRequestLine httpRequestLine = HttpRequestLine.parse(requestLine);
+        HttpRequestLine requestLine = HttpRequestLine.parse(requestLineString);
         HttpHeaders headers = HttpHeaders.parse(headerLines);
 
         String cookieString = headers.getHeader(COOKIE);
-        Cookie cookies = Cookie.parse(cookieString);
+        Cookie cookie = Cookie.parse(cookieString);
 
         String body = getBody(buffer, headers);
-        QueryParams queryParams = getQueryParams(requestLine, body);
-        return new HttpRequest(httpRequestLine, headers, body, queryParams, cookies);
+        QueryParams queryParams = getQueryParams(requestLineString, body);
+
+        return HttpRequest.builder()
+                .requestLine(requestLine)
+                .headers(headers)
+                .body(body)
+                .cookie(cookie)
+                .queryParams(queryParams)
+                .build();
     }
 
     private static List<String> getHeaderLines(BufferedReader buffer) throws IOException {
