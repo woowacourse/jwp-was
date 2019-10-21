@@ -6,9 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 public class HttpHeaders {
-    private static final int KEY_INDEX = 0;
-    private static final int VALUE_INDEX = 1;
-    private static final String HEADER_DELIMITER = ":\\s+";
+    private static final int KEY = 0;
+    private static final int VALUE = 1;
+    private static final int SPLICE_HEADER_SIZE = 2;
+    private static final String KEY_VALUE_DELIMETER = ":\\s+";
     private static final String CRLF = "\r\n";
     private static final String COLON_AND_WHITESPACE = ": ";
 
@@ -30,13 +31,12 @@ public class HttpHeaders {
     }
 
     public static HttpHeaders parse(List<String> lines) {
-        // TODO: 2019-09-23 Header field 포멧에 맞는지 확인해야 하지 않을까?
         Map<String, String> headers = new HashMap<>();
 
-        for (String header : lines) {
-            String[] splicedHeader = header.split(HEADER_DELIMITER);
-            headers.put(splicedHeader[KEY_INDEX], splicedHeader[VALUE_INDEX]);
-        }
+        lines.stream()
+                .map(header -> header.split(KEY_VALUE_DELIMETER))
+                .filter(spliced -> spliced.length == SPLICE_HEADER_SIZE)
+                .forEach(spliced -> headers.put(spliced[KEY], spliced[VALUE]));
         return new HttpHeaders(headers);
     }
 
