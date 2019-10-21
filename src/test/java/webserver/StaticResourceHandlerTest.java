@@ -16,7 +16,7 @@ import static webserver.StaticResourceHandler.VIEW_TEMPLATE_PATH;
 class StaticResourceHandlerTest {
     @Test
     void forward() throws IOException, URISyntaxException {
-        HttpRequest request = TestResourceLoader.getHttpRequest("Http_GET_Static.txt");
+        HttpRequest request = TestResourceLoader.getHttpRequest("Http_GET_StaticResource.txt");
         HttpResponse response = HttpResponse.of(request.getVersion());
         byte[] expectedBody = FileIoUtils.loadFileFromClasspath(VIEW_TEMPLATE_PATH + "/index.html");
 
@@ -31,16 +31,19 @@ class StaticResourceHandlerTest {
     void 정적_파일이_없는_경우_404응답() throws IOException, URISyntaxException {
         HttpRequest request = TestResourceLoader.getHttpRequest("Http_GET_Not_Exsisting_File.txt");
         HttpResponse response = HttpResponse.of(request.getVersion());
+        byte[] expectedBody = FileIoUtils.loadFileFromClasspath(VIEW_TEMPLATE_PATH + "/error-404.html");
 
         StaticResourceHandler.forward(request, response);
 
-        assertThat(response.getMessageHeader()).isEqualTo("HTTP/1.1 404 Not Found" + CRLF);
+        assertThat(response.getMessageHeader()).isEqualTo("HTTP/1.1 404 Not Found" + CRLF
+        + "Content-Type: text/html" + CRLF
+        + "Content-Length: " + expectedBody.length + CRLF);
     }
 
     @Test
     void MediaType을_알_수_없는_경우_html로_응답() throws IOException, URISyntaxException {
         HttpRequest request = TestResourceLoader
-                .getHttpRequest("Http_GET_Static_Without_Accept_Header.txt");
+                .getHttpRequest("Http_GET_Without_Accept_Header.txt");
         HttpResponse response = HttpResponse.of(request.getVersion());
         byte[] expectedBody = FileIoUtils.loadFileFromClasspath(VIEW_TEMPLATE_PATH + "/index.html");
 

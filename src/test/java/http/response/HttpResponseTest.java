@@ -1,5 +1,6 @@
 package http.response;
 
+import http.MediaType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -42,7 +43,9 @@ class HttpResponseTest {
 
     @Test
     void hasBody() {
-        byte[] body = "body".getBytes();
+        byte[] content = "body".getBytes();
+        MediaType type = HTML;
+        ResponseBody body = new ResponseBody(content, type);
 
         response.setBody(body);
 
@@ -60,5 +63,12 @@ class HttpResponseTest {
         assertThat(response.getMessageHeader()).isEqualTo("HTTP/1.1 200 OK" + CRLF
                 + "Content-Type: text/html" + CRLF
                 + "Content-Length: " + body.length + CRLF);
+    }
+
+    @Test
+    void addCookie() {
+        response.addCookie("key", "val");
+
+        assertThat(response.getCookieValue("key")).isEqualTo("val");
     }
 }

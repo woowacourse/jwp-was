@@ -26,7 +26,7 @@ class HttpHeadersTest {
     void HttpHeader_생성() throws FileNotFoundException {
         List<String> lines = Arrays.asList("key1: value1", "key2: value2", "key3: value3");
 
-        HttpHeaders httpHeaders = HttpHeaders.of(lines);
+        HttpHeaders httpHeaders = HttpHeaders.parse(lines);
 
         assertThat(httpHeaders.getHeader("key1")).isEqualTo("value1");
         assertThat(httpHeaders.getHeader("key2")).isEqualTo("value2");

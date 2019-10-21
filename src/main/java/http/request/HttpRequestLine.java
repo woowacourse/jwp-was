@@ -13,16 +13,16 @@ public class HttpRequestLine {
     private static final int START_LINE_SIZE = 3;
 
     private HttpMethod method;
-    private HttpUri uri;
+    private HttpUri path;
     private HttpVersion version;
 
-    private HttpRequestLine(HttpMethod method, HttpUri uri, HttpVersion version) {
+    HttpRequestLine(HttpMethod method, HttpUri path, HttpVersion version) {
         this.method = method;
-        this.uri = uri;
+        this.path = path;
         this.version = version;
     }
 
-    static HttpRequestLine of(String requestLine) throws UnsupportedEncodingException {
+    static HttpRequestLine parse(String requestLine) throws UnsupportedEncodingException {
         String[] parsedRequestLine = requestLine.split(REQUEST_LINE_DELIMITER);
         checkRequestLine(parsedRequestLine);
 
@@ -42,12 +42,8 @@ public class HttpRequestLine {
         return method;
     }
 
-    HttpUri getUri() {
-        return uri;
-    }
-
-    String getQueryParams() {
-        return uri.getQueryParams();
+    HttpUri getPath() {
+        return path;
     }
 
     HttpVersion getVersion() {
@@ -56,6 +52,6 @@ public class HttpRequestLine {
 
     @Override
     public String toString() {
-        return "\n" + method + " " + uri + " " + version;
+        return "\n" + method + " " + path + " " + version;
     }
 }

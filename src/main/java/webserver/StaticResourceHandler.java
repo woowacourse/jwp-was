@@ -15,13 +15,14 @@ import java.net.URISyntaxException;
 import static http.HttpHeaders.ACCEPT;
 import static http.MediaType.HTML;
 import static http.response.HttpStatus.INTERNAL_SERVER_ERROR;
+import static http.response.HttpStatus.NOT_FOUND;
 
 public class StaticResourceHandler {
     public static final String VIEW_TEMPLATE_PATH = "./templates";
     public static final String STATIC_PATH = "./static";
 
     private static final Integer MOST_PREFERRED = 0;
-    private static final String ERROR_PAGE = "/error.html";
+    private static final String ERROR_PAGE = "/error-404.html";
     private static final String ACCEPT_HEADER_DELIMITER = ",";
 
     public static void forward(HttpRequest request, HttpResponse response) {
@@ -32,7 +33,8 @@ public class StaticResourceHandler {
             content = loadFile(request);
             response.setBody(new ResponseBody(content, type));
         } catch (FileNotFoundException e) {
-            forwardErrorPage(response);
+            response.setStatus(NOT_FOUND);
+            forwardErrorPage(request, response);
         } catch (IOException | URISyntaxException e) {
             response.setStatus(INTERNAL_SERVER_ERROR);
         }
@@ -40,11 +42,10 @@ public class StaticResourceHandler {
 
     private static byte[] loadFile(HttpRequest request) throws IOException, URISyntaxException {
         String path = request.getPath();
+        String directory = HTML.equals(mediaTypeOf(request))
+                ? VIEW_TEMPLATE_PATH : STATIC_PATH;
 
-        if (mediaTypeOf(request).equals(HTML)) {
-            return FileIoUtils.loadFileFromClasspath(VIEW_TEMPLATE_PATH + path);
-        }
-        return FileIoUtils.loadFileFromClasspath(STATIC_PATH + path);
+        return FileIoUtils.loadFileFromClasspath(directory + path);
     }
 
     private static MediaType mediaTypeOf(HttpRequest request) {
@@ -59,12 +60,13 @@ public class StaticResourceHandler {
         }
     }
 
-    public static void forwardErrorPage(HttpResponse response) {
+    public static void forwardErrorPage(HttpRequest request, HttpResponse response) {
+        MediaType type = mediaTypeOf(request);
         byte[] content;
 
         try {
             content = FileIoUtils.loadFileFromClasspath(VIEW_TEMPLATE_PATH + ERROR_PAGE);
-            response.setBody(content);
+            response.setBody(new ResponseBody(content, type));
         } catch (IOException | URISyntaxException e) {
             response.setStatus(INTERNAL_SERVER_ERROR);
         }

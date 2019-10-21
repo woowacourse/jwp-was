@@ -13,7 +13,7 @@ class HttpRequestLineTest {
     void HttpRequestLine_생성() {
         String requestLine = "GET /index HTTP/1.1";
 
-        assertThatCode(() -> HttpRequestLine.of(requestLine))
+        assertThatCode(() -> HttpRequestLine.parse(requestLine))
                 .doesNotThrowAnyException();
     }
 
@@ -21,7 +21,7 @@ class HttpRequestLineTest {
     void request_line_parsing_결과가_3개가_아니면_예외_발생() throws UnsupportedEncodingException {
         String requestLine = "GET /index\n";
 
-        assertThatThrownBy(() -> HttpRequestLine.of(requestLine))
+        assertThatThrownBy(() -> HttpRequestLine.parse(requestLine))
                 .isInstanceOf(RequestLineException.class);
     }
 }

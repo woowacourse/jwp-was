@@ -2,31 +2,29 @@ package http.request;
 
 import http.HttpHeaders;
 import http.HttpVersion;
-
-import static http.request.HttpMethod.GET;
+import http.session.Cookie;
+import http.session.HttpSession;
+import http.session.SessionManager;
 
 public class HttpRequest {
     private HttpRequestLine requestLine;
     private HttpHeaders headers;
     private String body;
     private QueryParams queryParams;
+    private Cookie cookie;
+    private SessionManager sessionManager;
 
-    HttpRequest(HttpRequestLine requestLine, HttpHeaders headers, String body) {
+    HttpRequest(HttpRequestLine requestLine, HttpHeaders headers,
+                String body, QueryParams queryParams, Cookie cookie) {
         this.requestLine = requestLine;
         this.headers = headers;
         this.body = body;
-        this.queryParams = splitQueryParams();
+        this.queryParams = queryParams;
+        this.cookie = cookie;
     }
 
-    private QueryParams splitQueryParams() {
-        return GET.equals(requestLine.getHttpMethod())
-                ? QueryParams.of(requestLine.getQueryParams())
-                : QueryParams.of(body);
-    }
-
-    public boolean isStaticContentRequest() {
-        HttpUri uri = requestLine.getUri();
-        return uri.hasExtension();
+    public static HttpRequestBuilder builder() {
+        return new HttpRequestBuilder();
     }
 
     public HttpMethod getMethod() {
@@ -34,7 +32,7 @@ public class HttpRequest {
     }
 
     public String getPath() {
-        HttpUri uri = requestLine.getUri();
+        HttpUri uri = requestLine.getPath();
         return uri.getPath();
     }
 
@@ -52,6 +50,24 @@ public class HttpRequest {
 
     public String getBody() {
         return body;
+    }
+
+    public void addCookie(String key, String value) {
+        cookie.addAttribute(key, value);
+    }
+
+    public Cookie getCookie() {
+        return cookie;
+    }
+
+    public void bindTo(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
+    }
+
+    public HttpSession getSession() {
+        String jSessionId = cookie.getAttribute("JSESSIONID");
+
+        return sessionManager.getHttpSession(jSessionId);
     }
 
     @Override

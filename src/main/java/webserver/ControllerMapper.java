@@ -1,31 +1,32 @@
 package webserver;
 
 import controller.Controller;
+import controller.LoginController;
 import controller.UserController;
 import http.request.HttpRequest;
-import http.response.HttpResponse;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static http.response.HttpStatus.METHOD_NOT_ALLOWED;
 
 public class ControllerMapper {
     private static final Map<String, Controller> controllers;
 
     static {
         controllers = new HashMap<>();
+
         controllers.put("/user/create", new UserController());
+        controllers.put("/user/login", new LoginController());
+        controllers.put("/user/list", new UserController());
     }
 
-    public static void map(HttpRequest request, HttpResponse response) {
+    public static Controller map(HttpRequest request) {
         String path = request.getPath();
-        Controller controller = controllers.get(path);
 
-        if (controller == null) {
-            response.setStatus(METHOD_NOT_ALLOWED);
-            return;
-        }
-        controller.handle(request, response);
+        return controllers.get(path);
+    }
+
+    public static boolean canHandle(HttpRequest request) {
+        String path = request.getPath();
+        return controllers.get(path) != null;
     }
 }

@@ -2,17 +2,16 @@ package http.request;
 
 import http.HttpHeaders;
 import http.exception.EmptyHttpRequestException;
+import http.session.Cookie;
 import utils.IOUtils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 import static http.HttpHeaders.CONTENT_LENGTH;
+import static http.HttpHeaders.COOKIE;
 import static java.net.URLDecoder.decode;
 
 public class HttpRequestFactory {
@@ -27,13 +26,25 @@ public class HttpRequestFactory {
         BufferedReader buffer = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8.name()));
         List<String> lines = getHeaderLines(buffer);
 
-        String requestLine = lines.get(REQUEST_LINE_INDEX);
+        String requestLineString = lines.get(REQUEST_LINE_INDEX);
         List<String> headerLines = extractHeaderLinesFrom(lines);
 
-        HttpRequestLine httpRequestLine = HttpRequestLine.of(requestLine);
-        HttpHeaders headers = HttpHeaders.of(headerLines);
+        HttpRequestLine requestLine = HttpRequestLine.parse(requestLineString);
+        HttpHeaders headers = HttpHeaders.parse(headerLines);
+
+        String cookieString = headers.getHeader(COOKIE);
+        Cookie cookie = Cookie.parse(cookieString);
+
         String body = getBody(buffer, headers);
-        return new HttpRequest(httpRequestLine, headers, body);
+        QueryParams queryParams = getQueryParams(requestLineString, body);
+
+        return HttpRequest.builder()
+                .requestLine(requestLine)
+                .headers(headers)
+                .body(body)
+                .cookie(cookie)
+                .queryParams(queryParams)
+                .build();
     }
 
     private static List<String> getHeaderLines(BufferedReader buffer) throws IOException {
@@ -64,5 +75,11 @@ public class HttpRequestFactory {
 
         int contentLength = Integer.parseInt(headers.getHeader(CONTENT_LENGTH));
         return decode(IOUtils.readData(buffer, contentLength), StandardCharsets.UTF_8.name());
+    }
+
+    private static QueryParams getQueryParams(String requestLine, String body) throws UnsupportedEncodingException {
+        return QueryParams.canParse(requestLine)
+                ? QueryParams.parseRequestLine(requestLine)
+                : QueryParams.parseBody(body);
     }
 }

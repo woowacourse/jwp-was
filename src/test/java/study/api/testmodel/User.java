@@ -1,4 +1,4 @@
-package model;
+package study.api.testmodel;
 
 public class User {
     private String userId;
@@ -11,10 +11,6 @@ public class User {
         this.password = password;
         this.name = name;
         this.email = email;
-    }
-
-    public boolean hasSamePasswordWith(String password) {
-        return this.password.equals(password);
     }
 
     public String getUserId() {
@@ -31,10 +27,5 @@ public class User {
 
     public String getEmail() {
         return email;
-    }
-
-    @Override
-    public String toString() {
-        return "User [userId=" + userId + ", password=" + password + ", name=" + name + ", email=" + email + "]";
     }
 }
