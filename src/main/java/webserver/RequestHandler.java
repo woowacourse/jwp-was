@@ -36,6 +36,9 @@ public class RequestHandler implements Runnable {
             while (!"".equals(line)) {
                 System.out.println(line);
                 line = bufferedReader.readLine();
+                if (line == null) {
+                    return;
+                }
             }
 
             DataOutputStream dos = new DataOutputStream(out);
