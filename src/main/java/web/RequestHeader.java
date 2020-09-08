@@ -38,7 +38,7 @@ public class RequestHeader {
     }
 
     public String getPath() {
-        return requestUri.path;
+        return requestUri.path.getRequestPath();
     }
 
     public String getProtocol() {
@@ -48,7 +48,7 @@ public class RequestHeader {
     private static class RequestUri {
 
         private String method;
-        private String path;
+        private RequestPath path;
         private String protocol;
 
         public RequestUri(String uri) {
@@ -57,7 +57,7 @@ public class RequestHeader {
             }
             String[] splittedUri = uri.split(" ");
             this.method = splittedUri[0];
-            this.path = splittedUri[1];
+            this.path = new RequestPath(splittedUri[1]);
             this.protocol = splittedUri[2];
         }
     }
