@@ -1,5 +1,10 @@
 package webserver;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import utils.FileIoUtils;
+import web.RequestHeader;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -7,9 +12,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import web.RequestHeader;
+import java.net.URISyntaxException;
 
 public class RequestHandler implements Runnable {
 
@@ -23,7 +26,7 @@ public class RequestHandler implements Runnable {
 
     public void run() {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
-            connection.getPort());
+                connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
@@ -31,11 +34,11 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
             RequestHeader requestHeader = new RequestHeader(br);
-
-            byte[] body = "Hello World".getBytes();
+            String path = requestHeader.getPath();
+            byte[] body = FileIoUtils.loadFileFromClasspath("./templates/" + path);
             response200Header(dos, body.length);
             responseBody(dos, body);
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }
