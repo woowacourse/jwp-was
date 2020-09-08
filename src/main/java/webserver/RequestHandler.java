@@ -5,7 +5,9 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
+import web.HttpMethod;
 import web.HttpRequest;
+import web.RequestBody;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -15,6 +17,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
+import java.util.Map;
+
+;
 
 public class RequestHandler implements Runnable {
 
@@ -36,14 +41,17 @@ public class RequestHandler implements Runnable {
 
             HttpRequest httpRequest = new HttpRequest(br);
             String requestPath = httpRequest.getRequestPath();
+
             byte[] body = "".getBytes();
-            if (requestPath.endsWith(".html")) {
+            if (requestPath.endsWith(".html") && HttpMethod.GET == httpRequest.getMethod()) {
                 body = FileIoUtils.loadFileFromClasspath("./templates" + requestPath);
-            } else if (requestPath.equals("/user/create")) {
-                User user = new User(httpRequest.getParam("userId"),
-                        httpRequest.getParam("password"),
-                        httpRequest.getParam("name"),
-                        httpRequest.getParam("email"));
+            } else if (requestPath.equals("/user/create") && HttpMethod.POST == httpRequest.getMethod()) {
+                RequestBody requestBody = httpRequest.getRequestBody();
+                Map<String, String> parsedBody = requestBody.parse();
+                User user = new User(parsedBody.get("userId"),
+                        parsedBody.get("password"),
+                        parsedBody.get("name"),
+                        parsedBody.get("email"));
                 DataBase.addUser(user);
                 body = user.toString().getBytes();
             }

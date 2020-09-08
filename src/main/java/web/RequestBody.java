@@ -1,8 +1,11 @@
 package web;
 
+import utils.IOUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
-import utils.IOUtils;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RequestBody {
 
@@ -17,5 +20,16 @@ public class RequestBody {
 
     public String getBody() {
         return body;
+    }
+
+    public Map<String, String> parse() {
+        String[] splitBody = body.split("&");
+
+        Map<String, String> bodies = new HashMap<>();
+        for (String body : splitBody) {
+            String[] keyValue = body.split("=");
+            bodies.put(keyValue[0], keyValue[1]);
+        }
+        return bodies;
     }
 }

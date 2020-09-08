@@ -11,7 +11,9 @@ public class HttpRequest {
     public HttpRequest(final BufferedReader bufferedReader) throws IOException {
         this.requestUri = new RequestUri(bufferedReader);
         this.requestHeader = new RequestHeader(bufferedReader);
-        this.requestBody = new RequestBody(bufferedReader, requestHeader.getContentLength());
+        if (HttpMethod.POST == getMethod()) {
+            this.requestBody = new RequestBody(bufferedReader, requestHeader.getContentLength());
+        }
     }
 
     public String getRequestPath() {
@@ -26,7 +28,11 @@ public class HttpRequest {
         return requestHeader.getContentLength();
     }
 
-    public String getRequestBody() {
-        return requestBody.getBody();
+    public RequestBody getRequestBody() {
+        return requestBody;
+    }
+
+    public HttpMethod getMethod() {
+        return requestUri.getMethod();
     }
 }
