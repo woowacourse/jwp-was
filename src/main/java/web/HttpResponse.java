@@ -26,6 +26,16 @@ public class HttpResponse {
         }
     }
 
+    public void response302Header(String url) {
+        try {
+            this.dataOutputStream.writeBytes("HTTP/1.1 302 Found \r\n");
+            this.dataOutputStream.writeBytes("Location: " + url + "\r\n");
+            this.dataOutputStream.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
     public void responseBody(byte[] body) {
         try {
             this.dataOutputStream.write(body, 0, body.length);

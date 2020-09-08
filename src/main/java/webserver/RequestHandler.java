@@ -45,6 +45,11 @@ public class RequestHandler implements Runnable {
             byte[] body = "".getBytes();
             if (requestPath.endsWith(".html") && HttpMethod.GET == httpRequest.getMethod()) {
                 body = FileIoUtils.loadFileFromClasspath("./templates" + requestPath);
+
+                HttpResponse httpResponse = new HttpResponse(dos);
+                httpResponse.response200Header(body.length);
+                httpResponse.responseBody(body);
+
             } else if (requestPath.equals("/user/create") && HttpMethod.POST == httpRequest.getMethod()) {
                 RequestBody requestBody = httpRequest.getRequestBody();
                 Map<String, String> parsedBody = requestBody.parse();
@@ -54,11 +59,11 @@ public class RequestHandler implements Runnable {
                     parsedBody.get("email"));
                 DataBase.addUser(user);
                 body = user.toString().getBytes();
-            }
 
-            HttpResponse httpResponse = new HttpResponse(dos);
-            httpResponse.response200Header(body.length);
-            httpResponse.responseBody(body);
+                HttpResponse httpResponse = new HttpResponse(dos);
+                httpResponse.response302Header("/index.html");
+                httpResponse.responseBody(body);
+            }
 
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
