@@ -4,22 +4,31 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RequestPath {
-
-    private String requestPath;
-    private Map<String, String> requestParameters = new HashMap<>();
+    private final String fullPath;
+    private final String requestPath;
+    private final Map<String, String> requestParameters = new HashMap<>();
 
     public RequestPath(String requestPath) {
-        this.requestPath = requestPath;
-        String parameters = requestPath.split("\\?")[1];
-        String[] splittedParameters = parameters.split("&");
-        for (String parameter : splittedParameters) {
+        this.fullPath = requestPath;
+        String[] splitPath = requestPath.split("\\?");
+        this.requestPath = splitPath[0];
+        if (hasNoParameters()) {
+            return;
+        }
+        String parameters = splitPath[1];
+        String[] splitParameters = parameters.split("&");
+        for (String parameter : splitParameters) {
             String[] key = parameter.split("=");
             requestParameters.put(key[0], key[1]);
         }
     }
 
+    private boolean hasNoParameters() {
+        return this.fullPath.equals(this.requestPath);
+    }
+
     public String getRequestPath() {
-        return requestPath;
+        return this.requestPath;
     }
 
     public String getRequestParameter(String key) {

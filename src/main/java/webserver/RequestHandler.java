@@ -1,5 +1,12 @@
 package webserver;
 
+import db.DataBase;
+import model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import utils.FileIoUtils;
+import web.HttpRequest;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -8,10 +15,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import utils.FileIoUtils;
-import web.RequestHeader;
 
 public class RequestHandler implements Runnable {
 
@@ -28,13 +31,23 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             DataOutputStream dos = new DataOutputStream(out);
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
-            RequestHeader requestHeader = new RequestHeader(br);
-            String path = requestHeader.getPath();
-            byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + path);
+            HttpRequest httpRequest = new HttpRequest(br);
+            String requestPath = httpRequest.getRequestPath();
+            byte[] body = "".getBytes();
+            if (requestPath.endsWith(".html")) {
+                body = FileIoUtils.loadFileFromClasspath("./templates" + requestPath);
+            } else if (requestPath.equals("/user/create")) {
+                User user = new User(httpRequest.getParam("userId"),
+                        httpRequest.getParam("password"),
+                        httpRequest.getParam("name"),
+                        httpRequest.getParam("email"));
+                DataBase.addUser(user);
+                body = user.toString().getBytes();
+            }
+
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException | URISyntaxException e) {
