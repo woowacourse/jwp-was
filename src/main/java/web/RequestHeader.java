@@ -24,4 +24,9 @@ public class RequestHeader {
     public Map<String, String> getHeaders() {
         return headers;
     }
+
+    public int getContentLength() {
+        String contentLength = headers.get("Content-Length");
+        return Integer.parseInt(contentLength);
+    }
 }
