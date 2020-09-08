@@ -1,9 +1,10 @@
 package web;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public class HttpResponse {
 
@@ -19,6 +20,17 @@ public class HttpResponse {
         try {
             this.dataOutputStream.writeBytes("HTTP/1.1 200 OK \r\n");
             this.dataOutputStream.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            this.dataOutputStream.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            this.dataOutputStream.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    public void response200Header(int lengthOfBodyContent, String contentType) {
+        try {
+            this.dataOutputStream.writeBytes("HTTP/1.1 200 OK \r\n");
+            this.dataOutputStream.writeBytes("Content-Type: " + contentType + "\r\n");
             this.dataOutputStream.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             this.dataOutputStream.writeBytes("\r\n");
         } catch (IOException e) {
