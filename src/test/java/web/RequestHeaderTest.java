@@ -22,7 +22,9 @@ class RequestHeaderTest {
 
         RequestHeader requestHeader = new RequestHeader(br);
 
-        assertThat(requestHeader.getRequestURI()).isEqualTo("GET /js/chunk-vendors.js HTTP/1.1");
+        assertThat(requestHeader.getMethod()).isEqualTo("GET");
+        assertThat(requestHeader.getPath()).isEqualTo("/js/chunk-vendors.js");
+        assertThat(requestHeader.getProtocol()).isEqualTo("HTTP/1.1");
     }
 
     @DisplayName("RequestHeader headers 확인")

@@ -7,17 +7,17 @@ import java.util.Map;
 
 public class RequestHeader {
 
-    private String requestURI;
+    private RequestUri requestUri;
     private Map<String, String> headers = new HashMap<>();
 
     public RequestHeader(BufferedReader bufferedReader) throws IOException {
         String line = bufferedReader.readLine();
-        if (this.requestURI == null) {
-            this.requestURI = line;
+        if (this.requestUri == null) {
+            this.requestUri = new RequestUri(line);
         }
-        while (!"".equals(line)) {
+        while (!isEmpty(line)) {
             line = bufferedReader.readLine();
-            if (line == null) {
+            if (isEmpty(line)) {
                 break;
             }
             String[] tokens = line.split(": ");
@@ -25,11 +25,40 @@ public class RequestHeader {
         }
     }
 
-    public String getRequestURI() {
-        return requestURI;
+    private boolean isEmpty(String line) {
+        return line == null || "".equals(line);
     }
 
     public Map<String, String> getHeaders() {
         return headers;
+    }
+
+    public String getMethod() {
+        return requestUri.method;
+    }
+
+    public String getPath() {
+        return requestUri.path;
+    }
+
+    public String getProtocol() {
+        return requestUri.protocol;
+    }
+
+    private static class RequestUri {
+
+        private String method;
+        private String path;
+        private String protocol;
+
+        public RequestUri(String uri) {
+            if (uri.isEmpty()) {
+                return;
+            }
+            String[] splittedUri = uri.split(" ");
+            this.method = splittedUri[0];
+            this.path = splittedUri[1];
+            this.protocol = splittedUri[2];
+        }
     }
 }
