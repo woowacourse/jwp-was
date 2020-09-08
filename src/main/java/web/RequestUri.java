@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 public class RequestUri {
-    private String method;
+    private HttpMethod method;
     private RequestPath path;
     private String protocol;
 
@@ -13,17 +13,17 @@ public class RequestUri {
         if (uri.isEmpty()) {
             return;
         }
-        String[] splittedUri = uri.split(" ");
-        this.method = splittedUri[0];
-        this.path = new RequestPath(splittedUri[1]);
-        this.protocol = splittedUri[2];
+        String[] splitUri = uri.split(" ");
+        this.method = HttpMethod.valueOf(splitUri[0]);
+        this.path = new RequestPath(splitUri[1]);
+        this.protocol = splitUri[2];
     }
 
     public String getParam(final String key) {
         return this.path.getRequestParameter(key);
     }
 
-    public String getMethod() {
+    public HttpMethod getMethod() {
         return method;
     }
 
