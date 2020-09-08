@@ -8,7 +8,6 @@ import java.nio.file.Paths;
 
 public class FileIoUtils {
 
-    private static final String DELIMITER = " ";
     private static final String TEMPLATE_PATH = "./templates";
 
     public static byte[] loadFileFromClasspath(String filePath) throws IOException, URISyntaxException {
@@ -16,8 +15,7 @@ public class FileIoUtils {
         return Files.readAllBytes(path);
     }
 
-    public static byte[] loadFileFromRequest(String line) throws IOException, URISyntaxException {
-        String path = line.split(DELIMITER)[1];
+    public static byte[] loadFileFromRequest(String path) throws IOException, URISyntaxException {
         return loadFileFromClasspath(TEMPLATE_PATH + path);
     }
 }
