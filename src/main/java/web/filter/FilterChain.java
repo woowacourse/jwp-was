@@ -5,6 +5,7 @@ import web.HttpResponse;
 import web.servlet.DispatcherServlet;
 import web.servlet.Servlet;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class FilterChain {
 
     private int filterIndex = 0;
 
-    public void doFilter(HttpRequest httpRequest, HttpResponse httpResponse) {
+    public void doFilter(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         if (filterIndex < filters.size()) {
             Filter filter = filters.get(filterIndex);
             filterIndex++;
