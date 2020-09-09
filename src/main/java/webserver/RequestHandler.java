@@ -30,6 +30,7 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             String request = extractRequest(in);
+            logRequest(request);
             String path = request.split(" ")[1];
             String localPath = parseToLocalPath(path);
 
@@ -44,18 +45,23 @@ public class RequestHandler implements Runnable {
 
     private String extractRequest(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        StringBuilder stringBuilder = new StringBuilder().append(System.lineSeparator());
+        StringBuilder stringBuilder = new StringBuilder();
+
         String line = bufferedReader.readLine();
-        logger.debug("-----요청 출력 시작-----");
         while (line != null && !line.isEmpty()) {
-            stringBuilder.append(line)
-                .append(System.lineSeparator());
+            stringBuilder.append(line);
+            stringBuilder.append(System.lineSeparator());
             line = bufferedReader.readLine();
         }
-        String request = stringBuilder.toString();
-        logger.debug(request);
-        logger.debug("-----요청 출력 끝-----");
-        return request;
+
+        return stringBuilder.toString();
+    }
+
+    private void logRequest(String request) {
+        logger.debug(
+            System.lineSeparator() + "----- 요청 시작 -----"
+            + System.lineSeparator() + request
+            + "----- 요청 끝 -----");
     }
 
     private String parseToLocalPath(String path) {
