@@ -27,10 +27,7 @@ public class IOUtils {
         StringBuffer sb = new StringBuffer();
         String line = bufferedReader.readLine();
 
-        while (!"".equals(line)) {
-            if (line == null) {
-                break;
-            }
+        while (!"".equals(line) && line != null) {
             sb.append(line).append(NEW_LINE);
             line = bufferedReader.readLine();
         }
@@ -48,7 +45,6 @@ public class IOUtils {
         String[] infos = query.split("&");
         for (String info : infos) {
             String[] keyAndValue = info.split("=");
-            //TODO: Decoding 관련 처리하기
             params.put(keyAndValue[0], URLDecoder.decode(keyAndValue[1], StandardCharsets.UTF_8.toString()));
         }
     }

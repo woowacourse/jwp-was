@@ -3,11 +3,14 @@ package webserver.domain;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
+
 import lombok.Getter;
 import utils.IOUtils;
+import utils.StaticFileType;
 
 @Getter
-public class RequestHeader {
+public class HttpRequestHeader {
 
     public static final String NEW_LINE = "\n";
     public static final String SPACE = " ";
@@ -19,10 +22,10 @@ public class RequestHeader {
     private final Map<String, String> queryParams;
     private final Map<String, String> headerParams;
 
-    public RequestHeader(String header) throws UnsupportedEncodingException {
+    public HttpRequestHeader(String header) throws UnsupportedEncodingException {
         String[] lines = header.split(NEW_LINE);
         String firstLineOfHeader = lines[0];
-        this.requestMethod = RequestMethod.valueOf(firstLineOfHeader.split(SPACE)[0]);
+        this.requestMethod = RequestMethod.from(firstLineOfHeader.split(SPACE)[0]);
 
         this.queryParams = new HashMap<>();
         String url = firstLineOfHeader.split(SPACE)[1];
@@ -42,19 +45,23 @@ public class RequestHeader {
         }
     }
 
-    public boolean hasQueryParam() {
-        return !queryParams.isEmpty();
+    public boolean isStaticFile() {
+        return Pattern.matches("^.*[.][a-z]+$", this.path);
     }
 
-    public boolean isTemplate() {
-        return path.contains(".html");
-    }
-
-    public boolean equalPath(String target) {
+    public boolean hasEqualPathWith(String target) {
         return this.path.equals(target);
     }
 
     public int findContentLength() {
-        return Integer.parseInt(this.getQueryParams().getOrDefault("Content-Length", "0"));
+        String length = this.getHeaderParams()
+            .getOrDefault("Content-Length", "0");
+        return Integer.parseInt(length);
+    }
+
+    public StaticFileType findExtension() {
+        String[] split = this.path.split("\\.");
+        String extensionName = split[split.length - 1];
+        return StaticFileType.valueOf(extensionName.toUpperCase());
     }
 }

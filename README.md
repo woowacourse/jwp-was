@@ -5,7 +5,7 @@
     - 요청의 Request Parameter를 추출할 수 있도록 한다.
     - Request Body의 값을 추출할 수 있도록 한다.
     - redirect를 가능하게 한다.
-    - css파일을 지원하게 한다.
+    - 정적파일을 지원하게 한다.
 
 ## 2단계 HTTP 웹 서버 리팩토링
 

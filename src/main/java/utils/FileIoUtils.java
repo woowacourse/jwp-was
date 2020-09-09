@@ -8,14 +8,14 @@ import java.nio.file.Paths;
 
 public class FileIoUtils {
 
-    private static final String TEMPLATE_PATH = "./templates";
-
     public static byte[] loadFileFromClasspath(String filePath) throws IOException, URISyntaxException {
         Path path = Paths.get(FileIoUtils.class.getClassLoader().getResource(filePath).toURI());
         return Files.readAllBytes(path);
     }
 
-    public static byte[] loadFileFromRequest(String path) throws IOException, URISyntaxException {
-        return loadFileFromClasspath(TEMPLATE_PATH + path);
+    public static byte[] loadFileFromRequest(StaticFileType staticFileType, String path)
+        throws IOException, URISyntaxException {
+        String filePath = staticFileType.getPath() + path;
+        return loadFileFromClasspath(filePath);
     }
 }

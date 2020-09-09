@@ -17,8 +17,9 @@ import org.slf4j.LoggerFactory;
 import model.User;
 import utils.FileIoUtils;
 import utils.IOUtils;
-import webserver.domain.RequestBody;
-import webserver.domain.RequestHeader;
+import utils.StaticFileType;
+import webserver.domain.HttpRequestBody;
+import webserver.domain.HttpRequestHeader;
 
 public class RequestHandler implements Runnable {
 
@@ -34,20 +35,22 @@ public class RequestHandler implements Runnable {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
             connection.getPort());
 
-        try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            BufferedReader bufferedReader = new BufferedReader((new InputStreamReader(in, StandardCharsets.UTF_8)));
-            RequestHeader requestHeader = new RequestHeader(IOUtils.readHeader(bufferedReader));
-            RequestBody requestBody = new RequestBody(
-                IOUtils.readBody(bufferedReader, requestHeader.findContentLength()));
+        try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream();
+             BufferedReader bufferedReader = new BufferedReader((new InputStreamReader(in, StandardCharsets.UTF_8)))) {
+
+            HttpRequestHeader httpRequestHeader = new HttpRequestHeader(IOUtils.readHeader(bufferedReader));
+            HttpRequestBody httpRequestBody = new HttpRequestBody(
+                IOUtils.readBody(bufferedReader, httpRequestHeader.findContentLength()));
 
             byte[] responseBody = {};
             DataOutputStream dos = new DataOutputStream(out);
-            if (requestHeader.isTemplate()) {
-                responseBody = FileIoUtils.loadFileFromRequest(requestHeader.getPath());
-                response200Header(dos, responseBody.length);
+            if (httpRequestHeader.isStaticFile()) {
+                responseBody = FileIoUtils.loadFileFromRequest(httpRequestHeader.findExtension(),
+                    httpRequestHeader.getPath());
+                response200Header(dos, httpRequestHeader.findExtension(), responseBody.length);
             } else {
-                if (requestHeader.equalPath("/user/create")) {
-                    Map<String, String> params = requestBody.getParams();
+                if (httpRequestHeader.hasEqualPathWith("/user/create")) {
+                    Map<String, String> params = httpRequestBody.getParams();
                     User newUser = new User(params.get("userId"), params.get("password"), params.get("name"),
                         params.get("email"));
 
@@ -62,10 +65,10 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response200Header(DataOutputStream dos, StaticFileType staticFileType, int lengthOfBodyContent) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Type: " + staticFileType.getContentType() + ";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
@@ -73,8 +76,6 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    // HTTP/1.1 302 Found
-    // Location: http://www.iana.org/domains/example/
     private void response302Header(DataOutputStream dos, String redirectUrl) {
         try {
             dos.writeBytes("HTTP/1.1 302 FOUND \r\n");
