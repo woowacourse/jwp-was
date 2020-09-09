@@ -41,27 +41,32 @@ public class RequestUtils {
     }
 
     public static String extractBody(BufferedReader request, String contentLength) throws IOException {
-        return IOUtils.readData(request, Integer.parseInt(contentLength));
+        String body = IOUtils.readData(request, Integer.parseInt(contentLength));
+        return decode(body);
     }
 
     public static String extractWholeUrl(String requestHeader) {
         String wholeUrl = requestHeader.split(REQUEST_HEADER_DELIMITER)[1];
-        try {
-            return URLDecoder.decode(wholeUrl, StandardCharsets.UTF_8.name());
-        } catch (UnsupportedEncodingException e) {
-            throw new AssertionError();
-        }
+        return decode(wholeUrl);
     }
 
     public static String extractPath(String wholeUrl) {
         return wholeUrl.split(PATH_PARAM_DELIMITER)[0];
     }
 
-    public static Map<String, String> extractParams(String wholeUrl) {
+    public static Map<String, String> extractQueryParams(String wholeUrl) {
         validateParams(wholeUrl);
 
-        Map<String, String> output = new HashMap<>();
         String paramBundle = wholeUrl.split(PATH_PARAM_DELIMITER)[1];
+        return extractParams(paramBundle);
+    }
+
+    public static Map<String, String> extractBodyParams(String body) {
+       return extractParams(body);
+    }
+
+    private static Map<String, String> extractParams(String paramBundle) {
+        Map<String, String> output = new HashMap<>();
         String[] params = paramBundle.split(PARAM_BUNDLE_DELIMITER);
         for (String param : params) {
             String[] keyValues = param.split(KEY_VALUE_DELIMITER);
@@ -79,4 +84,13 @@ public class RequestUtils {
     public static String extractMethod(String requestHeader) {
         return requestHeader.split(REQUEST_HEADER_DELIMITER)[0];
     }
+
+    private static String decode(String input) {
+        try {
+            return URLDecoder.decode(input, StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            throw new AssertionError();
+        }
+    }
+
 }

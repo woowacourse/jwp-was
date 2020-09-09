@@ -8,7 +8,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
-import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
@@ -34,13 +33,20 @@ public class RequestHandler implements Runnable {
             connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            String request = extractRequest(in);
-            logRequest(request);
-            String wholeUrl = RequestUtils.extractWholeUrl(request);
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+
+            String requestHeader = RequestUtils.extractHeader(bufferedReader);
+            logRequest(requestHeader);
+            String wholeUrl = RequestUtils.extractWholeUrl(requestHeader);
             String path = RequestUtils.extractPath(wholeUrl);
+
             DataOutputStream dos = new DataOutputStream(out);
-            if (path.equals("/user/create")) {
-                Map<String, String> userInfo = RequestUtils.extractParams(wholeUrl);
+
+            String method = RequestUtils.extractMethod(requestHeader);
+            if ("/user/create".equals(path) && "POST".equals(method)) {
+                String contentLength = RequestUtils.extractHeaderValue(requestHeader, "Content-Length");
+                String body = RequestUtils.extractBody(bufferedReader, contentLength);
+                Map<String, String> userInfo = RequestUtils.extractBodyParams(body);
                 User user = new User(
                     userInfo.get("userId"), userInfo.get("password"), userInfo.get("name"), userInfo.get("email"));
                 DataBase.addUser(user);
@@ -54,21 +60,6 @@ public class RequestHandler implements Runnable {
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
-
-    }
-
-    private String extractRequest(InputStream inputStream) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        StringBuilder stringBuilder = new StringBuilder();
-
-        String line = bufferedReader.readLine();
-        while (line != null && !line.isEmpty()) {
-            stringBuilder.append(line);
-            stringBuilder.append(System.lineSeparator());
-            line = bufferedReader.readLine();
-        }
-
-        return stringBuilder.toString();
     }
 
     private void logRequest(String request) {

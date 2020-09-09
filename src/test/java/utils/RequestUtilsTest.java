@@ -33,7 +33,7 @@ class RequestUtilsTest {
             + "Content-Type: application/x-www-form-urlencoded\n"
             + "Accept: */*\n";
 
-    private static final String POST_REQUEST_BODY = "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
+    private static final String POST_REQUEST_BODY = "userId=javajigi&password=password&name=박재성&email=javajigi@slipp.net";
 
     private static final String GET_REQUEST_HEADER =
         "GET /user/create?userId=javajigi&password=password&name=%ED%8F%AC%EB%B9%84&email=javajigi%40slipp.net HTTP/1.1\n"
@@ -106,13 +106,13 @@ class RequestUtilsTest {
 
     @Test
     public void extractParams() {
-        Map<String, String> params = RequestUtils.extractParams(GET_WHOLE_URL);
+        Map<String, String> params = RequestUtils.extractQueryParams(GET_WHOLE_URL);
         assertThat(params.equals(GET_PARAMS));
     }
 
     @Test
     public void paramsNotExist() {
-        assertThatThrownBy(() -> RequestUtils.extractParams(GET_WHOLE_URL_WITHOUT_PARAMS))
+        assertThatThrownBy(() -> RequestUtils.extractQueryParams(GET_WHOLE_URL_WITHOUT_PARAMS))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("쿼리 파라미터가 존재하지 않습니다");
     }
