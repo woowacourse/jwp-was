@@ -1,16 +1,23 @@
 package webserver;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.URISyntaxException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import utils.FileIoUtils;
+
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final int REQUEST_URL_INDEX = 1;
+    private static final String RESOURCE_PATH = "./templates";
 
     private Socket connection;
 
@@ -19,16 +26,18 @@ public class RequestHandler implements Runnable {
     }
 
     public void run() {
-        logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
+        logger.debug("New Client Connect! Connected IP : {}, Port : {}",
+                connection.getInetAddress(),
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
+            String requestUrl = getRequestUrl(in);
+            byte[] body = FileIoUtils.loadFileFromClasspath(RESOURCE_PATH + requestUrl);
+
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = "Hello World".getBytes();
             response200Header(dos, body.length);
             responseBody(dos, body);
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }
@@ -51,5 +60,22 @@ public class RequestHandler implements Runnable {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private String getRequestUrl(InputStream in) throws IOException, URISyntaxException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
+        String line = bufferedReader.readLine();
+
+        String[] tokens = line.split(" ");
+        String url = tokens[REQUEST_URL_INDEX];
+
+        while (!"".equals(line)) {
+            if (line == null) {
+                return null;
+            }
+            logger.debug("Request Header: {}", line);
+            line = bufferedReader.readLine();
+        }
+        return url;
     }
 }
