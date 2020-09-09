@@ -10,13 +10,12 @@ import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import model.User;
 import utils.FileIoUtils;
 import utils.IOUtils;
+import webserver.domain.RequestBody;
 import webserver.domain.RequestHeader;
 
 public class RequestHandler implements Runnable {
@@ -34,27 +33,28 @@ public class RequestHandler implements Runnable {
             connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-            String header = IOUtils.readHeader(bufferedReader);
+            BufferedReader bufferedReader = new BufferedReader((new InputStreamReader(in, StandardCharsets.UTF_8)));
+            RequestHeader requestHeader = new RequestHeader(IOUtils.readHeader(bufferedReader));
+            RequestBody requestBody = new RequestBody(
+                IOUtils.readBody(bufferedReader, requestHeader.findContentLength()));
 
-            RequestHeader requestHeader = new RequestHeader(header);
-
-            byte[] body = {};
+            byte[] responseBody = {};
             if (requestHeader.isTemplate()) {
-                body = FileIoUtils.loadFileFromRequest(requestHeader.getPath());
+                responseBody = FileIoUtils.loadFileFromRequest(requestHeader.getPath());
             } else {
                 if (requestHeader.equalPath("/user/create")) {
-                    Map<String, String> queryParams = requestHeader.getQueryParam();
-                    User newUser = new User(queryParams.get("userId"), queryParams.get("password"),
-                        queryParams.get("name"), queryParams.get("email"));
+                    Map<String, String> params = requestBody.getParams();
+                    User newUser = new User(params.get("userId"), params.get("password"), params.get("name"),
+                        params.get("email"));
                 }
             }
             DataOutputStream dos = new DataOutputStream(out);
 
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+            response200Header(dos, responseBody.length);
+            responseBody(dos, responseBody);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
         }
     }
 

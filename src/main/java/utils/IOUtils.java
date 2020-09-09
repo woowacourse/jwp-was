@@ -7,8 +7,6 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-import exception.InvalidSocketRequestException;
-
 public class IOUtils {
 
     public static final String NEW_LINE = "\n";
@@ -28,15 +26,22 @@ public class IOUtils {
     public static String readHeader(BufferedReader bufferedReader) throws IOException {
         StringBuffer sb = new StringBuffer();
         String line = bufferedReader.readLine();
-        sb.append(line).append(NEW_LINE);
-        while (!"".equals(line) && !"\r\n".equals(line)) {
+
+        while (!"".equals(line)) {
             if (line == null) {
-                throw new InvalidSocketRequestException();
+                break;
             }
-            line = bufferedReader.readLine();
             sb.append(line).append(NEW_LINE);
+            line = bufferedReader.readLine();
         }
         return sb.toString();
+    }
+
+    public static String readBody(BufferedReader bufferedReader, int contentLength) throws IOException {
+        if (contentLength == 0) {
+            return "";
+        }
+        return readData(bufferedReader, contentLength);
     }
 
     public static void addParameters(String query, Map<String, String> params) throws UnsupportedEncodingException {

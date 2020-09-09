@@ -1,11 +1,10 @@
 package webserver.domain;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.io.UnsupportedEncodingException;
 import java.util.stream.Stream;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -41,7 +40,7 @@ class RequestHeaderTest {
         assertAll(
             () -> assertThat(requestHeader.getRequestMethod()).isEqualTo(RequestMethod.POST),
             () -> assertThat(requestHeader.getPath()).isEqualTo("/user/create"),
-            () -> assertThat(requestHeader.getContentLength()).isEqualTo(59)
+            () -> assertThat(requestHeader.findContentLength()).isEqualTo(59)
         );
     }
 
