@@ -86,6 +86,13 @@ class RequestUtilsTest {
     }
 
     @Test
+    public void extractRequestMethod() {
+        String method = RequestUtils.extractMethod(GET_REQUEST_HEADER);
+
+        assertThat(method).isEqualTo("GET");
+    }
+
+    @Test
     public void extractWholeUrl() {
         String wholeUrl = RequestUtils.extractWholeUrl(GET_REQUEST_HEADER);
         assertThat(wholeUrl).isEqualTo(GET_WHOLE_URL);

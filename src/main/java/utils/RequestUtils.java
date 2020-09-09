@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class RequestUtils {
 
-    private static final String WHOLE_URL_DELIMITER = " ";
+    private static final String REQUEST_HEADER_DELIMITER = " ";
     private static final String PATH_PARAM_DELIMITER = "\\?";
     private static final String PARAM_BUNDLE_DELIMITER = "&";
     private static final String KEY_VALUE_DELIMITER = "=";
@@ -45,7 +45,7 @@ public class RequestUtils {
     }
 
     public static String extractWholeUrl(String requestHeader) {
-        String wholeUrl = requestHeader.split(WHOLE_URL_DELIMITER)[1];
+        String wholeUrl = requestHeader.split(REQUEST_HEADER_DELIMITER)[1];
         try {
             return URLDecoder.decode(wholeUrl, StandardCharsets.UTF_8.name());
         } catch (UnsupportedEncodingException e) {
@@ -74,5 +74,9 @@ public class RequestUtils {
         if (wholeUrl.split(PATH_PARAM_DELIMITER).length != 2) {
             throw new IllegalArgumentException("쿼리 파라미터가 존재하지 않습니다");
         }
+    }
+
+    public static String extractMethod(String requestHeader) {
+        return requestHeader.split(REQUEST_HEADER_DELIMITER)[0];
     }
 }
