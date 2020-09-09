@@ -6,12 +6,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import webserver.domain.request.HttpRequest;
+import webserver.domain.request.RequestLine;
 
 class HttpRequestTest {
     @DisplayName("헤더에서 요청 url을 추출하여 반환한다.")
     @Test
     void getFilePath_whenRequestTemplatesFiles() {
-        String requestLine = "GET /index.html HTTP/1.1";
+        RequestLine requestLine = RequestLine.of("GET /index.html HTTP/1.1");
         String header = "Host: localhost:8080\n"
             + "Connection: keep-alive\n"
             + "Upgrade-Insecure-Requests: 1\n"
@@ -26,13 +27,13 @@ class HttpRequestTest {
             + "Cookie: Idea-3be1aa82=33bac591-b163-42cb-9b63-333572a05b11";
         HttpRequest httpRequest = new HttpRequest(requestLine, header);
 
-        assertThat(httpRequest.getFilePath()).isEqualTo("./templates/index.html");
+        assertThat(httpRequest.getResourcePath()).isEqualTo("./templates/index.html");
     }
 
     @DisplayName("헤더에서 요청 url을 추출하여 반환한다.")
     @Test
     void getFilePath_whenRequestStaticFiles() {
-        String requestLine = "GET /css/styles.css HTTP/1.1";
+        RequestLine requestLine = RequestLine.of("GET /css/styles.css HTTP/1.1");
         String header = "Host: localhost:8080\n"
             + "Connection: keep-alive\n"
             + "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36\n"
@@ -46,6 +47,6 @@ class HttpRequestTest {
             + "Cookie: Idea-3be1aa82=33bac591-b163-42cb-9b63-333572a05b11\n";
         HttpRequest httpRequest = new HttpRequest(requestLine, header);
 
-        assertThat(httpRequest.getFilePath()).isEqualTo("./static/css/styles.css");
+        assertThat(httpRequest.getResourcePath()).isEqualTo("./static/css/styles.css");
     }
 }

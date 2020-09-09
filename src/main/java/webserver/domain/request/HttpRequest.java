@@ -10,17 +10,17 @@ public class HttpRequest {
     private static final String lineSeparator = System.getProperty("line.separator");
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
 
-    private final String requestLine;
+    private final RequestLine requestLine;
     private final String header;
 
-    public HttpRequest(String requestLine, String header) {
+    public HttpRequest(RequestLine requestLine, String header) {
         this.requestLine = requestLine;
         this.header = header;
     }
 
     public static HttpRequest of(BufferedReader br) throws IOException {
         String line = br.readLine();
-        String requestLine = line;
+        RequestLine requestLine = RequestLine.of(line);
         logger.debug("Request Line{}{}{}", lineSeparator, line, lineSeparator);
 
         StringBuilder header = new StringBuilder();
@@ -38,13 +38,10 @@ public class HttpRequest {
         return new HttpRequest(requestLine, header.toString());
     }
 
-    public String getFilePath() {
-        String urlPath = requestLine.split(" ")[1];
-
-        if (urlPath.endsWith("html") || urlPath.equals("/favicon.ico")) {
-            return String.format("./templates%s", urlPath);
+    public String getResourcePath() {
+        if (requestLine.isTemplatesResource()) {
+            return String.format("./templates%s", requestLine.getPath());
         }
-
-        return String.format("./static%s", urlPath);
+        return String.format("./static%s", requestLine.getPath());
     }
 }

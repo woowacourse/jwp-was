@@ -31,7 +31,7 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
             HttpRequest httpRequest = HttpRequest.of(br);
-            String path = httpRequest.getFilePath();
+            String path = httpRequest.getResourcePath();
 
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = FileIoUtils.loadFileFromClasspath(path);

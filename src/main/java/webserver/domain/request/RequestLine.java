@@ -10,4 +10,25 @@ public class RequestLine {
         this.uri = uri;
         this.version = version;
     }
+
+    public static RequestLine of(String source) {
+        String[] sources = source.split(" ");
+        Method method = Method.of(sources[0]);
+        Uri uri = Uri.of(sources[1]);
+        HttpVersion httpVersion = HttpVersion.of(sources[2]);
+
+        return new RequestLine(method, uri, httpVersion);
+    }
+
+    public boolean isTemplatesResource() {
+        return uri.isTemplatesResource();
+    }
+
+    public boolean isStaticResource() {
+        return uri.isStaticResource();
+    }
+
+    public String getPath() {
+        return uri.getPath();
+    }
 }
