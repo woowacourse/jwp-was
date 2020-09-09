@@ -7,10 +7,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import utils.FileIoUtils;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -26,25 +29,40 @@ public class RequestHandler implements Runnable {
             connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            printRequest(in);
+            String request = extractRequest(in);
+            String path = request.split(" ")[1];
+            String localPath = parseToLocalPath(path);
+
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = "Hello World".getBytes();
+            byte[] body = FileIoUtils.loadFileFromClasspath(localPath);
             response200Header(dos, body.length);
             responseBody(dos, body);
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void printRequest(InputStream inputStream) throws IOException {
+    private String extractRequest(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        logger.debug("-----요청 출력 시작-----");
+        StringBuilder stringBuilder = new StringBuilder().append(System.lineSeparator());
         String line = bufferedReader.readLine();
+        logger.debug("-----요청 출력 시작-----");
         while (line != null && !line.isEmpty()) {
-            logger.debug(line);
+            stringBuilder.append(line)
+                .append(System.lineSeparator());
             line = bufferedReader.readLine();
         }
+        String request = stringBuilder.toString();
+        logger.debug(request);
         logger.debug("-----요청 출력 끝-----");
+        return request;
+    }
+
+    private String parseToLocalPath(String path) {
+        if (path.endsWith(".html") || path.endsWith(".ico")) {
+            return "./templates" + path;
+        }
+        return "./static" + path;
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
