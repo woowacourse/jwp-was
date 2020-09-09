@@ -27,7 +27,7 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-            readRequestUrl(br);
+            HttpRequest httpRequest = HttpRequest.of(br);
 
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = "Hello World".getBytes();
@@ -36,30 +36,6 @@ public class RequestHandler implements Runnable {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
-    }
-
-    private String readRequestUrl(BufferedReader br) throws IOException {
-        String lineSeparator = System.getProperty("line.separator");
-
-        StringBuilder requestLine = new StringBuilder("Request Line");
-        String line = br.readLine();
-        requestLine.append(lineSeparator);
-        requestLine.append(line);
-        requestLine.append(lineSeparator);
-        logger.debug("{}", requestLine);
-
-        StringBuilder header = new StringBuilder("Header");
-        while (!line.equals("")) {
-            header.append(lineSeparator);
-            line = br.readLine();
-            header.append(line);
-
-            if (line == null) {
-                break;
-            }
-        }
-        logger.debug("{}", header);
-        return "";
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
