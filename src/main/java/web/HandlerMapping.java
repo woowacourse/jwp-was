@@ -17,7 +17,7 @@ public class HandlerMapping {
         RequestMapping key = handlerMapping.keySet().stream()
                 .filter(mapping -> mapping.match(httpRequest))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException(String.format("요청(%s: %s)을 처리할 수 없습니다.", httpRequest.getMethod(), httpRequest.getRequestPath())));
+                .orElseThrow(() -> new IllegalArgumentException(String.format("요청(%s: %s)을 처리할 수 없습니다.", httpRequest.getMethod(), httpRequest.getRequestPath())));
         return handlerMapping.get(key);
     }
 }
