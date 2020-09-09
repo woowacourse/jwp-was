@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import webserver.domain.request.HttpRequest;
+
 class HttpRequestTest {
     @DisplayName("헤더에서 요청 url을 추출하여 반환한다.")
     @Test
