@@ -1,13 +1,13 @@
 package utils;
 
-import exception.InvalidSocketRequestException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Map;
+
+import exception.InvalidSocketRequestException;
 
 public class IOUtils {
 
@@ -39,14 +39,12 @@ public class IOUtils {
         return sb.toString();
     }
 
-    public static Map<String, String> readParameters(String query) throws UnsupportedEncodingException {
+    public static void addParameters(String query, Map<String, String> params) throws UnsupportedEncodingException {
         String[] infos = query.split("&");
-        Map<String, String> queryParams = new HashMap<>();
         for (String info : infos) {
             String[] keyAndValue = info.split("=");
             //TODO: Decoding 관련 처리하기
-            queryParams.put(keyAndValue[0], URLDecoder.decode(keyAndValue[1], StandardCharsets.UTF_8.toString()));
+            params.put(keyAndValue[0], URLDecoder.decode(keyAndValue[1], StandardCharsets.UTF_8.toString()));
         }
-        return queryParams;
     }
 }

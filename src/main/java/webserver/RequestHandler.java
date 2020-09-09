@@ -10,11 +10,14 @@ import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import model.User;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import model.User;
 import utils.FileIoUtils;
 import utils.IOUtils;
+import webserver.domain.RequestHeader;
 
 public class RequestHandler implements Runnable {
 
@@ -33,15 +36,15 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             String header = IOUtils.readHeader(bufferedReader);
-            String firstLineOfHeader = header.split("\n")[0];
-            String path = firstLineOfHeader.split(" ")[1];
+
+            RequestHeader requestHeader = new RequestHeader(header);
+
             byte[] body = {};
-            String[] urlAndParams = path.split("\\?");
-            if (isTemplate(urlAndParams[0])) {
-                body = FileIoUtils.loadFileFromRequest(path);
+            if (requestHeader.isTemplate()) {
+                body = FileIoUtils.loadFileFromRequest(requestHeader.getPath());
             } else {
-                Map<String, String> queryParams = IOUtils.readParameters(urlAndParams[1]);
-                if (urlAndParams[0].equals("/user/create")) {
+                if (requestHeader.equalPath("/user/create")) {
+                    Map<String, String> queryParams = requestHeader.getQueryParam();
                     User newUser = new User(queryParams.get("userId"), queryParams.get("password"),
                         queryParams.get("name"), queryParams.get("email"));
                 }
@@ -53,10 +56,6 @@ public class RequestHandler implements Runnable {
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
-    }
-
-    private boolean isTemplate(String urlAndParam) {
-        return urlAndParam.endsWith(".html");
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
