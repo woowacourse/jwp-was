@@ -1,11 +1,14 @@
 package webserver;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import java.nio.charset.StandardCharsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +17,7 @@ public class RequestHandler implements Runnable {
 
     private Socket connection;
 
-    public RequestHandler(Socket connectionSocket) {
+    RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
     }
 
@@ -22,8 +25,29 @@ public class RequestHandler implements Runnable {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
 
-        try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
+        /* request 형태!
+         * GET / HTTP/1.1                이부분을 request line 이라 함
+         * Host: localhost:8080
+         * Connection: keep-alive
+         * Cache-Control: max-age=0
+         * Upgrade-Insecure-Requests: 1
+         * ...
+         */
+        try (
+            InputStream in = connection.getInputStream();
+            OutputStream out = connection.getOutputStream()
+        ) {
+            BufferedReader br = new BufferedReader(
+                new InputStreamReader(in, StandardCharsets.UTF_8));
+
+            String line = br.readLine();
+            logger.debug("request line : {}", line);
+
+            while (!line.equals("")) {
+                line = br.readLine();
+                logger.debug("header: {}", line);
+            }
+
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = "Hello World".getBytes();
             response200Header(dos, body.length);
