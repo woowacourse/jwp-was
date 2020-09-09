@@ -1,11 +1,19 @@
 package utils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
 public class RequestUtils {
     public static String extractWholeUrl(String request) {
-        return request.split(" ")[1];
+        String wholeUrl = request.split(" ")[1];
+        try {
+            return URLDecoder.decode(wholeUrl, StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            throw new AssertionError();
+        }
     }
 
     public static String extractPath(String wholeUrl) {

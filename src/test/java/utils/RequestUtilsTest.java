@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 class RequestUtilsTest {
 
     private static final String REQUEST =
-        "GET /user/create?userId=javajigi&password=password&name=포비&email=javajigi@slipp.net HTTP/1.1\n"
+        "GET /user/create?userId=javajigi&password=password&name=%ED%8F%AC%EB%B9%84&email=javajigi%40slipp.net HTTP/1.1\n"
             + "Host: localhost:8080\n"
             + "Connection: keep-alive\n"
             + "Accept: */*";

@@ -47,7 +47,6 @@ public class RequestHandler implements Runnable {
                 response200Header(dos, 0);
             } else {
                 String localPath = parseToLocalPath(path);
-
                 byte[] body = FileIoUtils.loadFileFromClasspath(localPath);
                 response200Header(dos, body.length);
                 responseBody(dos, body);
