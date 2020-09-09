@@ -50,7 +50,7 @@ public class RequestHandler implements Runnable {
                 User user = new User(
                     userInfo.get("userId"), userInfo.get("password"), userInfo.get("name"), userInfo.get("email"));
                 DataBase.addUser(user);
-                response200Header(dos, 0);
+                response302Header(dos);
             } else {
                 String localPath = parseToLocalPath(path);
                 byte[] body = FileIoUtils.loadFileFromClasspath(localPath);
@@ -81,6 +81,16 @@ public class RequestHandler implements Runnable {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
             dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void response302Header(DataOutputStream dos) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 FOUND \r\n");
+            dos.writeBytes("Location: /index.html \r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
