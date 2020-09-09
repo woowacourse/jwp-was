@@ -5,5 +5,15 @@
 * 코드 리뷰 피드백에 대한 개선 작업을 하고 다시 PUSH한다.
 * 모든 피드백을 완료하면 다음 단계를 도전하고 앞의 과정을 반복한다.
 
+## 기능 구현 목록
+### 1단계
+#### 요구사항 1
+- [x] request header log 출력
+- [x] request header url에 해당하는 페이지 반환
+#### 요구사항 2
+- [ ] request url에서 parameter 추출
+- [ ] 추출한 parameter로 User 객체 생성
+ 
+
 ## 우아한테크코스 코드리뷰
 * [온라인 코드 리뷰 과정](https://github.com/woowacourse/woowacourse-docs/blob/master/maincourse/README.md)

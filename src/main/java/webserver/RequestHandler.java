@@ -62,7 +62,7 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private String getRequestUrl(InputStream in) throws IOException, URISyntaxException {
+    private String getRequestUrl(InputStream in) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
         String line = bufferedReader.readLine();
 
