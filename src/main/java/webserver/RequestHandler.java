@@ -6,7 +6,12 @@ import web.HttpRequest;
 import web.HttpResponse;
 import web.filter.FilterChain;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.Socket;
 
 public class RequestHandler implements Runnable {
@@ -32,29 +37,6 @@ public class RequestHandler implements Runnable {
 
             FilterChain filterChain = new FilterChain();
             filterChain.doFilter(httpRequest, httpResponse);
-
-//            byte[] body;
-//            if (ResourceFilter.isResource(requestPath) && HttpMethod.GET == httpRequest.getMethod()) {
-//                ResourceFilter resourceFilter = ResourceFilter.findResourceFilter(requestPath);
-//                body = resourceFilter.getBody(requestPath);
-//                HttpResponse httpResponse = new HttpResponse(dos);
-//                httpResponse.response200Header(body.length, resourceFilter.getContentType());
-//                httpResponse.responseBody(body);
-//            } else if (requestPath.equals("/user/create") && HttpMethod.POST == httpRequest.getMethod()) {
-//                RequestBody requestBody = httpRequest.getRequestBody();
-//                Map<String, String> parsedBody = requestBody.parse();
-//                User user = new User(parsedBody.get("userId"),
-//                        parsedBody.get("password"),
-//                        parsedBody.get("name"),
-//                        parsedBody.get("email"));
-//                DataBase.addUser(user);
-//                body = user.toString().getBytes();
-//
-//                HttpResponse httpResponse = new HttpResponse(dos);
-//                httpResponse.response302Header("/index.html");
-//                httpResponse.responseBody(body);
-//            }
-
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
