@@ -31,7 +31,7 @@ public class Uri {
     }
 
     public boolean isStaticResource() {
-        return !isTemplatesResource();
+        return !isTemplatesResource() && path.contains(".");
     }
 
     public String getPath() {

@@ -38,10 +38,15 @@ public class HttpRequest {
         return new HttpRequest(requestLine, header.toString());
     }
 
-    public String getResourcePath() {
+    public String getPath() {
         if (requestLine.isTemplatesResource()) {
             return String.format("./templates%s", requestLine.getPath());
         }
-        return String.format("./static%s", requestLine.getPath());
+
+        if (requestLine.isStaticResource()) {
+            return String.format("./static%s", requestLine.getPath());
+        }
+
+        return requestLine.getPath();
     }
 }

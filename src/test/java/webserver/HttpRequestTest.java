@@ -9,9 +9,9 @@ import webserver.domain.request.HttpRequest;
 import webserver.domain.request.RequestLine;
 
 class HttpRequestTest {
-    @DisplayName("헤더에서 요청 url을 추출하여 반환한다.")
+    @DisplayName("요청에 해당하는 templates 자원의 경로를 반환한다.")
     @Test
-    void getFilePath_whenRequestTemplatesFiles() {
+    void getPath_whenRequestTemplatesFiles() {
         RequestLine requestLine = RequestLine.of("GET /index.html HTTP/1.1");
         String header = "Host: localhost:8080\n"
             + "Connection: keep-alive\n"
@@ -27,12 +27,12 @@ class HttpRequestTest {
             + "Cookie: Idea-3be1aa82=33bac591-b163-42cb-9b63-333572a05b11";
         HttpRequest httpRequest = new HttpRequest(requestLine, header);
 
-        assertThat(httpRequest.getResourcePath()).isEqualTo("./templates/index.html");
+        assertThat(httpRequest.getPath()).isEqualTo("./templates/index.html");
     }
 
-    @DisplayName("헤더에서 요청 url을 추출하여 반환한다.")
+    @DisplayName("요청에 해당하는 static 자원의 경로를 반환한다.")
     @Test
-    void getFilePath_whenRequestStaticFiles() {
+    void getPath_whenRequestStaticFiles() {
         RequestLine requestLine = RequestLine.of("GET /css/styles.css HTTP/1.1");
         String header = "Host: localhost:8080\n"
             + "Connection: keep-alive\n"
@@ -47,6 +47,19 @@ class HttpRequestTest {
             + "Cookie: Idea-3be1aa82=33bac591-b163-42cb-9b63-333572a05b11\n";
         HttpRequest httpRequest = new HttpRequest(requestLine, header);
 
-        assertThat(httpRequest.getResourcePath()).isEqualTo("./static/css/styles.css");
+        assertThat(httpRequest.getPath()).isEqualTo("./static/css/styles.css");
+    }
+
+    @DisplayName("요청에 해당하는 경로를 반환한다.")
+    @Test
+    void getPath_whenRequestNotResources() {
+        RequestLine requestLine = RequestLine.of(
+            "GET /user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net HTTP/1.1");
+        String header = "Host: localhost:8080\n"
+            + "Connection: keep-alive\n"
+            + "Accept: */*";
+        HttpRequest httpRequest = new HttpRequest(requestLine, header);
+
+        assertThat(httpRequest.getPath()).isEqualTo("/user/create");
     }
 }
