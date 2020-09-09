@@ -15,6 +15,7 @@ class RequestUtilsTest {
             + "Connection: keep-alive\n"
             + "Accept: */*";
     private static final String WHOLE_URL = "/user/create?userId=javajigi&password=password&name=포비&email=javajigi@slipp.net";
+    private static final String WHOLE_URL_WITHOUT_PARAMS = "/user/create";
     private static final String PATH = "/user/create";
     private static final Map<String, String> PARAMS = new HashMap<String, String>() {{
         put("userId", "javajigi");
@@ -39,5 +40,12 @@ class RequestUtilsTest {
     public void extractParams() {
         Map<String, String> params = RequestUtils.extractParams(WHOLE_URL);
         assertThat(params.equals(PARAMS));
+    }
+
+    @Test
+    public void paramsNotExist() {
+        assertThatThrownBy(() -> RequestUtils.extractParams(WHOLE_URL_WITHOUT_PARAMS))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("쿼리 파라미터가 존재하지 않습니다");
     }
 }
