@@ -8,12 +8,17 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import db.DataBase;
+import model.User;
 import utils.FileIoUtils;
+import utils.RequestUtils;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -31,16 +36,26 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             String request = extractRequest(in);
             logRequest(request);
-            String path = request.split(" ")[1];
-            String localPath = parseToLocalPath(path);
-
+            String wholeUrl = RequestUtils.extractWholeUrl(request);
+            String path = RequestUtils.extractPath(wholeUrl);
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = FileIoUtils.loadFileFromClasspath(localPath);
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+            if (path.equals("/user/create")) {
+                Map<String, String> userInfo = RequestUtils.extractParams(wholeUrl);
+                User user = new User(
+                    userInfo.get("userId"), userInfo.get("password"), userInfo.get("name"), userInfo.get("email"));
+                DataBase.addUser(user);
+                response200Header(dos, 0);
+            } else {
+                String localPath = parseToLocalPath(path);
+
+                byte[] body = FileIoUtils.loadFileFromClasspath(localPath);
+                response200Header(dos, body.length);
+                responseBody(dos, body);
+            }
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
+
     }
 
     private String extractRequest(InputStream inputStream) throws IOException {
@@ -60,8 +75,8 @@ public class RequestHandler implements Runnable {
     private void logRequest(String request) {
         logger.debug(
             System.lineSeparator() + "----- 요청 시작 -----"
-            + System.lineSeparator() + request
-            + "----- 요청 끝 -----");
+                + System.lineSeparator() + request
+                + "----- 요청 끝 -----");
     }
 
     private String parseToLocalPath(String path) {
