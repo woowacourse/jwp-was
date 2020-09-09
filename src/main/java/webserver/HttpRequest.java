@@ -19,26 +19,25 @@ public class HttpRequest {
     }
 
     public static HttpRequest of(BufferedReader br) throws IOException {
-        StringBuilder requestLine = new StringBuilder("Request Line");
         String line = br.readLine();
-        requestLine.append(lineSeparator);
-        requestLine.append(line);
-        requestLine.append(lineSeparator);
-        logger.debug("{}", requestLine);
+        String requestLine = line;
+        logger.debug("Request Line{}", lineSeparator);
+        logger.debug("{}{}", line, lineSeparator);
 
-        StringBuilder header = new StringBuilder("Header");
+        StringBuilder header = new StringBuilder();
         while (!line.equals("")) {
-            header.append(lineSeparator);
             line = br.readLine();
+            header.append(lineSeparator);
             header.append(line);
 
             if (line == null) {
                 break;
             }
         }
+        logger.debug("Header{}", lineSeparator);
         logger.debug("{}", header);
 
-        return new HttpRequest(requestLine.toString(), header.toString());
+        return new HttpRequest(requestLine, header.toString());
     }
 
     public String getUrlPath() {
