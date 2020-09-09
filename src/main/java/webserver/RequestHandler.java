@@ -54,7 +54,7 @@ public class RequestHandler implements Runnable {
             } else {
                 String localPath = parseToLocalPath(path);
                 byte[] body = FileIoUtils.loadFileFromClasspath(localPath);
-                response200Header(dos, body.length);
+                response200Header(dos, body.length, parseContentType(path));
                 responseBody(dos, body);
             }
         } catch (IOException | URISyntaxException e) {
@@ -76,10 +76,10 @@ public class RequestHandler implements Runnable {
         return "./static" + path;
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Type: " + contentType + "\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
@@ -104,5 +104,12 @@ public class RequestHandler implements Runnable {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private String parseContentType(String path) {
+        if (path.endsWith(".css")) {
+            return "text/css";
+        }
+        return "text/html;charset=utf-8";
     }
 }
