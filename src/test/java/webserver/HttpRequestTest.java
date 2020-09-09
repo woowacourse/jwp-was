@@ -24,6 +24,6 @@ class HttpRequestTest {
             + "Cookie: Idea-3be1aa82=33bac591-b163-42cb-9b63-333572a05b11";
         HttpRequest httpRequest = new HttpRequest(requestLine, header);
 
-        assertThat(httpRequest.getUrl()).isEqualTo("/index.html");
+        assertThat(httpRequest.getUrlPath()).isEqualTo("./templates/index.html");
     }
 }

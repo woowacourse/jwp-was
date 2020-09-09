@@ -41,8 +41,8 @@ public class HttpRequest {
         return new HttpRequest(requestLine.toString(), header.toString());
     }
 
-    public String getUrl() {
-        System.out.println(requestLine);
-        return "/index.html";
+    public String getUrlPath() {
+        String[] tokens = requestLine.split(" ");
+        return String.format("./templates%s", tokens[1]);
     }
 }
