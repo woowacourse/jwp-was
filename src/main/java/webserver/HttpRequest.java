@@ -21,27 +21,30 @@ public class HttpRequest {
     public static HttpRequest of(BufferedReader br) throws IOException {
         String line = br.readLine();
         String requestLine = line;
-        logger.debug("Request Line{}", lineSeparator);
-        logger.debug("{}{}", line, lineSeparator);
+        logger.debug("Request Line{}{}{}", lineSeparator, line, lineSeparator);
 
         StringBuilder header = new StringBuilder();
         while (!line.equals("")) {
             line = br.readLine();
-            header.append(lineSeparator);
             header.append(line);
+            header.append(lineSeparator);
 
             if (line == null) {
                 break;
             }
         }
-        logger.debug("Header{}", lineSeparator);
-        logger.debug("{}", header);
+        logger.debug("Header{}{}", lineSeparator, header);
 
         return new HttpRequest(requestLine, header.toString());
     }
 
-    public String getUrlPath() {
-        String[] tokens = requestLine.split(" ");
-        return String.format("./templates%s", tokens[1]);
+    public String getFilePath() {
+        String urlPath = requestLine.split(" ")[1];
+
+        if (urlPath.endsWith("html") || urlPath.equals("/favicon.ico")) {
+            return String.format("./templates%s", urlPath);
+        }
+
+        return String.format("./static%s", urlPath);
     }
 }
