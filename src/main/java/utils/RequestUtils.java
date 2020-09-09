@@ -1,5 +1,7 @@
 package utils;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -8,13 +10,42 @@ import java.util.Map;
 
 public class RequestUtils {
 
-    public static final String WHOLE_URL_DELIMITER = " ";
-    public static final String PATH_PARAM_DELIMITER = "\\?";
-    public static final String PARAM_BUNDLE_DELIMITER = "&";
-    public static final String KEY_VALUE_DELIMITER = "=";
+    private static final String WHOLE_URL_DELIMITER = " ";
+    private static final String PATH_PARAM_DELIMITER = "\\?";
+    private static final String PARAM_BUNDLE_DELIMITER = "&";
+    private static final String KEY_VALUE_DELIMITER = "=";
+    private static final String HEADER_DELIMITER = ": ";
 
-    public static String extractWholeUrl(String request) {
-        String wholeUrl = request.split(WHOLE_URL_DELIMITER)[1];
+    public static String extractHeader(BufferedReader bufferedReaderRequest) throws IOException {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        String line = bufferedReaderRequest.readLine();
+        while (line != null && !line.isEmpty()) {
+            stringBuilder.append(line);
+            stringBuilder.append(System.lineSeparator());
+            line = bufferedReaderRequest.readLine();
+        }
+
+        return stringBuilder.toString();
+    }
+
+    public static String extractHeaderValue(String requestHeader, String key) {
+        String[] headers = requestHeader.split(System.lineSeparator());
+        for (String header : headers) {
+            String[] keyValue = header.split(HEADER_DELIMITER, 2);
+            if (keyValue[0].equals(key)) {
+                return keyValue[1];
+            }
+        }
+        throw new IllegalArgumentException("키에 해당하는 헤더 값이 존재 하지 않습니다");
+    }
+
+    public static String extractBody(BufferedReader request, String contentLength) throws IOException {
+        return IOUtils.readData(request, Integer.parseInt(contentLength));
+    }
+
+    public static String extractWholeUrl(String requestHeader) {
+        String wholeUrl = requestHeader.split(WHOLE_URL_DELIMITER)[1];
         try {
             return URLDecoder.decode(wholeUrl, StandardCharsets.UTF_8.name());
         } catch (UnsupportedEncodingException e) {
