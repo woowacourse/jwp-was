@@ -10,7 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.IOUtils;
 import webserver.httpmessages.request.Request;
-import webserver.resourcehandler.ResourcesHandler;
+import webserver.resource.Resource;
+import webserver.resource.ResourcesHandler;
 
 public class RequestHandler implements Runnable {
 
@@ -33,21 +34,28 @@ public class RequestHandler implements Runnable {
         ) {
             String httpRequestFormat = IOUtils.transformInputStreamToString(in);
             Request httpRequest = new Request(httpRequestFormat);
+            System.out.println("## 요청 들어옴! ##");
+            System.out.println(httpRequestFormat);
+            System.out.println("##################");
 
-            byte[] body = resourcesHandler.convertUriToResource(httpRequest.getUri());
+            Resource resourceForResponse = resourcesHandler.convertUriToResource(httpRequest.getUri());
+
+            byte[] body = resourceForResponse.getResource();
+            String contentType = resourceForResponse.getContentType();
 
             DataOutputStream dos = new DataOutputStream(out);
-            response200Header(dos, body.length);
+            response200Header(dos, body.length, contentType);
             responseBody(dos, body);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response200Header(DataOutputStream dos,
+            int lengthOfBodyContent, String contentType) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Type: " + contentType + ";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
