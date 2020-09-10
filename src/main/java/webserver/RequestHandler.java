@@ -33,9 +33,9 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(
                     new InputStreamReader(in, StandardCharsets.UTF_8));
             DataOutputStream dos = new DataOutputStream(out);
-            HttpRequest request = HttpRequest.from(br);
+            HttpRequest httpRequest = new HttpRequest(br);
             HttpResponse response = new HttpResponse(dos);
-            response.process(request);
+            response.process(httpRequest.getRequestHeader());
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
