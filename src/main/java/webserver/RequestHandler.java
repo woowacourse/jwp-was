@@ -9,7 +9,6 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -18,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import http.HttpStartLine;
 import model.User;
 import utils.FileIoUtils;
-import utils.StringSplitUtils;
 
 public class RequestHandler implements Runnable {
     private static final String TEMPLATES_PATH = "./templates";
@@ -43,21 +41,15 @@ public class RequestHandler implements Runnable {
             }
 
             HttpStartLine httpStartLine = new HttpStartLine(firstLine);
-            String path = httpStartLine.getUrl();
-            Map<String, String> userParams = new HashMap<>();
-            if (path.startsWith("/user/create")) {
-                String split = StringSplitUtils.splitAndFetch(path, "/", 2);
-                String fetch = StringSplitUtils.splitAndFetch(split, "\\?", 1);
-                String[] parameters = fetch.split("&");
-                for (String parameter : parameters) {
-                    String[] parameterKeyAndValue = parameter.split("=");
-                    userParams.put(parameterKeyAndValue[0], parameterKeyAndValue[1]);
-                }
+            String path = httpStartLine.getPath();
+            if (httpStartLine.isSamePath("/user/create")) {
+                Map<String, String> parameters = httpStartLine.getParameters();
+
                 User user = new User(
-                    userParams.get("userId"),
-                    userParams.get("password"),
-                    userParams.get("name"),
-                    userParams.get("email")
+                    parameters.get("userId"),
+                    parameters.get("password"),
+                    parameters.get("name"),
+                    parameters.get("email")
                 );
 
                 logger.debug("Saved User: {}", user);
