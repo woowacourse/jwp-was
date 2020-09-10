@@ -7,9 +7,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import model.HttpRequest;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -26,13 +29,11 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-            String line = bufferedReader.readLine();
-            logger.debug("request line : " + line);
-            while (!line.equals("")) {
-                line = bufferedReader.readLine();
-                logger.debug("header : " + line);
-            }
+            BufferedReader br = new BufferedReader(
+                    new InputStreamReader(in, StandardCharsets.UTF_8));
+            HttpRequest request = HttpRequest.from(br);
+            logger.debug(request.toString());
+            String requestUri = request.getPath();
 
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = "Hello World".getBytes();
