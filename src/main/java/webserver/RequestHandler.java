@@ -1,5 +1,6 @@
 package webserver;
 
+import db.DataBase;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -33,6 +34,8 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             RequestHeader requestHeader = new RequestHeader(bufferedReader);
+            ResponseHeader responseHeader = new ResponseHeader(new DataOutputStream(out));
+
             String resourcePath = UrlUtils.extractResourcePath(requestHeader.getFirstLine());
 
             if (resourcePath.startsWith("/user/create")) {
@@ -40,26 +43,30 @@ public class RequestHandler implements Runnable {
                     Map<String, String> requestParam = UrlUtils.extractRequestParamFromUrl(resourcePath);
                     if (isExistRequestParam(requestParam)) {
                         User user = bindParamsToUser(requestParam);
+                        DataBase.addUser(user);
                         logger.info("user : {}", user);
                     }
                 }
 
                 if (requestHeader.isPost()) {
-                    String body = requestHeader.getBody();
-                    Map<String, String> requestParam = UrlUtils.extractRequestParam(body);
+                    String requestBody = requestHeader.getBody();
+                    Map<String, String> requestParam = UrlUtils.extractRequestParam(requestBody);
                     if (isExistRequestParam(requestParam)) {
                         User user = bindParamsToUser(requestParam);
+                        DataBase.addUser(user);
                         logger.info("user : {}", user);
                     }
+
+                    byte[] responseFile = FileIoUtils.loadFileFromClasspath(TEMPLATES_PATH + "/index.html");
+                    responseHeader.createResponse302Header("/index.html");
+                    responseHeader.createResponseBody(responseFile);
+                    return;
                 }
-
             }
+            byte[] responseFile = FileIoUtils.loadFileFromClasspath(TEMPLATES_PATH + UrlUtils.extractFilePath(resourcePath));
 
-            byte[] body = FileIoUtils.loadFileFromClasspath(TEMPLATES_PATH + UrlUtils.extractFilePath(resourcePath));
-
-            DataOutputStream dos = new DataOutputStream(out);
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+            responseHeader.createResponse200Header(responseFile.length);
+            responseHeader.createResponseBody(responseFile);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
@@ -76,25 +83,5 @@ public class RequestHandler implements Runnable {
             .name(params.getOrDefault("name", DEFAULT_USER_BIND_VALUE))
             .email(params.getOrDefault("email", DEFAULT_USER_BIND_VALUE))
             .build();
-    }
-
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
     }
 }
