@@ -41,6 +41,6 @@ public class HttpUrl {
     }
 
     private boolean hasParameters() {
-        return url.contains("?");
+        return url.contains(PATH_AND_PARAMETER_DIVIDER);
     }
 }
