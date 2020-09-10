@@ -9,9 +9,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
 import java.util.Map;
-import java.util.Objects;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,31 +29,33 @@ public class RequestHandler implements Runnable {
     }
 
     public void run() {
-        logger
-            .debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
-                connection.getPort());
+        logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(), connection.getPort());
+        try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+            RequestHeader requestHeader = new RequestHeader(bufferedReader);
+            String resourcePath = UrlUtils.extractResourcePath(requestHeader.getFirstLine());
 
-        try (InputStream in = connection.getInputStream(); OutputStream out = connection
-            .getOutputStream()) {
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
-            BufferedReader bufferedReader = new BufferedReader(
-                new InputStreamReader(in, StandardCharsets.UTF_8));
-            String line = bufferedReader.readLine();
+            if (resourcePath.startsWith("/user/create")) {
+                if (requestHeader.isGet()) {
+                    Map<String, String> requestParam = UrlUtils.extractRequestParamFromUrl(resourcePath);
+                    if (isExistRequestParam(requestParam)) {
+                        User user = bindParamsToUser(requestParam);
+                        logger.info("user : {}", user);
+                    }
+                }
 
-            if (Objects.isNull(line)) {
-                return;
+                if (requestHeader.isPost()) {
+                    String body = requestHeader.getBody();
+                    Map<String, String> requestParam = UrlUtils.extractRequestParam(body);
+                    if (isExistRequestParam(requestParam)) {
+                        User user = bindParamsToUser(requestParam);
+                        logger.info("user : {}", user);
+                    }
+                }
+
             }
-            logger.info("line : {}", line);
-            String resourcePath = UrlUtils.extractResourcePath(line);
-            logger.info("resourcePath : {}", resourcePath);
-            Map<String, String> requestParam = UrlUtils.extractRequestParam(resourcePath);
 
-            if (isExistRequestParam(requestParam)) {
-                User user = bindParamsToUser(requestParam);
-                logger.info("user : {}", user);
-            }
-            byte[] body = FileIoUtils
-                .loadFileFromClasspath(TEMPLATES_PATH + UrlUtils.extractFilePath(resourcePath));
+            byte[] body = FileIoUtils.loadFileFromClasspath(TEMPLATES_PATH + UrlUtils.extractFilePath(resourcePath));
 
             DataOutputStream dos = new DataOutputStream(out);
             response200Header(dos, body.length);
@@ -66,7 +66,7 @@ public class RequestHandler implements Runnable {
     }
 
     private boolean isExistRequestParam(Map<String, String> requestParam) {
-        return !Collections.emptyMap().equals(requestParam);
+        return !requestParam.isEmpty();
     }
 
     private User bindParamsToUser(Map<String, String> params) {

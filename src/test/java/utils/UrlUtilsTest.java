@@ -22,6 +22,41 @@ public class UrlUtilsTest {
 
     private static Stream<Arguments> provideStringsForExtractRequestParam() {
         return Stream.of(
+            Arguments
+                .of("userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net",
+                    new HashMap<String, String>() {{
+                        put("userId", "javajigi");
+                        put("password", "password");
+                        put("name", "%EB%B0%95%EC%9E%AC%EC%84%B1");
+                        put("email", "javajigi%40slipp.net");
+                    }}),
+            Arguments
+                .of("userId=javajigi&password=password&name=%EB%B0%95%EC%=9E%AC%EC%84%B1&email=javajigi%40slipp.net&",
+                    new HashMap<String, String>() {{
+                        put("userId", "javajigi");
+                        put("password", "password");
+                        put("email", "javajigi%40slipp.net");
+                    }})
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideStringsForExtractRequestParam")
+    void extractRequestParam(String input, Map<String, String> expected) {
+        Map<String, String> result = UrlUtils.extractRequestParam(input);
+        assertThat(result).isEqualTo(expected);
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {"GET / HTTP/1.1, GET", "POST /index.html HTTP/1.1, POST",
+        "GET /user/login.html HTTP/1.1, GET"})
+   void extractHttpMethod(String input, String expected) {
+        String resourcePath = UrlUtils.extractHttpMethod(input);
+        assertThat(resourcePath).isEqualTo(expected);
+    }
+
+    private static Stream<Arguments> provideStringsForExtractRequestParamFromUrl() {
+        return Stream.of(
             Arguments.of(null, new HashMap<>()),
             Arguments.of("", new HashMap<>()),
             Arguments.of("  ", new HashMap<>()),
@@ -45,9 +80,9 @@ public class UrlUtilsTest {
     }
 
     @ParameterizedTest
-    @MethodSource("provideStringsForExtractRequestParam")
-    void extractRequestParam(String input, Map<String, String> expected) {
-        Map<String, String> result = UrlUtils.extractRequestParam(input);
+    @MethodSource("provideStringsForExtractRequestParamFromUrl")
+    void extractRequestParamFromUrl(String input, Map<String, String> expected) {
+        Map<String, String> result = UrlUtils.extractRequestParamFromUrl(input);
         assertThat(result).isEqualTo(expected);
     }
 

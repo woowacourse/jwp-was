@@ -1,5 +1,6 @@
 package utils;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -30,6 +31,10 @@ public class UrlUtils {
         return resourcePath;
     }
 
+    public static String extractHttpMethod(String firstLine) {
+        return firstLine.split(HTTP_HEADER_DELIMITER)[0];
+    }
+
     public static String extractFilePath(String resourcePath) {
         String filePath = resourcePath.split(PARAMS_DELIMITER)[FILE_INDEX];
 
@@ -39,18 +44,23 @@ public class UrlUtils {
         return filePath;
     }
 
-    public static Map<String, String> extractRequestParam(String resourcePath) {
-        Map<String, String> requestParams = new HashMap<>();
-
+    public static Map<String, String> extractRequestParamFromUrl(String resourcePath) {
         if (isBlank(resourcePath)) {
-            return requestParams;
+            return Collections.emptyMap();
         }
         String[] resourcePathSegment = resourcePath.split(PARAMS_DELIMITER);
 
         if (isNotAccessibleParams(resourcePathSegment)) {
-            return requestParams;
+            return Collections.emptyMap();
         }
         String params = resourcePathSegment[PARAMS_INDEX];
+
+        return extractRequestParam(params);
+    }
+
+    public static Map<String, String> extractRequestParam(String params) {
+        Map<String, String> requestParams = new HashMap<>();
+
         String[] paramsSegments = params.split(PARAM_DELIMITER);
         for (String paramsSegment : paramsSegments) {
             String[] paramSegment = paramsSegment.split(PARAM_KEY_VALUE_DELIMITER);
