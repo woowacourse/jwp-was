@@ -9,11 +9,11 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import http.HttpRequest;
 import http.HttpStartLine;
 import model.User;
 import utils.FileIoUtils;
@@ -35,21 +35,17 @@ public class RequestHandler implements Runnable {
         try (InputStream inputStream = connection.getInputStream(); OutputStream outputStream = connection.getOutputStream()) {
             BufferedReader bufferedReader = new BufferedReader(
                 new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-            String firstLine = bufferedReader.readLine();
-            if (firstLine == null) {
-                return;
-            }
+            HttpRequest httpRequest = new HttpRequest(bufferedReader);
 
-            HttpStartLine httpStartLine = new HttpStartLine(firstLine);
+            HttpStartLine httpStartLine = httpRequest.getHttpStartLine();
             String path = httpStartLine.getPath();
             if (httpStartLine.isSamePath("/user/create")) {
-                Map<String, String> parameters = httpStartLine.getParameters();
 
                 User user = new User(
-                    parameters.get("userId"),
-                    parameters.get("password"),
-                    parameters.get("name"),
-                    parameters.get("email")
+                    httpRequest.getHttpBodyValueOf("userId"),
+                    httpRequest.getHttpBodyValueOf("password"),
+                    httpRequest.getHttpBodyValueOf("name"),
+                    httpRequest.getHttpBodyValueOf("email")
                 );
 
                 logger.debug("Saved User: {}", user);
