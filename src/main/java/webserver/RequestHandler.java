@@ -1,6 +1,5 @@
 package webserver;
 
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -30,7 +29,8 @@ public class RequestHandler implements Runnable {
 		try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 
-			printHeader(bufferedReader);
+			HttpMainHeader httpMainHeader = extractHttpMainHeader(bufferedReader);
+
 			DataOutputStream dos = new DataOutputStream(out);
 			byte[] body = "Hello World".getBytes();
 			response200Header(dos, body.length);
@@ -40,19 +40,8 @@ public class RequestHandler implements Runnable {
 		}
 	}
 
-	private void printHeader(BufferedReader bufferedReader) throws IOException {
-		System.out.println("request header start: ");
-		String request = bufferedReader.readLine();
-		boolean isMainHeaders = false;
-		String requestUrl = "";
-		while (!request.equals("")) {
-			if (isMainHeaders) {
-				requestUrl = HeaderIOUtils.parseUrl(request);
-				isMainHeaders = true;
-			}
-			System.out.println("header : " + request);
-			request = bufferedReader.readLine();
-		}
+	private HttpMainHeader extractHttpMainHeader(BufferedReader bufferedReader) throws IOException {
+		return HeaderIOUtils.parseMainHeader(bufferedReader.readLine());
 	}
 
 	private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {

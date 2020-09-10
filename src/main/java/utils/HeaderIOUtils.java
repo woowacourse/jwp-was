@@ -1,9 +1,12 @@
 package utils;
 
+import webserver.HttpMainHeader;
+import webserver.HttpMethod;
+
 public class HeaderIOUtils {
 
-	public static String parseUrl(String mainHeadersLine) {
+	public static HttpMainHeader parseMainHeader(String mainHeadersLine) {
 		String[] mainHeaders = mainHeadersLine.split(" ");
-		return mainHeaders[1];
+		return new HttpMainHeader(HttpMethod.of(mainHeaders[0]), mainHeaders[1]);
 	}
 }
