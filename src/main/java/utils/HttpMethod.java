@@ -19,4 +19,8 @@ public enum HttpMethod {
             .findFirst()
             .orElseThrow(NoSuchElementException::new);
     }
+
+    public boolean isGet() {
+        return this == GET;
+    }
 }

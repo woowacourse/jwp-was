@@ -17,6 +17,7 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
+import utils.IOUtils;
 import utils.Request;
 
 public class RequestHandler implements Runnable {
@@ -38,17 +39,23 @@ public class RequestHandler implements Runnable {
 
             if (request.getHeader("filePath").equals("/user/create")) {
                 ObjectMapper objectMapper = new ObjectMapper();
-                User user = objectMapper.convertValue(request.getParams(), User.class);
+                User user = objectMapper.convertValue(IOUtils.parseStringToObject(request.getBody()), User.class);
+                System.err.println(user);
                 DataBase.addUser(user);
             }
 
             DataOutputStream dos = new DataOutputStream(out);
+            response(request, dos);
+        } catch (IOException | URISyntaxException e) {
+            logger.error(e.getMessage());
+        }
+    }
 
+    private void response(Request request, DataOutputStream dos) throws IOException, URISyntaxException {
+        if (request.isGetRequest()) {
             byte[] fileData = fileDataFinder(request);
             response200Header(dos, fileData.length);
             responseBody(dos, fileData);
-        } catch (IOException | URISyntaxException e) {
-            logger.error(e.getMessage());
         }
     }
 
@@ -62,7 +69,7 @@ public class RequestHandler implements Runnable {
             lines.add(line);
         }
 
-        return new Request(lines);
+        return new Request(lines, br);
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
