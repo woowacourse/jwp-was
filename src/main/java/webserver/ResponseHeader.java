@@ -25,10 +25,10 @@ public class ResponseHeader {
         }
     }
 
-    public void createResponse200Header(int lengthOfBodyContent) {
+    public void createResponse200Header(int lengthOfBodyContent, String resourcePath) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Type: " + HttpContentType.findContentType(resourcePath) + ";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {

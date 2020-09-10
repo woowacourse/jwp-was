@@ -22,6 +22,7 @@ public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private static final String DEFAULT_USER_BIND_VALUE = null;
     private static final String TEMPLATES_PATH = "./templates";
+    private static final String STATIC_PATH = "./static";
 
     private Socket connection;
 
@@ -63,10 +64,18 @@ public class RequestHandler implements Runnable {
                     return;
                 }
             }
-            byte[] responseFile = FileIoUtils.loadFileFromClasspath(TEMPLATES_PATH + UrlUtils.extractFilePath(resourcePath));
 
-            responseHeader.createResponse200Header(responseFile.length);
-            responseHeader.createResponseBody(responseFile);
+            if (HttpContentType.isHtmlFile(resourcePath)) {
+                byte[] responseFile = FileIoUtils.loadFileFromClasspath(TEMPLATES_PATH + UrlUtils.extractFilePath(resourcePath));
+                responseHeader.createResponse200Header(responseFile.length, resourcePath);
+                responseHeader.createResponseBody(responseFile);
+            }
+
+            if (!HttpContentType.isHtmlFile(resourcePath)) {
+                byte[] responseStaticFile = FileIoUtils.loadFileFromClasspath(STATIC_PATH + resourcePath);
+                responseHeader.createResponse200Header(responseStaticFile.length, resourcePath);
+                responseHeader.createResponseBody(responseStaticFile);
+            }
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
