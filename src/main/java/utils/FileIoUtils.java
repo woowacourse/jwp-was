@@ -9,7 +9,6 @@ import java.nio.file.Paths;
 public class FileIoUtils {
 
     public static byte[] loadFileFromClasspath(String filePath) throws IOException, URISyntaxException {
-        System.err.println("크아아" + filePath);
         Path path = Paths.get(FileIoUtils.class.getClassLoader().getResource(filePath).toURI());
         return Files.readAllBytes(path);
     }

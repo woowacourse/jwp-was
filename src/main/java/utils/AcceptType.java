@@ -3,14 +3,18 @@ package utils;
 import java.util.stream.Stream;
 
 public enum AcceptType {
-    HTML("./templates"),
-    CSS("./static"),
-    JS("./static");
+    HTML("./templates", "text/html"),
+    CSS("./static", "text/css"),
+    JS("./static", "text/js"),
+    TTF("./static", "text/font"),
+    WOFF("./static", "text/font");
 
     private final String fileRootPath;
+    private final String contentType;
 
-    AcceptType(String fileRootPath) {
+    AcceptType(String fileRootPath, String contentType) {
         this.fileRootPath = fileRootPath;
+        this.contentType = contentType;
     }
 
     public static AcceptType of(String filePath) {
@@ -22,5 +26,9 @@ public enum AcceptType {
 
     public String getFileRootPath() {
         return fileRootPath;
+    }
+
+    public String getContentType() {
+        return contentType;
     }
 }

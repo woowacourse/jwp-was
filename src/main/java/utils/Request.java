@@ -11,6 +11,7 @@ public class Request {
 
     private Map<String, Object> headers;
     private Map<String, String> params;
+    private AcceptType type;
     private String body;
 
     public Request(List<String> requestHeaders, BufferedReader bufferedReader) throws IOException {
@@ -45,6 +46,13 @@ public class Request {
         requestHeaders.stream()
             .map(line -> line.split(": "))
             .forEach(pair -> headers.put(pair[0], pair[1]));
+        parseAcceptType();
+    }
+
+    private void parseAcceptType() {
+        String filePath = (String) getHeader("filePath");
+        String fileExtension = IOUtils.extractExtension(filePath);
+        this.type = AcceptType.of(fileExtension);
     }
 
     private void parseParams(String filePath) {
@@ -77,6 +85,10 @@ public class Request {
     public boolean isPostRequest() {
         HttpMethod method = (HttpMethod) headers.get("method");
         return method.isPost();
+    }
+
+    public AcceptType getType() {
+        return type;
     }
 
     public String getBody() {
