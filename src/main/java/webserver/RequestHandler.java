@@ -3,6 +3,8 @@ package webserver;
 import java.io.*;
 import java.net.Socket;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import exception.InvalidFilePathException;
@@ -25,22 +27,24 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-            String requestHeaderFirstLine = bufferedReader.readLine();
-            String filePath = RequestUtils.getFilePathInRequestHeader(requestHeaderFirstLine);
+            Map<String,String> requestHeader = RequestUtils.transferRequestHeaderToMap(bufferedReader);
+            String target = requestHeader.get("Target");
+            String filePath = RequestUtils.getFilePath(target);
+            String contentType = requestHeader.get("Accept").split(",")[0];
 
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
-            response200Header(dos, body.length);
+            response200Header(dos, contentType, body.length);
             responseBody(dos, body);
         } catch (IOException | URISyntaxException | InvalidFilePathException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response200Header(DataOutputStream dos, String contentType, int lengthOfBodyContent) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Type: " + contentType + ";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
