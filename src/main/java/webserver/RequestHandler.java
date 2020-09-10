@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import utils.FileIoUtils;
 import webserver.domain.request.HttpRequest;
+import webserver.domain.response.HttpResponse;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -29,36 +30,27 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-            HttpRequest httpRequest = HttpRequest.of(br);
-            String path = httpRequest.getPath();
-
-            DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = FileIoUtils.loadFileFromClasspath(path);
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+            HttpRequest httpRequest = generateHttpRequest(in);
+            HttpResponse httpResponse = controlRequestAndResponse(httpRequest);
+            respondToHttpRequest(out, httpResponse);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+    private HttpRequest generateHttpRequest(InputStream in) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+        return HttpRequest.of(br);
     }
 
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+    private HttpResponse controlRequestAndResponse(HttpRequest httpRequest) throws IOException, URISyntaxException {
+        String path = httpRequest.getPath();
+        byte[] body = FileIoUtils.loadFileFromClasspath(path);
+        return HttpResponse.of("200", body);
+    }
+
+    private void respondToHttpRequest(OutputStream out, HttpResponse httpResponse) {
+        DataOutputStream dos = new DataOutputStream(out);
+        httpResponse.respond(dos);
     }
 }
