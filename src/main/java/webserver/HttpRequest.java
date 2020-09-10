@@ -8,6 +8,7 @@ import java.util.Map;
 import utils.IOUtils;
 
 public class HttpRequest {
+    public static final String PATH = "path";
     private static final String CONTENT_LENGTH = "Content-Length";
 
     private enum HttpMethod {
@@ -39,8 +40,8 @@ public class HttpRequest {
         HttpMethod httpMethod = HttpMethod.valueOf(tokens[0]);
         String[] urlAndParams = tokens[1].split("\\?");
         String path = urlAndParams[0];
-        Map<String, String> params = new HashMap<>();
 
+        Map<String, String> params = new HashMap<>();
         if (urlAndParams.length > 1) {
             String[] paramTokens = urlAndParams[1].split("&");
             for (String paramToken : paramTokens) {
@@ -51,7 +52,7 @@ public class HttpRequest {
 
         Map<String, String> httpsHeaders = new HashMap<>();
         httpsHeaders.put("Http-Version", tokens[2]);
-        httpsHeaders.putAll(IOUtils.readRequestHeader(bufferedReader));
+        httpsHeaders.putAll(IOUtils.readRequestHeaders(bufferedReader));
 
         String body = null;
 
