@@ -6,6 +6,6 @@ public class PathUtils {
             throw new IllegalArgumentException();
         }
         String[] tokens = line.split(" ");
-        return tokens[1];
+        return "./templates" + tokens[1];
     }
 }
