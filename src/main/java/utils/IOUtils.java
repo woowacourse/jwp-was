@@ -1,10 +1,9 @@
 package utils;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class IOUtils {
@@ -15,20 +14,16 @@ public class IOUtils {
         return String.copyValueOf(body);
     }
 
-    public static Map<String, String> parseStringToObject(String paramsSequence) {
+    public static Stream<String[]> parseParamsSequence(String paramsSequence) {
         return Stream.of(paramsSequence.split("&"))
-            .map(param -> param.split("="))
-            .collect(Collectors.toMap(pair -> pair[0], x -> x[1]));
+            .map(param -> param.split("="));
     }
 
-    public static String extractExtension(String filePath) {
-        return filePath.substring(filePath.lastIndexOf(".") + 1);
-    }
+    public static Map<String, String> parseStringToObject(String paramsSequence) {
+        Map<String, String> object = new HashMap<>();
+        parseParamsSequence(paramsSequence)
+            .forEach(pair -> object.put(pair[0], pair[1]));
 
-    public static void writeWithLineSeparator(DataOutputStream dos, String value) throws IOException {
-        StringBuilder builder = new StringBuilder(value);
-        StringBuilder withLineSeparator = builder.append(System.lineSeparator());
-
-        dos.writeBytes(withLineSeparator.toString());
+        return object;
     }
 }

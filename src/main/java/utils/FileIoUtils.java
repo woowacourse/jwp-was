@@ -11,10 +11,7 @@ import java.util.Optional;
 public class FileIoUtils {
 
     public static byte[] loadFileFromClasspath(String filePath) throws IOException, URISyntaxException {
-        Path path = Paths.get(Optional.ofNullable(FileIoUtils.class.getClassLoader().getResource(filePath))
-            .orElse(new URL("/"))
-            .toURI()
-        );
+        Path path = Paths.get(FileIoUtils.class.getClassLoader().getResource(filePath).toURI());
         return Files.readAllBytes(path);
     }
 }
