@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 
 public class IOUtils {
     private static final Logger logger = LoggerFactory.getLogger(IOUtils.class);
-    private static final int REQUEST_URL_INDEX = 1;
 
     /**
      * @param BufferedReader는
@@ -26,7 +25,7 @@ public class IOUtils {
         return String.copyValueOf(body);
     }
 
-    public static Map<String, String> readRequestHeader(BufferedReader bufferedReader) throws
+    public static Map<String, String> readRequestHeaders(BufferedReader bufferedReader) throws
             IOException {
         String line = null;
         Map<String, String> requestHeaders = new HashMap<>();
@@ -39,8 +38,7 @@ public class IOUtils {
             requestHeaders.put(split[0], split[1]);
             logger.debug("Request Header: {}", line);
         }
-        
+
         return requestHeaders;
     }
-
 }

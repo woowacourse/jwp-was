@@ -1,11 +1,11 @@
 package utils;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.DisplayName;
@@ -27,7 +27,7 @@ public class IOUtilsTest {
 
     @DisplayName("Map형식의 Request Header를 추출한다.")
     @Test
-    void readRequestUrl_NonParams() throws IOException {
+    void readRequestHeaders() throws IOException {
         // given
         String requestHeader = "Host: localhost:8080\n"
                 + "Connection: keep-alive\n"
@@ -38,17 +38,16 @@ public class IOUtilsTest {
         StringReader stringReader = new StringReader(requestHeader);
         BufferedReader bufferedReader = new BufferedReader(stringReader);
         // when
-        Map<String, String> actual = IOUtils.readRequestHeader(bufferedReader);
+        Map<String, String> actual = IOUtils.readRequestHeaders(bufferedReader);
+        Map<String, String> expected = new HashMap<>();
+        expected.put("Host", "localhost:8080");
+        expected.put("Connection", "keep-alive");
+        expected.put("Content-Length", "59");
+        expected.put("Content-Type", "application/x-www-form-urlencoded");
+        expected.put("Accept", "*/*");
 
         // then
-        assertAll(
-                () -> assertThat(actual.get("Host")).isEqualTo("localhost:8080"),
-                () -> assertThat(actual.get("Connection")).isEqualTo("keep-alive"),
-                () -> assertThat(actual.get("Content-Length")).isEqualTo("59"),
-                () -> assertThat(actual.get("Content-Type")).isEqualTo(
-                        "application/x-www-form-urlencoded"),
-                () -> assertThat(actual.get("Accept")).isEqualTo("*/*")
-        );
+        assertThat(actual).isEqualTo(expected);
     }
 
 }
