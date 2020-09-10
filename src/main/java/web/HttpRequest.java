@@ -1,4 +1,4 @@
-package model;
+package web;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,7 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class HttpRequest {
+    private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
     static final String NEW_LINE = "\n";
     static final String EMPTY = "";
     private static final String BLANK = " ";
@@ -17,6 +21,7 @@ public class HttpRequest {
 
     HttpRequest(List<String> request) {
         this.request = request;
+        logger.debug(toString());
     }
 
     public static HttpRequest from(BufferedReader br) throws IOException {
@@ -52,7 +57,7 @@ public class HttpRequest {
     @Override
     public String toString() {
         return "HttpRequest{" +
-                "request=" + request +
+                "header=" + request +
                 '}';
     }
 }

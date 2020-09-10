@@ -7,4 +7,4 @@
    - [x] Request Header를 파싱하여 원하는 정보 찾기
         - [x] 모든 Request header 출력하기
         - [x] Request에서 path 분리하기
-   - [ ] path에 해당하는 파일 읽어 응답하기
+   - [x] path에 해당하는 파일 읽어 응답하기
