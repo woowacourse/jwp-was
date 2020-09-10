@@ -49,7 +49,7 @@ public class RequestHandler implements Runnable {
     private void response(Request request, DataOutputStream dos) throws IOException, URISyntaxException {
         if (request.isGetRequest()) {
             byte[] fileData = fileDataFinder(request);
-            response200Header(dos, fileData.length);
+            response200Header(request, dos, fileData.length);
             responseBody(dos, fileData);
         }
     }
@@ -67,10 +67,11 @@ public class RequestHandler implements Runnable {
         return new Request(lines, br);
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response200Header(Request request, DataOutputStream dos, int lengthOfBodyContent) {
+        AcceptType type = request.getType();
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Type: " + type.getContentType() + ";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
@@ -107,10 +108,7 @@ public class RequestHandler implements Runnable {
     }
 
     private byte[] fileDataFinder(Request request) throws IOException, URISyntaxException {
-        String filePath = (String) request.getHeader("filePath");
-        String fileExtension = IOUtils.extractExtension(filePath);
-        AcceptType acceptType = AcceptType.of(fileExtension);
-
-        return FileIoUtils.loadFileFromClasspath(acceptType.getFileRootPath() + request.getHeader("filePath"));
+        AcceptType type = request.getType();
+        return FileIoUtils.loadFileFromClasspath(type.getFileRootPath() + request.getHeader("filePath"));
     }
 }
