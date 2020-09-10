@@ -9,6 +9,10 @@ import java.io.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import http.RequestHeader;
+import http.RequestLine;
+import http.RequestMethod;
+
 public class IOUtilsTest {
     private static final Logger logger = LoggerFactory.getLogger(IOUtilsTest.class);
 
@@ -21,14 +25,14 @@ public class IOUtilsTest {
         logger.debug("parse body : {}", IOUtils.readData(br, data.length()));
     }
 
-    @DisplayName("request line을 입력됐을 때 URL 추출")
+    @DisplayName("request line을 객체로 변환하는 메서드")
     @Test
-    void extractURLTest() {
-        String requestLine = "GET /index.html HTTP/1.1";
+    void ofReqeustLineTest() {
+        RequestLine requestLine = IOUtils.ofRequestLine("GET /index.html HTTP/1.1");
 
-        String url = IOUtils.extractURL(requestLine);
-
-        assertThat(url).isEqualTo("/index.html");
+        assertThat(requestLine.getMethod()).isEqualTo(RequestMethod.GET);
+        assertThat(requestLine.getUrl()).isEqualTo("/index.html");
+        assertThat(requestLine.getProtocol()).isEqualTo("HTTP/1.1");
     }
 
     @DisplayName("request를 로그로 남김")
@@ -43,13 +47,16 @@ public class IOUtilsTest {
         IOUtils.printRequest(in);
     }
 
-    @DisplayName("")
+    @DisplayName("requestHeader 만들기 테스트")
     @Test
-    void extractQueryParamsTest() {
-        String url = "/user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
+    void ofRequestHeaderTest() throws IOException {
+        String request = "Host: localhost:8080\n" +
+                "Connection: keep-alive\n" +
+                "Accept: */*";
+        InputStream in = new ByteArrayInputStream(request.getBytes());
+        BufferedReader br = new BufferedReader(new InputStreamReader(in));
+        RequestHeader requestHeader = IOUtils.ofRequestHeader(br);
 
-//        String[] queryParams = IOUtils.extractQueryParams(url);
-
-//        assertThat(queryParams).hasSize(4);
+        assertThat(requestHeader.getRequestHeaders()).hasSize(3);
     }
 }

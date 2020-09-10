@@ -10,6 +10,9 @@ import java.net.Socket;
 import java.net.URISyntaxException;
 import java.util.Map;
 
+import http.Request;
+import http.RequestLine;
+import http.RequestMethod;
 import mapper.QueryParams;
 import model.User;
 import org.slf4j.Logger;
@@ -35,14 +38,22 @@ public class RequestHandler implements Runnable {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             DataOutputStream dos = new DataOutputStream(out);
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
-            String requestUrl = IOUtils.extractURL(br.readLine());
             byte[] body = null;
-            if (requestUrl.endsWith(".html")) {
-                body = FileIoUtils.loadFileFromClasspath("./templates" + requestUrl);
-            } else {
-                QueryParams queryParams = new QueryParams(requestUrl);
-                Map<String, String> queryParamsMap = queryParams.getQueryParams();
-                User user = new User(queryParamsMap.get("userId"), queryParamsMap.get("password"), queryParamsMap.get("name"), queryParamsMap.get("email"));
+            Request request = new Request(br);
+            RequestLine requestLine = request.getRequestLine();
+
+            if(requestLine.getMethod() == RequestMethod.GET){
+                String requestUrl = requestLine.getUrl();
+                if (requestUrl.endsWith(".html")) {
+                    body = FileIoUtils.loadFileFromClasspath("./templates" + requestUrl);
+                } else{
+                    QueryParams queryParams = new QueryParams(requestUrl);
+                    Map<String, String> queryParamsMap = queryParams.getQueryParams();
+                    User user = new User(queryParamsMap.get("userId"), queryParamsMap.get("password"), queryParamsMap.get("name"), queryParamsMap.get("email"));
+                }
+            } else if(requestLine.getMethod() == RequestMethod.POST){
+                Map<String, String> requestBodies = request.getRequestBody().getRequestBodies();
+                User user = new User(requestBodies.get("userId"), requestBodies.get("password"), requestBodies.get("name"), requestBodies.get("email"));
             }
             response200Header(dos, body.length);
             responseBody(dos, body);
