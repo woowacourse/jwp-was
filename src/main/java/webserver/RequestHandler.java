@@ -1,8 +1,5 @@
 package webserver;
 
-import static utils.IOUtils.writeWithLineSeparator;
-
-import db.DataBase;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -14,16 +11,16 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
+import utils.Request;
 
 public class RequestHandler implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
-    private final Socket connection;
+    private Socket connection;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -35,20 +32,14 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             Request request = requestParser(in);
+            byte[] fileData = fileDataFinder(request);
 
             DataOutputStream dos = new DataOutputStream(out);
-            postRequestHandle(request, dos);
-            response(request, dos);
+
+            response200Header(dos, fileData.length);
+            responseBody(dos, fileData);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
-        }
-    }
-
-    private void response(Request request, DataOutputStream dos) throws IOException, URISyntaxException {
-        if (request.isGet()) {
-            byte[] fileData = fileDataFinder(request);
-            response200Header(request, dos, fileData.length);
-            responseBody(dos, fileData);
         }
     }
 
@@ -62,25 +53,15 @@ public class RequestHandler implements Runnable {
             lines.add(line);
         }
 
-        return new Request(lines, br);
+        return new Request(lines);
     }
 
-    private void response200Header(Request request, DataOutputStream dos, int lengthOfBodyContent) {
-        AcceptType type = request.getType();
+    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
         try {
-            writeWithLineSeparator(dos, "HTTP/1.1 200 OK ");
-            writeWithLineSeparator(dos, "Content-Type: " + type.getContentType() + ";charset=utf-8");
-            writeWithLineSeparator(dos, "Content-Length: " + lengthOfBodyContent);
-            dos.writeBytes(System.lineSeparator());
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void response302Header(DataOutputStream dos) {
-        try {
-            writeWithLineSeparator(dos, "HTTP/1.1 302 Found ");
-            writeWithLineSeparator(dos, "Location: http://localhost:8080/index.html ");
+            dos.writeBytes("HTTP/1.1 200 OK \r\n");
+            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -95,17 +76,7 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void postRequestHandle(Request request, DataOutputStream dos) {
-        if (request.isPost()) {
-            User user = request.getBody(User.class);
-
-            DataBase.addUser(user);
-            response302Header(dos);
-        }
-    }
-
     private byte[] fileDataFinder(Request request) throws IOException, URISyntaxException {
-        AcceptType type = request.getType();
-        return FileIoUtils.loadFileFromClasspath(type.getFileRootPath() + request.getPath());
+        return FileIoUtils.loadFileFromClasspath("./templates" + request.getHeader("filePath"));
     }
 }
