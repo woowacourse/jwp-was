@@ -1,12 +1,11 @@
 package http.request;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.function.Function;
 
+import utils.IOUtils;
+
 public enum ContentType {
-    APPLICATION_X_WWW_FORM_URLENCODED("application/x-www-form-urlencoded", ContentType::decode),
+    APPLICATION_X_WWW_FORM_URLENCODED("application/x-www-form-urlencoded", IOUtils::decode),
     APPLICATION_JSON("application/json", Function.identity());
 
     private String type;
@@ -19,13 +18,5 @@ public enum ContentType {
 
     public String parse(String input) {
         return parse.apply(input);
-    }
-
-    private static String decode(String input) {
-        try {
-            return URLDecoder.decode(input, StandardCharsets.UTF_8.name());
-        } catch (UnsupportedEncodingException e) {
-            throw new AssertionError();
-        }
     }
 }

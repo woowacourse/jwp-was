@@ -42,8 +42,7 @@ class RequestHeaderTest {
 
     @Test
     public void construct() {
-        RequestHeader requestHeader = RequestHeader.from(REQUEST_BUFFERED_READER);
-        assertThat(requestHeader.getHeaders()).isEqualTo(HEADERS);
+        assertThat(REQUEST_HEADER.getHeaders()).isEqualTo(HEADERS);
     }
 
     @ParameterizedTest
