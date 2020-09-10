@@ -6,7 +6,9 @@ import java.util.function.Predicate;
 public enum HttpContentType {
     HTML(".html", "text/html", false),
     CSS(".css", "text/css", true),
-    JS(".js", "text/javascript", true);
+    JS(".js", "text/javascript", true),
+    WOFF(".woff", "text/font", true),
+    TTF(".ttf", "text/font", true);
 
     private final String extension;
     private final String contentType;
