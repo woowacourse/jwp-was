@@ -15,17 +15,16 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import http.HttpStartLine;
 import model.User;
 import utils.FileIoUtils;
 import utils.StringSplitUtils;
 
 public class RequestHandler implements Runnable {
-	private static final String REQUEST_HEADER_DELIMITER = " ";
-	private static final int PATH_INDEX = 1;
-	private static final String TEMPLATES_PATH = "./templates";
-	private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final String TEMPLATES_PATH = "./templates";
+    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
-	private Socket connection;
+    private Socket connection;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -33,34 +32,36 @@ public class RequestHandler implements Runnable {
 
     public void run() {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
-			connection.getPort());
+            connection.getPort());
 
         try (InputStream inputStream = connection.getInputStream(); OutputStream outputStream = connection.getOutputStream()) {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+            BufferedReader bufferedReader = new BufferedReader(
+                new InputStreamReader(inputStream, StandardCharsets.UTF_8));
             String firstLine = bufferedReader.readLine();
             if (firstLine == null) {
                 return;
             }
 
-			String path = StringSplitUtils.splitAndFetch(firstLine, REQUEST_HEADER_DELIMITER, PATH_INDEX);
-			Map<String, String> userParams = new HashMap<>();
+            HttpStartLine httpStartLine = new HttpStartLine(firstLine);
+            String path = httpStartLine.getUrl();
+            Map<String, String> userParams = new HashMap<>();
             if (path.startsWith("/user/create")) {
-				String split = StringSplitUtils.splitAndFetch(path, "/", 2);
-				String fetch = StringSplitUtils.splitAndFetch(split, "\\?", 1);
-				String[] parameters = fetch.split("&");
-				for (String parameter : parameters) {
-					String[] parameterKeyAndValue = parameter.split("=");
-					userParams.put(parameterKeyAndValue[0], parameterKeyAndValue[1]);
-				}
-				User user = new User(
-					userParams.get("userId"),
-					userParams.get("password"),
-					userParams.get("name"),
-					userParams.get("email")
-				);
+                String split = StringSplitUtils.splitAndFetch(path, "/", 2);
+                String fetch = StringSplitUtils.splitAndFetch(split, "\\?", 1);
+                String[] parameters = fetch.split("&");
+                for (String parameter : parameters) {
+                    String[] parameterKeyAndValue = parameter.split("=");
+                    userParams.put(parameterKeyAndValue[0], parameterKeyAndValue[1]);
+                }
+                User user = new User(
+                    userParams.get("userId"),
+                    userParams.get("password"),
+                    userParams.get("name"),
+                    userParams.get("email")
+                );
 
-				logger.debug("Saved User: {}", user);
-			}
+                logger.debug("Saved User: {}", user);
+            }
 
             DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
             byte[] body = FileIoUtils.loadFileFromClasspath(TEMPLATES_PATH + path);
