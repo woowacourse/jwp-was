@@ -1,5 +1,7 @@
 package webserver;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import db.DataBase;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -11,6 +13,7 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
@@ -32,10 +35,16 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             Request request = requestParser(in);
-            byte[] fileData = fileDataFinder(request);
+
+            if (request.getHeader("filePath").equals("/user/create")) {
+                ObjectMapper objectMapper = new ObjectMapper();
+                User user = objectMapper.convertValue(request.getParams(), User.class);
+                DataBase.addUser(user);
+            }
 
             DataOutputStream dos = new DataOutputStream(out);
 
+            byte[] fileData = fileDataFinder(request);
             response200Header(dos, fileData.length);
             responseBody(dos, fileData);
         } catch (IOException | URISyntaxException e) {

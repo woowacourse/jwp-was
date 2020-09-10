@@ -20,13 +20,16 @@ public class Request {
         String[] splitHeaderFirstLine = headerFirstLine.split(" ");
 
         headers.put("method", HttpMethod.of(splitHeaderFirstLine[0]));
-        headers.put("filePath", splitHeaderFirstLine[1]);
+        headers.put("filePath", splitHeaderFirstLine[1].split("\\?")[0]);
         headers.put("httpVersion", splitHeaderFirstLine[2]);
 
         parseParams(splitHeaderFirstLine[1]);
     }
 
     private void parseParams(String filePath) {
+        if (!filePath.contains("?")) {
+            return;
+        }
         String paramsSequence = filePath.split("\\?")[1];
 
         Stream.of(paramsSequence.split("&"))
@@ -36,5 +39,9 @@ public class Request {
 
     public Object getHeader(String name) {
         return headers.get(name);
+    }
+
+    public Map<String, String> getParams() {
+        return params;
     }
 }
