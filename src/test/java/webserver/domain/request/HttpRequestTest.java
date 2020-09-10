@@ -1,12 +1,10 @@
-package webserver;
+package webserver.domain.request;
 
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import webserver.domain.request.HttpRequest;
-import webserver.domain.request.RequestLine;
 
 class HttpRequestTest {
     @DisplayName("요청에 해당하는 templates 자원의 경로를 반환한다.")
