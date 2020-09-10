@@ -15,3 +15,10 @@
 *구현 기능 목록*
 - [x] Request Parameter 추출
 - [x] 사용자가 입력한 값 저장
+
+### 요구사항3
+> http://localhost:8080/user/form.html 파일의 form 태그 method를 get에서 post로 수정한 후 회원가입 기능이 정상적으로 동작하도록 구현한다.
+
+>*구현 기능 목록*
+- [ ] form.html 파일의 form 태그 method를 get에서 post로 수정
+- [ ] Request Body의 값 추출하기
