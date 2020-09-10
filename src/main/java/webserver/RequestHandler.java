@@ -16,6 +16,7 @@ import java.util.List;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.AcceptType;
 import utils.FileIoUtils;
 import utils.IOUtils;
 import utils.Request;
@@ -106,6 +107,10 @@ public class RequestHandler implements Runnable {
     }
 
     private byte[] fileDataFinder(Request request) throws IOException, URISyntaxException {
-        return FileIoUtils.loadFileFromClasspath("./templates" + request.getHeader("filePath"));
+        String filePath = (String) request.getHeader("filePath");
+        String fileExtension = IOUtils.extractExtension(filePath);
+        AcceptType acceptType = AcceptType.of(fileExtension);
+
+        return FileIoUtils.loadFileFromClasspath(acceptType.getFileRootPath() + request.getHeader("filePath"));
     }
 }
