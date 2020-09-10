@@ -5,15 +5,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.URISyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.IOUtils;
 import webserver.httpmessages.request.Request;
+import webserver.resourcehandler.ResourcesHandler;
 
 public class RequestHandler implements Runnable {
+
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
+    private ResourcesHandler resourcesHandler = new ResourcesHandler();
 
     RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -27,16 +31,15 @@ public class RequestHandler implements Runnable {
             InputStream in = connection.getInputStream();
             OutputStream out = connection.getOutputStream()
         ) {
-            String request = IOUtils.transformInputStreamToString(in);
-            Request httpRequest = new Request(request);
+            String httpRequestFormat = IOUtils.transformInputStreamToString(in);
+            Request httpRequest = new Request(httpRequestFormat);
 
-            System.out.println("## method : " + httpRequest.getMethod());
+            byte[] body = resourcesHandler.convertUriToResource(httpRequest.getUri());
 
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = "Hello World".getBytes();
             response200Header(dos, body.length);
             responseBody(dos, body);
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }

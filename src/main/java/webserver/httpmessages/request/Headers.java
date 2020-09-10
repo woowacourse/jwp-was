@@ -13,7 +13,6 @@ class Headers {
     Headers(List<String> headerLines) {
         headerLines.forEach(header -> {
             String[] split = header.split(NAME_AND_VALUE_SEPARATOR);
-            System.out.println(split[0]);
             headers.put(split[0], split[1]);
         });
     }
