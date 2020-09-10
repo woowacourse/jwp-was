@@ -8,7 +8,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
+import db.DataBase;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
@@ -31,11 +35,27 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String line = br.readLine();
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = FileIoUtils.loadFileFromClasspath(PathUtils.parsePath(line));
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+            router(line, dos);
         } catch (IOException | URISyntaxException | NullPointerException e) {
             logger.error(e.getMessage());
+        }
+    }
+
+    private void router(String line, DataOutputStream dos) throws IOException, URISyntaxException {
+        String path = PathUtils.parsePath(line);
+        if(path.contains("/user/create")) {
+            String[] temp = path.split("\\?")[1].split("&");
+            Map<String, String> params = new HashMap<>();
+            for(String param : temp) {
+                String[] keyValues = param.split("=");
+                params.put(keyValues[0], keyValues[1]);
+            }
+            User user = new User(params.get("userId"), params.get("password"), params.get("name"), params.get("email"));
+            DataBase.addUser(user);
+        } else {
+            byte[] body = FileIoUtils.loadFileFromClasspath("./templates"+path);
+            response200Header(dos, body.length);
+            responseBody(dos, body);
         }
     }
 
