@@ -49,4 +49,12 @@ public class HttpRequest {
 
         return requestLine.getPath();
     }
+
+    public boolean isForStaticContent() {
+        return requestLine.isTemplatesResource() || requestLine.isStaticResource();
+    }
+
+    public boolean isForDynamicContent() {
+        return !isForStaticContent();
+    }
 }

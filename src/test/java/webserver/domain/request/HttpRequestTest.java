@@ -48,7 +48,7 @@ class HttpRequestTest {
         assertThat(httpRequest.getPath()).isEqualTo("./static/css/styles.css");
     }
 
-    @DisplayName("요청에 해당하는 경로를 반환한다.")
+    @DisplayName("요청에 해당하는 동적 처리 경로를 반환한다.")
     @Test
     void getPath_whenRequestNotResources() {
         RequestLine requestLine = RequestLine.of(

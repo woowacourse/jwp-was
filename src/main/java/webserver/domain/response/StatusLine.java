@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 public enum StatusLine {
     OK("200", "HTTP/1.1 200 OK"),
+    Found("302", "HTTP/1.1 302 Found"),
     ELSE("", "");
 
     private final String code;

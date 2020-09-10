@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,14 +17,19 @@ import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import webserver.domain.request.HttpRequest;
 import webserver.domain.response.HttpResponse;
+import webserver.servlet.Servlet;
+import webserver.servlet.UserCreate;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
-    private Socket connection;
+    private final Socket connection;
+    private final Map<String, Class<? extends Servlet>> controller;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
+        this.controller = new HashMap<>();
+        controller.put("/user/create", UserCreate.class);
     }
 
     public void run() {
@@ -33,7 +40,7 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = generateHttpRequest(in);
             HttpResponse httpResponse = controlRequestAndResponse(httpRequest);
             respondToHttpRequest(out, httpResponse);
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException | URISyntaxException | IllegalAccessException | InstantiationException e) {
             logger.error(e.getMessage());
         }
     }
@@ -43,10 +50,27 @@ public class RequestHandler implements Runnable {
         return HttpRequest.of(br);
     }
 
-    private HttpResponse controlRequestAndResponse(HttpRequest httpRequest) throws IOException, URISyntaxException {
-        String path = httpRequest.getPath();
-        byte[] body = FileIoUtils.loadFileFromClasspath(path);
-        return HttpResponse.of("200", body);
+    public HttpResponse controlRequestAndResponse(HttpRequest httpRequest) throws
+        IOException,
+        URISyntaxException,
+        IllegalAccessException,
+        InstantiationException {
+        if (httpRequest.isForStaticContent()) {
+            String path = httpRequest.getPath();
+            byte[] body = FileIoUtils.loadFileFromClasspath(path);
+            return HttpResponse.of("200", body);
+        }
+
+        if (httpRequest.isForDynamicContent()) {
+            String path = httpRequest.getPath();
+            Class<? extends Servlet> servletClass = controller.get(path);
+            Servlet servlet = servletClass.newInstance();
+            servlet.service();
+            byte[] body = FileIoUtils.loadFileFromClasspath(servlet.getResourcePathToRedirect());
+            return HttpResponse.of("302", body);
+        }
+
+        throw new AssertionError("HttpRequest는 정적 혹은 동적 컨텐츠 요청만 가능합니다.");
     }
 
     private void respondToHttpRequest(OutputStream out, HttpResponse httpResponse) {
