@@ -26,7 +26,7 @@
 ### 요구사항 3
 > http://localhost:8080/user/form.html 파일의 form 태그 method를 get에서 post로 수정한 후 회원가입 기능이 정상적으로 동작하도록 구현한다.
 
-- [ ] form.html 파일의 form 태그 메서드를 get에서 post로 수정한다.
+- [x] form.html 파일의 form 태그 메서드를 get에서 post로 수정한다.
 - [ ] HTTP 메서드를 파싱하여 활용하는 기능을 추가한다.
 - [ ] HTTP 요청의 body에서 User 정보를 추출한다.
 - [ ] 추출한 User 정보를 model.User 클래스에 저장한다. 
