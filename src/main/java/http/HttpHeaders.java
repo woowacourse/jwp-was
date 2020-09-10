@@ -15,15 +15,15 @@ public class HttpHeaders {
         String[] headerKeyAndValue = line.split(HEADER_KEY_AND_VALUE_DELIMITER);
         headers.put(headerKeyAndValue[0], headerKeyAndValue[1]);
 
-        while (isNotEmpty(line)) {
+        while (!isEmpty(line)) {
             headerKeyAndValue = line.split(HEADER_KEY_AND_VALUE_DELIMITER);
             headers.put(headerKeyAndValue[0], headerKeyAndValue[1]);
             line = bufferedReader.readLine();
         }
     }
 
-    private boolean isNotEmpty(String line) {
-        return !"".equals(line) && line != null;
+    private boolean isEmpty(String line) {
+        return "".equals(line) || line == null;
     }
 
     public String getValue(String key) {
