@@ -11,11 +11,11 @@ import org.slf4j.LoggerFactory;
 
 public class HttpRequest {
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
-    static final String NEW_LINE = "\n";
+    public static final String NEW_LINE = System.lineSeparator();
     static final String EMPTY = "";
     private static final String BLANK = " ";
     private static final int PATH_INDEX = 1;
-    private static final int FIRST_LINE = 0;
+    private static final int REQUEST_LINE_INDEX = 0;
 
     private final List<String> request;
 
@@ -36,7 +36,12 @@ public class HttpRequest {
     }
 
     public String getPath() {
-        return request.get(FIRST_LINE).split(BLANK)[PATH_INDEX];
+        String[] requestLines = getRequestLine().split(BLANK);
+        return requestLines[PATH_INDEX];
+    }
+
+    private String getRequestLine() {
+        return request.get(REQUEST_LINE_INDEX);
     }
 
     @Override

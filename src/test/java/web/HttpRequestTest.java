@@ -1,7 +1,7 @@
-package model;
+package web;
 
-import static model.HttpRequest.*;
 import static org.assertj.core.api.Assertions.*;
+import static web.HttpRequest.*;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;

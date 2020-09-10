@@ -13,5 +13,5 @@
 > “회원가입” 메뉴를 클릭하면 http://localhost:8080/user/form.html 으로 이동하면서 회원가입할 수 있다.
 
 *구현 기능 목록*
-- [ ] Request Parameter 추출
-- [ ] 사용자가 입력한 값 저장
+- [x] Request Parameter 추출
+- [x] 사용자가 입력한 값 저장
