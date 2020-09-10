@@ -26,4 +26,8 @@ public class IOUtils {
 
         return object;
     }
+
+    public static String extractExtension(String filePath) {
+        return filePath.substring(filePath.lastIndexOf(".") + 1);
+    }
 }
