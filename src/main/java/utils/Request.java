@@ -74,6 +74,11 @@ public class Request {
         return method.isGet();
     }
 
+    public boolean isPostRequest() {
+        HttpMethod method = (HttpMethod) headers.get("method");
+        return method.isPost();
+    }
+
     public String getBody() {
         return body;
     }

@@ -37,14 +37,8 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             Request request = requestParser(in);
 
-            if (request.getHeader("filePath").equals("/user/create")) {
-                ObjectMapper objectMapper = new ObjectMapper();
-                User user = objectMapper.convertValue(IOUtils.parseStringToObject(request.getBody()), User.class);
-                System.err.println(user);
-                DataBase.addUser(user);
-            }
-
             DataOutputStream dos = new DataOutputStream(out);
+            postRequestHandle(request, dos);
             response(request, dos);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
@@ -83,12 +77,31 @@ public class RequestHandler implements Runnable {
         }
     }
 
+    private void response302Header(DataOutputStream dos) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 Found \r\n");
+            dos.writeBytes("Location: http://localhost:8080/index.html \r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
     private void responseBody(DataOutputStream dos, byte[] body) {
         try {
             dos.write(body, 0, body.length);
             dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
+        }
+    }
+
+    private void postRequestHandle(Request request, DataOutputStream dos) {
+        if (request.isPostRequest()) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            User user = objectMapper.convertValue(IOUtils.parseStringToObject(request.getBody()), User.class);
+
+            DataBase.addUser(user);
+            response302Header(dos);
         }
     }
 
