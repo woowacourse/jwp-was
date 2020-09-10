@@ -5,6 +5,7 @@ import java.net.Socket;
 import java.net.URISyntaxException;
 import java.util.Objects;
 
+import exception.InvalidFilePathException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
@@ -22,16 +23,16 @@ public class RequestHandler implements Runnable {
     public void run() {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
-
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-            String filePath = RequestUtils.getFilePathInRequestHeader(bufferedReader);
-            System.out.println(filePath);
+            String requestHeaderFirstLine = bufferedReader.readLine();
+            String filePath = RequestUtils.getFilePathInRequestHeader(requestHeaderFirstLine);
+
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
             response200Header(dos, body.length);
             responseBody(dos, body);
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException | URISyntaxException | InvalidFilePathException e) {
             logger.error(e.getMessage());
         }
     }

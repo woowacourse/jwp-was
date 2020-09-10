@@ -1,7 +1,9 @@
 package utils;
 
-import java.io.BufferedReader;
+import exception.InvalidFilePathException;
+
 import java.io.IOException;
+import java.util.Objects;
 
 public class RequestUtils {
 
@@ -10,14 +12,26 @@ public class RequestUtils {
      * Request Header의 첫번째 줄에 [GET /poo.html HTTP/1.1] 과 같은 형식으로 파일명을 포함한 정보가 전달된다.
      * 이를 공백을 기준으로 split하고, 그 중 2번째 값(상단의 예시에서는 /poo.html)을 얻어 반환하도록 설계되었다.
      *
-     * @param requestHeader RequestHeader의 값으로, BufferedReader 객체가 전달된다.
+     * @param requestHeader RequestHeader의 첫번째 라인 값으로, String 객체가 전달된다.
      * @return 파일의 경로가 String 객체로 반환된다.
      * @throws IOException BufferReader 객체인 requestHeader를 읽는 과정에서 오류 발생 시 IOException이 throw된다.
      */
-    public static String getFilePathInRequestHeader(BufferedReader requestHeader) throws IOException {
-        String line = requestHeader.readLine();
-        String path = line.split(" ")[1];
-        return getLocationPath(path) + path;
+    public static String getFilePathInRequestHeader(String requestHeader) throws IOException {
+        try {
+            String path = requestHeader.split(" ")[1];
+            Objects.requireNonNull(path);
+
+            String locationPath = getLocationPath(path);
+            Objects.requireNonNull(locationPath);
+
+            if(path.isEmpty() || locationPath.isEmpty()) {
+                throw new ArrayIndexOutOfBoundsException();
+            }
+
+            return locationPath + path;
+        } catch(ArrayIndexOutOfBoundsException | NullPointerException e) {
+            throw new InvalidFilePathException();
+        }
     }
 
     /**
