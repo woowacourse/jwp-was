@@ -3,15 +3,13 @@ package webserver;
 import java.io.*;
 import java.net.Socket;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 
-import exception.InvalidFilePathException;
+import exception.InvalidHttpRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import utils.RequestUtils;
+import web.request.HttpRequest;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -27,16 +25,17 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-            Map<String,String> requestHeader = RequestUtils.transferRequestHeaderToMap(bufferedReader);
-            String target = requestHeader.get("Target");
+
+            HttpRequest httpRequest = new HttpRequest(bufferedReader);
+
+            String target = httpRequest.getTarget();
             String filePath = RequestUtils.getFilePath(target);
-            String contentType = requestHeader.get("Accept").split(",")[0];
 
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
-            response200Header(dos, contentType, body.length);
+            response200Header(dos, httpRequest.getContentType(), body.length);
             responseBody(dos, body);
-        } catch (IOException | URISyntaxException | InvalidFilePathException e) {
+        } catch (IOException | URISyntaxException | InvalidHttpRequestException e) {
             logger.error(e.getMessage());
         }
     }
