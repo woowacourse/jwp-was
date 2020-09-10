@@ -2,7 +2,8 @@ package webserver.resource;
 
 enum ContentType {
     HTML("text/html"),
-    CSS("text/css");
+    CSS("text/css"),
+    JS("application/javascript");
 
     private String contentType;
 

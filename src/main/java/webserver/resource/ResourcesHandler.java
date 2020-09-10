@@ -20,6 +20,10 @@ public class ResourcesHandler {
             filePath = "./static" + uri;
             return new Resource(FileIoUtils.loadFileFromClasspath(filePath), ContentType.CSS);
         }
+        if (uri.endsWith(".js")) {
+            filePath = "./static" + uri;
+            return new Resource(FileIoUtils.loadFileFromClasspath(filePath), ContentType.JS);
+        }
         throw new IllegalArgumentException("cannot convert given uri to resource.");
     }
 }
