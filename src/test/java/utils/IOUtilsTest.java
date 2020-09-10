@@ -42,4 +42,14 @@ public class IOUtilsTest {
 
         IOUtils.printRequest(in);
     }
+
+    @DisplayName("")
+    @Test
+    void extractQueryParamsTest() {
+        String url = "/user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
+
+//        String[] queryParams = IOUtils.extractQueryParams(url);
+
+//        assertThat(queryParams).hasSize(4);
+    }
 }

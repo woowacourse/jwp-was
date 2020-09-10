@@ -8,7 +8,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
+import java.util.Map;
 
+import mapper.QueryParams;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +36,14 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String requestUrl = IOUtils.extractURL(br.readLine());
-            byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + requestUrl);
+            byte[] body = null;
+            if (requestUrl.endsWith(".html")) {
+                body = FileIoUtils.loadFileFromClasspath("./templates" + requestUrl);
+            } else {
+                QueryParams queryParams = new QueryParams(requestUrl);
+                Map<String, String> queryParamsMap = queryParams.getQueryParams();
+                User user = new User(queryParamsMap.get("userId"), queryParamsMap.get("password"), queryParamsMap.get("name"), queryParamsMap.get("email"));
+            }
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException | URISyntaxException e) {
