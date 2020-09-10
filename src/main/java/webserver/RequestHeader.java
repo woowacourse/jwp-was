@@ -41,7 +41,6 @@ public class RequestHeader {
             }
             String headerKey = lineSegment[0];
             String headerValue = lineSegment[1];
-
             headers.put(headerKey, headerValue);
         }
         if (Objects.nonNull(headers.get("Content-Length"))) {

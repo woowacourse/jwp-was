@@ -14,15 +14,15 @@ import java.util.Map;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.FileIoUtils;
 import utils.UrlUtils;
 
 public class RequestHandler implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private static final String DEFAULT_USER_BIND_VALUE = null;
-    private static final String TEMPLATES_PATH = "./templates";
-    private static final String STATIC_PATH = "./static";
+    private static final String CREATE_URL = "/user/create";
+    private static final String INDEX_HTML_URL = "/index.html";
+
 
     private Socket connection;
 
@@ -39,50 +39,30 @@ public class RequestHandler implements Runnable {
 
             String resourcePath = UrlUtils.extractResourcePath(requestHeader.getFirstLine());
 
-            if (resourcePath.startsWith("/user/create")) {
+            if (resourcePath.startsWith(CREATE_URL)) {
                 if (requestHeader.isGet()) {
                     Map<String, String> requestParam = UrlUtils.extractRequestParamFromUrl(resourcePath);
-                    if (isExistRequestParam(requestParam)) {
-                        User user = bindParamsToUser(requestParam);
-                        DataBase.addUser(user);
-                        logger.info("user : {}", user);
-                    }
+                    bindRequestParam(requestParam);
                 }
 
                 if (requestHeader.isPost()) {
-                    String requestBody = requestHeader.getBody();
-                    Map<String, String> requestParam = UrlUtils.extractRequestParam(requestBody);
-                    if (isExistRequestParam(requestParam)) {
-                        User user = bindParamsToUser(requestParam);
-                        DataBase.addUser(user);
-                        logger.info("user : {}", user);
-                    }
-
-                    byte[] responseFile = FileIoUtils.loadFileFromClasspath(TEMPLATES_PATH + "/index.html");
-                    responseHeader.createResponse302Header("/index.html");
-                    responseHeader.createResponseBody(responseFile);
+                    Map<String, String> requestParam = UrlUtils.extractRequestParam(requestHeader.getBody());
+                    bindRequestParam(requestParam);
+                    responseHeader.createResponse302Header(INDEX_HTML_URL);
                     return;
                 }
             }
-
-            if (HttpContentType.isHtmlFile(resourcePath)) {
-                byte[] responseFile = FileIoUtils.loadFileFromClasspath(TEMPLATES_PATH + UrlUtils.extractFilePath(resourcePath));
-                responseHeader.createResponse200Header(responseFile.length, resourcePath);
-                responseHeader.createResponseBody(responseFile);
-            }
-
-            if (!HttpContentType.isHtmlFile(resourcePath)) {
-                byte[] responseStaticFile = FileIoUtils.loadFileFromClasspath(STATIC_PATH + resourcePath);
-                responseHeader.createResponse200Header(responseStaticFile.length, resourcePath);
-                responseHeader.createResponseBody(responseStaticFile);
-            }
+            responseHeader.createResponse200Header(resourcePath);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private boolean isExistRequestParam(Map<String, String> requestParam) {
-        return !requestParam.isEmpty();
+    private void bindRequestParam(Map<String, String> requestParam) {
+        if (!requestParam.isEmpty()) {
+            User user = bindParamsToUser(requestParam);
+            DataBase.addUser(user);
+        }
     }
 
     private User bindParamsToUser(Map<String, String> params) {
