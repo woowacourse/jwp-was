@@ -38,7 +38,8 @@ public class RequestHandler implements Runnable {
 
             Request request = RequestParser.parse(br);
 
-            Controller controller = ControllerType.find(request.getUri());
+            ControllerType controllerType = ControllerType.find(request.getUri());
+            Controller controller = controllerType.getController();
 
             Response response = new Response(new DataOutputStream(out));
 

@@ -12,15 +12,7 @@ public class RequestLine {
         this.version = version;
     }
 
-    public String getMethod() {
-        return method;
-    }
-
     public String getUri() {
         return uri;
-    }
-
-    public String getVersion() {
-        return version;
     }
 }

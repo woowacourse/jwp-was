@@ -11,7 +11,7 @@ public class RequestBody {
         this.body = handler(paramLine);
     }
 
-    public static RequestBody emptyData() {
+    public static RequestBody emptyBody() {
         return new RequestBody("");
     }
 
@@ -36,5 +36,9 @@ public class RequestBody {
 
     public String getValue(String name) {
         return body.get(name);
+    }
+
+    public Map<String, String> getBody() {
+        return body;
     }
 }

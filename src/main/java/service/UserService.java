@@ -1,8 +1,5 @@
 package service;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import db.DataBase;
 import http.request.Request;
 import model.User;
@@ -14,7 +11,7 @@ public class UserService {
     }
 
     public void create(Request request) {
-        User user = new User(request.getBody("userId"), request.getBody("password"), request.getBody("name"), request.getBody("email"));
+        User user = new User(request.getBodyByName("userId"), request.getBodyByName("password"), request.getBodyByName("name"), request.getBodyByName("email"));
         DataBase.addUser(user);
     }
 

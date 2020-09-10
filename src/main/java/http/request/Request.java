@@ -16,11 +16,11 @@ public class Request {
         return requestLine.getUri();
     }
 
-    public String getHeader(String name) {
+    public String getHeaderByName(String name) {
         return requestHeader.getValue(name);
     }
 
-    public String getBody(String name) {
+    public String getBodyByName(String name) {
         return requestBody.getValue(name);
     }
 }

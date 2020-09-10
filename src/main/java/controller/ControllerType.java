@@ -7,7 +7,7 @@ public enum ControllerType {
     INDEX("/index.html", new IndexController()),
     FORM("/user/form.html", new FormController()),
     USER("/user/create", new UserController()),
-    NONE("/", new HomeController());
+    NONE("", new ResourceController());
 
     private final String uri;
     private final Controller controller;
@@ -17,11 +17,14 @@ public enum ControllerType {
         this.controller = controller;
     }
 
-    public static Controller find(String uri) {
+    public static ControllerType find(String uri) {
         return Arrays.stream(ControllerType.values())
                 .filter(uriType -> uriType.uri.equals(uri))
                 .findFirst()
-                .orElse(NONE)
-                .controller;
+                .orElse(NONE);
+    }
+
+    public Controller getController() {
+        return controller;
     }
 }

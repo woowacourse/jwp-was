@@ -11,6 +11,6 @@ public class UserController implements Controller {
     @Override
     public void run(Request request, Response response) {
         userService.create(request);
-        response.response302Header(Integer.parseInt(request.getHeader("Content-Length")));
+        response.response302Header(Integer.parseInt(request.getHeaderByName("Content-Length")));
     }
 }

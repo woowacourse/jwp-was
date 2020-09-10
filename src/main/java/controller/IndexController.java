@@ -12,7 +12,7 @@ public class IndexController implements Controller {
     @Override
     public void run(Request request, Response response) throws IOException, URISyntaxException {
         byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + request.getUri());
-        response.response200Header(body.length);
+        response.response200Header(request.getHeaderByName("Accept").split(",")[0], body.length);
         response.responseBody(body);
     }
 }
