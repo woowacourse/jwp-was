@@ -1,16 +1,14 @@
 package webserver;
 
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
-
-import java.nio.charset.StandardCharsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.IOUtils;
+import webserver.httpmessages.request.Request;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -25,28 +23,14 @@ public class RequestHandler implements Runnable {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
 
-        /* request 형태!
-         * GET / HTTP/1.1                이부분을 request line 이라 함
-         * Host: localhost:8080
-         * Connection: keep-alive
-         * Cache-Control: max-age=0
-         * Upgrade-Insecure-Requests: 1
-         * ...
-         */
         try (
             InputStream in = connection.getInputStream();
             OutputStream out = connection.getOutputStream()
         ) {
-            BufferedReader br = new BufferedReader(
-                new InputStreamReader(in, StandardCharsets.UTF_8));
+            String request = IOUtils.transformInputStreamToString(in);
+            Request httpRequest = new Request(request);
 
-            String line = br.readLine();
-            logger.debug("request line : {}", line);
-
-            while (!line.equals("")) {
-                line = br.readLine();
-                logger.debug("header: {}", line);
-            }
+            System.out.println("## method : " + httpRequest.getMethod());
 
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = "Hello World".getBytes();
