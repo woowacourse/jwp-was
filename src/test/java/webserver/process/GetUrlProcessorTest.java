@@ -1,17 +1,16 @@
 package webserver.process;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import utils.FileIoUtils;
 import webserver.exception.NotExistUrlException;
+import webserver.process.get.GetUrlProcessor;
 
 class GetUrlProcessorTest {
 

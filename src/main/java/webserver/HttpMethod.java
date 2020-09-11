@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.function.Function;
 
 import webserver.process.DeleteUrlProcessor;
-import webserver.process.GetUrlProcessor;
+import webserver.process.get.GetUrlProcessor;
 import webserver.process.PatchUrlProcessor;
 import webserver.process.PostUrlProcessor;
 import webserver.process.PutUrlProcessor;

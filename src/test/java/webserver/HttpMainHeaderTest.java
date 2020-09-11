@@ -39,4 +39,16 @@ class HttpMainHeaderTest {
 
 		assertThat(actual).isEqualTo(expected);
 	}
+
+	@Test
+	@DisplayName("회원 가입 처리 테스트 - /user/create?userId=값&password=값&name=값&email=값")
+	void processByCreateUserUrl() throws IOException, URISyntaxException {
+		String requestUrl = "/user/create?userId=user&password=1234&name=name&email=email%gmail.com";
+		HttpMainHeader httpMainHeader = new HttpMainHeader(HttpMethod.GET, requestUrl);
+
+		byte[] actual = httpMainHeader.processByUrl();
+		byte[] expected = "create user success".getBytes();
+
+		assertThat(actual).isEqualTo(expected);
+	}
 }
