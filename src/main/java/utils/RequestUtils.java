@@ -4,17 +4,7 @@ import model.User;
 import model.UserRequest;
 
 public class RequestUtils {
-    private static final String QUERY_STRING_DELIMITER = "?";
-    private static final int MIN_INDEX = 0;
     private static final String INPUT_DELIMITER = "&";
-
-    public static String extractQueryString(String resource) {
-        int startIndex = resource.indexOf(QUERY_STRING_DELIMITER);
-        if (startIndex < MIN_INDEX) {
-            throw new RuntimeException("QueryString을 포함하고 있지 않습니다.");
-        }
-        return resource.substring(startIndex) + 1;
-    }
 
     public static User createUser(String input) {
         UserRequest userRequest = new UserRequest();
@@ -32,7 +22,7 @@ public class RequestUtils {
 
     private static void validateInputData(String input, UserRequest userRequest) {
         if (!input.matches(userRequest.getRegex())) {
-            throw new IllegalArgumentException("올바른 형식의 input 데이터가 아닙니다.");
+            throw new IllegalArgumentException("올바르지 않은 형식의 input data: " + input);
         }
     }
 
