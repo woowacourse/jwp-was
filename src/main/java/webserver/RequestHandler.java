@@ -11,6 +11,7 @@ import java.net.URISyntaxException;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    public static final String RESOURCE_BASE_PATH = "./templates";
 
     private Socket connection;
 
@@ -27,8 +28,8 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
 
             String requestLine = br.readLine();
-            String path = URLUtils.extractPath(requestLine);
-            byte[] body = FileIoUtils.loadFileFromClasspath(path);
+            String path = URLUtils.parseURL(requestLine);
+            byte[] body = FileIoUtils.loadFileFromClasspath(RESOURCE_BASE_PATH + path);
 
             response200Header(dos, body.length);
             responseBody(dos, body);
