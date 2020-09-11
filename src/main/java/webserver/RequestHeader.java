@@ -13,8 +13,10 @@ import utils.UrlUtils;
 
 public class RequestHeader {
 
-    public static final String HTTP_METHOD_GET = "GET";
-    public static final String HTTP_METHOD_POST = "POST";
+    private static final String HTTP_METHOD_GET = "GET";
+    private static final String HTTP_METHOD_POST = "POST";
+    private static final String HTTP_HEADER_DELIMITER = ": ";
+    private static final String BLANK = "";
 
     private final String firstLine;
     private final Map<String, String> headers = new HashMap<>();
@@ -32,9 +34,9 @@ public class RequestHeader {
         }
         firstLine = line;
 
-        while (!"".equals(line)) {
+        while (!BLANK.equals(line)) {
             line = bufferedReader.readLine();
-            String[] lineSegment = line.split(": ");
+            String[] lineSegment = line.split(HTTP_HEADER_DELIMITER);
 
             if (lineSegment.length != 2) {
                 break;
@@ -43,8 +45,10 @@ public class RequestHeader {
             String headerValue = lineSegment[1];
             headers.put(headerKey, headerValue);
         }
-        if (Objects.nonNull(headers.get("Content-Length"))) {
-            body = IOUtils.readData(bufferedReader, Integer.parseInt(headers.get("Content-Length")));
+        String contentLength = headers.get("Content-Length");
+
+        if (Objects.nonNull(contentLength)) {
+            body = IOUtils.readData(bufferedReader, Integer.parseInt(contentLength));
         }
     }
 

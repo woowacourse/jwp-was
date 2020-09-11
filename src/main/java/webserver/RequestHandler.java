@@ -23,7 +23,6 @@ public class RequestHandler implements Runnable {
     private static final String CREATE_URL = "/user/create";
     private static final String INDEX_HTML_URL = "/index.html";
 
-
     private Socket connection;
 
     public RequestHandler(Socket connectionSocket) {
