@@ -1,8 +1,10 @@
 package webserver;
 
+import http.Request;
+import http.RequestFactory;
+import http.RequestUri;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 import utils.FileIoUtils;
 
 import java.io.BufferedReader;
@@ -31,23 +33,18 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-            String requestUrl = findRequestUrl(br);
-            byte[] body = FileIoUtils.loadFileFromClasspath(BASE_URL + requestUrl);
+
+            Request request = RequestFactory.getRequest(br);
+            RequestUri requestUri = request.getRequestUri();
+
+            byte[] body = FileIoUtils.loadFileFromClasspath(BASE_URL + requestUri.getUri());
+
             DataOutputStream dos = new DataOutputStream(out);
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
-    }
-
-    private String findRequestUrl(BufferedReader br) throws IOException {
-        String line = br.readLine();
-        logger.debug("요청 정보 : {}", line);
-        if (StringUtils.isEmpty(line)) {
-            throw new IOException("요청 정보를 찾을 수 없습니다.");
-        }
-        return line.split(" ")[1];
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
