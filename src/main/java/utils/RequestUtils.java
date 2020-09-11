@@ -50,10 +50,4 @@ public class RequestUtils {
 
         return new User(parameters.get("userId"), parameters.get("password"), parameters.get("name"), parameters.get("email"));
     }
-
-    public static Map<String, String> parseHeaders(List<String> headers) {
-        return headers.stream()
-                .map(header -> header.split(": "))
-                .collect(Collectors.toMap(it -> it[INDEX_ZERO], it -> it[INDEX_ONE]));
-    }
 }

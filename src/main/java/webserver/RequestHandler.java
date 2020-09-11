@@ -7,13 +7,13 @@ import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import utils.IOUtils;
 import utils.RequestUtils;
+import web.RequestHeader;
 
 import java.io.*;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -36,16 +36,17 @@ public class RequestHandler implements Runnable {
             String request = br.readLine();
             String path = RequestUtils.parseURL(request);
             final String method = RequestUtils.parseMethod(request);
-            List<String> requestHeaders = new ArrayList<>();
 
+            List<String> requestHeaders = new ArrayList<>();
             while (!request.equals("")) {
                 request = br.readLine();
                 requestHeaders.add(request);
             }
+            requestHeaders.remove("");
+            final RequestHeader header = new RequestHeader(requestHeaders);
 
             if (method.equals("POST") && path.equals("/user/create")) {
-                final Map<String, String> headers = RequestUtils.parseHeaders(requestHeaders);
-                final int contentLength = Integer.parseInt(headers.get("Content-Length"));
+                final int contentLength = header.getContentLength();
                 final String body = IOUtils.readData(br, contentLength);
                 createUser(body);
             }
