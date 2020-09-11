@@ -41,6 +41,16 @@ public class RequestUtils {
         return new User(parameters.get("userId"), parameters.get("password"), parameters.get("name"), parameters.get("email"));
     }
 
+    public static User parseBody(String requestBody) {
+        final String[] pairs = requestBody.split(PARAMETER_DELIMITER);
+
+        final Map<String, String> parameters = Arrays.stream(pairs)
+                .map(parameter -> parameter.split(KEY_VALUE_DELIMITER))
+                .collect(Collectors.toMap(it -> it[INDEX_ZERO], it -> it[INDEX_ONE]));
+
+        return new User(parameters.get("userId"), parameters.get("password"), parameters.get("name"), parameters.get("email"));
+    }
+
     public static Map<String, String> parseHeaders(List<String> headers) {
         return headers.stream()
                 .map(header -> header.split(": "))

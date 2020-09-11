@@ -5,6 +5,7 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
+import utils.IOUtils;
 import utils.RequestUtils;
 
 import java.io.*;
@@ -34,6 +35,7 @@ public class RequestHandler implements Runnable {
 
             String request = br.readLine();
             String path = RequestUtils.parseURL(request);
+            final String method = RequestUtils.parseMethod(request);
             List<String> requestHeaders = new ArrayList<>();
 
             while (!request.equals("")) {
@@ -41,10 +43,11 @@ public class RequestHandler implements Runnable {
                 requestHeaders.add(request);
             }
 
-            final Map<String, String> headers = RequestUtils.parseHeaders(requestHeaders);
-
-            if (path.equals("/user/create")) {
-                createUser(request);
+            if (method.equals("POST") && path.equals("/user/create")) {
+                final Map<String, String> headers = RequestUtils.parseHeaders(requestHeaders);
+                final int contentLength = Integer.parseInt(headers.get("Content-Length"));
+                final String body = IOUtils.readData(br, contentLength);
+                createUser(body);
             }
 
             byte[] body = FileIoUtils.loadFileFromClasspath(RESOURCE_BASE_PATH + path);
@@ -58,8 +61,8 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void createUser(String requestLine) {
-        final User user = RequestUtils.parseUser(requestLine);
+    private void createUser(String body) {
+        final User user = RequestUtils.parseBody(body);
         DataBase.addUser(user);
     }
 

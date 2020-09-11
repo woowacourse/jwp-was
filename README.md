@@ -13,9 +13,9 @@
   - [x] HTML과 URL을 비교해 보고 사용자가 입력한 값을 파싱한다.
   - [x] 파싱한 값을 model.User 클래스에 저장한다.
   - [x] 파싱한 User를 DataBase에 저장한다.
-- [ ] http://localhost:8080/user/form.html 파일의 form 태그 method를 get에서 post로 수정한 후 회원가입 기능이 정상적으로 동작하도록 구현한다.
+- [x] http://localhost:8080/user/form.html 파일의 form 태그 method를 get에서 post로 수정한 후 회원가입 기능이 정상적으로 동작하도록 구현한다.
   - [x] form.html 파일의 form 태그 method를 get에서 post로 수정한다.
-  - [ ] 요청 정보에서 Method를 추출한다.
-  - [ ] Body에 담긴 파라미터를 추출해서 User 클래스에 저장한다.
+  - [x] 요청 정보에서 Method를 추출한다.
+  - [x] Body에 담긴 파라미터를 추출해서 User 클래스에 저장한다.
 - [ ] “회원가입”을 완료하면 /index.html 페이지로 이동하고 싶다. 현재는 URL이 /user/create 로 유지되는 상태로 읽어서 전달할 파일이 없다. 따라서 redirect 방식처럼 회원가입을 완료한 후 “index.html”로 이동해야 한다. 즉, 브라우저의 URL이 /index.html로 변경해야 한다.
 - [ ] 지금까지 구현한 소스 코드는 stylesheet 파일을 지원하지 못하고 있다. Stylesheet 파일을 지원하도록 구현하도록 한다.
