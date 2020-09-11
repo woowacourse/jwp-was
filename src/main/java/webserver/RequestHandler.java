@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import db.DataBase;
 import http.HttpRequest;
 import http.HttpRequestLine;
 import model.User;
@@ -47,8 +48,8 @@ public class RequestHandler implements Runnable {
                     httpRequest.getHttpBodyValueOf("name"),
                     httpRequest.getHttpBodyValueOf("email")
                 );
-
-                logger.debug("Saved User: {}", user);
+                DataBase.addUser(user);
+                logger.debug("Saved User: {}", DataBase.findUserById(httpRequest.getHttpBodyValueOf("userId")));
             }
 
             DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
