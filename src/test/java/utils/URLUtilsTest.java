@@ -1,13 +1,10 @@
 package utils;
 
+import model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class URLUtilsTest {
 
@@ -24,15 +21,10 @@ class URLUtilsTest {
     @Test
     void extractParameters() {
         String requestLine = "GET /user/create?userId=a&password=b&name=c&email=d%40d HTTP/1.1";
-        final Map<String, String> expected = new HashMap<>();
-        expected.put("userId", "a");
-        expected.put("password", "b");
-        expected.put("name", "c");
-        expected.put("email", "d%40d");
+        final User expected = new User("a", "b", "c", "d%40d");
 
+        final User user = URLUtils.extractUser(requestLine);
 
-        final Map<String, String> parameters = URLUtils.extractParameters(requestLine);
-
-        assertEquals(expected, parameters);
+        assertThat(user).isEqualTo(expected);
     }
 }

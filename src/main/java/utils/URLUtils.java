@@ -1,5 +1,7 @@
 package utils;
 
+import model.User;
+
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -19,14 +21,16 @@ public class URLUtils {
         return BASE_URL + info[PATH_INDEX];
     }
 
-    public static Map<String, String> extractParameters(String requestLine) {
+    public static User extractUser(String requestLine) {
         String[] info = requestLine.split(DELIMITER);
         final int questionIndex = info[PATH_INDEX].indexOf(QUESTION_MARK) + ONE;
         final String rawParameters = info[PATH_INDEX].substring(questionIndex);
         final String[] parameters = rawParameters.split(PARAMETER_DELIMITER);
 
-        return Arrays.stream(parameters)
+        final Map<String, String> collect = Arrays.stream(parameters)
                 .map(it -> it.split(KEY_VALUE_DELIMITER))
                 .collect(Collectors.toMap(it -> it[ZERO], it -> it[ONE]));
+
+        return new User(collect.get("userId"), collect.get("password"), collect.get("name"), collect.get("email"));
     }
 }
