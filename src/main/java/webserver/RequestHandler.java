@@ -35,28 +35,27 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
             DataOutputStream dos = new DataOutputStream(out);
 
-            String request = br.readLine();
-
-            final RequestLine requestLine = new RequestLine(request);
-            String url = requestLine.requestUrl();
+            String firstLine = br.readLine();
+            final RequestLine requestLine = new RequestLine(firstLine);
 
             List<String> requestHeaders = new ArrayList<>();
-            while (!request.equals("")) {
-                request = br.readLine();
+            String request;
+            while (!(request = br.readLine()).equals("")) {
                 requestHeaders.add(request);
             }
-            requestHeaders.remove("");
             final RequestHeader header = new RequestHeader(requestHeaders);
 
             final int contentLength = header.getContentLength();
             final String body = IOUtils.readData(br, contentLength);
             final RequestBody requestBody = new RequestBody(body);
 
+            String url = requestLine.requestUrl();
+
             if (requestLine.getMethod().equals("POST") && url.equals("/user/create")) {
                 createUser(requestBody);
             }
 
-            if (requestLine.requestUrl().contains(".html")) {
+            if (url.contains(".html")) {
                 byte[] staticFile = FileIoUtils.loadFileFromClasspath(RESOURCE_BASE_PATH + url);
                 response200Header(dos, staticFile.length);
                 responseBody(dos, staticFile);

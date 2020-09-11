@@ -23,6 +23,10 @@ public class RequestHeader {
     }
 
     public int getContentLength() {
-        return Integer.parseInt(headers.get(CONTENT_LENGTH));
+        try {
+            return Integer.parseInt(headers.get(CONTENT_LENGTH));
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 }

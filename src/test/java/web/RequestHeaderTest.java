@@ -35,4 +35,16 @@ class RequestHeaderTest {
 
         assertThat(header.getContentLength()).isEqualTo(59);
     }
+
+    @DisplayName("Header에 ContentLength 정보가 없으면 길이 0을 반환한다.")
+    @Test
+    void getZeroContentLength() {
+        final ArrayList<String> requestHeaders = new ArrayList<>();
+        requestHeaders.add("Host: localhost:8080");
+        requestHeaders.add("Connection: keep-alive");
+
+        final RequestHeader header = new RequestHeader(requestHeaders);
+
+        assertThat(header.getContentLength()).isEqualTo(0);
+    }
 }
