@@ -43,4 +43,8 @@ public class HttpUrl {
     private boolean hasParameters() {
         return url.contains(PATH_AND_PARAMETER_DIVIDER);
     }
+
+    public boolean isStaticFile() {
+        return StaticFiles.endsWith(url);
+    }
 }

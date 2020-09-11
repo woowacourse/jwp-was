@@ -16,11 +16,11 @@ import org.slf4j.LoggerFactory;
 import db.DataBase;
 import http.HttpRequest;
 import http.HttpRequestLine;
+import http.StaticFiles;
 import model.User;
 import utils.FileIoUtils;
 
 public class RequestHandler implements Runnable {
-    private static final String TEMPLATES_PATH = "./templates";
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
@@ -40,8 +40,13 @@ public class RequestHandler implements Runnable {
 
             HttpRequestLine httpRequestLine = httpRequest.getHttpRequestLine();
             String path = httpRequestLine.getPath();
-            if (httpRequestLine.isSamePath("/user/create")) {
-
+            if (httpRequest.isStaticFile()) {
+                DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+                byte[] body = FileIoUtils.loadFileFromClasspath(
+                    StaticFiles.getDirectoryEndsWith(httpRequestLine.getPath()) + path);
+                response200Header(dataOutputStream, body.length);
+                responseBody(dataOutputStream, body);
+            } else {
                 User user = new User(
                     httpRequest.getHttpBodyValueOf("userId"),
                     httpRequest.getHttpBodyValueOf("password"),
@@ -52,13 +57,9 @@ public class RequestHandler implements Runnable {
                 logger.debug("Saved User: {}", DataBase.findUserById(httpRequest.getHttpBodyValueOf("userId")));
 
                 DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-                byte[] body = FileIoUtils.loadFileFromClasspath(TEMPLATES_PATH + "/index.html");
+                byte[] body = FileIoUtils.loadFileFromClasspath(
+                    StaticFiles.getDirectoryEndsWith(httpRequestLine.getPath()) + "/index.html");
                 response302Header(dataOutputStream, "/index.html");
-                responseBody(dataOutputStream, body);
-            } else {
-                DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-                byte[] body = FileIoUtils.loadFileFromClasspath(TEMPLATES_PATH + path);
-                response200Header(dataOutputStream, body.length);
                 responseBody(dataOutputStream, body);
             }
         } catch (IOException | URISyntaxException e) {

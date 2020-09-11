@@ -1,7 +1,5 @@
 package http;
 
-import java.util.Map;
-
 public class HttpRequestLine {
     private static final String START_LINE_DELIMITER = " ";
 
@@ -16,10 +14,13 @@ public class HttpRequestLine {
         this.version = splitedStartLine[2];
     }
 
+    public boolean isStaticFile() {
+        return httpUrl.isStaticFile();
+    }
+
     public boolean isSamePath(String path) {
         return httpUrl.isSamePath(path);
     }
-
 
     public String getPath() {
         return httpUrl.getPath();

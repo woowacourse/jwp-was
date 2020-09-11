@@ -32,6 +32,10 @@ public class HttpRequest {
         return httpRequestLine.getPath();
     }
 
+    public boolean isStaticFile() {
+        return httpRequestLine.isStaticFile();
+    }
+
     public String getHttpHeaderParameterOf(String key) {
         return httpHeaders.getValue(key);
     }
