@@ -28,8 +28,18 @@
 > 따라서 redirect 방식처럼 회원가입을 완료한 후 “index.html”로 이동해야 한다.즉, 브라우저의 URL이 /index.html로 변경해야 한다.
 
 *구현 기능 목록*
-- [x] 요청에 따라 다른 HttpResponse를 내려준다.
-    - [ ] status code를 302로 변경한 후, Location 값에 리다이렉션 할 페이지를 넣어 응답한다.
+- [x] 요청에 따라 다른 HttpResponse를 응답
+    - [ ] status code를 302로 변경한 후, Location 값에 리다이렉션 할 페이지를 넣어 응답
         - ⛑ issue
             - [ ] 회원가입 버튼 클릭 시 요청이 바로 안나가고, 한 번 더 눌러야 나가는 이슈. 
             응답이 오지 않은 상태로 요청을 한번 더 보내니 java.net.SocketException: Broken pipe 예외 발생
+            
+ ### 요구사항5
+ > 지금까지 구현한 소스 코드는 stylesheet 파일을 지원하지 못하고 있다. Stylesheet 파일을 지원하도록 구현하도록 한다.
+   
+
+ *구현 기능 목록*
+- [ ] 응답에 따라 Content-Type을 변경하여 Stylesheet 파일을 지원하도록 구현
+    - 방법
+        1. 확장자를 통한 변경
+        2. 요청의 Accept를 통한 변경
