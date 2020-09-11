@@ -38,8 +38,8 @@ public class RequestHandler implements Runnable {
             System.out.println(httpRequestFormat);
             System.out.println("##################");
 
-            Resource resourceForResponse = resourcesHandler.convertUriToResource(httpRequest.getUri());
-
+            Resource resourceForResponse =
+                resourcesHandler.convertUriToResource(httpRequest.getUri());
             byte[] body = resourceForResponse.getResource();
             String contentType = resourceForResponse.getContentType();
 

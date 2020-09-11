@@ -8,7 +8,7 @@ class RequestLine {
     private static final String MESSAGE_INPUT_IS_WRONG = "request line input is unformatted.";
 
     private Method method;
-    private String uri;
+    private Uri uri;
 
     RequestLine(String requestLine) {
         List<String> split = Arrays.asList(requestLine.split(" "));
@@ -17,7 +17,7 @@ class RequestLine {
         }
         try {
             method = Method.from(split.get(0));
-            uri = split.get(1);
+            uri = new Uri(split.get(1));
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("request line input is unformatted.");
         }
@@ -28,6 +28,6 @@ class RequestLine {
     }
 
     String getUri() {
-        return uri;
+        return uri.getUri();
     }
 }
