@@ -3,7 +3,7 @@ package webserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
-import utils.PathUtils;
+import utils.URLUtils;
 
 import java.io.*;
 import java.net.Socket;
@@ -27,7 +27,7 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
 
             String requestLine = br.readLine();
-            String path = PathUtils.extractPath(requestLine);
+            String path = URLUtils.extractPath(requestLine);
             byte[] body = FileIoUtils.loadFileFromClasspath(path);
 
             response200Header(dos, body.length);
