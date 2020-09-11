@@ -8,6 +8,7 @@ import utils.FileIoUtils;
 import utils.IOUtils;
 import utils.RequestUtils;
 import web.RequestHeader;
+import web.RequestLine;
 
 import java.io.*;
 import java.net.Socket;
@@ -34,8 +35,9 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
 
             String request = br.readLine();
-            String path = RequestUtils.parseURL(request);
-            final String method = RequestUtils.parseMethod(request);
+
+            final RequestLine requestLine = new RequestLine(request);
+            String url = requestLine.requestUrl();
 
             List<String> requestHeaders = new ArrayList<>();
             while (!request.equals("")) {
@@ -45,13 +47,13 @@ public class RequestHandler implements Runnable {
             requestHeaders.remove("");
             final RequestHeader header = new RequestHeader(requestHeaders);
 
-            if (method.equals("POST") && path.equals("/user/create")) {
+            if (requestLine.getMethod().equals("POST") && url.equals("/user/create")) {
                 final int contentLength = header.getContentLength();
                 final String body = IOUtils.readData(br, contentLength);
                 createUser(body);
             }
 
-            byte[] body = FileIoUtils.loadFileFromClasspath(RESOURCE_BASE_PATH + path);
+            byte[] body = FileIoUtils.loadFileFromClasspath(RESOURCE_BASE_PATH + url);
 
             response200Header(dos, body.length);
             responseBody(dos, body);
