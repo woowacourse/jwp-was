@@ -1,13 +1,14 @@
 package webserver.domain;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.assertj.core.api.Assertions.*;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Map;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
 import utils.StaticFileType;
+import webserver.domain.request.RequestLine;
 
 public class RequestLineTest {
 
@@ -19,7 +20,7 @@ public class RequestLineTest {
     @Test
     void isStaticFile() throws UnsupportedEncodingException {
         RequestLine requestLine = new RequestLine(TEMPLATE_HEADER);
-        assertThat(requestLine.isStaticFile()).isTrue();
+        assertThat(requestLine.hasPathOfStaticFile()).isTrue();
     }
 
     @DisplayName("Request Line의 경로가 특정 Path와 동일한지 확인한다.")

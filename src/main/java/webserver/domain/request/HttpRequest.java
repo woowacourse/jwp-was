@@ -1,0 +1,76 @@
+package webserver.domain.request;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import utils.IOUtils;
+import utils.StaticFileType;
+
+public class HttpRequest {
+
+	private static final String NEW_LINE = System.lineSeparator();
+	private static final String COLON = ": ";
+
+	private final RequestLine requestLine;
+	private final Map<String, String> headerParams;
+	private final RequestParams requestParams;
+
+	public HttpRequest(BufferedReader bufferedReader) throws IOException {
+		String header = IOUtils.readHeader(bufferedReader);
+		String[] lines = header.split(NEW_LINE);
+		String requestLine = lines[0];
+		System.out.println(requestLine);
+		this.requestLine = new RequestLine(requestLine);
+		this.headerParams = new HashMap<>();
+		for (int i = 1; i < lines.length; i++) {
+			String[] keyValue = lines[i].split(COLON);
+			headerParams.put(keyValue[0], keyValue[1]);
+		}
+
+		String params = this.requestLine.getQuery();
+		if (headerParams.containsKey("Content-Length")) {
+			StringBuilder sb = new StringBuilder();
+			params = IOUtils.readBody(bufferedReader, findContentLength());
+		}
+		this.requestParams = new RequestParams(params);
+	}
+
+	public RequestMethod getMethod() {
+		return requestLine.getRequestMethod();
+	}
+
+	public String getHeader(String headerName) {
+		return headerParams.get(headerName);
+	}
+
+	public String getParameter(String key) {
+		return requestParams.get(key);
+	}
+
+	public boolean hasPathOfStaticFile() {
+		return this.requestLine.hasPathOfStaticFile();
+	}
+
+	public boolean hasEqualPathWith(String target) {
+		return this.requestLine.hasEqualPathWith(target);
+	}
+
+	public StaticFileType findExtension() {
+		return this.requestLine.findExtension();
+	}
+
+	public RequestMethod getRequestMethod() {
+		return requestLine.getRequestMethod();
+	}
+
+	public String getPath() {
+		return requestLine.getPath();
+	}
+
+	public int findContentLength() {
+		String length = headerParams.getOrDefault("Content-Length", "0");
+		return Integer.parseInt(length);
+	}
+}
