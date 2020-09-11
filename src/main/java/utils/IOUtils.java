@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class IOUtils {
 
-    public static final String NEW_LINE = "\n";
+    private static final String NEW_LINE = System.lineSeparator();
 
     /**
      * @param BufferedReader는 Request Body를 시작하는 시점이어야

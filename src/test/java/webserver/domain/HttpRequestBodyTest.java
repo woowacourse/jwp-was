@@ -16,10 +16,10 @@ class HttpRequestBodyTest {
         String body = "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
         HttpRequestBody httpRequestBody = new HttpRequestBody(body);
         assertAll(
-            () -> assertThat(httpRequestBody.getParams().get("userId")).isEqualTo("javajigi"),
-            () -> assertThat(httpRequestBody.getParams().get("password")).isEqualTo("password"),
-            () -> assertThat(httpRequestBody.getParams().get("name")).isEqualTo("박재성"),
-            () -> assertThat(httpRequestBody.getParams().get("email")).isEqualTo("javajigi@slipp.net")
+            () -> assertThat(httpRequestBody.getRequestParams().get("userId")).isEqualTo("javajigi"),
+            () -> assertThat(httpRequestBody.getRequestParams().get("password")).isEqualTo("password"),
+            () -> assertThat(httpRequestBody.getRequestParams().get("name")).isEqualTo("박재성"),
+            () -> assertThat(httpRequestBody.getRequestParams().get("email")).isEqualTo("javajigi@slipp.net")
         );
     }
 }

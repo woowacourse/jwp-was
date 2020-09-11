@@ -67,10 +67,10 @@ public class RequestHandler implements Runnable {
 
     private void response200Header(DataOutputStream dos, StaticFileType staticFileType, int lengthOfBodyContent) {
         try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: " + staticFileType.getContentType() + ";charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
+            dos.writeBytes("HTTP/1.1 200 OK " + NEW_LINE);
+            dos.writeBytes("Content-Type: " + staticFileType.getContentType() + ";charset=utf-8" + NEW_LINE);
+            dos.writeBytes("Content-Length: " + lengthOfBodyContent + NEW_LINE);
+            dos.writeBytes(NEW_LINE);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -78,9 +78,9 @@ public class RequestHandler implements Runnable {
 
     private void response302Header(DataOutputStream dos, String redirectUrl) {
         try {
-            dos.writeBytes("HTTP/1.1 302 FOUND \r\n");
-            dos.writeBytes("Location: " + redirectUrl + "\r\n");
-            dos.writeBytes("\r\n");
+            dos.writeBytes("HTTP/1.1 302 FOUND " + NEW_LINE);
+            dos.writeBytes("Location: " + redirectUrl + NEW_LINE);
+            dos.writeBytes(NEW_LINE);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
