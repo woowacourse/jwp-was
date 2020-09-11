@@ -20,7 +20,7 @@ class RequestBodyTest {
             put("name", "%EB%B0%95%EC%9E%AC%EC%84%B1");
             put("email", "javajigi%40slipp.net");
         }};
-        Map<String, String> actual = new RequestBody(createBufferedReader(body)).getFormData();
+        Map<String, String> actual = new RequestBody(createBufferedReader(BODY)).getFormData();
         assertEquals(expected, actual);
     }
 }

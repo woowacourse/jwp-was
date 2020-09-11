@@ -4,22 +4,19 @@ import static utils.HttpRequestParser.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class RequestHeader {
     public static final String NEW_LINE = System.lineSeparator();
-    public static final int CONTENT_LENGTH_INDEX = 3;
-    public static final int VALUE_INDEX = 1;
-    private static final Logger logger = LoggerFactory.getLogger(RequestHeader.class);
     private static final String BLANK = " ";
     private static final int METHOD_INDEX = 0;
     private static final int PATH_INDEX = 1;
-    private static final int REQUEST_LINE_INDEX = 0;
-    private final List<String> header;
+    public static final String REQUEST_LINE = "requestLine";
+    public static final String CONTENT_LENGTH = "Content-Length";
+    public static final String ACCEPT = "Accept";
+
+    private final Map<String, String> header;
     private Method method;
     private RequestUri requestUri;
 
@@ -42,15 +39,18 @@ public class RequestHeader {
     }
 
     public int getContentLength() {
-        return Integer.parseInt(header.get(CONTENT_LENGTH_INDEX).split(BLANK)[VALUE_INDEX]);
+        return Integer.parseInt(header.get(CONTENT_LENGTH));
     }
 
+    public String getAccept(){
+        return header.get(ACCEPT);
+    }
     public RequestUri getRequestUri() {
         return requestUri;
     }
 
     private String[] getRequestLine() {
-        return header.get(REQUEST_LINE_INDEX).split(BLANK);
+        return header.get(REQUEST_LINE).split(BLANK);
     }
 
     @Override

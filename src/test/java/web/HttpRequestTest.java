@@ -21,7 +21,7 @@ class HttpRequestTest {
     @DisplayName("요청이 POST인지 확인한다.")
     @Test
     void isPost() throws IOException {
-        assertTrue(new HttpRequest(createBufferedReader(request)).isPost());
+        assertTrue(new HttpRequest(createBufferedReader(REQUEST)).isPost());
     }
 
     @DisplayName("요청의 Uri를 추출한다.")
@@ -41,8 +41,8 @@ class HttpRequestTest {
     @DisplayName("요청에서 RequestBody를 분리한다.")
     @Test
     void getRequestBody() throws IOException {
-        RequestBody expected = new RequestBody(createBufferedReader(body));
-        RequestBody actual = new HttpRequest(createBufferedReader(request)).getRequestBody();
+        RequestBody expected = new RequestBody(createBufferedReader(BODY));
+        RequestBody actual = new HttpRequest(createBufferedReader(REQUEST)).getRequestBody();
         assertEquals(expected, actual);
     }
 

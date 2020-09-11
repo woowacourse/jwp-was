@@ -6,11 +6,8 @@ import static web.RequestHeader.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,13 +18,17 @@ class HttpRequestParserTest {
     @DisplayName("요청에서 header를 추출한다.")
     @Test
     void parsingRequestHeader() throws IOException {
-        List<String> expected = Arrays.stream(HttpRequestFixture.header.split(NEW_LINE))
-                .filter(value -> value != null && !value.isEmpty())
-                .collect(Collectors.toList());
-
+        Map<String, String> expected = new HashMap<String, String>() {{
+            put("requestLine", "POST /user/create HTTP/1.1");
+            put("Host", "localhost:8080");
+            put("Connection", "keep-alive");
+            put("Content-Length", String.valueOf(JAVAJIGI_DATA.length()));
+            put("Accept", "*/*");
+        }};
         BufferedReader br = HttpRequestFixture.createBufferedReader(
-                HttpRequestFixture.request);
-        List<String> actual = HttpRequestParser.parsingRequestHeader(br);
+                HttpRequestFixture.REQUEST);
+
+        Map<String, String> actual = HttpRequestParser.parsingRequestHeader(br);
 
         assertEquals(expected, actual);
     }
