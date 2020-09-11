@@ -5,8 +5,6 @@ import http.RequestUri;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ControllerMapperTest {
@@ -15,8 +13,7 @@ class ControllerMapperTest {
     void from() {
         RequestUri requestUri = new RequestUri(
                 HttpMethod.GET,
-                "/user/create",
-                new HashMap<>()
+                "/user/create"
         );
 
         ControllerMapper controllerMapper = ControllerMapper.from(requestUri).get();

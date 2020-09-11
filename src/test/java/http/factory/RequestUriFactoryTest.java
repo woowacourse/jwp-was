@@ -16,7 +16,8 @@ class RequestUriFactoryTest {
     @Test
     void construct() {
         String request = "GET /user/create?userId=id&password=1234 HTTP/1.1\n";
-        RequestUri requestUri = RequestUriFactory.getRequestUri(request);
+        HashMap<String, String> params = new HashMap<>();
+        RequestUri requestUri = RequestUriFactory.createRequestUri(request, params);
 
         Map<String, String> expectedParams = new HashMap<>();
         expectedParams.put("userId", "id");
@@ -25,22 +26,7 @@ class RequestUriFactoryTest {
         assertAll(
                 () -> assertThat(requestUri.getMethod()).isEqualTo(HttpMethod.GET),
                 () -> assertThat(requestUri.getUrl()).isEqualTo("/user/create"),
-                () -> assertThat(requestUri.getParams()).isEqualTo(expectedParams)
-        );
-    }
-
-    @DisplayName("생성 테스트 - params가 없는 경우")
-    @Test
-    void constructWithNoParams() {
-        String request = "GET /user/create HTTP/1.1\n";
-        RequestUri requestUri = RequestUriFactory.getRequestUri(request);
-
-        Map<String, String> expectedParams = new HashMap<>();
-
-        assertAll(
-                () -> assertThat(requestUri.getMethod()).isEqualTo(HttpMethod.GET),
-                () -> assertThat(requestUri.getUrl()).isEqualTo("/user/create"),
-                () -> assertThat(requestUri.getParams()).isEqualTo(expectedParams)
+                () -> assertThat(params).isEqualTo(expectedParams)
         );
     }
 }

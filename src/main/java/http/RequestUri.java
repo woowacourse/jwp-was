@@ -2,18 +2,15 @@ package http;
 
 import controller.ControllerMapper;
 
-import java.util.Map;
 import java.util.Objects;
 
 public class RequestUri {
     private final HttpMethod method;
     private final String url;
-    private final Map<String, String> params;
 
-    public RequestUri(HttpMethod method, String url, Map<String, String> params) {
+    public RequestUri(HttpMethod method, String url) {
         this.method = method;
         this.url = url;
-        this.params = params;
     }
 
     public boolean isEqualRequestType(ControllerMapper url) {
@@ -26,10 +23,6 @@ public class RequestUri {
 
     public String getUrl() {
         return url;
-    }
-
-    public Map<String, String> getParams() {
-        return params;
     }
 
     @Override

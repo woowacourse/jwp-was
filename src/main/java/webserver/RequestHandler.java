@@ -4,7 +4,7 @@ import controller.Controller;
 import controller.ControllerMapper;
 import http.HttpRequest;
 import http.RequestUri;
-import http.factory.RequestFactory;
+import http.factory.HttpRequestFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
@@ -37,18 +37,20 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             DataOutputStream dos = new DataOutputStream(out);
 
-            HttpRequest httpRequest = RequestFactory.getRequest(br);
+            HttpRequest httpRequest = HttpRequestFactory.createRequest(br);
             RequestUri requestUri = httpRequest.getRequestUri();
 
             ControllerMapper.from(requestUri).ifPresent(
-                    mapper -> Controller.getMethod(mapper).accept(requestUri.getParams())
+                    mapper -> Controller.getMethod(mapper).accept(httpRequest.getParams())
             );
 
             byte[] body = FileIoUtils.loadFileFromClasspath(BASE_URL + requestUri.getUrl());
             response200Header(dos, body.length);
             responseBody(dos, body);
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException e) {
             logger.error(e.getMessage());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
         }
     }
 

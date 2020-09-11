@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 public enum ControllerMapper {
-    CREATE_USER(HttpMethod.GET, "/user/create");
+    CREATE_USER(HttpMethod.POST, "/user/create");
 
     private HttpMethod httpMethod;
     private String url;
