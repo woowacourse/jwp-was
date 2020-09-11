@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class FileIoUtilsTest {
+
     private static final Logger log = LoggerFactory.getLogger(FileIoUtilsTest.class);
 
     @Test
@@ -12,4 +13,5 @@ public class FileIoUtilsTest {
         byte[] body = FileIoUtils.loadFileFromClasspath("./templates/index.html");
         log.debug("file : {}", new String(body));
     }
+
 }
