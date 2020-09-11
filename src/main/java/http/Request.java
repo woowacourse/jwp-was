@@ -10,10 +10,10 @@ public class Request {
     private RequestHeader requestHeader;
     private RequestBody requestBody;
 
-    public Request(BufferedReader br) throws IOException {
-        this.requestLine = IOUtils.ofRequestLine(br.readLine());
-        this.requestHeader = IOUtils.ofRequestHeader(br);
-        this.requestBody = IOUtils.ofRequestBody(br);
+    public Request(BufferedReader br) throws Exception {
+        this.requestLine = new RequestLine(br);
+        this.requestHeader = new RequestHeader(br);
+        this.requestBody = new RequestBody(br, requestHeader.getContentLength());
     }
 
     public RequestLine getRequestLine() {

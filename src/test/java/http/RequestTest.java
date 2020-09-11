@@ -18,7 +18,7 @@ class RequestTest {
 
     @DisplayName("post Request 생성 테스트")
     @Test
-    void postRequestTest() throws IOException {
+    void postRequestTest() throws Exception {
         String request = "POST /user/create HTTP/1.1\n"
                 + "Host: localhost:8080\n"
                 + "Connection: keep-alive\n"
@@ -39,7 +39,7 @@ class RequestTest {
 
     @DisplayName("get Request 생성 테스트")
     @Test
-    void getRequestTest() throws IOException {
+    void getRequestTest() throws Exception {
         String request = "GET /user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net HTTP/1.1\n"
                 + "Host: localhost:8080\n"
                 + "Connection: keep-alive\n"
