@@ -10,16 +10,22 @@ import org.junit.jupiter.api.Test;
 
 public class RequestParamsTest {
 
-    private static final String REQUEST_PARAMS_WITH_EMPTY_VALUE = "name=&value=";
-
     @DisplayName("URI의 query에 빈 값이 들어갔을 경우 빈값이 잘 들어가는지 확인 한다.")
     @Test
     void emptyValue() throws UnsupportedEncodingException {
-        RequestParams requestParams = new RequestParams(REQUEST_PARAMS_WITH_EMPTY_VALUE);
+        RequestParams requestParams = new RequestParams("name=&value=");
         Map<String, String> params = requestParams.getParams();
         assertAll(
             () -> assertThat(params.get("name")).isEqualTo(""),
             () -> assertThat(params.get("value")).isEqualTo("")
         );
+    }
+
+    @DisplayName("URI의 query에 중복된 키값이 들어가는 경우 마지막값이 저장되게 한다.")
+    @Test
+    void duplicateKeys() throws UnsupportedEncodingException {
+        RequestParams requestParams = new RequestParams("name=a&name=b");
+        Map<String, String> params = requestParams.getParams();
+        assertThat(params.get("name")).isEqualTo("b");
     }
 }
