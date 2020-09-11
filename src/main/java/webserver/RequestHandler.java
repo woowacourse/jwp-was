@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import db.DataBase;
 import http.HttpRequest;
-import http.HttpRequestLine;
+import http.HttpResponse;
 import http.StaticFiles;
 import model.User;
 import utils.FileIoUtils;
@@ -37,62 +37,32 @@ public class RequestHandler implements Runnable {
             BufferedReader bufferedReader = new BufferedReader(
                 new InputStreamReader(inputStream, StandardCharsets.UTF_8));
             HttpRequest httpRequest = new HttpRequest(bufferedReader);
+            DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+            HttpResponse httpResponse = new HttpResponse(dataOutputStream);
 
-            HttpRequestLine httpRequestLine = httpRequest.getHttpRequestLine();
-            String path = httpRequestLine.getPath();
             if (httpRequest.isStaticFile()) {
-                DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
                 byte[] body = FileIoUtils.loadFileFromClasspath(
-                    StaticFiles.getDirectoryEndsWith(httpRequestLine.getPath()) + path);
-                response200Header(dataOutputStream, body.length);
-                responseBody(dataOutputStream, body);
+                    StaticFiles.getDirectoryEndsWith(httpRequest.getHttpPath()) + httpRequest.getHttpPath());
+                httpResponse.response200Header(body.length);
+                httpResponse.responseBody(body);
             } else {
-                User user = new User(
-                    httpRequest.getHttpBodyValueOf("userId"),
-                    httpRequest.getHttpBodyValueOf("password"),
-                    httpRequest.getHttpBodyValueOf("name"),
-                    httpRequest.getHttpBodyValueOf("email")
-                );
-                DataBase.addUser(user);
-                logger.debug("Saved User: {}", DataBase.findUserById(httpRequest.getHttpBodyValueOf("userId")));
+                if (httpRequest.getHttpPath().contains("/user/create")) {
+                    User user = new User(
+                        httpRequest.getHttpBodyValueOf("userId"),
+                        httpRequest.getHttpBodyValueOf("password"),
+                        httpRequest.getHttpBodyValueOf("name"),
+                        httpRequest.getHttpBodyValueOf("email")
+                    );
+                    DataBase.addUser(user);
+                    logger.debug("Saved User: {}", DataBase.findUserById(httpRequest.getHttpBodyValueOf("userId")));
+                }
 
-                DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
                 byte[] body = FileIoUtils.loadFileFromClasspath(
-                    StaticFiles.getDirectoryEndsWith(httpRequestLine.getPath()) + "/index.html");
-                response302Header(dataOutputStream, "/index.html");
-                responseBody(dataOutputStream, body);
+                    "./templates" + "/index.html");
+                httpResponse.response302Header("/index.html");
+                httpResponse.responseBody(body);
             }
         } catch (IOException | URISyntaxException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void response302Header(DataOutputStream dos, String url) {
-        try {
-            dos.writeBytes("HTTP/1.1 302 FOUND \r\n");
-            dos.writeBytes("Location: " + url + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
