@@ -1,8 +1,14 @@
 package http;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class RequestUri {
+    public static final String DELIMITER_OF_URI_AND_DATA = "\\?";
+    public static final String DELIMITER_OF_PARAM_DATA = "&";
+    public static final String DELIMITER_OF_KEY_VALUE = "=";
+
     private HttpMethod method;
     private String uri;
 
@@ -17,6 +23,16 @@ public class RequestUri {
 
     public String getUri() {
         return uri;
+    }
+
+    public Map<String, String> makeRequestParam() {
+        Map<String, String> params = new HashMap<>();
+        String paramString = uri.split(DELIMITER_OF_URI_AND_DATA)[1];
+        String[] paramData = paramString.split(DELIMITER_OF_PARAM_DATA);
+        for (String paramDatum : paramData) {
+            params.put(paramDatum.split(DELIMITER_OF_KEY_VALUE)[0], paramDatum.split(DELIMITER_OF_KEY_VALUE)[1]);
+        }
+        return params;
     }
 
     @Override
