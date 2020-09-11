@@ -65,11 +65,11 @@ public class RequestHandler implements Runnable {
     }
 
     private User bindParamsToUser(Map<String, String> params) {
-        return new User.Builder()
-            .userId(params.getOrDefault("userId", DEFAULT_USER_BIND_VALUE))
-            .password(params.getOrDefault("password", DEFAULT_USER_BIND_VALUE))
-            .name(params.getOrDefault("name", DEFAULT_USER_BIND_VALUE))
-            .email(params.getOrDefault("email", DEFAULT_USER_BIND_VALUE))
-            .build();
+        return new User(
+            params.get("userId"),
+            params.get("password"),
+            params.get("name"),
+            params.get("email")
+        );
     }
 }
