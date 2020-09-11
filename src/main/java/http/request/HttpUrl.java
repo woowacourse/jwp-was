@@ -30,7 +30,7 @@ public class HttpUrl {
     }
 
     private static String[] splitUrl(String url) {
-        return url.split(PATH_PARAM_DELIMITER);
+        return url.split(PATH_PARAM_DELIMITER, 2);
     }
 
     public String getPath() {
