@@ -11,6 +11,8 @@ import java.util.Objects;
 
 public class FileIoUtils {
 
+    private static final String DEFAULT_DIRECTORY = "webapp/";
+
     public static byte[] loadFileFromClasspath(String filePath)
         throws IOException, URISyntaxException {
         Path path = getPath(filePath);
@@ -18,7 +20,7 @@ public class FileIoUtils {
     }
 
     private static Path getPath(String filePath) throws URISyntaxException {
-        URL resource = FileIoUtils.class.getClassLoader().getResource(filePath);
+        URL resource = FileIoUtils.class.getClassLoader().getResource(DEFAULT_DIRECTORY + filePath);
         URI uri = Objects.requireNonNull(resource).toURI();
         return Paths.get(uri);
     }
