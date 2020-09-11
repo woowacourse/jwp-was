@@ -53,6 +53,7 @@ public class RequestHandler implements Runnable {
 
             if (requestLine.getMethod().equals("POST") && url.equals("/user/create")) {
                 createUser(requestBody);
+                response302Header(dos, "/index.html");
             }
 
             if (url.contains(".html")) {
@@ -71,6 +72,16 @@ public class RequestHandler implements Runnable {
         final Map<String, String> parameters = body.parseParameters();
         final User user = new User(parameters.get("userId"), parameters.get("password"), parameters.get("name"), parameters.get("email"));
         DataBase.addUser(user);
+    }
+
+    private void response302Header(DataOutputStream dos, String url) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 Found \r\n");
+            dos.writeBytes("Location: " + url + " \r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
