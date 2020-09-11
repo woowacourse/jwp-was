@@ -41,17 +41,17 @@ public class HttpRequestHeader {
         return this.requestLine.findExtension();
     }
 
-    public int findContentLength() {
-        String length = this.getHeaderParams()
-            .getOrDefault("Content-Length", "0");
-        return Integer.parseInt(length);
-    }
-
     public RequestMethod getRequestMethod() {
         return requestLine.getRequestMethod();
     }
 
     public String getPath() {
         return requestLine.getPath();
+    }
+
+    public int findContentLength() {
+        String length = this.getHeaderParams()
+            .getOrDefault("Content-Length", "0");
+        return Integer.parseInt(length);
     }
 }
