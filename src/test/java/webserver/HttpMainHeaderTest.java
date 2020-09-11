@@ -19,12 +19,23 @@ class HttpMainHeaderTest {
 	}
 
 	@Test
-	@DisplayName("url 처리 테스트 - index.html")
-	void processByUrl() throws IOException, URISyntaxException {
+	@DisplayName("url 처리 테스트 - /index.html")
+	void processByIndexUrl() throws IOException, URISyntaxException {
 		HttpMainHeader httpMainHeader = new HttpMainHeader(HttpMethod.GET, "/index.html");
 
 		byte[] actual = httpMainHeader.processByUrl();
 		byte[] expected = FileIoUtils.loadFileFromClasspath("./templates/index.html");
+
+		assertThat(actual).isEqualTo(expected);
+	}
+
+	@Test
+	@DisplayName("url 처리 테스트 - /user/form.html")
+	void processByFromUrl() throws IOException, URISyntaxException {
+		HttpMainHeader httpMainHeader = new HttpMainHeader(HttpMethod.GET, "/user/form.html");
+
+		byte[] actual = httpMainHeader.processByUrl();
+		byte[] expected = FileIoUtils.loadFileFromClasspath("./templates/user/form.html");
 
 		assertThat(actual).isEqualTo(expected);
 	}

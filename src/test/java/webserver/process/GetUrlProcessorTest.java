@@ -31,4 +31,14 @@ class GetUrlProcessorTest {
 
 		assertThat(actual).isEqualTo(expected);
 	}
+
+	@DisplayName("/user/form.html 요청 처리")
+	@Test
+	void applyByUserFormHtml() throws IOException, URISyntaxException {
+		byte[] actual = new GetUrlProcessor().apply("/user/form.html");
+
+		byte[] expected = FileIoUtils.loadFileFromClasspath("./templates/user/form.html");
+
+		assertThat(actual).isEqualTo(expected);
+	}
 }

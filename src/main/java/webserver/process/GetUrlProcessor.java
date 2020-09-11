@@ -17,6 +17,12 @@ public class GetUrlProcessor implements Function<String, byte[]> {
 			} catch (IOException | URISyntaxException e) {
 				e.printStackTrace();
 			}
+		} else if (url.equals("/user/form.html")) {
+			try {
+				return FileIoUtils.loadFileFromClasspath("./templates/user/form.html");
+			} catch (IOException | URISyntaxException e) {
+				e.printStackTrace();
+			}
 		}
 		throw new NotExistUrlException();
 	}
