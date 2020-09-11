@@ -1,10 +1,10 @@
 package http;
 
-public class Request {
+public class HttpRequest {
     private final RequestUri requestUri;
     private final RequestHeader requestHeader;
 
-    public Request(RequestUri requestUri, RequestHeader requestHeader) {
+    public HttpRequest(RequestUri requestUri, RequestHeader requestHeader) {
         this.requestUri = requestUri;
         this.requestHeader = requestHeader;
     }

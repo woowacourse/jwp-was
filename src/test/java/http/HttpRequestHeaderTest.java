@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.io.BufferedReader;
 import java.io.StringReader;
 
-class RequestHeaderTest {
+class HttpRequestHeaderTest {
     @DisplayName("요청 url을 가져오는 기능 테스트")
     @Test
     void findRequestUrl() {

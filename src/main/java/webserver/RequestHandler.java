@@ -1,8 +1,10 @@
 package webserver;
 
-import http.Request;
-import http.RequestFactory;
+import controller.Controller;
+import controller.ControllerMapper;
+import http.HttpRequest;
 import http.RequestUri;
+import http.factory.RequestFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
@@ -33,13 +35,16 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-
-            Request request = RequestFactory.getRequest(br);
-            RequestUri requestUri = request.getRequestUri();
-
-            byte[] body = FileIoUtils.loadFileFromClasspath(BASE_URL + requestUri.getUri());
-
             DataOutputStream dos = new DataOutputStream(out);
+
+            HttpRequest httpRequest = RequestFactory.getRequest(br);
+            RequestUri requestUri = httpRequest.getRequestUri();
+
+            ControllerMapper.from(requestUri).ifPresent(
+                    mapper -> Controller.getMethod(mapper).accept(requestUri.getParams())
+            );
+
+            byte[] body = FileIoUtils.loadFileFromClasspath(BASE_URL + requestUri.getUrl());
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException | URISyntaxException e) {
