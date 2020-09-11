@@ -1,7 +1,9 @@
 package utils;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -38,6 +40,19 @@ public class IOUtils {
             return URLDecoder.decode(input, StandardCharsets.UTF_8.name());
         } catch (UnsupportedEncodingException e) {
             throw new AssertionError();
+        }
+    }
+
+    public static byte[] getBytesFromInputStream(InputStream is) {
+        try {
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            byte[] buffer = new byte[0xFFFF];
+            for (int len = is.read(buffer); len != -1; len = is.read(buffer)) {
+                os.write(buffer, 0, len);
+            }
+            return os.toByteArray();
+        } catch (IOException e) {
+            throw new RuntimeException("byte로 변환할 수 없습니다");
         }
     }
 }

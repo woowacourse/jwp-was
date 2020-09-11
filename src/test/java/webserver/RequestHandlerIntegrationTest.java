@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import utils.FileIoUtils;
 import utils.IOUtils;
 
 class RequestHandlerIntegrationTest {
@@ -29,8 +30,10 @@ class RequestHandlerIntegrationTest {
             + "Content-Type: text/html;charset=utf-8\n"
             + "Content-Length: 6902\n";
 
+    private static final String RESPONSE_BODY = new String(FileIoUtils.loadFileFromClasspath("./templates/index.html"));
+
     @Test
-    void test() {
+    void integrationTest() {
         // run server side
         Thread thread = new Thread(new Server());
         thread.start();
@@ -38,10 +41,12 @@ class RequestHandlerIntegrationTest {
         // run client side
         try {
             Client client = new Client(makeConnectedSocket());
-            String responseHeader = client.sendAndReadResponseHeader(REQUEST);
+            String response = client.sendAndReadResponse(REQUEST);
+            System.out.println(response);
 
             // assertThat response is equal to expected
-            assertThat(responseHeader).isEqualTo(RESPONSE_HEADER);
+            assertThat(response).startsWith(RESPONSE_HEADER);
+            assertThat(response).contains(RESPONSE_BODY);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -90,9 +95,11 @@ class RequestHandlerIntegrationTest {
             }
         }
 
-        public String sendAndReadResponseHeader(String message) {
+        public String sendAndReadResponse(String message) {
             writer.println(message);
-            return readResponseHeader();
+            String header = readResponseHeader();
+            String body = readResponseBody();
+            return header + System.lineSeparator() + body;
         }
 
         private String readResponseHeader() {
@@ -106,6 +113,15 @@ class RequestHandlerIntegrationTest {
                 }
 
                 return stringBuilder.toString();
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException();
+            }
+        }
+
+        private String readResponseBody() {
+            try {
+                return IOUtils.readDataWithinLength(reader, 6902);
             } catch (IOException e) {
                 e.printStackTrace();
                 throw new RuntimeException();
