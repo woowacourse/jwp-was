@@ -15,13 +15,15 @@ public class FileIoUtils {
 
     public static byte[] loadFileFromClasspath(String filePath)
         throws IOException, URISyntaxException {
-        Path path = getPath(filePath);
+        Path path = Paths.get(findFileUri(filePath));
         return Files.readAllBytes(path);
     }
 
-    private static Path getPath(String filePath) throws URISyntaxException {
+    private static URI findFileUri(String filePath) throws URISyntaxException {
         URL resource = FileIoUtils.class.getClassLoader().getResource(DEFAULT_DIRECTORY + filePath);
-        URI uri = Objects.requireNonNull(resource).toURI();
-        return Paths.get(uri);
+        if (Objects.isNull(resource)) {
+            throw new FileNotExitsException(filePath);
+        }
+        return Objects.requireNonNull(resource).toURI();
     }
 }
