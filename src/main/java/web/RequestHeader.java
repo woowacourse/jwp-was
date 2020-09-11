@@ -1,6 +1,7 @@
 package web;
 
 import static utils.HttpRequestParser.*;
+import static web.HeaderProperty.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,13 +9,11 @@ import java.util.Map;
 import java.util.Objects;
 
 public class RequestHeader {
+
     public static final String NEW_LINE = System.lineSeparator();
     private static final String BLANK = " ";
     private static final int METHOD_INDEX = 0;
     private static final int PATH_INDEX = 1;
-    public static final String REQUEST_LINE = "requestLine";
-    public static final String CONTENT_LENGTH = "Content-Length";
-    public static final String ACCEPT = "Accept";
 
     private final Map<String, String> header;
     private Method method;
@@ -39,18 +38,19 @@ public class RequestHeader {
     }
 
     public int getContentLength() {
-        return Integer.parseInt(header.get(CONTENT_LENGTH));
+        return Integer.parseInt(header.get(CONTENT_LENGTH.getName()));
     }
 
-    public String getAccept(){
-        return header.get(ACCEPT);
+    public String getAccept() {
+        return header.get(ACCEPT.getName());
     }
+
     public RequestUri getRequestUri() {
         return requestUri;
     }
 
     private String[] getRequestLine() {
-        return header.get(REQUEST_LINE).split(BLANK);
+        return header.get(REQUEST_LINE.getName()).split(BLANK);
     }
 
     @Override

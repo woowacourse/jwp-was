@@ -27,6 +27,10 @@ public class HttpRequest {
         return requestHeader.getRequestUri().getUri();
     }
 
+    public String getAccept() {
+        return requestHeader.getAccept();
+    }
+
     public RequestHeader getRequestHeader() {
         return requestHeader;
     }

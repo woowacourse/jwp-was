@@ -42,7 +42,7 @@ public class HttpResponse {
             logger.error(e.getMessage());
         }
         if (content != null) {
-            String response = response200Header(content);
+            String response = response200Header(httpRequest.getAccept(), content);
             toDataOutputStream(response);
             responseBody(content);
         }
@@ -61,9 +61,9 @@ public class HttpResponse {
         }
     }
 
-    private String response200Header(byte[] content) {
+    private String response200Header(String accept, byte[] content) {
         return "HTTP/1.1 200 OK" + NEW_LINE
-                + "Content-Type: text/html;charset=utf-8" + NEW_LINE
+                + "Content-Type: " + accept + NEW_LINE
                 + "Content-Length: " + content.length + NEW_LINE
                 + NEW_LINE;
     }

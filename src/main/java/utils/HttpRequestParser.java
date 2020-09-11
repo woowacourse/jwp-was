@@ -1,6 +1,6 @@
 package utils;
 
-import static web.RequestHeader.*;
+import static web.HeaderProperty.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,7 +18,7 @@ public class HttpRequestParser {
 
     public static Map<String, String> parsingRequestHeader(BufferedReader br) throws IOException {
         Map<String, String> request = new HashMap<>();
-        request.put(REQUEST_LINE, br.readLine());
+        request.put(REQUEST_LINE.getName(), br.readLine());
         String line = br.readLine();
         while (line != null && !EMPTY.equals(line)) {
             String[] headerData = line.split(HEADER_DATA_DELIMITER);
