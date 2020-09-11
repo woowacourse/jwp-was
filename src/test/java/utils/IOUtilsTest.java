@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
+import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -13,12 +14,21 @@ public class IOUtilsTest {
     private static final Logger logger = LoggerFactory.getLogger(IOUtilsTest.class);
 
     @Test
-    public void readData() throws Exception {
+    public void readDataWithinLength() throws Exception {
         String data = "abcd123";
         StringReader sr = new StringReader(data);
         BufferedReader br = new BufferedReader(sr);
 
-        logger.debug("parse body : {}", IOUtils.readData(br, data.length()));
+        logger.debug("parse body : {}", IOUtils.readDataWithinLength(br, data.length()));
+    }
+
+    @Test
+    public void readDataUntilEmpty() throws Exception {
+        String data = "qwer\nasdf\n\nzcxv";
+        StringReader sr = new StringReader(data);
+        BufferedReader br = new BufferedReader(sr);
+
+        assertThat(IOUtils.readDataUntilEmpty(br)).isEqualTo(Arrays.asList("qwer", "asdf"));
     }
 
     @Test

@@ -28,7 +28,7 @@ public class RequestBody {
     }
 
     private static String extractBody(BufferedReader bufferedReader, int contentLength) throws IOException {
-        return IOUtils.readData(bufferedReader, contentLength);
+        return IOUtils.readDataWithinLength(bufferedReader, contentLength);
     }
 
     public String getContent() {

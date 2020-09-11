@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 public class IOUtils {
     /**
@@ -15,10 +17,20 @@ public class IOUtils {
      * @return
      * @throws IOException
      */
-    public static String readData(BufferedReader br, int contentLength) throws IOException {
+    public static String readDataWithinLength(BufferedReader br, int contentLength) throws IOException {
         char[] body = new char[contentLength];
         br.read(body, 0, contentLength);
         return String.copyValueOf(body);
+    }
+
+    public static List<String> readDataUntilEmpty(BufferedReader br) throws IOException {
+        List<String> output = new ArrayList<>();
+        String line = br.readLine();
+        while (line != null && !line.isEmpty()) {
+            output.add(line);
+            line = br.readLine();
+        }
+        return output;
     }
 
     public static String decode(String input) {

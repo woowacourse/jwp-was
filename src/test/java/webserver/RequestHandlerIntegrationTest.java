@@ -10,8 +10,11 @@ import java.net.ConnectException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
+
+import utils.IOUtils;
 
 class RequestHandlerIntegrationTest {
 
@@ -96,11 +99,10 @@ class RequestHandlerIntegrationTest {
             try {
                 StringBuilder stringBuilder = new StringBuilder();
 
-                String line = reader.readLine();
-                while (line != null && !line.isEmpty()) {
+                List<String> lines = IOUtils.readDataUntilEmpty(reader);
+                for (String line : lines) {
                     stringBuilder.append(line);
                     stringBuilder.append(System.lineSeparator());
-                    line = reader.readLine();
                 }
 
                 return stringBuilder.toString();

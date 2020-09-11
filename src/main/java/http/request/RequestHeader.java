@@ -3,7 +3,10 @@ package http.request;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import utils.IOUtils;
 
 public class RequestHeader {
     private Map<String, String> headers;
@@ -25,11 +28,10 @@ public class RequestHeader {
     }
 
     private static void extractHeaders(BufferedReader bufferedReader, Map<String, String> headers) throws IOException {
-        String line = bufferedReader.readLine();
-        while (line != null && !line.isEmpty()) {
+        List<String> lines = IOUtils.readDataUntilEmpty(bufferedReader);
+        for (String line : lines) {
             String[] keyValues = line.split(": ", 2);
             headers.put(keyValues[0], keyValues[1]);
-            line = bufferedReader.readLine();
         }
     }
 
