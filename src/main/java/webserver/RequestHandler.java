@@ -1,5 +1,7 @@
 package webserver;
 
+import db.DataBase;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
@@ -29,6 +31,11 @@ public class RequestHandler implements Runnable {
 
             String requestLine = br.readLine();
             String path = URLUtils.parseURL(requestLine);
+
+            if (path.equals("/user/create")) {
+                createUser(requestLine);
+            }
+
             byte[] body = FileIoUtils.loadFileFromClasspath(RESOURCE_BASE_PATH + path);
 
             response200Header(dos, body.length);
@@ -38,6 +45,11 @@ public class RequestHandler implements Runnable {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
+    }
+
+    private void createUser(String requestLine) {
+        final User user = URLUtils.parseUser(requestLine);
+        DataBase.addUser(user);
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
