@@ -1,14 +1,14 @@
 package http.request;
 
+import static utils.StringUtils.*;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import utils.IOUtils;
 
 public class HttpUrl {
-    
-    private static final String PARAM_BUNDLE_DELIMITER = "&";
-    private static final String KEY_VALUE_DELIMITER = "=";
+
     private static final String PATH_PARAM_DELIMITER = "\\?";
 
     private String path;
@@ -31,16 +31,6 @@ public class HttpUrl {
 
     private static String[] splitUrl(String url) {
         return url.split(PATH_PARAM_DELIMITER);
-    }
-
-    private static Map<String, String> extractParams(String paramBundle) {
-        Map<String, String> output = new HashMap<>();
-        String[] params = paramBundle.split(PARAM_BUNDLE_DELIMITER);
-        for (String param : params) {
-            String[] keyValues = param.split(KEY_VALUE_DELIMITER);
-            output.put(keyValues[0], keyValues[1]);
-        }
-        return output;
     }
 
     public String getPath() {

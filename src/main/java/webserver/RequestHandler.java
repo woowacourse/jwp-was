@@ -15,9 +15,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import db.DataBase;
+import http.request.HttpMethod;
+import http.request.RequestBody;
+import http.request.RequestEntity;
 import model.User;
 import utils.FileIoUtils;
-import utils.RequestUtils;
+import utils.StringUtils;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -35,18 +38,14 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
 
-            String requestHeader = RequestUtils.extractHeader(bufferedReader);
-            logRequest(requestHeader);
-            String wholeUrl = RequestUtils.extractWholeUrl(requestHeader);
-            String path = RequestUtils.extractPath(wholeUrl);
+            RequestEntity requestEntity = RequestEntity.from(bufferedReader);
 
             DataOutputStream dos = new DataOutputStream(out);
 
-            String method = RequestUtils.extractMethod(requestHeader);
-            if ("/user/create".equals(path) && "POST".equals(method)) {
-                String contentLength = RequestUtils.extractHeaderValue(requestHeader, "Content-Length");
-                String body = RequestUtils.extractBody(bufferedReader, contentLength);
-                Map<String, String> userInfo = RequestUtils.extractBodyParams(body);
+            String path = requestEntity.getHttpUrl().getPath();
+            if (requestEntity.getHttpMethod() == HttpMethod.POST && path.equals("/user/create")) {
+                RequestBody requestBody = requestEntity.getRequestBody();
+                Map<String, String> userInfo = StringUtils.extractParams(requestBody.getContent());
                 User user = new User(
                     userInfo.get("userId"), userInfo.get("password"), userInfo.get("name"), userInfo.get("email"));
                 DataBase.addUser(user);
@@ -60,13 +59,6 @@ public class RequestHandler implements Runnable {
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
-    }
-
-    private void logRequest(String request) {
-        logger.debug(
-            System.lineSeparator() + "----- 요청 시작 -----"
-                + System.lineSeparator() + request
-                + "----- 요청 끝 -----");
     }
 
     private String parseToLocalPath(String path) {

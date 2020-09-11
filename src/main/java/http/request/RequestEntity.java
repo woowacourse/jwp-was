@@ -29,11 +29,13 @@ public class RequestEntity {
             String httpVersion = splittedStartLine[2];
 
             RequestHeader requestHeader = RequestHeader.from(bufferedReader);
-            ContentType contentType = ContentType.findOrDefault(requestHeader.findOrEmpty("Content-Type"));
-            RequestBody requestBody = RequestBody.from(bufferedReader, contentType,
-                Integer.parseInt(requestHeader.findOrEmpty("Content-Length")));
-
-            return new RequestEntity(httpMethod, httpUrl, httpVersion, requestHeader, requestBody);
+            String contentLength = requestHeader.findOrEmpty("Content-Length");
+            if (!contentLength.isEmpty()) {
+                ContentType contentType = ContentType.findOrDefault(requestHeader.findOrEmpty("Content-Type"));
+                RequestBody requestBody = RequestBody.from(bufferedReader, contentType, Integer.parseInt(contentLength));
+                return new RequestEntity(httpMethod, httpUrl, httpVersion, requestHeader, requestBody);
+            }
+            return new RequestEntity(httpMethod, httpUrl, httpVersion, requestHeader, null);
         } catch (IOException e) {
             throw new RuntimeException("IO EXCEPTION 발생");
         }
