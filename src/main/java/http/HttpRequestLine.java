@@ -5,9 +5,9 @@ import java.util.Map;
 public class HttpRequestLine {
     private static final String START_LINE_DELIMITER = " ";
 
-    private HttpMethod httpMethod;
-    private HttpUrl httpUrl;
-    private String version;
+    private final HttpMethod httpMethod;
+    private final HttpUrl httpUrl;
+    private final String version;
 
     public HttpRequestLine(String requestLine) {
         String[] splitedStartLine = requestLine.split(START_LINE_DELIMITER);

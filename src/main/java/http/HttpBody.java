@@ -7,7 +7,7 @@ public class HttpBody {
     private static final String DATA_DIVIDER = "&";
     private static final String KEY_VALUE_DIVIDER = "=";
 
-    private Map<String, String> httpBody = new LinkedHashMap<>();
+    private final Map<String, String> httpBody = new LinkedHashMap<>();
 
     public HttpBody(String httpBody) {
         String[] splitBodies = httpBody.split(DATA_DIVIDER);

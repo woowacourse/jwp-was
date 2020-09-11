@@ -8,7 +8,7 @@ public class HttpUrl {
     private static final String PARAMETERS_DIVIDER = "&";
     private static final String PARAMETER_DIVIDER = "=";
 
-    private String url;
+    private final String url;
 
     public HttpUrl(String url) {
         this.url = url;
