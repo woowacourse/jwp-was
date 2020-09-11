@@ -11,7 +11,7 @@
 
 ## LEVEL-1 기능 목록
 
-- [ ] `http://localhost:8080/index.html` => index.html 파일 응답
+- [x] `http://localhost:8080/index.html` => index.html 파일 응답
 - [ ] “회원가입” 메뉴를 클릭하면 `http://localhost:8080/user/form.html` 이동  
     - [ ] 회원가입을 하면 다음과 같은 형태로 사용자가 입력한 값이 서버에 전달된다.
     - `/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net`

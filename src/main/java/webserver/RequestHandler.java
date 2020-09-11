@@ -30,9 +30,8 @@ public class RequestHandler implements Runnable {
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 
 			HttpMainHeader httpMainHeader = extractHttpMainHeader(bufferedReader);
-
 			DataOutputStream dos = new DataOutputStream(out);
-			byte[] body = "Hello World".getBytes();
+			byte[] body = httpMainHeader.processByUrl();
 			response200Header(dos, body.length);
 			responseBody(dos, body);
 		} catch (IOException e) {

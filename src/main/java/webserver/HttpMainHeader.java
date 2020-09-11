@@ -10,6 +10,10 @@ public class HttpMainHeader {
 		this.requestUrl = requestUrl;
 	}
 
+	public byte[] processByUrl() {
+		return httpMethod.processByUrl(this.requestUrl);
+	}
+
 	public HttpMethod getHttpMethod() {
 		return httpMethod;
 	}
