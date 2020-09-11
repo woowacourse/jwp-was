@@ -39,4 +39,4 @@
 
 ### 요구사항 5  
 > 지금까지 구현한 소스 코드는 stylesheet 파일을 지원하지 못하고 있다. Stylesheet 파일을 지원하도록 구현하도록 한다.
-  
+- [ ] stylesheet을 지원하도록 응답 헤더에 Content-Type을 추가한다.
