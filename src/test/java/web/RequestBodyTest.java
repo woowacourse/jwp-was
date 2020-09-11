@@ -1,23 +1,24 @@
 package web;
 
-import model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class RequestBodyTest {
     @DisplayName("body 에서 User를 추출할 수 있다.")
     @Test
-    void parseBody() {
+    void parseParameters() {
         String body = "userId=a&password=b&name=c&email=d%40d";
-        final User expected = new User("a", "b", "c", "d%40d");
 
         final RequestBody requestBody = new RequestBody(body);
 
-        final User user = requestBody.parseUser();
+        final Map<String, String> user = requestBody.parseParameters();
 
-        assertThat(user).isEqualTo(expected);
+        assertThat(user.keySet()).containsOnly("userId", "password", "name", "email");
+        assertThat(user.values()).containsOnly("a", "b", "c", "d%40d");
     }
 
 }

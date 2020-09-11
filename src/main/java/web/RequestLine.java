@@ -1,7 +1,5 @@
 package web;
 
-import model.User;
-
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -45,14 +43,12 @@ public class RequestLine {
         return this.path.split(URL_PARAMETER_DELIMITER)[URL_INDEX];
     }
 
-    public User parseUser() {
+    public Map<String, String> parseParameters() {
         final String parameterString = this.path.split(URL_PARAMETER_DELIMITER)[PARAMETER_INDEX];
         final String[] pairs = parameterString.split(PARAMETER_DELIMITER);
 
-        final Map<String, String> parameters = Arrays.stream(pairs)
+        return Arrays.stream(pairs)
                 .map(parameter -> parameter.split(KEY_VALUE_DELIMITER))
                 .collect(Collectors.toMap(it -> it[INDEX_ZERO], it -> it[INDEX_ONE]));
-
-        return new User(parameters.get("userId"), parameters.get("password"), parameters.get("name"), parameters.get("email"));
     }
 }

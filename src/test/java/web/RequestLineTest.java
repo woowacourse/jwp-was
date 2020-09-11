@@ -1,8 +1,9 @@
 package web;
 
-import model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -29,15 +30,16 @@ class RequestLineTest {
         assertThat(requestLine.requestUrl()).isEqualTo("/index.html");
     }
 
-    @DisplayName("requestLine 에서 User를 추출할 수 있다.")
+    @DisplayName("requestLine 에서 전달받은 파라미터를 추출할 수 있다.")
     @Test
-    void parseUser() {
+    void parseParameters() {
         String request = "GET /user/create?userId=a&password=b&name=c&email=d%40d HTTP/1.1";
-        final User expected = new User("a", "b", "c", "d%40d");
 
         final RequestLine requestLine = new RequestLine(request);
+        final Map<String, String> parameters = requestLine.parseParameters();
 
-        assertThat(requestLine.parseUser()).isEqualTo(expected);
+        assertThat(parameters.keySet()).containsOnly("userId", "password", "name", "email");
+        assertThat(parameters.values()).containsOnly("a", "b", "c", "d%40d");
     }
 
 }

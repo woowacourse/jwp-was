@@ -15,6 +15,7 @@ import java.net.Socket;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -68,7 +69,8 @@ public class RequestHandler implements Runnable {
     }
 
     private void createUser(RequestBody body) {
-        final User user = body.parseUser();
+        final Map<String, String> parameters = body.parseParameters();
+        final User user = new User(parameters.get("userId"), parameters.get("password"), parameters.get("name"), parameters.get("email"));
         DataBase.addUser(user);
     }
 
