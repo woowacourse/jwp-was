@@ -12,9 +12,9 @@ class UriTest {
     private Uri uriNotUsingQueryString = new Uri("/users/me");
 
     @Test
-    void isQueryString() {
-        assertThat(getMethodUri.isQueryString()).isTrue();
-        assertThat(uriNotUsingQueryString.isQueryString()).isFalse();
+    void isUsingQueryString() {
+        assertThat(getMethodUri.isUsingQueryString()).isTrue();
+        assertThat(uriNotUsingQueryString.isUsingQueryString()).isFalse();
     }
 
     @Test
@@ -27,8 +27,17 @@ class UriTest {
     }
 
     @Test
-    void getUri() {
-        assertThat(getMethodUri.getUri()).isEqualTo("/join?id=abcd&password=test");
-        assertThat(uriNotUsingQueryString.getUri()).isEqualTo("/users/me");
+    void isPath() {
+        assertThat(getMethodUri.isPath("/join")).isTrue();
+        assertThat(getMethodUri.isPath("/joinUs")).isFalse();
+
+        assertThat(uriNotUsingQueryString.isPath("/users/me")).isTrue();
+        assertThat(uriNotUsingQueryString.isPath("/users/you")).isFalse();
+    }
+
+    @Test
+    void getPath() {
+        assertThat(getMethodUri.getPath()).isEqualTo("/join");
+        assertThat(uriNotUsingQueryString.getPath()).isEqualTo("/users/me");
     }
 }

@@ -2,6 +2,7 @@ package webserver.httpmessages.request;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 class RequestLine {
 
@@ -23,11 +24,23 @@ class RequestLine {
         }
     }
 
+    boolean isUriUsingQueryString() {
+        return uri.isUsingQueryString();
+    }
+
+    Map<String, String> getQueryDataFromUri() {
+        return uri.getDataFromGetMethodUri();
+    }
+
+    boolean isUriPath(String uriPath) {
+        return uri.isPath(uriPath);
+    }
+
     String getMethod() {
         return method.getMethod();
     }
 
     String getUri() {
-        return uri.getUri();
+        return uri.getPath();
     }
 }

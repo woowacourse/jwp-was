@@ -3,6 +3,7 @@ package webserver.httpmessages.request;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /** request 형태!
  *
@@ -19,7 +20,7 @@ public class Request {
 
     private RequestLine requestLine;
     private Headers headers;
-    private MessageBody messageBody;
+//    private MessageBody messageBody;
 
     public Request(String httpRequest) {
         List<String> lines = new ArrayList<>(Arrays.asList(httpRequest.split(LINE_SEPARATOR)));
@@ -28,6 +29,18 @@ public class Request {
 
         lines.remove(0);
         headers = new Headers(lines);
+    }
+
+    public boolean isUriUsingQueryString() {
+        return requestLine.isUriUsingQueryString();
+    }
+
+    public Map<String, String > getQueryDataFromUri() {
+        return requestLine.getQueryDataFromUri();
+    }
+
+    public boolean isUriPath(String uriPath) {
+        return requestLine.isUriPath(uriPath);
     }
 
     public String getMethod() {

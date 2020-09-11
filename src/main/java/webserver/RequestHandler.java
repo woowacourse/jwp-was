@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
+import java.util.Map;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.IOUtils;
@@ -38,6 +40,19 @@ public class RequestHandler implements Runnable {
             System.out.println(httpRequestFormat);
             System.out.println("##################");
 
+            if (httpRequest.isUriPath("/user/create") && httpRequest.isUriUsingQueryString()) {
+                Map<String, String> queryData = httpRequest.getQueryDataFromUri();
+                User user = new User(
+                    queryData.get("userId"),
+                    queryData.get("password"),
+                    queryData.get("name"),
+                    queryData.get("email")
+                );
+                User savedUser = User.save(user);
+
+                DataOutputStream dos = new DataOutputStream(out);
+                response201Header(dos, "/user/" + savedUser.getUserId());
+            }
             Resource resourceForResponse =
                 resourcesHandler.convertUriToResource(httpRequest.getUri());
             byte[] body = resourceForResponse.getResource();
@@ -57,6 +72,16 @@ public class RequestHandler implements Runnable {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
             dos.writeBytes("Content-Type: " + contentType + ";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void response201Header(DataOutputStream dos, String location) {
+        try {
+            dos.writeBytes("HTTP/1.1 201 OK \r\n");
+            dos.writeBytes("Location: " + location + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
