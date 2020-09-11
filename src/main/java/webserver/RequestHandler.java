@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import utils.IOUtils;
-import utils.RequestUtils;
+import web.RequestBody;
 import web.RequestHeader;
 import web.RequestLine;
 
@@ -47,16 +47,18 @@ public class RequestHandler implements Runnable {
             requestHeaders.remove("");
             final RequestHeader header = new RequestHeader(requestHeaders);
 
+            final int contentLength = header.getContentLength();
+            final String body = IOUtils.readData(br, contentLength);
+            final RequestBody requestBody = new RequestBody(body);
+
             if (requestLine.getMethod().equals("POST") && url.equals("/user/create")) {
-                final int contentLength = header.getContentLength();
-                final String body = IOUtils.readData(br, contentLength);
-                createUser(body);
+                createUser(requestBody);
             }
 
             if (requestLine.requestUrl().contains(".html")) {
-                byte[] body = FileIoUtils.loadFileFromClasspath(RESOURCE_BASE_PATH + url);
-                response200Header(dos, body.length);
-                responseBody(dos, body);
+                byte[] staticFile = FileIoUtils.loadFileFromClasspath(RESOURCE_BASE_PATH + url);
+                response200Header(dos, staticFile.length);
+                responseBody(dos, staticFile);
             }
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -65,8 +67,8 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void createUser(String body) {
-        final User user = RequestUtils.parseBody(body);
+    private void createUser(RequestBody body) {
+        final User user = body.parseUser();
         DataBase.addUser(user);
     }
 
