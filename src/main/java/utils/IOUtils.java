@@ -23,7 +23,7 @@ public class IOUtils {
         StringBuilder sb = new StringBuilder();
         String line = bufferedReader.readLine();
 
-        while (!"".equals(line) && line != null) {
+        while (line != null && !"".equals(line)) {
             sb.append(line).append(NEW_LINE);
             line = bufferedReader.readLine();
         }
