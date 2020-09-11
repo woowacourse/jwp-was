@@ -2,11 +2,13 @@ package utils;
 
 import model.User;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class URLUtils {
+public class RequestUtils {
     public static final String REQUEST_LINE_DELIMITER = " ";
     public static final String PARAMETER_DELIMITER = "&";
     public static final String KEY_VALUE_DELIMITER = "=";
@@ -37,5 +39,11 @@ public class URLUtils {
                 .collect(Collectors.toMap(it -> it[INDEX_ZERO], it -> it[INDEX_ONE]));
 
         return new User(parameters.get("userId"), parameters.get("password"), parameters.get("name"), parameters.get("email"));
+    }
+
+    public static Map<String, String> parseHeaders(List<String> headers) {
+        return headers.stream()
+                .map(header -> header.split(": "))
+                .collect(Collectors.toMap(it -> it[INDEX_ZERO], it -> it[INDEX_ONE]));
     }
 }

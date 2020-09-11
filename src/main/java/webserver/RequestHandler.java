@@ -5,11 +5,14 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
-import utils.URLUtils;
+import utils.RequestUtils;
 
 import java.io.*;
 import java.net.Socket;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -29,11 +32,19 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
             DataOutputStream dos = new DataOutputStream(out);
 
-            String requestLine = br.readLine();
-            String path = URLUtils.parseURL(requestLine);
+            String request = br.readLine();
+            String path = RequestUtils.parseURL(request);
+            List<String> requestHeaders = new ArrayList<>();
+
+            while (!request.equals("")) {
+                request = br.readLine();
+                requestHeaders.add(request);
+            }
+
+            final Map<String, String> headers = RequestUtils.parseHeaders(requestHeaders);
 
             if (path.equals("/user/create")) {
-                createUser(requestLine);
+                createUser(request);
             }
 
             byte[] body = FileIoUtils.loadFileFromClasspath(RESOURCE_BASE_PATH + path);
@@ -48,7 +59,7 @@ public class RequestHandler implements Runnable {
     }
 
     private void createUser(String requestLine) {
-        final User user = URLUtils.parseUser(requestLine);
+        final User user = RequestUtils.parseUser(requestLine);
         DataBase.addUser(user);
     }
 
