@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import http.HttpRequest;
-import http.HttpStartLine;
+import http.HttpRequestLine;
 import model.User;
 import utils.FileIoUtils;
 
@@ -37,9 +37,9 @@ public class RequestHandler implements Runnable {
                 new InputStreamReader(inputStream, StandardCharsets.UTF_8));
             HttpRequest httpRequest = new HttpRequest(bufferedReader);
 
-            HttpStartLine httpStartLine = httpRequest.getHttpStartLine();
-            String path = httpStartLine.getPath();
-            if (httpStartLine.isSamePath("/user/create")) {
+            HttpRequestLine httpRequestLine = httpRequest.getHttpRequestLine();
+            String path = httpRequestLine.getPath();
+            if (httpRequestLine.isSamePath("/user/create")) {
 
                 User user = new User(
                     httpRequest.getHttpBodyValueOf("userId"),

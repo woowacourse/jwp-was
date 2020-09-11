@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 public class HttpRequest {
-    private HttpStartLine httpStartLine;
+    private HttpRequestLine httpRequestLine;
     private HttpHeaders httpHeaders;
     private HttpBody httpBody;
 
@@ -14,21 +14,21 @@ public class HttpRequest {
             return;
         }
 
-        httpStartLine = new HttpStartLine(startLine);
+        httpRequestLine = new HttpRequestLine(startLine);
         httpHeaders = new HttpHeaders(bufferedReader);
 
-        if (httpStartLine.getHttpMethod().equals(HttpMethod.POST)) {
+        if (httpRequestLine.getHttpMethod().equals(HttpMethod.POST)) {
             String body = bufferedReader.readLine();
             httpBody = new HttpBody(body);
         }
     }
 
-    public HttpStartLine getHttpStartLine() {
-        return httpStartLine;
+    public HttpRequestLine getHttpRequestLine() {
+        return httpRequestLine;
     }
 
     public String getHttpPath() {
-        return httpStartLine.getPath();
+        return httpRequestLine.getPath();
     }
 
     public String getHttpHeaderParameterOf(String key) {

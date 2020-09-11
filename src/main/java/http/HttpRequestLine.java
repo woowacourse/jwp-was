@@ -2,15 +2,15 @@ package http;
 
 import java.util.Map;
 
-public class HttpStartLine {
+public class HttpRequestLine {
     private static final String START_LINE_DELIMITER = " ";
 
     private HttpMethod httpMethod;
     private HttpUrl httpUrl;
     private String version;
 
-    public HttpStartLine(String startLine) {
-        String[] splitedStartLine = startLine.split(START_LINE_DELIMITER);
+    public HttpRequestLine(String requestLine) {
+        String[] splitedStartLine = requestLine.split(START_LINE_DELIMITER);
         this.httpMethod = HttpMethod.valueOf(splitedStartLine[0]);
         this.httpUrl = new HttpUrl(splitedStartLine[1]);
         this.version = splitedStartLine[2];
