@@ -2,10 +2,6 @@ package utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.util.Map;
 
 public class IOUtils {
 
@@ -24,7 +20,7 @@ public class IOUtils {
     }
 
     public static String readHeader(BufferedReader bufferedReader) throws IOException {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         String line = bufferedReader.readLine();
 
         while (!"".equals(line) && line != null) {
