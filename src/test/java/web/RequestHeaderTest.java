@@ -2,48 +2,59 @@ package web;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static utils.HttpRequestParser.*;
+import static web.HttpRequestFixture.*;
 import static web.RequestHeader.*;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class RequestHeaderTest {
-    private String request = "GET /index.html HTTP/1.1" + NEW_LINE
-            + "Host: localhost:8080" + NEW_LINE
-            + "Connection: keep-alive" + NEW_LINE
-            + "Accept: */*" + NEW_LINE
-            + EMPTY;
-
-    private RequestHeader requestHeader = new RequestHeader(
-            Arrays.stream(request.split(NEW_LINE))
-                    .filter(value -> value != null && !value.isEmpty())
-                    .collect(Collectors.toList()));
-
-    @DisplayName("요청의 RequestHeader를 생성한다.")
+    @DisplayName("RequestHeader를 생성한다.")
     @Test
-    public void from() throws IOException {
-        BufferedReader br = new BufferedReader(
-                new InputStreamReader(new ByteArrayInputStream(request.getBytes())));
-
-        RequestHeader actual = new HttpRequest(br).getRequestHeader();
-
-        assertEquals(requestHeader, actual);
+    public void RequestHeader() throws IOException {
+        assertThat(createHeader(GET, INDEX_HTML))
+                .isInstanceOf(RequestHeader.class);
     }
 
-    @DisplayName("요청의 RequestUri를 생성한다.")
+    @DisplayName("정적 파일에 대한 요청인지 확인한다.")
     @Test
-    public void getPath() {
-        RequestUri expected = new RequestUri("/index.html");
+    public void isStaticFile() throws IOException {
+        assertTrue(createHeader(GET, INDEX_HTML).isStaticFile());
+    }
 
-        RequestUri actual = requestHeader.getRequestUri();
+    @DisplayName("루트(/)에 대한 요청인지 확인한다.")
+    @Test
+    public void isRootPath() throws IOException {
+        assertTrue(createHeader(GET, ROOT).isRootPath());
+    }
+
+    @DisplayName("POST 요청인지 확인한다.")
+    @Test
+    public void isPost() throws IOException {
+        assertTrue(createHeader(POST, ROOT).isPost());
+    }
+
+    @DisplayName("요청의 Uri를 추출한다.")
+    @Test
+    public void getRequestUri() throws IOException {
+        RequestUri expected = new RequestUri(INDEX_HTML);
+
+        RequestUri actual = createHeader(GET, INDEX_HTML).getRequestUri();
 
         assertEquals(expected, actual);
+    }
+
+    static RequestHeader createHeader(String method, String uri) throws IOException {
+        String request = method + " " + uri + " HTTP/1.1" + NEW_LINE
+                + "Host: localhost:8080" + NEW_LINE
+                + "Connection: keep-alive" + NEW_LINE
+                + "Accept: */*" + NEW_LINE
+                + EMPTY;
+        BufferedReader br = createBufferedReader(request);
+        return new RequestHeader(br);
     }
 }

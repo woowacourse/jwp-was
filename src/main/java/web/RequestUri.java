@@ -1,13 +1,13 @@
 package web;
 
-import java.util.Arrays;
-import java.util.HashMap;
+import static utils.HttpRequestParser.*;
+
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class RequestUri {
-    public static final String KEY_VALUE_DELIMITER = "=";
+    public static final int URI_INDEX = 0;
+    public static final String PARAMETER_DELIMITER = "?";
     private static final String ROOT_PATH = "/";
     private static final int PARAMETER_INDEX = 1;
     private static final String INDEX_HTML = "/index.html";
@@ -15,9 +15,6 @@ public class RequestUri {
     private static final String CSS_FILE = ".css";
     private static final String ICO_FILE = ".ico";
     private static final String JS_FILE = ".js";
-    public static final int URI_INDEX = 0;
-    public static final String PARAMETER_DELIMITER = "?";
-
     private String uri;
     private Map<String, String> parameters;
 
@@ -41,17 +38,19 @@ public class RequestUri {
 
     private Map<String, String> parsingParameters() {
         if (!uri.contains(PARAMETER_DELIMITER)) {
-            return new HashMap<>();
+            return null;
         }
         String[] requestUri = uri.split("\\" + PARAMETER_DELIMITER);
         uri = requestUri[URI_INDEX];
-        return Arrays.stream(requestUri[PARAMETER_INDEX].split("&"))
-                .collect(Collectors.toMap(param -> param.split(KEY_VALUE_DELIMITER)[0],
-                        param -> param.split(KEY_VALUE_DELIMITER)[1]));
+        return parsingData(requestUri[PARAMETER_INDEX]);
     }
 
     public Map<String, String> getParameters() {
         return parameters;
+    }
+
+    public String getUri() {
+        return uri;
     }
 
     @Override

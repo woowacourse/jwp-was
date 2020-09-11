@@ -21,4 +21,4 @@
 
 >*구현 기능 목록*
 - [x] form.html 파일의 form 태그 method를 get에서 post로 수정
-- [ ] Request Body의 값 추출하기
+- [x] Request Body의 값 추출하기
