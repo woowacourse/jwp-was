@@ -3,7 +3,6 @@ package webserver;
 import controller.Controller;
 import controller.ControllerMapper;
 import http.HttpRequest;
-import http.RequestUri;
 import http.factory.HttpRequestFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +15,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 
 public class RequestHandler implements Runnable {
@@ -38,19 +36,18 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
 
             HttpRequest httpRequest = HttpRequestFactory.createRequest(br);
-            RequestUri requestUri = httpRequest.getRequestUri();
 
-            ControllerMapper.from(requestUri).ifPresent(
-                    mapper -> Controller.getMethod(mapper).accept(httpRequest.getParams())
+            ControllerMapper.from(httpRequest.getRequestUri()).ifPresent(
+                    mapper -> Controller.getMethod(mapper).accept(httpRequest, dos)
             );
 
-            byte[] body = FileIoUtils.loadFileFromClasspath(BASE_URL + requestUri.getUrl());
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+            if (dos.size() == 0) {
+                byte[] body = FileIoUtils.loadFileFromClasspath(BASE_URL + httpRequest.getUrl());
+                response200Header(dos, body.length);
+                responseBody(dos, body);
+            }
         } catch (IOException e) {
             logger.error(e.getMessage());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
         }
     }
 

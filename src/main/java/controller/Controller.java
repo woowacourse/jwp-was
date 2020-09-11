@@ -1,20 +1,22 @@
 package controller;
 
-import model.service.UserService;
+import http.HttpRequest;
+import model.service.UserController;
 
+import java.io.DataOutputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 public class Controller {
-    private static final Map<ControllerMapper, Consumer<Map<String, String>>> methods;
+    private static final Map<ControllerMapper, BiConsumer<HttpRequest, DataOutputStream>> methods;
 
     static {
         methods = new HashMap<>();
-        methods.put(ControllerMapper.CREATE_USER, UserService::saveUser);
+        methods.put(ControllerMapper.CREATE_USER, UserController::saveUser);
     }
 
-    public static Consumer<Map<String, String>> getMethod(ControllerMapper controllerMapper) {
+    public static BiConsumer<HttpRequest, DataOutputStream> getMethod(ControllerMapper controllerMapper) {
         return methods.get(controllerMapper);
     }
 }

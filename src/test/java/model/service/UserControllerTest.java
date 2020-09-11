@@ -9,7 +9,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class UserServiceTest {
+class UserControllerTest {
     @DisplayName("유저 save 테스트")
     @Test
     void saveUser() {
@@ -19,8 +19,8 @@ class UserServiceTest {
         params.put("name", "ordincode");
         params.put("email", "email@email");
 
-        UserService userService = new UserService();
-        userService.saveUser(params);
+        UserController userController = new UserController();
+        userController.saveUser(params);
 
         assertThat(DataBase.findAll().size()).isNotZero();
     }

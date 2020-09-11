@@ -24,4 +24,8 @@ public class HttpRequest {
     public Map<String, String> getParams() {
         return params;
     }
+
+    public String getUrl() {
+        return requestUri.getUrl();
+    }
 }
