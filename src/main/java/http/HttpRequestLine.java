@@ -29,4 +29,8 @@ public class HttpRequestLine {
     public boolean isPost() {
         return httpMethod.isPost();
     }
+
+    public String getContentType() {
+        return httpUrl.getContentType();
+    }
 }

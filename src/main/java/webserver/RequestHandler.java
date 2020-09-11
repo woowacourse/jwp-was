@@ -21,6 +21,9 @@ import model.User;
 import utils.FileIoUtils;
 
 public class RequestHandler implements Runnable {
+    private static final String TEMPLATES = "./templates";
+    private static final String ROOT_HTML = "/index.html";
+
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
@@ -43,7 +46,7 @@ public class RequestHandler implements Runnable {
             if (httpRequest.isStaticFile()) {
                 byte[] body = FileIoUtils.loadFileFromClasspath(
                     StaticFiles.getDirectoryEndsWith(httpRequest.getHttpPath()) + httpRequest.getHttpPath());
-                httpResponse.response200Header(body.length);
+                httpResponse.response200Header(httpRequest.getContentType(), body.length);
                 httpResponse.responseBody(body);
             } else {
                 if (httpRequest.getHttpPath().contains("/user/create")) {
@@ -57,9 +60,8 @@ public class RequestHandler implements Runnable {
                     logger.debug("Saved User: {}", DataBase.findUserById(httpRequest.getHttpBodyValueOf("userId")));
                 }
 
-                byte[] body = FileIoUtils.loadFileFromClasspath(
-                    "./templates" + "/index.html");
-                httpResponse.response302Header("/index.html");
+                byte[] body = FileIoUtils.loadFileFromClasspath(TEMPLATES + ROOT_HTML);
+                httpResponse.response302Header(ROOT_HTML);
                 httpResponse.responseBody(body);
             }
         } catch (IOException | URISyntaxException e) {

@@ -47,4 +47,8 @@ public class HttpUrl {
     public boolean isStaticFile() {
         return StaticFiles.endsWith(url);
     }
+
+    public String getContentType() {
+        return StaticFiles.getContentType(url);
+    }
 }

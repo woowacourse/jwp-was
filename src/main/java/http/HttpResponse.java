@@ -15,10 +15,10 @@ public class HttpResponse {
         this.dataOutputStream = dataOutputStream;
     }
 
-    public void response200Header(int lengthOfBodyContent) {
+    public void response200Header(String contentType, int lengthOfBodyContent) {
         try {
             dataOutputStream.writeBytes("HTTP/1.1 200 OK \r\n");
-            dataOutputStream.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dataOutputStream.writeBytes("Content-Type: " + contentType + "\r\n");
             dataOutputStream.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dataOutputStream.writeBytes("\r\n");
         } catch (IOException e) {

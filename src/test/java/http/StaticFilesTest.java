@@ -9,14 +9,21 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class StaticFilesTest {
 
+    @DisplayName("정적파일 확장자가 올바른 경우 true, 아닌 경우 false를 리턴한다.")
+    @CsvSource(value = {"index.html,true", "index.woowa,false"})
+    @ParameterizedTest
+    void endsWith(String staticFile, boolean expected) {
+        assertThat(expected).isEqualTo(StaticFiles.endsWith(staticFile));
+    }
+
     @DisplayName("정적파일이 위치한 디렉토리를 반환한다.")
-    @CsvSource(value = {"index.html,./templates", "styles.css,./static/css"})
+    @CsvSource(value = {"index.html,./templates", "styles.css,./static"})
     @ParameterizedTest
     void getDirectoryEndsWith(String staticFile, String directory) {
         assertThat(directory).isEqualTo(StaticFiles.getDirectoryEndsWith(staticFile));
     }
 
-    @DisplayName("정적파일 확장자가 올바르지 않을 경우 예외처리한다.")
+    @DisplayName("디렉토리 조회시 정적파일 확장자가 올바르지 않을 경우 예외처리한다.")
     @ValueSource(strings = {"index.woowa", "styles.scv"})
     @ParameterizedTest
     void getDirectoryEndsWithThrowsException(String wrongStaticFile) {
@@ -24,10 +31,18 @@ class StaticFilesTest {
             .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("정적파일 확장자가 올바른 경우 true, 아닌 경우 false를 리턴한다.")
-    @CsvSource(value = {"index.html,true", "index.woowa,false"})
+    @DisplayName("정적파일의 Content-Type을 반환한다.")
+    @CsvSource(value = {"index.html,text/html;charset=UTF-8", "styles.css,text/css;charset=UTF-8"})
     @ParameterizedTest
-    void endsWith(String staticFile, boolean expected) {
-        assertThat(expected).isEqualTo(StaticFiles.endsWith(staticFile));
+    void getContentType(String staticFile, String contentType) {
+        assertThat(contentType).isEqualTo(StaticFiles.getContentType(staticFile));
+    }
+
+    @DisplayName("Content-Type 조회시 정적파일 확장자가 올바르지 않을 경우 예외처리한다.")
+    @ValueSource(strings = {"index.woowa", "styles.scv"})
+    @ParameterizedTest
+    void getContentTypeThrowsException(String wrongStaticFile) {
+        assertThatThrownBy(() -> StaticFiles.getContentType(wrongStaticFile))
+            .isInstanceOf(IllegalArgumentException.class);
     }
 }
