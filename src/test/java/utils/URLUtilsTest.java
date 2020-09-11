@@ -8,6 +8,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class URLUtilsTest {
 
+    @DisplayName("requestLind 에서 Method를 추출할 수 있다.")
+    @Test
+    void parseMethod() {
+        String requestLine = "GET /index.html?a=a HTTP/1.1";
+        String method = URLUtils.parseMethod(requestLine);
+
+        assertThat(method).isEqualTo("GET");
+    }
+
     @DisplayName("requestLine 에서 path를 추출할 수 있다.")
     @Test
     void parseURL() {
