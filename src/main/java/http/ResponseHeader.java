@@ -9,10 +9,10 @@ import org.slf4j.LoggerFactory;
 public class ResponseHeader {
     private static final Logger logger = LoggerFactory.getLogger(ResponseHeader.class);
 
-    public static void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    public static void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Type: " + contentType + ";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {

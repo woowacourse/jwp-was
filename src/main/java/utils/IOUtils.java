@@ -2,19 +2,14 @@ package utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import http.Request;
-import http.RequestBody;
-import http.RequestHeader;
-import http.RequestLine;
-import http.RequestMethod;
-
 public class IOUtils {
+    private static final String NEW_LINE = "\n";
+    private static final String SEPARATOR = " : ";
     private static final Logger logger = LoggerFactory.getLogger(IOUtils.class);
 
     /**
@@ -29,17 +24,13 @@ public class IOUtils {
         return String.copyValueOf(body);
     }
 
-    public static void printRequest(InputStream in) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(in));
-        String result = "\n";
-        String line = " ";
-        while (!"".equals(line)) {
-            line = br.readLine();
-            if (line == null) {
-                break;
-            }
-            result += line + "\n";
+    public static void printHeader(Map<String, String> headers) {
+        StringBuilder stringBuilder = new StringBuilder(NEW_LINE);
+
+        for (String key : headers.keySet()) {
+            stringBuilder.append(key + SEPARATOR + headers.get(key) + NEW_LINE);
         }
-        logger.debug(result);
+
+        logger.debug(stringBuilder.toString());
     }
 }

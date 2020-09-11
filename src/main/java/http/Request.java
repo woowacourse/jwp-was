@@ -1,9 +1,6 @@
 package http;
 
 import java.io.BufferedReader;
-import java.io.IOException;
-
-import utils.IOUtils;
 
 public class Request {
     private RequestLine requestLine;
@@ -26,5 +23,9 @@ public class Request {
 
     public RequestBody getRequestBody() {
         return requestBody;
+    }
+
+    public boolean isMethod(RequestMethod requestMethod) {
+        return requestMethod == requestLine.getMethod();
     }
 }

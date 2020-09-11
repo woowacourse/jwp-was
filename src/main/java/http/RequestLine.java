@@ -1,10 +1,11 @@
 package http;
 
-import exception.IllegalRequestException;
-
 import java.io.BufferedReader;
 
+import exception.IllegalRequestException;
+
 public class RequestLine {
+    private static final String DELIMITER = " ";
     private RequestMethod method;
 
     private String url;
@@ -14,7 +15,7 @@ public class RequestLine {
     public RequestLine(BufferedReader br) throws Exception {
         String requestLine = br.readLine();
         validate(requestLine);
-        String[] tokens = requestLine.split(" ");
+        String[] tokens = requestLine.split(DELIMITER);
         this.method = RequestMethod.valueOf(tokens[0]);
         this.url = tokens[1];
         this.protocol = tokens[2];
