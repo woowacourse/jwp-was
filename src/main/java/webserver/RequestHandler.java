@@ -6,14 +6,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.net.URISyntaxException;
+import java.util.Map;
 import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 
+import model.User;
 import utils.FileIoUtils;
 
 public class RequestHandler implements Runnable {
@@ -27,7 +30,7 @@ public class RequestHandler implements Runnable {
 
     public void run() {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
-                connection.getPort());
+            connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
@@ -40,12 +43,33 @@ public class RequestHandler implements Runnable {
                 line = bufferedReader.readLine();
             }
             RequestHeader requestHeader = RequestHeader.of(lines.toString());
+            User user = convert(User.class, requestHeader.getQueryParams());
             byte[] body = FileIoUtils.loadFileFromClasspath(requestHeader.getPath());
             DataOutputStream dos = new DataOutputStream(out);
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
+        }
+    }
+
+    private <T> T convert(Class<T> clazz, Map<String, String> queryParams) {
+        try {
+            T instance = clazz.getConstructor().newInstance();
+            queryParams.forEach((key, value) -> {
+                try {
+                    Field field = clazz.getDeclaredField(key);
+                    field.setAccessible(true);
+                    field.set(instance, value);
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            });
+            return instance;
+        } catch (InstantiationException | InvocationTargetException | IllegalAccessException e) {
+            throw new MethodParameterBindException();
+        } catch (NoSuchMethodException e) {
+            throw new NoDefaultConstructorException(clazz);
         }
     }
 
