@@ -2,9 +2,11 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.FileIoUtils;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.URISyntaxException;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -25,14 +27,16 @@ public class RequestHandler implements Runnable {
 
             String requestLine = br.readLine();
             String[] info = requestLine.split(" ");
-            String path = info[1];
-            logger.debug(path);
+            String path = "./templates" + info[1];
 
-            byte[] body = "Hello World".getBytes();
+            byte[] body = FileIoUtils.loadFileFromClasspath(path);
+
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException e) {
             logger.error(e.getMessage());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
         }
     }
 
