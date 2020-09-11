@@ -18,7 +18,7 @@ class HttpRequestTest {
     void createHttpRequest() throws IOException {
         String httpRequestInput = "POST /index.html HTTP/1.1\r\n"
             + "Content-Type: text/html;charset=utf-8\r\n"
-            + "Content-Length: 128\r\n"
+            + "Content-Length: 93\r\n"
             + "Accept-Language: en-US,en;q=0.9\r\n"
             + "Cookie: JSESSIONID=D03222408A13F2797D6DFECB7CFC74EE\r\n"
             + "\r\n"
@@ -31,7 +31,7 @@ class HttpRequestTest {
 
         assertAll(
             () -> assertThat("/index.html").isEqualTo(httpRequest.getHttpPath()),
-            () -> assertThat("128").isEqualTo(httpRequest.getHttpHeaderParameterOf("Content-Length")),
+            () -> assertThat("93").isEqualTo(httpRequest.getHttpHeaderParameterOf("Content-Length")),
             () -> assertThat("password").isEqualTo(httpRequest.getHttpBodyValueOf("password"))
         );
     }

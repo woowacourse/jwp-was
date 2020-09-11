@@ -20,19 +20,12 @@ public class HttpRequestLine {
         return httpUrl.isSamePath(path);
     }
 
-    public HttpMethod getHttpMethod() {
-        return httpMethod;
-    }
-
-    public String getUrl() {
-        return httpUrl.getUrl();
-    }
 
     public String getPath() {
         return httpUrl.getPath();
     }
 
-    public Map<String, String> getParameters() {
-        return httpUrl.getParameters();
+    public boolean isPost() {
+        return httpMethod.isPost();
     }
 }

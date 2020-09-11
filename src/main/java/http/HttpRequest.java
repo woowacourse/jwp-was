@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 public class HttpRequest {
+    private static final String CONTENT_LENGTH = "Content-Length";
+
     private HttpRequestLine httpRequestLine;
     private HttpHeaders httpHeaders;
     private HttpBody httpBody;
@@ -17,9 +19,8 @@ public class HttpRequest {
         httpRequestLine = new HttpRequestLine(startLine);
         httpHeaders = new HttpHeaders(bufferedReader);
 
-        if (httpRequestLine.getHttpMethod().equals(HttpMethod.POST)) {
-            String body = bufferedReader.readLine();
-            httpBody = new HttpBody(body);
+        if (httpRequestLine.isPost()) {
+            httpBody = new HttpBody(bufferedReader, Integer.parseInt(httpHeaders.getValue(CONTENT_LENGTH)));
         }
     }
 

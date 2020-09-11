@@ -5,4 +5,8 @@ public enum HttpMethod {
     POST,
     PUT,
     DELETE;
+
+    public boolean isPost() {
+        return POST.equals(this);
+    }
 }
