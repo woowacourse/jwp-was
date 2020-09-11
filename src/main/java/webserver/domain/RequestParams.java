@@ -5,6 +5,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+
 import lombok.Getter;
 
 @Getter
@@ -16,14 +17,14 @@ public class RequestParams {
     private Map<String, String> params = new HashMap<>();
 
     public RequestParams(String query) throws UnsupportedEncodingException {
-        String[] infos = query.split(QUERY_DELIMITER);
-        for (String info : infos) {
-            String[] keyAndValue = info.split(KEY_VALUE_DELIMITER);
+        String[] params = query.split(QUERY_DELIMITER);
+        for (String param : params) {
+            String[] keyAndValue = param.split(KEY_VALUE_DELIMITER);
             String value = "";
             if (hasNonEmptyValue(keyAndValue)) {
                 value = URLDecoder.decode(keyAndValue[1], StandardCharsets.UTF_8.toString());
             }
-            params.put(keyAndValue[0], value);
+            this.params.put(keyAndValue[0], value);
         }
     }
 
