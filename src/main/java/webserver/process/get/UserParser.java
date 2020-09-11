@@ -20,7 +20,7 @@ public class UserParser {
 		String userId = params.get(0);
 		String password = params.get(1);
 		String name = params.get(2);
-		String email = params.get(3);
+		String email = params.get(3).replace("%40", "@");
 
 		return new User(userId, password, name, email);
 	}

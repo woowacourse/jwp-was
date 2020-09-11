@@ -27,6 +27,7 @@ public class GetUrlProcessor implements Function<String, byte[]> {
 		} else if (url.contains("/user/create")) {
 			// 파싱해야된다
 			User user = UserParser.parseUser(url);
+
 			// 파싱한 값 저장
 			return "create user success".getBytes();
 		}
