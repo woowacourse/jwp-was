@@ -1,12 +1,13 @@
 package webserver;
 
 import db.DataBase;
+import http.RequestHeader;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
-import utils.PathUtils;
 
+import javax.print.DocFlavor;
 import java.io.*;
 import java.net.Socket;
 import java.net.URISyntaxException;
@@ -35,27 +36,23 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void router(BufferedReader br, DataOutputStream dos) throws IOException, URISyntaxException {
-        String line = br.readLine();
-        String method = PathUtils.parseMethod(line);
-        String path = PathUtils.parsePath(line);
-        if (method.equals("POST") && path.equals("/user/create")) {
-            while (!"".equals(br.readLine())) {
-            }
-            line = br.readLine();
-            String[] temp = line.split("&");
-            Map<String, String> params = new HashMap<>();
-            for (String param : temp) {
-                String[] keyValues = param.split("=");
-                params.put(keyValues[0], keyValues[1]);
-            }
-            User user = new User(params.get("userId"), params.get("password"), params.get("name"), params.get("email"));
-            DataBase.addUser(user);
-        } else {
-            byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + path);
-            response200Header(dos, body.length);
-            responseBody(dos, body);
-        }
+    private void router(BufferedReader br, DataOutputStream dos ) throws IOException, URISyntaxException {
+//        RequestHeader requestHeader = new RequestHeader(br);
+//
+//        if (method.equals("POST") && path.equals("/user/create")) {
+//            String[] temp = line.split("&");
+//            Map<String, String> params = new HashMap<>();
+//            for (String param : temp) {
+//                String[] keyValues = param.split("=");
+//                params.put(keyValues[0], keyValues[1]);
+//            }
+//            User user = new User(params.get("userId"), params.get("password"), params.get("name"), params.get("email"));
+//            DataBase.addUser(user);
+//        } else {
+//            byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + path);
+//            response200Header(dos, body.length);
+//            responseBody(dos, body);
+//        }
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
