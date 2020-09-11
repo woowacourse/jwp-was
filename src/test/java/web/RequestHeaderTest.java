@@ -13,6 +13,17 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class RequestHeaderTest {
+    static RequestHeader createHeader(String method, String uri) throws IOException {
+        String request = method + " " + uri + " HTTP/1.1" + NEW_LINE
+                + "Host: localhost:8080" + NEW_LINE
+                + "Connection: keep-alive" + NEW_LINE
+                + "Content-Length: " + JAVAJIGI_DATA.length() + NEW_LINE
+                + "Accept: */*" + NEW_LINE
+                + EMPTY;
+        BufferedReader br = createBufferedReader(request);
+        return new RequestHeader(br);
+    }
+
     @DisplayName("RequestHeader를 생성한다.")
     @Test
     public void RequestHeader() throws IOException {
@@ -46,15 +57,5 @@ class RequestHeaderTest {
         RequestUri actual = createHeader(GET, INDEX_HTML).getRequestUri();
 
         assertEquals(expected, actual);
-    }
-
-    static RequestHeader createHeader(String method, String uri) throws IOException {
-        String request = method + " " + uri + " HTTP/1.1" + NEW_LINE
-                + "Host: localhost:8080" + NEW_LINE
-                + "Connection: keep-alive" + NEW_LINE
-                + "Accept: */*" + NEW_LINE
-                + EMPTY;
-        BufferedReader br = createBufferedReader(request);
-        return new RequestHeader(br);
     }
 }

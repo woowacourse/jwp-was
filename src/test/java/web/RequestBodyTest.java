@@ -10,8 +10,6 @@ import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import utils.HttpRequestParser;
-
 class RequestBodyTest {
     @DisplayName("body의 데이터를 Map으로 추출한다.")
     @Test

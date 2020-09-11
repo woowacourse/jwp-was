@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 
 public class RequestHeader {
     public static final String NEW_LINE = System.lineSeparator();
+    public static final int CONTENT_LENGTH_INDEX = 3;
+    public static final int VALUE_INDEX = 1;
     private static final Logger logger = LoggerFactory.getLogger(RequestHeader.class);
     private static final String BLANK = " ";
     private static final int METHOD_INDEX = 0;
@@ -37,6 +39,10 @@ public class RequestHeader {
 
     public boolean isPost() {
         return Method.POST.equals(method);
+    }
+
+    public int getContentLength() {
+        return Integer.parseInt(header.get(CONTENT_LENGTH_INDEX).split(BLANK)[VALUE_INDEX]);
     }
 
     public RequestUri getRequestUri() {

@@ -8,9 +8,9 @@ import java.util.Objects;
 public class RequestUri {
     public static final int URI_INDEX = 0;
     public static final String PARAMETER_DELIMITER = "?";
+    static final String INDEX_HTML = "/index.html";
     private static final String ROOT_PATH = "/";
     private static final int PARAMETER_INDEX = 1;
-    private static final String INDEX_HTML = "/index.html";
     private static final String HTML_FILE = ".html";
     private static final String CSS_FILE = ".css";
     private static final String ICO_FILE = ".ico";
@@ -66,5 +66,13 @@ public class RequestUri {
     @Override
     public int hashCode() {
         return Objects.hash(uri);
+    }
+
+    @Override
+    public String toString() {
+        return "RequestUri{" +
+                "uri='" + uri + '\'' +
+                ", parameters=" + parameters +
+                '}';
     }
 }

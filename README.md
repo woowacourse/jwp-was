@@ -28,5 +28,8 @@
 > 따라서 redirect 방식처럼 회원가입을 완료한 후 “index.html”로 이동해야 한다.즉, 브라우저의 URL이 /index.html로 변경해야 한다.
 
 *구현 기능 목록*
-- [ ] 요청에 따라 다른 HttpResponse를 내려준다.
+- [x] 요청에 따라 다른 HttpResponse를 내려준다.
     - [ ] status code를 302로 변경한 후, Location 값에 리다이렉션 할 페이지를 넣어 응답한다.
+        - ⛑ issue
+            - [ ] 회원가입 버튼 클릭 시 요청이 바로 안나가고, 한 번 더 눌러야 나가는 이슈. 
+            응답이 오지 않은 상태로 요청을 한번 더 보내니 java.net.SocketException: Broken pipe 예외 발생

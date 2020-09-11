@@ -27,7 +27,7 @@ class RequestUriTest {
     @DisplayName("uri에 담긴 파라미터를 추출한다.")
     @Test
     void getParameter() {
-        Map<String, String> expected = new HashMap<String, String>(){
+        Map<String, String> expected = new HashMap<String, String>() {
             {
                 put("userId", "javajigi");
                 put("password", "password");
@@ -35,7 +35,8 @@ class RequestUriTest {
                 put("email", "javajigi%40slipp.net");
             }
         };
-        RequestUri uri = new RequestUri("/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net");
+        RequestUri uri = new RequestUri(
+                "/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net");
 
         Map<String, String> actual = uri.getParameters();
 

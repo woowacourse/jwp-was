@@ -11,6 +11,10 @@ import java.util.Objects;
 public class RequestBody {
     Map<String, String> requestBody;
 
+    public RequestBody(String data) {
+        this.requestBody = parsingData(data);
+    }
+
     public RequestBody(BufferedReader br) throws IOException {
         String line = br.readLine();
         while (line == null || line.isEmpty() || NEW_LINE.equals(line)) {

@@ -3,6 +3,8 @@ package web;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+import utils.IOUtils;
+
 public class HttpRequest {
     private RequestHeader requestHeader;
     private RequestBody requestBody;
@@ -10,7 +12,8 @@ public class HttpRequest {
     public HttpRequest(BufferedReader br) throws IOException {
         this.requestHeader = new RequestHeader(br);
         if (requestHeader.isPost()) {
-            this.requestBody = new RequestBody(br);
+            String data = IOUtils.readData(br, requestHeader.getContentLength());
+            this.requestBody = new RequestBody(data);
         } else {
             this.requestBody = null;
         }
