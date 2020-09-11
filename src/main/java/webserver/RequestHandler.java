@@ -53,10 +53,11 @@ public class RequestHandler implements Runnable {
                 createUser(body);
             }
 
-            byte[] body = FileIoUtils.loadFileFromClasspath(RESOURCE_BASE_PATH + url);
-
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+            if (requestLine.requestUrl().contains(".html")) {
+                byte[] body = FileIoUtils.loadFileFromClasspath(RESOURCE_BASE_PATH + url);
+                response200Header(dos, body.length);
+                responseBody(dos, body);
+            }
         } catch (IOException e) {
             logger.error(e.getMessage());
         } catch (URISyntaxException e) {
