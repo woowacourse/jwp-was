@@ -30,4 +30,23 @@ class RequestLineTest {
                 .hasMessage("QueryString을 포함하고 있지 않습니다.");
     }
 
+    @DisplayName("포함되는 RequestLine 인지")
+    @Test
+    void isMatch() {
+        RequestLine actual = new RequestLine(HttpMethod.GET, "user/form.html");
+
+        boolean isMatch = actual.isMatch(new RequestLine(HttpMethod.GET, ".html"));
+
+        assertThat(isMatch).isTrue();
+    }
+
+    @DisplayName("포함되지 않은 RequestLine 인지")
+    @Test
+    void isMatch2() {
+        RequestLine actual = new RequestLine(HttpMethod.GET, "user/gg");
+
+        boolean isMatch = actual.isMatch(new RequestLine(HttpMethod.GET, ".user/create"));
+
+        assertThat(isMatch).isFalse();
+    }
 }

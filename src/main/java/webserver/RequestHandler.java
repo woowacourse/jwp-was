@@ -3,7 +3,6 @@ package webserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
-import utils.RequestUtils;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -28,10 +27,12 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
-            String path = RequestUtils.extractFilePath(bufferedReader.readLine());
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+            Request request = new Request(bufferedReader);
+            HandlerMapping handlerMapping = HandlerMapping.from(request);
+            String filePath = handlerMapping.apply(request);
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = FileIoUtils.loadFileFromClasspath(path);
+            byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException | URISyntaxException e) {

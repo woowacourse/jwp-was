@@ -9,26 +9,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 class RequestUtilsTest {
 
-    @DisplayName("Request Line에서 QueryString 추출")
-    @Test
-    void extractQueryString() {
-        String requestLine = "/user/create?userId=javajigi&password=password&name=name&email=javajigi@slipp.net";
-
-        String queryString = RequestUtils.extractQueryString(requestLine);
-
-        assertThat(queryString).isEqualTo("userId=javajigi&password=password&name=name&email=javajigi@slipp.net");
-    }
-
-    @DisplayName("Request Line에서 QueryString이 없을 때 예외 발생")
-    @Test
-    void extractQueryString2() {
-        String requestLine = "/user/create";
-
-        assertThatThrownBy(() -> RequestUtils.extractQueryString(requestLine))
-                .isInstanceOf(RuntimeException.class)
-                .hasMessage("QueryString을 포함하고 있지 않습니다.");
-    }
-
     @DisplayName("input data에서 User 객체로 변환")
     @Test
     void createUser() {
@@ -40,15 +20,14 @@ class RequestUtilsTest {
         assertThat(actual).isEqualToComparingFieldByField(expected);
     }
 
-    @DisplayName("올바른 input data가 아닐 때")
+    @DisplayName("올바른 input data가 아닐 때 User 객체로 변환 예외 발생")
     @Test
     void createUser2() {
         String input = "userId=&password=password&name=name&email=javajigi@slipp.net";
 
-        User actual = RequestUtils.createUser(input);
-        User expected = new User("javajigi", "password", "name", "javajigi@slipp.net");
-
-        assertThat(actual).isEqualToComparingFieldByField(expected);
+        assertThatThrownBy(() -> RequestUtils.createUser(input))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("올바르지 않은 형식의 input data:");
     }
 
 }

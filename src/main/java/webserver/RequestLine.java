@@ -14,25 +14,19 @@ public class RequestLine {
 
     public String extractQueryString() {
         int startIndex = resource.indexOf(QUERY_STRING_DELIMITER);
-        validateQueryString(startIndex);
-        return resource.substring(startIndex + 1);
-    }
-
-    private void validateQueryString(int startIndex) {
         if (startIndex < MIN_INDEX) {
             throw new RuntimeException("QueryString을 포함하고 있지 않습니다.");
         }
+        return resource.substring(startIndex + 1);
     }
 
-    public boolean isMatchHttpMethod(HttpMethod httpMethod) {
-        return this.httpMethod == httpMethod;
-    }
-
-    public boolean containsPath(String path) {
-        return resource.contains(path);
+    public boolean isMatch(RequestLine requestLine) {
+        return this.httpMethod == requestLine.httpMethod
+                && this.resource.contains(requestLine.getResource());
     }
 
     public String getResource() {
         return resource;
     }
+
 }

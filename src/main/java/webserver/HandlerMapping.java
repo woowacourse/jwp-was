@@ -1,36 +1,32 @@
 package webserver;
 
-import controller.FileController;
-import domain.user.controller.UserController;
+import controller.PageController;
+import controller.UserController;
 
 import java.util.Arrays;
 import java.util.function.Function;
 
 public enum HandlerMapping {
-    PAGE(HttpMethod.GET, ".html", FileController::getPage),
-    GET_CSS(HttpMethod.GET, ".css", FileController::getCss),
-    GET_USER_CREATE(HttpMethod.GET, "/user/create", UserController::getCreateUser),
-    POST_USER_CREATE(HttpMethod.POST, "/user/create", UserController::postCreateUser);
+    GET_PAGE(new RequestLine(HttpMethod.GET, ".html"), PageController::getPagePath),
+    GET_USER_CREATE(new RequestLine(HttpMethod.GET, "/user/create"), UserController::createUser);
 
-    private final HttpMethod httpMethod;
-    private final String path;
-    private final Function<Request, Response> function;
+    private final RequestLine requestLine;
+    private final Function<Request, String> function;
 
-    HandlerMapping(HttpMethod httpMethod, String path, Function<Request, Response> function) {
-        this.httpMethod = httpMethod;
-        this.path = path;
+    HandlerMapping(RequestLine requestLine, Function<Request, String> function) {
+        this.requestLine = requestLine;
         this.function = function;
     }
 
     public static HandlerMapping from(Request request) {
         return Arrays.stream(values())
-                .filter(handlerMapping -> request.isMatchHttpMethod(handlerMapping.httpMethod))
-                .filter(handlerMapping -> request.containsPath(handlerMapping.path))
+                .filter(handlerMapping -> request.isMatchRequestLine(handlerMapping.requestLine))
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException("일치하는 컨트롤러를 찾지 못했습니다." + request.getResource()));
     }
 
-    public Response apply(Request request) {
+
+    public String apply(Request request) {
         return this.function.apply(request);
     }
 }
