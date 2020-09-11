@@ -12,7 +12,7 @@ class ControllerMapperTest {
     @Test
     void from() {
         RequestUri requestUri = new RequestUri(
-                HttpMethod.GET,
+                HttpMethod.POST,
                 "/user/create"
         );
 

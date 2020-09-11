@@ -1,6 +1,5 @@
 package controller;
 
-import http.HttpRequest;
 import model.service.UserController;
 
 import java.io.DataOutputStream;
@@ -9,14 +8,14 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 
 public class Controller {
-    private static final Map<ControllerMapper, BiConsumer<HttpRequest, DataOutputStream>> methods;
+    private static final Map<ControllerMapper, BiConsumer<Map<String, String>, DataOutputStream>> methods;
 
     static {
         methods = new HashMap<>();
         methods.put(ControllerMapper.CREATE_USER, UserController::saveUser);
     }
 
-    public static BiConsumer<HttpRequest, DataOutputStream> getMethod(ControllerMapper controllerMapper) {
+    public static BiConsumer<Map<String, String>, DataOutputStream> getMethod(ControllerMapper controllerMapper) {
         return methods.get(controllerMapper);
     }
 }

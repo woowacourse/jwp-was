@@ -18,7 +18,6 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
 public class RequestHandler implements Runnable {
-    private static final String BASE_URL = "./templates";
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
@@ -38,12 +37,12 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = HttpRequestFactory.createRequest(br);
 
             ControllerMapper.from(httpRequest.getRequestUri()).ifPresent(
-                    mapper -> Controller.getMethod(mapper).accept(httpRequest, dos)
+                    mapper -> Controller.getMethod(mapper).accept(httpRequest.getParams(), dos)
             );
 
             if (dos.size() == 0) {
-                byte[] body = FileIoUtils.loadFileFromClasspath(BASE_URL + httpRequest.getUrl());
-                response200Header(dos, body.length);
+                byte[] body = FileIoUtils.loadFileFromClasspath(findFilePath(httpRequest));
+                responseHeader(dos, httpRequest, body);
                 responseBody(dos, body);
             }
         } catch (IOException e) {
@@ -51,15 +50,28 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
+    private String findFilePath(HttpRequest httpRequest) {
+        String url = httpRequest.getUrl();
+        String baseUrl = "./static";
+        if (url.contains(".html") || url.contains("favicon.ico")) {
+            baseUrl = "./templates";
         }
+        return baseUrl + url;
+    }
+
+    private void responseHeader(DataOutputStream dos, HttpRequest httpRequest, byte[] body) throws IOException {
+        dos.writeBytes("HTTP/1.1 200 OK \r\n");
+        dos.writeBytes("Content-Type: " + findContentType(httpRequest) + ";charset=utf-8\r\n");
+        dos.writeBytes("Content-Length: " + body.length + "\r\n");
+        dos.writeBytes("\r\n");
+    }
+
+    private String findContentType(HttpRequest httpRequest) {
+        String contentType = "text/html";
+        if (httpRequest.getUrl().contains(".css")) {
+            contentType = "text/css";
+        }
+        return contentType;
     }
 
     private void responseBody(DataOutputStream dos, byte[] body) {

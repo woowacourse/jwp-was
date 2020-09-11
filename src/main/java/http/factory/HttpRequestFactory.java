@@ -3,6 +3,8 @@ package http.factory;
 import http.HttpRequest;
 import http.RequestHeader;
 import http.RequestUri;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 import utils.IOUtils;
 import utils.ParamUtils;
@@ -13,17 +15,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HttpRequestFactory {
+    private static final Logger logger = LoggerFactory.getLogger(HttpRequestFactory.class);
     private static final String COLON_DELIMITER = ": ";
 
     public static HttpRequest createRequest(BufferedReader br) throws IOException {
         Map<String, String> headers = new HashMap<>();
         Map<String, String> params = new HashMap<>();
         String line = br.readLine();
+        logger.debug("request header : {}", line);
         RequestUri requestUri = RequestUriFactory.createRequestUri(line, params);
-        line = br.readLine();
-        while (!StringUtils.isEmpty(line)) {
+        while (!StringUtils.isEmpty(line = br.readLine())) {
+            logger.debug("request header : {}", line);
             headers.put(line.split(COLON_DELIMITER)[0], line.split(COLON_DELIMITER)[1]);
-            line = br.readLine();
         }
         RequestHeader requestHeader = new RequestHeader(headers);
 

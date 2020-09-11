@@ -4,6 +4,8 @@ import model.db.DataBase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.DataOutputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,8 +21,11 @@ class UserControllerTest {
         params.put("name", "ordincode");
         params.put("email", "email@email");
 
-        UserController userController = new UserController();
-        userController.saveUser(params);
+        UserController.saveUser(params, new DataOutputStream(new OutputStream() {
+            @Override
+            public void write(int b) {
+            }
+        }));
 
         assertThat(DataBase.findAll().size()).isNotZero();
     }

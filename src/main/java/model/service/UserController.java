@@ -1,6 +1,5 @@
 package model.service;
 
-import http.HttpRequest;
 import model.db.DataBase;
 import model.domain.User;
 import org.slf4j.Logger;
@@ -13,8 +12,7 @@ import java.util.Map;
 public class UserController {
     private final static Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    public static void saveUser(HttpRequest httpRequest, DataOutputStream dos) {
-        Map<String, String> params = httpRequest.getParams();
+    public static void saveUser(Map<String, String> params, DataOutputStream dos) {
         User user = new User(
                 params.get("userId"),
                 params.get("password"),
