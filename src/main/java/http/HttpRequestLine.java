@@ -18,10 +18,6 @@ public class HttpRequestLine {
         return httpUrl.isStaticFile();
     }
 
-    public boolean isSamePath(String path) {
-        return httpUrl.isSamePath(path);
-    }
-
     public String getPath() {
         return httpUrl.getPath();
     }

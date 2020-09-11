@@ -14,10 +14,6 @@ public class HttpUrl {
         this.url = url;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
     public String getPath() {
         if (hasParameters()) {
             return url.substring(0, url.indexOf(PATH_AND_PARAMETER_DIVIDER));

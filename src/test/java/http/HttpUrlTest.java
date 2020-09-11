@@ -8,6 +8,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 class HttpUrlTest {
+
     @DisplayName("url에서 path만 반환한다.")
     @CsvSource(value = {"/user/form.html,/user/form.html", "/user/form.html?name=toney,/user/form.html"})
     @ParameterizedTest

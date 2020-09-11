@@ -24,10 +24,6 @@ public class HttpRequest {
         }
     }
 
-    public HttpRequestLine getHttpRequestLine() {
-        return httpRequestLine;
-    }
-
     public String getHttpPath() {
         return httpRequestLine.getPath();
     }
@@ -42,10 +38,6 @@ public class HttpRequest {
 
     public String getHttpHeaderParameterOf(String key) {
         return httpHeaders.getValue(key);
-    }
-
-    public HttpBody getHttpBody() {
-        return httpBody;
     }
 
     public String getHttpBodyValueOf(String key) {
