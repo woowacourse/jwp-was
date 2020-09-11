@@ -1,5 +1,6 @@
 package webserver;
 
+import db.DataBase;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,10 +49,10 @@ public class RequestHandler implements Runnable {
                     queryData.get("name"),
                     queryData.get("email")
                 );
-                User savedUser = User.save(user);
+                DataBase.addUser(user);
 
                 DataOutputStream dos = new DataOutputStream(out);
-                response201Header(dos, "/user/" + savedUser.getUserId());
+                response201Header(dos, "/user/" + user.getUserId());
             }
             Resource resourceForResponse =
                 resourcesHandler.convertUriToResource(httpRequest.getUri());
