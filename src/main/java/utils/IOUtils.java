@@ -36,12 +36,4 @@ public class IOUtils {
         }
         return readData(bufferedReader, contentLength);
     }
-
-    public static void addParameters(String query, Map<String, String> params) throws UnsupportedEncodingException {
-        String[] infos = query.split("&");
-        for (String info : infos) {
-            String[] keyAndValue = info.split("=");
-            params.put(keyAndValue[0], URLDecoder.decode(keyAndValue[1], StandardCharsets.UTF_8.toString()));
-        }
-    }
 }

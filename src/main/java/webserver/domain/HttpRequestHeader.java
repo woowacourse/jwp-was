@@ -3,10 +3,7 @@ package webserver.domain;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
-
 import lombok.Getter;
-import utils.IOUtils;
 import utils.StaticFileType;
 
 @Getter

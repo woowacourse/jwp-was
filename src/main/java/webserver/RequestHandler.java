@@ -10,11 +10,9 @@ import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import model.User;
 import utils.FileIoUtils;
 import utils.IOUtils;
 import utils.StaticFileType;
@@ -24,6 +22,7 @@ import webserver.domain.HttpRequestHeader;
 public class RequestHandler implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final String NEW_LINE = System.lineSeparator();
 
     private Socket connection;
 
@@ -36,7 +35,7 @@ public class RequestHandler implements Runnable {
             connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream();
-             BufferedReader bufferedReader = new BufferedReader((new InputStreamReader(in, StandardCharsets.UTF_8)))) {
+            BufferedReader bufferedReader = new BufferedReader((new InputStreamReader(in, StandardCharsets.UTF_8)))) {
 
             HttpRequestHeader httpRequestHeader = new HttpRequestHeader(IOUtils.readHeader(bufferedReader));
             HttpRequestBody httpRequestBody = new HttpRequestBody(
@@ -50,7 +49,7 @@ public class RequestHandler implements Runnable {
                 response200Header(dos, httpRequestHeader.findExtension(), responseBody.length);
             } else {
                 if (httpRequestHeader.hasEqualPathWith("/user/create")) {
-                    Map<String, String> params = httpRequestBody.getParams();
+                    Map<String, String> params = httpRequestBody.getRequestParams();
                     User newUser = new User(params.get("userId"), params.get("password"), params.get("name"),
                         params.get("email"));
 

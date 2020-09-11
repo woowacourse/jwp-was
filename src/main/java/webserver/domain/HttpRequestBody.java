@@ -1,21 +1,19 @@
 package webserver.domain;
 
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
 import java.util.Map;
-
 import lombok.Getter;
-import utils.IOUtils;
 
 @Getter
 public class HttpRequestBody {
 
-    private Map<String, String> params;
+    private RequestParams requestParams;
 
     public HttpRequestBody(String requestBody) throws UnsupportedEncodingException {
-        this.params = new HashMap<>();
-        if (!requestBody.isEmpty()) {
-            IOUtils.addParameters(requestBody, this.params);
-        }
+        this.requestParams = new RequestParams(requestBody);
+    }
+
+    public Map<String, String> getRequestParams() {
+        return requestParams.getParams();
     }
 }
