@@ -19,7 +19,6 @@ import utils.UrlUtils;
 public class RequestHandler implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private static final String DEFAULT_USER_BIND_VALUE = null;
     private static final String CREATE_URL = "/user/create";
     private static final String INDEX_HTML_URL = "/index.html";
 
@@ -36,7 +35,9 @@ public class RequestHandler implements Runnable {
             RequestHeader requestHeader = new RequestHeader(bufferedReader);
             ResponseHeader responseHeader = new ResponseHeader(new DataOutputStream(out));
 
-            String resourcePath = UrlUtils.extractResourcePath(requestHeader.getFirstLine());
+            String resourcePath = requestHeader.getResourcePath();
+            logger.info("first resourcePath : {} ",resourcePath);
+
 
             if (resourcePath.startsWith(CREATE_URL)) {
                 if (requestHeader.isGet()) {

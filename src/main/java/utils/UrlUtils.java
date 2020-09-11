@@ -7,33 +7,15 @@ import java.util.Objects;
 
 public class UrlUtils {
 
-    private static final int RESOURCE_PATH_INDEX = 1;
     private static final int FILE_INDEX = 0;
     private static final int PARAMS_INDEX = 1;
     private static final int DEFAULT_PARAMS_ACCESS_INDEX = 2;
     private static final int DEFAULT_PARAM_ACCESS_INDEX = 2;
-    private static final String HTTP_HEADER_FIRST_LINE_DELIMITER = " ";
+    private static final String ROOT_PATH = "/";
     private static final String PARAM_DELIMITER = "&";
     private static final String PARAMS_DELIMITER = "\\?";
     private static final String PARAM_KEY_VALUE_DELIMITER = "=";
-    private static final String ROOT_PATH = "/";
-    private static final String INDEX_PATH = "/index";
-    private static final String INDEX_SUFFIX = ".html";
     private static final String BLANK_VALUE = "";
-
-    public static String extractResourcePath(String headerLine) {
-        String[] headerLineSegment = headerLine.split(HTTP_HEADER_FIRST_LINE_DELIMITER);
-        String resourcePath = headerLineSegment[RESOURCE_PATH_INDEX];
-
-        if (ROOT_PATH.equals(resourcePath)) {
-            return INDEX_PATH + INDEX_SUFFIX;
-        }
-        return resourcePath;
-    }
-
-    public static String extractHttpMethod(String firstLine) {
-        return firstLine.split(HTTP_HEADER_FIRST_LINE_DELIMITER)[0];
-    }
 
     public static String extractFilePath(String resourcePath) {
         String filePath = resourcePath.split(PARAMS_DELIMITER)[FILE_INDEX];

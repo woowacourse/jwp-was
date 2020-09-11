@@ -26,7 +26,7 @@ public class RequestHeaderTest {
 
         assertThat(requestHeader.isGet()).isTrue();
         assertThat(requestHeader.getBody()).isNull();
-        assertThat(requestHeader.getFirstLine()).isEqualTo("GET /index.html HTTP/1.1");
+        assertThat(requestHeader.getResourcePath()).isEqualTo("/index.html");
     }
 
     @DisplayName("RequestHeader 객체 생성 - POST REQUEST")
@@ -39,6 +39,6 @@ public class RequestHeaderTest {
 
         assertThat(requestHeader.isPost()).isTrue();
         assertThat(requestHeader.getBody()).isEqualTo("userId=javajigi&password=password");
-        assertThat(requestHeader.getFirstLine()).isEqualTo("POST /index.html HTTP/1.1");
+        assertThat(requestHeader.getResourcePath()).isEqualTo("/index.html");
     }
 }

@@ -34,12 +34,14 @@ public class ResponseHeader {
     }
 
     public void createResponse200Header(String resourcePath) throws IOException, URISyntaxException {
-        byte[] responseFile = FileIoUtils.loadFileFromClasspath(TEMPLATES_PATH + UrlUtils.extractFilePath(resourcePath));
+        byte[] responseFile;
 
         if (HttpContentType.isStaticFile(resourcePath)) {
             responseFile = FileIoUtils.loadFileFromClasspath(STATIC_PATH + resourcePath);
-        }
+        } else {
+            responseFile = FileIoUtils.loadFileFromClasspath(TEMPLATES_PATH + UrlUtils.extractFilePath(resourcePath));
 
+        }
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
             dos.writeBytes("Content-Type: " + HttpContentType.findContentType(resourcePath) + ";charset=utf-8\r\n");

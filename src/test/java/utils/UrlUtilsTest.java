@@ -22,24 +22,6 @@ public class UrlUtilsTest {
         assertThat(result).isEqualTo(expected);
     }
 
-    @DisplayName("HttpHeader first line에서 http method 추출")
-    @ParameterizedTest
-    @CsvSource(value = {"GET / HTTP/1.1, GET", "POST /index.html HTTP/1.1, POST",
-        "GET /user/login.html HTTP/1.1, GET"})
-   void extractHttpMethod(String input, String expected) {
-        String resourcePath = UrlUtils.extractHttpMethod(input);
-        assertThat(resourcePath).isEqualTo(expected);
-    }
-
-    @DisplayName("HttpHeader first line에서 리소스 경로 추출")
-    @ParameterizedTest
-    @CsvSource(value = {"GET / HTTP/1.1, /index.html", "GET /index.html HTTP/1.1, /index.html",
-        "GET /user/login.html HTTP/1.1, /user/login.html"})
-    void extractResourcePath(String input, String expected) {
-        String resourcePath = UrlUtils.extractResourcePath(input);
-        assertThat(resourcePath).isEqualTo(expected);
-    }
-
     @DisplayName("Request Params에서 Param 추출")
     @ParameterizedTest
     @MethodSource("provideStringsForExtractRequestParam")
