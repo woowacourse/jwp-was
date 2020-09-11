@@ -10,12 +10,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HandlebarsTest {
+
     private static final Logger log = LoggerFactory.getLogger(HandlebarsTest.class);
 
     @Test
     void name() throws Exception {
         TemplateLoader loader = new ClassPathTemplateLoader();
-        loader.setPrefix("/templates");
+        loader.setPrefix("/webapp");
         loader.setSuffix(".html");
         Handlebars handlebars = new Handlebars(loader);
 
