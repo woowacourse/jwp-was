@@ -25,15 +25,14 @@ public class RequestHandler implements Runnable {
     }
 
     public void run() {
-        logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
-            connection.getPort());
+        logger.debug("New Client Connect! Connected IP : {}, Port : {}",
+            connection.getInetAddress(), connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+            DataOutputStream dos = new DataOutputStream(out);
 
             RequestEntity requestEntity = RequestEntity.from(bufferedReader);
-
-            DataOutputStream dos = new DataOutputStream(out);
 
             RequestMapping matchingMapping = RequestMappingStorage.findMatchingMapping(requestEntity);
             InputStream response = matchingMapping.generateResponse(requestEntity);

@@ -2,9 +2,6 @@ package http.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 
 import utils.IOUtils;
 
@@ -37,13 +34,5 @@ public class RequestBody {
 
     public ContentType getContentType() {
         return contentType;
-    }
-
-    private static String decode(String input) {
-        try {
-            return URLDecoder.decode(input, StandardCharsets.UTF_8.name());
-        } catch (UnsupportedEncodingException e) {
-            throw new AssertionError();
-        }
     }
 }
