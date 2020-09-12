@@ -23,7 +23,7 @@ public class HttpHeaders {
     }
 
     private boolean isEmpty(String line) {
-        return "".equals(line) || line == null;
+        return line == null || "".equals(line);
     }
 
     public String getValue(String key) {

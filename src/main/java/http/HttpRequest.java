@@ -11,12 +11,12 @@ public class HttpRequest {
     private HttpBody httpBody;
 
     public HttpRequest(BufferedReader bufferedReader) throws IOException {
-        String startLine = bufferedReader.readLine();
-        if (startLine == null) {
+        String requestLine = bufferedReader.readLine();
+        if (requestLine == null) {
             return;
         }
 
-        httpRequestLine = new HttpRequestLine(startLine);
+        httpRequestLine = new HttpRequestLine(requestLine);
         httpHeaders = new HttpHeaders(bufferedReader);
 
         if (httpRequestLine.isPost()) {

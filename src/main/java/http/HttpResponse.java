@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HttpResponse {
+    private static final String LINE_SEPARATOR = System.lineSeparator();
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
     private final DataOutputStream dataOutputStream;
@@ -17,10 +18,10 @@ public class HttpResponse {
 
     public void response200Header(String contentType, int lengthOfBodyContent) {
         try {
-            dataOutputStream.writeBytes("HTTP/1.1 200 OK \r\n");
-            dataOutputStream.writeBytes("Content-Type: " + contentType + "\r\n");
-            dataOutputStream.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dataOutputStream.writeBytes("\r\n");
+            dataOutputStream.writeBytes("HTTP/1.1 200 OK" + LINE_SEPARATOR);
+            dataOutputStream.writeBytes("Content-Type: " + contentType + LINE_SEPARATOR);
+            dataOutputStream.writeBytes("Content-Length: " + lengthOfBodyContent + LINE_SEPARATOR);
+            dataOutputStream.writeBytes(LINE_SEPARATOR);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -28,9 +29,9 @@ public class HttpResponse {
 
     public void response302Header(String url) {
         try {
-            dataOutputStream.writeBytes("HTTP/1.1 302 FOUND \r\n");
-            dataOutputStream.writeBytes("Location: " + url + "\r\n");
-            dataOutputStream.writeBytes("\r\n");
+            dataOutputStream.writeBytes("HTTP/1.1 302 FOUND" + LINE_SEPARATOR);
+            dataOutputStream.writeBytes("Location: " + url + LINE_SEPARATOR);
+            dataOutputStream.writeBytes(LINE_SEPARATOR);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
