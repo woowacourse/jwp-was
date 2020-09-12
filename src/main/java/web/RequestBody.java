@@ -2,6 +2,7 @@ package web;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class RequestBody {
@@ -26,5 +27,18 @@ public class RequestBody {
 
     public String getBody() {
         return body;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RequestBody that = (RequestBody) o;
+        return Objects.equals(body, that.body);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(body);
     }
 }

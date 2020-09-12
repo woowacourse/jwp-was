@@ -5,16 +5,12 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
-import utils.IOUtils;
+import web.HttpRequest;
 import web.RequestBody;
-import web.RequestHeader;
-import web.RequestLine;
 
 import java.io.*;
 import java.net.Socket;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class RequestHandler implements Runnable {
@@ -35,29 +31,17 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
             DataOutputStream dos = new DataOutputStream(out);
 
-            String firstLine = br.readLine();
-            final RequestLine requestLine = new RequestLine(firstLine);
+            final HttpRequest httpRequest = new HttpRequest(br);
 
-            List<String> requestHeaders = new ArrayList<>();
-            String request;
-            while (!(request = br.readLine()).equals("")) {
-                requestHeaders.add(request);
-            }
-            final RequestHeader header = new RequestHeader(requestHeaders);
+            String path = httpRequest.getPath();
 
-            final int contentLength = header.getContentLength();
-            final String body = IOUtils.readData(br, contentLength);
-            final RequestBody requestBody = new RequestBody(body);
-
-            String url = requestLine.requestUrl();
-
-            if (requestLine.getMethod().equals("POST") && url.equals("/user/create")) {
-                createUser(requestBody);
+            if (httpRequest.getMethod().equals("POST") && path.equals("/user/create")) {
+                createUser(httpRequest.getRequestBody());
                 response302Header(dos, "/index.html");
             }
 
-            if (url.contains(".html")) {
-                byte[] staticFile = FileIoUtils.loadFileFromClasspath(RESOURCE_BASE_PATH + url);
+            if (path.contains(".html")) {
+                byte[] staticFile = FileIoUtils.loadFileFromClasspath(RESOURCE_BASE_PATH + path);
                 response200Header(dos, staticFile.length);
                 responseBody(dos, staticFile);
             }

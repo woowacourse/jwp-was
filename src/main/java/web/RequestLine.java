@@ -2,29 +2,43 @@ package web;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class RequestLine {
     public static final String URL_PARAMETER_DELIMITER = "\\?";
     public static final String PARAMETER_DELIMITER = "&";
     public static final String KEY_VALUE_DELIMITER = "=";
-    public static final int METHOD_INDEX = 0;
-    public static final int PATH_INDEX = 1;
-    public static final int PROTOCOL_INDEX = 2;
-    public static final int URL_INDEX = 0;
-    public static final int PARAMETER_INDEX = 1;
-    public static final int INDEX_ZERO = 0;
-    public static final int INDEX_ONE = 1;
     private static final String REQUEST_LINE_DELIMITER = " ";
+
     private final String method;
     private final String path;
+    private final Map<String, String> parameters;
     private final String protocol;
 
     public RequestLine(String requestLine) {
         final String[] requests = requestLine.split(REQUEST_LINE_DELIMITER);
-        this.method = requests[METHOD_INDEX];
-        this.path = requests[PATH_INDEX];
-        this.protocol = requests[PROTOCOL_INDEX];
+        this.method = requests[0];
+        this.path = parsePath(requests[1]);
+        this.parameters = parseParameters(requests[1]);
+        this.protocol = requests[2];
+    }
+
+    private String parsePath(String pathAndParams) {
+        return pathAndParams.split(URL_PARAMETER_DELIMITER)[0];
+    }
+
+    private Map<String, String> parseParameters(String pathAndParams) {
+        if (pathAndParams.split(URL_PARAMETER_DELIMITER).length == 1) {
+            return null;
+        }
+
+        final String parameterString = pathAndParams.split(URL_PARAMETER_DELIMITER)[1];
+        final String[] pairs = parameterString.split(PARAMETER_DELIMITER);
+
+        return Arrays.stream(pairs)
+                .map(parameter -> parameter.split(KEY_VALUE_DELIMITER))
+                .collect(Collectors.toMap(it -> it[0], it -> it[1]));
     }
 
     public String getMethod() {
@@ -35,20 +49,26 @@ public class RequestLine {
         return path;
     }
 
+    public Map<String, String> getParameters() {
+        return parameters;
+    }
+
     public String getProtocol() {
         return protocol;
     }
 
-    public String requestUrl() {
-        return this.path.split(URL_PARAMETER_DELIMITER)[URL_INDEX];
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RequestLine that = (RequestLine) o;
+        return Objects.equals(method, that.method) &&
+                Objects.equals(path, that.path) &&
+                Objects.equals(protocol, that.protocol);
     }
 
-    public Map<String, String> parseParameters() {
-        final String parameterString = this.path.split(URL_PARAMETER_DELIMITER)[PARAMETER_INDEX];
-        final String[] pairs = parameterString.split(PARAMETER_DELIMITER);
-
-        return Arrays.stream(pairs)
-                .map(parameter -> parameter.split(KEY_VALUE_DELIMITER))
-                .collect(Collectors.toMap(it -> it[INDEX_ZERO], it -> it[INDEX_ONE]));
+    @Override
+    public int hashCode() {
+        return Objects.hash(method, path, protocol);
     }
 }
