@@ -18,8 +18,10 @@ public enum AcceptType {
     }
 
     public static AcceptType of(String filePath) {
+        String fileExtension = IOUtils.extractExtension(filePath);
+
         return Stream.of(values())
-            .filter(type -> type.toString().equalsIgnoreCase(filePath))
+            .filter(type -> type.toString().equalsIgnoreCase(fileExtension))
             .findFirst()
             .orElse(HTML);
     }

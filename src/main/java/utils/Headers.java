@@ -7,7 +7,6 @@ import java.util.Map;
 public class Headers {
 
     private Map<String, Object> headers;
-    private AcceptType type;
 
     public Headers(List<String> lines) {
         headers = new HashMap<>();
@@ -31,9 +30,7 @@ public class Headers {
     }
 
     private void parseAcceptType() {
-        String filePath = (String) headers.get("filePath");
-        String fileExtension = IOUtils.extractExtension(filePath);
-        this.type = AcceptType.of(fileExtension);
+
     }
 
     public boolean isGetRequest() {
@@ -48,9 +45,5 @@ public class Headers {
 
     public Object getHeader(String name) {
         return headers.get(name);
-    }
-
-    public AcceptType getType() {
-        return type;
     }
 }
