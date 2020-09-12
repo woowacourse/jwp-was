@@ -4,11 +4,11 @@ import controller.ControllerMapper;
 
 import java.util.Objects;
 
-public class RequestUri {
+public class RequestLine {
     private final HttpMethod method;
     private final String url;
 
-    public RequestUri(HttpMethod method, String url) {
+    public RequestLine(HttpMethod method, String url) {
         this.method = method;
         this.url = url;
     }
@@ -29,7 +29,7 @@ public class RequestUri {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final RequestUri that = (RequestUri) o;
+        final RequestLine that = (RequestLine) o;
         return getMethod() == that.getMethod() &&
                 Objects.equals(getUrl(), that.getUrl());
     }

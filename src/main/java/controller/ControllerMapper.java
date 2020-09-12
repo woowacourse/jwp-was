@@ -1,7 +1,7 @@
 package controller;
 
 import http.HttpMethod;
-import http.RequestUri;
+import http.RequestLine;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -17,9 +17,9 @@ public enum ControllerMapper {
         this.url = url;
     }
 
-    public static Optional<ControllerMapper> from(RequestUri requestUri) {
+    public static Optional<ControllerMapper> from(RequestLine requestLine) {
         return Arrays.stream(ControllerMapper.values())
-                .filter(requestUri::isEqualRequestType)
+                .filter(requestLine::isEqualRequestType)
                 .findAny();
     }
 

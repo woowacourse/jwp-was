@@ -3,18 +3,18 @@ package http;
 import java.util.Map;
 
 public class HttpRequest {
-    private final RequestUri requestUri;
+    private final RequestLine requestLine;
     private final RequestHeader requestHeader;
     private final Map<String, String> params;
 
-    public HttpRequest(RequestUri requestUri, RequestHeader requestHeader, Map<String, String> params) {
-        this.requestUri = requestUri;
+    public HttpRequest(RequestLine requestLine, RequestHeader requestHeader, Map<String, String> params) {
+        this.requestLine = requestLine;
         this.requestHeader = requestHeader;
         this.params = params;
     }
 
-    public RequestUri getRequestUri() {
-        return requestUri;
+    public RequestLine getRequestLine() {
+        return requestLine;
     }
 
     public RequestHeader getRequestHeader() {
@@ -26,6 +26,6 @@ public class HttpRequest {
     }
 
     public String getUrl() {
-        return requestUri.getUrl();
+        return requestLine.getUrl();
     }
 }

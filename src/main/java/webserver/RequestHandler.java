@@ -36,7 +36,7 @@ public class RequestHandler implements Runnable {
 
             HttpRequest httpRequest = HttpRequestFactory.createRequest(br);
 
-            ControllerMapper.from(httpRequest.getRequestUri()).ifPresent(
+            ControllerMapper.from(httpRequest.getRequestLine()).ifPresent(
                     mapper -> Controller.findMethod(mapper).accept(httpRequest.getParams(), dos)
             );
 

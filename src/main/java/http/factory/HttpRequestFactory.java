@@ -2,7 +2,7 @@ package http.factory;
 
 import http.HttpRequest;
 import http.RequestHeader;
-import http.RequestUri;
+import http.RequestLine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -24,14 +24,14 @@ public class HttpRequestFactory {
 
         String line = br.readLine();
         logger.debug("request header : {}", line);
-        RequestUri requestUri = RequestUriFactory.createRequestUri(line, params);
+        RequestLine requestLine = RequestUriFactory.createRequestUri(line, params);
         while (!StringUtils.isEmpty(line = br.readLine())) {
             logger.debug("request header : {}", line);
             headers.put(line.split(COLON_DELIMITER)[0], line.split(COLON_DELIMITER)[1]);
         }
         RequestHeader requestHeader = new RequestHeader(headers);
         putParameterOfBody(br, headers, params);
-        return new HttpRequest(requestUri, requestHeader, params);
+        return new HttpRequest(requestLine, requestHeader, params);
     }
 
     private static void putParameterOfBody(BufferedReader br, Map<String, String> headers, Map<String, String> params) throws IOException {

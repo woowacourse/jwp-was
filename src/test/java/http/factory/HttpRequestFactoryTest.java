@@ -3,7 +3,7 @@ package http.factory;
 import http.HttpMethod;
 import http.HttpRequest;
 import http.RequestHeader;
-import http.RequestUri;
+import http.RequestLine;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -33,14 +33,14 @@ class HttpRequestFactoryTest {
         headerParams.put("Accept", "*/*");
 
         RequestHeader expectHeader = new RequestHeader(headerParams);
-        RequestUri expectUri = new RequestUri(HttpMethod.GET, "/index.html");
+        RequestLine expectUri = new RequestLine(HttpMethod.GET, "/index.html");
 
         BufferedReader reader = new BufferedReader(new StringReader(requestHeader));
         HttpRequest actualHttpRequest = HttpRequestFactory.createRequest(reader);
 
         assertAll(
                 () -> assertThat(actualHttpRequest.getRequestHeader()).isEqualToComparingFieldByField(expectHeader),
-                () -> assertThat(actualHttpRequest.getRequestUri()).isEqualTo(expectUri)
+                () -> assertThat(actualHttpRequest.getRequestLine()).isEqualTo(expectUri)
         );
     }
 
@@ -67,7 +67,7 @@ class HttpRequestFactoryTest {
         data.put("email", "email@email");
 
         RequestHeader expectHeader = new RequestHeader(headers);
-        RequestUri expectUri = new RequestUri(HttpMethod.POST, "/user/create");
+        RequestLine expectUri = new RequestLine(HttpMethod.POST, "/user/create");
 
         BufferedReader reader = new BufferedReader(new StringReader(requestHeader));
         HttpRequest actualHttpRequest = HttpRequestFactory.createRequest(reader);
@@ -75,8 +75,8 @@ class HttpRequestFactoryTest {
         assertAll(
                 () -> assertThat(actualHttpRequest.getRequestHeader()).isEqualToComparingFieldByField(expectHeader),
                 () -> assertThat(actualHttpRequest.getParams()).isEqualTo(data),
-                () -> assertThat(actualHttpRequest.getRequestUri().getUrl()).isEqualTo(expectUri.getUrl()),
-                () -> assertThat(actualHttpRequest.getRequestUri().getMethod()).isEqualTo(expectUri.getMethod())
+                () -> assertThat(actualHttpRequest.getRequestLine().getUrl()).isEqualTo(expectUri.getUrl()),
+                () -> assertThat(actualHttpRequest.getRequestLine().getMethod()).isEqualTo(expectUri.getMethod())
         );
     }
 
