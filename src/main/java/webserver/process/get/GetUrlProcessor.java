@@ -7,28 +7,29 @@ import java.util.function.Function;
 import model.User;
 import utils.FileIoUtils;
 import webserver.exception.NotExistUrlException;
+import webserver.http.HttpRequest;
 
-public class GetUrlProcessor implements Function<String, byte[]> {
+public class GetUrlProcessor implements Function<HttpRequest, byte[]> {
 
 	@Override
-	public byte[] apply(String url) {
-		if (url.equals("/index.html")) {
+	public byte[] apply(HttpRequest httpRequest) {
+		if (httpRequest.isSameUrl("/index.html")) {
 			try {
 				return FileIoUtils.loadFileFromClasspath("./templates/index.html");
 			} catch (IOException | URISyntaxException e) {
 				e.printStackTrace();
 			}
-		} else if (url.equals("/user/form.html")) {
+		} else if (httpRequest.isSameUrl("/user/form.html")) {
 			try {
 				return FileIoUtils.loadFileFromClasspath("./templates/user/form.html");
 			} catch (IOException | URISyntaxException e) {
 				e.printStackTrace();
 			}
-		} else if (url.contains("/user/create")) {
-			// 파싱해야된다
-			User user = UserParser.parseUser(url);
+		} else if (httpRequest.containsInUrl("/user/create")) {
+			User user = UserParser.parseUser(httpRequest.getUrl());
 
-			// 파싱한 값 저장
+			System.out.println("여기 잘 들어오는가 ? ");
+
 			return "create user success".getBytes();
 		}
 		throw new NotExistUrlException();

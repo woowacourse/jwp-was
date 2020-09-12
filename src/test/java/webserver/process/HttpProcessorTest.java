@@ -10,32 +10,29 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import utils.FileIoUtils;
-import webserver.exception.NotExistUrlException;
 import webserver.http.HeaderName;
 import webserver.http.HttpBody;
 import webserver.http.HttpHeaders;
 import webserver.http.HttpRequest;
-import webserver.process.get.GetUrlProcessor;
 
-class GetUrlProcessorTest {
+class HttpProcessorTest {
 
-	@DisplayName("올바르지 않은 GET Method Url 요청")
+	@DisplayName("잘못된 Method가 들어왔을 경우 - IllegalArgumentException 발생")
 	@Test
-	void apply() {
+	void processException() {
 		HashMap<String, String> headers = new HashMap<>();
-		headers.put(HeaderName.Method.name(), "GET");
-		headers.put(HeaderName.RequestUrl.name(), "/올바르지않은url");
+		headers.put(HeaderName.Method.name(), "잘못된 METHOD");
 		HttpHeaders httpHeaders = new HttpHeaders(headers);
 		HttpBody httpBody = new HttpBody("");
 		HttpRequest httpRequest = new HttpRequest(httpHeaders, httpBody);
 
-		assertThatThrownBy(() -> new GetUrlProcessor().apply(httpRequest))
-			.isInstanceOf(NotExistUrlException.class);
+		assertThatThrownBy(() -> HttpProcessor.process(httpRequest))
+			.isInstanceOf(IllegalArgumentException.class);
 	}
 
-	@DisplayName("/index.html 요청 처리")
+	@DisplayName("GET - index.html 요청")
 	@Test
-	void applyByIndexHtml() throws IOException, URISyntaxException {
+	void proceeIndexHtml() throws IOException, URISyntaxException {
 		HashMap<String, String> headers = new HashMap<>();
 		headers.put(HeaderName.Method.name(), "GET");
 		headers.put(HeaderName.RequestUrl.name(), "/index.html");
@@ -43,16 +40,15 @@ class GetUrlProcessorTest {
 		HttpBody httpBody = new HttpBody("");
 		HttpRequest httpRequest = new HttpRequest(httpHeaders, httpBody);
 
-		byte[] actual = new GetUrlProcessor().apply(httpRequest);
-
+		byte[] actual = HttpProcessor.process(httpRequest);
 		byte[] expected = FileIoUtils.loadFileFromClasspath("./templates/index.html");
 
 		assertThat(actual).isEqualTo(expected);
 	}
 
-	@DisplayName("/user/form.html 요청 처리")
+	@DisplayName("GET - /user/form.html 요청")
 	@Test
-	void applyByUserFormHtml() throws IOException, URISyntaxException {
+	void processFormHtml() throws IOException, URISyntaxException {
 		HashMap<String, String> headers = new HashMap<>();
 		headers.put(HeaderName.Method.name(), "GET");
 		headers.put(HeaderName.RequestUrl.name(), "/user/form.html");
@@ -60,8 +56,7 @@ class GetUrlProcessorTest {
 		HttpBody httpBody = new HttpBody("");
 		HttpRequest httpRequest = new HttpRequest(httpHeaders, httpBody);
 
-		byte[] actual = new GetUrlProcessor().apply(httpRequest);
-
+		byte[] actual = HttpProcessor.process(httpRequest);
 		byte[] expected = FileIoUtils.loadFileFromClasspath("./templates/user/form.html");
 
 		assertThat(actual).isEqualTo(expected);

@@ -11,7 +11,12 @@ import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import utils.BodyIOUtils;
 import utils.HeaderIOUtils;
+import webserver.http.HttpBody;
+import webserver.http.HttpHeaders;
+import webserver.http.HttpRequest;
+import webserver.process.HttpProcessor;
 
 public class RequestHandler implements Runnable {
 	private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -27,11 +32,10 @@ public class RequestHandler implements Runnable {
 			connection.getPort());
 
 		try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+			HttpRequest httpRequest = parseHttpRequest(in);
 
-			HttpMainHeader httpMainHeader = extractHttpMainHeader(bufferedReader);
 			DataOutputStream dos = new DataOutputStream(out);
-			byte[] body = httpMainHeader.processByUrl();
+			byte[] body = HttpProcessor.process(httpRequest);
 			response200Header(dos, body.length);
 			responseBody(dos, body);
 		} catch (IOException e) {
@@ -39,8 +43,24 @@ public class RequestHandler implements Runnable {
 		}
 	}
 
-	private HttpMainHeader extractHttpMainHeader(BufferedReader bufferedReader) throws IOException {
-		return HeaderIOUtils.parseMainHeader(bufferedReader.readLine());
+	private HttpRequest parseHttpRequest(InputStream in) throws IOException {
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+		String headers = printHeader(bufferedReader);
+		HttpHeaders httpHeaders = HeaderIOUtils.parseHttpHeaders(headers);
+		HttpBody httpBody = new HttpBody(BodyIOUtils.parseHttpBody(httpHeaders, bufferedReader));
+		return new HttpRequest(httpHeaders, httpBody);
+	}
+
+	private String printHeader(BufferedReader bufferedReader) throws IOException {
+		System.out.println("request header start: ");
+		String request = bufferedReader.readLine();
+		StringBuilder stringBuilder = new StringBuilder();
+		while (!request.equals("")) {
+			stringBuilder.append(request).append("\n");
+			request = bufferedReader.readLine();
+		}
+		System.out.println(stringBuilder.toString());
+		return stringBuilder.toString();
 	}
 
 	private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
