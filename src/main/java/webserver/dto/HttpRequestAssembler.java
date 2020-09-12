@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.Kind;
+import webserver.FileNameExtension;
 import webserver.handler.RequestHandler;
 
 public class HttpRequestAssembler {
@@ -26,8 +26,8 @@ public class HttpRequestAssembler {
         String urlPath = extractUrlPath(requestLine);
         String protocol = extractProtocol(requestLine);
         Map<String, String> headers = extractHeaders(br);
-        Kind kind = Kind.from(urlPath);
-        return new HttpRequest(httpMethod, urlPath, protocol, headers, kind);
+        FileNameExtension fileNameExtension = FileNameExtension.from(urlPath);
+        return new HttpRequest(httpMethod, urlPath, protocol, headers, fileNameExtension);
     }
 
     private static String extractHttpMethod(String[] requestLine) {

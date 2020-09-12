@@ -1,6 +1,7 @@
 package webserver.dto;
 
 import java.util.Map;
+import webserver.FileNameExtension;
 import webserver.Kind;
 
 public class HttpRequest {
@@ -9,15 +10,15 @@ public class HttpRequest {
     private String urlPath;
     private String protocol;
     private Map<String, String> headers;
-    private Kind kind;
+    private FileNameExtension fileNameExtension;
 
     public HttpRequest(String HttpMethod, String urlPath, String protocol,
-        Map<String, String> headers, Kind kind) {
+        Map<String, String> headers, FileNameExtension fileNameExtension) {
         this.httpMethod = HttpMethod;
         this.urlPath = urlPath;
         this.protocol = protocol;
         this.headers = headers;
-        this.kind = kind;
+        this.fileNameExtension = fileNameExtension;
     }
 
     public String getHttpMethod() {
@@ -37,10 +38,14 @@ public class HttpRequest {
     }
 
     public Kind getKind() {
-        return kind;
+        return fileNameExtension.getKind();
     }
 
-    public boolean isSameKind(Kind kind) {
-        return this.kind.equals(kind);
+    public FileNameExtension getFileNameExtension() {
+        return fileNameExtension;
+    }
+
+    public boolean isFile() {
+        return !fileNameExtension.getKind().equals(Kind.API);
     }
 }
