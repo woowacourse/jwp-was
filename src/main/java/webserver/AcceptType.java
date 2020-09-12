@@ -1,6 +1,7 @@
-package utils;
+package webserver;
 
 import java.util.stream.Stream;
+import utils.IOUtils;
 
 public enum AcceptType {
     HTML("./templates", "text/html"),
