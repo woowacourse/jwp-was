@@ -2,21 +2,17 @@ package utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public class Request {
 
-    private Map<String, Object> headers;
-    private AcceptType type;
+    private Headers headers;
     private String body;
 
-    public Request(List<String> requestHeaders, BufferedReader bufferedReader) throws IOException {
-        headers = new HashMap<>();
-        parseRequestFirstLine(requestHeaders.remove(0));
-        parseHeaders(requestHeaders);
+    public Request(List<String> lines, BufferedReader bufferedReader) throws IOException {
+
+        headers = new Headers(lines);
         parseBody(bufferedReader);
     }
 
@@ -30,46 +26,24 @@ public class Request {
         this.body = IOUtils.readData(bufferedReader, contentLength);
     }
 
-    private void parseRequestFirstLine(String headerFirstLine) {
-        String[] splitHeaderFirstLine = headerFirstLine.split(" ");
-
-        headers.put("method", HttpMethod.of(splitHeaderFirstLine[0]));
-        headers.put("filePath", splitHeaderFirstLine[1].split("\\?")[0]);
-        headers.put("httpVersion", splitHeaderFirstLine[2]);
-    }
-
-    private void parseHeaders(List<String> requestHeaders) {
-        requestHeaders.stream()
-            .map(line -> line.split(": "))
-            .forEach(pair -> headers.put(pair[0], pair[1]));
-        parseAcceptType();
-    }
-
-    private void parseAcceptType() {
-        String filePath = (String) getHeader("filePath");
-        String fileExtension = IOUtils.extractExtension(filePath);
-        this.type = AcceptType.of(fileExtension);
-    }
-
     public boolean isGetRequest() {
-        HttpMethod method = (HttpMethod) headers.get("method");
-        return method.isGet();
+        return headers.isGetRequest();
     }
 
     public boolean isPostRequest() {
-        HttpMethod method = (HttpMethod) headers.get("method");
-        return method.isPost();
+        return headers.isPostRequest();
     }
 
     public Object getHeader(String name) {
-        return headers.get(name);
+        return headers.getHeader(name);
     }
 
     public AcceptType getType() {
-        return type;
+        return headers.getType();
     }
 
     public String getBody() {
         return body;
     }
+
 }
