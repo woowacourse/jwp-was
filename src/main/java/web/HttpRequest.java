@@ -28,6 +28,10 @@ public class HttpRequest {
         this.requestBody = new RequestBody(body);
     }
 
+    public boolean isStaticFileRequest() {
+        return this.requestLine.isStaticFile();
+    }
+
     public String getPath() {
         return this.requestLine.getPath();
     }

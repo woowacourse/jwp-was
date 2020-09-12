@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import web.HttpRequest;
 import web.RequestBody;
+import web.ResourceMatcher;
 
 import java.io.*;
 import java.net.Socket;
@@ -35,15 +36,16 @@ public class RequestHandler implements Runnable {
 
             String path = httpRequest.getPath();
 
-            if (httpRequest.getMethod().equals("POST") && path.equals("/user/create")) {
-                createUser(httpRequest.getRequestBody());
-                response302Header(dos, "/index.html");
-            }
-
-            if (path.contains(".html")) {
-                byte[] staticFile = FileIoUtils.loadFileFromClasspath(RESOURCE_BASE_PATH + path);
+            if (httpRequest.isStaticFileRequest()) {
+                String filePath = ResourceMatcher.findBaseDirectory(path) + path;
+                byte[] staticFile = FileIoUtils.loadFileFromClasspath(filePath);
                 response200Header(dos, staticFile.length);
                 responseBody(dos, staticFile);
+            } else {
+                if (httpRequest.getMethod().equals("POST") && path.equals("/user/create")) {
+                    createUser(httpRequest.getRequestBody());
+                    response302Header(dos, "/index.html");
+                }
             }
         } catch (IOException e) {
             logger.error(e.getMessage());

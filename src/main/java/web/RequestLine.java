@@ -12,14 +12,14 @@ public class RequestLine {
     private static final String REQUEST_LINE_DELIMITER = " ";
 
     private final String method;
-    private final String path;
+    private final Path path;
     private final Map<String, String> parameters;
     private final String protocol;
 
     public RequestLine(String requestLine) {
         final String[] requests = requestLine.split(REQUEST_LINE_DELIMITER);
         this.method = requests[0];
-        this.path = parsePath(requests[1]);
+        this.path = new Path(parsePath(requests[1]));
         this.parameters = parseParameters(requests[1]);
         this.protocol = requests[2];
     }
@@ -41,12 +41,16 @@ public class RequestLine {
                 .collect(Collectors.toMap(it -> it[0], it -> it[1]));
     }
 
+    public boolean isStaticFile() {
+        return this.path.isStaticFile();
+    }
+
     public String getMethod() {
         return method;
     }
 
     public String getPath() {
-        return path;
+        return path.getPath();
     }
 
     public Map<String, String> getParameters() {
