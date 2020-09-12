@@ -1,5 +1,7 @@
 package web;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
 
@@ -10,11 +12,13 @@ public class RequestLine {
     private final RequestUri requestUri;
     private final String protocol;
 
-    public RequestLine(String requestLine) {
-        String[] requests = requestLine.split(REQUEST_LINE_DELIMITER);
-        this.method = requests[0];
-        this.requestUri = new RequestUri(requests[1]);
-        this.protocol = requests[2];
+    public RequestLine(BufferedReader br) throws IOException {
+        String line = br.readLine();
+        String[] firstLine = line.split(REQUEST_LINE_DELIMITER);
+
+        this.method = firstLine[0];
+        this.requestUri = new RequestUri(firstLine[1]);
+        this.protocol = firstLine[2];
     }
 
     public boolean isStaticFile() {

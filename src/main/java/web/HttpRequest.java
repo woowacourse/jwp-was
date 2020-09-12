@@ -1,11 +1,7 @@
 package web;
 
-import utils.IOUtils;
-
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class HttpRequest {
@@ -14,19 +10,9 @@ public class HttpRequest {
     private final RequestBody requestBody;
 
     public HttpRequest(BufferedReader br) throws IOException {
-        String firstLine = br.readLine();
-        this.requestLine = new RequestLine(firstLine);
-
-        List<String> requestHeaders = new ArrayList<>();
-        String request;
-        while (!(request = br.readLine()).equals("")) {
-            requestHeaders.add(request);
-        }
-        this.requestHeader = new RequestHeader(requestHeaders);
-
-        int contentLength = requestHeader.getContentLength();
-        String body = IOUtils.readData(br, contentLength);
-        this.requestBody = new RequestBody(body);
+        this.requestLine = new RequestLine(br);
+        this.requestHeader = new RequestHeader(br);
+        this.requestBody = new RequestBody(br, requestHeader.getContentLength());
     }
 
     public boolean isStaticFileRequest() {

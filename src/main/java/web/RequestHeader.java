@@ -1,9 +1,10 @@
 package web;
 
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class RequestHeader {
     private static final String DELIMITER = ": ";
@@ -11,10 +12,16 @@ public class RequestHeader {
 
     private final Map<String, String> headers;
 
-    public RequestHeader(List<String> headers) {
-        this.headers = headers.stream()
-                .map(header -> header.split(DELIMITER))
-                .collect(Collectors.toMap(it -> it[0], it -> it[1]));
+    public RequestHeader(BufferedReader br) throws IOException {
+        HashMap<String, String> headers = new HashMap<>();
+        String line;
+
+        while (!(line = br.readLine()).equals("")) {
+            String[] header = line.split(DELIMITER);
+            headers.put(header[0], header[1]);
+        }
+
+        this.headers = headers;
     }
 
     public int getContentLength() {
