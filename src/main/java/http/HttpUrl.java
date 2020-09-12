@@ -7,6 +7,7 @@ public class HttpUrl {
     private static final String PATH_AND_PARAMETER_DIVIDER = "?";
     private static final String PARAMETERS_DIVIDER = "&";
     private static final String PARAMETER_DIVIDER = "=";
+    private static final String EMPTY_CONTENT = "";
 
     private final String url;
 
@@ -24,12 +25,24 @@ public class HttpUrl {
     public Map<String, String> getParameters() {
         String parameterLine = url.substring(url.indexOf(PATH_AND_PARAMETER_DIVIDER) + 1);
         String[] splitedParameters = parameterLine.split(PARAMETERS_DIVIDER);
+
         Map<String, String> parameters = new LinkedHashMap<>();
         for (String splitedParameter : splitedParameters) {
             String[] keyAndValue = splitedParameter.split(PARAMETER_DIVIDER);
             parameters.put(keyAndValue[0], keyAndValue[1]);
         }
+        validate(parameters, splitedParameters.length);
         return parameters;
+    }
+
+    private void validate(Map<String, String> parameters, int originalLength) {
+        if (parameters.size() != originalLength) {
+            throw new IllegalArgumentException("겹치는 key가 있습니다.");
+        }
+
+        if (parameters.containsKey(EMPTY_CONTENT)) {
+            throw new IllegalArgumentException("정보가 없는 key가 있습니다.");
+        }
     }
 
     public boolean isSamePath(String path) {
