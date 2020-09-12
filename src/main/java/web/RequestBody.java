@@ -21,6 +21,10 @@ public class RequestBody {
     }
 
     private Map<String, String> parseBodyData(String body) {
+        if (body.isEmpty()) {
+            return null;
+        }
+
         String[] data = body.split(PARAMETER_DELIMITER);
 
         return Arrays.stream(data)
