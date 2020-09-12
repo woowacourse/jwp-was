@@ -3,7 +3,10 @@ package webserver.resource;
 enum ContentType {
     HTML("text/html"),
     CSS("text/css"),
-    JS("application/javascript");
+    JS("application/javascript"),
+    ICON("image/x-icon"),
+    FONT_TTF("font/ttf"),
+    FONT_WOFF("font/woff");
 
     private String contentType;
 

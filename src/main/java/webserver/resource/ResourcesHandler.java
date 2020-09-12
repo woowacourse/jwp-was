@@ -24,6 +24,18 @@ public class ResourcesHandler {
             filePath = "./static" + uri;
             return new Resource(FileIoUtils.loadFileFromClasspath(filePath), ContentType.JS);
         }
+        if (uri.endsWith(".ico")) {
+            filePath = "./templates" + uri;
+            return new Resource(FileIoUtils.loadFileFromClasspath(filePath), ContentType.ICON);
+        }
+        if (uri.endsWith(".ttf")) {
+            filePath = "./static" + uri;
+            return new Resource(FileIoUtils.loadFileFromClasspath(filePath), ContentType.FONT_TTF);
+        }
+        if (uri.endsWith(".woff")) {
+            filePath = "./static" + uri;
+            return new Resource(FileIoUtils.loadFileFromClasspath(filePath), ContentType.FONT_WOFF);
+        }
         throw new IllegalArgumentException("cannot convert given uri to resource.");
     }
 }
