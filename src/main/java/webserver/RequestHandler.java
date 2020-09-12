@@ -1,13 +1,21 @@
 package webserver;
 
+import controller.Controller;
+import controller.ControllerMapper;
+import http.HttpRequest;
+import http.factory.HttpRequestFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import utils.FileIoUtils;
+
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.nio.charset.StandardCharsets;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -23,25 +31,47 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
+            BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = "Hello World".getBytes();
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+
+            HttpRequest httpRequest = HttpRequestFactory.createRequest(br);
+
+            ControllerMapper.from(httpRequest.getRequestLine()).ifPresent(
+                    mapper -> Controller.findMethod(mapper).accept(httpRequest.getParams(), dos)
+            );
+
+            if (dos.size() == 0) {
+                byte[] body = FileIoUtils.loadFileFromClasspath(findFilePath(httpRequest));
+                responseHeader(dos, httpRequest, body);
+                responseBody(dos, body);
+            }
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
+    private String findFilePath(HttpRequest httpRequest) {
+        String url = httpRequest.getUrl();
+        String baseUrl = "./static";
+        if (url.contains(".html") || url.contains("favicon.ico")) {
+            baseUrl = "./templates";
         }
+        return baseUrl + url;
+    }
+
+    private void responseHeader(DataOutputStream dos, HttpRequest httpRequest, byte[] body) throws IOException {
+        dos.writeBytes("HTTP/1.1 200 OK \r\n");
+        dos.writeBytes("Content-Type: " + findContentType(httpRequest) + ";charset=utf-8\r\n");
+        dos.writeBytes("Content-Length: " + body.length + "\r\n");
+        dos.writeBytes("\r\n");
+    }
+
+    private String findContentType(HttpRequest httpRequest) {
+        String contentType = "text/html";
+        if (httpRequest.getUrl().contains(".css")) {
+            contentType = "text/css";
+        }
+        return contentType;
     }
 
     private void responseBody(DataOutputStream dos, byte[] body) {
