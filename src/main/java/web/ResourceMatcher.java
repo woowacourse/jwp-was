@@ -1,6 +1,7 @@
 package web;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 public enum ResourceMatcher {
     HTML(".html", "./templates", "text/html;charset=UTF-8"),
@@ -22,11 +23,10 @@ public enum ResourceMatcher {
         this.contentType = contentType;
     }
 
-    public static ResourceMatcher fromUri(String uri) {
+    public static Optional<ResourceMatcher> fromUri(String uri) {
         return Arrays.stream(values())
                 .filter(value -> uri.endsWith(value.extension))
-                .findFirst()
-                .orElseGet(null);
+                .findFirst();
     }
 
     public String getResourcePath() {

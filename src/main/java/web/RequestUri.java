@@ -4,6 +4,7 @@ import static utils.HttpRequestParser.*;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 public class RequestUri {
     public static final int URI_INDEX = 0;
@@ -20,25 +21,25 @@ public class RequestUri {
     }
 
     public boolean isStaticFile() {
-        return findResource() != null;
+        return findResource().isPresent();
     }
 
-    public ResourceMatcher findResource() {
+    public Optional<ResourceMatcher> findResource() {
         return ResourceMatcher.fromUri(uri);
     }
 
     public String findPath() {
-        if (!isStaticFile()) {
-            return EMPTY;
+        if(findResource().isPresent()){
+            return findResource().get().getResourcePath();
         }
-        return findResource().getResourcePath();
+        return EMPTY;
     }
 
     public String findContentType() {
-        if (!isStaticFile()) {
-            return "*/*";
+        if(findResource().isPresent()){
+            return findResource().get().getContentType();
         }
-        return findResource().getContentType();
+        return "*/*";
     }
 
     private Map<String, String> parsingParameters() {

@@ -25,16 +25,15 @@ public class HttpResponse {
 
     public void process(HttpRequest httpRequest) {
         if (httpRequest.isStaticFile()) {
-            processFiles(httpRequest);
+            processFile(httpRequest);
         } else {
             processApi(httpRequest);
         }
     }
 
-    private void processFiles(HttpRequest httpRequest) {
+    private void processFile(HttpRequest httpRequest) {
         RequestUri requestUri = httpRequest.getRequestUri();
         String resourcePath = requestUri.findPath() + requestUri.getUri();
-        logger.debug("resourcePath: " + resourcePath);
         byte[] content = null;
         try {
             content = FileIoUtils.loadFileFromClasspath(
@@ -55,8 +54,7 @@ public class HttpResponse {
             User user = new User(body.get("userId"), body.get("password"), body.get("name"),
                     body.get("email"));
             DataBase.addUser(user);
-            logger.debug("USER 회원가입 성공 : " + user.toString());
-            String response = response302Header("localhost:8080" + INDEX_HTML);
+            String response = response302Header("http://localhost:8080" + INDEX_HTML);
             toDataOutputStream(response);
             responseBody(new byte[0]);
         }
@@ -65,7 +63,6 @@ public class HttpResponse {
     private String response200Header(String contentType, byte[] content) {
         return "HTTP/1.1 200 OK" + NEW_LINE
                 + "Content-Type: " + contentType + NEW_LINE
-                //+ "Content-Type: " + "*/*" + NEW_LINE
                 + "Content-Length: " + content.length + NEW_LINE
                 + NEW_LINE;
     }

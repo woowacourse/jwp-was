@@ -11,7 +11,7 @@ class ResourceMatcherTest {
     @DisplayName("uri에 해당하는 Resource를 찾아준다.")
     @Test
     void fromUri() {
-        ResourceMatcher actual = ResourceMatcher.fromUri(INDEX_HTML);
+        ResourceMatcher actual = ResourceMatcher.fromUri(INDEX_HTML).get();
         assertEquals(ResourceMatcher.HTML, actual);
     }
 }
