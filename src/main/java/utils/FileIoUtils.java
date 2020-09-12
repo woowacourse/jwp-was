@@ -11,16 +11,15 @@ import java.util.Objects;
 
 public class FileIoUtils {
 
-    private static final String DEFAULT_DIRECTORY = "webapp/";
-
-    public static byte[] loadFileFromClasspath(String filePath)
+    public static byte[] loadFileFromClasspath(String filePath, String directory)
         throws IOException, URISyntaxException {
-        Path path = Paths.get(findFileUri(filePath));
+        Path path = Paths.get(findFileUri(filePath, directory));
         return Files.readAllBytes(path);
     }
 
-    private static URI findFileUri(String filePath) throws URISyntaxException {
-        URL resource = FileIoUtils.class.getClassLoader().getResource(DEFAULT_DIRECTORY + filePath);
+    private static URI findFileUri(String filePath, String directory) throws URISyntaxException {
+        String fullFilePath = directory + filePath;
+        URL resource = FileIoUtils.class.getClassLoader().getResource(fullFilePath);
         if (Objects.isNull(resource)) {
             throw new FileNotExitsException(filePath);
         }
