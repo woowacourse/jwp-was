@@ -43,4 +43,8 @@ class RequestLine {
     String getUri() {
         return uri.getPath();
     }
+
+    boolean isMethod(Method method) {
+        return this.method == method;
+    }
 }

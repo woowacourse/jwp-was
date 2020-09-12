@@ -2,6 +2,7 @@ package webserver.httpmessages.request;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -20,15 +21,37 @@ public class Request {
 
     private RequestLine requestLine;
     private Headers headers;
-//    private MessageBody messageBody;
+    private MessageBody messageBody;
 
-    public Request(String httpRequest) {
-        List<String> lines = new ArrayList<>(Arrays.asList(httpRequest.split(LINE_SEPARATOR)));
+    public Request(String requestHeader, String requestBody) {
+        List<String> header = new ArrayList<>(Arrays.asList(requestHeader.split(LINE_SEPARATOR)));
 
-        requestLine = new RequestLine(lines.get(0));
+        requestLine = new RequestLine(header.get(0));
+        header.remove(0);
 
-        lines.remove(0);
-        headers = new Headers(lines);
+        headers = new Headers(collectHeaderLinesFrom(header));
+        messageBody = new MessageBody(requestBody);
+    }
+
+    private List<String> collectHeaderLinesFrom(List<String> lines) {
+        List<String> headers = new ArrayList<>();
+
+        while (!lines.isEmpty() && !lines.get(0).isEmpty()) {
+            headers.add(lines.get(0));
+            lines.remove(0);
+        }
+        return Collections.unmodifiableList(headers);
+    }
+
+    public static boolean isExistRequestHeader(String request, String headerName) {
+        return new Request(request, "")
+            .headers
+            .doesHeaderExist(headerName);
+    }
+
+    public static String findHeaderValue(String request, String headerName) {
+        return new Request(request, "")
+            .getHeader(headerName);
     }
 
     public boolean isUriUsingQueryString() {
@@ -39,8 +62,16 @@ public class Request {
         return requestLine.getQueryDataFromUri();
     }
 
+    public Map<String, String> getFormDataFromBody() {
+        return messageBody.getFormDataFromBody();
+    }
+
     public boolean isUriPath(String uriPath) {
         return requestLine.isUriPath(uriPath);
+    }
+
+    public boolean isMethod(Method method) {
+        return requestLine.isMethod(method);
     }
 
     public String getMethod() {

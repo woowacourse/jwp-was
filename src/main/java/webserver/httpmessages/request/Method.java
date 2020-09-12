@@ -2,7 +2,7 @@ package webserver.httpmessages.request;
 
 import java.util.Arrays;
 
-enum Method {
+public enum Method {
     GET("GET"),
     POST("POST"),
     PUT("PUT"),

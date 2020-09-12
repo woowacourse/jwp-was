@@ -13,14 +13,24 @@ class Headers {
     Headers(List<String> headerLines) {
         headerLines.forEach(header -> {
             String[] split = header.split(NAME_AND_VALUE_SEPARATOR);
+            if (split.length != 2) {
+                throw new IllegalArgumentException("input header format : " + header + " is wrong.");
+            }
             headers.put(split[0], split[1]);
         });
     }
 
-    String getValue(String headerFiledName) {
-        if (!headers.containsKey(headerFiledName)) {
+    boolean doesHeaderExist(String headerFieldName) {
+        if (!headers.containsKey(headerFieldName)) {
+            return false;
+        }
+        return true;
+    }
+
+    String getValue(String headerFieldName) {
+        if (!doesHeaderExist(headerFieldName)) {
             throw new IllegalArgumentException("this header field does not exist.");
         }
-        return headers.get(headerFiledName);
+        return headers.get(headerFieldName);
     }
 }

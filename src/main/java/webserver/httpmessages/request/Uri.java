@@ -1,12 +1,9 @@
 package webserver.httpmessages.request;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 public class Uri {
-
-    private static final String QUERY_STRING_REGULAR_EXPRESSION = "/.*?.*=.*";
 
     private String uri;
     private String path;
@@ -33,7 +30,7 @@ public class Uri {
     }
 
     boolean isUsingQueryString() {
-        return uri.matches(QUERY_STRING_REGULAR_EXPRESSION);
+        return QueryData.isUriUsingQuery(uri);
     }
 
     Map<String, String> getDataFromGetMethodUri() {
@@ -42,33 +39,16 @@ public class Uri {
                 "this function can be used only when uri is query string.");
         }
         String query = findQueryStringFromUri();
-        Map<String, String> queryData = convertQueryToMap(query);
-
-        return Collections.unmodifiableMap(queryData);
+        return Collections.unmodifiableMap(new QueryData(query).getQueryData());
     }
 
     private String findQueryStringFromUri() {
         if (!isUsingQueryString()) {
-            throw new IllegalArgumentException("The uri is not used Query String. (uri : " + uri + ")");
+            throw new IllegalArgumentException(
+                "The uri is not used QueryData String. (uri : " + uri + ")");
         }
         String[] pathAndQuery = uri.split("\\?");
         return pathAndQuery[1];
-    }
-
-    private Map<String, String> convertQueryToMap(String query) {
-        String[] params = query.split("&");
-        Map<String, String> map = new HashMap<>();
-
-        for (String param : params) {
-            String [] p=param.split("=");
-            String name = p[0];
-
-            if (p.length>1) {
-                String value = p[1];
-                map.put(name, value);
-            }
-        }
-        return map;
     }
 
     String getPath() {

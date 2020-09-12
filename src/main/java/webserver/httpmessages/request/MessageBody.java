@@ -1,9 +1,23 @@
 package webserver.httpmessages.request;
 
-import java.util.List;
+import java.util.Map;
 
 class MessageBody {
 
-    public MessageBody(List<String> messageBody) {
+    private String messageBody;
+
+    MessageBody(String messageBody) {
+        this.messageBody = messageBody;
+    }
+
+    public Map<String, String> getFormDataFromBody() {
+        System.out.println("*** message body ***");
+        System.out.println(messageBody);
+        System.out.println("********************");
+        return new QueryData(messageBody).getQueryData();
+    }
+
+    public String getMessageBody() {
+        return messageBody;
     }
 }

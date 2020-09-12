@@ -1,17 +1,21 @@
 package webserver;
 
 import db.DataBase;
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.IOUtils;
+import webserver.httpmessages.request.Method;
 import webserver.httpmessages.request.Request;
 import webserver.resource.Resource;
 import webserver.resource.ResourcesHandler;
@@ -35,14 +39,13 @@ public class RequestHandler implements Runnable {
             InputStream in = connection.getInputStream();
             OutputStream out = connection.getOutputStream()
         ) {
-            String httpRequestFormat = IOUtils.transformInputStreamToString(in);
-            Request httpRequest = new Request(httpRequestFormat);
-            System.out.println("## 요청 들어옴! ##");
-            System.out.println(httpRequestFormat);
-            System.out.println("##################");
+            BufferedReader br = new BufferedReader(
+                new InputStreamReader(in, StandardCharsets.UTF_8));
 
-            if (httpRequest.isUriPath("/user/create") && httpRequest.isUriUsingQueryString()) {
-                Map<String, String> queryData = httpRequest.getQueryDataFromUri();
+            Request httpRequest = readRequest(br);
+
+            if (httpRequest.isMethod(Method.POST) && httpRequest.isUriPath("/user/create")) {
+                Map<String, String> queryData = httpRequest.getFormDataFromBody();
                 User user = new User(
                     queryData.get("userId"),
                     queryData.get("password"),
@@ -53,6 +56,8 @@ public class RequestHandler implements Runnable {
 
                 DataOutputStream dos = new DataOutputStream(out);
                 response201Header(dos, "/user/" + user.getUserId());
+
+                return;
             }
             Resource resourceForResponse =
                 resourcesHandler.convertUriToResource(httpRequest.getUri());
@@ -65,6 +70,24 @@ public class RequestHandler implements Runnable {
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private Request readRequest(BufferedReader br) throws IOException {
+        String requestHeader = IOUtils.readDataBeforeEmptyLine(br);
+        String requestBody = "";
+
+        if (Request.isExistRequestHeader(requestHeader, "Content-Length")) {
+            int contentLength = Integer.parseInt(Request.findHeaderValue(
+                requestHeader, "Content-Length"));
+            requestBody = IOUtils.readData(br, contentLength);
+        }
+        System.out.println("## 요청 들어옴! ##");
+        System.out.println(requestHeader);
+        System.out.println();
+        System.out.println(requestBody);
+        System.out.println("##################");
+
+        return new Request(requestHeader, requestBody);
     }
 
     private void response200Header(DataOutputStream dos,
