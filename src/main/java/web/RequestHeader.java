@@ -17,16 +17,16 @@ public class RequestHeader {
                 .collect(Collectors.toMap(it -> it[0], it -> it[1]));
     }
 
-    public Map<String, String> getHeaders() {
-        return headers;
-    }
-
     public int getContentLength() {
         try {
             return Integer.parseInt(headers.get(CONTENT_LENGTH));
         } catch (NumberFormatException e) {
             return 0;
         }
+    }
+
+    public Map<String, String> getHeaders() {
+        return headers;
     }
 
     @Override

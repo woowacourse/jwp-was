@@ -13,17 +13,17 @@ class RequestLineTest {
     @Test
     void constructRequestLine() {
         String request = "GET /user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net HTTP/1.1";
-        final Map<String, String> expectedParameters = new HashMap<>();
+        Map<String, String> expectedParameters = new HashMap<>();
         expectedParameters.put("userId", "javajigi");
         expectedParameters.put("password", "password");
         expectedParameters.put("name", "%EB%B0%95%EC%9E%AC%EC%84%B1");
         expectedParameters.put("email", "javajigi%40slipp.net");
 
-        final RequestLine requestLine = new RequestLine(request);
+        RequestLine requestLine = new RequestLine(request);
 
         assertThat(requestLine.getMethod()).isEqualTo("GET");
         assertThat(requestLine.getPath()).isEqualTo("/user/create");
-        assertThat(requestLine.getParameters()).isEqualTo(expectedParameters);
+        assertThat(requestLine.getQueryParams()).isEqualTo(expectedParameters);
         assertThat(requestLine.getProtocol()).isEqualTo("HTTP/1.1");
     }
 
@@ -32,11 +32,11 @@ class RequestLineTest {
     void constructRequestLineWithNoParameter() {
         String request = "GET /user/create HTTP/1.1";
 
-        final RequestLine requestLine = new RequestLine(request);
+        RequestLine requestLine = new RequestLine(request);
 
         assertThat(requestLine.getMethod()).isEqualTo("GET");
         assertThat(requestLine.getPath()).isEqualTo("/user/create");
-        assertThat(requestLine.getParameters()).isEqualTo(null);
+        assertThat(requestLine.getQueryParams()).isEqualTo(null);
         assertThat(requestLine.getProtocol()).isEqualTo("HTTP/1.1");
     }
 }

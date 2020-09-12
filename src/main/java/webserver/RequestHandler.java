@@ -31,8 +31,8 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
             DataOutputStream dos = new DataOutputStream(out);
 
-            final HttpRequest httpRequest = new HttpRequest(br);
-            final HttpResponse httpResponse = new HttpResponse(dos);
+            HttpRequest httpRequest = new HttpRequest(br);
+            HttpResponse httpResponse = new HttpResponse(dos);
 
             if (httpRequest.isStaticFileRequest()) {
                 handleStaticFileRequest(httpRequest, httpResponse);
@@ -57,8 +57,8 @@ public class RequestHandler implements Runnable {
 
     private void handleAPIRequest(HttpRequest httpRequest, HttpResponse httpResponse) {
         if (httpRequest.getMethod().equals("POST") && httpRequest.getPath().equals("/user/create")) {
-            Map<String, String> parameters = httpRequest.getRequestBody().parseParameters();
-            User user = new User(parameters.get("userId"), parameters.get("password"), parameters.get("name"), parameters.get("email"));
+            Map<String, String> formData = httpRequest.getFormData();
+            User user = new User(formData.get("userId"), formData.get("password"), formData.get("name"), formData.get("email"));
             DataBase.addUser(user);
 
             httpResponse.response302Header("/index.html");

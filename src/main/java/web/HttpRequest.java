@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class HttpRequest {
     private final RequestLine requestLine;
@@ -23,8 +24,8 @@ public class HttpRequest {
         }
         this.requestHeader = new RequestHeader(requestHeaders);
 
-        final int contentLength = requestHeader.getContentLength();
-        final String body = IOUtils.readData(br, contentLength);
+        int contentLength = requestHeader.getContentLength();
+        String body = IOUtils.readData(br, contentLength);
         this.requestBody = new RequestBody(body);
     }
 
@@ -32,12 +33,16 @@ public class HttpRequest {
         return this.requestLine.isStaticFile();
     }
 
+    public String getMethod() {
+        return this.requestLine.getMethod();
+    }
+
     public String getPath() {
         return this.requestLine.getPath();
     }
 
-    public String getMethod() {
-        return this.requestLine.getMethod();
+    public Map<String, String> getFormData() {
+        return this.requestBody.getFormData();
     }
 
     public Integer getContentLength() {

@@ -11,22 +11,22 @@ public class RequestBody {
     public static final int INDEX_ZERO = 0;
     public static final int INDEX_ONE = 1;
 
-    private final String body;
+    private final Map<String, String> formData;
 
     public RequestBody(String body) {
-        this.body = body;
+        this.formData = parseBodyData(body);
     }
 
-    public Map<String, String> parseParameters() {
-        final String[] pairs = this.body.split(PARAMETER_DELIMITER);
+    private Map<String, String> parseBodyData(String body) {
+        String[] data = body.split(PARAMETER_DELIMITER);
 
-        return Arrays.stream(pairs)
+        return Arrays.stream(data)
                 .map(parameter -> parameter.split(KEY_VALUE_DELIMITER))
                 .collect(Collectors.toMap(it -> it[INDEX_ZERO], it -> it[INDEX_ONE]));
     }
 
-    public String getBody() {
-        return body;
+    public Map<String, String> getFormData() {
+        return formData;
     }
 
     @Override
@@ -34,11 +34,11 @@ public class RequestBody {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RequestBody that = (RequestBody) o;
-        return Objects.equals(body, that.body);
+        return Objects.equals(formData, that.formData);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(body);
+        return Objects.hash(formData);
     }
 }

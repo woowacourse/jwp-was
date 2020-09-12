@@ -27,7 +27,7 @@ class HttpRequestTest {
                 + "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net" + NEW_LINE;
 
         Reader inputString = new StringReader(httpRequestInput);
-        final BufferedReader br = new BufferedReader(inputString);
+        BufferedReader br = new BufferedReader(inputString);
 
         this.httpRequest = new HttpRequest(br);
     }
@@ -43,7 +43,7 @@ class HttpRequestTest {
                 + "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net" + NEW_LINE;
 
         Reader inputString = new StringReader(httpRequestInput);
-        final BufferedReader br = new BufferedReader(inputString);
+        BufferedReader br = new BufferedReader(inputString);
 
         HttpRequest httpRequest = new HttpRequest(br);
 
@@ -56,21 +56,21 @@ class HttpRequestTest {
     @DisplayName("HttpRequest에서 Method를 추출할 수 있다.")
     @Test
     void getMethod() {
-        final String method = this.httpRequest.getMethod();
+        String method = this.httpRequest.getMethod();
         assertThat(method).isEqualTo("POST");
     }
 
     @DisplayName("HttpRequest에서 Path를 추출할 수 있다.")
     @Test
     void getPath() {
-        final String method = this.httpRequest.getPath();
+        String method = this.httpRequest.getPath();
         assertThat(method).isEqualTo("/index.html");
     }
 
     @DisplayName("HttpRequest에서 ContentLength를 추출할 수 있다.")
     @Test
     void getContentLength() {
-        final int length = this.httpRequest.getContentLength();
+        int length = this.httpRequest.getContentLength();
         assertThat(length).isEqualTo(93);
     }
 }
