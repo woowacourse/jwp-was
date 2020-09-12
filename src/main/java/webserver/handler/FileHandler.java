@@ -24,19 +24,39 @@ public class FileHandler {
 
     protected static void loadFile(OutputStream out, HttpRequest httpRequest)
         throws IOException {
+
         try (DataOutputStream dos = new DataOutputStream(out)) {
+            if (!httpRequest.getHttpMethod().equalsIgnoreCase("GET")) {
+                returnMethodNotAllow(dos);
+                return;
+            }
             try {
-                byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getUrlPath(),
-                    httpRequest.getKind().getDirectory());
-                String contentType = getContentType(httpRequest);
-                response200Header(dos, body.length, contentType);
-                responseBody(dos, body);
+                returnOk(httpRequest, dos);
             } catch (URISyntaxException | FileNotExitsException e) {
-                byte[] body = e.getMessage().getBytes(StandardCharsets.UTF_8);
-                response404Header(dos, body.length);
-                responseBody(dos, body);
+                returnNotFound(dos, e);
             }
         }
+    }
+
+    private static void returnOk(HttpRequest httpRequest, DataOutputStream dos)
+        throws IOException, URISyntaxException {
+        byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getUrlPath(),
+            httpRequest.getKind().getDirectory());
+        String contentType = getContentType(httpRequest);
+        response200Header(dos, body.length, contentType);
+        responseBody(dos, body);
+    }
+
+    private static void returnNotFound(DataOutputStream dos, Exception e) {
+        byte[] body = e.getMessage().getBytes(StandardCharsets.UTF_8);
+        response404Header(dos, body.length);
+        responseBody(dos, body);
+    }
+
+    private static void returnMethodNotAllow(DataOutputStream dos) {
+        byte[] body = "지원하지 않는 메서드를 사용하셨습니다.".getBytes(StandardCharsets.UTF_8);
+        response405Header(dos, body.length);
+        responseBody(dos, body);
     }
 
     private static String getContentType(HttpRequest httpRequest) throws IOException {
@@ -65,6 +85,17 @@ public class FileHandler {
     private static void response404Header(DataOutputStream dos, int lengthOfBodyContent) {
         try {
             dos.writeBytes("HTTP/1.1 404 NOT FOUND \r\n");
+            dos.writeBytes("Content-Type: " + DEFAULT_CONTENT_TYPE + ";charset=utf-8\r\n");
+            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private static void response405Header(DataOutputStream dos, int lengthOfBodyContent) {
+        try {
+            dos.writeBytes("HTTP/1.1 405 METHOD NOT ALLOWED \r\n");
             dos.writeBytes("Content-Type: " + DEFAULT_CONTENT_TYPE + ";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
