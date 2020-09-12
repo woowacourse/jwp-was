@@ -3,27 +3,15 @@ package utils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 public class Request {
 
     private Headers headers;
-    private String body;
+    private Body body;
 
     public Request(List<String> lines, BufferedReader bufferedReader) throws IOException {
-
         headers = new Headers(lines);
-        parseBody(bufferedReader);
-    }
-
-    private void parseBody(BufferedReader bufferedReader) throws IOException {
-
-        int contentLength = Optional.ofNullable(getHeader("Content-Length"))
-            .map(x -> (String) x)
-            .map(Integer::parseInt)
-            .orElse(0);
-
-        this.body = IOUtils.readData(bufferedReader, contentLength);
+        body = new Body(bufferedReader, headers.getHeader("Content-Length"));
     }
 
     public boolean isGetRequest() {
@@ -43,7 +31,6 @@ public class Request {
     }
 
     public String getBody() {
-        return body;
+        return body.getBody();
     }
-
 }
