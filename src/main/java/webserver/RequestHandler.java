@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import web.HttpRequest;
 import web.HttpResponse;
-import web.ResourceMatcher;
+import web.ResourceType;
 
 import java.io.*;
 import java.net.Socket;
@@ -48,10 +48,12 @@ public class RequestHandler implements Runnable {
 
     private void handleStaticFileRequest(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         String path = httpRequest.getPath();
-        String filePath = ResourceMatcher.findBaseDirectory(path) + path;
+        ResourceType resourceType = ResourceType.from(path);
+        String filePath = resourceType.getBaseDirectory() + path;
+
         byte[] staticFile = FileIoUtils.loadFileFromClasspath(filePath);
 
-        httpResponse.response200Header(ResourceMatcher.findContentType(path), staticFile.length);
+        httpResponse.response200Header(resourceType.getContentType(), staticFile.length);
         httpResponse.responseBody(staticFile);
     }
 

@@ -2,6 +2,7 @@ package web;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class RequestUri {
@@ -35,7 +36,7 @@ public class RequestUri {
     }
 
     public boolean isStaticFile() {
-        return ResourceMatcher.isStaticFile(this.path);
+        return ResourceType.isStaticFile(this.path);
     }
 
     public String getPath() {
@@ -44,5 +45,19 @@ public class RequestUri {
 
     public Map<String, String> getQueryParams() {
         return queryParams;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RequestUri that = (RequestUri) o;
+        return Objects.equals(path, that.path) &&
+                Objects.equals(queryParams, that.queryParams);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(path, queryParams);
     }
 }
