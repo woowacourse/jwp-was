@@ -1,4 +1,4 @@
-package webserver.httpmessages.request;
+package webserver.request;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

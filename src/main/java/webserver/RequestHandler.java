@@ -15,8 +15,8 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.IOUtils;
-import webserver.httpmessages.request.Method;
-import webserver.httpmessages.request.Request;
+import webserver.request.Method;
+import webserver.request.Request;
 import webserver.resource.Resource;
 import webserver.resource.ResourcesHandler;
 
