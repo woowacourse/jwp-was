@@ -24,9 +24,10 @@ public class FileIoUtils {
             return null;
         } catch (URISyntaxException e) {
             logger.error(e.getMessage());
-            throw new RuntimeException(String.format(
+            throw new IllegalArgumentException(String.format(
                     "[%s] is not formatted strictly according to RFC2396 and cannot be converted to a URI",
                     filePath));
         }
     }
 }
+

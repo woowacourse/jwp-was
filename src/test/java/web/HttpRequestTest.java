@@ -3,7 +3,6 @@ package web;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static web.HttpRequestFixture.*;
-import static web.RequestHeaderTest.*;
 
 import java.io.IOException;
 

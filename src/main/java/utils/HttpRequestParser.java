@@ -11,10 +11,10 @@ import java.util.stream.Collectors;
 
 public class HttpRequestParser {
     public static final String EMPTY = "";
-    private static final String KEY_VALUE_DELIMITER = "=";
     public static final String HEADER_DATA_DELIMITER = ": ";
     public static final int KEY_INDEX = 0;
     public static final int VALUE_INDEX = 1;
+    private static final String KEY_VALUE_DELIMITER = "=";
 
     public static Map<String, String> parsingRequestHeader(BufferedReader br) throws IOException {
         Map<String, String> request = new HashMap<>();

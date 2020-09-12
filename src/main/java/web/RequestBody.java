@@ -1,7 +1,7 @@
 package web;
 
 import static utils.HttpRequestParser.*;
-import static web.RequestHeader.*;
+import static web.HttpResponse.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;

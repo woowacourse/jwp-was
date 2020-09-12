@@ -2,7 +2,6 @@ package utils;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static web.HttpRequestFixture.*;
-import static web.RequestHeader.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;

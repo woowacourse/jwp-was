@@ -9,8 +9,6 @@ import java.util.Map;
 import java.util.Objects;
 
 public class RequestHeader {
-
-    public static final String NEW_LINE = System.lineSeparator();
     private static final String BLANK = " ";
     private static final int METHOD_INDEX = 0;
     private static final int PATH_INDEX = 1;

@@ -29,14 +29,14 @@ public class RequestUri {
     }
 
     public String findPath() {
-        if(findResource().isPresent()){
+        if (findResource().isPresent()) {
             return findResource().get().getResourcePath();
         }
         return EMPTY;
     }
 
     public String findContentType() {
-        if(findResource().isPresent()){
+        if (findResource().isPresent()) {
             return findResource().get().getContentType();
         }
         return "*/*";

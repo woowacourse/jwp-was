@@ -32,6 +32,7 @@ class RequestUriTest {
         String actual = new RequestUri("js/script.js").findContentType();
         assertEquals(expected, actual);
     }
+
     @DisplayName("uri에 담긴 파라미터를 추출한다.")
     @Test
     void getParameter() {

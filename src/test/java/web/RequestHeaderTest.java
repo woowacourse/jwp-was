@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static utils.HttpRequestParser.*;
 import static web.HttpRequestFixture.*;
+import static web.HttpResponse.*;
 import static web.RequestHeader.*;
 
 import java.io.BufferedReader;

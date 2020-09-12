@@ -1,6 +1,5 @@
 package web;
 
-import static web.RequestHeader.*;
 import static web.RequestUri.*;
 
 import java.io.DataOutputStream;
@@ -15,6 +14,8 @@ import model.User;
 import utils.FileIoUtils;
 
 public class HttpResponse {
+    public static final String NEW_LINE = System.lineSeparator();
+
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
     private DataOutputStream dos;
