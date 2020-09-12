@@ -1,17 +1,17 @@
-package webserver.request;
+package request;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-class RequestLine {
+public class RequestLine {
 
     private static final String MESSAGE_INPUT_IS_WRONG = "request line input is unformatted.";
 
     private Method method;
     private Uri uri;
 
-    RequestLine(String requestLine) {
+    public RequestLine(String requestLine) {
         List<String> split = Arrays.asList(requestLine.split(" "));
         if (split.size() != 3) {
             throw new IllegalArgumentException(MESSAGE_INPUT_IS_WRONG);
@@ -36,11 +36,11 @@ class RequestLine {
         return uri.isPath(uriPath);
     }
 
-    String getMethod() {
+    public String getMethod() {
         return method.getMethod();
     }
 
-    String getUri() {
+    String getUriPath() {
         return uri.getPath();
     }
 

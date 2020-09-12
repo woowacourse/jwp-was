@@ -1,4 +1,4 @@
-package webserver.request;
+package request;
 
 import java.util.Collections;
 import java.util.Map;
@@ -8,7 +8,7 @@ public class Uri {
     private String uri;
     private String path;
 
-    Uri(String uri) {
+    public Uri(String uri) {
         validateUri(uri);
         this.uri = uri;
         this.path = findPathFromUri();
@@ -29,11 +29,11 @@ public class Uri {
         return pathAndQuery[0];
     }
 
-    boolean isUsingQueryString() {
+    public boolean isUsingQueryString() {
         return QueryData.isUriUsingQuery(uri);
     }
 
-    Map<String, String> getDataFromGetMethodUri() {
+    public Map<String, String> getDataFromGetMethodUri() {
         if (!isUsingQueryString()) {
             throw new UnsupportedOperationException(
                 "this function can be used only when uri is query string.");
@@ -51,11 +51,11 @@ public class Uri {
         return pathAndQuery[1];
     }
 
-    String getPath() {
+    public String getPath() {
         return path;
     }
 
-    boolean isPath(String uriPath) {
+    public boolean isPath(String uriPath) {
         return this.path.equals(uriPath);
     }
 }

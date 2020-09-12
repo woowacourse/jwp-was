@@ -1,4 +1,4 @@
-package webserver.request;
+package request;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +15,7 @@ import java.util.Map;
  * Upgrade-Insecure-Requests: 1
  * ...
  */
-public class Request {
+public class HttpRequest {
 
     private static final String LINE_SEPARATOR = "\\n";
 
@@ -23,7 +23,7 @@ public class Request {
     private Headers headers;
     private MessageBody messageBody;
 
-    public Request(String requestHeader, String requestBody) {
+    public HttpRequest(String requestHeader, String requestBody) {
         List<String> header = new ArrayList<>(Arrays.asList(requestHeader.split(LINE_SEPARATOR)));
 
         requestLine = new RequestLine(header.get(0));
@@ -44,13 +44,13 @@ public class Request {
     }
 
     public static boolean isExistRequestHeader(String request, String headerName) {
-        return new Request(request, "")
+        return new HttpRequest(request, "")
             .headers
             .doesHeaderExist(headerName);
     }
 
     public static String findHeaderValue(String request, String headerName) {
-        return new Request(request, "")
+        return new HttpRequest(request, "")
             .getHeader(headerName);
     }
 
@@ -78,8 +78,8 @@ public class Request {
         return requestLine.getMethod();
     }
 
-    public String getUri() {
-        return requestLine.getUri();
+    public String getUriPath() {
+        return requestLine.getUriPath();
     }
 
     public String getHeader(String headerName) {

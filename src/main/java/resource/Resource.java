@@ -1,4 +1,4 @@
-package webserver.resource;
+package resource;
 
 public class Resource {
 

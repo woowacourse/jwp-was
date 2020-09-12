@@ -1,4 +1,4 @@
-package webserver.resource;
+package resource;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

@@ -5,6 +5,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import org.junit.jupiter.api.Test;
+import resource.ContentType;
+import resource.Resource;
+import resource.ResourcesHandler;
 
 class ResourcesHandlerTest {
 

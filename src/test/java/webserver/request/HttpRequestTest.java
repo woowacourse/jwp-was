@@ -6,12 +6,14 @@ import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import request.HttpRequest;
+import request.Method;
 
-class RequestTest {
+class HttpRequestTest {
 
     private String requestHeader;
     private String requestBody;
-    private Request request;
+    private HttpRequest httpRequest;
 
     @BeforeEach
     void setUp() {
@@ -22,14 +24,14 @@ class RequestTest {
             + "Upgrade-Insecure-Requests: 1\n"
             + "Content-Length: 10\n";
         requestBody = "id=3456789";
-        request = new Request(requestHeader, requestBody);
+        httpRequest = new HttpRequest(requestHeader, requestBody);
     }
 
     @Test
     void isExistRequestHeader() {
-        assertThat(Request.isExistRequestHeader(requestHeader, "Content-Length"))
+        assertThat(HttpRequest.isExistRequestHeader(requestHeader, "Content-Length"))
             .isTrue();
-        assertThat(Request.isExistRequestHeader(requestHeader, "X-Auth-Token"))
+        assertThat(HttpRequest.isExistRequestHeader(requestHeader, "X-Auth-Token"))
             .isFalse();
     }
 
@@ -41,16 +43,16 @@ class RequestTest {
             + "Cache-Control: max-age=0\n"
             + "Upgrade-Insecure-Requests: 1\n"
             + "Content-Length: 250\n";
-        assertThat(Request.findHeaderValue(test, "Content-Length"))
+        assertThat(HttpRequest.findHeaderValue(test, "Content-Length"))
             .isEqualTo("250");
     }
 
     @Test
     void isUriUsingQueryString() {
-        Request expectedTrue = new Request(
+        HttpRequest expectedTrue = new HttpRequest(
             "GET /join?id=1 HTTP/1.1\n", "");
 
-        Request expectedFalse = new Request(
+        HttpRequest expectedFalse = new HttpRequest(
             "GET /join HTTP/1.1\n", "");
 
         assertThat(expectedTrue.isUriUsingQueryString()).isTrue();
@@ -62,7 +64,7 @@ class RequestTest {
         Map<String, String> expected = new HashMap<>();
         expected.put("id", "1");
 
-        assertThat(request.getQueryDataFromUri()).isEqualTo(expected);
+        assertThat(httpRequest.getQueryDataFromUri()).isEqualTo(expected);
     }
 
     @Test
@@ -70,33 +72,34 @@ class RequestTest {
         Map<String, String> expected = new HashMap<>();
         expected.put("id", "3456789");
 
-        assertThat(request.getFormDataFromBody()).isEqualTo(expected);
+        assertThat(httpRequest.getFormDataFromBody()).isEqualTo(expected);
     }
 
     @Test
     void isUriPath() {
-        assertThat(request.isUriPath("/join")).isTrue();
-        assertThat(request.isUriPath("/join?")).isFalse();
+        assertThat(httpRequest.isUriPath("/join")).isTrue();
+        assertThat(httpRequest.isUriPath("/join?")).isFalse();
     }
 
     @Test
     void isMethod() {
-        assertThat(request.isMethod(Method.GET)).isTrue();
-        assertThat(request.isMethod(Method.POST)).isFalse();
+        assertThat(httpRequest.isMethod(Method.GET)).isTrue();
+        assertThat(httpRequest.isMethod(Method.POST)).isFalse();
     }
 
     @Test
     void getMethod() {
-        assertThat(request.getMethod()).isEqualTo("GET");
+        assertThat(httpRequest.getMethod()).isEqualTo("GET");
     }
 
     @Test
-    void getUri() {
-        assertThat(request.getUri()).isEqualTo("/");
+    void getUriPath() {
+        assertThat(httpRequest.getUriPath()).isEqualTo("/join");
     }
 
     @Test
     void getHeaderValue() {
-        assertThat(request.getHeader("Host")).isEqualTo("localhost:8080");
+        assertThat(httpRequest.getHeader("Host"))
+            .isEqualTo("localhost:8080");
     }
 }

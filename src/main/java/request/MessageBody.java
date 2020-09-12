@@ -1,12 +1,12 @@
-package webserver.request;
+package request;
 
 import java.util.Map;
 
-class MessageBody {
+public class MessageBody {
 
     private String messageBody;
 
-    MessageBody(String messageBody) {
+    public MessageBody(String messageBody) {
         this.messageBody = messageBody;
     }
 

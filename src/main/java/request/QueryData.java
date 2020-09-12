@@ -1,17 +1,17 @@
-package webserver.request;
+package request;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-class QueryData {
+public class QueryData {
 
     private static final String URI_USING_QUERY_STRING_REGIX = "/.*?.*=.*";
     private static final String QUERY_STRING_REGIX = "=.*";
 
     private Map<String, String> queryData;
 
-    QueryData(String query) {
+    public QueryData(String query) {
         this.queryData = convertQueryToMap(query);
     }
 
@@ -32,11 +32,11 @@ class QueryData {
         return Collections.unmodifiableMap(map);
     }
 
-    static boolean isUriUsingQuery(String uri) {
+    public static boolean isUriUsingQuery(String uri) {
         return uri.matches(URI_USING_QUERY_STRING_REGIX);
     }
 
-    Map<String, String> getQueryData() {
+    public Map<String, String> getQueryData() {
         return queryData;
     }
 }

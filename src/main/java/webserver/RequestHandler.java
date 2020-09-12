@@ -1,6 +1,7 @@
 package webserver;
 
-import db.DataBase;
+import controller.UserController;
+import dto.UserCreateRequest;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -11,14 +12,13 @@ import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import request.HttpRequest;
+import request.Method;
+import resource.Resource;
+import resource.ResourcesHandler;
 import utils.IOUtils;
-import webserver.request.Method;
-import webserver.request.Request;
-import webserver.resource.Resource;
-import webserver.resource.ResourcesHandler;
 
 public class RequestHandler implements Runnable {
 
@@ -26,40 +26,40 @@ public class RequestHandler implements Runnable {
 
     private Socket connection;
     private ResourcesHandler resourcesHandler = new ResourcesHandler();
+    private UserController userController = new UserController();
 
     RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
     }
 
     public void run() {
-        logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
-                connection.getPort());
+        logger.debug("New Client Connect! Connected IP : {}, Port : {}",
+            connection.getInetAddress(), connection.getPort());
 
         try (
             InputStream in = connection.getInputStream();
-            OutputStream out = connection.getOutputStream()
-        ) {
+            OutputStream out = connection.getOutputStream();
             BufferedReader br = new BufferedReader(
                 new InputStreamReader(in, StandardCharsets.UTF_8));
-
-            Request httpRequest = readRequest(br);
+        ) {
+            HttpRequest httpRequest = readRequest(br);
 
             if (httpRequest.isMethod(Method.POST) && httpRequest.isUriPath("/user/create")) {
                 Map<String, String> queryData = httpRequest.getFormDataFromBody();
-                User user = new User(
+                UserCreateRequest userCreateRequest = new UserCreateRequest(
                     queryData.get("userId"),
                     queryData.get("password"),
                     queryData.get("name"),
                     queryData.get("email")
                 );
-                DataBase.addUser(user);
+                userController.createUser(userCreateRequest);
 
                 DataOutputStream dos = new DataOutputStream(out);
                 response302Header(dos, "/");
                 return;
             }
             Resource resourceForResponse =
-                resourcesHandler.convertUriToResource(httpRequest.getUri());
+                resourcesHandler.convertUriToResource(httpRequest.getUriPath());
             byte[] body = resourceForResponse.getResource();
             String contentType = resourceForResponse.getContentType();
 
@@ -71,20 +71,20 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private Request readRequest(BufferedReader br) throws IOException {
+    private HttpRequest readRequest(BufferedReader br) throws IOException {
         String requestHeader = IOUtils.readDataBeforeEmptyLine(br);
         String requestBody = "";
 
-        if (Request.isExistRequestHeader(requestHeader, "Content-Length")) {
-            int contentLength = Integer.parseInt(Request.findHeaderValue(
+        if (HttpRequest.isExistRequestHeader(requestHeader, "Content-Length")) {
+            int contentLength = Integer.parseInt(HttpRequest.findHeaderValue(
                 requestHeader, "Content-Length"));
             requestBody = IOUtils.readData(br, contentLength);
         }
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
             connection.getPort());
-        logger.debug("Receive Request\n{}\n{}", requestHeader, requestBody);
+        logger.debug("Receive HttpRequest\n{}\n{}", requestHeader, requestBody);
 
-        return new Request(requestHeader, requestBody);
+        return new HttpRequest(requestHeader, requestBody);
     }
 
     private void response200Header(DataOutputStream dos,

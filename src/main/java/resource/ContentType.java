@@ -1,6 +1,6 @@
-package webserver.resource;
+package resource;
 
-enum ContentType {
+public enum ContentType {
     HTML("text/html"),
     CSS("text/css"),
     JS("application/javascript"),
