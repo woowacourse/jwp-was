@@ -1,6 +1,5 @@
 package webserver;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import db.DataBase;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -18,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.AcceptType;
 import utils.FileIoUtils;
-import utils.IOUtils;
 import utils.Request;
 
 public class RequestHandler implements Runnable {
@@ -99,8 +97,8 @@ public class RequestHandler implements Runnable {
 
     private void postRequestHandle(Request request, DataOutputStream dos) {
         if (request.isPostRequest()) {
-            ObjectMapper objectMapper = new ObjectMapper();
-            User user = objectMapper.convertValue(IOUtils.parseStringToObject(request.getBody()), User.class);
+
+            User user = request.getBody(User.class);
 
             DataBase.addUser(user);
             response302Header(dos);

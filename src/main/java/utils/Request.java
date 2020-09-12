@@ -6,9 +6,9 @@ import java.util.List;
 
 public class Request {
 
-    private Headers headers;
-    private Body body;
-    private AcceptType type;
+    private final Headers headers;
+    private final Body body;
+    private final AcceptType type;
 
     public Request(List<String> lines, BufferedReader bufferedReader) throws IOException {
         headers = new Headers(lines);
@@ -32,7 +32,11 @@ public class Request {
         return type;
     }
 
-    public String getBody() {
-        return body.getBody();
+    public <T> T getBody(Class<T> type) {
+        return body.bodyMapper(type);
+    }
+
+    public Body getBody() {
+        return body;
     }
 }
