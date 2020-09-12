@@ -1,6 +1,7 @@
 package request;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class MessageBody {
 
@@ -11,7 +12,14 @@ public class MessageBody {
     }
 
     public Map<String, String> getFormDataFromBody() {
-        return new QueryData(messageBody).getQueryData();
+        if (Objects.isNull(messageBody) || messageBody.isEmpty()) {
+            throw new UnsupportedOperationException("message body is empty.");
+        }
+        try {
+            return new QueryData(messageBody).getQueryData();
+        } catch (IllegalArgumentException e) {
+            throw new UnsupportedOperationException("message body is not form data format.");
+        }
     }
 
     public String getMessageBody() {

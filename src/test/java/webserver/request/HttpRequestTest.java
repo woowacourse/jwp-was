@@ -1,6 +1,7 @@
 package webserver.request;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -73,6 +74,24 @@ class HttpRequestTest {
         expected.put("id", "3456789");
 
         assertThat(httpRequest.getFormDataFromBody()).isEqualTo(expected);
+    }
+
+    @Test
+    void getFormDataFromBody_IfMessageBodyIsEmpty_ThrowException() {
+        HttpRequest httpRequest = new HttpRequest(requestHeader, "");
+
+        assertThatThrownBy(httpRequest::getFormDataFromBody)
+            .isInstanceOf(UnsupportedOperationException.class)
+            .hasMessage("message body is empty.");
+    }
+
+    @Test
+    void getFormDataFromBody_IfRequestHasNotFormData_ThrowException() {
+        HttpRequest httpRequest = new HttpRequest(requestHeader, "01234");
+
+        assertThatThrownBy(httpRequest::getFormDataFromBody)
+            .isInstanceOf(UnsupportedOperationException.class)
+            .hasMessage("message body is not form data format.");
     }
 
     @Test

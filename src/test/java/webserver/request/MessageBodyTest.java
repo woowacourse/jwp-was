@@ -20,7 +20,10 @@ class MessageBodyTest {
         assertThat(formData.getFormDataFromBody()).isEqualTo(expected);
     }
 
+    // Todo: 여기서부터 예외상황에 대한 테스트 구현 시작할것
+
     @Test
     void getMessageBody() {
+        assertThat(formData.getMessageBody()).isEqualTo("id=test1234&password=13579");
     }
 }

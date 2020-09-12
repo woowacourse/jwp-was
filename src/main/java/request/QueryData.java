@@ -7,7 +7,6 @@ import java.util.Map;
 public class QueryData {
 
     private static final String URI_USING_QUERY_STRING_REGIX = "/.*?.*=.*";
-    private static final String QUERY_STRING_REGIX = "=.*";
 
     private Map<String, String> queryData;
 
