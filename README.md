@@ -1,10 +1,10 @@
 # 웹 애플리케이션 서버
 
 ## 요구사항 1
-- [ ] index.html 요청을 보냈을 때, webapp 디렉토리의 index.html 파일을 읽어 클라이언트에 응답한다.
-    - [ ] BufferedReader로 InputStream을 읽는다.
-    - [ ] 공백을 기준으로 파싱하여 요청한 URL을 추출한다.
-    - [ ] loadFileFromClasspath 메서드에 정확한 자원의 경로를 전달하여 요청한 파일 정보를 받는다.
+- [x] index.html 요청을 보냈을 때, webapp 디렉토리의 index.html 파일을 읽어 클라이언트에 응답한다.
+    - [x] BufferedReader로 InputStream을 읽는다.
+    - [x] 공백을 기준으로 파싱하여 요청한 URL을 추출한다.
+    - [x] loadFileFromClasspath 메서드에 정확한 자원의 경로를 전달하여 요청한 파일 정보를 받는다.
 
 ## 진행 방법
 * 웹 애플리케이션 서버 요구사항을 파악한다.

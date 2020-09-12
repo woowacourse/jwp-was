@@ -1,16 +1,26 @@
 package webserver;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.URISyntaxException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import utils.FileIoUtils;
+
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final String DELIMITER = " ";
+    private static final String FILE_PATH_TEMPLATES = "./templates";
+    private static final String FILE_PATH_STATIC = "./static";
+    private static final String FILE_TYPE_HTML = ".html";
+    private static final String FILE_TYPE_ICO = ".ico";
 
     private Socket connection;
 
@@ -20,17 +30,28 @@ public class RequestHandler implements Runnable {
 
     public void run() {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
-                connection.getPort());
+            connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            String line = br.readLine();
+            String path = line.split(DELIMITER)[1];
+
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = "Hello World".getBytes();
+            byte[] body = FileIoUtils.loadFileFromClasspath(parseFilePath(path));
+
             response200Header(dos, body.length);
             responseBody(dos, body);
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private String parseFilePath(String path) {
+        if (path.endsWith(FILE_TYPE_HTML) || path.endsWith(FILE_TYPE_ICO)) {
+            return FILE_PATH_TEMPLATES + path;
+        }
+        return FILE_PATH_STATIC + path;
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
