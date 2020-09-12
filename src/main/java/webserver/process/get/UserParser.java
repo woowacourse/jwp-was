@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import model.User;
+import webserver.http.HttpBody;
 
 public class UserParser {
 
-	public static User parseUser(String url) {
-		String[] requestParams = url.substring(url.indexOf("?") + 1)
-			.split("&");
+	public static User parseUser(HttpBody body) {
+		String[] requestParams = body.split("&");
 
 		List<String> params = Arrays.stream(requestParams)
 			.map(param -> param.split("="))

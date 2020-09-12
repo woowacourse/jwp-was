@@ -18,6 +18,14 @@ public class HttpRequest {
 		return httpHeaders.containsInUrl(url);
 	}
 
+	public HttpHeaders getHttpHeaders() {
+		return httpHeaders;
+	}
+
+	public HttpBody getHttpBody() {
+		return httpBody;
+	}
+
 	public String getHttpMethod() {
 		return this.httpHeaders.getHttpMethod();
 	}

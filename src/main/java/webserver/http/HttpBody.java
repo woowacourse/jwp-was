@@ -10,6 +10,10 @@ public class HttpBody {
 		this.httpBody = httpBody;
 	}
 
+	public String[] split(String regex) {
+		return httpBody.split(regex);
+	}
+
 	public String getHttpBody() {
 		return httpBody;
 	}

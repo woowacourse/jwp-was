@@ -1,23 +1,23 @@
 package webserver.process.get;
 
-import static org.graalvm.compiler.options.OptionType.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.lang.reflect.Constructor;
-import java.util.Arrays;
-
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import model.User;
+import webserver.http.HttpBody;
 
 class UserParserTest {
 
+	@DisplayName("Http Body에서 User 파싱")
 	@Test
 	void parseUser() {
 
-		String url = "/user/create?userId=user&password=1234&name=name&email=email@gmail.com";
+		String url = "userId=user&password=1234&name=name&email=email@gmail.com";
+		HttpBody httpBody = new HttpBody(url);
 
-		User user = UserParser.parseUser(url);
+		User user = UserParser.parseUser(httpBody);
 
 		assertAll(
 			() -> assertEquals(user.getUserId(), "user"),
