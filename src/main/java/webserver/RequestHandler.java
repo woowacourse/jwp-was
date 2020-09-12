@@ -55,8 +55,7 @@ public class RequestHandler implements Runnable {
                 DataBase.addUser(user);
 
                 DataOutputStream dos = new DataOutputStream(out);
-                response201Header(dos, "/user/" + user.getUserId());
-
+                response302Header(dos, "http://localhost:8000/");
                 return;
             }
             Resource resourceForResponse =
@@ -105,6 +104,16 @@ public class RequestHandler implements Runnable {
     private void response201Header(DataOutputStream dos, String location) {
         try {
             dos.writeBytes("HTTP/1.1 201 OK \r\n");
+            dos.writeBytes("Location: " + location + "\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void response302Header(DataOutputStream dos, String location) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 Found \r\n");
             dos.writeBytes("Location: " + location + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
