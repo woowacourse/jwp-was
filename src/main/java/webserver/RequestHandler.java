@@ -55,7 +55,7 @@ public class RequestHandler implements Runnable {
                 DataBase.addUser(user);
 
                 DataOutputStream dos = new DataOutputStream(out);
-                response302Header(dos, "http://localhost:8000/");
+                response302Header(dos, "/");
                 return;
             }
             Resource resourceForResponse =
@@ -80,11 +80,9 @@ public class RequestHandler implements Runnable {
                 requestHeader, "Content-Length"));
             requestBody = IOUtils.readData(br, contentLength);
         }
-        System.out.println("## 요청 들어옴! ##");
-        System.out.println(requestHeader);
-        System.out.println();
-        System.out.println(requestBody);
-        System.out.println("##################");
+        logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
+            connection.getPort());
+        logger.debug("Receive Request\n{}\n{}", requestHeader, requestBody);
 
         return new Request(requestHeader, requestBody);
     }

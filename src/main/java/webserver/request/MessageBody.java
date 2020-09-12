@@ -11,9 +11,6 @@ class MessageBody {
     }
 
     public Map<String, String> getFormDataFromBody() {
-        System.out.println("*** message body ***");
-        System.out.println(messageBody);
-        System.out.println("********************");
         return new QueryData(messageBody).getQueryData();
     }
 
