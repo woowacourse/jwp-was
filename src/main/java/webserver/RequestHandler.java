@@ -16,7 +16,6 @@ import java.util.Map;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    public static final String RESOURCE_BASE_PATH = "./templates";
 
     private Socket connection;
 
@@ -39,7 +38,7 @@ public class RequestHandler implements Runnable {
             if (httpRequest.isStaticFileRequest()) {
                 String filePath = ResourceMatcher.findBaseDirectory(path) + path;
                 byte[] staticFile = FileIoUtils.loadFileFromClasspath(filePath);
-                response200Header(dos, staticFile.length);
+                response200Header(dos, ResourceMatcher.findContentType(path), staticFile.length);
                 responseBody(dos, staticFile);
             } else {
                 if (httpRequest.getMethod().equals("POST") && path.equals("/user/create")) {
@@ -70,10 +69,10 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response200Header(DataOutputStream dos, String contentType, int lengthOfBodyContent) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Type: " + contentType + "\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {

@@ -24,4 +24,12 @@ class ResourceMatcherTest {
         String baseDirectory = ResourceMatcher.findBaseDirectory(path);
         assertThat(baseDirectory).isEqualTo(expectedBaseDirectory);
     }
+
+    @DisplayName("정적 파일을 요청하는 경우 정적 파일이 위치하는 baseDirectory를 받아 온다.")
+    @CsvSource({"/index.html, text/html;charset=UTF-8", "./css/styles.css, text/css;charset=UTF-8", "./js/scripts.js, application/javascript;charset=UTF-8", "/user, */*"})
+    @ParameterizedTest
+    void findContentType(String path, String expectedContentType) {
+        String contentType = ResourceMatcher.findContentType(path);
+        assertThat(contentType).isEqualTo(expectedContentType);
+    }
 }
