@@ -69,14 +69,6 @@ public class Request {
             .forEach(pair -> params.put(pair[0], pair[1]));
     }
 
-    public Object getHeader(String name) {
-        return headers.get(name);
-    }
-
-    public Map<String, String> getParams() {
-        return params;
-    }
-
     public boolean isGetRequest() {
         HttpMethod method = (HttpMethod) headers.get("method");
         return method.isGet();
@@ -85,6 +77,10 @@ public class Request {
     public boolean isPostRequest() {
         HttpMethod method = (HttpMethod) headers.get("method");
         return method.isPost();
+    }
+
+    public Object getHeader(String name) {
+        return headers.get(name);
     }
 
     public AcceptType getType() {
