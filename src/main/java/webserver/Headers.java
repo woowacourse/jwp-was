@@ -26,11 +26,6 @@ public class Headers {
         requestHeaders.stream()
             .map(line -> line.split(": "))
             .forEach(pair -> headers.put(pair[0], pair[1]));
-        parseAcceptType();
-    }
-
-    private void parseAcceptType() {
-
     }
 
     public boolean isGetRequest() {
