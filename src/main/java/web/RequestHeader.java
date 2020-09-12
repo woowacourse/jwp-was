@@ -29,20 +29,12 @@ public class RequestHeader {
         return requestUri.isStaticFile();
     }
 
-    public boolean isRootPath() {
-        return requestUri.isRootPath();
-    }
-
     public boolean isPost() {
         return Method.POST.equals(method);
     }
 
     public int getContentLength() {
         return Integer.parseInt(header.get(CONTENT_LENGTH.getName()));
-    }
-
-    public String getAccept() {
-        return header.get(ACCEPT.getName());
     }
 
     public RequestUri getRequestUri() {

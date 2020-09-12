@@ -9,12 +9,8 @@ public class RequestUri {
     public static final int URI_INDEX = 0;
     public static final String PARAMETER_DELIMITER = "?";
     static final String INDEX_HTML = "/index.html";
-    private static final String ROOT_PATH = "/";
     private static final int PARAMETER_INDEX = 1;
-    private static final String HTML_FILE = ".html";
-    private static final String CSS_FILE = ".css";
-    private static final String ICO_FILE = ".ico";
-    private static final String JS_FILE = ".js";
+
     private String uri;
     private Map<String, String> parameters;
 
@@ -24,16 +20,25 @@ public class RequestUri {
     }
 
     public boolean isStaticFile() {
-        return uri.contains(HTML_FILE) || uri.contains(CSS_FILE) || uri.contains(ICO_FILE)
-                || uri.contains(JS_FILE);
+        return findResource() != null;
     }
 
-    public boolean isRootPath() {
-        if (ROOT_PATH.equals(uri)) {
-            uri = INDEX_HTML;
-            return true;
+    public ResourceMatcher findResource() {
+        return ResourceMatcher.fromUri(uri);
+    }
+
+    public String findPath() {
+        if (!isStaticFile()) {
+            return EMPTY;
         }
-        return false;
+        return findResource().getResourcePath();
+    }
+
+    public String findContentType() {
+        if (!isStaticFile()) {
+            return "*/*";
+        }
+        return findResource().getContentType();
     }
 
     private Map<String, String> parsingParameters() {

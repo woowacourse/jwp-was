@@ -24,25 +24,26 @@ public class HttpResponse {
     }
 
     public void process(HttpRequest httpRequest) {
-        RequestHeader requestHeader = httpRequest.getRequestHeader();
-        if (requestHeader.isRootPath() || requestHeader.isStaticFile()) {
-            processHtml(httpRequest);
+        if (httpRequest.isStaticFile()) {
+            processFiles(httpRequest);
         } else {
             processApi(httpRequest);
         }
     }
 
-    private void processHtml(HttpRequest httpRequest) {
-        String HTML_PATH_PREFIX = "./templates";
+    private void processFiles(HttpRequest httpRequest) {
+        RequestUri requestUri = httpRequest.getRequestUri();
+        String resourcePath = requestUri.findPath() + requestUri.getUri();
+        logger.debug("resourcePath: " + resourcePath);
         byte[] content = null;
         try {
             content = FileIoUtils.loadFileFromClasspath(
-                    HTML_PATH_PREFIX + httpRequest.getRequestUri());
+                    resourcePath);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
         if (content != null) {
-            String response = response200Header(httpRequest.getAccept(), content);
+            String response = response200Header(requestUri.findContentType(), content);
             toDataOutputStream(response);
             responseBody(content);
         }
@@ -61,9 +62,10 @@ public class HttpResponse {
         }
     }
 
-    private String response200Header(String accept, byte[] content) {
+    private String response200Header(String contentType, byte[] content) {
         return "HTTP/1.1 200 OK" + NEW_LINE
-                + "Content-Type: " + accept + NEW_LINE
+                + "Content-Type: " + contentType + NEW_LINE
+                //+ "Content-Type: " + "*/*" + NEW_LINE
                 + "Content-Length: " + content.length + NEW_LINE
                 + NEW_LINE;
     }

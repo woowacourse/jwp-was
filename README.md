@@ -37,9 +37,5 @@
  ### 요구사항5
  > 지금까지 구현한 소스 코드는 stylesheet 파일을 지원하지 못하고 있다. Stylesheet 파일을 지원하도록 구현하도록 한다.
    
-
  *구현 기능 목록*
-- [ ] 응답에 따라 Content-Type을 변경하여 Stylesheet 파일을 지원하도록 구현
-    - 방법
-        1. 확장자를 통한 변경
-        2. 요청의 Accept를 통한 변경
+- [x] 응답에 따라 Content-Type을 변경하여 Stylesheet 파일을 지원하도록 구현

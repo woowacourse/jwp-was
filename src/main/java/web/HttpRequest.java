@@ -23,16 +23,12 @@ public class HttpRequest {
         return requestHeader.isPost();
     }
 
-    public String getRequestUri() {
-        return requestHeader.getRequestUri().getUri();
+    public boolean isStaticFile() {
+        return requestHeader.isStaticFile();
     }
 
-    public String getAccept() {
-        return requestHeader.getAccept();
-    }
-
-    public RequestHeader getRequestHeader() {
-        return requestHeader;
+    public RequestUri getRequestUri() {
+        return requestHeader.getRequestUri();
     }
 
     public RequestBody getRequestBody() {

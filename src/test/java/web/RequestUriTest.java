@@ -17,13 +17,21 @@ class RequestUriTest {
         assertTrue(uri.isStaticFile());
     }
 
-    @DisplayName("uri가 루트 경로인지 확인한다.")
+    @DisplayName("요청 자원의 경로를 확인한다.")
     @Test
-    void isRootPath() {
-        RequestUri uri = new RequestUri("/");
-        assertTrue(uri.isRootPath());
+    public void findPath() {
+        String expected = ResourceMatcher.JS.getResourcePath();
+        String actual = new RequestUri("js/script.js").findPath();
+        assertEquals(expected, actual);
     }
 
+    @DisplayName("요청 자원의 contentType을 확인한다.")
+    @Test
+    public void getContentType() {
+        String expected = ResourceMatcher.JS.getContentType();
+        String actual = new RequestUri("js/script.js").findContentType();
+        assertEquals(expected, actual);
+    }
     @DisplayName("uri에 담긴 파라미터를 추출한다.")
     @Test
     void getParameter() {

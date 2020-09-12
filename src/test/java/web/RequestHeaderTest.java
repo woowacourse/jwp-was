@@ -37,12 +37,6 @@ class RequestHeaderTest {
         assertTrue(createHeader(GET, INDEX_HTML).isStaticFile());
     }
 
-    @DisplayName("루트(/)에 대한 요청인지 확인한다.")
-    @Test
-    public void isRootPath() throws IOException {
-        assertTrue(createHeader(GET, ROOT).isRootPath());
-    }
-
     @DisplayName("POST 요청인지 확인한다.")
     @Test
     public void isPost() throws IOException {
