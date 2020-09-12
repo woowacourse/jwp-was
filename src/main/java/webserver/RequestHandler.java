@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import web.HttpRequest;
-import web.RequestBody;
+import web.HttpResponse;
 import web.ResourceMatcher;
 
 import java.io.*;
@@ -32,19 +32,12 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
 
             final HttpRequest httpRequest = new HttpRequest(br);
-
-            String path = httpRequest.getPath();
+            final HttpResponse httpResponse = new HttpResponse(dos);
 
             if (httpRequest.isStaticFileRequest()) {
-                String filePath = ResourceMatcher.findBaseDirectory(path) + path;
-                byte[] staticFile = FileIoUtils.loadFileFromClasspath(filePath);
-                response200Header(dos, ResourceMatcher.findContentType(path), staticFile.length);
-                responseBody(dos, staticFile);
+                handleStaticFileRequest(httpRequest, httpResponse);
             } else {
-                if (httpRequest.getMethod().equals("POST") && path.equals("/user/create")) {
-                    createUser(httpRequest.getRequestBody());
-                    response302Header(dos, "/index.html");
-                }
+                handleAPIRequest(httpRequest, httpResponse);
             }
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -53,39 +46,22 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void createUser(RequestBody body) {
-        final Map<String, String> parameters = body.parseParameters();
-        final User user = new User(parameters.get("userId"), parameters.get("password"), parameters.get("name"), parameters.get("email"));
-        DataBase.addUser(user);
+    private void handleStaticFileRequest(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+        String path = httpRequest.getPath();
+        String filePath = ResourceMatcher.findBaseDirectory(path) + path;
+        byte[] staticFile = FileIoUtils.loadFileFromClasspath(filePath);
+
+        httpResponse.response200Header(ResourceMatcher.findContentType(path), staticFile.length);
+        httpResponse.responseBody(staticFile);
     }
 
-    private void response302Header(DataOutputStream dos, String url) {
-        try {
-            dos.writeBytes("HTTP/1.1 302 Found \r\n");
-            dos.writeBytes("Location: " + url + " \r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
+    private void handleAPIRequest(HttpRequest httpRequest, HttpResponse httpResponse) {
+        if (httpRequest.getMethod().equals("POST") && httpRequest.getPath().equals("/user/create")) {
+            Map<String, String> parameters = httpRequest.getRequestBody().parseParameters();
+            User user = new User(parameters.get("userId"), parameters.get("password"), parameters.get("name"), parameters.get("email"));
+            DataBase.addUser(user);
 
-    private void response200Header(DataOutputStream dos, String contentType, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: " + contentType + "\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
+            httpResponse.response302Header("/index.html");
         }
     }
 }
