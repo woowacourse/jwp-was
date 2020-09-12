@@ -15,9 +15,7 @@ import java.util.List;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.AcceptType;
 import utils.FileIoUtils;
-import utils.Request;
 
 public class RequestHandler implements Runnable {
 
