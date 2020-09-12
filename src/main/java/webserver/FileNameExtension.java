@@ -1,5 +1,8 @@
 package webserver;
 
+import static webserver.FileNameExtension.Constants.DIRECTORY_STATIC;
+import static webserver.FileNameExtension.Constants.DIRECTORY_WEBAPP;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -8,26 +11,32 @@ import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 public enum FileNameExtension {
-    API(null, endsNotWithExtensions(), Kind.API),
-    CSS(Collections.singletonList(".css"), endsWithExtensions(), Kind.STATIC_FILE),
-    FILE(null, null, Kind.WEBAPP_FILE),
+    API(null, endsNotWithExtensions(), null),
+    CSS(Collections.singletonList(".css"), endsWithExtensions(), DIRECTORY_STATIC),
+    FILE(null, null, DIRECTORY_WEBAPP),
     FONTS(Arrays.asList(".eot", ".svg", ".ttf", ".woff", ".woff2"), endsWithExtensions(),
-        Kind.STATIC_FILE),
-    HTML(Collections.singletonList(".html"), endsWithExtensions(), Kind.WEBAPP_FILE),
-    IMAGES(Collections.singletonList(".png"), endsWithExtensions(), Kind.STATIC_FILE),
-    JS(Collections.singletonList(".js"), endsWithExtensions(), Kind.STATIC_FILE);
+        DIRECTORY_STATIC),
+    HTML(Collections.singletonList(".html"), endsWithExtensions(), DIRECTORY_WEBAPP),
+    IMAGES(Collections.singletonList(".png"), endsWithExtensions(), DIRECTORY_STATIC),
+    JS(Collections.singletonList(".js"), endsWithExtensions(), DIRECTORY_STATIC);
+
+    private final String directory;
 
     private static final String URL_DELIMITER = "/";
     private static final String EXTENSION_DELIMITER = ".";
+
     private final List<String> extensions;
     private final BiPredicate<List<String>, String> biPredicate;
-    private final Kind kind;
 
     FileNameExtension(List<String> extensions, BiPredicate<List<String>, String> biPredicate,
-        Kind kind) {
+        String directory) {
         this.extensions = extensions;
         this.biPredicate = biPredicate;
-        this.kind = kind;
+        this.directory = directory;
+    }
+
+    public String getDirectory() {
+        return directory;
     }
 
     private static BiPredicate<List<String>, String> endsNotWithExtensions() {
@@ -68,7 +77,9 @@ public enum FileNameExtension {
         return extensions;
     }
 
-    public Kind getKind() {
-        return kind;
+    static class Constants {
+
+        static final String DIRECTORY_WEBAPP = "webapp";
+        static final String DIRECTORY_STATIC = "static";
     }
 }

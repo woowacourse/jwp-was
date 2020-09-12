@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import utils.FileNotExitsException;
 import webserver.FileNameExtension;
+import webserver.HttpMethod;
 import webserver.dto.HttpRequest;
 
 public class FileHandler {
@@ -26,7 +27,7 @@ public class FileHandler {
         throws IOException {
 
         try (DataOutputStream dos = new DataOutputStream(out)) {
-            if (!httpRequest.getHttpMethod().equalsIgnoreCase("GET")) {
+            if (!httpRequest.getHttpMethod().equalsIgnoreCase(HttpMethod.GET.name())) {
                 returnMethodNotAllow(dos);
                 return;
             }
@@ -41,7 +42,7 @@ public class FileHandler {
     private static void returnOk(HttpRequest httpRequest, DataOutputStream dos)
         throws IOException, URISyntaxException {
         byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getUrlPath(),
-            httpRequest.getKind().getDirectory());
+            httpRequest.getDirectory());
         String contentType = getContentType(httpRequest);
         response200Header(dos, body.length, contentType);
         responseBody(dos, body);
