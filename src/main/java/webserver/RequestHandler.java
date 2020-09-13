@@ -9,11 +9,13 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import utils.FileIoUtils;
+import utils.IOUtils;
 import utils.RequestUtils;
 
 public class RequestHandler implements Runnable {
@@ -37,9 +39,22 @@ public class RequestHandler implements Runnable {
             if(line == null) {
                 return;
             }
-
             String[] request = RequestUtils.separateUrl(line);
-            String uri = RequestUtils.signIn(request);
+            String uri = request[URI_INDEX];
+            HashMap<String, String> requestUrl = new HashMap<>();
+            while(!"".equals(line)) {
+                logger.debug("header Line: {} " + line);
+                String[] headerToken = line.split(": ");
+                if(headerToken.length == 2) {
+                    requestUrl.put(headerToken[0], headerToken[1]);
+                }
+                line = bufferedReader.readLine();
+            }
+            if("POST".equals(request[0])) {
+                String userInfoUrl = IOUtils.readData(bufferedReader, Integer.parseInt(requestUrl.get("Content-Length")));
+                uri = RequestUtils.signIn(request, userInfoUrl);
+                logger.debug("userInfo: {}" +userInfoUrl);
+            }
 
             byte[] body = FileIoUtils.loadFileFromClasspath("./templates/" + uri);
             DataOutputStream dos = new DataOutputStream(out);

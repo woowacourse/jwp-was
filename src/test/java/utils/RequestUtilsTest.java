@@ -10,14 +10,14 @@ import model.User;
 
 class RequestUtilsTest {
 
-    private final String getSignInRequestUrl = "GET /user/create?userId=Id&password=password&name=name&email=email@gmail.com HTTP/1.1";
+    private final String getSignInRequestUrl = "POST /user/create?userId=Id&password=password&name=name&email=email@gmail.com HTTP/1.1";
     private final String[] requestUrlArrays = RequestUtils.separateUrl(getSignInRequestUrl);
 
     @DisplayName("Http 요청이 들어오면 http 요청 정보를 분리한다")
     @Test
     void separateHttpRequest() {
 
-        assertThat(requestUrlArrays[0]).isEqualTo("GET");
+        assertThat(requestUrlArrays[0]).isEqualTo("POST");
         assertThat(requestUrlArrays[1]).isEqualTo("/user/create?userId=Id&password=password&name=name&email=email@gmail.com");
         assertThat(requestUrlArrays[2]).isEqualTo("HTTP/1.1");
     }
@@ -26,7 +26,7 @@ class RequestUtilsTest {
     @Test
     void extractUserInfoTest1() {
 
-        String result = RequestUtils.signIn(requestUrlArrays);
+        String result = RequestUtils.signIn(requestUrlArrays, "userId=Id&password=password&name=name&email=email@gmail.com");
 
         assertThat(result).isEqualTo("index.html");
     }
@@ -35,9 +35,9 @@ class RequestUtilsTest {
     @Test
     void extractUserInfoTest2() {
 
-        String postUrl = "POST /user/create?userId=Id&password=password&name=name&email=email@gmail.com HTTP/1.1";
+        String postUrl = "GET /user/create?userId=Id&password=password&name=name&email=email@gmail.com HTTP/1.1";
 
-        String result = RequestUtils.signIn(postUrl.split(" "));
+        String result = RequestUtils.signIn(postUrl.split(" "), "userId=Id&password=password&name=name&email=email@gmail.com");
 
         assertThat(result).isEqualTo("/user/create?userId=Id&password=password&name=name&email=email@gmail.com");
     }
@@ -46,7 +46,7 @@ class RequestUtilsTest {
     @Test
     void parseUserInfoTest() {
         String userId = "Id";
-        String result = RequestUtils.signIn(requestUrlArrays);
+        RequestUtils.signIn(requestUrlArrays, "userId=Id&password=password&name=name&email=email@gmail.com");
 
         User user = DataBase.findUserById(userId);
         assertThat(user.getName()).isEqualTo("name");

@@ -17,7 +17,7 @@ public class RequestUtils {
     }
 
     private static boolean isSignIn(final String[] requestUrlArrays) {
-        return requestUrlArrays[URL_INDEX].startsWith("/user/create") && "GET".equals(requestUrlArrays[0]);
+        return requestUrlArrays[URL_INDEX].startsWith("/user/create") && "POST".equals(requestUrlArrays[0]);
     }
 
     private static HashMap<String, String> parseUserInfo(final String userInfoUrl) {
@@ -32,12 +32,11 @@ public class RequestUtils {
         return signInData;
     }
 
-    public static String signIn(final String[] request) {
+    public static String signIn(final String[] request, String userInfoUrl) {
         String uri = request[URL_INDEX];
 
         if(RequestUtils.isSignIn(request)) {
-            String signInInfoUri = uri.split("\\?")[SIGN_IN_INFO_INDEX];
-            HashMap<String, String> signInInfo = RequestUtils.parseUserInfo(signInInfoUri);
+            HashMap<String, String> signInInfo = RequestUtils.parseUserInfo(userInfoUrl);
             User user = new User(signInInfo.get("userId"),signInInfo.get("password"),signInInfo.get("name"),signInInfo.get("email"));
             DataBase.addUser(user);
             uri = "index.html";
