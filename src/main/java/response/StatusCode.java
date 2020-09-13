@@ -4,7 +4,9 @@ public enum StatusCode {
     
     OK(200, "OK"),
     CREATED(201, "Created"),
-    FOUND(302, "Found");
+    FOUND(302, "Found"),
+    NOT_FOUND(404, "NotFound"),
+    INTERNAL_SERVER_ERROR(500, "Internal Server Error");
 
     private int statusCode;
     private String statusMessage;

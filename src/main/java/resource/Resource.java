@@ -5,7 +5,7 @@ public class Resource {
     private byte[] resource;
     private ContentType contentType;
 
-    public Resource(byte[] resource, ContentType contentType) {
+    Resource(byte[] resource, ContentType contentType) {
         this.resource = resource;
         this.contentType = contentType;
     }
@@ -14,7 +14,7 @@ public class Resource {
         return resource;
     }
 
-    public String getContentType() {
-        return contentType.getContentType();
+    public ContentType getContentType() {
+        return contentType;
     }
 }

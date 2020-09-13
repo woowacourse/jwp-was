@@ -1,17 +1,25 @@
 package controller;
 
 import db.DataBase;
-import dto.UserCreateRequest;
+import java.util.Map;
 import model.User;
+import request.HttpRequest;
+import response.HttpResponse;
+import response.StatusCode;
 
 public class UserController {
 
-    public void createUser(UserCreateRequest request) { // Todo: 응답을 return 하도록 수정
-        User user = new User(request.getUserId(),
-            request.getPassword(),
-            request.getName(),
-            request.getEmail()
+    public HttpResponse createUser(HttpRequest request) {
+        Map<String, String> queryData = request.getFormDataFromBody();
+
+        User user = new User(
+            queryData.get("userId"),
+            queryData.get("password"),
+            queryData.get("name"),
+            queryData.get("email")
         );
         DataBase.addUser(user);
+
+        return new HttpResponse(StatusCode.FOUND, "/");
     }
 }
