@@ -54,23 +54,6 @@ public class FileHandler {
         ResponseUtils.response(dos, httpResponse);
     }
 
-    private static void returnNotFound(HttpRequest httpRequest, DataOutputStream dos,
-        Exception e) throws IOException {
-        HttpResponse httpResponse = new HttpResponse(
-            httpRequest.getProtocol(), HttpStatusCode.NOT_FOUND, new HashMap<>(), e.getMessage()
-        );
-        ResponseUtils.response(dos, httpResponse);
-    }
-
-    private static void returnMethodNotAllow(HttpRequest httpRequest, DataOutputStream dos)
-        throws IOException {
-        String body = "지원하지 않는 메서드를 사용하셨습니다.";
-        HttpResponse httpResponse = new HttpResponse(
-            httpRequest.getProtocol(), HttpStatusCode.METHOD_NOT_ALLOW, new HashMap<>(), body
-        );
-        ResponseUtils.response(dos, httpResponse);
-    }
-
     private static String getContentType(HttpRequest httpRequest) throws IOException {
         String contentType = Files.probeContentType(Paths.get(httpRequest.getUrlPath()));
         if (Objects.nonNull(contentType)) {
@@ -80,5 +63,20 @@ public class FileHandler {
             return CSS_CONTENT_TYPE;
         }
         return DEFAULT_CONTENT_TYPE;
+    }
+
+    private static void returnNotFound(HttpRequest httpRequest, DataOutputStream dos,
+        Exception e) throws IOException {
+        HttpResponse httpResponse
+            = new HttpResponse(httpRequest.getProtocol(), HttpStatusCode.NOT_FOUND, e.getMessage());
+        ResponseUtils.response(dos, httpResponse);
+    }
+
+    private static void returnMethodNotAllow(HttpRequest httpRequest, DataOutputStream dos)
+        throws IOException {
+        String body = "지원하지 않는 메서드를 사용하셨습니다.";
+        HttpResponse httpResponse
+            = new HttpResponse(httpRequest.getProtocol(), HttpStatusCode.METHOD_NOT_ALLOW, body);
+        ResponseUtils.response(dos, httpResponse);
     }
 }

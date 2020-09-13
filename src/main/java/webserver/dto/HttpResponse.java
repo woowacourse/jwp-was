@@ -6,6 +6,7 @@ import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import webserver.HttpStatusCode;
@@ -29,6 +30,10 @@ public class HttpResponse {
     public HttpResponse(String protocol, HttpStatusCode httpStatusCode,
         Map<String, String> headers, String body) {
         this(protocol, httpStatusCode, headers, body.getBytes(StandardCharsets.UTF_8));
+    }
+
+    public HttpResponse(String protocol, HttpStatusCode httpStatusCode, String body) {
+        this(protocol, httpStatusCode, new HashMap<>(), body);
     }
 
     private Map<String, String> settingHeaders(Map<String, String> headers, byte[] body) {
