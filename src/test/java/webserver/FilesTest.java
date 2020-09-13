@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 public class FilesTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(ExecutorsTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(FilesTest.class);
 
     @DisplayName("확장자에 따라 MIME 타입 추출 확인")
     @ParameterizedTest
@@ -19,6 +19,6 @@ public class FilesTest {
         "/css/bootstrap.min.css", "/glyphicons-halflings-regular.woff", "/haha.woff"})
     void probeContentType(String urlPath) throws IOException {
         String mimeType = Files.probeContentType(Paths.get(urlPath));
-        logger.debug("urlPath : {}, MimeType : {}", urlPath, mimeType);
+        LOGGER.debug("urlPath : {}, MimeType : {}", urlPath, mimeType);
     }
 }

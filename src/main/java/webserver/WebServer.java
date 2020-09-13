@@ -9,7 +9,7 @@ import webserver.handler.RequestHandler;
 
 public class WebServer {
 
-    private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebServer.class);
     private static final int DEFAULT_PORT = 8080;
 
     public static void main(String[] args) throws Exception {
@@ -17,7 +17,7 @@ public class WebServer {
 
         // 서버소켓을 생성한다.
         try (ServerSocket listenSocket = new ServerSocket(port)) {
-            logger.info("Web Application Server started {} port.", port);
+            LOGGER.info("Web Application Server started {} port.", port);
             startConnectionThread(listenSocket);
         }
     }

@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 public class HandlebarsTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(HandlebarsTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HandlebarsTest.class);
 
     @Test
     void name() throws Exception {
@@ -24,6 +24,6 @@ public class HandlebarsTest {
 
         User user = new User("javajigi", "password", "자바지기", "javajigi@gmail.com");
         String profilePage = template.apply(user);
-        logger.debug("ProfilePage : {}", profilePage);
+        LOGGER.debug("ProfilePage : {}", profilePage);
     }
 }

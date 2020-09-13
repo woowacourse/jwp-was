@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 public class IOUtilsTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(IOUtilsTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(IOUtilsTest.class);
 
     @DisplayName("데이터 정상으로 읽는지 확인")
     @Test
@@ -24,7 +24,7 @@ public class IOUtilsTest {
         br.close();
         sr.close();
 
-        logger.debug("parse body : {}", parseBody);
+        LOGGER.debug("parse body : {}", parseBody);
         assertThat(parseBody).isEqualTo(data);
     }
 
@@ -40,7 +40,7 @@ public class IOUtilsTest {
         br.close();
         sr.close();
 
-        logger.debug("parse body : {}", parseBody);
+        LOGGER.debug("parse body : {}", parseBody);
         assertThat(parseBody).isEqualTo(data.substring(0, contentLength));
     }
 
@@ -56,7 +56,7 @@ public class IOUtilsTest {
         br.close();
         sr.close();
 
-        logger.debug("parse body : {}", parseBody);
+        LOGGER.debug("parse body : {}", parseBody);
         assertThat(parseBody.length()).isEqualTo(contentLength);
         assertThat(parseBody.substring(0, data.length())).isEqualTo(data);
     }

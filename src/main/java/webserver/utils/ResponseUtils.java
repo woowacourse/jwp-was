@@ -12,6 +12,9 @@ public class ResponseUtils {
     private static final String BLANK = " ";
     private static final String HEADER_KEY_VALUE_DELIMITER = ": ";
 
+    private ResponseUtils() {
+    }
+
     public static void response(DataOutputStream dos, HttpResponse httpResponse)
         throws IOException {
         responseLine(dos, httpResponse);

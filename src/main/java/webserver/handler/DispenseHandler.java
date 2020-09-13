@@ -6,11 +6,19 @@ import webserver.dto.HttpRequest;
 
 public class DispenseHandler {
 
-    static void dispense(OutputStream out, HttpRequest httpRequest) throws IOException {
+    private final FileHandler fileHandler;
+    private final ApiHandler apiHandler;
+
+    DispenseHandler() {
+        this.fileHandler = new FileHandler();
+        this.apiHandler = new ApiHandler();
+    }
+
+    void dispense(OutputStream out, HttpRequest httpRequest) throws IOException {
         if (httpRequest.isFile()) {
-            FileHandler.loadFile(out, httpRequest);
+            fileHandler.loadFile(out, httpRequest);
             return;
         }
-        ApiHandler.handleAPI(out, httpRequest);
+        apiHandler.handleAPI(out, httpRequest);
     }
 }

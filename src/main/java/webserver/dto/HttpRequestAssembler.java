@@ -12,11 +12,10 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.FileNameExtension;
-import webserver.handler.RequestHandler;
 
 public class HttpRequestAssembler {
 
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HttpRequestAssembler.class);
     private static final String LINE_DELIMITER = " ";
     private static final String HEADER_DELIMITER = ": ";
     private static final String URL_PATH_DELIMITER = "\\?";
@@ -26,7 +25,7 @@ public class HttpRequestAssembler {
 
     public static HttpRequest assemble(BufferedReader br) throws IOException {
         String line = br.readLine();
-        logger.debug("request line : {}", line);
+        LOGGER.debug("request line : {}", line);
         String[] requestLine = line.split(LINE_DELIMITER);
 
         String httpMethod = extractHttpMethod(requestLine);
@@ -93,7 +92,7 @@ public class HttpRequestAssembler {
             if (header.equals(EMPTY)) {
                 break;
             }
-            logger.debug("header : {}", header);
+            LOGGER.debug("header : {}", header);
             String[] splitHeader = header.split(HEADER_DELIMITER);
             headers.put(splitHeader[0], splitHeader[1]);
         }

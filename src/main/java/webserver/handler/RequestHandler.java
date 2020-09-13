@@ -14,16 +14,18 @@ import webserver.dto.HttpRequestAssembler;
 
 public class RequestHandler implements Runnable {
 
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
+    private final DispenseHandler dispenseHandler;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
+        this.dispenseHandler = new DispenseHandler();
     }
 
     public void run() {
-        logger.debug(
+        LOGGER.debug(
             "New Client Connect! Connected IP : {}, Port : {}",
             connection.getInetAddress(),
             connection.getPort()
@@ -34,9 +36,9 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(
                 new InputStreamReader(in, StandardCharsets.UTF_8))) {
             HttpRequest httpRequest = HttpRequestAssembler.assemble(br);
-            DispenseHandler.dispense(out, httpRequest);
+            dispenseHandler.dispense(out, httpRequest);
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
     }
 }

@@ -5,6 +5,8 @@ import static com.google.common.net.HttpHeaders.CONTENT_LOCATION;
 import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static util.Constants.EMPTY;
+import static util.Constants.PROTOCOL;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -14,9 +16,6 @@ import org.junit.jupiter.api.Test;
 import webserver.HttpStatusCode;
 
 class HttpResponseTest {
-
-    private static final String EMPTY = "";
-    private static final String PROTOCOL = "HTTP/1.1";
 
     @DisplayName("Protocol이 Null인 경우 NPE 발생")
     @Test

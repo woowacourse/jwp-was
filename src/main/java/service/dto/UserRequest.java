@@ -1,5 +1,7 @@
 package service.dto;
 
+import model.User;
+
 public class UserRequest {
 
     private String userId;
@@ -12,6 +14,10 @@ public class UserRequest {
         this.password = password;
         this.name = name;
         this.email = email;
+    }
+
+    public User toUser() {
+        return new User(userId, password, name, email);
     }
 
     public String getUserId() {
