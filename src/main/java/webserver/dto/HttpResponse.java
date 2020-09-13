@@ -18,7 +18,7 @@ public class HttpResponse {
     private Map<String, String> headers;
     private byte[] body;
 
-    public HttpResponse(String protocol, HttpStatusCode httpStatusCode,
+    private HttpResponse(String protocol, HttpStatusCode httpStatusCode,
         Map<String, String> headers, byte[] body) {
         this.protocol = Objects.requireNonNull(protocol);
         this.httpStatusCode = Objects.requireNonNull(httpStatusCode);
@@ -27,13 +27,19 @@ public class HttpResponse {
         this.body = body;
     }
 
-    public HttpResponse(String protocol, HttpStatusCode httpStatusCode,
-        Map<String, String> headers, String body) {
-        this(protocol, httpStatusCode, headers, body.getBytes(StandardCharsets.UTF_8));
+    public static HttpResponse of(String protocol, HttpStatusCode httpStatusCode,
+        Map<String, String> headers, byte[] body) {
+        return new HttpResponse(protocol, httpStatusCode, headers, body);
     }
 
-    public HttpResponse(String protocol, HttpStatusCode httpStatusCode, String body) {
-        this(protocol, httpStatusCode, new HashMap<>(), body);
+    public static HttpResponse of(String protocol, HttpStatusCode httpStatusCode,
+        Map<String, String> headers, String body) {
+        byte[] bodyBytes = body.getBytes(StandardCharsets.UTF_8);
+        return new HttpResponse(protocol, httpStatusCode, headers, bodyBytes);
+    }
+
+    public static HttpResponse of(String protocol, HttpStatusCode httpStatusCode, String body) {
+        return HttpResponse.of(protocol, httpStatusCode, new HashMap<>(), body);
     }
 
     private Map<String, String> settingHeaders(Map<String, String> headers, byte[] body) {

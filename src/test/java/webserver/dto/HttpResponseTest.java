@@ -20,38 +20,38 @@ class HttpResponseTest {
 
     @DisplayName("Protocol이 Null인 경우 NPE 발생")
     @Test
-    void constructor_NullProtocol_ThrownException() {
-        assertThatThrownBy(() -> new HttpResponse(null, HttpStatusCode.OK, new HashMap<>(), EMPTY))
+    void of_NullProtocol_ThrownException() {
+        assertThatThrownBy(() -> HttpResponse.of(null, HttpStatusCode.OK, new HashMap<>(), EMPTY))
             .isInstanceOf(NullPointerException.class);
     }
 
     @DisplayName("HttpStatusCode가 Null인 경우 NPE 발생")
     @Test
-    void constructor_NullHttpStatusCode_ThrownException() {
-        assertThatThrownBy(() -> new HttpResponse(PROTOCOL, null, new HashMap<>(), EMPTY))
+    void of_NullHttpStatusCode_ThrownException() {
+        assertThatThrownBy(() -> HttpResponse.of(PROTOCOL, null, new HashMap<>(), EMPTY))
             .isInstanceOf(NullPointerException.class);
     }
 
     @DisplayName("Headers가 Null인 경우 NPE 발생")
     @Test
-    void constructor_NullHeaders_ThrownException() {
-        assertThatThrownBy(() -> new HttpResponse(PROTOCOL, HttpStatusCode.OK, null, EMPTY))
+    void of_NullHeaders_ThrownException() {
+        assertThatThrownBy(() -> HttpResponse.of(PROTOCOL, HttpStatusCode.OK, null, EMPTY))
             .isInstanceOf(NullPointerException.class);
     }
 
     @DisplayName("Body가 Null인 경우 NPE 발생")
     @Test
-    void constructor_NullBody_ThrownException() {
+    void of_NullBody_ThrownException() {
         assertThatThrownBy(() ->
-            new HttpResponse(PROTOCOL, HttpStatusCode.OK, new HashMap<>(), (byte[]) null))
+            HttpResponse.of(PROTOCOL, HttpStatusCode.OK, new HashMap<>(), (String) null))
             .isInstanceOf(NullPointerException.class);
     }
 
     @DisplayName("바디가 Empty인 경우 생성자 정상 생성")
     @Test
-    void constructor_BodyIsEmpty_Success() {
+    void of_BodyIsEmpty_Success() {
         HttpResponse httpResponse
-            = new HttpResponse(PROTOCOL, HttpStatusCode.OK, new HashMap<>(), EMPTY);
+            = HttpResponse.of(PROTOCOL, HttpStatusCode.OK, new HashMap<>(), EMPTY);
 
         assertThat(httpResponse.getProtocol()).isEqualTo(PROTOCOL);
         assertThat(httpResponse.getHttpStatusCode()).isEqualTo(HttpStatusCode.OK);
@@ -63,11 +63,11 @@ class HttpResponseTest {
 
     @DisplayName("Body에 값이 들어간 경우도 정상 생성")
     @Test
-    void constructor_ExistsBody_Success() {
+    void of_ExistsBody_Success() {
         String body = "니나노";
         byte[] expectedBody = body.getBytes(StandardCharsets.UTF_8);
         HttpResponse httpResponse
-            = new HttpResponse(PROTOCOL, HttpStatusCode.OK, new HashMap<>(), body);
+            = HttpResponse.of(PROTOCOL, HttpStatusCode.OK, new HashMap<>(), body);
 
         assertThat(httpResponse.getProtocol()).isEqualTo(PROTOCOL);
         assertThat(httpResponse.getHttpStatusCode()).isEqualTo(HttpStatusCode.OK);
@@ -81,13 +81,13 @@ class HttpResponseTest {
 
     @DisplayName("CONTENT_TYPE을 직접 넣는 경우, 직접 넣은 헤더 사용(단 charset 붙여줌)")
     @Test
-    void constructor_InputContentType_SuccessWithContentType() {
+    void of_InputContentType_SuccessWithContentType() {
         Map<String, String> headers = new HashMap<>();
         String expectedContentType = "text/css";
         headers.put(CONTENT_TYPE, expectedContentType);
 
         HttpResponse httpResponse
-            = new HttpResponse(PROTOCOL, HttpStatusCode.OK, headers, EMPTY);
+            = HttpResponse.of(PROTOCOL, HttpStatusCode.OK, headers, EMPTY);
 
         assertThat(httpResponse.getProtocol()).isEqualTo(PROTOCOL);
         assertThat(httpResponse.getHttpStatusCode()).isEqualTo(HttpStatusCode.OK);
@@ -100,13 +100,13 @@ class HttpResponseTest {
 
     @DisplayName("헤더를 직접 넣는 경우, 헤더 포함 생성")
     @Test
-    void constructor_InputHeaders_SuccessWithHeaders() {
+    void of_InputHeaders_SuccessWithHeaders() {
         Map<String, String> headers = new HashMap<>();
         String expectedLocation = "/index";
         headers.put(CONTENT_LOCATION, expectedLocation);
 
         HttpResponse httpResponse
-            = new HttpResponse(PROTOCOL, HttpStatusCode.OK, headers, EMPTY);
+            = HttpResponse.of(PROTOCOL, HttpStatusCode.OK, headers, EMPTY);
 
         assertThat(httpResponse.getProtocol()).isEqualTo(PROTOCOL);
         assertThat(httpResponse.getHttpStatusCode()).isEqualTo(HttpStatusCode.OK);

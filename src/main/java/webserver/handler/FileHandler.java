@@ -50,7 +50,7 @@ public class FileHandler {
             httpRequest.getDirectory());
 
         HttpResponse httpResponse
-            = new HttpResponse(httpRequest.getProtocol(), HttpStatusCode.OK, headers, body);
+            = HttpResponse.of(httpRequest.getProtocol(), HttpStatusCode.OK, headers, body);
         ResponseUtils.response(dos, httpResponse);
     }
 
@@ -68,7 +68,7 @@ public class FileHandler {
     private static void returnNotFound(HttpRequest httpRequest, DataOutputStream dos,
         Exception e) throws IOException {
         HttpResponse httpResponse
-            = new HttpResponse(httpRequest.getProtocol(), HttpStatusCode.NOT_FOUND, e.getMessage());
+            = HttpResponse.of(httpRequest.getProtocol(), HttpStatusCode.NOT_FOUND, e.getMessage());
         ResponseUtils.response(dos, httpResponse);
     }
 
@@ -76,7 +76,7 @@ public class FileHandler {
         throws IOException {
         String body = "지원하지 않는 메서드를 사용하셨습니다.";
         HttpResponse httpResponse
-            = new HttpResponse(httpRequest.getProtocol(), HttpStatusCode.METHOD_NOT_ALLOW, body);
+            = HttpResponse.of(httpRequest.getProtocol(), HttpStatusCode.METHOD_NOT_ALLOW, body);
         ResponseUtils.response(dos, httpResponse);
     }
 }
