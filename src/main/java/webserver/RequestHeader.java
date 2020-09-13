@@ -8,9 +8,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class RequestHeader {
+    private final MethodType method;
     private final String path;
     private final Map<String, String> queryParams;
-    private final MethodType method;
     private final String protocolVersion;
     private final Map<String, String> attribute;
 
@@ -124,5 +124,9 @@ public class RequestHeader {
 
     public Map<String, String> getQueryParams() {
         return queryParams;
+    }
+
+    public String getHeader(String header) {
+        return attribute.getOrDefault(header, null);
     }
 }

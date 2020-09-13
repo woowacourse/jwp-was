@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import model.User;
 import utils.FileIoUtils;
+import utils.IOUtils;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -37,13 +38,20 @@ public class RequestHandler implements Runnable {
             InputStreamReader reader = new InputStreamReader(in);
             BufferedReader bufferedReader = new BufferedReader(reader);
             String line = bufferedReader.readLine();
-            StringBuilder lines = new StringBuilder();
+            StringBuilder headerLines = new StringBuilder();
             while (Objects.nonNull(line) && !line.isEmpty()) {
-                lines.append(line).append("\n");
+                headerLines.append(line).append("\n");
                 line = bufferedReader.readLine();
             }
-            RequestHeader requestHeader = RequestHeader.of(lines.toString());
-            User user = convert(User.class, requestHeader.getQueryParams());
+            RequestHeader requestHeader = RequestHeader.of(headerLines.toString());
+            String contentLength = requestHeader.getHeader("Content-Length");
+            if (Objects.nonNull(contentLength)) {
+                String bodyLine = IOUtils.readData(bufferedReader, Integer.parseInt(
+                    contentLength));
+                RequestBody requestBody = RequestBody.of(bodyLine);
+                User user = convert(User.class, requestBody.getAttribute());
+            }
+
             byte[] body = FileIoUtils.loadFileFromClasspath(requestHeader.getPath());
             DataOutputStream dos = new DataOutputStream(out);
             response200Header(dos, body.length);
