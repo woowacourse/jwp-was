@@ -10,10 +10,26 @@ public class User {
     private String email;
 
     public User(String userId, String password, String name, String email) {
-        this.userId = Objects.requireNonNull(userId);
-        this.password = Objects.requireNonNull(password);
-        this.name = Objects.requireNonNull(name);
-        this.email = Objects.requireNonNull(email);
+        validate(userId, password, name, email);
+        this.userId = userId;
+        this.password = password;
+        this.name = name;
+        this.email = email;
+    }
+
+    private void validate(String userId, String password, String name, String email) {
+        if (Objects.requireNonNull(userId).isEmpty()) {
+            throw new IllegalArgumentException("userId는 필수값입니다.");
+        }
+        if (Objects.requireNonNull(password).isEmpty()) {
+            throw new IllegalArgumentException("password는 필수값입니다.");
+        }
+        if (Objects.requireNonNull(name).isEmpty()) {
+            throw new IllegalArgumentException("name은 필수값입니다.");
+        }
+        if (Objects.requireNonNull(email).isEmpty()) {
+            throw new IllegalArgumentException("email은 필수값입니다.");
+        }
     }
 
     public String getUserId() {
