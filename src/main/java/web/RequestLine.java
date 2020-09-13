@@ -5,9 +5,9 @@ import java.io.IOException;
 
 public class RequestLine {
 
-    private String method;
-    private String path;
-    private String protocol;
+    private final String method;
+    private final String path;
+    private final String protocol;
 
     public RequestLine(BufferedReader bufferedReader) throws IOException {
         String url = bufferedReader.readLine();
