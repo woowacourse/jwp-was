@@ -3,6 +3,8 @@ package http;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+import http.exception.InvalidHttpRequestException;
+
 public class HttpRequest {
     private HttpRequestLine httpRequestLine;
     private HttpHeaders httpHeaders;
@@ -11,7 +13,7 @@ public class HttpRequest {
     public HttpRequest(BufferedReader bufferedReader) throws IOException {
         String requestLine = bufferedReader.readLine();
         if (requestLine == null) {
-            return;
+            throw new InvalidHttpRequestException("request line이 없습니다.");
         }
 
         httpRequestLine = new HttpRequestLine(requestLine);

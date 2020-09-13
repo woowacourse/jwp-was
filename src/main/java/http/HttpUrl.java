@@ -3,6 +3,8 @@ package http;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import http.exception.InvalidHttpRequestException;
+
 public class HttpUrl {
     private static final String PATH_AND_PARAMETER_DIVIDER = "?";
     private static final String PARAMETERS_DIVIDER = "&";
@@ -37,11 +39,11 @@ public class HttpUrl {
 
     private void validate(Map<String, String> parameters, int originalLength) {
         if (parameters.size() != originalLength) {
-            throw new IllegalArgumentException("겹치는 key가 있습니다.");
+            throw new InvalidHttpRequestException("겹치는 key가 있습니다.");
         }
 
         if (parameters.containsKey(EMPTY_CONTENT)) {
-            throw new IllegalArgumentException("정보가 없는 key가 있습니다.");
+            throw new InvalidHttpRequestException("정보가 없는 key가 있습니다.");
         }
     }
 

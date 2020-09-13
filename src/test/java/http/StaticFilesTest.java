@@ -7,6 +7,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import http.exception.ResourceNotFoundException;
+
 class StaticFilesTest {
 
     @DisplayName("정적파일 확장자가 올바른 경우 true, 아닌 경우 false를 리턴한다.")
@@ -28,7 +30,7 @@ class StaticFilesTest {
     @ParameterizedTest
     void getDirectoryEndsWithThrowsException(String wrongStaticFile) {
         assertThatThrownBy(() -> StaticFiles.getDirectoryEndsWith(wrongStaticFile))
-            .isInstanceOf(IllegalArgumentException.class);
+            .isInstanceOf(ResourceNotFoundException.class);
     }
 
     @DisplayName("정적파일의 Content-Type을 반환한다.")
@@ -43,6 +45,6 @@ class StaticFilesTest {
     @ParameterizedTest
     void getContentTypeThrowsException(String wrongStaticFile) {
         assertThatThrownBy(() -> StaticFiles.getContentType(wrongStaticFile))
-            .isInstanceOf(IllegalArgumentException.class);
+            .isInstanceOf(ResourceNotFoundException.class);
     }
 }

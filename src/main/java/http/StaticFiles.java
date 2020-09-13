@@ -2,6 +2,8 @@ package http;
 
 import java.util.Arrays;
 
+import http.exception.ResourceNotFoundException;
+
 public enum StaticFiles {
     HTML(".html", "./templates", "text/html;charset=UTF-8"),
     CSS(".css", "./static", "text/css;charset=UTF-8"),
@@ -26,7 +28,7 @@ public enum StaticFiles {
         return Arrays.stream(values())
             .filter(staticFile -> path.endsWith(staticFile.staticFileExtension))
             .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("해당 path의 파일이 있는 경로를 찾을 수 없습니다. " + path))
+            .orElseThrow(() -> new ResourceNotFoundException("해당 path의 파일이 있는 경로를 찾을 수 없습니다. " + path))
             .getDirectory();
     }
 
@@ -35,7 +37,7 @@ public enum StaticFiles {
             .filter(staticFile -> inputStaticFileType.endsWith(staticFile.staticFileExtension))
             .findFirst()
             .orElseThrow(
-                () -> new IllegalArgumentException("해당 path의 파일의 ContentType을 찾을 수 없습니다. " + inputStaticFileType))
+                () -> new ResourceNotFoundException("해당 path의 파일의 ContentType을 찾을 수 없습니다. " + inputStaticFileType))
             .contentType;
     }
 
