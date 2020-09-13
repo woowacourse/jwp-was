@@ -1,36 +1,35 @@
 package http;
 
-import static java.util.stream.Collectors.*;
-
-import java.util.Map;
-import java.util.stream.Stream;
-
 public class Uri {
     private static final String QUERY_STRING_DELIMITER = "\\?";
-    private static final String QUERY_PARAMETER_DELIMITER = "&";
-    private static final String QUERY_PARAMETER_KEY_VALUE_DELIMITER = "=";
+    private static final int QUERY_PARAMETER_CONTAINS_URI_LENGTH = 2;
 
     private final String path;
-    private final Map<String, String> queryParameters;
+    private final QueryParameters queryParameters;
 
-    public Uri(final String uri) {
+    public Uri(final String path, final QueryParameters queryParameters) {
+        this.path = path;
+        this.queryParameters = queryParameters;
+    }
+
+    public static Uri from(final String uri) {
         String[] splitUri = uri.split(QUERY_STRING_DELIMITER);
-        this.path = splitUri[0];
-        this.queryParameters = Stream.of(splitUri[1].split(QUERY_PARAMETER_DELIMITER))
-                .map(query -> query.split(QUERY_PARAMETER_KEY_VALUE_DELIMITER))
-                .collect(toMap(query -> query[0], query -> query[1]));
+        if (splitUri.length == QUERY_PARAMETER_CONTAINS_URI_LENGTH) {
+            return new Uri(splitUri[0], QueryParameters.from(splitUri[1]));
+        }
+        return new Uri(splitUri[0], null);
     }
 
     public String getPath() {
         return path;
     }
 
-    public Map<String, String> getQueryParameters() {
+    public QueryParameters getQueryParameters() {
         return queryParameters;
     }
 
     public String getParameter(final String key) {
-        return queryParameters.get(key);
+        return queryParameters.getParameter(key);
     }
 
     @Override
