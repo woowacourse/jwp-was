@@ -9,12 +9,18 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import db.DataBase;
+import http.HttpRequest;
 import http.RequestLine;
+import http.Uri;
+import model.User;
 import utils.FileIoUtils;
+import utils.IOUtils;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -36,10 +42,25 @@ public class RequestHandler implements Runnable {
              OutputStream outputStream = connection.getOutputStream();
              DataOutputStream dataOutputStream = new DataOutputStream(outputStream)) {
 
-            RequestLine requestLine = new RequestLine(bufferedReader);
-            logger.debug(requestLine.toString());
+            List<String> header = IOUtils.readHeader(bufferedReader);
+            HttpRequest httpRequest = HttpRequest.from(header);
+            logger.debug(header.toString());
 
-            byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + requestLine.getUri());
+            RequestLine requestLine = httpRequest.getRequestLine();
+            Uri uri = requestLine.getUri();
+            if ("/user/create".equals(uri.getPath())) {
+                String userId = uri.getParameter("userId");
+                String password = uri.getParameter("password");
+                String name = uri.getParameter("name");
+                String email = uri.getParameter("email");
+                User user = new User(userId, password, name, email);
+                DataBase.addUser(user);
+            } else if (uri.getPath().endsWith(".html")) {
+                byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + requestLine.getPath());
+                response200Header(dataOutputStream, body.length);
+                responseBody(dataOutputStream, body);
+            }
+            byte[] body = "hello, world".getBytes();
             response200Header(dataOutputStream, body.length);
             responseBody(dataOutputStream, body);
         } catch (IOException | URISyntaxException e) {
