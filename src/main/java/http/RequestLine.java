@@ -7,22 +7,22 @@ public class RequestLine {
 
     private static final String REQUEST_LINE_DELIMITER = " ";
     private final HttpMethod method;
-    private final String uri;
+    private final Uri uri;
     private final String httpVersion;
 
     public RequestLine(final BufferedReader bufferedReader) throws IOException {
-        String rawLine = bufferedReader.readLine();
-        String[] line = rawLine.split(REQUEST_LINE_DELIMITER);
-        this.method = HttpMethod.valueOf(line[0]);
-        this.uri = line[1];
-        this.httpVersion = line[2];
+        String line = bufferedReader.readLine();
+        String[] splitLine = line.split(REQUEST_LINE_DELIMITER);
+        this.method = HttpMethod.valueOf(splitLine[0]);
+        this.uri = new Uri(splitLine[1]);
+        this.httpVersion = splitLine[2];
     }
 
     public HttpMethod getMethod() {
         return method;
     }
 
-    public String getUri() {
+    public Uri getUri() {
         return uri;
     }
 
