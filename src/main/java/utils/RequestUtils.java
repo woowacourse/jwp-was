@@ -39,7 +39,6 @@ public class RequestUtils {
             HashMap<String, String> signInInfo = RequestUtils.parseUserInfo(userInfoUrl);
             User user = new User(signInInfo.get("userId"),signInInfo.get("password"),signInInfo.get("name"),signInInfo.get("email"));
             DataBase.addUser(user);
-            uri = "index.html";
         }
 
         return uri;
