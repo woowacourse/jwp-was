@@ -33,11 +33,14 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             String line = bufferedReader.readLine();
+
             if(line == null) {
                 return;
             }
+
             String[] request = RequestUtils.separateUrl(line);
             String uri = RequestUtils.signIn(request);
+
             byte[] body = FileIoUtils.loadFileFromClasspath("./templates/" + uri);
             DataOutputStream dos = new DataOutputStream(out);
             response200Header(dos, body.length);

@@ -20,7 +20,7 @@ public class RequestUtils {
         return requestUrlArrays[URL_INDEX].startsWith("/user/create") && "GET".equals(requestUrlArrays[0]);
     }
 
-    public static HashMap<String, String> parseUserInfo(final String userInfoUrl) {
+    private static HashMap<String, String> parseUserInfo(final String userInfoUrl) {
         HashMap<String, String> signInData = new HashMap<>();
         String[] userInfos = userInfoUrl.split("&");
 

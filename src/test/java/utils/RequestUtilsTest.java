@@ -2,10 +2,11 @@ package utils;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.util.HashMap;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import db.DataBase;
+import model.User;
 
 class RequestUtilsTest {
 
@@ -41,15 +42,13 @@ class RequestUtilsTest {
         assertThat(result).isEqualTo("/user/create?userId=Id&password=password&name=name&email=email@gmail.com");
     }
 
-    @DisplayName("회원가입 정보가 담긴 Url을 HashMap으로 변환해준다.")
+    @DisplayName("회원가입 정보 Database에 저장된다.")
     @Test
     void parseUserInfoTest() {
-        String userInfoUrl = "userId=Id&password=password&name=name&email=email@gmail.com";
-        HashMap<String, String> userInfo = RequestUtils.parseUserInfo(userInfoUrl);
+        String userId = "Id";
+        String result = RequestUtils.signIn(requestUrlArrays);
 
-        assertThat(userInfo.get("userId")).isEqualTo("Id");
-        assertThat(userInfo.get("password")).isEqualTo("password");
-        assertThat(userInfo.get("name")).isEqualTo("name");
-        assertThat(userInfo.get("email")).isEqualTo("email@gmail.com");
+        User user = DataBase.findUserById(userId);
+        assertThat(user.getName()).isEqualTo("name");
     }
 }
