@@ -1,6 +1,7 @@
 package webserver.resource;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -18,5 +19,12 @@ class ResourcesHandlerTest {
         Resource resource = resourceHandler.convertUriToResource("/css/styles.css");
         assertThat(resource).isInstanceOf(Resource.class);
         assertThat(resource.getContentType()).isEqualTo(ContentType.CSS);
+    }
+
+    @Test
+    void convertUriToResource_IfExtensionOfRequestFileIsNotSupported() {
+        assertThatThrownBy(() -> resourceHandler.convertUriToResource("/css/styles.exe"))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("cannot convert given uri to resource.");
     }
 }
