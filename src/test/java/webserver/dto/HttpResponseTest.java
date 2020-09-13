@@ -5,6 +5,7 @@ import static com.google.common.net.HttpHeaders.CONTENT_LOCATION;
 import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static util.Constants.CONTENT_TYPE_TEXT_PLAIN;
 import static util.Constants.EMPTY;
 import static util.Constants.PROTOCOL;
 
@@ -56,7 +57,7 @@ class HttpResponseTest {
         assertThat(httpResponse.getHttpStatusCode()).isEqualTo(HttpStatusCode.OK);
         assertThat(httpResponse.getHeaders()).hasSize(2);
         assertThat(httpResponse.getHeaders().get(CONTENT_LENGTH)).isEqualTo("0");
-        assertThat(httpResponse.getHeaders().get(CONTENT_TYPE)).contains("plain");
+        assertThat(httpResponse.getHeaders().get(CONTENT_TYPE)).isEqualTo(CONTENT_TYPE_TEXT_PLAIN);
         assertThat(httpResponse.getBody()).isEmpty();
     }
 
@@ -74,7 +75,7 @@ class HttpResponseTest {
         assertThat(httpResponse.getHeaders().get(CONTENT_LENGTH))
             .isEqualTo(String.valueOf(expectedBody.length));
         assertThat(httpResponse.getHeaders().get(CONTENT_TYPE))
-            .isEqualTo("text/plain;charset=utf-8");
+            .isEqualTo(CONTENT_TYPE_TEXT_PLAIN);
         assertThat(httpResponse.getBody()).isEqualTo(expectedBody);
     }
 
@@ -112,7 +113,7 @@ class HttpResponseTest {
         assertThat(httpResponse.getHeaders()).hasSize(3);
         assertThat(httpResponse.getHeaders().get(CONTENT_LENGTH)).isEqualTo("0");
         assertThat(httpResponse.getHeaders().get(CONTENT_TYPE))
-            .isEqualTo("text/plain;charset=utf-8");
+            .isEqualTo(CONTENT_TYPE_TEXT_PLAIN);
         assertThat(httpResponse.getHeaders().get(CONTENT_LOCATION)).isEqualTo(expectedLocation);
         assertThat(httpResponse.getBody()).isEmpty();
     }

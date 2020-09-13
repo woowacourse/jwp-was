@@ -2,7 +2,7 @@ package controller;
 
 import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
-import static util.Constants.CONTENT_TYPE_APPLICATION_JSON;
+import static util.Constants.CONTENT_TYPE_TEXT_PLAIN;
 import static util.Constants.PROTOCOL;
 import static util.Constants.URL_INDEX_HTML;
 import static webserver.FileNameExtension.API;
@@ -36,7 +36,7 @@ class ControllerAdviceTest {
         assertThat(httpResponse.getBody())
             .contains(HttpStatusCode.BAD_REQUEST.getMessage().getBytes(StandardCharsets.UTF_8));
         assertThat(httpResponse.getHeaders().get(CONTENT_TYPE))
-            .contains(CONTENT_TYPE_APPLICATION_JSON);
+            .contains(CONTENT_TYPE_TEXT_PLAIN);
     }
 
     @DisplayName("IllegalArgumentException를 상속받은 Exception일 때, BadRequst 반환")
@@ -51,7 +51,7 @@ class ControllerAdviceTest {
             .getBytes(StandardCharsets.UTF_8);
         assertThat(httpResponse.getBody()).contains(expectedBody);
         assertThat(httpResponse.getHeaders().get(CONTENT_TYPE))
-            .contains(CONTENT_TYPE_APPLICATION_JSON);
+            .contains(CONTENT_TYPE_TEXT_PLAIN);
     }
 
     @DisplayName("NullPointerException일 때, BadRequst 반환")
@@ -65,7 +65,7 @@ class ControllerAdviceTest {
         assertThat(httpResponse.getBody())
             .contains(HttpStatusCode.BAD_REQUEST.getMessage().getBytes(StandardCharsets.UTF_8));
         assertThat(httpResponse.getHeaders().get(CONTENT_TYPE))
-            .contains(CONTENT_TYPE_APPLICATION_JSON);
+            .contains(CONTENT_TYPE_TEXT_PLAIN);
     }
 
     @DisplayName("Exception을 상속받은 Exception일 때, Internal Server Error반환")
@@ -81,6 +81,6 @@ class ControllerAdviceTest {
             .getBytes(StandardCharsets.UTF_8);
         assertThat(httpResponse.getBody()).contains(expectedBody);
         assertThat(httpResponse.getHeaders().get(CONTENT_TYPE))
-            .contains(CONTENT_TYPE_APPLICATION_JSON);
+            .contains(CONTENT_TYPE_TEXT_PLAIN);
     }
 }

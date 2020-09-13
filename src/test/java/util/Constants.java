@@ -13,7 +13,7 @@ public class Constants {
     public static final String USER_OTHER_EMAIL = "otherEmail";
 
 
-    public static final String CONTENT_TYPE_APPLICATION_JSON = "application/json;charset=utf-8";
+    public static final String CONTENT_TYPE_TEXT_PLAIN = "text/plain;charset=utf-8";
 
     public static final String PROTOCOL = "HTTP/1.1";
 
