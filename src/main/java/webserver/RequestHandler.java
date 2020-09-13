@@ -8,69 +8,83 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import db.DataBase;
+import model.User;
+import utils.ExtractUtils;
 import utils.FileIoUtils;
 
 public class RequestHandler implements Runnable {
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private static final String DELIMITER = " ";
-    private static final String FILE_PATH_TEMPLATES = "./templates";
-    private static final String FILE_PATH_STATIC = "./static";
-    private static final String FILE_TYPE_HTML = ".html";
-    private static final String FILE_TYPE_ICO = ".ico";
+	private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+	private static final String DELIMITER = " ";
+	private static final String FILE_PATH_TEMPLATES = "./templates";
+	private static final String FILE_PATH_STATIC = "./static";
+	private static final String FILE_TYPE_HTML = ".html";
+	private static final String FILE_TYPE_ICO = ".ico";
 
-    private Socket connection;
+	private Socket connection;
 
-    public RequestHandler(Socket connectionSocket) {
-        this.connection = connectionSocket;
-    }
+	public RequestHandler(Socket connectionSocket) {
+		this.connection = connectionSocket;
+	}
 
-    public void run() {
-        logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
-            connection.getPort());
+	public void run() {
+		logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
+			connection.getPort());
 
-        try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-            String line = br.readLine();
-            String path = line.split(DELIMITER)[1];
+		try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			String line = br.readLine();
+			String path = line.split(DELIMITER)[1];
+			DataOutputStream dos = new DataOutputStream(out);
 
-            DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = FileIoUtils.loadFileFromClasspath(parseFilePath(path));
+			System.out.println(path);
 
-            response200Header(dos, body.length);
-            responseBody(dos, body);
-        } catch (IOException | URISyntaxException e) {
-            logger.error(e.getMessage());
-        }
-    }
+			if (path.startsWith("/user/create")) {
+				Map<String, String> userInfo = ExtractUtils.extractUserInfo(path);
+				User user = new User(userInfo.get("userId"), userInfo.get("password"), userInfo.get("name"),
+					userInfo.get("email"));
+				DataBase.addUser(user);
+				response200Header(dos, 0);
+			} else {
+				byte[] body = FileIoUtils.loadFileFromClasspath(parseFilePath(path));
 
-    private String parseFilePath(String path) {
-        if (path.endsWith(FILE_TYPE_HTML) || path.endsWith(FILE_TYPE_ICO)) {
-            return FILE_PATH_TEMPLATES + path;
-        }
-        return FILE_PATH_STATIC + path;
-    }
+				response200Header(dos, body.length);
+				responseBody(dos, body);
+			}
+		} catch (IOException | URISyntaxException e) {
+			logger.error(e.getMessage());
+		}
+	}
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
+	private String parseFilePath(String path) {
+		if (path.endsWith(FILE_TYPE_HTML) || path.endsWith(FILE_TYPE_ICO)) {
+			return FILE_PATH_TEMPLATES + path;
+		}
+		return FILE_PATH_STATIC + path;
+	}
 
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
+	private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+		try {
+			dos.writeBytes("HTTP/1.1 200 OK \r\n");
+			dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+			dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+			dos.writeBytes("\r\n");
+		} catch (IOException e) {
+			logger.error(e.getMessage());
+		}
+	}
+
+	private void responseBody(DataOutputStream dos, byte[] body) {
+		try {
+			dos.write(body, 0, body.length);
+			dos.flush();
+		} catch (IOException e) {
+			logger.error(e.getMessage());
+		}
+	}
 }
