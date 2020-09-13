@@ -53,12 +53,13 @@ public class RequestHandler implements Runnable {
                 DataOutputStream dos = new DataOutputStream(out);
                 response302Header(dos);
             } else {
+                String contentType = requestHeader.getHeader("Accept").split(",")[0];
                 DataOutputStream dos = new DataOutputStream(out);
                 byte[] body = FileIoUtils.loadFileFromClasspath(requestHeader.getPath());
-                response200Header(dos, body.length);
+                response200Header(dos, body.length, contentType);
                 responseBody(dos, body);
             }
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
@@ -83,10 +84,10 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String type) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Type: " + type + ";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
