@@ -2,8 +2,9 @@ package http;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Map;
 
-import http.exception.InvalidHttpRequestException;
+import utils.HttpElementExtractor;
 
 public class HttpRequest {
     private HttpRequestLine httpRequestLine;
@@ -11,16 +12,15 @@ public class HttpRequest {
     private HttpBody httpBody;
 
     public HttpRequest(BufferedReader bufferedReader) throws IOException {
-        String requestLine = bufferedReader.readLine();
-        if (requestLine == null) {
-            throw new InvalidHttpRequestException("request line이 없습니다.");
-        }
-
+        String requestLine = HttpElementExtractor.extractRequestLine(bufferedReader);
         httpRequestLine = new HttpRequestLine(requestLine);
-        httpHeaders = new HttpHeaders(bufferedReader);
+
+        Map<String, String> headers = HttpElementExtractor.extractHeaders(bufferedReader);
+        httpHeaders = new HttpHeaders(headers);
 
         if (httpRequestLine.isPost()) {
-            httpBody = new HttpBody(bufferedReader, httpHeaders.getContentLength());
+            Map<String, String> body = HttpElementExtractor.extractBody(bufferedReader, httpHeaders.getContentLength());
+            httpBody = new HttpBody(body);
         }
     }
 

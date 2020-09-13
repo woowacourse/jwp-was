@@ -32,8 +32,7 @@ public class HttpUrl {
         }
     }
 
-    private void validate(Map<String, String> parameters,
-        int originalLength) { // TODO: 2020/09/13 이 부분도 예외가 아니라 실제로 넣어주자
+    private void validate(Map<String, String> parameters, int originalLength) {
         if (parameters.size() != originalLength) {
             throw new InvalidHttpRequestException("겹치는 key가 있습니다.");
         }
