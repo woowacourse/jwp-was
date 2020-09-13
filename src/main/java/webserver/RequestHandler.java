@@ -56,13 +56,20 @@ public class RequestHandler implements Runnable {
                 logger.debug("userInfo: {}" +userInfoUrl);
                 DataOutputStream dos = new DataOutputStream(out);
                 response302Header(dos);
-            } else {
+            }
+            if(request[URI_INDEX].endsWith(".html")) {
                 byte[] body = FileIoUtils.loadFileFromClasspath("./templates/" + uri);
                 DataOutputStream dos = new DataOutputStream(out);
                 response200Header(dos, body.length);
                 responseBody(dos, body);
-            }
+            }  else {
+                String[] headerToken = request[URI_INDEX].split("\\.");
+                byte[] body = FileIoUtils.loadFileFromClasspath("./static" + uri);
+                DataOutputStream dos = new DataOutputStream(out);
+                response200StaticHeader(dos, body.length, headerToken[headerToken.length-1]);
+                responseBody(dos, body);
 
+            }
 
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
@@ -73,6 +80,17 @@ public class RequestHandler implements Runnable {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
             dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void response200StaticHeader(DataOutputStream dos, int lengthOfBodyContent, String staticValue) {
+        try {
+            dos.writeBytes("HTTP/1.1 200 OK \r\n");
+            dos.writeBytes("Content-Type: text/"+staticValue+";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
