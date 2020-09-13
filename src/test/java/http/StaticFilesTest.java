@@ -34,7 +34,7 @@ class StaticFilesTest {
     }
 
     @DisplayName("정적파일의 Content-Type을 반환한다.")
-    @CsvSource(value = {"index.html,text/html;charset=UTF-8", "styles.css,text/css;charset=UTF-8"})
+    @CsvSource(value = {"index.html,text/html", "styles.css,text/css"})
     @ParameterizedTest
     void getContentType(String staticFile, String contentType) {
         assertThat(contentType).isEqualTo(StaticFiles.getContentType(staticFile));

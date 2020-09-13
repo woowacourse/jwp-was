@@ -34,7 +34,7 @@ class HttpRequestTest {
             () -> assertThat("93").isEqualTo(httpRequest.getHttpHeaderParameterOf("Content-Length")),
             () -> assertThat("password").isEqualTo(httpRequest.getHttpBodyValueOf("password")),
             () -> assertThat(true).isEqualTo(httpRequest.isStaticFile()),
-            () -> assertThat("text/html;charset=UTF-8").isEqualTo(httpRequest.getContentType())
+            () -> assertThat("text/html").isEqualTo(httpRequest.getContentType())
 
         );
     }
