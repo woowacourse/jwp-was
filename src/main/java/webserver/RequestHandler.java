@@ -37,7 +37,7 @@ public class RequestHandler implements Runnable {
                 return;
             }
             String[] request = RequestUtils.separateUrl(line);
-            String uri = request[URI_INDEX];
+            String uri = RequestUtils.signIn(request);
             byte[] body = FileIoUtils.loadFileFromClasspath("./templates/" + uri);
             DataOutputStream dos = new DataOutputStream(out);
             response200Header(dos, body.length);

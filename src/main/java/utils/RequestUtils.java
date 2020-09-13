@@ -2,17 +2,21 @@ package utils;
 
 import java.util.HashMap;
 
+import db.DataBase;
+import model.User;
+
 public class RequestUtils {
 
     private static final int URL_INDEX = 1;
     private static final int SIGN_IN_DATA_KEY_INDEX = 0;
     private static final int SIGN_IN_DATA_VALUE_INDEX = 1;
+    private static final int SIGN_IN_INFO_INDEX = 1;
 
     public static String[] separateUrl(final String requestUrl) {
         return requestUrl.split(" ");
     }
 
-    public static boolean isSignIn(final String[] requestUrlArrays) {
+    private static boolean isSignIn(final String[] requestUrlArrays) {
         return requestUrlArrays[URL_INDEX].startsWith("/user/create") && "GET".equals(requestUrlArrays[0]);
     }
 
@@ -24,6 +28,21 @@ public class RequestUtils {
             String[] userValues = userInfo.split("=");
             signInData.put(userValues[SIGN_IN_DATA_KEY_INDEX],userValues[SIGN_IN_DATA_VALUE_INDEX]);
         }
+
         return signInData;
+    }
+
+    public static String signIn(final String[] request) {
+        String uri = request[URL_INDEX];
+
+        if(RequestUtils.isSignIn(request)) {
+            String signInInfoUri = uri.split("\\?")[SIGN_IN_INFO_INDEX];
+            HashMap<String, String> signInInfo = RequestUtils.parseUserInfo(signInInfoUri);
+            User user = new User(signInInfo.get("userId"),signInInfo.get("password"),signInInfo.get("name"),signInInfo.get("email"));
+            DataBase.addUser(user);
+            uri = "index.html";
+        }
+
+        return uri;
     }
 }
