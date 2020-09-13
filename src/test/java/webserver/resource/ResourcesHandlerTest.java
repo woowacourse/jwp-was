@@ -17,6 +17,6 @@ class ResourcesHandlerTest {
     void convertUriToResource() throws IOException, URISyntaxException {
         Resource resource = resourceHandler.convertUriToResource("/css/styles.css");
         assertThat(resource).isInstanceOf(Resource.class);
-        assertThat(resource.getContentType()).isEqualTo(ContentType.CSS.getContentType());
+        assertThat(resource.getContentType()).isEqualTo(ContentType.CSS);
     }
 }
