@@ -36,8 +36,9 @@ public class RequestHandler implements Runnable {
             if(line == null) {
                 return;
             }
-            String[] uri = RequestUtils.separateUrl(line);
-            byte[] body = FileIoUtils.loadFileFromClasspath("./templates/" + uri[URI_INDEX]);
+            String[] request = RequestUtils.separateUrl(line);
+            String uri = request[URI_INDEX];
+            byte[] body = FileIoUtils.loadFileFromClasspath("./templates/" + uri);
             DataOutputStream dos = new DataOutputStream(out);
             response200Header(dos, body.length);
             responseBody(dos, body);
@@ -45,6 +46,8 @@ public class RequestHandler implements Runnable {
             logger.error(e.getMessage());
         }
     }
+
+
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
         try {
