@@ -8,6 +8,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import http.exception.InvalidHttpRequestException;
+
 class HttpUrlTest {
 
     @DisplayName("url에서 path만 반환한다.")
@@ -19,6 +21,16 @@ class HttpUrlTest {
         assertThat(expected).isEqualTo(httpUrl.getPath());
     }
 
+    @DisplayName("파라미터가 올바르지 않을 경우 예외처리한다.")
+    @ValueSource(strings = {
+        "/user/form.html?=no-key&age=12",
+        "/user/form.html?duplicated-key=toney&duplicated-key=parky"
+    })
+    @ParameterizedTest
+    public void getParametersThrowExceptionWhenInvalidUrl(String invalidUrl) {
+        assertThatThrownBy(() -> new HttpUrl(invalidUrl)).isInstanceOf(InvalidHttpRequestException.class);
+    }
+
     @DisplayName("url에서 파라미터를 추출하여 반환한다.")
     @CsvSource(value = {"/user/form.html?name=toney,name,toney"})
     @ParameterizedTest
@@ -27,18 +39,6 @@ class HttpUrlTest {
 
         assertThat(key).isIn(httpUrl.getParameters().keySet());
         assertThat(value).isEqualTo(httpUrl.getParameters().get(key));
-    }
-
-    @DisplayName("파라미터가 올바르지 않을 경우 예외처리한다.")
-    @ValueSource(strings = {
-        "/user/form.html?=no-key&age=12",
-        "/user/form.html?duplicated-key=toney&duplicated-key=parky"
-    })
-    @ParameterizedTest
-    public void getParametersThrowExceptionWhenInvalidUrl(String invalidUrl) {
-        HttpUrl httpUrl = new HttpUrl(invalidUrl);
-
-        assertThatThrownBy(httpUrl::getParameters).isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("파라미터가 있더라도 동일한 path라면 true를 반환한다.")
