@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 public class HttpRequest {
-    private static final String CONTENT_LENGTH = "Content-Length";
-
     private HttpRequestLine httpRequestLine;
     private HttpHeaders httpHeaders;
     private HttpBody httpBody;
@@ -20,7 +18,7 @@ public class HttpRequest {
         httpHeaders = new HttpHeaders(bufferedReader);
 
         if (httpRequestLine.isPost()) {
-            httpBody = new HttpBody(bufferedReader, Integer.parseInt(httpHeaders.getValue(CONTENT_LENGTH)));
+            httpBody = new HttpBody(bufferedReader, httpHeaders.getContentLength());
         }
     }
 

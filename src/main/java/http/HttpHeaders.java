@@ -7,6 +7,8 @@ import java.util.Map;
 
 public class HttpHeaders {
     private static final String HEADER_KEY_AND_VALUE_DELIMITER = ": ";
+    private static final String CONTENT_LENGTH = "Content-Length";
+
     private final Map<String, String> headers = new LinkedHashMap<>();
 
     public HttpHeaders(BufferedReader bufferedReader) throws IOException {
@@ -31,5 +33,9 @@ public class HttpHeaders {
             throw new IllegalArgumentException("해당 key의 header 값이 없습니다.");
         }
         return headers.get(key);
+    }
+
+    public int getContentLength() {
+        return Integer.parseInt(headers.get(CONTENT_LENGTH));
     }
 }
