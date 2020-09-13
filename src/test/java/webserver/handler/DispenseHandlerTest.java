@@ -12,6 +12,7 @@ import static util.Constants.USER_NAME;
 import static util.Constants.USER_PASSWORD;
 
 import db.DataBase;
+import db.DataBaseTest;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -33,7 +34,7 @@ class DispenseHandlerTest {
 
     @AfterEach
     void tearDown() {
-        dataBase.clear();
+        DataBaseTest.clear();
     }
 
     @DisplayName("파일인 경우, 파일을 찾아옴")

@@ -13,10 +13,10 @@ import webserver.HttpStatusCode;
 
 public class HttpResponse {
 
-    private String protocol;
-    private HttpStatusCode httpStatusCode;
-    private Map<String, String> headers;
-    private byte[] body;
+    private final String protocol;
+    private final HttpStatusCode httpStatusCode;
+    private final Map<String, String> headers;
+    private final byte[] body;
 
     private HttpResponse(String protocol, HttpStatusCode httpStatusCode,
         Map<String, String> headers, byte[] body) {

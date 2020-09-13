@@ -13,6 +13,7 @@ import static util.Constants.USER_PASSWORD;
 
 import controller.dto.UserRequest;
 import db.DataBase;
+import db.DataBaseTest;
 import model.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,7 +26,7 @@ class UserServiceTest {
 
     @AfterEach
     void tearDown() {
-        dataBase.clear();
+        DataBaseTest.clear();
     }
 
     @DisplayName("User 생성 테스트")

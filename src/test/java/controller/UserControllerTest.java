@@ -11,6 +11,7 @@ import static util.Constants.USER_NAME;
 import static util.Constants.USER_PASSWORD;
 
 import db.DataBase;
+import db.DataBaseTest;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +34,7 @@ class UserControllerTest {
 
     @AfterEach
     void tearDown() {
-        dataBase.clear();
+        DataBaseTest.clear();
     }
 
     @DisplayName("User 생성, 200 반환")

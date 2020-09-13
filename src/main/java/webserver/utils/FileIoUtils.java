@@ -11,6 +11,9 @@ import java.util.Objects;
 
 public class FileIoUtils {
 
+    private FileIoUtils() {
+    }
+
     public static byte[] loadFileFromClasspath(String filePath, String directory)
         throws IOException, URISyntaxException {
         Path path = Paths.get(findFileUri(filePath, directory));

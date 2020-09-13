@@ -13,6 +13,8 @@ import webserver.dto.HttpResponse;
 
 public class UserController {
 
+    private static final String INDEX_HTML = "/index.html";
+
     private final ControllerAdvice controllerAdvice;
     private final UserService userService;
 
@@ -26,7 +28,7 @@ public class UserController {
             UserRequest userRequest = UserRequestAssembler.assemble(httpRequest.getParameters());
             userService.createUser(userRequest);
             Map<String, String> headers = new HashMap<>();
-            headers.put(LOCATION, "/index.html");
+            headers.put(LOCATION, INDEX_HTML);
             return HttpResponse.of(httpRequest.getProtocol(), HttpStatusCode.FOUND, headers, "");
         } catch (Exception e) {
             return controllerAdvice.handleException(httpRequest, e);

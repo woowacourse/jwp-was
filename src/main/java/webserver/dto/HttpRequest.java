@@ -5,12 +5,12 @@ import webserver.FileNameExtension;
 
 public class HttpRequest {
 
-    private String httpMethod;
-    private String urlPath;
-    private Map<String, String> parameters;
-    private String protocol;
-    private Map<String, String> headers;
-    private FileNameExtension fileNameExtension;
+    private final String httpMethod;
+    private final String urlPath;
+    private final Map<String, String> parameters;
+    private final String protocol;
+    private final Map<String, String> headers;
+    private final FileNameExtension fileNameExtension;
 
     public HttpRequest(String HttpMethod, String urlPath, Map<String, String> parameters,
         String protocol, Map<String, String> headers, FileNameExtension fileNameExtension) {
@@ -36,6 +36,10 @@ public class HttpRequest {
 
     public String getProtocol() {
         return protocol;
+    }
+
+    public Map<String, String> getHeaders() {
+        return headers;
     }
 
     public FileNameExtension getFileNameExtension() {
