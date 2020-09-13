@@ -50,12 +50,14 @@ public class RequestHandler implements Runnable {
                     contentLength));
                 RequestBody requestBody = RequestBody.of(bodyLine);
                 User user = convert(User.class, requestBody.getAttribute());
+                DataOutputStream dos = new DataOutputStream(out);
+                response302Header(dos);
+            } else {
+                DataOutputStream dos = new DataOutputStream(out);
+                byte[] body = FileIoUtils.loadFileFromClasspath(requestHeader.getPath());
+                response200Header(dos, body.length);
+                responseBody(dos, body);
             }
-
-            byte[] body = FileIoUtils.loadFileFromClasspath(requestHeader.getPath());
-            DataOutputStream dos = new DataOutputStream(out);
-            response200Header(dos, body.length);
-            responseBody(dos, body);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
@@ -86,6 +88,16 @@ public class RequestHandler implements Runnable {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
             dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void response302Header(DataOutputStream dos) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 Found \r\n");
+            dos.writeBytes("Location: http://localhost:8080/index.html\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
