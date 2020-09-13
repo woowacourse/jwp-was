@@ -7,12 +7,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import http.RequestLine;
+import utils.FileIoUtils;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -33,12 +35,14 @@ public class RequestHandler implements Runnable {
              BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
              OutputStream outputStream = connection.getOutputStream();
              DataOutputStream dataOutputStream = new DataOutputStream(outputStream)) {
+
             RequestLine requestLine = new RequestLine(bufferedReader);
             logger.debug(requestLine.toString());
-            byte[] body = "Hello World".getBytes();
+
+            byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + requestLine.getUri());
             response200Header(dataOutputStream, body.length);
             responseBody(dataOutputStream, body);
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }
