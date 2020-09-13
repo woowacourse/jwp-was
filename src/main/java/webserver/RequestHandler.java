@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import utils.FileIoUtils;
+import web.RequestHeader;
 import web.RequestLine;
 
 public class RequestHandler implements Runnable {
@@ -31,18 +32,9 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
-            BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-            String line = br.readLine();
-            logger.debug("request line: {}", line);
-            RequestLine requestLine = new RequestLine(line);
-            logger.debug("request line path: {}", requestLine.getPath());
-            while (!line.equals("")) {
-                if(line == null){
-                    return;
-                }
-                line = br.readLine();
-                logger.debug("header : {}", line);
-            }
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+            RequestLine requestLine = new RequestLine(bufferedReader);
+            RequestHeader requestHeader = new RequestHeader(bufferedReader);
 
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + requestLine.getPath());
