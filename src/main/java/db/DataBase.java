@@ -7,7 +7,7 @@ import model.User;
 
 public class DataBase {
 
-    private Map<String, User> users = Maps.newHashMap();
+    private static Map<String, User> users = Maps.newHashMap();
 
     public void addUser(User user) {
         users.put(user.getUserId(), user);
@@ -19,5 +19,9 @@ public class DataBase {
 
     public Collection<User> findAll() {
         return users.values();
+    }
+
+    public void clear() {
+        users.clear();
     }
 }

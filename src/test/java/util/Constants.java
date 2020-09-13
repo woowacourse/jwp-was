@@ -7,6 +7,12 @@ public class Constants {
     public static final String USER_NAME = "name";
     public static final String USER_EMAIL = "email";
 
+    public static final String USER_OTHER_ID = "otherUserId";
+    public static final String USER_OTHER_PASSWORD = "otherPassword";
+    public static final String USER_OTHER_NAME = "otherName";
+    public static final String USER_OTHER_EMAIL = "otherEmail";
+
+
     public static final String CONTENT_TYPE_APPLICATION_JSON = "application/json;charset=utf-8";
 
     public static final String PROTOCOL = "HTTP/1.1";
