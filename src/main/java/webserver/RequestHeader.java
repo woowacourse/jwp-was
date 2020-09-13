@@ -2,7 +2,6 @@ package webserver;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -14,7 +13,7 @@ public class RequestHeader {
     private final String protocolVersion;
     private final Map<String, String> attribute;
 
-    private enum MethodType {
+    public enum MethodType {
         GET, HEAD, POST, PUT, PATCH, DELETE, CONNECT, OPTIONS, TRACE;
 
         public static MethodType of(String input) {
@@ -25,7 +24,7 @@ public class RequestHeader {
         }
     }
 
-    public RequestHeader(String path, Map<String, String> queryParams, MethodType method, String protocolVersion,
+    private RequestHeader(String path, Map<String, String> queryParams, MethodType method, String protocolVersion,
         Map<String, String> attribute) {
         this.path = path;
         this.queryParams = queryParams;
@@ -45,7 +44,7 @@ public class RequestHeader {
 
             Map<String, String> attribute = new LinkedHashMap<>();
             for (int i = 1; i < headers.length; i++) {
-                String[] map = headers[i].split(":");
+                String[] map = headers[i].split(":", 2);
                 attribute.put(map[0], map[1].trim());
             }
 
@@ -71,6 +70,30 @@ public class RequestHeader {
 
     private static String getPathWithoutParams(String path) {
         return path.split("\\?")[0];
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public MethodType getMethod() {
+        return method;
+    }
+
+    public String getProtocolVersion() {
+        return protocolVersion;
+    }
+
+    public Map<String, String> getAttribute() {
+        return Collections.unmodifiableMap(attribute);
+    }
+
+    public Map<String, String> getQueryParams() {
+        return queryParams;
+    }
+
+    public String getHeader(String header) {
+        return attribute.getOrDefault(header, null);
     }
 
     @Override
@@ -104,29 +127,5 @@ public class RequestHeader {
         }
 
         return builder.toString();
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public MethodType getMethod() {
-        return method;
-    }
-
-    public String getProtocolVersion() {
-        return protocolVersion;
-    }
-
-    public Map<String, String> getAttribute() {
-        return Collections.unmodifiableMap(attribute);
-    }
-
-    public Map<String, String> getQueryParams() {
-        return queryParams;
-    }
-
-    public String getHeader(String header) {
-        return attribute.getOrDefault(header, null);
     }
 }
