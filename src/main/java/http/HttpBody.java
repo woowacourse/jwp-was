@@ -23,9 +23,6 @@ public class HttpBody {
     }
 
     public String getValue(String key) {
-        if (!httpBody.containsKey(key)) {
-            throw new IllegalArgumentException("해당 key의 body 값이 없습니다.");
-        }
         return httpBody.get(key);
     }
 }
