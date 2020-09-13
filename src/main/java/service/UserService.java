@@ -1,9 +1,9 @@
 package service;
 
+import controller.dto.UserRequest;
 import db.DataBase;
 import java.util.Objects;
 import model.User;
-import service.dto.UserRequest;
 
 public class UserService {
 

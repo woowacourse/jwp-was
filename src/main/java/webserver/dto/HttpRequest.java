@@ -38,10 +38,6 @@ public class HttpRequest {
         return protocol;
     }
 
-    public Map<String, String> getHeaders() {
-        return headers;
-    }
-
     public FileNameExtension getFileNameExtension() {
         return fileNameExtension;
     }

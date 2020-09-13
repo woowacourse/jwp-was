@@ -1,4 +1,4 @@
-package service.dto;
+package controller.dto;
 
 import java.util.Map;
 

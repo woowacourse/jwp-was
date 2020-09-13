@@ -1,7 +1,9 @@
 package webserver.dto;
 
+import static java.lang.System.lineSeparator;
 import static org.assertj.core.api.Assertions.assertThat;
 import static util.Constants.PROTOCOL;
+import static util.Constants.URL_INDEX_HTML;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -11,6 +13,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,14 +22,17 @@ import webserver.HttpMethod;
 class HttpRequestAssemblerTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpRequestAssemblerTest.class);
-    private static final String REQUEST_LINE_FORMAT =
-        HttpMethod.GET.name() + " %s " + PROTOCOL + System.lineSeparator();
+    private static final String REQUEST_GET_LINE_FORMAT =
+        HttpMethod.GET.name() + " %s " + PROTOCOL + lineSeparator();
+    private static final String REQUEST_POST_LINE_FORMAT =
+        HttpMethod.POST.name() + " %s " + PROTOCOL + lineSeparator();
+    private static final String HEADER_CONTENT_LENGTH_FORMAT = "Content-Length: %d";
 
-    @DisplayName("Parameter가 없는 URL 요청시")
+    @DisplayName("QueryString이 없는 URL 요청시")
     @ParameterizedTest
     @ValueSource(strings = {"/index.html", "/index.html?"})
-    void assemble_hasNotParameters(String url) throws IOException {
-        String request = String.format(REQUEST_LINE_FORMAT, url) + System.lineSeparator();
+    void assemble_hasNotQueryString(String url) throws IOException {
+        String request = String.format(REQUEST_GET_LINE_FORMAT, url) + lineSeparator();
         HttpRequest httpRequest;
         try (InputStream in = new ByteArrayInputStream(request.getBytes(StandardCharsets.UTF_8));
             BufferedReader br = new BufferedReader(
@@ -41,12 +47,12 @@ class HttpRequestAssemblerTest {
         assertThat(httpRequest.getParameters()).isEmpty();
     }
 
-    @DisplayName("Parameter가 있는 URL 요청시")
+    @DisplayName("QueryString이 있는 URL 요청시")
     @ParameterizedTest
     @ValueSource(strings = {"/index.html?1234=abcd", "/index.html?1234=abcd&12345=abcd",
         "/index.html?1234=&12345=abcd"})
-    void assemble_hasParameters(String url) throws IOException {
-        String request = String.format(REQUEST_LINE_FORMAT, url) + System.lineSeparator();
+    void assemble_hasQueryString(String url) throws IOException {
+        String request = String.format(REQUEST_GET_LINE_FORMAT, url) + lineSeparator();
         HttpRequest httpRequest;
         try (InputStream in = new ByteArrayInputStream(request.getBytes(StandardCharsets.UTF_8));
             BufferedReader br = new BufferedReader(
@@ -64,11 +70,11 @@ class HttpRequestAssemblerTest {
         assertThat(httpRequest.getParameters()).hasSize(parameterCount);
     }
 
-    @DisplayName("Parameter에 Key만 있는 URL 요청시 - Parameter Skip")
+    @DisplayName("QueryString에 Key만 있는 URL 요청시 - Parameter Skip")
     @ParameterizedTest
     @ValueSource(strings = {"/index.html?1234", "/index.html?1234=abcd&12345"})
-    void assemble_hasParametersOnlyKey(String url) throws IOException {
-        String request = String.format(REQUEST_LINE_FORMAT, url) + System.lineSeparator();
+    void assemble_hasQueryStringOnlyKey(String url) throws IOException {
+        String request = String.format(REQUEST_GET_LINE_FORMAT, url) + lineSeparator();
         HttpRequest httpRequest;
         try (InputStream in = new ByteArrayInputStream(request.getBytes(StandardCharsets.UTF_8));
             BufferedReader br = new BufferedReader(
@@ -83,6 +89,28 @@ class HttpRequestAssemblerTest {
         assertThat(httpRequest.getUrlPath()).isEqualTo(urlParameters[0]);
 
         int parameterCount = urlParameters[1].split("&").length - 1;
+        assertThat(httpRequest.getParameters()).hasSize(parameterCount);
+    }
+
+    @DisplayName("body가 있는 POST 요청시")
+    @ParameterizedTest
+    @CsvSource(value = {"empty, 0", "bodyKey=bodyValue, 1", "bodyKey=bodyValue&key=value, 2"})
+    void assemble_hasBody(String body, int parameterCount) throws IOException {
+        int bodyLength = body.getBytes(StandardCharsets.UTF_8).length;
+        String contentLengthHeader = String.format(HEADER_CONTENT_LENGTH_FORMAT, bodyLength);
+        String request =
+            String.format(REQUEST_POST_LINE_FORMAT, URL_INDEX_HTML) + contentLengthHeader
+                + lineSeparator() + lineSeparator() + body;
+        HttpRequest httpRequest;
+        try (InputStream in = new ByteArrayInputStream(request.getBytes(StandardCharsets.UTF_8));
+            BufferedReader br = new BufferedReader(
+                new InputStreamReader(in, StandardCharsets.UTF_8))) {
+            httpRequest = HttpRequestAssembler.assemble(br);
+        }
+
+        LOGGER.debug("urlPath : {}", httpRequest.getUrlPath());
+        LOGGER.debug("parameters : {}", httpRequest.getParameters());
+
         assertThat(httpRequest.getParameters()).hasSize(parameterCount);
     }
 }

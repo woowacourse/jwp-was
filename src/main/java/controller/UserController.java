@@ -2,11 +2,11 @@ package controller;
 
 import static com.google.common.net.HttpHeaders.LOCATION;
 
+import controller.dto.UserRequest;
+import controller.dto.UserRequestAssembler;
 import java.util.HashMap;
 import java.util.Map;
 import service.UserService;
-import service.dto.UserRequest;
-import service.dto.UserRequestAssembler;
 import webserver.HttpStatusCode;
 import webserver.dto.HttpRequest;
 import webserver.dto.HttpResponse;

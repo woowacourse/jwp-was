@@ -1,4 +1,4 @@
-package service.dto;
+package controller.dto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static util.Constants.USER_EMAIL;

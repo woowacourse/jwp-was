@@ -1,7 +1,5 @@
 package webserver;
 
-import static webserver.FileNameExtension.Constants.DIRECTORY_STATIC;
-import static webserver.FileNameExtension.Constants.DIRECTORY_WEBAPP;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,39 +17,38 @@ public enum FileNameExtension {
     CSS(
         Collections.singletonList(".css"),
         endsWithExtensions(),
-        DIRECTORY_STATIC
+        Constants.DIRECTORY_STATIC
     ),
     FILE(
         null,
         null,
-        DIRECTORY_WEBAPP
+        Constants.DIRECTORY_WEBAPP
     ),
     FONTS(
         Arrays.asList(".eot", ".svg", ".ttf", ".woff", ".woff2"),
         endsWithExtensions(),
-        DIRECTORY_STATIC
+        Constants.DIRECTORY_STATIC
     ),
     HTML(
         Collections.singletonList(".html"),
         endsWithExtensions(),
-        DIRECTORY_WEBAPP
+        Constants.DIRECTORY_WEBAPP
     ),
     IMAGES(
         Collections.singletonList(".png"),
         endsWithExtensions(),
-        DIRECTORY_STATIC
+        Constants.DIRECTORY_STATIC
     ),
     JS(
         Collections.singletonList(".js"),
         endsWithExtensions(),
-        DIRECTORY_STATIC
+        Constants.DIRECTORY_STATIC
     );
 
     private static final String URL_DELIMITER = "/";
     private static final String EXTENSION_DELIMITER = ".";
 
     private final String directory;
-
     private final List<String> extensions;
     private final BiPredicate<List<String>, String> biPredicate;
 
