@@ -4,7 +4,6 @@ import static com.google.common.net.HttpHeaders.LOCATION;
 
 import java.util.HashMap;
 import java.util.Map;
-import model.User;
 import service.UserService;
 import service.dto.UserRequest;
 import service.dto.UserRequestAssembler;
@@ -25,10 +24,10 @@ public class UserController {
     public HttpResponse createUser(HttpRequest httpRequest) {
         try {
             UserRequest userRequest = UserRequestAssembler.assemble(httpRequest.getParameters());
-            User user = userService.createUser(userRequest);
+            userService.createUser(userRequest);
             Map<String, String> headers = new HashMap<>();
-            headers.put(LOCATION, "/users/" + user.getUserId());
-            return HttpResponse.of(httpRequest.getProtocol(), HttpStatusCode.CREATED, headers, "");
+            headers.put(LOCATION, "/index.html");
+            return HttpResponse.of(httpRequest.getProtocol(), HttpStatusCode.FOUND, headers, "");
         } catch (Exception e) {
             return controllerAdvice.handleException(httpRequest, e);
         }
