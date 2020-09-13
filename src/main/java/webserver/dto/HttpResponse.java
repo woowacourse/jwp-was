@@ -19,9 +19,10 @@ public class HttpResponse {
 
     public HttpResponse(String protocol, HttpStatusCode httpStatusCode,
         Map<String, String> headers, byte[] body) {
-        this.protocol = protocol;
-        this.httpStatusCode = httpStatusCode;
-        this.headers = settingHeaders(headers, body);
+        this.protocol = Objects.requireNonNull(protocol);
+        this.httpStatusCode = Objects.requireNonNull(httpStatusCode);
+        this.headers
+            = settingHeaders(Objects.requireNonNull(headers), Objects.requireNonNull(body));
         this.body = body;
     }
 
