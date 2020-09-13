@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import utils.FileIoUtils;
+import utils.RequestUtils;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -35,7 +36,7 @@ public class RequestHandler implements Runnable {
             if(line == null) {
                 return;
             }
-            String uri = line.split(" ")[URI_INDEX];
+            String uri = RequestUtils.separateUrl(line)[URI_INDEX];
             byte[] body = FileIoUtils.loadFileFromClasspath("./templates/" + uri);
             DataOutputStream dos = new DataOutputStream(out);
             response200Header(dos, body.length);
