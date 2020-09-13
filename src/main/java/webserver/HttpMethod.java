@@ -9,5 +9,9 @@ public enum HttpMethod {
     HEAD,
     CONNECT,
     OPTIONS,
-    TRACE
+    TRACE;
+
+    public boolean isSame(String httpMethod) {
+        return this.name().equals(httpMethod);
+    }
 }

@@ -1,4 +1,4 @@
-package utils;
+package webserver.utils;
 
 public class FileNotExitsException extends RuntimeException {
 

@@ -12,11 +12,11 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.FileIoUtils;
-import utils.FileIoUtilsTest;
 import webserver.FileNameExtension;
 import webserver.HttpMethod;
 import webserver.dto.HttpRequest;
+import webserver.utils.FileIoUtils;
+import webserver.utils.FileIoUtilsTest;
 
 class FileHandlerTest {
 
@@ -76,7 +76,7 @@ class FileHandlerTest {
         FileHandler.loadFile(os, httpRequest);
 
         assertThat(os.toString()).contains("405 METHOD NOT ALLOW");
-        assertThat(os.toString()).contains("Content-Type: text/plane");
+        assertThat(os.toString()).contains("Content-Type: text/plain");
 
         logger.debug("response : {}", os);
     }

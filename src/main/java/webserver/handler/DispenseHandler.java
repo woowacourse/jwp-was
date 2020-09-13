@@ -11,6 +11,6 @@ public class DispenseHandler {
             FileHandler.loadFile(out, httpRequest);
             return;
         }
-        ApiHandler.handleAPI();
+        ApiHandler.handleAPI(out, httpRequest);
     }
 }
