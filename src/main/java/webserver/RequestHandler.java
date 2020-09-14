@@ -2,8 +2,9 @@ package webserver;
 
 import controller.Controller;
 import controller.ControllerMapper;
-import http.HttpRequest;
 import http.factory.HttpRequestFactory;
+import http.request.HttpRequest;
+import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
@@ -35,6 +36,7 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
 
             HttpRequest httpRequest = HttpRequestFactory.createRequest(br);
+            HttpResponse httpResponse = new HttpResponse(dos);
 
             ControllerMapper.from(httpRequest.getRequestLine()).ifPresent(
                     mapper -> Controller.findMethod(mapper).accept(httpRequest.getParams(), dos)

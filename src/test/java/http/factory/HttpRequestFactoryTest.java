@@ -1,9 +1,10 @@
 package http.factory;
 
-import http.HttpMethod;
-import http.HttpRequest;
-import http.RequestHeader;
-import http.RequestLine;
+import http.request.HttpMethod;
+import http.request.HttpRequest;
+import http.request.RequestHeader;
+import http.request.RequestLine;
+import http.request.RequestParams;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -66,17 +67,18 @@ class HttpRequestFactoryTest {
         data.put("name", "name");
         data.put("email", "email@email");
 
-        RequestHeader expectHeader = new RequestHeader(headers);
-        RequestLine expectUri = new RequestLine(HttpMethod.POST, "/user/create");
+        RequestHeader expectedHeader = new RequestHeader(headers);
+        RequestLine expectedUri = new RequestLine(HttpMethod.POST, "/user/create");
+        RequestParams expectedParams = new RequestParams(data);
 
         BufferedReader reader = new BufferedReader(new StringReader(requestHeader));
         HttpRequest actualHttpRequest = HttpRequestFactory.createRequest(reader);
 
         assertAll(
-                () -> assertThat(actualHttpRequest.getRequestHeader()).isEqualToComparingFieldByField(expectHeader),
-                () -> assertThat(actualHttpRequest.getParams()).isEqualTo(data),
-                () -> assertThat(actualHttpRequest.getRequestLine().getUrl()).isEqualTo(expectUri.getUrl()),
-                () -> assertThat(actualHttpRequest.getRequestLine().getMethod()).isEqualTo(expectUri.getMethod())
+                () -> assertThat(actualHttpRequest.getRequestHeader()).isEqualToComparingFieldByField(expectedHeader),
+                () -> assertThat(actualHttpRequest.getParams()).isEqualTo(expectedParams),
+                () -> assertThat(actualHttpRequest.getRequestLine().getPath()).isEqualTo(expectedUri.getPath()),
+                () -> assertThat(actualHttpRequest.getRequestLine().getMethod()).isEqualTo(expectedUri.getMethod())
         );
     }
 

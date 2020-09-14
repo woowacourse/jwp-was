@@ -1,13 +1,11 @@
-package http;
-
-import java.util.Map;
+package http.request;
 
 public class HttpRequest {
     private final RequestLine requestLine;
     private final RequestHeader requestHeader;
-    private final Map<String, String> params;
+    private final RequestParams params;
 
-    public HttpRequest(RequestLine requestLine, RequestHeader requestHeader, Map<String, String> params) {
+    public HttpRequest(RequestLine requestLine, RequestHeader requestHeader, RequestParams params) {
         this.requestLine = requestLine;
         this.requestHeader = requestHeader;
         this.params = params;
@@ -21,11 +19,11 @@ public class HttpRequest {
         return requestHeader;
     }
 
-    public Map<String, String> getParams() {
+    public RequestParams getParams() {
         return params;
     }
 
     public String getUrl() {
-        return requestLine.getUrl();
+        return requestLine.getPath();
     }
 }

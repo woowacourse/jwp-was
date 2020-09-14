@@ -1,4 +1,4 @@
-package http;
+package http.request;
 
 import controller.ControllerMapper;
 
@@ -6,23 +6,23 @@ import java.util.Objects;
 
 public class RequestLine {
     private final HttpMethod method;
-    private final String url;
+    private final String path;
 
-    public RequestLine(HttpMethod method, String url) {
+    public RequestLine(HttpMethod method, String path) {
         this.method = method;
-        this.url = url;
+        this.path = path;
     }
 
     public boolean isEqualRequestType(ControllerMapper url) {
-        return this.method.equals(url.getHttpMethod()) && this.url.equals(url.getUrl());
+        return this.method.equals(url.getHttpMethod()) && this.path.equals(url.getUrl());
     }
 
     public HttpMethod getMethod() {
         return method;
     }
 
-    public String getUrl() {
-        return url;
+    public String getPath() {
+        return path;
     }
 
     @Override
@@ -31,11 +31,11 @@ public class RequestLine {
         if (o == null || getClass() != o.getClass()) return false;
         final RequestLine that = (RequestLine) o;
         return getMethod() == that.getMethod() &&
-                Objects.equals(getUrl(), that.getUrl());
+                Objects.equals(getPath(), that.getPath());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getMethod(), getUrl());
+        return Objects.hash(getMethod(), getPath());
     }
 }

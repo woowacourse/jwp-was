@@ -1,7 +1,7 @@
 package http.factory;
 
-import http.HttpMethod;
-import http.RequestLine;
+import http.request.HttpMethod;
+import http.request.RequestLine;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -25,7 +25,7 @@ class RequestUriFactoryTest {
 
         assertAll(
                 () -> assertThat(requestLine.getMethod()).isEqualTo(HttpMethod.GET),
-                () -> assertThat(requestLine.getUrl()).isEqualTo("/user/create"),
+                () -> assertThat(requestLine.getPath()).isEqualTo("/user/create"),
                 () -> assertThat(params).isEqualTo(expectedParams)
         );
     }

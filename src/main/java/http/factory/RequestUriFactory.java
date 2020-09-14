@@ -1,7 +1,7 @@
 package http.factory;
 
-import http.HttpMethod;
-import http.RequestLine;
+import http.request.HttpMethod;
+import http.request.RequestLine;
 import utils.ParamUtils;
 
 import java.util.Map;

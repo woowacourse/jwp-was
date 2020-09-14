@@ -1,5 +1,6 @@
 package model.service;
 
+import http.request.RequestParams;
 import model.db.DataBase;
 import model.domain.User;
 import org.slf4j.Logger;
@@ -9,10 +10,11 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Map;
 
-public class UserController {
-    private final static Logger logger = LoggerFactory.getLogger(UserController.class);
+public class UserService {
+    private final static Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    public static void saveUser(Map<String, String> params, DataOutputStream dos) {
+    public static void saveUser(RequestParams reqParams, DataOutputStream dos) {
+        Map<String, String> params = reqParams.getParams();
         User user = new User(
                 params.get("userId"),
                 params.get("password"),
@@ -22,10 +24,10 @@ public class UserController {
         DataBase.addUser(user);
         logger.debug("save userId : {}", user.getUserId());
 
-        response302Header(dos, "/index.html");
+        responseRedirectHeader(dos, "/index.html");
     }
 
-    private static void response302Header(DataOutputStream dos, String redirectUrl) {
+    private static void responseRedirectHeader(DataOutputStream dos, String redirectUrl) {
         try {
             dos.writeBytes("HTTP/1.1 302 FOUND \r\n");
             dos.writeBytes("Location: " + redirectUrl + "\r\n");

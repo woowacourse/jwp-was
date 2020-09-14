@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class WebServer {
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
@@ -22,9 +24,11 @@ public class WebServer {
             logger.info("Web Application Server started {} port.", port);
 
             Socket connection;
+            ExecutorService es = Executors.newFixedThreadPool(6);
             while ((connection = listenSocket.accept()) != null) {
-                Thread thread = new Thread(new RequestHandler(connection));
-                thread.start();
+                es.execute(new RequestHandler(connection));
+//                Thread thread = new Thread(new RequestHandler(connection));
+//                thread.start();
             }
         }
     }

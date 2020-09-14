@@ -1,7 +1,7 @@
 package controller;
 
-import http.HttpMethod;
-import http.RequestLine;
+import http.request.HttpMethod;
+import http.request.RequestLine;
 
 import java.util.Arrays;
 import java.util.Optional;

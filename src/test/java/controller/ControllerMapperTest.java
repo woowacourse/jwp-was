@@ -1,7 +1,7 @@
 package controller;
 
-import http.HttpMethod;
-import http.RequestLine;
+import http.request.HttpMethod;
+import http.request.RequestLine;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
