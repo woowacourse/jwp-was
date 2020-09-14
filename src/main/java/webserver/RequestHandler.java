@@ -33,17 +33,12 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+            HashMap<String, String> requestUrl = new HashMap<>();
             String line = bufferedReader.readLine();
 
-            if(line == null) {
-                return;
-            }
-
             String[] request = RequestUtils.separateUrl(line);
-            HashMap<String, String> requestUrl = new HashMap<>();
-            IOUtils.displayHeaderLog(bufferedReader, line, requestUrl);
+            IOUtils.parseHeaderToken(bufferedReader,line,requestUrl);
 
             UserController.postSignIn(out, bufferedReader, request, requestUrl);
             PageController.getIndexPage(out, request);
