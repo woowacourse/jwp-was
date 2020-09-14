@@ -11,7 +11,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 class RequestTest {
 
-    @DisplayName("Request를 생성할 때 RequestLine을 잘 만드는 지 테스트")
+    @DisplayName("Request를 생성할 때 RequestLine을 잘 만드는지 테스트")
     @Test
     void create() {
         String httpRequest = "GET /index.html HTTP/1.1\n" +
@@ -47,5 +47,25 @@ class RequestTest {
         assertThatThrownBy(() -> new Request(null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("bufferedReader는 null일 수 없습니다.");
+    }
+
+    @DisplayName("RequestBody를 잘 추출하는지 테스트")
+    @Test
+    void extractBody() {
+        String httpRequest = "POST /user/create HTTP/1.1\n" +
+                "Host: localhost:8080\n" +
+                "Connection: keep-alive\n" +
+                "Content-Length: 68\n" +
+                "Content-Type: application/x-www-form-urlencoded\n" +
+                "Accept: */*\n" +
+                "\n" +
+                "userId=javajigi&password=password&name=name&email=javajigi@slipp.net";
+        BufferedReader bufferedReader = new BufferedReader(new StringReader(httpRequest));
+        Request request = new Request(bufferedReader);
+
+        String actual = request.extractBody();
+        String expect = "userId=javajigi&password=password&name=name&email=javajigi@slipp.net";
+
+        assertThat(actual).isEqualTo(expect);
     }
 }
