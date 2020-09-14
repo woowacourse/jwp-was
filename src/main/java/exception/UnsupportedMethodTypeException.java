@@ -1,4 +1,4 @@
-package webserver;
+package exception;
 
 public class UnsupportedMethodTypeException extends RuntimeException {
     public UnsupportedMethodTypeException(String input) {

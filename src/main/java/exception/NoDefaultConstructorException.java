@@ -1,4 +1,4 @@
-package webserver;
+package exception;
 
 public class NoDefaultConstructorException extends RuntimeException {
     public <T> NoDefaultConstructorException(Class<T> clazz) {

@@ -1,4 +1,4 @@
-package webserver;
+package exception;
 
 public class MethodParameterBindException extends RuntimeException {
     public MethodParameterBindException() {

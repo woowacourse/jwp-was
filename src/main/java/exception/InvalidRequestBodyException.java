@@ -1,4 +1,4 @@
-package webserver;
+package exception;
 
 public class InvalidRequestBodyException extends RuntimeException {
     public InvalidRequestBodyException() {

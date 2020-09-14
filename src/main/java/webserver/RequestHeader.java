@@ -5,6 +5,10 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
+
+import exception.InvalidRequestHeaderException;
+import exception.UnsupportedMethodTypeException;
 
 public class RequestHeader {
     private final MethodType method;
@@ -70,6 +74,15 @@ public class RequestHeader {
 
     private static String getPathWithoutParams(String path) {
         return path.split("\\?")[0];
+    }
+
+    public int getContentLength() {
+        String contentLength = attribute.get("Content-Length");
+
+        if (Objects.isNull(contentLength) || contentLength.isEmpty()) {
+            contentLength = "0";
+        }
+        return Integer.parseInt(contentLength);
     }
 
     public String getPath() {

@@ -1,8 +1,11 @@
 package webserver;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+
+import exception.InvalidRequestBodyException;
 
 public class RequestBody {
     private final Map<String, String> attribute;
@@ -12,12 +15,12 @@ public class RequestBody {
     }
 
     public static RequestBody of(String line) {
-        Map<String, String> attributes = getBody(line);
+        Map<String, String> attributes = parseBodyAttributes(line);
 
         return new RequestBody(attributes);
     }
 
-    private static Map<String, String> getBody(String line) {
+    private static Map<String, String> parseBodyAttributes(String line) {
         Map<String, String> attributes = new LinkedHashMap<>();
         if (Objects.isNull(line) || line.isEmpty()) {
             return attributes;
@@ -35,6 +38,6 @@ public class RequestBody {
     }
 
     public Map<String, String> getAttribute() {
-        return attribute;
+        return Collections.unmodifiableMap(attribute);
     }
 }

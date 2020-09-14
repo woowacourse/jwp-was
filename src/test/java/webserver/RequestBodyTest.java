@@ -8,6 +8,8 @@ import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import exception.InvalidRequestBodyException;
+
 class RequestBodyTest {
     private static final String VALID_BODY = "userId=javajigi"
         + "&password=password"

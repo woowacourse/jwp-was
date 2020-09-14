@@ -1,4 +1,4 @@
-package webserver;
+package exception;
 
 public class InvalidRequestHeaderException extends RuntimeException {
     public InvalidRequestHeaderException() {
