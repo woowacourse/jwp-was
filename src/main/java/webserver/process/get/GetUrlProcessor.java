@@ -48,6 +48,32 @@ public class GetUrlProcessor implements Function<HttpRequest, HttpResponse> {
 			} catch (IOException | URISyntaxException e) {
 				e.printStackTrace();
 			}
+		} else if (httpRequest.isSameUrl("/css/styles.css")) {
+			try {
+				HttpStatusLine httpStatusLine = new HttpStatusLine(StatusCode.OK);
+				String body = FileIoUtils.loadFileFromClasspath("./static/css/styles.css");
+				Map<HttpResponseHeaderName, String> headers = new HashMap<>();
+				headers.put(CONTENT_TYPE, "text/css");
+				headers.put(CONTENT_LENGTH, String.valueOf(body.length()));
+				HttpResponseHeaders httpResponseHeaders = new HttpResponseHeaders(headers);
+
+				return new HttpResponse(httpStatusLine, httpResponseHeaders, new HttpResponseBody(body));
+			} catch (IOException | URISyntaxException e) {
+				e.printStackTrace();
+			}
+		} else if (httpRequest.isSameUrl("/css/bootstrap.min.css")) {
+			try {
+				HttpStatusLine httpStatusLine = new HttpStatusLine(StatusCode.OK);
+				String body = FileIoUtils.loadFileFromClasspath("./static/css/bootstrap.min.css");
+				Map<HttpResponseHeaderName, String> headers = new HashMap<>();
+				headers.put(CONTENT_TYPE, "text/css");
+				headers.put(CONTENT_LENGTH, String.valueOf(body.length()));
+				HttpResponseHeaders httpResponseHeaders = new HttpResponseHeaders(headers);
+
+				return new HttpResponse(httpStatusLine, httpResponseHeaders, new HttpResponseBody(body));
+			} catch (IOException | URISyntaxException e) {
+				e.printStackTrace();
+			}
 		}
 		throw new NotExistUrlException("url : " + httpRequest.getRequestTarget());
 	}
