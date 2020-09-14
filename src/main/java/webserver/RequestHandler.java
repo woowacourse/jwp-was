@@ -22,6 +22,7 @@ public class RequestHandler implements Runnable {
 	private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 	private static final String DELIMITER = " ";
 	private static final String REDIRECT_URL = "/index.html";
+	private static final String USER_CREATE_URL = "/user/create";
 
 	private Socket connection;
 
@@ -40,7 +41,7 @@ public class RequestHandler implements Runnable {
 			DataOutputStream dos = new DataOutputStream(out);
 			findBody(br, line);
 
-			if (path.startsWith("/user/create")) {
+			if (path.startsWith(USER_CREATE_URL)) {
 				HttpBody httpBody = new HttpBody(br, 100);
 				Map<String, String> userInfo = ExtractUtils.extractUserInfo(httpBody.getBody());
 				User user = new User(userInfo.get("userId"), userInfo.get("password"), userInfo.get("name"),
