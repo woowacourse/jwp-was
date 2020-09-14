@@ -29,7 +29,7 @@ public class RequestBody {
         return body;
     }
 
-    public Map<String, String> getParsedBody() {
+    public Map<String, String> parseBody() {
         Map<String, String> parsedBody = new HashMap<>();
         String[] splitBody = body.split(PARAM_DELIMITER);
         for (String content : splitBody) {

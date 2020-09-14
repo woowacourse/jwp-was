@@ -8,6 +8,7 @@ public class RequestPath {
     private static final String PATH_PARAM_DELIMITER = "\\?";
     private static final String PARAM_DELIMITER = "&";
     private static final String PARAM_KEY_VALUE_DELIMITER = "=";
+
     private String path;
     private Map<String, String> parameters = new HashMap<>();
 

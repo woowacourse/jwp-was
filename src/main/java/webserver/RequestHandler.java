@@ -19,6 +19,7 @@ import utils.FileIoUtils;
 import web.RequestBody;
 import web.RequestHeader;
 import web.RequestLine;
+import web.StaticFile;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -34,7 +35,6 @@ public class RequestHandler implements Runnable {
             connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
             RequestLine requestLine = new RequestLine(bufferedReader);
             RequestHeader requestHeader = new RequestHeader(bufferedReader);
@@ -44,11 +44,10 @@ public class RequestHandler implements Runnable {
             }
 
             DataOutputStream dos = new DataOutputStream(out);
-            logger.debug("requestLine.getPath {}", requestLine.getPath());
             String requestPath = requestLine.getPath();
             byte[] body;
             if (requestPath.endsWith("/user/create") && "POST".equals(requestLine.getMethod())) {
-                Map<String, String> parsedBody = requestBody.getParsedBody();
+                Map<String, String> parsedBody = requestBody.parseBody();
                 String userId = parsedBody.get("userId");
                 String password = parsedBody.get("password");
                 String name = parsedBody.get("name");
@@ -59,9 +58,10 @@ public class RequestHandler implements Runnable {
                 body = user.toString().getBytes();
                 response302Header(dos, "/index.html");
                 responseBody(dos, body);
-            } else {
-                body = FileIoUtils.loadFileFromClasspath("./templates" + requestPath);
-                response200Header(dos, body.length);
+            } else if ("GET".equals(requestLine.getMethod())) {
+                StaticFile staticFile = StaticFile.findStaticFile(requestLine.getPath());
+                body = FileIoUtils.loadFileFromClasspath(staticFile.getResourcePath() + requestPath);
+                response200Header(dos, body.length, staticFile.getContentType());
                 responseBody(dos, body);
             }
 
@@ -81,10 +81,22 @@ public class RequestHandler implements Runnable {
         }
     }
 
+    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
+        try {
+            dos.writeBytes("HTTP/1.1 200 OK \r\n");
+            dos.writeBytes("Content-Type: " + contentType + "\r\n");
+            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
     private void response302Header(DataOutputStream dos, String redirectUrl) {
         try {
             dos.writeBytes("HTTP/1.1 302 Found \r\n");
             dos.writeBytes("Location: " + redirectUrl + "\r\n");
+            dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
