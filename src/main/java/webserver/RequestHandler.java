@@ -8,11 +8,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import db.DataBase;
+import model.User;
 import utils.FileIoUtils;
 import web.RequestHeader;
 import web.RequestLine;
@@ -32,12 +33,26 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
             RequestLine requestLine = new RequestLine(bufferedReader);
             RequestHeader requestHeader = new RequestHeader(bufferedReader);
 
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + requestLine.getPath());
+            logger.debug("requestLine.getPath {}", requestLine.getPath());
+            String requestPath = requestLine.getPath();
+            byte[] body;
+            if (requestPath.endsWith("/user/create")) {
+                String userId = requestLine.getParam("userId");
+                String password = requestLine.getParam("password");
+                String name = requestLine.getParam("name");
+                String email = requestLine.getParam("email");
+
+                User user = new User(userId, password, name, email);
+                DataBase.addUser(user);
+                body = user.toString().getBytes();
+            } else {
+                body = FileIoUtils.loadFileFromClasspath("./templates" + requestPath);
+            }
             logger.debug("body {}", body);
             response200Header(dos, body.length);
             responseBody(dos, body);
