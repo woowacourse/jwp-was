@@ -2,44 +2,45 @@ package webserver.dto;
 
 import java.util.Map;
 import webserver.FileNameExtension;
+import webserver.HttpMethod;
 
 public class HttpRequest {
 
-    private final String httpMethod;
-    private final String urlPath;
-    private final Map<String, String> parameters;
-    private final String protocol;
-    private final Map<String, String> headers;
+    private final HttpMethod httpMethod;
+    private final UrlPath urlPath;
+    private final Parameters parameters;
+    private final Protocol protocol;
+    private final Headers headers;
     private final FileNameExtension fileNameExtension;
 
-    public HttpRequest(String HttpMethod, String urlPath, Map<String, String> parameters,
+    public HttpRequest(String httpMethod, String urlPath, Map<String, String> parameters,
         String protocol, Map<String, String> headers, FileNameExtension fileNameExtension) {
-        this.httpMethod = HttpMethod;
-        this.urlPath = urlPath;
-        this.parameters = parameters;
-        this.protocol = protocol;
-        this.headers = headers;
+        this.httpMethod = HttpMethod.from(httpMethod);
+        this.urlPath = UrlPath.from(urlPath);
+        this.parameters = Parameters.from(parameters);
+        this.protocol = Protocol.of(protocol);
+        this.headers = Headers.of(headers);
         this.fileNameExtension = fileNameExtension;
     }
 
     public String getHttpMethod() {
-        return httpMethod;
+        return httpMethod.name();
     }
 
     public String getUrlPath() {
-        return urlPath;
+        return urlPath.getUrlPath();
     }
 
     public Map<String, String> getParameters() {
-        return parameters;
+        return parameters.getParameters();
     }
 
     public String getProtocol() {
-        return protocol;
+        return protocol.getProtocol();
     }
 
     public Map<String, String> getHeaders() {
-        return headers;
+        return headers.getHeaders();
     }
 
     public FileNameExtension getFileNameExtension() {

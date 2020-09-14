@@ -74,7 +74,7 @@ class FileHandlerTest {
 
     @DisplayName("Get이 아닌 메서드로 파일 호출, 405 리턴")
     @ParameterizedTest
-    @ValueSource(strings = {"POST", "PUT", "DELETE", "XXX"})
+    @ValueSource(strings = {"POST", "PUT", "DELETE"})
     void loadFile_MethodNotGet_Return405(String httpMethod) throws IOException {
         try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
             HttpRequest httpRequest = new HttpRequest(httpMethod, URL_BOOTSTRAP_MIN_CSS,
