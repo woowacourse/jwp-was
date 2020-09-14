@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import db.DataBase;
 import model.User;
 import utils.FileIoUtils;
+import web.RequestBody;
 import web.RequestHeader;
 import web.RequestLine;
 
@@ -36,6 +37,7 @@ public class RequestHandler implements Runnable {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
             RequestLine requestLine = new RequestLine(bufferedReader);
             RequestHeader requestHeader = new RequestHeader(bufferedReader);
+            RequestBody requestBody = new RequestBody(bufferedReader, requestHeader.getContentLength());
 
             DataOutputStream dos = new DataOutputStream(out);
             logger.debug("requestLine.getPath {}", requestLine.getPath());
