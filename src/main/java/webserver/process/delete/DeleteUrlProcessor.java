@@ -10,6 +10,7 @@ public class DeleteUrlProcessor implements Function<HttpRequest, HttpResponse> {
 
 	@Override
 	public HttpResponse apply(HttpRequest httpRequest) {
-		throw new NotExistUrlException();
+		throw new NotExistUrlException("url : " + httpRequest.getRequestTarget());
+
 	}
 }

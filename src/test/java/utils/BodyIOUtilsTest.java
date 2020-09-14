@@ -10,17 +10,17 @@ import java.util.HashMap;
 import org.junit.jupiter.api.Test;
 
 import webserver.http.request.HttpRequestBody;
-import webserver.http.request.HttpRequestHeaderName;
-import webserver.http.request.HttpRequestHttpHeaders;
+import webserver.http.request.HttpRequestStartLine;
+import webserver.http.request.header.HttpRequestHttpHeaders;
 
 class BodyIOUtilsTest {
 
 	@Test
 	void parseHttpBodyByGet() throws IOException {
+		HttpRequestStartLine httpRequestStartLine = new HttpRequestStartLine("GET", "", "");
 		HashMap<String, String> headers = new HashMap<>();
-		headers.put(HttpRequestHeaderName.Method.name(), "GET");
 		HttpRequestHttpHeaders httpRequestHttpHeaders = new HttpRequestHttpHeaders(headers);
-		String body = BodyIOUtils.parseHttpBody(httpRequestHttpHeaders,
+		String body = BodyIOUtils.parseHttpBody(httpRequestStartLine, httpRequestHttpHeaders,
 			new BufferedReader(new InputStreamReader(System.in)));
 
 		assertThat(body).isEqualTo(HttpRequestBody.EMPTY_BODY.getHttpBody());

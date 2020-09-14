@@ -49,6 +49,6 @@ public class GetUrlProcessor implements Function<HttpRequest, HttpResponse> {
 				e.printStackTrace();
 			}
 		}
-		throw new NotExistUrlException();
+		throw new NotExistUrlException("url : " + httpRequest.getRequestTarget());
 	}
 }

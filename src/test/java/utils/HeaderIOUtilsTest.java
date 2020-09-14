@@ -6,14 +6,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import webserver.http.request.HttpRequestHttpHeaders;
-import webserver.process.HttpProcessor;
+import webserver.http.request.header.HttpRequestHttpHeaders;
 
 class HeaderIOUtilsTest {
 
 	@DisplayName("request header의 요청 url을 파싱한다.")
 	@Test
-	void parseMainHeader() {
+	void parseExceptStartLine() {
 		String httpHeader = "GET /index.html HTTP/1.1\n"
 			+ "Host: localhost:8080\n"
 			+ "Connection: keep-alive\n"
@@ -31,9 +30,8 @@ class HeaderIOUtilsTest {
 		HttpRequestHttpHeaders actual = HeaderIOUtils.parseHttpHeaders(httpHeader);
 
 		assertAll(
-			() -> assertThat(actual.size()).isEqualTo(15),
-			() -> assertThat(actual.getHttpMethod()).isEqualTo(HttpProcessor.GET.name()),
-			() -> assertThat(actual.getUrl()).isEqualTo("/index.html")
+			() -> assertThat(actual.size()).isEqualTo(12),
+			() -> assertThat(actual.getByHeaderName("Host")).isEqualTo("localhost:8080")
 		);
 	}
 }

@@ -15,7 +15,8 @@ import utils.BodyIOUtils;
 import utils.HeaderIOUtils;
 import webserver.http.request.HttpRequest;
 import webserver.http.request.HttpRequestBody;
-import webserver.http.request.HttpRequestHttpHeaders;
+import webserver.http.request.HttpRequestStartLine;
+import webserver.http.request.header.HttpRequestHttpHeaders;
 import webserver.http.response.HttpResponse;
 import webserver.http.response.utils.HttpResponseConverter;
 import webserver.process.HttpProcessor;
@@ -49,10 +50,11 @@ public class RequestHandler implements Runnable {
 	private HttpRequest parseHttpRequest(InputStream in) throws IOException {
 		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 		String headers = printHeader(bufferedReader);
+		HttpRequestStartLine httpRequestStartLine = HeaderIOUtils.parseStartLine(headers);
 		HttpRequestHttpHeaders httpRequestHttpHeaders = HeaderIOUtils.parseHttpHeaders(headers);
 		HttpRequestBody httpRequestBody = new HttpRequestBody(
-			BodyIOUtils.parseHttpBody(httpRequestHttpHeaders, bufferedReader));
-		return new HttpRequest(httpRequestHttpHeaders, httpRequestBody);
+			BodyIOUtils.parseHttpBody(httpRequestStartLine, httpRequestHttpHeaders, bufferedReader));
+		return new HttpRequest(httpRequestStartLine, httpRequestHttpHeaders, httpRequestBody);
 	}
 
 	private String printHeader(BufferedReader bufferedReader) throws IOException {

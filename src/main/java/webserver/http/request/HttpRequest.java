@@ -1,21 +1,26 @@
 package webserver.http.request;
 
+import webserver.http.request.header.HttpRequestHttpHeaders;
+
 public class HttpRequest {
 
+	private final HttpRequestStartLine httpRequestStartLine;
 	private final HttpRequestHttpHeaders httpRequestHttpHeaders;
 	private final HttpRequestBody httpRequestBody;
 
-	public HttpRequest(HttpRequestHttpHeaders httpRequestHttpHeaders, HttpRequestBody httpRequestBody) {
+	public HttpRequest(HttpRequestStartLine httpRequestStartLine,
+		HttpRequestHttpHeaders httpRequestHttpHeaders, HttpRequestBody httpRequestBody) {
+		this.httpRequestStartLine = httpRequestStartLine;
 		this.httpRequestHttpHeaders = httpRequestHttpHeaders;
 		this.httpRequestBody = httpRequestBody;
 	}
 
 	public boolean isSameUrl(String url) {
-		return httpRequestHttpHeaders.isSameUrl(url);
+		return httpRequestStartLine.isSameUrl(url);
 	}
 
 	public boolean containsInUrl(String url) {
-		return httpRequestHttpHeaders.containsInUrl(url);
+		return httpRequestStartLine.containsInUrl(url);
 	}
 
 	public HttpRequestHttpHeaders getHttpHeaders() {
@@ -27,10 +32,10 @@ public class HttpRequest {
 	}
 
 	public String getHttpMethod() {
-		return this.httpRequestHttpHeaders.getHttpMethod();
+		return this.httpRequestStartLine.getHttpMethod();
 	}
 
-	public String getUrl() {
-		return this.httpRequestHttpHeaders.getUrl();
+	public String getRequestTarget() {
+		return this.httpRequestStartLine.getRequestTarget();
 	}
 }

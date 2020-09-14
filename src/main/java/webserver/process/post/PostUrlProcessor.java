@@ -34,6 +34,6 @@ public class PostUrlProcessor implements Function<HttpRequest, HttpResponse> {
 				new HttpResponseBody(body));
 			return httpResponse;
 		}
-		throw new NotExistUrlException();
+		throw new NotExistUrlException("url : " + httpRequest.getRequestTarget());
 	}
 }
