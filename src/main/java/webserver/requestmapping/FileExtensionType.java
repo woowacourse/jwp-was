@@ -1,4 +1,4 @@
-package webserver;
+package webserver.requestmapping;
 
 import java.util.stream.Stream;
 
