@@ -1,25 +1,25 @@
-package webserver;
+package webserver.requestmapping;
 
-import static webserver.RequestMappingStorage.*;
+import static webserver.requestmapping.RequestMappingStorage.*;
 
 import java.io.InputStream;
-import java.util.function.Function;
 
 import http.request.HttpMethod;
 import http.request.RequestEntity;
+import webserver.requestmapping.behavior.RequestBehavior;
 
 public class RequestMapping {
 
     private HttpMethod httpMethod;
     private String path;
-    private Function<RequestEntity, InputStream> behavior;
+    private RequestBehavior behavior;
 
     public RequestMapping(
-        HttpMethod httpMethod, String path, Function<RequestEntity, InputStream> behavior
+        HttpMethod httpMethod, String path, RequestBehavior requestBehavior
     ) {
         this.httpMethod = httpMethod;
         this.path = path;
-        this.behavior = behavior;
+        this.behavior = requestBehavior;
     }
 
     public boolean isMapping(HttpMethod httpMethod, String path) {
@@ -31,7 +31,7 @@ public class RequestMapping {
     }
 
     public InputStream generateResponse(RequestEntity requestEntity) {
-        return behavior.apply(requestEntity);
+        return behavior.behave(requestEntity);
     }
 }
 
