@@ -11,7 +11,6 @@ import static util.Constants.USER_ID;
 import static util.Constants.USER_NAME;
 import static util.Constants.USER_PASSWORD;
 
-import db.DataBase;
 import db.DataBaseTest;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -30,7 +29,6 @@ import webserver.utils.FileIoUtils;
 class DispenseHandlerTest {
 
     private DispenseHandler dispenseHandler = new DispenseHandler();
-    private DataBase dataBase = new DataBase();
 
     @AfterEach
     void tearDown() {

@@ -33,4 +33,8 @@ public enum HttpMethod {
     public boolean hasRequestBody() {
         return hasRequestBody;
     }
+
+    public boolean equalsHttpMethodIgnoreCase(String httpMethod) {
+        return this.name().equalsIgnoreCase(httpMethod);
+    }
 }

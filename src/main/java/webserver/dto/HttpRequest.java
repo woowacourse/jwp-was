@@ -51,6 +51,6 @@ public class HttpRequest {
     }
 
     public boolean isFile() {
-        return !fileNameExtension.equals(FileNameExtension.API);
+        return !FileNameExtension.API.equals(fileNameExtension);
     }
 }

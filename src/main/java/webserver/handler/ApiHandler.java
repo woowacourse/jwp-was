@@ -26,7 +26,7 @@ public class ApiHandler {
     }
 
     public void handleAPI(OutputStream out, HttpRequest httpRequest) throws IOException {
-        if (httpRequest.getUrlPath().equals("/user/create")) {
+        if ("/user/create".equals(httpRequest.getUrlPath())) {
             if (HttpMethod.POST.isSame(httpRequest.getHttpMethod())) {
                 createUser(out, httpRequest);
                 return;

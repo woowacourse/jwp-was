@@ -1,6 +1,7 @@
 package webserver.handler;
 
 import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
+import static webserver.HttpMethod.GET;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -11,7 +12,6 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Objects;
 import webserver.FileNameExtension;
-import webserver.HttpMethod;
 import webserver.HttpStatusCode;
 import webserver.dto.HttpRequest;
 import webserver.dto.HttpResponse;
@@ -34,7 +34,8 @@ public class FileHandler {
     }
 
     private void loadFile(HttpRequest httpRequest, DataOutputStream dos) throws IOException {
-        if (!httpRequest.getHttpMethod().equalsIgnoreCase(HttpMethod.GET.name())) {
+        boolean isNotGetHttpMethod = !GET.equalsHttpMethodIgnoreCase(httpRequest.getHttpMethod());
+        if (isNotGetHttpMethod) {
             returnMethodNotAllow(httpRequest, dos);
             return;
         }
