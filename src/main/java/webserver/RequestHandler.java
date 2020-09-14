@@ -4,12 +4,15 @@ import java.io.*;
 import java.net.Socket;
 import java.net.URISyntaxException;
 
+import db.DataBase;
 import exception.InvalidHttpRequestException;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import utils.RequestUtils;
 import web.request.HttpRequest;
+import web.request.RequestPath;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -28,11 +31,18 @@ public class RequestHandler implements Runnable {
 
             HttpRequest httpRequest = new HttpRequest(bufferedReader);
 
-            String target = httpRequest.getTarget();
-            String filePath = RequestUtils.getFilePath(target);
-
+            RequestPath requestPath = httpRequest.getRequestPath();
+            String requestTarget = requestPath.getTarget();
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
+
+            if(requestTarget.equals("/user/create")) {
+                User user = new User(requestPath.getParameters());
+                DataBase.addUser(user);
+
+                //// TODO: 2020/09/14 이후 302 리스폰스에 대한 액션 구현시까지는...여기를 비운다.
+                return;
+            }
+            byte[] body = FileIoUtils.loadFileFromClasspath(requestTarget);
             response200Header(dos, httpRequest.getContentType(), body.length);
             responseBody(dos, body);
         } catch (IOException | URISyntaxException | InvalidHttpRequestException e) {
