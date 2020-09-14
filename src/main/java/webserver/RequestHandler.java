@@ -21,10 +21,6 @@ import utils.FileIoUtils;
 public class RequestHandler implements Runnable {
 	private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 	private static final String DELIMITER = " ";
-	private static final String FILE_PATH_TEMPLATES = "./templates";
-	private static final String FILE_PATH_STATIC = "./static";
-	private static final String FILE_TYPE_HTML = ".html";
-	private static final String FILE_TYPE_ICO = ".ico";
 	private static final String REDIRECT_URL = "/index.html";
 
 	private Socket connection;
@@ -52,7 +48,8 @@ public class RequestHandler implements Runnable {
 				DataBase.addUser(user);
 				ResponseHeader.response302Header(dos, REDIRECT_URL, logger);
 			} else {
-				byte[] body = FileIoUtils.loadFileFromClasspath(parseFilePath(path));
+				ContentTypeMatcher fileType = ContentTypeMatcher.findContentType(path);
+				byte[] body = FileIoUtils.loadFileFromClasspath(fileType.parseFilePath(path));
 
 				ResponseHeader.response200Header(dos, body.length, logger);
 				responseBody(dos, body);
@@ -69,13 +66,6 @@ public class RequestHandler implements Runnable {
 				break;
 			}
 		}
-	}
-
-	private String parseFilePath(String path) {
-		if (path.endsWith(FILE_TYPE_HTML) || path.endsWith(FILE_TYPE_ICO)) {
-			return FILE_PATH_TEMPLATES + path;
-		}
-		return FILE_PATH_STATIC + path;
 	}
 
 	private void responseBody(DataOutputStream dos, byte[] body) {
