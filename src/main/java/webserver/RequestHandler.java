@@ -51,7 +51,7 @@ public class RequestHandler implements Runnable {
 				ContentTypeMatcher fileType = ContentTypeMatcher.findContentType(path);
 				byte[] body = FileIoUtils.loadFileFromClasspath(fileType.parseFilePath(path));
 
-				ResponseHeader.response200Header(dos, body.length, logger);
+				ResponseHeader.response200Header(dos, body.length, fileType.getContentType(), logger);
 				responseBody(dos, body);
 			}
 		} catch (IOException | URISyntaxException e) {

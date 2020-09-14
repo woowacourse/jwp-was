@@ -6,10 +6,11 @@ import java.io.IOException;
 import org.slf4j.Logger;
 
 public class ResponseHeader {
-	public static void response200Header(DataOutputStream dos, int lengthOfBodyContent, Logger logger) {
+	public static void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType,
+		Logger logger) {
 		try {
 			dos.writeBytes("HTTP/1.1 200 OK \r\n");
-			dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+			dos.writeBytes(String.format("Content-Type: %s\r\n", contentType));
 			dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
 			dos.writeBytes("\r\n");
 		} catch (IOException e) {

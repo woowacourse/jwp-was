@@ -3,16 +3,18 @@ package webserver;
 import java.util.Arrays;
 
 public enum ContentTypeMatcher {
-	HTML(".html", "./templates"),
-	JS(".js", "./static"),
-	CSS(".css", "./static");
+	HTML(".html", "./templates", "text/html;charset=UTF-8"),
+	JS(".js", "./static", "application/javascript;charset=UTF-8"),
+	CSS(".css", "./static", "text/css;charset=UTF-8");
 
 	private final String fileType;
 	private final String filePath;
+	private final String contentType;
 
-	ContentTypeMatcher(String fileType, String filePath) {
+	ContentTypeMatcher(String fileType, String filePath, String contentType) {
 		this.fileType = fileType;
 		this.filePath = filePath;
+		this.contentType = contentType;
 	}
 
 	public static ContentTypeMatcher findContentType(String path) {
@@ -24,5 +26,9 @@ public enum ContentTypeMatcher {
 
 	public String parseFilePath(String path) {
 		return this.filePath + path;
+	}
+
+	public String getContentType() {
+		return contentType;
 	}
 }
