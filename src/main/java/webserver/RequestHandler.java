@@ -32,16 +32,22 @@ public class RequestHandler implements Runnable {
             HttpMessage httpMessage = HttpMessage.from(br);
             HttpBody httpBody = httpMessage.getHttpBody();
 
-            if (httpBody.isNotEmpty()) {
+            try {
                 User newUser = User.from(httpBody);
                 DataBase.addUser(newUser);
-                logger.debug("New User Created! : {}", newUser);
+            } catch (Exception e) {
+                logger.debug("New User Info Not Exist");
             }
 
             HttpUri httpUri = httpMessage.getRequestLine().getHttpUri();
-            byte[] fileBytes = httpUri.readFile();
-            response200Header(dos, fileBytes.length);
-            responseBody(dos, fileBytes);
+            try {
+                byte[] fileBytes = httpUri.readFile();
+                response200Header(dos, fileBytes.length);
+                responseBody(dos, fileBytes);
+            } catch (Exception e) {
+                String indexUrl = "/index.html";
+                response302Header(dos, indexUrl);
+            }
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -52,6 +58,16 @@ public class RequestHandler implements Runnable {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
             dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void response302Header(DataOutputStream dos, String redirectUrl) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 Found \r\n");
+            dos.writeBytes("Location: " + redirectUrl + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());

@@ -13,9 +13,4 @@ public class DefaultHttpBody implements HttpBody {
     public String getValue(String key) {
         return this.queryString.getParameterValue(key);
     }
-
-    @Override
-    public boolean isNotEmpty() {
-        return this.queryString.isNotEmpty();
-    }
 }
