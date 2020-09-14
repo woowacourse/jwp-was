@@ -1,5 +1,7 @@
 package webserver;
 
+import db.DataBase;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,10 +25,19 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream();
              BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
              OutputStream out = connection.getOutputStream()) {
+
             RequestLine requestLine = RequestLine.from(br.readLine());
-            byte[] fileBytes = requestLine.readFile();
+            HttpUri httpUri = requestLine.getHttpUri();
+            QueryString queryString = httpUri.getQueryString();
+
+            if (queryString.isNotEmpty()) {
+                User newUser = User.from(queryString);
+                DataBase.addUser(newUser);
+                logger.debug("New User Created! : {}", newUser);
+            }
 
             DataOutputStream dos = new DataOutputStream(out);
+            byte[] fileBytes = httpUri.readFile();
             response200Header(dos, fileBytes.length);
             responseBody(dos, fileBytes);
         } catch (IOException e) {

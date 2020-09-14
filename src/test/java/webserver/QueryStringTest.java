@@ -4,6 +4,7 @@ import exception.InvalidParameterException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -51,5 +52,22 @@ class QueryStringTest {
         assertThatThrownBy(() -> queryString.getParameterValue(invalidParameterKey))
                 .isInstanceOf(NullPointerException.class)
                 .hasMessage(invalidParameterKey + "에 해당하는 Parameter Key가 없습니다!");
+    }
+
+    @DisplayName("QueryString 객체의 Parameter가 있으면 true 반환")
+    @ParameterizedTest
+    @CsvSource(value = {"id=abc&password=123,true", "nickname=coollime,true"})
+    void isNotEmptyTrueTest(String queryStringValue, boolean expected) {
+        QueryString queryString = QueryString.from(queryStringValue);
+
+        assertThat(queryString.isNotEmpty()).isTrue();
+    }
+
+    @DisplayName("QueryString 객체의 Parameter가 없으면 false 반환")
+    @Test
+    void isNotEmptyFalseTest() {
+        QueryString queryString = QueryString.from("");
+
+        assertThat(queryString.isNotEmpty()).isFalse();
     }
 }

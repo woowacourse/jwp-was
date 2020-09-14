@@ -1,5 +1,7 @@
 package model;
 
+import webserver.QueryString;
+
 public class User {
     private String userId;
     private String password;
@@ -11,6 +13,15 @@ public class User {
         this.password = password;
         this.name = name;
         this.email = email;
+    }
+
+    public static User from(QueryString queryString) {
+        String userId = queryString.getParameterValue("userId");
+        String password = queryString.getParameterValue("password");
+        String name = queryString.getParameterValue("name");
+        String email = queryString.getParameterValue("email");
+
+        return new User(userId, password, name, email);
     }
 
     public String getUserId() {

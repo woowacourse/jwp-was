@@ -60,4 +60,8 @@ public class QueryString {
 
         return parameterValue;
     }
+
+    public boolean isNotEmpty() {
+        return !this.params.isEmpty();
+    }
 }

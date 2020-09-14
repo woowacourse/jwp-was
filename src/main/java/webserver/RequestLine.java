@@ -38,7 +38,7 @@ public class RequestLine {
         return tokens;
     }
 
-    public byte[] readFile() {
-        return this.httpUri.readFile();
+    public HttpUri getHttpUri() {
+        return httpUri;
     }
 }
