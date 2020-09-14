@@ -8,7 +8,8 @@ import java.util.function.Function;
 
 public enum HandlerMapping {
     GET_PAGE(new RequestLine(HttpMethod.GET, ".html"), PageController::getPagePath),
-    GET_USER_CREATE(new RequestLine(HttpMethod.GET, "/user/create"), UserController::createUser);
+    GET_USER_CREATE(new RequestLine(HttpMethod.GET, "/user/create"), UserController::getCreateUser),
+    POST_USER_CREATE(new RequestLine(HttpMethod.POST, "/user/create"), UserController::postCreateUser);
 
     private final RequestLine requestLine;
     private final Function<Request, String> function;
