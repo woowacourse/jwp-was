@@ -17,14 +17,14 @@ class HttpUriTest {
     @ParameterizedTest
     @ValueSource(strings = {"/index.html", "/user/create", "/create?id=abc"})
     void httpUriTest(String uri) {
-        assertThat(new HttpUri(uri)).isInstanceOf(HttpUri.class);
+        assertThat(HttpUri.from(uri)).isInstanceOf(HttpUri.class);
     }
 
     @DisplayName("/로 시작하지 않는 URI로 HttpUri 객체를 만들면 InvalidUriException 발생")
     @ParameterizedTest
     @ValueSource(strings = {"index.html", "?join/form.html", "."})
     void httpUriExceptionTest(String uri) {
-        assertThatThrownBy(() -> new HttpUri(uri))
+        assertThatThrownBy(() -> HttpUri.from(uri))
                 .isInstanceOf(InvalidUriException.class)
                 .hasMessage("규격에 맞지 않는 URI입니다! -> " + uri);
     }
@@ -34,7 +34,7 @@ class HttpUriTest {
     void readFileTest() throws Exception {
         byte[] indexBody = FileIoUtils.loadFileFromClasspath("./templates/index.html");
 
-        HttpUri httpUri = new HttpUri("/index.html");
+        HttpUri httpUri = HttpUri.from("/index.html");
 
         assertThat(httpUri.readFile()).isEqualTo(indexBody);
     }
@@ -42,7 +42,7 @@ class HttpUriTest {
     @DisplayName("templates에 존재하지 않는 resource이면 FileNotReadableException 발생")
     @Test
     void readFileExceptionTest() {
-        HttpUri httpUri = new HttpUri("/styles.css");
+        HttpUri httpUri = HttpUri.from("/styles.css");
 
         assertThatThrownBy(httpUri::readFile)
                 .isInstanceOf(FileNotReadableException.class)

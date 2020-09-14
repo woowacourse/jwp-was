@@ -23,7 +23,7 @@ public class RequestLine {
         String[] tokens = createTokens(line);
 
         HttpMethod httpMethod = HttpMethod.from(tokens[0]);
-        HttpUri httpUri = new HttpUri(tokens[1]);
+        HttpUri httpUri = HttpUri.from(tokens[1]);
         HttpVersion httpVersion = new HttpVersion(tokens[2]);
 
         return new RequestLine(httpMethod, httpUri, httpVersion);
