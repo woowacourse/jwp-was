@@ -1,5 +1,6 @@
 package webserver;
 
+import exception.InvalidHttpMessageException;
 import exception.InvalidHttpVersionException;
 import utils.StringUtils;
 
@@ -9,7 +10,7 @@ public class HttpVersion {
     private final String version;
 
     public HttpVersion(String version) {
-        StringUtils.validateNonNullAndNotEmpty(version);
+        StringUtils.validateNonNullAndNotEmpty(() -> new InvalidHttpMessageException(version), version);
         validateIsStartsWithVersionPrefix(version);
 
         this.version = version;

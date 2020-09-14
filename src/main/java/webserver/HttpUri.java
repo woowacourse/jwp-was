@@ -1,6 +1,7 @@
 package webserver;
 
 import exception.FileNotReadableException;
+import exception.InvalidHttpMessageException;
 import exception.InvalidUriException;
 import utils.FileIoUtils;
 import utils.StringUtils;
@@ -18,7 +19,7 @@ public class HttpUri {
     }
 
     public static HttpUri from(String uri) {
-        StringUtils.validateNonNullAndNotEmpty(uri);
+        StringUtils.validateNonNullAndNotEmpty(() -> new InvalidHttpMessageException(uri), uri);
         validateFirstCharacterIsSlash(uri);
 
         String[] tokens = uri.split(URI_QUERY_STRING_DELIMITER);

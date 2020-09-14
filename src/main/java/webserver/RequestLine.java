@@ -1,5 +1,6 @@
 package webserver;
 
+import exception.InvalidHttpMessageException;
 import exception.InvalidRequestLineException;
 import utils.StringUtils;
 
@@ -18,7 +19,7 @@ public class RequestLine {
     }
 
     public static RequestLine from(String line) {
-        StringUtils.validateNonNullAndNotEmpty(line);
+        StringUtils.validateNonNullAndNotEmpty(() -> new InvalidHttpMessageException(line), line);
 
         String[] tokens = createTokens(line);
 
@@ -36,6 +37,10 @@ public class RequestLine {
         }
 
         return tokens;
+    }
+
+    public boolean isPostRequest() {
+        return HttpMethod.POST == this.httpMethod;
     }
 
     public HttpUri getHttpUri() {

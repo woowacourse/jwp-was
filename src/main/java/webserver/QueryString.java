@@ -1,5 +1,6 @@
 package webserver;
 
+import exception.InvalidHttpMessageException;
 import exception.InvalidParameterException;
 import utils.StringUtils;
 
@@ -51,7 +52,7 @@ public class QueryString {
     }
 
     public String getParameterValue(String parameterKey) {
-        StringUtils.validateNonNullAndNotEmpty(parameterKey);
+        StringUtils.validateNonNullAndNotEmpty(() -> new InvalidHttpMessageException(parameterKey), parameterKey);
 
         String parameterValue = this.params.get(parameterKey);
         if (Objects.isNull(parameterValue)) {

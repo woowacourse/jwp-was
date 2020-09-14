@@ -1,6 +1,7 @@
 package webserver;
 
 import exception.HttpMethodNotFoundException;
+import exception.InvalidHttpMessageException;
 import utils.StringUtils;
 
 import java.util.Arrays;
@@ -18,7 +19,7 @@ public enum HttpMethod {
     }
 
     public static HttpMethod from(String methodName) {
-        StringUtils.validateNonNullAndNotEmpty(methodName);
+        StringUtils.validateNonNullAndNotEmpty(() -> new InvalidHttpMessageException(methodName), methodName);
 
         return Arrays.stream(HttpMethod.values())
                 .filter(type -> type.name.equals(methodName))
