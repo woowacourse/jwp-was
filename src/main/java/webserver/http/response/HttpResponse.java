@@ -24,4 +24,12 @@ public class HttpResponse {
 	public HttpResponseBody getHttpRequestBody() {
 		return httpResponseBody;
 	}
+
+	public int getStatusCodeNumber() {
+		return httpStatusLine.getStatusCode().getStatusCode();
+	}
+
+	public String getStatusCodeName() {
+		return httpStatusLine.getStatusCode().name();
+	}
 }

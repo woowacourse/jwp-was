@@ -19,14 +19,6 @@ public class HttpRequest {
 		return httpRequestStartLine.isSameUrl(url);
 	}
 
-	public boolean containsInUrl(String url) {
-		return httpRequestStartLine.containsInUrl(url);
-	}
-
-	public HttpRequestHttpHeaders getHttpHeaders() {
-		return httpRequestHttpHeaders;
-	}
-
 	public HttpRequestBody getHttpBody() {
 		return httpRequestBody;
 	}

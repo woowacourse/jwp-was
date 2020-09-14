@@ -1,8 +1,12 @@
 package webserver.http.response.utils;
 
+import static utils.HeaderIOUtils.*;
+
 import webserver.http.response.HttpResponse;
 
 public class HttpResponseConverter {
+
+	private static final String HEADER_LINE_REGEX = "\r\n";
 
 	public static byte[] convert(HttpResponse httpResponse) {
 		StringBuilder stringBuilder = new StringBuilder();
@@ -21,14 +25,17 @@ public class HttpResponseConverter {
 	private static void convertHeaders(HttpResponse httpResponse, StringBuilder stringBuilder) {
 		httpResponse.getHttpResponseHeaders().getHttpHeaders().entrySet()
 			.forEach(entry -> stringBuilder.append(entry.getKey().getValue())
-				.append(": ")
+				.append(HEADER_REGEX)
 				.append(entry.getValue())
-				.append("\r\n"));
+				.append(HEADER_LINE_REGEX));
 	}
 
 	private static void convertStatusLine(HttpResponse httpResponse, StringBuilder stringBuilder) {
-		stringBuilder.append(httpResponse.getHttpStatusLine().getHttpVersion()).append(" ");
-		stringBuilder.append(httpResponse.getHttpStatusLine().getStatusCode().getStatusCode()).append(" ");
-		stringBuilder.append(httpResponse.getHttpStatusLine().getStatusCode().name()).append(" \r\n");
+		stringBuilder.append(httpResponse.getHttpStatusLine().getHttpVersion())
+			.append(" ");
+		stringBuilder.append(httpResponse.getStatusCodeNumber())
+			.append(" ");
+		stringBuilder.append(httpResponse.getStatusCodeName())
+			.append(HEADER_LINE_REGEX);
 	}
 }

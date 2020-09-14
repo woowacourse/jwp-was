@@ -38,9 +38,9 @@ public class RequestHandler implements Runnable {
 		try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
 			HttpRequest httpRequest = parseHttpRequest(in);
 
-			DataOutputStream dos = new DataOutputStream(out);
 			HttpResponse httpResponse = HttpProcessor.process(httpRequest);
 
+			DataOutputStream dos = new DataOutputStream(out);
 			dos.write(HttpResponseConverter.convert(httpResponse));
 		} catch (IOException e) {
 			logger.error(e.getMessage());
@@ -50,22 +50,25 @@ public class RequestHandler implements Runnable {
 	private HttpRequest parseHttpRequest(InputStream in) throws IOException {
 		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 		String headers = printHeader(bufferedReader);
+
 		HttpRequestStartLine httpRequestStartLine = HeaderIOUtils.parseStartLine(headers);
 		HttpRequestHttpHeaders httpRequestHttpHeaders = HeaderIOUtils.parseHttpHeaders(headers);
 		HttpRequestBody httpRequestBody = new HttpRequestBody(
 			BodyIOUtils.parseHttpBody(httpRequestStartLine, httpRequestHttpHeaders, bufferedReader));
+
 		return new HttpRequest(httpRequestStartLine, httpRequestHttpHeaders, httpRequestBody);
 	}
 
 	private String printHeader(BufferedReader bufferedReader) throws IOException {
-		System.out.println("request header start: ");
+		logger.debug("request header start: ");
 		String request = bufferedReader.readLine();
 		StringBuilder stringBuilder = new StringBuilder();
 		while (!request.equals("")) {
 			stringBuilder.append(request).append("\n");
 			request = bufferedReader.readLine();
 		}
-		System.out.println(stringBuilder.toString());
-		return stringBuilder.toString();
+		String headers = stringBuilder.toString();
+		logger.debug(headers);
+		return headers;
 	}
 }

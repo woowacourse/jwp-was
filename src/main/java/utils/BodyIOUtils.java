@@ -15,13 +15,13 @@ public class BodyIOUtils {
 	public static String parseHttpBody(HttpRequestStartLine httpRequestStartLine,
 		HttpRequestHttpHeaders httpRequestHttpHeaders,
 		BufferedReader bufferedReader) throws IOException {
+
 		if (httpRequestStartLine.hasNotBody()) {
 			return EMPTY_BODY.getHttpBody();
 		}
 
 		String contentLength = httpRequestHttpHeaders.getByHeaderName(HttpRequestHeaderName.CONTENT_LENGTH.getValue());
 
-		System.out.println("conetnelength" + contentLength);
 		return IOUtils.readData(bufferedReader, parseInt(contentLength));
 	}
 }

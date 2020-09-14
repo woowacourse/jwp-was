@@ -33,8 +33,4 @@ public class HttpRequestStartLine {
 	public String getRequestTarget() {
 		return requestTarget;
 	}
-
-	public String getHttpVersion() {
-		return httpVersion;
-	}
 }

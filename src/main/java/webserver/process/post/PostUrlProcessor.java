@@ -30,9 +30,8 @@ public class PostUrlProcessor implements Function<HttpRequest, HttpResponse> {
 			headers.put(LOCATION, "http://localhost:8080/index.html");
 			HttpResponseHeaders httpResponseHeaders = new HttpResponseHeaders(headers);
 
-			HttpResponse httpResponse = new HttpResponse(httpStatusLine, httpResponseHeaders,
+			return new HttpResponse(httpStatusLine, httpResponseHeaders,
 				new HttpResponseBody(body));
-			return httpResponse;
 		}
 		throw new NotExistUrlException("url : " + httpRequest.getRequestTarget());
 	}

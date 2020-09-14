@@ -26,13 +26,17 @@ public enum HttpProcessor {
 	}
 
 	public static HttpResponse process(HttpRequest httpRequest) {
-		HttpProcessor httpProcessor = Arrays.stream(values())
+		HttpProcessor httpProcessor = of(httpRequest);
+
+		return httpProcessor.urlProcessor.apply(httpRequest);
+	}
+
+	private static HttpProcessor of(HttpRequest httpRequest) {
+		return Arrays.stream(values())
 			.filter(method -> method.isMatchMethod(httpRequest.getHttpMethod()))
 			.findFirst()
 			.orElseThrow(() -> new IllegalArgumentException(
 				String.format("%s는 HttpMethod에 포함되지 않습니다..", httpRequest.getHttpMethod())));
-
-		return httpProcessor.urlProcessor.apply(httpRequest);
 	}
 
 	public boolean isMatchMethod(String httpMethod) {
