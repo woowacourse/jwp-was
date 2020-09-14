@@ -3,6 +3,8 @@ package webserver;
 import db.DataBase;
 import http.RequestBody;
 import http.RequestHeader;
+import http.ResponseBody;
+import http.ResponseHeader;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,15 +51,15 @@ public class RequestHandler implements Runnable {
 
     private void resolveGet(RequestHeader requestHeader, DataOutputStream dos) throws IOException, URISyntaxException {
         if (requestHeader.getPath().equals("/")) {
-            response302Header(dos, "/index.html");
+            ResponseHeader.response302Header(dos, "/index.html");
         } else if (requestHeader.getParams().get("Accept").contains("css")) {
             byte[] body = FileIoUtils.loadFileFromClasspath("./static" + requestHeader.getPath());
-            response200Header(dos, "text/css", body.length);
-            responseBody(dos, body);
+            ResponseHeader.response200Header(dos, "text/css", body.length);
+            ResponseBody.responseBody(dos, body);
         } else {
             byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + requestHeader.getPath());
-            response200Header(dos, "text/html;charset=utf-8", body.length);
-            responseBody(dos, body);
+            ResponseHeader.response200Header(dos, "text/html;charset=utf-8", body.length);
+            ResponseBody.responseBody(dos, body);
         }
     }
 
@@ -66,37 +68,7 @@ public class RequestHandler implements Runnable {
             Map<String, String> params = requestBody.getParams();
             User user = new User(params.get("userId"), params.get("password"), params.get("name"), params.get("email"));
             DataBase.addUser(user);
-            response302Header(dos, "/index.html");
-        }
-    }
-
-    private void response200Header(DataOutputStream dos, String contentType, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: " + contentType + "\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void response302Header(DataOutputStream dos, String location) {
-        try {
-            dos.writeBytes("HTTP/1.1 302 Found \r\n");
-            dos.writeBytes("Location: " + location + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
+            ResponseHeader.response302Header(dos, "/index.html");
         }
     }
 }
