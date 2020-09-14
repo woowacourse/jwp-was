@@ -57,12 +57,14 @@ public class RequestHandler implements Runnable {
                 User user = new User(userId, password, name, email);
                 DataBase.addUser(user);
                 body = user.toString().getBytes();
+                response302Header(dos, "/index.html");
+                responseBody(dos, body);
             } else {
                 body = FileIoUtils.loadFileFromClasspath("./templates" + requestPath);
+                response200Header(dos, body.length);
+                responseBody(dos, body);
             }
-            logger.debug("body {}", body);
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
@@ -74,6 +76,15 @@ public class RequestHandler implements Runnable {
             dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void response302Header(DataOutputStream dos, String redirectUrl) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 Found \r\n");
+            dos.writeBytes("Location: " + redirectUrl + "\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
