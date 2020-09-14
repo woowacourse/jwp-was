@@ -19,6 +19,10 @@ public class FileIoUtils {
             return loadFileFromClasspath("/index.html");
         }
 
+        if(!filePath.endsWith(".html")) {
+            return "".getBytes();
+        }
+
         Path path = BASE_PATH.stream()
             .map(base -> getPath(base + filePath))
             .filter(Objects::nonNull)
