@@ -9,7 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class HandlebarsTest {
+class HandlebarsTest {
+
     private static final Logger log = LoggerFactory.getLogger(HandlebarsTest.class);
 
     @Test
