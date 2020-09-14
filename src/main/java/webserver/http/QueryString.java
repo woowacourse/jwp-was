@@ -1,4 +1,4 @@
-package webserver;
+package webserver.http;
 
 import exception.InvalidHttpMessageException;
 import exception.InvalidParameterException;

@@ -1,4 +1,4 @@
-package webserver;
+package webserver.http;
 
 import exception.InvalidParameterException;
 import org.junit.jupiter.api.DisplayName;

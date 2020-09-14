@@ -1,4 +1,4 @@
-package webserver;
+package webserver.http;
 
 import exception.FileNotReadableException;
 import exception.InvalidHttpMessageException;

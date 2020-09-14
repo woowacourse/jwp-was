@@ -1,4 +1,4 @@
-package webserver;
+package webserver.http;
 
 import exception.InvalidRequestLineException;
 import org.junit.jupiter.api.DisplayName;

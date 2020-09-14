@@ -1,4 +1,4 @@
-package webserver;
+package webserver.http;
 
 import exception.HttpMethodNotFoundException;
 import org.junit.jupiter.api.DisplayName;

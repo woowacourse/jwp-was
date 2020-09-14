@@ -1,4 +1,4 @@
-package webserver;
+package webserver.http;
 
 import exception.InvalidHttpVersionException;
 import org.junit.jupiter.api.DisplayName;
