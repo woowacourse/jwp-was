@@ -41,11 +41,11 @@ public class RequestHandler implements Runnable {
 			String line = br.readLine();
 			String path = line.split(DELIMITER)[1];
 			DataOutputStream dos = new DataOutputStream(out);
-
-			System.out.println(path);
+			findBody(br, line);
 
 			if (path.startsWith("/user/create")) {
-				Map<String, String> userInfo = ExtractUtils.extractUserInfo(path);
+				HttpBody httpBody = new HttpBody(br, 100);
+				Map<String, String> userInfo = ExtractUtils.extractUserInfo(httpBody.getBody());
 				User user = new User(userInfo.get("userId"), userInfo.get("password"), userInfo.get("name"),
 					userInfo.get("email"));
 				DataBase.addUser(user);
@@ -58,6 +58,15 @@ public class RequestHandler implements Runnable {
 			}
 		} catch (IOException | URISyntaxException e) {
 			logger.error(e.getMessage());
+		}
+	}
+
+	private void findBody(BufferedReader br, String line) throws IOException {
+		while (!"".equals(line)) {
+			line = br.readLine();
+			if (line == null) {
+				break;
+			}
 		}
 	}
 
