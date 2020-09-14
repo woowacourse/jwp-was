@@ -12,6 +12,14 @@ public class RequestEntity {
     private RequestHeader requestHeader;
     private RequestBody requestBody;
 
+    private RequestEntity(HttpMethod httpMethod, HttpUrl httpUrl, String httpVersion, RequestHeader requestHeader) {
+        this.httpMethod = httpMethod;
+        this.httpUrl = httpUrl;
+        this.httpVersion = httpVersion;
+        this.requestHeader = requestHeader;
+        this.requestBody = null;
+    }
+
     private RequestEntity(
         HttpMethod httpMethod, HttpUrl httpUrl, String httpVersion,
         RequestHeader requestHeader, RequestBody requestBody
@@ -37,7 +45,7 @@ public class RequestEntity {
                 RequestBody requestBody = RequestBody.from(bufferedReader, contentType, Integer.parseInt(contentLength));
                 return new RequestEntity(httpMethod, httpUrl, httpVersion, requestHeader, requestBody);
             }
-            return new RequestEntity(httpMethod, httpUrl, httpVersion, requestHeader, null);
+            return new RequestEntity(httpMethod, httpUrl, httpVersion, requestHeader);
         } catch (IOException e) {
             throw new RequestEntityCreateFailException();
         }
