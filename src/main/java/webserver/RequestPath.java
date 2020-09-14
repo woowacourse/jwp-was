@@ -20,8 +20,8 @@ public class RequestPath {
         String params = splitPath[1];
         String[] splitParams = params.split(PARAM_DELIMITER);
         for (String param : splitParams) {
-            String[] token = param.split(PARAM_KEY_VALUE_DELIMITER);
-            parameters.put(token[0], token[1]);
+            String[] keyValue = param.split(PARAM_KEY_VALUE_DELIMITER);
+            parameters.put(keyValue[0], keyValue[1]);
         }
     }
 
