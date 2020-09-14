@@ -9,6 +9,7 @@ import java.io.IOException;
 
 public class ResponseHeader {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+
     public static void response200Header(DataOutputStream dos, String contentType, int lengthOfBodyContent) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
