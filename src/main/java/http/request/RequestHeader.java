@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import exception.RequestHeaderCreateFailException;
 import utils.IOUtils;
 
 public class RequestHeader {
@@ -21,7 +22,7 @@ public class RequestHeader {
         try {
             extractHeaders(bufferedReader, headers);
         } catch (IOException e) {
-            throw new RuntimeException("IO EXCEPTION 발생");
+            throw new RequestHeaderCreateFailException();
         }
 
         return new RequestHeader(headers);

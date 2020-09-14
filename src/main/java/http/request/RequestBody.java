@@ -3,6 +3,7 @@ package http.request;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+import exception.RequestBodyCreateFailException;
 import utils.IOUtils;
 
 public class RequestBody {
@@ -20,7 +21,7 @@ public class RequestBody {
             content = contentType.parse(content);
             return new RequestBody(content, contentType);
         } catch (IOException e) {
-            throw new RuntimeException("IO EXCEPTION 발생");
+            throw new RequestBodyCreateFailException();
         }
     }
 
