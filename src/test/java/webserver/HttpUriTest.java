@@ -26,7 +26,7 @@ class HttpUriTest {
     void httpUriExceptionTest(String uri) {
         assertThatThrownBy(() -> new HttpUri(uri))
                 .isInstanceOf(InvalidUriException.class)
-                .hasMessage("규격에 맞지 않는 uri입니다! -> " + uri);
+                .hasMessage("규격에 맞지 않는 URI입니다! -> " + uri);
     }
 
     @DisplayName("templates에 존재하는 resource를 읽기")
