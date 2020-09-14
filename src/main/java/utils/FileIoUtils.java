@@ -7,8 +7,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class FileIoUtils {
+    private static final String INDEX_PATH = "/";
+    private static final String FILE_DIRECTORY = "./templates";
+
     public static byte[] loadFileFromClasspath(String filePath) throws IOException, URISyntaxException {
-        Path path = Paths.get(FileIoUtils.class.getClassLoader().getResource(filePath).toURI());
+        if (INDEX_PATH.equals(filePath)) {
+            return "Hello World".getBytes();
+        }
+        Path path = Paths.get(FileIoUtils.class.getClassLoader().getResource(FILE_DIRECTORY + filePath).toURI());
         return Files.readAllBytes(path);
     }
 }
