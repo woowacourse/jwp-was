@@ -1,20 +1,17 @@
 package webserver.http;
 
-import exception.FileNotReadableException;
 import exception.InvalidHttpMessageException;
 import exception.InvalidUriException;
-import utils.FileIoUtils;
 import utils.StringUtils;
 
 public class HttpUri {
-    private static final String TEMPLATES_PATH = "./templates";
     private static final String URI_QUERY_STRING_DELIMITER = "\\?";
 
-    private final String resourceUri;
+    private final HttpResourceUri httpResourceUri;
     private final QueryString queryString;
 
-    private HttpUri(String resourceUri, QueryString queryString) {
-        this.resourceUri = resourceUri;
+    private HttpUri(HttpResourceUri httpResourceUri, QueryString queryString) {
+        this.httpResourceUri = httpResourceUri;
         this.queryString = queryString;
     }
 
@@ -26,7 +23,7 @@ public class HttpUri {
         String resourceUri = tokens[0];
         String queryString = tokens.length == 2 ? tokens[1] : "";
 
-        return new HttpUri(resourceUri, QueryString.from(queryString));
+        return new HttpUri(HttpResourceUri.from(resourceUri), QueryString.from(queryString));
     }
 
     private static void validateFirstCharacterIsSlash(String uri) {
@@ -36,12 +33,11 @@ public class HttpUri {
     }
 
     public byte[] readFile() {
-        String filePath = TEMPLATES_PATH + resourceUri;
-        try {
-            return FileIoUtils.loadFileFromClasspath(filePath);
-        } catch (Exception e) {
-            throw new FileNotReadableException(filePath);
-        }
+        return this.httpResourceUri.readFile();
+    }
+
+    public String getContentType() {
+        return this.httpResourceUri.getContentType();
     }
 
     public String getParameterValue(String parameterKey) {
