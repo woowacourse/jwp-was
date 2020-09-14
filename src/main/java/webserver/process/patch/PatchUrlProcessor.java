@@ -11,6 +11,5 @@ public class PatchUrlProcessor implements Function<HttpRequest, HttpResponse> {
 	@Override
 	public HttpResponse apply(HttpRequest httpRequest) {
 		throw new NotExistUrlException("url : " + httpRequest.getRequestTarget());
-
 	}
 }

@@ -12,10 +12,6 @@ public class HttpStatusLine {
 		this.statusCode = statusCode;
 	}
 
-	public static String getDefaultHttpVersion() {
-		return DEFAULT_HTTP_VERSION;
-	}
-
 	public String getHttpVersion() {
 		return httpVersion;
 	}
