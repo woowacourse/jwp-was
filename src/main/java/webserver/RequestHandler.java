@@ -3,7 +3,7 @@ package webserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
-import webserver.http.HttpRequestHeader;
+import webserver.http.request.HttpRequestHeader;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
