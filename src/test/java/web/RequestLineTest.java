@@ -17,7 +17,6 @@ class RequestLineTest {
     void parseRequestLine() throws IOException {
         String request = "GET /favicon.ico HTTP/1.1";
         String[] req = request.split(" ");
-        String method = req[0];
         String path = req[1];
         String protocol = req[2];
 
@@ -27,7 +26,7 @@ class RequestLineTest {
 
         RequestLine requestLine = new RequestLine(bufferedReader);
 
-        assertThat(requestLine.getMethod()).isEqualTo(method);
+        assertThat(requestLine.getMethod()).isEqualTo(HttpMethod.GET);
         assertThat(requestLine.getPath()).isEqualTo(path);
         assertThat(requestLine.getProtocol()).isEqualTo(protocol);
     }

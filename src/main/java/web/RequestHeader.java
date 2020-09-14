@@ -8,14 +8,15 @@ import java.util.Objects;
 
 public class RequestHeader {
 
+    private static final String HEADER_DELIMITER = ": ";
+
     private final Map<String, String> headers = new HashMap<>();
 
     public RequestHeader(BufferedReader bufferedReader) throws IOException {
         String line = bufferedReader.readLine();
 
         while (!isEmpty(line)) {
-            System.out.println(line);
-            String[] headerToken = line.split(": ");
+            String[] headerToken = line.split(HEADER_DELIMITER);
             headers.put(headerToken[0], headerToken[1]);
             line = bufferedReader.readLine();
         }
@@ -27,5 +28,9 @@ public class RequestHeader {
 
     public Map<String, String> getHeaders() {
         return headers;
+    }
+
+    public int getContentLength() {
+        return Integer.parseInt(headers.get("Content-Length"));
     }
 }
