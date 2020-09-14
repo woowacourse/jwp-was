@@ -1,6 +1,6 @@
 package model;
 
-import webserver.QueryString;
+import webserver.http.NameAndValuePair;
 
 public class User {
     private String userId;
@@ -15,11 +15,11 @@ public class User {
         this.email = email;
     }
 
-    public static User from(QueryString queryString) {
-        String userId = queryString.getParameterValue("userId");
-        String password = queryString.getParameterValue("password");
-        String name = queryString.getParameterValue("name");
-        String email = queryString.getParameterValue("email");
+    public static User from(NameAndValuePair nameAndValuePair) {
+        String userId = nameAndValuePair.getValue("userId");
+        String password = nameAndValuePair.getValue("password");
+        String name = nameAndValuePair.getValue("name");
+        String email = nameAndValuePair.getValue("email");
 
         return new User(userId, password, name, email);
     }
