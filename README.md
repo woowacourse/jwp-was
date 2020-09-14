@@ -7,3 +7,12 @@
 
 ## 우아한테크코스 코드리뷰
 * [온라인 코드 리뷰 과정](https://github.com/woowacourse/woowacourse-docs/blob/master/maincourse/README.md)
+
+### 기능 목록
+
+요구사항 1
+
+-[ ]  http://localhost:8080/index.html 로 접속했을 때 webapp 디렉토리의 index.html 파일을 읽어 클라이언트에 응답한다.
+    -[ ] 모든 Request Header를 출력한다.
+    -[ ] Request Line에서 path를 분리한다.
+    -[ ] path에 해당하는 파일 읽어 응답한다.
