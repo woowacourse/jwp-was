@@ -2,21 +2,23 @@ package webserver.requestmapping.behavior;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.Map;
 
 import db.DataBase;
 import http.request.RequestBody;
 import http.request.RequestEntity;
 import model.User;
-import utils.StringUtils;
+import stringprocessor.Params;
 
 public class UserCreateBehavior implements RequestBehavior {
     @Override
     public InputStream behave(RequestEntity requestEntity) {
         RequestBody requestBody = requestEntity.getRequestBody();
-        Map<String, String> userInfo = StringUtils.extractParams(requestBody.getContent());
+        Params userInfo = Params.from(requestBody.getContent());
         User user = new User(
-            userInfo.get("userId"), userInfo.get("password"), userInfo.get("name"), userInfo.get("email"));
+            userInfo.findValueBy("userId"),
+            userInfo.findValueBy("password"),
+            userInfo.findValueBy("name"),
+            userInfo.findValueBy("email"));
         DataBase.addUser(user);
 
         String response = "HTTP/1.1 302 FOUND \r\n" +
