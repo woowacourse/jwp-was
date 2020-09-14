@@ -1,7 +1,7 @@
 package webserver;
 
 import java.util.Arrays;
-import webserver.exception.NotExistsMethod;
+import webserver.exception.NotExistsHttpMethod;
 
 public enum HttpMethod {
     GET(false),
@@ -24,7 +24,7 @@ public enum HttpMethod {
         return Arrays.stream(HttpMethod.values())
             .filter(method -> method.name().equals(httpMethod))
             .findFirst()
-            .orElseThrow(() -> new NotExistsMethod("올바르지 않은 메서드입니다."));
+            .orElseThrow(() -> new NotExistsHttpMethod("올바르지 않은 메서드입니다."));
     }
 
     public boolean isSame(String httpMethod) {
@@ -33,9 +33,5 @@ public enum HttpMethod {
 
     public boolean hasRequestBody() {
         return hasRequestBody;
-    }
-
-    public boolean equalsHttpMethodIgnoreCase(String httpMethod) {
-        return this.name().equalsIgnoreCase(httpMethod);
     }
 }

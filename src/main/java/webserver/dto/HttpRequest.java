@@ -13,13 +13,13 @@ public class HttpRequest {
     private final Headers headers;
     private final FileNameExtension fileNameExtension;
 
-    public HttpRequest(String httpMethod, String urlPath, Map<String, String> parameters,
-        String protocol, Map<String, String> headers, FileNameExtension fileNameExtension) {
-        this.httpMethod = HttpMethod.from(httpMethod);
-        this.urlPath = UrlPath.from(urlPath);
-        this.parameters = Parameters.from(parameters);
-        this.protocol = Protocol.of(protocol);
-        this.headers = Headers.of(headers);
+    public HttpRequest(HttpMethod httpMethod, UrlPath urlPath, Parameters parameters,
+        Protocol protocol, Headers headers, FileNameExtension fileNameExtension) {
+        this.httpMethod = httpMethod;
+        this.urlPath = urlPath;
+        this.parameters = parameters;
+        this.protocol = protocol;
+        this.headers = headers;
         this.fileNameExtension = fileNameExtension;
     }
 

@@ -4,15 +4,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static util.Constants.CONTENT_TYPE_TEXT_CSS;
 import static util.Constants.CONTENT_TYPE_TEXT_HTML;
 import static util.Constants.CONTENT_TYPE_TEXT_PLAIN;
+import static util.Constants.HEADERS_EMPTY;
+import static util.Constants.PARAMETERS_EMPTY;
 import static util.Constants.PROTOCOL;
-import static util.Constants.URL_BOOTSTRAP_MIN_CSS;
-import static util.Constants.URL_INDEX_HTML;
-import static util.Constants.URL_NOT_EXISTS_FILE;
+import static util.Constants.URL_PATH_BOOTSTRAP_MIN_CSS;
+import static util.Constants.URL_PATH_INDEX_HTML;
+import static util.Constants.URL_PATH_NOT_EXISTS_FILE;
+import static webserver.HttpMethod.GET;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.HashMap;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,6 +25,7 @@ import webserver.FileNameExtension;
 import webserver.HttpMethod;
 import webserver.HttpStatusCode;
 import webserver.dto.HttpRequest;
+import webserver.dto.UrlPath;
 import webserver.utils.FileIoUtils;
 
 class FileHandlerTest {
@@ -35,9 +38,8 @@ class FileHandlerTest {
     @Test
     void loadFile_HTML_Return200() throws IOException, URISyntaxException {
         try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
-            HttpRequest httpRequest = new HttpRequest(HttpMethod.GET.name(), URL_INDEX_HTML,
-                new HashMap<>(), PROTOCOL, new HashMap<>(), FileNameExtension.from(URL_INDEX_HTML)
-            );
+            HttpRequest httpRequest = makeHttpRequest(GET, URL_PATH_INDEX_HTML);
+
             fileHandler.loadFile(os, httpRequest);
 
             byte[] body = FileIoUtils
@@ -55,10 +57,8 @@ class FileHandlerTest {
     @Test
     void loadFile_CSS_Return200() throws IOException, URISyntaxException {
         try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
-            HttpRequest httpRequest = new HttpRequest(HttpMethod.GET.name(), URL_BOOTSTRAP_MIN_CSS,
-                new HashMap<>(), PROTOCOL, new HashMap<>(), FileNameExtension.from(
-                URL_BOOTSTRAP_MIN_CSS)
-            );
+            HttpRequest httpRequest = makeHttpRequest(GET, URL_PATH_BOOTSTRAP_MIN_CSS);
+
             fileHandler.loadFile(os, httpRequest);
 
             byte[] body = FileIoUtils
@@ -77,10 +77,8 @@ class FileHandlerTest {
     @ValueSource(strings = {"POST", "PUT", "DELETE"})
     void loadFile_MethodNotGet_Return405(String httpMethod) throws IOException {
         try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
-            HttpRequest httpRequest = new HttpRequest(httpMethod, URL_BOOTSTRAP_MIN_CSS,
-                new HashMap<>(),
-                PROTOCOL, new HashMap<>(), FileNameExtension.from(URL_BOOTSTRAP_MIN_CSS)
-            );
+            HttpRequest httpRequest
+                = makeHttpRequest(HttpMethod.from(httpMethod), URL_PATH_BOOTSTRAP_MIN_CSS);
             fileHandler.loadFile(os, httpRequest);
 
             assertThat(os.toString()).contains(HttpStatusCode.METHOD_NOT_ALLOW.getCodeAndMessage());
@@ -94,9 +92,7 @@ class FileHandlerTest {
     @Test
     void loadFile_NotExistsFile_Return404() throws IOException {
         try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
-            HttpRequest httpRequest = new HttpRequest(HttpMethod.GET.name(), URL_NOT_EXISTS_FILE,
-                new HashMap<>(), PROTOCOL, new HashMap<>(), FileNameExtension.from(URL_INDEX_HTML)
-            );
+            HttpRequest httpRequest = makeHttpRequest(GET, URL_PATH_NOT_EXISTS_FILE);
             fileHandler.loadFile(os, httpRequest);
 
             assertThat(os.toString()).contains(HttpStatusCode.NOT_FOUND.getCodeAndMessage());
@@ -104,5 +100,16 @@ class FileHandlerTest {
 
             LOGGER.debug("response : {}", os);
         }
+    }
+
+    private HttpRequest makeHttpRequest(HttpMethod httpMethod, UrlPath urlPath) {
+        return new HttpRequest(
+            httpMethod,
+            urlPath,
+            PARAMETERS_EMPTY,
+            PROTOCOL,
+            HEADERS_EMPTY,
+            FileNameExtension.from(urlPath)
+        );
     }
 }

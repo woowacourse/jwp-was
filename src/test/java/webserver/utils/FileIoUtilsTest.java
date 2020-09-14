@@ -1,8 +1,8 @@
 package webserver.utils;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static util.Constants.URL_BOOTSTRAP_MIN_CSS;
-import static util.Constants.URL_INDEX_HTML;
+import static util.Constants.URL_PATH_BOOTSTRAP_MIN_CSS;
+import static util.Constants.URL_PATH_INDEX_HTML;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,15 +18,15 @@ public class FileIoUtilsTest {
     @DisplayName("HTML 파일 불러오는지 확인, 성공 - 파일 존재")
     @Test
     void loadFileFromClasspath_HtmlFileExists_Success() throws Exception {
-        byte[] body = FileIoUtils.loadFileFromClasspath(URL_INDEX_HTML,
-            FileNameExtension.from(URL_INDEX_HTML).getDirectory());
+        byte[] body = FileIoUtils.loadFileFromClasspath(URL_PATH_INDEX_HTML.getUrlPath(),
+            FileNameExtension.from(URL_PATH_INDEX_HTML).getDirectory());
         LOGGER.debug("file : {}", new String(body));
     }
 
     @DisplayName("HTML 파일 불러오는지 확인, 예외 발생 - 파일 존재하지 않음")
     @Test
     void loadFileFromClasspath_HtmlFileNotExists_ThrownException() {
-        String filePath = WRONG_PREFIX_PATH + URL_INDEX_HTML;
+        String filePath = WRONG_PREFIX_PATH + URL_PATH_INDEX_HTML.getUrlPath();
         assertThatThrownBy(() -> FileIoUtils
             .loadFileFromClasspath(filePath, FileNameExtension.from(filePath).getDirectory()))
             .isInstanceOf(FileNotExitsException.class);
@@ -35,15 +35,15 @@ public class FileIoUtilsTest {
     @DisplayName("CSS 파일 불러오는지 확인, 성공 - 파일 존재")
     @Test
     void loadFileFromClasspath_CssFileExists_Success() throws Exception {
-        byte[] body = FileIoUtils.loadFileFromClasspath(URL_BOOTSTRAP_MIN_CSS,
-            FileNameExtension.from(URL_BOOTSTRAP_MIN_CSS).getDirectory());
+        byte[] body = FileIoUtils.loadFileFromClasspath(URL_PATH_BOOTSTRAP_MIN_CSS.getUrlPath(),
+            FileNameExtension.from(URL_PATH_BOOTSTRAP_MIN_CSS).getDirectory());
         LOGGER.debug("file : {}", new String(body));
     }
 
     @DisplayName("CSS 파일 불러오는지 확인, 예외 발생 - 파일 존재하지 않음")
     @Test
     void loadFileFromClasspath_CssFileNotExists_ThrownException() {
-        String filePath = WRONG_PREFIX_PATH + URL_BOOTSTRAP_MIN_CSS;
+        String filePath = WRONG_PREFIX_PATH + URL_PATH_BOOTSTRAP_MIN_CSS;
 
         assertThatThrownBy(() -> FileIoUtils
             .loadFileFromClasspath(filePath, FileNameExtension.from(filePath).getDirectory()))

@@ -7,16 +7,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static util.Constants.CONTENT_TYPE_TEXT_PLAIN;
 import static util.Constants.EMPTY;
-import static util.Constants.PROTOCOL;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import util.Constants;
 import webserver.HttpStatusCode;
 
 class HttpResponseTest {
+
+    public static final String PROTOCOL = Constants.PROTOCOL.getProtocol();
 
     @DisplayName("Protocol이 Null인 경우 NPE 발생")
     @Test
@@ -43,7 +45,7 @@ class HttpResponseTest {
     @Test
     void of_NullBody_ThrownException() {
         assertThatThrownBy(() ->
-            HttpResponse.of(PROTOCOL, HttpStatusCode.OK, new HashMap<>(), (String) null))
+            HttpResponse.of(PROTOCOL, HttpStatusCode.OK, new HashMap<>(), (byte[]) null))
             .isInstanceOf(NullPointerException.class);
     }
 

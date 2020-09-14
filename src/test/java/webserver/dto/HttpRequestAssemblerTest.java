@@ -3,7 +3,7 @@ package webserver.dto;
 import static java.lang.System.lineSeparator;
 import static org.assertj.core.api.Assertions.assertThat;
 import static util.Constants.PROTOCOL;
-import static util.Constants.URL_INDEX_HTML;
+import static util.Constants.URL_PATH_INDEX_HTML;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -99,7 +99,7 @@ class HttpRequestAssemblerTest {
         int bodyLength = body.getBytes(StandardCharsets.UTF_8).length;
         String contentLengthHeader = String.format(HEADER_CONTENT_LENGTH_FORMAT, bodyLength);
         String request =
-            String.format(REQUEST_POST_LINE_FORMAT, URL_INDEX_HTML) + contentLengthHeader
+            String.format(REQUEST_POST_LINE_FORMAT, URL_PATH_INDEX_HTML) + contentLengthHeader
                 + lineSeparator() + lineSeparator() + body;
         HttpRequest httpRequest;
         try (InputStream in = new ByteArrayInputStream(request.getBytes(StandardCharsets.UTF_8));

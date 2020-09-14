@@ -2,28 +2,28 @@ package controller;
 
 import static com.google.common.net.HttpHeaders.LOCATION;
 import static org.assertj.core.api.Assertions.assertThat;
+import static util.Constants.HEADERS_EMPTY;
+import static util.Constants.PARAMETERS_FOR_CREATE_USER;
 import static util.Constants.PROTOCOL;
-import static util.Constants.URL_API_CREATE_USER;
-import static util.Constants.URL_INDEX_HTML;
+import static util.Constants.URL_PATH_API_CREATE_USER;
+import static util.Constants.URL_PATH_INDEX_HTML;
 import static util.Constants.USER_EMAIL;
 import static util.Constants.USER_ID;
-import static util.Constants.USER_NAME;
 import static util.Constants.USER_PASSWORD;
+import static webserver.FileNameExtension.API;
+import static webserver.HttpMethod.POST;
 
 import db.DataBase;
 import db.DataBaseTest;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import service.UserService;
-import webserver.FileNameExtension;
-import webserver.HttpMethod;
 import webserver.HttpStatusCode;
 import webserver.dto.HttpRequest;
 import webserver.dto.HttpResponse;
+import webserver.dto.Parameters;
 
 class UserControllerTest {
 
@@ -40,33 +40,26 @@ class UserControllerTest {
     @DisplayName("User 생성, 200 반환")
     @Test
     void createUser_Return200() {
-        Map<String, String> parameter = new HashMap<String, String>() {{
-            put(USER_ID, USER_ID);
-            put(USER_EMAIL, USER_EMAIL);
-            put(USER_PASSWORD, USER_PASSWORD);
-            put(USER_NAME, USER_NAME);
-        }};
-        HttpRequest httpRequest = new HttpRequest(HttpMethod.POST.name(), URL_API_CREATE_USER,
-            parameter, PROTOCOL, new HashMap<>(), FileNameExtension.API);
+        HttpRequest httpRequest = makeHttpRequest(PARAMETERS_FOR_CREATE_USER);
 
         HttpResponse httpResponse = userController.createUser(httpRequest);
 
         assertThat(httpResponse.getHttpStatusCode()).isEqualTo(HttpStatusCode.FOUND);
         assertThat(httpResponse.getBody()).isEmpty();
-        assertThat(httpResponse.getProtocol()).isEqualTo(PROTOCOL);
-        assertThat(httpResponse.getHeaders().get(LOCATION)).isEqualTo(URL_INDEX_HTML);
+        assertThat(httpResponse.getProtocol()).isEqualTo(PROTOCOL.getProtocol());
+        assertThat(httpResponse.getHeaders().get(LOCATION))
+            .isEqualTo(URL_PATH_INDEX_HTML.getUrlPath());
     }
 
     @DisplayName("User 생성, 404 반환 - 파라미터 일부 누락")
     @Test
     void createUser_NotExistsSomeParameters_Return404() {
-        Map<String, String> parameter = new HashMap<String, String>() {{
-            put(USER_ID, USER_ID);
-            put(USER_EMAIL, USER_EMAIL);
-            put(USER_PASSWORD, USER_PASSWORD);
-        }};
-        HttpRequest httpRequest = new HttpRequest(HttpMethod.POST.name(), URL_API_CREATE_USER,
-            parameter, PROTOCOL, new HashMap<>(), FileNameExtension.API);
+        Parameters wrongParameters = Parameters.fromEncodedParameter(
+            USER_ID + "=" + USER_ID
+                + "&" + USER_EMAIL + "=" + USER_EMAIL
+                + "&" + USER_PASSWORD + "=" + USER_PASSWORD
+        );
+        HttpRequest httpRequest = makeHttpRequest(wrongParameters);
 
         HttpResponse httpResponse = userController.createUser(httpRequest);
 
@@ -74,7 +67,12 @@ class UserControllerTest {
         byte[] expectedBody = HttpStatusCode.BAD_REQUEST.getMessage()
             .getBytes(StandardCharsets.UTF_8);
         assertThat(httpResponse.getBody()).contains(expectedBody);
-        assertThat(httpResponse.getProtocol()).isEqualTo(PROTOCOL);
+        assertThat(httpResponse.getProtocol()).isEqualTo(PROTOCOL.getProtocol());
         assertThat(httpResponse.getHeaders().get(LOCATION)).isNull();
+    }
+
+    private HttpRequest makeHttpRequest(Parameters parameters) {
+        return new HttpRequest(POST, URL_PATH_API_CREATE_USER,
+            parameters, PROTOCOL, HEADERS_EMPTY, API);
     }
 }

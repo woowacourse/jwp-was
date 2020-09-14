@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
+import webserver.dto.UrlPath;
 
 public enum FileNameExtension {
     API(
@@ -75,6 +76,10 @@ public enum FileNameExtension {
         int delimiterIndex = urlPath.lastIndexOf(URL_DELIMITER);
         urlPath = urlPath.substring(delimiterIndex + 1);
         return urlPath;
+    }
+
+    public static FileNameExtension from(UrlPath urlPath) {
+        return from(urlPath.getUrlPath());
     }
 
     public static FileNameExtension from(String urlPath) {

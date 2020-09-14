@@ -34,7 +34,7 @@ public class FileHandler {
     }
 
     private void loadFile(HttpRequest httpRequest, DataOutputStream dos) throws IOException {
-        boolean isNotGetHttpMethod = !GET.equalsHttpMethodIgnoreCase(httpRequest.getHttpMethod());
+        boolean isNotGetHttpMethod = !GET.isSame(httpRequest.getHttpMethod());
         if (isNotGetHttpMethod) {
             returnMethodNotAllow(httpRequest, dos);
             return;
