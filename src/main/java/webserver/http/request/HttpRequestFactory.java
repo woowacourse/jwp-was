@@ -1,4 +1,4 @@
-package webserver.http;
+package webserver.http.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,23 +11,26 @@ import java.util.Objects;
 import utils.IOUtils;
 
 public class HttpRequestFactory {
+    private HttpRequestFactory() {
+    }
+
     public static HttpRequest create(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
-        HttpStartLine httpStartLine = HttpStartLine.from(bufferedReader.readLine());
-        HttpHeaders httpHeaders = getHttpHeaders(bufferedReader);
+        RequestStartLine requestStartLine = RequestStartLine.from(bufferedReader.readLine());
+        RequestHeaders requestHeaders = getHttpHeaders(bufferedReader);
 
-        String body = IOUtils.readData(bufferedReader, httpHeaders.getContentLength());
-        return new HttpRequest(httpStartLine, httpHeaders, new HttpBody(body));
+        String body = IOUtils.readData(bufferedReader, requestHeaders.getContentLength());
+        return new HttpRequest(requestStartLine, requestHeaders, new RequestBody(body));
     }
 
-    private static HttpHeaders getHttpHeaders(BufferedReader bufferedReader) throws IOException {
+    private static RequestHeaders getHttpHeaders(BufferedReader bufferedReader) throws IOException {
         List<String> headers = new ArrayList<>();
         String headerLine;
         while (Objects.nonNull(headerLine = bufferedReader.readLine()) && !"".equals(headerLine)) {
             headers.add(headerLine);
         }
 
-        return HttpHeaders.from(headers);
+        return RequestHeaders.from(headers);
     }
 }

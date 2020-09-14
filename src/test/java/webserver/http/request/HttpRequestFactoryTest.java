@@ -1,4 +1,4 @@
-package webserver.http;
+package webserver.http.request;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -6,6 +6,9 @@ import java.io.ByteArrayInputStream;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import webserver.http.request.HttpRequest;
+import webserver.http.request.HttpRequestFactory;
 
 class HttpRequestFactoryTest {
 

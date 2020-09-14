@@ -9,12 +9,8 @@ import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.ByteSource;
-
-import utils.IOUtils;
-import webserver.http.HttpRequest;
-import webserver.http.HttpRequestFactory;
+import webserver.http.request.HttpRequest;
+import webserver.http.request.HttpRequestFactory;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -33,6 +29,7 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             DataOutputStream dos = new DataOutputStream(out);
             HttpRequest httpRequest = HttpRequestFactory.create(in);
+
             byte[] body = "Hello World".getBytes();
             response200Header(dos, body.length);
             responseBody(dos, body);
@@ -50,6 +47,7 @@ public class RequestHandler implements Runnable {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+
     }
 
     private void responseBody(DataOutputStream dos, byte[] body) {

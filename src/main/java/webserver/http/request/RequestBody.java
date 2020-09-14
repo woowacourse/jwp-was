@@ -1,9 +1,9 @@
-package webserver.http;
+package webserver.http.request;
 
-public class HttpBody {
+public class RequestBody {
     private String body;
 
-    public HttpBody(String body) {
+    public RequestBody(String body) {
         this.body = body;
     }
 

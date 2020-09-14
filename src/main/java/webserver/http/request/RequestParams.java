@@ -1,4 +1,4 @@
-package webserver.http;
+package webserver.http.request;
 
 import static java.util.stream.Collectors.*;
 
@@ -9,23 +9,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class HttpRequestParams {
+public class RequestParams {
     private final Map<String, List<String>> parameters;
 
-    public HttpRequestParams(Map<String, List<String>> parameters) {
+    public RequestParams(Map<String, List<String>> parameters) {
         this.parameters = parameters;
     }
 
-    public static HttpRequestParams from(String params) {
+    public static RequestParams from(String params) {
         if (Objects.isNull(params) || params.isEmpty()) {
-            return new HttpRequestParams(new HashMap<>());
+            return new RequestParams(new HashMap<>());
         }
 
         return Arrays.stream(params.split("&"))
             .map(param -> param.split("="))
             .collect(
                 collectingAndThen(groupingBy(param -> param[0], mapping(param -> param[1], toList())),
-                    HttpRequestParams::new));
+                    RequestParams::new));
     }
 
     public String getOneParameterValue(String key) {

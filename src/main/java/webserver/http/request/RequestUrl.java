@@ -1,21 +1,21 @@
-package webserver.http;
+package webserver.http.request;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class HttpUrl {
+public class RequestUrl {
     private static final int URL_INDEX = 0;
     private static final int PARAMS_INDEX = 1;
 
     private String url;
-    private HttpRequestParams httpRequestParams;
+    private RequestParams requestParams;
 
-    public HttpUrl(String url, HttpRequestParams httpRequestParams) {
+    public RequestUrl(String url, RequestParams requestParams) {
         this.url = url;
-        this.httpRequestParams = httpRequestParams;
+        this.requestParams = requestParams;
     }
 
-    public static HttpUrl from(String urlLine) {
+    public static RequestUrl from(String urlLine) {
         List<String> strings = Arrays.asList(urlLine.split("\\?"));
         String url = strings.get(URL_INDEX);
         String params = "";
@@ -23,14 +23,14 @@ public class HttpUrl {
             params = strings.get(PARAMS_INDEX);
         }
 
-        return new HttpUrl(url, HttpRequestParams.from(params));
+        return new RequestUrl(url, RequestParams.from(params));
     }
 
     public String getUrl() {
         return url;
     }
 
-    public HttpRequestParams getHttpRequestParams() {
-        return httpRequestParams;
+    public RequestParams getHttpRequestParams() {
+        return requestParams;
     }
 }

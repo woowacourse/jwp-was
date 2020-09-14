@@ -1,14 +1,14 @@
-package webserver.http;
+package webserver.http.request;
 
 import java.util.Arrays;
 
-public enum HttpMethod {
+public enum RequestMethod {
     GET,
     POST;
 
-    public static HttpMethod of(String methodName) {
+    public static RequestMethod of(String methodName) {
         return Arrays.stream(values())
-            .filter(httpMethod -> httpMethod.name().equalsIgnoreCase(methodName))
+            .filter(requestMethod -> requestMethod.name().equalsIgnoreCase(methodName))
             .findAny()
             .orElseThrow(() -> new IllegalArgumentException("허용되지 않는 Http Method 입니다."));
     }
