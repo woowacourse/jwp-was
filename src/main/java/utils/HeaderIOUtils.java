@@ -3,14 +3,14 @@ package utils;
 import java.util.HashMap;
 import java.util.Map;
 
-import webserver.http.HeaderName;
-import webserver.http.HttpHeaders;
+import webserver.http.request.HttpRequestHeaderName;
+import webserver.http.request.HttpRequestHttpHeaders;
 
 public class HeaderIOUtils {
 
 	public static final int FIRST_INDEX_EXCLUDING_MAIN_HEADER = 1;
 
-	public static HttpHeaders parseHttpHeaders(String httpHeader) {
+	public static HttpRequestHttpHeaders parseHttpHeaders(String httpHeader) {
 		Map<String, String> headers = new HashMap<>();
 
 		String[] headerLine = httpHeader.split("\n");
@@ -19,7 +19,7 @@ public class HeaderIOUtils {
 
 		parseExceptMainHeaders(headers, headerLine);
 
-		return new HttpHeaders(headers);
+		return new HttpRequestHttpHeaders(headers);
 	}
 
 	private static void parseExceptMainHeaders(Map<String, String> headers, String[] headerLine) {
@@ -31,8 +31,8 @@ public class HeaderIOUtils {
 
 	private static void parseMainHeaders(Map<String, String> headers, String s) {
 		String[] mainHeaders = s.split(" ");
-		headers.put(HeaderName.Method.name(), mainHeaders[0]);
-		headers.put(HeaderName.RequestUrl.name(), mainHeaders[1]);
+		headers.put(HttpRequestHeaderName.Method.name(), mainHeaders[0]);
+		headers.put(HttpRequestHeaderName.RequestUrl.name(), mainHeaders[1]);
 		headers.put("httpVersion", mainHeaders[2]);
 	}
 }

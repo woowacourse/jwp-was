@@ -6,7 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import model.User;
-import webserver.http.HttpBody;
+import webserver.http.request.HttpRequestBody;
 
 class UserParserTest {
 
@@ -15,9 +15,9 @@ class UserParserTest {
 	void parseUser() {
 
 		String url = "userId=user&password=1234&name=name&email=email@gmail.com";
-		HttpBody httpBody = new HttpBody(url);
+		HttpRequestBody httpRequestBody = new HttpRequestBody(url);
 
-		User user = UserParser.parseUser(httpBody);
+		User user = UserParser.parseUser(httpRequestBody);
 
 		assertAll(
 			() -> assertEquals(user.getUserId(), "user"),

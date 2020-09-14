@@ -1,12 +1,12 @@
-package webserver.http;
+package webserver.http.request;
 
-public class HttpBody {
+public class HttpRequestBody {
 
-	public static final HttpBody EMPTY_BODY = new HttpBody("");
+	public static final HttpRequestBody EMPTY_BODY = new HttpRequestBody("");
 
 	private final String httpBody;
 
-	public HttpBody(String httpBody) {
+	public HttpRequestBody(String httpBody) {
 		this.httpBody = httpBody;
 	}
 

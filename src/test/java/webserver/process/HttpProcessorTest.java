@@ -1,6 +1,8 @@
 package webserver.process;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static webserver.http.response.HttpResponseHeaderName.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -10,10 +12,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import utils.FileIoUtils;
-import webserver.http.HeaderName;
-import webserver.http.HttpBody;
-import webserver.http.HttpHeaders;
-import webserver.http.HttpRequest;
+import webserver.http.request.HttpRequest;
+import webserver.http.request.HttpRequestBody;
+import webserver.http.request.HttpRequestHeaderName;
+import webserver.http.request.HttpRequestHttpHeaders;
+import webserver.http.response.HttpResponse;
+import webserver.http.response.StatusCode;
 
 class HttpProcessorTest {
 
@@ -21,10 +25,10 @@ class HttpProcessorTest {
 	@Test
 	void processException() {
 		HashMap<String, String> headers = new HashMap<>();
-		headers.put(HeaderName.Method.name(), "잘못된 METHOD");
-		HttpHeaders httpHeaders = new HttpHeaders(headers);
-		HttpBody httpBody = new HttpBody("");
-		HttpRequest httpRequest = new HttpRequest(httpHeaders, httpBody);
+		headers.put(HttpRequestHeaderName.Method.name(), "잘못된 METHOD");
+		HttpRequestHttpHeaders httpRequestHttpHeaders = new HttpRequestHttpHeaders(headers);
+		HttpRequestBody httpRequestBody = new HttpRequestBody("");
+		HttpRequest httpRequest = new HttpRequest(httpRequestHttpHeaders, httpRequestBody);
 
 		assertThatThrownBy(() -> HttpProcessor.process(httpRequest))
 			.isInstanceOf(IllegalArgumentException.class);
@@ -32,33 +36,45 @@ class HttpProcessorTest {
 
 	@DisplayName("GET - index.html 요청")
 	@Test
-	void proceeIndexHtml() throws IOException, URISyntaxException {
+	void processIndexHtml() throws IOException, URISyntaxException {
 		HashMap<String, String> headers = new HashMap<>();
-		headers.put(HeaderName.Method.name(), "GET");
-		headers.put(HeaderName.RequestUrl.name(), "/index.html");
-		HttpHeaders httpHeaders = new HttpHeaders(headers);
-		HttpBody httpBody = new HttpBody("");
-		HttpRequest httpRequest = new HttpRequest(httpHeaders, httpBody);
+		headers.put(HttpRequestHeaderName.Method.name(), "GET");
+		headers.put(HttpRequestHeaderName.RequestUrl.name(), "/index.html");
+		HttpRequestHttpHeaders httpRequestHttpHeaders = new HttpRequestHttpHeaders(headers);
+		HttpRequestBody httpRequestBody = new HttpRequestBody("");
+		HttpRequest httpRequest = new HttpRequest(httpRequestHttpHeaders, httpRequestBody);
 
-		byte[] actual = HttpProcessor.process(httpRequest);
-		byte[] expected = FileIoUtils.loadFileFromClasspath("./templates/index.html");
+		HttpResponse actual = HttpProcessor.process(httpRequest);
 
-		assertThat(actual).isEqualTo(expected);
+		assertAll(
+			() -> assertThat(actual.getHttpStatusLine().getHttpVersion()).isEqualTo("HTTP/1.1"),
+			() -> assertThat(actual.getHttpStatusLine().getStatusCode()).isEqualTo(StatusCode.OK),
+			() -> assertThat(actual.getHttpResponseHeaders().getHttpHeaders()).containsKey(CONTENT_TYPE),
+			() -> assertThat(actual.getHttpResponseHeaders().getHttpHeaders()).containsKey(CONTENT_LENGTH),
+			() -> assertThat(actual.getHttpRequestBody().getBody()).isEqualTo(
+				FileIoUtils.loadFileFromClasspath("./templates/index.html"))
+		);
 	}
 
 	@DisplayName("GET - /user/form.html 요청")
 	@Test
 	void processFormHtml() throws IOException, URISyntaxException {
 		HashMap<String, String> headers = new HashMap<>();
-		headers.put(HeaderName.Method.name(), "GET");
-		headers.put(HeaderName.RequestUrl.name(), "/user/form.html");
-		HttpHeaders httpHeaders = new HttpHeaders(headers);
-		HttpBody httpBody = new HttpBody("");
-		HttpRequest httpRequest = new HttpRequest(httpHeaders, httpBody);
+		headers.put(HttpRequestHeaderName.Method.name(), "GET");
+		headers.put(HttpRequestHeaderName.RequestUrl.name(), "/user/form.html");
+		HttpRequestHttpHeaders httpRequestHttpHeaders = new HttpRequestHttpHeaders(headers);
+		HttpRequestBody httpRequestBody = new HttpRequestBody("");
+		HttpRequest httpRequest = new HttpRequest(httpRequestHttpHeaders, httpRequestBody);
 
-		byte[] actual = HttpProcessor.process(httpRequest);
-		byte[] expected = FileIoUtils.loadFileFromClasspath("./templates/user/form.html");
+		HttpResponse actual = HttpProcessor.process(httpRequest);
 
-		assertThat(actual).isEqualTo(expected);
+		assertAll(
+			() -> assertThat(actual.getHttpStatusLine().getHttpVersion()).isEqualTo("HTTP/1.1"),
+			() -> assertThat(actual.getHttpStatusLine().getStatusCode()).isEqualTo(StatusCode.OK),
+			() -> assertThat(actual.getHttpResponseHeaders().getHttpHeaders()).containsKey(CONTENT_TYPE),
+			() -> assertThat(actual.getHttpResponseHeaders().getHttpHeaders()).containsKey(CONTENT_LENGTH),
+			() -> assertThat(actual.getHttpRequestBody().getBody()).isEqualTo(
+				FileIoUtils.loadFileFromClasspath("./templates/user/form.html"))
+		);
 	}
 }

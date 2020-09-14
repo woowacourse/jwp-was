@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import webserver.http.HttpHeaders;
+import webserver.http.request.HttpRequestHttpHeaders;
 import webserver.process.HttpProcessor;
 
 class HeaderIOUtilsTest {
@@ -28,7 +28,7 @@ class HeaderIOUtilsTest {
 			+ "Accept-Encoding: gzip, deflate, br\n"
 			+ "Accept-Language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7";
 
-		HttpHeaders actual = HeaderIOUtils.parseHttpHeaders(httpHeader);
+		HttpRequestHttpHeaders actual = HeaderIOUtils.parseHttpHeaders(httpHeader);
 
 		assertAll(
 			() -> assertThat(actual.size()).isEqualTo(15),

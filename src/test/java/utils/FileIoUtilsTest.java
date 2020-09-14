@@ -2,7 +2,6 @@ package utils;
 
 import static org.assertj.core.api.Assertions.*;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +11,7 @@ public class FileIoUtilsTest {
 
 	@Test
 	void loadFileFromClasspath() throws Exception {
-		byte[] actual = FileIoUtils.loadFileFromClasspath("./templates/index.html");
+		String actual = FileIoUtils.loadFileFromClasspath("./templates/index.html");
 		String expected = "<!DOCTYPE html>\n"
 			+ "<html lang=\"kr\">\n"
 			+ "\t<head>\n"
@@ -162,7 +161,7 @@ public class FileIoUtilsTest {
 			+ "\t</body>\n"
 			+ "</html>";
 
-		assertThat(actual).isEqualTo(expected.getBytes());
-		log.debug("file : {}", new String(actual));
+		assertThat(actual).isEqualTo(expected);
+		log.debug("file : {}", actual);
 	}
 }

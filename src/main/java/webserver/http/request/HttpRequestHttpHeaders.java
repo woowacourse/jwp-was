@@ -1,14 +1,14 @@
-package webserver.http;
+package webserver.http.request;
 
 import java.util.Map;
 
 import webserver.process.HttpProcessor;
 
-public class HttpHeaders {
+public class HttpRequestHttpHeaders {
 
 	private final Map<String, String> httpHeaders;
 
-	public HttpHeaders(Map<String, String> httpHeaders) {
+	public HttpRequestHttpHeaders(Map<String, String> httpHeaders) {
 		this.httpHeaders = httpHeaders;
 	}
 
@@ -29,11 +29,11 @@ public class HttpHeaders {
 	}
 
 	public String getHttpMethod() {
-		return httpHeaders.get(HeaderName.Method.name());
+		return httpHeaders.get(HttpRequestHeaderName.Method.name());
 	}
 
 	public String getUrl() {
-		return httpHeaders.get(HeaderName.RequestUrl.name());
+		return httpHeaders.get(HttpRequestHeaderName.RequestUrl.name());
 	}
 
 	public String getByHeaderName(String headerName) {

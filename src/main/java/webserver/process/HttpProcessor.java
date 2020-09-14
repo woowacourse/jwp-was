@@ -3,7 +3,8 @@ package webserver.process;
 import java.util.Arrays;
 import java.util.function.Function;
 
-import webserver.http.HttpRequest;
+import webserver.http.request.HttpRequest;
+import webserver.http.response.HttpResponse;
 import webserver.process.delete.DeleteUrlProcessor;
 import webserver.process.get.GetUrlProcessor;
 import webserver.process.patch.PatchUrlProcessor;
@@ -18,13 +19,13 @@ public enum HttpProcessor {
 	DELETE(new DeleteUrlProcessor()),
 	PATCH(new PatchUrlProcessor());
 
-	private final Function<HttpRequest, byte[]> urlProcessor;
+	private final Function<HttpRequest, HttpResponse> urlProcessor;
 
-	HttpProcessor(Function<HttpRequest, byte[]> urlProcessor) {
+	HttpProcessor(Function<HttpRequest, HttpResponse> urlProcessor) {
 		this.urlProcessor = urlProcessor;
 	}
 
-	public static byte[] process(HttpRequest httpRequest) {
+	public static HttpResponse process(HttpRequest httpRequest) {
 		HttpProcessor httpProcessor = Arrays.stream(values())
 			.filter(method -> method.isMatchMethod(httpRequest.getHttpMethod()))
 			.findFirst()

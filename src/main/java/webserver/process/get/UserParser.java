@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import model.User;
-import webserver.http.HttpBody;
+import webserver.http.request.HttpRequestBody;
 
 public class UserParser {
 
-	public static User parseUser(HttpBody body) {
+	public static User parseUser(HttpRequestBody body) {
 		String[] requestParams = body.split("&");
 
 		List<String> params = Arrays.stream(requestParams)

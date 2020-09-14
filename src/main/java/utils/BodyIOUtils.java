@@ -1,21 +1,23 @@
 package utils;
 
 import static java.lang.Integer.*;
-import static webserver.http.HttpBody.*;
+import static webserver.http.request.HttpRequestBody.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 
-import webserver.http.HttpHeaders;
+import webserver.http.request.HttpRequestHttpHeaders;
+import webserver.http.response.HttpResponseHeaderName;
 
 public class BodyIOUtils {
 
-	public static String parseHttpBody(HttpHeaders httpHeaders, BufferedReader bufferedReader) throws IOException {
-		if (httpHeaders.hasNotBody()) {
+	public static String parseHttpBody(HttpRequestHttpHeaders httpRequestHttpHeaders,
+		BufferedReader bufferedReader) throws IOException {
+		if (httpRequestHttpHeaders.hasNotBody()) {
 			return EMPTY_BODY.getHttpBody();
 		}
 
-		String contentLength = httpHeaders.getByHeaderName("Content-Length");
+		String contentLength = httpRequestHttpHeaders.getByHeaderName(HttpResponseHeaderName.CONTENT_LENGTH.name());
 		return IOUtils.readData(bufferedReader, parseInt(contentLength));
 	}
 }
