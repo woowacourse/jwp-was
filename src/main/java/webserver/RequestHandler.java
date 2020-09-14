@@ -48,9 +48,13 @@ public class RequestHandler implements Runnable {
     }
 
     private void resolveGet(RequestHeader requestHeader, DataOutputStream dos) throws IOException, URISyntaxException {
-        byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + requestHeader.getPath());
-        response200Header(dos, body.length);
-        responseBody(dos, body);
+        if (requestHeader.getPath().equals("/")) {
+            response302Header(dos, "/index.html");
+        } else {
+            byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + requestHeader.getPath());
+            response200Header(dos, body.length);
+            responseBody(dos, body);
+        }
     }
 
     private void resolvePost(RequestHeader requestHeader, RequestBody requestBody, DataOutputStream dos) {
@@ -58,6 +62,7 @@ public class RequestHandler implements Runnable {
             Map<String, String> params = requestBody.getParams();
             User user = new User(params.get("userId"), params.get("password"), params.get("name"), params.get("email"));
             DataBase.addUser(user);
+            response302Header(dos, "/index.html");
         }
     }
 
@@ -66,6 +71,16 @@ public class RequestHandler implements Runnable {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
             dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void response302Header(DataOutputStream dos, String location) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 Found \r\n");
+            dos.writeBytes("Location: " + location + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
