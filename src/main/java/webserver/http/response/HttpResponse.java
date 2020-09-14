@@ -5,6 +5,10 @@ public class HttpResponse {
     private ResponseHeaders responseHeaders;
     private ResponseBody responseBody;
 
+    public HttpResponse(ResponseStatusLine responseStatusLine, ResponseHeaders responseHeaders) {
+        this(responseStatusLine, responseHeaders, null);
+    }
+
     public HttpResponse(ResponseStatusLine responseStatus, ResponseHeaders responseHeaders,
         ResponseBody responseBody) {
         this.responseStatus = responseStatus;
