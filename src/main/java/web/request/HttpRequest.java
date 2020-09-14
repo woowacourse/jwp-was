@@ -9,15 +9,16 @@ import java.util.Map;
 
 public class HttpRequest {
     private final String method;
-    private final String target;
+    private final RequestPath requestPath;
     private final String version;
     private final Map<String, String> parameters;
+    // TODO: 2020/09/10 parameters라는 이름이 올바른지 MDN 문서 보고 재검토
 
     public HttpRequest(BufferedReader request) {
         try {
             String[] requestHeaderFirstLines = request.readLine().split(" ");
             method = requestHeaderFirstLines[0].trim();
-            target = requestHeaderFirstLines[1].trim();
+            requestPath = new RequestPath(requestHeaderFirstLines[1].trim());
             version = requestHeaderFirstLines[2].trim();
 
             parameters = new HashMap<>();
@@ -44,8 +45,8 @@ public class HttpRequest {
         return method;
     }
 
-    public String getTarget() {
-        return target;
+    public RequestPath getRequestPath() {
+        return requestPath;
     }
 
     public String getVersion() {
