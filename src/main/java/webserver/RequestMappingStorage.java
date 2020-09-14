@@ -16,11 +16,14 @@ import utils.FileIoUtils;
 import utils.StringUtils;
 
 public class RequestMappingStorage {
+
+    public static final String FILE_PATH =  "/static/files";
+
     private static List<RequestMapping> REQUEST_MAPPINGS;
 
     static {
         REQUEST_MAPPINGS = Arrays.asList(
-            new RequestMapping(HttpMethod.GET, "/file", RequestMappingStorage::fileMapping),
+            new RequestMapping(HttpMethod.GET, FILE_PATH, RequestMappingStorage::fileMapping),
             new RequestMapping(HttpMethod.POST, "/user/create", (RequestMappingStorage::userCreateMapping))
         );
     }

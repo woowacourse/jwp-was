@@ -1,5 +1,7 @@
 package webserver;
 
+import static webserver.RequestMappingStorage.*;
+
 import java.io.InputStream;
 import java.util.function.Function;
 
@@ -21,11 +23,8 @@ public class RequestMapping {
     }
 
     public boolean isMapping(HttpMethod httpMethod, String path) {
-        if (path.endsWith(".html") || path.endsWith(".js")
-            || path.endsWith(".css") || path.endsWith(".ico")
-            || path.endsWith(".ttf") || path.endsWith(".woff")
-        ) {
-            return this.httpMethod == httpMethod;
+        if (FileExtensionType.isSupportedFile(path)) {
+            return this.httpMethod == httpMethod && this.path.equals(FILE_PATH);
         }
 
         return this.httpMethod == httpMethod && this.path.equals(path);
