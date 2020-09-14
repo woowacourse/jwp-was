@@ -15,7 +15,7 @@ public class RequestHeader {
     public RequestHeader(BufferedReader br) throws IOException {
         params = new HashMap<>();
         String line = br.readLine();
-        if(line.isEmpty()) {
+        if (line.isEmpty()) {
             throw new IllegalArgumentException();
         }
         String[] token = line.split(" ");
@@ -24,7 +24,7 @@ public class RequestHeader {
         this.httpVersion = token[2];
 
         line = br.readLine();
-        while((line != null) && !"".equals(line)) {
+        while ((line != null) && !"".equals(line)) {
             token = line.split(": ");
             params.put(token[0], token[1]);
             line = br.readLine();
@@ -48,6 +48,9 @@ public class RequestHeader {
     }
 
     public int getContentLength() {
+        if (this.params.get("Content-Length") == null) {
+            return 0;
+        }
         return Integer.parseInt(this.params.get("Content-Length"));
     }
 }

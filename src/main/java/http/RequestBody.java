@@ -13,12 +13,12 @@ public class RequestBody {
     public RequestBody(BufferedReader br, int contentLength) throws IOException {
         params = new HashMap<>();
         String line = IOUtils.readData(br, contentLength);
-        if(line.isEmpty()) {
+        if (line.isEmpty()) {
             throw new IllegalArgumentException();
         }
 
         String[] tokens = line.split("&");
-        for(String token: tokens) {
+        for (String token : tokens) {
             String[] keyValue = token.split("=");
             params.put(keyValue[0], keyValue[1]);
         }

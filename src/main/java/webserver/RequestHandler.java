@@ -1,17 +1,16 @@
 package webserver;
 
 import db.DataBase;
+import http.RequestBody;
 import http.RequestHeader;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 
-import javax.print.DocFlavor;
 import java.io.*;
 import java.net.Socket;
 import java.net.URISyntaxException;
-import java.util.HashMap;
 import java.util.Map;
 
 public class RequestHandler implements Runnable {
@@ -36,23 +35,30 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void router(BufferedReader br, DataOutputStream dos ) throws IOException, URISyntaxException {
-//        RequestHeader requestHeader = new RequestHeader(br);
-//
-//        if (method.equals("POST") && path.equals("/user/create")) {
-//            String[] temp = line.split("&");
-//            Map<String, String> params = new HashMap<>();
-//            for (String param : temp) {
-//                String[] keyValues = param.split("=");
-//                params.put(keyValues[0], keyValues[1]);
-//            }
-//            User user = new User(params.get("userId"), params.get("password"), params.get("name"), params.get("email"));
-//            DataBase.addUser(user);
-//        } else {
-//            byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + path);
-//            response200Header(dos, body.length);
-//            responseBody(dos, body);
-//        }
+    private void router(BufferedReader br, DataOutputStream dos) throws IOException, URISyntaxException {
+        RequestHeader requestHeader = new RequestHeader(br);
+
+        if (requestHeader.getMethod().equals("GET")) {
+            resolveGet(requestHeader, dos);
+        }
+        if (requestHeader.getMethod().equals("POST")) {
+            RequestBody requestBody = new RequestBody(br, requestHeader.getContentLength());
+            resolvePost(requestHeader, requestBody, dos);
+        }
+    }
+
+    private void resolveGet(RequestHeader requestHeader, DataOutputStream dos) throws IOException, URISyntaxException {
+        byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + requestHeader.getPath());
+        response200Header(dos, body.length);
+        responseBody(dos, body);
+    }
+
+    private void resolvePost(RequestHeader requestHeader, RequestBody requestBody, DataOutputStream dos) {
+        if (requestHeader.getPath().equals("/user/create")) {
+            Map<String, String> params = requestBody.getParams();
+            User user = new User(params.get("userId"), params.get("password"), params.get("name"), params.get("email"));
+            DataBase.addUser(user);
+        }
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
