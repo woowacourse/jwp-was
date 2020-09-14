@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import webserver.http.body.HttpBody;
+import webserver.http.header.HttpHeader;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;

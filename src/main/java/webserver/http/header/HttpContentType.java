@@ -1,4 +1,4 @@
-package webserver.http;
+package webserver.http.header;
 
 import webserver.http.body.DefaultHttpBody;
 import webserver.http.body.HttpBody;

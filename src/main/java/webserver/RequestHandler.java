@@ -5,7 +5,7 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.http.HttpMessage;
-import webserver.http.HttpUri;
+import webserver.http.request.HttpUri;
 import webserver.http.body.HttpBody;
 
 import java.io.*;

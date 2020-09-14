@@ -2,6 +2,8 @@ package webserver.http;
 
 import exception.InvalidHttpMessageException;
 import webserver.http.body.HttpBody;
+import webserver.http.header.HttpHeader;
+import webserver.http.request.RequestLine;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,8 +1,9 @@
-package webserver.http;
+package webserver.http.request;
 
 import exception.InvalidHttpMessageException;
 import exception.InvalidUriException;
 import utils.StringUtils;
+import webserver.http.QueryString;
 
 public class HttpUri {
     private static final String URI_QUERY_STRING_DELIMITER = "\\?";
