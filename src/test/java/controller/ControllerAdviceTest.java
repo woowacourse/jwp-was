@@ -25,11 +25,13 @@ class ControllerAdviceTest {
     private HttpRequest httpRequest
         = new HttpRequest(GET, URL_PATH_INDEX_HTML, PARAMETERS_EMPTY, PROTOCOL, HEADERS_EMPTY, API);
 
-    @DisplayName("IllegalArgumentException일 때, BadRequst 반환")
+    @DisplayName("IllegalArgumentException이 Cause일 때, BadRequst 반환")
     @Test
-    void handleException_IllegalArgumentException_BadRequest() {
+    void handleException_CauseOfIllegalArgumentException_BadRequest() {
+        RuntimeException exception
+            = makeRuntimeExceptionWithCause(new IllegalArgumentException());
         HttpResponse httpResponse
-            = controllerAdvice.handleException(httpRequest, new IllegalArgumentException());
+            = controllerAdvice.handleCauseException(httpRequest, exception);
 
         assertThat(httpResponse.getProtocol()).isEqualTo(httpRequest.getProtocol());
         assertThat(httpResponse.getHttpStatusCode()).isEqualTo(HttpStatusCode.BAD_REQUEST);
@@ -39,11 +41,13 @@ class ControllerAdviceTest {
             .contains(CONTENT_TYPE_TEXT_PLAIN);
     }
 
-    @DisplayName("IllegalArgumentException를 상속받은 Exception일 때, BadRequst 반환")
+    @DisplayName("IllegalArgumentException를 상속받은 Exception이 Cause일 때, BadRequst 반환")
     @Test
-    void handleException_ExtendsIllegalArgumentException_BadRequest() {
+    void handleException_CauseOfExtendsIllegalArgumentException_BadRequest() {
+        RuntimeException exception
+            = makeRuntimeExceptionWithCause(new childOfIllegalArgumentException());
         HttpResponse httpResponse
-            = controllerAdvice.handleException(httpRequest, new childOfIllegalArgumentException());
+            = controllerAdvice.handleCauseException(httpRequest, exception);
 
         assertThat(httpResponse.getProtocol()).isEqualTo(httpRequest.getProtocol());
         assertThat(httpResponse.getHttpStatusCode()).isEqualTo(HttpStatusCode.BAD_REQUEST);
@@ -54,11 +58,13 @@ class ControllerAdviceTest {
             .contains(CONTENT_TYPE_TEXT_PLAIN);
     }
 
-    @DisplayName("NullPointerException일 때, BadRequst 반환")
+    @DisplayName("NullPointerException이 Cause일 때, BadRequst 반환")
     @Test
-    void handleException_NullPointerException_BadRequest() {
+    void handleException_CauseOfNullPointerException_BadRequest() {
+        RuntimeException exception
+            = makeRuntimeExceptionWithCause(new NullPointerException());
         HttpResponse httpResponse
-            = controllerAdvice.handleException(httpRequest, new NullPointerException());
+            = controllerAdvice.handleCauseException(httpRequest, exception);
 
         assertThat(httpResponse.getProtocol()).isEqualTo(httpRequest.getProtocol());
         assertThat(httpResponse.getHttpStatusCode()).isEqualTo(HttpStatusCode.BAD_REQUEST);
@@ -68,11 +74,13 @@ class ControllerAdviceTest {
             .contains(CONTENT_TYPE_TEXT_PLAIN);
     }
 
-    @DisplayName("Exception을 상속받은 Exception일 때, Internal Server Error반환")
+    @DisplayName("Exception을 상속받은 Exception이 Cause일 때, Internal Server Error반환")
     @Test
-    void handleException_ExtendsException_BadRequest() {
+    void handleException_CauseOfExtendsException_BadRequest() {
+        RuntimeException exception
+            = makeRuntimeExceptionWithCause(new childOfException());
         HttpResponse httpResponse
-            = controllerAdvice.handleException(httpRequest, new childOfException());
+            = controllerAdvice.handleCauseException(httpRequest, exception);
 
         assertThat(httpResponse.getProtocol()).isEqualTo(httpRequest.getProtocol());
         assertThat(httpResponse.getHttpStatusCode())
@@ -82,5 +90,11 @@ class ControllerAdviceTest {
         assertThat(httpResponse.getBody()).contains(expectedBody);
         assertThat(httpResponse.getHeaders().get(CONTENT_TYPE))
             .contains(CONTENT_TYPE_TEXT_PLAIN);
+    }
+
+    private RuntimeException makeRuntimeExceptionWithCause(Exception causeException) {
+        RuntimeException runtimeException = new RuntimeException();
+        runtimeException.initCause(causeException);
+        return runtimeException;
     }
 }

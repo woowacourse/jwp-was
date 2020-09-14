@@ -29,6 +29,9 @@ class DispenseHandlerTest {
 
     private DispenseHandler dispenseHandler = new DispenseHandler();
 
+    DispenseHandlerTest() throws NoSuchFieldException, IllegalAccessException {
+    }
+
     @AfterEach
     void tearDown() {
         DataBaseTest.clear();

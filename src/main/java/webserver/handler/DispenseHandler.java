@@ -1,5 +1,6 @@
 package webserver.handler;
 
+import controller.handler.ControllerHandler;
 import java.io.IOException;
 import java.io.OutputStream;
 import webserver.dto.HttpRequest;
@@ -7,11 +8,11 @@ import webserver.dto.HttpRequest;
 public class DispenseHandler {
 
     private final FileHandler fileHandler;
-    private final ApiHandler apiHandler;
+    private final ControllerHandler controllerHandler;
 
-    DispenseHandler() {
+    public DispenseHandler() throws NoSuchFieldException, IllegalAccessException {
         this.fileHandler = new FileHandler();
-        this.apiHandler = new ApiHandler();
+        this.controllerHandler = new ControllerHandler();
     }
 
     void dispense(OutputStream out, HttpRequest httpRequest) throws IOException {
@@ -19,6 +20,6 @@ public class DispenseHandler {
             fileHandler.loadFile(out, httpRequest);
             return;
         }
-        apiHandler.handleAPI(out, httpRequest);
+        controllerHandler.handleAPI(out, httpRequest);
     }
 }

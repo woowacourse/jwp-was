@@ -6,9 +6,9 @@ import webserver.dto.HttpResponse;
 
 public class ControllerAdvice {
 
-    public HttpResponse handleException(HttpRequest httpRequest, Exception exception) {
-        if (exception instanceof IllegalArgumentException
-            || exception instanceof NullPointerException) {
+    public HttpResponse handleCauseException(HttpRequest httpRequest, Exception exception) {
+        if (exception.getCause() instanceof IllegalArgumentException
+            || exception.getCause() instanceof NullPointerException) {
             return handleHttpStatusCode(httpRequest, HttpStatusCode.BAD_REQUEST);
         }
         return handleHttpStatusCode(httpRequest, HttpStatusCode.INTERNAL_SERVER_ERROR);

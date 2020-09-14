@@ -19,9 +19,9 @@ public class RequestHandler implements Runnable {
     private final Socket connection;
     private final DispenseHandler dispenseHandler;
 
-    public RequestHandler(Socket connectionSocket) {
+    public RequestHandler(Socket connectionSocket, DispenseHandler dispenseHandler) {
         this.connection = connectionSocket;
-        this.dispenseHandler = new DispenseHandler();
+        this.dispenseHandler = dispenseHandler;
     }
 
     public void run() {
