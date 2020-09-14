@@ -8,6 +8,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import http.exception.ResourceNotFoundException;
+import http.request.StaticFiles;
 
 class StaticFilesTest {
 

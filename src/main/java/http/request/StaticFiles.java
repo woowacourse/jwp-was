@@ -1,10 +1,10 @@
-package http;
+package http.request;
 
 import java.util.Arrays;
 
 import http.exception.ResourceNotFoundException;
 
-public enum StaticFiles {// TODO: 2020/09/13  별도의 문자열로 인코딩 관리
+public enum StaticFiles {
     HTML(".html", "./templates", "text/html"),
     CSS(".css", "./static", "text/css"),
     JAVASCRIPT(".js", "./static", "application/javascript");

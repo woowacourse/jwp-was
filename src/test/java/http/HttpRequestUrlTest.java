@@ -9,16 +9,17 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import http.exception.InvalidHttpRequestException;
+import http.request.HttpRequestUrl;
 
-class HttpUrlTest {
+class HttpRequestUrlTest {
 
     @DisplayName("url에서 path만 반환한다.")
     @CsvSource(value = {"/user/form.html,/user/form.html", "/user/form.html?name=toney,/user/form.html"})
     @ParameterizedTest
     void getPath(String inputUrl, String expected) {
-        HttpUrl httpUrl = new HttpUrl(inputUrl);
+        HttpRequestUrl httpRequestUrl = new HttpRequestUrl(inputUrl);
 
-        assertThat(expected).isEqualTo(httpUrl.getPath());
+        assertThat(expected).isEqualTo(httpRequestUrl.getPath());
     }
 
     @DisplayName("파라미터가 올바르지 않을 경우 예외처리한다.")
@@ -28,25 +29,25 @@ class HttpUrlTest {
     })
     @ParameterizedTest
     public void getParametersThrowExceptionWhenInvalidUrl(String invalidUrl) {
-        assertThatThrownBy(() -> new HttpUrl(invalidUrl)).isInstanceOf(InvalidHttpRequestException.class);
+        assertThatThrownBy(() -> new HttpRequestUrl(invalidUrl)).isInstanceOf(InvalidHttpRequestException.class);
     }
 
     @DisplayName("url에서 파라미터를 추출하여 반환한다.")
     @CsvSource(value = {"/user/form.html?name=toney,name,toney"})
     @ParameterizedTest
     void getParameters(String input, String key, String value) {
-        HttpUrl httpUrl = new HttpUrl(input);
+        HttpRequestUrl httpRequestUrl = new HttpRequestUrl(input);
 
-        assertThat(key).isIn(httpUrl.getParameters().keySet());
-        assertThat(value).isEqualTo(httpUrl.getParameters().get(key));
+        assertThat(key).isIn(httpRequestUrl.getParameters().keySet());
+        assertThat(value).isEqualTo(httpRequestUrl.getParameters().get(key));
     }
 
     @DisplayName("파라미터가 있더라도 동일한 path라면 true를 반환한다.")
     @CsvSource(value = {"/user/form.html?name=toney,/user/form.html"})
     @ParameterizedTest
     void isSamePath(String pathWithParameter, String path) {
-        HttpUrl urlWithParameter = new HttpUrl(pathWithParameter);
-        HttpUrl url = new HttpUrl(path);
+        HttpRequestUrl urlWithParameter = new HttpRequestUrl(pathWithParameter);
+        HttpRequestUrl url = new HttpRequestUrl(path);
 
         assertTrue(url.isSamePath(urlWithParameter.getPath()));
     }

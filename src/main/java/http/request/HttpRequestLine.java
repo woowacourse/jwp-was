@@ -1,25 +1,25 @@
-package http;
+package http.request;
 
 public class HttpRequestLine {
     private static final String START_LINE_DELIMITER = " ";
 
     private final HttpMethod httpMethod;
-    private final HttpUrl httpUrl;
+    private final HttpRequestUrl httpRequestUrl;
     private final String version;
 
     public HttpRequestLine(String requestLine) {
         String[] splitedStartLine = requestLine.split(START_LINE_DELIMITER);
         this.httpMethod = HttpMethod.valueOf(splitedStartLine[0]);
-        this.httpUrl = new HttpUrl(splitedStartLine[1]);
+        this.httpRequestUrl = new HttpRequestUrl(splitedStartLine[1]);
         this.version = splitedStartLine[2];
     }
 
     public boolean isStaticFile() {
-        return httpUrl.isStaticFile();
+        return httpRequestUrl.isStaticFile();
     }
 
     public String getPath() {
-        return httpUrl.getPath();
+        return httpRequestUrl.getPath();
     }
 
     public boolean isPost() {
@@ -27,6 +27,6 @@ public class HttpRequestLine {
     }
 
     public String getContentType() {
-        return httpUrl.getContentType();
+        return httpRequestUrl.getContentType();
     }
 }

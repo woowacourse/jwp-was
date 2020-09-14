@@ -9,7 +9,9 @@ import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class HttpBodyTest {
+import http.request.HttpRequestBody;
+
+class HttpRequestBodyTest {
 
     @DisplayName("올바른 입력에 대해 HttpBody를 생성한다.")
     @Test
@@ -20,13 +22,13 @@ class HttpBodyTest {
         body.put("name", "%EB%B0%95%EC%9E%AC%EC%84%B1");
         body.put("email", "javajigi%40slipp.net");
 
-        HttpBody httpBody = new HttpBody(body);
+        HttpRequestBody httpRequestBody = new HttpRequestBody(body);
 
         assertAll(
-            () -> assertThat("javajigi").isEqualTo(httpBody.getValue("userId")),
-            () -> assertThat("password").isEqualTo(httpBody.getValue("password")),
-            () -> assertThat("%EB%B0%95%EC%9E%AC%EC%84%B1").isEqualTo(httpBody.getValue("name")),
-            () -> assertThat("javajigi%40slipp.net").isEqualTo(httpBody.getValue("email"))
+            () -> assertThat("javajigi").isEqualTo(httpRequestBody.getValue("userId")),
+            () -> assertThat("password").isEqualTo(httpRequestBody.getValue("password")),
+            () -> assertThat("%EB%B0%95%EC%9E%AC%EC%84%B1").isEqualTo(httpRequestBody.getValue("name")),
+            () -> assertThat("javajigi%40slipp.net").isEqualTo(httpRequestBody.getValue("email"))
         );
     }
 }

@@ -11,6 +11,8 @@ import java.io.StringReader;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import http.request.HttpRequest;
+
 class HttpRequestTest {
 
     @DisplayName("올바른 입력에 대하여 HttpRequest를 생성한다.")

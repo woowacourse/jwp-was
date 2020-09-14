@@ -1,27 +1,27 @@
-package http;
+package http.request;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import http.exception.InvalidHttpRequestException;
 
-public class HttpUrl {
+public class HttpRequestUrl {
     private static final String PATH_AND_PARAMETER_DIVIDER = "?";
     private static final String PARAMETERS_DIVIDER = "&";
     private static final String PARAMETER_DIVIDER = "=";
     private static final String EMPTY_CONTENT = "";
 
-    private final String url;
+    private final String requestUrl;
     private final Map<String, String> parameters = new LinkedHashMap<>();
 
-    public HttpUrl(String url) {
-        this.url = url;
-        String parameterLine = url.substring(url.indexOf(PATH_AND_PARAMETER_DIVIDER) + 1);
-        parseParameter(url, parameterLine);
+    public HttpRequestUrl(String requestUrl) {
+        this.requestUrl = requestUrl;
+        String parameterLine = requestUrl.substring(requestUrl.indexOf(PATH_AND_PARAMETER_DIVIDER) + 1);
+        parseParameter(requestUrl, parameterLine);
     }
 
-    private void parseParameter(String url, String parameterLine) {
-        if (url.contains(PATH_AND_PARAMETER_DIVIDER)) {
+    private void parseParameter(String requestUrl, String parameterLine) {
+        if (requestUrl.contains(PATH_AND_PARAMETER_DIVIDER)) {
             String[] splitedParameters = parameterLine.split(PARAMETERS_DIVIDER);
 
             for (String splitedParameter : splitedParameters) {
@@ -44,9 +44,9 @@ public class HttpUrl {
 
     public String getPath() {
         if (hasParameters()) {
-            return url.substring(0, url.indexOf(PATH_AND_PARAMETER_DIVIDER));
+            return requestUrl.substring(0, requestUrl.indexOf(PATH_AND_PARAMETER_DIVIDER));
         }
-        return url;
+        return requestUrl;
     }
 
     public boolean isSamePath(String path) {
@@ -54,11 +54,11 @@ public class HttpUrl {
     }
 
     private boolean hasParameters() {
-        return url.contains(PATH_AND_PARAMETER_DIVIDER);
+        return requestUrl.contains(PATH_AND_PARAMETER_DIVIDER);
     }
 
     public boolean isStaticFile() {
-        return StaticFiles.endsWith(url);
+        return StaticFiles.endsWith(requestUrl);
     }
 
     public Map<String, String> getParameters() {
@@ -66,6 +66,6 @@ public class HttpUrl {
     }
 
     public String getContentType() {
-        return StaticFiles.getContentType(url);
+        return StaticFiles.getContentType(requestUrl);
     }
 }

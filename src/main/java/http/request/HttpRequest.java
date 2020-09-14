@@ -1,4 +1,4 @@
-package http;
+package http.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,19 +8,20 @@ import utils.HttpElementExtractor;
 
 public class HttpRequest {
     private HttpRequestLine httpRequestLine;
-    private HttpHeaders httpHeaders;
-    private HttpBody httpBody;
+    private HttpRequestHeaders httpRequestHeaders;
+    private HttpRequestBody httpRequestBody;
 
     public HttpRequest(BufferedReader bufferedReader) throws IOException {
         String requestLine = HttpElementExtractor.extractRequestLine(bufferedReader);
         httpRequestLine = new HttpRequestLine(requestLine);
 
         Map<String, String> headers = HttpElementExtractor.extractHeaders(bufferedReader);
-        httpHeaders = new HttpHeaders(headers);
+        httpRequestHeaders = new HttpRequestHeaders(headers);
 
         if (httpRequestLine.isPost()) {
-            Map<String, String> body = HttpElementExtractor.extractBody(bufferedReader, httpHeaders.getContentLength());
-            httpBody = new HttpBody(body);
+            Map<String, String> body = HttpElementExtractor.extractBody(bufferedReader,
+                httpRequestHeaders.getContentLength());
+            httpRequestBody = new HttpRequestBody(body);
         }
     }
 
@@ -37,10 +38,10 @@ public class HttpRequest {
     }
 
     public String getHttpHeaderParameterOf(String key) {
-        return httpHeaders.getValue(key);
+        return httpRequestHeaders.getValue(key);
     }
 
     public String getHttpBodyValueOf(String key) {
-        return httpBody.getValue(key);
+        return httpRequestBody.getValue(key);
     }
 }
