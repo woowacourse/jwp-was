@@ -3,6 +3,8 @@ package http.request;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+import exception.RequestEntityCreateFailException;
+
 public class RequestEntity {
     private HttpMethod httpMethod;
     private HttpUrl httpUrl;
@@ -37,7 +39,7 @@ public class RequestEntity {
             }
             return new RequestEntity(httpMethod, httpUrl, httpVersion, requestHeader, null);
         } catch (IOException e) {
-            throw new RuntimeException("IO EXCEPTION 발생");
+            throw new RequestEntityCreateFailException();
         }
     }
 
