@@ -25,6 +25,7 @@ public class RequestHandler implements Runnable {
 	private static final String FILE_PATH_STATIC = "./static";
 	private static final String FILE_TYPE_HTML = ".html";
 	private static final String FILE_TYPE_ICO = ".ico";
+	private static final String REDIRECT_URL = "/index.html";
 
 	private Socket connection;
 
@@ -49,11 +50,11 @@ public class RequestHandler implements Runnable {
 				User user = new User(userInfo.get("userId"), userInfo.get("password"), userInfo.get("name"),
 					userInfo.get("email"));
 				DataBase.addUser(user);
-				response200Header(dos, 0);
+				ResponseHeader.response302Header(dos, REDIRECT_URL, logger);
 			} else {
 				byte[] body = FileIoUtils.loadFileFromClasspath(parseFilePath(path));
 
-				response200Header(dos, body.length);
+				ResponseHeader.response200Header(dos, body.length, logger);
 				responseBody(dos, body);
 			}
 		} catch (IOException | URISyntaxException e) {
@@ -75,17 +76,6 @@ public class RequestHandler implements Runnable {
 			return FILE_PATH_TEMPLATES + path;
 		}
 		return FILE_PATH_STATIC + path;
-	}
-
-	private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-		try {
-			dos.writeBytes("HTTP/1.1 200 OK \r\n");
-			dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-			dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-			dos.writeBytes("\r\n");
-		} catch (IOException e) {
-			logger.error(e.getMessage());
-		}
 	}
 
 	private void responseBody(DataOutputStream dos, byte[] body) {
