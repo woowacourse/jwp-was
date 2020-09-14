@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import utils.ValueExtractor;
+
 public class RequestParams {
     private final Map<String, List<String>> parameters;
 
@@ -17,15 +19,7 @@ public class RequestParams {
     }
 
     public static RequestParams from(String params) {
-        if (Objects.isNull(params) || params.isEmpty()) {
-            return new RequestParams(new HashMap<>());
-        }
-
-        return Arrays.stream(params.split("&"))
-            .map(param -> param.split("="))
-            .collect(
-                collectingAndThen(groupingBy(param -> param[0], mapping(param -> param[1], toList())),
-                    RequestParams::new));
+        return new RequestParams(ValueExtractor.extract(params));
     }
 
     public String getOneParameterValue(String key) {
