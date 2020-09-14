@@ -16,7 +16,7 @@ import webserver.RequestHandler;
 public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private static final int URL_INDEX = 1;
+    private static final int PATH_INDEX = 1;
     private static final int METHOD_INDEX = 0;
 
 
@@ -33,7 +33,7 @@ public class UserController {
     }
 
     private static boolean isPostSignIn(final String[] request) {
-        return "POST".equals(request[METHOD_INDEX]) && request[URL_INDEX].startsWith("/user/create");
+        return "POST".equals(request[METHOD_INDEX]) && request[PATH_INDEX].startsWith("/user/create");
     }
 
     private static void response302Header(DataOutputStream dos) {

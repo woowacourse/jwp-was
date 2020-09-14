@@ -19,6 +19,7 @@ public class IOUtils {
      * @throws IOException
      */
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final String HEADER_TOKEN_SPLIT_VALUE = ": ";
 
     public static String readData(BufferedReader br, int contentLength) throws IOException {
         char[] body = new char[contentLength];
@@ -30,7 +31,7 @@ public class IOUtils {
             final HashMap<String, String> requestUrl) throws IOException {
         while(!"".equals(line)) {
             logger.debug("header Line: {} " + line);
-            String[] headerToken = line.split(": ");
+            String[] headerToken = line.split(HEADER_TOKEN_SPLIT_VALUE);
             if(headerToken.length == 2) {
                 requestUrl.put(headerToken[0], headerToken[1]);
             }

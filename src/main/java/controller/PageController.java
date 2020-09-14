@@ -16,6 +16,9 @@ public class PageController {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private static final int PATH_INDEX = 1;
     private static final int METHOD_INDEX = 0;
+    private static final String TEMPLATES_PATH = "./templates";
+    private static final String STATIC_PATH = "./static";
+    private static final String HTML_EXTENSION_VALUE = ".html";
 
     public static void getIndexPage(final OutputStream out, final String[] request) throws
             IOException, URISyntaxException {
@@ -25,14 +28,14 @@ public class PageController {
 
         String uri = request[PATH_INDEX];
 
-        if(request[PATH_INDEX].endsWith(".html")) {
-            byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + uri);
+        if(request[PATH_INDEX].endsWith(HTML_EXTENSION_VALUE)) {
+            byte[] body = FileIoUtils.loadFileFromClasspath(TEMPLATES_PATH + uri);
             DataOutputStream dos = new DataOutputStream(out);
             response200Header(dos, body.length);
             responseBody(dos, body);
         }  else {
             String[] headerToken = request[PATH_INDEX].split("\\.");
-            byte[] body = FileIoUtils.loadFileFromClasspath("./static" + uri);
+            byte[] body = FileIoUtils.loadFileFromClasspath(STATIC_PATH + uri);
             DataOutputStream dos = new DataOutputStream(out);
             response200StaticResourcesHeader(dos, body.length, headerToken[headerToken.length-1]);
             responseBody(dos, body);
