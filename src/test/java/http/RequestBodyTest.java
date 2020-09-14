@@ -6,12 +6,11 @@ import org.junit.jupiter.api.Test;
 import java.io.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
-class RequestHeaderTest {
+class RequestBodyTest {
     @Test
-    @DisplayName("헤더를 잘 파싱하는지 테스트")
-    void headerParseTest() throws IOException {
+    @DisplayName("바디를 잘 파싱하는지 테스트")
+    void bodyParseTest() throws IOException {
         String request = "POST /user/create HTTP/1.1\n" +
                 "Host: localhost:8080\n" +
                 "Connection: keep-alive\n" +
@@ -25,9 +24,11 @@ class RequestHeaderTest {
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
         RequestHeader requestHeader = new RequestHeader(br);
+        RequestBody requestBody = new RequestBody(br, requestHeader.getContentLength());
 
-        assertThat(requestHeader.getMethod()).isEqualTo("POST");
-        assertThat(requestHeader.getPath()).isEqualTo("/user/create");
-        assertThat(requestHeader.getContentLength()).isEqualTo(93);
+        assertThat(requestBody.getParams().get("userId")).isEqualTo("javajigi");
+        assertThat(requestBody.getParams().get("password")).isEqualTo("password");
+        assertThat(requestBody.getParams().get("name")).isEqualTo("%EB%B0%95%EC%9E%AC%EC%84%B1");
+        assertThat(requestBody.getParams().get("email")).isEqualTo("javajigi%40slipp.net");
     }
 }

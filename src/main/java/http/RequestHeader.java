@@ -46,4 +46,8 @@ public class RequestHeader {
     public Map<String, String> getParams() {
         return params;
     }
+
+    public int getContentLength() {
+        return Integer.parseInt(this.params.get("Content-Length"));
+    }
 }
