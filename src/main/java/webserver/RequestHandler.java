@@ -18,6 +18,9 @@ import db.DataBase;
 import model.User;
 import utils.FileIoUtils;
 import utils.HttpRequestUtils;
+import utils.IOUtils;
+import web.RequestHeader;
+import web.RequestLine;
 import web.StaticFile;
 
 public class RequestHandler implements Runnable {
@@ -35,21 +38,21 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-            String line = br.readLine();
-            String path = HttpRequestUtils.extractPath(line);
+
+            RequestLine requestLine = RequestLine.of(br.readLine());
+            RequestHeader requestHeader = new RequestHeader(br);
+
+            String path = requestLine.getPath();
             if (path.startsWith("/user/create")) {
-                Map<String, String> params = HttpRequestUtils.parseQueryString(path);
+                String requestBody = IOUtils.readData(br, Integer.parseInt(requestHeader.getValue("Content-Length")));
+                Map<String, String> params = HttpRequestUtils.parseQueryString(requestBody);
+
                 User user = new User(params.get("userId"), params.get("password"), params.get("name"), params.get("email"));
                 DataBase.addUser(user);
                 logger.debug("user : {}", user);
                 return;
             }
 
-            logger.debug("request line : {}", line);
-            while (!"".equals(line)) {
-                line = br.readLine();
-                logger.debug("header : {}", line);
-            }
             DataOutputStream dos = new DataOutputStream(out);
             StaticFile staticFile = StaticFile.of(path);
             byte[] body = FileIoUtils.loadFileFromClasspath(staticFile.getPrefix() + path);
