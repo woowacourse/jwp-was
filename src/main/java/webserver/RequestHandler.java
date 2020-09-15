@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import utils.URIUtils;
 import web.request.HttpRequest;
+import web.request.RequestBody;
 import web.request.RequestPath;
 
 public class RequestHandler implements Runnable {
@@ -36,7 +37,8 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
 
             if(requestTarget.equals("/user/create")) {
-                User user = new User(requestPath.getParameters());
+                RequestBody requestBody = httpRequest.getRequestBody();
+                User user = new User(requestBody.getParameters());
                 DataBase.addUser(user);
 
                 //// TODO: 2020/09/14 이후 302 리스폰스에 대한 액션 구현시까지는...여기를 비운다.

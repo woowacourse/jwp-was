@@ -5,6 +5,9 @@ import exception.InvalidRequestBodyException;
 import java.util.Objects;
 
 public class RequestBody extends ParameterMapper {
+    public RequestBody() {
+        super();
+    }
 
     public RequestBody(String requestBody) {
         validateBody(requestBody);
