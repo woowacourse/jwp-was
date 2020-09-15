@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class HttpResponse {
+    public static final String ERROR_PAGE = "/error-page.html";
+
     private final DataOutputStream dos;
 
     public HttpResponse(OutputStream outputStream) {
@@ -43,6 +45,17 @@ public class HttpResponse {
             dos.writeBytes("HTTP/1.1 302 FOUND \r\n");
             dos.writeBytes("Location: " + redirectPath + "\r\n");
             dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void badRequest() {
+        byte[] body = FileIoUtils.loadFileFromClasspath(ERROR_PAGE);
+        try {
+            dos.writeBytes("HTTP/1.1 400 FOUND \r\n");
+            dos.writeBytes("\r\n");
+            responseBody(body);
         } catch (IOException e) {
             e.printStackTrace();
         }

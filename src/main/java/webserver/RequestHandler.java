@@ -48,13 +48,14 @@ public class RequestHandler implements Runnable {
             controller.service(httpRequest, httpResponse);
             return;
         }
-        forward(httpRequest, httpResponse);
+        findStaticResources(httpRequest, httpResponse);
     }
 
-    void forward(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+    void findStaticResources(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getPath());
         if (body == null) {
-            httpResponse.sendRedirect("index.html");
+            httpResponse.badRequest();
+            return;
         }
         httpResponse.forward(httpRequest.getPath());
     }
