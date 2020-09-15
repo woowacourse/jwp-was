@@ -1,5 +1,6 @@
 package webserver.http.response;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
@@ -30,5 +31,9 @@ public class ResponseBody {
 
     public int getBodyLength() {
         return body.length;
+    }
+
+    public void write(DataOutputStream dos) throws IOException {
+        dos.write(body, 0, getBodyLength());
     }
 }

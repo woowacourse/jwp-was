@@ -1,5 +1,9 @@
 package webserver.http.response;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.Objects;
+
 public class HttpResponse {
     private ResponseStatusLine responseStatus;
     private ResponseHeaders responseHeaders;
@@ -16,15 +20,12 @@ public class HttpResponse {
         this.responseBody = responseBody;
     }
 
-    public ResponseStatusLine getResponseStatus() {
-        return responseStatus;
-    }
-
-    public ResponseHeaders getResponseHeader() {
-        return responseHeaders;
-    }
-
-    public ResponseBody getResponseBody() {
-        return responseBody;
+    public void write(DataOutputStream dos) throws IOException {
+        responseStatus.write(dos);
+        responseHeaders.write(dos);
+        if (Objects.nonNull(responseBody)) {
+            responseBody.write(dos);
+        }
+        dos.flush();
     }
 }

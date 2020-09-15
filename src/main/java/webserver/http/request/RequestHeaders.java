@@ -22,18 +22,19 @@ public class RequestHeaders {
         return headers.stream()
             .map(header -> header.split(DELIMITER))
             .collect(
-                collectingAndThen(toMap(header -> header[KEY_INDEX], header -> header[VALUE_INDEX].trim()), RequestHeaders::new));
+                collectingAndThen(toMap(header -> header[KEY_INDEX], header -> header[VALUE_INDEX].trim()),
+                    RequestHeaders::new));
     }
 
     public int getContentLength() {
-        return Integer.parseInt(httpHeaders.get(CONTENT_LENGTH));
+        try {
+            return Integer.parseInt(httpHeaders.get(CONTENT_LENGTH));
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 
     public String get(String key) {
         return httpHeaders.get(key);
-    }
-
-    public Map<String, String> getHttpHeaders() {
-        return Collections.unmodifiableMap(httpHeaders);
     }
 }

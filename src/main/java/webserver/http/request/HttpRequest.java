@@ -22,10 +22,6 @@ public class HttpRequest {
         return requestStartLine;
     }
 
-    public RequestHeaders getHttpHeaders() {
-        return requestHeaders;
-    }
-
     public RequestBody getHttpBody() {
         return requestBody;
     }

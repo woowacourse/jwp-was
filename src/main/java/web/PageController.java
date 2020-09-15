@@ -1,6 +1,5 @@
 package web;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,27 +12,26 @@ import webserver.http.response.ResponseHeaders;
 import webserver.http.response.ResponseStatusLine;
 
 public class PageController extends Controller {
-    private static final String PATH = "./templates/";
-
-    public HttpResponse viewPage(HttpRequest httpRequest) {
+    public HttpResponse viewFile(HttpRequest httpRequest) {
         if (httpRequest.getHttpStartLine().getHttpMethod() != RequestMethod.GET) {
-            return notFound(httpRequest);
+            return notAllowed(httpRequest);
         }
 
         ResponseStatusLine responseStatusLine = new ResponseStatusLine(httpRequest.getHttpStartLine().getHttpVersion(),
             HttpStatus.OK);
 
+        Map<String, String> headerInfo = new HashMap<>();
         ResponseBody responseBody;
         try {
-            responseBody = ResponseBody.ofFile(PATH + httpRequest.getHttpStartLine().getUrl());
-        } catch (IOException e) {
+            FileMapping fileMapping = FileMapping.findByExtension(httpRequest.getHttpStartLine().getUrl());
+            headerInfo.put("Content-Type", fileMapping.getContentType());
+            responseBody = ResponseBody.ofFile(fileMapping.getFilePath() + httpRequest.getHttpStartLine().getUrl());
+        } catch (Exception e) {
             return notFound(httpRequest);
         }
 
-        Map<String, String> headersInfo = new HashMap<>();
-        headersInfo.put("Content-Type", "text/html;charset=utf-8");
-        headersInfo.put("Content-Length", String.valueOf(responseBody.getBodyLength()));
+        headerInfo.put("Content-Length", String.valueOf(responseBody.getBodyLength()));
 
-        return new HttpResponse(responseStatusLine, new ResponseHeaders(headersInfo), responseBody);
+        return new HttpResponse(responseStatusLine, new ResponseHeaders(headerInfo), responseBody);
     }
 }

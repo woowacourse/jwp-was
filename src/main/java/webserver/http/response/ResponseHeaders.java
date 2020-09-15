@@ -1,5 +1,7 @@
 package webserver.http.response;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.Map;
 
 public class ResponseHeaders {
@@ -9,7 +11,10 @@ public class ResponseHeaders {
         this.headers = headers;
     }
 
-    public Map<String, String> getHeaders() {
-        return headers;
+    public void write(DataOutputStream dos) throws IOException {
+        for (Map.Entry<String, String> entry : headers.entrySet()) {
+            dos.writeBytes(entry.getKey() + ": " + entry.getValue() + System.lineSeparator());
+        }
+        dos.writeBytes(System.lineSeparator());
     }
 }

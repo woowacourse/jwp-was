@@ -20,4 +20,14 @@ public abstract class Controller {
         headersInfo.put("Content-Length", String.valueOf(responseBody.getBodyLength()));
         return new HttpResponse(responseStatusLine, new ResponseHeaders(headersInfo), responseBody);
     }
+
+    protected HttpResponse notAllowed(HttpRequest httpRequest) {
+        ResponseStatusLine responseStatusLine = new ResponseStatusLine(httpRequest.getHttpStartLine().getHttpVersion(),
+            HttpStatus.METHOD_NOT_ALLOWED);
+        Map<String, String> headersInfo = new HashMap<>();
+        ResponseBody responseBody = new ResponseBody("메소드가 허용되지 않습니다.");
+        headersInfo.put("Content-Type", "text/html;charset=utf-8");
+        headersInfo.put("Content-Length", String.valueOf(responseBody.getBodyLength()));
+        return new HttpResponse(responseStatusLine, new ResponseHeaders(headersInfo), responseBody);
+    }
 }
