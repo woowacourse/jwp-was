@@ -12,14 +12,22 @@ import java.nio.file.Paths;
 public class FileIoUtils {
     private final static Logger logger = LoggerFactory.getLogger(FileIoUtils.class);
 
-    public static byte[] loadFileFromClasspath(String filePath) throws IOException {
+    public static byte[] loadFileFromClasspath(String filePath) {
         Path path;
         try {
-            path = Paths.get(FileIoUtils.class.getClassLoader().getResource(filePath).toURI());
-        } catch (URISyntaxException | NullPointerException e) {
-            logger.error("Illegal file path");
-            throw new IllegalArgumentException("Illegal file path");
+            path = Paths.get(FileIoUtils.class.getClassLoader().getResource(appendBasePath(filePath)).toURI());
+            return Files.readAllBytes(path);
+        } catch (URISyntaxException | NullPointerException | IOException e) {
+            logger.debug("Illegal file path so return null");
+            return null;
         }
-        return Files.readAllBytes(path);
+    }
+
+    private static String appendBasePath(String path) {
+        String baseUrl = "./static";
+        if (path.contains(".html") || path.contains("favicon.ico")) {
+            baseUrl = "./templates";
+        }
+        return baseUrl + path;
     }
 }
