@@ -9,10 +9,13 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import db.DataBase;
+import model.User;
 import utils.FileIoUtils;
 import utils.RequestPathUtil;
 
@@ -31,19 +34,32 @@ public class RequestHandler implements Runnable {
 
 		try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
 			BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-			String line = br.readLine();
-			String requestPath = RequestPathUtil.extract(line);
-			logger.debug("request line : {}", line);
+			String requestHeader = br.readLine();
+			logger.debug("request line : {}", requestHeader);
 
-			while (!line.equals("")) {
-				line = br.readLine();
-				logger.debug("header : {}", line);
+			String request = requestHeader.split(" ")[1];
+			DataOutputStream dos = new DataOutputStream(out);
+
+			while (!requestHeader.equals("")) {
+				requestHeader = br.readLine();
+				logger.debug("header : {}", requestHeader);
 			}
 
-			DataOutputStream dos = new DataOutputStream(out);
-			byte[] body = FileIoUtils.loadFileFromClasspath(requestPath);
-			response200Header(dos, body.length);
-			responseBody(dos, body);
+			if (request.startsWith("/user/create")) {
+				Map<String, String> requestParameters = RequestPathUtil.extractSignUpRequestData(request);
+				User user = new User(requestParameters.get("userId"), requestParameters.get("password"),
+					requestParameters.get("name"), requestParameters.get("email"));
+				DataBase.addUser(user);
+
+				logger.debug("Database : {}", user);
+				response200Header(dos, 0);
+			} else {
+				String requestPath = RequestPathUtil.extractFilePath(request);
+				byte[] body = FileIoUtils.loadFileFromClasspath(requestPath);
+
+				response200Header(dos, body.length);
+				responseBody(dos, body);
+			}
 		} catch (IOException | URISyntaxException e) {
 			logger.error(e.getMessage());
 		}
