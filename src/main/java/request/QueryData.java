@@ -35,6 +35,13 @@ public class QueryData {
         return uri.matches(URI_USING_QUERY_STRING_REGIX);
     }
 
+    String getValue(String name) {
+        if (queryData.containsKey(name)) {
+            return queryData.get(name);
+        }
+        throw new IllegalArgumentException("field \"" + name + "\" is not exist.");
+    }
+
     public Map<String, String> getQueryData() {
         return queryData;
     }

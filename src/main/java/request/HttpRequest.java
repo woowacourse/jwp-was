@@ -84,8 +84,8 @@ public class HttpRequest {
         return requestLine.getQueryDataFromUri();
     }
 
-    public Map<String, String> getFormDataFromBody() {
-        return messageBody.getFormDataFromBody();
+    public String getValueFromFormData(String headerName) {
+        return messageBody.findDataFromFormFormatBody(headerName);
     }
 
     public boolean isUriPath(String uriPath) {

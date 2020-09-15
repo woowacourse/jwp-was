@@ -102,8 +102,8 @@ class HttpRequestTest {
     }
 
     @Test
-    @DisplayName("요청의 body 로부터 form 데이터 읽기")
-    void getFormDataFromBody() {
+    @DisplayName("요청의 body 로부터 form 데이터 얻기")
+    void getValueFromFormData() {
         String requestHeader = "GET /join?id=1 HTTP/1.1\n"
             + "Host: localhost:8080\n"
             + "Connection: keep-alive\n"
@@ -113,15 +113,12 @@ class HttpRequestTest {
         String requestBody = "id=3456789";
         HttpRequest httpRequest = new HttpRequest(requestHeader, requestBody);
 
-        Map<String, String> expected = new HashMap<>();
-        expected.put("id", "3456789");
-
-        assertThat(httpRequest.getFormDataFromBody()).isEqualTo(expected);
+        assertThat(httpRequest.getValueFromFormData("id")).isEqualTo("3456789");
     }
 
     @Test
-    @DisplayName("요청의 body 로부터 form 데이터 읽기 - body가 비어있는 경우 예외처리")
-    void getFormDataFromBody_IfMessageBodyIsEmpty_ThrowException() {
+    @DisplayName("요청의 body 로부터 form 데이터 얻기 - body가 비어있는 경우 예외처리")
+    void getValueFromFormData_IfMessageBodyIsEmpty_ThrowException() {
         String requestHeader = "GET /join?id=1 HTTP/1.1\n"
             + "Host: localhost:8080\n"
             + "Connection: keep-alive\n"
@@ -130,14 +127,14 @@ class HttpRequestTest {
             + "Content-Length: 10\n";
         HttpRequest httpRequest = new HttpRequest(requestHeader, "");
 
-        assertThatThrownBy(httpRequest::getFormDataFromBody)
+        assertThatThrownBy(() -> httpRequest.getValueFromFormData("Host"))
             .isInstanceOf(UnsupportedOperationException.class)
             .hasMessage("message body is empty.");
     }
 
     @Test
-    @DisplayName("요청의 body 로부터 form 데이터 읽기 - body가 form data 형식이 아닌 경우 예외처리")
-    void getFormDataFromBody_IfRequestHasNotFormData_ThrowException() {
+    @DisplayName("요청의 body 로부터 form 데이터 얻기 - body가 form data 형식이 아닌 경우 예외처리")
+    void getValueFromFormData_IfRequestHasNotFormData_ThrowException() {
         String requestHeader = "GET /join?id=1 HTTP/1.1\n"
             + "Host: localhost:8080\n"
             + "Connection: keep-alive\n"
@@ -148,7 +145,7 @@ class HttpRequestTest {
 
         HttpRequest httpRequest = new HttpRequest(requestHeader, requestBody);
 
-        assertThatThrownBy(httpRequest::getFormDataFromBody)
+        assertThatThrownBy(() -> httpRequest.getValueFromFormData("Host"))
             .isInstanceOf(UnsupportedOperationException.class)
             .hasMessage("message body is not form data format.");
     }
