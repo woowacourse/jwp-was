@@ -1,25 +1,26 @@
-package http.request;
+package http;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 
 import exception.RequestBodyCreateFailException;
+import http.request.ContentType;
 import utils.IOUtils;
 
-public class RequestBody {
+public class HttpBody {
     private String content;
     private ContentType contentType;
 
-    public RequestBody(String content, ContentType contentType) {
+    public HttpBody(String content, ContentType contentType) {
         this.content = content;
         this.contentType = contentType;
     }
 
-    public static RequestBody from(BufferedReader bufferedReader, ContentType contentType, int contentLength) {
+    public static HttpBody from(BufferedReader bufferedReader, ContentType contentType, int contentLength) {
         try {
             String content = extractBody(bufferedReader, contentLength);
             content = contentType.parse(content);
-            return new RequestBody(content, contentType);
+            return new HttpBody(content, contentType);
         } catch (IOException e) {
             throw new RequestBodyCreateFailException();
         }

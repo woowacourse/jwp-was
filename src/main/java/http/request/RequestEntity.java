@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 import exception.RequestEntityCreateFailException;
+import http.HttpBody;
+import http.HttpHeader;
 
 public class RequestEntity {
     private static final String START_LINE_SEPERATOR = " ";
@@ -16,26 +18,26 @@ public class RequestEntity {
     private HttpMethod httpMethod;
     private HttpUrl httpUrl;
     private String httpVersion;
-    private RequestHeader requestHeader;
-    private RequestBody requestBody;
+    private HttpHeader httpHeader;
+    private HttpBody httpBody;
 
-    private RequestEntity(HttpMethod httpMethod, HttpUrl httpUrl, String httpVersion, RequestHeader requestHeader) {
+    private RequestEntity(HttpMethod httpMethod, HttpUrl httpUrl, String httpVersion, HttpHeader httpHeader) {
         this.httpMethod = httpMethod;
         this.httpUrl = httpUrl;
         this.httpVersion = httpVersion;
-        this.requestHeader = requestHeader;
-        this.requestBody = null;
+        this.httpHeader = httpHeader;
+        this.httpBody = null;
     }
 
     private RequestEntity(
         HttpMethod httpMethod, HttpUrl httpUrl, String httpVersion,
-        RequestHeader requestHeader, RequestBody requestBody
+        HttpHeader httpHeader, HttpBody httpBody
     ) {
         this.httpMethod = httpMethod;
         this.httpUrl = httpUrl;
         this.httpVersion = httpVersion;
-        this.requestHeader = requestHeader;
-        this.requestBody = requestBody;
+        this.httpHeader = httpHeader;
+        this.httpBody = httpBody;
     }
 
     public static RequestEntity from(BufferedReader bufferedReader) {
@@ -45,15 +47,15 @@ public class RequestEntity {
             HttpUrl httpUrl = HttpUrl.from(splittedStartLine[URL_INDEX]);
             String httpVersion = splittedStartLine[VERSION_INDEX];
 
-            RequestHeader requestHeader = RequestHeader.from(bufferedReader);
-            String contentLength = requestHeader.findOrEmpty(CONTENT_LENGTH);
+            HttpHeader httpHeader = HttpHeader.from(bufferedReader);
+            String contentLength = httpHeader.findOrEmpty(CONTENT_LENGTH);
             if (!contentLength.isEmpty()) {
-                ContentType contentType = ContentType.findOrDefault(requestHeader.findOrEmpty(CONTENT_TYPE));
-                RequestBody requestBody = RequestBody.from(bufferedReader, contentType,
+                ContentType contentType = ContentType.findOrDefault(httpHeader.findOrEmpty(CONTENT_TYPE));
+                HttpBody httpBody = HttpBody.from(bufferedReader, contentType,
                     Integer.parseInt(contentLength));
-                return new RequestEntity(httpMethod, httpUrl, httpVersion, requestHeader, requestBody);
+                return new RequestEntity(httpMethod, httpUrl, httpVersion, httpHeader, httpBody);
             }
-            return new RequestEntity(httpMethod, httpUrl, httpVersion, requestHeader);
+            return new RequestEntity(httpMethod, httpUrl, httpVersion, httpHeader);
         } catch (IOException e) {
             throw new RequestEntityCreateFailException();
         }
@@ -71,11 +73,11 @@ public class RequestEntity {
         return httpVersion;
     }
 
-    public RequestHeader getRequestHeader() {
-        return requestHeader;
+    public HttpHeader getHttpHeader() {
+        return httpHeader;
     }
 
-    public RequestBody getRequestBody() {
-        return requestBody;
+    public HttpBody getHttpBody() {
+        return httpBody;
     }
 }

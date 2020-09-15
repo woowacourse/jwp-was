@@ -1,4 +1,4 @@
-package http.request;
+package http;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,7 +9,7 @@ import java.util.Map;
 import exception.RequestHeaderCreateFailException;
 import utils.IOUtils;
 
-public class RequestHeader {
+public class HttpHeader {
     private static final String HEADER_SEPERATOR = ": ";
     private static final int SPLIT_SIZE = 2;
     private static final int KEY_INDEX = 0;
@@ -18,11 +18,11 @@ public class RequestHeader {
 
     private Map<String, String> headers;
 
-    private RequestHeader(Map<String, String> headers) {
+    private HttpHeader(Map<String, String> headers) {
         this.headers = headers;
     }
 
-    public static RequestHeader from(BufferedReader bufferedReader) {
+    public static HttpHeader from(BufferedReader bufferedReader) {
         Map<String, String> headers = new HashMap<>();
 
         try {
@@ -31,7 +31,7 @@ public class RequestHeader {
             throw new RequestHeaderCreateFailException();
         }
 
-        return new RequestHeader(headers);
+        return new HttpHeader(headers);
     }
 
     private static void extractHeaders(BufferedReader bufferedReader, Map<String, String> headers) throws IOException {
