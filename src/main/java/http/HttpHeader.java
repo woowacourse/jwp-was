@@ -2,9 +2,12 @@ package http;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import exception.RequestHeaderCreateFailException;
 import utils.IOUtils;
@@ -17,34 +20,36 @@ public class HttpHeader {
     private static final String DEFAUlT_VALUE = "";
     private static final String JOIN_SEPERATOR = ",";
 
-    private Map<String, String> headers;
+    private SortedMap<String, String> headers = new TreeMap<>(Collections.reverseOrder());
+
+    public HttpHeader() {
+    }
 
     private HttpHeader(Map<String, String> headers) {
-        this.headers = headers;
+        this.headers.putAll(headers);
     }
 
     public static HttpHeader empty() {
-        return new HttpHeader(new HashMap<>());
+        return new HttpHeader();
     }
 
     public static HttpHeader from(BufferedReader bufferedReader) {
-        Map<String, String> headers = new HashMap<>();
-
         try {
-            extractHeaders(bufferedReader, headers);
+            return new HttpHeader(extractHeaders(bufferedReader));
         } catch (IOException e) {
             throw new RequestHeaderCreateFailException();
         }
-
-        return new HttpHeader(headers);
     }
 
-    private static void extractHeaders(BufferedReader bufferedReader, Map<String, String> headers) throws IOException {
+    private static Map<String, String> extractHeaders(BufferedReader bufferedReader) throws IOException {
         List<String> lines = IOUtils.readDataUntilEmpty(bufferedReader);
+
+        Map<String, String> headers = new HashMap<>();
         for (String line : lines) {
             String[] keyValues = line.split(HEADER_SEPERATOR, SPLIT_SIZE);
             headers.put(keyValues[KEY_INDEX], keyValues[VALUE_INDEX]);
         }
+        return headers;
     }
 
     public void addHeader(String key, String value) {
@@ -58,6 +63,16 @@ public class HttpHeader {
 
     public String findOrEmpty(String input) {
         return headers.getOrDefault(input, DEFAUlT_VALUE);
+    }
+
+    public String convertToString() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (Map.Entry<String, String> entry : headers.entrySet()) {
+            stringBuilder.append(entry.getKey() + HEADER_SEPERATOR + entry.getValue());
+            stringBuilder.append(System.lineSeparator());
+        }
+        return stringBuilder.toString();
     }
 
     public Map<String, String> getHeaders() {

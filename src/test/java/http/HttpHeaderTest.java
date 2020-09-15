@@ -1,6 +1,7 @@
 package http;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
@@ -67,5 +68,16 @@ public class HttpHeaderTest {
 
         REQUEST_HEADER.addHeader("testKey", "testValue2");
         assertThat(REQUEST_HEADER.findOrEmpty("testKey")).isEqualTo("testValue,testValue2");
+    }
+
+    @Test
+    public void convertToString() {
+        assertAll(
+            () -> assertThat(REQUEST_HEADER.convertToString()).contains("Host: localhost:8080\n"),
+            () -> assertThat(REQUEST_HEADER.convertToString()).contains("Connection: keep-alive\n"),
+            () -> assertThat(REQUEST_HEADER.convertToString()).contains("Content-Length: 93\n"),
+            () -> assertThat(REQUEST_HEADER.convertToString()).contains("Content-Type: application/x-www-form-urlencoded\n"),
+            () -> assertThat(REQUEST_HEADER.convertToString()).contains("Accept: */*\n")
+        );
     }
 }
