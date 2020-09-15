@@ -1,4 +1,4 @@
-package http.request;
+package http;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -12,10 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-class RequestHeaderTest {
+public class HttpHeaderTest {
 
     private BufferedReader REQUEST_BUFFERED_READER;
-    private RequestHeader REQUEST_HEADER;
+    private HttpHeader REQUEST_HEADER;
 
     private static final String REQUEST =
         "Host: localhost:8080\n"
@@ -37,7 +37,7 @@ class RequestHeaderTest {
     @BeforeEach
     public void setUp() {
         REQUEST_BUFFERED_READER = new BufferedReader(new StringReader(REQUEST));
-        REQUEST_HEADER = RequestHeader.from(REQUEST_BUFFERED_READER);
+        REQUEST_HEADER = HttpHeader.from(REQUEST_BUFFERED_READER);
     }
 
     @Test

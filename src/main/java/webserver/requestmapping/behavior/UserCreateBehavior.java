@@ -4,7 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 import db.DataBase;
-import http.request.RequestBody;
+import http.HttpBody;
 import http.request.RequestEntity;
 import model.User;
 import stringprocessor.Params;
@@ -12,8 +12,8 @@ import stringprocessor.Params;
 public class UserCreateBehavior implements RequestBehavior {
     @Override
     public InputStream behave(RequestEntity requestEntity) {
-        RequestBody requestBody = requestEntity.getRequestBody();
-        Params userInfo = Params.from(requestBody.getContent());
+        HttpBody httpBody = requestEntity.getHttpBody();
+        Params userInfo = Params.from(httpBody.getContent());
         User user = new User(
             userInfo.findValueBy("userId"),
             userInfo.findValueBy("password"),
