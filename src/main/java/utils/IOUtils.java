@@ -10,6 +10,9 @@ import org.slf4j.LoggerFactory;
 
 public class IOUtils {
     private static final Logger logger = LoggerFactory.getLogger(IOUtils.class);
+    private static final String HEADER_DELIMITER = ": ";
+    private static final int HEADER_KEY = 0;
+    private static final int HEADER_VALUE = 1;
 
     /**
      * @param BufferedReader는
@@ -34,8 +37,8 @@ public class IOUtils {
             if (line == null) {
                 break;
             }
-            String[] split = line.split(": ");
-            requestHeaders.put(split[0], split[1]);
+            String[] split = line.split(HEADER_DELIMITER);
+            requestHeaders.put(split[HEADER_KEY], split[HEADER_VALUE]);
             logger.debug("Request Header: {}", line);
         }
 
