@@ -12,7 +12,7 @@ import web.request.HttpRequest;
 import java.io.*;
 
 public class HttpRequestTest {
-    private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
+    private static final Logger logger = LoggerFactory.getLogger(HttpRequestTest.class);
     private InputStream inputStream;
 
     @BeforeEach
@@ -57,7 +57,7 @@ public class HttpRequestTest {
     }
 
     @Test
-    @DisplayName("HttpRequest에 contentType 정보를 요청하면, 올바른 값을 반환함")
+    @DisplayName("HttpRequest에 contentType 정보를 요청하면, 올바른 값을 반환한다")
     void getContentTypeTest() {
         try {
             BufferedReader request = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));

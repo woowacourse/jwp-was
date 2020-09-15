@@ -7,13 +7,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import web.request.RequestPath;
 
 public class RequestPathTest {
-    private static final Logger logger = LoggerFactory.getLogger(RequestPathTest.class);
-
     @Test
     @DisplayName("RequestPath 객체가 올바르게 생성된다")
     void createRequestPathTest() {
@@ -43,8 +39,8 @@ public class RequestPathTest {
 
         Assertions.assertThat(requestPath.getTarget()).isEqualTo("/index.html");
 
-        Assertions.assertThat(requestPath.getParameters().get("poo")).isEqualTo("bar");
-        Assertions.assertThat(requestPath.getParameters().get("test")).isEqualTo("success");
+        Assertions.assertThat(requestPath.getParameterByKey("poo")).isEqualTo("bar");
+        Assertions.assertThat(requestPath.getParameterByKey("test")).isEqualTo("success");
     }
 
     @Test
