@@ -18,7 +18,8 @@
 #### 요구사항 4
 - [x] response status code 를 302 로 변경
 - [x] 회원 가입 후 index.html으로 redirect
- 
+#### 요구사항 5
+- [ ] stylesheet 파일을 지원하도록 수정
 
 ## 우아한테크코스 코드리뷰
 * [온라인 코드 리뷰 과정](https://github.com/woowacourse/woowacourse-docs/blob/master/maincourse/README.md)
