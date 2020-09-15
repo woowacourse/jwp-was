@@ -59,4 +59,13 @@ public class HttpHeaderTest {
         }
         return input;
     }
+
+    @Test
+    public void addHeader() {
+        REQUEST_HEADER.addHeader("testKey", "testValue");
+        assertThat(REQUEST_HEADER.findOrEmpty("testKey")).isEqualTo("testValue");
+
+        REQUEST_HEADER.addHeader("testKey", "testValue2");
+        assertThat(REQUEST_HEADER.findOrEmpty("testKey")).isEqualTo("testValue,testValue2");
+    }
 }
