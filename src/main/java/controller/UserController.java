@@ -1,19 +1,23 @@
 package controller;
 
 import service.UserService;
+import webserver.FileResponse;
+import webserver.HttpStatus;
 import webserver.Request;
+import webserver.Response;
 
 public class UserController {
 
-    public static String getCreateUser(Request request) {
+    public static Response getCreateUser(Request request) {
         String input = request.extractQueryString();
         UserService.createUser(input);
-        return "./templates/index.html";
+        return Response.withFileResponse(HttpStatus.OK, new FileResponse("./templates/index.html", "text/html"));
     }
 
-    public static String postCreateUser(Request request) {
+    public static Response postCreateUser(Request request) {
         String input = request.extractBody();
         UserService.createUser(input);
-        return "./templates/index.html";
+        return Response.withLocation(HttpStatus.FOUND, "/index.html");
+
     }
 }

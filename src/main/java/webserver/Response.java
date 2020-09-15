@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class Response {
-    private final HttpStatus status;
-    private final FileResponse fileResponse;
-    private final String location;
+    private HttpStatus status;
+    private FileResponse fileResponse;
+    private String location;
 
     private Response(HttpStatus status, FileResponse fileResponse, String location) {
         this.status = status;
@@ -27,24 +27,24 @@ public class Response {
 
     public void respond(DataOutputStream dos) throws IOException, URISyntaxException {
         if (status == HttpStatus.FOUND) {
-            redirect302Header(dos);
+            redirect(dos);
             return;
         }
         byte[] body = FileIoUtils.loadFileFromClasspath(fileResponse.getFilePath());
-        response200Header(dos, body.length);
+        responseHeader(dos, body.length);
         responseBody(dos, body);
     }
 
-    private void redirect302Header(DataOutputStream dos) throws IOException {
-        dos.writeBytes(String.format("%s %s \r\n", HttpMessage.HTTP_VERSION.getName(), HttpMessage.STATUS_FOUND.getName()));
-        dos.writeBytes(String.format("%s: %d \r\n", HttpMessage.LOCATION.getName(), this.location));
+    private void redirect(DataOutputStream dos) throws IOException {
+        dos.writeBytes("HTTP/1.1 302 FOUND \r\n");
+        dos.writeBytes("Location: " + this.location + "\r\n");
         dos.flush();
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) throws IOException {
-        dos.writeBytes(String.format("%s %s \r\n", HttpMessage.HTTP_VERSION.getName(), HttpMessage.STATUS_OK.getName()));
-        dos.writeBytes(String.format("%s: %s;charset=utf-8 \r\n", HttpMessage.CONTENT_TYPE, fileResponse.getContentType()));
-        dos.writeBytes(String.format("%s: %d \r\n", HttpMessage.CONTENT_LENGTH, lengthOfBodyContent));
+    private void responseHeader(DataOutputStream dos, int lengthOfBodyContent) throws IOException {
+        dos.writeBytes("HTTP/1.1 200 OK \r\n");
+        dos.writeBytes(String.format("Content-Type: %s;charset=utf-8\r\n", fileResponse.getContentType()));
+        dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
         dos.writeBytes("\r\n");
     }
 

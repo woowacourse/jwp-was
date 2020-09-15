@@ -4,8 +4,6 @@ import utils.IOUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 
 public class Request {
     private static final String NAME_AND_VALUE_DELIMITER = " ";
@@ -31,17 +29,9 @@ public class Request {
             throw new RuntimeException("잘못된 RequetLine입니다." + requestLine);
         }
         HttpMethod httpMethod = HttpMethod.from(tokens[HTTP_METHOD_INDEX]);
-        String resource = decode(tokens[VALUE_INDEX]);
-        return new RequestLine(httpMethod, resource);
+        return new RequestLine(httpMethod, tokens[VALUE_INDEX]);
     }
 
-    private String decode(String data) {
-        try {
-            return URLDecoder.decode(data, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("UnsupportedEncodingException" + data);
-        }
-    }
 
     private String readLine() {
         try {
@@ -67,7 +57,7 @@ public class Request {
         }
 
         String body = IOUtils.readData(bufferedReader, contentLength);
-        return decode(body);
+        return body;
     }
 
     public boolean isMatchRequestLine(RequestLine requestLine) {
