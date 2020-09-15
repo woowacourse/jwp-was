@@ -12,14 +12,16 @@ import java.net.URISyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import db.DataBase;
+import model.User;
 import utils.FileIoUtils;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private static final int REQUEST_URL_INDEX = 1;
     private static final String RESOURCE_PATH = "./templates";
 
     private Socket connection;
+    private HttpRequest httpRequest;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -31,8 +33,16 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            String requestUrl = getRequestUrl(in);
-            byte[] body = FileIoUtils.loadFileFromClasspath(RESOURCE_PATH + requestUrl);
+            httpRequest = HttpRequest.from(new BufferedReader(new InputStreamReader(in)));
+
+            byte[] body = null;
+            if (httpRequest.getPath().contains("/user/create")) {
+                DataBase.addUser(User.from(httpRequest.getParameters()));
+                body = FileIoUtils.loadFileFromClasspath(RESOURCE_PATH + "/user/form.html");
+            } else {
+                body = FileIoUtils.loadFileFromClasspath(
+                        RESOURCE_PATH + httpRequest.getPath());
+            }
 
             DataOutputStream dos = new DataOutputStream(out);
             response200Header(dos, body.length);
@@ -60,22 +70,5 @@ public class RequestHandler implements Runnable {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
-    }
-
-    private String getRequestUrl(InputStream in) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
-        String line = bufferedReader.readLine();
-
-        String[] tokens = line.split(" ");
-        String url = tokens[REQUEST_URL_INDEX];
-
-        while (!"".equals(line)) {
-            if (line == null) {
-                return null;
-            }
-            logger.debug("Request Header: {}", line);
-            line = bufferedReader.readLine();
-        }
-        return url;
     }
 }
