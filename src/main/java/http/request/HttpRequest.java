@@ -3,24 +3,20 @@ package http.request;
 public class HttpRequest {
     private final RequestLine requestLine;
     private final RequestHeader requestHeader;
-    private final RequestParams params;
+    private final RequestParams requestParams;
 
-    public HttpRequest(RequestLine requestLine, RequestHeader requestHeader, RequestParams params) {
+    public HttpRequest(RequestLine requestLine, RequestHeader requestHeader, RequestParams requestParams) {
         this.requestLine = requestLine;
         this.requestHeader = requestHeader;
-        this.params = params;
+        this.requestParams = requestParams;
     }
 
-    public RequestLine getRequestLine() {
-        return requestLine;
+    public String getHeader(String key) {
+        return requestHeader.get(key);
     }
 
-    public RequestHeader getRequestHeader() {
-        return requestHeader;
-    }
-
-    public RequestParams getParams() {
-        return params;
+    public String getParameter(String key) {
+        return requestParams.get(key);
     }
 
     public String getPath() {

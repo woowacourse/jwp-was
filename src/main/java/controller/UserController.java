@@ -1,7 +1,6 @@
 package controller;
 
 import http.request.HttpRequest;
-import http.request.RequestParams;
 import http.response.HttpResponse;
 import model.db.DataBase;
 import model.domain.User;
@@ -13,12 +12,11 @@ public class UserController extends AbstractController {
 
     @Override
     void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        RequestParams params = httpRequest.getParams();
         User user = new User(
-                params.get("userId"),
-                params.get("password"),
-                params.get("name"),
-                params.get("email")
+                httpRequest.getParameter("userId"),
+                httpRequest.getParameter("password"),
+                httpRequest.getParameter("name"),
+                httpRequest.getParameter("email")
         );
         DataBase.addUser(user);
         logger.debug("save userId : {}", user.getUserId());

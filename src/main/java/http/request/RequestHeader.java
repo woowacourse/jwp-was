@@ -10,6 +10,10 @@ public class RequestHeader {
         this.header = header;
     }
 
+    public String get(String key) {
+        return header.get(key);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

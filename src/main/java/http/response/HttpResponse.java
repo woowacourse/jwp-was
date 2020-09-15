@@ -13,8 +13,16 @@ public class HttpResponse {
         this.dos = new DataOutputStream(outputStream);
     }
 
+    private static String appendBasePath(String path) {
+        String baseUrl = "./static";
+        if (path.contains(".html") || path.contains("favicon.ico")) {
+            baseUrl = "./templates";
+        }
+        return baseUrl + path;
+    }
+
     public void forward(String path) throws IOException {
-        byte[] body = FileIoUtils.loadFileFromClasspath(path);
+        byte[] body = FileIoUtils.loadFileFromClasspath(appendBasePath(path));
         responseHeader(path, body);
         responseBody(body);
     }
