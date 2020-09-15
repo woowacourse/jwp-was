@@ -45,7 +45,7 @@ public class RequestHandler implements Runnable {
     }
 
     private void response(Request request, DataOutputStream dos) throws IOException, URISyntaxException {
-        if (request.isGetRequest()) {
+        if (request.isGet()) {
             byte[] fileData = fileDataFinder(request);
             response200Header(request, dos, fileData.length);
             responseBody(dos, fileData);
@@ -96,7 +96,7 @@ public class RequestHandler implements Runnable {
     }
 
     private void postRequestHandle(Request request, DataOutputStream dos) {
-        if (request.isPostRequest()) {
+        if (request.isPost()) {
             User user = request.getBody(User.class);
 
             DataBase.addUser(user);
