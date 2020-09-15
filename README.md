@@ -22,8 +22,8 @@
     - [X] User 객체를 생성한다.
 - [X] 회원가입을 완료하면 /index.html 페이지로 이동한다.
     - [X] 응답 헤더의 상태 코드로 302를 사용하여 리다이렉트 한다.
-- [ ] stylesheet 파일을 지원하도록 구현한다.
-    - [ ] Stylesheet인 경우 응답 헤더의 Content-Type을 text/css로 전송한다.
+- [X] stylesheet 파일을 지원하도록 구현한다.
+    - [X] Stylesheet인 경우 응답 헤더의 Content-Type을 text/css로 전송한다.
 
 ## 우아한테크코스 코드리뷰
 * [온라인 코드 리뷰 과정](https://github.com/woowacourse/woowacourse-docs/blob/master/maincourse/README.md)

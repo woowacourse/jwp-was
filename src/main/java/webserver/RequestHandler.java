@@ -50,8 +50,8 @@ public class RequestHandler implements Runnable {
             RequestLine requestLine = RequestLine.from(requestLineAndHeader.get(0));
             RequestHeaders requestHeaders = RequestHeaders.from(
                     requestLineAndHeader.subList(1, requestLineAndHeader.size()));
-
             Uri uri = requestLine.getUri();
+
             if ("/user/create".equals(uri.getPath()) && requestLine.equalsMethod(HttpMethod.POST)) {
                 int contentLength = Integer.parseInt(requestHeaders.getHeader("Content-Length"));
                 String body = IOUtils.readBody(bufferedReader, contentLength);
@@ -65,11 +65,44 @@ public class RequestHandler implements Runnable {
                 response302Header(dataOutputStream, "/index.html");
             } else if (uri.getPath().endsWith(".html")) {
                 byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + requestLine.getPath());
-                response200Header(dataOutputStream, body.length);
+                response200Header(dataOutputStream, "text/html", body.length);
+                responseBody(dataOutputStream, body);
+            } else if (uri.getPath().endsWith(".js")) {
+                byte[] body = FileIoUtils.loadFileFromClasspath("./static" + requestLine.getPath());
+                response200Header(dataOutputStream, "text/javascript", body.length);
+                responseBody(dataOutputStream, body);
+            } else if (uri.getPath().endsWith(".css")) {
+                byte[] body = FileIoUtils.loadFileFromClasspath("./static" + requestLine.getPath());
+                response200Header(dataOutputStream, "text/css", body.length);
+                responseBody(dataOutputStream, body);
+            } else if (uri.getPath().endsWith(".svg")) {
+                byte[] body = FileIoUtils.loadFileFromClasspath("./static" + requestLine.getPath());
+                response200Header(dataOutputStream, "image/svg+xml", body.length);
+                responseBody(dataOutputStream, body);
+            } else if (uri.getPath().endsWith(".ttf")) {
+                byte[] body = FileIoUtils.loadFileFromClasspath("./static" + requestLine.getPath());
+                response200Header(dataOutputStream, "application/x-font-ttf", body.length);
+                responseBody(dataOutputStream, body);
+            } else if (uri.getPath().endsWith(".woff")) {
+                byte[] body = FileIoUtils.loadFileFromClasspath("./static" + requestLine.getPath());
+                response200Header(dataOutputStream, "application/x-font-woff", body.length);
+                responseBody(dataOutputStream, body);
+            } else if (uri.getPath().endsWith(".woff2")) {
+                byte[] body = FileIoUtils.loadFileFromClasspath("./static" + requestLine.getPath());
+                response200Header(dataOutputStream, "application/x-font-woff2", body.length);
+                responseBody(dataOutputStream, body);
+            } else if (uri.getPath().endsWith(".eot")) {
+                byte[] body = FileIoUtils.loadFileFromClasspath("./static" + requestLine.getPath());
+                response200Header(dataOutputStream, "application/vnd.ms-fontobject", body.length);
+                responseBody(dataOutputStream, body);
+
+            } else if (uri.getPath().endsWith(".png")) {
+                byte[] body = FileIoUtils.loadFileFromClasspath("./static" + requestLine.getPath());
+                response200Header(dataOutputStream, "image/png", body.length);
                 responseBody(dataOutputStream, body);
             } else {
                 byte[] body = "hello, world".getBytes();
-                response200Header(dataOutputStream, body.length);
+                response200Header(dataOutputStream, "text/plain", body.length);
                 responseBody(dataOutputStream, body);
             }
         } catch (IOException | URISyntaxException e) {
@@ -77,10 +110,10 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response200Header(DataOutputStream dos, String contentType, int lengthOfBodyContent) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Type:  " + contentType + ";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
