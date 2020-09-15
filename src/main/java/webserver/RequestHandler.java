@@ -1,5 +1,7 @@
 package webserver;
 
+import static utils.IOUtils.writeWithLineSeparator;
+
 import db.DataBase;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -66,10 +68,10 @@ public class RequestHandler implements Runnable {
     private void response200Header(Request request, DataOutputStream dos, int lengthOfBodyContent) {
         AcceptType type = request.getType();
         try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: " + type.getContentType() + ";charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
+            writeWithLineSeparator(dos, "HTTP/1.1 200 OK ");
+            writeWithLineSeparator(dos, "Content-Type: " + type.getContentType() + ";charset=utf-8");
+            writeWithLineSeparator(dos, "Content-Length: " + lengthOfBodyContent);
+            dos.writeBytes(System.lineSeparator());
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -77,8 +79,8 @@ public class RequestHandler implements Runnable {
 
     private void response302Header(DataOutputStream dos) {
         try {
-            dos.writeBytes("HTTP/1.1 302 Found \r\n");
-            dos.writeBytes("Location: http://localhost:8080/index.html \r\n");
+            writeWithLineSeparator(dos, "HTTP/1.1 302 Found ");
+            writeWithLineSeparator(dos, "Location: http://localhost:8080/index.html ");
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -95,7 +97,6 @@ public class RequestHandler implements Runnable {
 
     private void postRequestHandle(Request request, DataOutputStream dos) {
         if (request.isPostRequest()) {
-
             User user = request.getBody(User.class);
 
             DataBase.addUser(user);

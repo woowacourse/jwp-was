@@ -1,6 +1,7 @@
 package utils;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -22,5 +23,12 @@ public class IOUtils {
 
     public static String extractExtension(String filePath) {
         return filePath.substring(filePath.lastIndexOf(".") + 1);
+    }
+
+    public static void writeWithLineSeparator(DataOutputStream dos, String value) throws IOException {
+        StringBuilder builder = new StringBuilder(value);
+        StringBuilder withLineSeparator = builder.append(System.lineSeparator());
+
+        dos.writeBytes(withLineSeparator.toString());
     }
 }
