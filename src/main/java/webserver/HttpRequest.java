@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import utils.IOUtils;
 import utils.StringUtils;
 
@@ -17,6 +20,8 @@ public class HttpRequest {
     private static final int HTTP_VERSION_INDEX = 2;
     private static final int PATH_INDEX = 0;
     private static final int PARAMETER_INDEX = 1;
+    private static final String CONTENT_LENGTH = "Content-Length";
+    private static final Logger logger = LoggerFactory.getLogger(IOUtils.class);
 
     private enum HttpMethod {
         GET, POST;
@@ -30,17 +35,21 @@ public class HttpRequest {
     private final String path;
     private final Map<String, String> parameters;
     private final Map<String, String> httpHeaders;
+    private final String body;
 
-    private HttpRequest(HttpMethod httpMethod, String path, Map<String, String> parameters,
-            Map<String, String> httpHeaders) {
+    public HttpRequest(HttpMethod httpMethod, String path,
+            Map<String, String> parameters,
+            Map<String, String> httpHeaders, String body) {
         this.httpMethod = httpMethod;
         this.path = path;
         this.parameters = parameters;
         this.httpHeaders = httpHeaders;
+        this.body = body;
     }
 
     public static HttpRequest from(BufferedReader bufferedReader) throws IOException {
         String line = bufferedReader.readLine();
+        logger.debug(line);
         String[] firstLine = line.split(FIRST_LINE_DELIMITER);
 
         HttpMethod httpMethod = HttpMethod.valueOf(firstLine[HTTP_METHOD_INDEX]);
@@ -54,7 +63,13 @@ public class HttpRequest {
         httpsHeaders.put("Http-Version", firstLine[HTTP_VERSION_INDEX]);
         httpsHeaders.putAll(IOUtils.readRequestHeaders(bufferedReader));
 
-        return new HttpRequest(httpMethod, path, parameters, httpsHeaders);
+        String body = null;
+        if (httpsHeaders.containsKey(CONTENT_LENGTH)) {
+            body = IOUtils.readData(bufferedReader,
+                    Integer.parseInt(httpsHeaders.get(CONTENT_LENGTH)));
+        }
+
+        return new HttpRequest(httpMethod, path, parameters, httpsHeaders, body);
     }
 
     private static Map<String, String> parseParameters(String[] urlTokens) {
@@ -76,5 +91,9 @@ public class HttpRequest {
 
     public Map<String, String> getParameters() {
         return parameters;
+    }
+
+    public String getBody() {
+        return body;
     }
 }
