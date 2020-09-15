@@ -7,14 +7,17 @@ import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import request.HttpRequest;
 import request.Method;
 
 class HttpRequestTest {
 
-    @Test
+    @ParameterizedTest
+    @CsvSource({"Content-Length,True", "X-Auth-Token,False"})
     @DisplayName("요청 헤더 문자열에 특정 헤더가 존재하는지 아닌지 알아보기")
-    void isExistRequestHeader() {
+    void isExistRequestHeader(String headerName, boolean expected) {
         String requestHeader = "GET /join?id=1 HTTP/1.1\n"
             + "Host: localhost:8080\n"
             + "Connection: keep-alive\n"
@@ -22,10 +25,8 @@ class HttpRequestTest {
             + "Upgrade-Insecure-Requests: 1\n"
             + "Content-Length: 10\n";
 
-        assertThat(HttpRequest.isExistRequestHeader(requestHeader, "Content-Length"))
-            .isTrue();
-        assertThat(HttpRequest.isExistRequestHeader(requestHeader, "X-Auth-Token"))
-            .isFalse();
+        assertThat(HttpRequest.isExistRequestHeader(requestHeader, headerName))
+            .isEqualTo(expected);
     }
 
     @Test

@@ -7,24 +7,23 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import request.Headers;
 
 class HeadersTest {
 
-    @Test
+    @ParameterizedTest
+    @CsvSource({"Authentication,bearer zxfsDeZ23u1eoi5jGwkdfv091", "Host,localhost:8080"})
     @DisplayName("요청 헤더의 특정 필드 값 읽기")
-    void getValue() {
+    void getValue(String headerName, String expected) {
         List<String> headerFormats = new ArrayList<>();
-        headerFormats.add("Authentication: bearer zxfsDeZ23u1eoi5jGwkdfv091");
-        headerFormats.add("Host: localhost:8080");
-        headerFormats.add("Connection: keep-alive");
+        headerFormats.add(headerName + ": " + expected);
 
         Headers headers = new Headers(headerFormats);
 
-        assertThat(headers.getValue("Authentication"))
-            .isEqualTo("bearer zxfsDeZ23u1eoi5jGwkdfv091");
-        assertThat(headers.getValue("Host"))
-            .isEqualTo("localhost:8080");
+        assertThat(headers.getValue(headerName))
+            .isEqualTo(expected);
     }
 
     @Test
