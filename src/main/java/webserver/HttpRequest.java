@@ -93,6 +93,10 @@ public class HttpRequest {
         return parameters;
     }
 
+    public Map<String, String> getHttpHeaders() {
+        return httpHeaders;
+    }
+
     public String getBody() {
         return body;
     }
