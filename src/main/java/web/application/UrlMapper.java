@@ -5,7 +5,7 @@ import java.util.Map;
 
 import web.application.controller.Controller;
 import web.application.controller.CreateUserController;
-import web.application.controller.StaticController;
+import web.application.controller.RootController;
 import web.server.exception.UrlNotFoundException;
 
 public class UrlMapper {
@@ -15,7 +15,7 @@ public class UrlMapper {
     static {
         mapper = new HashMap<>();
         mapper.put("/user/create", CreateUserController.getInstance());
-        mapper.put("/", StaticController.getInstance());
+        mapper.put("/", RootController.getInstance());
     }
 
     public static Controller findMatchingController(String path) {
