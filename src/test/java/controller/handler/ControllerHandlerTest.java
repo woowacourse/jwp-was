@@ -73,13 +73,31 @@ class ControllerHandlerTest {
             HttpRequest httpRequest = new HttpRequest(
                 POST,
                 URL_PATH_NOT_EXISTS_FILE,
-                PARAMETERS_EMPTY,
+                PARAMETERS_FOR_CREATE_USER,
                 PROTOCOL,
                 HEADERS_EMPTY,
                 API);
             controllerHandler.handleAPI(os, httpRequest);
 
             assertThat(os.toString()).contains(HttpStatusCode.NOT_FOUND.getCodeAndMessage());
+            assertThat(os.toString()).contains(CONTENT_TYPE_TEXT_PLAIN);
+        }
+    }
+
+    @DisplayName("잘못된 parameter, 400 반환")
+    @Test
+    void handleAPI_WrongParameters_Return400() throws IOException {
+        try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+            HttpRequest httpRequest = new HttpRequest(
+                POST,
+                URL_PATH_API_CREATE_USER,
+                PARAMETERS_EMPTY,
+                PROTOCOL,
+                HEADERS_EMPTY,
+                API);
+            controllerHandler.handleAPI(os, httpRequest);
+
+            assertThat(os.toString()).contains(HttpStatusCode.BAD_REQUEST.getCodeAndMessage());
             assertThat(os.toString()).contains(CONTENT_TYPE_TEXT_PLAIN);
         }
     }
