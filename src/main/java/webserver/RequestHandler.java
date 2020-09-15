@@ -9,12 +9,16 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import db.DataBase;
+import model.User;
 import utils.FileIoUtils;
-import utils.StringUtils;
+import utils.HttpRequestUtils;
+import web.StaticFile;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -32,14 +36,23 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             String line = br.readLine();
-            String path = StringUtils.extractPath(line);
+            String path = HttpRequestUtils.extractPath(line);
+            if (path.startsWith("/user/create")) {
+                Map<String, String> params = HttpRequestUtils.parseQueryString(path);
+                User user = new User(params.get("userId"), params.get("password"), params.get("name"), params.get("email"));
+                DataBase.addUser(user);
+                logger.debug("user : {}", user);
+                return;
+            }
+
             logger.debug("request line : {}", line);
             while (!"".equals(line)) {
                 line = br.readLine();
                 logger.debug("header : {}", line);
             }
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + path);
+            StaticFile staticFile = StaticFile.of(path);
+            byte[] body = FileIoUtils.loadFileFromClasspath(staticFile.getPrefix() + path);
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException | URISyntaxException e) {
