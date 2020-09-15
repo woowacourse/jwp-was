@@ -9,8 +9,8 @@ public class RequestPath {
     private static final String PARAM_DELIMITER = "&";
     private static final String PARAM_KEY_VALUE_DELIMITER = "=";
 
-    private String path;
-    private Map<String, String> parameters = new HashMap<>();
+    private final String path;
+    private final Map<String, String> parameters = new HashMap<>();
 
     public RequestPath(String path) {
         String[] splitPath = path.split(PATH_PARAM_DELIMITER);

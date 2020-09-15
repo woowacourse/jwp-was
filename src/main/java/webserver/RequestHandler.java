@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import db.DataBase;
 import model.User;
 import utils.FileIoUtils;
+import web.HttpMethod;
 import web.RequestBody;
 import web.RequestHeader;
 import web.RequestLine;
@@ -24,7 +26,7 @@ import web.StaticFile;
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
-    private Socket connection;
+    private final Socket connection;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -35,18 +37,18 @@ public class RequestHandler implements Runnable {
             connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             RequestLine requestLine = new RequestLine(bufferedReader);
             RequestHeader requestHeader = new RequestHeader(bufferedReader);
             RequestBody requestBody = null;
-            if (requestLine.getMethod().equals("POST")) {
+            if (HttpMethod.POST == requestLine.getMethod()) {
                 requestBody = new RequestBody(bufferedReader, requestHeader.getContentLength());
             }
 
             DataOutputStream dos = new DataOutputStream(out);
             String requestPath = requestLine.getPath();
             byte[] body;
-            if (requestPath.endsWith("/user/create") && "POST".equals(requestLine.getMethod())) {
+            if (requestPath.endsWith("/user/create") && HttpMethod.POST == requestLine.getMethod()) {
                 Map<String, String> parsedBody = requestBody.parseBody();
                 String userId = parsedBody.get("userId");
                 String password = parsedBody.get("password");
@@ -58,7 +60,7 @@ public class RequestHandler implements Runnable {
                 body = user.toString().getBytes();
                 response302Header(dos, "/index.html");
                 responseBody(dos, body);
-            } else if ("GET".equals(requestLine.getMethod())) {
+            } else if (HttpMethod.GET == requestLine.getMethod()) {
                 StaticFile staticFile = StaticFile.findStaticFile(requestLine.getPath());
                 body = FileIoUtils.loadFileFromClasspath(staticFile.getResourcePath() + requestPath);
                 response200Header(dos, body.length, staticFile.getContentType());
