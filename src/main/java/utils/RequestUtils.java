@@ -3,10 +3,14 @@ package utils;
 import model.User;
 import model.UserRequest;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 public class RequestUtils {
     private static final String INPUT_DELIMITER = "&";
 
     public static User createUser(String input) {
+        input = decode(input);
         UserRequest userRequest = new UserRequest();
         validateInputData(input, userRequest);
         // 정규식으로 바꾸는게 나을까?
@@ -35,5 +39,13 @@ public class RequestUtils {
 
     private static int calculateFromIndexOfValue(String input, String field) {
         return input.indexOf(field) + field.length() + 1;
+    }
+
+    private static String decode(String data) {
+        try {
+            return URLDecoder.decode(data, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("UnsupportedEncodingException" + data);
+        }
     }
 }
