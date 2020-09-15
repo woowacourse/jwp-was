@@ -21,9 +21,13 @@ public class UserController extends Controller {
 
         RequestParams requestParams = RequestParams.from(httpRequest.getHttpBody().getBody());
 
-        DataBase.addUser(
-            new User(requestParams.getOneParameterValue("userId"), requestParams.getOneParameterValue("password"),
-                requestParams.getOneParameterValue("name"), requestParams.getOneParameterValue("email")));
+        try {
+            DataBase.addUser(
+                new User(requestParams.getOneParameterValue("userId"), requestParams.getOneParameterValue("password"),
+                    requestParams.getOneParameterValue("name"), requestParams.getOneParameterValue("email")));
+        } catch (Exception e) {
+            return badRequest(httpRequest);
+        }
 
         ResponseStatusLine responseStatusLine = new ResponseStatusLine(httpRequest.getHttpStartLine().getHttpVersion(),
             HttpStatus.FOUND);

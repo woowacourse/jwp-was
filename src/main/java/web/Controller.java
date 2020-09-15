@@ -30,4 +30,14 @@ public abstract class Controller {
         headersInfo.put("Content-Length", String.valueOf(responseBody.getBodyLength()));
         return new HttpResponse(responseStatusLine, new ResponseHeaders(headersInfo), responseBody);
     }
+
+    protected HttpResponse badRequest(HttpRequest httpRequest) {
+        ResponseStatusLine responseStatusLine = new ResponseStatusLine(httpRequest.getHttpStartLine().getHttpVersion(),
+            HttpStatus.BAD_REQUEST);
+        Map<String, String> headersInfo = new HashMap<>();
+        ResponseBody responseBody = new ResponseBody("잘못된 값이 들어왔습니다.");
+        headersInfo.put("Content-Type", "text/html;charset=utf-8");
+        headersInfo.put("Content-Length", String.valueOf(responseBody.getBodyLength()));
+        return new HttpResponse(responseStatusLine, new ResponseHeaders(headersInfo), responseBody);
+    }
 }
