@@ -11,8 +11,11 @@
 - [x] request header log 출력
 - [x] request header url에 해당하는 페이지 반환
 #### 요구사항 2
-- [ ] request url에서 parameter 추출
-- [ ] 추출한 parameter로 User 객체 생성
+- [x] request url에서 parameter 추출
+- [x] 추출한 parameter로 User 객체 생성
+#### 요구사항 3
+- [ ] form 태그 method를 Post로 수정  
+
  
 
 ## 우아한테크코스 코드리뷰
