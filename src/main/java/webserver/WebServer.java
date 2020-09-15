@@ -3,28 +3,27 @@ package webserver;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.handler.DispenseHandler;
 import webserver.handler.RequestHandler;
 
 public class WebServer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WebServer.class);
     private static final int DEFAULT_PORT = 8080;
-    private static DispenseHandler DISPENSE_HANDLER;
 
     public static void main(String[] args) throws Exception {
         int port = calculatePort(args);
 
-        // 핸들러를 생성한다.
-        LOGGER.info("Create Controller Handler");
-        DISPENSE_HANDLER = new DispenseHandler();
+        // 쓰레드를 생성한다.
+        ExecutorService es = Executors.newFixedThreadPool(10);
 
         // 서버소켓을 생성한다.
         try (ServerSocket listenSocket = new ServerSocket(port)) {
             LOGGER.info("Web Application Server started {} port.", port);
-            startConnectionThread(listenSocket);
+            startConnectionThread(listenSocket, es);
         }
     }
 
@@ -38,13 +37,19 @@ public class WebServer {
         return Integer.parseInt(args[0]);
     }
 
-    private static void startConnectionThread(ServerSocket listenSocket)
-        throws IOException, NoSuchFieldException, IllegalAccessException {
+    private static void startConnectionThread(ServerSocket listenSocket, ExecutorService es)
+        throws IOException {
         // 클라이언트가 연결될때까지 대기한다.
+        LOGGER.info("대기중");
         Socket connection;
         while ((connection = listenSocket.accept()) != null) {
-            Thread thread = new Thread(new RequestHandler(connection, DISPENSE_HANDLER));
-            thread.start();
+            Socket threadConnection = connection;
+            es.execute(() -> {
+                RequestHandler requestHandler
+                    = new RequestHandler(threadConnection);
+                requestHandler.run();
+                LOGGER.info("실행 connection : {}", threadConnection.toString());
+            });
         }
     }
 }

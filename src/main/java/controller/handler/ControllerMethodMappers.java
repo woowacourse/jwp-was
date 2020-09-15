@@ -17,9 +17,9 @@ public class ControllerMethodMappers {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ControllerMethodMappers.class);
 
-    private final Map<Method, Object> controllerMethodMappers;
+    private final static Map<Method, Object> controllerMethodMappers;
 
-    public ControllerMethodMappers() {
+    static {
         DataBase dataBase = new DataBase();
         UserService userService = new UserService(dataBase);
         Set<Object> controllers = new HashSet<>();
@@ -27,7 +27,7 @@ public class ControllerMethodMappers {
         controllerMethodMappers = getControllerMethodMappers(controllers);
     }
 
-    private Map<Method, Object> getControllerMethodMappers(Set<Object> controllers) {
+    private static Map<Method, Object> getControllerMethodMappers(Set<Object> controllers) {
         Map<Method, Object> controllerMethodMapper = new HashMap<>();
         for (Object controller : controllers) {
             putControllerMethod(controllerMethodMapper, controller);
@@ -35,7 +35,7 @@ public class ControllerMethodMappers {
         return controllerMethodMapper;
     }
 
-    private void putControllerMethod(Map<Method, Object> controllerMethodMapper,
+    private static void putControllerMethod(Map<Method, Object> controllerMethodMapper,
         Object controller) {
         Class<?> type = controller.getClass();
         Method[] methods = type.getMethods();
@@ -45,7 +45,8 @@ public class ControllerMethodMappers {
         }
     }
 
-    private void putControllerMethod(Map<Method, Object> controllerMethodMapper, Object controller,
+    private static void putControllerMethod(Map<Method, Object> controllerMethodMapper,
+        Object controller,
         Method method) {
 
         boolean hasRequestMappingAnnotation
