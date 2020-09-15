@@ -7,8 +7,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import webserver.controller.Controller;
 import webserver.controller.StaticController;
 import webserver.domain.request.HttpRequest;
@@ -30,13 +32,14 @@ public class RequestHandler implements Runnable {
             connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream();
-            BufferedReader bufferedReader = new BufferedReader((new InputStreamReader(in, StandardCharsets.UTF_8)))) {
+             BufferedReader bufferedReader = new BufferedReader((new InputStreamReader(in, StandardCharsets.UTF_8)))) {
 
             HttpRequest httpRequest = new HttpRequest(bufferedReader);
             HttpResponse httpResponse = new HttpResponse(out);
 
             if (httpRequest.hasPathOfStaticFile()) {
-                new StaticController().service(httpRequest, httpResponse);
+                StaticController.getInstance()
+                    .service(httpRequest, httpResponse);
             } else {
                 Controller controller = UrlMapper.findMatchingController(httpRequest.getPath());
                 controller.service(httpRequest, httpResponse);

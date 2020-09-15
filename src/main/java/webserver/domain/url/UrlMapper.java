@@ -2,6 +2,7 @@ package webserver.domain.url;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import webserver.controller.Controller;
 import webserver.controller.CreateUserController;
 import webserver.controller.StaticController;
@@ -13,8 +14,8 @@ public class UrlMapper {
 
     static {
         mapper = new HashMap<>();
-        mapper.put("/user/create", new CreateUserController());
-        mapper.put("/", new StaticController());
+        mapper.put("/user/create", CreateUserController.getInstance());
+        mapper.put("/", StaticController.getInstance());
     }
 
     public static Controller findMatchingController(String path) {
