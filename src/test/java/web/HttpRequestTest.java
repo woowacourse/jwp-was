@@ -7,17 +7,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.IOUtilsTest;
 import web.request.HttpRequest;
 
 import java.io.*;
 
 public class HttpRequestTest {
-    private static final Logger logger = LoggerFactory.getLogger(IOUtilsTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
     private InputStream inputStream;
 
     @BeforeEach
-    void setup(){
+    void setup() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("GET /index.html HTTP/1.1\n");
         stringBuilder.append("Host: localhost:8080\n");
@@ -25,6 +24,7 @@ public class HttpRequestTest {
         stringBuilder.append("Accept: */*\n\n");
         inputStream = new ByteArrayInputStream(stringBuilder.toString().getBytes());
     }
+
     @Test
     @DisplayName("HttpRequest 객체가 올바르게 생성된다")
     void createHttpRequestTest() {
@@ -32,9 +32,9 @@ public class HttpRequestTest {
             BufferedReader request = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
             HttpRequest httpRequest = new HttpRequest(request);
             Assertions.assertThat(httpRequest.getMethod()).isEqualTo("GET");
-            Assertions.assertThat(httpRequest.getTarget()).isEqualTo("/index.html");
+            Assertions.assertThat(httpRequest.getRequestPath().getTarget()).isEqualTo("/index.html");
             Assertions.assertThat(httpRequest.getVersion()).isEqualTo("HTTP/1.1");
-        } catch(IOException e) {
+        } catch (IOException e) {
             logger.error(e.getMessage());
             throw new AssertionError();
         }
@@ -50,7 +50,7 @@ public class HttpRequestTest {
             Assertions.assertThatThrownBy(() -> new HttpRequest(request))
                     .isInstanceOf(InvalidHttpRequestException.class)
                     .hasMessage("Http Request의 값이 올바르지 않습니다");
-        } catch(IOException e) {
+        } catch (IOException e) {
             logger.error(e.getMessage());
             throw new AssertionError();
         }
@@ -64,7 +64,7 @@ public class HttpRequestTest {
             HttpRequest httpRequest = new HttpRequest(request);
 
             Assertions.assertThat(httpRequest.getContentType()).isEqualTo("*/*");
-        } catch(IOException e) {
+        } catch (IOException e) {
             logger.error(e.getMessage());
             throw new AssertionError();
         }

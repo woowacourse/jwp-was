@@ -1,27 +1,39 @@
 package web.request;
 
+import exception.InvalidRequestPathException;
+
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class RequestPath {
     private final String target;
-    private final Map<String, String> parameters;
+    private final Map<String, String> pathParameters;
 
     public RequestPath(String path) {
         target = path.split("\\?")[0];
-        parameters = new HashMap<>();
+        pathParameters = new HashMap<>();
         if(path.contains("?")) {
-            mappingParameters(path.split("\\?")[1]);
+            mappingPathParameters(path.split("\\?")[1]);
         }
     }
 
-    private void mappingParameters(String pathParams) {
+    private void mappingPathParameters(String pathParams) {
         for(String parameter : pathParams.split("&")) {
+            validateParameter(parameter);
             String[] tokens = parameter.split("=");
             String key = tokens[0];
             String value = tokens[1];
 
-            parameters.put(key, value);
+            pathParameters.put(key, value);
+        }
+    }
+
+    private void validateParameter(String parameter) {
+        String key = parameter.split("=")[0];
+        if(!parameter.contains("=") || key.isEmpty()) {
+            throw new InvalidRequestPathException();
         }
     }
 
@@ -29,7 +41,7 @@ public class RequestPath {
         return target;
     }
 
-    public Map<String, String> getParameters() {
-        return parameters;
+    public Map<String, String> getPathParameters() {
+        return pathParameters;
     }
 }
