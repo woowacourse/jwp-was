@@ -21,7 +21,10 @@ public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private static final String RESOURCE_PATH = "./templates";
     private static final String STATIC_PATH = "./static";
-    private static final String HTML_CONTENT_TYPE = "text/html";
+    private static final String HTML_ACCEPT = "text/html";
+    private static final String ACCEPT = "Accept";
+    private static final String HTML_CONTENT_TYPE = "text/html;charset=utf-8";
+    private static final String CSS_CONTENT_TYPE = "text/css";
 
     private Socket connection;
     private HttpRequest httpRequest;
@@ -38,26 +41,45 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             httpRequest = HttpRequest.from(new BufferedReader(new InputStreamReader(in)));
             DataOutputStream dos = new DataOutputStream(out);
-
-            byte[] body = null;
-            if (httpRequest.getPath().contains("/user/create")) {
-                DataBase.addUser(User.from(StringUtils.readParameters(httpRequest.getBody())));
-                response302Header(dos, "/index.html");
-            } else {
-                if (httpRequest.getHttpHeaders().get("Accept").contains(HTML_CONTENT_TYPE)) {
-                    body = FileIoUtils.loadFileFromClasspath(
-                            RESOURCE_PATH + httpRequest.getPath());
-                    response200Header(dos, "text/html;charset=utf-8", body.length);
-                } else {
-                    body = FileIoUtils.loadFileFromClasspath(
-                            STATIC_PATH + httpRequest.getPath());
-                    response200Header(dos, "text/css", body.length);
-                }
-            }
-            responseBody(dos, body);
+            responseByRequestMethod(dos, httpRequest);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private void responseByRequestMethod(DataOutputStream dos, HttpRequest httpRequest) throws
+            IOException, URISyntaxException {
+
+        if (httpRequest.isPost()) {
+            responseCreateUser(dos, httpRequest);
+            return;
+        }
+        responsePage(dos, httpRequest);
+    }
+
+    private void responseCreateUser(DataOutputStream dos, HttpRequest httpRequest) {
+        if (httpRequest.getPath().contains("/user/create")) {
+            DataBase.addUser(User.from(StringUtils.readParameters(httpRequest.getBody())));
+            response302Header(dos, "/index.html");
+        }
+    }
+
+    private void responsePage(DataOutputStream dos, HttpRequest httpRequest) throws
+            IOException,
+            URISyntaxException {
+        if (httpRequest.getHttpHeaders().get(ACCEPT).contains(HTML_ACCEPT)) {
+            responsePageByContentType(dos, httpRequest, RESOURCE_PATH, HTML_CONTENT_TYPE);
+            return;
+        }
+        responsePageByContentType(dos, httpRequest, STATIC_PATH, CSS_CONTENT_TYPE);
+    }
+
+    private void responsePageByContentType(DataOutputStream dos, HttpRequest httpRequest,
+            String resourcePath, String s) throws IOException, URISyntaxException {
+        byte[] body = FileIoUtils.loadFileFromClasspath(
+                resourcePath + httpRequest.getPath());
+        response200Header(dos, s, body.length);
+        responseBody(dos, body);
     }
 
     private void response200Header(DataOutputStream dos, String contentType,
@@ -76,7 +98,7 @@ public class RequestHandler implements Runnable {
         try {
             dos.writeBytes("HTTP/1.1 302 Found \r\n");
             dos.writeBytes("Location: " + location + "\r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Type: " + HTML_CONTENT_TYPE + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());

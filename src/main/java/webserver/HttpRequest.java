@@ -85,6 +85,14 @@ public class HttpRequest {
         return urlTokens.length > 1;
     }
 
+    public boolean isPost() {
+        return this.httpMethod.isPost();
+    }
+
+    public HttpMethod getHttpMethod() {
+        return httpMethod;
+    }
+
     public String getPath() {
         return path;
     }
