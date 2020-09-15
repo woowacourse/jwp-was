@@ -17,7 +17,7 @@ class StringUtilsTest {
         String url = "/user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
 
         // when
-        Map<String, String> actual = StringUtils.readUrl(url);
+        Map<String, String> actual = StringUtils.readParameters(url);
         // then
         Map<String, String> expected = new HashMap<>();
         expected.put(PATH, "/user/create");
