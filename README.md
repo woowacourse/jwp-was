@@ -14,7 +14,7 @@
 - [x] request url에서 parameter 추출
 - [x] 추출한 parameter로 User 객체 생성
 #### 요구사항 3
-- [ ] form 태그 method를 Post로 수정  
+- [x] form 태그 method를 Post로 수정  
 
  
 

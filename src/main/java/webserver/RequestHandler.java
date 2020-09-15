@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import db.DataBase;
 import model.User;
 import utils.FileIoUtils;
+import utils.StringUtils;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -37,7 +38,7 @@ public class RequestHandler implements Runnable {
 
             byte[] body = null;
             if (httpRequest.getPath().contains("/user/create")) {
-                DataBase.addUser(User.from(httpRequest.getParameters()));
+                DataBase.addUser(User.from(StringUtils.readParameters(httpRequest.getBody())));
                 body = FileIoUtils.loadFileFromClasspath(RESOURCE_PATH + "/user/form.html");
             } else {
                 body = FileIoUtils.loadFileFromClasspath(
