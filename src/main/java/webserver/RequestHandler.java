@@ -35,7 +35,7 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
 
             if(requestTarget.equals("/user/create")) {
-                User user = new User(requestPath.getPathParameters());
+                User user = new User(requestPath.getParameters());
                 DataBase.addUser(user);
 
                 //// TODO: 2020/09/14 이후 302 리스폰스에 대한 액션 구현시까지는...여기를 비운다.

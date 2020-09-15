@@ -11,8 +11,7 @@ public class HttpRequest {
     private final String method;
     private final RequestPath requestPath;
     private final String version;
-    private final Map<String, String> parameters;
-    // TODO: 2020/09/10 parameters라는 이름이 올바른지 MDN 문서 보고 재검토
+    private final Map<String, String> headers;
 
     public HttpRequest(BufferedReader request) {
         try {
@@ -21,9 +20,9 @@ public class HttpRequest {
             requestPath = new RequestPath(requestHeaderFirstLines[1].trim());
             version = requestHeaderFirstLines[2].trim();
 
-            parameters = new HashMap<>();
+            headers = new HashMap<>();
             mappingParameters(request);
-        }catch(IndexOutOfBoundsException | NullPointerException | IOException e) {
+        } catch (IndexOutOfBoundsException | NullPointerException | IOException e) {
             throw new InvalidHttpRequestException();
         }
     }
@@ -36,7 +35,7 @@ public class HttpRequest {
             String key = splitLine[0].trim();
             String value = splitLine[1].trim();
 
-            parameters.put(key, value);
+            headers.put(key, value);
             line = request.readLine();
         }
     }
@@ -54,7 +53,7 @@ public class HttpRequest {
     }
 
     public String getContentType() {
-        String acceptInfo = parameters.get("Accept");
+        String acceptInfo = headers.get("Accept");
 
         return acceptInfo.split(",")[0];
     }

@@ -1,9 +1,12 @@
 package web;
 
+import exception.InvalidRequestParamsException;
 import exception.InvalidRequestPathException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import web.request.RequestPath;
@@ -19,7 +22,16 @@ public class RequestPathTest {
         RequestPath requestPath = new RequestPath(path);
 
         Assertions.assertThat(requestPath.getTarget()).isEqualTo(path);
-        Assertions.assertThat(requestPath.getPathParameters()).isEmpty();
+        Assertions.assertThat(requestPath.getParameters()).isEmpty();
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @DisplayName("예외 테스트: RequestPath 생성 중 잘못된 경로가 전달되면, 예외를 발생시킨다.")
+    void createHttpRequestExceptionTest(String invalidRequest) {
+        Assertions.assertThatThrownBy(() -> new RequestPath(invalidRequest))
+                .isInstanceOf(InvalidRequestPathException.class)
+                .hasMessage("Request Path의 값이 올바르지 않습니다");
     }
 
     @Test
@@ -31,17 +43,17 @@ public class RequestPathTest {
 
         Assertions.assertThat(requestPath.getTarget()).isEqualTo("/index.html");
 
-        Assertions.assertThat(requestPath.getPathParameters().get("poo")).isEqualTo("bar");
-        Assertions.assertThat(requestPath.getPathParameters().get("test")).isEqualTo("success");
+        Assertions.assertThat(requestPath.getParameters().get("poo")).isEqualTo("bar");
+        Assertions.assertThat(requestPath.getParameters().get("test")).isEqualTo("success");
     }
 
     @Test
-    @DisplayName("예외 테스트: RequestPath 생성 중 잘못된 값이 전달되면, 예외를 발생시킨다.")
-    void createHttpRequestExceptionTest() {
+    @DisplayName("예외 테스트: RequestPath 생성 중 잘못된 파라미터가 전달되면, 예외를 발생시킨다.")
+    void createHttpRequestWithParmasExceptionTest() {
         String invalidRequest = "/index.html?=123";
 
         Assertions.assertThatThrownBy(() -> new RequestPath(invalidRequest))
-                .isInstanceOf(InvalidRequestPathException.class)
-                .hasMessage("잘못된 경로 요청입니다");
+                .isInstanceOf(InvalidRequestParamsException.class)
+                .hasMessage("Request에 포함된 인자의 값이 올바르지 않습니다");
     }
 }
