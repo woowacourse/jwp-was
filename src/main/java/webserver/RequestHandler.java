@@ -38,13 +38,13 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-
             RequestLine requestLine = RequestLine.of(br.readLine());
             RequestHeader requestHeader = new RequestHeader(br);
             RequestBody requestBody = null;
             if (HttpMethod.POST == requestLine.getMethod()) {
                 requestBody = RequestBody.of(br, requestHeader.getValue("Content-Length"));
             }
+
             String path = requestLine.getPath();
             byte[] body;
             if (path.startsWith("/user/create")) {
@@ -59,7 +59,7 @@ public class RequestHandler implements Runnable {
                 DataOutputStream dos = new DataOutputStream(out);
                 StaticFile staticFile = StaticFile.of(path);
                 body = FileIoUtils.loadFileFromClasspath(staticFile.getPrefix() + path);
-                response200Header(dos, body.length);
+                response200Header(dos, body.length, staticFile.getType());
                 responseBody(dos, body);
             }
 
@@ -78,10 +78,10 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Type: " + contentType + "\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
