@@ -42,9 +42,10 @@ public class RequestHandler implements Runnable {
              OutputStream outputStream = connection.getOutputStream();
              DataOutputStream dataOutputStream = new DataOutputStream(outputStream)) {
 
-            List<String> header = IOUtils.readHeader(bufferedReader);
-            HttpRequest httpRequest = HttpRequest.from(header);
-            logger.debug(header.toString());
+            List<String> requestLineAndHeader = IOUtils.readHeader(bufferedReader);
+            HttpRequest httpRequest = HttpRequest.from(requestLineAndHeader.get(0),
+                    requestLineAndHeader.subList(1, requestLineAndHeader.size()));
+            logger.debug(requestLineAndHeader.toString());
 
             RequestLine requestLine = httpRequest.getRequestLine();
             Uri uri = requestLine.getUri();

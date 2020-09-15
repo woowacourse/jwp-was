@@ -12,7 +12,7 @@ public class IOUtils {
 
     /**
      * @param bufferedReader 는
-     *            Request Body를 시작하는 시점이어야
+     *            Request Body를 시작하는 시점이어야 한다.
      * @param contentLength 는
      *            Request Header의 Content-Length 값이다.
      * @return
@@ -24,6 +24,12 @@ public class IOUtils {
         return String.copyValueOf(body);
     }
 
+    /**
+     * @param bufferedReader 는
+     *            Request를 시작하는 시점이어야 한다.
+     * @return
+     * @throws IOException
+     */
     public static List<String> readHeader(BufferedReader bufferedReader) throws IOException {
         List<String> header = new ArrayList<>();
         String line = bufferedReader.readLine();

@@ -11,7 +11,7 @@ public class QueryParameters {
 
     private final Map<String, String> parameters;
 
-    public QueryParameters(final Map<String, String> parameters) {
+    private QueryParameters(final Map<String, String> parameters) {
         this.parameters = parameters;
     }
 

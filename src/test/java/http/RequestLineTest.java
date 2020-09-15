@@ -6,6 +6,8 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class RequestLineTest {
     @DisplayName("from: 헤더 첫 라인을 입력받아 인스턴스 생성")
@@ -22,5 +24,17 @@ public class RequestLineTest {
         assertThat(requestLine.getUri().getPath()).isEqualTo("/");
         assertThat(requestLine.getUri().getQueryParameters()).isNull();
         assertThat(requestLine.getHttpVersion()).isEqualTo("HTTP/1.1");
+    }
+
+    @DisplayName("from: 잘못된 헤더 첫 라인 입력시 예외 발생")
+    @ParameterizedTest
+    @ValueSource(strings = {"GET", "/ HTTP/1.1", "GET / "})
+    void from_InvalidLineFormat_ExceptionThrown(final String line) throws IOException {
+        // given
+        // when
+        // then
+        assertThatThrownBy(() -> RequestLine.from(line))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("request line 형식이 올바르지 않습니다.");
     }
 }

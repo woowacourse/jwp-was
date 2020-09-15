@@ -11,10 +11,10 @@ import org.junit.jupiter.api.Test;
 public class HttpRequestTest {
     @DisplayName("from: body가 없는 http 요청을 읽어 HttpRequest 생성")
     @Test
-    void constructor() {
+    void from() {
         // given
+        final String requestLine = "GET / HTTP/1.1";
         final List<String> requestHeaders = Arrays.asList(
-                "GET / HTTP/1.1",
                 "Host: localhost:8080",
                 "Sec-Fetch-Site: none",
                 "Sec-Fetch-Mode: navigate",
@@ -22,7 +22,7 @@ public class HttpRequestTest {
                 "Sec-Fetch-Dest: document");
 
         // when
-        HttpRequest httpRequest = HttpRequest.from(requestHeaders);
+        HttpRequest httpRequest = HttpRequest.from(requestLine, requestHeaders);
 
         // then
         assertThat(httpRequest.getRequestLine()).isNotNull();

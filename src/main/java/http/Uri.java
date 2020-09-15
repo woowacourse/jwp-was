@@ -1,5 +1,7 @@
 package http;
 
+import java.util.Objects;
+
 public class Uri {
     private static final String QUERY_STRING_DELIMITER = "\\?";
     private static final int QUERY_PARAMETER_CONTAINS_URI_LENGTH = 2;
@@ -8,7 +10,7 @@ public class Uri {
     private final QueryParameters queryParameters;
 
     public Uri(final String path, final QueryParameters queryParameters) {
-        this.path = path;
+        this.path = Objects.requireNonNull(path, "uri path가 존재하지 않습니다.");
         this.queryParameters = queryParameters;
     }
 
