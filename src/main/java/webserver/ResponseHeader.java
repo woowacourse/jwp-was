@@ -24,9 +24,9 @@ public class ResponseHeader {
         byte[] responseFile = FileIoUtils.loadFileFromClasspath(TEMPLATES_PATH + location);
 
         try {
-            dos.writeBytes("HTTP/1.1 302 Found \r\n");
-            dos.writeBytes("Location: " + location + "\r\n");
-            dos.writeBytes("\r\n");
+            dos.writeBytes("HTTP/1.1 302 Found " + System.lineSeparator());
+            dos.writeBytes("Location: " + location + System.lineSeparator());
+            dos.writeBytes(System.lineSeparator());
             createResponseBody(responseFile);
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -43,10 +43,10 @@ public class ResponseHeader {
 
         }
         try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: " + HttpContentType.findContentType(resourcePath) + ";charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + responseFile.length + "\r\n");
-            dos.writeBytes("\r\n");
+            dos.writeBytes("HTTP/1.1 200 OK " + System.lineSeparator());
+            dos.writeBytes("Content-Type: " + HttpContentType.findContentType(resourcePath) + ";charset=utf-8" + System.lineSeparator());
+            dos.writeBytes("Content-Length: " + responseFile.length + System.lineSeparator());
+            dos.writeBytes(System.lineSeparator());
             createResponseBody(responseFile);
         } catch (IOException e) {
             logger.error(e.getMessage());
