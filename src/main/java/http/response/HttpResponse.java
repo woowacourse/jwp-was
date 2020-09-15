@@ -22,10 +22,10 @@ public class HttpResponse {
     }
 
     private void responseHeader(String path, byte[] body) throws IOException {
-        dos.writeBytes("HTTP/1.1 200 OK \r\n");
-        dos.writeBytes("Content-Type: " + findContentType(path) + ";charset=utf-8\r\n");
-        dos.writeBytes("Content-Length: " + body.length + "\r\n");
-        dos.writeBytes("\r\n");
+        dos.writeBytes("HTTP/1.1 200 OK " + System.lineSeparator());
+        dos.writeBytes("Content-Type: " + findContentType(path) + ";charset=utf-8" + System.lineSeparator());
+        dos.writeBytes("Content-Length: " + body.length + System.lineSeparator());
+        dos.writeBytes(System.lineSeparator());
     }
 
     private void responseBody(byte[] body) throws IOException {
@@ -42,9 +42,9 @@ public class HttpResponse {
 
     public void sendRedirect(String redirectPath) {
         try {
-            dos.writeBytes("HTTP/1.1 302 FOUND \r\n");
-            dos.writeBytes("Location: " + redirectPath + "\r\n");
-            dos.writeBytes("\r\n");
+            dos.writeBytes("HTTP/1.1 302 FOUND " + System.lineSeparator());
+            dos.writeBytes("Location: " + redirectPath + System.lineSeparator());
+            dos.writeBytes(System.lineSeparator());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -53,8 +53,10 @@ public class HttpResponse {
     public void badRequest() {
         byte[] body = FileIoUtils.loadFileFromClasspath(ERROR_PAGE);
         try {
-            dos.writeBytes("HTTP/1.1 400 FOUND \r\n");
-            dos.writeBytes("\r\n");
+            dos.writeBytes("HTTP/1.1 400 FOUND " + System.lineSeparator());
+            dos.writeBytes("Content-Type: text/html;charset=utf-8" + System.lineSeparator());
+            dos.writeBytes("Content-Length: " + body.length + System.lineSeparator());
+            dos.writeBytes(System.lineSeparator());
             responseBody(body);
         } catch (IOException e) {
             e.printStackTrace();
