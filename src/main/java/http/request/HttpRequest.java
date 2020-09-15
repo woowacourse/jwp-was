@@ -23,7 +23,11 @@ public class HttpRequest {
         return params;
     }
 
-    public String getUrl() {
+    public String getPath() {
         return requestLine.getPath();
+    }
+
+    public HttpMethod getMethod() {
+        return requestLine.getMethod();
     }
 }

@@ -15,11 +15,19 @@ public class FileIoUtils {
     public static byte[] loadFileFromClasspath(String filePath) throws IOException {
         Path path;
         try {
-            path = Paths.get(FileIoUtils.class.getClassLoader().getResource(filePath).toURI());
+            path = Paths.get(FileIoUtils.class.getClassLoader().getResource(appendBasePath(filePath)).toURI());
         } catch (URISyntaxException | NullPointerException e) {
             logger.error("Illegal file path");
             throw new IllegalArgumentException("Illegal file path");
         }
         return Files.readAllBytes(path);
+    }
+
+    private static String appendBasePath(String path) {
+        String baseUrl = "./static";
+        if (path.contains(".html") || path.contains("favicon.ico")) {
+            baseUrl = "./templates";
+        }
+        return baseUrl + path;
     }
 }

@@ -27,8 +27,6 @@ public class WebServer {
             ExecutorService es = Executors.newFixedThreadPool(6);
             while ((connection = listenSocket.accept()) != null) {
                 es.execute(new RequestHandler(connection));
-//                Thread thread = new Thread(new RequestHandler(connection));
-//                thread.start();
             }
         }
     }

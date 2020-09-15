@@ -10,8 +10,8 @@ public class RequestParams {
         this.params = params;
     }
 
-    public Map<String, String> getParams() {
-        return params;
+    public String get(String key) {
+        return params.get(key);
     }
 
     @Override
@@ -19,11 +19,11 @@ public class RequestParams {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         final RequestParams that = (RequestParams) o;
-        return Objects.equals(getParams(), that.getParams());
+        return Objects.equals(params, that.params);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getParams());
+        return Objects.hash(params);
     }
 }

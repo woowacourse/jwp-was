@@ -1,7 +1,5 @@
 package http.request;
 
-import controller.ControllerMapper;
-
 import java.util.Objects;
 
 public class RequestLine {
@@ -11,10 +9,6 @@ public class RequestLine {
     public RequestLine(HttpMethod method, String path) {
         this.method = method;
         this.path = path;
-    }
-
-    public boolean isEqualRequestType(ControllerMapper url) {
-        return this.method.equals(url.getHttpMethod()) && this.path.equals(url.getUrl());
     }
 
     public HttpMethod getMethod() {
