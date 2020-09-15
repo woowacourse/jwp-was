@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
 import utils.IOUtils;
 
 public class HttpRequest {
@@ -27,7 +28,7 @@ public class HttpRequest {
         }
 
         String params = this.requestLine.getQuery();
-        if (headerParams.containsKey("Content-Length")) {
+        if (this.requestLine.isPostMethod()) {
             params = IOUtils.readBody(bufferedReader, findContentLength());
         }
         this.requestParams = new RequestParams(params);
