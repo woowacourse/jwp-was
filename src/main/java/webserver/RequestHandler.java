@@ -17,8 +17,8 @@ import org.slf4j.LoggerFactory;
 import db.DataBase;
 import model.User;
 import utils.FileIoUtils;
-import utils.HttpRequestUtils;
-import utils.IOUtils;
+import web.HttpMethod;
+import web.RequestBody;
 import web.RequestHeader;
 import web.RequestLine;
 import web.StaticFile;
@@ -41,24 +41,39 @@ public class RequestHandler implements Runnable {
 
             RequestLine requestLine = RequestLine.of(br.readLine());
             RequestHeader requestHeader = new RequestHeader(br);
-
+            RequestBody requestBody = null;
+            if (HttpMethod.POST == requestLine.getMethod()) {
+                requestBody = RequestBody.of(br, requestHeader.getValue("Content-Length"));
+            }
             String path = requestLine.getPath();
+            byte[] body;
             if (path.startsWith("/user/create")) {
-                String requestBody = IOUtils.readData(br, Integer.parseInt(requestHeader.getValue("Content-Length")));
-                Map<String, String> params = HttpRequestUtils.parseQueryString(requestBody);
-
+                Map<String, String> params = requestBody.getParams();
                 User user = new User(params.get("userId"), params.get("password"), params.get("name"), params.get("email"));
                 DataBase.addUser(user);
-                logger.debug("user : {}", user);
-                return;
+                body = user.toString().getBytes();
+                DataOutputStream dos = new DataOutputStream(out);
+                response302Header(dos, "/index.html");
+                responseBody(dos, body);
+            } else if (HttpMethod.GET == requestLine.getMethod()) {
+                DataOutputStream dos = new DataOutputStream(out);
+                StaticFile staticFile = StaticFile.of(path);
+                body = FileIoUtils.loadFileFromClasspath(staticFile.getPrefix() + path);
+                response200Header(dos, body.length);
+                responseBody(dos, body);
             }
 
-            DataOutputStream dos = new DataOutputStream(out);
-            StaticFile staticFile = StaticFile.of(path);
-            byte[] body = FileIoUtils.loadFileFromClasspath(staticFile.getPrefix() + path);
-            response200Header(dos, body.length);
-            responseBody(dos, body);
         } catch (IOException | URISyntaxException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void response302Header(DataOutputStream dos, String redirectUrl) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 Found \r\n");
+            dos.writeBytes("Location: " + redirectUrl + "\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
