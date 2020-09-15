@@ -5,10 +5,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import request.HttpRequest;
 import request.Method;
 
@@ -55,17 +58,20 @@ class HttpRequestTest {
             .hasMessage("this header field does not exist.");
     }
 
-    @Test
+    @ParameterizedTest
+    @MethodSource("getParameterOfIsRequestLineUriQueryString")
     @DisplayName("요청 헤더의 URI 가 query string 형식인지 아닌지 알아보기")
-    void isUriUsingQueryString() {
-        HttpRequest expectedTrue = new HttpRequest(
-            "GET /join?id=1 HTTP/1.1\n", "");
+    void isRequestLineUriQueryString(String requestLine, boolean expected) {
+        HttpRequest httpRequest = new HttpRequest(requestLine, "");
 
-        HttpRequest expectedFalse = new HttpRequest(
-            "GET /join HTTP/1.1\n", "");
+        assertThat(httpRequest.isRequestLineUriQueryString()).isEqualTo(expected);
+    }
 
-        assertThat(expectedTrue.isUriUsingQueryString()).isTrue();
-        assertThat(expectedFalse.isUriUsingQueryString()).isFalse();
+    private static Stream<Arguments> getParameterOfIsRequestLineUriQueryString() {
+        return Stream.of(
+            Arguments.of("GET /join?id=1 HTTP/1.1\n", true),
+            Arguments.of("GET /join HTTP/1.1\n", false)
+        );
     }
 
     @Test

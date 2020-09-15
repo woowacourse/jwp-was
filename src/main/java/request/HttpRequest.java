@@ -76,7 +76,7 @@ public class HttpRequest {
             .getHeader(headerName);
     }
 
-    public boolean isUriUsingQueryString() {
+    public boolean isRequestLineUriQueryString() {
         return requestLine.isUriUsingQueryString();
     }
 
