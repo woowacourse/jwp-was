@@ -4,12 +4,13 @@ import utils.FileIoUtils;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 public class HttpResponse {
     private final DataOutputStream dos;
 
-    public HttpResponse(DataOutputStream dos) {
-        this.dos = dos;
+    public HttpResponse(OutputStream outputStream) {
+        this.dos = new DataOutputStream(outputStream);
     }
 
     public void forward(String path) throws IOException {

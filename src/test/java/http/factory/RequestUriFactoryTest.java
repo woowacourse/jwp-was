@@ -15,7 +15,7 @@ class RequestUriFactoryTest {
     @DisplayName("생성 테스트")
     @Test
     void construct() {
-        String request = "GET /user/create?userId=id&password=1234 HTTP/1.1\n";
+        String request = "GET /user?userId=id&password=1234 HTTP/1.1\n";
         HashMap<String, String> params = new HashMap<>();
         RequestLine requestLine = RequestUriFactory.createRequestUri(request, params);
 
@@ -25,7 +25,7 @@ class RequestUriFactoryTest {
 
         assertAll(
                 () -> assertThat(requestLine.getMethod()).isEqualTo(HttpMethod.GET),
-                () -> assertThat(requestLine.getPath()).isEqualTo("/user/create"),
+                () -> assertThat(requestLine.getPath()).isEqualTo("/user"),
                 () -> assertThat(params).isEqualTo(expectedParams)
         );
     }
