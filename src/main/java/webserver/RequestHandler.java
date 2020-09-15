@@ -10,6 +10,7 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
+import utils.URIUtils;
 import web.request.HttpRequest;
 import web.request.RequestPath;
 
@@ -41,7 +42,8 @@ public class RequestHandler implements Runnable {
                 //// TODO: 2020/09/14 이후 302 리스폰스에 대한 액션 구현시까지는...여기를 비운다.
                 return;
             }
-            byte[] body = FileIoUtils.loadFileFromClasspath(requestTarget);
+            String filePath = URIUtils.getFilePath(requestTarget);
+            byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
             response200Header(dos, httpRequest.getContentType(), body.length);
             responseBody(dos, body);
         } catch (IOException | URISyntaxException | InvalidHttpRequestException e) {
