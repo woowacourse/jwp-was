@@ -22,7 +22,7 @@ public enum HttpContentType {
 
     public static String findContentType(String url) {
         return Arrays.stream(HttpContentType.values())
-            .filter(isSameExtension(url))
+            .filter(type -> type.isSameExtension(url))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException("해당하는 확장자가 없습니다!"))
             .contentType;
@@ -30,13 +30,13 @@ public enum HttpContentType {
 
     public static boolean isStaticFile(String uri) {
         return Arrays.stream(HttpContentType.values())
-            .filter(isSameExtension(uri))
+            .filter(type -> type.isSameExtension(uri))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException("해당하는 확장자가 없습니다!"))
             .staticFile;
     }
 
-    private static Predicate<HttpContentType> isSameExtension(String uri) {
-        return type -> uri.endsWith(type.extension);
+    private boolean isSameExtension(String uri) {
+        return uri.endsWith(this.extension);
     }
 }
