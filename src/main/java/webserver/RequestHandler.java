@@ -106,6 +106,6 @@ public class RequestHandler implements Runnable {
 
     private byte[] fileDataFinder(Request request) throws IOException, URISyntaxException {
         AcceptType type = request.getType();
-        return FileIoUtils.loadFileFromClasspath(type.getFileRootPath() + request.getHeader("filePath"));
+        return FileIoUtils.loadFileFromClasspath(type.getFileRootPath() + request.getPath());
     }
 }
