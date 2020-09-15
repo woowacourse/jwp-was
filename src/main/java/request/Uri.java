@@ -5,6 +5,8 @@ import java.util.Map;
 
 public class Uri {
 
+    private static final String PATH_AND_QUERY_SEPARATOR = "\\?";
+
     private String uri;
     private String path;
 
@@ -18,14 +20,16 @@ public class Uri {
         if (!uri.startsWith("/")) {
             throw new IllegalArgumentException("The uri format is incorrect. (uri : " + uri + ")");
         }
-        String[] pathAndQuery = uri.split("\\?");
-        if (pathAndQuery.length > 2) {
+        String[] pathAndQuery = uri.split(PATH_AND_QUERY_SEPARATOR);
+        final int pathAndQueryMaxLength = 2;
+
+        if (pathAndQuery.length > pathAndQueryMaxLength) {
             throw new IllegalArgumentException("The uri format is incorrect. (uri : " + uri + ")");
         }
     }
 
     private String findPathFromUri() {
-        String[] pathAndQuery = uri.split("\\?");
+        String[] pathAndQuery = uri.split(PATH_AND_QUERY_SEPARATOR);
         return pathAndQuery[0];
     }
 
@@ -47,7 +51,7 @@ public class Uri {
             throw new IllegalArgumentException(
                 "The uri is not used QueryData String. (uri : " + uri + ")");
         }
-        String[] pathAndQuery = uri.split("\\?");
+        String[] pathAndQuery = uri.split(PATH_AND_QUERY_SEPARATOR);
         return pathAndQuery[1];
     }
 
@@ -57,5 +61,10 @@ public class Uri {
 
     public boolean isPath(String uriPath) {
         return this.path.equals(uriPath);
+    }
+
+    @Override
+    public String toString() {
+        return uri;
     }
 }

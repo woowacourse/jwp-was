@@ -24,6 +24,11 @@ public class RequestLine {
         }
     }
 
+    @Override
+    public String toString() {
+        return method.toString() + " " + uri.toString() + "\n";
+    }
+
     boolean isUriUsingQueryString() {
         return uri.isUsingQueryString();
     }

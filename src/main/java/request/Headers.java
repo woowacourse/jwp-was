@@ -3,9 +3,11 @@ package request;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Headers {
 
+    static final String CONTENT_TYPE = "Content-Type";
     private static final String NAME_AND_VALUE_SEPARATOR = ": ";
 
     private Map<String, String> headers = new HashMap<>();
@@ -29,5 +31,15 @@ public class Headers {
             throw new IllegalArgumentException("this header field does not exist.");
         }
         return headers.get(headerFieldName);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        Set<String> headerNames = headers.keySet();
+
+        headerNames.forEach(headerName -> stringBuilder.append(headers.get(headerName)));
+
+        return stringBuilder.toString();
     }
 }

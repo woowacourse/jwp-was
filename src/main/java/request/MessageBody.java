@@ -5,6 +5,8 @@ import java.util.Objects;
 
 public class MessageBody {
 
+    static final String EMPTY_BODY = "";
+
     private String messageBody;
 
     public MessageBody(String messageBody) {
@@ -23,6 +25,11 @@ public class MessageBody {
     }
 
     public String getMessageBody() {
+        return messageBody;
+    }
+
+    @Override
+    public String toString() {
         return messageBody;
     }
 }
