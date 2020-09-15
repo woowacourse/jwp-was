@@ -21,6 +21,14 @@ public class RequestHeaders {
                 .collect(collectingAndThen(toMap(header -> header[0], header -> header[1]), RequestHeaders::new));
     }
 
+    public boolean hasContentLength() {
+        return headers.containsKey("Content-Length");
+    }
+
+    public int getContentLength() {
+        return Integer.parseInt(getHeader("Content-Length"));
+    }
+
     public String getHeader(final String key) {
         return headers.get(key);
     }

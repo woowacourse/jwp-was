@@ -9,7 +9,7 @@ public class RequestBody {
     private static final String BODY_DELIMITER = "&";
     private static final String BODY_KEY_VALUE_DELIMITER = "=";
 
-    Map<String, String> values;
+    private final Map<String, String> values;
 
     public RequestBody(Map<String, String> values) {
         this.values = values;

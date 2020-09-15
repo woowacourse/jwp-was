@@ -22,6 +22,14 @@ public class Uri {
         return new Uri(splitUri[0], null);
     }
 
+    public boolean endsWith(final String extension) {
+        return path.endsWith(extension);
+    }
+
+    public boolean matchesPath(final String path) {
+        return getPath().equals(path);
+    }
+
     public String getPath() {
         return path;
     }

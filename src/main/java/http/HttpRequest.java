@@ -1,6 +1,11 @@
 package http;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
+
+import utils.IOUtils;
 
 public class HttpRequest {
     private final RequestLine requestLine;
@@ -14,8 +19,32 @@ public class HttpRequest {
         this.requestBody = requestBody;
     }
 
-    public HttpRequest(final RequestLine requestLine, final RequestHeaders requestHeaders) {
-        this(requestLine, requestHeaders, null);
+    public static HttpRequest from(final BufferedReader bufferedReader) throws IOException {
+        List<String> requestLineAndHeader = IOUtils.readHeader(bufferedReader);
+        RequestLine line = RequestLine.from(requestLineAndHeader.get(0));
+        RequestHeaders headers = RequestHeaders.from(requestLineAndHeader.subList(1, requestLineAndHeader.size()));
+        if (headers.hasContentLength()) {
+            int contentLength = headers.getContentLength();
+            RequestBody body = RequestBody.from(IOUtils.readBody(bufferedReader, contentLength));
+            return new HttpRequest(line, headers, body);
+        }
+        return new HttpRequest(line, headers, null);
+    }
+
+    public boolean equalsMethod(final HttpMethod httpMethod) {
+        return requestLine.equalsMethod(httpMethod);
+    }
+
+    public boolean matchesPath(final String path) {
+        return requestLine.matchesPath(path);
+    }
+
+    public String getPath() {
+        return requestLine.getPath();
+    }
+
+    public String getBodyValue(final String key) {
+        return requestBody.getValue(key);
     }
 
     public RequestLine getRequestLine() {

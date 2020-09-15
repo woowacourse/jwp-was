@@ -8,12 +8,12 @@ public class RequestLine {
 
     private final HttpMethod method;
     private final Uri uri;
-    private final String httpVersion;
+    private final String protocol;
 
-    private RequestLine(final HttpMethod method, final Uri uri, final String httpVersion) {
+    private RequestLine(final HttpMethod method, final Uri uri, final String protocol) {
         this.method = Objects.requireNonNull(method, "http 메서드가 존재하지 않습니다.");
         this.uri = Objects.requireNonNull(uri, "uri가 존재하지 않습니다.");
-        this.httpVersion = Objects.requireNonNull(httpVersion, "http version이 존재하지 않습니다.");
+        this.protocol = Objects.requireNonNull(protocol, "protocol이 존재하지 않습니다.");
     }
 
     public static RequestLine from(final String requestLine) {
@@ -28,6 +28,10 @@ public class RequestLine {
         return method.equals(httpMethod);
     }
 
+    public boolean matchesPath(final String path) {
+        return uri.matchesPath(path);
+    }
+
     public String getPath() {
         return uri.getPath();
     }
@@ -40,8 +44,8 @@ public class RequestLine {
         return uri;
     }
 
-    public String getHttpVersion() {
-        return httpVersion;
+    public String getProtocol() {
+        return protocol;
     }
 
     @Override
@@ -49,7 +53,7 @@ public class RequestLine {
         return "RequestLine{" +
                 "method=" + method +
                 ", uri='" + uri + '\'' +
-                ", httpVersion='" + httpVersion + '\'' +
+                ", protocol='" + protocol + '\'' +
                 '}';
     }
 }
