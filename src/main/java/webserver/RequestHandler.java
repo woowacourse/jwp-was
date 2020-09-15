@@ -35,18 +35,17 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             httpRequest = HttpRequest.from(new BufferedReader(new InputStreamReader(in)));
+            DataOutputStream dos = new DataOutputStream(out);
 
             byte[] body = null;
             if (httpRequest.getPath().contains("/user/create")) {
                 DataBase.addUser(User.from(StringUtils.readParameters(httpRequest.getBody())));
-                body = FileIoUtils.loadFileFromClasspath(RESOURCE_PATH + "/user/form.html");
+                response302Header(dos, "/index.html");
             } else {
                 body = FileIoUtils.loadFileFromClasspath(
                         RESOURCE_PATH + httpRequest.getPath());
+                response200Header(dos, body.length);
             }
-
-            DataOutputStream dos = new DataOutputStream(out);
-            response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
@@ -58,6 +57,17 @@ public class RequestHandler implements Runnable {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
             dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void response302Header(DataOutputStream dos, String location) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 Found \r\n");
+            dos.writeBytes("Location: " + location + "\r\n");
+            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
