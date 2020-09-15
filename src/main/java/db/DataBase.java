@@ -4,8 +4,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
-
-import model.User;
+import web.application.domain.model.User;
 
 public class DataBase {
     private static Map<String, User> users = Maps.newHashMap();
