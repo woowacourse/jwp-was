@@ -8,6 +8,7 @@ import http.request.ContentType;
 
 public class ResponseEntity {
 
+    public static final String SEPERATOR = " ";
     private String httpVersion;
     private HttpStatus httpStatus;
     private HttpHeader httpHeader;
@@ -48,6 +49,12 @@ public class ResponseEntity {
     public ResponseEntity body(String body, ContentType contentType) {
         this.httpBody = new HttpBody(body, contentType);
         return this;
+    }
+
+    public String convertToString() {
+        return httpVersion + SEPERATOR + httpStatus.convertToString() + SEPERATOR + System.lineSeparator()
+            + httpHeader.convertToString() + System.lineSeparator()
+            + httpBody.getContent();
     }
 
     public String getHttpVersion() {

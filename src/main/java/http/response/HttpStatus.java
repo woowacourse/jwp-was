@@ -10,7 +10,7 @@ public enum HttpStatus {
         this.code = code;
     }
 
-    public String toString() {
-        return name() + " " + code;
+    public String convertToString() {
+        return code + " " + name();
     }
 }
