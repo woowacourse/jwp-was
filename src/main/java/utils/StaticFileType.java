@@ -17,4 +17,8 @@ public enum StaticFileType {
 
     private final String path;
     private final String contentType;
+
+    public static StaticFileType from(String type) {
+        return StaticFileType.valueOf(type.toUpperCase());
+    }
 }
