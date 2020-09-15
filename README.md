@@ -20,8 +20,8 @@
     - [X] http://localhost:8080/user/form.html 파일의 form 태그 method를 get에서 post로 수정한다.
     - [X] Reuqest Body를 읽어온다.
     - [X] User 객체를 생성한다.
-- [ ] 회원가입을 완료하면 /index.html 페이지로 이동한다.
-    - [ ] 응답 헤더의 상태 코드로 302를 사용하여 리다이렉 한다.
+- [X] 회원가입을 완료하면 /index.html 페이지로 이동한다.
+    - [X] 응답 헤더의 상태 코드로 302를 사용하여 리다이렉트 한다.
 - [ ] stylesheet 파일을 지원하도록 구현한다.
     - [ ] Stylesheet인 경우 응답 헤더의 Content-Type을 text/css로 전송한다.
 

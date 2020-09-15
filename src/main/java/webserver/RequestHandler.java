@@ -62,14 +62,16 @@ public class RequestHandler implements Runnable {
                 String email = requestBody.getValue("email");
                 User user = new User(userId, password, name, email);
                 DataBase.addUser(user);
+                response302Header(dataOutputStream, "/index.html");
             } else if (uri.getPath().endsWith(".html")) {
                 byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + requestLine.getPath());
                 response200Header(dataOutputStream, body.length);
                 responseBody(dataOutputStream, body);
+            } else {
+                byte[] body = "hello, world".getBytes();
+                response200Header(dataOutputStream, body.length);
+                responseBody(dataOutputStream, body);
             }
-            byte[] body = "hello, world".getBytes();
-            response200Header(dataOutputStream, body.length);
-            responseBody(dataOutputStream, body);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
@@ -81,6 +83,18 @@ public class RequestHandler implements Runnable {
             dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void response302Header(DataOutputStream dos, String location) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 Found \r\n");
+            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Location: " + location + "\r\n");
+            dos.writeBytes("\r\n");
+            dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
