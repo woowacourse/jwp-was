@@ -30,13 +30,13 @@ public class StaticFileController {
             return new HttpResponse(StatusCode.OK, body, contentType);
 
         } catch (IOException e) {
-            logger.error("fail to read static file that uri is {} : {}",
+            logger.error("fail to read static file that uri is \"{}\" : {}",
                 httpRequest.getUriPath(),
                 e.getMessage()
             );
             return new HttpResponse(StatusCode.INTERNAL_SERVER_ERROR);
         } catch (URISyntaxException e) {
-            logger.error("There is no corresponding file for uri {}. : {}",
+            logger.error("There is no corresponding file for uri \"{}\". : {}",
                 httpRequest.getUriPath(),
                 e.getMessage()
             );

@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class Headers {
 
-    static final String CONTENT_TYPE = "Content-Type";
+    static final String CONTENT_LENGTH = "Content-Length";
     private static final String NAME_AND_VALUE_SEPARATOR = ": ";
 
     private Map<String, String> headers = new HashMap<>();

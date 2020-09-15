@@ -47,9 +47,9 @@ public class HttpRequest {
         String requestHeader = IOUtils.readDataBeforeEmptyLine(br);
         String requestBody = "";
 
-        if (HttpRequest.isExistRequestHeader(requestHeader, Headers.CONTENT_TYPE)) {
+        if (HttpRequest.isExistRequestHeader(requestHeader, Headers.CONTENT_LENGTH)) {
             int contentLength = Integer.parseInt(HttpRequest.findHeaderValue(
-                requestHeader, Headers.CONTENT_TYPE));
+                requestHeader, Headers.CONTENT_LENGTH));
             requestBody = IOUtils.readData(br, contentLength);
         }
         return new HttpRequest(requestHeader, requestBody);
