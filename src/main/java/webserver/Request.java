@@ -16,11 +16,11 @@ public class Request {
         type = AcceptType.of((String) headers.getHeader("filePath"));
     }
 
-    public boolean isGetRequest() {
+    public boolean isGet() {
         return headers.isGetRequest();
     }
 
-    public boolean isPostRequest() {
+    public boolean isPost() {
         return headers.isPostRequest();
     }
 
