@@ -19,9 +19,9 @@ import webserver.HttpStatusCode;
 import webserver.dto.HttpRequest;
 import webserver.dto.HttpResponse;
 
-class ControllerAdviceTest {
+class GlobalExceptionHandlerTest {
 
-    private ControllerAdvice controllerAdvice = new ControllerAdvice();
+    private GlobalExceptionHandler globalExceptionHandler = new GlobalExceptionHandler();
     private HttpRequest httpRequest
         = new HttpRequest(GET, URL_PATH_INDEX_HTML, PARAMETERS_EMPTY, PROTOCOL, HEADERS_EMPTY, API);
 
@@ -31,7 +31,7 @@ class ControllerAdviceTest {
         RuntimeException exception
             = makeRuntimeExceptionWithCause(new IllegalArgumentException());
         HttpResponse httpResponse
-            = controllerAdvice.handleCauseException(httpRequest, exception);
+            = globalExceptionHandler.handleCauseException(httpRequest, exception);
 
         assertThat(httpResponse.getProtocol()).isEqualTo(httpRequest.getProtocol());
         assertThat(httpResponse.getHttpStatusCode()).isEqualTo(HttpStatusCode.BAD_REQUEST);
@@ -47,7 +47,7 @@ class ControllerAdviceTest {
         RuntimeException exception
             = makeRuntimeExceptionWithCause(new childOfIllegalArgumentException());
         HttpResponse httpResponse
-            = controllerAdvice.handleCauseException(httpRequest, exception);
+            = globalExceptionHandler.handleCauseException(httpRequest, exception);
 
         assertThat(httpResponse.getProtocol()).isEqualTo(httpRequest.getProtocol());
         assertThat(httpResponse.getHttpStatusCode()).isEqualTo(HttpStatusCode.BAD_REQUEST);
@@ -64,7 +64,7 @@ class ControllerAdviceTest {
         RuntimeException exception
             = makeRuntimeExceptionWithCause(new NullPointerException());
         HttpResponse httpResponse
-            = controllerAdvice.handleCauseException(httpRequest, exception);
+            = globalExceptionHandler.handleCauseException(httpRequest, exception);
 
         assertThat(httpResponse.getProtocol()).isEqualTo(httpRequest.getProtocol());
         assertThat(httpResponse.getHttpStatusCode()).isEqualTo(HttpStatusCode.BAD_REQUEST);
@@ -80,7 +80,7 @@ class ControllerAdviceTest {
         RuntimeException exception
             = makeRuntimeExceptionWithCause(new childOfException());
         HttpResponse httpResponse
-            = controllerAdvice.handleCauseException(httpRequest, exception);
+            = globalExceptionHandler.handleCauseException(httpRequest, exception);
 
         assertThat(httpResponse.getProtocol()).isEqualTo(httpRequest.getProtocol());
         assertThat(httpResponse.getHttpStatusCode())

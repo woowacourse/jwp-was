@@ -4,7 +4,7 @@ import webserver.HttpStatusCode;
 import webserver.dto.HttpRequest;
 import webserver.dto.HttpResponse;
 
-public class ControllerAdvice {
+public class GlobalExceptionHandler {
 
     public HttpResponse handleCauseException(HttpRequest httpRequest, Exception exception) {
         if (exception.getCause() instanceof IllegalArgumentException

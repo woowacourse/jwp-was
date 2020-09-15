@@ -8,21 +8,18 @@ import webserver.dto.HttpResponse;
 
 public class MatchInfo {
 
-    private final Object instance;
-    private final Method method;
-    private final int sameUrlPathCount;
+    private Object instance;
+    private Method method;
+    private int sameUrlPathCount;
 
-    public MatchInfo(Object instance, Method method, int sameUrlPathCount) {
-        validate(instance, method);
+    private MatchInfo(Object instance, Method method, int sameUrlPathCount) {
         this.instance = instance;
         this.method = method;
         this.sameUrlPathCount = sameUrlPathCount;
     }
 
-    private void validate(Object instance, Method method) {
-        if (Objects.isNull(instance) != Objects.isNull(method)) {
-            throw new IllegalArgumentException("인스턴스와 메서드가 제대로 매칭되지 않았습니다.");
-        }
+    public static MatchInfo Default() {
+        return new MatchInfo(null, null, 0);
     }
 
     public boolean anyMatchUrlPath() {
@@ -40,5 +37,26 @@ public class MatchInfo {
     public HttpResponse executeMethod(HttpRequest httpRequest)
         throws InvocationTargetException, IllegalAccessException {
         return (HttpResponse) method.invoke(instance, httpRequest);
+    }
+
+    public void setInstance(Object instance) {
+        this.instance = instance;
+    }
+
+    public void setMethod(Method method) {
+        this.method = method;
+    }
+
+    public void increaseCount() {
+        sameUrlPathCount++;
+    }
+
+    @Override
+    public String toString() {
+        return "MatchInfo{" +
+            "instance=" + instance +
+            ", method=" + method +
+            ", sameUrlPathCount=" + sameUrlPathCount +
+            '}';
     }
 }

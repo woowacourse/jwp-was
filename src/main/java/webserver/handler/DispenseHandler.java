@@ -10,7 +10,7 @@ public class DispenseHandler {
     private final FileHandler fileHandler;
     private final ControllerHandler controllerHandler;
 
-    public DispenseHandler() throws NoSuchFieldException, IllegalAccessException {
+    public DispenseHandler() {
         this.fileHandler = new FileHandler();
         this.controllerHandler = new ControllerHandler();
     }

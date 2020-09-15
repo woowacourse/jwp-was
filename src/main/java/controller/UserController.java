@@ -2,7 +2,6 @@ package controller;
 
 import static com.google.common.net.HttpHeaders.LOCATION;
 
-import controller.annotation.Controller;
 import controller.annotation.RequestMapping;
 import controller.dto.UserRequest;
 import controller.dto.UserRequestAssembler;
@@ -14,16 +13,13 @@ import webserver.HttpStatusCode;
 import webserver.dto.HttpRequest;
 import webserver.dto.HttpResponse;
 
-@Controller
 public class UserController {
 
     private static final String INDEX_HTML = "/index.html";
 
-    private final ControllerAdvice controllerAdvice;
     private final UserService userService;
 
-    public UserController(ControllerAdvice controllerAdvice, UserService userService) {
-        this.controllerAdvice = controllerAdvice;
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 

@@ -23,10 +23,9 @@ import webserver.dto.Parameters;
 
 class UserControllerTest {
 
-    private ControllerAdvice controllerAdvice = new ControllerAdvice();
     private DataBase dataBase = new DataBase();
     private UserService userService = new UserService(dataBase);
-    private UserController userController = new UserController(controllerAdvice, userService);
+    private UserController userController = new UserController(userService);
 
     @AfterEach
     void tearDown() {
