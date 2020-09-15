@@ -28,8 +28,9 @@ public class HttpResponse {
 
     public void response404Header() {
         try {
-            dataOutputStream.writeBytes("HTTP/1.1 200 OK \r\n");
+            dataOutputStream.writeBytes("HTTP/1.1 404 Not Found \r\n");
             dataOutputStream.writeBytes("\r\n");
+            dataOutputStream.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }

@@ -25,9 +25,7 @@ public class FrontController {
             handler.handleRequest(httpRequest, httpResponse);
         } catch (HandlerNotFoundException exception) {
             logger.info(exception.getMessage());
-            byte[] body = "요청하신 페이지를 찾을 수 없습니다.".getBytes();
             httpResponse.response404Header();
-            httpResponse.responseBody(body);
         }
     }
 
