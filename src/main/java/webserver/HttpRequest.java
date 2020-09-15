@@ -6,10 +6,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 import utils.IOUtils;
+import utils.StringUtils;
 
 public class HttpRequest {
     public static final String PATH = "path";
-    private static final String CONTENT_LENGTH = "Content-Length";
+    private static final String PARAMETER_DELIMITER = "\\?";
+    private static final String FIRST_LINE_DELIMITER = " ";
+    private static final int HTTP_METHOD_INDEX = 0;
+    private static final int URL_INDEX = 1;
+    private static final int HTTP_VERSION_INDEX = 2;
+    private static final int PATH_INDEX = 0;
+    private static final int PARAMETER_INDEX = 1;
 
     private enum HttpMethod {
         GET, POST;
@@ -23,44 +30,51 @@ public class HttpRequest {
     private final String path;
     private final Map<String, String> parameters;
     private final Map<String, String> httpHeaders;
-    private final String body;
 
     private HttpRequest(HttpMethod httpMethod, String path, Map<String, String> parameters,
-            Map<String, String> httpHeaders, String body) {
+            Map<String, String> httpHeaders) {
         this.httpMethod = httpMethod;
         this.path = path;
         this.parameters = parameters;
         this.httpHeaders = httpHeaders;
-        this.body = body;
     }
 
     public static HttpRequest from(BufferedReader bufferedReader) throws IOException {
         String line = bufferedReader.readLine();
-        String[] tokens = line.split(" ");
-        HttpMethod httpMethod = HttpMethod.valueOf(tokens[0]);
-        String[] urlAndParams = tokens[1].split("\\?");
-        String path = urlAndParams[0];
+        String[] firstLine = line.split(FIRST_LINE_DELIMITER);
 
-        Map<String, String> params = new HashMap<>();
-        if (urlAndParams.length > 1) {
-            String[] paramTokens = urlAndParams[1].split("&");
-            for (String paramToken : paramTokens) {
-                String[] strings = paramToken.split("=");
-                params.put(strings[0], strings[1]);
-            }
-        }
+        HttpMethod httpMethod = HttpMethod.valueOf(firstLine[HTTP_METHOD_INDEX]);
+
+        String[] urlTokens = firstLine[URL_INDEX].split(PARAMETER_DELIMITER);
+        String path = urlTokens[PATH_INDEX];
+
+        Map<String, String> parameters = parseParameters(urlTokens);
 
         Map<String, String> httpsHeaders = new HashMap<>();
-        httpsHeaders.put("Http-Version", tokens[2]);
+        httpsHeaders.put("Http-Version", firstLine[HTTP_VERSION_INDEX]);
         httpsHeaders.putAll(IOUtils.readRequestHeaders(bufferedReader));
 
-        String body = null;
+        return new HttpRequest(httpMethod, path, parameters, httpsHeaders);
+    }
 
-        if (httpMethod.isPost()) {
-            body = IOUtils.readData(bufferedReader,
-                    Integer.parseInt(httpsHeaders.get(CONTENT_LENGTH)));
+    private static Map<String, String> parseParameters(String[] urlTokens) {
+        Map<String, String> parameters = new HashMap<>();
+
+        if (hasParameter(urlTokens)) {
+            parameters.putAll(StringUtils.readParameters(urlTokens[PARAMETER_INDEX]));
         }
+        return parameters;
+    }
 
-        return new HttpRequest(httpMethod, path, params, httpsHeaders, body);
+    private static boolean hasParameter(String[] urlTokens) {
+        return urlTokens.length > 1;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public Map<String, String> getParameters() {
+        return parameters;
     }
 }
