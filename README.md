@@ -15,7 +15,9 @@
 - [x] 추출한 parameter로 User 객체 생성
 #### 요구사항 3
 - [x] form 태그 method를 Post로 수정  
-
+#### 요구사항 4
+- [ ] response status code 를 302 로 변경
+- [ ] 회원 가입 후 index.html으로 redirect
  
 
 ## 우아한테크코스 코드리뷰
