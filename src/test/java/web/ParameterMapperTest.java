@@ -47,7 +47,7 @@ public class ParameterMapperTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings={"poobar","=poo","="})
+    @ValueSource(strings={"poobar","=poo","=", "hey="})
     @DisplayName("예외 테스트: ParameterMapper의 mappingParameters에 잘못된 값을 넣으면 예외가 발생한다.")
     void mappingParametersInvalidExceptionTest(String value) {
         ParamsMapper paramsMapper = new ParamsMapper();

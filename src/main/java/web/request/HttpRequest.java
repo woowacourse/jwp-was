@@ -41,7 +41,7 @@ public class HttpRequest {
         Map<String, String> headers = new HashMap<>();
 
         String line = request.readLine();
-        while (Objects.isNull(line) || !line.isEmpty()) {
+        while (!Objects.isNull(line) && !line.isEmpty()) {
             logger.debug(line);
             String[] splitLine = line.split(":");
             String key = splitLine[0].trim();
@@ -54,6 +54,7 @@ public class HttpRequest {
     }
 
     private RequestBody mappingBodies(BufferedReader request) throws IOException {
+        System.out.println(method);
         if(!method.equals("POST")) {
             return new RequestBody();
         }

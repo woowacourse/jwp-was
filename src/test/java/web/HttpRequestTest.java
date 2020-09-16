@@ -21,7 +21,7 @@ public class HttpRequestTest {
         stringBuilder.append("GET /index.html HTTP/1.1\n");
         stringBuilder.append("Host: localhost:8080\n");
         stringBuilder.append("Connection: keep-alive\n");
-        stringBuilder.append("Accept: */*\n");
+        stringBuilder.append("Accept: */*\n\n");
         inputStream = new ByteArrayInputStream(stringBuilder.toString().getBytes());
     }
 
@@ -43,7 +43,7 @@ public class HttpRequestTest {
     @Test
     @DisplayName("예외 테스트: HttpRequest 생성 중 잘못된 값이 전달되면, 예외가 발생한다")
     void createHttpRequestExceptionTest() {
-        String invalidRequest = "Es Muss Sein!";
+        String invalidRequest = "Es-Muss-Sein!";
         inputStream = new ByteArrayInputStream(invalidRequest.getBytes());
         try {
             BufferedReader request = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
