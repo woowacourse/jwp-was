@@ -1,7 +1,7 @@
 package utils;
 
-import model.User;
-import model.UserRequest;
+import domain.user.User;
+import domain.user.dto.UserRequest;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;

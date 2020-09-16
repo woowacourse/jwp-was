@@ -1,6 +1,6 @@
 package utils;
 
-import model.User;
+import domain.user.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

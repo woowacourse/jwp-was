@@ -1,4 +1,6 @@
-package model;
+package domain.user.dto;
+
+import domain.user.User;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,9 +17,6 @@ public class UserRequest {
     private String password;
     private String name;
     private String email;
-
-    public UserRequest() {
-    }
 
     public List<String> getFieldNames() {
         return Arrays.asList(USER_ID, PASSWORD, NAME, EMAIL);

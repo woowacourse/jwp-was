@@ -1,7 +1,7 @@
-package service;
+package domain.user.service;
 
 import db.DataBase;
-import model.User;
+import domain.user.User;
 import utils.RequestUtils;
 
 public class UserService {

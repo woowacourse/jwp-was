@@ -1,6 +1,6 @@
-package controller;
+package domain.user.controller;
 
-import service.UserService;
+import domain.user.service.UserService;
 import webserver.FileResponse;
 import webserver.HttpStatus;
 import webserver.Request;
