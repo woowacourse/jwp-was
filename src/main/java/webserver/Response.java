@@ -27,21 +27,21 @@ public class Response {
 
     public void respond(DataOutputStream dos) throws IOException, URISyntaxException {
         if (status == HttpStatus.FOUND) {
-            redirect(dos);
+            redirect302Header(dos);
             return;
         }
         byte[] body = FileIoUtils.loadFileFromClasspath(fileResponse.getFilePath());
-        responseHeader(dos, body.length);
+        response200Header(dos, body.length);
         responseBody(dos, body);
     }
 
-    private void redirect(DataOutputStream dos) throws IOException {
+    private void redirect302Header(DataOutputStream dos) throws IOException {
         dos.writeBytes("HTTP/1.1 302 FOUND \r\n");
         dos.writeBytes("Location: " + this.location + "\r\n");
         dos.flush();
     }
 
-    private void responseHeader(DataOutputStream dos, int lengthOfBodyContent) throws IOException {
+    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) throws IOException {
         dos.writeBytes("HTTP/1.1 200 OK \r\n");
         dos.writeBytes(String.format("Content-Type: %s;charset=utf-8\r\n", fileResponse.getContentType()));
         dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
