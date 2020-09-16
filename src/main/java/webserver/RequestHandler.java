@@ -16,6 +16,10 @@ import java.util.Map;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    public static final String HTTP_METHOD_POST = "POST";
+    public static final String HTTP_METHOD_GET = "GET";
+    public static final String HTTP_METHOD_PUT = "PUT";
+    public static final String HTTP_METHOD_DELETE = "DELETE";
 
     private Socket connection;
 
@@ -58,7 +62,7 @@ public class RequestHandler implements Runnable {
     }
 
     private void handleAPIRequest(HttpRequest httpRequest, HttpResponse httpResponse) {
-        if (httpRequest.getMethod().equals("POST") && httpRequest.getPath().equals("/user/create")) {
+        if (HTTP_METHOD_POST.equals(httpRequest.getMethod()) && "/user/create".equals(httpRequest.getPath())) {
             Map<String, String> formData = httpRequest.getFormData();
             User user = new User(formData.get("userId"), formData.get("password"), formData.get("name"), formData.get("email"));
             DataBase.addUser(user);
