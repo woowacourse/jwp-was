@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import utils.StringUtils;
+import org.springframework.util.StringUtils;
 
 public class RequestHeader {
 
