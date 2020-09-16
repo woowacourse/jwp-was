@@ -69,4 +69,19 @@ public class HttpResponse {
             logger.error(e.getMessage());
         }
     }
+
+    public void responseNotFound() throws IOException, URISyntaxException {
+        byte[] body = FileIoUtils.loadFileFromClasspath(TEMPLATES + "/common/not_found.html");
+        response404Header();
+        responseBody(body);
+    }
+
+    private void response404Header() {
+        try {
+            dataOutputStream.writeBytes("HTTP/1.1 404 NOT FOUND" + LINE_SEPARATOR);
+            dataOutputStream.writeBytes(LINE_SEPARATOR);
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
 }

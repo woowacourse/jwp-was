@@ -39,11 +39,14 @@ public class RequestHandler implements Runnable {
             DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
             HttpResponse httpResponse = new HttpResponse(dataOutputStream);
 
+            MappedRequest mappedRequest = new MappedRequest(httpRequest.getHttpMethod(), httpRequest.getHttpPath());
+
             if (httpRequest.isStaticFile()) {
                 httpResponse.responseOk(httpRequest);
+            } else if (!RequestMapper.isContain(mappedRequest)) {
+                httpResponse.responseNotFound();
             } else {
-                Method controllerMethod = RequestMapper.get(
-                    new MappedRequest(httpRequest.getHttpMethod(), httpRequest.getHttpPath()));
+                Method controllerMethod = RequestMapper.get(mappedRequest);
                 controllerMethod.invoke(null, httpRequest, httpResponse);
 
                 httpResponse.responseFound();
