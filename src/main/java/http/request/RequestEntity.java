@@ -51,8 +51,7 @@ public class RequestEntity {
             String contentLength = httpHeader.findOrEmpty(CONTENT_LENGTH);
             if (!contentLength.isEmpty()) {
                 ContentType contentType = ContentType.findOrDefault(httpHeader.findOrEmpty(CONTENT_TYPE));
-                HttpBody httpBody = HttpBody.from(bufferedReader, contentType,
-                    Integer.parseInt(contentLength));
+                HttpBody httpBody = HttpBody.of(bufferedReader, contentType, Integer.parseInt(contentLength));
                 return new RequestEntity(httpMethod, httpUrl, httpVersion, httpHeader, httpBody);
             }
             return new RequestEntity(httpMethod, httpUrl, httpVersion, httpHeader);

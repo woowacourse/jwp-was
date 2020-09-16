@@ -1,9 +1,8 @@
 package webserver.requestmapping.behavior;
 
-import java.io.InputStream;
-
 import http.request.RequestEntity;
+import http.response.ResponseEntity;
 
 public interface RequestBehavior {
-    InputStream behave(RequestEntity requestEntity);
+    ResponseEntity behave(RequestEntity requestEntity);
 }

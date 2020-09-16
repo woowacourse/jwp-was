@@ -1,17 +1,16 @@
 package webserver.requestmapping.behavior;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-
 import db.DataBase;
 import http.HttpBody;
 import http.request.RequestEntity;
+import http.response.HttpStatus;
+import http.response.ResponseEntity;
 import model.User;
 import stringprocessor.Params;
 
 public class UserCreateBehavior implements RequestBehavior {
     @Override
-    public InputStream behave(RequestEntity requestEntity) {
+    public ResponseEntity behave(RequestEntity requestEntity) {
         HttpBody httpBody = requestEntity.getHttpBody();
         Params userInfo = Params.from(httpBody.getContent());
         User user = new User(
@@ -21,9 +20,8 @@ public class UserCreateBehavior implements RequestBehavior {
             userInfo.findValueBy("email"));
         DataBase.addUser(user);
 
-        String response = "HTTP/1.1 302 FOUND \r\n" +
-            "Location: /index.html \r\n" +
-            "\r\n";
-        return new ByteArrayInputStream(response.getBytes());
+        return ResponseEntity.status(HttpStatus.FOUND)
+            .version("HTTP/1.1")
+            .addHeader("Location", "/index.html");
     }
 }

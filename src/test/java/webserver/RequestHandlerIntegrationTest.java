@@ -27,7 +27,7 @@ class RequestHandlerIntegrationTest {
     private static final String RESPONSE_HEADER =
         "HTTP/1.1 200 OK \n"
             + "Content-Type: text/html;charset=utf-8\n"
-            + "Content-Length: 6902\n";
+            + "Content-Length: 6750\n";
 
     private static final String RESPONSE_BODY = new String(FileIoUtils.loadFileFromClasspath("./templates/index.html"));
 

@@ -61,6 +61,10 @@ public class HttpHeader {
         }
     }
 
+    public void setOrReplaceHeader(String key, String value) {
+        headers.put(key, value);
+    }
+
     public String findOrEmpty(String input) {
         return headers.getOrDefault(input, DEFAUlT_VALUE);
     }

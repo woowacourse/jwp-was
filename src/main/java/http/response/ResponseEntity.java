@@ -8,14 +8,17 @@ import http.request.ContentType;
 
 public class ResponseEntity {
 
-    public static final String SEPERATOR = " ";
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String CONTENT_LENGTH = "Content-Length";
+    private static final String SEPERATOR = " ";
+
     private String httpVersion;
     private HttpStatus httpStatus;
     private HttpHeader httpHeader;
     private HttpBody httpBody;
 
     public ResponseEntity(HttpStatus httpStatus) {
-        this(null, httpStatus, HttpHeader.empty(), null);
+        this(null, httpStatus, HttpHeader.empty(), HttpBody.empty());
     }
 
     public ResponseEntity(String httpVersion, HttpStatus httpStatus, HttpHeader httpHeader, HttpBody httpBody) {
@@ -47,7 +50,9 @@ public class ResponseEntity {
     }
 
     public ResponseEntity body(String body, ContentType contentType) {
-        this.httpBody = new HttpBody(body, contentType);
+        this.httpBody = HttpBody.of(body, contentType);
+        this.httpHeader.setOrReplaceHeader(CONTENT_TYPE, contentType.getType());
+        this.httpHeader.setOrReplaceHeader(CONTENT_LENGTH, String.valueOf(body.length()));
         return this;
     }
 

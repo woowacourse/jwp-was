@@ -1,27 +1,24 @@
 package webserver.requestmapping.behavior;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
-import com.github.jknack.handlebars.internal.lang3.ArrayUtils;
+import http.request.ContentType;
 import http.request.RequestEntity;
+import http.response.HttpStatus;
+import http.response.ResponseEntity;
 import utils.FileIoUtils;
 
 public class FileMappingBehavior implements RequestBehavior {
 
     @Override
-    public InputStream behave(RequestEntity requestEntity) {
+    public ResponseEntity behave(RequestEntity requestEntity) {
         String path = requestEntity.getHttpUrl().getPath();
         String localPath = parseToLocalPath(path);
-        byte[] body = FileIoUtils.loadFileFromClasspath(localPath);
-        String header =
-            "HTTP/1.1 200 OK \r\n" +
-                "Content-Type: " + parseContentType(path) + "\r\n" +
-                "Content-Length: " + body.length + "\r\n" +
-                "\r\n";
+        String body = new String(FileIoUtils.loadFileFromClasspath(localPath), StandardCharsets.UTF_8);
 
-        byte[] response = ArrayUtils.addAll(header.getBytes(), body);
-        return new ByteArrayInputStream(response);
+        return ResponseEntity.status(HttpStatus.OK)
+            .version("HTTP/1.1")
+            .body(body, parseContentType(path));
     }
 
     private String parseToLocalPath(String path) {
@@ -31,10 +28,10 @@ public class FileMappingBehavior implements RequestBehavior {
         return "./static" + path;
     }
 
-    private String parseContentType(String path) {
+    private ContentType parseContentType(String path) {
         if (path.endsWith(".css")) {
-            return "text/css";
+            return ContentType.CSS;
         }
-        return "text/html;charset=utf-8";
+        return ContentType.HTML;
     }
 }
