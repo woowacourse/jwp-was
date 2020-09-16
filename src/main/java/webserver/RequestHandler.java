@@ -38,18 +38,19 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             String url = readRequest(br);
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = {};
-            if (!url.equals("/user/create")) {
-                body = FileIoUtils.loadFileFromClasspath(FILE_PATH + url);
-                response200Header(dos, body.length);
-            }
-            if (url.equals("/user/create")) {
-                response302Header(dos, body.length);
-            }
+            byte[] body = loadFileIfStaticFileRequest(url);
+            responseHeader(dos, url, body.length);
             responseBody(dos, body);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private byte[] loadFileIfStaticFileRequest(String url) throws IOException, URISyntaxException {
+        if (isApiCall(url)) {
+            return new byte[0];
+        }
+        return FileIoUtils.loadFileFromClasspath(FILE_PATH + url);
     }
 
     private String readRequest(BufferedReader br) throws IOException {
@@ -82,10 +83,22 @@ public class RequestHandler implements Runnable {
         return contentLength;
     }
 
-    private void response302Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private boolean isApiCall(String url) {
+        return url.split("\\.").length == 1;
+    }
+
+    private void responseHeader(DataOutputStream dos, String url, int lengthOfBodyContent) {
+        if (!isApiCall(url)) {
+            response200Header(dos, lengthOfBodyContent);
+        }
+        if (isApiCall(url)) {
+            response300Header(dos, lengthOfBodyContent);
+        }
+    }
+
+    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
         try {
-            dos.writeBytes("HTTP/1.1 302 FOUND \r\n");
-            dos.writeBytes("Location: http://localhost:8080/index.html\r\n");
+            dos.writeBytes("HTTP/1.1 200 OK \r\n");
             dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
@@ -94,9 +107,10 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response300Header(DataOutputStream dos, int lengthOfBodyContent) {
         try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
+            dos.writeBytes("HTTP/1.1 302 FOUND \r\n");
+            dos.writeBytes("Location: http://localhost:8080/index.html\r\n");
             dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
