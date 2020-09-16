@@ -6,6 +6,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import webserver.http.response.GetHttpResponse;
 import webserver.http.response.HttpResponse;
+import webserver.http.response.PostHttpResponse;
 
 import java.util.stream.Stream;
 
@@ -14,7 +15,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class HttpRequestMethodTest {
     private static Stream<Arguments> provideHttpMethodTypeForHttpResponse() {
         return Stream.of(
-                Arguments.of("GET", new GetHttpResponse())
+                Arguments.of("GET", new GetHttpResponse()),
+                Arguments.of("POST", new PostHttpResponse())
         );
     }
 

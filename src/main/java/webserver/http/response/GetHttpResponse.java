@@ -1,8 +1,5 @@
 package webserver.http.response;
 
-import db.DataBase;
-import model.User;
-import model.UserFactory;
 import utils.FileIoUtils;
 
 import java.io.DataOutputStream;
@@ -16,8 +13,6 @@ import java.util.Map;
 public class GetHttpResponse extends HttpResponse {
     private static final String QUESTION_MARK = "?";
     private static final String URL_REGEX = "\\?";
-    private static final String URL_PARAMETER_REGEX = "&";
-    private static final String PARAMETER_REGEX = "=";
 
     @Override
     public void handleResponse(DataOutputStream dos) throws IOException, URISyntaxException {
@@ -43,11 +38,6 @@ public class GetHttpResponse extends HttpResponse {
             parameters.put(entry[0], entry[1]);
         }
         return parameters;
-    }
-
-    private void createUser(Map<String, String> parameters) {
-        User user = UserFactory.create(parameters);
-        DataBase.addUser(user);
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {

@@ -25,5 +25,5 @@
     
 요구사항 3
 
--[ ] http://localhost:8080/user/form.html 파일의 form 태그 method를 get에서 post로 수정한 후 회원가입 기능이 정상적으로 동작하도록 구현한다.
-    -[ ] Request Body의 값 추출
+-[x] http://localhost:8080/user/form.html 파일의 form 태그 method를 get에서 post로 수정한 후 회원가입 기능이 정상적으로 동작하도록 구현한다.
+    -[x] Request Body의 값 추출

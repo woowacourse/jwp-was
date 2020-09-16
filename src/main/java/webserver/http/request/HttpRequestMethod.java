@@ -2,11 +2,13 @@ package webserver.http.request;
 
 import webserver.http.response.GetHttpResponse;
 import webserver.http.response.HttpResponse;
+import webserver.http.response.PostHttpResponse;
 
 import java.util.Arrays;
 
 public enum HttpRequestMethod {
-    GET("GET", new GetHttpResponse());
+    GET("GET", new GetHttpResponse()),
+    POST("POST", new PostHttpResponse());
 
     private final String methodType;
     private final HttpResponse httpResponse;
