@@ -40,15 +40,19 @@ public class RequestHandler implements Runnable {
                 RequestBody requestBody = httpRequest.getRequestBody();
                 User user = new User(requestBody.getParameters());
                 DataBase.addUser(user);
+                logger.debug("New User created! -> {}",user);
 
-                //// TODO: 2020/09/14 이후 302 리스폰스에 대한 액션 구현시까지는...여기를 비운다.
-                return;
+                response302Header(dos, "/index.html");
+
+                byte[] body = user.toString().getBytes();
+                responseBody(dos, body);
+            } else {
+                String filePath = URIUtils.getFilePath(requestTarget);
+                byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
+                response200Header(dos, httpRequest.getContentType(), body.length);
+                responseBody(dos, body);
             }
-            String filePath = URIUtils.getFilePath(requestTarget);
-            byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
-            response200Header(dos, httpRequest.getContentType(), body.length);
-            responseBody(dos, body);
-        } catch (IOException | URISyntaxException | InvalidHttpRequestException e) {
+        } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }
@@ -58,6 +62,16 @@ public class RequestHandler implements Runnable {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
             dos.writeBytes("Content-Type: " + contentType + ";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void response302Header(DataOutputStream dos, String relocateURI) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 FOUND \r\n");
+            dos.writeBytes("Location: " + relocateURI + " \r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());

@@ -1,6 +1,10 @@
 package web.request;
 
 import exception.InvalidHttpRequestException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import utils.IOUtils;
+import webserver.RequestHandler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,6 +13,8 @@ import java.util.Map;
 import java.util.Objects;
 
 public class HttpRequest {
+    private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
+
     private final String method;
     private final RequestPath requestPath;
     private final String version;
@@ -17,10 +23,12 @@ public class HttpRequest {
 
     public HttpRequest(BufferedReader request) {
         try {
-            String[] requestHeaderFirstLines = request.readLine().split(" ");
-            method = requestHeaderFirstLines[0].trim();
-            requestPath = new RequestPath(requestHeaderFirstLines[1].trim());
-            version = requestHeaderFirstLines[2].trim();
+            String requestHeaderFirstLine = request.readLine();
+            logger.debug(requestHeaderFirstLine);
+            String[] tokens = requestHeaderFirstLine.split(" ");
+            method = tokens[0].trim();
+            requestPath = new RequestPath(tokens[1].trim());
+            version = tokens[2].trim();
 
             requestHeader = mappingHeaders(request);
             requestBody = mappingBodies(request);
@@ -29,11 +37,12 @@ public class HttpRequest {
         }
     }
 
-    private Map<String, String> mappingHeaders(BufferedReader request) throws IOException {
+    private Map<String, String> mappingHeaders(BufferedReader request) throws IOException, NullPointerException {
         Map<String, String> headers = new HashMap<>();
 
         String line = request.readLine();
-        while (!line.isEmpty()) {
+        while (Objects.isNull(line) || !line.isEmpty()) {
+            logger.debug(line);
             String[] splitLine = line.split(":");
             String key = splitLine[0].trim();
             String value = splitLine[1].trim();
@@ -48,11 +57,12 @@ public class HttpRequest {
         if(!method.equals("POST")) {
             return new RequestBody();
         }
-        String line = request.readLine();
-        if(Objects.isNull(line) || line.isEmpty()) {
+        int contentLength = Integer.parseInt(requestHeader.get("Content-Length"));
+        String requestBodyData = IOUtils.readData(request, contentLength);
+        if(Objects.isNull(requestBodyData) || requestBodyData.isEmpty()) {
             return new RequestBody();
         }
-        return new RequestBody(line);
+        return new RequestBody(requestBodyData);
     }
 
     public String getMethod() {

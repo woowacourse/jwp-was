@@ -2,6 +2,7 @@ package web.request;
 
 import exception.InvalidRequestParamsException;
 import exception.RequestParameterNotFoundException;
+import jdk.internal.joptsimple.internal.Strings;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +17,9 @@ public abstract class ParameterMapper {
 
     protected void mappingParameters(String params) {
         validateParameters(params);
+        System.out.println(params + " hey TWICE");
         for (String parameter : params.split("&")) {
+            System.out.println(parameter);
             validateParameter(parameter);
             String[] tokens = parameter.split("=");
             String key = tokens[0];
@@ -33,11 +36,19 @@ public abstract class ParameterMapper {
     }
 
     private void validateParameter(String parameter) {
+        // TODO: 2020/09/16 값이 비어있는 경우는 별도 처리해주기!!
         if(parameter.isEmpty() || !parameter.contains("=") || parameter.equals("=")) {
             throw new InvalidRequestParamsException();
         }
-        String key = parameter.split("=")[0];
-        if (!parameter.contains("=") || key.isEmpty()) {
+        try {
+            String key = parameter.split("=")[0];
+            String value = parameter.split("=")[1];
+            Objects.requireNonNull(key);
+            Objects.requireNonNull(value);
+            if(key.isEmpty() || value.isEmpty()) {
+                throw new InvalidRequestParamsException();
+            }
+        } catch(NullPointerException | ArrayIndexOutOfBoundsException e) {
             throw new InvalidRequestParamsException();
         }
     }

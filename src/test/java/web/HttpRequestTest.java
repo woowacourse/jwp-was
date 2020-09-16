@@ -21,7 +21,7 @@ public class HttpRequestTest {
         stringBuilder.append("GET /index.html HTTP/1.1\n");
         stringBuilder.append("Host: localhost:8080\n");
         stringBuilder.append("Connection: keep-alive\n");
-        stringBuilder.append("Accept: */*\n\n");
+        stringBuilder.append("Accept: */*\n");
         inputStream = new ByteArrayInputStream(stringBuilder.toString().getBytes());
     }
 

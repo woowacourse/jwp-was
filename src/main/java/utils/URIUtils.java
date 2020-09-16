@@ -42,7 +42,7 @@ public class URIUtils {
         if(fileName.isEmpty() || filePath.isEmpty()){
             throw new ArrayIndexOutOfBoundsException();
         }
-        if(fileType.equals("html")) {
+        if(fileType.equals("html") || fileType.equals("ico")) {
             return "./templates";
         }
         return "./static";
