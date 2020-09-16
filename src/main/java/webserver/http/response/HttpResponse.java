@@ -16,6 +16,7 @@ public abstract class HttpResponse {
     protected static final Logger LOGGER = LoggerFactory.getLogger(HttpResponse.class);
     protected static final String URL_PARAMETER_REGEX = "&";
     protected static final String PARAMETER_REGEX = "=";
+    protected static final String ENCODING_TYPE = "UTF-8";
 
     protected HttpRequests httpRequests;
 

@@ -15,7 +15,7 @@ public class PostHttpResponse extends HttpResponse {
     @Override
     public void handleResponse(DataOutputStream dos) throws IOException, URISyntaxException {
         String body = httpRequests.getBody();
-        String decodedBody = URLDecoder.decode(body, "UTF-8");
+        String decodedBody = URLDecoder.decode(body, ENCODING_TYPE);
         parseUserParameters(decodedBody);
         byte[] redirectBody = FileIoUtils.loadFileFromClasspath(REDIRECT_URL);
         response302Header(dos, redirectBody.length);
@@ -37,7 +37,7 @@ public class PostHttpResponse extends HttpResponse {
             dos.writeBytes("HTTP/1.1 302 Found \r\n");
             dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("Location: " + "http://localhost:8080/index.html");
+            dos.writeBytes("Location: " + "http://localhost:8080/" + REDIRECT_URL);
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
