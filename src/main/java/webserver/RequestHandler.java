@@ -13,10 +13,9 @@ import java.nio.charset.StandardCharsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import model.User;
 import utils.FileIoUtils;
 import utils.IOUtils;
-import utils.RedirectUrl;
+import utils.ModelType;
 import utils.RequestUtils;
 
 public class RequestHandler implements Runnable {
@@ -39,8 +38,14 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             String url = readRequest(br);
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = FileIoUtils.loadFileFromClasspath(FILE_PATH + url);
-            response200Header(dos, body.length);
+            byte[] body = {};
+            if (!url.equals("/user/create")) {
+                body = FileIoUtils.loadFileFromClasspath(FILE_PATH + url);
+                response200Header(dos, body.length);
+            }
+            if (url.equals("/user/create")) {
+                response302Header(dos, body.length);
+            }
             responseBody(dos, body);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
@@ -48,27 +53,45 @@ public class RequestHandler implements Runnable {
     }
 
     private String readRequest(BufferedReader br) throws IOException {
+        int contentLength = 0;
         String line = br.readLine();
         String firstLine = line;
         String url = RequestUtils.extractUrl(firstLine);
-        int contentLength = 0;
-        if (!url.endsWith(".html")) {
-            url = RedirectUrl.findRedirectUrl(url).getRedirectUrl();
-        }
         while (!EMPTY.equals(line) && line != null) {
             logger.debug("header : {}", line);
-            if (line.startsWith("Content-Length")) {
-                contentLength = Integer.parseInt(line.split(" ")[1]);
-            }
+            contentLength = assignContentLengthIfPresent(contentLength, line);
             line = br.readLine();
         }
 
-        if (RequestUtils.isPost(firstLine)) {
-            String body = IOUtils.readData(br, contentLength);
-            User user = RequestUtils.extractUser(body);
-            logger.debug(user.toString());
-        }
+        createModel(br, contentLength, firstLine);
         return url;
+    }
+
+    private void createModel(BufferedReader br, int contentLength, String firstLine) throws IOException {
+        if (RequestUtils.isPost(firstLine)) {
+            ModelType modelType = ModelType.valueOf(RequestUtils.extractTitleOfModel(firstLine).toUpperCase());
+            String body = IOUtils.readData(br, contentLength);
+            logger.debug(modelType.getModel(body).toString());
+        }
+    }
+
+    private int assignContentLengthIfPresent(int contentLength, String line) {
+        if (line.startsWith("Content-Length")) {
+            contentLength = Integer.parseInt(line.split(" ")[1]);
+        }
+        return contentLength;
+    }
+
+    private void response302Header(DataOutputStream dos, int lengthOfBodyContent) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 FOUND \r\n");
+            dos.writeBytes("Location: http://localhost:8080/index.html\r\n");
+            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
