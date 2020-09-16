@@ -23,8 +23,8 @@ public class RequestMapping {
         return this.httpMethod == httpMethod && this.path.equals(path);
     }
 
-    public ResponseEntity generateResponse(RequestEntity requestEntity) {
-        return behavior.behave(requestEntity);
+    public void process(RequestEntity requestEntity, ResponseEntity responseEntity) {
+        behavior.behave(requestEntity, responseEntity);
     }
 }
 
