@@ -1,10 +1,14 @@
 package webserver;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,15 +26,31 @@ public class RequestHandler implements Runnable {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
 
-        try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
+        try (
+            InputStream inputStream = connection.getInputStream();
+            OutputStream outputStream = connection.getOutputStream();
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+        ) {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
-            DataOutputStream dos = new DataOutputStream(out);
+            String header = extractRequestHeader(bufferedReader);
+            logger.debug(header);
+            DataOutputStream dos = new DataOutputStream(outputStream);
             byte[] body = "Hello World".getBytes();
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private String extractRequestHeader(BufferedReader bufferedReader) throws IOException {
+        StringBuilder stringBuilder = new StringBuilder(System.lineSeparator());
+        String line;
+        while (Objects.nonNull(line = bufferedReader.readLine()) && !line.isEmpty()) {
+            stringBuilder.append(line).append(System.lineSeparator());
+        }
+        return stringBuilder.toString();
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
