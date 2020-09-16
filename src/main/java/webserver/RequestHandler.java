@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import http.request.RequestEntity;
 import http.response.ResponseEntity;
+import webserver.filter.FilterStorage;
 import webserver.requestmapping.RequestMapping;
 import webserver.requestmapping.RequestMappingStorage;
 
@@ -35,11 +36,15 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
 
             RequestEntity requestEntity = RequestEntity.from(bufferedReader);
+            ResponseEntity responseEntity = ResponseEntity.empty();
 
-            RequestMapping matchingMapping = RequestMappingStorage.findMatchingMapping(requestEntity);
-            ResponseEntity response = matchingMapping.generateResponse(requestEntity);
+            boolean isFilterPassing = FilterStorage.doFilters(requestEntity, responseEntity);
+            if (isFilterPassing) {
+                RequestMapping matchingMapping = RequestMappingStorage.findMatchingMapping(requestEntity);
+                responseEntity = matchingMapping.generateResponse(requestEntity);
+            }
 
-            String responseString = response.convertToString();
+            String responseString = responseEntity.convertToString();
             dos.write(responseString.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             logger.error(e.getMessage());

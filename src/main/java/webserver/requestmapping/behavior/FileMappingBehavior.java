@@ -2,7 +2,7 @@ package webserver.requestmapping.behavior;
 
 import java.nio.charset.StandardCharsets;
 
-import http.request.ContentType;
+import http.ContentType;
 import http.request.RequestEntity;
 import http.response.HttpStatus;
 import http.response.ResponseEntity;
