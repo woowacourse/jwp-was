@@ -4,5 +4,5 @@ import http.request.RequestEntity;
 import http.response.ResponseEntity;
 
 public interface RequestBehavior {
-    ResponseEntity behave(RequestEntity requestEntity);
+    void behave(RequestEntity requestEntity, ResponseEntity responseEntity);
 }

@@ -38,16 +38,23 @@ public class RequestHandler implements Runnable {
             RequestEntity requestEntity = RequestEntity.from(bufferedReader);
             ResponseEntity responseEntity = ResponseEntity.empty();
 
-            boolean isFilterPassing = FilterStorage.doFilters(requestEntity, responseEntity);
-            if (isFilterPassing) {
-                RequestMapping matchingMapping = RequestMappingStorage.findMatchingMapping(requestEntity);
-                responseEntity = matchingMapping.generateResponse(requestEntity);
-            }
-
-            String responseString = responseEntity.convertToString();
-            dos.write(responseString.getBytes(StandardCharsets.UTF_8));
+            requestProcessing(requestEntity, responseEntity);
+            writeOutResponse(dos, responseEntity);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private void requestProcessing(RequestEntity requestEntity, ResponseEntity responseEntity) {
+        boolean isFilterPassing = FilterStorage.doFilters(requestEntity, responseEntity);
+        if (isFilterPassing) {
+            RequestMapping matchingMapping = RequestMappingStorage.findMatchingMapping(requestEntity);
+            matchingMapping.process(requestEntity, responseEntity);
+        }
+    }
+
+    private void writeOutResponse(DataOutputStream dataOutputStream, ResponseEntity responseEntity) throws IOException {
+        String responseString = responseEntity.convertToString();
+        dataOutputStream.write(responseString.getBytes(StandardCharsets.UTF_8));
     }
 }

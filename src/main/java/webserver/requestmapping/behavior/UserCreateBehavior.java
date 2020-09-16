@@ -10,7 +10,7 @@ import stringprocessor.Params;
 
 public class UserCreateBehavior implements RequestBehavior {
     @Override
-    public ResponseEntity behave(RequestEntity requestEntity) {
+    public void behave(RequestEntity requestEntity, ResponseEntity responseEntity) {
         HttpBody httpBody = requestEntity.getHttpBody();
         Params userInfo = Params.from(httpBody.getContent());
         User user = new User(
@@ -20,7 +20,7 @@ public class UserCreateBehavior implements RequestBehavior {
             userInfo.findValueBy("email"));
         DataBase.addUser(user);
 
-        return ResponseEntity.generateWithStatus(HttpStatus.FOUND)
+       responseEntity.status(HttpStatus.FOUND)
             .version("HTTP/1.1")
             .addHeader("Location", "/index.html");
     }
