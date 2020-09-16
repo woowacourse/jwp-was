@@ -1,4 +1,4 @@
-package web.server.exception;
+package web.application.exception;
 
 public class UrlNotFoundException extends IllegalArgumentException {
 

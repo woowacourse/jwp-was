@@ -6,7 +6,7 @@ import java.util.Map;
 import web.application.controller.Controller;
 import web.application.controller.CreateUserController;
 import web.application.controller.RootController;
-import web.server.exception.UrlNotFoundException;
+import web.application.exception.UrlNotFoundException;
 
 public class FrontController {
 
