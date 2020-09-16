@@ -13,7 +13,7 @@ import webserver.controller.annotation.RequestMapping;
 @Controller
 public class UserController implements Handlers {
 
-    @RequestMapping(value = "/create/user", type = RequestHeader.MethodType.POST)
+    @RequestMapping(value = "/user/create", type = RequestHeader.MethodType.POST)
     public ServletResponse create(User user) {
         UserService userService = new UserService();
         userService.save(user);
@@ -22,5 +22,13 @@ public class UserController implements Handlers {
         response.put("Location", "http://localhost:8080/index.html");
 
         return new ServletResponse(ServletResponse.StatusCode.FOUND, response);
+    }
+
+    @RequestMapping(type = RequestHeader.MethodType.GET, value = "/user/form")
+    public ServletResponse form() {
+        LinkedHashMap<String, String> response = new LinkedHashMap<>();
+        response.put("View", "form");
+
+        return new ServletResponse(ServletResponse.StatusCode.OK, response);
     }
 }

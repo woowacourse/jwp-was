@@ -23,13 +23,16 @@ public class HandlerMapping {
 
     public Method mapping(ServletRequest request) {
         RequestHeader.MethodType methodType = request.getMethod();
-        String path = request.getPath();
+        String path =
+            request.getPath().endsWith(".html") ?
+                request.getPath().substring(0, request.getPath().lastIndexOf("."))
+                : request.getPath();
 
         return handlers.stream()
             .flatMap(controller -> Stream.of(controller.getMethods()))
             .filter(method -> {
                 RequestMapping annotation = method.getAnnotation(RequestMapping.class);
-                return Arrays.asList(annotation.value()).contains(path) && annotation.type().equals(methodType);
+                return Objects.nonNull(annotation) && Arrays.asList(annotation.value()).contains(path) && annotation.type().equals(methodType);
             })
             .findAny()
             .orElseThrow(MethodNotAllowedException::new);

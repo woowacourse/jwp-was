@@ -44,16 +44,22 @@ public class ServletResponse {
     }
 
     public void createResponse(DataOutputStream dos, ServletRequest request) throws IOException {
-        byte[] body = FileIoUtils.loadFileFromClasspath(request.getPath());
         String contentType = request.getHeader("Accept");
 
         dos.writeBytes(String.format("%s %d %s \r\n", request.getProtocolVersion(), statusCode.getStatusCode(),
             statusCode.name()));
         for (Map.Entry<String, String> entry : attributes.entrySet()) {
+            if(entry.getKey().equalsIgnoreCase("View")){
+                continue;
+            }
             dos.writeBytes(String.format("%s: %s\r\n", entry.getKey(), entry.getValue()));
         }
-        dos.writeBytes(String.format("Content-Type: %s\r\n", contentType));
-        dos.writeBytes("Content-Length: " + body.length + "\r\n");
+        dos.writeBytes(String.format("Content-Type: %s;charset=utf-8\r\n", contentType.split(",")[0]));
+
+        String view = attributes.getOrDefault("View", null);
+        byte[] body = FileIoUtils.loadFileFromClasspath("/"+view + ".html");
+        dos.writeBytes(String.format("Content-Length: " + body.length + "\r\n"));
+        dos.writeBytes("\r\n");
         responseBody(dos, body);
     }
 

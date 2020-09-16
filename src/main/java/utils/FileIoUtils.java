@@ -19,7 +19,7 @@ public class FileIoUtils {
             return loadFileFromClasspath("/index.html");
         }
 
-        if(!filePath.endsWith(".html")) {
+        if(!filePath.contains(".")) {
             return "".getBytes();
         }
 
