@@ -6,17 +6,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.Socket;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import http.request.HttpRequest;
-import http.request.MappedRequest;
 import http.response.HttpResponse;
 
 public class RequestHandler implements Runnable {
@@ -29,8 +25,7 @@ public class RequestHandler implements Runnable {
     }
 
     public void run() {
-        logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
-            connection.getPort());
+        logger.debug("New Client Connect! IP : {}, Port : {}", connection.getInetAddress(), connection.getPort());
 
         try (InputStream inputStream = connection.getInputStream(); OutputStream outputStream = connection.getOutputStream()) {
             BufferedReader bufferedReader = new BufferedReader(
@@ -39,22 +34,9 @@ public class RequestHandler implements Runnable {
             DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
             HttpResponse httpResponse = new HttpResponse(dataOutputStream);
 
-            MappedRequest mappedRequest = new MappedRequest(httpRequest.getHttpMethod(), httpRequest.getHttpPath());
-
-            if (httpRequest.isStaticFile()) {
-                httpResponse.responseOk(httpRequest);
-            } else if (!RequestMapper.isContain(mappedRequest)) {
-                httpResponse.responseNotFound();
-            } else {
-                Method controllerMethod = RequestMapper.get(mappedRequest);
-                controllerMethod.invoke(null, httpRequest, httpResponse);
-
-                httpResponse.responseFound();
-            }
-        } catch (IOException | URISyntaxException e) {
+            ResponseHandler.run(httpRequest, httpResponse);
+        } catch (IOException e) {
             logger.error(e.getMessage());
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
         }
     }
 }
