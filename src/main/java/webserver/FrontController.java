@@ -26,6 +26,8 @@ public class FrontController {
         } catch (HandlerNotFoundException exception) {
             logger.info(exception.getMessage());
             httpResponse.response404Header();
+        } catch (Exception exception) {
+            httpResponse.response500Header();
         }
     }
 

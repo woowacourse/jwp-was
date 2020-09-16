@@ -26,6 +26,17 @@ public class HttpResponse {
         }
     }
 
+    public void response302Header(String location) {
+        try {
+            dataOutputStream.writeBytes("HTTP/1.1 302 Found \r\n");
+            dataOutputStream.writeBytes("Location: " + location + "\r\n");
+            dataOutputStream.writeBytes("\r\n");
+            dataOutputStream.flush();
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
     public void response404Header() {
         try {
             dataOutputStream.writeBytes("HTTP/1.1 404 Not Found \r\n");
@@ -36,10 +47,9 @@ public class HttpResponse {
         }
     }
 
-    public void response302Header(String location) {
+    public void response500Header() {
         try {
-            dataOutputStream.writeBytes("HTTP/1.1 302 Found \r\n");
-            dataOutputStream.writeBytes("Location: " + location + "\r\n");
+            dataOutputStream.writeBytes("HTTP/1.1 500 Internal Server Error \r\n");
             dataOutputStream.writeBytes("\r\n");
             dataOutputStream.flush();
         } catch (IOException e) {
