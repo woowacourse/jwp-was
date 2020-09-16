@@ -1,4 +1,4 @@
-package webserver.requestmapping;
+package webserver.filter;
 
 import static org.assertj.core.api.Assertions.*;
 
