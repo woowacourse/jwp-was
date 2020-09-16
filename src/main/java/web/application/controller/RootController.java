@@ -17,11 +17,6 @@ public class RootController extends AbstractController {
         httpResponse.forward("/index.html");
     }
 
-    @Override
-    public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-
-    }
-
     private static class ControllerCache {
         private static final RootController rootController = new RootController();
     }

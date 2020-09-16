@@ -23,7 +23,9 @@ public abstract class AbstractController implements Controller {
         requestMethodMapper.get(httpRequest.getMethod()).accept(httpRequest, httpResponse);
     }
 
-    public abstract void doGet(HttpRequest httpRequest, HttpResponse httpResponse);
+    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+    }
 
-    public abstract void doPost(HttpRequest httpRequest, HttpResponse httpResponse);
+    public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
+    }
 }
