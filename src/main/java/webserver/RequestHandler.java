@@ -22,7 +22,8 @@ public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     public static final String EMPTY = "";
     public static final int OFFSET = 0;
-    public static final String FILE_PATH = "./templates";
+    public static final String TEMPLATE_PATH = "./templates";
+    public static final String STATIC_PATH = "./static";
 
     private final Socket connection;
 
@@ -46,13 +47,6 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private byte[] loadFileIfStaticFileRequest(String url) throws IOException, URISyntaxException {
-        if (isApiCall(url)) {
-            return new byte[0];
-        }
-        return FileIoUtils.loadFileFromClasspath(FILE_PATH + url);
-    }
-
     private String readRequest(BufferedReader br) throws IOException {
         int contentLength = 0;
         String line = br.readLine();
@@ -68,9 +62,23 @@ public class RequestHandler implements Runnable {
         return url;
     }
 
+    private byte[] loadFileIfStaticFileRequest(String url) throws IOException, URISyntaxException {
+        if (!isApiCall(url)) {
+            return loadStaticFile(url);
+        }
+        return new byte[0];
+    }
+
+    private byte[] loadStaticFile(String url) throws IOException, URISyntaxException {
+        if ("html".equals(RequestUtils.extractExtension(url))) {
+            return FileIoUtils.loadFileFromClasspath(TEMPLATE_PATH + url);
+        }
+        return FileIoUtils.loadFileFromClasspath(STATIC_PATH + url);
+    }
+
     private void createModel(BufferedReader br, int contentLength, String firstLine) throws IOException {
         if (RequestUtils.isPost(firstLine)) {
-            ModelType modelType = ModelType.valueOf(RequestUtils.extractTitleOfModel(firstLine).toUpperCase());
+            ModelType modelType = ModelType.valueOf(RequestUtils.extractTitleOfModel(firstLine));
             String body = IOUtils.readData(br, contentLength);
             logger.debug(modelType.getModel(body).toString());
         }
@@ -89,18 +97,19 @@ public class RequestHandler implements Runnable {
 
     private void responseHeader(DataOutputStream dos, String url, int lengthOfBodyContent) {
         if (!isApiCall(url)) {
-            response200Header(dos, lengthOfBodyContent);
+            response200Header(dos, url, lengthOfBodyContent);
         }
         if (isApiCall(url)) {
             response300Header(dos, lengthOfBodyContent);
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response200Header(DataOutputStream dos, String url, int lengthOfBodyContent) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes(
+                String.format("Content-Type: text/%s;charset=utf-8\r\n", RequestUtils.extractExtension(url)));
+            dos.writeBytes(String.format("Content-Length: %d\r\n", lengthOfBodyContent));
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -112,7 +121,7 @@ public class RequestHandler implements Runnable {
             dos.writeBytes("HTTP/1.1 302 FOUND \r\n");
             dos.writeBytes("Location: http://localhost:8080/index.html\r\n");
             dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes(String.format("Content-Length: %d\r\n", lengthOfBodyContent));
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());

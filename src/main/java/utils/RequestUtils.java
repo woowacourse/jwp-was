@@ -17,6 +17,11 @@ public class RequestUtils {
 
     public static String extractTitleOfModel(String header) {
         String[] method = header.split(REGEX);
-        return method[URL_INDEX].split("/")[1];
+        return method[URL_INDEX].split("/")[1].toUpperCase();
+    }
+
+    public static String extractExtension(String url) {
+        String[] names = url.split("\\.");
+        return names[names.length - 1];
     }
 }
