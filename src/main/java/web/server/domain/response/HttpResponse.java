@@ -57,7 +57,6 @@ public class HttpResponse {
         }
     }
 
-    // 응답을 보낼 때 HTML, CSS, 자바스크립트 파일을 직접 읽어 응답으로 보내는 메소드
     public void forward(String path) {
         String[] split = path.split("\\.");
         StaticFileType contentType = StaticFileType.from(split[split.length - 1]);
@@ -69,7 +68,6 @@ public class HttpResponse {
         responseBody(this.dataOutputStream, body);
     }
 
-    // 다른 URL로 리다이렉트하는 메소드
     public void sendRedirect(String path) {
         headerParams.put("Location", path);
         response302Header();
