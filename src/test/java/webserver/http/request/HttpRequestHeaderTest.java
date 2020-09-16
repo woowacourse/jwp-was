@@ -1,10 +1,11 @@
 package webserver.http.request;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.http.response.GetHttpResponse;
+import webserver.http.response.HttpResponse;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -14,32 +15,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class HttpRequestHeaderTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpRequestHeaderTest.class);
-    private static final String REQUEST_HEADER = "GET /index.html HTTP/1.1\n"
+    private static final String GET_REQUEST_HEADER_NO_PARAMETER = "GET /index.html HTTP/1.1\n"
             + "Host: localhost:8080\n"
             + "Connection: keep-alive\n"
             + "Accept: */*\n";
-
-    private HttpRequestHeader httpRequestHeader;
-    private InputStream inputStream;
-
-    @BeforeEach
-    private void setUp() {
-        inputStream = new ByteArrayInputStream(REQUEST_HEADER.getBytes(StandardCharsets.UTF_8));
-        httpRequestHeader = new HttpRequestHeader(inputStream);
-    }
-
-    @DisplayName("Request line에서 path를 분리한다.")
-    @Test
-    void getPathTest() throws IOException {
-        String path = httpRequestHeader.getPath();
-
-        assertThat(path).isEqualTo("/index.html");
-    }
-
+    private static final String GET_REQUEST_HEADER_WITH_PARAMETER = "GET /user/create?userId=javajigi"
+            + "&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net HTTP/1.1\n"
+            + "Host: localhost:8080\n"
+            + "Connection: keep-alive\n"
+            + "Accept: */*";
 
     @DisplayName("HTTP Request Header의 모든 라인을 출력한다.")
     @Test
     void printAllHttpRequestHeaderTest() throws IOException {
+        InputStream inputStream = new ByteArrayInputStream(
+                GET_REQUEST_HEADER_NO_PARAMETER.getBytes(StandardCharsets.UTF_8));
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
@@ -51,5 +41,17 @@ public class HttpRequestHeaderTest {
             LOGGER.info(line);
             line = bufferedReader.readLine();
         }
+    }
+
+    @DisplayName("요청에 맞는 응답을 반환하는지 테스트")
+    @Test
+    void getHttpResponseTest() throws IOException {
+        InputStream inputStream = new ByteArrayInputStream(
+                GET_REQUEST_HEADER_WITH_PARAMETER.getBytes(StandardCharsets.UTF_8)
+        );
+        HttpRequestHeader httpRequestHeader = new HttpRequestHeader(inputStream);
+        HttpResponse httpResponse = httpRequestHeader.getHttpResponse();
+
+        assertThat(httpResponse).isInstanceOf(GetHttpResponse.class);
     }
 }

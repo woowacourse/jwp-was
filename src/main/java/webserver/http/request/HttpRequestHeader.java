@@ -1,23 +1,21 @@
 package webserver.http.request;
 
-import utils.RequestPathUtil;
+import webserver.http.response.HttpResponse;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 
 public class HttpRequestHeader {
-    private final InputStream inputStream;
+    private final HttpRequests httpRequests;
 
-    public HttpRequestHeader(InputStream inputStream) {
-        this.inputStream = inputStream;
+    public HttpRequestHeader(InputStream inputStream) throws IOException {
+        this.httpRequests = new HttpRequests(inputStream);
     }
 
-    public String getPath() throws IOException {
-        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-        String requestLine = bufferedReader.readLine();
-        return RequestPathUtil.getPathFromRequestLine(requestLine);
+    public HttpResponse getHttpResponse() {
+        String httpRequestMethod = httpRequests.getMethodType();
+        HttpResponse httpResponse = HttpRequestMethod.getHttpResponse(httpRequestMethod);
+        httpResponse.initHttpRequests(httpRequests);
+        return httpResponse;
     }
 }
