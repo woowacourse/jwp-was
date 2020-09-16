@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 public class WebServer {
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
     private static final int DEFAULT_PORT = 8080;
-    private static int cores = Runtime.getRuntime().availableProcessors();
+    private static final int CORES = Runtime.getRuntime().availableProcessors();
 
     public static void main(String args[]) throws Exception {
         int port = 0;
@@ -21,7 +21,7 @@ public class WebServer {
             port = Integer.parseInt(args[0]);
         }
 
-        ExecutorService es = Executors.newFixedThreadPool(cores);
+        ExecutorService es = Executors.newFixedThreadPool(CORES);
         try (ServerSocket listenSocket = new ServerSocket(port)) {
             logger.info("Web Application Server started {} port.", port);
             Socket connection;
