@@ -27,3 +27,8 @@
 
 -[x] http://localhost:8080/user/form.html 파일의 form 태그 method를 get에서 post로 수정한 후 회원가입 기능이 정상적으로 동작하도록 구현한다.
     -[x] Request Body의 값 추출
+    
+요구사항 4
+
+-[ ] “회원가입”을 완료하면 /index.html 페이지로 이동하고 싶다. 현재는 URL이 /user/create 로 유지되는 상태로 읽어서 전달할 파일이 없다. 따라서 redirect 방식처럼 회원가입을 완료한 후 “index.html”로 이동해야 한다. 즉, 브라우저의 URL이 /index.html로 변경해야 한다.
+    -[ ] HTTP 응답 헤더의 status code를 200이 아니라 302 code를 사용한다.
