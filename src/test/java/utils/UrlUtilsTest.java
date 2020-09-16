@@ -49,11 +49,27 @@ public class UrlUtilsTest {
                         put("email", "javajigi%40slipp.net");
                     }}),
             Arguments
-                .of("userId=javajigi&password=password&name=%EB%B0%95%EC%=9E%AC%EC%84%B1&email=javajigi%40slipp.net&",
+                .of("userId=javajigi&password=password&email=javajigi%40slipp.net&",
                     new HashMap<String, String>() {{
                         put("userId", "javajigi");
                         put("password", "password");
                         put("email", "javajigi%40slipp.net");
+                    }}),
+            Arguments
+                .of("userId=&password=&name=&email=",
+                    new HashMap<String, String>() {{
+                        put("userId", "");
+                        put("password", "");
+                        put("name", "");
+                        put("email", "");
+                    }}),
+            Arguments
+                .of("userId=javajigi1&userId=javajigi2&password=&name=&email=&userId=javajigi3",
+                    new HashMap<String, String>() {{
+                        put("userId", "javajigi1,javajigi2,javajigi3");
+                        put("password", "");
+                        put("name", "");
+                        put("email", "");
                     }})
         );
     }

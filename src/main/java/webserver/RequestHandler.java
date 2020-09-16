@@ -1,6 +1,7 @@
 package webserver;
 
 import db.DataBase;
+import exception.ParameterBindException;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -11,6 +12,7 @@ import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.Objects;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,11 +68,24 @@ public class RequestHandler implements Runnable {
     }
 
     private User bindParamsToUser(Map<String, String> params) {
+        validate(params);
         return new User(
             params.get("userId"),
             params.get("password"),
             params.get("name"),
             params.get("email")
         );
+    }
+
+    private void validate(Map<String, String> params) {
+        if(containsNull(params)) {
+            throw new ParameterBindException("파라미터를 Binding하는데 오류가 발생했습니다!");
+        }
+    }
+
+    private boolean containsNull(Map<String, String> params) {
+        return params.keySet()
+            .stream()
+            .anyMatch(key -> Objects.isNull(params.get(key)));
     }
 }

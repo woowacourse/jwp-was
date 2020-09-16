@@ -46,12 +46,23 @@ public class UrlUtils {
         String[] paramsSegments = params.split(PARAM_DELIMITER);
         for (String paramsSegment : paramsSegments) {
             String[] paramSegment = paramsSegment.split(PARAM_KEY_VALUE_DELIMITER);
+            String paramValue = "";
 
             if (isNotAccessibleParam(paramSegment)) {
                 continue;
             }
+
             String paramKey = paramSegment[0];
-            String paramValue = paramSegment[1];
+
+            if (paramSegment.length == 2) {
+                paramValue = paramSegment[1];
+            }
+
+            if (requestParams.containsKey(paramKey)) {
+                String prevParamValue = requestParams.get(paramKey);
+                requestParams.put(paramKey, prevParamValue + "," + paramSegment[1]);
+                continue;
+            }
             requestParams.put(paramKey, paramValue);
         }
         return requestParams;
@@ -62,7 +73,7 @@ public class UrlUtils {
     }
 
     private static boolean isNotAccessibleParam(String[] paramSegment) {
-        return paramSegment.length != DEFAULT_PARAM_ACCESS_INDEX;
+        return paramSegment.length > DEFAULT_PARAM_ACCESS_INDEX;
     }
 
     private static boolean isNotAccessibleParams(String[] resourcePathSegment) {
