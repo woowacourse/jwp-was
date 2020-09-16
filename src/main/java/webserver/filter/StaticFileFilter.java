@@ -7,7 +7,6 @@ import http.request.RequestEntity;
 import http.response.HttpStatus;
 import http.response.ResponseEntity;
 import utils.FileIoUtils;
-import webserver.requestmapping.FileExtensionType;
 
 public class StaticFileFilter implements Filter {
     @Override
