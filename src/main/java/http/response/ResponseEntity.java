@@ -2,9 +2,9 @@ package http.response;
 
 import java.util.Map;
 
+import http.ContentType;
 import http.HttpBody;
 import http.HttpHeader;
-import http.request.ContentType;
 
 public class ResponseEntity {
 

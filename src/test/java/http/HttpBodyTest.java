@@ -9,8 +9,6 @@ import java.io.StringReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import http.request.ContentType;
-
 class HttpBodyTest {
     private static final String REQUEST_AFTER_READ_HEADER = "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
     private static final String REQUEST_CONTENT = "userId=javajigi&password=password&name=박재성&email=javajigi@slipp.net";

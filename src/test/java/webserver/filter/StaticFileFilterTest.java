@@ -10,7 +10,7 @@ import java.io.StringReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import http.request.ContentType;
+import http.ContentType;
 import http.request.RequestEntity;
 import http.response.HttpStatus;
 import http.response.ResponseEntity;

@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
-import http.request.ContentType;
+import http.ContentType;
 
 class ResponseEntityTest {
 

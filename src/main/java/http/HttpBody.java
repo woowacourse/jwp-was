@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 import exception.RequestBodyCreateFailException;
-import http.request.ContentType;
 import utils.IOUtils;
 
 public class HttpBody {

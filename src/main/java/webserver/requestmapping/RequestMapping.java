@@ -1,7 +1,5 @@
 package webserver.requestmapping;
 
-import static webserver.requestmapping.RequestMappingStorage.*;
-
 import http.request.HttpMethod;
 import http.request.RequestEntity;
 import http.response.ResponseEntity;
@@ -22,10 +20,6 @@ public class RequestMapping {
     }
 
     public boolean isMapping(HttpMethod httpMethod, String path) {
-        if (FileExtensionType.isSupportedFile(path)) {
-            return this.httpMethod == httpMethod && this.path.equals(FILE_PATH);
-        }
-
         return this.httpMethod == httpMethod && this.path.equals(path);
     }
 
