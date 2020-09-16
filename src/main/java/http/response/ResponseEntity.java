@@ -17,19 +17,32 @@ public class ResponseEntity {
     private HttpHeader httpHeader;
     private HttpBody httpBody;
 
-    public ResponseEntity(HttpStatus httpStatus) {
+    private ResponseEntity() {
+        this(null, null, HttpHeader.empty(), HttpBody.empty());
+    }
+
+    private ResponseEntity(HttpStatus httpStatus) {
         this(null, httpStatus, HttpHeader.empty(), HttpBody.empty());
     }
 
-    public ResponseEntity(String httpVersion, HttpStatus httpStatus, HttpHeader httpHeader, HttpBody httpBody) {
+    private ResponseEntity(String httpVersion, HttpStatus httpStatus, HttpHeader httpHeader, HttpBody httpBody) {
         this.httpVersion = httpVersion;
         this.httpStatus = httpStatus;
         this.httpHeader = httpHeader;
         this.httpBody = httpBody;
     }
 
-    public static ResponseEntity status(HttpStatus httpStatus) {
+    public static ResponseEntity empty() {
+        return new ResponseEntity();
+    }
+
+    public static ResponseEntity generateWithStatus(HttpStatus httpStatus) {
         return new ResponseEntity(httpStatus);
+    }
+
+    public ResponseEntity status(HttpStatus httpStatus) {
+        this.httpStatus = httpStatus;
+        return this;
     }
 
     public ResponseEntity version(String version) {

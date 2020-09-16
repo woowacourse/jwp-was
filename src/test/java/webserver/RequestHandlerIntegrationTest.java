@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 import utils.FileIoUtils;
 import utils.IOUtils;
 
-class RequestHandlerIntegrationTest {
+public class RequestHandlerIntegrationTest {
 
     private static final String REQUEST =
         "GET /index.html HTTP/1.1\n"
@@ -29,7 +29,7 @@ class RequestHandlerIntegrationTest {
             + "Content-Type: text/html;charset=utf-8\n"
             + "Content-Length: 6750\n";
 
-    private static final String RESPONSE_BODY = new String(FileIoUtils.loadFileFromClasspath("./templates/index.html"));
+    public static final String RESPONSE_BODY = new String(FileIoUtils.loadFileFromClasspath("./templates/index.html"));
 
     @Test
     void integrationTest() {

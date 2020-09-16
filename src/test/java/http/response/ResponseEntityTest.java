@@ -27,7 +27,7 @@ class ResponseEntityTest {
             put("testKey", "testValue");
         }};
 
-        ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.OK)
+        ResponseEntity responseEntity = ResponseEntity.generateWithStatus(HttpStatus.OK)
             .version("HTTP/1.1")
             .addHeader("testKey", "testValue")
             .body(body, ContentType.HTML);
@@ -42,7 +42,7 @@ class ResponseEntityTest {
 
     @Test
     public void convertToString() {
-        ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.OK)
+        ResponseEntity responseEntity = ResponseEntity.generateWithStatus(HttpStatus.OK)
             .version("HTTP/1.1")
             .body("testBody", ContentType.HTML);
 

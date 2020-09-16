@@ -16,7 +16,7 @@ public class FileMappingBehavior implements RequestBehavior {
         String localPath = parseToLocalPath(path);
         String body = new String(FileIoUtils.loadFileFromClasspath(localPath), StandardCharsets.UTF_8);
 
-        return ResponseEntity.status(HttpStatus.OK)
+        return ResponseEntity.generateWithStatus(HttpStatus.OK)
             .version("HTTP/1.1")
             .body(body, parseContentType(path));
     }
