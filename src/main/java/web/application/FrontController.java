@@ -22,7 +22,7 @@ public class FrontController {
         mapper.put(RequestVo.of("/", RequestMethod.GET), RootController.getInstance()::doGet);
     }
 
-    public static BiConsumer<HttpRequest, HttpResponse> findMatchingController(RequestVo requestVo) {
+    public static BiConsumer<HttpRequest, HttpResponse> findMatchingService(RequestVo requestVo) {
         if (mapper.containsKey(requestVo)) {
             return mapper.get(requestVo);
         }
