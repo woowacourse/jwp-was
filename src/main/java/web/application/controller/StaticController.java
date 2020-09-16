@@ -6,6 +6,7 @@ import web.server.domain.response.HttpResponse;
 public class StaticController extends AbstractController {
 
     private StaticController() {
+        super();
     }
 
     public static StaticController getInstance() {

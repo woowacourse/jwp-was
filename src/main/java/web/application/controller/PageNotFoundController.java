@@ -6,6 +6,7 @@ import web.server.domain.response.HttpResponse;
 public class PageNotFoundController extends AbstractController {
 
     private PageNotFoundController() {
+        super();
     }
 
     public static PageNotFoundController getInstance() {

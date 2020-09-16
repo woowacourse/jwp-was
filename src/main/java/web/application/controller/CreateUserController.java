@@ -7,6 +7,7 @@ import web.server.domain.response.HttpResponse;
 public class CreateUserController extends AbstractController {
 
     private CreateUserController() {
+        super();
     }
 
     public static CreateUserController getInstance() {
