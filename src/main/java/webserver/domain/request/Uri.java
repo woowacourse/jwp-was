@@ -1,6 +1,5 @@
 package webserver.domain.request;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,12 +17,26 @@ public class Uri {
         String path = uriSources[0];
         Map<String, String> parameters = new HashMap<>();
 
-        if (uriSources.length > 1) {
-            Arrays.stream(uriSources[1].split("&"))
-                .forEach(parameter -> parameters.put(parameter.split("=")[0], parameter.split("=")[1]));
+        if (existParameters(uriSources)) {
+            extractParameter(uriSources[1], parameters);
         }
 
         return new Uri(path, parameters);
+    }
+
+    private static boolean existParameters(String[] uriSources) {
+        return uriSources.length > 1;
+    }
+
+    private static void extractParameter(String uriSource, Map<String, String> parameters) {
+        for (String parameter : uriSource.split("&")) {
+            String[] keyAndValue = parameter.split("=");
+            if (keyAndValue.length >= 2) {
+                parameters.put(keyAndValue[0], keyAndValue[1]);
+                continue;
+            }
+            parameters.put(keyAndValue[0], "");
+        }
     }
 
     public boolean isTemplatesResource() {

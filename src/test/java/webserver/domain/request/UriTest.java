@@ -23,4 +23,19 @@ class UriTest {
         assertThat(uri.getPath()).isEqualTo("/user/create");
         assertThat(uri.getParameters()).isEqualTo(expectedParameters);
     }
+
+    @DisplayName("파라미터의 value가 빈값인 경우에도 분리한다.")
+    @Test
+    void of_whenEmptyValue_shouldSplitParameters() {
+        Uri uri = Uri.of("/user/create?userId=&password=&name=&email=");
+
+        Map<String, String> expectedParameters = new HashMap<>();
+        expectedParameters.put("userId", "");
+        expectedParameters.put("password", "");
+        expectedParameters.put("name", "");
+        expectedParameters.put("email", "");
+
+        assertThat(uri.getPath()).isEqualTo("/user/create");
+        assertThat(uri.getParameters()).isEqualTo(expectedParameters);
+    }
 }
