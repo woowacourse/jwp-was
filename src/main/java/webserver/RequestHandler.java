@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -13,10 +15,9 @@ import java.nio.charset.StandardCharsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import db.DataBase;
 import http.request.HttpRequest;
+import http.request.MappedRequest;
 import http.response.HttpResponse;
-import model.User;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -41,21 +42,16 @@ public class RequestHandler implements Runnable {
             if (httpRequest.isStaticFile()) {
                 httpResponse.responseOk(httpRequest);
             } else {
-                if (httpRequest.getHttpPath().contains("/user/create")) {
-                    User user = new User(
-                        httpRequest.getHttpBodyValueOf("userId"),
-                        httpRequest.getHttpBodyValueOf("password"),
-                        httpRequest.getHttpBodyValueOf("name"),
-                        httpRequest.getHttpBodyValueOf("email")
-                    );
-                    DataBase.addUser(user);
-                    logger.debug("Saved User: {}", DataBase.findUserById(httpRequest.getHttpBodyValueOf("userId")));
-                }
+                Method controllerMethod = RequestMapper.get(
+                    new MappedRequest(httpRequest.getHttpMethod(), httpRequest.getHttpPath()));
+                controllerMethod.invoke(null, httpRequest, httpResponse);
 
                 httpResponse.responseFound();
             }
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
         }
     }
 }

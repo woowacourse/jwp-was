@@ -14,6 +14,10 @@ public class HttpRequestLine {
         this.version = splitedStartLine[2];
     }
 
+    public HttpMethod getHttpMethod() {
+        return httpMethod;
+    }
+
     public boolean isStaticFile() {
         return httpRequestUrl.isStaticFile();
     }
