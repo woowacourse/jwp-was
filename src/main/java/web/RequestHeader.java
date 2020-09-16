@@ -4,7 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
+
+import utils.StringUtils;
 
 public class RequestHeader {
 
@@ -15,15 +16,11 @@ public class RequestHeader {
     public RequestHeader(BufferedReader bufferedReader) throws IOException {
         String line = bufferedReader.readLine();
 
-        while (!isEmpty(line)) {
+        while (!StringUtils.isEmpty(line)) {
             String[] headerToken = line.split(HEADER_DELIMITER);
             headers.put(headerToken[0], headerToken[1]);
             line = bufferedReader.readLine();
         }
-    }
-
-    private boolean isEmpty(String line) {
-        return Objects.isNull(line) || Objects.equals(line, "");
     }
 
     public Map<String, String> getHeaders() {
