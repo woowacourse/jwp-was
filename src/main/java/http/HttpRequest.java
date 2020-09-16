@@ -35,8 +35,8 @@ public class HttpRequest {
         return requestLine.equalsMethod(httpMethod);
     }
 
-    public boolean matchesPath(final String path) {
-        return requestLine.matchesPath(path);
+    public boolean equalsPath(final String path) {
+        return requestLine.equalsPath(path);
     }
 
     public String getPath() {

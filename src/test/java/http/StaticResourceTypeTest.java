@@ -48,6 +48,6 @@ public class StaticResourceTypeTest {
     @MethodSource("provideMatches")
     @ParameterizedTest
     void matches(final Uri uri, final boolean expect) {
-        assertThat(StaticResourceType.matches(uri)).isEqualTo(expect);
+        assertThat(StaticResourceType.anyMatch(uri)).isEqualTo(expect);
     }
 }

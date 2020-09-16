@@ -38,7 +38,7 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = HttpRequest.from(bufferedReader);
             HttpResponse httpResponse = new HttpResponse(dataOutputStream);
 
-            if (StaticResourceType.matches(httpRequest.getRequestLine().getUri())) {
+            if (StaticResourceType.anyMatch(httpRequest.getRequestLine().getUri())) {
                 new ResourceRequestHandler().handleRequest(httpRequest, httpResponse);
             } else {
                 new FrontController().doService(httpRequest, httpResponse);

@@ -30,7 +30,7 @@ public enum StaticResourceType {
                 .orElseThrow(() -> new StaticResourceTypeNotFoundException("일치하는 정적 자원을 찾을 수 없습니다. " + uri.toString()));
     }
 
-    public static boolean matches(final Uri uri) {
+    public static boolean anyMatch(final Uri uri) {
         return Stream.of(values())
                 .anyMatch(staticResourceType -> uri.endsWith(staticResourceType.getExtension()));
     }

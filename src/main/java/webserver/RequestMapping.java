@@ -13,6 +13,6 @@ public class RequestMapping {
     }
 
     public boolean matches(final HttpRequest httpRequest) {
-        return httpRequest.matchesPath(path) && httpRequest.equalsMethod(httpMethod);
+        return httpRequest.equalsPath(path) && httpRequest.equalsMethod(httpMethod);
     }
 }

@@ -28,8 +28,8 @@ public class RequestLine {
         return method.equals(httpMethod);
     }
 
-    public boolean matchesPath(final String path) {
-        return uri.matchesPath(path);
+    public boolean equalsPath(final String path) {
+        return uri.equalsPath(path);
     }
 
     public String getPath() {

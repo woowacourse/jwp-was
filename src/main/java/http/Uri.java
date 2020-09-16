@@ -26,7 +26,7 @@ public class Uri {
         return path.endsWith(extension);
     }
 
-    public boolean matchesPath(final String path) {
+    public boolean equalsPath(final String path) {
         return getPath().equals(path);
     }
 
