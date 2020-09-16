@@ -17,12 +17,8 @@ import db.DataBase;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.User;
-import utils.FileIoUtils;
 
 public class RequestHandler implements Runnable {
-    private static final String TEMPLATES = "./templates";
-    private static final String ROOT_HTML = "/index.html";
-
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
@@ -56,9 +52,7 @@ public class RequestHandler implements Runnable {
                     logger.debug("Saved User: {}", DataBase.findUserById(httpRequest.getHttpBodyValueOf("userId")));
                 }
 
-                byte[] body = FileIoUtils.loadFileFromClasspath(TEMPLATES + ROOT_HTML);
-                httpResponse.response302Header(ROOT_HTML);
-                httpResponse.responseBody(body);
+                httpResponse.responseFound();
             }
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
