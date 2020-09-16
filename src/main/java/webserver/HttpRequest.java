@@ -9,25 +9,25 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class RequestHeader {
+public class HttpRequest {
 
     private static final String HTTP_HEADER_DELIMITER = ": ";
     private static final String BLANK = "";
 
-    private final RequestHeaderFirstLine requestHeaderFirstLine;
+    private final RequestLine requestLine;
     private final Map<String, String> headers = new HashMap<>();
     private final RequestBody requestBody;
 
-    private static final Logger logger = LoggerFactory.getLogger(RequestHeader.class);
+    private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
 
-    public RequestHeader(BufferedReader bufferedReader) throws IOException {
+    public HttpRequest(BufferedReader bufferedReader) throws IOException {
         String line = bufferedReader.readLine();
 
         if (isNotAvailable(line)) {
             logger.info("not exist Request Header");
             throw new NotExistRequestHeader("not exist Request Header");
         }
-        requestHeaderFirstLine = new RequestHeaderFirstLine(line);
+        requestLine = new RequestLine(line);
 
         while (!BLANK.equals(line)) {
             line = bufferedReader.readLine();
@@ -48,15 +48,15 @@ public class RequestHeader {
     }
 
     public boolean isGet() {
-        return requestHeaderFirstLine.isGet();
+        return requestLine.isGet();
     }
 
     public boolean isPost() {
-        return requestHeaderFirstLine.isPost();
+        return requestLine.isPost();
     }
 
     public String getResourcePath() {
-        return requestHeaderFirstLine.getResourcePath();
+        return requestLine.getResourcePath();
     }
 
     public String getBody() {

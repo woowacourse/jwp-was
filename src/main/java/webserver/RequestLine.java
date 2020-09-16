@@ -1,6 +1,6 @@
 package webserver;
 
-public class RequestHeaderFirstLine {
+public class RequestLine {
 
     private static final String HTTP_METHOD_GET = "GET";
     private static final String HTTP_METHOD_POST = "POST";
@@ -13,7 +13,7 @@ public class RequestHeaderFirstLine {
     private final String resourcePath;
     private final String version;
 
-    public RequestHeaderFirstLine(String line) {
+    public RequestLine(String line) {
         String[] lineSegment = line.split(HTTP_HEADER_FIRST_LINE_DELIMITER);
         validate(lineSegment);
         this.method = lineSegment[0];

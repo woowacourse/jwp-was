@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class RequestHeaderTest {
+public class HttpRequestTest {
 
     private final String HTTP_GET_REQUEST = "GET /index.html HTTP/1.1\r\nHost: localhost:8080\r\nConnection: keep-alive\r\nCache-Control: max-age=0\r\n\r\n";
     private final String HTTP_POST_REQUEST = "POST /index.html HTTP/1.1\r\nHost: localhost:8080\r\nConnection: keep-alive\r\nCache-Control: max-age=0\r\nContent-Length: 33\r\n\r\nuserId=javajigi&password=password";
@@ -22,11 +22,11 @@ public class RequestHeaderTest {
         InputStream inputStream = new ByteArrayInputStream(HTTP_GET_REQUEST.getBytes());
         BufferedReader bufferedReader = new BufferedReader(
             new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        RequestHeader requestHeader = new RequestHeader(bufferedReader);
+        HttpRequest httpRequest = new HttpRequest(bufferedReader);
 
-        assertThat(requestHeader.isGet()).isTrue();
-        assertThat(requestHeader.getBody()).isNull();
-        assertThat(requestHeader.getResourcePath()).isEqualTo("/index.html");
+        assertThat(httpRequest.isGet()).isTrue();
+        assertThat(httpRequest.getBody()).isNull();
+        assertThat(httpRequest.getResourcePath()).isEqualTo("/index.html");
     }
 
     @DisplayName("RequestHeader 객체 생성 - POST REQUEST")
@@ -35,10 +35,10 @@ public class RequestHeaderTest {
         InputStream inputStream = new ByteArrayInputStream(HTTP_POST_REQUEST.getBytes());
         BufferedReader bufferedReader = new BufferedReader(
             new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        RequestHeader requestHeader = new RequestHeader(bufferedReader);
+        HttpRequest httpRequest = new HttpRequest(bufferedReader);
 
-        assertThat(requestHeader.isPost()).isTrue();
-        assertThat(requestHeader.getBody()).isEqualTo("userId=javajigi&password=password");
-        assertThat(requestHeader.getResourcePath()).isEqualTo("/index.html");
+        assertThat(httpRequest.isPost()).isTrue();
+        assertThat(httpRequest.getBody()).isEqualTo("userId=javajigi&password=password");
+        assertThat(httpRequest.getResourcePath()).isEqualTo("/index.html");
     }
 }

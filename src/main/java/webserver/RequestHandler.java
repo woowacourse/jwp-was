@@ -34,21 +34,21 @@ public class RequestHandler implements Runnable {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(), connection.getPort());
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-            RequestHeader requestHeader = new RequestHeader(bufferedReader);
+            HttpRequest httpRequest = new HttpRequest(bufferedReader);
             ResponseHeader responseHeader = new ResponseHeader(new DataOutputStream(out));
 
-            String resourcePath = requestHeader.getResourcePath();
+            String resourcePath = httpRequest.getResourcePath();
             logger.info("first resourcePath : {} ",resourcePath);
 
 
             if (resourcePath.startsWith(CREATE_URL)) {
-                if (requestHeader.isGet()) {
+                if (httpRequest.isGet()) {
                     Map<String, String> requestParam = UrlUtils.extractRequestParamFromUrl(resourcePath);
                     bindRequestParam(requestParam);
                 }
 
-                if (requestHeader.isPost()) {
-                    Map<String, String> requestParam = UrlUtils.extractRequestParam(requestHeader.getBody());
+                if (httpRequest.isPost()) {
+                    Map<String, String> requestParam = UrlUtils.extractRequestParam(httpRequest.getBody());
                     bindRequestParam(requestParam);
                     responseHeader.createResponse302Header(INDEX_HTML_URL);
                     return;
