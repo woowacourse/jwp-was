@@ -56,8 +56,7 @@ public class Request {
             line = readLine();
         }
 
-        String body = IOUtils.readData(bufferedReader, contentLength);
-        return body;
+        return IOUtils.readData(bufferedReader, contentLength);
     }
 
     public boolean isMatchRequestLine(RequestLine requestLine) {
