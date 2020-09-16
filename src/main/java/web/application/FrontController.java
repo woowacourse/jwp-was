@@ -3,10 +3,9 @@ package web.application;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
-
 import web.application.controller.CreateUserController;
+import web.application.controller.PageNotFoundController;
 import web.application.controller.RootController;
-import web.application.exception.ControllerNotFoundException;
 import web.application.vo.RequestVo;
 import web.server.domain.request.HttpRequest;
 import web.server.domain.request.RequestMethod;
@@ -26,6 +25,6 @@ public class FrontController {
         if (mapper.containsKey(requestVo)) {
             return mapper.get(requestVo);
         }
-        throw new ControllerNotFoundException(requestVo);
+        return PageNotFoundController.getInstance()::doGet;
     }
 }

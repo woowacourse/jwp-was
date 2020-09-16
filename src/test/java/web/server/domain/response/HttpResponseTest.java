@@ -43,6 +43,15 @@ public class HttpResponseTest {
         );
     }
 
+    @DisplayName("없는 경로로 요청이 왔을 때 HttpResponse에 Status Code 404가 담기는지 확인한다.")
+    @Test
+    public void responsePageNotFound() throws Exception {
+        HttpResponse response = new HttpResponse(createOutputStream("http_url_not_found.txt"));
+        response.forwardPageNotFound();
+        String actual = readFile("http_url_not_found.txt");
+        assertThat(actual).contains("404");
+    }
+
     private OutputStream createOutputStream(String filename) throws FileNotFoundException {
         return new FileOutputStream(new File(testDirectory + filename));
     }

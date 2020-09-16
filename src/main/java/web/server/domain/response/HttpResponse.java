@@ -48,6 +48,15 @@ public class HttpResponse {
         }
     }
 
+    private void response404Header() {
+        try {
+            this.dataOutputStream.writeBytes("HTTP/1.1 404 NOT FOUND" + NEW_LINE);
+            this.dataOutputStream.writeBytes(NEW_LINE);
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
     private void responseBody(DataOutputStream dos, byte[] body) {
         try {
             dos.write(body, 0, body.length);
@@ -71,5 +80,9 @@ public class HttpResponse {
     public void sendRedirect(String path) {
         headerParams.put("Location", path);
         response302Header();
+    }
+
+    public void forwardPageNotFound() {
+        response404Header();
     }
 }
