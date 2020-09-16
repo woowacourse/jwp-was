@@ -2,9 +2,14 @@ package http.response;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import http.request.HttpRequest;
+import http.request.StaticFiles;
+import utils.FileIoUtils;
 
 public class HttpResponse {
     private static final String HEADER_VALUE_SEPARATOR = "; ";
@@ -16,6 +21,13 @@ public class HttpResponse {
 
     public HttpResponse(DataOutputStream dataOutputStream) {
         this.dataOutputStream = dataOutputStream;
+    }
+
+    public void responseOk(HttpRequest httpRequest) throws IOException, URISyntaxException {
+        byte[] body = FileIoUtils.loadFileFromClasspath(
+            StaticFiles.getDirectoryEndsWith(httpRequest.getHttpPath()) + httpRequest.getHttpPath());
+        response200Header(httpRequest.getContentType(), body.length);
+        responseBody(body);
     }
 
     public void response200Header(String contentType, int lengthOfBodyContent) {

@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 
 import db.DataBase;
 import http.request.HttpRequest;
-import http.request.StaticFiles;
 import http.response.HttpResponse;
 import model.User;
 import utils.FileIoUtils;
@@ -44,10 +43,7 @@ public class RequestHandler implements Runnable {
             HttpResponse httpResponse = new HttpResponse(dataOutputStream);
 
             if (httpRequest.isStaticFile()) {
-                byte[] body = FileIoUtils.loadFileFromClasspath(
-                    StaticFiles.getDirectoryEndsWith(httpRequest.getHttpPath()) + httpRequest.getHttpPath());
-                httpResponse.response200Header(httpRequest.getContentType(), body.length);
-                httpResponse.responseBody(body);
+                httpResponse.responseOk(httpRequest);
             } else {
                 if (httpRequest.getHttpPath().contains("/user/create")) {
                     User user = new User(
