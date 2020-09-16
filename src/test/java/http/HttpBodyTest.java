@@ -26,7 +26,7 @@ class HttpBodyTest {
     @Test
     public void construct() {
         HttpBody httpBody =
-            HttpBody.from(REQUEST_BUFFERED_READER, ContentType.APPLICATION_X_WWW_FORM_URLENCODED, CONTENT_LENGTH);
+            HttpBody.of(REQUEST_BUFFERED_READER, ContentType.APPLICATION_X_WWW_FORM_URLENCODED, CONTENT_LENGTH);
         assertAll(
             () -> assertThat(httpBody.getContent()).isEqualTo(REQUEST_CONTENT),
             () -> assertThat(httpBody.getContentType()).isEqualTo(ContentType.APPLICATION_X_WWW_FORM_URLENCODED)

@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import http.request.RequestEntity;
-import utils.IOUtils;
+import http.response.ResponseEntity;
 import webserver.requestmapping.RequestMapping;
 import webserver.requestmapping.RequestMappingStorage;
 
@@ -37,9 +37,10 @@ public class RequestHandler implements Runnable {
             RequestEntity requestEntity = RequestEntity.from(bufferedReader);
 
             RequestMapping matchingMapping = RequestMappingStorage.findMatchingMapping(requestEntity);
-            InputStream response = matchingMapping.generateResponse(requestEntity);
+            ResponseEntity response = matchingMapping.generateResponse(requestEntity);
 
-            dos.write(IOUtils.getBytesFromInputStream(response));
+            String responseString = response.convertToString();
+            dos.write(responseString.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             logger.error(e.getMessage());
         }

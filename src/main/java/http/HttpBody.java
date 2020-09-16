@@ -16,7 +16,15 @@ public class HttpBody {
         this.contentType = contentType;
     }
 
-    public static HttpBody from(BufferedReader bufferedReader, ContentType contentType, int contentLength) {
+    public static HttpBody empty() {
+        return new HttpBody("", ContentType.APPLICATION_X_WWW_FORM_URLENCODED);
+    }
+
+    public static HttpBody of(String content, ContentType contentType) {
+        return new HttpBody(content, contentType);
+    }
+
+    public static HttpBody of(BufferedReader bufferedReader, ContentType contentType, int contentLength) {
         try {
             String content = extractBody(bufferedReader, contentLength);
             content = contentType.parse(content);

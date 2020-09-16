@@ -2,10 +2,9 @@ package webserver.requestmapping;
 
 import static webserver.requestmapping.RequestMappingStorage.*;
 
-import java.io.InputStream;
-
 import http.request.HttpMethod;
 import http.request.RequestEntity;
+import http.response.ResponseEntity;
 import webserver.requestmapping.behavior.RequestBehavior;
 
 public class RequestMapping {
@@ -30,7 +29,7 @@ public class RequestMapping {
         return this.httpMethod == httpMethod && this.path.equals(path);
     }
 
-    public InputStream generateResponse(RequestEntity requestEntity) {
+    public ResponseEntity generateResponse(RequestEntity requestEntity) {
         return behavior.behave(requestEntity);
     }
 }

@@ -7,7 +7,9 @@ import utils.IOUtils;
 
 public enum ContentType {
     APPLICATION_X_WWW_FORM_URLENCODED("application/x-www-form-urlencoded", IOUtils::decode),
-    APPLICATION_JSON("application/json", Function.identity());
+    APPLICATION_JSON("application/json", Function.identity()),
+    HTML("text/html;charset=utf-8", Function.identity()),
+    CSS("text/css", Function.identity());
 
     private String type;
     private Function<String, String> parse;
@@ -26,5 +28,9 @@ public enum ContentType {
 
     public String parse(String input) {
         return parse.apply(input);
+    }
+
+    public String getType() {
+        return type;
     }
 }
