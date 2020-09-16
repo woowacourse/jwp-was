@@ -31,6 +31,6 @@ class DataBaseTest {
         DataBase.addUser(user1);
         DataBase.addUser(user2);
 
-        assertThat(DataBase.findAll()).containsExactlyInAnyOrderElementsOf(Arrays.asList(user, user1, user2));
+        assertThat(DataBase.findAll()).containsAll(Arrays.asList(user, user1, user2));
     }
 }

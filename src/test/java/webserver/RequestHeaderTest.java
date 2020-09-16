@@ -52,7 +52,7 @@ class RequestHeaderTest {
 
         assertThatThrownBy(() -> RequestHeader.of(INVALID_HEADER))
             .isInstanceOf(InvalidRequestHeaderException.class)
-            .hasMessage("지원하지 않는 request.txt header 형식입니다.");
+            .hasMessage("지원하지 않는 request header 형식입니다.");
     }
 
     @DisplayName("QueryParams에 정보가 없는 경우 params가 비어있다.")
