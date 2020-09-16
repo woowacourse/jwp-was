@@ -20,7 +20,7 @@ public class UserCreateBehavior implements RequestBehavior {
             userInfo.findValueBy("email"));
         DataBase.addUser(user);
 
-        return ResponseEntity.status(HttpStatus.FOUND)
+        return ResponseEntity.generateWithStatus(HttpStatus.FOUND)
             .version("HTTP/1.1")
             .addHeader("Location", "/index.html");
     }
