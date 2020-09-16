@@ -46,6 +46,6 @@ class RequestBodyTest {
     void noValueBody() {
         assertThatThrownBy(() -> RequestBody.of(INVALID_BODY))
             .isInstanceOf(InvalidRequestBodyException.class)
-            .hasMessage("지원하지 않는 request body 형식입니다.");
+            .hasMessage("지원하지 않는 request.txt body 형식입니다.");
     }
 }

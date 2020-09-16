@@ -22,6 +22,11 @@ public class ServletRequest {
         requestBody = RequestBody.of(IOUtils.readData(br, requestHeader.getContentLength()));
     }
 
+    public ServletRequest(String lines, String body) {
+        requestHeader = RequestHeader.of(lines);
+        requestBody = RequestBody.of(body);
+    }
+
     public Map<String, String> getBody() {
         return requestBody.getAttribute();
     }
