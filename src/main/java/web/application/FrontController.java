@@ -8,7 +8,7 @@ import web.application.controller.CreateUserController;
 import web.application.controller.RootController;
 import web.server.exception.UrlNotFoundException;
 
-public class UrlMapper {
+public class FrontController {
 
     private static final Map<String, Controller> mapper;
 

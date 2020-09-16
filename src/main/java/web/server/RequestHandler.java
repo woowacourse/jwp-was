@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import web.application.UrlMapper;
+import web.application.FrontController;
 import web.application.controller.Controller;
 import web.application.controller.StaticController;
 import web.server.domain.request.HttpRequest;
@@ -41,7 +41,7 @@ public class RequestHandler implements Runnable {
                 StaticController.getInstance()
                     .service(httpRequest, httpResponse);
             } else {
-                Controller controller = UrlMapper.findMatchingController(httpRequest.getPath());
+                Controller controller = FrontController.findMatchingController(httpRequest.getPath());
                 controller.service(httpRequest, httpResponse);
             }
         } catch (IOException e) {
