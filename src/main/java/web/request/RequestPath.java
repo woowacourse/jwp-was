@@ -16,7 +16,7 @@ public class RequestPath extends ParameterMapper {
     }
 
     private void validatePath(String path) {
-        if(Objects.isNull(path) || path.isEmpty()) {
+        if (Objects.isNull(path) || path.isEmpty()) {
             throw new InvalidRequestPathException();
         }
     }

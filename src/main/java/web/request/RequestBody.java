@@ -15,7 +15,7 @@ public class RequestBody extends ParameterMapper {
     }
 
     private void validateBody(String requestBody) {
-        if(Objects.isNull(requestBody) || requestBody.isEmpty()) {
+        if (Objects.isNull(requestBody) || requestBody.isEmpty()) {
             throw new InvalidRequestBodyException();
         }
     }

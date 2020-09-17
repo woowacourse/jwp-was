@@ -4,7 +4,6 @@ import exception.InvalidHttpRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.IOUtils;
-import webserver.RequestHandler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -37,7 +36,7 @@ public class HttpRequest {
         }
     }
 
-    private Map<String, String> mappingHeaders(BufferedReader request) throws IOException, NullPointerException {
+    private Map<String, String> mappingHeaders(BufferedReader request) throws IOException {
         Map<String, String> headers = new HashMap<>();
 
         String line = request.readLine();
@@ -54,13 +53,12 @@ public class HttpRequest {
     }
 
     private RequestBody mappingBodies(BufferedReader request) throws IOException {
-        System.out.println(method);
-        if(!method.equals("POST")) {
+        if (!method.equals("POST")) {
             return new RequestBody();
         }
         int contentLength = Integer.parseInt(requestHeader.get("Content-Length"));
         String requestBodyData = IOUtils.readData(request, contentLength);
-        if(Objects.isNull(requestBodyData) || requestBodyData.isEmpty()) {
+        if (Objects.isNull(requestBodyData) || requestBodyData.isEmpty()) {
             return new RequestBody();
         }
         return new RequestBody(requestBodyData);

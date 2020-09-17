@@ -2,7 +2,6 @@ package web.request;
 
 import exception.InvalidRequestParamsException;
 import exception.RequestParameterNotFoundException;
-import jdk.internal.joptsimple.internal.Strings;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,9 +16,7 @@ public abstract class ParameterMapper {
 
     protected void mappingParameters(String params) {
         validateParameters(params);
-        System.out.println(params + " hey TWICE");
         for (String parameter : params.split("&")) {
-            System.out.println(parameter);
             validateParameter(parameter);
             String[] tokens = parameter.split("=");
             String key = tokens[0];
@@ -36,7 +33,7 @@ public abstract class ParameterMapper {
     }
 
     private void validateParameter(String parameter) {
-        if(parameter.isEmpty() || !parameter.contains("=") || parameter.equals("=")) {
+        if (parameter.isEmpty() || !parameter.contains("=") || parameter.equals("=")) {
             throw new InvalidRequestParamsException();
         }
         try {
@@ -44,10 +41,10 @@ public abstract class ParameterMapper {
             String value = parameter.split("=")[1];
             Objects.requireNonNull(key);
             Objects.requireNonNull(value);
-            if(key.isEmpty() || value.isEmpty()) {
+            if (key.isEmpty() || value.isEmpty()) {
                 throw new InvalidRequestParamsException();
             }
-        } catch(NullPointerException | ArrayIndexOutOfBoundsException e) {
+        } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
             throw new InvalidRequestParamsException();
         }
     }
@@ -57,10 +54,10 @@ public abstract class ParameterMapper {
     }
 
     public String getParameterByKey(String key) {
-        if(Objects.isNull(key) || key.isEmpty()) {
+        if (Objects.isNull(key) || key.isEmpty()) {
             throw new RequestParameterNotFoundException();
         }
-        if(!parameters.containsKey(key)) {
+        if (!parameters.containsKey(key)) {
             throw new RequestParameterNotFoundException(key);
         }
         return parameters.get(key);
