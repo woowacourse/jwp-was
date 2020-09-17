@@ -11,4 +11,10 @@ public class StringUtils {
         }
         return requestLine[1];
     }
+
+    public static String extractParameterValue(String requestLocation, String key) {
+        return requestLocation
+            .split(key + "=")[1]
+            .split("&")[0];
+    }
 }

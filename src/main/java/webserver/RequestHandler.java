@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
@@ -38,10 +39,21 @@ public class RequestHandler implements Runnable {
             String requestLocation = StringUtils.getRequestLocation(line);
 
             DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-            byte[] body = FileIoUtils
-                .loadFileFromClasspath(TEMPLATE_LOCATION + requestLocation);
-            response200Header(dataOutputStream, body.length);
-            responseBody(dataOutputStream, body);
+
+            if (requestLocation.endsWith(".html")) {
+                byte[] body = FileIoUtils
+                    .loadFileFromClasspath(TEMPLATE_LOCATION + requestLocation);
+                response200Header(dataOutputStream, body.length);
+                responseBody(dataOutputStream, body);
+                return;
+            }
+
+            String userId = StringUtils.extractParameterValue(requestLocation, "userId");
+            String password = StringUtils.extractParameterValue(requestLocation, "password");
+            String name = StringUtils.extractParameterValue(requestLocation, "name");
+            String email = StringUtils.extractParameterValue(requestLocation, "email");
+
+            User user = new User(userId, password, name, email);
         } catch (Exception e) {
             logger.error(e.getMessage());
         }

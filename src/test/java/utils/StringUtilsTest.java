@@ -25,4 +25,13 @@ class StringUtilsTest {
         assertThatThrownBy(() -> StringUtils.getRequestLocation(requestLine))
             .isInstanceOf(IllegalArgumentException.class);
     }
+
+    @Test
+    @DisplayName("요청 인풋에서 parameter 추출 테스트")
+    void extractParameterValue() {
+        String requestLine = "GET /user/create?userId=hamliet&password=asdasdasd&name=라흐&email=jsahn32%40gmail.com HTTP/1.1";
+
+        assertThat(StringUtils.extractParameterValue(requestLine, "userId"))
+            .isEqualTo("hamliet");
+    }
 }
