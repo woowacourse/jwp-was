@@ -26,10 +26,10 @@ class RequestBodyTest {
         RequestHeader requestHeader = new RequestHeader(br);
         RequestBody requestBody = new RequestBody(br, requestHeader.getContentLength());
 
-        assertThat(requestBody.getParams().get("userId")).isEqualTo("javajigi");
-        assertThat(requestBody.getParams().get("password")).isEqualTo("password");
-        assertThat(requestBody.getParams().get("name")).isEqualTo("%EB%B0%95%EC%9E%AC%EC%84%B1");
-        assertThat(requestBody.getParams().get("email")).isEqualTo("javajigi%40slipp.net");
+        assertThat(requestBody.getValue("userId")).isEqualTo("javajigi");
+        assertThat(requestBody.getValue("password")).isEqualTo("password");
+        assertThat(requestBody.getValue("name")).isEqualTo("%EB%B0%95%EC%9E%AC%EC%84%B1");
+        assertThat(requestBody.getValue("email")).isEqualTo("javajigi%40slipp.net");
     }
     //TODO 바디 파싱 실패 케이스 테스트
 }
