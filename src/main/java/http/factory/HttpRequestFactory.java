@@ -1,5 +1,6 @@
 package http.factory;
 
+import http.request.HttpMethod;
 import http.request.HttpRequest;
 import http.request.RequestHeader;
 import http.request.RequestLine;
@@ -7,6 +8,7 @@ import http.request.RequestParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
+import utils.Extractor;
 import utils.IOUtils;
 import utils.ParamUtils;
 
@@ -20,24 +22,44 @@ public class HttpRequestFactory {
     private static final String COLON_DELIMITER = ": ";
 
     public static HttpRequest createRequest(BufferedReader br) throws IOException {
-        Map<String, String> headers = new HashMap<>();
-        Map<String, String> params = new HashMap<>();
-
         String line = br.readLine();
+        RequestLine requestLine = createRequestUri(line);
+        String paramOfRequestLine = Extractor.paramFromRequestLine(line);
+
+        RequestHeader requestHeader = createRequestHeader(br, line);
+        
+        String body = readBody(br, requestHeader);
+        RequestParams requestParams = createRequestParams(paramOfRequestLine, body);
+        return new HttpRequest(requestLine, requestHeader, requestParams);
+    }
+
+    public static RequestLine createRequestUri(String line) {
+        HttpMethod method = HttpMethod.valueOf(Extractor.methodFromRequestLine(line));
+        String path = Extractor.pathFromRequestLine(line);
+        return new RequestLine(method, path);
+    }
+
+    private static RequestHeader createRequestHeader(BufferedReader br, String line) throws IOException {
+        Map<String, String> headers = new HashMap<>();
         logger.debug("request header : {}", line);
-        RequestLine requestLine = RequestUriFactory.createRequestUri(line, params);
         while (!StringUtils.isEmpty(line = br.readLine())) {
             logger.debug("request header : {}", line);
             headers.put(line.split(COLON_DELIMITER)[0], line.split(COLON_DELIMITER)[1]);
         }
-        putParameterOfBody(br, headers, params);
-        return new HttpRequest(requestLine, new RequestHeader(headers), new RequestParams(params));
+        return new RequestHeader(headers);
     }
 
-    private static void putParameterOfBody(BufferedReader br, Map<String, String> headers, Map<String, String> params) throws IOException {
-        if (headers.containsKey("Content-Length")) {
-            String body = IOUtils.readData(br, Integer.parseInt(headers.get("Content-Length")));
-            ParamUtils.putParameter(params, body);
+    private static String readBody(BufferedReader br, RequestHeader requestHeader) throws IOException {
+        int contentLength = 0;
+        if (requestHeader.containsKey("Content-Length")) {
+            contentLength = Integer.parseInt(requestHeader.get("Content-Length"));
         }
+        return IOUtils.readData(br, contentLength);
+    }
+
+    private static RequestParams createRequestParams(String paramOfRequestLine, String body) throws IOException {
+        Map<String, String> params = ParamUtils.createParams(paramOfRequestLine);
+        params.putAll(ParamUtils.createParams(body));
+        return new RequestParams(params);
     }
 }
