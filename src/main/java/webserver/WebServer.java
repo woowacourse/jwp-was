@@ -5,6 +5,8 @@ import java.lang.reflect.Method;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -20,6 +22,7 @@ import webserver.http.request.MappedRequest;
 public class WebServer {
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
     private static final int DEFAULT_PORT = 8080;
+    private static final int NUMBER_OF_CORES = Runtime.getRuntime().availableProcessors();
 
     public static void main(String args[]) throws Exception {
         scanRequestMappingAnnotatedMethod();
@@ -36,10 +39,12 @@ public class WebServer {
             logger.info("Web Application Server started {} port.", port);
 
             // 클라이언트가 연결될때까지 대기한다.
+            ExecutorService executorService = Executors.newFixedThreadPool(NUMBER_OF_CORES);
+
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
-                Thread thread = new Thread(new RequestHandler(connection));
-                thread.start();
+                RequestHandler requestHandler = new RequestHandler(connection);
+                executorService.execute(requestHandler);
             }
         }
     }
