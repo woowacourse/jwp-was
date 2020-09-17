@@ -65,8 +65,7 @@ public class RequestHandler implements Runnable {
             String path = httpRequest.getPath();
             Class<? extends Servlet> servletClass = controller.get(path);
             Servlet servlet = servletClass.newInstance();
-            Map<String, String> parameters = httpRequest.getParameters();
-            servlet.service(parameters);
+            servlet.service(httpRequest);
             byte[] body = FileIoUtils.loadFileFromClasspath(servlet.getResourcePathToRedirect());
             return HttpResponse.of("302", body);
         }

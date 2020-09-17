@@ -38,7 +38,7 @@ class RequestHandlerTest {
             + "Accept-Encoding: gzip, deflate, br\n"
             + "Accept-Language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7,ja;q=0.6,vi;q=0.5,la;q=0.4\n"
             + "Cookie: Idea-3be1aa82=33bac591-b163-42cb-9b63-333572a05b11";
-        HttpRequest httpRequest = new HttpRequest(requestLine, header);
+        HttpRequest httpRequest = new HttpRequest(requestLine, header, "");
         byte[] body = FileIoUtils.loadFileFromClasspath("./templates/index.html");
 
         HttpResponse httpResponse = requestHandler.controlRequestAndResponse(httpRequest);
@@ -61,7 +61,7 @@ class RequestHandlerTest {
         String header = "Host: localhost:8080\n"
             + "Connection: keep-alive\n"
             + "Accept: */*";
-        HttpRequest httpRequest = new HttpRequest(requestLine, header);
+        HttpRequest httpRequest = new HttpRequest(requestLine, header, "");
         byte[] body = FileIoUtils.loadFileFromClasspath("./templates/index.html");
 
         HttpResponse httpResponse = requestHandler.controlRequestAndResponse(httpRequest);

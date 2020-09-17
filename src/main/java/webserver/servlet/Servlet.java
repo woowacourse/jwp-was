@@ -2,7 +2,9 @@ package webserver.servlet;
 
 import java.util.Map;
 
+import webserver.domain.request.HttpRequest;
+
 public interface Servlet {
-    void service(Map<String, String> parameters);
+    void service(HttpRequest httpRequest);
     String getResourcePathToRedirect();
 }

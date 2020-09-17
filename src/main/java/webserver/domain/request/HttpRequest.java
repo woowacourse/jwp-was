@@ -13,30 +13,51 @@ public class HttpRequest {
 
     private final RequestLine requestLine;
     private final String header;
+    private final String body;
 
-    public HttpRequest(RequestLine requestLine, String header) {
+    public HttpRequest(RequestLine requestLine, String header, String body) {
         this.requestLine = requestLine;
         this.header = header;
+        this.body = body;
     }
 
     public static HttpRequest of(BufferedReader br) throws IOException {
+        if (!br.ready()) {
+            throw new RuntimeException("잘못된 HTTP 요청입니다. 요청라인이 존재하지 않습니다.");
+        }
         String line = br.readLine();
         RequestLine requestLine = RequestLine.of(line);
         logger.debug("Request Line{}{}{}", lineSeparator, line, lineSeparator);
 
+        if (!br.ready()) {
+            throw new RuntimeException("잘못된 HTTP 요청입니다. 헤더가 존재하지 않습니다.");
+        }
         StringBuilder header = new StringBuilder();
-        while (!line.equals("")) {
+        do {
             line = br.readLine();
-            header.append(line);
-            header.append(lineSeparator);
-
             if (line == null) {
                 break;
             }
-        }
+            header.append(line);
+            header.append(lineSeparator);
+        } while (!line.equals(""));
         logger.debug("Header{}{}", lineSeparator, header);
 
-        return new HttpRequest(requestLine, header.toString());
+        if (!br.ready()) {
+            return new HttpRequest(requestLine, header.toString(), "");
+        }
+        StringBuilder body = new StringBuilder();
+        do {
+            line = br.readLine();
+            if (line == null) {
+                break;
+            }
+            body.append(line);
+            body.append(lineSeparator);
+        } while (!line.equals(""));
+        logger.debug("Body{}{}", lineSeparator, body);
+
+        return new HttpRequest(requestLine, header.toString(), body.toString());
     }
 
     public String getPath() {
@@ -53,6 +74,10 @@ public class HttpRequest {
 
     public Map<String, String> getParameters() {
         return requestLine.getParameters();
+    }
+
+    public String getBody() {
+        return body;
     }
 
     public boolean isForStaticContent() {

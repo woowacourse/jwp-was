@@ -4,10 +4,12 @@ import java.util.Map;
 
 import db.DataBase;
 import model.User;
+import webserver.domain.request.HttpRequest;
 
 public class UserCreate implements Servlet{
     @Override
-    public void service(Map<String, String> parameters) {
+    public void service(HttpRequest httpRequest) {
+        Map<String, String> parameters = httpRequest.getParameters();
         String userId = parameters.get("userId");
         String password = parameters.get("password");
         String name = parameters.get("name");

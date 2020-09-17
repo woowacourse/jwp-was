@@ -30,6 +30,10 @@ public class RequestLine {
         return uri.isStaticResource();
     }
 
+    public Method getMethod() {
+        return method;
+    }
+
     public String getPath() {
         return uri.getPath();
     }

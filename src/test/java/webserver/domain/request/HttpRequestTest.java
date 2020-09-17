@@ -2,6 +2,14 @@ package webserver.domain.request;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +31,7 @@ class HttpRequestTest {
             + "Accept-Encoding: gzip, deflate, br\n"
             + "Accept-Language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7,ja;q=0.6,vi;q=0.5,la;q=0.4\n"
             + "Cookie: Idea-3be1aa82=33bac591-b163-42cb-9b63-333572a05b11";
-        HttpRequest httpRequest = new HttpRequest(requestLine, header);
+        HttpRequest httpRequest = new HttpRequest(requestLine, header, "");
 
         assertThat(httpRequest.getPath()).isEqualTo("./templates/index.html");
     }
@@ -43,7 +51,7 @@ class HttpRequestTest {
             + "Accept-Encoding: gzip, deflate, br\n"
             + "Accept-Language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7,ja;q=0.6,vi;q=0.5,la;q=0.4\n"
             + "Cookie: Idea-3be1aa82=33bac591-b163-42cb-9b63-333572a05b11\n";
-        HttpRequest httpRequest = new HttpRequest(requestLine, header);
+        HttpRequest httpRequest = new HttpRequest(requestLine, header, "");
 
         assertThat(httpRequest.getPath()).isEqualTo("./static/css/styles.css");
     }
@@ -56,7 +64,37 @@ class HttpRequestTest {
         String header = "Host: localhost:8080\n"
             + "Connection: keep-alive\n"
             + "Accept: */*";
-        HttpRequest httpRequest = new HttpRequest(requestLine, header);
+        HttpRequest httpRequest = new HttpRequest(requestLine, header, "");
+
+        assertThat(httpRequest.getPath()).isEqualTo("/user/create");
+    }
+
+    @DisplayName("GET 요청에 대한 HttpRequest 객체를 생성한다. ")
+    @Test
+    void of_whenRequestMethodIsGet() throws IOException {
+        File file = new File("/Users/moon/Desktop/Github/jwp-was/build/resources/test/GetRequest.txt");
+        FileReader fr = new FileReader(file);
+        BufferedReader br = new BufferedReader(fr);
+
+        HttpRequest httpRequest = HttpRequest.of(br);
+
+        Map<String, String> expectedParameters = new HashMap<>();
+        expectedParameters.put("userId", "javajigi");
+        expectedParameters.put("password", "password");
+        expectedParameters.put("name", "%EB%B0%95%EC%9E%AC%EC%84%B1");
+        expectedParameters.put("email", "javajigi%40slipp.net");
+        assertThat(httpRequest.getPath()).isEqualTo("/user/create");
+        assertThat(httpRequest.getParameters()).isEqualTo(expectedParameters);
+    }
+
+    @DisplayName("POST 요청에 대한 HttpRequest 객체를 생성한다. ")
+    @Test
+    void of_whenRequestMethodIsPost() throws IOException {
+        File file = new File("/Users/moon/Desktop/Github/jwp-was/build/resources/test/PostRequest.txt");
+        FileReader fr = new FileReader(file);
+        BufferedReader br = new BufferedReader(fr);
+
+        HttpRequest httpRequest = HttpRequest.of(br);
 
         assertThat(httpRequest.getPath()).isEqualTo("/user/create");
     }
