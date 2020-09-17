@@ -1,0 +1,27 @@
+package web.application.controller;
+
+import web.application.domain.model.User;
+import web.server.domain.request.HttpRequest;
+import web.server.domain.response.HttpResponse;
+
+public class CreateUserController extends AbstractController {
+
+    private CreateUserController() {
+        super();
+    }
+
+    public static CreateUserController getInstance() {
+        return ControllerCache.createUserController;
+    }
+
+    @Override
+    public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
+        User newUser = new User(httpRequest.getParameter("userId"), httpRequest.getParameter("password"),
+            httpRequest.getParameter("name"), httpRequest.getParameter("email"));
+        httpResponse.sendRedirect("/index.html");
+    }
+
+    private static class ControllerCache {
+        private static final CreateUserController createUserController = new CreateUserController();
+    }
+}
