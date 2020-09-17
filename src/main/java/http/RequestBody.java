@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RequestBody {
-    private Map<String, String> params;
+    private final Map<String, String> params;
 
     public RequestBody(BufferedReader br, int contentLength) throws IOException {
         params = new HashMap<>();
@@ -27,4 +27,8 @@ public class RequestBody {
     public Map<String, String> getParams() {
         return params;
     } //TODO getter제거하고 기능으로 제공해볼까? 외부의 수정에 대해 방어하는 코드 필요-j
+
+    public String getValue(String key) {
+        return this.params.get(key);
+    }
 }
