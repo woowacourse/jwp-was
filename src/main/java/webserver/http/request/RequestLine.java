@@ -3,8 +3,9 @@ package webserver.http.request;
 import exception.InvalidHttpMessageException;
 import exception.InvalidRequestLineException;
 import utils.StringUtils;
+import webserver.http.StartLine;
 
-public class RequestLine {
+public class RequestLine implements StartLine {
     private static final String REQUEST_LINE_DELIMITER = " ";
     private static final int REQUEST_LINE_ELEMENT_COUNT = 3;
 
@@ -39,11 +40,14 @@ public class RequestLine {
         return tokens;
     }
 
-    public boolean isPostRequest() {
-        return HttpMethod.POST == this.httpMethod;
-    }
-
     public HttpUri getHttpUri() {
         return httpUri;
+    }
+
+    @Override
+    public String toHttpMessage() {
+        return httpMethod.name() + REQUEST_LINE_DELIMITER
+                + httpUri.toHttpMessage() + REQUEST_LINE_DELIMITER
+                + httpVersion.toHttpMessage();
     }
 }
