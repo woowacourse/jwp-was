@@ -25,4 +25,8 @@ public class RequestMapper {
     public static boolean isContain(MappedRequest mappedRequest) {
         return null != get(mappedRequest);
     }
+
+    protected static void clear() {
+        requestMapper.clear();
+    }
 }
