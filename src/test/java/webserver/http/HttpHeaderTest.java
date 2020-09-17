@@ -4,6 +4,7 @@ import exception.InvalidHttpMessageException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import webserver.http.body.HttpBody;
 import webserver.http.header.HttpHeader;
@@ -31,6 +32,26 @@ class HttpHeaderTest {
         assertThat(createHttpHeader(requestHeaderLines)).isInstanceOf(HttpHeader.class);
     }
 
+    @DisplayName("HTTP Request Header의 키와 값 규격에 맞을 때 HttpHeader 객체 생성")
+    @ParameterizedTest
+    @CsvSource(value = {"Connection,keep-alive", "Accept,*/*", "Location,/index.html"})
+    void httpHeaderKeyAndValueBuilderTest(String key, String value) {
+        HttpHeader.Builder builder = new HttpHeader.Builder();
+
+        assertThat(builder.addHeader(key, value).build()).isInstanceOf(HttpHeader.class);
+    }
+
+    @DisplayName("HTTP Request Header의 키와 값이 빈 값일 때 HttpHeader 객체 생성을 시도하면 InvalidHttpMessageException 발생")
+    @ParameterizedTest
+    @CsvSource(value = {"    ,localhost:8080", "Content-Type,  ", "   ,   "})
+    void httpHeaderKeyAndValueBuilderExceptionTest(String key, String value) {
+        HttpHeader.Builder builder = new HttpHeader.Builder();
+
+        assertThatThrownBy(() -> builder.addHeader(key, value).build())
+                .isInstanceOf(InvalidHttpMessageException.class)
+                .hasMessageStartingWith("잘못된 형식의 HTTP Message입니다! -> ");
+    }
+
     @DisplayName("HTTP Request Header가 규격에 맞지 않을 때 HttpHeader 객체 생성을 시도하면 InvalidHttpMessageException 발생")
     @ParameterizedTest
     @ValueSource(strings = {"Connection > keep-alive", "Content-Length 59", "Host: ", ":application/json", "   :   "})
@@ -39,7 +60,7 @@ class HttpHeaderTest {
 
         assertThatThrownBy(() -> builder.addHeaderLine(invalidHeaderLine))
                 .isInstanceOf(InvalidHttpMessageException.class)
-                .hasMessage("잘못된 형식의 HTTP Message입니다! -> " + invalidHeaderLine);
+                .hasMessageStartingWith("잘못된 형식의 HTTP Message입니다! -> ");
     }
 
     @DisplayName("HttpHeader를 통해 HttpBody 객체를 반환")

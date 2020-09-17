@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class HttpHeader {
     private final Map<String, String> headers;
@@ -48,6 +49,20 @@ public class HttpHeader {
         private static final String HEADER_LINE_DELIMITER = ":";
 
         private final Map<String, String> headers = new HashMap<>();
+
+        public Builder addHeader(String key, String value) {
+            StringUtils.validateNonNullAndNotEmpty(() -> new InvalidHttpMessageException(key, value), key, value);
+
+            String headerName = key.trim();
+            String headerValue = value.trim();
+
+            if (headerName.isEmpty() || headerValue.isEmpty()) {
+                throw new InvalidHttpMessageException(headerName, headerValue);
+            }
+            this.headers.put(headerName, headerValue);
+
+            return this;
+        }
 
         public Builder addHeaderLine(String headerLine) {
             StringUtils.validateNonNullAndNotEmpty(() -> new InvalidHttpMessageException(headerLine), headerLine);
