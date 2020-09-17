@@ -2,17 +2,14 @@ package utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class IOUtils {
     private static final Logger logger = LoggerFactory.getLogger(IOUtils.class);
-    private static final String HEADER_DELIMITER = ": ";
-    private static final int HEADER_KEY = 0;
-    private static final int HEADER_VALUE = 1;
 
     /**
      * @param BufferedReader는
@@ -28,20 +25,20 @@ public class IOUtils {
         return String.copyValueOf(body);
     }
 
-    public static Map<String, String> readRequestHeaders(BufferedReader bufferedReader) throws
+    public static List<String> readHeaders(BufferedReader bufferedReader) throws
             IOException {
-        String line = null;
-        Map<String, String> requestHeaders = new HashMap<>();
+        List<String> headers = new ArrayList<>();
 
-        while (!"".equals(line = bufferedReader.readLine())) {
-            if (line == null) {
-                break;
-            }
-            String[] split = line.split(HEADER_DELIMITER);
-            requestHeaders.put(split[HEADER_KEY], split[HEADER_VALUE]);
+        String line = bufferedReader.readLine();
+        while (isHeaderLine(line)) {
+            headers.add(line);
             logger.debug("Request Header: {}", line);
+            line = bufferedReader.readLine();
         }
+        return headers;
+    }
 
-        return requestHeaders;
+    private static boolean isHeaderLine(String line) {
+        return !"".equals(line) && line != null;
     }
 }

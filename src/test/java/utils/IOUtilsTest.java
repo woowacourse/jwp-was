@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,17 +34,17 @@ public class IOUtilsTest {
                 + "Content-Length: 59\n"
                 + "Content-Type: application/x-www-form-urlencoded\n"
                 + "Accept: */*";
-
         StringReader stringReader = new StringReader(requestHeader);
         BufferedReader bufferedReader = new BufferedReader(stringReader);
+
         // when
-        Map<String, String> actual = IOUtils.readRequestHeaders(bufferedReader);
-        Map<String, String> expected = new HashMap<>();
-        expected.put("Host", "localhost:8080");
-        expected.put("Connection", "keep-alive");
-        expected.put("Content-Length", "59");
-        expected.put("Content-Type", "application/x-www-form-urlencoded");
-        expected.put("Accept", "*/*");
+        List<String> actual = IOUtils.readHeaders(bufferedReader);
+        List<String> expected = new ArrayList<>();
+        expected.add("Host: localhost:8080");
+        expected.add("Connection: keep-alive");
+        expected.add("Content-Length: 59");
+        expected.add("Content-Type: application/x-www-form-urlencoded");
+        expected.add("Accept: */*");
 
         // then
         assertThat(actual).isEqualTo(expected);
