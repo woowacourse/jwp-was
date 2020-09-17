@@ -53,10 +53,8 @@ public class HttpResponse {
         }
     }
 
-    public void responseFound(String redirectPath) throws IOException, URISyntaxException {
-        byte[] body = FileIoUtils.loadFileFromClasspath(TEMPLATES + redirectPath);
+    public void responseFound(String redirectPath) {
         response302Header(redirectPath);
-        responseBody(body);
     }
 
     private void response302Header(String url) {
