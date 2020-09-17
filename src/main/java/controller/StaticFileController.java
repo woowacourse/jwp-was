@@ -12,13 +12,13 @@ import response.HttpResponse;
 import response.StatusCode;
 import webserver.RequestHandler;
 
-public class StaticFileController {
+public class StaticFileController extends AbstractController {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private ResourcesHandler resourcesHandler = new ResourcesHandler();
 
-    public HttpResponse findStaticFile(HttpRequest httpRequest) {
+    private HttpResponse findStaticFile(HttpRequest httpRequest) {
         Resource resourceForResponse;
 
         try {
@@ -42,5 +42,25 @@ public class StaticFileController {
             );
             return new HttpResponse(StatusCode.NOT_FOUND);
         }
+    }
+
+    @Override
+    public HttpResponse doGet(HttpRequest httpRequest) {
+        return findStaticFile(httpRequest);
+    }
+
+    @Override
+    public HttpResponse doPost(HttpRequest httpRequest) {
+        throw new UnsupportedOperationException("static file request must be GET request.");
+    }
+
+    @Override
+    public HttpResponse doPut(HttpRequest httpRequest) {
+        throw new UnsupportedOperationException("static file request must be GET request.");
+    }
+
+    @Override
+    public HttpResponse doDelete(HttpRequest httpRequest) {
+        throw new UnsupportedOperationException("static file request must be GET request.");
     }
 }

@@ -6,9 +6,9 @@ import request.HttpRequest;
 import response.HttpResponse;
 import response.StatusCode;
 
-public class UserController {
+public class UserController extends AbstractController {
 
-    public HttpResponse createUser(HttpRequest request) {
+    private HttpResponse createUser(HttpRequest request) {
         User user = new User(
             request.getValueFromFormData("userId"),
             request.getValueFromFormData("password"),
@@ -18,5 +18,25 @@ public class UserController {
         DataBase.addUser(user);
 
         return new HttpResponse(StatusCode.FOUND, "/");
+    }
+
+    @Override
+    public HttpResponse doGet(HttpRequest httpRequest) {
+        return null;
+    }
+
+    @Override
+    public HttpResponse doPost(HttpRequest httpRequest) {
+        return createUser(httpRequest);
+    }
+
+    @Override
+    public HttpResponse doPut(HttpRequest httpRequest) {
+        return null;
+    }
+
+    @Override
+    public HttpResponse doDelete(HttpRequest httpRequest) {
+        return null;
     }
 }

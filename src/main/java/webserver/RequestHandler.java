@@ -1,5 +1,7 @@
 package webserver;
 
+import controller.Controller;
+import controller.ControllerMapper;
 import controller.StaticFileController;
 import controller.UserController;
 import java.io.DataOutputStream;
@@ -10,7 +12,6 @@ import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.HttpRequest;
-import request.Method;
 import response.HttpResponse;
 
 public class RequestHandler implements Runnable {
@@ -18,6 +19,7 @@ public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
+    private ControllerMapper controllerMapper = new ControllerMapper();
     private UserController userController = new UserController();
     private StaticFileController staticFileController = new StaticFileController();
 
@@ -36,18 +38,9 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = HttpRequest.readHttpRequest(in);
             logger.debug("Receive HttpRequest\n{}", httpRequest.toString());
 
-            if (httpRequest.isMethod(Method.POST) && httpRequest.isUriPath("/user/create")) {
-                HttpResponse response = userController.createUser(httpRequest);
-                DataOutputStream dos = new DataOutputStream(out);
+            Controller controller = controllerMapper.findController(httpRequest);
+            HttpResponse response = controller.service(httpRequest);
 
-                try {
-                    dos.writeBytes(response.buildHeader());
-                } catch (IOException e) {
-                    logger.error(e.getMessage());
-                }
-                return;
-            }
-            HttpResponse response = staticFileController.findStaticFile(httpRequest);
             DataOutputStream dos = new DataOutputStream(out);
 
             try {
