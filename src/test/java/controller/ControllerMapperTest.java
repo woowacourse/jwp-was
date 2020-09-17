@@ -14,15 +14,26 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ControllerMapperTest {
 
-    @DisplayName("controller에 명시되어있는 요청인지 확인 테스트")
+    @DisplayName("controller에 명시되어있는 요청인지 확인 테스트 - true")
     @Test
-    void isApi() {
+    void isApiWhenTrue() {
         HttpRequest httpRequest = new HttpRequest(
                 new RequestLine(HttpMethod.POST, ControllerMapper.USER_CONTROLLER_PATH),
                 new RequestHeader(new HashMap<>()),
                 new RequestParams(new HashMap<>())
         );
         assertThat(ControllerMapper.isApi(httpRequest)).isTrue();
+    }
+
+    @DisplayName("controller에 명시되어있는 요청인지 확인 테스트 - false")
+    @Test
+    void isApiWhenFalse() {
+        HttpRequest httpRequest = new HttpRequest(
+                new RequestLine(HttpMethod.POST, "/abcd"),
+                new RequestHeader(new HashMap<>()),
+                new RequestParams(new HashMap<>())
+        );
+        assertThat(ControllerMapper.isApi(httpRequest)).isFalse();
     }
 
     @DisplayName("httpRequest로부터 일치하는 controller를 찾는 기능 테스트")
