@@ -8,7 +8,7 @@ public class Request {
 
     private HttpMethod method;
     private String path;
-    private String protocol;
+    private String version;
     private final Headers headers;
     private final Body body;
     private final AcceptType type;
@@ -25,7 +25,7 @@ public class Request {
 
         this.method = HttpMethod.of(splitRequestFirstLine[0]);
         this.path = splitRequestFirstLine[1].split("\\?")[0];
-        this.protocol = splitRequestFirstLine[2];
+        this.version = splitRequestFirstLine[2];
     }
 
     public boolean isGet() {
