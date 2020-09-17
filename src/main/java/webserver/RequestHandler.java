@@ -57,6 +57,6 @@ public class RequestHandler implements Runnable {
             httpResponse.notFound();
             return;
         }
-        httpResponse.forward(httpRequest.getPath());
+        httpResponse.forward(httpRequest);
     }
 }

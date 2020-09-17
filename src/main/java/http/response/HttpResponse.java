@@ -1,10 +1,13 @@
 package http.response;
 
+import http.request.HttpRequest;
 import utils.FileIoUtils;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+
+import static com.google.common.net.HttpHeaders.ACCEPT;
 
 public class HttpResponse {
     private final DataOutputStream dos;
@@ -13,29 +16,26 @@ public class HttpResponse {
         this.dos = new DataOutputStream(outputStream);
     }
 
-    public void forward(String path) throws IOException {
-        byte[] body = FileIoUtils.loadFileFromClasspath(path);
-        responseHeader(path, body);
+    public void forward(HttpRequest httpRequest) throws IOException {
+        byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getPath());
+        responseHeader(httpRequest, body);
         responseBody(body);
     }
 
-    private void responseHeader(String path, byte[] body) throws IOException {
+    private void responseHeader(HttpRequest httpRequest, byte[] body) throws IOException {
         dos.writeBytes("HTTP/1.1 200 OK " + System.lineSeparator());
-        dos.writeBytes("Content-Type: " + findContentType(path) + ";charset=utf-8" + System.lineSeparator());
+        dos.writeBytes("Content-Type: " + findContentType(httpRequest) + System.lineSeparator());
         dos.writeBytes("Content-Length: " + body.length + System.lineSeparator());
         dos.writeBytes(System.lineSeparator());
+    }
+
+    private String findContentType(HttpRequest httpRequest) {
+        return httpRequest.getHeader(ACCEPT).split(",")[0];
     }
 
     private void responseBody(byte[] body) throws IOException {
         dos.write(body, 0, body.length);
         dos.flush();
-    }
-
-    private String findContentType(String path) {
-        if (path.contains(".css")) {
-            return "text/css";
-        }
-        return "text/html";
     }
 
     public void sendRedirect(String redirectPath) {
