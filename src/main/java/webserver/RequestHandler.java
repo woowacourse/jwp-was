@@ -33,13 +33,7 @@ public class RequestHandler implements Runnable {
             HttpMessage httpMessage = HttpMessage.from(br);
             HttpBody httpBody = httpMessage.getHttpBody();
 
-            try {
-                User newUser = User.from(httpBody);
-                DataBase.addUser(newUser);
-                logger.debug("New User created! -> {}", newUser);
-            } catch (Exception e) {
-                logger.debug("This request is not for creating User");
-            }
+            UserService.addUser(httpBody);
 
             HttpUri httpUri = httpMessage.getRequestLine().getHttpUri();
             try {
