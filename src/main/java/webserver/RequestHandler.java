@@ -37,6 +37,7 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
 
             if(requestTarget.equals("/user/create")) {
+                // TODO: 2020/09/16 조건문 대신, 분류해주는 클래스 만들어보기
                 RequestBody requestBody = httpRequest.getRequestBody();
                 User user = new User(requestBody.getParameters());
                 DataBase.addUser(user);

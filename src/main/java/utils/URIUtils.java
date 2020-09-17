@@ -44,6 +44,7 @@ public class URIUtils {
         }
         if(fileType.equals("html") || fileType.equals("ico")) {
             return "./templates";
+            // TODO: 2020/09/16 판단을 위한 Enum 클래스 설계하기
         }
         return "./static";
     }
