@@ -14,7 +14,7 @@ public class RequestBody {
         params = new HashMap<>();
         String line = IOUtils.readData(br, contentLength);
         if (line.isEmpty()) {
-            throw new IllegalArgumentException(); //TODO 예외 발생-> 메시지로 나타내자 + 적절한 응답코드 나타내자-j
+            throw new IllegalArgumentException("Line is empty."); //TODO 예외 발생-> 적절한 응답코드 나타내자-j
         }
 
         String[] tokens = line.split("&");
