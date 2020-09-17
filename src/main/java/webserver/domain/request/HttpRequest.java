@@ -41,6 +41,9 @@ public class HttpRequest {
             header.append(line);
             header.append(lineSeparator);
         } while (!line.equals(""));
+        if (header.substring(header.length() - 2, header.length()).equals(lineSeparator)) {
+            header.delete(header.length() - 2, header.length());
+        }
         logger.debug("Header{}{}", lineSeparator, header);
 
         if (!br.ready()) {
@@ -55,6 +58,9 @@ public class HttpRequest {
             body.append(line);
             body.append(lineSeparator);
         } while (!line.equals(""));
+        if (body.substring(body.length() - lineSeparator.length(), body.length()).equals(lineSeparator)) {
+            body.delete(body.length() - lineSeparator.length(), body.length());
+        }
         logger.debug("Body{}{}", lineSeparator, body);
 
         return new HttpRequest(requestLine, header.toString(), body.toString());
@@ -86,5 +92,13 @@ public class HttpRequest {
 
     public boolean isForDynamicContent() {
         return !isForStaticContent();
+    }
+
+    public boolean isGet() {
+        return requestLine.getMethod() == Method.GET;
+    }
+
+    public boolean isPost() {
+        return requestLine.getMethod() == Method.POST;
     }
 }
