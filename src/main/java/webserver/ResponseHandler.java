@@ -25,9 +25,9 @@ public class ResponseHandler {
                 response.responseNotFound();
             } else {
                 Method controllerMethod = RequestMapper.get(mappedRequest);
-                controllerMethod.invoke(null, request, response);
+                String redirectPath = (String)controllerMethod.invoke(null, request, response);
 
-                response.responseFound();
+                response.responseFound(redirectPath);
             }
         } catch (IOException | InvocationTargetException | IllegalAccessException | URISyntaxException e) {
             logger.error(e.getMessage());

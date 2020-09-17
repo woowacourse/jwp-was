@@ -16,7 +16,7 @@ public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @RequestMapping(path = "/user/create", method = HttpMethod.POST)
-    public static void create(HttpRequest request, HttpResponse response) {
+    public static String create(HttpRequest request, HttpResponse response) {
         logger.debug("request : {}, request : {}", request, response);
 
         User user = new User(
@@ -27,5 +27,7 @@ public class UserController {
         );
         DataBase.addUser(user);
         logger.debug("Saved User: {}", DataBase.findUserById(request.getHttpBodyValueOf("userId")));
+
+        return "/index.html";
     }
 }

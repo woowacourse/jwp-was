@@ -15,7 +15,6 @@ public class HttpResponse {
     private static final String HEADER_VALUE_SEPARATOR = "; ";
     private static final String ENCODING_CHARSET_UTF_8 = "charset=UTF-8";
     private static final String TEMPLATES = "./templates";
-    private static final String ROOT_HTML = "/index.html";
     private static final String LINE_SEPARATOR = System.lineSeparator();
 
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
@@ -54,9 +53,9 @@ public class HttpResponse {
         }
     }
 
-    public void responseFound() throws IOException, URISyntaxException {
-        byte[] body = FileIoUtils.loadFileFromClasspath(TEMPLATES + ROOT_HTML);
-        response302Header(ROOT_HTML);
+    public void responseFound(String redirectPath) throws IOException, URISyntaxException {
+        byte[] body = FileIoUtils.loadFileFromClasspath(TEMPLATES + redirectPath);
+        response302Header(redirectPath);
         responseBody(body);
     }
 
