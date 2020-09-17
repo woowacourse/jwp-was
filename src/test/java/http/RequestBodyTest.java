@@ -31,4 +31,5 @@ class RequestBodyTest {
         assertThat(requestBody.getParams().get("name")).isEqualTo("%EB%B0%95%EC%9E%AC%EC%84%B1");
         assertThat(requestBody.getParams().get("email")).isEqualTo("javajigi%40slipp.net");
     }
+    //TODO 바디 파싱 실패 케이스 테스트
 }

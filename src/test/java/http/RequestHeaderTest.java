@@ -11,8 +11,7 @@ class RequestHeaderTest {
     @Test
     @DisplayName("헤더를 잘 파싱하는지 테스트")
     void headerParseTest() throws IOException {
-        String request = "POST /user/create HTTP/1.1\n" +
-                "Host: localhost:8080\n" +
+        String request = "Host: localhost:8080\n" +
                 "Connection: keep-alive\n" +
                 "Content-Length: 93\n" +
                 "Content-Type: application/x-www-form-urlencoded\n" +
@@ -25,8 +24,6 @@ class RequestHeaderTest {
 
         RequestHeader requestHeader = new RequestHeader(br);
 
-        assertThat(requestHeader.getMethod()).isEqualTo("POST");
-        assertThat(requestHeader.getPath()).isEqualTo("/user/create");
         assertThat(requestHeader.getContentLength()).isEqualTo(93);
     }
 }
