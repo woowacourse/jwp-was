@@ -11,6 +11,10 @@ public class HttpRequest {
         this.requestParams = requestParams;
     }
 
+    public boolean isMatchMethod(HttpMethod method) {
+        return method.equals(requestLine.getMethod());
+    }
+
     public String getHeader(String key) {
         return requestHeader.get(key);
     }
@@ -21,9 +25,5 @@ public class HttpRequest {
 
     public String getPath() {
         return requestLine.getPath();
-    }
-
-    public HttpMethod getMethod() {
-        return requestLine.getMethod();
     }
 }

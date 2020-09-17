@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -31,7 +32,7 @@ class HttpRequestFactoryTest {
         params.put("message", "abc");
         System.out.println(params.toString());
         assertAll(
-                () -> assertEquals(HttpMethod.GET, httpRequest.getMethod()),
+                () -> assertThat(httpRequest.isMatchMethod(HttpMethod.GET)).isTrue(),
                 () -> assertEquals("/user/create", httpRequest.getPath()),
                 () -> assertEquals("keep-alive", httpRequest.getHeader("Connection")),
                 () -> assertEquals("javajigi", httpRequest.getParameter("userId"))
@@ -47,7 +48,7 @@ class HttpRequestFactoryTest {
         HttpRequest httpRequest = HttpRequestFactory.createRequest(br);
 
         assertAll(
-                () -> assertEquals(HttpMethod.POST, httpRequest.getMethod()),
+                () -> assertThat(httpRequest.isMatchMethod(HttpMethod.POST)).isTrue(),
                 () -> assertEquals("/user/create", httpRequest.getPath()),
                 () -> assertEquals("keep-alive", httpRequest.getHeader("Connection")),
                 () -> assertEquals("javajigi", httpRequest.getParameter("userId"))
@@ -62,7 +63,7 @@ class HttpRequestFactoryTest {
         HttpRequest httpRequest = HttpRequestFactory.createRequest(br);
 
         assertAll(
-                () -> assertEquals(HttpMethod.POST, httpRequest.getMethod()),
+                () -> assertThat(httpRequest.isMatchMethod(HttpMethod.POST)).isTrue(),
                 () -> assertEquals("/user/create", httpRequest.getPath()),
                 () -> assertEquals("keep-alive", httpRequest.getHeader("Connection")),
                 () -> assertEquals("1", httpRequest.getParameter("id")),

@@ -7,10 +7,10 @@ import http.response.HttpResponse;
 public abstract class AbstractController implements Controller {
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
-        if (HttpMethod.GET.equals(httpRequest.getMethod())) {
+        if (httpRequest.isMatchMethod(HttpMethod.GET)) {
             doGet(httpRequest, httpResponse);
         }
-        if (HttpMethod.POST.equals(httpRequest.getMethod())) {
+        if (httpRequest.isMatchMethod(HttpMethod.POST)) {
             doPost(httpRequest, httpResponse);
         }
     }
