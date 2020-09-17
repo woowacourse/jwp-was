@@ -1,5 +1,7 @@
 package webserver.domain.request;
 
+import java.util.Map;
+
 public class RequestLine {
     private final Method method;
     private final Uri uri;
@@ -30,5 +32,9 @@ public class RequestLine {
 
     public String getPath() {
         return uri.getPath();
+    }
+
+    public Map<String, String> getParameters() {
+        return uri.getParameters();
     }
 }

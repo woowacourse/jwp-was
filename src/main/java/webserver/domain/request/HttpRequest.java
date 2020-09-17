@@ -2,6 +2,7 @@ package webserver.domain.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +49,10 @@ public class HttpRequest {
         }
 
         return requestLine.getPath();
+    }
+
+    public Map<String, String> getParameters() {
+        return requestLine.getParameters();
     }
 
     public boolean isForStaticContent() {
