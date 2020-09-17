@@ -2,6 +2,7 @@ package utils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class StringUtils {
     private static final String PARAMETER_DELIMITER = "=";
@@ -10,6 +11,8 @@ public class StringUtils {
     private static final int PARAMETER_VALUE = 1;
 
     public static Map<String, String> readParameters(String line) {
+        Objects.requireNonNull(line);
+
         Map<String, String> params = new HashMap<>();
         String[] paramTokens = line.split(PARAMETERS_DELIMITER);
 

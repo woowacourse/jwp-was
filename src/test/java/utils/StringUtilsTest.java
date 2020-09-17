@@ -1,7 +1,7 @@
 package utils;
 
+import static http.request.HttpRequest.PATH;
 import static org.assertj.core.api.Assertions.*;
-import static webserver.HttpRequest.PATH;
 
 import java.util.HashMap;
 import java.util.Map;
