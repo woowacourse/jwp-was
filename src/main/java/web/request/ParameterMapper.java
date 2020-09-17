@@ -36,7 +36,6 @@ public abstract class ParameterMapper {
     }
 
     private void validateParameter(String parameter) {
-        // TODO: 2020/09/16 값이 비어있는 경우는 별도 처리해주기!!
         if(parameter.isEmpty() || !parameter.contains("=") || parameter.equals("=")) {
             throw new InvalidRequestParamsException();
         }

@@ -1,11 +1,6 @@
 package webserver;
 
-import java.io.*;
-import java.net.Socket;
-import java.net.URISyntaxException;
-
 import db.DataBase;
-import exception.InvalidHttpRequestException;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +9,10 @@ import utils.URIUtils;
 import web.request.HttpRequest;
 import web.request.RequestBody;
 import web.request.RequestPath;
+
+import java.io.*;
+import java.net.Socket;
+import java.net.URISyntaxException;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -36,23 +35,24 @@ public class RequestHandler implements Runnable {
             String requestTarget = requestPath.getTarget();
             DataOutputStream dos = new DataOutputStream(out);
 
-            if(requestTarget.equals("/user/create")) {
+            if (requestTarget.equals("/user/create")) {
                 // TODO: 2020/09/16 조건문 대신, 분류해주는 클래스 만들어보기
                 RequestBody requestBody = httpRequest.getRequestBody();
                 User user = new User(requestBody.getParameters());
                 DataBase.addUser(user);
-                logger.debug("New User created! -> {}",user);
+                logger.debug("New User created! -> {}", user);
 
                 response302Header(dos, "/index.html");
 
                 byte[] body = user.toString().getBytes();
                 responseBody(dos, body);
-            } else {
-                String filePath = URIUtils.getFilePath(requestTarget);
-                byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
-                response200Header(dos, httpRequest.getContentType(), body.length);
-                responseBody(dos, body);
+
+                return;
             }
+            String filePath = URIUtils.getFilePath(requestTarget);
+            byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
+            response200Header(dos, httpRequest.getContentType(), body.length);
+            responseBody(dos, body);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
