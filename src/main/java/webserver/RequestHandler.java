@@ -51,10 +51,10 @@ public class RequestHandler implements Runnable {
         findStaticResources(httpRequest, httpResponse);
     }
 
-    void findStaticResources(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+    private void findStaticResources(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getPath());
         if (body == null) {
-            httpResponse.badRequest();
+            httpResponse.notFound();
             return;
         }
         httpResponse.forward(httpRequest.getPath());

@@ -27,6 +27,6 @@ public class UserController extends AbstractController {
     @Override
     void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         logger.debug("userController doGet");
-        httpResponse.badRequest();
+        httpResponse.methodNotAllowed();
     }
 }

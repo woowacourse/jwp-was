@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class HttpResponse {
-    public static final String ERROR_PAGE = "/error-page.html";
-
     private final DataOutputStream dos;
 
     public HttpResponse(OutputStream outputStream) {
@@ -50,14 +48,23 @@ public class HttpResponse {
         }
     }
 
-    public void badRequest() {
-        byte[] body = FileIoUtils.loadFileFromClasspath(ERROR_PAGE);
+    public void methodNotAllowed() {
         try {
-            dos.writeBytes("HTTP/1.1 400 FOUND " + System.lineSeparator());
+            dos.writeBytes("HTTP/1.1 405 Method Not Allowed " + System.lineSeparator());
             dos.writeBytes("Content-Type: text/html;charset=utf-8" + System.lineSeparator());
-            dos.writeBytes("Content-Length: " + body.length + System.lineSeparator());
             dos.writeBytes(System.lineSeparator());
-            responseBody(body);
+            dos.writeBytes("<h1>405 Try another method</h1>");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void notFound() {
+        try {
+            dos.writeBytes("HTTP/1.1 404 Not Found " + System.lineSeparator());
+            dos.writeBytes("Content-Type: text/html;charset=utf-8" + System.lineSeparator());
+            dos.writeBytes(System.lineSeparator());
+            dos.writeBytes("<h1>404 Not found</h1>");
         } catch (IOException e) {
             e.printStackTrace();
         }
