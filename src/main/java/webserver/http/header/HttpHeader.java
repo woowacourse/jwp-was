@@ -20,6 +20,26 @@ public class HttpHeader {
         this.headers = headers;
     }
 
+    public static HttpHeader from(BufferedReader br) throws IOException {
+        HttpHeader.Builder builder = new HttpHeader.Builder();
+
+        while (true) {
+            String headerLine = br.readLine();
+
+            if (Objects.isNull(headerLine)) {
+                throw new InvalidHttpMessageException("null");
+            }
+
+            if (headerLine.isEmpty()) {
+                break;
+            }
+
+            builder.addHeaderLine(headerLine);
+        }
+
+        return builder.build();
+    }
+
     public HttpBody createHttpBody(BufferedReader br) throws IOException {
         int contentLength = getContentLength();
         String body = contentLength == -1 ? "" : IOUtils.readData(br, contentLength);
@@ -43,6 +63,12 @@ public class HttpHeader {
     private HttpContentType getContentType() {
         String contentType = this.headers.get("Content-Type");
         return HttpContentType.from(contentType);
+    }
+
+    public String toHttpMessage() {
+        return this.headers.entrySet().stream()
+                .map(entry -> entry.getKey() + ": " + entry.getValue())
+                .collect(Collectors.joining(System.lineSeparator()));
     }
 
     public static class Builder {

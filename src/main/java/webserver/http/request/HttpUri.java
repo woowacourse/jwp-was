@@ -41,11 +41,11 @@ public class HttpUri {
         return this.httpResourceUri.getContentType();
     }
 
-    public String getParameterValue(String parameterKey) {
-        return this.queryString.getParameterValue(parameterKey);
-    }
-
-    public QueryString getQueryString() {
-        return this.queryString;
+    public String toHttpMessage() {
+        String uri = httpResourceUri.toHttpMessage();
+        if (queryString.isNotEmpty()) {
+            return uri + URI_QUERY_STRING_DELIMITER + queryString.toHttpMessage();
+        }
+        return uri;
     }
 }

@@ -16,9 +16,17 @@ public class HttpVersion {
         this.version = version;
     }
 
+    public static HttpVersion from(double version) {
+        return new HttpVersion(HTTP_VERSION_PREFIX + version);
+    }
+
     private void validateIsStartsWithVersionPrefix(String version) {
         if (!version.startsWith(HTTP_VERSION_PREFIX)) {
             throw new InvalidHttpVersionException(version);
         }
+    }
+
+    public String toHttpMessage() {
+        return version;
     }
 }

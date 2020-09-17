@@ -7,6 +7,7 @@ import utils.StringUtils;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class QueryString {
     private static final String PARAMETERS_DELIMITER = "&";
@@ -64,5 +65,11 @@ public class QueryString {
 
     public boolean isNotEmpty() {
         return !this.params.isEmpty();
+    }
+
+    public String toHttpMessage() {
+        return this.params.entrySet().stream()
+                .map(entry -> entry.getKey() + PARAMETER_VALUE_DELIMITER + entry.getValue())
+                .collect(Collectors.joining(PARAMETERS_DELIMITER));
     }
 }

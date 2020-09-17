@@ -33,4 +33,8 @@ public class HttpResourceUri {
     public String getContentType() {
         return this.httpResourceType.getContentType();
     }
+
+    public String toHttpMessage() {
+        return this.resourceUri;
+    }
 }

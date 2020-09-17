@@ -22,13 +22,17 @@ class HttpHeaderTest {
 
     @DisplayName("HTTP Request Header가 규격에 맞을 때 HttpHeader 객체 생성")
     @Test
-    void httpHeaderBuilderTest() {
+    void httpHeaderBuilderTest() throws IOException {
         String requestHeaderLines = "Host: localhost:8080" + NEW_LINE +
                 "Connection: keep-alive" + NEW_LINE +
                 "Content-Length: 59" + NEW_LINE +
                 "Content-Type: application/x-www-form-urlencoded" + NEW_LINE +
-                "Accept: */*";
+                "Accept: */*" + NEW_LINE +
+                NEW_LINE;
 
+        BufferedReader br = createBufferedReader(requestHeaderLines);
+
+        assertThat(HttpHeader.from(br)).isInstanceOf(HttpHeader.class);
         assertThat(createHttpHeader(requestHeaderLines)).isInstanceOf(HttpHeader.class);
     }
 
@@ -103,8 +107,8 @@ class HttpHeaderTest {
         return builder.build();
     }
 
-    private BufferedReader createBufferedReader(String requestBody) {
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(requestBody.getBytes());
+    private BufferedReader createBufferedReader(String content) {
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(content.getBytes());
         return new BufferedReader(new InputStreamReader(byteArrayInputStream));
     }
 }
