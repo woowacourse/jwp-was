@@ -1,10 +1,7 @@
 package webserver;
 
 import db.DataBase;
-import http.RequestBody;
-import http.RequestHeader;
-import http.ResponseBody;
-import http.ResponseHeader;
+import http.*;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,42 +28,45 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             DataOutputStream dos = new DataOutputStream(out);
-            router(br, dos);
+            router(br, dos); //TODO router 보다는 route가 명시적이다
         } catch (IOException | URISyntaxException | NullPointerException e) {
             logger.error(e.getMessage());
         }
     }
 
     private void router(BufferedReader br, DataOutputStream dos) throws IOException, URISyntaxException {
+        RequestLine requestLine = new RequestLine(br);
         RequestHeader requestHeader = new RequestHeader(br);
 
-        if (requestHeader.getMethod().equals("GET")) {
-            resolveGet(requestHeader, dos);
+        //TODO 좀 더 확장성있게 설계(http method는 고정값이라서 interface로 추출), path 처리해주는 클래스 안에 http method 처리해주는 메소드 넣으면 어떨까? -h
+        if (requestLine.isMethodEqualTo("GET")) { //TODO 지원하지 않는 메소드로 요청이 왔을 때 예외처리 추가-j
+            resolveGet(requestLine, requestHeader, dos);
         }
-        if (requestHeader.getMethod().equals("POST")) {
+        if (requestLine.isMethodEqualTo("POST")) {
             RequestBody requestBody = new RequestBody(br, requestHeader.getContentLength());
-            resolvePost(requestHeader, requestBody, dos);
+            resolvePost(requestLine, requestHeader, requestBody, dos);
         }
     }
 
-    private void resolveGet(RequestHeader requestHeader, DataOutputStream dos) throws IOException, URISyntaxException {
-        if (requestHeader.getPath().equals("/")) {
+    private void resolveGet(RequestLine requestLine, RequestHeader requestHeader, DataOutputStream dos) throws IOException, URISyntaxException {
+        //TODO 404, 405같은 상태코드를 생각해보자
+        if (requestLine.isPathEqualTo("/")) { //TODO getter을 사용하지 않고 메시지를 던져보자-j
             ResponseHeader.response302Header(dos, "/index.html");
-        } else if (requestHeader.getParams().get("Accept").contains("css")) {
-            byte[] body = FileIoUtils.loadFileFromClasspath("./static" + requestHeader.getPath());
+        } else if (requestHeader.getParams().get("Accept").contains("css")) { //TODO getter 사용하지 않고 requestheader에 요청하여 값을 받아오자-h
+            byte[] body = FileIoUtils.loadFileFromClasspath("./static" + requestLine.getPath());
             ResponseHeader.response200Header(dos, "text/css", body.length);
             ResponseBody.responseBody(dos, body);
         } else {
-            byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + requestHeader.getPath());
+            byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + requestLine.getPath());
             ResponseHeader.response200Header(dos, "text/html;charset=utf-8", body.length);
             ResponseBody.responseBody(dos, body);
         }
     }
 
-    private void resolvePost(RequestHeader requestHeader, RequestBody requestBody, DataOutputStream dos) {
-        if (requestHeader.getPath().equals("/user/create")) {
+    private void resolvePost(RequestLine requestLine, RequestHeader requestHeader, RequestBody requestBody, DataOutputStream dos) {
+        if (requestLine.getPath().equals("/user/create")) {//TODO "/user/create".equals() 를 사용하면 NPE 를 방지할 수 있다-h
             Map<String, String> params = requestBody.getParams();
-            User user = new User(params.get("userId"), params.get("password"), params.get("name"), params.get("email"));
+            User user = new User(params.get("userId"), params.get("password"), params.get("name"), params.get("email")); //TODO 서비스 레이어를 분리해서 처리-h
             DataBase.addUser(user);
             ResponseHeader.response302Header(dos, "/index.html");
         }
