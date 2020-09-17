@@ -19,7 +19,7 @@ public class Headers {
             .forEach(pair -> headers.put(pair[0], pair[1]));
     }
 
-    public Object getHeader(String name) {
+    public String getHeader(String name) {
         return headers.get(name);
     }
 }

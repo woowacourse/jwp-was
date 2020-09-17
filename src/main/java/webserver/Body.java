@@ -10,13 +10,12 @@ public class Body {
 
     private String body;
 
-    public Body(BufferedReader bufferedReader, Object contentLength) throws IOException {
+    public Body(BufferedReader bufferedReader, String contentLength) throws IOException {
         parseBody(bufferedReader, contentLength);
     }
 
-    private void parseBody(BufferedReader bufferedReader, Object contentLength) throws IOException {
+    private void parseBody(BufferedReader bufferedReader, String contentLength) throws IOException {
         int readSize = Optional.ofNullable(contentLength)
-            .map(x -> (String) x)
             .map(Integer::parseInt)
             .orElse(0);
 
