@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import http.request.QueryParameters;
+
 class QueryParametersTest {
     @DisplayName("빈 문자열이 아닐 경우 객체를 생성")
     @Test

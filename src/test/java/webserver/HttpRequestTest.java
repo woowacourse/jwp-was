@@ -9,6 +9,8 @@ import java.io.StringReader;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import http.request.HttpRequest;
+
 class HttpRequestTest {
     @DisplayName("BufferedReader로 객체 생성")
     @Test

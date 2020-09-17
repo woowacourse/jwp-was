@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import http.HttpVersion;
+
 class HttpVersionTest {
     @DisplayName("HTTP VERSION에 해당하는 객체 반환")
     @ParameterizedTest
