@@ -13,9 +13,9 @@ import org.reflections.scanners.MethodAnnotationsScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import annotation.Controller;
-import annotation.RequestMapping;
-import http.request.MappedRequest;
+import webserver.annotation.Controller;
+import webserver.annotation.RequestMapping;
+import webserver.http.request.MappedRequest;
 
 public class WebServer {
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
@@ -45,7 +45,7 @@ public class WebServer {
     }
 
     private static void scanRequestMappingAnnotatedMethod() throws NoSuchMethodException {
-        Reflections reflections = new Reflections("controller");
+        Reflections reflections = new Reflections("application/controller");
         Set<Class<?>> controllerAnnotatedClasses = reflections.getTypesAnnotatedWith(Controller.class);
 
         Method addToRequestMapper = RequestMapper.class.getMethod("add", MappedRequest.class, Method.class);

@@ -8,12 +8,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import controller.UserController;
-import http.request.HttpMethod;
-import http.request.HttpRequest;
-import http.request.MappedRequest;
-import http.response.HttpResponse;
+import application.controller.UserController;
 import webserver.exception.DuplicatedMappedRequestException;
+import webserver.http.request.HttpMethod;
+import webserver.http.request.HttpRequest;
+import webserver.http.request.MappedRequest;
+import webserver.http.response.HttpResponse;
 
 class RequestMapperTest {
 	private MappedRequest mappedRequest;
@@ -35,7 +35,7 @@ class RequestMapperTest {
 		assertThatThrownBy(() -> RequestMapper.add(mappedRequest, userCreateMethod))
 			.isInstanceOf(DuplicatedMappedRequestException.class)
 			.hasMessage(
-				"중복되는 Mapped Request가 있습니다 : public static java.lang.String controller.UserController.create(http.request.HttpRequest,http.response.HttpResponse)와 public static java.lang.String controller.UserController.create(http.request.HttpRequest,http.response.HttpResponse)");
+				"중복되는 Mapped Request가 있습니다 : public static java.lang.String application.controller.UserController.create(webserver.http.request.HttpRequest,webserver.http.response.HttpResponse)와 public static java.lang.String application.controller.UserController.create(webserver.http.request.HttpRequest,webserver.http.response.HttpResponse)");
 	}
 
 	@DisplayName("MappedRequest에 따라 Method를 반환한다.")

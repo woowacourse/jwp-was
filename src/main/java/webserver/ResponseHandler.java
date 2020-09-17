@@ -8,9 +8,9 @@ import java.net.URISyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import http.request.HttpRequest;
-import http.request.MappedRequest;
-import http.response.HttpResponse;
+import webserver.http.request.HttpRequest;
+import webserver.http.request.MappedRequest;
+import webserver.http.response.HttpResponse;
 
 public class ResponseHandler {
     private static final Logger logger = LoggerFactory.getLogger(ResponseHandler.class);
