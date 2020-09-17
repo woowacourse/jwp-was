@@ -29,7 +29,7 @@ public class RequestHeader {
         return Integer.parseInt(contentLength);
     }
 
-    public Map<String, String> getParams() {
-        return params;
+    public String getValue(String key) {
+        return this.params.get(key);
     }
 }

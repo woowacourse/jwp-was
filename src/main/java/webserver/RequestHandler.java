@@ -5,6 +5,7 @@ import http.*;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import service.UserService;
 import utils.FileIoUtils;
 
 import java.io.*;
@@ -50,9 +51,9 @@ public class RequestHandler implements Runnable {
 
     private void resolveGet(RequestLine requestLine, RequestHeader requestHeader, DataOutputStream dos) throws IOException, URISyntaxException {
         //TODO 404, 405같은 상태코드를 생각해보자
-        if (requestLine.isPathEqualTo("/")) { //TODO getter을 사용하지 않고 메시지를 던져보자-j
+        if (requestLine.isPathEqualTo("/")) {
             ResponseHeader.response302Header(dos, "/index.html");
-        } else if (requestHeader.getParams().get("Accept").contains("css")) { //TODO getter 사용하지 않고 requestheader에 요청하여 값을 받아오자-h
+        } else if (requestHeader.getValue("accept").contains("css")) { //TODO getter 사용하지 않고 requestheader에 요청하여 값을 받아오자-h
             byte[] body = FileIoUtils.loadFileFromClasspath("./static" + requestLine.getPath());
             ResponseHeader.response200Header(dos, "text/css", body.length);
             ResponseBody.responseBody(dos, body);
@@ -64,10 +65,9 @@ public class RequestHandler implements Runnable {
     }
 
     private void resolvePost(RequestLine requestLine, RequestHeader requestHeader, RequestBody requestBody, DataOutputStream dos) {
-        if (requestLine.getPath().equals("/user/create")) {//TODO "/user/create".equals() 를 사용하면 NPE 를 방지할 수 있다-h
-            Map<String, String> params = requestBody.getParams();
-            User user = new User(params.get("userId"), params.get("password"), params.get("name"), params.get("email")); //TODO 서비스 레이어를 분리해서 처리-h
-            DataBase.addUser(user);
+        if (requestLine.isPathEqualTo("/user/create")) {
+            UserService userService = new UserService();
+            userService.createUser(requestBody);
             ResponseHeader.response302Header(dos, "/index.html");
         }
     }
