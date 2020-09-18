@@ -38,7 +38,10 @@ public class Headers {
         StringBuilder stringBuilder = new StringBuilder();
         Set<String> headerNames = headers.keySet();
 
-        headerNames.forEach(headerName -> stringBuilder.append(headers.get(headerName)));
+        headerNames.forEach(headerName ->
+            stringBuilder.append(headers.get(headerName))
+                .append("\n")
+        );
 
         return stringBuilder.toString();
     }

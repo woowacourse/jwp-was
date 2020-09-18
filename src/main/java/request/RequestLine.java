@@ -26,7 +26,7 @@ public class RequestLine {
 
     @Override
     public String toString() {
-        return method.toString() + " " + uri.toString() + "\n";
+        return method.toString() + " " + uri.toString();
     }
 
     boolean isUriUsingQueryString() {

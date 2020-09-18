@@ -27,13 +27,14 @@ public class RequestHandler implements Runnable {
         this.connection = connectionSocket;
     }
 
+    @Override
     public void run() {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}",
             connection.getInetAddress(), connection.getPort());
 
         try (
             InputStream in = connection.getInputStream();
-            OutputStream out = connection.getOutputStream();
+            OutputStream out = connection.getOutputStream()
         ) {
             HttpRequest httpRequest = HttpRequest.readHttpRequest(in);
             logger.debug("Receive HttpRequest\n{}", httpRequest.toString());

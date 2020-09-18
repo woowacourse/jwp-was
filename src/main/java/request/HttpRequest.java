@@ -110,11 +110,12 @@ public class HttpRequest {
 
     @Override
     public String toString() {
-        return "HttpRequest{"
+        return "** HttpRequest **\n"
             + requestLine.toString()
+            + "\n"
             + headers.toString()
             + "\n"
             + messageBody.toString()
-            + "}";
+            + "\n";
     }
 }
