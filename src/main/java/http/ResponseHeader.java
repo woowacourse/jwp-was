@@ -48,4 +48,13 @@ public class ResponseHeader {
             logger.error(e.getMessage());
         }
     }
+
+    public static void response400Header(DataOutputStream dos) {
+        try {
+            dos.writeBytes("HTTP/1.1 400 Bad Request \r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
 }

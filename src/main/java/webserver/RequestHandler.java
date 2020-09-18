@@ -36,19 +36,23 @@ public class RequestHandler implements Runnable {
     }
 
     private void route(BufferedReader br, DataOutputStream dos) throws IOException {
-        RequestLine requestLine = new RequestLine(br);
-        RequestHeader requestHeader = new RequestHeader(br);
         Map<String, Path> paths = new HashMap<>();
         paths.put("/user/create", new UserCreate());
         paths.put("/", new Index());
+        try {
+            RequestLine requestLine = new RequestLine(br);
+            RequestHeader requestHeader = new RequestHeader(br);
 
-        Path path = paths.getOrDefault(requestLine.getPath(), new RawFile(requestLine.getPath()));
+            Path path = paths.getOrDefault(requestLine.getPath(), new RawFile(requestLine.getPath()));
 
-        if (requestLine.isMethodEqualTo("GET")) {
-            path.get(dos, requestHeader);
-        } else if (requestLine.isMethodEqualTo("POST")) {
-            RequestBody requestBody = new RequestBody(br, requestHeader.getContentLength());
-            path.post(dos, requestHeader, requestBody);
+            if (requestLine.isMethodEqualTo("GET")) {
+                path.get(dos, requestHeader);
+            } else if (requestLine.isMethodEqualTo("POST")) {
+                RequestBody requestBody = new RequestBody(br, requestHeader.getContentLength());
+                path.post(dos, requestHeader, requestBody);
+            }
+        } catch (IllegalArgumentException e) {
+            ResponseHeader.response400Header(dos);
         }
     }
 }
