@@ -21,15 +21,15 @@ public class RequestHeader {
         }
     }
 
+    public boolean containsValueOf(String key, String value) {
+        return this.params.get(key).contains(value);
+    }
+
     public int getContentLength() {
         String contentLength = this.params.get("content-length");
         if (contentLength == null) {
             return 0;
         }
         return Integer.parseInt(contentLength);
-    }
-
-    public String getValue(String key) {
-        return this.params.get(key);
     }
 }

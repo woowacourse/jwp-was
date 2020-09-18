@@ -1,8 +1,6 @@
 package webserver;
 
-import db.DataBase;
 import http.*;
-import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
@@ -11,7 +9,6 @@ import utils.FileIoUtils;
 import java.io.*;
 import java.net.Socket;
 import java.net.URISyntaxException;
-import java.util.Map;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -53,7 +50,7 @@ public class RequestHandler implements Runnable {
         //TODO 404, 405같은 상태코드를 생각해보자
         if (requestLine.isPathEqualTo("/")) {
             ResponseHeader.response302Header(dos, "/index.html");
-        } else if (requestHeader.getValue("accept").contains("css")) { //TODO getter 사용하지 않고 requestheader에 요청하여 값을 받아오자-h
+        } else if (requestHeader.containsValueOf("accept","css")) {
             byte[] body = FileIoUtils.loadFileFromClasspath("./static" + requestLine.getPath());
             ResponseHeader.response200Header(dos, "text/css", body.length);
             ResponseBody.responseBody(dos, body);
