@@ -78,7 +78,7 @@ public class RequestHandler implements Runnable {
 		DataBase.addUser(user);
 
 		logger.debug("Database : {}", user);
-		response200Header(dos, 0);
+		response302Header(dos, "/index.html");
 	}
 
 	private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
@@ -86,6 +86,17 @@ public class RequestHandler implements Runnable {
 			dos.writeBytes("HTTP/1.1 200 OK \r\n");
 			dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
 			dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+			dos.writeBytes("\r\n");
+		} catch (IOException e) {
+			logger.error(e.getMessage());
+		}
+	}
+
+	private void response302Header(DataOutputStream dos, String location) {
+		try {
+			dos.writeBytes("HTTP/1.1 302 Found \r\n");
+			dos.writeBytes("Location: " + location + "\r\n");
+			dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
 			dos.writeBytes("\r\n");
 		} catch (IOException e) {
 			logger.error(e.getMessage());
