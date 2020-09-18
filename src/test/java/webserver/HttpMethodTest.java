@@ -8,10 +8,17 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 public class HttpMethodTest {
 
-    @DisplayName("서버에서 지원하는 HTTP Method")
+    @DisplayName("HTTP Method - 서버에서 지원하는가")
     @ParameterizedTest
-    @CsvSource({"GET,true", "POST,true", "OPTIONS,false", "TRACE,false"})
+    @CsvSource({"GET,true", "POST,true", "PUT,false", "DELETE,false", "HEAD,false", "TRACE,false", "CONNECT,false", "OPTIONS,false"})
     void isSupported(String httpMethod, boolean expected) {
         assertThat(HttpMethod.isSupported(httpMethod)).isEqualTo(expected);
+    }
+
+    @DisplayName("HTTP Method - body 유무")
+    @ParameterizedTest
+    @CsvSource({"GET,false", "POST,true", "PUT,true", "DELETE,false", "HEAD,false", "TRACE,false", "CONNECT,false", "OPTIONS,false"})
+    void hasBody(String httpMethod, boolean expected) {
+        assertThat(HttpMethod.hasBody(httpMethod)).isEqualTo(expected);
     }
 }
