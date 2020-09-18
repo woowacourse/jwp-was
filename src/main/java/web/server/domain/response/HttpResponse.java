@@ -82,7 +82,7 @@ public class HttpResponse {
         response302Header();
     }
 
-    public void forwardPageNotFound() {
+    public void respondPageNotFound() {
         response404Header();
     }
 }

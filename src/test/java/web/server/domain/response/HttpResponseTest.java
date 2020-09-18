@@ -47,7 +47,7 @@ public class HttpResponseTest {
     @Test
     public void responsePageNotFound() throws Exception {
         HttpResponse response = new HttpResponse(createOutputStream("http_url_not_found.txt"));
-        response.forwardPageNotFound();
+        response.respondPageNotFound();
         String actual = readFile("http_url_not_found.txt");
         assertThat(actual).contains("404");
     }

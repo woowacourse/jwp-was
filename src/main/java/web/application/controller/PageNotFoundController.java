@@ -15,7 +15,7 @@ public class PageNotFoundController extends AbstractController {
 
     @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        httpResponse.forwardPageNotFound();
+        httpResponse.respondPageNotFound();
     }
 
     private static class PageNotFoundControllerCache {
