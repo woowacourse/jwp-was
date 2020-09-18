@@ -47,7 +47,7 @@ public class RequestHandler implements Runnable {
     }
 
     private void resolveGet(RequestLine requestLine, RequestHeader requestHeader, DataOutputStream dos) throws IOException, URISyntaxException {
-        //TODO 404, 405같은 상태코드를 생각해보자
+        //TODO 405같은 상태코드를 생각해보자
         if (requestLine.isPathEqualTo("/")) {
             ResponseHeader.response302Header(dos, "/index.html");
         } else if (requestHeader.containsValueOf("accept","css")) {
@@ -55,9 +55,13 @@ public class RequestHandler implements Runnable {
             ResponseHeader.response200Header(dos, "text/css", body.length);
             ResponseBody.responseBody(dos, body);
         } else {
-            byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + requestLine.getPath());
-            ResponseHeader.response200Header(dos, "text/html;charset=utf-8", body.length);
-            ResponseBody.responseBody(dos, body);
+            try{
+                byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + requestLine.getPath());
+                ResponseHeader.response200Header(dos, "text/html;charset=utf-8", body.length);
+                ResponseBody.responseBody(dos, body);
+            }catch(NullPointerException e) {
+                ResponseHeader.response404Header(dos);
+            }
         }
     }
 
