@@ -5,11 +5,16 @@ import static org.assertj.core.api.Assertions.*;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import db.DataBase;
+import model.User;
 import utils.FileIoUtils;
+import webserver.domain.Header;
 import webserver.domain.request.HttpRequest;
 import webserver.domain.request.RequestLine;
 import webserver.domain.response.HttpResponse;
@@ -26,26 +31,18 @@ class RequestHandlerTest {
         IOException {
         RequestHandler requestHandler = new RequestHandler(new Socket());
         RequestLine requestLine = RequestLine.of("GET /index.html HTTP/1.1");
-        String header = "Host: localhost:8080\n"
-            + "Connection: keep-alive\n"
-            + "Upgrade-Insecure-Requests: 1\n"
-            + "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36\n"
-            + "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9\n"
-            + "Sec-Fetch-Site: none\n"
-            + "Sec-Fetch-Mode: navigate\n"
-            + "Sec-Fetch-User: ?1\n"
-            + "Sec-Fetch-Dest: document\n"
-            + "Accept-Encoding: gzip, deflate, br\n"
-            + "Accept-Language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7,ja;q=0.6,vi;q=0.5,la;q=0.4\n"
-            + "Cookie: Idea-3be1aa82=33bac591-b163-42cb-9b63-333572a05b11";
+        Map<String, String> headerFields = new HashMap<>();
+        headerFields.put("Host", "localhost:8080");
+        headerFields.put("Connection", "keep-alive");
+        headerFields.put("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+        Header header = new Header(headerFields);
         HttpRequest httpRequest = new HttpRequest(requestLine, header, "");
         byte[] body = FileIoUtils.loadFileFromClasspath("./templates/index.html");
 
         HttpResponse httpResponse = requestHandler.controlRequestAndResponse(httpRequest);
 
         assertThat(httpResponse.getStatusLine().getValue()).isEqualTo("HTTP/1.1 200 OK");
-        assertThat(httpResponse.getHeader()).isEqualTo("Content-Type: text/html;charset=utf-8" + lineSeparator +
-            "Content-Length: 6902" + lineSeparator);
+        assertThat(httpResponse.getHeader()).contains("Content-Type: text/html;charset=utf-8", "Content-Length: 6902");
         assertThat(httpResponse.getBody()).isEqualTo(body);
     }
 
@@ -58,17 +55,19 @@ class RequestHandlerTest {
         IOException {
         RequestHandler requestHandler = new RequestHandler(new Socket());
         RequestLine requestLine = RequestLine.of("GET /user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net HTTP/1.1");
-        String header = "Host: localhost:8080\n"
-            + "Connection: keep-alive\n"
-            + "Accept: */*";
+        Map<String, String> headerFields = new HashMap<>();
+        headerFields.put("Host", "localhost:8080");
+        headerFields.put("Connection", "keep-alive");
+        headerFields.put("Accept", "*/*");
+        Header header = new Header(headerFields);
         HttpRequest httpRequest = new HttpRequest(requestLine, header, "");
         byte[] body = FileIoUtils.loadFileFromClasspath("./templates/index.html");
 
         HttpResponse httpResponse = requestHandler.controlRequestAndResponse(httpRequest);
 
         assertThat(httpResponse.getStatusLine().getValue()).isEqualTo("HTTP/1.1 302 Found");
-        assertThat(httpResponse.getHeader()).isEqualTo("Content-Type: text/html;charset=utf-8" + lineSeparator +
-            "Content-Length: 6902" + lineSeparator);
-        assertThat(httpResponse.getBody()).isEqualTo(body);
+        assertThat(httpResponse.getHeader()).contains("Location: /index.html");
+        assertThat(httpResponse.getBody()).isEqualTo(new byte[0]);
+        assertThat(DataBase.findUserById("javajigi")).isEqualToComparingFieldByField(new User("javajigi", "password", "%EB%B0%95%EC%9E%AC%EC%84%B1", "javajigi%40slipp.net"));
     }
 }

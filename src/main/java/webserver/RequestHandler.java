@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import utils.FileIoUtils;
 import webserver.domain.request.HttpRequest;
+import webserver.domain.Header;
 import webserver.domain.response.HttpResponse;
 import webserver.servlet.Servlet;
 import webserver.servlet.UserCreate;
@@ -58,7 +59,11 @@ public class RequestHandler implements Runnable {
         if (httpRequest.isForStaticContent()) {
             String path = httpRequest.getPath();
             byte[] body = FileIoUtils.loadFileFromClasspath(path);
-            return HttpResponse.of("200", body);
+            Map<String, String > headerFields = new HashMap<>();
+            headerFields.put("Content-Type", "text/html;charset=utf-8");
+            headerFields.put("Content-Length", String.valueOf(body.length));
+            Header header = new Header(headerFields);
+            return HttpResponse.of("200", header, body);
         }
 
         if (httpRequest.isForDynamicContent()) {
@@ -66,8 +71,10 @@ public class RequestHandler implements Runnable {
             Class<? extends Servlet> servletClass = controller.get(path);
             Servlet servlet = servletClass.newInstance();
             servlet.service(httpRequest);
-            byte[] body = FileIoUtils.loadFileFromClasspath(servlet.getResourcePathToRedirect());
-            return HttpResponse.of("302", body);
+            Map<String, String > headerFields = new HashMap<>();
+            headerFields.put("Location", "/index.html");
+            Header header = new Header(headerFields);
+            return HttpResponse.of("302", header);
         }
 
         throw new AssertionError("HttpRequest는 정적 혹은 동적 컨텐츠 요청만 가능합니다.");
