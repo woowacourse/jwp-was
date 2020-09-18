@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.io.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class RequestHeaderTest {
     @Test
@@ -25,5 +26,24 @@ class RequestHeaderTest {
         RequestHeader requestHeader = new RequestHeader(br);
 
         assertThat(requestHeader.getContentLength()).isEqualTo(93);
+    }
+
+    @Test
+    @DisplayName("[예외] 헤더 값이 누락됐을 때 테스트")
+    void invalidHeaderParseTest() {
+        String request = "Host: \n" +
+                "Connection: keep-alive\n" +
+                "Content-Length: 93\n" +
+                "Content-Type: application/x-www-form-urlencoded\n" +
+                "Accept: */*\n" +
+                "\n" +
+                "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
+
+        InputStream in = new ByteArrayInputStream(request.getBytes());
+        BufferedReader br = new BufferedReader(new InputStreamReader(in));
+
+        assertThatThrownBy(() -> new RequestHeader(br))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Host");
     }
 }
