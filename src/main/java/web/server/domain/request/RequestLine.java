@@ -9,7 +9,7 @@ import web.server.utils.StaticFileType;
 @Getter
 public class RequestLine {
 
-    private static final Pattern staticFilePattern = Pattern.compile("^.*[.][a-z]+$");
+    private static final Pattern STATIC_FILE_PATTERN = Pattern.compile("^.*[.][a-z]+$");
     private static final String REQUEST_LINE_DELIMITER = " ";
     private static final String EXTENSION_DELIMITER = "\\.";
 
@@ -23,7 +23,7 @@ public class RequestLine {
     }
 
     public boolean hasPathOfStaticFile() {
-        Matcher matcher = staticFilePattern.matcher(getPath());
+        Matcher matcher = STATIC_FILE_PATTERN.matcher(getPath());
         return matcher.matches();
     }
 
