@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import db.DataBase;
 import model.User;
 import utils.FileIoUtils;
+import utils.IOUtils;
 import utils.RequestPathUtil;
 
 public class RequestHandler implements Runnable {
@@ -37,22 +38,27 @@ public class RequestHandler implements Runnable {
 			String requestHeader = br.readLine();
 			logger.debug("request line : {}", requestHeader);
 
+			String httpMethod = requestHeader.split(" ")[0];
 			String request = requestHeader.split(" ")[1];
 			DataOutputStream dos = new DataOutputStream(out);
 
-			while (!requestHeader.equals("")) {
+			int contextLength = 0;
+
+			while (!"".equals(requestHeader)) {
 				requestHeader = br.readLine();
+				if (requestHeader.contains("Content-Length")) {
+					contextLength = Integer.parseInt(requestHeader.split( " ")[1]);
+				}
 				logger.debug("header : {}", requestHeader);
 			}
 
-			if (request.startsWith("/user/create")) {
-				Map<String, String> requestParameters = RequestPathUtil.extractSignUpRequestData(request);
-				User user = new User(requestParameters.get("userId"), requestParameters.get("password"),
-					requestParameters.get("name"), requestParameters.get("email"));
-				DataBase.addUser(user);
-
-				logger.debug("Database : {}", user);
-				response200Header(dos, 0);
+			if ("GET".equals(httpMethod) && "/user/create".equals(request)) {
+				String requestParameter = request.split("\\?")[1];
+				signUpUser(dos, requestParameter);
+			} else if("POST".equals(httpMethod) && "/user/create".equals(request)) {
+				String body = IOUtils.readData(br, contextLength);
+				logger.debug("body : {}", body);
+				signUpUser(dos, body);
 			} else {
 				String requestPath = RequestPathUtil.extractFilePath(request);
 				byte[] body = FileIoUtils.loadFileFromClasspath(requestPath);
@@ -63,6 +69,16 @@ public class RequestHandler implements Runnable {
 		} catch (IOException | URISyntaxException e) {
 			logger.error(e.getMessage());
 		}
+	}
+
+	private void signUpUser(DataOutputStream dos, String requestParameter) {
+		Map<String, String> requestParameters = RequestPathUtil.extractSignUpRequestData(requestParameter);
+		User user = new User(requestParameters.get("userId"), requestParameters.get("password"),
+			requestParameters.get("name"), requestParameters.get("email"));
+		DataBase.addUser(user);
+
+		logger.debug("Database : {}", user);
+		response200Header(dos, 0);
 	}
 
 	private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {

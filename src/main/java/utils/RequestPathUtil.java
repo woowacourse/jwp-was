@@ -19,10 +19,9 @@ public class RequestPathUtil {
 		return STATIC_PATH + request;
 	}
 
-	public static Map<String, String> extractSignUpRequestData(String request) {
+	public static Map<String, String> extractSignUpRequestData(String requestData) {
 		Map<String, String> signUpRequestData = new HashMap<>();
-		String requestParameter = request.split("\\?")[1];
-		String[] requestParemeters = requestParameter.split("&");
+		String[] requestParemeters = requestData.split("&");
 		for (String parameter : requestParemeters) {
 			String[] data = URLDecoder.decode(parameter).split("=");
 			signUpRequestData.put(data[0], data[1]);
