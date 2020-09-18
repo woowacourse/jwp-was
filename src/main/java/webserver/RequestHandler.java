@@ -7,12 +7,9 @@ import http.path.RawFile;
 import http.path.UserCreate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import service.UserService;
-import utils.FileIoUtils;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,13 +29,13 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             DataOutputStream dos = new DataOutputStream(out);
-            router(br, dos); //TODO router 보다는 route가 명시적이다
+            route(br, dos);
         } catch (IOException | NullPointerException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void router(BufferedReader br, DataOutputStream dos) throws IOException {
+    private void route(BufferedReader br, DataOutputStream dos) throws IOException {
         RequestLine requestLine = new RequestLine(br);
         RequestHeader requestHeader = new RequestHeader(br);
         Map<String, Path> paths = new HashMap<>();
