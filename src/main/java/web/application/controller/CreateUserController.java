@@ -1,5 +1,6 @@
 package web.application.controller;
 
+import db.DataBase;
 import web.application.domain.model.User;
 import web.server.domain.request.HttpRequest;
 import web.server.domain.response.HttpResponse;
@@ -18,6 +19,7 @@ public class CreateUserController extends AbstractController {
     public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         User newUser = new User(httpRequest.getParameter("userId"), httpRequest.getParameter("password"),
             httpRequest.getParameter("name"), httpRequest.getParameter("email"));
+        DataBase.addUser(newUser);
         httpResponse.sendRedirect("/index.html");
     }
 
