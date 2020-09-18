@@ -16,6 +16,9 @@ public class RequestHeader {
         }
         while ((line != null) && !line.isEmpty()) {
             String[] token = line.split(": ");
+            if(token.length != 2) {
+                throw new IllegalArgumentException("No value for the key: " + token[0]);
+            }
             params.put(token[0].toLowerCase(), token[1]);
             line = br.readLine();
         }
