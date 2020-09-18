@@ -1,8 +1,9 @@
 package webserver;
 
 import static utils.IOUtils.writeWithLineSeparator;
+import static webserver.Controller.mapping;
+import static webserver.Response.emptyResponse;
 
-import db.DataBase;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -10,14 +11,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import model.User;
+import java.util.Map;
+import java.util.function.BiFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.FileIoUtils;
 
 public class RequestHandler implements Runnable {
 
@@ -35,20 +35,12 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             Request request = requestParser(in);
-
+            BiFunction<Request, Response, Response> mapping = mapping(RequestType.of(request));
+            Response response = mapping.apply(request, emptyResponse());
             DataOutputStream dos = new DataOutputStream(out);
-            postRequestHandle(request, dos);
-            response(request, dos);
-        } catch (IOException | URISyntaxException e) {
+            response(response, dos);
+        } catch (IOException e) {
             logger.error(e.getMessage());
-        }
-    }
-
-    private void response(Request request, DataOutputStream dos) throws IOException, URISyntaxException {
-        if (request.isGet()) {
-            byte[] fileData = fileDataFinder(request);
-            response200Header(request, dos, fileData.length);
-            responseBody(dos, fileData);
         }
     }
 
@@ -65,47 +57,35 @@ public class RequestHandler implements Runnable {
         return new Request(lines, br);
     }
 
-    private void response200Header(Request request, DataOutputStream dos, int lengthOfBodyContent) {
-        AcceptType type = request.getType();
+    private void response(Response response, DataOutputStream dos) {
         try {
-            writeWithLineSeparator(dos, "HTTP/1.1 200 OK ");
-            writeWithLineSeparator(dos, "Content-Type: " + type.getContentType() + ";charset=utf-8");
-            writeWithLineSeparator(dos, "Content-Length: " + lengthOfBodyContent);
+            responseFirstLine(response, dos);
+            responseHeaders(dos, response);
             dos.writeBytes(System.lineSeparator());
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void response302Header(DataOutputStream dos) {
-        try {
-            writeWithLineSeparator(dos, "HTTP/1.1 302 Found ");
-            writeWithLineSeparator(dos, "Location: http://localhost:8080/index.html ");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
+            responseBody(response, dos);
             dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void postRequestHandle(Request request, DataOutputStream dos) {
-        if (request.isPost()) {
-            User user = request.getBody(User.class);
+    private void responseFirstLine(Response response, DataOutputStream dos) throws IOException {
+        Status status = response.getStatus();
+        writeWithLineSeparator(dos,
+            String.format("%s %d %s", response.getVersion(), status.getCode(), status.getMessage()));
+    }
 
-            DataBase.addUser(user);
-            response302Header(dos);
+    private void responseHeaders(DataOutputStream dos, Response response) throws IOException {
+        Map<String, String> headers = response.getHeaders();
+        for (String name : headers.keySet()) {
+            writeWithLineSeparator(dos, String.format("%s %s", name, headers.get(name)));
         }
     }
 
-    private byte[] fileDataFinder(Request request) throws IOException, URISyntaxException {
-        AcceptType type = request.getType();
-        return FileIoUtils.loadFileFromClasspath(type.getFileRootPath() + request.getPath());
+    private void responseBody(Response response, DataOutputStream dos) throws IOException {
+        if (!response.isBodyEmpty()) {
+            byte[] body = response.getBody();
+            dos.write(body, 0, body.length);
+        }
     }
 }

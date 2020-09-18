@@ -32,12 +32,16 @@ public class Request {
         return method.isGet();
     }
 
-    public boolean isPost() {
-        return method.isPost();
+    public HttpMethod getMethod() {
+        return method;
     }
 
     public String getPath() {
         return path;
+    }
+
+    public String getVersion() {
+        return version;
     }
 
     public AcceptType getType() {
