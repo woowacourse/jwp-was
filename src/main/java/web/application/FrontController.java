@@ -2,29 +2,37 @@ package web.application;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiConsumer;
+import web.application.controller.Controller;
 import web.application.controller.CreateUserController;
 import web.application.controller.PageNotFoundController;
 import web.application.controller.RootController;
+import web.application.controller.StaticController;
 import web.application.vo.RequestVo;
 import web.server.domain.request.HttpRequest;
 import web.server.domain.request.RequestMethod;
 import web.server.domain.response.HttpResponse;
 
-public class FrontController {
+public class FrontController implements Controller {
 
-    private static final Map<RequestVo, BiConsumer<HttpRequest, HttpResponse>> mapper;
+    private final Map<RequestVo, Controller> mapper;
 
-    static {
+    public FrontController() {
         mapper = new HashMap<>();
-        mapper.put(RequestVo.of("/user/create", RequestMethod.POST), CreateUserController.getInstance()::doPost);
-        mapper.put(RequestVo.of("/", RequestMethod.GET), RootController.getInstance()::doGet);
+        mapper.put(RequestVo.of("/user/create", RequestMethod.POST), CreateUserController.getInstance());
+        mapper.put(RequestVo.of("/", RequestMethod.GET), RootController.getInstance());
     }
 
-    public static BiConsumer<HttpRequest, HttpResponse> findMatchingService(RequestVo requestVo) {
-        if (mapper.containsKey(requestVo)) {
-            return mapper.get(requestVo);
+    @Override
+    public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
+        if (httpRequest.hasPathOfStaticFile()) {
+            StaticController.getInstance().service(httpRequest, httpResponse);
+            return;
         }
-        return PageNotFoundController.getInstance()::doGet;
+        RequestVo requestVo = RequestVo.of(httpRequest.getPath(), httpRequest.getRequestMethod());
+        if (mapper.containsKey(requestVo)) {
+            mapper.get(requestVo).service(httpRequest, httpResponse);
+            return;
+        }
+        PageNotFoundController.getInstance().service(httpRequest, httpResponse);
     }
 }
