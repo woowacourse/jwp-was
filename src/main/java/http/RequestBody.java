@@ -19,8 +19,11 @@ public class RequestBody {
 
         String[] tokens = line.split("&");
         for (String token : tokens) {
-            String[] keyValue = token.split("="); //TODO 중복되는 키가 들어오거나 value가 없는 경우에는 어떤 정책을 가져갈지.. -h
-            params.put(keyValue[0], keyValue[1]);
+            String[] keyValue = token.split("=");
+            if(keyValue.length != 2) {
+                throw new IllegalArgumentException("No value for the key: " + keyValue[0]);
+            }
+            params.put(keyValue[0].toLowerCase(), keyValue[1]);
         }
     }
 
