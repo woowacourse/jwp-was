@@ -2,8 +2,6 @@ package webserver;
 
 import controller.Controller;
 import controller.ControllerMapper;
-import controller.StaticFileController;
-import controller.UserController;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,8 +18,6 @@ public class RequestHandler implements Runnable {
 
     private Socket connection;
     private ControllerMapper controllerMapper = new ControllerMapper();
-    private UserController userController = new UserController();
-    private StaticFileController staticFileController = new StaticFileController();
 
     RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -43,16 +39,19 @@ public class RequestHandler implements Runnable {
             HttpResponse response = controller.service(httpRequest);
 
             DataOutputStream dos = new DataOutputStream(out);
+            writeResponseOnOutputStream(dos, response);
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
 
-            try {
-                dos.writeBytes(response.buildHeader());
+    private void writeResponseOnOutputStream(DataOutputStream dos, HttpResponse response) {
+        try {
+            dos.writeBytes(response.buildHeader());
 
-                byte[] body = response.getBody();
-                dos.write(body, 0, body.length);
-                dos.flush();
-            } catch (IOException e) {
-                logger.error(e.getMessage());
-            }
+            byte[] body = response.getBody();
+            dos.write(body, 0, body.length);
+            dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
