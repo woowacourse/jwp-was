@@ -61,7 +61,6 @@ class RequestHandlerTest {
         headerFields.put("Accept", "*/*");
         Header header = new Header(headerFields);
         HttpRequest httpRequest = new HttpRequest(requestLine, header, "");
-        byte[] body = FileIoUtils.loadFileFromClasspath("./templates/index.html");
 
         HttpResponse httpResponse = requestHandler.controlRequestAndResponse(httpRequest);
 

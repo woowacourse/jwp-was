@@ -4,10 +4,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import utils.IOUtils;
 import webserver.domain.Header;
 
 public class HttpRequest {
@@ -36,7 +38,7 @@ public class HttpRequest {
         }
         String line = br.readLine();
         RequestLine requestLine = RequestLine.of(line);
-        logger.debug("Request Line{}{}{}", lineSeparator, line, lineSeparator);
+        logger.debug("Request Line : {}", line);
 
         if (!br.ready()) {
             throw new RuntimeException("잘못된 HTTP 요청입니다. 헤더가 존재하지 않습니다.");
@@ -53,29 +55,16 @@ public class HttpRequest {
             }
             logger.debug("Header : {}", line);
         }
+        Header header = new Header(headerFields);
 
-        logger.debug("Content-Length : {}", headerFields.get("Content-Length"));
+        String contentLength = headerFields.get("Content-Length");
+        if (Objects.isNull(contentLength)) {
+            return new HttpRequest(requestLine, header, "");
+        }
+        String body = IOUtils.readData(br, Integer.parseInt(headerFields.get("Content-Length")));
+        logger.debug("Body : {}", body);
 
-        // TODO: 2020/09/18 body 추출하는 데 IOUtils.readData 활용
-        // if (!br.ready()) {
-        //     return new HttpRequest(requestLine, new Header(headerFields));
-        // }
-        // StringBuilder body = new StringBuilder();
-        //     line = br.readLine();
-        // do {
-        //     line = br.readLine();
-        //     if (line == null) {
-        //         break;
-        //     }
-        //     body.append(line);
-        //     body.append(lineSeparator);
-        // } while (!line.equals(""));
-        // if (body.substring(body.length() - lineSeparator.length(), body.length()).equals(lineSeparator)) {
-        //     body.delete(body.length() - lineSeparator.length(), body.length());
-        // }
-        // logger.debug("Body{}{}", lineSeparator, body);
-        //
-        return new HttpRequest(requestLine, new Header(headerFields), "");
+        return new HttpRequest(requestLine, header, body);
     }
 
     public String getPath() {
