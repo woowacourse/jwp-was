@@ -1,4 +1,4 @@
-package web;
+package http.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,11 +14,11 @@ public class RequestBody {
 
     private String body;
 
-    public RequestBody(BufferedReader br, int contentLength) throws IOException {
+    public RequestBody(BufferedReader bufferedReader, int contentLength) throws IOException {
         if (hasNoBody(contentLength)) {
             return;
         }
-        this.body = IOUtils.readData(br, contentLength);
+        this.body = IOUtils.readData(bufferedReader, contentLength);
     }
 
     private boolean hasNoBody(int contentLength) {

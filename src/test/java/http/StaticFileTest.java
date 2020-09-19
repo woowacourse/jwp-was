@@ -1,4 +1,4 @@
-package web;
+package http;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -12,7 +12,7 @@ class StaticFileTest {
     @DisplayName("지원하는 정적파일 찾기")
     @ParameterizedTest
     @CsvSource(value = {"/fonts/glyphicons-halflings-regular.woff, text/woff", "/css/bootstrap.min.css, text/css",
-        "/index.html, text/html", "/js/bootstrap.min.js, text/javascript"})
+        "/index.html, text/html;charset=utf-8", "/js/bootstrap.min.js, text/javascript"})
     void findStaticFile(String requestPath, String contentType) {
         StaticFile staticFile = StaticFile.findStaticFile(requestPath);
         assertThat(staticFile.getContentType()).isEqualTo(contentType);

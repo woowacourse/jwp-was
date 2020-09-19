@@ -1,10 +1,10 @@
-package web;
+package http;
 
 import java.util.Arrays;
 
 public enum StaticFile {
 
-    HTML(".html", "./templates", "text/html"),
+    HTML(".html", "./templates", "text/html;charset=utf-8"),
     ICO(".ico", "./templates", "image/vnd.microsoft.icon"),
     CSS(".css", "./static", "text/css"),
     JS(".js", "./static", "text/javascript"),

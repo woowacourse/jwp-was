@@ -1,11 +1,13 @@
-package web;
+package http.request;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Map;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,9 +32,14 @@ class RequestBodyTest {
         RequestLine requestLine = new RequestLine(bufferedReader);
         RequestHeader requestHeader = new RequestHeader(bufferedReader);
         RequestBody requestBody = new RequestBody(bufferedReader, requestHeader.getContentLength());
+        Map<String, String> parsedBody = requestBody.parseBody();
 
-        assertThat(requestBody.getBody()).isEqualTo(
-            "userId=sonypark&password=sony123&name=sony&email=sonypark0204@gmail.com");
+        assertAll(
+            () -> assertThat(parsedBody.get("userId")).isEqualTo("sonypark"),
+            () -> assertThat(parsedBody.get("password")).isEqualTo("sony123"),
+            () -> assertThat(parsedBody.get("name")).isEqualTo("sony"),
+            () -> assertThat(parsedBody.get("email")).isEqualTo("sonypark0204@gmail.com")
+        );
 
     }
 }

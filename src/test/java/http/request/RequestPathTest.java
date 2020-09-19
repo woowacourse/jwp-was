@@ -1,4 +1,4 @@
-package webserver;
+package http.request;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,10 +10,18 @@ class RequestPathTest {
 
     @DisplayName("RequestPath 파싱")
     @Test
+    void parse_RequestPath_With_No_Params() {
+        String path = "/user/create";
+        RequestPath requestPath = RequestPath.of(path);
+        assertThat(requestPath.getPath()).isEqualTo("/user/create");
+    }
+
+    @DisplayName("파라미터 포함한 RequestPath 파싱")
+    @Test
     void parse_RequestPath() {
         String path = "/user/create?userId=sony&password=pw123&name=sony&email=sonypark0204@gmail.com";
 
-        RequestPath requestPath = new RequestPath(path);
+        RequestPath requestPath = RequestPath.of(path);
 
         assertAll(
             () -> assertThat(requestPath.getPath()).isEqualTo("/user/create"),
@@ -23,4 +31,5 @@ class RequestPathTest {
             () -> assertThat(requestPath.getParameters("email")).isEqualTo("sonypark0204@gmail.com")
         );
     }
+
 }
