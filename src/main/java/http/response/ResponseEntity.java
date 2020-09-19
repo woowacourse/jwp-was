@@ -40,8 +40,10 @@ public class ResponseEntity {
 
     private static void responseBody(HttpResponse httpResponse, DataOutputStream dataOutputStream) throws IOException {
         byte[] body = httpResponse.getBody();
-        dataOutputStream.write(body, 0, body.length);
-        dataOutputStream.flush();
+        if (body != null) {
+            dataOutputStream.write(body, 0, body.length);
+            dataOutputStream.flush();
+        }
     }
 
 }
