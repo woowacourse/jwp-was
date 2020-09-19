@@ -13,19 +13,19 @@ import webserver.http.response.ResponseStatusLine;
 
 public class PageController extends Controller {
     public HttpResponse viewFile(HttpRequest httpRequest) {
-        if (httpRequest.getHttpStartLine().getHttpMethod() != RequestMethod.GET) {
+        if (httpRequest.getHttpMethod() != RequestMethod.GET) {
             return notAllowed(httpRequest);
         }
 
-        ResponseStatusLine responseStatusLine = new ResponseStatusLine(httpRequest.getHttpStartLine().getHttpVersion(),
+        ResponseStatusLine responseStatusLine = new ResponseStatusLine(httpRequest.getHttpVersion(),
             HttpStatus.OK);
 
         Map<String, String> headerInfo = new HashMap<>();
         ResponseBody responseBody;
         try {
-            FileMapping fileMapping = FileMapping.findByExtension(httpRequest.getHttpStartLine().getUrl());
+            FileMapping fileMapping = FileMapping.findByExtension(httpRequest.getUrl());
             headerInfo.put("Content-Type", fileMapping.getContentType());
-            responseBody = ResponseBody.ofFile(fileMapping.getFilePath() + httpRequest.getHttpStartLine().getUrl());
+            responseBody = ResponseBody.ofFile(fileMapping.getFilePath() + httpRequest.getUrl());
         } catch (Exception e) {
             return notFound(httpRequest);
         }

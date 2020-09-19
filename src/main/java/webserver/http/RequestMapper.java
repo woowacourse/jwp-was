@@ -21,7 +21,7 @@ public class RequestMapper {
     }
 
     public static HttpResponse mapPage(HttpRequest httpRequest) {
-        return Optional.of(httpRequest.getHttpStartLine().getUrl())
+        return Optional.of(httpRequest.getUrl())
             .map(mapper::get)
             .map(el -> el.apply(httpRequest))
             .orElseGet(() -> new PageController().viewFile(httpRequest));

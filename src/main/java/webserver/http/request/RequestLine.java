@@ -31,6 +31,10 @@ public class RequestLine {
         return requestMethod;
     }
 
+    public RequestUrl getHttpUrl() {
+        return requestUrl;
+    }
+
     public String getUrl() {
         return requestUrl.getUrl();
     }

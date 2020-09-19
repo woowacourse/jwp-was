@@ -15,7 +15,7 @@ import webserver.http.response.ResponseStatusLine;
 
 public class UserController extends Controller {
     public HttpResponse createUser(HttpRequest httpRequest) {
-        if (httpRequest.getHttpStartLine().getHttpMethod() != RequestMethod.POST) {
+        if (httpRequest.getHttpMethod() != RequestMethod.POST) {
             return notAllowed(httpRequest);
         }
 
@@ -29,7 +29,7 @@ public class UserController extends Controller {
             return badRequest(httpRequest);
         }
 
-        ResponseStatusLine responseStatusLine = new ResponseStatusLine(httpRequest.getHttpStartLine().getHttpVersion(),
+        ResponseStatusLine responseStatusLine = new ResponseStatusLine(httpRequest.getHttpVersion(),
             HttpStatus.FOUND);
         Map<String, String> headersInfo = new HashMap<>();
         headersInfo.put("Location", "/index.html");
