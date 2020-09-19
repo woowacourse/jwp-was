@@ -25,11 +25,12 @@ public class WebServer {
             logger.info("Web Application Server started {} port.", port);
 
             ExecutorService executor = Executors.newFixedThreadPool(100);
+            HandlerMapping handlerMapping = new HandlerMapping();
 
             // 클라이언트가 연결될때까지 대기한다.
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
-                executor.execute(new RequestHandler(connection));
+                executor.execute(new RequestHandler(connection, handlerMapping));
             }
         }
     }

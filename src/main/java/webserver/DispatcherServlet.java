@@ -1,6 +1,5 @@
 package webserver;
 
-import application.web.UserServlet;
 import http.HttpRequest;
 import http.HttpResponse;
 import http.ResourceType;
@@ -17,17 +16,29 @@ public class DispatcherServlet {
 
     private final HttpRequest request;
     private final HttpResponse response;
+    private final HandlerMapping handlerMapping;
 
-    public DispatcherServlet(HttpRequest request, HttpResponse response) {
+    public DispatcherServlet(HttpRequest request, HttpResponse response, HandlerMapping handlerMapping) {
         this.request = request;
         this.response = response;
+        this.handlerMapping = handlerMapping;
     }
 
     public void process() throws IOException, URISyntaxException {
         if (request.isStaticFileRequest()) {
             handleStaticFileRequest(request, response);
         } else {
-            handleAPIRequest(request, response);
+            Servlet servlet = handlerMapping.findServlet(request.getPath());
+            switch (request.getMethod()) {
+                case HTTP_METHOD_GET:
+                    servlet.doGet(request, response);
+                case HTTP_METHOD_POST:
+                    servlet.doPost(request, response);
+                case HTTP_METHOD_PUT:
+                    servlet.doPut(request, response);
+                case HTTP_METHOD_DELETE:
+                    servlet.doDelete(request, response);
+            }
         }
     }
 
@@ -40,13 +51,5 @@ public class DispatcherServlet {
 
         httpResponse.response200Header(resourceType.getContentType(), staticFile.length);
         httpResponse.responseBody(staticFile);
-    }
-
-    private void handleAPIRequest(HttpRequest httpRequest, HttpResponse httpResponse) {
-        if (HTTP_METHOD_POST.equals(httpRequest.getMethod()) && "/user/create".equals(httpRequest.getPath())) {
-            UserServlet userServlet = new UserServlet();
-            userServlet.doPost(request);
-            httpResponse.response302Header("/index.html");
-        }
     }
 }
