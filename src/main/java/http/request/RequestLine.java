@@ -22,7 +22,7 @@ public class RequestLine {
 
     public RequestLine(BufferedReader bufferedReader) {
         String requestLine = IOUtils.readRequestLine(bufferedReader);
-        logger.info(String.format("RequestLine: {}", requestLine));
+        logger.info("{}", requestLine);
         if (StringUtils.isEmpty(requestLine)) {
             logger.info("올바른 HTTP 요청이 아닙니다. RequestLine을 확인해주세요");
             throw new InvalidHttpRequestException();

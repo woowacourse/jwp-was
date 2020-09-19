@@ -18,13 +18,13 @@ public class RequestHeader {
 
     public RequestHeader(BufferedReader bufferedReader) throws IOException {
         String line = bufferedReader.readLine();
-        logger.info(String.format("RequestHeader: {}", line));
+        logger.info("{}", line);
 
         while (!StringUtils.isEmpty(line)) {
             String[] headerToken = line.split(HEADER_DELIMITER);
             headers.put(headerToken[0], headerToken[1]);
             line = bufferedReader.readLine();
-            logger.info(String.format("RequestHeader: {}", line));
+            logger.info("{}", line);
         }
     }
 
