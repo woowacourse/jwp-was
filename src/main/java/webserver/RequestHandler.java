@@ -1,35 +1,46 @@
 package webserver;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import db.DataBase;
-import model.User;
-import utils.FileIoUtils;
-import web.HttpMethod;
-import web.RequestBody;
-import web.RequestHeader;
-import web.RequestLine;
-import web.StaticFile;
+import controller.HttpRequestController;
+import controller.ResourceController;
+import controller.UserCreateController;
+import http.request.HttpRequest;
+import http.request.HttpRequestMapping;
+import http.request.HttpRequestParser;
+import http.response.HttpResponse;
+import http.response.ResponseEntity;
+import view.ModelAndView;
+import view.ViewResolver;
 
 public class RequestHandler implements Runnable {
+
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private final Socket connection;
+    private final HttpRequestController httpRequestController;
+    private final ViewResolver viewResolver;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
+        this.httpRequestController = setHttpRequestController();
+        this.viewResolver = new ViewResolver();
+    }
+
+    private HttpRequestController setHttpRequestController() {
+        HttpRequestController httpRequestController = new HttpRequestController(
+            new ResourceController(HttpRequestMapping.GET("/")));
+        UserCreateController userCreateController = new UserCreateController(HttpRequestMapping.POST("/user/create"));
+
+        httpRequestController.addController(userCreateController);
+        return httpRequestController;
     }
 
     public void run() {
@@ -37,78 +48,13 @@ public class RequestHandler implements Runnable {
             connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-            RequestLine requestLine = new RequestLine(bufferedReader);
-            RequestHeader requestHeader = new RequestHeader(bufferedReader);
-            RequestBody requestBody = null;
-            if (HttpMethod.POST == requestLine.getMethod()) {
-                requestBody = new RequestBody(bufferedReader, requestHeader.getContentLength());
-            }
 
-            DataOutputStream dos = new DataOutputStream(out);
-            String requestPath = requestLine.getPath();
-            byte[] body;
-            if (requestPath.endsWith("/user/create") && HttpMethod.POST == requestLine.getMethod()) {
-                Map<String, String> parsedBody = requestBody.parseBody();
-                String userId = parsedBody.get("userId");
-                String password = parsedBody.get("password");
-                String name = parsedBody.get("name");
-                String email = parsedBody.get("email");
-
-                User user = new User(userId, password, name, email);
-                DataBase.addUser(user);
-                body = user.toString().getBytes();
-                response302Header(dos, "/index.html");
-                responseBody(dos, body);
-            } else if (HttpMethod.GET == requestLine.getMethod()) {
-                StaticFile staticFile = StaticFile.findStaticFile(requestLine.getPath());
-                body = FileIoUtils.loadFileFromClasspath(staticFile.getResourcePath() + requestPath);
-                response200Header(dos, body.length, staticFile.getContentType());
-                responseBody(dos, body);
-            }
+            HttpRequest httpRequest = HttpRequestParser.parse(in);
+            ModelAndView modelAndView = httpRequestController.doService(httpRequest);
+            HttpResponse httpResponse = viewResolver.resolve(modelAndView);
+            ResponseEntity.build(httpResponse, out);
 
         } catch (IOException | URISyntaxException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: " + contentType + "\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void response302Header(DataOutputStream dos, String redirectUrl) {
-        try {
-            dos.writeBytes("HTTP/1.1 302 Found \r\n");
-            dos.writeBytes("Location: " + redirectUrl + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
