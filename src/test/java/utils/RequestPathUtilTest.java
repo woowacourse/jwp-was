@@ -2,7 +2,6 @@ package utils;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,14 +25,14 @@ class RequestPathUtilTest {
 
 	@Test
 	public void getRequestParameters() {
-		String request = "/user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
+		String request = "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
 
 		Map<String, String> expect = new HashMap<>();
 		expect.put("userId", "javajigi");
 		expect.put("password", "password");
-		expect.put("name", URLDecoder.decode("%EB%B0%95%EC%9E%AC%EC%84%B1"));
-		expect.put("email", URLDecoder.decode("javajigi%40slipp.net"));
+		expect.put("name", "박재성");
+		expect.put("email", "javajigi@slipp.net");
 
-		assertThat(RequestPathUtil.extractSignUpRequestData(request)).isEqualTo(expect);
+		assertThat(RequestPathUtil.extractParameters(request)).isEqualTo(expect);
 	}
 }

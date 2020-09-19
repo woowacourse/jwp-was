@@ -9,7 +9,6 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,11 +16,13 @@ import org.slf4j.LoggerFactory;
 import db.DataBase;
 import model.User;
 import utils.FileIoUtils;
-import utils.IOUtils;
 import utils.RequestPathUtil;
+import web.ContentType;
+import web.HttpRequest;
 
 public class RequestHandler implements Runnable {
 	private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+	public static final String INDEX_HTML_LOCATION = "/index.html";
 
 	private Socket connection;
 
@@ -35,52 +36,18 @@ public class RequestHandler implements Runnable {
 
 		try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
 			BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-			String requestHeader = br.readLine();
-			logger.debug("request line : {}", requestHeader);
 
-			String httpMethod = requestHeader.split(" ")[0];
-			String request = requestHeader.split(" ")[1];
+			HttpRequest request = HttpRequest.of(br);
 			DataOutputStream dos = new DataOutputStream(out);
 
-			int contextLength = 0;
-
-			while (!"".equals(requestHeader)) {
-				requestHeader = br.readLine();
-				if (requestHeader.contains("Content-Length")) {
-					contextLength = Integer.parseInt(requestHeader.split( " ")[1]);
-				}
-				logger.debug("header : {}", requestHeader);
-			}
-
-			if ("GET".equals(httpMethod) && "/user/create".equals(request)) {
-				String requestParameter = request.split("\\?")[1];
-				signUpUser(dos, requestParameter);
-			} else if("POST".equals(httpMethod) && "/user/create".equals(request)) {
-				String body = IOUtils.readData(br, contextLength);
-				logger.debug("body : {}", body);
-				signUpUser(dos, body);
+			if ("/user/create".equals(request.getPath())) {
+				signUpUser(dos, request);
 			} else {
-				String requestPath = RequestPathUtil.extractFilePath(request);
+				String filePath = request.getPath();
+				String requestPath = RequestPathUtil.extractFilePath(filePath);
 				byte[] body = FileIoUtils.loadFileFromClasspath(requestPath);
-				String contentType = "";
-
-				if (requestPath.endsWith("css")) {
-					contentType = "text/css";
-				} else if (requestPath.endsWith("js")) {
-					contentType = "application/javascript";
-				} else if (requestPath.endsWith("html")) {
-					contentType = "text/html";
-				} else if (requestPath.endsWith("ico")) {
-					contentType = "image/vnd.microsoft.icon";
-				} else if (requestPath.endsWith("woff")) {
-					contentType = "text/woff";
-				} else if (requestPath.endsWith("png")) {
-					contentType = "image/png";
-				} else if (requestPath.endsWith("jpeg")) {
-					contentType = "image/jpeg";
-				} else if (requestPath.endsWith("svg")) {
-					contentType = "image/svg_xml";
-				}
+				String contentType = ContentType.of(filePath)
+					.getContentType();
 
 				response200Header(dos, body.length, contentType);
 				responseBody(dos, body);
@@ -90,14 +57,13 @@ public class RequestHandler implements Runnable {
 		}
 	}
 
-	private void signUpUser(DataOutputStream dos, String requestParameter) {
-		Map<String, String> requestParameters = RequestPathUtil.extractSignUpRequestData(requestParameter);
-		User user = new User(requestParameters.get("userId"), requestParameters.get("password"),
-			requestParameters.get("name"), requestParameters.get("email"));
+	private void signUpUser(DataOutputStream dos, HttpRequest request) {
+		User user = new User(request.getParameter("userId"), request.getParameter("password"),
+			request.getParameter("name"), request.getParameter("email"));
 		DataBase.addUser(user);
 
 		logger.debug("Database : {}", user);
-		response302Header(dos, "/index.html");
+		response302Header(dos, INDEX_HTML_LOCATION);
 	}
 
 	private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
