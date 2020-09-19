@@ -33,16 +33,10 @@ public class HttpRequest {
     }
 
     public static HttpRequest of(BufferedReader br) throws IOException {
-        if (!br.ready()) {
-            throw new RuntimeException("잘못된 HTTP 요청입니다. 요청라인이 존재하지 않습니다.");
-        }
         String line = br.readLine();
         RequestLine requestLine = RequestLine.of(line);
         logger.debug("Request Line : {}", line);
 
-        if (!br.ready()) {
-            throw new RuntimeException("잘못된 HTTP 요청입니다. 헤더가 존재하지 않습니다.");
-        }
         Map<String, String> headerFields = new HashMap<>();
         while (!line.equals("")) {
             line = br.readLine();
