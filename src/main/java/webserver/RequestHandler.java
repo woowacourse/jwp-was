@@ -62,8 +62,27 @@ public class RequestHandler implements Runnable {
 			} else {
 				String requestPath = RequestPathUtil.extractFilePath(request);
 				byte[] body = FileIoUtils.loadFileFromClasspath(requestPath);
+				String contentType = "";
 
-				response200Header(dos, body.length);
+				if (requestPath.endsWith("css")) {
+					contentType = "text/css";
+				} else if (requestPath.endsWith("js")) {
+					contentType = "application/javascript";
+				} else if (requestPath.endsWith("html")) {
+					contentType = "text/html";
+				} else if (requestPath.endsWith("ico")) {
+					contentType = "image/vnd.microsoft.icon";
+				} else if (requestPath.endsWith("woff")) {
+					contentType = "text/woff";
+				} else if (requestPath.endsWith("png")) {
+					contentType = "image/png";
+				} else if (requestPath.endsWith("jpeg")) {
+					contentType = "image/jpeg";
+				} else if (requestPath.endsWith("svg")) {
+					contentType = "image/svg_xml";
+				}
+
+				response200Header(dos, body.length, contentType);
 				responseBody(dos, body);
 			}
 		} catch (IOException | URISyntaxException e) {
@@ -81,10 +100,10 @@ public class RequestHandler implements Runnable {
 		response302Header(dos, "/index.html");
 	}
 
-	private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+	private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
 		try {
 			dos.writeBytes("HTTP/1.1 200 OK \r\n");
-			dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+			dos.writeBytes("Content-Type: " + contentType + ";charset=utf-8\r\n");
 			dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
 			dos.writeBytes("\r\n");
 		} catch (IOException e) {
