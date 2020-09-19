@@ -9,34 +9,30 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class DispatcherServlet {
-    public static final String HTTP_METHOD_POST = "POST";
-    public static final String HTTP_METHOD_GET = "GET";
-    public static final String HTTP_METHOD_PUT = "PUT";
-    public static final String HTTP_METHOD_DELETE = "DELETE";
+    public static final String GET = "GET";
+    public static final String POST = "POST";
+    public static final String PUT = "PUT";
+    public static final String DELETE = "DELETE";
 
-    private final HttpRequest request;
-    private final HttpResponse response;
     private final HandlerMapping handlerMapping;
 
-    public DispatcherServlet(HttpRequest request, HttpResponse response, HandlerMapping handlerMapping) {
-        this.request = request;
-        this.response = response;
+    public DispatcherServlet(HandlerMapping handlerMapping) {
         this.handlerMapping = handlerMapping;
     }
 
-    public void process() throws IOException, URISyntaxException {
+    public void process(HttpRequest request, HttpResponse response) throws IOException, URISyntaxException {
         if (request.isStaticFileRequest()) {
             handleStaticFileRequest(request, response);
         } else {
             Servlet servlet = handlerMapping.findServlet(request.getPath());
             switch (request.getMethod()) {
-                case HTTP_METHOD_GET:
+                case GET:
                     servlet.doGet(request, response);
-                case HTTP_METHOD_POST:
+                case POST:
                     servlet.doPost(request, response);
-                case HTTP_METHOD_PUT:
+                case PUT:
                     servlet.doPut(request, response);
-                case HTTP_METHOD_DELETE:
+                case DELETE:
                     servlet.doDelete(request, response);
             }
         }

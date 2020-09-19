@@ -13,11 +13,11 @@ public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
-    private HandlerMapping handlerMapping;
+    private DispatcherServlet dispatcherServlet;
 
-    public RequestHandler(Socket connectionSocket, HandlerMapping handlerMapping) {
+    public RequestHandler(Socket connectionSocket, DispatcherServlet dispatcherServlet) {
         this.connection = connectionSocket;
-        this.handlerMapping = handlerMapping;
+        this.dispatcherServlet = dispatcherServlet;
     }
 
     public void run() {
@@ -32,8 +32,7 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = new HttpRequest(br);
             HttpResponse httpResponse = new HttpResponse(dos);
 
-            DispatcherServlet dispatcherServlet = new DispatcherServlet(httpRequest, httpResponse, handlerMapping);
-            dispatcherServlet.process();
+            dispatcherServlet.process(httpRequest, httpResponse);
         } catch (IOException e) {
             logger.error(e.getMessage());
         } catch (URISyntaxException e) {
