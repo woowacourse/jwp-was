@@ -29,6 +29,12 @@ public class StaticFileController extends AbstractController {
 
             return new HttpResponse(StatusCode.OK, body, contentType);
 
+        } catch (IllegalArgumentException e) {
+            logger.error("There is no corresponding file for uri \"{}\". : {}",
+                httpRequest.getUriPath(),
+                e.getMessage()
+            );
+            return new HttpResponse(StatusCode.NOT_FOUND);
         } catch (IOException e) {
             logger.error("fail to read static file that uri is \"{}\" : {}",
                 httpRequest.getUriPath(),
@@ -36,7 +42,7 @@ public class StaticFileController extends AbstractController {
             );
             return new HttpResponse(StatusCode.INTERNAL_SERVER_ERROR);
         } catch (URISyntaxException e) {
-            logger.error("There is no corresponding file for uri \"{}\". : {}",
+            logger.error("uri \"{}\" syntax is wrong. : {}",
                 httpRequest.getUriPath(),
                 e.getMessage()
             );

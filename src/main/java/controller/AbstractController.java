@@ -3,6 +3,7 @@ package controller;
 import request.HttpRequest;
 import request.Method;
 import response.HttpResponse;
+import response.StatusCode;
 
 abstract public class AbstractController implements Controller {
 
@@ -20,7 +21,7 @@ abstract public class AbstractController implements Controller {
         if (httpRequest.isMethod(Method.DELETE)) {
             return doDelete(httpRequest);
         }
-        throw new IllegalArgumentException("http request method not a predefined http method.");
+        return new HttpResponse(StatusCode.NOT_FOUND);
     }
 
     abstract public HttpResponse doGet(HttpRequest httpRequest);
