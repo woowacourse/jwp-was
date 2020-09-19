@@ -1,5 +1,7 @@
 package http.response;
 
+import java.util.Map;
+
 import http.HttpStatus;
 import http.HttpVersion;
 
@@ -25,8 +27,12 @@ public class HttpResponse {
         return new HttpResponse(header, status, version, null);
     }
 
-    public ResponseHeader getHeader() {
-        return header;
+    public Map<String, String> getHeaders() {
+        return header.getHeaders();
+    }
+
+    public String getHeader(String key) {
+        return header.getHeader(key);
     }
 
     public HttpStatus getStatus() {

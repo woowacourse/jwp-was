@@ -31,7 +31,7 @@ public class ResponseEntity {
 
     private static void responseHeader(HttpResponse httpResponse, DataOutputStream dataOutputStream) throws
         IOException {
-        for (Map.Entry<String, String> headerKeyValue : httpResponse.getHeader().getHeaders().entrySet()) {
+        for (Map.Entry<String, String> headerKeyValue : httpResponse.getHeaders().entrySet()) {
             dataOutputStream.writeBytes(headerKeyValue.getKey() + ": " + headerKeyValue.getValue() + lineSeparator);
         }
         // HEADER 와 BODY 사이릃 한 줄 띄워야 한다.
