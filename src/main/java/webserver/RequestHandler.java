@@ -60,7 +60,16 @@ public class RequestHandler implements Runnable {
             String path = httpRequest.getPath();
             byte[] body = FileIoUtils.loadFileFromClasspath(path);
             Map<String, String > headerFields = new HashMap<>();
-            headerFields.put("Content-Type", "text/html;charset=utf-8");
+            if (path.endsWith(".html")) {
+                headerFields.put("Content-Type", "text/html;charset=utf-8");
+            } else if (path.endsWith(".css")) {
+                headerFields.put("Content-Type", "text/css");
+            } else if (path.endsWith(".js")) {
+                headerFields.put("Content-Type", "application/javascript");
+            } else {
+                headerFields.put("Content-Type", "text/plain");
+            }
+            logger.debug("Content-Type : {}", headerFields.get("Content-Type"));
             headerFields.put("Content-Length", String.valueOf(body.length));
             Header header = new Header(headerFields);
             return HttpResponse.of("200", header, body);
