@@ -17,11 +17,11 @@ public class HttpRequestFactory {
     public static HttpRequest create(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
-        RequestStartLine requestStartLine = RequestStartLine.from(bufferedReader.readLine());
+        RequestLine requestLine = RequestLine.from(bufferedReader.readLine());
         RequestHeaders requestHeaders = getHttpHeaders(bufferedReader);
 
         String body = IOUtils.readData(bufferedReader, requestHeaders.getContentLength());
-        return new HttpRequest(requestStartLine, requestHeaders, new RequestBody(body));
+        return new HttpRequest(requestLine, requestHeaders, new RequestBody(body));
     }
 
     private static RequestHeaders getHttpHeaders(BufferedReader bufferedReader) throws IOException {

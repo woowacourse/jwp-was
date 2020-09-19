@@ -12,7 +12,7 @@ import webserver.http.request.HttpRequest;
 import webserver.http.request.RequestBody;
 import webserver.http.request.RequestHeaders;
 import webserver.http.request.RequestMethod;
-import webserver.http.request.RequestStartLine;
+import webserver.http.request.RequestLine;
 import webserver.http.request.RequestUrl;
 
 class UserControllerTest {
@@ -21,10 +21,10 @@ class UserControllerTest {
     @DisplayName("유저를 생성한다.")
     @Test
     void createUser() {
-        RequestStartLine requestStartLine = new RequestStartLine(RequestMethod.POST, RequestUrl.from("/user/create"),
+        RequestLine requestLine = new RequestLine(RequestMethod.POST, RequestUrl.from("/user/create"),
             "HTTP/1.1");
         RequestHeaders requestHeaders = new RequestHeaders(new HashMap<>());
-        HttpRequest httpRequest = new HttpRequest(requestStartLine, requestHeaders, new RequestBody("userId=hello&password=password&name=myname&email=is@name.com"));
+        HttpRequest httpRequest = new HttpRequest(requestLine, requestHeaders, new RequestBody("userId=hello&password=password&name=myname&email=is@name.com"));
 
         assertThat(userController.createUser(httpRequest))
             .extracting("responseStatus")
@@ -37,10 +37,10 @@ class UserControllerTest {
     @DisplayName("잘못된 값이 들어올 시 400 처리")
     @Test
     void createUserWithException() {
-        RequestStartLine requestStartLine = new RequestStartLine(RequestMethod.POST, RequestUrl.from("/user/create"),
+        RequestLine requestLine = new RequestLine(RequestMethod.POST, RequestUrl.from("/user/create"),
             "HTTP/1.1");
         RequestHeaders requestHeaders = new RequestHeaders(new HashMap<>());
-        HttpRequest httpRequest = new HttpRequest(requestStartLine, requestHeaders, new RequestBody("name.com"));
+        HttpRequest httpRequest = new HttpRequest(requestLine, requestHeaders, new RequestBody("name.com"));
 
         assertThat(userController.createUser(httpRequest))
             .extracting("responseStatus")
