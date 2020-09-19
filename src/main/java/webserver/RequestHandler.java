@@ -65,8 +65,11 @@ public class RequestHandler implements Runnable {
     public byte[] handle(InputStream inputStream) {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         try {
-            if (bufferedReader.readLine().contains("/index.html")) {
+            String firstLine = bufferedReader.readLine();
+            if (firstLine.contains("/index.html")) {
                 return FileIoUtils.loadFileFromClasspath("./templates/index.html");
+            } else if (firstLine.contains("/user/form.html")) {
+                return FileIoUtils.loadFileFromClasspath("./templates/user/form.html");
             }
         } catch (IOException | URISyntaxException e) {
             return ERROR_BODY;

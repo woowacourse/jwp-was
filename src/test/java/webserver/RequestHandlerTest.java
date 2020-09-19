@@ -41,6 +41,26 @@ class RequestHandlerTest {
         assertThat(actual).isEqualTo(expected);
     }
 
+    @DisplayName("/user/form.html 로 접속했을 때 /form.html을 반환한다.")
+    @Test
+    void formHandlerTest() throws IOException, URISyntaxException {
+        // given
+        StringBuilder request = new StringBuilder();
+        request.append("GET /user/form.html HTTP/1.1 \n");
+        request.append("Host: localhost:8080 \n");
+        request.append("Connection: keep-alive \n");
+        request.append("Accept: */* \n");
+
+        InputStream inputStream = new ByteArrayInputStream(request.toString().getBytes());
+
+        // when
+        byte[] actual = requestHandler.handle(inputStream);
+
+        // then
+        byte[] expected = FileIoUtils.loadFileFromClasspath("./templates/user/form.html");
+        assertThat(actual).isEqualTo(expected);
+    }
+
     @DisplayName("매칭되는 location이 없으면 Default 값을 반환한다.")
     @Test
     void defaultHandleTest() {
