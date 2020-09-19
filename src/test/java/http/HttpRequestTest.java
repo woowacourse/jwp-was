@@ -1,4 +1,4 @@
-package web;
+package http;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,7 +11,7 @@ import java.io.StringReader;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class HttpRequestTest {
+public class HttpRequestTest {
     public static final String NEW_LINE = System.lineSeparator();
 
     private HttpRequest httpRequest;
