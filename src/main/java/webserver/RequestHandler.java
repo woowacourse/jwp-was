@@ -1,16 +1,17 @@
 package webserver;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.Socket;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.FileIoUtils;
+
+import java.io.*;
+import java.net.Socket;
+import java.net.URISyntaxException;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final byte[] DEFAULT_BODY = "Hello World".getBytes();
+    private static final byte[] ERROR_BODY = "Error".getBytes();
 
     private Socket connection;
 
@@ -25,12 +26,16 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = "Hello World".getBytes();
+            byte[] body = handle(in);
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    public static byte[] getDefaultBody() {
+        return DEFAULT_BODY;
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
@@ -51,5 +56,21 @@ public class RequestHandler implements Runnable {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    public static byte[] getErrorBody() {
+        return ERROR_BODY;
+    }
+
+    public byte[] handle(InputStream inputStream) {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        try {
+            if (bufferedReader.readLine().contains("/index.html")) {
+                return FileIoUtils.loadFileFromClasspath("./templates/index.html");
+            }
+        } catch (IOException | URISyntaxException e) {
+            return ERROR_BODY;
+        }
+        return DEFAULT_BODY;
     }
 }
