@@ -63,7 +63,7 @@ class RequestTest {
         BufferedReader bufferedReader = new BufferedReader(new StringReader(httpRequest));
         Request request = new Request(bufferedReader);
 
-        String actual = request.extractBody();
+        String actual = request.getBody();
         String expect = "userId=javajigi&password=password&name=name&email=javajigi@slipp.net";
 
         assertThat(actual).isEqualTo(expect);

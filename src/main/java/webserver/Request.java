@@ -6,25 +6,25 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 public class Request {
-    private static final String NAME_AND_VALUE_DELIMITER = " ";
-    private static final int HTTP_METHOD_INDEX = 0;
+    private static final String REQUEST_LINE_DELIMITER = " ";
     private static final int VALUE_INDEX = 1;
+    private static final int HTTP_METHOD_INDEX = 0;
     private static final int REQUEST_LINE_LENGTH = 3;
 
-    private final BufferedReader bufferedReader;
     private final RequestLine requestLine;
+    private final String body;
 
     public Request(BufferedReader bufferedReader) {
         if (bufferedReader == null) {
             throw new IllegalArgumentException("bufferedReader는 null일 수 없습니다.");
         }
-        this.bufferedReader = bufferedReader;
-        this.requestLine = createRequestLine();
+        this.requestLine = createRequestLine(bufferedReader);
+        this.body = extractBody(bufferedReader);
     }
 
-    private RequestLine createRequestLine() {
-        String requestLine = readLine();
-        String[] tokens = requestLine.split(NAME_AND_VALUE_DELIMITER);
+    private RequestLine createRequestLine(BufferedReader bufferedReader) {
+        String requestLine = readLine(bufferedReader);
+        String[] tokens = requestLine.split(REQUEST_LINE_DELIMITER);
         if (tokens.length != REQUEST_LINE_LENGTH) {
             throw new RuntimeException("잘못된 RequetLine입니다." + requestLine);
         }
@@ -33,7 +33,7 @@ public class Request {
     }
 
 
-    private String readLine() {
+    private String readLine(BufferedReader bufferedReader) {
         try {
             return bufferedReader.readLine();
         } catch (IOException e) {
@@ -41,26 +41,25 @@ public class Request {
         }
     }
 
-    public String extractQueryString() {
-        return this.requestLine.extractQueryString();
-    }
-
-    public String extractBody() {
-        String line = readLine();
+    private String extractBody(BufferedReader bufferedReader) {
+        String line = readLine(bufferedReader);
         int contentLength = 0;
         while ((line != null) && (!line.isEmpty())) {
-            if (line.contains("Content-Length")) {
-                String[] tokens = line.split(NAME_AND_VALUE_DELIMITER);
+            if (HttpMessage.CONTENT_LENGTH.isMatch(line)) {
+                String[] tokens = line.split(REQUEST_LINE_DELIMITER);
                 contentLength = Integer.parseInt(tokens[VALUE_INDEX]);
             }
-            line = readLine();
+            line = readLine(bufferedReader);
         }
-
         return IOUtils.readData(bufferedReader, contentLength);
     }
 
-    public boolean isMatchRequestLine(RequestLine requestLine) {
-        return this.requestLine.isMatch(requestLine);
+    public boolean isMatchHttpMethod(HttpMethod httpMethod) {
+        return requestLine.isMatchHttpMethod(httpMethod);
+    }
+
+    public boolean containsPath(String path) {
+        return requestLine.containsPath(path);
     }
 
     public String getResource() {
@@ -70,4 +69,13 @@ public class Request {
     public RequestLine getRequestLine() {
         return requestLine;
     }
+
+    public String getQueryString() {
+        return this.requestLine.extractQueryString();
+    }
+
+    public String getBody() {
+        return body;
+    }
+
 }

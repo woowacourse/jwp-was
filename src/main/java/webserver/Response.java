@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class Response {
-    private HttpStatus status;
-    private FileResponse fileResponse;
-    private String location;
+    private final HttpStatus status;
+    private final FileResponse fileResponse;
+    private final String location;
 
     private Response(HttpStatus status, FileResponse fileResponse, String location) {
         this.status = status;
@@ -36,15 +36,15 @@ public class Response {
     }
 
     private void redirect302Header(DataOutputStream dos) throws IOException {
-        dos.writeBytes("HTTP/1.1 302 FOUND \r\n");
-        dos.writeBytes("Location: " + this.location + "\r\n");
+        dos.writeBytes(String.format("%s %s \r\n", HttpMessage.HTTP_VERSION.getName(), HttpMessage.STATUS_FOUND.getName()));
+        dos.writeBytes(String.format("%s: %d \r\n", HttpMessage.LOCATION.getName(), this.location));
         dos.flush();
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) throws IOException {
-        dos.writeBytes("HTTP/1.1 200 OK \r\n");
-        dos.writeBytes(String.format("Content-Type: %s;charset=utf-8\r\n", fileResponse.getContentType()));
-        dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+        dos.writeBytes(String.format("%s %s \r\n", HttpMessage.HTTP_VERSION.getName(), HttpMessage.STATUS_OK.getName()));
+        dos.writeBytes(String.format("%s: %s;charset=utf-8 \r\n", HttpMessage.CONTENT_TYPE, fileResponse.getContentType()));
+        dos.writeBytes(String.format("%s: %d \r\n", HttpMessage.CONTENT_LENGTH, lengthOfBodyContent));
         dos.writeBytes("\r\n");
     }
 
