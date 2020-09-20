@@ -54,4 +54,8 @@ public class ServletRequest {
     public String getHeader(String header) {
         return requestHeader.getHeader(header);
     }
+
+    public String getAccept() {
+        return requestHeader.getHeader("ACCEPT");
+    }
 }

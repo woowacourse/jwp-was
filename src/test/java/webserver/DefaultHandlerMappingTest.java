@@ -13,14 +13,14 @@ import model.User;
 import webserver.controller.IndexController;
 import webserver.controller.UserController;
 
-class HandlerMappingTest {
+class DefaultHandlerMappingTest {
 
     @DisplayName("올바른 헨들러를 반환한다.")
     @Test
     void mapping() throws NoSuchMethodException {
-        HandlerMapping handlerMapping = new HandlerMapping(Arrays.asList(IndexController.class, UserController.class));
+        DefaultHandlerMapping defaultHandlerMapping = new DefaultHandlerMapping(Arrays.asList(IndexController.class, UserController.class));
         ServletRequest servletRequest = new ServletRequest(REQUEST_HEADER, REQUEST_BODY);
-        Method findMethod = handlerMapping.mapping(servletRequest);
+        Method findMethod = defaultHandlerMapping.mapping(servletRequest);
 
         assertThat(findMethod).isEqualTo(UserController.class.getMethod("create", User.class));
     }
@@ -28,9 +28,9 @@ class HandlerMappingTest {
     @DisplayName(".html로 끝나는 Path는 파싱후 적절한 핸들러에 매핑된다.")
     @Test
     void mappingHtml() throws NoSuchMethodException {
-        HandlerMapping handlerMapping = new HandlerMapping(Arrays.asList(IndexController.class, UserController.class));
+        DefaultHandlerMapping defaultHandlerMapping = new DefaultHandlerMapping(Arrays.asList(IndexController.class, UserController.class));
         ServletRequest servletRequest = new ServletRequest(REQUEST_HEADER_WITH_HTML, REQUEST_BODY);
-        Method findMethod = handlerMapping.mapping(servletRequest);
+        Method findMethod = defaultHandlerMapping.mapping(servletRequest);
 
         assertThat(findMethod).isEqualTo(IndexController.class.getMethod("index"));
     }

@@ -2,6 +2,7 @@ package webserver;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import utils.FileIoUtils;
@@ -29,7 +30,23 @@ public class ServletResponse {
         this.attributes = attributes;
     }
 
-    public void createResponse(DataOutputStream dos, ServletRequest request) throws IOException {
+    public ServletResponse(StatusCode statusCode) {
+        this.statusCode = statusCode;
+        this.attributes = new HashMap<>();
+    }
+
+    public void sendResponse(DataOutputStream dos, ServletRequest request, View body) throws IOException {
+        String contentType = request.getHeader("Accept");
+
+        dos.writeBytes(String.format("%s %d %s \r\n", request.getProtocolVersion(), statusCode.getStatusCode(),
+            statusCode.name()));
+        dos.writeBytes(String.format("Content-Type: %s;charset=utf-8\r\n", contentType.split(",")[0]));
+        dos.writeBytes("Content-Length: " + body.getLength() + "\r\n");
+        dos.writeBytes("\r\n");
+        responseBody(dos, body.getView());
+    }
+
+    public void sendResponse(DataOutputStream dos, ServletRequest request) throws IOException {
         String contentType = request.getHeader("Accept");
 
         dos.writeBytes(String.format("%s %d %s \r\n", request.getProtocolVersion(), statusCode.getStatusCode(),
