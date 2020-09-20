@@ -4,26 +4,23 @@ public class RequestLine {
 
     private static final String HTTP_METHOD_GET = "GET";
     private static final String HTTP_METHOD_POST = "POST";
-    private static final String ROOT_PATH = "/";
-    private static final String INDEX_PATH = "/index";
-    private static final String INDEX_SUFFIX = ".html";
     private static final String HTTP_HEADER_FIRST_LINE_DELIMITER = " ";
 
-    private final String method;
-    private final String resourcePath;
+    private final HttpMethod method;
+    private final RequestUri requestUri;
     private final String version;
 
     public RequestLine(String line) {
         String[] lineSegment = line.split(HTTP_HEADER_FIRST_LINE_DELIMITER);
         validate(lineSegment);
-        this.method = lineSegment[0];
-        this.resourcePath = lineSegment[1];
+        this.method = HttpMethod.find(lineSegment[0]);
+        this.requestUri = new RequestUri(lineSegment[1]);
         this.version = lineSegment[2];
     }
 
     private void validate(String[] lineSegment) {
         if (lineSegment.length != 3) {
-            throw new NegativeArraySizeException("Header의 FirstLine 사이즈가 맞지 않습니다!");
+            throw new NegativeArraySizeException("Header RequestLine의 사이즈가 맞지 않습니다!");
         }
     }
 
@@ -36,17 +33,18 @@ public class RequestLine {
     }
 
     public String getMethod() {
-        return method;
+        return method.getHttpMethod();
     }
 
-    public String getResourcePath() {
-        if (ROOT_PATH.equals(resourcePath)) {
-            return INDEX_PATH + INDEX_SUFFIX;
-        }
-        return resourcePath;
+    public String getPath() {
+        return requestUri.getPath();
     }
 
-    public String getVersion() {
-        return version;
+    public String getParameter(String paramName) {
+        return requestUri.getParameter(paramName);
+    }
+
+    public boolean hasBody() {
+        return method.getBody();
     }
 }

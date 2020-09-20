@@ -12,6 +12,7 @@ public class UrlUtils {
     private static final int PARAMS_INDEX = 1;
     private static final int DEFAULT_PARAMS_ACCESS_INDEX = 2;
     private static final int DEFAULT_PARAM_ACCESS_INDEX = 2;
+    private static final int PARAM_KEY_VALUE_DELIMITER_LIMIT = 2;
     private static final String ROOT_PATH = "/";
     private static final String PARAM_DELIMITER = "&";
     private static final String PARAMS_DELIMITER = "\\?";
@@ -45,13 +46,12 @@ public class UrlUtils {
 
         String[] paramsSegments = params.split(PARAM_DELIMITER);
         for (String paramsSegment : paramsSegments) {
-            String[] paramSegment = paramsSegment.split(PARAM_KEY_VALUE_DELIMITER);
+            String[] paramSegment = paramsSegment.split(PARAM_KEY_VALUE_DELIMITER, PARAM_KEY_VALUE_DELIMITER_LIMIT);
             String paramValue = "";
 
             if (isNotAccessibleParam(paramSegment)) {
                 continue;
             }
-
             String paramKey = paramSegment[0];
 
             if (paramSegment.length == 2) {

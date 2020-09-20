@@ -44,4 +44,8 @@ public enum HttpMethod {
     public String getHttpMethod() {
         return httpMethod;
     }
+
+    public boolean getBody() {
+        return body;
+    }
 }

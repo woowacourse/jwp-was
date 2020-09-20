@@ -16,7 +16,7 @@ public class HttpRequestTest {
 
     private static final String TEST_REQUEST_DIRECTORY = "./src/test/resources/request/";
 
-    @DisplayName("GET 요청 확인")
+    @DisplayName("HttpRequest GET 요청")
     @Test
     void request_GET() throws IOException {
         InputStream in = new FileInputStream(new File(TEST_REQUEST_DIRECTORY + "Http_Request_GET.txt"));
@@ -27,5 +27,18 @@ public class HttpRequestTest {
         assertThat(request.getPath()).isEqualTo("/user/create");
         assertThat(request.getHeader("Connection")).isEqualTo("keep-alive");
         assertThat(request.getParameter("userId")).isEqualTo("javajigi");
+    }
+
+    @DisplayName("HttpRequest POST 요청")
+    @Test
+    void request_POST() throws IOException {
+        InputStream in = new FileInputStream(new File(TEST_REQUEST_DIRECTORY + "Http_Request_POST.txt"));
+        BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+        HttpRequest request = new HttpRequest(br);
+
+        assertThat(request.getMethod()).isEqualTo("POST");
+        assertThat(request.getPath()).isEqualTo("/user/create");
+        assertThat(request.getHeader("Connection")).isEqualTo("keep-alive");
+        assertThat(request.getBodyParameter("userId")).isEqualTo("javajigi");
     }
 }

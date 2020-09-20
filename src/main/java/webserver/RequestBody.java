@@ -7,16 +7,38 @@ import utils.IOUtils;
 
 public class RequestBody {
 
-    private String body;
+    private final Object body;
 
-    public RequestBody(BufferedReader bufferedReader, String contentLength) throws IOException {
-        if (Objects.nonNull(contentLength)) {
-            body = IOUtils.readData(bufferedReader, Integer.parseInt(contentLength));
+    public RequestBody(BufferedReader bufferedReader, RequestHeader requestHeader, RequestLine requestLine) throws IOException {
+        if(!requestLine.hasBody()) {
+            this.body = null;
+            return;
+        }
+
+        String contentLength = requestHeader.getHeader("Content-Length");
+        String contentType = requestHeader.getHeader("Content-Type");
+        validate(contentLength, requestLine);
+        String readBody = IOUtils.readData(bufferedReader, Integer.parseInt(contentLength));
+
+        if ("application/x-www-form-urlencoded".equals(contentType)) {
+            this.body = new RequestParameters(readBody);
+            return;
+        }
+        this.body = readBody;
+    }
+
+    private void validate(String contentLength, RequestLine requestLine) {
+        if (Objects.isNull(contentLength)) {
+            throw new IllegalArgumentException("Content-Length를 설정해주세요!");
         }
     }
 
     public String getBody() {
-        return body;
+        return (String) body;
+    }
+
+    public String getParameter(String paramName) {
+        return ((RequestParameters) body).getValue(paramName);
     }
 
     @Override

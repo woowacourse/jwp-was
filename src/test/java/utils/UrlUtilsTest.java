@@ -30,14 +30,6 @@ public class UrlUtilsTest {
         assertThat(result).isEqualTo(expected);
     }
 
-    @DisplayName("URL에서 Param 추출")
-    @ParameterizedTest
-    @MethodSource("provideStringsForExtractRequestParamFromUrl")
-    void extractRequestParamFromUrl(String input, Map<String, String> expected) {
-        Map<String, String> result = UrlUtils.extractRequestParamFromUrl(input);
-        assertThat(result).isEqualTo(expected);
-    }
-
     private static Stream<Arguments> provideStringsForExtractRequestParam() {
         return Stream.of(
             Arguments
@@ -70,30 +62,6 @@ public class UrlUtilsTest {
                         put("password", "");
                         put("name", "");
                         put("email", "");
-                    }})
-        );
-    }
-
-    private static Stream<Arguments> provideStringsForExtractRequestParamFromUrl() {
-        return Stream.of(
-            Arguments.of(null, new HashMap<>()),
-            Arguments.of("", new HashMap<>()),
-            Arguments.of("  ", new HashMap<>()),
-            Arguments.of("not blank", new HashMap<>()),
-            Arguments
-                .of("/user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net",
-                    new HashMap<String, String>() {{
-                        put("userId", "javajigi");
-                        put("password", "password");
-                        put("name", "%EB%B0%95%EC%9E%AC%EC%84%B1");
-                        put("email", "javajigi%40slipp.net");
-                    }}),
-            Arguments
-                .of("/user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%=9E%AC%EC%84%B1&email=javajigi%40slipp.net&",
-                    new HashMap<String, String>() {{
-                        put("userId", "javajigi");
-                        put("password", "password");
-                        put("email", "javajigi%40slipp.net");
                     }})
         );
     }
