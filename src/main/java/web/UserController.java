@@ -1,38 +1,29 @@
 package web;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Objects;
 
 import db.DataBase;
 import model.User;
+import webserver.controller.AbstractController;
 import webserver.http.request.HttpRequest;
-import webserver.http.request.RequestMethod;
 import webserver.http.request.RequestParams;
 import webserver.http.response.HttpResponse;
 import webserver.http.response.HttpStatus;
-import webserver.http.response.ResponseHeaders;
-import webserver.http.response.ResponseStatusLine;
 
-public class UserController extends Controller {
-    public HttpResponse createUser(HttpRequest httpRequest) {
-        if (httpRequest.getHttpMethod() != RequestMethod.POST) {
-            return notAllowed(httpRequest);
-        }
-
+public class UserController extends AbstractController {
+    @Override
+    public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         RequestParams requestParams = RequestParams.from(httpRequest.getHttpBody().getBody());
 
-        try {
-            DataBase.addUser(
-                new User(requestParams.getOneParameterValue("userId"), requestParams.getOneParameterValue("password"),
-                    requestParams.getOneParameterValue("name"), requestParams.getOneParameterValue("email")));
-        } catch (Exception e) {
-            return badRequest(httpRequest);
+        if (Objects.isNull(requestParams.get("userId")) || Objects.isNull(requestParams.get("password"))) {
+            httpResponse.sendError(HttpStatus.BAD_REQUEST, "id 또는 비밀번호가 존재하지 않습니다.");
+            return;
         }
 
-        ResponseStatusLine responseStatusLine = new ResponseStatusLine(httpRequest.getHttpVersion(),
-            HttpStatus.FOUND);
-        Map<String, String> headersInfo = new HashMap<>();
-        headersInfo.put("Location", "/index.html");
-        return new HttpResponse(responseStatusLine, new ResponseHeaders(headersInfo));
+        DataBase.addUser(
+            new User(requestParams.getOneParameterValue("userId"), requestParams.getOneParameterValue("password"),
+                requestParams.getOneParameterValue("name"), requestParams.getOneParameterValue("email")));
+
+        httpResponse.sendRedirect("/index.html");
     }
 }

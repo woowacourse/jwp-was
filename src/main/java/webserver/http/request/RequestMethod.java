@@ -13,7 +13,7 @@ public enum RequestMethod {
             .orElseThrow(() -> new IllegalArgumentException("허용되지 않는 Http Method 입니다."));
     }
 
-	public boolean allowBody() {
-		return this == POST;
-	}
+    public boolean allowBody() {
+        return this == POST;
+    }
 }

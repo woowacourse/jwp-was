@@ -11,6 +11,10 @@ public class ResponseHeaders {
         this.headers = headers;
     }
 
+    public void setHeader(String key, String value) {
+        headers.put(key, value);
+    }
+
     public void write(DataOutputStream dos) throws IOException {
         for (Map.Entry<String, String> entry : headers.entrySet()) {
             dos.writeBytes(entry.getKey() + ": " + entry.getValue() + System.lineSeparator());

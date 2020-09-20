@@ -1,4 +1,4 @@
-package web;
+package webserver.controller;
 
 import java.util.Arrays;
 
