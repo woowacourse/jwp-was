@@ -3,6 +3,11 @@ package utils;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import exceptions.InvalidHttpRequestException;
+
 public class IOUtils {
     /**
      * @param BufferedReader는
@@ -12,9 +17,21 @@ public class IOUtils {
      * @return
      * @throws IOException
      */
+
+    private static final Logger logger = LoggerFactory.getLogger(IOUtils.class);
+
     public static String readData(BufferedReader br, int contentLength) throws IOException {
         char[] body = new char[contentLength];
         br.read(body, 0, contentLength);
         return String.copyValueOf(body);
+    }
+
+    public static String readRequestLine(BufferedReader bufferedReader) {
+        try {
+            return bufferedReader.readLine();
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+            throw new InvalidHttpRequestException(e.getMessage());
+        }
     }
 }
