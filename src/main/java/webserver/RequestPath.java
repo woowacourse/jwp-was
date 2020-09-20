@@ -8,13 +8,15 @@ public class RequestPath {
     private final String requestPath;
 
     public RequestPath(String requestPath) {
+        if (ROOT_PATH.equals(requestPath)) {
+            this.requestPath = INDEX_PATH + INDEX_SUFFIX;
+            return;
+        }
         this.requestPath = requestPath;
     }
 
     public String getRequestPath() {
-        if (ROOT_PATH.equals(requestPath)) {
-            return INDEX_PATH + INDEX_SUFFIX;
-        }
+
         return requestPath;
     }
 }

@@ -1,9 +1,10 @@
 package utils;
 
+import static utils.StringUtils.isBlank;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class UrlUtils {
 
@@ -15,7 +16,6 @@ public class UrlUtils {
     private static final String PARAM_DELIMITER = "&";
     private static final String PARAMS_DELIMITER = "\\?";
     private static final String PARAM_KEY_VALUE_DELIMITER = "=";
-    private static final String BLANK_VALUE = "";
 
     public static String extractFilePath(String resourcePath) {
         String filePath = resourcePath.split(PARAMS_DELIMITER)[FILE_INDEX];
@@ -66,10 +66,6 @@ public class UrlUtils {
             requestParams.put(paramKey, paramValue);
         }
         return requestParams;
-    }
-
-    private static boolean isBlank(String input) {
-        return Objects.isNull(input) || BLANK_VALUE.equals(input.trim());
     }
 
     private static boolean isNotAccessibleParam(String[] paramSegment) {

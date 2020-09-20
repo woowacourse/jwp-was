@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.StringUtils;
 
 public class HttpRequest {
 
@@ -29,8 +30,7 @@ public class HttpRequest {
         }
         requestLine = new RequestLine(line);
 
-        while (!BLANK.equals(line)) {
-            line = bufferedReader.readLine();
+        while (!StringUtils.isBlank(line = bufferedReader.readLine())) {
             String[] lineSegment = line.split(HTTP_HEADER_DELIMITER);
 
             if (lineSegment.length != 2) {
@@ -56,10 +56,26 @@ public class HttpRequest {
     }
 
     public String getResourcePath() {
-        return requestLine.getResourcePath();
+        return requestLine.getPath();
     }
 
     public String getBody() {
         return requestBody.getBody();
+    }
+
+    public String getMethod() {
+        return requestLine.getMethod();
+    }
+
+    public String getPath() {
+        return requestLine.getPath();
+    }
+
+    public String getHeader(String headerName) {
+        return headers.get(headerName);
+    }
+
+    public String getParameter(String paramName) {
+        return requestLine.getParameter(paramName);
     }
 }

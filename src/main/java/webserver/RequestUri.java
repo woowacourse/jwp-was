@@ -4,7 +4,7 @@ import exception.MissingRequestParameterException;
 import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.UrlUtils;
+import utils.StringUtils;
 
 public class RequestUri {
 
@@ -15,7 +15,7 @@ public class RequestUri {
     private static final Logger log = LoggerFactory.getLogger(RequestUri.class);
 
     private final RequestPath path;
-    private RequestParameters parameters;
+    private final RequestParameters parameters;
 
     public RequestUri(String requestUri) {
         validate(requestUri);
@@ -24,7 +24,9 @@ public class RequestUri {
         this.path = new RequestPath(requestUriSegment[0]);
         if (isAccessibleParameters(requestUriSegment)) {
             this.parameters = new RequestParameters(requestUriSegment[1]);
+            return;
         }
+        this.parameters = null;
     }
 
     private boolean isAccessibleParameters(String[] requestUriSegment) {
@@ -40,7 +42,7 @@ public class RequestUri {
     }
 
     private void validate(String requestUri) {
-        if (UrlUtils.isBlank(requestUri)) {
+        if (StringUtils.isBlank(requestUri)) {
             log.error("Request Uri Blank or Null Error! : requestUri is {} ", requestUri);
             throw new IllegalArgumentException("Request Uri : " + requestUri + "가 Null 또는 공백입니다!");
         }
