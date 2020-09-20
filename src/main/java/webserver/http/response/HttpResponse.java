@@ -34,7 +34,7 @@ public class HttpResponse {
 
     private void response200Header(String contentType, int lengthOfBodyContent) {
         try {
-            dataOutputStream.writeBytes("HTTP/1.1 200 OK" + LINE_SEPARATOR);
+            dataOutputStream.writeBytes(HttpStatusLine.convertToString(HttpStatus.OK) + LINE_SEPARATOR);
             dataOutputStream.writeBytes(
                 "Content-Type: " + contentType + HEADER_VALUE_SEPARATOR + ENCODING_CHARSET_UTF_8 + LINE_SEPARATOR);
             dataOutputStream.writeBytes("Content-Length: " + lengthOfBodyContent + LINE_SEPARATOR);
@@ -59,7 +59,7 @@ public class HttpResponse {
 
     private void response302Header(String url) {
         try {
-            dataOutputStream.writeBytes("HTTP/1.1 302 FOUND" + LINE_SEPARATOR);
+            dataOutputStream.writeBytes(HttpStatusLine.convertToString(HttpStatus.FOUND) + LINE_SEPARATOR);
             dataOutputStream.writeBytes("Location: " + url + LINE_SEPARATOR);
             dataOutputStream.writeBytes(LINE_SEPARATOR);
         } catch (IOException e) {
@@ -75,7 +75,7 @@ public class HttpResponse {
 
     private void response404Header() {
         try {
-            dataOutputStream.writeBytes("HTTP/1.1 404 NOT FOUND" + LINE_SEPARATOR);
+            dataOutputStream.writeBytes(HttpStatusLine.convertToString(HttpStatus.NOT_FOUND) + LINE_SEPARATOR);
             dataOutputStream.writeBytes(LINE_SEPARATOR);
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -94,7 +94,8 @@ public class HttpResponse {
 
     private void response500Header() {
         try {
-            dataOutputStream.writeBytes("HTTP/1.1 500 INTERNAL SERVER ERROR" + LINE_SEPARATOR);
+            dataOutputStream.writeBytes(
+                HttpStatusLine.convertToString(HttpStatus.INTERNAL_SERVER_ERROR) + LINE_SEPARATOR);
             dataOutputStream.writeBytes(LINE_SEPARATOR);
         } catch (IOException e) {
             logger.error(e.getMessage());
