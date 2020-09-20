@@ -25,5 +25,4 @@ public class UserMapper {
             throw new RuntimeException("UnsupportedEncodingException" + data);
         }
     }
-
 }

@@ -30,7 +30,6 @@ public enum HandlerMapping {
                 .orElseThrow(() -> new IllegalArgumentException("일치하는 컨트롤러를 찾지 못했습니다." + request.getResource()));
     }
 
-
     public Response apply(Request request) {
         return this.function.apply(request);
     }
