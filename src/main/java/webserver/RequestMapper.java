@@ -1,17 +1,21 @@
-package webserver.http;
+package webserver;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import webserver.controller.Controller;
 import webserver.controller.PageController;
-import web.UserController;
+import slipp.web.UserController;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 import webserver.http.response.HttpStatus;
 
 public class RequestMapper {
+    private static final Logger logger = LoggerFactory.getLogger(RequestMapper.class);
     private static final Map<String, Controller> mapper = new HashMap<>();
 
     static {
@@ -25,6 +29,7 @@ public class RequestMapper {
         try {
             mapService(httpRequest, httpResponse);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             httpResponse.sendError(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }

@@ -1,4 +1,4 @@
-package utils;
+package webserver.utils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

@@ -1,6 +1,6 @@
 package webserver.controller;
 
-import utils.FileIoUtils;
+import webserver.utils.FileIoUtils;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 import webserver.http.response.HttpStatus;

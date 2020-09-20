@@ -1,4 +1,4 @@
-package web;
+package slipp.web;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -7,7 +7,7 @@ import java.util.HashMap;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import db.DataBase;
+import slipp.db.DataBase;
 import webserver.http.request.HttpRequest;
 import webserver.http.request.RequestBody;
 import webserver.http.request.RequestHeaders;

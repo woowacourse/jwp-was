@@ -1,9 +1,9 @@
-package web;
+package slipp.web;
 
 import java.util.Objects;
 
-import db.DataBase;
-import model.User;
+import slipp.db.DataBase;
+import slipp.model.User;
 import webserver.controller.AbstractController;
 import webserver.http.request.HttpRequest;
 import webserver.http.request.RequestParams;
