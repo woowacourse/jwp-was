@@ -4,6 +4,7 @@ import db.DataBase;
 import model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import webserver.service.UserService;
 
 import java.util.HashMap;
 import java.util.Map;

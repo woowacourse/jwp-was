@@ -3,6 +3,7 @@ package webserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.http.request.HttpRequest;
+import webserver.http.response.HttpResponse;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -27,39 +28,24 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = handle(new HttpRequest(in));
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+            HttpResponse httpResponse = handle(new HttpRequest(in));
+            readResponse(httpResponse, dos);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void readResponse(HttpResponse httpResponse, DataOutputStream dos) {
         try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
+            dos.writeBytes(httpResponse.getHttpResponseHeader().format());
+            dos.write(httpResponse.getBody(), 0, httpResponse.getBody().length);
             dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    public static byte[] getDefaultBody() {
-        return DEFAULT_BODY;
-    }
-
-    public byte[] handle(HttpRequest httpRequest) {
+    public HttpResponse handle(HttpRequest httpRequest) {
         return RequestProcessor.process(httpRequest);
     }
 }

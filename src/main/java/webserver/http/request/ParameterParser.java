@@ -12,8 +12,10 @@ public class ParameterParser {
 
         Map<String, String> parameters = new HashMap<>();
         for (String queryString : queryStrings) {
-            parameters.put(queryString.split("=")[0],
-                    queryString.split("=")[1]);
+            String[] splited = queryString.split("=");
+            if (splited.length >= 2) {
+                parameters.put(splited[0], splited[1]);
+            }
         }
         return parameters;
     }

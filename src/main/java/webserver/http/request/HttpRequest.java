@@ -45,16 +45,12 @@ public class HttpRequest {
         this(new BufferedReader(new InputStreamReader(inputStream)));
     }
 
-    public boolean isResourcePath(String resourcePath) {
-        return httpRequestHeader.isResourcePath(resourcePath);
-    }
-
     public HttpMethod getHttpMethod() {
-        return httpRequestHeader.getHttpMethod();
+        return httpRequestHeader.getHttpRequestLine().getHttpMethod();
     }
 
     public Map<String, String> getQueryParameters() {
-        return Collections.unmodifiableMap(httpRequestHeader.getParameters());
+        return Collections.unmodifiableMap(httpRequestHeader.getHttpRequestLine().getParameters());
     }
 
     public Map<String, String> getHeaders() {
@@ -62,7 +58,7 @@ public class HttpRequest {
     }
 
     public String getResourcePath() {
-        return httpRequestHeader.getResourcePath();
+        return httpRequestHeader.getHttpRequestLine().getResourcePath();
     }
 
     public Map<String, String> getBody() {

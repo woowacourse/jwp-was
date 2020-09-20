@@ -47,7 +47,7 @@ class HttpRequestTest {
     void requestBodyParsingTest() throws IOException {
         // given
         StringBuilder request = new StringBuilder();
-        request.append("POST /user/create\n");
+        request.append("POST /user/create HTTP/1.1\n");
         request.append("Host: localhost:8080\n");
         request.append("Connection: keep-alive\n");
         request.append("Accept: */*\n");
