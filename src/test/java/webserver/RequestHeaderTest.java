@@ -10,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import exception.InvalidRequestHeaderException;
+import webserver.request.RequestHeader;
 
 class RequestHeaderTest {
     private static final String VALID_HEADER = "GET /index.html?name=dd&password=ddd HTTP/1.1\n"

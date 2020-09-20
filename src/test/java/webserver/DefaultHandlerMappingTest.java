@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import model.User;
 import webserver.controller.IndexController;
 import webserver.controller.UserController;
+import webserver.handlermapping.DefaultHandlerMapping;
+import webserver.request.ServletRequest;
 
 class DefaultHandlerMappingTest {
 

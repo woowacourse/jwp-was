@@ -4,10 +4,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import model.User;
-import webserver.MethodType;
-import webserver.ModelAndView;
-import webserver.ServletResponse;
-import webserver.StatusCode;
+import webserver.request.MethodType;
+import webserver.response.ModelAndView;
+import webserver.response.StatusCode;
 import webserver.service.UserService;
 import webserver.controller.annotation.Controller;
 import webserver.controller.annotation.RequestMapping;

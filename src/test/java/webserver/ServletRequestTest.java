@@ -13,6 +13,8 @@ import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import webserver.request.ServletRequest;
+
 class ServletRequestTest {
 
     @DisplayName("요청을 정상적으로 생성하는 지 확인")

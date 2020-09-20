@@ -13,6 +13,10 @@ import org.junit.jupiter.api.Test;
 import model.User;
 import webserver.controller.IndexController;
 import webserver.controller.UserController;
+import webserver.handleradaptor.DefaultHandlerAdaptor;
+import webserver.messageconverter.DefaultHttpMessageConverter;
+import webserver.request.ServletRequest;
+import webserver.response.ServletResponse;
 
 class DefaultHandlerAdaptorTest {
 

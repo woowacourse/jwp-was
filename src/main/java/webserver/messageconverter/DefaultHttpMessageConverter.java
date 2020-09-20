@@ -1,4 +1,4 @@
-package webserver;
+package webserver.messageconverter;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -21,7 +21,7 @@ public class DefaultHttpMessageConverter implements HttpMessageConverter {
                     field.setAccessible(true);
                     field.set(instance, value);
                 } catch (NoSuchFieldException | IllegalAccessException e) {
-                    e.printStackTrace();
+                    logger.info(e.getMessage(), e);
                 }
             });
             return instance;

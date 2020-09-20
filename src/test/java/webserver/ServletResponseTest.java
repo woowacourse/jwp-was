@@ -17,6 +17,9 @@ import java.util.Objects;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import webserver.request.ServletRequest;
+import webserver.response.ServletResponse;
+
 class ServletResponseTest {
 
     @DisplayName("정상적으로 Response 생성한다.")
