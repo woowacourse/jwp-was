@@ -8,11 +8,14 @@ import java.util.Objects;
 import utils.IOUtils;
 
 public class ServletRequest {
+    private final HttpStartLine httpStartLine;
     private final RequestHeader requestHeader;
     private final RequestBody requestBody;
 
     public ServletRequest(BufferedReader br) throws IOException {
         String line = br.readLine();
+        this.httpStartLine = HttpStartLine.of(line);
+        line = br.readLine();
         StringBuilder headerLines = new StringBuilder();
         while (Objects.nonNull(line) && !line.isEmpty()) {
             headerLines.append(line).append("\n");
@@ -22,33 +25,34 @@ public class ServletRequest {
         requestBody = RequestBody.of(IOUtils.readData(br, requestHeader.getContentLength()));
     }
 
-    public ServletRequest(String lines, String body) {
-        requestHeader = RequestHeader.of(lines);
-        requestBody = RequestBody.of(body);
+    public ServletRequest(String startLine, String headerLines, String bodyLines) {
+        this.httpStartLine = HttpStartLine.of(startLine);
+        this.requestHeader = RequestHeader.of(headerLines);
+        this.requestBody = RequestBody.of(bodyLines);
     }
 
     public Map<String, String> getBody() {
-        return requestBody.getAttribute();
+        return requestBody.getAttributes();
     }
 
     public String getPath() {
-        return requestHeader.getPath();
+        return httpStartLine.getPath();
     }
 
-    public RequestHeader.MethodType getMethod() {
-        return requestHeader.getMethod();
+    public MethodType getMethod() {
+        return httpStartLine.getMethod();
     }
 
     public String getProtocolVersion() {
-        return requestHeader.getProtocolVersion();
+        return httpStartLine.getProtocolVersion();
     }
 
     public Map<String, String> getHeaders() {
-        return requestHeader.getAttribute();
+        return requestHeader.getHeaders();
     }
 
     public Map<String, String> getQueryParams() {
-        return requestHeader.getQueryParams();
+        return httpStartLine.getQueryParams();
     }
 
     public String getHeader(String header) {
@@ -56,6 +60,10 @@ public class ServletRequest {
     }
 
     public String getAccept() {
-        return requestHeader.getHeader("ACCEPT");
+        return requestHeader.getHeader("Accept");
+    }
+
+    public boolean hasStaticResource() {
+        return getPath().contains(".");
     }
 }

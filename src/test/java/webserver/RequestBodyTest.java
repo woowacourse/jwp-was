@@ -27,7 +27,7 @@ class RequestBodyTest {
         expected.put("email", "javajigi@slipp.net");
 
         RequestBody body = RequestBody.of(VALID_BODY);
-        assertThat(body.getAttribute()).isEqualTo(expected);
+        assertThat(body.getAttributes()).isEqualTo(expected);
     }
 
     @DisplayName("Body가 null인 경우 빈 body를 생성한다")
@@ -37,8 +37,8 @@ class RequestBodyTest {
         RequestBody nullBody = RequestBody.of(null);
         RequestBody emptyBody = RequestBody.of("");
 
-        assertThat(nullBody.getAttribute()).isEqualTo(expected);
-        assertThat(emptyBody.getAttribute()).isEqualTo(expected);
+        assertThat(nullBody.getAttributes()).isEqualTo(expected);
+        assertThat(emptyBody.getAttributes()).isEqualTo(expected);
     }
 
     @DisplayName("Body가 value가 없는 경우 예외를 반환한다.")
