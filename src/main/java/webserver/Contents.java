@@ -5,10 +5,10 @@ import java.io.IOException;
 
 import utils.IOUtils;
 
-public class HttpBody {
+public class Contents {
 	private final String body;
 
-	public HttpBody(BufferedReader br, int contentLength) throws IOException {
+	public Contents(BufferedReader br, int contentLength) throws IOException {
 		this.body = IOUtils.readData(br, contentLength);
 	}
 

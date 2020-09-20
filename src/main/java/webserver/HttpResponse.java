@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import org.slf4j.Logger;
 
-public class ResponseHeader {
+public class HttpResponse {
 	public static void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType,
 		Logger logger) {
 		try {

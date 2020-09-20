@@ -36,23 +36,23 @@ public class RequestHandler implements Runnable {
 
 		try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
 			BufferedReader br = new BufferedReader(new InputStreamReader(in));
-			String line = br.readLine();
-			String path = line.split(DELIMITER)[1];
+			String startLine = br.readLine();
+			String path = startLine.split(DELIMITER)[1];
 			DataOutputStream dos = new DataOutputStream(out);
-			findBody(br, line);
+			findBody(br);
 
 			if (path.startsWith(USER_CREATE_URL)) {
-				HttpBody httpBody = new HttpBody(br, 100);
-				Map<String, String> userInfo = ExtractUtils.extractUserInfo(httpBody.getBody());
+				Contents contents = new Contents(br, 100);
+				Map<String, String> userInfo = ExtractUtils.extractUserInfo(contents.getBody());
 				User user = new User(userInfo.get("userId"), userInfo.get("password"), userInfo.get("name"),
 					userInfo.get("email"));
 				DataBase.addUser(user);
-				ResponseHeader.response302Header(dos, REDIRECT_URL, logger);
+				HttpResponse.response302Header(dos, REDIRECT_URL, logger);
 			} else {
-				ContentTypeMatcher fileType = ContentTypeMatcher.findContentType(path);
+				ResourceTypeMatcher fileType = ResourceTypeMatcher.findContentType(path);
 				byte[] body = FileIoUtils.loadFileFromClasspath(fileType.parseFilePath(path));
 
-				ResponseHeader.response200Header(dos, body.length, fileType.getContentType(), logger);
+				HttpResponse.response200Header(dos, body.length, fileType.getContentType(), logger);
 				responseBody(dos, body);
 			}
 		} catch (IOException | URISyntaxException e) {
@@ -60,12 +60,13 @@ public class RequestHandler implements Runnable {
 		}
 	}
 
-	private void findBody(BufferedReader br, String line) throws IOException {
+	private void findBody(BufferedReader br) throws IOException {
+		String line = br.readLine();
 		while (!"".equals(line)) {
-			line = br.readLine();
 			if (line == null) {
 				break;
 			}
+			line = br.readLine();
 		}
 	}
 
