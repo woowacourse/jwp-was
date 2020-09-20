@@ -59,7 +59,7 @@ public class RequestMapper {
     }
 
     public static boolean isContain(MappedRequest mappedRequest) {
-        return null != get(mappedRequest);
+        return requestMapper.containsKey(mappedRequest);
     }
 
     protected static void clear() {
