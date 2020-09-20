@@ -9,12 +9,11 @@ import webserver.response.ModelAndView;
 import webserver.request.ServletRequest;
 import webserver.controller.annotation.RequestMapping;
 
-public class DefaultHandlerAdaptor implements HandlerAdaptor{
+public class DefaultHandlerAdaptor implements HandlerAdaptor {
 
     public ModelAndView invoke(Method handler, ServletRequest servletRequest, HttpMessageConverter converter) {
         final boolean resource = handler.getAnnotation(RequestMapping.class).isResource();
         Class<?>[] parameterTypes = handler.getParameterTypes();
-        User user = null;
 
         try {
             Object handlers = handler.getDeclaringClass().getDeclaredConstructor().newInstance();
@@ -23,15 +22,16 @@ public class DefaultHandlerAdaptor implements HandlerAdaptor{
                 mav.setHttpProtocolVersion(servletRequest.getProtocolVersion());
                 return mav;
             }
-            if (converter.isSupport(parameterTypes[0], servletRequest.getBody())) {
-                user = (User)converter.convert(parameterTypes[0], servletRequest.getBody());
-            }
             if (resource) {
                 return (ModelAndView)handler.invoke(handlers, servletRequest);
             }
-            final ModelAndView mav = (ModelAndView)handler.invoke(handlers, user);
-            mav.setHttpProtocolVersion(servletRequest.getProtocolVersion());
-            return mav;
+            if (converter.isSupport(parameterTypes[0], servletRequest.getBody())) {
+                final ModelAndView mav = (ModelAndView)handler.invoke(handlers,
+                    parameterTypes[0].cast(converter.convert(parameterTypes[0], servletRequest.getBody())));
+                mav.setHttpProtocolVersion(servletRequest.getProtocolVersion());
+                return mav;
+            }
+            return null;
         } catch (IllegalAccessException | InvocationTargetException | InstantiationException | NoSuchMethodException e) {
             throw new IllegalArgumentException();
         }
