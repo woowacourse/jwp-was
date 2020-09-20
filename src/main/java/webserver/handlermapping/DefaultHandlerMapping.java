@@ -1,4 +1,4 @@
-package webserver;
+package webserver.handlermapping;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import exception.MethodNotAllowedException;
+import webserver.request.MethodType;
+import webserver.request.ServletRequest;
 import webserver.controller.Handlers;
 import webserver.controller.annotation.Controller;
 import webserver.controller.annotation.RequestMapping;

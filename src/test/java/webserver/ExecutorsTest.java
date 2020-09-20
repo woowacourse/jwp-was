@@ -25,7 +25,7 @@ public class ExecutorsTest {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    logger.info(e.getMessage(), e);
                 }
                 logger.info("Thread {}", idx);
             });

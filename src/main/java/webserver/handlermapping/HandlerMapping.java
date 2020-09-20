@@ -1,9 +1,8 @@
-package webserver;
+package webserver.handlermapping;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
-import webserver.controller.Handlers;
+import webserver.request.ServletRequest;
 
 public interface HandlerMapping {
     Method mapping(ServletRequest request);

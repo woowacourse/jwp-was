@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import model.User;
+import webserver.messageconverter.DefaultHttpMessageConverter;
 
 class DefaultHttpMessageConverterTest {
     public static final String ID = "javajigi";

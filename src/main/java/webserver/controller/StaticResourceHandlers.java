@@ -4,15 +4,10 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import utils.FileIoUtils;
-import webserver.HttpStatusLine;
-import webserver.MethodType;
-import webserver.ModelAndView;
-import webserver.ServletRequest;
-import webserver.ServletResponse;
-import webserver.StatusCode;
-import webserver.View;
-import webserver.controller.Handlers;
+import webserver.request.MethodType;
+import webserver.response.ModelAndView;
+import webserver.request.ServletRequest;
+import webserver.response.StatusCode;
 import webserver.controller.annotation.Controller;
 import webserver.controller.annotation.RequestMapping;
 

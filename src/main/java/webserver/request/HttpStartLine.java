@@ -1,4 +1,4 @@
-package webserver;
+package webserver.request;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
