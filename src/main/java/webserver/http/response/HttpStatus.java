@@ -9,12 +9,17 @@ public enum HttpStatus {
     INTERNAL_SERVER_ERROR(500, "Internal Server Error"),
     NOT_IMPLEMENTED(501, "Not_Implemented");
 
+    private static final int ERROR_THRESHOLD = 400;
     private int statusCode;
     private String status;
 
     HttpStatus(int statusCode, String status) {
         this.statusCode = statusCode;
         this.status = status;
+    }
+
+    public boolean isErrorCode() {
+        return statusCode >= ERROR_THRESHOLD;
     }
 
     public int getStatusCode() {

@@ -49,6 +49,9 @@ public class HttpResponse {
     }
 
     public void sendError(HttpStatus httpStatus, String message) {
+        if (!httpStatus.isErrorCode()) {
+            throw new IllegalArgumentException("에러 코드만 입력할 수 있습니다.");
+        }
         responseStatus.setHttpStatus(httpStatus);
         this.responseBody = new ResponseBody(message);
         setHeader(CONTENT_TYPE, TEXT_HTML_CHARSET_UTF_8);

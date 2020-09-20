@@ -100,4 +100,14 @@ class HttpResponseTest {
             () -> assertThat(out.toString()).contains("not found")
         );
     }
+
+    @DisplayName("잘못된 예외 코드가 오면 예외처리한다.")
+    @Test
+    void sendErrorWithException() {
+        HttpResponse httpResponse = HttpResponse.ofVersion("HTTP/1.1");
+
+        assertThatThrownBy(() -> httpResponse.sendError(HttpStatus.OK, "not found"))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("에러 코드만");
+    }
 }
