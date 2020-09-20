@@ -29,6 +29,11 @@ public enum ResourceTypeMatcher {
 		return this.filePath + path;
 	}
 
+	public static boolean isContainType(String path) {
+		return Arrays.stream(values())
+			.anyMatch(type -> path.endsWith(type.fileType));
+	}
+
 	public String getContentType() {
 		return contentType;
 	}

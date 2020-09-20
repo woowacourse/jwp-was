@@ -17,4 +17,10 @@ public class ResourceTypeMatcherTest {
 	void parseFilePathTest(String file, ResourceTypeMatcher type, String path) {
 		assertThat(type.parseFilePath(file)).isEqualTo(path);
 	}
+
+	@ParameterizedTest
+	@CsvSource({"/a.html,true", "/b.js,true", "/c.css,true", "d.woff,true", "e.hwp,false", "e.docs,false"})
+	void isContainTypeTest(String file, boolean expected) {
+		assertThat(ResourceTypeMatcher.isContainType(file)).isEqualTo(expected);
+	}
 }
