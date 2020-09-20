@@ -31,7 +31,7 @@ public class ResponseHandler {
             }
         } catch (IOException | InvocationTargetException | IllegalAccessException | URISyntaxException e) {
             logger.error(e.getMessage());
+            response.responseInternalServerError();
         }
-
     }
 }

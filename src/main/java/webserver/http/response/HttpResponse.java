@@ -81,4 +81,23 @@ public class HttpResponse {
             logger.error(e.getMessage());
         }
     }
+
+    public void responseInternalServerError() {
+        try {
+            byte[] body = FileIoUtils.loadFileFromClasspath(TEMPLATES + "/common/internal_server_error.html");
+            response500Header();
+            responseBody(body);
+        } catch (IOException | URISyntaxException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void response500Header() {
+        try {
+            dataOutputStream.writeBytes("HTTP/1.1 500 INTERNAL SERVER ERROR" + LINE_SEPARATOR);
+            dataOutputStream.writeBytes(LINE_SEPARATOR);
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
 }
