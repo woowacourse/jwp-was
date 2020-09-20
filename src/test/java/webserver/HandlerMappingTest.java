@@ -22,7 +22,7 @@ class HandlerMappingTest {
 
         HandlerMapping handlerMapping = HandlerMapping.from(new Request(bufferedReader));
 
-        assertThat(handlerMapping).isEqualTo(HandlerMapping.GET_PAGE);
+        assertThat(handlerMapping).isEqualTo(HandlerMapping.PAGE);
     }
 
     @DisplayName("Request와 일치하는 HadlerMapping이 없을 때 Exception 발생")

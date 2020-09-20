@@ -7,22 +7,25 @@ import java.util.Arrays;
 import java.util.function.Function;
 
 public enum HandlerMapping {
-    GET_PAGE(new RequestLine(HttpMethod.GET, ".html"), FileController::getPage),
-    GET_CSS(new RequestLine(HttpMethod.GET, ".css"), FileController::getCss),
-    GET_USER_CREATE(new RequestLine(HttpMethod.GET, "/user/create"), UserController::getCreateUser),
-    POST_USER_CREATE(new RequestLine(HttpMethod.POST, "/user/create"), UserController::postCreateUser);
+    PAGE(HttpMethod.GET, ".html", FileController::getPage),
+    GET_CSS(HttpMethod.GET, ".css", FileController::getCss),
+    GET_USER_CREATE(HttpMethod.GET, "/user/create", UserController::getCreateUser),
+    POST_USER_CREATE(HttpMethod.POST, "/user/create", UserController::postCreateUser);
 
-    private final RequestLine requestLine;
+    private final HttpMethod httpMethod;
+    private final String path;
     private final Function<Request, Response> function;
 
-    HandlerMapping(RequestLine requestLine, Function<Request, Response> function) {
-        this.requestLine = requestLine;
+    HandlerMapping(HttpMethod httpMethod, String path, Function<Request, Response> function) {
+        this.httpMethod = httpMethod;
+        this.path = path;
         this.function = function;
     }
 
     public static HandlerMapping from(Request request) {
         return Arrays.stream(values())
-                .filter(handlerMapping -> request.isMatchRequestLine(handlerMapping.requestLine))
+                .filter(handlerMapping -> request.isMatchHttpMethod(handlerMapping.httpMethod))
+                .filter(handlerMapping -> request.containsPath(handlerMapping.path))
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException("일치하는 컨트롤러를 찾지 못했습니다." + request.getResource()));
     }
