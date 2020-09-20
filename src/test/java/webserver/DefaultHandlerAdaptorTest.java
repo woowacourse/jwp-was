@@ -14,12 +14,12 @@ import model.User;
 import webserver.controller.IndexController;
 import webserver.controller.UserController;
 
-class HandlerAdaptorTest {
+class DefaultHandlerAdaptorTest {
 
     @DisplayName("INDEX 메소드를 정상 실행하고, 결과를 반환한다.")
     @Test
     void invokeIndex() throws NoSuchMethodException {
-        HandlerAdaptor adaptor = new HandlerAdaptor();
+        DefaultHandlerAdaptor adaptor = new DefaultHandlerAdaptor();
         Method method = IndexController.class.getMethod("index");
         ServletRequest request = new ServletRequest(REQUEST_HEADER_WITH_HTML, REQUEST_BODY);
         DefaultHttpMessageConverter converter = new DefaultHttpMessageConverter();
@@ -35,7 +35,7 @@ class HandlerAdaptorTest {
     @DisplayName("USER CREATE 메소드를 정상 실행하고, 결과를 반환한다.")
     @Test
     void invokeUserCreate() throws NoSuchMethodException {
-        HandlerAdaptor adaptor = new HandlerAdaptor();
+        DefaultHandlerAdaptor adaptor = new DefaultHandlerAdaptor();
         Method method = UserController.class.getMethod("create", User.class);
         ServletRequest request = new ServletRequest(REQUEST_HEADER, REQUEST_BODY);
         DefaultHttpMessageConverter converter = new DefaultHttpMessageConverter();

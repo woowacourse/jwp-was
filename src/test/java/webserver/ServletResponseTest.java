@@ -30,7 +30,7 @@ class ServletResponseTest {
         attributes.put("View", "index");
 
         ServletResponse response = new ServletResponse(ServletResponse.StatusCode.OK, attributes);
-        response.createResponse(dos, servletRequest);
+        response.sendResponse(dos, servletRequest);
 
         dos.close();
         fos.close();

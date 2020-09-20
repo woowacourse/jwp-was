@@ -23,7 +23,7 @@ public class WebServer {
 
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
-                Thread thread = new Thread(new DispatcherServlet(connection));
+                Thread thread = new Thread(new RequestHandler(connection));
                 thread.start();
             }
         }
