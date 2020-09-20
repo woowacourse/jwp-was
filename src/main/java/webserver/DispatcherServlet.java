@@ -14,6 +14,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.Maps;
 import webserver.controller.Handlers;
 import webserver.controller.IndexController;
 import webserver.controller.StaticResourceHandlers;
@@ -26,6 +27,7 @@ import webserver.messageconverter.DefaultHttpMessageConverter;
 import webserver.messageconverter.HttpMessageConverter;
 import webserver.request.ServletRequest;
 import webserver.response.ModelAndView;
+import webserver.response.StatusCode;
 
 public class DispatcherServlet implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(DispatcherServlet.class);
@@ -43,10 +45,10 @@ public class DispatcherServlet implements Runnable {
              OutputStream out = connection.getOutputStream();
              InputStreamReader ir = new InputStreamReader(in);
              BufferedReader br = new BufferedReader(ir);
-             DataOutputStream dos = new DataOutputStream(out))
-        {
+             DataOutputStream dos = new DataOutputStream(out)) {
             ServletRequest servletRequest = new ServletRequest(br);
-            List<Class<? extends Handlers>> controllers = Arrays.asList(UserController.class, IndexController.class, StaticResourceHandlers.class);
+            List<Class<? extends Handlers>> controllers = Arrays.asList(UserController.class, IndexController.class,
+                StaticResourceHandlers.class);
             HandlerMapping defaultHandlerMapping = new DefaultHandlerMapping(controllers);
             Method handler = defaultHandlerMapping.mapping(servletRequest);
             HandlerAdaptor defaultHandlerAdaptor = new DefaultHandlerAdaptor();
@@ -54,7 +56,15 @@ public class DispatcherServlet implements Runnable {
             final ModelAndView mav = defaultHandlerAdaptor.invoke(handler, servletRequest, converter);
             mav.sendResponse(dos);
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
+            try (OutputStream out = connection.getOutputStream();
+                 DataOutputStream dos = new DataOutputStream(out)) {
+                final ModelAndView mav = ModelAndView.of(StatusCode.INTERNAL_SERVER_ERROR,
+                    Maps.newLinkedHashMap(), "internalServerError");
+                mav.sendResponse(dos);
+            } catch (IOException ex) {
+                logger.error(ex.getMessage(), ex);
+            }
         }
     }
 }
