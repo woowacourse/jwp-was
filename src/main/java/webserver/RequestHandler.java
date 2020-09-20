@@ -2,14 +2,13 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.FileIoUtils;
+import webserver.http.request.HttpRequest;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.net.URISyntaxException;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -36,10 +35,6 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    public static byte[] getDefaultBody() {
-        return DEFAULT_BODY;
-    }
-
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
@@ -60,20 +55,11 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    public static byte[] getErrorBody() {
-        return ERROR_BODY;
+    public static byte[] getDefaultBody() {
+        return DEFAULT_BODY;
     }
 
     public byte[] handle(HttpRequest httpRequest) {
-        try {
-            if (httpRequest.isResourcePath("/index.html")) {
-                return FileIoUtils.loadFileFromClasspath("./templates/index.html");
-            } else if (httpRequest.isResourcePath("/user/form.html")) {
-                return FileIoUtils.loadFileFromClasspath("./templates/user/form.html");
-            }
-        } catch (IOException | URISyntaxException e) {
-            return ERROR_BODY;
-        }
-        return DEFAULT_BODY;
+        return RequestProcessor.process(httpRequest);
     }
 }
