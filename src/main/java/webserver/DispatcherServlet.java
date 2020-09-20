@@ -16,14 +16,15 @@ import org.slf4j.LoggerFactory;
 
 import webserver.controller.Handlers;
 import webserver.controller.IndexController;
+import webserver.controller.StaticResourceHandlers;
 import webserver.controller.UserController;
 
-public class RequestHandler implements Runnable {
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+public class DispatcherServlet implements Runnable {
+    private static final Logger logger = LoggerFactory.getLogger(DispatcherServlet.class);
 
-    private Socket connection;
+    private final Socket connection;
 
-    public RequestHandler(Socket connectionSocket) {
+    public DispatcherServlet(Socket connectionSocket) {
         this.connection = connectionSocket;
     }
 
@@ -37,22 +38,13 @@ public class RequestHandler implements Runnable {
              DataOutputStream dos = new DataOutputStream(out))
         {
             ServletRequest servletRequest = new ServletRequest(br);
-            ViewResolver defaultViewResolver = new DefaultViewResolver();
-            View view = defaultViewResolver.resolve(servletRequest);
-
-            if (view.isNotEmpty()) {
-                final ServletResponse servletResponse = new ServletResponse(ServletResponse.StatusCode.OK);
-                servletResponse.sendResponse(dos, servletRequest, view);
-                return;
-            }
-
-            List<Class<? extends Handlers>> controllers = Arrays.asList(UserController.class, IndexController.class);
+            List<Class<? extends Handlers>> controllers = Arrays.asList(UserController.class, IndexController.class, StaticResourceHandlers.class);
             HandlerMapping defaultHandlerMapping = new DefaultHandlerMapping(controllers);
             Method handler = defaultHandlerMapping.mapping(servletRequest);
             HandlerAdaptor defaultHandlerAdaptor = new DefaultHandlerAdaptor();
             HttpMessageConverter converter = new DefaultHttpMessageConverter();
-            ServletResponse servletResponse = defaultHandlerAdaptor.invoke(handler, servletRequest, converter);
-            servletResponse.sendResponse(dos, servletRequest);
+            final ModelAndView mav = defaultHandlerAdaptor.invoke(handler, servletRequest, converter);
+            mav.sendResponse(dos);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }

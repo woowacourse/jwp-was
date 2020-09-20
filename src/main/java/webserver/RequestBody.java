@@ -8,10 +8,10 @@ import java.util.Objects;
 import exception.InvalidRequestBodyException;
 
 public class RequestBody {
-    private final Map<String, String> attribute;
+    private final Map<String, String> attributes;
 
-    private RequestBody(Map<String, String> attribute) {
-        this.attribute = attribute;
+    private RequestBody(Map<String, String> attributes) {
+        this.attributes = attributes;
     }
 
     public static RequestBody of(String line) {
@@ -37,7 +37,7 @@ public class RequestBody {
         }
     }
 
-    public Map<String, String> getAttribute() {
-        return Collections.unmodifiableMap(attribute);
+    public Map<String, String> getAttributes() {
+        return Collections.unmodifiableMap(attributes);
     }
 }

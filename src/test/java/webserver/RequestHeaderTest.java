@@ -30,7 +30,7 @@ class RequestHeaderTest {
         expectedParams.put("password", "ddd");
 
         RequestHeader header = RequestHeader.of(VALID_HEADER);
-        Map<String, String> actual = header.getAttribute();
+        Map<String, String> actual = header.getHeaders();
         Map<String, String> params = header.getQueryParams();
 
         assertAll(
@@ -73,7 +73,7 @@ class RequestHeaderTest {
     void emptyAttribute() {
         String INVALID_HEADER = "GET /index.html HTTP/1.1\n";
         RequestHeader header = RequestHeader.of(INVALID_HEADER);
-        Map<String, String> attribute = header.getAttribute();
+        Map<String, String> attribute = header.getHeaders();
 
         assertThat(attribute).isEmpty();
     }
