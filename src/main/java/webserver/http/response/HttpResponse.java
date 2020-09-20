@@ -39,7 +39,7 @@ public class HttpResponse {
     public void writeBody(ResponseBody responseBody) {
         this.responseBody = responseBody;
         responseStatus.setHttpStatus(HttpStatus.OK);
-        setHeader(CONTENT_TYPE, "text/html;charset=utf-8");
+        setHeader(CONTENT_TYPE, TEXT_HTML_CHARSET_UTF_8);
         setHeader(CONTENT_LENGTH, String.valueOf(responseBody.getBodyLength()));
     }
 
