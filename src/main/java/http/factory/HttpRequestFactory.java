@@ -20,6 +20,7 @@ import java.util.Map;
 public class HttpRequestFactory {
     private static final Logger logger = LoggerFactory.getLogger(HttpRequestFactory.class);
     private static final String COLON_DELIMITER = ": ";
+    public static final int BASE_CONTNET_LENGTH = 0;
 
     public static HttpRequest createRequest(BufferedReader br) throws IOException {
         String line = br.readLine();
@@ -50,7 +51,7 @@ public class HttpRequestFactory {
     }
 
     private static String readBody(BufferedReader br, RequestHeader requestHeader) throws IOException {
-        int contentLength = 0;
+        int contentLength = BASE_CONTNET_LENGTH;
         if (requestHeader.containsKey("Content-Length")) {
             contentLength = Integer.parseInt(requestHeader.get("Content-Length"));
         }
