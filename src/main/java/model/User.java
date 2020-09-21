@@ -1,5 +1,7 @@
 package model;
 
+import webserver.http.body.NameAndValuePair;
+
 public class User {
     private String userId;
     private String password;
@@ -11,6 +13,15 @@ public class User {
         this.password = password;
         this.name = name;
         this.email = email;
+    }
+
+    public static User from(NameAndValuePair nameAndValuePair) {
+        String userId = nameAndValuePair.getValue("userId");
+        String password = nameAndValuePair.getValue("password");
+        String name = nameAndValuePair.getValue("name");
+        String email = nameAndValuePair.getValue("email");
+
+        return new User(userId, password, name, email);
     }
 
     public String getUserId() {
