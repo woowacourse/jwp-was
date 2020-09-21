@@ -55,4 +55,8 @@ public class Request {
     public Body getBody() {
         return body;
     }
+
+    public String getHeader(String name) {
+        return headers.getHeader(name);
+    }
 }
