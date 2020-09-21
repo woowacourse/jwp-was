@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.net.Socket;
 import java.util.Arrays;
@@ -29,9 +28,12 @@ import webserver.messageconverter.DefaultHttpMessageConverter;
 import webserver.messageconverter.HttpMessageConverter;
 import webserver.request.ServletRequest;
 import webserver.response.ModelAndView;
+import webserver.response.ServletResponse;
 import webserver.response.StatusCode;
+import webserver.response.View;
 
 public class DispatcherServlet implements Runnable {
+    public static final String INTERNAL_SERVER_ERROR_VIEW_NAME = "internalServerError";
     private static final Logger logger = LoggerFactory.getLogger(DispatcherServlet.class);
 
     private final Socket connection;
@@ -55,14 +57,16 @@ public class DispatcherServlet implements Runnable {
             HandlerAdaptor defaultHandlerAdaptor = new DefaultHandlerAdaptor();
             HttpMessageConverter converter = new DefaultHttpMessageConverter();
             final ModelAndView mav = defaultHandlerAdaptor.invoke(handler, servletRequest, converter);
-            mav.sendResponse(dos);
+            View view = View.of(mav.getViewName());
+            ServletResponse response = ServletResponse.of(mav, servletRequest, view);
+            response.sendResponse(dos);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
-            try (OutputStream out = connection.getOutputStream();
-                 DataOutputStream dos = new DataOutputStream(out)) {
-                final ModelAndView mav = ModelAndView.of(StatusCode.INTERNAL_SERVER_ERROR,
-                    Maps.newLinkedHashMap(), "internalServerError");
-                mav.sendResponse(dos);
+            try (DataOutputStream dos = new DataOutputStream(connection.getOutputStream())) {
+                ModelAndView mav = ModelAndView.of(StatusCode.INTERNAL_SERVER_ERROR,
+                    Maps.newLinkedHashMap(), Maps.newLinkedHashMap(), INTERNAL_SERVER_ERROR_VIEW_NAME);
+                ServletResponse internalServerError = ServletResponse.of(mav, View.of(INTERNAL_SERVER_ERROR_VIEW_NAME));
+                internalServerError.sendResponse(dos);
             } catch (IOException ex) {
                 logger.error(ex.getMessage(), ex);
             }

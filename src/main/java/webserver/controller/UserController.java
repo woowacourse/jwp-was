@@ -19,16 +19,19 @@ public class UserController implements Handlers {
         UserService userService = new UserService();
         userService.save(user);
 
-        Map<String, String> response = new LinkedHashMap<>();
-        response.put("Location", "http://localhost:8080/index.html");
+        Map<String, String> headers = new LinkedHashMap<>();
+        Map<String, String> attributes = new LinkedHashMap<>();
+        headers.put("Location", "http://localhost:8080/index.html");
 
-        return ModelAndView.of(StatusCode.FOUND, response, "index");
+
+        return ModelAndView.of(StatusCode.FOUND, headers, attributes, "index");
     }
 
     @RequestMapping(type = MethodType.GET, value = "/user/form")
     public ModelAndView form() {
-        LinkedHashMap<String, String> response = new LinkedHashMap<>();
+        LinkedHashMap<String, String> headers = new LinkedHashMap<>();
+        Map<String, String> attributes = new LinkedHashMap<>();
 
-        return ModelAndView.of(StatusCode.OK, response, "form");
+        return ModelAndView.of(StatusCode.OK, headers, attributes, "form");
     }
 }
