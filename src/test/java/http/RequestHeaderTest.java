@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.*;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RequestHeaderTest {
     @Test
@@ -25,7 +25,7 @@ class RequestHeaderTest {
 
         RequestHeader requestHeader = new RequestHeader(br);
 
-        assertThat(requestHeader.getContentLength()).isEqualTo(93);
+        assertEquals(93, requestHeader.getContentLength());
     }
 
     @Test
