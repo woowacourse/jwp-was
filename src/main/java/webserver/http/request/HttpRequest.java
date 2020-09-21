@@ -2,63 +2,51 @@ package webserver.http.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class HttpRequest {
-    private final HttpRequestHeader httpRequestHeader;
+    private final HttpRequestLine requestLine;
     private final Map<String, String> body;
 
-    public HttpRequest(HttpRequestHeader httpRequestHeader, Map<String, String> body) {
-        this.httpRequestHeader = httpRequestHeader;
+    public HttpRequest(HttpRequestLine requestLine, Map<String, String> body) {
+        this.requestLine = requestLine;
         this.body = body;
     }
 
-    public HttpRequest(HttpRequestHeader httpRequestHeader) {
-        this(httpRequestHeader, new HashMap<>());
+    public HttpRequest(HttpRequestLine requestLine) {
+        this(requestLine, new HashMap<>());
     }
 
     public HttpRequest(BufferedReader bufferedReader) throws IOException {
-        List<String> lines = bufferedReader.lines().collect(Collectors.toList());
-        List<String> headers = new ArrayList<>();
+        this.requestLine = new HttpRequestLine(bufferedReader.readLine());
 
-        boolean hasBody = false;
-        for (int i = 0; i < lines.size(); i++) {
-            if (lines.get(i).isEmpty()) {
-                hasBody = true;
+        String line;
+        while (bufferedReader.ready()
+                && (line = bufferedReader.readLine()) != null) {
+            if (line.length() == 0) {
                 break;
             }
-            headers.add(lines.get(i));
         }
-        this.httpRequestHeader = new HttpRequestHeader(headers);
 
-        if (hasBody) {
-            this.body = ParameterParser.parse(lines.get(lines.size() - 1));
+        if (bufferedReader.ready() && (line = bufferedReader.readLine()) != null) {
+            body = ParameterParser.parse(line);
         } else {
-            this.body = new HashMap<>();
+            body = new HashMap<>();
         }
-    }
-
-    public HttpRequest(InputStream inputStream) throws IOException {
-        this(new BufferedReader(new InputStreamReader(inputStream)));
     }
 
     public HttpMethod getHttpMethod() {
-        return httpRequestHeader.getHttpRequestLine().getHttpMethod();
+        return requestLine.getHttpMethod();
     }
 
     public Map<String, String> getQueryParameters() {
-        return Collections.unmodifiableMap(httpRequestHeader.getHttpRequestLine().getParameters());
-    }
-
-    public Map<String, String> getHeaders() {
-        return Collections.unmodifiableMap(httpRequestHeader.getHeaders());
+        return Collections.unmodifiableMap(requestLine.getParameters());
     }
 
     public String getResourcePath() {
-        return httpRequestHeader.getHttpRequestLine().getResourcePath();
+        return requestLine.getResourcePath();
     }
 
     public Map<String, String> getBody() {

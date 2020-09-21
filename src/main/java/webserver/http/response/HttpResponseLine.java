@@ -16,18 +16,11 @@ public class HttpResponseLine {
         this(DEFAULT_PROTOCOL, httpStatus);
     }
 
-    public String format() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(protocol.getProtocol());
-        stringBuilder.append(" ");
-        stringBuilder.append(httpStatus.name());
-        stringBuilder.append(" ");
-        stringBuilder.append(httpStatus.getStatusCode());
-
-        return stringBuilder.toString();
-    }
-
     public HttpStatus getHttpStatus() {
         return httpStatus;
+    }
+
+    public Protocol getProtocol() {
+        return protocol;
     }
 }

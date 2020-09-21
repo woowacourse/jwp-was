@@ -2,7 +2,11 @@ package webserver.http.response;
 
 public class HttpResponse {
     private final HttpResponseHeader httpResponseHeader;
-    private final byte[] body;
+    private byte[] body;
+
+    public HttpResponse(HttpResponseHeader httpResponseHeader) {
+        this.httpResponseHeader = httpResponseHeader;
+    }
 
     public HttpResponse(HttpResponseHeader httpResponseHeader, byte[] body) {
         this.httpResponseHeader = httpResponseHeader;
@@ -17,7 +21,19 @@ public class HttpResponse {
         return httpResponseHeader.getHttpResponseLine().getHttpStatus();
     }
 
+    public boolean hasBody() {
+        return body.length > 0;
+    }
+
+    public String getHeaderValue(String key) {
+        return httpResponseHeader.getHeaders().get(key);
+    }
+
     public byte[] getBody() {
         return body;
+    }
+
+    public HttpResponseLine getHttpResponseLine() {
+        return httpResponseHeader.getHttpResponseLine();
     }
 }

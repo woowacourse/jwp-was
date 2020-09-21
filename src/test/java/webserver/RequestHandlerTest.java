@@ -8,7 +8,6 @@ import org.junit.jupiter.params.provider.CsvSource;
 import utils.FileIoUtils;
 import webserver.http.request.HttpMethod;
 import webserver.http.request.HttpRequest;
-import webserver.http.request.HttpRequestHeader;
 import webserver.http.request.HttpRequestLine;
 import webserver.http.response.HttpResponse;
 import webserver.http.response.HttpStatus;
@@ -33,8 +32,7 @@ class RequestHandlerTest {
     @ParameterizedTest
     @CsvSource({"/index.html,./templates/index.html", "/user/form.html,./templates/user/form.html"})
     void staticHandleTest(String resourcePath, String filePath) throws IOException, URISyntaxException {
-        HttpRequestHeader httpRequestHeader = new HttpRequestHeader(new HttpRequestLine(HttpMethod.GET, resourcePath));
-        HttpResponse actual = requestHandler.handle(new HttpRequest(httpRequestHeader));
+        HttpResponse actual = requestHandler.handle(new HttpRequest(new HttpRequestLine(HttpMethod.GET, resourcePath)));
         byte[] expected = FileIoUtils.loadFileFromClasspath(filePath);
         assertThat(actual.getBody()).isEqualTo(expected);
     }
@@ -43,7 +41,7 @@ class RequestHandlerTest {
     @Test
     void joinHandleTest() throws IOException, URISyntaxException {
         // given
-        HttpRequestHeader httpRequestHeader = new HttpRequestHeader(new HttpRequestLine(HttpMethod.POST, "/user/create"));
+        HttpRequestLine requestLine = new HttpRequestLine(HttpMethod.POST, "/user/create");
         Map<String, String> body = new HashMap<>();
         body.put("userId", "javajigi");
         body.put("password", "password");
@@ -51,11 +49,10 @@ class RequestHandlerTest {
         body.put("email", "javajigi@slipp.net");
 
         // when
-        HttpResponse response = requestHandler.handle(new HttpRequest(httpRequestHeader, body));
+        HttpResponse response = requestHandler.handle(new HttpRequest(requestLine, body));
 
         // then
-        byte[] page = FileIoUtils.loadFileFromClasspath("./templates/index.html");
-        assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.REDIRECT);
-        assertThat(response.getBody()).isEqualTo(page);
+        assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
+        assertThat(response.getHeaderValue("Location")).isEqualTo("http://localhost:8080/index.html");
     }
 }

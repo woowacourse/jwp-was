@@ -20,17 +20,8 @@ public class HttpResponseHeader {
         headers.put(key, value);
     }
 
-    public String format() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(httpResponseLine.format());
-        stringBuilder.append("\n");
-        for (Map.Entry<String, String> entry : headers.entrySet()) {
-            stringBuilder.append(entry.getKey());
-            stringBuilder.append(": ");
-            stringBuilder.append(entry.getValue());
-            stringBuilder.append("\n");
-        }
-        return stringBuilder.toString();
+    public Map<String, String> getHeaders() {
+        return headers;
     }
 
     public HttpResponseLine getHttpResponseLine() {

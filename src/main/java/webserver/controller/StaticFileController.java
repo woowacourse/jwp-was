@@ -19,7 +19,8 @@ public class StaticFileController {
         httpResponseHeader.add("Content-Type", "text/html;charset=utf-8");
         httpResponseHeader.add("Content-Length", String.valueOf(body.length));
 
-        return new HttpResponse(httpResponseHeader, body);
+        HttpResponse httpResponse = new HttpResponse(httpResponseHeader, body);
+        return httpResponse;
     }
 
     public static HttpResponse staticProcess(String filePath) {

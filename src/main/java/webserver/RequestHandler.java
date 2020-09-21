@@ -2,19 +2,17 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.FormatUtils;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
+import java.util.Map;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private static final byte[] DEFAULT_BODY = "Hello World".getBytes();
-    private static final byte[] ERROR_BODY = "Error".getBytes();
+    private static final String ENCODING = "UTF-8";
 
     private Socket connection;
 
@@ -27,9 +25,9 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            DataOutputStream dos = new DataOutputStream(out);
-            HttpResponse httpResponse = handle(new HttpRequest(in));
-            readResponse(httpResponse, dos);
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, ENCODING));
+            HttpResponse httpResponse = handle(new HttpRequest(bufferedReader));
+            readResponse(httpResponse, new DataOutputStream(out));
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -37,8 +35,20 @@ public class RequestHandler implements Runnable {
 
     private void readResponse(HttpResponse httpResponse, DataOutputStream dos) {
         try {
-            dos.writeBytes(httpResponse.getHttpResponseHeader().format());
-            dos.write(httpResponse.getBody(), 0, httpResponse.getBody().length);
+            String responseLine = FormatUtils.formatResponseLine(httpResponse.getHttpResponseLine());
+            dos.writeBytes(responseLine);
+            System.out.println(responseLine);
+
+            for (Map.Entry<String, String> entry : httpResponse.getHttpResponseHeader().getHeaders().entrySet()) {
+                System.out.println(FormatUtils.formatHeader(entry));
+                dos.writeBytes(FormatUtils.formatHeader(entry));
+            }
+
+            if (httpResponse.hasBody()) {
+                dos.writeBytes("\r\n");
+                System.out.println("body");
+                dos.write(httpResponse.getBody(), 0, httpResponse.getBody().length);
+            }
             dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -46,6 +56,6 @@ public class RequestHandler implements Runnable {
     }
 
     public HttpResponse handle(HttpRequest httpRequest) {
-        return RequestProcessor.process(httpRequest);
+        return HandlerMapping.mapping(httpRequest);
     }
 }
