@@ -4,6 +4,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class HttpStartLine {
+    public static final String SPLIT_DELIMITER = " ";
+    public static final String QUERY_PARAM_DELIMITER = "\\?";
     private final MethodType method;
     private final String path;
     private final String protocolVersion;
@@ -18,31 +20,17 @@ public class HttpStartLine {
     }
 
     public static HttpStartLine of(final String line) {
-        String[] startLine = line.split(" ");
+        String[] startLine = line.split(SPLIT_DELIMITER);
         MethodType method = MethodType.of(startLine[0]);
         String path = getPathWithoutParams(startLine[1]);
         String protocolVersion = startLine[2];
-        Map<String, String> queryParams = createParams(startLine[1]);
+        QueryParams queryParams = QueryParams.of(startLine[1]);
 
-        return new HttpStartLine(method, path, protocolVersion, new QueryParams(queryParams));
-    }
-
-    private static Map<String, String> createParams(String path) {
-        Map<String, String> queryParams = new LinkedHashMap<>();
-        if (!path.contains("?")) {
-            return queryParams;
-        }
-        String queryString = path.split("\\?")[1];
-        String[] params = queryString.split("&");
-        for (String param : params) {
-            String[] attribute = param.split("=");
-            queryParams.put(attribute[0], attribute[1]);
-        }
-        return queryParams;
+        return new HttpStartLine(method, path, protocolVersion, queryParams);
     }
 
     private static String getPathWithoutParams(String path) {
-        return path.split("\\?")[0];
+        return path.split(QUERY_PARAM_DELIMITER)[0];
     }
 
     public String getPath() {
