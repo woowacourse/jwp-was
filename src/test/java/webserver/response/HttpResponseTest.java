@@ -20,7 +20,7 @@ public class HttpResponseTest {
 
     private static final String TEST_RESPONSE_DIRECTORY = "./src/test/resources/response/";
 
-    @DisplayName("HttpResponse Forward - HTML")
+    @DisplayName("HttpResponse Forward - non Static")
     @Test
     public void responseForward_HTML() throws Exception {
         String fileName = "Http_Response_Forward_HTML.txt";
@@ -35,7 +35,7 @@ public class HttpResponseTest {
         assertThat(responseText).contains("</body></html>");
     }
 
-    @DisplayName("HttpResponse Forward - CSS")
+    @DisplayName("HttpResponse Forward - Static")
     @Test
     public void responseForward_CSS() throws Exception {
         String fileName = "Http_Response_Forward_CSS.txt";

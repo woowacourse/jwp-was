@@ -31,7 +31,7 @@ public enum HttpContentType {
         return Arrays.stream(HttpContentType.values())
             .filter(type -> type.isSameExtension(uri))
             .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException(uri + "에해당하는 확장자가 없습니다!"))
+            .orElseThrow(() -> new IllegalArgumentException(uri + "에 해당하는 확장자가 없습니다!"))
             .staticFile;
     }
 

@@ -12,9 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.controller.Controller;
 import webserver.controller.CreateUserController;
+import webserver.controller.DefaultController;
 import webserver.controller.ListUserController;
 import webserver.controller.LoginController;
-import webserver.controller.defaultController;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 
@@ -46,7 +46,7 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = new HttpRequest(bufferedReader);
             HttpResponse httpResponse = new HttpResponse(out);
 
-            Controller controller = controllerMapper.getOrDefault(httpRequest.getPath(), new defaultController());
+            Controller controller = controllerMapper.getOrDefault(httpRequest.getPath(), new DefaultController());
             controller.service(httpRequest, httpResponse);
         } catch (IOException e) {
             logger.error(e.getMessage());

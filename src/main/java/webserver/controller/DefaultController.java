@@ -5,7 +5,7 @@ import java.net.URISyntaxException;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 
-public class defaultController extends AbstractController {
+public class DefaultController extends AbstractController {
 
     @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse)
