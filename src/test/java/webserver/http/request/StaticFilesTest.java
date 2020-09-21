@@ -1,4 +1,4 @@
-package webserver.http;
+package webserver.http.request;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -8,7 +8,6 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import webserver.http.exception.ResourceNotFoundException;
-import webserver.http.request.StaticFiles;
 
 class StaticFilesTest {
 

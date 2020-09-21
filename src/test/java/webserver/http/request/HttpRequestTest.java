@@ -1,4 +1,4 @@
-package webserver.http;
+package webserver.http.request;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,8 +10,6 @@ import java.io.StringReader;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import webserver.http.request.HttpRequest;
 
 class HttpRequestTest {
 
@@ -37,7 +35,6 @@ class HttpRequestTest {
             () -> assertThat("password").isEqualTo(httpRequest.getHttpBodyValueOf("password")),
             () -> assertThat(true).isEqualTo(httpRequest.isStaticFile()),
             () -> assertThat("text/html").isEqualTo(httpRequest.getContentType())
-
         );
     }
 }

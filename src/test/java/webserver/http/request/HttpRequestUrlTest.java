@@ -1,4 +1,4 @@
-package webserver.http;
+package webserver.http.request;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -9,7 +9,6 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import webserver.http.exception.InvalidHttpRequestException;
-import webserver.http.request.HttpRequestUrl;
 
 class HttpRequestUrlTest {
 
@@ -38,8 +37,8 @@ class HttpRequestUrlTest {
     void getParameters(String input, String key, String value) {
         HttpRequestUrl httpRequestUrl = new HttpRequestUrl(input);
 
-        assertThat(key).isIn(httpRequestUrl.getParameters().keySet());
-        assertThat(value).isEqualTo(httpRequestUrl.getParameters().get(key));
+        assertThat(key).isIn(httpRequestUrl.getKeySet());
+        assertThat(value).isEqualTo(httpRequestUrl.getValueBy(key));
     }
 
     @DisplayName("파라미터가 있더라도 동일한 path라면 true를 반환한다.")

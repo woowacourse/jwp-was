@@ -1,4 +1,4 @@
-package webserver.http;
+package webserver.http.request;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -8,8 +8,6 @@ import java.util.Map;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import webserver.http.request.HttpRequestBody;
 
 class HttpRequestBodyTest {
 
