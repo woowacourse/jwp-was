@@ -39,8 +39,8 @@ public class Response {
         }
 
         this.version = request.getVersion();
-        headers.setHeader("Content-Type:", type.getContentType() + ";charset=utf-8");
-        headers.setHeader("Content-Length:", String.valueOf(body.getLength()));
+        headers.setHeader("Content-Type", type.getContentType() + ";charset=utf-8");
+        headers.setHeader("Content-Length", String.valueOf(body.getLength()));
     }
 
     public void postResponse(Request request) {
@@ -50,7 +50,7 @@ public class Response {
 
     public void redirectTo(String url) {
         this.status = FOUND;
-        headers.setHeader("Location:", url);
+        headers.setHeader("Location", url);
     }
 
     private byte[] fileDataFinder(Request request) {
