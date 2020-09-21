@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import webserver.controller.UserCreateController;
 import webserver.middleware.Middlewares;
 import webserver.middleware.NotFound;
 import webserver.middleware.ServeStatic;
@@ -19,6 +20,7 @@ public class RequestHandler implements Runnable {
     private static final Middlewares middlewares = new Middlewares()
         .chain(new ServeStatic("templates"))
         .chain(new ServeStatic("static"))
+        .chain("/user/create", new UserCreateController())
         .chain(new NotFound());
 
     private final Socket connection;
