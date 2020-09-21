@@ -1,4 +1,4 @@
-package http.path;
+package http.controller;
 
 import http.RequestBody;
 import http.RequestHeader;
@@ -7,7 +7,7 @@ import service.UserService;
 
 import java.io.DataOutputStream;
 
-public class UserCreate implements Path {
+public class UserCreateController implements Controller {
     @Override
     public void get(DataOutputStream dos, RequestHeader requestHeader) {
         ResponseHeader.response405Header(dos);
