@@ -29,9 +29,9 @@ public class HttpRequestTest {
         assertThat(request.getParameter("userId")).isEqualTo("javajigi");
     }
 
-    @DisplayName("HttpRequest POST 요청")
+    @DisplayName("HttpRequest POST 요청, Param 없음")
     @Test
-    void request_POST() throws IOException {
+    void request_POST_WithoutParam() throws IOException {
         InputStream in = new FileInputStream(new File(TEST_REQUEST_DIRECTORY + "Http_Request_POST.txt"));
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         HttpRequest request = new HttpRequest(br);
@@ -40,5 +40,22 @@ public class HttpRequestTest {
         assertThat(request.getPath()).isEqualTo("/user/create");
         assertThat(request.getHeader("Connection")).isEqualTo("keep-alive");
         assertThat(request.getBodyParameter("userId")).isEqualTo("javajigi");
+    }
+
+    @DisplayName("HttpRequest POST 요청, Param 있음")
+    @Test
+    void request_POST_WithParam() throws IOException {
+        InputStream in = new FileInputStream(new File(TEST_REQUEST_DIRECTORY + "Http_Request_POST_With_Param.txt"));
+        BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+        HttpRequest request = new HttpRequest(br);
+
+        assertThat(request.getMethod()).isEqualTo("POST");
+        assertThat(request.getPath()).isEqualTo("/user/create");
+        assertThat(request.getHeader("Connection")).isEqualTo("keep-alive");
+        assertThat(request.getParameter("id")).isEqualTo("1");
+        assertThat(request.getParameter("name")).isEqualTo("bingbong");
+        assertThat(request.getBodyParameter("userId")).isEqualTo("javajigi");
+        assertThat(request.getBodyParameter("password")).isEqualTo("password");
+        assertThat(request.getBodyParameter("name")).isEqualTo("JaeSung");
     }
 }
