@@ -82,7 +82,7 @@ public class RequestHandler implements Runnable {
     private void responseHeaders(DataOutputStream dos, Response response) throws IOException {
         Map<String, String> headers = response.getHeaders();
         for (String name : headers.keySet()) {
-            writeWithLineSeparator(dos, String.format("%s %s", name, headers.get(name)));
+            writeWithLineSeparator(dos, String.format("%s: %s", name, headers.get(name)));
         }
     }
 

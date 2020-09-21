@@ -11,10 +11,10 @@ public class RequestTest extends WebServerTest {
 
     @Test
     public void requestTest_GET() throws Exception {
-        Request request = generateRequest("http_GET.txt");
+        Request request = generateRequest("http_GET_index.txt");
 
         assertThat(request.getMethod()).isEqualTo(GET);
-        assertThat(request.getPath()).isEqualTo("/user/create");
+        assertThat(request.getPath()).isEqualTo("/index.html");
         assertThat(request.getHeader("Connection")).isEqualTo("keep-alive");
     }
 
