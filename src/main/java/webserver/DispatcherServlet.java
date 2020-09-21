@@ -21,7 +21,10 @@ import webserver.controller.UserController;
 import webserver.handleradaptor.DefaultHandlerAdaptor;
 import webserver.handleradaptor.HandlerAdaptor;
 import webserver.handlermapping.DefaultHandlerMapping;
+import webserver.handlermapping.DefaultHandlerMappingStrategy;
 import webserver.handlermapping.HandlerMapping;
+import webserver.handlermapping.HandlerMappingStrategy;
+import webserver.handlermapping.StaticResourceHandlerMappingStrategy;
 import webserver.messageconverter.DefaultHttpMessageConverter;
 import webserver.messageconverter.HttpMessageConverter;
 import webserver.request.ServletRequest;
@@ -45,7 +48,9 @@ public class DispatcherServlet implements Runnable {
             ServletRequest servletRequest = new ServletRequest(br);
             List<Class<? extends Handlers>> controllers = Arrays.asList(UserController.class, IndexController.class,
                 StaticResourceHandlers.class);
-            HandlerMapping defaultHandlerMapping = new DefaultHandlerMapping(controllers);
+            List<HandlerMappingStrategy> handlerMappingStrategies = Arrays.asList(new DefaultHandlerMappingStrategy(),
+                new StaticResourceHandlerMappingStrategy());
+            HandlerMapping defaultHandlerMapping = new DefaultHandlerMapping(handlerMappingStrategies, controllers);
             Method handler = defaultHandlerMapping.mapping(servletRequest);
             HandlerAdaptor defaultHandlerAdaptor = new DefaultHandlerAdaptor();
             HttpMessageConverter converter = new DefaultHttpMessageConverter();
