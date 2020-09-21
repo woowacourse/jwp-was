@@ -13,7 +13,7 @@ public class View {
     }
 
     public static View of(final String viewName) {
-        try{
+        try {
             return new View(FileIoUtils.loadFileFromClasspath(viewName));
         } catch (IOException e) {
             throw new ViewNotFoundException(viewName);
@@ -24,7 +24,7 @@ public class View {
         return view;
     }
 
-    public int getLength(){
+    public int getLength() {
         return view.length;
     }
 

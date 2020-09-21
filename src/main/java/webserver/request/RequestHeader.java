@@ -8,6 +8,13 @@ import java.util.Objects;
 import exception.InvalidRequestHeaderException;
 
 public class RequestHeader {
+    private static final int KEY_VALUE_LENGTH = 2;
+    private static final int KEY_INDEX = 0;
+    private static final int VALUE_INDEX = 1;
+    private static final int DEFAULT_VALUE = 0;
+    private static final String DELIMITER = ":";
+    private static final String CONTENT_LENGTH = "Content-Length";
+
     private final Map<String, String> headers;
 
     private RequestHeader(final Map<String, String> headers) {
@@ -20,8 +27,8 @@ public class RequestHeader {
 
             Map<String, String> attribute = new LinkedHashMap<>();
             for (int i = 1; i < headers.length; i++) {
-                String[] map = headers[i].split(":", 2);
-                attribute.put(map[0], map[1].trim());
+                String[] map = headers[i].split(DELIMITER, KEY_VALUE_LENGTH);
+                attribute.put(map[KEY_INDEX], map[VALUE_INDEX].trim());
             }
 
             return new RequestHeader(attribute);
@@ -31,10 +38,10 @@ public class RequestHeader {
     }
 
     public int getContentLength() {
-        String contentLength = headers.get("Content-Length");
+        String contentLength = headers.get(CONTENT_LENGTH);
 
         if (Objects.isNull(contentLength) || contentLength.isEmpty()) {
-            contentLength = "0";
+            return DEFAULT_VALUE;
         }
         return Integer.parseInt(contentLength);
     }
@@ -53,7 +60,7 @@ public class RequestHeader {
 
         for (Map.Entry<String, String> entry : headers.entrySet()) {
             builder.append(entry.getKey())
-                .append(": ")
+                .append(DELIMITER)
                 .append(entry.getValue())
                 .append(System.lineSeparator());
         }
