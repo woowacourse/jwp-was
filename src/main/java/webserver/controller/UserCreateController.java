@@ -2,7 +2,6 @@ package webserver.controller;
 
 import java.io.IOException;
 
-import http.HttpStatus;
 import http.QueryParams;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -21,6 +20,6 @@ public class UserCreateController extends Controller {
             queryParams.get("password"),
             queryParams.get("name"),
             queryParams.get("email"));
-        response.status(HttpStatus.CREATED).end(null);
+        response.sendRedirect("/index.html");
     }
 }

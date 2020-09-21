@@ -49,6 +49,10 @@ public class HttpResponse {
         writer.flush();
     }
 
+    public void sendRedirect(String to) throws IOException {
+        status(HttpStatus.FOUND).set("Location", to).end(null);
+    }
+
     private void writeStatusLine() throws IOException {
         writer.writeBytes(statusLine.build() + CRLF);
     }
