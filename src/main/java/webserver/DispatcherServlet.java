@@ -3,7 +3,6 @@ package webserver;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
@@ -41,11 +40,8 @@ public class DispatcherServlet implements Runnable {
     public void run() {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
             connection.getPort());
-        try (InputStream in = connection.getInputStream();
-             OutputStream out = connection.getOutputStream();
-             InputStreamReader ir = new InputStreamReader(in);
-             BufferedReader br = new BufferedReader(ir);
-             DataOutputStream dos = new DataOutputStream(out)) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+             DataOutputStream dos = new DataOutputStream(connection.getOutputStream())) {
             ServletRequest servletRequest = new ServletRequest(br);
             List<Class<? extends Handlers>> controllers = Arrays.asList(UserController.class, IndexController.class,
                 StaticResourceHandlers.class);

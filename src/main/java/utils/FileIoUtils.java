@@ -1,6 +1,5 @@
 package utils;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -16,7 +15,6 @@ public class FileIoUtils {
     private static final String DEFAULT_PATH = "/";
     private static final String EXTENSION_DELIMITER = ".";
     private static final String NOT_FOUND_PAGE = "static/notFound.html";
-    private static final String BLANK = "";
     private static final String SUFFIX = ".html";
 
     public static byte[] loadFileFromClasspath(String filePath) throws IOException {
