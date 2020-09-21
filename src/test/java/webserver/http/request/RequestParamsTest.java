@@ -12,8 +12,8 @@ class RequestParamsTest {
         RequestParams requestParams = RequestParams.from("a=10&b=20&c=0");
 
         assertThat(requestParams.getParametersMap()).hasSize(3);
-        assertThat(requestParams.getOneParameterValue("a")).isEqualTo("10");
-        assertThat(requestParams.getOneParameterValue("b")).isEqualTo("20");
-        assertThat(requestParams.getOneParameterValue("c")).isEqualTo("0");
+        assertThat(requestParams.getParameters("a")).contains("10");
+        assertThat(requestParams.getParameters("b")).contains("20");
+        assertThat(requestParams.getParameters("c")).contains("0");
     }
 }

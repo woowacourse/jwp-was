@@ -17,11 +17,7 @@ public class RequestParams {
         return new RequestParams(ValueExtractor.extract(params));
     }
 
-    public String getOneParameterValue(String key) {
-        return parameters.get(key).get(0);
-    }
-
-    public List<String> get(String key) {
+    public List<String> getParameters(String key) {
         return parameters.get(key);
     }
 

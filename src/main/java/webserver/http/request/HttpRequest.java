@@ -1,6 +1,10 @@
 package webserver.http.request;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class HttpRequest {
     private RequestLine requestLine;
@@ -24,11 +28,19 @@ public class HttpRequest {
     }
 
     public String getParameter(String key) {
-        return getRequestParameter().getOneParameterValue(key);
+        List<String> parameters = getParameters(key);
+        if (Objects.isNull(parameters) || parameters.isEmpty()) {
+            return null;
+        }
+        return parameters.get(0);
     }
 
-    public List<String> getAllParameter(String key) {
-        return getRequestParameter().get(key);
+    public List<String> getParameters(String key) {
+        List<String> values = Stream.of(getRequestParameter().getParameters(key), requestBody.getParameters(key))
+            .filter(Objects::nonNull)
+            .flatMap(Collection::stream)
+            .collect(Collectors.toList());
+        return values.isEmpty() ? null : values;
     }
 
     public String getHttpVersion() {

@@ -15,12 +15,8 @@ public class RequestBody {
         return new RequestBody(query, RequestParams.from(query));
     }
 
-    public String getParameter(String key) {
-        return requestParams.getOneParameterValue(key);
-    }
-
-    public List<String> getAllParameter(String key) {
-        return requestParams.get(key);
+    public List<String> getParameters(String key) {
+        return requestParams.getParameters(key);
     }
 
     public String getBody() {

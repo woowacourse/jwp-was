@@ -17,4 +17,10 @@ class ValueExtractorTest {
         assertThat(extract.get("a")).hasSize(2);
         assertThat(extract.get("b")).contains("2");
     }
+
+    @DisplayName("빈 값이 올 시 정상적으로 생성되는 지 확인한다.")
+    @Test
+    void extractWithEmpty() {
+        assertThat(ValueExtractor.extract("")).isEmpty();
+    }
 }
