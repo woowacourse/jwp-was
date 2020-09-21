@@ -1,12 +1,8 @@
 package webserver;
 
-import exception.NotExistRequestHeader;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Objects;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import utils.StringUtils;
 
 public class HttpRequest {
@@ -17,11 +13,8 @@ public class HttpRequest {
     private final RequestHeader requestHeader;
     private final RequestBody requestBody;
 
-    private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
-
     public HttpRequest(BufferedReader bufferedReader) throws IOException {
         String line = bufferedReader.readLine();
-        validateRequestLine(line);
         requestLine = new RequestLine(line);
         requestHeader = new RequestHeader(new HashMap<>());
 
@@ -37,29 +30,6 @@ public class HttpRequest {
 
     private boolean isNotAccessibleLine(String[] lineSegment) {
         return lineSegment.length != 2;
-    }
-
-    private void validateRequestLine(String line) {
-        if (isNotAvailable(line)) {
-            logger.info("not exist Request Header");
-            throw new NotExistRequestHeader("not exist Request Header");
-        }
-    }
-
-    private boolean isNotAvailable(String line) {
-        return Objects.isNull(line);
-    }
-
-    public boolean isGet() {
-        return requestLine.isGet();
-    }
-
-    public boolean isPost() {
-        return requestLine.isPost();
-    }
-
-    public String getResourcePath() {
-        return requestLine.getPath();
     }
 
     public String getBody() {

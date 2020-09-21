@@ -1,9 +1,13 @@
 package webserver;
 
+import exception.NotExistRequestHeader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import utils.StringUtils;
+
 public class RequestLine {
 
-    private static final String HTTP_METHOD_GET = "GET";
-    private static final String HTTP_METHOD_POST = "POST";
+    private static final Logger log = LoggerFactory.getLogger(RequestLine.class);
     private static final String HTTP_HEADER_FIRST_LINE_DELIMITER = " ";
 
     private final HttpMethod method;
@@ -11,6 +15,7 @@ public class RequestLine {
     private final String version;
 
     public RequestLine(String line) {
+        validate(line);
         String[] lineSegment = line.split(HTTP_HEADER_FIRST_LINE_DELIMITER);
         validate(lineSegment);
         this.method = HttpMethod.find(lineSegment[0]);
@@ -18,18 +23,17 @@ public class RequestLine {
         this.version = lineSegment[2];
     }
 
+    private void validate(String line) {
+        if (StringUtils.isBlank(line)) {
+            log.info("not exist Request Header");
+            throw new NotExistRequestHeader("not exist Request Header");
+        }
+    }
+
     private void validate(String[] lineSegment) {
         if (lineSegment.length != 3) {
             throw new NegativeArraySizeException("Header RequestLine의 사이즈가 맞지 않습니다!");
         }
-    }
-
-    public boolean isGet() {
-        return HTTP_METHOD_GET.equals(method);
-    }
-
-    public boolean isPost() {
-        return HTTP_METHOD_POST.equals(method);
     }
 
     public String getMethod() {
