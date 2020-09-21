@@ -1,24 +1,17 @@
 package webserver;
 
-import webserver.controller.StaticFileController;
-import webserver.controller.UserController;
 import webserver.http.request.HttpMethod;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
-import webserver.http.response.HttpStatus;
+import webserver.staticfile.StaticFileController;
+import webserver.staticfile.StaticFileMatcher;
+import webserver.user.UserController;
 
 import java.util.Arrays;
 import java.util.function.Function;
 
 public enum HandlerMapping {
-    STATIC_INDEX(HttpMethod.GET, "/index.html",
-            httpRequest -> StaticFileController.staticProcess("./templates/index.html")),
-    STATIC_JOIN(HttpMethod.GET, "/user/form.html",
-            httpRequest -> StaticFileController.staticProcess("./templates/user/form.html")),
-    JOIN(HttpMethod.POST, "/user/create",
-            httpRequest -> UserController.doPost(httpRequest));
-
-    private static final String ERROR_PAGE = "./templates/error.html";
+    JOIN(HttpMethod.POST, "/user/create", httpRequest -> UserController.doPost(httpRequest));
 
     private HttpMethod httpMethod;
     private String resourcePath;
@@ -31,11 +24,14 @@ public enum HandlerMapping {
     }
 
     public static HttpResponse mapping(HttpRequest httpRequest) {
+        if (StaticFileMatcher.isStaticFileResourcePath(httpRequest.getResourcePath())) {
+            return StaticFileController.processStaticFile(httpRequest);
+        }
         return Arrays.stream(HandlerMapping.values())
                 .filter(x -> isSame(x, httpRequest))
                 .findAny()
                 .map(x -> x.process.apply(httpRequest))
-                .orElse(StaticFileController.staticProcess(ERROR_PAGE, HttpStatus.BAD_REQUEST));
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 요청입니다."));
     }
 
     private static boolean isSame(HandlerMapping handlerMapping, HttpRequest httpRequest) {

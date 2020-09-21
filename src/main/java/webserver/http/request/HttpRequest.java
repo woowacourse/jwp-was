@@ -1,5 +1,7 @@
 package webserver.http.request;
 
+import com.google.common.base.Strings;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Collections;
@@ -22,14 +24,11 @@ public class HttpRequest {
     public HttpRequest(BufferedReader bufferedReader) throws IOException {
         this.requestLine = new HttpRequestLine(bufferedReader.readLine());
 
-        String line;
         while (bufferedReader.ready()
-                && (line = bufferedReader.readLine()) != null) {
-            if (line.length() == 0) {
-                break;
-            }
+                && !Strings.isNullOrEmpty(bufferedReader.readLine())) {
         }
 
+        String line;
         if (bufferedReader.ready() && (line = bufferedReader.readLine()) != null) {
             body = ParameterParser.parse(line);
         } else {

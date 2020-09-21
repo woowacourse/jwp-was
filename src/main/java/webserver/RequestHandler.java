@@ -37,16 +37,13 @@ public class RequestHandler implements Runnable {
         try {
             String responseLine = FormatUtils.formatResponseLine(httpResponse.getHttpResponseLine());
             dos.writeBytes(responseLine);
-            System.out.println(responseLine);
 
             for (Map.Entry<String, String> entry : httpResponse.getHttpResponseHeader().getHeaders().entrySet()) {
-                System.out.println(FormatUtils.formatHeader(entry));
                 dos.writeBytes(FormatUtils.formatHeader(entry));
             }
 
             if (httpResponse.hasBody()) {
                 dos.writeBytes("\r\n");
-                System.out.println("body");
                 dos.write(httpResponse.getBody(), 0, httpResponse.getBody().length);
             }
             dos.flush();
