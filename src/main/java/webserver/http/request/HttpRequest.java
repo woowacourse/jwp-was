@@ -4,11 +4,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Map;
 
+import webserver.http.HttpHeaders;
 import webserver.utils.HttpElementExtractor;
 
 public class HttpRequest {
     private HttpRequestLine httpRequestLine;
-    private HttpRequestHeaders httpRequestHeaders;
+    private HttpHeaders httpRequestHeaders;
     private HttpRequestBody httpRequestBody;
 
     public HttpRequest(BufferedReader bufferedReader) throws IOException {
@@ -16,7 +17,7 @@ public class HttpRequest {
         httpRequestLine = new HttpRequestLine(requestLine);
 
         Map<String, String> headers = HttpElementExtractor.extractHeaders(bufferedReader);
-        httpRequestHeaders = new HttpRequestHeaders(headers);
+        httpRequestHeaders = new HttpHeaders(headers);
 
         if (httpRequestLine.isPost()) {
             Map<String, String> body = HttpElementExtractor.extractBody(bufferedReader,

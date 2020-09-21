@@ -1,13 +1,13 @@
-package webserver.http.request;
+package webserver.http;
 
 import java.util.Map;
 
-public class HttpRequestHeaders {
+public class HttpHeaders {
     private static final String CONTENT_LENGTH = "Content-Length";
 
     private final Map<String, String> requestHeaders;
 
-    public HttpRequestHeaders(Map<String, String> requestHeaders) {
+    public HttpHeaders(Map<String, String> requestHeaders) {
         this.requestHeaders = requestHeaders;
     }
 
