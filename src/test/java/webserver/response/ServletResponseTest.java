@@ -1,7 +1,6 @@
-package webserver;
+package webserver.response;
 
 import static org.assertj.core.api.Assertions.*;
-import static webserver.ServletFixture.*;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -11,7 +10,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -19,12 +17,7 @@ import java.util.Objects;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.google.common.collect.Maps;
-import webserver.request.ServletRequest;
-import webserver.response.ModelAndView;
-import webserver.response.ServletResponse;
-import webserver.response.StatusCode;
-import webserver.response.View;
+import webserver.ServletFixture;
 
 class ServletResponseTest {
 

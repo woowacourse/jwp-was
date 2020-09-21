@@ -3,6 +3,10 @@ package webserver;
 public class ServletFixture {
     public static final String REQUEST_START_LINE = "POST /user/create HTTP/1.1";
 
+    public static final String DEFAULT_PROTOCOL = "HTTP/1.1";
+
+    public static final String PATH_WITH_PARAMS = "/user/create?userId=javajigi&password=password&name=JaeSung";
+
     public static final String REQUEST_HEADER = "Host: localhost:8080\n"
         + "Connection: keep-alive\n"
         + "Content-Length: 93\n"
@@ -169,4 +173,5 @@ public class ServletFixture {
         + "<script src=\"js/scripts.js\"></script>"
         + "\t</body>"
         + "</html>null";
+
 }

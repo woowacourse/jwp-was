@@ -1,4 +1,4 @@
-package webserver;
+package webserver.request;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,7 +10,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import exception.InvalidRequestHeaderException;
-import webserver.request.RequestHeader;
 
 class RequestHeaderTest {
     private static final String VALID_HEADER = "Host: localhost:8080\n"
@@ -43,29 +42,6 @@ class RequestHeaderTest {
             .isInstanceOf(InvalidRequestHeaderException.class)
             .hasMessage("지원하지 않는 request header 형식입니다.");
     }
-
-    // @DisplayName("QueryParams에 정보가 없는 경우 params가 비어있다.")
-    // @Test
-    // void emptyQueryParams() {
-    //     String INVALID_HEADER = "GET /index.html HTTP/1.1\n"
-    //         + "Host: localhost:8080\n"
-    //         + "Connection: keep-alive\n"
-    //         + "Accept: */*";
-    //     RequestHeader header = RequestHeader.of(INVALID_HEADER);
-    //     Map<String, String> queryParams = header.getQueryParams();
-    //
-    //     assertThat(queryParams).isEmpty();
-    // }
-
-    // @DisplayName("header에 정보가 없는 경우 빈 헤더를 반환한다.")
-    // @Test
-    // void emptyAttribute() {
-    //     String INVALID_HEADER = "GET /index.html HTTP/1.1\n";
-    //     RequestHeader header = RequestHeader.of(INVALID_HEADER);
-    //     Map<String, String> attribute = header.getHeaders();
-    //
-    //     assertThat(attribute).isEmpty();
-    // }
 
     @DisplayName("header 값이 존재하면 값을 반환하고, 없으면 null을 반환한다.")
     @Test
