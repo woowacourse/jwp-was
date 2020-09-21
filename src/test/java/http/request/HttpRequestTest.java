@@ -8,13 +8,25 @@ import java.io.IOException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import http.HttpMethod;
+
 public class HttpRequestTest {
     @Test
     @DisplayName("HttpRequest 생성 테스트")
     void from() throws IOException {
-        String message = "GET /index.html HTTP/1.1";
+        String message = "GET /users?name=홍길동 HTTP/1.1\r\n" +
+            "Host: localhost:8080\r\n" +
+            "Connection: keep-alive\r\n" +
+            "Accept: */*";
         ByteArrayInputStream in = new ByteArrayInputStream(message.getBytes());
-        assertThat(HttpRequest.from(in)).isInstanceOf(HttpRequest.class);
+        HttpRequest httpRequest = HttpRequest.from(in);
+        assertThat(httpRequest.method()).isEqualTo(HttpMethod.GET);
+        assertThat(httpRequest.path()).isEqualTo("/users");
+        assertThat(httpRequest.version()).isEqualTo("HTTP/1.1");
+        assertThat(httpRequest.getParam("name")).isEqualTo("홍길동");
+        assertThat(httpRequest.getHeader("Host")).isEqualTo("localhost:8080");
+        assertThat(httpRequest.getHeader("Connection")).isEqualTo("keep-alive");
+        assertThat(httpRequest.getHeader("Accept")).isEqualTo("*/*");
     }
 
     @Test

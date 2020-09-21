@@ -47,6 +47,10 @@ public class HttpRequest {
         return requestLine.getVersion();
     }
 
+    public String getHeader(String key) {
+        return headers.get(key);
+    }
+
     public String getBody() {
         return body;
     }
