@@ -15,11 +15,11 @@ public class ServletRequest {
     public ServletRequest(BufferedReader br) throws IOException {
         String line = br.readLine();
         this.httpStartLine = HttpStartLine.of(line);
-        line = br.readLine();
+        String newLine = br.readLine();
         StringBuilder headerLines = new StringBuilder();
-        while (Objects.nonNull(line) && !line.isEmpty()) {
-            headerLines.append(line).append("\n");
-            line = br.readLine();
+        while (Objects.nonNull(newLine) && !newLine.isEmpty()) {
+            headerLines.append(newLine).append(System.lineSeparator());
+            newLine = br.readLine();
         }
         this.requestHeader = RequestHeader.of(headerLines.toString());
         this.requestBody = RequestBody.of(IOUtils.readData(br, requestHeader.getContentLength()));

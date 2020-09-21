@@ -11,8 +11,11 @@ import org.junit.jupiter.api.Test;
 
 import model.User;
 import webserver.controller.IndexController;
+import webserver.controller.StaticResourceHandlers;
 import webserver.controller.UserController;
 import webserver.handlermapping.DefaultHandlerMapping;
+import webserver.handlermapping.DefaultHandlerMappingStrategy;
+import webserver.handlermapping.StaticResourceHandlerMappingStrategy;
 import webserver.request.ServletRequest;
 
 class DefaultHandlerMappingTest {
@@ -20,20 +23,26 @@ class DefaultHandlerMappingTest {
     @DisplayName("올바른 헨들러를 반환한다.")
     @Test
     void mapping() throws NoSuchMethodException {
-        DefaultHandlerMapping defaultHandlerMapping = new DefaultHandlerMapping(Arrays.asList(IndexController.class, UserController.class));
-        ServletRequest servletRequest = new ServletRequest(REQUEST_HEADER, REQUEST_BODY);
+        DefaultHandlerMapping defaultHandlerMapping = new DefaultHandlerMapping(
+            Arrays.asList(new StaticResourceHandlerMappingStrategy(), new DefaultHandlerMappingStrategy()),
+            Arrays.asList(IndexController.class, UserController.class));
+
+        ServletRequest servletRequest = new ServletRequest(REQUEST_START_LINE, REQUEST_HEADER, REQUEST_BODY);
         Method findMethod = defaultHandlerMapping.mapping(servletRequest);
 
         assertThat(findMethod).isEqualTo(UserController.class.getMethod("create", User.class));
     }
 
-    @DisplayName(".html로 끝나는 Path는 파싱후 적절한 핸들러에 매핑된다.")
+    @DisplayName("정적자원은 StaticResourceHandlers에서 처리된다.")
     @Test
     void mappingHtml() throws NoSuchMethodException {
-        DefaultHandlerMapping defaultHandlerMapping = new DefaultHandlerMapping(Arrays.asList(IndexController.class, UserController.class));
-        ServletRequest servletRequest = new ServletRequest(REQUEST_HEADER_WITH_HTML, REQUEST_BODY);
+        DefaultHandlerMapping defaultHandlerMapping = new DefaultHandlerMapping(
+            Arrays.asList(new StaticResourceHandlerMappingStrategy(), new DefaultHandlerMappingStrategy()),
+            Arrays.asList(IndexController.class, UserController.class, StaticResourceHandlers.class));
+
+        ServletRequest servletRequest = new ServletRequest(REQUEST_START_LINE_WITH_HTML, REQUEST_HEADER, REQUEST_BODY);
         Method findMethod = defaultHandlerMapping.mapping(servletRequest);
 
-        assertThat(findMethod).isEqualTo(IndexController.class.getMethod("index"));
+        assertThat(findMethod).isEqualTo(StaticResourceHandlers.class.getMethod("resolve", ServletRequest.class));
     }
 }

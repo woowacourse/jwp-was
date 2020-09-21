@@ -1,15 +1,16 @@
 package webserver;
 
 public class ServletFixture {
-    public static final String REQUEST_HEADER = "POST /user/create HTTP/1.1\n"
-        + "Host: localhost:8080\n"
+    public static final String REQUEST_START_LINE = "POST /user/create HTTP/1.1";
+
+    public static final String REQUEST_HEADER = "Host: localhost:8080\n"
         + "Connection: keep-alive\n"
         + "Content-Length: 93\n"
         + "Content-Type: application/x-www-form-urlencoded\n"
         + "Accept: */*";
     public static final String REQUEST_BODY = "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
 
-    public static final String REQUEST_START_LINE = "GET /index.html HTTP/1.1\n";
+    public static final String REQUEST_START_LINE_WITH_HTML = "GET /index.html HTTP/1.1\n";
 
     public static final String REQUEST_HEADER_WITH_HTML = "Host: localhost:8080\n"
         + "Connection: keep-alive\n"
@@ -18,8 +19,7 @@ public class ServletFixture {
         + "Accept: */*";
 
     public static final String RESPONSE = "HTTP/1.1 200 OK "
-        + "Content-Type: */*;charset=utf-8"
-        + "Content-Length: 6902"
+        + "Content-Length: 6902 "
         + ""
         + "<!DOCTYPE html>"
         + "<html lang=\"kr\">"
@@ -168,6 +168,5 @@ public class ServletFixture {
         + "<script src=\"js/bootstrap.min.js\"></script>"
         + "<script src=\"js/scripts.js\"></script>"
         + "\t</body>"
-        + "</html>"
-        + "null";
+        + "</html>null";
 }

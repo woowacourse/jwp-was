@@ -50,8 +50,7 @@ public class DispatcherServlet implements Runnable {
             ServletRequest servletRequest = new ServletRequest(br);
             List<Class<? extends Handlers>> controllers = Arrays.asList(UserController.class, IndexController.class,
                 StaticResourceHandlers.class);
-            List<HandlerMappingStrategy> handlerMappingStrategies = Arrays.asList(new DefaultHandlerMappingStrategy(),
-                new StaticResourceHandlerMappingStrategy());
+            List<HandlerMappingStrategy> handlerMappingStrategies = Arrays.asList(new DefaultHandlerMappingStrategy(), new StaticResourceHandlerMappingStrategy());
             HandlerMapping defaultHandlerMapping = new DefaultHandlerMapping(handlerMappingStrategies, controllers);
             Method handler = defaultHandlerMapping.mapping(servletRequest);
             HandlerAdaptor defaultHandlerAdaptor = new DefaultHandlerAdaptor();
