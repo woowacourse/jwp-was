@@ -1,7 +1,10 @@
 package webserver;
 
 import exception.NotFoundHttpVersionException;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.Arrays;
+import utils.StringUtils;
 
 public enum HttpVersion {
     HTTP09("HTTP/0.9"),
@@ -24,5 +27,9 @@ public enum HttpVersion {
 
     private boolean isSameVersion(String version) {
         return this.httpVersion.equals(version);
+    }
+
+    public void write(DataOutputStream dataOutputStream) throws IOException {
+        dataOutputStream.writeBytes(httpVersion + StringUtils.SPACE);
     }
 }

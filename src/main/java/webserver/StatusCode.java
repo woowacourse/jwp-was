@@ -1,7 +1,10 @@
 package webserver;
 
 import exception.NotFoundStatusCodeException;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.Arrays;
+import utils.StringUtils;
 
 public enum StatusCode {
     CONTINUE(100, "Continue"),
@@ -35,5 +38,9 @@ public enum StatusCode {
 
     private boolean isSameStatusCode(String code) {
         return this.code == Integer.parseInt(code);
+    }
+
+    public void write(DataOutputStream dataOutputStream) throws IOException {
+        dataOutputStream.writeBytes(code + StringUtils.SPACE + reasonPhase + StringUtils.SPACE);
     }
 }
