@@ -48,8 +48,8 @@
 - [x] 쓰레드 풀 생성
 - [x] Http request & response 역할 분담 
 - [x] Handler mapping - 다형성을 통해 if문 제거하기
-- [ ] 깨지는 테스트 수정
-- [ ] Http response - 상태에 따라 다른 메소드를 수행하도록 변경
+- [x] 깨지는 테스트 수정
+- [x] Http response - 상태에 따라 다른 메소드를 수행하도록 변경
 - [x] ModelAndView를 Servlet response 안으로 리팩토링 
 
 ## 진행 방법
