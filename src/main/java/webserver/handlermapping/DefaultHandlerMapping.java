@@ -34,7 +34,6 @@ public class DefaultHandlerMapping implements HandlerMapping {
                 return Objects.nonNull(annotation)
                     && (isStaticResourceHandler(request, annotation)
                     || isMatchHandler(path, methodType, annotation));
-
             })
             .findAny()
             .orElseThrow(MethodNotAllowedException::new);
