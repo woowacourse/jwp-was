@@ -53,12 +53,12 @@ public class HttpRequestUrl {
         return getPath().equals(path);
     }
 
-    private boolean hasParameters() {
-        return requestUrl.contains(PATH_AND_PARAMETER_DIVIDER);
-    }
-
     public boolean isStaticFile() {
         return StaticFiles.endsWith(requestUrl);
+    }
+
+    private boolean hasParameters() {
+        return !parameters.isEmpty();
     }
 
     public Map<String, String> getParameters() {
