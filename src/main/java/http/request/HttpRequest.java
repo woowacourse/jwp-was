@@ -28,6 +28,10 @@ public class HttpRequest {
         return requestLine.getPath();
     }
 
+    public String getParam(String key) {
+        return requestLine.getParam(key);
+    }
+
     public String version() {
         return requestLine.getVersion();
     }

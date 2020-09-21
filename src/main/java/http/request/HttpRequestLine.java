@@ -1,6 +1,7 @@
 package http.request;
 
 import http.HttpMethod;
+import http.HttpUri;
 
 public class HttpRequestLine {
     private static final String DELIMITER = " ";
@@ -10,10 +11,10 @@ public class HttpRequestLine {
     private static final int REQUIRED_LENGTH = 3;
 
     private final HttpMethod method;
-    private final String path;
+    private final HttpUri path;
     private final String version;
 
-    private HttpRequestLine(HttpMethod method, String path, String version) {
+    private HttpRequestLine(HttpMethod method, HttpUri path, String version) {
         this.method = method;
         this.path = path;
         this.version = version;
@@ -24,7 +25,8 @@ public class HttpRequestLine {
         if (tokens.length != REQUIRED_LENGTH) {
             throw new IllegalArgumentException("METHOD URI VERSION 형식이어야 합니다.");
         }
-        return new HttpRequestLine(HttpMethod.from(tokens[METHOD_INDEX]), tokens[PATH_INDEX], tokens[VERSION_INDEX]);
+        return new HttpRequestLine(HttpMethod.from(tokens[METHOD_INDEX]), HttpUri.from(tokens[PATH_INDEX]),
+            tokens[VERSION_INDEX]);
     }
 
     public HttpMethod getMethod() {
@@ -32,7 +34,11 @@ public class HttpRequestLine {
     }
 
     public String getPath() {
-        return path;
+        return path.getPath();
+    }
+
+    public String getParam(String key) {
+        return path.getParam(key);
     }
 
     public String getVersion() {
