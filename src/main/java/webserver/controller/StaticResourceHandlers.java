@@ -17,9 +17,10 @@ public class StaticResourceHandlers implements Handlers {
     public ModelAndView resolve(final ServletRequest servletRequest) {
         final String path = servletRequest.getPath();
         final String contentType = servletRequest.getAccept().split(",")[0];
+        final Map<String, String> headers = new LinkedHashMap<>();
         final Map<String, String> attributes = new LinkedHashMap<>();
-        attributes.put("Content-Type", contentType);
+        headers.put("Content-Type", contentType);
 
-        return ModelAndView.of(servletRequest.getProtocolVersion(), StatusCode.OK, attributes, path);
+        return ModelAndView.of(StatusCode.OK, headers, attributes, path);
     }
 }

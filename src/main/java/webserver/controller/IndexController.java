@@ -13,6 +13,6 @@ public class IndexController implements Handlers {
     @RequestMapping(type = MethodType.GET, value = {"/", "/index"})
     public ModelAndView index() {
 
-        return ModelAndView.of(StatusCode.OK, Maps.newLinkedHashMap(), "index");
+        return ModelAndView.of(StatusCode.OK, Maps.newLinkedHashMap(), Maps.newLinkedHashMap(), "index");
     }
 }
