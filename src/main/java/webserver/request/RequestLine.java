@@ -51,4 +51,8 @@ public class RequestLine {
     public boolean hasBody() {
         return method.getBody();
     }
+
+    public boolean isSupported() {
+        return method.isSupport();
+    }
 }

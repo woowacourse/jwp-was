@@ -12,9 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.controller.Controller;
 import webserver.controller.CreateUserController;
-import webserver.controller.IndexController;
 import webserver.controller.ListUserController;
 import webserver.controller.LoginController;
+import webserver.controller.defaultController;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 
@@ -30,7 +30,10 @@ public class RequestHandler implements Runnable {
         this.connection = connectionSocket;
         this.controllerMapper = controllerMapper;
 
-        controllerMapper.put("/index.html", new IndexController());
+        initControllerMapper(controllerMapper);
+    }
+
+    private void initControllerMapper(Map<String, Controller> controllerMapper) {
         controllerMapper.put("/user/create", new CreateUserController());
         controllerMapper.put("/user/list.html", new ListUserController());
         controllerMapper.put("/user/login", new LoginController());
@@ -43,7 +46,7 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = new HttpRequest(bufferedReader);
             HttpResponse httpResponse = new HttpResponse(out);
 
-            Controller controller = controllerMapper.getOrDefault(httpRequest.getPath(), new IndexController());
+            Controller controller = controllerMapper.getOrDefault(httpRequest.getPath(), new defaultController());
             controller.service(httpRequest, httpResponse);
         } catch (IOException e) {
             logger.error(e.getMessage());

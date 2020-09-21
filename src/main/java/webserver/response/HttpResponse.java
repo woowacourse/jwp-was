@@ -41,6 +41,18 @@ public class HttpResponse {
         writeHttpResponse();
     }
 
+    public void methodNotAllowed(String path) throws IOException, URISyntaxException {
+        statusLine = new StatusLine("HTTP/1.1 405");
+        setResponseBody(path);
+        writeHttpResponse();
+    }
+
+    public void notImplemented(String path) throws IOException, URISyntaxException {
+        statusLine = new StatusLine("HTTP/1.1 501");
+        setResponseBody(path);
+        writeHttpResponse();
+    }
+
     private void setResponseBody(String path) throws IOException, URISyntaxException {
         if (HttpContentType.isStaticFile(path)) {
             responseBody = new ResponseBody(FileIoUtils.loadFileFromClasspath(STATIC_PATH + path));

@@ -11,10 +11,21 @@ import webserver.response.HttpResponse;
 public abstract class AbstractController implements Controller {
 
     private static final Logger log = LoggerFactory.getLogger(ListUserController.class);
+    private static final String ERROR_HTML_URL = "/error.html";
 
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
         try {
+            if (!httpRequest.isMethodSupported()) {
+                httpResponse.methodNotAllowed(ERROR_HTML_URL);
+                return;
+            }
+
+            if (HttpMethod.NONE.isSame(httpRequest.getMethod())) {
+                doNone(httpResponse);
+                return;
+            }
+
             if (HttpMethod.GET.isSame(httpRequest.getMethod())) {
                 doGet(httpRequest, httpResponse);
                 return;
@@ -26,6 +37,11 @@ public abstract class AbstractController implements Controller {
         } catch (IOException | URISyntaxException e) {
             log.error(e.getMessage());
         }
+    }
+
+    private void doNone(HttpResponse httpResponse)
+        throws IOException, URISyntaxException {
+        httpResponse.notImplemented(ERROR_HTML_URL);
     }
 
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse)

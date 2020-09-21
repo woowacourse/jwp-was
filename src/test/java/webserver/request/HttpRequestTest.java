@@ -58,4 +58,14 @@ public class HttpRequestTest {
         assertThat(request.getBodyParameter("password")).isEqualTo("password");
         assertThat(request.getBodyParameter("name")).isEqualTo("JaeSung");
     }
+
+    @DisplayName("HttpRequest TRACE 요청, 지원하지 않음")
+    @Test
+    void isMethodSupported_HELLO() throws IOException {
+        InputStream in = new FileInputStream(new File(TEST_REQUEST_DIRECTORY + "Http_Request_TRACE.txt"));
+        BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+        HttpRequest request = new HttpRequest(br);
+
+        assertThat(request.isMethodSupported()).isFalse();
+    }
 }

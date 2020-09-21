@@ -1,9 +1,7 @@
 package webserver.request;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import exception.NotFoundHttpMethodException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -15,7 +13,7 @@ public class HttpMethodTest {
     @ParameterizedTest
     @CsvSource({"GET,true", "POST,true", "PUT,false", "DELETE,false", "HEAD,false", "TRACE,false", "CONNECT,false", "OPTIONS,false"})
     void isSupported(String httpMethod, boolean expected) {
-        assertThat(HttpMethod.isSupported(httpMethod)).isEqualTo(expected);
+        assertThat(HttpMethod.find(httpMethod).isSupport()).isEqualTo(expected);
     }
 
     @DisplayName("HTTP Method - body 유무")
@@ -25,11 +23,17 @@ public class HttpMethodTest {
         assertThat(HttpMethod.hasBody(httpMethod)).isEqualTo(expected);
     }
 
-    @DisplayName("HTTP Method 찾기 - 예외, 해당하는 HTTP Method를 찾지 못함")
+    @DisplayName("같은 HTTP Method 찾기")
+    @Test
+    void isSame() {
+        String httpMethod = "GET";
+        assertThat(HttpMethod.find(httpMethod).isSame("GET")).isTrue();
+    }
+
+    @DisplayName("HTTP Method 찾기 - 해당하는 HTTP Method를 찾지 못하면 NONE 반환")
     @Test
     void find_NotExistHttpMethod_ThrownException() {
         String httpMethod = "HELLO";
-        assertThatThrownBy(() -> HttpMethod.find(httpMethod))
-            .isInstanceOf(NotFoundHttpMethodException.class);
+        assertThat(HttpMethod.find(httpMethod)).isEqualTo(HttpMethod.NONE);
     }
 }

@@ -32,6 +32,10 @@ public class HttpRequest {
         return lineSegment.length != 2;
     }
 
+    public boolean isMethodSupported() {
+        return requestLine.isSupported();
+    }
+
     public String getBody() {
         return requestBody.getBody();
     }

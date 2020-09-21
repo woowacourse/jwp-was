@@ -7,6 +7,8 @@ import utils.IOUtils;
 
 public class RequestBody {
 
+    private static final String DEFAULT_CONTENT_TYPE = "application/x-www-form-urlencoded";
+
     private final Object body;
 
     public RequestBody(BufferedReader bufferedReader, RequestHeader requestHeader, RequestLine requestLine) throws IOException {
@@ -20,7 +22,7 @@ public class RequestBody {
         validate(contentLength, requestLine);
         String readBody = IOUtils.readData(bufferedReader, Integer.parseInt(contentLength));
 
-        if ("application/x-www-form-urlencoded".equals(contentType)) {
+        if (DEFAULT_CONTENT_TYPE.equals(contentType)) {
             this.body = new RequestParameters(readBody);
             return;
         }
@@ -28,7 +30,7 @@ public class RequestBody {
     }
 
     private void validate(String contentLength, RequestLine requestLine) {
-        if (Objects.isNull(contentLength)) {
+        if (requestLine.hasBody() && Objects.isNull(contentLength)) {
             throw new IllegalArgumentException("Content-Length를 설정해주세요!");
         }
     }
@@ -39,12 +41,5 @@ public class RequestBody {
 
     public String getParameter(String paramName) {
         return ((RequestParameters) body).getValue(paramName);
-    }
-
-    @Override
-    public String toString() {
-        return "RequestBody{" +
-            "body='" + body + '\'' +
-            '}';
     }
 }

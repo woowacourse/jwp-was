@@ -1,6 +1,5 @@
 package webserver.request;
 
-import exception.NotFoundHttpMethodException;
 import java.util.Arrays;
 
 public enum HttpMethod {
@@ -12,7 +11,8 @@ public enum HttpMethod {
     HEAD("HEAD", false, false),
     TRACE("TRACE", false, false),
     CONNECT("CONNECT", false, false),
-    OPTIONS("OPTIONS", false, false);
+    OPTIONS("OPTIONS", false, false),
+    NONE("NONE", true, false);
 
     private final String httpMethod;
     private final boolean support;
@@ -28,12 +28,7 @@ public enum HttpMethod {
         return Arrays.stream(HttpMethod.values())
             .filter(method -> method.httpMethod.equals(httpMethod))
             .findFirst()
-            .orElseThrow(() -> new NotFoundHttpMethodException(httpMethod + "에 해당하는 HttpMethod를 찾지 못했습니다!"));
-    }
-
-    public static boolean isSupported(String httpMethod) {
-        HttpMethod foundHttpMethod = find(httpMethod);
-        return foundHttpMethod.support;
+            .orElse(HttpMethod.NONE);
     }
 
     public static boolean hasBody(String httpMethod) {
@@ -47,6 +42,10 @@ public enum HttpMethod {
 
     public String getHttpMethod() {
         return httpMethod;
+    }
+
+    public boolean isSupport() {
+        return support;
     }
 
     public boolean getBody() {
