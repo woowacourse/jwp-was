@@ -8,23 +8,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RequestBody {
-    private Map<String, String> params;
+    private final Map<String, String> params;
 
     public RequestBody(BufferedReader br, int contentLength) throws IOException {
         params = new HashMap<>();
         String line = IOUtils.readData(br, contentLength);
         if (line.isEmpty()) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Line is empty.");
         }
 
         String[] tokens = line.split("&");
         for (String token : tokens) {
             String[] keyValue = token.split("=");
-            params.put(keyValue[0], keyValue[1]);
+            if(keyValue.length != 2) {
+                throw new IllegalArgumentException("No value for the key: " + keyValue[0]);
+            }
+            params.put(keyValue[0].toLowerCase(), keyValue[1]);
         }
     }
 
-    public Map<String, String> getParams() {
-        return params;
+    public String getValue(String key) {
+        return this.params.get(key);
     }
 }

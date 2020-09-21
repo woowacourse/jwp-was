@@ -30,4 +30,31 @@ public class ResponseHeader {
             logger.error(e.getMessage());
         }
     }
+
+    public static void response404Header(DataOutputStream dos) {
+        try {
+            dos.writeBytes("HTTP/1.1 404 Not Found \r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    public static void response405Header(DataOutputStream dos) {
+        try {
+            dos.writeBytes("HTTP/1.1 405 Method Not Allowed \r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    public static void response400Header(DataOutputStream dos) {
+        try {
+            dos.writeBytes("HTTP/1.1 400 Bad Request \r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
 }
