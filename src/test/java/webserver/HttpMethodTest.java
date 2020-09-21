@@ -1,8 +1,11 @@
 package webserver;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import exception.NotFoundHttpMethodException;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -20,5 +23,13 @@ public class HttpMethodTest {
     @CsvSource({"GET,false", "POST,true", "PUT,true", "DELETE,false", "HEAD,false", "TRACE,false", "CONNECT,false", "OPTIONS,false"})
     void hasBody(String httpMethod, boolean expected) {
         assertThat(HttpMethod.hasBody(httpMethod)).isEqualTo(expected);
+    }
+
+    @DisplayName("HTTP Method 찾기 - 예외, 해당하는 HTTP Method를 찾지 못함")
+    @Test
+    void find_NotExistHttpMethod_ThrownException() {
+        String httpMethod = "HELLO";
+        assertThatThrownBy(() -> HttpMethod.find(httpMethod))
+            .isInstanceOf(NotFoundHttpMethodException.class);
     }
 }
