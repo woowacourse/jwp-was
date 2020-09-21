@@ -1,4 +1,4 @@
-package webserver;
+package webserver.handlermapping;
 
 import static org.assertj.core.api.Assertions.*;
 import static webserver.ServletFixture.*;
@@ -13,9 +13,6 @@ import model.User;
 import webserver.controller.IndexController;
 import webserver.controller.StaticResourceHandlers;
 import webserver.controller.UserController;
-import webserver.handlermapping.DefaultHandlerMapping;
-import webserver.handlermapping.DefaultHandlerMappingStrategy;
-import webserver.handlermapping.StaticResourceHandlerMappingStrategy;
 import webserver.request.ServletRequest;
 
 class DefaultHandlerMappingTest {

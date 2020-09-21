@@ -3,8 +3,9 @@ package webserver.request;
 import java.util.Map;
 
 public class HttpStartLine {
-    public static final String SPLIT_DELIMITER = " ";
-    public static final String QUERY_PARAM_DELIMITER = "\\?";
+    private static final String SPLIT_DELIMITER = " ";
+    private static final String QUERY_PARAM_DELIMITER = "\\?";
+
     private final MethodType method;
     private final String path;
     private final String protocolVersion;

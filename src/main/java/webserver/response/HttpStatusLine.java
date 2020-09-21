@@ -1,8 +1,9 @@
 package webserver.response;
 
 public class HttpStatusLine {
-    public static final String DEFAULT_PROTOCOL_VERSION = "HTTP/1.1";
-    private String protocolVersion;
+    private static final String DEFAULT_PROTOCOL_VERSION = "HTTP/1.1";
+
+    private final String protocolVersion;
     private final StatusCode statusCode;
 
     public HttpStatusLine(final String protocolVersion, final StatusCode statusCode) {
@@ -21,9 +22,5 @@ public class HttpStatusLine {
 
     public StatusCode getStatusCode() {
         return statusCode;
-    }
-
-    public void setHttpProtocolVersion(final String httpProtocolVersion) {
-        this.protocolVersion = httpProtocolVersion;
     }
 }

@@ -1,4 +1,4 @@
-package webserver;
+package webserver.request;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -9,7 +9,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import exception.InvalidRequestBodyException;
-import webserver.request.RequestBody;
 
 class RequestBodyTest {
     private static final String VALID_BODY = "userId=javajigi"
