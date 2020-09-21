@@ -8,25 +8,15 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
-public class UrlUtilsTest {
-
-    @DisplayName("Uri에서 리소스 경로 추출")
-    @ParameterizedTest
-    @CsvSource(value = {"/user/create?userId=javajigi&password=password, /user/create",
-        "?userId=javajigi&password=password, /"})
-    void extractFilePath(String input, String expected) {
-        String result = UrlUtils.extractFilePath(input);
-        assertThat(result).isEqualTo(expected);
-    }
+public class UriUtilsTest {
 
     @DisplayName("Request Params에서 Param 추출")
     @ParameterizedTest
     @MethodSource("provideStringsForExtractRequestParam")
     void extractRequestParam(String input, Map<String, String> expected) {
-        Map<String, String> result = UrlUtils.extractRequestParam(input);
+        Map<String, String> result = UriUtils.extractRequestParam(input);
         assertThat(result).isEqualTo(expected);
     }
 
