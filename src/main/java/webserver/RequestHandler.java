@@ -53,6 +53,8 @@ public class RequestHandler implements Runnable {
             } else if (requestLine.isMethodEqualTo("POST")) {
                 RequestBody requestBody = new RequestBody(br, requestHeader.getContentLength());
                 controller.post(dos, requestHeader, requestBody);
+            } else {
+                throw new IllegalArgumentException("Unsupported method: PUT, DELETE");
             }
         } catch (IllegalArgumentException e) {
             ResponseHeader.response400Header(dos);
