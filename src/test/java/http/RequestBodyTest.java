@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.*;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RequestBodyTest {
 
@@ -21,10 +21,10 @@ class RequestBodyTest {
 
         RequestBody requestBody = new RequestBody(br, 93);
 
-        assertThat(requestBody.getValue("userId")).isEqualTo("javajigi");
-        assertThat(requestBody.getValue("password")).isEqualTo("password");
-        assertThat(requestBody.getValue("name")).isEqualTo("%EB%B0%95%EC%9E%AC%EC%84%B1");
-        assertThat(requestBody.getValue("email")).isEqualTo("javajigi%40slipp.net");
+        assertEquals("javajigi", requestBody.getValue("userid"));
+        assertEquals("password", requestBody.getValue("password"));
+        assertEquals("%EB%B0%95%EC%9E%AC%EC%84%B1", requestBody.getValue("name"));
+        assertEquals("javajigi%40slipp.net", requestBody.getValue("email"));
     }
 
     @Test
