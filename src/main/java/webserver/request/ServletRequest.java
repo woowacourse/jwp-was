@@ -21,8 +21,8 @@ public class ServletRequest {
             headerLines.append(line).append("\n");
             line = br.readLine();
         }
-        requestHeader = RequestHeader.of(headerLines.toString());
-        requestBody = RequestBody.of(IOUtils.readData(br, requestHeader.getContentLength()));
+        this.requestHeader = RequestHeader.of(headerLines.toString());
+        this.requestBody = RequestBody.of(IOUtils.readData(br, requestHeader.getContentLength()));
     }
 
     public ServletRequest(String startLine, String headerLines, String bodyLines) {
@@ -35,24 +35,32 @@ public class ServletRequest {
         return requestBody.getAttributes();
     }
 
-    public String getPath() {
-        return httpStartLine.getPath();
+    public String getAttribute(String key) {
+        return requestBody.getAttribute(key);
     }
 
     public MethodType getMethod() {
         return httpStartLine.getMethod();
     }
 
+    public String getPath() {
+        return httpStartLine.getPath();
+    }
+
     public String getProtocolVersion() {
         return httpStartLine.getProtocolVersion();
     }
 
-    public Map<String, String> getHeaders() {
-        return requestHeader.getHeaders();
-    }
-
     public Map<String, String> getQueryParams() {
         return httpStartLine.getQueryParams();
+    }
+
+    public String getQueryParam(String key) {
+        return httpStartLine.getParam(key);
+    }
+
+    public Map<String, String> getHeaders() {
+        return requestHeader.getHeaders();
     }
 
     public String getHeader(String header) {
