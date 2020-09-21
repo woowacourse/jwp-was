@@ -19,11 +19,11 @@ public enum HttpContentType {
         this.staticFile = staticFile;
     }
 
-    public static String findContentType(String url) {
+    public static String findContentType(String uri) {
         return Arrays.stream(HttpContentType.values())
-            .filter(type -> type.isSameExtension(url))
+            .filter(type -> type.isSameExtension(uri))
             .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("해당하는 확장자가 없습니다!"))
+            .orElseThrow(() -> new IllegalArgumentException(uri + "에 해당하는 확장자가 없습니다!"))
             .contentType;
     }
 
@@ -31,7 +31,7 @@ public enum HttpContentType {
         return Arrays.stream(HttpContentType.values())
             .filter(type -> type.isSameExtension(uri))
             .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("해당하는 확장자가 없습니다!"))
+            .orElseThrow(() -> new IllegalArgumentException(uri + "에해당하는 확장자가 없습니다!"))
             .staticFile;
     }
 

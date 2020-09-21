@@ -41,6 +41,10 @@ public enum HttpMethod {
         return foundHttpMethod.body;
     }
 
+    public boolean isSame(String httpMethod) {
+        return this.httpMethod.equals(httpMethod);
+    }
+
     public String getHttpMethod() {
         return httpMethod;
     }

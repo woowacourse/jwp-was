@@ -22,34 +22,34 @@ public class HttpResponse {
         responseHeader = new ResponseHeader(new HashMap<>());
     }
 
+    public void addHeader(String key, String value) {
+        responseHeader.putHeader(key, value);
+    }
+
     public void forward(String path) throws IOException, URISyntaxException {
         statusLine = new StatusLine("HTTP/1.1 200");
         setResponseBody(path);
-        responseHeader.setHeader("Content-Type", HttpContentType.findContentType(path));
-        responseHeader.setHeader("Content-Length", String.valueOf(responseBody.getContentLength()));
+        responseHeader.putHeader("Content-Type", HttpContentType.findContentType(path));
+        responseHeader.putHeader("Content-Length", String.valueOf(responseBody.getContentLength()));
         writeHttpResponse();
     }
 
     public void sendRedirect(String path) throws IOException, URISyntaxException {
         statusLine = new StatusLine("HTTP/1.1 302");
         setResponseBody(path);
-        responseHeader.setHeader("Location", path);
+        responseHeader.putHeader("Location", path);
         writeHttpResponse();
-    }
-
-    public void addHeader(String key, String value) {
-        responseHeader.setHeader(key, value);
     }
 
     private void setResponseBody(String path) throws IOException, URISyntaxException {
         if (HttpContentType.isStaticFile(path)) {
             responseBody = new ResponseBody(FileIoUtils.loadFileFromClasspath(STATIC_PATH + path));
-        } else {
-            responseBody = new ResponseBody(FileIoUtils.loadFileFromClasspath(TEMPLATES_PATH + path));
+            return;
         }
+        responseBody = new ResponseBody(FileIoUtils.loadFileFromClasspath(TEMPLATES_PATH + path));
     }
 
-    public void writeHttpResponse() throws IOException {
+    private void writeHttpResponse() throws IOException {
         statusLine.write(dataOutputStream);
         responseHeader.write(dataOutputStream);
         dataOutputStream.writeBytes(System.lineSeparator());

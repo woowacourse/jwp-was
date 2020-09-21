@@ -11,18 +11,18 @@ public class ResponseHeader {
 
     private static final Logger log = LoggerFactory.getLogger(ResponseHeader.class);
 
-    private final Map<String, String> responseHeader;
+    private final Map<String, String> headers;
 
-    public ResponseHeader(Map<String, String> responseHeader) {
-        this.responseHeader = responseHeader;
+    public ResponseHeader(Map<String, String> headers) {
+        this.headers = headers;
     }
 
-    public void setHeader(String key, String value) {
-        responseHeader.put(key, value);
+    public void putHeader(String key, String value) {
+        headers.put(key, value);
     }
 
     public void write(DataOutputStream dataOutputStream) {
-        responseHeader.forEach((key, value) -> {
+        headers.forEach((key, value) -> {
             try {
                 dataOutputStream.writeBytes(key + ": " + value + StringUtils.SPACE + System.lineSeparator());
             } catch (IOException e) {

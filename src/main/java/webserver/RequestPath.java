@@ -16,7 +16,6 @@ public class RequestPath {
     }
 
     public String getRequestPath() {
-
         return requestPath;
     }
 }
