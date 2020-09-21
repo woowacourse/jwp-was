@@ -21,7 +21,7 @@ public class HttpStatusTest {
         return Stream.of(
             Arguments.of(200, HttpStatus.OK),
             Arguments.of(201, HttpStatus.CREATED),
-            Arguments.of(304, HttpStatus.FOUND),
+            Arguments.of(302, HttpStatus.FOUND),
             Arguments.of(404, HttpStatus.NOT_FOUND)
         );
     }
