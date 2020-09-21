@@ -13,7 +13,7 @@ import webserver.http.response.HttpStatus;
 public class UserController extends AbstractController {
     @Override
     public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        RequestParams requestParams = RequestParams.from(httpRequest.getHttpBody().getBody());
+        RequestParams requestParams = RequestParams.from(httpRequest.getBody());
 
         if (Objects.isNull(requestParams.get("userId")) || Objects.isNull(requestParams.get("password"))) {
             httpResponse.sendError(HttpStatus.BAD_REQUEST, "id 또는 비밀번호가 존재하지 않습니다.");

@@ -21,7 +21,7 @@ public class HttpRequestFactory {
         RequestHeaders requestHeaders = getHttpHeaders(bufferedReader);
 
         String body = IOUtils.readData(bufferedReader, requestHeaders.getContentLength());
-        return new HttpRequest(requestLine, requestHeaders, new RequestBody(body));
+        return new HttpRequest(requestLine, requestHeaders, RequestBody.from(body));
     }
 
     private static RequestHeaders getHttpHeaders(BufferedReader bufferedReader) throws IOException {

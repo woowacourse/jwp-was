@@ -26,7 +26,7 @@ class UserControllerTest {
             "HTTP/1.1");
         RequestHeaders requestHeaders = new RequestHeaders(new HashMap<>());
         HttpRequest httpRequest = new HttpRequest(requestLine, requestHeaders,
-            new RequestBody("userId=hello&password=password&name=myname&email=is@name.com"));
+            RequestBody.from("userId=hello&password=password&name=myname&email=is@name.com"));
         HttpResponse httpResponse = HttpResponse.ofVersion(httpRequest.getHttpVersion());
 
         userController.service(httpRequest, httpResponse);
@@ -45,7 +45,7 @@ class UserControllerTest {
         RequestLine requestLine = new RequestLine(RequestMethod.POST, RequestUrl.from("/user/create"),
             "HTTP/1.1");
         RequestHeaders requestHeaders = new RequestHeaders(new HashMap<>());
-        HttpRequest httpRequest = new HttpRequest(requestLine, requestHeaders, new RequestBody("name.com"));
+        HttpRequest httpRequest = new HttpRequest(requestLine, requestHeaders, RequestBody.from("name.com"));
         HttpResponse httpResponse = HttpResponse.ofVersion(httpRequest.getHttpVersion());
 
         userController.service(httpRequest, httpResponse);

@@ -25,7 +25,7 @@ class PageControllerTest {
         RequestLine requestLine = new RequestLine(RequestMethod.GET, RequestUrl.from("/index.html"),
             "HTTP/1.1");
         RequestHeaders requestHeaders = new RequestHeaders(new HashMap<>());
-        HttpRequest httpRequest = new HttpRequest(requestLine, requestHeaders, new RequestBody(""));
+        HttpRequest httpRequest = new HttpRequest(requestLine, requestHeaders, RequestBody.from(""));
         HttpResponse httpResponse = HttpResponse.ofVersion(httpRequest.getHttpVersion());
 
         pageController.service(httpRequest, httpResponse);
@@ -42,7 +42,7 @@ class PageControllerTest {
         RequestLine requestLine = new RequestLine(RequestMethod.GET, RequestUrl.from("/abc"),
             "HTTP/1.1");
         RequestHeaders requestHeaders = new RequestHeaders(new HashMap<>());
-        HttpRequest httpRequest = new HttpRequest(requestLine, requestHeaders, new RequestBody(""));
+        HttpRequest httpRequest = new HttpRequest(requestLine, requestHeaders, RequestBody.from(""));
         HttpResponse httpResponse = HttpResponse.ofVersion(httpRequest.getHttpVersion());
 
         pageController.service(httpRequest, httpResponse);
@@ -59,7 +59,7 @@ class PageControllerTest {
         RequestLine requestLine = new RequestLine(RequestMethod.POST, RequestUrl.from("/index.html"),
             "HTTP/1.1");
         RequestHeaders requestHeaders = new RequestHeaders(new HashMap<>());
-        HttpRequest httpRequest = new HttpRequest(requestLine, requestHeaders, new RequestBody(""));
+        HttpRequest httpRequest = new HttpRequest(requestLine, requestHeaders, RequestBody.from(""));
         HttpResponse httpResponse = HttpResponse.ofVersion(httpRequest.getHttpVersion());
 
         pageController.service(httpRequest, httpResponse);

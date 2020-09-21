@@ -25,7 +25,7 @@ public class RequestParams {
         return parameters.get(key);
     }
 
-    public Map<String, List<String>> getParameters() {
+    public Map<String, List<String>> getParametersMap() {
         return Collections.unmodifiableMap(parameters);
     }
 }
