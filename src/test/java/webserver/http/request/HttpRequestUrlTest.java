@@ -37,8 +37,8 @@ class HttpRequestUrlTest {
     void getParameters(String input, String key, String value) {
         HttpRequestUrl httpRequestUrl = new HttpRequestUrl(input);
 
-        assertThat(key).isIn(httpRequestUrl.getKeySet());
-        assertThat(value).isEqualTo(httpRequestUrl.getValueBy(key));
+        assertThat(key).isIn(httpRequestUrl.getParameterKeySet());
+        assertThat(value).isEqualTo(httpRequestUrl.getParameterValueBy(key));
     }
 
     @DisplayName("파라미터가 있더라도 동일한 path라면 true를 반환한다.")
