@@ -12,28 +12,33 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import com.google.common.collect.Maps;
 import webserver.request.ServletRequest;
+import webserver.response.ModelAndView;
 import webserver.response.ServletResponse;
+import webserver.response.StatusCode;
+import webserver.response.View;
 
 class ServletResponseTest {
 
     @DisplayName("정상적으로 Response 생성한다.")
     @Test
     void create() throws IOException {
-        ServletRequest servletRequest = new ServletRequest(REQUEST_HEADER, REQUEST_BODY);
-
         FileOutputStream fos = new FileOutputStream(new File("src/test/resources/response.txt"));
         DataOutputStream dos = new DataOutputStream(fos);
-        HashMap<String, String> attributes = new HashMap<>();
-        attributes.put("View", "index");
 
-        ServletResponse response = new ServletResponse(ServletResponse.StatusCode.OK, attributes);
-        response.sendResponse(dos, servletRequest);
+        Map<String, String> emptyMap = new LinkedHashMap<>();
+
+        ModelAndView mav = ModelAndView.of(StatusCode.OK, emptyMap, emptyMap, "index");
+        ServletResponse response = ServletResponse.of(mav, View.of("index"));
+        response.sendResponse(dos);
 
         dos.close();
         fos.close();

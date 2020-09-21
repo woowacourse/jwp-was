@@ -23,11 +23,11 @@ public class RequestHeader {
 
     public static RequestHeader of(String header) {
         try {
-            String[] headers = header.split("\n");
+            String[] headers = header.split(System.lineSeparator());
 
             Map<String, String> attribute = new LinkedHashMap<>();
-            for (int i = 1; i < headers.length; i++) {
-                String[] map = headers[i].split(DELIMITER, KEY_VALUE_LENGTH);
+            for (String s : headers) {
+                String[] map = s.split(DELIMITER, KEY_VALUE_LENGTH);
                 attribute.put(map[KEY_INDEX], map[VALUE_INDEX].trim());
             }
 
@@ -60,7 +60,7 @@ public class RequestHeader {
 
         for (Map.Entry<String, String> entry : headers.entrySet()) {
             builder.append(entry.getKey())
-                .append(DELIMITER)
+                .append(DELIMITER + " ")
                 .append(entry.getValue())
                 .append(System.lineSeparator());
         }

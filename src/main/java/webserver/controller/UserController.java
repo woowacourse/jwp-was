@@ -23,7 +23,6 @@ public class UserController implements Handlers {
         Map<String, String> attributes = new LinkedHashMap<>();
         headers.put("Location", "http://localhost:8080/index.html");
 
-
         return ModelAndView.of(StatusCode.FOUND, headers, attributes, "index");
     }
 

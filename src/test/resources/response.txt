@@ -1,6 +1,5 @@
 HTTP/1.1 200 OK 
-Content-Type: */*;charset=utf-8
-Content-Length: 6902
+Content-Length: 6902 
 
 <!DOCTYPE html>
 <html lang="kr">

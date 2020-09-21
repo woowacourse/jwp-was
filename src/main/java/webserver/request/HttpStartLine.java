@@ -1,6 +1,5 @@
 package webserver.request;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class HttpStartLine {
