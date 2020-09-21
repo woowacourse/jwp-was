@@ -1,4 +1,4 @@
-package webserver;
+package webserver.handler;
 
 import static webserver.HttpMethod.GET;
 import static webserver.HttpMethod.POST;
@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 import model.User;
+import webserver.request.Request;
+import webserver.request.RequestType;
+import webserver.response.Response;
 
 public class Controller {
 

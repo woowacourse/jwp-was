@@ -1,8 +1,8 @@
-package webserver;
+package webserver.handler;
 
 import static utils.IOUtils.writeWithLineSeparator;
-import static webserver.Controller.mapping;
-import static webserver.Response.emptyResponse;
+import static webserver.handler.Controller.mapping;
+import static webserver.response.Response.emptyResponse;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -15,9 +15,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.Status;
+import webserver.request.Request;
+import webserver.request.RequestType;
+import webserver.response.Response;
 
 public class RequestHandler implements Runnable {
 
@@ -35,8 +38,9 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             Request request = requestParser(in);
-            BiFunction<Request, Response, Response> mapping = mapping(RequestType.of(request));
-            Response response = mapping.apply(request, emptyResponse());
+            RequestType requestType = RequestType.of(request);
+
+            Response response = mapping(requestType).apply(request, emptyResponse());
             DataOutputStream dos = new DataOutputStream(out);
             response(response, dos);
         } catch (IOException e) {

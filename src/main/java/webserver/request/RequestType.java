@@ -1,6 +1,7 @@
-package webserver;
+package webserver.request;
 
 import java.util.Objects;
+import webserver.HttpMethod;
 
 public class RequestType {
 

@@ -1,4 +1,4 @@
-package webserver;
+package webserver.response;
 
 import static webserver.Status.CREATED;
 import static webserver.Status.FOUND;
@@ -7,6 +7,11 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Map;
 import utils.FileIoUtils;
+import webserver.AcceptType;
+import webserver.Body;
+import webserver.Headers;
+import webserver.Status;
+import webserver.request.Request;
 
 public class Response {
 

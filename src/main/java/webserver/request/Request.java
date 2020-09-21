@@ -1,8 +1,12 @@
-package webserver;
+package webserver.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.List;
+import webserver.AcceptType;
+import webserver.Body;
+import webserver.Headers;
+import webserver.HttpMethod;
 
 public class Request {
 
