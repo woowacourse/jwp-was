@@ -6,6 +6,7 @@ import utils.FileIoUtils;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URISyntaxException;
 
 import static com.google.common.net.HttpHeaders.ACCEPT;
 
@@ -16,7 +17,7 @@ public class HttpResponse {
         this.dos = new DataOutputStream(outputStream);
     }
 
-    public void forward(HttpRequest httpRequest) throws IOException {
+    public void forward(HttpRequest httpRequest) throws IOException, URISyntaxException {
         byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getPath());
         responseHeader(httpRequest, body);
         responseBody(body);

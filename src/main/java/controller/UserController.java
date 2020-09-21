@@ -23,10 +23,4 @@ public class UserController extends AbstractController {
 
         httpResponse.sendRedirect("/index.html");
     }
-
-    @Override
-    void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        logger.debug("userController doGet");
-        httpResponse.methodNotAllowed();
-    }
 }

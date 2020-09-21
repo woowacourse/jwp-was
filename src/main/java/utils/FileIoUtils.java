@@ -12,14 +12,14 @@ import java.nio.file.Paths;
 public class FileIoUtils {
     private final static Logger logger = LoggerFactory.getLogger(FileIoUtils.class);
 
-    public static byte[] loadFileFromClasspath(String filePath) {
+    public static byte[] loadFileFromClasspath(String filePath) throws IOException, URISyntaxException {
         Path path;
         try {
             path = Paths.get(FileIoUtils.class.getClassLoader().getResource(appendBasePath(filePath)).toURI());
             return Files.readAllBytes(path);
-        } catch (URISyntaxException | NullPointerException | IOException e) {
-            logger.debug("Illegal file path so return null");
-            return null;
+        } catch (NullPointerException e) {
+            logger.debug("Illegal file path so return empty");
+            return new byte[0];
         }
     }
 

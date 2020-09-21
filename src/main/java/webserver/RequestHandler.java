@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 
 public class RequestHandler implements Runnable {
@@ -37,12 +38,12 @@ public class RequestHandler implements Runnable {
             HttpResponse httpResponse = new HttpResponse(out);
 
             handle(httpRequest, httpResponse);
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void handle(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+    private void handle(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         if (ControllerMapper.isApi(httpRequest)) {
             Controller controller = ControllerMapper.map(httpRequest);
             controller.service(httpRequest, httpResponse);
@@ -51,9 +52,10 @@ public class RequestHandler implements Runnable {
         findStaticResources(httpRequest, httpResponse);
     }
 
-    private void findStaticResources(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
-        byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getPath());
-        if (body == null) {
+    private void findStaticResources(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+        byte[] body;
+        body = FileIoUtils.loadFileFromClasspath(httpRequest.getPath());
+        if (body.length == 0) {
             httpResponse.notFound();
             return;
         }
