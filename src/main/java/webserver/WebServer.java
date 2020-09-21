@@ -1,8 +1,8 @@
 package webserver;
 
+import com.google.common.collect.Maps;
 import java.net.ServerSocket;
 import java.net.Socket;
-
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.slf4j.Logger;
@@ -29,7 +29,7 @@ public class WebServer {
             // 클라이언트가 연결될때까지 대기한다.
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
-                executorService.execute(new RequestHandler(connection));
+                executorService.execute(new RequestHandler(connection, Maps.newHashMap()));
             }
         }
     }

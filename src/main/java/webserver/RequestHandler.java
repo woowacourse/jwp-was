@@ -1,33 +1,32 @@
 package webserver;
 
-import db.DataBase;
-import exception.ParameterBindException;
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import java.util.Objects;
-import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.UrlUtils;
 
 public class RequestHandler implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private static final String CREATE_URL = "/user/create";
-    private static final String INDEX_HTML_URL = "/index.html";
 
-    private Socket connection;
+    private final Socket connection;
+    private final Map<String, Controller> controllerMapper;
 
-    public RequestHandler(Socket connectionSocket) {
+
+    public RequestHandler(Socket connectionSocket, Map<String, Controller> controllerMapper) {
         this.connection = connectionSocket;
+        this.controllerMapper = controllerMapper;
+
+        controllerMapper.put("/index.html", new IndexController());
+        controllerMapper.put("/user/create", new CreateUserController());
+        controllerMapper.put("/user/list.html", new ListUserController());
+        controllerMapper.put("/user/login", new LoginController());
     }
 
     public void run() {
@@ -35,57 +34,12 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             HttpRequest httpRequest = new HttpRequest(bufferedReader);
-            ResponseHeader responseHeader = new ResponseHeader(new DataOutputStream(out));
+            HttpResponse httpResponse = new HttpResponse(out);
 
-            String resourcePath = httpRequest.getResourcePath();
-            logger.info("first resourcePath : {} ",resourcePath);
-
-
-            if (resourcePath.startsWith(CREATE_URL)) {
-                if (httpRequest.isGet()) {
-                    Map<String, String> requestParam = UrlUtils.extractRequestParamFromUrl(resourcePath);
-                    bindRequestParam(requestParam);
-                }
-
-                if (httpRequest.isPost()) {
-                    Map<String, String> requestParam = UrlUtils.extractRequestParam(httpRequest.getBody());
-                    bindRequestParam(requestParam);
-                    responseHeader.createResponse302Header(INDEX_HTML_URL);
-                    return;
-                }
-            }
-            responseHeader.createResponse200Header(resourcePath);
-        } catch (IOException | URISyntaxException e) {
+            Controller controller = controllerMapper.getOrDefault(httpRequest.getPath(), new IndexController());
+            controller.service(httpRequest, httpResponse);
+        } catch (IOException e) {
             logger.error(e.getMessage());
         }
-    }
-
-    private void bindRequestParam(Map<String, String> requestParam) {
-        if (!requestParam.isEmpty()) {
-            User user = bindParamsToUser(requestParam);
-            DataBase.addUser(user);
-        }
-    }
-
-    private User bindParamsToUser(Map<String, String> params) {
-        validate(params);
-        return new User(
-            params.get("userId"),
-            params.get("password"),
-            params.get("name"),
-            params.get("email")
-        );
-    }
-
-    private void validate(Map<String, String> params) {
-        if(containsNull(params)) {
-            throw new ParameterBindException("파라미터를 Binding하는데 오류가 발생했습니다!");
-        }
-    }
-
-    private boolean containsNull(Map<String, String> params) {
-        return params.keySet()
-            .stream()
-            .anyMatch(key -> Objects.isNull(params.get(key)));
     }
 }
