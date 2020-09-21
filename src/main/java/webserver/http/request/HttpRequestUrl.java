@@ -1,7 +1,9 @@
 package webserver.http.request;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import webserver.http.exception.InvalidHttpRequestException;
 
@@ -61,8 +63,12 @@ public class HttpRequestUrl {
         return !parameters.isEmpty();
     }
 
-    public Map<String, String> getParameters() {
-        return parameters;
+    protected Set<String> getKeySet() {
+        return Collections.unmodifiableSet(parameters.keySet());
+    }
+
+    protected String getValueBy(String key) {
+        return parameters.get(key);
     }
 
     public String getContentType() {
