@@ -12,7 +12,7 @@ public class HttpContentTypeTest {
 
     @DisplayName("확장자에 따른 ContentType 조회 - 성공")
     @ParameterizedTest
-    @CsvSource(value = {"/index.html, text/html", "/css.css, text/css", "hello/index.js, text/javascript"})
+    @CsvSource(value = {"/index.html, text/html ;charset=utf-8", "/css.css, text/css", "hello/index.js, text/javascript"})
     void findContentType_SuccessToFind(String uri, String expected) {
         assertThat(HttpContentType.findContentType(uri)).isEqualTo(expected);
     }

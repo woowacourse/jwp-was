@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.UrlUtils;
+import utils.UriUtils;
 
 public class RequestParameters {
 
@@ -14,7 +14,7 @@ public class RequestParameters {
     private final Map<String, String> parameters;
 
     public RequestParameters(String parameters) {
-        this.parameters = UrlUtils.extractRequestParam(parameters);
+        this.parameters = UriUtils.extractRequestParam(parameters);
     }
 
     public String getValue(String key) {

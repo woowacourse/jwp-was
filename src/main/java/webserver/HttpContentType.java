@@ -1,10 +1,9 @@
 package webserver;
 
 import java.util.Arrays;
-import java.util.function.Predicate;
 
 public enum HttpContentType {
-    HTML(".html", "text/html", false),
+    HTML(".html", "text/html ;charset=utf-8", false),
     CSS(".css", "text/css", true),
     JS(".js", "text/javascript", true),
     WOFF(".woff", "text/font", true),
