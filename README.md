@@ -46,7 +46,7 @@
 
 ### TO-DO
 - [x] 쓰레드 풀 생성
-- [ ] Http request & response 역할 분담 
+- [x] Http request & response 역할 분담 
 - [ ] Handler mapping - 다형성을 통해 if문 제거하기
 - [ ] Http response - 상태에 따라 다른 메소드를 수행하도록 변경
 - [ ] ModelAndView를 Servlet response 안으로 리팩토링 
