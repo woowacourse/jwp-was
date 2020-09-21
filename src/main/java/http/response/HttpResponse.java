@@ -58,7 +58,9 @@ public class HttpResponse {
     }
 
     private void writeHeaders() throws IOException {
-        writer.writeBytes(headers.build() + CRLF);
+        if (headers.isNotEmpty()) {
+            writer.writeBytes(headers.build() + CRLF);
+        }
     }
 
     private void writeEmptyLine() throws IOException {

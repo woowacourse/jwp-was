@@ -51,4 +51,8 @@ public class HttpHeaders {
             .map(it -> it.getKey() + DELIMITER + it.getValue())
             .collect(Collectors.joining(CRLF));
     }
+
+    public boolean isNotEmpty() {
+        return !headers.isEmpty();
+    }
 }
