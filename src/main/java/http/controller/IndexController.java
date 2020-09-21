@@ -1,4 +1,4 @@
-package http.path;
+package http.controller;
 
 import http.RequestBody;
 import http.RequestHeader;
@@ -6,7 +6,7 @@ import http.ResponseHeader;
 
 import java.io.DataOutputStream;
 
-public class Index implements Path{
+public class IndexController implements Controller {
     @Override
     public void get(DataOutputStream dos, RequestHeader requestHeader) {
         ResponseHeader.response302Header(dos, "/index.html");

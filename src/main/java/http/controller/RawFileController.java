@@ -1,4 +1,4 @@
-package http.path;
+package http.controller;
 
 import http.RequestBody;
 import http.RequestHeader;
@@ -13,12 +13,12 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-public class RawFile implements Path {
+public class RawFileController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private String filePath;
 
-    public RawFile(String filePath) {
+    public RawFileController(String filePath) {
         this.filePath = filePath;
     }
 
