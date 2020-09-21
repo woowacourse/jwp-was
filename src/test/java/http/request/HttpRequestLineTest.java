@@ -14,7 +14,7 @@ import http.HttpMethod;
 
 public class HttpRequestLineTest {
     @ParameterizedTest
-    @MethodSource(value = {"provideValidHRequestLine"})
+    @MethodSource(value = {"provideValidRequestLine"})
     @DisplayName("HttpRequestLine 파싱 테스트")
     void from(String requestLine, String method, String path, String version) {
         HttpRequestLine httpRequestLine = HttpRequestLine.from(requestLine);
@@ -23,7 +23,7 @@ public class HttpRequestLineTest {
         assertThat(httpRequestLine.getVersion()).isEqualTo(version);
     }
 
-    private static Stream<Arguments> provideValidHRequestLine() {
+    private static Stream<Arguments> provideValidRequestLine() {
         return Stream.of(
             Arguments.of("GET /index.html HTTP/1.1", "GET", "/index.html", "HTTP/1.1"),
             Arguments.of("POST / HTTP/1.1", "POST", "/", "HTTP/1.1")
