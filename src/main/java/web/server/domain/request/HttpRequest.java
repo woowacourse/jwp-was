@@ -2,8 +2,6 @@ package web.server.domain.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import web.server.utils.IOUtils;
 
@@ -19,8 +17,7 @@ public class HttpRequest {
     public HttpRequest(BufferedReader bufferedReader) throws IOException {
         String header = IOUtils.readHeader(bufferedReader);
         String[] lines = header.split(NEW_LINE);
-        String requestLine = lines[0];
-        this.requestLine = new RequestLine(requestLine);
+        this.requestLine = new RequestLine(lines[0]);
         this.headerParams = new HeaderParams();
         for (int i = 1; i < lines.length; i++) {
             String[] keyValue = lines[i].split(COLON);
