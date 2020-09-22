@@ -8,11 +8,13 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.controller.Controller;
 import webserver.controller.CreateUserController;
 import webserver.controller.DefaultController;
+import webserver.controller.ErrorController;
 import webserver.controller.ListUserController;
 import webserver.controller.LoginController;
 import webserver.request.HttpRequest;
@@ -34,9 +36,20 @@ public class RequestHandler implements Runnable {
     }
 
     private void initControllerMapper(Map<String, Controller> controllerMapper) {
-        controllerMapper.put("/user/create", new CreateUserController());
+        controllerMapper.put("/js/jquery-2.2.0.min.js", new DefaultController());
+        controllerMapper.put("/js/bootstrap.min.js", new DefaultController());
+        controllerMapper.put("/js/scripts.js", new DefaultController());
+        controllerMapper.put("/css/bootstrap.min.css", new DefaultController());
+        controllerMapper.put("/css/styles.css", new DefaultController());
+        controllerMapper.put("/user/login_failed.html", new DefaultController());
+        controllerMapper.put("/user/profile.html", new DefaultController());
+        controllerMapper.put("/user/form.html", new DefaultController());
+        controllerMapper.put("/user/login.html", new DefaultController());
         controllerMapper.put("/user/list.html", new ListUserController());
+        controllerMapper.put("/user/create", new CreateUserController());
         controllerMapper.put("/user/login", new LoginController());
+        controllerMapper.put("/index.html", new DefaultController());
+        controllerMapper.put("/", new DefaultController());
     }
 
     public void run() {
@@ -46,7 +59,10 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = new HttpRequest(bufferedReader);
             HttpResponse httpResponse = new HttpResponse(out);
 
-            Controller controller = controllerMapper.getOrDefault(httpRequest.getPath(), new DefaultController());
+            Controller controller = controllerMapper.get(httpRequest.getPath());
+            if (Objects.isNull(controller)) {
+                controller = new ErrorController();
+            }
             controller.service(httpRequest, httpResponse);
         } catch (IOException e) {
             logger.error(e.getMessage());

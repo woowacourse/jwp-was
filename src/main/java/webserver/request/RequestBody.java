@@ -3,10 +3,13 @@ package webserver.request;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Objects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.IOUtils;
 
 public class RequestBody {
 
+    private static final Logger log = LoggerFactory.getLogger(RequestBody.class);
     private static final String DEFAULT_CONTENT_TYPE = "application/x-www-form-urlencoded";
 
     private final Object body;
@@ -31,15 +34,25 @@ public class RequestBody {
 
     private void validate(String contentLength, RequestLine requestLine) {
         if (requestLine.hasBody() && Objects.isNull(contentLength)) {
-            throw new IllegalArgumentException("Content-Length를 설정해주세요!");
+            log.error("ContentLength is Null!");
+            throw new IllegalArgumentException("Content-Length를 다시 설정해주세요!");
         }
     }
 
     public String getBody() {
+        validateBody();
         return (String) body;
     }
 
     public String getParameter(String paramName) {
+        validateBody();
         return ((RequestParameters) body).getValue(paramName);
+    }
+
+    private void validateBody() {
+        if (Objects.isNull(body)) {
+            log.error("Request Body is Null!");
+            throw new IllegalArgumentException("Request Body가 null입니다!");
+        }
     }
 }

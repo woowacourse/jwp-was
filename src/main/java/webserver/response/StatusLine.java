@@ -2,9 +2,13 @@ package webserver.response;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.StringUtils;
 
 public class StatusLine {
+
+    private static final Logger log = LoggerFactory.getLogger(StatusLine.class);
 
     private final HttpVersion httpVersion;
     private final StatusCode statusCode;
@@ -18,7 +22,8 @@ public class StatusLine {
 
     private void validate(String statusLine) {
         if (StringUtils.isBlank(statusLine)) {
-            throw new IllegalArgumentException();
+            log.error("StatusLine : {} is Null or Blank!", statusLine);
+            throw new IllegalArgumentException("StatusLine이 Null 또는 공백입니다!");
         }
     }
 

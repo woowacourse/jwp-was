@@ -1,10 +1,10 @@
 package webserver.response;
 
+import com.google.common.collect.Maps;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
-import java.util.HashMap;
 import utils.FileIoUtils;
 
 public class HttpResponse {
@@ -19,7 +19,7 @@ public class HttpResponse {
 
     public HttpResponse(OutputStream outputStream) {
         dataOutputStream = new DataOutputStream(outputStream);
-        responseHeader = new ResponseHeader(new HashMap<>());
+        responseHeader = new ResponseHeader(Maps.newHashMap());
     }
 
     public void addHeader(String key, String value) {
@@ -66,5 +66,11 @@ public class HttpResponse {
         responseHeader.write(dataOutputStream);
         dataOutputStream.writeBytes(System.lineSeparator());
         responseBody.write(dataOutputStream);
+    }
+
+    public void notFound(String path) throws IOException, URISyntaxException {
+        statusLine = new StatusLine("HTTP/1.1 404");
+        setResponseBody(path);
+        writeHttpResponse();
     }
 }

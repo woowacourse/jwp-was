@@ -4,6 +4,7 @@ import exception.NotExistRequestHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.StringUtils;
+import webserver.response.HttpVersion;
 
 public class RequestLine {
 
@@ -12,7 +13,7 @@ public class RequestLine {
 
     private final HttpMethod method;
     private final RequestUri requestUri;
-    private final String version;
+    private final HttpVersion version;
 
     public RequestLine(String line) {
         validate(line);
@@ -20,18 +21,19 @@ public class RequestLine {
         validate(lineSegment);
         this.method = HttpMethod.find(lineSegment[0]);
         this.requestUri = new RequestUri(lineSegment[1]);
-        this.version = lineSegment[2];
+        this.version = HttpVersion.find(lineSegment[2]);
     }
 
     private void validate(String line) {
         if (StringUtils.isBlank(line)) {
-            log.info("not exist Request Header");
+            log.error("not exist Request Header");
             throw new NotExistRequestHeader("not exist Request Header");
         }
     }
 
     private void validate(String[] lineSegment) {
         if (lineSegment.length != 3) {
+            log.error("RequestLine array size is {}", lineSegment.length);
             throw new NegativeArraySizeException("Header RequestLine의 사이즈가 맞지 않습니다!");
         }
     }
