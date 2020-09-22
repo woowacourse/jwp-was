@@ -22,7 +22,7 @@ public class UserController extends AbstractController {
 
     @Override
     public HttpResponse doGet(HttpRequest httpRequest) {
-        return null;
+        return new HttpResponse(StatusCode.NOT_FOUND);
     }
 
     @Override
@@ -32,11 +32,11 @@ public class UserController extends AbstractController {
 
     @Override
     public HttpResponse doPut(HttpRequest httpRequest) {
-        return null;
+        return new HttpResponse(StatusCode.NOT_FOUND);
     }
 
     @Override
     public HttpResponse doDelete(HttpRequest httpRequest) {
-        return null;
+        return new HttpResponse(StatusCode.NOT_FOUND);
     }
 }

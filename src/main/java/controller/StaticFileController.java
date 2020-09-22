@@ -57,16 +57,16 @@ public class StaticFileController extends AbstractController {
 
     @Override
     public HttpResponse doPost(HttpRequest httpRequest) {
-        throw new UnsupportedOperationException("static file request must be GET request.");
+        return new HttpResponse(StatusCode.NOT_FOUND);
     }
 
     @Override
     public HttpResponse doPut(HttpRequest httpRequest) {
-        throw new UnsupportedOperationException("static file request must be GET request.");
+        return new HttpResponse(StatusCode.NOT_FOUND);
     }
 
     @Override
     public HttpResponse doDelete(HttpRequest httpRequest) {
-        throw new UnsupportedOperationException("static file request must be GET request.");
+        return new HttpResponse(StatusCode.NOT_FOUND);
     }
 }
