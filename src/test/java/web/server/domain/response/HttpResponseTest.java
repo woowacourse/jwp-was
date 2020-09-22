@@ -4,12 +4,12 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.OutputStream;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -52,8 +52,8 @@ public class HttpResponseTest {
         assertThat(actual).contains("404");
     }
 
-    private OutputStream createOutputStream(String filename) throws FileNotFoundException {
-        return new FileOutputStream(new File(testDirectory + filename));
+    private DataOutputStream createOutputStream(String filename) throws FileNotFoundException {
+        return new DataOutputStream(new FileOutputStream(new File(testDirectory + filename)));
     }
 
     private String readFile(String path) throws IOException {

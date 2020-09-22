@@ -2,7 +2,6 @@ package web.server.domain.response;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,8 +19,8 @@ public class HttpResponse {
     private final DataOutputStream dataOutputStream;
     private final Map<String, String> headerParams;
 
-    public HttpResponse(OutputStream outputStream) {
-        this.dataOutputStream = new DataOutputStream(outputStream);
+    public HttpResponse(DataOutputStream dataOutputStream) {
+        this.dataOutputStream = dataOutputStream;
         this.headerParams = new HashMap<>();
     }
 
