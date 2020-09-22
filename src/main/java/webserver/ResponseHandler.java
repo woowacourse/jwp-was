@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import webserver.http.request.HttpRequest;
 import webserver.http.request.MappedRequest;
 import webserver.http.response.HttpResponse;
+import webserver.http.response.ResponseEntity;
 
 public class ResponseHandler {
     private static final Logger logger = LoggerFactory.getLogger(ResponseHandler.class);
@@ -25,9 +26,9 @@ public class ResponseHandler {
                 response.responseNotFound();
             } else {
                 Method controllerMethod = RequestMapper.get(mappedRequest);
-                String redirectPath = (String)controllerMethod.invoke(null, request, response);
+                ResponseEntity<?> responseEntity = (ResponseEntity<?>)controllerMethod.invoke(null, request, response);
 
-                response.responseFound(redirectPath);
+                response.send(responseEntity);
             }
         } catch (IOException | InvocationTargetException | IllegalAccessException | URISyntaxException e) {
             logger.error(e.getMessage());

@@ -25,6 +25,14 @@ public class HttpResponse {
         this.dataOutputStream = dataOutputStream;
     }
 
+    public void send(ResponseEntity<?> responseEntity) throws IOException {
+        dataOutputStream.writeBytes(HttpStatusLine.convertToString(responseEntity.getHttpStatus()) + LINE_SEPARATOR);
+        responseEntity.writeHeaders(dataOutputStream);
+        if (!responseEntity.isBodyNull()) {
+            dataOutputStream.writeBytes((String)(responseEntity.getBody()));
+        }
+    }
+
     public void responseOk(HttpRequest httpRequest) throws IOException, URISyntaxException {
         byte[] body = FileIoUtils.loadFileFromClasspath(
             StaticFiles.getDirectoryEndsWith(httpRequest.getHttpPath()) + httpRequest.getHttpPath());
@@ -48,20 +56,6 @@ public class HttpResponse {
         try {
             dataOutputStream.write(body, 0, body.length);
             dataOutputStream.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    public void responseFound(String redirectPath) {
-        response302Header(redirectPath);
-    }
-
-    private void response302Header(String url) {
-        try {
-            dataOutputStream.writeBytes(HttpStatusLine.convertToString(HttpStatus.FOUND) + LINE_SEPARATOR);
-            dataOutputStream.writeBytes("Location: " + url + LINE_SEPARATOR);
-            dataOutputStream.writeBytes(LINE_SEPARATOR);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
