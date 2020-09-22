@@ -24,11 +24,11 @@ abstract public class AbstractController implements Controller {
         return new HttpResponse(StatusCode.NOT_FOUND);
     }
 
-    abstract public HttpResponse doGet(HttpRequest httpRequest);
+    abstract protected HttpResponse doGet(HttpRequest httpRequest);
 
-    abstract public HttpResponse doPost(HttpRequest httpRequest);
+    abstract protected HttpResponse doPost(HttpRequest httpRequest);
 
-    abstract public HttpResponse doPut(HttpRequest httpRequest);
+    abstract protected HttpResponse doPut(HttpRequest httpRequest);
 
-    abstract public HttpResponse doDelete(HttpRequest httpRequest);
+    abstract protected HttpResponse doDelete(HttpRequest httpRequest);
 }

@@ -21,22 +21,22 @@ public class UserController extends AbstractController {
     }
 
     @Override
-    public HttpResponse doGet(HttpRequest httpRequest) {
+    protected HttpResponse doGet(HttpRequest httpRequest) {
         return new HttpResponse(StatusCode.NOT_FOUND);
     }
 
     @Override
-    public HttpResponse doPost(HttpRequest httpRequest) {
+    protected HttpResponse doPost(HttpRequest httpRequest) {
         return createUser(httpRequest);
     }
 
     @Override
-    public HttpResponse doPut(HttpRequest httpRequest) {
+    protected HttpResponse doPut(HttpRequest httpRequest) {
         return new HttpResponse(StatusCode.NOT_FOUND);
     }
 
     @Override
-    public HttpResponse doDelete(HttpRequest httpRequest) {
+    protected HttpResponse doDelete(HttpRequest httpRequest) {
         return new HttpResponse(StatusCode.NOT_FOUND);
     }
 }
