@@ -34,7 +34,7 @@ public class RequestLine {
     public StaticFileType findExtension() {
         String[] split = getPath().split(EXTENSION_DELIMITER);
         String extensionName = split[split.length - 1];
-        return StaticFileType.valueOf(extensionName.toUpperCase());
+        return StaticFileType.from(extensionName);
     }
 
     public String getPath() {
