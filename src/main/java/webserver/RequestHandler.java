@@ -49,24 +49,29 @@ public class RequestHandler implements Runnable {
                 return;
             }
 
-            while (!line.contains("Content-Length:")) {
-                line = bufferedReader.readLine();
+            if(line.contains("/user/create")){
+                while (!line.contains("Content-Length:")) {
+                    line = bufferedReader.readLine();
+                }
+                int contentLength = Integer.parseInt(line.split("Content-Length: ")[1]);
+
+                while (!line.equals("")) {
+                    line = bufferedReader.readLine();
+                }
+
+                String parameters = IOUtils.readData(bufferedReader, contentLength);
+
+                String userId = StringUtils.extractParameterValue(parameters, "userId");
+                String password = StringUtils.extractParameterValue(parameters, "password");
+                String name = StringUtils.extractParameterValue(parameters, "name");
+                String email = StringUtils.extractParameterValue(parameters, "email");
+
+                User user = new User(userId, password, name, email);
+
+                byte[] body = FileIoUtils
+                    .loadFileFromClasspath(TEMPLATE_LOCATION + "/index.html");
+                response302Header(dataOutputStream, body.length);
             }
-            int contentLength = Integer.parseInt(line.split("Content-Length: ")[1]);
-
-            while (!line.equals("")) {
-                line = bufferedReader.readLine();
-            }
-
-            String parameters = IOUtils.readData(bufferedReader, contentLength);
-
-            String userId = StringUtils.extractParameterValue(parameters, "userId");
-            String password = StringUtils.extractParameterValue(parameters, "password");
-            String name = StringUtils.extractParameterValue(parameters, "name");
-            String email = StringUtils.extractParameterValue(parameters, "email");
-
-            User user = new User(userId, password, name, email);
-            System.out.println(user.toString());
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -77,6 +82,16 @@ public class RequestHandler implements Runnable {
             dataOutputStream.writeBytes("HTTP/1.1 200 OK \r\n");
             dataOutputStream.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
             dataOutputStream.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dataOutputStream.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void response302Header(DataOutputStream dataOutputStream, int lengthOfBodyContent) {
+        try {
+            dataOutputStream.writeBytes("HTTP/1.1 302 Found \r\n");
+            dataOutputStream.writeBytes("Location: /index.html \r\n");
             dataOutputStream.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
