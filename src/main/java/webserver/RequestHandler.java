@@ -11,6 +11,7 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
+import utils.IOUtils;
 import utils.StringUtils;
 
 public class RequestHandler implements Runnable {
@@ -48,12 +49,24 @@ public class RequestHandler implements Runnable {
                 return;
             }
 
-            String userId = StringUtils.extractParameterValue(requestLocation, "userId");
-            String password = StringUtils.extractParameterValue(requestLocation, "password");
-            String name = StringUtils.extractParameterValue(requestLocation, "name");
-            String email = StringUtils.extractParameterValue(requestLocation, "email");
+            while (!line.contains("Content-Length:")) {
+                line = bufferedReader.readLine();
+            }
+            int contentLength = Integer.parseInt(line.split("Content-Length: ")[1]);
+
+            while (!line.equals("")) {
+                line = bufferedReader.readLine();
+            }
+
+            String parameters = IOUtils.readData(bufferedReader, contentLength);
+
+            String userId = StringUtils.extractParameterValue(parameters, "userId");
+            String password = StringUtils.extractParameterValue(parameters, "password");
+            String name = StringUtils.extractParameterValue(parameters, "name");
+            String email = StringUtils.extractParameterValue(parameters, "email");
 
             User user = new User(userId, password, name, email);
+            System.out.println(user.toString());
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
