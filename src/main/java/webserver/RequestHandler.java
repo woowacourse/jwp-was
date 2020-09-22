@@ -18,6 +18,7 @@ public class RequestHandler implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private static final String TEMPLATE_LOCATION = "./templates";
+    private static final String STATIC_LOCATION = "./static";
 
     private Socket connection;
 
@@ -44,11 +45,10 @@ public class RequestHandler implements Runnable {
             if (requestLocation.endsWith(".html")) {
                 byte[] body = FileIoUtils
                     .loadFileFromClasspath(TEMPLATE_LOCATION + requestLocation);
-                response200Header(dataOutputStream, body.length);
+                response200Header(dataOutputStream, body.length, "text/html");
                 responseBody(dataOutputStream, body);
                 return;
             }
-
             if(line.contains("/user/create")){
                 while (!line.contains("Content-Length:")) {
                     line = bufferedReader.readLine();
@@ -68,19 +68,25 @@ public class RequestHandler implements Runnable {
 
                 User user = new User(userId, password, name, email);
 
+                response302Header(dataOutputStream);
+                return;
+            }
+            if (requestLocation.endsWith(".css")) {
                 byte[] body = FileIoUtils
-                    .loadFileFromClasspath(TEMPLATE_LOCATION + "/index.html");
-                response302Header(dataOutputStream, body.length);
+                    .loadFileFromClasspath(STATIC_LOCATION + requestLocation);
+                response200Header(dataOutputStream, body.length, "text/css");
+                responseBody(dataOutputStream, body);
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void response200Header(DataOutputStream dataOutputStream, int lengthOfBodyContent) {
+    private void response200Header(DataOutputStream dataOutputStream, int lengthOfBodyContent,
+        String contentType) {
         try {
             dataOutputStream.writeBytes("HTTP/1.1 200 OK \r\n");
-            dataOutputStream.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dataOutputStream.writeBytes("Content-Type: " + contentType + ";charset=utf-8\r\n");
             dataOutputStream.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dataOutputStream.writeBytes("\r\n");
         } catch (IOException e) {
@@ -88,7 +94,7 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void response302Header(DataOutputStream dataOutputStream, int lengthOfBodyContent) {
+    private void response302Header(DataOutputStream dataOutputStream) {
         try {
             dataOutputStream.writeBytes("HTTP/1.1 302 Found \r\n");
             dataOutputStream.writeBytes("Location: /index.html \r\n");
