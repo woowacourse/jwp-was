@@ -17,7 +17,7 @@ public class RequestUri {
         this.query = findQuery(requestUri);
     }
 
-    public String findQuery(String requestUri) {
+    private String findQuery(String requestUri) {
         String[] pathQuerySplit = requestUri.split(URI_DELIMITER_REGEX);
         String query = "";
         if (hasQueryString(pathQuerySplit.length)) {
