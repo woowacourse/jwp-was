@@ -9,13 +9,12 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import web.server.RequestHandler;
 import web.server.utils.FileIoUtils;
 import web.server.utils.StaticFileType;
 
 public class HttpResponse {
 
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
     private static final String NEW_LINE = System.lineSeparator();
 
     private final DataOutputStream dataOutputStream;
