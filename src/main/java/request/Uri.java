@@ -33,13 +33,13 @@ class Uri {
         return pathAndQuery[0];
     }
 
-    public boolean isUsingQueryString() {
+    boolean isUsingQueryString() {
         return QueryData.isUriUsingQuery(uri);
     }
 
     Map<String, String> getDataFromGetMethodUri() {
         if (!isUsingQueryString()) {
-            throw new UnsupportedOperationException(
+            throw new RequestDataFormatException(
                 "this function can be used only when uri is query string.");
         }
         String query = findQueryStringFromUri();
@@ -55,7 +55,7 @@ class Uri {
         return pathAndQuery[1];
     }
 
-    public String getPath() {
+    String getPath() {
         return path;
     }
 
