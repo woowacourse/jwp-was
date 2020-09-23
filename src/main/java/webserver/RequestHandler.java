@@ -1,7 +1,6 @@
 package webserver;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -20,7 +19,6 @@ import utils.RequestUtils;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    public static final int OFFSET = 0;
     public static final String TEMPLATE_PATH = "./templates";
     public static final String STATIC_PATH = "./static";
     public static final String HTML = "html";
@@ -40,10 +38,8 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = new HttpRequest(br);
             printHeader(httpRequest);
             createModel(br, httpRequest);
-            DataOutputStream dos = new DataOutputStream(out);
             byte[] body = loadStaticFile(httpRequest);
-            responseHeader(dos, httpRequest.getPath(), body.length);
-            responseBody(dos, body);
+            response(out, httpRequest.getPath(), body.length);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
@@ -70,49 +66,21 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void responseHeader(DataOutputStream dos, String path, int lengthOfBodyContent) {
+    private void response(OutputStream out, String path, int lengthOfBodyContent) throws
+        IOException,
+        URISyntaxException {
+        HttpResponse httpResponse;
         if (lengthOfBodyContent != 0) {
-            response200Header(dos, path, lengthOfBodyContent);
+            httpResponse = new HttpResponse(HttpStatus.OK, out);
+            httpResponse.addHeader("Content-Type",
+                String.format("text/%s;charset=utf-8", RequestUtils.extractExtension(path)));
+            httpResponse.addHeader("Content-Length", RequestUtils.extractExtension(path));
+            httpResponse.forward(path);
         }
         if (lengthOfBodyContent == 0) {
-            response302Header(dos, lengthOfBodyContent);
-        }
-    }
-
-    private void response200Header(DataOutputStream dos, String path, int lengthOfBodyContent) {
-        try {
-            writeWithLineSeparator(dos, "HTTP/1.1 200 OK");
-            writeWithLineSeparator(dos,
-                String.format("Content-Type: text/%s;charset=utf-8", RequestUtils.extractExtension(path)));
-            writeWithLineSeparator(dos, String.format("Content-Length: %d", lengthOfBodyContent));
-            dos.writeBytes(System.lineSeparator());
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void response302Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            writeWithLineSeparator(dos, "HTTP/1.1 302 FOUND");
-            writeWithLineSeparator(dos, "Location: http://localhost:8080/index.html");
-            writeWithLineSeparator(dos, "Content-Type: text/html;charset=utf-8");
-            writeWithLineSeparator(dos, String.format("Content-Length: %d", lengthOfBodyContent));
-            dos.writeBytes(System.lineSeparator());
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void writeWithLineSeparator(DataOutputStream dos, String contents) throws IOException {
-        dos.writeBytes(String.format("%s%s", contents, System.lineSeparator()));
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, OFFSET, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
+            httpResponse = new HttpResponse(HttpStatus.FOUND, out);
+            httpResponse.addHeader("Content-Length", RequestUtils.extractExtension(path));
+            httpResponse.sendRedirect("/index.html");
         }
     }
 }

@@ -4,8 +4,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import utils.FileIoUtils;
 import utils.RequestUtils;
@@ -24,7 +24,7 @@ public class HttpResponse {
     public HttpResponse(HttpStatus httpStatus, OutputStream out) {
         this.httpStatus = httpStatus;
         this.dos = new DataOutputStream(out);
-        this.header = new HashMap<>();
+        this.header = new TreeMap<>();
     }
 
     public void addHeader(String key, String value) {
@@ -33,13 +33,28 @@ public class HttpResponse {
 
     public void forward(String path) throws IOException, URISyntaxException {
         body = loadStaticFile(path);
-        writeWithLineSeparator("HTTP 1.1 " + httpStatus.getNumber() + " " + httpStatus.name());
+        writeStatus();
         for (Map.Entry<String, String> entry : header.entrySet()) {
             writeWithLineSeparator(entry.getKey() + ": " + entry.getValue());
         }
         dos.writeBytes(System.lineSeparator());
         dos.write(body, OFFSET, body.length);
         dos.flush();
+    }
+
+    public void sendRedirect(String path) throws IOException {
+        writeStatus();
+        for (Map.Entry<String, String> entry : header.entrySet()) {
+            writeWithLineSeparator(entry.getKey() + ": " + entry.getValue());
+        }
+        writeWithLineSeparator("Location: http://localhost:8080" + path);
+        writeWithLineSeparator("Content-Type: text/html;charset=utf-8");
+        dos.writeBytes(System.lineSeparator());
+        dos.flush();
+    }
+
+    private void writeStatus() throws IOException {
+        writeWithLineSeparator("HTTP 1.1 " + httpStatus.getNumber() + " " + httpStatus.name());
     }
 
     private byte[] loadStaticFile(String path) throws IOException, URISyntaxException {

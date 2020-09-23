@@ -1,7 +1,8 @@
 package webserver;
 
 public enum HttpStatus {
-    OK(200);
+    OK(200),
+    FOUND(300);
 
     private final int number;
 
