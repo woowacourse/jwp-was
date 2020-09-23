@@ -11,14 +11,14 @@ class RequestUtilsTest {
         String get = "GET /index.html HTTP/1.1";
         String post = "POST /index.html HTTP/1.1";
         assertAll(
-            () -> assertThat(RequestUtils.isPost(get)).isFalse(),
-            () -> assertThat(RequestUtils.isPost(post)).isTrue()
+            () -> assertThat(RequestUtils.extractMethod(get)).isEqualTo("GET"),
+            () -> assertThat(RequestUtils.extractMethod(post)).isEqualTo("POST")
         );
     }
 
     @Test
-    void extractUrl() {
-        String url = RequestUtils.extractUrl("GET /index.html HTTP/1.1");
+    void extractPath() {
+        String url = RequestUtils.extractPath("GET /index.html HTTP/1.1");
         assertThat(url).isEqualTo("/index.html");
     }
 

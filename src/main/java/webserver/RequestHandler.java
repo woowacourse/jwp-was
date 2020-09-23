@@ -51,7 +51,7 @@ public class RequestHandler implements Runnable {
         int contentLength = 0;
         String line = br.readLine();
         String firstLine = line;
-        String url = RequestUtils.extractUrl(firstLine);
+        String url = RequestUtils.extractPath(firstLine);
         while (!EMPTY.equals(line) && line != null) {
             logger.debug("header : {}", line);
             contentLength = assignContentLengthIfPresent(contentLength, line);
@@ -77,7 +77,7 @@ public class RequestHandler implements Runnable {
     }
 
     private void createModel(BufferedReader br, int contentLength, String firstLine) throws IOException {
-        if (RequestUtils.isPost(firstLine)) {
+        if (RequestUtils.extractMethod(firstLine).equals("POST")) {
             ModelType modelType = ModelType.valueOf(RequestUtils.extractTitleOfModel(firstLine));
             String body = IOUtils.readData(br, contentLength);
             logger.debug(modelType.getModel(body).toString());
@@ -100,32 +100,36 @@ public class RequestHandler implements Runnable {
             response200Header(dos, url, lengthOfBodyContent);
         }
         if (isApiCall(url)) {
-            response300Header(dos, lengthOfBodyContent);
+            response302Header(dos, lengthOfBodyContent);
         }
     }
 
     private void response200Header(DataOutputStream dos, String url, int lengthOfBodyContent) {
         try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes(
-                String.format("Content-Type: text/%s;charset=utf-8\r\n", RequestUtils.extractExtension(url)));
-            dos.writeBytes(String.format("Content-Length: %d\r\n", lengthOfBodyContent));
-            dos.writeBytes("\r\n");
+            writeWithLineSeparator(dos, "HTTP/1.1 200 OK");
+            writeWithLineSeparator(dos,
+                String.format("Content-Type: text/%s;charset=utf-8", RequestUtils.extractExtension(url)));
+            writeWithLineSeparator(dos, String.format("Content-Length: %d", lengthOfBodyContent));
+            dos.writeBytes(System.lineSeparator());
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void response300Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response302Header(DataOutputStream dos, int lengthOfBodyContent) {
         try {
-            dos.writeBytes("HTTP/1.1 302 FOUND \r\n");
-            dos.writeBytes("Location: http://localhost:8080/index.html\r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes(String.format("Content-Length: %d\r\n", lengthOfBodyContent));
-            dos.writeBytes("\r\n");
+            writeWithLineSeparator(dos, "HTTP/1.1 302 FOUND");
+            writeWithLineSeparator(dos, "Location: http://localhost:8080/index.html");
+            writeWithLineSeparator(dos, "Content-Type: text/html;charset=utf-8");
+            writeWithLineSeparator(dos, String.format("Content-Length: %d", lengthOfBodyContent));
+            dos.writeBytes(System.lineSeparator());
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private void writeWithLineSeparator(DataOutputStream dos, String contents) throws IOException {
+        dos.writeBytes(String.format("%s%s", contents, System.lineSeparator()));
     }
 
     private void responseBody(DataOutputStream dos, byte[] body) {
