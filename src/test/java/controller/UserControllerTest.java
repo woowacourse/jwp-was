@@ -31,16 +31,17 @@ class UserControllerTest {
         assertThat(responseHeader.contains("Location: /")).isTrue();
     }
 
-    @Test
+    @ParameterizedTest
+    @ValueSource(strings = {"userId=", "password=", "nickname=", "email=", "zzzzzzz", "", " "})
     @DisplayName("회원가입 테스트 - 요청 body가 잘못된 경우")
-    void serviceForJoin_IfBodyIsWrong() {
+    void serviceForJoin_IfBodyIsWrong(String wrongBody) {
         HttpRequest joinRequest = new HttpRequest("POST /user/create HTTP/1.1\n"
             + "Host: localhost:8080\n"
             + "Connection: keep-alive\n"
             + "Cache-Control: max-age=0\n"
             + "Upgrade-Insecure-Requests: 1\n"
             + "Content-Length: 10\n",
-            "userId=");
+            wrongBody);
 
         HttpResponse response = userController.service(joinRequest);
         String responseHeader = response.buildHeader();
