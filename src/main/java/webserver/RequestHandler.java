@@ -22,7 +22,8 @@ import web.HttpRequest;
 
 public class RequestHandler implements Runnable {
 	private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-	public static final String INDEX_HTML_LOCATION = "/index.html";
+	private static final String INDEX_HTML_LOCATION = "/index.html";
+	private static final String LINE_SEPARATOR = System.lineSeparator();
 
 	private Socket connection;
 
@@ -38,6 +39,7 @@ public class RequestHandler implements Runnable {
 			BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
 
 			HttpRequest request = HttpRequest.of(br);
+
 			DataOutputStream dos = new DataOutputStream(out);
 
 			if ("/user/create".equals(request.getPath())) {
@@ -68,10 +70,10 @@ public class RequestHandler implements Runnable {
 
 	private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
 		try {
-			dos.writeBytes("HTTP/1.1 200 OK \r\n");
-			dos.writeBytes("Content-Type: " + contentType + ";charset=utf-8\r\n");
-			dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-			dos.writeBytes("\r\n");
+			dos.writeBytes("HTTP/1.1 200 OK " + LINE_SEPARATOR);
+			dos.writeBytes("Content-Type: " + contentType + ";charset=utf-8" + LINE_SEPARATOR);
+			dos.writeBytes("Content-Length: " + lengthOfBodyContent + LINE_SEPARATOR);
+			dos.writeBytes(LINE_SEPARATOR);
 		} catch (IOException e) {
 			logger.error(e.getMessage());
 		}
@@ -79,10 +81,10 @@ public class RequestHandler implements Runnable {
 
 	private void response302Header(DataOutputStream dos, String location) {
 		try {
-			dos.writeBytes("HTTP/1.1 302 Found \r\n");
-			dos.writeBytes("Location: " + location + "\r\n");
-			dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-			dos.writeBytes("\r\n");
+			dos.writeBytes("HTTP/1.1 302 Found " + LINE_SEPARATOR);
+			dos.writeBytes("Location: " + location + LINE_SEPARATOR);
+			dos.writeBytes("Content-Type: text/html;charset=utf-8" + LINE_SEPARATOR);
+			dos.writeBytes(LINE_SEPARATOR);
 		} catch (IOException e) {
 			logger.error(e.getMessage());
 		}
