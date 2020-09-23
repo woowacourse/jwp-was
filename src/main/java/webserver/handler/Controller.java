@@ -30,8 +30,7 @@ public class Controller {
                 User user = request.getBody(User.class);
                 DataBase.addUser(user);
 
-                response.postResponse(request);
-                response.redirectTo("http://localhost:8080/index.html ");
+                response.redirectTo(request, "http://localhost:8080/index.html ");
                 return response;
             }
         );

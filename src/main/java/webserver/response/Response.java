@@ -48,8 +48,9 @@ public class Response {
         this.version = request.getVersion();
     }
 
-    public void redirectTo(String url) {
+    public void redirectTo(Request request, String url) {
         this.status = FOUND;
+        this.version = request.getVersion();
         headers.setHeader("Location", url);
     }
 
