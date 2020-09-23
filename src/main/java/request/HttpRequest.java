@@ -85,7 +85,12 @@ public class HttpRequest {
     }
 
     public String getValueFromFormData(String headerName) {
-        return messageBody.findDataFromFormFormatBody(headerName);
+        try {
+            return messageBody.findDataFromFormFormatBody(headerName);
+        } catch (DataIsNotFormDataException e) {
+            throw new WrongRequestFormatException(
+                "request format is wrong : " + e.getMessage());
+        }
     }
 
     public boolean isUriPath(String uriPath) {

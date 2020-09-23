@@ -9,6 +9,7 @@ import response.StatusCode;
 public class UserController extends AbstractController {
 
     private HttpResponse createUser(HttpRequest request) {
+        validateUriPath(request.getUriPath());
         User user = new User(
             request.getValueFromFormData("userId"),
             request.getValueFromFormData("password"),
@@ -18,6 +19,12 @@ public class UserController extends AbstractController {
         DataBase.addUser(user);
 
         return new HttpResponse(StatusCode.FOUND, "/");
+    }
+
+    private void validateUriPath(String uriPath) {
+        if (!uriPath.equals(UriPathConstants.USER_CREATE_URI_PATH)) {
+            throw new WrongUriException("bad request: strange uri");
+        }
     }
 
     @Override
