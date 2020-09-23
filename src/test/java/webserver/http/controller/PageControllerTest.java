@@ -69,4 +69,21 @@ class PageControllerTest {
             .extracting("httpStatus")
             .extracting("statusCode").isEqualTo(405);
     }
+
+    @DisplayName("잘못된 메서드 호출 시 501 호출")
+    @Test
+    void viewPageWithNotImplemented() throws Exception {
+        RequestLine requestLine = new RequestLine(RequestMethod.of("Hello"), RequestUrl.from("/index.html"),
+            "HTTP/1.1");
+        RequestHeaders requestHeaders = new RequestHeaders(new HashMap<>());
+        HttpRequest httpRequest = new HttpRequest(requestLine, requestHeaders, RequestBody.from(""));
+        HttpResponse httpResponse = HttpResponse.ofVersion(httpRequest.getHttpVersion());
+
+        pageController.service(httpRequest, httpResponse);
+
+        assertThat(httpResponse)
+            .extracting("responseStatus")
+            .extracting("httpStatus")
+            .extracting("statusCode").isEqualTo(501);
+    }
 }

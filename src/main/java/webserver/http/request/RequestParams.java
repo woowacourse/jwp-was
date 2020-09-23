@@ -20,8 +20,4 @@ public class RequestParams {
     public List<String> getParameters(String key) {
         return parameters.get(key);
     }
-
-    public Map<String, List<String>> getParametersMap() {
-        return Collections.unmodifiableMap(parameters);
-    }
 }

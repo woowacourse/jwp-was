@@ -10,6 +10,7 @@ public enum HttpStatus {
     NOT_IMPLEMENTED(501, "Not Implemented");
 
     private static final int ERROR_THRESHOLD = 400;
+
     private int statusCode;
     private String status;
 

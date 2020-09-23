@@ -1,6 +1,7 @@
 package webserver.http.request;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.ByteArrayInputStream;
 
@@ -27,7 +28,7 @@ public class HttpRequestTest {
     @DisplayName("Post 요청 시, 파라미터를 올바르게 가지고 오는 지 확인한다.")
     @Test
     void getParameterWithPost() throws Exception {
-        String request = "POST /index.html?a=1&b=2 HTTP/1.1" + System.lineSeparator()
+        String request = "POST /index.html?b=2 HTTP/1.1" + System.lineSeparator()
             + "Host: localhost:8080" + System.lineSeparator()
             + "Connection: keep-alive" + System.lineSeparator()
             + "Content-Length: 3" + System.lineSeparator()
@@ -37,7 +38,10 @@ public class HttpRequestTest {
 
         HttpRequest httpRequest = HttpRequestFactory.create(new ByteArrayInputStream(request.getBytes()));
 
-        assertThat(httpRequest.getParameters("a")).contains("1", "2");
+        assertAll(
+            () -> assertThat(httpRequest.getParameter("a")).isEqualTo("2"),
+            () -> assertThat(httpRequest.getParameter("b")).isEqualTo("2")
+        );
     }
 
     @DisplayName("파라미터를 없을 경우 null을 반환한다.")

@@ -26,7 +26,7 @@ class RequestUrlTest {
         String url = "/index";
         RequestUrl requestUrl = RequestUrl.from(url);
         assertAll(
-            () -> assertThat(requestUrl.getHttpRequestParams().getParametersMap()).isEmpty(),
+            () -> assertThat(requestUrl.getHttpRequestParams()).extracting("parameters").asInstanceOf(MAP).isEmpty(),
             () -> assertThat(requestUrl.getUrl()).isEqualTo("/index")
         );
     }
