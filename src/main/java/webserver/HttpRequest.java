@@ -2,49 +2,49 @@ package webserver;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import utils.RequestUtils;
 
 public class HttpRequest {
     public static final String EMPTY = "";
-    public static final String SPACE_REGEX = " ";
-    public static final int VALUE_INDEX = 1;
+    public static final String REGEX = ":";
+    public static final int KEY_INDEX = 0;
 
-    private String header;
     private final String path;
     private final HttpMethod httpMethod;
-    private int contentLength;
+    private final Map<String, String> header;
 
     public HttpRequest(BufferedReader br) throws IOException {
-        String firstLine = readAndPrintRequest(br);
+        this.header = new HashMap<>();
+        String firstLine = readRequest(br);
         this.httpMethod = HttpMethod.valueOf(RequestUtils.extractMethod(firstLine));
         this.path = RequestUtils.extractPath(firstLine);
     }
 
-    private String readAndPrintRequest(BufferedReader br) throws IOException {
+    private String readRequest(BufferedReader br) throws IOException {
         String line = br.readLine();
-        printRequest(br, line);
+        createHeader(br);
 
         return line;
     }
 
-    private void printRequest(BufferedReader br, String line) throws IOException {
-        StringBuilder sb = new StringBuilder();
+    private void createHeader(BufferedReader br) throws IOException {
+        String line = br.readLine();
         while (!EMPTY.equals(line) && line != null) {
-            sb.append(line).append(System.lineSeparator());
-            assignContentLengthIfPresent(line);
+            String key = line.split(REGEX)[KEY_INDEX];
+            String value = line.substring(key.length() + 2);
+            header.put(key, value);
             line = br.readLine();
         }
-        this.header = sb.toString();
     }
 
-    private void assignContentLengthIfPresent(String line) {
-        if (line.startsWith("Content-Length")) {
-            this.contentLength = Integer.parseInt(line.split(SPACE_REGEX)[VALUE_INDEX]);
-        }
+    public String getHeader(String key) {
+        return header.get(key);
     }
 
-    public String getHeader() {
+    public Map<String, String> getHeader() {
         return header;
     }
 

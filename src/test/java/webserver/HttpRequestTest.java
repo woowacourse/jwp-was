@@ -25,7 +25,7 @@ class HttpRequestTest {
         HttpRequest httpRequest = new HttpRequest(br);
 
         assertAll(
-            () -> assertThat(httpRequest.getHeader()).isEqualTo(request),
+            () -> assertThat(httpRequest.getHeader("Host")).isEqualTo("localhost:8080"),
             () -> assertThat(httpRequest.getPath()).isEqualTo("/admin/"),
             () -> assertThat(httpRequest.getHttpMethod()).isEqualTo(HttpMethod.GET)
         );

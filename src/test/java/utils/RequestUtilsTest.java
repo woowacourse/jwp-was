@@ -24,7 +24,7 @@ class RequestUtilsTest {
 
     @Test
     void extractTitleOfModel() {
-        String title = RequestUtils.extractTitleOfModel("GET /user/create HTTP/1.1");
+        String title = RequestUtils.extractTitleOfModel("/user/create");
         assertThat(title).isEqualTo("USER");
     }
 
