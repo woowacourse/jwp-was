@@ -4,14 +4,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class RequestLine {
+class RequestLine {
 
     private static final String MESSAGE_INPUT_IS_WRONG = "request line input is unformatted.";
 
     private Method method;
     private Uri uri;
 
-    public RequestLine(String requestLine) {
+    RequestLine(String requestLine) {
         List<String> split = Arrays.asList(requestLine.split(" "));
         if (split.size() != 3) {
             throw new IllegalArgumentException(MESSAGE_INPUT_IS_WRONG);

@@ -14,6 +14,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import request.HttpRequest;
 import request.Method;
+import request.WrongRequestDataFormatException;
 
 class HttpRequestTest {
 
@@ -135,8 +136,8 @@ class HttpRequestTest {
         HttpRequest httpRequest = new HttpRequest(requestHeader, "");
 
         assertThatThrownBy(() -> httpRequest.getValueFromFormData("Host"))
-            .isInstanceOf(UnsupportedOperationException.class)
-            .hasMessage("message body is empty.");
+            .isInstanceOf(WrongRequestDataFormatException.class)
+            .hasMessage("request format is wrong : message body is empty.");
     }
 
     @Test
@@ -153,8 +154,8 @@ class HttpRequestTest {
         HttpRequest httpRequest = new HttpRequest(requestHeader, requestBody);
 
         assertThatThrownBy(() -> httpRequest.getValueFromFormData("Host"))
-            .isInstanceOf(UnsupportedOperationException.class)
-            .hasMessage("message body is not form data format.");
+            .isInstanceOf(WrongRequestDataFormatException.class)
+            .hasMessage("request format is wrong : message body is not form data format.");
     }
 
     @Test

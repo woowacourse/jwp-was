@@ -2,17 +2,17 @@ package request;
 
 import java.util.Objects;
 
-public class MessageBody {
+class MessageBody {
 
     static final String EMPTY_BODY = "";
 
     private String messageBody;
 
-    public MessageBody(String messageBody) {
+    MessageBody(String messageBody) {
         this.messageBody = messageBody;
     }
 
-    public String findDataFromFormFormatBody(String fieldName) {
+    String findDataFromFormFormatBody(String fieldName) {
         if (Objects.isNull(messageBody) || messageBody.isEmpty()) {
             throw new DataIsNotFormDataException("message body is empty.");
         }
@@ -21,10 +21,6 @@ public class MessageBody {
         } catch (IllegalArgumentException e) {
             throw new DataIsNotFormDataException("message body is not form data format.");
         }
-    }
-
-    public String getMessageBody() {
-        return messageBody;
     }
 
     @Override

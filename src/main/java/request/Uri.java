@@ -3,14 +3,14 @@ package request;
 import java.util.Collections;
 import java.util.Map;
 
-public class Uri {
+class Uri {
 
     private static final String PATH_AND_QUERY_SEPARATOR = "\\?";
 
     private String uri;
     private String path;
 
-    public Uri(String uri) {
+    Uri(String uri) {
         validateUri(uri);
         this.uri = uri;
         this.path = findPathFromUri();
@@ -37,7 +37,7 @@ public class Uri {
         return QueryData.isUriUsingQuery(uri);
     }
 
-    public Map<String, String> getDataFromGetMethodUri() {
+    Map<String, String> getDataFromGetMethodUri() {
         if (!isUsingQueryString()) {
             throw new UnsupportedOperationException(
                 "this function can be used only when uri is query string.");
@@ -59,7 +59,7 @@ public class Uri {
         return path;
     }
 
-    public boolean isPath(String uriPath) {
+    boolean isPath(String uriPath) {
         return this.path.equals(uriPath);
     }
 

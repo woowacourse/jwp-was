@@ -5,14 +5,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class Headers {
+class Headers {
 
     static final String CONTENT_LENGTH = "Content-Length";
     private static final String NAME_AND_VALUE_SEPARATOR = ": ";
 
     private Map<String, String> headers = new HashMap<>();
 
-    public Headers(List<String> headerLines) {
+    Headers(List<String> headerLines) {
         headerLines.forEach(header -> {
             String[] split = header.split(NAME_AND_VALUE_SEPARATOR);
             if (split.length != 2) {
@@ -26,7 +26,7 @@ public class Headers {
         return headers.containsKey(headerFieldName);
     }
 
-    public String getValue(String headerFieldName) {
+    String getValue(String headerFieldName) {
         if (!doesHeaderExist(headerFieldName)) {
             throw new IllegalArgumentException("this header field does not exist.");
         }
