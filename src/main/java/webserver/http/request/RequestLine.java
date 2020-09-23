@@ -2,6 +2,7 @@ package webserver.http.request;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class RequestLine {
     private static final int HTTP_METHOD_INDEX = 0;
@@ -44,6 +45,9 @@ public class RequestLine {
     }
 
     public boolean allowBody() {
+        if (Objects.isNull(requestMethod)) {
+            return false;
+        }
         return requestMethod.allowBody();
     }
 }

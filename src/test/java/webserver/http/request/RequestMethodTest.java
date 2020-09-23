@@ -12,12 +12,10 @@ class RequestMethodTest {
         assertThat(RequestMethod.of("GET")).isEqualTo(RequestMethod.GET);
     }
 
-    @DisplayName("생성 예외 테스트")
+    @DisplayName("지원하지 않는 메소드가 올 시 null 반환")
     @Test
     void ofException() {
-        assertThatThrownBy(() -> RequestMethod.of("hi"))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("허용되지 않는");
+        assertThat(RequestMethod.of("hi")).isNull();
     }
 
     @DisplayName("Http Method가 body를 지원하는 지 확인한다.")

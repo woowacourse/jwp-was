@@ -10,7 +10,7 @@ public enum RequestMethod {
         return Arrays.stream(values())
             .filter(requestMethod -> requestMethod.name().equalsIgnoreCase(methodName))
             .findAny()
-            .orElseThrow(() -> new IllegalArgumentException("허용되지 않는 Http Method 입니다."));
+            .orElse(null);
     }
 
     public boolean allowBody() {

@@ -13,12 +13,12 @@ public abstract class AbstractController implements Controller {
         } else if (httpRequest.getHttpMethod() == RequestMethod.POST) {
             doPost(httpRequest, httpResponse);
         } else {
-            httpResponse.sendError(HttpStatus.METHOD_NOT_ALLOWED, "허용되지 않은 Http 메소드입니다.");
+            httpResponse.sendError(HttpStatus.NOT_IMPLEMENTED, "아직 이 요청은 지원하지 않습니다.");
         }
     }
 
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws Exception {
-        httpResponse.sendError(HttpStatus.NOT_FOUND, "페이지가 없습니다.");
+        httpResponse.sendError(HttpStatus.METHOD_NOT_ALLOWED, "허용되지 않은 Http 메소드입니다.");
     }
 
     public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws Exception {
