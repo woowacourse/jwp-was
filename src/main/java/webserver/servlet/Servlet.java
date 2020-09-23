@@ -1,7 +1,5 @@
 package webserver.servlet;
 
-import java.util.Map;
-
 import webserver.domain.request.HttpRequest;
 
 public interface Servlet {
@@ -10,6 +8,4 @@ public interface Servlet {
     void get(HttpRequest httpRequest);
 
     void post(HttpRequest httpRequest);
-
-    String getResourcePathToRedirect();
 }

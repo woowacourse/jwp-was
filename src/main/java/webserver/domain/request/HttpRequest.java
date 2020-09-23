@@ -13,7 +13,7 @@ import utils.IOUtils;
 import webserver.domain.Header;
 
 public class HttpRequest {
-    private static final String lineSeparator = System.getProperty("line.separator");
+    private static final String lineSeparator = System.lineSeparator();
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
 
     private final RequestLine requestLine;
@@ -55,7 +55,7 @@ public class HttpRequest {
         if (Objects.isNull(contentLength)) {
             return new HttpRequest(requestLine, header, "");
         }
-        String body = IOUtils.readData(br, Integer.parseInt(headerFields.get("Content-Length")));
+        String body = IOUtils.readData(br, Integer.parseInt(contentLength));
         logger.debug("Body : {}", body);
 
         return new HttpRequest(requestLine, header, body);

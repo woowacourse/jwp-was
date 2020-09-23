@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import webserver.domain.Header;
 
 public class HttpResponse {
-    private static final String lineSeparator = System.getProperty("line.separator");
+    private static final String lineSeparator = System.lineSeparator();
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
     private final StatusLine statusLine;

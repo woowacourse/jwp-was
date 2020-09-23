@@ -20,7 +20,7 @@ import webserver.domain.request.RequestLine;
 import webserver.domain.response.HttpResponse;
 
 class RequestHandlerTest {
-    private static final String lineSeparator = System.getProperty("line.separator");
+    private static final String lineSeparator = System.lineSeparator();
 
     @DisplayName("정적 컨텐츠 처리에 대한 요청에 응답한다.")
     @Test

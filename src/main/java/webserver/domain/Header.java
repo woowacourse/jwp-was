@@ -3,7 +3,7 @@ package webserver.domain;
 import java.util.Map;
 
 public class Header {
-    private static final String lineSeparator = System.getProperty("line.separator");
+    private static final String lineSeparator = System.lineSeparator();
 
     private Map<String, String> fields;
 

@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,8 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import utils.FileIoUtils;
-import webserver.domain.request.HttpRequest;
 import webserver.domain.Header;
+import webserver.domain.request.HttpRequest;
 import webserver.domain.response.HttpResponse;
 import webserver.servlet.Servlet;
 import webserver.servlet.UserCreate;
@@ -35,7 +36,7 @@ public class RequestHandler implements Runnable {
 
     public void run() {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
-                connection.getPort());
+            connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest httpRequest = generateHttpRequest(in);
@@ -47,7 +48,7 @@ public class RequestHandler implements Runnable {
     }
 
     private HttpRequest generateHttpRequest(InputStream in) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+        BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         return HttpRequest.of(br);
     }
 
@@ -59,7 +60,7 @@ public class RequestHandler implements Runnable {
         if (httpRequest.isForStaticContent()) {
             String path = httpRequest.getPath();
             byte[] body = FileIoUtils.loadFileFromClasspath(path);
-            Map<String, String > headerFields = new HashMap<>();
+            Map<String, String> headerFields = new HashMap<>();
             if (path.endsWith(".html")) {
                 headerFields.put("Content-Type", "text/html;charset=utf-8");
             } else if (path.endsWith(".css")) {
@@ -80,7 +81,7 @@ public class RequestHandler implements Runnable {
             Class<? extends Servlet> servletClass = controller.get(path);
             Servlet servlet = servletClass.newInstance();
             servlet.service(httpRequest);
-            Map<String, String > headerFields = new HashMap<>();
+            Map<String, String> headerFields = new HashMap<>();
             headerFields.put("Location", "/index.html");
             Header header = new Header(headerFields);
             return HttpResponse.of("302", header);

@@ -14,7 +14,7 @@ import utils.FileIoUtils;
 import webserver.domain.Header;
 
 class HttpResponseTest {
-    private static final String lineSeparator = System.getProperty("line.separator");
+    private static final String lineSeparator = System.lineSeparator();
 
     @DisplayName("200상태의 HttpResponse를 생성한다.")
     @Test

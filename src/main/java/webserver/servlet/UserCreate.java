@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import db.DataBase;
 import model.User;
-import webserver.RequestHandler;
 import webserver.domain.request.HttpRequest;
 
 public class UserCreate implements Servlet{
@@ -67,10 +66,5 @@ public class UserCreate implements Servlet{
 
         User user = new User(userId, password, name, email);
         DataBase.addUser(user);
-    }
-
-    @Override
-    public String getResourcePathToRedirect() {
-        return "./templates/index.html";
     }
 }
