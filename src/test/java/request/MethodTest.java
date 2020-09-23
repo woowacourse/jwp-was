@@ -15,8 +15,8 @@ class MethodTest {
     @ParameterizedTest
     @MethodSource("getParameterOfFromTest")
     @DisplayName("문자열로부터 enum 객체 찾기")
-    void from(String methodString, Method method) {
-        assertThat(Method.from(methodString)).isEqualTo(method);
+    void from(String methodString, Method expected) {
+        assertThat(Method.from(methodString)).isEqualTo(expected);
     }
 
     private static Stream<Arguments> getParameterOfFromTest() {
