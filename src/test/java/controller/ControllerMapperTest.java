@@ -17,12 +17,15 @@ class ControllerMapperTest {
     @DisplayName("controller에 명시되어있는 요청인지 확인 테스트 - true")
     @Test
     void isApiWhenTrue() {
+        ControllerMapper.getInstance().addController(new UserController());
+
         HttpRequest httpRequest = new HttpRequest(
-                new RequestLine(HttpMethod.POST, ControllerMapper.USER_CONTROLLER_PATH),
+                new RequestLine(HttpMethod.POST, new UserController().getPath()),
                 new RequestHeader(new HashMap<>()),
                 new RequestParams(new HashMap<>())
         );
-        assertThat(ControllerMapper.isApi(httpRequest)).isTrue();
+
+        assertThat(ControllerMapper.getInstance().isApi(httpRequest)).isTrue();
     }
 
     @DisplayName("controller에 명시되어있는 요청인지 확인 테스트 - false")
@@ -33,18 +36,21 @@ class ControllerMapperTest {
                 new RequestHeader(new HashMap<>()),
                 new RequestParams(new HashMap<>())
         );
-        assertThat(ControllerMapper.isApi(httpRequest)).isFalse();
+        assertThat(ControllerMapper.getInstance().isApi(httpRequest)).isFalse();
     }
 
     @DisplayName("httpRequest로부터 일치하는 controller를 찾는 기능 테스트")
     @Test
     void map() {
+        ControllerMapper.getInstance().addController(new UserController());
+
         HttpRequest httpRequest = new HttpRequest(
-                new RequestLine(HttpMethod.POST, ControllerMapper.USER_CONTROLLER_PATH),
+                new RequestLine(HttpMethod.POST, new UserController().getPath()),
                 new RequestHeader(new HashMap<>()),
                 new RequestParams(new HashMap<>())
         );
-        Controller controller = ControllerMapper.map(httpRequest);
+        Controller controller = ControllerMapper.getInstance().map(httpRequest);
+
         assertThat(controller).isInstanceOf(UserController.class);
     }
 }

@@ -2,6 +2,7 @@ package webserver;
 
 import controller.Controller;
 import controller.ControllerMapper;
+import controller.UserController;
 import http.factory.HttpRequestFactory;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -25,6 +26,14 @@ public class RequestHandler implements Runnable {
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
+        initControllerMapper();
+    }
+
+    private void initControllerMapper() {
+        ControllerMapper mapper = ControllerMapper.getInstance();
+        if (mapper.isEmpty()) {
+            mapper.addController(new UserController());
+        }
     }
 
     public void run() {
@@ -44,8 +53,8 @@ public class RequestHandler implements Runnable {
     }
 
     private void handle(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
-        if (ControllerMapper.isApi(httpRequest)) {
-            Controller controller = ControllerMapper.map(httpRequest);
+        if (ControllerMapper.getInstance().isApi(httpRequest)) {
+            Controller controller = ControllerMapper.getInstance().map(httpRequest);
             controller.service(httpRequest, httpResponse);
             return;
         }
@@ -53,12 +62,15 @@ public class RequestHandler implements Runnable {
     }
 
     private void findStaticResources(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
-        byte[] body;
-        body = FileIoUtils.loadFileFromClasspath(httpRequest.getPath());
-        if (body.length == 0) {
+        if (isNotFound(httpRequest)) {
             httpResponse.notFound();
             return;
         }
         httpResponse.forward(httpRequest);
+    }
+
+    private boolean isNotFound(HttpRequest httpRequest) throws IOException, URISyntaxException {
+        byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getPath());
+        return body.length == 0;
     }
 }

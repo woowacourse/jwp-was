@@ -6,18 +6,32 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ControllerMapper {
-    public static final String USER_CONTROLLER_PATH = "/user";
-    private static final Map<String, Controller> controllers = new HashMap<>();
+    private final Map<String, Controller> controllers = new HashMap<>();
 
-    static {
-        controllers.put(USER_CONTROLLER_PATH, new UserController());
+    private ControllerMapper() {
     }
 
-    public static Controller map(HttpRequest httpRequest) {
+    public static ControllerMapper getInstance() {
+        return Holder.INSTANCE;
+    }
+
+    public boolean isEmpty() {
+        return controllers.isEmpty();
+    }
+
+    public void addController(AbstractController controller) {
+        controllers.put(controller.getPath(), controller);
+    }
+
+    public Controller map(HttpRequest httpRequest) {
         return controllers.get(httpRequest.getPath());
     }
 
-    public static boolean isApi(HttpRequest httpRequest) {
+    public boolean isApi(HttpRequest httpRequest) {
         return controllers.containsKey(httpRequest.getPath());
+    }
+
+    private static class Holder {
+        private static final ControllerMapper INSTANCE = new ControllerMapper();
     }
 }

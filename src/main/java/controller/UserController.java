@@ -9,9 +9,10 @@ import org.slf4j.LoggerFactory;
 
 public class UserController extends AbstractController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static final String PATH = "/user";
 
     @Override
-    void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
+    protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         User user = new User(
                 httpRequest.getParameter("userId"),
                 httpRequest.getParameter("password"),
@@ -22,5 +23,10 @@ public class UserController extends AbstractController {
         logger.debug("save userId : {}", user.getUserId());
 
         httpResponse.sendRedirect("/index.html");
+    }
+
+    @Override
+    protected String getPath() {
+        return PATH;
     }
 }
