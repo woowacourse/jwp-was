@@ -2,6 +2,10 @@ package webserver.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import webserver.AcceptType;
 import webserver.Body;
@@ -17,8 +21,16 @@ public class Request {
     private final Body body;
     private final AcceptType type;
 
-    public Request(List<String> lines, BufferedReader bufferedReader) throws IOException {
+    public Request(InputStream inputStream) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+        String line;
+        List<String> lines = new ArrayList<>();
+
+        while (!"".equals(line = bufferedReader.readLine()) && line != null) {
+            lines.add(line);
+        }
         parseRequestFirstLine(lines.remove(0));
+
         headers = new Headers(lines);
         body = new Body(bufferedReader, headers.getHeader("Content-Length"));
         type = AcceptType.of(path);

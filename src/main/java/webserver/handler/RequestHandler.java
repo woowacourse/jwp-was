@@ -37,7 +37,7 @@ public class RequestHandler implements Runnable {
             connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            Request request = requestParser(in);
+            Request request = new Request(in);
             RequestType requestType = RequestType.of(request);
 
             Response response = mapping(requestType).apply(request, emptyResponse());
@@ -46,19 +46,6 @@ public class RequestHandler implements Runnable {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
-    }
-
-    private Request requestParser(InputStream in) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-        String line;
-        List<String> lines = new ArrayList<>();
-
-        while (!"".equals(line = br.readLine()) && line != null) {
-            logger.debug(line);
-            lines.add(line);
-        }
-
-        return new Request(lines, br);
     }
 
     private void response(Response response, DataOutputStream dos) {
