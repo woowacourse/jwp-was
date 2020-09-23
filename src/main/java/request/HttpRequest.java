@@ -88,7 +88,7 @@ public class HttpRequest {
         try {
             return messageBody.findDataFromFormFormatBody(headerName);
         } catch (DataIsNotFormDataException e) {
-            throw new WrongRequestFormatException(
+            throw new WrongRequestDataFormatException(
                 "request format is wrong : " + e.getMessage());
         }
     }

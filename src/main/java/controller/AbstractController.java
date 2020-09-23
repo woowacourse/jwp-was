@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.HttpRequest;
 import request.Method;
-import request.WrongRequestFormatException;
+import request.WrongRequestDataFormatException;
 import response.HttpResponse;
 import response.StatusCode;
 
@@ -27,10 +27,13 @@ abstract public class AbstractController implements Controller {
             if (httpRequest.isMethod(Method.DELETE)) {
                 return doDelete(httpRequest);
             }
-            return new HttpResponse(StatusCode.NOT_FOUND);
-        } catch (WrongRequestFormatException | WrongUriException e) {
+            throw new WrongUriException("http method of the request is weird.");
+        } catch (WrongRequestDataFormatException e) {
             logger.debug(e.getMessage());
             return new HttpResponse(StatusCode.BAD_REQUEST);
+        } catch (WrongUriException e) {
+            logger.debug(e.getMessage());
+            return new HttpResponse(StatusCode.NOT_FOUND);
         }
     }
 
