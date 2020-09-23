@@ -1,6 +1,5 @@
 package webserver.http.request;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 

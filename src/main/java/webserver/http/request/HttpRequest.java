@@ -29,13 +29,16 @@ public class HttpRequest {
 
     public String getParameter(String key) {
         List<String> parameters = getParameters(key);
-        if (parameters.isEmpty()) {
+        if (Objects.isNull(parameters) || parameters.isEmpty()) {
             return null;
         }
         return parameters.get(0);
     }
 
     private List<String> getParameters(String key) {
+        if (Objects.isNull(requestBody)) {
+            return getRequestParameter().getParameters(key);
+        }
         return Stream.of(getRequestParameter().getParameters(key), requestBody.getParameters(key))
             .filter(Objects::nonNull)
             .flatMap(Collection::stream)

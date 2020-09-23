@@ -25,6 +25,24 @@ public class HttpRequestTest {
         assertThat(httpRequest.getParameter("a")).isEqualTo("1");
     }
 
+    @DisplayName("Get 요청 시, 파라미터를 올바르게 가지고 오는 지 확인한다.")
+    @Test
+    void getParameterWithGet() throws Exception {
+        String request = "GET /index.html?a=2 HTTP/1.1" + System.lineSeparator()
+            + "Host: localhost:8080" + System.lineSeparator()
+            + "Connection: keep-alive" + System.lineSeparator()
+            + "Accept: */*" + System.lineSeparator()
+            + System.lineSeparator()
+            + "b=2";
+
+        HttpRequest httpRequest = HttpRequestFactory.create(new ByteArrayInputStream(request.getBytes()));
+
+        assertAll(
+            () -> assertThat(httpRequest.getParameter("a")).isEqualTo("2"),
+            () -> assertThat(httpRequest.getParameter("b")).isNull()
+        );
+    }
+
     @DisplayName("Post 요청 시, 파라미터를 올바르게 가지고 오는 지 확인한다.")
     @Test
     void getParameterWithPost() throws Exception {
