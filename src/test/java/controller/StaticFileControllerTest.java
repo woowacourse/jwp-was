@@ -1,4 +1,5 @@
 package controller;
 
 class StaticFileControllerTest {
+
 }

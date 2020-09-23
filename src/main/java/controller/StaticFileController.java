@@ -51,22 +51,22 @@ public class StaticFileController extends AbstractController {
     }
 
     @Override
-    public HttpResponse doGet(HttpRequest httpRequest) {
+    protected HttpResponse doGet(HttpRequest httpRequest) {
         return findStaticFile(httpRequest);
     }
 
     @Override
-    public HttpResponse doPost(HttpRequest httpRequest) {
+    protected HttpResponse doPost(HttpRequest httpRequest) {
         return new HttpResponse(StatusCode.NOT_FOUND);
     }
 
     @Override
-    public HttpResponse doPut(HttpRequest httpRequest) {
+    protected HttpResponse doPut(HttpRequest httpRequest) {
         return new HttpResponse(StatusCode.NOT_FOUND);
     }
 
     @Override
-    public HttpResponse doDelete(HttpRequest httpRequest) {
+    protected HttpResponse doDelete(HttpRequest httpRequest) {
         return new HttpResponse(StatusCode.NOT_FOUND);
     }
 }
