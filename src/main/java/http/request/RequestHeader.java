@@ -1,4 +1,4 @@
-package http;
+package http.request;
 
 import java.util.Map;
 import java.util.Objects;
@@ -8,6 +8,14 @@ public class RequestHeader {
 
     public RequestHeader(Map<String, String> header) {
         this.header = header;
+    }
+
+    public String get(String key) {
+        return header.get(key);
+    }
+
+    public boolean containsKey(String key) {
+        return header.containsKey(key);
     }
 
     @Override

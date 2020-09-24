@@ -2,19 +2,21 @@ package webserver;
 
 import controller.Controller;
 import controller.ControllerMapper;
-import http.HttpRequest;
+import controller.UserController;
 import http.factory.HttpRequestFactory;
+import http.request.HttpRequest;
+import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 
 public class RequestHandler implements Runnable {
@@ -24,6 +26,14 @@ public class RequestHandler implements Runnable {
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
+        initControllerMapper();
+    }
+
+    private void initControllerMapper() {
+        ControllerMapper mapper = ControllerMapper.getInstance();
+        if (mapper.isEmpty()) {
+            mapper.addController(new UserController());
+        }
     }
 
     public void run() {
@@ -32,54 +42,35 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-            DataOutputStream dos = new DataOutputStream(out);
 
             HttpRequest httpRequest = HttpRequestFactory.createRequest(br);
+            HttpResponse httpResponse = new HttpResponse(out);
 
-            ControllerMapper.from(httpRequest.getRequestLine()).ifPresent(
-                    mapper -> Controller.findMethod(mapper).accept(httpRequest.getParams(), dos)
-            );
-
-            if (dos.size() == 0) {
-                byte[] body = FileIoUtils.loadFileFromClasspath(findFilePath(httpRequest));
-                responseHeader(dos, httpRequest, body);
-                responseBody(dos, body);
-            }
-        } catch (IOException e) {
+            handle(httpRequest, httpResponse);
+        } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private String findFilePath(HttpRequest httpRequest) {
-        String url = httpRequest.getUrl();
-        String baseUrl = "./static";
-        if (url.contains(".html") || url.contains("favicon.ico")) {
-            baseUrl = "./templates";
+    private void handle(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+        if (ControllerMapper.getInstance().isApi(httpRequest)) {
+            Controller controller = ControllerMapper.getInstance().map(httpRequest);
+            controller.service(httpRequest, httpResponse);
+            return;
         }
-        return baseUrl + url;
+        findStaticResources(httpRequest, httpResponse);
     }
 
-    private void responseHeader(DataOutputStream dos, HttpRequest httpRequest, byte[] body) throws IOException {
-        dos.writeBytes("HTTP/1.1 200 OK \r\n");
-        dos.writeBytes("Content-Type: " + findContentType(httpRequest) + ";charset=utf-8\r\n");
-        dos.writeBytes("Content-Length: " + body.length + "\r\n");
-        dos.writeBytes("\r\n");
+    private void findStaticResources(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+        if (isNotFound(httpRequest)) {
+            httpResponse.notFound();
+            return;
+        }
+        httpResponse.forward(httpRequest);
     }
 
-    private String findContentType(HttpRequest httpRequest) {
-        String contentType = "text/html";
-        if (httpRequest.getUrl().contains(".css")) {
-            contentType = "text/css";
-        }
-        return contentType;
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+    private boolean isNotFound(HttpRequest httpRequest) throws IOException, URISyntaxException {
+        byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getPath());
+        return body.length == 0;
     }
 }

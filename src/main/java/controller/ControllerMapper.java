@@ -1,33 +1,37 @@
 package controller;
 
-import http.HttpMethod;
-import http.RequestLine;
+import http.request.HttpRequest;
 
-import java.util.Arrays;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
-public enum ControllerMapper {
-    CREATE_USER(HttpMethod.POST, "/user/create");
+public class ControllerMapper {
+    private final Map<String, Controller> controllers = new HashMap<>();
 
-    private HttpMethod httpMethod;
-    private String url;
-
-    ControllerMapper(HttpMethod httpMethod, String url) {
-        this.httpMethod = httpMethod;
-        this.url = url;
+    private ControllerMapper() {
     }
 
-    public static Optional<ControllerMapper> from(RequestLine requestLine) {
-        return Arrays.stream(ControllerMapper.values())
-                .filter(requestLine::isEqualRequestType)
-                .findAny();
+    public static ControllerMapper getInstance() {
+        return Holder.INSTANCE;
     }
 
-    public HttpMethod getHttpMethod() {
-        return httpMethod;
+    public boolean isEmpty() {
+        return controllers.isEmpty();
     }
 
-    public String getUrl() {
-        return url;
+    public void addController(AbstractController controller) {
+        controllers.put(controller.getPath(), controller);
+    }
+
+    public Controller map(HttpRequest httpRequest) {
+        return controllers.get(httpRequest.getPath());
+    }
+
+    public boolean isApi(HttpRequest httpRequest) {
+        return controllers.containsKey(httpRequest.getPath());
+    }
+
+    private static class Holder {
+        private static final ControllerMapper INSTANCE = new ControllerMapper();
     }
 }
