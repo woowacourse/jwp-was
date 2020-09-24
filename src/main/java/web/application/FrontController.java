@@ -5,7 +5,6 @@ import java.util.Map;
 
 import web.application.controller.Controller;
 import web.application.controller.CreateUserController;
-import web.application.controller.PageNotFoundController;
 import web.application.controller.RootController;
 import web.application.controller.StaticController;
 import web.server.domain.request.HttpRequest;
@@ -31,6 +30,6 @@ public class FrontController implements Controller {
             mapper.get(httpRequest.getPath()).service(httpRequest, httpResponse);
             return;
         }
-        PageNotFoundController.getInstance().service(httpRequest, httpResponse);
+        httpResponse.respondPageNotFound();
     }
 }
