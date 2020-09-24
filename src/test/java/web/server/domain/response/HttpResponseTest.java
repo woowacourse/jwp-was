@@ -2,13 +2,8 @@ package web.server.domain.response;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static web.server.common.IoUtil.*;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 
 import org.junit.jupiter.api.DisplayName;
@@ -17,7 +12,6 @@ import org.junit.jupiter.api.Test;
 public class HttpResponseTest {
 
     private static final String INDEX_PAGE = "/index.html";
-    private String testDirectory = "./src/test/java/resources/";
 
     @DisplayName("정적 파일을 요청했을 때 HttpResponse에 Status Code 200과 정적파일 내용이 담기는지 확인한다.")
     @Test
@@ -50,22 +44,6 @@ public class HttpResponseTest {
         response.respondPageNotFound();
         String actual = readFile("/out/http_url_not_found.txt");
         assertThat(actual).contains("404");
-    }
-
-    private DataOutputStream createOutputStream(String filename) throws FileNotFoundException {
-        new File(testDirectory + "/out").mkdirs();
-        return new DataOutputStream(new FileOutputStream(new File(testDirectory + filename)));
-    }
-
-    private String readFile(String path) throws IOException {
-        File file = new File(testDirectory + path);
-        BufferedReader br = new BufferedReader(new FileReader(file));
-        String line;
-        StringBuilder sb = new StringBuilder();
-        while ((line = br.readLine()) != null) {
-            sb.append(line).append("\n");
-        }
-        return sb.toString();
     }
 
     @Test
