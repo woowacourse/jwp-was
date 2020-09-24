@@ -1,6 +1,7 @@
 package webserver;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -13,15 +14,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import utils.FileIoUtils;
-import utils.IOUtils;
 import utils.ModelType;
 import utils.RequestUtils;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    public static final String TEMPLATE_PATH = "./templates";
-    public static final String STATIC_PATH = "./static";
-    public static final String HTML = "html";
+    public static final String TEMPLATE_CLASS_PATH = "./templates";
+    public static final String STATIC_CLASS_PATH = "./static";
+    public static final String TEMPLATE_PATH = "./src/main/resources/templates";
+    public static final String STATIC_PATH = "./src/main/resources/static";
 
     private final Socket connection;
 
@@ -37,9 +38,9 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             HttpRequest httpRequest = new HttpRequest(br);
             printHeader(httpRequest);
-            createModel(br, httpRequest);
+            createModel(httpRequest);
             byte[] body = loadStaticFile(httpRequest);
-            response(out, httpRequest.getPath(), body.length);
+            response(out, httpRequest.getPath(), body);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
@@ -47,39 +48,50 @@ public class RequestHandler implements Runnable {
 
     private void printHeader(HttpRequest httpRequest) {
         logger.debug("header : {}", httpRequest.getHttpMethod() + " " + httpRequest.getPath());
-        httpRequest.getHeader().forEach((key, value) -> logger.debug("header : {}", key + " " + value));
+        httpRequest.getHeader()
+            .forEach((key, value) -> logger.debug("header : {}", String.format("%s: %s", key, value)));
     }
 
     private byte[] loadStaticFile(HttpRequest httpRequest) throws IOException, URISyntaxException {
         String path = httpRequest.getPath();
-        if (HTML.equals(RequestUtils.extractExtension(path))) {
-            return FileIoUtils.loadFileFromClasspath(TEMPLATE_PATH + path);
+        File file = new File(TEMPLATE_PATH + path);
+        if (file.isFile()) {
+            return FileIoUtils.loadFileFromClasspath(TEMPLATE_CLASS_PATH + path);
         }
-        return FileIoUtils.loadFileFromClasspath(STATIC_PATH + path);
+        file = new File(STATIC_PATH + path);
+        if (file.isFile()) {
+            return FileIoUtils.loadFileFromClasspath(STATIC_CLASS_PATH + path);
+        }
+        return null;
     }
 
-    private void createModel(BufferedReader br, HttpRequest httpRequest) throws IOException {
+    private void createModel(HttpRequest httpRequest) {
         if (HttpMethod.POST == httpRequest.getHttpMethod()) {
-            ModelType modelType = ModelType.valueOf(RequestUtils.extractTitleOfModel(httpRequest.getPath()));
-            String body = IOUtils.readData(br, Integer.parseInt(httpRequest.getHeader("Content-Length")));
-            logger.debug(modelType.getModel(body).toString());
+            String model = RequestUtils.extractTitleOfModel(httpRequest.getPath());
+            ModelType modelType = ModelType.valueOf(model);
+            printParameter(httpRequest);
+            // logger.debug(modelType.getModel(body).toString());
         }
     }
 
-    private void response(OutputStream out, String path, int lengthOfBodyContent) throws
+    private void printParameter(HttpRequest httpRequest) {
+        httpRequest.getParameter()
+            .forEach((key, value) -> logger.debug("body : {}", String.format("%s = %s", key, value)));
+    }
+
+    private void response(OutputStream out, String path, byte[] body) throws
         IOException,
         URISyntaxException {
         HttpResponse httpResponse;
-        if (lengthOfBodyContent != 0) {
+        if (body != null) {
             httpResponse = new HttpResponse(HttpStatus.OK, out);
             httpResponse.addHeader("Content-Type",
                 String.format("text/%s;charset=utf-8", RequestUtils.extractExtension(path)));
-            httpResponse.addHeader("Content-Length", RequestUtils.extractExtension(path));
+            httpResponse.addHeader("Content-Length", String.valueOf(body.length));
             httpResponse.forward(path);
         }
-        if (lengthOfBodyContent == 0) {
+        if (body == null) {
             httpResponse = new HttpResponse(HttpStatus.FOUND, out);
-            httpResponse.addHeader("Content-Length", RequestUtils.extractExtension(path));
             httpResponse.sendRedirect("/index.html");
         }
     }

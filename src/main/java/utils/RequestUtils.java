@@ -2,6 +2,7 @@ package utils;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 public class RequestUtils {
@@ -35,6 +36,6 @@ public class RequestUtils {
         String[] parameters = body.split(AND_REGEX);
         return Arrays.stream(parameters)
             .map(parameter -> parameter.split(EQUALS_REGEX))
-            .collect(Collectors.toMap(strings -> strings[0], strings -> strings[1]));
+            .collect(Collectors.toMap(strings -> strings[0], strings -> strings[1], (k, v) -> v, TreeMap::new));
     }
 }

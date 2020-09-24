@@ -35,7 +35,7 @@ public class HttpResponse {
         body = loadStaticFile(path);
         writeStatus();
         for (Map.Entry<String, String> entry : header.entrySet()) {
-            writeWithLineSeparator(entry.getKey() + ": " + entry.getValue());
+            writeWithLineSeparator(String.format("%s: %s", entry.getKey(), entry.getValue()));
         }
         dos.writeBytes(System.lineSeparator());
         dos.write(body, OFFSET, body.length);
@@ -44,17 +44,17 @@ public class HttpResponse {
 
     public void sendRedirect(String path) throws IOException {
         writeStatus();
+        writeWithLineSeparator(String.format("Location: http://localhost:8080%s", path));
+        writeWithLineSeparator("Content-Type: text/html;charset=utf-8");
         for (Map.Entry<String, String> entry : header.entrySet()) {
             writeWithLineSeparator(entry.getKey() + ": " + entry.getValue());
         }
-        writeWithLineSeparator("Location: http://localhost:8080" + path);
-        writeWithLineSeparator("Content-Type: text/html;charset=utf-8");
         dos.writeBytes(System.lineSeparator());
         dos.flush();
     }
 
     private void writeStatus() throws IOException {
-        writeWithLineSeparator("HTTP 1.1 " + httpStatus.getNumber() + " " + httpStatus.name());
+        writeWithLineSeparator(String.format("HTTP/1.1 %d %s", httpStatus.getNumber(), httpStatus.name()));
     }
 
     private byte[] loadStaticFile(String path) throws IOException, URISyntaxException {
@@ -66,5 +66,9 @@ public class HttpResponse {
 
     private void writeWithLineSeparator(String contents) throws IOException {
         dos.writeBytes(String.format("%s%s", contents, System.lineSeparator()));
+    }
+
+    public Map<String, String> getHeader() {
+        return header;
     }
 }

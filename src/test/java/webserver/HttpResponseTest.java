@@ -17,7 +17,7 @@ class HttpResponseTest {
 
     @Test
     public void responseRedirect() throws Exception {
-        // Http_Redirect.txt 결과는 응답 headere에 Location 정보가 /index.html로 포함되어 있어야 한다.
+        // Http_Redirect.txt 결과는 응답 header에 Location 정보가 /index.html로 포함되어 있어야 한다.
         HttpResponse response = new HttpResponse(HttpStatus.FOUND, createOutputStream("Http_Redirect.txt"));
         response.sendRedirect("/index.html");
     }

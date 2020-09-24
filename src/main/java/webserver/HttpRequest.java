@@ -2,8 +2,8 @@ package webserver;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import utils.IOUtils;
 import utils.RequestUtils;
@@ -19,7 +19,7 @@ public class HttpRequest {
     private Map<String, String> parameter;
 
     public HttpRequest(BufferedReader br) throws IOException {
-        this.header = new HashMap<>();
+        this.header = new TreeMap<>();
         String firstLine = readRequest(br);
         this.httpMethod = HttpMethod.valueOf(RequestUtils.extractMethod(firstLine));
         this.path = RequestUtils.extractPath(firstLine);
@@ -60,6 +60,10 @@ public class HttpRequest {
 
     public String getParameter(String key) {
         return parameter.get(key);
+    }
+
+    public Map<String, String> getParameter() {
+        return parameter;
     }
 
     public String getPath() {
