@@ -1,7 +1,8 @@
-package webserver;
+package webserver.request;
 
 import controller.FileController;
 import domain.user.controller.UserController;
+import webserver.response.Response;
 
 import java.util.Arrays;
 import java.util.function.Function;

@@ -2,6 +2,8 @@ package webserver;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import webserver.request.HandlerMapping;
+import webserver.request.Request;
 
 import java.io.BufferedReader;
 import java.io.StringReader;

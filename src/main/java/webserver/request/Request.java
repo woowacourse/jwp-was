@@ -1,6 +1,7 @@
-package webserver;
+package webserver.request;
 
 import utils.IOUtils;
+import webserver.EntityHeader;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -45,7 +46,7 @@ public class Request {
         String line = readLine(bufferedReader);
         int contentLength = 0;
         while ((line != null) && (!line.isEmpty())) {
-            if (HttpMessage.CONTENT_LENGTH.isMatch(line)) {
+            if (EntityHeader.CONTENT_LENGTH.match(line)) {
                 String[] tokens = line.split(REQUEST_LINE_DELIMITER);
                 contentLength = Integer.parseInt(tokens[VALUE_INDEX]);
             }

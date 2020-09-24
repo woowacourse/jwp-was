@@ -1,4 +1,4 @@
-package webserver;
+package webserver.request;
 
 public class RequestLine {
     private static final String QUERY_STRING_DELIMITER = "?";

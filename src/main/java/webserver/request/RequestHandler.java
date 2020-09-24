@@ -1,7 +1,8 @@
-package webserver;
+package webserver.request;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.response.Response;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

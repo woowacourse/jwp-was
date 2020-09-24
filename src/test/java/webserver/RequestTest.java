@@ -2,6 +2,9 @@ package webserver;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import webserver.request.HttpMethod;
+import webserver.request.Request;
+import webserver.request.RequestLine;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
@@ -68,4 +71,5 @@ class RequestTest {
 
         assertThat(actual).isEqualTo(expect);
     }
+
 }
