@@ -3,6 +3,8 @@ package utils;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Map;
+
 import org.junit.jupiter.api.Test;
 
 class RequestUtilsTest {
@@ -32,5 +34,17 @@ class RequestUtilsTest {
     void extractExtension() {
         String extension = RequestUtils.extractExtension("/css/styles.css");
         assertThat(extension).isEqualTo("css");
+    }
+
+    @Test
+    void extractParameter() {
+        Map<String, String> parameter = RequestUtils.extractParameter(
+            "userId=javajigi&password=password&name=javajigi&email=javajigi@slipp.net");
+        assertAll(
+            () -> assertThat(parameter.get("userId")).isEqualTo("javajigi"),
+            () -> assertThat(parameter.get("password")).isEqualTo("password"),
+            () -> assertThat(parameter.get("name")).isEqualTo("javajigi"),
+            () -> assertThat(parameter.get("email")).isEqualTo("javajigi@slipp.net")
+        );
     }
 }

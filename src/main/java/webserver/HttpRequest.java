@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import utils.IOUtils;
 import utils.RequestUtils;
 
 public class HttpRequest {
@@ -15,12 +16,14 @@ public class HttpRequest {
     private final String path;
     private final HttpMethod httpMethod;
     private final Map<String, String> header;
+    private Map<String, String> parameter;
 
     public HttpRequest(BufferedReader br) throws IOException {
         this.header = new HashMap<>();
         String firstLine = readRequest(br);
         this.httpMethod = HttpMethod.valueOf(RequestUtils.extractMethod(firstLine));
         this.path = RequestUtils.extractPath(firstLine);
+        createParameterIfPost(br);
     }
 
     private String readRequest(BufferedReader br) throws IOException {
@@ -40,12 +43,23 @@ public class HttpRequest {
         }
     }
 
+    private void createParameterIfPost(BufferedReader br) throws IOException {
+        if (HttpMethod.POST == httpMethod) {
+            String body = IOUtils.readData(br, Integer.parseInt(header.get("Content-Length")));
+            this.parameter = RequestUtils.extractParameter(body);
+        }
+    }
+
     public String getHeader(String key) {
         return header.get(key);
     }
 
     public Map<String, String> getHeader() {
         return header;
+    }
+
+    public String getParameter(String key) {
+        return parameter.get(key);
     }
 
     public String getPath() {

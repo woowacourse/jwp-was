@@ -8,8 +8,6 @@ import java.io.OutputStream;
 import org.junit.jupiter.api.Test;
 
 class HttpResponseTest {
-    private final String testDirectory = "./src/test/resources/";
-
     @Test
     void responseForward() throws Exception {
         // Http_Forward.txt 결과는 응답 body에 index.html이 포함되어 있어야 한다.
@@ -25,6 +23,7 @@ class HttpResponseTest {
     }
 
     private OutputStream createOutputStream(String filename) throws FileNotFoundException {
+        String testDirectory = "./src/test/resources/";
         return new FileOutputStream(new File(testDirectory + filename));
     }
 }
