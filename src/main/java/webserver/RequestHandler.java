@@ -1,14 +1,11 @@
 package webserver;
 
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,17 +36,11 @@ public class RequestHandler implements Runnable {
             connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            HttpRequest httpRequest = generateHttpRequest(in);
-            HttpResponse httpResponse = controlRequestAndResponse(httpRequest);
+            HttpResponse httpResponse = controlRequestAndResponse(HttpRequest.of(in));
             respondToHttpRequest(out, httpResponse);
         } catch (IOException | URISyntaxException | IllegalAccessException | InstantiationException e) {
             logger.error(e.getMessage());
         }
-    }
-
-    private HttpRequest generateHttpRequest(InputStream in) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-        return HttpRequest.of(br);
     }
 
     public HttpResponse controlRequestAndResponse(HttpRequest httpRequest) throws

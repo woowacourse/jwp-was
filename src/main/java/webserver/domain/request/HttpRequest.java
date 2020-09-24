@@ -2,6 +2,9 @@ package webserver.domain.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -13,26 +16,20 @@ import utils.IOUtils;
 import webserver.domain.Header;
 
 public class HttpRequest {
-    private static final String lineSeparator = System.lineSeparator();
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
 
     private final RequestLine requestLine;
     private final Header header;
     private final String body;
 
-    public HttpRequest(RequestLine requestLine, Header header, String body) {
+    private HttpRequest(RequestLine requestLine, Header header, String body) {
         this.requestLine = requestLine;
         this.header = header;
         this.body = body;
     }
 
-    public HttpRequest(RequestLine requestLine, Header header) {
-        this.requestLine = requestLine;
-        this.header = header;
-        this.body = "";
-    }
-
-    public static HttpRequest of(BufferedReader br) throws IOException {
+    public static HttpRequest of(InputStream inputStream) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         String line = br.readLine();
         RequestLine requestLine = RequestLine.of(line);
         logger.debug("Request Line : {}", line);
