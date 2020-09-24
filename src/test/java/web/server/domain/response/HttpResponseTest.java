@@ -67,4 +67,12 @@ public class HttpResponseTest {
         }
         return sb.toString();
     }
+
+    @Test
+    void respondMethodNotAllowed() throws IOException {
+        HttpResponse response = new HttpResponse(createOutputStream("/out/method_not_allowed.txt"));
+        response.respondMethodNotAllowed();
+        String actual = readFile("/out/method_not_allowed.txt");
+        assertThat(actual).contains("405");
+    }
 }

@@ -83,4 +83,17 @@ public class HttpResponse {
     public void respondPageNotFound() {
         response404Header();
     }
+
+    public void respondMethodNotAllowed() {
+        response405Header();
+    }
+
+    private void response405Header() {
+        try {
+            this.dataOutputStream.writeBytes("HTTP/1.1 405 Method Not Allowed" + NEW_LINE);
+            this.dataOutputStream.writeBytes(NEW_LINE);
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
 }

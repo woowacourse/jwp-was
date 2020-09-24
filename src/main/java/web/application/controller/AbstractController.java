@@ -24,8 +24,10 @@ public abstract class AbstractController implements Controller {
     }
 
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+        httpResponse.respondMethodNotAllowed();
     }
 
     public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
+        httpResponse.respondMethodNotAllowed();
     }
 }
