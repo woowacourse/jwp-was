@@ -13,8 +13,8 @@ import java.nio.charset.StandardCharsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import model.Model;
 import utils.FileIoUtils;
-import utils.ModelType;
 import utils.RequestUtils;
 
 public class RequestHandler implements Runnable {
@@ -47,7 +47,7 @@ public class RequestHandler implements Runnable {
     }
 
     private void printHeader(HttpRequest httpRequest) {
-        logger.debug("header : {}", httpRequest.getHttpMethod() + " " + httpRequest.getPath());
+        logger.debug("header : {}", httpRequest.getMethodName() + " " + httpRequest.getPath());
         httpRequest.getHeader()
             .forEach((key, value) -> logger.debug("header : {}", String.format("%s: %s", key, value)));
     }
@@ -66,11 +66,10 @@ public class RequestHandler implements Runnable {
     }
 
     private void createModel(HttpRequest httpRequest) {
-        if (HttpMethod.POST == httpRequest.getHttpMethod()) {
-            String model = RequestUtils.extractTitleOfModel(httpRequest.getPath());
-            ModelType modelType = ModelType.valueOf(model);
+        Model model = httpRequest.createModel();
+        if (model != null) {
             printParameter(httpRequest);
-            // logger.debug(modelType.getModel(body).toString());
+            logger.debug("model : {}", model.toString());
         }
     }
 

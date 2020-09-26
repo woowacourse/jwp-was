@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 class RequestUtilsTest {
     @Test
-    void isPost() {
+    void extractMethod() {
         String get = "GET /index.html HTTP/1.1";
         String post = "POST /index.html HTTP/1.1";
         assertAll(

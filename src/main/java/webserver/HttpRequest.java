@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 
-import utils.IOUtils;
+import httpmethod.HttpMethod;
+import httpmethod.Method;
+import model.Model;
 import utils.RequestUtils;
 
 public class HttpRequest {
@@ -14,16 +16,17 @@ public class HttpRequest {
     public static final int KEY_INDEX = 0;
 
     private final String path;
-    private final HttpMethod httpMethod;
+    private final Method method;
     private final Map<String, String> header;
-    private Map<String, String> parameter;
+    private final Map<String, String> parameter;
 
     public HttpRequest(BufferedReader br) throws IOException {
         this.header = new TreeMap<>();
         String firstLine = readRequest(br);
-        this.httpMethod = HttpMethod.valueOf(RequestUtils.extractMethod(firstLine));
+        this.method = HttpMethod.valueOf(RequestUtils.extractMethod(firstLine))
+            .getMethod();
         this.path = RequestUtils.extractPath(firstLine);
-        createParameterIfPost(br);
+        this.parameter = method.extractParameter(br, header);
     }
 
     private String readRequest(BufferedReader br) throws IOException {
@@ -43,11 +46,8 @@ public class HttpRequest {
         }
     }
 
-    private void createParameterIfPost(BufferedReader br) throws IOException {
-        if (HttpMethod.POST == httpMethod) {
-            String body = IOUtils.readData(br, Integer.parseInt(header.get("Content-Length")));
-            this.parameter = RequestUtils.extractParameter(body);
-        }
+    public Model createModel() {
+        return method.extractModel(path, parameter);
     }
 
     public String getHeader(String key) {
@@ -70,7 +70,11 @@ public class HttpRequest {
         return path;
     }
 
-    public HttpMethod getHttpMethod() {
-        return httpMethod;
+    public Method getMethod() {
+        return method;
+    }
+
+    public String getMethodName() {
+        return method.getName();
     }
 }
