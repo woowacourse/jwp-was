@@ -1,12 +1,16 @@
 package webserver;
 
-import http.*;
+import http.HttpRequest;
+import http.HttpResponse;
+import http.RequestMethod;
 import http.controller.Controller;
 import http.controller.IndexController;
 import http.controller.RawFileController;
 import http.controller.UserCreateController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.HttpResponseHeaderParser;
+import utils.HttpResponseUtils;
 
 import java.io.*;
 import java.net.Socket;
@@ -40,21 +44,20 @@ public class RequestHandler implements Runnable {
         controllers.put("/user/create", new UserCreateController());
         controllers.put("/", new IndexController());
         try {
-            RequestLine requestLine = new RequestLine(br);
-            RequestHeader requestHeader = new RequestHeader(br);
+            HttpRequest httpRequest = new HttpRequest(br);
+            HttpResponse httpResponse;
+            Controller controller = controllers.getOrDefault(httpRequest.getPath(), new RawFileController(httpRequest.getPath()));
 
-            Controller controller = controllers.getOrDefault(requestLine.getPath(), new RawFileController(requestLine.getPath()));
-
-            if (requestLine.isMethodEqualTo(RequestMethod.GET)) {
-                controller.get(dos, requestHeader);
-            } else if (requestLine.isMethodEqualTo(RequestMethod.POST)) {
-                RequestBody requestBody = new RequestBody(br, requestHeader.getContentLength());
-                controller.post(dos, requestHeader, requestBody);
+            if (httpRequest.isMethodEqualTo(RequestMethod.GET)) {
+                httpResponse = controller.get(httpRequest);
+            } else if (httpRequest.isMethodEqualTo(RequestMethod.POST)) {
+                httpResponse = controller.post(httpRequest);
             } else {
                 throw new IllegalArgumentException("Unsupported method: PUT, DELETE");
             }
+            HttpResponseUtils.response(dos, httpResponse);
         } catch (IllegalArgumentException e) {
-            ResponseHeader.response400Header(dos);
+            HttpResponseUtils.response(dos, new HttpResponse(HttpResponseHeaderParser.response400Header()));
         }
     }
 }

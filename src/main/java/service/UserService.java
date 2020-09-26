@@ -1,16 +1,16 @@
 package service;
 
 import db.DataBase;
-import http.RequestBody;
+import http.HttpRequest;
 import model.User;
 
 public class UserService {
-    public void createUser(RequestBody requestBody) {
+    public void createUser(HttpRequest httpRequest) {
         User user = new User(
-                requestBody.getValue("userId"),
-                requestBody.getValue("password"),
-                requestBody.getValue("name"),
-                requestBody.getValue("email")
+                httpRequest.getBodyValue("userId"),
+                httpRequest.getBodyValue("password"),
+                httpRequest.getBodyValue("name"),
+                httpRequest.getBodyValue("email")
         );
         DataBase.addUser(user);
     }
