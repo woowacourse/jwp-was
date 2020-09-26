@@ -1,7 +1,6 @@
 package webserver;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -15,14 +14,9 @@ import org.slf4j.LoggerFactory;
 
 import model.Model;
 import utils.FileIoUtils;
-import utils.RequestUtils;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    public static final String TEMPLATE_CLASS_PATH = "./templates";
-    public static final String STATIC_CLASS_PATH = "./static";
-    public static final String TEMPLATE_PATH = "./src/main/resources/templates";
-    public static final String STATIC_PATH = "./src/main/resources/static";
 
     private final Socket connection;
 
@@ -39,8 +33,8 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = new HttpRequest(br);
             printHeader(httpRequest);
             createModel(httpRequest);
-            byte[] body = loadStaticFile(httpRequest);
-            response(out, httpRequest.getPath(), body);
+            byte[] body = FileIoUtils.findStaticFile(httpRequest.getPath());
+            ResponseFactory.response(out, httpRequest.getPath(), body);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
@@ -50,19 +44,6 @@ public class RequestHandler implements Runnable {
         logger.debug("header : {}", httpRequest.getMethodName() + " " + httpRequest.getPath());
         httpRequest.getHeader()
             .forEach((key, value) -> logger.debug("header : {}", String.format("%s: %s", key, value)));
-    }
-
-    private byte[] loadStaticFile(HttpRequest httpRequest) throws IOException, URISyntaxException {
-        String path = httpRequest.getPath();
-        File file = new File(TEMPLATE_PATH + path);
-        if (file.isFile()) {
-            return FileIoUtils.loadFileFromClasspath(TEMPLATE_CLASS_PATH + path);
-        }
-        file = new File(STATIC_PATH + path);
-        if (file.isFile()) {
-            return FileIoUtils.loadFileFromClasspath(STATIC_CLASS_PATH + path);
-        }
-        return null;
     }
 
     private void createModel(HttpRequest httpRequest) {
@@ -76,22 +57,5 @@ public class RequestHandler implements Runnable {
     private void printParameter(HttpRequest httpRequest) {
         httpRequest.getParameter()
             .forEach((key, value) -> logger.debug("body : {}", String.format("%s = %s", key, value)));
-    }
-
-    private void response(OutputStream out, String path, byte[] body) throws
-        IOException,
-        URISyntaxException {
-        HttpResponse httpResponse;
-        if (body != null) {
-            httpResponse = new HttpResponse(HttpStatus.OK, out);
-            httpResponse.addHeader("Content-Type",
-                String.format("text/%s;charset=utf-8", RequestUtils.extractExtension(path)));
-            httpResponse.addHeader("Content-Length", String.valueOf(body.length));
-            httpResponse.forward(path);
-        }
-        if (body == null) {
-            httpResponse = new HttpResponse(HttpStatus.FOUND, out);
-            httpResponse.sendRedirect("/index.html");
-        }
     }
 }
