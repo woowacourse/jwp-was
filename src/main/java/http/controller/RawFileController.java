@@ -1,9 +1,6 @@
 package http.controller;
 
-import http.RequestBody;
-import http.RequestHeader;
-import http.ResponseBody;
-import http.ResponseHeader;
+import http.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
@@ -25,7 +22,7 @@ public class RawFileController implements Controller {
     @Override
     public void get(DataOutputStream dos, RequestHeader requestHeader) {
         try {
-            if (requestHeader.containsValueOf("accept", "css")) {
+            if (requestHeader.containsValueOf(HeaderParam.ACCEPT, "css")) {
                 byte[] body = FileIoUtils.loadFileFromClasspath("./static" + filePath);
                 ResponseHeader.response200Header(dos, "text/css", body.length);
                 ResponseBody.responseBody(dos, body);
