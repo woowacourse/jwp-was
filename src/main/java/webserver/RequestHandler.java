@@ -1,9 +1,6 @@
 package webserver;
 
-import http.RequestBody;
-import http.RequestHeader;
-import http.RequestLine;
-import http.ResponseHeader;
+import http.*;
 import http.controller.Controller;
 import http.controller.IndexController;
 import http.controller.RawFileController;
@@ -48,9 +45,9 @@ public class RequestHandler implements Runnable {
 
             Controller controller = controllers.getOrDefault(requestLine.getPath(), new RawFileController(requestLine.getPath()));
 
-            if (requestLine.isMethodEqualTo("GET")) {
+            if (requestLine.isMethodEqualTo(RequestMethod.GET)) {
                 controller.get(dos, requestHeader);
-            } else if (requestLine.isMethodEqualTo("POST")) {
+            } else if (requestLine.isMethodEqualTo(RequestMethod.POST)) {
                 RequestBody requestBody = new RequestBody(br, requestHeader.getContentLength());
                 controller.post(dos, requestHeader, requestBody);
             } else {

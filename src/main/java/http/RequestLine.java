@@ -19,8 +19,8 @@ public class RequestLine {
         this.httpVersion = token[2];
     }
 
-    public boolean isMethodEqualTo(String method) {
-        return this.method.equals(RequestMethod.of(method));
+    public boolean isMethodEqualTo(RequestMethod requestMethod) {
+        return this.method.equals(requestMethod);
     }
 
     public boolean isPathEqualTo(String path) {
