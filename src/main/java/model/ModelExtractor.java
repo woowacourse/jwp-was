@@ -1,10 +1,7 @@
-package utils;
+package model;
 
 import java.util.Map;
 import java.util.function.Function;
-
-import model.Model;
-import model.User;
 
 public enum ModelExtractor {
     USER(User::new);

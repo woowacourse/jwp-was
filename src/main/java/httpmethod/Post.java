@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.util.Map;
 
 import model.Model;
+import model.ModelExtractor;
 import utils.IOUtils;
-import utils.ModelExtractor;
 import utils.RequestUtils;
 
 public class Post implements Method {
