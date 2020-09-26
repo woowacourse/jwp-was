@@ -1,12 +1,14 @@
 package http.controller;
 
-import http.*;
+import http.HeaderParam;
+import http.HttpRequest;
+import http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
+import utils.HttpResponseHeaderParser;
 import webserver.RequestHandler;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
@@ -20,26 +22,31 @@ public class RawFileController implements Controller {
     }
 
     @Override
-    public void get(DataOutputStream dos, RequestHeader requestHeader) {
+    public HttpResponse get(HttpRequest httpRequest) {
         try {
-            if (requestHeader.containsValueOf(HeaderParam.ACCEPT, "css")) {
-                byte[] body = FileIoUtils.loadFileFromClasspath("./static" + filePath);
-                ResponseHeader.response200Header(dos, "text/css", body.length);
-                ResponseBody.responseBody(dos, body);
+            String header;
+            byte[] body;
+            if (httpRequest.headerContainsValueOf(HeaderParam.ACCEPT, "css")) {
+                body = FileIoUtils.loadFileFromClasspath("./static" + filePath);
+                header = HttpResponseHeaderParser.response200Header("text/css", body.length);
             } else {
-                byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + filePath);
-                ResponseHeader.response200Header(dos, "text/html;charset=utf-8", body.length);
-                ResponseBody.responseBody(dos, body);
+                body = FileIoUtils.loadFileFromClasspath("./templates" + filePath);
+                header = HttpResponseHeaderParser.response200Header("text/html;charset=utf-8", body.length);
             }
+            return new HttpResponse(header, body);
         } catch (NullPointerException e) {
-            ResponseHeader.response404Header(dos);
+            String header = HttpResponseHeaderParser.response404Header();
+            return new HttpResponse(header);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
+            String header = HttpResponseHeaderParser.response500Header();
+            return new HttpResponse(header);
         }
     }
 
     @Override
-    public void post(DataOutputStream dos, RequestHeader requestHeader, RequestBody requestBody) {
-        ResponseHeader.response405Header(dos);
+    public HttpResponse post(HttpRequest httpRequest) {
+        String header = HttpResponseHeaderParser.response405Header();
+        return new HttpResponse(header);
     }
 }

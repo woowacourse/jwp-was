@@ -1,11 +1,10 @@
 package http.controller;
 
-import http.RequestBody;
-import http.RequestHeader;
-
-import java.io.DataOutputStream;
+import http.HttpRequest;
+import http.HttpResponse;
 
 public interface Controller {
-    void get(DataOutputStream dos, RequestHeader requestHeader);
-    void post(DataOutputStream dos, RequestHeader requestHeader, RequestBody requestBody);
+    HttpResponse get(HttpRequest httpRequest);
+
+    HttpResponse post(HttpRequest httpRequest);
 }

@@ -12,15 +12,15 @@ public class RequestBody {
 
     public RequestBody(BufferedReader br, int contentLength) throws IOException {
         params = new HashMap<>();
-        String line = IOUtils.readData(br, contentLength);
-        if (line.isEmpty()) {
-            throw new IllegalArgumentException("Line is empty.");
+        String body = IOUtils.readData(br, contentLength);
+        if (body.isEmpty()) {
+            return;
         }
 
-        String[] tokens = line.split("&");
+        String[] tokens = body.split("&");
         for (String token : tokens) {
             String[] keyValue = token.split("=");
-            if(keyValue.length != 2) {
+            if (keyValue.length != 2) {
                 throw new IllegalArgumentException("No value for the key: " + keyValue[0]);
             }
             params.put(keyValue[0].toLowerCase(), keyValue[1]);
