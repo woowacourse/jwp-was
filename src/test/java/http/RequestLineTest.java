@@ -28,7 +28,7 @@ class RequestLineTest {
         RequestLine requestLine = new RequestLine(br);
 
         assertTrue(requestLine.isPathEqualTo("/user/create"));
-        assertTrue(requestLine.isMethodEqualTo("POST"));
+        assertTrue(requestLine.isMethodEqualTo(RequestMethod.POST));
         assertTrue(requestLine.isHttpVersionEqualTo("HTTP/1.1"));
     }
 
