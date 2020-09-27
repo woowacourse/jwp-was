@@ -14,8 +14,12 @@ public class Body {
 
     private String body;
 
-    public Body(BufferedReader bufferedReader, String contentLength) throws IOException {
+    public Body(BufferedReader bufferedReader, String contentLength, String queryParams) throws IOException {
         parseBody(bufferedReader, contentLength);
+
+        if (queryParams != null) {
+            this.body += "&" + queryParams;
+        }
     }
 
     public Body(byte[] fileData) {

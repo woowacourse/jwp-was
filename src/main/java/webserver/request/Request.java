@@ -19,6 +19,7 @@ public class Request {
     private final Headers headers;
     private final Body body;
     private final AcceptType acceptType;
+    private String queryParams;
 
     public Request(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
@@ -31,16 +32,18 @@ public class Request {
         parseRequestFirstLine(lines.remove(0));
 
         headers = new Headers(lines);
-        body = new Body(bufferedReader, headers.getHeader("Content-Length"));
+        body = new Body(bufferedReader, headers.getHeader("Content-Length"), queryParams);
         acceptType = AcceptType.of(requestType.getPath());
     }
 
     private void parseRequestFirstLine(String requestFirstLine) {
         String[] splitRequestFirstLine = requestFirstLine.split(" ");
-
-        this.requestType = RequestType.of(HttpMethod.of(splitRequestFirstLine[0]),
-            splitRequestFirstLine[1].split("\\?")[0]);
+        String[] path = splitRequestFirstLine[1].split("\\?");
+        this.requestType = RequestType.of(HttpMethod.of(splitRequestFirstLine[0]), path[0]);
         this.version = splitRequestFirstLine[2];
+        if (path.length > 1) {
+            this.queryParams = path[1];
+        }
     }
 
     public RequestType getRequestType() {
