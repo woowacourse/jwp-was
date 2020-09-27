@@ -4,7 +4,8 @@ public enum Status {
     OK(200, "OK"),
     CREATED(201, "Created"),
     FOUND(302, "Found"),
-    NOT_FOUND(404, "Not Found");//TODO 500 추가
+    NOT_FOUND(404, "Not Found"),
+    INTERNAL_SERVER_ERROR(500, "Internal Server Error");
 
     private int code;
     private String message;
