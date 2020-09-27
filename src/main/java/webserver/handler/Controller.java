@@ -21,7 +21,7 @@ public class Controller {
         mapper.put(
             RequestTypeMatcher.of(GET, ""),
             (request, response) -> {
-                response.getResponse(request);
+                response.ok(request);
                 return response;
             }
         );

@@ -28,7 +28,7 @@ public class Response {
         return new Response();
     }
 
-    public void getResponse(Request request) { //TODO 네이밍 수정
+    public void ok(Request request) {
         AcceptType type = request.getAcceptType();
         this.body = new Body(fileDataFinder(request));
 
@@ -43,7 +43,7 @@ public class Response {
         headers.setHeader("Content-Length", String.valueOf(body.getLength()));
     }
 
-    public void postResponse(Request request) {
+    public void created(Request request) {
         this.status = CREATED;
         this.version = request.getVersion();
     }
