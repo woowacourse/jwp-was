@@ -10,22 +10,23 @@ import java.util.function.BiFunction;
 import model.User;
 import webserver.request.Request;
 import webserver.request.RequestType;
+import webserver.request.RequestTypeMatcher;
 import webserver.response.Response;
 
 public class Controller {
 
-    private static Map<RequestType, BiFunction<Request, Response, Response>> mapper = new HashMap<>();
+    private static Map<RequestTypeMatcher, BiFunction<Request, Response, Response>> mapper = new HashMap<>();
 
     static {
         mapper.put(
-            RequestType.of(GET, ""),
+            RequestTypeMatcher.of(GET, ""),
             (request, response) -> {
                 response.getResponse(request);
                 return response;
             }
         );
         mapper.put(
-            RequestType.of(POST, "/user/create"),
+            RequestTypeMatcher.of(POST, "/user/create"),
             (request, response) -> {
                 User user = request.getBody(User.class);
                 DataBase.addUser(user);
@@ -37,6 +38,6 @@ public class Controller {
     }
 
     public static BiFunction<Request, Response, Response> mapping(RequestType requestType) {
-        return mapper.get(requestType);
+        return mapper.get(RequestTypeMatcher.of(requestType));
     }
 }

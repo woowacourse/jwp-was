@@ -28,8 +28,8 @@ public class Response {
         return new Response();
     }
 
-    public void getResponse(Request request) {
-        AcceptType type = request.getType();
+    public void getResponse(Request request) { //TODO 네이밍 수정
+        AcceptType type = request.getAcceptType();
         this.body = new Body(fileDataFinder(request));
 
         if (body.isEmpty()) {
@@ -55,7 +55,7 @@ public class Response {
     }
 
     private byte[] fileDataFinder(Request request) {
-        AcceptType type = request.getType();
+        AcceptType type = request.getAcceptType();
         try {
             return FileIoUtils.loadFileFromClasspath(type.getFileRootPath() + request.getPath());
         } catch (IOException | URISyntaxException e) {

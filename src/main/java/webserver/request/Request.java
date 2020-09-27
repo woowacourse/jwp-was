@@ -14,12 +14,11 @@ import webserver.HttpMethod;
 
 public class Request {
 
-    private HttpMethod method;
-    private String path;
+    private RequestType requestType;
     private String version;
     private final Headers headers;
     private final Body body;
-    private final AcceptType type;
+    private final AcceptType acceptType;
 
     public Request(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
@@ -33,35 +32,35 @@ public class Request {
 
         headers = new Headers(lines);
         body = new Body(bufferedReader, headers.getHeader("Content-Length"));
-        type = AcceptType.of(path);
+        acceptType = AcceptType.of(requestType.getPath());
     }
 
     private void parseRequestFirstLine(String requestFirstLine) {
         String[] splitRequestFirstLine = requestFirstLine.split(" ");
 
-        this.method = HttpMethod.of(splitRequestFirstLine[0]);
-        this.path = splitRequestFirstLine[1].split("\\?")[0];
+        this.requestType = RequestType.of(HttpMethod.of(splitRequestFirstLine[0]),
+            splitRequestFirstLine[1].split("\\?")[0]);
         this.version = splitRequestFirstLine[2];
     }
 
-    public boolean isGet() {
-        return method.isGet();
+    public RequestType getRequestType() {
+        return requestType;
     }
 
     public HttpMethod getMethod() {
-        return method;
+        return requestType.getMethod();
     }
 
     public String getPath() {
-        return path;
+        return requestType.getPath();
     }
 
     public String getVersion() {
         return version;
     }
 
-    public AcceptType getType() {
-        return type;
+    public AcceptType getAcceptType() {
+        return acceptType;
     }
 
     public <T> T getBody(Class<T> type) {
