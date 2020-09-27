@@ -5,5 +5,11 @@
 * 코드 리뷰 피드백에 대한 개선 작업을 하고 다시 PUSH한다.
 * 모든 피드백을 완료하면 다음 단계를 도전하고 앞의 과정을 반복한다.
 
-## 우아한테크코스 코드리뷰
-* [온라인 코드 리뷰 과정](https://github.com/woowacourse/woowacourse-docs/blob/master/maincourse/README.md)
+## TODO
+
+ - [x] GET요청에서 header를 읽어 원하는 파일 반환
+    - [x] 폰트를 포함한 여러 파일들을 읽을 수 있어야 한다
+ - [x] POST요청에서 body를 읽어 로직을 실행
+    - [x] 로직 수행후 redirect
+ - [x] Request와 Response 객체 분리
+ - [ ] POST요청에서 QueryParam도 읽어 로직 실행
