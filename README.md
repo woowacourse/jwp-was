@@ -12,4 +12,4 @@
  - [x] POST요청에서 body를 읽어 로직을 실행
     - [x] 로직 수행후 redirect
  - [x] Request와 Response 객체 분리
- - [ ] POST요청에서 QueryParam도 읽어 로직 실행
+ - [x] POST요청에서 QueryParam도 읽어 로직 실행
