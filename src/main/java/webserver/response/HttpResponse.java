@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
 import utils.FileIoUtils;
+import webserver.FileExtension;
 
 public class HttpResponse {
 
@@ -57,7 +58,7 @@ public class HttpResponse {
     }
 
     private void setResponseBody(String path) throws IOException, URISyntaxException {
-        if (HttpContentType.isStaticFile(path)) {
+        if (FileExtension.find(path).isStaticDirectory()) {
             responseBody = new ResponseBody(FileIoUtils.loadFileFromClasspath(STATIC_PATH + path));
             return;
         }
