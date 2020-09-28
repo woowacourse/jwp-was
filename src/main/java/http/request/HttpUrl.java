@@ -1,6 +1,5 @@
 package http.request;
 
-import stringprocessor.Params;
 import utils.IOUtils;
 
 public class HttpUrl {

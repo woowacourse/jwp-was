@@ -2,11 +2,11 @@ package webserver.requestmapping.behavior;
 
 import db.DataBase;
 import http.HttpBody;
+import http.request.Params;
 import http.request.RequestEntity;
 import http.response.HttpStatus;
 import http.response.ResponseEntity;
 import model.User;
-import stringprocessor.Params;
 
 public class UserCreateBehavior implements RequestBehavior {
     @Override
