@@ -7,11 +7,11 @@ import utils.HttpResponseHeaderParser;
 public class IndexController implements Controller {
     @Override
     public HttpResponse get(HttpRequest httpRequest) {
-        return new HttpResponse(HttpResponseHeaderParser.response302Header("/index.html"));
+        return new HttpResponse(HttpResponseHeaderParser.found("/index.html"));
     }
 
     @Override
     public HttpResponse post(HttpRequest httpRequest) {
-        return new HttpResponse(HttpResponseHeaderParser.response405Header());
+        return new HttpResponse(HttpResponseHeaderParser.methodNotAllowed());
     }
 }

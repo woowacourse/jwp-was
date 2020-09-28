@@ -8,7 +8,7 @@ import utils.HttpResponseHeaderParser;
 public class UserCreateController implements Controller {
     @Override
     public HttpResponse get(HttpRequest httpRequest) {
-        String header = HttpResponseHeaderParser.response405Header();
+        String header = HttpResponseHeaderParser.methodNotAllowed();
         return new HttpResponse(header);
     }
 
@@ -16,7 +16,7 @@ public class UserCreateController implements Controller {
     public HttpResponse post(HttpRequest httpRequest) {
         UserService userService = new UserService();
         userService.createUser(httpRequest);
-        String header = HttpResponseHeaderParser.response302Header("/index.html");
+        String header = HttpResponseHeaderParser.found("/index.html");
         return new HttpResponse(header);
     }
 }

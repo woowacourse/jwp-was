@@ -28,25 +28,25 @@ public class RawFileController implements Controller {
             byte[] body;
             if (httpRequest.headerContainsValueOf(HeaderParam.ACCEPT, "css")) {
                 body = FileIoUtils.loadFileFromClasspath("./static" + filePath);
-                header = HttpResponseHeaderParser.response200Header("text/css", body.length);
+                header = HttpResponseHeaderParser.ok("text/css", body.length);
             } else {
                 body = FileIoUtils.loadFileFromClasspath("./templates" + filePath);
-                header = HttpResponseHeaderParser.response200Header("text/html;charset=utf-8", body.length);
+                header = HttpResponseHeaderParser.ok("text/html;charset=utf-8", body.length);
             }
             return new HttpResponse(header, body);
         } catch (NullPointerException e) {
-            String header = HttpResponseHeaderParser.response404Header();
+            String header = HttpResponseHeaderParser.notFound();
             return new HttpResponse(header);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
-            String header = HttpResponseHeaderParser.response500Header();
+            String header = HttpResponseHeaderParser.internalServerError();
             return new HttpResponse(header);
         }
     }
 
     @Override
     public HttpResponse post(HttpRequest httpRequest) {
-        String header = HttpResponseHeaderParser.response405Header();
+        String header = HttpResponseHeaderParser.methodNotAllowed();
         return new HttpResponse(header);
     }
 }
