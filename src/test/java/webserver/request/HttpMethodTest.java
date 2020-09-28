@@ -30,10 +30,10 @@ public class HttpMethodTest {
         assertThat(HttpMethod.find(httpMethod).isSame("GET")).isTrue();
     }
 
-    @DisplayName("HTTP Method 찾기 - 해당하는 HTTP Method를 찾지 못하면 NONE 반환")
+    @DisplayName("HTTP Method 찾기 - 해당하는 HTTP Method를 찾지 못하면 null 반환")
     @Test
     void find_NotExistHttpMethod_ThrownException() {
         String httpMethod = "HELLO";
-        assertThat(HttpMethod.find(httpMethod)).isEqualTo(HttpMethod.NONE);
+        assertThat(HttpMethod.find(httpMethod)).isNull();
     }
 }

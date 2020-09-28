@@ -11,8 +11,7 @@ public enum HttpMethod {
     HEAD("HEAD", false, false),
     TRACE("TRACE", false, false),
     CONNECT("CONNECT", false, false),
-    OPTIONS("OPTIONS", false, false),
-    NONE("NONE", true, false);
+    OPTIONS("OPTIONS", false, false);
 
     private final String httpMethod;
     private final boolean support;
@@ -28,7 +27,7 @@ public enum HttpMethod {
         return Arrays.stream(HttpMethod.values())
             .filter(method -> method.httpMethod.equals(httpMethod))
             .findFirst()
-            .orElse(HttpMethod.NONE);
+            .orElse(null);
     }
 
     public static boolean hasBody(String httpMethod) {
