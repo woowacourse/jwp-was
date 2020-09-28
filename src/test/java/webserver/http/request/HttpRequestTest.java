@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class HttpRequestTest {
     @DisplayName("HttpRequest 생성 테스트")
@@ -69,5 +70,18 @@ class HttpRequestTest {
         assertThat(httpRequest.getHttpMethod()).isEqualTo(HttpMethod.POST);
         assertThat(httpRequest.getResourcePath()).isEqualTo("/user/create");
         assertThat(httpRequest.getBody()).containsExactlyEntriesOf(body);
+    }
+
+    @DisplayName("잘못된 입력을 넣었을 때 예외 처리")
+    @Test
+    void invalidHttpRequestExceptionTest() throws IOException {
+        String invalidRequest = "HTTP/1.1 GET /user/create?usertId=javajigi";
+
+        // when
+        Reader inputString = new StringReader(invalidRequest);
+        BufferedReader reader = new BufferedReader(inputString);
+
+        assertThatThrownBy(() -> new HttpRequest(reader))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }

@@ -3,7 +3,7 @@ package webserver.http;
 import java.util.Arrays;
 
 public enum Protocol {
-    HTTP_1_1("HTTP/1.1");
+    HTTP_1_1("HTTP/1.1"), HTTP_1_2("HTTP/1.2");
 
     private final String protocol;
 

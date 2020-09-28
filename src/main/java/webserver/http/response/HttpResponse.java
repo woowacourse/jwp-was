@@ -4,10 +4,6 @@ public class HttpResponse {
     private final HttpResponseHeader httpResponseHeader;
     private byte[] body;
 
-    public HttpResponse(HttpResponseHeader httpResponseHeader) {
-        this.httpResponseHeader = httpResponseHeader;
-    }
-
     public HttpResponse(HttpResponseHeader httpResponseHeader, byte[] body) {
         this.httpResponseHeader = httpResponseHeader;
         this.body = body;

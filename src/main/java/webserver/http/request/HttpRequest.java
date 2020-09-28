@@ -29,11 +29,9 @@ public class HttpRequest {
         }
 
         String line;
-        if (bufferedReader.ready() && (line = bufferedReader.readLine()) != null) {
-            body = ParameterParser.parse(line);
-        } else {
-            body = new HashMap<>();
-        }
+        this.body = bufferedReader.ready() && (line = bufferedReader.readLine()) != null
+                ? ParameterParser.parse(line)
+                : new HashMap<>();
     }
 
     public HttpMethod getHttpMethod() {
