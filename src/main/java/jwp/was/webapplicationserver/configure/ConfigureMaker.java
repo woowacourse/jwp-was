@@ -1,5 +1,6 @@
 package jwp.was.webapplicationserver.configure;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -8,7 +9,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import jwp.was.webapplicationserver.configure.annotation.Autowired;
 import jwp.was.webapplicationserver.configure.annotation.Configure;
-import jwp.was.webapplicationserver.configure.annotation.Controller;
 import org.reflections.Reflections;
 
 public class ConfigureMaker {
@@ -83,14 +83,15 @@ public class ConfigureMaker {
         return configureInstanceType.equals(fieldType);
     }
 
-    public Set<Object> getControllerInstances() {
+    public <T extends Annotation> Set<Object> getConfiguresWithAnnotation(Class<T> annotation) {
         return configures.stream()
-            .filter(this::isController)
+            .filter(configure -> isWithAnnotation(configure, annotation))
             .collect(Collectors.toSet());
     }
 
-    private boolean isController(Object configureInstance) {
-        return configureInstance.getClass().isAnnotationPresent(Controller.class);
+    private <T extends Annotation> boolean isWithAnnotation(Object configureInstance,
+        Class<T> annotation) {
+        return configureInstance.getClass().isAnnotationPresent(annotation);
     }
 
     @SuppressWarnings("unchecked")
@@ -99,6 +100,7 @@ public class ConfigureMaker {
             .filter(configureInstance -> configureInstance.getClass().equals(aClass))
             .findFirst()
             .orElseThrow(
-                () -> new IllegalArgumentException(aClass.getName() + "에 해당하는 configure가 없습니다."));
+                () -> new IllegalArgumentException(
+                    aClass.getName() + "에 해당하는 configure가 없습니다."));
     }
 }

@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import jwp.was.webapplicationserver.configure.annotation.Controller;
 import jwp.was.webapplicationserver.configure.annotation.RequestMapping;
 import jwp.was.webapplicationserver.controller.handler.HttpInfo;
 import jwp.was.webapplicationserver.controller.handler.MatchedInfo;
@@ -19,8 +20,9 @@ public class HttpInfoMethodMapper {
     private final Map<HttpInfo, Method> httpInfoMethodMapper;
 
     private HttpInfoMethodMapper() {
-        Set<Object> controllerInstances = ConfigureMaker.getInstance().getControllerInstances();
         Map<HttpInfo, Method> httpInfoMethodMapper = new HashMap<>();
+        Set<Object> controllerInstances = ConfigureMaker.getInstance()
+            .getConfiguresWithAnnotation(Controller.class);
 
         for (Object controllerInstance : controllerInstances) {
             Method[] methods = controllerInstance.getClass().getDeclaredMethods();
