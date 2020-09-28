@@ -23,7 +23,7 @@ public class RequestLineTest {
         assertThat(requestLine.getMethod()).isEqualTo(HttpMethod.GET);
         assertThat(requestLine.getUri().getPath()).isEqualTo("/");
         assertThat(requestLine.getUri().getQueryParameters()).isNull();
-        assertThat(requestLine.getProtocol()).isEqualTo("HTTP/1.1");
+        assertThat(requestLine.getVersion()).isEqualTo("HTTP/1.1");
     }
 
     @DisplayName("from: 잘못된 헤더 첫 라인 입력시 예외 발생")
