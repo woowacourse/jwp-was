@@ -1,28 +1,67 @@
 package webserver.http.request;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class HttpRequest {
-    private RequestStartLine requestStartLine;
+    private RequestLine requestLine;
     private RequestHeaders requestHeaders;
     private RequestBody requestBody;
 
-    public HttpRequest(RequestStartLine requestStartLine, RequestHeaders requestHeaders, RequestBody requestBody) {
-        validate(requestStartLine, requestBody);
-        this.requestStartLine = requestStartLine;
+    public HttpRequest(RequestLine requestLine, RequestHeaders requestHeaders, RequestBody requestBody) {
+        this.requestLine = requestLine;
         this.requestHeaders = requestHeaders;
-        this.requestBody = requestBody;
-    }
-
-    private void validate(RequestStartLine requestStartLine, RequestBody requestBody) {
-        if (!requestStartLine.allowBody() && !requestBody.isEmpty()) {
-            throw new IllegalArgumentException("이 HttpMethod에서는 body message가 포함되는 것이 허용되지 않습니다.");
+        if (requestLine.allowBody()) {
+            this.requestBody = requestBody;
         }
     }
 
-    public RequestStartLine getHttpStartLine() {
-        return requestStartLine;
+    public RequestMethod getHttpMethod() {
+        return requestLine.getHttpMethod();
     }
 
-    public RequestBody getHttpBody() {
-        return requestBody;
+    public String getUrl() {
+        return getRequestUrl().getUrl();
+    }
+
+    public String getParameter(String key) {
+        List<String> parameters = getParameters(key);
+        if (Objects.isNull(parameters) || parameters.isEmpty()) {
+            return null;
+        }
+        return parameters.get(0);
+    }
+
+    private List<String> getParameters(String key) {
+        if (Objects.isNull(requestBody)) {
+            return getRequestParameter().getParameters(key);
+        }
+        return Stream.of(getRequestParameter().getParameters(key), requestBody.getParameters(key))
+            .filter(Objects::nonNull)
+            .flatMap(Collection::stream)
+            .collect(Collectors.toList());
+    }
+
+    public String getHttpVersion() {
+        return requestLine.getHttpVersion();
+    }
+
+    public String getHeader(String key) {
+        return requestHeaders.get(key);
+    }
+
+    public RequestUrl getRequestUrl() {
+        return requestLine.getHttpUrl();
+    }
+
+    public RequestParams getRequestParameter() {
+        return getRequestUrl().getHttpRequestParams();
+    }
+
+    public String getBody() {
+        return requestBody.getBody();
     }
 }

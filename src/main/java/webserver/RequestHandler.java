@@ -1,7 +1,6 @@
 package webserver;
 
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -9,7 +8,6 @@ import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import webserver.http.RequestMapper;
 import webserver.http.request.HttpRequest;
 import webserver.http.request.HttpRequestFactory;
 import webserver.http.response.HttpResponse;
@@ -31,9 +29,10 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             DataOutputStream dos = new DataOutputStream(out);
             HttpRequest httpRequest = HttpRequestFactory.create(in);
-            HttpResponse httpResponse = RequestMapper.mapPage(httpRequest);
+            HttpResponse httpResponse = HttpResponse.ofVersion(httpRequest.getHttpVersion());
+            RequestMapper.execute(httpRequest, httpResponse);
             httpResponse.write(dos);
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.error(e.getMessage());
         }
     }

@@ -1,10 +1,9 @@
 package webserver.http.request;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import utils.ValueExtractor;
+import webserver.utils.ValueExtractor;
 
 public class RequestParams {
     private final Map<String, List<String>> parameters;
@@ -17,15 +16,7 @@ public class RequestParams {
         return new RequestParams(ValueExtractor.extract(params));
     }
 
-    public String getOneParameterValue(String key) {
-        return parameters.get(key).get(0);
-    }
-
-    public List<String> get(String key) {
+    public List<String> getParameters(String key) {
         return parameters.get(key);
-    }
-
-    public Map<String, List<String>> getParameters() {
-        return Collections.unmodifiableMap(parameters);
     }
 }

@@ -28,7 +28,7 @@ class HttpRequestFactoryTest {
         assertThat(httpRequest).isNotNull();
     }
 
-    @DisplayName("body와 http method가 맞지 않는 경우 예외 처리")
+    @DisplayName("body와 http method가 맞지 않는 경우 빈 바디를 넣는다.")
     @Test
     void createWithException() throws Exception {
         String request = "GET /index.html?a=1&b=2 HTTP/1.1" + System.lineSeparator()
@@ -39,8 +39,6 @@ class HttpRequestFactoryTest {
             + System.lineSeparator()
             + "i'm body";
 
-        assertThatThrownBy(() -> HttpRequestFactory.create(new ByteArrayInputStream(request.getBytes())))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("허용되지 않습니다.");
+        assertThat(HttpRequestFactory.create(new ByteArrayInputStream(request.getBytes())));
     }
 }
