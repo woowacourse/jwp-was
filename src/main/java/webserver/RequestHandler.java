@@ -48,13 +48,8 @@ public class RequestHandler implements Runnable {
             HttpResponse httpResponse;
             Controller controller = controllers.getOrDefault(httpRequest.getPath(), new RawFileController(httpRequest.getPath()));
 
-            if (httpRequest.isMethodEqualTo(RequestMethod.GET)) {
-                httpResponse = controller.get(httpRequest);
-            } else if (httpRequest.isMethodEqualTo(RequestMethod.POST)) {
-                httpResponse = controller.post(httpRequest);
-            } else {
-                throw new IllegalArgumentException("Unsupported method: PUT, DELETE");
-            }
+            RequestMethod requestMethod = httpRequest.getRequestMethod();
+            httpResponse = requestMethod.extractResponse(controller, httpRequest);
             HttpResponseUtils.response(dos, httpResponse);
         } catch (IllegalArgumentException e) {
             HttpResponseUtils.response(dos, new HttpResponse(HttpResponseHeaderParser.response400Header()));

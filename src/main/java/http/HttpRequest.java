@@ -18,15 +18,15 @@ public class HttpRequest {
         return this.requestLine.getPath();
     }
 
-    public boolean isMethodEqualTo(RequestMethod requestMethod) {
-        return this.requestLine.isMethodEqualTo(requestMethod);
-    }
-
     public String getBodyValue(String key) {
         return this.requestBody.getValue(key);
     }
 
     public boolean headerContainsValueOf(HeaderParam key, String value) {
         return this.requestHeader.containsValueOf(key, value);
+    }
+
+    public RequestMethod getRequestMethod() {
+        return this.requestLine.getMethod();
     }
 }
