@@ -14,7 +14,7 @@ public class UserCreateController implements Controller {
 
     @Override
     public HttpResponse post(HttpRequest httpRequest) {
-        UserService userService = new UserService();
+        UserService userService = UserService.getInstance();
         userService.createUser(httpRequest);
         String header = HttpResponseHeaderParser.found("/index.html");
         return new HttpResponse(header);
