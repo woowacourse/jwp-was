@@ -14,7 +14,7 @@ import java.util.Objects;
 public class HttpRequest {
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
 
-    private final String method;
+    private final MethodType method;
     private final RequestPath requestPath;
     private final String version;
     private final Map<String, String> requestHeader;
@@ -25,7 +25,8 @@ public class HttpRequest {
             String requestHeaderFirstLine = request.readLine();
             logger.debug(requestHeaderFirstLine);
             String[] tokens = requestHeaderFirstLine.split(" ");
-            method = tokens[0].trim();
+            String methodName = tokens[0].trim();
+            method = MethodType.createMethodByName(methodName);
             requestPath = new RequestPath(tokens[1].trim());
             version = tokens[2].trim();
 
@@ -53,18 +54,18 @@ public class HttpRequest {
     }
 
     private RequestBody mappingBodies(BufferedReader request) throws IOException {
-        if (!method.equals("POST")) {
+        if (!method.isPost()) {
             return new RequestBody();
         }
         int contentLength = Integer.parseInt(requestHeader.get("Content-Length"));
         String requestBodyData = IOUtils.readData(request, contentLength);
-        if (Objects.isNull(requestBodyData) || requestBodyData.isEmpty()) {
+        if (requestBodyData.isEmpty()) {
             return new RequestBody();
         }
         return new RequestBody(requestBodyData);
     }
 
-    public String getMethod() {
+    public MethodType getMethod() {
         return method;
     }
 

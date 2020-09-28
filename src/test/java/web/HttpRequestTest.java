@@ -31,7 +31,7 @@ public class HttpRequestTest {
         try {
             BufferedReader request = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
             HttpRequest httpRequest = new HttpRequest(request);
-            Assertions.assertThat(httpRequest.getMethod()).isEqualTo("GET");
+            Assertions.assertThat(httpRequest.getMethod().getName()).isEqualTo("GET");
             Assertions.assertThat(httpRequest.getRequestPath().getTarget()).isEqualTo("/index.html");
             Assertions.assertThat(httpRequest.getVersion()).isEqualTo("HTTP/1.1");
         } catch (IOException e) {
