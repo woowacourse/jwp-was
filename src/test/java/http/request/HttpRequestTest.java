@@ -31,9 +31,9 @@ public class HttpRequestTest {
 
     @Test
     void getBodyByName() {
-        assertThat(httpRequest.getBodyByName("userId")).isEqualTo("javajigi");
-        assertThat(httpRequest.getBodyByName("password")).isEqualTo("password");
-        assertThat(httpRequest.getBodyByName("name")).isEqualTo("자바지기");
-        assertThat(httpRequest.getBodyByName("email")).isEqualTo("javajigi@slipp.net");
+        assertThat(httpRequest.getHttpRequestBodyByName("userId")).isEqualTo("javajigi");
+        assertThat(httpRequest.getHttpRequestBodyByName("password")).isEqualTo("password");
+        assertThat(httpRequest.getHttpRequestBodyByName("name")).isEqualTo("자바지기");
+        assertThat(httpRequest.getHttpRequestBodyByName("email")).isEqualTo("javajigi@slipp.net");
     }
 }

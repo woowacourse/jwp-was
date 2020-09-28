@@ -20,7 +20,7 @@ public class HttpRequest {
         return httpRequestHeader.getValue(name);
     }
 
-    public String getBodyByName(String name) {
+    public String getHttpRequestBodyByName(String name) {
         return httpRequestBody.getValue(name);
     }
 }

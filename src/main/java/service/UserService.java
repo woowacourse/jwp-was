@@ -11,8 +11,8 @@ public class UserService {
     }
 
     public void create(HttpRequest httpRequest) {
-        User user = new User(httpRequest.getBodyByName("userId"), httpRequest.getBodyByName("password"), httpRequest.getBodyByName("name"), httpRequest
-                .getBodyByName("email"));
+        User user = new User(httpRequest.getHttpRequestBodyByName("userId"), httpRequest.getHttpRequestBodyByName("password"), httpRequest.getHttpRequestBodyByName("name"), httpRequest
+                .getHttpRequestBodyByName("email"));
         DataBase.addUser(user);
     }
 
