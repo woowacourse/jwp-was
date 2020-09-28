@@ -1,9 +1,9 @@
 package jwp.was.webserver.dto;
 
 import static java.lang.System.lineSeparator;
+import static jwp.was.util.Constants.PROTOCOL;
+import static jwp.was.util.Constants.URL_PATH_INDEX_HTML;
 import static org.assertj.core.api.Assertions.assertThat;
-import static util.Constants.PROTOCOL;
-import static util.Constants.URL_PATH_INDEX_HTML;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;

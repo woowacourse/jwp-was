@@ -1,8 +1,8 @@
 package jwp.was.webserver.dto;
 
+import static jwp.was.util.Constants.EMPTY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static util.Constants.EMPTY;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;

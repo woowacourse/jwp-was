@@ -1,16 +1,16 @@
 package jwp.was.webserver.handler;
 
+import static jwp.was.util.Constants.CONTENT_TYPE_TEXT_CSS;
+import static jwp.was.util.Constants.CONTENT_TYPE_TEXT_HTML;
+import static jwp.was.util.Constants.CONTENT_TYPE_TEXT_PLAIN;
+import static jwp.was.util.Constants.HEADERS_EMPTY;
+import static jwp.was.util.Constants.PARAMETERS_EMPTY;
+import static jwp.was.util.Constants.PROTOCOL;
+import static jwp.was.util.Constants.URL_PATH_BOOTSTRAP_MIN_CSS;
+import static jwp.was.util.Constants.URL_PATH_INDEX_HTML;
+import static jwp.was.util.Constants.URL_PATH_NOT_EXISTS_FILE;
 import static jwp.was.webserver.HttpMethod.GET;
 import static org.assertj.core.api.Assertions.assertThat;
-import static util.Constants.CONTENT_TYPE_TEXT_CSS;
-import static util.Constants.CONTENT_TYPE_TEXT_HTML;
-import static util.Constants.CONTENT_TYPE_TEXT_PLAIN;
-import static util.Constants.HEADERS_EMPTY;
-import static util.Constants.PARAMETERS_EMPTY;
-import static util.Constants.PROTOCOL;
-import static util.Constants.URL_PATH_BOOTSTRAP_MIN_CSS;
-import static util.Constants.URL_PATH_INDEX_HTML;
-import static util.Constants.URL_PATH_NOT_EXISTS_FILE;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

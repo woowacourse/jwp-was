@@ -16,7 +16,6 @@ public class HttpRequestAssembler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpRequestAssembler.class);
     private static final String LINE_DELIMITER = " ";
-    private static final String HEADER_DELIMITER = ": ";
     private static final String EMPTY = "";
     private static final int HTTP_METHOD_INDEX_OF_REQUEST_LINE = 0;
     private static final int URL_INDEX_OF_REQUEST_LINE = 1;

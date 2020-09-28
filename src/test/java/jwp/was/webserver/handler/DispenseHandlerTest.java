@@ -1,23 +1,23 @@
 package jwp.was.webserver.handler;
 
+import static jwp.was.util.Constants.CONTENT_TYPE_TEXT_HTML;
+import static jwp.was.util.Constants.CONTENT_TYPE_TEXT_PLAIN;
+import static jwp.was.util.Constants.HEADERS_EMPTY;
+import static jwp.was.util.Constants.PARAMETERS_EMPTY;
+import static jwp.was.util.Constants.PARAMETERS_FOR_CREATE_USER;
+import static jwp.was.util.Constants.PROTOCOL;
+import static jwp.was.util.Constants.URL_PATH_API_CREATE_USER;
+import static jwp.was.util.Constants.URL_PATH_INDEX_HTML;
 import static jwp.was.webserver.FileNameExtension.API;
 import static jwp.was.webserver.FileNameExtension.HTML;
 import static jwp.was.webserver.HttpMethod.GET;
 import static jwp.was.webserver.HttpMethod.POST;
 import static org.assertj.core.api.Assertions.assertThat;
-import static util.Constants.CONTENT_TYPE_TEXT_HTML;
-import static util.Constants.CONTENT_TYPE_TEXT_PLAIN;
-import static util.Constants.HEADERS_EMPTY;
-import static util.Constants.PARAMETERS_EMPTY;
-import static util.Constants.PARAMETERS_FOR_CREATE_USER;
-import static util.Constants.PROTOCOL;
-import static util.Constants.URL_PATH_API_CREATE_USER;
-import static util.Constants.URL_PATH_INDEX_HTML;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import jwp.was.db.DataBaseTest;
+import jwp.was.webapplicationserver.db.DataBaseTest;
 import jwp.was.webserver.HttpStatusCode;
 import jwp.was.webserver.dto.HttpRequest;
 import jwp.was.webserver.utils.FileIoUtils;

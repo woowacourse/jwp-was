@@ -2,7 +2,7 @@ package jwp.was.webserver.handler;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import jwp.was.controller.handler.ControllerHandler;
+import jwp.was.webapplicationserver.controller.handler.ControllerHandler;
 import jwp.was.webserver.dto.HttpRequest;
 
 public class DispenseHandler {

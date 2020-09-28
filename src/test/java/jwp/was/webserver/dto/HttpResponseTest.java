@@ -3,18 +3,18 @@ package jwp.was.webserver.dto;
 import static com.google.common.net.HttpHeaders.CONTENT_LENGTH;
 import static com.google.common.net.HttpHeaders.CONTENT_LOCATION;
 import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
+import static jwp.was.util.Constants.CONTENT_TYPE_TEXT_PLAIN;
+import static jwp.was.util.Constants.EMPTY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static util.Constants.CONTENT_TYPE_TEXT_PLAIN;
-import static util.Constants.EMPTY;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import jwp.was.util.Constants;
 import jwp.was.webserver.HttpStatusCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import util.Constants;
 
 class HttpResponseTest {
 

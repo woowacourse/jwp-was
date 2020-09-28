@@ -1,7 +1,7 @@
 package jwp.was.webserver.dto;
 
+import static jwp.was.util.Constants.EMPTY;
 import static org.assertj.core.api.Assertions.assertThat;
-import static util.Constants.EMPTY;
 
 import com.google.common.net.HttpHeaders;
 import java.util.ArrayList;

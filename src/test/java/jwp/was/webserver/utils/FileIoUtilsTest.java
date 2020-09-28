@@ -1,8 +1,8 @@
 package jwp.was.webserver.utils;
 
+import static jwp.was.util.Constants.URL_PATH_BOOTSTRAP_MIN_CSS;
+import static jwp.was.util.Constants.URL_PATH_INDEX_HTML;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static util.Constants.URL_PATH_BOOTSTRAP_MIN_CSS;
-import static util.Constants.URL_PATH_INDEX_HTML;
 
 import jwp.was.webserver.FileNameExtension;
 import org.junit.jupiter.api.DisplayName;
