@@ -1,5 +1,7 @@
 package webserver;
 
+import controller.ControllerMapper;
+import controller.UserController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +21,7 @@ public class WebServer {
         } else {
             port = Integer.parseInt(args[0]);
         }
+        initControllerMapper();
 
         try (ServerSocket listenSocket = new ServerSocket(port)) {
             logger.info("Web Application Server started {} port.", port);
@@ -26,8 +29,13 @@ public class WebServer {
             Socket connection;
             ExecutorService es = Executors.newFixedThreadPool(6);
             while ((connection = listenSocket.accept()) != null) {
-                es.execute(new RequestHandler(connection));
+                es.execute(new RequestHandler(connection, ControllerMapper.getInstance()));
             }
         }
+    }
+
+    private static void initControllerMapper() {
+        ControllerMapper controllerMapper = ControllerMapper.getInstance();
+        controllerMapper.addController(new UserController());
     }
 }

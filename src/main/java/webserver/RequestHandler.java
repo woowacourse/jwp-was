@@ -2,7 +2,6 @@ package webserver;
 
 import controller.Controller;
 import controller.ControllerMapper;
-import controller.UserController;
 import http.factory.HttpRequestFactory;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -22,18 +21,12 @@ import java.nio.charset.StandardCharsets;
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
-    private Socket connection;
+    private final Socket connection;
+    private final ControllerMapper controllerMapper;
 
-    public RequestHandler(Socket connectionSocket) {
+    public RequestHandler(Socket connectionSocket, ControllerMapper mapper) {
         this.connection = connectionSocket;
-        initControllerMapper();
-    }
-
-    private void initControllerMapper() {
-        ControllerMapper mapper = ControllerMapper.getInstance();
-        if (mapper.isEmpty()) {
-            mapper.addController(new UserController());
-        }
+        this.controllerMapper = mapper;
     }
 
     public void run() {
@@ -53,8 +46,8 @@ public class RequestHandler implements Runnable {
     }
 
     private void handle(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
-        if (ControllerMapper.getInstance().isApi(httpRequest)) {
-            Controller controller = ControllerMapper.getInstance().map(httpRequest);
+        if (controllerMapper.isApi(httpRequest)) {
+            Controller controller = controllerMapper.map(httpRequest);
             controller.service(httpRequest, httpResponse);
             return;
         }
