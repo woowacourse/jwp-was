@@ -7,6 +7,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import jwp.was.configure.maker.ConfigureMaker;
 import jwp.was.controller.GlobalExceptionHandler;
 import jwp.was.webserver.dto.HttpRequest;
 import jwp.was.webserver.dto.HttpResponse;
@@ -18,38 +20,39 @@ public class ControllerHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ControllerHandler.class);
 
-    private final ControllerMethodMappers controllerMethodMappers;
-    private final GlobalExceptionHandler globalExceptionHandler;
+    private final ConfigureMaker configureMaker = ConfigureMaker.getInstance();
+    private final HttpInfoMethodMapper httpInfoMethodMapper = HttpInfoMethodMapper.getInstance();
+    private final GlobalExceptionHandler globalExceptionHandler = new GlobalExceptionHandler();
 
     public ControllerHandler() {
-        this.controllerMethodMappers = new ControllerMethodMappers();
-        this.globalExceptionHandler = new GlobalExceptionHandler();
     }
 
     public void handleAPI(OutputStream out, HttpRequest httpRequest) throws IOException {
-        MatchInfo matchInfo = controllerMethodMappers.getMatchInstanceMethod(httpRequest);
+        MatchedInfo matchedInfo = httpInfoMethodMapper.getMatchMethod(httpRequest);
 
         try (DataOutputStream dos = new DataOutputStream(out)) {
-            HttpResponse httpResponse = makeHttpResponse(httpRequest, matchInfo);
+            HttpResponse httpResponse = makeHttpResponse(httpRequest, matchedInfo);
             response(dos, httpResponse);
         }
     }
 
-    private HttpResponse makeHttpResponse(HttpRequest httpRequest, MatchInfo matchInfo) {
-        if (matchInfo.isMatch()) {
-            return executeMatchedMethod(httpRequest, matchInfo);
+    private HttpResponse makeHttpResponse(HttpRequest httpRequest, MatchedInfo matchedInfo) {
+        if (matchedInfo.isMatch()) {
+            return executeMatchedMethod(httpRequest, matchedInfo);
         }
 
-        if (matchInfo.isNotMatch() && matchInfo.anyMatchUrlPath()) {
+        if (matchedInfo.isNotMatch() && matchedInfo.anyMatchUrlPath()) {
             return globalExceptionHandler.handleHttpStatusCode(httpRequest, METHOD_NOT_ALLOW);
         }
 
         return globalExceptionHandler.handleHttpStatusCode(httpRequest, NOT_FOUND);
     }
 
-    private HttpResponse executeMatchedMethod(HttpRequest httpRequest, MatchInfo matchInfo) {
+    private HttpResponse executeMatchedMethod(HttpRequest httpRequest, MatchedInfo matchedInfo) {
         try {
-            return matchInfo.executeMethod(httpRequest);
+            Method method = matchedInfo.getMethod();
+            Object instance = configureMaker.getConfigure(method.getDeclaringClass());
+            return (HttpResponse) method.invoke(instance, httpRequest);
         } catch (IllegalAccessException | InvocationTargetException e) {
             return globalExceptionHandler.handleCauseException(httpRequest, e);
         }
