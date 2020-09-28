@@ -9,6 +9,9 @@ import http.response.ResponseEntity;
 import utils.FileIoUtils;
 
 public class StaticFileFilter implements Filter {
+
+    private static final String CONTENT_TYPE = "Content-Type";
+
     @Override
     public boolean doFilter(RequestEntity requestEntity, ResponseEntity responseEntity) {
         String path = requestEntity.getHttpUrl().getPath();
@@ -19,7 +22,9 @@ public class StaticFileFilter implements Filter {
 
             responseEntity.status(HttpStatus.OK)
                 .version("HTTP/1.1")
-                .body(body, FileExtensionType.findMatchingContentType(path));
+                .addHeader(CONTENT_TYPE, FileExtensionType.findMatchingContentType(path).getType())
+                .body(body);
+
             return false;
         }
         return true;

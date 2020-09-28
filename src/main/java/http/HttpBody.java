@@ -8,26 +8,24 @@ import utils.IOUtils;
 
 public class HttpBody {
     private String content;
-    private ContentType contentType;
 
-    public HttpBody(String content, ContentType contentType) {
+    public HttpBody(String content) {
         this.content = content;
-        this.contentType = contentType;
     }
 
     public static HttpBody empty() {
-        return new HttpBody("", ContentType.APPLICATION_X_WWW_FORM_URLENCODED);
+        return new HttpBody("");
     }
 
-    public static HttpBody of(String content, ContentType contentType) {
-        return new HttpBody(content, contentType);
+    public static HttpBody of(String content) {
+        return new HttpBody(content);
     }
 
     public static HttpBody of(BufferedReader bufferedReader, ContentType contentType, int contentLength) {
         try {
             String content = extractBody(bufferedReader, contentLength);
             content = contentType.parse(content);
-            return new HttpBody(content, contentType);
+            return new HttpBody(content);
         } catch (IOException e) {
             throw new RequestBodyCreateFailException();
         }
@@ -39,9 +37,5 @@ public class HttpBody {
 
     public String getContent() {
         return content;
-    }
-
-    public ContentType getContentType() {
-        return contentType;
     }
 }
