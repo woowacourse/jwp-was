@@ -1,6 +1,6 @@
 package webserver;
 
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -12,7 +12,7 @@ import http.HttpResponse;
 
 public class FrontController {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
-    private static final Map<RequestMapping, Handler> handlerMappings = new LinkedHashMap<>();
+    private static final Map<RequestMapping, Handler> handlerMappings = new HashMap<>();
 
     static {
         UserController userController = new UserController();
