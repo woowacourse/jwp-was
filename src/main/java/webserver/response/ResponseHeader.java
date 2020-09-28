@@ -1,7 +1,7 @@
 package webserver.response;
 
 public enum ResponseHeader {
-    LOCATION("Location: %s");
+    LOCATION("Location");
 
     private final String header;
 
@@ -10,6 +10,6 @@ public enum ResponseHeader {
     }
 
     public String make(String value) {
-        return String.format(header, value);
+        return header + ": " + value;
     }
 }

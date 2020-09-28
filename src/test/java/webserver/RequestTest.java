@@ -8,6 +8,8 @@ import webserver.request.RequestLine;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -70,6 +72,30 @@ class RequestTest {
         String expect = "userId=javajigi&password=password&name=name&email=javajigi@slipp.net";
 
         assertThat(actual).isEqualTo(expect);
+    }
+
+    @DisplayName("queryString을 map으로 잘 변환하는 지 테스트")
+    @Test
+    void extractQueryString() {
+        String httpRequest = "POST /user/create HTTP/1.1\n" +
+                "Host: localhost:8080\n" +
+                "Connection: keep-alive\n" +
+                "Content-Length: 68\n" +
+                "Content-Type: application/x-www-form-urlencoded\n" +
+                "Accept: */*\n" +
+                "\n" +
+                "userId=javajigi&password=password&name=name&email=javajigi@slipp.net";
+        BufferedReader bufferedReader = new BufferedReader(new StringReader(httpRequest));
+        Request request = new Request(bufferedReader);
+        Map<String, String> expected = new HashMap<>();
+        expected.put("userId", "javajigi");
+        expected.put("password", "password");
+        expected.put("name", "name");
+        expected.put("email", "javajigi@slipp.net");
+
+        Map<String, String> actual = Request.extractQueryString(request.getBody());
+
+        assertThat(actual).isEqualTo(expected);
     }
 
 }

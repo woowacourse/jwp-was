@@ -1,24 +1,25 @@
 package webserver;
 
 public enum EntityHeader {
-    CONTENT_LENGTH("Content-Length: %s"),
-    CONTENT_TYPE("Content-Type: %s; charset=utf-8");
+    CONTENT_LENGTH("Content-Length"),
+    CONTENT_TYPE("Content-Type"),
+    CHARSET_UTF_8("charset=utf-8");
 
-    private final String name;
+    private final String header;
 
-    EntityHeader(String name) {
-        this.name = name;
+    EntityHeader(String header) {
+        this.header = header;
     }
 
     public boolean match(String line) {
-        return line.contains(this.name);
+        return line.contains(this.header);
     }
 
     public String get() {
-        return name;
+        return header;
     }
 
     public String make(String value) {
-        return String.format(name, value);
+        return this.header + ": " + value;
     }
 }

@@ -5,11 +5,17 @@ import webserver.EntityHeader;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Request {
     private static final String REQUEST_LINE_DELIMITER = " ";
-    private static final int VALUE_INDEX = 1;
+    private static final String PARAMETER_DELIMITER = "&";
+    private static final String NAME_VALUE_DELIMITER = "=";
     private static final int HTTP_METHOD_INDEX = 0;
+    private static final int NAME_INDEX = 0;
+    private static final int VALUE_INDEX = 1;
     private static final int REQUEST_LINE_LENGTH = 3;
 
     private final RequestLine requestLine;
@@ -33,7 +39,6 @@ public class Request {
         return new RequestLine(httpMethod, tokens[VALUE_INDEX]);
     }
 
-
     private String readLine(BufferedReader bufferedReader) {
         try {
             return bufferedReader.readLine();
@@ -53,6 +58,15 @@ public class Request {
             line = readLine(bufferedReader);
         }
         return IOUtils.readData(bufferedReader, contentLength);
+    }
+
+    public static Map<String, String> extractQueryString(String queryString) {
+        return Arrays.stream(queryString.split(PARAMETER_DELIMITER))
+                .map(token -> token.split(NAME_VALUE_DELIMITER))
+                .collect(Collectors.toMap(
+                        nameAndValue -> nameAndValue[NAME_INDEX],
+                        nameAndValue -> nameAndValue[VALUE_INDEX],
+                        (a, b) -> b));
     }
 
     public boolean isMatchHttpMethod(HttpMethod httpMethod) {

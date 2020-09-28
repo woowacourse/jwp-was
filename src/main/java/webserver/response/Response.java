@@ -45,7 +45,8 @@ public class Response {
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) throws IOException {
         dos.writeBytes(String.format("%s %s \r\n", HttpVersion.USING_VERSION.get(), Status.OK.getStatus()));
-        dos.writeBytes(EntityHeader.CONTENT_TYPE.make(fileResponse.getContentType()) + " \r\n");
+        dos.writeBytes(EntityHeader.CONTENT_TYPE.make(fileResponse.getContentType()));
+        dos.writeBytes(String.format("; %s \r\n", EntityHeader.CHARSET_UTF_8.get()));
         dos.writeBytes(EntityHeader.CONTENT_LENGTH.make(String.valueOf(lengthOfBodyContent)) + " \r\n");
         dos.writeBytes("\r\n");
     }
