@@ -21,7 +21,6 @@ public class UserCreateBehavior implements RequestBehavior {
         DataBase.addUser(user);
 
        responseEntity.status(HttpStatus.FOUND)
-            .version("HTTP/1.1")
             .addHeader("Location", "/index.html");
     }
 }

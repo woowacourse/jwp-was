@@ -7,7 +7,8 @@ import http.HttpHeader;
 
 public class ResponseEntity {
 
-    private static final String CONTENT_TYPE = "Content-Type";
+
+    private static final String DEFAULT_VERSION = "HTTP/1.1";
     private static final String SEPERATOR = " ";
 
     private String httpVersion;
@@ -16,11 +17,11 @@ public class ResponseEntity {
     private HttpBody httpBody;
 
     private ResponseEntity() {
-        this(null, null, HttpHeader.empty(), HttpBody.empty());
+        this(null);
     }
 
     private ResponseEntity(HttpStatus httpStatus) {
-        this(null, httpStatus, HttpHeader.empty(), HttpBody.empty());
+        this(DEFAULT_VERSION, httpStatus, HttpHeader.empty(), HttpBody.empty());
     }
 
     private ResponseEntity(String httpVersion, HttpStatus httpStatus, HttpHeader httpHeader, HttpBody httpBody) {
