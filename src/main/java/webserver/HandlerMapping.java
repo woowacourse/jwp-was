@@ -1,5 +1,6 @@
 package webserver;
 
+import webserver.controller.ExceptionHandler;
 import webserver.http.request.HttpMethod;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
@@ -7,35 +8,34 @@ import webserver.staticfile.StaticFileController;
 import webserver.staticfile.StaticFileMatcher;
 import webserver.user.UserController;
 
-import java.util.Arrays;
-import java.util.function.Function;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
-public enum HandlerMapping {
-    JOIN(HttpMethod.POST, "/user/create", httpRequest -> UserController.doPost(httpRequest));
+public class HandlerMapping {
+    private static Map<String, Method> postMappings = new HashMap<>();
 
-    private HttpMethod httpMethod;
-    private String resourcePath;
-    private Function<HttpRequest, HttpResponse> process;
-
-    HandlerMapping(HttpMethod httpMethod, String resourcePath, Function<HttpRequest, HttpResponse> process) {
-        this.httpMethod = httpMethod;
-        this.resourcePath = resourcePath;
-        this.process = process;
+    static {
+        try {
+            postMappings.put("/user/create", UserController.class.getDeclaredMethod("doPost", HttpRequest.class));
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
     }
 
     public static HttpResponse mapping(HttpRequest httpRequest) {
         if (StaticFileMatcher.isStaticFileResourcePath(httpRequest.getResourcePath())) {
             return StaticFileController.processStaticFile(httpRequest);
         }
-        return Arrays.stream(HandlerMapping.values())
-                .filter(x -> isSame(x, httpRequest))
-                .findAny()
-                .map(x -> x.process.apply(httpRequest))
-                .orElseThrow(() -> new IllegalArgumentException("잘못된 요청입니다."));
-    }
-
-    private static boolean isSame(HandlerMapping handlerMapping, HttpRequest httpRequest) {
-        return handlerMapping.httpMethod.equals(httpRequest.getHttpMethod())
-                && handlerMapping.resourcePath.equals(httpRequest.getResourcePath());
+        try {
+            if (httpRequest.getHttpMethod().equals(HttpMethod.POST)) {
+                Method method = postMappings.get(httpRequest.getResourcePath());
+                return (HttpResponse) method.invoke(null, httpRequest);
+            }
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            return ExceptionHandler.processException(e);
+        }
+        return ExceptionHandler.processException(new IllegalArgumentException("등록되지 않은 요청입니다."));
     }
 }
