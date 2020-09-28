@@ -43,6 +43,10 @@ public class HttpRequest {
         return requestLine.getPath();
     }
 
+    public Uri getUri() {
+        return requestLine.getUri();
+    }
+
     public String getBodyValue(final String key) {
         return requestBody.getValue(key);
     }
