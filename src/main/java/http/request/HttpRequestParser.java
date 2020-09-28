@@ -2,6 +2,8 @@ package http.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,16 +34,16 @@ public class HttpRequestParser {
     }
 
     private static HttpRequestHeader parseRequestHeader(BufferedReader br) throws IOException {
-        HttpRequestHeader httpRequestHeader = new HttpRequestHeader();
+        Map<String, String> httpRequestHeaderCache = new HashMap<>();
         String[] headers;
         String line = br.readLine();
         while (!line.equals("")) {
             headers = line.split(COLON + BLANK);
-            httpRequestHeader.add(headers[0], headers[1]);
+            httpRequestHeaderCache.put(headers[0], headers[1]);
             logger.debug("request header : {}", line);
             line = br.readLine();
         }
-        return httpRequestHeader;
+        return new HttpRequestHeader(httpRequestHeaderCache);
     }
 
     private static HttpRequestBody parseRequestBody(BufferedReader br, HttpRequestHeader httpRequestHeader) throws IOException {

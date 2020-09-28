@@ -1,18 +1,13 @@
 package http.request;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class HttpRequestHeader {
 
     private Map<String, String> requestHeader;
 
-    public HttpRequestHeader() {
-        this.requestHeader = new HashMap<>();
-    }
-
-    public void add(String name, String value) {
-        requestHeader.put(name, value);
+    public HttpRequestHeader(final Map<String, String> requestHeader) {
+        this.requestHeader = requestHeader;
     }
 
     public String getValue(String name) {
