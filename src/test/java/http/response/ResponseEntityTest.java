@@ -14,7 +14,6 @@ class ResponseEntityTest {
 
     private static final String HTTP_RESPONSE_STRING = "HTTP/1.1 200 OK \n"
         + "Content-Type: text/html;charset=utf-8\n"
-        + "Content-Length: 8\n"
         + "\n"
         + "testBody";
 
@@ -23,7 +22,6 @@ class ResponseEntityTest {
         String body = "testBody";
         Map<String, String> expectedHeader = new HashMap<String, String>() {{
             put("Content-Type", "text/html;charset=utf-8");
-            put("Content-Length", "8");
             put("testKey", "testValue");
         }};
 

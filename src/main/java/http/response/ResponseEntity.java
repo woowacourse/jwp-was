@@ -9,7 +9,6 @@ import http.HttpHeader;
 public class ResponseEntity {
 
     private static final String CONTENT_TYPE = "Content-Type";
-    private static final String CONTENT_LENGTH = "Content-Length";
     private static final String SEPERATOR = " ";
 
     private String httpVersion;
@@ -65,7 +64,6 @@ public class ResponseEntity {
     public ResponseEntity body(String body, ContentType contentType) {
         this.httpBody = HttpBody.of(body, contentType);
         this.httpHeader.setOrReplaceHeader(CONTENT_TYPE, contentType.getType());
-        this.httpHeader.setOrReplaceHeader(CONTENT_LENGTH, String.valueOf(body.length()));
         return this;
     }
 
