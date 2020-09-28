@@ -3,10 +3,7 @@ package webserver;
 import http.HttpRequest;
 import http.HttpResponse;
 import http.RequestMethod;
-import http.controller.Controller;
-import http.controller.IndexController;
-import http.controller.RawFileController;
-import http.controller.UserCreateController;
+import http.controller.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.HttpResponseHeaderParser;
@@ -40,13 +37,11 @@ public class RequestHandler implements Runnable {
     }
 
     private void route(BufferedReader br, DataOutputStream dos) throws IOException {
-        Map<String, Controller> controllers = new HashMap<>();
-        controllers.put("/user/create", new UserCreateController());
-        controllers.put("/", new IndexController());
+        Controllers controllers = ControllersFactory.getControllers();
         try {
             HttpRequest httpRequest = new HttpRequest(br);
             HttpResponse httpResponse;
-            Controller controller = controllers.getOrDefault(httpRequest.getPath(), new RawFileController(httpRequest.getPath()));
+            Controller controller = controllers.find(httpRequest.getPath());
 
             RequestMethod requestMethod = httpRequest.getRequestMethod();
             httpResponse = requestMethod.extractResponse(controller, httpRequest);
