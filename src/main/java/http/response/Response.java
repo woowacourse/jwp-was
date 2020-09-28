@@ -9,7 +9,9 @@ import org.slf4j.LoggerFactory;
 import webserver.RequestHandler;
 
 public class Response {
+
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final String NEW_LINE = System.lineSeparator();
 
     private DataOutputStream dos;
 
@@ -19,10 +21,10 @@ public class Response {
 
     public void response200Header(String contentType, int lengthOfBodyContent) {
         try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: " + contentType + ";charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
+            dos.writeBytes("HTTP/1.1 200 OK" + NEW_LINE);
+            dos.writeBytes("Content-Type: " + contentType + ";charset=utf-8" + NEW_LINE);
+            dos.writeBytes("Content-Length: " + lengthOfBodyContent + NEW_LINE);
+            dos.writeBytes(NEW_LINE);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -30,11 +32,11 @@ public class Response {
 
     public void response302Header(int lengthOfBodyContent) {
         try {
-            dos.writeBytes("HTTP/1.1 302 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("Location: " + "http://localhost:8080/index.html" + "\r\n");
-            dos.writeBytes("\r\n");
+            dos.writeBytes("HTTP/1.1 302 OK" + NEW_LINE);
+            dos.writeBytes("Content-Type: text/html;charset=utf-8" + NEW_LINE);
+            dos.writeBytes("Content-Length: " + lengthOfBodyContent + NEW_LINE);
+            dos.writeBytes("Location: " + "http://localhost:8080/index.html" + NEW_LINE);
+            dos.writeBytes(NEW_LINE);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
