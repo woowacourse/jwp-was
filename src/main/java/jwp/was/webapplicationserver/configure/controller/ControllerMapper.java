@@ -1,25 +1,24 @@
-package jwp.was.webapplicationserver.configure;
+package jwp.was.webapplicationserver.configure.controller;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import jwp.was.webapplicationserver.configure.ConfigureMaker;
 import jwp.was.webapplicationserver.configure.annotation.Controller;
 import jwp.was.webapplicationserver.configure.annotation.RequestMapping;
-import jwp.was.webapplicationserver.controller.handler.HttpInfo;
-import jwp.was.webapplicationserver.controller.handler.MatchedInfo;
 import jwp.was.webserver.dto.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class HttpInfoMethodMapper {
+public class ControllerMapper {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HttpInfoMethodMapper.class);
-    private static final HttpInfoMethodMapper INSTANCE = new HttpInfoMethodMapper();
+    private static final Logger LOGGER = LoggerFactory.getLogger(ControllerMapper.class);
+    private static final ControllerMapper INSTANCE = new ControllerMapper();
 
     private final Map<HttpInfo, Method> httpInfoMethodMapper;
 
-    private HttpInfoMethodMapper() {
+    private ControllerMapper() {
         Map<HttpInfo, Method> httpInfoMethodMapper = new HashMap<>();
         Set<Object> controllerInstances = ConfigureMaker.getInstance()
             .getConfiguresWithAnnotation(Controller.class);
@@ -31,7 +30,7 @@ public class HttpInfoMethodMapper {
         this.httpInfoMethodMapper = httpInfoMethodMapper;
     }
 
-    public static HttpInfoMethodMapper getInstance() {
+    public static ControllerMapper getInstance() {
         return INSTANCE;
     }
 

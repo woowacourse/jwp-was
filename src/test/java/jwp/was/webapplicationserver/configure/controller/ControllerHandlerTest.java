@@ -1,4 +1,4 @@
-package jwp.was.webapplicationserver.controller.handler;
+package jwp.was.webapplicationserver.configure.controller;
 
 import static jwp.was.util.Constants.CONTENT_TYPE_TEXT_PLAIN;
 import static jwp.was.util.Constants.HEADERS_EMPTY;

@@ -1,4 +1,4 @@
-package jwp.was.webapplicationserver.controller.handler;
+package jwp.was.webapplicationserver.configure.controller;
 
 import java.lang.reflect.Method;
 import java.util.Objects;

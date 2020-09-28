@@ -1,4 +1,4 @@
-package jwp.was.webapplicationserver.controller.handler;
+package jwp.was.webapplicationserver.configure.controller;
 
 import static jwp.was.webserver.HttpStatusCode.METHOD_NOT_ALLOW;
 import static jwp.was.webserver.HttpStatusCode.NOT_FOUND;
@@ -9,7 +9,6 @@ import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import jwp.was.webapplicationserver.configure.ConfigureMaker;
-import jwp.was.webapplicationserver.configure.HttpInfoMethodMapper;
 import jwp.was.webapplicationserver.controller.GlobalExceptionHandler;
 import jwp.was.webserver.dto.HttpRequest;
 import jwp.was.webserver.dto.HttpResponse;
@@ -22,14 +21,14 @@ public class ControllerHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(ControllerHandler.class);
 
     private final ConfigureMaker configureMaker = ConfigureMaker.getInstance();
-    private final HttpInfoMethodMapper httpInfoMethodMapper = HttpInfoMethodMapper.getInstance();
+    private final ControllerMapper controllerMapper = ControllerMapper.getInstance();
     private final GlobalExceptionHandler globalExceptionHandler = new GlobalExceptionHandler();
 
     public ControllerHandler() {
     }
 
     public void handleAPI(OutputStream out, HttpRequest httpRequest) throws IOException {
-        MatchedInfo matchedInfo = httpInfoMethodMapper.getMatchMethod(httpRequest);
+        MatchedInfo matchedInfo = controllerMapper.getMatchMethod(httpRequest);
 
         try (DataOutputStream dos = new DataOutputStream(out)) {
             HttpResponse httpResponse = makeHttpResponse(httpRequest, matchedInfo);
