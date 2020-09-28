@@ -21,7 +21,6 @@ public class StaticFileFilter implements Filter {
             String body = new String(FileIoUtils.loadFileFromClasspath(localPath), StandardCharsets.UTF_8);
 
             responseEntity.status(HttpStatus.OK)
-                .version("HTTP/1.1")
                 .addHeader(CONTENT_TYPE, FileExtensionType.findMatchingContentType(path).getType())
                 .body(body);
 

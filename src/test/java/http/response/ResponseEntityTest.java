@@ -26,7 +26,6 @@ class ResponseEntityTest {
         }};
 
         ResponseEntity responseEntity = ResponseEntity.generateWithStatus(HttpStatus.OK)
-            .version("HTTP/1.1")
             .addHeader("testKey", "testValue")
             .addHeader("Content-Type", ContentType.HTML.getType())
             .body(body);
@@ -42,7 +41,6 @@ class ResponseEntityTest {
     @Test
     public void convertToString() {
         ResponseEntity responseEntity = ResponseEntity.generateWithStatus(HttpStatus.OK)
-            .version("HTTP/1.1")
             .addHeader("Content-Type", ContentType.HTML.getType())
             .body("testBody");
 
