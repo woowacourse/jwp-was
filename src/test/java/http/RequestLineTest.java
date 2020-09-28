@@ -39,7 +39,7 @@ class RequestLineTest {
         InputStream in = new ByteArrayInputStream(request.getBytes());
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
         assertThatThrownBy(() -> new RequestLine(br)).isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Invalid");
+                .hasMessageContaining("Unsupported");
     }
 
     @Test
