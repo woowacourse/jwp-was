@@ -3,10 +3,10 @@ package controller;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import http.request.Request;
-import http.response.Response;
+import http.request.HttpRequest;
+import http.response.HttpResponse;
 
 public interface Controller {
 
-    void run(Request request, Response response) throws IOException, URISyntaxException;
+    void run(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException;
 }

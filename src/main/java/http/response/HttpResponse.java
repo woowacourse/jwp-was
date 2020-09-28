@@ -8,14 +8,14 @@ import org.slf4j.LoggerFactory;
 
 import webserver.RequestHandler;
 
-public class Response {
+public class HttpResponse {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private static final String NEW_LINE = System.lineSeparator();
 
     private DataOutputStream dos;
 
-    public Response(DataOutputStream dos) {
+    public HttpResponse(DataOutputStream dos) {
         this.dos = dos;
     }
 

@@ -3,16 +3,16 @@ package http.request;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RequestBody {
+public class HttpRequestBody {
 
     private Map<String, String> body;
 
-    public RequestBody(String paramLine) {
+    public HttpRequestBody(String paramLine) {
         this.body = handler(paramLine);
     }
 
-    public static RequestBody emptyBody() {
-        return new RequestBody("");
+    public static HttpRequestBody emptyBody() {
+        return new HttpRequestBody("");
     }
 
     private Map<String, String> handler(String paramLine) {

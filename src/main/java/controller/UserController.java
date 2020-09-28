@@ -1,7 +1,7 @@
 package controller;
 
-import http.request.Request;
-import http.response.Response;
+import http.request.HttpRequest;
+import http.response.HttpResponse;
 import service.UserService;
 
 public class UserController implements Controller {
@@ -9,8 +9,8 @@ public class UserController implements Controller {
     private UserService userService = UserService.getInstance();
 
     @Override
-    public void run(Request request, Response response) {
-        userService.create(request);
-        response.response302Header(Integer.parseInt(request.getHeaderByName("Content-Length")));
+    public void run(HttpRequest httpRequest, HttpResponse httpResponse) {
+        userService.create(httpRequest);
+        httpResponse.response302Header(Integer.parseInt(httpRequest.getHeaderByName("Content-Length")));
     }
 }

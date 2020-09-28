@@ -3,16 +3,16 @@ package controller;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import http.request.Request;
-import http.response.Response;
+import http.request.HttpRequest;
+import http.response.HttpResponse;
 import utils.FileIoUtils;
 
 public class IndexController implements Controller {
 
     @Override
-    public void run(Request request, Response response) throws IOException, URISyntaxException {
-        byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + request.getUri());
-        response.response200Header(request.getHeaderByName("Accept").split(",")[0], body.length);
-        response.responseBody(body);
+    public void run(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+        byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + httpRequest.getUri());
+        httpResponse.response200Header(httpRequest.getHeaderByName("Accept").split(",")[0], body.length);
+        httpResponse.responseBody(body);
     }
 }

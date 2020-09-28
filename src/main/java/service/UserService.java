@@ -1,7 +1,7 @@
 package service;
 
 import db.DataBase;
-import http.request.Request;
+import http.request.HttpRequest;
 import model.User;
 
 public class UserService {
@@ -10,8 +10,9 @@ public class UserService {
         return UserServiceHolder.INSTANCE;
     }
 
-    public void create(Request request) {
-        User user = new User(request.getBodyByName("userId"), request.getBodyByName("password"), request.getBodyByName("name"), request.getBodyByName("email"));
+    public void create(HttpRequest httpRequest) {
+        User user = new User(httpRequest.getBodyByName("userId"), httpRequest.getBodyByName("password"), httpRequest.getBodyByName("name"), httpRequest
+                .getBodyByName("email"));
         DataBase.addUser(user);
     }
 

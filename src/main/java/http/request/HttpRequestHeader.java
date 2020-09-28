@@ -3,11 +3,11 @@ package http.request;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RequestHeader {
+public class HttpRequestHeader {
 
     private Map<String, String> requestHeader;
 
-    public RequestHeader() {
+    public HttpRequestHeader() {
         this.requestHeader = new HashMap<>();
     }
 
