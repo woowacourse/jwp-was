@@ -8,6 +8,7 @@ import utils.StringUtils;
 public class HttpRequest {
 
     private static final String HTTP_HEADER_DELIMITER = ": ";
+    public static final String HTTP_HEADER_VALUE_DELIMITER = ",";
 
     private final RequestLine requestLine;
     private final RequestHeader requestHeader;
@@ -49,7 +50,12 @@ public class HttpRequest {
     }
 
     public String getHeader(String headerName) {
-        return requestHeader.getHeader(headerName);
+        String header = requestHeader.getHeader(headerName);
+        return getFirstHeaderSegment(header);
+    }
+
+    private String getFirstHeaderSegment(String header) {
+        return header.split(HTTP_HEADER_VALUE_DELIMITER)[0];
     }
 
     public String getParameter(String paramName) {

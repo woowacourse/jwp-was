@@ -10,12 +10,15 @@ import webserver.response.HttpResponse;
 
 public abstract class AbstractController implements Controller {
 
-    private static final Logger log = LoggerFactory.getLogger(ListUserController.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractController.class);
     private static final String ERROR_HTML_URL = "/error.html";
 
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
         try {
+            String acceptValue = httpRequest.getHeader("Accept");
+            httpResponse.setContentType(acceptValue);
+
             if (!httpRequest.isMethodSupported()) {
                 httpResponse.methodNotAllowed(ERROR_HTML_URL);
                 return;

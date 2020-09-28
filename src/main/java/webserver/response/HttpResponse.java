@@ -26,10 +26,13 @@ public class HttpResponse {
         responseHeader.putHeader(key, value);
     }
 
+    public void setContentType(String contentType) {
+        responseHeader.putHeader("Content-Type", contentType);
+    }
+
     public void forward(String path) throws IOException, URISyntaxException {
         statusLine = new StatusLine("HTTP/1.1 200");
         setResponseBody(path);
-        responseHeader.putHeader("Content-Type", HttpContentType.findContentType(path));
         responseHeader.putHeader("Content-Length", String.valueOf(responseBody.getContentLength()));
         writeHttpResponse();
     }
