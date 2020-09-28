@@ -52,7 +52,7 @@ public class RequestHandler implements Runnable {
             httpResponse = requestMethod.extractResponse(controller, httpRequest);
             HttpResponseUtils.response(dos, httpResponse);
         } catch (IllegalArgumentException e) {
-            HttpResponseUtils.response(dos, new HttpResponse(HttpResponseHeaderParser.response400Header()));
+            HttpResponseUtils.response(dos, new HttpResponse(HttpResponseHeaderParser.badRequest()));
         }
     }
 }
