@@ -18,4 +18,8 @@ public enum HttpMethod {
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException("허용되지 않은 HttpMethod: " + methodName));
     }
+
+    public String getMethodName() {
+        return methodName;
+    }
 }

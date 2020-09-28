@@ -2,17 +2,17 @@ package utils;
 
 import domain.user.User;
 import domain.user.dto.UserRequest;
+import webserver.request.HttpRequest;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.Map;
 
 public class UserMapper {
 
-    public static User createUser(Map<String, String> inputs) {
+    public static User createUser(HttpRequest httpRequest) {
         UserRequest userRequest = new UserRequest();
-        for (String key : inputs.keySet()) {
-            String value = inputs.get(key);
+        for (String key : httpRequest.getParametersKeys()) {
+            String value = httpRequest.getParameter(key);
             userRequest.set(key, decode(value));
         }
         return userRequest.toUser();

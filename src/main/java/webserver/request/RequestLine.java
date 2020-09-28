@@ -2,26 +2,25 @@ package webserver.request;
 
 public class RequestLine {
     private static final String QUERY_STRING_DELIMITER = "?";
-    private static final int MIN_INDEX = 0;
 
     private final HttpMethod httpMethod;
-    private final String resource;
+    private final String path;
+    private final String data;
 
-    public RequestLine(HttpMethod httpMethod, String resource) {
+    private RequestLine(HttpMethod httpMethod, String path, String data) {
         this.httpMethod = httpMethod;
-        this.resource = resource;
+        this.path = path;
+        this.data = data;
     }
 
-    public String extractQueryString() {
-        int startIndex = resource.indexOf(QUERY_STRING_DELIMITER);
-        validateQueryString(startIndex);
-        return resource.substring(startIndex + 1);
-    }
-
-    private void validateQueryString(int startIndex) {
-        if (startIndex < MIN_INDEX) {
-            throw new RuntimeException("QueryString을 포함하고 있지 않습니다.");
+    public static RequestLine of(HttpMethod httpMethod, String resource) {
+        if (resource.contains(QUERY_STRING_DELIMITER)) {
+            int startIndex = resource.indexOf(QUERY_STRING_DELIMITER);
+            String path = resource.substring(0, startIndex);
+            String data = resource.substring(startIndex + 1);
+            return new RequestLine(httpMethod, path, data);
         }
+        return new RequestLine(httpMethod, resource, null);
     }
 
     public boolean isMatchHttpMethod(HttpMethod httpMethod) {
@@ -29,10 +28,18 @@ public class RequestLine {
     }
 
     public boolean containsPath(String path) {
-        return resource.contains(path);
+        return this.path.contains(path);
     }
 
-    public String getResource() {
-        return resource;
+    public String getPath() {
+        return path;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public String getMethod() {
+        return this.httpMethod.getMethodName();
     }
 }

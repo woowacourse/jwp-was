@@ -2,7 +2,7 @@ package webserver.request;
 
 import controller.FileController;
 import domain.user.controller.UserController;
-import webserver.response.Response;
+import webserver.response.HttpResponse;
 
 import java.util.Arrays;
 import java.util.function.Function;
@@ -15,23 +15,23 @@ public enum HandlerMapping {
 
     private final HttpMethod httpMethod;
     private final String path;
-    private final Function<Request, Response> function;
+    private final Function<HttpRequest, HttpResponse> function;
 
-    HandlerMapping(HttpMethod httpMethod, String path, Function<Request, Response> function) {
+    HandlerMapping(HttpMethod httpMethod, String path, Function<HttpRequest, HttpResponse> function) {
         this.httpMethod = httpMethod;
         this.path = path;
         this.function = function;
     }
 
-    public static HandlerMapping from(Request request) {
+    public static HandlerMapping from(HttpRequest httpRequest) {
         return Arrays.stream(values())
-                .filter(handlerMapping -> request.isMatchHttpMethod(handlerMapping.httpMethod))
-                .filter(handlerMapping -> request.containsPath(handlerMapping.path))
+                .filter(handlerMapping -> httpRequest.isMatchHttpMethod(handlerMapping.httpMethod))
+                .filter(handlerMapping -> httpRequest.containsPath(handlerMapping.path))
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException("일치하는 컨트롤러를 찾지 못했습니다." + request.getResource()));
+                .orElseThrow(() -> new IllegalArgumentException("일치하는 컨트롤러를 찾지 못했습니다." + httpRequest.getPath()));
     }
 
-    public Response apply(Request request) {
-        return this.function.apply(request);
+    public HttpResponse apply(HttpRequest httpRequest) {
+        return this.function.apply(httpRequest);
     }
 }

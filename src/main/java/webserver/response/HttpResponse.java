@@ -8,28 +8,28 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-public class Response {
+public class HttpResponse {
     private final Status status;
     private final FileResponse fileResponse;
     private final String location;
 
-    private Response(Status status, FileResponse fileResponse, String location) {
+    private HttpResponse(Status status, FileResponse fileResponse, String location) {
         this.status = status;
         this.fileResponse = fileResponse;
         this.location = location;
     }
 
-    public static Response withFileResponse(Status status, FileResponse fileResponse) {
-        return new Response(status, fileResponse, null);
+    public static HttpResponse withFileResponse(Status status, FileResponse fileResponse) {
+        return new HttpResponse(status, fileResponse, null);
     }
 
-    public static Response withLocation(Status status, String location) {
-        return new Response(status, null, location);
+    public static HttpResponse withLocation(Status status, String location) {
+        return new HttpResponse(status, null, location);
     }
 
     public void respond(DataOutputStream dos) throws IOException, URISyntaxException {
         if (status == Status.FOUND) {
-            redirect302Header(dos);
+            sendRedirect(dos);
             return;
         }
         byte[] body = FileIoUtils.loadFileFromClasspath(fileResponse.getFilePath());
@@ -37,7 +37,7 @@ public class Response {
         responseBody(dos, body);
     }
 
-    private void redirect302Header(DataOutputStream dos) throws IOException {
+    private void sendRedirect(DataOutputStream dos) throws IOException {
         dos.writeBytes(String.format("%s %s \r\n", HttpVersion.USING_VERSION.get(), Status.FOUND.getStatus()));
         dos.writeBytes(ResponseHeader.LOCATION.make(this.location) + " \r\n");
         dos.flush();
