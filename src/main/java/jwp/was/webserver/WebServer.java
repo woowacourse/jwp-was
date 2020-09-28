@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import jwp.was.webapplicationserver.configure.HttpInfoMethodMapper;
 import jwp.was.webserver.handler.RequestHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,14 +40,16 @@ public class WebServer {
 
     private static void startConnectionThread(ServerSocket listenSocket, ExecutorService es)
         throws IOException {
+        // 중복된 RequestMapping이 있는지 확인한다.
+        HttpInfoMethodMapper.getInstance();
+
         // 클라이언트가 연결될때까지 대기한다.
         LOGGER.info("대기중");
         Socket connection;
         while ((connection = listenSocket.accept()) != null) {
             Socket threadConnection = connection;
             es.execute(() -> {
-                RequestHandler requestHandler
-                    = new RequestHandler(threadConnection);
+                RequestHandler requestHandler = new RequestHandler(threadConnection);
                 requestHandler.run();
                 LOGGER.info("실행 connection : {}", threadConnection.toString());
             });
