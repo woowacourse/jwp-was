@@ -20,7 +20,7 @@ public class HttpResponse {
             dataOutputStream.writeBytes("HTTP/1.1 200 OK " + System.lineSeparator());
             dataOutputStream.writeBytes("Content-Type:  " + contentType + ";charset=utf-8" + System.lineSeparator());
             dataOutputStream.writeBytes("Content-Length: " + lengthOfBodyContent + System.lineSeparator());
-            dataOutputStream.writeBytes("\r\n");
+            dataOutputStream.writeBytes(System.lineSeparator());
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -31,7 +31,6 @@ public class HttpResponse {
             dataOutputStream.writeBytes("HTTP/1.1 302 Found " + System.lineSeparator());
             dataOutputStream.writeBytes("Location: " + location + System.lineSeparator());
             dataOutputStream.writeBytes(System.lineSeparator());
-            dataOutputStream.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -41,7 +40,6 @@ public class HttpResponse {
         try {
             dataOutputStream.writeBytes("HTTP/1.1 404 Not Found " + System.lineSeparator());
             dataOutputStream.writeBytes(System.lineSeparator());
-            dataOutputStream.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -51,7 +49,6 @@ public class HttpResponse {
         try {
             dataOutputStream.writeBytes("HTTP/1.1 500 Internal Server Error " + System.lineSeparator());
             dataOutputStream.writeBytes(System.lineSeparator());
-            dataOutputStream.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -60,6 +57,14 @@ public class HttpResponse {
     public void responseBody(byte[] body) {
         try {
             dataOutputStream.write(body, 0, body.length);
+            dataOutputStream.flush();
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    public void emptyBody() {
+        try {
             dataOutputStream.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());

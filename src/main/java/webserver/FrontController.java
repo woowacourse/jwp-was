@@ -26,12 +26,14 @@ public class FrontController {
         } catch (HandlerNotFoundException exception) {
             logger.info(exception.getMessage());
             httpResponse.response404Header();
+            httpResponse.emptyBody();
         } catch (Exception exception) {
             httpResponse.response500Header();
+            httpResponse.emptyBody();
         }
     }
 
-    public Handler getHandler(final HttpRequest httpRequest) {
+    private Handler getHandler(final HttpRequest httpRequest) {
         return handlerMappings.keySet()
                 .stream()
                 .filter(requestMapping -> requestMapping.matches(httpRequest))

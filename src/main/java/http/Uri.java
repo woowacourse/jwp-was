@@ -27,7 +27,7 @@ public class Uri {
     }
 
     public boolean equalsPath(final String path) {
-        return getPath().equals(path);
+        return this.path.equals(path);
     }
 
     public String getPath() {
