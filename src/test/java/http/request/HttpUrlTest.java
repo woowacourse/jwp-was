@@ -4,8 +4,6 @@ import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import stringprocessor.Params;
-
 class HttpUrlTest {
 
     private static final String URL_WITHOUT_PARAM = "/user/create";
