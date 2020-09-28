@@ -1,10 +1,10 @@
 package util;
 
 import java.util.ArrayList;
-import webserver.dto.Headers;
-import webserver.dto.Parameters;
-import webserver.dto.Protocol;
-import webserver.dto.UrlPath;
+import jwp.was.webserver.dto.Headers;
+import jwp.was.webserver.dto.Parameters;
+import jwp.was.webserver.dto.Protocol;
+import jwp.was.webserver.dto.UrlPath;
 
 public class Constants {
 
