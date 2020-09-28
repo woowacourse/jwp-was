@@ -28,7 +28,8 @@ class ResponseEntityTest {
         ResponseEntity responseEntity = ResponseEntity.generateWithStatus(HttpStatus.OK)
             .version("HTTP/1.1")
             .addHeader("testKey", "testValue")
-            .body(body, ContentType.HTML);
+            .addHeader("Content-Type", ContentType.HTML.getType())
+            .body(body);
 
         assertAll(
             () -> assertThat(responseEntity.getHttpStatus()).isEqualTo(HttpStatus.OK),
@@ -42,7 +43,8 @@ class ResponseEntityTest {
     public void convertToString() {
         ResponseEntity responseEntity = ResponseEntity.generateWithStatus(HttpStatus.OK)
             .version("HTTP/1.1")
-            .body("testBody", ContentType.HTML);
+            .addHeader("Content-Type", ContentType.HTML.getType())
+            .body("testBody");
 
         assertThat(responseEntity.convertToString()).isEqualTo(HTTP_RESPONSE_STRING);
     }

@@ -2,7 +2,6 @@ package http.response;
 
 import java.util.Map;
 
-import http.ContentType;
 import http.HttpBody;
 import http.HttpHeader;
 
@@ -61,9 +60,8 @@ public class ResponseEntity {
         return this;
     }
 
-    public ResponseEntity body(String body, ContentType contentType) {
-        this.httpBody = HttpBody.of(body, contentType);
-        this.httpHeader.setOrReplaceHeader(CONTENT_TYPE, contentType.getType());
+    public ResponseEntity body(String body) {
+        this.httpBody = HttpBody.of(body);
         return this;
     }
 

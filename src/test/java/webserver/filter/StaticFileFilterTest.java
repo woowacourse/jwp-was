@@ -52,7 +52,8 @@ class StaticFileFilterTest {
 
         ResponseEntity expected = ResponseEntity.generateWithStatus(HttpStatus.OK)
             .version("HTTP/1.1")
-            .body(RESPONSE_BODY, ContentType.HTML);
+            .addHeader("Content-Type", ContentType.HTML.getType())
+            .body(RESPONSE_BODY);
 
         assertAll(
             () -> assertThat(result).isFalse(),

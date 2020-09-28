@@ -1,7 +1,6 @@
 package http;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
@@ -25,9 +24,6 @@ class HttpBodyTest {
     public void construct() {
         HttpBody httpBody =
             HttpBody.of(REQUEST_BUFFERED_READER, ContentType.APPLICATION_X_WWW_FORM_URLENCODED, CONTENT_LENGTH);
-        assertAll(
-            () -> assertThat(httpBody.getContent()).isEqualTo(REQUEST_CONTENT),
-            () -> assertThat(httpBody.getContentType()).isEqualTo(ContentType.APPLICATION_X_WWW_FORM_URLENCODED)
-        );
+        assertThat(httpBody.getContent()).isEqualTo(REQUEST_CONTENT);
     }
 }
