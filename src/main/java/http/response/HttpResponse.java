@@ -32,7 +32,7 @@ public class HttpResponse {
 
     public void response302Header(int lengthOfBodyContent) {
         try {
-            dos.writeBytes("HTTP/1.1 302 OK" + NEW_LINE);
+            dos.writeBytes("HTTP/1.1 302 FOUND" + NEW_LINE);
             dos.writeBytes("Content-Type: text/html;charset=utf-8" + NEW_LINE);
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + NEW_LINE);
             dos.writeBytes("Location: " + "http://localhost:8080/index.html" + NEW_LINE);
