@@ -1,12 +1,6 @@
 package utils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import webserver.RequestHandler;
-
 public class HttpResponseHeaderParser {
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-
     public static String response200Header(String contentType, int lengthOfBodyContent) {
         return "HTTP/1.1 200 OK \r\n" +
                 "Content-Type: " + contentType + "\r\n" +
