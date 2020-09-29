@@ -15,10 +15,6 @@ public class ControllerMapper {
         return Holder.INSTANCE;
     }
 
-    public boolean isEmpty() {
-        return controllers.isEmpty();
-    }
-
     public void addController(AbstractController controller) {
         controllers.put(controller.getPath(), controller);
     }

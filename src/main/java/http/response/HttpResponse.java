@@ -7,6 +7,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
+import java.util.Map;
 
 import static com.google.common.net.HttpHeaders.ACCEPT;
 
@@ -43,6 +44,19 @@ public class HttpResponse {
         try {
             dos.writeBytes("HTTP/1.1 302 FOUND " + System.lineSeparator());
             dos.writeBytes("Location: " + redirectPath + System.lineSeparator());
+            dos.writeBytes(System.lineSeparator());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendRedirect(String redirectPath, Map<String, String> headers) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 FOUND " + System.lineSeparator());
+            dos.writeBytes("Location: " + redirectPath + System.lineSeparator());
+            for (Map.Entry<String, String> header : headers.entrySet()) {
+                dos.writeBytes(String.format("%s: %s" + System.lineSeparator(), header.getKey(), header.getValue()));
+            }
             dos.writeBytes(System.lineSeparator());
         } catch (IOException e) {
             e.printStackTrace();

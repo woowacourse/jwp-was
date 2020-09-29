@@ -1,6 +1,7 @@
 package webserver;
 
 import controller.ControllerMapper;
+import controller.LoginController;
 import controller.UserController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,5 +38,6 @@ public class WebServer {
     private static void initControllerMapper() {
         ControllerMapper controllerMapper = ControllerMapper.getInstance();
         controllerMapper.addController(new UserController());
+        controllerMapper.addController(new LoginController());
     }
 }
