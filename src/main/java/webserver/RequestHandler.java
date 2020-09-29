@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +16,7 @@ import webserver.controller.DefaultController;
 import webserver.controller.ErrorController;
 import webserver.controller.ListUserController;
 import webserver.controller.LoginController;
+import webserver.controller.RequestHandlerMapping;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 
@@ -25,41 +25,35 @@ public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private final Socket connection;
-    private final Map<String, Controller> controllerMapper;
+    private final RequestHandlerMapping requestHandlerMapping;
 
 
-    public RequestHandler(Socket connectionSocket, Map<String, Controller> controllerMapper) {
+    public RequestHandler(Socket connectionSocket, RequestHandlerMapping requestHandlerMapping) {
         this.connection = connectionSocket;
-        this.controllerMapper = controllerMapper;
+        initRequestHandler(requestHandlerMapping);
+        this.requestHandlerMapping = requestHandlerMapping;
 
-        initControllerMapper(controllerMapper);
     }
 
-    private void initControllerMapper(Map<String, Controller> controllerMapper) {
-        controllerMapper.put("/js/jquery-2.2.0.min.js", new DefaultController());
-        controllerMapper.put("/js/bootstrap.min.js", new DefaultController());
-        controllerMapper.put("/js/scripts.js", new DefaultController());
-        controllerMapper.put("/css/bootstrap.min.css", new DefaultController());
-        controllerMapper.put("/css/styles.css", new DefaultController());
-        controllerMapper.put("/user/login_failed.html", new DefaultController());
-        controllerMapper.put("/user/profile.html", new DefaultController());
-        controllerMapper.put("/user/form.html", new DefaultController());
-        controllerMapper.put("/user/login.html", new DefaultController());
-        controllerMapper.put("/user/list.html", new ListUserController());
-        controllerMapper.put("/user/create", new CreateUserController());
-        controllerMapper.put("/user/login", new LoginController());
-        controllerMapper.put("/index.html", new DefaultController());
-        controllerMapper.put("/", new DefaultController());
+    private void initRequestHandler(RequestHandlerMapping requestHandlerMapping) {
+        requestHandlerMapping.putController("/user/list.html", new ListUserController());
+        requestHandlerMapping.putController("/user/create", new CreateUserController());
+        requestHandlerMapping.putController("/user/login", new LoginController());
+        requestHandlerMapping.putController("/", new DefaultController());
     }
 
     public void run() {
-        logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(), connection.getPort());
-        try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+        logger
+            .debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
+                connection.getPort());
+        try (InputStream in = connection.getInputStream(); OutputStream out = connection
+            .getOutputStream()) {
+            BufferedReader bufferedReader = new BufferedReader(
+                new InputStreamReader(in, StandardCharsets.UTF_8));
             HttpRequest httpRequest = new HttpRequest(bufferedReader);
             HttpResponse httpResponse = new HttpResponse(out);
 
-            Controller controller = controllerMapper.get(httpRequest.getPath());
+            Controller controller = requestHandlerMapping.getController(httpRequest.getPath());
             if (Objects.isNull(controller)) {
                 controller = new ErrorController();
             }

@@ -24,6 +24,11 @@ public enum FileExtension {
             .orElseThrow(() -> new IllegalArgumentException(uri + "에 해당하는 FileExtension을 찾지 못했습니다!"));
     }
 
+    public static boolean isFileExtension(String uri) {
+        return Arrays.stream(FileExtension.values())
+            .anyMatch(fileExtension -> fileExtension.isSameExtension(uri));
+    }
+
     public boolean isStaticDirectory() {
         return this.staticDirectory;
     }

@@ -1,6 +1,6 @@
 HTTP/1.1 200 Ok 
 Content-Length: 6902 
-Content-Type: text/html ;charset=utf-8 
+Content-Type: text/html 
 
 <!DOCTYPE html>
 <html lang="kr">
