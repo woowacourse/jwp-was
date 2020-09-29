@@ -34,6 +34,17 @@ public class IoUtil {
         return sb.toString();
     }
 
+    public static String readFile(String path, String directory) throws IOException {
+        File file = new File(directory + path);
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        String line;
+        StringBuilder sb = new StringBuilder();
+        while ((line = br.readLine()) != null) {
+            sb.append(line).append("\n");
+        }
+        return sb.toString();
+    }
+
     public static HttpRequest createRequest(String url) throws IOException {
         InputStream in = new FileInputStream(new File(testDirectory + url));
         return new HttpRequest(
