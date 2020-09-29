@@ -55,6 +55,15 @@ public class HttpResponse {
         }
     }
 
+    private void response405Header() {
+        try {
+            this.dataOutputStream.writeBytes("HTTP/1.1 405 Method Not Allowed" + NEW_LINE);
+            this.dataOutputStream.writeBytes(NEW_LINE);
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
     private void responseBody(DataOutputStream dos, byte[] body) {
         try {
             dos.write(body, 0, body.length);
@@ -84,14 +93,5 @@ public class HttpResponse {
 
     public void respondMethodNotAllowed() {
         response405Header();
-    }
-
-    private void response405Header() {
-        try {
-            this.dataOutputStream.writeBytes("HTTP/1.1 405 Method Not Allowed" + NEW_LINE);
-            this.dataOutputStream.writeBytes(NEW_LINE);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
     }
 }
