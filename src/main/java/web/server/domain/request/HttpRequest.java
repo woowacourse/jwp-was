@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 import web.server.utils.IOUtils;
+import web.server.utils.StaticFileType;
 
 public class HttpRequest {
 
@@ -53,6 +54,10 @@ public class HttpRequest {
 
     public String getPath() {
         return requestLine.getPath();
+    }
+
+    public StaticFileType findExtension() {
+        return requestLine.findExtension();
     }
 
     public int findContentLength() {

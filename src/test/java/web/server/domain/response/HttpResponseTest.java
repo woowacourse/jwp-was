@@ -9,15 +9,17 @@ import java.io.IOException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import web.server.utils.StaticFileType;
+
 public class HttpResponseTest {
 
-    private static final String INDEX_PAGE = "/index.html";
+    private static final String INDEX_PAGE = "./templates/index.html";
 
     @DisplayName("정적 파일을 요청했을 때 HttpResponse에 Status Code 200과 정적파일 내용이 담기는지 확인한다.")
     @Test
     public void responseForward() throws Exception {
         HttpResponse response = new HttpResponse(createOutputStream("/out/http_forward.txt"));
-        response.forward(INDEX_PAGE);
+        response.forward(INDEX_PAGE, StaticFileType.HTML);
         String actual = readFile("/out/http_forward.txt");
         assertAll(
             () -> assertThat(actual).contains("200"),

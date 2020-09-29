@@ -1,7 +1,9 @@
 package web.application.controller;
 
+import web.application.common.FilePathMapper;
 import web.server.domain.request.HttpRequest;
 import web.server.domain.response.HttpResponse;
+import web.server.utils.StaticFileType;
 
 public class StaticController extends AbstractController {
 
@@ -15,7 +17,12 @@ public class StaticController extends AbstractController {
 
     @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        httpResponse.forward(httpRequest.getPath());
+        FilePathMapper filePathMapper = FilePathMapper.getInstance();
+        StaticFileType staticFileType = httpRequest.findExtension();
+
+        String filePath = filePathMapper.addPrefix(httpRequest.getPath(), staticFileType);
+
+        httpResponse.forward(filePath, staticFileType);
     }
 
     private static class ControllerCache {

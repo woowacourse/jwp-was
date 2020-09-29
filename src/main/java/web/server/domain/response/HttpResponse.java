@@ -64,11 +64,9 @@ public class HttpResponse {
         }
     }
 
-    public void forward(String path) {
-        String[] split = path.split("\\.");
-        StaticFileType contentType = StaticFileType.from(split[split.length - 1]);
-        byte[] body = FileIoUtils.loadFileFromRequest(contentType, path);
-        headerParams.put("Content-Type", contentType.getContentType());
+    public void forward(String path, StaticFileType staticFileType) {
+        byte[] body = FileIoUtils.loadFileFromRequest(path);
+        headerParams.put("Content-Type", staticFileType.getContentType());
         headerParams.put("Content-Length", String.valueOf(body.length));
 
         response200Header();

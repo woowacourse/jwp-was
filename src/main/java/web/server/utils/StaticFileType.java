@@ -7,15 +7,14 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum StaticFileType {
 
-    HTML("./templates", "text/html"),
-    ICO("./templates", "image/icon"),
-    CSS("./static", "text/css"),
-    JS("./static", "Application/javascript"),
-    PNG("./static", "image/jpeg"),
-    TTF("./static", "application/font-ttf"),
-    WOFF("./static", "application/font-woff");
+    HTML("text/html"),
+    ICO("image/icon"),
+    CSS("text/css"),
+    JS("Application/javascript"),
+    PNG("image/jpeg"),
+    TTF("application/font-ttf"),
+    WOFF("application/font-woff");
 
-    private final String path;
     private final String contentType;
 
     public static StaticFileType from(String type) {
