@@ -12,11 +12,13 @@ public class RequestBody {
     private static final Logger log = LoggerFactory.getLogger(RequestBody.class);
     private static final String DEFAULT_CONTENT_TYPE = "application/x-www-form-urlencoded";
 
-    private final Object body;
+    private final String text;
+    private final RequestParameters requestParameters;
 
     public RequestBody(BufferedReader bufferedReader, RequestHeader requestHeader, RequestLine requestLine) throws IOException {
         if(!requestLine.hasBody()) {
-            this.body = null;
+            this.text = null;
+            this.requestParameters = null;
             return;
         }
 
@@ -26,10 +28,12 @@ public class RequestBody {
         String readBody = IOUtils.readData(bufferedReader, Integer.parseInt(contentLength));
 
         if (DEFAULT_CONTENT_TYPE.equals(contentType)) {
-            this.body = new RequestParameters(readBody);
+            this.text = null;
+            this.requestParameters = new RequestParameters(readBody);
             return;
         }
-        this.body = readBody;
+        this.text = readBody;
+        this.requestParameters = null;
     }
 
     private void validate(String contentLength, RequestLine requestLine) {
@@ -40,16 +44,16 @@ public class RequestBody {
     }
 
     public String getBody() {
-        validateBody();
-        return (String) body;
+        validateBody(text);
+        return text;
     }
 
     public String getParameter(String paramName) {
-        validateBody();
-        return ((RequestParameters) body).getValue(paramName);
+        validateBody(requestParameters);
+        return requestParameters.getValue(paramName);
     }
 
-    private void validateBody() {
+    private void validateBody(Object body) {
         if (Objects.isNull(body)) {
             log.error("Request Body is Null!");
             throw new IllegalArgumentException("Request Body가 null입니다!");
