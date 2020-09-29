@@ -4,6 +4,8 @@ import java.util.Map;
 import java.util.Objects;
 
 public class RequestHeader {
+    public static final String COOKIE = "Cookie";
+
     private final Map<String, String> header;
 
     public RequestHeader(Map<String, String> header) {
@@ -16,6 +18,11 @@ public class RequestHeader {
 
     public boolean containsKey(String key) {
         return header.containsKey(key);
+    }
+
+    public boolean isLogined() {
+        String cookie = header.get(COOKIE);
+        return cookie.contains("logined=true");
     }
 
     @Override

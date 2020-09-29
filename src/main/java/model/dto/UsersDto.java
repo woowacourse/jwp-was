@@ -2,16 +2,16 @@ package model.dto;
 
 import model.domain.User;
 
-import java.util.List;
+import java.util.Collection;
 
 public class UsersDto {
-    private final List<User> users;
+    private final Collection<User> users;
 
-    public UsersDto(List<User> users) {
+    public UsersDto(Collection<User> users) {
         this.users = users;
     }
 
-    public List<User> getUsers() {
+    public Collection<User> getUsers() {
         return users;
     }
 }

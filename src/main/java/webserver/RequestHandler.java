@@ -7,7 +7,6 @@ import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.FileIoUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -55,15 +54,18 @@ public class RequestHandler implements Runnable {
     }
 
     private void findStaticResources(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
-        if (isNotFound(httpRequest)) {
+        if (httpRequest.isNotFound()) {
             httpResponse.notFound();
             return;
+        }
+        if (httpRequest.isMemberService() && httpRequest.isNotLogined()) {
+            httpResponse.sendRedirect("/user/login.html");
+            return;
+        }
+        if (httpRequest.isDynamicPage()) {
+            httpResponse.sendRedirect(httpRequest.getPath().replace(".html", ""));
         }
         httpResponse.forward(httpRequest);
     }
 
-    private boolean isNotFound(HttpRequest httpRequest) throws IOException, URISyntaxException {
-        byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getPath());
-        return body.length == 0;
-    }
 }

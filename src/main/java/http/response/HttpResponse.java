@@ -24,6 +24,14 @@ public class HttpResponse {
         responseBody(body);
     }
 
+    public void forwardDynamicPage(HttpRequest httpRequest, byte[] body) throws IOException {
+        dos.writeBytes("HTTP/1.1 200 OK " + System.lineSeparator());
+        dos.writeBytes("Content-Type: " + findContentType(httpRequest) + System.lineSeparator());
+        dos.writeBytes("Content-Length: " + body.length + System.lineSeparator());
+        dos.writeBytes(System.lineSeparator());
+        dos.write(body);
+    }
+
     private void responseHeader(HttpRequest httpRequest, byte[] body) throws IOException {
         dos.writeBytes("HTTP/1.1 200 OK " + System.lineSeparator());
         dos.writeBytes("Content-Type: " + findContentType(httpRequest) + System.lineSeparator());
