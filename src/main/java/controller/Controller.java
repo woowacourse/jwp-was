@@ -8,5 +8,5 @@ import http.response.HttpResponse;
 
 public interface Controller {
 
-    void run(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException;
+    void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException;
 }

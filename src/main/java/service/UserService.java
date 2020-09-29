@@ -10,7 +10,13 @@ public class UserService {
         return UserServiceHolder.INSTANCE;
     }
 
-    public void create(HttpRequest httpRequest) {
+    public void createRequestParams(HttpRequest httpRequest) {
+        User user = new User(httpRequest.getHttpRequestParamsByName("userId"), httpRequest.getHttpRequestParamsByName("password"), httpRequest.getHttpRequestParamsByName("name"), httpRequest
+                .getHttpRequestParamsByName("email"));
+        DataBase.addUser(user);
+    }
+
+    public void createRequestBody(HttpRequest httpRequest) {
         User user = new User(httpRequest.getHttpRequestBodyByName("userId"), httpRequest.getHttpRequestBodyByName("password"), httpRequest.getHttpRequestBodyByName("name"), httpRequest
                 .getHttpRequestBodyByName("email"));
         DataBase.addUser(user);

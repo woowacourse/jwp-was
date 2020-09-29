@@ -10,6 +10,6 @@ public class HttpHttpRequestLineTest {
     void getUri() {
         HttpRequestLine httpRequestLine = new HttpRequestLine("GET", "/index.html", "HTTP/1.1");
 
-        assertThat(httpRequestLine.getUri()).isEqualTo("/index.html");
+        assertThat(httpRequestLine.getUrl()).isEqualTo("/index.html");
     }
 }

@@ -7,12 +7,15 @@ import http.request.HttpRequest;
 import http.response.HttpResponse;
 import utils.FileIoUtils;
 
-public class IndexController implements Controller {
+public class StaticController extends AbstractController {
 
     @Override
-    public void run(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
-        byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + httpRequest.getUri());
+    void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+        byte[] body = FileIoUtils.loadFileFromClasspath("./static" + httpRequest.getUrl());
         httpResponse.response200Header(httpRequest.getHeaderByName("Accept").split(",")[0], body.length);
         httpResponse.responseBody(body);
     }
+
+    @Override
+    void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {}
 }

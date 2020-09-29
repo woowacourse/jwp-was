@@ -36,12 +36,12 @@ public class RequestHandler implements Runnable {
 
             HttpRequest httpRequest = HttpRequestParser.parse(br);
 
-            ControllerType controllerType = ControllerType.find(httpRequest.getUri());
+            ControllerType controllerType = ControllerType.find(httpRequest);
             Controller controller = controllerType.getController();
 
             HttpResponse httpResponse = new HttpResponse(new DataOutputStream(out));
 
-            controller.run(httpRequest, httpResponse);
+            controller.service(httpRequest, httpResponse);
 
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());

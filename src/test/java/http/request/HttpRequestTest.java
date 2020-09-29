@@ -21,7 +21,7 @@ public class HttpRequestTest {
 
     @Test
     void getUri() {
-        assertThat(httpRequest.getUri()).isEqualTo("/user/create");
+        assertThat(httpRequest.getUrl()).isEqualTo("/user/create");
     }
 
     @Test

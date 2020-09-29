@@ -24,7 +24,7 @@ public class UserServiceTest {
         HttpRequestBody httpRequestBody = new HttpRequestBody("userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net");
 
         HttpRequest httpRequest = new HttpRequest(httpRequestLine, httpRequestHeader, httpRequestBody);
-        userService.create(httpRequest);
+        userService.createRequestBody(httpRequest);
 
         final Collection<User> user = DataBase.findAll();
 

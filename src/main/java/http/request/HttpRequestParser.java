@@ -28,7 +28,7 @@ public class HttpRequestParser {
     private static HttpRequestLine parseRequestLine(BufferedReader br) throws IOException {
         String line = br.readLine();
         String[] lines = line.split(BLANK);
-        HttpRequestLine httpRequestLine = new HttpRequestLine(lines[0], lines[1], lines[2]);
+        HttpRequestLine httpRequestLine = new HttpRequestLine(lines[0], new HttpRequestUrl(lines[1]), lines[2]);
         logger.debug("request line : {}", line);
         return httpRequestLine;
     }

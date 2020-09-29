@@ -2,17 +2,25 @@ package http.request;
 
 public class HttpRequestLine {
 
-    private String method;
-    private String uri;
-    private String version;
+    private final String method;
+    private final HttpRequestUrl httpRequestUrl;
+    private final String version;
 
-    public HttpRequestLine(String method, String uri, String version) {
+    public HttpRequestLine(final String method, final HttpRequestUrl httpRequestUrl, final String version) {
         this.method = method;
-        this.uri = uri;
+        this.httpRequestUrl = httpRequestUrl;
         this.version = version;
     }
 
-    public String getUri() {
-        return uri;
+    public String getMethod() {
+        return this.method;
+    }
+
+    public String getUrl() {
+        return this.httpRequestUrl.getUrl();
+    }
+
+    public String getValue(final String name) {
+        return this.httpRequestUrl.getValue(name);
     }
 }

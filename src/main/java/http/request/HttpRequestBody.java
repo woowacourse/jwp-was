@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class HttpRequestBody {
 
-    private Map<String, String> body;
+    private final Map<String, String> body;
 
     public HttpRequestBody(String paramLine) {
         this.body = handler(paramLine);
@@ -22,7 +22,7 @@ public class HttpRequestBody {
         return mapping(paramLine);
     }
 
-    private Map<String, String> mapping(String paramLine) {
+    private Map<String, String> mapping(final String paramLine) {
         Map<String, String> body = new HashMap<>();
         String[] params = paramLine.split("&");
 
@@ -34,11 +34,11 @@ public class HttpRequestBody {
         return body;
     }
 
-    public String getValue(String name) {
-        return body.get(name);
+    public String getValue(final String name) {
+        return this.body.get(name);
     }
 
     public Map<String, String> getBody() {
-        return body;
+        return this.body;
     }
 }

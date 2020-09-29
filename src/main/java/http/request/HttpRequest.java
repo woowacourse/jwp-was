@@ -2,25 +2,33 @@ package http.request;
 
 public class HttpRequest {
 
-    private HttpRequestLine httpRequestLine;
-    private HttpRequestHeader httpRequestHeader;
-    private HttpRequestBody httpRequestBody;
+    private final HttpRequestLine httpRequestLine;
+    private final HttpRequestHeader httpRequestHeader;
+    private final HttpRequestBody httpRequestBody;
 
-    public HttpRequest(HttpRequestLine httpRequestLine, HttpRequestHeader httpRequestHeader, HttpRequestBody httpRequestBody) {
+    public HttpRequest(final HttpRequestLine httpRequestLine, final HttpRequestHeader httpRequestHeader, final HttpRequestBody httpRequestBody) {
         this.httpRequestLine = httpRequestLine;
         this.httpRequestHeader = httpRequestHeader;
         this.httpRequestBody = httpRequestBody;
     }
 
-    public String getUri() {
-        return httpRequestLine.getUri();
+    public String getMethod() {
+        return this.httpRequestLine.getMethod();
     }
 
-    public String getHeaderByName(String name) {
-        return httpRequestHeader.getValue(name);
+    public String getUrl() {
+        return this.httpRequestLine.getUrl();
     }
 
-    public String getHttpRequestBodyByName(String name) {
-        return httpRequestBody.getValue(name);
+    public String getHeaderByName(final String name) {
+        return this.httpRequestHeader.getValue(name);
+    }
+
+    public String getHttpRequestBodyByName(final String name) {
+        return this.httpRequestBody.getValue(name);
+    }
+
+    public String getHttpRequestParamsByName(final String name) {
+        return this.httpRequestLine.getValue(name);
     }
 }
