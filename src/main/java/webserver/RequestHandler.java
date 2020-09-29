@@ -13,10 +13,10 @@ import org.slf4j.LoggerFactory;
 
 import http.HttpRequest;
 import http.HttpResponse;
-import http.StaticResourceType;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final FrontController frontController = new FrontController();
 
     private Socket connection;
 
@@ -34,15 +34,9 @@ public class RequestHandler implements Runnable {
              BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
              OutputStream outputStream = connection.getOutputStream();
              DataOutputStream dataOutputStream = new DataOutputStream(outputStream)) {
-
             HttpRequest httpRequest = HttpRequest.from(bufferedReader);
             HttpResponse httpResponse = new HttpResponse(dataOutputStream);
-
-            if (StaticResourceType.anyMatch(httpRequest.getUri())) {
-                new ResourceRequestHandler().handleRequest(httpRequest, httpResponse);
-            } else {
-                new FrontController().doService(httpRequest, httpResponse);
-            }
+            frontController.doService(httpRequest, httpResponse);
         } catch (Exception exception) {
             logger.error(exception.getMessage());
         }

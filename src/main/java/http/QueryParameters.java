@@ -2,6 +2,7 @@ package http;
 
 import static java.util.stream.Collectors.*;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -26,7 +27,7 @@ public class QueryParameters {
     }
 
     public Map<String, String> getParameters() {
-        return parameters;
+        return Collections.unmodifiableMap(parameters);
     }
 
     @Override

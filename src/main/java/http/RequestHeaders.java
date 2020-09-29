@@ -2,6 +2,7 @@ package http;
 
 import static java.util.stream.Collectors.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -34,6 +35,6 @@ public class RequestHeaders {
     }
 
     public Map<String, String> getHeaders() {
-        return headers;
+        return Collections.unmodifiableMap(headers);
     }
 }

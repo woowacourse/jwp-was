@@ -62,4 +62,13 @@ public class HttpRequest {
     public RequestBody getRequestBody() {
         return requestBody;
     }
+
+    @Override
+    public String toString() {
+        return "HttpRequest{" +
+                "requestLine=" + requestLine +
+                ", requestHeaders=" + requestHeaders +
+                ", requestBody=" + requestBody +
+                '}';
+    }
 }
