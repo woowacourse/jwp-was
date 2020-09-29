@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import controller.Controller;
-import controller.ControllerType;
+import controller.type.ControllerType;
 import http.request.HttpRequest;
 import http.request.HttpRequestParser;
 import http.response.HttpResponse;

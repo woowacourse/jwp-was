@@ -1,4 +1,4 @@
-package http.request;
+package controller.type.resource;
 
 import java.util.Arrays;
 

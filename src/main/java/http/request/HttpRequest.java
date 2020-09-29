@@ -20,15 +20,15 @@ public class HttpRequest {
         return this.httpRequestLine.getUrl();
     }
 
-    public String getHeaderByName(final String name) {
+    public String getHttpRequestHeaderByName(final String name) {
         return this.httpRequestHeader.getValue(name);
-    }
-
-    public String getHttpRequestBodyByName(final String name) {
-        return this.httpRequestBody.getValue(name);
     }
 
     public String getHttpRequestParamsByName(final String name) {
         return this.httpRequestLine.getValue(name);
+    }
+
+    public String getHttpRequestBodyByName(final String name) {
+        return this.httpRequestBody.getValue(name);
     }
 }

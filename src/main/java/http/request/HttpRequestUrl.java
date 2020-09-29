@@ -33,16 +33,8 @@ public class HttpRequestUrl {
         return new HashMap<>();
     }
 
-    public boolean isEmptyParameters() {
-        return this.parameters.isEmpty();
-    }
-
     public String getUrl() {
         return this.url;
-    }
-
-    public Map<String, String> getParameters() {
-        return this.parameters;
     }
 
     public String getValue(final String name) {

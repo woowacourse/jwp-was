@@ -1,11 +1,15 @@
-package controller;
+package controller.type;
 
 import java.util.Arrays;
 import java.util.function.Predicate;
 
+import controller.Controller;
+import controller.StaticController;
+import controller.type.resource.StaticType;
+import controller.TemplateController;
+import controller.type.resource.TemplateType;
+import controller.UserController;
 import http.request.HttpRequest;
-import http.request.StaticType;
-import http.request.TemplateType;
 
 public enum ControllerType {
 
