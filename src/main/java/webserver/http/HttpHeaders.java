@@ -22,10 +22,11 @@ public class HttpHeaders {
     }
 
     public String getValue(String key) {
-        if (!requestHeaders.containsKey(key)) {
-            throw new IllegalArgumentException("해당 key의 header 값이 없습니다.");
-        }
         return requestHeaders.get(key);
+    }
+
+    public String getValueOrDefault(String key, String defaultValue) {
+        return requestHeaders.getOrDefault(key, defaultValue);
     }
 
     public int getContentLength() {
