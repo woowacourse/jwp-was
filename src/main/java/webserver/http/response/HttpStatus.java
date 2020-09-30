@@ -11,4 +11,8 @@ public enum HttpStatus {
         this.code = code;
         this.text = text;
     }
+
+    public String toHttpMessage() {
+        return this.code + " " + this.text;
+    }
 }
