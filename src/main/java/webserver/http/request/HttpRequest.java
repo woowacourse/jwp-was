@@ -49,4 +49,8 @@ public class HttpRequest {
     public String getHttpBodyValueOf(String key) {
         return httpRequestBody.getValue(key);
     }
+
+    public HttpHeaders getHttpRequestHeaders() {
+        return httpRequestHeaders;
+    }
 }

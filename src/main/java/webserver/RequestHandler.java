@@ -32,7 +32,7 @@ public class RequestHandler implements Runnable {
                 new InputStreamReader(inputStream, StandardCharsets.UTF_8));
             HttpRequest httpRequest = new HttpRequest(bufferedReader);
             DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-            HttpResponse httpResponse = new HttpResponse(dataOutputStream);
+            HttpResponse httpResponse = new HttpResponse(dataOutputStream, httpRequest);
 
             ResponseHandler.run(httpRequest, httpResponse);
         } catch (IOException e) {

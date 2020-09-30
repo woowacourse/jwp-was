@@ -3,10 +3,12 @@ package webserver.http.response;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import webserver.http.HttpHeaders;
 import webserver.http.request.HttpRequest;
 import webserver.http.request.StaticFiles;
 import webserver.utils.FileIoUtils;
@@ -20,16 +22,28 @@ public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
     private final DataOutputStream dataOutputStream;
+    private HttpHeaders httpHeaders;
+    private HttpStatus httpStatus;
+    private HttpResponseBody httpResponseBody;
 
-    public HttpResponse(DataOutputStream dataOutputStream) {
+    public HttpResponse(DataOutputStream dataOutputStream, HttpRequest httpRequest) {
         this.dataOutputStream = dataOutputStream;
+        this.httpHeaders = httpRequest.getHttpRequestHeaders();
     }
 
-    public void send(ResponseEntity<?> responseEntity) throws IOException {
-        dataOutputStream.writeBytes(HttpStatusLine.convertToString(responseEntity.getHttpStatus()) + LINE_SEPARATOR);
-        responseEntity.writeHeaders(dataOutputStream);
-        if (!responseEntity.isBodyNull()) {
-            dataOutputStream.writeBytes((String)(responseEntity.getBody()));
+    public void addHttpHeader(String key, String value) {
+        httpHeaders.put(key, value);
+    }
+
+    public void setHttpStatus(HttpStatus httpStatus) {
+        this.httpStatus = httpStatus;
+    }
+
+    public void send() throws IOException {
+        dataOutputStream.writeBytes(HttpStatusLine.convertToString(httpStatus) + LINE_SEPARATOR);
+        httpHeaders.write(dataOutputStream);
+        if (httpResponseBody.isNotEmpty()) {
+            dataOutputStream.writeBytes(Arrays.toString(httpResponseBody.getBody()));
         }
     }
 
