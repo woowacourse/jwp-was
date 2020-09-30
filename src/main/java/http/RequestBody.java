@@ -10,13 +10,21 @@ import java.util.Map;
 public class RequestBody {
     private final Map<String, String> params;
 
-    public RequestBody(BufferedReader br, int contentLength) throws IOException {
+    public RequestBody(BufferedReader br, int contentLength, String contentType) throws IOException {
         params = new HashMap<>();
         String body = IOUtils.readData(br, contentLength);
         if (body.isEmpty()) {
             return;
         }
 
+        if (contentType.equals("application/x-www-form-urlencoded")) {
+            parseWWWForm(body);
+        } else {
+            throw new UnsupportedOperationException("Unsupported content-type.");
+        }
+    }
+
+    private void parseWWWForm(String body) {
         String[] tokens = body.split("&");
         for (String token : tokens) {
             String[] keyValue = token.split("=");
