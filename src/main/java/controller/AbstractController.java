@@ -37,11 +37,19 @@ abstract public class AbstractController implements Controller {
         }
     }
 
-    abstract protected HttpResponse doGet(HttpRequest httpRequest);
+    protected HttpResponse doGet(HttpRequest httpRequest) {
+        return new HttpResponse(StatusCode.NOT_FOUND);
+    }
 
-    abstract protected HttpResponse doPost(HttpRequest httpRequest);
+    protected HttpResponse doPost(HttpRequest httpRequest) {
+        return new HttpResponse(StatusCode.NOT_FOUND);
+    }
 
-    abstract protected HttpResponse doPut(HttpRequest httpRequest);
+    protected HttpResponse doPut(HttpRequest httpRequest) {
+        return new HttpResponse(StatusCode.NOT_FOUND);
+    }
 
-    abstract protected HttpResponse doDelete(HttpRequest httpRequest);
+    protected HttpResponse doDelete(HttpRequest httpRequest) {
+        return new HttpResponse(StatusCode.NOT_FOUND);
+    }
 }
