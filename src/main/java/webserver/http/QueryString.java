@@ -31,6 +31,10 @@ public class QueryString {
         return new QueryString(params);
     }
 
+    public static QueryString empty() {
+        return new QueryString(new HashMap<>());
+    }
+
     private static Map<String, String> createParams(String queryString) {
         Map<String, String> params = new HashMap<>();
 

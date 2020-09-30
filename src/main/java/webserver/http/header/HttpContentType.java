@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.function.Function;
 
 public enum HttpContentType {
-    APPLICATION_X_WWW_FORM_URLENCODED("application/x-www-form-urlencoded", DefaultHttpBody::new);
+    APPLICATION_X_WWW_FORM_URLENCODED("application/x-www-form-urlencoded", DefaultHttpBody::from);
 
     private final String name;
     private final Function<String, HttpBody> httpBodyCreator;

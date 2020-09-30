@@ -55,7 +55,7 @@ public class RequestHandler implements Runnable {
                     .addHeader("Content-Type", httpUri.getContentType() + ";charset=utf-8")
                     .addHeader("Content-Length", String.valueOf(fileBytes.length))
                     .build();
-            HttpBody httpbody = new DefaultHttpBody(new String(fileBytes, 0, fileBytes.length));
+            HttpBody httpbody = DefaultHttpBody.from(new String(fileBytes, 0, fileBytes.length));
             return new HttpMessage(statusLine, httpHeader, httpbody);
         } catch (Exception e) {
             StatusLine statusLine = new StatusLine(HttpStatus.FOUND);
