@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import webserver.domain.Protocol;
 import webserver.exception.IncorrectProtocolException;
 
 class ProtocolTest {

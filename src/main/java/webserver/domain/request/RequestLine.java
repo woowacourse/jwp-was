@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Map;
 
+import webserver.domain.Protocol;
 import webserver.exception.NotReadableHttpMessageException;
 
 public class RequestLine {

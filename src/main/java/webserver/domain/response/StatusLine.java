@@ -1,28 +1,17 @@
 package webserver.domain.response;
 
-import java.util.Arrays;
+import webserver.domain.Protocol;
 
-public enum StatusLine {
-    OK("200", "HTTP/1.1 200 OK"),
-    Found("302", "HTTP/1.1 302 Found"),
-    ELSE("", "");
+public class StatusLine {
+    private final Protocol protocol;
+    private final StatusCode statusCode;
 
-    private final String code;
-    private final String value;
-
-    StatusLine(String code, String value) {
-        this.code = code;
-        this.value = value;
-    }
-
-    public static StatusLine of(String code) {
-        return Arrays.stream(values())
-            .filter(statusLine -> statusLine.code.equals(code))
-            .findAny()
-            .orElse(ELSE);
+    public StatusLine(Protocol protocol, StatusCode statusCode) {
+        this.protocol = protocol;
+        this.statusCode = statusCode;
     }
 
     public String getValue() {
-        return value;
+        return String.format("%s %s", protocol.getValue(), statusCode.getValue());
     }
 }

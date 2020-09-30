@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import webserver.domain.request.HttpRequest;
 import webserver.domain.response.HttpResponse;
-import webserver.domain.response.ResponseHeader;
 import webserver.servlet.Servlet;
 import webserver.servlet.UserCreate;
 
@@ -51,20 +50,21 @@ public class RequestHandler implements Runnable {
         if (httpRequest.isForStaticContent()) {
             String path = httpRequest.getPath();
             byte[] body = FileIoUtils.loadFileFromClasspath(path);
-            Map<String, String> headerFields = new HashMap<>();
+            String contentType = "";
             if (path.endsWith(".html")) {
-                headerFields.put("Content-Type", "text/html;charset=utf-8");
+                contentType = "text/html;charset=utf-8";
             } else if (path.endsWith(".css")) {
-                headerFields.put("Content-Type", "text/css");
+                contentType = "text/css";
             } else if (path.endsWith(".js")) {
-                headerFields.put("Content-Type", "application/javascript");
+                contentType = "application/javascript";
             } else {
-                headerFields.put("Content-Type", "text/plain");
+                contentType = "text/plain";
             }
-            logger.debug("Content-Type : {}", headerFields.get("Content-Type"));
-            headerFields.put("Content-Length", String.valueOf(body.length));
-            ResponseHeader responseHeader = new ResponseHeader(headerFields);
-            return HttpResponse.of("200", responseHeader, body);
+            return HttpResponse.ok()
+                .contentType(contentType)
+                .contentLength(body.length)
+                .body(body)
+                .build();
         }
 
         if (httpRequest.isForDynamicContent()) {
@@ -72,10 +72,7 @@ public class RequestHandler implements Runnable {
             Class<? extends Servlet> servletClass = controller.get(path);
             Servlet servlet = servletClass.newInstance();
             servlet.service(httpRequest);
-            Map<String, String> headerFields = new HashMap<>();
-            headerFields.put("Location", "/index.html");
-            ResponseHeader responseHeader = new ResponseHeader(headerFields);
-            return HttpResponse.of("302", responseHeader);
+            return HttpResponse.found("/index.html").build();
         }
 
         throw new AssertionError("HttpRequest는 정적 혹은 동적 컨텐츠 요청만 가능합니다.");

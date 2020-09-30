@@ -1,4 +1,4 @@
-package webserver.domain.request;
+package webserver.domain;
 
 import java.util.Arrays;
 
@@ -23,5 +23,9 @@ public enum Protocol {
             .filter(value -> value.identifier.equals(identifier))
             .findAny()
             .orElseThrow(() -> new IncorrectProtocolException(identifier));
+    }
+
+    public String getValue() {
+        return identifier;
     }
 }
