@@ -19,7 +19,7 @@ class RequestBodyTest {
         InputStream in = new ByteArrayInputStream(request.getBytes());
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
-        RequestBody requestBody = new RequestBody(br, 93);
+        RequestBody requestBody = new RequestBody(br, 93, "application/x-www-form-urlencoded");
 
         assertEquals("javajigi", requestBody.getValue("userid"));
         assertEquals("password", requestBody.getValue("password"));
@@ -36,7 +36,7 @@ class RequestBodyTest {
         InputStream in = new ByteArrayInputStream(request.getBytes());
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
-        assertThatThrownBy(() -> new RequestBody(br, 85))
+        assertThatThrownBy(() -> new RequestBody(br, 85, "application/x-www-form-urlencoded"))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("password");
     }

@@ -36,6 +36,10 @@ public class RequestHeader {
         return Integer.parseInt(contentLength);
     }
 
+    public String getContentType() {
+        return getHeaderParamValue(HeaderParam.CONTENT_TYPE);
+    }
+
     private String getHeaderParamValue(HeaderParam headerParam) {
         return this.params.get(headerParam.getParamName());
     }

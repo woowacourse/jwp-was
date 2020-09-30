@@ -11,7 +11,7 @@ public class HttpRequest {
     public HttpRequest(BufferedReader br) throws IOException {
         this.requestLine = new RequestLine(br);
         this.requestHeader = new RequestHeader(br);
-        this.requestBody = new RequestBody(br, this.requestHeader.getContentLength());
+        this.requestBody = new RequestBody(br, this.requestHeader.getContentLength(), this.requestHeader.getContentType());
     }
 
     public String getPath() {
