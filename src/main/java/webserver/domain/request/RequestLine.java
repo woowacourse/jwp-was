@@ -5,21 +5,21 @@ import java.util.Map;
 public class RequestLine {
     private final Method method;
     private final Uri uri;
-    private final HttpVersion version;
+    private final Protocol protocol;
 
-    public RequestLine(Method method, Uri uri, HttpVersion version) {
+    public RequestLine(Method method, Uri uri, Protocol protocol) {
         this.method = method;
         this.uri = uri;
-        this.version = version;
+        this.protocol = protocol;
     }
 
     public static RequestLine of(String source) {
         String[] sources = source.split(" ");
         Method method = Method.of(sources[0]);
         Uri uri = Uri.of(sources[1]);
-        HttpVersion httpVersion = HttpVersion.of(sources[2]);
+        Protocol protocol = Protocol.of(sources[2]);
 
-        return new RequestLine(method, uri, httpVersion);
+        return new RequestLine(method, uri, protocol);
     }
 
     public boolean isTemplatesResource() {
