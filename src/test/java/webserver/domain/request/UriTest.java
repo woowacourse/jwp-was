@@ -9,10 +9,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class UriTest {
-    @DisplayName("Uri의 파라미터를 올바로 분리한다.")
+    @DisplayName("Uri의 파라미터를 &와 ;를 기준으로 분리한다.")
     @Test
     void of_shouldSplitParameters() {
-        Uri uri = Uri.of("/user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net");
+        Uri uri = Uri.of("/user/create?userId=javajigi&password=password;name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net");
 
         Map<String, String> expectedParameters = new HashMap<>();
         expectedParameters.put("userId", "javajigi");
