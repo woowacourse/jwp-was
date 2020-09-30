@@ -13,9 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import utils.FileIoUtils;
-import webserver.domain.Header;
 import webserver.domain.request.HttpRequest;
 import webserver.domain.response.HttpResponse;
+import webserver.domain.response.ResponseHeader;
 import webserver.servlet.Servlet;
 import webserver.servlet.UserCreate;
 
@@ -63,8 +63,8 @@ public class RequestHandler implements Runnable {
             }
             logger.debug("Content-Type : {}", headerFields.get("Content-Type"));
             headerFields.put("Content-Length", String.valueOf(body.length));
-            Header header = new Header(headerFields);
-            return HttpResponse.of("200", header, body);
+            ResponseHeader responseHeader = new ResponseHeader(headerFields);
+            return HttpResponse.of("200", responseHeader, body);
         }
 
         if (httpRequest.isForDynamicContent()) {
@@ -74,8 +74,8 @@ public class RequestHandler implements Runnable {
             servlet.service(httpRequest);
             Map<String, String> headerFields = new HashMap<>();
             headerFields.put("Location", "/index.html");
-            Header header = new Header(headerFields);
-            return HttpResponse.of("302", header);
+            ResponseHeader responseHeader = new ResponseHeader(headerFields);
+            return HttpResponse.of("302", responseHeader);
         }
 
         throw new AssertionError("HttpRequest는 정적 혹은 동적 컨텐츠 요청만 가능합니다.");

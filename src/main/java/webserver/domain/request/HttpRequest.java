@@ -6,36 +6,27 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import java.util.Objects;
-
-import utils.IOUtils;
-import webserver.domain.Header;
 
 public class HttpRequest {
     private final RequestLine requestLine;
-    private final Header header;
-    private final String body;
+    private final RequestHeader requestHeader;
+    private final RequestBody requestBody;
 
-    private HttpRequest(RequestLine requestLine, Header header, String body) {
+    private HttpRequest(RequestLine requestLine, RequestHeader requestHeader, RequestBody requestBody) {
         this.requestLine = requestLine;
-        this.header = header;
-        this.body = body;
+        this.requestHeader = requestHeader;
+        this.requestBody = requestBody;
     }
 
     public static HttpRequest of(InputStream inputStream) throws IOException {
         // TODO: 2020/09/25 requestLine, header, body의 생성 책임을 각각에게 넘기기
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+
         RequestLine requestLine = RequestLine.of(bufferedReader);
+        RequestHeader requestHeader = RequestHeader.of(bufferedReader);
+        RequestBody requestBody = RequestBody.of(bufferedReader, requestHeader.getContentLength());
 
-        Header header = Header.of(bufferedReader);
-
-        String contentLength = header.getContentLength();
-        if (Objects.isNull(contentLength)) {
-            return new HttpRequest(requestLine, header, "");
-        }
-        String body = IOUtils.readData(bufferedReader, Integer.parseInt(contentLength));
-
-        return new HttpRequest(requestLine, header, body);
+        return new HttpRequest(requestLine, requestHeader, requestBody);
     }
 
     public String getPath() {
@@ -57,7 +48,7 @@ public class HttpRequest {
     }
 
     public String getBody() {
-        return body;
+        return requestBody.getBody();
     }
 
     public boolean isForStaticContent() {

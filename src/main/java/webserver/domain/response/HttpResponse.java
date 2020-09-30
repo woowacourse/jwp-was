@@ -6,35 +6,33 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import webserver.domain.Header;
-
 public class HttpResponse {
     private static final String lineSeparator = System.lineSeparator();
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
     private final StatusLine statusLine;
-    private final Header header;
+    private final ResponseHeader responseHeader;
     private final byte[] body;
 
-    public HttpResponse(StatusLine statusLine, Header header, byte[] body) {
+    public HttpResponse(StatusLine statusLine, ResponseHeader responseHeader, byte[] body) {
         this.statusLine = statusLine;
-        this.header = header;
+        this.responseHeader = responseHeader;
         this.body = body;
     }
 
-    public static HttpResponse of(String code, Header header, byte[] body) {
-        return new HttpResponse(StatusLine.of(code), header, body);
+    public static HttpResponse of(String code, ResponseHeader responseHeader, byte[] body) {
+        return new HttpResponse(StatusLine.of(code), responseHeader, body);
     }
 
-    public static HttpResponse of(String code, Header header) {
-        return new HttpResponse(StatusLine.of(code), header, new byte[0]);
+    public static HttpResponse of(String code, ResponseHeader responseHeader) {
+        return new HttpResponse(StatusLine.of(code), responseHeader, new byte[0]);
     }
 
     public void respond(DataOutputStream dos) {
         try {
             dos.writeBytes(statusLine.getValue());
             dos.writeBytes(lineSeparator);
-            dos.writeBytes(header.toValue());
+            dos.writeBytes(responseHeader.toValue());
             dos.writeBytes(lineSeparator);
             dos.write(body, 0, body.length);
             dos.flush();
@@ -48,7 +46,7 @@ public class HttpResponse {
     }
 
     public String getHeader() {
-        return header.toValue();
+        return responseHeader.toValue();
     }
 
     public byte[] getBody() {
