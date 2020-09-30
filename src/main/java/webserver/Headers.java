@@ -6,7 +6,11 @@ import java.util.Map;
 
 public class Headers {
 
-    private Map<String, Object> headers;
+    private Map<String, String> headers;
+
+    public Headers() {
+        headers = new HashMap<>();
+    }
 
     public Headers(List<String> lines) {
         headers = new HashMap<>();
@@ -19,7 +23,15 @@ public class Headers {
             .forEach(pair -> headers.put(pair[0], pair[1]));
     }
 
-    public Object getHeader(String name) {
+    public Map<String, String> getHeaders() {
+        return headers;
+    }
+
+    public String getHeader(String name) {
         return headers.get(name);
+    }
+
+    public void setHeader(String key, String value) {
+        headers.put(key, value);
     }
 }
