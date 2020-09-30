@@ -9,7 +9,7 @@ public enum Method {
     DELETE,
     ELSE;
 
-    private String methodName;
+    private final String methodName;
 
     Method() {
         methodName = name();
