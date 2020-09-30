@@ -9,6 +9,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class UriTest {
+    @DisplayName("Uri 객체를 생성한다.")
+    @Test
+    void of_shouldReturnUri() {
+        Uri uri = Uri.of("/user/create");
+
+        assertThat(uri.getPath()).isEqualTo("/user/create");
+        assertThat(uri.getParameters()).isEqualTo(new HashMap<>());
+    }
+
     @DisplayName("Uri의 파라미터를 &와 ;를 기준으로 분리한다.")
     @Test
     void of_shouldSplitParameters() {

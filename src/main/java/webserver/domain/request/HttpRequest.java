@@ -19,7 +19,6 @@ public class HttpRequest {
     }
 
     public static HttpRequest of(InputStream inputStream) throws IOException {
-        // TODO: 2020/09/25 requestLine, header, body의 생성 책임을 각각에게 넘기기
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
 
         RequestLine requestLine = RequestLine.of(bufferedReader);
