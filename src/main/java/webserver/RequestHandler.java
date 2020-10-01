@@ -13,7 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import http.request.RequestEntity;
-import utils.IOUtils;
+import http.response.ResponseEntity;
+import webserver.filter.FilterStorage;
+import webserver.requestmapping.RequestMapping;
+import webserver.requestmapping.RequestMappingStorage;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -33,13 +36,29 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
 
             RequestEntity requestEntity = RequestEntity.from(bufferedReader);
+            ResponseEntity responseEntity = ResponseEntity.empty();
 
-            RequestMapping matchingMapping = RequestMappingStorage.findMatchingMapping(requestEntity);
-            InputStream response = matchingMapping.generateResponse(requestEntity);
+            httpEntityProcessing(requestEntity, responseEntity);
 
-            dos.write(IOUtils.getBytesFromInputStream(response));
+            writeOutResponse(dos, responseEntity);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private void httpEntityProcessing(RequestEntity requestEntity, ResponseEntity responseEntity) {
+        boolean isInputPassing = FilterStorage.doInputFilters(requestEntity, responseEntity);
+
+        if (isInputPassing) {
+            RequestMapping matchingMapping = RequestMappingStorage.findMatchingMapping(requestEntity);
+            matchingMapping.process(requestEntity, responseEntity);
+        }
+
+        FilterStorage.doOutputFilters(requestEntity, responseEntity);
+    }
+
+    private void writeOutResponse(DataOutputStream dataOutputStream, ResponseEntity responseEntity) throws IOException {
+        String responseString = responseEntity.convertToString();
+        dataOutputStream.write(responseString.getBytes(StandardCharsets.UTF_8));
     }
 }

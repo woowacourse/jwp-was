@@ -1,7 +1,6 @@
-package http.request;
+package http;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
@@ -9,7 +8,7 @@ import java.io.StringReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class RequestBodyTest {
+class HttpBodyTest {
     private static final String REQUEST_AFTER_READ_HEADER = "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
     private static final String REQUEST_CONTENT = "userId=javajigi&password=password&name=박재성&email=javajigi@slipp.net";
     private static final int CONTENT_LENGTH = 93;
@@ -23,11 +22,8 @@ class RequestBodyTest {
 
     @Test
     public void construct() {
-        RequestBody requestBody =
-            RequestBody.from(REQUEST_BUFFERED_READER, ContentType.APPLICATION_X_WWW_FORM_URLENCODED, CONTENT_LENGTH);
-        assertAll(
-            () -> assertThat(requestBody.getContent()).isEqualTo(REQUEST_CONTENT),
-            () -> assertThat(requestBody.getContentType()).isEqualTo(ContentType.APPLICATION_X_WWW_FORM_URLENCODED)
-        );
+        HttpBody httpBody =
+            HttpBody.of(REQUEST_BUFFERED_READER, ContentType.APPLICATION_X_WWW_FORM_URLENCODED, CONTENT_LENGTH);
+        assertThat(httpBody.getContent()).isEqualTo(REQUEST_CONTENT);
     }
 }

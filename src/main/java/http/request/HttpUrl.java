@@ -1,43 +1,45 @@
 package http.request;
 
-import static utils.StringUtils.*;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import utils.IOUtils;
 
 public class HttpUrl {
 
     private static final String PATH_PARAM_DELIMITER = "\\?";
+    public static final int PARAM_EXIST_SIZE = 2;
+    public static final int PATH_INDEX = 0;
+    public static final int PARAM_INDEX = 1;
+    public static final int SPLIT_SIZE = 2;
 
     private String path;
-    private Map<String, String> params;
+    private Params params;
 
-    private HttpUrl(String path, Map<String, String> params) {
+    private HttpUrl(String path) {
+        this.path = path;
+        this.params = Params.empty();
+    }
+
+    private HttpUrl(String path, Params params) {
         this.path = path;
         this.params = params;
     }
 
     public static HttpUrl from(String url) {
         String decodedUrl = IOUtils.decode(url);
-        String[] splittedUrl = splitUrl(decodedUrl);
+        String[] splittedUrl = decodedUrl.split(PATH_PARAM_DELIMITER, SPLIT_SIZE);
 
-        if (splittedUrl.length == 2) {
-            return new HttpUrl(splittedUrl[0], extractParams(splittedUrl[1]));
+        if (splittedUrl.length == PARAM_EXIST_SIZE) {
+            String path = splittedUrl[PATH_INDEX];
+            String paramBundle = splittedUrl[PARAM_INDEX];
+            return new HttpUrl(path, Params.from(paramBundle));
         }
-        return new HttpUrl(splittedUrl[0], new HashMap<>());
-    }
-
-    private static String[] splitUrl(String url) {
-        return url.split(PATH_PARAM_DELIMITER, 2);
+        return new HttpUrl(splittedUrl[PATH_INDEX]);
     }
 
     public String getPath() {
         return path;
     }
 
-    public Map<String, String> getParams() {
+    public Params getParams() {
         return params;
     }
 }
