@@ -6,7 +6,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.ConnectException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
@@ -17,7 +16,7 @@ import org.junit.jupiter.api.Test;
 import utils.FileIoUtils;
 import utils.IOUtils;
 
-class RequestHandlerIntegrationTest {
+public class RequestHandlerIntegrationTest {
 
     private static final String REQUEST =
         "GET /index.html HTTP/1.1\n"
@@ -28,9 +27,9 @@ class RequestHandlerIntegrationTest {
     private static final String RESPONSE_HEADER =
         "HTTP/1.1 200 OK \n"
             + "Content-Type: text/html;charset=utf-8\n"
-            + "Content-Length: 6902\n";
+            + "Content-Length: 6750\n";
 
-    private static final String RESPONSE_BODY = new String(FileIoUtils.loadFileFromClasspath("./templates/index.html"));
+    public static final String RESPONSE_BODY = new String(FileIoUtils.loadFileFromClasspath("./templates/index.html"));
 
     @Test
     void integrationTest() {
@@ -39,24 +38,19 @@ class RequestHandlerIntegrationTest {
         thread.start();
 
         // run client side
-        try {
-            Client client = new Client(makeConnectedSocket());
-            String response = client.sendAndReadResponse(REQUEST);
-            System.out.println(response);
+        Client client = new Client(makeConnectedSocket());
+        String response = client.sendAndReadResponse(REQUEST);
 
-            // assertThat response is equal to expected
-            assertThat(response).startsWith(RESPONSE_HEADER);
-            assertThat(response).contains(RESPONSE_BODY);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // assertThat response is equal to expected
+        assertThat(response).startsWith(RESPONSE_HEADER);
+        assertThat(response).contains(RESPONSE_BODY);
     }
 
-    private Socket makeConnectedSocket() throws IOException {
+    private Socket makeConnectedSocket() {
         while (true) {
             try {
                 return new Socket("127.0.0.1", 6666);
-            } catch (ConnectException ignored) {
+            } catch (IOException ignored) {
             }
         }
     }

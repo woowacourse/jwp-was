@@ -1,6 +1,7 @@
-package http.request;
+package http;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
@@ -12,10 +13,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-class RequestHeaderTest {
+public class HttpHeaderTest {
 
     private BufferedReader REQUEST_BUFFERED_READER;
-    private RequestHeader REQUEST_HEADER;
+    private HttpHeader REQUEST_HEADER;
 
     private static final String REQUEST =
         "Host: localhost:8080\n"
@@ -37,7 +38,7 @@ class RequestHeaderTest {
     @BeforeEach
     public void setUp() {
         REQUEST_BUFFERED_READER = new BufferedReader(new StringReader(REQUEST));
-        REQUEST_HEADER = RequestHeader.from(REQUEST_BUFFERED_READER);
+        REQUEST_HEADER = HttpHeader.from(REQUEST_BUFFERED_READER);
     }
 
     @Test
@@ -58,5 +59,25 @@ class RequestHeaderTest {
             return "";
         }
         return input;
+    }
+
+    @Test
+    public void addHeader() {
+        REQUEST_HEADER.addHeader("testKey", "testValue");
+        assertThat(REQUEST_HEADER.findOrEmpty("testKey")).isEqualTo("testValue");
+
+        REQUEST_HEADER.addHeader("testKey", "testValue2");
+        assertThat(REQUEST_HEADER.findOrEmpty("testKey")).isEqualTo("testValue,testValue2");
+    }
+
+    @Test
+    public void convertToString() {
+        assertAll(
+            () -> assertThat(REQUEST_HEADER.convertToString()).contains("Host: localhost:8080\n"),
+            () -> assertThat(REQUEST_HEADER.convertToString()).contains("Connection: keep-alive\n"),
+            () -> assertThat(REQUEST_HEADER.convertToString()).contains("Content-Length: 93\n"),
+            () -> assertThat(REQUEST_HEADER.convertToString()).contains("Content-Type: application/x-www-form-urlencoded\n"),
+            () -> assertThat(REQUEST_HEADER.convertToString()).contains("Accept: */*\n")
+        );
     }
 }

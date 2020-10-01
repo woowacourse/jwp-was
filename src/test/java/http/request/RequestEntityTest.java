@@ -1,6 +1,6 @@
 package http.request;
 
-import static http.request.RequestHeaderTest.*;
+import static http.HttpHeaderTest.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -52,8 +52,8 @@ class RequestEntityTest {
             () -> assertThat(requestEntity.getHttpMethod()).isEqualTo(HttpMethod.POST),
             () -> assertThat(requestEntity.getHttpUrl()).usingRecursiveComparison().isEqualTo(HttpUrl.from("/user/create")),
             () -> assertThat(requestEntity.getHttpVersion()).isEqualTo("HTTP/1.1"),
-            () -> assertThat(requestEntity.getRequestHeader().getHeaders()).isEqualTo(HEADERS),
-            () -> assertThat(requestEntity.getRequestBody().getContent()).isEqualTo("userId=javajigi&password=password&name=박재성&email=javajigi@slipp.net")
+            () -> assertThat(requestEntity.getHttpHeader().getHeaders()).isEqualTo(HEADERS),
+            () -> assertThat(requestEntity.getHttpBody().getContent()).isEqualTo("userId=javajigi&password=password&name=박재성&email=javajigi@slipp.net")
         );
     }
 
@@ -64,8 +64,8 @@ class RequestEntityTest {
             () -> assertThat(requestEntity.getHttpMethod()).isEqualTo(HttpMethod.GET),
             () -> assertThat(requestEntity.getHttpUrl()).usingRecursiveComparison().isEqualTo(HttpUrl.from("/index.html")),
             () -> assertThat(requestEntity.getHttpVersion()).isEqualTo("HTTP/1.1"),
-            () -> assertThat(requestEntity.getRequestHeader().getHeaders()).isEqualTo(HEADERS2),
-            () -> assertThat(requestEntity.getRequestBody()).isNull()
+            () -> assertThat(requestEntity.getHttpHeader().getHeaders()).isEqualTo(HEADERS2),
+            () -> assertThat(requestEntity.getHttpBody()).isNull()
         );
     }
 }
