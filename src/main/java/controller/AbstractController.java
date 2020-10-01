@@ -15,19 +15,7 @@ abstract public class AbstractController implements Controller {
     @Override
     public HttpResponse service(HttpRequest httpRequest) {
         try {
-            if (httpRequest.isMethod(Method.GET)) {
-                return doGet(httpRequest);
-            }
-            if (httpRequest.isMethod(Method.POST)) {
-                return doPost(httpRequest);
-            }
-            if (httpRequest.isMethod(Method.PUT)) {
-                return doPut(httpRequest);
-            }
-            if (httpRequest.isMethod(Method.DELETE)) {
-                return doDelete(httpRequest);
-            }
-            throw new WrongUriException("http method of the request is weird.");
+            return serviceWithoutExceptionCatch(httpRequest);
         } catch (RequestDataFormatException e) {
             logger.debug(e.getMessage());
             return new HttpResponse(StatusCode.BAD_REQUEST);
@@ -35,6 +23,22 @@ abstract public class AbstractController implements Controller {
             logger.debug(e.getMessage());
             return new HttpResponse(StatusCode.NOT_FOUND);
         }
+    }
+
+    private HttpResponse serviceWithoutExceptionCatch(HttpRequest httpRequest) {
+        if (httpRequest.isMethod(Method.GET)) {
+            return doGet(httpRequest);
+        }
+        if (httpRequest.isMethod(Method.POST)) {
+            return doPost(httpRequest);
+        }
+        if (httpRequest.isMethod(Method.PUT)) {
+            return doPut(httpRequest);
+        }
+        if (httpRequest.isMethod(Method.DELETE)) {
+            return doDelete(httpRequest);
+        }
+        throw new WrongUriException("http method of the request is weird.");
     }
 
     protected HttpResponse doGet(HttpRequest httpRequest) {
