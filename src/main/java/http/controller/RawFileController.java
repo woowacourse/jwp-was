@@ -1,6 +1,5 @@
 package http.controller;
 
-import http.HeaderParam;
 import http.HttpRequest;
 import http.HttpResponse;
 import org.slf4j.Logger;
@@ -24,24 +23,26 @@ public class RawFileController implements Controller {
     @Override
     public HttpResponse get(HttpRequest httpRequest) {
         try {
-            String header;
-            byte[] body;
-            if (httpRequest.headerContainsValueOf(HeaderParam.ACCEPT, "css")) {
-                body = FileIoUtils.loadFileFromClasspath("./static" + filePath);
-                header = HttpResponseHeaderParser.ok("text/css", body.length);
-            } else {
-                body = FileIoUtils.loadFileFromClasspath("./templates" + filePath);
-                header = HttpResponseHeaderParser.ok("text/html;charset=utf-8", body.length);
-            }
+            FileType fileType = FileType.of(extractExtension());
+            byte[] body = FileIoUtils.loadFileFromClasspath(fileType.getRootPath() + filePath);
+            String header = HttpResponseHeaderParser.ok(fileType.getContentType(), body.length);
             return new HttpResponse(header, body);
-        } catch (NullPointerException e) {
-            String header = HttpResponseHeaderParser.notFound();
-            return new HttpResponse(header);
+//        } catch (NullPointerException e) {
+//            String header = HttpResponseHeaderParser.notFound();
+//            return new HttpResponse(header);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
             String header = HttpResponseHeaderParser.internalServerError();
             return new HttpResponse(header);
         }
+    }
+
+    private String extractExtension() {
+        String[] token = filePath.split("\\.");
+        if (token.length < 2) {
+            return "";
+        }
+        return token[token.length - 1];
     }
 
     @Override

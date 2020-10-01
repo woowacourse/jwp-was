@@ -3,7 +3,9 @@ package webserver;
 import http.HttpRequest;
 import http.HttpResponse;
 import http.RequestMethod;
-import http.controller.*;
+import http.controller.Controller;
+import http.controller.Controllers;
+import http.controller.ControllersFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.HttpResponseHeaderParser;
@@ -11,8 +13,6 @@ import utils.HttpResponseUtils;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.Map;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -31,7 +31,7 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             DataOutputStream dos = new DataOutputStream(out);
             route(br, dos);
-        } catch (IOException | NullPointerException e) {
+        } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
