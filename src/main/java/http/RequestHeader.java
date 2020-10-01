@@ -24,15 +24,23 @@ public class RequestHeader {
         }
     }
 
-    public boolean containsValueOf(String key, String value) {
-        return this.params.get(key).contains(value);
+    public boolean containsValueOf(HeaderParam key, String value) {
+        return this.params.get(key.getParamName()).contains(value);
     }
 
     public int getContentLength() {
-        String contentLength = this.params.get("content-length");
+        String contentLength = getHeaderParamValue(HeaderParam.CONTENT_LENGTH);
         if (contentLength == null) {
             return 0;
         }
         return Integer.parseInt(contentLength);
+    }
+
+    public String getContentType() {
+        return getHeaderParamValue(HeaderParam.CONTENT_TYPE);
+    }
+
+    private String getHeaderParamValue(HeaderParam headerParam) {
+        return this.params.get(headerParam.getParamName());
     }
 }

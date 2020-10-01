@@ -1,15 +1,13 @@
 package http.controller;
 
-import http.RequestBody;
-import http.RequestHeader;
-import http.ResponseBody;
-import http.ResponseHeader;
+import http.HttpRequest;
+import http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
+import utils.HttpResponseHeaderParser;
 import webserver.RequestHandler;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
@@ -23,26 +21,33 @@ public class RawFileController implements Controller {
     }
 
     @Override
-    public void get(DataOutputStream dos, RequestHeader requestHeader) {
+    public HttpResponse get(HttpRequest httpRequest) {
         try {
-            if (requestHeader.containsValueOf("accept", "css")) {
-                byte[] body = FileIoUtils.loadFileFromClasspath("./static" + filePath);
-                ResponseHeader.response200Header(dos, "text/css", body.length);
-                ResponseBody.responseBody(dos, body);
-            } else {
-                byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + filePath);
-                ResponseHeader.response200Header(dos, "text/html;charset=utf-8", body.length);
-                ResponseBody.responseBody(dos, body);
-            }
-        } catch (NullPointerException e) {
-            ResponseHeader.response404Header(dos);
+            FileType fileType = FileType.of(extractExtension());
+            byte[] body = FileIoUtils.loadFileFromClasspath(fileType.getRootPath() + filePath);
+            String header = HttpResponseHeaderParser.ok(fileType.getContentType(), body.length);
+            return new HttpResponse(header, body);
+//        } catch (NullPointerException e) {
+//            String header = HttpResponseHeaderParser.notFound();
+//            return new HttpResponse(header);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
+            String header = HttpResponseHeaderParser.internalServerError();
+            return new HttpResponse(header);
         }
     }
 
+    private String extractExtension() {
+        String[] token = filePath.split("\\.");
+        if (token.length < 2) {
+            return "";
+        }
+        return token[token.length - 1];
+    }
+
     @Override
-    public void post(DataOutputStream dos, RequestHeader requestHeader, RequestBody requestBody) {
-        ResponseHeader.response405Header(dos);
+    public HttpResponse post(HttpRequest httpRequest) {
+        String header = HttpResponseHeaderParser.methodNotAllowed();
+        return new HttpResponse(header);
     }
 }

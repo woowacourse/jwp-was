@@ -28,7 +28,7 @@ class RequestLineTest {
         RequestLine requestLine = new RequestLine(br);
 
         assertTrue(requestLine.isPathEqualTo("/user/create"));
-        assertTrue(requestLine.isMethodEqualTo("POST"));
+        assertTrue(requestLine.isMethodEqualTo(RequestMethod.POST));
         assertTrue(requestLine.isHttpVersionEqualTo("HTTP/1.1"));
     }
 
@@ -39,7 +39,7 @@ class RequestLineTest {
         InputStream in = new ByteArrayInputStream(request.getBytes());
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
         assertThatThrownBy(() -> new RequestLine(br)).isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Invalid");
+                .hasMessageContaining("Unsupported");
     }
 
     @Test

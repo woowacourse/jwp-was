@@ -1,19 +1,17 @@
 package http.controller;
 
-import http.RequestBody;
-import http.RequestHeader;
-import http.ResponseHeader;
-
-import java.io.DataOutputStream;
+import http.HttpRequest;
+import http.HttpResponse;
+import utils.HttpResponseHeaderParser;
 
 public class IndexController implements Controller {
     @Override
-    public void get(DataOutputStream dos, RequestHeader requestHeader) {
-        ResponseHeader.response302Header(dos, "/index.html");
+    public HttpResponse get(HttpRequest httpRequest) {
+        return new HttpResponse(HttpResponseHeaderParser.found("/index.html"));
     }
 
     @Override
-    public void post(DataOutputStream dos, RequestHeader requestHeader, RequestBody requestBody) {
-        ResponseHeader.response405Header(dos);
+    public HttpResponse post(HttpRequest httpRequest) {
+        return new HttpResponse(HttpResponseHeaderParser.methodNotAllowed());
     }
 }

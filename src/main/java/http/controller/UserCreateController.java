@@ -1,22 +1,22 @@
 package http.controller;
 
-import http.RequestBody;
-import http.RequestHeader;
-import http.ResponseHeader;
+import http.HttpRequest;
+import http.HttpResponse;
 import service.UserService;
-
-import java.io.DataOutputStream;
+import utils.HttpResponseHeaderParser;
 
 public class UserCreateController implements Controller {
     @Override
-    public void get(DataOutputStream dos, RequestHeader requestHeader) {
-        ResponseHeader.response405Header(dos);
+    public HttpResponse get(HttpRequest httpRequest) {
+        String header = HttpResponseHeaderParser.methodNotAllowed();
+        return new HttpResponse(header);
     }
 
     @Override
-    public void post(DataOutputStream dos, RequestHeader requestHeader, RequestBody requestBody) {
-        UserService userService = new UserService();
-        userService.createUser(requestBody);
-        ResponseHeader.response302Header(dos, "/index.html");
+    public HttpResponse post(HttpRequest httpRequest) {
+        UserService userService = UserService.getInstance();
+        userService.createUser(httpRequest);
+        String header = HttpResponseHeaderParser.found("/index.html");
+        return new HttpResponse(header);
     }
 }
