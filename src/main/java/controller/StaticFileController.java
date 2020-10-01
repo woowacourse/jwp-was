@@ -19,16 +19,8 @@ public class StaticFileController extends AbstractController {
     private ResourcesHandler resourcesHandler = new ResourcesHandler();
 
     private HttpResponse findStaticFile(HttpRequest httpRequest) {
-        Resource resourceForResponse;
-
         try {
-            resourceForResponse = resourcesHandler.convertUriToResource(httpRequest.getUriPath());
-
-            byte[] body = resourceForResponse.getResource();
-            ContentType contentType = resourceForResponse.getContentType();
-
-            return new HttpResponse(StatusCode.OK, body, contentType);
-
+            return findStaticFileWithoutExceptionCatch(httpRequest);
         } catch (IllegalArgumentException e) {
             logger.error("There is no corresponding file for uri \"{}\". : {}",
                 httpRequest.getUriPath(),
@@ -48,6 +40,17 @@ public class StaticFileController extends AbstractController {
             );
             return new HttpResponse(StatusCode.NOT_FOUND);
         }
+    }
+
+    private HttpResponse findStaticFileWithoutExceptionCatch(HttpRequest httpRequest)
+            throws IOException, URISyntaxException {
+        Resource resourceForResponse =
+            resourcesHandler.convertUriToResource(httpRequest.getUriPath());
+
+        byte[] body = resourceForResponse.getResource();
+        ContentType contentType = resourceForResponse.getContentType();
+
+        return new HttpResponse(StatusCode.OK, body, contentType);
     }
 
     @Override
