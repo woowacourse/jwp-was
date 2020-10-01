@@ -7,18 +7,23 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.URISyntaxException;
+import java.util.Objects;
+import model.ContentType;
+import model.Method;
+import model.Request;
+import model.Status;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
-import utils.IOUtils;
 import utils.StringUtils;
 
 public class RequestHandler implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private static final String TEMPLATE_LOCATION = "./templates";
-    private static final String STATIC_LOCATION = "./static";
+    private static final String REDIRECT_LOCATION = "/index.html";
+    private static final CharSequence USER_CREATE_LOCATION = "/user/create";
 
     private Socket connection;
 
@@ -26,6 +31,7 @@ public class RequestHandler implements Runnable {
         this.connection = connectionSocket;
     }
 
+    //정적 팩토리 메서드?
     public void run() {
         logger
             .debug("New Client Connect! Connected IP : {}, Port : {}",
@@ -36,79 +42,73 @@ public class RequestHandler implements Runnable {
             OutputStream outputStream = connection.getOutputStream()) {
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
-            String line = bufferedReader.readLine();
-            String requestLocation = StringUtils.getRequestLocation(line);
-
             DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
 
-            if (requestLocation.endsWith(".html")) {
-                byte[] body = FileIoUtils
-                    .loadFileFromClasspath(TEMPLATE_LOCATION + requestLocation);
-                response200Header(dataOutputStream, body.length, "text/html");
-                responseBody(dataOutputStream, body);
+            String line = bufferedReader.readLine();
+            Request request = Request.of(line);
+
+            if (request.isSameMethod(Method.GET) || request.isSameMethod(Method.HEAD)) {
+                makeResponse(dataOutputStream, request, Status.OK);
                 return;
             }
-            if(line.contains("/user/create")){
-                while (!line.contains("Content-Length:")) {
-                    line = bufferedReader.readLine();
+            if (request.isSameMethod(Method.POST)) {
+                if (request.getLocation().contains(USER_CREATE_LOCATION)) {
+                    String parameters = StringUtils.getParameters(line, bufferedReader);
+                    User user = User.of(parameters);
+
+                    makeResponse(dataOutputStream, request, Status.FOUND);
+                    return;
                 }
-                int contentLength = Integer.parseInt(line.split("Content-Length: ")[1]);
-
-                while (!line.equals("")) {
-                    line = bufferedReader.readLine();
-                }
-
-                String parameters = IOUtils.readData(bufferedReader, contentLength);
-
-                String userId = StringUtils.extractParameterValue(parameters, "userId");
-                String password = StringUtils.extractParameterValue(parameters, "password");
-                String name = StringUtils.extractParameterValue(parameters, "name");
-                String email = StringUtils.extractParameterValue(parameters, "email");
-
-                User user = new User(userId, password, name, email);
-
-                response302Header(dataOutputStream);
                 return;
             }
-            if (requestLocation.endsWith(".css")) {
-                byte[] body = FileIoUtils
-                    .loadFileFromClasspath(STATIC_LOCATION + requestLocation);
-                response200Header(dataOutputStream, body.length, "text/css");
-                responseBody(dataOutputStream, body);
+            makeResponse(dataOutputStream, request, Status.METHOD_NOT_ALLOWED);
+        } catch (IOException | IllegalArgumentException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void makeResponse(DataOutputStream dataOutputStream, Request request, Status status) {
+        responseHeader(dataOutputStream, request, status);
+        responseBody(dataOutputStream, request);
+    }
+
+    private void responseHeader(DataOutputStream dataOutputStream, Request request, Status status) {
+        ContentType contentType = request.getContentType();
+
+        try {
+            dataOutputStream.writeBytes(
+                "HTTP/1.1 "
+                    + status.getStatusCode()
+                    + " "
+                    + status.getStatusName()
+                    + " \r\n");
+            if (!Objects.isNull(contentType)) {
+                dataOutputStream
+                    .writeBytes("Content-Type: " + contentType.getContentType()
+                        + ";charset=utf-8\r\n");
             }
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void response200Header(DataOutputStream dataOutputStream, int lengthOfBodyContent,
-        String contentType) {
-        try {
-            dataOutputStream.writeBytes("HTTP/1.1 200 OK \r\n");
-            dataOutputStream.writeBytes("Content-Type: " + contentType + ";charset=utf-8\r\n");
-            dataOutputStream.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            if (request.isNeedBody() && request.isSameMethod(Method.GET)) { // POST Body에 대한 정의 완료 후 리팩토링 예정
+                byte[] body = FileIoUtils.loadFileFromClasspath(StringUtils.generatePath(request));
+                dataOutputStream.writeBytes("Content-Length: " + body.length + "\r\n");
+            }
+            if (status.isNeedLocation()) {
+                dataOutputStream.writeBytes("Location: " + REDIRECT_LOCATION + "\r\n");
+            }
             dataOutputStream.writeBytes("\r\n");
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void response302Header(DataOutputStream dataOutputStream) {
-        try {
-            dataOutputStream.writeBytes("HTTP/1.1 302 Found \r\n");
-            dataOutputStream.writeBytes("Location: /index.html \r\n");
-            dataOutputStream.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
+    private void responseBody(DataOutputStream dataOutputStream, Request request) {
+        if(!request.isNeedBody() || request.isSameMethod(Method.POST)) { // POST Body에 대한 정의 완료 후 리팩토링 예정
+            return;
         }
-    }
-
-    private void responseBody(DataOutputStream dataOutputStream, byte[] body) {
         try {
+            byte[] body = FileIoUtils.loadFileFromClasspath(StringUtils.generatePath(request));
             dataOutputStream.write(body, 0, body.length);
             dataOutputStream.flush();
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }

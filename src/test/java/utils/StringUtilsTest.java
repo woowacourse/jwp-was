@@ -12,7 +12,7 @@ class StringUtilsTest {
     @DisplayName("요청 인풋에서 path 추출 테스트")
     void getRequestLocation() {
         String requestLine = "GET /index.html HTTP/1.1";
-        String requestLocation = StringUtils.getRequestLocation(requestLine);
+        String requestLocation = StringUtils.extractRequestLocation(requestLine);
 
         assertThat(requestLocation).isEqualTo("/index.html");
     }
@@ -22,7 +22,7 @@ class StringUtilsTest {
     void getRequestLocation_IfInvalidInput_ThrowException() {
         String requestLine = "";
 
-        assertThatThrownBy(() -> StringUtils.getRequestLocation(requestLine))
+        assertThatThrownBy(() -> StringUtils.extractRequestLocation(requestLine))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
