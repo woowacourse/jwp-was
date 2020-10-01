@@ -4,6 +4,7 @@ import exception.InvalidHttpMessageException;
 import exception.InvalidParameterException;
 import utils.StringUtils;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -32,7 +33,7 @@ public class QueryString {
     }
 
     public static QueryString empty() {
-        return new QueryString(new HashMap<>());
+        return new QueryString(Collections.emptyMap());
     }
 
     private static Map<String, String> createParams(String queryString) {

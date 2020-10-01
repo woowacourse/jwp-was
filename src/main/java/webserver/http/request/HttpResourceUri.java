@@ -37,4 +37,8 @@ public class HttpResourceUri {
     public String toHttpMessage() {
         return this.resourceUri;
     }
+
+    public String getResourceUri() {
+        return this.resourceUri;
+    }
 }
