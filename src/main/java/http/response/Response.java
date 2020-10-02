@@ -14,7 +14,7 @@ import utils.Directory;
 import utils.FileIoUtils;
 
 public class Response {
-    private static final Logger logger = LoggerFactory.getLogger(ResponseEntity.class);
+    private static final Logger logger = LoggerFactory.getLogger(Response.class);
 
     private DataOutputStream dataOutputStream;
     private StatusLine statusLine;
@@ -34,6 +34,12 @@ public class Response {
         statusLine = new StatusLine("HTTP/1.1", Status.OK);
         body = setResponseBody(path);
         setHeader("Content-Length", String.valueOf(body.getContentLength()));
+        write();
+    }
+
+    public void found(String locationUri) {
+        statusLine = new StatusLine("HTTP/1.1", Status.FOUND);
+        setHeader("Location", locationUri);
         write();
     }
 

@@ -7,15 +7,13 @@ import http.ContentType;
 import http.request.Request;
 import http.response.Response;
 
-public class TemplatesController implements Controller {
-
+public class ResourceController implements Controller {
     @Override
     public void service(Request request, Response response) throws IOException, URISyntaxException {
         String requestUrl = request.getRequestLine().getUrl();
+
         ContentType contentType = ContentType.of(requestUrl);
-
-        response.setHeader("Content-Type", contentType.getContentType() + ";charset=utf-8");
-
+        response.setHeader("Content-Type", contentType.getContentType() + ";charset=UTF-8");
         response.ok(requestUrl);
     }
 }

@@ -33,13 +33,14 @@ public class HttpHeader {
     }
 
     public String getContentType() {
-        return requestHeaders.get("Content-Type");
+        return requestHeaders.get(Header.CONTENT_TYPE.getName());
     }
 
     public void write(DataOutputStream dataOutputStream) throws IOException {
         for (String key : requestHeaders.keySet()) {
             dataOutputStream.writeBytes(key + ": " + requestHeaders.get(key) + " " + System.lineSeparator());
         }
+        dataOutputStream.writeBytes(System.lineSeparator());
     }
 
     public Map<String, String> getRequestHeaders() {

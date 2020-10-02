@@ -29,7 +29,7 @@ public class UserCreateController implements Controller {
             User user = new User(queryParamsMap.get("userId"), queryParamsMap.get("password"),
                     queryParamsMap.get("name"), queryParamsMap.get("email"));
             DataBase.addUser(user);
-            // response302(dos, "/index.html");
+            response.found("/index.html");
         }
     }
 
@@ -39,6 +39,6 @@ public class UserCreateController implements Controller {
                 requestBodies.get("name"), requestBodies.get("email"));
         DataBase.addUser(user);
 
-        // response302(dos, "/index.html");
+        response.found("/index.html");
     }
 }
