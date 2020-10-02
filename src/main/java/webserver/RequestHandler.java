@@ -47,6 +47,9 @@ public class RequestHandler implements Runnable {
         URISyntaxException,
         IllegalAccessException,
         InstantiationException {
+        // todo : 1. 정적 컨텐츠 동적 컨텐츠 분리
+        // todo : 2-1-1. 정적 컨텐츠는 static 안에서 파일 먼저 찾고 없으면 templates에서 찾음
+        // todo : 2-1-2. 정적 컨텐츠는 확장자에 따른 contentType지정
         if (httpRequest.isForStaticContent()) {
             String path = httpRequest.getPath();
             byte[] body = FileIoUtils.loadFileFromClasspath(path);
@@ -71,8 +74,7 @@ public class RequestHandler implements Runnable {
             String path = httpRequest.getPath();
             Class<? extends Servlet> servletClass = controller.get(path);
             Servlet servlet = servletClass.newInstance();
-            servlet.service(httpRequest);
-            return HttpResponse.found("/index.html").build();
+            return servlet.service(httpRequest);
         }
 
         throw new AssertionError("HttpRequest는 정적 혹은 동적 컨텐츠 요청만 가능합니다.");

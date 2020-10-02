@@ -65,4 +65,16 @@ public class HttpRequest {
     public boolean isPost() {
         return requestLine.getMethod() == Method.POST;
     }
+
+    public boolean isPut() {
+        return requestLine.getMethod() == Method.PUT;
+    }
+
+    public boolean isDelete() {
+        return requestLine.getMethod() == Method.DELETE;
+    }
+
+    public String getMethod() {
+        return requestLine.getMethod().getMethodName();
+    }
 }

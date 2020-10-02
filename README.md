@@ -40,12 +40,12 @@
         - [x]  응답 헤더 정보를 Map<String, String>으로 관리한다.
         - [x]  RequestHandler가 새로 추가한 HttpResponse를 사용하도록 리팩토링한다.
         - [x]  테스트 코드를 기반으로 구현한다.
-    - [ ]  다형성을 활용해 클라이언트 요청 URL에 대한 분기 처리를 제거한다.
-        - [ ]  각 요청과 응답에 대한 처리를 담당하는 부분을 추상화해 인터페이스로 만든다. 인터페이스는 다음과 같이 구현할 수 있다.
-        - [ ]  각 분기문을 Controller 인터페이스를 구현하는(implements) 클래스를 만들어 분리한다.
-        - [ ]  이렇게 생성한 Controller 구현체를 Map<String, Controller>에 저장한다. Map의 key에 해당하는 String은 요청 URL, value에 해당하는 Controller는 Controller 구현체이다.
-        - [ ]  클라이언트 요청 URL에 해당하는 Controller를 찾아 service() 메소드를 호출한다.
-        - [ ]  Controller 인터페이스를 구현하는 AbstractController 추상클래스를 추가해 중복을 제거하고, service() 메소드에서 GET과 POST HTTP 메소드에 따라 doGet(), doPost() 메소드를 호출하도록 한다.
+    - [x]  다형성을 활용해 클라이언트 요청 URL에 대한 분기 처리를 제거한다.
+        - [x]  각 요청과 응답에 대한 처리를 담당하는 부분을 추상화해 인터페이스로 만든다.
+        - [x]  각 분기문을 Controller 인터페이스를 구현하는(implements) 클래스를 만들어 분리한다.
+        - [x]  이렇게 생성한 Controller 구현체를 Map<String, Controller>에 저장한다. Map의 key에 해당하는 String은 요청 URL, value에 해당하는 Controller는 Controller 구현체이다.
+        - [x]  클라이언트 요청 URL에 해당하는 Controller를 찾아 service() 메소드를 호출한다.
+        - [x]  Controller 인터페이스를 구현하는 AbstractController 추상클래스를 추가해 중복을 제거하고, service() 메소드에서 GET과 POST HTTP 메소드에 따라 doGet(), doPost() 메소드를 호출하도록 한다.
 - [ ]  다수의 사용자 요청에 대해 Queue 에 저장한 후 순차적으로 처리가 가능하도록 해야 한다.
 - [ ]  서버가 모든 요청에 대해 Thread를 매번 생성하는 경우 성능상 문제가 발생할 수 있다. Thread Pool을 적용해 일정 수의 사용자 동시에 처리가 가능하도록 한다.
 - [ ]  추가 요구사항이나 변경이 발생하는 경우를 고려한다.

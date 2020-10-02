@@ -1,11 +1,8 @@
 package webserver.servlet;
 
 import webserver.domain.request.HttpRequest;
+import webserver.domain.response.HttpResponse;
 
 public interface Servlet {
-    void service(HttpRequest httpRequest);
-
-    void get(HttpRequest httpRequest);
-
-    void post(HttpRequest httpRequest);
+    HttpResponse service(HttpRequest httpRequest);
 }

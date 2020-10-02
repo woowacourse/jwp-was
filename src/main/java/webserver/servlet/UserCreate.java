@@ -9,26 +9,13 @@ import org.slf4j.LoggerFactory;
 import db.DataBase;
 import model.User;
 import webserver.domain.request.HttpRequest;
+import webserver.domain.response.HttpResponse;
 
-public class UserCreate implements Servlet{
-    private static Logger logger = LoggerFactory.getLogger(UserCreate.class);
-
-
-    @Override
-    public void service(HttpRequest httpRequest) {
-        if (httpRequest.isGet()) {
-            get(httpRequest);
-            return;
-        }
-
-        if (httpRequest.isPost()) {
-            post(httpRequest);
-            return;
-        }
-    }
+public class UserCreate extends AbstractServlet {
+    private static final Logger logger = LoggerFactory.getLogger(UserCreate.class);
 
     @Override
-    public void post(HttpRequest httpRequest) {
+    public HttpResponse post(HttpRequest httpRequest) {
         Map<String, String> data = new HashMap<>();
         String body = httpRequest.getBody();
         logger.debug("body : {}", body);
@@ -37,31 +24,31 @@ public class UserCreate implements Servlet{
             logger.debug("bodyParam : {}", input);
             String[] keyAndValue = input.split("=");
             if (keyAndValue.length < 2) {
-                return;
+                continue;
             }
             logger.debug("key : {}", keyAndValue[0]);
             logger.debug("value : {}", keyAndValue[1]);
             data.put(keyAndValue[0], keyAndValue[1]);
         }
+        joinMember(data);
+        return HttpResponse.found("/index.html").build();
+    }
+
+    @Override
+    public HttpResponse get(HttpRequest httpRequest) {
+        Map<String, String> parameters = httpRequest.getParameters();
+        joinMember(parameters);
+        return HttpResponse.found("/index.html").build();
+    }
+
+    private void joinMember(Map<String, String> data) {
         String userId = data.get("userId");
         String password = data.get("password");
         String name = data.get("name");
         String email = data.get("email");
 
-        User user = new User(userId, password, name, email);
-        DataBase.addUser(user);
-    }
-
-    @Override
-    public void get(HttpRequest httpRequest) {
-        Map<String, String> parameters = httpRequest.getParameters();
-        String userId = parameters.get("userId");
-        String password = parameters.get("password");
-        String name = parameters.get("name");
-        String email = parameters.get("email");
-
         if (userId.isEmpty() || password.isEmpty() || name.isEmpty() || email.isEmpty()) {
-            return;
+            throw new ApplicationBusinessException("회원 가입이 실패하였습니다. 입력하지 않은 정보가 있습니다.");
         }
 
         User user = new User(userId, password, name, email);
