@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import webserver.domain.request.HttpRequest;
 import webserver.domain.response.HttpResponse;
+import webserver.servlet.ApplicationBusinessException;
 import webserver.servlet.Servlet;
 import webserver.servlet.UserCreate;
 
@@ -47,37 +48,42 @@ public class RequestHandler implements Runnable {
         URISyntaxException,
         IllegalAccessException,
         InstantiationException {
-        // todo : 1. 정적 컨텐츠 동적 컨텐츠 분리
-        // todo : 2-1-1. 정적 컨텐츠는 static 안에서 파일 먼저 찾고 없으면 templates에서 찾음
-        // todo : 2-1-2. 정적 컨텐츠는 확장자에 따른 contentType지정
-        if (httpRequest.isForStaticContent()) {
-            String path = httpRequest.getPath();
-            byte[] body = FileIoUtils.loadFileFromClasspath(path);
-            String contentType = "";
-            if (path.endsWith(".html")) {
-                contentType = "text/html;charset=utf-8";
-            } else if (path.endsWith(".css")) {
-                contentType = "text/css";
-            } else if (path.endsWith(".js")) {
-                contentType = "application/javascript";
-            } else {
-                contentType = "text/plain";
+        try {
+            // todo : 1. 정적 컨텐츠 동적 컨텐츠 분리
+            // todo : 2-1-1. 정적 컨텐츠는 static 안에서 파일 먼저 찾고 없으면 templates에서 찾음
+            // todo : 2-1-2. 정적 컨텐츠는 확장자에 따른 contentType지정
+            if (httpRequest.isForStaticContent()) {
+                String path = httpRequest.getPath();
+                byte[] body = FileIoUtils.loadFileFromClasspath(path);
+                String contentType = "";
+                if (path.endsWith(".html")) {
+                    contentType = "text/html;charset=utf-8";
+                } else if (path.endsWith(".css")) {
+                    contentType = "text/css";
+                } else if (path.endsWith(".js")) {
+                    contentType = "application/javascript";
+                } else {
+                    contentType = "text/plain";
+                }
+                return HttpResponse.ok()
+                    .contentType(contentType)
+                    .contentLength(body.length)
+                    .body(body)
+                    .build();
             }
-            return HttpResponse.ok()
-                .contentType(contentType)
-                .contentLength(body.length)
-                .body(body)
-                .build();
-        }
 
-        if (httpRequest.isForDynamicContent()) {
-            String path = httpRequest.getPath();
-            Class<? extends Servlet> servletClass = controller.get(path);
-            Servlet servlet = servletClass.newInstance();
-            return servlet.service(httpRequest);
-        }
+            if (httpRequest.isForDynamicContent()) {
+                String path = httpRequest.getPath();
+                Class<? extends Servlet> servletClass = controller.get(path);
+                Servlet servlet = servletClass.newInstance();
+                return servlet.service(httpRequest);
+            }
 
-        throw new AssertionError("HttpRequest는 정적 혹은 동적 컨텐츠 요청만 가능합니다.");
+            throw new AssertionError("HttpRequest는 정적 혹은 동적 컨텐츠 요청만 가능합니다.");
+        } catch (ApplicationBusinessException e) {
+            logger.info(e.getMessage());
+            return HttpResponse.badRequest(e.getMessage()).build();
+        }
     }
 
     private void respondToHttpRequest(OutputStream out, HttpResponse httpResponse) {

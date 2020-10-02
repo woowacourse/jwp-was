@@ -2,6 +2,7 @@ package webserver.domain.response;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,11 +30,18 @@ public class HttpResponse {
     }
 
     public static Builder created(String location) {
-        return new Builder(StatusCode.CREATED).location(location);
+        return new Builder(StatusCode.CREATED)
+            .location(location);
     }
 
     public static Builder found(String location) {
-        return new Builder(StatusCode.FOUND).location(location);
+        return new Builder(StatusCode.FOUND)
+            .location(location);
+    }
+
+    public static Builder badRequest(String errorMessage) {
+        return new Builder(StatusCode.BAD_REQUEST)
+            .body(String.format("error: %s", errorMessage));
     }
 
     public void respond(DataOutputStream dos) {
@@ -89,6 +97,11 @@ public class HttpResponse {
 
         public Builder body(byte[] body) {
             this.body = body;
+            return this;
+        }
+
+        public Builder body(String body) {
+            this.body = body.getBytes(StandardCharsets.UTF_8);
             return this;
         }
 
