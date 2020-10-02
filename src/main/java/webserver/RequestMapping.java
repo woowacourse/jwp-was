@@ -7,7 +7,6 @@ import controller.Controller;
 import controller.StaticController;
 import controller.TemplatesController;
 import controller.UserCreateController;
-import http.ContentType;
 
 public class RequestMapping {
     private final static TemplatesController templatesController = new TemplatesController();
@@ -24,13 +23,7 @@ public class RequestMapping {
         if (controller != null) {
             return controller;
         }
-
-        ContentType contentType = ContentType.of(requestUrl);
-
-        if (contentType == ContentType.HTML) {
-            return templatesController;
-        }
-
+        
         return staticController;
     }
 }

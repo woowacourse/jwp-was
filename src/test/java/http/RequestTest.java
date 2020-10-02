@@ -10,6 +10,9 @@ import java.io.InputStreamReader;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import http.request.Request;
+import http.request.RequestMethod;
+
 class RequestTest {
 
     @DisplayName("post Request 생성 테스트")
@@ -18,7 +21,7 @@ class RequestTest {
         String request = "POST /user/create HTTP/1.1\n"
                 + "Host: localhost:8080\n"
                 + "Connection: keep-alive\n"
-                + "Content-Length: 92\n"
+                + "Content-Length: 93\n"
                 + "Content-Type: application/x-www-form-urlencoded\n"
                 + "Accept: */*\n"
                 + "\n"
@@ -30,7 +33,8 @@ class RequestTest {
 
         assertThat(expected.getRequestLine().getUrl()).isEqualTo("/user/create");
         assertThat(expected.getRequestHeader().getRequestHeaders()).hasSize(5);
-        assertThat(expected.getRequestBody().getRequestBodies()).hasSize(4);
+        assertThat(expected.getRequestBody().getBody()).isEqualTo(
+                "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net");
     }
 
     @DisplayName("get Request 생성 테스트")
@@ -50,6 +54,6 @@ class RequestTest {
                 "/user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net");
         assertThat(expected.getRequestLine().getMethod()).isEqualTo(RequestMethod.GET);
         assertThat(expected.getRequestHeader().getRequestHeaders()).hasSize(3);
-        assertThat(expected.getRequestBody().getRequestBodies()).hasSize(0);
+        assertThat(expected.getRequestBody().getBody()).hasSize(0);
     }
 }

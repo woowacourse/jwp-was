@@ -2,10 +2,11 @@ package utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import http.request.Request;
 
 public class IOUtils {
     private static final String NEW_LINE = "\n";
@@ -24,12 +25,16 @@ public class IOUtils {
         return String.copyValueOf(body);
     }
 
-    public static void printHeader(Map<String, String> headers) {
+    public static void printRequest(Request request) {
         StringBuilder stringBuilder = new StringBuilder(NEW_LINE);
-
-        for (String key : headers.keySet()) {
-            stringBuilder.append(key + SEPARATOR + headers.get(key) + NEW_LINE);
+        stringBuilder.append(request.getRequestLine().toString() + NEW_LINE);
+        for (String key : request.getRequestHeader().getRequestHeaders().keySet()) {
+            stringBuilder.append(key + SEPARATOR + request.getRequestHeader().getHeader(key) + NEW_LINE);
         }
+
+        stringBuilder.append(NEW_LINE);
+        
+        stringBuilder.append(request.getRequestBody().getBody());
 
         logger.debug(stringBuilder.toString());
     }

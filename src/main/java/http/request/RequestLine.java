@@ -1,4 +1,4 @@
-package http;
+package http.request;
 
 import java.io.BufferedReader;
 
@@ -37,5 +37,10 @@ public class RequestLine {
 
     public String getProtocol() {
         return protocol;
+    }
+
+    @Override
+    public String toString() {
+        return method + " " + url + " " + protocol;
     }
 }
