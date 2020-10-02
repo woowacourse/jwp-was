@@ -1,12 +1,13 @@
 package http.request;
 
+import http.ContentType;
+import http.HttpHeader;
+import utils.IOUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
-import http.HttpHeader;
-import utils.IOUtils;
 
 public class Request {
     private final static String DELIMITER = ": ";
@@ -46,7 +47,15 @@ public class Request {
         return requestBody;
     }
 
+    public String getUrl() {
+        return requestLine.getUrl();
+    }
+
     public boolean isMethod(RequestMethod requestMethod) {
         return requestMethod == requestLine.getMethod();
+    }
+
+    public String getContentType() {
+        return ContentType.of(requestLine.getUrl()).getContentType();
     }
 }
