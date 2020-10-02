@@ -17,7 +17,7 @@ public class ResourceHandlerMapping implements HandlerMapping {
             StaticResourceType resourceType = StaticResourceType.findByUri(httpRequest.getUri());
             byte[] body = FileIoUtils.loadFileFromClasspath(resourceType.getResourceLocation() + httpRequest.getPath());
             httpResponse.response200Header(resourceType.getContentType(), body.length);
-            httpResponse.responseBody(body);
+            httpResponse.ok(body);
         };
     }
 }

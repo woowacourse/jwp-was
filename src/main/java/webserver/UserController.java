@@ -14,6 +14,6 @@ public class UserController {
         User user = new User(userId, password, name, email);
         DataBase.addUser(user);
         httpResponse.response302Header("/index.html");
-        httpResponse.emptyBody();
+        httpResponse.noContent();
     }
 }
