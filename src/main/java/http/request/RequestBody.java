@@ -1,11 +1,12 @@
 package http.request;
 
+import exception.IllegalRequestException;
+import utils.IOUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
-import utils.IOUtils;
 
 public class RequestBody {
     private static final String URL_DELIMITER = "&";
@@ -17,18 +18,21 @@ public class RequestBody {
         body = IOUtils.readData(br, contentLength);
     }
 
-    public Map<String, String> parseRequestBody() {
+    public Map<String, String> parseRequestBody() throws IllegalRequestException {
         Map<String, String> result = new HashMap<>();
 
-        if (!"".equals(body)) {
-            String[] tokens = body.split(URL_DELIMITER);
-
-            for (String token : tokens) {
-                String[] value = token.split(BODY_DELIMITER);
-                result.put(value[0], value[1]);
-            }
+        if ("".equals(body)) {
+            return result;
         }
 
+        String[] tokens = body.split(URL_DELIMITER);
+        for (String token : tokens) {
+            String[] value = token.split(BODY_DELIMITER);
+            if (value.length != 2) {
+                throw new IllegalRequestException();
+            }
+            result.put(value[0], value[1]);
+        }
         return result;
     }
 

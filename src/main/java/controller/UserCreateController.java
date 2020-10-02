@@ -1,6 +1,7 @@
 package controller;
 
 import db.DataBase;
+import exception.IllegalRequestException;
 import http.request.Request;
 import http.response.Response;
 import mapper.QueryParams;
@@ -13,7 +14,7 @@ import static http.request.RequestMethod.POST;
 
 public class UserCreateController implements Controller {
     @Override
-    public void service(Request request, Response response) {
+    public void service(Request request, Response response) throws IllegalRequestException {
         if (request.isMethod(GET)) {
             doGet(request, response);
         } else if (request.isMethod(POST)) {
@@ -34,7 +35,7 @@ public class UserCreateController implements Controller {
         }
     }
 
-    private void doPost(Request request, Response response) {
+    private void doPost(Request request, Response response) throws IllegalRequestException {
         Map<String, String> requestBodies = request.getRequestBody().parseRequestBody();
         User user = new User(requestBodies.get("userId"), requestBodies.get("password"),
                 requestBodies.get("name"), requestBodies.get("email"));

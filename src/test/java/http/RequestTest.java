@@ -1,17 +1,16 @@
 package http;
 
-import static org.assertj.core.api.Assertions.*;
+import http.request.Request;
+import http.request.RequestMethod;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import http.request.Request;
-import http.request.RequestMethod;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class RequestTest {
 
@@ -32,7 +31,7 @@ class RequestTest {
         Request expected = new Request(br);
 
         assertThat(expected.getRequestLine().getUrl()).isEqualTo("/user/create");
-        assertThat(expected.getRequestHeader().getRequestHeaders()).hasSize(5);
+        assertThat(expected.getRequestHeaders()).hasSize(5);
         assertThat(expected.getRequestBody().getBody()).isEqualTo(
                 "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net");
     }
@@ -53,7 +52,7 @@ class RequestTest {
         assertThat(expected.getRequestLine().getUrl()).isEqualTo(
                 "/user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net");
         assertThat(expected.getRequestLine().getMethod()).isEqualTo(RequestMethod.GET);
-        assertThat(expected.getRequestHeader().getRequestHeaders()).hasSize(3);
+        assertThat(expected.getRequestHeaders()).hasSize(3);
         assertThat(expected.getRequestBody().getBody()).hasSize(0);
     }
 }

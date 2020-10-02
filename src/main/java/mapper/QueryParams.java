@@ -7,6 +7,7 @@ public class QueryParams {
     private final static String QUERY_PARAM_DELIMITER = "=";
     private final static String QUERY_PARAMS_DELIMITER = "&";
     private final static String URL_DELIMITER = "\\?";
+    private final static String[] EMPTY_STRINGS = new String[]{};
 
     private Map<String, String> queryParams = new HashMap<>();
 
@@ -21,7 +22,7 @@ public class QueryParams {
     private String[] extractQueryParams(String url) {
         String[] split = url.split(URL_DELIMITER);
         if (split.length == 1) {
-            return new String[] {};
+            return EMPTY_STRINGS;
         }
         return split[1].split(QUERY_PARAMS_DELIMITER);
     }

@@ -7,43 +7,43 @@ import java.util.Map;
 
 public class HttpHeader {
 
-    private Map<String, String> requestHeaders;
+    private Map<String, String> httpHeaders;
 
-    public HttpHeader(Map<String, String> requestHeaders) {
-        this.requestHeaders = requestHeaders;
+    public HttpHeader(Map<String, String> httpHeaders) {
+        this.httpHeaders = httpHeaders;
     }
 
     public HttpHeader() {
-        requestHeaders = new HashMap<>();
+        httpHeaders = new HashMap<>();
     }
 
     public String getHeader(String key) {
-        return requestHeaders.get(key);
+        return httpHeaders.get(key);
     }
 
     public void setHeader(String key, String value) {
-        requestHeaders.put(key, value);
+        httpHeaders.put(key, value);
     }
 
     public Integer getContentLength() {
-        if (requestHeaders.get(Header.CONTENT_TYPE.getName()) == null) {
+        if (httpHeaders.get(Header.CONTENT_TYPE.getName()) == null) {
             return 0;
         }
-        return Integer.parseInt(requestHeaders.get(Header.CONTENT_LENGTH.getName()));
+        return Integer.parseInt(httpHeaders.get(Header.CONTENT_LENGTH.getName()));
     }
 
     public String getContentType() {
-        return requestHeaders.get(Header.CONTENT_TYPE.getName());
+        return httpHeaders.get(Header.CONTENT_TYPE.getName());
     }
 
     public void write(DataOutputStream dataOutputStream) throws IOException {
-        for (String key : requestHeaders.keySet()) {
-            dataOutputStream.writeBytes(key + ": " + requestHeaders.get(key) + " " + System.lineSeparator());
+        for (String key : httpHeaders.keySet()) {
+            dataOutputStream.writeBytes(key + ": " + httpHeaders.get(key) + " " + System.lineSeparator());
         }
         dataOutputStream.writeBytes(System.lineSeparator());
     }
 
-    public Map<String, String> getRequestHeaders() {
-        return requestHeaders;
+    public Map<String, String> getHttpHeaders() {
+        return httpHeaders;
     }
 }
