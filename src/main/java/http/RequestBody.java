@@ -8,23 +8,34 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RequestBody {
-    private Map<String, String> params;
+    private final Map<String, String> params;
 
-    public RequestBody(BufferedReader br, int contentLength) throws IOException {
+    public RequestBody(BufferedReader br, int contentLength, String contentType) throws IOException {
         params = new HashMap<>();
-        String line = IOUtils.readData(br, contentLength);
-        if (line.isEmpty()) {
-            throw new IllegalArgumentException();
+        String body = IOUtils.readData(br, contentLength);
+        if (body.isEmpty()) {
+            return;
         }
 
-        String[] tokens = line.split("&");
-        for (String token : tokens) {
-            String[] keyValue = token.split("=");
-            params.put(keyValue[0], keyValue[1]);
+        if (contentType.equals("application/x-www-form-urlencoded")) {
+            parseWWWForm(body);
+        } else {
+            throw new UnsupportedOperationException("Unsupported content-type.");
         }
     }
 
-    public Map<String, String> getParams() {
-        return params;
+    private void parseWWWForm(String body) {
+        String[] tokens = body.split("&");
+        for (String token : tokens) {
+            String[] keyValue = token.split("=");
+            if (keyValue.length != 2) {
+                throw new IllegalArgumentException("No value for the key: " + keyValue[0]);
+            }
+            params.put(keyValue[0].toLowerCase(), keyValue[1]);
+        }
+    }
+
+    public String getValue(String key) {
+        return this.params.get(key);
     }
 }
