@@ -1,76 +1,65 @@
 package webserver;
 
-import db.DataBase;
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
-import model.User;
+import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.UrlUtils;
+import webserver.controller.Controller;
+import webserver.controller.CreateUserController;
+import webserver.controller.DefaultController;
+import webserver.controller.ErrorController;
+import webserver.controller.ListUserController;
+import webserver.controller.LoginController;
+import webserver.controller.RequestHandlerMapping;
+import webserver.request.HttpRequest;
+import webserver.response.HttpResponse;
 
 public class RequestHandler implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private static final String CREATE_URL = "/user/create";
-    private static final String INDEX_HTML_URL = "/index.html";
 
-    private Socket connection;
+    private final Socket connection;
+    private final RequestHandlerMapping requestHandlerMapping;
 
-    public RequestHandler(Socket connectionSocket) {
+
+    public RequestHandler(Socket connectionSocket, RequestHandlerMapping requestHandlerMapping) {
         this.connection = connectionSocket;
+        initRequestHandler(requestHandlerMapping);
+        this.requestHandlerMapping = requestHandlerMapping;
+
+    }
+
+    private void initRequestHandler(RequestHandlerMapping requestHandlerMapping) {
+        requestHandlerMapping.putController("/user/list.html", new ListUserController());
+        requestHandlerMapping.putController("/user/create", new CreateUserController());
+        requestHandlerMapping.putController("/user/login", new LoginController());
+        requestHandlerMapping.putController("/", new DefaultController());
     }
 
     public void run() {
-        logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(), connection.getPort());
-        try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-            RequestHeader requestHeader = new RequestHeader(bufferedReader);
-            ResponseHeader responseHeader = new ResponseHeader(new DataOutputStream(out));
+        logger
+            .debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
+                connection.getPort());
+        try (InputStream in = connection.getInputStream(); OutputStream out = connection
+            .getOutputStream()) {
+            BufferedReader bufferedReader = new BufferedReader(
+                new InputStreamReader(in, StandardCharsets.UTF_8));
+            HttpRequest httpRequest = new HttpRequest(bufferedReader);
+            HttpResponse httpResponse = new HttpResponse(out);
 
-            String resourcePath = requestHeader.getResourcePath();
-            logger.info("first resourcePath : {} ",resourcePath);
-
-
-            if (resourcePath.startsWith(CREATE_URL)) {
-                if (requestHeader.isGet()) {
-                    Map<String, String> requestParam = UrlUtils.extractRequestParamFromUrl(resourcePath);
-                    bindRequestParam(requestParam);
-                }
-
-                if (requestHeader.isPost()) {
-                    Map<String, String> requestParam = UrlUtils.extractRequestParam(requestHeader.getBody());
-                    bindRequestParam(requestParam);
-                    responseHeader.createResponse302Header(INDEX_HTML_URL);
-                    return;
-                }
+            Controller controller = requestHandlerMapping.getController(httpRequest.getPath());
+            if (Objects.isNull(controller)) {
+                controller = new ErrorController();
             }
-            responseHeader.createResponse200Header(resourcePath);
-        } catch (IOException | URISyntaxException e) {
+            controller.service(httpRequest, httpResponse);
+        } catch (IOException e) {
             logger.error(e.getMessage());
         }
-    }
-
-    private void bindRequestParam(Map<String, String> requestParam) {
-        if (!requestParam.isEmpty()) {
-            User user = bindParamsToUser(requestParam);
-            DataBase.addUser(user);
-        }
-    }
-
-    private User bindParamsToUser(Map<String, String> params) {
-        return new User(
-            params.get("userId"),
-            params.get("password"),
-            params.get("name"),
-            params.get("email")
-        );
     }
 }
