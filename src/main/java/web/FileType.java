@@ -14,25 +14,25 @@ public enum FileType {
     JPEG(".jpeg", "./static", "image/jpeg"),
     SVG(".svg", "./static", "image/svg_xml");
 
-    private final String fileType;
+    private final String type;
     private final String resourcePath;
     private final String contentType;
 
-    FileType(String fileType, String resourcePath, String contentType) {
-        this.fileType = fileType;
+    FileType(String type, String resourcePath, String contentType) {
+        this.type = type;
         this.resourcePath = resourcePath;
         this.contentType = contentType;
     }
 
     public static FileType findFileType(String path) {
         return Arrays.stream(FileType.values())
-                .filter(fileType -> path.endsWith(fileType.getFileType()))
+                .filter(fileType -> path.endsWith(fileType.getType()))
                 .findAny()
                 .orElseThrow(InvalidRequestPathException::new);
     }
 
-    public String getFileType() {
-        return fileType;
+    public String getType() {
+        return type;
     }
 
     public String getResourcePath() {

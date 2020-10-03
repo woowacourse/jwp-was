@@ -1,4 +1,4 @@
-package web;
+package web.request;
 
 import exception.InvalidRequestParamsException;
 import exception.RequestParameterNotFoundException;
@@ -11,7 +11,6 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import web.request.ParameterMapper;
 
 public class ParameterMapperTest {
 
