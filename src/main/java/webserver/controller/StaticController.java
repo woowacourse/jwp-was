@@ -5,6 +5,9 @@ import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 
 public class StaticController extends AbstractController {
+
+    private static final String DELIMITER = "\\.";
+
     @Override
     protected HttpResponse get(HttpRequest httpRequest) {
         String defaultPath = httpRequest.getDefaultPath();
@@ -18,18 +21,11 @@ public class StaticController extends AbstractController {
         }
 
         byte[] body = FileIoUtils.loadFileFromClasspath(path);
-        String contentType = "";
-        if (path.endsWith(".html")) {
-            contentType = "text/html;charset=utf-8";
-        } else if (path.endsWith(".css")) {
-            contentType = "text/css";
-        } else if (path.endsWith(".js")) {
-            contentType = "application/javascript";
-        } else {
-            contentType = "text/plain";
-        }
+        String extension = path.split(DELIMITER)[1];
+        ContentType contentType = ContentTypeMapper.map(extension);
+
         return HttpResponse.ok()
-            .contentType(contentType)
+            .contentType(contentType.value())
             .contentLength(body.length)
             .body(body)
             .build();
