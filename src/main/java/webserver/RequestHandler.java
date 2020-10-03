@@ -38,7 +38,12 @@ public class RequestHandler implements Runnable {
 
             if (requestTarget.equals("/user/create")) {
                 RequestBody requestBody = httpRequest.getRequestBody();
-                User user = new User(requestBody.getParameters());
+                User user = User.builder()
+                        .userId(requestBody.getParameterByKey("userId"))
+                        .email(requestBody.getParameterByKey("email"))
+                        .password(requestBody.getParameterByKey("password"))
+                        .name(requestBody.getParameterByKey("name"))
+                        .build();
                 DataBase.addUser(user);
                 logger.debug("New User created! -> {}", user);
 
