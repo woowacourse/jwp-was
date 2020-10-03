@@ -1,4 +1,4 @@
-package webserver.servlet;
+package webserver.controller;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -14,7 +14,7 @@ import db.DataBase;
 import model.User;
 import webserver.domain.request.HttpRequest;
 
-class UserCreateServletTest {
+class UserCreateControllerTest {
     @DisplayName("회원가입에 대한 GET 요청이 들어오면 파라미터의 값으로 회원을 생성한다.")
     @Test
     void get() throws IOException {
@@ -22,8 +22,8 @@ class UserCreateServletTest {
             new File("/Users/moon/Desktop/Github/jwp-was/build/resources/test/GetRequest.txt"));
         HttpRequest httpRequest = HttpRequest.of(inputStream);
 
-        Servlet servlet = new UserCreateServlet();
-        servlet.service(httpRequest);
+        Controller controller = new UserCreateController();
+        controller.service(httpRequest);
 
         User persistUser = DataBase.findUserById("javajigi");
         assertThat(persistUser.getPassword()).isEqualTo("password");
@@ -38,8 +38,8 @@ class UserCreateServletTest {
             new File("/Users/moon/Desktop/Github/jwp-was/build/resources/test/PostRequest.txt"));
         HttpRequest httpRequest = HttpRequest.of(inputStream);
 
-        Servlet servlet = new UserCreateServlet();
-        servlet.service(httpRequest);
+        Controller controller = new UserCreateController();
+        controller.service(httpRequest);
 
         User persistUser = DataBase.findUserById("javajigi");
         assertThat(persistUser.getPassword()).isEqualTo("password");

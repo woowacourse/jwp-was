@@ -14,8 +14,6 @@ import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import webserver.exception.NotReadableHttpMessageException;
-
 class RequestLineTest {
     @DisplayName("RequestLine 객체를 생성한다.")
     @Test

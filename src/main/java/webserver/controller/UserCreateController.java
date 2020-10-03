@@ -1,4 +1,4 @@
-package webserver.servlet;
+package webserver.controller;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,8 +11,8 @@ import model.User;
 import webserver.domain.request.HttpRequest;
 import webserver.domain.response.HttpResponse;
 
-public class UserCreateServlet extends AbstractServlet {
-    private static final Logger logger = LoggerFactory.getLogger(UserCreateServlet.class);
+public class UserCreateController extends AbstractController {
+    private static final Logger logger = LoggerFactory.getLogger(UserCreateController.class);
 
     @Override
     public HttpResponse post(HttpRequest httpRequest) {

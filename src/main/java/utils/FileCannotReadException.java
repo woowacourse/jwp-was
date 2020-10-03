@@ -1,8 +1,8 @@
 package utils;
 
-import webserver.SystemException;
+import webserver.ServerException;
 
-public class FileCannotReadException extends SystemException {
+public class FileCannotReadException extends ServerException {
     public FileCannotReadException(String message) {
         super(message);
     }

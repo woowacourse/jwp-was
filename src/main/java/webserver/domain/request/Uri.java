@@ -39,14 +39,6 @@ public class Uri {
         }
     }
 
-    public boolean isTemplatesResource() {
-        return path.endsWith("html") || path.equals("/favicon.ico");
-    }
-
-    public boolean isStaticResource() {
-        return !isTemplatesResource() && path.contains(".");
-    }
-
     public String getPath() {
         return path;
     }

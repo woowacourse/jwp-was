@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Map;
 
 import webserver.domain.Protocol;
-import webserver.exception.NotReadableHttpMessageException;
 
 public class RequestLine {
     private static final String SPACE = "\\s";
@@ -32,14 +31,6 @@ public class RequestLine {
         Protocol protocol = Protocol.of(sources[2]);
 
         return new RequestLine(method, uri, protocol);
-    }
-
-    public boolean isTemplatesResource() {
-        return uri.isTemplatesResource();
-    }
-
-    public boolean isStaticResource() {
-        return uri.isStaticResource();
     }
 
     public Method getMethod() {

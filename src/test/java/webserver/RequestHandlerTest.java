@@ -1,6 +1,7 @@
 package webserver;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.BDDMockito.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,19 +12,27 @@ import java.net.Socket;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import db.DataBase;
 import model.User;
 import utils.FileIoUtils;
+import webserver.controller.StaticController;
+import webserver.controller.UserCreateController;
 import webserver.domain.request.HttpRequest;
 import webserver.domain.response.HttpResponse;
 
 class RequestHandlerTest {
     private RequestHandler requestHandler;
 
+    @Mock
+    private RequestMapping requestMapping;
+
     @BeforeEach
     void setUp() {
-        requestHandler = new RequestHandler(new Socket(), new ServletContainer());
+        MockitoAnnotations.initMocks(this);
+        requestHandler = new RequestHandler(new Socket(), requestMapping);
     }
 
     @DisplayName("정적 컨텐츠 처리에 대한 요청에 응답한다.")
@@ -32,6 +41,7 @@ class RequestHandlerTest {
         InputStream inputStream = new FileInputStream(
             new File("/Users/moon/Desktop/Github/jwp-was/build/resources/test/TemplatesResourceRequest.txt"));
         HttpRequest httpRequest = HttpRequest.of(inputStream);
+        given(requestMapping.getController(any(HttpRequest.class))).willReturn(new StaticController());
 
         HttpResponse httpResponse = requestHandler.controlRequestAndResponse(httpRequest);
 
@@ -47,6 +57,7 @@ class RequestHandlerTest {
         InputStream inputStream = new FileInputStream(
             new File("/Users/moon/Desktop/Github/jwp-was/build/resources/test/GetRequest.txt"));
         HttpRequest httpRequest = HttpRequest.of(inputStream);
+        given(requestMapping.getController(any(HttpRequest.class))).willReturn(new UserCreateController());
 
         HttpResponse httpResponse = requestHandler.controlRequestAndResponse(httpRequest);
 

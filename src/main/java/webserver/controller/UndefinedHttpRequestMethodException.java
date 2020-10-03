@@ -1,4 +1,4 @@
-package webserver.servlet;
+package webserver.controller;
 
 import webserver.domain.request.HttpRequest;
 
@@ -10,6 +10,6 @@ public class UndefinedHttpRequestMethodException extends RuntimeException {
     }
 
     UndefinedHttpRequestMethodException(HttpRequest httpRequest) {
-        this(String.format("%s : {'URL' : %s, 'Method': %s}", message, httpRequest.getPath(), httpRequest.getMethod()));
+        this(String.format("%s : {'URL' : %s, 'Method': %s}", message, httpRequest.getDefaultPath(), httpRequest.getMethod()));
     }
 }

@@ -2,8 +2,6 @@ package webserver.domain;
 
 import java.util.Arrays;
 
-import webserver.exception.IncorrectProtocolException;
-
 public enum Protocol {
     ZERO_POINT_NINE(""),
     ONE_POINT_ZERO("HTTP/1.0"),
