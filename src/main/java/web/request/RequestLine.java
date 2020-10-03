@@ -1,7 +1,10 @@
 package web.request;
 
+import exception.InvalidRequestLineException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Objects;
 
 public class RequestLine {
     private static final Logger logger = LoggerFactory.getLogger(RequestLine.class);
@@ -11,6 +14,7 @@ public class RequestLine {
     private final String version;
 
     public RequestLine(String requestLine) {
+        validateLine(requestLine);
         logger.debug(requestLine);
 
         String[] tokens = requestLine.split(" ");
@@ -18,6 +22,12 @@ public class RequestLine {
         this.method = MethodType.createMethodByName(methodName);
         this.requestPath = new RequestPath(tokens[1].trim());
         this.version = tokens[2].trim();
+    }
+
+    private void validateLine(String requestLine) {
+        if (Objects.isNull(requestLine) || requestLine.isEmpty()) {
+            throw new InvalidRequestLineException();
+        }
     }
 
     public MethodType getMethod() {
