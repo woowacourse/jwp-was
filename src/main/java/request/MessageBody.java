@@ -1,28 +1,30 @@
 package request;
 
-import java.util.Map;
 import java.util.Objects;
 
-public class MessageBody {
+class MessageBody {
+
+    static final String EMPTY_BODY = "";
 
     private String messageBody;
 
-    public MessageBody(String messageBody) {
+    MessageBody(String messageBody) {
         this.messageBody = messageBody;
     }
 
-    public Map<String, String> getFormDataFromBody() {
+    String findDataFromFormFormatBody(String fieldName) {
         if (Objects.isNull(messageBody) || messageBody.isEmpty()) {
-            throw new UnsupportedOperationException("message body is empty.");
+            throw new RequestDataFormatException("message body is empty.");
         }
         try {
-            return new QueryData(messageBody).getQueryData();
+            return new QueryData(messageBody).getValue(fieldName);
         } catch (IllegalArgumentException e) {
-            throw new UnsupportedOperationException("message body is not form data format.");
+            throw new RequestDataFormatException("message body is not form data format.");
         }
     }
 
-    public String getMessageBody() {
+    @Override
+    public String toString() {
         return messageBody;
     }
 }

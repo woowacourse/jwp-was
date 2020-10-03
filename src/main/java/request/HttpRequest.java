@@ -1,10 +1,16 @@
 package request;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import utils.IOUtils;
 
 /** request 형태!
  *
@@ -33,6 +39,22 @@ public class HttpRequest {
         messageBody = new MessageBody(requestBody);
     }
 
+    public static HttpRequest readHttpRequest(InputStream httpRequestFormatInput)
+            throws IOException {
+        BufferedReader br = new BufferedReader(
+            new InputStreamReader(httpRequestFormatInput, StandardCharsets.UTF_8));
+
+        String requestHeader = IOUtils.readDataBeforeEmptyLine(br);
+        String requestBody = "";
+
+        if (HttpRequest.isExistRequestHeader(requestHeader, Headers.CONTENT_LENGTH)) {
+            int contentLength = Integer.parseInt(HttpRequest.findHeaderValue(
+                requestHeader, Headers.CONTENT_LENGTH));
+            requestBody = IOUtils.readData(br, contentLength);
+        }
+        return new HttpRequest(requestHeader, requestBody);
+    }
+
     private List<String> collectHeaderLinesFrom(List<String> lines) {
         List<String> headers = new ArrayList<>();
 
@@ -44,17 +66,17 @@ public class HttpRequest {
     }
 
     public static boolean isExistRequestHeader(String request, String headerName) {
-        return new HttpRequest(request, "")
+        return new HttpRequest(request, MessageBody.EMPTY_BODY)
             .headers
             .doesHeaderExist(headerName);
     }
 
     public static String findHeaderValue(String request, String headerName) {
-        return new HttpRequest(request, "")
+        return new HttpRequest(request, MessageBody.EMPTY_BODY)
             .getHeader(headerName);
     }
 
-    public boolean isUriUsingQueryString() {
+    public boolean isRequestLineUriQueryString() {
         return requestLine.isUriUsingQueryString();
     }
 
@@ -62,8 +84,8 @@ public class HttpRequest {
         return requestLine.getQueryDataFromUri();
     }
 
-    public Map<String, String> getFormDataFromBody() {
-        return messageBody.getFormDataFromBody();
+    public String getValueFromFormData(String headerName) {
+        return messageBody.findDataFromFormFormatBody(headerName);
     }
 
     public boolean isUriPath(String uriPath) {
@@ -84,5 +106,16 @@ public class HttpRequest {
 
     public String getHeader(String headerName) {
         return headers.getValue(headerName);
+    }
+
+    @Override
+    public String toString() {
+        return "** HttpRequest **\n"
+            + requestLine.toString()
+            + "\n"
+            + headers.toString()
+            + "\n"
+            + messageBody.toString()
+            + "\n";
     }
 }

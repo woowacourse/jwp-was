@@ -12,35 +12,49 @@ import response.HttpResponse;
 import response.StatusCode;
 import webserver.RequestHandler;
 
-public class StaticFileController {
+public class StaticFileController extends AbstractController {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private ResourcesHandler resourcesHandler = new ResourcesHandler();
 
-    public HttpResponse findStaticFile(HttpRequest httpRequest) {
-        Resource resourceForResponse;
-
+    private HttpResponse findStaticFile(HttpRequest httpRequest) {
         try {
-            resourceForResponse = resourcesHandler.convertUriToResource(httpRequest.getUriPath());
-
-            byte[] body = resourceForResponse.getResource();
-            ContentType contentType = resourceForResponse.getContentType();
-
-            return new HttpResponse(StatusCode.OK, body, contentType);
-
+            return findStaticFileWithoutExceptionCatch(httpRequest);
+        } catch (IllegalArgumentException e) {
+            logger.error("There is no corresponding file for uri \"{}\". : {}",
+                httpRequest.getUriPath(),
+                e.getMessage()
+            );
+            return new HttpResponse(StatusCode.NOT_FOUND);
         } catch (IOException e) {
-            logger.error("fail to read static file that uri is {} : {}",
+            logger.error("fail to read static file that uri is \"{}\" : {}",
                 httpRequest.getUriPath(),
                 e.getMessage()
             );
             return new HttpResponse(StatusCode.INTERNAL_SERVER_ERROR);
         } catch (URISyntaxException e) {
-            logger.error("There is no corresponding file for uri {}. : {}",
+            logger.error("uri \"{}\" syntax is wrong. : {}",
                 httpRequest.getUriPath(),
                 e.getMessage()
             );
             return new HttpResponse(StatusCode.NOT_FOUND);
         }
+    }
+
+    private HttpResponse findStaticFileWithoutExceptionCatch(HttpRequest httpRequest)
+            throws IOException, URISyntaxException {
+        Resource resourceForResponse =
+            resourcesHandler.convertUriToResource(httpRequest.getUriPath());
+
+        byte[] body = resourceForResponse.getResource();
+        ContentType contentType = resourceForResponse.getContentType();
+
+        return new HttpResponse(StatusCode.OK, body, contentType);
+    }
+
+    @Override
+    protected HttpResponse doGet(HttpRequest httpRequest) {
+        return findStaticFile(httpRequest);
     }
 }
