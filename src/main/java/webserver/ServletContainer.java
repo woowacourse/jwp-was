@@ -17,7 +17,7 @@ public class ServletContainer {
     public ServletContainer() {
         servletNameMapper = new HashMap<>();
         servletContainer = new HashMap<>();
-        servletNameMapper.put("/user/create", "webserver.servlet.UserCreate");
+        servletNameMapper.put("/user/create", "webserver.controller.UserCreateController");
         logger.info("ServletContainer has loaded.");
     }
 
@@ -36,7 +36,7 @@ public class ServletContainer {
                 Class clazz = Class.forName(className);
                 servletContainer.put(requestPath, (Controller)clazz.newInstance());
             }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NullPointerException e) {
             logger.error(e.getMessage());
             throw new CannotInitServletException(requestPath);
         }

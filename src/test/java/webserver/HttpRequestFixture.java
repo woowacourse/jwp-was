@@ -17,6 +17,11 @@ public class HttpRequestFixture {
         return HttpRequest.of(inputStream(filePath));
     }
 
+    public static HttpRequest httpRequestWithEmptyParameter() throws IOException {
+        String filePath = "/Users/moon/Desktop/Github/jwp-was/build/resources/test/GetRequestWithEmptyParameter.txt";
+        return HttpRequest.of(inputStream(filePath));
+    }
+
     public static HttpRequest httpRequestOfPostMethod() throws IOException {
         String filePath = "/Users/moon/Desktop/Github/jwp-was/build/resources/test/PostRequest.txt";
         return HttpRequest.of(inputStream(filePath));
@@ -24,6 +29,11 @@ public class HttpRequestFixture {
 
     public static HttpRequest httpRequestOfTemplatesResource() throws IOException {
         String filePath = "/Users/moon/Desktop/Github/jwp-was/build/resources/test/TemplatesResourceRequest.txt";
+        return HttpRequest.of(inputStream(filePath));
+    }
+
+    public static HttpRequest httpRequestOfPutMethod() throws IOException {
+        String filePath = "/Users/moon/Desktop/Github/jwp-was/build/resources/test/PutRequest.txt";
         return HttpRequest.of(inputStream(filePath));
     }
 
