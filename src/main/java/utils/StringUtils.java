@@ -6,6 +6,7 @@ import static model.ContentType.ICO;
 import java.io.BufferedReader;
 import java.io.IOException;
 import model.ContentType;
+import model.Method;
 import model.Request;
 
 public class StringUtils {
@@ -56,8 +57,30 @@ public class StringUtils {
         return "." + sections[sections.length - 1];
     }
 
-    public static String getParameters(String line, BufferedReader bufferedReader)
+    public static String getParameters(String line, String requestMethod,
+        BufferedReader bufferedReader)
         throws IOException {
+        Method method = Method.of(requestMethod);
+
+        if (method.equals(Method.GET)) {
+            return extractGetParameters(line);
+        }
+        if (method.equals(Method.POST)) {
+            return extractPostParameters(bufferedReader);
+        }
+        return null;
+    }
+
+    private static String extractGetParameters(String line) throws IOException {
+        String[] sections = line.split("\\?");
+        if (sections.length == 1) {
+            return null;
+        }
+        return sections[1];
+    }
+
+    private static String extractPostParameters(BufferedReader bufferedReader) throws IOException {
+        String line = bufferedReader.readLine();
         while (!line.contains("Content-Length:")) {
             line = bufferedReader.readLine();
         }

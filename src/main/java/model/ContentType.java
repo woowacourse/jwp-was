@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public enum ContentType {
+
     HTML("text/html", ".html"),
     CSS("text/css", ".css"),
     JS("text/javascript", ".js"),

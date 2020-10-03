@@ -3,6 +3,7 @@ package model;
 import utils.StringUtils;
 
 public class User {
+
     private String userId;
     private String password;
     private String name;
