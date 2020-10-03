@@ -28,9 +28,9 @@ public class RequestLine {
             throw new InvalidHttpRequestException();
         }
         String[] splitRequestLine = requestLine.split(REQUEST_LINE_DELIMITER);
-        this.method = HttpMethod.of(splitRequestLine[0]);
-        this.path = RequestPath.of(splitRequestLine[1]);
-        this.version = HttpVersion.of(splitRequestLine[2]);
+        this.method = HttpMethod.from(splitRequestLine[0]);
+        this.path = RequestPath.from(splitRequestLine[1]);
+        this.version = HttpVersion.from(splitRequestLine[2]);
     }
 
     public HttpMethod getMethod() {

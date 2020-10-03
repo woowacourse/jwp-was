@@ -34,7 +34,7 @@ class RequestLineTest {
 
         assertThat(requestLine.getMethod()).isEqualTo(HttpMethod.GET);
         assertThat(requestLine.getPath()).isEqualTo(path);
-        assertThat(requestLine.getVersion()).isEqualTo(HttpVersion.of(version));
+        assertThat(requestLine.getVersion()).isEqualTo(HttpVersion.from(version));
     }
 
     @DisplayName("유효하지 않은 RequestLine - 예외 발생")

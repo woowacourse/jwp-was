@@ -17,7 +17,7 @@ class HttpMethodTest {
     @DisplayName("유혀하지 않은 HTTP 메서드 - 예외 발생")
     @Test
     void invalid_HttpMethod_Should_Throw_Exception() {
-        assertThatThrownBy(() -> HttpMethod.of("INVALID_METHOD"))
+        assertThatThrownBy(() -> HttpMethod.from("INVALID_METHOD"))
             .isInstanceOf(InvalidHttpRequestException.class)
             .hasMessage("유효한 HTTP 요청이 아닙니다.");
     }
@@ -26,7 +26,7 @@ class HttpMethodTest {
     @ParameterizedTest
     @MethodSource("provideHttpMethod")
     void valid_HttpMethod(String method, HttpMethod httpMethod) {
-        assertThat(HttpMethod.of(method)).isEqualTo(httpMethod);
+        assertThat(HttpMethod.from(method)).isEqualTo(httpMethod);
     }
 
     private static Stream<Arguments> provideHttpMethod() {

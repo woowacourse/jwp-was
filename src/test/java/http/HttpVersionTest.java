@@ -18,7 +18,7 @@ class HttpVersionTest {
     @ParameterizedTest
     @MethodSource("provideHttpVersion")
     void of(String version, HttpVersion httpVersion) {
-        assertThat(HttpVersion.of(version)).isEqualTo(httpVersion);
+        assertThat(HttpVersion.from(version)).isEqualTo(httpVersion);
     }
 
     private static Stream<Arguments> provideHttpVersion() {
@@ -31,7 +31,7 @@ class HttpVersionTest {
     @DisplayName("유효하지 않은 HTTP 버전 - 예외 발생")
     @Test
     void invalid_HttpVersion_Should_Throw_Exception() {
-        assertThatThrownBy(() -> HttpVersion.of("HTTP123"))
+        assertThatThrownBy(() -> HttpVersion.from("HTTP123"))
             .isInstanceOf(InvalidHttpRequestException.class)
             .hasMessage("유효한 HTTP 요청이 아닙니다.");
     }

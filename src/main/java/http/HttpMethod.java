@@ -11,7 +11,7 @@ public enum HttpMethod {
     PATCH,
     DELETE;
 
-    public static HttpMethod of(String method) {
+    public static HttpMethod from(String method) {
         return Arrays.stream(values())
             .filter(httpMethod -> httpMethod.name().equals(method))
             .findAny()

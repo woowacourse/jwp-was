@@ -18,7 +18,7 @@ class ViewResolverTest {
     @DisplayName("Redirect 테스트")
     @Test
     void redirect() throws IOException, URISyntaxException {
-        ModelAndView modelAndView = ModelAndView.of(new View("redirect:/index.html"));
+        ModelAndView modelAndView = ModelAndView.from(new View("redirect:/index.html"));
 
         ViewResolver viewResolver = new ViewResolver();
         HttpResponse httpResponse = viewResolver.resolve(modelAndView);
@@ -32,7 +32,7 @@ class ViewResolverTest {
     @DisplayName("응답 200 OK 테스트")
     @Test
     void response_200_OK() throws IOException, URISyntaxException {
-        ModelAndView modelAndView = ModelAndView.of(new View("/index.html"));
+        ModelAndView modelAndView = ModelAndView.from(new View("/index.html"));
 
         ViewResolver viewResolver = new ViewResolver();
         HttpResponse httpResponse = viewResolver.resolve(modelAndView);

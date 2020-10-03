@@ -4,14 +4,14 @@ import java.util.Arrays;
 
 public enum StaticFile {
 
-    HTML(".html", "./templates", "text/html;charset=utf-8"),
-    ICO(".ico", "./templates", "image/vnd.microsoft.icon"),
-    CSS(".css", "./static", "text/css"),
-    JS(".js", "./static", "text/javascript"),
-    WOFF(".woff", "./static", "text/woff"),
-    PNG(".png", "./static", "image/png"),
-    JPEG(".jpeg", "./static", "image/jpeg"),
-    SVG(".svg", "./static", "image/svg_xml");
+    HTML(".html", Constants.TEMPLATES_FILE_PATH, "text/html;charset=utf-8"),
+    ICO(".ico", Constants.TEMPLATES_FILE_PATH, "image/vnd.microsoft.icon"),
+    CSS(".css", Constants.STATIC_FILE_PATH, "text/css"),
+    JS(".js", Constants.STATIC_FILE_PATH, "text/javascript"),
+    WOFF(".woff", Constants.STATIC_FILE_PATH, "text/woff"),
+    PNG(".png", Constants.STATIC_FILE_PATH, "image/png"),
+    JPEG(".jpeg", Constants.STATIC_FILE_PATH, "image/jpeg"),
+    SVG(".svg", Constants.STATIC_FILE_PATH, "image/svg_xml");
 
     private final String fileType;
     private final String resourcePath;
@@ -36,5 +36,10 @@ public enum StaticFile {
 
     public String getContentType() {
         return contentType;
+    }
+
+    private static class Constants {
+        private static final String STATIC_FILE_PATH = "./static";
+        private static final String TEMPLATES_FILE_PATH = "./templates";
     }
 }

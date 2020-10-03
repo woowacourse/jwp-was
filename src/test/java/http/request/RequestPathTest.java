@@ -12,7 +12,7 @@ class RequestPathTest {
     @Test
     void parse_RequestPath_With_No_Params() {
         String path = "/user/create";
-        RequestPath requestPath = RequestPath.of(path);
+        RequestPath requestPath = RequestPath.from(path);
         assertThat(requestPath.getPath()).isEqualTo("/user/create");
     }
 
@@ -21,7 +21,7 @@ class RequestPathTest {
     void parse_RequestPath() {
         String path = "/user/create?userId=sony&password=pw123&name=sony&email=sonypark0204@gmail.com";
 
-        RequestPath requestPath = RequestPath.of(path);
+        RequestPath requestPath = RequestPath.from(path);
 
         assertAll(
             () -> assertThat(requestPath.getPath()).isEqualTo("/user/create"),
