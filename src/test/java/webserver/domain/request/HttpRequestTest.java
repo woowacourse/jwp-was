@@ -2,24 +2,20 @@ package webserver.domain.request;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import webserver.HttpRequestFixture;
+
 class HttpRequestTest {
     @DisplayName("GET 요청에 대한 HttpRequest 객체를 생성한다. ")
     @Test
     void of_whenRequestMethodIsGet() throws IOException {
-        InputStream inputStream = new FileInputStream(
-            new File("/Users/moon/Desktop/Github/jwp-was/build/resources/test/GetRequest.txt"));
-
-        HttpRequest httpRequest = HttpRequest.of(inputStream);
+        HttpRequest httpRequest = HttpRequestFixture.httpRequestOfGetMethod();
 
         Map<String, String> expectedParameters = new HashMap<>();
         expectedParameters.put("userId", "javajigi");

@@ -3,10 +3,7 @@ package webserver;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.Socket;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -38,9 +35,7 @@ class RequestHandlerTest {
     @DisplayName("정적 컨텐츠 처리에 대한 요청에 응답한다.")
     @Test
     void controlRequestAndResponse_whenRequestIsForStaticContent() throws IOException {
-        InputStream inputStream = new FileInputStream(
-            new File("/Users/moon/Desktop/Github/jwp-was/build/resources/test/TemplatesResourceRequest.txt"));
-        HttpRequest httpRequest = HttpRequest.of(inputStream);
+        HttpRequest httpRequest = HttpRequestFixture.httpRequestOfTemplatesResource();
         given(requestMapping.getController(any(HttpRequest.class))).willReturn(new StaticController());
 
         HttpResponse httpResponse = requestHandler.controlRequestAndResponse(httpRequest);
@@ -54,9 +49,7 @@ class RequestHandlerTest {
     @DisplayName("동적 컨텐츠 처리에 대한 요청에 응답한다.")
     @Test
     void controlRequestAndResponse_whenRequestIsForDynamicContent() throws IOException {
-        InputStream inputStream = new FileInputStream(
-            new File("/Users/moon/Desktop/Github/jwp-was/build/resources/test/GetRequest.txt"));
-        HttpRequest httpRequest = HttpRequest.of(inputStream);
+        HttpRequest httpRequest = HttpRequestFixture.httpRequestOfGetMethod();
         given(requestMapping.getController(any(HttpRequest.class))).willReturn(new UserCreateController());
 
         HttpResponse httpResponse = requestHandler.controlRequestAndResponse(httpRequest);
