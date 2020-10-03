@@ -1,12 +1,12 @@
-package webserver.domain.request;
+package webserver.http.request;
 
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import webserver.domain.IncorrectProtocolException;
-import webserver.domain.Protocol;
+import webserver.http.IncorrectProtocolException;
+import webserver.http.Protocol;
 
 class ProtocolTest {
     @DisplayName("식별자에 해당하는 Protocol 객체를 생성한다.")

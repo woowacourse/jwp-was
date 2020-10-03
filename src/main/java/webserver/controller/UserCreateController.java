@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 
 import db.DataBase;
 import model.User;
-import webserver.domain.request.HttpRequest;
-import webserver.domain.response.HttpResponse;
+import webserver.http.request.HttpRequest;
+import webserver.http.response.HttpResponse;
 
 public class UserCreateController extends AbstractController {
     private static final Logger logger = LoggerFactory.getLogger(UserCreateController.class);

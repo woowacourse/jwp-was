@@ -14,7 +14,7 @@ import org.mockito.MockitoAnnotations;
 import webserver.controller.Controller;
 import webserver.controller.StaticController;
 import webserver.controller.UserCreateController;
-import webserver.domain.request.HttpRequest;
+import webserver.http.request.HttpRequest;
 
 class RequestMappingTest {
     private RequestMapping requestMapping;

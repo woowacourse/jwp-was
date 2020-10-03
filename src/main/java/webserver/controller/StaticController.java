@@ -1,8 +1,8 @@
 package webserver.controller;
 
 import utils.FileIoUtils;
-import webserver.domain.request.HttpRequest;
-import webserver.domain.response.HttpResponse;
+import webserver.http.request.HttpRequest;
+import webserver.http.response.HttpResponse;
 
 public class StaticController extends AbstractController {
     @Override

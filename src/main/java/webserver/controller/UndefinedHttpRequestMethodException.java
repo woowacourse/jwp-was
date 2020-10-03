@@ -1,6 +1,6 @@
 package webserver.controller;
 
-import webserver.domain.request.HttpRequest;
+import webserver.http.request.HttpRequest;
 
 public class UndefinedHttpRequestMethodException extends RuntimeException {
     private static final String message ="HTTP 요청의 URL에 대한 메서드는 정의되어 있지 않습니다.";

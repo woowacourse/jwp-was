@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import webserver.controller.Controller;
-import webserver.domain.request.HttpRequest;
+import webserver.http.request.HttpRequest;
 
 public class ServletContainer {
     private static final Logger logger = LoggerFactory.getLogger(ServletContainer.class);

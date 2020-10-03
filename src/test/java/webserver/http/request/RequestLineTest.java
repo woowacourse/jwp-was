@@ -1,4 +1,4 @@
-package webserver.domain.request;
+package webserver.http.request;
 
 import static org.assertj.core.api.Assertions.*;
 

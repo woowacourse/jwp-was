@@ -11,8 +11,8 @@ import org.slf4j.LoggerFactory;
 
 import webserver.controller.ApplicationBusinessException;
 import webserver.controller.Controller;
-import webserver.domain.request.HttpRequest;
-import webserver.domain.response.HttpResponse;
+import webserver.http.request.HttpRequest;
+import webserver.http.response.HttpResponse;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);

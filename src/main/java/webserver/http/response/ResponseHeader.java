@@ -1,4 +1,4 @@
-package webserver.domain.response;
+package webserver.http.response;
 
 import java.util.Map;
 

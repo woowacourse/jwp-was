@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import db.DataBase;
 import model.User;
 import webserver.HttpRequestFixture;
-import webserver.domain.request.HttpRequest;
+import webserver.http.request.HttpRequest;
 
 class UserCreateControllerTest {
     private UserCreateController controller;

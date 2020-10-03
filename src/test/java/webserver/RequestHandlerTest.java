@@ -17,8 +17,8 @@ import model.User;
 import utils.FileIoUtils;
 import webserver.controller.StaticController;
 import webserver.controller.UserCreateController;
-import webserver.domain.request.HttpRequest;
-import webserver.domain.response.HttpResponse;
+import webserver.http.request.HttpRequest;
+import webserver.http.response.HttpResponse;
 
 class RequestHandlerTest {
     private RequestHandler requestHandler;

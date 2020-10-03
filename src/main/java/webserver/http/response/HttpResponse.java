@@ -1,4 +1,4 @@
-package webserver.domain.response;
+package webserver.http.response;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -9,7 +9,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import webserver.domain.Protocol;
+import webserver.http.Protocol;
 
 public class HttpResponse {
     private static final String lineSeparator = System.lineSeparator();

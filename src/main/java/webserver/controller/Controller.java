@@ -1,7 +1,7 @@
 package webserver.controller;
 
-import webserver.domain.request.HttpRequest;
-import webserver.domain.response.HttpResponse;
+import webserver.http.request.HttpRequest;
+import webserver.http.response.HttpResponse;
 
 public interface Controller {
     HttpResponse service(HttpRequest httpRequest);

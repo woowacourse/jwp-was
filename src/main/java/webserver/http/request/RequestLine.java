@@ -1,10 +1,10 @@
-package webserver.domain.request;
+package webserver.http.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Map;
 
-import webserver.domain.Protocol;
+import webserver.http.Protocol;
 
 public class RequestLine {
     private static final String SPACE = "\\s";

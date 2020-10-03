@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
-import webserver.domain.request.HttpRequest;
+import webserver.http.request.HttpRequest;
 
 public class HttpRequestFixture {
     public static HttpRequest httpRequestOfGetMethod() throws IOException {

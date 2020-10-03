@@ -2,7 +2,7 @@ package webserver;
 
 import webserver.controller.Controller;
 import webserver.controller.StaticController;
-import webserver.domain.request.HttpRequest;
+import webserver.http.request.HttpRequest;
 
 public class RequestMapping {
     private final ServletContainer servletContainer;

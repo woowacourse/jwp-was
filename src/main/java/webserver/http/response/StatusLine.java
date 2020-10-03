@@ -1,6 +1,6 @@
-package webserver.domain.response;
+package webserver.http.response;
 
-import webserver.domain.Protocol;
+import webserver.http.Protocol;
 
 public class StatusLine {
     private final Protocol protocol;

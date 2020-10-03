@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import webserver.controller.Controller;
 import webserver.controller.UserCreateController;
-import webserver.domain.request.HttpRequest;
+import webserver.http.request.HttpRequest;
 
 class ServletContainerTest {
     private ServletContainer servletContainer;

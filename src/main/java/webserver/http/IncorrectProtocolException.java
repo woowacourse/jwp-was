@@ -1,4 +1,4 @@
-package webserver.domain;
+package webserver.http;
 
 import webserver.RequestException;
 
