@@ -7,8 +7,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
-import java.net.URISyntaxException;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -19,14 +19,16 @@ import webserver.domain.request.HttpRequest;
 import webserver.domain.response.HttpResponse;
 
 class RequestHandlerTest {
+    private RequestHandler requestHandler;
+
+    @BeforeEach
+    void setUp() {
+        requestHandler = new RequestHandler(new Socket(), new ServletContainer());
+    }
+
     @DisplayName("정적 컨텐츠 처리에 대한 요청에 응답한다.")
     @Test
-    void controlRequestAndResponse_whenRequestIsForStaticContent() throws
-        URISyntaxException,
-        InstantiationException,
-        IllegalAccessException,
-        IOException {
-        RequestHandler requestHandler = new RequestHandler(new Socket());
+    void controlRequestAndResponse_whenRequestIsForStaticContent() throws IOException {
         InputStream inputStream = new FileInputStream(
             new File("/Users/moon/Desktop/Github/jwp-was/build/resources/test/TemplatesResourceRequest.txt"));
         HttpRequest httpRequest = HttpRequest.of(inputStream);
@@ -41,12 +43,7 @@ class RequestHandlerTest {
 
     @DisplayName("동적 컨텐츠 처리에 대한 요청에 응답한다.")
     @Test
-    void controlRequestAndResponse_whenRequestIsForDynamicContent() throws
-        URISyntaxException,
-        InstantiationException,
-        IllegalAccessException,
-        IOException {
-        RequestHandler requestHandler = new RequestHandler(new Socket());
+    void controlRequestAndResponse_whenRequestIsForDynamicContent() throws IOException {
         InputStream inputStream = new FileInputStream(
             new File("/Users/moon/Desktop/Github/jwp-was/build/resources/test/GetRequest.txt"));
         HttpRequest httpRequest = HttpRequest.of(inputStream);

@@ -41,7 +41,12 @@ public class HttpResponse {
 
     public static Builder badRequest(String errorMessage) {
         return new Builder(StatusCode.BAD_REQUEST)
-            .body(String.format("error: %s", errorMessage));
+            .error(errorMessage);
+    }
+
+    public static Builder internalServer(String errorMessage) {
+        return new Builder(StatusCode.INTERNAL_SERVER_ERROR)
+            .error(errorMessage);
     }
 
     public void respond(DataOutputStream dos) {
@@ -51,7 +56,7 @@ public class HttpResponse {
             dos.writeBytes(responseHeader.toValue());
             dos.writeBytes(lineSeparator);
             dos.write(body, 0, body.length);
-            dos.flush();
+            dos.close();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -100,8 +105,8 @@ public class HttpResponse {
             return this;
         }
 
-        public Builder body(String body) {
-            this.body = body.getBytes(StandardCharsets.UTF_8);
+        public Builder error(String errorMessage) {
+            this.body = String.format("error: %s", errorMessage).getBytes(StandardCharsets.UTF_8);
             return this;
         }
 

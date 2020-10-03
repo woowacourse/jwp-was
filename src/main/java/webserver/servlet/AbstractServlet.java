@@ -4,7 +4,6 @@ import webserver.domain.request.HttpRequest;
 import webserver.domain.response.HttpResponse;
 
 abstract class AbstractServlet implements Servlet {
-
     @Override
     public final HttpResponse service(HttpRequest httpRequest) {
         if (httpRequest.isGet()) {

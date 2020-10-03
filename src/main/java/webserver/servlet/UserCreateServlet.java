@@ -11,8 +11,8 @@ import model.User;
 import webserver.domain.request.HttpRequest;
 import webserver.domain.response.HttpResponse;
 
-public class UserCreate extends AbstractServlet {
-    private static final Logger logger = LoggerFactory.getLogger(UserCreate.class);
+public class UserCreateServlet extends AbstractServlet {
+    private static final Logger logger = LoggerFactory.getLogger(UserCreateServlet.class);
 
     @Override
     public HttpResponse post(HttpRequest httpRequest) {

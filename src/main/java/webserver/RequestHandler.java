@@ -5,9 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,19 +13,16 @@ import utils.FileIoUtils;
 import webserver.domain.request.HttpRequest;
 import webserver.domain.response.HttpResponse;
 import webserver.servlet.ApplicationBusinessException;
-import webserver.servlet.Servlet;
-import webserver.servlet.UserCreate;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private final Socket connection;
-    private final Map<String, Class<? extends Servlet>> controller;
+    private final ServletContainer servletContainer;
 
-    public RequestHandler(Socket connectionSocket) {
+    public RequestHandler(Socket connectionSocket, ServletContainer servletContainer) {
         this.connection = connectionSocket;
-        this.controller = new HashMap<>();
-        controller.put("/user/create", UserCreate.class);
+        this.servletContainer = servletContainer;
     }
 
     public void run() {
@@ -38,16 +32,12 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpResponse httpResponse = controlRequestAndResponse(HttpRequest.of(in));
             respondToHttpRequest(out, httpResponse);
-        } catch (IOException | URISyntaxException | IllegalAccessException | InstantiationException e) {
+        } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    public HttpResponse controlRequestAndResponse(HttpRequest httpRequest) throws
-        IOException,
-        URISyntaxException,
-        IllegalAccessException,
-        InstantiationException {
+    public HttpResponse controlRequestAndResponse(HttpRequest httpRequest) {
         try {
             // todo : 1. 정적 컨텐츠 동적 컨텐츠 분리
             // todo : 2-1-1. 정적 컨텐츠는 static 안에서 파일 먼저 찾고 없으면 templates에서 찾음
@@ -73,16 +63,16 @@ public class RequestHandler implements Runnable {
             }
 
             if (httpRequest.isForDynamicContent()) {
-                String path = httpRequest.getPath();
-                Class<? extends Servlet> servletClass = controller.get(path);
-                Servlet servlet = servletClass.newInstance();
-                return servlet.service(httpRequest);
+                return ServletContainer.executeServlet(httpRequest);
             }
 
             throw new AssertionError("HttpRequest는 정적 혹은 동적 컨텐츠 요청만 가능합니다.");
         } catch (ApplicationBusinessException e) {
             logger.info(e.getMessage());
             return HttpResponse.badRequest(e.getMessage()).build();
+        } catch (SystemException e) {
+            logger.error(e.getMessage());
+            return HttpResponse.internalServer(e.getMessage()).build();
         }
     }
 
