@@ -8,5 +8,5 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 public interface Controller {
-    void service(Request request, Response response) throws IOException, URISyntaxException, IllegalRequestException;
+    void service(Request request, Response response) throws IOException, URISyntaxException, NoSuchMethodException, IllegalRequestException;
 }
