@@ -1,23 +1,24 @@
 package http.response;
 
-import http.ContentType;
+import static org.assertj.core.api.Assertions.*;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.net.URISyntaxException;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.io.*;
-import java.net.URISyntaxException;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import common.TestFileIo;
+import http.ContentType;
 
 public class ResponseTest {
-    private String testDirectory = "./src/test/resources/";
-
     @DisplayName("found 테스트")
     @Test
     void responseFound() throws Exception {
-        Response response = new Response(createOutputStream("Http_Found.txt"));
+        Response response = new Response(TestFileIo.createOutputStream("http_found.txt"));
         response.found("/index.html");
-        BufferedReader br = readBufferedReader("Http_Found.txt");
+        BufferedReader br = TestFileIo.readBufferedReader("http_Found.txt");
 
         assertThat(br.readLine()).isEqualTo("HTTP/1.1 302 Found ");
         assertThat(br.readLine()).isEqualTo("Location: /index.html ");
@@ -26,22 +27,12 @@ public class ResponseTest {
     @DisplayName("ok 테스트")
     @Test
     void responseOk() throws IOException, URISyntaxException {
-        Response response = new Response(createOutputStream("Http_Ok.txt"));
+        Response response = new Response(TestFileIo.createOutputStream("http_ok.txt"));
         response.ok("/index.html", ContentType.HTML.getContentType());
-        BufferedReader br = readBufferedReader("Http_Ok.txt");
+        BufferedReader br = TestFileIo.readBufferedReader("http_ok.txt");
 
         assertThat(br.readLine()).isEqualTo("HTTP/1.1 200 OK ");
-        assertThat(br.readLine()).isEqualTo("Content-Length: 7049 ");
+        assertThat(br.readLine()).isEqualTo("Content-Length: 6902 ");
         assertThat(br.readLine()).isEqualTo("Content-Type: text/html;charset=UTF-8 ");
-    }
-
-    private OutputStream createOutputStream(String filename) throws FileNotFoundException {
-        return new FileOutputStream(new File(testDirectory + filename));
-    }
-
-    private BufferedReader readBufferedReader(String filename) throws FileNotFoundException {
-        File file = new File(testDirectory + filename);
-        InputStream in = new FileInputStream(file);
-        return new BufferedReader(new InputStreamReader(in));
     }
 }

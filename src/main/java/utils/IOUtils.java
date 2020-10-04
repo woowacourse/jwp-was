@@ -1,11 +1,12 @@
 package utils;
 
-import http.request.Request;
+import java.io.BufferedReader;
+import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.IOException;
+import http.request.Request;
 
 public class IOUtils {
     private static final String NEW_LINE = System.lineSeparator();
@@ -26,7 +27,8 @@ public class IOUtils {
 
     public static void printRequest(Request request) {
         StringBuilder stringBuilder = new StringBuilder(NEW_LINE);
-        stringBuilder.append(request.getRequestLine().toString() + NEW_LINE);
+        stringBuilder.append(request.getRequestLine().toString())
+                .append(NEW_LINE);
         for (String key : request.getRequestHeaders().keySet()) {
             stringBuilder.append(key)
                     .append(SEPARATOR)
