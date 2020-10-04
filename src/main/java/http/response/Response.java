@@ -1,18 +1,18 @@
 package http.response;
 
+import http.ContentType;
+import http.Header;
+import http.HttpHeader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import utils.Directory;
+import utils.FileIoUtils;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import http.ContentType;
-import http.Header;
-import http.HttpHeader;
-import utils.Directory;
-import utils.FileIoUtils;
+import java.util.Objects;
 
 public class Response {
     private static final Logger logger = LoggerFactory.getLogger(Response.class);
@@ -31,8 +31,9 @@ public class Response {
         header.setHeader(key, value);
     }
 
-    public void ok(String path) throws IOException, URISyntaxException {
+    public void ok(String path, String contentType) throws IOException, URISyntaxException {
         statusLine = new StatusLine("HTTP/1.1", Status.OK);
+        setHeader("Content-Type", contentType + ";charset=UTF-8");
         body = setResponseBody(path);
         setHeader(Header.CONTENT_LENGTH.getName(), String.valueOf(body.getContentLength()));
         write();
@@ -55,7 +56,9 @@ public class Response {
         try {
             statusLine.write(dataOutputStream);
             header.write(dataOutputStream);
-            body.write(dataOutputStream);
+            if (Objects.nonNull(body)) {
+                body.write(dataOutputStream);
+            }
             dataOutputStream.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());

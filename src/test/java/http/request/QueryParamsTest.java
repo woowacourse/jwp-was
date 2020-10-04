@@ -1,9 +1,9 @@
-import static org.assertj.core.api.Assertions.*;
+package http.request;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import http.request.QueryParams;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class QueryParamsTest {
 
