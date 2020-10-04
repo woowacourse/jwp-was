@@ -12,7 +12,7 @@ public class StaticController extends AbstractController {
     }
 
     public static StaticController getInstance() {
-        return ControllerCache.staticController;
+        return ControllerCache.STATIC_CONTROLLER;
     }
 
     @Override
@@ -26,6 +26,6 @@ public class StaticController extends AbstractController {
     }
 
     private static class ControllerCache {
-        private static final StaticController staticController = new StaticController();
+        private static final StaticController STATIC_CONTROLLER = new StaticController();
     }
 }

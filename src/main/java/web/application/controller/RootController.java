@@ -12,7 +12,7 @@ public class RootController extends AbstractController {
     }
 
     public static RootController getInstance() {
-        return ControllerCache.rootController;
+        return ControllerCache.ROOT_CONTROLLER;
     }
 
     @Override
@@ -24,6 +24,6 @@ public class RootController extends AbstractController {
     }
 
     private static class ControllerCache {
-        private static final RootController rootController = new RootController();
+        private static final RootController ROOT_CONTROLLER = new RootController();
     }
 }
