@@ -52,8 +52,8 @@ public class Request {
         return requestBody;
     }
 
-    public String getUrl() {
-        return requestLine.getUrl();
+    public String getPath() {
+        return requestLine.getPath();
     }
 
     public boolean isMethod(RequestMethod requestMethod) {
@@ -61,6 +61,6 @@ public class Request {
     }
 
     public String getContentType() {
-        return ContentType.of(requestLine.getUrl()).getContentType();
+        return ContentType.of(requestLine.getPath()).getContentType();
     }
 }

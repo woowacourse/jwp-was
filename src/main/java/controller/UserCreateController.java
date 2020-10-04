@@ -2,9 +2,9 @@ package controller;
 
 import db.DataBase;
 import exception.IllegalRequestException;
+import http.request.QueryParams;
 import http.request.Request;
 import http.response.Response;
-import mapper.QueryParams;
 import model.User;
 
 import java.util.Map;
@@ -23,7 +23,7 @@ public class UserCreateController implements Controller {
     }
 
     private void doGet(Request request, Response response) {
-        String requestUrl = request.getRequestLine().getUrl();
+        String requestUrl = request.getPath();
         QueryParams queryParams = new QueryParams(requestUrl);
         Map<String, String> queryParamsMap = queryParams.getQueryParams();
 

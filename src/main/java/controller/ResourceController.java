@@ -9,7 +9,7 @@ import java.net.URISyntaxException;
 public class ResourceController implements Controller {
     @Override
     public void service(Request request, Response response) throws IOException, URISyntaxException {
-        String requestUrl = request.getUrl();
+        String requestUrl = request.getPath();
         response.setHeader("Content-Type", request.getContentType() + ";charset=UTF-8");
         response.ok(requestUrl);
     }

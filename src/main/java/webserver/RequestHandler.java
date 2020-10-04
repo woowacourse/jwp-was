@@ -1,17 +1,16 @@
 package webserver;
 
+import controller.Controller;
+import http.request.Request;
+import http.response.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import controller.Controller;
-import http.request.Request;
-import http.response.Response;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -31,7 +30,7 @@ public class RequestHandler implements Runnable {
             Request request = new Request(br);
             Response response = new Response(out);
 
-            Controller controller = RequestMapping.getController(request.getRequestLine().getUrl());
+            Controller controller = RequestMapping.getController(request.getPath());
             controller.service(request, response);
         } catch (Exception e) {
             logger.error(e.getMessage());
