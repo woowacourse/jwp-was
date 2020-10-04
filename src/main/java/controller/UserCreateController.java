@@ -1,7 +1,5 @@
 package controller;
 
-import static http.request.RequestMethod.*;
-
 import java.util.Map;
 
 import db.DataBase;
@@ -10,17 +8,10 @@ import http.response.Response;
 import mapper.QueryParams;
 import model.User;
 
-public class UserCreateController implements Controller {
-    @Override
-    public void service(Request request, Response response) {
-        if (request.isMethod(GET)) {
-            doGet(request, response);
-        } else if (request.isMethod(POST)) {
-            doPost(request, response);
-        }
-    }
+public class UserCreateController extends AbstractController {
 
-    private void doGet(Request request, Response response) {
+    @Override
+    public void doGet(Request request, Response response) {
         String requestUrl = request.getRequestLine().getUrl();
         QueryParams queryParams = new QueryParams(requestUrl);
         Map<String, String> queryParamsMap = queryParams.getQueryParams();
@@ -33,7 +24,8 @@ public class UserCreateController implements Controller {
         }
     }
 
-    private void doPost(Request request, Response response) {
+    @Override
+    public void doPost(Request request, Response response) {
         Map<String, String> requestBodies = request.getRequestBody().parseRequestBody();
         User user = new User(requestBodies.get("userId"), requestBodies.get("password"),
                 requestBodies.get("name"), requestBodies.get("email"));

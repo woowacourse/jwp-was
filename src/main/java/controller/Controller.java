@@ -7,5 +7,5 @@ import http.request.Request;
 import http.response.Response;
 
 public interface Controller {
-    void service(Request request, Response response) throws IOException, URISyntaxException;
+    void service(Request request, Response response) throws IOException, URISyntaxException, NoSuchMethodException;
 }
