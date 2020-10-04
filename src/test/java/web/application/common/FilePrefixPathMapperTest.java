@@ -8,14 +8,14 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import web.server.utils.StaticFileType;
 
-class FilePathMapperTest {
+class FilePrefixPathMapperTest {
 
     @DisplayName("정적파일의 FullPath를 확인한다")
     @ParameterizedTest
     @CsvSource(value = {"/index.html, HTML, ./templates/index.html", "/style.css, CSS, ./static/style.css"})
     void addPrefix(String path, StaticFileType staticFileType, String actual) {
-        FilePathMapper filePathMapper = FilePathMapper.getInstance();
-        String filePath = filePathMapper.addPrefix(path, staticFileType);
+        FilePrefixPathMapper filePrefixPathMapper = FilePrefixPathMapper.getInstance();
+        String filePath = filePrefixPathMapper.addPrefix(path, staticFileType);
 
         assertThat(filePath).isEqualTo(actual);
     }

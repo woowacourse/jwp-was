@@ -1,6 +1,6 @@
 package web.application.controller;
 
-import web.application.common.FilePathMapper;
+import web.application.common.FilePrefixPathMapper;
 import web.server.domain.request.HttpRequest;
 import web.server.domain.response.HttpResponse;
 import web.server.utils.StaticFileType;
@@ -17,10 +17,10 @@ public class StaticController extends AbstractController {
 
     @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        FilePathMapper filePathMapper = FilePathMapper.getInstance();
+        FilePrefixPathMapper filePrefixPathMapper = FilePrefixPathMapper.getInstance();
         StaticFileType staticFileType = httpRequest.findExtension();
 
-        String filePath = filePathMapper.addPrefix(httpRequest.getPath(), staticFileType);
+        String filePath = filePrefixPathMapper.addPrefix(httpRequest.getPath(), staticFileType);
 
         httpResponse.forward(filePath, staticFileType);
     }

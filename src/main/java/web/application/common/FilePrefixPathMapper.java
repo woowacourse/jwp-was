@@ -5,17 +5,17 @@ import java.util.Map;
 
 import web.server.utils.StaticFileType;
 
-public class FilePathMapper {
+public class FilePrefixPathMapper {
 
     private final Map<String, String> map;
 
-    private FilePathMapper() {
+    private FilePrefixPathMapper() {
         map = new HashMap<>();
         map.put("HTML", "./templates");
         map.put("STATIC_EXTENSION", "./static");
     }
 
-    public static FilePathMapper getInstance() {
+    public static FilePrefixPathMapper getInstance() {
         return Cache.PREFIX_MAPPER;
     }
 
@@ -31,6 +31,6 @@ public class FilePathMapper {
     }
 
     private static class Cache {
-        private static final FilePathMapper PREFIX_MAPPER = new FilePathMapper();
+        private static final FilePrefixPathMapper PREFIX_MAPPER = new FilePrefixPathMapper();
     }
 }
