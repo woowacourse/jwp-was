@@ -1,15 +1,14 @@
 package controller;
 
-import static org.assertj.core.api.Assertions.*;
-
-import java.io.BufferedReader;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
 import common.TestFileIo;
 import http.request.Request;
 import http.response.Response;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import java.io.BufferedReader;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class ResourceControllerTest {
 
@@ -25,7 +24,7 @@ class ResourceControllerTest {
         BufferedReader responseBr = TestFileIo.readBufferedReader("http_resource_response.txt");
 
         assertThat(responseBr.readLine()).isEqualTo("HTTP/1.1 200 OK ");
-        assertThat(responseBr.readLine()).isEqualTo("Content-Length: 6902 ");
+        assertThat(responseBr.readLine()).isEqualTo("Content-Length: 7049 ");
         assertThat(responseBr.readLine()).isEqualTo("Content-Type: text/html;charset=UTF-8 ");
     }
 }

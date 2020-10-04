@@ -1,16 +1,15 @@
 package http.response;
 
-import static org.assertj.core.api.Assertions.*;
+import common.TestFileIo;
+import http.ContentType;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import common.TestFileIo;
-import http.ContentType;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ResponseTest {
     @DisplayName("found 테스트")
@@ -32,7 +31,7 @@ public class ResponseTest {
         BufferedReader br = TestFileIo.readBufferedReader("http_ok.txt");
 
         assertThat(br.readLine()).isEqualTo("HTTP/1.1 200 OK ");
-        assertThat(br.readLine()).isEqualTo("Content-Length: 6902 ");
+        assertThat(br.readLine()).isEqualTo("Content-Length: 7049 ");
         assertThat(br.readLine()).isEqualTo("Content-Type: text/html;charset=UTF-8 ");
     }
 }
