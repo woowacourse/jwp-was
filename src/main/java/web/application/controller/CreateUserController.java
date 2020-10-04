@@ -12,7 +12,7 @@ public class CreateUserController extends AbstractController {
     }
 
     public static CreateUserController getInstance() {
-        return ControllerCache.createUserController;
+        return ControllerCache.CREATE_USER_CONTROLLER;
     }
 
     @Override
@@ -24,6 +24,6 @@ public class CreateUserController extends AbstractController {
     }
 
     private static class ControllerCache {
-        private static final CreateUserController createUserController = new CreateUserController();
+        private static final CreateUserController CREATE_USER_CONTROLLER = new CreateUserController();
     }
 }

@@ -24,40 +24,10 @@ public class HttpResponse {
         this.headerParams = new HashMap<>();
     }
 
-    private void response200Header() {
+    private void responseHeader(StatusCode statusCode) {
         try {
-            this.dataOutputStream.writeBytes("HTTP/1.1 200 OK " + NEW_LINE);
-            this.dataOutputStream
-                .writeBytes("Content-Type: " + headerParams.get("Content-Type") + ";charset=utf-8" + NEW_LINE);
-            this.dataOutputStream.writeBytes("Content-Length: " + headerParams.get("Content-Length") + NEW_LINE);
-            this.dataOutputStream.writeBytes(NEW_LINE);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void response302Header() {
-        try {
-            this.dataOutputStream.writeBytes("HTTP/1.1 302 FOUND " + NEW_LINE);
-            this.dataOutputStream.writeBytes("Location: " + headerParams.get("Location") + NEW_LINE);
-            this.dataOutputStream.writeBytes(NEW_LINE);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void response404Header() {
-        try {
-            this.dataOutputStream.writeBytes("HTTP/1.1 404 NOT FOUND" + NEW_LINE);
-            this.dataOutputStream.writeBytes(NEW_LINE);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void response405Header() {
-        try {
-            this.dataOutputStream.writeBytes("HTTP/1.1 405 Method Not Allowed" + NEW_LINE);
+            this.dataOutputStream.writeBytes(statusCode.getStatusLine() + NEW_LINE);
+            this.dataOutputStream.writeBytes(statusCode.getHeaders(headerParams));
             this.dataOutputStream.writeBytes(NEW_LINE);
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -75,23 +45,23 @@ public class HttpResponse {
 
     public void forward(String path, StaticFileType staticFileType) {
         byte[] body = FileIoUtils.loadFileFromRequest(path);
-        headerParams.put("Content-Type", staticFileType.getContentType());
+        headerParams.put("Content-Type", staticFileType.getContentType() + ";charset=utf-8");
         headerParams.put("Content-Length", String.valueOf(body.length));
 
-        response200Header();
+        responseHeader(StatusCode.OK);
         responseBody(this.dataOutputStream, body);
     }
 
     public void sendRedirect(String path) {
         headerParams.put("Location", path);
-        response302Header();
+        responseHeader(StatusCode.FOUND);
     }
 
     public void respondPageNotFound() {
-        response404Header();
+        responseHeader(StatusCode.NOT_FOUND);
     }
 
     public void respondMethodNotAllowed() {
-        response405Header();
+        responseHeader(StatusCode.METHOD_NOT_ALLOWED);
     }
 }
