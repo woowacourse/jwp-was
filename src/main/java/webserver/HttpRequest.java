@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 
-import httpmethod.HttpMethod;
-import httpmethod.Method;
-import model.Model;
+import utils.IOUtils;
 import utils.RequestUtils;
 
 public class HttpRequest {
@@ -15,18 +13,19 @@ public class HttpRequest {
     public static final String REGEX = ":";
     public static final int KEY_INDEX = 0;
 
+    private final HttpMethod httpMethod;
     private final String path;
-    private final Method method;
+    private final String model;
     private final Map<String, String> header;
     private final Map<String, String> parameter;
 
     public HttpRequest(BufferedReader br) throws IOException {
         this.header = new TreeMap<>();
         String firstLine = readRequest(br);
-        this.method = HttpMethod.valueOf(RequestUtils.extractMethod(firstLine))
-            .getMethod();
+        this.httpMethod = HttpMethod.valueOf(RequestUtils.extractMethod(firstLine));
+        this.model = RequestUtils.extractTitleOfModel(firstLine);
         this.path = RequestUtils.extractPath(firstLine);
-        this.parameter = method.extractParameter(br, header);
+        this.parameter = createParameter(br);
     }
 
     private String readRequest(BufferedReader br) throws IOException {
@@ -46,8 +45,28 @@ public class HttpRequest {
         }
     }
 
-    public Model createModel() {
-        return method.extractModel(path, parameter);
+    private Map<String, String> createParameter(BufferedReader br) throws IOException {
+        if (header.containsKey("Content-Length")) {
+            String body = IOUtils.readData(br, Integer.parseInt(header.get("Content-Length")));
+            return RequestUtils.extractParameter(body);
+        }
+        return new TreeMap<>();
+    }
+
+    public boolean isGet() {
+        return httpMethod.isGet();
+    }
+
+    public boolean isPost() {
+        return httpMethod.isPost();
+    }
+
+    public boolean isPut() {
+        return httpMethod.isPut();
+    }
+
+    public boolean isDelete() {
+        return httpMethod.isDelete();
     }
 
     public String getHeader(String key) {
@@ -70,11 +89,11 @@ public class HttpRequest {
         return path;
     }
 
-    public Method getMethod() {
-        return method;
+    public String getModel() {
+        return model;
     }
 
-    public String getMethodName() {
-        return method.getName();
+    public HttpMethod getHttpMethod() {
+        return httpMethod;
     }
 }

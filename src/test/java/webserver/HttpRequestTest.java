@@ -27,7 +27,7 @@ class HttpRequestTest {
         assertAll(
             () -> assertThat(httpRequest.getHeader("Host")).isEqualTo("localhost:8080"),
             () -> assertThat(httpRequest.getPath()).isEqualTo("/admin/"),
-            () -> assertThat(httpRequest.getMethodName()).isEqualTo("GET")
+            () -> assertThat(httpRequest.getHttpMethod().name()).isEqualTo("GET")
         );
     }
 
@@ -46,7 +46,7 @@ class HttpRequestTest {
 
         assertAll(
             () -> assertThat(httpRequest.getParameter("userId")).isEqualTo("javajigi"),
-            () -> assertThat(httpRequest.getMethodName()).isEqualTo("POST")
+            () -> assertThat(httpRequest.getHttpMethod().name()).isEqualTo("POST")
         );
     }
 }

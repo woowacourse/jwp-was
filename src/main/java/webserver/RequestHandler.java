@@ -8,20 +8,27 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import model.Model;
-import utils.FileIoUtils;
+import web.Controller;
+import web.FileController;
+import web.UserController;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private final Socket connection;
+    private final Map<String, Controller> controllers;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
+        controllers = new HashMap<>();
+        controllers.put("FILE", new FileController());
+        controllers.put("USER", new UserController());
     }
 
     public void run() {
@@ -32,26 +39,21 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             HttpRequest httpRequest = new HttpRequest(br);
             printHeader(httpRequest);
-            createModel(httpRequest);
-            byte[] body = FileIoUtils.findStaticFile(httpRequest.getPath());
-            ResponseFactory.response(out, httpRequest.getPath(), body);
+            if (httpRequest.isPost()) {
+                printParameter(httpRequest);
+            }
+            Controller controller = controllers.getOrDefault(httpRequest.getModel(), controllers.get("FILE"));
+            controller.service(httpRequest, new HttpResponse(out));
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }
 
     private void printHeader(HttpRequest httpRequest) {
-        logger.debug("header : {}", httpRequest.getMethodName() + " " + httpRequest.getPath());
+        logger.debug("header : {}",
+            String.format("%s %s HTTP/1.1", httpRequest.getHttpMethod().name(), httpRequest.getPath()));
         httpRequest.getHeader()
             .forEach((key, value) -> logger.debug("header : {}", String.format("%s: %s", key, value)));
-    }
-
-    private void createModel(HttpRequest httpRequest) {
-        Model model = httpRequest.createModel();
-        if (model != null) {
-            printParameter(httpRequest);
-            logger.debug("model : {}", model.toString());
-        }
     }
 
     private void printParameter(HttpRequest httpRequest) {

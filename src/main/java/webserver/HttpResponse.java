@@ -3,36 +3,30 @@ package webserver;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.TreeMap;
 
-import utils.FileIoUtils;
-import utils.RequestUtils;
-
 public class HttpResponse {
-    public static final String TEMPLATE_PATH = "./templates";
-    public static final String STATIC_PATH = "./static";
-    public static final String HTML = "html";
     private static final int OFFSET = 0;
 
-    private final HttpStatus httpStatus;
+    private HttpStatus httpStatus;
     private final DataOutputStream dos;
     private final Map<String, String> header;
-    private byte[] body;
 
-    public HttpResponse(HttpStatus httpStatus, OutputStream out) {
-        this.httpStatus = httpStatus;
+    public HttpResponse(OutputStream out) {
         this.dos = new DataOutputStream(out);
         this.header = new TreeMap<>();
+    }
+
+    public void setHttpStatus(HttpStatus httpStatus) {
+        this.httpStatus = httpStatus;
     }
 
     public void addHeader(String key, String value) {
         header.put(key, value);
     }
 
-    public void forward(String path) throws IOException, URISyntaxException {
-        body = loadStaticFile(path);
+    public void forward(byte[] body) throws IOException {
         writeStatus();
         for (Map.Entry<String, String> entry : header.entrySet()) {
             writeWithLineSeparator(String.format("%s: %s", entry.getKey(), entry.getValue()));
@@ -55,13 +49,6 @@ public class HttpResponse {
 
     private void writeStatus() throws IOException {
         writeWithLineSeparator(String.format("HTTP/1.1 %d %s", httpStatus.getNumber(), httpStatus.name()));
-    }
-
-    private byte[] loadStaticFile(String path) throws IOException, URISyntaxException {
-        if (HTML.equals(RequestUtils.extractExtension(path))) {
-            return FileIoUtils.loadFileFromClasspath(TEMPLATE_PATH + path);
-        }
-        return FileIoUtils.loadFileFromClasspath(STATIC_PATH + path);
     }
 
     private void writeWithLineSeparator(String contents) throws IOException {
