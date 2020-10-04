@@ -1,12 +1,13 @@
 package http.request;
 
-import exception.IllegalRequestException;
-import utils.IOUtils;
-
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import exception.IllegalRequestException;
+import utils.IOUtils;
 
 public class RequestBody {
     private static final String URL_DELIMITER = "&";
@@ -33,7 +34,7 @@ public class RequestBody {
             }
             result.put(value[0], value[1]);
         }
-        return result;
+        return Collections.unmodifiableMap(result);
     }
 
     public String getBody() {

@@ -1,21 +1,22 @@
-import http.request.QueryParams;
+import static org.assertj.core.api.Assertions.*;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.Map;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import http.request.QueryParams;
 
 class QueryParamsTest {
 
     @DisplayName("쿼리스트링을 잘 분해하는지 테스트")
     @Test
     void getQueryParamsTest() {
-        String url = "/user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
+        String url = "userId=javajigi&password=password&name=박재성&email=javajigi@slipp.net";
 
-        QueryParams mapper = new QueryParams(url);
-        Map<String, String> queryParams = mapper.getQueryParams();
+        QueryParams queryParams = new QueryParams(url);
 
-        assertThat(queryParams).hasSize(4);
+        assertThat(queryParams.getParam("userId")).isEqualTo("javajigi");
+        assertThat(queryParams.getParam("password")).isEqualTo("password");
+        assertThat(queryParams.getParam("name")).isEqualTo("박재성");
+        assertThat(queryParams.getParam("email")).isEqualTo("javajigi@slipp.net");
     }
 }

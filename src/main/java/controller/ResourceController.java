@@ -1,18 +1,16 @@
 package controller;
 
-import http.ContentType;
-import http.request.Request;
-import http.response.Response;
-
 import java.io.IOException;
 import java.net.URISyntaxException;
+
+import http.request.Request;
+import http.response.Response;
 
 public class ResourceController extends AbstractController {
     public void doGet(Request request, Response response) throws IOException, URISyntaxException {
         String requestUrl = request.getPath();
 
-        ContentType contentType = ContentType.of(requestUrl);
-        response.setHeader("Content-Type", contentType.getContentType() + ";charset=UTF-8");
+        response.setHeader("Content-Type", request.getContentType() + ";charset=UTF-8");
         response.ok(requestUrl);
     }
 

@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import http.ContentType;
+import http.Header;
 import http.HttpHeader;
 import utils.Directory;
 import utils.FileIoUtils;
@@ -33,13 +34,13 @@ public class Response {
     public void ok(String path) throws IOException, URISyntaxException {
         statusLine = new StatusLine("HTTP/1.1", Status.OK);
         body = setResponseBody(path);
-        setHeader("Content-Length", String.valueOf(body.getContentLength()));
+        setHeader(Header.CONTENT_LENGTH.getName(), String.valueOf(body.getContentLength()));
         write();
     }
 
     public void found(String locationUri) {
         statusLine = new StatusLine("HTTP/1.1", Status.FOUND);
-        setHeader("Location", locationUri);
+        setHeader(Header.LOCATION.getName(), locationUri);
         write();
     }
 

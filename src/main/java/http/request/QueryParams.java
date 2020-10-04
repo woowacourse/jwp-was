@@ -7,7 +7,6 @@ public class QueryParams {
     private final static String QUERY_PARAM_DELIMITER = "=";
     private final static String QUERY_PARAMS_DELIMITER = "&";
     private final static String URL_DELIMITER = "?";
-    private final static String[] EMPTY_STRINGS = new String[]{};
 
     private Map<String, String> queryParams = new LinkedHashMap<>();
 
@@ -20,11 +19,14 @@ public class QueryParams {
     }
 
     public QueryParams() {
-        this.queryParams = new LinkedHashMap<>();
     }
 
-    public Map<String, String> getQueryParams() {
-        return queryParams;
+    public boolean isEmpty() {
+        return queryParams.isEmpty();
+    }
+
+    public String getParam(String key) {
+        return queryParams.get(key);
     }
 
     @Override

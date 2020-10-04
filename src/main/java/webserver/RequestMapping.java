@@ -2,8 +2,10 @@ package webserver;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import controller.Controller;
+import controller.IndexController;
 import controller.ResourceController;
 import controller.UserCreateController;
 
@@ -13,12 +15,13 @@ public class RequestMapping {
 
     static {
         controllers.put("/users", new UserCreateController());
+        controllers.put("/", new IndexController());
     }
 
     public static Controller getController(String requestUrl) {
         Controller controller = controllers.get(requestUrl);
 
-        if (controller != null) {
+        if (Objects.nonNull(requestUrl)) {
             return controller;
         }
 
