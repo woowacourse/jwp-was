@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import web.application.FrontController;
+import web.application.UrlMapper;
 import web.application.controller.Controller;
 import web.server.domain.request.HttpRequest;
 import web.server.domain.response.HttpResponse;
@@ -20,7 +21,7 @@ import web.server.domain.response.HttpResponse;
 public class RequestHandler implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private static final Controller CONTROLLER = new FrontController();
+    private static final Controller CONTROLLER = new FrontController(UrlMapper.getInstance());
 
     private Socket connection;
 

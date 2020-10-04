@@ -12,12 +12,10 @@ import web.server.domain.response.HttpResponse;
 
 public class FrontController implements Controller {
 
-    private final Map<String, Controller> mapper;
+    private final UrlMapper urlMapper;
 
-    public FrontController() {
-        mapper = new HashMap<>();
-        mapper.put("/user/create", CreateUserController.getInstance());
-        mapper.put("/", RootController.getInstance());
+    public FrontController(UrlMapper urlMapper) {
+        this.urlMapper = urlMapper;
     }
 
     @Override
@@ -26,8 +24,8 @@ public class FrontController implements Controller {
             StaticController.getInstance().service(httpRequest, httpResponse);
             return;
         }
-        if (mapper.containsKey(httpRequest.getPath())) {
-            mapper.get(httpRequest.getPath()).service(httpRequest, httpResponse);
+        if (urlMapper.contains(httpRequest.getPath())) {
+            urlMapper.getController(httpRequest.getPath()).service(httpRequest, httpResponse);
             return;
         }
         httpResponse.respondPageNotFound();
