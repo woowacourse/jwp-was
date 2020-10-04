@@ -9,14 +9,12 @@ import webserver.HttpStatus;
 public class FileController extends AbstractController {
     @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
-        //todo : throw exception
-        httpResponse.setHttpStatus(HttpStatus.FOUND);
-        httpResponse.sendRedirect("/index.html");
+        httpResponse.setHttpStatus(HttpStatus.NOT_FOUND);
+        httpResponse.error();
     }
 
     @Override
-    public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-
+    public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
     }
 
     @Override

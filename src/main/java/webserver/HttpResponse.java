@@ -26,6 +26,15 @@ public class HttpResponse {
         header.put(key, value);
     }
 
+    public void error() throws IOException {
+        writeStatus();
+        for (Map.Entry<String, String> entry : header.entrySet()) {
+            writeWithLineSeparator(String.format("%s: %s", entry.getKey(), entry.getValue()));
+        }
+        dos.writeBytes(System.lineSeparator());
+        dos.flush();
+    }
+
     public void forward(byte[] body) throws IOException {
         writeStatus();
         for (Map.Entry<String, String> entry : header.entrySet()) {
@@ -48,7 +57,7 @@ public class HttpResponse {
     }
 
     private void writeStatus() throws IOException {
-        writeWithLineSeparator(String.format("HTTP/1.1 %d %s", httpStatus.getNumber(), httpStatus.name()));
+        writeWithLineSeparator(String.format("HTTP/1.1 %d %s", httpStatus.getNumber(), httpStatus.getName()));
     }
 
     private void writeWithLineSeparator(String contents) throws IOException {
