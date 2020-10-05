@@ -16,7 +16,9 @@ public class HttpResponseUtils {
         byte[] body = httpResponse.getBody();
         try {
             dos.writeBytes(header);
-            dos.write(body, 0, body.length);
+            if (body != null) {
+                dos.write(body, 0, body.length);
+            }
             dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());

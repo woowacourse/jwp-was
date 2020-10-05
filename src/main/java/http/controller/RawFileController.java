@@ -27,9 +27,10 @@ public class RawFileController implements Controller {
             byte[] body = FileIoUtils.loadFileFromClasspath(fileType.getRootPath() + filePath);
             String header = HttpResponseHeaderParser.ok(fileType.getContentType(), body.length);
             return new HttpResponse(header, body);
-//        } catch (NullPointerException e) {
-//            String header = HttpResponseHeaderParser.notFound();
-//            return new HttpResponse(header);
+        } catch (NullPointerException e) {
+            logger.error(e.getMessage());
+            String header = HttpResponseHeaderParser.notFound();
+            return new HttpResponse(header);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
             String header = HttpResponseHeaderParser.internalServerError();
