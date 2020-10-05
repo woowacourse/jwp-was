@@ -64,13 +64,14 @@ class StringUtilsTest {
     @ParameterizedTest
     @DisplayName("file의 path 추출 테스트")
     @CsvSource(value = {
-        "src/test/resources/get_template_file_request.txt:./templates/index.html",
-        "src/test/resources/get_static_file_request.txt:./static/css/style.css"
+        "src/test/resources/input/get_template_file_request.txt:./templates/index.html",
+        "src/test/resources/input/get_static_file_request.txt:./static/css/style.css"
     }, delimiter = ':')
     void generatePath(String filePath, String expected) {
         try {
-            InputStream fileInputStream = new FileInputStream(filePath);
-            Request request = Request.of(fileInputStream);
+            InputStream inputStream = new FileInputStream(filePath);
+            Request request = Request.of(inputStream);
+
             assertThat(StringUtils.generatePath(request)).isEqualTo(expected);
         } catch (IOException e) {
             e.printStackTrace();
@@ -98,17 +99,18 @@ class StringUtilsTest {
     @Test
     @DisplayName("요청 인풋에서 파라미터 추출 테스트 - GET")
     void getParametersFromGetRequest() {
-        String filePath = "src/test/resources/get_api_request.txt";
+        String filePath = "src/test/resources/input/get_api_request.txt";
         try {
-            InputStream fileInputStream = new FileInputStream(filePath);
-            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+            InputStream inputStream = new FileInputStream(filePath);
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             String line = bufferedReader.readLine();
 
             String method = StringUtils.extractRequestMethod(line);
             String parameters = StringUtils.getParameters(line, method, bufferedReader);
 
-            assertThat(parameters).isEqualTo("userId=javajigi&password=password");
+            assertThat(parameters).isEqualTo(
+                "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -117,37 +119,18 @@ class StringUtilsTest {
     @Test
     @DisplayName("요청 인풋에서 파라미터 추출 테스트 - POST")
     void getParametersFromPostRequest() {
-        String filePath = "src/test/resources/post_api_request.txt";
+        String filePath = "src/test/resources/input/post_api_request.txt";
         try {
-            InputStream fileInputStream = new FileInputStream(filePath);
-            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+            InputStream inputStream = new FileInputStream(filePath);
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             String line = bufferedReader.readLine();
 
             String method = StringUtils.extractRequestMethod(line);
             String parameters = StringUtils.getParameters(line, method, bufferedReader);
 
-            assertThat(parameters).isEqualTo("userId=javajigi2&password=password2");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    @DisplayName("요청 인풋에서 파라미터 추출 테스트 - 지원하지 않는 Method")
-    void getParametersFromPostRequest_IfNotSupportedMethod_ThrowException() {
-        String filePath = "src/test/resources/put_api_request.txt";
-        try {
-            InputStream fileInputStream = new FileInputStream(filePath);
-            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-            String line = bufferedReader.readLine();
-
-            String method = StringUtils.extractRequestMethod(line);
-
-            assertThatThrownBy(() -> StringUtils.getParameters(line, method, bufferedReader))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Not Supported Method");
+            assertThat(parameters).isEqualTo(
+                "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net");
         } catch (IOException e) {
             e.printStackTrace();
         }

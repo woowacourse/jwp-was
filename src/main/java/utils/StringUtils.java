@@ -5,7 +5,6 @@ import static model.ContentType.ICO;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.rmi.UnexpectedException;
 import model.ContentType;
 import model.Method;
 import model.Request;
@@ -68,7 +67,7 @@ public class StringUtils {
         if (method.equals(Method.POST)) {
             return extractPostParameters(bufferedReader);
         }
-        throw new IllegalArgumentException("Not Supported Method");
+        throw new IllegalArgumentException("Not Implemented Method");
     }
 
     private static String extractGetParameters(String line) throws IOException {

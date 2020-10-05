@@ -83,10 +83,11 @@ public enum ResponseProvider {
                 + " \r\n");
         if (Objects.nonNull(contentType)) {
             dataOutputStream
-                .writeBytes("Content-Type: " + contentType.getContentType()
+                .writeBytes("Content-Type: " + contentType.getContentTypeValue()
                     + ";charset=utf-8\r\n");
         }
-        if (status.isNeedBody()) {
+        if (Objects.nonNull(contentType) && status.isNeedBody() && request.getContentType()
+            .equals(ContentType.HTML)) {
             byte[] body = FileIoUtils.loadFileFromClasspath(StringUtils.generatePath(request));
             dataOutputStream.writeBytes("Content-Length: " + body.length + "\r\n");
         }
@@ -98,7 +99,10 @@ public enum ResponseProvider {
 
     private static void responseBody(DataOutputStream dataOutputStream, Request request,
         Status status) throws IOException, URISyntaxException {
-        if (!status.isNeedBody()) {
+        ContentType contentType = request.getContentType();
+
+        if (!(Objects.nonNull(contentType) && status.isNeedBody() && request.getContentType()
+            .equals(ContentType.HTML))) {
             return;
         }
         byte[] body = FileIoUtils.loadFileFromClasspath(StringUtils.generatePath(request));

@@ -1,7 +1,6 @@
 package model;
 
 import java.util.Arrays;
-import java.util.Objects;
 
 public enum ContentType {
 
@@ -12,25 +11,22 @@ public enum ContentType {
     TTF("text/font", ".ttf"),
     ICO("image/x-icon", ".ico");
 
-    private final String contentType;
+    private final String contentTypeValue;
     private final String extension;
 
-    ContentType(String contentType, String extension) {
-        this.contentType = contentType;
+    ContentType(String contentTypeValue, String extension) {
+        this.contentTypeValue = contentTypeValue;
         this.extension = extension;
     }
 
     public static ContentType of(String extension) {
-        if(Objects.isNull(extension)){
-            return null;
-        }
         return Arrays.stream(values())
             .filter(c -> c.extension.equals(extension))
             .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("Not Exist ContentType"));
+            .orElse(null);
     }
 
-    public String getContentType() {
-        return contentType;
+    public String getContentTypeValue() {
+        return contentTypeValue;
     }
 }
