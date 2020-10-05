@@ -9,7 +9,6 @@ import http.controller.ControllersFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.HttpResponseHeaderParser;
-import utils.HttpResponseUtils;
 
 import java.io.*;
 import java.net.Socket;
@@ -43,9 +42,9 @@ public class RequestHandler implements Runnable {
             Controller controller = controllers.find(httpRequest.getPath());
             RequestMethod requestMethod = httpRequest.getRequestMethod();
             HttpResponse httpResponse = requestMethod.extractResponse(controller, httpRequest);
-            HttpResponseUtils.response(dos, httpResponse);
+            httpResponse.createResponse(dos);
         } catch (IllegalArgumentException e) {
-            HttpResponseUtils.response(dos, new HttpResponse(HttpResponseHeaderParser.badRequest()));
+            new HttpResponse(HttpResponseHeaderParser.badRequest()).createResponse(dos);
         }
     }
 }
