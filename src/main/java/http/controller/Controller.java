@@ -2,9 +2,16 @@ package http.controller;
 
 import http.HttpRequest;
 import http.HttpResponse;
+import utils.HttpResponseHeaderParser;
 
-public interface Controller {
-    HttpResponse get(HttpRequest httpRequest);
+public abstract class Controller {
+    public HttpResponse get(HttpRequest httpRequest) {
+        String header = HttpResponseHeaderParser.methodNotAllowed();
+        return new HttpResponse(header);
+    }
 
-    HttpResponse post(HttpRequest httpRequest);
+    public HttpResponse post(HttpRequest httpRequest) {
+        String header = HttpResponseHeaderParser.methodNotAllowed();
+        return new HttpResponse(header);
+    }
 }

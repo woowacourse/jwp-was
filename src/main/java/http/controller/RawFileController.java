@@ -11,10 +11,10 @@ import webserver.RequestHandler;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-public class RawFileController implements Controller {
+public class RawFileController extends Controller {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
-    private String filePath;
+    private final String filePath;
 
     public RawFileController(String filePath) {
         this.filePath = filePath;
@@ -44,11 +44,5 @@ public class RawFileController implements Controller {
             return "";
         }
         return token[token.length - 1];
-    }
-
-    @Override
-    public HttpResponse post(HttpRequest httpRequest) {
-        String header = HttpResponseHeaderParser.methodNotAllowed();
-        return new HttpResponse(header);
     }
 }

@@ -5,12 +5,7 @@ import http.HttpResponse;
 import service.UserService;
 import utils.HttpResponseHeaderParser;
 
-public class UserCreateController implements Controller {
-    @Override
-    public HttpResponse get(HttpRequest httpRequest) {
-        String header = HttpResponseHeaderParser.methodNotAllowed();
-        return new HttpResponse(header);
-    }
+public class UserCreateController extends Controller {
 
     @Override
     public HttpResponse post(HttpRequest httpRequest) {
