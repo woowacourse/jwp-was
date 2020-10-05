@@ -15,7 +15,7 @@ import webserver.RequestHandler;
 
 public enum ResponseProvider {
 
-    RESOURCE_RESPONSE(Method.GET, (dataOutputStream, request) -> {
+    GET_RESPONSE(Method.GET, (dataOutputStream, request) -> {
         try {
             makeResponse(dataOutputStream, request, Status.OK);
         } catch (IOException | URISyntaxException e) {
@@ -23,7 +23,7 @@ public enum ResponseProvider {
             logger.error(e.getMessage());
         }
     }),
-    API_RESPONSE(Method.POST, (dataOutputStream, request) -> {
+    POST_RESPONSE(Method.POST, (dataOutputStream, request) -> {
         if (request.getLocation().contains("/user/create")) {
             String parameters = request.getParameters();
             User user = User.of(parameters);
@@ -66,15 +66,13 @@ public enum ResponseProvider {
     }
 
     private static void makeResponse(DataOutputStream dataOutputStream, Request request,
-        Status status)
-        throws IOException, URISyntaxException {
+        Status status) throws IOException, URISyntaxException {
         responseHeader(dataOutputStream, request, status);
         responseBody(dataOutputStream, request, status);
     }
 
     private static void responseHeader(DataOutputStream dataOutputStream, Request request,
-        Status status)
-        throws IOException, URISyntaxException {
+        Status status) throws IOException, URISyntaxException {
         ContentType contentType = request.getContentType();
 
         dataOutputStream.writeBytes(
@@ -99,8 +97,7 @@ public enum ResponseProvider {
     }
 
     private static void responseBody(DataOutputStream dataOutputStream, Request request,
-        Status status)
-        throws IOException, URISyntaxException {
+        Status status) throws IOException, URISyntaxException {
         if (!status.isNeedBody()) {
             return;
         }

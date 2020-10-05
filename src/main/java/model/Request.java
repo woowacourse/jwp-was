@@ -48,13 +48,4 @@ public class Request {
     public ContentType getContentType() {
         return contentType;
     }
-
-    @Override
-    public String toString() {
-        return "Request{" +
-            "method=" + method +
-            ", location='" + location + '\'' +
-            ", contentType=" + contentType +
-            '}';
-    }
 }

@@ -58,8 +58,7 @@ public class StringUtils {
     }
 
     public static String getParameters(String line, String requestMethod,
-        BufferedReader bufferedReader)
-        throws IOException {
+        BufferedReader bufferedReader) throws IOException {
         Method method = Method.of(requestMethod);
 
         if (method.equals(Method.GET)) {
@@ -76,7 +75,7 @@ public class StringUtils {
         if (sections.length == 1) {
             return null;
         }
-        return sections[1];
+        return sections[1].split(" ")[0];
     }
 
     private static String extractPostParameters(BufferedReader bufferedReader) throws IOException {
