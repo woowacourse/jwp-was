@@ -40,11 +40,9 @@ public class RequestHandler implements Runnable {
         Controllers controllers = ControllersFactory.getControllers();
         try {
             HttpRequest httpRequest = new HttpRequest(br);
-            HttpResponse httpResponse;
             Controller controller = controllers.find(httpRequest.getPath());
-
             RequestMethod requestMethod = httpRequest.getRequestMethod();
-            httpResponse = requestMethod.extractResponse(controller, httpRequest);
+            HttpResponse httpResponse = requestMethod.extractResponse(controller, httpRequest);
             HttpResponseUtils.response(dos, httpResponse);
         } catch (IllegalArgumentException e) {
             HttpResponseUtils.response(dos, new HttpResponse(HttpResponseHeaderParser.badRequest()));
