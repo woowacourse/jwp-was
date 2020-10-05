@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class ControllersFactory {
     private final Controllers controllers;
-    private static ControllersFactory controllersFactory;
+    private static final ControllersFactory controllersFactory = new ControllersFactory();
 
     public ControllersFactory() {
         Map<String, Controller> controllers = new HashMap<>();
@@ -15,13 +15,6 @@ public class ControllersFactory {
     }
 
     public static Controllers getControllers() {
-        return getInstance().controllers;
-    }
-
-    public static ControllersFactory getInstance() {
-        if (controllersFactory == null) {
-            controllersFactory = new ControllersFactory();
-        }
-        return controllersFactory;
+        return controllersFactory.controllers;
     }
 }
