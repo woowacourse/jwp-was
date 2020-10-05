@@ -1,26 +1,21 @@
 package webserver.request;
 
-import controller.Controller;
-import controller.PageController;
-import controller.StaticResourceController;
-import controller.UserController;
+import controller.Controllers;
 import webserver.response.HttpResponse;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Arrays;
 
 public enum HandlerMapping {
-    PAGE(".html", new PageController()),
-    GET_CSS(".css", new StaticResourceController()),
-    USER_CREATE("/user/create", new UserController());
+    PAGE(".html", Controllers.PAGE_CONTROLLER),
+    GET_CSS(".css", Controllers.STATIC_RESOURCE_CONTROLLER),
+    USER_CREATE("/user/create", Controllers.USER_CONTROLLER);
 
     private final String path;
-    private final Controller controller;
+    private final Controllers controllers;
 
-    HandlerMapping(String path, Controller controller) {
+    HandlerMapping(String path, Controllers controllers) {
         this.path = path;
-        this.controller = controller;
+        this.controllers = controllers;
     }
 
     public static HandlerMapping from(HttpRequest httpRequest) {
@@ -30,7 +25,7 @@ public enum HandlerMapping {
                 .orElseThrow(() -> new IllegalArgumentException("일치하는 컨트롤러를 찾지 못했습니다." + httpRequest.getPath()));
     }
 
-    public void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
-        this.controller.service(httpRequest, httpResponse);
+    public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
+        this.controllers.service(httpRequest, httpResponse);
     }
 }

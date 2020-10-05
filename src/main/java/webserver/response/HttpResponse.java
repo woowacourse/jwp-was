@@ -27,6 +27,15 @@ public class HttpResponse {
         headers.put(http, value);
     }
 
+    public void sendError(Status status) {
+        try {
+            processStatusLine(status);
+            dos.flush();
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
     public void sendRedirect(String location) {
         try {
             processStatusLine(Status.FOUND);
@@ -47,7 +56,7 @@ public class HttpResponse {
         }
     }
 
-    public void response200Header(byte[] body) throws IOException {
+    private void response200Header(byte[] body) throws IOException {
         processStatusLine(Status.OK);
         processHeader(EntityHeader.CONTENT_TYPE, headers.get(EntityHeader.CONTENT_TYPE));
         processHeader(EntityHeader.CONTENT_LENGTH, String.valueOf(body.length));
