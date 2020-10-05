@@ -65,7 +65,7 @@ class StringUtilsTest {
     @DisplayName("file의 path 추출 테스트")
     @CsvSource(value = {
         "src/test/resources/input/get_template_file_request.txt:./templates/index.html",
-        "src/test/resources/input/get_static_file_request.txt:./static/css/style.css"
+        "src/test/resources/input/get_static_file_request.txt:./static/css/styles.css"
     }, delimiter = ':')
     void generatePath(String filePath, String expected) {
         try {

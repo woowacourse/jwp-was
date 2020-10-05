@@ -71,7 +71,7 @@ public class RequestTest {
     @DisplayName("경로 확인")
     @CsvSource(value = {
         "src/test/resources/input/get_template_file_request.txt:/index.html",
-        "src/test/resources/input/get_static_file_request.txt:/css/style.css",
+        "src/test/resources/input/get_static_file_request.txt:/css/styles.css",
         "src/test/resources/input/get_api_request.txt:/user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net",
         "src/test/resources/input/post_api_request.txt:/user/create"
     }, delimiter = ':')

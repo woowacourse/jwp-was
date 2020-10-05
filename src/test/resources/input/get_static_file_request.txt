@@ -1,4 +1,4 @@
-GET /css/style.css HTTP/1.1
+GET /css/styles.css HTTP/1.1
 Host: localhost:8080
 Connection: keep-alive
 Accept: text/css,*/*;q=0.1

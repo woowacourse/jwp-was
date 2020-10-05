@@ -30,7 +30,7 @@ public class StringUtils {
     private static final int PARAMETERS_RIGHT_SIDE_INDEX = 1;
     private static final int PARAMETERS_INDEX = 0;
     private static final int CONTENT_LENGTH_VALUE_INDEX = 1;
-    private static final String EMPTY_LIME = "";
+    private static final String EMPTY_LINE = "";
 
     public static String extractRequestMethod(String line) {
         String[] requestLine = line.split(REQUEST_LINE_DELIMITER);
@@ -105,7 +105,7 @@ public class StringUtils {
         int contentLength
             = Integer.parseInt(line.split("Content-Length: ")[CONTENT_LENGTH_VALUE_INDEX]);
 
-        while (!line.equals(EMPTY_LIME)) {
+        while (!line.equals(EMPTY_LINE)) {
             line = bufferedReader.readLine();
         }
         return IOUtils.readData(bufferedReader, contentLength);

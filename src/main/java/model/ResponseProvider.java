@@ -86,8 +86,7 @@ public enum ResponseProvider {
                 .writeBytes("Content-Type: " + contentType.getContentTypeValue()
                     + ";charset=utf-8\r\n");
         }
-        if (Objects.nonNull(contentType) && status.isNeedBody() && request.getContentType()
-            .equals(ContentType.HTML)) {
+        if (Objects.nonNull(contentType) && status.isNeedBody()) {
             byte[] body = FileIoUtils.loadFileFromClasspath(StringUtils.generatePath(request));
             dataOutputStream.writeBytes("Content-Length: " + body.length + "\r\n");
         }
@@ -101,8 +100,7 @@ public enum ResponseProvider {
         Status status) throws IOException, URISyntaxException {
         ContentType contentType = request.getContentType();
 
-        if (!(Objects.nonNull(contentType) && status.isNeedBody() && request.getContentType()
-            .equals(ContentType.HTML))) {
+        if (!(Objects.nonNull(contentType) && status.isNeedBody())) {
             return;
         }
         byte[] body = FileIoUtils.loadFileFromClasspath(StringUtils.generatePath(request));

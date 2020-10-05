@@ -35,6 +35,7 @@ public class ContentTypeTest {
     }, delimiter = ':')
     void getContentType(String extension, String contentTypeValue) {
         ContentType contentType = ContentType.of(extension);
+
         assertThat(contentType.getContentTypeValue()).isEqualTo(contentTypeValue);
     }
 }
