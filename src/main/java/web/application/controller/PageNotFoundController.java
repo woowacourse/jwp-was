@@ -19,6 +19,7 @@ public class PageNotFoundController extends AbstractController {
     }
 
     private static class PageNotFoundControllerCache {
+
         private static final PageNotFoundController pageNotFoundController = new PageNotFoundController();
     }
 }

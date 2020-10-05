@@ -28,6 +28,7 @@ public class CreateUserController extends AbstractController {
     }
 
     private static class ControllerCache {
+
         private static final CreateUserController CREATE_USER_CONTROLLER = new CreateUserController();
     }
 }

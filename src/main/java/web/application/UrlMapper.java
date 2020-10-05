@@ -31,6 +31,7 @@ public class UrlMapper {
     }
 
     private static class Cache {
+
         private static final UrlMapper URL_MAPPER = new UrlMapper();
     }
 }

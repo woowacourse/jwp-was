@@ -8,10 +8,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import web.application.FrontController;
 import web.application.UrlMapper;
 import web.application.controller.Controller;
@@ -34,8 +32,8 @@ public class RequestHandler implements Runnable {
             connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream();
-             BufferedReader bufferedReader = new BufferedReader((new InputStreamReader(in, StandardCharsets.UTF_8)));
-             DataOutputStream dataOutputStream = new DataOutputStream(out)) {
+            BufferedReader bufferedReader = new BufferedReader((new InputStreamReader(in, StandardCharsets.UTF_8)));
+            DataOutputStream dataOutputStream = new DataOutputStream(out)) {
 
             HttpRequest httpRequest = new HttpRequest(bufferedReader);
             HttpResponse httpResponse = new HttpResponse(dataOutputStream);

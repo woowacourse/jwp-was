@@ -24,6 +24,7 @@ public class RootController extends AbstractController {
     }
 
     private static class ControllerCache {
+
         private static final RootController ROOT_CONTROLLER = new RootController();
     }
 }

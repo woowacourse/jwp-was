@@ -2,7 +2,6 @@ package web.application.common;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import web.server.utils.StaticFileType;
 
 public class FilePathMapper {
@@ -31,6 +30,7 @@ public class FilePathMapper {
     }
 
     private static class Cache {
+
         private static final FilePathMapper PREFIX_MAPPER = new FilePathMapper();
     }
 }

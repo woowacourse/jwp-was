@@ -26,6 +26,7 @@ public class StaticController extends AbstractController {
     }
 
     private static class ControllerCache {
+
         private static final StaticController STATIC_CONTROLLER = new StaticController();
     }
 }

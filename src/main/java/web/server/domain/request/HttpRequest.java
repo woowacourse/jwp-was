@@ -2,7 +2,6 @@ package web.server.domain.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-
 import web.server.utils.IOUtils;
 import web.server.utils.StaticFileType;
 

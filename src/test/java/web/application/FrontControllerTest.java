@@ -1,14 +1,14 @@
 package web.application;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static web.server.common.IoUtil.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static web.server.common.IoUtil.createOutputStream;
+import static web.server.common.IoUtil.createRequest;
+import static web.server.common.IoUtil.readFile;
 
 import java.io.IOException;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import web.server.domain.request.HttpRequest;
 import web.server.domain.response.HttpResponse;
 

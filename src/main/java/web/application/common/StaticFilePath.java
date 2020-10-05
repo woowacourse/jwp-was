@@ -2,7 +2,6 @@ package web.application.common;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import web.application.exception.InvalidStaticFileTypeException;
 
 public class StaticFilePath {
@@ -35,6 +34,7 @@ public class StaticFilePath {
     }
 
     private static class Cache {
+
         private static final StaticFilePath staticFilePath = new StaticFilePath();
     }
 }
