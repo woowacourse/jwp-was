@@ -5,7 +5,9 @@ import java.util.Arrays;
 public enum Method {
 
     GET("GET"),
-    POST("POST");
+    POST("POST"),
+    PUT("PUT"),
+    DELETE("DELETE");
 
     private final String method;
 
@@ -17,6 +19,6 @@ public enum Method {
         return Arrays.stream(values())
             .filter(m -> m.method.equals(method))
             .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("Not Implemented Method"));
+            .orElseThrow(() -> new IllegalArgumentException("Not Supported Method"));
     }
 }
