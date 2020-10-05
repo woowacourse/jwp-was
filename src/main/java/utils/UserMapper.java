@@ -6,6 +6,7 @@ import webserver.request.HttpRequest;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 public class UserMapper {
 
@@ -20,7 +21,7 @@ public class UserMapper {
 
     private static String decode(String data) {
         try {
-            return URLDecoder.decode(data, "UTF-8");
+            return URLDecoder.decode(data, StandardCharsets.UTF_8.name());
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("UnsupportedEncodingException" + data);
         }
