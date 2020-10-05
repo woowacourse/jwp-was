@@ -72,10 +72,14 @@ public class HttpRequest {
 
     private String extractBody(BufferedReader bufferedReader) {
         String contentLength = headers.get(EntityHeader.CONTENT_LENGTH.get());
-        if (contentLength != null) {
-            return IOUtils.readData(bufferedReader, Integer.parseInt(contentLength));
+        if (contentLength == null) {
+            return requestLine.getData();
         }
-        return requestLine.getData();
+        String body = IOUtils.readData(bufferedReader, Integer.parseInt(contentLength));
+        if (requestLine.getData() == null) {
+            return body;
+        }
+        return String.join(PARAMETER_DELIMITER, body, requestLine.getData());
     }
 
     private String readLine(BufferedReader bufferedReader) {

@@ -1,6 +1,6 @@
 package webserver.response;
 
-public enum ResponseHeader {
+public enum ResponseHeader implements HttpField {
     LOCATION("Location");
 
     private final String header;
@@ -9,7 +9,8 @@ public enum ResponseHeader {
         this.header = header;
     }
 
-    public String make(String value) {
-        return header + ": " + value;
+    @Override
+    public String get() {
+        return header;
     }
 }

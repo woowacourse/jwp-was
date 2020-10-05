@@ -1,16 +1,14 @@
 package webserver.response;
 
-public enum Status implements HttpField {
-    OK("200 OK"),
-    FOUND("302 FOUND");
+public enum HttpVersion {
+    USING_VERSION("HTTP/1.1");
 
     private final String name;
 
-    Status(String name) {
+    HttpVersion(String name) {
         this.name = name;
     }
 
-    @Override
     public String get() {
         return name;
     }

@@ -1,9 +1,10 @@
 package webserver;
 
-public enum EntityHeader {
+import webserver.response.HttpField;
+
+public enum EntityHeader implements HttpField {
     CONTENT_LENGTH("Content-Length"),
-    CONTENT_TYPE("Content-Type"),
-    CHARSET_UTF_8("charset=utf-8");
+    CONTENT_TYPE("Content-Type");
 
     private final String header;
 
@@ -11,15 +12,8 @@ public enum EntityHeader {
         this.header = header;
     }
 
-    public boolean match(String line) {
-        return line.contains(this.header);
-    }
-
+    @Override
     public String get() {
         return header;
-    }
-
-    public String make(String value) {
-        return this.header + ": " + value;
     }
 }
