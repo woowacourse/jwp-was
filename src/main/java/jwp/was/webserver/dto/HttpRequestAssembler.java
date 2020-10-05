@@ -19,7 +19,7 @@ public class HttpRequestAssembler {
     private static final String EMPTY = "";
     private static final int HTTP_METHOD_INDEX_OF_REQUEST_LINE = 0;
     private static final int URL_INDEX_OF_REQUEST_LINE = 1;
-    private static final int PROTOCOL_INDEX_OF_REQUEST_LINE = 2;
+    private static final int HTTP_VERSION_INDEX_OF_REQUEST_LINE = 2;
 
     public static HttpRequest assemble(BufferedReader br) throws IOException {
         String line = readLine(br);
@@ -28,7 +28,7 @@ public class HttpRequestAssembler {
         HttpMethod httpMethod = HttpMethod.from(requestLine[HTTP_METHOD_INDEX_OF_REQUEST_LINE]);
         UrlPath urlPath = UrlPath.from(requestLine[URL_INDEX_OF_REQUEST_LINE]);
         Parameters parameters = Parameters.fromUrl(requestLine[URL_INDEX_OF_REQUEST_LINE]);
-        Protocol protocol = Protocol.of(requestLine[PROTOCOL_INDEX_OF_REQUEST_LINE]);
+        HttpVersion httpVersion = HttpVersion.of(requestLine[HTTP_VERSION_INDEX_OF_REQUEST_LINE]);
         Headers headers = Headers.from(readHeaders(br));
 
         if (httpMethod.hasRequestBody()) {
@@ -37,7 +37,8 @@ public class HttpRequestAssembler {
         }
         FileNameExtension fileNameExtension = FileNameExtension.from(urlPath.getUrlPath());
 
-        return new HttpRequest(httpMethod, urlPath, parameters, protocol, headers, fileNameExtension
+        return new HttpRequest(httpMethod, urlPath, parameters, httpVersion, headers,
+            fileNameExtension
         );
     }
 

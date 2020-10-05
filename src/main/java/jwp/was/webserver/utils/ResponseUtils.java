@@ -29,7 +29,7 @@ public class ResponseUtils {
 
     private static void responseLine(DataOutputStream dos, HttpResponse httpResponse)
         throws IOException {
-        dos.writeBytes(httpResponse.getProtocol());
+        dos.writeBytes(httpResponse.getHttpVersion());
         dos.writeBytes(BLANK);
         dos.writeBytes(httpResponse.getHttpStatusCode().getCodeAndMessage());
     }

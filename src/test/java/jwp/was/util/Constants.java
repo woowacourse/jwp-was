@@ -2,8 +2,8 @@ package jwp.was.util;
 
 import java.util.ArrayList;
 import jwp.was.webserver.dto.Headers;
+import jwp.was.webserver.dto.HttpVersion;
 import jwp.was.webserver.dto.Parameters;
-import jwp.was.webserver.dto.Protocol;
 import jwp.was.webserver.dto.UrlPath;
 
 public class Constants {
@@ -28,7 +28,7 @@ public class Constants {
     public static final UrlPath URL_PATH_BOOTSTRAP_MIN_CSS = UrlPath.from("/css/bootstrap.min.css");
     public static final UrlPath URL_PATH_API_CREATE_USER = UrlPath.from("/user/create");
 
-    public static final Protocol PROTOCOL = Protocol.of("HTTP/1.1");
+    public static final HttpVersion HTTP_VERSION = HttpVersion.of("HTTP/1.1");
     public static final Parameters PARAMETERS_EMPTY = Parameters.fromEncodedParameter("");
     public static final Parameters PARAMETERS_FOR_CREATE_USER = Parameters.fromEncodedParameter(
         USER_ID + "=" + USER_ID

@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
     public HttpResponse handleHttpStatusCode(HttpRequest httpRequest,
         HttpStatusCode httpStatusCode) {
         return HttpResponse.of(
-            httpRequest.getProtocol(),
+            httpRequest.getHttpVersion(),
             httpStatusCode,
             httpStatusCode.getMessage()
         );

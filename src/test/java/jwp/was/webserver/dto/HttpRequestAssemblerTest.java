@@ -1,7 +1,7 @@
 package jwp.was.webserver.dto;
 
 import static java.lang.System.lineSeparator;
-import static jwp.was.util.Constants.PROTOCOL;
+import static jwp.was.util.Constants.HTTP_VERSION;
 import static jwp.was.util.Constants.URL_PATH_INDEX_HTML;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,9 +23,9 @@ class HttpRequestAssemblerTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpRequestAssemblerTest.class);
     private static final String REQUEST_GET_LINE_FORMAT =
-        HttpMethod.GET.name() + " %s " + PROTOCOL + lineSeparator();
+        HttpMethod.GET.name() + " %s " + HTTP_VERSION + lineSeparator();
     private static final String REQUEST_POST_LINE_FORMAT =
-        HttpMethod.POST.name() + " %s " + PROTOCOL + lineSeparator();
+        HttpMethod.POST.name() + " %s " + HTTP_VERSION + lineSeparator();
     private static final String HEADER_CONTENT_LENGTH_FORMAT = "Content-Length: %d";
 
     @DisplayName("QueryString이 없는 URL 요청시")

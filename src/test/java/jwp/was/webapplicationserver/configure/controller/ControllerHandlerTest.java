@@ -2,9 +2,9 @@ package jwp.was.webapplicationserver.configure.controller;
 
 import static jwp.was.util.Constants.CONTENT_TYPE_TEXT_PLAIN;
 import static jwp.was.util.Constants.HEADERS_EMPTY;
+import static jwp.was.util.Constants.HTTP_VERSION;
 import static jwp.was.util.Constants.PARAMETERS_EMPTY;
 import static jwp.was.util.Constants.PARAMETERS_FOR_CREATE_USER;
-import static jwp.was.util.Constants.PROTOCOL;
 import static jwp.was.util.Constants.URL_PATH_API_CREATE_USER;
 import static jwp.was.util.Constants.URL_PATH_NOT_EXISTS_FILE;
 import static jwp.was.webserver.FileNameExtension.API;
@@ -38,7 +38,7 @@ class ControllerHandlerTest {
                 POST,
                 URL_PATH_API_CREATE_USER,
                 PARAMETERS_FOR_CREATE_USER,
-                PROTOCOL,
+                HTTP_VERSION,
                 HEADERS_EMPTY,
                 API);
             controllerHandler.handleAPI(os, httpRequest);
@@ -56,7 +56,7 @@ class ControllerHandlerTest {
                 CONNECT,
                 URL_PATH_API_CREATE_USER,
                 PARAMETERS_FOR_CREATE_USER,
-                PROTOCOL,
+                HTTP_VERSION,
                 HEADERS_EMPTY,
                 API);
             controllerHandler.handleAPI(os, httpRequest);
@@ -74,7 +74,7 @@ class ControllerHandlerTest {
                 POST,
                 URL_PATH_NOT_EXISTS_FILE,
                 PARAMETERS_FOR_CREATE_USER,
-                PROTOCOL,
+                HTTP_VERSION,
                 HEADERS_EMPTY,
                 API);
             controllerHandler.handleAPI(os, httpRequest);
@@ -92,7 +92,7 @@ class ControllerHandlerTest {
                 POST,
                 URL_PATH_API_CREATE_USER,
                 PARAMETERS_EMPTY,
-                PROTOCOL,
+                HTTP_VERSION,
                 HEADERS_EMPTY,
                 API);
             controllerHandler.handleAPI(os, httpRequest);

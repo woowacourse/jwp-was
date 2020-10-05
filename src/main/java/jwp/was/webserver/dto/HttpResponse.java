@@ -13,33 +13,33 @@ import jwp.was.webserver.HttpStatusCode;
 
 public class HttpResponse {
 
-    private final String protocol;
+    private final String httpVersion;
     private final HttpStatusCode httpStatusCode;
     private final Map<String, String> headers;
     private final byte[] body;
 
-    private HttpResponse(String protocol, HttpStatusCode httpStatusCode,
+    private HttpResponse(String httpVersion, HttpStatusCode httpStatusCode,
         Map<String, String> headers, byte[] body) {
-        this.protocol = Objects.requireNonNull(protocol);
+        this.httpVersion = Objects.requireNonNull(httpVersion);
         this.httpStatusCode = Objects.requireNonNull(httpStatusCode);
         this.headers
             = settingHeaders(Objects.requireNonNull(headers), Objects.requireNonNull(body));
         this.body = body;
     }
 
-    public static HttpResponse of(String protocol, HttpStatusCode httpStatusCode,
+    public static HttpResponse of(String httpVersion, HttpStatusCode httpStatusCode,
         Map<String, String> headers, byte[] body) {
-        return new HttpResponse(protocol, httpStatusCode, headers, body);
+        return new HttpResponse(httpVersion, httpStatusCode, headers, body);
     }
 
-    public static HttpResponse of(String protocol, HttpStatusCode httpStatusCode,
+    public static HttpResponse of(String httpVersion, HttpStatusCode httpStatusCode,
         Map<String, String> headers, String body) {
         byte[] bodyBytes = body.getBytes(StandardCharsets.UTF_8);
-        return new HttpResponse(protocol, httpStatusCode, headers, bodyBytes);
+        return new HttpResponse(httpVersion, httpStatusCode, headers, bodyBytes);
     }
 
-    public static HttpResponse of(String protocol, HttpStatusCode httpStatusCode, String body) {
-        return HttpResponse.of(protocol, httpStatusCode, new HashMap<>(), body);
+    public static HttpResponse of(String httpVersion, HttpStatusCode httpStatusCode, String body) {
+        return HttpResponse.of(httpVersion, httpStatusCode, new HashMap<>(), body);
     }
 
     private Map<String, String> settingHeaders(Map<String, String> headers, byte[] body) {
@@ -53,8 +53,8 @@ public class HttpResponse {
         return Collections.unmodifiableMap(headers);
     }
 
-    public String getProtocol() {
-        return protocol;
+    public String getHttpVersion() {
+        return httpVersion;
     }
 
     public HttpStatusCode getHttpStatusCode() {
@@ -72,7 +72,7 @@ public class HttpResponse {
     @Override
     public String toString() {
         return "HttpResponse{" +
-            "protocol='" + protocol + '\'' +
+            "httpVersion='" + httpVersion + '\'' +
             ", httpStatusCode=" + httpStatusCode +
             ", headers=" + headers +
             ", body=" + Arrays.toString(body) +

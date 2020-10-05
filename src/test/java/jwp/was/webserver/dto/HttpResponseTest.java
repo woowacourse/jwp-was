@@ -18,11 +18,11 @@ import org.junit.jupiter.api.Test;
 
 class HttpResponseTest {
 
-    public static final String PROTOCOL = Constants.PROTOCOL.getProtocol();
+    public static final String HTTP_VERSION = Constants.HTTP_VERSION.getHttpVersion();
 
-    @DisplayName("Protocol이 Null인 경우 NPE 발생")
+    @DisplayName("HttpVersion이 Null인 경우 NPE 발생")
     @Test
-    void of_NullProtocol_ThrownException() {
+    void of_NullHttpVersion_ThrownException() {
         assertThatThrownBy(() -> HttpResponse.of(null, HttpStatusCode.OK, new HashMap<>(), EMPTY))
             .isInstanceOf(NullPointerException.class);
     }
@@ -30,14 +30,14 @@ class HttpResponseTest {
     @DisplayName("HttpStatusCode가 Null인 경우 NPE 발생")
     @Test
     void of_NullHttpStatusCode_ThrownException() {
-        assertThatThrownBy(() -> HttpResponse.of(PROTOCOL, null, new HashMap<>(), EMPTY))
+        assertThatThrownBy(() -> HttpResponse.of(HTTP_VERSION, null, new HashMap<>(), EMPTY))
             .isInstanceOf(NullPointerException.class);
     }
 
     @DisplayName("Headers가 Null인 경우 NPE 발생")
     @Test
     void of_NullHeaders_ThrownException() {
-        assertThatThrownBy(() -> HttpResponse.of(PROTOCOL, HttpStatusCode.OK, null, EMPTY))
+        assertThatThrownBy(() -> HttpResponse.of(HTTP_VERSION, HttpStatusCode.OK, null, EMPTY))
             .isInstanceOf(NullPointerException.class);
     }
 
@@ -45,7 +45,7 @@ class HttpResponseTest {
     @Test
     void of_NullBody_ThrownException() {
         assertThatThrownBy(() ->
-            HttpResponse.of(PROTOCOL, HttpStatusCode.OK, new HashMap<>(), (byte[]) null))
+            HttpResponse.of(HTTP_VERSION, HttpStatusCode.OK, new HashMap<>(), (byte[]) null))
             .isInstanceOf(NullPointerException.class);
     }
 
@@ -53,9 +53,9 @@ class HttpResponseTest {
     @Test
     void of_BodyIsEmpty_Success() {
         HttpResponse httpResponse
-            = HttpResponse.of(PROTOCOL, HttpStatusCode.OK, new HashMap<>(), EMPTY);
+            = HttpResponse.of(HTTP_VERSION, HttpStatusCode.OK, new HashMap<>(), EMPTY);
 
-        assertThat(httpResponse.getProtocol()).isEqualTo(PROTOCOL);
+        assertThat(httpResponse.getHttpVersion()).isEqualTo(HTTP_VERSION);
         assertThat(httpResponse.getHttpStatusCode()).isEqualTo(HttpStatusCode.OK);
         assertThat(httpResponse.getHeaders()).hasSize(2);
         assertThat(httpResponse.getHeaders().get(CONTENT_LENGTH)).isEqualTo("0");
@@ -69,9 +69,9 @@ class HttpResponseTest {
         String body = "니나노";
         byte[] expectedBody = body.getBytes(StandardCharsets.UTF_8);
         HttpResponse httpResponse
-            = HttpResponse.of(PROTOCOL, HttpStatusCode.OK, new HashMap<>(), body);
+            = HttpResponse.of(HTTP_VERSION, HttpStatusCode.OK, new HashMap<>(), body);
 
-        assertThat(httpResponse.getProtocol()).isEqualTo(PROTOCOL);
+        assertThat(httpResponse.getHttpVersion()).isEqualTo(HTTP_VERSION);
         assertThat(httpResponse.getHttpStatusCode()).isEqualTo(HttpStatusCode.OK);
         assertThat(httpResponse.getHeaders()).hasSize(2);
         assertThat(httpResponse.getHeaders().get(CONTENT_LENGTH))
@@ -89,9 +89,9 @@ class HttpResponseTest {
         headers.put(CONTENT_TYPE, expectedContentType);
 
         HttpResponse httpResponse
-            = HttpResponse.of(PROTOCOL, HttpStatusCode.OK, headers, EMPTY);
+            = HttpResponse.of(HTTP_VERSION, HttpStatusCode.OK, headers, EMPTY);
 
-        assertThat(httpResponse.getProtocol()).isEqualTo(PROTOCOL);
+        assertThat(httpResponse.getHttpVersion()).isEqualTo(HTTP_VERSION);
         assertThat(httpResponse.getHttpStatusCode()).isEqualTo(HttpStatusCode.OK);
         assertThat(httpResponse.getHeaders()).hasSize(2);
         assertThat(httpResponse.getHeaders().get(CONTENT_LENGTH)).isEqualTo("0");
@@ -108,9 +108,9 @@ class HttpResponseTest {
         headers.put(CONTENT_LOCATION, expectedLocation);
 
         HttpResponse httpResponse
-            = HttpResponse.of(PROTOCOL, HttpStatusCode.OK, headers, EMPTY);
+            = HttpResponse.of(HTTP_VERSION, HttpStatusCode.OK, headers, EMPTY);
 
-        assertThat(httpResponse.getProtocol()).isEqualTo(PROTOCOL);
+        assertThat(httpResponse.getHttpVersion()).isEqualTo(HTTP_VERSION);
         assertThat(httpResponse.getHttpStatusCode()).isEqualTo(HttpStatusCode.OK);
         assertThat(httpResponse.getHeaders()).hasSize(3);
         assertThat(httpResponse.getHeaders().get(CONTENT_LENGTH)).isEqualTo("0");

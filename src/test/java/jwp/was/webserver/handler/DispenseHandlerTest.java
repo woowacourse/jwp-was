@@ -3,9 +3,9 @@ package jwp.was.webserver.handler;
 import static jwp.was.util.Constants.CONTENT_TYPE_TEXT_HTML;
 import static jwp.was.util.Constants.CONTENT_TYPE_TEXT_PLAIN;
 import static jwp.was.util.Constants.HEADERS_EMPTY;
+import static jwp.was.util.Constants.HTTP_VERSION;
 import static jwp.was.util.Constants.PARAMETERS_EMPTY;
 import static jwp.was.util.Constants.PARAMETERS_FOR_CREATE_USER;
-import static jwp.was.util.Constants.PROTOCOL;
 import static jwp.was.util.Constants.URL_PATH_API_CREATE_USER;
 import static jwp.was.util.Constants.URL_PATH_INDEX_HTML;
 import static jwp.was.webserver.FileNameExtension.API;
@@ -42,7 +42,7 @@ class DispenseHandlerTest {
                 GET,
                 URL_PATH_INDEX_HTML,
                 PARAMETERS_EMPTY,
-                PROTOCOL,
+                HTTP_VERSION,
                 HEADERS_EMPTY,
                 HTML);
             dispenseHandler.dispense(os, httpRequest);
@@ -64,7 +64,7 @@ class DispenseHandlerTest {
                 POST,
                 URL_PATH_API_CREATE_USER,
                 PARAMETERS_FOR_CREATE_USER,
-                PROTOCOL,
+                HTTP_VERSION,
                 HEADERS_EMPTY,
                 API);
             dispenseHandler.dispense(os, httpRequest);

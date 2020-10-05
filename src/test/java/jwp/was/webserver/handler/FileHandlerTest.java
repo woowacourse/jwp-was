@@ -4,8 +4,8 @@ import static jwp.was.util.Constants.CONTENT_TYPE_TEXT_CSS;
 import static jwp.was.util.Constants.CONTENT_TYPE_TEXT_HTML;
 import static jwp.was.util.Constants.CONTENT_TYPE_TEXT_PLAIN;
 import static jwp.was.util.Constants.HEADERS_EMPTY;
+import static jwp.was.util.Constants.HTTP_VERSION;
 import static jwp.was.util.Constants.PARAMETERS_EMPTY;
-import static jwp.was.util.Constants.PROTOCOL;
 import static jwp.was.util.Constants.URL_PATH_BOOTSTRAP_MIN_CSS;
 import static jwp.was.util.Constants.URL_PATH_INDEX_HTML;
 import static jwp.was.util.Constants.URL_PATH_NOT_EXISTS_FILE;
@@ -107,7 +107,7 @@ class FileHandlerTest {
             httpMethod,
             urlPath,
             PARAMETERS_EMPTY,
-            PROTOCOL,
+            HTTP_VERSION,
             HEADERS_EMPTY,
             FileNameExtension.from(urlPath)
         );
