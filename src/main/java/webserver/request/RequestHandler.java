@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.response.HttpResponse;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -27,9 +26,7 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest httpRequest = new HttpRequest(in);
             HandlerMapping handlerMapping = HandlerMapping.from(httpRequest);
-            HttpResponse httpResponse = handlerMapping.apply(httpRequest);
-            DataOutputStream dos = new DataOutputStream(out);
-            httpResponse.respond(dos);
+            handlerMapping.service(httpRequest, new HttpResponse(out));
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }

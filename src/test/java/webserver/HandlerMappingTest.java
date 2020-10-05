@@ -24,7 +24,7 @@ class HandlerMappingTest {
 
         HandlerMapping handlerMapping = HandlerMapping.from(new HttpRequest(in));
 
-        assertThat(handlerMapping).isEqualTo(HandlerMapping.GET_USER_CREATE);
+        assertThat(handlerMapping).isEqualTo(HandlerMapping.USER_CREATE);
     }
 
     @DisplayName("Request와 일치하는 HadlerMapping이 없을 때 Exception 발생")
