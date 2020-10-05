@@ -13,6 +13,7 @@ public class RequestUtils {
     public static final int MODEL_INDEX = 1;
     public static final String AND_REGEX = "&";
     public static final String EQUALS_REGEX = "=";
+    public static final String EXTENSION_REGEX = "\\.";
 
     public static String extractMethod(String header) {
         return header.split(SPACE_REGEX)[METHOD_TYPE_INDEX];
@@ -28,7 +29,7 @@ public class RequestUtils {
     }
 
     public static String extractExtension(String url) {
-        String[] names = url.split("\\.");
+        String[] names = url.split(EXTENSION_REGEX);
         return names[names.length - 1];
     }
 

@@ -1,25 +1,21 @@
-package model;
-
-import java.util.Map;
+package domain.user.model;
 
 public class User {
-    private String userId;
-    private String password;
-    private String name;
-    private String email;
+    public static final String USER_ID = "userId";
+    public static final String PASSWORD = "password";
+    public static final String NAME = "name";
+    public static final String EMAIL = "email";
+
+    private final String userId;
+    private final String password;
+    private final String name;
+    private final String email;
 
     public User(String userId, String password, String name, String email) {
         this.userId = userId;
         this.password = password;
         this.name = name;
         this.email = email;
-    }
-
-    public User(Map<String, String> parameter) {
-        this.userId = parameter.get("userId");
-        this.password = parameter.get("password");
-        this.name = parameter.get("name");
-        this.email = parameter.get("email");
     }
 
     public String getUserId() {

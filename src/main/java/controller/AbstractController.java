@@ -1,15 +1,19 @@
-package web;
+package controller;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 
 import utils.FileIoUtils;
 import utils.RequestUtils;
+import webserver.HttpHeader;
 import webserver.HttpRequest;
 import webserver.HttpResponse;
 import webserver.HttpStatus;
 
 public abstract class AbstractController implements Controller {
+    public static final String USER_UPDATE = "/user/update";
+    public static final String USER_DELETE = "/user/delete";
+
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         if (httpRequest.isGet()) {
@@ -21,10 +25,20 @@ public abstract class AbstractController implements Controller {
             doPost(httpRequest, httpResponse);
         }
         if (httpRequest.isPut()) {
-            doPut(httpRequest, httpResponse);
+            if (USER_UPDATE.equals(httpRequest.getPath())) {
+                doPut(httpRequest, httpResponse);
+                return;
+            }
+            httpResponse.setHttpStatus(HttpStatus.METHOD_NOT_ALLOWED);
+            httpResponse.error();
         }
         if (httpRequest.isDelete()) {
-            doDelete(httpRequest, httpResponse);
+            if (USER_DELETE.equals(httpRequest.getPath())) {
+                doDelete(httpRequest, httpResponse);
+                return;
+            }
+            httpResponse.setHttpStatus(HttpStatus.METHOD_NOT_ALLOWED);
+            httpResponse.error();
         }
     }
 
@@ -32,9 +46,9 @@ public abstract class AbstractController implements Controller {
         IOException {
         if (body != null) {
             httpResponse.setHttpStatus(HttpStatus.OK);
-            httpResponse.addHeader("Content-Type",
+            httpResponse.addHeader(HttpHeader.CONTENT_TYPE,
                 String.format("text/%s;charset=utf-8", RequestUtils.extractExtension(path)));
-            httpResponse.addHeader("Content-Length", String.valueOf(body.length));
+            httpResponse.addHeader(HttpHeader.CONTENT_LENGTH, String.valueOf(body.length));
             httpResponse.forward(body);
         }
         if (body == null) {
@@ -46,7 +60,7 @@ public abstract class AbstractController implements Controller {
 
     public abstract void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException;
 
-    public abstract void doPut(HttpRequest httpRequest, HttpResponse httpResponse);
+    public abstract void doPut(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException;
 
-    public abstract void doDelete(HttpRequest httpRequest, HttpResponse httpResponse);
+    public abstract void doDelete(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException;
 }

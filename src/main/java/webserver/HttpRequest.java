@@ -12,12 +12,16 @@ public class HttpRequest {
     public static final String EMPTY = "";
     public static final String REGEX = ":";
     public static final int KEY_INDEX = 0;
+    public static final String QUERY_REGEX = "\\?";
+    public static final String EQUALS = "=";
+    public static final int PARAMETER_INDEX = 0;
+    public static final int VALUE_INDEX = 1;
 
     private final HttpMethod httpMethod;
-    private final String path;
     private final String model;
     private final Map<String, String> header;
     private final Map<String, String> parameter;
+    private String path;
 
     public HttpRequest(BufferedReader br) throws IOException {
         this.header = new TreeMap<>();
@@ -26,6 +30,16 @@ public class HttpRequest {
         this.model = RequestUtils.extractTitleOfModel(firstLine);
         this.path = RequestUtils.extractPath(firstLine);
         this.parameter = createParameter(br);
+        extractQueryParam();
+    }
+
+    private void extractQueryParam() {
+        String[] queries = path.split(QUERY_REGEX);
+        path = queries[0];
+        for (int i = 1; i < queries.length; i++) {
+            String[] split = queries[i].split(EQUALS);
+            parameter.put(split[PARAMETER_INDEX], split[VALUE_INDEX]);
+        }
     }
 
     private String readRequest(BufferedReader br) throws IOException {
@@ -46,8 +60,8 @@ public class HttpRequest {
     }
 
     private Map<String, String> createParameter(BufferedReader br) throws IOException {
-        if (header.containsKey("Content-Length")) {
-            String body = IOUtils.readData(br, Integer.parseInt(header.get("Content-Length")));
+        if (header.containsKey(HttpHeader.CONTENT_LENGTH)) {
+            String body = IOUtils.readData(br, Integer.parseInt(header.get(HttpHeader.CONTENT_LENGTH)));
             return RequestUtils.extractParameter(body);
         }
         return new TreeMap<>();

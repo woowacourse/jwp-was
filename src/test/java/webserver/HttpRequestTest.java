@@ -49,4 +49,26 @@ class HttpRequestTest {
             () -> assertThat(httpRequest.getHttpMethod().name()).isEqualTo("POST")
         );
     }
+
+    @Test
+    public void post2() throws Exception {
+        String request = "POST /user/create?id=1 HTTP/1.1\n"
+            + "Host: localhost:8080\n"
+            + "Connection: keep-alive\n"
+            + "Content-Length: 46\n"
+            + "Content-Type: application/x-www-form-urlencoded\n"
+            + "Accept: */*\n\n"
+            + "userId=javajigi&password=password&name=JaeSung";
+        InputStream in = new ByteArrayInputStream(request.getBytes());
+        BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+        HttpRequest httpRequest = new HttpRequest(br);
+
+        assertAll(
+            () -> assertThat(httpRequest.getHttpMethod().name()).isEqualTo("POST"),
+            () -> assertThat(httpRequest.getPath()).isEqualTo("/user/create"),
+            () -> assertThat(httpRequest.getHeader("Connection")).isEqualTo("keep-alive"),
+            () -> assertThat(httpRequest.getParameter("id")).isEqualTo("1"),
+            () -> assertThat(httpRequest.getParameter("userId")).isEqualTo("javajigi")
+        );
+    }
 }

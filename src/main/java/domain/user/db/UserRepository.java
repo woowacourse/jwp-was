@@ -1,14 +1,14 @@
-package db;
+package domain.user.db;
 
 import java.util.Collection;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
 
-import model.User;
+import domain.user.model.User;
 
-public class DataBase {
-    private static Map<String, User> users = Maps.newHashMap();
+public class UserRepository {
+    private static final Map<String, User> users = Maps.newHashMap();
 
     public static void addUser(User user) {
         users.put(user.getUserId(), user);

@@ -1,4 +1,4 @@
-package web;
+package controller;
 
 import java.io.IOException;
 
@@ -15,15 +15,15 @@ public class FileController extends AbstractController {
 
     @Override
     public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+        httpResponse.setHttpStatus(HttpStatus.METHOD_NOT_ALLOWED);
+        httpResponse.error();
     }
 
     @Override
     public void doPut(HttpRequest httpRequest, HttpResponse httpResponse) {
-
     }
 
     @Override
     public void doDelete(HttpRequest httpRequest, HttpResponse httpResponse) {
-
     }
 }

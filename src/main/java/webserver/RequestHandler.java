@@ -14,9 +14,10 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import web.Controller;
-import web.FileController;
-import web.UserController;
+import controller.Controller;
+import controller.FileController;
+import domain.user.web.UserCreateController;
+import domain.user.web.UserReadController;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -28,7 +29,8 @@ public class RequestHandler implements Runnable {
         this.connection = connectionSocket;
         controllers = new HashMap<>();
         controllers.put("FILE", new FileController());
-        controllers.put("USER", new UserController());
+        controllers.put("/user/create", new UserCreateController());
+        controllers.put("/user/profile", new UserReadController());
     }
 
     public void run() {
@@ -42,7 +44,7 @@ public class RequestHandler implements Runnable {
             if (httpRequest.isPost()) {
                 printParameter(httpRequest);
             }
-            Controller controller = controllers.getOrDefault(httpRequest.getModel(), controllers.get("FILE"));
+            Controller controller = controllers.getOrDefault(httpRequest.getPath(), controllers.get("FILE"));
             controller.service(httpRequest, new HttpResponse(out));
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());

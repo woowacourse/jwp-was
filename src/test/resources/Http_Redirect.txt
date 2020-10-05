@@ -1,4 +1,4 @@
-HTTP/1.1 302 FOUND
+HTTP/1.1 302 Found
 Location: http://localhost:8080/index.html
 Content-Type: text/html;charset=utf-8
 
