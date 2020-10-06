@@ -10,7 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class RequestHeadersTest {
-    @DisplayName("from: 헤더 리스트를 받아 인스턴스 생성")
+    @DisplayName("from: 헤더 리스트를 받아 인스턴스를 생성한다.")
     @Test
     void from() {
         // given

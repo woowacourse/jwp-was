@@ -30,7 +30,7 @@ public class HttpRequestTest {
         );
     }
 
-    @DisplayName("constructor: body가 없는 http 요청을 읽어 HttpRequest 생성")
+    @DisplayName("constructor: body가 없는 http 요청을 읽어 HttpRequest를 생성한다.")
     @Test
     void constructor_BodyIsNotEmpty() {
         // when
@@ -44,7 +44,7 @@ public class HttpRequestTest {
         );
     }
 
-    @DisplayName("from: bufferedReader를 읽어 HttpRequest 생성")
+    @DisplayName("from: bufferedReader를 읽어 HttpRequest를 생성한다.")
     @Test
     void from() throws IOException {
         // given
@@ -71,7 +71,7 @@ public class HttpRequestTest {
         );
     }
 
-    @DisplayName("equalsPath: 입력받은 path와 동일한 path를 가지는지 확인")
+    @DisplayName("equalsPath: 입력받은 path와 동일한 path를 가지는지 확인한다.")
     @MethodSource("providePathAndResult")
     @ParameterizedTest
     void equalsPath(final String path, final boolean expect) {

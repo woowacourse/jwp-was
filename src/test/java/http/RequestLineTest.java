@@ -11,7 +11,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 public class RequestLineTest {
-    @DisplayName("from: 헤더 첫 라인을 입력받아 인스턴스 생성")
+    @DisplayName("from: 헤더 첫 라인을 입력받아 인스턴스가 생성된다.")
     @Test
     void from() throws IOException {
         // given
@@ -29,7 +29,7 @@ public class RequestLineTest {
         );
     }
 
-    @DisplayName("from: 잘못된 헤더 첫 라인 입력시 예외 발생")
+    @DisplayName("from: 잘못된 헤더 첫 라인 입력시 예외가 발생한다.")
     @ParameterizedTest
     @ValueSource(strings = {"GET", "/ HTTP/1.1", "GET / "})
     void from_InvalidLineFormat_ExceptionThrown(final String line) throws IOException {

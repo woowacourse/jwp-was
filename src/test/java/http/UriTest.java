@@ -7,7 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class UriTest {
-    @DisplayName("from: query parameter가 있는 uri를 입력받아 인스턴스 생성")
+    @DisplayName("from: query parameter가 있는 uri를 입력받아 인스턴스를 생성한다.")
     @Test
     void from_queryStringExist() {
         // given
@@ -23,7 +23,7 @@ public class UriTest {
         );
     }
 
-    @DisplayName("from: query parameter가 없는 uri를 입력받아 인스턴스 생성")
+    @DisplayName("from: query parameter가 없는 uri를 입력받아 인스턴스를 생성한다.")
     @Test
     void from_queryStringNotExist() {
         // given

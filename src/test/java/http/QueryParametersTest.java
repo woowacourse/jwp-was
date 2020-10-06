@@ -7,7 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class QueryParametersTest {
-    @DisplayName("from: 쿼리스트링을 받아 인스턴스 생성")
+    @DisplayName("from: 쿼리스트링을 받아 인스턴스를 생성한다.")
     @Test
     void from() {
         // given
