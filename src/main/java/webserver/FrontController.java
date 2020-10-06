@@ -6,23 +6,27 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import http.HttpMethod;
+import controller.Controller;
+import controller.LoginController;
+import controller.UserController;
 import http.HttpRequest;
 import http.HttpResponse;
 
-public class FrontController {
+public class FrontController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
     private static final List<HandlerMapping> handlerMappings = new ArrayList<>();
 
     static {
         handlerMappings.add(new ResourceHandlerMapping());
-        handlerMappings.add(new UrlHandlerMapping("/user/create", HttpMethod.POST, new UserController()::saveUser));
+        handlerMappings.add(new UrlHandlerMapping("/user/create", new UserController()));
+        handlerMappings.add(new UrlHandlerMapping("/user/login", new LoginController()));
     }
 
-    public void doService(final HttpRequest httpRequest, final HttpResponse httpResponse) {
+    @Override
+    public void service(final HttpRequest httpRequest, final HttpResponse httpResponse) {
         try {
-            Handler handler = getHandler(httpRequest);
-            handler.handleRequest(httpRequest, httpResponse);
+            Controller controller = getHandler(httpRequest);
+            controller.service(httpRequest, httpResponse);
         } catch (HandlerNotFoundException exception) {
             logger.info(exception.getMessage());
             httpResponse.response404Header();
@@ -34,11 +38,11 @@ public class FrontController {
         }
     }
 
-    private Handler getHandler(final HttpRequest httpRequest) {
+    private Controller getHandler(final HttpRequest httpRequest) {
         return handlerMappings.stream()
                 .filter(handlerMapping -> handlerMapping.matches(httpRequest))
                 .findFirst()
-                .map(HandlerMapping::getHandler)
+                .map(HandlerMapping::getController)
                 .orElseThrow(() -> new HandlerNotFoundException("요청에 맞는 handler를 찾을 수 없습니다."));
     }
 }

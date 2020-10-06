@@ -35,8 +35,9 @@ public class RequestHandler implements Runnable {
              OutputStream outputStream = connection.getOutputStream();
              DataOutputStream dataOutputStream = new DataOutputStream(outputStream)) {
             HttpRequest httpRequest = HttpRequest.from(bufferedReader);
+            logger.info(httpRequest.toString());
             HttpResponse httpResponse = new HttpResponse(dataOutputStream);
-            frontController.doService(httpRequest, httpResponse);
+            frontController.service(httpRequest, httpResponse);
         } catch (Exception exception) {
             logger.error(exception.getMessage());
         }

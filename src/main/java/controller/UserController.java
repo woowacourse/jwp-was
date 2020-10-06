@@ -1,12 +1,13 @@
-package webserver;
+package controller;
 
 import db.DataBase;
 import http.HttpRequest;
 import http.HttpResponse;
 import model.User;
 
-public class UserController {
-    public void saveUser(final HttpRequest httpRequest, final HttpResponse httpResponse) {
+public class UserController extends AbstractController {
+    @Override
+    protected void doPost(final HttpRequest httpRequest, final HttpResponse httpResponse) {
         String userId = httpRequest.getBodyValue("userId");
         String password = httpRequest.getBodyValue("password");
         String name = httpRequest.getBodyValue("name");

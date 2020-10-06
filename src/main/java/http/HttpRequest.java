@@ -39,12 +39,20 @@ public class HttpRequest {
         return requestLine.equalsPath(path);
     }
 
+    public HttpMethod getMethod() {
+        return requestLine.getMethod();
+    }
+
     public String getPath() {
         return requestLine.getPath();
     }
 
     public Uri getUri() {
         return requestLine.getUri();
+    }
+
+    public String getHeader(final String key) {
+        return requestHeaders.getHeader(key);
     }
 
     public String getBodyValue(final String key) {
