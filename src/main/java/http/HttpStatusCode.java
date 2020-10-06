@@ -3,8 +3,8 @@ package http;
 public enum HttpStatusCode {
     OK(200, "OK"),
     FOUND(302, "FOUND"),
-    Method_Not_Allowed(405, "Method Not Allowed"),
-    Not_Found(404, "Not Found");
+    METHOD_NOT_ALLOWED(405, "Method Not Allowed"),
+    NOT_FOUND(404, "Not Found");
 
 
     private int code;

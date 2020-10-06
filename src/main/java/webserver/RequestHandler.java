@@ -43,17 +43,21 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = HttpRequestFactory.createRequest(br);
             HttpResponse httpResponse = new HttpResponse(out);
 
-            if (httpRequest.notContainsSessionId()) {
-                String sessionId = String.valueOf(UUID.randomUUID());
-                sessionContainer.put(sessionId, new HttpSession(sessionId));
-                httpResponse.putHeader("Set-Cookie",
-                        String.format("%s=%s", SessionContainer.SESSION_KEY_FOR_COOKIE, sessionId));
-                logger.debug("set sessionId: {}", sessionId);
-            }
+            sessionCheck(httpRequest, httpResponse);
 
             handle(httpRequest, httpResponse);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
+        }
+    }
+
+    private void sessionCheck(HttpRequest httpRequest, HttpResponse httpResponse) {
+        if (httpRequest.notContainsSessionId()) {
+            String sessionId = String.valueOf(UUID.randomUUID());
+            sessionContainer.put(sessionId, new HttpSession(sessionId));
+            httpResponse.putHeader("Set-Cookie",
+                    String.format("%s=%s", SessionContainer.SESSION_KEY_FOR_COOKIE, sessionId));
+            logger.debug("set sessionId: {}", sessionId);
         }
     }
 

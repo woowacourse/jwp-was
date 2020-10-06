@@ -15,6 +15,10 @@ public class SessionContainer {
         return Holder.INSTANCE;
     }
 
+    public HttpSession getSession(String sessionId) {
+        return sessionContainer.get(sessionId);
+    }
+
     public void put(String sessionId, HttpSession httpSession) {
         sessionContainer.put(sessionId, httpSession);
     }

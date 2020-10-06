@@ -40,11 +40,17 @@ class HttpResponseTest {
 
     @Test
     public void responseRedirectWhenLogin() throws Exception {
-        // Http_Redirect.txt 결과는 응답 headere에 Location 정보와 Set-Cookie 정보가 포하되어 있어야 한다.
+        // Http_Redirect_When_Login.txt 결과는 응답 headere에 Location 정보와 Set-Cookie 정보가 포하되어 있어야 한다.
         HttpResponse response = new HttpResponse(createOutputStream("Http_Redirect_When_Login.txt"));
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Set-Cookie", "logined=true; path");
-        response.sendRedirect("/index.html", headers);
+        response.putHeader("Set-Cookie", "logined=true; path");
+        response.sendRedirect("/index.html");
+    }
+
+    @Test
+    public void responseNotAllowed() throws Exception {
+        // Http_Redirect_Not_Allowed.txt 결과는 응답 body에 <h1>405 Try another method</h1> 문구가 있어야 한다.
+        HttpResponse response = new HttpResponse(createOutputStream("Http_Redirect_Not_Allowed.txt"));
+        response.methodNotAllowed();
     }
 
     private OutputStream createOutputStream(String filename) throws FileNotFoundException {
