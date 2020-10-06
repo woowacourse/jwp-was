@@ -8,11 +8,15 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import webserver.http.body.HttpBody;
 import webserver.http.header.HttpHeader;
+import webserver.http.header.HttpHeaderField;
+import webserver.http.request.HttpResourceType;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -22,7 +26,7 @@ class HttpHeaderTest {
 
     @DisplayName("HTTP Request Header가 규격에 맞을 때 HttpHeader 객체 생성")
     @Test
-    void httpHeaderBuilderTest() throws IOException {
+    void httpRequestHeaderBuilderTest() throws IOException {
         String requestHeaderLines = "Host: localhost:8080" + NEW_LINE +
                 "Connection: keep-alive" + NEW_LINE +
                 "Content-Length: 59" + NEW_LINE +
@@ -36,7 +40,17 @@ class HttpHeaderTest {
         assertThat(createHttpHeader(requestHeaderLines)).isInstanceOf(HttpHeader.class);
     }
 
-    @DisplayName("HTTP Request Header의 키와 값 규격에 맞을 때 HttpHeader 객체 생성")
+    @DisplayName("HTTP Response Header가 규격에 맞을 때 HttpHeader 객체 생성")
+    @Test
+    void httpResponseHeaderBuilderTest() {
+        Map<String, String> responseHeaders = new HashMap<>();
+        responseHeaders.put(HttpHeaderField.CONTENT_LENGTH.getName(), "123");
+        responseHeaders.put(HttpHeaderField.CONTENT_TYPE.getName(), HttpResourceType.JS.getContentType());
+
+        assertThat(HttpHeader.from(responseHeaders)).isInstanceOf(HttpHeader.class);
+    }
+
+    @DisplayName("HTTP Header의 키와 값 규격에 맞을 때 HttpHeader 객체 생성")
     @ParameterizedTest
     @CsvSource(value = {"Connection,keep-alive", "Accept,*/*", "Location,/index.html"})
     void httpHeaderKeyAndValueBuilderTest(String key, String value) {
@@ -45,7 +59,7 @@ class HttpHeaderTest {
         assertThat(builder.addHeader(key, value).build()).isInstanceOf(HttpHeader.class);
     }
 
-    @DisplayName("HTTP Request Header의 키와 값이 빈 값일 때 HttpHeader 객체 생성을 시도하면 InvalidHttpMessageException 발생")
+    @DisplayName("HTTP Header의 키와 값이 빈 값일 때 HttpHeader 객체 생성을 시도하면 InvalidHttpMessageException 발생")
     @ParameterizedTest
     @CsvSource(value = {"    ,localhost:8080", "Content-Type,  ", "   ,   "})
     void httpHeaderKeyAndValueBuilderExceptionTest(String key, String value) {
@@ -56,7 +70,7 @@ class HttpHeaderTest {
                 .hasMessageStartingWith("잘못된 형식의 HTTP Message입니다! -> ");
     }
 
-    @DisplayName("HTTP Request Header가 규격에 맞지 않을 때 HttpHeader 객체 생성을 시도하면 InvalidHttpMessageException 발생")
+    @DisplayName("HTTP Header가 규격에 맞지 않을 때 HttpHeader 객체 생성을 시도하면 InvalidHttpMessageException 발생")
     @ParameterizedTest
     @ValueSource(strings = {"Connection > keep-alive", "Content-Length 59", "Host: ", ":application/json", "   :   "})
     void httpHeaderBuilderExceptionTest(String invalidHeaderLine) {

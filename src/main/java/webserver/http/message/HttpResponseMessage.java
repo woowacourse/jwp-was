@@ -15,9 +15,7 @@ public class HttpResponseMessage extends HttpMessage {
 
     public static HttpResponseMessage of(HttpStatus httpStatus, Map<String, String> headers, String body) {
         StatusLine statusLine = new StatusLine(httpStatus);
-        HttpHeader httpHeader = new HttpHeader.Builder()
-                .addHeaders(headers)
-                .build();
+        HttpHeader httpHeader = HttpHeader.from(headers);
         HttpBody httpBody = DefaultHttpBody.from(body);
 
         return new HttpResponseMessage(statusLine, httpHeader, httpBody);
@@ -25,9 +23,7 @@ public class HttpResponseMessage extends HttpMessage {
 
     public static HttpResponseMessage of(HttpStatus httpStatus, Map<String, String> headers) {
         StatusLine statusLine = new StatusLine(httpStatus);
-        HttpHeader httpHeader = new HttpHeader.Builder()
-                .addHeaders(headers)
-                .build();
+        HttpHeader httpHeader = HttpHeader.from(headers);
         HttpBody httpBody = HttpBody.empty();
 
         return new HttpResponseMessage(statusLine, httpHeader, httpBody);

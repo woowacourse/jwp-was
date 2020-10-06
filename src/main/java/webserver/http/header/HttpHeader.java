@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class HttpHeader {
     private final Map<String, String> headers;
 
-    public HttpHeader(Map<String, String> headers) {
+    private HttpHeader(Map<String, String> headers) {
         this.headers = headers;
     }
 
@@ -36,6 +36,18 @@ public class HttpHeader {
 
             builder.addHeaderLine(headerLine);
         }
+
+        return builder.build();
+    }
+
+    public static HttpHeader from(Map<String, String> headers) {
+        if (Objects.isNull(headers) || headers.isEmpty()) {
+            throw new InvalidHttpMessageException(headers);
+        }
+
+        HttpHeader.Builder builder = new HttpHeader.Builder();
+
+        headers.forEach((key, value) -> builder.addHeader(key, value));
 
         return builder.build();
     }
@@ -75,18 +87,6 @@ public class HttpHeader {
         private static final String HEADER_LINE_DELIMITER = ":";
 
         private final Map<String, String> headers = new HashMap<>();
-
-        public Builder addHeaders(Map<String, String> headers) {
-            if (Objects.isNull(headers) || headers.isEmpty()) {
-                throw new InvalidHttpMessageException(headers);
-            }
-
-            for (String key : headers.keySet()) {
-                this.addHeader(key, headers.get(key));
-            }
-
-            return this;
-        }
 
         public Builder addHeader(String key, String value) {
             StringUtils.validateNonNullAndNotEmpty(() -> new InvalidHttpMessageException(key, value), key, value);
