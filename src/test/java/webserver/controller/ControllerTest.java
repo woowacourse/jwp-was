@@ -2,8 +2,8 @@ package webserver.controller;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import webserver.http.message.HttpMessage;
 import webserver.http.message.HttpRequestMessage;
+import webserver.http.message.HttpResponseMessage;
 import webserver.http.request.HttpUri;
 
 import java.io.BufferedReader;
@@ -21,7 +21,7 @@ class ControllerTest {
     @Test
     void createHttpResponseMessageForUserCreationTest() throws IOException {
         HttpRequestMessage httpRequestMessage = createHttpRequestMessage("./src/test/resources/CreateUserRequest");
-        HttpMessage httpResponseMessage = createHttpResponseMessage(httpRequestMessage);
+        HttpResponseMessage httpResponseMessage = createHttpResponseMessage(httpRequestMessage);
         String actualMessage = httpResponseMessage.toHttpMessage();
 
         String expectedMessage = "HTTP/1.1 302 Found" + NEW_LINE +
@@ -35,7 +35,7 @@ class ControllerTest {
     @Test
     void createHttpResponseMessageForResourceTest() throws IOException {
         HttpRequestMessage httpRequestMessage = createHttpRequestMessage("./src/test/resources/ResourceRequest");
-        HttpMessage httpResponseMessage = createHttpResponseMessage(httpRequestMessage);
+        HttpResponseMessage httpResponseMessage = createHttpResponseMessage(httpRequestMessage);
         String actualMessage = httpResponseMessage.toHttpMessage();
 
         String expectedMessage = "HTTP/1.1 200 OK" + NEW_LINE +
@@ -51,7 +51,7 @@ class ControllerTest {
     void createHttpResponseMessageForNotFoundResourceTest() throws IOException {
         HttpRequestMessage httpRequestMessage = createHttpRequestMessage("./src/test/resources" +
                                                                                  "/NotFoundResourceRequest");
-        HttpMessage httpResponseMessage = createHttpResponseMessage(httpRequestMessage);
+        HttpResponseMessage httpResponseMessage = createHttpResponseMessage(httpRequestMessage);
         String actualMessage = httpResponseMessage.toHttpMessage();
 
         String expectedMessage = "HTTP/1.1 404 Not Found" + NEW_LINE +
@@ -69,7 +69,7 @@ class ControllerTest {
         return HttpRequestMessage.from(bufferedReader);
     }
 
-    private HttpMessage createHttpResponseMessage(HttpRequestMessage httpRequestMessage) {
+    private HttpResponseMessage createHttpResponseMessage(HttpRequestMessage httpRequestMessage) {
         HttpUri httpUri = httpRequestMessage.getRequestLine().getHttpUri();
         Controller controller = httpUri.findController();
 

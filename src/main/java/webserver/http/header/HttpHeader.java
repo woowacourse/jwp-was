@@ -76,6 +76,18 @@ public class HttpHeader {
 
         private final Map<String, String> headers = new HashMap<>();
 
+        public Builder addHeaders(Map<String, String> headers) {
+            if (Objects.isNull(headers) || headers.isEmpty()) {
+                throw new InvalidHttpMessageException(headers);
+            }
+
+            for (String key : headers.keySet()) {
+                this.addHeader(key, headers.get(key));
+            }
+
+            return this;
+        }
+
         public Builder addHeader(String key, String value) {
             StringUtils.validateNonNullAndNotEmpty(() -> new InvalidHttpMessageException(key, value), key, value);
 

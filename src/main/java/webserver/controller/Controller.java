@@ -1,8 +1,8 @@
 package webserver.controller;
 
-import webserver.http.message.HttpMessage;
 import webserver.http.message.HttpRequestMessage;
+import webserver.http.message.HttpResponseMessage;
 
 public interface Controller {
-    HttpMessage createHttpResponseMessage(HttpRequestMessage httpRequestMessage);
+    HttpResponseMessage createHttpResponseMessage(HttpRequestMessage httpRequestMessage);
 }

@@ -2,7 +2,7 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.http.message.HttpMessage;
+import webserver.http.message.HttpResponseMessage;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -17,7 +17,7 @@ public class ResponseWriter implements AutoCloseable {
         this.dos = new DataOutputStream(connection.getOutputStream());
     }
 
-    public void write(HttpMessage httpResponseMessage) {
+    public void write(HttpResponseMessage httpResponseMessage) {
         byte[] message = httpResponseMessage.toHttpMessage().getBytes();
 
         try {

@@ -1,27 +1,26 @@
 package webserver.controller;
 
 import webserver.http.body.HttpBody;
-import webserver.http.header.HttpHeader;
 import webserver.http.header.HttpHeaderField;
-import webserver.http.message.HttpMessage;
 import webserver.http.message.HttpRequestMessage;
+import webserver.http.message.HttpResponseMessage;
 import webserver.http.response.HttpStatus;
-import webserver.http.response.StatusLine;
 import webserver.service.UserService;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CreateUserController implements Controller {
 
     @Override
-    public HttpMessage createHttpResponseMessage(HttpRequestMessage httpRequestMessage) {
+    public HttpResponseMessage createHttpResponseMessage(HttpRequestMessage httpRequestMessage) {
         HttpBody httpBody = httpRequestMessage.getHttpBody();
         UserService.addUser(httpBody);
 
-        StatusLine statusLine = new StatusLine(HttpStatus.FOUND);
+        Map<String, String> headers = new HashMap<>();
         String redirectUrl = "/index.html";
-        HttpHeader httpHeader = new HttpHeader.Builder()
-                .addHeader(HttpHeaderField.LOCATION.getName(), redirectUrl)
-                .build();
+        headers.put(HttpHeaderField.LOCATION.getName(), redirectUrl);
 
-        return new HttpMessage(statusLine, httpHeader);
+        return HttpResponseMessage.of(HttpStatus.FOUND, headers);
     }
 }

@@ -3,8 +3,8 @@ package webserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.controller.Controller;
-import webserver.http.message.HttpMessage;
 import webserver.http.message.HttpRequestMessage;
+import webserver.http.message.HttpResponseMessage;
 import webserver.http.request.HttpUri;
 
 import java.io.BufferedReader;
@@ -36,7 +36,7 @@ public class RequestHandler implements Runnable {
             HttpUri httpUri = httpRequestMessage.getRequestLine().getHttpUri();
             Controller controller = httpUri.findController();
 
-            HttpMessage httpResponseMessage = controller.createHttpResponseMessage(httpRequestMessage);
+            HttpResponseMessage httpResponseMessage = controller.createHttpResponseMessage(httpRequestMessage);
 
             responseWriter.write(httpResponseMessage);
         } catch (IOException e) {

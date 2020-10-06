@@ -4,23 +4,22 @@ import exception.FileNotReadableException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
-import webserver.http.body.DefaultHttpBody;
-import webserver.http.body.HttpBody;
 import webserver.http.header.HttpCharacterEncoding;
-import webserver.http.header.HttpHeader;
 import webserver.http.header.HttpHeaderField;
-import webserver.http.message.HttpMessage;
 import webserver.http.message.HttpRequestMessage;
+import webserver.http.message.HttpResponseMessage;
 import webserver.http.request.HttpResourceType;
 import webserver.http.request.HttpUri;
 import webserver.http.response.HttpStatus;
-import webserver.http.response.StatusLine;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ReadResourceController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(ReadResourceController.class);
 
     @Override
-    public HttpMessage createHttpResponseMessage(HttpRequestMessage httpRequestMessage) {
+    public HttpResponseMessage createHttpResponseMessage(HttpRequestMessage httpRequestMessage) {
         HttpUri httpUri = httpRequestMessage.getRequestLine().getHttpUri();
         byte[] fileBytes;
         try {
@@ -29,18 +28,17 @@ public class ReadResourceController implements Controller {
             return createNotFoundResourceHttpResponseMessage();
         }
 
-        StatusLine statusLine = new StatusLine(HttpStatus.OK);
-        HttpHeader httpHeader = new HttpHeader.Builder()
-                .addHeader(HttpHeaderField.CONTENT_TYPE.getName(),
-                           httpUri.getContentType() + HttpCharacterEncoding.UTF_8.toHttpMessage())
-                .addHeader(HttpHeaderField.CONTENT_LENGTH.getName(), String.valueOf(fileBytes.length))
-                .build();
-        HttpBody httpbody = DefaultHttpBody.from(new String(fileBytes, 0, fileBytes.length));
+        Map<String, String> headers = new HashMap<>();
+        headers.put(HttpHeaderField.CONTENT_TYPE.getName(),
+                    httpUri.getContentType() + HttpCharacterEncoding.UTF_8.toHttpMessage());
+        headers.put(HttpHeaderField.CONTENT_LENGTH.getName(), String.valueOf(fileBytes.length));
 
-        return new HttpMessage(statusLine, httpHeader, httpbody);
+        String body = new String(fileBytes, 0, fileBytes.length);
+
+        return HttpResponseMessage.of(HttpStatus.OK, headers, body);
     }
 
-    private HttpMessage createNotFoundResourceHttpResponseMessage() {
+    private HttpResponseMessage createNotFoundResourceHttpResponseMessage() {
         String filePath = "./templates/not_found_error.html";
         byte[] fileBytes = new byte[]{};
         try {
@@ -49,14 +47,13 @@ public class ReadResourceController implements Controller {
             logger.error(e.getMessage());
         }
 
-        StatusLine statusLine = new StatusLine(HttpStatus.NOT_FOUND);
-        HttpHeader httpHeader = new HttpHeader.Builder()
-                .addHeader(HttpHeaderField.CONTENT_TYPE.getName(),
-                           HttpResourceType.HTML.getContentType() + HttpCharacterEncoding.UTF_8.toHttpMessage())
-                .addHeader(HttpHeaderField.CONTENT_LENGTH.getName(), String.valueOf(fileBytes.length))
-                .build();
-        HttpBody httpbody = DefaultHttpBody.from(new String(fileBytes, 0, fileBytes.length));
+        Map<String, String> headers = new HashMap<>();
+        headers.put(HttpHeaderField.CONTENT_TYPE.getName(),
+                    HttpResourceType.HTML.getContentType() + HttpCharacterEncoding.UTF_8.toHttpMessage());
+        headers.put(HttpHeaderField.CONTENT_LENGTH.getName(), String.valueOf(fileBytes.length));
 
-        return new HttpMessage(statusLine, httpHeader, httpbody);
+        String body = new String(fileBytes, 0, fileBytes.length);
+
+        return HttpResponseMessage.of(HttpStatus.NOT_FOUND, headers, body);
     }
 }
