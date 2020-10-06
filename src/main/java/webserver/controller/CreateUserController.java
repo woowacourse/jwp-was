@@ -2,6 +2,7 @@ package webserver.controller;
 
 import webserver.http.body.HttpBody;
 import webserver.http.header.HttpHeader;
+import webserver.http.header.HttpHeaderField;
 import webserver.http.message.HttpMessage;
 import webserver.http.message.HttpRequestMessage;
 import webserver.http.response.HttpStatus;
@@ -18,7 +19,7 @@ public class CreateUserController implements Controller {
         StatusLine statusLine = new StatusLine(HttpStatus.FOUND);
         String redirectUrl = "/index.html";
         HttpHeader httpHeader = new HttpHeader.Builder()
-                .addHeader("Location", redirectUrl)
+                .addHeader(HttpHeaderField.LOCATION.getName(), redirectUrl)
                 .build();
 
         return new HttpMessage(statusLine, httpHeader);

@@ -48,7 +48,7 @@ public class HttpHeader {
     }
 
     private int getContentLength() {
-        String contentLength = this.headers.get("Content-Length");
+        String contentLength = this.headers.get(HttpHeaderField.CONTENT_LENGTH.getName());
         if (Objects.isNull(contentLength)) {
             return -1;
         }
@@ -61,7 +61,7 @@ public class HttpHeader {
     }
 
     private HttpContentType getContentType() {
-        String contentType = this.headers.get("Content-Type");
+        String contentType = this.headers.get(HttpHeaderField.CONTENT_TYPE.getName());
         return HttpContentType.from(contentType);
     }
 
