@@ -1,6 +1,7 @@
 package http;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -36,9 +37,11 @@ public class HttpRequestTest {
         HttpRequest httpRequest = new HttpRequest(REQUEST_LINE, REQUEST_HEADERS, REQUEST_BODY);
 
         // then
-        assertThat(httpRequest.getRequestLine()).isNotNull();
-        assertThat(httpRequest.getRequestHeaders()).isNotNull();
-        assertThat(httpRequest.getRequestBody()).isNotNull();
+        assertAll(
+                () -> assertThat(httpRequest.getRequestLine()).isNotNull(),
+                () -> assertThat(httpRequest.getRequestHeaders()).isNotNull(),
+                () -> assertThat(httpRequest.getRequestBody()).isNotNull()
+        );
     }
 
     @DisplayName("from: bufferedReader를 읽어 HttpRequest 생성")
@@ -47,9 +50,9 @@ public class HttpRequestTest {
         // given
         String input = "GET / HTTP/1.1" + System.lineSeparator()
                 + "Host: localhost:8080" + System.lineSeparator()
-                + "Content-Length: 76" + System.lineSeparator()
+                + "Content-Length: 31" + System.lineSeparator()
                 + System.lineSeparator()
-                + "userId=test@test.com&name=hello" + System.lineSeparator();
+                + "userId=test@test.com&name=hello";
         InputStream inputStream = new ByteArrayInputStream(input.getBytes());
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
@@ -57,9 +60,15 @@ public class HttpRequestTest {
         HttpRequest httpRequest = HttpRequest.from(bufferedReader);
 
         // then
-        assertThat(httpRequest.getRequestLine()).isNotNull();
-        assertThat(httpRequest.getRequestHeaders()).isNotNull();
-        assertThat(httpRequest.getRequestBody()).isNotNull();
+        assertAll(
+                () -> assertThat(httpRequest.equalsPath("/")).isTrue(),
+                () -> assertThat(httpRequest.equalsMethod(HttpMethod.GET)).isTrue(),
+                () -> assertThat(httpRequest.getRequestLine().getVersion()).isEqualTo("HTTP/1.1"),
+                () -> assertThat(httpRequest.getHeader("Host")).isEqualTo("localhost:8080"),
+                () -> assertThat(httpRequest.getHeader("Content-Length")).isEqualTo("31"),
+                () -> assertThat(httpRequest.getBodyValue("userId")).isEqualTo("test@test.com"),
+                () -> assertThat(httpRequest.getBodyValue("name")).isEqualTo("hello")
+        );
     }
 
     @DisplayName("equalsPath: 입력받은 path와 동일한 path를 가지는지 확인")

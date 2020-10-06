@@ -1,6 +1,7 @@
 package http;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,8 +23,10 @@ public class RequestHeadersTest {
         RequestHeaders requestHeaders = RequestHeaders.from(headers);
 
         // then
-        assertThat(requestHeaders.getHeader("Upgrade-Insecure-Requests")).isEqualTo("1");
-        assertThat(requestHeaders.getHeader("Sec-Fetch-Site")).isEqualTo("none");
-        assertThat(requestHeaders.getHeader("Sec-Fetch-Mode")).isEqualTo("navigate");
+        assertAll(
+                () -> assertThat(requestHeaders.getHeader("Upgrade-Insecure-Requests")).isEqualTo("1"),
+                () -> assertThat(requestHeaders.getHeader("Sec-Fetch-Site")).isEqualTo("none"),
+                () -> assertThat(requestHeaders.getHeader("Sec-Fetch-Mode")).isEqualTo("navigate")
+        );
     }
 }

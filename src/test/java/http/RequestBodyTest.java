@@ -1,6 +1,7 @@
 package http;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,9 +17,11 @@ public class RequestBodyTest {
         RequestBody requestBody = RequestBody.from(body);
 
         // then
-        assertThat(requestBody.getValue("userId")).isEqualTo("test@test.com");
-        assertThat(requestBody.getValue("password")).isEqualTo("1q2w3e");
-        assertThat(requestBody.getValue("name")).isEqualTo("hello");
-        assertThat(requestBody.getValue("email")).isEqualTo("nullable@kakao.com");
+        assertAll(
+                () -> assertThat(requestBody.getValue("userId")).isEqualTo("test@test.com"),
+                () -> assertThat(requestBody.getValue("password")).isEqualTo("1q2w3e"),
+                () -> assertThat(requestBody.getValue("name")).isEqualTo("hello"),
+                () -> assertThat(requestBody.getValue("email")).isEqualTo("nullable@kakao.com")
+        );
     }
 }

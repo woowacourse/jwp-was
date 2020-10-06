@@ -1,6 +1,7 @@
 package http;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,8 +17,10 @@ public class UriTest {
         Uri uri = Uri.from(uriWithQueryString);
 
         // then
-        assertThat(uri.getPath()).isEqualTo("/user/create");
-        assertThat(uri.getQueryParameters()).isNotNull();
+        assertAll(
+                () -> assertThat(uri.getPath()).isEqualTo("/user/create"),
+                () -> assertThat(uri.getQueryParameters()).isNotNull()
+        );
     }
 
     @DisplayName("from: query parameter가 없는 uri를 입력받아 인스턴스 생성")
@@ -30,7 +33,9 @@ public class UriTest {
         Uri uri = Uri.from(uriWithoutQueryString);
 
         // then
-        assertThat(uri.getPath()).isEqualTo("/user/read");
-        assertThat(uri.getQueryParameters()).isNull();
+        assertAll(
+                () -> assertThat(uri.getPath()).isEqualTo("/user/read"),
+                () -> assertThat(uri.getQueryParameters()).isNull()
+        );
     }
 }

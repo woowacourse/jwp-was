@@ -1,6 +1,7 @@
 package http;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 
@@ -20,10 +21,12 @@ public class RequestLineTest {
         RequestLine requestLine = RequestLine.from(line);
 
         // then
-        assertThat(requestLine.getMethod()).isEqualTo(HttpMethod.GET);
-        assertThat(requestLine.getUri().getPath()).isEqualTo("/");
-        assertThat(requestLine.getUri().getQueryParameters()).isNull();
-        assertThat(requestLine.getVersion()).isEqualTo("HTTP/1.1");
+        assertAll(
+                () -> assertThat(requestLine.getMethod()).isEqualTo(HttpMethod.GET),
+                () -> assertThat(requestLine.getUri().getPath()).isEqualTo("/"),
+                () -> assertThat(requestLine.getUri().getQueryParameters()).isNull(),
+                () -> assertThat(requestLine.getVersion()).isEqualTo("HTTP/1.1")
+        );
     }
 
     @DisplayName("from: 잘못된 헤더 첫 라인 입력시 예외 발생")

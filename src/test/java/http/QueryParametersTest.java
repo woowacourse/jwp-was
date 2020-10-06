@@ -1,6 +1,7 @@
 package http;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,9 +17,12 @@ public class QueryParametersTest {
         QueryParameters queryParameters = QueryParameters.from(queries);
 
         // then
-        assertThat(queryParameters.getParameter("userId")).isEqualTo("test@test.com");
-        assertThat(queryParameters.getParameter("password")).isEqualTo("1q2w3e");
-        assertThat(queryParameters.getParameter("name")).isEqualTo("hello");
-        assertThat(queryParameters.getParameter("email")).isEqualTo("nullable@kakao.com");
+        assertAll(
+                () -> assertThat(queryParameters.getParameter("userId")).isEqualTo("test@test.com"),
+                () -> assertThat(queryParameters.getParameter("password")).isEqualTo("1q2w3e"),
+                () -> assertThat(queryParameters.getParameter("name")).isEqualTo("hello"),
+                () -> assertThat(queryParameters.getParameter("email")).isEqualTo("nullable@kakao.com")
+        );
+
     }
 }
