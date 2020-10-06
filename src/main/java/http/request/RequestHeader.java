@@ -1,5 +1,7 @@
 package http.request;
 
+import utils.Extractor;
+
 import java.util.Map;
 import java.util.Objects;
 
@@ -36,5 +38,10 @@ public class RequestHeader {
     @Override
     public int hashCode() {
         return Objects.hash(header);
+    }
+
+    public boolean containsSessionId() {
+        String cookie = header.get(COOKIE);
+        return Extractor.sessionIdFrom(cookie).isPresent();
     }
 }

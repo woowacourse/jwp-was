@@ -1,5 +1,6 @@
 package http.response;
 
+import http.HttpStatusCode;
 import http.request.HttpRequest;
 import utils.FileIoUtils;
 
@@ -7,12 +8,14 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.Map;
 
 import static com.google.common.net.HttpHeaders.ACCEPT;
 
 public class HttpResponse {
     private final DataOutputStream dos;
+    private final Map<String, String> header = new HashMap<>();
 
     public HttpResponse(OutputStream outputStream) {
         this.dos = new DataOutputStream(outputStream);
@@ -20,6 +23,11 @@ public class HttpResponse {
 
     public void forward(HttpRequest httpRequest) throws IOException, URISyntaxException {
         byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getPath());
+        responseHeader(httpRequest, body);
+        responseBody(body);
+    }
+
+    public void forward(HttpRequest httpRequest, byte[] body) throws IOException {
         responseHeader(httpRequest, body);
         responseBody(body);
     }
@@ -36,6 +44,9 @@ public class HttpResponse {
         dos.writeBytes("HTTP/1.1 200 OK " + System.lineSeparator());
         dos.writeBytes("Content-Type: " + findContentType(httpRequest) + System.lineSeparator());
         dos.writeBytes("Content-Length: " + body.length + System.lineSeparator());
+        for (Map.Entry<String, String> header : header.entrySet()) {
+            dos.writeBytes(String.format("%s: %s" + System.lineSeparator(), header.getKey(), header.getValue()));
+        }
         dos.writeBytes(System.lineSeparator());
     }
 
@@ -91,5 +102,17 @@ public class HttpResponse {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void putHeader(String key, String value) {
+        header.put(key, value);
+    }
+
+    public void writeHeader(HttpStatusCode statusCode) throws IOException {
+        dos.writeBytes(String.format("HTTP/1.1 %s", statusCode.findCodeAndMessage()));
+        for (Map.Entry<String, String> header : header.entrySet()) {
+            dos.writeBytes(String.format("%s: %s" + System.lineSeparator(), header.getKey(), header.getValue()));
+        }
+        dos.writeBytes(System.lineSeparator());
     }
 }

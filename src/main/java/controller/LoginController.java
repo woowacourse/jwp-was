@@ -10,9 +10,6 @@ import model.domain.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class LoginController extends AbstractController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private static final String PATH = "/user/login";
@@ -26,14 +23,12 @@ public class LoginController extends AbstractController {
             validateLoginRequests(userId, password);
 
             logger.debug("Login success");
-            Map<String, String> responseHeaders = new HashMap<>();
-            responseHeaders.put("Set-Cookie", "logined=true; path=/");
-            httpResponse.sendRedirect("/index.html", responseHeaders);
+            httpResponse.putHeader("Set-Cookie", "logined=true; path=/");
+            httpResponse.sendRedirect("/index.html");
         } catch (LoginException e) {
             logger.error(e.getMessage());
-            Map<String, String> responseHeaders = new HashMap<>();
-            responseHeaders.put("Set-Cookie", "logined=false");
-            httpResponse.sendRedirect("/user/login_failed.html", responseHeaders);
+            httpResponse.putHeader("Set-Cookie", "logined=false");
+            httpResponse.sendRedirect("/user/login_failed.html");
         }
     }
 

@@ -4,6 +4,7 @@ import controller.ControllerMapper;
 import controller.LoginController;
 import controller.UserController;
 import controller.UserListController;
+import http.servlet.SessionContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +32,9 @@ public class WebServer {
             Socket connection;
             ExecutorService es = Executors.newFixedThreadPool(6);
             while ((connection = listenSocket.accept()) != null) {
-                es.execute(new RequestHandler(connection, ControllerMapper.getInstance()));
+                ControllerMapper controllerMapper = ControllerMapper.getInstance();
+                SessionContainer sessionContainer = SessionContainer.getInstance();
+                es.execute(new RequestHandler(connection, controllerMapper, sessionContainer));
             }
         }
     }

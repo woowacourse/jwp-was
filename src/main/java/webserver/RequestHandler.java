@@ -5,6 +5,8 @@ import controller.ControllerMapper;
 import http.factory.HttpRequestFactory;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import http.servlet.HttpSession;
+import http.servlet.SessionContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,16 +18,19 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private final Socket connection;
     private final ControllerMapper controllerMapper;
+    private final SessionContainer sessionContainer;
 
-    public RequestHandler(Socket connectionSocket, ControllerMapper mapper) {
+    public RequestHandler(Socket connectionSocket, ControllerMapper mapper, SessionContainer sessionContainer) {
         this.connection = connectionSocket;
         this.controllerMapper = mapper;
+        this.sessionContainer = sessionContainer;
     }
 
     public void run() {
@@ -37,6 +42,14 @@ public class RequestHandler implements Runnable {
 
             HttpRequest httpRequest = HttpRequestFactory.createRequest(br);
             HttpResponse httpResponse = new HttpResponse(out);
+
+            if (httpRequest.notContainsSessionId()) {
+                String sessionId = String.valueOf(UUID.randomUUID());
+                sessionContainer.put(sessionId, new HttpSession(sessionId));
+                httpResponse.putHeader("Set-Cookie",
+                        String.format("%s=%s", SessionContainer.SESSION_KEY_FOR_COOKIE, sessionId));
+                logger.debug("set sessionId: {}", sessionId);
+            }
 
             handle(httpRequest, httpResponse);
         } catch (IOException | URISyntaxException e) {
@@ -57,13 +70,6 @@ public class RequestHandler implements Runnable {
         if (httpRequest.isNotFound()) {
             httpResponse.notFound();
             return;
-        }
-        if (httpRequest.isMemberService() && httpRequest.isNotLogined()) {
-            httpResponse.sendRedirect("/user/login.html");
-            return;
-        }
-        if (httpRequest.isDynamicPage()) {
-            httpResponse.sendRedirect(httpRequest.getPath().replace(".html", ""));
         }
         httpResponse.forward(httpRequest);
     }

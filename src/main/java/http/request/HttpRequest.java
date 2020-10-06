@@ -29,14 +29,6 @@ public class HttpRequest {
         return !requestHeader.isLogined();
     }
 
-    public boolean isMemberService() {
-        return getPath().equals("/user/list.html");
-    }
-
-    public boolean isDynamicPage() {
-        return getPath().equals("/user/list.html");
-    }
-
     public String getHeader(String key) {
         return requestHeader.get(key);
     }
@@ -47,5 +39,9 @@ public class HttpRequest {
 
     public String getPath() {
         return requestLine.getPath();
+    }
+
+    public boolean notContainsSessionId() {
+        return !requestHeader.containsSessionId();
     }
 }
