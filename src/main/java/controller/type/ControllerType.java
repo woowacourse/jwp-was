@@ -9,6 +9,7 @@ import controller.type.resource.StaticType;
 import controller.TemplateController;
 import controller.type.resource.TemplateType;
 import controller.UserController;
+import exception.NotFoundControllerType;
 import http.request.HttpRequest;
 
 public enum ControllerType {
@@ -16,6 +17,8 @@ public enum ControllerType {
     TEMPLATE(ControllerType::isTemplate, new TemplateController()),
     STATIC(ControllerType::isStatic, new StaticController()),
     USER(ControllerType::isUser, new UserController());
+
+    private static final String PERIOD = "\\.";
 
     private final Predicate<HttpRequest> predicateControllerType;
 
@@ -29,7 +32,7 @@ public enum ControllerType {
         return Arrays.stream(ControllerType.values())
                 .filter(type -> type.predicateControllerType.test(httpRequest))
                 .findFirst()
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(() -> new NotFoundControllerType("Controller를 찾을 수 없습니다."));
     }
 
     public Controller getController() {
@@ -37,20 +40,23 @@ public enum ControllerType {
     }
 
     private static boolean isTemplate(final HttpRequest httpRequest) {
-        final String url = httpRequest.getUrl();
-        final String[] splittedUrl = url.split("\\.");
+        final String[] splittedUrl = splitUrlByPeriod(httpRequest);
         final TemplateType templateType = TemplateType.find(splittedUrl[splittedUrl.length - 1]);
         return !TemplateType.NONE.equals(templateType);
     }
 
     private static boolean isStatic(final HttpRequest httpRequest) {
-        final String url = httpRequest.getUrl();
-        String[] splittedUrl = url.split("\\.");
+        String[] splittedUrl = splitUrlByPeriod(httpRequest);
         final StaticType staticType = StaticType.find(splittedUrl[splittedUrl.length - 1]);
         return !StaticType.NONE.equals(staticType);
     }
 
-    private static boolean isUser(HttpRequest httpRequest) {
+    private static String[] splitUrlByPeriod(final HttpRequest httpRequest) {
+        final String url = httpRequest.getUrl();
+        return url.split(PERIOD);
+    }
+
+    private static boolean isUser(final HttpRequest httpRequest) {
         final String url = httpRequest.getUrl();
         return "/user/create".equals(url);
     }
