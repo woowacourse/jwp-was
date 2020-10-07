@@ -19,7 +19,7 @@ public class HttpRequest {
     }
 
     public String getBodyValue(String key) {
-        return this.requestBody.getValue(key);
+        return this.requestBody.getValue(key.toLowerCase());
     }
 
     public boolean headerContainsValueOf(HeaderParam key, String value) {

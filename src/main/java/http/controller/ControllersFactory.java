@@ -11,6 +11,7 @@ public class ControllersFactory {
         Map<String, Controller> controllers = new HashMap<>();
         controllers.put("/user/create", new UserCreateController());
         controllers.put("/", new IndexController());
+        controllers.put("/user/login", new UserLoginController());
         this.controllers = new Controllers(controllers);
     }
 
