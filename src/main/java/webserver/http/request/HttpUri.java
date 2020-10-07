@@ -3,6 +3,8 @@ package webserver.http.request;
 import exception.InvalidHttpMessageException;
 import exception.InvalidUriException;
 import utils.StringUtils;
+import webserver.controller.Controller;
+import webserver.controller.ControllerFinder;
 import webserver.http.QueryString;
 
 public class HttpUri {
@@ -47,5 +49,11 @@ public class HttpUri {
             return uri + URI_QUERY_STRING_DELIMITER + queryString.toHttpMessage();
         }
         return uri;
+    }
+
+    public Controller findController() {
+        String resourceUri = this.httpResourceUri.getResourceUri();
+
+        return ControllerFinder.findController(resourceUri);
     }
 }

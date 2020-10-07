@@ -8,11 +8,15 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import webserver.http.body.HttpBody;
 import webserver.http.header.HttpHeader;
+import webserver.http.header.HttpHeaderField;
+import webserver.http.request.HttpResourceType;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -20,49 +24,53 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class HttpHeaderTest {
     private static final String NEW_LINE = System.lineSeparator();
 
-    @DisplayName("HTTP Request Header가 규격에 맞을 때 HttpHeader 객체 생성")
+    @DisplayName("HTTP Header가 규격에 맞을 때 HttpHeader 객체 생성")
     @Test
-    void httpHeaderBuilderTest() throws IOException {
-        String requestHeaderLines = "Host: localhost:8080" + NEW_LINE +
+    void httpHeaderFromBufferedReaderTest() throws IOException {
+        String headerLines = "Host: localhost:8080" + NEW_LINE +
                 "Connection: keep-alive" + NEW_LINE +
                 "Content-Length: 59" + NEW_LINE +
                 "Content-Type: application/x-www-form-urlencoded" + NEW_LINE +
                 "Accept: */*" + NEW_LINE +
                 NEW_LINE;
 
-        BufferedReader br = createBufferedReader(requestHeaderLines);
+        BufferedReader br = createBufferedReader(headerLines);
 
         assertThat(HttpHeader.from(br)).isInstanceOf(HttpHeader.class);
-        assertThat(createHttpHeader(requestHeaderLines)).isInstanceOf(HttpHeader.class);
     }
 
-    @DisplayName("HTTP Request Header의 키와 값 규격에 맞을 때 HttpHeader 객체 생성")
-    @ParameterizedTest
-    @CsvSource(value = {"Connection,keep-alive", "Accept,*/*", "Location,/index.html"})
-    void httpHeaderKeyAndValueBuilderTest(String key, String value) {
-        HttpHeader.Builder builder = new HttpHeader.Builder();
+    @DisplayName("HTTP Header가 규격에 맞을 때 HttpHeader 객체 생성")
+    @Test
+    void httpHeaderFromMapTest() {
+        Map<String, String> headers = new HashMap<>();
+        headers.put(HttpHeaderField.CONTENT_LENGTH.getName(), "123");
+        headers.put(HttpHeaderField.CONTENT_TYPE.getName(), HttpResourceType.JS.getContentType());
 
-        assertThat(builder.addHeader(key, value).build()).isInstanceOf(HttpHeader.class);
+        assertThat(HttpHeader.from(headers)).isInstanceOf(HttpHeader.class);
     }
 
-    @DisplayName("HTTP Request Header의 키와 값이 빈 값일 때 HttpHeader 객체 생성을 시도하면 InvalidHttpMessageException 발생")
+    @DisplayName("HTTP Header가 규격에 맞지 않을 때 HttpHeader 객체 생성을 시도하면 InvalidHttpMessageException 발생")
     @ParameterizedTest
-    @CsvSource(value = {"    ,localhost:8080", "Content-Type,  ", "   ,   "})
-    void httpHeaderKeyAndValueBuilderExceptionTest(String key, String value) {
-        HttpHeader.Builder builder = new HttpHeader.Builder();
+    @ValueSource(strings = {"Connection > keep-alive", "Content-Length 59", "Host: ", ":application/json", "   :   "})
+    void httpHeaderFromBufferedReaderExceptionTest(String invalidHeaderLine) {
+        String headerLine = invalidHeaderLine + NEW_LINE +
+                NEW_LINE;
 
-        assertThatThrownBy(() -> builder.addHeader(key, value).build())
+        BufferedReader br = createBufferedReader(headerLine);
+
+        assertThatThrownBy(() -> HttpHeader.from(br))
                 .isInstanceOf(InvalidHttpMessageException.class)
                 .hasMessageStartingWith("잘못된 형식의 HTTP Message입니다! -> ");
     }
 
-    @DisplayName("HTTP Request Header가 규격에 맞지 않을 때 HttpHeader 객체 생성을 시도하면 InvalidHttpMessageException 발생")
+    @DisplayName("HTTP Header가 규격에 맞지 않을 때 HttpHeader 객체 생성을 시도하면 InvalidHttpMessageException 발생")
     @ParameterizedTest
-    @ValueSource(strings = {"Connection > keep-alive", "Content-Length 59", "Host: ", ":application/json", "   :   "})
-    void httpHeaderBuilderExceptionTest(String invalidHeaderLine) {
-        HttpHeader.Builder builder = new HttpHeader.Builder();
+    @CsvSource(value = {" , ", "Content-Length,", ",application/json"})
+    void httpHeaderFromMapExceptionTest(String headerName, String headerValue) {
+        Map<String, String> invalidHeaders = new HashMap<>();
+        invalidHeaders.put(headerName, headerValue);
 
-        assertThatThrownBy(() -> builder.addHeaderLine(invalidHeaderLine))
+        assertThatThrownBy(() -> HttpHeader.from(invalidHeaders))
                 .isInstanceOf(InvalidHttpMessageException.class)
                 .hasMessageStartingWith("잘못된 형식의 HTTP Message입니다! -> ");
     }
@@ -74,14 +82,16 @@ class HttpHeaderTest {
                 "Connection: keep-alive" + NEW_LINE +
                 "Content-Length: 59" + NEW_LINE +
                 "Content-Type: application/x-www-form-urlencoded" + NEW_LINE +
-                "Accept: */*";
+                "Accept: */*" + NEW_LINE +
+                NEW_LINE;
         String requestBody = "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi" +
                 "%40slipp.net";
 
-        HttpHeader httpHeader = createHttpHeader(requestHeaderLines);
-        BufferedReader br = createBufferedReader(requestBody);
+        BufferedReader headerReader = createBufferedReader(requestHeaderLines);
+        HttpHeader httpHeader = HttpHeader.from(headerReader);
+        BufferedReader bodyReader = createBufferedReader(requestBody);
 
-        assertThat(httpHeader.createHttpBody(br)).isInstanceOf(HttpBody.class);
+        assertThat(httpHeader.createHttpBody(bodyReader)).isInstanceOf(HttpBody.class);
     }
 
     @DisplayName("HTTP Request에 Body가 없는 경우에도 HttpBody 객체를 반환")
@@ -89,22 +99,15 @@ class HttpHeaderTest {
     void createEmptyHttpBodyTest() throws IOException {
         String requestHeaderLines = "Host: localhost:8080" + NEW_LINE +
                 "Connection: keep-alive" + NEW_LINE +
-                "Accept: */*";
+                "Accept: */*" + NEW_LINE +
+                NEW_LINE;
         String requestEmptyBody = "";
 
-        HttpHeader httpHeader = createHttpHeader(requestHeaderLines);
+        BufferedReader headerReader = createBufferedReader(requestHeaderLines);
+        HttpHeader httpHeader = HttpHeader.from(headerReader);
         BufferedReader br = createBufferedReader(requestEmptyBody);
 
         assertThat(httpHeader.createHttpBody(br)).isInstanceOf(HttpBody.class);
-    }
-
-    private HttpHeader createHttpHeader(String requestHeaderLines) {
-        String[] headerLines = requestHeaderLines.split(NEW_LINE);
-        HttpHeader.Builder builder = new HttpHeader.Builder();
-        for (String headerLine : headerLines) {
-            builder.addHeaderLine(headerLine);
-        }
-        return builder.build();
     }
 
     private BufferedReader createBufferedReader(String content) {

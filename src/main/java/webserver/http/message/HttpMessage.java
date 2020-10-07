@@ -17,10 +17,6 @@ public class HttpMessage {
         this.httpBody = httpBody;
     }
 
-    public HttpMessage(StartLine startLine, HttpHeader httpHeader) {
-        this(startLine, httpHeader, HttpBody.empty());
-    }
-
     public HttpBody getHttpBody() {
         return httpBody;
     }

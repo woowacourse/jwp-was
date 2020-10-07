@@ -4,7 +4,6 @@ import exception.InvalidParameterException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -56,8 +55,8 @@ class QueryStringTest {
 
     @DisplayName("QueryString 객체의 Parameter가 있으면 true 반환")
     @ParameterizedTest
-    @CsvSource(value = {"id=abc&password=123,true", "nickname=coollime,true"})
-    void isNotEmptyTrueTest(String queryStringValue, boolean expected) {
+    @ValueSource(strings = {"id=abc&password=123", "nickname=coollime"})
+    void isNotEmptyTrueTest(String queryStringValue) {
         QueryString queryString = QueryString.from(queryStringValue);
 
         assertThat(queryString.isNotEmpty()).isTrue();

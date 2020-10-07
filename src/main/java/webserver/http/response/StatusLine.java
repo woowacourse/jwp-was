@@ -16,7 +16,6 @@ public class StatusLine implements StartLine {
 
     @Override
     public String toHttpMessage() {
-        return httpVersion.toHttpMessage() + STATUS_LINE_DELIMITER
-                + statusCode.name();
+        return httpVersion.toHttpMessage() + STATUS_LINE_DELIMITER + statusCode.toHttpMessage();
     }
 }
