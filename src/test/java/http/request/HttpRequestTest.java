@@ -2,6 +2,14 @@ package http.request;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,24 +18,21 @@ import org.junit.jupiter.api.Test;
 
 public class HttpRequestTest {
 
+    private String testDirectory = "./src/test/resources/";
+
     private HttpRequest httpRequestGetMethod;
     private HttpRequest httpRequestPostMethod;
 
     @BeforeEach
-    void setUp() {
-        HttpRequestLine httpRequestLine1 = new HttpRequestLine("GET", new HttpRequestUrl("/user/create?userId=javajigi&password=password&name=자바지기&email=javajigi@slipp.net"), "HTTP/1.1");
-        HttpRequestLine httpRequestLine2 = new HttpRequestLine("POST", new HttpRequestUrl("/user/create"), "HTTP/1.1");
+    void setUp() throws IOException {
+        InputStream inGetMethod = new FileInputStream(new File(testDirectory + "Http_GET.txt"));
+        InputStream inPostMethod = new FileInputStream(new File(testDirectory + "Http_POST.txt"));
 
-        final Map<String, String> requestHeader = new HashMap<>();
-        requestHeader.put("Host", "localhost:8080");
-        requestHeader.put("Connection", "keep-alive");
-        HttpRequestHeader httpRequestHeader = new HttpRequestHeader(requestHeader);
+        BufferedReader brGetMethod = new BufferedReader(new InputStreamReader(inGetMethod,"UTF-8"));
+        BufferedReader brPostMethod = new BufferedReader(new InputStreamReader(inPostMethod,"UTF-8"));
 
-        HttpRequestBody httpRequestBody1 = HttpRequestBody.emptyBody();
-        HttpRequestBody httpRequestBody2 = new HttpRequestBody("userId=javajigi&password=password&name=자바지기&email=javajigi@slipp.net");
-
-        httpRequestGetMethod = new HttpRequest(httpRequestLine1, httpRequestHeader, httpRequestBody1);
-        httpRequestPostMethod = new HttpRequest(httpRequestLine2, httpRequestHeader, httpRequestBody2);
+        httpRequestGetMethod = HttpRequestParser.parse(brGetMethod);
+        httpRequestPostMethod = HttpRequestParser.parse(brPostMethod);
     }
 
     @Test
@@ -48,15 +53,13 @@ public class HttpRequestTest {
     void getHttpRequestParamsByName() {
         assertThat(httpRequestGetMethod.getHttpRequestParamsByName("userId")).isEqualTo("javajigi");
         assertThat(httpRequestGetMethod.getHttpRequestParamsByName("password")).isEqualTo("password");
-        assertThat(httpRequestGetMethod.getHttpRequestParamsByName("name")).isEqualTo("자바지기");
-        assertThat(httpRequestGetMethod.getHttpRequestParamsByName("email")).isEqualTo("javajigi@slipp.net");
+        assertThat(httpRequestGetMethod.getHttpRequestParamsByName("name")).isEqualTo("JaeSung");
     }
 
     @Test
     void getHttpRequestBodyByName() {
         assertThat(httpRequestPostMethod.getHttpRequestBodyByName("userId")).isEqualTo("javajigi");
         assertThat(httpRequestPostMethod.getHttpRequestBodyByName("password")).isEqualTo("password");
-        assertThat(httpRequestPostMethod.getHttpRequestBodyByName("name")).isEqualTo("자바지기");
-        assertThat(httpRequestPostMethod.getHttpRequestBodyByName("email")).isEqualTo("javajigi@slipp.net");
+        assertThat(httpRequestPostMethod.getHttpRequestBodyByName("name")).isEqualTo("JaeSung");
     }
 }

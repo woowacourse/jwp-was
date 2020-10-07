@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 import utils.IOUtils;
 import webserver.RequestHandler;
@@ -37,7 +38,7 @@ public class HttpRequestParser {
         Map<String, String> httpRequestHeaderCache = new HashMap<>();
         String[] headers;
         String line = br.readLine();
-        while (!line.equals("")) {
+        while (!StringUtils.isEmpty(line)) {
             headers = line.split(COLON + BLANK);
             httpRequestHeaderCache.put(headers[0], headers[1]);
             logger.debug("request header : {}", line);
