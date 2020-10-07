@@ -31,7 +31,7 @@ public class RequestBody {
             if (keyValue.length != 2) {
                 throw new IllegalArgumentException("No value for the key: " + keyValue[0]);
             }
-            params.put(keyValue[0].toLowerCase(), keyValue[1]);
+            params.put(keyValue[0].toLowerCase(), keyValue[1].trim());
         }
     }
 
