@@ -20,7 +20,7 @@ public class ReadResourceController implements Controller {
 
     @Override
     public HttpResponseMessage createHttpResponseMessage(HttpRequestMessage httpRequestMessage) {
-        HttpUri httpUri = httpRequestMessage.getRequestLine().getHttpUri();
+        HttpUri httpUri = httpRequestMessage.getHttpUri();
         byte[] fileBytes;
         try {
             fileBytes = httpUri.readFile();

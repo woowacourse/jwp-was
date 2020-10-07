@@ -2,6 +2,7 @@ package webserver.http.message;
 
 import webserver.http.body.HttpBody;
 import webserver.http.header.HttpHeader;
+import webserver.http.request.HttpUri;
 import webserver.http.request.RequestLine;
 
 import java.io.BufferedReader;
@@ -23,7 +24,7 @@ public class HttpRequestMessage extends HttpMessage {
         return new HttpRequestMessage(requestLine, httpHeader, httpBody);
     }
 
-    public RequestLine getRequestLine() {
-        return requestLine;
+    public HttpUri getHttpUri() {
+        return requestLine.getHttpUri();
     }
 }

@@ -70,7 +70,7 @@ class ControllerTest {
     }
 
     private HttpResponseMessage createHttpResponseMessage(HttpRequestMessage httpRequestMessage) {
-        HttpUri httpUri = httpRequestMessage.getRequestLine().getHttpUri();
+        HttpUri httpUri = httpRequestMessage.getHttpUri();
         Controller controller = httpUri.findController();
 
         return controller.createHttpResponseMessage(httpRequestMessage);
