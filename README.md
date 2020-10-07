@@ -36,3 +36,35 @@ WAS 기능과 HTTP 요청/응답 처리 기능을 재사용이 가능한 구조�
     - 다형성을 활용해 클라이언트 요청 URL에 대한 분기 처리를 제거한다.
   - 추가 요구사항이나 변경이 발생하는 경우의 처리를 연습해 본다.
     - HTTP에서 POST 방식으로 데이터를 전달할 때 body를 통한 데이터 전달뿐만 아니라 Query String을 활용한 데이터 전달도 지원해야 한다.
+
+## 3단계 - 로그인 및 세션 구현
+
+1. “로그인” 메뉴를 클릭하면 http://localhost:8080/user/login.html 으로 이동해 로그인할 수 있다.
+
+   a.  로그인이 성공하면 /index.html로 이동해야 한다.
+
+   b.  로그인이 실패하면 /user/login_failed.html로 이동해야 한다.
+
+   c.  회원가입한 사용자로 로그인할 수 있어야 한다.
+
+   d.  로그인이 성공하면 cookie를 활용해 로그인 상태를 유지할 수 있어야 한다. (요청 header의 Cookie header 값이 logined=true)
+
+   e.  로그인이 실패하면 Cookie header 값이 logined=false로 전달되어야 한다.
+
+2. 접근 사용자가 “로그인” 상태(Cookie 값이 logined=true) 경우 http://localhost:8080/user/list 로 접근했을 때 사용자 목록을 출력한다.
+
+   a.  만약 로그인하지 않은 상태라면 로그인 페이지(login.html)로 이동한다.
+
+   b.  동적으로 html을 생성하기 위해 handlebars.java template engine을 활용한다.
+
+3. 서블릿에서 지원하는 HttpSession API의 일부를 지원해야 한다. 구현할 메소드는 다음 5개이다.
+
+   a.  String getId(): 현재 세션에 할당되어 있는 고유한 세션 아이디를 반환
+
+   b.  void setAttribute(String name, Object value): 현재 세션에 value 인자로 전달되는 객체를 name 인자 이름으로 저장
+
+   c.  Object getAttribute(String name): 현재 세션에 name 인자로 저장되어 있는 객체 값을 찾아 반환
+
+   d.  void removeAttribute(String name): 현재 세션에 name 인자로 저장되어 있는 객체 값을 삭제
+
+   e.  void invalidate(): 현재 세션에 저장되어 있는 모든 값을 삭제
