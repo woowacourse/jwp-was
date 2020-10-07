@@ -15,7 +15,7 @@ public class UserLoginController extends Controller {
         if (auth) {
             header = HttpResponseHeaderParser.found("/", true);
         } else {
-            header = HttpResponseHeaderParser.unauthorized("text/html", false);
+            header = HttpResponseHeaderParser.found("/user/login_failed.html", false);
         }
         return new HttpResponse(header);
     }
