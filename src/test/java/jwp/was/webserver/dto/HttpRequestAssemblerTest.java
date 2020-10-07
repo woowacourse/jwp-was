@@ -7,10 +7,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 import jwp.was.webserver.HttpMethod;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -27,6 +30,7 @@ class HttpRequestAssemblerTest {
     private static final String REQUEST_POST_LINE_FORMAT =
         HttpMethod.POST.name() + " %s " + HTTP_VERSION + lineSeparator();
     private static final String HEADER_CONTENT_LENGTH_FORMAT = "Content-Length: %d";
+    private static final String TEST_RESOURCES = "./src/test/resources/";
 
     @DisplayName("QueryString이 없는 URL 요청시")
     @ParameterizedTest
@@ -112,5 +116,23 @@ class HttpRequestAssemblerTest {
         LOGGER.debug("parameters : {}", httpRequest.getParameters());
 
         assertThat(httpRequest.getParameters()).hasSize(parameterCount);
+    }
+
+    @DisplayName("Header가 있는 요청시")
+    @ParameterizedTest
+    @ValueSource(strings = {"Http_GET.txt", "Http_POST.txt"})
+    void assemble_hasHeaders(String fileName) throws IOException {
+        try (InputStream in = new FileInputStream(new File(TEST_RESOURCES + fileName));
+            BufferedReader br = new BufferedReader(
+                new InputStreamReader(in, StandardCharsets.UTF_8))) {
+            HttpRequest httpRequest = HttpRequestAssembler.assemble(br);
+
+            Map<String, String> headers = httpRequest.getHeaders();
+            assertThat(headers).isNotNull();
+            assertThat(headers).isNotEmpty();
+
+            assertThat("keep-alive").isEqualTo(httpRequest.getHeader("Connection"));
+            assertThat("jamie9504").isEqualTo(httpRequest.getParameter("userId"));
+        }
     }
 }

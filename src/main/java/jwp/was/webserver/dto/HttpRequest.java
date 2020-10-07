@@ -54,4 +54,12 @@ public class HttpRequest {
     public boolean isFile() {
         return !FileNameExtension.API.equals(fileNameExtension);
     }
+
+    public String getHeader(String header) {
+        return headers.get(header);
+    }
+
+    public String getParameter(String parameter) {
+        return parameters.getParameter(parameter);
+    }
 }
