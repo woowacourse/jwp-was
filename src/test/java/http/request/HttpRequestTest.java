@@ -5,26 +5,22 @@ import static org.assertj.core.api.Assertions.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class HttpRequestTest {
 
-    private String testDirectory = "./src/test/resources/";
-
     private HttpRequest httpRequestGetMethod;
     private HttpRequest httpRequestPostMethod;
 
     @BeforeEach
     void setUp() throws IOException {
+        String testDirectory = "./src/test/resources/";
+
         InputStream inGetMethod = new FileInputStream(new File(testDirectory + "Http_GET.txt"));
         InputStream inPostMethod = new FileInputStream(new File(testDirectory + "Http_POST.txt"));
 

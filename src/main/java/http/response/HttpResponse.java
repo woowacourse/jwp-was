@@ -31,14 +31,14 @@ public class HttpResponse {
         httpResponseLine.setHttpStatus(HttpStatus.OK);
         initResponseHeader(contentType, body.length);
         httpResponseBody.setBody(body);
-        send();
+        render();
     }
 
     public void response302(int lengthOfBodyContent) throws IOException {
         httpResponseLine.setHttpStatus(HttpStatus.FOUND);
         initResponseHeader(CONTENT_TYPE_TEXT_HTML, lengthOfBodyContent);
         httpResponseHeader.addResponseHeader(RESPONSE_HEADER_LOCATION, REDIRECT_HOME);
-        send();
+        render();
     }
 
     private void initResponseHeader(String contentType, int lengthOfBodyContent) {
@@ -46,7 +46,7 @@ public class HttpResponse {
         httpResponseHeader.addResponseHeader(RESPONSE_HEADER_CONTENT_LENGTH, lengthOfBodyContent);
     }
 
-    private void send() throws IOException {
+    private void render() throws IOException {
         responseLine();
         responseHeader();
         responseBody();
