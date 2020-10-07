@@ -18,11 +18,11 @@ public class HttpRequestParser {
 
         HttpMethod method = requestLine.getMethod();
         if (HttpMethod.GET == method) {
-            return new HttpRequest(requestLine, requestHeader, null);
+            return HttpRequest.of(requestLine, requestHeader, null);
         }
         if (HttpMethod.POST == method) {
             RequestBody requestBody = new RequestBody(bufferedReader, requestHeader.getContentLength());
-            return new HttpRequest(requestLine, requestHeader, requestBody);
+            return HttpRequest.of(requestLine, requestHeader, requestBody);
         }
         throw new InvalidHttpRequestException();
     }

@@ -19,11 +19,11 @@ public class HttpResponse {
         this.body = body;
     }
 
-    public static HttpResponse from(ResponseHeader header, HttpStatus status, HttpVersion version, byte[] body) {
+    public static HttpResponse of(ResponseHeader header, HttpStatus status, HttpVersion version, byte[] body) {
         return new HttpResponse(header, status, version, body);
     }
 
-    public static HttpResponse from(ResponseHeader header, HttpStatus status, HttpVersion version) {
+    public static HttpResponse of(ResponseHeader header, HttpStatus status, HttpVersion version) {
         return new HttpResponse(header, status, version, null);
     }
 

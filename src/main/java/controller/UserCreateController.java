@@ -29,6 +29,6 @@ public class UserCreateController extends HttpRequestMappingAbstractController {
         model.addAttributes("user", user);
         View view = new View("redirect:/index.html");
 
-        return ModelAndView.from(model, view);
+        return ModelAndView.of(model, view);
     }
 }

@@ -10,11 +10,11 @@ public class ModelAndView {
         this.view = view;
     }
 
-    public static ModelAndView from(Model model, View view) {
+    public static ModelAndView of(Model model, View view) {
         return new ModelAndView(model, view);
     }
 
-    public static ModelAndView of(View view) {
+    public static ModelAndView from(View view) {
         return new ModelAndView(null, view);
     }
 

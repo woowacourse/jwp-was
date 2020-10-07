@@ -22,7 +22,7 @@ public class RequestPath {
         this.parameters = parameters;
     }
 
-    public static RequestPath of(String fullPath) {
+    public static RequestPath from(String fullPath) {
         String[] splitPath = fullPath.split(PATH_PARAM_DELIMITER);
         String path = splitPath[0];
         if (fullPath.equals(path)) {

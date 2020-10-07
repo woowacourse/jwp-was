@@ -9,8 +9,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ResponseEntity {
+
     public static final Logger logger = LoggerFactory.getLogger(ResponseEntity.class);
     private static final String lineSeparator = System.lineSeparator();
+    private static final String HEADER_DELIMITER = ": ";
+    private static final String SPACE = " ";
 
     public static void build(HttpResponse httpResponse, OutputStream out) {
         DataOutputStream dataOutputStream = new DataOutputStream(out);
@@ -26,13 +29,14 @@ public class ResponseEntity {
     private static void responseStatus(HttpResponse httpResponse, DataOutputStream dataOutputStream) throws
         IOException {
         dataOutputStream.writeBytes(
-            httpResponse.getVersion().getVersion() + " " + httpResponse.getStatus().getMessage() + lineSeparator);
+            httpResponse.getVersion().getVersion() + SPACE + httpResponse.getStatus().getMessage() + lineSeparator);
     }
 
     private static void responseHeader(HttpResponse httpResponse, DataOutputStream dataOutputStream) throws
         IOException {
         for (Map.Entry<String, String> headerKeyValue : httpResponse.getHeaders().entrySet()) {
-            dataOutputStream.writeBytes(headerKeyValue.getKey() + ": " + headerKeyValue.getValue() + lineSeparator);
+            dataOutputStream.writeBytes(
+                headerKeyValue.getKey() + HEADER_DELIMITER + headerKeyValue.getValue() + lineSeparator);
         }
         // HEADER 와 BODY 사이릃 한 줄 띄워야 한다.
         dataOutputStream.writeBytes(lineSeparator);

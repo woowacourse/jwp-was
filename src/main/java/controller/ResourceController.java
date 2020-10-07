@@ -13,6 +13,6 @@ public class ResourceController extends HttpRequestMappingAbstractController {
 
     @Override
     public ModelAndView handle(HttpRequest httpRequest) {
-        return ModelAndView.of(new View(httpRequest.getRequestLine().getPath()));
+        return ModelAndView.from(new View(httpRequest.getRequestLine().getPath()));
     }
 }

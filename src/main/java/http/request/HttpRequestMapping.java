@@ -9,7 +9,7 @@ public class HttpRequestMapping {
     private final HttpMethod httpMethod;
     private final String requestPath;
 
-    public HttpRequestMapping(HttpMethod httpMethod, String requestPath) {
+    private HttpRequestMapping(HttpMethod httpMethod, String requestPath) {
         this.httpMethod = httpMethod;
         this.requestPath = requestPath;
     }

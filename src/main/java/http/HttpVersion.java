@@ -15,7 +15,7 @@ public enum HttpVersion {
         this.version = version;
     }
 
-    public static HttpVersion of(String version) {
+    public static HttpVersion from(String version) {
         return Arrays.stream(values())
             .filter(value -> value.version.equals(version))
             .findFirst()

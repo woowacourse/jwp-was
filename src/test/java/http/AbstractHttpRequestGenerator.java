@@ -19,7 +19,7 @@ public abstract class AbstractHttpRequestGenerator {
 
         RequestLine requestLine = new RequestLine(bufferedReader);
         RequestHeader requestHeader = new RequestHeader(bufferedReader);
-        return new HttpRequest(requestLine, requestHeader, null);
+        return HttpRequest.of(requestLine, requestHeader, null);
     }
 
     protected static HttpRequest createHttpPostRequest(String fileName) throws IOException {
@@ -30,7 +30,7 @@ public abstract class AbstractHttpRequestGenerator {
         RequestHeader requestHeader = new RequestHeader(bufferedReader);
         RequestBody requestBody = new RequestBody(bufferedReader, requestHeader.getContentLength());
 
-        return new HttpRequest(requestLine, requestHeader, requestBody);
+        return HttpRequest.of(requestLine, requestHeader, requestBody);
     }
 }
 

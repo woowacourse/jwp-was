@@ -19,7 +19,7 @@ public class ViewResolver {
 
         if (view.isRedirectView()) {
             responseHeader.addRedirectHeader(resource);
-            return HttpResponse.from(responseHeader, HttpStatus.FOUND, HttpVersion.HTTP1_1);
+            return HttpResponse.of(responseHeader, HttpStatus.FOUND, HttpVersion.HTTP1_1);
         }
 
         return resolveResponse(resource, responseHeader);
@@ -34,7 +34,7 @@ public class ViewResolver {
         responseHeader.addHeader("Content-Type", staticFile.getContentType());
         responseHeader.addHeader("Content-Length", String.valueOf(body.length));
 
-        return HttpResponse.from(responseHeader, HttpStatus.OK, HttpVersion.HTTP1_1, body);
+        return HttpResponse.of(responseHeader, HttpStatus.OK, HttpVersion.HTTP1_1, body);
     }
 
 }
