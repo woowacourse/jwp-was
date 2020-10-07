@@ -6,7 +6,6 @@ import static jwp.was.util.Constants.HEADERS_EMPTY;
 import static jwp.was.util.Constants.HTTP_VERSION;
 import static jwp.was.util.Constants.PARAMETERS_EMPTY;
 import static jwp.was.util.Constants.URL_PATH_INDEX_HTML;
-import static jwp.was.webserver.FileNameExtension.API;
 import static jwp.was.webserver.HttpMethod.GET;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,8 +22,8 @@ class GlobalExceptionHandlerTest {
 
     private GlobalExceptionHandler globalExceptionHandler = new GlobalExceptionHandler();
     private HttpRequest httpRequest
-        = new HttpRequest(GET, URL_PATH_INDEX_HTML, PARAMETERS_EMPTY, HTTP_VERSION, HEADERS_EMPTY,
-        API);
+        = new HttpRequest(GET, URL_PATH_INDEX_HTML, PARAMETERS_EMPTY, HTTP_VERSION, HEADERS_EMPTY
+    );
 
     @DisplayName("IllegalArgumentException이 Cause일 때, BadRequst 반환")
     @Test

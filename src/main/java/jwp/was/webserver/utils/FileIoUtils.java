@@ -11,11 +11,19 @@ import java.util.Objects;
 
 public class FileIoUtils {
 
+    private static final String WEBAPP = "webapp";
+    private static final String STATIC = "static";
+
     private FileIoUtils() {
     }
 
-    public static byte[] loadFileFromClasspath(String filePath, String directory)
+    public static byte[] loadFileFromClasspath(String filePath)
         throws IOException, URISyntaxException {
+        String directory = WEBAPP;
+        if (filePath.contains("/css/") || filePath.contains("/js/") || filePath.contains("/fonts/")
+            || filePath.contains("/images/")) {
+            directory = STATIC;
+        }
         Path path = Paths.get(findFileUri(filePath, directory));
         return Files.readAllBytes(path);
     }

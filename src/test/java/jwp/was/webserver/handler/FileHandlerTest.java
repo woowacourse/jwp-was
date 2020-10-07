@@ -15,7 +15,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import jwp.was.webserver.FileNameExtension;
 import jwp.was.webserver.HttpMethod;
 import jwp.was.webserver.HttpStatusCode;
 import jwp.was.webserver.dto.HttpRequest;
@@ -42,8 +41,7 @@ class FileHandlerTest {
 
             fileHandler.loadFile(os, httpRequest);
 
-            byte[] body = FileIoUtils
-                .loadFileFromClasspath(httpRequest.getUrlPath(), httpRequest.getDirectory());
+            byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getUrlPath());
 
             assertThat(os.toString()).contains(HttpStatusCode.OK.getCodeAndMessage());
             assertThat(os.toString()).contains(CONTENT_TYPE_TEXT_HTML);
@@ -61,8 +59,7 @@ class FileHandlerTest {
 
             fileHandler.loadFile(os, httpRequest);
 
-            byte[] body = FileIoUtils
-                .loadFileFromClasspath(httpRequest.getUrlPath(), httpRequest.getDirectory());
+            byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getUrlPath());
 
             assertThat(os.toString()).contains(HttpStatusCode.OK.getCodeAndMessage());
             assertThat(os.toString()).contains(CONTENT_TYPE_TEXT_CSS);
@@ -108,8 +105,7 @@ class FileHandlerTest {
             urlPath,
             PARAMETERS_EMPTY,
             HTTP_VERSION,
-            HEADERS_EMPTY,
-            FileNameExtension.from(urlPath)
+            HEADERS_EMPTY
         );
     }
 }

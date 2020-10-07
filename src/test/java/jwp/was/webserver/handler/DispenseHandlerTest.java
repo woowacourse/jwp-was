@@ -8,8 +8,6 @@ import static jwp.was.util.Constants.PARAMETERS_EMPTY;
 import static jwp.was.util.Constants.PARAMETERS_FOR_CREATE_USER;
 import static jwp.was.util.Constants.URL_PATH_API_CREATE_USER;
 import static jwp.was.util.Constants.URL_PATH_INDEX_HTML;
-import static jwp.was.webserver.FileNameExtension.API;
-import static jwp.was.webserver.FileNameExtension.HTML;
 import static jwp.was.webserver.HttpMethod.GET;
 import static jwp.was.webserver.HttpMethod.POST;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,15 +41,15 @@ class DispenseHandlerTest {
                 URL_PATH_INDEX_HTML,
                 PARAMETERS_EMPTY,
                 HTTP_VERSION,
-                HEADERS_EMPTY,
-                HTML);
+                HEADERS_EMPTY
+            );
             dispenseHandler.dispense(os, httpRequest);
 
             assertThat(os.toString()).contains(HttpStatusCode.OK.getCodeAndMessage());
             assertThat(os.toString()).contains(CONTENT_TYPE_TEXT_HTML);
 
             byte[] body = FileIoUtils
-                .loadFileFromClasspath(httpRequest.getUrlPath(), httpRequest.getDirectory());
+                .loadFileFromClasspath(httpRequest.getUrlPath());
             assertThat(os.toByteArray()).contains(body);
         }
     }
@@ -65,8 +63,8 @@ class DispenseHandlerTest {
                 URL_PATH_API_CREATE_USER,
                 PARAMETERS_FOR_CREATE_USER,
                 HTTP_VERSION,
-                HEADERS_EMPTY,
-                API);
+                HEADERS_EMPTY
+            );
             dispenseHandler.dispense(os, httpRequest);
 
             assertThat(os.toString()).contains(HttpStatusCode.FOUND.getCodeAndMessage());

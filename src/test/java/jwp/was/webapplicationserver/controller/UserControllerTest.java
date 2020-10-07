@@ -6,7 +6,6 @@ import static jwp.was.util.Constants.HTTP_VERSION;
 import static jwp.was.util.Constants.PARAMETERS_FOR_CREATE_USER;
 import static jwp.was.util.Constants.URL_PATH_API_CREATE_USER;
 import static jwp.was.util.Constants.URL_PATH_INDEX_HTML;
-import static jwp.was.webserver.FileNameExtension.API;
 import static jwp.was.webserver.HttpMethod.POST;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -46,6 +45,6 @@ class UserControllerTest {
 
     private HttpRequest makeHttpRequest(Parameters parameters) {
         return new HttpRequest(POST, URL_PATH_API_CREATE_USER,
-            parameters, HTTP_VERSION, HEADERS_EMPTY, API);
+            parameters, HTTP_VERSION, HEADERS_EMPTY);
     }
 }

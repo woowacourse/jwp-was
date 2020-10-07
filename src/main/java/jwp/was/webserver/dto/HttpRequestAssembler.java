@@ -6,7 +6,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import jwp.was.webserver.FileNameExtension;
 import jwp.was.webserver.HttpMethod;
 import jwp.was.webserver.utils.IOUtils;
 import org.slf4j.Logger;
@@ -35,10 +34,8 @@ public class HttpRequestAssembler {
             String body = readBody(br, headers);
             parameters = Parameters.combine(parameters, Parameters.fromEncodedParameter(body));
         }
-        FileNameExtension fileNameExtension = FileNameExtension.from(urlPath.getUrlPath());
 
-        return new HttpRequest(httpMethod, urlPath, parameters, httpVersion, headers,
-            fileNameExtension
+        return new HttpRequest(httpMethod, urlPath, parameters, httpVersion, headers
         );
     }
 
