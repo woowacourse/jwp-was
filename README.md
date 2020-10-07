@@ -25,3 +25,14 @@
     - [x] 클라이언트 응답 데이터를 처리하는 로직을 별도의 클래스로 분리한다.(HttpResponse)
     - [x] 다형성을 활용해 클라이언트 요청 URL에 대한 분기 처리를 제거한다.
     
+## 3단계 - 로그인 및 세션 구현
+1. - [ ] 회원가입한 사용자로 로그인을 할 수 있다.
+   - [ ] 로그인 성공 시 쿠키를 활용해 로그인 상태를 유지한다.
+2. - [ ] 로그인 상태일 경우 사용자 목록을 출력한다.
+   - [ ] 로그인하지 않은 상태일 경우 로그인 페이지로 이동한다.
+3. HttpSession API의 일부를 작성한다
+    - [ ] getId()
+    - [ ] setAttribute(String name, Object value)
+    - [ ] getAttribute(String name)
+    - [ ] removeAttribute(String name)
+    - [ ] invalidate()
