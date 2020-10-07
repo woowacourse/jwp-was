@@ -42,7 +42,6 @@ public class RequestHandler implements Runnable {
             HttpResponse httpResponse = new HttpResponse(new DataOutputStream(out));
 
             controller.service(httpRequest, httpResponse);
-
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }

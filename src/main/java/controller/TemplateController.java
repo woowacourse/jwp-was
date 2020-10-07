@@ -9,11 +9,12 @@ import utils.FileIoUtils;
 
 public class TemplateController extends AbstractController {
 
+    private static final String TEMPLATES = "./templates";
+
     @Override
     void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
-        byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + httpRequest.getUrl());
-        httpResponse.response200Header(httpRequest.getHttpRequestHeaderByName("Accept").split(",")[0], body.length);
-        httpResponse.responseBody(body);
+        byte[] body = FileIoUtils.loadFileFromClasspath(TEMPLATES + httpRequest.getUrl());
+        httpResponse.response200(httpRequest.getContentType(), body);
     }
 
     @Override

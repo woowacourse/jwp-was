@@ -9,11 +9,12 @@ import utils.FileIoUtils;
 
 public class StaticController extends AbstractController {
 
+    private static final String STATIC = "./static";
+
     @Override
     void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
-        byte[] body = FileIoUtils.loadFileFromClasspath("./static" + httpRequest.getUrl());
-        httpResponse.response200Header(httpRequest.getHttpRequestHeaderByName("Accept").split(",")[0], body.length);
-        httpResponse.responseBody(body);
+        byte[] body = FileIoUtils.loadFileFromClasspath(STATIC + httpRequest.getUrl());
+        httpResponse.response200(httpRequest.getContentType(), body);
     }
 
     @Override

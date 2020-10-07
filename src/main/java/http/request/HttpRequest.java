@@ -2,6 +2,9 @@ package http.request;
 
 public class HttpRequest {
 
+    private static final String HEADER_ACCEPT = "Accept";
+    private static final String COMMA = ",";
+
     private final HttpRequestLine httpRequestLine;
     private final HttpRequestHeader httpRequestHeader;
     private final HttpRequestBody httpRequestBody;
@@ -30,5 +33,9 @@ public class HttpRequest {
 
     public String getHttpRequestBodyByName(final String name) {
         return this.httpRequestBody.getValue(name);
+    }
+
+    public String getContentType() {
+        return this.httpRequestHeader.getValue(HEADER_ACCEPT).split(COMMA)[0];
     }
 }

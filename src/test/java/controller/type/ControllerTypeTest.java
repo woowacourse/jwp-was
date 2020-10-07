@@ -19,6 +19,7 @@ public class ControllerTypeTest {
     private HttpRequest httpRequestStatic;
     private HttpRequest httpRequestGetUser;
     private HttpRequest httpRequestPostUser;
+    private HttpRequest httpRequestError;
 
     @BeforeEach
     void setUp() {
@@ -26,6 +27,7 @@ public class ControllerTypeTest {
         HttpRequestLine httpRequestLine2 = new HttpRequestLine("GET", new HttpRequestUrl("/css/style.css"), "HTTP/1.1");
         HttpRequestLine httpRequestLine3 = new HttpRequestLine("GET", new HttpRequestUrl("/user/create"), "HTTP/1.1");
         HttpRequestLine httpRequestLine4 = new HttpRequestLine("POST", new HttpRequestUrl("/user/create"), "HTTP/1.1");
+        HttpRequestLine httpRequestLine5 = new HttpRequestLine("GET", new HttpRequestUrl("/user/not-exist"), "HTTP/1.1");
 
         HttpRequestHeader httpRequestHeader = new HttpRequestHeader(new HashMap<>());
         HttpRequestBody httpRequestBody = HttpRequestBody.emptyBody();
@@ -34,6 +36,7 @@ public class ControllerTypeTest {
         httpRequestStatic = new HttpRequest(httpRequestLine2, httpRequestHeader, httpRequestBody);
         httpRequestGetUser = new HttpRequest(httpRequestLine3, httpRequestHeader, httpRequestBody);
         httpRequestPostUser = new HttpRequest(httpRequestLine4, httpRequestHeader, httpRequestBody);
+        httpRequestError = new HttpRequest(httpRequestLine5, httpRequestHeader, httpRequestBody);
     }
 
     @Test
@@ -58,5 +61,11 @@ public class ControllerTypeTest {
     void findPostUser() {
         ControllerType actual = ControllerType.find(httpRequestPostUser);
         assertThat(actual).isEqualTo(ControllerType.USER);
+    }
+
+    @Test
+    void findError() {
+        assertThatThrownBy(() -> ControllerType.find(httpRequestError))
+            .isInstanceOf(RuntimeException.class);
     }
 }

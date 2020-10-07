@@ -5,6 +5,10 @@ import java.util.Map;
 
 public class HttpRequestBody {
 
+    private static final String EMPTY = "";
+    private static final String AND = "&";
+    private static final String EQUAL = "=";
+
     private final Map<String, String> body;
 
     public HttpRequestBody(String paramLine) {
@@ -12,7 +16,7 @@ public class HttpRequestBody {
     }
 
     public static HttpRequestBody emptyBody() {
-        return new HttpRequestBody("");
+        return new HttpRequestBody(EMPTY);
     }
 
     private Map<String, String> handler(String paramLine) {
@@ -24,10 +28,10 @@ public class HttpRequestBody {
 
     private Map<String, String> mapping(final String paramLine) {
         Map<String, String> body = new HashMap<>();
-        String[] params = paramLine.split("&");
+        String[] params = paramLine.split(AND);
 
         for (String param : params) {
-            String[] data = param.split("=");
+            String[] data = param.split(EQUAL);
             body.put(data[0], data[1]);
         }
 

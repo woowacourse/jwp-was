@@ -5,6 +5,10 @@ import java.util.Map;
 
 public class HttpRequestUrl {
 
+    private static final String QUESTION_MARK = "\\?";
+    private static final String AND = "&";
+    private static final String EQUAL = "=";
+
     private final String url;
     private final Map<String, String> parameters;
 
@@ -15,16 +19,16 @@ public class HttpRequestUrl {
     }
 
     private String[] parseUrl(String url) {
-        return url.split("\\?");
+        return url.split(QUESTION_MARK);
     }
 
     private Map<String, String> parseParameters(String[] parsingUrl) {
         if (parsingUrl.length == 2) {
             Map<String, String> cache = new HashMap<>();
-            final String[] parameters = parsingUrl[1].split("&");
+            final String[] parameters = parsingUrl[1].split(AND);
 
             for (String parameter : parameters) {
-                String[] data = parameter.split("=");
+                String[] data = parameter.split(EQUAL);
                 cache.put(data[0], data[1]);
             }
 
