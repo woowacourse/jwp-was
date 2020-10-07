@@ -1,10 +1,15 @@
-package model;
+package domain.user.model;
 
 public class User {
-    private String userId;
-    private String password;
-    private String name;
-    private String email;
+    public static final String USER_ID = "userId";
+    public static final String PASSWORD = "password";
+    public static final String NAME = "name";
+    public static final String EMAIL = "email";
+
+    private final String userId;
+    private final String password;
+    private final String name;
+    private final String email;
 
     public User(String userId, String password, String name, String email) {
         this.userId = userId;
