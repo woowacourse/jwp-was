@@ -11,17 +11,18 @@ import java.util.Objects;
 
 public class ExtensionMimeMatcher {
 
+    private static final String MIME_TXT_FILE_ROUTE = "./src/main/resources/mime.txt";
     private static final String LINE_SEPARATOR = ";";
     private static final String CONTENT_DELIMITER = " ";
     private static final String REPEATED_CONTENT_DELIMITER_REGEX = CONTENT_DELIMITER + "+";
     private static final int MIME_INDEX = 0;
     private static final int EXTENSION_START_INDEX = MIME_INDEX + 1;
-    private static final Map<String, String> extensionMimeMatcher;
+    private static final Map<String, String> EXTENSION_MIME_MATCHER;
     private static final String DEFAULT_MIME = "application/octet-stream";
     private static final String EXTENSION_DELIMITER = "\\.";
 
     static {
-        File mimeFile = new File("./src/main/resources/mime.txt");
+        File mimeFile = new File(MIME_TXT_FILE_ROUTE);
         String mimeContent = "";
         try (FileReader fileReader = new FileReader(mimeFile);
             BufferedReader bufferedReader = new BufferedReader(fileReader)) {
@@ -29,7 +30,7 @@ public class ExtensionMimeMatcher {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        extensionMimeMatcher = makeExtensionMimeMatcher(mimeContent);
+        EXTENSION_MIME_MATCHER = makeExtensionMimeMatcher(mimeContent);
     }
 
     private ExtensionMimeMatcher() {
@@ -72,7 +73,7 @@ public class ExtensionMimeMatcher {
             throw new IllegalArgumentException("확장자가 없습니다.");
         }
         String extension = splitUrlPath[splitUrlPath.length - 1];
-        String mimeType = extensionMimeMatcher.get(extension);
+        String mimeType = EXTENSION_MIME_MATCHER.get(extension);
         if (Objects.isNull(mimeType)) {
             return DEFAULT_MIME;
         }
