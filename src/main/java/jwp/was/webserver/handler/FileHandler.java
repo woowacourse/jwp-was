@@ -63,8 +63,7 @@ public class FileHandler {
 
     private void returnNotFound(HttpRequest httpRequest, DataOutputStream dos,
         Exception e) throws IOException {
-        HttpResponse httpResponse
-            = HttpResponse
+        HttpResponse httpResponse = HttpResponse
             .of(httpRequest.getHttpVersion(), HttpStatusCode.NOT_FOUND, e.getMessage());
         ResponseUtils.response(dos, httpResponse);
     }
