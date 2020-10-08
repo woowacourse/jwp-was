@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import jwp.was.webapplicationserver.configure.ConfigureMaker;
+import jwp.was.webapplicationserver.configure.LoginConfigure;
 import jwp.was.webapplicationserver.configure.annotation.AnnotationHelper;
 import jwp.was.webapplicationserver.configure.annotation.ResponseBody;
 import jwp.was.webapplicationserver.configure.controller.info.MatchedInfo;
@@ -27,6 +28,7 @@ public class ControllerHandler {
     private final ConfigureMaker configureMaker = ConfigureMaker.getInstance();
     private final ControllerMapper controllerMapper = ControllerMapper.getInstance();
     private final GlobalExceptionHandler globalExceptionHandler = new GlobalExceptionHandler();
+    private final LoginConfigure loginConfigure = LoginConfigure.getInstance();
 
     public ControllerHandler() {
     }
@@ -42,7 +44,10 @@ public class ControllerHandler {
 
     private HttpResponse makeHttpResponse(HttpRequest httpRequest, MatchedInfo matchedInfo) {
         if (matchedInfo.isMatch()) {
-            return executeMatchedMethod(httpRequest, matchedInfo);
+            if (loginConfigure.verifyLogin(httpRequest)) {
+                return executeMatchedMethod(httpRequest, matchedInfo);
+            }
+            return loginConfigure.getRedirectLoginPage(httpRequest);
         }
 
         if (matchedInfo.isNotMatch() && matchedInfo.anyMatchUrlPath()) {
