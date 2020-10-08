@@ -26,4 +26,46 @@
 
 ## 3단계 로그인 및 세션 구현
 
+#### 요구사항 1
+
+- “로그인” 메뉴를 클릭하면 http://localhost:8080/user/login.html 으로 이동해 로그인할 수 있다.
+
+- 로그인이 성공하면 index.html로 이동하고, 로그인이 실패하면 /user/login_failed.html로 이동해야 한다.
+
+- 앞에서 회원가입한 사용자로 로그인할 수 있어야 한다.
+ 
+- 로그인이 성공하면 cookie를 활용해 로그인 상태를 유지할 수 있어야 한다.
+
+- 로그인이 성공할 경우 요청 header의 Cookie header 값이 logined=true, 로그인이 실패하면 Cookie header 값이 logined=false로 전달되어야 한다.
+
+#### 요구사항 2
+
+- 접근하고 있는 사용자가 “로그인” 상태일 경우(Cookie 값이 logined=true) 경우 http://localhost:8080/user/list 로 접근했을 때 사용자 목록을 출력한다.
+
+- 만약 로그인하지 않은 상태라면 로그인 페이지(login.html)로 이동한다.
+
+- 동적으로 html을 생성하기 위해 handlebars.java template engine을 활용한다.
+  
+#### 요구사항 3
+
+- 서블릿에서 지원하는 HttpSession API의 일부를 지원해야 한다.
+
+- HttpSession API 중 구현할 메소드는 getId(), setAttribute(String name, Object value), getAttribute(String name), removeAttribute(String name), invalidate() 5개이다.
+
+    - HttpSession의 가장 중요하고 핵심이 되는 메소드이다.
+  
+    - 각 메소드의 역할은 다음과 같다.
+  
+        - String getId(): 현재 세션에 할당되어 있는 고유한 세션 아이디를 반환
+        
+        - void setAttribute(String name, Object value): 현재 세션에 value 인자로 전달되는 객체를 name 인자 이름으로 저장
+        
+        - Object getAttribute(String name): 현재 세션에 name 인자로 저장되어 있는 객체 값을 찾아 반환
+        
+        - void removeAttribute(String name): 현재 세션에 name 인자로 저장되어 있는 객체 값을 삭제
+        
+        - void invalidate(): 현재 세션에 저장되어 있는 모든 값을 삭제
+  
+- 세션은 클라이언트와 서버 간에 상태 값을 공유하기 위해 고유한 아이디를 활용하고, 이 고유한 아이디는 쿠키를 활용해 공유한다.
+
 ## 4단계 MULTI MODULE 적용
