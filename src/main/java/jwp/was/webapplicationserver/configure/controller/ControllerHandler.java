@@ -9,6 +9,8 @@ import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import jwp.was.webapplicationserver.configure.ConfigureMaker;
+import jwp.was.webapplicationserver.configure.annotation.AnnotationHelper;
+import jwp.was.webapplicationserver.configure.annotation.ResponseBody;
 import jwp.was.webapplicationserver.controller.GlobalExceptionHandler;
 import jwp.was.webserver.dto.HttpRequest;
 import jwp.was.webserver.dto.HttpResponse;
@@ -52,10 +54,20 @@ public class ControllerHandler {
         try {
             Method method = matchedInfo.getMethod();
             Object instance = configureMaker.getConfigure(method.getDeclaringClass());
-            return (HttpResponse) method.invoke(instance, httpRequest);
+            return getHttpResponse(httpRequest, method, instance);
         } catch (IllegalAccessException | InvocationTargetException e) {
             return globalExceptionHandler.handleCauseException(httpRequest, e);
         }
+    }
+
+    private HttpResponse getHttpResponse(HttpRequest httpRequest, Method method, Object instance)
+        throws IllegalAccessException, InvocationTargetException {
+
+        if (AnnotationHelper.includeAnnotation(instance, ResponseBody.class)) {
+            return (HttpResponse) method.invoke(instance, httpRequest);
+        }
+        ModelAndView modelAndView = (ModelAndView) method.invoke(instance, httpRequest);
+        return modelAndView.toHttpResponse(httpRequest);
     }
 
     private void response(DataOutputStream dos, HttpResponse httpResponse) throws IOException {
