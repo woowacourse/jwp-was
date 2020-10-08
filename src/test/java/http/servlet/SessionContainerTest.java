@@ -20,4 +20,13 @@ class SessionContainerTest {
 
         assertThat(sessionContainer.getSession(sessionId) == httpSession).isTrue();
     }
+
+    @DisplayName("세션 컨테이너에서 저장된 세션을 가져오는 기능 테스트 - 일치하는 세션이 없을 때")
+    @Test
+    void getSessionWhenNotExist() {
+        SessionContainer sessionContainer = SessionContainer.getInstance();
+        String sessionId = String.valueOf(UUID.randomUUID());
+
+        assertThat(sessionContainer.getSession(sessionId)).isNull();
+    }
 }

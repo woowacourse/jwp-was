@@ -14,6 +14,7 @@ import java.util.Map;
 import static com.google.common.net.HttpHeaders.ACCEPT;
 
 public class HttpResponse {
+    public static final String HTTP_VERSION = "HTTP/1.1";
     public static final String CONTENT_TYPE = "Content-Type";
     public static final String CONTENT_LENGTH = "Content-Length";
     public static final String LOCATION = "Location";
@@ -40,7 +41,7 @@ public class HttpResponse {
     }
 
     public void responseHeader(HttpStatusCode statusCode) throws IOException {
-        dos.writeBytes(String.format("HTTP/1.1 %s" + System.lineSeparator(), statusCode.findCodeAndMessage()));
+        dos.writeBytes(String.format("%s %s" + System.lineSeparator(), HTTP_VERSION, statusCode.findCodeAndMessage()));
         for (Map.Entry<String, String> header : header.entrySet()) {
             dos.writeBytes(String.format("%s: %s" + System.lineSeparator(), header.getKey(), header.getValue()));
         }
