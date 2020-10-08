@@ -23,11 +23,11 @@ public class LoginController extends AbstractController {
             validateLoginRequests(userId, password);
 
             logger.debug("Login success");
-            httpResponse.putHeader("Set-Cookie", "logined=true; path=/");
+            httpResponse.putHeader(HttpResponse.SET_COOKIE, "logined=true; path=/");
             httpResponse.sendRedirect("/index.html");
         } catch (LoginException e) {
             logger.error(e.getMessage());
-            httpResponse.putHeader("Set-Cookie", "logined=false");
+            httpResponse.putHeader(HttpResponse.SET_COOKIE, "logined=false");
             httpResponse.sendRedirect("/user/login_failed.html");
         }
     }

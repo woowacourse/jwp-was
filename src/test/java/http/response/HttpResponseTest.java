@@ -42,7 +42,7 @@ class HttpResponseTest {
     public void responseRedirectWhenLogin() throws Exception {
         // Http_Redirect_When_Login.txt 결과는 응답 headere에 Location 정보와 Set-Cookie 정보가 포하되어 있어야 한다.
         HttpResponse response = new HttpResponse(createOutputStream("Http_Redirect_When_Login.txt"));
-        response.putHeader("Set-Cookie", "logined=true; path");
+        response.putHeader(HttpResponse.SET_COOKIE, "logined=true; path");
         response.sendRedirect("/index.html");
     }
 

@@ -53,7 +53,7 @@ public class HttpRequest {
         if (notContainsSessionId()) {
             String sessionId = String.valueOf(UUID.randomUUID());
             sessionContainer.put(sessionId, new HttpSession(sessionId));
-            httpResponse.putHeader("Set-Cookie",
+            httpResponse.putHeader(HttpResponse.SET_COOKIE,
                     String.format("%s=%s", SessionContainer.SESSION_KEY_FOR_COOKIE, sessionId));
         }
     }

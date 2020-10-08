@@ -14,6 +14,11 @@ import java.util.Map;
 import static com.google.common.net.HttpHeaders.ACCEPT;
 
 public class HttpResponse {
+    public static final String CONTENT_TYPE = "Content-Type";
+    public static final String CONTENT_LENGTH = "Content-Length";
+    public static final String LOCATION = "Location";
+    public static final String SET_COOKIE = "Set-Cookie";
+
     private final DataOutputStream dos;
     private final Map<String, String> header = new HashMap<>();
 
@@ -23,8 +28,8 @@ public class HttpResponse {
 
     public void forward(HttpRequest httpRequest) throws IOException, URISyntaxException {
         byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getPath());
-        header.put("Content-Type", findContentType(httpRequest));
-        header.put("Content-Length", String.valueOf(body.length));
+        header.put(CONTENT_TYPE, findContentType(httpRequest));
+        header.put(CONTENT_LENGTH, String.valueOf(body.length));
 
         responseHeader(HttpStatusCode.OK);
         responseBody(body);
@@ -48,8 +53,8 @@ public class HttpResponse {
     }
 
     public void forward(HttpRequest httpRequest, byte[] body) throws IOException {
-        header.put("Content-Type", findContentType(httpRequest));
-        header.put("Content-Length", String.valueOf(body.length));
+        header.put(CONTENT_TYPE, findContentType(httpRequest));
+        header.put(CONTENT_LENGTH, String.valueOf(body.length));
 
         responseHeader(HttpStatusCode.OK);
         responseBody(body);
@@ -57,7 +62,7 @@ public class HttpResponse {
 
     public void sendRedirect(String redirectPath) {
         try {
-            putHeader("Location", redirectPath);
+            putHeader(LOCATION, redirectPath);
             responseHeader(HttpStatusCode.FOUND);
         } catch (IOException e) {
             e.printStackTrace();
@@ -66,7 +71,7 @@ public class HttpResponse {
 
     public void methodNotAllowed() {
         try {
-            header.put("Content-Type", "text/html;charset=utf-8");
+            header.put(CONTENT_TYPE, "text/html;charset=utf-8");
             responseHeader(HttpStatusCode.METHOD_NOT_ALLOWED);
             String body = "<h1>405 Try another method</h1>";
             responseBody(body.getBytes());
@@ -77,7 +82,7 @@ public class HttpResponse {
 
     public void notFound() {
         try {
-            header.put("Content-Type", "text/html;charset=utf-8");
+            header.put(CONTENT_TYPE, "text/html;charset=utf-8");
             responseHeader(HttpStatusCode.NOT_FOUND);
             String body = "<h1>404 Not found</h1>";
             responseBody(body.getBytes());
