@@ -7,8 +7,8 @@ import static jwp.was.webserver.HttpStatusCode.FOUND;
 import java.util.HashMap;
 import java.util.Map;
 import jwp.was.webapplicationserver.configure.annotation.Autowired;
-import jwp.was.webapplicationserver.configure.annotation.Controller;
 import jwp.was.webapplicationserver.configure.annotation.RequestMapping;
+import jwp.was.webapplicationserver.configure.annotation.RestController;
 import jwp.was.webapplicationserver.controller.dto.LoginRequest;
 import jwp.was.webapplicationserver.controller.dto.LoginRequestAssembler;
 import jwp.was.webapplicationserver.controller.dto.UserRequest;
@@ -18,7 +18,7 @@ import jwp.was.webserver.HttpMethod;
 import jwp.was.webserver.dto.HttpRequest;
 import jwp.was.webserver.dto.HttpResponse;
 
-@Controller
+@RestController
 public class UserController {
 
     private static final String INDEX_HTML = "/index.html";
