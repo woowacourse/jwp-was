@@ -7,6 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
+import jwp.was.webapplicationserver.configure.annotation.AnnotationHelper;
 import jwp.was.webapplicationserver.configure.annotation.Autowired;
 import jwp.was.webapplicationserver.configure.annotation.Configure;
 import org.reflections.Reflections;
@@ -85,13 +86,8 @@ public class ConfigureMaker {
 
     public <T extends Annotation> Set<Object> getConfiguresWithAnnotation(Class<T> annotation) {
         return configures.stream()
-            .filter(configure -> isWithAnnotation(configure, annotation))
+            .filter(configure -> AnnotationHelper.includeAnnotation(configure, annotation))
             .collect(Collectors.toSet());
-    }
-
-    private <T extends Annotation> boolean isWithAnnotation(Object configureInstance,
-        Class<T> annotation) {
-        return configureInstance.getClass().isAnnotationPresent(annotation);
     }
 
     @SuppressWarnings("unchecked")
@@ -99,8 +95,7 @@ public class ConfigureMaker {
         return (T) configures.stream()
             .filter(configureInstance -> configureInstance.getClass().equals(aClass))
             .findFirst()
-            .orElseThrow(
-                () -> new IllegalArgumentException(
-                    aClass.getName() + "에 해당하는 configure가 없습니다."));
+            .orElseThrow(() -> new IllegalArgumentException(
+                aClass.getName() + "에 해당하는 configure가 없습니다."));
     }
 }

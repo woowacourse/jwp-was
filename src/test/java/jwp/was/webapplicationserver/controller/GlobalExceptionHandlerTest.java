@@ -10,8 +10,8 @@ import static jwp.was.webserver.HttpMethod.GET;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.nio.charset.StandardCharsets;
-import jwp.was.util.ChildOfException;
-import jwp.was.util.ChildOfIllegalArgumentException;
+import jwp.was.util.exception.ChildOfException;
+import jwp.was.util.exception.ChildOfIllegalArgumentException;
 import jwp.was.webserver.HttpStatusCode;
 import jwp.was.webserver.dto.HttpRequest;
 import jwp.was.webserver.dto.HttpResponse;

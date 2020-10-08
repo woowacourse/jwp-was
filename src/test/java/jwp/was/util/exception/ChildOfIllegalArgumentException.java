@@ -1,4 +1,4 @@
-package jwp.was.util;
+package jwp.was.util.exception;
 
 public class ChildOfIllegalArgumentException extends IllegalArgumentException {
 
