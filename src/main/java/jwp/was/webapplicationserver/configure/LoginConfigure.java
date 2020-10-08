@@ -19,7 +19,7 @@ public class LoginConfigure {
 
     private static final LoginConfigure INSTANCE = new LoginConfigure();
     private static final String NEED_LOGIN_MESSAGE = "로그인이 필요합니다.";
-    private static final String LOGIN_PAGE = "/login.html";
+    private static final String LOGIN_PAGE = "/user/login.html";
     private static final String LOGIN_TRUE = "logined=true";
 
     private final Set<HttpInfo> withLogin;

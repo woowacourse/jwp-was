@@ -28,7 +28,7 @@ public class Constants {
     public static final UrlPath URL_PATH_BOOTSTRAP_MIN_CSS = UrlPath.from("/css/bootstrap.min.css");
     public static final UrlPath URL_PATH_API_CREATE_USER = UrlPath.from("/user/create");
     public static final UrlPath URL_PATH_PAGE_API_USER_LIST = UrlPath.from("/user/list");
-    public static final String URL_PATH_LOGIN_HTML = "/login.html";
+    public static final String URL_PATH_LOGIN_HTML = "/user/login.html";
 
     public static final HttpVersion HTTP_VERSION = HttpVersion.of("HTTP/1.1");
     public static final Parameters PARAMETERS_EMPTY = Parameters.fromEncodedParameter("");
