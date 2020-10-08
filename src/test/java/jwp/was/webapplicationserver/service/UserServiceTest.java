@@ -11,6 +11,7 @@ import static jwp.was.util.Constants.USER_PASSWORD;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.util.List;
 import jwp.was.webapplicationserver.configure.ConfigureMaker;
 import jwp.was.webapplicationserver.controller.dto.LoginRequest;
 import jwp.was.webapplicationserver.controller.dto.UserRequest;
@@ -105,5 +106,18 @@ class UserServiceTest {
         boolean login = userService.login(loginRequest);
 
         assertThat(login).isFalse();
+    }
+
+    @DisplayName("모든 유저 조회 - 성공")
+    @Test
+    void findAllUser_Success() {
+        UserRequest userRequest = new UserRequest(USER_ID, USER_PASSWORD, USER_NAME, USER_EMAIL);
+        User user = userService.createUser(userRequest);
+
+        List<User> allUser = userService.findAllUser();
+
+        assertThat(allUser).isNotNull();
+        assertThat(allUser).isNotEmpty();
+        assertThat(allUser).contains(user);
     }
 }

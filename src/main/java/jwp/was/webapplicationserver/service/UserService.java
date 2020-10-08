@@ -1,5 +1,7 @@
 package jwp.was.webapplicationserver.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import jwp.was.webapplicationserver.configure.annotation.Autowired;
 import jwp.was.webapplicationserver.configure.annotation.Service;
@@ -36,5 +38,9 @@ public class UserService {
     public boolean login(LoginRequest loginRequest) {
         User foundUser = dataBase.findUserById(loginRequest.getUserId());
         return Objects.nonNull(foundUser) && foundUser.isSamePassword(loginRequest.getPassword());
+    }
+
+    public List<User> findAllUser() {
+        return new ArrayList<>(dataBase.findAll());
     }
 }
