@@ -31,9 +31,9 @@ class UserControllerTest {
         DataBaseTest.clear();
     }
 
-    @DisplayName("User 생성, Ok 반환")
+    @DisplayName("User 생성, 성공 - Location + Found 반환")
     @Test
-    void createUser_ReturnOk() {
+    void createUser_Success_ReturnFoundWithLocation() {
         HttpRequest createUserRequest = makeHttpRequest(PARAMETERS_FOR_CREATE_USER);
 
         HttpResponse createUserResponse = userController.createUser(createUserRequest);
@@ -45,33 +45,35 @@ class UserControllerTest {
             .isEqualTo(URL_PATH_INDEX_HTML.getUrlPath());
     }
 
-    @DisplayName("Login, 성공 - Ok 반환")
+    @DisplayName("Login 생성, 성공 - Location + Found 반환")
     @Test
-    void login_Success_ReturnOk() {
+    void login_Success_ReturnFoundWithLocation() {
         HttpRequest createUserRequest = makeHttpRequest(PARAMETERS_FOR_CREATE_USER);
         userController.createUser(createUserRequest);
 
         HttpRequest loginRequest = makeHttpRequest(PARAMETERS_FOR_LOGIN);
         HttpResponse loginResponse = userController.login(loginRequest);
 
-        assertThat(loginResponse.getHttpStatusCode()).isEqualTo(HttpStatusCode.OK);
+        assertThat(loginResponse.getHttpStatusCode()).isEqualTo(HttpStatusCode.FOUND);
         assertThat(loginResponse.getBody()).isEmpty();
         assertThat(loginResponse.getHttpVersion()).isEqualTo(HTTP_VERSION.getHttpVersion());
         assertThat(loginResponse.getHeaders().get(SET_COOKIE)).isEqualTo("logined=true; Path=/");
+        assertThat(loginResponse.getHeaders().get(LOCATION))
+            .isEqualTo(URL_PATH_INDEX_HTML.getUrlPath());
     }
 
-    @DisplayName("Login, 실패 - Unauthorized 반환")
+    @DisplayName("Login 생성, 실패 - Location + Found 반환")
     @Test
-    void login_Failed_ReturnUnauthorized() {
+    void login_Failed_ReturnFoundWithLocation() {
         HttpRequest loginRequest = makeHttpRequest(PARAMETERS_FOR_LOGIN);
         HttpResponse loginResponse = userController.login(loginRequest);
 
-        assertThat(loginResponse.getHttpStatusCode()).isEqualTo(HttpStatusCode.UNAUTHORIZED);
+        assertThat(loginResponse.getHttpStatusCode()).isEqualTo(HttpStatusCode.FOUND);
         assertThat(loginResponse.getBody()).isEmpty();
         assertThat(loginResponse.getHttpVersion()).isEqualTo(HTTP_VERSION.getHttpVersion());
         assertThat(loginResponse.getHeaders().get(SET_COOKIE)).isEqualTo("logined=false");
+        assertThat(loginResponse.getHeaders().get(LOCATION)).isEqualTo("/user/login_failed.html");
     }
-
 
     private HttpRequest makeHttpRequest(Parameters parameters) {
         return new HttpRequest(POST, URL_PATH_API_CREATE_USER, parameters, HTTP_VERSION,
