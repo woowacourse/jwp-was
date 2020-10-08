@@ -1,4 +1,4 @@
-package jwp.was.webapplicationserver.configure.controller;
+package jwp.was.webapplicationserver.configure.controller.info;
 
 import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
 

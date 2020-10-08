@@ -1,4 +1,4 @@
-package jwp.was.webapplicationserver.configure.controller;
+package jwp.was.webapplicationserver.configure.controller.info;
 
 import java.lang.reflect.Method;
 import java.util.Objects;

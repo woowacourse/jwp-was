@@ -4,7 +4,7 @@ import java.util.List;
 import jwp.was.webapplicationserver.configure.annotation.Autowired;
 import jwp.was.webapplicationserver.configure.annotation.Controller;
 import jwp.was.webapplicationserver.configure.annotation.RequestMapping;
-import jwp.was.webapplicationserver.configure.controller.ModelAndView;
+import jwp.was.webapplicationserver.configure.controller.info.ModelAndView;
 import jwp.was.webapplicationserver.model.User;
 import jwp.was.webapplicationserver.service.UserService;
 import jwp.was.webserver.HttpMethod;
