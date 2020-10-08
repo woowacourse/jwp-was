@@ -10,6 +10,6 @@ public enum HttpCharacterEncoding {
     }
 
     public String toHttpMessage() {
-        return ";charset=" + this.name;
+        return "charset=" + this.name;
     }
 }

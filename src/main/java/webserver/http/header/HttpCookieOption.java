@@ -10,6 +10,6 @@ public enum HttpCookieOption {
     }
 
     public String toHttpMessage(String value) {
-        return ";" + this.name + "=" + value;
+        return this.name + "=" + value;
     }
 }

@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 public class HttpHeader {
     private static final String HEADER_LINE_DELIMITER = ":";
+    public static final String HEADER_VALUE_DELIMITER = ";";
 
     private final Map<String, String> headers;
 

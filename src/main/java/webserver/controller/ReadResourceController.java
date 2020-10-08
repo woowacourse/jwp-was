@@ -15,6 +15,8 @@ import webserver.http.response.HttpStatus;
 import java.util.HashMap;
 import java.util.Map;
 
+import static webserver.http.header.HttpHeader.HEADER_VALUE_DELIMITER;
+
 public class ReadResourceController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(ReadResourceController.class);
 
@@ -30,7 +32,7 @@ public class ReadResourceController implements Controller {
 
         Map<String, String> headers = new HashMap<>();
         headers.put(HttpHeaderField.CONTENT_TYPE.getName(),
-                    httpUri.getContentType() + HttpCharacterEncoding.UTF_8.toHttpMessage());
+                    httpUri.getContentType() + HEADER_VALUE_DELIMITER + HttpCharacterEncoding.UTF_8.toHttpMessage());
         headers.put(HttpHeaderField.CONTENT_LENGTH.getName(), String.valueOf(fileBytes.length));
 
         String body = new String(fileBytes, 0, fileBytes.length);
@@ -49,7 +51,7 @@ public class ReadResourceController implements Controller {
 
         Map<String, String> headers = new HashMap<>();
         headers.put(HttpHeaderField.CONTENT_TYPE.getName(),
-                    HttpResourceType.HTML.getContentType() + HttpCharacterEncoding.UTF_8.toHttpMessage());
+                    HttpResourceType.HTML.getContentType() + HEADER_VALUE_DELIMITER + HttpCharacterEncoding.UTF_8.toHttpMessage());
         headers.put(HttpHeaderField.CONTENT_LENGTH.getName(), String.valueOf(fileBytes.length));
 
         String body = new String(fileBytes, 0, fileBytes.length);

@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.http.body.HttpBody;
 
+import java.util.Objects;
+
 public class UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
@@ -20,11 +22,12 @@ public class UserService {
     }
 
     public static boolean isUser(HttpBody httpBody) {
-        try {
-            User user = DataBase.findUserById(httpBody.getValue("userId"));
-            return user.getPassword().equals(httpBody.getValue("password"));
-        } catch (NullPointerException e) {
+        User user = DataBase.findUserById(httpBody.getValue("userId"));
+
+        if (Objects.isNull(user)) {
             return false;
         }
+
+        return user.getPassword().equals(httpBody.getValue("password"));
     }
 }
