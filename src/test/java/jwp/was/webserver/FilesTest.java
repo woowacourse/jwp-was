@@ -19,6 +19,7 @@ public class FilesTest {
         "/css/bootstrap.min.css", "/glyphicons-halflings-regular.woff", "/haha.woff"})
     void probeContentType(String urlPath) throws IOException {
         String mimeType = Files.probeContentType(Paths.get(urlPath));
+
         LOGGER.debug("urlPath : {}, MimeType : {}", urlPath, mimeType);
     }
 }

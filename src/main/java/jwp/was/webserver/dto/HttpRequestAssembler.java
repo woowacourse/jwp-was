@@ -6,7 +6,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import jwp.was.webserver.FileNameExtension;
 import jwp.was.webserver.HttpMethod;
 import jwp.was.webserver.utils.IOUtils;
 import org.slf4j.Logger;
@@ -19,7 +18,7 @@ public class HttpRequestAssembler {
     private static final String EMPTY = "";
     private static final int HTTP_METHOD_INDEX_OF_REQUEST_LINE = 0;
     private static final int URL_INDEX_OF_REQUEST_LINE = 1;
-    private static final int PROTOCOL_INDEX_OF_REQUEST_LINE = 2;
+    private static final int HTTP_VERSION_INDEX_OF_REQUEST_LINE = 2;
 
     public static HttpRequest assemble(BufferedReader br) throws IOException {
         String line = readLine(br);
@@ -28,16 +27,15 @@ public class HttpRequestAssembler {
         HttpMethod httpMethod = HttpMethod.from(requestLine[HTTP_METHOD_INDEX_OF_REQUEST_LINE]);
         UrlPath urlPath = UrlPath.from(requestLine[URL_INDEX_OF_REQUEST_LINE]);
         Parameters parameters = Parameters.fromUrl(requestLine[URL_INDEX_OF_REQUEST_LINE]);
-        Protocol protocol = Protocol.of(requestLine[PROTOCOL_INDEX_OF_REQUEST_LINE]);
+        HttpVersion httpVersion = HttpVersion.of(requestLine[HTTP_VERSION_INDEX_OF_REQUEST_LINE]);
         Headers headers = Headers.from(readHeaders(br));
 
         if (httpMethod.hasRequestBody()) {
             String body = readBody(br, headers);
             parameters = Parameters.combine(parameters, Parameters.fromEncodedParameter(body));
         }
-        FileNameExtension fileNameExtension = FileNameExtension.from(urlPath.getUrlPath());
 
-        return new HttpRequest(httpMethod, urlPath, parameters, protocol, headers, fileNameExtension
+        return new HttpRequest(httpMethod, urlPath, parameters, httpVersion, headers
         );
     }
 

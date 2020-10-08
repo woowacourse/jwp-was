@@ -29,6 +29,6 @@ public class UserController {
         userService.createUser(userRequest);
         Map<String, String> headers = new HashMap<>();
         headers.put(LOCATION, INDEX_HTML);
-        return HttpResponse.of(httpRequest.getProtocol(), HttpStatusCode.FOUND, headers, "");
+        return HttpResponse.of(httpRequest.getHttpVersion(), HttpStatusCode.FOUND, headers, "");
     }
 }

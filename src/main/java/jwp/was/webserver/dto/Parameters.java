@@ -73,4 +73,12 @@ public class Parameters {
     public Map<String, String> getParameters() {
         return parameters;
     }
+
+    public String getParameter(String parameter) {
+        return parameters.keySet().stream()
+            .filter(key -> key.equals(parameter))
+            .map(parameters::get)
+            .findFirst()
+            .orElse(null);
+    }
 }

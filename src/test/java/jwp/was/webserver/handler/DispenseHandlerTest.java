@@ -3,13 +3,11 @@ package jwp.was.webserver.handler;
 import static jwp.was.util.Constants.CONTENT_TYPE_TEXT_HTML;
 import static jwp.was.util.Constants.CONTENT_TYPE_TEXT_PLAIN;
 import static jwp.was.util.Constants.HEADERS_EMPTY;
+import static jwp.was.util.Constants.HTTP_VERSION;
 import static jwp.was.util.Constants.PARAMETERS_EMPTY;
 import static jwp.was.util.Constants.PARAMETERS_FOR_CREATE_USER;
-import static jwp.was.util.Constants.PROTOCOL;
 import static jwp.was.util.Constants.URL_PATH_API_CREATE_USER;
 import static jwp.was.util.Constants.URL_PATH_INDEX_HTML;
-import static jwp.was.webserver.FileNameExtension.API;
-import static jwp.was.webserver.FileNameExtension.HTML;
 import static jwp.was.webserver.HttpMethod.GET;
 import static jwp.was.webserver.HttpMethod.POST;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -42,16 +40,16 @@ class DispenseHandlerTest {
                 GET,
                 URL_PATH_INDEX_HTML,
                 PARAMETERS_EMPTY,
-                PROTOCOL,
-                HEADERS_EMPTY,
-                HTML);
+                HTTP_VERSION,
+                HEADERS_EMPTY
+            );
             dispenseHandler.dispense(os, httpRequest);
 
             assertThat(os.toString()).contains(HttpStatusCode.OK.getCodeAndMessage());
             assertThat(os.toString()).contains(CONTENT_TYPE_TEXT_HTML);
 
             byte[] body = FileIoUtils
-                .loadFileFromClasspath(httpRequest.getUrlPath(), httpRequest.getDirectory());
+                .loadFileFromClasspath(httpRequest.getUrlPath());
             assertThat(os.toByteArray()).contains(body);
         }
     }
@@ -64,9 +62,9 @@ class DispenseHandlerTest {
                 POST,
                 URL_PATH_API_CREATE_USER,
                 PARAMETERS_FOR_CREATE_USER,
-                PROTOCOL,
-                HEADERS_EMPTY,
-                API);
+                HTTP_VERSION,
+                HEADERS_EMPTY
+            );
             dispenseHandler.dispense(os, httpRequest);
 
             assertThat(os.toString()).contains(HttpStatusCode.FOUND.getCodeAndMessage());

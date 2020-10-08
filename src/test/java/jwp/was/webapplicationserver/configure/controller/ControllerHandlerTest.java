@@ -2,12 +2,11 @@ package jwp.was.webapplicationserver.configure.controller;
 
 import static jwp.was.util.Constants.CONTENT_TYPE_TEXT_PLAIN;
 import static jwp.was.util.Constants.HEADERS_EMPTY;
+import static jwp.was.util.Constants.HTTP_VERSION;
 import static jwp.was.util.Constants.PARAMETERS_EMPTY;
 import static jwp.was.util.Constants.PARAMETERS_FOR_CREATE_USER;
-import static jwp.was.util.Constants.PROTOCOL;
 import static jwp.was.util.Constants.URL_PATH_API_CREATE_USER;
 import static jwp.was.util.Constants.URL_PATH_NOT_EXISTS_FILE;
-import static jwp.was.webserver.FileNameExtension.API;
 import static jwp.was.webserver.HttpMethod.CONNECT;
 import static jwp.was.webserver.HttpMethod.POST;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,9 +37,9 @@ class ControllerHandlerTest {
                 POST,
                 URL_PATH_API_CREATE_USER,
                 PARAMETERS_FOR_CREATE_USER,
-                PROTOCOL,
-                HEADERS_EMPTY,
-                API);
+                HTTP_VERSION,
+                HEADERS_EMPTY
+            );
             controllerHandler.handleAPI(os, httpRequest);
 
             assertThat(os.toString()).contains(HttpStatusCode.FOUND.getCodeAndMessage());
@@ -56,9 +55,9 @@ class ControllerHandlerTest {
                 CONNECT,
                 URL_PATH_API_CREATE_USER,
                 PARAMETERS_FOR_CREATE_USER,
-                PROTOCOL,
-                HEADERS_EMPTY,
-                API);
+                HTTP_VERSION,
+                HEADERS_EMPTY
+            );
             controllerHandler.handleAPI(os, httpRequest);
 
             assertThat(os.toString()).contains(HttpStatusCode.METHOD_NOT_ALLOW.getCodeAndMessage());
@@ -74,9 +73,9 @@ class ControllerHandlerTest {
                 POST,
                 URL_PATH_NOT_EXISTS_FILE,
                 PARAMETERS_FOR_CREATE_USER,
-                PROTOCOL,
-                HEADERS_EMPTY,
-                API);
+                HTTP_VERSION,
+                HEADERS_EMPTY
+            );
             controllerHandler.handleAPI(os, httpRequest);
 
             assertThat(os.toString()).contains(HttpStatusCode.NOT_FOUND.getCodeAndMessage());
@@ -92,9 +91,9 @@ class ControllerHandlerTest {
                 POST,
                 URL_PATH_API_CREATE_USER,
                 PARAMETERS_EMPTY,
-                PROTOCOL,
-                HEADERS_EMPTY,
-                API);
+                HTTP_VERSION,
+                HEADERS_EMPTY
+            );
             controllerHandler.handleAPI(os, httpRequest);
 
             assertThat(os.toString()).contains(HttpStatusCode.BAD_REQUEST.getCodeAndMessage());

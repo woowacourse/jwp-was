@@ -9,6 +9,7 @@ public class UrlPath {
     private static final String URL_PATH_DELIMITER = "?";
     private static final String URL_PATH_DELIMITER_REGEX = "\\" + URL_PATH_DELIMITER;
     private static final int URL_PATH_INDEX = 0;
+    private static final String EXTENSION_DELIMITER = ".";
 
     private final String urlPath;
 
@@ -44,5 +45,9 @@ public class UrlPath {
 
     public String getUrlPath() {
         return urlPath;
+    }
+
+    public boolean isFile() {
+        return urlPath.contains(EXTENSION_DELIMITER);
     }
 }
