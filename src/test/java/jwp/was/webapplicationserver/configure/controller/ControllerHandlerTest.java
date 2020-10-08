@@ -12,6 +12,11 @@ import static jwp.was.util.Constants.URL_PATH_API_CREATE_USER;
 import static jwp.was.util.Constants.URL_PATH_LOGIN_HTML;
 import static jwp.was.util.Constants.URL_PATH_NOT_EXISTS_FILE;
 import static jwp.was.util.Constants.URL_PATH_PAGE_API_USER_LIST;
+import static jwp.was.util.Constants.USER_EMAIL;
+import static jwp.was.util.Constants.USER_ID;
+import static jwp.was.util.Constants.USER_NAME;
+import static jwp.was.util.Constants.USER_PASSWORD;
+import static jwp.was.webapplicationserver.configure.security.LoginConfigure.ATTRIBUTE_KEY_USER;
 import static jwp.was.webserver.HttpMethod.CONNECT;
 import static jwp.was.webserver.HttpMethod.GET;
 import static jwp.was.webserver.HttpMethod.POST;
@@ -25,6 +30,7 @@ import jwp.was.webapplicationserver.configure.session.HttpSession;
 import jwp.was.webapplicationserver.configure.session.HttpSessionImpl;
 import jwp.was.webapplicationserver.configure.session.HttpSessions;
 import jwp.was.webapplicationserver.db.DataBaseTest;
+import jwp.was.webapplicationserver.model.User;
 import jwp.was.webserver.HttpStatusCode;
 import jwp.was.webserver.dto.Headers;
 import jwp.was.webserver.dto.HttpRequest;
@@ -131,32 +137,13 @@ class ControllerHandlerTest {
         }
     }
 
-    @DisplayName("UserList 조회 - 302 반환, 유효하지 않은 SessionIdCookie 포함")
-    @Test
-    void handleAPI_GetUserListWithCookieWrongSessionId_Return302() throws IOException {
-        Map<String, String> headers = new HashMap<>();
-        headers.put(COOKIE, SET_COOKIE_SESSION_ID_KEY + "wrongSessionId");
-        try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
-            HttpRequest httpRequest = new HttpRequest(
-                GET,
-                URL_PATH_PAGE_API_USER_LIST,
-                PARAMETERS_EMPTY,
-                HTTP_VERSION,
-                new Headers(headers)
-            );
-            controllerHandler.handleAPI(os, httpRequest);
-
-            assertThat(os.toString()).contains(HttpStatusCode.FOUND.getCodeAndMessage());
-            assertThat(os.toString()).contains(URL_PATH_LOGIN_HTML);
-        }
-    }
-
-
     @DisplayName("UserList 조회 - 200 반환, Cookie 포함")
     @Test
     void handleAPI_GetUserListWithCookie_Return200() throws IOException {
         HttpSessions httpSessions = HttpSessions.getInstance();
         HttpSession httpSession = new HttpSessionImpl();
+        User user = new User(USER_ID, USER_PASSWORD, USER_NAME, USER_EMAIL);
+        httpSession.setAttribute(ATTRIBUTE_KEY_USER, user);
         httpSessions.saveSession(httpSession);
 
         Map<String, String> headers = new HashMap<>();

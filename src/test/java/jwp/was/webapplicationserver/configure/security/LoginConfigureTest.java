@@ -8,6 +8,11 @@ import static jwp.was.util.Constants.PARAMETERS_EMPTY;
 import static jwp.was.util.Constants.SET_COOKIE_SESSION_ID_KEY;
 import static jwp.was.util.Constants.URL_PATH_LOGIN_HTML;
 import static jwp.was.util.Constants.URL_PATH_PAGE_API_USER_LIST;
+import static jwp.was.util.Constants.USER_EMAIL;
+import static jwp.was.util.Constants.USER_ID;
+import static jwp.was.util.Constants.USER_NAME;
+import static jwp.was.util.Constants.USER_PASSWORD;
+import static jwp.was.webapplicationserver.configure.security.LoginConfigure.ATTRIBUTE_KEY_USER;
 import static jwp.was.webserver.HttpMethod.GET;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,6 +22,7 @@ import jwp.was.webapplicationserver.configure.controller.info.HttpInfo;
 import jwp.was.webapplicationserver.configure.session.HttpSession;
 import jwp.was.webapplicationserver.configure.session.HttpSessionImpl;
 import jwp.was.webapplicationserver.configure.session.HttpSessions;
+import jwp.was.webapplicationserver.model.User;
 import jwp.was.webserver.HttpMethod;
 import jwp.was.webserver.HttpStatusCode;
 import jwp.was.webserver.dto.Headers;
@@ -40,6 +46,8 @@ class LoginConfigureTest {
 
         HttpSessions httpSessions = HttpSessions.getInstance();
         HttpSession httpSession = new HttpSessionImpl();
+        User user = new User(USER_ID, USER_PASSWORD, USER_NAME, USER_EMAIL);
+        httpSession.setAttribute(ATTRIBUTE_KEY_USER, user);
         httpSessions.saveSession(httpSession);
 
         Map<String, String> headers = new HashMap<>();
@@ -54,6 +62,34 @@ class LoginConfigureTest {
         );
 
         assertThat(LOGIN_CONFIGURE.verifyLogin(httpRequest)).isTrue();
+
+        httpSessions.removeSession(httpSession.getId());
+    }
+
+    @DisplayName("로그인 검증 - False, User 속성이 없는 세션")
+    @Test
+    void verifyLogin_LoginInfoAndHasCookieNotExistsUser_ReturnFalse() {
+        HttpMethod httpMethod = GET;
+        UrlPath urlPath = URL_PATH_PAGE_API_USER_LIST;
+        assertThat(LOGIN_CONFIGURE.getWithLoginInfo())
+            .contains(HttpInfo.of(httpMethod, urlPath.getUrlPath()));
+
+        HttpSessions httpSessions = HttpSessions.getInstance();
+        HttpSession httpSession = new HttpSessionImpl();
+        httpSessions.saveSession(httpSession);
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put(COOKIE, SET_COOKIE_SESSION_ID_KEY + httpSession.getId());
+
+        HttpRequest httpRequest = new HttpRequest(
+            httpMethod,
+            urlPath,
+            PARAMETERS_EMPTY,
+            HTTP_VERSION,
+            new Headers(headers)
+        );
+
+        assertThat(LOGIN_CONFIGURE.verifyLogin(httpRequest)).isFalse();
 
         httpSessions.removeSession(httpSession.getId());
     }

@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import jwp.was.webapplicationserver.configure.controller.info.HttpInfo;
+import jwp.was.webapplicationserver.configure.session.HttpSession;
 import jwp.was.webapplicationserver.configure.session.HttpSessions;
 import jwp.was.webserver.HttpMethod;
 import jwp.was.webserver.HttpStatusCode;
@@ -19,6 +20,7 @@ import jwp.was.webserver.dto.HttpResponse;
 public class LoginConfigure {
 
     public static final String SET_COOKIE_SESSION_ID_KEY = "sessionId=";
+    public static final String ATTRIBUTE_KEY_USER = "USER";
     private static final LoginConfigure INSTANCE = new LoginConfigure();
     private static final String NEED_LOGIN_MESSAGE = "로그인이 필요합니다.";
     private static final String LOGIN_PAGE = "/user/login.html";
@@ -60,7 +62,16 @@ public class LoginConfigure {
         if (Objects.isNull(sessionId) || sessionId.isEmpty()) {
             return false;
         }
-        return Objects.nonNull(httpSessions.findSession(sessionId));
+        return existsUser(sessionId);
+    }
+
+    private boolean existsUser(String sessionId) {
+        HttpSession session = httpSessions.findSession(sessionId);
+        if (Objects.isNull(session)) {
+            return false;
+        }
+        Object user = session.getAttribute(ATTRIBUTE_KEY_USER);
+        return Objects.nonNull(user);
     }
 
     private String getSessionId(String cookies) {
