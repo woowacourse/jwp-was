@@ -8,6 +8,7 @@ public class ControllerFinder {
 
     static {
         controllers.put("/user/create", new CreateUserController());
+        controllers.put("/user/login", new LoginController());
     }
 
     private ControllerFinder() {

@@ -1,5 +1,7 @@
 package webserver.controller;
 
+import db.DataBase;
+import model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import webserver.http.message.HttpRequestMessage;
@@ -60,6 +62,36 @@ class ControllerTest {
                 NEW_LINE;
 
         assertThat(actualMessage).contains(expectedMessage);
+    }
+
+    @DisplayName("회원이 로그인을 하면 알맞은 응답 메세지를 생성")
+    @Test
+    void createHttpResponseMessageForUserLoginTest() throws IOException {
+        DataBase.addUser(new User("cool", "1234", "coollime", "cool@woowa.com"));
+
+        HttpRequestMessage httpRequestMessage = createHttpRequestMessage("./src/test/resources/LoginRequest");
+        String actualMessage = createHttpResponseMessage(httpRequestMessage).toHttpMessage();
+
+        String expectedMessage = "HTTP/1.1 302 Found" + NEW_LINE +
+                "Set-Cookie: logined=true;Path=/" + NEW_LINE +
+                "Location: /index.html" + NEW_LINE +
+                NEW_LINE;
+
+        assertEquals(actualMessage, expectedMessage);
+    }
+
+    @DisplayName("비회원이 로그인을 하면 알맞은 응답 메세지를 생성")
+    @Test
+    void createHttpResponseMessageForNonUserLoginTest() throws IOException {
+        HttpRequestMessage httpRequestMessage = createHttpRequestMessage("./src/test/resources/LoginRequest");
+        String actualMessage = createHttpResponseMessage(httpRequestMessage).toHttpMessage();
+
+        String expectedMessage = "HTTP/1.1 302 Found" + NEW_LINE +
+                "Set-Cookie: logined=false;Path=/" + NEW_LINE +
+                "Location: /user/login_failed.html" + NEW_LINE +
+                NEW_LINE;
+
+        assertEquals(actualMessage, expectedMessage);
     }
 
     private HttpRequestMessage createHttpRequestMessage(String pathName) throws IOException {
