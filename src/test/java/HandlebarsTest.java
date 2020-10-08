@@ -3,7 +3,7 @@ import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import java.util.Arrays;
-import jwp.was.webapplicationserver.configure.controller.RowNumberHelper;
+import jwp.was.webapplicationserver.configure.controller.handlebar.RowNumberHelper;
 import jwp.was.webapplicationserver.model.User;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
