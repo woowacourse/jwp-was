@@ -6,6 +6,7 @@ import static jwp.was.util.Constants.HEADERS_EMPTY;
 import static jwp.was.util.Constants.HTTP_VERSION;
 import static jwp.was.util.Constants.PARAMETERS_FOR_CREATE_USER;
 import static jwp.was.util.Constants.PARAMETERS_FOR_LOGIN;
+import static jwp.was.util.Constants.SET_COOKIE_SESSION_ID_KEY;
 import static jwp.was.util.Constants.URL_PATH_API_CREATE_USER;
 import static jwp.was.util.Constants.URL_PATH_INDEX_HTML;
 import static jwp.was.webserver.HttpMethod.POST;
@@ -25,6 +26,7 @@ class UserControllerTest {
 
     private ConfigureMaker configureMaker = ConfigureMaker.getInstance();
     private UserController userController = configureMaker.getConfigure(UserController.class);
+    private static final String SET_COOKIE_ALL_PATH = "; Path=/";
 
     @AfterEach
     void tearDown() {
@@ -57,7 +59,8 @@ class UserControllerTest {
         assertThat(loginResponse.getHttpStatusCode()).isEqualTo(HttpStatusCode.FOUND);
         assertThat(loginResponse.getBody()).isEmpty();
         assertThat(loginResponse.getHttpVersion()).isEqualTo(HTTP_VERSION.getHttpVersion());
-        assertThat(loginResponse.getHeaders().get(SET_COOKIE)).isEqualTo("logined=true; Path=/");
+        assertThat(loginResponse.getHeaders().get(SET_COOKIE)).contains(SET_COOKIE_SESSION_ID_KEY);
+        assertThat(loginResponse.getHeaders().get(SET_COOKIE)).contains(SET_COOKIE_ALL_PATH);
         assertThat(loginResponse.getHeaders().get(LOCATION))
             .isEqualTo(URL_PATH_INDEX_HTML.getUrlPath());
     }
@@ -71,7 +74,7 @@ class UserControllerTest {
         assertThat(loginResponse.getHttpStatusCode()).isEqualTo(HttpStatusCode.FOUND);
         assertThat(loginResponse.getBody()).isEmpty();
         assertThat(loginResponse.getHttpVersion()).isEqualTo(HTTP_VERSION.getHttpVersion());
-        assertThat(loginResponse.getHeaders().get(SET_COOKIE)).isEqualTo("logined=false");
+        assertThat(loginResponse.getHeaders().get(SET_COOKIE)).isEqualTo(SET_COOKIE_SESSION_ID_KEY);
         assertThat(loginResponse.getHeaders().get(LOCATION)).isEqualTo("/user/login_failed.html");
     }
 

@@ -22,6 +22,7 @@ public class Constants {
     public static final String CONTENT_TYPE_TEXT_CSS = "text/css;charset=utf-8";
     public static final String CONTENT_TYPE_TEXT_HTML = "text/html;charset=utf-8";
 
+    public static final String SET_COOKIE_SESSION_ID_KEY = "sessionId=";
 
     public static final UrlPath URL_PATH_NOT_EXISTS_FILE = UrlPath.from("/wrong.file");
     public static final UrlPath URL_PATH_INDEX_HTML = UrlPath.from("/index.html");

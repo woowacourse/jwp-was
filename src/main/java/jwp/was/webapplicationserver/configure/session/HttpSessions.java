@@ -23,4 +23,8 @@ public class HttpSessions {
     public HttpSession findSession(String id) {
         return sessions.get(id);
     }
+
+    public void removeSession(String id) {
+        sessions.remove(id);
+    }
 }
