@@ -1,9 +1,11 @@
 package jwp.was.webapplicationserver.controller;
 
 import static com.google.common.net.HttpHeaders.LOCATION;
+import static com.google.common.net.HttpHeaders.SET_COOKIE;
 import static jwp.was.util.Constants.HEADERS_EMPTY;
 import static jwp.was.util.Constants.HTTP_VERSION;
 import static jwp.was.util.Constants.PARAMETERS_FOR_CREATE_USER;
+import static jwp.was.util.Constants.PARAMETERS_FOR_LOGIN;
 import static jwp.was.util.Constants.URL_PATH_API_CREATE_USER;
 import static jwp.was.util.Constants.URL_PATH_INDEX_HTML;
 import static jwp.was.webserver.HttpMethod.POST;
@@ -29,22 +31,50 @@ class UserControllerTest {
         DataBaseTest.clear();
     }
 
-    @DisplayName("User 생성, 200 반환")
+    @DisplayName("User 생성, Ok 반환")
     @Test
-    void createUser_Return200() {
-        HttpRequest httpRequest = makeHttpRequest(PARAMETERS_FOR_CREATE_USER);
+    void createUser_ReturnOk() {
+        HttpRequest createUserRequest = makeHttpRequest(PARAMETERS_FOR_CREATE_USER);
 
-        HttpResponse httpResponse = userController.createUser(httpRequest);
+        HttpResponse createUserResponse = userController.createUser(createUserRequest);
 
-        assertThat(httpResponse.getHttpStatusCode()).isEqualTo(HttpStatusCode.FOUND);
-        assertThat(httpResponse.getBody()).isEmpty();
-        assertThat(httpResponse.getHttpVersion()).isEqualTo(HTTP_VERSION.getHttpVersion());
-        assertThat(httpResponse.getHeaders().get(LOCATION))
+        assertThat(createUserResponse.getHttpStatusCode()).isEqualTo(HttpStatusCode.FOUND);
+        assertThat(createUserResponse.getBody()).isEmpty();
+        assertThat(createUserResponse.getHttpVersion()).isEqualTo(HTTP_VERSION.getHttpVersion());
+        assertThat(createUserResponse.getHeaders().get(LOCATION))
             .isEqualTo(URL_PATH_INDEX_HTML.getUrlPath());
     }
 
+    @DisplayName("Login, 성공 - Ok 반환")
+    @Test
+    void login_Success_ReturnOk() {
+        HttpRequest createUserRequest = makeHttpRequest(PARAMETERS_FOR_CREATE_USER);
+        userController.createUser(createUserRequest);
+
+        HttpRequest loginRequest = makeHttpRequest(PARAMETERS_FOR_LOGIN);
+        HttpResponse loginResponse = userController.login(loginRequest);
+
+        assertThat(loginResponse.getHttpStatusCode()).isEqualTo(HttpStatusCode.OK);
+        assertThat(loginResponse.getBody()).isEmpty();
+        assertThat(loginResponse.getHttpVersion()).isEqualTo(HTTP_VERSION.getHttpVersion());
+        assertThat(loginResponse.getHeaders().get(SET_COOKIE)).isEqualTo("logined=true; Path=/");
+    }
+
+    @DisplayName("Login, 실패 - Unauthorized 반환")
+    @Test
+    void login_Failed_ReturnUnauthorized() {
+        HttpRequest loginRequest = makeHttpRequest(PARAMETERS_FOR_LOGIN);
+        HttpResponse loginResponse = userController.login(loginRequest);
+
+        assertThat(loginResponse.getHttpStatusCode()).isEqualTo(HttpStatusCode.UNAUTHORIZED);
+        assertThat(loginResponse.getBody()).isEmpty();
+        assertThat(loginResponse.getHttpVersion()).isEqualTo(HTTP_VERSION.getHttpVersion());
+        assertThat(loginResponse.getHeaders().get(SET_COOKIE)).isEqualTo("logined=false");
+    }
+
+
     private HttpRequest makeHttpRequest(Parameters parameters) {
-        return new HttpRequest(POST, URL_PATH_API_CREATE_USER,
-            parameters, HTTP_VERSION, HEADERS_EMPTY);
+        return new HttpRequest(POST, URL_PATH_API_CREATE_USER, parameters, HTTP_VERSION,
+            HEADERS_EMPTY);
     }
 }

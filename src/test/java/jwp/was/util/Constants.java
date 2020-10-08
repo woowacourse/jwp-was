@@ -30,13 +30,13 @@ public class Constants {
 
     public static final HttpVersion HTTP_VERSION = HttpVersion.of("HTTP/1.1");
     public static final Parameters PARAMETERS_EMPTY = Parameters.fromEncodedParameter("");
-    public static final Parameters PARAMETERS_FOR_CREATE_USER = Parameters.fromEncodedParameter(
-        USER_ID + "=" + USER_ID
-            + "&" + USER_EMAIL + "=" + USER_EMAIL
-            + "&" + USER_PASSWORD + "=" + USER_PASSWORD
-            + "&" + USER_NAME + "=" + USER_NAME
-    );
     public static final Headers HEADERS_EMPTY = Headers.from(new ArrayList<>());
-
     public static final String EMPTY = "";
+
+    private static final String LOGIN_PARAMETER
+        = USER_ID + "=" + USER_ID + "&" + USER_PASSWORD + "=" + USER_PASSWORD;
+    public static final Parameters PARAMETERS_FOR_LOGIN
+        = Parameters.fromEncodedParameter(LOGIN_PARAMETER);
+    public static final Parameters PARAMETERS_FOR_CREATE_USER = Parameters.fromEncodedParameter(
+        LOGIN_PARAMETER + "&" + USER_EMAIL + "=" + USER_EMAIL + "&" + USER_NAME + "=" + USER_NAME);
 }
