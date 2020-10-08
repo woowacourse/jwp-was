@@ -1,9 +1,13 @@
 package http.request;
 
+import http.response.HttpResponse;
+import http.servlet.HttpSession;
+import http.servlet.SessionContainer;
 import utils.FileIoUtils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.UUID;
 
 public class HttpRequest {
     private final RequestLine requestLine;
@@ -43,5 +47,14 @@ public class HttpRequest {
 
     public boolean notContainsSessionId() {
         return !requestHeader.containsSessionId();
+    }
+
+    public void sessionCheck(HttpResponse httpResponse, SessionContainer sessionContainer) {
+        if (notContainsSessionId()) {
+            String sessionId = String.valueOf(UUID.randomUUID());
+            sessionContainer.put(sessionId, new HttpSession(sessionId));
+            httpResponse.putHeader("Set-Cookie",
+                    String.format("%s=%s", SessionContainer.SESSION_KEY_FOR_COOKIE, sessionId));
+        }
     }
 }

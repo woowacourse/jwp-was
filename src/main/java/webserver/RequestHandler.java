@@ -5,7 +5,6 @@ import controller.ControllerMapper;
 import http.factory.HttpRequestFactory;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import http.servlet.HttpSession;
 import http.servlet.SessionContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +17,6 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.util.UUID;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -43,21 +41,11 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = HttpRequestFactory.createRequest(br);
             HttpResponse httpResponse = new HttpResponse(out);
 
-            sessionCheck(httpRequest, httpResponse);
+            httpRequest.sessionCheck(httpResponse, sessionContainer);
 
             handle(httpRequest, httpResponse);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
-        }
-    }
-
-    private void sessionCheck(HttpRequest httpRequest, HttpResponse httpResponse) {
-        if (httpRequest.notContainsSessionId()) {
-            String sessionId = String.valueOf(UUID.randomUUID());
-            sessionContainer.put(sessionId, new HttpSession(sessionId));
-            httpResponse.putHeader("Set-Cookie",
-                    String.format("%s=%s", SessionContainer.SESSION_KEY_FOR_COOKIE, sessionId));
-            logger.debug("set sessionId: {}", sessionId);
         }
     }
 
