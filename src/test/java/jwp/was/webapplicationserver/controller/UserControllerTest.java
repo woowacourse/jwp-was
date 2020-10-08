@@ -11,7 +11,7 @@ import static jwp.was.util.Constants.URL_PATH_INDEX_HTML;
 import static jwp.was.webserver.HttpMethod.POST;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import jwp.was.webapplicationserver.configure.ConfigureMaker;
+import jwp.was.webapplicationserver.configure.maker.ConfigureMaker;
 import jwp.was.webapplicationserver.db.DataBaseTest;
 import jwp.was.webserver.HttpStatusCode;
 import jwp.was.webserver.dto.HttpRequest;

@@ -1,4 +1,4 @@
-package jwp.was.webapplicationserver.configure;
+package jwp.was.webapplicationserver.configure.maker;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;

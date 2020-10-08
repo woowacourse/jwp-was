@@ -1,4 +1,4 @@
-package jwp.was.webapplicationserver.configure;
+package jwp.was.webapplicationserver.configure.security;
 
 import static com.google.common.net.HttpHeaders.COOKIE;
 import static com.google.common.net.HttpHeaders.LOCATION;

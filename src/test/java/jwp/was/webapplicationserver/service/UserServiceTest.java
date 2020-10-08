@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
-import jwp.was.webapplicationserver.configure.ConfigureMaker;
+import jwp.was.webapplicationserver.configure.maker.ConfigureMaker;
 import jwp.was.webapplicationserver.controller.dto.LoginRequest;
 import jwp.was.webapplicationserver.controller.dto.UserRequest;
 import jwp.was.webapplicationserver.db.DataBase;

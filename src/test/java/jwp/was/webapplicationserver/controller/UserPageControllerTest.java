@@ -2,8 +2,8 @@ package jwp.was.webapplicationserver.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import jwp.was.webapplicationserver.configure.ConfigureMaker;
 import jwp.was.webapplicationserver.configure.controller.info.ModelAndView;
+import jwp.was.webapplicationserver.configure.maker.ConfigureMaker;
 import jwp.was.webserver.HttpMethod;
 import jwp.was.webserver.HttpStatusCode;
 import jwp.was.webserver.dto.HttpRequest;
