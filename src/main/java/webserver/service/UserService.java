@@ -18,4 +18,13 @@ public class UserService {
             logger.debug("This request is not for creating User");
         }
     }
+
+    public static boolean isUser(HttpBody httpBody) {
+        try {
+            User user = DataBase.findUserById(httpBody.getValue("userId"));
+            return user.getPassword().equals(httpBody.getValue("password"));
+        } catch (NullPointerException e) {
+            return false;
+        }
+    }
 }
