@@ -8,7 +8,7 @@ public class HttpMessage {
     private static final String NEW_LINE = System.lineSeparator();
 
     private final StartLine startLine;
-    private final HttpHeader httpHeader;
+    protected final HttpHeader httpHeader;
     private final HttpBody httpBody;
 
     public HttpMessage(StartLine startLine, HttpHeader httpHeader, HttpBody httpBody) {

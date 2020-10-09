@@ -25,6 +25,10 @@ public class HttpRequestMessage extends HttpMessage {
     }
 
     public HttpUri getHttpUri() {
-        return requestLine.getHttpUri();
+        return this.requestLine.getHttpUri();
+    }
+
+    public String getHeaderValue(String headerField) {
+        return super.httpHeader.getHeaderValue(headerField);
     }
 }

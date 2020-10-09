@@ -24,7 +24,7 @@ public class QueryString {
         Objects.requireNonNull(queryString);
 
         if (queryString.isEmpty()) {
-            return new QueryString(new HashMap<>());
+            return empty();
         }
 
         Map<String, String> params = createParams(queryString);
@@ -60,12 +60,7 @@ public class QueryString {
     public String getParameterValue(String parameterKey) {
         StringUtils.validateNonNullAndNotEmpty(() -> new InvalidHttpMessageException(parameterKey), parameterKey);
 
-        String parameterValue = this.params.get(parameterKey);
-        if (Objects.isNull(parameterValue)) {
-            throw new NullPointerException(parameterKey + "에 해당하는 Parameter Key가 없습니다!");
-        }
-
-        return parameterValue;
+        return this.params.get(parameterKey);
     }
 
     public boolean isNotEmpty() {

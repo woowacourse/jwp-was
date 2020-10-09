@@ -108,6 +108,12 @@ public class HttpHeader {
         return HttpContentType.from(contentType);
     }
 
+    public String getHeaderValue(String headerField) {
+        StringUtils.validateNonNullAndNotEmpty(() -> new InvalidHttpMessageException(headerField), headerField);
+
+        return this.headers.get(headerField);
+    }
+
     public String toHttpMessage() {
         return this.headers.entrySet().stream()
                 .map(entry -> entry.getKey() + ": " + entry.getValue())

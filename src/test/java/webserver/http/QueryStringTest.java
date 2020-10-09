@@ -41,16 +41,14 @@ class QueryStringTest {
         assertThat(queryString.getParameterValue("nickname")).isEqualTo(nickNameValue.trim());
     }
 
-    @DisplayName("QueryString 객체가 모르는 Parameter key 값으로 value를 찾으면 NullPointerException 발생")
+    @DisplayName("QueryString 객체가 모르는 Parameter key 값으로 value를 찾으면 Null 반환")
     @Test
     void getParameterValueExceptionTest() {
         String queryStringValue = "id=abc&password=123";
         QueryString queryString = QueryString.from(queryStringValue);
         String invalidParameterKey = "email";
 
-        assertThatThrownBy(() -> queryString.getParameterValue(invalidParameterKey))
-                .isInstanceOf(NullPointerException.class)
-                .hasMessage(invalidParameterKey + "에 해당하는 Parameter Key가 없습니다!");
+        assertThat(queryString.getParameterValue(invalidParameterKey)).isNull();
     }
 
     @DisplayName("QueryString 객체의 Parameter가 있으면 true 반환")

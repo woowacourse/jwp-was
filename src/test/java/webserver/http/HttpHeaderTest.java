@@ -110,6 +110,41 @@ class HttpHeaderTest {
         assertThat(httpHeader.createHttpBody(br)).isInstanceOf(HttpBody.class);
     }
 
+    @DisplayName("HttpHeader에 존재하는 특정 필드의 값을 요청하면 정상적으로 반환")
+    @ParameterizedTest
+    @CsvSource(value = {"Host,localhost:8080", "Connection,keep-alive", "Content-Length,59",
+            "Content-Type,application/x-www-form-urlencoded", "Accept,*/*"})
+    void getHeaderValueTest(String headerField, String headerValue) throws IOException {
+        String requestHeaderLines = "Host: localhost:8080" + NEW_LINE +
+                "Connection: keep-alive" + NEW_LINE +
+                "Content-Length: 59" + NEW_LINE +
+                "Content-Type: application/x-www-form-urlencoded" + NEW_LINE +
+                "Accept: */*" + NEW_LINE +
+                NEW_LINE;
+
+        BufferedReader br = createBufferedReader(requestHeaderLines);
+        HttpHeader httpHeader = HttpHeader.from(br);
+
+        assertThat(httpHeader.getHeaderValue(headerField)).isEqualTo(headerValue);
+    }
+
+    @DisplayName("HttpHeader에 존재하지 않는 특정 필드의 값을 요청하면 null 반환")
+    @ParameterizedTest
+    @ValueSource(strings = {"Cookie", "Cache-Control", "If-None-Match"})
+    void getHeaderValueTest(String notExistHeaderField) throws IOException {
+        String requestHeaderLines = "Host: localhost:8080" + NEW_LINE +
+                "Connection: keep-alive" + NEW_LINE +
+                "Content-Length: 59" + NEW_LINE +
+                "Content-Type: application/x-www-form-urlencoded" + NEW_LINE +
+                "Accept: */*" + NEW_LINE +
+                NEW_LINE;
+
+        BufferedReader br = createBufferedReader(requestHeaderLines);
+        HttpHeader httpHeader = HttpHeader.from(br);
+
+        assertThat(httpHeader.getHeaderValue(notExistHeaderField)).isNull();
+    }
+
     private BufferedReader createBufferedReader(String content) {
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(content.getBytes());
         return new BufferedReader(new InputStreamReader(byteArrayInputStream));
