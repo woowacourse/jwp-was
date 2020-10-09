@@ -28,17 +28,17 @@
 ### 🚀 2단계 - HTTP 웹 서버 리팩토링
 
 - WAS
-    - [ ] 다수의 사용자 요청에 대해 Queue 에 저장한 후 순차적으로 처리한다.
-    - [ ] 매번 thread를 만들지 않고 thread pool을 이용한다.
+    - [X] 다수의 사용자 요청에 대해 Queue 에 저장한 후 순차적으로 처리한다.
+    - [X] 매번 thread를 만들지 않고 thread pool을 이용한다.
 
 - HTTP 요청/응답 처리
-    - [ ] 요청 Header/Body 처리 역할을 분리한다.
-    - [ ] 응답 Header/Body 처리 역할을 분리한다.
+    - [X] 요청 Header/Body 처리 역할을 분리한다.
+    - [X] 응답 Header/Body 처리 역할을 분리한다.
 
 - 코드 리팩토링
-    - [ ] RequestHandler 클래스의 책임을 분리한다.
-        - [ ] 요청을 처리할 수 있는 객체를 찾는 기능을 분리한다.
-        - [ ] 요청을 처리하는 기능을 분리한다.
+    - [X] RequestHandler 클래스의 책임을 분리한다.
+        - [X] 요청을 처리할 수 있는 객체를 찾는 기능을 분리한다.
+        - [X] 요청을 처리하는 기능을 분리한다.
 
 ## 우아한테크코스 코드리뷰
 * [온라인 코드 리뷰 과정](https://github.com/woowacourse/woowacourse-docs/blob/master/maincourse/README.md)
