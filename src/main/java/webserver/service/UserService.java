@@ -2,6 +2,7 @@ package webserver.service;
 
 import db.DataBase;
 import model.User;
+import model.Users;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.http.body.HttpBody;
@@ -29,5 +30,9 @@ public class UserService {
         }
 
         return user.getPassword().equals(httpBody.getValue("password"));
+    }
+
+    public static Users findAll() {
+        return new Users(DataBase.findAll());
     }
 }
