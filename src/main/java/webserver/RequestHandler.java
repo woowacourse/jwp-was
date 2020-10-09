@@ -7,16 +7,28 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import controller.LoginController;
+import controller.UserController;
 import http.HttpRequest;
 import http.HttpResponse;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private static final FrontController frontController = new FrontController();
+    private static final FrontController frontController;
+
+    static {
+        List<HandlerMapping> handlerMappings = new ArrayList<>();
+        handlerMappings.add(new ResourceHandlerMapping());
+        handlerMappings.add(new UrlHandlerMapping("/user/create", new UserController()));
+        handlerMappings.add(new UrlHandlerMapping("/user/login", new LoginController()));
+        frontController = new FrontController(handlerMappings);
+    }
 
     private final Socket connection;
 

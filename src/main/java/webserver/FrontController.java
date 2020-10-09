@@ -1,25 +1,21 @@
 package webserver;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import controller.Controller;
-import controller.LoginController;
-import controller.UserController;
 import http.HttpRequest;
 import http.HttpResponse;
 
 public class FrontController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
-    private static final List<HandlerMapping> handlerMappings = new ArrayList<>();
 
-    static {
-        handlerMappings.add(new ResourceHandlerMapping());
-        handlerMappings.add(new UrlHandlerMapping("/user/create", new UserController()));
-        handlerMappings.add(new UrlHandlerMapping("/user/login", new LoginController()));
+    private final List<HandlerMapping> handlerMappings;
+
+    public FrontController(final List<HandlerMapping> handlerMappings) {
+        this.handlerMappings = handlerMappings;
     }
 
     @Override
