@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class RequestBodyTest {
+class RequestBodyTest {
     @DisplayName("from: 요청 body를 받아 인스턴스를 생성한다.")
     @Test
     void from() {

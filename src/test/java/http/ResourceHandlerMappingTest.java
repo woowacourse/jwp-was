@@ -16,7 +16,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import webserver.ResourceHandlerMapping;
 
-public class ResourceHandlerMappingTest {
+class ResourceHandlerMappingTest {
     private static Stream<Arguments> provideRequestLineAndResult() {
         return Stream.of(
                 Arguments.of("GET /hello.js HTTP/1.1" + System.lineSeparator(), true),

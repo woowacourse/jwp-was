@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class IOUtilsTest {
+class IOUtilsTest {
     private static final Logger logger = LoggerFactory.getLogger(IOUtilsTest.class);
 
     @DisplayName("readBody: 요청 body를 읽는다.")

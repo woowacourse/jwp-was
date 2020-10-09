@@ -9,26 +9,26 @@ import utils.IOUtils;
 
 public class HttpRequest {
     private final RequestLine requestLine;
-    private final RequestHeaders requestHeaders;
+    private final HttpHeaders httpHeaders;
     private final RequestBody requestBody;
 
-    public HttpRequest(final RequestLine requestLine, final RequestHeaders requestHeaders,
+    public HttpRequest(final RequestLine requestLine, final HttpHeaders httpHeaders,
             final RequestBody requestBody) {
         this.requestLine = Objects.requireNonNull(requestLine, "request line이 존재하지 않습니다.");
-        this.requestHeaders = Objects.requireNonNull(requestHeaders, "request headers가 존재하지 않습니다.");
+        this.httpHeaders = Objects.requireNonNull(httpHeaders, "request headers가 존재하지 않습니다.");
         this.requestBody = requestBody;
     }
 
     public static HttpRequest from(final BufferedReader bufferedReader) throws IOException {
         List<String> requestLineAndHeader = IOUtils.readHeader(bufferedReader);
         RequestLine line = RequestLine.from(requestLineAndHeader.get(0));
-        RequestHeaders headers = RequestHeaders.from(requestLineAndHeader.subList(1, requestLineAndHeader.size()));
-        if (headers.hasContentLength()) {
-            int contentLength = headers.getContentLength();
+        HttpHeaders httpHeaders = HttpHeaders.from(requestLineAndHeader.subList(1, requestLineAndHeader.size()));
+        if (httpHeaders.hasContentLength()) {
+            int contentLength = httpHeaders.getContentLength();
             RequestBody body = RequestBody.from(IOUtils.readBody(bufferedReader, contentLength));
-            return new HttpRequest(line, headers, body);
+            return new HttpRequest(line, httpHeaders, body);
         }
-        return new HttpRequest(line, headers, null);
+        return new HttpRequest(line, httpHeaders, null);
     }
 
     public boolean equalsMethod(final HttpMethod httpMethod) {
@@ -52,7 +52,7 @@ public class HttpRequest {
     }
 
     public String getHeader(final String key) {
-        return requestHeaders.getHeader(key);
+        return httpHeaders.getHeader(key);
     }
 
     public String getBodyValue(final String key) {
@@ -63,8 +63,8 @@ public class HttpRequest {
         return requestLine;
     }
 
-    public RequestHeaders getRequestHeaders() {
-        return requestHeaders;
+    public HttpHeaders getHttpHeaders() {
+        return httpHeaders;
     }
 
     public RequestBody getRequestBody() {
@@ -75,7 +75,7 @@ public class HttpRequest {
     public String toString() {
         return "HttpRequest{" +
                 "requestLine=" + requestLine +
-                ", requestHeaders=" + requestHeaders +
+                ", requestHeaders=" + httpHeaders +
                 ", requestBody=" + requestBody +
                 '}';
     }

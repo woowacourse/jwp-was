@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-public class RequestLineTest {
+class RequestLineTest {
     @DisplayName("from: 헤더 첫 라인을 입력받아 인스턴스가 생성된다.")
     @Test
     void from() throws IOException {

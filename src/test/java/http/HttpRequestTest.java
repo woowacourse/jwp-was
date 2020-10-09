@@ -17,9 +17,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-public class HttpRequestTest {
+class HttpRequestTest {
     private static final RequestLine REQUEST_LINE = RequestLine.from("GET / HTTP/1.1");
-    private static final RequestHeaders REQUEST_HEADERS = RequestHeaders.from(
+    private static final HttpHeaders REQUEST_HTTP_HEADERS = HttpHeaders.from(
             Collections.singletonList("Host: localhost:8080"));
     private static final RequestBody REQUEST_BODY = RequestBody.from("userId=test@test.com&name=hello");
 
@@ -34,12 +34,12 @@ public class HttpRequestTest {
     @Test
     void constructor_BodyIsNotEmpty() {
         // when
-        HttpRequest httpRequest = new HttpRequest(REQUEST_LINE, REQUEST_HEADERS, REQUEST_BODY);
+        HttpRequest httpRequest = new HttpRequest(REQUEST_LINE, REQUEST_HTTP_HEADERS, REQUEST_BODY);
 
         // then
         assertAll(
                 () -> assertThat(httpRequest.getRequestLine()).isNotNull(),
-                () -> assertThat(httpRequest.getRequestHeaders()).isNotNull(),
+                () -> assertThat(httpRequest.getHttpHeaders()).isNotNull(),
                 () -> assertThat(httpRequest.getRequestBody()).isNotNull()
         );
     }
@@ -76,7 +76,7 @@ public class HttpRequestTest {
     @ParameterizedTest
     void equalsPath(final String path, final boolean expect) {
         // when
-        HttpRequest httpRequest = new HttpRequest(REQUEST_LINE, REQUEST_HEADERS, REQUEST_BODY);
+        HttpRequest httpRequest = new HttpRequest(REQUEST_LINE, REQUEST_HTTP_HEADERS, REQUEST_BODY);
 
         // when
         boolean actual = httpRequest.equalsPath(path);
