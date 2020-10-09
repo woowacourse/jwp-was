@@ -1,5 +1,6 @@
 package utils;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
@@ -11,6 +12,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class BufferedReaderUtilsTest {
+    @DisplayName("request에서 header부분만을 map으로 읽어들인다")
     @Test
     void readHeader() throws IOException {
         String data = "Host: localhost:8080\n"

@@ -15,7 +15,7 @@ public class UserListController extends AbstractController {
 
     protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         try {
-            if (isLoginUser(httpRequest)) {
+            if (isNotLoginUser(httpRequest)) {
                 httpResponse.sendRedirect("/user/login.html");
                 return;
             }
@@ -28,7 +28,7 @@ public class UserListController extends AbstractController {
         }
     }
 
-    private boolean isLoginUser(HttpRequest httpRequest) {
+    private boolean isNotLoginUser(HttpRequest httpRequest) {
         return !httpRequest.containsKeyInCookie(SESSION_KEY_OF_LOGIN)
                 || httpRequest.getCookie(SESSION_KEY_OF_LOGIN).equals(Boolean.toString(false));
     }
