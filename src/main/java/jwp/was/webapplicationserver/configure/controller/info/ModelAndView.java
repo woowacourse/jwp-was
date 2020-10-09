@@ -20,6 +20,15 @@ public class ModelAndView {
     private static final String TEXT_HTML = "text/html";
     private static final String PREFIX_HANDLEBAR_FILE = "/webapp";
     private static final String SUFFIX_HANDLEBAR_FILE = ".html";
+    private static final Handlebars handlebars;
+
+    static {
+        TemplateLoader loader = new ClassPathTemplateLoader();
+        loader.setPrefix(PREFIX_HANDLEBAR_FILE);
+        loader.setSuffix(SUFFIX_HANDLEBAR_FILE);
+        handlebars = new Handlebars(loader);
+        handlebars.registerHelper("rowNumber", new RowNumberHelper());
+    }
 
     private final Object model;
     private final String view;
@@ -42,11 +51,6 @@ public class ModelAndView {
     }
 
     private String makeBody() throws IOException {
-        TemplateLoader loader = new ClassPathTemplateLoader();
-        loader.setPrefix(PREFIX_HANDLEBAR_FILE);
-        loader.setSuffix(SUFFIX_HANDLEBAR_FILE);
-        Handlebars handlebars = new Handlebars(loader);
-        handlebars.registerHelper("rowNumber", new RowNumberHelper());
         Template template = handlebars.compile(view);
         return template.apply(model);
     }
