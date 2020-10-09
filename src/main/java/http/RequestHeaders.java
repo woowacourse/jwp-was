@@ -37,4 +37,11 @@ public class RequestHeaders {
     public Map<String, String> getHeaders() {
         return Collections.unmodifiableMap(headers);
     }
+
+    @Override
+    public String toString() {
+        return "RequestHeaders{" +
+                "headers=" + headers +
+                '}';
+    }
 }

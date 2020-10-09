@@ -18,7 +18,7 @@ public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private static final FrontController frontController = new FrontController();
 
-    private Socket connection;
+    private final Socket connection;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -35,11 +35,11 @@ public class RequestHandler implements Runnable {
              OutputStream outputStream = connection.getOutputStream();
              DataOutputStream dataOutputStream = new DataOutputStream(outputStream)) {
             HttpRequest httpRequest = HttpRequest.from(bufferedReader);
-            logger.info(httpRequest.toString());
+            logger.info("Request: {}", httpRequest.getRequestLine());
             HttpResponse httpResponse = new HttpResponse(dataOutputStream);
             frontController.service(httpRequest, httpResponse);
         } catch (Exception exception) {
-            logger.error(exception.getMessage());
+            logger.error("Unhandled exception occur. ", exception);
         }
     }
 }
