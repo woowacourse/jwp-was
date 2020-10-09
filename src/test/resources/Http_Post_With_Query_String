@@ -3,6 +3,7 @@ Host: localhost:8080
 Connection: keep-alive
 Content-Length: 46
 Content-Type: application/x-www-form-urlencoded
+Cookie: _ga=GA1.1.1321239274.1597885260; logined=true
 Accept: */*
 
 userId=javajigi&password=password&name=JaeSung

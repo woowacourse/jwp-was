@@ -4,15 +4,17 @@ import org.springframework.util.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BufferedReaderUtils {
-    public static List<String> readHeader(BufferedReader br) throws IOException {
+    private static final String COLON_DELIMITER = ": ";
+
+    public static Map<String, String> readHeader(BufferedReader br) throws IOException {
         String line;
-        List<String> lines = new ArrayList<>();
+        Map<String, String> lines = new HashMap<>();
         while (!StringUtils.isEmpty(line = br.readLine())) {
-            lines.add(line);
+            lines.put(line.split(COLON_DELIMITER)[0], line.split(COLON_DELIMITER)[1]);
         }
         return lines;
     }

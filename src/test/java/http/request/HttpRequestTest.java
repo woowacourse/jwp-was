@@ -1,6 +1,7 @@
 package http.request;
 
 import http.factory.HttpRequestFactory;
+import http.servlet.SessionContainer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -25,7 +26,8 @@ class HttpRequestTest {
 
         HttpRequest request = HttpRequestFactory.createRequest(reader);
 
-        assertThat(request.notContainsSessionId()).isFalse();
+        assertThat(request.containsKeyInCookie(SessionContainer.SESSION_KEY_FOR_COOKIE)).isTrue();
+
     }
 
     @DisplayName("요청에 sessionId가 있는지 확인 - sessionId가 없는 경우")
@@ -36,6 +38,6 @@ class HttpRequestTest {
 
         HttpRequest request = HttpRequestFactory.createRequest(reader);
 
-        assertThat(request.notContainsSessionId()).isTrue();
+        assertThat(request.containsKeyInCookie(SessionContainer.SESSION_KEY_FOR_COOKIE)).isFalse();
     }
 }

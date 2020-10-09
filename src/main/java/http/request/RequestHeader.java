@@ -1,13 +1,9 @@
 package http.request;
 
-import utils.Extractor;
-
 import java.util.Map;
 import java.util.Objects;
 
 public class RequestHeader {
-    public static final String COOKIE = "Cookie";
-
     private final Map<String, String> header;
 
     public RequestHeader(Map<String, String> header) {
@@ -22,11 +18,6 @@ public class RequestHeader {
         return header.containsKey(key);
     }
 
-    public boolean isLogined() {
-        String cookie = header.get(COOKIE);
-        return cookie.contains("logined=true");
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -38,10 +29,5 @@ public class RequestHeader {
     @Override
     public int hashCode() {
         return Objects.hash(header);
-    }
-
-    public boolean containsSessionId() {
-        String cookie = header.get(COOKIE);
-        return Extractor.sessionIdFrom(cookie).isPresent();
     }
 }

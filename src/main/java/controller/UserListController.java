@@ -11,10 +11,11 @@ import java.io.IOException;
 
 public class UserListController extends AbstractController {
     private static final String PATH = "/user/list";
+    public static final String SESSION_KEY_OF_LOGIN = "logined";
 
     protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         try {
-            if (httpRequest.isNotLogined()) {
+            if (isLoginUser(httpRequest)) {
                 httpResponse.sendRedirect("/user/login.html");
                 return;
             }
@@ -25,6 +26,11 @@ public class UserListController extends AbstractController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean isLoginUser(HttpRequest httpRequest) {
+        return !httpRequest.containsKeyInCookie(SESSION_KEY_OF_LOGIN)
+                || httpRequest.getCookie(SESSION_KEY_OF_LOGIN).equals(Boolean.toString(false));
     }
 
     @Override

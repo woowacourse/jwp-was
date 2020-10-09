@@ -1,5 +1,6 @@
 package http.response;
 
+import http.request.Cookie;
 import http.request.HttpMethod;
 import http.request.HttpRequest;
 import http.request.RequestHeader;
@@ -26,7 +27,9 @@ class HttpResponseTest {
         HttpRequest httpRequest = new HttpRequest(
                 new RequestLine(HttpMethod.GET, "/index.html"),
                 new RequestHeader(header),
-                new RequestParams(new HashMap<>())
+                new RequestParams(new HashMap<>()),
+                new Cookie(new HashMap<>())
+
         );
         response.forward(httpRequest);
     }
