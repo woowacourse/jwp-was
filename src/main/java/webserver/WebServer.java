@@ -15,7 +15,7 @@ public class WebServer {
     private static final int DEFAULT_PORT = 8080;
     private static final int THREAD_POOL_FACTOR = 2;
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         try {
             int port = initializePort(args);
             ExecutorService executorService = initializeThreadPool();
