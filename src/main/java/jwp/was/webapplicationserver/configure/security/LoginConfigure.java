@@ -7,11 +7,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import jwp.was.webapplicationserver.configure.controller.info.HttpInfo;
-import jwp.was.webapplicationserver.configure.session.HttpSession;
-import jwp.was.webapplicationserver.configure.session.HttpSessions;
 import jwp.was.webserver.HttpMethod;
 import jwp.was.webserver.HttpStatusCode;
 import jwp.was.webserver.dto.HttpRequest;
@@ -24,9 +21,7 @@ public class LoginConfigure {
     private static final LoginConfigure INSTANCE = new LoginConfigure();
     private static final String NEED_LOGIN_MESSAGE = "로그인이 필요합니다.";
     private static final String LOGIN_PAGE = "/user/login.html";
-    private static final String COOKIE_DELIMITER = ";";
 
-    private final HttpSessions httpSessions = HttpSessions.getInstance();
     private final Set<HttpInfo> withLogin;
 
     public LoginConfigure() {
@@ -44,44 +39,10 @@ public class LoginConfigure {
             = HttpInfo.of(httpRequest.getHttpMethod(), httpRequest.getUrlPath());
 
         if (withLogin.contains(requestHttpInfo)) {
-            String cookie = httpRequest.getHeader(COOKIE);
-            return verifyCookie(cookie);
+            Cookie cookie = new Cookie(httpRequest.getHeader(COOKIE));
+            return cookie.verifySessionId();
         }
         return true;
-    }
-
-    private boolean verifyCookie(String cookie) {
-        if (Objects.isNull(cookie)) {
-            return false;
-        }
-        return verifySessionId(cookie);
-    }
-
-    private boolean verifySessionId(String cookie) {
-        String sessionId = getSessionId(cookie);
-        if (Objects.isNull(sessionId) || sessionId.isEmpty()) {
-            return false;
-        }
-        return existsUser(sessionId);
-    }
-
-    private boolean existsUser(String sessionId) {
-        HttpSession session = httpSessions.findSession(sessionId);
-        if (Objects.isNull(session)) {
-            return false;
-        }
-        Object user = session.getAttribute(ATTRIBUTE_KEY_USER);
-        return Objects.nonNull(user);
-    }
-
-    private String getSessionId(String cookies) {
-        String[] splitCookie = cookies.split(COOKIE_DELIMITER);
-        for (String cookie : splitCookie) {
-            if (cookie.startsWith(SET_COOKIE_SESSION_ID_KEY)) {
-                return cookie.substring(SET_COOKIE_SESSION_ID_KEY.length());
-            }
-        }
-        return null;
     }
 
     public HttpResponse getRedirectLoginPage(HttpRequest httpRequest) {
