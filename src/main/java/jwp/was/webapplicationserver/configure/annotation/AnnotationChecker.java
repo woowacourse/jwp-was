@@ -2,11 +2,11 @@ package jwp.was.webapplicationserver.configure.annotation;
 
 import java.lang.annotation.Annotation;
 
-public class AnnotationHelper {
+public class AnnotationChecker {
 
     private static final int HAS_NOT_SIZE = 0;
 
-    private AnnotationHelper() {
+    private AnnotationChecker() {
     }
 
     public static <T extends Annotation> boolean includeAnnotation(Object configureInstance,

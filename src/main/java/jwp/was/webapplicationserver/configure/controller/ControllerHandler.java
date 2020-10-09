@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import jwp.was.webapplicationserver.configure.annotation.AnnotationHelper;
+import jwp.was.webapplicationserver.configure.annotation.AnnotationChecker;
 import jwp.was.webapplicationserver.configure.annotation.ResponseBody;
 import jwp.was.webapplicationserver.configure.controller.info.MatchedInfo;
 import jwp.was.webapplicationserver.configure.controller.info.ModelAndView;
@@ -70,7 +70,7 @@ public class ControllerHandler {
     private HttpResponse getHttpResponse(HttpRequest httpRequest, Method method, Object instance)
         throws IllegalAccessException, InvocationTargetException {
 
-        if (AnnotationHelper.includeAnnotation(instance, ResponseBody.class)) {
+        if (AnnotationChecker.includeAnnotation(instance, ResponseBody.class)) {
             return (HttpResponse) method.invoke(instance, httpRequest);
         }
         ModelAndView modelAndView = (ModelAndView) method.invoke(instance, httpRequest);

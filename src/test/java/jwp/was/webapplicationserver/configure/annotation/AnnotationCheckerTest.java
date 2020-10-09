@@ -9,7 +9,7 @@ import jwp.was.util.annotation.SoleClass;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class AnnotationHelperTest {
+class AnnotationCheckerTest {
 
     private static final IncludedClass INCLUDED_CLASS_INSTANCE = new IncludedClass();
     private static final SoleClass SOLE_CLASS_INSTANCE = new SoleClass();
@@ -18,7 +18,8 @@ class AnnotationHelperTest {
     @Test
     void includeAnnotation_HasAnnotation_ReturnTrue() {
         boolean withMainAnnotation
-            = AnnotationHelper.includeAnnotation(INCLUDED_CLASS_INSTANCE, IncludedAnnotation.class);
+            = AnnotationChecker
+            .includeAnnotation(INCLUDED_CLASS_INSTANCE, IncludedAnnotation.class);
 
         assertThat(withMainAnnotation).isTrue();
     }
@@ -27,7 +28,7 @@ class AnnotationHelperTest {
     @Test
     void includeAnnotation_includeAnnotation_ReturnTrue() {
         boolean withMainAnnotation
-            = AnnotationHelper.includeAnnotation(INCLUDED_CLASS_INSTANCE, SoleAnnotation.class);
+            = AnnotationChecker.includeAnnotation(INCLUDED_CLASS_INSTANCE, SoleAnnotation.class);
 
         assertThat(withMainAnnotation).isTrue();
     }
@@ -36,7 +37,7 @@ class AnnotationHelperTest {
     @Test
     void includeAnnotation_HasNotAndExcludeAnnotation_ReturnFalse() {
         boolean withMainAnnotation
-            = AnnotationHelper.includeAnnotation(SOLE_CLASS_INSTANCE, IncludedAnnotation.class);
+            = AnnotationChecker.includeAnnotation(SOLE_CLASS_INSTANCE, IncludedAnnotation.class);
 
         assertThat(withMainAnnotation).isFalse();
     }

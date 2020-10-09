@@ -7,7 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
-import jwp.was.webapplicationserver.configure.annotation.AnnotationHelper;
+import jwp.was.webapplicationserver.configure.annotation.AnnotationChecker;
 import jwp.was.webapplicationserver.configure.annotation.Autowired;
 import jwp.was.webapplicationserver.configure.annotation.Configure;
 import org.reflections.Reflections;
@@ -86,7 +86,7 @@ public class ConfigureMaker {
 
     public <T extends Annotation> Set<Object> getConfiguresWithAnnotation(Class<T> annotation) {
         return configures.stream()
-            .filter(configure -> AnnotationHelper.includeAnnotation(configure, annotation))
+            .filter(configure -> AnnotationChecker.includeAnnotation(configure, annotation))
             .collect(Collectors.toSet());
     }
 
