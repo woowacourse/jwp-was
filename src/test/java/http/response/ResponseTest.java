@@ -1,37 +1,61 @@
 package http.response;
 
-import common.TestFileIo;
-import http.ContentType;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-public class ResponseTest {
+import http.ContentType;
+import http.request.RequestMethod;
+
+class ResponseTest {
     @DisplayName("found 테스트")
     @Test
-    void responseFound() throws Exception {
-        Response response = new Response(TestFileIo.createOutputStream("http_found.txt"));
+    void responseFound() {
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+        Response response = new Response(result);
         response.found("/index.html");
-        BufferedReader br = TestFileIo.readBufferedReader("http_Found.txt");
 
-        assertThat(br.readLine()).isEqualTo("HTTP/1.1 302 Found ");
-        assertThat(br.readLine()).isEqualTo("Location: /index.html ");
+        String actual = result.toString();
+
+        assertAll(
+                () -> assertThat(actual).contains("HTTP/1.1 302 Found "),
+                () -> assertThat(actual).contains("Location: /index.html ")
+        );
     }
 
     @DisplayName("ok 테스트")
     @Test
     void responseOk() throws IOException, URISyntaxException {
-        Response response = new Response(TestFileIo.createOutputStream("http_ok.txt"));
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+        Response response = new Response(result);
         response.ok("/index.html", ContentType.HTML.getContentType());
-        BufferedReader br = TestFileIo.readBufferedReader("http_ok.txt");
 
-        assertThat(br.readLine()).isEqualTo("HTTP/1.1 200 OK ");
-        assertThat(br.readLine()).isEqualTo("Content-Length: 7049 ");
-        assertThat(br.readLine()).isEqualTo("Content-Type: text/html;charset=UTF-8 ");
+        String actual = result.toString();
+
+        assertAll(
+                () -> assertThat(actual).contains("HTTP/1.1 200 OK "),
+                () -> assertThat(actual).contains("Content-Type: text/html;charset=UTF-8 ")
+        );
+    }
+
+    @DisplayName("methodNotAllowed 테스트")
+    @Test
+    void responseMethodNotAllowed() {
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+        Response response = new Response(result);
+        response.methodNotAllowed(RequestMethod.POST);
+
+        String actual = result.toString();
+
+        assertAll(
+                () -> assertThat(actual).contains("HTTP/1.1 405 Method Not Allowed "),
+                () -> assertThat(actual).contains("Request method POST not supported")
+        );
     }
 }

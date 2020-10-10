@@ -1,15 +1,19 @@
 package http.request;
 
-import exception.IllegalRequestException;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.*;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import exception.IllegalRequestException;
 
 class RequestBodyTest {
 
@@ -40,7 +44,8 @@ class RequestBodyTest {
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
         requestBody = new RequestBody(br, 7);
 
-        assertThatThrownBy(() -> requestBody.parseRequestBody()).isInstanceOf(IllegalRequestException.class)
-                .hasMessage("적절하지 않은 요청입니다.");
+        assertThatThrownBy(() -> requestBody.parseRequestBody())
+                .isInstanceOf(IllegalRequestException.class)
+                .hasMessage("key, value 쌍이 완전하지 않습니다.");
     }
 }
