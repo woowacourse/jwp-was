@@ -11,30 +11,23 @@ public class HttpResponse {
     private static final String LINE_SEPARATOR = System.lineSeparator();
 
     private final DataOutputStream dataOutputStream;
+    private final HttpHeaders httpHeaders;
 
     public HttpResponse(final DataOutputStream dataOutputStream) {
         this.dataOutputStream = dataOutputStream;
+        this.httpHeaders = HttpHeaders.empty();
     }
 
     public void response200Header(String contentType, int lengthOfBodyContent) {
-        HttpHeaders httpHeaders = HttpHeaders.empty();
         httpHeaders.setContentType(contentType);
         httpHeaders.setContentLength(lengthOfBodyContent);
-        responseHeader(ResponseStatusLine.OK, httpHeaders);
+        responseHeader(ResponseStatusLine.OK);
     }
 
-    public void response302Header(String location) {
-        HttpHeaders httpHeaders = HttpHeaders.empty();
+    public void sendRedirect(String location) {
         httpHeaders.setLocation(location);
-        responseHeader(ResponseStatusLine.FOUND, httpHeaders);
-    }
-
-    public void response404Header() {
-        responseHeader(ResponseStatusLine.NOT_FOUND);
-    }
-
-    public void response500Header() {
-        responseHeader(ResponseStatusLine.INTERNAL_SERVER_ERROR);
+        responseHeader(ResponseStatusLine.FOUND);
+        noContent();
     }
 
     public void ok(byte[] body) {
@@ -54,22 +47,20 @@ public class HttpResponse {
         }
     }
 
-    private void responseHeader(final ResponseStatusLine responseStatusLine) {
+    public void responseHeader(final ResponseStatusLine responseStatusLine) {
         try {
-            dataOutputStream.writeBytes(responseStatusLine.toMessage() + LINE_SEPARATOR);
-            dataOutputStream.writeBytes(LINE_SEPARATOR);
+            responseHeader(responseStatusLine, httpHeaders.isNotEmpty());
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void responseHeader(final ResponseStatusLine responseStatusLine, final HttpHeaders httpHeaders) {
-        try {
-            dataOutputStream.writeBytes(responseStatusLine.toMessage() + LINE_SEPARATOR);
-            dataOutputStream.writeBytes(httpHeaders.toMessage(LINE_SEPARATOR) + LINE_SEPARATOR);
-            dataOutputStream.writeBytes(LINE_SEPARATOR);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
+    private void responseHeader(final ResponseStatusLine responseStatusLine, final boolean hasHeader) throws
+            IOException {
+        dataOutputStream.writeBytes(responseStatusLine.toMessage() + LINE_SEPARATOR);
+        if (hasHeader) {
+            dataOutputStream.writeBytes(httpHeaders.toMessage() + LINE_SEPARATOR);
         }
+        dataOutputStream.writeBytes(LINE_SEPARATOR);
     }
 }

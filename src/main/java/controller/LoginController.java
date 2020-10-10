@@ -3,7 +3,7 @@ package controller;
 import db.DataBase;
 import http.HttpRequest;
 import http.HttpResponse;
-import webserver.AuthorizationException;
+import webserver.AuthenticationException;
 
 public class LoginController extends AbstractController {
     @Override
@@ -13,9 +13,9 @@ public class LoginController extends AbstractController {
 
         DataBase.findUserById(userId)
                 .filter(user -> user.isSamePassword(password))
-                .orElseThrow(() -> new AuthorizationException("사용자의 아이디 또는 비밀번호가 올바르지 않습니다."));
+                .orElseThrow(() -> new AuthenticationException("사용자의 아이디 또는 비밀번호가 올바르지 않습니다."));
 
-        httpResponse.response302Header("/index.html");
+        httpResponse.sendRedirect("/index.html");
         httpResponse.noContent();
     }
 }

@@ -32,10 +32,14 @@ public class HttpHeaders {
         return new HttpHeaders(new HashMap<>());
     }
 
-    public String toMessage(final String postfix) {
+    public boolean isNotEmpty() {
+        return !headers.isEmpty();
+    }
+
+    public String toMessage() {
         return headers.entrySet().stream()
                 .map(header -> header.getKey() + HEADER_KEY_VALUE_DELIMITER + header.getValue())
-                .collect(Collectors.joining(postfix));
+                .collect(Collectors.joining(System.lineSeparator()));
     }
 
     public boolean hasContentLength() {

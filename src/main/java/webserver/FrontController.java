@@ -6,8 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import controller.Controller;
+import controller.MethodNotSupportException;
 import http.HttpRequest;
 import http.HttpResponse;
+import http.ResponseStatusLine;
 
 public class FrontController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
@@ -23,13 +25,17 @@ public class FrontController implements Controller {
         try {
             Controller controller = getHandler(httpRequest);
             controller.service(httpRequest, httpResponse);
-        } catch (HandlerNotFoundException exception) {
+        } catch (MethodNotSupportException | HandlerNotFoundException exception) {
             logger.info(exception.getMessage());
-            httpResponse.response404Header();
+            httpResponse.responseHeader(ResponseStatusLine.NOT_FOUND);
+            httpResponse.noContent();
+        } catch (AuthenticationException exception) {
+            logger.info(exception.getMessage());
+            httpResponse.responseHeader(ResponseStatusLine.UNAUTHORIZED);
             httpResponse.noContent();
         } catch (Exception exception) {
-            logger.error(exception.getMessage());
-            httpResponse.response500Header();
+            logger.error("Unhandled exception occur. ", exception);
+            httpResponse.responseHeader(ResponseStatusLine.INTERNAL_SERVER_ERROR);
             httpResponse.noContent();
         }
     }
