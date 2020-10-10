@@ -5,6 +5,7 @@ import static model.ContentType.ICO;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Optional;
 import model.ContentType;
 import model.Method;
 import model.Request;

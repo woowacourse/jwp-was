@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 public enum ContentType {
 
@@ -19,11 +20,10 @@ public enum ContentType {
         this.extension = extension;
     }
 
-    public static ContentType of(String extension) {
+    public static Optional<ContentType> of(String extension) {
         return Arrays.stream(values())
             .filter(c -> c.extension.equals(extension))
-            .findFirst()
-            .orElse(null);
+            .findFirst();
     }
 
     public String getContentTypeValue() {

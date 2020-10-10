@@ -14,13 +14,17 @@ public class ContentTypeTest {
     @DisplayName("ContentType of")
     @ValueSource(strings = {".html", ".css", ".js", ".woff", ".ttf", ".ico"})
     void create(String extension) {
-        assertThat(ContentType.of(extension)).isInstanceOf(ContentType.class);
+        ContentType contentType = ContentType.of(extension)
+            .orElse(null);
+        assertThat(contentType).isInstanceOf(ContentType.class);
     }
 
     @Test
-    @DisplayName("ContentType - extension이 없을 경우")
+    @DisplayName("ContentType - extension을 알 수 없는 경우")
     void create_IfNoExtension_ReturnNull() {
-        assertThat(ContentType.of(null)).isNull();
+        ContentType contentType = ContentType.of("unknown")
+            .orElse(null);
+        assertThat(contentType).isNull();
     }
 
     @ParameterizedTest
@@ -34,7 +38,8 @@ public class ContentTypeTest {
         ".ico:image/x-icon"
     }, delimiter = ':')
     void getContentType(String extension, String contentTypeValue) {
-        ContentType contentType = ContentType.of(extension);
+        ContentType contentType = ContentType.of(extension)
+            .orElse(null);
 
         assertThat(contentType.getContentTypeValue()).isEqualTo(contentTypeValue);
     }

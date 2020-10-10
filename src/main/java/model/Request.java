@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Optional;
 import utils.StringUtils;
 
 public class Request {
@@ -17,7 +18,8 @@ public class Request {
         this.method = Method.of(method);
         this.location = location;
         this.parameters = parameters;
-        this.contentType = ContentType.of(contentType);
+        this.contentType = ContentType.of(contentType)
+            .orElse(null);
     }
 
     public static Request of(InputStream inputStream) throws IOException {
