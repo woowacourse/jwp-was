@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
-public class HttpHttpRequestHeaderTest {
+public class HttpRequestHeaderTest {
 
     @Test
     void add() {
