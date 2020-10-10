@@ -10,6 +10,7 @@ import java.util.function.BiConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
+import utils.HttpUtils;
 import utils.StringUtils;
 import webserver.RequestHandler;
 
@@ -87,7 +88,7 @@ public enum ResponseProvider {
                     + ";charset=utf-8\r\n");
         }
         if (Objects.nonNull(contentType) && status.isNeedBody()) {
-            byte[] body = FileIoUtils.loadFileFromClasspath(StringUtils.generatePath(request));
+            byte[] body = FileIoUtils.loadFileFromClasspath(HttpUtils.generatePath(request));
             dataOutputStream.writeBytes("Content-Length: " + body.length + "\r\n");
         }
         if (status.isNeedLocation()) {
@@ -103,7 +104,7 @@ public enum ResponseProvider {
         if (!(Objects.nonNull(contentType) && status.isNeedBody())) {
             return;
         }
-        byte[] body = FileIoUtils.loadFileFromClasspath(StringUtils.generatePath(request));
+        byte[] body = FileIoUtils.loadFileFromClasspath(HttpUtils.generatePath(request));
         dataOutputStream.write(body, 0, body.length);
         dataOutputStream.flush();
     }

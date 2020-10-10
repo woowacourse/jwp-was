@@ -72,7 +72,7 @@ class StringUtilsTest {
             InputStream inputStream = new FileInputStream(filePath);
             Request request = Request.of(inputStream);
 
-            assertThat(StringUtils.generatePath(request)).isEqualTo(expected);
+            assertThat(HttpUtils.generatePath(request)).isEqualTo(expected);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -107,7 +107,7 @@ class StringUtilsTest {
             String line = bufferedReader.readLine();
 
             String method = StringUtils.extractRequestMethod(line);
-            String parameters = StringUtils.getParameters(line, method, bufferedReader);
+            String parameters = HttpUtils.getParameters(line, method, bufferedReader);
 
             assertThat(parameters).isEqualTo(
                 "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net");
@@ -127,7 +127,7 @@ class StringUtilsTest {
             String line = bufferedReader.readLine();
 
             String method = StringUtils.extractRequestMethod(line);
-            String parameters = StringUtils.getParameters(line, method, bufferedReader);
+            String parameters = HttpUtils.getParameters(line, method, bufferedReader);
 
             assertThat(parameters).isEqualTo(
                 "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net");

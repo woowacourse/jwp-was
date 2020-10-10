@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Optional;
+import utils.HttpUtils;
 import utils.StringUtils;
 
 public class Request {
@@ -29,7 +30,7 @@ public class Request {
 
         String method = StringUtils.extractRequestMethod(line);
         String location = StringUtils.extractRequestLocation(line);
-        String parameters = StringUtils.getParameters(line, method, bufferedReader);
+        String parameters = HttpUtils.getParameters(line, method, bufferedReader);
         String contentType = StringUtils.extractExtension(line);
 
         return new Request(method, location, parameters, contentType);
