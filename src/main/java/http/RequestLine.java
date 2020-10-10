@@ -13,7 +13,7 @@ public class RequestLine {
     private RequestLine(final HttpMethod method, final Uri uri, final String version) {
         this.method = Objects.requireNonNull(method, "http 메서드가 존재하지 않습니다.");
         this.uri = Objects.requireNonNull(uri, "uri가 존재하지 않습니다.");
-        this.version = Objects.requireNonNull(version, "protocol이 존재하지 않습니다.");
+        this.version = Objects.requireNonNull(version, "version이 존재하지 않습니다.");
     }
 
     public static RequestLine from(final String requestLine) {
@@ -53,7 +53,7 @@ public class RequestLine {
         return "RequestLine{" +
                 "method=" + method +
                 ", uri='" + uri + '\'' +
-                ", protocol='" + version + '\'' +
+                ", version='" + version + '\'' +
                 '}';
     }
 }

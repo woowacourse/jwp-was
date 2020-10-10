@@ -8,53 +8,29 @@ import org.slf4j.LoggerFactory;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
+    private static final String LINE_SEPARATOR = System.lineSeparator();
 
     private final DataOutputStream dataOutputStream;
+    private final HttpHeaders httpHeaders;
 
     public HttpResponse(final DataOutputStream dataOutputStream) {
         this.dataOutputStream = dataOutputStream;
+        this.httpHeaders = HttpHeaders.empty();
     }
 
     public void response200Header(String contentType, int lengthOfBodyContent) {
-        try {
-            dataOutputStream.writeBytes("HTTP/1.1 200 OK " + System.lineSeparator());
-            dataOutputStream.writeBytes("Content-Type:  " + contentType + ";charset=utf-8" + System.lineSeparator());
-            dataOutputStream.writeBytes("Content-Length: " + lengthOfBodyContent + System.lineSeparator());
-            dataOutputStream.writeBytes(System.lineSeparator());
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+        httpHeaders.setContentType(contentType);
+        httpHeaders.setContentLength(lengthOfBodyContent);
+        responseHeader(ResponseStatusLine.OK);
     }
 
-    public void response302Header(String location) {
-        try {
-            dataOutputStream.writeBytes("HTTP/1.1 302 Found " + System.lineSeparator());
-            dataOutputStream.writeBytes("Location: " + location + System.lineSeparator());
-            dataOutputStream.writeBytes(System.lineSeparator());
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+    public void sendRedirect(String location) {
+        httpHeaders.setLocation(location);
+        responseHeader(ResponseStatusLine.FOUND);
+        noContent();
     }
 
-    public void response404Header() {
-        try {
-            dataOutputStream.writeBytes("HTTP/1.1 404 Not Found " + System.lineSeparator());
-            dataOutputStream.writeBytes(System.lineSeparator());
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    public void response500Header() {
-        try {
-            dataOutputStream.writeBytes("HTTP/1.1 500 Internal Server Error " + System.lineSeparator());
-            dataOutputStream.writeBytes(System.lineSeparator());
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    public void responseBody(byte[] body) {
+    public void ok(byte[] body) {
         try {
             dataOutputStream.write(body, 0, body.length);
             dataOutputStream.flush();
@@ -63,11 +39,28 @@ public class HttpResponse {
         }
     }
 
-    public void emptyBody() {
+    public void noContent() {
         try {
             dataOutputStream.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    public void responseHeader(final ResponseStatusLine responseStatusLine) {
+        try {
+            responseHeader(responseStatusLine, httpHeaders.isNotEmpty());
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void responseHeader(final ResponseStatusLine responseStatusLine, final boolean hasHeader) throws
+            IOException {
+        dataOutputStream.writeBytes(responseStatusLine.toMessage() + LINE_SEPARATOR);
+        if (hasHeader) {
+            dataOutputStream.writeBytes(httpHeaders.toMessage() + LINE_SEPARATOR);
+        }
+        dataOutputStream.writeBytes(LINE_SEPARATOR);
     }
 }

@@ -7,18 +7,30 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import controller.LoginController;
+import controller.UserController;
 import http.HttpRequest;
 import http.HttpResponse;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private static final FrontController frontController = new FrontController();
+    private static final FrontController frontController;
 
-    private Socket connection;
+    static {
+        List<HandlerMapping> handlerMappings = new ArrayList<>();
+        handlerMappings.add(new ResourceHandlerMapping());
+        handlerMappings.add(new UrlHandlerMapping("/user/create", new UserController()));
+        handlerMappings.add(new UrlHandlerMapping("/user/login", new LoginController()));
+        frontController = new FrontController(handlerMappings);
+    }
+
+    private final Socket connection;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -35,10 +47,11 @@ public class RequestHandler implements Runnable {
              OutputStream outputStream = connection.getOutputStream();
              DataOutputStream dataOutputStream = new DataOutputStream(outputStream)) {
             HttpRequest httpRequest = HttpRequest.from(bufferedReader);
+            logger.info("Request: {}", httpRequest.getRequestLine());
             HttpResponse httpResponse = new HttpResponse(dataOutputStream);
-            frontController.doService(httpRequest, httpResponse);
+            frontController.service(httpRequest, httpResponse);
         } catch (Exception exception) {
-            logger.error(exception.getMessage());
+            logger.error("Unhandled exception occur. ", exception);
         }
     }
 }

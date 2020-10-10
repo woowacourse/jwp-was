@@ -1,44 +1,50 @@
 package webserver;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import http.HttpMethod;
+import controller.Controller;
+import controller.MethodNotSupportException;
 import http.HttpRequest;
 import http.HttpResponse;
+import http.ResponseStatusLine;
 
-public class FrontController {
+public class FrontController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
-    private static final List<HandlerMapping> handlerMappings = new ArrayList<>();
 
-    static {
-        handlerMappings.add(new ResourceHandlerMapping());
-        handlerMappings.add(new UrlHandlerMapping("/user/create", HttpMethod.POST, new UserController()::saveUser));
+    private final List<HandlerMapping> handlerMappings;
+
+    public FrontController(final List<HandlerMapping> handlerMappings) {
+        this.handlerMappings = handlerMappings;
     }
 
-    public void doService(final HttpRequest httpRequest, final HttpResponse httpResponse) {
+    @Override
+    public void service(final HttpRequest httpRequest, final HttpResponse httpResponse) {
         try {
-            Handler handler = getHandler(httpRequest);
-            handler.handleRequest(httpRequest, httpResponse);
-        } catch (HandlerNotFoundException exception) {
+            Controller controller = getHandler(httpRequest);
+            controller.service(httpRequest, httpResponse);
+        } catch (MethodNotSupportException | HandlerNotFoundException exception) {
             logger.info(exception.getMessage());
-            httpResponse.response404Header();
-            httpResponse.emptyBody();
+            httpResponse.responseHeader(ResponseStatusLine.NOT_FOUND);
+            httpResponse.noContent();
+        } catch (AuthenticationException exception) {
+            logger.info(exception.getMessage());
+            httpResponse.responseHeader(ResponseStatusLine.UNAUTHORIZED);
+            httpResponse.noContent();
         } catch (Exception exception) {
-            logger.error(exception.getMessage());
-            httpResponse.response500Header();
-            httpResponse.emptyBody();
+            logger.error("Unhandled exception occur. ", exception);
+            httpResponse.responseHeader(ResponseStatusLine.INTERNAL_SERVER_ERROR);
+            httpResponse.noContent();
         }
     }
 
-    private Handler getHandler(final HttpRequest httpRequest) {
+    private Controller getHandler(final HttpRequest httpRequest) {
         return handlerMappings.stream()
                 .filter(handlerMapping -> handlerMapping.matches(httpRequest))
                 .findFirst()
-                .map(HandlerMapping::getHandler)
+                .map(HandlerMapping::getController)
                 .orElseThrow(() -> new HandlerNotFoundException("요청에 맞는 handler를 찾을 수 없습니다."));
     }
 }

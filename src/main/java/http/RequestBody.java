@@ -24,4 +24,11 @@ public class RequestBody {
     public String getValue(final String key) {
         return values.get(key);
     }
+
+    @Override
+    public String toString() {
+        return "RequestBody{" +
+                "values=" + values +
+                '}';
+    }
 }

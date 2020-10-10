@@ -10,7 +10,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-public class StaticResourceTypeTest {
+class StaticResourceTypeTest {
     private static Stream<Arguments> provideMatches() {
         return Stream.of(
                 Arguments.of(Uri.from("index.html"), true),
@@ -44,7 +44,7 @@ public class StaticResourceTypeTest {
                 .hasMessageContaining("일치하는 정적 자원을 찾을 수 없습니다.");
     }
 
-    @DisplayName("matches: 확장자가 일치하는 정적 자원이 있는지 확인")
+    @DisplayName("matches: 확장자가 일치하는 정적 자원이 있는지 확인한다.")
     @MethodSource("provideMatches")
     @ParameterizedTest
     void matches(final Uri uri, final boolean expect) {

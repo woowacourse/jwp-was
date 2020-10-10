@@ -12,10 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class IOUtilsTest {
+class IOUtilsTest {
     private static final Logger logger = LoggerFactory.getLogger(IOUtilsTest.class);
 
-    @DisplayName("readBody: 요청 body를 읽는다")
+    @DisplayName("readBody: 요청 body를 읽는다.")
     @Test
     public void readBody() throws Exception {
         // given
@@ -30,7 +30,7 @@ public class IOUtilsTest {
         assertThat(actual).isEqualTo(expect);
     }
 
-    @DisplayName("readHeader: 요청 header를 읽는다")
+    @DisplayName("readHeader: 요청 header를 읽는다.")
     @Test
     void readHeader() throws IOException {
         // given

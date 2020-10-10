@@ -1,27 +1,25 @@
 package webserver;
 
-import http.HttpMethod;
+import controller.Controller;
 import http.HttpRequest;
 
 public class UrlHandlerMapping implements HandlerMapping {
 
     private final String path;
-    private final HttpMethod httpMethod;
-    private final Handler handler;
+    private final Controller controller;
 
-    public UrlHandlerMapping(final String path, final HttpMethod httpMethod, final Handler handler) {
+    public UrlHandlerMapping(final String path, final Controller controller) {
         this.path = path;
-        this.httpMethod = httpMethod;
-        this.handler = handler;
+        this.controller = controller;
     }
 
     @Override
     public boolean matches(final HttpRequest httpRequest) {
-        return httpRequest.equalsPath(path) && httpRequest.equalsMethod(httpMethod);
+        return httpRequest.equalsPath(path);
     }
 
     @Override
-    public Handler getHandler() {
-        return handler;
+    public Controller getController() {
+        return controller;
     }
 }
