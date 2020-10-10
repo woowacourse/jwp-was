@@ -10,11 +10,13 @@ public class HttpSessionFinder {
     private HttpSessionFinder() {
     }
 
-    public static void createSession() {
+    public static String createHttpSession() {
         String sessionId = String.valueOf(UUID.randomUUID());
         HttpSession httpSession = new HttpSession(sessionId);
 
         httpSessions.put(sessionId, httpSession);
+
+        return sessionId;
     }
 
     public static HttpSession findSession(String sessionId) {

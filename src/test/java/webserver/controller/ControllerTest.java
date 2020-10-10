@@ -14,7 +14,6 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ControllerTest {
     private static final String NEW_LINE = System.lineSeparator();
@@ -30,7 +29,7 @@ class ControllerTest {
                 "Location: /index.html" + NEW_LINE +
                 NEW_LINE;
 
-        assertEquals(actualMessage, expectedMessage);
+        assertThat(actualMessage).isEqualTo(expectedMessage);
     }
 
     @DisplayName("HTTP Request가 존재하는 resource 요청일 때 알맞은 응답 메세지를 생성")
@@ -72,12 +71,13 @@ class ControllerTest {
         HttpRequestMessage httpRequestMessage = createHttpRequestMessage("./src/test/resources/LoginRequest");
         String actualMessage = createHttpResponseMessage(httpRequestMessage).toHttpMessage();
 
-        String expectedMessage = "HTTP/1.1 302 Found" + NEW_LINE +
-                "Set-Cookie: logined=true;Path=/" + NEW_LINE +
-                "Location: /index.html" + NEW_LINE +
-                NEW_LINE;
+        String expectedStatusLine = "HTTP/1.1 302 Found";
+        String expectedCookieHeader = "Set-Cookie: sessionId=";
+        String expectedCookieValue = "logined=true;Path=/";
+        String expectedLocationHeaderValue = "Location: /index.html";
 
-        assertEquals(actualMessage, expectedMessage);
+        assertThat(actualMessage)
+                .contains(expectedStatusLine, expectedCookieHeader, expectedCookieValue, expectedLocationHeaderValue);
     }
 
     @DisplayName("비회원이 로그인을 하면 알맞은 응답 메세지를 생성")
@@ -91,7 +91,7 @@ class ControllerTest {
                 "Location: /user/login_failed.html" + NEW_LINE +
                 NEW_LINE;
 
-        assertEquals(actualMessage, expectedMessage);
+        assertThat(actualMessage).isEqualTo(expectedMessage);
     }
 
     private HttpRequestMessage createHttpRequestMessage(String pathName) throws IOException {

@@ -9,7 +9,7 @@ public enum HttpCookieOption {
         this.name = name;
     }
 
-    public String toHttpMessage(String value) {
-        return this.name + "=" + value;
+    public String getName() {
+        return name;
     }
 }
