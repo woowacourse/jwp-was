@@ -64,6 +64,10 @@ public class Request {
         return requestLine.getQueryParams();
     }
 
+    public RequestMethod getRequestMethod() {
+        return requestLine.getMethod();
+    }
+
     public String getContentType() {
         return ContentType.of(getPath()).getContentType();
     }

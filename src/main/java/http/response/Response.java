@@ -1,18 +1,20 @@
 package http.response;
 
-import http.ContentType;
-import http.Header;
-import http.HttpHeader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import utils.Directory;
-import utils.FileIoUtils;
-
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.util.Objects;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import http.ContentType;
+import http.Header;
+import http.HttpHeader;
+import http.request.RequestMethod;
+import utils.Directory;
+import utils.FileIoUtils;
 
 public class Response {
     private static final Logger logger = LoggerFactory.getLogger(Response.class);
@@ -42,6 +44,12 @@ public class Response {
     public void found(String locationUri) {
         statusLine = new StatusLine("HTTP/1.1", Status.FOUND);
         setHeader(Header.LOCATION.getName(), locationUri);
+        write();
+    }
+
+    public void methodNotAllowed(RequestMethod requestMethod) {
+        statusLine = new StatusLine("HTTP/1.1", Status.METHOD_NOT_ALLOWED);
+        body = new ResponseBody(String.format("Request method %s not supported", requestMethod).getBytes());
         write();
     }
 

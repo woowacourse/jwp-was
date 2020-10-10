@@ -13,9 +13,4 @@ public class IndexController extends AbstractController {
     public void doGet(Request request, Response response) throws IOException, URISyntaxException {
         response.ok("/index.html", HTML.getContentType());
     }
-
-    @Override
-    public void doPost(Request request, Response response) throws NoSuchMethodException {
-        throw new NoSuchMethodException("지원하지 않은 메서드입니다.");
-    }
 }
