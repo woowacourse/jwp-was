@@ -1,7 +1,5 @@
 package controller;
 
-import java.util.Map;
-
 import db.DataBase;
 import exception.IllegalRequestException;
 import http.request.QueryParams;
@@ -10,10 +8,12 @@ import http.request.RequestBody;
 import http.response.Response;
 import model.User;
 
+import java.util.Map;
+
 public class UserCreateController extends AbstractController {
 
     @Override
-    public void doGet(Request request, Response response) {
+    protected void doGet(Request request, Response response) {
         QueryParams queryParams = request.getQueryParams();
 
         if (!queryParams.isEmpty()) {
@@ -25,10 +25,10 @@ public class UserCreateController extends AbstractController {
     }
 
     @Override
-    public void doPost(Request request, Response response) throws IllegalRequestException {
+    protected void doPost(Request request, Response response) throws IllegalRequestException {
         RequestBody requestBody = request.getRequestBody();
         Map<String, String> requestBodies = requestBody.parseRequestBody();
-        
+
         User user = new User(requestBodies.get("userId"), requestBodies.get("password"),
                 requestBodies.get("name"), requestBodies.get("email"));
         DataBase.addUser(user);

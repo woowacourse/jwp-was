@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class RequestLine {
-    private static final String SPACE = " ";
+    private static final String SEPARATOR = " ";
 
     private RequestMethod method;
     private RequestUri requestUri;
@@ -14,7 +14,7 @@ public class RequestLine {
     public RequestLine(BufferedReader br) throws IOException {
         String requestLine = br.readLine();
         Objects.requireNonNull(requestLine);
-        String[] tokens = requestLine.split(SPACE);
+        String[] tokens = requestLine.split(SEPARATOR);
         this.method = RequestMethod.valueOf(tokens[0]);
         this.requestUri = new RequestUri(tokens[1]);
         this.httpVersion = tokens[2];
@@ -34,6 +34,6 @@ public class RequestLine {
 
     @Override
     public String toString() {
-        return method + SPACE + requestUri.toString() + SPACE + httpVersion;
+        return method + SEPARATOR + requestUri.toString() + SEPARATOR + httpVersion;
     }
 }

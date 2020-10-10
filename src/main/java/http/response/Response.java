@@ -1,32 +1,30 @@
 package http.response;
 
+import http.ContentType;
+import http.HttpHeaders;
+import http.request.RequestMethod;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import utils.Directory;
+import utils.FileIoUtils;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.util.Objects;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import http.ContentType;
-import http.Header;
-import http.HttpHeader;
-import http.request.RequestMethod;
-import utils.Directory;
-import utils.FileIoUtils;
-
 public class Response {
     private static final Logger logger = LoggerFactory.getLogger(Response.class);
 
     private DataOutputStream dataOutputStream;
     private StatusLine statusLine;
-    private HttpHeader header;
+    private HttpHeaders header;
     private ResponseBody body;
 
     public Response(OutputStream out) {
         dataOutputStream = new DataOutputStream(out);
-        header = new HttpHeader();
+        header = new HttpHeaders();
     }
 
     public void setHeader(String key, String value) {
@@ -35,15 +33,15 @@ public class Response {
 
     public void ok(String path, String contentType) throws IOException, URISyntaxException {
         statusLine = new StatusLine("HTTP/1.1", Status.OK);
-        setHeader("Content-Type", contentType + ";charset=UTF-8");
+        setHeader(HttpHeaders.CONTENT_TYPE, contentType + ";charset=UTF-8");
         body = setResponseBody(path);
-        setHeader(Header.CONTENT_LENGTH.getName(), String.valueOf(body.getContentLength()));
+        setHeader(HttpHeaders.CONTENT_LENGTH, String.valueOf(body.getContentLength()));
         write();
     }
 
     public void found(String locationUri) {
         statusLine = new StatusLine("HTTP/1.1", Status.FOUND);
-        setHeader(Header.LOCATION.getName(), locationUri);
+        setHeader(HttpHeaders.LOCATION, locationUri);
         write();
     }
 

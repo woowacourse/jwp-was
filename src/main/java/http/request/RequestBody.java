@@ -1,13 +1,13 @@
 package http.request;
 
+import exception.IllegalRequestException;
+import utils.IOUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
-import exception.IllegalRequestException;
-import utils.IOUtils;
 
 public class RequestBody {
     private static final String URL_DELIMITER = "&";
@@ -30,7 +30,7 @@ public class RequestBody {
         for (String token : tokens) {
             String[] value = token.split(BODY_DELIMITER);
             if (value.length != 2) {
-                throw new IllegalRequestException();
+                throw new IllegalRequestException("key, value 쌍이 완전하지 않습니다.");
             }
             result.put(value[0], value[1]);
         }

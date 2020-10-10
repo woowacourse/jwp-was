@@ -1,25 +1,25 @@
 package http.request;
 
+import http.ContentType;
+import http.HttpHeaders;
+import utils.IOUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import http.ContentType;
-import http.HttpHeader;
-import utils.IOUtils;
-
 public class Request {
     private final static String DELIMITER = ": ";
 
     private final RequestLine requestLine;
-    private final HttpHeader httpHeader;
+    private final HttpHeaders httpHeader;
     private final RequestBody requestBody;
 
     public Request(BufferedReader br) throws Exception {
         this.requestLine = new RequestLine(br);
-        this.httpHeader = new HttpHeader(ofRequestHeader(br));
+        this.httpHeader = new HttpHeaders(ofRequestHeader(br));
         this.requestBody = new RequestBody(br, httpHeader.getContentLength());
         IOUtils.printRequest(this);
     }
