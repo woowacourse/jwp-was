@@ -68,4 +68,18 @@ public class HttpRequestTest {
             throw new AssertionError();
         }
     }
+
+    @Test
+    @DisplayName("HttpRequest에 Version 정보를 요청하면, 올바른 값을 반환한다")
+    void getVersionTest() {
+        try {
+            BufferedReader request = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+            HttpRequest httpRequest = new HttpRequest(request);
+
+            Assertions.assertThat(httpRequest.getVersion()).isEqualTo("1.1");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+            throw new AssertionError();
+        }
+    }
 }

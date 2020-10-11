@@ -7,41 +7,22 @@ import utils.IOUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 
 public class HttpRequest {
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
 
     private final RequestLine requestLine;
-    private final Map<String, String> requestHeader;
+    private final RequestHeader requestHeader;
     private final RequestBody requestBody;
 
     public HttpRequest(BufferedReader request) {
         try {
             requestLine = new RequestLine(request.readLine());
-            requestHeader = mappingHeaders(request);
+            requestHeader = new RequestHeader(request);
             requestBody = mappingBodies(request);
         } catch (IndexOutOfBoundsException | NullPointerException | IOException e) {
             throw new InvalidHttpRequestException();
         }
-    }
-
-    private Map<String, String> mappingHeaders(BufferedReader request) throws IOException {
-        Map<String, String> headers = new HashMap<>();
-
-        String line = request.readLine();
-        while (!Objects.isNull(line) && !line.isEmpty()) {
-            logger.debug(line);
-            String[] splitLine = line.split(":");
-            String key = splitLine[0].trim();
-            String value = splitLine[1].trim();
-
-            headers.put(key, value);
-            line = request.readLine();
-        }
-        return headers;
     }
 
     private RequestBody mappingBodies(BufferedReader request) throws IOException {
@@ -49,7 +30,7 @@ public class HttpRequest {
         if (!method.isPost()) {
             return new RequestBody();
         }
-        int contentLength = Integer.parseInt(requestHeader.get("Content-Length"));
+        int contentLength = requestHeader.getContentLength();
         String requestBodyData = IOUtils.readData(request, contentLength);
         if (requestBodyData.isEmpty()) {
             return new RequestBody();
@@ -74,8 +55,6 @@ public class HttpRequest {
     }
 
     public String getContentType() {
-        String acceptInfo = requestHeader.get("Accept");
-
-        return acceptInfo.split(",")[0];
+        return requestHeader.getContentType();
     }
 }
