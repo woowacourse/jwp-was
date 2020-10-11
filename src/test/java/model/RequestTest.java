@@ -1,15 +1,18 @@
 package model;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 public class RequestTest {
@@ -28,21 +31,6 @@ public class RequestTest {
             Request request = Request.of(inputStream);
 
             assertThat(request).isInstanceOf(Request.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    @DisplayName("Request 생성 테스트 - .지원하지 않는 메소드")
-    void generatePath() {
-        String filePath = "src/test/resources/input/put_api_request.txt";
-        try {
-            InputStream inputStream = new FileInputStream(filePath);
-
-            assertThatThrownBy(() -> Request.of(inputStream))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Not Implemented Method");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -80,7 +68,7 @@ public class RequestTest {
             InputStream inputStream = new FileInputStream(filePath);
             Request request = Request.of(inputStream);
 
-            assertThat(request.getLocation()).isEqualTo(location);
+            assertThat(request.getRequestUri()).isEqualTo(location);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -88,21 +76,32 @@ public class RequestTest {
 
     @ParameterizedTest
     @DisplayName("파라미터 확인")
-    @CsvSource(value = {
-        "src/test/resources/input/get_template_file_request.txt:",
-        "src/test/resources/input/get_static_file_request.txt:",
-        "src/test/resources/input/get_api_request.txt:userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net",
-        "src/test/resources/input/post_api_request.txt:userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net"
-    }, delimiter = ':')
-    void getParameters(String filePath, String parameters) {
+    @MethodSource("provideParameters")
+    void getParameters(String filePath, Map<String, String> parameters) {
         try {
             InputStream inputStream = new FileInputStream(filePath);
             Request request = Request.of(inputStream);
+            Map<String, String> requestParameters = request.extractParameters();
 
-            assertThat(request.getParameters()).isEqualTo(parameters);
+            assertThat(requestParameters).isEqualTo(parameters);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static Stream<Arguments> provideParameters() {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("password", "password");
+        parameters.put("name", "%EB%B0%95%EC%9E%AC%EC%84%B1");
+        parameters.put("userId", "javajigi");
+        parameters.put("email", "javajigi%40slipp.net");
+
+        return Stream.of(
+            Arguments.of("src/test/resources/input/get_template_file_request.txt", null),
+            Arguments.of("src/test/resources/input/get_static_file_request.txt", null),
+            Arguments.of("src/test/resources/input/get_api_request.txt", parameters),
+            Arguments.of("src/test/resources/input/post_api_request.txt", parameters)
+        );
     }
 
     @ParameterizedTest
@@ -118,7 +117,7 @@ public class RequestTest {
             InputStream inputStream = new FileInputStream(filePath);
             Request request = Request.of(inputStream);
 
-            assertThat(request.getContentType()).isEqualTo(contentType);
+            assertThat(request.generateContentTypeFromRequestUri()).isEqualTo(contentType);
         } catch (IOException e) {
             e.printStackTrace();
         }

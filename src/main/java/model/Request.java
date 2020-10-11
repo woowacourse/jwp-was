@@ -4,51 +4,50 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Optional;
-import utils.HttpUtils;
-import utils.StringUtils;
+import java.util.Map;
 
 public class Request {
 
-    private Method method;
-    private String location;
-    private String parameters;
-    private ContentType contentType;
+    private final RequestLine requestLine;
+    private final Headers headers;
+    private final MessageBody messageBody;
 
-    private Request(String method, String location, String parameters, String contentType) {
-        this.method = Method.of(method);
-        this.location = location;
-        this.parameters = parameters;
-        this.contentType = ContentType.of(contentType)
-            .orElse(null);
+    private Request(RequestLine line, Headers headers, MessageBody messageBody) {
+        this.requestLine = line;
+        this.headers = headers;
+        this.messageBody = messageBody;
     }
 
     public static Request of(InputStream inputStream) throws IOException {
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-        String line = bufferedReader.readLine();
 
-        String method = StringUtils.extractRequestMethod(line);
-        String location = StringUtils.extractRequestLocation(line);
-        String parameters = HttpUtils.getParameters(line, method, bufferedReader);
-        String contentType = StringUtils.extractExtension(line);
+        RequestLine requestLine = RequestLine.of(bufferedReader.readLine());
+        Headers headers = Headers.of(bufferedReader);
 
-        return new Request(method, location, parameters, contentType);
+        if (headers.hasContent()) {
+            MessageBody messageBody = MessageBody.of(bufferedReader.readLine());
+            return new Request(requestLine, headers, messageBody);
+        }
+        return new Request(requestLine, headers, null);
     }
 
     public boolean isSameMethod(Method method) {
-        return this.method.equals(method);
+        return requestLine.isSameMethod(method);
     }
 
-    public String getLocation() {
-        return location;
+    public ContentType generateContentTypeFromRequestUri() {
+        return requestLine.generateContentTypeFromRequestUri();
     }
 
-    public String getParameters() {
-        return parameters;
+    public String getRequestUri() {
+        return requestLine.getRequestUri();
     }
 
-    public ContentType getContentType() {
-        return contentType;
+    public Map<String, String> extractParameters() {
+        if (requestLine.isSameMethod(Method.GET)) {
+            return requestLine.extractParameters();
+        }
+        return messageBody.extractParameters();
     }
 }

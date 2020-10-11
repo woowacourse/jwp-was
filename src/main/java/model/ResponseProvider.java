@@ -5,13 +5,13 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import utils.HttpUtils;
-import utils.StringUtils;
 import webserver.RequestHandler;
 
 public enum ResponseProvider {
@@ -25,8 +25,8 @@ public enum ResponseProvider {
         }
     }),
     POST_RESPONSE(Method.POST, (dataOutputStream, request) -> {
-        if (request.getLocation().contains("/user/create")) {
-            String parameters = request.getParameters();
+        if (request.getRequestUri().contains("/user/create")) {
+            Map<String, String> parameters = request.extractParameters();
             User user = User.of(parameters);
             DataBase.addUser(user);
 
@@ -74,7 +74,7 @@ public enum ResponseProvider {
 
     private static void responseHeader(DataOutputStream dataOutputStream, Request request,
         Status status) throws IOException, URISyntaxException {
-        ContentType contentType = request.getContentType();
+        ContentType contentType = request.generateContentTypeFromRequestUri();
 
         dataOutputStream.writeBytes(
             "HTTP/1.1 "
@@ -99,7 +99,7 @@ public enum ResponseProvider {
 
     private static void responseBody(DataOutputStream dataOutputStream, Request request,
         Status status) throws IOException, URISyntaxException {
-        ContentType contentType = request.getContentType();
+        ContentType contentType = request.generateContentTypeFromRequestUri();
 
         if (!(Objects.nonNull(contentType) && status.isNeedBody())) {
             return;

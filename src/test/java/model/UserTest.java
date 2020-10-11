@@ -2,19 +2,31 @@ package model;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.HashMap;
+import java.util.Map;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class UserTest {
 
-    private final static String USER_PARAMETERS
-        = "?userId=javajigi&password=password&name=자바지기&email=javajigi@gmail.com";
+    private static Map<String, String> userParameters;
+
+    @BeforeEach
+    void setUp() {
+        userParameters = new HashMap<>();
+
+        userParameters.put("userId", "javajigi");
+        userParameters.put("password", "password");
+        userParameters.put("name", "자바지기");
+        userParameters.put("email", "javajigi@gmail.com");
+    }
 
     @Test
     @DisplayName("User of")
     void create() {
         User user = User
-            .of(USER_PARAMETERS);
+            .of(userParameters);
 
         assertThat(user).isInstanceOf(User.class);
     }
@@ -22,7 +34,7 @@ public class UserTest {
     @Test
     void getUserId() {
         User user = User
-            .of(USER_PARAMETERS);
+            .of(userParameters);
 
         assertThat(user.getUserId()).isEqualTo("javajigi");
     }
@@ -30,7 +42,7 @@ public class UserTest {
     @Test
     void getName() {
         User user = User
-            .of(USER_PARAMETERS);
+            .of(userParameters);
 
         assertThat(user.getName()).isEqualTo("자바지기");
     }
