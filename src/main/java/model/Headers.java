@@ -36,23 +36,6 @@ public class Headers {
     public boolean hasContent() {
         return headers.containsKey(Header.CONTENT_LENGTH);
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Headers headers1 = (Headers) o;
-        return Objects.equals(headers, headers1.headers);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(headers);
-    }
 }
 
 

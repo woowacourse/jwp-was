@@ -20,8 +20,8 @@ public class ContentTypeTest {
     }
 
     @Test
-    @DisplayName("ContentType - extension을 알 수 없는 경우")
-    void create_IfNoExtension_ReturnNull() {
+    @DisplayName("ContentType of - 확장자가 유효하지 않을 경우")
+    void create_IfInvalidExtension_ReturnNull() {
         ContentType contentType = ContentType.of("unknown")
             .orElse(null);
         assertThat(contentType).isNull();
