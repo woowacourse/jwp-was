@@ -25,15 +25,11 @@ public class RequestTest {
         "src/test/resources/input/get_api_request.txt",
         "src/test/resources/input/post_api_request.txt"
     })
-    void generatePath(String filePath) {
-        try {
-            InputStream inputStream = new FileInputStream(filePath);
-            Request request = Request.of(inputStream);
+    void generatePath(String filePath) throws IOException {
+        InputStream inputStream = new FileInputStream(filePath);
+        Request request = Request.of(inputStream);
 
-            assertThat(request).isInstanceOf(Request.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        assertThat(request).isInstanceOf(Request.class);
     }
 
     @ParameterizedTest
@@ -44,15 +40,11 @@ public class RequestTest {
         "src/test/resources/input/get_api_request.txt:GET",
         "src/test/resources/input/post_api_request.txt:POST"
     }, delimiter = ':')
-    void isSameMethod(String filePath, String method) {
-        try {
-            InputStream inputStream = new FileInputStream(filePath);
-            Request request = Request.of(inputStream);
+    void isSameMethod(String filePath, String method) throws IOException {
+        InputStream inputStream = new FileInputStream(filePath);
+        Request request = Request.of(inputStream);
 
-            assertThat(request.isSameMethod(Method.of(method))).isTrue();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        assertThat(request.isSameMethod(Method.of(method))).isTrue();
     }
 
     @ParameterizedTest
@@ -63,30 +55,22 @@ public class RequestTest {
         "src/test/resources/input/get_api_request.txt:/user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net",
         "src/test/resources/input/post_api_request.txt:/user/create"
     }, delimiter = ':')
-    void getLocation(String filePath, String location) {
-        try {
-            InputStream inputStream = new FileInputStream(filePath);
-            Request request = Request.of(inputStream);
+    void getLocation(String filePath, String location) throws IOException {
+        InputStream inputStream = new FileInputStream(filePath);
+        Request request = Request.of(inputStream);
 
-            assertThat(request.getRequestUri()).isEqualTo(location);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        assertThat(request.getRequestUri()).isEqualTo(location);
     }
 
     @ParameterizedTest
     @DisplayName("파라미터 확인")
     @MethodSource("provideParameters")
-    void getParameters(String filePath, Map<String, String> parameters) {
-        try {
-            InputStream inputStream = new FileInputStream(filePath);
-            Request request = Request.of(inputStream);
-            Map<String, String> requestParameters = request.extractParameters();
+    void getParameters(String filePath, Map<String, String> parameters) throws IOException {
+        InputStream inputStream = new FileInputStream(filePath);
+        Request request = Request.of(inputStream);
+        Map<String, String> requestParameters = request.extractParameters();
 
-            assertThat(requestParameters).isEqualTo(parameters);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        assertThat(requestParameters).isEqualTo(parameters);
     }
 
     private static Stream<Arguments> provideParameters() {
@@ -112,14 +96,10 @@ public class RequestTest {
         "src/test/resources/input/get_api_request.txt:",
         "src/test/resources/input/post_api_request.txt:"
     }, delimiter = ':')
-    void getContentType(String filePath, ContentType contentType) {
-        try {
-            InputStream inputStream = new FileInputStream(filePath);
-            Request request = Request.of(inputStream);
+    void getContentType(String filePath, ContentType contentType) throws IOException {
+        InputStream inputStream = new FileInputStream(filePath);
+        Request request = Request.of(inputStream);
 
-            assertThat(request.generateContentTypeFromRequestUri()).isEqualTo(contentType);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        assertThat(request.generateContentTypeFromRequestUri()).isEqualTo(contentType);
     }
 }

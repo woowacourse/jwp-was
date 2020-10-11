@@ -24,16 +24,12 @@ public class ResponseProviderTest {
         "src/test/resources/input/get_api_request.txt",
         "src/test/resources/input/post_api_request.txt"
     })
-    void create(String filePath) {
-        try {
-            InputStream inputStream = new FileInputStream(filePath);
-            Request request = Request.of(inputStream);
-            ResponseProvider responseProvider = ResponseProvider.of(request);
+    void create(String filePath) throws IOException {
+        InputStream inputStream = new FileInputStream(filePath);
+        Request request = Request.of(inputStream);
+        ResponseProvider responseProvider = ResponseProvider.of(request);
 
-            assertThat(responseProvider).isInstanceOf(ResponseProvider.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        assertThat(responseProvider).isInstanceOf(ResponseProvider.class);
     }
 
     @ParameterizedTest
@@ -52,27 +48,24 @@ public class ResponseProviderTest {
             + ":src/test/resources/output/post_api_request_output.txt"
             + ":302 FOUND"
     }, delimiter = ':')
-    void executeOperation(String inputFilePath, String outputFilePath, String responseFirstLine) {
-        try {
-            InputStream inputStream = new FileInputStream(inputFilePath);
-            Request request = Request.of(inputStream);
-            ResponseProvider responseProvider = ResponseProvider.of(request);
+    void executeOperation(String inputFilePath, String outputFilePath, String responseFirstLine)
+        throws IOException {
+        InputStream inputStream = new FileInputStream(inputFilePath);
+        Request request = Request.of(inputStream);
+        ResponseProvider responseProvider = ResponseProvider.of(request);
 
-            FileOutputStream fileOutputStream = new FileOutputStream(outputFilePath);
-            DataOutputStream outputStream = new DataOutputStream(fileOutputStream);
+        FileOutputStream fileOutputStream = new FileOutputStream(outputFilePath);
+        DataOutputStream outputStream = new DataOutputStream(fileOutputStream);
 
-            responseProvider.executeOperation(outputStream, request);
-            outputStream.close();
-            fileOutputStream.close();
+        responseProvider.executeOperation(outputStream, request);
+        outputStream.close();
+        fileOutputStream.close();
 
-            InputStream resultInputStream = new FileInputStream(outputFilePath);
-            InputStreamReader inputStreamReader = new InputStreamReader(resultInputStream);
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+        InputStream resultInputStream = new FileInputStream(outputFilePath);
+        InputStreamReader inputStreamReader = new InputStreamReader(resultInputStream);
+        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
-            String outputFirstLine = bufferedReader.readLine();
-            assertThat(outputFirstLine).contains(responseFirstLine);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String outputFirstLine = bufferedReader.readLine();
+        assertThat(outputFirstLine).contains(responseFirstLine);
     }
 }
