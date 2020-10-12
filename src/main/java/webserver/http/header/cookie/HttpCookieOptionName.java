@@ -1,11 +1,11 @@
-package webserver.http.header;
+package webserver.http.header.cookie;
 
-public enum HttpCookieOption {
+public enum HttpCookieOptionName {
     PATH("Path");
 
     private final String name;
 
-    HttpCookieOption(String name) {
+    HttpCookieOptionName(String name) {
         this.name = name;
     }
 

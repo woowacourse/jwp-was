@@ -40,8 +40,8 @@ class ControllerTest {
         String actualMessage = httpResponseMessage.toHttpMessage();
 
         String expectedMessage = "HTTP/1.1 200 OK" + NEW_LINE +
-                "Content-Length: 7065" + NEW_LINE +
                 "Content-Type: text/css;charset=utf-8" + NEW_LINE +
+                "Content-Length: 7065" + NEW_LINE +
                 NEW_LINE;
 
         assertThat(actualMessage).contains(expectedMessage);
@@ -56,8 +56,8 @@ class ControllerTest {
         String actualMessage = httpResponseMessage.toHttpMessage();
 
         String expectedMessage = "HTTP/1.1 404 Not Found" + NEW_LINE +
-                "Content-Length: 1365" + NEW_LINE +
                 "Content-Type: text/html;charset=utf-8" + NEW_LINE +
+                "Content-Length: 1365" + NEW_LINE +
                 NEW_LINE;
 
         assertThat(actualMessage).contains(expectedMessage);

@@ -3,42 +3,45 @@ package webserver.controller;
 import model.Users;
 import utils.TemplateCreator;
 import webserver.http.header.HttpCharacterEncoding;
-import webserver.http.header.HttpHeaderField;
+import webserver.http.header.HttpHeader;
+import webserver.http.header.HttpHeaderName;
+import webserver.http.header.HttpHeaders;
 import webserver.http.message.HttpRequestMessage;
 import webserver.http.message.HttpResponseMessage;
 import webserver.http.request.HttpResourceType;
 import webserver.http.response.HttpStatus;
+import webserver.http.session.HttpSessionFinder;
 import webserver.service.UserService;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
-import static webserver.http.header.HttpHeader.HEADER_VALUE_DELIMITER;
+import static webserver.http.header.HttpHeaders.HEADER_VALUE_DELIMITER;
 
 public class GetUserListController implements Controller {
 
     @Override
     public HttpResponseMessage createHttpResponseMessage(HttpRequestMessage httpRequestMessage) {
-        String cookieValue = httpRequestMessage.getHeaderValue(HttpHeaderField.COOKIE.getName());
+        Optional<String> cookieValue = httpRequestMessage.getHeaderValue(HttpHeaderName.COOKIE.getName());
+        String cookie = cookieValue.orElse(null);
 
-        if (Objects.isNull(cookieValue)) {
+        if (Objects.isNull(cookie)) {
             return createNonUserHttpResponseMessage();
         }
 
-        if (isLogined(cookieValue)) {
+        if (isLogined(cookie)) {
             return createUserListHttpResponseMessage();
         }
 
         return createNonUserHttpResponseMessage();
     }
 
-    private boolean isLogined(String cookieValue) {
-        String[] tokens = cookieValue.split(HEADER_VALUE_DELIMITER);
+    private boolean isLogined(String cookie) {
+        String[] tokens = cookie.split(HEADER_VALUE_DELIMITER);
         for (String token : tokens) {
-            if (token.contains("logined")) {
-                String[] loginedTokens = token.split("=");
-                return Boolean.parseBoolean(loginedTokens[1]);
+            if (token.contains("sessionId")) {
+                String[] sessionIdTokens = token.split("=");
+                return HttpSessionFinder.hasSession(sessionIdTokens[1]);
             }
         }
 
@@ -48,12 +51,18 @@ public class GetUserListController implements Controller {
     private HttpResponseMessage createUserListHttpResponseMessage() {
         String body = createUserListBody();
 
-        Map<String, String> headers = new HashMap<>();
-        headers.put(HttpHeaderField.CONTENT_TYPE.getName(),
-                    HttpResourceType.HTML.getContentType() + HEADER_VALUE_DELIMITER + HttpCharacterEncoding.UTF_8.toHttpMessage());
-        headers.put(HttpHeaderField.CONTENT_LENGTH.getName(), String.valueOf(body.getBytes().length));
+        HttpHeader contentType = HttpHeader.of(HttpHeaderName.CONTENT_TYPE.getName(),
+                                               HttpResourceType.HTML.getContentType()
+                                                       + HEADER_VALUE_DELIMITER
+                                                       + HttpCharacterEncoding.UTF_8.toHttpMessage());
+        HttpHeader contentLength = HttpHeader.of(HttpHeaderName.CONTENT_LENGTH.getName(),
+                                                 String.valueOf(body.getBytes().length));
 
-        return HttpResponseMessage.of(HttpStatus.OK, headers, body);
+        HttpHeaders httpHeaders = HttpHeaders.empty();
+        httpHeaders.addHeader(contentType);
+        httpHeaders.addHeader(contentLength);
+
+        return HttpResponseMessage.of(HttpStatus.OK, httpHeaders, body);
     }
 
     private String createUserListBody() {
@@ -64,9 +73,11 @@ public class GetUserListController implements Controller {
     }
 
     private HttpResponseMessage createNonUserHttpResponseMessage() {
-        Map<String, String> headers = new HashMap<>();
-        headers.put(HttpHeaderField.LOCATION.getName(), "/user/login.html");
+        HttpHeader location = HttpHeader.of(HttpHeaderName.LOCATION.getName(), "/user/login.html");
 
-        return HttpResponseMessage.of(HttpStatus.FOUND, headers);
+        HttpHeaders httpHeaders = HttpHeaders.empty();
+        httpHeaders.addHeader(location);
+
+        return HttpResponseMessage.of(HttpStatus.FOUND, httpHeaders);
     }
 }

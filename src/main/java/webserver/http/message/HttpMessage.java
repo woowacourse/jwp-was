@@ -2,18 +2,18 @@ package webserver.http.message;
 
 import webserver.http.StartLine;
 import webserver.http.body.HttpBody;
-import webserver.http.header.HttpHeader;
+import webserver.http.header.HttpHeaders;
 
 public class HttpMessage {
     private static final String NEW_LINE = System.lineSeparator();
 
     private final StartLine startLine;
-    protected final HttpHeader httpHeader;
+    protected final HttpHeaders httpHeaders;
     private final HttpBody httpBody;
 
-    public HttpMessage(StartLine startLine, HttpHeader httpHeader, HttpBody httpBody) {
+    public HttpMessage(StartLine startLine, HttpHeaders httpHeaders, HttpBody httpBody) {
         this.startLine = startLine;
-        this.httpHeader = httpHeader;
+        this.httpHeaders = httpHeaders;
         this.httpBody = httpBody;
     }
 
@@ -23,7 +23,7 @@ public class HttpMessage {
 
     public String toHttpMessage() {
         return startLine.toHttpMessage() + NEW_LINE
-                + httpHeader.toHttpMessage() + NEW_LINE
+                + httpHeaders.toHttpMessage() + NEW_LINE
                 + NEW_LINE
                 + httpBody.toHttpMessage();
     }

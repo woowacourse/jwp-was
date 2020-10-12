@@ -1,6 +1,6 @@
 package webserver.http.header;
 
-public enum HttpHeaderField {
+public enum HttpHeaderName {
     CONTENT_TYPE("Content-Type"),
     CONTENT_LENGTH("Content-Length"),
     LOCATION("Location"),
@@ -9,7 +9,7 @@ public enum HttpHeaderField {
 
     private final String name;
 
-    HttpHeaderField(String name) {
+    HttpHeaderName(String name) {
         this.name = name;
     }
 

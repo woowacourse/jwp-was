@@ -22,4 +22,8 @@ public class HttpSessionFinder {
     public static HttpSession findSession(String sessionId) {
         return httpSessions.get(sessionId);
     }
+
+    public static boolean hasSession(String sessionId) {
+        return httpSessions.containsKey(sessionId);
+    }
 }

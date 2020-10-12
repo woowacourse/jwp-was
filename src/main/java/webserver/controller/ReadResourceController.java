@@ -5,17 +5,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import webserver.http.header.HttpCharacterEncoding;
-import webserver.http.header.HttpHeaderField;
+import webserver.http.header.HttpHeader;
+import webserver.http.header.HttpHeaderName;
+import webserver.http.header.HttpHeaders;
 import webserver.http.message.HttpRequestMessage;
 import webserver.http.message.HttpResponseMessage;
 import webserver.http.request.HttpResourceType;
 import webserver.http.request.HttpUri;
 import webserver.http.response.HttpStatus;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static webserver.http.header.HttpHeader.HEADER_VALUE_DELIMITER;
+import static webserver.http.header.HttpHeaders.HEADER_VALUE_DELIMITER;
 
 public class ReadResourceController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(ReadResourceController.class);
@@ -30,14 +29,20 @@ public class ReadResourceController implements Controller {
             return createNotFoundResourceHttpResponseMessage();
         }
 
-        Map<String, String> headers = new HashMap<>();
-        headers.put(HttpHeaderField.CONTENT_TYPE.getName(),
-                    httpUri.getContentType() + HEADER_VALUE_DELIMITER + HttpCharacterEncoding.UTF_8.toHttpMessage());
-        headers.put(HttpHeaderField.CONTENT_LENGTH.getName(), String.valueOf(fileBytes.length));
+        HttpHeader contentType = HttpHeader.of(HttpHeaderName.CONTENT_TYPE.getName(),
+                                               httpUri.getContentType()
+                                                       + HEADER_VALUE_DELIMITER
+                                                       + HttpCharacterEncoding.UTF_8.toHttpMessage());
+        HttpHeader contentLength = HttpHeader.of(HttpHeaderName.CONTENT_LENGTH.getName(),
+                                                 String.valueOf(fileBytes.length));
+
+        HttpHeaders httpHeaders = HttpHeaders.empty();
+        httpHeaders.addHeader(contentType);
+        httpHeaders.addHeader(contentLength);
 
         String body = new String(fileBytes, 0, fileBytes.length);
 
-        return HttpResponseMessage.of(HttpStatus.OK, headers, body);
+        return HttpResponseMessage.of(HttpStatus.OK, httpHeaders, body);
     }
 
     private HttpResponseMessage createNotFoundResourceHttpResponseMessage() {
@@ -49,13 +54,19 @@ public class ReadResourceController implements Controller {
             logger.error(e.getMessage());
         }
 
-        Map<String, String> headers = new HashMap<>();
-        headers.put(HttpHeaderField.CONTENT_TYPE.getName(),
-                    HttpResourceType.HTML.getContentType() + HEADER_VALUE_DELIMITER + HttpCharacterEncoding.UTF_8.toHttpMessage());
-        headers.put(HttpHeaderField.CONTENT_LENGTH.getName(), String.valueOf(fileBytes.length));
+        HttpHeader contentType = HttpHeader.of(HttpHeaderName.CONTENT_TYPE.getName(),
+                                               HttpResourceType.HTML.getContentType()
+                                                       + HEADER_VALUE_DELIMITER
+                                                       + HttpCharacterEncoding.UTF_8.toHttpMessage());
+        HttpHeader contentLength = HttpHeader.of(HttpHeaderName.CONTENT_LENGTH.getName(),
+                                                 String.valueOf(fileBytes.length));
+
+        HttpHeaders httpHeaders = HttpHeaders.empty();
+        httpHeaders.addHeader(contentType);
+        httpHeaders.addHeader(contentLength);
 
         String body = new String(fileBytes, 0, fileBytes.length);
 
-        return HttpResponseMessage.of(HttpStatus.NOT_FOUND, headers, body);
+        return HttpResponseMessage.of(HttpStatus.NOT_FOUND, httpHeaders, body);
     }
 }
