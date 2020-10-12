@@ -3,6 +3,7 @@ package web.response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
+import utils.URIUtils;
 import web.HttpHeader;
 
 import java.io.DataOutputStream;
@@ -30,7 +31,8 @@ public class HttpResponse {
         httpHeader.addHeader(key, value);
     }
 
-    public void ok(String filePath, String contentType) throws IOException, URISyntaxException {
+    public void ok(String path, String contentType) throws IOException, URISyntaxException {
+        String filePath = URIUtils.getFilePath(path);
         responseLine = new ResponseLine(Status.OK, HTTP_VERSION);
         addHeader(HttpHeader.CONTENT_TYPE, contentType + ";charset=UTF-8");
         responseBody = new ResponseBody(FileIoUtils.loadFileFromClasspath(filePath));
