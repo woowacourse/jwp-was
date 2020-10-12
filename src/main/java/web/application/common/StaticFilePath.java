@@ -2,6 +2,7 @@ package web.application.common;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import web.application.exception.InvalidStaticFileTypeException;
 
 public class StaticFilePath {
@@ -10,13 +11,13 @@ public class StaticFilePath {
 
     private StaticFilePath() {
         map = new HashMap<>();
-        map.put("html", "./templates");
-        map.put("ico", "./templates");
-        map.put("css", "./static");
-        map.put("js", "./static");
-        map.put("png", "./static");
-        map.put("ttf", "./static");
-        map.put("woff", "./static");
+        map.put("html", "templates");
+        map.put("ico", "templates");
+        map.put("css", "static");
+        map.put("js", "static");
+        map.put("png", "static");
+        map.put("ttf", "static");
+        map.put("woff", "static");
     }
 
     public static StaticFilePath getInstance() {

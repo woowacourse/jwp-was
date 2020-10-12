@@ -2,6 +2,7 @@ package web.application.common;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import web.server.utils.StaticFileType;
 
 public class FilePathMapper {
@@ -10,8 +11,8 @@ public class FilePathMapper {
 
     private FilePathMapper() {
         map = new HashMap<>();
-        map.put("HTML", "./templates");
-        map.put("STATIC_EXTENSION", "./static");
+        map.put("HTML", "templates");
+        map.put("STATIC_EXTENSION", "static");
     }
 
     public static FilePathMapper getInstance() {
