@@ -8,11 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -33,8 +30,7 @@ public class HttpRequestTest {
     @Test
     @DisplayName("HttpRequest 객체가 올바르게 생성된다")
     void createHttpRequestTest() {
-        BufferedReader request = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        HttpRequest httpRequest = new HttpRequest(request);
+        HttpRequest httpRequest = new HttpRequest(inputStream);
         Assertions.assertThat(httpRequest.getMethod().getName()).isEqualTo("GET");
         Assertions.assertThat(httpRequest.getRequestPath().getTarget()).isEqualTo("/index.html");
         Assertions.assertThat(httpRequest.getVersion()).isEqualTo("HTTP/1.1");
@@ -52,9 +48,8 @@ public class HttpRequestTest {
         stringBuilder.append("Accept: */*\n\n");
         stringBuilder.append("userId=javajigi&password=password&name=JaeSung\n");
         inputStream = new ByteArrayInputStream(stringBuilder.toString().getBytes());
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
 
-        HttpRequest request = new HttpRequest(bufferedReader);
+        HttpRequest request = new HttpRequest(inputStream);
 
         assertEquals("POST", request.getMethod().getName());
         assertEquals("/user/create", request.getRequestPath().getTarget());
@@ -69,8 +64,7 @@ public class HttpRequestTest {
         String invalidRequest = "Es-Muss-Sein!";
         inputStream = new ByteArrayInputStream(invalidRequest.getBytes());
 
-        BufferedReader request = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        Assertions.assertThatThrownBy(() -> new HttpRequest(request))
+        Assertions.assertThatThrownBy(() -> new HttpRequest(inputStream))
                 .isInstanceOf(InvalidHttpRequestException.class)
                 .hasMessage("Http Request의 값이 올바르지 않습니다");
     }
@@ -78,9 +72,7 @@ public class HttpRequestTest {
     @Test
     @DisplayName("HttpRequest에 contentType 정보를 요청하면, 올바른 값을 반환한다")
     void getContentTypeTest() {
-
-        BufferedReader request = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        HttpRequest httpRequest = new HttpRequest(request);
+        HttpRequest httpRequest = new HttpRequest(inputStream);
 
         Assertions.assertThat(httpRequest.getAcceptType()).isEqualTo("*/*");
     }
@@ -88,8 +80,7 @@ public class HttpRequestTest {
     @Test
     @DisplayName("HttpRequest에 Version 정보를 요청하면, 올바른 값을 반환한다")
     void getVersionTest() {
-        BufferedReader request = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        HttpRequest httpRequest = new HttpRequest(request);
+        HttpRequest httpRequest = new HttpRequest(inputStream);
 
         Assertions.assertThat(httpRequest.getVersion()).isEqualTo("HTTP/1.1");
     }

@@ -8,6 +8,9 @@ import web.HttpHeader;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -19,8 +22,9 @@ public class HttpRequest {
     private final HttpHeader httpHeader;
     private final RequestBody requestBody;
 
-    public HttpRequest(BufferedReader request) {
+    public HttpRequest(InputStream inputStream) {
         try {
+            BufferedReader request = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
             requestLine = new RequestLine(request.readLine());
             httpHeader = new HttpHeader(mappingHeaders(request));
             requestBody = mappingBodies(request);

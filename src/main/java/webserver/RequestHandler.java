@@ -10,10 +10,12 @@ import web.request.HttpRequest;
 import web.request.RequestBody;
 import web.request.RequestPath;
 
-import java.io.*;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -28,12 +30,11 @@ public class RequestHandler implements Runnable {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-
-            HttpRequest httpRequest = new HttpRequest(bufferedReader);
+            HttpRequest httpRequest = new HttpRequest(in);
 
             RequestPath requestPath = httpRequest.getRequestPath();
             String requestTarget = requestPath.getTarget();
+
             DataOutputStream dos = new DataOutputStream(out);
 
             if (requestTarget.equals("/user/create")) {
@@ -56,7 +57,7 @@ public class RequestHandler implements Runnable {
             }
             String filePath = URIUtils.getFilePath(requestTarget);
             byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
-            response200Header(dos, httpRequest.getContentType(), body.length);
+            response200Header(dos, httpRequest.getAcceptType(), body.length);
             responseBody(dos, body);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
