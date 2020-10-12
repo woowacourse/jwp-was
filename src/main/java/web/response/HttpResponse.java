@@ -12,6 +12,7 @@ import java.net.URISyntaxException;
 import java.util.Objects;
 
 public class HttpResponse {
+    public static final String BAD_REQUEST_ERROR_MESSAGE = "errorMessage : ";
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
     private static final String HTTP_VERSION = "HTTP/1.1";
 
@@ -39,6 +40,13 @@ public class HttpResponse {
     public void found(String location) {
         responseLine = new ResponseLine(Status.FOUND, HTTP_VERSION);
         addHeader(HttpHeader.LOCATION, location);
+        write();
+    }
+
+    public void badRequest(String message) {
+        responseLine = new ResponseLine(Status.BAD_REQUEST, HTTP_VERSION);
+        String errorMessage = BAD_REQUEST_ERROR_MESSAGE + message;
+        responseBody = new ResponseBody(errorMessage.getBytes());
         write();
     }
 

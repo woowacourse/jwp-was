@@ -85,4 +85,8 @@ public class HttpRequest {
     public String getRequestHeaderByKey(String key) {
         return httpHeader.getHeaderByKey(key);
     }
+
+    public String getRequestBodyByKey(String key) {
+        return requestBody.getParameterByKey(key);
+    }
 }
