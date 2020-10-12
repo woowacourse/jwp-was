@@ -1,4 +1,4 @@
-package model;
+package model.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,7 +23,7 @@ public class UserTest {
     }
 
     @Test
-    @DisplayName("User of")
+    @DisplayName("User 생성")
     void create() {
         User user = User
             .of(userParameters);

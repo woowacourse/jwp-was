@@ -1,4 +1,4 @@
-package model;
+package model.request;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -33,7 +33,7 @@ public class MessageBody {
         return new MessageBody(Collections.unmodifiableMap(parameters));
     }
 
-    public Map<String, String> extractParameters() {
+    public Map<String, String> extractPostParameters() {
         return parameters;
     }
 }

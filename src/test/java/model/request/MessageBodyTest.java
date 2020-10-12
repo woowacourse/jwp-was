@@ -1,4 +1,4 @@
-package model;
+package model.request;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 public class MessageBodyTest {
 
     @Test
-    @DisplayName("MessageBody of")
+    @DisplayName("MessageBody 생성")
     void create() {
         String requestMessageBody = "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
         MessageBody messageBody = MessageBody.of(requestMessageBody);
@@ -19,11 +19,11 @@ public class MessageBodyTest {
     }
 
     @Test
-    @DisplayName("파라미터 추출 테스트")
+    @DisplayName("Post 파라미터 추출 테스트")
     void extractParameters() {
         String requestMessageBody = "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
         MessageBody messageBody = MessageBody.of(requestMessageBody);
-        Map<String, String> parameters = messageBody.extractParameters();
+        Map<String, String> parameters = messageBody.extractPostParameters();
 
         Stream.of(
             assertThat(parameters.size()).isEqualTo(4),

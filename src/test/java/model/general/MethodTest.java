@@ -1,4 +1,4 @@
-package model;
+package model.general;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -9,7 +9,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 public class MethodTest {
 
     @ParameterizedTest
-    @DisplayName("Method of")
+    @DisplayName("Method 생성")
     @ValueSource(strings = {"GET", "POST", "PUT", "DELETE"})
     void create(String method) {
         assertThat(Method.of(method)).isInstanceOf(Method.class);

@@ -1,8 +1,10 @@
-package model;
+package model.request;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import model.general.ContentType;
+import model.general.Method;
 
 public class RequestLine {
 
@@ -57,7 +59,7 @@ public class RequestLine {
         return EXTENSION_LETTER + sections[sections.length - SIZE_CORRECTION_NUMBER];
     }
 
-    public Map<String, String> extractParameters() {
+    public Map<String, String> extractGetParameters() {
         String[] separatedUri = requestUri.split(URI_PARAMETER_SEPARATOR);
 
         if (separatedUri.length == 1) {
@@ -81,7 +83,19 @@ public class RequestLine {
         return parameters;
     }
 
+    public boolean containsUri(String uri) {
+        return requestUri.contains(uri);
+    }
+
+    public Method getMethod() {
+        return method;
+    }
+
     public String getRequestUri() {
         return requestUri;
+    }
+
+    public String getHttpVersion() {
+        return httpVersion;
     }
 }

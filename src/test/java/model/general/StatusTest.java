@@ -1,4 +1,4 @@
-package model;
+package model.general;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -27,35 +27,13 @@ public class StatusTest {
     }
 
     @ParameterizedTest
-    @DisplayName("StatusName 확인")
+    @DisplayName("reasonPhrase 확인")
     @CsvSource(value = {
         "OK:OK",
-        "FOUND:FOUND",
-        "METHOD_NOT_ALLOWED:METHOD_NOT_ALLOWED"
+        "FOUND:Found",
+        "METHOD_NOT_ALLOWED:Method Not Allowed"
     }, delimiter = ':')
     void getStatusName(Status status, String statusName) {
-        assertThat(status.getStatusName()).isEqualTo(statusName);
-    }
-
-    @ParameterizedTest
-    @DisplayName("Location 필요 여부 확인")
-    @CsvSource(value = {
-        "OK:false",
-        "FOUND:true",
-        "METHOD_NOT_ALLOWED:false"
-    }, delimiter = ':')
-    void isNeedLocation(Status status, boolean needLocation) {
-        assertThat(status.isNeedLocation()).isEqualTo(needLocation);
-    }
-
-    @ParameterizedTest
-    @DisplayName("Body 필요 여부 확인")
-    @CsvSource(value = {
-        "OK:true",
-        "FOUND:false",
-        "METHOD_NOT_ALLOWED:false"
-    }, delimiter = ':')
-    void isNeedBody(Status status, boolean needBody) {
-        assertThat(status.isNeedBody()).isEqualTo(needBody);
+        assertThat(status.getReasonPhrase()).isEqualTo(statusName);
     }
 }

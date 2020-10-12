@@ -1,4 +1,4 @@
-package model;
+package model.general;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -11,7 +11,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 public class ContentTypeTest {
 
     @ParameterizedTest
-    @DisplayName("ContentType of")
+    @DisplayName("ContentType 생성")
     @ValueSource(strings = {".html", ".css", ".js", ".woff", ".ttf", ".ico"})
     void create(String extension) {
         ContentType contentType = ContentType.of(extension)
@@ -20,7 +20,7 @@ public class ContentTypeTest {
     }
 
     @Test
-    @DisplayName("ContentType of - 확장자가 유효하지 않을 경우")
+    @DisplayName("ContentType 생성 - 확장자가 유효하지 않을 경우")
     void create_IfInvalidExtension_ReturnNull() {
         ContentType contentType = ContentType.of("unknown")
             .orElse(null);

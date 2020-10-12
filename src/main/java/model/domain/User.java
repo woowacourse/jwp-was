@@ -1,13 +1,8 @@
-package model;
+package model.domain;
 
 import java.util.Map;
 
 public class User {
-
-    private static final String KEY_VALUE_LINK_LETTER = "=";
-    private static final String PARAMETER_DELIMITER = "&";
-    private static final int VALUE_RIGHT_SIDE_INDEX = 1;
-    private static final int VALUE_INDEX = 0;
 
     private String userId;
     private String password;
