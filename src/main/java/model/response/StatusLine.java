@@ -13,10 +13,12 @@ public class StatusLine {
         this.status = status;
     }
 
-    public static StatusLine of(Request request, Status status) {
-        String httpVersion = request.getHttpVersion();
+    public static StatusLine of(Status status) {
+        return new StatusLine("HTTP/1.1", status);
+    }
 
-        return new StatusLine(httpVersion, status);
+    public static StatusLine of(Request request, Status status) {
+        return new StatusLine(request.getHttpVersion(), status);
     }
 
     public String getHttpVersion() {

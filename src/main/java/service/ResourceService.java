@@ -30,7 +30,7 @@ public class ResourceService {
         headers.put(Header.CONTENT_TYPE, contentType.getContentTypeValue());
         headers.put(Header.CONTENT_LENGTH, String.valueOf(body.length));
 
-        return new Response(statusLine, headers, body);
+        return Response.of(statusLine, headers, body);
     }
 
     public static String generatePath(Request request) {

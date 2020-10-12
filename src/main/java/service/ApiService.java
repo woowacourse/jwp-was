@@ -28,10 +28,10 @@ public class ApiService {
 
             headers.put(Header.LOCATION, CREATE_REDIRECT_LOCATION);
 
-            return new Response(statusLine, headers, null);
+            return Response.of(statusLine, headers, null);
         }
         StatusLine statusLine = StatusLine.of(request, Status.METHOD_NOT_ALLOWED);
 
-        return new Response(statusLine, headers, null);
+        return Response.of(statusLine);
     }
 }

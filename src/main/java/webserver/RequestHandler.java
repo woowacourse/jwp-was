@@ -7,10 +7,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Map;
-import model.general.ContentType;
 import model.general.Header;
+import model.general.Status;
 import model.request.Request;
 import model.response.Response;
+import model.response.StatusLine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,17 +35,23 @@ public class RequestHandler implements Runnable {
             OutputStream outputStream = connection.getOutputStream()) {
             DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
 
-            Request request = Request.of(inputStream);
-
-            ContentType responseContentType = request.generateContentTypeFromRequestUri();
-            Controller controller = Controller.of(responseContentType);
-            Response response = controller.executeOperation(request);
-
+            Response response = makeResponse(inputStream);
             writeToOutputStream(dataOutputStream, response);
-        } catch (IOException | IllegalArgumentException e) {
+        } catch (Exception e) {
             logger.error(e.getMessage());
-            e.printStackTrace();
         }
+    }
+
+    private Response makeResponse(InputStream inputStream) {
+        Request request;
+        try {
+            request = Request.of(inputStream);
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+            return Response.of(StatusLine.of(Status.BAD_REQUEST));
+        }
+
+        return Controller.executeOperation(request);
     }
 
     private void writeToOutputStream(DataOutputStream dataOutputStream, Response response)

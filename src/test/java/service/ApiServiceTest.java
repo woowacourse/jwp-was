@@ -2,13 +2,11 @@ package service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import controller.Controller;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.stream.Stream;
-import model.general.ContentType;
 import model.general.Header;
 import model.request.Request;
 import model.response.Response;
@@ -24,9 +22,7 @@ public class ApiServiceTest {
         InputStream inputStream = new FileInputStream(filePath);
         Request request = Request.of(inputStream);
 
-        ContentType responseContentType = request.generateContentTypeFromRequestUri();
-        Controller controller = Controller.of(responseContentType);
-        Response response = controller.executeOperation(request);
+        Response response = ApiService.execute(request);
         Map<Header, String> headers = response.getHeaders();
 
         Stream.of(

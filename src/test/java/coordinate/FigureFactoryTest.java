@@ -8,6 +8,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FigureFactoryTest {
+
     @Test
     public void line() {
         List<Point> points = Arrays.asList(

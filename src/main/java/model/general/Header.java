@@ -14,6 +14,7 @@ public enum Header {
     UPGRADE("Upgrade"),
     VIA("Via"),
     WARNING("Warning"),
+    COOKIE("Cookie"),
     //Request Header
     SEC_CH_UA("sec-ch-ua"),
     SEC_CH_UA_MOBILE("sec-ch-ua-mobile"),

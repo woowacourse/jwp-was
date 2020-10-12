@@ -6,11 +6,11 @@ import controller.Controller;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
-import model.general.ContentType;
 import model.general.Header;
 import model.request.Request;
 import org.junit.jupiter.api.DisplayName;
@@ -30,13 +30,10 @@ public class ResponseTest {
         "src/test/resources/input/get_api_request.txt",
         "src/test/resources/input/post_api_request.txt"
     })
-    void create(String filePath) throws IOException {
+    void create(String filePath) throws IOException, URISyntaxException {
         InputStream inputStream = new FileInputStream(filePath);
         Request request = Request.of(inputStream);
-
-        ContentType responseContentType = request.generateContentTypeFromRequestUri();
-        Controller controller = Controller.of(responseContentType);
-        Response response = controller.executeOperation(request);
+        Response response = Controller.executeOperation(request);
 
         assertThat(response).isInstanceOf(Response.class);
     }
@@ -49,13 +46,10 @@ public class ResponseTest {
         "src/test/resources/input/get_api_request.txt:false",
         "src/test/resources/input/post_api_request.txt:false"
     }, delimiter = ':')
-    void hasContents(String filePath, boolean expected) throws IOException {
+    void hasContents(String filePath, boolean expected) throws IOException, URISyntaxException {
         InputStream inputStream = new FileInputStream(filePath);
         Request request = Request.of(inputStream);
-
-        ContentType responseContentType = request.generateContentTypeFromRequestUri();
-        Controller controller = Controller.of(responseContentType);
-        Response response = controller.executeOperation(request);
+        Response response = Controller.executeOperation(request);
 
         assertThat(response.hasContents()).isEqualTo(expected);
     }
@@ -68,13 +62,10 @@ public class ResponseTest {
         "src/test/resources/input/get_api_request.txt:HTTP/1.1",
         "src/test/resources/input/post_api_request.txt:HTTP/1.1"
     }, delimiter = ':')
-    void getHttpVersion(String filePath, String expected) throws IOException {
+    void getHttpVersion(String filePath, String expected) throws IOException, URISyntaxException {
         InputStream inputStream = new FileInputStream(filePath);
         Request request = Request.of(inputStream);
-
-        ContentType responseContentType = request.generateContentTypeFromRequestUri();
-        Controller controller = Controller.of(responseContentType);
-        Response response = controller.executeOperation(request);
+        Response response = Controller.executeOperation(request);
 
         assertThat(response.getHttpVersion()).isEqualTo(expected);
     }
@@ -88,13 +79,10 @@ public class ResponseTest {
         "src/test/resources/input/post_api_request.txt:302",
         "src/test/resources/input/put_api_request.txt:405"
     }, delimiter = ':')
-    void getStatusCode(String filePath, String expected) throws IOException {
+    void getStatusCode(String filePath, String expected) throws IOException, URISyntaxException {
         InputStream inputStream = new FileInputStream(filePath);
         Request request = Request.of(inputStream);
-
-        ContentType responseContentType = request.generateContentTypeFromRequestUri();
-        Controller controller = Controller.of(responseContentType);
-        Response response = controller.executeOperation(request);
+        Response response = Controller.executeOperation(request);
 
         assertThat(response.getStatusCode()).isEqualTo(expected);
     }
@@ -108,13 +96,10 @@ public class ResponseTest {
         "src/test/resources/input/post_api_request.txt:Found",
         "src/test/resources/input/put_api_request.txt:Method Not Allowed"
     }, delimiter = ':')
-    void getReasonPhrase(String filePath, String expected) throws IOException {
+    void getReasonPhrase(String filePath, String expected) throws IOException, URISyntaxException {
         InputStream inputStream = new FileInputStream(filePath);
         Request request = Request.of(inputStream);
-
-        ContentType responseContentType = request.generateContentTypeFromRequestUri();
-        Controller controller = Controller.of(responseContentType);
-        Response response = controller.executeOperation(request);
+        Response response = Controller.executeOperation(request);
 
         assertThat(response.getReasonPhrase()).isEqualTo(expected);
     }
@@ -122,13 +107,11 @@ public class ResponseTest {
     @ParameterizedTest
     @DisplayName("headers 확인")
     @MethodSource("provideHeaders")
-    void getHeaders(String filePath, Map<Header, String> expected) throws IOException {
+    void getHeaders(String filePath, Map<Header, String> expected)
+        throws IOException, URISyntaxException {
         InputStream inputStream = new FileInputStream(filePath);
         Request request = Request.of(inputStream);
-
-        ContentType responseContentType = request.generateContentTypeFromRequestUri();
-        Controller controller = Controller.of(responseContentType);
-        Response response = controller.executeOperation(request);
+        Response response = Controller.executeOperation(request);
 
         assertThat(response.getHeaders()).isEqualTo(expected);
     }
@@ -168,13 +151,11 @@ public class ResponseTest {
         "src/test/resources/input/post_api_request.txt:false",
         "src/test/resources/input/put_api_request.txt:false"
     }, delimiter = ':')
-    void getBody(String filePath, boolean expected) throws IOException {
+    void getBody(String filePath, boolean expected) throws IOException, URISyntaxException {
         InputStream inputStream = new FileInputStream(filePath);
         Request request = Request.of(inputStream);
+        Response response = Controller.executeOperation(request);
 
-        ContentType responseContentType = request.generateContentTypeFromRequestUri();
-        Controller controller = Controller.of(responseContentType);
-        Response response = controller.executeOperation(request);
         byte[] body = response.getBody();
 
         assertThat(Objects.nonNull(body)).isEqualTo(expected);

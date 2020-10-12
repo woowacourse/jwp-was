@@ -21,8 +21,10 @@ public class StatusLineTest {
     void create(String filePath, Status status) throws IOException {
         InputStream inputStream = new FileInputStream(filePath);
         Request request = Request.of(inputStream);
-
-        assertThat(StatusLine.of(request, status)).isInstanceOf(StatusLine.class);
+        Stream.of(
+            assertThat(StatusLine.of(request, status)).isInstanceOf(StatusLine.class),
+            assertThat(StatusLine.of(status)).isInstanceOf(StatusLine.class)
+        );
     }
 
     private static Stream<Arguments> provideStatus() {
