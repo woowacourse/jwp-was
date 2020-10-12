@@ -18,7 +18,7 @@ public class RequestHandlerMappingTest {
         RequestHandlerMapping requestHandlerMapping = new RequestHandlerMapping(Maps.newHashMap());
         requestHandlerMapping.putController("/user/create", new CreateUserController());
         requestHandlerMapping.putController("/user/login", new LoginController());
-        requestHandlerMapping.putController("/", new DefaultController());
+        requestHandlerMapping.putController("/", DefaultController.getInstance());
         assertThat(requestHandlerMapping.getController(url)).isInstanceOf(controllerClass.getClass());
 
     }
@@ -27,9 +27,9 @@ public class RequestHandlerMappingTest {
         return Stream.of(
             Arguments.of("/user/create", new CreateUserController()),
             Arguments.of("/user/login", new LoginController()),
-            Arguments.of("/index.html", new DefaultController()),
-            Arguments.of("/", new DefaultController()),
-            Arguments.of("/asdf", new ErrorController())
+            Arguments.of("/index.html", DefaultController.getInstance()),
+            Arguments.of("/", DefaultController.getInstance()),
+            Arguments.of("/asdf", ErrorController.getInstance())
         );
     }
 }

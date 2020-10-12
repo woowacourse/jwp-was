@@ -22,7 +22,7 @@ public class ErrorControllerTest {
         String fileName = "Http_Response_Not_Found.txt";
         HttpResponse response = new HttpResponse(createOutputStream(fileName));
 
-        Controller controller = new ErrorController();
+        Controller controller = ErrorController.getInstance();
         controller.service(request, response);
         String responseText = convertText(createResponseBufferedReader(fileName));
 
@@ -38,7 +38,7 @@ public class ErrorControllerTest {
         String fileName = "Http_Response_Not_Found.txt";
         HttpResponse response = new HttpResponse(createOutputStream(fileName));
 
-        Controller controller = new ErrorController();
+        Controller controller = ErrorController.getInstance();
         controller.service(request, response);
         String responseText = convertText(createResponseBufferedReader(fileName));
 

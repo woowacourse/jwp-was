@@ -21,9 +21,9 @@ public class RequestHandlerMapping {
 
         if (Objects.isNull(controller)) {
             if (FileExtension.isFileExtension(uri) ) {
-                return new DefaultController();
+                return DefaultController.getInstance();
             }
-            return new ErrorController();
+            return ErrorController.getInstance();
         }
         return controller;
     }

@@ -22,7 +22,7 @@ public class DefaultControllerTest {
         String fileName = "Http_Response_Forward_HTML.txt";
         HttpResponse response = new HttpResponse(createOutputStream(fileName));
 
-        Controller controller = new DefaultController();
+        Controller controller = DefaultController.getInstance();
         controller.service(request, response);
         String responseText = convertText(createResponseBufferedReader(fileName));
 
