@@ -4,8 +4,10 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import web.server.utils.FileIoUtils;
 import web.server.utils.StaticFileType;
 
@@ -16,12 +18,12 @@ public class HttpResponse {
 
     private final DataOutputStream dataOutputStream;
     private final Map<String, String> headerParams;
-    private final Cookies cookies;
+    private final ResponseCookies responseCookies;
 
     public HttpResponse(DataOutputStream dataOutputStream) {
         this.dataOutputStream = dataOutputStream;
         this.headerParams = new HashMap<>();
-        this.cookies = new Cookies();
+        this.responseCookies = new ResponseCookies();
     }
 
     private void responseHeader(StatusCode statusCode) {
@@ -36,8 +38,8 @@ public class HttpResponse {
     }
 
     private void writeCookies() throws IOException {
-        for (Cookie cookie : cookies.getCookies()) {
-            this.dataOutputStream.writeBytes(cookie.convertToString() + NEW_LINE);
+        for (ResponseCookie responseCookie : responseCookies.getResponseCookies()) {
+            this.dataOutputStream.writeBytes(responseCookie.convertToString() + NEW_LINE);
         }
     }
 
@@ -48,6 +50,14 @@ public class HttpResponse {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    public void forward(String content) {
+        byte[] body = content.getBytes();
+        headerParams.put("Content-Type", StaticFileType.HTML + ";charset=utf-8");
+        headerParams.put("Content-Length", String.valueOf(body.length));
+        responseHeader(StatusCode.OK);
+        responseBody(this.dataOutputStream, body);
     }
 
     public void forward(String path, StaticFileType staticFileType) {
@@ -72,7 +82,7 @@ public class HttpResponse {
         responseHeader(StatusCode.METHOD_NOT_ALLOWED);
     }
 
-    public void addCookie(Cookie cookie) {
-        cookies.addCookie(cookie);
+    public void addCookie(ResponseCookie responseCookie) {
+        responseCookies.addCookie(responseCookie);
     }
 }
