@@ -5,6 +5,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 import utils.FileIoUtils;
 import webserver.FileExtension;
 
@@ -17,6 +19,7 @@ public class HttpResponse {
     private StatusLine statusLine;
     private final ResponseHeader responseHeader;
     private ResponseBody responseBody;
+    private final List<Cookie> cookies = new ArrayList<>();
 
     public HttpResponse(OutputStream outputStream) {
         dataOutputStream = new DataOutputStream(outputStream);
@@ -25,6 +28,16 @@ public class HttpResponse {
 
     public void addHeader(String key, String value) {
         responseHeader.putHeader(key, value);
+    }
+
+    public void addCookie(Cookie cookie) {
+        cookies.add(cookie);
+
+        addHeader("Set-Cookie", cookie.generateHeader());
+    }
+
+    public List<Cookie> getCookies() {
+        return cookies;
     }
 
     public void setContentType(String contentType) {

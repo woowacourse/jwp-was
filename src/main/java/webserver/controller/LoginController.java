@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import model.User;
 import webserver.request.HttpRequest;
+import webserver.response.Cookie;
 import webserver.response.HttpResponse;
 
 public class LoginController extends AbstractController{
@@ -16,9 +17,11 @@ public class LoginController extends AbstractController{
         User user = DataBase.findUserById(userId);
 
         if(user.isSamePassword(password)) {
+            httpResponse.addCookie(new Cookie("logined", "true"));
             httpResponse.sendRedirect("/index.html");
             return;
         }
+        httpResponse.addCookie(new Cookie("logined", "false"));
         httpResponse.sendRedirect("/user/login_failed.html");
     }
 }

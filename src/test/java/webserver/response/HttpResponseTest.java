@@ -1,8 +1,10 @@
 package webserver.response;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -12,6 +14,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Objects;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -102,6 +105,30 @@ public class HttpResponseTest {
 
         assertThat(responseText).contains("HTTP/1.1 501 Not Implemented");
         assertThat(responseText).contains("</body></html>");
+    }
+
+    @DisplayName("Cookie 추가")
+    @Test
+    public void addCookie() {
+        HttpResponse response = new HttpResponse(new ByteArrayOutputStream());
+        response.addCookie(new Cookie("name", "bingbong"));
+
+        List<Cookie> cookies = response.getCookies();
+        assertAll(() -> {
+            assertThat(cookies.get(0).getName()).isEqualTo("name");
+            assertThat(cookies.get(0).getValue()).isEqualTo("bingbong");
+        });
+    }
+
+    @DisplayName("Cookies 조회")
+    @Test
+    public void getCookies() {
+        HttpResponse response = new HttpResponse(new ByteArrayOutputStream());
+        response.addCookie(new Cookie("name", "bingbong"));
+        response.addCookie(new Cookie("generation", "2"));
+
+        List<Cookie> cookies = response.getCookies();
+        assertThat(cookies).hasSize(2);
     }
 
     private String convertText(BufferedReader bufferedReader) throws IOException {
