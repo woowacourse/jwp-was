@@ -2,60 +2,68 @@ package web.request;
 
 import exception.InvalidHttpRequestException;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import java.io.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class HttpRequestTest {
     private static final Logger logger = LoggerFactory.getLogger(HttpRequestTest.class);
+    private static final String TEST_DIRECTORY = "resources/testdata/";
     private InputStream inputStream;
 
-    @BeforeEach
-    void setup() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("GET /index.html HTTP/1.1\n");
-        stringBuilder.append("Host: localhost:8080\n");
-        stringBuilder.append("Connection: keep-alive\n");
-        stringBuilder.append("Accept: */*\n\n");
-        inputStream = new ByteArrayInputStream(stringBuilder.toString().getBytes());
-    }
-
     @Test
-    @DisplayName("HttpRequest 객체가 올바르게 생성된다")
+    @DisplayName("GET 요청을 보낼 경우, HttpRequest 객체가 올바르게 생성된다")
     void createHttpRequestTest() {
-        HttpRequest httpRequest = new HttpRequest(inputStream);
-        Assertions.assertThat(httpRequest.getMethod().getName()).isEqualTo("GET");
-        Assertions.assertThat(httpRequest.getRequestPath().getTarget()).isEqualTo("/index.html");
-        Assertions.assertThat(httpRequest.getVersion()).isEqualTo("HTTP/1.1");
+        try {
+            inputStream = new FileInputStream(new File(TEST_DIRECTORY + "HTTP_GET_1.txt"));
+            HttpRequest httpRequest = new HttpRequest(inputStream);
+            Assertions.assertThat(httpRequest.getMethod().getName()).isEqualTo("GET");
+            Assertions.assertThat(httpRequest.getTarget()).isEqualTo("/index.html");
+            Assertions.assertThat(httpRequest.getVersion()).isEqualTo("HTTP/1.1");
+        } catch (FileNotFoundException e) {
+            logger.error(e.getMessage());
+        }
     }
 
     @Test
-    @DisplayName("POST로 요청 후 body에 값을 담아도, HttpRequest 객체가 올바르게 생성된다")
+    @DisplayName("POST로 요청을 보낼 경우, HttpRequest 객체가 올바르게 생성된다")
     void createHttpRequestWithBodyTest() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("POST /user/create?id=1 HTTP/1.1\n");
-        stringBuilder.append("Host: localhost:8080\n");
-        stringBuilder.append("Connection: keep-alive\n");
-        stringBuilder.append("Content-Length: 46\n");
-        stringBuilder.append("Content-Type: application/x-www-form-urlencoded\n");
-        stringBuilder.append("Accept: */*\n\n");
-        stringBuilder.append("userId=javajigi&password=password&name=JaeSung\n");
-        inputStream = new ByteArrayInputStream(stringBuilder.toString().getBytes());
+        try {
+            inputStream = new FileInputStream(new File(TEST_DIRECTORY + "HTTP_POST_1.txt"));
 
-        HttpRequest request = new HttpRequest(inputStream);
+            HttpRequest request = new HttpRequest(inputStream);
 
-        assertEquals("POST", request.getMethod().getName());
-        assertEquals("/user/create", request.getRequestPath().getTarget());
-        assertEquals("keep-alive", request.getRequestHeaderByKey("Connection"));
-        assertEquals("1", request.getRequestPath().getParameterByKey("id"));
-        assertEquals("javajigi", request.getRequestBody().getParameterByKey("userId"));
+            assertEquals("POST", request.getMethod().getName());
+            assertEquals("/user/create", request.getTarget());
+            assertEquals("keep-alive", request.getRequestHeaderByKey("Connection"));
+            assertEquals("javajigi", request.getRequestBodyByKey("userId"));
+            assertEquals("javajigi%40slipp.net", request.getRequestBodyByKey("email"));
+        } catch (FileNotFoundException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    @Test
+    @DisplayName("POST로 요청 후 경로에 값을 담을 경우, HttpRequest 객체가 올바르게 생성된다")
+    void createHttpRequestWithBodyAndParamTest() {
+        try {
+            inputStream = new FileInputStream(new File(TEST_DIRECTORY + "HTTP_POST_2.txt"));
+
+            HttpRequest request = new HttpRequest(inputStream);
+
+            assertEquals("POST", request.getMethod().getName());
+            assertEquals("/user/create", request.getTarget());
+            assertEquals("keep-alive", request.getRequestHeaderByKey("Connection"));
+            assertEquals("1", request.getRequestParamsByKey("id"));
+            assertEquals("javajigi", request.getRequestBodyByKey("userId"));
+        } catch (FileNotFoundException e) {
+            logger.error(e.getMessage());
+        }
     }
 
     @Test
@@ -72,16 +80,13 @@ public class HttpRequestTest {
     @Test
     @DisplayName("HttpRequest에 contentType 정보를 요청하면, 올바른 값을 반환한다")
     void getContentTypeTest() {
-        HttpRequest httpRequest = new HttpRequest(inputStream);
+        try {
+            inputStream = new FileInputStream(new File(TEST_DIRECTORY + "HTTP_GET_1.txt"));
+            HttpRequest httpRequest = new HttpRequest(inputStream);
 
-        Assertions.assertThat(httpRequest.getAcceptType()).isEqualTo("*/*");
-    }
-
-    @Test
-    @DisplayName("HttpRequest에 Version 정보를 요청하면, 올바른 값을 반환한다")
-    void getVersionTest() {
-        HttpRequest httpRequest = new HttpRequest(inputStream);
-
-        Assertions.assertThat(httpRequest.getVersion()).isEqualTo("HTTP/1.1");
+            Assertions.assertThat(httpRequest.getAcceptType()).isEqualTo("*/*");
+        } catch (FileNotFoundException e) {
+            logger.error(e.getMessage());
+        }
     }
 }

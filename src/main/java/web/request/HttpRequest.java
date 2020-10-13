@@ -66,20 +66,22 @@ public class HttpRequest {
         return requestLine.getMethod();
     }
 
-    public RequestPath getRequestPath() {
-        return requestLine.getRequestPath();
-    }
-
     public String getVersion() {
         return requestLine.getVersion();
     }
 
-    public RequestBody getRequestBody() {
-        return requestBody;
-    }
-
     public String getAcceptType() {
         return httpHeader.getAcceptType();
+    }
+
+    public String getTarget() {
+        RequestPath requestPath = requestLine.getRequestPath();
+        return requestPath.getTarget();
+    }
+
+    public String getRequestParamsByKey(String key) {
+        RequestPath requestPath = requestLine.getRequestPath();
+        return requestPath.getParameterByKey(key);
     }
 
     public String getRequestHeaderByKey(String key) {
