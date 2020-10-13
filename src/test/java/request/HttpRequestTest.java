@@ -6,16 +6,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 class HttpRequestTest {
 
@@ -113,46 +107,6 @@ class HttpRequestTest {
             .hasMessage("this header field does not exist.");
     }
 
-    @ParameterizedTest
-    @MethodSource("getParameterOfIsRequestLineUriQueryString")
-    @DisplayName("요청 헤더의 URI 가 query string 형식인지 아닌지 알아보기")
-    void isRequestLineUriQueryString(String requestLine, boolean expected) {
-        HttpRequest httpRequest = new HttpRequest(requestLine, "");
-
-        assertThat(httpRequest.isRequestLineUriQueryString()).isEqualTo(expected);
-    }
-
-    private static Stream<Arguments> getParameterOfIsRequestLineUriQueryString() {
-        return Stream.of(
-            Arguments.of("GET /join?id=1 HTTP/1.1\n", true),
-            Arguments.of("GET /join HTTP/1.1\n", false),
-            Arguments.of("POST /join?id=1 HTTP/1.1\n", true),
-            Arguments.of("POST /join HTTP/1.1\n", false)
-        );
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"GET /user/create?id=1 HTTP/1.1\n",
-        "POST /user/create?id=1 HTTP/1.1\n"})
-    @DisplayName("요청 헤더의 URI 로부터 query 데이터 가져오기")
-    void getQueryDataFromUri(String requestHeader) {
-        HttpRequest httpRequest = new HttpRequest(requestHeader, "");
-
-        Map<String, String> expected = new HashMap<>();
-        expected.put("id", "1");
-
-        assertThat(httpRequest.getQueryDataFromUri()).isEqualTo(expected);
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"GET /user/create HTTP/1.1\n", "PUT /user/create HTTP/1.1\n"})
-    @DisplayName("요청 헤더의 uri로부터 query data 가져오기 - uri가 query string 형식이 아닐때 예외처리")
-    void getQueryDataFromUri_IfUriIsNotQueryString_ThrowException(String requestHeader) {
-        HttpRequest httpRequest = new HttpRequest(requestHeader, "");
-
-        assertThatThrownBy(httpRequest::getQueryDataFromUri).isInstanceOf(RequestDataFormatException.class);
-    }
-
     @Test
     @DisplayName("요청의 body 로부터 form 데이터 얻기")
     void getValueFromFormData() {
@@ -161,11 +115,14 @@ class HttpRequestTest {
             + "Connection: keep-alive\n"
             + "Cache-Control: max-age=0\n"
             + "Upgrade-Insecure-Requests: 1\n"
-            + "Content-Length: 10\n";
-        String requestBody = "id=3456789";
+            + "Content-Length: 10\n"
+            + "Content-Type: application/x-www-form-urlencoded\n";
+        String requestBody = "userId=javajigi&password=password&name=JaeSung";
         HttpRequest httpRequest = new HttpRequest(requestHeader, requestBody);
 
-        assertThat(httpRequest.getValueFromFormData("id")).isEqualTo("3456789");
+        assertThat(httpRequest.getValueFromFormData("userId")).isEqualTo("javajigi");
+        assertThat(httpRequest.getValueFromFormData("password")).isEqualTo("password");
+        assertThat(httpRequest.getValueFromFormData("name")).isEqualTo("JaeSung");
     }
 
     @Test

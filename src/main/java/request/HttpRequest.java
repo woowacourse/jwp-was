@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import utils.IOUtils;
 
 /** request 형태!
@@ -74,14 +73,6 @@ public class HttpRequest {
     public static String findHeaderValue(String request, String headerName) {
         return new HttpRequest(request, MessageBody.EMPTY_BODY)
             .getHeader(headerName);
-    }
-
-    public boolean isRequestLineUriQueryString() {
-        return requestLine.isUriUsingQueryString();
-    }
-
-    public Map<String, String > getQueryDataFromUri() {
-        return requestLine.getQueryDataFromUri();
     }
 
     public String getValueFromFormData(String headerName) {
