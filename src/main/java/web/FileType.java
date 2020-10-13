@@ -38,8 +38,4 @@ public enum FileType {
     public String getResourcePath() {
         return resourcePath;
     }
-
-    public String getContentType() {
-        return contentType;
-    }
 }

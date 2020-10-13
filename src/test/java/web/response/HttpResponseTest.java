@@ -5,15 +5,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import web.request.HttpRequestTest;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class HttpResponseTest {
-    private static final Logger logger = LoggerFactory.getLogger(HttpRequestTest.class);
-    private static final String TEST_DIRECTORY = "./src/test/resources/request/";
+    private static final Logger logger = LoggerFactory.getLogger(HttpResponseTest.class);
     private ByteArrayOutputStream outputStream;
 
     @Test
