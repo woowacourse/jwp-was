@@ -1,4 +1,4 @@
-package webserver.controller;
+package controller;
 
 import exception.RequestMethodNotSupportedException;
 import org.slf4j.Logger;

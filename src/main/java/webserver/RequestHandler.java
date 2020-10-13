@@ -1,12 +1,12 @@
 package webserver;
 
+import controller.Controller;
+import controller.ControllerMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import web.request.HttpRequest;
 import web.request.RequestPath;
 import web.response.HttpResponse;
-import webserver.controller.Controller;
-import webserver.controller.ControllerMapper;
 
 import java.io.IOException;
 import java.io.InputStream;
