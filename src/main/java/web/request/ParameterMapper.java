@@ -16,6 +16,7 @@ public abstract class ParameterMapper {
 
     protected void mappingParameters(String params) {
         validateParameters(params);
+
         for (String parameter : params.split("&")) {
             validateParameter(parameter);
             String[] tokens = parameter.split("=");

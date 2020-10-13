@@ -10,7 +10,7 @@ public class IndexController extends AbstractController {
     @Override
     protected void doGet(HttpRequest request, HttpResponse response) {
         try {
-            response.ok("/index.html", "*/*");
+            response.ok("/index.html", "text/html");
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }

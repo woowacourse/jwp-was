@@ -10,14 +10,6 @@ public class ResponseBody {
         this.body = body;
     }
 
-    public int getContentLength() {
-        return body.length;
-    }
-
-    public byte[] getBody() {
-        return body;
-    }
-
     public void write(DataOutputStream dataOutputStream) throws IOException {
         dataOutputStream.write(body, 0, body.length);
     }

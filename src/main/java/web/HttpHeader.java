@@ -42,8 +42,9 @@ public class HttpHeader {
     }
 
     public void write(DataOutputStream dataOutputStream) throws IOException {
-        for (String key : headers.keySet()) {
-            String value = headers.get(key);
+        for (Map.Entry<String, String> entry : headers.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
             dataOutputStream.writeBytes(key + HEADER_DELIMITER + value + " \r\n");
         }
         dataOutputStream.writeBytes("\n");

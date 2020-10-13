@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class HttpRequestTest {
     private static final Logger logger = LoggerFactory.getLogger(HttpRequestTest.class);
-    private static final String TEST_DIRECTORY = "resources/testdata/";
+    private static final String TEST_DIRECTORY = "./src/test/resources/request/";
     private InputStream inputStream;
 
     @Test
@@ -27,6 +27,7 @@ public class HttpRequestTest {
             Assertions.assertThat(httpRequest.getVersion()).isEqualTo("HTTP/1.1");
         } catch (FileNotFoundException e) {
             logger.error(e.getMessage());
+            throw new AssertionError();
         }
     }
 
@@ -42,9 +43,9 @@ public class HttpRequestTest {
             assertEquals("/user/create", request.getTarget());
             assertEquals("keep-alive", request.getRequestHeaderByKey("Connection"));
             assertEquals("javajigi", request.getRequestBodyByKey("userId"));
-            assertEquals("javajigi%40slipp.net", request.getRequestBodyByKey("email"));
         } catch (FileNotFoundException e) {
             logger.error(e.getMessage());
+            throw new AssertionError();
         }
     }
 
@@ -63,6 +64,7 @@ public class HttpRequestTest {
             assertEquals("javajigi", request.getRequestBodyByKey("userId"));
         } catch (FileNotFoundException e) {
             logger.error(e.getMessage());
+            throw new AssertionError();
         }
     }
 
@@ -87,6 +89,7 @@ public class HttpRequestTest {
             Assertions.assertThat(httpRequest.getAcceptType()).isEqualTo("*/*");
         } catch (FileNotFoundException e) {
             logger.error(e.getMessage());
+            throw new AssertionError();
         }
     }
 }
