@@ -3,6 +3,7 @@ package controller;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import exception.NotSupportedControllerException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 
@@ -21,7 +22,7 @@ public abstract class AbstractController implements Controller {
             doPost(httpRequest, httpResponse);
             return ;
         }
-        throw new RuntimeException();
+        throw new NotSupportedControllerException("지원하지 않는 Controller입니다.");
     }
 
     abstract void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException;

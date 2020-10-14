@@ -9,7 +9,7 @@ import controller.type.resource.StaticType;
 import controller.TemplateController;
 import controller.type.resource.TemplateType;
 import controller.UserController;
-import exception.NotFoundControllerType;
+import exception.NotFoundControllerTypeException;
 import http.request.HttpRequest;
 
 public enum ControllerType {
@@ -32,7 +32,7 @@ public enum ControllerType {
         return Arrays.stream(ControllerType.values())
                 .filter(type -> type.predicateControllerType.test(httpRequest))
                 .findFirst()
-                .orElseThrow(() -> new NotFoundControllerType("Controller를 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundControllerTypeException("Controller를 찾을 수 없습니다."));
     }
 
     public Controller getController() {
