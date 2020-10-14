@@ -19,7 +19,7 @@ abstract public class AbstractController implements Controller {
         } catch (RequestDataFormatException e) {
             logger.debug(e.getMessage());
             return new HttpResponse(StatusCode.BAD_REQUEST);
-        } catch (WrongUriException e) {
+        } catch (WrongRequestException e) {
             logger.debug(e.getMessage());
             return new HttpResponse(StatusCode.NOT_FOUND);
         }
@@ -38,7 +38,7 @@ abstract public class AbstractController implements Controller {
         if (httpRequest.isMethod(Method.DELETE)) {
             return doDelete(httpRequest);
         }
-        throw new WrongUriException("http method of the request is weird.");
+        throw new WrongRequestException("http method of the request is weird.");
     }
 
     protected HttpResponse doGet(HttpRequest httpRequest) {

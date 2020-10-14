@@ -8,8 +8,10 @@ import response.StatusCode;
 
 public class UserController extends AbstractController {
 
-    private HttpResponse createUser(HttpRequest request) {
-        validateUriPath(request.getUriPath());
+    static final String CREATE_URI_PATH = "/user/create";
+    static final String LOGIN_URI_PATH = "/user/login";
+
+    private HttpResponse create(HttpRequest request) {
         User user = new User(
             request.getValueFromFormData("userId"),
             request.getValueFromFormData("password"),
@@ -21,14 +23,20 @@ public class UserController extends AbstractController {
         return new HttpResponse(StatusCode.FOUND, "/");
     }
 
-    private void validateUriPath(String uriPath) {
-        if (!uriPath.equals(UriPathConstants.USER_CREATE_URI_PATH)) {
-            throw new WrongUriException("bad request: strange uri");
-        }
+    private HttpResponse login(HttpRequest request) {
+        // todo 쿠키로 logined=true 내려주도록 구현
+
+       return new HttpResponse(StatusCode.OK, "/");
     }
 
     @Override
     protected HttpResponse doPost(HttpRequest httpRequest) {
-        return createUser(httpRequest);
+        if (httpRequest.getUriPath().equals(CREATE_URI_PATH)) {
+            return create(httpRequest);
+        }
+        if (httpRequest.getUriPath().equals(LOGIN_URI_PATH)) {
+            return login(httpRequest);
+        }
+        throw new WrongRequestException("uri that does not exist in the POST method.");
     }
 }

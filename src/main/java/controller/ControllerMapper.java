@@ -11,7 +11,8 @@ public class ControllerMapper {
 
     public ControllerMapper() {
         /* put new controller when you make a new controller */
-        controllersByUriPath.put(UriPathConstants.USER_CREATE_URI_PATH, new UserController());
+        controllersByUriPath.put(UserController.CREATE_URI_PATH, new UserController());
+        controllersByUriPath.put(UserController.LOGIN_URI_PATH, new UserController());
     }
 
     public Controller findController(HttpRequest httpRequest) {
