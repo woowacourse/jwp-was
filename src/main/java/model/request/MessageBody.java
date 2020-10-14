@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class MessageBody {
 
@@ -19,16 +20,9 @@ public class MessageBody {
     }
 
     public static MessageBody of(String messageBody) {
-        Map<String, String> parameters = new HashMap<>();
-
-        String[] splitParameter = messageBody.split(PARAMETER_DELIMITER);
-        Arrays.stream(splitParameter)
-            .forEach(p -> {
-                String key = p.split(PARAMETER_KEY_VALUE_SEPARATOR)[KEY_INDEX];
-                String value = p.split(PARAMETER_KEY_VALUE_SEPARATOR)[VALUE_INDEX];
-
-                parameters.put(key, value);
-            });
+        Map<String, String> parameters = Arrays.stream(messageBody.split(PARAMETER_DELIMITER))
+            .map(it -> it.split(PARAMETER_KEY_VALUE_SEPARATOR))
+            .collect(Collectors.toMap(it -> it[KEY_INDEX], it -> it[VALUE_INDEX]));
 
         return new MessageBody(Collections.unmodifiableMap(parameters));
     }

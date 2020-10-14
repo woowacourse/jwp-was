@@ -54,6 +54,7 @@ public class RequestHandler implements Runnable {
         return Controller.executeOperation(request);
     }
 
+    //todo: 이하 코드 util로 분리
     private void writeToOutputStream(DataOutputStream dataOutputStream, Response response)
         throws IOException {
         writeStatusLine(dataOutputStream, response);

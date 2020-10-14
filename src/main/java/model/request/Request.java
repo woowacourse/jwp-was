@@ -51,7 +51,7 @@ public class Request {
         Map<Header, String> headers = new HashMap<>();
 
         String line = bufferedReader.readLine();
-        while (Objects.nonNull(line) && !line.equals(EMPTY_LINE)) {
+        while (Objects.nonNull(line) && !EMPTY_LINE.equals(line)) {
             Header key = Header.of(line.split(HEADER_KEY_VALUE_SEPARATOR)[KEY_INDEX]);
             String value = line.split(HEADER_KEY_VALUE_SEPARATOR)[VALUE_INDEX];
             headers.put(key, value);

@@ -104,11 +104,12 @@ public class ResponseTest {
         assertThat(response.getReasonPhrase()).isEqualTo(expected);
     }
 
+    //todo: 테스트 깨지는지 확인
     @ParameterizedTest
     @DisplayName("headers 확인")
     @MethodSource("provideHeaders")
     void getHeaders(String filePath, Map<Header, String> expected)
-        throws IOException, URISyntaxException {
+        throws IOException {
         InputStream inputStream = new FileInputStream(filePath);
         Request request = Request.of(inputStream);
         Response response = Controller.executeOperation(request);

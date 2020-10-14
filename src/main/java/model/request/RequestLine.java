@@ -16,7 +16,7 @@ public class RequestLine {
     private static final int NO_EXTENSION_SIZE = 1;
     private static final int SIZE_CORRECTION_NUMBER = 1;
     private static final String EXTENSION_LETTER = ".";
-    private static final String PARAMETER_DELIMITER = "&";
+    private static final String PARAMETER_DELIMITER = "&"; // todo: semicolon delimiter 처리
     private static final String URI_PARAMETER_SEPARATOR = "\\?";
     private static final int PARAMETER_INDEX = 1;
     private static final String PARAMETER_KEY_VALUE_SEPARATOR = "=";

@@ -21,7 +21,6 @@ public class ResourceService {
     private static final String STATIC_LOCATION = "./static";
 
     public static Response execute(Request request) throws IOException, URISyntaxException {
-        request.getRequestUri();
         StatusLine statusLine = StatusLine.of(request, Status.OK);
         Map<Header, String> headers = new HashMap<>();
         byte[] body = FileIoUtils.loadFileFromClasspath(generatePath(request));
