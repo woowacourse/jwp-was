@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedReader;
 import java.io.StringReader;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class IOUtilsTest {
     private static final Logger logger = LoggerFactory.getLogger(IOUtilsTest.class);
 
@@ -18,7 +20,7 @@ public class IOUtilsTest {
         StringReader sr = new StringReader(data);
         BufferedReader br = new BufferedReader(sr);
 
-        logger.debug("parse body : {}", IOUtils.readData(br, data.length()));
+        assertThat(IOUtils.readData(br, data.length())).isEqualTo(data);
     }
 
     @DisplayName("길이가 0일때")
@@ -28,6 +30,6 @@ public class IOUtilsTest {
         StringReader sr = new StringReader(data);
         BufferedReader br = new BufferedReader(sr);
 
-        logger.debug("parse body : {}", IOUtils.readData(br, data.length()));
+        assertThat(IOUtils.readData(br, data.length())).isEmpty();
     }
 }

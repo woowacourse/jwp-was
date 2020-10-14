@@ -3,6 +3,7 @@ package utils;
 import com.github.jknack.handlebars.Template;
 import model.domain.User;
 import model.dto.UsersDto;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -15,6 +16,7 @@ import java.util.Collection;
 class TemplateMakerTest {
     private static final Logger log = LoggerFactory.getLogger(TemplateMaker.class);
 
+    @Disabled
     @DisplayName("handlebars template 테스트")
     @Test
     void name() throws IOException {

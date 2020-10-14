@@ -25,7 +25,7 @@ class DataBaseTest {
     void findByUserIdWhenEmpty() {
         Optional<User> user = DataBase.findUserById("1");
 
-        assertThat(user.isPresent()).isFalse();
+        assertThat(user).isEmpty();
     }
 
     @DisplayName("findAll 메서드 테스트")
