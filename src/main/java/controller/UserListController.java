@@ -3,18 +3,20 @@ package controller;
 import com.github.jknack.handlebars.Template;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import http.servlet.HttpSession;
+import http.servlet.SessionContainer;
 import model.db.DataBase;
 import model.dto.UsersDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 import utils.TemplateMaker;
 
 import java.io.IOException;
 
 public class UserListController extends AbstractController {
-    private static final String PATH = "/user/list";
-    public static final String SESSION_KEY_OF_LOGIN = "logined";
     private static final Logger logger = LoggerFactory.getLogger(UserListController.class);
+    private static final String PATH = "/user/list";
 
     protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         try {
@@ -32,8 +34,11 @@ public class UserListController extends AbstractController {
     }
 
     private boolean isNotLoginUser(HttpRequest httpRequest) {
-        return !httpRequest.containsKeyInCookie(SESSION_KEY_OF_LOGIN)
-                || httpRequest.getCookie(SESSION_KEY_OF_LOGIN).equals(Boolean.toString(false));
+        String sessionId = httpRequest.getCookie(SessionContainer.SESSION_KEY_FOR_COOKIE);
+        HttpSession session = SessionContainer.getInstance().getSession(sessionId);
+        String logined = session.getAttribute(LoginController.SESSION_KEY_OF_LOGIN);
+        return StringUtils.isEmpty(logined)
+                || logined.equals(Boolean.toString(false));
     }
 
     @Override

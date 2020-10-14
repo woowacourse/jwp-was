@@ -6,6 +6,8 @@ import http.request.HttpRequest;
 import http.request.RequestHeader;
 import http.request.RequestLine;
 import http.request.RequestParams;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.BufferedReaderUtils;
 import utils.Extractor;
 import utils.IOUtils;
@@ -16,10 +18,12 @@ import java.io.IOException;
 import java.util.Map;
 
 public class HttpRequestFactory {
+    private static final Logger logger = LoggerFactory.getLogger(HttpRequestFactory.class);
     public static final int BASE_CONTNET_LENGTH = 0;
 
     public static HttpRequest createRequest(BufferedReader br) throws IOException {
         String line = br.readLine();
+        logger.debug("request: {}", line);
         RequestLine requestLine = createRequestUri(line);
         String paramOfRequestLine = Extractor.paramFromRequestLine(line);
 

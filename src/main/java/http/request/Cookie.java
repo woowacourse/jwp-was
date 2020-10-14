@@ -16,6 +16,10 @@ public class Cookie {
 
     public Cookie(String cookieLine) {
         Map<String, String> cookies = new HashMap<>();
+        if (cookieLine == null) {
+            this.cookies = cookies;
+            return;
+        }
         for (String cookie : cookieLine.split(DELIMITER_OF_ELEMENT)) {
             String trimedCookie = cookie.trim();
             cookies.put(trimedCookie.split(DELIMITER_OF_KEY_VALUE)[0], trimedCookie.split(DELIMITER_OF_KEY_VALUE)[1]);

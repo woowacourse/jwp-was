@@ -5,6 +5,8 @@ import exception.LoginException;
 import exception.NotFoundUserIdException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import http.servlet.HttpSession;
+import http.servlet.SessionContainer;
 import model.db.DataBase;
 import model.domain.User;
 import org.slf4j.Logger;
@@ -13,9 +15,12 @@ import org.slf4j.LoggerFactory;
 public class LoginController extends AbstractController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private static final String PATH = "/user/login";
+    public static final String SESSION_KEY_OF_LOGIN = "logined";
 
     @Override
     protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
+        HttpSession session = SessionContainer.getInstance()
+                .getSession(httpRequest.getCookie(SessionContainer.SESSION_KEY_FOR_COOKIE));
         try {
             String userId = httpRequest.getParameter("userId");
             String password = httpRequest.getParameter("password");
@@ -23,11 +28,12 @@ public class LoginController extends AbstractController {
             validateLoginRequests(userId, password);
 
             logger.debug("Login success");
-            httpResponse.putHeader(HttpResponse.SET_COOKIE, "logined=true; path=/");
+
+            session.setAttribute(SESSION_KEY_OF_LOGIN, Boolean.toString(true));
             httpResponse.sendRedirect("/index.html");
         } catch (LoginException e) {
             logger.error(e.getMessage());
-            httpResponse.putHeader(HttpResponse.SET_COOKIE, "logined=false");
+            session.setAttribute(SESSION_KEY_OF_LOGIN, Boolean.toString(false));
             httpResponse.sendRedirect("/user/login_failed.html");
         }
     }

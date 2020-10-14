@@ -2,6 +2,7 @@ package http.request;
 
 import http.response.HttpResponse;
 import http.servlet.SessionContainer;
+import org.springframework.util.StringUtils;
 import utils.FileIoUtils;
 
 import java.io.IOException;
@@ -42,11 +43,17 @@ public class HttpRequest {
     }
 
     public void sessionCheck(HttpResponse httpResponse, SessionContainer sessionContainer) {
-        if (!cookie.containsKey(SessionContainer.SESSION_KEY_FOR_COOKIE)) {
+        if (isNotExistSession(sessionContainer)) {
             String sessionId = sessionContainer.createSession();
             httpResponse.putHeader(HttpResponse.SET_COOKIE,
                     String.format("%s=%s", SessionContainer.SESSION_KEY_FOR_COOKIE, sessionId));
         }
+    }
+
+    private boolean isNotExistSession(SessionContainer sessionContainer) {
+        String sessionId = cookie.get(SessionContainer.SESSION_KEY_FOR_COOKIE);
+        return StringUtils.isEmpty(sessionId)
+                || sessionContainer.getSession(sessionId) == null;
     }
 
     public boolean containsKeyInCookie(String key) {

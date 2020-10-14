@@ -23,12 +23,10 @@ public class RequestHandler implements Runnable {
 
     private final Socket connection;
     private final ControllerMapper controllerMapper;
-    private final SessionContainer sessionContainer;
 
-    public RequestHandler(Socket connectionSocket, ControllerMapper mapper, SessionContainer sessionContainer) {
+    public RequestHandler(Socket connectionSocket, ControllerMapper mapper) {
         this.connection = connectionSocket;
         this.controllerMapper = mapper;
-        this.sessionContainer = sessionContainer;
     }
 
     public void run() {
@@ -41,7 +39,7 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = HttpRequestFactory.createRequest(br);
             HttpResponse httpResponse = new HttpResponse(out);
 
-            httpRequest.sessionCheck(httpResponse, sessionContainer);
+            httpRequest.sessionCheck(httpResponse, SessionContainer.getInstance());
 
             handle(httpRequest, httpResponse);
         } catch (IOException | URISyntaxException e) {

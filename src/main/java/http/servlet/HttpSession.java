@@ -2,11 +2,10 @@ package http.servlet;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class HttpSession {
     private final String id;
-    private final Map<String, Object> attributes = new HashMap<>();
+    private final Map<String, String> attributes = new HashMap<>();
 
     public HttpSession(String id) {
         this.id = id;
@@ -16,11 +15,11 @@ public class HttpSession {
         return String.valueOf(id);
     }
 
-    public void setAttribute(String name, Objects value) {
+    public void setAttribute(String name, String value) {
         attributes.put(name, value);
     }
 
-    public Object getAttribute(String name) {
+    public String getAttribute(String name) {
         return attributes.get(name);
     }
 
@@ -30,5 +29,9 @@ public class HttpSession {
 
     public void invalidate() {
         attributes.clear();
+    }
+
+    public Map<String, String> getAttributes() {
+        return attributes;
     }
 }
