@@ -65,5 +65,4 @@ public class RequestHandler implements Runnable {
         }
         httpResponse.forward(httpRequest);
     }
-
 }

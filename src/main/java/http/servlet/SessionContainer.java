@@ -2,6 +2,7 @@ package http.servlet;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class SessionContainer {
     public static final String SESSION_KEY_FOR_COOKIE = "session_id";
@@ -21,6 +22,12 @@ public class SessionContainer {
 
     public void put(String sessionId, HttpSession httpSession) {
         sessionContainer.put(sessionId, httpSession);
+    }
+
+    public String createSession() {
+        String sessionId = String.valueOf(UUID.randomUUID());
+        sessionContainer.put(sessionId, new HttpSession(sessionId));
+        return sessionId;
     }
 
     private static class Holder {
