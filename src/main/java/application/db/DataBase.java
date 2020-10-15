@@ -14,7 +14,7 @@ public class DataBase {
         users.put(user.getUserId(), user);
     }
 
-    public static User findUserById(String userId) {
+    public static User findUserById(String userId) throws WrongUserIdPasswordException {
         if (users.containsKey(userId)) {
             return users.get(userId);
         }
