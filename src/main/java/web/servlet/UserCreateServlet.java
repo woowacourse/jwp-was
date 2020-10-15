@@ -18,9 +18,6 @@ public class UserCreateServlet implements Servlet {
                 parsedBody.get("name"),
                 parsedBody.get("email"));
         DataBase.addUser(user);
-        byte[] body = user.toString().getBytes();
-
-        httpResponse.response302Header("/index.html");
-        httpResponse.responseBody(body);
+        httpResponse.response302("/index.html");
     }
 }

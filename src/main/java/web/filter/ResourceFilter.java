@@ -17,8 +17,7 @@ public class ResourceFilter implements Filter {
 
             byte[] body = FileIoUtils.loadFileFromClasspath(matcher.getResourcePath() + requestPath);
 
-            httpResponse.response200Header(body.length, matcher.getContentType());
-            httpResponse.responseBody(body);
+            httpResponse.response200(body, matcher.getContentType());
             return;
         }
         filterChain.doFilter(httpRequest, httpResponse);
