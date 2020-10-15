@@ -35,4 +35,8 @@ public class HttpRequest {
     public HttpMethod getMethod() {
         return requestUri.getMethod();
     }
+
+    public boolean isGetMethod() {
+        return getMethod().isGet();
+    }
 }

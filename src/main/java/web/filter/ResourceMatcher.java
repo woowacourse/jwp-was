@@ -1,11 +1,13 @@
 package web.filter;
 
+import web.ContentTypes;
+
 import java.util.Arrays;
 
 public enum ResourceMatcher {
-    HTML(".html", "./templates", "text/html;charset=UTF-8"),
-    JAVASCRIPT(".js", "./static", "application/javascript;charset=UTF-8"),
-    CSS(".css", "./static", "text/css;charset=UTF-8");
+    HTML(".html", "./templates", ContentTypes.HTML_UTF_8.getValue()),
+    JAVASCRIPT(".js", "./static", ContentTypes.JAVASCRIPT_UTF_8.getValue()),
+    CSS(".css", "./static", ContentTypes.CSS_UTF_8.getValue());
 
     private final String suffix;
     private final String resourcePath;
