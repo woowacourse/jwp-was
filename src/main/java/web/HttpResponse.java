@@ -19,9 +19,9 @@ public class HttpResponse {
 
     public void response200Header(int lengthOfBodyContent, String contentType) {
         try {
-            this.dataOutputStream.writeBytes("HTTP/1.1 200 OK " + NEW_LINE);
-            this.dataOutputStream.writeBytes("Content-Type: " + contentType + NEW_LINE);
-            this.dataOutputStream.writeBytes("Content-Length: " + lengthOfBodyContent + NEW_LINE);
+            this.dataOutputStream.writeBytes(HttpVersion.HTTP_1_1.getVersion() + HttpStatusCode.OK.getValue() + NEW_LINE);
+            this.dataOutputStream.writeBytes(HeaderName.CONTENT_TYPE.getHeader(contentType) + NEW_LINE);
+            this.dataOutputStream.writeBytes(HeaderName.CONTENT_LENGTH.getHeader(lengthOfBodyContent) + NEW_LINE);
             this.dataOutputStream.writeBytes(NEW_LINE);
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -30,8 +30,8 @@ public class HttpResponse {
 
     public void response302Header(String url) {
         try {
-            this.dataOutputStream.writeBytes("HTTP/1.1 302 Found " + NEW_LINE);
-            this.dataOutputStream.writeBytes("Location: " + url + NEW_LINE);
+            this.dataOutputStream.writeBytes(HttpVersion.HTTP_1_1.getVersion() + HttpStatusCode.FOUND.getValue() + NEW_LINE);
+            this.dataOutputStream.writeBytes(HeaderName.LOCATION.getHeader(url) + NEW_LINE);
             this.dataOutputStream.writeBytes(NEW_LINE);
         } catch (IOException e) {
             logger.error(e.getMessage());
