@@ -1,6 +1,7 @@
 package db;
 
 import com.google.common.collect.Maps;
+import controller.user.WrongUserIdPasswordException;
 import java.util.Collection;
 import java.util.Map;
 import model.User;
@@ -14,7 +15,10 @@ public class DataBase {
     }
 
     public static User findUserById(String userId) {
-        return users.get(userId);
+        if (users.containsKey(userId)) {
+            return users.get(userId);
+        }
+        throw new WrongUserIdPasswordException("user that id is " + userId + " is not exist.");
     }
 
     public static Collection<User> findAll() {

@@ -1,8 +1,8 @@
 package controller;
 
-class WrongRequestException extends RuntimeException {
+public class WrongRequestException extends RuntimeException {
 
-    WrongRequestException(String message) {
+    public WrongRequestException(String message) {
         super(message);
     }
 }

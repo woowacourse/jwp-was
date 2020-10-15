@@ -140,4 +140,11 @@ public class HttpResponse {
     public byte[] getBody() {
         return body;
     }
+
+    @Override
+    public String toString() {
+        return "** HttpResponse **\n"
+            + buildHeader()
+            + "\n";
+    }
 }

@@ -33,11 +33,12 @@ public class RequestHandler implements Runnable {
             OutputStream out = connection.getOutputStream()
         ) {
             HttpRequest httpRequest = HttpRequest.readHttpRequest(in);
-            logger.debug("Receive HttpRequest\n{}", httpRequest.toString());
+            logger.info("Receive HttpRequest\n{}", httpRequest.toString());
 
             Controller controller = controllerMapper.findController(httpRequest);
             HttpResponse response = controller.service(httpRequest);
 
+            logger.info("HttpResponse to send\n{}", response.toString());
             DataOutputStream dos = new DataOutputStream(out);
             writeResponseOnOutputStream(dos, response);
         } catch (IOException e) {

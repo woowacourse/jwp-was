@@ -1,8 +1,11 @@
-package controller;
+package controller.user;
 
+import controller.AbstractController;
+import controller.WrongRequestException;
 import db.DataBase;
 import model.User;
 import request.HttpRequest;
+import response.Cookies;
 import response.HttpResponse;
 import response.StatusCode;
 
@@ -24,9 +27,21 @@ public class UserController extends AbstractController {
     }
 
     private HttpResponse login(HttpRequest request) {
-        // todo 쿠키로 logined=true 내려주도록 구현
+        String userId = request.getValueFromFormData("userId");
+        String password = request.getValueFromFormData("password");
 
-       return new HttpResponse(StatusCode.OK, "/");
+        try {
+            User user = DataBase.findUserById(userId);
+
+            if (!user.getPassword().equals(password)) {
+                throw new WrongUserIdPasswordException("userId is exist but password is wrong.");
+            }
+            return new HttpResponse(StatusCode.FOUND, "/")
+                .setCookies(Cookies.createWithSingleCookie("login", "true"));
+        } catch (WrongUserIdPasswordException e) {
+            return new HttpResponse(StatusCode.FOUND, "/user/login_failed.html")
+                .setCookies(Cookies.createWithSingleCookie("login", "false"));
+        }
     }
 
     @Override
