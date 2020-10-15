@@ -24,8 +24,8 @@ class HttpResponseTest {
     void createResponseWithCookies() {
         Cookies cookies = new Cookies(
             Arrays.asList(
-                new Cookie("token", "1A32Q!#RESRE15039"),
-                new Cookie("id", "1"))
+                new Cookie("token", "1A32Q!#RESRE15039", "/"),
+                new Cookie("id", "1", "/"))
         );
 
         HttpResponse response = new HttpResponse(StatusCode.FOUND, "/")
@@ -33,8 +33,8 @@ class HttpResponseTest {
 
         String expected = "HTTP/1.1 302 Found \r\n"
             + "Location: /\r\n"
-            + "Set-Cookie: token=1A32Q!#RESRE15039\r\n"
-            + "Set-Cookie: id=1\r\n";
+            + "Set-Cookie: token=1A32Q!#RESRE15039; Path=/\r\n"
+            + "Set-Cookie: id=1; Path=/\r\n";
 
         assertThat(response.buildHeader()).isEqualTo(expected);
     }

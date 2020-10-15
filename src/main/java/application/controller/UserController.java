@@ -25,10 +25,10 @@ public class UserController extends AbstractController {
         try {
             userService.login(request);
             return new HttpResponse(StatusCode.FOUND, "/")
-                .setCookies(Cookies.createWithSingleCookie("login", "true"));
+                .setCookies(Cookies.createWithSingleCookie("login", "true", "/"));
         } catch(WrongUserIdPasswordException e) {
             return new HttpResponse(StatusCode.FOUND, "/user/login_failed.html")
-                .setCookies(Cookies.createWithSingleCookie("login", "false"));
+                .setCookies(Cookies.createWithSingleCookie("login", "false", "/"));
         }
     }
 

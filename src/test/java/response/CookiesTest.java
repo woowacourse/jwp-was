@@ -19,8 +19,8 @@ class CookiesTest {
     @DisplayName("Cookies 생성")
     void create() {
         Cookies cookies = new Cookies(Arrays.asList(
-            new Cookie("cookie1", "mint"),
-            new Cookie("cookie2", "chocolate"))
+            new Cookie("cookie1", "mint", "/"),
+            new Cookie("cookie2", "chocolate", "/"))
         );
         assertThat(cookies).isInstanceOf(Cookies.class);
     }
@@ -29,8 +29,8 @@ class CookiesTest {
     @DisplayName("Cookies 생성 - 중복된 쿠키이름이 있을 경우 예외처리")
     void create_IfDuplicatedCookieNameExists_ThrowException() {
         assertThatThrownBy(() -> new Cookies(Arrays.asList(
-            new Cookie("cookie", "mint"),
-            new Cookie("cookie", "chocolate"))
+            new Cookie("cookie", "mint", "/"),
+            new Cookie("cookie", "chocolate", "/"))
         )).isInstanceOf(IllegalArgumentException.class)
             .hasMessage("cookies with same name exist.");
     }
@@ -38,7 +38,7 @@ class CookiesTest {
     @Test
     @DisplayName("Cookies 생성 - 쿠키 한개짜리를 간편하게 생성하기 위한 factory method 이용")
     void createWithSingleCookie() {
-        Cookies cookies = Cookies.createWithSingleCookie("cookie", "drug flavor cookies");
+        Cookies cookies = Cookies.createWithSingleCookie("cookie", "drug flavor cookies", "/");
 
         assertThat(cookies).isInstanceOf(Cookies.class);
     }
@@ -47,13 +47,13 @@ class CookiesTest {
     @DisplayName("쿠키 각각을 response header 형식으로 바꾸기")
     void toCookieHeaderValueFormats() {
         Cookies cookies = new Cookies(Arrays.asList(
-            new Cookie("cookie1", "mint"),
-            new Cookie("cookie2", "chocolate"))
+            new Cookie("cookie1", "mint", "/"),
+            new Cookie("cookie2", "chocolate", "/"))
         );
         List<String> expected = new ArrayList<>();
 
-        expected.add("cookie1=mint");
-        expected.add("cookie2=chocolate");
+        expected.add("cookie1=mint; Path=/");
+        expected.add("cookie2=chocolate; Path=/");
 
         assertThat(cookies.toCookieHeaderValueFormats()).isEqualTo(expected);
     }
@@ -67,8 +67,8 @@ class CookiesTest {
 
     private static Stream<Arguments> testcaseForIsNotEmpty() {
         Cookies notEmpty = new Cookies(Arrays.asList(
-            new Cookie("cookie1", "mint"),
-            new Cookie("cookie2", "chocolate"))
+            new Cookie("cookie1", "mint", "/"),
+            new Cookie("cookie2", "chocolate", "/"))
         );
         return Stream.of(
             Arguments.of(notEmpty, true),

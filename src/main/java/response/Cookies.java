@@ -17,8 +17,9 @@ public class Cookies {
         cookies = new ArrayList<>();
     }
 
-    public static Cookies createWithSingleCookie(String cookieName, String cookieValue) {
-        return new Cookies(Collections.singletonList(new Cookie(cookieName, cookieValue)));
+    public static Cookies createWithSingleCookie(String cookieName, String cookieValue,
+        String path) {
+        return new Cookies(Collections.singletonList(new Cookie(cookieName, cookieValue, path)));
     }
 
     public Cookies(List<Cookie> cookies) {
