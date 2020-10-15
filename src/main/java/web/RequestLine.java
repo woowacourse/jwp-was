@@ -16,7 +16,7 @@ public class RequestLine {
 
     public static RequestLine from(String line) {
         String[] values = line.split(SPACE);
-        return new RequestLine(HttpMethod.valueOf(values[0]), values[1], values[2]);
+        return new RequestLine(HttpMethod.from(values[0]), values[1], values[2]);
     }
 
     public HttpMethod getMethod() {

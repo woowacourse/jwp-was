@@ -9,7 +9,6 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +17,7 @@ import db.DataBase;
 import model.User;
 import utils.FileIoUtils;
 import web.HttpMethod;
-import web.RequestBody;
-import web.RequestHeader;
-import web.RequestLine;
+import web.HttpRequest;
 import web.StaticFile;
 
 public class RequestHandler implements Runnable {
@@ -38,29 +35,29 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-            RequestLine requestLine = RequestLine.of(br.readLine());
-            RequestHeader requestHeader = new RequestHeader(br);
-            RequestBody requestBody = null;
-            if (HttpMethod.POST == requestLine.getMethod()) {
-                requestBody = RequestBody.of(br, requestHeader.getValue("Content-Length"));
-            }
 
-            String path = requestLine.getPath();
+            HttpRequest httpRequest = HttpRequest.from(br);
+
+            String path = httpRequest.getPath();
             byte[] body;
-            if (path.startsWith("/user/create")) {
-                Map<String, String> params = requestBody.getParams();
-                User user = new User(params.get("userId"), params.get("password"), params.get("name"), params.get("email"));
-                DataBase.addUser(user);
-                body = user.toString().getBytes();
-                DataOutputStream dos = new DataOutputStream(out);
-                response302Header(dos, "/index.html");
-                responseBody(dos, body);
-            } else if (HttpMethod.GET == requestLine.getMethod()) {
+            if (HttpMethod.POST == httpRequest.getMethod()) {
+                if (path.equals("/user/create")) {
+                    User user = User.from(httpRequest.getRequestBody());
+                    DataBase.addUser(user);
+                    body = user.toString().getBytes();
+                    DataOutputStream dos = new DataOutputStream(out);
+                    response302Header(dos, "/index.html");
+                    responseBody(dos, body);
+                }
+            } else if (HttpMethod.GET == httpRequest.getMethod()) {
                 DataOutputStream dos = new DataOutputStream(out);
                 StaticFile staticFile = StaticFile.of(path);
                 body = FileIoUtils.loadFileFromClasspath(staticFile.getPrefix() + path);
                 response200Header(dos, body.length, staticFile.getType());
                 responseBody(dos, body);
+            } else if (HttpMethod.NONE == httpRequest.getMethod()) {
+                DataOutputStream dos = new DataOutputStream(out);
+                response405Header(dos);
             }
 
         } catch (IOException | URISyntaxException e) {
@@ -68,11 +65,29 @@ public class RequestHandler implements Runnable {
         }
     }
 
+    private void response405Header(DataOutputStream dos) {
+        try {
+            dos.writeBytes("HTTP/1.1 405 Method Not Allowed" + System.lineSeparator());
+            dos.writeBytes(System.lineSeparator());
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void response404Header(DataOutputStream dos) {
+        try {
+            dos.writeBytes("HTTP/1.1 404 Not Found" + System.lineSeparator());
+            dos.writeBytes(System.lineSeparator());
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
     private void response302Header(DataOutputStream dos, String redirectUrl) {
         try {
-            dos.writeBytes("HTTP/1.1 302 Found \r\n");
-            dos.writeBytes("Location: " + redirectUrl + "\r\n");
-            dos.writeBytes("\r\n");
+            dos.writeBytes("HTTP/1.1 302 Found" + System.lineSeparator());
+            dos.writeBytes("Location: " + redirectUrl + System.lineSeparator());
+            dos.writeBytes(System.lineSeparator());
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -80,10 +95,10 @@ public class RequestHandler implements Runnable {
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
         try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: " + contentType + "\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
+            dos.writeBytes("HTTP/1.1 200 OK" + System.lineSeparator());
+            dos.writeBytes("Content-Type: " + contentType + System.lineSeparator());
+            dos.writeBytes("Content-Length: " + lengthOfBodyContent + System.lineSeparator());
+            dos.writeBytes(System.lineSeparator());
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
