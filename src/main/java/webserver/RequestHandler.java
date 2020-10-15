@@ -51,7 +51,7 @@ public class RequestHandler implements Runnable {
                 }
             } else if (HttpMethod.GET == httpRequest.getMethod()) {
                 DataOutputStream dos = new DataOutputStream(out);
-                StaticFile staticFile = StaticFile.of(path);
+                StaticFile staticFile = StaticFile.of(httpRequest);
                 body = FileIoUtils.loadFileFromClasspath(staticFile.getPrefix() + path);
                 response200Header(dos, body.length, staticFile.getType());
                 responseBody(dos, body);

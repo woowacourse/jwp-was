@@ -4,34 +4,32 @@ import java.util.Arrays;
 
 public enum StaticFile {
 
-    HTML(".html", "./templates", "text/html"),
-    ICO(".ico", "./templates", "image/vnd.microsoft.icon"),
-    CSS(".css", "./static", "text/css"),
-    JS(".js", "./static", "text/javascript"),
-    WOFF(".woff", "./static", "text/woff"),
-    PNG(".png", "./static", "image/png"),
-    JPEG(".jpeg", "./static", "image/jpeg"),
-    SVG(".svg", "./static", "image/svg_xml");
+    HTML("./templates", "text/html"),
+    ICO("./templates", "image/vnd.microsoft.icon"),
+    CSS("./static", "text/css"),
+    JS("./static", "text/javascript"),
+    WOFF("./static", "text/woff"),
+    PNG("./static", "image/png"),
+    JPEG("./static", "image/jpeg"),
+    SVG("./static", "image/svg_xml");
 
-    private final String suffix;
     private final String prefix;
     private final String type;
 
-    StaticFile(String suffix, String prefix, String type) {
-        this.suffix = suffix;
+    StaticFile(String prefix, String type) {
         this.prefix = prefix;
         this.type = type;
     }
 
-    public static StaticFile of(String path) {
+    public static StaticFile of(HttpRequest request) {
         return Arrays.stream(values())
-            .filter(v -> path.endsWith(v.suffix))
+            .filter(v -> v.isContentType(request))
             .findFirst()
             .orElseThrow(IllegalArgumentException::new);
     }
 
-    public String getSuffix() {
-        return suffix;
+    public boolean isContentType(HttpRequest request) {
+        return type.equals(request.getHeaders().get("Content-Type"));
     }
 
     public String getPrefix() {
