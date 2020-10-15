@@ -1,6 +1,8 @@
 package response;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import resource.ContentType;
 
 public class HttpResponse {
@@ -9,9 +11,10 @@ public class HttpResponse {
     private final static String charset = "UTF-8";
 
     private StatusCode statusCode;
+    private String location = "";
     private byte[] body;
     private ContentType contentType;
-    private String location = "";
+    private Cookies cookies = Cookies.EMPTY_COOKIES;
 
     public HttpResponse(StatusCode statusCode) {
         this.statusCode = statusCode;
@@ -40,27 +43,24 @@ public class HttpResponse {
     public String buildHeader() {
         StringBuilder stringBuilder = new StringBuilder();
 
-        buildStatusLine(stringBuilder);
-        stringBuilder.append("\r\n");
+        buildStatusLine(stringBuilder).append("\r\n");
 
         if (hasLocation()) {
-            buildLocationHeader(stringBuilder);
-            stringBuilder.append("\r\n");
+            buildLocationHeader(stringBuilder).append("\r\n");
         }
-
+        if (cookies.isNotEmpty()) {
+            buildCookieHeader(stringBuilder).append("\r\n");
+        }
         if (hasBody()) {
-            buildContentTypeHeader(stringBuilder);
-            stringBuilder.append("\r\n");
-
-            buildContentLengthHeader(stringBuilder);
-            stringBuilder.append("\r\n");
+            buildContentTypeHeader(stringBuilder).append("\r\n");
+            buildContentLengthHeader(stringBuilder).append("\r\n");
 
             stringBuilder.append("\r\n");
         }
         return stringBuilder.toString();
     }
 
-    private void buildStatusLine(StringBuilder stringBuilder) {
+    private StringBuilder buildStatusLine(StringBuilder stringBuilder) {
         validateStringBuilderIsNull(stringBuilder);
 
         stringBuilder.append("HTTP/" + httpVersion + " ")
@@ -68,9 +68,11 @@ public class HttpResponse {
             .append(" ")
             .append(statusCode.getStatusMessage())
             .append(" ");
+
+        return stringBuilder;
     }
 
-    private void buildLocationHeader(StringBuilder stringBuilder) {
+    private StringBuilder buildLocationHeader(StringBuilder stringBuilder) {
         validateStringBuilderIsNull(stringBuilder);
         if (!hasLocation()) {
             throw new UnsupportedOperationException(
@@ -78,22 +80,39 @@ public class HttpResponse {
         }
         stringBuilder.append("Location: ")
             .append(location);
+
+        return stringBuilder;
     }
 
-    private void buildContentTypeHeader(StringBuilder stringBuilder) {
+    private StringBuilder buildCookieHeader(StringBuilder stringBuilder) {
+        List<String> cookieHeaderValues = cookies.toCookieHeaderValueFormats();
+
+        String cookieHeader = cookieHeaderValues.stream()
+            .map(cookieHeaderValue -> "Set-Cookie: " + cookieHeaderValue)
+            .collect(Collectors.joining("\r\n"));
+        stringBuilder.append(cookieHeader);
+
+        return stringBuilder;
+    }
+
+    private StringBuilder buildContentTypeHeader(StringBuilder stringBuilder) {
         validateBodyIsExist();
         validateStringBuilderIsNull(stringBuilder);
         stringBuilder.append("Content-Type: ")
             .append(contentType.getContentType())
             .append(";charset=")
             .append(charset);
+
+        return stringBuilder;
     }
 
-    private void buildContentLengthHeader(StringBuilder stringBuilder) {
+    private StringBuilder buildContentLengthHeader(StringBuilder stringBuilder) {
         validateBodyIsExist();
         validateStringBuilderIsNull(stringBuilder);
         stringBuilder.append("Content-Length: ")
             .append(body.length);
+
+        return stringBuilder;
     }
 
     private void validateStringBuilderIsNull(StringBuilder stringBuilder) {
@@ -107,6 +126,15 @@ public class HttpResponse {
             throw new UnsupportedOperationException(
                 "cannot use this method because there is no body.");
         }
+    }
+
+    public HttpResponse setCookies(Cookies cookies) {
+        if (Objects.isNull(cookies)) {
+            throw new IllegalArgumentException("cannot use null parameter.");
+        }
+        this.cookies = cookies;
+
+        return this;
     }
 
     public byte[] getBody() {
