@@ -12,7 +12,7 @@ public class ResourceFilter implements Filter {
     public void doFilter(HttpRequest httpRequest, HttpResponse httpResponse, FilterChain filterChain) throws IOException {
 
         String requestPath = httpRequest.getRequestPath();
-        if (ResourceMatcher.isResource(requestPath) && httpRequest.getMethod().isGet()) {
+        if (ResourceMatcher.isResource(requestPath) && httpRequest.isGetMethod()) {
             ResourceMatcher matcher = ResourceMatcher.findResourceMatcher(requestPath);
 
             byte[] body = FileIoUtils.loadFileFromClasspath(matcher.getResourcePath() + requestPath);
