@@ -1,8 +1,8 @@
 package web;
 
-import utils.HttpRequestUtils;
-
 public class RequestLine {
+
+    private static final String SPACE = " ";
 
     private HttpMethod method;
     private String path;
@@ -14,12 +14,9 @@ public class RequestLine {
         this.version = version;
     }
 
-    public static RequestLine of(String line) {
-        return new RequestLine(
-            HttpRequestUtils.extractHttpMethod(line),
-            HttpRequestUtils.extractPath(line),
-            HttpRequestUtils.extractVersion(line)
-        );
+    public static RequestLine from(String line) {
+        String[] values = line.split(SPACE);
+        return new RequestLine(HttpMethod.valueOf(values[0]), values[1], values[2]);
     }
 
     public HttpMethod getMethod() {
