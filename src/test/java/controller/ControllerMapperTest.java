@@ -2,7 +2,7 @@ package controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import controller.user.UserController;
+import application.controller.UserController;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

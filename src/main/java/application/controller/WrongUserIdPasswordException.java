@@ -1,4 +1,4 @@
-package controller.user;
+package application.controller;
 
 public class WrongUserIdPasswordException extends RuntimeException {
 

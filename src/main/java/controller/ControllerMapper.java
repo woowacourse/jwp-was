@@ -1,6 +1,6 @@
 package controller;
 
-import controller.user.UserController;
+import application.controller.UserController;
 import java.util.HashMap;
 import java.util.Map;
 import request.HttpRequest;
@@ -11,7 +11,7 @@ public class ControllerMapper {
     private Controller staticFileController = new StaticFileController();
 
     public ControllerMapper() {
-        /* put new controller when you make a new controller */
+        /* Todo: 이부분을 application 패키지에서 할 수 있으면 좋을것같음 */
         controllersByUriPath.put(UserController.CREATE_URI_PATH, new UserController());
         controllersByUriPath.put(UserController.LOGIN_URI_PATH, new UserController());
     }

@@ -1,8 +1,8 @@
-package controller.user;
+package application.controller;
 
+import application.db.DataBase;
 import controller.AbstractController;
 import controller.WrongRequestException;
-import db.DataBase;
 import model.User;
 import request.HttpRequest;
 import response.Cookies;

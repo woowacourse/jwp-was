@@ -1,8 +1,7 @@
-package controller;
+package application.controller;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import controller.user.UserController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

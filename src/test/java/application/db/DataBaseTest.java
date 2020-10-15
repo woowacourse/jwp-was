@@ -1,4 +1,4 @@
-package db;
+package application.db;
 
 import org.junit.jupiter.api.Test;
 

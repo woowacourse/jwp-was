@@ -1,7 +1,7 @@
-package db;
+package application.db;
 
+import application.controller.WrongUserIdPasswordException;
 import com.google.common.collect.Maps;
-import controller.user.WrongUserIdPasswordException;
 import java.util.Collection;
 import java.util.Map;
 import model.User;
