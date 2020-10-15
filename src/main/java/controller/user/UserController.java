@@ -8,8 +8,8 @@ import response.StatusCode;
 
 public class UserController extends AbstractController {
 
-    static final String CREATE_URI_PATH = "/user/create";
-    static final String LOGIN_URI_PATH = "/user/login";
+    public static final String CREATE_URI_PATH = "/user/create";
+    public static final String LOGIN_URI_PATH = "/user/login";
 
     private HttpResponse create(HttpRequest request) {
         User user = new User(
