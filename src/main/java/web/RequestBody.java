@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RequestBody {
+    private static final String URL_DELIMITER = "&";
 
     private String body;
 
@@ -23,12 +24,12 @@ public class RequestBody {
     }
 
     public Map<String, String> parse() {
-        String[] splitBody = body.split("&");
+        String[] splitBody = body.split(URL_DELIMITER);
 
         Map<String, String> bodies = new HashMap<>();
         for (String body : splitBody) {
-            String[] keyValue = body.split("=");
-            bodies.put(keyValue[0], keyValue[1]);
+            UrlParameter parameter = new UrlParameter(body);
+            bodies.put(parameter.getKey(), parameter.getValue());
         }
         return bodies;
     }

@@ -10,6 +10,7 @@ public class HttpResponse {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
     private static final String NEW_LINE = "\r\n";
+    private static final String SPACE = " ";
 
     private final DataOutputStream dataOutputStream;
 
@@ -24,7 +25,7 @@ public class HttpResponse {
 
     private void response200Header(int contentLength, String contentType) {
         try {
-            this.dataOutputStream.writeBytes(HttpVersion.HTTP_1_1.getVersion() + HttpStatusCode.OK.getValue() + NEW_LINE);
+            this.dataOutputStream.writeBytes(HttpVersion.HTTP_1_1.getVersion() + SPACE + HttpStatusCode.OK.getValue() + NEW_LINE);
             this.dataOutputStream.writeBytes(HeaderName.CONTENT_TYPE.getHeader(contentType) + NEW_LINE);
             this.dataOutputStream.writeBytes(HeaderName.CONTENT_LENGTH.getHeader(contentLength) + NEW_LINE);
             this.dataOutputStream.writeBytes(NEW_LINE);
@@ -44,7 +45,7 @@ public class HttpResponse {
 
     public void response302(final String url) {
         try {
-            this.dataOutputStream.writeBytes(HttpVersion.HTTP_1_1.getVersion() + HttpStatusCode.FOUND.getValue() + NEW_LINE);
+            this.dataOutputStream.writeBytes(HttpVersion.HTTP_1_1.getVersion() + SPACE + HttpStatusCode.FOUND.getValue() + NEW_LINE);
             this.dataOutputStream.writeBytes(HeaderName.LOCATION.getHeader(url) + NEW_LINE);
             this.dataOutputStream.writeBytes(NEW_LINE);
             this.dataOutputStream.flush();

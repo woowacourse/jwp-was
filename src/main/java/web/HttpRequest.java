@@ -17,7 +17,7 @@ public class HttpRequest {
     }
 
     public String getRequestPath() {
-        return requestUri.getPath().getRequestPath();
+        return requestUri.getRequestPath();
     }
 
     public String getParam(final String key) {
