@@ -16,10 +16,6 @@ public class RequestHeader {
         }
     }
 
-    private boolean isEmpty(String line) {
-        return line == null || "".equals(line);
-    }
-
     public Map<String, String> getHeaders() {
         return headers;
     }
