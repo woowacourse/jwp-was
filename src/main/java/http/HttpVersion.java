@@ -4,10 +4,10 @@ import java.util.Arrays;
 
 public enum HttpVersion {
     UNKNOWN("UNKNOWN"),
-    VERSION10("HTTP/1.0"),
-    VERSION11("HTTP/1.1"),
-    VERSION20("HTTP/2.0"),
-    VERSION30("HTTP/3.0");
+    VERSION_1_0("HTTP/1.0"),
+    VERSION_1_1("HTTP/1.1"),
+    VERSION_2_0("HTTP/2.0"),
+    VERSION_3_0("HTTP/3.0");
 
     private final String httpVersion;
 
