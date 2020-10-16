@@ -14,13 +14,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 class HttpRequestTest {
 
     @Test
-    void name() throws IOException {
+    void checkRequest() throws IOException {
         InputStream inputStream = new FileInputStream("./src/test/resources/UserCreateRequest.txt");
 
         HttpRequest httpRequest = new HttpRequest(
                 new BufferedReader(new InputStreamReader(new BufferedInputStream(inputStream))));
 
+        assertThat(httpRequest.isGetMethod()).isFalse();
         assertThat(httpRequest.getRequestBody().getBody())
                 .isEqualTo("userId=javajigi&password=password&name=pobi&email=javajigi@slipp.net");
+        assertThat(httpRequest.getRequestPath()).isEqualTo("/user/create");
+        assertThat(httpRequest.getContentLength()).isEqualTo(68);
     }
 }

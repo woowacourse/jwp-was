@@ -1,5 +1,7 @@
 package web;
 
+import java.util.Objects;
+
 public class RequestMapping {
     private final String uri;
     private final HttpMethod httpMethod;
@@ -9,7 +11,25 @@ public class RequestMapping {
         this.httpMethod = httpMethod;
     }
 
-    public boolean match(HttpRequest httpRequest) {
-        return this.uri.equals(httpRequest.getRequestPath()) && this.httpMethod == httpRequest.getMethod();
+    private String getUri() {
+        return uri;
+    }
+
+    private HttpMethod getHttpMethod() {
+        return httpMethod;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RequestMapping that = (RequestMapping) o;
+        return Objects.equals(getUri(), that.getUri()) &&
+                getHttpMethod() == that.getHttpMethod();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getUri(), getHttpMethod());
     }
 }
