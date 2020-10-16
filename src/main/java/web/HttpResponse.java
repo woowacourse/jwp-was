@@ -30,12 +30,16 @@ public class HttpResponse {
             byte[] body = FileIoUtils.loadFileFromClasspath(staticFile.getPrefix() + path);
 
             headers = StaticFile.writeContentType(headers, path);
-            headers.put("Content-Length", body.length + "");
+            addHeader("Content-Length", body.length + "");
             response200Header(body.length);
             responseBody(body);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    public void addHeader(String key, String value) {
+        headers.put(key, value);
     }
 
     public void forwardBody(String body) {
@@ -44,10 +48,6 @@ public class HttpResponse {
         headers.put("Content-Length", contents.length + "");
         response200Header(contents.length);
         responseBody(contents);
-    }
-
-    public void addHeader(String key, String value) {
-        headers.put(key, value);
     }
 
     public void response405Header() {
@@ -59,10 +59,12 @@ public class HttpResponse {
         }
     }
 
-    public void response404Header() {
+    private void processHeaders() {
         try {
-            dos.writeBytes("HTTP/1.1 404 Not Found" + System.lineSeparator());
-            dos.writeBytes(System.lineSeparator());
+            Set<String> keys = headers.keySet();
+            for (String key : keys) {
+                dos.writeBytes(key + ": " + headers.get(key) + System.lineSeparator());
+            }
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -90,12 +92,10 @@ public class HttpResponse {
         }
     }
 
-    private void processHeaders() {
+    public void response404Header() {
         try {
-            Set<String> keys = headers.keySet();
-            for (String key : keys) {
-                dos.writeBytes(key + ": " + headers.get(key) + System.lineSeparator());
-            }
+            dos.writeBytes("HTTP/1.1 404 Not Found" + System.lineSeparator());
+            dos.writeBytes(System.lineSeparator());
         } catch (IOException e) {
             logger.error(e.getMessage());
         }

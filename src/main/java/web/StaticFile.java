@@ -38,10 +38,6 @@ public enum StaticFile {
         return headers;
     }
 
-    public boolean isContentType(HttpRequest request) {
-        return type.equals(request.getHeaders().get("Content-Type"));
-    }
-
     public String getPrefix() {
         return prefix;
     }

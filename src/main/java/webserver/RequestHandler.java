@@ -1,12 +1,9 @@
 package webserver;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,10 +27,10 @@ public class RequestHandler implements Runnable {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
 
-        try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+        try (InputStream in = connection.getInputStream();
+             OutputStream out = connection.getOutputStream()) {
 
-            HttpRequest request = HttpRequest.from(br);
+            HttpRequest request = HttpRequest.from(in);
             HttpResponse response = new HttpResponse(out);
 
             String path = getDefaultPath(request.getPath());
