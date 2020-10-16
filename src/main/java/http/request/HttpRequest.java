@@ -6,7 +6,6 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import http.Headers;
 import utils.IOUtils;
 
 public class HttpRequest {
@@ -14,10 +13,10 @@ public class HttpRequest {
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
 
     private final RequestLine requestLine;
-    private final Headers requestHeaders;
+    private final RequestHeaders requestHeaders;
     private final String body;
 
-    private HttpRequest(RequestLine requestLine, Headers requestHeaders, String body) {
+    private HttpRequest(RequestLine requestLine, RequestHeaders requestHeaders, String body) {
         this.requestLine = requestLine;
         this.requestHeaders = requestHeaders;
         this.body = body;
@@ -27,7 +26,7 @@ public class HttpRequest {
         String firstLine = bufferedReader.readLine();
         logger.debug(firstLine);
         RequestLine requestLine = RequestLine.from(firstLine);
-        Headers requestHeaders = Headers.from(IOUtils.readHeaders(bufferedReader));
+        RequestHeaders requestHeaders = RequestHeaders.from(IOUtils.readHeaders(bufferedReader));
 
         String body = null;
         if (requestHeaders.contains(CONTENT_LENGTH)) {
