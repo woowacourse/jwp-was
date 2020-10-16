@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import db.DataBase;
+import http.request.HttpRequest;
 import model.User;
 import utils.FileIoUtils;
 import utils.StringUtils;
@@ -49,7 +50,6 @@ public class RequestHandler implements Runnable {
 
     private void responseByRequestMethod(DataOutputStream dos, HttpRequest httpRequest) throws
             IOException, URISyntaxException {
-
         if (httpRequest.isPost()) {
             responseCreateUser(dos, httpRequest);
             return;
@@ -67,7 +67,7 @@ public class RequestHandler implements Runnable {
     private void responsePage(DataOutputStream dos, HttpRequest httpRequest) throws
             IOException,
             URISyntaxException {
-        if (httpRequest.getHttpHeaders().get(ACCEPT).contains(HTML_ACCEPT)) {
+        if (httpRequest.getAttribute(ACCEPT).contains(HTML_ACCEPT)) {
             responsePageByContentType(dos, httpRequest, RESOURCE_PATH, HTML_CONTENT_TYPE);
             return;
         }

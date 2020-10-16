@@ -6,11 +6,11 @@ public class RequestUri {
     private static final String DELIMITER = "\\?";
 
     private final String path;
-    private final QueryParameters queryParameters;
+    private final Parameters parameters;
 
-    private RequestUri(String path, QueryParameters queryParameters) {
+    private RequestUri(String path, Parameters parameters) {
         this.path = path;
-        this.queryParameters = queryParameters;
+        this.parameters = parameters;
     }
 
     private RequestUri(String path) {
@@ -23,7 +23,7 @@ public class RequestUri {
             return new RequestUri(requestUri);
         }
         String[] tokens = requestUri.split(DELIMITER);
-        return new RequestUri(tokens[0], QueryParameters.from(tokens[1]));
+        return new RequestUri(tokens[0], Parameters.from(tokens[1]));
     }
 
     private static boolean hasQueryParameters(String requestUri) {
@@ -31,7 +31,7 @@ public class RequestUri {
     }
 
     public String getParameterBy(String key) {
-        return queryParameters.getParameterBy(key);
+        return parameters.getParameterBy(key);
     }
 
     public String getPath() {
