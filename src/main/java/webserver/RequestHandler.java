@@ -4,15 +4,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import db.DataBase;
-import model.User;
-import web.HttpMethod;
 import web.HttpRequest;
 import web.HttpResponse;
+import web.controller.Controller;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -33,17 +32,11 @@ public class RequestHandler implements Runnable {
             HttpRequest request = HttpRequest.from(in);
             HttpResponse response = new HttpResponse(out);
 
-            String path = getDefaultPath(request.getPath());
-            if (HttpMethod.POST == request.getMethod()) {
-                if ("/user/create".equals(path)) {
-                    User user = User.from(request.getRequestBody());
-                    DataBase.addUser(user);
-                    response.sendRedirect("/index.html");
-                }
-            } else if (HttpMethod.NONE == request.getMethod()) {
-                response.response405Header();
+            Controller controller = RequestMapping.getController(getDefaultPath(request.getPath()));
+            if (Objects.isNull(controller)) {
+                response.forward(request.getPath());
             } else {
-                response.forward(path);
+                controller.service(request, response);
             }
         } catch (IOException e) {
             logger.error(e.getMessage());
