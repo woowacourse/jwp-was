@@ -1,18 +1,20 @@
 package web;
 
+import utils.IOUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 
 public class HttpRequest {
-    private RequestUri requestUri;
-    private RequestHeader requestHeader;
+    private final RequestUri requestUri;
+    private final RequestHeader requestHeader;
     private RequestBody requestBody;
 
     public HttpRequest(final BufferedReader bufferedReader) throws IOException {
-        this.requestUri = new RequestUri(bufferedReader);
-        this.requestHeader = new RequestHeader(bufferedReader);
+        this.requestUri = new RequestUri(bufferedReader.readLine());
+        this.requestHeader = new RequestHeader(IOUtils.readHeader(bufferedReader));
         if (HttpMethod.POST == getMethod()) {
-            this.requestBody = new RequestBody(bufferedReader, requestHeader.getContentLength());
+            this.requestBody = new RequestBody(IOUtils.readData(bufferedReader, requestHeader.getContentLength()));
         }
     }
 
