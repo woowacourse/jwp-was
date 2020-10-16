@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import db.DataBase;
 import http.request.HttpRequest;
+import http.response.HttpResponse;
 import model.User;
 import utils.FileIoUtils;
 import utils.StringUtils;
@@ -28,7 +29,6 @@ public class RequestHandler implements Runnable {
     private static final String CSS_CONTENT_TYPE = "text/css";
 
     private Socket connection;
-    private HttpRequest httpRequest;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -40,10 +40,10 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            httpRequest = HttpRequest.from(new BufferedReader(new InputStreamReader(in)));
-            DataOutputStream dos = new DataOutputStream(out);
-            responseByRequestMethod(dos, httpRequest);
-        } catch (IOException | URISyntaxException e) {
+            HttpRequest httpRequest = HttpRequest.from(
+                    new BufferedReader(new InputStreamReader(in)));
+            HttpResponse httpResponse = new HttpResponse(new DataOutputStream(out));
+        } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
@@ -80,37 +80,5 @@ public class RequestHandler implements Runnable {
                 resourcePath + httpRequest.getPath());
         response200Header(dos, s, body.length);
         responseBody(dos, body);
-    }
-
-    private void response200Header(DataOutputStream dos, String contentType,
-            int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: " + contentType + "\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void response302Header(DataOutputStream dos, String location) {
-        try {
-            dos.writeBytes("HTTP/1.1 302 Found \r\n");
-            dos.writeBytes("Location: " + location + "\r\n");
-            dos.writeBytes("Content-Type: " + HTML_CONTENT_TYPE + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
     }
 }
