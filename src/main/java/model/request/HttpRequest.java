@@ -12,7 +12,7 @@ import model.general.Header;
 import model.general.Method;
 import utils.IOUtils;
 
-public class Request {
+public class HttpRequest {
 
     private static final String EMPTY_LINE = "";
     private static final String HEADER_KEY_VALUE_SEPARATOR = ": ";
@@ -23,13 +23,13 @@ public class Request {
     private final Map<Header, String> headers;
     private final MessageBody messageBody;
 
-    private Request(RequestLine line, Map<Header, String> headers, MessageBody messageBody) {
+    private HttpRequest(RequestLine line, Map<Header, String> headers, MessageBody messageBody) {
         this.requestLine = line;
         this.headers = headers;
         this.messageBody = messageBody;
     }
 
-    public static Request of(InputStream inputStream) throws IOException {
+    public static HttpRequest of(InputStream inputStream) throws IOException {
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
@@ -41,9 +41,9 @@ public class Request {
             String requestBody = IOUtils.readData(bufferedReader, contentLength);
             MessageBody messageBody = MessageBody.of(requestBody);
 
-            return new Request(requestLine, headers, messageBody);
+            return new HttpRequest(requestLine, headers, messageBody);
         }
-        return new Request(requestLine, headers, null);
+        return new HttpRequest(requestLine, headers, null);
     }
 
     private static Map<Header, String> addHeaders(BufferedReader bufferedReader)
@@ -64,12 +64,12 @@ public class Request {
         return requestLine.isSameMethod(method);
     }
 
-    public boolean containsUri(String uri) {
-        return requestLine.containsUri(uri);
+    public boolean isStartsWithUri(String uri) {
+        return requestLine.isStartsWithUri(uri);
     }
 
-    public ContentType generateContentTypeFromRequestUri() {
-        return requestLine.generateContentTypeFromRequestUri();
+    public String extractRequestUriExtension(){
+        return requestLine.extractRequestUriExtension();
     }
 
     public Map<String, String> extractParameters() {

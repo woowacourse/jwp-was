@@ -53,7 +53,7 @@ public class RequestLineTest {
     @CsvSource(value = {
         "src/test/resources/input/get_template_file_request.txt:/index.html",
         "src/test/resources/input/get_static_file_request.txt:/css/styles.css",
-        "src/test/resources/input/get_api_request.txt:user/create",
+        "src/test/resources/input/get_api_request.txt:/user/create",
         "src/test/resources/input/post_api_request.txt:/user/create"
     }, delimiter = ':')
     void containsUri(String filePath, String uri) throws IOException {
@@ -63,26 +63,7 @@ public class RequestLineTest {
 
         RequestLine requestLine = RequestLine.of(bufferedReader.readLine());
 
-        assertThat(requestLine.containsUri(uri)).isTrue();
-    }
-
-    @ParameterizedTest
-    @DisplayName("컨텐츠 타입 확인")
-    @CsvSource(value = {
-        "src/test/resources/input/get_template_file_request.txt:HTML",
-        "src/test/resources/input/get_static_file_request.txt:CSS",
-        "src/test/resources/input/get_api_request.txt:",
-        "src/test/resources/input/post_api_request.txt:"
-    }, delimiter = ':')
-    void generateContentTypeFromRequestUri(String filePath, ContentType contentType)
-        throws IOException {
-        InputStream inputStream = new FileInputStream(filePath);
-        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
-        RequestLine requestLine = RequestLine.of(bufferedReader.readLine());
-
-        assertThat(requestLine.generateContentTypeFromRequestUri()).isEqualTo(contentType);
+        assertThat(requestLine.isStartsWithUri(uri)).isTrue();
     }
 
     @ParameterizedTest

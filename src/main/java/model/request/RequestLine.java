@@ -3,7 +3,6 @@ package model.request;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import model.general.ContentType;
 import model.general.Method;
 
 public class RequestLine {
@@ -45,12 +44,7 @@ public class RequestLine {
         return this.method.equals(method);
     }
 
-    public ContentType generateContentTypeFromRequestUri() {
-        return ContentType.of(extractRequestUriExtension())
-            .orElse(null);
-    }
-
-    private String extractRequestUriExtension() {
+    public String extractRequestUriExtension() {
         String[] sections = requestUri.split(EXTENSION_DELIMITER);
 
         if (sections.length == NO_EXTENSION_SIZE) {
@@ -83,8 +77,8 @@ public class RequestLine {
         return parameters;
     }
 
-    public boolean containsUri(String uri) {
-        return requestUri.contains(uri);
+    public boolean isStartsWithUri(String uri) {
+        return requestUri.startsWith(uri);
     }
 
     public Method getMethod() {

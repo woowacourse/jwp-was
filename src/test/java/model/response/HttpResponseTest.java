@@ -12,15 +12,16 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
 import model.general.Header;
-import model.request.Request;
+import model.request.HttpRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import webserver.ControllerMapper;
 
-public class ResponseTest {
+public class HttpResponseTest {
 
     @ParameterizedTest
     @DisplayName("Response 생성")
@@ -30,28 +31,13 @@ public class ResponseTest {
         "src/test/resources/input/get_api_request.txt",
         "src/test/resources/input/post_api_request.txt"
     })
-    void create(String filePath) throws IOException, URISyntaxException {
+    void create(String filePath) throws IOException {
         InputStream inputStream = new FileInputStream(filePath);
-        Request request = Request.of(inputStream);
-        Response response = Controller.executeOperation(request);
+        HttpRequest httpRequest = HttpRequest.of(inputStream);
+        Controller controller = ControllerMapper.selectController(httpRequest);
+        HttpResponse httpResponse = controller.service(httpRequest);
 
-        assertThat(response).isInstanceOf(Response.class);
-    }
-
-    @ParameterizedTest
-    @DisplayName("Response Body 존재 확인")
-    @CsvSource(value = {
-        "src/test/resources/input/get_template_file_request.txt:true",
-        "src/test/resources/input/get_static_file_request.txt:true",
-        "src/test/resources/input/get_api_request.txt:false",
-        "src/test/resources/input/post_api_request.txt:false"
-    }, delimiter = ':')
-    void hasContents(String filePath, boolean expected) throws IOException, URISyntaxException {
-        InputStream inputStream = new FileInputStream(filePath);
-        Request request = Request.of(inputStream);
-        Response response = Controller.executeOperation(request);
-
-        assertThat(response.hasContents()).isEqualTo(expected);
+        assertThat(httpResponse).isInstanceOf(HttpResponse.class);
     }
 
     @ParameterizedTest
@@ -62,12 +48,13 @@ public class ResponseTest {
         "src/test/resources/input/get_api_request.txt:HTTP/1.1",
         "src/test/resources/input/post_api_request.txt:HTTP/1.1"
     }, delimiter = ':')
-    void getHttpVersion(String filePath, String expected) throws IOException, URISyntaxException {
+    void getHttpVersion(String filePath, String expected) throws IOException {
         InputStream inputStream = new FileInputStream(filePath);
-        Request request = Request.of(inputStream);
-        Response response = Controller.executeOperation(request);
+        HttpRequest httpRequest = HttpRequest.of(inputStream);
+        Controller controller = ControllerMapper.selectController(httpRequest);
+        HttpResponse httpResponse = controller.service(httpRequest);
 
-        assertThat(response.getHttpVersion()).isEqualTo(expected);
+        assertThat(httpResponse.getHttpVersion()).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -81,10 +68,11 @@ public class ResponseTest {
     }, delimiter = ':')
     void getStatusCode(String filePath, String expected) throws IOException, URISyntaxException {
         InputStream inputStream = new FileInputStream(filePath);
-        Request request = Request.of(inputStream);
-        Response response = Controller.executeOperation(request);
+        HttpRequest httpRequest = HttpRequest.of(inputStream);
+        Controller controller = ControllerMapper.selectController(httpRequest);
+        HttpResponse httpResponse = controller.service(httpRequest);
 
-        assertThat(response.getStatusCode()).isEqualTo(expected);
+        assertThat(httpResponse.getStatusCode()).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -98,10 +86,11 @@ public class ResponseTest {
     }, delimiter = ':')
     void getReasonPhrase(String filePath, String expected) throws IOException, URISyntaxException {
         InputStream inputStream = new FileInputStream(filePath);
-        Request request = Request.of(inputStream);
-        Response response = Controller.executeOperation(request);
+        HttpRequest httpRequest = HttpRequest.of(inputStream);
+        Controller controller = ControllerMapper.selectController(httpRequest);
+        HttpResponse httpResponse = controller.service(httpRequest);
 
-        assertThat(response.getReasonPhrase()).isEqualTo(expected);
+        assertThat(httpResponse.getReasonPhrase()).isEqualTo(expected);
     }
 
     //todo: 테스트 깨지는지 확인
@@ -111,10 +100,11 @@ public class ResponseTest {
     void getHeaders(String filePath, Map<Header, String> expected)
         throws IOException {
         InputStream inputStream = new FileInputStream(filePath);
-        Request request = Request.of(inputStream);
-        Response response = Controller.executeOperation(request);
+        HttpRequest httpRequest = HttpRequest.of(inputStream);
+        Controller controller = ControllerMapper.selectController(httpRequest);
+        HttpResponse httpResponse = controller.service(httpRequest);
 
-        assertThat(response.getHeaders()).isEqualTo(expected);
+        assertThat(httpResponse.getHeaders()).isEqualTo(expected);
     }
 
     private static Stream<Arguments> provideHeaders() {
@@ -154,10 +144,11 @@ public class ResponseTest {
     }, delimiter = ':')
     void getBody(String filePath, boolean expected) throws IOException, URISyntaxException {
         InputStream inputStream = new FileInputStream(filePath);
-        Request request = Request.of(inputStream);
-        Response response = Controller.executeOperation(request);
+        HttpRequest httpRequest = HttpRequest.of(inputStream);
+        Controller controller = ControllerMapper.selectController(httpRequest);
+        HttpResponse httpResponse = controller.service(httpRequest);
 
-        byte[] body = response.getBody();
+        byte[] body = httpResponse.getBody();
 
         assertThat(Objects.nonNull(body)).isEqualTo(expected);
     }

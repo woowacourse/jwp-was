@@ -24,9 +24,9 @@ public class WebServer {
 
             while (true) {
                 try {
-                    Socket finalConnection = listenSocket.accept();
+                    Socket connection = listenSocket.accept();
                     executorService.execute(() -> {
-                        RequestHandler requestHandler = new RequestHandler(finalConnection);
+                        RequestHandler requestHandler = new RequestHandler(connection);
                         requestHandler.run();
                     });
                 } catch (Exception e) {

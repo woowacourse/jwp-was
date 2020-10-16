@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.stream.Stream;
 import model.general.Status;
-import model.request.Request;
+import model.request.HttpRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -20,9 +20,9 @@ public class StatusLineTest {
     @MethodSource("provideStatus")
     void create(String filePath, Status status) throws IOException {
         InputStream inputStream = new FileInputStream(filePath);
-        Request request = Request.of(inputStream);
+        HttpRequest httpRequest = HttpRequest.of(inputStream);
         Stream.of(
-            assertThat(StatusLine.of(request, status)).isInstanceOf(StatusLine.class),
+            assertThat(StatusLine.of(httpRequest, status)).isInstanceOf(StatusLine.class),
             assertThat(StatusLine.of(status)).isInstanceOf(StatusLine.class)
         );
     }
@@ -47,8 +47,8 @@ public class StatusLineTest {
     @MethodSource("provideStatus")
     void getHttpVersion(String filePath, Status status) throws IOException {
         InputStream inputStream = new FileInputStream(filePath);
-        Request request = Request.of(inputStream);
-        StatusLine statusLine = StatusLine.of(request, status);
+        HttpRequest httpRequest = HttpRequest.of(inputStream);
+        StatusLine statusLine = StatusLine.of(httpRequest, status);
 
         assertThat(statusLine.getHttpVersion()).isEqualTo("HTTP/1.1");
     }
@@ -58,8 +58,8 @@ public class StatusLineTest {
     @MethodSource("provideStatus")
     void getStatusCode(String filePath, Status status) throws IOException {
         InputStream inputStream = new FileInputStream(filePath);
-        Request request = Request.of(inputStream);
-        StatusLine statusLine = StatusLine.of(request, status);
+        HttpRequest httpRequest = HttpRequest.of(inputStream);
+        StatusLine statusLine = StatusLine.of(httpRequest, status);
 
         assertThat(statusLine.getStatusCode())
             .isEqualTo(String.valueOf(status.getStatusCode()));
@@ -70,8 +70,8 @@ public class StatusLineTest {
     @MethodSource("provideStatus")
     void getReasonPhrase(String filePath, Status status) throws IOException {
         InputStream inputStream = new FileInputStream(filePath);
-        Request request = Request.of(inputStream);
-        StatusLine statusLine = StatusLine.of(request, status);
+        HttpRequest httpRequest = HttpRequest.of(inputStream);
+        StatusLine statusLine = StatusLine.of(httpRequest, status);
 
         assertThat(statusLine.getReasonPhrase()).isEqualTo(status.getReasonPhrase());
     }
