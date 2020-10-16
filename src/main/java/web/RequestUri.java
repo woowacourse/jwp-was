@@ -27,8 +27,8 @@ public class RequestUri {
         return method;
     }
 
-    public RequestPath getPath() {
-        return path;
+    public String getRequestPath() {
+        return path.getRequestPath();
     }
 
     public String getProtocol() {

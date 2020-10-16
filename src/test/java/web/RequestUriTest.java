@@ -23,7 +23,7 @@ class RequestUriTest {
         RequestUri requestUri = new RequestUri(br);
 
         assertThat(requestUri.getMethod()).isEqualTo(HttpMethod.GET);
-        assertThat(requestUri.getPath().getRequestPath()).isEqualTo("/js/chunk-vendors.js");
+        assertThat(requestUri.getRequestPath()).isEqualTo("/js/chunk-vendors.js");
         assertThat(requestUri.getProtocol()).isEqualTo("HTTP/1.1");
     }
 }
