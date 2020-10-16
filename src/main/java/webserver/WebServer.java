@@ -28,16 +28,8 @@ public class WebServer {
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
                 RequestHandler requestHandler = new RequestHandler(connection);
-                execute(executorService, requestHandler);
-            }
-        }
-    }
-
-    private static void execute(ExecutorService executorService, RequestHandler requestHandler) {
-        for (int i = 0; i < 100; i++) {
-            executorService.execute(() -> {
                 executorService.execute(requestHandler);
-            });
+            }
         }
     }
 }
