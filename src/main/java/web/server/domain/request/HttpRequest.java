@@ -14,6 +14,7 @@ public class HttpRequest {
     private final RequestLine requestLine;
     private final HeaderParams headerParams;
     private final RequestParams requestParams;
+    private final HttpSessionStorage httpSessionStorage;
 
     public HttpRequest(BufferedReader bufferedReader) throws IOException {
         String header = IOUtils.readHeader(bufferedReader);
@@ -30,6 +31,7 @@ public class HttpRequest {
             params = IOUtils.readBody(bufferedReader, findContentLength());
         }
         this.requestParams = new RequestParams(params);
+        this.httpSessionStorage = HttpSessionStorage.getInstance();
     }
 
     public RequestMethod getMethod() {
@@ -63,5 +65,21 @@ public class HttpRequest {
     public int findContentLength() {
         String length = headerParams.getOrDefault("Content-Length", "0");
         return Integer.parseInt(length);
+    }
+
+    public HttpSession getSession() {
+        String cookies = getHeader("Cookie");
+        String[] split = cookies.split("; ");
+        String key = "";
+        for (String s : split) {
+            if (s.startsWith("JSESSION=")) {
+                key = s.split("=")[1];
+                break;
+            }
+        }
+        if (key.isEmpty()) {
+            return httpSessionStorage.createSession();
+        }
+        return httpSessionStorage.getSession(key);
     }
 }
