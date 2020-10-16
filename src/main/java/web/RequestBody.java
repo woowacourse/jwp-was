@@ -1,36 +1,19 @@
 package web;
 
-import utils.IOUtils;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 public class RequestBody {
-    private static final String URL_DELIMITER = "&";
+    private final UrlParameters parameters;
+    private final String body;
 
-    private String body;
-
-    public RequestBody(BufferedReader bufferedReader, int contentLength) throws IOException {
-        if (contentLength == 0) {
-            return;
-        }
-        this.body = IOUtils.readData(bufferedReader, contentLength);
+    public RequestBody(String body) {
+        this.body = body;
+        this.parameters = new UrlParameters(this.body);
     }
 
     public String getBody() {
         return body;
     }
 
-    public Map<String, String> parse() {
-        String[] splitBody = body.split(URL_DELIMITER);
-
-        Map<String, String> bodies = new HashMap<>();
-        for (String body : splitBody) {
-            UrlParameter parameter = new UrlParameter(body);
-            bodies.put(parameter.getKey(), parameter.getValue());
-        }
-        return bodies;
+    public String getParameter(String key) {
+        return parameters.get(key);
     }
 }

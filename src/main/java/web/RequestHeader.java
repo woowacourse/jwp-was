@@ -1,19 +1,18 @@
 package web;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class RequestHeader {
+    private static final String TOKEN_DELIMITER = ": ";
+
     private final Map<String, String> headers = new HashMap<>();
 
-    public RequestHeader(BufferedReader bufferedReader) throws IOException {
-        String line = bufferedReader.readLine();
-        while (!isEmpty(line)) {
-            String[] tokens = line.split(": ");
+    public RequestHeader(List<String> lines) {
+        for (String line : lines) {
+            String[] tokens = line.split(TOKEN_DELIMITER);
             headers.put(tokens[0], tokens[1]);
-            line = bufferedReader.readLine();
         }
     }
 
