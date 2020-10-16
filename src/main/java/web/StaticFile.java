@@ -1,6 +1,7 @@
 package web;
 
 import java.util.Arrays;
+import java.util.Map;
 
 public enum StaticFile {
 
@@ -21,11 +22,20 @@ public enum StaticFile {
         this.type = type;
     }
 
-    public static StaticFile of(HttpRequest request) {
+    public static StaticFile of(String path) {
         return Arrays.stream(values())
-            .filter(v -> v.isContentType(request))
+            .filter(v -> path.endsWith(v.name().toLowerCase()))
             .findFirst()
             .orElseThrow(IllegalArgumentException::new);
+    }
+
+    public static Map<String, String> writeContentType(Map<String, String> headers, String url) {
+        Arrays.stream(values())
+            .filter(v -> url.endsWith(v.name().toLowerCase()))
+            .findFirst()
+            .map(v -> headers.put("Content-Type", v.type));
+
+        return headers;
     }
 
     public boolean isContentType(HttpRequest request) {

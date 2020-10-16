@@ -1,13 +1,11 @@
 package webserver;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 
 import org.slf4j.Logger;
@@ -15,10 +13,9 @@ import org.slf4j.LoggerFactory;
 
 import db.DataBase;
 import model.User;
-import utils.FileIoUtils;
 import web.HttpMethod;
 import web.HttpRequest;
-import web.StaticFile;
+import web.HttpResponse;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -36,80 +33,30 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
 
-            HttpRequest httpRequest = HttpRequest.from(br);
+            HttpRequest request = HttpRequest.from(br);
+            HttpResponse response = new HttpResponse(out);
 
-            String path = httpRequest.getPath();
-            byte[] body;
-            if (HttpMethod.POST == httpRequest.getMethod()) {
-                if (path.equals("/user/create")) {
-                    User user = User.from(httpRequest.getRequestBody());
+            String path = getDefaultPath(request.getPath());
+            if (HttpMethod.POST == request.getMethod()) {
+                if ("/user/create".equals(path)) {
+                    User user = User.from(request.getRequestBody());
                     DataBase.addUser(user);
-                    body = user.toString().getBytes();
-                    DataOutputStream dos = new DataOutputStream(out);
-                    response302Header(dos, "/index.html");
-                    responseBody(dos, body);
+                    response.sendRedirect("/index.html");
                 }
-            } else if (HttpMethod.GET == httpRequest.getMethod()) {
-                DataOutputStream dos = new DataOutputStream(out);
-                StaticFile staticFile = StaticFile.of(httpRequest);
-                body = FileIoUtils.loadFileFromClasspath(staticFile.getPrefix() + path);
-                response200Header(dos, body.length, staticFile.getType());
-                responseBody(dos, body);
-            } else if (HttpMethod.NONE == httpRequest.getMethod()) {
-                DataOutputStream dos = new DataOutputStream(out);
-                response405Header(dos);
+            } else if (HttpMethod.NONE == request.getMethod()) {
+                response.response405Header();
+            } else {
+                response.forward(path);
             }
-
-        } catch (IOException | URISyntaxException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void response405Header(DataOutputStream dos) {
-        try {
-            dos.writeBytes("HTTP/1.1 405 Method Not Allowed" + System.lineSeparator());
-            dos.writeBytes(System.lineSeparator());
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void response404Header(DataOutputStream dos) {
-        try {
-            dos.writeBytes("HTTP/1.1 404 Not Found" + System.lineSeparator());
-            dos.writeBytes(System.lineSeparator());
-        } catch (IOException e) {
-            logger.error(e.getMessage());
+    private String getDefaultPath(String path) {
+        if ("/".equals(path)) {
+            return "/index.html";
         }
-    }
-
-    private void response302Header(DataOutputStream dos, String redirectUrl) {
-        try {
-            dos.writeBytes("HTTP/1.1 302 Found" + System.lineSeparator());
-            dos.writeBytes("Location: " + redirectUrl + System.lineSeparator());
-            dos.writeBytes(System.lineSeparator());
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK" + System.lineSeparator());
-            dos.writeBytes("Content-Type: " + contentType + System.lineSeparator());
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + System.lineSeparator());
-            dos.writeBytes(System.lineSeparator());
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+        return path;
     }
 }

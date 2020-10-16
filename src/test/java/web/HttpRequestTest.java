@@ -1,31 +1,41 @@
 package web;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.StringReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class HttpRequestTest {
 
-    @DisplayName("HttpRequest 생성")
+    private String testDirectory = "./src/test/resources/";
+
+    @DisplayName("HttpRequest 생성 - GET")
     @Test
-    public void createRequest() throws IOException {
-
-        String input = "GET /index.html HTTP/1.1" + System.lineSeparator()
-            + "Host: localhost:8080" + System.lineSeparator()
-            + "Connection: keep-alive" + System.lineSeparator()
-            + "Accept: */*";
-
-        BufferedReader br = new BufferedReader(new StringReader(input));
-        HttpRequest request = HttpRequest.from(br);
+    public void createGetRequest() throws IOException {
+        InputStream in = new FileInputStream(new File(testDirectory + "Http_GET.txt"));
+        HttpRequest request = HttpRequest.from(new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
 
         assertThat(request.getMethod()).isEqualTo(HttpMethod.GET);
         assertThat(request.getPath()).isEqualTo("/index.html");
         assertThat(request.getHeaders()).hasSize(3);
+    }
+
+    @DisplayName("HttpRequest 생성 - POST")
+    @Test
+    public void createPostRequest() throws IOException {
+        InputStream in = new FileInputStream(new File(testDirectory + "Http_POST.txt"));
+        HttpRequest request = HttpRequest.from(new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
+
+        assertThat(request.getMethod()).isEqualTo(HttpMethod.POST);
+        assertThat(request.getPath()).isEqualTo("/user/create");
+        assertThat(request.getHeaders()).hasSize(5);
     }
 }
