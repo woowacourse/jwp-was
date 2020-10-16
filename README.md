@@ -1,7 +1,7 @@
 # 웹 애플리케이션 서버
 
 ## 요구사항
-- [ ] newFixedThreadPool을 사용해 쓰레드풀을 이용한다.
+- [x] newFixedThreadPool을 사용해 쓰레드풀을 이용한다.
 - [ ] HttpRequest, HttpResponse를 구현하여 요청과 응답에 대한 처리 로직을 분리한다.
 - [ ] 다형성을 활용하여 요청 URL에 대한 분기를 처리한다.
 
