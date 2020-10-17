@@ -25,6 +25,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import utils.ControllerMapper;
+import utils.FileIoUtils;
 
 public class HttpResponseTest {
 
@@ -77,7 +78,7 @@ public class HttpResponseTest {
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
-        assertThat(bufferedReader.readLine()).isEqualTo(statusLine);
+        assertThat(bufferedReader.readLine()).contains(statusLine);
     }
 
     @ParameterizedTest
@@ -124,7 +125,7 @@ public class HttpResponseTest {
         "src/test/resources/input/post_api_request.txt:Found",
         "src/test/resources/input/post_api_request_invalid_method.txt:Method Not Allowed"
     }, delimiter = ':')
-    void getReasonPhrase(String filePath, String expected) throws IOException, URISyntaxException {
+    void getReasonPhrase(String filePath, String expected) throws IOException {
         InputStream inputStream = new FileInputStream(filePath);
         HttpRequest httpRequest = HttpRequest.of(inputStream);
         Controller controller = ControllerMapper.selectController(httpRequest);
@@ -132,7 +133,6 @@ public class HttpResponseTest {
 
         assertThat(httpResponse.getReasonPhrase()).isEqualTo(expected);
     }
-    //todo: 테스트 깨지는지 확인
 
     @ParameterizedTest
     @DisplayName("headers 확인")
@@ -147,13 +147,17 @@ public class HttpResponseTest {
         assertThat(httpResponse.getHeaders()).isEqualTo(expected);
     }
 
-    private static Stream<Arguments> provideHeaders() {
+    private static Stream<Arguments> provideHeaders() throws IOException, URISyntaxException {
         Map<Header, String> getMethodTemplateHeaders = new HashMap<>();
-        getMethodTemplateHeaders.put(Header.CONTENT_LENGTH, "7049");
+        byte[] indexHtmlBody = FileIoUtils
+            .loadFileFromClasspath("./templates/index.html");
+        getMethodTemplateHeaders.put(Header.CONTENT_LENGTH, String.valueOf(indexHtmlBody.length));
         getMethodTemplateHeaders.put(Header.CONTENT_TYPE, "text/html");
 
         Map<Header, String> getMethodStaticHeaders = new HashMap<>();
-        getMethodStaticHeaders.put(Header.CONTENT_LENGTH, "7268");
+        byte[] styleCssBody = FileIoUtils
+            .loadFileFromClasspath("./static/css/styles.css");
+        getMethodStaticHeaders.put(Header.CONTENT_LENGTH, String.valueOf(styleCssBody.length));
         getMethodStaticHeaders.put(Header.CONTENT_TYPE, "text/css");
 
         Map<Header, String> getMethodApiHeaders = new HashMap<>();

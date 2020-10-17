@@ -35,8 +35,9 @@ public class HttpResponse {
     }
 
     private void writeStatusLine(DataOutputStream dataOutputStream) throws IOException {
-        dataOutputStream.writeBytes(
-            getHttpVersion() + " " + getStatusCode() + " " + getReasonPhrase() + "\r\n");
+        dataOutputStream
+            .writeBytes(getHttpVersion() + " " + getStatusCode() + " " + getReasonPhrase()
+                + System.lineSeparator());
     }
 
     private void writeHeaders(DataOutputStream dataOutputStream)
@@ -44,10 +45,10 @@ public class HttpResponse {
         Map<Header, String> headers = getHeaders();
 
         for (Map.Entry<Header, String> entry : headers.entrySet()) {
-            dataOutputStream
-                .writeBytes(entry.getKey().getName() + ": " + entry.getValue() + "\r\n");
+            dataOutputStream.writeBytes(entry.getKey().getName() + ": " + entry.getValue()
+                + System.lineSeparator());
         }
-        dataOutputStream.writeBytes("\r\n");
+        dataOutputStream.writeBytes(System.lineSeparator());
     }
 
     private void writeBody(DataOutputStream dataOutputStream) throws IOException {

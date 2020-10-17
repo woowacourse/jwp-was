@@ -46,6 +46,7 @@ public class RequestLineTest {
         RequestLine requestLine = RequestLine.of(bufferedReader.readLine());
 
         assertThat(requestLine.extractRequestUriExtension()).isEqualTo(expected);
+        bufferedReader.close();
     }
 
     @ParameterizedTest
@@ -59,6 +60,7 @@ public class RequestLineTest {
         RequestLine requestLine = RequestLine.of(bufferedReader.readLine());
 
         assertThat(requestLine.extractUriParameters()).isEqualTo(parameters);
+        bufferedReader.close();
     }
 
     private static Stream<Arguments> provideParameters() {
@@ -96,6 +98,7 @@ public class RequestLineTest {
         RequestLine requestLine = RequestLine.of(bufferedReader.readLine());
 
         assertThat(requestLine.isSameMethod(Method.of(method))).isTrue();
+        bufferedReader.close();
     }
 
     @ParameterizedTest
@@ -114,6 +117,7 @@ public class RequestLineTest {
         RequestLine requestLine = RequestLine.of(bufferedReader.readLine());
 
         assertThat(requestLine.isSameUri(uri)).isTrue();
+        bufferedReader.close();
     }
 
     @ParameterizedTest
@@ -132,6 +136,7 @@ public class RequestLineTest {
         RequestLine requestLine = RequestLine.of(bufferedReader.readLine());
 
         assertThat(requestLine.isStartsWithUri(uri)).isTrue();
+        bufferedReader.close();
     }
 
     @ParameterizedTest
@@ -146,6 +151,7 @@ public class RequestLineTest {
         Map<String, String> requestParameters = requestLine.extractUriParameters();
 
         assertThat(requestParameters).isEqualTo(parameters);
+        bufferedReader.close();
     }
 
     @ParameterizedTest
@@ -164,6 +170,7 @@ public class RequestLineTest {
         RequestLine requestLine = RequestLine.of(bufferedReader.readLine());
 
         assertThat(requestLine.whetherUriHasExtension()).isEqualTo(expected);
+        bufferedReader.close();
     }
 
     @ParameterizedTest
@@ -183,6 +190,7 @@ public class RequestLineTest {
         RequestLine requestLine = RequestLine.of(bufferedReader.readLine());
 
         assertThat(requestLine.getMethod()).isEqualTo(Method.of(method));
+        bufferedReader.close();
     }
 
     @ParameterizedTest
@@ -201,6 +209,7 @@ public class RequestLineTest {
         RequestLine requestLine = RequestLine.of(bufferedReader.readLine());
 
         assertThat(requestLine.getRequestUri()).isEqualTo(location);
+        bufferedReader.close();
     }
 
     @ParameterizedTest
@@ -219,5 +228,6 @@ public class RequestLineTest {
         RequestLine requestLine = RequestLine.of(bufferedReader.readLine());
 
         assertThat(requestLine.getHttpVersion()).isEqualTo(httpVersion);
+        bufferedReader.close();
     }
 }
