@@ -17,6 +17,8 @@ public class ResponseEntity {
     private static final String lineSeparator = System.lineSeparator();
     private static final String HEADER_DELIMITER = ": ";
     private static final String SPACE = " ";
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String CONTENT_LENGTH = "Content-Length";
 
     public static void build(HttpResponse httpResponse) {
         try {
@@ -41,8 +43,6 @@ public class ResponseEntity {
             dataOutputStream.writeBytes(
                 headerKeyValue.getKey() + HEADER_DELIMITER + headerKeyValue.getValue() + lineSeparator);
         }
-        // HEADER 와 BODY 사이릃 한 줄 띄워야 한다.
-        dataOutputStream.writeBytes(lineSeparator);
     }
 
     private static void responseBody(HttpResponse httpResponse, DataOutputStream dataOutputStream) throws
@@ -52,26 +52,17 @@ public class ResponseEntity {
             return;
         }
 
-        resolveResponse(httpResponse);
-
-        byte[] body = httpResponse.getBody();
-        if (body != null) {
-            dataOutputStream.write(body, 0, body.length);
-            dataOutputStream.flush();
-        }
-    }
-
-    private static void resolveResponse(HttpResponse httpResponse) throws
-        IOException,
-        URISyntaxException {
         String resource = httpResponse.getResource();
-
         StaticFile staticFile = StaticFile.findStaticFile(resource);
         byte[] body = FileIoUtils.loadFileFromClasspath(staticFile.getResourcePath() + resource);
 
-        httpResponse.addHeader("Content-Type", staticFile.getContentType());
-        httpResponse.addHeader("Content-Length", String.valueOf(body.length));
-        httpResponse.setBody(body);
+        dataOutputStream.writeBytes(CONTENT_TYPE + HEADER_DELIMITER + staticFile.getContentType() + lineSeparator);
+        dataOutputStream.writeBytes(CONTENT_LENGTH + HEADER_DELIMITER + body.length + lineSeparator);
+        // HEADER 와 BODY 사이릃 한 줄 띄워야 한다.
+        dataOutputStream.writeBytes(lineSeparator);
+        dataOutputStream.write(body, 0, body.length);
+        dataOutputStream.flush();
+
     }
 
 }
