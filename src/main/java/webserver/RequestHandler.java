@@ -18,8 +18,11 @@ import http.request.HttpRequestMapping;
 import http.request.HttpRequestParser;
 import http.response.HttpResponse;
 import http.response.ResponseEntity;
+import http.session.HttpSessionManager;
+import http.session.RandomGenerateStrategy;
+import http.session.SessionManager;
 import view.ModelAndView;
-import view.ViewResolver;
+// import view.ViewResolver;
 
 public class RequestHandler implements Runnable {
 
@@ -27,12 +30,14 @@ public class RequestHandler implements Runnable {
 
     private final Socket connection;
     private final HttpRequestController httpRequestController;
-    private final ViewResolver viewResolver;
+    // private final ViewResolver viewResolver;
+    private final SessionManager sessionManager;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
         this.httpRequestController = setHttpRequestController();
-        this.viewResolver = new ViewResolver();
+        // this.viewResolver = new ViewResolver();
+        this.sessionManager = new HttpSessionManager(new RandomGenerateStrategy());
     }
 
     private HttpRequestController setHttpRequestController() {
@@ -53,11 +58,12 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
 
             HttpRequest httpRequest = HttpRequestParser.parse(in);
-            ModelAndView modelAndView = httpRequestController.doService(httpRequest);
-            HttpResponse httpResponse = viewResolver.resolve(modelAndView);
-            ResponseEntity.build(httpResponse, out);
+            httpRequest.setSessionManager(this.sessionManager);
+            HttpResponse httpResponse = HttpResponse.from(out);
+            httpRequestController.doService(httpRequest, httpResponse);
+            ResponseEntity.build(httpResponse);
 
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }

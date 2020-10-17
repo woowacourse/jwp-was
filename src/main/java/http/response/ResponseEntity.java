@@ -2,11 +2,14 @@ package http.response;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.net.URISyntaxException;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import http.StaticFile;
+import utils.FileIoUtils;
 
 public class ResponseEntity {
 
@@ -15,13 +18,13 @@ public class ResponseEntity {
     private static final String HEADER_DELIMITER = ": ";
     private static final String SPACE = " ";
 
-    public static void build(HttpResponse httpResponse, OutputStream out) {
-        DataOutputStream dataOutputStream = new DataOutputStream(out);
+    public static void build(HttpResponse httpResponse) {
         try {
+            DataOutputStream dataOutputStream = new DataOutputStream(httpResponse.getOutputStream());
             responseStatus(httpResponse, dataOutputStream);
             responseHeader(httpResponse, dataOutputStream);
             responseBody(httpResponse, dataOutputStream);
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }
@@ -42,12 +45,33 @@ public class ResponseEntity {
         dataOutputStream.writeBytes(lineSeparator);
     }
 
-    private static void responseBody(HttpResponse httpResponse, DataOutputStream dataOutputStream) throws IOException {
+    private static void responseBody(HttpResponse httpResponse, DataOutputStream dataOutputStream) throws
+        IOException,
+        URISyntaxException {
+        if (!httpResponse.hasResource()) {
+            return;
+        }
+
+        resolveResponse(httpResponse);
+
         byte[] body = httpResponse.getBody();
         if (body != null) {
             dataOutputStream.write(body, 0, body.length);
             dataOutputStream.flush();
         }
+    }
+
+    private static void resolveResponse(HttpResponse httpResponse) throws
+        IOException,
+        URISyntaxException {
+        String resource = httpResponse.getResource();
+
+        StaticFile staticFile = StaticFile.findStaticFile(resource);
+        byte[] body = FileIoUtils.loadFileFromClasspath(staticFile.getResourcePath() + resource);
+
+        httpResponse.addHeader("Content-Type", staticFile.getContentType());
+        httpResponse.addHeader("Content-Length", String.valueOf(body.length));
+        httpResponse.setBody(body);
     }
 
 }

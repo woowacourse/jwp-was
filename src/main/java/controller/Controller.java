@@ -1,11 +1,11 @@
 package controller;
 
 import http.request.HttpRequest;
-import view.ModelAndView;
+import http.response.HttpResponse;
 
 public interface Controller {
 
-    ModelAndView handle(HttpRequest httpRequest);
+    void handle(HttpRequest httpRequest, HttpResponse httpResponse);
 
     boolean canHandle(HttpRequest httpRequest);
 }

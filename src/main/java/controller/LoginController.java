@@ -5,10 +5,8 @@ import java.util.Objects;
 import db.DataBase;
 import http.request.HttpRequest;
 import http.request.HttpRequestMapping;
+import http.response.HttpResponse;
 import model.User;
-import view.Model;
-import view.ModelAndView;
-import view.View;
 
 public class LoginController extends HttpRequestMappingAbstractController {
 
@@ -17,24 +15,20 @@ public class LoginController extends HttpRequestMappingAbstractController {
     }
 
     @Override
-    public ModelAndView handle(HttpRequest httpRequest) {
+    public void handle(HttpRequest httpRequest, HttpResponse httpResponse) {
         String userId = httpRequest.getRequestBody().parseBody().get("userId");
         String password = httpRequest.getRequestBody().parseBody().get("password");
 
         User user = DataBase.findUserById(userId);
 
         if (authenticateUser(user, password)) {
-            Model model = new Model();
-            model.addAttributes("user", user);
-            View view = new View("redirect:/index.html");
-            return ModelAndView.of(model, view);
+            httpResponse.setCookie("logined=true; Path=/");
+            httpResponse.redirect("/index.html");
+            return;
         }
-        Model model = new Model();
-        model.addAttributes("user", user);
-        View view = new View("redirect:/user/login_failed.html");
 
-        return ModelAndView.of(model, view);
-
+        httpResponse.setCookie("logined=false");
+        httpResponse.redirect("/user/login_failed.html");
     }
 
     private boolean authenticateUser(User user, String password) {
