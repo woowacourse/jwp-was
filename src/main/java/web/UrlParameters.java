@@ -8,6 +8,13 @@ public class UrlParameters {
 
     private final Map<String, String> urlParameters = new HashMap<>();
 
+    public static UrlParameters empty() {
+        return new UrlParameters();
+    }
+
+    private UrlParameters() {
+    }
+
     public UrlParameters(String body) {
         String[] splitBody = body.split(URL_DELIMITER);
         validate(splitBody);
@@ -17,6 +24,7 @@ public class UrlParameters {
             urlParameters.put(parameter.getKey(), parameter.getValue());
         }
     }
+
 
     private void validate(String[] splitBody) {
         if (splitBody.length == 0) {

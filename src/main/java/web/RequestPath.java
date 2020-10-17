@@ -1,26 +1,21 @@
 package web;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class RequestPath {
     private final String fullPath;
     private final String requestPath;
-    private final Map<String, String> requestParameters = new HashMap<>();
+    private final UrlParameters urlParameters;
 
     public RequestPath(String requestPath) {
         this.fullPath = requestPath;
         String[] splitPath = requestPath.split("\\?");
         this.requestPath = splitPath[0];
+
         if (hasNoParameters()) {
+            this.urlParameters = UrlParameters.empty();
             return;
         }
-        String parameters = splitPath[1];
-        String[] splitParameters = parameters.split("&");
-        for (String parameter : splitParameters) {
-            String[] key = parameter.split("=");
-            requestParameters.put(key[0], key[1]);
-        }
+        String body = splitPath[1];
+        this.urlParameters = new UrlParameters(body);
     }
 
     private boolean hasNoParameters() {
@@ -32,6 +27,6 @@ public class RequestPath {
     }
 
     public String getRequestParameter(String key) {
-        return requestParameters.get(key);
+        return urlParameters.get(key);
     }
 }
