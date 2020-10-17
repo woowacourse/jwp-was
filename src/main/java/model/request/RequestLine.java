@@ -16,7 +16,7 @@ public class RequestLine {
     private static final int NO_EXTENSION_SIZE = 1;
     private static final int SIZE_CORRECTION_NUMBER = 1;
     private static final String EXTENSION_LETTER = ".";
-    private static final String PARAMETER_DELIMITER = "&"; // todo: semicolon delimiter 처리
+    private static final String PARAMETER_DELIMITER = ";";
     private static final String URI_PARAMETER_SEPARATOR = "\\?";
     private static final int URI_INDEX = 0;
     private static final int PARAMETER_INDEX = 1;
@@ -69,7 +69,9 @@ public class RequestLine {
     private Map<String, String> makeParameters() {
         String parameterSection = requestUri.split(URI_PARAMETER_SEPARATOR)[PARAMETER_INDEX];
 
-        Map<String, String> parameters = Arrays.stream(parameterSection.split(PARAMETER_DELIMITER))
+        String unifiedParameterSection = parameterSection.replace("&", ";");
+        Map<String, String> parameters = Arrays
+            .stream(unifiedParameterSection.split(PARAMETER_DELIMITER))
             .map(it -> it.split(PARAMETER_KEY_VALUE_SEPARATOR))
             .collect(Collectors.toMap(it -> it[KEY_INDEX], it -> it[VALUE_INDEX]));
 

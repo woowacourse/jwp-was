@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 public class MessageBody {
 
-    private static final String PARAMETER_DELIMITER = "&";
+    private static final String PARAMETER_DELIMITER = ";";
     private static final String PARAMETER_KEY_VALUE_SEPARATOR = "=";
     private static final int KEY_INDEX = 0;
     private static final int VALUE_INDEX = 1;
@@ -22,7 +22,10 @@ public class MessageBody {
         if (messageBody.isEmpty()) {
             return new MessageBody(Collections.unmodifiableMap(Collections.emptyMap()));
         }
-        Map<String, String> parameters = Arrays.stream(messageBody.split(PARAMETER_DELIMITER))
+
+        String unifiedMessageBody = messageBody.replace("&", ";");
+        Map<String, String> parameters = Arrays
+            .stream(unifiedMessageBody.split(PARAMETER_DELIMITER))
             .map(it -> it.split(PARAMETER_KEY_VALUE_SEPARATOR))
             .collect(Collectors.toMap(it -> it[KEY_INDEX], it -> it[VALUE_INDEX]));
 
