@@ -7,6 +7,7 @@ import java.util.Objects;
 
 public class HttpCookie {
     private static final String COOKIE_OPTION_DELIMITER = ";";
+    private static final String EQUALS_SIGN = "=";
 
     private final String name;
     private final String value;
@@ -34,11 +35,30 @@ public class HttpCookie {
         return of(name, value, null);
     }
 
-    public String toHttpMessage() {
-        if (Objects.isNull(this.httpCookieOption)) {
-            return this.name + "=" + this.value;
+    public static HttpCookie from(String cookieToken) {
+        StringUtils.validateNonNullAndNotEmpty(() -> new InvalidCookieException(cookieToken));
+
+        String[] tokens = cookieToken.split(EQUALS_SIGN);
+        if (tokens.length != 2) {
+            throw new InvalidCookieException(cookieToken);
         }
 
-        return this.name + "=" + this.value + COOKIE_OPTION_DELIMITER + this.httpCookieOption.toHttpMessage();
+        return of(tokens[0], tokens[1]);
+    }
+
+    public String toHttpMessage() {
+        if (Objects.isNull(this.httpCookieOption)) {
+            return this.name + EQUALS_SIGN + this.value;
+        }
+
+        return this.name + EQUALS_SIGN + this.value + COOKIE_OPTION_DELIMITER + this.httpCookieOption.toHttpMessage();
+    }
+
+    public boolean hasSameName(String name) {
+        return this.name.equals(name);
+    }
+
+    public String getValue() {
+        return value;
     }
 }
