@@ -2,35 +2,29 @@ package webserver;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import controller.Controller;
-import controller.StaticController;
-import controller.TemplatesController;
+import controller.IndexController;
+import controller.ResourceController;
 import controller.UserCreateController;
-import http.ContentType;
 
-public class RequestMapping {
-    private final static TemplatesController templatesController = new TemplatesController();
-    private final static StaticController staticController = new StaticController();
+class RequestMapping {
+    private final static ResourceController RESOURCE_CONTROLLER = new ResourceController();
     private final static Map<String, Controller> controllers = new HashMap<>();
 
     static {
         controllers.put("/users", new UserCreateController());
+        controllers.put("/", new IndexController());
     }
 
     public static Controller getController(String requestUrl) {
         Controller controller = controllers.get(requestUrl);
 
-        if (controller != null) {
+        if (Objects.nonNull(controller)) {
             return controller;
         }
 
-        ContentType contentType = ContentType.of(requestUrl);
-
-        if (contentType == ContentType.HTML) {
-            return templatesController;
-        }
-
-        return staticController;
+        return RESOURCE_CONTROLLER;
     }
 }

@@ -4,7 +4,9 @@ public enum Directory {
     STATIC,
     TEMPLATES;
 
+    private static final String CLASS_PATH = "./";
+    
     public String getDirectory() {
-        return "./" + this.name().toLowerCase();
+        return CLASS_PATH + this.name().toLowerCase();
     }
 }
