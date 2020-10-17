@@ -22,6 +22,10 @@ public enum ContentType {
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 확장자입니다."));
     }
 
+    public boolean isHtml(String contentType) {
+        return contentType.contains(HTML.contentType);
+    }
+
     public String getSuffix() {
         return suffix;
     }
@@ -29,4 +33,5 @@ public enum ContentType {
     public String getContentType() {
         return contentType;
     }
+
 }

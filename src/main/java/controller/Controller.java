@@ -1,11 +1,12 @@
 package controller;
 
-import java.io.DataOutputStream;
+import exception.IllegalRequestException;
+import http.request.Request;
+import http.response.Response;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import http.Request;
-
 public interface Controller {
-    void service(Request request, DataOutputStream dos) throws IOException, URISyntaxException;
+    void service(Request request, Response response) throws IOException, URISyntaxException, NoSuchMethodException, IllegalRequestException;
 }
