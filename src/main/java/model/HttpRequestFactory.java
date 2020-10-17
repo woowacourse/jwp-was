@@ -17,7 +17,7 @@ public class HttpRequestFactory {
     private RequestLine createRequestLine(String requestLine) {
         String[] tokens = requestLine.split(SP);
         HttpMethod method = HttpMethod.valueOf(tokens[HTTP_METHOD]);
-        RequestURI uri = new RequestURI(tokens[REQUEST_URI]);
+        RequestURI uri = RequestURI.of(tokens[REQUEST_URI]);
         HttpVersion version = HttpVersion.of(tokens[HTTP_VERSION]);
 
         return new RequestLine(method, uri, version);

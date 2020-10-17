@@ -10,6 +10,8 @@ import java.net.URISyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import db.DataBase;
+
 public class HttpGetService implements HttpService {
     private static final Logger logger = LoggerFactory.getLogger(HttpGetService.class);
     private static final String FILE_PATH = "./templates";
@@ -21,6 +23,11 @@ public class HttpGetService implements HttpService {
         DataOutputStream dos = new DataOutputStream(out);
         String classPath = FILE_PATH + requestURI.getUri();
         logger.debug(classPath);
+
+        HttpQueryParams httpQueryParams = requestURI.getHttpQueryParams();
+        DataBase.addUser(httpQueryParams.toModel(User.class));
+        DataBase.findAll().forEach(user -> logger.debug(user.toString()));
+
         byte[] body = loadFileFromClasspath(classPath);
         response200Header(dos, body.length);
         responseBody(dos, body);
