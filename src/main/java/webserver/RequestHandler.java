@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import controller.HttpRequestController;
+import controller.LoginController;
 import controller.ResourceController;
 import controller.UserCreateController;
 import http.request.HttpRequest;
@@ -38,8 +39,10 @@ public class RequestHandler implements Runnable {
         HttpRequestController httpRequestController = new HttpRequestController(
             new ResourceController(HttpRequestMapping.GET("/")));
         UserCreateController userCreateController = new UserCreateController(HttpRequestMapping.POST("/user/create"));
+        LoginController loginController = new LoginController(HttpRequestMapping.POST("/user/login"));
 
         httpRequestController.addController(userCreateController);
+        httpRequestController.addController(loginController);
         return httpRequestController;
     }
 
