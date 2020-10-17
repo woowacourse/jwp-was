@@ -35,7 +35,7 @@ public class RequestHandler implements Runnable {
 
             RequestURI uri = httpRequest.getHeader()
                     .getRequestLine()
-                    .getUri();
+                    .getRequestURI();
 
             httpRequest
                     .getService()

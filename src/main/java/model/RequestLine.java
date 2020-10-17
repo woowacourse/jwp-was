@@ -2,12 +2,12 @@ package model;
 
 public class RequestLine {
     private final HttpMethod method;
-    private final RequestURI uri;
+    private final RequestURI requestURI;
     private final HttpVersion version;
 
-    public RequestLine(HttpMethod method, RequestURI uri, HttpVersion version) {
+    public RequestLine(HttpMethod method, RequestURI requestURI, HttpVersion version) {
         this.method = method;
-        this.uri = uri;
+        this.requestURI = requestURI;
         this.version = version;
     }
 
@@ -15,8 +15,8 @@ public class RequestLine {
         return method;
     }
 
-    public RequestURI getUri() {
-        return uri;
+    public RequestURI getRequestURI() {
+        return requestURI;
     }
 
     public HttpVersion getVersion() {
