@@ -7,10 +7,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
-import model.general.ContentType;
 import model.general.Method;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -75,7 +75,7 @@ public class RequestLineTest {
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
         RequestLine requestLine = RequestLine.of(bufferedReader.readLine());
-        Map<String, String> requestParameters = requestLine.extractGetParameters();
+        Map<String, String> requestParameters = requestLine.extractUriParameters();
 
         assertThat(requestParameters).isEqualTo(parameters);
     }
@@ -88,10 +88,14 @@ public class RequestLineTest {
         parameters.put("email", "javajigi%40slipp.net");
 
         return Stream.of(
-            Arguments.of("src/test/resources/input/get_template_file_request.txt", null),
-            Arguments.of("src/test/resources/input/get_static_file_request.txt", null),
-            Arguments.of("src/test/resources/input/get_api_request.txt", parameters),
-            Arguments.of("src/test/resources/input/post_api_request.txt", null)
+            Arguments.of("src/test/resources/input/get_template_file_request.txt",
+                Collections.emptyMap()),
+            Arguments.of("src/test/resources/input/get_static_file_request.txt",
+                Collections.emptyMap()),
+            Arguments.of("src/test/resources/input/get_api_request.txt",
+                parameters),
+            Arguments.of("src/test/resources/input/post_api_request.txt",
+                Collections.emptyMap())
         );
     }
 

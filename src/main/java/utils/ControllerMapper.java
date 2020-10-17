@@ -1,13 +1,10 @@
-package webserver;
+package utils;
 
 import com.google.common.collect.Maps;
 import controller.Controller;
 import controller.ResourceController;
 import controller.UserController;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import model.general.ContentType;
 import model.request.HttpRequest;
 
 public class ControllerMapper {
@@ -20,8 +17,7 @@ public class ControllerMapper {
     }
 
     public static Controller selectController(HttpRequest httpRequest) {
-        Optional<ContentType> contentType = ContentType.of(httpRequest);
-        if (contentType.isPresent()) {
+        if (httpRequest.whetherUriHasExtension()) {
             return resourceController;
         }
 

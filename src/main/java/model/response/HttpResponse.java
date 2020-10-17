@@ -23,16 +23,8 @@ public class HttpResponse {
         return new HttpResponse(StatusLine.of(status), Collections.emptyMap(), null);
     }
 
-    public static HttpResponse of(StatusLine statusLine) {
-        return new HttpResponse(statusLine, Collections.emptyMap(), null);
-    }
-
     public static HttpResponse of(StatusLine statusLine, Map<Header, String> headers, byte[] body) {
         return new HttpResponse(statusLine, headers, body);
-    }
-
-    public static HttpResponse emptyResponse() {
-        return new HttpResponse(null, Collections.emptyMap(), null);
     }
 
     public void writeToOutputStream(DataOutputStream dataOutputStream)

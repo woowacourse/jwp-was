@@ -22,14 +22,16 @@ public class UserController extends AbstractController {
         if (method.equals(Method.POST)) {
             return doPost(httpRequest);
         }
+
         return super.service(httpRequest);
     }
 
     @Override
     public HttpResponse doPost(HttpRequest httpRequest) {
-        if (httpRequest.isStartsWithUri(USER_CREATE_REQUEST)) {
+        if (httpRequest.isSameUri(USER_CREATE_REQUEST)) {
             return createUser(httpRequest);
         }
+
         return super.doPost(httpRequest);
     }
 

@@ -23,7 +23,7 @@ public class MessageBodyTest {
     void extractParameters() {
         String requestMessageBody = "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
         MessageBody messageBody = MessageBody.of(requestMessageBody);
-        Map<String, String> parameters = messageBody.extractPostParameters();
+        Map<String, String> parameters = messageBody.extractBodyParameters();
 
         Stream.of(
             assertThat(parameters.size()).isEqualTo(4),

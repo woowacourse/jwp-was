@@ -19,7 +19,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import webserver.ControllerMapper;
+import utils.ControllerMapper;
 
 public class HttpResponseTest {
 
@@ -66,7 +66,7 @@ public class HttpResponseTest {
         "src/test/resources/input/post_api_request.txt:302",
         "src/test/resources/input/put_api_request.txt:405"
     }, delimiter = ':')
-    void getStatusCode(String filePath, String expected) throws IOException, URISyntaxException {
+    void getStatusCode(String filePath, String expected) throws IOException {
         InputStream inputStream = new FileInputStream(filePath);
         HttpRequest httpRequest = HttpRequest.of(inputStream);
         Controller controller = ControllerMapper.selectController(httpRequest);

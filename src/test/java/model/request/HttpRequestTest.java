@@ -5,10 +5,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
-import model.general.ContentType;
 import model.general.Method;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -50,18 +50,18 @@ public class HttpRequestTest {
     }
 
     @ParameterizedTest
-    @DisplayName("해당 경로를 Uri가 포함하고 있는지 테스트")
+    @DisplayName("Uri가 같은지 테스트")
     @CsvSource(value = {
         "src/test/resources/input/get_template_file_request.txt:/index.html",
         "src/test/resources/input/get_static_file_request.txt:/css/styles.css",
         "src/test/resources/input/get_api_request.txt:/user/create",
         "src/test/resources/input/post_api_request.txt:/user/create"
     }, delimiter = ':')
-    void containsUri(String filePath, String uri) throws IOException {
+    void isSameUri(String filePath, String uri) throws IOException {
         InputStream inputStream = new FileInputStream(filePath);
         HttpRequest httpRequest = HttpRequest.of(inputStream);
 
-        assertThat(httpRequest.isStartsWithUri(uri)).isTrue();
+        assertThat(httpRequest.isSameUri(uri)).isTrue();
     }
 
     @ParameterizedTest
@@ -83,10 +83,14 @@ public class HttpRequestTest {
         parameters.put("email", "javajigi%40slipp.net");
 
         return Stream.of(
-            Arguments.of("src/test/resources/input/get_template_file_request.txt", null),
-            Arguments.of("src/test/resources/input/get_static_file_request.txt", null),
-            Arguments.of("src/test/resources/input/get_api_request.txt", parameters),
-            Arguments.of("src/test/resources/input/post_api_request.txt", parameters)
+            Arguments.of("src/test/resources/input/get_template_file_request.txt",
+                Collections.emptyMap()),
+            Arguments.of("src/test/resources/input/get_static_file_request.txt",
+                Collections.emptyMap()),
+            Arguments.of("src/test/resources/input/get_api_request.txt",
+                parameters),
+            Arguments.of("src/test/resources/input/post_api_request.txt",
+                parameters)
         );
     }
 

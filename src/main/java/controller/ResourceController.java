@@ -24,6 +24,7 @@ public class ResourceController extends AbstractController {
         if (method.equals(Method.GET)) {
             return doGet(httpRequest);
         }
+
         return super.service(httpRequest);
     }
 
@@ -33,6 +34,9 @@ public class ResourceController extends AbstractController {
             .orElse(null);
         if (Objects.nonNull(contentType)) {
             return findResourceFile(httpRequest);
+        }
+        if(httpRequest.whetherUriHasExtension()){
+            return HttpResponse.of(Status.NOT_FOUND);
         }
 
         return super.doGet(httpRequest);
@@ -46,7 +50,7 @@ public class ResourceController extends AbstractController {
         try {
             body = FileIoUtils.loadFileFromClasspath(generatePath(httpRequest));
         } catch (Exception e) {
-            return HttpResponse.of(Status.INTERNAL_ERROR);
+            return HttpResponse.of(Status.NOT_FOUND);
         }
 
         ContentType contentType = ContentType.of(httpRequest)
@@ -65,6 +69,7 @@ public class ResourceController extends AbstractController {
         if (contentType.equals(ContentType.HTML) || contentType.equals(ContentType.ICO)) {
             return TEMPLATE_LOCATION + location;
         }
+
         return STATIC_LOCATION + location;
     }
 }

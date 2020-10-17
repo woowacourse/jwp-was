@@ -1,8 +1,7 @@
-package service;
+package controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import controller.Controller;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,17 +14,17 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import utils.ControllerMapper;
 
-public class UserServiceTest {
+public class UserControllerTest {
 
     @Test
-    @DisplayName("Uer Service 동작 테스트")
-    void execute() throws IOException {
+    @DisplayName("UserController 테스트")
+    void executeApiServiceOperation() throws IOException {
         String filePath = "src/test/resources/input/post_api_request.txt";
         InputStream inputStream = new FileInputStream(filePath);
         HttpRequest httpRequest = HttpRequest.of(inputStream);
+
         Controller controller = ControllerMapper.selectController(httpRequest);
         HttpResponse httpResponse = controller.service(httpRequest);
-
         Map<Header, String> headers = httpResponse.getHeaders();
 
         Stream.of(

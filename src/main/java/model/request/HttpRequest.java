@@ -4,10 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import model.general.ContentType;
 import model.general.Header;
 import model.general.Method;
 import utils.IOUtils;
@@ -64,8 +64,12 @@ public class HttpRequest {
         return requestLine.isSameMethod(method);
     }
 
-    public boolean isStartsWithUri(String uri) {
-        return requestLine.isStartsWithUri(uri);
+    public boolean isSameUri(String uri) {
+        return requestLine.isSameUri(uri);
+    }
+
+    public boolean whetherUriHasExtension() {
+        return requestLine.whetherUriHasExtension();
     }
 
     public String extractRequestUriExtension(){
@@ -74,9 +78,22 @@ public class HttpRequest {
 
     public Map<String, String> extractParameters() {
         if (requestLine.isSameMethod(Method.GET)) {
-            return requestLine.extractGetParameters();
+            Map<String, String> uriParameters = requestLine.extractUriParameters();
+
+            return uriParameters;
         }
-        return messageBody.extractPostParameters();
+        if (requestLine.isSameMethod(Method.POST)){
+            Map<String, String> uriParameters = requestLine.extractUriParameters();
+            Map<String, String> bodyParameters= messageBody.extractBodyParameters();
+            Map<String, String> postParameters = new HashMap<>();
+
+            postParameters.putAll(uriParameters);
+            postParameters.putAll(bodyParameters);
+
+            return postParameters;
+        }
+
+        return Collections.emptyMap();
     }
 
     public Method getMethod() {

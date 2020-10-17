@@ -6,7 +6,6 @@ import controller.Controller;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.stream.Stream;
 import model.general.Header;
@@ -14,7 +13,7 @@ import model.request.HttpRequest;
 import model.response.HttpResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import webserver.ControllerMapper;
+import utils.ControllerMapper;
 
 public class ResourceServiceTest {
 

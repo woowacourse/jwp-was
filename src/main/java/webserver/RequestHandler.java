@@ -10,9 +10,9 @@ import java.util.Objects;
 import model.general.Status;
 import model.request.HttpRequest;
 import model.response.HttpResponse;
-import model.response.StatusLine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.ControllerMapper;
 
 public class RequestHandler implements Runnable {
 
@@ -51,9 +51,14 @@ public class RequestHandler implements Runnable {
         }
 
         Controller controller = ControllerMapper.selectController(request);
-        if(Objects.isNull(controller)){
+        if (Objects.isNull(controller)) {
             return HttpResponse.of(Status.NOT_FOUND);
         }
-        return controller.service(request);
+
+        try {
+            return controller.service(request);
+        } catch (Exception e) {
+            return HttpResponse.of(Status.INTERNAL_ERROR);
+        }
     }
 }
