@@ -2,6 +2,7 @@ package utils;
 
 import com.google.common.collect.Maps;
 import controller.Controller;
+import controller.ErrorController;
 import controller.ResourceController;
 import controller.UserController;
 import java.util.Map;
@@ -11,6 +12,7 @@ public class ControllerMapper {
 
     private static final Map<String, Controller> controllerMap = Maps.newHashMap();
     private static final Controller resourceController = new ResourceController();
+    private static final Controller errorController = new ErrorController();
 
     static {
         controllerMap.put("/user/", new UserController());
@@ -28,6 +30,6 @@ public class ControllerMapper {
             }
         }
 
-        return null;
+        return errorController;
     }
 }

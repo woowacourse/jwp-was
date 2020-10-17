@@ -3,9 +3,14 @@ package model.response;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import controller.Controller;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,6 +46,41 @@ public class HttpResponseTest {
     }
 
     @ParameterizedTest
+    @DisplayName("Output 작성 확인")
+    @CsvSource(value = {
+        "src/test/resources/input/get_template_file_request.txt:"
+            + "src/test/resources/output/get_template_file_request_output.txt:"
+            + "HTTP/1.1 200 OK",
+        "src/test/resources/input/get_static_file_request.txt:"
+            + "src/test/resources/output/get_static_file_request_output.txt:"
+            + "HTTP/1.1 200 OK",
+        "src/test/resources/input/get_api_request.txt:"
+            + "src/test/resources/output/get_api_request_output.txt:"
+            + "HTTP/1.1 405 Method Not Allowed",
+        "src/test/resources/input/post_api_request.txt:"
+            + "src/test/resources/output/post_api_request_output.txt:"
+            + "HTTP/1.1 302 Found"
+    }, delimiter = ':')
+    void writeToOutputStream(String inputFilePath, String outputFilePath, String statusLine)
+        throws IOException {
+        InputStream inputStream = new FileInputStream(inputFilePath);
+        OutputStream outputStream = new FileOutputStream(outputFilePath);
+        DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+
+        HttpRequest httpRequest = HttpRequest.of(inputStream);
+        Controller controller = ControllerMapper.selectController(httpRequest);
+        HttpResponse httpResponse = controller.service(httpRequest);
+
+        httpResponse.writeToOutputStream(dataOutputStream);
+
+        inputStream = new FileInputStream(outputFilePath);
+        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+        assertThat(bufferedReader.readLine()).isEqualTo(statusLine);
+    }
+
+    @ParameterizedTest
     @DisplayName("HttpVersion 확인")
     @CsvSource(value = {
         "src/test/resources/input/get_template_file_request.txt:HTTP/1.1",
@@ -64,7 +104,7 @@ public class HttpResponseTest {
         "src/test/resources/input/get_static_file_request.txt:200",
         "src/test/resources/input/get_api_request.txt:405",
         "src/test/resources/input/post_api_request.txt:302",
-        "src/test/resources/input/put_api_request.txt:405"
+        "src/test/resources/input/post_api_request_invalid_method.txt:405"
     }, delimiter = ':')
     void getStatusCode(String filePath, String expected) throws IOException {
         InputStream inputStream = new FileInputStream(filePath);
@@ -82,7 +122,7 @@ public class HttpResponseTest {
         "src/test/resources/input/get_static_file_request.txt:OK",
         "src/test/resources/input/get_api_request.txt:Method Not Allowed",
         "src/test/resources/input/post_api_request.txt:Found",
-        "src/test/resources/input/put_api_request.txt:Method Not Allowed"
+        "src/test/resources/input/post_api_request_invalid_method.txt:Method Not Allowed"
     }, delimiter = ':')
     void getReasonPhrase(String filePath, String expected) throws IOException, URISyntaxException {
         InputStream inputStream = new FileInputStream(filePath);
@@ -92,8 +132,8 @@ public class HttpResponseTest {
 
         assertThat(httpResponse.getReasonPhrase()).isEqualTo(expected);
     }
-
     //todo: 테스트 깨지는지 확인
+
     @ParameterizedTest
     @DisplayName("headers 확인")
     @MethodSource("provideHeaders")
@@ -140,9 +180,9 @@ public class HttpResponseTest {
         "src/test/resources/input/get_static_file_request.txt:true",
         "src/test/resources/input/get_api_request.txt:false",
         "src/test/resources/input/post_api_request.txt:false",
-        "src/test/resources/input/put_api_request.txt:false"
+        "src/test/resources/input/post_api_request_invalid_method.txt:false"
     }, delimiter = ':')
-    void getBody(String filePath, boolean expected) throws IOException, URISyntaxException {
+    void getBody(String filePath, boolean expected) throws IOException {
         InputStream inputStream = new FileInputStream(filePath);
         HttpRequest httpRequest = HttpRequest.of(inputStream);
         Controller controller = ControllerMapper.selectController(httpRequest);

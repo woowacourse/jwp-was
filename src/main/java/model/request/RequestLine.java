@@ -2,7 +2,6 @@ package model.request;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import model.general.Method;
@@ -43,17 +42,18 @@ public class RequestLine {
         return new RequestLine(method, requestUri, httpVersion);
     }
 
-    public boolean isSameMethod(Method method) {
-        return this.method.equals(method);
-    }
-
     public String extractRequestUriExtension() {
-        String[] sections = requestUri.split(EXTENSION_DELIMITER);
+        String[] sections = makePureUri(requestUri).split(EXTENSION_DELIMITER);
 
         if (sections.length == NO_EXTENSION_SIZE) {
             return null;
         }
+
         return EXTENSION_LETTER + sections[sections.length - SIZE_CORRECTION_NUMBER];
+    }
+
+    private String makePureUri(String uri) {
+        return uri.split(URI_PARAMETER_SEPARATOR)[URI_INDEX];
     }
 
     public Map<String, String> extractUriParameters() {
@@ -62,6 +62,7 @@ public class RequestLine {
         if (separatedUri.length == 1) {
             return Collections.emptyMap();
         }
+
         return makeParameters();
     }
 
@@ -75,11 +76,15 @@ public class RequestLine {
         return parameters;
     }
 
-    public boolean isSameUri(String uri) {
-        String pureRequestUri = requestUri.split(URI_PARAMETER_SEPARATOR)[URI_INDEX];
-        String pureUri = uri.split(URI_PARAMETER_SEPARATOR)[URI_INDEX];
+    public boolean isSameMethod(Method method) {
+        return this.method.equals(method);
+    }
 
-        return pureRequestUri.equals(pureUri);
+    public boolean isSameUri(String inputUri) {
+        String pueRequestUri = makePureUri(requestUri);
+        String pureUri = makePureUri(inputUri);
+
+        return pueRequestUri.equals(pureUri);
     }
 
     public boolean isStartsWithUri(String uri) {
@@ -87,9 +92,7 @@ public class RequestLine {
     }
 
     public boolean whetherUriHasExtension() {
-        String pureUri = requestUri.split(URI_PARAMETER_SEPARATOR)[URI_INDEX];
-
-        return pureUri.contains(".");
+        return makePureUri(requestUri).contains(".");
     }
 
     public Method getMethod() {

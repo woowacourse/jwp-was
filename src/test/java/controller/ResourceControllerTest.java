@@ -19,7 +19,7 @@ import utils.ControllerMapper;
 public class ResourceControllerTest {
 
     @ParameterizedTest
-    @DisplayName("ResourceController 테스트 - 자원 요청")
+    @DisplayName("ResourceController - 자원 요청")
     @CsvSource(value = {
         "src/test/resources/input/get_template_file_request.txt:text/html",
         "src/test/resources/input/get_static_file_request.txt:text/css"
@@ -44,7 +44,7 @@ public class ResourceControllerTest {
     }
 
     @Test
-    @DisplayName("ResourceController 테스트 - 존재하지 않는 자원")
+    @DisplayName("ResourceController - 존재하지 않는 자원")
     void service_WhenInvalidResource_Return404Response() throws IOException {
         String filePath = "src/test/resources/input/get_template_file_request_invalid_file.txt";
         InputStream inputStream = new FileInputStream(filePath);
@@ -65,7 +65,7 @@ public class ResourceControllerTest {
     }
 
     @Test
-    @DisplayName("ResourceController 테스트 - 지원하지 않는 메소드")
+    @DisplayName("ResourceController - 지원하지 않는 메소드")
     void service_WhenInvalidMethod_Return405Response() throws IOException {
         String filePath = "src/test/resources/input/get_template_file_request_invalid_method.txt";
         InputStream inputStream = new FileInputStream(filePath);
@@ -86,7 +86,7 @@ public class ResourceControllerTest {
     }
 
     @Test
-    @DisplayName("ResourceController 테스트 - 지원하지 않는 리소스")
+    @DisplayName("ResourceController - 지원하지 않는 리소스")
     void service_WhenNotExistContentType_Return405Response() throws IOException {
         String filePath = "src/test/resources/input/get_template_file_request_invalid_content_type.txt";
         InputStream inputStream = new FileInputStream(filePath);
@@ -107,7 +107,7 @@ public class ResourceControllerTest {
     }
 
     @Test
-    @DisplayName("ResourceController 테스트 - 구현되지 않은 Api 요청")
+    @DisplayName("ResourceController - 구현되지 않은 Api 요청")
     void service_WhenNotExistApi_Return405Response() throws IOException {
         String filePath = "src/test/resources/input/get_api_request.txt";
         InputStream inputStream = new FileInputStream(filePath);

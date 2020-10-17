@@ -32,7 +32,7 @@ public class UserController extends AbstractController {
             return createUser(httpRequest);
         }
 
-        return super.doPost(httpRequest);
+        return HttpResponse.of(Status.NOT_FOUND);
     }
 
     public static HttpResponse createUser(HttpRequest httpRequest) {

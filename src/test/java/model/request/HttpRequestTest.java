@@ -25,7 +25,8 @@ public class HttpRequestTest {
         "src/test/resources/input/get_template_file_request.txt",
         "src/test/resources/input/get_static_file_request.txt",
         "src/test/resources/input/get_api_request.txt",
-        "src/test/resources/input/post_api_request.txt"
+        "src/test/resources/input/post_api_request.txt",
+        "src/test/resources/input/post_api_request_no_parameters.txt"
     })
     void create(String filePath) throws IOException {
         InputStream inputStream = new FileInputStream(filePath);
@@ -90,7 +91,9 @@ public class HttpRequestTest {
             Arguments.of("src/test/resources/input/get_api_request.txt",
                 parameters),
             Arguments.of("src/test/resources/input/post_api_request.txt",
-                parameters)
+                parameters),
+            Arguments.of("src/test/resources/input/post_api_request_invalid_method.txt",
+                Collections.emptyMap())
         );
     }
 
@@ -101,7 +104,7 @@ public class HttpRequestTest {
         "src/test/resources/input/get_static_file_request.txt:GET",
         "src/test/resources/input/get_api_request.txt:GET",
         "src/test/resources/input/post_api_request.txt:POST",
-        "src/test/resources/input/put_api_request.txt:PUT"
+        "src/test/resources/input/post_api_request_invalid_method.txt:PUT"
     }, delimiter = ':')
     void getMethod(String filePath, String method) throws IOException {
         InputStream inputStream = new FileInputStream(filePath);

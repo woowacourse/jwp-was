@@ -72,7 +72,7 @@ public class HttpRequest {
         return requestLine.whetherUriHasExtension();
     }
 
-    public String extractRequestUriExtension(){
+    public String extractRequestUriExtension() {
         return requestLine.extractRequestUriExtension();
     }
 
@@ -82,9 +82,9 @@ public class HttpRequest {
 
             return uriParameters;
         }
-        if (requestLine.isSameMethod(Method.POST)){
+        if (requestLine.isSameMethod(Method.POST)) {
             Map<String, String> uriParameters = requestLine.extractUriParameters();
-            Map<String, String> bodyParameters= messageBody.extractBodyParameters();
+            Map<String, String> bodyParameters = messageBody.extractBodyParameters();
             Map<String, String> postParameters = new HashMap<>();
 
             postParameters.putAll(uriParameters);

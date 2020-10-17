@@ -2,7 +2,6 @@ package model.general;
 
 import java.util.Arrays;
 import java.util.Optional;
-import jdk.nashorn.internal.ir.RuntimeNode.Request;
 import model.request.HttpRequest;
 
 public enum ContentType {

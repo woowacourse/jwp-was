@@ -37,7 +37,7 @@ public class StatusLineTest {
                 Status.METHOD_NOT_ALLOWED),
             Arguments.of("src/test/resources/input/post_api_request.txt",
                 Status.FOUND),
-            Arguments.of("src/test/resources/input/put_api_request.txt",
+            Arguments.of("src/test/resources/input/post_api_request_invalid_method.txt",
                 Status.METHOD_NOT_ALLOWED)
         );
     }

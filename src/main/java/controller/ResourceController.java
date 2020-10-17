@@ -35,7 +35,7 @@ public class ResourceController extends AbstractController {
         if (Objects.nonNull(contentType)) {
             return findResourceFile(httpRequest);
         }
-        if(httpRequest.whetherUriHasExtension()){
+        if (httpRequest.whetherUriHasExtension()) {
             return HttpResponse.of(Status.NOT_FOUND);
         }
 

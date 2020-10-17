@@ -36,7 +36,7 @@ public class HttpResponse {
 
     private void writeStatusLine(DataOutputStream dataOutputStream) throws IOException {
         dataOutputStream.writeBytes(
-            getHttpVersion() + " " + getStatusCode() + " " + getReasonPhrase() + " \r\n");
+            getHttpVersion() + " " + getStatusCode() + " " + getReasonPhrase() + "\r\n");
     }
 
     private void writeHeaders(DataOutputStream dataOutputStream)

@@ -19,7 +19,7 @@ public class MessageBody {
     }
 
     public static MessageBody of(String messageBody) {
-        if (messageBody.isEmpty()){
+        if (messageBody.isEmpty()) {
             return new MessageBody(Collections.unmodifiableMap(Collections.emptyMap()));
         }
         Map<String, String> parameters = Arrays.stream(messageBody.split(PARAMETER_DELIMITER))

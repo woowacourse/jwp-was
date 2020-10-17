@@ -18,12 +18,4 @@ abstract public class AbstractController implements Controller {
     public HttpResponse doPost(HttpRequest request) {
         return HttpResponse.of(Status.METHOD_NOT_ALLOWED);
     }
-
-    public HttpResponse doPut(HttpRequest request) {
-        return HttpResponse.of(Status.METHOD_NOT_ALLOWED);
-    }
-
-    public HttpResponse doDelete(HttpRequest request) {
-        return HttpResponse.of(Status.METHOD_NOT_ALLOWED);
-    }
 }

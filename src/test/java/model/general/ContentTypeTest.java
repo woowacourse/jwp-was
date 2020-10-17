@@ -2,8 +2,6 @@ package model.general;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import jdk.nashorn.internal.ir.RuntimeNode.Request;
-import model.request.HttpRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
