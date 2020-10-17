@@ -47,7 +47,7 @@ public class HttpResponse {
         }
     }
 
-    public void responseOk(HttpRequest httpRequest) throws IOException, URISyntaxException {
+    void responseOk(HttpRequest httpRequest) throws IOException, URISyntaxException {
         byte[] body = FileIoUtils.loadFileFromClasspath(
             StaticFiles.getDirectoryEndsWith(httpRequest.getHttpPath()) + httpRequest.getHttpPath());
         response200Header(httpRequest.getContentType(), body.length);
@@ -75,7 +75,7 @@ public class HttpResponse {
         }
     }
 
-    public void responseNotFound() throws IOException, URISyntaxException {
+    void responseNotFound() throws IOException, URISyntaxException {
         byte[] body = FileIoUtils.loadFileFromClasspath(TEMPLATES + "/common/not_found.html");
         response404Header();
         responseBody(body);
@@ -90,7 +90,7 @@ public class HttpResponse {
         }
     }
 
-    public void responseInternalServerError() {
+    void responseInternalServerError() {
         try {
             byte[] body = FileIoUtils.loadFileFromClasspath(TEMPLATES + "/common/internal_server_error.html");
             response500Header();
