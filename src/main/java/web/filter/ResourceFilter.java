@@ -1,8 +1,10 @@
 package web.filter;
 
 import utils.FileIoUtils;
+import web.HeaderName;
 import web.HttpRequest;
 import web.HttpResponse;
+import web.HttpStatusCode;
 
 import java.io.IOException;
 
@@ -17,7 +19,8 @@ public class ResourceFilter implements Filter {
 
             byte[] body = FileIoUtils.loadFileFromClasspath(matcher.getResourcePath() + requestPath);
 
-            httpResponse.response200(body, matcher.getContentType());
+            httpResponse.putHeader(HeaderName.CONTENT_TYPE.getName(), matcher.getContentType());
+            httpResponse.response(HttpStatusCode.OK, body);
             return;
         }
         filterChain.doFilter(httpRequest, httpResponse);
