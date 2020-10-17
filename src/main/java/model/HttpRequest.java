@@ -7,4 +7,13 @@ public class HttpRequest {
         this.header = header;
     }
 
+    public HttpService getService() {
+        return header.getRequestLine()
+                .getMethod()
+                .getService();
+    }
+
+    public HttpHeader getHeader() {
+        return header;
+    }
 }

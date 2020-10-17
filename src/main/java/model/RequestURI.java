@@ -6,4 +6,8 @@ public class RequestURI {
     public RequestURI(String uri) {
         this.uri = uri;
     }
+
+    public String getUri() {
+        return uri;
+    }
 }
