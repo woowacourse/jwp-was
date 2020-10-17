@@ -7,42 +7,40 @@ import webserver.http.header.HttpHeaders;
 import webserver.http.header.cookie.HttpCookie;
 import webserver.http.header.cookie.HttpCookieOption;
 import webserver.http.header.cookie.HttpCookieOptionName;
+import webserver.http.header.cookie.HttpCookies;
 import webserver.http.message.HttpRequestMessage;
 import webserver.http.message.HttpResponseMessage;
 import webserver.http.response.HttpStatus;
 import webserver.http.session.HttpSessionFinder;
 import webserver.service.UserService;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class LoginController implements Controller {
 
     @Override
     public HttpResponseMessage createHttpResponseMessage(HttpRequestMessage httpRequestMessage) {
-        List<HttpCookie> httpCookies = new ArrayList<>();
+        HttpCookies httpCookies = HttpCookies.empty();
         HttpCookieOption loginedCookieOption = HttpCookieOption.of(HttpCookieOptionName.PATH, "/");
 
         HttpBody httpBody = httpRequestMessage.getHttpBody();
         if (UserService.isUser(httpBody)) {
             HttpCookie sessionCookie = HttpCookie.of("sessionId", HttpSessionFinder.createHttpSession());
-            httpCookies.add(sessionCookie);
+            httpCookies.addCookie(sessionCookie);
             HttpCookie loginedCookie = HttpCookie.of("logined", String.valueOf(true), loginedCookieOption);
-            httpCookies.add(loginedCookie);
+            httpCookies.addCookie(loginedCookie);
 
             return createLoginHttpResponseMessage(httpCookies, "/index.html");
         }
 
         HttpCookie loginedCookie = HttpCookie.of("logined", String.valueOf(false), loginedCookieOption);
-        httpCookies.add(loginedCookie);
+        httpCookies.addCookie(loginedCookie);
 
         return createLoginHttpResponseMessage(httpCookies, "/user/login_failed.html");
     }
 
-    private HttpResponseMessage createLoginHttpResponseMessage(List<HttpCookie> httpCookies, String redirectUrl) {
+    private HttpResponseMessage createLoginHttpResponseMessage(HttpCookies httpCookies, String redirectUrl) {
         HttpHeaders httpHeaders = HttpHeaders.empty();
 
-        httpCookies.stream()
+        httpCookies.getCookies().stream()
                 .map(httpCookie -> HttpHeader.of(HttpHeaderName.SET_COOKIE.getName(), httpCookie.toHttpMessage()))
                 .forEach(httpHeaders::addHeader);
 

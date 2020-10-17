@@ -3,6 +3,7 @@ package webserver.http.header.cookie;
 import exception.InvalidCookieException;
 import utils.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +29,10 @@ public class HttpCookies {
         return new HttpCookies(cookies);
     }
 
+    public static HttpCookies empty() {
+        return new HttpCookies(new ArrayList<>());
+    }
+
     public Optional<String> getCookieValue(String cookieName) {
         StringUtils.validateNonNullAndNotEmpty(() -> new InvalidCookieException(cookieName));
 
@@ -35,5 +40,13 @@ public class HttpCookies {
                 .filter(httpCookie -> httpCookie.hasSameName(cookieName))
                 .map(HttpCookie::getValue)
                 .findFirst();
+    }
+
+    public void addCookie(HttpCookie httpCookie) {
+        this.cookies.add(httpCookie);
+    }
+
+    public List<HttpCookie> getCookies() {
+        return cookies;
     }
 }

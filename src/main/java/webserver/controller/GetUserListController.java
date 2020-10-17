@@ -6,6 +6,7 @@ import webserver.http.header.HttpCharacterEncoding;
 import webserver.http.header.HttpHeader;
 import webserver.http.header.HttpHeaderName;
 import webserver.http.header.HttpHeaders;
+import webserver.http.header.cookie.HttpCookies;
 import webserver.http.message.HttpRequestMessage;
 import webserver.http.message.HttpResponseMessage;
 import webserver.http.request.HttpResourceType;
@@ -22,30 +23,18 @@ public class GetUserListController implements Controller {
 
     @Override
     public HttpResponseMessage createHttpResponseMessage(HttpRequestMessage httpRequestMessage) {
-        Optional<String> cookieValue = httpRequestMessage.getHeaderValue(HttpHeaderName.COOKIE.getName());
-        String cookie = cookieValue.orElse(null);
+        Optional<String> sessionId = httpRequestMessage.getHeaderValue(HttpHeaderName.COOKIE.getName())
+                .map(HttpCookies::from)
+                .map(httpCookies -> httpCookies.getCookieValue("sessionId"))
+                .orElse(null);
 
-        if (Objects.isNull(cookie)) {
+        if (Objects.isNull(sessionId)) {
             return createNonUserHttpResponseMessage();
         }
 
-        if (isLogined(cookie)) {
-            return createUserListHttpResponseMessage();
-        }
-
-        return createNonUserHttpResponseMessage();
-    }
-
-    private boolean isLogined(String cookie) {
-        String[] tokens = cookie.split(HEADER_VALUE_DELIMITER);
-        for (String token : tokens) {
-            if (token.contains("sessionId")) {
-                String[] sessionIdTokens = token.split("=");
-                return HttpSessionFinder.hasSession(sessionIdTokens[1]);
-            }
-        }
-
-        return false;
+        return sessionId.filter(HttpSessionFinder::hasSession)
+                .map(id -> createUserListHttpResponseMessage())
+                .orElse(createNonUserHttpResponseMessage());
     }
 
     private HttpResponseMessage createUserListHttpResponseMessage() {
