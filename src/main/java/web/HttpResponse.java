@@ -7,35 +7,41 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class HttpResponse {
-
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
     private static final String NEW_LINE = "\r\n";
     private static final String SPACE = " ";
+    private static final String HTTP_VERSION = "HTTP/1.1";
 
     private final DataOutputStream dataOutputStream;
+
+    private final HttpHeader httpHeader = new HttpHeader();
 
     public HttpResponse(DataOutputStream dataOutputStream) {
         this.dataOutputStream = dataOutputStream;
     }
 
-    public void response200(final byte[] body, final String contentType) {
-        response200Header(body.length, contentType);
-        responseBody(body);
+    public void putHeader(String key, String value) {
+        this.httpHeader.put(key, value);
     }
 
-    private void response200Header(int contentLength, String contentType) {
+    public void response(HttpStatusCode statusCode) {
         try {
-            this.dataOutputStream.writeBytes(HttpVersion.HTTP_1_1.getVersion() + SPACE + HttpStatusCode.OK.getValue() + NEW_LINE);
-            this.dataOutputStream.writeBytes(HeaderName.CONTENT_TYPE.getHeader(contentType) + NEW_LINE);
-            this.dataOutputStream.writeBytes(HeaderName.CONTENT_LENGTH.getHeader(contentLength) + NEW_LINE);
+            this.dataOutputStream.writeBytes(HTTP_VERSION + SPACE + statusCode.getValue() + NEW_LINE);
+            this.httpHeader.write(this.dataOutputStream);
             this.dataOutputStream.writeBytes(NEW_LINE);
+
+            this.dataOutputStream.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void responseBody(byte[] body) {
+    public void response(HttpStatusCode statusCode, byte[] body) {
         try {
+            this.dataOutputStream.writeBytes(HTTP_VERSION + SPACE + statusCode.getValue() + NEW_LINE);
+            this.httpHeader.write(this.dataOutputStream);
+            this.dataOutputStream.writeBytes(NEW_LINE);
+
             this.dataOutputStream.write(body, 0, body.length);
             this.dataOutputStream.flush();
         } catch (IOException e) {
@@ -43,14 +49,9 @@ public class HttpResponse {
         }
     }
 
-    public void response302(final String url) {
-        try {
-            this.dataOutputStream.writeBytes(HttpVersion.HTTP_1_1.getVersion() + SPACE + HttpStatusCode.FOUND.getValue() + NEW_LINE);
-            this.dataOutputStream.writeBytes(HeaderName.LOCATION.getHeader(url) + NEW_LINE);
-            this.dataOutputStream.writeBytes(NEW_LINE);
-            this.dataOutputStream.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+    public void sendRedirect(String url) {
+        putHeader(HeaderName.LOCATION.getName(), url);
+        response(HttpStatusCode.FOUND);
     }
+
 }

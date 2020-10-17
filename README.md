@@ -28,5 +28,5 @@
 ### 2단계
 #### 요구사항
 - [ ] ThreadPoolExecutor를 적용해 일정 수의 사용자 동시에 처리가 가능하도록 한다.
-- [ ] HTTP 응답 Header/Body 처리만을 담당하는 역할을 분리
+- [x] HTTP 응답 Header/Body 처리만을 담당하는 역할을 분리
 - [ ] Servlet을 Controller로 변경
