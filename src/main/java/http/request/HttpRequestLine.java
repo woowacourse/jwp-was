@@ -1,18 +1,20 @@
 package http.request;
 
+import type.method.MethodType;
+
 public class HttpRequestLine {
 
-    private final String method;
+    private final MethodType method;
     private final HttpRequestUrl httpRequestUrl;
     private final String version;
 
     public HttpRequestLine(final String method, final HttpRequestUrl httpRequestUrl, final String version) {
-        this.method = method;
+        this.method = MethodType.find(method);
         this.httpRequestUrl = httpRequestUrl;
         this.version = version;
     }
 
-    public String getMethod() {
+    public MethodType getMethod() {
         return this.method;
     }
 

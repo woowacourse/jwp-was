@@ -3,26 +3,24 @@ package controller;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import exception.NotSupportedControllerException;
+import type.method.MethodType;
+import exception.NotSupportedMethodException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 
 public abstract class AbstractController implements Controller {
 
-    private static final String GET = "GET";
-    private static final String POST = "POST";
-
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
-        if (GET.equals(httpRequest.getMethod())) {
+        if (MethodType.GET == httpRequest.getMethod()) {
             doGet(httpRequest, httpResponse);
             return ;
         }
-        if (POST.equals(httpRequest.getMethod())) {
+        if (MethodType.POST == httpRequest.getMethod()) {
             doPost(httpRequest, httpResponse);
             return ;
         }
-        throw new NotSupportedControllerException("지원하지 않는 Controller입니다.");
+        throw new NotSupportedMethodException("지원하지 않는 Method 입니다.");
     }
 
     abstract void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException;

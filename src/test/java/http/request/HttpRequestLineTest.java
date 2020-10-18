@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import type.method.MethodType;
+
 public class HttpRequestLineTest {
 
     private HttpRequestLine httpRequestLine;
@@ -16,7 +18,7 @@ public class HttpRequestLineTest {
 
     @Test
     void getMethod() {
-        assertThat(httpRequestLine.getMethod()).isEqualTo("GET");
+        assertThat(httpRequestLine.getMethod()).isEqualTo(MethodType.GET);
     }
 
     @Test

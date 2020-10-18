@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import controller.Controller;
-import controller.type.ControllerType;
+import controller.ControllerMapper;
 import http.request.HttpRequest;
 import http.request.HttpRequestParser;
 import http.response.HttpResponse;
@@ -32,14 +32,12 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(in,"UTF-8"));
+            final BufferedReader br = new BufferedReader(new InputStreamReader(in,"UTF-8"));
 
-            HttpRequest httpRequest = HttpRequestParser.parse(br);
+            final HttpRequest httpRequest = HttpRequestParser.parse(br);
+            final HttpResponse httpResponse = new HttpResponse(new DataOutputStream(out), httpRequest);
 
-            ControllerType controllerType = ControllerType.find(httpRequest);
-            Controller controller = controllerType.getController();
-
-            HttpResponse httpResponse = new HttpResponse(new DataOutputStream(out));
+            final Controller controller = ControllerMapper.find(httpRequest.getUrl());
 
             controller.service(httpRequest, httpResponse);
         } catch (IOException | URISyntaxException e) {

@@ -8,19 +8,17 @@ import service.UserService;
 
 public class UserController extends AbstractController {
 
-    private static final String CONTENT_LENGTH = "Content-Length";
-
     private final UserService userService = UserService.getInstance();
 
     @Override
     void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         userService.createRequestParams(httpRequest);
-        httpResponse.response302(Integer.parseInt(httpRequest.getHttpRequestHeaderByName(CONTENT_LENGTH)));
+        httpResponse.response302();
     }
 
     @Override
     void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         userService.createRequestBody(httpRequest);
-        httpResponse.response302(Integer.parseInt(httpRequest.getHttpRequestHeaderByName(CONTENT_LENGTH)));
+        httpResponse.response302();
     }
 }

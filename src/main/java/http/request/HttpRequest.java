@@ -1,5 +1,7 @@
 package http.request;
 
+import type.method.MethodType;
+
 public class HttpRequest {
 
     private static final String HEADER_ACCEPT = "Accept";
@@ -15,7 +17,7 @@ public class HttpRequest {
         this.httpRequestBody = httpRequestBody;
     }
 
-    public String getMethod() {
+    public MethodType getMethod() {
         return this.httpRequestLine.getMethod();
     }
 

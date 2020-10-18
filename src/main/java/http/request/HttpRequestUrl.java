@@ -23,18 +23,19 @@ public class HttpRequestUrl {
     }
 
     private Map<String, String> parseParameters(String[] parsingUrl) {
-        if (parsingUrl.length == 2) {
-            Map<String, String> cache = new HashMap<>();
-            final String[] parameters = parsingUrl[1].split(AND);
-
-            for (String parameter : parameters) {
-                String[] data = parameter.split(EQUAL);
-                cache.put(data[0], data[1]);
-            }
-
-            return cache;
+        if (parsingUrl.length != 2) {
+            return new HashMap<>();
         }
-        return new HashMap<>();
+
+        Map<String, String> cache = new HashMap<>();
+        final String[] parameters = parsingUrl[1].split(AND);
+
+        for (String parameter : parameters) {
+            String[] data = parameter.split(EQUAL);
+            cache.put(data[0], data[1]);
+        }
+
+        return cache;
     }
 
     public String getUrl() {

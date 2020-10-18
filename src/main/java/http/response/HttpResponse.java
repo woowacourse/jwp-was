@@ -3,6 +3,8 @@ package http.response;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import http.request.HttpRequest;
+
 public class HttpResponse {
 
     private static final String NEW_LINE = System.lineSeparator();
@@ -16,28 +18,38 @@ public class HttpResponse {
     private static final String CHARSET_UTF_8 = ";charset=utf-8";
 
     private final DataOutputStream dos;
+    private final HttpRequest httpRequest;
     private final HttpResponseLine httpResponseLine;
     private final HttpResponseHeader httpResponseHeader;
     private final HttpResponseBody httpResponseBody;
 
-    public HttpResponse(final DataOutputStream dos) {
+    public HttpResponse(final DataOutputStream dos, final HttpRequest httpRequest) {
         this.dos = dos;
+        this.httpRequest = httpRequest;
         this.httpResponseLine = new HttpResponseLine();
         this.httpResponseHeader = new HttpResponseHeader();
         this.httpResponseBody = new HttpResponseBody();
     }
 
-    public void response200(final String contentType, final byte[] body) throws IOException {
+    public void response200(final byte[] body) throws IOException {
         httpResponseLine.setHttpStatus(HttpStatus.OK);
+
+        String contentType = httpRequest.getContentType();
         initResponseHeader(contentType, body.length);
+
         httpResponseBody.setBody(body);
+
         render();
     }
 
-    public void response302(int lengthOfBodyContent) throws IOException {
+    public void response302() throws IOException {
         httpResponseLine.setHttpStatus(HttpStatus.FOUND);
+
+        int lengthOfBodyContent = Integer.parseInt(httpRequest.getHttpRequestHeaderByName(RESPONSE_HEADER_CONTENT_LENGTH));
         initResponseHeader(CONTENT_TYPE_TEXT_HTML, lengthOfBodyContent);
+
         httpResponseHeader.addResponseHeader(RESPONSE_HEADER_LOCATION, REDIRECT_HOME);
+
         render();
     }
 

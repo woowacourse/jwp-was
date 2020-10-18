@@ -14,7 +14,7 @@ public class TemplateController extends AbstractController {
     @Override
     void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         byte[] body = FileIoUtils.loadFileFromClasspath(TEMPLATES + httpRequest.getUrl());
-        httpResponse.response200(httpRequest.getContentType(), body);
+        httpResponse.response200(body);
     }
 
     @Override

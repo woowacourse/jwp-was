@@ -12,6 +12,8 @@ import java.io.InputStreamReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import type.method.MethodType;
+
 public class HttpRequestTest {
 
     private HttpRequest httpRequestGetMethod;
@@ -36,7 +38,16 @@ public class HttpRequestTest {
     }
 
     @Test
-    void getUri() {
+    void getMethod() {
+        assertThat(httpRequestGetMethod.getMethod()).isEqualTo(MethodType.GET);
+
+        assertThat(httpRequestPostMethod.getMethod()).isEqualTo(MethodType.POST);
+
+        assertThat(httpRequestPostMethodSpecialCase.getMethod()).isEqualTo(MethodType.POST);
+    }
+
+    @Test
+    void getUrl() {
         assertThat(httpRequestGetMethod.getUrl()).isEqualTo("/user/create");
 
         assertThat(httpRequestPostMethod.getUrl()).isEqualTo("/user/create");
@@ -74,5 +85,14 @@ public class HttpRequestTest {
         assertThat(httpRequestPostMethodSpecialCase.getHttpRequestBodyByName("userId")).isEqualTo("javajigi");
         assertThat(httpRequestPostMethodSpecialCase.getHttpRequestBodyByName("password")).isEqualTo("password");
         assertThat(httpRequestPostMethodSpecialCase.getHttpRequestBodyByName("name")).isEqualTo("JaeSung");
+    }
+
+    @Test
+    void getContentType() {
+        assertThat(httpRequestGetMethod.getContentType()).isEqualTo("*/*");
+
+        assertThat(httpRequestPostMethod.getContentType()).isEqualTo("*/*");
+
+        assertThat(httpRequestPostMethodSpecialCase.getContentType()).isEqualTo("*/*");
     }
 }
