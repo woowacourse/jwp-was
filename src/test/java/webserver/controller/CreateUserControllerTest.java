@@ -17,7 +17,7 @@ public class CreateUserControllerTest {
     @DisplayName("CreateUserController doPost")
     @Test
     void doPost() throws IOException {
-        HttpRequest request = new HttpRequest(createRequestBufferedReader("Http_Request_POST.txt"));
+        HttpRequest request = new HttpRequest(createRequestBufferedReader("Http_Request_POST_Create_User.txt"));
 
         String fileName = "Http_Response_Redirect.txt";
         HttpResponse response = new HttpResponse(createOutputStream(fileName));

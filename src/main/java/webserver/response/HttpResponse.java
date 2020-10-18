@@ -51,6 +51,19 @@ public class HttpResponse {
         writeHttpResponse();
     }
 
+    public void forwardByHandlebars(String path, String listPage) throws IOException, URISyntaxException {
+        statusLine = new StatusLine("HTTP/1.1 200");
+        setResponseBody(path);
+        byte[] bytes = listPage.getBytes();
+        responseHeader.putHeader("Content-Length", String.valueOf(bytes.length));
+
+        statusLine.write(dataOutputStream);
+        responseHeader.write(dataOutputStream);
+        dataOutputStream.writeBytes(System.lineSeparator());
+        dataOutputStream.write(bytes, 0, bytes.length);
+        dataOutputStream.flush();
+    }
+
     public void sendRedirect(String path) throws IOException, URISyntaxException {
         statusLine = new StatusLine("HTTP/1.1 302");
         setResponseBody(path);

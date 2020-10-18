@@ -17,11 +17,15 @@ public class LoginController extends AbstractController{
         User user = DataBase.findUserById(userId);
 
         if(user.isSamePassword(password)) {
-            httpResponse.addCookie(new Cookie("logined", "true"));
+            Cookie cookie = new Cookie("logined", "true");
+            cookie.setPath("/");
+            httpResponse.addCookie(cookie);
             httpResponse.sendRedirect("/index.html");
             return;
         }
-        httpResponse.addCookie(new Cookie("logined", "false"));
+        Cookie cookie = new Cookie("logined", "false");
+        cookie.setPath("/");
+        httpResponse.addCookie(cookie);
         httpResponse.sendRedirect("/user/login_failed.html");
     }
 }

@@ -26,7 +26,7 @@ public abstract class AbstractController implements Controller {
             }
 
             if (Objects.isNull(httpRequest.getMethod())) {
-                doNone(httpResponse);
+                httpResponse.notImplemented(ERROR_HTML_URL);
                 return;
             }
 
@@ -41,11 +41,6 @@ public abstract class AbstractController implements Controller {
         } catch (IOException | URISyntaxException e) {
             log.error(e.getMessage());
         }
-    }
-
-    private void doNone(HttpResponse httpResponse)
-        throws IOException, URISyntaxException {
-        httpResponse.notImplemented(ERROR_HTML_URL);
     }
 
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse)
