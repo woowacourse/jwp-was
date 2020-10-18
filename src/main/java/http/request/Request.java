@@ -1,14 +1,14 @@
 package http.request;
 
-import http.ContentType;
-import http.HttpHeaders;
-import utils.IOUtils;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import http.ContentType;
+import http.HttpHeaders;
+import utils.IOUtils;
 
 public class Request {
     private final static String DELIMITER = ": ";
@@ -16,11 +16,13 @@ public class Request {
     private final RequestLine requestLine;
     private final HttpHeaders httpHeader;
     private final RequestBody requestBody;
+    private Cookies cookies;
 
     public Request(BufferedReader br) throws Exception {
         this.requestLine = new RequestLine(br);
         this.httpHeader = new HttpHeaders(ofRequestHeader(br));
         this.requestBody = new RequestBody(br, httpHeader.getContentLength());
+        this.cookies = new Cookies(httpHeader.getHeader(HttpHeaders.COOKIE));
         IOUtils.printRequest(this);
     }
 
@@ -70,5 +72,9 @@ public class Request {
 
     public String getContentType() {
         return ContentType.of(getPath()).getContentType();
+    }
+
+    public String getCookie(String key) {
+        return cookies.getCookie(key);
     }
 }

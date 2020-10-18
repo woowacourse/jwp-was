@@ -41,6 +41,14 @@ public class Response {
         write();
     }
 
+    public void ok(String body) {
+        statusLine = new StatusLine(HTTP_1_1, Status.OK);
+        setHeader(HttpHeaders.CONTENT_TYPE, ContentType.HTML.getContentType() + ";charset=UTF-8");
+        this.body = new ResponseBody(body.getBytes());
+        setHeader(HttpHeaders.CONTENT_LENGTH, String.valueOf(this.body.getContentLength()));
+        write();
+    }
+
     public void found(String locationUri) {
         statusLine = new StatusLine(HTTP_1_1, Status.FOUND);
         setHeader(HttpHeaders.LOCATION, locationUri);
@@ -54,7 +62,7 @@ public class Response {
     }
 
     private ResponseBody setResponseBody(String path) throws IOException, URISyntaxException {
-        if (ContentType.HTML.isHtml(headers.getContentType())) {
+        if (ContentType.HTML.isHtml(headers.getContentType()) && path.contains(".html")) {
             return new ResponseBody(FileIoUtils.loadFileFromClasspath(Directory.TEMPLATES.getDirectory() + path));
         }
         return new ResponseBody(FileIoUtils.loadFileFromClasspath(Directory.STATIC.getDirectory() + path));
