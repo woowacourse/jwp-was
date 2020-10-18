@@ -5,10 +5,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
-import model.general.ContentType;
 import model.general.Method;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,7 +17,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-public class RequestTest {
+public class HttpRequestTest {
 
     @ParameterizedTest
     @DisplayName("Request 생성 테스트")
@@ -25,13 +25,14 @@ public class RequestTest {
         "src/test/resources/input/get_template_file_request.txt",
         "src/test/resources/input/get_static_file_request.txt",
         "src/test/resources/input/get_api_request.txt",
-        "src/test/resources/input/post_api_request.txt"
+        "src/test/resources/input/post_api_request.txt",
+        "src/test/resources/input/post_api_request_no_parameters.txt"
     })
     void create(String filePath) throws IOException {
         InputStream inputStream = new FileInputStream(filePath);
-        Request request = Request.of(inputStream);
+        HttpRequest httpRequest = HttpRequest.of(inputStream);
 
-        assertThat(request).isInstanceOf(Request.class);
+        assertThat(httpRequest).isInstanceOf(HttpRequest.class);
     }
 
     @ParameterizedTest
@@ -44,40 +45,24 @@ public class RequestTest {
     }, delimiter = ':')
     void isSameMethod(String filePath, String method) throws IOException {
         InputStream inputStream = new FileInputStream(filePath);
-        Request request = Request.of(inputStream);
+        HttpRequest httpRequest = HttpRequest.of(inputStream);
 
-        assertThat(request.isSameMethod(Method.of(method))).isTrue();
+        assertThat(httpRequest.isSameMethod(Method.of(method))).isTrue();
     }
 
     @ParameterizedTest
-    @DisplayName("해당 경로를 Uri가 포함하고 있는지 테스트")
+    @DisplayName("Uri가 같은지 테스트")
     @CsvSource(value = {
         "src/test/resources/input/get_template_file_request.txt:/index.html",
         "src/test/resources/input/get_static_file_request.txt:/css/styles.css",
-        "src/test/resources/input/get_api_request.txt:user/create",
+        "src/test/resources/input/get_api_request.txt:/user/create",
         "src/test/resources/input/post_api_request.txt:/user/create"
     }, delimiter = ':')
-    void containsUri(String filePath, String uri) throws IOException {
+    void isSameUri(String filePath, String uri) throws IOException {
         InputStream inputStream = new FileInputStream(filePath);
-        Request request = Request.of(inputStream);
+        HttpRequest httpRequest = HttpRequest.of(inputStream);
 
-        assertThat(request.containsUri(uri)).isTrue();
-    }
-
-    @ParameterizedTest
-    @DisplayName("컨텐츠 타입 확인")
-    @CsvSource(value = {
-        "src/test/resources/input/get_template_file_request.txt:HTML",
-        "src/test/resources/input/get_static_file_request.txt:CSS",
-        "src/test/resources/input/get_api_request.txt:",
-        "src/test/resources/input/post_api_request.txt:"
-    }, delimiter = ':')
-    void generateContentTypeFromRequestUri(String filePath, ContentType contentType)
-        throws IOException {
-        InputStream inputStream = new FileInputStream(filePath);
-        Request request = Request.of(inputStream);
-
-        assertThat(request.generateContentTypeFromRequestUri()).isEqualTo(contentType);
+        assertThat(httpRequest.isSameUri(uri)).isTrue();
     }
 
     @ParameterizedTest
@@ -85,8 +70,8 @@ public class RequestTest {
     @MethodSource("provideParameters")
     void extractParameters(String filePath, Map<String, String> parameters) throws IOException {
         InputStream inputStream = new FileInputStream(filePath);
-        Request request = Request.of(inputStream);
-        Map<String, String> requestParameters = request.extractParameters();
+        HttpRequest httpRequest = HttpRequest.of(inputStream);
+        Map<String, String> requestParameters = httpRequest.extractParameters();
 
         assertThat(requestParameters).isEqualTo(parameters);
     }
@@ -99,10 +84,16 @@ public class RequestTest {
         parameters.put("email", "javajigi%40slipp.net");
 
         return Stream.of(
-            Arguments.of("src/test/resources/input/get_template_file_request.txt", null),
-            Arguments.of("src/test/resources/input/get_static_file_request.txt", null),
-            Arguments.of("src/test/resources/input/get_api_request.txt", parameters),
-            Arguments.of("src/test/resources/input/post_api_request.txt", parameters)
+            Arguments.of("src/test/resources/input/get_template_file_request.txt",
+                Collections.emptyMap()),
+            Arguments.of("src/test/resources/input/get_static_file_request.txt",
+                Collections.emptyMap()),
+            Arguments.of("src/test/resources/input/get_api_request.txt",
+                parameters),
+            Arguments.of("src/test/resources/input/post_api_request.txt",
+                parameters),
+            Arguments.of("src/test/resources/input/post_api_request_invalid_method.txt",
+                Collections.emptyMap())
         );
     }
 
@@ -113,13 +104,13 @@ public class RequestTest {
         "src/test/resources/input/get_static_file_request.txt:GET",
         "src/test/resources/input/get_api_request.txt:GET",
         "src/test/resources/input/post_api_request.txt:POST",
-        "src/test/resources/input/put_api_request.txt:PUT"
+        "src/test/resources/input/post_api_request_invalid_method.txt:PUT"
     }, delimiter = ':')
     void getMethod(String filePath, String method) throws IOException {
         InputStream inputStream = new FileInputStream(filePath);
-        Request request = Request.of(inputStream);
+        HttpRequest httpRequest = HttpRequest.of(inputStream);
 
-        assertThat(request.getMethod()).isEqualTo(Method.of(method));
+        assertThat(httpRequest.getMethod()).isEqualTo(Method.of(method));
     }
 
     @ParameterizedTest
@@ -132,9 +123,9 @@ public class RequestTest {
     }, delimiter = ':')
     void getRequestUri(String filePath, String location) throws IOException {
         InputStream inputStream = new FileInputStream(filePath);
-        Request request = Request.of(inputStream);
+        HttpRequest httpRequest = HttpRequest.of(inputStream);
 
-        assertThat(request.getRequestUri()).isEqualTo(location);
+        assertThat(httpRequest.getRequestUri()).isEqualTo(location);
     }
 
     @ParameterizedTest
@@ -147,8 +138,8 @@ public class RequestTest {
     }, delimiter = ':')
     void getHttpVersion(String filePath, String httpVersion) throws IOException {
         InputStream inputStream = new FileInputStream(filePath);
-        Request request = Request.of(inputStream);
+        HttpRequest httpRequest = HttpRequest.of(inputStream);
 
-        assertThat(request.getHttpVersion()).isEqualTo(httpVersion);
+        assertThat(httpRequest.getHttpVersion()).isEqualTo(httpVersion);
     }
 }

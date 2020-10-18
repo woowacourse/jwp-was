@@ -6,14 +6,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.util.Map;
-import model.general.Header;
+import java.util.Objects;
 import model.general.Status;
-import model.request.Request;
-import model.response.Response;
-import model.response.StatusLine;
+import model.request.HttpRequest;
+import model.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.ControllerMapper;
 
 public class RequestHandler implements Runnable {
 
@@ -35,60 +34,31 @@ public class RequestHandler implements Runnable {
             OutputStream outputStream = connection.getOutputStream()) {
             DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
 
-            Response response = makeResponse(inputStream);
-            writeToOutputStream(dataOutputStream, response);
+            HttpResponse response = makeResponse(inputStream);
+            response.writeToOutputStream(dataOutputStream);
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
     }
 
-    private Response makeResponse(InputStream inputStream) {
-        Request request;
+    private HttpResponse makeResponse(InputStream inputStream) {
+        HttpRequest request;
         try {
-            request = Request.of(inputStream);
+            request = HttpRequest.of(inputStream);
         } catch (IOException e) {
             logger.error(e.getMessage());
-            return Response.of(StatusLine.of(Status.BAD_REQUEST));
+            return HttpResponse.of(Status.BAD_REQUEST);
         }
 
-        return Controller.executeOperation(request);
-    }
-
-    private void writeToOutputStream(DataOutputStream dataOutputStream, Response response)
-        throws IOException {
-        writeStatusLine(dataOutputStream, response);
-        writeHeaders(dataOutputStream, response);
-        writeBody(dataOutputStream, response);
-    }
-
-    private void writeStatusLine(DataOutputStream dataOutputStream, Response response)
-        throws IOException {
-        dataOutputStream.writeBytes(
-            response.getHttpVersion()
-                + " "
-                + response.getStatusCode()
-                + " "
-                + response.getReasonPhrase()
-                + " \r\n");
-    }
-
-    private void writeHeaders(DataOutputStream dataOutputStream, Response response)
-        throws IOException {
-        Map<Header, String> headers = response.getHeaders();
-
-        for (Map.Entry<Header, String> entry : headers.entrySet()) {
-            dataOutputStream
-                .writeBytes(entry.getKey().getName() + ": " + entry.getValue() + "\r\n");
+        Controller controller = ControllerMapper.selectController(request);
+        if (Objects.isNull(controller)) {
+            return HttpResponse.of(Status.NOT_FOUND);
         }
-        dataOutputStream.writeBytes("\r\n");
-    }
 
-    private void writeBody(DataOutputStream dataOutputStream, Response response)
-        throws IOException {
-        if (response.hasContents()) {
-            byte[] body = response.getBody();
-            dataOutputStream.write(body, 0, body.length);
-            dataOutputStream.flush();
+        try {
+            return controller.service(request);
+        } catch (Exception e) {
+            return HttpResponse.of(Status.INTERNAL_ERROR);
         }
     }
 }

@@ -1,9 +1,9 @@
 package model.request;
 
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
-import model.general.ContentType;
+import java.util.stream.Collectors;
 import model.general.Method;
 
 public class RequestLine {
@@ -16,8 +16,9 @@ public class RequestLine {
     private static final int NO_EXTENSION_SIZE = 1;
     private static final int SIZE_CORRECTION_NUMBER = 1;
     private static final String EXTENSION_LETTER = ".";
-    private static final String PARAMETER_DELIMITER = "&";
+    private static final String PARAMETER_DELIMITER = ";";
     private static final String URI_PARAMETER_SEPARATOR = "\\?";
+    private static final int URI_INDEX = 0;
     private static final int PARAMETER_INDEX = 1;
     private static final String PARAMETER_KEY_VALUE_SEPARATOR = "=";
     private static final int KEY_INDEX = 0;
@@ -41,50 +42,59 @@ public class RequestLine {
         return new RequestLine(method, requestUri, httpVersion);
     }
 
-    public boolean isSameMethod(Method method) {
-        return this.method.equals(method);
-    }
-
-    public ContentType generateContentTypeFromRequestUri() {
-        return ContentType.of(extractRequestUriExtension())
-            .orElse(null);
-    }
-
-    private String extractRequestUriExtension() {
-        String[] sections = requestUri.split(EXTENSION_DELIMITER);
+    public String extractRequestUriExtension() {
+        String[] sections = makePureUri(requestUri).split(EXTENSION_DELIMITER);
 
         if (sections.length == NO_EXTENSION_SIZE) {
             return null;
         }
+
         return EXTENSION_LETTER + sections[sections.length - SIZE_CORRECTION_NUMBER];
     }
 
-    public Map<String, String> extractGetParameters() {
+    private String makePureUri(String uri) {
+        return uri.split(URI_PARAMETER_SEPARATOR)[URI_INDEX];
+    }
+
+    public Map<String, String> extractUriParameters() {
         String[] separatedUri = requestUri.split(URI_PARAMETER_SEPARATOR);
 
         if (separatedUri.length == 1) {
-            return null;
+            return Collections.emptyMap();
         }
+
         return makeParameters();
     }
 
     private Map<String, String> makeParameters() {
-        Map<String, String> parameters = new HashMap<>();
         String parameterSection = requestUri.split(URI_PARAMETER_SEPARATOR)[PARAMETER_INDEX];
-        String[] splitParameter = parameterSection.split(PARAMETER_DELIMITER);
-        Arrays.stream(splitParameter)
-            .forEach(p -> {
-                String key = p.split(PARAMETER_KEY_VALUE_SEPARATOR)[KEY_INDEX];
-                String value = p.split(PARAMETER_KEY_VALUE_SEPARATOR)[VALUE_INDEX];
 
-                parameters.put(key, value);
-            });
+        String unifiedParameterSection = parameterSection.replace("&", ";");
+        Map<String, String> parameters = Arrays
+            .stream(unifiedParameterSection.split(PARAMETER_DELIMITER))
+            .map(it -> it.split(PARAMETER_KEY_VALUE_SEPARATOR))
+            .collect(Collectors.toMap(it -> it[KEY_INDEX], it -> it[VALUE_INDEX]));
 
         return parameters;
     }
 
-    public boolean containsUri(String uri) {
-        return requestUri.contains(uri);
+    public boolean isSameMethod(Method method) {
+        return this.method.equals(method);
+    }
+
+    public boolean isSameUri(String inputUri) {
+        String pueRequestUri = makePureUri(requestUri);
+        String pureUri = makePureUri(inputUri);
+
+        return pueRequestUri.equals(pureUri);
+    }
+
+    public boolean isStartsWithUri(String uri) {
+        return requestUri.startsWith(uri);
+    }
+
+    public boolean whetherUriHasExtension() {
+        return makePureUri(requestUri).contains(".");
     }
 
     public Method getMethod() {
