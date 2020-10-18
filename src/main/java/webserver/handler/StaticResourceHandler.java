@@ -1,20 +1,20 @@
 package webserver.handler;
 
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
 import utils.FileIoUtils;
+import webserver.HttpRequest;
 import webserver.HttpResponse;
 import webserver.ResourceTypeMatcher;
 
 public class StaticResourceHandler extends Handler {
 	@Override
-	public void handleRequest(String path, DataOutputStream dos, BufferedReader br) throws
+	public void handleRequest(HttpRequest httpRequest, DataOutputStream dos) throws
 		IOException, URISyntaxException {
-		ResourceTypeMatcher fileType = ResourceTypeMatcher.findContentType(path);
-		byte[] body = FileIoUtils.loadFileFromClasspath(fileType.parseFilePath(path));
+		ResourceTypeMatcher fileType = ResourceTypeMatcher.findContentType(httpRequest.getUrl());
+		byte[] body = FileIoUtils.loadFileFromClasspath(fileType.parseFilePath(httpRequest.getUrl()));
 
 		HttpResponse.response200Header(dos, body.length, fileType.getContentType(), logger);
 		responseBody(dos, body);

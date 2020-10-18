@@ -1,4 +1,4 @@
-package utils;
+package webserver;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,60 +10,57 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class ExtractUtilsTest {
-	private static final String BODY = "userId=a&password=1&name=asd&email=test%40test.com";
+public class RequestHeadersTest {
 	private static final String FILE_DIRECTORY = "./src/test/resources/";
 	private static final String POST_REQUEST = "post_request.txt";
 	private static final String GET_REQUEST = "get_request.txt";
 
-	@DisplayName("URL의 Param을 분리")
-	@Test
-	void extractUserInfoTest() throws UnsupportedEncodingException {
-		Map<String, String> userInfo = ExtractUtils.extractUserInfo(BODY);
+	private RequestHeaders requestHeaders;
 
-		assertAll(
-			() -> assertThat(userInfo.get("userId")).isEqualTo("a"),
-			() -> assertThat(userInfo.get("password")).isEqualTo("1"),
-			() -> assertThat(userInfo.get("name")).isEqualTo("asd"),
-			() -> assertThat(userInfo.get("email")).isEqualTo("test@test.com")
-		);
-	}
-
+	@DisplayName("GET 요청에 대한 Of 메서드를 테스트한다.")
 	@Test
-	void extractFirstHeader() throws IOException {
+	void getOfTest() throws IOException {
 		BufferedReader br = createBufferedReader(GET_REQUEST);
-		Map<String, String> headers = new HashMap<>();
+		requestHeaders = RequestHeaders.of(br);
+		Map<String, String> headers = requestHeaders.getHeaders();
 
-		ExtractUtils.extractFirstHeader(br, headers);
 		assertAll(
 			() -> assertThat(headers.get("method")).isEqualTo("GET"),
+			() -> assertThat(headers.get("Connection")).isEqualTo("keep-alive"),
 			() -> assertThat(headers.get("url")).isEqualTo("/user/create"),
-			() -> assertThat(headers.get("userId")).isEqualTo("javajigi"),
-			() -> assertThat(headers.get("password")).isEqualTo("password"),
-			() -> assertThat(headers.get("name")).isEqualTo("JaeSung")
+			() -> assertThat(headers.get("userId")).isEqualTo("javajigi")
 		);
 	}
 
+	@DisplayName("POST 요청에 대한 Of 메서드를 테스트한다.")
 	@Test
-	void extractExtraHeaders() throws IOException {
+	void postOfTest() throws IOException {
 		BufferedReader br = createBufferedReader(POST_REQUEST);
-		br.readLine();
-		Map<String, String> headers = new HashMap<>();
+		requestHeaders = RequestHeaders.of(br);
+		Map<String, String> headers = requestHeaders.getHeaders();
 
-		ExtractUtils.extractExtraHeaders(br, headers);
 		assertAll(
-			() -> assertThat(headers.get("Host")).isEqualTo("localhost:8080"),
+			() -> assertThat(headers.get("method")).isEqualTo("POST"),
 			() -> assertThat(headers.get("Connection")).isEqualTo("keep-alive"),
+			() -> assertThat(headers.get("url")).isEqualTo("/user/create"),
+			() -> assertThat(headers.get("Accept")).isEqualTo("*/*"),
 			() -> assertThat(headers.get("Content-Length")).isEqualTo("46"),
 			() -> assertThat(headers.get("Content-Type")).isEqualTo("application/x-www-form-urlencoded")
 		);
+	}
+
+	@DisplayName("POST 요청시 header에 담긴 Content-Length 내용을 확인한다.")
+	@Test
+	void getContentLengthTest() throws IOException {
+		BufferedReader br = createBufferedReader(POST_REQUEST);
+		requestHeaders = RequestHeaders.of(br);
+
+		assertThat(requestHeaders.getContentSize()).isEqualTo(46);
 	}
 
 	private BufferedReader createBufferedReader(String fileName) throws FileNotFoundException {
