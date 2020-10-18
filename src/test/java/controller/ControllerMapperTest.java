@@ -1,5 +1,6 @@
 package controller;
 
+import http.request.Cookie;
 import http.request.HttpMethod;
 import http.request.HttpRequest;
 import http.request.RequestHeader;
@@ -22,7 +23,8 @@ class ControllerMapperTest {
         HttpRequest httpRequest = new HttpRequest(
                 new RequestLine(HttpMethod.POST, new UserController().getPath()),
                 new RequestHeader(new HashMap<>()),
-                new RequestParams(new HashMap<>())
+                new RequestParams(new HashMap<>()),
+                new Cookie(new HashMap<>())
         );
 
         assertThat(ControllerMapper.getInstance().isApi(httpRequest)).isTrue();
@@ -34,7 +36,9 @@ class ControllerMapperTest {
         HttpRequest httpRequest = new HttpRequest(
                 new RequestLine(HttpMethod.POST, "/abcd"),
                 new RequestHeader(new HashMap<>()),
-                new RequestParams(new HashMap<>())
+                new RequestParams(new HashMap<>()),
+                new Cookie(new HashMap<>())
+
         );
         assertThat(ControllerMapper.getInstance().isApi(httpRequest)).isFalse();
     }
@@ -47,7 +51,8 @@ class ControllerMapperTest {
         HttpRequest httpRequest = new HttpRequest(
                 new RequestLine(HttpMethod.POST, new UserController().getPath()),
                 new RequestHeader(new HashMap<>()),
-                new RequestParams(new HashMap<>())
+                new RequestParams(new HashMap<>()),
+                new Cookie(new HashMap<>())
         );
         Controller controller = ControllerMapper.getInstance().map(httpRequest);
 

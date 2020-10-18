@@ -1,5 +1,6 @@
 package http.factory;
 
+import http.request.Cookie;
 import http.request.HttpMethod;
 import http.request.HttpRequest;
 import http.request.RequestHeader;
@@ -7,31 +8,32 @@ import http.request.RequestLine;
 import http.request.RequestParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
+import utils.BufferedReaderUtils;
 import utils.Extractor;
 import utils.IOUtils;
 import utils.ParamUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 public class HttpRequestFactory {
     private static final Logger logger = LoggerFactory.getLogger(HttpRequestFactory.class);
-    private static final String COLON_DELIMITER = ": ";
     public static final int BASE_CONTNET_LENGTH = 0;
 
     public static HttpRequest createRequest(BufferedReader br) throws IOException {
         String line = br.readLine();
+        logger.debug("request: {}", line);
         RequestLine requestLine = createRequestUri(line);
         String paramOfRequestLine = Extractor.paramFromRequestLine(line);
 
-        RequestHeader requestHeader = createRequestHeader(br, line);
-        
+        Map<String, String> headers = BufferedReaderUtils.readHeader(br);
+        Cookie cookie = new Cookie(headers.get(Cookie.NAME));
+        RequestHeader requestHeader = createRequestHeader(headers);
+
         String body = readBody(br, requestHeader);
         RequestParams requestParams = createRequestParams(paramOfRequestLine, body);
-        return new HttpRequest(requestLine, requestHeader, requestParams);
+        return new HttpRequest(requestLine, requestHeader, requestParams, cookie);
     }
 
     public static RequestLine createRequestUri(String line) {
@@ -40,13 +42,8 @@ public class HttpRequestFactory {
         return new RequestLine(method, path);
     }
 
-    private static RequestHeader createRequestHeader(BufferedReader br, String line) throws IOException {
-        Map<String, String> headers = new HashMap<>();
-        logger.debug("request header : {}", line);
-        while (!StringUtils.isEmpty(line = br.readLine())) {
-            logger.debug("request header : {}", line);
-            headers.put(line.split(COLON_DELIMITER)[0], line.split(COLON_DELIMITER)[1]);
-        }
+    private static RequestHeader createRequestHeader(Map<String, String> headers) {
+        headers.remove(Cookie.NAME);
         return new RequestHeader(headers);
     }
 

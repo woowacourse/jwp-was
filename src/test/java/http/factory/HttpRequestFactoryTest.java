@@ -11,8 +11,6 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -28,9 +26,6 @@ class HttpRequestFactoryTest {
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
 
         HttpRequest httpRequest = HttpRequestFactory.createRequest(br);
-        Map<String, String> params = new HashMap<>();
-        params.put("message", "abc");
-        System.out.println(params.toString());
         assertAll(
                 () -> assertThat(httpRequest.isMatchMethod(HttpMethod.GET)).isTrue(),
                 () -> assertEquals("/user/create", httpRequest.getPath()),

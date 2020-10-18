@@ -1,0 +1,5 @@
+POST /index.html HTTP/1.1
+Host: localhost:8080
+Connection: keep-alive
+Cookie: _ga=GA1.1.1321239274.1597885260; session_id=64e89da0-d28f-4cec-ae44-e1b70504b8e9; logined=true
+Accept: */*

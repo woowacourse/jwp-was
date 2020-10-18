@@ -1,5 +1,6 @@
 package utils;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FileIoUtilsTest {
     private static final Logger log = LoggerFactory.getLogger(FileIoUtilsTest.class);
 
+    @Disabled
     @DisplayName("파일 찾기 테스트")
     @Test
     void loadFileFromClasspath() throws Exception {
