@@ -3,12 +3,15 @@ package webserver.request;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import utils.StringUtils;
+import webserver.response.Cookie;
 
 public class HttpRequest {
 
     private static final String HTTP_HEADER_DELIMITER = ": ";
     public static final String HTTP_HEADER_VALUE_DELIMITER = ",";
+    public static final String COOKIE_HEADER = "Cookie";
 
     private final RequestLine requestLine;
     private final RequestHeader requestHeader;
@@ -64,5 +67,11 @@ public class HttpRequest {
 
     public String getBodyParameter(String paramName) {
         return requestBody.getParameter(paramName);
+    }
+
+    public List<Cookie> getCookies() {
+        String cookieHeader = requestHeader.getHeader(COOKIE_HEADER);
+
+        return Cookie.parse(cookieHeader);
     }
 }

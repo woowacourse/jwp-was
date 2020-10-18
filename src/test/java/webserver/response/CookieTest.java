@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -51,5 +52,19 @@ public class CookieTest {
         cookie.setHttpOnly(true);
 
         assertThat(cookie.generateHeader()).isEqualTo("name=bingbong; Path=/; max-age=0; HttpOnly");
+    }
+
+    @DisplayName("Cookie 파싱")
+    @Test
+    void parse() {
+        String cookieHeader = "logined=true; JSESSIONID=hello";
+
+        List<Cookie> cookies = Cookie.parse(cookieHeader);
+
+        assertAll(() -> {
+            assertThat(cookies).hasSize(2);
+            assertThat(cookies.get(0).getName()).isEqualTo("logined");
+            assertThat(cookies.get(0).getValue()).isEqualTo("true");
+        });
     }
 }

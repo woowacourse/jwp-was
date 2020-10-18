@@ -12,6 +12,7 @@ public class Cookie {
     private static final String PATH_HEADER = "Path=";
     private static final String COOKIE_HEADER_DELIMITER = "; ";
     private static final int INIT_MAX_AGE = -1;
+    public static final String COOKIE_KEY_VALUE_DELIMITER = "=";
 
     private final String name;
     private String value;
@@ -25,10 +26,27 @@ public class Cookie {
         this.value = value;
     }
 
+    public static List<Cookie> parse(String header) {
+        List<Cookie> cookies = new ArrayList<>();
+        String[] cookiesSegments = header.split(COOKIE_HEADER_DELIMITER);
+        for (String cookie : cookiesSegments) {
+            final int i = cookie.indexOf(COOKIE_KEY_VALUE_DELIMITER);
+            final String key = cookie.substring(0, i);
+            final String value = cookie.substring(i + 1);
+
+            cookies.add(new Cookie(key, value));
+        }
+        return cookies;
+    }
+
     private void validate(String name) {
-        if(StringUtils.isBlank(name)) {
+        if (StringUtils.isBlank(name)) {
             throw new IllegalArgumentException("쿠키의 이름 : " + name + "이 잘못됐습니다!");
         }
+    }
+
+    public boolean isSameName(String name) {
+        return this.name.equals(name);
     }
 
     public String getName() {
