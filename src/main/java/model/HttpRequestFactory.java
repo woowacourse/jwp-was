@@ -19,7 +19,6 @@ public class HttpRequestFactory {
     public HttpRequest create(BufferedReader br) throws IOException {
         HttpHeader header = extractHeader(br);
         HttpBody body = extractBody(br, header);
-        br.reset();
         return new HttpRequest(header, body);
     }
 
