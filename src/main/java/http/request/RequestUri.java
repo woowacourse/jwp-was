@@ -30,11 +30,11 @@ public class RequestUri {
         return requestUri.split(DELIMITER).length == 1;
     }
 
-    public String getParameterBy(String key) {
-        return parameters.getParameterBy(key);
-    }
-
     public String getPath() {
         return path;
+    }
+
+    public Parameters getParameters() {
+        return parameters;
     }
 }

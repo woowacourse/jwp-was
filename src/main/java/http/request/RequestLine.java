@@ -33,4 +33,12 @@ public class RequestLine {
     public String getPath() {
         return requestUri.getPath();
     }
+
+    public Parameters getParameters() {
+        return requestUri.getParameters();
+    }
+
+    public HttpVersion getHttpVersion() {
+        return httpVersion;
+    }
 }

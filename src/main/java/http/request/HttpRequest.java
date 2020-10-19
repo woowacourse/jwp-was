@@ -37,6 +37,10 @@ public class HttpRequest {
         return new HttpRequest(requestLine, requestHeaders, body);
     }
 
+    public boolean isPost() {
+        return requestLine.isPost();
+    }
+
     public String getAttribute(String attribute) {
         return requestHeaders.getAttribute(attribute);
     }
@@ -49,7 +53,11 @@ public class HttpRequest {
         return body;
     }
 
-    public boolean isPost() {
-        return requestLine.isPost();
+    public String getHttpVersion() {
+        return requestLine.getHttpVersion().getHttpVersion();
+    }
+
+    public Parameters getParameters() {
+        return requestLine.getParameters();
     }
 }

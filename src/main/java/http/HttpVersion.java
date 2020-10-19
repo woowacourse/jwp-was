@@ -21,4 +21,8 @@ public enum HttpVersion {
                 .findAny()
                 .orElse(UNKNOWN);
     }
+
+    public String getHttpVersion() {
+        return httpVersion;
+    }
 }

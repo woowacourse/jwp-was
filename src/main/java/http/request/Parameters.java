@@ -15,6 +15,7 @@ public class Parameters {
 
     public static Parameters from(String queryParameters) {
         Objects.requireNonNull(queryParameters);
+
         if (queryParameters.isEmpty()) {
             return new Parameters(Collections.emptyMap());
         }
