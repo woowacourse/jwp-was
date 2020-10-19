@@ -1,5 +1,6 @@
 package model;
 
+import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
 
 import java.lang.reflect.Constructor;
@@ -16,11 +17,15 @@ public class HttpQueryParams {
 
     private final Map<String, String> params;
 
-    public HttpQueryParams(Map<String, String> params) {
+    private HttpQueryParams(Map<String, String> params) {
         this.params = params;
     }
 
     public static HttpQueryParams of(String queryParams) {
+        if (queryParams.isEmpty()) {
+            return new HttpQueryParams(emptyMap());
+        }
+
         Map<String, String> params = Arrays.stream(queryParams.split(PARAM_DELIMITER))
                 .collect(toMap(
                         queryParam -> queryParam.split(VALUE_DELIMITER)[KEY],

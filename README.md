@@ -64,7 +64,7 @@ userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajig
 
 ### 요구사항 5
 
-- 지금까지 구현한 소스 코드는 stylesheet 파일을 지원하지 못하고 있다. 
+- 지금까지 구현한 소스 코드는 stylesheet 파일을 지원하지 못하고 있다.
 - Stylesheet 파일을 지원하도록 구현하도록 한다.
 
 HTTP Request Header 예
