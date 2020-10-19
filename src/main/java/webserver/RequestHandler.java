@@ -33,7 +33,7 @@ public class RequestHandler implements Runnable {
 
             HttpRequestMessage httpRequestMessage = HttpRequestMessage.from(br);
 
-            HttpUri httpUri = httpRequestMessage.getRequestLine().getHttpUri();
+            HttpUri httpUri = httpRequestMessage.getHttpUri();
             Controller controller = httpUri.findController();
 
             HttpResponseMessage httpResponseMessage = controller.createHttpResponseMessage(httpRequestMessage);

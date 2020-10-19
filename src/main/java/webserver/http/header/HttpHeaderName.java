@@ -1,13 +1,15 @@
 package webserver.http.header;
 
-public enum HttpHeaderField {
+public enum HttpHeaderName {
     CONTENT_TYPE("Content-Type"),
     CONTENT_LENGTH("Content-Length"),
-    LOCATION("Location");
+    LOCATION("Location"),
+    SET_COOKIE("Set-Cookie"),
+    COOKIE("Cookie");
 
     private final String name;
 
-    HttpHeaderField(String name) {
+    HttpHeaderName(String name) {
         this.name = name;
     }
 

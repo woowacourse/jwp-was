@@ -2,30 +2,26 @@ package webserver.http.message;
 
 import webserver.http.body.DefaultHttpBody;
 import webserver.http.body.HttpBody;
-import webserver.http.header.HttpHeader;
+import webserver.http.header.HttpHeaders;
 import webserver.http.response.HttpStatus;
 import webserver.http.response.StatusLine;
 
-import java.util.Map;
-
 public class HttpResponseMessage extends HttpMessage {
-    private HttpResponseMessage(StatusLine statusLine, HttpHeader httpHeader, HttpBody httpBody) {
-        super(statusLine, httpHeader, httpBody);
+    private HttpResponseMessage(StatusLine statusLine, HttpHeaders httpHeaders, HttpBody httpBody) {
+        super(statusLine, httpHeaders, httpBody);
     }
 
-    public static HttpResponseMessage of(HttpStatus httpStatus, Map<String, String> headers, String body) {
+    public static HttpResponseMessage of(HttpStatus httpStatus, HttpHeaders httpHeaders, String body) {
         StatusLine statusLine = new StatusLine(httpStatus);
-        HttpHeader httpHeader = HttpHeader.from(headers);
         HttpBody httpBody = DefaultHttpBody.from(body);
 
-        return new HttpResponseMessage(statusLine, httpHeader, httpBody);
+        return new HttpResponseMessage(statusLine, httpHeaders, httpBody);
     }
 
-    public static HttpResponseMessage of(HttpStatus httpStatus, Map<String, String> headers) {
+    public static HttpResponseMessage of(HttpStatus httpStatus, HttpHeaders httpHeaders) {
         StatusLine statusLine = new StatusLine(httpStatus);
-        HttpHeader httpHeader = HttpHeader.from(headers);
         HttpBody httpBody = HttpBody.empty();
 
-        return new HttpResponseMessage(statusLine, httpHeader, httpBody);
+        return new HttpResponseMessage(statusLine, httpHeaders, httpBody);
     }
 }
