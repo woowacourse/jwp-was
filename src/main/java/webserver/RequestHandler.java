@@ -11,15 +11,12 @@ import java.net.URISyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import model.HttpBody;
-import model.HttpRequest;
 import model.HttpRequestFactory;
-import model.RequestURI;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
-    private Socket connection;
+    private final Socket connection;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -31,17 +28,10 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            HttpRequest httpRequest = new HttpRequestFactory()
-                    .create(new BufferedReader(new InputStreamReader(in)));
-
-            RequestURI uri = httpRequest.getHeader()
-                    .getRequestLine()
-                    .getRequestURI();
-            HttpBody body = httpRequest.getBody();
-
-            httpRequest
+            new HttpRequestFactory()
+                    .create(new BufferedReader(new InputStreamReader(in)))
                     .getService()
-                    .doService(out, uri, body);
+                    .doService(out);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }

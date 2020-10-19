@@ -14,20 +14,27 @@ public class RequestURITypeTest {
     @TestFactory
     Stream<DynamicTest> getFactory() {
         return Stream.of(
-                dynamicTest("query params가 존재할 때 ParamsFactory를 반환", this::existParams),
-                dynamicTest("query params가 존재하지 않을 때 NoParamsFactory를 반환", this::noParams)
+                dynamicTest("query params가 존재할 때 ParamsFactory에서 생성된 requetURI를 반환",
+                        this::existParams),
+                dynamicTest("query params가 존재하지 않을 때 NoParamsFactory에서 생성된 requestURI를 반환",
+                        this::noParams)
         );
     }
 
     private void existParams() {
-        String uri = "http://localhost:8080/user/create?name=name";
-        assertThat(RequestURIType.of(uri).getFactory()).isInstanceOf(
-                RequestURIType.ParamsFactory.class);
+        String uri = "http://localhost:8080/user/create";
+        String queryParam = "?name=name";
+        RequestURI actual = RequestURIType.of(uri + queryParam)
+                .getFactory()
+                .create(uri + queryParam);
+        assertThat(actual.getUri()).isEqualTo(uri);
     }
 
     private void noParams() {
         String uri = "http://localhost:8080/user/create";
-        assertThat(RequestURIType.of(uri).getFactory()).isInstanceOf(
-                RequestURIType.NoParamsFactory.class);
+        RequestURI actual = RequestURIType.of(uri)
+                .getFactory()
+                .create(uri);
+        assertThat(actual.getUri()).isEqualTo(uri);
     }
 }

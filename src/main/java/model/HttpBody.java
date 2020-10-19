@@ -1,6 +1,6 @@
 package model;
 
-import static jdk.internal.joptsimple.internal.Strings.*;
+import static utils.Strings.*;
 
 public class HttpBody {
     public static final HttpBody EMPTY_BODY = new HttpBody(EMPTY);

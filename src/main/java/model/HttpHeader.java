@@ -1,13 +1,25 @@
 package model;
 
 public class HttpHeader {
-    private final RequestLine requestLine;
+    private final HttpMethod method;
+    private final RequestURI requestURI;
+    private final HttpVersion version;
 
-    public HttpHeader(RequestLine requestLine) {
-        this.requestLine = requestLine;
+    public HttpHeader(HttpMethod method, RequestURI requestURI, HttpVersion version) {
+        this.method = method;
+        this.requestURI = requestURI;
+        this.version = version;
     }
 
-    public RequestLine getRequestLine() {
-        return requestLine;
+    public HttpMethod getMethod() {
+        return method;
+    }
+
+    public RequestURI getRequestURI() {
+        return requestURI;
+    }
+
+    public HttpVersion getVersion() {
+        return version;
     }
 }

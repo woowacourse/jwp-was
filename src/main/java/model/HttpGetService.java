@@ -10,16 +10,18 @@ import java.net.URISyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class HttpGetService implements HttpService {
+public class HttpGetService extends AbstractHttpService {
     private static final Logger logger = LoggerFactory.getLogger(HttpGetService.class);
     private static final String FILE_PATH = "./templates";
 
+    public HttpGetService(HttpHeader header, HttpBody body) {
+        super(header, body);
+    }
+
     @Override
-    public void doService(OutputStream out, RequestURI requestURI, HttpBody httpBody) throws
-            IOException,
-            URISyntaxException {
+    public void doService(OutputStream out) throws URISyntaxException, IOException {
         DataOutputStream dos = new DataOutputStream(out);
-        String classPath = FILE_PATH + requestURI.getUri();
+        String classPath = FILE_PATH + header.getRequestURI().getUri();
         logger.debug(classPath);
 
         byte[] body = loadFileFromClasspath(classPath);

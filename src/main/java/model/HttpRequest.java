@@ -9,10 +9,9 @@ public class HttpRequest {
         this.body = body;
     }
 
-    public HttpService getService() {
-        return header.getRequestLine()
-                .getMethod()
-                .getService();
+    public AbstractHttpService getService() {
+        return header.getMethod()
+                .getService(header, body);
     }
 
     public HttpHeader getHeader() {

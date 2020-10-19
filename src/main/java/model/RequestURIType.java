@@ -1,6 +1,6 @@
 package model;
 
-import static jdk.internal.joptsimple.internal.Strings.*;
+import static utils.Strings.*;
 
 import java.util.Arrays;
 import java.util.function.Predicate;
@@ -45,7 +45,8 @@ public enum RequestURIType {
         @Override
         public RequestURI create(String uri) {
             String[] uriAndQueryParams = uri.split(QUERY_STRING_DELIMITER);
-            return new RequestURI(uriAndQueryParams[URI], HttpParams.of(uriAndQueryParams[QUERY_PARAMS]));
+            return new RequestURI(uriAndQueryParams[URI],
+                    HttpParams.of(uriAndQueryParams[QUERY_PARAMS]));
         }
     }
 }

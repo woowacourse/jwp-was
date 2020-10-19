@@ -2,6 +2,7 @@ package model;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static utils.Strings.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,8 +13,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class HttpRequestFactoryTest {
-    private static final String SP = " ";
-
     private HttpRequestFactory httpRequestFactory;
 
     @BeforeEach
@@ -29,16 +28,13 @@ class HttpRequestFactoryTest {
         String version = "HTTP/1.1";
 
         StringReader sr = new StringReader(method + SP + uri + SP + version);
-        HttpRequest request = httpRequestFactory.create(new BufferedReader(sr));
+        BufferedReader br = new BufferedReader(sr);
+        HttpRequest request = httpRequestFactory.create(br);
 
         assertAll(
-                () -> assertThat(request.getHeader().getRequestLine().getMethod()).isEqualTo(
-                        HttpMethod.GET),
-                () -> assertThat(
-                        request.getHeader().getRequestLine().getRequestURI().getUri()).isEqualTo(
-                        uri),
-                () -> assertThat(request.getHeader().getRequestLine().getVersion()).isEqualTo(
-                        HttpVersion.HTTP_1_1)
+                () -> assertThat(request.getHeader().getMethod()).isEqualTo(HttpMethod.GET),
+                () -> assertThat(request.getHeader().getRequestURI().getUri()).isEqualTo(uri),
+                () -> assertThat(request.getHeader().getVersion()).isEqualTo(HttpVersion.HTTP_1_1)
         );
     }
 }

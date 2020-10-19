@@ -1,12 +1,12 @@
 package model;
 
-import static jdk.internal.joptsimple.internal.Strings.*;
+import static utils.Strings.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Objects;
 
 public class HttpRequestFactory {
-    private static final String SP = " ";
     private static final int HTTP_METHOD = 0;
     private static final int REQUEST_URI = 1;
     private static final int HTTP_VERSION = 2;
@@ -19,31 +19,23 @@ public class HttpRequestFactory {
     }
 
     private HttpHeader extractHeader(BufferedReader br) throws IOException {
-        String line = br.readLine();
-        RequestLine requestLine = createRequestLine(line);
-
-        return new HttpHeader(requestLine);
-    }
-
-    private RequestLine createRequestLine(String requestLine) {
+        String requestLine = br.readLine();
         String[] tokens = requestLine.split(SP);
+
         HttpMethod method = HttpMethod.valueOf(tokens[HTTP_METHOD]);
         RequestURI uri = RequestURIType.of(tokens[REQUEST_URI])
                 .getFactory()
                 .create(tokens[REQUEST_URI]);
         HttpVersion version = HttpVersion.of(tokens[HTTP_VERSION]);
-        return new RequestLine(method, uri, version);
+
+        return new HttpHeader(method, uri, version);
     }
 
     private void consumeBufferedReader(BufferedReader br) throws IOException {
         String line = br.readLine();
-        while (isNotEmpty(line)) {
+        while (Objects.nonNull(line) && !EMPTY.equals(line)) {
             line = br.readLine();
         }
-    }
-
-    private boolean isNotEmpty(String line) {
-        return !EMPTY.equals(line);
     }
 
     private HttpBody extractBody(BufferedReader br) throws IOException {
