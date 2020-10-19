@@ -14,7 +14,6 @@ import webserver.http.response.HttpStatus;
 import webserver.http.session.HttpSessionFinder;
 import webserver.service.UserService;
 
-import java.util.Objects;
 import java.util.Optional;
 
 import static webserver.http.header.HttpHeaders.HEADER_VALUE_DELIMITER;
@@ -25,10 +24,9 @@ public class GetUserListController implements Controller {
     public HttpResponseMessage createHttpResponseMessage(HttpRequestMessage httpRequestMessage) {
         Optional<String> sessionId = httpRequestMessage.getHeaderValue(HttpHeaderName.COOKIE.getName())
                 .map(HttpCookies::from)
-                .map(httpCookies -> httpCookies.getCookieValue("sessionId"))
-                .orElse(null);
+                .flatMap(httpCookies -> httpCookies.getCookieValue("sessionId"));
 
-        if (Objects.isNull(sessionId)) {
+        if (!sessionId.isPresent()) {
             return createNonUserHttpResponseMessage();
         }
 
