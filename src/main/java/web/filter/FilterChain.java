@@ -3,7 +3,7 @@ package web.filter;
 import web.HttpRequest;
 import web.HttpResponse;
 import web.servlet.DispatcherServlet;
-import web.servlet.Servlet;
+import web.servlet.Controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import java.util.List;
 public class FilterChain {
 
     private static final List<Filter> filters = new ArrayList<>();
-    private static final Servlet servlet = new DispatcherServlet();
+    private static final Controller CONTROLLER = new DispatcherServlet();
 
     static {
         filters.add(new ResourceFilter());
@@ -27,6 +27,6 @@ public class FilterChain {
             filter.doFilter(httpRequest, httpResponse, this);
             return;
         }
-        servlet.doService(httpRequest, httpResponse);
+        CONTROLLER.doService(httpRequest, httpResponse);
     }
 }

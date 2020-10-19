@@ -4,7 +4,7 @@ import db.DataBase;
 import model.User;
 import web.*;
 
-public class UserCreateServlet implements Servlet {
+public class UserCreateController implements Controller {
     @Override
     public void doService(final HttpRequest httpRequest, final HttpResponse httpResponse) {
         RequestBody requestBody = httpRequest.getRequestBody();
