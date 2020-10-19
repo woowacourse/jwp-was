@@ -1,4 +1,4 @@
-package webserver.response;
+package webserver;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -9,7 +9,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
-import webserver.Cookie;
 
 public class CookieTest {
 
@@ -19,13 +18,13 @@ public class CookieTest {
         Cookie cookie = new Cookie("bingbong", "wooteco");
         cookie.setPath("/");
 
-        assertAll(() -> {
-            assertThat(cookie.getName()).isEqualTo("bingbong");
-            assertThat(cookie.getValue()).isEqualTo("wooteco");
-            assertThat(cookie.getPath()).isEqualTo("/");
-            assertThat(cookie.getMaxAge()).isEqualTo(-1);
-            assertThat(cookie.isHttpOnly()).isEqualTo(false);
-        });
+        assertAll(
+            () -> assertThat(cookie.getName()).isEqualTo("bingbong"),
+            () -> assertThat(cookie.getValue()).isEqualTo("wooteco"),
+            () -> assertThat(cookie.getPath()).isEqualTo("/"),
+            () -> assertThat(cookie.getMaxAge()).isEqualTo(-1),
+            () -> assertThat(cookie.isHttpOnly()).isEqualTo(false)
+        );
     }
 
     @DisplayName("Cookie 생성 - 예외, 이름이 null 또는 길이가 0인 경우")
@@ -60,12 +59,12 @@ public class CookieTest {
     void parse() {
         String cookieHeader = "logined=true; JSESSIONID=hello";
 
-        List<Cookie> cookies = Cookie.parse(cookieHeader);
+        List<Cookie> cookies = CookieUtils.parse(cookieHeader);
 
-        assertAll(() -> {
-            assertThat(cookies).hasSize(2);
-            assertThat(cookies.get(0).getName()).isEqualTo("logined");
-            assertThat(cookies.get(0).getValue()).isEqualTo("true");
-        });
+        assertAll(
+            () -> assertThat(cookies).hasSize(2),
+            () -> assertThat(cookies.get(0).getName()).isEqualTo("logined"),
+            () -> assertThat(cookies.get(0).getValue()).isEqualTo("true")
+        );
     }
 }

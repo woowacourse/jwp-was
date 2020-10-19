@@ -17,9 +17,9 @@ public class CreateUserControllerTest extends ControllerTest {
 
         String body = service(fileName, controller);
 
-        assertAll(() -> {
-            assertThat(body).contains("HTTP/1.1 302 Found");
-            assertThat(body).contains("Location: /index.html");
-        });
+        assertAll(
+            () -> assertThat(body).contains("HTTP/1.1 302 Found"),
+            () -> assertThat(body).contains("Location: /index.html")
+        );
     }
 }

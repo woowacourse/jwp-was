@@ -27,10 +27,10 @@ public class LoginControllerTest extends ControllerTest {
 
         String body = service(fileName, controller);
 
-        assertAll(() -> {
-            assertThat(body).contains("HTTP/1.1 302 Found");
-            assertThat(body).contains("Set-Cookie: logined=true");
-        });
+        assertAll(
+            () -> assertThat(body).contains("HTTP/1.1 302 Found"),
+            () -> assertThat(body).contains("Set-Cookie: logined=true")
+        );
     }
 
     @DisplayName("LoginController doPost Login Failed 후 쿠키 조회")
@@ -41,9 +41,9 @@ public class LoginControllerTest extends ControllerTest {
 
         String body = service(fileName, controller);
 
-        assertAll(() -> {
-            assertThat(body).contains("HTTP/1.1 302 Found");
-            assertThat(body).contains("Set-Cookie: logined=false");
-        });
+        assertAll(
+            () -> assertThat(body).contains("HTTP/1.1 302 Found"),
+            () -> assertThat(body).contains("Set-Cookie: logined=false")
+        );
     }
 }

@@ -25,11 +25,11 @@
     4. [X] 다형성을 활용해 클라이언트 요청 URL에 대한 분기 처리를 제거한다.
 
 ## 3단계 요구사항
-1. [ ] 로그인이 성공하면 index.html, 로그인이 실패하면 /user/login_failed.html
-2. [ ] 회원가입한 사용자로 로그인할 수 있어야 함
-    1. [ ] 로그인이 성공하면 logined=true, 실패하면 logined=false
-3. [ ] http://localhost:8080/user/list로 접근했을 때 로그인 상태면 사용자 목록 출력, 로그인 상태가 아니라면 login.html
-4. [ ] HttpSession API 지원
+1. [X] 로그인이 성공하면 index.html, 로그인이 실패하면 /user/login_failed.html
+2. [X] 회원가입한 사용자로 로그인할 수 있어야 함
+    1. [X] 로그인이 성공하면 logined=true, 실패하면 logined=false
+3. [X] http://localhost:8080/user/list로 접근했을 때 로그인 상태면 사용자 목록 출력, 로그인 상태가 아니라면 login.html
+4. [X] HttpSession API 지원
 
 
 ## 우아한테크코스 코드리뷰

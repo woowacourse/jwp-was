@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import utils.FileIoUtils;
 import webserver.Cookie;
+import webserver.Cookies;
 import webserver.FileExtension;
 
 public class HttpResponse {
@@ -17,14 +18,15 @@ public class HttpResponse {
     private static final String STATIC_PATH = "./static";
 
     private final DataOutputStream dataOutputStream;
-    private StatusLine statusLine;
     private final ResponseHeader responseHeader;
+    private final Cookies cookies;
+    private StatusLine statusLine;
     private ResponseBody responseBody;
-    private final List<Cookie> cookies = new ArrayList<>();
 
     public HttpResponse(OutputStream outputStream) {
         dataOutputStream = new DataOutputStream(outputStream);
         responseHeader = new ResponseHeader(Maps.newHashMap());
+        cookies = new Cookies(new ArrayList<>());
     }
 
     public void addHeader(String key, String value) {
@@ -38,7 +40,7 @@ public class HttpResponse {
     }
 
     public List<Cookie> getCookies() {
-        return cookies;
+        return cookies.getCookies();
     }
 
     public void setContentType(String contentType) {
@@ -52,7 +54,8 @@ public class HttpResponse {
         writeHttpResponse();
     }
 
-    public void forwardByHandlebars(String path, String listPage) throws IOException, URISyntaxException {
+    public void forwardByHandlebars(String path, String listPage)
+        throws IOException, URISyntaxException {
         statusLine = new StatusLine("HTTP/1.1 200");
         setResponseBody(path);
         byte[] bytes = listPage.getBytes();

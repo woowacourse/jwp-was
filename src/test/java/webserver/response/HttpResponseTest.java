@@ -28,10 +28,10 @@ public class HttpResponseTest {
         response.forward("/index.html");
         String body = makeBody(byteArrayOutputStream);
 
-        assertAll(() -> {
-            assertThat(body).contains("HTTP/1.1 200 Ok");
-            assertThat(body).contains("Content-Length: ");
-        });
+        assertAll(
+            () -> assertThat(body).contains("HTTP/1.1 200 Ok"),
+            () -> assertThat(body).contains("Content-Length: ")
+        );
     }
 
     @DisplayName("HttpResponse Forward - CSS")
@@ -49,10 +49,10 @@ public class HttpResponseTest {
         response.sendRedirect("/index.html");
         String body = makeBody(byteArrayOutputStream);
 
-        assertAll(() -> {
-            assertThat(body).contains("HTTP/1.1 302 Found");
-            assertThat(body).contains("Location: /index.html");
-        });
+        assertAll(
+            () -> assertThat(body).contains("HTTP/1.1 302 Found"),
+            () -> assertThat(body).contains("Location: /index.html")
+        );
     }
 
     @DisplayName("HttpResponse MethodNotAllowed")
@@ -80,10 +80,10 @@ public class HttpResponseTest {
 
         List<Cookie> cookies = response.getCookies();
 
-        assertAll(() -> {
-            assertThat(cookies.get(0).getName()).isEqualTo("name");
-            assertThat(cookies.get(0).getValue()).isEqualTo("bingbong");
-        });
+        assertAll(
+            () -> assertThat(cookies.get(0).getName()).isEqualTo("name"),
+            () -> assertThat(cookies.get(0).getValue()).isEqualTo("bingbong")
+        );
     }
 
     @DisplayName("Cookies 조회")
