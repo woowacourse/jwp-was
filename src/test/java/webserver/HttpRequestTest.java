@@ -15,6 +15,7 @@ public class HttpRequestTest {
 	private static final String FILE_DIRECTORY = "./src/test/resources/";
 	private static final String POST_REQUEST = "post_request.txt";
 	private static final String GET_REQUEST = "get_request.txt";
+	private static final String ANOTHER_POST_REQUEST = "new_post_request.txt";
 
 	private HttpRequest httpRequest;
 
@@ -40,6 +41,20 @@ public class HttpRequestTest {
 			() -> assertThat(httpRequest.getMethod()).isEqualTo("POST"),
 			() -> assertThat(httpRequest.getUrl()).isEqualTo("/user/create"),
 			() -> assertThat(httpRequest.getParameter("Connection")).isEqualTo("keep-alive"),
+			() -> assertThat(httpRequest.getBody()).isEqualTo("userId=javajigi&password=password&name=JaeSung")
+		);
+	}
+
+	@DisplayName("또 다른 POST 요청에 대한 HttpRequest를 생성한다.")
+	@Test
+	void createAnotherPostHttpRequestTest() throws IOException {
+		httpRequest = createHttpRequest(ANOTHER_POST_REQUEST);
+
+		assertAll(
+			() -> assertThat(httpRequest.getMethod()).isEqualTo("POST"),
+			() -> assertThat(httpRequest.getUrl()).isEqualTo("/user/create"),
+			() -> assertThat(httpRequest.getParameter("Connection")).isEqualTo("keep-alive"),
+			() -> assertThat(httpRequest.getParameter("id")).isEqualTo("1"),
 			() -> assertThat(httpRequest.getBody()).isEqualTo("userId=javajigi&password=password&name=JaeSung")
 		);
 	}
