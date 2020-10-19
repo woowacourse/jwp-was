@@ -11,6 +11,7 @@ import java.net.URISyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import model.HttpBody;
 import model.HttpRequest;
 import model.HttpRequestFactory;
 import model.RequestURI;
@@ -36,10 +37,11 @@ public class RequestHandler implements Runnable {
             RequestURI uri = httpRequest.getHeader()
                     .getRequestLine()
                     .getRequestURI();
+            HttpBody body = httpRequest.getBody();
 
             httpRequest
                     .getService()
-                    .doService(out, uri);
+                    .doService(out, uri, body);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }

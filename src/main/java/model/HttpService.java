@@ -5,5 +5,5 @@ import java.io.OutputStream;
 import java.net.URISyntaxException;
 
 public interface HttpService {
-    void doService(OutputStream out, RequestURI requestURI) throws IOException, URISyntaxException;
+    void doService(OutputStream out, RequestURI requestURI, HttpBody httpBody) throws IOException, URISyntaxException;
 }

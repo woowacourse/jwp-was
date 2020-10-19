@@ -1,7 +1,8 @@
 package model;
 
 public enum HttpMethod {
-    GET(new HttpGetService());
+    GET(new HttpGetService()),
+    POST(new HttpPostService());
 
     private final HttpService service;
 

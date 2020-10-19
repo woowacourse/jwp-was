@@ -9,7 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Map;
 
-public class HttpQueryParams {
+public class HttpParams {
     private static final String PARAM_DELIMITER = "&";
     private static final String VALUE_DELIMITER = "=";
     private static final int KEY = 0;
@@ -17,13 +17,13 @@ public class HttpQueryParams {
 
     private final Map<String, String> params;
 
-    private HttpQueryParams(Map<String, String> params) {
+    private HttpParams(Map<String, String> params) {
         this.params = params;
     }
 
-    public static HttpQueryParams of(String queryParams) {
+    public static HttpParams of(String queryParams) {
         if (queryParams.isEmpty()) {
-            return new HttpQueryParams(emptyMap());
+            return new HttpParams(emptyMap());
         }
 
         Map<String, String> params = Arrays.stream(queryParams.split(PARAM_DELIMITER))
@@ -32,7 +32,7 @@ public class HttpQueryParams {
                         queryParam -> queryParam.split(VALUE_DELIMITER)[VALUE]
                 ));
 
-        return new HttpQueryParams(params);
+        return new HttpParams(params);
     }
 
     public <T> T toModel(Class<T> clazz) {

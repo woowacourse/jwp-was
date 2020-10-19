@@ -2,18 +2,18 @@ package model;
 
 public class RequestURI {
     private final String uri;
-    private final HttpQueryParams httpQueryParams;
+    private final HttpParams httpParams;
 
-    public RequestURI(String uri, HttpQueryParams httpQueryParams) {
+    public RequestURI(String uri, HttpParams httpParams) {
         this.uri = uri;
-        this.httpQueryParams = httpQueryParams;
+        this.httpParams = httpParams;
     }
 
     public String getUri() {
         return uri;
     }
 
-    public HttpQueryParams getHttpQueryParams() {
-        return httpQueryParams;
+    public HttpParams getHttpParams() {
+        return httpParams;
     }
 }

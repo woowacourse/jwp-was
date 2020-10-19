@@ -32,7 +32,7 @@ public enum RequestURIType {
     static class NoParamsFactory implements RequestURIFactory {
         @Override
         public RequestURI create(String uri) {
-            return new RequestURI(uri, HttpQueryParams.of(EMPTY));
+            return new RequestURI(uri, HttpParams.of(EMPTY));
         }
     }
 
@@ -45,8 +45,7 @@ public enum RequestURIType {
         @Override
         public RequestURI create(String uri) {
             String[] uriAndQueryParams = uri.split(QUERY_STRING_DELIMITER);
-            return new RequestURI(uriAndQueryParams[URI],
-                    HttpQueryParams.of(uriAndQueryParams[QUERY_PARAMS]));
+            return new RequestURI(uriAndQueryParams[URI], HttpParams.of(uriAndQueryParams[QUERY_PARAMS]));
         }
     }
 }
