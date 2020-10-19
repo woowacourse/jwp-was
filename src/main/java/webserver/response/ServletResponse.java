@@ -4,7 +4,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Map;
 
-import webserver.request.RequestHeader;
 import webserver.request.ServletRequest;
 
 public class ServletResponse {

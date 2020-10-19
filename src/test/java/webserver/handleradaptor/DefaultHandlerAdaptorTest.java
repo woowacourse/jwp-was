@@ -10,7 +10,6 @@ import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.google.common.collect.Maps;
 import model.User;
 import webserver.controller.IndexController;
 import webserver.controller.StaticResourceHandlers;
@@ -18,7 +17,6 @@ import webserver.controller.UserController;
 import webserver.messageconverter.DefaultHttpMessageConverter;
 import webserver.request.ServletRequest;
 import webserver.response.ModelAndView;
-import webserver.response.StatusCode;
 
 class DefaultHandlerAdaptorTest {
 
