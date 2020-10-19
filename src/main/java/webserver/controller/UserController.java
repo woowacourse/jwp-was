@@ -1,36 +1,28 @@
 package webserver.controller;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import model.User;
+import webserver.controller.annotation.Controller;
+import webserver.controller.annotation.RequestMapping;
 import webserver.request.MethodType;
 import webserver.response.ModelAndView;
 import webserver.response.StatusCode;
 import webserver.service.UserService;
-import webserver.controller.annotation.Controller;
-import webserver.controller.annotation.RequestMapping;
 
 @Controller
-public class UserController implements Handlers {
+public class UserController {
 
     @RequestMapping(value = "/user/create", type = MethodType.POST)
     public ModelAndView create(User user) {
         UserService userService = new UserService();
         userService.save(user);
+        ModelAndView mav = ModelAndView.of(StatusCode.FOUND, "index");
+        mav.addHeader("Location", "http://localhost:8080/index.html");
 
-        Map<String, String> headers = new LinkedHashMap<>();
-        Map<String, String> attributes = new LinkedHashMap<>();
-        headers.put("Location", "http://localhost:8080/index.html");
-
-        return ModelAndView.of(StatusCode.FOUND, headers, attributes, "index");
+        return mav;
     }
 
     @RequestMapping(type = MethodType.GET, value = "/user/form")
     public ModelAndView form() {
-        LinkedHashMap<String, String> headers = new LinkedHashMap<>();
-        Map<String, String> attributes = new LinkedHashMap<>();
-
-        return ModelAndView.of(StatusCode.OK, headers, attributes, "form");
+        return ModelAndView.of(StatusCode.OK, "form");
     }
 }

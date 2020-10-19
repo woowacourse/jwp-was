@@ -15,11 +15,24 @@ public class ModelAndView {
         this.viewName = viewName;
     }
 
-    public static ModelAndView of(final StatusCode statusCode, final Map<String, String> headers, final Map<String, String> body, final String viewName) {
+    public static ModelAndView of(StatusCode statusCode, Map<String, String> headers, Map<String, String> body,
+        String viewName) {
         ResponseHeader responseHeader = new ResponseHeader(headers);
         ResponseBody responseBody = new ResponseBody(body);
 
         return new ModelAndView(statusCode, responseHeader, responseBody, viewName);
+    }
+
+    public static ModelAndView of(StatusCode statusCode, String viewName) {
+        return new ModelAndView(statusCode, ResponseHeader.emptyHeader(), ResponseBody.emptyBody(), viewName);
+    }
+
+    public void addHeader(String key, String value) {
+        headers.addHeader(key, value);
+    }
+
+    public void addBody(String key, String value) {
+        body.addBody(key, value);
     }
 
     public StatusCode getStatusCode() {

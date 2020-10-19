@@ -6,14 +6,13 @@ public class HttpStatusLine {
     private final String protocolVersion;
     private final StatusCode statusCode;
 
-    public HttpStatusLine(final String protocolVersion, final StatusCode statusCode) {
+    public HttpStatusLine(String protocolVersion, StatusCode statusCode) {
         this.protocolVersion = protocolVersion;
         this.statusCode = statusCode;
     }
 
-    public HttpStatusLine(final StatusCode statusCode) {
-        this.protocolVersion = DEFAULT_PROTOCOL_VERSION;
-        this.statusCode = statusCode;
+    public HttpStatusLine(StatusCode statusCode) {
+        this(DEFAULT_PROTOCOL_VERSION, statusCode);
     }
 
     public String getProtocolVersion() {

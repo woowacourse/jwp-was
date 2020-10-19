@@ -5,7 +5,6 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +12,6 @@ import org.slf4j.LoggerFactory;
 public class WebServer {
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
     private static final int DEFAULT_PORT = 8080;
-    private static AtomicInteger counter = new AtomicInteger(0);
 
     public static void main(String args[]) throws Exception {
         int port = 0;

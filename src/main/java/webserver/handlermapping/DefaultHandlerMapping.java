@@ -7,17 +7,15 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import exception.MethodNotAllowedException;
-import webserver.controller.Handlers;
 import webserver.controller.annotation.Controller;
 import webserver.controller.annotation.RequestMapping;
-import webserver.request.MethodType;
 import webserver.request.ServletRequest;
 
 public class DefaultHandlerMapping implements HandlerMapping {
-    private final List<Class<? extends Handlers>> handlers;
+    private final List<Class<?>> handlers;
     private final List<HandlerMappingStrategy> strategies;
 
-    public DefaultHandlerMapping(List<HandlerMappingStrategy> strategies, List<Class<? extends Handlers>> handlers) {
+    public DefaultHandlerMapping(List<HandlerMappingStrategy> strategies, List<Class<?>> handlers) {
         this.strategies = strategies;
         this.handlers = handlers.stream()
             .filter(handler -> Objects.nonNull(handler.getAnnotation(Controller.class)))

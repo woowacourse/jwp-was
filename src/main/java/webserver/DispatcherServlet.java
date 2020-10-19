@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Maps;
-import webserver.controller.Handlers;
 import webserver.controller.IndexController;
 import webserver.controller.StaticResourceHandlers;
 import webserver.controller.UserController;
@@ -35,6 +34,21 @@ import webserver.response.View;
 public class DispatcherServlet implements Runnable {
     public static final String INTERNAL_SERVER_ERROR_VIEW_NAME = "internalServerError";
     private static final Logger logger = LoggerFactory.getLogger(DispatcherServlet.class);
+    private static final HandlerAdaptor DEFAULT_HANDLER_ADAPTOR;
+    private static final HttpMessageConverter CONVERTER;
+    private static final List<HandlerMappingStrategy> HANDLER_MAPPING_STRATEGIES;
+    private static final List<Class<?>> CONTROLLERS;
+    private static final HandlerMapping DEFAULT_HANDLER_MAPPING;
+
+    static {
+        DEFAULT_HANDLER_ADAPTOR = new DefaultHandlerAdaptor();
+        CONVERTER = new DefaultHttpMessageConverter();
+        HANDLER_MAPPING_STRATEGIES = Arrays.asList(
+            new DefaultHandlerMappingStrategy(), new StaticResourceHandlerMappingStrategy());
+        CONTROLLERS = Arrays.asList(UserController.class, IndexController.class,
+            StaticResourceHandlers.class);
+        DEFAULT_HANDLER_MAPPING = new DefaultHandlerMapping(HANDLER_MAPPING_STRATEGIES, CONTROLLERS);
+    }
 
     private final Socket connection;
 
@@ -48,14 +62,8 @@ public class DispatcherServlet implements Runnable {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
              DataOutputStream dos = new DataOutputStream(connection.getOutputStream())) {
             ServletRequest servletRequest = new ServletRequest(br);
-            List<Class<? extends Handlers>> controllers = Arrays.asList(UserController.class, IndexController.class,
-                StaticResourceHandlers.class);
-            List<HandlerMappingStrategy> handlerMappingStrategies = Arrays.asList(new DefaultHandlerMappingStrategy(), new StaticResourceHandlerMappingStrategy());
-            HandlerMapping defaultHandlerMapping = new DefaultHandlerMapping(handlerMappingStrategies, controllers);
-            Method handler = defaultHandlerMapping.mapping(servletRequest);
-            HandlerAdaptor defaultHandlerAdaptor = new DefaultHandlerAdaptor();
-            HttpMessageConverter converter = new DefaultHttpMessageConverter();
-            final ModelAndView mav = defaultHandlerAdaptor.invoke(handler, servletRequest, converter);
+            Method handler = DEFAULT_HANDLER_MAPPING.mapping(servletRequest);
+            final ModelAndView mav = DEFAULT_HANDLER_ADAPTOR.invoke(handler, servletRequest, CONVERTER);
             View view = View.of(mav.getViewName());
             ServletResponse response = ServletResponse.of(mav, servletRequest, view);
             response.sendResponse(dos);
