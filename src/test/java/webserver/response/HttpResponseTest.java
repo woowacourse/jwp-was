@@ -79,6 +79,7 @@ public class HttpResponseTest {
         response.addCookie(new Cookie("name", "bingbong"));
 
         List<Cookie> cookies = response.getCookies();
+
         assertAll(() -> {
             assertThat(cookies.get(0).getName()).isEqualTo("name");
             assertThat(cookies.get(0).getValue()).isEqualTo("bingbong");
@@ -92,6 +93,7 @@ public class HttpResponseTest {
         response.addCookie(new Cookie("generation", "2"));
 
         List<Cookie> cookies = response.getCookies();
+
         assertThat(cookies).hasSize(2);
     }
 

@@ -14,7 +14,8 @@ public class UriUtils {
 
         String[] paramsSegments = params.split(PARAM_DELIMITER);
         for (String paramsSegment : paramsSegments) {
-            String[] paramSegment = paramsSegment.split(PARAM_KEY_VALUE_DELIMITER, PARAM_KEY_VALUE_DELIMITER_LIMIT);
+            String[] paramSegment = paramsSegment
+                .split(PARAM_KEY_VALUE_DELIMITER, PARAM_KEY_VALUE_DELIMITER_LIMIT);
             String paramValue = "";
 
             String paramKey = paramSegment[0];

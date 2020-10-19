@@ -34,7 +34,8 @@ public enum StatusCode {
         return Arrays.stream(StatusCode.values())
             .filter(statusCode -> statusCode.isSameStatusCode(code))
             .findFirst()
-            .orElseThrow(() -> new NotFoundStatusCodeException(code + "에 해당하는 StatusCode를 찾지 못했습니다!"));
+            .orElseThrow(
+                () -> new NotFoundStatusCodeException(code + "에 해당하는 StatusCode를 찾지 못했습니다!"));
     }
 
     private boolean isSameStatusCode(String code) {

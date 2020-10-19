@@ -3,6 +3,7 @@ package coordinate;
 import java.util.List;
 
 public class Rectangle extends AbstractFigure {
+
     public Rectangle(List<Point> points) {
         super(points);
     }

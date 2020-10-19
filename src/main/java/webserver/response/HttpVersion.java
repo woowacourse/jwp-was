@@ -22,7 +22,8 @@ public enum HttpVersion {
         return Arrays.stream(HttpVersion.values())
             .filter(version -> version.isSameVersion(httpVersion))
             .findFirst()
-            .orElseThrow(() -> new NotFoundHttpVersionException(httpVersion + "에 해당하는 HttpVersion을 찾지 못했습니다!"));
+            .orElseThrow(() -> new NotFoundHttpVersionException(
+                httpVersion + "에 해당하는 HttpVersion을 찾지 못했습니다!"));
     }
 
     private boolean isSameVersion(String version) {

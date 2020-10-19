@@ -21,7 +21,8 @@ public enum FileExtension {
         return Arrays.stream(FileExtension.values())
             .filter(fileExtension -> fileExtension.isSameExtension(uri))
             .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException(uri + "에 해당하는 FileExtension을 찾지 못했습니다!"));
+            .orElseThrow(
+                () -> new IllegalArgumentException(uri + "에 해당하는 FileExtension을 찾지 못했습니다!"));
     }
 
     public static boolean isFileExtension(String uri) {

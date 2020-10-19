@@ -11,10 +11,12 @@ import org.slf4j.LoggerFactory;
 import webserver.controller.RequestHandlerMapping;
 
 public class WebServer {
+
     private static final Logger log = LoggerFactory.getLogger(WebServer.class);
     private static final int DEFAULT_PORT = 8080;
     private static final int DEFAULT_THREAD_COUNT = 100;
-    private static final ExecutorService executorService = Executors.newFixedThreadPool(DEFAULT_THREAD_COUNT);
+    private static final ExecutorService executorService = Executors
+        .newFixedThreadPool(DEFAULT_THREAD_COUNT);
 
     public static void main(String[] args) throws Exception {
         int port;
@@ -32,7 +34,8 @@ public class WebServer {
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
                 try {
-                    Future<?> future = executorService.submit(new RequestHandler(connection, new RequestHandlerMapping(Maps.newHashMap())));
+                    Future<?> future = executorService.submit(new RequestHandler(connection,
+                        new RequestHandlerMapping(Maps.newHashMap())));
                     future.get();
                 } catch (Exception e) {
                     log.error(e.getMessage());

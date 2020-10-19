@@ -20,7 +20,7 @@ public class RequestHandlerMapping {
         Controller controller = handlerMapping.get(uri);
 
         if (Objects.isNull(controller)) {
-            if (FileExtension.isFileExtension(uri) ) {
+            if (FileExtension.isFileExtension(uri)) {
                 return DefaultController.getInstance();
             }
             return ErrorController.getInstance();

@@ -1,6 +1,7 @@
 package webserver.request;
 
 public class RequestPath {
+
     private static final String ROOT_PATH = "/";
     private static final String INDEX_PATH = "/index";
     private static final String INDEX_SUFFIX = ".html";

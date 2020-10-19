@@ -3,6 +3,7 @@ package coordinate;
 import java.util.Objects;
 
 public class Point {
+
     private final int x;
     private final int y;
 
@@ -16,6 +17,19 @@ public class Point {
         if (y < 0 || y > 24) {
             throw new IllegalArgumentException();
         }
+    }
+
+    private static int square(int number) {
+        return number * number;
+    }
+
+    public static Point of(int x, int y) {
+        return new Point(x, y);
+    }
+
+    public static Point ofCommaSeparator(String text) {
+        String[] values = text.split(",");
+        return new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
     }
 
     public double getDistance(Point other) {
@@ -32,26 +46,17 @@ public class Point {
         return this.y - number;
     }
 
-    private static int square(int number) {
-        return number * number;
-    }
-
-    public static Point of(int x, int y) {
-        return new Point(x, y);
-    }
-
-    public static Point ofCommaSeparator(String text) {
-        String[] values = text.split(",");
-        return new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
-    }
-
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Point point = (Point) o;
         return x == point.x &&
-                y == point.y;
+            y == point.y;
     }
 
     @Override
