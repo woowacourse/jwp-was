@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.net.URISyntaxException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,13 +36,12 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = HttpRequest.from(bufferedReader);
             HttpResponse httpResponse = new HttpResponse(dos);
             handleRequest(httpRequest, httpResponse);
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void handleRequest(HttpRequest httpRequest, HttpResponse httpResponse) throws
-            IOException, URISyntaxException {
+    private void handleRequest(HttpRequest httpRequest, HttpResponse httpResponse) {
         String requestPath = httpRequest.getPath();
 
         if (StaticResource.match(requestPath)) {
