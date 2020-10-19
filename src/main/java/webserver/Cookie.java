@@ -1,4 +1,4 @@
-package webserver.response;
+package webserver;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Optional;
 import model.User;
 import utils.HandlebarUtils;
+import webserver.Cookie;
 import webserver.request.HttpRequest;
-import webserver.response.Cookie;
 import webserver.response.HttpResponse;
 
 public class ListUserController extends AbstractController {

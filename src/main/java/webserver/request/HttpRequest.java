@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import utils.StringUtils;
-import webserver.response.Cookie;
+import webserver.Cookie;
 
 public class HttpRequest {
 

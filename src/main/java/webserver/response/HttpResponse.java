@@ -8,6 +8,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import utils.FileIoUtils;
+import webserver.Cookie;
 import webserver.FileExtension;
 
 public class HttpResponse {

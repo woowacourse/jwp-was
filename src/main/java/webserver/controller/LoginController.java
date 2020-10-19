@@ -4,8 +4,8 @@ import db.DataBase;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import model.User;
+import webserver.Cookie;
 import webserver.request.HttpRequest;
-import webserver.response.Cookie;
 import webserver.response.HttpResponse;
 
 public class LoginController extends AbstractController{
