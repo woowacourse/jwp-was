@@ -9,12 +9,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import exception.ViewNotFoundException;
+
 public class FileIoUtils {
     private static final List<String> BASE_PATH = Arrays.asList("templates", "static");
-    public static final String INDEX_PAGE = "/index.html";
+    private static final String INDEX_PAGE = "/index.html";
     private static final String DEFAULT_PATH = "/";
     private static final String EXTENSION_DELIMITER = ".";
-    private static final String NOT_FOUND_PAGE = "static/notFound.html";
     private static final String SUFFIX = ".html";
 
     public static byte[] loadFileFromClasspath(String filePath) throws IOException {
@@ -30,7 +31,7 @@ public class FileIoUtils {
             .map(base -> getPath(base + filePath))
             .filter(Objects::nonNull)
             .findAny()
-            .orElseGet(() -> getPath(NOT_FOUND_PAGE));
+            .orElseThrow(() -> new ViewNotFoundException(filePath));
 
         assert path != null;
         return Files.readAllBytes(path);

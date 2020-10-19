@@ -21,7 +21,7 @@ public class DefaultHttpMessageConverter implements HttpMessageConverter {
                     field.setAccessible(true);
                     field.set(instance, value);
                 } catch (NoSuchFieldException | IllegalAccessException e) {
-                    logger.info(e.getMessage(), e);
+                    logger.error(e.getMessage(), e);
                 }
             });
             return instance;

@@ -6,6 +6,7 @@ import java.util.Map;
 public class QueryParams {
     private static final String QUERY_PARAM_INDICATOR = "\\?";
     private static final String QUERY_PARAM_DELIMITER = "&";
+    private static final String QUERY_PARAMS_START_DELIMITER = "?";
     private static final String KEY_VALUE_DELIMITER = "=";
     private static final QueryParams EMPTY_QUERY_PARAMS = new QueryParams(new LinkedHashMap<>());
 
@@ -17,7 +18,7 @@ public class QueryParams {
 
     public static QueryParams of(String path) {
         Map<String, String> queryParams = new LinkedHashMap<>();
-        if (!path.contains("?")) {
+        if (!path.contains(QUERY_PARAMS_START_DELIMITER)) {
             return EMPTY_QUERY_PARAMS;
         }
         String queryString = path.split(QUERY_PARAM_INDICATOR)[1];

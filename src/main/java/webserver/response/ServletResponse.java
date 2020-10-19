@@ -4,38 +4,41 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Map;
 
+import webserver.request.RequestHeader;
 import webserver.request.ServletRequest;
 
 public class ServletResponse {
     private final HttpStatusLine httpStatusLine;
     private final ResponseHeader headers;
-    private final ResponseBody body;
-    private final View view;
+    private final ModelAndView mav;
 
-    private ServletResponse(HttpStatusLine httpStatusLine, ResponseHeader headers, ResponseBody body, View view) {
+    public ServletResponse(HttpStatusLine httpStatusLine, ResponseHeader headers, ModelAndView mav) {
         this.httpStatusLine = httpStatusLine;
         this.headers = headers;
-        this.body = body;
-        this.view = view;
+        this.mav = mav;
     }
 
-    public static ServletResponse of(ModelAndView mav, View view) {
-        HttpStatusLine httpStatusLine = new HttpStatusLine(mav.getStatusCode());
-        ResponseHeader headers = mav.getHeaders();
-        ResponseBody body = mav.getBody();
+    public static ServletResponse of(StatusCode statusCode, ModelAndView mav, View view, ServletRequest request) {
 
-        return new ServletResponse(httpStatusLine, headers, body, view);
+        return new ServletResponse(new HttpStatusLine(statusCode), ResponseHeader.of(view, request), mav);
     }
 
-    public static ServletResponse of(ModelAndView mav, ServletRequest request, View view) {
-        HttpStatusLine httpStatusLine = new HttpStatusLine(request.getProtocolVersion(), mav.getStatusCode());
-        ResponseHeader headers = mav.getHeaders();
-        ResponseBody body = mav.getBody();
+    public static ServletResponse of(ModelAndView mav, ServletRequest request) {
+        HttpStatusLine httpStatusLine = new HttpStatusLine(request.getProtocolVersion(), StatusCode.of(mav.getView()));
+        ResponseHeader headers = ResponseHeader.of(mav.getView(), request);
 
-        return new ServletResponse(httpStatusLine, headers, body, view);
+        return new ServletResponse(httpStatusLine, headers, mav);
+    }
+
+    public static ServletResponse of(StatusCode statusCode, ModelAndView mav) {
+        HttpStatusLine httpStatusLine = new HttpStatusLine(statusCode);
+        ResponseHeader headers = ResponseHeader.emptyHeader();
+
+        return new ServletResponse(httpStatusLine, headers, mav);
     }
 
     public void sendResponse(DataOutputStream dos) throws IOException {
+        View view = mav.getView();
         dos.writeBytes(String.format("%s %d %s \r\n", httpStatusLine.getProtocolVersion(),
             httpStatusLine.getStatusCode().getStatusCode(), httpStatusLine.getStatusCode().name()));
 
@@ -73,15 +76,15 @@ public class ServletResponse {
         return headers.getHeader(key);
     }
 
-    public ResponseBody getBody() {
-        return body;
+    public Model getModel() {
+        return mav.getModel();
     }
 
     public String getAttribute(String key) {
-        return body.getAttribute(key);
+        return mav.getAttribute(key);
     }
 
     public View getView() {
-        return view;
+        return mav.getView();
     }
 }
