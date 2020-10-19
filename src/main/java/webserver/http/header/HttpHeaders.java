@@ -53,7 +53,7 @@ public class HttpHeaders {
 
     public HttpBody createHttpBody(BufferedReader br) throws IOException {
         int contentLength = getContentLength();
-        String body = contentLength == -1 ? "" : IOUtils.readData(br, contentLength);
+        String body = contentLength == 0 ? "" : IOUtils.readData(br, contentLength);
 
         return getContentType().createHttpBody(body);
     }
@@ -63,7 +63,7 @@ public class HttpHeaders {
         String contentLength = contentLengthValue.orElse(null);
 
         if (Objects.isNull(contentLength)) {
-            return -1;
+            return 0;
         }
 
         if (StringUtils.isNotNumber(contentLength)) {
