@@ -12,10 +12,16 @@ import webserver.HttpStatus;
 public class UserCreateController extends AbstractController {
     @Override
     public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
-        User user = new User(httpRequest.getParameter(User.USER_ID), httpRequest.getParameter(User.PASSWORD),
-            httpRequest.getParameter(User.NAME), httpRequest.getParameter(User.EMAIL));
-        UserService.addUser(user);
-        httpResponse.setHttpStatus(HttpStatus.FOUND);
-        httpResponse.sendRedirect("/index.html");
+        if (!httpRequest.containsAll(User.USER_ID, User.PASSWORD, User.NAME, User.EMAIL)) {
+            httpResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
+            httpResponse.error();
+        }
+        if (httpRequest.containsAll(User.USER_ID, User.PASSWORD, User.NAME, User.EMAIL)) {
+            User user = new User(httpRequest.getParameter(User.USER_ID), httpRequest.getParameter(User.PASSWORD),
+                httpRequest.getParameter(User.NAME), httpRequest.getParameter(User.EMAIL));
+            UserService.addUser(user);
+            httpResponse.setHttpStatus(HttpStatus.FOUND);
+            httpResponse.sendRedirect("/index.html");
+        }
     }
 }

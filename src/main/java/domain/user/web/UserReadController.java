@@ -19,7 +19,7 @@ public class UserReadController extends AbstractController {
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         User user = UserService.findById(httpRequest.getParameter(User.USER_ID));
         if (user == null) {
-            httpResponse.setHttpStatus(HttpStatus.UNAUTHORIZED);
+            validateParameter(httpRequest, httpResponse);
             httpResponse.error();
         }
         if (user != null) {
@@ -28,6 +28,15 @@ public class UserReadController extends AbstractController {
             httpResponse.addHeader(HttpHeader.CONTENT_TYPE, "application/json;charset=utf-8");
             httpResponse.addHeader(HttpHeader.CONTENT_LENGTH, String.valueOf(body.length));
             httpResponse.forward(body);
+        }
+    }
+
+    private void validateParameter(HttpRequest httpRequest, HttpResponse httpResponse) {
+        if (!httpRequest.containsParameter(User.USER_ID)) {
+            httpResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
+        }
+        if (httpRequest.containsParameter(User.USER_ID)) {
+            httpResponse.setHttpStatus(HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 }

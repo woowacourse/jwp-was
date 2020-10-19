@@ -2,6 +2,7 @@ package webserver;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -81,6 +82,15 @@ public class HttpRequest {
 
     public boolean isDelete() {
         return httpMethod.isDelete();
+    }
+
+    public boolean containsAll(String... keys) {
+        return parameter.keySet()
+            .containsAll(Arrays.asList(keys.clone()));
+    }
+
+    public boolean containsParameter(String key) {
+        return parameter.containsKey(key);
     }
 
     public String getHeader(String key) {
