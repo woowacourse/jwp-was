@@ -13,21 +13,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 public class StatusCodeTest {
 
-    @DisplayName("StatusCode 찾기 - 성공")
-    @ParameterizedTest
-    @MethodSource("provideStatusCodeForFind")
-    void find(String input, StatusCode statusCode) {
-        assertThat(StatusCode.find(input)).isEqualTo(statusCode);
-    }
-
-    @DisplayName("StatusCode 찾기 - 예외, 해당하는 코드를 찾지 못함")
-    @Test
-    void find_NotExistStatusCode_ThrownException() {
-        String statusCode = "1000";
-        assertThatThrownBy(() -> StatusCode.find(statusCode))
-            .isInstanceOf(NotFoundStatusCodeException.class);
-    }
-
     private static Stream<Arguments> provideStatusCodeForFind() {
         return Stream.of(
             Arguments.of("100", StatusCode.CONTINUE),
@@ -44,5 +29,20 @@ public class StatusCodeTest {
             Arguments.of("405", StatusCode.METHOD_NOT_ALLOWED),
             Arguments.of("500", StatusCode.INTERNAL_SERVER_ERROR)
         );
+    }
+
+    @DisplayName("StatusCode 찾기 - 성공")
+    @ParameterizedTest
+    @MethodSource("provideStatusCodeForFind")
+    void find(String input, StatusCode statusCode) {
+        assertThat(StatusCode.find(input)).isEqualTo(statusCode);
+    }
+
+    @DisplayName("StatusCode 찾기 - 예외, 해당하는 코드를 찾지 못함")
+    @Test
+    void find_NotExistStatusCode_ThrownException() {
+        String statusCode = "1000";
+        assertThatThrownBy(() -> StatusCode.find(statusCode))
+            .isInstanceOf(NotFoundStatusCodeException.class);
     }
 }

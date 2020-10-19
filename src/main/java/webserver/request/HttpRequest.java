@@ -40,6 +40,10 @@ public class HttpRequest {
         return requestLine.isSupported();
     }
 
+    public boolean isMethodNotImplemented() {
+        return requestLine.isNotImplemented();
+    }
+
     public String getBody() {
         return requestBody.getBody();
     }

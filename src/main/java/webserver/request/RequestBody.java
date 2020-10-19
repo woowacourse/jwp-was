@@ -16,7 +16,7 @@ public class RequestBody {
     private final RequestParameters requestParameters;
 
     public RequestBody(BufferedReader bufferedReader, RequestHeader requestHeader, RequestLine requestLine) throws IOException {
-        if(!requestLine.hasBody()) {
+        if(requestLine.isNotImplemented() || !requestLine.hasBody()) {
             this.text = null;
             this.requestParameters = null;
             return;

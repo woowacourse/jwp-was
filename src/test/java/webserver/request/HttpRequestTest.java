@@ -19,7 +19,8 @@ public class HttpRequestTest {
     @DisplayName("HttpRequest GET 요청")
     @Test
     void request_GET() throws IOException {
-        InputStream in = new FileInputStream(new File(TEST_REQUEST_DIRECTORY + "Http_Request_GET.txt"));
+        InputStream in = new FileInputStream(
+            new File(TEST_REQUEST_DIRECTORY + "Http_Request_GET.txt"));
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         HttpRequest request = new HttpRequest(br);
 
@@ -32,7 +33,8 @@ public class HttpRequestTest {
     @DisplayName("HttpRequest POST 요청, Param 없음")
     @Test
     void request_POST_WithoutParam() throws IOException {
-        InputStream in = new FileInputStream(new File(TEST_REQUEST_DIRECTORY + "Http_Request_POST_Create_User.txt"));
+        InputStream in = new FileInputStream(
+            new File(TEST_REQUEST_DIRECTORY + "Http_Request_POST_Create_User.txt"));
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         HttpRequest request = new HttpRequest(br);
 
@@ -45,7 +47,8 @@ public class HttpRequestTest {
     @DisplayName("HttpRequest POST 요청, Param 있음")
     @Test
     void request_POST_WithParam() throws IOException {
-        InputStream in = new FileInputStream(new File(TEST_REQUEST_DIRECTORY + "Http_Request_POST_With_Param.txt"));
+        InputStream in = new FileInputStream(
+            new File(TEST_REQUEST_DIRECTORY + "Http_Request_POST_With_Param.txt"));
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         HttpRequest request = new HttpRequest(br);
 
@@ -62,7 +65,8 @@ public class HttpRequestTest {
     @DisplayName("HttpRequest TRACE 요청, 지원하지 않음")
     @Test
     void isMethodSupported_NotSupport() throws IOException {
-        InputStream in = new FileInputStream(new File(TEST_REQUEST_DIRECTORY + "Http_Request_TRACE.txt"));
+        InputStream in = new FileInputStream(
+            new File(TEST_REQUEST_DIRECTORY + "Http_Request_TRACE.txt"));
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         HttpRequest request = new HttpRequest(br);
 
@@ -72,7 +76,8 @@ public class HttpRequestTest {
     @DisplayName("HttpRequest 쿠키 조회")
     @Test
     void getCookies() throws IOException {
-        InputStream in = new FileInputStream(new File(TEST_REQUEST_DIRECTORY + "Http_Request_GET_Cookie_Login_True.txt"));
+        InputStream in = new FileInputStream(
+            new File(TEST_REQUEST_DIRECTORY + "Http_Request_GET_Cookie_Login_True.txt"));
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         HttpRequest request = new HttpRequest(br);
 
