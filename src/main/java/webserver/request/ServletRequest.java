@@ -68,7 +68,7 @@ public class ServletRequest {
     }
 
     public String getAccept() {
-        return requestHeader.getHeader("Accept");
+        return requestHeader.getHeader("Accept").split(",")[0];
     }
 
     public boolean hasStaticResource() {
