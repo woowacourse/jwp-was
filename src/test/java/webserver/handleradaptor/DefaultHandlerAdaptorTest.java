@@ -31,7 +31,7 @@ class DefaultHandlerAdaptorTest {
             REQUEST_BODY);
         DefaultHttpMessageConverter converter = new DefaultHttpMessageConverter();
 
-        ModelAndView expected = ModelAndView.of(StatusCode.OK, Maps.newHashMap(), Maps.newHashMap(), "index");
+        ModelAndView expected = ModelAndView.of("index");
         ModelAndView actual = adaptor.invoke(method, request, converter);
 
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
@@ -47,7 +47,7 @@ class DefaultHandlerAdaptorTest {
 
         Map<String, String> headers = new LinkedHashMap<>();
         headers.put("Location", "http://localhost:8080/index.html");
-        ModelAndView expected = ModelAndView.of(StatusCode.FOUND, headers, Maps.newHashMap(), "index");
+        ModelAndView expected = ModelAndView.of("redirect:/index");
         ModelAndView actual = adaptor.invoke(method, request, converter);
 
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
@@ -62,7 +62,7 @@ class DefaultHandlerAdaptorTest {
         DefaultHttpMessageConverter converter = new DefaultHttpMessageConverter();
         Map<String, String> headers = new LinkedHashMap<>();
         headers.put("Content-Type", request.getAccept());
-        ModelAndView expected = ModelAndView.of(StatusCode.OK, headers, Maps.newLinkedHashMap(), "/index.html");
+        ModelAndView expected = ModelAndView.of("/index.html");
         ModelAndView actual = adaptor.invoke(method, request, converter);
 
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);

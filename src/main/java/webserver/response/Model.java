@@ -3,15 +3,15 @@ package webserver.response;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class ResponseBody {
+public class Model {
     private final Map<String, String> attributes;
 
-    public ResponseBody(Map<String, String> attributes) {
+    public Model(Map<String, String> attributes) {
         this.attributes = attributes;
     }
 
-    public static ResponseBody emptyBody() {
-        return new ResponseBody(new LinkedHashMap<>());
+    public static Model emptyModel() {
+        return new Model(new LinkedHashMap<>());
     }
 
     public Map<String, String> getAttributes() {

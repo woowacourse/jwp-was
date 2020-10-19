@@ -12,6 +12,6 @@ public class IndexController {
     @RequestMapping(type = MethodType.GET, value = {"/", "/index"})
     public ModelAndView index() {
 
-        return ModelAndView.of(StatusCode.OK, "index");
+        return ModelAndView.of("index");
     }
 }

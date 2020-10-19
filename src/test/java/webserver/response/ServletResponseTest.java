@@ -27,10 +27,8 @@ class ServletResponseTest {
         FileOutputStream fos = new FileOutputStream(new File("src/test/resources/response.txt"));
         DataOutputStream dos = new DataOutputStream(fos);
 
-        Map<String, String> emptyMap = new LinkedHashMap<>();
-
-        ModelAndView mav = ModelAndView.of(StatusCode.OK, emptyMap, emptyMap, "index");
-        ServletResponse response = ServletResponse.of(mav, View.of("index"));
+        ModelAndView mav = ModelAndView.of("index");
+        ServletResponse response = ServletResponse.of(StatusCode.OK, mav);
         response.sendResponse(dos);
 
         dos.close();

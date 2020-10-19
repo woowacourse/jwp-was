@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Maps;
+import exception.ViewNotFoundException;
 import webserver.controller.IndexController;
 import webserver.controller.StaticResourceHandlers;
 import webserver.controller.UserController;
@@ -39,6 +40,7 @@ public class DispatcherServlet implements Runnable {
     private static final List<HandlerMappingStrategy> HANDLER_MAPPING_STRATEGIES;
     private static final List<Class<?>> CONTROLLERS;
     private static final HandlerMapping DEFAULT_HANDLER_MAPPING;
+    private static final String NOT_FOUND_PAGE = "static/notFound.html";
 
     static {
         DEFAULT_HANDLER_ADAPTOR = new DefaultHandlerAdaptor();
@@ -64,16 +66,22 @@ public class DispatcherServlet implements Runnable {
             ServletRequest servletRequest = new ServletRequest(br);
             Method handler = DEFAULT_HANDLER_MAPPING.mapping(servletRequest);
             final ModelAndView mav = DEFAULT_HANDLER_ADAPTOR.invoke(handler, servletRequest, CONVERTER);
-            View view = View.of(mav.getViewName());
-            ServletResponse response = ServletResponse.of(mav, servletRequest, view);
+            ServletResponse response = ServletResponse.of(mav, servletRequest);
             response.sendResponse(dos);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
             try (DataOutputStream dos = new DataOutputStream(connection.getOutputStream())) {
-                ModelAndView mav = ModelAndView.of(StatusCode.INTERNAL_SERVER_ERROR,
-                    Maps.newLinkedHashMap(), Maps.newLinkedHashMap(), INTERNAL_SERVER_ERROR_VIEW_NAME);
-                ServletResponse internalServerError = ServletResponse.of(mav, View.of(INTERNAL_SERVER_ERROR_VIEW_NAME));
-                internalServerError.sendResponse(dos);
+                ServletResponse response = ServletResponse.of(StatusCode.INTERNAL_SERVER_ERROR,
+                    ModelAndView.of(INTERNAL_SERVER_ERROR_VIEW_NAME));
+                response.sendResponse(dos);
+            } catch (IOException ex) {
+                logger.error(ex.getMessage(), ex);
+            }
+        } catch (ViewNotFoundException e) {
+            logger.error(e.getMessage(), e);
+            try (DataOutputStream dos = new DataOutputStream(connection.getOutputStream())) {
+                ServletResponse response = ServletResponse.of(StatusCode.NOT_FOUND, ModelAndView.of(NOT_FOUND_PAGE));
+                response.sendResponse(dos);
             } catch (IOException ex) {
                 logger.error(ex.getMessage(), ex);
             }

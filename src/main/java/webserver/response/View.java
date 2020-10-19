@@ -7,15 +7,27 @@ import utils.FileIoUtils;
 
 public class View {
     private final byte[] view;
+    private final String viewName;
+    private final boolean isRedirect;
 
-    public View(final byte[] view) {
-        this.view = view;
+    public View(byte[] view, String viewName) {
+        this(view, viewName, false);
     }
 
-    public static View of(final String viewName) {
+    private View(byte[] view, String viewName, boolean isRedirect) {
+        this.view = view;
+        this.viewName = viewName;
+        this.isRedirect = isRedirect;
+    }
+
+    public static View of(String viewName) {
         try {
-            return new View(FileIoUtils.loadFileFromClasspath(viewName));
-        } catch (IOException e) {
+            if (viewName.startsWith("redirect:/")) {
+                viewName = viewName.substring(10);
+                return new View(FileIoUtils.loadFileFromClasspath(viewName), viewName, true);
+            }
+            return new View(FileIoUtils.loadFileFromClasspath(viewName), viewName);
+        } catch (IOException | ViewNotFoundException exception) {
             throw new ViewNotFoundException(viewName);
         }
     }
@@ -30,5 +42,13 @@ public class View {
 
     public boolean isNotEmpty() {
         return view.length != 0;
+    }
+
+    public boolean isRedirect() {
+        return isRedirect;
+    }
+
+    public String getViewName() {
+        return viewName;
     }
 }
