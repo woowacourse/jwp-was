@@ -4,15 +4,21 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import utils.StringUtils;
 import webserver.Cookie;
+import webserver.CookieUtils;
+import webserver.Cookies;
+import webserver.HttpSession;
+import webserver.HttpSessions;
 
 public class HttpRequest {
 
-    private static final String HTTP_HEADER_DELIMITER = ": ";
     public static final String HTTP_HEADER_VALUE_DELIMITER = ",";
     public static final String COOKIE_HEADER = "Cookie";
-
+    public static final String DEFAULT_SESSION_ID = "JSESSIONID";
+    private static final String HTTP_HEADER_DELIMITER = ": ";
     private final RequestLine requestLine;
     private final RequestHeader requestHeader;
     private final RequestBody requestBody;
@@ -76,6 +82,18 @@ public class HttpRequest {
     public List<Cookie> getCookies() {
         String cookieHeader = requestHeader.getHeader(COOKIE_HEADER);
 
-        return Cookie.parse(cookieHeader);
+        return CookieUtils.parse(cookieHeader);
+    }
+
+    public HttpSession getSession() {
+        Cookies cookies = new Cookies(getCookies());
+        Optional<Cookie> sessionCookie = cookies.getCookie(DEFAULT_SESSION_ID);
+
+        if (sessionCookie.isPresent()) {
+            String sessionId = sessionCookie.get().getValue();
+            return HttpSessions.getHttpSession(sessionId);
+        }
+        String randomUUID = UUID.randomUUID().toString();
+        return HttpSessions.createHttpSession(randomUUID);
     }
 }

@@ -12,7 +12,6 @@ public class Cookie {
     private static final String PATH_HEADER = "Path=";
     private static final String COOKIE_HEADER_DELIMITER = "; ";
     private static final int INIT_MAX_AGE = -1;
-    public static final String COOKIE_KEY_VALUE_DELIMITER = "=";
 
     private final String name;
     private String value;
@@ -24,19 +23,6 @@ public class Cookie {
         validate(name);
         this.name = name;
         this.value = value;
-    }
-
-    public static List<Cookie> parse(String header) {
-        List<Cookie> cookies = new ArrayList<>();
-        String[] cookiesSegments = header.split(COOKIE_HEADER_DELIMITER);
-        for (String cookie : cookiesSegments) {
-            final int i = cookie.indexOf(COOKIE_KEY_VALUE_DELIMITER);
-            final String key = cookie.substring(0, i);
-            final String value = cookie.substring(i + 1);
-
-            cookies.add(new Cookie(key, value));
-        }
-        return cookies;
     }
 
     private void validate(String name) {
@@ -65,16 +51,8 @@ public class Cookie {
         return path;
     }
 
-    public void setPath(String path) {
-        this.path = path;
-    }
-
     public int getMaxAge() {
         return maxAge;
-    }
-
-    public void setMaxAge(int maxAge) {
-        this.maxAge = maxAge;
     }
 
     public boolean isHttpOnly() {
@@ -99,8 +77,16 @@ public class Cookie {
         return Objects.nonNull(this.path);
     }
 
+    public void setPath(String path) {
+        this.path = path;
+    }
+
     private boolean isMaxAge() {
         return this.maxAge != INIT_MAX_AGE;
+    }
+
+    public void setMaxAge(int maxAge) {
+        this.maxAge = maxAge;
     }
 
     private void generateCookieValueString(List<String> header) {
