@@ -31,7 +31,7 @@ class StaticFileMatcherTest {
     @CsvSource({"/index.html,./templates/index.html",
             "/css/new.css,./static/css/new.css",
             "/js/my.js,./static/js/my.js",})
-    void name(String resourcePath, String expected) {
+    void findStaticFilePathTest(String resourcePath, String expected) {
         String actual = StaticFileMatcher.findStaticFilePath(resourcePath);
         assertThat(actual).isEqualTo(expected);
     }

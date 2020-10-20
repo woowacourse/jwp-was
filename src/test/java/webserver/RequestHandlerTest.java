@@ -32,9 +32,13 @@ class RequestHandlerTest {
     @ParameterizedTest
     @CsvSource({"/index.html,./templates/index.html", "/user/form.html,./templates/user/form.html"})
     void staticHandleTest(String resourcePath, String filePath) throws IOException, URISyntaxException {
-        HttpResponse actual = requestHandler.handle(new HttpRequest(new HttpRequestLine(HttpMethod.GET, resourcePath)));
-        byte[] expected = FileIoUtils.loadFileFromClasspath(filePath);
-        assertThat(actual.getBody()).isEqualTo(expected);
+        HttpRequest httpRequest = new HttpRequest(new HttpRequestLine(HttpMethod.GET, resourcePath));
+        HttpResponse httpResponse = new HttpResponse(null);
+
+        requestHandler.handle(httpRequest, httpResponse);
+
+        byte[] actual = FileIoUtils.loadFileFromClasspath(filePath);
+        assertThat(httpResponse.getBody()).isEqualTo(actual);
     }
 
     @DisplayName("회원가입 시 새로운 페이지로 이동한다.")
@@ -49,10 +53,11 @@ class RequestHandlerTest {
         body.put("email", "javajigi@slipp.net");
 
         // when
-        HttpResponse response = requestHandler.handle(new HttpRequest(requestLine, body));
+        HttpResponse response = new HttpResponse(null);
+        requestHandler.handle(new HttpRequest(requestLine, body), response);
 
         // then
         assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
-        assertThat(response.getHeaderValue("Location")).isEqualTo("http://localhost:8080/index.html");
+        assertThat(response.getHeaders().get("Location")).isEqualTo("http://localhost:8080/index.html");
     }
 }
