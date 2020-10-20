@@ -11,6 +11,6 @@ public class HttpRequestBody {
     }
 
     public HttpRequestBody(String line) throws UnsupportedEncodingException {
-        this.parameters = ParameterParser.parse(line);
+        this.parameters = Parser.parseParameter(line);
     }
 }
