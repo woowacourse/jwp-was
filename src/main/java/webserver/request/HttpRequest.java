@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -25,8 +26,8 @@ public class HttpRequest {
     private static final String HEADER_DELIMITER = ": ";
 
     private final RequestLine requestLine;
-    private final Map<String, String> headers;
-    private final Map<String, String> parameters;
+    private final RequestHeaders headers;
+    private final RequestParameters parameters;
 
     public HttpRequest(InputStream inputStream) {
         if (inputStream == null) {
@@ -34,8 +35,8 @@ public class HttpRequest {
         }
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         this.requestLine = createRequestLine(bufferedReader);
-        this.headers = parsingHeaders(bufferedReader);
-        this.parameters = parsingParameters(bufferedReader);
+        this.headers = new RequestHeaders(parsingHeaders(bufferedReader));
+        this.parameters = new RequestParameters(parsingParameters(bufferedReader));
     }
 
     private RequestLine createRequestLine(BufferedReader bufferedReader) {
@@ -71,12 +72,12 @@ public class HttpRequest {
     }
 
     private String extractBody(BufferedReader bufferedReader) {
-        String contentLength = headers.get(EntityHeader.CONTENT_LENGTH.get());
-        if (contentLength == null) {
+        if (headers.isNull(EntityHeader.CONTENT_LENGTH)) {
             return requestLine.getData();
         }
+        String contentLength = headers.getValue(EntityHeader.CONTENT_LENGTH.get());
         String body = IOUtils.readData(bufferedReader, Integer.parseInt(contentLength));
-        if (requestLine.getData() == null) {
+        if (requestLine.isNotExistData()) {
             return body;
         }
         return String.join(PARAMETER_DELIMITER, body, requestLine.getData());
@@ -94,8 +95,9 @@ public class HttpRequest {
         return requestLine.isMatchHttpMethod(httpMethod);
     }
 
-    public boolean containsPath(String path) {
-        return requestLine.containsPath(path);
+    public boolean containsPath(List<String> paths) {
+        return paths.stream()
+                .anyMatch(path -> requestLine.containsPath(path));
     }
 
     public String getMethod() {
@@ -107,14 +109,14 @@ public class HttpRequest {
     }
 
     public String getHeader(String header) {
-        return this.headers.get(header);
+        return this.headers.getValue(header);
     }
 
     public String getParameter(String parameter) {
-        return this.parameters.get(parameter);
+        return this.parameters.getValue(parameter);
     }
 
     public Set<String> getParametersKeys() {
-        return this.parameters.keySet();
+        return this.parameters.getKeys();
     }
 }

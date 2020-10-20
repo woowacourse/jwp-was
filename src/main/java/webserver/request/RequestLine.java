@@ -31,6 +31,10 @@ public class RequestLine {
         return this.path.contains(path);
     }
 
+    public boolean isNotExistData() {
+        return this.data == null;
+    }
+
     public String getPath() {
         return path;
     }
