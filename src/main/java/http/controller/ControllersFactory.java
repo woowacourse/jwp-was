@@ -12,6 +12,7 @@ public class ControllersFactory {
         controllers.put("/user/create", new UserCreateController());
         controllers.put("/", new IndexController());
         controllers.put("/user/login", new UserLoginController());
+        controllers.put("/user/list", new UserListController());
         this.controllers = new Controllers(controllers);
     }
 
