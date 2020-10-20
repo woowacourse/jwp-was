@@ -4,7 +4,7 @@ import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 
 public enum Controllers {
-    PAGE_CONTROLLER(new PageController()),
+    TEMPLATES_CONTROLLER(new TemplatesController()),
     STATIC_RESOURCE_CONTROLLER(new StaticResourceController()),
     USER_CONTROLLER(new UserController());
 

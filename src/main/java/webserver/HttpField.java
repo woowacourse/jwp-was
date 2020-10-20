@@ -1,4 +1,4 @@
-package webserver.response;
+package webserver;
 
 public interface HttpField {
     String get();

@@ -1,5 +1,7 @@
 package webserver.response;
 
+import webserver.HttpField;
+
 public enum Status implements HttpField {
     OK("200 OK"),
     FOUND("302 FOUND"),

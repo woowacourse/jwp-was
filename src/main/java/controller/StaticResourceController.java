@@ -1,5 +1,6 @@
 package controller;
 
+import webserver.ContentType;
 import webserver.EntityHeader;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
@@ -9,7 +10,8 @@ public class StaticResourceController extends AbstractController {
 
     @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        httpResponse.addHeader(EntityHeader.CONTENT_TYPE, "text/css; charset=utf-8");
+        ContentType contentType = ContentType.form(httpRequest.getPath());
+        httpResponse.addHeader(EntityHeader.CONTENT_TYPE, contentType.get());
         httpResponse.forward(STATIC_RESOURCE_PREFIX + httpRequest.getPath());
     }
 }

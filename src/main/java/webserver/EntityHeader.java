@@ -1,7 +1,5 @@
 package webserver;
 
-import webserver.response.HttpField;
-
 public enum EntityHeader implements HttpField {
     CONTENT_LENGTH("Content-Length"),
     CONTENT_TYPE("Content-Type");

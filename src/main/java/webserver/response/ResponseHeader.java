@@ -1,5 +1,7 @@
 package webserver.response;
 
+import webserver.HttpField;
+
 public enum ResponseHeader implements HttpField {
     LOCATION("Location");
 
