@@ -4,6 +4,8 @@ import utils.IOUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,14 +26,14 @@ public class RequestBody {
         }
     }
 
-    private void parseWWWForm(String body) {
+    private void parseWWWForm(String body) throws UnsupportedEncodingException {
         String[] tokens = body.split("&");
         for (String token : tokens) {
             String[] keyValue = token.split("=");
             if (keyValue.length != 2) {
                 throw new IllegalArgumentException("No value for the key: " + keyValue[0]);
             }
-            params.put(keyValue[0].toLowerCase(), keyValue[1].trim());
+            params.put(keyValue[0].toLowerCase(), URLDecoder.decode(keyValue[1].trim(), "UTF-8"));
         }
     }
 
