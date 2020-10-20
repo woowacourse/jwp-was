@@ -18,7 +18,7 @@ class RequestBodyTest {
         String input = "userId=javajigi&password=javable&name=pobi&email=test@test.com";
 
         BufferedReader br = new BufferedReader(new StringReader(input));
-        RequestBody requestBody = RequestBody.of(br, String.valueOf(input.length()));
+        RequestBody requestBody = RequestBody.of(br, String.valueOf(input.length()), RequestLine.from("POST /user/create HTTP/1.1"));
 
         assertThat(requestBody.getParams()).containsEntry("userId", "javajigi");
         assertThat(requestBody.getParams()).containsEntry("password", "javable");

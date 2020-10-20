@@ -22,7 +22,7 @@ class HttpRequestTest {
 
         assertThat(request.getMethod()).isEqualTo(HttpMethod.GET);
         assertThat(request.getPath()).isEqualTo("/index.html");
-        assertThat(request.getHeaders()).hasSize(3);
+        assertThat(request.getHeaders("Connection")).isEqualTo("keep-alive");
     }
 
     @DisplayName("HttpRequest 생성 - POST")
@@ -33,6 +33,19 @@ class HttpRequestTest {
 
         assertThat(request.getMethod()).isEqualTo(HttpMethod.POST);
         assertThat(request.getPath()).isEqualTo("/user/create");
-        assertThat(request.getHeaders()).hasSize(5);
+        assertThat(request.getHeaders("Connection")).isEqualTo("keep-alive");
+    }
+
+    @DisplayName("HttpRequest 생성 - queryString")
+    @Test
+    public void createPostRequestWithQueryString() throws Exception {
+        InputStream in = new FileInputStream(new File(testDirectory + "Http_POST2.txt"));
+        HttpRequest request = HttpRequest.from(in);
+
+        assertThat(request.getMethod()).isEqualTo(HttpMethod.POST);
+        assertThat(request.getPath()).isEqualTo("/user/create");
+        assertThat(request.getHeaders("Connection")).isEqualTo("keep-alive");
+        assertThat(request.getRequestBody().getParams()).containsEntry("id", "1");
+        assertThat(request.getRequestBody().getParams()).containsEntry("userId", "javajigi");
     }
 }
