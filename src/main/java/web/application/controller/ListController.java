@@ -1,11 +1,11 @@
 package web.application.controller;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import db.DataBase;
 import web.HandlebarsHelper;
 import web.application.dto.UserListResponse;
-import web.application.util.CookieUtils;
 import web.server.domain.request.HttpRequest;
 import web.server.domain.response.HttpResponse;
 import web.server.utils.StaticFileType;
@@ -18,9 +18,11 @@ public class ListController extends AbstractController {
 
     @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        boolean isNotLogined = CookieUtils.checkUserIsNotLogined(httpRequest.getHeader("Cookie"));
+        boolean isLogined = Optional.ofNullable(httpRequest.getSession().getAttribute("logined"))
+            .map(value -> Boolean.parseBoolean(value.toString()))
+            .orElse(false);
 
-        if (isNotLogined) {
+        if (!isLogined) {
             httpResponse.forward("templates/index.html", StaticFileType.HTML);
             return;
         }

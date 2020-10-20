@@ -2,6 +2,7 @@ package web.server.domain.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Arrays;
 
 import web.server.utils.IOUtils;
 import web.server.utils.StaticFileType;
@@ -70,13 +71,13 @@ public class HttpRequest {
     public HttpSession getSession() {
         String cookies = getHeader("Cookie");
         String[] split = cookies.split("; ");
-        String key = "";
-        for (String s : split) {
-            if (s.startsWith("JSESSION=")) {
-                key = s.split("=")[1];
-                break;
-            }
-        }
+
+        String key = Arrays.stream(split)
+            .filter(value -> value.startsWith("JSESSIONID="))
+            .map(value -> value.split("=")[1])
+            .findFirst()
+            .orElse("");
+
         if (key.isEmpty()) {
             return httpSessionStorage.createSession();
         }
