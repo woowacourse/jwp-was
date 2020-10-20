@@ -14,7 +14,7 @@ public class UserRepository {
         users.put(user.getUserId(), user);
     }
 
-    public static User findUserById(String userId) {
+    public static User findUserByUserId(String userId) {
         return users.get(userId);
     }
 

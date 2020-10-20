@@ -15,9 +15,15 @@ import webserver.HttpStatus;
 public class UserReadController extends AbstractController {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
+    private final UserService userService;
+
+    public UserReadController(UserService userService) {
+        this.userService = userService;
+    }
+
     @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
-        User user = UserService.findById(httpRequest.getParameter(User.USER_ID));
+        User user = userService.findByUserId(httpRequest.getParameter(User.USER_ID));
         if (user == null) {
             validateParameter(httpRequest, httpResponse);
             httpResponse.error();

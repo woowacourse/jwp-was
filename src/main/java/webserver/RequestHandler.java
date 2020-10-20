@@ -16,6 +16,8 @@ import org.slf4j.LoggerFactory;
 
 import controller.Controller;
 import controller.FileController;
+import domain.user.service.UserService;
+import domain.user.web.LoginController;
 import domain.user.web.UserCreateController;
 import domain.user.web.UserReadController;
 
@@ -27,10 +29,12 @@ public class RequestHandler implements Runnable {
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
+        UserService userService = UserService.getInstance();
         controllers = new HashMap<>();
         controllers.put("FILE", new FileController());
-        controllers.put("/user/create", new UserCreateController());
-        controllers.put("/user/profile", new UserReadController());
+        controllers.put("/user/create", new UserCreateController(userService));
+        controllers.put("/user/profile", new UserReadController(userService));
+        controllers.put("/user/login", new LoginController(userService));
     }
 
     public void run() {
