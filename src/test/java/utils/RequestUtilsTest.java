@@ -47,4 +47,15 @@ class RequestUtilsTest {
             () -> assertThat(parameter.get("email")).isEqualTo("javajigi@slipp.net")
         );
     }
+
+    @Test
+    void logined() {
+        String cookie = "Idea-887e564c=c5cf03c1-8b9e-4ade-82f6-76c992d8a148; "
+            + "Idea-b969b4f=03e5e381-4bf6-4045-a4a3-a6f0a7ab6ced; "
+            + "Idea-b969b50=25d9d319-6628-4124-818b-e53f4dd4f9a4; "
+            + "_ga=GA1.1.1289063521.1597912649; "
+            + "logined=true";
+
+        assertThat(RequestUtils.logined(cookie)).isTrue();
+    }
 }

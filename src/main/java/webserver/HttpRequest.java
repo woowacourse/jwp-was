@@ -11,7 +11,7 @@ import utils.RequestUtils;
 
 public class HttpRequest {
     public static final String EMPTY = "";
-    public static final String REGEX = ":";
+    public static final String COLON = ":";
     public static final int KEY_INDEX = 0;
     public static final String QUERY_REGEX = "\\?";
     public static final String EQUALS = "=";
@@ -53,7 +53,7 @@ public class HttpRequest {
     private void createHeader(BufferedReader br) throws IOException {
         String line = br.readLine();
         while (!EMPTY.equals(line) && line != null) {
-            String key = line.split(REGEX)[KEY_INDEX];
+            String key = line.split(COLON)[KEY_INDEX];
             String value = line.substring(key.length() + 2);
             header.put(key, value);
             line = br.readLine();
@@ -66,6 +66,14 @@ public class HttpRequest {
             return RequestUtils.extractParameter(body);
         }
         return new TreeMap<>();
+    }
+
+    public boolean logined() {
+        String cookie = header.get(HttpHeader.COOKIE);
+        if (cookie == null) {
+            return false;
+        }
+        return RequestUtils.logined(cookie);
     }
 
     public boolean isGet() {

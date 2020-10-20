@@ -18,9 +18,9 @@ class HttpResponseTest {
         HttpResponse response = new HttpResponse(createOutputStream("Http_Forward.txt"));
         byte[] body = FileIoUtils.findStaticFile(path);
         response.setHttpStatus(HttpStatus.OK);
-        response.addHeader("Content-Type",
+        response.addHeader(HttpHeader.CONTENT_TYPE,
             String.format("text/%s;charset=utf-8", RequestUtils.extractExtension(path)));
-        response.addHeader("Content-Length", String.valueOf(body.length));
+        response.addHeader(HttpHeader.CONTENT_LENGTH, String.valueOf(body.length));
         response.forward(body);
     }
 

@@ -71,4 +71,17 @@ class HttpRequestTest {
             () -> assertThat(httpRequest.getParameter("userId")).isEqualTo("javajigi")
         );
     }
+
+    @Test
+    void logined() throws IOException {
+        String request = "GET /user/create?id=1 HTTP/1.1\n"
+            + "Host: localhost:8080\n"
+            + "Connection: keep-alive\n"
+            + "Cookie: logined=false";
+        InputStream in = new ByteArrayInputStream(request.getBytes());
+        BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+        HttpRequest httpRequest = new HttpRequest(br);
+
+        assertThat(httpRequest.logined()).isFalse();
+    }
 }
