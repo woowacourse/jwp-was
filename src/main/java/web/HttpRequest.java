@@ -20,13 +20,20 @@ public class HttpRequest {
 
     public static HttpRequest from(InputStream in) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+
         RequestLine requestLine = RequestLine.from(br.readLine());
         RequestHeader requestHeader = RequestHeader.from(br);
-        RequestBody requestBody = null;
-        if (requestLine.isPost()) {
-            requestBody = RequestBody.of(br, requestHeader.getValue("Content-Length"), requestLine);
-        }
+        RequestBody requestBody = createRequestBody(br, requestLine, requestHeader);
+
         return new HttpRequest(requestLine, requestHeader, requestBody);
+    }
+
+    private static RequestBody createRequestBody(BufferedReader br, RequestLine requestLine,
+        RequestHeader requestHeader) throws IOException {
+        if (requestLine.isPost()) {
+            return RequestBody.of(br, requestHeader.getValue("Content-Length"), requestLine);
+        }
+        return null;
     }
 
     public RequestBody getRequestBody() {

@@ -30,7 +30,7 @@ public class HttpResponse {
             byte[] body = FileIoUtils.loadFileFromClasspath(staticFile.getPrefix() + path);
 
             headers = StaticFile.writeContentType(headers, path);
-            addHeader("Content-Length", body.length + "");
+            addHeader("Content-Length", String.valueOf(body.length));
             response200Header(body.length);
             responseBody(body);
         } catch (IOException | URISyntaxException e) {

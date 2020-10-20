@@ -20,10 +20,12 @@ public class RequestBody {
     }
 
     public static RequestBody of(BufferedReader br, String value, RequestLine requestLine) throws IOException {
-        String data = IOUtils.readData(br, Integer.parseInt(value));
         Map<String, String> queryParams = new HashMap<>();
+
+        String data = IOUtils.readData(br, Integer.parseInt(value));
         parseFromUrl(queryParams, requestLine.getRawPath());
         parseFromBody(queryParams, data);
+
         return new RequestBody(queryParams);
     }
 
