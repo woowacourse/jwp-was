@@ -12,7 +12,6 @@ import java.util.concurrent.Executors;
 public class WebServer {
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
     private static final int DEFAULT_PORT = 8080;
-    private static final int FIXED_THREAD_SIZE = 10;
 
     public static void main(String args[]) throws Exception {
         int port = 0;
@@ -27,7 +26,7 @@ public class WebServer {
             logger.info("Web Application Server started {} port.", port);
             // 클라이언트가 연결될때까지 대기한다.
             Socket connection;
-            ExecutorService executor = Executors.newFixedThreadPool(FIXED_THREAD_SIZE);
+            ExecutorService executor = Executors.newCachedThreadPool();
             while ((connection = listenSocket.accept()) != null) {
                 executor.submit(new RequestHandler(connection));
             }
