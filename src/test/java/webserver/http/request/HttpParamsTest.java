@@ -1,8 +1,10 @@
-package model;
+package webserver.http.request;
 
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
+
+import model.User;
 
 class HttpParamsTest {
 

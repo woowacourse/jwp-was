@@ -1,4 +1,4 @@
-package model;
+package webserver.http.request;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.DynamicTest.*;

@@ -1,4 +1,4 @@
-package model;
+package webserver.http.service;
 
 import static utils.FileIoUtils.*;
 
@@ -9,6 +9,12 @@ import java.net.URISyntaxException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import webserver.http.request.HttpBody;
+import webserver.http.request.HttpHeader;
+import webserver.http.request.HttpHeaderFields;
+import webserver.http.request.HttpVersion;
+import webserver.http.request.RequestURI;
 
 public class HttpGetService extends AbstractHttpService {
     private static final Logger logger = LoggerFactory.getLogger(HttpGetService.class);

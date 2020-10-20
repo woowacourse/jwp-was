@@ -1,4 +1,4 @@
-package model;
+package webserver.http.request;
 
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;

@@ -1,4 +1,4 @@
-package model;
+package webserver.http.request;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.DynamicTest.*;
@@ -10,6 +10,9 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
+
+import webserver.http.service.HttpGetService;
+import webserver.http.service.HttpPostService;
 
 public class HttpRequestTest {
     @TestFactory

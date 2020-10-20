@@ -1,6 +1,7 @@
-package model;
+package webserver.http.request;
 
 import static java.lang.Integer.*;
+import static java.util.Objects.*;
 import static utils.IOUtils.*;
 import static utils.Strings.*;
 
@@ -8,7 +9,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class HttpRequestFactory {
     private static final int HTTP_METHOD = 0;
@@ -39,7 +39,7 @@ public class HttpRequestFactory {
     private Map<String, String> extractFields(BufferedReader br) throws IOException {
         Map<String, String> fields = new HashMap<>();
         String line = br.readLine();
-        while (Objects.nonNull(line) && !EMPTY.equals(line)) {
+        while (nonNull(line) && !EMPTY.equals(line)) {
             int indexOfDelimiter = line.indexOf(HEADER_DELIMITER);
             String key = line.substring(0, indexOfDelimiter);
             String value = line.substring(indexOfDelimiter + 2);
@@ -50,9 +50,9 @@ public class HttpRequestFactory {
     }
 
     private HttpBody extractBody(BufferedReader br, HttpHeader header) throws IOException {
-        if (br.ready()) {
-            int contentLength = parseInt(header.get(HttpHeaderFields.CONTENT_LENGTH));
-            return new HttpBody(readData(br, contentLength));
+        String contentLength = header.get(HttpHeaderFields.CONTENT_LENGTH);
+        if (br.ready() && nonNull(contentLength)) {
+            return new HttpBody(readData(br, parseInt(contentLength)));
         }
         return HttpBody.EMPTY_BODY;
     }

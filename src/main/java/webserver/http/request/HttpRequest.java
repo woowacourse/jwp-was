@@ -1,4 +1,6 @@
-package model;
+package webserver.http.request;
+
+import webserver.http.service.AbstractHttpService;
 
 public class HttpRequest {
     private final HttpHeader header;
