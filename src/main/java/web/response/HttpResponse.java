@@ -54,10 +54,11 @@ public class HttpResponse {
 
     private void write() {
         try {
-            responseLine.write(dataOutputStream);
-            httpHeader.write(dataOutputStream);
+            dataOutputStream.writeBytes(responseLine.toString() + " \r\n");
+            dataOutputStream.writeBytes(httpHeader.toString() + "\n");
             if (Objects.nonNull(responseBody)) {
-                responseBody.write(dataOutputStream);
+                byte[] body = responseBody.getBody();
+                dataOutputStream.write(body, 0, body.length);
             }
             dataOutputStream.flush();
         } catch (IOException e) {

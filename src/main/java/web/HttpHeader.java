@@ -1,7 +1,5 @@
 package web;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,12 +39,17 @@ public class HttpHeader {
         return Integer.parseInt(contentLength);
     }
 
-    public void write(DataOutputStream dataOutputStream) throws IOException {
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
         for (Map.Entry<String, String> entry : headers.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
-            dataOutputStream.writeBytes(key + HEADER_DELIMITER + value + " \r\n");
+            stringBuilder.append(key)
+                    .append(HEADER_DELIMITER)
+                    .append(value)
+                    .append(" \r\n");
         }
-        dataOutputStream.writeBytes("\n");
+        return stringBuilder.toString();
     }
 }
