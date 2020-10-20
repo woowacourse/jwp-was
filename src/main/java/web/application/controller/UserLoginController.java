@@ -3,6 +3,7 @@ package web.application.controller;
 import web.application.common.FilePrefixPathMapper;
 import web.application.service.UserService;
 import web.server.domain.request.HttpRequest;
+import web.server.domain.request.HttpSession;
 import web.server.domain.response.HttpResponse;
 import web.server.domain.response.ResponseCookie;
 import web.server.utils.StaticFileType;
@@ -21,7 +22,11 @@ public class UserLoginController extends AbstractController {
         UserService userService = UserService.getInstance();
         boolean isLogined = userService.isValidatedUser(userId, password);
 
-        ResponseCookie responseCookie = new ResponseCookie("logined", String.valueOf(isLogined), "Path=/");
+        HttpSession session = httpRequest.getSession();
+        session.setAttribute("logined", isLogined);
+        String sessionId = session.getId();
+
+        ResponseCookie responseCookie = new ResponseCookie("JSESSIONID", sessionId, "Path=/");
         httpResponse.addCookie(responseCookie);
 
         FilePrefixPathMapper filePrefixPathMapper = FilePrefixPathMapper.getInstance();
