@@ -102,5 +102,14 @@
 <script src="../js/jquery-2.2.0.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>
 <script src="../js/scripts.js"></script>
+<script>
+    const getCookie = function(name) {
+        const value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+        return value? value[2] : null;
+    }
+    if(!getCookie("logined") || getCookie("logined") === "false") {
+        window.location.replace("/user/login.html");
+    }
+</script>
 	</body>
 </html>
