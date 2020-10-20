@@ -20,4 +20,8 @@ public enum HttpVersion {
                         new NoSuchElementException("해당하는 HTTP Version 이 없습니다. : " + version)
                 );
     }
+
+    public String getVersion() {
+        return version;
+    }
 }

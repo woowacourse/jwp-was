@@ -26,7 +26,7 @@ public class HttpRequestTest {
         BufferedReader br = new BufferedReader(sr);
         HttpRequest httpRequest = new HttpRequestFactory().create(br);
 
-        assertThat(httpRequest.getService()).isInstanceOf(HttpGetService.class);
+        assertThat(httpRequest.createService()).isInstanceOf(HttpGetService.class);
     }
 
     private void serviceOfPost() throws IOException {
@@ -35,6 +35,6 @@ public class HttpRequestTest {
         BufferedReader br = new BufferedReader(sr);
         HttpRequest httpRequest = new HttpRequestFactory().create(br);
 
-        assertThat(httpRequest.getService()).isInstanceOf(HttpPostService.class);
+        assertThat(httpRequest.createService()).isInstanceOf(HttpPostService.class);
     }
 }

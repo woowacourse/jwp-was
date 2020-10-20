@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 
 public class HttpGetService extends AbstractHttpService {
     private static final Logger logger = LoggerFactory.getLogger(HttpGetService.class);
-    private static final String FILE_PATH = "./templates";
 
     public HttpGetService(HttpHeader header, HttpBody body) {
         super(header, body);
@@ -21,19 +20,18 @@ public class HttpGetService extends AbstractHttpService {
     @Override
     public void doService(OutputStream out) throws URISyntaxException, IOException {
         DataOutputStream dos = new DataOutputStream(out);
-        String classPath = FILE_PATH + header.getRequestURI().getUri();
-        logger.debug(classPath);
+        RequestURI uri = header.getRequestURI();
 
-        byte[] body = loadFileFromClasspath(classPath);
-        response200Header(dos, body.length);
+        byte[] body = loadFileFromClasspath(uri.getClassPath());
+        response200Header(dos, body.length, uri.getContentType());
         responseBody(dos, body);
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response200Header(DataOutputStream dos, int lengthOfContent, String contentType) {
         try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes(HttpVersion.HTTP_1_1.getVersion() + " 200 OK \r\n");
+            dos.writeBytes(HttpHeaderFields.CONTENT_TYPE + ": " + contentType + "\r\n");
+            dos.writeBytes(HttpHeaderFields.CONTENT_LENGTH + ": " + lengthOfContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());

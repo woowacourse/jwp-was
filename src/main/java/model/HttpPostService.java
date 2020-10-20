@@ -1,5 +1,7 @@
 package model;
 
+import static webserver.WebServer.*;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -21,14 +23,14 @@ public class HttpPostService extends AbstractHttpService {
         DataOutputStream dos = new DataOutputStream(out);
         HttpParams bodyParams = HttpParams.of(body.getBody());
         DataBase.addUser(bodyParams.toModel(User.class));
-        DataBase.findAll().forEach(user -> logger.debug(user.toString()));
         response302Header(dos);
     }
 
     private void response302Header(DataOutputStream dos) {
         try {
-            dos.writeBytes("HTTP/1.1 302 Found \r\n");
-            dos.writeBytes("Location: " + "http://localhost:8080/index.html" + "\r\n");
+            dos.writeBytes(HttpVersion.HTTP_1_1.getVersion() + " 302 Found \r\n");
+            dos.writeBytes(
+                    "Location: http://" + BASE_URL + ":" + DEFAULT_PORT + "/index.html \r\n");
             dos.writeBytes("\r\n");
             dos.flush();
         } catch (IOException e) {

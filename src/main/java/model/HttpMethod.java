@@ -6,13 +6,13 @@ public enum HttpMethod {
     GET(HttpGetService::new),
     POST(HttpPostService::new);
 
-    private final BiFunction<HttpHeader, HttpBody, AbstractHttpService> getService;
+    private final BiFunction<HttpHeader, HttpBody, AbstractHttpService> createService;
 
-    HttpMethod(BiFunction<HttpHeader, HttpBody, AbstractHttpService> getService) {
-        this.getService = getService;
+    HttpMethod(BiFunction<HttpHeader, HttpBody, AbstractHttpService> createService) {
+        this.createService = createService;
     }
 
-    public AbstractHttpService getService(HttpHeader header, HttpBody body) {
-        return getService.apply(header, body);
+    public AbstractHttpService createService(HttpHeader header, HttpBody body) {
+        return createService.apply(header, body);
     }
 }
