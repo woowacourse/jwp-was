@@ -1,6 +1,6 @@
 package web.response;
 
-public enum Status {
+public enum ResponseStatus {
     OK(200, "OK"),
     FOUND(302, "FOUND"),
     BAD_REQUEST(400, "BAD REQUEST");
@@ -8,7 +8,7 @@ public enum Status {
     private final int code;
     private final String name;
 
-    Status(int code, String name) {
+    ResponseStatus(int code, String name) {
         this.code = code;
         this.name = name;
     }

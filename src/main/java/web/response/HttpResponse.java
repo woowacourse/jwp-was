@@ -33,20 +33,20 @@ public class HttpResponse {
 
     public void ok(String path, String contentType) throws IOException, URISyntaxException {
         String filePath = URIUtils.getFilePath(path);
-        responseLine = new ResponseLine(Status.OK, HTTP_VERSION);
+        responseLine = new ResponseLine(ResponseStatus.OK, HTTP_VERSION);
         addHeader(HttpHeader.CONTENT_TYPE, contentType + ";charset=UTF-8");
         responseBody = new ResponseBody(FileIoUtils.loadFileFromClasspath(filePath));
         write();
     }
 
     public void found(String location) {
-        responseLine = new ResponseLine(Status.FOUND, HTTP_VERSION);
+        responseLine = new ResponseLine(ResponseStatus.FOUND, HTTP_VERSION);
         addHeader(HttpHeader.LOCATION, location);
         write();
     }
 
     public void badRequest(String message) {
-        responseLine = new ResponseLine(Status.BAD_REQUEST, HTTP_VERSION);
+        responseLine = new ResponseLine(ResponseStatus.BAD_REQUEST, HTTP_VERSION);
         String errorMessage = BAD_REQUEST_ERROR_MESSAGE + message;
         responseBody = new ResponseBody(errorMessage.getBytes());
         write();
