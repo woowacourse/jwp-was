@@ -40,7 +40,7 @@ public class HttpRequestLine {
         if (resourcePath.equals(line)) {
             return new HashMap<>();
         }
-        return ParameterParser.parse(line.substring(resourcePath.length() + 1));
+        return Parser.parseParameter(line.substring(resourcePath.length() + 1));
     }
 
     public HttpMethod getHttpMethod() {

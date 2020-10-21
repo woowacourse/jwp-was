@@ -39,6 +39,9 @@ class HttpRequestTest {
 
         // then
         assertThat(httpRequest.getHttpMethod()).isEqualTo(HttpMethod.GET);
+        assertThat(httpRequest.getHeaders().get("Host")).isEqualTo("localhost:8080");
+        assertThat(httpRequest.getHeaders().get("Connection")).isEqualTo("keep-alive");
+        assertThat(httpRequest.getHeaders().get("Accept")).isEqualTo("*/*");
         assertThat(httpRequest.getResourcePath()).isEqualTo("/user/create");
         assertThat(httpRequest.getQueryParameters()).containsExactlyEntriesOf(queryParameters);
     }
@@ -68,6 +71,9 @@ class HttpRequestTest {
 
         // then
         assertThat(httpRequest.getHttpMethod()).isEqualTo(HttpMethod.POST);
+        assertThat(httpRequest.getHeaders().get("Host")).isEqualTo("localhost:8080");
+        assertThat(httpRequest.getHeaders().get("Connection")).isEqualTo("keep-alive");
+        assertThat(httpRequest.getHeaders().get("Accept")).isEqualTo("*/*");
         assertThat(httpRequest.getResourcePath()).isEqualTo("/user/create");
         assertThat(httpRequest.getBody()).containsExactlyEntriesOf(body);
     }
