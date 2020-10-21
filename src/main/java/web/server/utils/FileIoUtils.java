@@ -17,8 +17,7 @@ public class FileIoUtils {
         }
     }
 
-    public static byte[] loadFileFromRequest(StaticFileType staticFileType, String path) {
-        String filePath = staticFileType.getPath() + path;
+    public static byte[] loadFileFromRequest(String filePath) {
         return loadFileFromClasspath(filePath);
     }
 }

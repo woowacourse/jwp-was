@@ -1,24 +1,25 @@
 package web.server;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.util.function.BiConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import web.application.FrontController;
-import web.application.controller.StaticController;
-import web.application.vo.RequestVo;
+import web.application.UrlMapper;
+import web.application.controller.Controller;
 import web.server.domain.request.HttpRequest;
 import web.server.domain.response.HttpResponse;
 
 public class RequestHandler implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final Controller CONTROLLER = new FrontController(UrlMapper.getInstance());
 
     private Socket connection;
 
@@ -31,19 +32,13 @@ public class RequestHandler implements Runnable {
             connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream();
-            BufferedReader bufferedReader = new BufferedReader((new InputStreamReader(in, StandardCharsets.UTF_8)))) {
+            BufferedReader bufferedReader = new BufferedReader((new InputStreamReader(in, StandardCharsets.UTF_8)));
+            DataOutputStream dataOutputStream = new DataOutputStream(out)) {
 
             HttpRequest httpRequest = new HttpRequest(bufferedReader);
-            HttpResponse httpResponse = new HttpResponse(out);
+            HttpResponse httpResponse = new HttpResponse(dataOutputStream);
 
-            if (httpRequest.hasPathOfStaticFile()) {
-                StaticController.getInstance()
-                    .service(httpRequest, httpResponse);
-            } else {
-                RequestVo requestVo = RequestVo.of(httpRequest.getPath(), httpRequest.getRequestMethod());
-                BiConsumer<HttpRequest, HttpResponse> service = FrontController.findMatchingService(requestVo);
-                service.accept(httpRequest, httpResponse);
-            }
+            CONTROLLER.service(httpRequest, httpResponse);
         } catch (IOException e) {
             logger.error(e.getMessage());
             e.printStackTrace();

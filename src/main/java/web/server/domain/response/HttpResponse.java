@@ -2,58 +2,44 @@ package web.server.domain.response;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import web.server.RequestHandler;
 import web.server.utils.FileIoUtils;
 import web.server.utils.StaticFileType;
 
 public class HttpResponse {
 
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
     private static final String NEW_LINE = System.lineSeparator();
 
     private final DataOutputStream dataOutputStream;
     private final Map<String, String> headerParams;
+    private final ResponseCookies responseCookies;
 
-    public HttpResponse(OutputStream outputStream) {
-        this.dataOutputStream = new DataOutputStream(outputStream);
+    public HttpResponse(DataOutputStream dataOutputStream) {
+        this.dataOutputStream = dataOutputStream;
         this.headerParams = new HashMap<>();
+        this.responseCookies = new ResponseCookies();
     }
 
-    private void response200Header() {
+    private void responseHeader(StatusCode statusCode) {
         try {
-            this.dataOutputStream.writeBytes("HTTP/1.1 200 OK " + NEW_LINE);
-            this.dataOutputStream
-                .writeBytes("Content-Type: " + headerParams.get("Content-Type") + ";charset=utf-8" + NEW_LINE);
-            this.dataOutputStream.writeBytes("Content-Length: " + headerParams.get("Content-Length") + NEW_LINE);
+            this.dataOutputStream.writeBytes(statusCode.getStatusLine() + NEW_LINE);
+            this.dataOutputStream.writeBytes(statusCode.getHeaders(headerParams));
+            writeCookies();
             this.dataOutputStream.writeBytes(NEW_LINE);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void response302Header() {
-        try {
-            this.dataOutputStream.writeBytes("HTTP/1.1 302 FOUND " + NEW_LINE);
-            this.dataOutputStream.writeBytes("Location: " + headerParams.get("Location") + NEW_LINE);
-            this.dataOutputStream.writeBytes(NEW_LINE);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void response404Header() {
-        try {
-            this.dataOutputStream.writeBytes("HTTP/1.1 404 NOT FOUND" + NEW_LINE);
-            this.dataOutputStream.writeBytes(NEW_LINE);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
+    private void writeCookies() throws IOException {
+        for (ResponseCookie responseCookie : responseCookies.getResponseCookies()) {
+            this.dataOutputStream.writeBytes(responseCookie.convertToString() + NEW_LINE);
         }
     }
 
@@ -66,23 +52,37 @@ public class HttpResponse {
         }
     }
 
-    public void forward(String path) {
-        String[] split = path.split("\\.");
-        StaticFileType contentType = StaticFileType.from(split[split.length - 1]);
-        byte[] body = FileIoUtils.loadFileFromRequest(contentType, path);
-        headerParams.put("Content-Type", contentType.getContentType());
+    public void forward(String content) {
+        byte[] body = content.getBytes();
+        headerParams.put("Content-Type", StaticFileType.HTML + ";charset=utf-8");
+        headerParams.put("Content-Length", String.valueOf(body.length));
+        responseHeader(StatusCode.OK);
+        responseBody(this.dataOutputStream, body);
+    }
+
+    public void forward(String path, StaticFileType staticFileType) {
+        byte[] body = FileIoUtils.loadFileFromRequest(path);
+        headerParams.put("Content-Type", staticFileType.getContentType() + ";charset=utf-8");
         headerParams.put("Content-Length", String.valueOf(body.length));
 
-        response200Header();
+        responseHeader(StatusCode.OK);
         responseBody(this.dataOutputStream, body);
     }
 
     public void sendRedirect(String path) {
         headerParams.put("Location", path);
-        response302Header();
+        responseHeader(StatusCode.FOUND);
     }
 
-    public void forwardPageNotFound() {
-        response404Header();
+    public void respondPageNotFound() {
+        responseHeader(StatusCode.NOT_FOUND);
+    }
+
+    public void respondMethodNotAllowed() {
+        responseHeader(StatusCode.METHOD_NOT_ALLOWED);
+    }
+
+    public void addCookie(ResponseCookie responseCookie) {
+        responseCookies.addCookie(responseCookie);
     }
 }

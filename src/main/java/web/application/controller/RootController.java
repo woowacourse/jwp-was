@@ -1,7 +1,9 @@
 package web.application.controller;
 
+import web.application.common.FilePrefixPathMapper;
 import web.server.domain.request.HttpRequest;
 import web.server.domain.response.HttpResponse;
+import web.server.utils.StaticFileType;
 
 public class RootController extends AbstractController {
 
@@ -10,15 +12,19 @@ public class RootController extends AbstractController {
     }
 
     public static RootController getInstance() {
-        return ControllerCache.rootController;
+        return ControllerCache.ROOT_CONTROLLER;
     }
 
     @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        httpResponse.forward("/index.html");
+        FilePrefixPathMapper filePrefixPathMapper = FilePrefixPathMapper.getInstance();
+        String filePath = filePrefixPathMapper.addPrefix("/index.html", StaticFileType.HTML);
+
+        httpResponse.forward(filePath, StaticFileType.HTML);
     }
 
     private static class ControllerCache {
-        private static final RootController rootController = new RootController();
+
+        private static final RootController ROOT_CONTROLLER = new RootController();
     }
 }

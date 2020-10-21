@@ -1,7 +1,9 @@
 package web.server.domain.request;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,7 +13,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +23,7 @@ class HttpRequestTest {
     @DisplayName("HttpRequest 받았을 때 RequestHeader URI의 QueryParam이 저장되는지 확인한다.")
     @Test
     void checkQueryParam() throws IOException {
-        InputStream in = new FileInputStream(new File(testDirectory + "http_get.txt"));
+        InputStream in = new FileInputStream(new File(testDirectory + "http_get_with_querystring.txt"));
         HttpRequest httpRequest = new HttpRequest(
             new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
         assertAll(
@@ -36,7 +37,7 @@ class HttpRequestTest {
     @DisplayName("HttpRequest 받았을 때 RequestBody의 FormData가 저장되는지 확인한다.")
     @Test
     void checkFormData() throws IOException {
-        InputStream in = new FileInputStream(new File(testDirectory + "http_post.txt"));
+        InputStream in = new FileInputStream(new File(testDirectory + "http_post_with_formdata.txt"));
         HttpRequest httpRequest = new HttpRequest(
             new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
         assertAll(
@@ -50,7 +51,7 @@ class HttpRequestTest {
     @DisplayName("HttpRequest 받았을 때 RequestLine가 저장되는지 확인한다.")
     @Test
     void checkRequestLine() throws IOException {
-        InputStream in = new FileInputStream(new File(testDirectory + "http_post.txt"));
+        InputStream in = new FileInputStream(new File(testDirectory + "http_post_with_formdata.txt"));
         HttpRequest httpRequest = new HttpRequest(
             new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
         assertAll(
@@ -62,7 +63,7 @@ class HttpRequestTest {
     @DisplayName("HttpRequest를 받았을 때 RequestHeader가 저장되는지 확인한다.")
     @Test
     void checkRequestHeader() throws IOException {
-        InputStream in = new FileInputStream(new File(testDirectory + "http_post.txt"));
+        InputStream in = new FileInputStream(new File(testDirectory + "http_post_with_formdata.txt"));
         HttpRequest httpRequest = new HttpRequest(
             new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
 
@@ -78,7 +79,8 @@ class HttpRequestTest {
     @DisplayName("Post 요청에서 Query String을 보낸 경우 값을 무시한다.")
     @Test
     public void request_POST2() throws Exception {
-        BufferedReader br = new BufferedReader(new FileReader(new File(testDirectory + "Http_POST2.txt")));
+        BufferedReader br = new BufferedReader(
+            new FileReader(new File(testDirectory + "http_post_with_querystring_formdata.txt")));
         HttpRequest request = new HttpRequest(br);
 
         assertAll(
@@ -93,7 +95,8 @@ class HttpRequestTest {
     @DisplayName("Get 요청에서 RequestBody 보낸 경우 값을 무시한다.")
     @Test
     public void request_GET2() throws Exception {
-        BufferedReader br = new BufferedReader(new FileReader(new File(testDirectory + "Http_GET2.txt")));
+        BufferedReader br = new BufferedReader(
+            new FileReader(new File(testDirectory + "http_get_with_querystring_formdata.txt")));
         HttpRequest request = new HttpRequest(br);
 
         assertAll(
