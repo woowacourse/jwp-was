@@ -2,9 +2,10 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import web.HandlerMapping;
 import web.HttpRequest;
 import web.HttpResponse;
-import web.filter.FilterChain;
+import web.servlet.Controller;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -35,8 +36,8 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = new HttpRequest(br);
             HttpResponse httpResponse = new HttpResponse(dos);
 
-            FilterChain filterChain = new FilterChain();
-            filterChain.doFilter(httpRequest, httpResponse);
+            Controller controller = HandlerMapping.find(httpRequest);
+            controller.doService(httpRequest, httpResponse);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
