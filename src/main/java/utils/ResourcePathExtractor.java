@@ -1,14 +1,13 @@
 package utils;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ResourcePathExtractor {
-    public static List<String> extract(String root) throws IOException {
+    public static List<String> extract(String root) {
         String rootPath = ClassLoader.getSystemResource(root).getFile();
         List<String> filePaths = new ArrayList<>();
         findFilePaths(filePaths, rootPath);
@@ -18,7 +17,7 @@ public class ResourcePathExtractor {
                 .collect(Collectors.toList());
     }
 
-    private static void findFilePaths(List<String> filePaths, String rootPath) throws IOException {
+    private static void findFilePaths(List<String> filePaths, String rootPath) {
         File rootFile = new File(rootPath);
         File[] files = rootFile.listFiles();
 
