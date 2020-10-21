@@ -7,13 +7,15 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ResourcePathExtractor {
-    public static List<String> extract(String root) {
+
+    public static List<ResourcePath> extract(String root) {
         String rootPath = ClassLoader.getSystemResource(root).getFile();
         List<String> filePaths = new ArrayList<>();
         findFilePaths(filePaths, rootPath);
 
         return filePaths.stream()
                 .map(path -> path.split(root)[1])
+                .map(requestPath -> new ResourcePath(root, requestPath))
                 .collect(Collectors.toList());
     }
 
