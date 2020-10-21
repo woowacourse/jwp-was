@@ -19,20 +19,35 @@ public class RequestBody {
         this.params = params;
     }
 
-    public static RequestBody of(BufferedReader br, String value) throws IOException {
+    public static RequestBody of(BufferedReader br, String value, RequestLine requestLine) throws IOException {
+        Map<String, String> queryParams = new HashMap<>();
+
         String data = IOUtils.readData(br, Integer.parseInt(value));
-        return new RequestBody(parseData(data));
+        parseFromUrl(queryParams, requestLine.getRawPath());
+        parseFromBody(queryParams, data);
+
+        return new RequestBody(queryParams);
     }
 
-    private static Map<String, String> parseData(String data) {
-        Map<String, String> queryParams = new HashMap<>();
-        int index = data.indexOf(QUESTION_MARK);
-        String[] params = data.substring(index+1).split(AMPERSAND);
+    private static void parseFromUrl(Map<String, String> queryParams, String path) {
+        int index = path.indexOf(QUESTION_MARK);
+        if (index == -1) {
+            return;
+        }
+        String[] params = path.substring(index+1).split(AMPERSAND);
+        addQueryParams(queryParams, params);
+    }
+
+    private static void parseFromBody(Map<String, String> queryParams, String data) {
+        String[] params = data.split(AMPERSAND);
+        addQueryParams(queryParams, params);
+    }
+
+    private static void addQueryParams(Map<String, String> queryParams, String[] params) {
         for (String param : params) {
             String[] entry = param.split(EQUAL_SIGN);
             queryParams.put(entry[0], entry[1]);
         }
-        return queryParams;
     }
 
     public Map<String, String> getParams() {

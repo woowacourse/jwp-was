@@ -5,13 +5,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 
 public class HttpRequest {
 
-    private RequestLine requestLine;
-    private RequestHeader requestHeader;
-    private RequestBody requestBody;
+    private final RequestLine requestLine;
+    private final RequestHeader requestHeader;
+    private final RequestBody requestBody;
 
     private HttpRequest(RequestLine requestLine, RequestHeader requestHeader, RequestBody requestBody) {
         this.requestLine = requestLine;
@@ -21,13 +20,20 @@ public class HttpRequest {
 
     public static HttpRequest from(InputStream in) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+
         RequestLine requestLine = RequestLine.from(br.readLine());
         RequestHeader requestHeader = RequestHeader.from(br);
-        RequestBody requestBody = null;
-        if (HttpMethod.POST == requestLine.getMethod()) {
-            requestBody = RequestBody.of(br, requestHeader.getValue("Content-Length"));
-        }
+        RequestBody requestBody = createRequestBody(br, requestLine, requestHeader);
+
         return new HttpRequest(requestLine, requestHeader, requestBody);
+    }
+
+    private static RequestBody createRequestBody(BufferedReader br, RequestLine requestLine,
+        RequestHeader requestHeader) throws IOException {
+        if (requestLine.isPost()) {
+            return RequestBody.of(br, requestHeader.getValue("Content-Length"), requestLine);
+        }
+        return null;
     }
 
     public RequestBody getRequestBody() {
@@ -42,7 +48,7 @@ public class HttpRequest {
         return requestLine.getPath();
     }
 
-    public Map<String, String> getHeaders() {
-        return requestHeader.getParams();
+    public String getHeaders(String key) {
+        return requestHeader.getParams().get(key);
     }
 }

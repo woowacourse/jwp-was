@@ -10,7 +10,7 @@ public class RequestHeader {
 
     private static final String COLON = ": ";
 
-    private Map<String, String> params;
+    private final Map<String, String> params;
 
     private RequestHeader(Map<String, String> params) {
         this.params = params;
