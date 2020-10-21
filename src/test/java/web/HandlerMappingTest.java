@@ -2,8 +2,8 @@ package web;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import web.servlet.Controller;
-import web.servlet.UserCreateController;
+import web.controller.Controller;
+import web.controller.UserCreateController;
 
 import java.io.*;
 

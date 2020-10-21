@@ -1,9 +1,9 @@
 package web;
 
 import utils.ResourcePathExtractor;
-import web.servlet.Controller;
-import web.servlet.ResourceController;
-import web.servlet.UserCreateController;
+import web.controller.Controller;
+import web.controller.ResourceController;
+import web.controller.UserCreateController;
 
 import java.util.HashMap;
 import java.util.List;
