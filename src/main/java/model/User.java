@@ -1,5 +1,9 @@
 package model;
 
+import java.util.Map;
+
+import http.request.Parameters;
+
 public class User {
     private String userId;
     private String password;
@@ -11,6 +15,16 @@ public class User {
         this.password = password;
         this.name = name;
         this.email = email;
+    }
+
+    public static User from(Map<String, String> parameters) {
+        return new User(parameters.get("userId"), parameters.get("password"),
+                parameters.get("name"), parameters.get("email"));
+    }
+
+    public static User from(Parameters parameters) {
+        return new User(parameters.getParameterBy("userId"), parameters.getParameterBy("password"),
+                parameters.getParameterBy("name"), parameters.getParameterBy("email"));
     }
 
     public String getUserId() {
@@ -31,6 +45,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User [userId=" + userId + ", password=" + password + ", name=" + name + ", email=" + email + "]";
+        return "User [userId=" + userId + ", password=" + password + ", name=" + name + ", email="
+                + email + "]";
     }
 }
