@@ -9,32 +9,37 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import exception.ViewNotFoundException;
+
 public class FileIoUtils {
     private static final List<String> BASE_PATH = Arrays.asList("templates", "static");
-    public static final String NOT_FOUND = "404 NOT FOUND 잘 부탁드립니다.";
-    public static final String INDEX_PAGE = "/index.html";
+    private static final String INDEX_PAGE = "/index.html";
+    private static final String DEFAULT_PATH = "/";
+    private static final String EXTENSION_DELIMITER = ".";
+    private static final String SUFFIX = ".html";
 
     public static byte[] loadFileFromClasspath(String filePath) throws IOException {
-        if (filePath.equals("/")) {
-            return loadFileFromClasspath("/index.html");
+        if (filePath.equals(DEFAULT_PATH)) {
+            return loadFileFromClasspath(INDEX_PAGE);
         }
 
-        if(!filePath.contains(".")) {
-            return "".getBytes();
+        if (!filePath.contains(EXTENSION_DELIMITER)) {
+            return loadFileFromClasspath("/" + filePath + SUFFIX);
         }
 
         Path path = BASE_PATH.stream()
             .map(base -> getPath(base + filePath))
             .filter(Objects::nonNull)
             .findAny()
-            .orElseGet(() -> getPath("static/notFound.html"));
+            .orElseThrow(() -> new ViewNotFoundException(filePath));
 
+        assert path != null;
         return Files.readAllBytes(path);
     }
 
     private static Path getPath(String path) {
         try {
-            return Paths.get(FileIoUtils.class.getClassLoader().getResource(path).toURI());
+            return Paths.get(Objects.requireNonNull(FileIoUtils.class.getClassLoader().getResource(path)).toURI());
         } catch (NullPointerException e) {
             return null;
         } catch (URISyntaxException e) {

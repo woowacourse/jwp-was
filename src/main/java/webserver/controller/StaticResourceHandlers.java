@@ -1,0 +1,18 @@
+package webserver.controller;
+
+import webserver.controller.annotation.Controller;
+import webserver.controller.annotation.RequestMapping;
+import webserver.request.MethodType;
+import webserver.request.ServletRequest;
+import webserver.response.ModelAndView;
+
+@Controller
+public class StaticResourceHandlers {
+
+    @RequestMapping(type = MethodType.GET, isResource = true)
+    public ModelAndView resolve(ServletRequest servletRequest) {
+        String path = servletRequest.getPath();
+
+        return ModelAndView.of(path);
+    }
+}

@@ -1,13 +1,13 @@
 package webserver;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.util.StopWatch;
-
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.StopWatch;
 
 public class ExecutorsTest {
     private static final Logger logger = LoggerFactory.getLogger(ExecutorsTest.class);
@@ -25,7 +25,7 @@ public class ExecutorsTest {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    logger.info(e.getMessage(), e);
                 }
                 logger.info("Thread {}", idx);
             });

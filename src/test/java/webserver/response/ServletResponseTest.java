@@ -1,7 +1,6 @@
-package webserver;
+package webserver.response;
 
 import static org.assertj.core.api.Assertions.*;
-import static webserver.ServletFixture.*;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -11,26 +10,24 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
 import java.util.Objects;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import webserver.ServletFixture;
 
 class ServletResponseTest {
 
     @DisplayName("정상적으로 Response 생성한다.")
     @Test
     void create() throws IOException {
-        ServletRequest servletRequest = new ServletRequest(REQUEST_HEADER, REQUEST_BODY);
-
         FileOutputStream fos = new FileOutputStream(new File("src/test/resources/response.txt"));
         DataOutputStream dos = new DataOutputStream(fos);
-        HashMap<String, String> attributes = new HashMap<>();
-        attributes.put("View", "index");
 
-        ServletResponse response = new ServletResponse(ServletResponse.StatusCode.OK, attributes);
-        response.createResponse(dos, servletRequest);
+        ModelAndView mav = ModelAndView.of("index");
+        ServletResponse response = ServletResponse.of(StatusCode.OK, mav);
+        response.sendResponse(dos);
 
         dos.close();
         fos.close();
