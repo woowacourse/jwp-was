@@ -1,6 +1,7 @@
-package web;
+package web.request;
 
 import utils.IOUtils;
+import web.HttpHeader;
 
 import java.io.BufferedReader;
 import java.io.IOException;

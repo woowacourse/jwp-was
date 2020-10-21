@@ -1,4 +1,4 @@
-package web;
+package web.request;
 
 public class RequestPath {
     private final String fullPath;

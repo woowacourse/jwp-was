@@ -3,8 +3,8 @@ package webserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import web.HandlerMapping;
-import web.HttpRequest;
-import web.HttpResponse;
+import web.request.HttpRequest;
+import web.response.HttpResponse;
 import web.controller.Controller;
 
 import java.io.BufferedReader;

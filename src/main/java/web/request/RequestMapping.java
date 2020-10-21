@@ -1,4 +1,4 @@
-package web;
+package web.request;
 
 import java.util.Objects;
 

@@ -1,6 +1,7 @@
 package web;
 
 import org.junit.jupiter.api.Test;
+import web.request.HttpRequest;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;

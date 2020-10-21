@@ -1,4 +1,4 @@
-package web;
+package web.request;
 
 public class UrlParameter {
     private static final int KEY_INDEX = 0;

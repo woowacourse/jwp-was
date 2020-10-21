@@ -1,7 +1,9 @@
-package web;
+package web.response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import web.HeaderName;
+import web.HttpHeader;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

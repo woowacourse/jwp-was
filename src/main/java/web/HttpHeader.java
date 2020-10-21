@@ -28,7 +28,7 @@ public class HttpHeader {
     }
 
     public int getContentLength() {
-        String contentLength = headers.get("Content-Length");
+        String contentLength = headers.get(HeaderName.CONTENT_LENGTH.getName());
         return Integer.parseInt(contentLength);
     }
 
