@@ -13,7 +13,7 @@ import jwp.was.webapplicationserver.configure.annotation.ResponseBody;
 import jwp.was.webapplicationserver.configure.controller.info.MatchedInfo;
 import jwp.was.webapplicationserver.configure.controller.info.ModelAndView;
 import jwp.was.webapplicationserver.configure.maker.ConfigureMaker;
-import jwp.was.webapplicationserver.configure.security.LoginConfigure;
+import jwp.was.webapplicationserver.configure.security.WithLoginConfigure;
 import jwp.was.webapplicationserver.controller.GlobalExceptionHandler;
 import jwp.was.webserver.dto.HttpRequest;
 import jwp.was.webserver.dto.HttpResponse;
@@ -28,7 +28,7 @@ public class ControllerHandler {
     private final ConfigureMaker configureMaker = ConfigureMaker.getInstance();
     private final ControllerMapper controllerMapper = ControllerMapper.getInstance();
     private final GlobalExceptionHandler globalExceptionHandler = new GlobalExceptionHandler();
-    private final LoginConfigure loginConfigure = LoginConfigure.getInstance();
+    private final WithLoginConfigure withLoginConfigure = WithLoginConfigure.getInstance();
 
     public ControllerHandler() {
     }
@@ -43,17 +43,20 @@ public class ControllerHandler {
     }
 
     private HttpResponse makeHttpResponse(HttpRequest httpRequest, MatchedInfo matchedInfo) {
-        if (matchedInfo.isMatch()) {
-            if (loginConfigure.verifyLogin(httpRequest)) {
-                return executeMatchedMethod(httpRequest, matchedInfo);
-            }
-            return loginConfigure.getRedirectLoginPage(httpRequest);
+        if (withLoginConfigure.verifyLogin(httpRequest)) {
+            return getHttpResponseAfterLogin(httpRequest, matchedInfo);
         }
+        return withLoginConfigure.getRedirectLoginPage(httpRequest);
+    }
 
+    private HttpResponse getHttpResponseAfterLogin(HttpRequest httpRequest,
+        MatchedInfo matchedInfo) {
+        if (matchedInfo.isMatch()) {
+            return executeMatchedMethod(httpRequest, matchedInfo);
+        }
         if (matchedInfo.isNotMatch() && matchedInfo.anyMatchUrlPath()) {
             return globalExceptionHandler.handleHttpStatusCode(httpRequest, METHOD_NOT_ALLOW);
         }
-
         return globalExceptionHandler.handleHttpStatusCode(httpRequest, NOT_FOUND);
     }
 

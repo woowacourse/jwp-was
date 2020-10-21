@@ -2,7 +2,7 @@ package jwp.was.webapplicationserver.controller;
 
 import static com.google.common.net.HttpHeaders.LOCATION;
 import static com.google.common.net.HttpHeaders.SET_COOKIE;
-import static jwp.was.webapplicationserver.configure.security.LoginConfigure.SET_COOKIE_SESSION_ID_KEY;
+import static jwp.was.webapplicationserver.configure.security.WithLoginConfigure.SET_COOKIE_SESSION_ID_KEY;
 import static jwp.was.webserver.HttpStatusCode.FOUND;
 
 import java.util.HashMap;

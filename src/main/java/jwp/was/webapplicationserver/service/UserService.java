@@ -1,6 +1,6 @@
 package jwp.was.webapplicationserver.service;
 
-import static jwp.was.webapplicationserver.configure.security.LoginConfigure.ATTRIBUTE_KEY_USER;
+import static jwp.was.webapplicationserver.configure.security.WithLoginConfigure.ATTRIBUTE_KEY_USER;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +56,7 @@ public class UserService {
         HttpSession httpSession = new HttpSessionImpl();
         String sessionId = httpSession.getId();
         httpSession.setAttribute(ATTRIBUTE_KEY_USER, foundUser);
+        httpSessions.saveSession(httpSession);
         return sessionId;
     }
 }

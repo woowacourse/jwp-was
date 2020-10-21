@@ -16,7 +16,7 @@ import static jwp.was.util.Constants.USER_EMAIL;
 import static jwp.was.util.Constants.USER_ID;
 import static jwp.was.util.Constants.USER_NAME;
 import static jwp.was.util.Constants.USER_PASSWORD;
-import static jwp.was.webapplicationserver.configure.security.LoginConfigure.ATTRIBUTE_KEY_USER;
+import static jwp.was.webapplicationserver.configure.security.WithLoginConfigure.ATTRIBUTE_KEY_USER;
 import static jwp.was.webserver.HttpMethod.CONNECT;
 import static jwp.was.webserver.HttpMethod.GET;
 import static jwp.was.webserver.HttpMethod.POST;
