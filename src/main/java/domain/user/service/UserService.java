@@ -9,11 +9,11 @@ import domain.user.model.User;
 public class UserService {
     private static final UserService instance = new UserService();
 
-    public static UserService getInstance() {
-        return instance;
+    private UserService() {
     }
 
-    private UserService() {
+    public static UserService getInstance() {
+        return instance;
     }
 
     public void addUser(User user) {
@@ -21,7 +21,7 @@ public class UserService {
     }
 
     public User findByUserId(String userId) {
-        return UserRepository.findUserByUserId(userId);
+        return UserRepository.findByUserId(userId);
     }
 
     public List<User> list() {

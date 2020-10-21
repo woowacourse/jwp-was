@@ -21,13 +21,12 @@ public class UserCreateController extends AbstractController {
         if (!httpRequest.containsAll(User.USER_ID, User.PASSWORD, User.NAME, User.EMAIL)) {
             httpResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
             httpResponse.error();
+            return;
         }
-        if (httpRequest.containsAll(User.USER_ID, User.PASSWORD, User.NAME, User.EMAIL)) {
-            User user = new User(httpRequest.getParameter(User.USER_ID), httpRequest.getParameter(User.PASSWORD),
-                httpRequest.getParameter(User.NAME), httpRequest.getParameter(User.EMAIL));
-            userService.addUser(user);
-            httpResponse.setHttpStatus(HttpStatus.FOUND);
-            httpResponse.sendRedirect("/index.html");
-        }
+        User user = new User(httpRequest.getParameter(User.USER_ID), httpRequest.getParameter(User.PASSWORD),
+            httpRequest.getParameter(User.NAME), httpRequest.getParameter(User.EMAIL));
+        userService.addUser(user);
+        httpResponse.setHttpStatus(HttpStatus.FOUND);
+        httpResponse.sendRedirect("/index.html");
     }
 }

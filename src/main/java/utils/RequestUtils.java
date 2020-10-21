@@ -41,14 +41,12 @@ public class RequestUtils {
             .collect(Collectors.toMap(strings -> strings[0], strings -> strings[1], (k, v) -> v, TreeMap::new));
     }
 
-    public static boolean logined(String cookie) {
+    public static String extractSessionId(String cookie) {
         String[] split = cookie.split(SEMICOLON);
-        String answer = Arrays.stream(split)
+        return Arrays.stream(split)
             .map(str -> str.split(EQUALS_REGEX))
-            .filter(strings -> "logined".equals(strings[0].trim()))
+            .filter(strings -> "SESSIONID".equals(strings[0].trim()))
             .findFirst()
-            .orElseGet(() -> new String[] {"logined", "false"})[1];
-
-        return Boolean.parseBoolean(answer);
+            .orElseGet(() -> new String[] {"", null})[1];
     }
 }

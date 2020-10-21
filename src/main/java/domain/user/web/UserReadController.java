@@ -27,14 +27,13 @@ public class UserReadController extends AbstractController {
         if (user == null) {
             validateParameter(httpRequest, httpResponse);
             httpResponse.error();
+            return;
         }
-        if (user != null) {
-            byte[] body = objectMapper.writeValueAsBytes(user);
-            httpResponse.setHttpStatus(HttpStatus.OK);
-            httpResponse.addHeader(HttpHeader.CONTENT_TYPE, "application/json;charset=UTF-8");
-            httpResponse.addHeader(HttpHeader.CONTENT_LENGTH, String.valueOf(body.length));
-            httpResponse.forward(body);
-        }
+        byte[] body = objectMapper.writeValueAsBytes(user);
+        httpResponse.setHttpStatus(HttpStatus.OK);
+        httpResponse.addHeader(HttpHeader.CONTENT_TYPE, "application/json;charset=UTF-8");
+        httpResponse.addHeader(HttpHeader.CONTENT_LENGTH, String.valueOf(body.length));
+        httpResponse.forward(body);
     }
 
     private void validateParameter(HttpRequest httpRequest, HttpResponse httpResponse) {

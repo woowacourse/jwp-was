@@ -68,12 +68,12 @@ public class HttpRequest {
         return new TreeMap<>();
     }
 
-    public boolean logined() {
+    public String getSessionId() {
         String cookie = header.get(HttpHeader.COOKIE);
         if (cookie == null) {
-            return false;
+            return null;
         }
-        return RequestUtils.logined(cookie);
+        return RequestUtils.extractSessionId(cookie);
     }
 
     public boolean isGet() {
