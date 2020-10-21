@@ -1,4 +1,4 @@
-package web.servlet;
+package web.controller;
 
 import utils.FileIoUtils;
 import web.HeaderName;

@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import web.HandlerMapping;
 import web.HttpRequest;
 import web.HttpResponse;
-import web.servlet.Controller;
+import web.controller.Controller;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
