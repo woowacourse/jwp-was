@@ -1,4 +1,4 @@
-package web.filter;
+package utils;
 
 import web.ContentType;
 
