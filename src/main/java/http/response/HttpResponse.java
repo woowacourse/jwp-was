@@ -94,4 +94,8 @@ public class HttpResponse {
     public void setBody(byte[] body) {
         this.body = body;
     }
+
+    public boolean hasModel() {
+        return Objects.nonNull(modelAndView.getModel());
+    }
 }

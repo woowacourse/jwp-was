@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import http.StaticFile;
 import utils.FileIoUtils;
+import view.ViewResolver;
 
 public class ResponseEntity {
 
@@ -19,8 +20,13 @@ public class ResponseEntity {
     private static final String SPACE = " ";
     private static final String CONTENT_TYPE = "Content-Type";
     private static final String CONTENT_LENGTH = "Content-Length";
+    private final ViewResolver viewResolver;
 
-    public static void build(HttpResponse httpResponse) {
+    public ResponseEntity(ViewResolver viewResolver) {
+        this.viewResolver = viewResolver;
+    }
+
+    public void build(HttpResponse httpResponse) {
         try {
             DataOutputStream dataOutputStream = new DataOutputStream(httpResponse.getOutputStream());
             responseStatus(httpResponse, dataOutputStream);
@@ -31,13 +37,13 @@ public class ResponseEntity {
         }
     }
 
-    private static void responseStatus(HttpResponse httpResponse, DataOutputStream dataOutputStream) throws
+    private void responseStatus(HttpResponse httpResponse, DataOutputStream dataOutputStream) throws
         IOException {
         dataOutputStream.writeBytes(
             httpResponse.getVersion().getVersion() + SPACE + httpResponse.getStatus().getMessage() + lineSeparator);
     }
 
-    private static void responseHeader(HttpResponse httpResponse, DataOutputStream dataOutputStream) throws
+    private void responseHeader(HttpResponse httpResponse, DataOutputStream dataOutputStream) throws
         IOException {
         for (Map.Entry<String, String> headerKeyValue : httpResponse.getHeaders().entrySet()) {
             logger.info("{}", headerKeyValue.getKey() + HEADER_DELIMITER + headerKeyValue.getValue());
@@ -46,10 +52,15 @@ public class ResponseEntity {
         }
     }
 
-    private static void responseBody(HttpResponse httpResponse, DataOutputStream dataOutputStream) throws
+    private void responseBody(HttpResponse httpResponse, DataOutputStream dataOutputStream) throws
         IOException,
         URISyntaxException {
         if (!httpResponse.hasResource()) {
+            return;
+        }
+
+        if (httpResponse.hasModel()) {
+            this.viewResolver.render(httpResponse, dataOutputStream);
             return;
         }
 

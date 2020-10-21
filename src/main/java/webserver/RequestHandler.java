@@ -12,6 +12,7 @@ import http.controller.HttpRequestController;
 import http.controller.LoginController;
 import http.controller.ResourceController;
 import http.controller.UserCreateController;
+import http.controller.UserListController;
 import http.request.HttpRequest;
 import http.request.HttpRequestMapping;
 import http.request.HttpRequestParser;
@@ -20,6 +21,7 @@ import http.response.ResponseEntity;
 import http.session.HttpSessionManager;
 import http.session.RandomGenerateStrategy;
 import http.session.SessionManager;
+import view.HandleBarViewResolver;
 
 public class RequestHandler implements Runnable {
 
@@ -40,9 +42,11 @@ public class RequestHandler implements Runnable {
             new ResourceController(HttpRequestMapping.GET("/")));
         UserCreateController userCreateController = new UserCreateController(HttpRequestMapping.POST("/user/create"));
         LoginController loginController = new LoginController(HttpRequestMapping.POST("/user/login"));
+        UserListController userListController = new UserListController(HttpRequestMapping.GET("/user/list"));
 
         httpRequestController.addController(userCreateController);
         httpRequestController.addController(loginController);
+        httpRequestController.addController(userListController);
         return httpRequestController;
     }
 
@@ -56,7 +60,7 @@ public class RequestHandler implements Runnable {
             httpRequest.setSessionManager(this.sessionManager);
             HttpResponse httpResponse = HttpResponse.from(out);
             httpRequestController.doService(httpRequest, httpResponse);
-            ResponseEntity.build(httpResponse);
+            new ResponseEntity(new HandleBarViewResolver()).build(httpResponse);
 
         } catch (IOException e) {
             logger.error(e.getMessage());
