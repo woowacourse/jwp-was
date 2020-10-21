@@ -17,27 +17,34 @@ class HttpRequestTest {
 	void of() throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader("./src/test/java/web/example.txt"));
 
-		Map<String, String> header = new HashMap<>();
-		header.put("Host", "localhost:8080");
-		header.put("Connection", "keep-alive");
-		header.put("Content-Length", "59");
-		header.put("Content-Type", "application/x-www-form-urlencoded");
-		header.put("Accept", "*/*");
+		Map<String, String> headers = new HashMap<>();
+		headers.put("Host", "localhost:8080");
+		headers.put("Connection", "keep-alive");
+		headers.put("Content-Length", "59");
+		headers.put("Content-Type", "application/x-www-form-urlencoded");
+		headers.put("Accept", "*/*");
 
-		Map<String, String> parameter = new HashMap<>();
-		parameter.put("userId", "javajigi");
-		parameter.put("password", "password");
-		parameter.put("name", "박재성");
-		parameter.put("email", "javajigi@slipp.net");
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("userId", "javajigi");
+		parameters.put("password", "password");
+		parameters.put("name", "박재성");
+		parameters.put("email", "javajigi@slipp.net");
 
-		HttpRequest expect = new HttpRequest(HttpMethod.POST, "/user/create", header, parameter);
+		RequestLine requestLine = new RequestLine(HttpMethod.POST, "/user/create");
 
-		HttpRequest request = HttpRequest.of(br);
+		Header header = new Header(headers);
+
+		Parameter parameter = new Parameter(parameters);
+
+		HttpRequest expect = new HttpRequest(requestLine, header, parameter);
+
+		HttpRequest actual = HttpRequest.of(br);
+
 		assertAll(
-			() -> assertThat(request.getMethod()).isEqualTo(expect.getMethod()),
-			() -> assertThat(request.getPath()).isEqualTo(expect.getPath()),
-			() -> assertThat(request.getHeader("Content-Length")).isEqualTo(expect.getHeader("Content-Length")),
-			() -> assertThat(request.getParameter("userId")).isEqualTo(expect.getParameter("userId"))
+			() -> assertThat(actual.getMethod()).isEqualTo(expect.getMethod()),
+			() -> assertThat(actual.getPath()).isEqualTo(expect.getPath()),
+			() -> assertThat(actual.getHeader("Content-Length")).isEqualTo(expect.getHeader("Content-Length")),
+			() -> assertThat(actual.getParameter("userId")).isEqualTo(expect.getParameter("userId"))
 		);
 	}
 }

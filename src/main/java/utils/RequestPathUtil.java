@@ -1,9 +1,5 @@
 package utils;
 
-import java.net.URLDecoder;
-import java.util.HashMap;
-import java.util.Map;
-
 public class RequestPathUtil {
 
 	public static final String HTML_FILE_TYPE = ".html";
@@ -17,15 +13,5 @@ public class RequestPathUtil {
 		}
 
 		return STATIC_PATH + path;
-	}
-
-	public static Map<String, String> extractParameters(String requestData) {
-		Map<String, String> signUpRequestData = new HashMap<>();
-		String[] requestParemeters = requestData.split("&");
-		for (String parameter : requestParemeters) {
-			String[] data = URLDecoder.decode(parameter).split("=");
-			signUpRequestData.put(data[0], data[1]);
-		}
-		return signUpRequestData;
 	}
 }
