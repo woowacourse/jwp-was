@@ -1,4 +1,4 @@
-package web;
+package web.response;
 
 public enum HttpStatusCode {
     OK("200 OK"),

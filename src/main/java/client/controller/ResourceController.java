@@ -1,10 +1,11 @@
-package web.controller;
+package client.controller;
 
 import utils.FileIoUtils;
 import web.HeaderName;
-import web.HttpRequest;
-import web.HttpResponse;
-import web.HttpStatusCode;
+import web.controller.Controller;
+import web.request.HttpRequest;
+import web.response.HttpResponse;
+import web.response.HttpStatusCode;
 import utils.ResourceMatcher;
 
 import java.io.IOException;

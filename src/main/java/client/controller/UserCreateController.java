@@ -1,8 +1,11 @@
-package web.controller;
+package client.controller;
 
 import db.DataBase;
 import model.User;
-import web.*;
+import web.controller.Controller;
+import web.request.HttpRequest;
+import web.request.RequestBody;
+import web.response.HttpResponse;
 
 public class UserCreateController implements Controller {
     @Override

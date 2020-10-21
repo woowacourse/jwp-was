@@ -1,4 +1,4 @@
-package web;
+package web.request;
 
 public class RequestBody {
     private final UrlParameters parameters;
