@@ -31,7 +31,7 @@ public class Context {
         SessionService sessionService = SessionService.getInstance();
 
         controllers.put("file", new FileController());
-        controllers.put("/user/create", new UserCreateController(userService));
+        controllers.put("/user/create", new UserCreateController(userService, sessionService));
         controllers.put("/user/profile", new UserReadController(userService, objectMapper));
         controllers.put("/user/login", new LoginController(userService, sessionService));
         controllers.put("/user/list", new UserListController(userService, sessionService, objectMapper));
