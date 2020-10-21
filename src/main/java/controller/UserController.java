@@ -1,16 +1,24 @@
 package controller;
 
-import http.request.Request;
-import http.response.Response;
+import java.io.IOException;
+
+import http.request.HttpRequest;
+import http.response.HttpResponse;
 import service.UserService;
 
-public class UserController implements Controller {
+public class UserController extends AbstractController {
 
-    private UserService userService = UserService.getInstance();
+    private final UserService userService = UserService.getInstance();
 
     @Override
-    public void run(Request request, Response response) {
-        userService.create(request);
-        response.response302Header(Integer.parseInt(request.getHeaderByName("Content-Length")));
+    void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+        userService.createRequestParams(httpRequest);
+        httpResponse.response302();
+    }
+
+    @Override
+    void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+        userService.createRequestBody(httpRequest);
+        httpResponse.response302();
     }
 }
