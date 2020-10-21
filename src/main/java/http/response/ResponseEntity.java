@@ -40,6 +40,7 @@ public class ResponseEntity {
     private static void responseHeader(HttpResponse httpResponse, DataOutputStream dataOutputStream) throws
         IOException {
         for (Map.Entry<String, String> headerKeyValue : httpResponse.getHeaders().entrySet()) {
+            logger.info("{}", headerKeyValue.getKey() + HEADER_DELIMITER + headerKeyValue.getValue());
             dataOutputStream.writeBytes(
                 headerKeyValue.getKey() + HEADER_DELIMITER + headerKeyValue.getValue() + lineSeparator);
         }

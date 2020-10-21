@@ -1,4 +1,4 @@
-package controller;
+package http.controller;
 
 import java.util.Map;
 

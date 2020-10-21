@@ -4,15 +4,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.net.URISyntaxException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import controller.HttpRequestController;
-import controller.LoginController;
-import controller.ResourceController;
-import controller.UserCreateController;
+import http.controller.HttpRequestController;
+import http.controller.LoginController;
+import http.controller.ResourceController;
+import http.controller.UserCreateController;
 import http.request.HttpRequest;
 import http.request.HttpRequestMapping;
 import http.request.HttpRequestParser;
@@ -21,8 +20,6 @@ import http.response.ResponseEntity;
 import http.session.HttpSessionManager;
 import http.session.RandomGenerateStrategy;
 import http.session.SessionManager;
-import view.ModelAndView;
-// import view.ViewResolver;
 
 public class RequestHandler implements Runnable {
 
@@ -30,13 +27,11 @@ public class RequestHandler implements Runnable {
 
     private final Socket connection;
     private final HttpRequestController httpRequestController;
-    // private final ViewResolver viewResolver;
     private final SessionManager sessionManager;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
         this.httpRequestController = setHttpRequestController();
-        // this.viewResolver = new ViewResolver();
         this.sessionManager = new HttpSessionManager(new RandomGenerateStrategy());
     }
 

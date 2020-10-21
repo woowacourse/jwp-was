@@ -1,4 +1,4 @@
-package controller;
+package http.controller;
 
 import http.request.HttpRequest;
 import http.request.HttpRequestMapping;

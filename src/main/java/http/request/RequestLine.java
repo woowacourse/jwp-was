@@ -1,6 +1,7 @@
 package http.request;
 
 import java.io.BufferedReader;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,8 +46,8 @@ public class RequestLine {
         return path.getParameters(key);
     }
 
-    public String getParam(String key) {
-        return path.getParameters(key);
+    public Map<String, String> getParam() {
+        return path.getParameters();
     }
 
     public HttpVersion getVersion() {
