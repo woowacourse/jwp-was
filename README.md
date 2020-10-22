@@ -7,7 +7,7 @@
 즉, WAS 기능, HTTP 요청/응답 처리 기능은 애플리케이션 개발자가 신경쓰지 않아도 재사용이 가능한 구조가 되도록 한다.
 ### 요구 사항
 ##### 1. 1단계 피드백
-  - [ ] 사용자로부터 전달 받은(Query String, Request Body) 정보에 중복 key 값이 있는 경우 처리
+  - [x] 사용자로부터 전달 받은(Query String, Request Body) 정보에 중복 key 값이 있는 경우 처리
   - [x] 변수의 타입 인터페이스로 수정하기
   - [x] HTTP 메서드를 상수로 관리하기
   - [ ] API 요청을 처리하는 부분에 대한 확장 고려하기 - doGet(request), doPost(request) 등을 갖는 interface를 구현 등

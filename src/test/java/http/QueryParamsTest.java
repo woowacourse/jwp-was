@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class QueryParamsTest {
 
@@ -35,5 +36,15 @@ class QueryParamsTest {
         QueryParams queryParams = new QueryParams(requestUri);
 
         assertThat(queryParams.getQueryParams()).isEmpty();
+    }
+
+    @DisplayName("예외: Query String 에 중복 Key 존재")
+    @Test
+    void duplicateKeyException() {
+        String requestUri = "/user/create?userId=javajigi&userId=javajigi";
+
+        assertThatThrownBy(() -> new QueryParams(requestUri))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Query String에 중복된 키가 있습니다.");
     }
 }

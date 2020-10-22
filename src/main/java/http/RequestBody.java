@@ -5,6 +5,7 @@ import utils.IOUtils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -17,19 +18,24 @@ public class RequestBody {
 
     public RequestBody(BufferedReader br, int contentLength) throws IOException {
         String body = IOUtils.readData(br, contentLength);
-        this.formData = parseBodyData(body);
+        this.formData = convertFormData(body);
     }
 
-    private Map<String, String> parseBodyData(String body) {
+    private Map<String, String> convertFormData(String body) {
         if (body.isEmpty()) {
-            return null;
+            return Collections.emptyMap();
         }
 
         String[] data = body.split(PARAMETER_DELIMITER);
 
-        return Arrays.stream(data)
-                .map(parameter -> parameter.split(KEY_VALUE_DELIMITER))
-                .collect(Collectors.toMap(it -> it[0], it -> it[1]));
+        try {
+            return Arrays.stream(data)
+                    .map(parameter -> parameter.split(KEY_VALUE_DELIMITER))
+                    .filter(it -> it.length == 2)
+                    .collect(Collectors.toMap(it -> it[0], it -> it[1]));
+        } catch (IllegalStateException e) {
+            throw new IllegalArgumentException("Request Body에 중복된 키가 있습니다.");
+        }
     }
 
     public Map<String, String> getFormData() {

@@ -1,7 +1,7 @@
 package http;
 
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -18,22 +18,27 @@ public class QueryParams {
             throw new IllegalArgumentException("URI가 비어 있습니다.");
         }
 
-        this.queryParams = parseQueryParams(requestUri);
+        this.queryParams = convertQueryParams(requestUri);
     }
 
-    private Map<String, String> parseQueryParams(String requestUri) {
+    private Map<String, String> convertQueryParams(String requestUri) {
         String[] splitUri = requestUri.split(URL_PARAMETER_DELIMITER);
 
         if (splitUri.length == 1) {
-            return new HashMap<>();
+            return Collections.emptyMap();
         }
 
         String queryString = splitUri[1];
         String[] paramPairs = queryString.split(PARAMETER_DELIMITER);
 
-        return Arrays.stream(paramPairs)
-                .map(parameter -> parameter.split(KEY_VALUE_DELIMITER))
-                .collect(Collectors.toMap(it -> it[0], it -> it[1]));
+        try {
+            return Arrays.stream(paramPairs)
+                    .map(parameter -> parameter.split(KEY_VALUE_DELIMITER))
+                    .filter(it -> it.length == 2)
+                    .collect(Collectors.toMap(it -> it[0], it -> it[1]));
+        } catch (IllegalStateException e) {
+            throw new IllegalArgumentException("Query String에 중복된 키가 있습니다.");
+        }
     }
 
     public Map<String, String> getQueryParams() {
