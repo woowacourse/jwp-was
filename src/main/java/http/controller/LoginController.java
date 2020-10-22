@@ -16,8 +16,8 @@ public class LoginController extends HttpRequestMappingAbstractController {
 
     @Override
     public void handle(HttpRequest httpRequest, HttpResponse httpResponse) {
-        String userId = httpRequest.getRequestBody().parseBody().get("userId");
-        String password = httpRequest.getRequestBody().parseBody().get("password");
+        String userId = httpRequest.getBody().parseBody().get("userId");
+        String password = httpRequest.getBody().parseBody().get("password");
 
         User user = DataBase.findUserById(userId);
 

@@ -1,7 +1,6 @@
 package http.request;
 
 import java.util.Map;
-import java.util.Objects;
 
 import http.session.HttpCookie;
 import http.session.SessionManager;
@@ -38,11 +37,15 @@ public class HttpRequest {
         return requestLine;
     }
 
-    public RequestHeader getRequestHeader() {
+    public RequestHeader getHeader() {
         return requestHeader;
     }
 
-    public RequestBody getRequestBody() {
+    public String getHeader(String key) {
+        return requestHeader.getHeader(key);
+    }
+
+    public RequestBody getBody() {
         return requestBody;
     }
 

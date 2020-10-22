@@ -34,7 +34,7 @@ public class RequestBody {
         String[] splitBody = body.split(PARAM_DELIMITER);
         for (String content : splitBody) {
             String[] keyValue = content.split(PARAM_KEY_VALUE_DELIMITER);
-            parsedBody.put(keyValue[0], keyValue[1]);
+            parsedBody.put(keyValue[0].trim(), keyValue[1].trim());
         }
         return parsedBody;
     }

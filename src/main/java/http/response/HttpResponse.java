@@ -96,6 +96,6 @@ public class HttpResponse {
     }
 
     public boolean hasModel() {
-        return Objects.nonNull(modelAndView.getModel());
+        return Objects.nonNull(this.modelAndView) && Objects.nonNull(modelAndView.getModel());
     }
 }

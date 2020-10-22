@@ -17,17 +17,12 @@ public class UserCreateController extends HttpRequestMappingAbstractController {
 
     @Override
     public void handle(HttpRequest httpRequest, HttpResponse httpResponse) {
-        Map<String, String> parsedBody = httpRequest.getRequestBody().parseBody();
+        Map<String, String> parsedBody = httpRequest.getBody().parseBody();
         UserDto userDto = UserDto.from(parsedBody);
         User user = userDto.toEntity();
 
         DataBase.addUser(user);
 
         httpResponse.redirect("/index.html");
-
-        // Model model = new Model();
-        // model.addAttributes("user", user);
-        // View view = new View("redirect:/");
-        // ModelAndView.of(model, view);
     }
 }

@@ -31,6 +31,7 @@ public class HttpRequestParser {
         if (HttpMethod.POST == method) {
             RequestBody requestBody = new RequestBody(bufferedReader, requestHeader.getContentLength());
             Map<String, String> parameters = requestBody.parseBody();
+            parameters.putAll(requestLine.getParam());
             return HttpRequest.of(requestLine, requestHeader, requestBody, cookies, parameters);
         }
         throw new InvalidHttpRequestException();
