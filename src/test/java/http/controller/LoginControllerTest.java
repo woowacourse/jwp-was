@@ -53,5 +53,7 @@ class LoginControllerTest extends AbstractHttpRequestGenerator {
             () -> assertThat(httpResponse.getHeader("Set-Cookie")).isEqualTo("logined=true; Path=/"),
             () -> assertThat(httpResponse.getStatus()).isEqualTo(HttpStatus.FOUND)
         );
+
+        DataBase.deleteById("sonypark");
     }
 }

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import db.DataBase;
 import http.AbstractHttpRequestGenerator;
 import http.HttpStatus;
 import http.request.HttpRequest;
@@ -40,5 +41,7 @@ class UserCreateControllerTest extends AbstractHttpRequestGenerator {
             () -> assertThat(httpResponse.getHeader("Location")).isEqualTo("/index.html"),
             () -> assertThat(httpResponse.getStatus()).isEqualTo(HttpStatus.FOUND)
         );
+
+        DataBase.deleteById("sonypark");
     }
 }
