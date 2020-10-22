@@ -1,6 +1,7 @@
 package http.request;
 
 import java.util.Map;
+import java.util.Objects;
 
 import http.session.HttpCookie;
 import http.session.SessionManager;
