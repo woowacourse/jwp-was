@@ -29,6 +29,12 @@ public class LoginController extends AbstractController {
             return;
         }
         HttpSession httpSession = new HttpSession();
+        setHttpResponse(httpRequest, httpResponse, httpSession);
+        sessionService.addSession(httpSession);
+    }
+
+    private void setHttpResponse(HttpRequest httpRequest, HttpResponse httpResponse, HttpSession httpSession) throws
+        IOException {
         if (userService.findByUserId(httpRequest.getParameter(User.USER_ID)) == null) {
             httpResponse.setHttpStatus(HttpStatus.FOUND);
             httpSession.setAttribute("logined", false);
@@ -41,6 +47,5 @@ public class LoginController extends AbstractController {
             httpResponse.addHeader(HttpHeader.SET_COOKIE, String.format("SESSIONID=%s; Path=/", httpSession.getId()));
             httpResponse.sendRedirect("/index.html");
         }
-        sessionService.addSession(httpSession);
     }
 }

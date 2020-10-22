@@ -3,6 +3,7 @@ package webserver;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,13 @@ class HttpResponseTest {
         HttpResponse response = new HttpResponse(createOutputStream("Http_Redirect.txt"));
         response.setHttpStatus(HttpStatus.FOUND);
         response.sendRedirect("/index.html");
+    }
+
+    @Test
+    public void error() throws IOException {
+        HttpResponse response = new HttpResponse(createOutputStream("Http_Error.txt"));
+        response.setHttpStatus(HttpStatus.BAD_REQUEST);
+        response.error();
     }
 
     private OutputStream createOutputStream(String filename) throws FileNotFoundException {
