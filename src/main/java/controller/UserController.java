@@ -1,5 +1,6 @@
 package controller;
 
+import http.AbstractServlet;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.db.DataBase;
@@ -11,7 +12,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
-public class UserController extends AbstractController {
+public class UserController extends AbstractServlet {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private static final String PATH = "/user";
 

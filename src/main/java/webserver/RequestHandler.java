@@ -1,11 +1,11 @@
 package webserver;
 
-import controller.Controller;
-import controller.ControllerMapper;
+import http.ControllerMapper;
+import http.Servlet;
+import http.SessionContainer;
 import http.factory.HttpRequestFactory;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import http.servlet.SessionContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,8 +49,8 @@ public class RequestHandler implements Runnable {
 
     private void handle(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         if (controllerMapper.isApi(httpRequest)) {
-            Controller controller = controllerMapper.map(httpRequest);
-            controller.service(httpRequest, httpResponse);
+            Servlet servlet = controllerMapper.map(httpRequest);
+            servlet.service(httpRequest, httpResponse);
             return;
         }
         findStaticResources(httpRequest, httpResponse);

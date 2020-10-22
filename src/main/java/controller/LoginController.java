@@ -3,16 +3,17 @@ package controller;
 import exception.IllegalPasswordException;
 import exception.LoginException;
 import exception.NotFoundUserIdException;
+import http.AbstractServlet;
+import http.HttpSession;
+import http.SessionContainer;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import http.servlet.HttpSession;
-import http.servlet.SessionContainer;
 import model.db.DataBase;
 import model.domain.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class LoginController extends AbstractController {
+public class LoginController extends AbstractServlet {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private static final String PATH = "/user/login";
     public static final String SESSION_KEY_OF_LOGIN = "logined";

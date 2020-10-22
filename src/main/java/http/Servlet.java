@@ -1,8 +1,8 @@
-package controller;
+package http;
 
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 
-public interface Controller {
+public interface Servlet {
     void service(HttpRequest httpRequest, HttpResponse response);
 }

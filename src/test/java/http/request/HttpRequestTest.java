@@ -1,7 +1,7 @@
 package http.request;
 
+import http.SessionContainer;
 import http.factory.HttpRequestFactory;
-import http.servlet.SessionContainer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

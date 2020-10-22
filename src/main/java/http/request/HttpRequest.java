@@ -1,7 +1,7 @@
 package http.request;
 
+import http.SessionContainer;
 import http.response.HttpResponse;
-import http.servlet.SessionContainer;
 import org.springframework.util.StringUtils;
 import utils.FileIoUtils;
 

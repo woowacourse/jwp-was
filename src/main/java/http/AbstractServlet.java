@@ -1,10 +1,10 @@
-package controller;
+package http;
 
 import http.request.HttpMethod;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 
-public abstract class AbstractController implements Controller {
+public abstract class AbstractServlet implements Servlet {
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
         if (httpRequest.isMatchMethod(HttpMethod.GET)) {

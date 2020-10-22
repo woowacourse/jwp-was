@@ -1,6 +1,6 @@
 package utils;
 
-import http.servlet.SessionContainer;
+import http.SessionContainer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

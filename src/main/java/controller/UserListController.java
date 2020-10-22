@@ -1,10 +1,11 @@
 package controller;
 
 import com.github.jknack.handlebars.Template;
+import http.AbstractServlet;
+import http.HttpSession;
+import http.SessionContainer;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import http.servlet.HttpSession;
-import http.servlet.SessionContainer;
 import model.db.DataBase;
 import model.dto.UsersDto;
 import org.slf4j.Logger;
@@ -14,7 +15,7 @@ import utils.TemplateMaker;
 
 import java.io.IOException;
 
-public class UserListController extends AbstractController {
+public class UserListController extends AbstractServlet {
     private static final Logger logger = LoggerFactory.getLogger(UserListController.class);
     private static final String PATH = "/user/list";
 

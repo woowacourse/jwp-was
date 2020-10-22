@@ -1,5 +1,7 @@
 package controller;
 
+import http.ControllerMapper;
+import http.Servlet;
 import http.request.Cookie;
 import http.request.HttpMethod;
 import http.request.HttpRequest;
@@ -54,8 +56,8 @@ class ControllerMapperTest {
                 new RequestParams(new HashMap<>()),
                 new Cookie(new HashMap<>())
         );
-        Controller controller = ControllerMapper.getInstance().map(httpRequest);
+        Servlet servlet = ControllerMapper.getInstance().map(httpRequest);
 
-        assertThat(controller).isInstanceOf(UserController.class);
+        assertThat(servlet).isInstanceOf(UserController.class);
     }
 }

@@ -1,6 +1,6 @@
 package utils;
 
-import http.servlet.SessionContainer;
+import http.SessionContainer;
 
 import java.util.Arrays;
 import java.util.Optional;

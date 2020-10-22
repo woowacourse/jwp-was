@@ -1,4 +1,4 @@
-package controller;
+package http;
 
 import http.request.HttpRequest;
 
@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ControllerMapper {
-    private final Map<String, Controller> controllers = new HashMap<>();
+    private final Map<String, Servlet> controllers = new HashMap<>();
 
     private ControllerMapper() {
     }
@@ -15,11 +15,11 @@ public class ControllerMapper {
         return Holder.INSTANCE;
     }
 
-    public void addController(AbstractController controller) {
+    public void addController(AbstractServlet controller) {
         controllers.put(controller.getPath(), controller);
     }
 
-    public Controller map(HttpRequest httpRequest) {
+    public Servlet map(HttpRequest httpRequest) {
         return controllers.get(httpRequest.getPath());
     }
 
