@@ -12,8 +12,8 @@ import java.net.URISyntaxException;
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
-    private Socket connection;
-    private DispatcherServlet dispatcherServlet;
+    private final Socket connection;
+    private final DispatcherServlet dispatcherServlet;
 
     public RequestHandler(Socket connectionSocket, DispatcherServlet dispatcherServlet) {
         this.connection = connectionSocket;
