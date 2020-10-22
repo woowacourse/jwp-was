@@ -3,14 +3,12 @@ package domain.user.service;
 import db.DataBase;
 import domain.user.User;
 import utils.UserMapper;
-
-import java.util.Map;
+import webserver.request.HttpRequest;
 
 public class UserService {
 
-    public static void createUser(Map<String, String> inputs) {
-        User user = UserMapper.createUser(inputs);
+    public static void createUser(HttpRequest httpRequest) {
+        User user = UserMapper.createUser(httpRequest);
         DataBase.addUser(user);
-        System.out.println(DataBase.findAll());
     }
 }

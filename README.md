@@ -16,3 +16,18 @@
     - [x] Request Body의 값 추출하기
 4. “회원가입”을 완료하면 /index.html 페이지로 redirect 방식처럼 이동한다.
 5. 지금까지 구현한 소스 코드는 stylesheet 파일을 지원하지 못하고 있다. Stylesheet 파일을 지원하도록 구현하도록 한다.
+
+## 2단계
+1. Thread Pool을 적용해 일정 수의 사용자 동시에 처리가 가능하도록
+2. 리팩토링 접근 방법 - 메소드 분리 및 클래스 분리
+    - [x] RequestHandler 클래스 책임 분리
+3. HttpRequest 리팩토링
+    - [x] Header를 Map으로 관리
+    - [x] 전달되는 인자를 Map으로 관리
+4. HttpResponse 리팩토링
+    - [x] 응답 헤더정보를 Map으로 관리
+    - 응답을 보낼때 status code 별 메서드 분리
+5. Controller 분리
+    - [x] Controller 인터페이스
+    - [x] AbstractController로 중복 제거
+    - [x] Http Methode에 따라 메서드 분리
