@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HeaderParams {
+
     private final Map<String, String> headerParams;
 
     public HeaderParams() {

@@ -1,22 +1,20 @@
 package web.application;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static web.server.common.IoUtil.*;
+import static web.server.common.IoUtil.createOutputStream;
+import static web.server.common.IoUtil.createRequest;
+import static web.server.common.IoUtil.readFile;
 
 import java.io.IOException;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-
 import web.server.domain.request.HttpRequest;
 import web.server.domain.response.HttpResponse;
 
 class FrontControllerTest {
 
-    private final static FrontController FRONT_CONTROLLER = new FrontController();
+    private final static FrontController FRONT_CONTROLLER = new FrontController(UrlMapper.getInstance());
 
     @DisplayName("FrontController에서 지원하지 않는 Method 요청 시 405 응답보낸다.")
     @Test

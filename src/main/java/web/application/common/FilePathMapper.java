@@ -11,8 +11,8 @@ public class FilePathMapper {
 
     private FilePathMapper() {
         map = new HashMap<>();
-        map.put("HTML", "./templates");
-        map.put("STATIC_EXTENSION", "./static");
+        map.put("HTML", "templates");
+        map.put("STATIC_EXTENSION", "static");
     }
 
     public static FilePathMapper getInstance() {
@@ -31,6 +31,7 @@ public class FilePathMapper {
     }
 
     private static class Cache {
+
         private static final FilePathMapper PREFIX_MAPPER = new FilePathMapper();
     }
 }

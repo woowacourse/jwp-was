@@ -2,7 +2,6 @@ package web.server.domain.request;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import lombok.Getter;
 import web.server.utils.StaticFileType;
 

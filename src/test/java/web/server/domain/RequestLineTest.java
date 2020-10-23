@@ -1,12 +1,10 @@
 package web.server.domain;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.UnsupportedEncodingException;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import web.server.domain.request.RequestLine;
 import web.server.utils.StaticFileType;
 

@@ -11,13 +11,13 @@ public class StaticFilePath {
 
     private StaticFilePath() {
         map = new HashMap<>();
-        map.put("html", "./templates");
-        map.put("ico", "./templates");
-        map.put("css", "./static");
-        map.put("js", "./static");
-        map.put("png", "./static");
-        map.put("ttf", "./static");
-        map.put("woff", "./static");
+        map.put("html", "templates");
+        map.put("ico", "templates");
+        map.put("css", "static");
+        map.put("js", "static");
+        map.put("png", "static");
+        map.put("ttf", "static");
+        map.put("woff", "static");
     }
 
     public static StaticFilePath getInstance() {
@@ -35,6 +35,7 @@ public class StaticFilePath {
     }
 
     private static class Cache {
+
         private static final StaticFilePath staticFilePath = new StaticFilePath();
     }
 }
