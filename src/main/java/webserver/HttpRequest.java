@@ -10,18 +10,20 @@ import utils.IOUtils;
 public class HttpRequest {
 	private static final String EMPTY = "";
 
+	private final RequestLine requestLine;
 	private final RequestHeaders requestHeaders;
 	private final String body;
 
 	public HttpRequest(InputStream in) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
+		requestLine = RequestLine.of(br);
 		requestHeaders = RequestHeaders.of(br);
 		this.body = extractBody(br);
 	}
 
 	private String extractBody(BufferedReader br) throws IOException {
-		if (requestHeaders.isPostMethod()) {
+		if (requestLine.isPostMethod()) {
 			return IOUtils.readData(br, requestHeaders.getContentSize());
 		}
 		return EMPTY;
@@ -32,14 +34,18 @@ public class HttpRequest {
 	}
 
 	public String getMethod() {
-		return requestHeaders.getParameter("method");
+		return requestLine.getMethod();
 	}
 
 	public String getUrl() {
-		return requestHeaders.getParameter("url");
+		return requestLine.getUrl();
+	}
+
+	public String getHeader(String header) {
+		return requestHeaders.getHeader(header);
 	}
 
 	public String getParameter(String param) {
-		return requestHeaders.getParameter(param);
+		return requestLine.getParameter(param);
 	}
 }

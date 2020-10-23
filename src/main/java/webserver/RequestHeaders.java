@@ -8,8 +8,6 @@ import java.util.Map;
 import utils.ExtractUtils;
 
 public class RequestHeaders {
-	private static final String POST_METHOD = "POST";
-
 	private final Map<String, String> headers;
 
 	private RequestHeaders(Map<String, String> headers) {
@@ -19,7 +17,6 @@ public class RequestHeaders {
 	public static RequestHeaders of(BufferedReader br) throws IOException {
 		Map<String, String> headers = new HashMap<>();
 
-		ExtractUtils.extractFirstHeader(br, headers);
 		ExtractUtils.extractExtraHeaders(br, headers);
 
 		return new RequestHeaders(headers);
@@ -36,15 +33,7 @@ public class RequestHeaders {
 		return length;
 	}
 
-	public boolean isPostMethod() {
-		return POST_METHOD.equals(headers.get("method"));
-	}
-
-	public Map<String, String> getHeaders() {
-		return headers;
-	}
-
-	public String getParameter(String param) {
-		return headers.get(param);
+	public String getHeader(String header) {
+		return headers.get(header);
 	}
 }

@@ -10,7 +10,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Map;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,14 +25,13 @@ public class RequestHeadersTest {
 	@Test
 	void getOfTest() throws IOException {
 		BufferedReader br = createBufferedReader(GET_REQUEST);
+		br.readLine();
 		requestHeaders = RequestHeaders.of(br);
-		Map<String, String> headers = requestHeaders.getHeaders();
 
 		assertAll(
-			() -> assertThat(headers.get("method")).isEqualTo("GET"),
-			() -> assertThat(headers.get("Connection")).isEqualTo("keep-alive"),
-			() -> assertThat(headers.get("url")).isEqualTo("/user/create"),
-			() -> assertThat(headers.get("userId")).isEqualTo("javajigi")
+			() -> assertThat(requestHeaders.getHeader("Host")).isEqualTo("localhost:8080"),
+			() -> assertThat(requestHeaders.getHeader("Connection")).isEqualTo("keep-alive"),
+			() -> assertThat(requestHeaders.getHeader("Accept")).isEqualTo("*/*")
 		);
 	}
 
@@ -41,16 +39,14 @@ public class RequestHeadersTest {
 	@Test
 	void postOfTest() throws IOException {
 		BufferedReader br = createBufferedReader(POST_REQUEST);
+		br.readLine();
 		requestHeaders = RequestHeaders.of(br);
-		Map<String, String> headers = requestHeaders.getHeaders();
 
 		assertAll(
-			() -> assertThat(headers.get("method")).isEqualTo("POST"),
-			() -> assertThat(headers.get("Connection")).isEqualTo("keep-alive"),
-			() -> assertThat(headers.get("url")).isEqualTo("/user/create"),
-			() -> assertThat(headers.get("Accept")).isEqualTo("*/*"),
-			() -> assertThat(headers.get("Content-Length")).isEqualTo("46"),
-			() -> assertThat(headers.get("Content-Type")).isEqualTo("application/x-www-form-urlencoded")
+			() -> assertThat(requestHeaders.getHeader("Connection")).isEqualTo("keep-alive"),
+			() -> assertThat(requestHeaders.getHeader("Accept")).isEqualTo("*/*"),
+			() -> assertThat(requestHeaders.getHeader("Content-Length")).isEqualTo("46"),
+			() -> assertThat(requestHeaders.getHeader("Content-Type")).isEqualTo("application/x-www-form-urlencoded")
 		);
 	}
 
@@ -58,6 +54,7 @@ public class RequestHeadersTest {
 	@Test
 	void getContentLengthTest() throws IOException {
 		BufferedReader br = createBufferedReader(POST_REQUEST);
+		br.readLine();
 		requestHeaders = RequestHeaders.of(br);
 
 		assertThat(requestHeaders.getContentSize()).isEqualTo(46);

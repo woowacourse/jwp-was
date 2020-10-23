@@ -27,8 +27,10 @@ public class HttpRequestTest {
 		assertAll(
 			() -> assertThat(httpRequest.getMethod()).isEqualTo("GET"),
 			() -> assertThat(httpRequest.getUrl()).isEqualTo("/user/create"),
-			() -> assertThat(httpRequest.getParameter("Connection")).isEqualTo("keep-alive"),
-			() -> assertThat(httpRequest.getParameter("userId")).isEqualTo("javajigi")
+			() -> assertThat(httpRequest.getHeader("Connection")).isEqualTo("keep-alive"),
+			() -> assertThat(httpRequest.getParameter("userId")).isEqualTo("javajigi"),
+			() -> assertThat(httpRequest.getParameter("password")).isEqualTo("password"),
+			() -> assertThat(httpRequest.getParameter("name")).isEqualTo("JaeSung")
 		);
 	}
 
@@ -40,7 +42,7 @@ public class HttpRequestTest {
 		assertAll(
 			() -> assertThat(httpRequest.getMethod()).isEqualTo("POST"),
 			() -> assertThat(httpRequest.getUrl()).isEqualTo("/user/create"),
-			() -> assertThat(httpRequest.getParameter("Connection")).isEqualTo("keep-alive"),
+			() -> assertThat(httpRequest.getHeader("Connection")).isEqualTo("keep-alive"),
 			() -> assertThat(httpRequest.getBody()).isEqualTo("userId=javajigi&password=password&name=JaeSung")
 		);
 	}
@@ -53,7 +55,7 @@ public class HttpRequestTest {
 		assertAll(
 			() -> assertThat(httpRequest.getMethod()).isEqualTo("POST"),
 			() -> assertThat(httpRequest.getUrl()).isEqualTo("/user/create"),
-			() -> assertThat(httpRequest.getParameter("Connection")).isEqualTo("keep-alive"),
+			() -> assertThat(httpRequest.getHeader("Connection")).isEqualTo("keep-alive"),
 			() -> assertThat(httpRequest.getParameter("id")).isEqualTo("1"),
 			() -> assertThat(httpRequest.getBody()).isEqualTo("userId=javajigi&password=password&name=JaeSung")
 		);
