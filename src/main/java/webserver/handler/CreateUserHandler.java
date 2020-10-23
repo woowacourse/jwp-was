@@ -24,6 +24,6 @@ public class CreateUserHandler extends Handler {
 
 	@Override
 	public boolean canHandle(String path) {
-		return path.startsWith(USER_CREATE_URL);
+		return path.equals(USER_CREATE_URL);
 	}
 }
