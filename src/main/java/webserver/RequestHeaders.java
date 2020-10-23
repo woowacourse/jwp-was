@@ -5,7 +5,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class RequestHeaders {
+	private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 	private static final String HEADER_DELIMITER = ": ";
 
 	private final Map<String, String> headers;
@@ -42,7 +46,7 @@ public class RequestHeaders {
 		try {
 			length = Integer.parseInt(contentLength);
 		} catch (NumberFormatException e) {
-			System.err.println("Content-Length가 숫자가 아닙니다.");
+			logger.error("Content-Length가 숫자가 아닙니다.");
 		}
 		return length;
 	}
