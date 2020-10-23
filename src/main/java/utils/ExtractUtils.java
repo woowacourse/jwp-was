@@ -9,7 +9,7 @@ public class ExtractUtils {
 	private static final String PARAM_DELIMITER = "&";
 	private static final String ELEMENT_DELIMITER = "=";
 
-	public static Map<String, String> extractUserInfo(String body) throws UnsupportedEncodingException {
+	public static Map<String, String> parseRequestBody(String body) throws UnsupportedEncodingException {
 		String[] infos = body.split(PARAM_DELIMITER);
 		Map<String, String> userInfo = new HashMap<>();
 

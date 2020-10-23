@@ -16,7 +16,7 @@ public class CreateUserHandler extends Handler {
 
 	@Override
 	public void handleRequest(HttpRequest httpRequest, DataOutputStream dos) throws IOException {
-		Map<String, String> userInfo = ExtractUtils.extractUserInfo(httpRequest.getBody());
+		Map<String, String> userInfo = ExtractUtils.parseRequestBody(httpRequest.getBody());
 		User user = User.of(userInfo);
 		DataBase.addUser(user);
 		HttpResponse.response302Header(dos, REDIRECT_URL, logger);

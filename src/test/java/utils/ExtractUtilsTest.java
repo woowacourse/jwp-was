@@ -14,8 +14,8 @@ public class ExtractUtilsTest {
 
 	@DisplayName("URL의 Param을 분리")
 	@Test
-	void extractUserInfoTest() throws UnsupportedEncodingException {
-		Map<String, String> userInfo = ExtractUtils.extractUserInfo(BODY);
+	void parseRequestBodyTest() throws UnsupportedEncodingException {
+		Map<String, String> userInfo = ExtractUtils.parseRequestBody(BODY);
 
 		assertAll(
 			() -> assertThat(userInfo.get("userId")).isEqualTo("a"),
