@@ -20,7 +20,7 @@ public class HttpHeaders {
     }
 
     public HttpHeaders() {
-        httpHeaders = new HashMap<>();
+        this(new HashMap<>());
     }
 
     public String getHeader(String key) {
