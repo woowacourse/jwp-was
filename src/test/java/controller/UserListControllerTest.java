@@ -1,18 +1,19 @@
 package controller;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.io.ByteArrayOutputStream;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
 import common.TestFileIo;
 import db.DataBase;
 import http.request.Request;
 import http.response.Response;
+import http.session.HttpSessionStore;
 import model.User;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import session.MockSession;
+
+import java.io.ByteArrayOutputStream;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class UserListControllerTest {
     @DisplayName("로그인이 되어있을때 리스트를 확인")
@@ -23,6 +24,8 @@ class UserListControllerTest {
 
         DataBase.addUser(pobi);
         DataBase.addUser(jun);
+        MockSession mockSession = new MockSession(null, "1");
+        HttpSessionStore.addSession(mockSession);
 
         ByteArrayOutputStream result = new ByteArrayOutputStream();
         Request request = new Request(TestFileIo.readBufferedReader("http_user_list_request.txt"));
@@ -59,7 +62,7 @@ class UserListControllerTest {
 
         assertAll(
                 () -> assertThat(actual).contains("HTTP/1.1 302 Found "),
-                () -> assertThat(actual).contains("Location: /login.html ")
+            () -> assertThat(actual).contains("Location: /user/login.html ")
         );
     }
 }

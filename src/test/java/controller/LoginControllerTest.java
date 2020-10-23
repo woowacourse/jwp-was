@@ -36,8 +36,8 @@ class LoginControllerTest {
         String actual = result.toString();
 
         assertAll(
-                () -> assertThat(actual).contains("HTTP/1.1 302 Found "),
-                () -> assertThat(actual).contains("Set-Cookie: logined=true; Path=/ ")
+            () -> assertThat(actual).contains("HTTP/1.1 302 Found "),
+            () -> assertThat(actual).contains("Location: /index.html ")
         );
     }
 
@@ -54,9 +54,8 @@ class LoginControllerTest {
         String actual = result.toString();
 
         assertAll(
-                () -> assertThat(actual).contains("HTTP/1.1 302 Found "),
-                () -> assertThat(actual).contains("Location: /user/login_failed.html "),
-                () -> assertThat(actual).contains("Set-Cookie: logined=false ")
+            () -> assertThat(actual).contains("HTTP/1.1 302 Found "),
+            () -> assertThat(actual).contains("Location: /user/login_failed.html ")
         );
     }
 
@@ -75,9 +74,8 @@ class LoginControllerTest {
         String actual = result.toString();
 
         assertAll(
-                () -> assertThat(actual).contains("HTTP/1.1 302 Found "),
-                () -> assertThat(actual).contains("Location: /user/login_failed.html "),
-                () -> assertThat(actual).contains("Set-Cookie: logined=false ")
+            () -> assertThat(actual).contains("HTTP/1.1 302 Found "),
+            () -> assertThat(actual).contains("Location: /user/login_failed.html ")
         );
     }
 

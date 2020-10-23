@@ -1,8 +1,8 @@
 package utils;
 
-import java.util.Collection;
-
 import model.User;
+
+import java.util.Collection;
 
 public class UsersDto {
     private final Collection<User> users;

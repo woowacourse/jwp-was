@@ -1,17 +1,17 @@
 package controller;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.io.ByteArrayOutputStream;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
 import common.TestFileIo;
 import exception.HttpRequestMethodNotSupportedException;
 import http.request.Request;
 import http.response.Response;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import java.io.ByteArrayOutputStream;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class IndexControllerTest {
     @DisplayName("/경로가 들어왔을 때 index.html을 반환하는 테스트")

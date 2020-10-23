@@ -6,6 +6,8 @@ import http.HttpHeaders;
 import http.request.Request;
 import http.request.RequestBody;
 import http.response.Response;
+import http.session.HttpSession;
+import http.session.HttpSessionStore;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,11 +26,15 @@ public class LoginController extends AbstractController {
             User user = DataBase.findUserById(requestBodies.get("userId"));
             validate(requestBodies, user);
 
-            response.setHeader(HttpHeaders.SET_COOKIE, "logined=true; Path=/");
+            HttpSession httpSession = HttpSessionStore.create();
+            httpSession.setAttribute("email", user.getEmail());
+
+            String id = httpSession.getId();
+
+            response.setHeader(HttpHeaders.SET_COOKIE, "JSESSIONID=" + id + "; Path=/");
             response.found("/index.html");
         } catch (IllegalRequestException e) {
             logger.info(e.getMessage());
-            response.setHeader(HttpHeaders.SET_COOKIE, "logined=false");
             response.found("/user/login_failed.html");
         }
     }

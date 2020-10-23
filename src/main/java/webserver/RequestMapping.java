@@ -1,15 +1,10 @@
 package webserver;
 
+import controller.*;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-
-import controller.Controller;
-import controller.IndexController;
-import controller.LoginController;
-import controller.ResourceController;
-import controller.UserCreateController;
-import controller.UserListController;
 
 class RequestMapping {
     private final static ResourceController RESOURCE_CONTROLLER = new ResourceController();

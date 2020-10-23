@@ -1,19 +1,18 @@
 package http.response;
 
+import http.ContentType;
+import http.HttpHeaders;
+import http.request.RequestMethod;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import utils.Directory;
+import utils.FileIoUtils;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.util.Objects;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import http.ContentType;
-import http.HttpHeaders;
-import http.request.RequestMethod;
-import utils.Directory;
-import utils.FileIoUtils;
 
 public class Response {
     private static final Logger logger = LoggerFactory.getLogger(Response.class);

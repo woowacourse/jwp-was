@@ -1,14 +1,14 @@
 package http.request;
 
+import http.ContentType;
+import http.HttpHeaders;
+import utils.IOUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
-import http.ContentType;
-import http.HttpHeaders;
-import utils.IOUtils;
 
 public class Request {
     private final static String DELIMITER = ": ";
