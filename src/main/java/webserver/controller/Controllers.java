@@ -2,6 +2,7 @@ package webserver.controller;
 
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
+import webserver.user.UserController;
 
 public enum Controllers {
     USER_CONTROLLER(new UserController()),

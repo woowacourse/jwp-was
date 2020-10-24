@@ -29,7 +29,7 @@
   - HTTP 요청 Header/Body 처리, 응답 Header/Body 처리만을 담당하는 역할을 분리해 재사용 가능하도록 한다.
   
 #3단계
--[ ] 로그인 처리
+-[x] 로그인 처리
     - 성공
         -[ ] index.html로 이동
         -[ ] Cookie header logined=true
