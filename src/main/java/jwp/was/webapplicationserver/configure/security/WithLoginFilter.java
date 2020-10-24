@@ -17,7 +17,6 @@ import jwp.was.webserver.dto.HttpResponse;
 
 public class WithLoginFilter {
 
-    public static final String ATTRIBUTE_KEY_USER = "USER";
     private static final String SET_COOKIE_SESSION_ID = "sessionId";
     public static final String SET_COOKIE_SESSION_ID_KEY = SET_COOKIE_SESSION_ID + "=";
     private static final WithLoginFilter INSTANCE = new WithLoginFilter();

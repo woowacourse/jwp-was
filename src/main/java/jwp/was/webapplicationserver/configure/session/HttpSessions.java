@@ -6,8 +6,8 @@ import java.util.Objects;
 
 public class HttpSessions {
 
+    public static final String ATTRIBUTE_KEY_USER = "USER";
     private static final HttpSessions INSTANCE = new HttpSessions();
-    private static final String ATTRIBUTE_KEY_USER = "USER";
 
     private Map<String, HttpSession> sessions = new HashMap<>();
 

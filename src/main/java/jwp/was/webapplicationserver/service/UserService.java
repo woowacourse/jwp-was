@@ -1,6 +1,6 @@
 package jwp.was.webapplicationserver.service;
 
-import static jwp.was.webapplicationserver.configure.security.WithLoginFilter.ATTRIBUTE_KEY_USER;
+import static jwp.was.webapplicationserver.configure.session.HttpSessions.ATTRIBUTE_KEY_USER;
 
 import java.util.ArrayList;
 import java.util.List;
