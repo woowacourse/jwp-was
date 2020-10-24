@@ -39,6 +39,10 @@ public class HttpResponse {
         httpResponseHeader.add("Content-Length", String.valueOf(body.length));
     }
 
+    public void setCookie(String value) {
+        httpResponseHeader.add("Set-Cookie", value + " Path=/");
+    }
+
     public void redirect(String location) {
         HttpResponseLine httpResponseLine = new HttpResponseLine(HttpStatus.FOUND);
         httpResponseHeader = new HttpResponseHeader(httpResponseLine);
