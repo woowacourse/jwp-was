@@ -10,12 +10,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class ExtractUtilsTest {
-	private static final String PATH = "userId=a&password=1&name=asd&email=test%40test.com";
+	private static final String BODY = "userId=a&password=1&name=asd&email=test%40test.com";
 
 	@DisplayName("URL의 Param을 분리")
 	@Test
-	void extractUserInfoTest() throws UnsupportedEncodingException {
-		Map<String, String> userInfo = ExtractUtils.extractUserInfo(PATH);
+	void parseRequestBodyTest() throws UnsupportedEncodingException {
+		Map<String, String> userInfo = ExtractUtils.parseRequestBody(BODY);
 
 		assertAll(
 			() -> assertThat(userInfo.get("userId")).isEqualTo("a"),
