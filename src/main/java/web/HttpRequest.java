@@ -2,6 +2,9 @@ package web;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 public class HttpRequest {
 	private final RequestLine requestLine;
@@ -14,13 +17,13 @@ public class HttpRequest {
 		this.parameter = parameter;
 	}
 
-	public static HttpRequest of(BufferedReader br) throws IOException {
+	public static HttpRequest of(InputStream in) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+
 		String requestFirstLine = br.readLine();
 
 		RequestLine requestLine = RequestLine.of(requestFirstLine);
-
 		Header header = Header.of(br);
-
 		Parameter parameter = Parameter.of(br, requestLine, header);
 
 		return new HttpRequest(requestLine, header, parameter);

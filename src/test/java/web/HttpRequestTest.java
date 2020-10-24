@@ -4,8 +4,10 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +17,7 @@ class HttpRequestTest {
 
 	@Test
 	void of() throws IOException {
-		BufferedReader br = new BufferedReader(new FileReader("./src/test/java/web/example.txt"));
+		InputStream in = new FileInputStream("./src/test/java/web/example.txt");
 
 		Map<String, String> headers = new HashMap<>();
 		headers.put("Host", "localhost:8080");
@@ -38,7 +40,7 @@ class HttpRequestTest {
 
 		HttpRequest expect = new HttpRequest(requestLine, header, parameter);
 
-		HttpRequest actual = HttpRequest.of(br);
+		HttpRequest actual = HttpRequest.of(in);
 
 		assertAll(
 			() -> assertThat(actual.getMethod()).isEqualTo(expect.getMethod()),
