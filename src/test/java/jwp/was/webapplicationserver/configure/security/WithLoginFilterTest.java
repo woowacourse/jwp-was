@@ -2,6 +2,7 @@ package jwp.was.webapplicationserver.configure.security;
 
 import static com.google.common.net.HttpHeaders.COOKIE;
 import static com.google.common.net.HttpHeaders.LOCATION;
+import static jwp.was.util.Constants.ATTRIBUTE_KEY_USER;
 import static jwp.was.util.Constants.HEADERS_EMPTY;
 import static jwp.was.util.Constants.HTTP_VERSION;
 import static jwp.was.util.Constants.PARAMETERS_EMPTY;
@@ -12,7 +13,6 @@ import static jwp.was.util.Constants.USER_EMAIL;
 import static jwp.was.util.Constants.USER_ID;
 import static jwp.was.util.Constants.USER_NAME;
 import static jwp.was.util.Constants.USER_PASSWORD;
-import static jwp.was.webapplicationserver.configure.security.WithLoginConfigure.ATTRIBUTE_KEY_USER;
 import static jwp.was.webserver.HttpMethod.GET;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,9 +32,9 @@ import jwp.was.webserver.dto.UrlPath;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class WithLoginConfigureTest {
+class WithLoginFilterTest {
 
-    private static final WithLoginConfigure LOGIN_CONFIGURE = WithLoginConfigure.getInstance();
+    private static final WithLoginFilter LOGIN_CONFIGURE = WithLoginFilter.getInstance();
 
     @DisplayName("로그인 검증 - True, 로그인해야하는 정보에 쿠키가 있음")
     @Test

@@ -9,28 +9,31 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import jwp.was.webapplicationserver.configure.controller.info.HttpInfo;
+import jwp.was.webapplicationserver.configure.session.HttpSessions;
 import jwp.was.webserver.HttpMethod;
 import jwp.was.webserver.HttpStatusCode;
 import jwp.was.webserver.dto.HttpRequest;
 import jwp.was.webserver.dto.HttpResponse;
 
-public class LoginConfigure {
+public class WithLoginFilter {
 
-    public static final String SET_COOKIE_SESSION_ID_KEY = "sessionId=";
     public static final String ATTRIBUTE_KEY_USER = "USER";
-    private static final LoginConfigure INSTANCE = new LoginConfigure();
+    private static final String SET_COOKIE_SESSION_ID = "sessionId";
+    public static final String SET_COOKIE_SESSION_ID_KEY = SET_COOKIE_SESSION_ID + "=";
+    private static final WithLoginFilter INSTANCE = new WithLoginFilter();
     private static final String NEED_LOGIN_MESSAGE = "로그인이 필요합니다.";
     private static final String LOGIN_PAGE = "/user/login.html";
+    private static final HttpSessions HTTP_SESSIONS = HttpSessions.getInstance();
 
     private final Set<HttpInfo> withLogin;
 
-    public LoginConfigure() {
+    public WithLoginFilter() {
         Set<HttpInfo> withLogin = new HashSet<>();
         withLogin.add(HttpInfo.of(HttpMethod.GET, "/user/list"));
         this.withLogin = Collections.unmodifiableSet(withLogin);
     }
 
-    public static LoginConfigure getInstance() {
+    public static WithLoginFilter getInstance() {
         return INSTANCE;
     }
 
@@ -39,8 +42,9 @@ public class LoginConfigure {
             = HttpInfo.of(httpRequest.getHttpMethod(), httpRequest.getUrlPath());
 
         if (withLogin.contains(requestHttpInfo)) {
-            Cookie cookie = new Cookie(httpRequest.getHeader(COOKIE));
-            return cookie.verifySessionId();
+            Cookies cookies = Cookies.from(httpRequest.getHeader(COOKIE));
+            String sessionId = cookies.get(SET_COOKIE_SESSION_ID);
+            return HTTP_SESSIONS.existsUser(sessionId);
         }
         return true;
     }

@@ -42,4 +42,6 @@ public class Constants {
         = Parameters.fromEncodedParameter(LOGIN_PARAMETER);
     public static final Parameters PARAMETERS_FOR_CREATE_USER = Parameters.fromEncodedParameter(
         LOGIN_PARAMETER + "&" + USER_EMAIL + "=" + USER_EMAIL + "&" + USER_NAME + "=" + USER_NAME);
+
+    public static final String ATTRIBUTE_KEY_USER = "USER";
 }

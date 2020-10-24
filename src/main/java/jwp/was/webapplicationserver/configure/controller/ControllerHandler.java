@@ -13,7 +13,7 @@ import jwp.was.webapplicationserver.configure.annotation.ResponseBody;
 import jwp.was.webapplicationserver.configure.controller.info.MatchedInfo;
 import jwp.was.webapplicationserver.configure.controller.info.ModelAndView;
 import jwp.was.webapplicationserver.configure.maker.ConfigureMaker;
-import jwp.was.webapplicationserver.configure.security.WithLoginConfigure;
+import jwp.was.webapplicationserver.configure.security.WithLoginFilter;
 import jwp.was.webapplicationserver.controller.GlobalExceptionHandler;
 import jwp.was.webserver.dto.HttpRequest;
 import jwp.was.webserver.dto.HttpResponse;
@@ -28,7 +28,7 @@ public class ControllerHandler {
     private final ConfigureMaker configureMaker = ConfigureMaker.getInstance();
     private final ControllerMapper controllerMapper = ControllerMapper.getInstance();
     private final GlobalExceptionHandler globalExceptionHandler = new GlobalExceptionHandler();
-    private final WithLoginConfigure withLoginConfigure = WithLoginConfigure.getInstance();
+    private final WithLoginFilter withLoginFilter = WithLoginFilter.getInstance();
 
     public ControllerHandler() {
     }
@@ -43,10 +43,10 @@ public class ControllerHandler {
     }
 
     private HttpResponse makeHttpResponse(HttpRequest httpRequest, MatchedInfo matchedInfo) {
-        if (withLoginConfigure.verifyLogin(httpRequest)) {
+        if (withLoginFilter.verifyLogin(httpRequest)) {
             return getHttpResponseAfterLogin(httpRequest, matchedInfo);
         }
-        return withLoginConfigure.getRedirectLoginPage(httpRequest);
+        return withLoginFilter.getRedirectLoginPage(httpRequest);
     }
 
     private HttpResponse getHttpResponseAfterLogin(HttpRequest httpRequest,

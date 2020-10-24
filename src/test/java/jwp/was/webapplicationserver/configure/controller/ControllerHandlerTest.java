@@ -1,6 +1,7 @@
 package jwp.was.webapplicationserver.configure.controller;
 
 import static com.google.common.net.HttpHeaders.COOKIE;
+import static jwp.was.util.Constants.ATTRIBUTE_KEY_USER;
 import static jwp.was.util.Constants.CONTENT_TYPE_TEXT_HTML;
 import static jwp.was.util.Constants.CONTENT_TYPE_TEXT_PLAIN;
 import static jwp.was.util.Constants.HEADERS_EMPTY;
@@ -16,7 +17,6 @@ import static jwp.was.util.Constants.USER_EMAIL;
 import static jwp.was.util.Constants.USER_ID;
 import static jwp.was.util.Constants.USER_NAME;
 import static jwp.was.util.Constants.USER_PASSWORD;
-import static jwp.was.webapplicationserver.configure.security.WithLoginConfigure.ATTRIBUTE_KEY_USER;
 import static jwp.was.webserver.HttpMethod.CONNECT;
 import static jwp.was.webserver.HttpMethod.GET;
 import static jwp.was.webserver.HttpMethod.POST;

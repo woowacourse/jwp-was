@@ -2,10 +2,12 @@ package jwp.was.webapplicationserver.configure.session;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class HttpSessions {
 
     private static final HttpSessions INSTANCE = new HttpSessions();
+    private static final String ATTRIBUTE_KEY_USER = "USER";
 
     private Map<String, HttpSession> sessions = new HashMap<>();
 
@@ -20,11 +22,13 @@ public class HttpSessions {
         sessions.put(httpSession.getId(), httpSession);
     }
 
-    public HttpSession findSession(String id) {
-        return sessions.get(id);
-    }
-
     public void removeSession(String id) {
         sessions.remove(id);
+    }
+
+    public boolean existsUser(String sessionId) {
+        HttpSession session = sessions.get(sessionId);
+        return Objects.nonNull(session)
+            && Objects.nonNull(session.getAttribute(ATTRIBUTE_KEY_USER));
     }
 }
