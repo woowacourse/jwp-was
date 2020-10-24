@@ -18,7 +18,7 @@ class RequestPoolExecutorTest {
     void execute() throws InterruptedException {
         Queue<Integer> responseQueue = new LinkedBlockingQueue<>();
         LinkedBlockingQueue<Runnable> queue = new LinkedBlockingQueue<>(Integer.MAX_VALUE);
-        RequestPoolExecutor executor = new RequestPoolExecutor(new ThreadPoolExecutor(16, 16, 1L, TimeUnit.SECONDS, queue));
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(16, 16, 1L, TimeUnit.SECONDS, queue);
 
         CountDownLatch countDownLatch = new CountDownLatch(5);
         for (int i = 1; i <= 5; i++) {
