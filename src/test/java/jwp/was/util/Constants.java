@@ -29,6 +29,7 @@ public class Constants {
     public static final UrlPath URL_PATH_BOOTSTRAP_MIN_CSS = UrlPath.from("/css/bootstrap.min.css");
     public static final UrlPath URL_PATH_API_CREATE_USER = UrlPath.from("/user/create");
     public static final UrlPath URL_PATH_PAGE_API_USER_LIST = UrlPath.from("/user/list");
+    public static final UrlPath URL_PATH_LOGIN = UrlPath.from("/user/login");
     public static final String URL_PATH_LOGIN_HTML = "/user/login.html";
 
     public static final HttpVersion HTTP_VERSION = HttpVersion.of("HTTP/1.1");
@@ -40,6 +41,8 @@ public class Constants {
         = USER_ID + "=" + USER_ID + "&" + USER_PASSWORD + "=" + USER_PASSWORD;
     public static final Parameters PARAMETERS_FOR_LOGIN
         = Parameters.fromEncodedParameter(LOGIN_PARAMETER);
+    public static final Parameters WRONG_PARAMETERS_FOR_LOGIN
+        = Parameters.fromEncodedParameter(LOGIN_PARAMETER + "WRONG");
     public static final Parameters PARAMETERS_FOR_CREATE_USER = Parameters.fromEncodedParameter(
         LOGIN_PARAMETER + "&" + USER_EMAIL + "=" + USER_EMAIL + "&" + USER_NAME + "=" + USER_NAME);
 

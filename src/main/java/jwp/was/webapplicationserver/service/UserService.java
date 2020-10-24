@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import jwp.was.webapplicationserver.configure.annotation.Autowired;
 import jwp.was.webapplicationserver.configure.annotation.Service;
+import jwp.was.webapplicationserver.configure.annotation.UserDetails;
 import jwp.was.webapplicationserver.configure.session.HttpSession;
 import jwp.was.webapplicationserver.configure.session.HttpSessionImpl;
 import jwp.was.webapplicationserver.configure.session.HttpSessions;
@@ -17,6 +18,7 @@ import jwp.was.webapplicationserver.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@UserDetails
 @Service
 public class UserService {
 

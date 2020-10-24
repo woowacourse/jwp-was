@@ -2,6 +2,7 @@ package jwp.was.webapplicationserver.configure.security;
 
 import static com.google.common.net.HttpHeaders.COOKIE;
 import static com.google.common.net.HttpHeaders.LOCATION;
+import static jwp.was.webapplicationserver.configure.security.LoginFilter.SET_COOKIE_SESSION_ID;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,8 +18,6 @@ import jwp.was.webserver.dto.HttpResponse;
 
 public class WithLoginFilter {
 
-    private static final String SET_COOKIE_SESSION_ID = "sessionId";
-    public static final String SET_COOKIE_SESSION_ID_KEY = SET_COOKIE_SESSION_ID + "=";
     private static final WithLoginFilter INSTANCE = new WithLoginFilter();
     private static final String NEED_LOGIN_MESSAGE = "로그인이 필요합니다.";
     private static final String LOGIN_PAGE = "/user/login.html";
