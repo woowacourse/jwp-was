@@ -22,9 +22,7 @@ public enum StatusCode {
     }
 
     StatusCode(String reasonPhrase, int statusCode) {
-        this.reasonPhrase = reasonPhrase;
-        this.statusCode = statusCode;
-        this.headers = Collections.emptyList();
+        this(reasonPhrase, statusCode, Collections.emptyList());
     }
 
     public String getStatusLine() {
