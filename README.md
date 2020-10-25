@@ -36,7 +36,7 @@
     - 실패
         -[x] /user/login_failed.html로 이동
         -[x] Cookie header logined=false
--[ ] 사용자 목록 조희
+-[x] 사용자 목록 조희
     -[ ] 로그인했다면 출력한다.
     -[ ] 로그인하지 않았다면 로그인 페이지로 이동
 -[ ] 세션 구현       
