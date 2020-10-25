@@ -1,11 +1,12 @@
 package web.application.dto;
 
 import java.util.List;
+
 import web.application.domain.model.User;
 
-public class UserListResponse extends ResponseDto {
+public class UserListResponse extends ResponseDto<UserListResponse> {
 
-    private List<User> users;
+    private final List<User> users;
 
     private UserListResponse(List<User> users) {
         this.users = users;

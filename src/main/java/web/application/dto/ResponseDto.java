@@ -1,5 +1,4 @@
 package web.application.dto;
 
-public abstract class ResponseDto {
-
+public abstract class ResponseDto<T> {
 }

@@ -1,10 +1,11 @@
 package web;
 
+import java.io.IOException;
+
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
-import java.io.IOException;
 import web.application.dto.ResponseDto;
 
 public class HandlebarsHelper {
@@ -13,7 +14,7 @@ public class HandlebarsHelper {
         return Cache.HANDLEBARS_HELPER;
     }
 
-    public String apply(String path, ResponseDto responseDto) {
+    public String apply(String path, ResponseDto<? extends ResponseDto<?>> responseDto) {
         TemplateLoader loader = new ClassPathTemplateLoader();
         loader.setPrefix("/templates");
         loader.setSuffix(".html");
