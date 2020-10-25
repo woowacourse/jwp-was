@@ -51,7 +51,7 @@ public class HttpResponse {
         this.header.addHeader(key, value);
     }
 
-    public boolean hasResource(){
+    public boolean hasResource() {
         return Objects.nonNull(this.modelAndView) && Objects.nonNull(this.modelAndView.getView());
     }
 
@@ -97,5 +97,9 @@ public class HttpResponse {
 
     public boolean hasModel() {
         return Objects.nonNull(this.modelAndView) && Objects.nonNull(modelAndView.getModel());
+    }
+
+    public void error() {
+        this.status = HttpStatus.ERROR;
     }
 }

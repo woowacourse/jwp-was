@@ -11,6 +11,7 @@ import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import http.StaticFile;
+import http.exceptions.FailToRenderView;
 import http.response.HttpResponse;
 
 public class HandleBarViewResolver implements ViewResolver {
@@ -38,6 +39,7 @@ public class HandleBarViewResolver implements ViewResolver {
             write(dataOutputStream, apply(httpResponse));
         } catch (IOException e) {
             logger.error(e.getMessage());
+            throw new FailToRenderView(e.getMessage());
         }
     }
 

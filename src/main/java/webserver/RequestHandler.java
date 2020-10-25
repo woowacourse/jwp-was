@@ -13,6 +13,7 @@ import http.controller.LoginController;
 import http.controller.ResourceController;
 import http.controller.UserCreateController;
 import http.controller.UserListController;
+import http.exceptions.FailToHandleRequest;
 import http.request.HttpRequest;
 import http.request.HttpRequestMapping;
 import http.request.HttpRequestParser;
@@ -55,15 +56,29 @@ public class RequestHandler implements Runnable {
             connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
+            handleRequest(in, out);
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+            throw new FailToHandleRequest(e.getMessage());
+        }
+    }
 
+    private void handleRequest(InputStream in, OutputStream out) {
+        try {
             HttpRequest httpRequest = HttpRequestParser.parse(in);
             httpRequest.setSessionManager(this.sessionManager);
             HttpResponse httpResponse = HttpResponse.from(out);
             httpRequestController.doService(httpRequest, httpResponse);
             new ResponseEntity(new HandleBarViewResolver()).build(httpResponse);
-
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.error(e.getMessage());
+            sendError(out);
         }
+    }
+
+    private void sendError(OutputStream out) {
+        HttpResponse httpResponse = HttpResponse.from(out);
+        httpResponse.error();
+        new ResponseEntity(new HandleBarViewResolver()).build(httpResponse);
     }
 }

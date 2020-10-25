@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import http.StaticFile;
+import http.exceptions.FailToBuildResponse;
 import utils.FileIoUtils;
 import view.ViewResolver;
 
@@ -34,6 +35,7 @@ public class ResponseEntity {
             responseBody(httpResponse, dataOutputStream);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
+            throw new FailToBuildResponse(e.getMessage());
         }
     }
 
