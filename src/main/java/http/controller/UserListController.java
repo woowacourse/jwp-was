@@ -12,7 +12,7 @@ import view.View;
 
 public class UserListController extends HttpRequestMappingAbstractController {
 
-    private static final String TRUE = "true";
+    private static final String LOGIN_SUCCESS = "true";
     private static final String LOGINED = "logined";
 
     public UserListController(HttpRequestMapping httpRequestMapping) {
@@ -34,6 +34,6 @@ public class UserListController extends HttpRequestMappingAbstractController {
     }
 
     private boolean isLoggedin(HttpRequest httpRequest) {
-        return httpRequest.hasCookie() && TRUE.equals(httpRequest.getCookie(LOGINED));
+        return httpRequest.hasCookie() && LOGIN_SUCCESS.equals(httpRequest.getCookie(LOGINED));
     }
 }
