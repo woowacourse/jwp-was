@@ -19,7 +19,7 @@ public class HttpResponseTest {
         byte[] expectedBody = FileIoUtils.loadFileFromClasspath(filePath);
 
         HttpResponse httpResponse = new HttpResponse(null);
-        httpResponse.forward(filePath);
+        httpResponse.ok(filePath);
 
         assertThat(httpResponse.getBody()).isEqualTo(expectedBody);
         assertThat(httpResponse.getHttpStatus()).isEqualTo(HttpStatus.OK);

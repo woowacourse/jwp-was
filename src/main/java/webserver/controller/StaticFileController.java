@@ -7,7 +7,7 @@ import webserver.staticfile.StaticFileMatcher;
 public class StaticFileController extends AbstractController {
     @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        httpResponse.forward(StaticFileMatcher.findStaticFilePath(httpRequest.getResourcePath()));
+        httpResponse.ok(StaticFileMatcher.findStaticFilePath(httpRequest.getResourcePath()));
     }
 
     @Override
