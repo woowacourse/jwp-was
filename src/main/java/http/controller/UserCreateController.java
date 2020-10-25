@@ -1,15 +1,13 @@
-package controller;
+package http.controller;
 
 import java.util.Map;
 
 import db.DataBase;
 import http.request.HttpRequest;
 import http.request.HttpRequestMapping;
+import http.response.HttpResponse;
 import model.User;
 import model.UserDto;
-import view.Model;
-import view.ModelAndView;
-import view.View;
 
 public class UserCreateController extends HttpRequestMappingAbstractController {
 
@@ -18,17 +16,13 @@ public class UserCreateController extends HttpRequestMappingAbstractController {
     }
 
     @Override
-    public ModelAndView handle(HttpRequest httpRequest) {
-        Map<String, String> parsedBody = httpRequest.getRequestBody().parseBody();
+    public void handle(HttpRequest httpRequest, HttpResponse httpResponse) {
+        Map<String, String> parsedBody = httpRequest.getBody().parseBody();
         UserDto userDto = UserDto.from(parsedBody);
         User user = userDto.toEntity();
 
         DataBase.addUser(user);
 
-        Model model = new Model();
-        model.addAttributes("user", user);
-        View view = new View("redirect:/index.html");
-
-        return ModelAndView.of(model, view);
+        httpResponse.redirect("/index.html");
     }
 }

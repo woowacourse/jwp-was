@@ -5,10 +5,6 @@ import java.util.Map;
 
 public class ResponseHeader {
 
-    public static final String REDIRECT_LOCATION = "Location";
-    private static final String REDIRECT_PREFIX = "redirect:";
-    private static final String EMPTY_STRING = "";
-
     private final Map<String, String> headers;
 
     public ResponseHeader() {
@@ -21,11 +17,6 @@ public class ResponseHeader {
 
     public void addHeader(String key, String value) {
         headers.put(key, value);
-    }
-
-    public void addRedirectHeader(String redirectUri) {
-        String redirectLocation = redirectUri.replace(REDIRECT_PREFIX, EMPTY_STRING);
-        headers.put(REDIRECT_LOCATION, redirectLocation);
     }
 
     public Map<String, String> getHeaders() {

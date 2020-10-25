@@ -1,5 +1,7 @@
 package view;
 
+import java.util.Map;
+
 public class ModelAndView {
 
     private final Model model;
@@ -16,6 +18,10 @@ public class ModelAndView {
 
     public static ModelAndView from(View view) {
         return new ModelAndView(null, view);
+    }
+
+    public Map<String, Object> getAttributes() {
+        return model.getAttributes();
     }
 
     public Model getModel() {

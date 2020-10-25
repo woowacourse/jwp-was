@@ -43,6 +43,10 @@ public class RequestPath {
         return path;
     }
 
+    public Map<String, String> getParameters() {
+        return parameters;
+    }
+
     public String getParameters(String key) {
         return parameters.get(key);
     }

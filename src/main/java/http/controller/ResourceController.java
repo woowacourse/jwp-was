@@ -1,8 +1,8 @@
-package controller;
+package http.controller;
 
 import http.request.HttpRequest;
 import http.request.HttpRequestMapping;
-import view.ModelAndView;
+import http.response.HttpResponse;
 import view.View;
 
 public class ResourceController extends HttpRequestMappingAbstractController {
@@ -12,7 +12,7 @@ public class ResourceController extends HttpRequestMappingAbstractController {
     }
 
     @Override
-    public ModelAndView handle(HttpRequest httpRequest) {
-        return ModelAndView.from(new View(httpRequest.getRequestLine().getPath()));
+    public void handle(HttpRequest httpRequest, HttpResponse httpResponse) {
+        httpResponse.ok(new View(httpRequest.getRequestLine().getPath()));
     }
 }

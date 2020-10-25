@@ -17,7 +17,7 @@ class RequestBodyTest extends AbstractHttpRequestGenerator {
     @Test
     void check_RequestBody_Content() throws IOException {
         HttpRequest httpRequest = createHttpPostRequest("POST_UserCreateRequest");
-        RequestBody requestBody = httpRequest.getRequestBody();
+        RequestBody requestBody = httpRequest.getBody();
         Map<String, String> parsedBody = requestBody.parseBody();
 
         assertAll(

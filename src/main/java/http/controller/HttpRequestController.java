@@ -1,10 +1,10 @@
-package controller;
+package http.controller;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import http.request.HttpRequest;
-import view.ModelAndView;
+import http.response.HttpResponse;
 
 public class HttpRequestController {
 
@@ -19,12 +19,12 @@ public class HttpRequestController {
         controllers.add(controller);
     }
 
-    public ModelAndView doService(HttpRequest httpRequest) {
+    public void doService(HttpRequest httpRequest, HttpResponse httpResponse) {
         Controller selectedController = controllers.stream()
             .filter(controller -> controller.canHandle(httpRequest))
             .findAny()
             .orElse(defaultController);
 
-        return selectedController.handle(httpRequest);
+        selectedController.handle(httpRequest, httpResponse);
     }
 }
