@@ -12,7 +12,7 @@ class FilePrefixPathMapperTest {
 
     @DisplayName("정적파일의 FullPath를 확인한다")
     @ParameterizedTest
-    @CsvSource(value = {"/index.html, HTML, /index.html", "/style.css, CSS, ./static/style.css"})
+    @CsvSource(value = {"/index.html, HTML, templates/index.html", "/style.css, CSS, static/style.css"})
     void addPrefix(String path, StaticFileType staticFileType, String actual) {
         FilePrefixPathMapper filePrefixPathMapper = FilePrefixPathMapper.getInstance();
         String filePath = filePrefixPathMapper.addPrefix(path, staticFileType);
