@@ -71,8 +71,8 @@ public class HttpResponse {
         return status;
     }
 
-    public HttpVersion getVersion() {
-        return version;
+    public String getVersion() {
+        return version.getVersion();
     }
 
     public ModelAndView getModelAndView() {

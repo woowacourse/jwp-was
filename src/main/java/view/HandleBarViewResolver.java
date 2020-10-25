@@ -46,7 +46,7 @@ public class HandleBarViewResolver implements ViewResolver {
     private String apply(HttpResponse httpResponse) throws IOException {
         String resource = httpResponse.getResource();
         Template template = handlebars.compile(resource);
-        return template.apply(httpResponse.getModelAndView().getModel().getAttributes());
+        return template.apply(httpResponse.getModelAndView().getAttributes());
     }
 
     private void write(DataOutputStream dataOutputStream, String body) throws IOException {

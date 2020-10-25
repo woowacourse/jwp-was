@@ -42,7 +42,7 @@ public class ResponseEntity {
     private void responseStatus(HttpResponse httpResponse, DataOutputStream dataOutputStream) throws
         IOException {
         dataOutputStream.writeBytes(
-            httpResponse.getVersion().getVersion() + SPACE + httpResponse.getStatus().getMessage() + lineSeparator);
+            httpResponse.getVersion() + SPACE + httpResponse.getStatus().getMessage() + lineSeparator);
     }
 
     private void responseHeader(HttpResponse httpResponse, DataOutputStream dataOutputStream) throws

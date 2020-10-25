@@ -27,7 +27,7 @@ class HttpResponseTest {
     @DisplayName("HTTP 1.1 버전 확인")
     @Test
     void check_Default_HttpVersion() {
-        assertThat(response.getVersion()).isEqualTo(HttpVersion.HTTP1_1);
+        assertThat(response.getVersion()).isEqualTo(HttpVersion.HTTP1_1.getVersion());
     }
 
     @DisplayName("응답에 리소스 없는 경우")
