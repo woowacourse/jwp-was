@@ -13,10 +13,10 @@ import java.util.Map;
 
 public class HttpRequest {
     private final HttpRequestLine requestLine;
-    private final Map<String, String> headers;
+    private final Map<String, Object> headers;
     private final Map<String, String> body;
 
-    public HttpRequest(HttpRequestLine requestLine, Map<String, String> headers, Map<String, String> body) {
+    public HttpRequest(HttpRequestLine requestLine, Map<String, Object> headers, Map<String, String> body) {
         this.requestLine = requestLine;
         this.headers = headers;
         this.body = body;
@@ -47,8 +47,8 @@ public class HttpRequest {
         this.body = extractBody(hasBody, lines);
     }
 
-    private Map<String, String> extractHeaders(boolean hasBody, List<String> lines) throws UnsupportedEncodingException {
-        Map<String, String> headers = new HashMap<>();
+    private Map<String, Object> extractHeaders(boolean hasBody, List<String> lines) throws UnsupportedEncodingException {
+        Map<String, Object> headers = new HashMap<>();
         int headerSize = hasBody ? lines.size() - 1 : lines.size();
         for (int i = 0; i < headerSize; i++) {
             if (Strings.isNullOrEmpty(lines.get(i))) {
@@ -71,8 +71,8 @@ public class HttpRequest {
         return requestLine.getHttpMethod();
     }
 
-    public Map<String, String> getHeaders() {
-        return headers;
+    public Object getHeader(String httpHeader) {
+        return headers.get(httpHeader);
     }
 
     public Map<String, String> getQueryParameters() {

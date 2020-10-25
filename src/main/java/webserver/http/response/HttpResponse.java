@@ -6,6 +6,7 @@ import utils.FileIoUtils;
 import utils.FormatUtils;
 import view.ModelAndView;
 import webserver.controller.ExceptionHandler;
+import webserver.http.session.Cookie;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -54,8 +55,9 @@ public class HttpResponse {
         httpResponseHeader.add("Content-Length", String.valueOf(body.length));
     }
 
-    public void setCookie(String value) {
-        httpResponseHeader.add("Set-Cookie", value + " Path=/");
+    public void setCookie(Cookie cookie) {
+        cookie.add("Path", "/");
+        httpResponseHeader.add("Set-Cookie", cookie);
     }
 
     public void redirect(String location) {
@@ -77,7 +79,7 @@ public class HttpResponse {
         String responseLine = FormatUtils.formatResponseLine(httpResponseHeader.getHttpResponseLine());
         dataOutputStream.writeBytes(responseLine);
 
-        for (Map.Entry<String, String> entry : httpResponseHeader.getHeaders().entrySet()) {
+        for (Map.Entry<String, Object> entry : httpResponseHeader.getHeaders().entrySet()) {
             dataOutputStream.writeBytes(FormatUtils.formatHeader(entry));
         }
 
@@ -97,7 +99,7 @@ public class HttpResponse {
         return body;
     }
 
-    public Map<String, String> getHeaders() {
+    public Map<String, Object> getHeaders() {
         return Collections.unmodifiableMap(httpResponseHeader.getHeaders());
     }
 

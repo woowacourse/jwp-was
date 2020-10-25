@@ -1,6 +1,5 @@
 package webserver.user;
 
-import com.google.common.base.Strings;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +9,8 @@ import webserver.controller.AbstractController;
 import webserver.controller.ExceptionHandler;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
+import webserver.http.session.Cookie;
+import webserver.http.session.SessionStorage;
 import webserver.staticfile.StaticFileMatcher;
 
 import java.util.Collection;
@@ -21,11 +22,17 @@ public class UserListController extends AbstractController {
 
     @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        String cookie = httpRequest.getHeaders().get("Cookie");
-        if (Strings.isNullOrEmpty(cookie) || !cookie.equals("logined=true")) {
+        if (httpRequest.getHeader("Cookie") == null) {
             httpResponse.redirect("/user/login");
             return;
         }
+
+        Cookie cookie = (Cookie) httpRequest.getHeader("Cookie");
+        if (!SessionStorage.has((String) cookie.get("logined"))) {
+            httpResponse.redirect("/user/login");
+            return;
+        }
+
         Collection<User> users = UserService.findUsers();
         Map<String, Object> model = new HashMap<>();
         model.put("users", users);

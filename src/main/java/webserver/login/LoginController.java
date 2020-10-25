@@ -3,6 +3,10 @@ package webserver.login;
 import webserver.controller.AbstractController;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
+import webserver.http.session.Cookie;
+import webserver.http.session.Session;
+import webserver.http.session.SessionManager;
+import webserver.http.session.SessionStorage;
 
 public class LoginController extends AbstractController {
     final LoginService loginService = new LoginService();
@@ -22,7 +26,12 @@ public class LoginController extends AbstractController {
         String location = login ? "/index.html" : "/user/login_failed.html";
         httpResponse.redirect(location);
 
-        String value = "logined=" + login + ";";
-        httpResponse.setCookie(value);
+        if (login) {
+            Session session = SessionManager.getNewSession();
+            SessionStorage.add(session);
+            Cookie cookie = new Cookie();
+            cookie.add("logined", session.getId());
+            httpResponse.setCookie(cookie);
+        }
     }
 }

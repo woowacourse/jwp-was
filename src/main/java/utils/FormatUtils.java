@@ -10,7 +10,7 @@ public class FormatUtils {
                 httpResponseLine.getHttpStatus().name(), httpResponseLine.getHttpStatus().getStatusCode());
     }
 
-    public static String formatHeader(Map.Entry<String, String> line) {
+    public static String formatHeader(Map.Entry<String, Object> line) {
         return String.format("%s: %s\n", line.getKey(), line.getValue());
     }
 }

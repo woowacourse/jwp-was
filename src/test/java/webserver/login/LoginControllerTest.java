@@ -39,7 +39,7 @@ public class LoginControllerTest {
         loginController.doPost(httpRequest, httpResponse);
 
         assertThat(httpResponse.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
-        assertThat(httpResponse.getHeaders().get("Set-Cookie")).isEqualTo("logined=true; Path=/");
+        assertThat(httpResponse.getHeaders().get("Set-Cookie")).isNotNull();
         assertThat(httpResponse.getHeaders().get("Location")).isEqualTo("http://localhost:8080/index.html");
     }
 
@@ -56,7 +56,7 @@ public class LoginControllerTest {
         loginController.doPost(httpRequest, httpResponse);
 
         assertThat(httpResponse.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
-        assertThat(httpResponse.getHeaders().get("Set-Cookie")).isEqualTo("logined=false; Path=/");
+        assertThat(httpResponse.getHeaders().get("Set-Cookie")).isNull();
         assertThat(httpResponse.getHeaders().get("Location")).isEqualTo("http://localhost:8080/user/login_failed.html");
     }
 }
