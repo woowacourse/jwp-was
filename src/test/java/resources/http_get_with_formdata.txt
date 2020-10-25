@@ -6,4 +6,3 @@ Content-Type: application/x-www-form-urlencoded
 Accept: */*
 
 id=1
-
