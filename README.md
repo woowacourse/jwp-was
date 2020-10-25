@@ -37,8 +37,8 @@
         -[x] /user/login_failed.html로 이동
         -[x] Cookie header logined=false
 -[x] 사용자 목록 조희
-    -[ ] 로그인했다면 출력한다.
-    -[ ] 로그인하지 않았다면 로그인 페이지로 이동
+    -[x] 로그인했다면 출력한다.
+    -[x] 로그인하지 않았다면 로그인 페이지로 이동
 -[ ] 세션 구현       
     String getId(): 현재 세션에 할당되어 있는 고유한 세션 아이디를 반환  
     void setAttribute(String name, Object value): 현재 세션에 value 인자로 전달되는 객체를 name 인자 이름으로 저장  

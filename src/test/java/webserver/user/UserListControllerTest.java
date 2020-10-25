@@ -7,6 +7,7 @@ import view.ModelAndView;
 import view.View;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
+import webserver.http.response.HttpStatus;
 import webserver.staticfile.StaticFileMatcher;
 
 import java.io.IOException;
@@ -32,7 +33,9 @@ public class UserListControllerTest {
 
         byte[] expected = modelAndView.render().getBytes();
 
-        HttpRequest httpRequest = new HttpRequest(null, null, null);
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Cookie", "logined=true");
+        HttpRequest httpRequest = new HttpRequest(null, headers, null);
         HttpResponse httpResponse = new HttpResponse(null);
 
         userListController.doGet(httpRequest, httpResponse);
@@ -41,7 +44,15 @@ public class UserListControllerTest {
 
     @DisplayName("사용자 목록 출력 시, 로그인하지 않았다면 로그인 페이지로 이동한다.")
     @Test
-    void name() {
+    void listFailTest() {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Cookie", "logined=false");
+        HttpRequest httpRequest = new HttpRequest(null, headers, null);
+        HttpResponse httpResponse = new HttpResponse(null);
 
+        userListController.doGet(httpRequest, httpResponse);
+
+        assertThat(httpResponse.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
+        assertThat(httpResponse.getHeaders().get("Location")).isEqualTo("http://localhost:8080/user/login");
     }
 }
