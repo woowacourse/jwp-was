@@ -1,24 +1,24 @@
 package web.server.domain.request;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class HttpSessionStorage {
 
     private Map<String, HttpSession> sessionStorage;
 
     private HttpSessionStorage() {
-        this.sessionStorage = new HashMap<>();
+        this.sessionStorage = new ConcurrentHashMap<>();
     }
 
     public static HttpSessionStorage getInstance() {
         return Cache.HTTP_SESSION_STORAGE;
     }
 
-    public HttpSession getSession(String key) {
-        if (sessionStorage.containsKey(key)) {
-            return sessionStorage.get(key);
+    public HttpSession getSession(String sessionKey) {
+        if (sessionStorage.containsKey(sessionKey)) {
+            return sessionStorage.get(sessionKey);
         }
         return createSession();
     }
