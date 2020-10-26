@@ -1,18 +1,20 @@
 package controller;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import db.DataBase;
 import exception.IllegalRequestException;
-import http.HttpHeaders;
+import http.request.Cookie;
 import http.request.Request;
 import http.request.RequestBody;
 import http.response.Response;
 import http.session.HttpSession;
 import http.session.HttpSessionStore;
+import http.session.WebSession;
 import model.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.Map;
 
 public class LoginController extends AbstractController {
 
@@ -30,8 +32,9 @@ public class LoginController extends AbstractController {
             httpSession.setAttribute("email", user.getEmail());
 
             String id = httpSession.getId();
-
-            response.setHeader(HttpHeaders.SET_COOKIE, "JSESSIONID=" + id + "; Path=/");
+            Cookie cookie = new Cookie(WebSession.DEFAULT_SESSION_COOKIE_NAME, id + "; paht=/");
+            
+            response.addCookie(cookie);
             response.found("/index.html");
         } catch (IllegalRequestException e) {
             logger.info(e.getMessage());

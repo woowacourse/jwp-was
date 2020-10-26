@@ -20,14 +20,17 @@ public class Request {
     private final HttpHeaders httpHeader;
     private final RequestBody requestBody;
     private final Cookies cookies;
-    private final HttpSession httpSession;
+    private HttpSession httpSession;
 
     public Request(BufferedReader br) throws Exception {
         this.requestLine = new RequestLine(br);
         this.httpHeader = new HttpHeaders(ofRequestHeader(br));
         this.requestBody = new RequestBody(br, httpHeader.getContentLength());
         this.cookies = new Cookies(httpHeader.getHeader(HttpHeaders.COOKIE));
-        this.httpSession = HttpSessionStore.getSession(cookies.getCookie(WebSession.DEFAULT_SESSION_COOKIE_NAME));
+        if (!"".equals(cookies.getCookieValue(WebSession.DEFAULT_SESSION_COOKIE_NAME))) {
+            this.httpSession = HttpSessionStore.getSession(
+                    cookies.getCookieValue(WebSession.DEFAULT_SESSION_COOKIE_NAME));
+        }
         IOUtils.printRequest(this);
     }
 
@@ -77,10 +80,6 @@ public class Request {
 
     public String getContentType() {
         return ContentType.of(getPath()).getContentType();
-    }
-
-    public String getCookie(String key) {
-        return cookies.getCookie(key);
     }
 
     public HttpSession getHttpSession() {

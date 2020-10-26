@@ -1,18 +1,21 @@
 package http.response;
 
-import http.ContentType;
-import http.HttpHeaders;
-import http.request.RequestMethod;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import utils.Directory;
-import utils.FileIoUtils;
-
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.util.Objects;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import http.ContentType;
+import http.HttpHeaders;
+import http.request.Cookie;
+import http.request.Cookies;
+import http.request.RequestMethod;
+import utils.Directory;
+import utils.FileIoUtils;
 
 public class Response {
     private static final Logger logger = LoggerFactory.getLogger(Response.class);
@@ -21,11 +24,13 @@ public class Response {
     private DataOutputStream dataOutputStream;
     private StatusLine statusLine;
     private HttpHeaders headers;
+    private Cookies cookies;
     private ResponseBody body;
 
     public Response(OutputStream out) {
         dataOutputStream = new DataOutputStream(out);
         headers = new HttpHeaders();
+        cookies = new Cookies();
     }
 
     public void setHeader(String key, String value) {
@@ -67,10 +72,14 @@ public class Response {
         return new ResponseBody(FileIoUtils.loadFileFromClasspath(Directory.STATIC.getDirectory() + path));
     }
 
+    public void addCookie(Cookie cookie) {
+        cookies.addCookie(cookie);
+    }
+
     private void write() {
         try {
             statusLine.write(dataOutputStream);
-            headers.write(dataOutputStream);
+            headers.write(dataOutputStream, cookies);
             if (Objects.nonNull(body)) {
                 body.write(dataOutputStream);
             }
