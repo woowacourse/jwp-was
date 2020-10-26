@@ -2,8 +2,8 @@ package web.server.domain.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Arrays;
 
+import web.common.Cookie;
 import web.server.utils.IOUtils;
 import web.server.utils.StaticFileType;
 
@@ -11,11 +11,12 @@ public class HttpRequest {
 
     private static final String NEW_LINE = System.lineSeparator();
     private static final String COLON = ": ";
+    private static final String JSSESION_ID = "JSESSIONID";
 
     private final RequestLine requestLine;
     private final HeaderParams headerParams;
     private final RequestParams requestParams;
-    private final HttpSessionStorage httpSessionStorage;
+    private final Cookies cookies;
 
     public HttpRequest(BufferedReader bufferedReader) throws IOException {
         String header = IOUtils.readHeader(bufferedReader);
@@ -32,7 +33,7 @@ public class HttpRequest {
             params = IOUtils.readBody(bufferedReader, findContentLength());
         }
         this.requestParams = new RequestParams(params);
-        this.httpSessionStorage = HttpSessionStorage.getInstance();
+        this.cookies = Cookies.from(getHeader("Cookie"));
     }
 
     public RequestMethod getMethod() {
@@ -69,15 +70,9 @@ public class HttpRequest {
     }
 
     public HttpSession getSession() {
-        String cookies = getHeader("Cookie");
-        String[] split = cookies.split("; ");
+        Cookie cookie = cookies.findCookie(JSSESION_ID);
 
-        String sessionKey = Arrays.stream(split)
-            .filter(value -> value.startsWith("JSESSIONID="))
-            .map(value -> value.split("=")[1])
-            .findFirst()
-            .orElse("");
-
-        return httpSessionStorage.getSession(sessionKey);
+        return HttpSessionStorage.getInstance()
+            .getSession(cookie.getValue());
     }
 }
