@@ -14,4 +14,8 @@ public class HttpSessionStorage {
         HttpSession httpSession = new HttpSession();
         return addSession(httpSession);
     }
+
+    public static HttpSession getSession(String sessionId) {
+        return storage.get(sessionId);
+    }
 }

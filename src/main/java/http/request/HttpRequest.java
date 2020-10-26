@@ -29,4 +29,12 @@ public class HttpRequest {
     public RequestMethod getRequestMethod() {
         return this.requestLine.getMethod();
     }
+
+    public boolean hasCookie(String key) {
+        return this.requestHeader.hasCookie(key);
+    }
+
+    public String getSessionId() {
+        return this.requestHeader.getCookie("SESSIONID");
+    }
 }

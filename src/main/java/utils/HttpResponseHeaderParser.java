@@ -1,5 +1,7 @@
 package utils;
 
+import http.request.Cookie;
+
 public class HttpResponseHeaderParser {
     public static String ok(String contentType, int lengthOfBodyContent) {
         return "HTTP/1.1 200 OK \r\n" +
@@ -14,10 +16,10 @@ public class HttpResponseHeaderParser {
                 "\r\n";
     }
 
-    public static String found(String location, boolean logined) {
+    public static String found(String location, Cookie cookie) {
         return "HTTP/1.1 302 Found \r\n" +
                 "Location: " + location + "\r\n" +
-                "Set-Cookie: logined=" + logined + "; Path=/" + "\r\n" +
+                "Set-Cookie: " + cookie.toString() + "\r\n" +
                 "\r\n";
     }
 
