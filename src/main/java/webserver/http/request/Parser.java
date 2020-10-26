@@ -29,9 +29,9 @@ public class Parser {
 
     public static class Pair {
         private final String key;
-        private final String value;
+        private final Object value;
 
-        public Pair(String key, String value) {
+        public Pair(String key, Object value) {
             this.key = key;
             this.value = value;
         }
@@ -40,7 +40,7 @@ public class Parser {
             return key;
         }
 
-        public String getValue() {
+        public Object getValue() {
             return value;
         }
     }

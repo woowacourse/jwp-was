@@ -4,7 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import utils.FormatUtils;
+import view.ModelAndView;
 import webserver.controller.ExceptionHandler;
+import webserver.http.session.Cookie;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -24,7 +26,7 @@ public class HttpResponse {
         this.outputStream = outputStream;
     }
 
-    public void forward(String location) {
+    public void ok(String location) {
         try {
             this.body = FileIoUtils.loadFileFromClasspath(location);
         } catch (Exception e) {
@@ -32,11 +34,30 @@ public class HttpResponse {
             ExceptionHandler.processException(e, this);
             return;
         }
+        ok();
+    }
 
+    public void ok(ModelAndView modelAndView) {
+        try {
+            this.body = modelAndView.render().getBytes();
+        } catch (IOException e) {
+            logger.info(e.getMessage());
+            ExceptionHandler.processException(e, this);
+            return;
+        }
+        ok();
+    }
+
+    private void ok() {
         HttpResponseLine httpResponseLine = new HttpResponseLine(HttpStatus.OK);
         httpResponseHeader = new HttpResponseHeader(httpResponseLine);
         httpResponseHeader.add("Content-Type", "text/html;charset=utf-8");
         httpResponseHeader.add("Content-Length", String.valueOf(body.length));
+    }
+
+    public void setCookie(Cookie cookie) {
+        cookie.add("Path", "/");
+        httpResponseHeader.add("Set-Cookie", cookie);
     }
 
     public void redirect(String location) {
@@ -58,7 +79,7 @@ public class HttpResponse {
         String responseLine = FormatUtils.formatResponseLine(httpResponseHeader.getHttpResponseLine());
         dataOutputStream.writeBytes(responseLine);
 
-        for (Map.Entry<String, String> entry : httpResponseHeader.getHeaders().entrySet()) {
+        for (Map.Entry<String, Object> entry : httpResponseHeader.getHeaders().entrySet()) {
             dataOutputStream.writeBytes(FormatUtils.formatHeader(entry));
         }
 
@@ -66,6 +87,7 @@ public class HttpResponse {
             dataOutputStream.writeBytes("\r\n");
             dataOutputStream.write(body, 0, body.length);
         }
+
         dataOutputStream.flush();
     }
 
@@ -77,7 +99,7 @@ public class HttpResponse {
         return body;
     }
 
-    public Map<String, String> getHeaders() {
+    public Map<String, Object> getHeaders() {
         return Collections.unmodifiableMap(httpResponseHeader.getHeaders());
     }
 

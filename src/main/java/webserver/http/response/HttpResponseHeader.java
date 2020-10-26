@@ -5,9 +5,9 @@ import java.util.Map;
 
 public class HttpResponseHeader {
     private final HttpResponseLine httpResponseLine;
-    private final Map<String, String> headers;
+    private final Map<String, Object> headers;
 
-    public HttpResponseHeader(HttpResponseLine httpResponseLine, Map<String, String> headers) {
+    public HttpResponseHeader(HttpResponseLine httpResponseLine, Map<String, Object> headers) {
         this.httpResponseLine = httpResponseLine;
         this.headers = headers;
     }
@@ -16,11 +16,11 @@ public class HttpResponseHeader {
         this(httpResponseLine, new HashMap<>());
     }
 
-    public void add(String key, String value) {
+    public void add(String key, Object value) {
         headers.put(key, value);
     }
 
-    public Map<String, String> getHeaders() {
+    public Map<String, Object> getHeaders() {
         return headers;
     }
 

@@ -13,6 +13,7 @@ public class HandlerMapping {
 
     public HandlerMapping() {
         mappings.put("/user/create", Controllers.USER_CONTROLLER);
+        mappings.put("/user/login", Controllers.LOGIN_CONTROLLER);
     }
 
     public void mapping(HttpRequest httpRequest, HttpResponse httpResponse) {

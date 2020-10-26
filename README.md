@@ -27,3 +27,21 @@
 -[x] Controller 추상화
 -[x] HTTP 요청/응답 처리 기능
   - HTTP 요청 Header/Body 처리, 응답 Header/Body 처리만을 담당하는 역할을 분리해 재사용 가능하도록 한다.
+  
+#3단계
+-[x] 로그인 처리
+    - 성공
+        -[x] index.html로 이동
+        -[x] Cookie header logined=true
+    - 실패
+        -[x] /user/login_failed.html로 이동
+        -[x] Cookie header logined=false
+-[x] 사용자 목록 조희
+    -[x] 로그인했다면 출력한다.
+    -[x] 로그인하지 않았다면 로그인 페이지로 이동
+-[x] 세션 구현       
+    String getId(): 현재 세션에 할당되어 있는 고유한 세션 아이디를 반환  
+    void setAttribute(String name, Object value): 현재 세션에 value 인자로 전달되는 객체를 name 인자 이름으로 저장  
+    Object getAttribute(String name): 현재 세션에 name 인자로 저장되어 있는 객체 값을 찾아 반환  
+    void removeAttribute(String name): 현재 세션에 name 인자로 저장되어 있는 객체 값을 삭제  
+    void invalidate(): 현재 세션에 저장되어 있는 모든 값을 삭제 
