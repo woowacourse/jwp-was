@@ -8,18 +8,40 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import web.application.FrontController;
 import web.application.UrlMapper;
 import web.application.controller.Controller;
+import web.application.controller.CreateUserController;
+import web.application.controller.ListController;
+import web.application.controller.RootController;
+import web.application.controller.UserLoginController;
+import web.application.util.HandlebarsTemplateEngine;
 import web.server.domain.request.HttpRequest;
 import web.server.domain.response.HttpResponse;
+import web.server.dto.UrlMappingCreateDto;
 
 public class RequestHandler implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private static final Controller CONTROLLER = new FrontController(UrlMapper.getInstance());
+    private static final Controller CONTROLLER;
+
+    static {
+        List<UrlMappingCreateDto> urlMappingCreateDtos = Arrays.asList(
+            UrlMappingCreateDto.of("/", new RootController()),
+            UrlMappingCreateDto.of("/user/create", new CreateUserController()),
+            UrlMappingCreateDto.of("/user/login", new UserLoginController()),
+            UrlMappingCreateDto.of("/user/list", new ListController(HandlebarsTemplateEngine.getInstance()))
+        );
+
+        UrlMapper instance = new UrlMapper(urlMappingCreateDtos);
+        CONTROLLER = new FrontController(instance);
+    }
 
     private Socket connection;
 
@@ -32,8 +54,8 @@ public class RequestHandler implements Runnable {
             connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream();
-            BufferedReader bufferedReader = new BufferedReader((new InputStreamReader(in, StandardCharsets.UTF_8)));
-            DataOutputStream dataOutputStream = new DataOutputStream(out)) {
+             BufferedReader bufferedReader = new BufferedReader((new InputStreamReader(in, StandardCharsets.UTF_8)));
+             DataOutputStream dataOutputStream = new DataOutputStream(out)) {
 
             HttpRequest httpRequest = new HttpRequest(bufferedReader);
             HttpResponse httpResponse = new HttpResponse(dataOutputStream);

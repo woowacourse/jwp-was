@@ -1,22 +1,22 @@
 package web.application;
 
+import lombok.RequiredArgsConstructor;
 import web.application.controller.Controller;
 import web.application.controller.StaticController;
 import web.server.domain.request.HttpRequest;
 import web.server.domain.response.HttpResponse;
 
+@RequiredArgsConstructor
 public class FrontController implements Controller {
 
-    private final UrlMapper urlMapper;
+    private static final StaticController STATIC_CONTROLLER = new StaticController();
 
-    public FrontController(UrlMapper urlMapper) {
-        this.urlMapper = urlMapper;
-    }
+    private final UrlMapper urlMapper;
 
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
         if (httpRequest.hasPathOfStaticFile()) {
-            StaticController.getInstance().service(httpRequest, httpResponse);
+            STATIC_CONTROLLER.service(httpRequest, httpResponse);
             return;
         }
         if (urlMapper.contains(httpRequest.getPath())) {

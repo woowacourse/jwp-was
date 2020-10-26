@@ -1,19 +1,21 @@
 package web.application;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import db.DataBase;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import web.HandlebarsHelper;
+
+import db.DataBase;
 import web.application.domain.model.User;
 import web.application.dto.UserListResponse;
+import web.application.util.HandlebarsTemplateEngine;
 
-public class HandlebarsHelperTest {
+public class HandlebarsTemplateEngineTest {
 
     @BeforeEach
     void setUp() {
@@ -34,12 +36,12 @@ public class HandlebarsHelperTest {
     @DisplayName("템플릿 경로와 모델을 입력하면 해당 동적 페이지를 반환한다.")
     @Test
     void handlebarsApplyTest() {
-        HandlebarsHelper handlebarsHelper = HandlebarsHelper.getInstance();
+        HandlebarsTemplateEngine handlebarsTemplateEngine = HandlebarsTemplateEngine.getInstance();
 
         List<User> users = new ArrayList<>(DataBase.findAll());
         UserListResponse userListResponse = UserListResponse.of(users);
 
-        String contents = handlebarsHelper.apply("user/list", userListResponse);
+        String contents = handlebarsTemplateEngine.apply("user/list", userListResponse);
 
         assertAll(
             () -> assertThat(contents).contains("자바지기"),

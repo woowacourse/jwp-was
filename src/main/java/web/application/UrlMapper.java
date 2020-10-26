@@ -1,28 +1,21 @@
 package web.application;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import web.application.controller.Controller;
-import web.application.controller.CreateUserController;
-import web.application.controller.ListController;
-import web.application.controller.RootController;
-import web.application.controller.UserLoginController;
+import web.server.dto.UrlMappingCreateDto;
 
 public class UrlMapper {
 
     private final Map<String, Controller> mapper;
 
-    private UrlMapper() {
+    public UrlMapper(List<UrlMappingCreateDto> urlMappingCreateDtos) {
         this.mapper = new HashMap<>();
-        this.mapper.put("/user/create", CreateUserController.getInstance());
-        this.mapper.put("/user/login", UserLoginController.getInstance());
-        this.mapper.put("/", RootController.getInstance());
-        this.mapper.put("/user/list", ListController.getInstance());
-    }
-
-    public static UrlMapper getInstance() {
-        return Cache.URL_MAPPER;
+        for (UrlMappingCreateDto urlMappingCreateDto : urlMappingCreateDtos) {
+            this.mapper.put(urlMappingCreateDto.getUrl(), urlMappingCreateDto.getController());
+        }
     }
 
     public Controller getController(String url) {
@@ -31,10 +24,5 @@ public class UrlMapper {
 
     public boolean contains(String url) {
         return this.mapper.containsKey(url);
-    }
-
-    private static class Cache {
-
-        private static final UrlMapper URL_MAPPER = new UrlMapper();
     }
 }

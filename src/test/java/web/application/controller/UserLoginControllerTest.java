@@ -1,17 +1,17 @@
 package web.application.controller;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static web.server.common.IoUtil.createOutputStream;
-import static web.server.common.IoUtil.createRequest;
-import static web.server.common.IoUtil.readFile;
+import static org.assertj.core.api.Assertions.*;
+import static web.server.common.IoUtil.*;
 
-import db.DataBase;
 import java.io.IOException;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+
+import db.DataBase;
 import web.application.domain.model.User;
 import web.server.domain.request.HttpRequest;
 import web.server.domain.response.HttpResponse;
@@ -34,6 +34,7 @@ class UserLoginControllerTest {
         DataBase.deleteUser("pobi");
     }
 
+    // todo 바꿔야함
     @DisplayName("회원정보를 요청했을 때 쿠키를 확인한다.")
     @ParameterizedTest
     @CsvSource(value = {"http_login_success.txt,true", "http_login_failed.txt,false"})
