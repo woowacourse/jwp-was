@@ -1,6 +1,7 @@
-package http;
+package http.request;
 
 import http.controller.Controller;
+import http.response.HttpResponse;
 
 import java.util.Arrays;
 import java.util.function.BiFunction;

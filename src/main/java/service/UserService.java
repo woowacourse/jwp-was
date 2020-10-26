@@ -1,7 +1,7 @@
 package service;
 
 import db.DataBase;
-import http.HttpRequest;
+import http.request.HttpRequest;
 import model.User;
 
 public class UserService {
