@@ -1,5 +1,6 @@
 package webserver;
 
+import controller.UserController;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -10,10 +11,8 @@ import java.net.Socket;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import utils.FileIoUtils;
 import webserver.protocol.RequestHeader;
 import webserver.protocol.RequestHeaderParser;
@@ -33,6 +32,13 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             final RequestHeader requestHeader = parseRequestHeader(in);
+
+            if (requestHeader.hasQueryParams()) {
+                final String path = requestHeader.getPath();
+                if ("/user/create".equals(path)) {
+                    UserController.create(requestHeader.getQueryParams());
+                }
+            }
 
             final DataOutputStream dos = new DataOutputStream(out);
             final byte[] responseBody = FileIoUtils.loadFileFromClasspath(
