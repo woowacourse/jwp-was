@@ -16,16 +16,18 @@ public class HttpSessionStorage {
         return Cache.HTTP_SESSION_STORAGE;
     }
 
+    public HttpSession getSession(String key) {
+        if (sessionStorage.containsKey(key)) {
+            return sessionStorage.get(key);
+        }
+        return createSession();
+    }
 
-    public HttpSession createSession() {
+    private HttpSession createSession() {
         UUID uuid = UUID.randomUUID();
         HttpSession httpSession = new HttpSession(uuid.toString());
         sessionStorage.put(httpSession.getId(), httpSession);
         return httpSession;
-    }
-
-    public HttpSession getSession(String key) {
-        return sessionStorage.get(key);
     }
 
     private static class Cache {

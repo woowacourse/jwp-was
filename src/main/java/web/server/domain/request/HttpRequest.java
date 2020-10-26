@@ -72,15 +72,12 @@ public class HttpRequest {
         String cookies = getHeader("Cookie");
         String[] split = cookies.split("; ");
 
-        String key = Arrays.stream(split)
+        String sessionKey = Arrays.stream(split)
             .filter(value -> value.startsWith("JSESSIONID="))
             .map(value -> value.split("=")[1])
             .findFirst()
             .orElse("");
 
-        if (key.isEmpty()) {
-            return httpSessionStorage.createSession();
-        }
-        return httpSessionStorage.getSession(key);
+        return httpSessionStorage.getSession(sessionKey);
     }
 }
