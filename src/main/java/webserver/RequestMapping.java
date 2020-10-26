@@ -1,10 +1,16 @@
 package webserver;
 
-import controller.*;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
+import controller.Controller;
+import controller.IndexController;
+import controller.LoginController;
+import controller.LogoutController;
+import controller.ResourceController;
+import controller.UserCreateController;
+import controller.UserListController;
 
 class RequestMapping {
     private final static ResourceController RESOURCE_CONTROLLER = new ResourceController();
@@ -15,6 +21,7 @@ class RequestMapping {
         controllers.put("/user/login", new LoginController());
         controllers.put("/users", new UserCreateController());
         controllers.put("/", new IndexController());
+        controllers.put("/user/logout", new LogoutController());
     }
 
     public static Controller getController(String requestUrl) {

@@ -1,28 +1,33 @@
 package http.request;
 
-import http.ContentType;
-import http.HttpHeaders;
-import utils.IOUtils;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import http.ContentType;
+import http.HttpHeaders;
+import http.session.HttpSession;
+import http.session.HttpSessionStore;
+import http.session.WebSession;
+import utils.IOUtils;
+
 public class Request {
-    private final static String DELIMITER = ": ";
+    private static final String DELIMITER = ": ";
 
     private final RequestLine requestLine;
     private final HttpHeaders httpHeader;
     private final RequestBody requestBody;
-    private Cookies cookies;
+    private final Cookies cookies;
+    private final HttpSession httpSession;
 
     public Request(BufferedReader br) throws Exception {
         this.requestLine = new RequestLine(br);
         this.httpHeader = new HttpHeaders(ofRequestHeader(br));
         this.requestBody = new RequestBody(br, httpHeader.getContentLength());
         this.cookies = new Cookies(httpHeader.getHeader(HttpHeaders.COOKIE));
+        this.httpSession = HttpSessionStore.getSession(cookies.getCookie(WebSession.DEFAULT_SESSION_COOKIE_NAME));
         IOUtils.printRequest(this);
     }
 
@@ -76,5 +81,9 @@ public class Request {
 
     public String getCookie(String key) {
         return cookies.getCookie(key);
+    }
+
+    public HttpSession getHttpSession() {
+        return httpSession;
     }
 }

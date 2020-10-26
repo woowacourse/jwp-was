@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class WebSession implements HttpSession {
+    public static final String DEFAULT_SESSION_COOKIE_NAME = "JSESSIONID";
 
     private Map<String, Object> attributes = new HashMap<>();
     private UUID id = UUID.randomUUID();

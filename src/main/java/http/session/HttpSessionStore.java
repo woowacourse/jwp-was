@@ -5,11 +5,10 @@ import java.util.Map;
 
 public class HttpSessionStore {
 
-    private final static Map<String, HttpSession> httpSessionStore = new HashMap<>();
+    private static final Map<String, HttpSession> httpSessionStore = new HashMap<>();
 
     public static HttpSession getSession(String id) {
-        HttpSession httpSession = httpSessionStore.get(id);
-        return httpSession;
+        return httpSessionStore.get(id);
     }
 
     public static HttpSession addSession(HttpSession httpSession) {

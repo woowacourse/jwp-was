@@ -1,21 +1,22 @@
 package controller;
 
+import javax.naming.AuthenticationException;
+
 import http.request.Request;
 import http.response.Response;
+import http.session.HttpSession;
 import http.session.HttpSessionStore;
-
-import javax.naming.AuthenticationException;
 
 public class LogoutController extends AbstractController {
     @Override
     protected void doDelete(Request request, Response response) {
         try {
-            String jsessionid = request.getCookie("JSESSIONID");
+            HttpSession httpSession = request.getHttpSession();
 
-            if (!HttpSessionStore.isContains(jsessionid)) {
+            if (httpSession == null) {
                 throw new AuthenticationException();
             }
-            HttpSessionStore.delete(jsessionid);
+            HttpSessionStore.delete(httpSession.getId());
 
             response.found("/index.html");
         } catch (AuthenticationException e) {
