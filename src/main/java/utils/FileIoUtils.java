@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class FileIoUtils {
-    public static final String DEFAULT_PATH = "./templates/";
+    public static final String DEFAULT_PATH = "./templates";
 
     public static byte[] loadFileFromClasspath(String filePath) throws IOException, URISyntaxException {
         Path path = Paths.get(FileIoUtils.class.getClassLoader().getResource(filePath).toURI());
