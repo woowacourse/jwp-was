@@ -4,17 +4,17 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import db.DataBase;
-import web.HandlebarsHelper;
+import lombok.RequiredArgsConstructor;
 import web.application.dto.UserListResponse;
+import web.application.util.TemplateEngine;
 import web.server.domain.request.HttpRequest;
 import web.server.domain.response.HttpResponse;
 import web.server.utils.StaticFileType;
 
+@RequiredArgsConstructor
 public class ListController extends AbstractController {
 
-    public static ListController getInstance() {
-        return ListController.Cache.LIST_CONTROLLER;
-    }
+    private final TemplateEngine templateEngine;
 
     @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
@@ -27,15 +27,9 @@ public class ListController extends AbstractController {
             return;
         }
 
-        HandlebarsHelper handlebarsHelper = HandlebarsHelper.getInstance();
         UserListResponse userListResponse = UserListResponse.of(new ArrayList<>(DataBase.findAll()));
-        String content = handlebarsHelper.apply("user/list", userListResponse);
+        String content = templateEngine.apply("user/list", userListResponse);
 
         httpResponse.forward(content);
-    }
-
-    private static class Cache {
-
-        private static final ListController LIST_CONTROLLER = new ListController();
     }
 }

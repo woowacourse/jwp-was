@@ -10,10 +10,6 @@ import web.server.utils.StaticFileType;
 
 public class UserLoginController extends AbstractController {
 
-    public static UserLoginController getInstance() {
-        return Cache.USER_LOGIN_CONTROLLER;
-    }
-
     @Override
     public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         String userId = httpRequest.getParameter("userId");
@@ -32,10 +28,5 @@ public class UserLoginController extends AbstractController {
         FilePrefixPathMapper filePrefixPathMapper = FilePrefixPathMapper.getInstance();
         String filePath = filePrefixPathMapper.addPrefix("/index.html", StaticFileType.HTML);
         httpResponse.forward(filePath, StaticFileType.HTML);
-    }
-
-    private static class Cache {
-
-        private static final UserLoginController USER_LOGIN_CONTROLLER = new UserLoginController();
     }
 }
