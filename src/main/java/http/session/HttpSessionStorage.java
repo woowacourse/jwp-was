@@ -7,7 +7,8 @@ public class HttpSessionStorage {
     private static Map<String, HttpSession> storage = new HashMap<>();
 
     public static HttpSession addSession(HttpSession httpSession) {
-        return storage.put(httpSession.getId(), httpSession);
+        storage.put(httpSession.getId(), httpSession);
+        return httpSession;
     }
 
     public static HttpSession create() {

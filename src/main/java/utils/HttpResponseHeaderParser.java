@@ -19,7 +19,7 @@ public class HttpResponseHeaderParser {
     public static String found(String location, Cookie cookie) {
         return "HTTP/1.1 302 Found \r\n" +
                 "Location: " + location + "\r\n" +
-                "Set-Cookie: " + cookie.toString() + "\r\n" +
+                "Set-Cookie: " + cookie.toString() + "Path=/" + "\r\n" +
                 "\r\n";
     }
 
