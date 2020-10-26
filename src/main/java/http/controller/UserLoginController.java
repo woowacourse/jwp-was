@@ -21,11 +21,7 @@ public class UserLoginController extends Controller {
         Cookie cookie = new Cookie();
         if (auth) {
             User user = DataBase.findUserById(httpRequest.getBodyValue("userId"));
-            if (httpRequest.hasCookie("SESSIONID")) {
-                httpSession = HttpSessionStorage.getSession(httpRequest.getSessionId());
-            } else {
-                httpSession = HttpSessionStorage.create();
-            }
+            httpSession = retrieveHttpSession(httpRequest);
             httpSession.setAttribute("email", user.getEmail());
             cookie.setCookie("logined", "true");
             cookie.setCookie("SESSIONID", httpSession.getId());
@@ -35,5 +31,17 @@ public class UserLoginController extends Controller {
             header = HttpResponseHeaderParser.found("/user/login_failed.html", cookie);
         }
         return new HttpResponse(header);
+    }
+
+    private HttpSession retrieveHttpSession(HttpRequest httpRequest) {
+        if (httpRequest.hasCookie("SESSIONID")) {
+            HttpSession httpSession = HttpSessionStorage.getSession(httpRequest.getSessionId());
+            if (httpSession == null) {
+                httpSession = HttpSessionStorage.create();
+            }
+            return httpSession;
+        } else {
+            return HttpSessionStorage.create();
+        }
     }
 }
