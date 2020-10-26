@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class RequestHeader {
     private final Map<String, String> params;
+    private final Cookie cookie;
 
     public RequestHeader(BufferedReader br) throws IOException {
         params = new HashMap<>();
@@ -16,11 +17,16 @@ public class RequestHeader {
         }
         while ((line != null) && !line.isEmpty()) {
             String[] token = line.split(": ");
-            if(token.length != 2) {
+            if (token.length != 2) {
                 throw new IllegalArgumentException("No value for the key: " + token[0]);
             }
             params.put(token[0].toLowerCase(), token[1]);
             line = br.readLine();
+        }
+        if (params.containsKey("cookie")) {
+            this.cookie = new Cookie(params.get("cookie"));
+        } else {
+            this.cookie = new Cookie("");
         }
     }
 
@@ -42,5 +48,13 @@ public class RequestHeader {
 
     private String getHeaderParamValue(HeaderParam headerParam) {
         return this.params.get(headerParam.getParamName());
+    }
+
+    public boolean hasCookie(String key) {
+        return this.cookie.hasCookie(key);
+    }
+
+    public String getCookie(String key) {
+        return this.cookie.getCookie(key);
     }
 }
