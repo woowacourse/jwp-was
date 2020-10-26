@@ -1,17 +1,19 @@
-package web.servlet;
+package client.controller;
 
 import db.DataBase;
 import model.User;
-import web.HttpRequest;
-import web.HttpResponse;
-import web.RequestBody;
+import web.controller.Controller;
+import web.request.HttpRequest;
+import web.request.RequestBody;
+import web.response.HttpResponse;
 
-public class UserCreateServlet implements Servlet {
+public class UserCreateController implements Controller {
     @Override
     public void doService(final HttpRequest httpRequest, final HttpResponse httpResponse) {
         RequestBody requestBody = httpRequest.getRequestBody();
         createUser(requestBody);
-        httpResponse.response302("/index.html");
+
+        httpResponse.sendRedirect("/index.html");
     }
 
     private void createUser(RequestBody requestBody) {

@@ -23,3 +23,10 @@
 
 #### 요구사항 5
 - [x] 지금까지 구현한 소스 코드는 stylesheet 파일을 지원하지 못하고 있다. Stylesheet 파일을 지원하도록 구현하도록 한다.
+
+
+### 2단계
+#### 요구사항
+- [x] ThreadPoolExecutor를 적용해 일정 수의 사용자 동시에 처리가 가능하도록 한다.
+- [x] HTTP 응답 Header/Body 처리만을 담당하는 역할을 분리
+- [x] Servlet을 Controller로 변경

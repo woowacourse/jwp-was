@@ -2,8 +2,9 @@ package web;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import web.servlet.Servlet;
-import web.servlet.UserCreateServlet;
+import web.controller.Controller;
+import client.controller.UserCreateController;
+import web.request.HttpRequest;
 
 import java.io.*;
 
@@ -18,9 +19,9 @@ class HandlerMappingTest {
         InputStream inputStream = new FileInputStream("./src/test/resources/UserCreateRequest.txt");
         HttpRequest httpRequest = new HttpRequest(new BufferedReader(new InputStreamReader(inputStream)));
 
-        Servlet servlet = HandlerMapping.find(httpRequest);
+        Controller controller = HandlerMapping.find(httpRequest);
 
-        assertThat(servlet).isInstanceOf(UserCreateServlet.class);
+        assertThat(controller).isInstanceOf(UserCreateController.class);
     }
 
     @DisplayName("요청에 맞는 servlet이 존재하지 않으면 exception 발생")

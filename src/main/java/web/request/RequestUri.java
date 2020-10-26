@@ -1,4 +1,4 @@
-package web;
+package web.request;
 
 public class RequestUri {
     private static final int METHOD_INDEX = 0;
