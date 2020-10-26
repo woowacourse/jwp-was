@@ -26,4 +26,16 @@ public class RequestHeader {
             throw new IllegalArgumentException("httpVersion가 유효하지 않습니다: " + httpVersion);
         }
     }
+
+    public String getHttpMethod() {
+        return httpMethod;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public String getHttpVersion() {
+        return httpVersion;
+    }
 }
