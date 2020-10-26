@@ -10,7 +10,7 @@ public class RequestHeader {
     private final String httpVersion;
     private final Map<String, String> queryParams;
 
-    public RequestHeader(final String httpMethod, final String path, final String httpVersion,
+    RequestHeader(final String httpMethod, final String path, final String httpVersion,
         final Map<String, String> queryParams) {
         validate(httpMethod, path, httpVersion, queryParams);
         this.httpMethod = httpMethod;
