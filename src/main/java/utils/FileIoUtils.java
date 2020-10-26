@@ -12,7 +12,7 @@ public class FileIoUtils {
             Path path = Paths.get(FileIoUtils.class.getClassLoader().getResource(filePath).toURI());
             return Files.readAllBytes(path);
         } catch (URISyntaxException e) {
-            throw new RuntimeException(String.format("%s: URI로 변환할 수 없습니다.", filePath));
+            throw new IllegalArgumentException(String.format("%s: URI로 변환할 수 없습니다.", filePath));
         }
     }
 }

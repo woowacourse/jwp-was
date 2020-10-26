@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import web.request.RequestPath;
 
 class RequestPathTest {
 
@@ -14,6 +15,7 @@ class RequestPathTest {
 
         RequestPath requestPath = new RequestPath(path);
 
+        assertThat(requestPath.getRequestPath()).isEqualTo("/create");
         assertThat(requestPath.getRequestParameter("userId")).isEqualTo("javajigi");
         assertThat(requestPath.getRequestParameter("password")).isEqualTo("password");
         assertThat(requestPath.getRequestParameter("name")).isEqualTo("%EB%B0%95%EC%9E%AC%EC%84%B1");

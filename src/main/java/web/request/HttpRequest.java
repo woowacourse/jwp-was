@@ -1,23 +1,26 @@
-package web;
+package web.request;
+
+import utils.IOUtils;
+import web.HttpHeader;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 
 public class HttpRequest {
-    private RequestUri requestUri;
-    private RequestHeader requestHeader;
+    private final RequestUri requestUri;
+    private final HttpHeader httpHeader;
     private RequestBody requestBody;
 
     public HttpRequest(final BufferedReader bufferedReader) throws IOException {
-        this.requestUri = new RequestUri(bufferedReader);
-        this.requestHeader = new RequestHeader(bufferedReader);
+        this.requestUri = new RequestUri(bufferedReader.readLine());
+        this.httpHeader = new HttpHeader(IOUtils.readHeader(bufferedReader));
         if (HttpMethod.POST == getMethod()) {
-            this.requestBody = new RequestBody(bufferedReader, requestHeader.getContentLength());
+            this.requestBody = new RequestBody(IOUtils.readData(bufferedReader, httpHeader.getContentLength()));
         }
     }
 
     public String getRequestPath() {
-        return requestUri.getPath().getRequestPath();
+        return requestUri.getRequestPath();
     }
 
     public String getParam(final String key) {
@@ -25,7 +28,7 @@ public class HttpRequest {
     }
 
     public int getContentLength() {
-        return requestHeader.getContentLength();
+        return httpHeader.getContentLength();
     }
 
     public RequestBody getRequestBody() {
@@ -34,5 +37,9 @@ public class HttpRequest {
 
     public HttpMethod getMethod() {
         return requestUri.getMethod();
+    }
+
+    public boolean isGetMethod() {
+        return getMethod().isGet();
     }
 }
