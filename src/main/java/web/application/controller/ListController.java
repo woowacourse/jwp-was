@@ -18,9 +18,12 @@ public class ListController extends AbstractController {
 
     @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        boolean isLogined = Optional.ofNullable(httpRequest.getSession().getAttribute("logined"))
-            .map(value -> Boolean.parseBoolean(value.toString()))
-            .orElse(false);
+        Optional<Object> logined = httpRequest.getSession()
+            .getAttribute("logined");
+
+        boolean isLogined = logined.map(Object::toString)
+            .map(Boolean::parseBoolean)
+            .orElse(Boolean.FALSE);
 
         if (!isLogined) {
             httpResponse.forward("templates/index.html", StaticFileType.HTML);

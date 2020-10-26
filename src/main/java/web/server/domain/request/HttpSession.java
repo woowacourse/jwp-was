@@ -2,6 +2,7 @@ package web.server.domain.request;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import lombok.Getter;
 
@@ -20,8 +21,8 @@ public class HttpSession {
         attribute.put(name, value);
     }
 
-    public Object getAttribute(String name) {
-        return attribute.get(name);
+    public Optional<Object> getAttribute(String name) {
+        return Optional.ofNullable(attribute.get(name));
     }
 
     public void removeAttribute(String name) {
