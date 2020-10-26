@@ -1,20 +1,40 @@
 package web.application;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static web.server.common.IoUtil.createOutputStream;
-import static web.server.common.IoUtil.createRequest;
-import static web.server.common.IoUtil.readFile;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static web.server.common.IoUtil.*;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import web.application.controller.CreateUserController;
+import web.application.controller.ListController;
+import web.application.controller.RootController;
+import web.application.controller.UserLoginController;
+import web.application.util.HandlebarsTemplateEngine;
 import web.server.domain.request.HttpRequest;
 import web.server.domain.response.HttpResponse;
+import web.server.dto.UrlMappingCreateDto;
 
 class FrontControllerTest {
 
-    private final static FrontController FRONT_CONTROLLER = new FrontController(UrlMapper.getInstance());
+    private final static FrontController FRONT_CONTROLLER;
+
+    static {
+        List<UrlMappingCreateDto> urlMappingCreateDtos = Arrays.asList(
+            UrlMappingCreateDto.of("/", new RootController()),
+            UrlMappingCreateDto.of("/user/create", new CreateUserController()),
+            UrlMappingCreateDto.of("/user/login", new UserLoginController()),
+            UrlMappingCreateDto.of("/user/list", new ListController(HandlebarsTemplateEngine.getInstance()))
+        );
+
+        UrlMapper instance = UrlMapper.from(urlMappingCreateDtos);
+        FRONT_CONTROLLER = FrontController.from(instance);
+    }
 
     @DisplayName("FrontController에서 지원하지 않는 Method 요청 시 405 응답보낸다.")
     @Test

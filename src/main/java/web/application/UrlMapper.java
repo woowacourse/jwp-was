@@ -11,11 +11,15 @@ public class UrlMapper {
 
     private final Map<String, Controller> mapper;
 
-    public UrlMapper(List<UrlMappingCreateDto> urlMappingCreateDtos) {
+    private UrlMapper(List<UrlMappingCreateDto> urlMappingCreateDtos) {
         this.mapper = new HashMap<>();
         for (UrlMappingCreateDto urlMappingCreateDto : urlMappingCreateDtos) {
             this.mapper.put(urlMappingCreateDto.getUrl(), urlMappingCreateDto.getController());
         }
+    }
+
+    public static UrlMapper from(List<UrlMappingCreateDto> urlMappingCreateDtos) {
+        return new UrlMapper(urlMappingCreateDtos);
     }
 
     public Controller getController(String url) {

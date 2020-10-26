@@ -39,8 +39,8 @@ public class RequestHandler implements Runnable {
             UrlMappingCreateDto.of("/user/list", new ListController(HandlebarsTemplateEngine.getInstance()))
         );
 
-        UrlMapper instance = new UrlMapper(urlMappingCreateDtos);
-        CONTROLLER = new FrontController(instance);
+        UrlMapper instance = UrlMapper.from(urlMappingCreateDtos);
+        CONTROLLER = FrontController.from(instance);
     }
 
     private Socket connection;
@@ -66,5 +66,4 @@ public class RequestHandler implements Runnable {
             e.printStackTrace();
         }
     }
-
 }
