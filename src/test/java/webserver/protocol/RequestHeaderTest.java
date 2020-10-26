@@ -51,4 +51,34 @@ class RequestHeaderTest {
                 .hasMessage("queryParams가 유효하지 않습니다: null")
         );
     }
+
+    @DisplayName("queryParams의 내용이 있으면 true 반환")
+    @Test
+    void hasQueryParamsTest_true() {
+        final String httpMethod = "GET";
+        final String path = "/user/create";
+        final String httpVersion = "HTTP/1.1";
+        final Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("userId", "testId");
+        queryParams.put("password", "testPW");
+        queryParams.put("name", "testName");
+        queryParams.put("email", "test%40test.com");
+
+        final RequestHeader requestHeader = new RequestHeader(httpMethod, path, httpVersion, queryParams);
+
+        assertThat(requestHeader.hasQueryParams()).isTrue();
+    }
+
+    @DisplayName("queryParams의 내용이 없으면 false 반환")
+    @Test
+    void hasQueryParamsTest_false() {
+        final String httpMethod = "GET";
+        final String path = "/index.html";
+        final String httpVersion = "HTTP/1.1";
+        final Map<String, String> queryParams = new HashMap<>();
+
+        final RequestHeader requestHeader = new RequestHeader(httpMethod, path, httpVersion, queryParams);
+
+        assertThat(requestHeader.hasQueryParams()).isFalse();
+    }
 }

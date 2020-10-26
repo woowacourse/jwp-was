@@ -35,6 +35,10 @@ public class RequestHeader {
         }
     }
 
+    public boolean hasQueryParams() {
+        return !queryParams.isEmpty();
+    }
+
     public String getHttpMethod() {
         return httpMethod;
     }
