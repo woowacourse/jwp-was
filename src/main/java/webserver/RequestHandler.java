@@ -8,12 +8,15 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import utils.FileIoUtils;
 import webserver.protocol.RequestHeader;
+import webserver.protocol.RequestHeaderParser;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -43,9 +46,15 @@ public class RequestHandler implements Runnable {
 
     private RequestHeader parseRequestHeader(final InputStream request) throws IOException {
         final BufferedReader reader = new BufferedReader(new InputStreamReader(request));
-        final String[] firstLineSplitResult = reader.readLine().split(" ", -1);
-        return new RequestHeader(firstLineSplitResult[0], firstLineSplitResult[1],
-            firstLineSplitResult[2]);
+        final List<String> header = new ArrayList<>();
+
+        String line = reader.readLine();
+        while (!"".equals(line)) {
+            header.add(line);
+            line = reader.readLine();
+        }
+
+        return RequestHeaderParser.parse(header);
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
