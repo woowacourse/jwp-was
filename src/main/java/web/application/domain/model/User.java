@@ -17,6 +17,15 @@ public class User {
     private String name;
     private String email;
 
+    public User copy() {
+        return User.builder()
+            .userId(getUserId())
+            .password(getPassword())
+            .name(getName())
+            .email(getEmail())
+            .build();
+    }
+
     public boolean hasPasswordSameWith(String password) {
         return this.password.equals(password);
     }

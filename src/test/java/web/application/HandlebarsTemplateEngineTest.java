@@ -3,7 +3,6 @@ package web.application;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -38,7 +37,7 @@ public class HandlebarsTemplateEngineTest {
     void handlebarsApplyTest() {
         HandlebarsTemplateEngine handlebarsTemplateEngine = HandlebarsTemplateEngine.getInstance();
 
-        List<User> users = new ArrayList<>(DataBase.findAll());
+        List<User> users = DataBase.findAll();
         UserListResponse userListResponse = UserListResponse.of(users);
 
         String contents = handlebarsTemplateEngine.apply("user/list", userListResponse);
