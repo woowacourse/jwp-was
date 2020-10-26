@@ -16,7 +16,7 @@ public class ResponseCookie {
     private final List<String> options;
 
     public ResponseCookie(String key, String value, String... options) {
-        this.cookie = new Cookie(key, value);
+        this.cookie = Cookie.of(key, value);
         this.options = Arrays.asList(options);
     }
 

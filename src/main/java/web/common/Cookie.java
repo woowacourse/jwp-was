@@ -2,20 +2,26 @@ package web.common;
 
 import java.util.Objects;
 
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class Cookie {
 
-    private String key;
-    private String value;
+    private static final String COOKIE_DELIMITER = "=";
 
-    public Cookie(String cookie) {
-        String[] keyAndValue = cookie.split("=");
-        this.key = keyAndValue[0];
-        this.value = keyAndValue[1];
+    private final String key;
+    private final String value;
+
+    public static Cookie parseCookie(String cookie) {
+        String[] keyAndValue = cookie.split(COOKIE_DELIMITER);
+        return new Cookie(keyAndValue[0], keyAndValue[1]);
+    }
+
+    public static Cookie of(String key, String value) {
+        return new Cookie(key, value);
     }
 
     @Override
