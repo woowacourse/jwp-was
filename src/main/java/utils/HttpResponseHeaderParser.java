@@ -2,6 +2,8 @@ package utils;
 
 import http.request.Cookie;
 
+import java.util.Map;
+
 public class HttpResponseHeaderParser {
     public static String ok(String contentType, int lengthOfBodyContent) {
         return "HTTP/1.1 200 OK \r\n" +
@@ -17,10 +19,14 @@ public class HttpResponseHeaderParser {
     }
 
     public static String found(String location, Cookie cookie) {
-        return "HTTP/1.1 302 Found \r\n" +
-                "Location: " + location + "\r\n" +
-                "Set-Cookie: " + cookie.toString() + "Path=/" + "\r\n" +
-                "\r\n";
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("HTTP/1.1 302 Found \r\n");
+        stringBuilder.append("Location: " + location + "\r\n");
+        for (Map.Entry<String, String> entry : cookie.getAllCookie()) {
+            stringBuilder.append("Set-Cookie: " + entry.getKey() + "=" + entry.getValue() + "; Path=/" + "\r\n");
+        }
+        stringBuilder.append("\r\n");
+        return stringBuilder.toString();
     }
 
     public static String badRequest() {
