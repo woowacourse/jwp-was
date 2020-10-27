@@ -4,9 +4,12 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import lombok.Getter;
+
+@Getter
 public class HttpSessionStorage {
 
-    private Map<String, HttpSession> sessionStorage;
+    private final Map<String, HttpSession> sessionStorage;
 
     private HttpSessionStorage() {
         this.sessionStorage = new ConcurrentHashMap<>();
