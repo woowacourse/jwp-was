@@ -28,8 +28,12 @@ public class WebServer {
         try (ServerSocket listenSocket = new ServerSocket(port)) {
             ExecutorService executorService = new ThreadPoolExecutor(
                     CORES, CORES, 5000L,
+<<<<<<< HEAD
                     TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(100, true),
                     new ThreadPoolExecutor.AbortPolicy());
+=======
+                    TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(100, true));
+>>>>>>> 6fa414ee6e10f592ba3be901d31f82c6bea26177
 
             logger.info("Web Application Server started {} port.", port);
             // 클라이언트가 연결될때까지 대기한다.

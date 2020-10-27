@@ -1,7 +1,12 @@
 package http.controller;
 
+<<<<<<< HEAD
 import http.HttpRequest;
 import http.HttpResponse;
+=======
+import http.request.HttpRequest;
+import http.response.HttpResponse;
+>>>>>>> 6fa414ee6e10f592ba3be901d31f82c6bea26177
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
@@ -11,10 +16,10 @@ import webserver.RequestHandler;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-public class RawFileController implements Controller {
+public class RawFileController extends Controller {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
-    private String filePath;
+    private final String filePath;
 
     public RawFileController(String filePath) {
         this.filePath = filePath;
@@ -27,9 +32,10 @@ public class RawFileController implements Controller {
             byte[] body = FileIoUtils.loadFileFromClasspath(fileType.getRootPath() + filePath);
             String header = HttpResponseHeaderParser.ok(fileType.getContentType(), body.length);
             return new HttpResponse(header, body);
-//        } catch (NullPointerException e) {
-//            String header = HttpResponseHeaderParser.notFound();
-//            return new HttpResponse(header);
+        } catch (NullPointerException e) {
+            logger.error(e.getMessage());
+            String header = HttpResponseHeaderParser.notFound();
+            return new HttpResponse(header);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
             String header = HttpResponseHeaderParser.internalServerError();
@@ -43,11 +49,5 @@ public class RawFileController implements Controller {
             return "";
         }
         return token[token.length - 1];
-    }
-
-    @Override
-    public HttpResponse post(HttpRequest httpRequest) {
-        String header = HttpResponseHeaderParser.methodNotAllowed();
-        return new HttpResponse(header);
     }
 }
