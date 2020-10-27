@@ -42,4 +42,8 @@ class CookiesTest {
             () -> cookies.findCookie("pobi")
         ).isInstanceOf(CookieNotFoundException.class);
     }
+
+    @Test
+    void testFindCookie() {
+    }
 }
