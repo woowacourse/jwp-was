@@ -1,0 +1,3 @@
+include 'mission-common'
+include 'mission-app'
+include 'mission-was'
