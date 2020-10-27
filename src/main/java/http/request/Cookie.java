@@ -12,9 +12,11 @@ public class Cookie {
 
     public Cookie(String rawCookie) {
         if (rawCookie.length() != 0) {
-            String[] tokens = rawCookie.split("; ");
+            String[] tokens = rawCookie.trim().split("; ");
             for (String token : tokens) {
-                String[] tmp = token.split("=");
+                String[] tmp = token
+                        .replace(";", "")
+                        .split("=");
                 this.cookies.put(tmp[0], tmp[1]);
             }
         }
