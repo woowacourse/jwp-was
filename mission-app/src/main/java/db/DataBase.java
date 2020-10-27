@@ -15,7 +15,7 @@ public class DataBase {
     public static void addUser(User user) {
         User copiedUser = user.clone();
         users.put(copiedUser.getUserId(), copiedUser);
-    }`
+    }
 
     public static Optional<User> findUserById(String userId) {
         User user = users.get(userId);

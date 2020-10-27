@@ -2,8 +2,10 @@ package dto;
 
 import java.util.List;
 
-import web.application.domain.model.User;
+import domain.model.User;
+import lombok.Getter;
 
+@Getter
 public class UserListResponse extends ResponseDto<UserListResponse> {
 
     private final List<User> users;
@@ -14,9 +16,5 @@ public class UserListResponse extends ResponseDto<UserListResponse> {
 
     public static UserListResponse of(List<User> users) {
         return new UserListResponse(users);
-    }
-
-    public List<User> getUsers() {
-        return users;
     }
 }

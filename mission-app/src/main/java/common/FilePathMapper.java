@@ -3,7 +3,7 @@ package common;
 import java.util.HashMap;
 import java.util.Map;
 
-import web.server.utils.StaticFileType;
+import servlet.StaticFileType;
 
 public class FilePathMapper {
 

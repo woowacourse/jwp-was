@@ -3,7 +3,7 @@ package service;
 import java.util.Optional;
 
 import db.DataBase;
-import web.application.domain.model.User;
+import domain.model.User;
 
 public class UserService {
 

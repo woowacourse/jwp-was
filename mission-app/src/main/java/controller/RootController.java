@@ -1,9 +1,10 @@
 package controller;
 
-import web.application.common.FilePrefixPathMapper;
-import web.server.domain.request.HttpRequest;
-import web.server.domain.response.HttpResponse;
-import web.server.utils.StaticFileType;
+import application.AbstractController;
+import common.FilePrefixPathMapper;
+import servlet.HttpRequest;
+import servlet.HttpResponse;
+import servlet.StaticFileType;
 
 public class RootController extends AbstractController {
 

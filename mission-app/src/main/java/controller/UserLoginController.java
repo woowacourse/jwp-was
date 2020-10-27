@@ -1,12 +1,13 @@
 package controller;
 
-import web.application.common.FilePrefixPathMapper;
-import web.application.service.UserService;
-import web.server.domain.request.HttpRequest;
-import web.server.domain.request.HttpSession;
-import web.server.domain.response.HttpResponse;
-import web.server.domain.response.ResponseCookie;
-import web.server.utils.StaticFileType;
+import application.AbstractController;
+import common.FilePrefixPathMapper;
+import service.UserService;
+import servlet.Cookie;
+import servlet.HttpRequest;
+import servlet.HttpResponse;
+import servlet.HttpSession;
+import servlet.StaticFileType;
 
 public class UserLoginController extends AbstractController {
 
@@ -22,8 +23,8 @@ public class UserLoginController extends AbstractController {
         session.setAttribute("logined", isLogined);
         String sessionId = session.getId();
 
-        ResponseCookie responseCookie = new ResponseCookie("JSESSIONID", sessionId, "Path=/");
-        httpResponse.addCookie(responseCookie);
+        Cookie cookie = Cookie.of("JSESSIONID", sessionId);
+        httpResponse.addCookie(cookie, "Path=/");
 
         FilePrefixPathMapper filePrefixPathMapper = FilePrefixPathMapper.getInstance();
         String filePath = filePrefixPathMapper.addPrefix("/index.html", StaticFileType.HTML);

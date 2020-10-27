@@ -3,7 +3,7 @@ package vo;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import web.server.domain.request.RequestMethod;
+import servlet.RequestMethod;
 
 @RequiredArgsConstructor
 @Getter

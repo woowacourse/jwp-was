@@ -1,7 +1,8 @@
 package controller;
 
-import web.server.domain.request.HttpRequest;
-import web.server.domain.response.HttpResponse;
+import application.AbstractController;
+import servlet.HttpRequest;
+import servlet.HttpResponse;
 
 public class PageNotFoundController extends AbstractController {
 

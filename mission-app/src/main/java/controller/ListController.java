@@ -1,13 +1,14 @@
 package controller;
 
+import application.AbstractController;
 import db.DataBase;
+import dto.UserListResponse;
+import exception.AttributeNotFoundException;
+import exception.AuthorizationException;
 import lombok.RequiredArgsConstructor;
-import web.application.dto.UserListResponse;
-import web.application.exception.AuthorizationException;
-import web.application.util.TemplateEngine;
-import web.server.domain.exception.AttributeNotFoundException;
-import web.server.domain.request.HttpRequest;
-import web.server.domain.response.HttpResponse;
+import servlet.HttpRequest;
+import servlet.HttpResponse;
+import template.TemplateEngine;
 
 @RequiredArgsConstructor
 public class ListController extends AbstractController {
