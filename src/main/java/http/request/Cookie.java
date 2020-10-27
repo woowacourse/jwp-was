@@ -2,6 +2,7 @@ package http.request;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class Cookie {
     private Map<String, String> cookies = new HashMap<>();
@@ -27,19 +28,11 @@ public class Cookie {
         return this.cookies.get(key);
     }
 
-    public void setCookie(String key, String value) {
-        this.cookies.put(key, value);
+    public Set<Map.Entry<String, String>> getAllCookie() {
+        return this.cookies.entrySet();
     }
 
-    @Override
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (Map.Entry<String, String> entry : cookies.entrySet()) {
-            stringBuilder.append(entry.getKey());
-            stringBuilder.append("=");
-            stringBuilder.append(entry.getValue());
-            stringBuilder.append("; ");
-        }
-        return stringBuilder.toString();
+    public void setCookie(String key, String value) {
+        this.cookies.put(key, value);
     }
 }

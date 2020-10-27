@@ -5,12 +5,11 @@ import http.request.Cookie;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.session.HttpSession;
-import http.session.HttpSessionStorage;
 import model.User;
 import service.UserService;
 import utils.HttpResponseHeaderParser;
 
-public class UserLoginController extends Controller {
+public class UserLoginController extends AuthController {
 
     @Override
     public HttpResponse post(HttpRequest httpRequest) {
@@ -31,17 +30,5 @@ public class UserLoginController extends Controller {
             header = HttpResponseHeaderParser.found("/user/login_failed.html", cookie);
         }
         return new HttpResponse(header);
-    }
-
-    private HttpSession retrieveHttpSession(HttpRequest httpRequest) {
-        if (httpRequest.hasCookie("SESSIONID")) {
-            HttpSession httpSession = HttpSessionStorage.getSession(httpRequest.getSessionId());
-            if (httpSession == null) {
-                httpSession = HttpSessionStorage.create();
-            }
-            return httpSession;
-        } else {
-            return HttpSessionStorage.create();
-        }
     }
 }

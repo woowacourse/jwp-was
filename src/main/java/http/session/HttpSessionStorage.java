@@ -19,4 +19,8 @@ public class HttpSessionStorage {
     public static HttpSession getSession(String sessionId) {
         return storage.get(sessionId);
     }
+
+    public static void deleteSession(String sessionId) {
+        storage.remove(sessionId);
+    }
 }
