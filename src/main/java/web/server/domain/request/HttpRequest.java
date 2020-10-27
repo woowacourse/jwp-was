@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 import web.common.Cookie;
+import web.server.domain.exception.CookieNotFoundException;
 import web.server.utils.IOUtils;
 import web.server.utils.StaticFileType;
 
@@ -12,6 +13,7 @@ public class HttpRequest {
     private static final String NEW_LINE = System.lineSeparator();
     private static final String COLON = ": ";
     private static final String JSSESION_ID = "JSESSIONID";
+    private static final String EMPTY_STRING = "";
 
     private final RequestLine requestLine;
     private final HeaderParams headerParams;
@@ -70,9 +72,12 @@ public class HttpRequest {
     }
 
     public HttpSession getSession() {
-        Cookie cookie = cookies.findCookie(JSSESION_ID);
-
-        return HttpSessionStorage.getInstance()
-            .getSession(cookie.getValue());
+        HttpSessionStorage httpSessionStorage = HttpSessionStorage.getInstance();
+        try {
+            Cookie cookie = cookies.findCookie(JSSESION_ID);
+            return httpSessionStorage.getSession(cookie.getValue());
+        } catch (CookieNotFoundException e) {
+            return httpSessionStorage.getSession(EMPTY_STRING);
+        }
     }
 }

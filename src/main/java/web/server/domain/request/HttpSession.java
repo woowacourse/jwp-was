@@ -2,9 +2,9 @@ package web.server.domain.request;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import lombok.Getter;
+import web.server.domain.exception.AttributeNotFoundException;
 
 @Getter
 public class HttpSession {
@@ -21,8 +21,11 @@ public class HttpSession {
         attribute.put(name, value);
     }
 
-    public Optional<Object> getAttribute(String name) {
-        return Optional.ofNullable(attribute.get(name));
+    public Object getAttribute(String name) {
+        if (attribute.containsKey(name)) {
+            return attribute.get(name);
+        }
+        throw new AttributeNotFoundException(name);
     }
 
     public void removeAttribute(String name) {

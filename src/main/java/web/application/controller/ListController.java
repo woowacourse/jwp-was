@@ -1,15 +1,13 @@
 package web.application.controller;
 
-import java.util.ArrayList;
-import java.util.Optional;
-
 import db.DataBase;
 import lombok.RequiredArgsConstructor;
 import web.application.dto.UserListResponse;
+import web.application.exception.AuthorizationException;
 import web.application.util.TemplateEngine;
+import web.server.domain.exception.AttributeNotFoundException;
 import web.server.domain.request.HttpRequest;
 import web.server.domain.response.HttpResponse;
-import web.server.utils.StaticFileType;
 
 @RequiredArgsConstructor
 public class ListController extends AbstractController {
@@ -18,21 +16,21 @@ public class ListController extends AbstractController {
 
     @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        Optional<Object> logined = httpRequest.getSession()
-            .getAttribute("logined");
+        try {
+            Object logined = httpRequest.getSession()
+                .getAttribute("logined");
 
-        boolean isLogined = logined.map(Object::toString)
-            .map(Boolean::parseBoolean)
-            .orElse(Boolean.FALSE);
+            boolean isLogined = Boolean.parseBoolean(logined.toString());
 
-        if (!isLogined) {
-            httpResponse.forward("templates/index.html", StaticFileType.HTML);
-            return;
+            if (!isLogined) {
+                throw new AuthorizationException();
+            }
+
+            UserListResponse userListResponse = UserListResponse.of(DataBase.findAll());
+            String content = templateEngine.apply("user/list", userListResponse);
+            httpResponse.forward(content);
+        } catch (AttributeNotFoundException | AuthorizationException e) {
+            httpResponse.sendRedirect("/");
         }
-
-        UserListResponse userListResponse = UserListResponse.of(new ArrayList<>(DataBase.findAll()));
-        String content = templateEngine.apply("user/list", userListResponse);
-
-        httpResponse.forward(content);
     }
 }
