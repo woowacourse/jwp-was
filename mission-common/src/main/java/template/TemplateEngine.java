@@ -1,6 +1,6 @@
-package util;
+package template;
 
-import web.application.dto.ResponseDto;
+import dto.ResponseDto;
 
 @FunctionalInterface
 public interface TemplateEngine {

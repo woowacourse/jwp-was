@@ -1,12 +1,12 @@
-package controller;
+package application;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
-import web.server.domain.request.HttpRequest;
-import web.server.domain.request.RequestMethod;
-import web.server.domain.response.HttpResponse;
+import servlet.HttpRequest;
+import servlet.HttpResponse;
+import servlet.RequestMethod;
 
 public abstract class AbstractController implements Controller {
 

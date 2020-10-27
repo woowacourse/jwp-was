@@ -1,4 +1,4 @@
-package server.domain.exception;
+package exception;
 
 public class AttributeNotFoundException extends IllegalArgumentException {
 

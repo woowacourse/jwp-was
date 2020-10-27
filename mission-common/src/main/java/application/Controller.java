@@ -1,7 +1,7 @@
-package controller;
+package application;
 
-import web.server.domain.request.HttpRequest;
-import web.server.domain.response.HttpResponse;
+import servlet.HttpRequest;
+import servlet.HttpResponse;
 
 @FunctionalInterface
 public interface Controller {

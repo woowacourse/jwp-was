@@ -1,7 +1,5 @@
 package servlet;
 
-import common.Cookie;
-
 public interface HttpResponse {
 
     void forward(String content);
@@ -14,5 +12,5 @@ public interface HttpResponse {
 
     void respondMethodNotAllowed();
 
-    void addCookie(Cookie cookie);
+    void addCookie(Cookie cookie, String... options);
 }

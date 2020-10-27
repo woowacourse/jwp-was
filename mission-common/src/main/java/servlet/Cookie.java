@@ -1,4 +1,4 @@
-package common;
+package servlet;
 
 import java.util.Objects;
 
