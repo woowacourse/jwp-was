@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class HttpRequestTest {
+class HttpServletRequestTest {
 
     private final String testDirectory = "./src/test/java/resources/";
 

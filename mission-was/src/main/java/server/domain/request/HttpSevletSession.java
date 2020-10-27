@@ -7,12 +7,12 @@ import lombok.Getter;
 import web.server.domain.exception.AttributeNotFoundException;
 
 @Getter
-public class HttpSession {
+public class HttpSevletSession {
 
     private String id;
     private Map<String, Object> attribute;
 
-    public HttpSession(String id) {
+    public HttpSevletSession(String id) {
         this.id = id;
         this.attribute = new HashMap<>();
     }

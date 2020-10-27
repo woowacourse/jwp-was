@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import web.server.utils.StaticFileType;
 
-public class HttpResponseTest {
+public class HttpServletResponseTest {
 
     private static final String INDEX_PAGE = "./templates/index.html";
 

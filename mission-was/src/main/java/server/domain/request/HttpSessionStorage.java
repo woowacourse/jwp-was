@@ -9,7 +9,7 @@ import lombok.Getter;
 @Getter
 public class HttpSessionStorage {
 
-    private final Map<String, HttpSession> sessionStorage;
+    private final Map<String, HttpSevletSession> sessionStorage;
 
     private HttpSessionStorage() {
         this.sessionStorage = new ConcurrentHashMap<>();
@@ -19,18 +19,18 @@ public class HttpSessionStorage {
         return Cache.HTTP_SESSION_STORAGE;
     }
 
-    public HttpSession getSession(String sessionKey) {
+    public HttpSevletSession getSession(String sessionKey) {
         if (sessionStorage.containsKey(sessionKey)) {
             return sessionStorage.get(sessionKey);
         }
         return createSession();
     }
 
-    private HttpSession createSession() {
+    private HttpSevletSession createSession() {
         UUID uuid = UUID.randomUUID();
-        HttpSession httpSession = new HttpSession(uuid.toString());
-        sessionStorage.put(httpSession.getId(), httpSession);
-        return httpSession;
+        HttpSevletSession httpSevletSession = new HttpSevletSession(uuid.toString());
+        sessionStorage.put(httpSevletSession.getId(), httpSevletSession);
+        return httpSevletSession;
     }
 
     private static class Cache {

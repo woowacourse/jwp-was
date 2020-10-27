@@ -11,16 +11,16 @@ import org.slf4j.LoggerFactory;
 import web.server.utils.FileIoUtils;
 import web.server.utils.StaticFileType;
 
-public class HttpResponse {
+public class HttpServletResponse {
 
-    private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
+    private static final Logger logger = LoggerFactory.getLogger(HttpServletResponse.class);
     private static final String NEW_LINE = System.lineSeparator();
 
     private final DataOutputStream dataOutputStream;
     private final Map<String, String> headerParams;
     private final ResponseCookies responseCookies;
 
-    public HttpResponse(DataOutputStream dataOutputStream) {
+    public HttpServletResponse(DataOutputStream dataOutputStream) {
         this.dataOutputStream = dataOutputStream;
         this.headerParams = new HashMap<>();
         this.responseCookies = new ResponseCookies();

@@ -9,7 +9,7 @@ import web.server.domain.exception.CookieNotFoundException;
 import web.server.utils.IOUtils;
 import web.server.utils.StaticFileType;
 
-public class HttpRequest {
+public class HttpServletRequest {
 
     private static final String NEW_LINE = System.lineSeparator();
     private static final String COLON = ": ";
@@ -21,7 +21,7 @@ public class HttpRequest {
     private final RequestParams requestParams;
     private final Cookies cookies;
 
-    public HttpRequest(BufferedReader bufferedReader) throws IOException {
+    public HttpServletRequest(BufferedReader bufferedReader) throws IOException {
         String header = IOUtils.readHeader(bufferedReader);
         String[] lines = header.split(NEW_LINE);
         this.requestLine = new RequestLine(lines[0]);
@@ -72,7 +72,7 @@ public class HttpRequest {
         return Integer.parseInt(length);
     }
 
-    public HttpSession getSession() {
+    public HttpSevletSession getSession() {
         HttpSessionStorage httpSessionStorage = HttpSessionStorage.getInstance();
         try {
             Cookie cookie = cookies.findCookie(JSSESION_ID);
