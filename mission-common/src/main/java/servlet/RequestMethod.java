@@ -1,4 +1,4 @@
-package web.server.domain.request;
+package servlet;
 
 import java.util.Arrays;
 

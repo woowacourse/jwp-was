@@ -1,4 +1,4 @@
-package web.server.utils;
+package servlet;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
