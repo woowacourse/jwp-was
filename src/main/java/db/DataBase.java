@@ -13,14 +13,14 @@ public class DataBase {
     private static Map<String, User> users = Maps.newHashMap();
 
     public static void addUser(User user) {
-        User copiedUser = user.copy();
+        User copiedUser = user.clone();
         users.put(copiedUser.getUserId(), copiedUser);
     }
 
     public static Optional<User> findUserById(String userId) {
         User user = users.get(userId);
         try {
-            return Optional.ofNullable(user.copy());
+            return Optional.ofNullable(user.clone());
         } catch (NullPointerException e) {
             return Optional.empty();
         }
@@ -29,7 +29,7 @@ public class DataBase {
     public static List<User> findAll() {
         return users.values()
             .stream()
-            .map(User::copy)
+            .map(User::clone)
             .collect(Collectors.toList());
     }
 

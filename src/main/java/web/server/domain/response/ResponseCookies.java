@@ -19,5 +19,4 @@ public class ResponseCookies {
     public Set<ResponseCookie> getResponseCookies() {
         return Collections.unmodifiableSet(responseCookies);
     }
-
 }

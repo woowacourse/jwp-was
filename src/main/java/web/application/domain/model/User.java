@@ -17,7 +17,8 @@ public class User {
     private String name;
     private String email;
 
-    public User copy() {
+    @Override
+    public User clone() {
         return User.builder()
             .userId(getUserId())
             .password(getPassword())
