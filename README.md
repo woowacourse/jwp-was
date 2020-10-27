@@ -31,9 +31,9 @@
 2. - [x] 로그인 상태일 경우 사용자 목록을 출력한다.
    - [x] 로그인하지 않은 상태일 경우 로그인 페이지로 이동한다.
 3. HttpSession API의 일부를 작성한다
-    - [ ] getId()
-    - [ ] setAttribute(String name, Object value)
-    - [ ] getAttribute(String name)
-    - [ ] removeAttribute(String name)
-    - [ ] invalidate()
+    - [x] getId()
+    - [x] setAttribute(String name, Object value)
+    - [x] getAttribute(String name)
+    - [x] removeAttribute(String name)
+    - [x] invalidate()
     
