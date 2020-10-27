@@ -1,18 +1,4 @@
-plugins {
-    id 'java'
-    id 'idea'
-    id 'eclipse'
-}
-
 version '1.0.0'
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
-}
-
-test {
-    useJUnitPlatform()
 }

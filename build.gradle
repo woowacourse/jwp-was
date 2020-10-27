@@ -4,17 +4,6 @@ plugins {
     id 'eclipse'
 }
 
-version = '1.0.0'
-sourceCompatibility = 1.8
-
-repositories {
-    mavenCentral()
-}
-
-test {
-    useJUnitPlatform()
-}
-
 subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
