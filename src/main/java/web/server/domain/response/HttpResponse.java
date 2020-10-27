@@ -28,13 +28,28 @@ public class HttpResponse {
 
     private void responseHeader(StatusCode statusCode) {
         try {
-            this.dataOutputStream.writeBytes(statusCode.getStatusLine() + NEW_LINE);
-            this.dataOutputStream.writeBytes(statusCode.getHeaders(headerParams));
+            this.dataOutputStream.writeBytes(createResponseLine(statusCode));
+            this.dataOutputStream.writeBytes(createResponse(statusCode));
             writeCookies();
             this.dataOutputStream.writeBytes(NEW_LINE);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private String createResponseLine(StatusCode statusCode) {
+        return String.format("HTTP/1.1 %d %s\n", statusCode.getStatusCode(), statusCode.getReasonPhrase());
+    }
+
+    private String createResponse(StatusCode statusCode) {
+        StringBuilder sb = new StringBuilder();
+        for (String header : statusCode.getHeaders()) {
+            sb.append(header)
+                .append(": ")
+                .append(headerParams.get(header))
+                .append("\n");
+        }
+        return sb.toString();
     }
 
     private void writeCookies() throws IOException {
