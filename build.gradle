@@ -16,8 +16,6 @@ subprojects {
     }
 
     dependencies {
-        implementation project(':common')
-
         implementation 'com.github.jknack:handlebars:4.2.0'
         implementation 'com.google.guava:guava:29.0-jre'
         implementation 'org.springframework:spring-core:5.2.6.RELEASE'
