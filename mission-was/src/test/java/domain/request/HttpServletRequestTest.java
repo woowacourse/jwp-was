@@ -1,5 +1,6 @@
 package domain.request;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.BufferedReader;
@@ -14,15 +15,18 @@ import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import servlet.HttpRequest;
+import servlet.RequestMethod;
+
 class HttpServletRequestTest {
 
-    private final String testDirectory = "./src/test/java/resources/";
+    private final String testDirectory = "./src/test/resources/";
 
     @DisplayName("HttpRequest 받았을 때 RequestHeader URI의 QueryParam이 저장되는지 확인한다.")
     @Test
     void checkQueryParam() throws IOException {
         InputStream in = new FileInputStream(new File(testDirectory + "http_get_with_querystring.txt"));
-        HttpRequest httpRequest = new HttpRequest(
+        HttpRequest httpRequest = new HttpServletRequest(
             new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
         assertAll(
             () -> assertThat(httpRequest.getParameter("userId")).isEqualTo("javajigi"),
@@ -36,7 +40,7 @@ class HttpServletRequestTest {
     @Test
     void checkFormData() throws IOException {
         InputStream in = new FileInputStream(new File(testDirectory + "http_post_with_formdata.txt"));
-        HttpRequest httpRequest = new HttpRequest(
+        HttpRequest httpRequest = new HttpServletRequest(
             new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
         assertAll(
             () -> assertThat(httpRequest.getParameter("userId")).isEqualTo("javajigi"),
@@ -50,7 +54,7 @@ class HttpServletRequestTest {
     @Test
     void checkRequestLine() throws IOException {
         InputStream in = new FileInputStream(new File(testDirectory + "http_post_with_formdata.txt"));
-        HttpRequest httpRequest = new HttpRequest(
+        HttpRequest httpRequest = new HttpServletRequest(
             new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
         assertAll(
             () -> assertThat(httpRequest.getRequestMethod()).isEqualTo(RequestMethod.POST),
@@ -62,7 +66,7 @@ class HttpServletRequestTest {
     @Test
     void checkRequestHeader() throws IOException {
         InputStream in = new FileInputStream(new File(testDirectory + "http_post_with_formdata.txt"));
-        HttpRequest httpRequest = new HttpRequest(
+        HttpRequest httpRequest = new HttpServletRequest(
             new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
 
         assertAll(
@@ -79,7 +83,7 @@ class HttpServletRequestTest {
     public void request_POST2() throws Exception {
         BufferedReader br = new BufferedReader(
             new FileReader(new File(testDirectory + "http_post_with_querystring_formdata.txt")));
-        HttpRequest request = new HttpRequest(br);
+        HttpRequest request = new HttpServletRequest(br);
 
         assertAll(
             () -> assertEquals(RequestMethod.POST, request.getMethod()),
@@ -95,7 +99,7 @@ class HttpServletRequestTest {
     public void request_GET2() throws Exception {
         BufferedReader br = new BufferedReader(
             new FileReader(new File(testDirectory + "http_get_with_querystring_formdata.txt")));
-        HttpRequest request = new HttpRequest(br);
+        HttpRequest request = new HttpServletRequest(br);
 
         assertAll(
             () -> assertEquals(RequestMethod.GET, request.getMethod()),

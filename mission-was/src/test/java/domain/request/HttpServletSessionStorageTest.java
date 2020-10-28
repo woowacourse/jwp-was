@@ -1,7 +1,11 @@
 package domain.request;
 
+import static org.assertj.core.api.Assertions.*;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import servlet.HttpSession;
 
 class HttpServletSessionStorageTest {
 

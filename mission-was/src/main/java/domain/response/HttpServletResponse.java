@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import servlet.Cookie;
 import servlet.HttpResponse;
 import servlet.StaticFileType;
-import utils.FileIoUtils;
+import util.FileIoUtils;
 
 public class HttpServletResponse implements HttpResponse {
 

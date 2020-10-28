@@ -9,7 +9,7 @@ import servlet.HttpRequest;
 import servlet.HttpSession;
 import servlet.RequestMethod;
 import servlet.StaticFileType;
-import utils.IOUtils;
+import util.IOUtils;
 
 public class HttpServletRequest implements HttpRequest {
 

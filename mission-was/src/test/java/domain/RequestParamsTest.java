@@ -9,7 +9,7 @@ import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import web.server.domain.request.RequestParams;
+import domain.request.RequestParams;
 
 public class RequestParamsTest {
 

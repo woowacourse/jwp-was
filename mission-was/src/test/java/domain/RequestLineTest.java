@@ -1,12 +1,14 @@
 package domain;
 
+import static org.assertj.core.api.Assertions.*;
+
 import java.io.UnsupportedEncodingException;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import web.server.domain.request.RequestLine;
-import web.server.utils.StaticFileType;
+import domain.request.RequestLine;
+import servlet.StaticFileType;
 
 public class RequestLineTest {
 

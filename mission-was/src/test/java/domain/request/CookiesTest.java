@@ -6,8 +6,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import web.common.Cookie;
-import web.server.domain.exception.CookieNotFoundException;
+import exception.CookieNotFoundException;
+import servlet.Cookie;
 
 class CookiesTest {
 
