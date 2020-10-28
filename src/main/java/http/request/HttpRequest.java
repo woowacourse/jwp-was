@@ -1,4 +1,4 @@
-package http;
+package http.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,7 +19,7 @@ public class HttpRequest {
     }
 
     public String getBodyValue(String key) {
-        return this.requestBody.getValue(key);
+        return this.requestBody.getValue(key.toLowerCase());
     }
 
     public boolean headerContainsValueOf(HeaderParam key, String value) {
@@ -28,5 +28,13 @@ public class HttpRequest {
 
     public RequestMethod getRequestMethod() {
         return this.requestLine.getMethod();
+    }
+
+    public boolean hasCookie(String key) {
+        return this.requestHeader.hasCookie(key);
+    }
+
+    public String getSessionId() {
+        return this.requestHeader.getCookie("SESSIONID");
     }
 }

@@ -1,14 +1,14 @@
 package service;
 
 import db.DataBase;
-import http.HttpRequest;
+import http.request.HttpRequest;
 import model.User;
 
 public class UserService {
     private static UserService userService;
 
     public static UserService getInstance() {
-        if(userService == null) {
+        if (userService == null) {
             userService = new UserService();
         }
         return userService;
@@ -22,5 +22,15 @@ public class UserService {
                 httpRequest.getBodyValue("email")
         );
         DataBase.addUser(user);
+    }
+
+    public boolean authenticateUser(HttpRequest httpRequest) {
+        String userId = httpRequest.getBodyValue("userId");
+        String password = httpRequest.getBodyValue("password");
+        User userById = DataBase.findUserById(userId);
+        if (userById == null) {
+            return false;
+        }
+        return userById.getPassword().equals(password);
     }
 }

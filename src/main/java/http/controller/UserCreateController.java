@@ -1,7 +1,7 @@
 package http.controller;
 
-import http.HttpRequest;
-import http.HttpResponse;
+import http.request.HttpRequest;
+import http.response.HttpResponse;
 import service.UserService;
 import utils.HttpResponseHeaderParser;
 

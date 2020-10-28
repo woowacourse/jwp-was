@@ -1,7 +1,7 @@
 package http.controller;
 
-import http.HttpRequest;
-import http.HttpResponse;
+import http.request.HttpRequest;
+import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
