@@ -53,4 +53,8 @@ public class RequestBody {
     public Map<String, String> getParams() {
         return params;
     }
+
+    public String getParameter(String key) {
+        return params.get(key);
+    }
 }

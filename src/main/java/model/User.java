@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Map;
+import java.util.Objects;
 
 import web.RequestBody;
 
@@ -20,6 +21,10 @@ public class User {
     public static User from(RequestBody requestBody) {
         Map<String, String> params = requestBody.getParams();
         return new User(params.get("userId"), params.get("password"), params.get("name"), params.get("email"));
+    }
+
+    public boolean login(String password) {
+        return Objects.equals(this.password, password);
     }
 
     public String getUserId() {
