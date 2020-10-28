@@ -1,12 +1,8 @@
 package service;
 
 import db.DataBase;
-<<<<<<< HEAD
-import http.HttpRequest;
-=======
 import http.request.HttpRequest;
 import model.User;
->>>>>>> 6fa414ee6e10f592ba3be901d31f82c6bea26177
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -28,17 +24,11 @@ class UserServiceTest {
         InputStream in = new ByteArrayInputStream(request.getBytes());
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
-<<<<<<< HEAD
-        UserService userService = new UserService();
-=======
         UserService userService = UserService.getInstance();
->>>>>>> 6fa414ee6e10f592ba3be901d31f82c6bea26177
         userService.createUser(new HttpRequest(br));
 
         assertThat(DataBase.findUserById("javajigi")).isNotNull();
     }
-<<<<<<< HEAD
-=======
 
     @Test
     void authenticateUserTest() throws IOException {
@@ -77,5 +67,4 @@ class UserServiceTest {
         UserService userService = new UserService();
         assertThat(userService.authenticateUser(new HttpRequest(br))).isFalse();
     }
->>>>>>> 6fa414ee6e10f592ba3be901d31f82c6bea26177
 }

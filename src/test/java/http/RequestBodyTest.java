@@ -1,9 +1,6 @@
 package http;
 
-<<<<<<< HEAD
-=======
 import http.request.RequestBody;
->>>>>>> 6fa414ee6e10f592ba3be901d31f82c6bea26177
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -27,8 +24,8 @@ class RequestBodyTest {
 
         assertEquals("javajigi", requestBody.getValue("userid"));
         assertEquals("password", requestBody.getValue("password"));
-        assertEquals("%EB%B0%95%EC%9E%AC%EC%84%B1", requestBody.getValue("name"));
-        assertEquals("javajigi%40slipp.net", requestBody.getValue("email"));
+        assertEquals("박재성", requestBody.getValue("name"));
+        assertEquals("javajigi@slipp.net", requestBody.getValue("email"));
     }
 
     @Test
