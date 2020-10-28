@@ -1,10 +1,10 @@
 package controller;
 
 import application.AbstractController;
-import common.FilePrefixPathMapper;
 import servlet.HttpRequest;
 import servlet.HttpResponse;
 import servlet.StaticFileType;
+import util.FilePrefixPathMapper;
 
 public class StaticController extends AbstractController {
 

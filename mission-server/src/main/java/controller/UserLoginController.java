@@ -1,13 +1,13 @@
 package controller;
 
 import application.AbstractController;
-import common.FilePrefixPathMapper;
 import service.UserService;
 import servlet.Cookie;
 import servlet.HttpRequest;
 import servlet.HttpResponse;
 import servlet.HttpSession;
 import servlet.StaticFileType;
+import util.FilePrefixPathMapper;
 
 public class UserLoginController extends AbstractController {
 
