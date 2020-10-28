@@ -1,4 +1,4 @@
-package server.domain.request;
+package domain.request;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;

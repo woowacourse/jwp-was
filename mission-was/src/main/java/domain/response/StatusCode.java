@@ -1,4 +1,4 @@
-package server.domain.response;
+package domain.response;
 
 import java.util.Arrays;
 import java.util.Collections;

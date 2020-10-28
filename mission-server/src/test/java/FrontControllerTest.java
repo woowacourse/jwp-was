@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import dto.UrlMappingCreateDto;
 import web.application.controller.CreateUserController;
 import web.application.controller.ListController;
 import web.application.controller.RootController;
@@ -16,7 +17,6 @@ import web.application.controller.UserLoginController;
 import web.application.util.HandlebarsTemplateEngine;
 import web.server.domain.request.HttpRequest;
 import web.server.domain.response.HttpResponse;
-import web.server.dto.UrlMappingCreateDto;
 
 class FrontControllerTest {
 

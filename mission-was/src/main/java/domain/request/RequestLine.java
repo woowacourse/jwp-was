@@ -1,4 +1,4 @@
-package server.domain.request;
+package domain.request;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

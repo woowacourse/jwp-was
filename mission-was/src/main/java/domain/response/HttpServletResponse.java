@@ -1,4 +1,4 @@
-package server.domain.response;
+package domain.response;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -8,10 +8,10 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import server.utils.FileIoUtils;
 import servlet.Cookie;
 import servlet.HttpResponse;
 import servlet.StaticFileType;
+import utils.FileIoUtils;
 
 public class HttpServletResponse implements HttpResponse {
 

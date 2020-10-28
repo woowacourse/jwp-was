@@ -1,4 +1,4 @@
-package server.domain.request;
+package domain.request;
 
 import static java.util.stream.Collectors.*;
 
@@ -7,10 +7,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import exception.CookieNotFoundException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import server.domain.exception.CookieNotFoundException;
 import servlet.Cookie;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)

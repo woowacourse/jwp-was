@@ -1,4 +1,4 @@
-package server.dto;
+package dto;
 
 import application.Controller;
 import lombok.AccessLevel;

@@ -1,4 +1,4 @@
-package server.domain.response;
+package domain.response;
 
 import java.util.Collections;
 import java.util.HashSet;

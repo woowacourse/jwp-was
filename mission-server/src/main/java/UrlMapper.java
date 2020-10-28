@@ -3,7 +3,7 @@ import java.util.List;
 import java.util.Map;
 
 import application.Controller;
-import web.server.dto.UrlMappingCreateDto;
+import dto.UrlMappingCreateDto;
 
 public class UrlMapper {
 

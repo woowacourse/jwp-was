@@ -1,10 +1,10 @@
-package server.domain.request;
+package domain.request;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import exception.AttributeNotFoundException;
 import lombok.Getter;
-import server.domain.exception.AttributeNotFoundException;
 import servlet.HttpSession;
 
 @Getter

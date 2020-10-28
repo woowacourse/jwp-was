@@ -1,5 +1,3 @@
 include 'mission-common'
 include 'mission-server'
 include 'mission-was'
-include 'mission-server'
-

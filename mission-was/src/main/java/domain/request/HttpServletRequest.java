@@ -1,15 +1,15 @@
-package server.domain.request;
+package domain.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 
-import server.domain.exception.CookieNotFoundException;
-import server.utils.IOUtils;
+import exception.CookieNotFoundException;
 import servlet.Cookie;
 import servlet.HttpRequest;
 import servlet.HttpSession;
 import servlet.RequestMethod;
 import servlet.StaticFileType;
+import utils.IOUtils;
 
 public class HttpServletRequest implements HttpRequest {
 

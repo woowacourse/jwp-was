@@ -1,6 +1,6 @@
 package exception;
 
-import web.application.vo.RequestVo;
+import vo.RequestVo;
 
 public class ControllerNotFoundException extends IllegalArgumentException {
 

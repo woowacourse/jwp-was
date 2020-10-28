@@ -1,9 +1,9 @@
+import application.Controller;
+import controller.StaticController;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import web.application.controller.Controller;
-import web.application.controller.StaticController;
-import web.server.domain.request.HttpRequest;
-import web.server.domain.response.HttpResponse;
+import servlet.HttpRequest;
+import servlet.HttpResponse;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class FrontController implements Controller {
