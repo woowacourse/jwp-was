@@ -3,13 +3,15 @@ package server.domain.request;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+import server.domain.exception.CookieNotFoundException;
+import server.utils.IOUtils;
+import servlet.Cookie;
+import servlet.HttpRequest;
+import servlet.HttpSession;
 import servlet.RequestMethod;
-import web.common.Cookie;
-import web.server.domain.exception.CookieNotFoundException;
-import web.server.utils.IOUtils;
-import web.server.utils.StaticFileType;
+import servlet.StaticFileType;
 
-public class HttpServletRequest {
+public class HttpServletRequest implements HttpRequest {
 
     private static final String NEW_LINE = System.lineSeparator();
     private static final String COLON = ": ";
@@ -39,40 +41,49 @@ public class HttpServletRequest {
         this.cookies = Cookies.from(getHeader("Cookie"));
     }
 
+    @Override
     public RequestMethod getMethod() {
         return requestLine.getRequestMethod();
     }
 
+    @Override
     public String getHeader(String headerName) {
         return headerParams.get(headerName);
     }
 
+    @Override
     public String getParameter(String key) {
         return requestParams.get(key);
     }
 
+    @Override
     public boolean hasPathOfStaticFile() {
         return this.requestLine.hasPathOfStaticFile();
     }
 
+    @Override
     public RequestMethod getRequestMethod() {
         return requestLine.getRequestMethod();
     }
 
+    @Override
     public String getPath() {
         return requestLine.getPath();
     }
 
+    @Override
     public StaticFileType findExtension() {
         return requestLine.findExtension();
     }
 
+    @Override
     public int findContentLength() {
         String length = headerParams.getOrDefault("Content-Length", "0");
         return Integer.parseInt(length);
     }
 
-    public HttpSevletSession getSession() {
+    @Override
+    public HttpSession getSession() {
         HttpSessionStorage httpSessionStorage = HttpSessionStorage.getInstance();
         try {
             Cookie cookie = cookies.findCookie(JSSESION_ID);

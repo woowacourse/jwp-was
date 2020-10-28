@@ -1,9 +1,9 @@
 package server.dto;
 
+import application.Controller;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import web.application.controller.Controller;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter

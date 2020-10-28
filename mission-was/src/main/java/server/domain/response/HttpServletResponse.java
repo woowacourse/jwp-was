@@ -8,10 +8,12 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import web.server.utils.FileIoUtils;
-import web.server.utils.StaticFileType;
+import server.utils.FileIoUtils;
+import servlet.Cookie;
+import servlet.HttpResponse;
+import servlet.StaticFileType;
 
-public class HttpServletResponse {
+public class HttpServletResponse implements HttpResponse {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpServletResponse.class);
     private static final String NEW_LINE = System.lineSeparator();
@@ -67,6 +69,7 @@ public class HttpServletResponse {
         }
     }
 
+    @Override
     public void forward(String content) {
         byte[] body = content.getBytes();
         headerParams.put("Content-Type", StaticFileType.HTML + ";charset=utf-8");
@@ -75,6 +78,7 @@ public class HttpServletResponse {
         responseBody(this.dataOutputStream, body);
     }
 
+    @Override
     public void forward(String path, StaticFileType staticFileType) {
         byte[] body = FileIoUtils.loadFileFromRequest(path);
         headerParams.put("Content-Type", staticFileType.getContentType() + ";charset=utf-8");
@@ -84,20 +88,24 @@ public class HttpServletResponse {
         responseBody(this.dataOutputStream, body);
     }
 
+    @Override
     public void sendRedirect(String path) {
         headerParams.put("Location", path);
         responseHeader(StatusCode.FOUND);
     }
 
+    @Override
     public void respondPageNotFound() {
         responseHeader(StatusCode.NOT_FOUND);
     }
 
+    @Override
     public void respondMethodNotAllowed() {
         responseHeader(StatusCode.METHOD_NOT_ALLOWED);
     }
 
-    public void addCookie(ResponseCookie responseCookie) {
-        responseCookies.addCookie(responseCookie);
+    @Override
+    public void addCookie(Cookie cookie, String... options) {
+        responseCookies.addCookie(cookie, options);
     }
 }

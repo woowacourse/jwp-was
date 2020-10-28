@@ -8,7 +8,7 @@ import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class HttpSevletSessionTest {
+class HttpServletSessionTest {
 
     @DisplayName("세션에 attribute를 설정한다.")
     @Test

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 import lombok.Getter;
-import web.common.Cookie;
+import servlet.Cookie;
 
 @Getter
 public class ResponseCookie {
@@ -15,8 +15,8 @@ public class ResponseCookie {
     private final Cookie cookie;
     private final List<String> options;
 
-    public ResponseCookie(String key, String value, String... options) {
-        this.cookie = Cookie.of(key, value);
+    public ResponseCookie(Cookie cookie, String[] options) {
+        this.cookie = cookie;
         this.options = Arrays.asList(options);
     }
 

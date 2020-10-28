@@ -8,9 +8,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import db.DataBase;
-import web.application.domain.model.User;
-import web.application.dto.UserListResponse;
-import web.application.util.HandlebarsTemplateEngine;
+import domain.model.User;
+import dto.UserListResponse;
+import util.HandlebarsTemplateEngine;
 
 public class HandlebarsTemplateEngineTest {
 

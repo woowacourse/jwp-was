@@ -5,11 +5,12 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import lombok.Getter;
+import servlet.HttpSession;
 
 @Getter
 public class HttpSessionStorage {
 
-    private final Map<String, HttpSevletSession> sessionStorage;
+    private final Map<String, HttpSession> sessionStorage;
 
     private HttpSessionStorage() {
         this.sessionStorage = new ConcurrentHashMap<>();
@@ -19,18 +20,18 @@ public class HttpSessionStorage {
         return Cache.HTTP_SESSION_STORAGE;
     }
 
-    public HttpSevletSession getSession(String sessionKey) {
+    public HttpSession getSession(String sessionKey) {
         if (sessionStorage.containsKey(sessionKey)) {
             return sessionStorage.get(sessionKey);
         }
         return createSession();
     }
 
-    private HttpSevletSession createSession() {
+    private HttpSession createSession() {
         UUID uuid = UUID.randomUUID();
-        HttpSevletSession httpSevletSession = new HttpSevletSession(uuid.toString());
-        sessionStorage.put(httpSevletSession.getId(), httpSevletSession);
-        return httpSevletSession;
+        HttpSession httpSession = new HttpServletSession(uuid.toString());
+        sessionStorage.put(httpSession.getId(), httpSession);
+        return httpSession;
     }
 
     private static class Cache {

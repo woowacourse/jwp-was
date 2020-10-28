@@ -10,8 +10,8 @@ import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import web.common.Cookie;
-import web.server.domain.exception.CookieNotFoundException;
+import server.domain.exception.CookieNotFoundException;
+import servlet.Cookie;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter

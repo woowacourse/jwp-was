@@ -2,7 +2,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import web.application.controller.Controller;
+import application.Controller;
 import web.server.dto.UrlMappingCreateDto;
 
 public class UrlMapper {

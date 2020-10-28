@@ -9,13 +9,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import web.application.controller.Controller;
-import web.application.controller.CreateUserController;
-import web.application.controller.ListController;
-import web.application.controller.RootController;
-import web.application.controller.UserLoginController;
-import web.application.util.HandlebarsTemplateEngine;
-import web.server.dto.UrlMappingCreateDto;
+import application.Controller;
+import controller.CreateUserController;
+import controller.ListController;
+import controller.RootController;
+import controller.UserLoginController;
+import util.HandlebarsTemplateEngine;
 
 class UrlMapperTest {
 

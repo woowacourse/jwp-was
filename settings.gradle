@@ -1,3 +1,5 @@
 include 'mission-common'
-include 'mission-app'
+include 'mission-server'
 include 'mission-was'
+include 'mission-server'
+

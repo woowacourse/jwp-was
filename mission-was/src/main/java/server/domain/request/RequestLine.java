@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 import lombok.Getter;
 import servlet.RequestMethod;
-import web.server.utils.StaticFileType;
+import servlet.StaticFileType;
 
 @Getter
 public class RequestLine {
