@@ -36,6 +36,7 @@ public class RequestHandler implements Runnable {
             final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
             final RequestHeader requestHeader = RequestHeaderParser.parse(IOUtils.readHeaderData(bufferedReader));
 
+            final DataOutputStream dos = new DataOutputStream(out);
             if (requestHeader.hasContentLength()) {
                 final String contentLength = requestHeader.getHeaders().get("Content-Length");
                 final String bodyData = IOUtils.readBodyData(bufferedReader, Integer.parseInt(contentLength));
@@ -44,14 +45,15 @@ public class RequestHandler implements Runnable {
                 final String path = requestHeader.getPath();
                 if ("/user/create".equals(path)) {
                     UserController.create(requestBody.getContents());
+                    response302Header(dos);
                 }
+            } else {
+                final byte[] responseBody = FileIoUtils.loadFileFromClasspath(
+                    FileIoUtils.DEFAULT_PATH + requestHeader.getPath());
+                response200Header(dos, responseBody.length);
+                responseBody(dos, responseBody);
             }
 
-            final DataOutputStream dos = new DataOutputStream(out);
-            final byte[] responseBody = FileIoUtils.loadFileFromClasspath(
-                FileIoUtils.DEFAULT_PATH + requestHeader.getPath());
-            response200Header(dos, responseBody.length);
-            responseBody(dos, responseBody);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
@@ -63,6 +65,17 @@ public class RequestHandler implements Runnable {
             dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void response302Header(final DataOutputStream dos) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 Found \r\n");
+            dos.writeBytes("Location: /index.html \r\n");
+            dos.writeBytes("\r\n");
+            dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
