@@ -7,6 +7,8 @@
     - [x] HTML과 URL을 비교해 보고 사용자가 입력한 값을 파싱해 model.User 클래스에 저장한다.
 - [x] http://localhost:8080/user/form.html 파일의 form 태그 method를 get에서 post로 수정한 후 회원가입 기능이 정상적으로 동작하도록 구현한다.
     - [x] RequestBody에서 필요한 값을 읽어온다.
+- [ ] “회원가입”을 완료하면 /index.html 페이지로 이동한다.
+    - [ ] HTTP 응답 헤더의 status code를 200이 아니라 302 code를 사용한다.
 
 ## 진행 방법
 * 웹 애플리케이션 서버 요구사항을 파악한다.
