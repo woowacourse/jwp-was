@@ -45,9 +45,9 @@ public class HttpHeaders {
     }
 
     public void write(DataOutputStream dataOutputStream, Cookies cookies) throws IOException {
-        httpHeaders.put("Set-Cookie", cookies.toString());
-        for (String key : httpHeaders.keySet()) {
-            dataOutputStream.writeBytes(key + ": " + httpHeaders.get(key) + " " + System.lineSeparator());
+        httpHeaders.put(SET_COOKIE, cookies.toString());
+        for (Map.Entry<String, String> key : httpHeaders.entrySet()) {
+            dataOutputStream.writeBytes(key.getKey() + ": " + key.getValue() + " " + System.lineSeparator());
         }
         dataOutputStream.writeBytes(System.lineSeparator());
     }

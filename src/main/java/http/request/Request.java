@@ -27,6 +27,7 @@ public class Request {
         this.httpHeader = new HttpHeaders(ofRequestHeader(br));
         this.requestBody = new RequestBody(br, httpHeader.getContentLength());
         this.cookies = new Cookies(httpHeader.getHeader(HttpHeaders.COOKIE));
+        this.httpSession = new WebSession();
         if (!"".equals(cookies.getCookieValue(WebSession.DEFAULT_SESSION_COOKIE_NAME))) {
             this.httpSession = HttpSessionStore.getSession(
                     cookies.getCookieValue(WebSession.DEFAULT_SESSION_COOKIE_NAME));

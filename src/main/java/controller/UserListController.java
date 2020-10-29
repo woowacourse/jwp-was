@@ -25,13 +25,12 @@ public class UserListController extends AbstractController {
             String path = request.getPath();
             Template template = TemplateFactory.of(path);
             Collection<User> users = DataBase.findAll();
-
             HttpSession httpSession = request.getHttpSession();
-
-            if (httpSession == null) {
+        
+            if (httpSession.getAttribute("email") == null) {
                 throw new AuthenticationException();
             }
-            
+
             response.ok(template.apply(users));
         } catch (AuthenticationException e) {
             logger.info(e.getMessage());

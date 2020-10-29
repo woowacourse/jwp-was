@@ -13,9 +13,10 @@ public class LogoutController extends AbstractController {
         try {
             HttpSession httpSession = request.getHttpSession();
 
-            if (httpSession == null) {
+            if (httpSession.getAttribute("email") == null) {
                 throw new AuthenticationException();
             }
+
             HttpSessionStore.delete(httpSession.getId());
 
             response.found("/index.html");
