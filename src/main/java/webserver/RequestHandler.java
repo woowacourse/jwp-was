@@ -32,14 +32,17 @@ public class RequestHandler implements Runnable {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
             connection.getPort());
 
-        try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
-            final RequestHeader requestHeader = RequestHeaderParser.parse(IOUtils.readHeaderData(bufferedReader));
+        try (
+            final InputStream in = connection.getInputStream();
+            final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            final OutputStream out = connection.getOutputStream();
+            final DataOutputStream dos = new DataOutputStream(out)
+        ) {
+            final RequestHeader requestHeader = RequestHeaderParser.parse(IOUtils.readHeaderData(reader));
 
-            final DataOutputStream dos = new DataOutputStream(out);
             if (requestHeader.hasContentLength()) {
                 final String contentLength = requestHeader.getHeaders().get("Content-Length");
-                final String bodyData = IOUtils.readBodyData(bufferedReader, Integer.parseInt(contentLength));
+                final String bodyData = IOUtils.readBodyData(reader, Integer.parseInt(contentLength));
                 final RequestBody requestBody = RequestBodyParser.parse(bodyData);
 
                 final String path = requestHeader.getPath();
