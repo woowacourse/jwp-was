@@ -89,4 +89,33 @@ class RequestHeaderTest {
 
         assertThat(requestHeader.hasQueryParams()).isFalse();
     }
+
+    @DisplayName("headers에 content-length가 있으면 true 반환")
+    @Test
+    void hasContentLengthTest_true() {
+        final HttpMethod httpMethod = HttpMethod.POST;
+        final String path = "/user/create";
+        final String httpVersion = "HTTP/1.1";
+        final Map<String, String> queryParams = new HashMap<>();
+        final Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Length", "59");
+
+        final RequestHeader requestHeader = new RequestHeader(httpMethod, path, httpVersion, queryParams, headers);
+
+        assertThat(requestHeader.hasContentLength()).isTrue();
+    }
+
+    @DisplayName("headers에 content-length가 없으면 false 반환")
+    @Test
+    void hasContentLengthTest_false() {
+        final HttpMethod httpMethod = HttpMethod.POST;
+        final String path = "/user/create";
+        final String httpVersion = "HTTP/1.1";
+        final Map<String, String> queryParams = new HashMap<>();
+        final Map<String, String> headers = new HashMap<>();
+
+        final RequestHeader requestHeader = new RequestHeader(httpMethod, path, httpVersion, queryParams, headers);
+
+        assertThat(requestHeader.hasContentLength()).isFalse();
+    }
 }

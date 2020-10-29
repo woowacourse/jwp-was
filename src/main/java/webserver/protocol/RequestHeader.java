@@ -5,6 +5,8 @@ import java.util.Objects;
 
 public class RequestHeader {
 
+    private static final String CONTENT_LENGTH = "Content-Length";
+
     private final HttpMethod httpMethod;
     private final String path;
     private final String httpVersion;
@@ -42,6 +44,10 @@ public class RequestHeader {
 
     public boolean hasQueryParams() {
         return !queryParams.isEmpty();
+    }
+
+    public boolean hasContentLength() {
+        return headers.containsKey(CONTENT_LENGTH);
     }
 
     public HttpMethod getHttpMethod() {
