@@ -1,5 +1,6 @@
 package webserver;
 
+import controller.UserController;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -8,20 +9,17 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import controller.UserController;
 import utils.FileIoUtils;
 import utils.IOUtils;
-import webserver.protocol.HttpMethod;
+import webserver.protocol.RequestBody;
+import webserver.protocol.RequestBodyParser;
 import webserver.protocol.RequestHeader;
 import webserver.protocol.RequestHeaderParser;
 
 public class RequestHandler implements Runnable {
+
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private final Socket connection;
@@ -38,10 +36,14 @@ public class RequestHandler implements Runnable {
             final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
             final RequestHeader requestHeader = RequestHeaderParser.parse(IOUtils.readHeaderData(bufferedReader));
 
-            if (requestHeader.hasQueryParams()) {
+            if (requestHeader.hasContentLength()) {
+                final String contentLength = requestHeader.getHeaders().get("Content-Length");
+                final String bodyData = IOUtils.readBodyData(bufferedReader, Integer.parseInt(contentLength));
+                final RequestBody requestBody = RequestBodyParser.parse(bodyData);
+
                 final String path = requestHeader.getPath();
                 if ("/user/create".equals(path)) {
-                    UserController.create(requestHeader.getQueryParams());
+                    UserController.create(requestBody.getContents());
                 }
             }
 
