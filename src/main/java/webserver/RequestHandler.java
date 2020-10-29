@@ -48,13 +48,31 @@ public class RequestHandler implements Runnable {
                     response302Header(dos);
                 }
             } else {
-                final byte[] responseBody = FileIoUtils.loadFileFromClasspath(
-                    FileIoUtils.DEFAULT_PATH + requestHeader.getPath());
-                response200Header(dos, responseBody.length);
-                responseBody(dos, responseBody);
+                if (requestHeader.isAcceptCSS()) {
+                    final byte[] responseBody = FileIoUtils.loadFileFromClasspath(
+                        FileIoUtils.STATIC_PATH + requestHeader.getPath());
+                    response200CSSHeader(dos, responseBody.length);
+                    responseBody(dos, responseBody);
+                } else {
+                    final byte[] responseBody = FileIoUtils.loadFileFromClasspath(
+                        FileIoUtils.TEMPLATES_PATH + requestHeader.getPath());
+                    response200Header(dos, responseBody.length);
+                    responseBody(dos, responseBody);
+                }
             }
 
         } catch (IOException | URISyntaxException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void response200CSSHeader(final DataOutputStream dos, final int lengthOfBodyContent) {
+        try {
+            dos.writeBytes("HTTP/1.1 200 OK \r\n");
+            dos.writeBytes("Content-Type: text/css; charset=\"utf-8\"\r\n");
+            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
