@@ -11,7 +11,7 @@ import model.dto.UsersDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
-import util.TemplateMaker;
+import utils.TemplateMaker;
 
 import java.io.IOException;
 
