@@ -1,8 +1,8 @@
 package domain.response;
 
-import static common.IoUtil.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static test.IoUtil.*;
 
 import java.io.IOException;
 

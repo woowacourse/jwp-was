@@ -1,4 +1,4 @@
-package common;
+package test;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -17,9 +17,11 @@ import servlet.HttpRequest;
 
 public class IoUtil {
 
-    private static final String testDirectory = "./src/test/java/resources";
+    private static final String testDirectory = "src/test/resources/";
 
     public static DataOutputStream createOutputStream(String filename) throws FileNotFoundException {
+        System.out.println(new File(".").getAbsolutePath());
+
         new File(testDirectory + "/out").mkdirs();
         return new DataOutputStream(new FileOutputStream(new File(testDirectory + filename)));
     }

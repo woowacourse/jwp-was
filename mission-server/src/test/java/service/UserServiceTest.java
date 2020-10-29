@@ -9,7 +9,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import db.DataBase;
-import web.application.domain.model.User;
+import domain.model.User;
 
 class UserServiceTest {
 

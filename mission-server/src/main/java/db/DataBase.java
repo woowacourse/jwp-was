@@ -10,7 +10,7 @@ import domain.model.User;
 
 public class DataBase {
 
-    private static Map<String, User> users = Maps.newHashMap();
+    private static final Map<String, User> users = Maps.newHashMap();
 
     public static void addUser(User user) {
         User copiedUser = user.clone();

@@ -1,6 +1,6 @@
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static web.server.common.IoUtil.*;
+import static test.IoUtil.*;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -9,14 +9,15 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import controller.CreateUserController;
+import controller.ListController;
+import controller.RootController;
+import controller.UserLoginController;
+import domain.response.HttpServletResponse;
 import dto.UrlMappingCreateDto;
-import web.application.controller.CreateUserController;
-import web.application.controller.ListController;
-import web.application.controller.RootController;
-import web.application.controller.UserLoginController;
-import web.application.util.HandlebarsTemplateEngine;
-import web.server.domain.request.HttpRequest;
-import web.server.domain.response.HttpResponse;
+import servlet.HttpRequest;
+import servlet.HttpResponse;
+import util.HandlebarsTemplateEngine;
 
 class FrontControllerTest {
 
@@ -38,7 +39,7 @@ class FrontControllerTest {
     @Test
     void methodNotAllowed() throws IOException {
         HttpRequest httpRequest = createRequest("http_with_method_not_allowed.txt");
-        HttpResponse httpResponse = new HttpResponse(createOutputStream("/out/method_not_allowed.txt"));
+        HttpResponse httpResponse = new HttpServletResponse(createOutputStream("/out/method_not_allowed.txt"));
 
         FRONT_CONTROLLER.service(httpRequest, httpResponse);
 
@@ -50,7 +51,7 @@ class FrontControllerTest {
     @Test
     void pageNotFound() throws IOException {
         HttpRequest httpRequest = createRequest("http_not_supported_url.txt");
-        HttpResponse httpResponse = new HttpResponse(createOutputStream("/out/page_not_found.txt"));
+        HttpResponse httpResponse = new HttpServletResponse(createOutputStream("/out/page_not_found.txt"));
 
         FRONT_CONTROLLER.service(httpRequest, httpResponse);
 
@@ -62,7 +63,7 @@ class FrontControllerTest {
     @Test
     void mapStaticFileUrl() throws IOException {
         HttpRequest httpRequest = createRequest("http_template_request.txt");
-        HttpResponse httpResponse = new HttpResponse(createOutputStream("/out/index_page.txt"));
+        HttpResponse httpResponse = new HttpServletResponse(createOutputStream("/out/index_page.txt"));
         FRONT_CONTROLLER.service(httpRequest, httpResponse);
 
         String actual = readFile("/out/index_page.txt");
@@ -77,7 +78,7 @@ class FrontControllerTest {
     @Test
     void mapRootUrl() throws IOException {
         HttpRequest httpRequest = createRequest("http_root.txt");
-        HttpResponse httpResponse = new HttpResponse(createOutputStream("/out/root_page.txt"));
+        HttpResponse httpResponse = new HttpServletResponse(createOutputStream("/out/root_page.txt"));
         FRONT_CONTROLLER.service(httpRequest, httpResponse);
 
         String actual = readFile("/out/root_page.txt");
@@ -92,7 +93,7 @@ class FrontControllerTest {
     @Test
     void mapApi() throws IOException {
         HttpRequest httpRequest = createRequest("http_post_with_formdata.txt");
-        HttpResponse httpResponse = new HttpResponse(createOutputStream("/out/create_user_response.txt"));
+        HttpResponse httpResponse = new HttpServletResponse(createOutputStream("/out/create_user_response.txt"));
         FRONT_CONTROLLER.service(httpRequest, httpResponse);
 
         String actual = readFile("/out/create_user_response.txt");

@@ -26,6 +26,8 @@ public class UserLoginController extends AbstractController {
         Cookie cookie = Cookie.of("JSESSIONID", sessionId);
         httpResponse.addCookie(cookie, "Path=/");
 
+        System.out.println(isLogined);
+
         FilePrefixPathMapper filePrefixPathMapper = FilePrefixPathMapper.getInstance();
         String filePath = filePrefixPathMapper.addPrefix("/index.html", StaticFileType.HTML);
         httpResponse.forward(filePath, StaticFileType.HTML);

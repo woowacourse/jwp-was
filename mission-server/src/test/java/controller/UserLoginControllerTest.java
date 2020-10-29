@@ -1,7 +1,7 @@
 package controller;
 
 import static org.assertj.core.api.Assertions.*;
-import static web.server.common.IoUtil.*;
+import static test.IoUtil.*;
 
 import java.io.IOException;
 
@@ -11,9 +11,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import db.DataBase;
-import web.application.domain.model.User;
-import web.server.domain.request.HttpRequest;
-import web.server.domain.response.HttpResponse;
+import domain.model.User;
+import domain.response.HttpServletResponse;
+import servlet.HttpRequest;
+import servlet.HttpResponse;
 
 class UserLoginControllerTest {
 
@@ -37,7 +38,7 @@ class UserLoginControllerTest {
     @Test
     void doPost() throws IOException {
         HttpRequest httpRequest = createRequest("http_login_success.txt");
-        HttpResponse httpResponse = new HttpResponse(createOutputStream("/out/root_page.txt"));
+        HttpResponse httpResponse = new HttpServletResponse(createOutputStream("/out/root_page.txt"));
 
         UserLoginController userLoginController = new UserLoginController();
         userLoginController.service(httpRequest, httpResponse);

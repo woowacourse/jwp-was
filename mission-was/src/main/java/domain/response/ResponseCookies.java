@@ -15,7 +15,8 @@ public class ResponseCookies {
     }
 
     public void addCookie(Cookie cookie, String[] options) {
-        new ResponseCookie(cookie, options);
+        ResponseCookie responseCookie = new ResponseCookie(cookie, options);
+        responseCookies.add(responseCookie);
     }
 
     public Set<ResponseCookie> getResponseCookies() {

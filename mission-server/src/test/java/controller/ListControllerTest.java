@@ -1,7 +1,7 @@
 package controller;
 
 import static org.assertj.core.api.Assertions.*;
-import static web.server.common.IoUtil.*;
+import static test.IoUtil.*;
 
 import java.io.IOException;
 import java.util.Map;
@@ -9,11 +9,14 @@ import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import web.application.util.HandlebarsTemplateEngine;
-import web.server.domain.request.HttpRequest;
-import web.server.domain.request.HttpSession;
-import web.server.domain.request.HttpSessionStorage;
-import web.server.domain.response.HttpResponse;
+import application.Controller;
+import domain.request.HttpServletSession;
+import domain.request.HttpSessionStorage;
+import domain.response.HttpServletResponse;
+import servlet.HttpRequest;
+import servlet.HttpResponse;
+import servlet.HttpSession;
+import util.HandlebarsTemplateEngine;
 
 class ListControllerTest {
 
@@ -21,7 +24,7 @@ class ListControllerTest {
     @Test
     void name() throws IOException {
         HttpRequest httpRequest = createRequest("list_controller/login_fail_request.txt");
-        HttpResponse httpResponse = new HttpResponse(createOutputStream("/out/list_controller_actual.txt"));
+        HttpResponse httpResponse = new HttpServletResponse(createOutputStream("/out/list_controller_actual.txt"));
 
         Controller ListController = new ListController(HandlebarsTemplateEngine.getInstance());
         ListController.service(httpRequest, httpResponse);
@@ -35,12 +38,12 @@ class ListControllerTest {
     @Test
     void doGet() throws IOException {
         Map<String, HttpSession> sessionStorage = HttpSessionStorage.getInstance().getSessionStorage();
-        HttpSession httpSession = new HttpSession("TEST_SESSION_ID");
+        HttpSession httpSession = new HttpServletSession("TEST_SESSION_ID");
         httpSession.setAttribute("logined", true);
         sessionStorage.put("TEST_SESSION_ID", httpSession);
 
         HttpRequest httpRequest = createRequest("list_controller/login_success_request.txt");
-        HttpResponse httpResponse = new HttpResponse(createOutputStream("/out/login_success_response.txt"));
+        HttpResponse httpResponse = new HttpServletResponse(createOutputStream("/out/login_success_response.txt"));
 
         Controller ListController = new ListController(HandlebarsTemplateEngine.getInstance());
         ListController.service(httpRequest, httpResponse);
