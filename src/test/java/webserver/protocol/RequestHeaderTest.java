@@ -118,4 +118,48 @@ class RequestHeaderTest {
 
         assertThat(requestHeader.hasContentLength()).isFalse();
     }
+
+    @DisplayName("hearders에 accept가 text/css,*/*;q=0.1면 true 반환")
+    @Test
+    void isAcceptCSSTest_true() {
+        final HttpMethod httpMethod = HttpMethod.POST;
+        final String path = "/user/create";
+        final String httpVersion = "HTTP/1.1";
+        final Map<String, String> queryParams = new HashMap<>();
+        final Map<String, String> headers = new HashMap<>();
+        headers.put("Accept", "text/css,*/*;q=0.1");
+
+        final RequestHeader requestHeader = new RequestHeader(httpMethod, path, httpVersion, queryParams, headers);
+
+        assertThat(requestHeader.isAcceptCSS()).isTrue();
+    }
+
+    @DisplayName("hearders에 accept가 text/css,*/*;q=0.1가 아니면 false 반환")
+    @Test
+    void isAcceptCSSTest_false() {
+        final HttpMethod httpMethod = HttpMethod.POST;
+        final String path = "/user/create";
+        final String httpVersion = "HTTP/1.1";
+        final Map<String, String> queryParams = new HashMap<>();
+        final Map<String, String> headers = new HashMap<>();
+        headers.put("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9\n");
+
+        final RequestHeader requestHeader = new RequestHeader(httpMethod, path, httpVersion, queryParams, headers);
+
+        assertThat(requestHeader.isAcceptCSS()).isFalse();
+    }
+
+    @DisplayName("hearders에 accept가 없으면 false 반환")
+    @Test
+    void isAcceptCSSTest_no_accept() {
+        final HttpMethod httpMethod = HttpMethod.POST;
+        final String path = "/user/create";
+        final String httpVersion = "HTTP/1.1";
+        final Map<String, String> queryParams = new HashMap<>();
+        final Map<String, String> headers = new HashMap<>();
+
+        final RequestHeader requestHeader = new RequestHeader(httpMethod, path, httpVersion, queryParams, headers);
+
+        assertThat(requestHeader.isAcceptCSS()).isFalse();
+    }
 }

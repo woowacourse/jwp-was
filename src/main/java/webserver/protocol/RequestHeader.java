@@ -6,6 +6,8 @@ import java.util.Objects;
 public class RequestHeader {
 
     private static final String CONTENT_LENGTH = "Content-Length";
+    private static final String TEXT_CSS = "text/css,*/*;q=0.1";
+    private static final String ACCEPT = "Accept";
 
     private final HttpMethod httpMethod;
     private final String path;
@@ -48,6 +50,10 @@ public class RequestHeader {
 
     public boolean hasContentLength() {
         return headers.containsKey(CONTENT_LENGTH);
+    }
+
+    public boolean isAcceptCSS() {
+        return Objects.equals(TEXT_CSS, headers.get(ACCEPT));
     }
 
     public HttpMethod getHttpMethod() {
