@@ -14,20 +14,34 @@ public final class RequestHeaderParser {
     private static final int QUERY_PARAM_VALUE_INDEX = 1;
     private static final int RESOURCES_INDEX = 1;
     private static final int PATH_INDEX = 0;
+    private static final int HEADER_KEY_INDEX = 0;
+    private static final int HEADER_VALUE_INDEX = 1;
+    private static final int HEADERS_START_INDEX = 1;
     private static final String QUERY_PARAM_REGEX = "&";
     private static final String QUERY_PARAMS_REGEX = "\\?";
     private static final String PARAM_REGEX = "=";
+    private static final String HEADER_REGEX = ": ";
 
     public static RequestHeader parse(final List<String> header) {
         final String[] firstLineSplitResult = header.get(FIRST_LINE).split(" ", -1);
         final String[] resources = firstLineSplitResult[RESOURCES_INDEX].split(QUERY_PARAMS_REGEX, -1);
 
-        final String httpMethod = firstLineSplitResult[HTTP_METHOD_INDEX];
+        final HttpMethod httpMethod = HttpMethod.valueOf(firstLineSplitResult[HTTP_METHOD_INDEX]);
         final String httpVersion = firstLineSplitResult[HTTP_VERSION_INDEX];
         final String path = resources[PATH_INDEX];
         final Map<String, String> queryParams = parseQueryParams(resources);
+        final Map<String, String> headers = parseHeaders(header);
 
-        return new RequestHeader(httpMethod, path, httpVersion, queryParams);
+        return new RequestHeader(httpMethod, path, httpVersion, queryParams, headers);
+    }
+
+    private static Map<String, String> parseHeaders(final List<String> header) {
+        final Map<String, String> headers = new HashMap<>();
+        for (int i = HEADERS_START_INDEX; i < header.size(); i++) {
+            final String[] tokens = header.get(i).split(HEADER_REGEX, -1);
+            headers.put(tokens[HEADER_KEY_INDEX], tokens[HEADER_VALUE_INDEX]);
+        }
+        return headers;
     }
 
     private static Map<String, String> parseQueryParams(final String[] resources) {

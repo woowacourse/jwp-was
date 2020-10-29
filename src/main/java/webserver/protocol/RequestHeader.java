@@ -5,23 +5,25 @@ import java.util.Objects;
 
 public class RequestHeader {
 
-    private final String httpMethod;
+    private final HttpMethod httpMethod;
     private final String path;
     private final String httpVersion;
     private final Map<String, String> queryParams;
+    private final Map<String, String> headers;
 
-    RequestHeader(final String httpMethod, final String path, final String httpVersion,
-        final Map<String, String> queryParams) {
-        validate(httpMethod, path, httpVersion, queryParams);
+    RequestHeader(final HttpMethod httpMethod, final String path, final String httpVersion,
+        final Map<String, String> queryParams, final Map<String, String> headers) {
+        validate(httpMethod, path, httpVersion, queryParams, headers);
         this.httpMethod = httpMethod;
         this.path = path;
         this.httpVersion = httpVersion;
         this.queryParams = queryParams;
+        this.headers = headers;
     }
 
-    private void validate(final String httpMethod, final String path, final String httpVersion,
-        final Map<String, String> queryParams) {
-        if (Objects.isNull(httpMethod) || httpMethod.isEmpty()) {
+    private void validate(final HttpMethod httpMethod, final String path, final String httpVersion,
+        final Map<String, String> queryParams, final Map<String, String> headers) {
+        if (Objects.isNull(httpMethod)) {
             throw new IllegalArgumentException("httpMethod가 유효하지 않습니다: " + httpMethod);
         }
         if (Objects.isNull(path) || path.isEmpty()) {
@@ -33,13 +35,16 @@ public class RequestHeader {
         if (Objects.isNull(queryParams)) {
             throw new IllegalArgumentException("queryParams가 유효하지 않습니다: " + null);
         }
+        if (Objects.isNull(headers)) {
+            throw new IllegalArgumentException("headers가 유효하지 않습니다: " + null);
+        }
     }
 
     public boolean hasQueryParams() {
         return !queryParams.isEmpty();
     }
 
-    public String getHttpMethod() {
+    public HttpMethod getHttpMethod() {
         return httpMethod;
     }
 
@@ -53,5 +58,9 @@ public class RequestHeader {
 
     public Map<String, String> getQueryParams() {
         return queryParams;
+    }
+
+    public Map<String, String> getHeaders() {
+        return headers;
     }
 }

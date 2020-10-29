@@ -1,6 +1,5 @@
 package webserver;
 
-import controller.UserController;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -11,9 +10,14 @@ import java.net.Socket;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import controller.UserController;
 import utils.FileIoUtils;
+import utils.IOUtils;
+import webserver.protocol.HttpMethod;
 import webserver.protocol.RequestHeader;
 import webserver.protocol.RequestHeaderParser;
 
@@ -31,7 +35,8 @@ public class RequestHandler implements Runnable {
             connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            final RequestHeader requestHeader = parseRequestHeader(in);
+            final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
+            final RequestHeader requestHeader = RequestHeaderParser.parse(IOUtils.readHeaderData(bufferedReader));
 
             if (requestHeader.hasQueryParams()) {
                 final String path = requestHeader.getPath();
@@ -48,19 +53,6 @@ public class RequestHandler implements Runnable {
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
-    }
-
-    private RequestHeader parseRequestHeader(final InputStream request) throws IOException {
-        final BufferedReader reader = new BufferedReader(new InputStreamReader(request));
-        final List<String> header = new ArrayList<>();
-
-        String line = reader.readLine();
-        while (!"".equals(line)) {
-            header.add(line);
-            line = reader.readLine();
-        }
-
-        return RequestHeaderParser.parse(header);
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
