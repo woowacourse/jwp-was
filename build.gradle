@@ -18,6 +18,7 @@ dependencies {
     implementation 'org.springframework:spring-core:5.2.6.RELEASE'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.6.2'
     testImplementation 'org.assertj:assertj-core:3.16.1'
+    compile group: 'com.github.jknack', name: 'handlebars.java', version: '0.5.2', ext: 'pom'
 }
 
 test {

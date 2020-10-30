@@ -14,6 +14,7 @@ public class ControllerMapper {
         /* Todo: 이부분을 application 패키지에서 할 수 있으면 좋을것같음 */
         controllersByUriPath.put(UserController.CREATE_URI_PATH, new UserController());
         controllersByUriPath.put(UserController.LOGIN_URI_PATH, new UserController());
+        controllersByUriPath.put(UserController.FIND_USER_URI_PATH, new UserController());
     }
 
     public Controller findController(HttpRequest httpRequest) {

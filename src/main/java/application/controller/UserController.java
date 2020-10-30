@@ -12,6 +12,7 @@ public class UserController extends AbstractController {
 
     public static final String CREATE_URI_PATH = "/user/create";
     public static final String LOGIN_URI_PATH = "/user/login";
+    public static final String FIND_USER_URI_PATH = "/user/list";
 
     private final UserService userService = new UserService();
 
@@ -32,6 +33,11 @@ public class UserController extends AbstractController {
         }
     }
 
+    private HttpResponse findAllUsers(HttpRequest httpRequest) {
+        return new HttpResponse(StatusCode.FOUND, "/user/list.html")
+            .setCookies(Cookies.createWithSingleCookie("login", "true", "/"));
+    }
+
     @Override
     protected HttpResponse doPost(HttpRequest httpRequest) {
         if (httpRequest.getUriPath().equals(CREATE_URI_PATH)) {
@@ -39,6 +45,14 @@ public class UserController extends AbstractController {
         }
         if (httpRequest.getUriPath().equals(LOGIN_URI_PATH)) {
             return login(httpRequest);
+        }
+        throw new WrongRequestException("uri that does not exist in the POST method.");
+    }
+
+    @Override
+    protected  HttpResponse doGet(HttpRequest httpRequest) {
+        if (httpRequest.getUriPath().equals(FIND_USER_URI_PATH)) {
+            return findAllUsers(httpRequest);
         }
         throw new WrongRequestException("uri that does not exist in the POST method.");
     }
