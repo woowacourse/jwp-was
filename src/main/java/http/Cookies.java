@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 public class Cookies implements Cloneable {
 
+    private static final String SESSION_ID = "SessionId";
     private static final String EQUAL = "=";
     private static final String SEMICOLON = ";";
     private static final String BLANK = " ";
@@ -44,8 +45,8 @@ public class Cookies implements Cloneable {
                 .collect(Collectors.joining(SEMICOLON + BLANK));
     }
 
-    public String getValue(final String name) {
-        return cookies.get(name);
+    public String getSessionId() {
+        return cookies.get(SESSION_ID);
     }
 
     @Override

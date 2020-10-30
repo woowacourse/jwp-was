@@ -2,19 +2,18 @@ package http.response;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.stream.Collectors;
 
-import http.Cookies;
 import http.request.HttpRequest;
 
 public class HttpResponse {
 
     private static final String NEW_LINE = System.lineSeparator();
-    private static final String COOKIE = "Cookie";
-    private static final String CONTENT_TYPE_TEXT_HTML = "text/html";
     private static final String RESPONSE_HEADER_LOCATION = "Location";
     private static final String RESPONSE_HEADER_CONTENT_TYPE = "Content-Type";
     private static final String RESPONSE_HEADER_CONTENT_LENGTH = "Content-Length";
+    private static final String RESPONSE_HEADER_SET_COOKIE = "Set-Cookie";
+    private static final String COOKIE_NAME_PATH = "Path";
+    private static final String COOKIE_VALUE_PATH = "/";
     private static final String CHARSET_UTF_8 = ";charset=utf-8";
 
     private final DataOutputStream dos;
@@ -69,9 +68,9 @@ public class HttpResponse {
             return ;
         }
 
-        this.httpResponseHeader.addCookie("Path", "/");
+        this.httpResponseHeader.addCookie(COOKIE_NAME_PATH, COOKIE_VALUE_PATH);
         String flatCookies = this.httpResponseHeader.flatCookie();
-        addHeader("Set-Cookie", flatCookies);
+        addHeader(RESPONSE_HEADER_SET_COOKIE, flatCookies);
     }
 
     private void render() throws IOException {

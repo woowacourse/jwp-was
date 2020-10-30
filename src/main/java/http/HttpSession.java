@@ -6,8 +6,8 @@ import java.util.UUID;
 
 public class HttpSession {
 
-    private String id;
-    private Map<String, Object> attribute;
+    private final String id;
+    private final Map<String, Object> attribute;
 
     public HttpSession() {
         this.id = UUID.randomUUID().toString();
