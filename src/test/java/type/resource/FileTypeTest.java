@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import exception.NotFoundFileTypeException;
 
-public class FileTypeTest {
+class FileTypeTest {
 
     @ParameterizedTest
     @CsvSource(value = {"html,TEMPLATE", "ico,TEMPLATE", "css,STATIC", "js,STATIC", "woff,STATIC", "woff2,STATIC"})
