@@ -3,7 +3,7 @@ package model;
 import java.util.Map;
 import java.util.Objects;
 
-import web.RequestBody;
+import web.http.HttpRequestBody;
 
 public class User {
     private String userId;
@@ -18,13 +18,13 @@ public class User {
         this.email = email;
     }
 
-    public static User from(RequestBody requestBody) {
-        Map<String, String> params = requestBody.getParams();
+    public static User from(HttpRequestBody httpRequestBody) {
+        Map<String, String> params = httpRequestBody.getParams();
         return new User(params.get("userId"), params.get("password"), params.get("name"), params.get("email"));
     }
 
-    public boolean login(String password) {
-        return Objects.equals(this.password, password);
+    public boolean passwordWrong(String password) {
+        return !Objects.equals(this.password, password);
     }
 
     public String getUserId() {

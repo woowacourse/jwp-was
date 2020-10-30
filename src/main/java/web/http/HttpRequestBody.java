@@ -1,4 +1,4 @@
-package web;
+package web.http;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,7 +7,7 @@ import java.util.Map;
 
 import utils.IOUtils;
 
-public class RequestBody {
+public class HttpRequestBody {
 
     private static final String QUESTION_MARK = "?";
     private static final String AMPERSAND = "&";
@@ -15,18 +15,18 @@ public class RequestBody {
 
     private final Map<String, String> params;
 
-    private RequestBody(Map<String, String> params) {
+    private HttpRequestBody(Map<String, String> params) {
         this.params = params;
     }
 
-    public static RequestBody of(BufferedReader br, String value, RequestLine requestLine) throws IOException {
+    public static HttpRequestBody of(BufferedReader br, String value, HttpRequestLine httpRequestLine) throws IOException {
         Map<String, String> queryParams = new HashMap<>();
 
         String data = IOUtils.readData(br, Integer.parseInt(value));
-        parseFromUrl(queryParams, requestLine.getRawPath());
+        parseFromUrl(queryParams, httpRequestLine.getRawPath());
         parseFromBody(queryParams, data);
 
-        return new RequestBody(queryParams);
+        return new HttpRequestBody(queryParams);
     }
 
     private static void parseFromUrl(Map<String, String> queryParams, String path) {

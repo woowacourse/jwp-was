@@ -13,8 +13,8 @@ import org.junit.jupiter.api.Test;
 
 import db.DataBase;
 import model.User;
-import web.HttpRequest;
-import web.HttpResponse;
+import web.http.HttpRequest;
+import web.http.HttpResponse;
 import webserver.RequestMapping;
 
 class LoginControllerTest {

@@ -1,8 +1,8 @@
 package web.controller;
 
-import web.HttpMethod;
-import web.HttpRequest;
-import web.HttpResponse;
+import web.http.HttpMethod;
+import web.http.HttpRequest;
+import web.http.HttpResponse;
 
 public abstract class AbstractController implements Controller {
 
@@ -14,8 +14,6 @@ public abstract class AbstractController implements Controller {
             doPost(request, response);
         } else if (HttpMethod.GET == method) {
             doGet(request, response);
-        } else if (HttpMethod.NONE == method) {
-            response.response405Header();
         }
     }
 

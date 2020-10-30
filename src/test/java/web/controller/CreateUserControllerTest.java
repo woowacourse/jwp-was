@@ -14,8 +14,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import db.DataBase;
-import web.HttpRequest;
-import web.HttpResponse;
+import web.http.HttpRequest;
+import web.http.HttpResponse;
 import webserver.RequestMapping;
 
 class CreateUserControllerTest {

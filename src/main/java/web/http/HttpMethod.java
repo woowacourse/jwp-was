@@ -1,4 +1,4 @@
-package web;
+package web.http;
 
 import java.util.Arrays;
 

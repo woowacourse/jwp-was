@@ -9,9 +9,10 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import web.HttpRequest;
-import web.HttpResponse;
+import web.StaticFile;
 import web.controller.Controller;
+import web.http.HttpRequest;
+import web.http.HttpResponse;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -24,7 +25,7 @@ public class RequestHandler implements Runnable {
 
     public void run() {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
-                connection.getPort());
+            connection.getPort());
 
         try (InputStream in = connection.getInputStream();
              OutputStream out = connection.getOutputStream()) {
@@ -34,10 +35,12 @@ public class RequestHandler implements Runnable {
 
             Controller controller = RequestMapping.getController(getDefaultPath(request.getPath()));
             if (Objects.isNull(controller)) {
-                response.forward(request.getPath());
+                String location = request.getPath();
+                response.ok(StaticFile.of(location).getPrefix() + location);
             } else {
                 controller.service(request, response);
             }
+            response.send();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }

@@ -8,6 +8,8 @@ import java.io.OutputStream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import web.http.HttpResponse;
+
 public class HttpResponseTest {
 
     private String testDirectory = "./src/test/resources/";

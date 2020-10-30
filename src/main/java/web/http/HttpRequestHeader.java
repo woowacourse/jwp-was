@@ -1,4 +1,4 @@
-package web;
+package web.http;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,18 +6,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class RequestHeader {
+public class HttpRequestHeader {
 
     private static final String COLON = ": ";
 
-    private final Map<String, String> params;
+    private final Map<String, Object> params;
 
-    private RequestHeader(Map<String, String> params) {
+    private HttpRequestHeader(Map<String, Object> params) {
         this.params = params;
     }
 
-    public static RequestHeader from(BufferedReader br) throws IOException {
-        Map<String, String> headerMap = new HashMap<>();
+    public static HttpRequestHeader from(BufferedReader br) throws IOException {
+        Map<String, Object> headerMap = new HashMap<>();
         String line = br.readLine();
         while (!"".equals(line)) {
             if (Objects.isNull(line)) {
@@ -27,14 +27,14 @@ public class RequestHeader {
             headerMap.put(values[0], values[1]);
             line = br.readLine();
         }
-        return new RequestHeader(headerMap);
+        return new HttpRequestHeader(headerMap);
     }
 
-    public String getValue(String key) {
+    public Object getValue(String key) {
         return this.params.get(key);
     }
 
-    public Map<String, String> getParams() {
+    public Map<String, Object> getParams() {
         return params;
     }
 }

@@ -10,6 +10,9 @@ import java.io.InputStream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import web.http.HttpMethod;
+import web.http.HttpRequest;
+
 class HttpRequestTest {
 
     private String testDirectory = "./src/test/resources/";
