@@ -3,12 +3,15 @@ package controller;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import http.HttpSessionStorage;
 import type.method.MethodType;
 import exception.NotSupportedMethodException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 
 public abstract class AbstractController implements Controller {
+
+    protected HttpSessionStorage httpSessionStorage = HttpSessionStorage.getInstance();
 
     @Override
     public void service(final HttpRequest httpRequest, final HttpResponse httpResponse) throws IOException, URISyntaxException {

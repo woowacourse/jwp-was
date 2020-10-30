@@ -16,13 +16,16 @@ import model.User;
 
 public class UserListController extends AbstractController {
 
+    private static final String SESSION_ID = "SessionId";
+    private static final String REDIRECT_LOGIN = "/user/login.html";
+
     @Override
     protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         final Cookies cookies = httpRequest.getCookie();
-        final String logined = cookies.getValue("logined");
+        final String SessionId = cookies.getValue(SESSION_ID);
 
-        if (Objects.isNull(logined) || "false".equals(logined)) {
-            httpResponse.response302("/user/login.html");
+        if (Objects.isNull(SessionId) || !httpSessionStorage.isExistById(SessionId)) {
+            httpResponse.response302(REDIRECT_LOGIN);
         }
 
         final TemplateLoader loader = new ClassPathTemplateLoader();
