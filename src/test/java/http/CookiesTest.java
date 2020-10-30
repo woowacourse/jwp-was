@@ -25,7 +25,7 @@ class CookiesTest {
         final HttpRequest httpRequest = new HttpRequest(httpRequestLine, httpRequestHeader, HttpRequestBody.emptyBody());
 
         // when
-        Cookies cookies = new Cookies(httpRequest);
+        Cookies cookies = Cookies.from(httpRequest.getHttpRequestHeaderByName("Cookie"));
 
         // then
         assertThat(cookies.isEmpty()).isFalse();
@@ -39,7 +39,7 @@ class CookiesTest {
         final HttpRequest httpRequest = new HttpRequest(httpRequestLine, httpRequestHeader, HttpRequestBody.emptyBody());
 
         // when
-        Cookies cookies = new Cookies(httpRequest);
+        Cookies cookies = Cookies.from(httpRequest.getHttpRequestHeaderByName("Cookie"));
 
         // then
         assertThat(cookies.isEmpty()).isTrue();
@@ -48,11 +48,8 @@ class CookiesTest {
     @Test
     void flat() {
         // given
-        final HttpRequestLine httpRequestLine = new HttpRequestLine("GET", new HttpRequestUrl("/index.html"), "HTTP/1.1");
-        final HttpRequestHeader httpRequestHeader = new HttpRequestHeader(new HashMap<>());
-        final HttpRequest httpRequest = new HttpRequest(httpRequestLine, httpRequestHeader, HttpRequestBody.emptyBody());
-        Cookies cookies = new Cookies(httpRequest);
-        cookies.addCookie("logined", true);
+        Cookies cookies = Cookies.from(null);
+        cookies.addCookie("logined", "true");
         cookies.addCookie("Path", "/");
 
         // when

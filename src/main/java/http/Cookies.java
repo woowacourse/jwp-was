@@ -18,7 +18,7 @@ public class Cookies implements Cloneable {
     }
 
     public static Cookies from(final String cookies) {
-        if (Objects.isNull(cookies)) {
+        if (Objects.isNull(cookies) || cookies.isEmpty()) {
             return new Cookies(new LinkedHashMap<>());
         }
         Map<String, String> savedCookies = new LinkedHashMap<>();
