@@ -12,8 +12,8 @@ public class TemplateController extends AbstractController {
     private static final String TEMPLATES = "./templates";
 
     @Override
-    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
-        byte[] body = FileIoUtils.loadFileFromClasspath(TEMPLATES + httpRequest.getUrl());
+    public void doGet(final HttpRequest httpRequest, final HttpResponse httpResponse) throws IOException, URISyntaxException {
+        final byte[] body = FileIoUtils.loadFileFromClasspath(TEMPLATES + httpRequest.getUrl());
         httpResponse.response200(body);
     }
 }

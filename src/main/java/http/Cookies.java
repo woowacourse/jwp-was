@@ -5,36 +5,32 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import http.request.HttpRequest;
+public class Cookies implements Cloneable {
 
-public class Cookies {
-
-    private static final String COOKIE = "Cookie";
     private static final String EQUAL = "=";
     private static final String SEMICOLON = ";";
     private static final String BLANK = " ";
 
-    private final Map<String, Object> cookies;
+    private final Map<String, String> cookies;
 
-    public Cookies(final HttpRequest httpRequest) {
-        this.cookies = init(httpRequest);
+    private Cookies(final Map<String, String> cookies) {
+        this.cookies = cookies;
     }
 
-    private Map<String, Object> init(final HttpRequest httpRequest) {
-        String cookieData = httpRequest.getHttpRequestHeaderByName(COOKIE);
-        if (Objects.isNull(cookieData)) {
-            return new LinkedHashMap<>();
+    public static Cookies from(final String cookies) {
+        if (Objects.isNull(cookies)) {
+            return new Cookies(new LinkedHashMap<>());
         }
-        Map<String, Object> cookies = new LinkedHashMap<>();
-        String[] flatCookie = cookieData.split(SEMICOLON);
+        Map<String, String> savedCookies = new LinkedHashMap<>();
+        String[] flatCookie = cookies.split(SEMICOLON);
         for (String cookie : flatCookie) {
             String[] data = cookie.split(EQUAL);
-            cookies.put(data[0].trim(), data[1].trim());
+            savedCookies.put(data[0].trim(), data[1].trim());
         }
-        return cookies;
+        return new Cookies(savedCookies);
     }
 
-    public void addCookie(final String name, final Object value) {
+    public void addCookie(final String name, final String value) {
         this.cookies.put(name, value);
     }
 
@@ -46,5 +42,14 @@ public class Cookies {
         return this.cookies.entrySet().stream()
                 .map(key -> key.getKey() + EQUAL + key.getValue())
                 .collect(Collectors.joining(SEMICOLON + BLANK));
+    }
+
+    public String getValue(final String name) {
+        return cookies.get(name);
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

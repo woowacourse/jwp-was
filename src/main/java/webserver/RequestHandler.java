@@ -40,7 +40,7 @@ public class RequestHandler implements Runnable {
             final Controller controller = ControllerMapper.find(httpRequest.getUrl());
 
             controller.service(httpRequest, httpResponse);
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException | URISyntaxException | CloneNotSupportedException e) {
             logger.error(e.getMessage());
         }
     }

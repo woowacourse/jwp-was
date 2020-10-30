@@ -10,6 +10,7 @@ import http.request.HttpRequest;
 public class HttpResponse {
 
     private static final String NEW_LINE = System.lineSeparator();
+    private static final String COOKIE = "Cookie";
     private static final String CONTENT_TYPE_TEXT_HTML = "text/html";
     private static final String RESPONSE_HEADER_LOCATION = "Location";
     private static final String RESPONSE_HEADER_CONTENT_TYPE = "Content-Type";
@@ -21,15 +22,13 @@ public class HttpResponse {
     private final HttpResponseLine httpResponseLine;
     private final HttpResponseHeader httpResponseHeader;
     private final HttpResponseBody httpResponseBody;
-    private final Cookies cookies;
 
-    public HttpResponse(final DataOutputStream dos, final HttpRequest httpRequest) {
+    public HttpResponse(final DataOutputStream dos, final HttpRequest httpRequest) throws CloneNotSupportedException {
         this.dos = dos;
         this.httpRequest = httpRequest;
         this.httpResponseLine = new HttpResponseLine();
-        this.httpResponseHeader = new HttpResponseHeader();
+        this.httpResponseHeader = new HttpResponseHeader(httpRequest.getCookie());
         this.httpResponseBody = new HttpResponseBody();
-        this.cookies = new Cookies(httpRequest);
     }
 
     public void response200(final byte[] body) throws IOException {
@@ -47,9 +46,6 @@ public class HttpResponse {
     public void response302(final String redirectUrl) throws IOException {
         this.httpResponseLine.setHttpStatus(HttpStatus.FOUND);
 
-        int lengthOfBodyContent = Integer.parseInt(this.httpRequest.getHttpRequestHeaderByName(RESPONSE_HEADER_CONTENT_LENGTH));
-        initHeader(CONTENT_TYPE_TEXT_HTML, lengthOfBodyContent);
-
         addHeader(RESPONSE_HEADER_LOCATION, redirectUrl);
         addCookieInHeader();
 
@@ -64,17 +60,17 @@ public class HttpResponse {
     public void addHeader(final String name, final Object value) {
         this.httpResponseHeader.addResponseHeader(name, value);
     }
-    public void addCookie(final String name, final Object value) {
-        this.cookies.addCookie(name, value);
+    public void addCookie(final String name, final String value) {
+        this.httpResponseHeader.addCookie(name, value);
     }
 
     private void addCookieInHeader() {
-        if (this.cookies.isEmpty()) {
+        if (this.httpResponseHeader.isEmptyCookie()) {
             return ;
         }
 
-        this.cookies.addCookie("Path", "/");
-        String flatCookies = this.cookies.flat();
+        this.httpResponseHeader.addCookie("Path", "/");
+        String flatCookies = this.httpResponseHeader.flatCookie();
         addHeader("Set-Cookie", flatCookies);
     }
 

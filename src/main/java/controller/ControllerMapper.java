@@ -18,6 +18,7 @@ public class ControllerMapper {
     static {
         controllers.put("/user/create", new UserController());
         controllers.put("/user/login", new LoginController());
+        controllers.put("/user/list", new UserListController());
     }
 
     private ControllerMapper() {}

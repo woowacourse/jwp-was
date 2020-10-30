@@ -12,8 +12,8 @@ public class StaticController extends AbstractController {
     private static final String STATIC = "./static";
 
     @Override
-    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
-        byte[] body = FileIoUtils.loadFileFromClasspath(STATIC + httpRequest.getUrl());
+    public void doGet(final HttpRequest httpRequest, final HttpResponse httpResponse) throws IOException, URISyntaxException {
+        final byte[] body = FileIoUtils.loadFileFromClasspath(STATIC + httpRequest.getUrl());
         httpResponse.response200(body);
     }
 }

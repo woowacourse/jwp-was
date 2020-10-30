@@ -1,5 +1,6 @@
 package http.request;
 
+import http.Cookies;
 import type.method.MethodType;
 
 public class HttpRequest {
@@ -39,5 +40,9 @@ public class HttpRequest {
 
     public String getContentType() {
         return this.httpRequestHeader.getValue(HEADER_ACCEPT).split(COMMA)[0];
+    }
+
+    public Cookies getCookie() {
+        return this.httpRequestHeader.getCookies();
     }
 }
