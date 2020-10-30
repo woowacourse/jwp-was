@@ -20,10 +20,14 @@ public abstract class AbstractController implements Controller {
             doPost(httpRequest, httpResponse);
             return ;
         }
-        throw new NotSupportedMethodException("지원하지 않는 Method 입니다.");
+        throw new NotSupportedMethodException("지원하지 않는 Method 입니다. Method: " + httpRequest.getMethod());
     }
 
-    abstract void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException;
+    protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+        throw new NotSupportedMethodException("지원하지 않는 Method 입니다. Method: GET");
+    }
 
-    abstract void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException;
+    protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+        throw new NotSupportedMethodException("지원하지 않는 Method 입니다. Method: POST");
+    }
 }

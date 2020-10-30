@@ -13,15 +13,4 @@ public class HttpResponseHeaderTest {
 
         assertThat(httpResponseHeader.getValue("Content-type")).isEqualTo("text/html");
     }
-
-    @Test
-    void keySet() {
-        final HttpResponseHeader httpResponseHeader = new HttpResponseHeader();
-        httpResponseHeader.addResponseHeader("Content-type", "text/html");
-        httpResponseHeader.addResponseHeader("Content-Length", 7000);
-
-        assertThat(httpResponseHeader.keySet()).hasSize(2);
-        assertThat(httpResponseHeader.keySet().contains("Content-type")).isTrue();
-        assertThat(httpResponseHeader.keySet().contains("Content-Length")).isTrue();
-    }
 }

@@ -2,19 +2,18 @@ package http.response;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.stream.Collectors;
 
+import http.Cookies;
 import http.request.HttpRequest;
 
 public class HttpResponse {
 
     private static final String NEW_LINE = System.lineSeparator();
-    private static final String BLANK = " ";
-    private static final String COLON = ": ";
     private static final String CONTENT_TYPE_TEXT_HTML = "text/html";
     private static final String RESPONSE_HEADER_LOCATION = "Location";
     private static final String RESPONSE_HEADER_CONTENT_TYPE = "Content-Type";
     private static final String RESPONSE_HEADER_CONTENT_LENGTH = "Content-Length";
-    private static final String REDIRECT_HOME = "http://localhost:8080/index.html";
     private static final String CHARSET_UTF_8 = ";charset=utf-8";
 
     private final DataOutputStream dos;
@@ -22,6 +21,7 @@ public class HttpResponse {
     private final HttpResponseLine httpResponseLine;
     private final HttpResponseHeader httpResponseHeader;
     private final HttpResponseBody httpResponseBody;
+    private final Cookies cookies;
 
     public HttpResponse(final DataOutputStream dos, final HttpRequest httpRequest) {
         this.dos = dos;
@@ -29,56 +29,60 @@ public class HttpResponse {
         this.httpResponseLine = new HttpResponseLine();
         this.httpResponseHeader = new HttpResponseHeader();
         this.httpResponseBody = new HttpResponseBody();
+        this.cookies = new Cookies(httpRequest);
     }
 
     public void response200(final byte[] body) throws IOException {
-        httpResponseLine.setHttpStatus(HttpStatus.OK);
+        this.httpResponseLine.setHttpStatus(HttpStatus.OK);
 
-        String contentType = httpRequest.getContentType();
-        initResponseHeader(contentType, body.length);
+        String contentType = this.httpRequest.getContentType();
+        initHeader(contentType, body.length);
 
-        httpResponseBody.setBody(body);
-
-        render();
-    }
-
-    public void response302() throws IOException {
-        httpResponseLine.setHttpStatus(HttpStatus.FOUND);
-
-        int lengthOfBodyContent = Integer.parseInt(httpRequest.getHttpRequestHeaderByName(RESPONSE_HEADER_CONTENT_LENGTH));
-        initResponseHeader(CONTENT_TYPE_TEXT_HTML, lengthOfBodyContent);
-
-        httpResponseHeader.addResponseHeader(RESPONSE_HEADER_LOCATION, REDIRECT_HOME);
+        this.httpResponseBody.setBody(body);
+        addCookieInHeader();
 
         render();
     }
 
-    private void initResponseHeader(String contentType, int lengthOfBodyContent) {
-        httpResponseHeader.addResponseHeader(RESPONSE_HEADER_CONTENT_TYPE, contentType + CHARSET_UTF_8);
-        httpResponseHeader.addResponseHeader(RESPONSE_HEADER_CONTENT_LENGTH, lengthOfBodyContent);
+    public void response302(final String redirectUrl) throws IOException {
+        this.httpResponseLine.setHttpStatus(HttpStatus.FOUND);
+
+        int lengthOfBodyContent = Integer.parseInt(this.httpRequest.getHttpRequestHeaderByName(RESPONSE_HEADER_CONTENT_LENGTH));
+        initHeader(CONTENT_TYPE_TEXT_HTML, lengthOfBodyContent);
+
+        addHeader(RESPONSE_HEADER_LOCATION, redirectUrl);
+        addCookieInHeader();
+
+        render();
+    }
+
+    private void initHeader(final String contentType, final int lengthOfBodyContent) {
+        addHeader(RESPONSE_HEADER_CONTENT_TYPE, contentType + CHARSET_UTF_8);
+        addHeader(RESPONSE_HEADER_CONTENT_LENGTH, lengthOfBodyContent);
+    }
+
+    public void addHeader(final String name, final Object value) {
+        this.httpResponseHeader.addResponseHeader(name, value);
+    }
+    public void addCookie(final String name, final Object value) {
+        this.cookies.addCookie(name, value);
+    }
+
+    private void addCookieInHeader() {
+        if (this.cookies.isEmpty()) {
+            return ;
+        }
+
+        this.cookies.addCookie("Path", "/");
+        String flatCookies = this.cookies.flat();
+        addHeader("Set-Cookie", flatCookies);
     }
 
     private void render() throws IOException {
-        responseLine();
-        responseHeader();
-        responseBody();
-        this.dos.flush();
-    }
-
-    private void responseLine() throws IOException {
-        final HttpStatus httpStatus = httpResponseLine.getHttpStatus();
-        this.dos.writeBytes(httpResponseLine.getVersion() + BLANK + httpStatus.getCode() + BLANK + httpStatus + NEW_LINE);
-    }
-
-    private void responseHeader() throws IOException {
-        for (String name : httpResponseHeader.keySet()) {
-            this.dos.writeBytes(name + COLON + httpResponseHeader.getValue(name) + NEW_LINE);
-        }
-    }
-
-    private void responseBody() throws IOException {
-        final byte[] body = httpResponseBody.getBody();
+        this.httpResponseLine.write(this.dos);
+        this.httpResponseHeader.write(this.dos);
         this.dos.writeBytes(NEW_LINE);
-        this.dos.write(body, 0, body.length);
+        this.httpResponseBody.write(this.dos);
+        this.dos.flush();
     }
 }

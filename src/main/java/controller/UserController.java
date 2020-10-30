@@ -8,17 +8,19 @@ import service.UserService;
 
 public class UserController extends AbstractController {
 
+    private static final String REDIRECT_HOME = "http://localhost:8080/index.html";
+
     private final UserService userService = UserService.getInstance();
 
     @Override
-    void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         userService.createRequestParams(httpRequest);
-        httpResponse.response302();
+        httpResponse.response302(REDIRECT_HOME);
     }
 
     @Override
-    void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+    public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         userService.createRequestBody(httpRequest);
-        httpResponse.response302();
+        httpResponse.response302(REDIRECT_HOME);
     }
 }
