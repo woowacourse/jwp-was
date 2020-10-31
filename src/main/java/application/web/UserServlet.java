@@ -4,6 +4,7 @@ import application.db.DataBase;
 import application.model.User;
 import http.HttpRequest;
 import http.HttpResponse;
+import http.HttpStatus;
 import webserver.Servlet;
 
 import java.util.Map;
@@ -16,6 +17,7 @@ public class UserServlet extends Servlet {
         User user = new User(formData.get("userId"), formData.get("password"), formData.get("name"), formData.get("email"));
         DataBase.addUser(user);
 
-        response.response302Header("/index.html");
+        response.addHeader("Location", "/index.html");
+        response.response(HttpStatus.FOUND);
     }
 }

@@ -2,6 +2,7 @@ package webserver;
 
 import http.HttpRequest;
 import http.HttpResponse;
+import http.HttpStatus;
 import http.ResourceType;
 import utils.FileIoUtils;
 
@@ -45,7 +46,8 @@ public class DispatcherServlet {
 
         byte[] staticFile = FileIoUtils.loadFileFromClasspath(filePath);
 
-        httpResponse.response200Header(resourceType.getContentType(), staticFile.length);
-        httpResponse.responseBody(staticFile);
+        httpResponse.addHeader("Content-Type", resourceType.getContentType());
+        httpResponse.addHeader("Content-Length", String.valueOf(staticFile.length));
+        httpResponse.response(HttpStatus.OK, staticFile);
     }
 }
