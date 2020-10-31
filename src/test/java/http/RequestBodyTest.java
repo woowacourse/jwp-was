@@ -1,5 +1,6 @@
 package http;
 
+import exception.DuplicateParamsException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -36,7 +37,7 @@ class RequestBodyTest {
         BufferedReader br = new BufferedReader(inputString);
 
         assertThatThrownBy(() -> new RequestBody(br, httpRequestInput.length()))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(DuplicateParamsException.class)
                 .hasMessage("Request Body에 중복된 키가 있습니다.");
     }
 }

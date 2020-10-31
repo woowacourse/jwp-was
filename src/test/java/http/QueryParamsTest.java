@@ -1,5 +1,6 @@
 package http;
 
+import exception.DuplicateParamsException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -44,7 +45,7 @@ class QueryParamsTest {
         String requestUri = "/user/create?userId=javajigi&userId=javajigi";
 
         assertThatThrownBy(() -> new QueryParams(requestUri))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(DuplicateParamsException.class)
                 .hasMessage("Query String에 중복된 키가 있습니다.");
     }
 }

@@ -1,5 +1,7 @@
 package http;
 
+import exception.DuplicateParamsException;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -37,7 +39,7 @@ public class QueryParams {
                     .filter(it -> it.length == 2)
                     .collect(Collectors.toMap(it -> it[0], it -> it[1]));
         } catch (IllegalStateException e) {
-            throw new IllegalArgumentException("Query String에 중복된 키가 있습니다.");
+            throw new DuplicateParamsException("Query String에 중복된 키가 있습니다.");
         }
     }
 
