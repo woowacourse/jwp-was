@@ -23,7 +23,7 @@ public class ResourceController implements Controller {
 
         try {
             byte[] body = FileIoUtils.loadFileFromClasspath(this.filePath);
-            httpResponse.putHeader(HeaderName.CONTENT_TYPE.getName(), ContentTypeMatcher.findResourceContentType(requestPath));
+            httpResponse.putHeader(HeaderName.CONTENT_TYPE, ContentTypeMatcher.findResourceContentType(requestPath));
             httpResponse.response(HttpStatusCode.OK, body);
         } catch (IOException e) {
             throw new IllegalArgumentException(String.format("%s : 해당경로에 파일이 존재하지 않습니다.", requestPath));

@@ -11,25 +11,17 @@ public class RequestMapping {
         this.httpMethod = httpMethod;
     }
 
-    private String getUri() {
-        return uri;
-    }
-
-    private HttpMethod getHttpMethod() {
-        return httpMethod;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RequestMapping that = (RequestMapping) o;
-        return Objects.equals(getUri(), that.getUri()) &&
-                getHttpMethod() == that.getHttpMethod();
+        return Objects.equals(uri, that.uri) &&
+                httpMethod == that.httpMethod;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getUri(), getHttpMethod());
+        return Objects.hash(uri, httpMethod);
     }
 }
