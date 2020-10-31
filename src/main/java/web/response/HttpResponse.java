@@ -26,6 +26,10 @@ public class HttpResponse {
         this.httpHeader.put(key, value);
     }
 
+    public void putHeader(HeaderName headerName, String value) {
+        this.putHeader(headerName.getName(), value);
+    }
+
     public void response(HttpStatusCode statusCode) {
         try {
             this.dataOutputStream.writeBytes(HTTP_VERSION + SPACE + statusCode.getValue() + NEW_LINE);
@@ -52,7 +56,7 @@ public class HttpResponse {
     }
 
     public void sendRedirect(String url) {
-        putHeader(HeaderName.LOCATION.getName(), url);
+        putHeader(HeaderName.LOCATION, url);
         response(HttpStatusCode.FOUND);
     }
 

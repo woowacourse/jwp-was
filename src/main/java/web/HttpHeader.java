@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class HttpHeader {
     private static final String TOKEN_DELIMITER = ": ";
-    private static final String NEW_LINE = "\r\n";
+    private static final String NEW_LINE = System.lineSeparator();
     private static final String DELIMITER = ": ";
 
     private final Map<String, String> headers = new HashMap<>();
