@@ -10,7 +10,7 @@ public class HttpRequestHeader {
 
     private static final String COLON = ": ";
 
-    private final Map<String, Object> params;
+    private Map<String, Object> params;
 
     private HttpRequestHeader(Map<String, Object> params) {
         this.params = params;
@@ -36,5 +36,9 @@ public class HttpRequestHeader {
 
     public Map<String, Object> getParams() {
         return params;
+    }
+
+    public void addHeader(Map<String, Object> header) {
+        this.params.putAll(header);
     }
 }
