@@ -33,7 +33,7 @@ public class UserListController extends AbstractController {
 
         String location = "/user/list.html";
         View view = new View(StaticFile.of(location).getPrefix() + location);
-        response.ok(new ModelAndView(view));
+        response.ok(new ModelAndView(view, model));
     }
 
     private boolean isNotLoggedIn(HttpRequest request) {
