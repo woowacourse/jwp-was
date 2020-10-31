@@ -15,10 +15,14 @@ public class DataBase {
     }
 
     public static Optional<User> findUserById(String userId) {
-        return Optional.of(users.get(userId));
+        return Optional.ofNullable(users.get(userId));
     }
 
     public static Collection<User> findAll() {
         return users.values();
+    }
+
+    public static void deleteAll() {
+        users = Maps.newHashMap();
     }
 }

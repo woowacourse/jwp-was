@@ -18,14 +18,14 @@ public class HttpResponseTest {
     @Test
     public void responseForward() throws Exception {
         HttpResponse response = new HttpResponse(createOutputStream("Http_Forward.txt"));
-        response.forward("/index.html");
+        response.ok("/index.html");
     }
 
     @DisplayName("POST - 302 응답")
     @Test
     public void responseRedirect() throws Exception {
         HttpResponse response = new HttpResponse(createOutputStream("Http_Redirect.txt"));
-        response.sendRedirect("/index.html");
+        response.redirect("/index.html");
     }
 
     private OutputStream createOutputStream(String filename) throws FileNotFoundException {

@@ -16,16 +16,15 @@ public class LoginController extends AbstractController {
         try {
             validateUser(request);
             response.redirect("/index.html");
+
+            Session session = SessionFactory.getNewSession();
+            SessionStorage.add(session);
+            Cookie cookie = new Cookie();
+            cookie.add("logined", session.getId());
+            response.addCookie(cookie);
         } catch (IllegalArgumentException e) {
             response.redirect("/user/login_failed.html");
         }
-
-        Session session = SessionFactory.getNewSession();
-        SessionStorage.add(session);
-        Cookie cookie = new Cookie();
-        cookie.add("logined", session.getId());
-        response.addCookie(cookie);
-
     }
 
     private void validateUser(HttpRequest request) {
