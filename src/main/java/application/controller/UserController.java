@@ -33,11 +33,13 @@ public class UserController {
         try {
             UserService.login(request);
             response.addHttpHeader("Location", "/index.html");
+            response.addHttpHeader("Set-Cookie", "logined=true; Path=/");
             response.setHttpStatus(HttpStatus.FOUND);
         } catch (UserLoginException e) {
             logger.debug("error : {}", e.getMessage());
 
             response.addHttpHeader("Location", "/user/login_failed.html");
+            response.addHttpHeader("Set-Cookie", "logined=false; Path=/");
             response.setHttpStatus(HttpStatus.FOUND);
         }
     }
