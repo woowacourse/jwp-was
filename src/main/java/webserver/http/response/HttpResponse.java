@@ -4,6 +4,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +43,7 @@ public class HttpResponse {
     public void send() throws IOException {
         dataOutputStream.writeBytes(HttpStatusLine.convertToString(httpStatus) + LINE_SEPARATOR);
         httpHeaders.write(dataOutputStream);
-        if (httpResponseBody.isNotEmpty()) {
+        if (Objects.nonNull(httpResponseBody)) {
             dataOutputStream.writeBytes(Arrays.toString(httpResponseBody.getBody()));
         }
     }

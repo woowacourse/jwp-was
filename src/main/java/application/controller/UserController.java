@@ -4,7 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import application.db.DataBase;
-import application.model.User;
+import application.model.UserLoginException;
+import application.service.UserService;
 import webserver.annotation.Controller;
 import webserver.annotation.RequestMapping;
 import webserver.http.request.HttpMethod;
@@ -19,17 +20,25 @@ public class UserController {
     @RequestMapping(path = "/user/create", method = HttpMethod.POST)
     public static void create(HttpRequest request, HttpResponse response) {
         logger.debug("request : {}, request : {}", request, response);
+        UserService.create(request);
 
-        User user = new User(
-            request.getHttpBodyValueOf("userId"),
-            request.getHttpBodyValueOf("password"),
-            request.getHttpBodyValueOf("name"),
-            request.getHttpBodyValueOf("email")
-        );
-        DataBase.addUser(user);
-        logger.debug("Saved User: {}", DataBase.findUserById(request.getHttpBodyValueOf("userId")));
-
+        logger.debug("Created User: {}", DataBase.findUserById(request.getHttpBodyValueOf("userId")));
         response.addHttpHeader("Location", "/index.html");
         response.setHttpStatus(HttpStatus.FOUND);
+    }
+
+    @RequestMapping(path = "/user/login", method = HttpMethod.POST)
+    public static void login(HttpRequest request, HttpResponse response) {
+        logger.debug("request : {}, request : {}", request, response);
+        try {
+            UserService.login(request);
+            response.addHttpHeader("Location", "/index.html");
+            response.setHttpStatus(HttpStatus.FOUND);
+        } catch (UserLoginException e) {
+            logger.debug("error : {}", e.getMessage());
+
+            response.addHttpHeader("Location", "/user/login_failed.html");
+            response.setHttpStatus(HttpStatus.FOUND);
+        }
     }
 }
