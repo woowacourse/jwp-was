@@ -68,3 +68,9 @@ WAS 기능과 HTTP 요청/응답 처리 기능을 재사용이 가능한 구조�
    d.  void removeAttribute(String name): 현재 세션에 name 인자로 저장되어 있는 객체 값을 삭제
 
    e.  void invalidate(): 현재 세션에 저장되어 있는 모든 값을 삭제
+
+## 4단계 - multi module 적용
+
+- gradle의 multi module 개념을 적용해 아래 두 영역을 서로 다른 프로젝트로 분리한다.
+  - Web Application Server(이하 WAS) 본연의 기능을 담당하는 부분
+  - 사용자 관리라는 응용 애플리케이션을 구현하는 부분
