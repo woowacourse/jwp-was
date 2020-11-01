@@ -1,6 +1,6 @@
 package model;
 
-import webserver.http.body.NameAndValuePair;
+import http.body.NameAndValuePair;
 
 public class User {
     private String userId;

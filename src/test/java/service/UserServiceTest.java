@@ -1,12 +1,12 @@
-package webserver.service;
+package service;
 
 import db.DataBase;
+import http.body.DefaultHttpBody;
+import http.body.HttpBody;
 import model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import webserver.http.body.DefaultHttpBody;
-import webserver.http.body.HttpBody;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

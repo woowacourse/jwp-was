@@ -1,12 +1,13 @@
-package webserver.controller;
+package controller;
 
 import db.DataBase;
+import http.message.HttpRequestMessage;
+import http.message.HttpResponseMessage;
+import http.request.HttpUri;
 import model.User;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import webserver.http.message.HttpRequestMessage;
-import webserver.http.message.HttpResponseMessage;
-import webserver.http.request.HttpUri;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,6 +18,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ControllerTest {
     private static final String NEW_LINE = System.lineSeparator();
+
+    @BeforeEach
+    void setUp() {
+        ControllerFinder.addDefaultController(new ReadResourceController());
+        ControllerFinder.addController("/user/create", new CreateUserController());
+        ControllerFinder.addController("/user/login", new LoginController());
+        ControllerFinder.addController("/user/list", new GetUserListController());
+    }
 
     @DisplayName("HTTP Request가 회원 가입 요청일 때 담당 Controller에서 알맞은 응답 메세지를 생성")
     @Test

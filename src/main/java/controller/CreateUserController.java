@@ -1,13 +1,13 @@
-package webserver.controller;
+package controller;
 
-import webserver.http.body.HttpBody;
-import webserver.http.header.HttpHeader;
-import webserver.http.header.HttpHeaderName;
-import webserver.http.header.HttpHeaders;
-import webserver.http.message.HttpRequestMessage;
-import webserver.http.message.HttpResponseMessage;
-import webserver.http.response.HttpStatus;
-import webserver.service.UserService;
+import http.body.HttpBody;
+import http.header.HttpHeader;
+import http.header.HttpHeaderName;
+import http.header.HttpHeaders;
+import http.message.HttpRequestMessage;
+import http.message.HttpResponseMessage;
+import http.response.HttpStatus;
+import service.UserService;
 
 public class CreateUserController implements Controller {
 
