@@ -7,7 +7,7 @@ import domain.user.model.User;
 import domain.user.service.UserService;
 import session.model.HttpSession;
 import session.service.SessionService;
-import webserver.HttpHeader;
+import webserver.HttpCookie;
 import webserver.HttpRequest;
 import webserver.HttpResponse;
 import webserver.HttpStatus;
@@ -36,16 +36,19 @@ public class LoginController extends AbstractController {
     private void setHttpResponse(HttpRequest httpRequest, HttpResponse httpResponse, HttpSession httpSession) throws
         IOException {
         User user = userService.findByUserId(httpRequest.getParameter(User.USER_ID));
+        HttpCookie httpCookie = new HttpCookie();
         if (user == null) {
             httpResponse.setHttpStatus(HttpStatus.FOUND);
             httpSession.setAttribute("logined", false);
-            httpResponse.addHeader(HttpHeader.SET_COOKIE, String.format("SESSIONID=%s; Path=/", httpSession.getId()));
+            httpCookie.add(String.format("SESSIONID=%s; Path=/", httpSession.getId()));
+            httpCookie.apply(httpResponse);
             httpResponse.sendRedirect("/user/login_failed.html");
         }
         if (user != null) {
             httpResponse.setHttpStatus(HttpStatus.FOUND);
             httpSession.setAttribute("logined", true);
-            httpResponse.addHeader(HttpHeader.SET_COOKIE, String.format("SESSIONID=%s; Path=/", httpSession.getId()));
+            httpCookie.add(String.format("SESSIONID=%s; Path=/", httpSession.getId()));
+            httpCookie.apply(httpResponse);
             httpResponse.sendRedirect("/index.html");
         }
     }

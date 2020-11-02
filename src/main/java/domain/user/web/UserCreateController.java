@@ -7,7 +7,7 @@ import domain.user.model.User;
 import domain.user.service.UserService;
 import session.model.HttpSession;
 import session.service.SessionService;
-import webserver.HttpHeader;
+import webserver.HttpCookie;
 import webserver.HttpRequest;
 import webserver.HttpResponse;
 import webserver.HttpStatus;
@@ -34,9 +34,10 @@ public class UserCreateController extends AbstractController {
         HttpSession httpSession = new HttpSession();
         httpSession.setAttribute("logined", true);
         sessionService.addSession(httpSession);
-
+        HttpCookie httpCookie = new HttpCookie();
+        httpCookie.add(String.format("SESSIONID=%s; Path=/", httpSession.getId()));
+        httpCookie.apply(httpResponse);
         httpResponse.setHttpStatus(HttpStatus.FOUND);
-        httpResponse.addHeader(HttpHeader.SET_COOKIE, String.format("SESSIONID=%s; Path=/", httpSession.getId()));
         httpResponse.sendRedirect("/index.html");
     }
 }
