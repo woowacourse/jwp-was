@@ -9,10 +9,10 @@ import org.junit.jupiter.api.Test;
 
 class RequestBodyTest {
 
-    final String userId = "testId";
-    final String password = "testPW";
-    final String name = "testName";
-    final String email = "test%40test.com";
+    private static final String userId = "testId";
+    private static final String password = "testPW";
+    private static final String name = "testName";
+    private static final String email = "test%40test.com";
 
     @DisplayName("RequestBody 생성")
     @Test
