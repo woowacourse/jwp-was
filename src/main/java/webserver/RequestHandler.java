@@ -17,8 +17,8 @@ import utils.FileIoUtils;
 import utils.IOUtils;
 import webserver.protocol.RequestBody;
 import webserver.protocol.RequestBodyParser;
-import webserver.protocol.RequestHeader;
-import webserver.protocol.RequestHeaderParser;
+import webserver.protocol.HttpRequest;
+import webserver.protocol.HttpRequestParser;
 
 @AllArgsConstructor
 public class RequestHandler implements Runnable {
@@ -37,27 +37,27 @@ public class RequestHandler implements Runnable {
             final OutputStream out = connection.getOutputStream();
             final DataOutputStream dos = new DataOutputStream(out)
         ) {
-            final RequestHeader requestHeader = RequestHeaderParser.parse(IOUtils.readHeaderData(reader));
+            final HttpRequest httpRequest = HttpRequestParser.parse(IOUtils.readHeaderData(reader));
 
-            if (requestHeader.hasContentLength()) {
-                final String contentLength = requestHeader.getHeaders().get("Content-Length");
+            if (httpRequest.hasContentLength()) {
+                final String contentLength = httpRequest.getHeaders().get("Content-Length");
                 final String bodyData = IOUtils.readBodyData(reader, Integer.parseInt(contentLength));
                 final RequestBody requestBody = RequestBodyParser.parse(bodyData);
 
-                final String path = requestHeader.getPath();
+                final String path = httpRequest.getPath();
                 if ("/user/create".equals(path)) {
                     UserController.create(requestBody.getContents());
                     response302Header(dos);
                 }
             } else {
-                if (requestHeader.isAcceptCSS()) {
+                if (httpRequest.isAcceptCSS()) {
                     final byte[] responseBody = FileIoUtils.loadFileFromClasspath(
-                        FileIoUtils.STATIC_PATH + requestHeader.getPath());
+                        FileIoUtils.STATIC_PATH + httpRequest.getPath());
                     response200CSSHeader(dos, responseBody.length);
                     responseBody(dos, responseBody);
                 } else {
                     final byte[] responseBody = FileIoUtils.loadFileFromClasspath(
-                        FileIoUtils.TEMPLATES_PATH + requestHeader.getPath());
+                        FileIoUtils.TEMPLATES_PATH + httpRequest.getPath());
                     response200Header(dos, responseBody.length);
                     responseBody(dos, responseBody);
                 }

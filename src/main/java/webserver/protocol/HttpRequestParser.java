@@ -1,10 +1,11 @@
 package webserver.protocol;
 
+import java.io.BufferedReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class RequestHeaderParser {
+public final class HttpRequestParser {
 
     private static final int FIRST_LINE = 0;
     private static final int HTTP_METHOD_INDEX = 0;
@@ -22,7 +23,7 @@ public final class RequestHeaderParser {
     private static final String PARAM_REGEX = "=";
     private static final String HEADER_REGEX = ": ";
 
-    public static RequestHeader parse(final List<String> header) {
+    public static HttpRequest parse(final List<String> header) {
         final String[] firstLineSplitResult = header.get(FIRST_LINE).split(" ", -1);
         final String[] resources = firstLineSplitResult[RESOURCES_INDEX].split(QUERY_PARAMS_REGEX, -1);
 
@@ -32,7 +33,7 @@ public final class RequestHeaderParser {
         final Map<String, String> queryParams = parseQueryParams(resources);
         final Map<String, String> headers = parseHeaders(header);
 
-        return new RequestHeader(httpMethod, path, httpVersion, queryParams, headers);
+        return new HttpRequest(httpMethod, path, httpVersion, queryParams, headers, null);
     }
 
     private static Map<String, String> parseHeaders(final List<String> header) {

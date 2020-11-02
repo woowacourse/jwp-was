@@ -8,39 +8,41 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class RequestHeader {
+public class HttpRequest {
 
     private static final String CONTENT_LENGTH = "Content-Length";
     private static final String TEXT_CSS = "text/css,*/*;q=0.1";
     private static final String ACCEPT = "Accept";
 
-    private final HttpMethod httpMethod;
+    private final HttpMethod method;
     private final String path;
-    private final String httpVersion;
+    private final String version;
     private final Map<String, String> queryParams;
     private final Map<String, String> headers;
+    private final RequestBody body;
 
     @Builder
-    RequestHeader(final HttpMethod httpMethod, final String path, final String httpVersion,
-        final Map<String, String> queryParams, final Map<String, String> headers) {
-        validate(httpMethod, path, httpVersion, queryParams, headers);
-        this.httpMethod = httpMethod;
+    HttpRequest(final HttpMethod method, final String path, final String version,
+        final Map<String, String> queryParams, final Map<String, String> headers, final RequestBody body) {
+        validate(method, path, version, queryParams, headers);
+        this.method = method;
         this.path = path;
-        this.httpVersion = httpVersion;
+        this.version = version;
         this.queryParams = queryParams;
         this.headers = headers;
+        this.body = body;
     }
 
-    private void validate(final HttpMethod httpMethod, final String path, final String httpVersion,
+    private void validate(final HttpMethod method, final String path, final String version,
         final Map<String, String> queryParams, final Map<String, String> headers) {
-        if (Objects.isNull(httpMethod)) {
-            throw new IllegalArgumentException("httpMethod가 유효하지 않습니다: " + httpMethod);
+        if (Objects.isNull(method)) {
+            throw new IllegalArgumentException("httpMethod가 유효하지 않습니다: " + null);
         }
         if (Objects.isNull(path) || path.isEmpty()) {
             throw new IllegalArgumentException("path가 유효하지 않습니다: " + path);
         }
-        if (Objects.isNull(httpVersion) || httpVersion.isEmpty()) {
-            throw new IllegalArgumentException("httpVersion가 유효하지 않습니다: " + httpVersion);
+        if (Objects.isNull(version) || version.isEmpty()) {
+            throw new IllegalArgumentException("httpVersion가 유효하지 않습니다: " + version);
         }
         if (Objects.isNull(queryParams)) {
             throw new IllegalArgumentException("queryParams가 유효하지 않습니다: " + null);
