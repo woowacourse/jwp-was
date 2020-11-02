@@ -1,5 +1,6 @@
 package controller;
 
+import common.TestFixtureFactory;
 import http.SessionContainer;
 import http.request.Cookie;
 import http.request.HttpMethod;
@@ -22,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class LoginControllerTest {
+    private final LoginController loginController = new LoginController();
     private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     private final SessionContainer sessionContainer = SessionContainer.getInstance();
 
@@ -40,13 +42,7 @@ class LoginControllerTest {
         HashMap<String, String> cookies = new HashMap<>();
         cookies.put(SessionContainer.SESSION_KEY_FOR_COOKIE, sessionContainer.createSession());
 
-        HttpRequest httpRequest = new HttpRequest(
-                new RequestLine(HttpMethod.POST, ""),
-                new RequestHeader(new HashMap<>()),
-                new RequestParams(params),
-                new Cookie(cookies)
-        );
-        LoginController loginController = new LoginController();
+        HttpRequest httpRequest = TestFixtureFactory.makeHttpRequestForControllerTest(params, cookies);
         loginController.doPost(httpRequest, new HttpResponse(outputStream));
 
         assertAll(
@@ -71,7 +67,6 @@ class LoginControllerTest {
                 new RequestParams(params),
                 new Cookie(cookies)
         );
-        LoginController loginController = new LoginController();
         loginController.doPost(httpRequest, new HttpResponse(outputStream));
 
         assertAll(
@@ -96,7 +91,6 @@ class LoginControllerTest {
                 new RequestParams(params),
                 new Cookie(cookies)
         );
-        LoginController loginController = new LoginController();
         loginController.doPost(httpRequest, new HttpResponse(outputStream));
 
         System.out.println(outputStream.toString());
