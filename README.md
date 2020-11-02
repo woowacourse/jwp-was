@@ -39,17 +39,20 @@
 
 ### 요구사항 5  
 > 지금까지 구현한 소스 코드는 stylesheet 파일을 지원하지 못하고 있다. Stylesheet 파일을 지원하도록 구현하도록 한다.
+
 - [x] stylesheet을 지원하도록 응답 헤더에 Content-Type을 추가한다.
 
 ## 2단계 - HTTP 웹 서버 리팩토링
 
 ### 요구사항 1
 > 다수의 사용자 요청에 대해 Queue 에 저장한 후 순차적으로 처리가 가능하도록 해야 한다.  
-> 서버가 모든 요청에 대해 Thread를 매번 생성하는 경우 성능상 문제가 발생할 수 있다. Thread Pool을 적용해 일정 수의 사용자 동시에 처리가 가능하도록 한다.  
+> 서버가 모든 요청에 대해 Thread를 매번 생성하는 경우 성능상 문제가 발생할 수 있다. Thread Pool을 적용해 일정 수의 사용자 동시에 처리가 가능하도록 한다.
+  
 - [x] Thread pool을 적용한다.
 
 ### 요구사항 2
-> HTTP 요청 Header/Body 처리, 응답 Header/Body 처리만을 담당하는 역할을 분리해 재사용 가능하도록 한다.  
+> HTTP 요청 Header/Body 처리, 응답 Header/Body 처리만을 담당하는 역할을 분리해 재사용 가능하도록 한다.
+  
 - [x] 웹서버와 애플리케이션 패키지를 분리한다.
 - [x] HttpResponse를 이용하여 응답을 처리한다.
 
@@ -60,6 +63,7 @@
 > “로그인” 메뉴를 클릭하면 http://localhost:8080/user/login.html 으로 이동해 로그인할 수 있다. 로그인이 성공하면 index.html로 이동하고, 로그인이 실패하면 /user/login_failed.html로 이동해야 한다.
 >  
 > 앞에서 회원가입한 사용자로 로그인할 수 있어야 한다. 로그인이 성공하면 cookie를 활용해 로그인 상태를 유지할 수 있어야 한다. 로그인이 성공할 경우 요청 header의 Cookie header 값이 logined=true, 로그인이 실패하면 Cookie header 값이 logined=false로 전달되어야 한다.
+
 - [x] 로그인 메뉴를 누르면 login.html로 이동한다.
 - [x] 로그인이 성공하면 index.html로 이동한다.
 - [x] 로그인이 실패하면 login_failed.html로 이동한다.
@@ -70,6 +74,7 @@
 > 접근하고 있는 사용자가 “로그인” 상태일 경우(Cookie 값이 logined=true) 경우 http://localhost:8080/user/list 로 접근했을 때 사용자 목록을 출력한다. 만약 로그인하지 않은 상태라면 로그인 페이지(login.html)로 이동한다.
 >
 > 동적으로 html을 생성하기 위해 handlebars.java template engine을 활용한다.
+
 - [x] 로그인 상태일 경우 /user/list로 접근했을 때 사용자 목록을 출력한다.
 - [x] 로그인 상태가 아닐 경우 /user/list로 접근했을 때 login.html로 이동한다.
 
@@ -77,9 +82,12 @@
 > 서블릿에서 지원하는 HttpSession API의 일부를 지원해야 한다.
 >
 > HttpSession API 중 구현할 메소드는 getId(), setAttribute(String name, Object value), getAttribute(String name), removeAttribute(String name), invalidate() 5개이다. HttpSession의 가장 중요하고 핵심이 되는 메소드이다.
-- [ ] UUID를 활용하여 고유한 세션 id를 생성한다.
-- [ ] String getId()를 구현한다.
-- [ ] void setAttribute(String name, Object value)를 구현한다.
-- [ ] Object getAttribute(String name)를 구현한다.
-- [ ] void removeAttribute(String name)를 구현한다.
-- [ ] void invalidate()를 구현한다.
+
+- [x] UUID를 활용하여 고유한 세션 id를 생성한다.
+- [x] String getId()를 구현한다.
+- [x] void setAttribute(String name, Object value)를 구현한다.
+- [x] Object getAttribute(String name)를 구현한다.
+- [x] void removeAttribute(String name)를 구현한다.
+- [x] void invalidate()를 구현한다.
+- [ ] session storage를 구현한다.
+- [ ] 세션을 적용한다.
