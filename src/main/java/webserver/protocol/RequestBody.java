@@ -1,16 +1,16 @@
 package webserver.protocol;
 
+import java.util.Collections;
 import java.util.Map;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public class RequestBody {
 
     private final Map<String, String> contents;
 
-    public RequestBody(final Map<String, String> contents) {
-        this.contents = contents;
-    }
-
     public Map<String, String> getContents() {
-        return contents;
+        return Collections.unmodifiableMap(contents);
     }
 }

@@ -14,12 +14,13 @@ class RequestHeaderParserTest {
     @DisplayName("requestParams가 없는 request를 parsing해서 정상적으로 RequestHeader 생성")
     @Test
     void parseTest() {
-        final HttpMethod httpMethod = HttpMethod.GET;
-        final String path = "/index.html";
-        final String httpVersion = "HTTP/1.1";
-        final Map<String, String> queryParams = new HashMap<>();
-        final Map<String, String> headers = new HashMap<>();
-        final RequestHeader expected = new RequestHeader(httpMethod, path, httpVersion, queryParams, headers);
+        final RequestHeader expected = RequestHeader.builder()
+            .httpMethod(HttpMethod.GET)
+            .path("/index.html")
+            .httpVersion("HTTP/1.1")
+            .queryParams(new HashMap<>())
+            .headers(new HashMap<>())
+            .build();
         final List<String> header = Collections.singletonList("GET /index.html HTTP/1.1");
 
         assertThat(RequestHeaderParser.parse(header)).isEqualToComparingFieldByField(expected);

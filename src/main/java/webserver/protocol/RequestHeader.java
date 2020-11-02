@@ -1,8 +1,13 @@
 package webserver.protocol;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
+import lombok.Builder;
+import lombok.Getter;
+
+@Getter
 public class RequestHeader {
 
     private static final String CONTENT_LENGTH = "Content-Length";
@@ -15,6 +20,7 @@ public class RequestHeader {
     private final Map<String, String> queryParams;
     private final Map<String, String> headers;
 
+    @Builder
     RequestHeader(final HttpMethod httpMethod, final String path, final String httpVersion,
         final Map<String, String> queryParams, final Map<String, String> headers) {
         validate(httpMethod, path, httpVersion, queryParams, headers);
@@ -56,23 +62,11 @@ public class RequestHeader {
         return Objects.equals(TEXT_CSS, headers.get(ACCEPT));
     }
 
-    public HttpMethod getHttpMethod() {
-        return httpMethod;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public String getHttpVersion() {
-        return httpVersion;
-    }
-
     public Map<String, String> getQueryParams() {
-        return queryParams;
+        return Collections.unmodifiableMap(queryParams);
     }
 
     public Map<String, String> getHeaders() {
-        return headers;
+        return Collections.unmodifiableMap(headers);
     }
 }

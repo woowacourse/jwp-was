@@ -11,6 +11,8 @@ import java.net.Socket;
 import java.net.URISyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import lombok.AllArgsConstructor;
 import utils.FileIoUtils;
 import utils.IOUtils;
 import webserver.protocol.RequestBody;
@@ -18,15 +20,12 @@ import webserver.protocol.RequestBodyParser;
 import webserver.protocol.RequestHeader;
 import webserver.protocol.RequestHeaderParser;
 
+@AllArgsConstructor
 public class RequestHandler implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private final Socket connection;
-
-    public RequestHandler(Socket connectionSocket) {
-        this.connection = connectionSocket;
-    }
 
     public void run() {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
