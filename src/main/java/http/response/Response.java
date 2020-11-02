@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 
 import http.ContentType;
 import http.HttpHeaders;
+import http.request.Cookie;
+import http.request.Cookies;
 import http.request.RequestMethod;
 import utils.Directory;
 import utils.FileIoUtils;
@@ -22,11 +24,13 @@ public class Response {
     private DataOutputStream dataOutputStream;
     private StatusLine statusLine;
     private HttpHeaders headers;
+    private Cookies cookies;
     private ResponseBody body;
 
     public Response(OutputStream out) {
         dataOutputStream = new DataOutputStream(out);
         headers = new HttpHeaders();
+        cookies = new Cookies();
     }
 
     public void setHeader(String key, String value) {
@@ -38,6 +42,14 @@ public class Response {
         setHeader(HttpHeaders.CONTENT_TYPE, contentType + ";charset=UTF-8");
         body = setResponseBody(path);
         setHeader(HttpHeaders.CONTENT_LENGTH, String.valueOf(body.getContentLength()));
+        write();
+    }
+
+    public void ok(String body) {
+        statusLine = new StatusLine(HTTP_1_1, Status.OK);
+        setHeader(HttpHeaders.CONTENT_TYPE, ContentType.HTML.getContentType() + ";charset=UTF-8");
+        this.body = new ResponseBody(body.getBytes());
+        setHeader(HttpHeaders.CONTENT_LENGTH, String.valueOf(this.body.getContentLength()));
         write();
     }
 
@@ -54,16 +66,20 @@ public class Response {
     }
 
     private ResponseBody setResponseBody(String path) throws IOException, URISyntaxException {
-        if (ContentType.HTML.isHtml(headers.getContentType())) {
+        if (ContentType.HTML.isHtml(headers.getContentType()) && path.contains(".html")) {
             return new ResponseBody(FileIoUtils.loadFileFromClasspath(Directory.TEMPLATES.getDirectory() + path));
         }
         return new ResponseBody(FileIoUtils.loadFileFromClasspath(Directory.STATIC.getDirectory() + path));
     }
 
+    public void addCookie(Cookie cookie) {
+        cookies.addCookie(cookie);
+    }
+
     private void write() {
         try {
             statusLine.write(dataOutputStream);
-            headers.write(dataOutputStream);
+            headers.write(dataOutputStream, cookies);
             if (Objects.nonNull(body)) {
                 body.write(dataOutputStream);
             }

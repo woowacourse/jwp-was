@@ -1,16 +1,15 @@
 package http.request;
 
-import static org.assertj.core.api.Assertions.*;
+import common.TestFileIo;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import common.TestFileIo;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class RequestTest {
 

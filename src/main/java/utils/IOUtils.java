@@ -1,12 +1,11 @@
 package utils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-
+import http.request.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import http.request.Request;
+import java.io.BufferedReader;
+import java.io.IOException;
 
 public class IOUtils {
     private static final String NEW_LINE = System.lineSeparator();

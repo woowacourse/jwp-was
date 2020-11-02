@@ -5,11 +5,15 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import http.request.Cookies;
+
 public class HttpHeaders {
 
     public static final String CONTENT_TYPE = "Content-Type";
     public static final String CONTENT_LENGTH = "Content-Length";
     public static final String LOCATION = "Location";
+    public static final String SET_COOKIE = "Set-Cookie";
+    public static final String COOKIE = "Cookie";
 
     private Map<String, String> httpHeaders;
 
@@ -18,7 +22,7 @@ public class HttpHeaders {
     }
 
     public HttpHeaders() {
-        httpHeaders = new HashMap<>();
+        this(new HashMap<>());
     }
 
     public String getHeader(String key) {
@@ -40,9 +44,10 @@ public class HttpHeaders {
         return httpHeaders.get(CONTENT_TYPE);
     }
 
-    public void write(DataOutputStream dataOutputStream) throws IOException {
-        for (String key : httpHeaders.keySet()) {
-            dataOutputStream.writeBytes(key + ": " + httpHeaders.get(key) + " " + System.lineSeparator());
+    public void write(DataOutputStream dataOutputStream, Cookies cookies) throws IOException {
+        httpHeaders.put(SET_COOKIE, cookies.toString());
+        for (Map.Entry<String, String> key : httpHeaders.entrySet()) {
+            dataOutputStream.writeBytes(key.getKey() + ": " + key.getValue() + " " + System.lineSeparator());
         }
         dataOutputStream.writeBytes(System.lineSeparator());
     }
