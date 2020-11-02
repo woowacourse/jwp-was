@@ -11,12 +11,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TestFixtureFactory {
-    public static HttpRequest makeHttpRequestForControllerTest(Map<String, String> params, Map<String, String> cookies) {
+    public static HttpRequest makeHttpRequestForControllerTest(String path, Map<String, String> header, Map<String, String> params, Map<String, String> cookies) {
         return new HttpRequest(
-                new RequestLine(HttpMethod.POST, ""),
-                new RequestHeader(new HashMap<>()),
+                new RequestLine(HttpMethod.POST, path),
+                new RequestHeader(header),
                 new RequestParams(params),
                 new Cookie(cookies)
         );
+    }
+
+    public static HttpRequest makeHttpRequestForControllerTest(Map<String, String> params, Map<String, String> cookies) {
+        return makeHttpRequestForControllerTest("", new HashMap<>(), params, cookies);
     }
 }
