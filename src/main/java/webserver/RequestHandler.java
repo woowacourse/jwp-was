@@ -63,21 +63,21 @@ public class RequestHandler implements Runnable {
 
     private void response200CSSHeader(final DataOutputStream dos, final int lengthOfBodyContent) {
         try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/css; charset=\"utf-8\"\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
+            dos.writeBytes("HTTP/1.1 200 OK " + System.lineSeparator());
+            dos.writeBytes("Content-Type: text/css; charset=\"utf-8\"" + System.lineSeparator());
+            dos.writeBytes("Content-Length: " + lengthOfBodyContent + System.lineSeparator());
+            dos.writeBytes(System.lineSeparator());
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response200Header(final DataOutputStream dos, final int lengthOfBodyContent) {
         try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
+            dos.writeBytes("HTTP/1.1 200 OK " + System.lineSeparator());
+            dos.writeBytes("Content-Type: text/html;charset=utf-8" + System.lineSeparator());
+            dos.writeBytes("Content-Length: " + lengthOfBodyContent + System.lineSeparator());
+            dos.writeBytes(System.lineSeparator());
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -85,16 +85,16 @@ public class RequestHandler implements Runnable {
 
     private void response302Header(final DataOutputStream dos) {
         try {
-            dos.writeBytes("HTTP/1.1 302 Found \r\n");
-            dos.writeBytes("Location: /index.html \r\n");
-            dos.writeBytes("\r\n");
+            dos.writeBytes("HTTP/1.1 302 Found " + System.lineSeparator());
+            dos.writeBytes("Location: /index.html " + System.lineSeparator());
+            dos.writeBytes(System.lineSeparator());
             dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void responseBody(DataOutputStream dos, byte[] body) {
+    private void responseBody(final DataOutputStream dos, final byte[] body) {
         try {
             dos.write(body, 0, body.length);
             dos.flush();
