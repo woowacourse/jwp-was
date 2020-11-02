@@ -31,7 +31,6 @@ class HttpResponseTest {
                 new RequestHeader(header),
                 new RequestParams(new HashMap<>()),
                 new Cookie(new HashMap<>())
-
         );
         response.forward(httpRequest);
     }
