@@ -33,4 +33,8 @@ public class Request {
     public String toString() {
         return request;
     }
+
+    public String getPath() {
+        return null;
+    }
 }
