@@ -19,7 +19,7 @@ class HttpRequestTest {
             .path("/index.html")
             .version("HTTP/1.1")
             .queryParams(new HashMap<>())
-            .headers(new HashMap<>())
+            .headers(new RequestHeaders(new HashMap<>()))
             .build());
     }
 
@@ -32,52 +32,52 @@ class HttpRequestTest {
                 .path("/index.html")
                 .version("HTTP/1.1")
                 .queryParams(new HashMap<>())
-                .headers(new HashMap<>())
+                .headers(new RequestHeaders(new HashMap<>()))
                 .build()
             )
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("httpMethod가 유효하지 않습니다: null"),
 
             () -> assertThatThrownBy(() -> HttpRequest.builder()
-            .method(HttpMethod.GET)
-            .path(null)
-            .version("HTTP/1.1")
-            .queryParams(new HashMap<>())
-            .headers(new HashMap<>())
-            .build()
+                .method(HttpMethod.GET)
+                .path(null)
+                .version("HTTP/1.1")
+                .queryParams(new HashMap<>())
+                .headers(new RequestHeaders(new HashMap<>()))
+                .build()
             )
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("path가 유효하지 않습니다: null"),
 
             () -> assertThatThrownBy(() -> HttpRequest.builder()
-            .method(HttpMethod.GET)
-            .path("/index.html")
-            .version(null)
-            .queryParams(new HashMap<>())
-            .headers(new HashMap<>())
-            .build()
+                .method(HttpMethod.GET)
+                .path("/index.html")
+                .version(null)
+                .queryParams(new HashMap<>())
+                .headers(new RequestHeaders(new HashMap<>()))
+                .build()
             )
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("httpVersion가 유효하지 않습니다: null"),
 
             () -> assertThatThrownBy(() -> HttpRequest.builder()
-            .method(HttpMethod.GET)
-            .path("/index.html")
-            .version("HTTP/1.1")
-            .queryParams(null)
-            .headers(new HashMap<>())
-            .build()
+                .method(HttpMethod.GET)
+                .path("/index.html")
+                .version("HTTP/1.1")
+                .queryParams(null)
+                .headers(new RequestHeaders(new HashMap<>()))
+                .build()
             )
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("queryParams가 유효하지 않습니다: null"),
 
             () -> assertThatThrownBy(() -> HttpRequest.builder()
-            .method(HttpMethod.GET)
-            .path("/index.html")
-            .version("HTTP/1.1")
-            .queryParams(new HashMap<>())
-            .headers(null)
-            .build()
+                .method(HttpMethod.GET)
+                .path("/index.html")
+                .version("HTTP/1.1")
+                .queryParams(new HashMap<>())
+                .headers(null)
+                .build()
             )
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("headers가 유효하지 않습니다: null")
@@ -98,7 +98,7 @@ class HttpRequestTest {
             .path("/user/create")
             .version("HTTP/1.1")
             .queryParams(queryParams)
-            .headers(new HashMap<>())
+            .headers(new RequestHeaders(new HashMap<>()))
             .build();
 
         assertThat(httpRequest.hasQueryParams()).isTrue();
@@ -112,7 +112,7 @@ class HttpRequestTest {
             .path("/index.html")
             .version("HTTP/1.1")
             .queryParams(new HashMap<>())
-            .headers(new HashMap<>())
+            .headers(new RequestHeaders(new HashMap<>()))
             .build();
 
         assertThat(httpRequest.hasQueryParams()).isFalse();
@@ -129,7 +129,7 @@ class HttpRequestTest {
             .path("/user/create")
             .version("HTTP/1.1")
             .queryParams(new HashMap<>())
-            .headers(headers)
+            .headers(new RequestHeaders(headers))
             .build();
 
         assertThat(httpRequest.hasContentLength()).isTrue();
@@ -143,7 +143,7 @@ class HttpRequestTest {
             .path("/user/create")
             .version("HTTP/1.1")
             .queryParams(new HashMap<>())
-            .headers(new HashMap<>())
+            .headers(new RequestHeaders(new HashMap<>()))
             .build();
 
         assertThat(httpRequest.hasContentLength()).isFalse();
@@ -160,7 +160,7 @@ class HttpRequestTest {
             .path("/user/create")
             .version("HTTP/1.1")
             .queryParams(new HashMap<>())
-            .headers(headers)
+            .headers(new RequestHeaders(headers))
             .build();
 
         assertThat(httpRequest.isAcceptCSS()).isTrue();
@@ -178,7 +178,7 @@ class HttpRequestTest {
             .path("/user/create")
             .version("HTTP/1.1")
             .queryParams(new HashMap<>())
-            .headers(headers)
+            .headers(new RequestHeaders(headers))
             .build();
 
         assertThat(httpRequest.isAcceptCSS()).isFalse();
@@ -192,7 +192,7 @@ class HttpRequestTest {
             .path("/user/create")
             .version("HTTP/1.1")
             .queryParams(new HashMap<>())
-            .headers(new HashMap<>())
+            .headers(new RequestHeaders(new HashMap<>()))
             .build();
 
         assertThat(httpRequest.isAcceptCSS()).isFalse();

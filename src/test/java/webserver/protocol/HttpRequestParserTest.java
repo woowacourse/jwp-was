@@ -24,7 +24,7 @@ class HttpRequestParserTest {
             .path("/index.html")
             .version("HTTP/1.1")
             .queryParams(new HashMap<>())
-            .headers(headers)
+            .headers(new RequestHeaders(headers))
             .body(new RequestBody(new HashMap<>()))
             .build();
 

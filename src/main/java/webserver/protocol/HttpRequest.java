@@ -9,21 +9,16 @@ import lombok.Getter;
 
 @Getter
 public class HttpRequest {
-
-    private static final String CONTENT_LENGTH = "Content-Length";
-    private static final String TEXT_CSS = "text/css,*/*;q=0.1";
-    private static final String ACCEPT = "Accept";
-
     private final HttpMethod method;
     private final String path;
     private final String version;
     private final Map<String, String> queryParams;
-    private final Map<String, String> headers;
+    private final RequestHeaders headers;
     private final RequestBody body;
 
     @Builder
     HttpRequest(final HttpMethod method, final String path, final String version,
-        final Map<String, String> queryParams, final Map<String, String> headers, final RequestBody body) {
+        final Map<String, String> queryParams, final RequestHeaders headers, final RequestBody body) {
         validate(method, path, version, queryParams, headers);
         this.method = method;
         this.path = path;
@@ -34,7 +29,7 @@ public class HttpRequest {
     }
 
     private void validate(final HttpMethod method, final String path, final String version,
-        final Map<String, String> queryParams, final Map<String, String> headers) {
+        final Map<String, String> queryParams, final RequestHeaders headers) {
         if (Objects.isNull(method)) {
             throw new IllegalArgumentException("httpMethod가 유효하지 않습니다: " + null);
         }
@@ -57,18 +52,14 @@ public class HttpRequest {
     }
 
     public boolean hasContentLength() {
-        return headers.containsKey(CONTENT_LENGTH);
+        return headers.hasContentLength();
     }
 
     public boolean isAcceptCSS() {
-        return Objects.equals(TEXT_CSS, headers.get(ACCEPT));
+        return headers.isAcceptCSS();
     }
 
     public Map<String, String> getQueryParams() {
         return Collections.unmodifiableMap(queryParams);
-    }
-
-    public Map<String, String> getHeaders() {
-        return Collections.unmodifiableMap(headers);
     }
 }

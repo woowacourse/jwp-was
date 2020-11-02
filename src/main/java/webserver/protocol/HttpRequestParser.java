@@ -42,7 +42,7 @@ public final class HttpRequestParser {
             .path(path)
             .version(version)
             .queryParams(queryParams)
-            .headers(headers)
+            .headers(new RequestHeaders(headers))
             .body(body)
             .build();
     }
