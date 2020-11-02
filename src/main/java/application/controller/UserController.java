@@ -1,11 +1,17 @@
 package application.controller;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import application.db.DataBase;
+import application.model.UserDto;
 import application.model.UserLoginException;
 import application.service.UserService;
+import application.view.ViewResolver;
 import webserver.annotation.Controller;
 import webserver.annotation.RequestMapping;
 import webserver.http.request.HttpMethod;
@@ -33,14 +39,33 @@ public class UserController {
         try {
             UserService.login(request);
             response.addHttpHeader("Location", "/index.html");
-            response.addHttpHeader("Set-Cookie", "logined=true; Path=/");
-            response.setHttpStatus(HttpStatus.FOUND);
-        } catch (UserLoginException e) {
-            logger.debug("error : {}", e.getMessage());
+			response.addHttpHeader("Set-Cookie", "logined=true; Path=/");
+			response.setHttpStatus(HttpStatus.FOUND);
+		} catch (UserLoginException e) {
+			logger.debug("error : {}", e.getMessage());
 
-            response.addHttpHeader("Location", "/user/login_failed.html");
-            response.addHttpHeader("Set-Cookie", "logined=false; Path=/");
-            response.setHttpStatus(HttpStatus.FOUND);
-        }
-    }
+			response.addHttpHeader("Location", "/user/login_failed.html");
+			response.addHttpHeader("Set-Cookie", "logined=false; Path=/");
+			response.setHttpStatus(HttpStatus.FOUND);
+		}
+	}
+
+	@RequestMapping(path = "/user/list", method = HttpMethod.GET)
+	public static void list(HttpRequest request, HttpResponse response) throws IOException {
+		logger.debug("request : {}, request : {}", request, response);
+
+		String cookie = request.getHttpHeaderParameterOf("Cookie");
+		if (cookie.contains("logined=true")) {
+			List<UserDto> users = UserService.findAll().stream()
+				.map(UserDto::new)
+				.collect(Collectors.toList());
+			response.setHttpStatus(HttpStatus.OK);
+			String body = ViewResolver.resolve("user/list", users);
+			response.addHttpBody(body);
+		} else {
+			response.addHttpHeader("Location", "/user/login.html");
+			response.addHttpHeader("Set-Cookie", "logined=false; Path=/");
+			response.setHttpStatus(HttpStatus.FOUND);
+		}
+	}
 }

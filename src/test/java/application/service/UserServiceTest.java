@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.io.IOException;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -14,6 +15,11 @@ import fixtures.HttpRequestGenerator;
 import webserver.http.request.HttpRequest;
 
 class UserServiceTest {
+
+	@BeforeEach
+	void setUp() {
+		DataBase.deleteAll();
+	}
 
 	@DisplayName("사용자를 정상적으로 생성한다")
 	@Test

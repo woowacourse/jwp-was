@@ -1,5 +1,8 @@
 package application.service;
 
+import java.util.Collections;
+import java.util.List;
+
 import application.db.DataBase;
 import application.model.User;
 import application.model.UserLoginException;
@@ -14,6 +17,10 @@ public class UserService {
 			request.getHttpBodyValueOf("email")
 		);
 		DataBase.addUser(user);
+	}
+
+	public static List<User> findAll() {
+		return Collections.unmodifiableList(DataBase.findAll());
 	}
 
 	public static User login(HttpRequest request) {
