@@ -23,7 +23,7 @@ public class RequestHandler implements Runnable {
             connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
+            System.out.println(new Request(in));
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = "Hello World".getBytes();
             response200Header(dos, body.length);
