@@ -1,12 +1,14 @@
 package webserver.protocol;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class HttpRequestParser {
+import utils.IOUtils;
 
+public final class HttpRequestParser {
     private static final int FIRST_LINE = 0;
     private static final int HTTP_METHOD_INDEX = 0;
     private static final int HTTP_VERSION_INDEX = 2;
@@ -23,17 +25,26 @@ public final class HttpRequestParser {
     private static final String PARAM_REGEX = "=";
     private static final String HEADER_REGEX = ": ";
 
-    public static HttpRequest parse(final List<String> header) {
-        final String[] firstLineSplitResult = header.get(FIRST_LINE).split(" ", -1);
-        final String[] resources = firstLineSplitResult[RESOURCES_INDEX].split(QUERY_PARAMS_REGEX, -1);
+    public static HttpRequest parse(final BufferedReader reader) throws IOException {
+        final List<String> headerData = IOUtils.readHeaderData(reader);
+        final String[] requestLine = headerData.get(FIRST_LINE).split(" ", -1);
+        final String[] resources = requestLine[RESOURCES_INDEX].split(QUERY_PARAMS_REGEX, -1);
 
-        final HttpMethod httpMethod = HttpMethod.valueOf(firstLineSplitResult[HTTP_METHOD_INDEX]);
-        final String httpVersion = firstLineSplitResult[HTTP_VERSION_INDEX];
+        final HttpMethod method = HttpMethod.valueOf(requestLine[HTTP_METHOD_INDEX]);
+        final String version = requestLine[HTTP_VERSION_INDEX];
         final String path = resources[PATH_INDEX];
         final Map<String, String> queryParams = parseQueryParams(resources);
-        final Map<String, String> headers = parseHeaders(header);
+        final Map<String, String> headers = parseHeaders(headerData);
+        final RequestBody body = RequestBodyParser.parse(reader, headers);
 
-        return new HttpRequest(httpMethod, path, httpVersion, queryParams, headers, null);
+        return HttpRequest.builder()
+            .method(method)
+            .path(path)
+            .version(version)
+            .queryParams(queryParams)
+            .headers(headers)
+            .body(body)
+            .build();
     }
 
     private static Map<String, String> parseHeaders(final List<String> header) {
