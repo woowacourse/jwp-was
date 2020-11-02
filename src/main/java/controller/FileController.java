@@ -3,6 +3,7 @@ package controller;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import utils.Extension;
 import utils.FileIoUtils;
 import utils.RequestUtils;
 import webserver.HttpHeader;
@@ -29,10 +30,10 @@ public class FileController extends AbstractController {
 
     private void addContentType(HttpResponse httpResponse, String path) {
         String extension = RequestUtils.extractExtension(path);
-        if ("js".equals(extension)) {
+        if (Extension.isJS(extension)) {
             httpResponse.addHeader(HttpHeader.CONTENT_TYPE, "application/javascript;charset=utf-8");
         }
-        if ("css".equals(extension) || "html".equals(extension)) {
+        if (Extension.isCSS(extension) || Extension.isHTML(extension)) {
             httpResponse.addHeader(HttpHeader.CONTENT_TYPE,
                 String.format("text/%s;charset=utf-8", RequestUtils.extractExtension(path)));
         }

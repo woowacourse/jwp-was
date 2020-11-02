@@ -35,13 +35,14 @@ public class LoginController extends AbstractController {
 
     private void setHttpResponse(HttpRequest httpRequest, HttpResponse httpResponse, HttpSession httpSession) throws
         IOException {
-        if (userService.findByUserId(httpRequest.getParameter(User.USER_ID)) == null) {
+        User user = userService.findByUserId(httpRequest.getParameter(User.USER_ID));
+        if (user == null) {
             httpResponse.setHttpStatus(HttpStatus.FOUND);
             httpSession.setAttribute("logined", false);
             httpResponse.addHeader(HttpHeader.SET_COOKIE, String.format("SESSIONID=%s; Path=/", httpSession.getId()));
             httpResponse.sendRedirect("/user/login_failed.html");
         }
-        if (userService.findByUserId(httpRequest.getParameter(User.USER_ID)) != null) {
+        if (user != null) {
             httpResponse.setHttpStatus(HttpStatus.FOUND);
             httpSession.setAttribute("logined", true);
             httpResponse.addHeader(HttpHeader.SET_COOKIE, String.format("SESSIONID=%s; Path=/", httpSession.getId()));
