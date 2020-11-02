@@ -3,7 +3,6 @@ package webserver.protocol;
 import java.util.Map;
 import java.util.Objects;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
@@ -27,6 +26,10 @@ public class RequestHeaders {
 
     public boolean hasContentLength() {
         return headers.containsKey(CONTENT_LENGTH);
+    }
+
+    public int findContentLength() {
+        return Integer.parseInt(headers.get(CONTENT_LENGTH));
     }
 
     public boolean isAcceptCSS() {

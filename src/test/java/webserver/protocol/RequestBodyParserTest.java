@@ -28,8 +28,9 @@ class RequestBodyParserTest {
 
         final Map<String, String> headers = new HashMap<>();
         headers.put("Content-Length", data.getBytes().length + "");
+        final RequestHeaders requestHeaders = new RequestHeaders(headers);
 
-        assertThat(RequestBodyParser.parse(reader, headers))
+        assertThat(RequestBodyParser.parse(reader, requestHeaders))
             .usingRecursiveComparison()
             .isEqualTo(expected);
     }
