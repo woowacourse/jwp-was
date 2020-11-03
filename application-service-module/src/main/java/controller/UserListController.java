@@ -12,9 +12,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 import utils.TemplateMaker;
+import webserver.annotation.Controller;
 
 import java.io.IOException;
 
+@Controller
 public class UserListController extends AbstractServlet {
     private static final Logger logger = LoggerFactory.getLogger(UserListController.class);
     private static final String PATH = "/user/list";

@@ -12,7 +12,9 @@ import model.db.DataBase;
 import model.domain.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.annotation.Controller;
 
+@Controller
 public class LoginController extends AbstractServlet {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private static final String PATH = "/user/login";
