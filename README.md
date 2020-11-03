@@ -33,7 +33,7 @@
 
 ### 3단계
 #### 요구사항 1
-- [ ] "로그인" 메뉴를 클릭하면 http://localhost:8080/user/login.html 으로 이동한다.
+- [x] "로그인" 메뉴를 클릭하면 http://localhost:8080/user/login.html 으로 이동한다.
     - [ ] 로그인 성공 시
         - [ ] index.html로 이동
         - [ ] 요청 header의 Cookie header 값이 logined=true로 전달된다.
