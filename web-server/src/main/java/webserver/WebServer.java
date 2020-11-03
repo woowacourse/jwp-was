@@ -41,14 +41,25 @@ public class WebServer {
         }
     }
 
-    private static void initControllerMapper() throws IllegalAccessException, InvocationTargetException, InstantiationException {
+    private static void initControllerMapper() {
         Reflections reflections = new Reflections(CONTROLLER_PACKAGE_PATH);
         Set<Class<?>> controllerClasses = reflections.getTypesAnnotatedWith(Controller.class);
-        for (Class<?> controllerClass : controllerClasses) {
-            Constructor<?> constructor = controllerClass.getDeclaredConstructors()[0];
-            AbstractServlet controller = (AbstractServlet) constructor.newInstance();
-            logger.debug("add controller to mapper: {}", controller.getClass().getName());
-            ControllerMapper.getInstance().addController(controller);
+        controllerClasses.stream()
+                .map(WebServer::toController)
+                .forEach(WebServer::addController);
+    }
+
+    private static AbstractServlet toController(Class<?> controllerClass) {
+        Constructor<?> constructor = controllerClass.getDeclaredConstructors()[0];
+        try {
+            return (AbstractServlet) constructor.newInstance();
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            throw new IllegalArgumentException();
         }
+    }
+
+    private static void addController(AbstractServlet controller) {
+        logger.debug("add controller to mapper: {}", controller.getClass().getName());
+        ControllerMapper.getInstance().addController(controller);
     }
 }
