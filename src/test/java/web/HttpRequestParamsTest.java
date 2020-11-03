@@ -10,7 +10,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import web.http.HttpRequestParams;
-import web.http.HttpRequestLine;
 
 class HttpRequestParamsTest {
 
@@ -21,7 +20,8 @@ class HttpRequestParamsTest {
         String input = "userId=javajigi&password=javable&name=pobi&email=test@test.com";
 
         BufferedReader br = new BufferedReader(new StringReader(input));
-        HttpRequestParams httpRequestParams = HttpRequestParams.of(br, String.valueOf(input.length()), HttpRequestLine.from("POST /user/create HTTP/1.1"));
+        HttpRequestParams httpRequestParams = new HttpRequestParams();
+        httpRequestParams.addBody(br.readLine());
 
         assertThat(httpRequestParams.getParams()).containsEntry("userId", "javajigi");
         assertThat(httpRequestParams.getParams()).containsEntry("password", "javable");

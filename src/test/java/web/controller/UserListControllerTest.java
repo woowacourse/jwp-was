@@ -1,19 +1,21 @@
 package web.controller;
 
+import static org.assertj.core.api.Assertions.*;
+
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import model.User;
 import web.http.HttpRequest;
 import web.http.HttpResponse;
-import webserver.RequestMapping;
+import web.http.HttpStatus;
+import web.session.HttpSession;
+import web.session.SessionStorage;
 
 public class UserListControllerTest {
 
@@ -22,16 +24,17 @@ public class UserListControllerTest {
     @DisplayName("로그인 후 사용자 목록 조회")
     @Test
     void listTest() throws IOException {
-        InputStream in = new FileInputStream(new File(testDirectory + "Http_USER_LIST.txt"));
-        HttpRequest request = HttpRequest.from(in);
-        HttpResponse response = new HttpResponse(createOutputStream("USER_LIST.txt"));
+        User user = new User("javajigi", "123123", "pobi", "test@test.com");
+        HttpSession session = SessionStorage.getSession("123123");
+        session.setAttribute("user", user);
 
+        InputStream in = new FileInputStream(new File(testDirectory + "Http_List.txt"));
+        HttpRequest request = new HttpRequest(in);
+        HttpResponse response = new HttpResponse(null);
 
-        Controller controller = RequestMapping.getController("/user/list.html");
-        controller.service(request, response);
-    }
+        Controller userListController = new UserListController();
+        userListController.service(request, response);
 
-    private OutputStream createOutputStream(String filename) throws FileNotFoundException {
-        return new FileOutputStream(new File(testDirectory + filename));
+        assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.OK);
     }
 }

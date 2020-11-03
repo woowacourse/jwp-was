@@ -21,7 +21,7 @@ class HttpRequestTest {
     @Test
     public void createGetRequest() throws IOException {
         InputStream in = new FileInputStream(new File(testDirectory + "Http_GET.txt"));
-        HttpRequest request = HttpRequest.from(in);
+        HttpRequest request = new HttpRequest(in);
 
         assertThat(request.getMethod()).isEqualTo(HttpMethod.GET);
         assertThat(request.getPath()).isEqualTo("/index.html");
@@ -31,8 +31,8 @@ class HttpRequestTest {
     @DisplayName("HttpRequest 생성 - POST")
     @Test
     public void createPostRequest() throws IOException {
-        InputStream in = new FileInputStream(new File(testDirectory + "Http_POST.txt"));
-        HttpRequest request = HttpRequest.from(in);
+        InputStream in = new FileInputStream(new File(testDirectory + "Http_Create.txt"));
+        HttpRequest request = new HttpRequest(in);
 
         assertThat(request.getMethod()).isEqualTo(HttpMethod.POST);
         assertThat(request.getPath()).isEqualTo("/user/create");
@@ -43,7 +43,7 @@ class HttpRequestTest {
     @Test
     public void createPostRequestWithQueryString() throws Exception {
         InputStream in = new FileInputStream(new File(testDirectory + "Http_POST2.txt"));
-        HttpRequest request = HttpRequest.from(in);
+        HttpRequest request = new HttpRequest(in);
 
         assertThat(request.getMethod()).isEqualTo(HttpMethod.POST);
         assertThat(request.getPath()).isEqualTo("/user/create");

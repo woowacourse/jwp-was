@@ -1,14 +1,12 @@
 package web;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import web.http.HttpResponse;
+import web.http.HttpStatus;
 
 public class HttpResponseTest {
 
@@ -16,19 +14,29 @@ public class HttpResponseTest {
 
     @DisplayName("GET - 200 응답")
     @Test
-    public void responseForward() throws Exception {
-        HttpResponse response = new HttpResponse(createOutputStream("Http_Forward.txt"));
-        response.ok("/index.html");
+    public void responseForward() {
+        HttpResponse response = new HttpResponse(null);
+        response.ok("templates/index.html");
+
+        assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.OK);
     }
 
     @DisplayName("POST - 302 응답")
     @Test
-    public void responseRedirect() throws Exception {
-        HttpResponse response = new HttpResponse(createOutputStream("Http_Redirect.txt"));
+    public void responseRedirect() {
+        HttpResponse response = new HttpResponse(null);
         response.sendRedirect("/index.html");
+
+        assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
     }
 
-    private OutputStream createOutputStream(String filename) throws FileNotFoundException {
-        return new FileOutputStream(new File(testDirectory + filename));
+    @DisplayName("add cookie - 302 응답")
+    @Test
+    public void responseCookies() {
+        HttpResponse response = new HttpResponse(null);
+        response.addHeader("Set-Cookie", "JSESSIONID=123123123");
+        response.sendRedirect("/index.html");
+
+        assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.FOUND);
     }
 }
