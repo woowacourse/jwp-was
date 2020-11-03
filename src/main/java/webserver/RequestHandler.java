@@ -35,7 +35,7 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
             HttpRequest httpRequest = new HttpRequest(br);
-            HttpResponse httpResponse = new HttpResponse(dos, new HttpHeader());
+            HttpResponse httpResponse = new HttpResponse(dos, HttpHeader.ofResponse());
 
             Controller controller = HandlerMapping.find(httpRequest);
             controller.doService(httpRequest, httpResponse);
