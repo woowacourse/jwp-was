@@ -22,7 +22,9 @@ public class ServletFixture {
         + "Content-Type: application/x-www-form-urlencoded\n"
         + "Accept: */*";
 
-    public static final String RESPONSE = "HTTP/1.1 200 OK "
+    public static final String STATUS_LINE = "HTTP/1.1 200 OK ";
+
+    public static final String RESPONSE = STATUS_LINE
         + "Content-Length: 6902 "
         + ""
         + "<!DOCTYPE html>"
