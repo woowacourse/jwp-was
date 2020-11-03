@@ -5,7 +5,6 @@ import model.User;
 import web.controller.Controller;
 import web.request.HttpRequest;
 import web.response.HttpResponse;
-import web.response.HttpStatusCode;
 
 import java.util.Optional;
 
@@ -18,9 +17,14 @@ public class LoginController implements Controller {
 
         User findUser = Optional.ofNullable(DataBase.findUserById(userId))
                 .orElseThrow(() -> new IllegalArgumentException(String.format("%s: 존재하지 않는 사용자입니다.", userId)));
-        boolean result = findUser.hasSamePassword(password);
+        boolean logined = findUser.hasSamePassword(password);
 
-        httpResponse.addCookie("logined=" + result);
-        httpResponse.response(HttpStatusCode.OK);
+        httpResponse.addCookie("logined=" + logined);
+        if (logined) {
+            httpResponse.sendRedirect("/index.html");
+            return;
+        }
+        httpResponse.sendRedirect("/user/login_failed.html");
+
     }
 }
