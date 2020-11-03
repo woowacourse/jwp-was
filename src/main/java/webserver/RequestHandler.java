@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Objects;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,12 +31,16 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream();
              OutputStream out = connection.getOutputStream()) {
 
-            HttpRequest request = HttpRequest.from(in);
+            HttpRequest request = new HttpRequest(in);
             HttpResponse response = new HttpResponse(out);
 
-            Controller controller = RequestMapping.getController(getDefaultPath(request.getPath()));
+            if (request.getCookies().getCookie("JSESSIONID") == null) {
+                response.addHeader("Set-Cookie", "JSESSIONID=" + UUID.randomUUID());
+            }
+
+            Controller controller = RequestMapping.getController(request.getPath());
             if (Objects.isNull(controller)) {
-                String location = request.getPath();
+                String location = getDefaultPath(request.getPath());
                 response.ok(StaticFile.of(location).getPrefix() + location);
             } else {
                 controller.service(request, response);

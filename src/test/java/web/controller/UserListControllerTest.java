@@ -7,18 +7,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import web.http.HttpRequest;
 import web.http.HttpResponse;
-import web.session.Cookie;
-import web.session.Session;
-import web.session.SessionFactory;
-import web.session.SessionStorage;
 import webserver.RequestMapping;
 
 public class UserListControllerTest {
@@ -32,9 +26,6 @@ public class UserListControllerTest {
         HttpRequest request = HttpRequest.from(in);
         HttpResponse response = new HttpResponse(createOutputStream("USER_LIST.txt"));
 
-        Session session = SessionFactory.getNewSession();
-        SessionStorage.add(session);
-        request.addHeader(createHeader(session.getId()));
 
         Controller controller = RequestMapping.getController("/user/list.html");
         controller.service(request, response);
@@ -42,14 +33,5 @@ public class UserListControllerTest {
 
     private OutputStream createOutputStream(String filename) throws FileNotFoundException {
         return new FileOutputStream(new File(testDirectory + filename));
-    }
-
-    private Map<String, Object> createHeader(String sessionId) {
-        Map<String, Object> headers = new HashMap<>();
-        Cookie cookie = new Cookie();
-        cookie.add("logined", sessionId);
-        headers.put("Cookie", cookie);
-
-        return headers;
     }
 }

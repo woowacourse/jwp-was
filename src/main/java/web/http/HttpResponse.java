@@ -15,13 +15,12 @@ import utils.FormatUtils;
 import view.ModelAndView;
 import web.StaticFile;
 import web.controller.ExceptionHandler;
-import web.session.Cookie;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
     private DataOutputStream dos;
-    private HttpResponseHeader httpResponseHeader;
+    private HttpResponseHeader httpResponseHeader = new HttpResponseHeader();
     private byte[] body;
 
     public HttpResponse(OutputStream output) {
@@ -64,15 +63,15 @@ public class HttpResponse {
         httpResponseHeader.add("Content-Length", String.valueOf(body.length));
     }
 
-    public void redirect(String location) {
+    public void sendRedirect(String location) {
         HttpResponseLine httpResponseLine = new HttpResponseLine(HttpStatus.FOUND);
-        httpResponseHeader = new HttpResponseHeader(httpResponseLine);
+        httpResponseHeader.setHttpResponseLine(httpResponseLine);
         httpResponseHeader.add("Location", location);
     }
 
     public void exception(HttpStatus httpStatus, byte[] body) {
         HttpResponseLine httpResponseLine = new HttpResponseLine(httpStatus);
-        httpResponseHeader = new HttpResponseHeader(httpResponseLine);
+        httpResponseHeader.setHttpResponseLine(httpResponseLine);
         this.body = body;
         httpResponseHeader.add("Content-Type", "text/html;charset=utf-8");
         httpResponseHeader.add("Content-Length", String.valueOf(body.length));
@@ -101,17 +100,16 @@ public class HttpResponse {
         return body;
     }
 
-    public void addCookie(Cookie cookie) {
-        cookie.add("Path", "/");
-        httpResponseHeader.add("Set-Cookie", cookie);
-    }
-
-    public void addHttpStatus(HttpStatus httpStatus) {
-        this.httpResponseHeader = new HttpResponseHeader(new HttpResponseLine(httpStatus));
+    public void addHeader(String key, String value) {
+        httpResponseHeader.add(key, value);
     }
 
     public Map<String, Object> getHeaders() {
         return Collections.unmodifiableMap(httpResponseHeader.getHeaders());
+    }
+
+    public void addHttpStatus(HttpStatus httpStatus) {
+        this.httpResponseHeader = new HttpResponseHeader(new HttpResponseLine(httpStatus));
     }
 
     public HttpStatus getHttpStatus() {

@@ -4,17 +4,23 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 public class SessionStorage {
-    private static final ConcurrentMap<String, Session> sessions = new ConcurrentHashMap<>();
+    private static ConcurrentMap<String, HttpSession> sessions = new ConcurrentHashMap<>();
 
-    public static void add(Session session) {
-        sessions.put(session.getId(), session);
+    public static HttpSession getSession(String id) {
+        HttpSession session = sessions.get(id);
+
+        if (session == null) {
+            session = new HttpSession(id);
+            sessions.put(id, session);
+            return session;
+        }
+
+        return session;
     }
 
-    public static Session get(String id) {
-        return sessions.get(id);
+    public static void remove(String id) {
+        sessions.remove(id);
     }
 
-    public static boolean has(String id) {
-        return sessions.containsKey(id);
-    }
+
 }

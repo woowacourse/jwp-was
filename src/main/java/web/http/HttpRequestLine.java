@@ -9,13 +9,13 @@ public class HttpRequestLine {
     private final HttpMethod method;
     private final String path;
     private final String version;
-    private final String rawPath;
+    private final String queryString;
 
-    private HttpRequestLine(HttpMethod method, String path, String version, String rawPath) {
+    private HttpRequestLine(HttpMethod method, String path, String version, String queryString) {
         this.method = method;
         this.path = path;
         this.version = version;
-        this.rawPath = rawPath;
+        this.queryString = queryString;
     }
 
     public static HttpRequestLine from(String line) {
@@ -42,7 +42,7 @@ public class HttpRequestLine {
         return version;
     }
 
-    public String getRawPath() {
-        return rawPath;
+    public String getQueryString() {
+        return queryString;
     }
 }

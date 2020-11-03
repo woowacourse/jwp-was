@@ -25,7 +25,7 @@ class HttpRequestTest {
 
         assertThat(request.getMethod()).isEqualTo(HttpMethod.GET);
         assertThat(request.getPath()).isEqualTo("/index.html");
-        assertThat(request.getHeaders("Connection")).isEqualTo("keep-alive");
+        assertThat(request.getHeader("Connection")).isEqualTo("keep-alive");
     }
 
     @DisplayName("HttpRequest 생성 - POST")
@@ -36,7 +36,7 @@ class HttpRequestTest {
 
         assertThat(request.getMethod()).isEqualTo(HttpMethod.POST);
         assertThat(request.getPath()).isEqualTo("/user/create");
-        assertThat(request.getHeaders("Connection")).isEqualTo("keep-alive");
+        assertThat(request.getHeader("Connection")).isEqualTo("keep-alive");
     }
 
     @DisplayName("HttpRequest 생성 - queryString")
@@ -47,7 +47,7 @@ class HttpRequestTest {
 
         assertThat(request.getMethod()).isEqualTo(HttpMethod.POST);
         assertThat(request.getPath()).isEqualTo("/user/create");
-        assertThat(request.getHeaders("Connection")).isEqualTo("keep-alive");
+        assertThat(request.getHeader("Connection")).isEqualTo("keep-alive");
         assertThat(request.getRequestBody().getParams()).containsEntry("id", "1");
         assertThat(request.getRequestBody().getParams()).containsEntry("userId", "javajigi");
     }

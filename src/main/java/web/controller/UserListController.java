@@ -11,19 +11,13 @@ import view.View;
 import web.StaticFile;
 import web.http.HttpRequest;
 import web.http.HttpResponse;
-import web.http.HttpStatus;
+import web.session.HttpSession;
 
 public class UserListController extends AbstractController {
     @Override
-    protected void doPost(HttpRequest request, HttpResponse response) {
-        response.addHttpStatus(HttpStatus.NOT_ALLOWED_METHOD);
-        ExceptionHandler.processException(new NoSuchMethodException("지원하지 않는 메서드입니다."), response);
-    }
-
-    @Override
     protected void doGet(HttpRequest request, HttpResponse response) {
-        if (isNotLoggedIn(request)) {
-            response.redirect("/user/login");
+        if (!isLogin(request)) {
+            response.sendRedirect("/user/login");
             return;
         }
 
@@ -36,7 +30,13 @@ public class UserListController extends AbstractController {
         response.ok(new ModelAndView(view, model));
     }
 
-    private boolean isNotLoggedIn(HttpRequest request) {
-        return request.getHeaders("Cookie") == null;
+    private boolean isLogin(HttpRequest request) {
+        if (request.getCookies() == null) {
+            return false;
+        }
+
+        HttpSession session = request.getSession();
+        Object user = session.getAttribute("user");
+        return user != null;
     }
 }

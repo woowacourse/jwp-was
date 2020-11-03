@@ -34,6 +34,6 @@ public class HttpSession implements Session{
 
     @Override
     public void invalidate() {
-        attributes.clear();
+        SessionStorage.remove(id);
     }
 }

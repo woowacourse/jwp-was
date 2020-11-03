@@ -5,40 +5,38 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import utils.IOUtils;
+import web.session.HttpSession;
 
 public class HttpRequest {
+    private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
 
-    private final HttpRequestLine httpRequestLine;
-    private final HttpRequestHeader httpRequestHeader;
-    private final HttpRequestBody httpRequestBody;
+    private HttpRequestLine httpRequestLine;
+    private HttpRequestHeaders httpRequestHeaders;
+    private HttpRequestParams httpRequestParams = new HttpRequestParams();
 
-    private HttpRequest(HttpRequestLine httpRequestLine, HttpRequestHeader httpRequestHeader, HttpRequestBody httpRequestBody) {
-        this.httpRequestLine = httpRequestLine;
-        this.httpRequestHeader = httpRequestHeader;
-        this.httpRequestBody = httpRequestBody;
-    }
-
-    public static HttpRequest from(InputStream in) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-
-        HttpRequestLine httpRequestLine = HttpRequestLine.from(br.readLine());
-        HttpRequestHeader httpRequestHeader = HttpRequestHeader.from(br);
-        HttpRequestBody httpRequestBody = createRequestBody(br, httpRequestLine, httpRequestHeader);
-
-        return new HttpRequest(httpRequestLine, httpRequestHeader, httpRequestBody);
-    }
-
-    private static HttpRequestBody createRequestBody(BufferedReader br, HttpRequestLine httpRequestLine,
-        HttpRequestHeader httpRequestHeader) throws IOException {
-        if (httpRequestLine.isPost()) {
-            return HttpRequestBody.of(br, (String) httpRequestHeader.getValue("Content-Length"), httpRequestLine);
+    public HttpRequest(InputStream in) {
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+            httpRequestLine = HttpRequestLine.from(br.readLine());
+            httpRequestParams.addQueryString(httpRequestLine.getQueryString());
+            httpRequestHeaders = HttpRequestHeaders.from(br);
+            httpRequestParams.addBody(IOUtils.readData(br, httpRequestHeaders.getContentLength()));
+        } catch (IOException e) {
+            logger.error(e.getMessage());
         }
-        return null;
     }
 
-    public HttpRequestBody getRequestBody() {
-        return httpRequestBody;
+    public HttpRequestParams getRequestBody() {
+        return httpRequestParams;
+    }
+
+    public String getParameter(String name) {
+        return httpRequestParams.getParameter(name);
     }
 
     public HttpMethod getMethod() {
@@ -49,11 +47,15 @@ public class HttpRequest {
         return httpRequestLine.getPath();
     }
 
-    public Object getHeaders(String key) {
-        return httpRequestHeader.getParams().get(key);
+    public String getHeader(String key) {
+        return httpRequestHeaders.getParams().get(key);
     }
 
-    public void addHeader(Map<String, Object> header) {
-        this.httpRequestHeader.addHeader(header);
+    public HttpCookie getCookies() {
+        return httpRequestHeaders.getCookies();
+    }
+
+    public HttpSession getSession() {
+        return httpRequestHeaders.getSession();
     }
 }

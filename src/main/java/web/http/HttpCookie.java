@@ -1,25 +1,29 @@
 package web.http;
 
-import java.util.HashMap;
 import java.util.Map;
 
-public class HttpCookie {
-    private static final String EQUAL_SIGN = "=";
+import utils.HttpRequestUtils;
 
+public class HttpCookie {
     private Map<String, String> cookies;
 
-    private HttpCookie(Map<String, String> cookies) {
-        this.cookies = cookies;
+    public HttpCookie(String cookieValue) {
+        cookies = HttpRequestUtils.parseCookies(cookieValue);
     }
 
-    public static HttpCookie from(String cookie) {
-        String[] values = cookie.split(EQUAL_SIGN);
-        Map<String, String> cookies = new HashMap<>();
-        cookies.put(values[0], values[1]);
-        return new HttpCookie(cookies);
+    public String getCookie(String name) {
+        return cookies.get(name);
     }
 
-    public String getCookie(String key) {
-        return this.cookies.get(key);
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Map.Entry<String, String> entry : cookies.entrySet()) {
+            stringBuilder.append(entry.getKey());
+            stringBuilder.append("=");
+            stringBuilder.append(entry.getValue());
+            stringBuilder.append(";");
+        }
+        return stringBuilder.toString();
     }
 }

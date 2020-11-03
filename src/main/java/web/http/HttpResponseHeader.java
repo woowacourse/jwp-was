@@ -5,19 +5,16 @@ import java.util.Map;
 
 public class HttpResponseHeader {
 
-    private final HttpResponseLine httpResponseLine;
-    private final Map<String, Object> headers;
-
-    public HttpResponseHeader(HttpResponseLine httpResponseLine, Map<String, Object> headers) {
-        this.httpResponseLine = httpResponseLine;
-        this.headers = headers;
-    }
+    private HttpResponseLine httpResponseLine;
+    private Map<String, Object> headers = new HashMap<>();
 
     public HttpResponseHeader(HttpResponseLine httpResponseLine) {
-        this(httpResponseLine, new HashMap<>());
+        this.httpResponseLine = httpResponseLine;
     }
 
-    public void add(String key, Object value) {
+    public HttpResponseHeader() {}
+
+    public void add(String key, String value) {
         headers.put(key, value);
     }
 
@@ -25,7 +22,23 @@ public class HttpResponseHeader {
         return headers;
     }
 
+    public void setHttpResponseLine(HttpResponseLine httpResponseLine) {
+        this.httpResponseLine = httpResponseLine;
+    }
+
     public HttpResponseLine getHttpResponseLine() {
         return httpResponseLine;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Map.Entry<String, Object> entry : headers.entrySet()) {
+            stringBuilder.append(entry.getKey())
+                .append(": ")
+                .append(entry.getValue())
+                .append(System.lineSeparator());
+        }
+        return stringBuilder.toString();
     }
 }
