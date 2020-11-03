@@ -3,7 +3,7 @@ package webserver.http.response;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Arrays;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,11 +39,16 @@ public class HttpResponse {
         this.httpStatus = httpStatus;
     }
 
+    public void addHttpBody(String body) {
+        this.httpResponseBody = new HttpResponseBody(body.getBytes());
+    }
+
     public void send() throws IOException {
         dataOutputStream.writeBytes(HttpStatusLine.convertToString(httpStatus) + LINE_SEPARATOR);
         httpHeaders.write(dataOutputStream);
-        if (httpResponseBody.isNotEmpty()) {
-            dataOutputStream.writeBytes(Arrays.toString(httpResponseBody.getBody()));
+        if (Objects.nonNull(httpResponseBody)) {
+            dataOutputStream.writeBytes(LINE_SEPARATOR);
+            dataOutputStream.writeBytes(new String(httpResponseBody.getBody()));
         }
     }
 
