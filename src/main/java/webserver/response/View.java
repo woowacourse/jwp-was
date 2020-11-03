@@ -1,54 +1,31 @@
 package webserver.response;
 
+import static webserver.response.RedirectView.*;
+
 import java.io.IOException;
 
 import exception.ViewNotFoundException;
-import utils.FileIoUtils;
 
-public class View {
-    private final byte[] view;
-    private final String viewName;
-    private final boolean isRedirect;
+public interface View {
 
-    public View(byte[] view, String viewName) {
-        this(view, viewName, false);
-    }
-
-    private View(byte[] view, String viewName, boolean isRedirect) {
-        this.view = view;
-        this.viewName = viewName;
-        this.isRedirect = isRedirect;
-    }
-
-    public static View of(String viewName) {
+    static View of(String viewName) {
         try {
-            if (viewName.startsWith("redirect:/")) {
-                viewName = viewName.substring(10);
-                return new View(FileIoUtils.loadFileFromClasspath(viewName), viewName, true);
+            if (viewName.startsWith(REDIRECT_PREFIX)) {
+                return new RedirectView(viewName);
             }
-            return new View(FileIoUtils.loadFileFromClasspath(viewName), viewName);
-        } catch (IOException | ViewNotFoundException exception) {
+            return new DefaultView(viewName);
+        } catch (IOException exception) {
             throw new ViewNotFoundException(viewName);
         }
     }
 
-    public byte[] getView() {
-        return view;
-    }
+    byte[] getView();
 
-    public int getLength() {
-        return view.length;
-    }
+    int getLength();
 
-    public boolean isNotEmpty() {
-        return view.length != 0;
-    }
+    boolean isNotEmpty();
 
-    public boolean isRedirect() {
-        return isRedirect;
-    }
+    boolean isRedirect();
 
-    public String getViewName() {
-        return viewName;
-    }
+    String getViewName();
 }

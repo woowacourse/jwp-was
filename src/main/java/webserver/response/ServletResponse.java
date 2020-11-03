@@ -17,7 +17,7 @@ public class ServletResponse {
         this.mav = mav;
     }
 
-    public static ServletResponse of(StatusCode statusCode, ModelAndView mav, View view, ServletRequest request) {
+    public static ServletResponse of(StatusCode statusCode, ModelAndView mav, DefaultView view, ServletRequest request) {
 
         return new ServletResponse(new HttpStatusLine(statusCode), ResponseHeader.of(view, request), mav);
     }

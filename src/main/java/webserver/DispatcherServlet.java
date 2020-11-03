@@ -13,9 +13,8 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import exception.ViewNotFoundException;
+import exception.HttpRequestException;
 import webserver.controller.IndexController;
-import webserver.controller.StaticResourceHandlers;
 import webserver.controller.UserController;
 import webserver.handleradaptor.DefaultHandlerAdaptor;
 import webserver.handleradaptor.HandlerAdaptor;
@@ -23,12 +22,13 @@ import webserver.handlermapping.DefaultHandlerMapping;
 import webserver.handlermapping.DefaultHandlerMappingStrategy;
 import webserver.handlermapping.HandlerMapping;
 import webserver.handlermapping.HandlerMappingStrategy;
-import webserver.handlermapping.StaticResourceHandlerMappingStrategy;
 import webserver.messageconverter.DefaultHttpMessageConverter;
 import webserver.messageconverter.HttpMessageConverter;
+import webserver.request.MethodType;
 import webserver.request.ServletRequest;
 import webserver.response.ModelAndView;
 import webserver.response.ServletResponse;
+import webserver.response.StatusCode;
 
 public class DispatcherServlet implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(DispatcherServlet.class);
@@ -37,15 +37,16 @@ public class DispatcherServlet implements Runnable {
     private static final List<HandlerMappingStrategy> HANDLER_MAPPING_STRATEGIES;
     private static final List<Class<?>> CONTROLLERS;
     private static final HandlerMapping DEFAULT_HANDLER_MAPPING;
+    private static final StaticResourceHandler RESOURCE_HANDLER;
 
     static {
         DEFAULT_HANDLER_ADAPTOR = new DefaultHandlerAdaptor();
         CONVERTER = new DefaultHttpMessageConverter();
         HANDLER_MAPPING_STRATEGIES = Arrays.asList(
-            new DefaultHandlerMappingStrategy(), new StaticResourceHandlerMappingStrategy());
-        CONTROLLERS = Arrays.asList(UserController.class, IndexController.class,
-            StaticResourceHandlers.class);
+            new DefaultHandlerMappingStrategy());
+        CONTROLLERS = Arrays.asList(UserController.class, IndexController.class);
         DEFAULT_HANDLER_MAPPING = new DefaultHandlerMapping(HANDLER_MAPPING_STRATEGIES, CONTROLLERS);
+        RESOURCE_HANDLER = new DefaultStaticResourceHandler();
     }
 
     private final Socket connection;
@@ -55,30 +56,35 @@ public class DispatcherServlet implements Runnable {
     }
 
     public void run() {
+        ServletResponse servletResponse = null;
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
             connection.getPort());
-        ExceptionHandler exception = null;
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-             DataOutputStream dos = new DataOutputStream(connection.getOutputStream())) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
             ServletRequest servletRequest = new ServletRequest(br);
-            Method handler = DEFAULT_HANDLER_MAPPING.mapping(servletRequest);
-            ModelAndView mav = DEFAULT_HANDLER_ADAPTOR.invoke(handler, servletRequest, CONVERTER);
-            ServletResponse response = ServletResponse.of(mav, servletRequest);
-            response.sendResponse(dos);
-        } catch (IOException e) {
+
+            if (RESOURCE_HANDLER.isStaticResourceRequest(servletRequest)) {
+                servletResponse = RESOURCE_HANDLER.handle(servletRequest);
+            } else {
+                Method handler = DEFAULT_HANDLER_MAPPING.mapping(servletRequest);
+                ModelAndView mav = DEFAULT_HANDLER_ADAPTOR.invoke(handler, servletRequest, CONVERTER);
+                servletResponse = ServletResponse.of(mav, servletRequest);
+            }
+        } catch (HttpRequestException e) {
             logger.error(e.getMessage(), e);
-            exception = ExceptionHandler.of(500);
-        } catch (ViewNotFoundException e) {
+            servletResponse = e.getHandledResponse();
+        } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            exception = ExceptionHandler.of(404);
+            servletResponse = ServletResponse.of(StatusCode.INTERNAL_SERVER_ERROR,
+                ModelAndView.of("static/notFound.html"));
         } finally {
-            if (Objects.nonNull(exception)) {
-                try (DataOutputStream dos = new DataOutputStream(connection.getOutputStream())) {
-                    ServletResponse response = exception.getResponse();
-                    response.sendResponse(dos);
-                } catch (IOException ex) {
-                    logger.error(ex.getMessage(), ex);
+            try (DataOutputStream dos = new DataOutputStream(connection.getOutputStream())) {
+                if (Objects.isNull(servletResponse)) {
+                    servletResponse = ServletResponse.of(StatusCode.INTERNAL_SERVER_ERROR,
+                        ModelAndView.of("static/notFound.html"));
                 }
+                servletResponse.sendResponse(dos);
+            } catch (IOException ex) {
+                logger.error(ex.getMessage(), ex);
             }
         }
     }
