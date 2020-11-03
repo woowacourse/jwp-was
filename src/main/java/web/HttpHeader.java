@@ -10,6 +10,7 @@ public class HttpHeader {
     private static final String TOKEN_DELIMITER = ": ";
     private static final String NEW_LINE = System.lineSeparator();
     private static final String DELIMITER = ": ";
+    private static final String COOKIE = "Cookie";
 
     private final Map<String, String> headers = new HashMap<>();
 
@@ -44,5 +45,9 @@ public class HttpHeader {
         for (Map.Entry<String, String> entry : headers.entrySet()) {
             dataOutputStream.writeBytes(entry.getKey() + DELIMITER + entry.getValue() + NEW_LINE);
         }
+    }
+
+    public void addCookie(String value) {
+        headers.merge(COOKIE, value, (oldValue, newValue) -> String.join("; ", oldValue, newValue));
     }
 }

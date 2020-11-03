@@ -3,6 +3,7 @@ package webserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import web.HandlerMapping;
+import web.HttpHeader;
 import web.request.HttpRequest;
 import web.response.HttpResponse;
 import web.controller.Controller;
@@ -34,7 +35,7 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
             HttpRequest httpRequest = new HttpRequest(br);
-            HttpResponse httpResponse = new HttpResponse(dos);
+            HttpResponse httpResponse = new HttpResponse(dos, new HttpHeader());
 
             Controller controller = HandlerMapping.find(httpRequest);
             controller.doService(httpRequest, httpResponse);
