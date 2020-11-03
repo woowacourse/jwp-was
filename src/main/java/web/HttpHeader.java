@@ -9,19 +9,29 @@ import java.util.Map;
 public class HttpHeader {
     private static final String TOKEN_DELIMITER = ": ";
     private static final String NEW_LINE = System.lineSeparator();
-    private static final String DELIMITER = ": ";
     private static final String COOKIE = "Cookie";
 
     private final Map<String, String> headers = new HashMap<>();
+    private final HttpCookie httpCookie;
 
-    public HttpHeader() {
+    public static HttpHeader ofResponse() {
+        return new HttpHeader();
     }
 
-    public HttpHeader(List<String> lines) {
+    public static HttpHeader ofRequest(List<String> lines) {
+        return new HttpHeader(lines);
+    }
+
+    private HttpHeader() {
+        httpCookie = new HttpCookie();
+    }
+
+    private HttpHeader(List<String> lines) {
         for (String line : lines) {
             String[] tokens = line.split(TOKEN_DELIMITER);
             headers.put(tokens[0], tokens[1]);
         }
+        httpCookie = new HttpCookie(headers.get(COOKIE));
     }
 
     public Map<String, String> getHeaders() {
@@ -43,11 +53,16 @@ public class HttpHeader {
 
     public void write(DataOutputStream dataOutputStream) throws IOException {
         for (Map.Entry<String, String> entry : headers.entrySet()) {
-            dataOutputStream.writeBytes(entry.getKey() + DELIMITER + entry.getValue() + NEW_LINE);
+            dataOutputStream.writeBytes(entry.getKey() + TOKEN_DELIMITER + entry.getValue() + NEW_LINE);
         }
+        dataOutputStream.writeBytes(httpCookie.convertToResponse() + NEW_LINE);
     }
 
-    public void addCookie(String value) {
-        headers.merge(COOKIE, value, (oldValue, newValue) -> String.join("; ", oldValue, newValue));
+    public void addCookie(String key, String value) {
+        this.httpCookie.addCookie(key, value);
+    }
+
+    public Map<String, String> getCookies() {
+        return this.httpCookie.getCookies();
     }
 }

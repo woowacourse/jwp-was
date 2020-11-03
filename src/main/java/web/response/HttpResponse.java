@@ -61,7 +61,7 @@ public class HttpResponse {
         response(HttpStatusCode.FOUND);
     }
 
-    public void addCookie(String value) {
-        httpHeader.addCookie(value);
+    public void addCookie(String key, String value) {
+        httpHeader.addCookie(key, value);
     }
 }

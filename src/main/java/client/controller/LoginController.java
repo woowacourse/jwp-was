@@ -19,7 +19,7 @@ public class LoginController implements Controller {
                 .orElseThrow(() -> new IllegalArgumentException(String.format("%s: 존재하지 않는 사용자입니다.", userId)));
         boolean logined = findUser.hasSamePassword(password);
 
-        httpResponse.addCookie("logined=" + logined);
+        httpResponse.addCookie("logined", String.valueOf(logined));
         if (logined) {
             httpResponse.sendRedirect("/index.html");
             return;

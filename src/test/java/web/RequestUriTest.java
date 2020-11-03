@@ -29,7 +29,7 @@ class RequestUriTest {
     void constructor() {
         assertThatThrownBy(() -> new RequestUri(""))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("비어있습니다.");
+                .hasMessage("요청 URI가 비어있습니다.");
     }
 
     @DisplayName("생성자에 전달받은 값이 올바르지 않은 경우")

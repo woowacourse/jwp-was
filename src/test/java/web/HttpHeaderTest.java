@@ -20,7 +20,7 @@ class HttpHeaderTest {
         lines.add("Host: localhost:8080");
         lines.add("Connection: keep-alive");
 
-        HttpHeader httpHeader = new HttpHeader(lines);
+        HttpHeader httpHeader = HttpHeader.ofRequest(lines);
 
         Map<String, String> headers = httpHeader.getHeaders();
 
@@ -31,7 +31,7 @@ class HttpHeaderTest {
     @DisplayName("헤더를 추가한다.")
     @Test
     void putTest() {
-        HttpHeader httpHeader = new HttpHeader();
+        HttpHeader httpHeader = HttpHeader.ofResponse();
 
         httpHeader.put("Location", "/index.html");
 
@@ -41,7 +41,7 @@ class HttpHeaderTest {
     @DisplayName("헤더를 response의 outputStream에 전부 쓴다.")
     @Test
     void writeTest() throws IOException {
-        HttpHeader httpHeader = new HttpHeader();
+        HttpHeader httpHeader = HttpHeader.ofResponse();
         httpHeader.put("Location", "/index.html");
         httpHeader.put("Content-type", "text/html");
 
@@ -63,21 +63,21 @@ class HttpHeaderTest {
     @DisplayName("쿠키 헤더가 없을 경우 쿠키 값을 추가한다.")
     @Test
     void addCookieTest1() {
-        HttpHeader httpHeader = new HttpHeader();
+        HttpHeader httpHeader = HttpHeader.ofResponse();
 
-        httpHeader.addCookie("logined=true");
+        httpHeader.addCookie("logined", "true");
 
-        assertThat(httpHeader.get("Cookie")).isEqualTo("logined=true");
+        assertThat(httpHeader.get("Set-Cookie")).isEqualTo("logined=true");
     }
 
     @DisplayName("쿠키 헤더가 있을 경우 기존 쿠키 값에 이어 붙인다.")
     @Test
     void addCookieTest2() {
-        HttpHeader httpHeader = new HttpHeader();
-        httpHeader.addCookie("logined=true");
+        HttpHeader httpHeader = HttpHeader.ofResponse();
+        httpHeader.addCookie("logined", "true");
 
-        httpHeader.addCookie("session=123");
+        httpHeader.addCookie("session", "123");
 
-        assertThat(httpHeader.get("Cookie")).isEqualTo("logined=true; session=123");
+        assertThat(httpHeader.get("Set-Cookie")).isEqualTo("logined=true; session=123");
     }
 }

@@ -5,6 +5,7 @@ import web.HttpHeader;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Map;
 
 public class HttpRequest {
     private final RequestUri requestUri;
@@ -13,7 +14,7 @@ public class HttpRequest {
 
     public HttpRequest(final BufferedReader bufferedReader) throws IOException {
         this.requestUri = new RequestUri(bufferedReader.readLine());
-        this.httpHeader = new HttpHeader(IOUtils.readHeader(bufferedReader));
+        this.httpHeader = HttpHeader.ofRequest(IOUtils.readHeader(bufferedReader));
         if (HttpMethod.POST == getMethod()) {
             this.requestBody = new RequestBody(IOUtils.readData(bufferedReader, httpHeader.getContentLength()));
         }
@@ -41,5 +42,13 @@ public class HttpRequest {
 
     public boolean isGetMethod() {
         return getMethod().isGet();
+    }
+
+    public HttpHeader getHeader() {
+        return httpHeader;
+    }
+
+    public Map<String, String> getCookies() {
+        return this.httpHeader.getCookies();
     }
 }
