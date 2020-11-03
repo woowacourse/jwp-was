@@ -42,6 +42,10 @@ public class HttpRequest {
         return httpRequestLine.getContentType();
     }
 
+    public boolean hasHttpHeaderParameterOf(String key) {
+        return httpRequestHeaders.hasValue(key);
+    }
+
     public String getHttpHeaderParameterOf(String key) {
         return httpRequestHeaders.getValue(key);
     }

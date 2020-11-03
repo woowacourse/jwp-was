@@ -25,12 +25,12 @@ public class HttpHeaders {
         httpHeaders.put(key, value);
     }
 
-    public String getValue(String key) {
-        return httpHeaders.get(key);
+    public boolean hasValue(String key) {
+        return httpHeaders.get(key) != null;
     }
 
-    public String getValueOrDefault(String key, String defaultValue) {
-        return httpHeaders.getOrDefault(key, defaultValue);
+    public String getValue(String key) {
+        return httpHeaders.get(key);
     }
 
     public int getContentLength() {
