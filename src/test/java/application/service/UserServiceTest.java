@@ -13,12 +13,14 @@ import application.model.User;
 import application.model.UserLoginException;
 import fixtures.HttpRequestGenerator;
 import webserver.http.request.HttpRequest;
+import webserver.session.SessionStorage;
 
 class UserServiceTest {
 
 	@BeforeEach
 	void setUp() {
 		DataBase.deleteAll();
+		SessionStorage.clear();
 	}
 
 	@DisplayName("사용자를 정상적으로 생성한다")
@@ -39,9 +41,9 @@ class UserServiceTest {
 		UserService.create(createRequest);
 
 		HttpRequest loginRequest = HttpRequestGenerator.createPostHttpRequest("loginUser");
-		User user = UserService.login(loginRequest);
+		String sessionId = UserService.login(loginRequest);
 
-		assertThat(user.getName()).isEqualTo("toney");
+		assertThat(SessionStorage.contain(sessionId)).isTrue();
 	}
 
 	@DisplayName("회원가입이 안된 상태로 로그인 시도시 예외가 발생한다")

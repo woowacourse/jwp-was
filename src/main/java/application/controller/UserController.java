@@ -37,9 +37,10 @@ public class UserController {
     public static void login(HttpRequest request, HttpResponse response) {
         logger.debug("request : {}, request : {}", request, response);
         try {
-            UserService.login(request);
-            response.addHttpHeader("Location", "/index.html");
-			response.addHttpHeader("Set-Cookie", "logined=true; Path=/");
+			String sessionId = UserService.login(request);
+
+			response.addHttpHeader("Location", "/index.html");
+			response.addHttpHeader("Set-Cookie", "sessionId=" + sessionId + "; Path=/");
 			response.setHttpStatus(HttpStatus.FOUND);
 		} catch (UserLoginException e) {
 			logger.debug("error : {}", e.getMessage());
@@ -54,8 +55,7 @@ public class UserController {
 	public static void list(HttpRequest request, HttpResponse response) throws IOException {
 		logger.debug("request : {}, request : {}", request, response);
 
-		String cookie = request.getHttpHeaderParameterOf("Cookie");
-		if (cookie.contains("logined=true")) {
+		if (UserService.isLogin(request)) {
 			List<UserDto> users = UserService.findAll().stream()
 				.map(UserDto::new)
 				.collect(Collectors.toList());
@@ -64,7 +64,6 @@ public class UserController {
 			response.addHttpBody(body);
 		} else {
 			response.addHttpHeader("Location", "/user/login.html");
-			response.addHttpHeader("Set-Cookie", "logined=false; Path=/");
 			response.setHttpStatus(HttpStatus.FOUND);
 		}
 	}

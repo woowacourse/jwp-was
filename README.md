@@ -89,5 +89,5 @@
 - [x] Object getAttribute(String name)를 구현한다.
 - [x] void removeAttribute(String name)를 구현한다.
 - [x] void invalidate()를 구현한다.
-- [ ] session storage를 구현한다.
-- [ ] 세션을 적용한다.
+- [x] session storage를 구현한다.
+- [x] 세션을 적용한다.

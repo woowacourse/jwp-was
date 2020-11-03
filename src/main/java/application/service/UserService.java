@@ -7,6 +7,8 @@ import application.db.DataBase;
 import application.model.User;
 import application.model.UserLoginException;
 import webserver.http.request.HttpRequest;
+import webserver.session.HttpSession;
+import webserver.session.SessionStorage;
 
 public class UserService {
 	public static void create(HttpRequest request) {
@@ -23,7 +25,7 @@ public class UserService {
 		return Collections.unmodifiableList(DataBase.findAll());
 	}
 
-	public static User login(HttpRequest request) {
+	public static String login(HttpRequest request) {
 		User user = DataBase.findUserById(request.getHttpBodyValueOf("userId"));
 
 		if (user == null) {
@@ -34,6 +36,23 @@ public class UserService {
 			throw new UserLoginException("올바르지 않은 비밀번호입니다.");
 		}
 
-		return user;
+		if (isLogin(request)) {
+			return getSessionId(request);
+		}
+
+		String sessionId = SessionStorage.create("userId", user.getUserId());
+		SessionStorage.loginBy(sessionId);
+		return sessionId;
+	}
+
+	private static String getSessionId(HttpRequest request) {
+		String cookie = request.getHttpHeaderParameterOf("Cookie");
+		return cookie.substring(cookie.indexOf("sessionId=") + 10, cookie.indexOf("sessionId=") + 46);
+	}
+
+	public static boolean isLogin(HttpRequest request) {
+		String sessionId = getSessionId(request);
+		HttpSession httpSession = SessionStorage.findBy(sessionId);
+		return (boolean)httpSession.getAttribute("logined");
 	}
 }
