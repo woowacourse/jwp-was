@@ -9,7 +9,9 @@ import java.io.StringReader;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class RequestHeaderTest {
+import web.http.HttpRequestHeaders;
+
+class HttpRequestHeadersTest {
 
     @DisplayName("RequestHeader 생성")
     @Test
@@ -20,7 +22,7 @@ class RequestHeaderTest {
             + "Accept: */*";
 
         BufferedReader br = new BufferedReader(new StringReader(input));
-        RequestHeader header = RequestHeader.from(br);
+        HttpRequestHeaders header = HttpRequestHeaders.from(br);
 
         assertThat(header.getParams()).hasSize(3);
         assertThat(header.getValue("Host")).isEqualTo("localhost:8080");

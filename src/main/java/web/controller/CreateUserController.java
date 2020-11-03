@@ -5,11 +5,10 @@ import org.slf4j.LoggerFactory;
 
 import db.DataBase;
 import model.User;
-import web.HttpRequest;
-import web.HttpResponse;
+import web.http.HttpRequest;
+import web.http.HttpResponse;
 
 public class CreateUserController extends AbstractController {
-
     private static final Logger logger = LoggerFactory.getLogger(CreateUserController.class);
 
     @Override
@@ -18,9 +17,5 @@ public class CreateUserController extends AbstractController {
         logger.info("user : {}", user);
         DataBase.addUser(user);
         response.sendRedirect("/index.html");
-    }
-
-    @Override
-    protected void doGet(HttpRequest request, HttpResponse response) {
     }
 }
