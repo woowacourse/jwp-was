@@ -59,4 +59,25 @@ class HttpHeaderTest {
         assertThat(headers).contains("Location: /index.html");
         assertThat(headers).contains("Content-type: text/html");
     }
+
+    @DisplayName("쿠키 헤더가 없을 경우 쿠키 값을 추가한다.")
+    @Test
+    void addCookieTest1() {
+        HttpHeader httpHeader = new HttpHeader();
+
+        httpHeader.addCookie("logined=true");
+
+        assertThat(httpHeader.get("Cookie")).isEqualTo("logined=true");
+    }
+
+    @DisplayName("쿠키 헤더가 있을 경우 기존 쿠키 값에 이어 붙인다.")
+    @Test
+    void addCookieTest2() {
+        HttpHeader httpHeader = new HttpHeader();
+        httpHeader.addCookie("logined=true");
+
+        httpHeader.addCookie("session=123");
+
+        assertThat(httpHeader.get("Cookie")).isEqualTo("logined=true; session=123");
+    }
 }

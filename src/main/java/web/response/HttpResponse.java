@@ -16,10 +16,11 @@ public class HttpResponse {
 
     private final DataOutputStream dataOutputStream;
 
-    private final HttpHeader httpHeader = new HttpHeader();
+    private final HttpHeader httpHeader;
 
-    public HttpResponse(DataOutputStream dataOutputStream) {
+    public HttpResponse(DataOutputStream dataOutputStream, HttpHeader httpHeader) {
         this.dataOutputStream = dataOutputStream;
+        this.httpHeader = httpHeader;
     }
 
     public void putHeader(String key, String value) {
@@ -60,4 +61,7 @@ public class HttpResponse {
         response(HttpStatusCode.FOUND);
     }
 
+    public void addCookie(String value) {
+        httpHeader.addCookie(value);
+    }
 }
