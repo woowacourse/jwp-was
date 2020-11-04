@@ -53,4 +53,8 @@ public class HttpRequestHeaders {
     public HttpSession getSession() {
         return SessionStorage.getSession(getCookies().getCookie(HttpSession.SESSION_ID));
     }
+
+    public void addCookie(String key, String value) {
+        getCookies().addCookie(key, value);
+    }
 }

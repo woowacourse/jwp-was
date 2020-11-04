@@ -36,7 +36,9 @@ public class RequestHandler implements Runnable {
             HttpResponse response = new HttpResponse(out);
 
             if (request.getCookies().getCookie(HttpSession.SESSION_ID) == null) {
-                response.addHeader("Set-Cookie", HttpSession.SESSION_ID + "=" + UUID.randomUUID());
+                String uuid = String.valueOf(UUID.randomUUID());
+                request.addCookie(HttpSession.SESSION_ID, uuid);
+                response.addHeader("Set-Cookie", HttpSession.SESSION_ID + "=" + uuid);
             }
 
             Controller controller = RequestMapping.getController(request.getPath());

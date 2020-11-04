@@ -58,4 +58,8 @@ public class HttpRequest {
     public HttpSession getSession() {
         return httpRequestHeaders.getSession();
     }
+
+    public void addCookie(String key, String value) {
+        httpRequestHeaders.addCookie(key, value);
+    }
 }

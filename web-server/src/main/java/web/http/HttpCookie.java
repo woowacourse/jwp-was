@@ -11,6 +11,10 @@ public class HttpCookie {
         cookies = HttpRequestUtils.parseCookies(cookieValue);
     }
 
+    public void addCookie(String key, String value) {
+        cookies.put(key, value);
+    }
+
     public String getCookie(String name) {
         return cookies.get(name);
     }
