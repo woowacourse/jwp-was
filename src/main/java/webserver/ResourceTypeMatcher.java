@@ -6,7 +6,8 @@ public enum ResourceTypeMatcher {
 	HTML(".html", "./templates", "text/html;charset=UTF-8"),
 	JS(".js", "./static", "application/javascript;charset=UTF-8"),
 	CSS(".css", "./static", "text/css;charset=UTF-8"),
-	WOFF(".woff", "./static", "font/woff;charset=UTF-8");
+	WOFF(".woff", "./static", "font/woff;charset=UTF-8"),
+	ICO(".ico", "./templates", "image/x-icon;charset=UTF-8");
 
 	private final String fileType;
 	private final String filePath;
