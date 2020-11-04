@@ -32,10 +32,6 @@ public class UserListController extends AbstractController {
     }
 
     private boolean isLogin(HttpRequest request) {
-        if (request.getCookies() == null) {
-            return false;
-        }
-
         HttpSession session = request.getSession();
         Object user = session.getAttribute("user");
         return user != null;
