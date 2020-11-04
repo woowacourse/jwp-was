@@ -10,7 +10,7 @@ import web.session.HttpSession;
 import web.session.SessionStorage;
 
 public class HttpRequestHeaders {
-
+    private static final String COOKIE = "Cookie";
     private static final String COLON = ": ";
 
     private Map<String, String> params;
@@ -47,10 +47,10 @@ public class HttpRequestHeaders {
     }
 
     public HttpCookie getCookies() {
-        return new HttpCookie(getValue("Cookie"));
+        return new HttpCookie(getValue(COOKIE));
     }
 
     public HttpSession getSession() {
-        return SessionStorage.getSession(getCookies().getCookie("JSESSIONID"));
+        return SessionStorage.getSession(getCookies().getCookie(HttpSession.SESSION_ID));
     }
 }

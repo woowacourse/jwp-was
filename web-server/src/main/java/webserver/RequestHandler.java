@@ -14,6 +14,7 @@ import web.StaticFile;
 import web.controller.Controller;
 import web.http.HttpRequest;
 import web.http.HttpResponse;
+import web.session.HttpSession;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -34,8 +35,8 @@ public class RequestHandler implements Runnable {
             HttpRequest request = new HttpRequest(in);
             HttpResponse response = new HttpResponse(out);
 
-            if (request.getCookies().getCookie("JSESSIONID") == null) {
-                response.addHeader("Set-Cookie", "JSESSIONID=" + UUID.randomUUID());
+            if (request.getCookies().getCookie(HttpSession.SESSION_ID) == null) {
+                response.addHeader("Set-Cookie", HttpSession.SESSION_ID + "=" + UUID.randomUUID());
             }
 
             Controller controller = RequestMapping.getController(request.getPath());
