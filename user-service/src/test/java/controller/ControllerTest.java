@@ -5,6 +5,7 @@ import http.message.HttpRequestMessage;
 import http.message.HttpResponseMessage;
 import http.request.HttpUri;
 import model.User;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,8 +14,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class ControllerTest {
     private static final String NEW_LINE = System.lineSeparator();
@@ -38,7 +37,7 @@ class ControllerTest {
                 "Location: /index.html" + NEW_LINE +
                 NEW_LINE;
 
-        assertThat(actualMessage).isEqualTo(expectedMessage);
+        Assertions.assertThat(actualMessage).isEqualTo(expectedMessage);
     }
 
     @DisplayName("HTTP Request가 존재하는 resource 요청일 때 알맞은 응답 메세지를 생성")
@@ -50,10 +49,10 @@ class ControllerTest {
 
         String expectedMessage = "HTTP/1.1 200 OK" + NEW_LINE +
                 "Content-Type: text/css;charset=utf-8" + NEW_LINE +
-                "Content-Length: 7065" + NEW_LINE +
+                "Content-Length: 8421" + NEW_LINE +
                 NEW_LINE;
 
-        assertThat(actualMessage).contains(expectedMessage);
+        Assertions.assertThat(actualMessage).contains(expectedMessage);
     }
 
     @DisplayName("HTTP Request가 존재하지 않는 resource 요청일 때 알맞은 응답 메세지를 생성")
@@ -69,7 +68,7 @@ class ControllerTest {
                 "Content-Length: 1365" + NEW_LINE +
                 NEW_LINE;
 
-        assertThat(actualMessage).contains(expectedMessage);
+        Assertions.assertThat(actualMessage).contains(expectedMessage);
     }
 
     @DisplayName("회원이 로그인을 하면 알맞은 응답 메세지를 생성")
@@ -85,7 +84,7 @@ class ControllerTest {
         String expectedCookieValue = "logined=true;Path=/";
         String expectedLocationHeaderValue = "Location: /index.html";
 
-        assertThat(actualMessage)
+        Assertions.assertThat(actualMessage)
                 .contains(expectedStatusLine, expectedCookieHeader, expectedCookieValue, expectedLocationHeaderValue);
     }
 
@@ -100,7 +99,7 @@ class ControllerTest {
                 "Location: /user/login_failed.html" + NEW_LINE +
                 NEW_LINE;
 
-        assertThat(actualMessage).isEqualTo(expectedMessage);
+        Assertions.assertThat(actualMessage).isEqualTo(expectedMessage);
     }
 
     private HttpRequestMessage createHttpRequestMessage(String pathName) throws IOException {

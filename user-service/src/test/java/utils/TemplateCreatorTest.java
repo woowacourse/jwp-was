@@ -3,13 +3,12 @@ package utils;
 import db.DataBase;
 import model.User;
 import model.Users;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class TemplateCreatorTest {
     private static final Logger log = LoggerFactory.getLogger(TemplateCreator.class);
@@ -30,6 +29,6 @@ class TemplateCreatorTest {
 
         log.debug("UserListPage : {}", template);
 
-        assertThat(template).contains(userId, name, email);
+        Assertions.assertThat(template).contains(userId, name, email);
     }
 }
