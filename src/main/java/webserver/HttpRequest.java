@@ -2,6 +2,7 @@ package webserver;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -10,7 +11,7 @@ import utils.RequestUtils;
 
 public class HttpRequest {
     public static final String EMPTY = "";
-    public static final String REGEX = ":";
+    public static final String COLON = ":";
     public static final int KEY_INDEX = 0;
     public static final String QUERY_REGEX = "\\?";
     public static final String EQUALS = "=";
@@ -52,7 +53,7 @@ public class HttpRequest {
     private void createHeader(BufferedReader br) throws IOException {
         String line = br.readLine();
         while (!EMPTY.equals(line) && line != null) {
-            String key = line.split(REGEX)[KEY_INDEX];
+            String key = line.split(COLON)[KEY_INDEX];
             String value = line.substring(key.length() + 2);
             header.put(key, value);
             line = br.readLine();
@@ -65,6 +66,14 @@ public class HttpRequest {
             return RequestUtils.extractParameter(body);
         }
         return new TreeMap<>();
+    }
+
+    public String getSessionId() {
+        String cookie = header.get(HttpHeader.COOKIE);
+        if (cookie == null) {
+            return null;
+        }
+        return RequestUtils.extractSessionId(cookie);
     }
 
     public boolean isGet() {
@@ -81,6 +90,15 @@ public class HttpRequest {
 
     public boolean isDelete() {
         return httpMethod.isDelete();
+    }
+
+    public boolean containsAll(String... keys) {
+        return parameter.keySet()
+            .containsAll(Arrays.asList(keys.clone()));
+    }
+
+    public boolean containsParameter(String key) {
+        return parameter.containsKey(key);
     }
 
     public String getHeader(String key) {

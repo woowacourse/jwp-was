@@ -14,6 +14,7 @@ public class RequestUtils {
     public static final String AND_REGEX = "&";
     public static final String EQUALS_REGEX = "=";
     public static final String EXTENSION_REGEX = "\\.";
+    public static final String SEMICOLON = ";";
 
     public static String extractMethod(String header) {
         return header.split(SPACE_REGEX)[METHOD_TYPE_INDEX];
@@ -38,5 +39,14 @@ public class RequestUtils {
         return Arrays.stream(parameters)
             .map(parameter -> parameter.split(EQUALS_REGEX))
             .collect(Collectors.toMap(strings -> strings[0], strings -> strings[1], (k, v) -> v, TreeMap::new));
+    }
+
+    public static String extractSessionId(String cookie) {
+        String[] split = cookie.split(SEMICOLON);
+        return Arrays.stream(split)
+            .map(str -> str.split(EQUALS_REGEX))
+            .filter(strings -> "SESSIONID".equals(strings[0].trim()))
+            .findFirst()
+            .orElseGet(() -> new String[] {"", null})[1];
     }
 }

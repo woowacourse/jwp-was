@@ -8,29 +8,24 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import controller.Controller;
-import controller.FileController;
-import domain.user.web.UserCreateController;
-import domain.user.web.UserReadController;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private final Socket connection;
+    private final Context context;
     private final Map<String, Controller> controllers;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
-        controllers = new HashMap<>();
-        controllers.put("FILE", new FileController());
-        controllers.put("/user/create", new UserCreateController());
-        controllers.put("/user/profile", new UserReadController());
+        this.context = Context.getInstance();
+        controllers = context.createControllerBifurcation();
     }
 
     public void run() {
@@ -41,10 +36,8 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             HttpRequest httpRequest = new HttpRequest(br);
             printHeader(httpRequest);
-            if (httpRequest.isPost()) {
-                printParameter(httpRequest);
-            }
-            Controller controller = controllers.getOrDefault(httpRequest.getPath(), controllers.get("FILE"));
+            printParameter(httpRequest);
+            Controller controller = controllers.getOrDefault(httpRequest.getPath(), controllers.get("file"));
             controller.service(httpRequest, new HttpResponse(out));
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());

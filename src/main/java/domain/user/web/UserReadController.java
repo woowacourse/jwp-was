@@ -13,21 +13,35 @@ import webserver.HttpResponse;
 import webserver.HttpStatus;
 
 public class UserReadController extends AbstractController {
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private final UserService userService;
+    private final ObjectMapper objectMapper;
+
+    public UserReadController(UserService userService, ObjectMapper objectMapper) {
+        this.userService = userService;
+        this.objectMapper = objectMapper;
+    }
 
     @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
-        User user = UserService.findById(httpRequest.getParameter(User.USER_ID));
+        User user = userService.findByUserId(httpRequest.getParameter(User.USER_ID));
         if (user == null) {
-            httpResponse.setHttpStatus(HttpStatus.UNAUTHORIZED);
+            validateParameter(httpRequest, httpResponse);
             httpResponse.error();
+            return;
         }
-        if (user != null) {
-            byte[] body = objectMapper.writeValueAsBytes(user);
-            httpResponse.setHttpStatus(HttpStatus.OK);
-            httpResponse.addHeader(HttpHeader.CONTENT_TYPE, "application/json;charset=utf-8");
-            httpResponse.addHeader(HttpHeader.CONTENT_LENGTH, String.valueOf(body.length));
-            httpResponse.forward(body);
+        byte[] body = objectMapper.writeValueAsBytes(user);
+        httpResponse.setHttpStatus(HttpStatus.OK);
+        httpResponse.addHeader(HttpHeader.CONTENT_TYPE, "application/json;charset=UTF-8");
+        httpResponse.addHeader(HttpHeader.CONTENT_LENGTH, String.valueOf(body.length));
+        httpResponse.forward(body);
+    }
+
+    private void validateParameter(HttpRequest httpRequest, HttpResponse httpResponse) {
+        if (!httpRequest.containsParameter(User.USER_ID)) {
+            httpResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
+        }
+        if (httpRequest.containsParameter(User.USER_ID)) {
+            httpResponse.setHttpStatus(HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 }

@@ -9,8 +9,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class HttpRequestTest {
     @Test
@@ -69,6 +73,67 @@ class HttpRequestTest {
             () -> assertThat(httpRequest.getHeader("Connection")).isEqualTo("keep-alive"),
             () -> assertThat(httpRequest.getParameter("id")).isEqualTo("1"),
             () -> assertThat(httpRequest.getParameter("userId")).isEqualTo("javajigi")
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideParameterAndAnswer")
+    void containsParameter(String parameter, boolean result) throws IOException {
+        String request = "POST /user/create?id=1 HTTP/1.1\n"
+            + "Host: localhost:8080\n"
+            + "Connection: keep-alive\n"
+            + "Content-Length: 46\n"
+            + "Content-Type: application/x-www-form-urlencoded\n"
+            + "Accept: */*\n\n"
+            + "userId=javajigi&password=password&name=JaeSung";
+        InputStream in = new ByteArrayInputStream(request.getBytes());
+        BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+        HttpRequest httpRequest = new HttpRequest(br);
+
+        assertThat(httpRequest.containsParameter(parameter)).isEqualTo(result);
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideParametersAndAnswer")
+    void containsAll(String[] parameters, boolean result) throws IOException {
+        String request = "POST /user/create?id=1 HTTP/1.1\n"
+            + "Host: localhost:8080\n"
+            + "Connection: keep-alive\n"
+            + "Content-Length: 46\n"
+            + "Content-Type: application/x-www-form-urlencoded\n"
+            + "Accept: */*\n\n"
+            + "userId=javajigi&password=password&name=JaeSung";
+        InputStream in = new ByteArrayInputStream(request.getBytes());
+        BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+        HttpRequest httpRequest = new HttpRequest(br);
+
+        assertThat(httpRequest.containsAll(parameters)).isEqualTo(result);
+    }
+
+    @Test
+    void extractSessionId() throws IOException {
+        String request = "GET /user/create?id=1 HTTP/1.1\n"
+            + "Host: localhost:8080\n"
+            + "Connection: keep-alive\n"
+            + "Cookie: SESSIONID=aaa";
+        InputStream in = new ByteArrayInputStream(request.getBytes());
+        BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+        HttpRequest httpRequest = new HttpRequest(br);
+
+        assertThat(httpRequest.getSessionId()).isEqualTo("aaa");
+    }
+
+    private static Stream<Arguments> provideParameterAndAnswer() {
+        return Stream.of(
+            Arguments.of("userId", true),
+            Arguments.of("email", false)
+        );
+    }
+
+    private static Stream<Arguments> provideParametersAndAnswer() {
+        return Stream.of(
+            Arguments.of(new String[] {"userId", "password", "name"}, true),
+            Arguments.of(new String[] {"userId", "password", "name", "email"}, false)
         );
     }
 }

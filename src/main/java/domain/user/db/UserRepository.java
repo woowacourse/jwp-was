@@ -14,11 +14,15 @@ public class UserRepository {
         users.put(user.getUserId(), user);
     }
 
-    public static User findUserById(String userId) {
+    public static User findByUserId(String userId) {
         return users.get(userId);
     }
 
     public static Collection<User> findAll() {
         return users.values();
+    }
+
+    public static void clear() {
+        users.clear();
     }
 }
