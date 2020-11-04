@@ -17,4 +17,5 @@
     - [x] void invalidate() : 현재 세션에 저장되어 있는 모든 값을 삭제
 - [x] 세션의 고유 아이디는 JDK에서 제공하는 UUID 클래스를 사용해 고유한 아이디를 활용한다.
     - [x] 세션 관리를 위한 자료구조는 Map을 사용하며, Map<String, HttpSession>와 같은 구조가 된다. 이 때, 키는 UUID이다.
-- [ ] service application과 server/servlet부분을 멀티 모듈로 분리한다.
+- [x] service application과 server/servlet부분을 멀티 모듈로 분리한다.
+    - [x] web-server, web-common, service-app 세개의 모듈로 분리

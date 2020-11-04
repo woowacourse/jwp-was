@@ -1,0 +1,11 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+    }
+}
+
+rootProject.name = 'jwp-was'
+
+include 'web-server'
+include 'web-common'
+include 'service-app'
