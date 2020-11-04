@@ -11,6 +11,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.springframework:spring-core:5.2.6.RELEASE'
     testCompile group: 'junit', name: 'junit', version: '4.12'
     implementation 'ch.qos.logback:logback-classic:1.2.3'
     implementation 'com.github.jknack:handlebars:4.2.0'
