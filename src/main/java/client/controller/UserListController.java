@@ -6,28 +6,32 @@ import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import db.DataBase;
 import model.Users;
+import web.HttpSession;
 import web.controller.Controller;
 import web.request.HttpRequest;
 import web.response.HttpResponse;
 import web.response.HttpStatusCode;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class UserListController implements Controller {
 
     @Override
     public void doService(HttpRequest httpRequest, HttpResponse httpResponse) {
-        String logined = httpRequest.getCookies().get("logined");
+        HttpSession httpSession = httpRequest.getSession();
+        boolean logined = (boolean) Optional.ofNullable(httpSession.getAttribute("logined"))
+                .orElse(false);
 
-        if ("true".equals(logined)) {
-            String profilePage = foo("user/profile", new Users(DataBase.findAll()));
+        if (logined) {
+            String profilePage = parseTemplate("user/profile", new Users(DataBase.findAll()));
             httpResponse.response(HttpStatusCode.OK, profilePage.getBytes());
             return;
         }
         httpResponse.sendRedirect("/user/login.html");
     }
 
-    private String foo(String path, Object data) {
+    private String parseTemplate(String path, Object data) {
         TemplateLoader loader = new ClassPathTemplateLoader();
         loader.setPrefix("/templates");
         loader.setSuffix(".html");
