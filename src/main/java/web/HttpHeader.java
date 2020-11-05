@@ -1,5 +1,8 @@
 package web;
 
+import web.cookie.CookieOption;
+import web.cookie.HttpCookies;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -12,7 +15,7 @@ public class HttpHeader {
     private static final String COOKIE = "Cookie";
 
     private final Map<String, String> headers = new HashMap<>();
-    private final HttpCookie httpCookie;
+    private final HttpCookies httpCookies;
 
     public static HttpHeader ofResponse() {
         return new HttpHeader();
@@ -23,7 +26,7 @@ public class HttpHeader {
     }
 
     private HttpHeader() {
-        httpCookie = new HttpCookie();
+        httpCookies = new HttpCookies();
     }
 
     private HttpHeader(List<String> lines) {
@@ -31,7 +34,7 @@ public class HttpHeader {
             String[] tokens = line.split(TOKEN_DELIMITER);
             headers.put(tokens[0], tokens[1]);
         }
-        httpCookie = new HttpCookie(headers.get(COOKIE));
+        httpCookies = new HttpCookies(headers.get(COOKIE));
     }
 
     public Map<String, String> getHeaders() {
@@ -55,14 +58,22 @@ public class HttpHeader {
         for (Map.Entry<String, String> entry : headers.entrySet()) {
             dataOutputStream.writeBytes(entry.getKey() + TOKEN_DELIMITER + entry.getValue() + NEW_LINE);
         }
-        dataOutputStream.writeBytes(httpCookie.convertToResponse() + NEW_LINE);
+        dataOutputStream.writeBytes(httpCookies.convertToResponse() + NEW_LINE);
     }
 
     public void addCookie(String key, String value) {
-        this.httpCookie.addCookie(key, value);
+        this.httpCookies.add(key, value);
     }
 
-    public Map<String, String> getCookies() {
-        return this.httpCookie.getCookies();
+    public void addCookie(String key, String value, CookieOption cookieOption) {
+        this.httpCookies.add(key, value, cookieOption);
+    }
+
+    public void addCookie(String key, String value, CookieOption cookieOption, String optionValue) {
+        this.httpCookies.add(key, value, cookieOption, optionValue);
+    }
+
+    public HttpCookies getCookies() {
+        return this.httpCookies;
     }
 }

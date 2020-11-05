@@ -3,7 +3,13 @@ package web;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -60,24 +66,4 @@ class HttpHeaderTest {
         assertThat(headers).contains("Content-type: text/html");
     }
 
-    @DisplayName("쿠키 헤더가 없을 경우 쿠키 값을 추가한다.")
-    @Test
-    void addCookieTest1() {
-        HttpHeader httpHeader = HttpHeader.ofResponse();
-
-        httpHeader.addCookie("logined", "true");
-
-        assertThat(httpHeader.get("Set-Cookie")).isEqualTo("logined=true");
-    }
-
-    @DisplayName("쿠키 헤더가 있을 경우 기존 쿠키 값에 이어 붙인다.")
-    @Test
-    void addCookieTest2() {
-        HttpHeader httpHeader = HttpHeader.ofResponse();
-        httpHeader.addCookie("logined", "true");
-
-        httpHeader.addCookie("session", "123");
-
-        assertThat(httpHeader.get("Set-Cookie")).isEqualTo("logined=true; session=123");
-    }
 }
