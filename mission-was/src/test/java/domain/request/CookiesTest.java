@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import exception.CookieNotFoundException;
 import servlet.Cookie;
 
 class CookiesTest {
@@ -26,7 +25,7 @@ class CookiesTest {
     @Test
     void findCookie() {
         Cookies cookies = Cookies.from("foo=bar; foo2=bar2; foo3=bar3");
-        Cookie cookie = cookies.findCookie("foo");
+        Cookie cookie = cookies.findCookie("foo").get();
 
         assertAll(
             () -> assertThat(cookie.getKey()).isEqualTo("foo"),
@@ -34,20 +33,11 @@ class CookiesTest {
         );
     }
 
-    @DisplayName("존재하지 않는 쿠키를 꺼내면 예외가 발생한다.")
-    @Test
-    void name() {
-        Cookies cookies = Cookies.from("foo=bar; foo2=bar2; foo3=bar3");
-        assertThatThrownBy(
-            () -> cookies.findCookie("pobi")
-        ).isInstanceOf(CookieNotFoundException.class);
-    }
-
     @DisplayName("등록된 쿠키를 검색한다.")
     @Test
     void testFindCookie() {
         Cookies cookies = Cookies.from("foo=bar; foo2=bar2; foo3=bar3");
-        Cookie cookie = cookies.findCookie("foo");
+        Cookie cookie = cookies.findCookie("foo").get();
         assertAll(
             () -> assertThat(cookie.getKey()).isEqualTo("foo"),
             () -> assertThat(cookie.getValue()).isEqualTo("bar")
@@ -61,7 +51,7 @@ class CookiesTest {
 
         assertAll(
             () -> assertThat(cookies.getCookies()).hasSize(1),
-            () -> assertThat(cookies.findCookie("foo").getValue()).isEqualTo("bar3")
+            () -> assertThat(cookies.findCookie("foo").get().getValue()).isEqualTo("bar3")
         );
     }
 }

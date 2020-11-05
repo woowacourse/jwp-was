@@ -3,7 +3,6 @@ package domain.request;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-import exception.CookieNotFoundException;
 import servlet.Cookie;
 import servlet.HttpRequest;
 import servlet.HttpSession;
@@ -85,11 +84,12 @@ public class HttpServletRequest implements HttpRequest {
     @Override
     public HttpSession getSession() {
         HttpSessionStorage httpSessionStorage = HttpSessionStorage.getInstance();
-        try {
-            Cookie cookie = cookies.findCookie(JSSESION_ID);
-            return httpSessionStorage.getSession(cookie.getValue());
-        } catch (CookieNotFoundException e) {
-            return httpSessionStorage.getSession(EMPTY_STRING);
-        }
+
+        String sessionKey = cookies.findCookie(JSSESION_ID)
+            .map(Cookie::getValue)
+            .orElse(EMPTY_STRING);
+
+        return httpSessionStorage.getSession(sessionKey);
     }
 }
+

@@ -3,8 +3,8 @@ package domain.request;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
-import exception.CookieNotFoundException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -34,10 +34,8 @@ public class Cookies {
         return new Cookies(cookieMap);
     }
 
-    public Cookie findCookie(String key) {
-        if (cookies.containsKey(key)) {
-            return cookies.get(key);
-        }
-        throw new CookieNotFoundException(key);
+    public Optional<Cookie> findCookie(String key) {
+        return Optional.ofNullable(cookies.get(key));
+
     }
 }
