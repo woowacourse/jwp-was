@@ -1,8 +1,5 @@
 package domain.request;
 
-import static java.util.stream.Collectors.*;
-
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -28,10 +25,11 @@ public class Cookies {
             return EMPTY_COOKIES;
         }
 
-        Map<String, Cookie> cookieMap = Arrays.stream(cookies.split(COOKIES_DELIMITER))
-            .map(String::trim)
-            .map(Cookie::parseCookie)
-            .collect(toMap(Cookie::getKey, value -> value));
+        Map<String, Cookie> cookieMap = new HashMap<>();
+        for (String cookie : cookies.split(COOKIES_DELIMITER)) {
+            Cookie parsedCookie = Cookie.parseCookie(cookie.trim());
+            cookieMap.put(parsedCookie.getKey(), parsedCookie);
+        }
 
         return new Cookies(cookieMap);
     }

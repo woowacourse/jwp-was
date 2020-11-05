@@ -43,7 +43,25 @@ class CookiesTest {
         ).isInstanceOf(CookieNotFoundException.class);
     }
 
+    @DisplayName("등록된 쿠키를 검색한다.")
     @Test
     void testFindCookie() {
+        Cookies cookies = Cookies.from("foo=bar; foo2=bar2; foo3=bar3");
+        Cookie cookie = cookies.findCookie("foo");
+        assertAll(
+            () -> assertThat(cookie.getKey()).isEqualTo("foo"),
+            () -> assertThat(cookie.getValue()).isEqualTo("bar")
+        );
+    }
+
+    @DisplayName("중복된 쿠키이름은 마지막 쿠키만 허용한다.")
+    @Test
+    void testFrom() {
+        Cookies cookies = Cookies.from("foo=bar; foo=bar2; foo=bar3");
+
+        assertAll(
+            () -> assertThat(cookies.getCookies()).hasSize(1),
+            () -> assertThat(cookies.findCookie("foo").getValue()).isEqualTo("bar3")
+        );
     }
 }
