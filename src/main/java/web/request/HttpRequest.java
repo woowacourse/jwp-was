@@ -2,6 +2,8 @@ package web.request;
 
 import utils.IOUtils;
 import web.HttpHeader;
+import web.HttpSession;
+import web.HttpSessions;
 import web.cookie.HttpCookies;
 
 import java.io.BufferedReader;
@@ -50,5 +52,9 @@ public class HttpRequest {
 
     public HttpCookies getCookies() {
         return this.httpHeader.getCookies();
+    }
+
+    public HttpSession getSession() {
+        return HttpSessions.get(httpHeader.getCookies().get("JSESSIONID"));
     }
 }
