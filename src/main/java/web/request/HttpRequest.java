@@ -2,10 +2,10 @@ package web.request;
 
 import utils.IOUtils;
 import web.HttpHeader;
+import web.cookie.HttpCookies;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Map;
 
 public class HttpRequest {
     private final RequestUri requestUri;
@@ -48,7 +48,7 @@ public class HttpRequest {
         return httpHeader;
     }
 
-    public Map<String, String> getCookies() {
+    public HttpCookies getCookies() {
         return this.httpHeader.getCookies();
     }
 }

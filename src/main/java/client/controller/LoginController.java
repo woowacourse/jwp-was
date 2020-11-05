@@ -3,6 +3,7 @@ package client.controller;
 import db.DataBase;
 import model.User;
 import web.controller.Controller;
+import web.cookie.CookieOption;
 import web.request.HttpRequest;
 import web.response.HttpResponse;
 
@@ -19,7 +20,8 @@ public class LoginController implements Controller {
                 .orElseThrow(() -> new IllegalArgumentException(String.format("%s: 존재하지 않는 사용자입니다.", userId)));
         boolean logined = findUser.hasSamePassword(password);
 
-        httpResponse.addCookie("logined", String.valueOf(logined));
+        httpResponse.getCookies()
+                .add("logined", String.valueOf(logined), CookieOption.PATH, "/");
         if (logined) {
             httpResponse.sendRedirect("/index.html");
             return;
