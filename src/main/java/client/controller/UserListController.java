@@ -24,7 +24,7 @@ public class UserListController implements Controller {
             httpResponse.response(HttpStatusCode.OK, profilePage.getBytes());
             return;
         }
-        httpResponse.sendRedirect("/index.html");
+        httpResponse.sendRedirect("/user/login.html");
     }
 
     private String foo(String path, Object data) {
