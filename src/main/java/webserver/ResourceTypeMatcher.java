@@ -19,9 +19,9 @@ public enum ResourceTypeMatcher {
 		this.contentType = contentType;
 	}
 
-	public static ResourceTypeMatcher findContentType(String path) {
+	public static ResourceTypeMatcher findContentType(String url) {
 		return Arrays.stream(values())
-			.filter(type -> path.endsWith(type.fileType))
+			.filter(type -> url.endsWith(type.fileType))
 			.findFirst()
 			.orElseThrow(() -> new IllegalArgumentException("지원하지 않는 파일 타입입니다."));
 	}
@@ -30,9 +30,9 @@ public enum ResourceTypeMatcher {
 		return this.filePath + path;
 	}
 
-	public static boolean isContainType(String path) {
+	public static boolean isContainType(String url) {
 		return Arrays.stream(values())
-			.anyMatch(type -> path.endsWith(type.fileType));
+			.anyMatch(type -> url.endsWith(type.fileType));
 	}
 
 	public String getContentType() {

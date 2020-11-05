@@ -11,9 +11,9 @@ public class HandlerStorage {
 		handlers.add(new StaticResourceHandler());
 	}
 
-	public static Handler findHandler(String path) {
+	public static Handler findHandler(String url) {
 		return handlers.stream()
-			.filter(handler -> handler.canHandle(path))
+			.filter(handler -> handler.canHandle(url))
 			.findFirst()
 			.orElseThrow(() -> new IllegalArgumentException("지원하지 않는 요청입니다."));
 	}

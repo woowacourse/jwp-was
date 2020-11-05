@@ -11,8 +11,7 @@ import webserver.ResourceTypeMatcher;
 
 public class StaticResourceHandler extends Handler {
 	@Override
-	public void handleRequest(HttpRequest httpRequest, DataOutputStream dos) throws
-		IOException, URISyntaxException {
+	public void handleRequest(HttpRequest httpRequest, DataOutputStream dos) throws IOException, URISyntaxException {
 		ResourceTypeMatcher fileType = ResourceTypeMatcher.findContentType(httpRequest.getUrl());
 		byte[] body = FileIoUtils.loadFileFromClasspath(fileType.parseFilePath(httpRequest.getUrl()));
 
@@ -30,7 +29,7 @@ public class StaticResourceHandler extends Handler {
 	}
 
 	@Override
-	public boolean canHandle(String path) {
-		return ResourceTypeMatcher.isContainType(path);
+	public boolean canHandle(String url) {
+		return ResourceTypeMatcher.isContainType(url);
 	}
 }

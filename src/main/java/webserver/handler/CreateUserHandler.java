@@ -23,7 +23,7 @@ public class CreateUserHandler extends Handler {
 	}
 
 	@Override
-	public boolean canHandle(String path) {
-		return path.equals(USER_CREATE_URL);
+	public boolean canHandle(String url) {
+		return url.equals(USER_CREATE_URL);
 	}
 }
