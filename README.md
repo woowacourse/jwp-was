@@ -43,8 +43,8 @@
 
 #### 요구사항 2
 - [ ] http://localhost:8080/user/list로 접근했을 때
-    - [ ] 로그인 상태이면 사용자 목록을 출력한다.
-    - [ ] 로그인하지 않은 상태이면 로그인 페이지(login.html)로 이동한다.
+    - [ ] 로그인 상태(`Cookie: logined=true`)이면 사용자 목록을 출력한다.
+    - [x] 로그인하지 않은 상태이면 로그인 페이지(login.html)로 이동한다.
     
 #### 요구사항 3
 - [ ] HttpSession API 중 getId(), setAttribute(String name, Object value), getAttribute(String name), removeAttribute(String name), invalidate() 를 구현한다.

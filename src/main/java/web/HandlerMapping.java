@@ -3,6 +3,7 @@ package web;
 import client.controller.LoginController;
 import client.controller.ResourceController;
 import client.controller.UserCreateController;
+import client.controller.UserListController;
 import utils.ResourcePathExtractor;
 import web.controller.Controller;
 import web.request.HttpMethod;
@@ -21,6 +22,7 @@ public class HandlerMapping {
     static {
         handlerMapping.put(new RequestMapping("/user/create", HttpMethod.POST), new UserCreateController());
         handlerMapping.put(new RequestMapping("/user/login", HttpMethod.POST), new LoginController());
+        handlerMapping.put(new RequestMapping("/user/list", HttpMethod.GET), new UserListController());
 
         initResourceMapping();
     }
