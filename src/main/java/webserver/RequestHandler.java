@@ -4,16 +4,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import web.HandlerMapping;
 import web.HttpHeader;
+import web.controller.Controller;
+import web.cookie.CookieOption;
 import web.request.HttpRequest;
 import web.response.HttpResponse;
-import web.controller.Controller;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
 
 public class RequestHandler implements Runnable {
@@ -36,6 +32,7 @@ public class RequestHandler implements Runnable {
 
             HttpRequest httpRequest = new HttpRequest(br);
             HttpResponse httpResponse = new HttpResponse(dos, HttpHeader.ofResponse());
+            httpResponse.getCookies().add("JSESSIONID", httpRequest.getSession().getId(), CookieOption.PATH, "/");
 
             Controller controller = HandlerMapping.find(httpRequest);
             controller.doService(httpRequest, httpResponse);
