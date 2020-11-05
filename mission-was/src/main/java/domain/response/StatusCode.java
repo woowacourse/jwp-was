@@ -8,7 +8,7 @@ import lombok.Getter;
 
 @Getter
 public enum StatusCode {
-    OK("OK", 200, Arrays.asList("Content-Type", "Content-Length")),
+    OK("OK", 200, Collections.emptyList()),
     FOUND("Found", 302, Arrays.asList("Location")),
     NOT_FOUND("Not Found", 404, Collections.emptyList()),
     METHOD_NOT_ALLOWED("Method Not Allowed", 405, Collections.emptyList());

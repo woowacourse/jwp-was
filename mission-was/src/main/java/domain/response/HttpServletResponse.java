@@ -31,12 +31,26 @@ public class HttpServletResponse implements HttpResponse {
     private void responseHeader(StatusCode statusCode) {
         try {
             this.dataOutputStream.writeBytes(createResponseLine(statusCode));
+            this.dataOutputStream.writeBytes(createContent());
             this.dataOutputStream.writeBytes(createResponse(statusCode));
             writeCookies();
             this.dataOutputStream.writeBytes(NEW_LINE);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private String createContent() {
+        StringBuilder stringBuffer = new StringBuilder();
+        if (hasContent()) {
+            stringBuffer.append("Content-Type:").append(headerParams.get("Content-Type")).append(NEW_LINE);
+            stringBuffer.append("Content-Length:").append(headerParams.get("Content-Length")).append(NEW_LINE);
+        }
+        return stringBuffer.toString();
+    }
+
+    private boolean hasContent() {
+        return headerParams.containsKey("Content-Type");
     }
 
     private String createResponseLine(StatusCode statusCode) {
