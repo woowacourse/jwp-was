@@ -8,7 +8,7 @@ import java.util.UUID;
 public class HttpSessions {
     private static final Map<String, HttpSession> httpSessions = new HashMap<>();
 
-    public HttpSession get(String id) {
+    public static HttpSession get(String id) {
         if (Objects.isNull(id)) {
             id = UUID.randomUUID().toString();
         }
