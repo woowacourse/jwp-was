@@ -2,7 +2,7 @@ package servlet;
 
 public interface HttpSession {
 
-    public String getId();
+    String getId();
 
     void setAttribute(String name, Object value);
 
