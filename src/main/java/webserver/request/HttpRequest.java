@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import utils.StringUtils;
 import webserver.Cookie;
@@ -87,13 +86,9 @@ public class HttpRequest {
 
     public HttpSession getSession() {
         Cookies cookies = new Cookies(getCookies());
-        Optional<Cookie> sessionCookie = cookies.getCookie(DEFAULT_SESSION_ID);
 
-        if (sessionCookie.isPresent()) {
-            String sessionId = sessionCookie.get().getValue();
-            return HttpSessions.getHttpSession(sessionId);
-        }
-        String randomUUID = UUID.randomUUID().toString();
-        return HttpSessions.createHttpSession(randomUUID);
+        return cookies.getCookie(DEFAULT_SESSION_ID)
+            .map(cookie -> HttpSessions.getHttpSession(cookie.getValue()))
+            .orElse(HttpSessions.createHttpSession(UUID.randomUUID().toString()));
     }
 }
