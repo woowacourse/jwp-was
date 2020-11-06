@@ -5,11 +5,11 @@ import application.model.User;
 import http.HttpRequest;
 import http.HttpResponse;
 import http.HttpStatus;
-import webserver.Servlet;
+import webserver.HttpServlet;
 
 import java.util.Map;
 
-public class UserServlet extends Servlet {
+public class UserServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpRequest request, HttpResponse response) {

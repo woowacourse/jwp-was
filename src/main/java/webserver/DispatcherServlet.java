@@ -10,11 +10,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class DispatcherServlet {
-    public static final String GET = "GET";
-    public static final String POST = "POST";
-    public static final String PUT = "PUT";
-    public static final String DELETE = "DELETE";
-
     private final HandlerMapping handlerMapping;
 
     public DispatcherServlet(HandlerMapping handlerMapping) {
@@ -26,16 +21,7 @@ public class DispatcherServlet {
             handleStaticFileRequest(request, response);
         } else {
             Servlet servlet = handlerMapping.findServlet(request.getPath());
-            switch (request.getMethod()) {
-                case GET:
-                    servlet.doGet(request, response);
-                case POST:
-                    servlet.doPost(request, response);
-                case PUT:
-                    servlet.doPut(request, response);
-                case DELETE:
-                    servlet.doDelete(request, response);
-            }
+            servlet.service(request, response);
         }
     }
 

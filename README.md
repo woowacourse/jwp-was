@@ -10,7 +10,7 @@
   - [x] 사용자로부터 전달 받은(Query String, Request Body) 정보에 중복 key 값이 있는 경우 처리
   - [x] 변수의 타입 인터페이스로 수정하기
   - [x] HTTP 메서드를 상수로 관리하기
-  - [ ] API 요청을 처리하는 부분에 대한 확장 고려하기 - doGet(request), doPost(request) 등을 갖는 interface를 구현 등
+  - [x] API 요청을 처리하는 부분에 대한 확장 고려하기 - doGet(request), doPost(request) 등을 갖는 interface를 구현 등
   - [x] 404, 405 등에 대한 처리 로직 구현하기
   - [x] equals()로 비교하는 문자열의 순서를 바꾸어서 NPE 방지하기
   - [x] Map으로 관리하는 query Params 를 일급 컬렉션으로 수정하기
@@ -18,7 +18,7 @@
   - [x] 다수의 사용자 요청에 대해 Queue 에 저장한 후 순차적으로 처리가 가능하도록 해야 한다.
   - [x] 서버가 모든 요청에 대해 Thread를 매번 생성하는 경우 성능상 문제가 발생할 수 있다. Thread Pool을 적용해 일정 수의 사용자 동시에 처리가 가능하도록 한다.(java.util.concurrent.Executors에서 제공하는 api 활용)
 ##### 3. HTTP 요청/응답 처리 기능
-  - [ ] HTTP 요청 Header/Body 처리, 응답 Header/Body 처리만을 담당하는 역할을 분리해 재사용 가능하도록 한다.      
+  - [x] HTTP 요청 Header/Body 처리, 응답 Header/Body 처리만을 담당하는 역할을 분리해 재사용 가능하도록 한다.      
 
 
 ## 1단계 - HTTP 웹 서버 구현
