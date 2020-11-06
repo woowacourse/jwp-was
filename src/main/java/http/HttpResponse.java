@@ -5,23 +5,20 @@ import org.slf4j.LoggerFactory;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
-    private static final String NEW_LINE = System.lineSeparator();
+    public static final String NEW_LINE = System.lineSeparator();
 
     private final DataOutputStream dos;
-    private final Map<String, String> headers = new HashMap<>();
+    private final ResponseHeader responseHeader = new ResponseHeader();
 
     public HttpResponse(DataOutputStream dos) {
         this.dos = dos;
     }
 
     public void addHeader(String key, String value) {
-        this.headers.put(key, value);
+        this.responseHeader.addHeader(key, value);
     }
 
     public void response(HttpStatus status) {
@@ -44,13 +41,11 @@ public class HttpResponse {
     }
 
     public void responseHeader() {
-        Set<String> keys = this.headers.keySet();
-        for (String key : keys) {
-            try {
-                dos.writeBytes(key + ": " + this.headers.get(key) + NEW_LINE);
-            } catch (IOException e) {
-                logger.error(e.getMessage());
-            }
+        String headers = this.responseHeader.readHeaders();
+        try {
+            dos.writeBytes(headers);
+        } catch (IOException e) {
+            logger.error(e.getMessage());
         }
     }
 
