@@ -26,7 +26,10 @@ public class HttpResponse {
         responseHeader();
     }
 
-    public void response(HttpStatus status, byte[] body) {
+    public void response(HttpStatus status, ResourceType resourceType, byte[] body) {
+        responseHeader.addHeader("Content-Length", String.valueOf(body.length));
+        responseHeader.addHeader("Content-Type", resourceType.getContentType());
+
         responseStatusLine(status);
         responseHeader();
         responseBody(body);
@@ -51,6 +54,7 @@ public class HttpResponse {
 
     private void responseBody(byte[] body) {
         try {
+            dos.writeBytes(NEW_LINE);
             dos.write(body, 0, body.length);
             dos.flush();
         } catch (IOException e) {

@@ -32,8 +32,6 @@ public class DispatcherServlet {
 
         byte[] staticFile = FileIoUtils.loadFileFromClasspath(filePath);
 
-        httpResponse.addHeader("Content-Type", resourceType.getContentType());
-        httpResponse.addHeader("Content-Length", String.valueOf(staticFile.length));
-        httpResponse.response(HttpStatus.OK, staticFile);
+        httpResponse.response(HttpStatus.OK, resourceType, staticFile);
     }
 }
