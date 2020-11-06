@@ -32,7 +32,7 @@ public class HttpResponse {
         responseBody(body);
     }
 
-    public void responseStatusLine(HttpStatus status) {
+    private void responseStatusLine(HttpStatus status) {
         try {
             dos.writeBytes("HTTP/1.1 " + status.getValue() + " " + status.getReasonPhrase() + NEW_LINE);
         } catch (IOException e) {
@@ -40,7 +40,7 @@ public class HttpResponse {
         }
     }
 
-    public void responseHeader() {
+    private void responseHeader() {
         String headers = this.responseHeader.readHeaders();
         try {
             dos.writeBytes(headers);
@@ -49,7 +49,7 @@ public class HttpResponse {
         }
     }
 
-    public void responseBody(byte[] body) {
+    private void responseBody(byte[] body) {
         try {
             dos.write(body, 0, body.length);
             dos.flush();

@@ -1,7 +1,9 @@
 package webserver;
 
+import exception.NotSupportedMethodException;
 import http.HttpRequest;
 import http.HttpResponse;
+import http.HttpStatus;
 
 public abstract class HttpServlet implements Servlet {
     private static final String GET = "GET";
@@ -23,15 +25,23 @@ public abstract class HttpServlet implements Servlet {
         }
     }
 
-    public void doGet(HttpRequest request, HttpResponse response) {
+    protected void doGet(HttpRequest request, HttpResponse response) {
+        response.response(HttpStatus.BAD_REQUEST);
+        throw new NotSupportedMethodException(GET);
     }
 
-    public void doPost(HttpRequest request, HttpResponse response) {
+    protected void doPost(HttpRequest request, HttpResponse response) {
+        response.response(HttpStatus.BAD_REQUEST);
+        throw new NotSupportedMethodException(POST);
     }
 
-    public void doPut(HttpRequest request, HttpResponse response) {
+    protected void doPut(HttpRequest request, HttpResponse response) {
+        response.response(HttpStatus.BAD_REQUEST);
+        throw new NotSupportedMethodException(PUT);
     }
 
-    public void doDelete(HttpRequest request, HttpResponse response) {
+    protected void doDelete(HttpRequest request, HttpResponse response) {
+        response.response(HttpStatus.BAD_REQUEST);
+        throw new NotSupportedMethodException(DELETE);
     }
 }
