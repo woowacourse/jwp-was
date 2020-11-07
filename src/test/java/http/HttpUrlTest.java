@@ -1,11 +1,11 @@
 package http;
 
-import static http.HTTPRequestUrl.*;
+import static http.HttpUrl.*;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-public class HTTPRequestUrlTest {
+public class HttpUrlTest {
 
     @Test
     void extractRequestUrlTest() {
@@ -16,7 +16,7 @@ public class HTTPRequestUrlTest {
     @Test
     void extractPathTest() {
         String url = "/someUrl.url";
-        HTTPRequestUrl requestUrl = new HTTPRequestUrl("/someUrl.url");
+        HttpUrl requestUrl = HttpUrl.from("/someUrl.url");
         assertThat(requestUrl.extractClassPath()).isEqualTo("./templates" + url);
     }
 }

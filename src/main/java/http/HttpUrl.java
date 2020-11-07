@@ -1,17 +1,20 @@
 package http;
 
-public class HTTPRequestUrl {
+public class HttpUrl {
     private static final String TEMPLATES_FILE_PATH = "./templates";
     public static final String DELIMITER = " ";
     private final String url;
 
-    public HTTPRequestUrl(String url) {
+    private HttpUrl(String url) {
         this.url = url;
     }
 
-    public static HTTPRequestUrl extractRequestUrl(String request) {
-        System.out.println(request);
-        return new HTTPRequestUrl(request.split(DELIMITER)[1]);
+    public static HttpUrl extractRequestUrl(String request) {
+        return new HttpUrl(request.split(DELIMITER)[1]);
+    }
+
+    public static HttpUrl from(String httpUrl) {
+        return new HttpUrl(httpUrl);
     }
 
     public String extractClassPath() {
