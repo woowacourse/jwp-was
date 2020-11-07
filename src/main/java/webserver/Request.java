@@ -39,6 +39,10 @@ public class Request {
         return builder.toString();
     }
 
+    public Method getMethod() {
+        return Method.valueOf(StringUtils.getMethod(request));
+    }
+
     public String getPath() {
         String filename = StringUtils.getFilename(request);
         if (INDEX_FILE.equals(filename)) {

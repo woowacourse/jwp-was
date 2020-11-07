@@ -16,6 +16,11 @@ public class StringUtils {
             .split(QUESTION_MARK)[0];
     }
 
+    public static String getMethod(String request) {
+        return getFirstLine(request)
+            .split(SPACE)[0];
+    }
+
     public static String getFirstLine(String request) {
         return request.split(System.lineSeparator())[0];
     }
