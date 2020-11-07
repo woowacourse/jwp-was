@@ -50,4 +50,11 @@ public class RequestTest {
         assertThat(queryParameters.get("name")).isEqualTo("jaesung");
         assertThat(queryParameters.get("email")).isEqualTo("javajigi@slipp.net");
     }
+
+    @Test
+    void getMethod() throws IOException {
+        String input = "GET /user/create?userId=javajigi&password=password&name=jaesung&email=javajigi@slipp.net HTTP/1.1";
+        Request request = new Request(new ByteArrayInputStream(input.getBytes()));
+        assertThat(request.getMethod()).isEqualTo(Method.GET);
+    }
 }
