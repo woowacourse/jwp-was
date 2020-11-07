@@ -6,10 +6,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import model.User;
 import utils.FileIoUtils;
 
 public class RequestHandler implements Runnable {
@@ -28,6 +30,17 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             Request request = new Request(in);
             logger.info(request.toString());
+            if (request.getPath().contains("/user/create")) {
+                Map<String, String> queryParameters = request.getQueryParameters();
+                User user = new User(
+                    queryParameters.get("userId"),
+                    queryParameters.get("password"),
+                    queryParameters.get("name"),
+                    queryParameters.get("email")
+                );
+                System.out.println("======================");
+                System.out.println(user);
+            }
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = FileIoUtils.loadFileFromClasspath(request.getPath());
             response200Header(dos, body.length);
