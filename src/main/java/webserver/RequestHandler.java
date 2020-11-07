@@ -23,7 +23,7 @@ public class RequestHandler implements Runnable {
             connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            System.out.println(new Request(in));
+            logger.info(new Request(in).toString());
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = "Hello World".getBytes();
             response200Header(dos, body.length);

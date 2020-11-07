@@ -29,12 +29,15 @@ public class Request {
         return builder.toString();
     }
 
+    public String getPath() {
+        String[] firstLine = request
+            .split(System.lineSeparator())[0]
+            .split(" ");
+        return firstLine[1];
+    }
+
     @Override
     public String toString() {
         return request;
-    }
-
-    public String getPath() {
-        return null;
     }
 }
