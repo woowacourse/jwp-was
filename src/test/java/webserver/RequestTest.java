@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -36,5 +37,17 @@ public class RequestTest {
     void getPath(String input, String expected) throws IOException {
         Request request = new Request(new ByteArrayInputStream(input.getBytes()));
         assertThat(request.getPath()).isEqualTo(expected);
+    }
+
+    @Test
+    void getQueryParameters() throws IOException {
+        String input = "GET /user/create?userId=javajigi&password=password&name=jaesung&email=javajigi@slipp.net HTTP/1.1";
+        Request request = new Request(new ByteArrayInputStream(input.getBytes()));
+        Map<String, String> queryParameters = request.getQueryParameters();
+
+        assertThat(queryParameters.get("userId")).isEqualTo("javajigi");
+        assertThat(queryParameters.get("password")).isEqualTo("password");
+        assertThat(queryParameters.get("name")).isEqualTo("jaesung");
+        assertThat(queryParameters.get("email")).isEqualTo("javajigi@slipp.net");
     }
 }
