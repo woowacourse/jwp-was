@@ -1,4 +1,4 @@
-package web;
+package http;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,7 +34,7 @@ class RequestLineTest {
         assertThat(requestLine.getProtocol()).isEqualTo("HTTP/1.1");
     }
 
-    @DisplayName("요청 받은 requestLine에 parameters가 전달되지 않았을 때 parameters는 null이 된다.")
+    @DisplayName("요청 받은 requestLine에 queryString이 없으면 queryParams는 empty map이 된다.")
     @Test
     void constructRequestLineWithNoParameter() throws IOException {
         String httpRequestInput = "GET /user/create HTTP/1.1";
@@ -45,7 +45,7 @@ class RequestLineTest {
 
         assertThat(requestLine.getMethod()).isEqualTo("GET");
         assertThat(requestLine.getPath()).isEqualTo("/user/create");
-        assertThat(requestLine.getQueryParams()).isEqualTo(null);
+        assertThat(requestLine.getQueryParams()).isEmpty();
         assertThat(requestLine.getProtocol()).isEqualTo("HTTP/1.1");
     }
 }

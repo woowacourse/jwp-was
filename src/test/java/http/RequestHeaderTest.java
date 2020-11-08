@@ -1,4 +1,4 @@
-package web;
+package http;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 
+import static http.HttpRequestTest.NEW_LINE;
 import static org.assertj.core.api.Assertions.assertThat;
-import static web.HttpRequestTest.NEW_LINE;
 
 class RequestHeaderTest {
 

@@ -1,4 +1,4 @@
-package web;
+package http;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,10 +13,10 @@ public class RequestHeader {
     private final Map<String, String> headers;
 
     public RequestHeader(BufferedReader br) throws IOException {
-        HashMap<String, String> headers = new HashMap<>();
+        Map<String, String> headers = new HashMap<>();
         String line;
 
-        while (!(line = br.readLine()).equals("")) {
+        while (!"".equals(line = br.readLine())) {
             String[] header = line.split(DELIMITER);
             headers.put(header[0], header[1]);
         }
