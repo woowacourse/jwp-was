@@ -10,7 +10,11 @@ import java.net.URISyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Charsets;
 import utils.FileIoUtils;
+import webserver.http.request.HttpRequest;
+import webserver.http.request.HttpRequestParser;
+import webserver.http.request.MimeMatcher;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -26,59 +30,27 @@ public class RequestHandler implements Runnable {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), Charsets.UTF_8));
              DataOutputStream dos = new DataOutputStream(connection.getOutputStream())) {
-            final String requestPath = br.readLine().split(" ")[1];
-            final int extensionIndex = requestPath.lastIndexOf(".");
-            if (extensionIndex != -1 && requestPath.substring(extensionIndex + 1)
-                    .matches("html|ico|css|js|eot|svg|woff|woff2|png|ttf")) {
-                final byte[] body = FileIoUtils.loadFileFromClasspath("./static" + requestPath);
-                response200Header(dos, body.length, requestPath.substring(extensionIndex + 1));
+            HttpRequest request = HttpRequestParser.parse(br);
+            if (request.isStaticResourceRequest()) {
+                MimeMatcher matcher = MimeMatcher.of(request.getPath());
+                final byte[] body = FileIoUtils.loadFileFromClasspath(matcher.getFilePosition() + request.getPath());
+                response200Header(dos, body.length, matcher.getMimeType());
                 responseBody(dos, body);
                 return;
             }
-            final byte[] body = FileIoUtils.loadFileFromClasspath("./templates" + requestPath);
-            response200Header(dos, body.length, requestPath.substring(extensionIndex + 1));
-            responseBody(dos, body);
+            // 동적 요청 처리 구간
+            throw new RuntimeException();
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String extension) {
+    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String mimeType) {
         try {
-            String type = "text/html";
-            switch (extension) {
-                case "html":
-                    type = "text/html";
-                    break;
-                case "ico":
-                    type = "image/x-icon";
-                    break;
-                case "css":
-                    type = "text/css";
-                    break;
-                case "js":
-                    type = "application/js";
-                    break;
-                case "png":
-                    type = "image/png";
-                    break;
-                case "eot":
-                    type = "application/x-font-eot";
-                    break;
-                case "svg":
-                    type = "image/svg+xml";
-                    break;
-                case "woff":
-                case "woff2":
-                    type = "application/x-font-woff";
-                    break;
-                case "ttf":
-                    type = "application/x-font-ttf";
-            }
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: " + type + ";charset=utf-8\r\n");
+            dos.writeBytes("Content-Type: " + mimeType + ";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
