@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 public class HttpRequest {
     private final HttpRequestLine httpRequestLine;
@@ -17,7 +18,11 @@ public class HttpRequest {
     }
 
     public String getPath() {
-        return httpRequestLine.getUrl().extractFilePath();
+        return httpRequestLine.getPath();
+    }
+
+    public Map<String, String> getBody() {
+        return httpRequestLine.getBody();
     }
 
     public HttpRequestLine getHttpRequestLine() {

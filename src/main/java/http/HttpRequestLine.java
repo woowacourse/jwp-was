@@ -1,5 +1,7 @@
 package http;
 
+import java.util.Map;
+
 public class HttpRequestLine {
     private static final String DELIMITER = " ";
     private static final int METHOD_INDEX = 0;
@@ -23,13 +25,25 @@ public class HttpRequestLine {
         return new HttpRequestLine(httpMethod, httpUrl, httpVersion);
     }
 
+    public String getUrl() {
+        return httpUrl.getUrl();
+    }
+
+    public Map<String, String> getBody() {
+        return httpUrl.getParams();
+    }
+
+    public String getPath() {
+        return httpUrl.extractFilePath();
+    }
+
     public HttpMethod getMethod() {
         return httpMethod;
     }
 
-    public HttpUrl getUrl() {
-        return httpUrl;
-    }
+    // public HttpUrl getUrl() {
+    //     return httpUrl;
+    // }
 
     public String getVersion() {
         return httpVersion;
