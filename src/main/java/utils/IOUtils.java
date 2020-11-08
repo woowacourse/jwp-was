@@ -2,6 +2,8 @@ package utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class IOUtils {
     /**
@@ -12,9 +14,20 @@ public class IOUtils {
      * @return
      * @throws IOException
      */
-    public static String readData(BufferedReader br, int contentLength) throws IOException {
+    public static String readBodyData(BufferedReader br, int contentLength) throws IOException {
         char[] body = new char[contentLength];
         br.read(body, 0, contentLength);
         return String.copyValueOf(body);
+    }
+
+    public static List<String> readHeaderData(final BufferedReader reader) throws IOException {
+        final List<String> headerData = new ArrayList<>();
+
+        String line = reader.readLine();
+        while (!"".equals(line)) {
+            headerData.add(line);
+            line = reader.readLine();
+        }
+        return headerData;
     }
 }
