@@ -6,8 +6,8 @@
 - [x] 로그인이 성공할 경우 요청 header의 Cookie header 값이 logined=true, 로그인이 실패하면 Cookie header 값이 logined=false로 전달되어야 한다.
 
 ## 요구사항 2
-- [ ] 로그인 상태인 경우 사용자 목록을 보여주고, 로그인 상태가 아니면 `login.html`로 이동한다.
-- [ ] 동적으로 html을 생성하기 위해 handlebars.java template engine을 활용한다.
+- [x] 로그인 상태인 경우 사용자 목록을 보여주고, 로그인 상태가 아니면 `login.html`로 이동한다.
+- [x] 동적으로 html을 생성하기 위해 handlebars.java template engine을 활용한다.
 
 ## 요구사항 3
 - [ ] 서블릿에서 지원하는 HttpSession API의 일부를 지원한다.

@@ -10,6 +10,7 @@ public class HandlerStorage {
 		handlers.add(new CreateUserHandler());
 		handlers.add(new StaticResourceHandler());
 		handlers.add(new LoginHandler());
+		handlers.add(new UserListHandler());
 	}
 
 	public static Handler findHandler(String url) {

@@ -40,4 +40,24 @@ public class HttpResponse {
 			logger.error(e.getMessage());
 		}
 	}
+
+	public static void responseUserList200Header(DataOutputStream dos, byte[] body, Logger logger) {
+		try {
+			dos.writeBytes("HTTP/1.1 200 OK " + LINE_SEPARATOR);
+			dos.writeBytes("Content-Type: text/html;charset=UTF-8" + LINE_SEPARATOR);
+			dos.write(body, 0, body.length);
+			dos.flush();
+		} catch (IOException e) {
+			logger.error(e.getMessage());
+		}
+	}
+
+	public static void responseNotLogin302Header(DataOutputStream dos, Logger logger) {
+		try {
+			dos.writeBytes("HTTP/1.1 302 FOUND " + LINE_SEPARATOR);
+			dos.writeBytes(String.format("Location: %s" + LINE_SEPARATOR, "/user/login.html"));
+		} catch (IOException e) {
+			logger.error(e.getMessage());
+		}
+	}
 }
