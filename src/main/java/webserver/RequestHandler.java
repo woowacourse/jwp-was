@@ -1,6 +1,6 @@
 package webserver;
 
-import static http.HTTPRequestUrl.*;
+import static http.HttpUrl.*;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -15,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import http.HttpRequest;
 import utils.FileIoUtils;
 
 public class RequestHandler implements Runnable {
@@ -32,27 +33,14 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
-            BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-            String line = br.readLine();
-            if (line == null) {
-                return;
-            }
-            String filePath = extractRequestUrl(line).extractClassPath();
-            printRequestHeader(br);
+            HttpRequest httpRequest = new HttpRequest(in);
+            byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getPath());
+
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
-        }
-    }
-
-    private void printRequestHeader(BufferedReader br) throws IOException {
-        String line = br.readLine();
-        while (!"".equals(line) && (line != null)) {
-            System.out.println(line);
-            line = br.readLine();
         }
     }
 
