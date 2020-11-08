@@ -7,7 +7,7 @@ import model.User;
 
 public class UserController {
     public static User createUser(HttpRequest httpRequest) {
-        Map<String, String> userInfo = httpRequest.getBody();
+        Map<String, String> userInfo = httpRequest.getParams();
         String userId = userInfo.get("userId");
         String password = userInfo.get("password");
         String name = userInfo.get("name");

@@ -28,4 +28,12 @@ public class HttpHeaders {
         }
         return httpHeaders;
     }
+
+    public String get(String headerType) {
+        return httpHeaders.get(headerType);
+    }
+
+    public Map<String, String> getHttpHeaders() {
+        return httpHeaders;
+    }
 }

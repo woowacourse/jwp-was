@@ -1,17 +1,13 @@
 package webserver;
 
 import static controller.UserController.*;
-import static http.HttpUrl.*;
 
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +32,9 @@ public class RequestHandler implements Runnable {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             HttpRequest httpRequest = new HttpRequest(in);
             byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getPath());
-            createUser(httpRequest);
+            if (httpRequest.isBodyExist()) {
+                createUser(httpRequest);
+            }
             DataOutputStream dos = new DataOutputStream(out);
             response200Header(dos, body.length);
             responseBody(dos, body);

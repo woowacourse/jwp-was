@@ -1,17 +1,14 @@
 package http;
 
-public class HttpMethod {
-    private final String httpMethod;
-
-    private HttpMethod(String httpMethod) {
-        this.httpMethod = httpMethod;
-    }
+public enum  HttpMethod {
+    GET,
+    POST;
 
     public static HttpMethod from(String httpMethod) {
-        return new HttpMethod(httpMethod);
+        return valueOf(httpMethod);
     }
 
-    public String get() {
-        return httpMethod;
+    public HttpMethod get() {
+        return this;
     }
 }
