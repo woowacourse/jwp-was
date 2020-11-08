@@ -18,4 +18,8 @@ public class HttpRequest {
     public String getPath() {
         return requestLine.getPath();
     }
+
+    public boolean isGetMethod() {
+        return requestLine.isGetMethod();
+    }
 }

@@ -30,4 +30,8 @@ class HttpRequestLine {
     public HttpMethod getMethod() {
         return method;
     }
+
+    public boolean isGetMethod() {
+        return method.isGet();
+    }
 }

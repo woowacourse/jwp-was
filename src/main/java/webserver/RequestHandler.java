@@ -32,16 +32,18 @@ public class RequestHandler implements Runnable {
 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), Charsets.UTF_8));
              DataOutputStream dos = new DataOutputStream(connection.getOutputStream())) {
-            HttpRequest request = HttpRequestParser.parse(br);
+            final HttpRequest request = HttpRequestParser.parse(br);
             if (request.isStaticResourceRequest()) {
-                MimeMatcher matcher = MimeMatcher.of(request.getPath());
+                final MimeMatcher matcher = MimeMatcher.of(request.getPath());
                 final byte[] body = FileIoUtils.loadFileFromClasspath(matcher.getFilePosition() + request.getPath());
                 response200Header(dos, body.length, matcher.getMimeType());
                 responseBody(dos, body);
                 return;
             }
             // 동적 요청 처리 구간
-            throw new RuntimeException();
+            ServletContainer servletContainer = ServletContainer.getInstance();
+            final HttpServlet servlet = servletContainer.get(request.getPath());
+            servlet.doService(request);
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
