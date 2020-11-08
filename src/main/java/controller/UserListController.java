@@ -25,8 +25,8 @@ public class UserListController extends AbstractController {
             String path = request.getPath();
             Template template = TemplateFactory.of(path);
             Collection<User> users = DataBase.findAll();
-            HttpSession httpSession = request.getHttpSession();
-        
+            HttpSession httpSession = request.getHttpSession(false);
+
             if (httpSession.getAttribute("email") == null) {
                 throw new AuthenticationException();
             }

@@ -1,16 +1,17 @@
 package http.response;
 
-import http.ContentType;
-import http.request.RequestMethod;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import http.ContentType;
+import http.HttpMethod;
 
 class ResponseTest {
     @DisplayName("found 테스트")
@@ -48,7 +49,7 @@ class ResponseTest {
     void responseMethodNotAllowed() {
         ByteArrayOutputStream result = new ByteArrayOutputStream();
         Response response = new Response(result);
-        response.methodNotAllowed(RequestMethod.POST);
+        response.methodNotAllowed(HttpMethod.POST);
 
         String actual = result.toString();
 

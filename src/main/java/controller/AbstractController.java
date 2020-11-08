@@ -1,23 +1,22 @@
 package controller;
 
+import static http.HttpMethod.*;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+
 import exception.HttpRequestMethodNotSupportedException;
 import exception.IllegalRequestException;
 import http.request.Request;
 import http.response.Response;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-
-import static http.request.RequestMethod.GET;
-import static http.request.RequestMethod.POST;
-
 public abstract class AbstractController implements Controller {
 
     @Override
     public void service(Request request, Response response) throws
-        IOException,
-        URISyntaxException,
-        IllegalRequestException {
+            IOException,
+            URISyntaxException,
+            IllegalRequestException {
         if (request.isMethod(GET)) {
             doGet(request, response);
         } else if (request.isMethod(POST)) {

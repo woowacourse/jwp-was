@@ -8,6 +8,7 @@ import java.util.Map;
 
 import http.ContentType;
 import http.HttpHeaders;
+import http.HttpMethod;
 import http.session.HttpSession;
 import http.session.HttpSessionStore;
 import http.session.WebSession;
@@ -15,6 +16,7 @@ import utils.IOUtils;
 
 public class Request {
     private static final String DELIMITER = ": ";
+    private static final WebSession DEFAULT_SESSION = new WebSession();
 
     private final RequestLine requestLine;
     private final HttpHeaders httpHeader;
@@ -27,7 +29,7 @@ public class Request {
         this.httpHeader = new HttpHeaders(ofRequestHeader(br));
         this.requestBody = new RequestBody(br, httpHeader.getContentLength());
         this.cookies = new Cookies(httpHeader.getHeader(HttpHeaders.COOKIE));
-        this.httpSession = new WebSession();
+        this.httpSession = DEFAULT_SESSION;
         if (!"".equals(cookies.getCookieValue(WebSession.DEFAULT_SESSION_COOKIE_NAME))) {
             this.httpSession = HttpSessionStore.getSession(
                     cookies.getCookieValue(WebSession.DEFAULT_SESSION_COOKIE_NAME));
@@ -47,8 +49,8 @@ public class Request {
         return requestHeaders;
     }
 
-    public boolean isMethod(RequestMethod requestMethod) {
-        return requestMethod == requestLine.getMethod();
+    public boolean isMethod(HttpMethod httpMethod) {
+        return httpMethod == requestLine.getMethod();
     }
 
     public RequestLine getRequestLine() {
@@ -75,7 +77,7 @@ public class Request {
         return requestLine.getQueryParams();
     }
 
-    public RequestMethod getRequestMethod() {
+    public HttpMethod getRequestMethod() {
         return requestLine.getMethod();
     }
 
@@ -83,7 +85,10 @@ public class Request {
         return ContentType.of(getPath()).getContentType();
     }
 
-    public HttpSession getHttpSession() {
+    public HttpSession getHttpSession(boolean create) {
+        if (create) {
+            httpSession = HttpSessionStore.create();
+        }
         return httpSession;
     }
 }

@@ -11,9 +11,9 @@ import org.slf4j.LoggerFactory;
 
 import http.ContentType;
 import http.HttpHeaders;
+import http.HttpMethod;
 import http.request.Cookie;
 import http.request.Cookies;
-import http.request.RequestMethod;
 import utils.Directory;
 import utils.FileIoUtils;
 
@@ -59,9 +59,9 @@ public class Response {
         write();
     }
 
-    public void methodNotAllowed(RequestMethod requestMethod) {
+    public void methodNotAllowed(HttpMethod httpMethod) {
         statusLine = new StatusLine(HTTP_1_1, Status.METHOD_NOT_ALLOWED);
-        body = new ResponseBody(String.format("Request method %s not supported", requestMethod).getBytes());
+        body = new ResponseBody(String.format("Request method %s not supported", httpMethod).getBytes());
         write();
     }
 

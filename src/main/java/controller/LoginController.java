@@ -12,7 +12,6 @@ import http.request.Request;
 import http.request.RequestBody;
 import http.response.Response;
 import http.session.HttpSession;
-import http.session.HttpSessionStore;
 import http.session.WebSession;
 import model.User;
 
@@ -28,12 +27,12 @@ public class LoginController extends AbstractController {
             User user = DataBase.findUserById(requestBodies.get("userId"));
             validate(requestBodies, user);
 
-            HttpSession httpSession = HttpSessionStore.create();
+            HttpSession httpSession = request.getHttpSession(true);
             httpSession.setAttribute("email", user.getEmail());
 
             String id = httpSession.getId();
-            Cookie cookie = new Cookie(WebSession.DEFAULT_SESSION_COOKIE_NAME, id + "; paht=/");
-            
+            Cookie cookie = new Cookie(WebSession.DEFAULT_SESSION_COOKIE_NAME, id + "; path=/");
+
             response.addCookie(cookie);
             response.found("/index.html");
         } catch (IllegalRequestException e) {

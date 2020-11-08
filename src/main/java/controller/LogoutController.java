@@ -11,7 +11,7 @@ public class LogoutController extends AbstractController {
     @Override
     protected void doDelete(Request request, Response response) {
         try {
-            HttpSession httpSession = request.getHttpSession();
+            HttpSession httpSession = request.getHttpSession(false);
 
             if (httpSession.getAttribute("email") == null) {
                 throw new AuthenticationException();

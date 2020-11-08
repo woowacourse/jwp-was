@@ -1,15 +1,17 @@
 package http.request;
 
-import common.TestFileIo;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.*;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import common.TestFileIo;
+import http.HttpMethod;
 
 class RequestTest {
 
@@ -19,7 +21,7 @@ class RequestTest {
         BufferedReader br = TestFileIo.readBufferedReader("http_user_post_request.txt");
         Request expected = new Request(br);
 
-        assertThat(expected.isMethod(RequestMethod.POST)).isTrue();
+        assertThat(expected.isMethod(HttpMethod.POST)).isTrue();
         assertThat(expected.getRequestLine().getPath()).isEqualTo("/users");
         assertThat(expected.getRequestHeaders()).hasSize(5);
         assertThat(expected.getRequestBody().getBody()).isEqualTo(
@@ -41,7 +43,7 @@ class RequestTest {
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
         Request expected = new Request(br);
 
-        assertThat(expected.isMethod(RequestMethod.POST)).isTrue();
+        assertThat(expected.isMethod(HttpMethod.POST)).isTrue();
         assertThat(expected.getRequestLine().getPath()).isEqualTo("/users");
         assertThat(expected.getQueryParams().isEmpty()).isFalse();
         assertThat(expected.getRequestHeaders()).hasSize(5);
@@ -56,10 +58,10 @@ class RequestTest {
 
         Request expected = new Request(br);
 
-        assertThat(expected.isMethod(RequestMethod.GET)).isTrue();
+        assertThat(expected.isMethod(HttpMethod.GET)).isTrue();
         assertThat(expected.getPath()).isEqualTo("/index.html");
         assertThat(expected.getQueryParams().isEmpty()).isTrue();
-        assertThat(expected.getRequestLine().getMethod()).isEqualTo(RequestMethod.GET);
+        assertThat(expected.getRequestLine().getMethod()).isEqualTo(HttpMethod.GET);
         assertThat(expected.getRequestHeaders()).hasSize(3);
         assertThat(expected.getRequestBody().getBody()).hasSize(0);
     }
@@ -70,10 +72,10 @@ class RequestTest {
         BufferedReader br = TestFileIo.readBufferedReader("http_user_get_request.txt");
         Request expected = new Request(br);
 
-        assertThat(expected.isMethod(RequestMethod.GET)).isTrue();
+        assertThat(expected.isMethod(HttpMethod.GET)).isTrue();
         assertThat(expected.getPath()).isEqualTo("/users");
         assertThat(expected.getQueryParams().isEmpty()).isFalse();
-        assertThat(expected.getRequestLine().getMethod()).isEqualTo(RequestMethod.GET);
+        assertThat(expected.getRequestLine().getMethod()).isEqualTo(HttpMethod.GET);
         assertThat(expected.getRequestHeaders()).hasSize(3);
         assertThat(expected.getRequestBody().getBody()).hasSize(0);
     }
