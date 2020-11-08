@@ -5,25 +5,13 @@ import java.util.Map;
 
 public class HttpSessionStorage {
 
-    private final Map<String, HttpSession> storage;
+    private static final Map<String, HttpSession> storage = new HashMap<>();
 
-    private HttpSessionStorage() {
-        this.storage = new HashMap<>();
+    public static void save(final String id, final HttpSession httpSession) {
+        storage.put(id, httpSession);
     }
 
-    public static HttpSessionStorage getInstance() {
-        return HttpSessionStorageHolder.INSTANCE;
-    }
-
-    public void save(final String id, final HttpSession httpSession) {
-        this.storage.put(id, httpSession);
-    }
-
-    public boolean isExistById(final String id) {
-        return this.storage.containsKey(id);
-    }
-
-    private static class HttpSessionStorageHolder {
-        private static final HttpSessionStorage INSTANCE = new HttpSessionStorage();
+    public static boolean isExistById(final String id) {
+        return storage.containsKey(id);
     }
 }

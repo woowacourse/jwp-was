@@ -13,6 +13,7 @@ import http.Cookies;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.User;
+import utils.TemplateUtils;
 
 public class UserListController extends AbstractController {
 
@@ -27,12 +28,7 @@ public class UserListController extends AbstractController {
             httpResponse.response302(REDIRECT_LOGIN);
         }
 
-        final TemplateLoader loader = new ClassPathTemplateLoader();
-        loader.setPrefix("/templates");
-        loader.setSuffix(".html");
-        final Handlebars handlebars = new Handlebars(loader);
-
-        final Template template = handlebars.compile(httpRequest.getUrl());
+        final Template template = TemplateUtils.createHTML(httpRequest.getUrl());
 
         final Collection<User> users = DataBase.findAll();
         final byte[] userListPage = template.apply(users).getBytes();

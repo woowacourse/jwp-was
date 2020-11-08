@@ -11,6 +11,7 @@ public class Cookies implements Cloneable {
     private static final String EQUAL = "=";
     private static final String SEMICOLON = ";";
     private static final String BLANK = " ";
+    private static final String EMPTY = "";
 
     private final Map<String, String> cookies;
 
@@ -26,9 +27,16 @@ public class Cookies implements Cloneable {
         String[] flatCookie = cookies.split(SEMICOLON);
         for (String cookie : flatCookie) {
             String[] data = cookie.split(EQUAL);
-            savedCookies.put(data[0].trim(), data[1].trim());
+            inputCookieData(savedCookies, data);
         }
         return new Cookies(savedCookies);
+    }
+
+    private static void inputCookieData(final Map<String, String> savedCookies, final String[] data) {
+        if (data.length == 2) {
+            savedCookies.put(data[0].trim(), data[1].trim());
+        }
+        savedCookies.put(data[0].trim(), EMPTY);
     }
 
     public void addCookie(final String name, final String value) {

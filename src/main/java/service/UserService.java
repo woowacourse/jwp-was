@@ -27,8 +27,8 @@ public class UserService {
         DataBase.addUser(user);
     }
 
-    public User login(final HttpRequest httpRequest) {
-        return DataBase.findUserById(httpRequest.getHttpRequestBodyByName(USER_ID));
+    public User login(final String userId) {
+        return DataBase.findUserById(userId);
     }
 
     private static class UserServiceHolder {
