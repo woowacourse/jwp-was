@@ -29,4 +29,15 @@ public class HttpResponse {
 			logger.error(e.getMessage());
 		}
 	}
+
+	public static void responseLogin302Header(DataOutputStream dos, LoginStatus loginStatus, Logger logger) {
+		try {
+			dos.writeBytes("HTTP/1.1 302 FOUND " + LINE_SEPARATOR);
+			dos.writeBytes(String.format("Location: %s" + LINE_SEPARATOR, loginStatus.getRedirectUrl()));
+			dos.writeBytes(String.format("Set-Cookie: logined=%s; Path=/" + LINE_SEPARATOR, loginStatus.isValidated()));
+			dos.writeBytes(LINE_SEPARATOR);
+		} catch (IOException e) {
+			logger.error(e.getMessage());
+		}
+	}
 }
