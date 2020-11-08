@@ -1,7 +1,7 @@
 # 웹 애플리케이션 서버
 
 ## 요구사항 1
-- [ ] 로그인 성공 시 `index.html`로 이동하고, 로그인 실패 시 `/user/login_failed.html`로 이동한다. 
+- [x] 로그인 성공 시 `index.html`로 이동하고, 로그인 실패 시 `/user/login_failed.html`로 이동한다. 
 - [ ] 로그인 성공 시 cookie를 활용하여 로그인 상태를 유지해야 한다.
 - [ ] 로그인이 성공할 경우 요청 header의 Cookie header 값이 logined=true, 로그인이 실패하면 Cookie header 값이 logined=false로 전달되어야 한다.
 

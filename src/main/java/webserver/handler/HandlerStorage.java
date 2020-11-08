@@ -9,6 +9,7 @@ public class HandlerStorage {
 	static {
 		handlers.add(new CreateUserHandler());
 		handlers.add(new StaticResourceHandler());
+		handlers.add(new LoginHandler());
 	}
 
 	public static Handler findHandler(String url) {
