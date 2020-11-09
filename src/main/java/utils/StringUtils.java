@@ -1,6 +1,7 @@
 package utils;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -25,8 +26,16 @@ public class StringUtils {
         return request.split(System.lineSeparator())[0];
     }
 
+    public static String trimExtensionIfExists(String path) {
+        return path.split("//.")[0];
+    }
+
     public static Map<String, String> getQueryParameters(String request) {
-        return Arrays.stream(getFirstLine(request)
+        String firstLine = getFirstLine(request);
+        if (!firstLine.contains("?")) {
+            return new HashMap<>();
+        }
+        return Arrays.stream(firstLine
             .split(SPACE)[1]
             .split(QUESTION_MARK)[1]
             .split(AMPERSAND))
