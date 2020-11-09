@@ -30,6 +30,10 @@ public class HttpRequest {
         return !body.equals("");
     }
 
+    public HttpMethod getMethod() {
+        return httpRequestLine.getMethod();
+    }
+
     public String getPath() {
         return httpRequestLine.getPath();
     }
