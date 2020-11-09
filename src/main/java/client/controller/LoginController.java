@@ -2,9 +2,7 @@ package client.controller;
 
 import db.DataBase;
 import model.User;
-import web.HttpSession;
 import web.controller.Controller;
-import web.cookie.CookieOption;
 import web.request.HttpRequest;
 import web.response.HttpResponse;
 

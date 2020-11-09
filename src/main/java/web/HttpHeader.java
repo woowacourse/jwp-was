@@ -17,14 +17,6 @@ public class HttpHeader {
     private final Map<String, String> headers = new HashMap<>();
     private final HttpCookies httpCookies;
 
-    public static HttpHeader ofResponse() {
-        return new HttpHeader();
-    }
-
-    public static HttpHeader ofRequest(List<String> lines) {
-        return new HttpHeader(lines);
-    }
-
     private HttpHeader() {
         httpCookies = new HttpCookies();
     }
@@ -35,6 +27,14 @@ public class HttpHeader {
             headers.put(tokens[0], tokens[1]);
         }
         httpCookies = new HttpCookies(headers.get(COOKIE));
+    }
+
+    public static HttpHeader ofResponse() {
+        return new HttpHeader();
+    }
+
+    public static HttpHeader ofRequest(List<String> lines) {
+        return new HttpHeader(lines);
     }
 
     public Map<String, String> getHeaders() {
