@@ -18,10 +18,6 @@ public class HttpCookie {
 		this.cookies = cookies;
 	}
 
-	public boolean isLogin() {
-		return Boolean.parseBoolean(cookies.get("logined"));
-	}
-
 	public String getCookie(String cookieName) {
 		return cookies.get(cookieName);
 	}

@@ -8,9 +8,12 @@ import java.util.Optional;
 import db.DataBase;
 import model.User;
 import utils.ExtractUtils;
+import webserver.HttpCookie;
 import webserver.HttpRequest;
 import webserver.HttpResponse;
+import webserver.HttpSession;
 import webserver.LoginStatus;
+import webserver.SessionStorage;
 
 public class LoginHandler extends Handler {
 	private static final String USER_LOGIN_URL = "/user/login";
@@ -23,8 +26,11 @@ public class LoginHandler extends Handler {
 		User user = Optional.ofNullable(DataBase.findUserById(userId))
 			.orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
 		LoginStatus loginStatus = LoginStatus.of(user.validatePassword(password));
+		HttpCookie httpCookie = new HttpCookie(httpRequest.getHeader("Cookie"));
+		HttpSession httpSession = SessionStorage.getSession(httpCookie.getCookie("sessionId"));
+		httpSession.setAttribute("logined", true);
 
-		HttpResponse.responseLogin302Header(dos, loginStatus, logger);
+		HttpResponse.responseLogin302Header(dos, loginStatus, httpSession, logger);
 	}
 
 	@Override

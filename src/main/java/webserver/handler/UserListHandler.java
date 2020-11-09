@@ -14,6 +14,8 @@ import db.DataBase;
 import webserver.HttpCookie;
 import webserver.HttpRequest;
 import webserver.HttpResponse;
+import webserver.HttpSession;
+import webserver.SessionStorage;
 
 public class UserListHandler extends Handler {
 	private static final String USER_LIST_URL = "/user/list";
@@ -22,7 +24,10 @@ public class UserListHandler extends Handler {
 	public void handleRequest(HttpRequest httpRequest, DataOutputStream dos) throws IOException {
 		String allCookies = httpRequest.getHeader("Cookie");
 		HttpCookie cookies = new HttpCookie(allCookies);
-		if (cookies.isLogin()) {
+		HttpSession httpSession = SessionStorage.getSession(cookies.getCookie("sessionId"));
+		boolean isLogin = (boolean)httpSession.getAttribute("logined");
+
+		if (isLogin) {
 			String template = createTemplate(httpRequest);
 			HttpResponse.responseUserList200Header(dos, template.getBytes(), logger);
 		} else {
