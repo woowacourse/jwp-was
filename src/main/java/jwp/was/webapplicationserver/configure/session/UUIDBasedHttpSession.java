@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class HttpSessionImpl implements HttpSession {
+public class UUIDBasedHttpSession implements HttpSession {
 
     private final String id = String.valueOf(UUID.randomUUID());
     private final Map<String, Object> attributes = new HashMap<>();

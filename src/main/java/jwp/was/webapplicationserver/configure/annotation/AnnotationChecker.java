@@ -12,17 +12,17 @@ public class AnnotationChecker {
     public static <T extends Annotation> boolean includeAnnotation(Object configureInstance,
         Class<T> annotation) {
 
-        boolean hasResponseBodyAnnotation = configureInstance.getClass()
+        boolean hasAnnotation = configureInstance.getClass()
             .getDeclaredAnnotationsByType(annotation).length != HAS_NOT_SIZE;
 
         Annotation[] declaredAnnotations = configureInstance.getClass().getDeclaredAnnotations();
         for (Annotation declaredAnnotation : declaredAnnotations) {
-            if (hasResponseBodyAnnotation) {
+            if (hasAnnotation) {
                 return true;
             }
-            hasResponseBodyAnnotation = declaredAnnotation.annotationType()
+            hasAnnotation = declaredAnnotation.annotationType()
                 .getDeclaredAnnotationsByType(annotation).length != HAS_NOT_SIZE;
         }
-        return hasResponseBodyAnnotation;
+        return hasAnnotation;
     }
 }

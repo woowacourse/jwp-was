@@ -15,7 +15,7 @@ class HttpSessionsTest {
     @DisplayName("User가 있는지 확인 - True, User가 존재하는 SessionId")
     @Test
     void existsUser_SessionIdExistsUser_ReturnTrue() {
-        HttpSession httpSession = new HttpSessionImpl();
+        HttpSession httpSession = new UUIDBasedHttpSession();
         httpSession.setAttribute(ATTRIBUTE_KEY_USER, "TEST_USER");
         httpSessions.saveSession(httpSession);
 
@@ -27,7 +27,7 @@ class HttpSessionsTest {
     @DisplayName("User가 있는지 확인 - False, User가 존재하지 않는 SessionId")
     @Test
     void existsUser_SessionIdNotExistsUser_ReturnFalse() {
-        HttpSession httpSession = new HttpSessionImpl();
+        HttpSession httpSession = new UUIDBasedHttpSession();
         httpSessions.saveSession(httpSession);
 
         boolean result = httpSessions.existsUser(httpSession.getId());
@@ -38,7 +38,7 @@ class HttpSessionsTest {
     @DisplayName("User가 있는지 확인 - False, 존재하지 않는 SessionId")
     @Test
     void existsUser_NotExistsSessionId_ReturnFalse() {
-        HttpSession httpSession = new HttpSessionImpl();
+        HttpSession httpSession = new UUIDBasedHttpSession();
         httpSessions.saveSession(httpSession);
 
         boolean result = httpSessions.existsUser(httpSession.getId() + 1);

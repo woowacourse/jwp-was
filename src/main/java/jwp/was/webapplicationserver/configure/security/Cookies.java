@@ -8,7 +8,7 @@ public class Cookies {
 
     private static final String COOKIE_DELIMITER = ";";
     private static final String KEY_VALUE_DELIMITER = "=";
-    private static final Cookies EMPTY = new Cookies(new HashMap<>());
+    private static final Cookies EMPTY_COOKIES = new Cookies(new HashMap<>());
     private static final int COOKIE_STANDARD_LENGTH = 2;
     private static final int KEY_INDEX = 0;
     private static final int VALUE_INDEX = 1;
@@ -21,7 +21,7 @@ public class Cookies {
 
     public static Cookies from(String cookie) {
         if (Objects.isNull(cookie) || cookie.isEmpty()) {
-            return EMPTY;
+            return EMPTY_COOKIES;
         }
         return new Cookies(parseCookie(cookie));
     }

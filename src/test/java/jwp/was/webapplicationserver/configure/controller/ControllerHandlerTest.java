@@ -27,8 +27,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import jwp.was.webapplicationserver.configure.session.HttpSession;
-import jwp.was.webapplicationserver.configure.session.HttpSessionImpl;
 import jwp.was.webapplicationserver.configure.session.HttpSessions;
+import jwp.was.webapplicationserver.configure.session.UUIDBasedHttpSession;
 import jwp.was.webapplicationserver.db.DataBaseTest;
 import jwp.was.webapplicationserver.model.User;
 import jwp.was.webserver.HttpStatusCode;
@@ -141,7 +141,7 @@ class ControllerHandlerTest {
     @Test
     void handleAPI_GetUserListWithCookie_Return200() throws IOException {
         HttpSessions httpSessions = HttpSessions.getInstance();
-        HttpSession httpSession = new HttpSessionImpl();
+        HttpSession httpSession = new UUIDBasedHttpSession();
         User user = new User(USER_ID, USER_PASSWORD, USER_NAME, USER_EMAIL);
         httpSession.setAttribute(ATTRIBUTE_KEY_USER, user);
         httpSessions.saveSession(httpSession);

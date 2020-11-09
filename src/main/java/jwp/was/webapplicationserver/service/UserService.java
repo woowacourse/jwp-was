@@ -9,8 +9,8 @@ import jwp.was.webapplicationserver.configure.annotation.Autowired;
 import jwp.was.webapplicationserver.configure.annotation.Service;
 import jwp.was.webapplicationserver.configure.annotation.UserDetails;
 import jwp.was.webapplicationserver.configure.session.HttpSession;
-import jwp.was.webapplicationserver.configure.session.HttpSessionImpl;
 import jwp.was.webapplicationserver.configure.session.HttpSessions;
+import jwp.was.webapplicationserver.configure.session.UUIDBasedHttpSession;
 import jwp.was.webapplicationserver.controller.dto.LoginRequest;
 import jwp.was.webapplicationserver.controller.dto.UserRequest;
 import jwp.was.webapplicationserver.db.DataBase;
@@ -55,7 +55,7 @@ public class UserService {
 
     public String createSessionById(String userId) {
         User foundUser = dataBase.findUserById(userId);
-        HttpSession httpSession = new HttpSessionImpl();
+        HttpSession httpSession = new UUIDBasedHttpSession();
         String sessionId = httpSession.getId();
         httpSession.setAttribute(ATTRIBUTE_KEY_USER, foundUser);
         httpSessions.saveSession(httpSession);

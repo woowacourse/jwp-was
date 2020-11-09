@@ -24,8 +24,8 @@ public class LoginFilter {
     private static final String EMPTY_BODY = "";
     private static final String LOGIN_FAILED_HTML = "/user/login_failed.html";
     private static final String SET_COOKIE_ALL_PATH = "; Path=/";
-    private static final HttpMethod USER_LOGIN_HTTP_METHOD = HttpMethod.POST;
     private static final String USER_LOGIN_URL_PATH = "/user/login";
+
     private static final LoginFilter INSTANCE = new LoginFilter();
 
     private UserService userService;
@@ -61,7 +61,7 @@ public class LoginFilter {
     }
 
     public boolean isLoginRequest(HttpRequest httpRequest) {
-        return USER_LOGIN_HTTP_METHOD.isSame(httpRequest.getHttpMethod())
+        return HttpMethod.POST.isSame(httpRequest.getHttpMethod())
             && USER_LOGIN_URL_PATH.equals(httpRequest.getUrlPath());
     }
 }
