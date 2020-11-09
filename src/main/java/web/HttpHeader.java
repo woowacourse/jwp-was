@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static web.HttpSession.JSESSIONID;
 import static web.cookie.HttpCookie.COOKIE;
 
 public class HttpHeader {
@@ -66,19 +67,11 @@ public class HttpHeader {
         return stringBuilder.toString();
     }
 
-    public void addCookie(String key, String value) {
-        this.httpCookies.add(key, value);
+    public void addSession(String session) {
+        this.httpCookies.add(JSESSIONID, session, CookieOption.PATH, "/");
     }
 
-    public void addCookie(String key, String value, CookieOption cookieOption) {
-        this.httpCookies.add(key, value, cookieOption);
-    }
-
-    public void addCookie(String key, String value, CookieOption cookieOption, String optionValue) {
-        this.httpCookies.add(key, value, cookieOption, optionValue);
-    }
-
-    public HttpCookies getCookies() {
-        return this.httpCookies;
+    public String getSessionId() {
+        return this.httpCookies.get(JSESSIONID);
     }
 }

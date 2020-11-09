@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import web.HeaderName;
 import web.HttpHeader;
-import web.cookie.HttpCookies;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -62,7 +61,7 @@ public class HttpResponse {
         response(HttpStatusCode.FOUND);
     }
 
-    public HttpCookies getCookies() {
-        return httpHeader.getCookies();
+    public void addSession(String session) {
+        this.httpHeader.addSession(session);
     }
 }
