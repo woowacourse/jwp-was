@@ -1,5 +1,7 @@
 package http;
 
+import static utils.StringUtils.*;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,21 +22,16 @@ public class Parameters {
 
     public static Parameters parse(String token) {
         Map<String, String> params = new HashMap<>();
-        System.out.println(token);
+        token = deleteLastEmptyLine(token);
         for (String param : token.split(PARAMS_DELIMITER)) {
             String[] paramTokens = param.split(PARAM_DELIMITER);
             params.put(paramTokens[PARAMETER_NAME_INDEX], paramTokens[PARAMETER_VALUE_INDEX]);
         }
-        System.out.println(params.toString());
         return new Parameters(params);
     }
 
     public static Parameters parse() {
         return new Parameters();
-    }
-
-    public boolean isEmpty() {
-        return params.isEmpty();
     }
 
     public Map<String, String> getParams() {
