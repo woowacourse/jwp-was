@@ -4,19 +4,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class ServletContainer {
-    private static ServletContainer SINGLE_INSTANCE = new ServletContainer();
+public class ServletMapper {
+    private static final ServletMapper SINGLE_INSTANCE = new ServletMapper();
 
     private final Map<String, HttpServlet> servlets;
     private final Map<String, Supplier<HttpServlet>> servletGenerator;
 
-    private ServletContainer() {
+    private ServletMapper() {
         this.servlets = new HashMap<>();
         this.servletGenerator = new HashMap<>();
         this.servletGenerator.put("/user/create", UserServlet::new);
     }
 
-    public static ServletContainer getInstance() {
+    public static ServletMapper getInstance() {
         return SINGLE_INSTANCE;
     }
 

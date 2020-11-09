@@ -2,13 +2,14 @@ package webserver.http.request;
 
 public class HttpRequest {
     private final HttpRequestLine requestLine;
-    private final HttpRequestHeader requestHeader;
-    private final HttpRequestBody requestBody;
+    private final HttpRequestHeaders requestHeaders;
+    private final HttpRequestParameters requestParameters;
 
-    public HttpRequest(HttpRequestLine requestLine, HttpRequestHeader requestHeader, HttpRequestBody requestBody) {
+    public HttpRequest(HttpRequestLine requestLine, HttpRequestHeaders requestHeaders,
+            HttpRequestParameters requestParameters) {
         this.requestLine = requestLine;
-        this.requestHeader = requestHeader;
-        this.requestBody = requestBody;
+        this.requestHeaders = requestHeaders;
+        this.requestParameters = requestParameters;
     }
 
     public boolean isStaticResourceRequest() {
@@ -21,5 +22,13 @@ public class HttpRequest {
 
     public boolean isGetMethod() {
         return requestLine.isGetMethod();
+    }
+
+    public String getHeader(String key) {
+        return requestHeaders.get(key);
+    }
+
+    public String getParameter(String key) {
+        return requestParameters.get(key);
     }
 }

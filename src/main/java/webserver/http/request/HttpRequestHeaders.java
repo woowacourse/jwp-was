@@ -2,10 +2,10 @@ package webserver.http.request;
 
 import java.util.Map;
 
-class HttpRequestHeader {
+class HttpRequestHeaders {
     private final Map<String, String> headers;
 
-    public HttpRequestHeader(Map<String, String> headers) {
+    public HttpRequestHeaders(Map<String, String> headers) {
         this.headers = headers;
     }
 

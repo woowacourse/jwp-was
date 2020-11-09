@@ -21,23 +21,45 @@ public class HttpRequestParser {
 
     public static HttpRequest parse(BufferedReader br) {
         try {
-            HttpRequestLine requestLine = parseRequestLine(br);
-            HttpRequestHeader requestHeader = parseRequestHeader(br);
-            HttpRequestBody requestBody = parseRequestBody(br, requestHeader, requestLine);
-            return new HttpRequest(requestLine, requestHeader, requestBody);
+            final String httpRequestLine = br.readLine();
+            final String[] requestLines = httpRequestLine.split(" ");
+            final String pathWithQueryString = requestLines[1];
+            final String[] pathQueryString = pathWithQueryString.split("\\?");
+
+            HttpRequestLine requestLine = new HttpRequestLine(HttpMethod.valueOf(requestLines[0]), pathQueryString[0],
+                    requestLines[2]);
+            HttpRequestHeaders requestHeader = parseRequestHeader(br);
+
+            HttpRequestParameters requestParameters = getHttpRequestParameters(br, pathQueryString, requestLine,
+                    requestHeader);
+            return new HttpRequest(requestLine, requestHeader, requestParameters);
         } catch (IOException e) {
             logger.error(e.getMessage());
             throw new RuntimeException();
         }
     }
 
-    private static HttpRequestLine parseRequestLine(BufferedReader br) throws IOException {
-        final String s = br.readLine();
-        final String[] s1 = s.split(" ");
-        return new HttpRequestLine(HttpMethod.GET, s1[1], s1[2]);
+    private static HttpRequestParameters getHttpRequestParameters(BufferedReader br, String[] pathQueryString,
+            HttpRequestLine requestLine, HttpRequestHeaders requestHeader) throws IOException {
+        HttpRequestParameters requestParameters;
+        final HashMap<String, String> queryParams = new HashMap<>();
+        if (requestLine.isGetMethod()) {
+            if (pathQueryString.length == 2) {
+                String queryString = pathQueryString[1];
+                final String decode = URLDecoder.decode(queryString, "UTF-8");
+                final String[] queries = decode.split("&");
+                for (String query : queries) {
+                    final String[] keyValue = query.split("=");
+                    queryParams.put(keyValue[0], keyValue[1]);
+                }
+            }
+            return new HttpRequestParameters(queryParams);
+        }
+        requestParameters = parseRequestParameters(br, requestHeader, requestLine);
+        return requestParameters;
     }
 
-    private static HttpRequestHeader parseRequestHeader(BufferedReader br) throws IOException {
+    private static HttpRequestHeaders parseRequestHeader(BufferedReader br) throws IOException {
         final Map<String, String> headers = new HashMap<>();
         String oneLine = br.readLine();
         while (!"".equals(oneLine) && oneLine != null) {
@@ -45,15 +67,15 @@ public class HttpRequestParser {
             headers.put(header[0], header[1]);
             oneLine = br.readLine();
         }
-        return new HttpRequestHeader(headers);
+        return new HttpRequestHeaders(headers);
     }
 
-    private static HttpRequestBody parseRequestBody(BufferedReader br,
-            HttpRequestHeader header, HttpRequestLine requestLine) throws IOException {
+    private static HttpRequestParameters parseRequestParameters(BufferedReader br,
+            HttpRequestHeaders header, HttpRequestLine requestLine) throws IOException {
         final HashMap<String, String> requestDatas = new HashMap<>();
         final HttpMethod httpMethod = requestLine.getMethod();
         if (!httpMethod.hasRequestBody()) {
-            return new HttpRequestBody(requestDatas);
+            return new HttpRequestParameters(requestDatas);
         }
         final String data = IOUtils.readData(br, Integer.parseInt(header.get(HttpHeaders.CONTENT_LENGTH)));
         if (!"".equals(data)) {
@@ -64,6 +86,6 @@ public class HttpRequestParser {
                 requestDatas.put(keyValue[0], keyValue[1]);
             }
         }
-        return new HttpRequestBody(requestDatas);
+        return new HttpRequestParameters(requestDatas);
     }
 }

@@ -1,15 +1,11 @@
 package webserver.http.request;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import webserver.http.HttpMethod;
 
 class HttpRequestLine {
     private final HttpMethod method;
     private final String path;
     private final String protocol;
-    private final Map<String, String> queryParameters = new HashMap<>();
 
     public HttpRequestLine(HttpMethod method, String path, String protocol) {
         this.method = method;
@@ -29,6 +25,10 @@ class HttpRequestLine {
 
     public HttpMethod getMethod() {
         return method;
+    }
+
+    public String getProtocol() {
+        return protocol;
     }
 
     public boolean isGetMethod() {
