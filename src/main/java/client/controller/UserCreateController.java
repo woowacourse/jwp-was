@@ -6,14 +6,16 @@ import web.controller.Controller;
 import web.request.HttpRequest;
 import web.request.RequestBody;
 import web.response.HttpResponse;
+import web.view.HandlebarView;
+import web.view.ModelAndView;
 
 public class UserCreateController implements Controller {
     @Override
-    public void doService(final HttpRequest httpRequest, final HttpResponse httpResponse) {
+    public ModelAndView doService(final HttpRequest httpRequest, final HttpResponse httpResponse) {
         RequestBody requestBody = httpRequest.getRequestBody();
         createUser(requestBody);
 
-        httpResponse.sendRedirect("/index.html");
+        return ModelAndView.view(new HandlebarView("redirect:/index.html"));
     }
 
     private void createUser(RequestBody requestBody) {

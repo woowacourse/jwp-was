@@ -7,14 +7,14 @@ import web.model.Model;
 import web.request.HttpRequest;
 import web.response.HttpResponse;
 import web.view.HandlebarView;
-import web.view.View;
+import web.view.ModelAndView;
 
 import java.util.Optional;
 
 public class UserListController implements Controller {
 
     @Override
-    public void doService(HttpRequest httpRequest, HttpResponse httpResponse) {
+    public ModelAndView doService(HttpRequest httpRequest, HttpResponse httpResponse) {
         HttpSession httpSession = httpRequest.getSession();
         boolean logined = (boolean) Optional.ofNullable(httpSession.getAttribute("logined"))
                 .orElse(false);
@@ -23,10 +23,8 @@ public class UserListController implements Controller {
             Model model = new Model();
             model.setAttribute("users", DataBase.findAll());
 
-            View view = new HandlebarView("user/profile");
-            view.render(model, httpRequest, httpResponse);
-            return;
+            return new ModelAndView(model, new HandlebarView("user/profile"));
         }
-        httpResponse.sendRedirect("/user/login.html");
+        return ModelAndView.view(new HandlebarView("redirect:/user/login.html"));
     }
 }
