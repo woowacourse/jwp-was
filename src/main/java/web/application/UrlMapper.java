@@ -13,7 +13,7 @@ public class UrlMapper {
 
     private final Map<String, Controller> mapper;
 
-    public UrlMapper() {
+    private UrlMapper() {
         this.mapper = new HashMap<>();
         this.mapper.put("/user/create", CreateUserController.getInstance());
         this.mapper.put("/user/login", UserLoginController.getInstance());
