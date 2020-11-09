@@ -3,9 +3,7 @@ package web;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -13,11 +11,17 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
+import web.request.HttpMethod;
+import web.request.HttpRequest;
+import web.request.Parameter;
+import web.request.RequestHeader;
+import web.request.RequestLine;
+
 class HttpRequestTest {
 
 	@Test
 	void of() throws IOException {
-		InputStream in = new FileInputStream("./src/test/java/web/example.txt");
+		InputStream in = new FileInputStream("./src/test/resources/example.txt");
 
 		Map<String, String> headers = new HashMap<>();
 		headers.put("Host", "localhost:8080");
@@ -34,11 +38,11 @@ class HttpRequestTest {
 
 		RequestLine requestLine = new RequestLine(HttpMethod.POST, "/user/create");
 
-		Header header = new Header(headers);
+		RequestHeader requestHeader = new RequestHeader(headers);
 
 		Parameter parameter = new Parameter(parameters);
 
-		HttpRequest expect = new HttpRequest(requestLine, header, parameter);
+		HttpRequest expect = new HttpRequest(requestLine, requestHeader, parameter);
 
 		HttpRequest actual = HttpRequest.of(in);
 

@@ -1,4 +1,4 @@
-package web;
+package web.request;
 
 public class RequestLine {
 	private static final String SPACE_DELIMITER = " ";

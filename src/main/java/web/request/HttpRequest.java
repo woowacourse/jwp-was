@@ -1,4 +1,4 @@
-package web;
+package web.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,12 +8,12 @@ import java.nio.charset.StandardCharsets;
 
 public class HttpRequest {
 	private final RequestLine requestLine;
-	private final Header header;
+	private final RequestHeader requestHeader;
 	private final Parameter parameter;
 
-	public HttpRequest(RequestLine requestLine, Header header, Parameter parameter) {
+	public HttpRequest(RequestLine requestLine, RequestHeader requestHeader, Parameter parameter) {
 		this.requestLine = requestLine;
-		this.header = header;
+		this.requestHeader = requestHeader;
 		this.parameter = parameter;
 	}
 
@@ -23,10 +23,10 @@ public class HttpRequest {
 		String requestFirstLine = br.readLine();
 
 		RequestLine requestLine = RequestLine.of(requestFirstLine);
-		Header header = Header.of(br);
-		Parameter parameter = Parameter.of(br, requestLine, header);
+		RequestHeader requestHeader = RequestHeader.of(br);
+		Parameter parameter = Parameter.of(br, requestLine, requestHeader);
 
-		return new HttpRequest(requestLine, header, parameter);
+		return new HttpRequest(requestLine, requestHeader, parameter);
 	}
 
 	public HttpMethod getMethod() {
@@ -38,7 +38,7 @@ public class HttpRequest {
 	}
 
 	public String getHeader(String key) {
-		return header.get(key);
+		return requestHeader.get(key);
 	}
 
 	public String getParameter(String key) {
