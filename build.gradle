@@ -1,0 +1,56 @@
+buildscript {
+    ext {
+        springBootVersion = '2.2.2.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+plugins {
+    id 'java'
+    id 'idea'
+    id 'eclipse'
+}
+
+allprojects {
+    version = '1.0.0'
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'eclipse'
+
+    sourceCompatibility = 1.8
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        implementation 'ch.qos.logback:logback-classic:1.2.3'
+        testImplementation 'org.junit.jupiter:junit-jupiter:5.6.2'
+        testImplementation 'org.assertj:assertj-core:3.16.1'
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+}
+
+project(':web-server') {
+    dependencies {
+        compile project(':web-common')
+    }
+}
+
+project(':service-app') {
+    dependencies {
+        compile project(':web-common')
+        compile project(':web-server')
+    }
+}
