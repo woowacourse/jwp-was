@@ -55,7 +55,7 @@ class HttpHeaderTest {
         BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(byteArrayOutputStream);
         DataOutputStream dataOutputStream = new DataOutputStream(bufferedOutputStream);
 
-        httpHeader.write(dataOutputStream);
+        dataOutputStream.writeBytes(httpHeader.write());
         dataOutputStream.flush();
 
         byte[] bytes = byteArrayOutputStream.toByteArray();

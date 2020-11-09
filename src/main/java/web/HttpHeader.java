@@ -3,8 +3,6 @@ package web;
 import web.cookie.CookieOption;
 import web.cookie.HttpCookies;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,11 +52,17 @@ public class HttpHeader {
         return this.getHeaders().get(key);
     }
 
-    public void write(DataOutputStream dataOutputStream) throws IOException {
+    public String write() {
+        StringBuilder stringBuilder = new StringBuilder();
         for (Map.Entry<String, String> entry : headers.entrySet()) {
-            dataOutputStream.writeBytes(entry.getKey() + TOKEN_DELIMITER + entry.getValue() + NEW_LINE);
+            stringBuilder.append(entry.getKey())
+                    .append(TOKEN_DELIMITER)
+                    .append(entry.getValue())
+                    .append(NEW_LINE);
         }
-        dataOutputStream.writeBytes(httpCookies.convertToResponse() + NEW_LINE);
+        stringBuilder.append(httpCookies.convertToResponse())
+                .append(NEW_LINE);
+        return stringBuilder.toString();
     }
 
     public void addCookie(String key, String value) {
