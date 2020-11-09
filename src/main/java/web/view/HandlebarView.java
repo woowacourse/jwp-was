@@ -11,15 +11,14 @@ import web.response.HttpStatusCode;
 
 import java.io.IOException;
 
-public class HandlebarView implements View {
+public class HandlebarView extends AbstractView {
     private static final String DEFAULT_PREFIX = "/templates";
     private static final String DEFAULT_SUFFIX = ".html";
 
-    private final String path;
     private final Handlebars handlebars;
 
     public HandlebarView(String path, TemplateLoader templateLoader) {
-        this.path = path;
+        super(path);
         this.handlebars = new Handlebars(templateLoader);
     }
 
@@ -28,13 +27,13 @@ public class HandlebarView implements View {
     }
 
     @Override
-    public void render(Model model, HttpRequest httpRequest, HttpResponse httpResponse) {
+    public void processRender(Model model, HttpRequest httpRequest, HttpResponse httpResponse) {
         try {
-            Template template = this.handlebars.compile(path);
+            Template template = this.handlebars.compile(super.path);
             String view = template.apply(model.getAttributes());
             httpResponse.response(HttpStatusCode.OK, view.getBytes());
         } catch (IOException e) {
-            throw new IllegalArgumentException(String.format("%s : 페이지가 존재하지 않습니다.", path));
+            throw new IllegalArgumentException(String.format("%s : 페이지가 존재하지 않습니다.", super.path));
         }
     }
 }

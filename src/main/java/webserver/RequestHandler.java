@@ -7,6 +7,7 @@ import web.HttpHeader;
 import web.controller.Controller;
 import web.request.HttpRequest;
 import web.response.HttpResponse;
+import web.view.ModelAndView;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -39,7 +40,9 @@ public class RequestHandler implements Runnable {
             httpResponse.addSession(httpRequest.getSessionId());
 
             Controller controller = HandlerMapping.find(httpRequest);
-            controller.doService(httpRequest, httpResponse);
+
+            ModelAndView modelAndView = controller.doService(httpRequest, httpResponse);
+            modelAndView.render(httpRequest, httpResponse);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
