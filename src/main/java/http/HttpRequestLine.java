@@ -33,17 +33,9 @@ public class HttpRequestLine {
         return httpUrl.getParams();
     }
 
-    public String getPath() {
-        return httpUrl.extractFilePath();
-    }
-
     public HttpMethod getMethod() {
         return httpMethod;
     }
-
-    // public HttpUrl getUrl() {
-    //     return httpUrl;
-    // }
 
     public String getVersion() {
         return httpVersion;

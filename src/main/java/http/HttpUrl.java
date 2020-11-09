@@ -3,7 +3,6 @@ package http;
 import java.util.Map;
 
 public class HttpUrl {
-    private static final String TEMPLATES_FILE_PATH = "./templates";
     private static final String URL_DELIMITER = "\\?";
     private final String url;
     private final Parameters params;
@@ -20,10 +19,6 @@ public class HttpUrl {
             return new HttpUrl(url, Parameters.parse());
         }
         return new HttpUrl(url, Parameters.parse(tokens[1]));
-    }
-
-    public String extractFilePath() {
-        return TEMPLATES_FILE_PATH + this.url;
     }
 
     public String getUrl() {

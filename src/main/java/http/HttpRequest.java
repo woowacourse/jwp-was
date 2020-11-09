@@ -34,8 +34,8 @@ public class HttpRequest {
         return httpRequestLine.getMethod();
     }
 
-    public String getPath() {
-        return httpRequestLine.getPath();
+    public String getUrl() {
+        return this.httpRequestLine.getUrl();
     }
 
     public String getBody() {
@@ -44,13 +44,5 @@ public class HttpRequest {
 
     public Map<String, String> getParams() {
         return Parameters.parse(body).getParams();
-    }
-
-    public HttpRequestLine getHttpRequestLine() {
-        return httpRequestLine;
-    }
-
-    public HttpHeaders getHttpHeaders() {
-        return httpHeaders;
     }
 }

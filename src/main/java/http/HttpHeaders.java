@@ -21,7 +21,6 @@ public class HttpHeaders {
         Map<String, String> httpHeaders = new HashMap<>();
         String line = br.readLine();
         while ((line != null) && !"".equals(line)) {
-            System.out.println(line);
             String[] tokens = line.split(DELIMITER);
             httpHeaders.put(tokens[0].trim(), tokens[1].trim());
             line = br.readLine();
@@ -33,7 +32,4 @@ public class HttpHeaders {
         return httpHeaders.get(headerType);
     }
 
-    public Map<String, String> getHttpHeaders() {
-        return httpHeaders;
-    }
 }

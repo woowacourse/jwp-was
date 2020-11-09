@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import http.HttpMethod;
 import http.HttpRequest;
+import http.MimeType;
 import utils.FileIoUtils;
 
 public class RequestHandler implements Runnable {
@@ -32,15 +33,18 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             HttpRequest httpRequest = new HttpRequest(in);
-            byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getPath());
             if (httpRequest.isBodyExist()) {
                 createUser(httpRequest);
             }
+
             DataOutputStream dos = new DataOutputStream(out);
+            MimeType mimeType = MimeType.from(httpRequest.getUrl());
+            String path = mimeType.getFilePath(httpRequest.getUrl());
+            byte[] body = FileIoUtils.loadFileFromClasspath(path);
             if (HttpMethod.POST.equals(httpRequest.getMethod())) {
-                response302Header(dos, body.length);
+                response302Header(dos, body.length, mimeType);
             } else {
-                response200Header(dos, body.length);
+                response200Header(dos, body.length, mimeType);
             }
             responseBody(dos, body);
         } catch (IOException | URISyntaxException e) {
@@ -48,10 +52,11 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void response302Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response302Header(DataOutputStream dos, int lengthOfBodyContent, MimeType mimeType) {
         try {
             dos.writeBytes("HTTP/1.1 302 FOUND \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Type: " + mimeType.getContentType() + ";");
+            dos.writeBytes("charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("Location: " + "/index.html" + "\r\n");
             dos.writeBytes("\r\n");
@@ -60,10 +65,11 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, MimeType mimeType) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Type: " + mimeType.getContentType() + ";");
+            dos.writeBytes("charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
