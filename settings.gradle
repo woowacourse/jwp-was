@@ -7,5 +7,5 @@ pluginManagement {
 rootProject.name = 'jwp-was'
 
 include 'web-server'
-include 'web-common'
+include 'web-domain'
 include 'service-app'
