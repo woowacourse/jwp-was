@@ -5,6 +5,8 @@ import java.util.Map;
 
 public class HttpSession {
 
+    public static final String DEFAULT_SESSION_NAME = "JSESSIONID";
+
     private final String id;
     private final Map<String, Object> values;
 

@@ -19,7 +19,7 @@ public class LoginControllerTest extends ControllerTest {
         DataBase.addUser(user);
     }
 
-    @DisplayName("LoginController doPost Login 후 쿠키 조회")
+    @DisplayName("LoginController doPost Login 후 세션 쿠키 추가")
     @Test
     void doPost_Login_LoginedCookieIsTrue() throws IOException {
         String fileName = "Http_Request_POST_Login.txt";
@@ -29,11 +29,12 @@ public class LoginControllerTest extends ControllerTest {
 
         assertAll(
             () -> assertThat(body).contains("HTTP/1.1 302 Found"),
-            () -> assertThat(body).contains("Set-Cookie: logined=true")
+            () -> assertThat(body).contains("Set-Cookie: JSESSIONID="),
+            () -> assertThat(body).doesNotContain("아이디 또는 비밀번호가 틀립니다.")
         );
     }
 
-    @DisplayName("LoginController doPost Login Failed 후 쿠키 조회")
+    @DisplayName("LoginController doPost Login Failed 후 리다이렉트")
     @Test
     void doPost_LoginFailed_LoginedCookieIsFalse() throws IOException {
         String fileName = "Http_Request_POST_Login_Failed.txt";
@@ -43,7 +44,7 @@ public class LoginControllerTest extends ControllerTest {
 
         assertAll(
             () -> assertThat(body).contains("HTTP/1.1 302 Found"),
-            () -> assertThat(body).contains("Set-Cookie: logined=false")
+            () -> assertThat(body).contains("아이디 또는 비밀번호가 틀립니다.")
         );
     }
 }

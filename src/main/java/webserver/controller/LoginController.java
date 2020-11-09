@@ -1,10 +1,13 @@
 package webserver.controller;
 
+import static webserver.HttpSession.DEFAULT_SESSION_NAME;
+
 import db.DataBase;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import model.User;
 import webserver.Cookie;
+import webserver.HttpSession;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 
@@ -18,15 +21,18 @@ public class LoginController extends AbstractController {
         User user = DataBase.findUserById(userId);
 
         if (user.isSamePassword(password)) {
-            Cookie cookie = new Cookie("logined", "true");
-            cookie.setPath("/");
-            httpResponse.addCookie(cookie);
+            HttpSession session = httpRequest.getSession();
+            session.setAttribute("user", user);
+            setSessionCookie(httpResponse, session);
             httpResponse.sendRedirect("/index.html");
             return;
         }
-        Cookie cookie = new Cookie("logined", "false");
+        httpResponse.sendRedirect("/user/login_failed.html");
+    }
+
+    private void setSessionCookie(HttpResponse httpResponse, HttpSession session) {
+        Cookie cookie = new Cookie(DEFAULT_SESSION_NAME, session.getId());
         cookie.setPath("/");
         httpResponse.addCookie(cookie);
-        httpResponse.sendRedirect("/user/login_failed.html");
     }
 }

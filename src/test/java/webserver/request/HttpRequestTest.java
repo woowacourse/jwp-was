@@ -71,7 +71,7 @@ public class HttpRequestTest {
     @Test
     void getCookies() throws IOException {
         HttpRequest request = new HttpRequest(
-            createRequestBufferedReader("Http_Request_GET_Cookie_Login_True.txt"));
+            createRequestBufferedReader("Http_Request_GET_SessionCookie_Login_True.txt"));
 
         assertThat(request.getCookies()).hasSize(1);
     }
@@ -80,7 +80,7 @@ public class HttpRequestTest {
     @Test
     void getHttpSession_Not_Stored() throws IOException {
         HttpRequest request = new HttpRequest(
-            createRequestBufferedReader("Http_Request_GET_Cookie_Login_True.txt"));
+            createRequestBufferedReader("Http_Request_GET_SessionCookie_Login_True.txt"));
 
         HttpSession httpSession = request.getSession();
 

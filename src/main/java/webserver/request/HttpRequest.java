@@ -1,5 +1,7 @@
 package webserver.request;
 
+import static webserver.HttpSession.DEFAULT_SESSION_NAME;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
@@ -16,7 +18,6 @@ public class HttpRequest {
 
     public static final String HTTP_HEADER_VALUE_DELIMITER = ",";
     public static final String COOKIE_HEADER = "Cookie";
-    public static final String DEFAULT_SESSION_ID = "JSESSIONID";
     private static final String HTTP_HEADER_DELIMITER = ": ";
     private final RequestLine requestLine;
     private final RequestHeader requestHeader;
@@ -87,7 +88,7 @@ public class HttpRequest {
     public HttpSession getSession() {
         Cookies cookies = new Cookies(getCookies());
 
-        return cookies.getCookie(DEFAULT_SESSION_ID)
+        return cookies.getCookie(DEFAULT_SESSION_NAME)
             .map(cookie -> HttpSessions.getHttpSession(cookie.getValue()))
             .orElse(HttpSessions.createHttpSession(UUID.randomUUID().toString()));
     }

@@ -4,5 +4,6 @@ Connection: keep-alive
 Content-Length: 33
 Content-Type: application/x-www-form-urlencoded
 Accept: */*
+Cookie: JSESSIONID=
 
 userId=javajigi&password=password
