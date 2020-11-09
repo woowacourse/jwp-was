@@ -11,7 +11,7 @@ import web.application.controller.UserLoginController;
 
 public class UrlMapper {
 
-    private Map<String, Controller> mapper;
+    private final Map<String, Controller> mapper;
 
     public UrlMapper() {
         this.mapper = new HashMap<>();
