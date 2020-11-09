@@ -20,7 +20,7 @@ public class ListUserController extends AbstractController {
         throws IOException, URISyntaxException {
 
         if (isLogin(httpRequest.getSession())) {
-            final Collection<User> users = DataBase.findAll();
+            Collection<User> users = DataBase.findAll();
             String appliedPage = HandlebarUtils.apply(USER_LIST_URL, users);
             httpResponse.forwardByHandlebars(USER_LIST_URL + ".html", appliedPage);
             return;

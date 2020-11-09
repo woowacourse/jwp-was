@@ -2,6 +2,7 @@ package db;
 
 import com.google.common.collect.Maps;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import model.User;
@@ -20,6 +21,6 @@ public class DataBase {
     }
 
     public static Collection<User> findAll() {
-        return users.values();
+        return Collections.unmodifiableCollection(users.values());
     }
 }
