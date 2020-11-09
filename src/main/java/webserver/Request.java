@@ -15,16 +15,16 @@ public class Request {
     public static final String EMPTY = "";
 
     private final String request;
-    private final Map<String, String> header;
     private final Method method;
-    private final String body;
+    private final Map<String, String> header;
+    private final Map<String, String> body;
 
     public Request(InputStream inputStream) throws IOException {
         if (Objects.isNull(inputStream)) {
             this.request = EMPTY;
             this.method = Method.GET;
             this.header = Collections.emptyMap();
-            this.body = EMPTY;
+            this.body = Collections.emptyMap();
             return;
         }
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
@@ -45,12 +45,12 @@ public class Request {
         return builder.toString();
     }
 
-    private String parseBody(BufferedReader bufferedReader) throws IOException {
+    private Map<String, String> parseBody(BufferedReader bufferedReader) throws IOException {
         int contentLength = Integer.parseInt(header.getOrDefault("Content-Length", "0"));
         if (contentLength == 0) {
-            return EMPTY;
+            return Collections.emptyMap();
         }
-        return IOUtils.readData(bufferedReader, contentLength);
+        return StringUtils.getBody(IOUtils.readData(bufferedReader, contentLength));
     }
 
     public Method getMethod() {
@@ -61,7 +61,7 @@ public class Request {
         return StringUtils.getFilename(request);
     }
 
-    public String getBody() {
+    public Map<String, String> getBody() {
         return body;
     }
 
@@ -71,7 +71,7 @@ public class Request {
 
     @Override
     public String toString() {
-        if (body.length() == 0) {
+        if (body.keySet().size() == 0) {
             return request;
         }
         return request + System.lineSeparator() + body;

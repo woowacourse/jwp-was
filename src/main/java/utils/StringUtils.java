@@ -2,9 +2,9 @@ package utils;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class StringUtils {
     public static final String SPACE = " ";
@@ -37,14 +37,20 @@ public class StringUtils {
         if (!firstLine.contains("?")) {
             return Collections.emptyMap();
         }
-        return Arrays.stream(firstLine
+        return parseQuery(Arrays.stream(firstLine
             .split(SPACE)[1]
             .split(QUESTION_MARK)[1]
-            .split(AMPERSAND))
-            .collect(Collectors.toMap(
-                it -> it.split(EQUAL)[0],
-                it -> it.split(EQUAL)[1])
-            );
+            .split(AMPERSAND)));
+    }
+
+    public static Map<String, String> getBody(String body) {
+        return parseQuery(Arrays.stream(body.split(AMPERSAND)));
+    }
+
+    private static Map<String, String> parseQuery(Stream<String> queries) {
+        return queries.collect(Collectors.toMap(
+            it -> it.split(EQUAL)[0],
+            it -> it.split(EQUAL)[1]));
     }
 
     public static Map<String, String> getHeader(String request) {

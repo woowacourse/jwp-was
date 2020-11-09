@@ -31,13 +31,14 @@ public class Controller {
     }
 
     private Response createUser(Request request) {
-        Map<String, String> queryParameters = request.getQueryParameters();
+        Map<String, String> body = request.getBody();
         User user = new User(
-            queryParameters.get("userId"),
-            queryParameters.get("password"),
-            queryParameters.get("name"),
-            queryParameters.get("email")
+            body.get("userId"),
+            body.get("password"),
+            body.get("name"),
+            body.get("email")
         );
+        System.out.println(user);
         return Response.of("/index.html");
     }
 
