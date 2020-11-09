@@ -50,4 +50,23 @@ public class RequestTest {
         Request request = new Request(new ByteArrayInputStream(input.getBytes()));
         assertThat(request.getMethod()).isEqualTo(Method.GET);
     }
+
+    @Test
+    void getPath() throws IOException {
+        String input = "GET /index.html HTTP/1.1\nHost: localhost:8080\nConnection: keep-alive\n";
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
+        Request request = new Request(inputStream);
+        assertThat(request.getPath()).isEqualTo("/index.html");
+    }
+
+    @Test
+    void getBody() throws IOException {
+        String input = "GET /user/create HTTP/1.1\nContent-Length: 70\n\nuserId=kimhodol&password=password&name=김호돌&email=woonjangahn@gmail.com";
+        Request request = new Request(new ByteArrayInputStream(input.getBytes()));
+        Map<String, String> body = request.getBody();
+        assertThat(body.get("userId")).isEqualTo("kimhodol");
+        assertThat(body.get("password")).isEqualTo("password");
+        assertThat(body.get("name")).isEqualTo("김호돌");
+        assertThat(body.get("email")).isEqualTo("woonjangahn@gmail.com");
+    }
 }
