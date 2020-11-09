@@ -38,11 +38,10 @@ public class Controller {
             body.get("name"),
             body.get("email")
         );
-        System.out.println(user);
-        return Response.of("/index.html");
+        return Response.found(request, "/index.html");
     }
 
     private Response serveDefaultPage(Request request) {
-        return Response.of(request);
+        return Response.ok(request);
     }
 }

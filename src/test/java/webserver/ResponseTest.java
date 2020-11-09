@@ -20,7 +20,7 @@ public class ResponseTest {
     }, delimiter = ':')
     void getPath(String input, String expected) throws IOException {
         Request request = new Request(new ByteArrayInputStream(input.getBytes()));
-        Response response = Response.of(request);
+        Response response = Response.ok(request);
         assertThat(response.getPath()).isEqualTo(expected);
     }
 }
