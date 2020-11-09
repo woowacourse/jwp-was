@@ -2,10 +2,10 @@ package interfaces;
 
 import db.DataBase;
 import model.User;
+import web.session.HttpSession;
 import web.controller.AbstractController;
 import web.http.HttpRequest;
 import web.http.HttpResponse;
-import web.session.HttpSession;
 
 public class LoginController extends AbstractController {
     @Override

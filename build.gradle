@@ -45,6 +45,7 @@ subprojects {
 project(':web-server') {
     dependencies {
         compile project(':web-domain')
+        compile project(':web-session')
     }
 }
 
@@ -52,5 +53,6 @@ project(':service-app') {
     dependencies {
         compile project(':web-domain')
         compile project(':web-server')
+        compile project(':web-session')
     }
 }

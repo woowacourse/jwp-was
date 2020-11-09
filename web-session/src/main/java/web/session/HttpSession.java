@@ -3,7 +3,7 @@ package web.session;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-public class HttpSession implements Session{
+public class HttpSession implements Session {
     public static final String SESSION_ID = "JSESSIONID";
 
     private final String id;

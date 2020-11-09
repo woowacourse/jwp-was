@@ -21,6 +21,4 @@ public class SessionStorage {
     public static void remove(String id) {
         sessions.remove(id);
     }
-
-
 }
