@@ -13,7 +13,7 @@ public class HttpRequest {
     }
 
     public boolean isStaticResourceRequest() {
-        return requestLine.isStaticResourceRequest();
+        return requestLine.isFileRequest();
     }
 
     public String getPath() {

@@ -1,7 +1,7 @@
 package webserver;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
+import static com.google.common.net.HttpHeaders.*;
+import static webserver.http.response.HttpStatus.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,8 +27,9 @@ public class UserServlet extends HttpServlet {
         }
         DataBase.addUser(user);
         System.out.println("회원가입 GET 요청을 처리한다." + user);
-        // response200Header(dos, body.length, matcher.getMimeType());
-        // responseBody(dos, body);
+
+        response.changeHttpStatus(FOUND);
+        response.addHeader(LOCATION, "/index.html");
     }
 
     @Override
@@ -44,25 +45,7 @@ public class UserServlet extends HttpServlet {
         }
         DataBase.addUser(user);
         System.out.println("회원가입 POST 요청을 처리한다." + user);
-    }
-
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String mimeType) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: " + mimeType + ";charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+        response.changeHttpStatus(FOUND);
+        response.addHeader(LOCATION, "/index.html");
     }
 }

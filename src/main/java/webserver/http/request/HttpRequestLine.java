@@ -1,22 +1,24 @@
 package webserver.http.request;
 
+import java.util.regex.Pattern;
+
 import webserver.http.HttpMethod;
 
 class HttpRequestLine {
+    private static final Pattern EXTENSION_PATTERN = Pattern.compile("[^\\s]+\\.[\\w]+");
+
     private final HttpMethod method;
     private final String path;
-    private final String protocol;
+    private final String version;
 
-    public HttpRequestLine(HttpMethod method, String path, String protocol) {
+    public HttpRequestLine(HttpMethod method, String path, String version) {
         this.method = method;
         this.path = path;
-        this.protocol = protocol;
+        this.version = version;
     }
 
-    public boolean isStaticResourceRequest() {
-        final int extensionIndex = path.lastIndexOf(".");
-        return method.isGet() && extensionIndex != -1 && path.substring(extensionIndex + 1)
-                .matches("html|ico|css|js|eot|svg|woff|woff2|png|ttf");
+    public boolean isFileRequest() {
+        return EXTENSION_PATTERN.matcher(path).matches();
     }
 
     public String getPath() {
@@ -27,8 +29,8 @@ class HttpRequestLine {
         return method;
     }
 
-    public String getProtocol() {
-        return protocol;
+    public String getVersion() {
+        return version;
     }
 
     public boolean isGetMethod() {

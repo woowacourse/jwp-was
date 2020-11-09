@@ -2,11 +2,11 @@ package webserver.http.request;
 
 import java.util.Arrays;
 
-public enum MimeMatcher {
-    HTML("./templates", ".html", "text/html"),
+public enum MimeType {
+    HTML_UTF_8("./templates", ".html", "text/html;charset=utf-8"),
     ICO("./templates", ".ico", "image/x-icon"),
-    CSS("./static", ".css", "text/css"),
-    JS("./static", ".js", "application/js"),
+    CSS_UTF_8("./static", ".css", "text/css;charset=utf-8"),
+    JS_UTF_8("./static", ".js", "application/js;charset=utf-8"),
     PNG("./static", ".png", "image/png"),
     EOT("./static", ".eot", "application/x-font-eot"),
     SVG("./static", ".svg", "image/svg+xml"),
@@ -18,13 +18,13 @@ public enum MimeMatcher {
     private final String extensionType;
     private final String mimeType;
 
-    MimeMatcher(String filePosition, String extensionType, String mimeType) {
+    MimeType(String filePosition, String extensionType, String mimeType) {
         this.filePosition = filePosition;
         this.extensionType = extensionType;
         this.mimeType = mimeType;
     }
 
-    public static MimeMatcher of(String path) {
+    public static MimeType of(String path) {
         final String targetExtensionType = path.substring(path.lastIndexOf("."));
         return Arrays.stream(values())
                 .filter(mime -> mime.extensionType.equalsIgnoreCase(targetExtensionType))
