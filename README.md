@@ -10,12 +10,12 @@
 - [x] 동적으로 html을 생성하기 위해 handlebars.java template engine을 활용한다.
 
 ## 요구사항 3
-- [ ] 서블릿에서 지원하는 HttpSession API의 일부를 지원한다.
-    - [ ] getId() 메서드를 구현한다.
-    - [ ] setAttribute(String name, Object value) 메서드를 구현한다.
-    - [ ] getAttribute(String name) 메서드를 구현한다.
-    - [ ] removeAttribute(String name) 메서드를 구현한다.
-    - [ ] invalidate() 메서드를 구현한다.
+- [x] 서블릿에서 지원하는 HttpSession API의 일부를 지원한다.
+    - [x] getId() 메서드를 구현한다.
+    - [x] setAttribute(String name, Object value) 메서드를 구현한다.
+    - [x] getAttribute(String name) 메서드를 구현한다.
+    - [x] removeAttribute(String name) 메서드를 구현한다.
+    - [x] invalidate() 메서드를 구현한다.
 
 ## 진행 방법
 * 웹 애플리케이션 서버 요구사항을 파악한다.
