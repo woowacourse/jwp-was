@@ -11,14 +11,14 @@ public class ExtractUtils {
 
 	public static Map<String, String> parseRequestBody(String body) throws UnsupportedEncodingException {
 		String[] infos = body.split(PARAM_DELIMITER);
-		Map<String, String> userInfo = new HashMap<>();
+		Map<String, String> parsedBody = new HashMap<>();
 
 		for (String info : infos) {
 			String element = info.split(ELEMENT_DELIMITER)[0];
 			String content = URLDecoder.decode(info.split(ELEMENT_DELIMITER)[1], "UTF-8");
-			userInfo.put(element, content);
+			parsedBody.put(element, content);
 		}
 
-		return userInfo;
+		return parsedBody;
 	}
 }

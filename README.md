@@ -1,9 +1,21 @@
 # 웹 애플리케이션 서버
 
-## 요구사항
-- [x] newFixedThreadPool을 사용해 쓰레드풀을 이용한다.
-- [x] HttpRequest, HttpResponse를 구현하여 요청과 응답에 대한 처리 로직을 분리한다.
-- [x] 다형성을 활용하여 요청 URL에 대한 분기를 처리한다.
+## 요구사항 1
+- [x] 로그인 성공 시 `index.html`로 이동하고, 로그인 실패 시 `/user/login_failed.html`로 이동한다. 
+- [x] 로그인 성공 시 cookie를 활용하여 로그인 상태를 유지해야 한다.
+- [x] 로그인이 성공할 경우 요청 header의 Cookie header 값이 logined=true, 로그인이 실패하면 Cookie header 값이 logined=false로 전달되어야 한다.
+
+## 요구사항 2
+- [x] 로그인 상태인 경우 사용자 목록을 보여주고, 로그인 상태가 아니면 `login.html`로 이동한다.
+- [x] 동적으로 html을 생성하기 위해 handlebars.java template engine을 활용한다.
+
+## 요구사항 3
+- [x] 서블릿에서 지원하는 HttpSession API의 일부를 지원한다.
+    - [x] getId() 메서드를 구현한다.
+    - [x] setAttribute(String name, Object value) 메서드를 구현한다.
+    - [x] getAttribute(String name) 메서드를 구현한다.
+    - [x] removeAttribute(String name) 메서드를 구현한다.
+    - [x] invalidate() 메서드를 구현한다.
 
 ## 진행 방법
 * 웹 애플리케이션 서버 요구사항을 파악한다.

@@ -16,5 +16,5 @@ public abstract class Handler {
 	public abstract void handleRequest(HttpRequest httpRequest, DataOutputStream dos) throws
 		IOException, URISyntaxException;
 
-	public abstract boolean canHandle(String path);
+	public abstract boolean canHandle(String url);
 }
