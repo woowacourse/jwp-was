@@ -8,6 +8,7 @@ public class HttpCookie {
     private static final String SET_COOKIE = "Set-Cookie: ";
     private static final String KEY_VALUE_DELIMITER = "=";
     private static final String OPTION_DELIMITER = "; ";
+    public static final String COOKIE = "Cookie";
 
     private final String key;
     private final String value;
