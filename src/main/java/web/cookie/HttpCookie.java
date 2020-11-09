@@ -4,12 +4,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class HttpCookie {
+    public static final String COOKIE = "Cookie";
     private static final String NEW_LINE = System.lineSeparator();
     private static final String SET_COOKIE = "Set-Cookie: ";
     private static final String KEY_VALUE_DELIMITER = "=";
     private static final String OPTION_DELIMITER = "; ";
-    public static final String COOKIE = "Cookie";
-
     private final String key;
     private final String value;
     private final Map<CookieOption, String> options;

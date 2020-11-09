@@ -34,7 +34,7 @@ public class User {
         return "User [userId=" + userId + ", password=" + password + ", name=" + name + ", email=" + email + "]";
     }
 
-    public boolean hasSamePassword(String password){
+    public boolean hasSamePassword(String password) {
         return this.password.equals(password);
     }
 
