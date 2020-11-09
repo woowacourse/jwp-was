@@ -4,6 +4,8 @@ import java.util.Map;
 
 public class HttpUrl {
     private static final String URL_DELIMITER = "\\?";
+    private static final int URL_INDEX = 0;
+    private static final int PARAMS_INDEX = 1;
     private final String url;
     private final Parameters params;
 
@@ -14,11 +16,15 @@ public class HttpUrl {
 
     public static HttpUrl from(String httpUrl) {
         String[] tokens = httpUrl.split(URL_DELIMITER);
-        String url = tokens[0];
-        if (tokens.length == 1) {
-            return new HttpUrl(url, Parameters.parse());
+        String url = tokens[URL_INDEX];
+        if (existQueryParam(tokens)) {
+            return new HttpUrl(url, Parameters.parse(tokens[PARAMS_INDEX]));
         }
-        return new HttpUrl(url, Parameters.parse(tokens[1]));
+        return new HttpUrl(url, Parameters.parse());
+    }
+
+    private static boolean existQueryParam(String[] tokens) {
+        return tokens.length == 2;
     }
 
     public String getUrl() {

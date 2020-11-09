@@ -1,8 +1,10 @@
 package http;
 
-public enum  HttpMethod {
+public enum HttpMethod {
     GET,
-    POST;
+    POST,
+    PUT,
+    DELETE;
 
     public static HttpMethod from(String httpMethod) {
         return valueOf(httpMethod);

@@ -33,6 +33,10 @@ public class HttpRequestLine {
         return httpUrl.getParams();
     }
 
+    public String getQueryParam(String param) {
+        return httpUrl.getParam(param);
+    }
+
     public HttpMethod getMethod() {
         return httpMethod;
     }

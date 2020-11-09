@@ -23,7 +23,6 @@ public class HttpRequest {
             body = IOUtils.readData(br, Integer.parseInt(httpHeaders.get("Content-Length")));
         }
         this.body = body;
-        System.out.println(body);
     }
 
     public boolean isBodyExist() {
@@ -38,11 +37,18 @@ public class HttpRequest {
         return this.httpRequestLine.getUrl();
     }
 
-    public String getBody() {
-        return this.body;
+    public String getVersion() {
+        return this.httpRequestLine.getVersion();
     }
 
-    public Map<String, String> getParams() {
-        return Parameters.parse(body).getParams();
+    public String getParam(String param) {
+        if(isBodyExist()) {
+            return Parameters.parse(body).get(param);
+        }
+        return httpRequestLine.getQueryParam(param);
+    }
+
+    public String getHeader(String headerType) {
+        return httpHeaders.get(headerType);
     }
 }
