@@ -9,15 +9,16 @@ import web.application.dto.ResponseDto;
 
 public class HandlebarsHelper {
 
-    public static HandlebarsHelper getInstance() {
-        return Cache.HANDLEBARS_HELPER;
-    }
+    private static final Handlebars handlebars;
 
-    public String apply(String path, ResponseDto responseDto) {
+    static {
         TemplateLoader loader = new ClassPathTemplateLoader();
         loader.setPrefix("/templates");
         loader.setSuffix(".html");
-        Handlebars handlebars = new Handlebars(loader);
+        handlebars = new Handlebars(loader);
+    }
+
+    public static String apply(String path, ResponseDto responseDto) {
         try {
             Template template = handlebars.compile(path);
             return template.apply(responseDto);
@@ -26,8 +27,4 @@ public class HandlebarsHelper {
         }
     }
 
-    private static class Cache {
-
-        private static final HandlebarsHelper HANDLEBARS_HELPER = new HandlebarsHelper();
-    }
 }

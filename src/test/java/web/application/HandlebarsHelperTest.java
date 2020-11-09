@@ -34,12 +34,10 @@ public class HandlebarsHelperTest {
     @DisplayName("템플릿 경로와 모델을 입력하면 해당 동적 페이지를 반환한다.")
     @Test
     void handlebarsApplyTest() {
-        HandlebarsHelper handlebarsHelper = HandlebarsHelper.getInstance();
-
         List<User> users = new ArrayList<>(DataBase.findAll());
         UserListResponse userListResponse = UserListResponse.of(users);
 
-        String contents = handlebarsHelper.apply("user/list", userListResponse);
+        String contents = HandlebarsHelper.apply("user/list", userListResponse);
 
         assertAll(
             () -> assertThat(contents).contains("자바지기"),

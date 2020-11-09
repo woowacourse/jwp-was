@@ -27,9 +27,8 @@ public class ListController extends AbstractController {
             return;
         }
 
-        HandlebarsHelper handlebarsHelper = HandlebarsHelper.getInstance();
         UserListResponse userListResponse = UserListResponse.of(new ArrayList<>(DataBase.findAll()));
-        String content = handlebarsHelper.apply("user/list", userListResponse);
+        String content = HandlebarsHelper.apply("user/list", userListResponse);
 
         httpResponse.forward(content);
     }
