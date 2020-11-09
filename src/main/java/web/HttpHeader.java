@@ -7,10 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static web.cookie.HttpCookie.COOKIE;
+
 public class HttpHeader {
     private static final String TOKEN_DELIMITER = ": ";
     private static final String NEW_LINE = System.lineSeparator();
-    private static final String COOKIE = "Cookie";
 
     private final Map<String, String> headers = new HashMap<>();
     private final HttpCookies httpCookies;
