@@ -35,7 +35,7 @@ public class HttpResponse {
     public void response(HttpStatusCode statusCode) {
         try {
             this.dataOutputStream.writeBytes(HTTP_VERSION + SPACE + statusCode.getValue() + NEW_LINE);
-            this.httpHeader.write(this.dataOutputStream);
+            this.dataOutputStream.writeBytes(this.httpHeader.write());
             this.dataOutputStream.writeBytes(NEW_LINE);
 
             this.dataOutputStream.flush();
@@ -47,7 +47,7 @@ public class HttpResponse {
     public void response(HttpStatusCode statusCode, byte[] body) {
         try {
             this.dataOutputStream.writeBytes(HTTP_VERSION + SPACE + statusCode.getValue() + NEW_LINE);
-            this.httpHeader.write(this.dataOutputStream);
+            this.dataOutputStream.writeBytes(this.httpHeader.write());
             this.dataOutputStream.writeBytes(NEW_LINE);
 
             this.dataOutputStream.write(body, 0, body.length);
