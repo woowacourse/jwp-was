@@ -21,8 +21,8 @@ public class RequestHeader {
 		String line = br.readLine();
 
 		while (!"".equals(line)) {
-			String[] s1 = line.split(HEADER_DELIMITER);
-			header.put(s1[0], s1[1]);
+			String[] headerInfos = line.split(HEADER_DELIMITER);
+			header.put(headerInfos[0], headerInfos[1]);
 			line = br.readLine();
 		}
 

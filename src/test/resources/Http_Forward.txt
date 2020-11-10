@@ -1,5 +1,5 @@
-HTTP/1.1 200 OK 
-Content-length: 6923
+HTTP/1.1 200 OK
+Content-length: 6902
 Content-Type: text/html;charset=utf-8
 
 <!DOCTYPE html>
@@ -17,9 +17,9 @@ Content-Type: text/html;charset=utf-8
 	</head>
 	
 	<body>
-<nav class="navbar navbar-fixed-top requestHeader">
+<nav class="navbar navbar-fixed-top header">
  	<div class="col-md-12">
-        <div class="navbar-requestHeader">
+        <div class="navbar-header">
 
             <a href="index.html" class="navbar-brand">SLiPP</a>
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse1">
@@ -51,7 +51,7 @@ Content-Type: text/html;charset=utf-8
 </nav>
 <div class="navbar navbar-default" id="subnav">
     <div class="col-md-12">
-        <div class="navbar-requestHeader">
+        <div class="navbar-header">
             <a href="#" style="margin-left:15px;" class="navbar-btn btn btn-default btn-plus dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-home" style="color:#dd1111;"></i> Home <small><i class="glyphicon glyphicon-chevron-down"></i></small></a>
             <ul class="nav dropdown-menu">
                 <li><a href="user/profile.html"><i class="glyphicon glyphicon-user" style="color:#1111dd;"></i> Profile</a></li>
