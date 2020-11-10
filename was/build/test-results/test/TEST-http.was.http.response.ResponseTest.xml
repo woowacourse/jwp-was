@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="http.was.http.response.ResponseTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2020-11-10T06:57:07" hostname="MacBook-Pro-3.local" time="0.072">
+  <properties/>
+  <testcase name="responseOk()" classname="http.was.http.response.ResponseTest" time="0.066"/>
+  <testcase name="responseMethodNotAllowed()" classname="http.was.http.response.ResponseTest" time="0.002"/>
+  <testcase name="responseFound()" classname="http.was.http.response.ResponseTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

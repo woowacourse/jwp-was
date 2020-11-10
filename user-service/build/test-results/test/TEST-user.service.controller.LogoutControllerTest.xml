@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="user.service.controller.LogoutControllerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-11-10T06:57:01" hostname="MacBook-Pro-3.local" time="0.006">
+  <properties/>
+  <testcase name="doDeleteTest()" classname="user.service.controller.LogoutControllerTest" time="0.006"/>
+  <system-out><![CDATA[15:57:01.775 [DEBUG] [Test worker] [http.was.utils.IOUtils] - 
+POST /user/login HTTP/1.1
+Accept : */*
+Connection : keep-alive
+Host : localhost:8080
+Content-Length : 29
+Content-Type : application/x-www-form-urlencoded
+
+userId=javajigi&password=1234
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

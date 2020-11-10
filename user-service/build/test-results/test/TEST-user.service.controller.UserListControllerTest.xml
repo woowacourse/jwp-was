@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="user.service.controller.UserListControllerTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2020-11-10T06:57:01" hostname="MacBook-Pro-3.local" time="0.149">
+  <properties/>
+  <testcase name="doGetTest2()" classname="user.service.controller.UserListControllerTest" time="0.131"/>
+  <testcase name="doGetTest()" classname="user.service.controller.UserListControllerTest" time="0.017"/>
+  <system-out><![CDATA[15:57:01.603 [DEBUG] [Test worker] [http.was.utils.IOUtils] - 
+GET /user/list HTTP/1.1
+Cookie : logined=false
+Accept : */*
+Connection : keep-alive
+Host : localhost:8080
+
+
+15:57:01.638 [DEBUG] [Test worker] [c.g.j.h.internal.HbsParserFactory] - About to parse: /templates/user/list.html
+15:57:01.705 [DEBUG] [Test worker] [c.g.j.h.internal.HbsParserFactory] - Building AST
+15:57:01.722 [DEBUG] [Test worker] [c.g.j.h.internal.HbsParserFactory] - Creating templates
+15:57:01.728 [INFO ] [Test worker] [u.s.controller.UserListController] - null
+15:57:01.732 [DEBUG] [Test worker] [http.was.utils.IOUtils] - 
+GET /user/list HTTP/1.1
+Cookie : JSESSIONID=1
+Accept : */*
+Connection : keep-alive
+Host : localhost:8080
+
+
+15:57:01.732 [DEBUG] [Test worker] [c.g.j.h.internal.HbsParserFactory] - About to parse: /templates/user/list.html
+15:57:01.733 [DEBUG] [Test worker] [c.g.j.h.internal.HbsParserFactory] - Building AST
+15:57:01.737 [DEBUG] [Test worker] [c.g.j.h.internal.HbsParserFactory] - Creating templates
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

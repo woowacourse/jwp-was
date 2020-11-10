@@ -1,0 +1,5 @@
+dependencies {
+    implementation 'org.springframework:spring-core:5.2.6.RELEASE'
+    implementation 'org.reflections:reflections:0.9.11'
+
+}
