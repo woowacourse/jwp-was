@@ -16,7 +16,6 @@ public class HttpSessionStorage {
         return Cache.HTTP_SESSION_STORAGE;
     }
 
-
     public HttpSession createSession() {
         UUID uuid = UUID.randomUUID();
         HttpSession httpSession = new HttpSession(uuid.toString());
