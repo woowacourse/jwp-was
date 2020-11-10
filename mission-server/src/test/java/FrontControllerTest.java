@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import controller.CreateUserController;
 import controller.ListController;
 import controller.RootController;
+import controller.StaticController;
 import controller.UserLoginController;
 import domain.response.HttpServletResponse;
 import dto.UrlMappingCreateDto;
@@ -32,7 +33,7 @@ class FrontControllerTest {
         );
 
         UrlMapper instance = UrlMapper.from(urlMappingCreateDtos);
-        FRONT_CONTROLLER = FrontController.from(instance);
+        FRONT_CONTROLLER = new FrontController(new StaticController(), instance);
     }
 
     @DisplayName("FrontController에서 지원하지 않는 Method 요청 시 405 응답보낸다.")
