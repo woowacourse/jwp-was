@@ -11,7 +11,8 @@ public enum ContentType {
     JS("text/javascript", ".js"),
     WOFF("text/font", ".woff"),
     TTF("text/font", ".ttf"),
-    ICO("image/x-icon", ".ico");
+    ICO("image/x-icon", ".ico"),
+    PNG("image/png", ".png");
 
     private final String contentTypeValue;
     private final String extension;

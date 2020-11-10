@@ -24,9 +24,9 @@
     - [x] 앞에서 회원가입한 사용자로 로그인할 수 있어야 한다.
     - [x] 로그인이 성공하면 cookie를 활용해 로그인 상태를 유지할 수 있어야 한다. 
     - [x] 로그인이 성공할 경우 요청 header의 Cookie header 값이 logined=true, 로그인이 실패하면 Cookie header 값이 logined=false로 전달되어야 한다.
-2. [ ] 접근하고 있는 사용자가 “로그인” 상태일 경우(Cookie 값이 logined=true) 경우 http://localhost:8080/user/list 로 접근했을 때 사용자 목록을 출력한다.
-    - [ ] 로그인하지 않은 상태라면 로그인 페이지(login.html)로 이동한다.
-    - [ ] 동적으로 html을 생성하기 위해 handlebars.java template engine을 활용한다.
+2. [x] 접근하고 있는 사용자가 “로그인” 상태일 경우(Cookie 값이 logined=true) 경우 http://localhost:8080/user/list 로 접근했을 때 사용자 목록을 출력한다.
+    - [x] 로그인하지 않은 상태라면 로그인 페이지(login.html)로 이동한다.
+    - [x] 동적으로 html을 생성하기 위해 handlebars.java template engine을 활용한다.
 3. [ ] 서블릿에서 지원하는 HttpSession API의 일부를 지원해야 한다.
    - [ ] getId()
    - [ ] setAttribute(String name, Object value)

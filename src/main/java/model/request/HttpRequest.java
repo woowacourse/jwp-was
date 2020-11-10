@@ -107,4 +107,13 @@ public class HttpRequest {
     public String getHttpVersion() {
         return requestLine.getHttpVersion();
     }
+
+    public String getCookie(String key) {
+        String cookies = headers.get(Header.COOKIE);
+        if (Objects.nonNull(cookies) && cookies.contains(key)) {
+            return cookies.split(key + "=")[1]
+                .split(";")[0];
+        }
+        return null;
+    }
 }
