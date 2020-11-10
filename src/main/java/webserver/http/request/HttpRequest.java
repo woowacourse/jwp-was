@@ -1,5 +1,7 @@
 package webserver.http.request;
 
+import webserver.http.HttpMethod;
+
 public class HttpRequest {
     private final HttpRequestLine requestLine;
     private final HttpRequestHeaders requestHeaders;
@@ -22,6 +24,10 @@ public class HttpRequest {
 
     public boolean isGetMethod() {
         return requestLine.isGetMethod();
+    }
+
+    public HttpMethod getMethod() {
+        return requestLine.getMethod();
     }
 
     public String getHeader(String key) {

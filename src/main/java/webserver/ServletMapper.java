@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import webserver.exception.ResourceNotFoundException;
+
 public class ServletMapper {
     private static final ServletMapper SINGLE_INSTANCE = new ServletMapper();
 
@@ -24,6 +26,12 @@ public class ServletMapper {
         if (servlets.containsKey(url)) {
             return servlets.get(url);
         }
-        return servlets.computeIfAbsent(url, newUrl -> servletGenerator.get(newUrl).get());
+        return servlets.computeIfAbsent(url, newUrl -> {
+            final Supplier<HttpServlet> httpServletSupplier = servletGenerator.get(newUrl);
+            if (httpServletSupplier == null) {
+                throw new ResourceNotFoundException();
+            }
+            return httpServletSupplier.get();
+        });
     }
 }
