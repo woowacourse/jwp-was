@@ -30,3 +30,21 @@
 - [x] ThreadPoolExecutor를 적용해 일정 수의 사용자 동시에 처리가 가능하도록 한다.
 - [x] HTTP 응답 Header/Body 처리만을 담당하는 역할을 분리
 - [x] Servlet을 Controller로 변경
+
+### 3단계
+#### 요구사항 1
+- [x] "로그인" 메뉴를 클릭하면 http://localhost:8080/user/login.html 으로 이동한다.
+    - [x] 로그인 성공 시
+        - [x] index.html로 이동
+        - [x] 요청 header의 Cookie header 값이 logined=true로 전달된다.
+    - [x] 로그인 실패 시
+        - [x] /user/login_failed.html로 이동
+        - [x] 요청 header의 Cookie header 값이 logined=false로 전달된다.
+
+#### 요구사항 2
+- [x] http://localhost:8080/user/list로 접근했을 때
+    - [x] 로그인 상태(`Cookie: logined=true`)이면 사용자 목록을 출력한다.
+    - [x] 로그인하지 않은 상태이면 로그인 페이지(login.html)로 이동한다.
+    
+#### 요구사항 3
+- [x] HttpSession API 중 getId(), setAttribute(String name, Object value), getAttribute(String name), removeAttribute(String name), invalidate() 를 구현한다.

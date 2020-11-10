@@ -13,7 +13,7 @@ public class RequestUri {
 
     public RequestUri(String uri) {
         if (uri.isEmpty()) {
-            throw new IllegalArgumentException("비어있습니다.");
+            throw new IllegalArgumentException("요청 URI가 비어있습니다.");
         }
 
         String[] splitUri = uri.split(URI_DELIMITER);

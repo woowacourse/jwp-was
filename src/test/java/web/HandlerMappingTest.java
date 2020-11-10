@@ -1,12 +1,16 @@
 package web;
 
+import client.controller.UserCreateController;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import web.controller.Controller;
-import client.controller.UserCreateController;
 import web.request.HttpRequest;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

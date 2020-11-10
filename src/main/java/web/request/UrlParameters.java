@@ -8,10 +8,6 @@ public class UrlParameters {
 
     private final Map<String, String> urlParameters = new HashMap<>();
 
-    public static UrlParameters empty() {
-        return new UrlParameters();
-    }
-
     private UrlParameters() {
     }
 
@@ -25,6 +21,9 @@ public class UrlParameters {
         }
     }
 
+    public static UrlParameters empty() {
+        return new UrlParameters();
+    }
 
     private void validate(String[] splitBody) {
         if (splitBody.length == 0) {
