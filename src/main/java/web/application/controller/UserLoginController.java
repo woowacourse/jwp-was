@@ -10,6 +10,10 @@ import web.server.utils.StaticFileType;
 
 public class UserLoginController extends AbstractController {
 
+    private UserLoginController() {
+        super();
+    }
+
     public static UserLoginController getInstance() {
         return Cache.USER_LOGIN_CONTROLLER;
     }

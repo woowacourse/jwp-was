@@ -1,9 +1,8 @@
 package web.application.controller;
 
+import db.DataBase;
 import java.util.ArrayList;
 import java.util.Optional;
-
-import db.DataBase;
 import web.HandlebarsHelper;
 import web.application.dto.UserListResponse;
 import web.server.domain.request.HttpRequest;
@@ -11,6 +10,10 @@ import web.server.domain.response.HttpResponse;
 import web.server.utils.StaticFileType;
 
 public class ListController extends AbstractController {
+
+    private ListController() {
+        super();
+    }
 
     public static ListController getInstance() {
         return ListController.Cache.LIST_CONTROLLER;
