@@ -5,7 +5,11 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 import utils.FileIoUtils;
+import webserver.Cookie;
+import webserver.Cookies;
 import webserver.FileExtension;
 
 public class HttpResponse {
@@ -14,17 +18,29 @@ public class HttpResponse {
     private static final String STATIC_PATH = "./static";
 
     private final DataOutputStream dataOutputStream;
-    private StatusLine statusLine;
     private final ResponseHeader responseHeader;
+    private final Cookies cookies;
+    private StatusLine statusLine;
     private ResponseBody responseBody;
 
     public HttpResponse(OutputStream outputStream) {
         dataOutputStream = new DataOutputStream(outputStream);
         responseHeader = new ResponseHeader(Maps.newHashMap());
+        cookies = new Cookies(new ArrayList<>());
     }
 
     public void addHeader(String key, String value) {
         responseHeader.putHeader(key, value);
+    }
+
+    public void addCookie(Cookie cookie) {
+        cookies.add(cookie);
+
+        addHeader("Set-Cookie", cookie.generateHeader());
+    }
+
+    public List<Cookie> getCookies() {
+        return cookies.getCookies();
     }
 
     public void setContentType(String contentType) {
@@ -36,6 +52,20 @@ public class HttpResponse {
         setResponseBody(path);
         responseHeader.putHeader("Content-Length", String.valueOf(responseBody.getContentLength()));
         writeHttpResponse();
+    }
+
+    public void forwardByHandlebars(String path, String listPage)
+        throws IOException, URISyntaxException {
+        statusLine = new StatusLine("HTTP/1.1 200");
+        setResponseBody(path);
+        byte[] bytes = listPage.getBytes();
+        responseHeader.putHeader("Content-Length", String.valueOf(bytes.length));
+
+        statusLine.write(dataOutputStream);
+        responseHeader.write(dataOutputStream);
+        dataOutputStream.writeBytes(System.lineSeparator());
+        dataOutputStream.write(bytes, 0, bytes.length);
+        dataOutputStream.flush();
     }
 
     public void sendRedirect(String path) throws IOException, URISyntaxException {

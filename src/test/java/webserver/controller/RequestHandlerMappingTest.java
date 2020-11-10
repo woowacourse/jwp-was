@@ -11,6 +11,16 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 public class RequestHandlerMappingTest {
 
+    private static Stream<Arguments> provideStringsForGetController() {
+        return Stream.of(
+            Arguments.of("/user/create", new CreateUserController()),
+            Arguments.of("/user/login", new LoginController()),
+            Arguments.of("/index.html", DefaultController.getInstance()),
+            Arguments.of("/", DefaultController.getInstance()),
+            Arguments.of("/asdf", ErrorController.getInstance())
+        );
+    }
+
     @DisplayName("RequestHandlerMapping에 해당하는 컨트롤러 반환")
     @MethodSource("provideStringsForGetController")
     @ParameterizedTest
@@ -18,18 +28,9 @@ public class RequestHandlerMappingTest {
         RequestHandlerMapping requestHandlerMapping = new RequestHandlerMapping(Maps.newHashMap());
         requestHandlerMapping.putController("/user/create", new CreateUserController());
         requestHandlerMapping.putController("/user/login", new LoginController());
-        requestHandlerMapping.putController("/", new DefaultController());
-        assertThat(requestHandlerMapping.getController(url)).isInstanceOf(controllerClass.getClass());
+        requestHandlerMapping.putController("/", DefaultController.getInstance());
+        assertThat(requestHandlerMapping.getController(url))
+            .isInstanceOf(controllerClass.getClass());
 
-    }
-
-    private static Stream<Arguments> provideStringsForGetController() {
-        return Stream.of(
-            Arguments.of("/user/create", new CreateUserController()),
-            Arguments.of("/user/login", new LoginController()),
-            Arguments.of("/index.html", new DefaultController()),
-            Arguments.of("/", new DefaultController()),
-            Arguments.of("/asdf", new ErrorController())
-        );
     }
 }

@@ -7,13 +7,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.controller.Controller;
 import webserver.controller.CreateUserController;
 import webserver.controller.DefaultController;
-import webserver.controller.ErrorController;
 import webserver.controller.ListUserController;
 import webserver.controller.LoginController;
 import webserver.controller.RequestHandlerMapping;
@@ -39,7 +37,7 @@ public class RequestHandler implements Runnable {
         requestHandlerMapping.putController("/user/list.html", new ListUserController());
         requestHandlerMapping.putController("/user/create", new CreateUserController());
         requestHandlerMapping.putController("/user/login", new LoginController());
-        requestHandlerMapping.putController("/", new DefaultController());
+        requestHandlerMapping.putController("/", DefaultController.getInstance());
     }
 
     public void run() {
@@ -54,9 +52,6 @@ public class RequestHandler implements Runnable {
             HttpResponse httpResponse = new HttpResponse(out);
 
             Controller controller = requestHandlerMapping.getController(httpRequest.getPath());
-            if (Objects.isNull(controller)) {
-                controller = new ErrorController();
-            }
             controller.service(httpRequest, httpResponse);
         } catch (IOException e) {
             logger.error(e.getMessage());

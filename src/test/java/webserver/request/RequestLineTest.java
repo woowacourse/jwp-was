@@ -23,7 +23,8 @@ public class RequestLineTest {
     @ParameterizedTest
     @ValueSource(strings = {"GET / HTTP/1.1 hello", "GET /"})
     void constructor_NegativeSize_ThrownException(String input) {
-        assertThatThrownBy(() -> new RequestLine(input)).isInstanceOf(NegativeArraySizeException.class);
+        assertThatThrownBy(() -> new RequestLine(input))
+            .isInstanceOf(NegativeArraySizeException.class);
     }
 
     @DisplayName("RequestHeaderFirstLine에서 http method 추출")

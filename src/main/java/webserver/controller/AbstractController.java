@@ -2,7 +2,6 @@ package webserver.controller;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.request.HttpMethod;
@@ -20,13 +19,13 @@ public abstract class AbstractController implements Controller {
             String acceptValue = httpRequest.getHeader("Accept");
             httpResponse.setContentType(acceptValue);
 
-            if (!httpRequest.isMethodSupported()) {
-                httpResponse.methodNotAllowed(ERROR_HTML_URL);
+            if (httpRequest.isMethodNotImplemented()) {
+                httpResponse.notImplemented(ERROR_HTML_URL);
                 return;
             }
 
-            if (Objects.isNull(httpRequest.getMethod())) {
-                doNone(httpResponse);
+            if (!httpRequest.isMethodSupported()) {
+                httpResponse.methodNotAllowed(ERROR_HTML_URL);
                 return;
             }
 
@@ -41,11 +40,6 @@ public abstract class AbstractController implements Controller {
         } catch (IOException | URISyntaxException e) {
             log.error(e.getMessage());
         }
-    }
-
-    private void doNone(HttpResponse httpResponse)
-        throws IOException, URISyntaxException {
-        httpResponse.notImplemented(ERROR_HTML_URL);
     }
 
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse)

@@ -13,6 +13,15 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 public class HttpVersionTest {
 
+    private static Stream<Arguments> provideHttpVersionForFind() {
+        return Stream.of(
+            Arguments.of("HTTP/0.9", HttpVersion.HTTP09),
+            Arguments.of("HTTP/1.0", HttpVersion.HTTP10),
+            Arguments.of("HTTP/1.1", HttpVersion.HTTP11),
+            Arguments.of("HTTP/2", HttpVersion.HTTP2)
+        );
+    }
+
     @DisplayName("HttpVersion 찾기 - 성공")
     @ParameterizedTest
     @MethodSource("provideHttpVersionForFind")
@@ -26,14 +35,5 @@ public class HttpVersionTest {
         String httpVersion = "HTTP/100";
         assertThatThrownBy(() -> HttpVersion.find(httpVersion))
             .isInstanceOf(NotFoundHttpVersionException.class);
-    }
-
-    private static Stream<Arguments> provideHttpVersionForFind() {
-        return Stream.of(
-            Arguments.of("HTTP/0.9", HttpVersion.HTTP09),
-            Arguments.of("HTTP/1.0", HttpVersion.HTTP10),
-            Arguments.of("HTTP/1.1", HttpVersion.HTTP11),
-            Arguments.of("HTTP/2", HttpVersion.HTTP2)
-        );
     }
 }

@@ -10,7 +10,8 @@ import webserver.response.HttpResponse;
 public class CreateUserController extends AbstractController {
 
     @Override
-    public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+    public void doPost(HttpRequest httpRequest, HttpResponse httpResponse)
+        throws IOException, URISyntaxException {
         DataBase.addUser(new User(
             httpRequest.getBodyParameter("userId"),
             httpRequest.getBodyParameter("password"),

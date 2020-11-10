@@ -1,15 +1,24 @@
 package webserver.request;
 
+import static webserver.HttpSession.DEFAULT_SESSION_NAME;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 import utils.StringUtils;
+import webserver.Cookie;
+import webserver.CookieUtils;
+import webserver.Cookies;
+import webserver.HttpSession;
+import webserver.HttpSessions;
 
 public class HttpRequest {
 
-    private static final String HTTP_HEADER_DELIMITER = ": ";
     public static final String HTTP_HEADER_VALUE_DELIMITER = ",";
-
+    public static final String COOKIE_HEADER = "Cookie";
+    private static final String HTTP_HEADER_DELIMITER = ": ";
     private final RequestLine requestLine;
     private final RequestHeader requestHeader;
     private final RequestBody requestBody;
@@ -35,6 +44,10 @@ public class HttpRequest {
 
     public boolean isMethodSupported() {
         return requestLine.isSupported();
+    }
+
+    public boolean isMethodNotImplemented() {
+        return requestLine.isNotImplemented();
     }
 
     public String getBody() {
@@ -64,5 +77,19 @@ public class HttpRequest {
 
     public String getBodyParameter(String paramName) {
         return requestBody.getParameter(paramName);
+    }
+
+    public List<Cookie> getCookies() {
+        String cookieHeader = requestHeader.getHeader(COOKIE_HEADER);
+
+        return CookieUtils.parse(cookieHeader);
+    }
+
+    public HttpSession getSession() {
+        Cookies cookies = new Cookies(getCookies());
+
+        return cookies.getCookie(DEFAULT_SESSION_NAME)
+            .map(cookie -> HttpSessions.getHttpSession(cookie.getValue()))
+            .orElse(HttpSessions.createHttpSession(UUID.randomUUID().toString()));
     }
 }

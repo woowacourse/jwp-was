@@ -24,7 +24,8 @@ public class ResponseHeader {
     public void write(DataOutputStream dataOutputStream) {
         headers.forEach((key, value) -> {
             try {
-                dataOutputStream.writeBytes(key + ": " + value + StringUtils.SPACE + System.lineSeparator());
+                dataOutputStream
+                    .writeBytes(key + ": " + value + StringUtils.SPACE + System.lineSeparator());
             } catch (IOException e) {
                 log.error(e.getMessage());
             }

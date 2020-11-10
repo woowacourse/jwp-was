@@ -48,7 +48,8 @@ public class RequestUri {
         }
         if (requestUri.endsWith("?") && isAvailableDelimiter(requestUri)) {
             log.error("Request Uri Not Exist Parameter Error! : requestUri is {} ", requestUri);
-            throw new MissingRequestParameterException("Request Uri : " + requestUri + "에 Parameter가 없습니다! ");
+            throw new MissingRequestParameterException(
+                "Request Uri : " + requestUri + "에 Parameter가 없습니다! ");
         }
     }
 

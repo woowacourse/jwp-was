@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ResponseBody {
+
     private static final Logger log = LoggerFactory.getLogger(ResponseHeader.class);
 
     private final byte[] body;

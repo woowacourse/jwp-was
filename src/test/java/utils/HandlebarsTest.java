@@ -1,28 +1,25 @@
 package utils;
 
-import com.github.jknack.handlebars.Handlebars;
-import com.github.jknack.handlebars.Template;
-import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
-import com.github.jknack.handlebars.io.TemplateLoader;
+import java.util.Arrays;
+import java.util.List;
 import model.User;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HandlebarsTest {
+
     private static final Logger log = LoggerFactory.getLogger(HandlebarsTest.class);
 
+    @DisplayName("동적 페이지 생성")
     @Test
-    void name() throws Exception {
-        TemplateLoader loader = new ClassPathTemplateLoader();
-        loader.setPrefix("/templates");
-        loader.setSuffix(".html");
-        Handlebars handlebars = new Handlebars(loader);
-
-        Template template = handlebars.compile("user/profile");
-
+    void apply() throws Exception {
         User user = new User("javajigi", "password", "자바지기", "javajigi@gmail.com");
-        String profilePage = template.apply(user);
+        User otherUser = new User("bingbong", "password", "빙봉", "bingbong@gmail.com");
+        List<User> users = Arrays.asList(user, otherUser);
+
+        String profilePage = HandlebarUtils.apply("user/profile", users);
         log.debug("ProfilePage : {}", profilePage);
     }
 }
