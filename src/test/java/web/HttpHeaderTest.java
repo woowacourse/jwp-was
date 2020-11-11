@@ -3,7 +3,13 @@ package web;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +26,7 @@ class HttpHeaderTest {
         lines.add("Host: localhost:8080");
         lines.add("Connection: keep-alive");
 
-        HttpHeader httpHeader = new HttpHeader(lines);
+        HttpHeader httpHeader = HttpHeader.ofRequest(lines);
 
         Map<String, String> headers = httpHeader.getHeaders();
 
@@ -31,7 +37,7 @@ class HttpHeaderTest {
     @DisplayName("헤더를 추가한다.")
     @Test
     void putTest() {
-        HttpHeader httpHeader = new HttpHeader();
+        HttpHeader httpHeader = HttpHeader.ofResponse();
 
         httpHeader.put("Location", "/index.html");
 
@@ -41,7 +47,7 @@ class HttpHeaderTest {
     @DisplayName("헤더를 response의 outputStream에 전부 쓴다.")
     @Test
     void writeTest() throws IOException {
-        HttpHeader httpHeader = new HttpHeader();
+        HttpHeader httpHeader = HttpHeader.ofResponse();
         httpHeader.put("Location", "/index.html");
         httpHeader.put("Content-type", "text/html");
 
@@ -49,7 +55,7 @@ class HttpHeaderTest {
         BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(byteArrayOutputStream);
         DataOutputStream dataOutputStream = new DataOutputStream(bufferedOutputStream);
 
-        httpHeader.write(dataOutputStream);
+        dataOutputStream.writeBytes(httpHeader.write());
         dataOutputStream.flush();
 
         byte[] bytes = byteArrayOutputStream.toByteArray();
@@ -59,4 +65,5 @@ class HttpHeaderTest {
         assertThat(headers).contains("Location: /index.html");
         assertThat(headers).contains("Content-type: text/html");
     }
+
 }

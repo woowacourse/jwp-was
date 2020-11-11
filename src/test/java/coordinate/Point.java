@@ -18,6 +18,19 @@ public class Point {
         }
     }
 
+    private static int square(int number) {
+        return number * number;
+    }
+
+    public static Point of(int x, int y) {
+        return new Point(x, y);
+    }
+
+    public static Point ofCommaSeparator(String text) {
+        String[] values = text.split(",");
+        return new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+    }
+
     public double getDistance(Point other) {
         int xDifference = other.minusX(x);
         int yDifference = other.minusY(y);
@@ -30,19 +43,6 @@ public class Point {
 
     private int minusY(int number) {
         return this.y - number;
-    }
-
-    private static int square(int number) {
-        return number * number;
-    }
-
-    public static Point of(int x, int y) {
-        return new Point(x, y);
-    }
-
-    public static Point ofCommaSeparator(String text) {
-        String[] values = text.split(",");
-        return new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
     }
 
     @Override

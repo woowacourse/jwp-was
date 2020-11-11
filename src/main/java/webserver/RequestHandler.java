@@ -3,9 +3,11 @@ package webserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import web.HandlerMapping;
+import web.HttpHeader;
+import web.controller.Controller;
 import web.request.HttpRequest;
 import web.response.HttpResponse;
-import web.controller.Controller;
+import web.view.ModelAndView;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -34,10 +36,13 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
             HttpRequest httpRequest = new HttpRequest(br);
-            HttpResponse httpResponse = new HttpResponse(dos);
+            HttpResponse httpResponse = new HttpResponse(dos, HttpHeader.ofResponse());
+            httpResponse.addSession(httpRequest.getSessionId());
 
             Controller controller = HandlerMapping.find(httpRequest);
-            controller.doService(httpRequest, httpResponse);
+
+            ModelAndView modelAndView = controller.doService(httpRequest, httpResponse);
+            modelAndView.render(httpRequest, httpResponse);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }

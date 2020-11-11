@@ -16,20 +16,25 @@ public class HttpResponse {
 
     private final DataOutputStream dataOutputStream;
 
-    private final HttpHeader httpHeader = new HttpHeader();
+    private final HttpHeader httpHeader;
 
-    public HttpResponse(DataOutputStream dataOutputStream) {
+    public HttpResponse(DataOutputStream dataOutputStream, HttpHeader httpHeader) {
         this.dataOutputStream = dataOutputStream;
+        this.httpHeader = httpHeader;
     }
 
     public void putHeader(String key, String value) {
         this.httpHeader.put(key, value);
     }
 
+    public void putHeader(HeaderName headerName, String value) {
+        this.putHeader(headerName.getName(), value);
+    }
+
     public void response(HttpStatusCode statusCode) {
         try {
             this.dataOutputStream.writeBytes(HTTP_VERSION + SPACE + statusCode.getValue() + NEW_LINE);
-            this.httpHeader.write(this.dataOutputStream);
+            this.dataOutputStream.writeBytes(this.httpHeader.write());
             this.dataOutputStream.writeBytes(NEW_LINE);
 
             this.dataOutputStream.flush();
@@ -41,7 +46,7 @@ public class HttpResponse {
     public void response(HttpStatusCode statusCode, byte[] body) {
         try {
             this.dataOutputStream.writeBytes(HTTP_VERSION + SPACE + statusCode.getValue() + NEW_LINE);
-            this.httpHeader.write(this.dataOutputStream);
+            this.dataOutputStream.writeBytes(this.httpHeader.write());
             this.dataOutputStream.writeBytes(NEW_LINE);
 
             this.dataOutputStream.write(body, 0, body.length);
@@ -52,8 +57,11 @@ public class HttpResponse {
     }
 
     public void sendRedirect(String url) {
-        putHeader(HeaderName.LOCATION.getName(), url);
+        putHeader(HeaderName.LOCATION, url);
         response(HttpStatusCode.FOUND);
     }
 
+    public void addSession(String session) {
+        this.httpHeader.addSession(session);
+    }
 }
