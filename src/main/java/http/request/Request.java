@@ -11,14 +11,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Request {
-    private final static String DELIMITER = ": ";
+    private static final String DELIMITER = ": ";
 
     private final RequestLine requestLine;
     private final HttpHeaders httpHeader;
     private final RequestBody requestBody;
     private Cookies cookies;
 
-    public Request(BufferedReader br) throws Exception {
+    public Request(BufferedReader br) throws IOException {
         this.requestLine = new RequestLine(br);
         this.httpHeader = new HttpHeaders(ofRequestHeader(br));
         this.requestBody = new RequestBody(br, httpHeader.getContentLength());

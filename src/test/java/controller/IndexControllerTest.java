@@ -14,6 +14,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class IndexControllerTest {
+
     @DisplayName("/경로가 들어왔을 때 index.html을 반환하는 테스트")
     @Test
     void doGetTest() throws Exception {

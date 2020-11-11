@@ -5,7 +5,6 @@ import http.HttpHeaders;
 import http.request.RequestMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.Directory;
 import utils.FileIoUtils;
 
 import java.io.DataOutputStream;
@@ -62,9 +61,9 @@ public class Response {
 
     private ResponseBody setResponseBody(String path) throws IOException, URISyntaxException {
         if (ContentType.HTML.isHtml(headers.getContentType()) && path.contains(".html")) {
-            return new ResponseBody(FileIoUtils.loadFileFromClasspath(Directory.TEMPLATES.getDirectory() + path));
+            return new ResponseBody(FileIoUtils.loadFileFromClasspath("./templates" + path));
         }
-        return new ResponseBody(FileIoUtils.loadFileFromClasspath(Directory.STATIC.getDirectory() + path));
+        return new ResponseBody(FileIoUtils.loadFileFromClasspath("./static" + path));
     }
 
     private void write() {
