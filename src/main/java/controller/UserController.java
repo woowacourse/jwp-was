@@ -30,6 +30,12 @@ public class UserController extends AbstractController {
     private static final String HOME_LOCATION = "/index.html";
     private static final String LOGIN_FAIL_REDIRECT_LOCATION = "/user/login_failed.html";
     private static final String LOGIN_REDIRECT_LOCATION = "/user/login.html";
+    private static final String LOGIN_CHECK_COOKIE = "logined";
+    private static final String USER_ATTRIBUTE_KEY = "user";
+    private static final String TEMPLATE_LOCATION = "./templates";
+    private static final String HTML_EXTENSION = ".html";
+    private static final String LOGIN_SUCCESS_COOKIE_VALUE = "logined=true; Path=/";
+    private static final String LOGIN_FAIL_COOKIE_VALUE = "logined=false; Path=/";
 
     @Override
     public HttpResponse service(HttpRequest httpRequest) {
@@ -59,7 +65,6 @@ public class UserController extends AbstractController {
 
     @Override
     public HttpResponse doPost(HttpRequest httpRequest) {
-        //todo: enum으로 처리?
         if (httpRequest.isSameUri(USER_CREATE_REQUEST)) {
             return createUser(httpRequest);
         }
@@ -83,110 +88,100 @@ public class UserController extends AbstractController {
     }
 
     private HttpResponse login(HttpRequest httpRequest) {
-        Map<Header, String> headers = new HashMap<>();
         UserService service = UserService.getInstance();
-        StatusLine statusLine;
 
         try {
             User user = service.login(httpRequest);
             HttpSession httpSession = HttpSessions.getHttpSession(httpRequest.getSessionId());
-            httpSession.setAttribute("user", user);
+            httpSession.setAttribute(USER_ATTRIBUTE_KEY, user);
 
-            statusLine = StatusLine.of(httpRequest, Status.FOUND);
+            StatusLine statusLine = StatusLine.of(httpRequest, Status.FOUND);
+            Map<Header, String> headers = new HashMap<>();
             headers.put(Header.LOCATION, HOME_LOCATION);
             headers.put(Header.CONTENT_TYPE, ContentType.HTML
                 .getContentTypeValue());
-            headers.put(Header.SET_COOKIE, "logined=true; Path=/");
-        } catch (IllegalArgumentException e) {
-            statusLine = StatusLine.of(httpRequest, Status.FOUND);
-            headers.put(Header.LOCATION, LOGIN_FAIL_REDIRECT_LOCATION);
-            headers.put(Header.SET_COOKIE, "logined=false; Path=/");
-        }
+            headers.put(Header.SET_COOKIE, LOGIN_SUCCESS_COOKIE_VALUE);
 
-        return HttpResponse.of(statusLine, headers, null);
+            return HttpResponse.of(statusLine, headers, null);
+        } catch (IllegalArgumentException e) {
+            StatusLine statusLine = StatusLine.of(httpRequest, Status.FOUND);
+            Map<Header, String> headers = new HashMap<>();
+            headers.put(Header.LOCATION, LOGIN_FAIL_REDIRECT_LOCATION);
+            headers.put(Header.SET_COOKIE, LOGIN_FAIL_COOKIE_VALUE);
+
+            return HttpResponse.of(statusLine, headers, null);
+        }
     }
 
     private HttpResponse showList(HttpRequest httpRequest) {
-        Map<Header, String> headers = new HashMap<>();
-        StatusLine statusLine;
-        String logined = httpRequest.getCookie("logined");
-        byte[] body;
-
-        if ("true".equals(logined)) {
-            statusLine = StatusLine.of(httpRequest, Status.OK);
-            headers.put(Header.CONTENT_TYPE, ContentType.HTML
-                .getContentTypeValue());
-
-            TemplateLoader loader = new ClassPathTemplateLoader();
-            loader.setPrefix("/templates");
-            loader.setSuffix(".html");
-            Handlebars handlebars = new Handlebars(loader);
-
-            Template template = null;
+        if (isLogined(httpRequest)) {
             try {
-                template = handlebars.compile("user/list");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                Template template = loadHandlebar(LIST_REQUEST);
+                Collection<User> users = DataBase.findAll();
+                String listPage = template.apply(users);
+                byte[] body = listPage.getBytes();
 
-            Collection<User> users = DataBase.findAll();
-            String listPage = null;
-            try {
-                listPage = template.apply(users);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                StatusLine statusLine = StatusLine.of(httpRequest, Status.OK);
+                Map<Header, String> headers = new HashMap<>();
+                headers.put(Header.CONTENT_TYPE, ContentType.HTML
+                    .getContentTypeValue());
+                headers.put(Header.CONTENT_LENGTH, String.valueOf(body.length));
 
-            body = listPage.getBytes();
-            headers.put(Header.CONTENT_LENGTH, String.valueOf(body.length));
-            return HttpResponse.of(statusLine, headers, body);
+                return HttpResponse.of(statusLine, headers, body);
+            } catch (IOException e) {
+                StatusLine statusLine = StatusLine.of(httpRequest, Status.INTERNAL_ERROR);
+                Map<Header, String> headers = new HashMap<>();
+
+                return HttpResponse.of(statusLine, headers, null);
+            }
         }
-
-        statusLine = StatusLine.of(httpRequest, Status.FOUND);
+        StatusLine statusLine = StatusLine.of(httpRequest, Status.FOUND);
+        Map<Header, String> headers = new HashMap<>();
         headers.put(Header.LOCATION, LOGIN_REDIRECT_LOCATION);
+
         return HttpResponse.of(statusLine, headers, null);
     }
 
     private HttpResponse showProfile(HttpRequest httpRequest) {
-        Map<Header, String> headers = new HashMap<>();
-        StatusLine statusLine;
-        String logined = httpRequest.getCookie("logined");
-        byte[] body;
-
-        if ("true".equals(logined)) {
-            statusLine = StatusLine.of(httpRequest, Status.OK);
-            headers.put(Header.CONTENT_TYPE, ContentType.HTML
-                .getContentTypeValue());
-
-            TemplateLoader loader = new ClassPathTemplateLoader();
-            loader.setPrefix("/templates");
-            loader.setSuffix(".html");
-            Handlebars handlebars = new Handlebars(loader);
-
-            Template template = null;
+        if (isLogined(httpRequest)) {
             try {
-                template = handlebars.compile("user/profile");
+                Template template = loadHandlebar(PROFILE_REQUEST);
+                HttpSession httpSession = HttpSessions.getHttpSession(httpRequest.getSessionId());
+                User user = (User) httpSession.getAttribute(USER_ATTRIBUTE_KEY);
+                String postPage = template.apply(user);
+                byte[] body = postPage.getBytes();
+
+                StatusLine statusLine = StatusLine.of(httpRequest, Status.OK);
+                Map<Header, String> headers = new HashMap<>();
+                headers.put(Header.CONTENT_LENGTH, String.valueOf(body.length));
+                headers.put(Header.CONTENT_TYPE, ContentType.HTML
+                    .getContentTypeValue());
+
+                return HttpResponse.of(statusLine, headers, body);
             } catch (IOException e) {
-                e.printStackTrace();
+                StatusLine statusLine = StatusLine.of(httpRequest, Status.INTERNAL_ERROR);
+                Map<Header, String> headers = new HashMap<>();
+
+                return HttpResponse.of(statusLine, headers, null);
             }
-
-            HttpSession httpSession = HttpSessions.getHttpSession(httpRequest.getSessionId());
-            User user = (User) httpSession.getAttribute("user");
-
-            String postPage = null;
-            try {
-                postPage = template.apply(user);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            body = postPage.getBytes();
-            headers.put(Header.CONTENT_LENGTH, String.valueOf(body.length));
-            return HttpResponse.of(statusLine, headers, body);
         }
-
-        statusLine = StatusLine.of(httpRequest, Status.FOUND);
+        StatusLine statusLine = StatusLine.of(httpRequest, Status.FOUND);
+        Map<Header, String> headers = new HashMap<>();
         headers.put(Header.LOCATION, LOGIN_REDIRECT_LOCATION);
+
         return HttpResponse.of(statusLine, headers, null);
+    }
+
+    private Template loadHandlebar(String location) throws IOException {
+        TemplateLoader loader = new ClassPathTemplateLoader();
+        loader.setPrefix(TEMPLATE_LOCATION);
+        loader.setSuffix(HTML_EXTENSION);
+        Handlebars handlebars = new Handlebars(loader);
+
+        return handlebars.compile(location);
+    }
+
+    private boolean isLogined(HttpRequest httpRequest) {
+        return new Boolean(httpRequest.getCookie(LOGIN_CHECK_COOKIE));
     }
 }

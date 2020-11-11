@@ -18,6 +18,10 @@ public class HttpRequest {
     private static final String HEADER_KEY_VALUE_SEPARATOR = ": ";
     private static final int KEY_INDEX = 0;
     private static final int VALUE_INDEX = 1;
+    private static final String SESSION_COOKIE_KEY = "JSESSIONID";
+    private static final String COOKIE_SEPARATOR = ";";
+    private static final String COOKIE_KEY_VALUE_SEPARATOR = "=";
+    private static final int FIRST_COOKIE_INDEX = 0;
 
     private final RequestLine requestLine;
     private final Map<Header, String> headers;
@@ -111,13 +115,14 @@ public class HttpRequest {
     public String getCookie(String key) {
         String cookies = headers.get(Header.COOKIE);
         if (Objects.nonNull(cookies) && cookies.contains(key)) {
-            return cookies.split(key + "=")[1]
-                .split(";")[0];
+            return cookies
+                .split(COOKIE_SEPARATOR)[FIRST_COOKIE_INDEX]
+                .split(key + COOKIE_KEY_VALUE_SEPARATOR)[VALUE_INDEX];
         }
         return null;
     }
 
     public String getSessionId() {
-        return getCookie("JSESSIONID");
+        return getCookie(SESSION_COOKIE_KEY);
     }
 }
