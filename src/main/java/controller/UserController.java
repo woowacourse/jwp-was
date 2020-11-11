@@ -18,6 +18,8 @@ import model.request.HttpRequest;
 import model.response.HttpResponse;
 import model.response.StatusLine;
 import service.UserService;
+import webserver.HttpSession;
+import webserver.HttpSessions;
 
 public class UserController extends AbstractController {
 
@@ -47,6 +49,9 @@ public class UserController extends AbstractController {
     public HttpResponse doGet(HttpRequest httpRequest) {
         if (httpRequest.isSameUri(LIST_REQUEST)) {
             return showList(httpRequest);
+        }
+        if (httpRequest.isSameUri(PROFILE_REQUEST)) {
+            return showProfile(httpRequest);
         }
 
         return HttpResponse.of(Status.NOT_FOUND);
@@ -83,7 +88,10 @@ public class UserController extends AbstractController {
         StatusLine statusLine;
 
         try {
-            service.login(httpRequest);
+            User user = service.login(httpRequest);
+            HttpSession httpSession = HttpSessions.getHttpSession(httpRequest.getSessionId());
+            httpSession.setAttribute("user", user);
+
             statusLine = StatusLine.of(httpRequest, Status.FOUND);
             headers.put(Header.LOCATION, HOME_LOCATION);
             headers.put(Header.CONTENT_TYPE, ContentType.HTML
@@ -130,6 +138,49 @@ public class UserController extends AbstractController {
             }
 
             body = listPage.getBytes();
+            headers.put(Header.CONTENT_LENGTH, String.valueOf(body.length));
+            return HttpResponse.of(statusLine, headers, body);
+        }
+
+        statusLine = StatusLine.of(httpRequest, Status.FOUND);
+        headers.put(Header.LOCATION, LOGIN_REDIRECT_LOCATION);
+        return HttpResponse.of(statusLine, headers, null);
+    }
+
+    private HttpResponse showProfile(HttpRequest httpRequest) {
+        Map<Header, String> headers = new HashMap<>();
+        StatusLine statusLine;
+        String logined = httpRequest.getCookie("logined");
+        byte[] body;
+
+        if ("true".equals(logined)) {
+            statusLine = StatusLine.of(httpRequest, Status.OK);
+            headers.put(Header.CONTENT_TYPE, ContentType.HTML
+                .getContentTypeValue());
+
+            TemplateLoader loader = new ClassPathTemplateLoader();
+            loader.setPrefix("/templates");
+            loader.setSuffix(".html");
+            Handlebars handlebars = new Handlebars(loader);
+
+            Template template = null;
+            try {
+                template = handlebars.compile("user/profile");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            HttpSession httpSession = HttpSessions.getHttpSession(httpRequest.getSessionId());
+            User user = (User) httpSession.getAttribute("user");
+
+            String postPage = null;
+            try {
+                postPage = template.apply(user);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            body = postPage.getBytes();
             headers.put(Header.CONTENT_LENGTH, String.valueOf(body.length));
             return HttpResponse.of(statusLine, headers, body);
         }

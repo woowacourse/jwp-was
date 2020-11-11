@@ -27,12 +27,13 @@
 2. [x] 접근하고 있는 사용자가 “로그인” 상태일 경우(Cookie 값이 logined=true) 경우 http://localhost:8080/user/list 로 접근했을 때 사용자 목록을 출력한다.
     - [x] 로그인하지 않은 상태라면 로그인 페이지(login.html)로 이동한다.
     - [x] 동적으로 html을 생성하기 위해 handlebars.java template engine을 활용한다.
-3. [ ] 서블릿에서 지원하는 HttpSession API의 일부를 지원해야 한다.
-   - [ ] getId()
-   - [ ] setAttribute(String name, Object value)
-   - [ ] getAttribute(String name)
-   - [ ] removeAttribute(String name)
-   - [ ] invalidate()
-   - [ ] 세션은 클라이언트와 서버 간에 상태 값을 공유하기 위해 고유한 아이디를 활용하고, 이 고유한 아이디는 쿠키를 활용해 공유한다.    
+3. [x] 서블릿에서 지원하는 HttpSession API의 일부를 지원해야 한다.
+   - [x] getId()
+   - [x] setAttribute(String name, Object value)
+   - [x] getAttribute(String name)
+   - [x] removeAttribute(String name)
+   - [x] invalidate()
+   - [x] 세션은 클라이언트와 서버 간에 상태 값을 공유하기 위해 고유한 아이디를 활용하고, 이 고유한 아이디는 쿠키를 활용해 공유한다.
+      
 ## 우아한테크코스 코드리뷰
 * [온라인 코드 리뷰 과정](https://github.com/woowacourse/woowacourse-docs/blob/master/maincourse/README.md)

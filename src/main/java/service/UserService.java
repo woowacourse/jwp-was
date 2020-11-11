@@ -23,7 +23,7 @@ public class UserService {
         DataBase.addUser(user);
     }
 
-    public void login(HttpRequest httpRequest) {
+    public User login(HttpRequest httpRequest) {
         Map<String, String> parameters = httpRequest.extractParameters();
         String requestId = parameters.get("userId");
         String requestPassword = parameters.get("password");
@@ -33,5 +33,7 @@ public class UserService {
         if(Objects.isNull(user) || !user.checkPassword(requestPassword)){
             throw new IllegalArgumentException();
         }
+
+        return user;
     }
 }

@@ -116,4 +116,8 @@ public class HttpRequest {
         }
         return null;
     }
+
+    public String getSessionId() {
+        return getCookie("JSESSIONID");
+    }
 }
