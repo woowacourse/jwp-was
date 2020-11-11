@@ -13,7 +13,8 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 public class RequestHandler implements Runnable {
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
 
@@ -22,8 +23,8 @@ public class RequestHandler implements Runnable {
     }
 
     public void run() {
-        logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
-                connection.getPort());
+        LOGGER.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
+            connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
@@ -33,7 +34,7 @@ public class RequestHandler implements Runnable {
             Controller controller = RequestMapping.getController(request.getPath());
             controller.service(request, response);
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
     }
 }
