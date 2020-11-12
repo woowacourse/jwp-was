@@ -3,10 +3,10 @@ package controller;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import type.method.MethodType;
 import exception.NotSupportedMethodException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import type.method.MethodType;
 
 public abstract class AbstractController implements Controller {
 
