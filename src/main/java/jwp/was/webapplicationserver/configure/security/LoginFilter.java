@@ -50,7 +50,6 @@ public class LoginFilter {
             headers.put(LOCATION, INDEX_HTML);
             return HttpResponse.of(httpRequest.getHttpVersion(), FOUND, headers, EMPTY_BODY);
         }
-//        headers.put(SET_COOKIE, SET_COOKIE_SESSION_ID_KEY);
         headers.put(LOCATION, LOGIN_FAILED_HTML);
         return HttpResponse.of(httpRequest.getHttpVersion(), FOUND, headers, EMPTY_BODY);
     }

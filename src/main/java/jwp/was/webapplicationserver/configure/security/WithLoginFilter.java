@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import jwp.was.webapplicationserver.configure.controller.info.HttpInfo;
 import jwp.was.webapplicationserver.configure.session.HttpSessions;
@@ -35,16 +36,25 @@ public class WithLoginFilter {
         return INSTANCE;
     }
 
-    public boolean verifyLogin(HttpRequest httpRequest) {
+    public void validateLogin(HttpRequest httpRequest) {
         HttpInfo requestHttpInfo
             = HttpInfo.of(httpRequest.getHttpMethod(), httpRequest.getUrlPath());
 
-        if (withLogin.contains(requestHttpInfo)) {
-            Cookies cookies = Cookies.from(httpRequest.getHeader(COOKIE));
-            String sessionId = cookies.get(SET_COOKIE_SESSION_ID);
-            return HTTP_SESSIONS.existsUser(sessionId);
+        if (!withLogin.contains(requestHttpInfo)) {
+            return;
         }
-        return true;
+
+        Cookies cookies = Cookies.from(httpRequest.getHeader(COOKIE));
+        String sessionId = cookies.get(SET_COOKIE_SESSION_ID);
+        if (Objects.isNull(sessionId) || sessionId.isEmpty()) {
+            throw new NeedLoginException("Session ID 값이 없습니다.");
+        }
+
+        if (HTTP_SESSIONS.existsUser(sessionId)) {
+            return;
+        }
+
+        throw new NeedLoginException("Session ID가 유효하지 않습니다 : " + sessionId);
     }
 
     public HttpResponse getRedirectLoginPage(HttpRequest httpRequest) {

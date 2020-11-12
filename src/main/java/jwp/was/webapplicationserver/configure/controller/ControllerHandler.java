@@ -12,8 +12,11 @@ import jwp.was.webapplicationserver.configure.annotation.AnnotationChecker;
 import jwp.was.webapplicationserver.configure.annotation.ResponseBody;
 import jwp.was.webapplicationserver.configure.controller.info.MatchedInfo;
 import jwp.was.webapplicationserver.configure.controller.info.ModelAndView;
+import jwp.was.webapplicationserver.configure.controller.info.NotSupportMethodException;
+import jwp.was.webapplicationserver.configure.controller.info.NotSupportUrlException;
 import jwp.was.webapplicationserver.configure.maker.ConfigureMaker;
 import jwp.was.webapplicationserver.configure.security.LoginFilter;
+import jwp.was.webapplicationserver.configure.security.NeedLoginException;
 import jwp.was.webapplicationserver.configure.security.WithLoginFilter;
 import jwp.was.webapplicationserver.controller.GlobalExceptionHandler;
 import jwp.was.webserver.dto.HttpRequest;
@@ -45,10 +48,13 @@ public class ControllerHandler {
     }
 
     private HttpResponse makeHttpResponse(HttpRequest httpRequest, MatchedInfo matchedInfo) {
-        if (withLoginFilter.verifyLogin(httpRequest)) {
+        try {
+            withLoginFilter.validateLogin(httpRequest);
             return disposeRequest(httpRequest, matchedInfo);
+        } catch (NeedLoginException e) {
+            LOGGER.info("NeedLoginException: {}", e.getMessage());
+            return withLoginFilter.getRedirectLoginPage(httpRequest);
         }
-        return withLoginFilter.getRedirectLoginPage(httpRequest);
     }
 
     private HttpResponse disposeRequest(HttpRequest httpRequest, MatchedInfo matchedInfo) {
@@ -60,33 +66,30 @@ public class ControllerHandler {
 
     private HttpResponse getHttpResponseAfterLogin(HttpRequest httpRequest,
         MatchedInfo matchedInfo) {
-        if (matchedInfo.isMatch()) {
-            return executeMatchedMethod(httpRequest, matchedInfo);
-        }
-        if (matchedInfo.isNotMatch() && matchedInfo.anyMatchUrlPath()) {
+        try {
+            matchedInfo.validateMatch();
+        } catch (NotSupportMethodException e) {
             return globalExceptionHandler.handleHttpStatusCode(httpRequest, METHOD_NOT_ALLOW);
+        } catch (NotSupportUrlException e) {
+            return globalExceptionHandler.handleHttpStatusCode(httpRequest, NOT_FOUND);
         }
-        return globalExceptionHandler.handleHttpStatusCode(httpRequest, NOT_FOUND);
+
+        Method method = matchedInfo.getMethod();
+        Object instance = configureMaker.getConfigure(method.getDeclaringClass());
+        return getHttpResponse(httpRequest, method, instance);
     }
 
-    private HttpResponse executeMatchedMethod(HttpRequest httpRequest, MatchedInfo matchedInfo) {
+    private HttpResponse getHttpResponse(HttpRequest httpRequest, Method method, Object instance) {
         try {
-            Method method = matchedInfo.getMethod();
-            Object instance = configureMaker.getConfigure(method.getDeclaringClass());
-            return getHttpResponse(httpRequest, method, instance);
+            Object responseResult = method.invoke(instance, httpRequest);
+            if (AnnotationChecker.includeAnnotation(instance, ResponseBody.class)) {
+                return (HttpResponse) responseResult;
+            }
+            ModelAndView modelAndView = (ModelAndView) responseResult;
+            return modelAndView.toHttpResponse(httpRequest);
         } catch (IllegalAccessException | InvocationTargetException e) {
             return globalExceptionHandler.handleCauseException(httpRequest, e);
         }
-    }
-
-    private HttpResponse getHttpResponse(HttpRequest httpRequest, Method method, Object instance)
-        throws IllegalAccessException, InvocationTargetException {
-
-        if (AnnotationChecker.includeAnnotation(instance, ResponseBody.class)) {
-            return (HttpResponse) method.invoke(instance, httpRequest);
-        }
-        ModelAndView modelAndView = (ModelAndView) method.invoke(instance, httpRequest);
-        return modelAndView.toHttpResponse(httpRequest);
     }
 
     private void response(DataOutputStream dos, HttpResponse httpResponse) throws IOException {

@@ -15,20 +15,18 @@ public class MatchedInfo {
         this.urlPathCount = matchedUrlPathCount;
     }
 
-    public boolean isMatch() {
-        return Objects.nonNull(method);
-    }
-
-    public boolean isNotMatch() {
-        return !isMatch();
-    }
-
-    public boolean anyMatchUrlPath() {
-        return urlPathCount > DEFAULT_COUNT;
-    }
-
     public Method getMethod() {
         return method;
+    }
+
+    public void validateMatch() {
+        if (Objects.nonNull(method)) {
+            return;
+        }
+        if (urlPathCount > DEFAULT_COUNT) {
+            throw new NotSupportMethodException();
+        }
+        throw new NotSupportUrlException();
     }
 
     @Override

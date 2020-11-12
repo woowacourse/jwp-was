@@ -15,6 +15,7 @@ import static jwp.was.util.Constants.USER_NAME;
 import static jwp.was.util.Constants.USER_PASSWORD;
 import static jwp.was.webserver.HttpMethod.GET;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,9 +37,9 @@ class WithLoginFilterTest {
 
     private static final WithLoginFilter LOGIN_CONFIGURE = WithLoginFilter.getInstance();
 
-    @DisplayName("로그인 검증 - True, 로그인해야하는 정보에 쿠키가 있음")
+    @DisplayName("로그인 검증 - Void, 로그인해야하는 정보에 쿠키가 있음")
     @Test
-    void verifyLogin_LoginInfoAndHasCookie_ReturnTrue() {
+    void verifyLogin_LoginInfoAndHasCookie_Nothing() {
         HttpMethod httpMethod = GET;
         UrlPath urlPath = URL_PATH_PAGE_API_USER_LIST;
         assertThat(LOGIN_CONFIGURE.getWithLoginInfo())
@@ -61,14 +62,14 @@ class WithLoginFilterTest {
             new Headers(headers)
         );
 
-        assertThat(LOGIN_CONFIGURE.verifyLogin(httpRequest)).isTrue();
+        LOGIN_CONFIGURE.validateLogin(httpRequest);
 
         httpSessions.removeSession(httpSession.getId());
     }
 
-    @DisplayName("로그인 검증 - False, User 속성이 없는 세션")
+    @DisplayName("로그인 검증 - 예외 발생, User 속성이 없는 세션")
     @Test
-    void verifyLogin_LoginInfoAndHasCookieNotExistsUser_ReturnFalse() {
+    void verifyLogin_LoginInfoAndHasCookieNotExistsUser_ThrownNeedLoginException() {
         HttpMethod httpMethod = GET;
         UrlPath urlPath = URL_PATH_PAGE_API_USER_LIST;
         assertThat(LOGIN_CONFIGURE.getWithLoginInfo())
@@ -89,14 +90,15 @@ class WithLoginFilterTest {
             new Headers(headers)
         );
 
-        assertThat(LOGIN_CONFIGURE.verifyLogin(httpRequest)).isFalse();
+        assertThatThrownBy(() -> LOGIN_CONFIGURE.validateLogin(httpRequest))
+            .isInstanceOf(NeedLoginException.class);
 
         httpSessions.removeSession(httpSession.getId());
     }
 
-    @DisplayName("로그인 검증 - False, 로그인해야하는 정보에 유효하지 않은 SessionIdCookie 포함 쿠키가 있음")
+    @DisplayName("로그인 검증 - 예외 발생, 로그인해야하는 정보에 유효하지 않은 SessionIdCookie 포함 쿠키가 있음")
     @Test
-    void verifyLogin_LoginInfoAndHasCookieWrongSessionId_ReturnFalse() {
+    void verifyLogin_LoginInfoAndHasCookieWrongSessionId_ThrownNeedLoginException() {
         HttpMethod httpMethod = GET;
         UrlPath urlPath = URL_PATH_PAGE_API_USER_LIST;
         assertThat(LOGIN_CONFIGURE.getWithLoginInfo())
@@ -113,12 +115,13 @@ class WithLoginFilterTest {
             new Headers(headers)
         );
 
-        assertThat(LOGIN_CONFIGURE.verifyLogin(httpRequest)).isFalse();
+        assertThatThrownBy(() -> LOGIN_CONFIGURE.validateLogin(httpRequest))
+            .isInstanceOf(NeedLoginException.class);
     }
 
-    @DisplayName("로그인 검증 - False, 로그인해야하는 정보인데, 쿠키가 없음")
+    @DisplayName("로그인 검증 - 예외 발생, 로그인해야하는 정보인데, 쿠키가 없음")
     @Test
-    void verifyLogin_LoginInfoAndHasNotCookie_ReturnFalse() {
+    void verifyLogin_LoginInfoAndHasNotCookie_ThrownNeedLoginException() {
         HttpMethod httpMethod = GET;
         UrlPath urlPath = URL_PATH_PAGE_API_USER_LIST;
         assertThat(LOGIN_CONFIGURE.getWithLoginInfo())
@@ -132,12 +135,13 @@ class WithLoginFilterTest {
             HEADERS_EMPTY
         );
 
-        assertThat(LOGIN_CONFIGURE.verifyLogin(httpRequest)).isFalse();
+        assertThatThrownBy(() -> LOGIN_CONFIGURE.validateLogin(httpRequest))
+            .isInstanceOf(NeedLoginException.class);
     }
 
-    @DisplayName("로그인 검증 - True, 로그인해야하는 정보가 아님")
+    @DisplayName("로그인 검증 - Void, 로그인해야하는 정보가 아님")
     @Test
-    void verifyLogin_NotLoginInfo_ReturnTrue() {
+    void verifyLogin_NotLoginInfo_Nothing() {
         HttpMethod httpMethod = GET;
         UrlPath urlPath = UrlPath.from("/notLogin");
         assertThat(LOGIN_CONFIGURE.getWithLoginInfo())
@@ -151,7 +155,7 @@ class WithLoginFilterTest {
             HEADERS_EMPTY
         );
 
-        assertThat(LOGIN_CONFIGURE.verifyLogin(httpRequest)).isTrue();
+        LOGIN_CONFIGURE.validateLogin(httpRequest);
     }
 
     @DisplayName("LoginPage로 Redirect시키는 HttpResponse를 가져옴")
