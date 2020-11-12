@@ -3,6 +3,7 @@ package webserver.requestmapping;
 import http.request.HttpMethod;
 import http.request.RequestEntity;
 import implementedbehavior.UserCreateBehavior;
+import implementedbehavior.UserListBehavior;
 import implementedbehavior.UserLoginBehavior;
 
 import java.util.Arrays;
@@ -15,7 +16,8 @@ public class RequestMappingStorage {
     static {
         REQUEST_MAPPINGS = Arrays.asList(
             new RequestMapping(HttpMethod.POST, "/user/create", new UserCreateBehavior()),
-            new RequestMapping(HttpMethod.POST, "/user/login", new UserLoginBehavior())
+            new RequestMapping(HttpMethod.POST, "/user/login", new UserLoginBehavior()),
+            new RequestMapping(HttpMethod.GET, "/user/list", new UserListBehavior())
         );
     }
 
