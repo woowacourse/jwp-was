@@ -18,6 +18,6 @@ public class HttpStatusLine {
     }
 
     public String getLine() {
-        return httpVersion + " " + httpStatus.getStatusCode() + " " + httpStatus.name();
+        return httpVersion + " " + httpStatus.getStatusCode() + " " + httpStatus.getMessage();
     }
 }
