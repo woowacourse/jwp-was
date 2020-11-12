@@ -1,11 +1,14 @@
 package http;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class QueryParameters {
+    private static final Map<String, String> DEFAULT_QUERY_PARAMETERS = Collections.unmodifiableMap(new HashMap<>());
+
     private Map<String, String> queryParams;
 
     public static QueryParameters of(String queries) {
@@ -18,7 +21,7 @@ public class QueryParameters {
     }
 
     public static QueryParameters empty() {
-        return new QueryParameters(new HashMap<>());
+        return new QueryParameters(DEFAULT_QUERY_PARAMETERS);
     }
 
     public QueryParameters(Map<String, String> queryParams) {
