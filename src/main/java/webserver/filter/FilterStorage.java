@@ -5,6 +5,7 @@ import java.util.List;
 
 import http.request.RequestEntity;
 import http.response.ResponseEntity;
+import implementedfilter.AuthFilter;
 
 public class FilterStorage {
 
@@ -12,6 +13,7 @@ public class FilterStorage {
     private static final List<Filter> outputFilters = new ArrayList<>();
 
     static {
+        inputFilters.add(new AuthFilter());
         inputFilters.add(new StaticFileFilter());
         outputFilters.add(new ContentLengthFilter());
     }
