@@ -38,10 +38,10 @@ public class RequestHandler implements Runnable {
             String path = mimeType.getFilePath(url);
             byte[] body = FileIoUtils.loadFileFromClasspath(path);
 
-            if (httpRequest.isMethod(HttpMethod.GET)) {
+            if (httpRequest.matchMethod(HttpMethod.GET)) {
                 httpResponse.response200Header(body.length, mimeType.getContentType());
             }
-            if (httpRequest.isMethod(HttpMethod.POST)) {
+            if (httpRequest.matchMethod(HttpMethod.POST)) {
                 createUser(httpRequest);
                 httpResponse.setHttpStatus(HttpStatus.FOUND);
                 httpResponse.response302Header(body.length, mimeType.getContentType(), "/index.html");

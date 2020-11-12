@@ -28,7 +28,7 @@ public class HttpRequest {
         return !body.isEmpty();
     }
 
-    public boolean isMethod(HttpMethod httpMethod) {
+    public boolean matchMethod(HttpMethod httpMethod) {
         return httpRequestLine.isMethod(httpMethod);
     }
 
