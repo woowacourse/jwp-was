@@ -12,6 +12,7 @@ public class HttpResponse {
     private static final String RESPONSE_HEADER_CONTENT_TYPE = "Content-Type";
     private static final String RESPONSE_HEADER_CONTENT_LENGTH = "Content-Length";
     private static final String RESPONSE_HEADER_SET_COOKIE = "Set-Cookie";
+    private static final String RESPONSE_HEADER_ALLOW = "Allow";
     private static final String COOKIE_NAME_PATH = "Path";
     private static final String COOKIE_VALUE_PATH = "/";
     private static final String CHARSET_UTF_8 = ";charset=utf-8";
@@ -47,6 +48,14 @@ public class HttpResponse {
 
         addHeader(RESPONSE_HEADER_LOCATION, redirectUrl);
         addCookieInHeader();
+
+        render();
+    }
+
+    public void response405(final String allowMethods) throws IOException {
+        this.httpResponseLine.setHttpStatus(HttpStatus.METHOD_NOT_ALLOWED);
+
+        addHeader(RESPONSE_HEADER_ALLOW, allowMethods);
 
         render();
     }

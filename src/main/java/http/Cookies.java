@@ -12,6 +12,7 @@ public class Cookies implements Cloneable {
     private static final String SEMICOLON = ";";
     private static final String BLANK = " ";
     private static final String EMPTY = "";
+    private static final int MINIMUM_LENGTH_TWO = 2;
 
     private final Map<String, String> cookies;
 
@@ -33,7 +34,7 @@ public class Cookies implements Cloneable {
     }
 
     private static void inputCookieData(final Map<String, String> savedCookies, final String[] data) {
-        if (data.length == 2) {
+        if (data.length == MINIMUM_LENGTH_TWO) {
             savedCookies.put(data[0].trim(), data[1].trim());
         }
         savedCookies.put(data[0].trim(), EMPTY);

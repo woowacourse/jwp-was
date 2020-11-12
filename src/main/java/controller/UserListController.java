@@ -4,15 +4,14 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Objects;
 
-import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
-import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
-import com.github.jknack.handlebars.io.TemplateLoader;
 import db.DataBase;
 import http.Cookies;
+import http.HttpSessionStorage;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.User;
+import type.method.MethodType;
 import utils.TemplateUtils;
 
 public class UserListController extends AbstractController {
@@ -24,7 +23,7 @@ public class UserListController extends AbstractController {
         final Cookies cookies = httpRequest.getCookie();
         final String SessionId = cookies.getSessionId();
 
-        if (Objects.isNull(SessionId) || !httpSessionStorage.isExistById(SessionId)) {
+        if (Objects.isNull(SessionId) || !HttpSessionStorage.isExistById(SessionId)) {
             httpResponse.response302(REDIRECT_LOGIN);
         }
 
@@ -33,5 +32,10 @@ public class UserListController extends AbstractController {
         final Collection<User> users = DataBase.findAll();
         final byte[] userListPage = template.apply(users).getBytes();
         httpResponse.response200(userListPage);
+    }
+
+    @Override
+    void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+        httpResponse.response405(MethodType.GET.name());
     }
 }

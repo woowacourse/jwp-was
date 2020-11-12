@@ -11,7 +11,6 @@ public class HttpRequest {
 
     private static final String HEADER_ACCEPT = "Accept";
     private static final String COMMA = ",";
-    private static final String SESSION_ID = "SessionId";
 
     private final HttpRequestLine httpRequestLine;
     private final HttpRequestHeader httpRequestHeader;
@@ -26,12 +25,11 @@ public class HttpRequest {
     }
 
     private HttpSession initSession() {
-        final Cookies cookies = httpRequestHeader.getCookies();
-        final HttpSession httpSession = new HttpSession();
-        if (Objects.nonNull(cookies.getSessionId())) {
-            HttpSessionStorage.save(SESSION_ID, httpSession);
+        Cookies cookies = this.httpRequestHeader.getCookies();
+        if (Objects.isNull(cookies.getSessionId())) {
+            return new HttpSession();
         }
-        return httpSession;
+        return HttpSessionStorage.getHttpSessionById(cookies.getSessionId());
     }
 
     public MethodType getMethod() {
@@ -67,6 +65,6 @@ public class HttpRequest {
     }
 
     public HttpSession getHttpSession() {
-        return httpSession;
+        return this.httpSession;
     }
 }

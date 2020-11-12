@@ -3,10 +3,13 @@ package controller;
 import java.io.IOException;
 import java.util.Objects;
 
+import http.HttpSession;
+import http.HttpSessionStorage;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.User;
 import service.UserService;
+import type.method.MethodType;
 
 public class LoginController extends AbstractController {
 
@@ -19,6 +22,11 @@ public class LoginController extends AbstractController {
     private final UserService userService = UserService.getInstance();
 
     @Override
+    void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+        httpResponse.response405(MethodType.POST.name());
+    }
+
+    @Override
     public void doPost(final HttpRequest httpRequest, final HttpResponse httpResponse) throws IOException {
         final User user = userService.login(httpRequest.getHttpRequestBodyByName(USER_ID));
         if (Objects.isNull(user)) {
@@ -26,6 +34,10 @@ public class LoginController extends AbstractController {
             httpResponse.response302(REDIRECT_LOGIN_FAILED);
             return ;
         }
+
+        HttpSession httpSession = httpRequest.getHttpSession();
+        httpSession.setAttribute(user.getUserId(), user);
+        HttpSessionStorage.save(httpSession.getId(), httpSession);
 
         httpResponse.addCookie(SESSION_ID, httpRequest.getSessionId());
         httpResponse.addCookie(LOGINED, "true");
