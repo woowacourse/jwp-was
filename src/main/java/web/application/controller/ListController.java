@@ -11,6 +11,8 @@ import web.server.utils.StaticFileType;
 
 public class ListController extends AbstractController {
 
+    private static final String LOGINED = "logined";
+
     private ListController() {
         super();
     }
@@ -21,7 +23,7 @@ public class ListController extends AbstractController {
 
     @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        boolean isLogined = Optional.ofNullable(httpRequest.getSession().getAttribute("logined"))
+        boolean isLogined = Optional.ofNullable(httpRequest.getSession().getAttribute(LOGINED))
             .map(value -> Boolean.parseBoolean(value.toString()))
             .orElse(false);
 
