@@ -1,4 +1,4 @@
-package http.controller;
+package controller;
 
 import java.util.Objects;
 
@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import db.DataBase;
-import http.exceptions.UserNotFound;
+import exceptions.UserNotFound;
 import http.request.HttpRequest;
 import http.request.HttpRequestMapping;
 import http.response.HttpResponse;

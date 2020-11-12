@@ -1,4 +1,4 @@
-package http.controller;
+package controller;
 
 import java.util.Collection;
 
