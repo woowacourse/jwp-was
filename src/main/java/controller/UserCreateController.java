@@ -3,7 +3,7 @@ package controller;
 import http.HttpRequest;
 import model.User;
 
-public class UserController {
+public class UserCreateController {
     public static User createUser(HttpRequest httpRequest) {
         String userId = httpRequest.getParam("userId");
         String password = httpRequest.getParam("password");
