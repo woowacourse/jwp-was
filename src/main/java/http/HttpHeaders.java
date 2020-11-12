@@ -27,7 +27,6 @@ public class HttpHeaders {
         String line = br.readLine();
         while ((line != null) && !"".equals(line)) {
             String[] tokens = line.split(DELIMITER);
-            System.out.println(Arrays.toString(tokens));
             httpHeaders.put(tokens[HEADER_TYPE_INDEX], tokens[HEADER_VALUE_INDEX]);
             line = br.readLine();
         }
