@@ -1,8 +1,12 @@
 package webserver;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import utils.IOUtils;
 
 public class HttpRequest {
     private static final String ENTRY_POINT = "/index.html";
@@ -12,6 +16,11 @@ public class HttpRequest {
     private String path;
     private String version;
     private Map<String, String> headers;
+
+    public static HttpRequest of(BufferedReader bufferedReader) throws IOException {
+        String s = IOUtils.readData(bufferedReader, 10);
+        return of(s);
+    }
 
     public static HttpRequest of(String input) {
         String[] lines = input.split(System.lineSeparator());
