@@ -1,7 +1,7 @@
 package service;
 
 import db.DataBase;
-import exception.LoginFailException;
+import exception.NotExistUserException;
 import java.util.Map;
 import java.util.Objects;
 import model.domain.User;
@@ -24,7 +24,7 @@ public class UserService {
         DataBase.addUser(user);
     }
 
-    public User login(HttpRequest httpRequest) throws LoginFailException {
+    public User login(HttpRequest httpRequest) throws NotExistUserException {
         Map<String, String> parameters = httpRequest.extractParameters();
         String requestId = parameters.get("userId");
         String requestPassword = parameters.get("password");
@@ -32,7 +32,7 @@ public class UserService {
         User user = DataBase.findUserById(requestId);
 
         if (Objects.isNull(user) || !user.checkPassword(requestPassword)) {
-            throw new LoginFailException("Not Exist User");
+            throw new NotExistUserException("Not Exist User");
         }
 
         return user;

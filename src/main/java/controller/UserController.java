@@ -2,7 +2,7 @@ package controller;
 
 import com.github.jknack.handlebars.Template;
 import db.DataBase;
-import exception.LoginFailException;
+import exception.NotExistUserException;
 import exception.NoSessionException;
 import java.io.IOException;
 import java.util.Collection;
@@ -19,8 +19,8 @@ import model.response.HttpResponse;
 import model.response.StatusLine;
 import service.UserService;
 import utils.HandlebarUtils;
-import webserver.HttpSession;
-import webserver.HttpSessions;
+import model.session.HttpSession;
+import model.session.HttpSessions;
 
 public class UserController extends AbstractController {
 
@@ -102,7 +102,7 @@ public class UserController extends AbstractController {
             headers.put(Header.SET_COOKIE, LOGIN_SUCCESS_COOKIE_VALUE);
 
             return HttpResponse.of(statusLine, headers, null);
-        } catch (LoginFailException e) {
+        } catch (NotExistUserException e) {
             return redirectResponse(httpRequest, LOGIN_FAIL_REDIRECT_LOCATION);
         } catch (NoSessionException e) {
             return redirectResponse(httpRequest, LOGIN_REDIRECT_LOCATION);

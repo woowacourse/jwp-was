@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Stream;
 import model.general.Method;
 import org.junit.jupiter.api.DisplayName;
@@ -18,6 +19,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class RequestLineTest {
 
@@ -31,12 +33,10 @@ public class RequestLineTest {
     }
 
     @ParameterizedTest
-    @DisplayName("Request Uri 파라미터 확인")
+    @DisplayName("Request Uri 확장자 확인")
     @CsvSource(value = {
         "src/test/resources/input/get_template_file_request.txt:.html",
-        "src/test/resources/input/get_static_file_request.txt:.css",
-        "src/test/resources/input/get_api_request.txt:",
-        "src/test/resources/input/post_api_request.txt:"
+        "src/test/resources/input/get_static_file_request.txt:.css"
     }, delimiter = ':')
     void extractRequestUriExtension(String filePath, String expected) throws IOException {
         InputStream inputStream = new FileInputStream(filePath);
@@ -45,7 +45,25 @@ public class RequestLineTest {
 
         RequestLine requestLine = RequestLine.of(bufferedReader.readLine());
 
-        assertThat(requestLine.extractRequestUriExtension()).isEqualTo(expected);
+        assertThat(requestLine.extractRequestUriExtension()).isEqualTo(Optional.of(expected));
+        bufferedReader.close();
+    }
+
+    @ParameterizedTest
+    @DisplayName("Request Uri 확장자 확인 - 확장자가 없을 경우")
+    @ValueSource(strings = {
+        "src/test/resources/input/get_api_request.txt",
+        "src/test/resources/input/post_api_request.txt"
+    })
+    void extractRequestUriExtension_IfNoExtension_ReturnEmpty(String filePath)
+        throws IOException {
+        InputStream inputStream = new FileInputStream(filePath);
+        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+        RequestLine requestLine = RequestLine.of(bufferedReader.readLine());
+
+        assertThat(requestLine.extractRequestUriExtension()).isEqualTo(Optional.empty());
         bufferedReader.close();
     }
 

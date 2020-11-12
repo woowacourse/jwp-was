@@ -1,4 +1,4 @@
-package webserver;
+package model.session;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +17,7 @@ public class HttpSessions {
         return session;
     }
 
-    public static HttpSession makeNewHttpSession(String id) {
+    private static HttpSession makeNewHttpSession(String id) {
         HttpSession newSession = new HttpSession(id);
         sessions.put(id, newSession);
 
