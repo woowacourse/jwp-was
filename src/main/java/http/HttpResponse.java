@@ -6,7 +6,6 @@ import java.io.OutputStream;
 import java.util.HashMap;
 
 public class HttpResponse {
-    private static final String CRLF = "\r\n";
     private static final String DELIMITER = ": ";
     private static final String CONTENT_TYPE = "Content-Type";
     private static final String CONTENT_LENGTH = "Content-Length";
@@ -52,14 +51,14 @@ public class HttpResponse {
     }
 
     private void writeStatusLine() throws IOException {
-        dos.writeBytes(httpStatusLine.getLine() + CRLF);
+        dos.writeBytes(httpStatusLine.getLine() + System.lineSeparator());
     }
 
     private void writeHeaders() throws IOException {
         for (String headerType : httpHeaders.keySet()) {
-            String header = headerType + DELIMITER + httpHeaders.get(headerType) + CRLF;
+            String header = headerType + DELIMITER + httpHeaders.get(headerType) + System.lineSeparator();
             dos.writeBytes(header);
         }
-        dos.writeBytes(CRLF);
+        dos.writeBytes(System.lineSeparator());
     }
 }

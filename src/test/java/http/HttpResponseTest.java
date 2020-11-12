@@ -20,10 +20,10 @@ class HttpResponseTest {
         httpResponse.response200Header(10, MimeType.HTML.getContentType());
 
         String result = out.toString();
-        String expected = "HTTP/1.1 200 OK\r\n"
-            + "Content-Length: 10\r\n"
-            + "Content-Type: text/html;charset=utf-8\r\n"
-            + "\r\n";
+        String expected = "HTTP/1.1 200 OK" + System.lineSeparator()
+            + "Content-Length: 10" + System.lineSeparator()
+            + "Content-Type: text/html;charset=utf-8" + System.lineSeparator()
+            + System.lineSeparator();
 
         assertEquals(expected, result);
     }
@@ -38,11 +38,11 @@ class HttpResponseTest {
         httpResponse.response302Header(10, MimeType.HTML.getContentType(), "/index.html");
 
         String result = out.toString();
-        String expected = "HTTP/1.1 302 FOUND\r\n"
-            + "Content-Length: 10\r\n"
-            + "Content-Type: text/html;charset=utf-8\r\n"
-            + "Location: /index.html\r\n"
-            + "\r\n";
+        String expected = "HTTP/1.1 302 FOUND" + System.lineSeparator()
+            + "Content-Length: 10" + System.lineSeparator()
+            + "Content-Type: text/html;charset=utf-8" + System.lineSeparator()
+            + "Location: /index.html" + System.lineSeparator()
+            + System.lineSeparator();
         assertEquals(expected, result);
     }
 
