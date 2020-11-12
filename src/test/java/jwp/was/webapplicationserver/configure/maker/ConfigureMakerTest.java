@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.lang.annotation.Annotation;
 import java.util.Set;
-import jwp.was.webapplicationserver.configure.ConfigureMaker;
 import jwp.was.webapplicationserver.configure.annotation.Controller;
 import org.junit.jupiter.api.Test;
 

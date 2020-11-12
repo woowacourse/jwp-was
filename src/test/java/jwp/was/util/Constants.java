@@ -22,21 +22,29 @@ public class Constants {
     public static final String CONTENT_TYPE_TEXT_CSS = "text/css;charset=utf-8";
     public static final String CONTENT_TYPE_TEXT_HTML = "text/html;charset=utf-8";
 
+    public static final String SET_COOKIE_SESSION_ID_KEY = "sessionId=";
 
     public static final UrlPath URL_PATH_NOT_EXISTS_FILE = UrlPath.from("/wrong.file");
     public static final UrlPath URL_PATH_INDEX_HTML = UrlPath.from("/index.html");
     public static final UrlPath URL_PATH_BOOTSTRAP_MIN_CSS = UrlPath.from("/css/bootstrap.min.css");
     public static final UrlPath URL_PATH_API_CREATE_USER = UrlPath.from("/user/create");
+    public static final UrlPath URL_PATH_PAGE_API_USER_LIST = UrlPath.from("/user/list");
+    public static final UrlPath URL_PATH_LOGIN = UrlPath.from("/user/login");
+    public static final String URL_PATH_LOGIN_HTML = "/user/login.html";
 
     public static final HttpVersion HTTP_VERSION = HttpVersion.of("HTTP/1.1");
     public static final Parameters PARAMETERS_EMPTY = Parameters.fromEncodedParameter("");
-    public static final Parameters PARAMETERS_FOR_CREATE_USER = Parameters.fromEncodedParameter(
-        USER_ID + "=" + USER_ID
-            + "&" + USER_EMAIL + "=" + USER_EMAIL
-            + "&" + USER_PASSWORD + "=" + USER_PASSWORD
-            + "&" + USER_NAME + "=" + USER_NAME
-    );
     public static final Headers HEADERS_EMPTY = Headers.from(new ArrayList<>());
-
     public static final String EMPTY = "";
+
+    private static final String LOGIN_PARAMETER
+        = USER_ID + "=" + USER_ID + "&" + USER_PASSWORD + "=" + USER_PASSWORD;
+    public static final Parameters PARAMETERS_FOR_LOGIN
+        = Parameters.fromEncodedParameter(LOGIN_PARAMETER);
+    public static final Parameters WRONG_PARAMETERS_FOR_LOGIN
+        = Parameters.fromEncodedParameter(LOGIN_PARAMETER + "WRONG");
+    public static final Parameters PARAMETERS_FOR_CREATE_USER = Parameters.fromEncodedParameter(
+        LOGIN_PARAMETER + "&" + USER_EMAIL + "=" + USER_EMAIL + "&" + USER_NAME + "=" + USER_NAME);
+
+    public static final String ATTRIBUTE_KEY_USER = "USER";
 }

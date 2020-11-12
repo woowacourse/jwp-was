@@ -10,8 +10,8 @@ import static jwp.was.webserver.HttpMethod.GET;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.nio.charset.StandardCharsets;
-import jwp.was.util.childOfException;
-import jwp.was.util.childOfIllegalArgumentException;
+import jwp.was.util.exception.ChildOfException;
+import jwp.was.util.exception.ChildOfIllegalArgumentException;
 import jwp.was.webserver.HttpStatusCode;
 import jwp.was.webserver.dto.HttpRequest;
 import jwp.was.webserver.dto.HttpResponse;
@@ -45,7 +45,7 @@ class GlobalExceptionHandlerTest {
     @Test
     void handleException_CauseOfExtendsIllegalArgumentException_BadRequest() {
         RuntimeException exception
-            = makeRuntimeExceptionWithCause(new childOfIllegalArgumentException());
+            = makeRuntimeExceptionWithCause(new ChildOfIllegalArgumentException());
         HttpResponse httpResponse
             = globalExceptionHandler.handleCauseException(httpRequest, exception);
 
@@ -78,7 +78,7 @@ class GlobalExceptionHandlerTest {
     @Test
     void handleException_CauseOfExtendsException_BadRequest() {
         RuntimeException exception
-            = makeRuntimeExceptionWithCause(new childOfException());
+            = makeRuntimeExceptionWithCause(new ChildOfException());
         HttpResponse httpResponse
             = globalExceptionHandler.handleCauseException(httpRequest, exception);
 

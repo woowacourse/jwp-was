@@ -13,6 +13,9 @@ import jwp.was.webserver.HttpStatusCode;
 
 public class HttpResponse {
 
+    private static final String CHARSET_UTF_8 = ";charset=utf-8";
+    private static final String TEXT_PLAIN = "text/plain";
+
     private final String httpVersion;
     private final HttpStatusCode httpStatusCode;
     private final Map<String, String> headers;
@@ -22,8 +25,8 @@ public class HttpResponse {
         Map<String, String> headers, byte[] body) {
         this.httpVersion = Objects.requireNonNull(httpVersion);
         this.httpStatusCode = Objects.requireNonNull(httpStatusCode);
-        this.headers
-            = settingHeaders(Objects.requireNonNull(headers), Objects.requireNonNull(body));
+        this.headers = settingHeaders(Objects.requireNonNull(headers),
+            Objects.requireNonNull(body));
         this.body = body;
     }
 
@@ -46,10 +49,10 @@ public class HttpResponse {
         headers.put(CONTENT_LENGTH, String.valueOf(body.length));
         String contentType = headers.get(CONTENT_TYPE);
         if (Objects.isNull(contentType) || contentType.isEmpty()) {
-            headers.put(CONTENT_TYPE, "text/plain;charset=utf-8");
+            headers.put(CONTENT_TYPE, TEXT_PLAIN + CHARSET_UTF_8);
             return Collections.unmodifiableMap(headers);
         }
-        headers.put(CONTENT_TYPE, contentType + ";charset=utf-8");
+        headers.put(CONTENT_TYPE, contentType + CHARSET_UTF_8);
         return Collections.unmodifiableMap(headers);
     }
 

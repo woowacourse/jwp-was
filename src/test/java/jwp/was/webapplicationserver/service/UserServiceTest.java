@@ -11,7 +11,9 @@ import static jwp.was.util.Constants.USER_PASSWORD;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import jwp.was.webapplicationserver.configure.ConfigureMaker;
+import java.util.List;
+import jwp.was.webapplicationserver.configure.maker.ConfigureMaker;
+import jwp.was.webapplicationserver.controller.dto.LoginRequest;
 import jwp.was.webapplicationserver.controller.dto.UserRequest;
 import jwp.was.webapplicationserver.db.DataBase;
 import jwp.was.webapplicationserver.db.DataBaseTest;
@@ -83,5 +85,39 @@ class UserServiceTest {
         );
         assertThatThrownBy(() -> userService.createUser(userEqualIdRequest))
             .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @DisplayName("로그인 - True, 성공시")
+    @Test
+    void login_Success_ReturnTrue() {
+        UserRequest userRequest = new UserRequest(USER_ID, USER_PASSWORD, USER_NAME, USER_EMAIL);
+        userService.createUser(userRequest);
+
+        LoginRequest loginRequest = new LoginRequest(USER_ID, USER_PASSWORD);
+        boolean login = userService.login(loginRequest);
+
+        assertThat(login).isTrue();
+    }
+
+    @DisplayName("로그인 - False, 실패시")
+    @Test
+    void login_Failed_ReturnFalse() {
+        LoginRequest loginRequest = new LoginRequest(USER_ID, USER_PASSWORD);
+        boolean login = userService.login(loginRequest);
+
+        assertThat(login).isFalse();
+    }
+
+    @DisplayName("모든 유저 조회 - 성공")
+    @Test
+    void findAllUser_Success() {
+        UserRequest userRequest = new UserRequest(USER_ID, USER_PASSWORD, USER_NAME, USER_EMAIL);
+        User user = userService.createUser(userRequest);
+
+        List<User> allUser = userService.findAllUser();
+
+        assertThat(allUser).isNotNull();
+        assertThat(allUser).isNotEmpty();
+        assertThat(allUser).contains(user);
     }
 }

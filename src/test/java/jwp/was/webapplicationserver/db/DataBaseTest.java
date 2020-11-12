@@ -1,6 +1,6 @@
 package jwp.was.webapplicationserver.db;
 
-import jwp.was.webapplicationserver.configure.ConfigureMaker;
+import jwp.was.webapplicationserver.configure.maker.ConfigureMaker;
 
 public class DataBaseTest {
 
