@@ -1,7 +1,5 @@
 package http;
 
-import java.util.Map;
-
 public class HttpUrl {
     private static final String URL_DELIMITER = "\\?";
     private static final int URL_INDEX = 0;
@@ -27,15 +25,15 @@ public class HttpUrl {
         return tokens.length == 2;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public Map<String, String> getParams() {
-        return params.getParams();
-    }
-
     public String getParam(String param) {
         return params.get(param);
+    }
+
+    public MimeType getMimeType() {
+        return MimeType.from(url);
+    }
+
+    public String getPath(MimeType mimeType) {
+        return mimeType.getFilePath(url);
     }
 }

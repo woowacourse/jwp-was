@@ -21,7 +21,6 @@ class HttpRequestTest {
 
         assertAll(() -> {
             assertTrue(httpRequest.matchMethod(HttpMethod.GET));
-            assertEquals("/user/create", httpRequest.getUrl());
             assertEquals("keep-alive", httpRequest.getHeader("Connection"));
             assertEquals("orange", httpRequest.getParam("userId"));
             assertEquals("Yerin", httpRequest.getParam("name"));
@@ -37,7 +36,6 @@ class HttpRequestTest {
 
         assertAll(() -> {
             assertTrue(httpRequest.matchMethod(HttpMethod.POST));
-            assertEquals("/user/create", httpRequest.getUrl());
             assertEquals("keep-alive", httpRequest.getHeader("Connection"));
             assertEquals("46", httpRequest.getHeader("Content-Length"));
             assertEquals("application/x-www-form-urlencoded", httpRequest.getHeader("Content-Type"));

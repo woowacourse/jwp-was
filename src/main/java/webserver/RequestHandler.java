@@ -33,9 +33,8 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = new HttpRequest(in);
             HttpResponse httpResponse = new HttpResponse(out, httpRequest.getVersion());
 
-            String url = httpRequest.getUrl();
-            MimeType mimeType = MimeType.from(url);
-            String path = mimeType.getFilePath(url);
+            MimeType mimeType = httpRequest.getMimeType();
+            String path = httpRequest.getPath();
             byte[] body = FileIoUtils.loadFileFromClasspath(path);
 
             if (httpRequest.matchMethod(HttpMethod.GET)) {

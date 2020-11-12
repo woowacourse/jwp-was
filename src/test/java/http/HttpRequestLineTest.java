@@ -15,7 +15,6 @@ class HttpRequestLineTest {
 
         assertAll(
             () -> assertThat(httpRequestLine.isMethod(HttpMethod.GET)).isTrue(),
-            () -> assertThat(httpRequestLine.getUrl()).isEqualTo("/someUrl.url"),
             () -> assertThat(httpRequestLine.getVersion()).isEqualTo("HTTP/1.1")
         );
     }

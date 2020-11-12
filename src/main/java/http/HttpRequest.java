@@ -32,8 +32,8 @@ public class HttpRequest {
         return httpRequestLine.isMethod(httpMethod);
     }
 
-    public String getUrl() {
-        return this.httpRequestLine.getUrl();
+    public String getPath() {
+        return httpRequestLine.getPath();
     }
 
     public String getVersion() {
@@ -49,5 +49,9 @@ public class HttpRequest {
 
     public String getHeader(String headerType) {
         return httpHeaders.get(headerType);
+    }
+
+    public MimeType getMimeType() {
+        return httpRequestLine.getMimeType();
     }
 }
