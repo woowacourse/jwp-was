@@ -29,9 +29,12 @@ public enum ContentType {
     }
 
     public static Optional<ContentType> of(HttpRequest httpRequest) {
-        String extension = httpRequest.extractRequestUriExtension();
+        Optional<String> extension = httpRequest.extractRequestUriExtension();
+        if(extension.isPresent()){
+            return of(extension.get());
+        }
 
-        return of(extension);
+        return Optional.empty();
     }
 
     public String getContentTypeValue() {

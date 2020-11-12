@@ -1,5 +1,6 @@
 package model.request;
 
+import exception.NoSessionException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,6 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import model.general.Header;
 import model.general.Method;
 import utils.IOUtils;
@@ -76,7 +78,7 @@ public class HttpRequest {
         return requestLine.whetherUriHasExtension();
     }
 
-    public String extractRequestUriExtension() {
+    public Optional<String> extractRequestUriExtension() {
         return requestLine.extractRequestUriExtension();
     }
 
@@ -112,17 +114,25 @@ public class HttpRequest {
         return requestLine.getHttpVersion();
     }
 
-    public String getCookie(String key) {
+    public Optional<String> getCookie(String key) {
         String cookies = headers.get(Header.COOKIE);
         if (Objects.nonNull(cookies) && cookies.contains(key)) {
-            return cookies
-                .split(COOKIE_SEPARATOR)[FIRST_COOKIE_INDEX]
-                .split(key + COOKIE_KEY_VALUE_SEPARATOR)[VALUE_INDEX];
+            return Optional.of(cookies
+                .split(key + COOKIE_KEY_VALUE_SEPARATOR)[VALUE_INDEX]
+                .split(COOKIE_SEPARATOR)[FIRST_COOKIE_INDEX]);
         }
-        return null;
+
+        return Optional.empty();
     }
 
-    public String getSessionId() {
-        return getCookie(SESSION_COOKIE_KEY);
+    public String getSessionId() throws NoSessionException {
+        String cookies = headers.get(Header.COOKIE);
+        if (Objects.nonNull(cookies) && cookies.contains(SESSION_COOKIE_KEY)) {
+            return cookies
+                .split(SESSION_COOKIE_KEY + COOKIE_KEY_VALUE_SEPARATOR)[VALUE_INDEX]
+                .split(COOKIE_SEPARATOR)[FIRST_COOKIE_INDEX];
+        }
+
+        throw new NoSessionException("No Session");
     }
 }

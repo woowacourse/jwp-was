@@ -1,14 +1,14 @@
 package controller;
 
-import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
-import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
-import com.github.jknack.handlebars.io.TemplateLoader;
 import db.DataBase;
+import exception.LoginFailException;
+import exception.NoSessionException;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import model.domain.User;
 import model.general.ContentType;
 import model.general.Header;
@@ -18,6 +18,7 @@ import model.request.HttpRequest;
 import model.response.HttpResponse;
 import model.response.StatusLine;
 import service.UserService;
+import utils.HandlebarUtils;
 import webserver.HttpSession;
 import webserver.HttpSessions;
 
@@ -32,8 +33,6 @@ public class UserController extends AbstractController {
     private static final String LOGIN_REDIRECT_LOCATION = "/user/login.html";
     private static final String LOGIN_CHECK_COOKIE = "logined";
     private static final String USER_ATTRIBUTE_KEY = "user";
-    private static final String TEMPLATE_LOCATION = "./templates";
-    private static final String HTML_EXTENSION = ".html";
     private static final String LOGIN_SUCCESS_COOKIE_VALUE = "logined=true; Path=/";
     private static final String LOGIN_FAIL_COOKIE_VALUE = "logined=false; Path=/";
 
@@ -103,20 +102,17 @@ public class UserController extends AbstractController {
             headers.put(Header.SET_COOKIE, LOGIN_SUCCESS_COOKIE_VALUE);
 
             return HttpResponse.of(statusLine, headers, null);
-        } catch (IllegalArgumentException e) {
-            StatusLine statusLine = StatusLine.of(httpRequest, Status.FOUND);
-            Map<Header, String> headers = new HashMap<>();
-            headers.put(Header.LOCATION, LOGIN_FAIL_REDIRECT_LOCATION);
-            headers.put(Header.SET_COOKIE, LOGIN_FAIL_COOKIE_VALUE);
-
-            return HttpResponse.of(statusLine, headers, null);
+        } catch (LoginFailException e) {
+            return redirectResponse(httpRequest, LOGIN_FAIL_REDIRECT_LOCATION);
+        } catch (NoSessionException e) {
+            return redirectResponse(httpRequest, LOGIN_REDIRECT_LOCATION);
         }
     }
 
     private HttpResponse showList(HttpRequest httpRequest) {
         if (isLogined(httpRequest)) {
             try {
-                Template template = loadHandlebar(LIST_REQUEST);
+                Template template = HandlebarUtils.loadHandlebar(LIST_REQUEST);
                 Collection<User> users = DataBase.findAll();
                 String listPage = template.apply(users);
                 byte[] body = listPage.getBytes();
@@ -129,23 +125,17 @@ public class UserController extends AbstractController {
 
                 return HttpResponse.of(statusLine, headers, body);
             } catch (IOException e) {
-                StatusLine statusLine = StatusLine.of(httpRequest, Status.INTERNAL_ERROR);
-                Map<Header, String> headers = new HashMap<>();
-
-                return HttpResponse.of(statusLine, headers, null);
+                return HttpResponse.of(Status.INTERNAL_ERROR);
             }
         }
-        StatusLine statusLine = StatusLine.of(httpRequest, Status.FOUND);
-        Map<Header, String> headers = new HashMap<>();
-        headers.put(Header.LOCATION, LOGIN_REDIRECT_LOCATION);
 
-        return HttpResponse.of(statusLine, headers, null);
+        return redirectResponse(httpRequest, LOGIN_REDIRECT_LOCATION);
     }
 
     private HttpResponse showProfile(HttpRequest httpRequest) {
         if (isLogined(httpRequest)) {
             try {
-                Template template = loadHandlebar(PROFILE_REQUEST);
+                Template template = HandlebarUtils.loadHandlebar(PROFILE_REQUEST);
                 HttpSession httpSession = HttpSessions.getHttpSession(httpRequest.getSessionId());
                 User user = (User) httpSession.getAttribute(USER_ATTRIBUTE_KEY);
                 String postPage = template.apply(user);
@@ -159,29 +149,30 @@ public class UserController extends AbstractController {
 
                 return HttpResponse.of(statusLine, headers, body);
             } catch (IOException e) {
-                StatusLine statusLine = StatusLine.of(httpRequest, Status.INTERNAL_ERROR);
-                Map<Header, String> headers = new HashMap<>();
-
-                return HttpResponse.of(statusLine, headers, null);
+                return HttpResponse.of(Status.INTERNAL_ERROR);
+            } catch (NoSessionException e) {
+                return redirectResponse(httpRequest, LOGIN_REDIRECT_LOCATION);
             }
         }
+
+        return redirectResponse(httpRequest, LOGIN_REDIRECT_LOCATION);
+    }
+
+    private HttpResponse redirectResponse(HttpRequest httpRequest, String location) {
         StatusLine statusLine = StatusLine.of(httpRequest, Status.FOUND);
         Map<Header, String> headers = new HashMap<>();
-        headers.put(Header.LOCATION, LOGIN_REDIRECT_LOCATION);
+        headers.put(Header.LOCATION, location);
+        headers.put(Header.SET_COOKIE, LOGIN_FAIL_COOKIE_VALUE);
 
         return HttpResponse.of(statusLine, headers, null);
     }
 
-    private Template loadHandlebar(String location) throws IOException {
-        TemplateLoader loader = new ClassPathTemplateLoader();
-        loader.setPrefix(TEMPLATE_LOCATION);
-        loader.setSuffix(HTML_EXTENSION);
-        Handlebars handlebars = new Handlebars(loader);
-
-        return handlebars.compile(location);
-    }
-
     private boolean isLogined(HttpRequest httpRequest) {
-        return new Boolean(httpRequest.getCookie(LOGIN_CHECK_COOKIE));
+        Optional<String> logined = httpRequest.getCookie(LOGIN_CHECK_COOKIE);
+        if (logined.isPresent()) {
+            return new Boolean(logined.get());
+        }
+
+        return false;
     }
 }

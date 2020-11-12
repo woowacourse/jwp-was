@@ -1,6 +1,7 @@
 package webserver;
 
 import controller.Controller;
+import exception.NoSessionException;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,7 +39,6 @@ public class RequestHandler implements Runnable {
             DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
 
             HttpResponse httpResponse = makeResponse(inputStream);
-
             httpResponse.writeToOutputStream(dataOutputStream);
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -47,6 +47,7 @@ public class RequestHandler implements Runnable {
 
     private HttpResponse makeResponse(InputStream inputStream) {
         HttpRequest httpRequest;
+
         try {
             httpRequest = HttpRequest.of(inputStream);
         } catch (IOException e) {
@@ -69,9 +70,9 @@ public class RequestHandler implements Runnable {
     }
 
     private void makeSession(HttpRequest httpRequest, HttpResponse httpResponse) {
-        String sessionId = httpRequest.getSessionId();
-
-        if (Objects.isNull(sessionId)) {
+        try {
+            httpRequest.getSessionId();
+        } catch (NoSessionException e) {
             Map<Header, String> headers = httpResponse.getHeaders();
             UUID uuid = UUID.randomUUID();
 
