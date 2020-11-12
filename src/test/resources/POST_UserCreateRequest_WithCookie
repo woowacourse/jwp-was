@@ -1,9 +1,0 @@
-POST /user/create HTTP/1.1
-Host: localhost:8080
-Connection: keep-alive
-Content-Length: 71
-Content-Type: application/x-www-form-urlencoded
-Accept: */*
-Cookie: logined=true
-
-userId=sonypark&password=sony123&name=sony&email=sonypark0204@gmail.com
