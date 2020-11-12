@@ -3,18 +3,16 @@ package http;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class SimpleHttpRequest implements HttpRequest {
 
-    private HttpMethod method;
-    private String path;
-    private String version;
+    public static final int START_LINE_INDEX = 0;
+    public static final int HEADER_LINE_START_INDEX = 1;
+    private StartLine startLine;
     private HttpHeaders headers;
 
-    public static HttpRequest of(BufferedReader bufferedReader) throws IOException {
+    public static SimpleHttpRequest of(BufferedReader bufferedReader) throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
         String line;
         while (Objects.nonNull(line = bufferedReader.readLine()) && !line.isEmpty()) {
@@ -24,42 +22,45 @@ public class SimpleHttpRequest implements HttpRequest {
         return of(httpRequestString);
     }
 
-    public static HttpRequest of(String input) {
+    public static SimpleHttpRequest of(String input) {
         String[] lines = input.split(System.lineSeparator());
-        String startLine = lines[0];
-        String[] tokens = startLine.split(" ");
-        Map<String, String> headers = Arrays.stream(Arrays.copyOfRange(lines, 1, lines.length))
-            .map(line -> line.split(": "))
-            .collect(Collectors.toMap(
-                pair -> pair[0], pair -> pair[1]
-            ));
-        HttpHeaders httpHeaders = new HttpHeaders(headers);
-        return new SimpleHttpRequest(HttpMethod.valueOf(tokens[0]), tokens[1], tokens[2], httpHeaders);
+        StartLine startLine = StartLine.from(lines[START_LINE_INDEX]);
+        int lastHeaderIndex = extractLastHeaderIndex(lines);
+        HttpHeaders httpHeaders = HttpHeaders.from(Arrays.copyOfRange(lines, HEADER_LINE_START_INDEX, lastHeaderIndex));
+        return new SimpleHttpRequest(startLine, httpHeaders);
     }
 
-    private SimpleHttpRequest(HttpMethod httpMethod, String path, String version, HttpHeaders httpHeaders) {
-        this.method = httpMethod;
-        this.path = path;
-        this.version = version;
+    private SimpleHttpRequest(StartLine startLine, HttpHeaders httpHeaders) {
+        this.startLine = startLine;
         this.headers = httpHeaders;
-    }
-
-    public String getVersion() {
-        return version;
     }
 
     @Override
     public HttpMethod getMethod() {
-        return method;
+        return startLine.getHttpMethod();
     }
 
     @Override
     public String getURI() {
-        return path;
+        return startLine.getPath();
     }
 
     @Override
     public HttpHeaders getHeaders() {
         return headers;
     }
+
+    public String getVersion() {
+        return startLine.getVersion();
+    }
+
+    private static int extractLastHeaderIndex(String[] lines) {
+        for (int i = 0; i < lines.length; i++) {
+            if ("".equals(lines[i])) {
+                return i;
+            }
+        }
+        return lines.length;
+    }
+
 }

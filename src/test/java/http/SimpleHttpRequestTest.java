@@ -28,11 +28,13 @@ class SimpleHttpRequestTest {
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
-        HttpRequest httpRequest = SimpleHttpRequest.of(bufferedReader);
+        SimpleHttpRequest httpRequest = SimpleHttpRequest.of(bufferedReader);
 
         assertAll(
             () -> assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.GET),
-            () -> assertThat(httpRequest.getURI()).isEqualTo("/")
+            () -> assertThat(httpRequest.getHeaders().size()).isEqualTo(7),
+            () -> assertThat(httpRequest.getURI()).isEqualTo("/"),
+            () -> assertThat(httpRequest.getVersion()).isEqualTo("HTTP/1.1")
         );
     }
 }

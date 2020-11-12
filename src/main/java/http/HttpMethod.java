@@ -7,7 +7,7 @@ public enum HttpMethod {
     PATCH,
     DELETE;
 
-    public static HttpMethod method(String name) {
+    public static HttpMethod from(String name) {
         try {
             return valueOf(name);
         } catch (IllegalArgumentException e) {
