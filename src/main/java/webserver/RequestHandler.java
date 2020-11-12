@@ -43,7 +43,7 @@ public class RequestHandler implements Runnable {
             httpEntityProcessing(requestEntity, responseEntity);
 
             writeOutResponse(dos, responseEntity);
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.error("error message", e);
         }
     }

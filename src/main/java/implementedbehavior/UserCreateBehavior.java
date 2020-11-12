@@ -1,4 +1,4 @@
-package webserver.requestmapping.behavior;
+package implementedbehavior;
 
 import db.DataBase;
 import http.HttpBody;
@@ -7,6 +7,7 @@ import http.request.RequestEntity;
 import http.response.HttpStatus;
 import http.response.ResponseEntity;
 import model.User;
+import webserver.requestmapping.behavior.RequestBehavior;
 
 public class UserCreateBehavior implements RequestBehavior {
     @Override
