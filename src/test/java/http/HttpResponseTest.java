@@ -16,13 +16,13 @@ class HttpResponseTest {
     void response200Test() throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        HttpResponse httpResponse = new HttpResponse(out, HttpStatus.OK, "HTTP/1.1");
+        HttpResponse httpResponse = new HttpResponse(out, "HTTP/1.1");
         httpResponse.response200Header(10, MimeType.HTML.getContentType());
 
         String result = out.toString();
         String expected = "HTTP/1.1 200 OK\r\n"
             + "Content-Length: 10\r\n"
-            + "Content-Type: text/html\r\n"
+            + "Content-Type: text/html;charset=utf-8\r\n"
             + "\r\n";
 
         assertEquals(expected, result);
@@ -33,13 +33,14 @@ class HttpResponseTest {
     void response302Test() throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        HttpResponse httpResponse = new HttpResponse(out, HttpStatus.FOUND, "HTTP/1.1");
+        HttpResponse httpResponse = new HttpResponse(out, "HTTP/1.1");
+        httpResponse.setHttpStatus(HttpStatus.FOUND);
         httpResponse.response302Header(10, MimeType.HTML.getContentType(), "/index.html");
 
         String result = out.toString();
         String expected = "HTTP/1.1 302 FOUND\r\n"
             + "Content-Length: 10\r\n"
-            + "Content-Type: text/html\r\n"
+            + "Content-Type: text/html;charset=utf-8\r\n"
             + "Location: /index.html\r\n"
             + "\r\n";
         assertEquals(expected, result);

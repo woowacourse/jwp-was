@@ -37,11 +37,11 @@ public class HttpRequestLine {
         return httpUrl.getParam(param);
     }
 
-    public HttpMethod getMethod() {
-        return httpMethod;
-    }
-
     public String getVersion() {
         return httpVersion;
+    }
+
+    public boolean isMethod(HttpMethod httpMethod) {
+        return httpMethod == this.httpMethod;
     }
 }

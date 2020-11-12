@@ -1,7 +1,7 @@
 package http;
 
 public class HttpStatusLine {
-    private final HttpStatus httpStatus;
+    private HttpStatus httpStatus;
     private final String httpVersion;
 
     private HttpStatusLine(HttpStatus httpStatus, String httpVersion) {
@@ -11,6 +11,10 @@ public class HttpStatusLine {
 
     public static HttpStatusLine of(HttpStatus status, String httpVersion) {
         return new HttpStatusLine(status, httpVersion);
+    }
+
+    public void setHttpStatus(HttpStatus httpStatus) {
+        this.httpStatus = httpStatus;
     }
 
     public String getLine() {

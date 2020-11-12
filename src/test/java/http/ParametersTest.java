@@ -11,7 +11,7 @@ class ParametersTest {
     void parseTest() {
         String input = "userId=orange&password=password&name=Yerin";
         Parameters result = Parameters.parse(input);
-        assertAll(() ->{
+        assertAll(() -> {
             assertEquals("orange", result.get("userId"));
             assertEquals("password", result.get("password"));
             assertEquals("Yerin", result.get("name"));

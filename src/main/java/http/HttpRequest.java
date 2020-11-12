@@ -25,11 +25,11 @@ public class HttpRequest {
     }
 
     public boolean isBodyExist() {
-        return !body.equals("");
+        return !body.isEmpty();
     }
 
-    public HttpMethod getMethod() {
-        return httpRequestLine.getMethod();
+    public boolean isMethod(HttpMethod httpMethod) {
+        return httpRequestLine.isMethod(httpMethod);
     }
 
     public String getUrl() {
