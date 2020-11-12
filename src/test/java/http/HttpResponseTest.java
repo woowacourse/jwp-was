@@ -16,7 +16,7 @@ class HttpResponseTest {
     void response200Test() throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        HttpResponse httpResponse = new HttpResponse(out, "HTTP/1.1");
+        HttpResponse httpResponse = new HttpResponse(out, HttpStatus.OK, "HTTP/1.1");
         httpResponse.response200Header(10, MimeType.HTML.getContentType());
 
         String result = out.toString();
@@ -33,8 +33,7 @@ class HttpResponseTest {
     void response302Test() throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        HttpResponse httpResponse = new HttpResponse(out, "HTTP/1.1");
-        httpResponse.setHttpStatus(HttpStatus.FOUND);
+        HttpResponse httpResponse = new HttpResponse(out, HttpStatus.FOUND, "HTTP/1.1");
         httpResponse.response302Header(10, MimeType.HTML.getContentType(), "/index.html");
 
         String result = out.toString();

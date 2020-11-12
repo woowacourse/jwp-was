@@ -31,19 +31,23 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest httpRequest = new HttpRequest(in);
-            HttpResponse httpResponse = new HttpResponse(out, httpRequest.getVersion());
+            HttpResponse httpResponse;
 
             MimeType mimeType = httpRequest.getMimeType();
             String path = httpRequest.getPath();
             byte[] body = FileIoUtils.loadFileFromClasspath(path);
 
             if (httpRequest.matchMethod(HttpMethod.GET)) {
+                httpResponse = new HttpResponse(out, HttpStatus.OK, httpRequest.getVersion());
                 httpResponse.response200Header(body.length, mimeType.getContentType());
             }
-            if (httpRequest.matchMethod(HttpMethod.POST)) {
+            else if (httpRequest.matchMethod(HttpMethod.POST)) {
                 createUser(httpRequest);
-                httpResponse.setHttpStatus(HttpStatus.FOUND);
+                httpResponse = new HttpResponse(out, HttpStatus.FOUND, httpRequest.getVersion());
                 httpResponse.response302Header(body.length, mimeType.getContentType(), "/index.html");
+            }
+            else {
+                httpResponse = new HttpResponse(out, HttpStatus.METHOD_NOT_FOUND, httpRequest.getVersion());
             }
             httpResponse.responseBody(body);
         } catch (Exception e) {

@@ -16,9 +16,9 @@ public class HttpResponse {
     private final HttpStatusLine httpStatusLine;
     private final HttpHeaders httpHeaders;
 
-    public HttpResponse(OutputStream out, String version) {
+    public HttpResponse(OutputStream out, HttpStatus httpStatus, String version) {
         this.dos = new DataOutputStream(out);
-        this.httpStatusLine = HttpStatusLine.of(HttpStatus.OK, version);
+        this.httpStatusLine = HttpStatusLine.of(httpStatus, version);
         this.httpHeaders = new HttpHeaders(new HashMap<>());
     }
 
@@ -40,10 +40,6 @@ public class HttpResponse {
     public void responseBody(byte[] body) throws IOException {
         dos.write(body, 0, body.length);
         dos.flush();
-    }
-
-    public void setHttpStatus(HttpStatus httpStatus) {
-        this.httpStatusLine.setHttpStatus(HttpStatus.FOUND);
     }
 
     private void addResponseHeader(String headerType, String value) {
