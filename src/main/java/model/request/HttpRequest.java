@@ -84,9 +84,7 @@ public class HttpRequest {
 
     public Map<String, String> extractParameters() {
         if (requestLine.isSameMethod(Method.GET)) {
-            Map<String, String> uriParameters = requestLine.extractUriParameters();
-
-            return uriParameters;
+            return requestLine.extractUriParameters();
         }
         if (requestLine.isSameMethod(Method.POST)) {
             Map<String, String> uriParameters = requestLine.extractUriParameters();

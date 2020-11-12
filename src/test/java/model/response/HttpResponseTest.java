@@ -38,10 +38,7 @@ public class HttpResponseTest {
         "src/test/resources/input/post_api_request.txt"
     })
     void create(String filePath) throws IOException {
-        InputStream inputStream = new FileInputStream(filePath);
-        HttpRequest httpRequest = HttpRequest.of(inputStream);
-        Controller controller = ControllerMapper.selectController(httpRequest);
-        HttpResponse httpResponse = controller.service(httpRequest);
+        HttpResponse httpResponse = makeHttpResponseFromFile(filePath);
 
         assertThat(httpResponse).isInstanceOf(HttpResponse.class);
     }
@@ -90,10 +87,7 @@ public class HttpResponseTest {
         "src/test/resources/input/post_api_request.txt:HTTP/1.1"
     }, delimiter = ':')
     void getHttpVersion(String filePath, String expected) throws IOException {
-        InputStream inputStream = new FileInputStream(filePath);
-        HttpRequest httpRequest = HttpRequest.of(inputStream);
-        Controller controller = ControllerMapper.selectController(httpRequest);
-        HttpResponse httpResponse = controller.service(httpRequest);
+        HttpResponse httpResponse = makeHttpResponseFromFile(filePath);
 
         assertThat(httpResponse.getHttpVersion()).isEqualTo(expected);
     }
@@ -108,10 +102,7 @@ public class HttpResponseTest {
         "src/test/resources/input/post_api_request_invalid_method.txt:405"
     }, delimiter = ':')
     void getStatusCode(String filePath, String expected) throws IOException {
-        InputStream inputStream = new FileInputStream(filePath);
-        HttpRequest httpRequest = HttpRequest.of(inputStream);
-        Controller controller = ControllerMapper.selectController(httpRequest);
-        HttpResponse httpResponse = controller.service(httpRequest);
+        HttpResponse httpResponse = makeHttpResponseFromFile(filePath);
 
         assertThat(httpResponse.getStatusCode()).isEqualTo(expected);
     }
@@ -126,10 +117,7 @@ public class HttpResponseTest {
         "src/test/resources/input/post_api_request_invalid_method.txt:Method Not Allowed"
     }, delimiter = ':')
     void getReasonPhrase(String filePath, String expected) throws IOException {
-        InputStream inputStream = new FileInputStream(filePath);
-        HttpRequest httpRequest = HttpRequest.of(inputStream);
-        Controller controller = ControllerMapper.selectController(httpRequest);
-        HttpResponse httpResponse = controller.service(httpRequest);
+        HttpResponse httpResponse = makeHttpResponseFromFile(filePath);
 
         assertThat(httpResponse.getReasonPhrase()).isEqualTo(expected);
     }
@@ -139,10 +127,7 @@ public class HttpResponseTest {
     @MethodSource("provideHeaders")
     void getHeaders(String filePath, Map<Header, String> expected)
         throws IOException {
-        InputStream inputStream = new FileInputStream(filePath);
-        HttpRequest httpRequest = HttpRequest.of(inputStream);
-        Controller controller = ControllerMapper.selectController(httpRequest);
-        HttpResponse httpResponse = controller.service(httpRequest);
+        HttpResponse httpResponse = makeHttpResponseFromFile(filePath);
 
         assertThat(httpResponse.getHeaders()).isEqualTo(expected);
     }
@@ -187,13 +172,17 @@ public class HttpResponseTest {
         "src/test/resources/input/post_api_request_invalid_method.txt:false"
     }, delimiter = ':')
     void getBody(String filePath, boolean expected) throws IOException {
-        InputStream inputStream = new FileInputStream(filePath);
-        HttpRequest httpRequest = HttpRequest.of(inputStream);
-        Controller controller = ControllerMapper.selectController(httpRequest);
-        HttpResponse httpResponse = controller.service(httpRequest);
-
+        HttpResponse httpResponse = makeHttpResponseFromFile(filePath);
         byte[] body = httpResponse.getBody();
 
         assertThat(Objects.nonNull(body)).isEqualTo(expected);
+    }
+
+    private HttpResponse makeHttpResponseFromFile(String filePath) throws IOException {
+        InputStream inputStream = new FileInputStream(filePath);
+        HttpRequest httpRequest = HttpRequest.of(inputStream);
+        Controller controller = ControllerMapper.selectController(httpRequest);
+
+        return controller.service(httpRequest);
     }
 }

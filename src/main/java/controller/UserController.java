@@ -2,8 +2,8 @@ package controller;
 
 import com.github.jknack.handlebars.Template;
 import db.DataBase;
-import exception.NotExistUserException;
 import exception.NoSessionException;
+import exception.NotExistUserException;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
@@ -17,10 +17,10 @@ import model.general.Status;
 import model.request.HttpRequest;
 import model.response.HttpResponse;
 import model.response.StatusLine;
-import service.UserService;
-import utils.HandlebarUtils;
 import model.session.HttpSession;
 import model.session.HttpSessions;
+import service.UserService;
+import utils.HandlebarUtils;
 
 public class UserController extends AbstractController {
 

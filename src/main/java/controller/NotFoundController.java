@@ -4,7 +4,7 @@ import model.general.Status;
 import model.request.HttpRequest;
 import model.response.HttpResponse;
 
-public class ErrorController extends AbstractController {
+public class NotFoundController extends AbstractController {
 
     @Override
     public HttpResponse service(HttpRequest httpRequest) {

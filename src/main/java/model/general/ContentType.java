@@ -30,7 +30,7 @@ public enum ContentType {
 
     public static Optional<ContentType> of(HttpRequest httpRequest) {
         Optional<String> extension = httpRequest.extractRequestUriExtension();
-        if(extension.isPresent()){
+        if (extension.isPresent()) {
             return of(extension.get());
         }
 

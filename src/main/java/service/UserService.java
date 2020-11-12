@@ -9,13 +9,13 @@ import model.request.HttpRequest;
 
 public class UserService {
 
-    private static UserService userService;
-
     public static UserService getInstance() {
-        if (Objects.isNull(userService)) {
-            userService = new UserService();
-        }
-        return userService;
+        return LazyHolder.userService;
+    }
+
+    private static class LazyHolder {
+
+        private static final UserService userService = new UserService();
     }
 
     public void createUser(HttpRequest httpRequest) {

@@ -12,7 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import utils.ControllerMapper;
 
-public class ErrorControllerTest {
+public class NotFoundControllerTest {
 
     @Test
     @DisplayName("ErrorController")
@@ -25,7 +25,7 @@ public class ErrorControllerTest {
         HttpResponse httpResponse = controller.service(httpRequest);
 
         Stream.of(
-            assertThat(controller).isInstanceOf(ErrorController.class),
+            assertThat(controller).isInstanceOf(NotFoundController.class),
             assertThat(httpResponse).isInstanceOf(HttpResponse.class),
             assertThat(httpResponse.getBody()).isEqualTo(null),
             assertThat(httpResponse.getHttpVersion()).isEqualTo("HTTP/1.1"),
