@@ -1,13 +1,27 @@
 package webserver.http.response;
 
+import static com.google.common.base.Charsets.*;
+
+import com.google.common.net.HttpHeaders;
+import webserver.http.request.MimeType;
+
 public class HttpResponse {
-    private HttpStatusLine statusLine;
-    private HttpResponseHeaders responseHeaders;
+
+    private final HttpStatusLine statusLine;
+    private final HttpResponseHeaders responseHeaders;
     private byte[] body;
 
     public HttpResponse() {
         this.statusLine = HttpStatusLine.withDefaultVersion();
         this.responseHeaders = HttpResponseHeaders.ofEmpty();
+    }
+
+    public static HttpResponse withContent(HttpStatus httpStatus, MimeType mimeType, String content) {
+        HttpResponse httpResponse = new HttpResponse();
+        byte[] body = content.getBytes(UTF_8);
+        httpResponse.changeHttpStatus(httpStatus);
+        httpResponse.addBody(body, mimeType);
+        return httpResponse;
     }
 
     public void changeHttpStatus(HttpStatus httpStatus) {
@@ -16,6 +30,12 @@ public class HttpResponse {
 
     public void addHeader(String key, String value) {
         this.responseHeaders.addHeader(key, value);
+    }
+
+    public void addBody(byte[] body, MimeType mimeType) {
+        this.addHeader(HttpHeaders.CONTENT_TYPE, mimeType.getMimeType());
+        this.addHeader(HttpHeaders.CONTENT_LENGTH, String.valueOf(body.length));
+        this.body = body;
     }
 
     public HttpStatusLine getStatusLine() {
@@ -28,9 +48,5 @@ public class HttpResponse {
 
     public byte[] getBody() {
         return body;
-    }
-
-    public void addBody(byte[] body) {
-        this.body = body;
     }
 }

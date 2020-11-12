@@ -14,6 +14,7 @@ import utils.IOUtils;
 import webserver.http.HttpMethod;
 
 public class HttpRequestParser {
+
     private static final Logger logger = LoggerFactory.getLogger(HttpRequestParser.class);
 
     private HttpRequestParser() {
@@ -21,10 +22,10 @@ public class HttpRequestParser {
 
     public static HttpRequest parse(BufferedReader br) {
         try {
-            final String httpRequestLine = br.readLine();
-            final String[] requestLines = httpRequestLine.split(" ");
-            final String pathWithQueryString = requestLines[1];
-            final String[] pathQueryString = pathWithQueryString.split("\\?");
+            String httpRequestLine = br.readLine();
+            String[] requestLines = httpRequestLine.split(" ");
+            String pathWithQueryString = requestLines[1];
+            String[] pathQueryString = pathWithQueryString.split("\\?");
 
             HttpRequestLine requestLine = new HttpRequestLine(HttpMethod.valueOf(requestLines[0]), pathQueryString[0],
                     requestLines[2]);
@@ -42,14 +43,14 @@ public class HttpRequestParser {
     private static HttpRequestParameters getHttpRequestParameters(BufferedReader br, String[] pathQueryString,
             HttpRequestLine requestLine, HttpRequestHeaders requestHeader) throws IOException {
         HttpRequestParameters requestParameters;
-        final HashMap<String, String> queryParams = new HashMap<>();
+        Map<String, String> queryParams = new HashMap<>();
         if (requestLine.isGetMethod()) {
             if (pathQueryString.length == 2) {
                 String queryString = pathQueryString[1];
-                final String decode = URLDecoder.decode(queryString, "UTF-8");
-                final String[] queries = decode.split("&");
+                String decode = URLDecoder.decode(queryString, "UTF-8");
+                String[] queries = decode.split("&");
                 for (String query : queries) {
-                    final String[] keyValue = query.split("=");
+                    String[] keyValue = query.split("=");
                     queryParams.put(keyValue[0], keyValue[1]);
                 }
             }
@@ -60,10 +61,10 @@ public class HttpRequestParser {
     }
 
     private static HttpRequestHeaders parseRequestHeader(BufferedReader br) throws IOException {
-        final Map<String, String> headers = new HashMap<>();
+        Map<String, String> headers = new HashMap<>();
         String oneLine = br.readLine();
         while (!"".equals(oneLine) && oneLine != null) {
-            final String[] header = oneLine.split(": ");
+            String[] header = oneLine.split(": ");
             headers.put(header[0], header[1]);
             oneLine = br.readLine();
         }
@@ -72,17 +73,17 @@ public class HttpRequestParser {
 
     private static HttpRequestParameters parseRequestParameters(BufferedReader br,
             HttpRequestHeaders header, HttpRequestLine requestLine) throws IOException {
-        final HashMap<String, String> requestDatas = new HashMap<>();
-        final HttpMethod httpMethod = requestLine.getMethod();
+        Map<String, String> requestDatas = new HashMap<>();
+        HttpMethod httpMethod = requestLine.getMethod();
         if (!httpMethod.hasRequestBody()) {
             return new HttpRequestParameters(requestDatas);
         }
-        final String data = IOUtils.readData(br, Integer.parseInt(header.get(HttpHeaders.CONTENT_LENGTH)));
+        String data = IOUtils.readData(br, Integer.parseInt(header.get(HttpHeaders.CONTENT_LENGTH)));
         if (!"".equals(data)) {
-            final String decode = URLDecoder.decode(data, "UTF-8");
-            final String[] split = decode.split("&");
+            String decode = URLDecoder.decode(data, "UTF-8");
+            String[] split = decode.split("&");
             for (String value : split) {
-                final String[] keyValue = value.split("=");
+                String[] keyValue = value.split("=");
                 requestDatas.put(keyValue[0], keyValue[1]);
             }
         }

@@ -3,6 +3,7 @@ package webserver.http.request;
 import java.util.Map;
 
 class HttpRequestHeaders {
+
     private final Map<String, String> headers;
 
     public HttpRequestHeaders(Map<String, String> headers) {

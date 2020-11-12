@@ -5,6 +5,7 @@ import java.util.Arrays;
 import webserver.exception.UnsupportedMimeTypeException;
 
 public enum MimeType {
+
     HTML_UTF_8("./templates", ".html", "text/html;charset=utf-8"),
     ICO("./templates", ".ico", "image/x-icon"),
     CSS_UTF_8("./static", ".css", "text/css;charset=utf-8"),
@@ -27,7 +28,7 @@ public enum MimeType {
     }
 
     public static MimeType of(String path) {
-        final String targetExtensionType = path.substring(path.lastIndexOf("."));
+        String targetExtensionType = path.substring(path.lastIndexOf("."));
         return Arrays.stream(values())
                 .filter(mime -> mime.extensionType.equalsIgnoreCase(targetExtensionType))
                 .findAny()

@@ -3,19 +3,19 @@ package webserver;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.net.HttpHeaders;
 import utils.FileIoUtils;
 import webserver.exception.MethodNotAllowedException;
+import webserver.exception.NotFoundException;
+import webserver.exception.ResourceNotFoundException;
+import webserver.exception.UnsupportedMimeTypeException;
 import webserver.http.request.HttpRequest;
 import webserver.http.request.MimeType;
 import webserver.http.response.HttpResponse;
 import webserver.http.response.HttpStatus;
 
 public class StaticResourceHandlerMapping implements HandlerMapping {
-    Logger logger = LoggerFactory.getLogger(StaticResourceHandlerMapping.class);
+
+    private static final String RUNTIME_EXCEPTION_ERROR_MESSAGE = "서버 내부 에러가 발생했습니다.";
 
     @Override
     public boolean isSupport(HttpRequest request) {
@@ -24,20 +24,22 @@ public class StaticResourceHandlerMapping implements HandlerMapping {
 
     @Override
     public void handle(HttpRequest request, HttpResponse response) {
-        System.out.println(request.getPath() + "요청 처리하자.");
-        System.out.println(request.isGetMethod());
         if (!request.isGetMethod()) {
             throw new MethodNotAllowedException(request.getMethod());
         }
         try {
-            final MimeType mime = MimeType.of(request.getPath());
-            final byte[] body = FileIoUtils.loadFileFromClasspath(mime.getFilePosition() + request.getPath());
-            response.changeHttpStatus(HttpStatus.OK);
-            response.addHeader(HttpHeaders.CONTENT_TYPE, mime.getMimeType());
-            response.addHeader(HttpHeaders.CONTENT_LENGTH, String.valueOf(body.length));
-            response.addBody(body);
-        } catch (IOException | URISyntaxException e) {
-            throw new RuntimeException();
+            MimeType mime = MimeType.of(request.getPath());
+            byte[] body = FileIoUtils.loadFileFromClasspath(mime.getFilePosition() + request.getPath());
+            makeResourceResponse(response, mime, body);
+        } catch (UnsupportedMimeTypeException | ResourceNotFoundException e) {
+            throw new NotFoundException(request.getPath());
+        } catch (IOException | URISyntaxException | RuntimeException e) {
+            throw new RuntimeException(RUNTIME_EXCEPTION_ERROR_MESSAGE);
         }
+    }
+
+    private void makeResourceResponse(HttpResponse response, MimeType mime, byte[] body) {
+        response.changeHttpStatus(HttpStatus.OK);
+        response.addBody(body, mime);
     }
 }

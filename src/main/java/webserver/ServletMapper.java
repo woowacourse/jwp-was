@@ -7,6 +7,7 @@ import java.util.function.Supplier;
 import webserver.exception.ResourceNotFoundException;
 
 public class ServletMapper {
+
     private static final ServletMapper SINGLE_INSTANCE = new ServletMapper();
 
     private final Map<String, HttpServlet> servlets;
@@ -27,7 +28,7 @@ public class ServletMapper {
             return servlets.get(url);
         }
         return servlets.computeIfAbsent(url, newUrl -> {
-            final Supplier<HttpServlet> httpServletSupplier = servletGenerator.get(newUrl);
+            Supplier<HttpServlet> httpServletSupplier = servletGenerator.get(newUrl);
             if (httpServletSupplier == null) {
                 throw new ResourceNotFoundException();
             }

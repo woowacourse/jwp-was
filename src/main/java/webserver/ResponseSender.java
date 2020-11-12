@@ -14,6 +14,7 @@ import webserver.http.response.HttpStatus;
 import webserver.http.response.HttpStatusLine;
 
 public class ResponseSender {
+
     private static final Logger logger = LoggerFactory.getLogger(ResponseSender.class);
 
     private ResponseSender() {
@@ -35,15 +36,15 @@ public class ResponseSender {
     }
 
     private static String parseResponseLine(HttpStatusLine httpStatusLine) {
-        final HttpStatus httpStatus = httpStatusLine.getHttpStatus();
-        return String.format("%s %d %s\r\n", httpStatusLine.getVersion(), httpStatus.getStatusCode(),
+        HttpStatus httpStatus = httpStatusLine.getHttpStatus();
+        return String.format("%s %d %s\r\n", httpStatusLine.getVersion(), httpStatus.getCode(),
                 httpStatus.getReasonPhrase());
     }
 
     private static String parseResponseHeaders(HttpResponseHeaders responseHeaders) {
         StringBuilder stringBuilder = new StringBuilder();
-        final Map<String, String> headers = responseHeaders.getResponseHeaders();
-        final Set<String> keys = headers.keySet();
+        Map<String, String> headers = responseHeaders.getResponseHeaders();
+        Set<String> keys = headers.keySet();
         for (String key : keys) {
             stringBuilder.append(key);
             stringBuilder.append(":");
@@ -56,7 +57,7 @@ public class ResponseSender {
     }
 
     private static void sendResponseBodyIfPresent(DataOutputStream dos, HttpResponse response) throws IOException {
-        final byte[] body = response.getBody();
+        byte[] body = response.getBody();
         if (body == null) {
             return;
         }

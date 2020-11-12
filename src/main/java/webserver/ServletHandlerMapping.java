@@ -4,6 +4,7 @@ import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 
 public class ServletHandlerMapping implements HandlerMapping {
+
     private final ServletMapper servletMapper;
 
     public ServletHandlerMapping(ServletMapper servletMapper) {
@@ -17,7 +18,7 @@ public class ServletHandlerMapping implements HandlerMapping {
 
     @Override
     public void handle(HttpRequest request, HttpResponse response) {
-        final HttpServlet servlet = servletMapper.get(request.getPath());
+        HttpServlet servlet = servletMapper.get(request.getPath());
         servlet.doService(request, response);
     }
 }

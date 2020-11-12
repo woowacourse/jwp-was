@@ -3,6 +3,7 @@ package webserver.http.request;
 import webserver.http.HttpMethod;
 
 public class HttpRequest {
+
     private final HttpRequestLine requestLine;
     private final HttpRequestHeaders requestHeaders;
     private final HttpRequestParameters requestParameters;

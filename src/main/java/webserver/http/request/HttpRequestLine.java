@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 import webserver.http.HttpMethod;
 
 class HttpRequestLine {
+
     private static final Pattern EXTENSION_PATTERN = Pattern.compile("[^\\s]+\\.[\\w]+");
 
     private final HttpMethod method;
@@ -27,10 +28,6 @@ class HttpRequestLine {
 
     public HttpMethod getMethod() {
         return method;
-    }
-
-    public String getVersion() {
-        return version;
     }
 
     public boolean isGetMethod() {

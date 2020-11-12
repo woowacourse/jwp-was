@@ -1,6 +1,7 @@
 package webserver.http.response;
 
 public class HttpStatusLine {
+
     private static final String DEFAULT_VERSION = "HTTP/1.1";
 
     private String version;

@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class HttpResponseHeaders {
+
     private final Map<String, String> responseHeaders;
 
     private HttpResponseHeaders(Map<String, String> responseHeaders) {
