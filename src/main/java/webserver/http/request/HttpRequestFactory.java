@@ -10,14 +10,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import utils.Strings;
-
 public class HttpRequestFactory {
     private static final int HTTP_METHOD = 0;
     private static final int REQUEST_URI = 1;
     private static final int HTTP_VERSION = 2;
     private static final String HEADER_DELIMITER = ":";
-    private static final String EMPTY = "";
 
     public HttpRequest create(BufferedReader br) throws IOException {
         HttpRequestLine requestLine = extractRequestLine(br);
@@ -30,20 +27,27 @@ public class HttpRequestFactory {
     private HttpRequestLine extractRequestLine(BufferedReader br) throws IOException {
         String requestLine = br.readLine();
         String[] tokens = requestLine.split(SP);
+        String uri = tokens[REQUEST_URI];
+        RequestURIType URIType = RequestURIType.of(uri);
 
         HttpMethod method = HttpMethod.valueOf(tokens[HTTP_METHOD]);
-        RequestURI uri = RequestURIType.of(tokens[REQUEST_URI])
-                .getFactory()
-                .create(tokens[REQUEST_URI]);
+        RequestURI requestURI = createRequestURI(URIType, uri);
         HttpVersion version = HttpVersion.of(tokens[HTTP_VERSION]);
-        return new HttpRequestLine(method, uri, version);
+        return new HttpRequestLine(method, requestURI, version);
+    }
+
+    private RequestURI createRequestURI(RequestURIType uriType, String uri) {
+        if (uriType.hasParams()) {
+            return new RequestURIFactory().create(uri);
+        }
+        return new RequestURI(uri, HttpParams.of(EMPTY));
     }
 
     private HttpHeader extractHeader(BufferedReader br) throws IOException {
         Map<String, String> fields = new HashMap<>();
         String line = br.readLine();
 
-        while (nonNull(line) && !Strings.EMPTY.equals(line)) {
+        while (nonNull(line) && !EMPTY.equals(line)) {
             int indexOfDelimiter = line.indexOf(HEADER_DELIMITER);
             String key = line.substring(0, indexOfDelimiter);
             String value = line.substring(indexOfDelimiter + 2);
