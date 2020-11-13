@@ -9,7 +9,6 @@ import java.nio.file.Paths;
 public class FileIoUtils {
     public static byte[] loadFileFromClasspath(String filePath) throws IOException, URISyntaxException {
         if (validate(filePath)) {
-            System.out.println("아아");
             return new byte[0];
         }
         Path path = Paths.get(FileIoUtils.class.getClassLoader().getResource(filePath).toURI());
