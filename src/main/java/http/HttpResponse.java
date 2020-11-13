@@ -7,9 +7,6 @@ import java.util.HashMap;
 
 public class HttpResponse {
     private static final String DELIMITER = ": ";
-    private static final String CONTENT_TYPE = "Content-Type";
-    private static final String CONTENT_LENGTH = "Content-Length";
-    private static final String LOCATION = "Location";
     private static final String CHARSET_UTF_8 = ";charset=utf-8";
 
     private final DataOutputStream dos;
@@ -23,16 +20,16 @@ public class HttpResponse {
     }
 
     public void response200Header(int lengthOfBodyContent, String contentType) throws IOException {
-        addResponseHeader(CONTENT_TYPE, contentType + CHARSET_UTF_8);
-        addResponseHeader(CONTENT_LENGTH, String.valueOf(lengthOfBodyContent));
+        addResponseHeader(HeaderType.CONTENT_TYPE, contentType + CHARSET_UTF_8);
+        addResponseHeader(HeaderType.CONTENT_LENGTH, String.valueOf(lengthOfBodyContent));
         writeStatusLine();
         writeHeaders();
     }
 
     public void response302Header(int lengthOfBodyContent, String contentType, String url) throws IOException {
-        addResponseHeader(CONTENT_TYPE, contentType + CHARSET_UTF_8);
-        addResponseHeader(CONTENT_LENGTH, String.valueOf(lengthOfBodyContent));
-        addResponseHeader(LOCATION, url);
+        addResponseHeader(HeaderType.CONTENT_TYPE, contentType + CHARSET_UTF_8);
+        addResponseHeader(HeaderType.CONTENT_LENGTH, String.valueOf(lengthOfBodyContent));
+        addResponseHeader(HeaderType.LOCATION, url);
         writeStatusLine();
         writeHeaders();
     }
@@ -46,7 +43,7 @@ public class HttpResponse {
         dos.flush();
     }
 
-    private void addResponseHeader(String headerType, String value) {
+    private void addResponseHeader(HeaderType headerType, String value) {
         httpHeaders.addHeader(headerType, value);
     }
 
@@ -55,8 +52,9 @@ public class HttpResponse {
     }
 
     private void writeHeaders() throws IOException {
-        for (String headerType : httpHeaders.keySet()) {
-            String header = headerType + DELIMITER + httpHeaders.get(headerType) + System.lineSeparator();
+        for (HeaderType headerType : httpHeaders.keySet()) {
+            String typeName = headerType.getTypeName();
+            String header = typeName + DELIMITER + httpHeaders.get(headerType) + System.lineSeparator();
             dos.writeBytes(header);
         }
         dos.writeBytes(System.lineSeparator());

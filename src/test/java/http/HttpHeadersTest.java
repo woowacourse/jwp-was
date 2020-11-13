@@ -21,9 +21,9 @@ class HttpHeadersTest {
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         HttpHeaders httpHeaders = HttpHeaders.from(br);
         assertAll(() -> {
-            assertEquals("localhost:8080", httpHeaders.get("Host"));
-            assertEquals("keep-alive", httpHeaders.get("Connection"));
-            assertEquals("*/*", httpHeaders.get("Accept"));
+            assertEquals("localhost:8080", httpHeaders.get(HeaderType.HOST));
+            assertEquals("keep-alive", httpHeaders.get(HeaderType.CONNECTION));
+            assertEquals("*/*", httpHeaders.get(HeaderType.ACCEPT));
         });
     }
 

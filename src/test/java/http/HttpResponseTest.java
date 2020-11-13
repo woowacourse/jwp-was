@@ -1,5 +1,6 @@
 package http;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.ByteArrayOutputStream;
@@ -18,12 +19,10 @@ class HttpResponseTest {
         httpResponse.response200Header(10, MimeType.HTML.getContentType());
 
         String result = out.toString();
-        String expected = "HTTP/1.1 200 OK" + System.lineSeparator()
-            + "Content-Length: 10" + System.lineSeparator()
-            + "Content-Type: text/html;charset=utf-8" + System.lineSeparator()
-            + System.lineSeparator();
 
-        assertEquals(expected, result);
+        assertThat(result).contains("HTTP/1.1 200 OK");
+        assertThat(result).contains("Content-Length: 10");
+        assertThat(result).contains("Content-Type: text/html;charset=utf-8");
     }
 
     @Test
@@ -35,12 +34,11 @@ class HttpResponseTest {
         httpResponse.response302Header(10, MimeType.HTML.getContentType(), "/index.html");
 
         String result = out.toString();
-        String expected = "HTTP/1.1 302 FOUND" + System.lineSeparator()
-            + "Content-Length: 10" + System.lineSeparator()
-            + "Content-Type: text/html;charset=utf-8" + System.lineSeparator()
-            + "Location: /index.html" + System.lineSeparator()
-            + System.lineSeparator();
-        assertEquals(expected, result);
+
+        assertThat(result).contains("HTTP/1.1 302 FOUND");
+        assertThat(result).contains("Content-Length: 10");
+        assertThat(result).contains("Content-Type: text/html;charset=utf-8");
+        assertThat(result).contains("Location: /index.html");
     }
 
     @Test
