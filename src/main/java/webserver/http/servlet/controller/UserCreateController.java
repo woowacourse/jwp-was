@@ -1,11 +1,13 @@
-package webserver.servlet;
+package webserver.http.servlet.controller;
 
 import db.DataBase;
 import model.User;
-import webserver.controller.Controller;
+import utils.ModelMapper;
 import webserver.http.request.HttpParams;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
+import webserver.http.servlet.view.RedirectView;
+import webserver.http.servlet.view.View;
 
 public class UserCreateController implements Controller {
     @Override

@@ -10,6 +10,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import webserver.http.HttpHeaderFields;
+import webserver.http.HttpVersion;
+
 public class HttpRequestFactory {
     private static final int HTTP_METHOD = 0;
     private static final int REQUEST_URI = 1;

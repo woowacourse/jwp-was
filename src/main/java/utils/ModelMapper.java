@@ -1,4 +1,4 @@
-package webserver.servlet;
+package utils;
 
 import static java.util.stream.Collectors.*;
 

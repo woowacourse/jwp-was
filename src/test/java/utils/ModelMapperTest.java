@@ -1,11 +1,11 @@
-package webserver.http.request;
+package utils;
 
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
 import model.User;
-import webserver.servlet.ModelMapper;
+import webserver.http.request.HttpParams;
 
 class ModelMapperTest {
     @Test

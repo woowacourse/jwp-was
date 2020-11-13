@@ -1,5 +1,7 @@
 package webserver.http.request;
 
+import webserver.http.HttpVersion;
+
 public class HttpRequestLine {
     private final HttpMethod method;
     private final RequestURI requestURI;

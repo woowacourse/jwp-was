@@ -1,9 +1,8 @@
-package webserver.servlet;
+package webserver.http.servlet.controller;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import webserver.controller.Controller;
 import webserver.http.request.HttpMethod;
 import webserver.http.request.RequestMapping;
 

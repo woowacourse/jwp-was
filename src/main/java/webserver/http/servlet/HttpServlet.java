@@ -1,9 +1,11 @@
-package webserver.servlet;
+package webserver.http.servlet;
 
-import webserver.controller.Controller;
 import webserver.http.request.HttpRequest;
 import webserver.http.request.RequestMapping;
 import webserver.http.response.HttpResponse;
+import webserver.http.servlet.controller.Controller;
+import webserver.http.servlet.controller.ControllerMapping;
+import webserver.http.servlet.view.View;
 
 public class HttpServlet {
     public void doDispatch(HttpRequest request, HttpResponse response) {

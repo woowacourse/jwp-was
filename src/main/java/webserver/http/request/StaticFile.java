@@ -1,25 +1,31 @@
-package webserver.http;
+package webserver.http.request;
 
 import java.util.Arrays;
 
-public enum TemplateFile {
-    HTML(".html", "text/html"),
-    ICO(".ico", "image/x-icon");
+public enum StaticFile {
+    CSS(".css", "text/css"),
+    JS(".js", "text/javascript"),
+    EOT(".eot", "application/vnd.ms-fontobject"),
+    SVG(".svf", "image/svg+xml"),
+    TTF(".ttf", "font/ttf"),
+    WOFF(".woff", "font/woff"),
+    WOFF2(".woff2", "font/woff2"),
+    PNG(".png", "image/png");
 
     private final String suffix;
     private final String contentType;
 
-    TemplateFile(String suffix, String contentType) {
+    StaticFile(String suffix, String contentType) {
         this.suffix = suffix;
         this.contentType = contentType;
     }
 
-    public static boolean isTemplate(String uri) {
+    public static boolean isStatic(String uri) {
         return Arrays.stream(values())
                 .anyMatch(value -> uri.endsWith(value.suffix));
     }
 
-    public static TemplateFile of(String uri) {
+    public static StaticFile of(String uri) {
         return Arrays.stream(values())
                 .filter(value -> uri.endsWith(value.suffix))
                 .findFirst()

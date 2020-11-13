@@ -9,8 +9,8 @@ import java.net.URISyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import webserver.http.request.HttpHeaderFields;
-import webserver.http.request.HttpVersion;
+import webserver.http.HttpHeaderFields;
+import webserver.http.HttpVersion;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
@@ -48,11 +48,15 @@ public class HttpResponse {
 
     private void notFound() {
         try {
-            dos.writeBytes(
-                    HttpVersion.HTTP_1_1.getVersion() + SP + HttpStatusCode.NOT_FOUND.getValue()
-                            + NEW_LINE);
-            dos.writeBytes(NEW_LINE);
-            dos.flush();
+            try {
+                dos.writeBytes(
+                        HttpVersion.HTTP_1_1.getVersion() + SP + HttpStatusCode.NOT_FOUND.getValue()
+                                + NEW_LINE);
+                dos.writeBytes(NEW_LINE);
+                dos.flush();
+            } catch (NullPointerException e) {
+                notFound();
+            }
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
