@@ -1,5 +1,6 @@
 package model.request;
 
+import exception.NoSessionException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,6 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import model.general.Header;
 import model.general.Method;
 import utils.IOUtils;
@@ -18,6 +20,10 @@ public class HttpRequest {
     private static final String HEADER_KEY_VALUE_SEPARATOR = ": ";
     private static final int KEY_INDEX = 0;
     private static final int VALUE_INDEX = 1;
+    private static final String SESSION_COOKIE_KEY = "JSESSIONID";
+    private static final String COOKIE_SEPARATOR = ";";
+    private static final String COOKIE_KEY_VALUE_SEPARATOR = "=";
+    private static final int FIRST_COOKIE_INDEX = 0;
 
     private final RequestLine requestLine;
     private final Map<Header, String> headers;
@@ -72,15 +78,13 @@ public class HttpRequest {
         return requestLine.whetherUriHasExtension();
     }
 
-    public String extractRequestUriExtension() {
+    public Optional<String> extractRequestUriExtension() {
         return requestLine.extractRequestUriExtension();
     }
 
     public Map<String, String> extractParameters() {
         if (requestLine.isSameMethod(Method.GET)) {
-            Map<String, String> uriParameters = requestLine.extractUriParameters();
-
-            return uriParameters;
+            return requestLine.extractUriParameters();
         }
         if (requestLine.isSameMethod(Method.POST)) {
             Map<String, String> uriParameters = requestLine.extractUriParameters();
@@ -106,5 +110,27 @@ public class HttpRequest {
 
     public String getHttpVersion() {
         return requestLine.getHttpVersion();
+    }
+
+    public Optional<String> getCookie(String key) {
+        String cookies = headers.get(Header.COOKIE);
+        if (Objects.nonNull(cookies) && cookies.contains(key)) {
+            return Optional.of(cookies
+                .split(key + COOKIE_KEY_VALUE_SEPARATOR)[VALUE_INDEX]
+                .split(COOKIE_SEPARATOR)[FIRST_COOKIE_INDEX]);
+        }
+
+        return Optional.empty();
+    }
+
+    public String getSessionId() throws NoSessionException {
+        String cookies = headers.get(Header.COOKIE);
+        if (Objects.nonNull(cookies) && cookies.contains(SESSION_COOKIE_KEY)) {
+            return cookies
+                .split(SESSION_COOKIE_KEY + COOKIE_KEY_VALUE_SEPARATOR)[VALUE_INDEX]
+                .split(COOKIE_SEPARATOR)[FIRST_COOKIE_INDEX];
+        }
+
+        throw new NoSessionException("No Session");
     }
 }

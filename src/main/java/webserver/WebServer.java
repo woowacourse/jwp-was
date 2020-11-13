@@ -11,13 +11,15 @@ public class WebServer {
 
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
     private static final int DEFAULT_PORT = 8080;
-    private static final int DEFAULT_THREAD_SIZE = 100;
+    private static final int NUMBER_OF_AVAILABLE_CORES = Runtime.getRuntime().availableProcessors();
+    private static final int BLOCKING_COEFFICIENT = 0;
     private static final int NO_ARGUMENTS = 0;
     private static final int ARGUMENT_INDEX = 0;
 
-    public static void main(String args[]) throws Exception {
+    public static void main(String[] args) throws Exception {
         int port = initPort(args);
-        ExecutorService executorService = Executors.newFixedThreadPool(DEFAULT_THREAD_SIZE);
+        ExecutorService executorService
+            = Executors.newFixedThreadPool(NUMBER_OF_AVAILABLE_CORES * (1 + BLOCKING_COEFFICIENT));
 
         try (ServerSocket listenSocket = new ServerSocket(port)) {
             logger.info("Web Application Server started {} port.", port);
@@ -25,10 +27,7 @@ public class WebServer {
             while (true) {
                 try {
                     Socket connection = listenSocket.accept();
-                    executorService.execute(() -> {
-                        RequestHandler requestHandler = new RequestHandler(connection);
-                        requestHandler.run();
-                    });
+                    executorService.execute(new RequestHandler(connection));
                 } catch (Exception e) {
                     logger.error(e.getMessage());
                 }

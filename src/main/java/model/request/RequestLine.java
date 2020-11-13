@@ -3,6 +3,7 @@ package model.request;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import model.general.Method;
 
@@ -42,14 +43,14 @@ public class RequestLine {
         return new RequestLine(method, requestUri, httpVersion);
     }
 
-    public String extractRequestUriExtension() {
+    public Optional<String> extractRequestUriExtension() {
         String[] sections = makePureUri(requestUri).split(EXTENSION_DELIMITER);
 
         if (sections.length == NO_EXTENSION_SIZE) {
-            return null;
+            return Optional.empty();
         }
 
-        return EXTENSION_LETTER + sections[sections.length - SIZE_CORRECTION_NUMBER];
+        return Optional.of(EXTENSION_LETTER + sections[sections.length - SIZE_CORRECTION_NUMBER]);
     }
 
     private String makePureUri(String uri) {

@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Stream;
 import model.general.Method;
 import org.junit.jupiter.api.DisplayName;
@@ -18,6 +19,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class RequestLineTest {
 
@@ -31,36 +33,37 @@ public class RequestLineTest {
     }
 
     @ParameterizedTest
-    @DisplayName("Request Uri 파라미터 확인")
+    @DisplayName("Request Uri 확장자 확인")
     @CsvSource(value = {
         "src/test/resources/input/get_template_file_request.txt:.html",
-        "src/test/resources/input/get_static_file_request.txt:.css",
-        "src/test/resources/input/get_api_request.txt:",
-        "src/test/resources/input/post_api_request.txt:"
+        "src/test/resources/input/get_static_file_request.txt:.css"
     }, delimiter = ':')
     void extractRequestUriExtension(String filePath, String expected) throws IOException {
-        InputStream inputStream = new FileInputStream(filePath);
-        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+        RequestLine requestLine = makeRequestLineFromFile(filePath);
 
-        RequestLine requestLine = RequestLine.of(bufferedReader.readLine());
+        assertThat(requestLine.extractRequestUriExtension()).isEqualTo(Optional.of(expected));
+    }
 
-        assertThat(requestLine.extractRequestUriExtension()).isEqualTo(expected);
-        bufferedReader.close();
+    @ParameterizedTest
+    @DisplayName("Request Uri 확장자 확인 - 확장자가 없을 경우")
+    @ValueSource(strings = {
+        "src/test/resources/input/get_api_request.txt",
+        "src/test/resources/input/post_api_request.txt"
+    })
+    void extractRequestUriExtension_IfNoExtension_ReturnEmpty(String filePath)
+        throws IOException {
+        RequestLine requestLine = makeRequestLineFromFile(filePath);
+
+        assertThat(requestLine.extractRequestUriExtension()).isEqualTo(Optional.empty());
     }
 
     @ParameterizedTest
     @DisplayName("Request Uri 파라미터 확인")
     @MethodSource("provideParameters")
     void extractUriParameters(String filePath, Map<String, String> parameters) throws IOException {
-        InputStream inputStream = new FileInputStream(filePath);
-        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
-        RequestLine requestLine = RequestLine.of(bufferedReader.readLine());
+        RequestLine requestLine = makeRequestLineFromFile(filePath);
 
         assertThat(requestLine.extractUriParameters()).isEqualTo(parameters);
-        bufferedReader.close();
     }
 
     private static Stream<Arguments> provideParameters() {
@@ -91,14 +94,9 @@ public class RequestLineTest {
         "src/test/resources/input/post_api_request.txt:POST"
     }, delimiter = ':')
     void isSameMethod(String filePath, String method) throws IOException {
-        InputStream inputStream = new FileInputStream(filePath);
-        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
-        RequestLine requestLine = RequestLine.of(bufferedReader.readLine());
+        RequestLine requestLine = makeRequestLineFromFile(filePath);
 
         assertThat(requestLine.isSameMethod(Method.of(method))).isTrue();
-        bufferedReader.close();
     }
 
     @ParameterizedTest
@@ -110,14 +108,9 @@ public class RequestLineTest {
         "src/test/resources/input/post_api_request.txt:/user/create"
     }, delimiter = ':')
     void isSameUri(String filePath, String uri) throws IOException {
-        InputStream inputStream = new FileInputStream(filePath);
-        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
-        RequestLine requestLine = RequestLine.of(bufferedReader.readLine());
+        RequestLine requestLine = makeRequestLineFromFile(filePath);
 
         assertThat(requestLine.isSameUri(uri)).isTrue();
-        bufferedReader.close();
     }
 
     @ParameterizedTest
@@ -129,29 +122,19 @@ public class RequestLineTest {
         "src/test/resources/input/post_api_request.txt:/user/create"
     }, delimiter = ':')
     void isStartsWithUri(String filePath, String uri) throws IOException {
-        InputStream inputStream = new FileInputStream(filePath);
-        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
-        RequestLine requestLine = RequestLine.of(bufferedReader.readLine());
+        RequestLine requestLine = makeRequestLineFromFile(filePath);
 
         assertThat(requestLine.isStartsWithUri(uri)).isTrue();
-        bufferedReader.close();
     }
 
     @ParameterizedTest
     @DisplayName("Get 파라미터 확인")
     @MethodSource("provideParameters")
     void extractGetParameters(String filePath, Map<String, String> parameters) throws IOException {
-        InputStream inputStream = new FileInputStream(filePath);
-        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
-        RequestLine requestLine = RequestLine.of(bufferedReader.readLine());
+        RequestLine requestLine = makeRequestLineFromFile(filePath);
         Map<String, String> requestParameters = requestLine.extractUriParameters();
 
         assertThat(requestParameters).isEqualTo(parameters);
-        bufferedReader.close();
     }
 
     @ParameterizedTest
@@ -163,14 +146,9 @@ public class RequestLineTest {
         "src/test/resources/input/post_api_request.txt:false"
     }, delimiter = ':')
     void whetherUriHasExtension(String filePath, boolean expected) throws IOException {
-        InputStream inputStream = new FileInputStream(filePath);
-        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
-        RequestLine requestLine = RequestLine.of(bufferedReader.readLine());
+        RequestLine requestLine = makeRequestLineFromFile(filePath);
 
         assertThat(requestLine.whetherUriHasExtension()).isEqualTo(expected);
-        bufferedReader.close();
     }
 
     @ParameterizedTest
@@ -183,14 +161,9 @@ public class RequestLineTest {
         "src/test/resources/input/post_api_request_invalid_method.txt:PUT"
     }, delimiter = ':')
     void getMethod(String filePath, String method) throws IOException {
-        InputStream inputStream = new FileInputStream(filePath);
-        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
-        RequestLine requestLine = RequestLine.of(bufferedReader.readLine());
+        RequestLine requestLine = makeRequestLineFromFile(filePath);
 
         assertThat(requestLine.getMethod()).isEqualTo(Method.of(method));
-        bufferedReader.close();
     }
 
     @ParameterizedTest
@@ -202,14 +175,9 @@ public class RequestLineTest {
         "src/test/resources/input/post_api_request.txt:/user/create"
     }, delimiter = ':')
     void getRequestUri(String filePath, String location) throws IOException {
-        InputStream inputStream = new FileInputStream(filePath);
-        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
-        RequestLine requestLine = RequestLine.of(bufferedReader.readLine());
+        RequestLine requestLine = makeRequestLineFromFile(filePath);
 
         assertThat(requestLine.getRequestUri()).isEqualTo(location);
-        bufferedReader.close();
     }
 
     @ParameterizedTest
@@ -221,13 +189,18 @@ public class RequestLineTest {
         "src/test/resources/input/post_api_request.txt:HTTP/1.1"
     }, delimiter = ':')
     void getHttpVersion(String filePath, String httpVersion) throws IOException {
+        RequestLine requestLine = makeRequestLineFromFile(filePath);
+
+        assertThat(requestLine.getHttpVersion()).isEqualTo(httpVersion);
+    }
+
+    private RequestLine makeRequestLineFromFile(String filePath) throws IOException {
         InputStream inputStream = new FileInputStream(filePath);
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
-        RequestLine requestLine = RequestLine.of(bufferedReader.readLine());
-
-        assertThat(requestLine.getHttpVersion()).isEqualTo(httpVersion);
+        String requestLine = bufferedReader.readLine();
         bufferedReader.close();
+
+        return RequestLine.of(requestLine);
     }
 }

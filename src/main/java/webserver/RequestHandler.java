@@ -1,12 +1,16 @@
 package webserver;
 
 import controller.Controller;
+import exception.NoSessionException;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
+import model.general.Header;
 import model.general.Status;
 import model.request.HttpRequest;
 import model.response.HttpResponse;
@@ -34,31 +38,45 @@ public class RequestHandler implements Runnable {
             OutputStream outputStream = connection.getOutputStream()) {
             DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
 
-            HttpResponse response = makeResponse(inputStream);
-            response.writeToOutputStream(dataOutputStream);
+            HttpResponse httpResponse = makeResponse(inputStream);
+            httpResponse.writeToOutputStream(dataOutputStream);
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
     }
 
     private HttpResponse makeResponse(InputStream inputStream) {
-        HttpRequest request;
+        HttpRequest httpRequest;
+
         try {
-            request = HttpRequest.of(inputStream);
+            httpRequest = HttpRequest.of(inputStream);
         } catch (IOException e) {
             logger.error(e.getMessage());
             return HttpResponse.of(Status.BAD_REQUEST);
         }
 
-        Controller controller = ControllerMapper.selectController(request);
+        Controller controller = ControllerMapper.selectController(httpRequest);
         if (Objects.isNull(controller)) {
             return HttpResponse.of(Status.NOT_FOUND);
         }
 
         try {
-            return controller.service(request);
+            HttpResponse httpResponse = controller.service(httpRequest);
+            makeSession(httpRequest, httpResponse);
+            return httpResponse;
         } catch (Exception e) {
             return HttpResponse.of(Status.INTERNAL_ERROR);
+        }
+    }
+
+    private void makeSession(HttpRequest httpRequest, HttpResponse httpResponse) {
+        try {
+            httpRequest.getSessionId();
+        } catch (NoSessionException e) {
+            Map<Header, String> headers = httpResponse.getHeaders();
+            UUID uuid = UUID.randomUUID();
+
+            headers.put(Header.SET_COOKIE, "JSESSIONID=" + uuid.toString());
         }
     }
 }

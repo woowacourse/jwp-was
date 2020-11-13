@@ -2,7 +2,7 @@ package controller;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
+import java.util.Optional;
 import model.general.ContentType;
 import model.general.Header;
 import model.general.Method;
@@ -30,9 +30,9 @@ public class ResourceController extends AbstractController {
 
     @Override
     public HttpResponse doGet(HttpRequest httpRequest) {
-        ContentType contentType = ContentType.of(httpRequest)
-            .orElse(null);
-        if (Objects.nonNull(contentType)) {
+        Optional<ContentType> contentType = ContentType.of(httpRequest);
+
+        if (contentType.isPresent()) {
             return findResourceFile(httpRequest);
         }
         if (httpRequest.whetherUriHasExtension()) {
@@ -43,33 +43,34 @@ public class ResourceController extends AbstractController {
     }
 
     private HttpResponse findResourceFile(HttpRequest httpRequest) {
-        StatusLine statusLine = StatusLine.of(httpRequest, Status.OK);
-        Map<Header, String> headers = new HashMap<>();
-        byte[] body;
+        Optional<ContentType> contentType = ContentType.of(httpRequest);
+        String requestUri = httpRequest.getRequestUri();
 
-        try {
-            body = FileIoUtils.loadFileFromClasspath(generatePath(httpRequest));
-        } catch (Exception e) {
-            return HttpResponse.of(Status.NOT_FOUND);
+        if (contentType.isPresent()) {
+            byte[] body;
+            try {
+                body = FileIoUtils
+                    .loadFileFromClasspath(generatePath(contentType.get(), requestUri));
+            } catch (Exception e) {
+                return HttpResponse.of(Status.NOT_FOUND);
+            }
+            StatusLine statusLine = StatusLine.of(httpRequest, Status.OK);
+            Map<Header, String> headers = new HashMap<>();
+            headers.put(Header.CONTENT_TYPE, contentType.get()
+                .getContentTypeValue());
+            headers.put(Header.CONTENT_LENGTH, String.valueOf(body.length));
+
+            return HttpResponse.of(statusLine, headers, body);
         }
 
-        ContentType contentType = ContentType.of(httpRequest)
-            .orElse(null);
-        headers.put(Header.CONTENT_TYPE, contentType.getContentTypeValue());
-        headers.put(Header.CONTENT_LENGTH, String.valueOf(body.length));
-
-        return HttpResponse.of(statusLine, headers, body);
+        return HttpResponse.of(Status.NOT_FOUND);
     }
 
-    private static String generatePath(HttpRequest httpRequest) {
-        ContentType contentType = ContentType.of(httpRequest)
-            .orElse(null);
-        String location = httpRequest.getRequestUri();
-
+    private static String generatePath(ContentType contentType, String requestUri) {
         if (contentType.equals(ContentType.HTML) || contentType.equals(ContentType.ICO)) {
-            return TEMPLATE_LOCATION + location;
+            return TEMPLATE_LOCATION + requestUri;
         }
 
-        return STATIC_LOCATION + location;
+        return STATIC_LOCATION + requestUri;
     }
 }

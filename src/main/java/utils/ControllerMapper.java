@@ -2,7 +2,7 @@ package utils;
 
 import com.google.common.collect.Maps;
 import controller.Controller;
-import controller.ErrorController;
+import controller.NotFoundController;
 import controller.ResourceController;
 import controller.UserController;
 import java.util.Map;
@@ -12,7 +12,7 @@ public class ControllerMapper {
 
     private static final Map<String, Controller> controllerMap = Maps.newHashMap();
     private static final Controller resourceController = new ResourceController();
-    private static final Controller errorController = new ErrorController();
+    private static final Controller errorController = new NotFoundController();
 
     static {
         controllerMap.put("/user/", new UserController());

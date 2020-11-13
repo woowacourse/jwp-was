@@ -11,7 +11,8 @@ public enum ContentType {
     JS("text/javascript", ".js"),
     WOFF("text/font", ".woff"),
     TTF("text/font", ".ttf"),
-    ICO("image/x-icon", ".ico");
+    ICO("image/x-icon", ".ico"),
+    PNG("image/png", ".png");
 
     private final String contentTypeValue;
     private final String extension;
@@ -28,9 +29,12 @@ public enum ContentType {
     }
 
     public static Optional<ContentType> of(HttpRequest httpRequest) {
-        String extension = httpRequest.extractRequestUriExtension();
+        Optional<String> extension = httpRequest.extractRequestUriExtension();
+        if (extension.isPresent()) {
+            return of(extension.get());
+        }
 
-        return of(extension);
+        return Optional.empty();
     }
 
     public String getContentTypeValue() {

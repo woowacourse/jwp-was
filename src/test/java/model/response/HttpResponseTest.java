@@ -38,10 +38,7 @@ public class HttpResponseTest {
         "src/test/resources/input/post_api_request.txt"
     })
     void create(String filePath) throws IOException {
-        InputStream inputStream = new FileInputStream(filePath);
-        HttpRequest httpRequest = HttpRequest.of(inputStream);
-        Controller controller = ControllerMapper.selectController(httpRequest);
-        HttpResponse httpResponse = controller.service(httpRequest);
+        HttpResponse httpResponse = makeHttpResponseFromFile(filePath);
 
         assertThat(httpResponse).isInstanceOf(HttpResponse.class);
     }
@@ -57,7 +54,7 @@ public class HttpResponseTest {
             + "HTTP/1.1 200 OK",
         "src/test/resources/input/get_api_request.txt:"
             + "src/test/resources/output/get_api_request_output.txt:"
-            + "HTTP/1.1 405 Method Not Allowed",
+            + "HTTP/1.1 404 Not Found",
         "src/test/resources/input/post_api_request.txt:"
             + "src/test/resources/output/post_api_request_output.txt:"
             + "HTTP/1.1 302 Found"
@@ -90,10 +87,7 @@ public class HttpResponseTest {
         "src/test/resources/input/post_api_request.txt:HTTP/1.1"
     }, delimiter = ':')
     void getHttpVersion(String filePath, String expected) throws IOException {
-        InputStream inputStream = new FileInputStream(filePath);
-        HttpRequest httpRequest = HttpRequest.of(inputStream);
-        Controller controller = ControllerMapper.selectController(httpRequest);
-        HttpResponse httpResponse = controller.service(httpRequest);
+        HttpResponse httpResponse = makeHttpResponseFromFile(filePath);
 
         assertThat(httpResponse.getHttpVersion()).isEqualTo(expected);
     }
@@ -103,15 +97,12 @@ public class HttpResponseTest {
     @CsvSource(value = {
         "src/test/resources/input/get_template_file_request.txt:200",
         "src/test/resources/input/get_static_file_request.txt:200",
-        "src/test/resources/input/get_api_request.txt:405",
+        "src/test/resources/input/get_api_request.txt:404",
         "src/test/resources/input/post_api_request.txt:302",
         "src/test/resources/input/post_api_request_invalid_method.txt:405"
     }, delimiter = ':')
     void getStatusCode(String filePath, String expected) throws IOException {
-        InputStream inputStream = new FileInputStream(filePath);
-        HttpRequest httpRequest = HttpRequest.of(inputStream);
-        Controller controller = ControllerMapper.selectController(httpRequest);
-        HttpResponse httpResponse = controller.service(httpRequest);
+        HttpResponse httpResponse = makeHttpResponseFromFile(filePath);
 
         assertThat(httpResponse.getStatusCode()).isEqualTo(expected);
     }
@@ -121,15 +112,12 @@ public class HttpResponseTest {
     @CsvSource(value = {
         "src/test/resources/input/get_template_file_request.txt:OK",
         "src/test/resources/input/get_static_file_request.txt:OK",
-        "src/test/resources/input/get_api_request.txt:Method Not Allowed",
+        "src/test/resources/input/get_api_request.txt:Not Found",
         "src/test/resources/input/post_api_request.txt:Found",
         "src/test/resources/input/post_api_request_invalid_method.txt:Method Not Allowed"
     }, delimiter = ':')
     void getReasonPhrase(String filePath, String expected) throws IOException {
-        InputStream inputStream = new FileInputStream(filePath);
-        HttpRequest httpRequest = HttpRequest.of(inputStream);
-        Controller controller = ControllerMapper.selectController(httpRequest);
-        HttpResponse httpResponse = controller.service(httpRequest);
+        HttpResponse httpResponse = makeHttpResponseFromFile(filePath);
 
         assertThat(httpResponse.getReasonPhrase()).isEqualTo(expected);
     }
@@ -139,10 +127,7 @@ public class HttpResponseTest {
     @MethodSource("provideHeaders")
     void getHeaders(String filePath, Map<Header, String> expected)
         throws IOException {
-        InputStream inputStream = new FileInputStream(filePath);
-        HttpRequest httpRequest = HttpRequest.of(inputStream);
-        Controller controller = ControllerMapper.selectController(httpRequest);
-        HttpResponse httpResponse = controller.service(httpRequest);
+        HttpResponse httpResponse = makeHttpResponseFromFile(filePath);
 
         assertThat(httpResponse.getHeaders()).isEqualTo(expected);
     }
@@ -187,13 +172,17 @@ public class HttpResponseTest {
         "src/test/resources/input/post_api_request_invalid_method.txt:false"
     }, delimiter = ':')
     void getBody(String filePath, boolean expected) throws IOException {
-        InputStream inputStream = new FileInputStream(filePath);
-        HttpRequest httpRequest = HttpRequest.of(inputStream);
-        Controller controller = ControllerMapper.selectController(httpRequest);
-        HttpResponse httpResponse = controller.service(httpRequest);
-
+        HttpResponse httpResponse = makeHttpResponseFromFile(filePath);
         byte[] body = httpResponse.getBody();
 
         assertThat(Objects.nonNull(body)).isEqualTo(expected);
+    }
+
+    private HttpResponse makeHttpResponseFromFile(String filePath) throws IOException {
+        InputStream inputStream = new FileInputStream(filePath);
+        HttpRequest httpRequest = HttpRequest.of(inputStream);
+        Controller controller = ControllerMapper.selectController(httpRequest);
+
+        return controller.service(httpRequest);
     }
 }

@@ -1,16 +1,20 @@
 package model.request;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import exception.NoSessionException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Stream;
 import model.general.Method;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -141,5 +145,47 @@ public class HttpRequestTest {
         HttpRequest httpRequest = HttpRequest.of(inputStream);
 
         assertThat(httpRequest.getHttpVersion()).isEqualTo(httpVersion);
+    }
+
+    @Test
+    @DisplayName("Cookie 확인")
+    void getCookie() throws IOException {
+        String filePath = "src/test/resources/input/get_api_request.txt";
+        InputStream inputStream = new FileInputStream(filePath);
+        HttpRequest httpRequest = HttpRequest.of(inputStream);
+
+        assertThat(httpRequest.getCookie("logined")).isEqualTo(Optional.of("true"));
+    }
+
+    @Test
+    @DisplayName("Cookie 확인 - 존재하지 않는 쿠키")
+    void getCookie_IfNoCookie_ReturnEmpty() throws IOException {
+        String filePath = "src/test/resources/input/get_api_request.txt";
+        InputStream inputStream = new FileInputStream(filePath);
+        HttpRequest httpRequest = HttpRequest.of(inputStream);
+
+        assertThat(httpRequest.getCookie("UNKNOWN_COOKIE")).isEqualTo(Optional.empty());
+    }
+
+    @Test
+    @DisplayName("SessionId 확인")
+    void getSessionId() throws IOException, NoSessionException {
+        String filePath = "src/test/resources/input/get_api_request.txt";
+        InputStream inputStream = new FileInputStream(filePath);
+        HttpRequest httpRequest = HttpRequest.of(inputStream);
+
+        assertThat(httpRequest.getSessionId()).isEqualTo("6ab731c0-06e2-47d5-84b3-b8c2bc1d4a14");
+    }
+
+    @Test
+    @DisplayName("SessionId 확인 - SessionId가 없을 경우")
+    void getSessionId_IfNoSessionId_ThrowException() throws IOException {
+        String filePath = "src/test/resources/input/post_api_request.txt";
+        InputStream inputStream = new FileInputStream(filePath);
+        HttpRequest httpRequest = HttpRequest.of(inputStream);
+
+        assertThatThrownBy(() -> httpRequest.getSessionId())
+            .isInstanceOf(NoSessionException.class)
+            .hasMessage("No Session");
     }
 }
