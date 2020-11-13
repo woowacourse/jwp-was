@@ -11,25 +11,18 @@ import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import webserver.http.request.HttpRequest;
-import webserver.http.request.HttpRequestParser;
-import webserver.http.response.HttpResponse;
+import webserver.servlet.http.request.HttpRequest;
+import webserver.servlet.http.request.HttpRequestParser;
+import webserver.servlet.http.response.HttpResponse;
 
 public class RequestHandler implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private final Socket connectionSocket;
-    private final RequestProcessor requestProcessor;
 
     public RequestHandler(Socket connectionSocket) {
         this.connectionSocket = connectionSocket;
-        this.requestProcessor = new RequestProcessor();
-    }
-
-    public RequestHandler(Socket connectionSocket, RequestProcessor requestProcessor) {
-        this.connectionSocket = connectionSocket;
-        this.requestProcessor = requestProcessor;
     }
 
     @Override
@@ -41,6 +34,7 @@ public class RequestHandler implements Runnable {
                 connectionSocket.getInputStream(), UTF_8));
              DataOutputStream outputStream = new DataOutputStream(connectionSocket.getOutputStream())) {
             HttpRequest request = HttpRequestParser.parse(reader);
+            RequestProcessor requestProcessor = RequestProcessorFactory.getInstance();
             HttpResponse response = requestProcessor.response(request);
             ResponseSender.send(outputStream, response);
         } catch (IOException e) {

@@ -1,28 +1,20 @@
 package webserver;
 
-import static webserver.http.request.MimeType.*;
-import static webserver.http.response.HttpStatus.*;
+import static webserver.servlet.http.MimeType.*;
+import static webserver.servlet.http.response.HttpStatus.*;
 
-import java.util.Arrays;
-
-import webserver.exception.BadRequestException;
-import webserver.exception.MethodNotAllowedException;
-import webserver.exception.NotFoundException;
-import webserver.http.request.HttpRequest;
-import webserver.http.response.HttpResponse;
+import webserver.servlet.exception.BadRequestException;
+import webserver.servlet.exception.MethodNotAllowedException;
+import webserver.servlet.exception.NotFoundException;
+import webserver.servlet.handler.HandlerMapping;
+import webserver.servlet.handler.HandlerMappings;
+import webserver.servlet.http.request.HttpRequest;
+import webserver.servlet.http.response.HttpResponse;
+import webserver.servlet.http.response.HttpStatus;
 
 public class RequestProcessor {
 
     private final HandlerMappings handlerMappings;
-
-    public RequestProcessor() {
-        handlerMappings = new HandlerMappings(
-                Arrays.asList(
-                        new StaticResourceHandlerMapping(),
-                        new ServletHandlerMapping(ServletMapper.getInstance())
-                )
-        );
-    }
 
     public RequestProcessor(HandlerMappings handlerMappings) {
         this.handlerMappings = handlerMappings;
@@ -30,18 +22,22 @@ public class RequestProcessor {
 
     public HttpResponse response(HttpRequest request) {
         try {
-            HttpResponse result = new HttpResponse();
+            HttpResponse response = new HttpResponse();
             HandlerMapping handler = handlerMappings.findHandler(request);
-            handler.handle(request, result);
-            return result;
+            handler.handle(request, response);
+            return response;
         } catch (BadRequestException e) {
-            return HttpResponse.withContent(BAD_REQUEST, HTML_UTF_8, e.getMessage());
+            return getHttpResponseWithException(BAD_REQUEST, e);
         } catch (NotFoundException e) {
-            return HttpResponse.withContent(NOT_FOUND, HTML_UTF_8, e.getMessage());
+            return getHttpResponseWithException(NOT_FOUND, e);
         } catch (MethodNotAllowedException e) {
-            return HttpResponse.withContent(METHOD_NOT_ALLOWED, HTML_UTF_8, e.getMessage());
+            return getHttpResponseWithException(METHOD_NOT_ALLOWED, e);
         } catch (RuntimeException e) {
-            return HttpResponse.withContent(INTERNAL_SERVER_ERROR, HTML_UTF_8, e.getMessage());
+            return getHttpResponseWithException(INTERNAL_SERVER_ERROR, e);
         }
+    }
+
+    private HttpResponse getHttpResponseWithException(HttpStatus httpStatus, Exception ex) {
+        return HttpResponse.withContent(httpStatus, HTML_UTF_8, ex.getMessage());
     }
 }

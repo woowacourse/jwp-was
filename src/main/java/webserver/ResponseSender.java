@@ -8,10 +8,10 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import webserver.http.response.HttpResponse;
-import webserver.http.response.HttpResponseHeaders;
-import webserver.http.response.HttpStatus;
-import webserver.http.response.HttpStatusLine;
+import webserver.servlet.http.response.HttpResponse;
+import webserver.servlet.http.response.HttpResponseHeaders;
+import webserver.servlet.http.response.HttpStatus;
+import webserver.servlet.http.response.HttpStatusLine;
 
 public class ResponseSender {
 
