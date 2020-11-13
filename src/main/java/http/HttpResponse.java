@@ -20,16 +20,16 @@ public class HttpResponse {
     }
 
     public void response200Header(int lengthOfBodyContent, String contentType) throws IOException {
-        addResponseHeader(HeaderType.CONTENT_TYPE, contentType + CHARSET_UTF_8);
-        addResponseHeader(HeaderType.CONTENT_LENGTH, String.valueOf(lengthOfBodyContent));
+        addResponseHeader(HeaderType.CONTENT_TYPE.getTypeName(), contentType + CHARSET_UTF_8);
+        addResponseHeader(HeaderType.CONTENT_LENGTH.getTypeName(), String.valueOf(lengthOfBodyContent));
         writeStatusLine();
         writeHeaders();
     }
 
     public void response302Header(int lengthOfBodyContent, String contentType, String url) throws IOException {
-        addResponseHeader(HeaderType.CONTENT_TYPE, contentType + CHARSET_UTF_8);
-        addResponseHeader(HeaderType.CONTENT_LENGTH, String.valueOf(lengthOfBodyContent));
-        addResponseHeader(HeaderType.LOCATION, url);
+        addResponseHeader(HeaderType.CONTENT_TYPE.getTypeName(), contentType + CHARSET_UTF_8);
+        addResponseHeader(HeaderType.CONTENT_LENGTH.getTypeName(), String.valueOf(lengthOfBodyContent));
+        addResponseHeader(HeaderType.LOCATION.getTypeName(), url);
         writeStatusLine();
         writeHeaders();
     }
@@ -43,7 +43,7 @@ public class HttpResponse {
         dos.flush();
     }
 
-    private void addResponseHeader(HeaderType headerType, String value) {
+    private void addResponseHeader(String headerType, String value) {
         httpHeaders.addHeader(headerType, value);
     }
 
@@ -52,9 +52,8 @@ public class HttpResponse {
     }
 
     private void writeHeaders() throws IOException {
-        for (HeaderType headerType : httpHeaders.keySet()) {
-            String typeName = headerType.getTypeName();
-            String header = typeName + DELIMITER + httpHeaders.get(headerType) + System.lineSeparator();
+        for (String headerType : httpHeaders.keySet()) {
+            String header = headerType + DELIMITER + httpHeaders.get(headerType) + System.lineSeparator();
             dos.writeBytes(header);
         }
         dos.writeBytes(System.lineSeparator());

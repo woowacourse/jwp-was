@@ -18,8 +18,9 @@ public class HttpRequest {
         this.httpRequestLine = HttpRequestLine.from(br.readLine());
         this.httpHeaders = HttpHeaders.from(br);
         String body = "";
-        if (httpHeaders.get(HeaderType.CONTENT_LENGTH) != null) {
-            body = IOUtils.readData(br, Integer.parseInt(httpHeaders.get(HeaderType.CONTENT_LENGTH)));
+        String headerType = HeaderType.CONTENT_LENGTH.getTypeName();
+        if (httpHeaders.get(headerType) != null) {
+            body = IOUtils.readData(br, Integer.parseInt(httpHeaders.get(headerType)));
         }
         this.body = body;
     }
@@ -48,7 +49,7 @@ public class HttpRequest {
     }
 
     public String getHeader(String headerType) {
-        return httpHeaders.get(HeaderType.from(headerType));
+        return httpHeaders.get(headerType);
     }
 
     public MimeType getMimeType() {

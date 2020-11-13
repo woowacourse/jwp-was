@@ -10,7 +10,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 class HeaderTypeTest {
     @ParameterizedTest
-    @CsvSource({"Host, HOST", "Connection, CONNECTION", "Accept, ACCEPT", "Content-Type, CONTENT_TYPE"})
+    @CsvSource({"Connection, CONNECTION", "Content-Type, CONTENT_TYPE", "Location, LOCATION"})
     void fromTest(String input, HeaderType headerType) {
         assertEquals(headerType, HeaderType.from(input));
     }

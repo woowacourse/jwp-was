@@ -3,9 +3,7 @@ package http;
 import java.util.Arrays;
 
 public enum HeaderType {
-    HOST("Host"),
     CONNECTION("Connection"),
-    ACCEPT("Accept"),
     CONTENT_TYPE("Content-Type"),
     CONTENT_LENGTH("Content-Length"),
     LOCATION("Location");
