@@ -28,16 +28,32 @@ public class HttpResponse {
 
     public void ok(String classPath, String contentType) {
         try {
-            byte[] body = loadFileFromClasspath(classPath);
-
-            dos.writeBytes(HttpVersion.HTTP_1_1.getVersion() + SP + HttpStatusCode.OK.getValue()
-                    + NEW_LINE);
-            dos.writeBytes(HttpHeaderFields.CONTENT_TYPE + COLON + SP + contentType + NEW_LINE);
-            dos.writeBytes(HttpHeaderFields.CONTENT_LENGTH + COLON + SP + body.length + NEW_LINE);
-            dos.writeBytes(NEW_LINE);
-            dos.write(body, 0, body.length);
-            dos.flush();
+            try {
+                byte[] body = loadFileFromClasspath(classPath);
+                dos.writeBytes(HttpVersion.HTTP_1_1.getVersion() + SP + HttpStatusCode.OK.getValue()
+                        + NEW_LINE);
+                dos.writeBytes(HttpHeaderFields.CONTENT_TYPE + COLON + SP + contentType + NEW_LINE);
+                dos.writeBytes(
+                        HttpHeaderFields.CONTENT_LENGTH + COLON + SP + body.length + NEW_LINE);
+                dos.writeBytes(NEW_LINE);
+                dos.write(body, 0, body.length);
+                dos.flush();
+            } catch (NullPointerException e) {
+                notFound();
+            }
         } catch (IOException | URISyntaxException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void notFound() {
+        try {
+            dos.writeBytes(
+                    HttpVersion.HTTP_1_1.getVersion() + SP + HttpStatusCode.NOT_FOUND.getValue()
+                            + NEW_LINE);
+            dos.writeBytes(NEW_LINE);
+            dos.flush();
+        } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
@@ -47,6 +63,18 @@ public class HttpResponse {
             dos.writeBytes(HttpVersion.HTTP_1_1.getVersion() + SP + HttpStatusCode.FOUND.getValue()
                     + NEW_LINE);
             dos.writeBytes(LOCATION + COLON + SP + BASE_URI + uri + SP + NEW_LINE);
+            dos.writeBytes(NEW_LINE);
+            dos.flush();
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    public void badRequest() {
+        try {
+            dos.writeBytes(
+                    HttpVersion.HTTP_1_1.getVersion() + SP + HttpStatusCode.BAD_REQUEST.getValue()
+                            + NEW_LINE);
             dos.writeBytes(NEW_LINE);
             dos.flush();
         } catch (IOException e) {

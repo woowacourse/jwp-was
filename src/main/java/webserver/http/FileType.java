@@ -1,7 +1,7 @@
 package webserver.http;
 
 public class FileType {
-    private static final String TEMPLATE = "./template";
+    private static final String TEMPLATE = "./templates";
     private static final String STATIC = "./static";
 
     private final String classPath;

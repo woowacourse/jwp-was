@@ -3,8 +3,6 @@ package webserver.http.request;
 import webserver.http.FileType;
 
 public class RequestURI {
-    private static final String SLASH = "/";
-
     private final String uri;
     private final HttpParams httpParams;
 
@@ -14,7 +12,7 @@ public class RequestURI {
     }
 
     public String getClassPath() {
-        return FileType.of(uri).getClassPath() + SLASH + uri;
+        return FileType.of(uri).getClassPath() + uri;
     }
 
     public String getContentType() {
