@@ -34,10 +34,6 @@ public class Parameters {
         return new Parameters();
     }
 
-    public Map<String, String> getParams() {
-        return params;
-    }
-
     public String get(String param) {
         return params.get(param);
     }

@@ -19,4 +19,12 @@ class HttpRequestLineTest {
         );
     }
 
+    @Test
+    @DisplayName("올바르지 않은 request line 입력시 예외처리")
+    void fromError() {
+        assertThatThrownBy(() -> HttpRequestLine.from("GET"))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("request line 의 구성요소(method, url, version)이 모두 존재하지 않습니다.");
+    }
+
 }
