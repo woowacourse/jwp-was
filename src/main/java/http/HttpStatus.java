@@ -4,7 +4,7 @@ public enum HttpStatus {
     OK(200, "OK"),
     FOUND(302, "FOUND"),
     NOT_FOUND(404, "NOT FOUND"),
-    METHOD_NOT_FOUND(405, "METHOD NOT FOUND");
+    METHOD_NOT_ALLOWED(405, "METHOD NOT ALLOWED");
 
     private final int statusCode;
     private final String message;

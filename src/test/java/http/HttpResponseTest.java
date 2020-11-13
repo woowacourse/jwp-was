@@ -9,8 +9,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class HttpResponseTest {
-    private String testDirectory = "./src/test/resources/";
-
     @Test
     @DisplayName("200 Ok 반환")
     void response200Test() throws IOException {
@@ -45,4 +43,15 @@ class HttpResponseTest {
         assertEquals(expected, result);
     }
 
+    @Test
+    @DisplayName("405 Method Not Allowed 반환")
+    void response405Test() throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        HttpResponse httpResponse = new HttpResponse(out, HttpStatus.METHOD_NOT_ALLOWED, "HTTP/1.1");
+        httpResponse.response405Header();
+
+        String result = out.toString();
+        String expected = "HTTP/1.1 405 METHOD NOT ALLOWED" + System.lineSeparator();
+        assertEquals(expected, result);
+    }
 }

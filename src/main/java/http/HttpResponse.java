@@ -37,6 +37,10 @@ public class HttpResponse {
         writeHeaders();
     }
 
+    public void response405Header() throws IOException {
+        writeStatusLine();
+    }
+
     public void responseBody(byte[] body) throws IOException {
         dos.write(body, 0, body.length);
         dos.flush();

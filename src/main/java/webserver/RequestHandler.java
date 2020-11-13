@@ -47,7 +47,9 @@ public class RequestHandler implements Runnable {
                 httpResponse.response302Header(body.length, mimeType.getContentType(), "/index.html");
             }
             else {
-                httpResponse = new HttpResponse(out, HttpStatus.METHOD_NOT_FOUND, httpRequest.getVersion());
+                httpResponse = new HttpResponse(out, HttpStatus.METHOD_NOT_ALLOWED, httpRequest.getVersion());
+                httpResponse.response405Header();
+                body = new byte[0];
             }
             httpResponse.responseBody(body);
         } catch (Exception e) {

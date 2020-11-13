@@ -16,7 +16,7 @@ class HttpRequestTest {
     @Test
     @DisplayName("GET 요청에 대한 테스트")
     void getRequestTest() throws IOException {
-        InputStream in = new FileInputStream(new File(testDirectory + "GET.txt"));
+        InputStream in = new FileInputStream(new File(testDirectory + "get.txt"));
         HttpRequest httpRequest = new HttpRequest(in);
 
         assertAll(() -> {
@@ -31,7 +31,7 @@ class HttpRequestTest {
     @Test
     @DisplayName("POST 요청에 대한 테스트")
     void postRequestTest() throws IOException {
-        InputStream in = new FileInputStream(new File(testDirectory + "POST.txt"));
+        InputStream in = new FileInputStream(new File(testDirectory + "post.txt"));
         HttpRequest httpRequest = new HttpRequest(in);
 
         assertAll(() -> {
@@ -45,4 +45,12 @@ class HttpRequestTest {
         });
     }
 
+    @Test
+    @DisplayName("서버에서 지원하지 않는 http 요청(get, post, put, patch, delete 제외)에 대한 테스트")
+    void notSupportedMethod() throws IOException {
+        InputStream in = new FileInputStream(new File(testDirectory + "connect_not_allowed.txt"));
+        HttpRequest httpRequest = new HttpRequest(in);
+
+        assertTrue(httpRequest.matchMethod(HttpMethod.NOT_SUPPORT_METHOD));
+    }
 }
