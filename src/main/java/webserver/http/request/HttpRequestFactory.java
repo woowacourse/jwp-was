@@ -10,19 +10,24 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import utils.Strings;
+
 public class HttpRequestFactory {
     private static final int HTTP_METHOD = 0;
     private static final int REQUEST_URI = 1;
     private static final int HTTP_VERSION = 2;
     private static final String HEADER_DELIMITER = ":";
+    private static final String EMPTY = "";
 
     public HttpRequest create(BufferedReader br) throws IOException {
+        HttpRequestLine requestLine = extractRequestLine(br);
         HttpHeader header = extractHeader(br);
-        HttpBody body = extractBody(br, header);
-        return new HttpRequest(header, body);
+        String body = extractBody(br, header.get(HttpHeaderFields.CONTENT_LENGTH));
+
+        return new HttpRequest(requestLine, header, body);
     }
 
-    private HttpHeader extractHeader(BufferedReader br) throws IOException {
+    private HttpRequestLine extractRequestLine(BufferedReader br) throws IOException {
         String requestLine = br.readLine();
         String[] tokens = requestLine.split(SP);
 
@@ -31,29 +36,28 @@ public class HttpRequestFactory {
                 .getFactory()
                 .create(tokens[REQUEST_URI]);
         HttpVersion version = HttpVersion.of(tokens[HTTP_VERSION]);
-        Map<String, String> fields = extractFields(br);
-
-        return new HttpHeader(method, uri, version, fields);
+        return new HttpRequestLine(method, uri, version);
     }
 
-    private Map<String, String> extractFields(BufferedReader br) throws IOException {
+    private HttpHeader extractHeader(BufferedReader br) throws IOException {
         Map<String, String> fields = new HashMap<>();
         String line = br.readLine();
-        while (nonNull(line) && !EMPTY.equals(line)) {
+
+        while (nonNull(line) && !Strings.EMPTY.equals(line)) {
             int indexOfDelimiter = line.indexOf(HEADER_DELIMITER);
             String key = line.substring(0, indexOfDelimiter);
             String value = line.substring(indexOfDelimiter + 2);
             fields.put(key, value);
             line = br.readLine();
         }
-        return fields;
+
+        return new HttpHeader(fields);
     }
 
-    private HttpBody extractBody(BufferedReader br, HttpHeader header) throws IOException {
-        String contentLength = header.get(HttpHeaderFields.CONTENT_LENGTH);
+    private String extractBody(BufferedReader br, String contentLength) throws IOException {
         if (br.ready() && nonNull(contentLength)) {
-            return new HttpBody(readData(br, parseInt(contentLength)));
+            return readData(br, parseInt(contentLength));
         }
-        return HttpBody.EMPTY_BODY;
+        return EMPTY;
     }
 }

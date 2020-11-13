@@ -1,26 +1,29 @@
 package webserver.http.request;
 
-import webserver.http.service.AbstractHttpService;
-
 public class HttpRequest {
+    private final HttpRequestLine requestLine;
     private final HttpHeader header;
-    private final HttpBody body;
+    private final String body;
 
-    public HttpRequest(HttpHeader header, HttpBody body) {
+    public HttpRequest(HttpRequestLine requestLine, HttpHeader header, String body) {
+        this.requestLine = requestLine;
         this.header = header;
         this.body = body;
     }
 
-    public AbstractHttpService createService() {
-        return header.getMethod()
-                .createService(header, body);
+    public RequestMapping toRequestMapping() {
+        return new RequestMapping(requestLine.getRequestURI().getUri(), requestLine.getMethod());
+    }
+
+    public HttpRequestLine getRequestLine() {
+        return requestLine;
     }
 
     public HttpHeader getHeader() {
         return header;
     }
 
-    public HttpBody getBody() {
+    public String getBody() {
         return body;
     }
 }
