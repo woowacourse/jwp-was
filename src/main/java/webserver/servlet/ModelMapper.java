@@ -7,9 +7,14 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import webserver.http.request.HttpParams;
 
 public class ModelMapper {
+    private static final Logger logger = LoggerFactory.getLogger(ModelMapper.class);
+
     public static <T> T toModel(Class<T> clazz, HttpParams params) {
         try {
             Field[] fields = clazz.getDeclaredFields();
@@ -30,7 +35,7 @@ public class ModelMapper {
                 InvocationTargetException |
                 NoSuchMethodException |
                 IllegalAccessException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
             throw new AssertionError("인자를 통해 인스턴스를 생성하지 못했습니다.");
         }
     }
