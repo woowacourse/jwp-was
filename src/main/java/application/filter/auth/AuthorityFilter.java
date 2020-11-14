@@ -1,4 +1,4 @@
-package application.filter;
+package application.filter.auth;
 
 import request.HttpRequest;
 

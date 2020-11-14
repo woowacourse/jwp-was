@@ -1,8 +1,8 @@
 package application.controller;
 
 import application.dto.HttpRequestToDtoConverter;
-import application.filter.AuthorityFilter;
-import application.filter.UnauthorizedException;
+import application.filter.auth.AuthorityFilter;
+import application.filter.auth.UnauthorizedException;
 import application.service.UserService;
 import com.github.jknack.handlebars.Template;
 import controller.AbstractController;
