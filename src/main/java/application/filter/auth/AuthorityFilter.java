@@ -8,7 +8,7 @@ public class AuthorityFilter {
         try {
             String cookie = httpRequest.getHeader("Cookie");
 
-            if (!cookie.contains(" login=true")) {
+            if (!cookie.contains("login=true")) {
                 throw new UnauthorizedException();
             }
         } catch (IllegalArgumentException e) {

@@ -10,7 +10,7 @@ import request.HttpRequest;
 import response.HttpResponse;
 
 @DisplayName("UserController - 이상한 사용")
-class UserControllerIllegalUsageTest {
+class UserControllerIllegalUsageTest extends UserControllerTest {
 
     private UserController userController = new UserController();
 

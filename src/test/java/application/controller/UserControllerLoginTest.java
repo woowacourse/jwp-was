@@ -9,7 +9,7 @@ import request.HttpRequest;
 import response.HttpResponse;
 
 @DisplayName("UserController - 로그인")
-class UserControllerLoginTest {
+class UserControllerLoginTest extends UserControllerTest {
 
     private static final String TEST_USER_ID = "test";
     private static final String TEST_PASSWORD = "test";

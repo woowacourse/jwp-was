@@ -8,20 +8,16 @@ import request.HttpRequest;
 import response.HttpResponse;
 
 @DisplayName("UserController - 전체 회원 목록 조회")
-class UserControllerFindAllUsersTest {
+class UserControllerFindAllUsersTest extends UserControllerTest {
 
     private UserController userController = new UserController();
 
     @Test
     @DisplayName("정상 응답")
     void findAllUsers() {
-        HttpRequest findAllUsersRequest = new HttpRequest("GET /user/list HTTP/1.1\n"
-            + "Host: localhost:8080\n"
-            + "Connection: keep-alive\n"
-            + "Cache-Control: max-age=0\n"
-            + "Cookie: login=true\n"
-            + "Upgrade-Insecure-Requests: 1\n"
-            + "Content-Length: 10\n", "");
+        HttpRequest findAllUsersRequest = new HttpRequest(
+            "GET /user/list HTTP/1.1\n"
+            + "Cookie: login=true\n", "");
 
         HttpResponse response = userController.service(findAllUsersRequest);
         String responseHeader = response.buildHeader();
@@ -43,6 +39,6 @@ class UserControllerFindAllUsersTest {
         HttpResponse response = userController.service(findAllUsersRequest);
         String responseHeader = response.buildHeader();
 
-        assertThat(responseHeader).startsWith("HTTP/1.1 401 Unauthorized");
+        assertThat(responseHeader).startsWith("HTTP/1.1 302 Found");
     }
 }
