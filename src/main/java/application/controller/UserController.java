@@ -1,5 +1,6 @@
 package application.controller;
 
+import application.dto.HttpRequestToDtoConverter;
 import application.service.UserService;
 import controller.AbstractController;
 import controller.WrongRequestException;
@@ -17,14 +18,14 @@ public class UserController extends AbstractController {
     private final UserService userService = new UserService();
 
     private HttpResponse create(HttpRequest request) {
-        userService.create(request);
+        userService.create(HttpRequestToDtoConverter.toUserCreateRequest(request));
 
         return new HttpResponse(StatusCode.FOUND, "/");
     }
 
     private HttpResponse login(HttpRequest request) {
         try {
-            userService.login(request);
+            userService.login(HttpRequestToDtoConverter.toLoginRequest(request));
             return new HttpResponse(StatusCode.FOUND, "/")
                 .setCookies(Cookies.createWithSingleCookie("login", "true", "/"));
         } catch(WrongUserIdPasswordException e) {

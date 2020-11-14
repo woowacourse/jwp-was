@@ -1,25 +1,25 @@
 package application.dto;
 
-import application.model.User;
-
-public class UserResponse {
+public class UserCreateRequest {
 
     private String userId;
+    private String password;
     private String name;
     private String email;
 
-    public UserResponse(String userId, String name, String email) {
+    public UserCreateRequest(String userId, String password, String name, String email) {
         this.userId = userId;
+        this.password = password;
         this.name = name;
         this.email = email;
     }
 
-    public static UserResponse of(User user) {
-        return new UserResponse(user.getUserId(), user.getName(), user.getEmail());
-    }
-
     public String getUserId() {
         return userId;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public String getName() {
