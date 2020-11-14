@@ -20,8 +20,6 @@ public class IoUtil {
     private static final String testDirectory = "src/test/resources/";
 
     public static DataOutputStream createOutputStream(String filename) throws FileNotFoundException {
-        System.out.println(new File(".").getAbsolutePath());
-
         new File(testDirectory + "/out").mkdirs();
         return new DataOutputStream(new FileOutputStream(new File(testDirectory + filename)));
     }
