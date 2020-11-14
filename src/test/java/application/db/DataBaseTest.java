@@ -3,7 +3,7 @@ package application.db;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import application.controller.WrongUserIdPasswordException;
-import model.User;
+import application.model.User;
 import org.junit.jupiter.api.Test;
 
 class DataBaseTest {

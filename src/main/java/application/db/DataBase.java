@@ -1,10 +1,10 @@
 package application.db;
 
 import application.controller.WrongUserIdPasswordException;
+import application.model.User;
 import com.google.common.collect.Maps;
 import java.util.Collection;
 import java.util.Map;
-import model.User;
 
 public class DataBase {
 

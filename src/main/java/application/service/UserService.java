@@ -2,7 +2,7 @@ package application.service;
 
 import application.controller.WrongUserIdPasswordException;
 import application.db.DataBase;
-import model.User;
+import application.model.User;
 import request.HttpRequest;
 
 public class UserService {
