@@ -6,8 +6,8 @@ import org.slf4j.LoggerFactory;
 import net.slipp.application.UserService;
 import net.slipp.config.ServiceFactory;
 import net.slipp.presentation.dto.JoinRequest;
-import net.slipp.presentation.dto.JoinRequestParser;
 import net.slipp.presentation.dto.JoinResponse;
+import net.slipp.presentation.dto.parser.RequestDTOParser;
 
 import webserver.servlet.HttpServlet;
 import webserver.servlet.http.request.HttpRequest;
@@ -31,7 +31,7 @@ public class UserServlet extends HttpServlet {
     }
 
     private void createUser(HttpRequest request, HttpResponse response) {
-        JoinRequest joinRequest = JoinRequestParser.parseRequest(request);
+        JoinRequest joinRequest = RequestDTOParser.toJoinRequest(request);
         UserService userService = ServiceFactory.getUserService();
         JoinResponse joinResponse = userService.create(joinRequest);
         logger.debug(CREATE_USER_COMPLETE_DEBUG_LOG_MESSAGE_FORMAT, request.getMethod(), joinResponse.getPrincipal());

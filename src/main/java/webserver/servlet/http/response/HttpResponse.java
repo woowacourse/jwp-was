@@ -5,6 +5,8 @@ import static com.google.common.net.HttpHeaders.*;
 import static webserver.servlet.http.response.HttpStatus.*;
 
 import com.google.common.net.HttpHeaders;
+import utils.CookieParser;
+import webserver.servlet.http.Cookie;
 import webserver.servlet.http.MimeType;
 
 public class HttpResponse {
@@ -37,6 +39,10 @@ public class HttpResponse {
 
     public void addHeader(String key, String value) {
         this.responseHeaders.addHeader(key, value);
+    }
+
+    public void addCookie(Cookie cookie) {
+        responseHeaders.addHeader(SET_COOKIE, CookieParser.parse(cookie));
     }
 
     public void addBody(byte[] body, MimeType mimeType) {

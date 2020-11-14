@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import net.slipp.presentation.LoginServlet;
 import net.slipp.presentation.UserServlet;
 
 import webserver.servlet.exception.ResourceNotFoundException;
@@ -18,6 +19,7 @@ public class ServletMapper {
     private ServletMapper() {
         // SINGLE_INSTANCE.mappingServletGenerator("/user/create", UserServlet::new);
         this.servletGenerator.put("/user/create", UserServlet::new);
+        this.servletGenerator.put("/user/login", LoginServlet::new);
     }
 
     public static ServletMapper getInstance() {

@@ -1,6 +1,7 @@
 package net.slipp.domain;
 
 import java.util.Collection;
+import java.util.Optional;
 
 public interface UserRepository {
 
@@ -8,7 +9,7 @@ public interface UserRepository {
 
     boolean isExistUserId(String email);
 
-    User findUserById(String userId);
+    Optional<User> findUserById(String userId);
 
     Collection<User> findAll();
 }

@@ -18,6 +18,10 @@ public class User {
         return new Builder();
     }
 
+    public boolean hasPassword(String password) {
+        return this.password.equals(password);
+    }
+
     public String getUserId() {
         return userId;
     }

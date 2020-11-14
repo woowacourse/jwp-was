@@ -6,6 +6,7 @@ import static webserver.servlet.http.response.HttpStatus.*;
 import webserver.servlet.exception.BadRequestException;
 import webserver.servlet.exception.MethodNotAllowedException;
 import webserver.servlet.exception.NotFoundException;
+import webserver.servlet.exception.UnAuthorizedException;
 import webserver.servlet.handler.HandlerMapping;
 import webserver.servlet.handler.HandlerMappings;
 import webserver.servlet.http.request.HttpRequest;
@@ -28,6 +29,8 @@ public class RequestProcessor {
             return response;
         } catch (BadRequestException e) {
             return getHttpResponseWithException(BAD_REQUEST, e);
+        } catch (UnAuthorizedException e) {
+            return getHttpResponseWithException(UNAUTHORIZED, e);
         } catch (NotFoundException e) {
             return getHttpResponseWithException(NOT_FOUND, e);
         } catch (MethodNotAllowedException e) {

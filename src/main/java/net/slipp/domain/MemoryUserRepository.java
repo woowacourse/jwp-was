@@ -2,6 +2,7 @@ package net.slipp.domain;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 
 public class MemoryUserRepository implements UserRepository {
     private final Map<String, User> users;
@@ -21,8 +22,8 @@ public class MemoryUserRepository implements UserRepository {
     }
 
     @Override
-    public User findUserById(String userId) {
-        return users.get(userId);
+    public Optional<User> findUserById(String userId) {
+        return Optional.ofNullable(users.get(userId));
     }
 
     @Override
