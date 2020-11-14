@@ -32,18 +32,23 @@ public class UserService {
      * 로그인 성공시 정상종료
      * 로그인 실패시 WrongUserIdPasswordException 예외를 던짐
      */
-    public void login(LoginRequest request) throws WrongUserIdPasswordException {
+    public boolean isExistUser(LoginRequest request) {
         String userId = request.getUserId();
         String password = request.getPassword();
 
-        User user = DataBase.findUserById(userId);
+        try {
+            User user = DataBase.findUserById(userId);
 
-        if (!user.getPassword().equals(password)) {
-            throw new WrongUserIdPasswordException("userId is exist but password is wrong.");
+            if (!user.getPassword().equals(password)) {
+                throw new WrongUserIdPasswordException("userId is exist but password is wrong.");
+            }
+            return true;
+        } catch (WrongUserIdPasswordException e) {
+            return false;
         }
     }
 
-    public List<UserResponse> findUsers() {
+    public List<UserResponse> findAllUsers() {
         List<UserResponse> userResponses = new ArrayList<>();
 
         for (User user : DataBase.findAll()) {

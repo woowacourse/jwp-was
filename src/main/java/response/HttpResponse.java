@@ -27,6 +27,10 @@ public class HttpResponse {
         this.contentType = contentType;
     }
 
+    public HttpResponse(StatusCode statusCode, String body, ContentType contentType) {
+        this(statusCode, body.getBytes(), contentType);
+    }
+
     public HttpResponse(StatusCode statusCode, String location) {
         this(statusCode);
         this.location = location;

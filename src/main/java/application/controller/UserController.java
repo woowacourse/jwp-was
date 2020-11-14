@@ -2,12 +2,18 @@ package application.controller;
 
 import application.dto.HttpRequestToDtoConverter;
 import application.service.UserService;
+import com.github.jknack.handlebars.Template;
 import controller.AbstractController;
 import controller.WrongRequestException;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import request.HttpRequest;
+import resource.ContentType;
 import response.Cookies;
 import response.HttpResponse;
 import response.StatusCode;
+import utils.TemplateBuilder;
 
 public class UserController extends AbstractController {
 
@@ -24,19 +30,30 @@ public class UserController extends AbstractController {
     }
 
     private HttpResponse login(HttpRequest request) {
-        try {
-            userService.login(HttpRequestToDtoConverter.toLoginRequest(request));
+        boolean isRightUser = userService.isExistUser(
+            HttpRequestToDtoConverter.toLoginRequest(request));
+
+        if (isRightUser) {
             return new HttpResponse(StatusCode.FOUND, "/")
                 .setCookies(Cookies.createWithSingleCookie("login", "true", "/"));
-        } catch(WrongUserIdPasswordException e) {
-            return new HttpResponse(StatusCode.FOUND, "/user/login_failed.html")
-                .setCookies(Cookies.createWithSingleCookie("login", "false", "/"));
         }
+        return new HttpResponse(StatusCode.FOUND, "/user/login_failed.html")
+            .setCookies(Cookies.createWithSingleCookie("login", "false", "/"));
     }
 
     private HttpResponse findAllUsers(HttpRequest httpRequest) {
-        return new HttpResponse(StatusCode.FOUND, "/user/list.html")
-            .setCookies(Cookies.createWithSingleCookie("login", "true", "/"));
+        Map<String, Object> handlebarData = new HashMap<>();
+        try {
+            handlebarData.put("users", userService.findAllUsers());
+
+            Template template = TemplateBuilder.build(httpRequest.getUriPath());
+            String usersPage = template.apply(handlebarData);
+
+            return new HttpResponse(StatusCode.OK, usersPage, ContentType.HTML)
+                .setCookies(Cookies.createWithSingleCookie("login", "true", "/"));
+        } catch (IOException e) {
+            return new HttpResponse(StatusCode.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Override
@@ -51,7 +68,7 @@ public class UserController extends AbstractController {
     }
 
     @Override
-    protected  HttpResponse doGet(HttpRequest httpRequest) {
+    protected HttpResponse doGet(HttpRequest httpRequest) {
         if (httpRequest.getUriPath().equals(FIND_USER_URI_PATH)) {
             return findAllUsers(httpRequest);
         }
