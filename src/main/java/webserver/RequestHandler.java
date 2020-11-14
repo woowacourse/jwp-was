@@ -1,13 +1,20 @@
 package webserver;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
+import static controller.UserCreateController.*;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import http.HttpMethod;
+import http.HttpRequest;
+import http.HttpResponse;
+import http.HttpStatus;
+import http.MimeType;
+import utils.FileIoUtils;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -20,35 +27,32 @@ public class RequestHandler implements Runnable {
 
     public void run() {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
-                connection.getPort());
+            connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
-            DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = "Hello World".getBytes();
-            response200Header(dos, body.length);
-            responseBody(dos, body);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
+            HttpRequest httpRequest = new HttpRequest(in);
+            HttpResponse httpResponse;
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
+            MimeType mimeType = httpRequest.getMimeType();
+            String path = httpRequest.getPath();
+            byte[] body = FileIoUtils.loadFileFromClasspath(path);
 
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
+            if (httpRequest.matchMethod(HttpMethod.GET)) {
+                httpResponse = new HttpResponse(out, HttpStatus.OK, httpRequest.getVersion());
+                httpResponse.response200Header(body.length, mimeType.getContentType());
+            }
+            else if (httpRequest.matchMethod(HttpMethod.POST)) {
+                createUser(httpRequest);
+                httpResponse = new HttpResponse(out, HttpStatus.FOUND, httpRequest.getVersion());
+                httpResponse.response302Header(body.length, mimeType.getContentType(), "/index.html");
+            }
+            else {
+                httpResponse = new HttpResponse(out, HttpStatus.METHOD_NOT_ALLOWED, httpRequest.getVersion());
+                httpResponse.response405Header();
+                body = new byte[0];
+            }
+            httpResponse.responseBody(body);
+        } catch (Exception e) {
             logger.error(e.getMessage());
         }
     }
