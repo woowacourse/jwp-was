@@ -14,7 +14,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 class HttpRequestTest {
 
     @Test
-    @DisplayName("HTTP 요청으로부터 HttpRequest 객체 생성하기 HttpRequest 객체 생성하기")
+    @DisplayName("HTTP 요청으로부터 HttpRequest 객체 생성하기")
     void readHttpRequest() throws IOException {
         String httpRequestFormat = "GET /join?id=1 HTTP/1.1\n"
             + "Host: localhost:8080\n"

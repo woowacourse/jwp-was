@@ -1,6 +1,8 @@
 package application.controller;
 
 import application.dto.HttpRequestToDtoConverter;
+import application.filter.AuthorityFilter;
+import application.filter.UnauthorizedException;
 import application.service.UserService;
 import com.github.jknack.handlebars.Template;
 import controller.AbstractController;
@@ -42,18 +44,26 @@ public class UserController extends AbstractController {
     }
 
     private HttpResponse findAllUsers(HttpRequest httpRequest) {
-        Map<String, Object> handlebarData = new HashMap<>();
         try {
-            handlebarData.put("users", userService.findAllUsers());
+            AuthorityFilter.validateAuthority(httpRequest);
 
-            Template template = TemplateBuilder.build(httpRequest.getUriPath());
-            String usersPage = template.apply(handlebarData);
-
-            return new HttpResponse(StatusCode.OK, usersPage, ContentType.HTML)
-                .setCookies(Cookies.createWithSingleCookie("login", "true", "/"));
+            return makeResponseForFindAllUsers(httpRequest);
         } catch (IOException e) {
             return new HttpResponse(StatusCode.INTERNAL_SERVER_ERROR);
+        } catch (UnauthorizedException e) {
+            return new HttpResponse(StatusCode.FOUND, "login.html");
         }
+    }
+
+    private HttpResponse makeResponseForFindAllUsers(HttpRequest httpRequest) throws IOException {
+        Map<String, Object> handlebarData = new HashMap<>();
+        handlebarData.put("users", userService.findAllUsers());
+
+        Template template = TemplateBuilder.build(httpRequest.getUriPath());
+        String usersPage = template.apply(handlebarData);
+
+        return new HttpResponse(StatusCode.OK, usersPage, ContentType.HTML)
+            .setCookies(Cookies.createWithSingleCookie("login", "true", "/"));
     }
 
     @Override
@@ -69,7 +79,9 @@ public class UserController extends AbstractController {
 
     @Override
     protected HttpResponse doGet(HttpRequest httpRequest) {
-        if (httpRequest.getUriPath().equals(FIND_USER_URI_PATH)) {
+        String uriPath = httpRequest.getUriPath();
+
+        if (uriPath.equals(FIND_USER_URI_PATH)) {
             return findAllUsers(httpRequest);
         }
         throw new WrongRequestException("uri that does not exist in the POST method.");
