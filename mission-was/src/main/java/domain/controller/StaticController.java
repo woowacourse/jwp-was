@@ -1,4 +1,4 @@
-package controller;
+package domain.controller;
 
 import application.AbstractController;
 import servlet.HttpRequest;

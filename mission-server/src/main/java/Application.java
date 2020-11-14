@@ -4,8 +4,8 @@ import java.util.List;
 import controller.CreateUserController;
 import controller.ListController;
 import controller.RootController;
-import controller.StaticController;
 import controller.UserLoginController;
+import domain.controller.StaticController;
 import dto.UrlMappingCreateDto;
 import util.HandlebarsTemplateEngine;
 

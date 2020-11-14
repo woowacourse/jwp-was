@@ -14,6 +14,7 @@ import controller.CreateUserController;
 import controller.ListController;
 import controller.RootController;
 import controller.UserLoginController;
+import domain.UrlMapper;
 import dto.UrlMappingCreateDto;
 import util.HandlebarsTemplateEngine;
 
