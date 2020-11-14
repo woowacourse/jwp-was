@@ -18,4 +18,8 @@ public enum HttpVersion {
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);
     }
+
+    public String getVersion() {
+        return version;
+    }
 }

@@ -1,5 +1,8 @@
 package webserver.http;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,6 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class HttpHeaders {
+    private static final Logger LOGGER = LoggerFactory.getLogger(HttpHeaders.class);
     private static final String EMPTY_STRING = "";
 
     private final HttpHeadersState httpHeadersState;
@@ -29,8 +33,10 @@ public class HttpHeaders {
         }
 
         if (isEmptyHeaders(httpHeaders)) {
+            LOGGER.info("empty headers create clear!");
             return new HttpHeaders(HttpHeadersState.EMPTY, httpHeaders);
         }
+        LOGGER.info("not empty headers create clear!");
         return new HttpHeaders(HttpHeadersState.NOT_EMPTY, httpHeaders);
     }
 
@@ -40,6 +46,13 @@ public class HttpHeaders {
 
     private static boolean isEmptyHeaders(List<HttpHeader> httpHeaders) {
         return httpHeaders.isEmpty();
+    }
+
+    public static HttpHeaders of(List<HttpHeader> httpHeaders) {
+        if (isEmptyHeaders(httpHeaders)) {
+            return new HttpHeaders(HttpHeadersState.EMPTY, httpHeaders);
+        }
+        return new HttpHeaders(HttpHeadersState.NOT_EMPTY, httpHeaders);
     }
 
     public HttpHeadersState getHttpHeadersState() {

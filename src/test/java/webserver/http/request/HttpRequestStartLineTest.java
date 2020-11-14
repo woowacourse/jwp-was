@@ -16,7 +16,7 @@ public class HttpRequestStartLineTest {
 
         assertAll(
                 () -> assertThat(httpRequestStartLine.getHttpMethodType()).isEqualTo(HttpMethodType.GET),
-                () -> assertThat(httpRequestStartLine.getUrl()).isEqualTo("/index.html"),
+                () -> assertThat(httpRequestStartLine.getUrl().getUrl()).isEqualTo("/index.html"),
                 () -> assertThat(httpRequestStartLine.getHttpVersion()).isEqualTo(HttpVersion.HTTP_1_1)
         );
     }

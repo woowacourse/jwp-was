@@ -1,33 +1,52 @@
 package webserver.http.response;
 
-import db.DataBase;
-import model.User;
-import model.UserFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import webserver.http.request.HttpRequests;
+import webserver.http.*;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.Map;
+import java.io.OutputStream;
+import java.util.List;
 
-public abstract class HttpResponse {
-    protected static final Logger LOGGER = LoggerFactory.getLogger(HttpResponse.class);
-    protected static final String URL_PARAMETER_REGEX = "&";
-    protected static final String PARAMETER_REGEX = "=";
-    protected static final String ENCODING_TYPE = "UTF-8";
+public class HttpResponse {
+    private final DataOutputStream dos;
 
-    protected HttpRequests httpRequests;
-
-    void createUser(Map<String, String> parameters) {
-        User user = UserFactory.create(parameters);
-        DataBase.addUser(user);
+    public HttpResponse(OutputStream out) {
+        this.dos = new DataOutputStream(out);
     }
 
-    public void initHttpRequests(HttpRequests httpRequests) {
-        this.httpRequests = httpRequests;
+    public void forward(HttpResponseStartLine httpResponseStartLine, HttpHeaders httpResponseHeaders,
+                        Body httpResponseBody) throws IOException {
+        writeHttpResponseStartLine(httpResponseStartLine);
+        writeHttpResponseHeaders(httpResponseHeaders);
+        writeHttpResponseBody(httpResponseBody);
     }
 
-    public abstract void handleResponse(DataOutputStream dos) throws IOException, URISyntaxException;
+    private void writeHttpResponseStartLine(HttpResponseStartLine httpResponseStartLine) throws IOException {
+        dos.writeBytes(httpResponseStartLine.toString());
+        dos.writeBytes(System.lineSeparator());
+    }
+
+    private void writeHttpResponseHeaders(HttpHeaders httpResponseHeaders) throws IOException {
+        HttpHeadersState responseHeaderState = httpResponseHeaders.getHttpHeadersState();
+        if (HttpHeadersState.EMPTY.equals(responseHeaderState)) {
+            dos.writeBytes(System.lineSeparator());
+            return;
+        }
+        List<HttpHeader> httpHeaders = httpResponseHeaders.getHttpHeaders();
+        for (HttpHeader httpHeader : httpHeaders) {
+            dos.writeBytes(httpHeader.getType() + ": " + httpHeader.getContent());
+            dos.writeBytes(System.lineSeparator());
+        }
+        dos.writeBytes(System.lineSeparator());
+    }
+
+    private void writeHttpResponseBody(Body httpResponseBody) throws IOException {
+        BodyState bodyState = httpResponseBody.getState();
+        if (BodyState.EMPTY.equals(bodyState)) {
+            dos.flush();
+            return;
+        }
+        dos.write(httpResponseBody.getContent(), 0, httpResponseBody.getLength());
+        dos.flush();
+    }
 }

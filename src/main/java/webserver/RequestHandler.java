@@ -2,10 +2,9 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.http.request.HttpRequestHeader;
+import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -26,11 +25,11 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            HttpRequestHeader httpRequestHeader = new HttpRequestHeader(in);
-            HttpResponse httpResponse = httpRequestHeader.getHttpResponse();
-            DataOutputStream dos = new DataOutputStream(out);
-            httpResponse.handleResponse(dos);
+            HttpRequest httpRequest = new HttpRequest(in);
+            HttpResponse httpResponse = new HttpResponse(out);
+            HandlerMapper.handle(httpRequest, httpResponse);
         } catch (IOException | URISyntaxException e) {
+            e.printStackTrace();
             LOGGER.error(e.getMessage());
         }
     }

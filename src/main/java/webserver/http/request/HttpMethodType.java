@@ -11,4 +11,12 @@ public enum HttpMethodType {
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);
     }
+
+    public boolean isGet() {
+        return this.equals(HttpMethodType.GET);
+    }
+
+    public boolean isPost() {
+        return this.equals(HttpMethodType.POST);
+    }
 }
