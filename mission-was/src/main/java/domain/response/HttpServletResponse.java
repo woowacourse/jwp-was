@@ -94,7 +94,7 @@ public class HttpServletResponse implements HttpResponse {
 
     @Override
     public void forward(String path, StaticFileType staticFileType) {
-        byte[] body = FileIoUtils.loadFileFromRequest(path);
+        byte[] body = FileIoUtils.loadFileFromClasspath(path);
         headerParams.put("Content-Type", staticFileType.getContentType() + ";charset=utf-8");
         headerParams.put("Content-Length", String.valueOf(body.length));
 
