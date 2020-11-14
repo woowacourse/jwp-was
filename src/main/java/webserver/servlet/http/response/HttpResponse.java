@@ -15,13 +15,18 @@ public class HttpResponse {
     private final HttpResponseHeaders responseHeaders;
     private byte[] body;
 
-    public HttpResponse() {
-        this.statusLine = HttpStatusLine.withDefaultVersion();
-        this.responseHeaders = HttpResponseHeaders.ofEmpty();
+    private HttpResponse(HttpStatusLine httpStatusLine,
+            HttpResponseHeaders httpResponseHeaders) {
+        this.statusLine = httpStatusLine;
+        this.responseHeaders = httpResponseHeaders;
+    }
+
+    public static HttpResponse with200Empty() {
+        return new HttpResponse(HttpStatusLine.withDefaultVersion(), HttpResponseHeaders.ofEmpty());
     }
 
     public static HttpResponse withContent(HttpStatus httpStatus, MimeType mimeType, String content) {
-        HttpResponse httpResponse = new HttpResponse();
+        HttpResponse httpResponse = HttpResponse.with200Empty();
         byte[] body = content.getBytes(UTF_8);
         httpResponse.changeHttpStatus(httpStatus);
         httpResponse.addBody(body, mimeType);

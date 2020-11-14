@@ -1,9 +1,14 @@
 package webserver.servlet.http.request;
 
+import static com.google.common.net.HttpHeaders.*;
+import static utils.CookieParser.*;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -11,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.net.HttpHeaders;
 import utils.IOUtils;
+import webserver.servlet.http.Cookie;
 import webserver.servlet.http.HttpMethod;
 
 public class HttpRequestParser {
@@ -62,10 +68,16 @@ public class HttpRequestParser {
 
     private static HttpRequestHeaders parseRequestHeader(BufferedReader br) throws IOException {
         Map<String, String> headers = new HashMap<>();
+        List<Cookie> cookies = new ArrayList<>();
         String oneLine = br.readLine();
         while (!"".equals(oneLine) && oneLine != null) {
             String[] header = oneLine.split(": ");
-            headers.put(header[0], header[1]);
+            String key = header[0];
+            String value = header[1];
+            if (COOKIE.equals(key)) {
+                cookies.add(toCookie(value));
+            }
+            headers.put(key, value);
             oneLine = br.readLine();
         }
         return new HttpRequestHeaders(headers);

@@ -28,4 +28,8 @@ public class CookieParser {
 
         return result;
     }
+
+    public static Cookie toCookie(String value) {
+        return null;
+    }
 }

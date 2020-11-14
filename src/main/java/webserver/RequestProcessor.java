@@ -23,7 +23,7 @@ public class RequestProcessor {
 
     public HttpResponse response(HttpRequest request) {
         try {
-            HttpResponse response = new HttpResponse();
+            HttpResponse response = HttpResponse.with200Empty();
             HandlerMapping handler = handlerMappings.findHandler(request);
             handler.handle(request, response);
             return response;

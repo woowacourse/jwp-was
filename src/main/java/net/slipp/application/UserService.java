@@ -7,6 +7,7 @@ import net.slipp.domain.UserRepository;
 import net.slipp.presentation.dto.JoinRequest;
 import net.slipp.presentation.dto.JoinResponse;
 import net.slipp.presentation.dto.LoginRequest;
+import net.slipp.presentation.dto.UsersResponse;
 
 public class UserService {
     private final UserRepository userRepository;
@@ -32,5 +33,9 @@ public class UserService {
         if (!user.hasPassword(password)) {
             throw new AuthenticationFailException();
         }
+    }
+
+    public UsersResponse findAll() {
+        return UsersResponse.ofList(userRepository.findAll());
     }
 }
