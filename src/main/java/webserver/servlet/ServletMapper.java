@@ -4,10 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import net.slipp.presentation.LoginServlet;
-import net.slipp.presentation.UserListServlet;
-import net.slipp.presentation.UserServlet;
-
 import webserver.servlet.exception.ResourceNotFoundException;
 
 public class ServletMapper {
@@ -18,10 +14,6 @@ public class ServletMapper {
     private final Map<String, Supplier<HttpServlet>> servletGenerator = new HashMap<>();
 
     private ServletMapper() {
-        // SINGLE_INSTANCE.mappingServletGenerator("/user/create", UserServlet::new);
-        this.servletGenerator.put("/user/create", UserServlet::new);
-        this.servletGenerator.put("/user/login", LoginServlet::new);
-        this.servletGenerator.put("/user/list", UserListServlet::new);
     }
 
     public static ServletMapper getInstance() {
@@ -41,7 +33,7 @@ public class ServletMapper {
         });
     }
 
-    public void mappingServletGenerator(String url, Supplier<HttpServlet> mappingServletGenerator) {
-        this.servletGenerator.put(url, mappingServletGenerator);
+    public void putAll(Map<String, Supplier<HttpServlet>> servletMapping) {
+        this.servletGenerator.putAll(servletMapping);
     }
 }

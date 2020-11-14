@@ -8,14 +8,30 @@ import java.util.concurrent.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class WebServerApplication {
+public class WebServer {
 
-    private static final Logger logger = LoggerFactory.getLogger(WebServerApplication.class);
+    private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
 
     private static final int DEFAULT_PORT = 8080;
     private static final int DEFAULT_THREAD_POOL_SIZE = Runtime.getRuntime().availableProcessors();
 
-    public static void main(String[] args) throws Exception {
+    private final ServletConfig servletConfig;
+
+    public WebServer(ServletConfig servletConfig) {
+        this.servletConfig = servletConfig;
+    }
+
+    public void start(String[] args) {
+        try {
+            servletConfig.mapServlet();
+            run(args);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            System.exit(0);
+        }
+    }
+
+    private void run(String[] args) throws Exception {
         int port = getPort(args);
 
         try (ServerSocket listenSocket = new ServerSocket(port)) {
@@ -29,7 +45,7 @@ public class WebServerApplication {
         }
     }
 
-    private static int getPort(String[] args) {
+    private int getPort(String[] args) {
         int port;
         if (args == null || args.length == 0) {
             port = DEFAULT_PORT;
