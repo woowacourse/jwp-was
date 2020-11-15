@@ -21,11 +21,6 @@ public class CookieParser {
             result += PATH + KEY_VALUE_DELIMITER + cookie.getPath();
         }
 
-        if (cookie.hasMaxAge()) {
-            result += DELIMITER;
-            result += MAX_AGE + KEY_VALUE_DELIMITER + cookie.getMaxAge();
-        }
-
         return result;
     }
 

@@ -39,7 +39,6 @@ public class LoginServlet extends HttpServlet {
     private Cookie createLoginCookie() {
         Cookie cookie = new Cookie(LOGINED, true);
         cookie.setPath(LOGIN_COOKIE_PATH);
-        cookie.setMaxAge(ONE_DAY);
         return cookie;
     }
 }

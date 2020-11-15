@@ -27,11 +27,23 @@ public class UserListServlet extends HttpServlet {
 
     private static final Logger logger = LoggerFactory.getLogger(LoginServlet.class);
 
-    private static final String REQUIRE_AUTH_PAGE_URL = "/login.html";
+    private static final String REQUIRE_AUTH_PAGE_URL = "./templates/user/login.html";
     private static final String LOGINED = "logined";
 
     @Override
     protected void doGet(HttpRequest request, HttpResponse response) {
+        boolean logined = Arrays.stream(request.getCookies())
+                .anyMatch(cookie -> cookie.hasValue(LOGINED, true));
+        if (!logined) {
+            logger.error("401");
+            try {
+                response.addBody(FileIoUtils.loadFileFromClasspath(REQUIRE_AUTH_PAGE_URL), HTML_UTF_8);
+            } catch (IOException | URISyntaxException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
+
         UserService userService = ServiceFactory.getUserService();
         UsersResponse userResponse = userService.findAll();
 
