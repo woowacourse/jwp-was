@@ -49,3 +49,12 @@
    따라서 redirect 방식처럼 회원가입을 완료한 후 “index.html”로 이동해야 한다.
    즉, 브라우저의 URL이 /index.html로 변경해야 한다.
    ```
+
+#### 요구사항 5
+ - [ ] stylesheet 파일을 지원하도록 구현
+   ```
+   GET ./css/style.css HTTP/1.1
+   Host: localhost:8080
+   Accept: text/css,*/*;q=0.1
+   Connection: keep-alive
+   ```
