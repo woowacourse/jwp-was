@@ -10,10 +10,12 @@
 
 ## 요구사항
 
-### 요구사항 1
+### 1단계
+
+#### 요구사항 1
  - [x] http://localhost:8080/index.html 로 접속했을 때 webapp 디렉토리의 index.html 파일을 읽어 클라이언트에 응답한다.
  
-### 요구사항 2
+#### 요구사항 2
  - [x] 회원가입
     - [x] http://localhost:8080/user/form.html 으로 이동해서 회원가입 할 수 있다.
    ```
@@ -26,3 +28,16 @@
    Connection: keep-alive
    Accept: */*
    ```
+ #### 요구사항 3
+  - [ ] 회원가입 기능을 post 요청으로 바꾸어도 정상적으로 동작하도록 구현한다.
+      ```
+        POST /user/create HTTP/1.1
+        Host: localhost:8080
+        Connection: keep-alive
+        Content-Length: 59
+        Content-Type: application/x-www-form-urlencoded
+        Accept: */*
+
+        userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net
+      ```
+   
