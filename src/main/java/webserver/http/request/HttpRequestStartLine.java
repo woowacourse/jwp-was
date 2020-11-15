@@ -1,13 +1,9 @@
 package webserver.http.request;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import webserver.http.HttpVersion;
 import webserver.http.URL;
 
 public class HttpRequestStartLine {
-    private static final Logger LOGGER = LoggerFactory.getLogger(HttpRequestStartLine.class);
-
     private static final String START_LINE_REGEX = " ";
     private static final int HTTP_METHOD_TYPE_INDEX = 0;
     private static final int URL_INDEX = 1;
@@ -28,7 +24,6 @@ public class HttpRequestStartLine {
         HttpMethodType httpMethodType = HttpMethodType.find(startLines[HTTP_METHOD_TYPE_INDEX]);
         URL url = URL.of(startLines[URL_INDEX]);
         HttpVersion httpVersion = HttpVersion.find(startLines[HTTP_VERSION_INDEX]);
-        LOGGER.info("start line create clear!");
         return new HttpRequestStartLine(httpMethodType, url, httpVersion);
     }
 

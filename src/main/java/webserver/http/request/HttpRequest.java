@@ -1,7 +1,5 @@
 package webserver.http.request;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import webserver.http.*;
 
 import java.io.BufferedReader;
@@ -10,8 +8,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class HttpRequest {
-    private static final Logger LOGGER = LoggerFactory.getLogger(HttpRequest.class);
-
     private final HttpRequestStartLine httpRequestStartLine;
     private final HttpHeaders httpHeaders;
     private final Body body;
@@ -29,7 +25,6 @@ public class HttpRequest {
             return;
         }
         body = Body.emptyBody();
-        LOGGER.info("Create Clear!");
     }
 
     public boolean isGetRequest() {

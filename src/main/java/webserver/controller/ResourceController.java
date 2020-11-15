@@ -13,9 +13,9 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 
-public class TemplateController extends AbstractController {
-    public TemplateController() {
-        this.paths = Arrays.asList(".html", ".ico");
+public class ResourceController extends AbstractController {
+    public ResourceController() {
+        this.paths = Arrays.asList(".html", ".ico", ".css", ".js", "woff", "ttf");
     }
 
     @Override
