@@ -2,6 +2,7 @@ package webserver.http;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.IOUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,14 +20,9 @@ public class Body {
         this.content = content;
     }
 
-    public static Body of(BufferedReader bufferedReader) throws IOException {
-        String line = bufferedReader.readLine();
-        if (isNullLine(line)) {
-            LOGGER.info("empty body create clear!");
-            return new Body(BodyState.EMPTY, null);
-        }
-        LOGGER.info("not empty body create clear!");
-        return new Body(BodyState.NOT_EMPTY, line);
+    public static Body of(BufferedReader bufferedReader, String contentLength) throws IOException {
+        String body = IOUtils.readData(bufferedReader, Integer.parseInt(contentLength));
+        return new Body(BodyState.NOT_EMPTY, body);
     }
 
     private static boolean isNullLine(String line) {
@@ -47,8 +43,8 @@ public class Body {
         return new Body(BodyState.EMPTY, null);
     }
 
-    public BodyState getState() {
-        return bodyState;
+    public Parameters getParameters() {
+        return Parameters.notEmptyQueryParameters(content);
     }
 
     public byte[] getContent() {
@@ -57,5 +53,9 @@ public class Body {
 
     public int getLength() {
         return content.getBytes().length;
+    }
+
+    public BodyState getState() {
+        return bodyState;
     }
 }

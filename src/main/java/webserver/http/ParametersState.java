@@ -1,5 +1,5 @@
 package webserver.http;
 
-public enum QueryParametersState {
+public enum ParametersState {
     EMPTY, NOT_EMPTY;
 }

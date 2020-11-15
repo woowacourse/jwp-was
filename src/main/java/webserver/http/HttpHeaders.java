@@ -60,6 +60,18 @@ public class HttpHeaders {
         return new HttpHeaders(HttpHeadersState.EMPTY, Collections.emptyList());
     }
 
+    public boolean contains(HttpHeader httpHeader) {
+        return httpHeaders.contains(httpHeader);
+    }
+
+    public String getHttpHeader(HttpHeader httpHeader) {
+        return httpHeaders.stream()
+                .filter(header -> header.equals(httpHeader))
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new)
+                .getContent();
+    }
+
     public HttpHeadersState getHttpHeadersState() {
         return httpHeadersState;
     }

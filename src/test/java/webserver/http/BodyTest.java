@@ -1,37 +1,26 @@
 package webserver.http;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.api.Test;
 
 import java.io.*;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class BodyTest {
-    static Stream<Arguments> bodySource() {
-        InputStream bodyInputStream = new ByteArrayInputStream("non empty".getBytes());
-        InputStreamReader bodyInputStreamReader = new InputStreamReader(bodyInputStream);
-        BufferedReader bodyBufferedReader = new BufferedReader(bodyInputStreamReader);
+    @DisplayName("요청에 대해 Body 생성")
+    @Test
+    void ofTest() throws IOException {
+        InputStream inputStream = new ByteArrayInputStream("this is body".getBytes());
+        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+        Body body = Body.of(bufferedReader, "12");
 
-        InputStream emptyInputStream = new ByteArrayInputStream("".getBytes());
-        InputStreamReader emptyInputStreamReader = new InputStreamReader(emptyInputStream);
-        BufferedReader emptyBufferedReader = new BufferedReader(emptyInputStreamReader);
-
-        return Stream.of(
-                Arguments.of(bodyBufferedReader, BodyState.NOT_EMPTY),
-                Arguments.of(emptyBufferedReader, BodyState.EMPTY)
+        assertAll(
+                () -> assertThat(body.getState()).isEqualTo(BodyState.NOT_EMPTY),
+                () -> assertThat(body.getContent()).isEqualTo("this is body".getBytes()),
+                () -> assertThat(body.getLength()).isEqualTo(12)
         );
-    }
-
-    @DisplayName("요청에 대해 생성한 body의 상태 확인")
-    @ParameterizedTest
-    @MethodSource("bodySource")
-    void ofTest(BufferedReader bufferedReader, BodyState bodyState) throws IOException {
-        Body body = Body.of(bufferedReader);
-
-        assertThat(body.getState()).isEqualTo(bodyState);
     }
 }

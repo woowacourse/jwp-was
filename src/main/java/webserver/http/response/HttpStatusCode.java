@@ -1,7 +1,8 @@
 package webserver.http.response;
 
 public enum HttpStatusCode {
-    OK("200", "OK");
+    OK("200", "OK"),
+    FOUND("302", "Found");
 
     private final String code;
     private final String message;

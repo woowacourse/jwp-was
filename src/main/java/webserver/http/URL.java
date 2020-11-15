@@ -9,25 +9,21 @@ public class URL {
     private static final int QUERY_PARAMETER_INDEX = 1;
 
     private String path;
-    private QueryParameters queryParameters;
+    private Parameters parameters;
 
-    private URL(String path) {
+    private URL(String path, Parameters parameters) {
         this.path = path;
-    }
-
-    private URL(String path, QueryParameters queryParameters) {
-        this.path = path;
-        this.queryParameters = queryParameters;
+        this.parameters = parameters;
     }
 
     public static URL of(String url) {
         if (url.contains(QUERY_PARAMETER_DELIMITER)) {
             String[] urls = url.split(QUERY_PARAMETER_REGEX);
-            QueryParameters queryParameters = QueryParameters.notEmptyQueryParameters(urls[QUERY_PARAMETER_INDEX]);
-            return new URL(urls[PATH_INDEX], queryParameters);
+            Parameters parameters = Parameters.notEmptyQueryParameters(urls[QUERY_PARAMETER_INDEX]);
+            return new URL(urls[PATH_INDEX], parameters);
         }
-        QueryParameters queryParameters = QueryParameters.emptyQueryParameters();
-        return new URL(url, queryParameters);
+        Parameters parameters = Parameters.emptyQueryParameters();
+        return new URL(url, parameters);
     }
 
     public boolean isEndsWith(String path) {
@@ -35,14 +31,14 @@ public class URL {
     }
 
     public Map<String, String> getQueryParameters() {
-        return queryParameters.getQueryParameters();
+        return parameters.getParameters();
     }
 
     public String getPath() {
         return path;
     }
 
-    public QueryParametersState hasQueryParameters() {
-        return queryParameters.getQueryParametersState();
+    public ParametersState hasQueryParameters() {
+        return parameters.getQueryParametersState();
     }
 }

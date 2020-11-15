@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.io.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class HttpHeadersTest {
@@ -35,5 +36,44 @@ public class HttpHeadersTest {
                 () -> assertThat(httpHeaders.getHttpHeadersState()).isEqualTo(HttpHeadersState.NOT_EMPTY),
                 () -> assertThat(httpHeaders.getHttpHeaders()).hasSize(1)
         );
+    }
+
+    @DisplayName("입력한 HttpHeader가 포함되어 있는지 확인한다")
+    @Test
+    void containsTest() throws IOException {
+        InputStream inputStream = new ByteArrayInputStream("Host: localhost:8080\nContent-Length: 59".getBytes());
+        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+        HttpHeaders httpHeaders = HttpHeaders.of(bufferedReader);
+
+        assertThat(httpHeaders.contains(HttpHeader.of(HttpHeaderType.CONTENT_LENGTH))).isTrue();
+    }
+
+    @DisplayName("HttpHeaders에서 입력한 HttpHeader의 값 추출")
+    @Test
+    void getHttpHeaderTest() throws IOException {
+        InputStream inputStream = new ByteArrayInputStream("Host: localhost:8080\nContent-Length: 59".getBytes());
+        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+        HttpHeaders httpHeaders = HttpHeaders.of(bufferedReader);
+        HttpHeader httpHeader = HttpHeader.of(HttpHeaderType.CONTENT_LENGTH);
+
+        String expected = httpHeaders.getHttpHeader(httpHeader);
+
+        assertThat(expected).isEqualTo("59");
+    }
+
+    @DisplayName("포함되지 않은 HttpHeader 입력 시 예외 반환")
+    @Test
+    void getHttpHeaderWithInvalidHeaderTest() throws IOException {
+        InputStream inputStream = new ByteArrayInputStream("Host: localhost:8080\nContent-Length: 59".getBytes());
+        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+        HttpHeaders httpHeaders = HttpHeaders.of(bufferedReader);
+        HttpHeader httpHeader = HttpHeader.of(HttpHeaderType.LOCATION);
+
+        assertThatThrownBy(() -> {
+            httpHeaders.getHttpHeader(httpHeader);
+        }).isInstanceOf(IllegalArgumentException.class);
     }
 }

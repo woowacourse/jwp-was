@@ -17,7 +17,7 @@ public class URLTest {
 
         assertAll(
                 () -> assertThat(url.getPath()).isEqualTo(requestUrl),
-                () -> assertThat(url.hasQueryParameters()).isEqualTo(QueryParametersState.EMPTY)
+                () -> assertThat(url.hasQueryParameters()).isEqualTo(ParametersState.EMPTY)
         );
     }
 

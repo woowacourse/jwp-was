@@ -8,7 +8,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class QueryParametersTest {
+public class ParametersTest {
     @DisplayName("queryString으로 파라미터 생성")
     @Test
     void ofTest() {
@@ -16,9 +16,9 @@ public class QueryParametersTest {
                 "password=password&" +
                 "name=%EB%B0%95%EC%9E%AC%EC%84%B1&" +
                 "email=javajigi%40slipp.net";
-        QueryParameters queryParameters = QueryParameters.notEmptyQueryParameters(queryString);
+        Parameters parameters = Parameters.notEmptyQueryParameters(queryString);
 
-        Map<String, String> expected = queryParameters.getQueryParameters();
+        Map<String, String> expected = parameters.getParameters();
 
         assertAll(
                 () -> assertThat(expected.get("userId")).isEqualTo("javajigi"),
