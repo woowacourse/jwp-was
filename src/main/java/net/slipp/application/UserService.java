@@ -10,6 +10,7 @@ import net.slipp.presentation.dto.LoginRequest;
 import net.slipp.presentation.dto.UsersResponse;
 
 public class UserService {
+
     private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {

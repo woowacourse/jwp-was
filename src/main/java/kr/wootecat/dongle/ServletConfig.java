@@ -3,8 +3,8 @@ package kr.wootecat.dongle;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import kr.wootecat.dongle.application.servlet.HttpServlet;
-import kr.wootecat.dongle.application.servlet.ServletMapper;
+import kr.wootecat.dongle.core.servlet.HttpServlet;
+import kr.wootecat.dongle.core.servlet.ServletMapper;
 
 public class ServletConfig {
 

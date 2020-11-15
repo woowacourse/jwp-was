@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public class MemoryUserRepository implements UserRepository {
+
     private final Map<String, User> users;
 
     public MemoryUserRepository(Map<String, User> users) {

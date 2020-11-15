@@ -3,7 +3,7 @@ package net.slipp.presentation.dto.parser;
 import net.slipp.presentation.dto.JoinRequest;
 import net.slipp.presentation.dto.LoginRequest;
 
-import kr.wootecat.dongle.application.http.request.HttpRequest;
+import kr.wootecat.dongle.http.request.HttpRequest;
 
 public class RequestDTOParser {
 
@@ -11,6 +11,9 @@ public class RequestDTOParser {
     private static final String PARAM_PASSWORD = "password";
     private static final String PARAM_NAME = "name";
     private static final String PARAM_EMAIL = "email";
+
+    private RequestDTOParser() {
+    }
 
     public static JoinRequest toJoinRequest(HttpRequest request) {
         String userId = request.getParameter(PARAM_USER_ID);

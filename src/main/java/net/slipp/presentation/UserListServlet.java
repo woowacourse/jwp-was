@@ -1,7 +1,7 @@
 package net.slipp.presentation;
 
 import static com.google.common.base.Charsets.*;
-import static kr.wootecat.dongle.application.http.MimeType.*;
+import static kr.wootecat.dongle.http.MimeType.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -10,16 +10,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.slipp.application.UserService;
-import net.slipp.config.ServiceFactory;
+import net.slipp.application.UserServiceFactory;
 import net.slipp.presentation.dto.UsersResponse;
 
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
-import kr.wootecat.dongle.application.http.request.HttpRequest;
-import kr.wootecat.dongle.application.http.response.HttpResponse;
-import kr.wootecat.dongle.application.servlet.HttpServlet;
+import kr.wootecat.dongle.core.servlet.HttpServlet;
+import kr.wootecat.dongle.http.request.HttpRequest;
+import kr.wootecat.dongle.http.response.HttpResponse;
 import utils.FileIoUtils;
 
 public class UserListServlet extends HttpServlet {
@@ -42,7 +42,7 @@ public class UserListServlet extends HttpServlet {
             return;
         }
 
-        UserService userService = ServiceFactory.getUserService();
+        UserService userService = UserServiceFactory.getInstance();
         UsersResponse userResponse = userService.findAll();
 
         TemplateLoader loader = new ClassPathTemplateLoader("/templates", ".html");

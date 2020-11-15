@@ -1,8 +1,9 @@
 package net.slipp.application.exception;
 
-import kr.wootecat.dongle.application.http.exception.BadRequestException;
+import kr.wootecat.dongle.http.exception.BadRequestException;
 
 public class DuplicatedUserIdException extends BadRequestException {
+
     private static final String DUPLICATED_USER_ID_EXCEPTION_MESSAGE_FORMAT = "중복된 아이디로는 가입하실 수 없습니다. : %s";
 
     public DuplicatedUserIdException(String userId) {

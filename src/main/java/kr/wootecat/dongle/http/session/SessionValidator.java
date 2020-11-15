@@ -1,0 +1,28 @@
+package kr.wootecat.dongle.http.session;
+
+import kr.wootecat.dongle.http.Cookie;
+import kr.wootecat.dongle.http.request.HttpRequest;
+import kr.wootecat.dongle.http.response.HttpResponse;
+import kr.wootecat.dongle.utils.IdGenerator;
+
+public class SessionValidator {
+
+    private static final String COOKIE_KEY_SESSION_ID = "JSESSIONID";
+
+    private final SessionStorage sessionStorage;
+    private final IdGenerator idGenerator;
+
+    public SessionValidator(SessionStorage sessionStorage, IdGenerator idGenerator) {
+        this.sessionStorage = sessionStorage;
+        this.idGenerator = idGenerator;
+    }
+
+    public void checkRequestSession(HttpRequest request, HttpResponse response) {
+        if (!request.hasCookie(COOKIE_KEY_SESSION_ID)) {
+            String sessionId = idGenerator.create();
+            sessionStorage.insert(sessionId);
+            Cookie sessionIdCookie = new Cookie(COOKIE_KEY_SESSION_ID, sessionId, "/");
+            response.addCookie(sessionIdCookie);
+        }
+    }
+}

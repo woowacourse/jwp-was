@@ -8,6 +8,7 @@ import java.util.List;
 import net.slipp.domain.User;
 
 public class UsersResponse {
+
     private final List<UserResponse> users;
 
     private UsersResponse(List<UserResponse> users) {

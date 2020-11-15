@@ -1,7 +1,7 @@
 package net.slipp.presentation;
 
-import static kr.wootecat.dongle.application.http.HttpStatus.*;
-import static kr.wootecat.dongle.application.http.MimeType.*;
+import static kr.wootecat.dongle.http.HttpStatus.*;
+import static kr.wootecat.dongle.http.MimeType.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -10,15 +10,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.slipp.application.UserService;
+import net.slipp.application.UserServiceFactory;
 import net.slipp.application.exception.AuthenticationFailException;
-import net.slipp.config.ServiceFactory;
 import net.slipp.presentation.dto.LoginRequest;
 import net.slipp.presentation.dto.parser.RequestDTOParser;
 
-import kr.wootecat.dongle.application.http.Cookie;
-import kr.wootecat.dongle.application.http.request.HttpRequest;
-import kr.wootecat.dongle.application.http.response.HttpResponse;
-import kr.wootecat.dongle.application.servlet.HttpServlet;
+import kr.wootecat.dongle.core.servlet.HttpServlet;
+import kr.wootecat.dongle.http.Cookie;
+import kr.wootecat.dongle.http.request.HttpRequest;
+import kr.wootecat.dongle.http.response.HttpResponse;
 import utils.FileIoUtils;
 
 public class LoginServlet extends HttpServlet {
@@ -35,12 +35,12 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpRequest request, HttpResponse response) {
         LoginRequest loginRequest = RequestDTOParser.toLoginRequest(request);
-        UserService userService = ServiceFactory.getUserService();
+        UserService userService = UserServiceFactory.getInstance();
         try {
             userService.login(loginRequest);
         } catch (AuthenticationFailException e) {
-            response.changeHttpStatus(UNAUTHORIZED);
             try {
+                response.changeHttpStatus(UNAUTHORIZED);
                 response.addCookie(new Cookie(LOGINED, false));
                 response.addBody(FileIoUtils.loadFileFromClasspath(LOGIN_FAIL_PATH), HTML_UTF_8);
                 return;
@@ -48,15 +48,9 @@ public class LoginServlet extends HttpServlet {
                 ioException.printStackTrace();
             }
         }
-        Cookie cookie = createLoginCookie();
-        response.addCookie(cookie);
+        response.addCookie(new Cookie(LOGINED, true, LOGIN_COOKIE_PATH));
         logger.debug(LOGIN_COMPLETE_LOGGING_MESSAGE, loginRequest.getUserId());
         response.sendRedirect(INDEX_URL_PATH);
     }
 
-    private Cookie createLoginCookie() {
-        Cookie cookie = new Cookie(LOGINED, true);
-        cookie.setPath(LOGIN_COOKIE_PATH);
-        return cookie;
-    }
 }
