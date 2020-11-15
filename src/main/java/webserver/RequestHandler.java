@@ -14,8 +14,11 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import db.DataBase;
 import http.HttpRequest;
+import http.QueryParameters;
 import http.SimpleHttpRequest;
+import model.User;
 import utils.FileIoUtils;
 
 public class RequestHandler implements Runnable {
@@ -38,13 +41,22 @@ public class RequestHandler implements Runnable {
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
         ) {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
-            String header = extractRequestHeader(bufferedReader);
-            logger.debug(System.lineSeparator() + header);
             HttpRequest httpRequest = SimpleHttpRequest.of(bufferedReader);
-            DataOutputStream dos = new DataOutputStream(outputStream);
-            byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getURI());
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+            logger.debug(System.lineSeparator() + httpRequest.toString());
+            if (httpRequest.getURI().contains("/user/create")) {
+                QueryParameters queryParameters = QueryParameters.of(httpRequest.getQuery());
+                User user = new User(
+                    queryParameters.getParameter("userId"),
+                    queryParameters.getParameter("password"),
+                    queryParameters.getParameter("name"),
+                    queryParameters.getParameter("email"));
+                DataBase.addUser(user);
+            } else {
+                DataOutputStream dos = new DataOutputStream(outputStream);
+                byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getURI());
+                response200Header(dos, body.length);
+                responseBody(dos, body);
+            }
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }

@@ -14,12 +14,12 @@
  - [x] http://localhost:8080/index.html 로 접속했을 때 webapp 디렉토리의 index.html 파일을 읽어 클라이언트에 응답한다.
  
 ### 요구사항 2
- - [ ] 회원가입
-    - [ ] http://localhost:8080/user/form.html 으로 이동해서 회원가입 할 수 있다.
+ - [x] 회원가입
+    - [x] http://localhost:8080/user/form.html 으로 이동해서 회원가입 할 수 있다.
    ```
    /create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net
    ```
-    - [ ] HTML과 URL을 비교해 보고 사용자가 입력한 값을 파싱해 model.User 클래스에 저장한다.
+    - [x] HTML과 URL을 비교해 보고 사용자가 입력한 값을 파싱해 model.User 클래스에 저장한다.
    ```
    GET /user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net HTTP/1.1
    Host: localhost:8080

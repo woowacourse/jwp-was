@@ -11,6 +11,7 @@ public class SimpleHttpRequest implements HttpRequest {
 
     private StartLine startLine;
     private HttpHeaders headers;
+    private String rawRequest;
 
     public static SimpleHttpRequest of(BufferedReader bufferedReader) throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
@@ -27,12 +28,13 @@ public class SimpleHttpRequest implements HttpRequest {
         StartLine startLine = StartLine.from(lines[START_LINE_INDEX]);
         int lastHeaderIndex = extractLastHeaderIndex(lines);
         HttpHeaders httpHeaders = HttpHeaders.from(Arrays.copyOfRange(lines, HEADER_LINE_START_INDEX, lastHeaderIndex));
-        return new SimpleHttpRequest(startLine, httpHeaders);
+        return new SimpleHttpRequest(startLine, httpHeaders, input);
     }
 
-    private SimpleHttpRequest(StartLine startLine, HttpHeaders httpHeaders) {
+    private SimpleHttpRequest(StartLine startLine, HttpHeaders httpHeaders, String rawRequest) {
         this.startLine = startLine;
         this.headers = httpHeaders;
+        this.rawRequest = rawRequest;
     }
 
     @Override
@@ -57,6 +59,11 @@ public class SimpleHttpRequest implements HttpRequest {
 
     public String getVersion() {
         return startLine.getVersion();
+    }
+
+    @Override
+    public String toString() {
+        return rawRequest;
     }
 
     private static int extractLastHeaderIndex(String[] lines) {
