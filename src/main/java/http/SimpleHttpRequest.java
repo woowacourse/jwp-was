@@ -5,35 +5,51 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
 
+import utils.IOUtils;
+
 public class SimpleHttpRequest implements HttpRequest {
     public static final int START_LINE_INDEX = 0;
     public static final int HEADER_LINE_START_INDEX = 1;
 
     private StartLine startLine;
     private HttpHeaders headers;
+    private RequestBody requestBody;
     private String rawRequest;
 
     public static SimpleHttpRequest of(BufferedReader bufferedReader) throws IOException {
+        String startLineString = bufferedReader.readLine();
+        StartLine startLine = StartLine.from(startLineString);
+        String requestHeadersString = extractRequestHeader(bufferedReader);
+        HttpHeaders httpHeaders = HttpHeaders.from(requestHeadersString);
+        String requestBodyString = IOUtils.readData(bufferedReader, httpHeaders.getContentLength());
+        RequestBody requestBody = RequestBody.from(requestBodyString);
+        return new SimpleHttpRequest(startLine, httpHeaders, requestBody, joinRequest(startLineString, requestHeadersString, requestBodyString));
+    }
+
+    private static String extractRequestHeader(BufferedReader bufferedReader) throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
         String line;
         while (Objects.nonNull(line = bufferedReader.readLine()) && !line.isEmpty()) {
             stringBuilder.append(line).append(System.lineSeparator());
         }
-        String httpRequestString = stringBuilder.toString();
-        return of(httpRequestString);
+        return stringBuilder.toString();
     }
 
-    public static SimpleHttpRequest of(String input) {
-        String[] lines = input.split(System.lineSeparator());
-        StartLine startLine = StartLine.from(lines[START_LINE_INDEX]);
-        int lastHeaderIndex = extractLastHeaderIndex(lines);
-        HttpHeaders httpHeaders = HttpHeaders.from(Arrays.copyOfRange(lines, HEADER_LINE_START_INDEX, lastHeaderIndex));
-        return new SimpleHttpRequest(startLine, httpHeaders, input);
+    private static String joinRequest(String startLine, String httpHeaders, String requestBody) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(startLine);
+        stringBuilder.append(System.lineSeparator());
+        stringBuilder.append(httpHeaders);
+        stringBuilder.append(System.lineSeparator());
+        stringBuilder.append(System.lineSeparator());
+        stringBuilder.append(requestBody);
+        return stringBuilder.toString();
     }
 
-    private SimpleHttpRequest(StartLine startLine, HttpHeaders httpHeaders, String rawRequest) {
+    private SimpleHttpRequest(StartLine startLine, HttpHeaders httpHeaders, RequestBody requestBody, String rawRequest) {
         this.startLine = startLine;
         this.headers = httpHeaders;
+        this.requestBody = requestBody;
         this.rawRequest = rawRequest;
     }
 
@@ -55,6 +71,11 @@ public class SimpleHttpRequest implements HttpRequest {
     @Override
     public HttpHeaders getHeaders() {
         return headers;
+    }
+
+    @Override
+    public RequestBody getBody() {
+        return requestBody;
     }
 
     public String getVersion() {

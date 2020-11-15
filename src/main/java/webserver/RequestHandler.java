@@ -15,11 +15,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import db.DataBase;
+import http.HttpHeaders;
 import http.HttpRequest;
 import http.QueryParameters;
+import http.RequestBody;
 import http.SimpleHttpRequest;
 import model.User;
 import utils.FileIoUtils;
+import utils.IOUtils;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -44,12 +47,12 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = SimpleHttpRequest.of(bufferedReader);
             logger.debug(System.lineSeparator() + httpRequest.toString());
             if (httpRequest.getURI().contains("/user/create")) {
-                QueryParameters queryParameters = QueryParameters.of(httpRequest.getQuery());
+                RequestBody requestBody = httpRequest.getBody();
                 User user = new User(
-                    queryParameters.getParameter("userId"),
-                    queryParameters.getParameter("password"),
-                    queryParameters.getParameter("name"),
-                    queryParameters.getParameter("email"));
+                    requestBody.get("userId"),
+                    requestBody.get("password"),
+                    requestBody.get("name"),
+                    requestBody.get("email"));
                 DataBase.addUser(user);
             } else {
                 DataOutputStream dos = new DataOutputStream(outputStream);

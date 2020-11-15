@@ -11,4 +11,6 @@ public interface HttpRequest {
     String getQuery();
 
     HttpHeaders getHeaders();
+
+    RequestBody getBody();
 }
