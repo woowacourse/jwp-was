@@ -36,6 +36,10 @@ public class StartLine {
         return uri.getRawPath();
     }
 
+    public String getQuery() {
+        return uri.getRawQuery();
+    }
+
     public String getVersion() {
         return version;
     }

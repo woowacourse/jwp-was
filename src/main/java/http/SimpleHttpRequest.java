@@ -6,9 +6,9 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class SimpleHttpRequest implements HttpRequest {
-
     public static final int START_LINE_INDEX = 0;
     public static final int HEADER_LINE_START_INDEX = 1;
+
     private StartLine startLine;
     private HttpHeaders headers;
 
@@ -46,6 +46,11 @@ public class SimpleHttpRequest implements HttpRequest {
     }
 
     @Override
+    public String getQuery() {
+        return startLine.getQuery();
+    }
+
+    @Override
     public HttpHeaders getHeaders() {
         return headers;
     }
@@ -62,5 +67,4 @@ public class SimpleHttpRequest implements HttpRequest {
         }
         return lines.length;
     }
-
 }
