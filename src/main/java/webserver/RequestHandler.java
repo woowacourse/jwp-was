@@ -23,6 +23,7 @@ import http.SimpleHttpRequest;
 import model.User;
 import utils.FileIoUtils;
 import utils.IOUtils;
+import utils.StaticResourceMatcher;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -46,7 +47,12 @@ public class RequestHandler implements Runnable {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             HttpRequest httpRequest = SimpleHttpRequest.of(bufferedReader);
             logger.debug(System.lineSeparator() + httpRequest.toString());
-            if (httpRequest.getURI().contains("/user/create")) {
+            if (StaticResourceMatcher.isStaticResourcePath(httpRequest.getURI())) {
+                DataOutputStream dos = new DataOutputStream(outputStream);
+                byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getURI());
+                response200Header(dos, body.length);
+                responseBody(dos, body);
+            } else if (httpRequest.getURI().contains("/user/create")) {
                 RequestBody requestBody = httpRequest.getBody();
                 User user = new User(
                     requestBody.get("userId"),
@@ -56,11 +62,6 @@ public class RequestHandler implements Runnable {
                 DataBase.addUser(user);
                 DataOutputStream dos = new DataOutputStream(outputStream);
                 response302Header(dos);
-            } else {
-                DataOutputStream dos = new DataOutputStream(outputStream);
-                byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getURI());
-                response200Header(dos, body.length);
-                responseBody(dos, body);
             }
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
