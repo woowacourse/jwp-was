@@ -7,7 +7,7 @@ public class Cookie {
     public static final String PATH = "Path";
 
     private final String name;
-    private String value;
+    private final String value;
     private String path;
 
     public Cookie(String name, String value) {
@@ -40,8 +40,8 @@ public class Cookie {
         this.path = path;
     }
 
-    public boolean hasValue(String name, boolean value) {
+    public boolean hasValue(String name, String value) {
         return Objects.equals(name, this.name) &&
-                Objects.equals(String.valueOf(value), this.value);
+                Objects.equals(value, this.value);
     }
 }

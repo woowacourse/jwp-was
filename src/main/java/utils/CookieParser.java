@@ -1,6 +1,10 @@
 package utils;
 
+import static java.util.Collections.*;
 import static kr.wootecat.dongle.application.http.Cookie.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import kr.wootecat.dongle.application.http.Cookie;
 
@@ -24,7 +28,15 @@ public class CookieParser {
         return result;
     }
 
-    public static Cookie toCookie(String headerValue) {
-        return null;
+    public static List<Cookie> toCookie(String key, String value) {
+        List<Cookie> cookies = new ArrayList<>();
+        String[] keyValue = value.split(DELIMITER);
+        for (String cookiePair : keyValue) {
+            String[] split = cookiePair.split(KEY_VALUE_DELIMITER);
+            String cookieName = split[0];
+            String cookieValue = split.length == 2 ? split[1] : "";
+            cookies.add(new Cookie(cookieName, cookieValue));
+        }
+        return unmodifiableList(cookies);
     }
 }

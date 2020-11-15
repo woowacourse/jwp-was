@@ -77,12 +77,12 @@ public class HttpRequestParser {
             String key = header[0];
             String value = header[1];
             if (COOKIE.equals(key)) {
-                cookies.add(toCookie(value));
+                cookies = toCookie(key, value);
             }
             headers.put(key, value);
             oneLine = br.readLine();
         }
-        return new HttpRequestHeaders(headers);
+        return new HttpRequestHeaders(headers, cookies);
     }
 
     private static HttpRequestParameters parseRequestParameters(BufferedReader br,

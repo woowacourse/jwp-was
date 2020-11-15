@@ -1,6 +1,5 @@
 package kr.wootecat.dongle.application.http.request;
 
-import kr.wootecat.dongle.application.http.Cookie;
 import kr.wootecat.dongle.application.http.HttpMethod;
 
 public class HttpRequest {
@@ -32,15 +31,11 @@ public class HttpRequest {
         return requestLine.getMethod();
     }
 
-    public String getHeader(String key) {
-        return requestHeaders.get(key);
-    }
-
     public String getParameter(String key) {
         return requestParameters.get(key);
     }
 
-    public Cookie[] getCookies() {
-        return new Cookie[0];
+    public boolean hasCookie(String value, boolean name) {
+        return requestHeaders.containsCookie(value, name);
     }
 }

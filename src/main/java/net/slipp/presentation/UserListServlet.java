@@ -5,7 +5,6 @@ import static kr.wootecat.dongle.application.http.MimeType.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,8 +31,7 @@ public class UserListServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpRequest request, HttpResponse response) {
-        boolean logined = Arrays.stream(request.getCookies())
-                .anyMatch(cookie -> cookie.hasValue(LOGINED, true));
+        boolean logined = request.hasCookie(LOGINED, true);
         if (!logined) {
             logger.error("401");
             try {
