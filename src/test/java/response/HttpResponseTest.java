@@ -22,10 +22,10 @@ class HttpResponseTest {
     @Test
     @DisplayName("쿠키가 있는 response 만들기")
     void createResponseWithCookies() {
-        Cookies cookies = new Cookies(
+        ResponseCookies cookies = new ResponseCookies(
             Arrays.asList(
-                new Cookie("token", "1A32Q!#RESRE15039", "/"),
-                new Cookie("id", "1", "/"))
+                new ResponseCookie("token", "1A32Q!#RESRE15039", "/"),
+                new ResponseCookie("id", "1", "/"))
         );
 
         HttpResponse response = new HttpResponse(StatusCode.FOUND, "/")

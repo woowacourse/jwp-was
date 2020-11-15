@@ -14,7 +14,7 @@ public class HttpResponse {
     private String location = "";
     private byte[] body;
     private ContentType contentType;
-    private Cookies cookies = Cookies.EMPTY_COOKIES;
+    private ResponseCookies cookies = ResponseCookies.EMPTY_COOKIES;
 
     public HttpResponse(StatusCode statusCode) {
         this.statusCode = statusCode;
@@ -132,7 +132,7 @@ public class HttpResponse {
         }
     }
 
-    public HttpResponse setCookies(Cookies cookies) {
+    public HttpResponse setCookies(ResponseCookies cookies) {
         if (Objects.isNull(cookies)) {
             throw new IllegalArgumentException("cannot use null parameter.");
         }

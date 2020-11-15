@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 import request.HttpRequest;
 import resource.ContentType;
-import response.Cookies;
 import response.HttpResponse;
+import response.ResponseCookies;
 import response.StatusCode;
 import utils.TemplateBuilder;
 
@@ -37,10 +37,10 @@ public class UserController extends AbstractController {
 
         if (isRightUser) {
             return new HttpResponse(StatusCode.FOUND, "/")
-                .setCookies(Cookies.createWithSingleCookie("login", "true", "/"));
+                .setCookies(ResponseCookies.createWithSingleCookie("login", "true", "/"));
         }
         return new HttpResponse(StatusCode.FOUND, "/user/login_failed.html")
-            .setCookies(Cookies.createWithSingleCookie("login", "false", "/"));
+            .setCookies(ResponseCookies.createWithSingleCookie("login", "false", "/"));
     }
 
     private HttpResponse findAllUsers(HttpRequest httpRequest) {
@@ -63,7 +63,7 @@ public class UserController extends AbstractController {
         String usersPage = template.apply(handlebarData);
 
         return new HttpResponse(StatusCode.OK, usersPage, ContentType.HTML)
-            .setCookies(Cookies.createWithSingleCookie("login", "true", "/"));
+            .setCookies(ResponseCookies.createWithSingleCookie("login", "true", "/"));
     }
 
     @Override

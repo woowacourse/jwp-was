@@ -7,30 +7,31 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class Cookies {
+public class ResponseCookies {
 
-    public static Cookies EMPTY_COOKIES = new Cookies();
+    public static ResponseCookies EMPTY_COOKIES = new ResponseCookies();
 
-    private final List<Cookie> cookies;
+    private final List<ResponseCookie> cookies;
 
-    private Cookies() {
+    private ResponseCookies() {
         cookies = new ArrayList<>();
     }
 
-    public static Cookies createWithSingleCookie(String cookieName, String cookieValue,
-        String path) {
-        return new Cookies(Collections.singletonList(new Cookie(cookieName, cookieValue, path)));
+    public static ResponseCookies createWithSingleCookie(
+            String cookieName, String cookieValue, String path) {
+        return new ResponseCookies(
+            Collections.singletonList(new ResponseCookie(cookieName, cookieValue, path)));
     }
 
-    public Cookies(List<Cookie> cookies) {
+    public ResponseCookies(List<ResponseCookie> cookies) {
         validateIfDuplicatedCookieNameExists(cookies);
         this.cookies = Collections.unmodifiableList(cookies);
     }
 
-    private void validateIfDuplicatedCookieNameExists(List<Cookie> cookies) {
+    private void validateIfDuplicatedCookieNameExists(List<ResponseCookie> cookies) {
         Map<String, String> cookieNameValueMap = new HashMap<>();
 
-        for (Cookie cookie : cookies) {
+        for (ResponseCookie cookie : cookies) {
             cookieNameValueMap.put(cookie.getName(), cookie.getValue());
         }
         if (cookieNameValueMap.size() != cookies.size()) {
@@ -40,7 +41,7 @@ public class Cookies {
 
     public List<String> toCookieHeaderValueFormats() {
         List<String> cookieValues = cookies.stream()
-            .map(Cookie::toHttpResponseHeaderValueFormat)
+            .map(ResponseCookie::toHttpResponseHeaderValueFormat)
             .collect(Collectors.toList());
         return Collections.unmodifiableList(cookieValues);
     }
