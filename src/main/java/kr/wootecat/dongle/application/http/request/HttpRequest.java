@@ -35,7 +35,11 @@ public class HttpRequest {
         return requestParameters.get(key);
     }
 
-    public boolean hasCookie(String value, boolean name) {
-        return requestHeaders.containsCookie(value, name);
+    public boolean hasCookie(String name, boolean value) {
+        return requestHeaders.hasCookieWithPair(name, value);
+    }
+
+    public boolean hasCookie(String name) {
+        return requestHeaders.containsCookie(name);
     }
 }

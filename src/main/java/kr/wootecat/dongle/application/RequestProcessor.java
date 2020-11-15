@@ -16,14 +16,23 @@ import kr.wootecat.dongle.application.http.response.HttpResponse;
 public class RequestProcessor {
 
     private final HandlerMappings handlerMappings;
+    private final SessionValidator sessionValidator;
 
     public RequestProcessor(HandlerMappings handlerMappings) {
         this.handlerMappings = handlerMappings;
+        this.sessionValidator = null;
+    }
+
+    public RequestProcessor(HandlerMappings handlerMappings,
+            SessionValidator sessionValidator) {
+        this.handlerMappings = handlerMappings;
+        this.sessionValidator = sessionValidator;
     }
 
     public HttpResponse response(HttpRequest request) {
         try {
             HttpResponse response = HttpResponse.with200Empty();
+            sessionValidator.checkRequestSession(request, response);
             HandlerMapping handler = handlerMappings.findHandler(request);
             handler.handle(request, response);
             return response;

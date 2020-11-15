@@ -24,6 +24,15 @@ public class Cookie {
         return path != null;
     }
 
+    public boolean hasValue(String name, String value) {
+        return Objects.equals(name, this.name) &&
+                Objects.equals(value, this.value);
+    }
+
+    public boolean hasName(String name) {
+        return this.name.equals(name);
+    }
+
     public String getName() {
         return name;
     }
@@ -38,10 +47,5 @@ public class Cookie {
 
     public void setPath(String path) {
         this.path = path;
-    }
-
-    public boolean hasValue(String name, String value) {
-        return Objects.equals(name, this.name) &&
-                Objects.equals(value, this.value);
     }
 }

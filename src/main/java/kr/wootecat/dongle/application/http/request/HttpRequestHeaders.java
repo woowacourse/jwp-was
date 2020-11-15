@@ -15,13 +15,18 @@ class HttpRequestHeaders {
         this.cookies = cookies;
     }
 
-    public boolean containsCookie(String name, boolean value) {
-        return containsCookie(name, String.valueOf(value));
+    public boolean hasCookieWithPair(String name, boolean value) {
+        return hasCookieWithPair(name, String.valueOf(value));
     }
 
-    public boolean containsCookie(String name, String value) {
+    public boolean hasCookieWithPair(String name, String value) {
         return cookies.stream()
                 .anyMatch(cookie -> cookie.hasValue(name, value));
+    }
+
+    public boolean containsCookie(String name) {
+        return cookies.stream()
+                .anyMatch(cookie -> cookie.hasName(name));
     }
 
     public String get(String key) {
