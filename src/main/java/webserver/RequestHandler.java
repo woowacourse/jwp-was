@@ -9,20 +9,17 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import db.DataBase;
-import http.HttpHeaders;
 import http.HttpRequest;
-import http.QueryParameters;
 import http.RequestBody;
 import http.SimpleHttpRequest;
 import model.User;
+import utils.ContentType;
 import utils.FileIoUtils;
-import utils.IOUtils;
 import utils.StaticResourceMatcher;
 
 public class RequestHandler implements Runnable {
@@ -50,7 +47,7 @@ public class RequestHandler implements Runnable {
             if (StaticResourceMatcher.isStaticResourcePath(httpRequest.getURI())) {
                 DataOutputStream dos = new DataOutputStream(outputStream);
                 byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getURI());
-                response200Header(dos, body.length);
+                response200Header(dos, body.length, ContentType.findByURI(httpRequest.getURI()));
                 responseBody(dos, body);
             } else if (httpRequest.getURI().contains("/user/create")) {
                 RequestBody requestBody = httpRequest.getBody();
@@ -68,10 +65,10 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, ContentType contentType) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Type: " + contentType.getContentType() + ";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {

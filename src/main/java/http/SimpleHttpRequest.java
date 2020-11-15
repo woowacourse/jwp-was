@@ -2,15 +2,11 @@ package http;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Objects;
 
 import utils.IOUtils;
 
 public class SimpleHttpRequest implements HttpRequest {
-    public static final int START_LINE_INDEX = 0;
-    public static final int HEADER_LINE_START_INDEX = 1;
-
     private StartLine startLine;
     private HttpHeaders headers;
     private RequestBody requestBody;
@@ -23,7 +19,8 @@ public class SimpleHttpRequest implements HttpRequest {
         HttpHeaders httpHeaders = HttpHeaders.from(requestHeadersString);
         String requestBodyString = IOUtils.readData(bufferedReader, httpHeaders.getContentLength());
         RequestBody requestBody = RequestBody.from(requestBodyString);
-        return new SimpleHttpRequest(startLine, httpHeaders, requestBody, joinRequest(startLineString, requestHeadersString, requestBodyString));
+        return new SimpleHttpRequest(startLine, httpHeaders, requestBody,
+            joinRequest(startLineString, requestHeadersString, requestBodyString));
     }
 
     private static String extractRequestHeader(BufferedReader bufferedReader) throws IOException {
@@ -46,7 +43,8 @@ public class SimpleHttpRequest implements HttpRequest {
         return stringBuilder.toString();
     }
 
-    private SimpleHttpRequest(StartLine startLine, HttpHeaders httpHeaders, RequestBody requestBody, String rawRequest) {
+    private SimpleHttpRequest(StartLine startLine, HttpHeaders httpHeaders, RequestBody requestBody,
+        String rawRequest) {
         this.startLine = startLine;
         this.headers = httpHeaders;
         this.requestBody = requestBody;

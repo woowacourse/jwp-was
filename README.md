@@ -51,7 +51,7 @@
    ```
 
 #### 요구사항 5
- - [ ] stylesheet 파일을 지원하도록 구현
+ - [x] stylesheet 파일을 지원하도록 구현
    ```
    GET ./css/style.css HTTP/1.1
    Host: localhost:8080

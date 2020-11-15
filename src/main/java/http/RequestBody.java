@@ -10,7 +10,8 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 public class RequestBody {
-    private static final RequestBody DEFAULT_REQUEST_BODY = new RequestBody(Collections.unmodifiableMap(new HashMap<>()));
+    private static final RequestBody DEFAULT_REQUEST_BODY =
+        new RequestBody(Collections.unmodifiableMap(new HashMap<>()));
     private static final String HTTP_BODY_SPLITTER = "&";
     private static final String HTTP_KEY_VALUE_SPLITTER = "=";
     private static final int KEY_INDEX = 0;

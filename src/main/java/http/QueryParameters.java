@@ -10,7 +10,8 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 public class QueryParameters {
-    private static final QueryParameters DEFAULT_QUERY_PARAMETERS = new QueryParameters(Collections.unmodifiableMap(new HashMap<>()));
+    private static final QueryParameters DEFAULT_QUERY_PARAMETERS =
+        new QueryParameters(Collections.unmodifiableMap(new HashMap<>()));
     private static final String QUERY_SPLITTER = "&";
     private static final String KEY_VALUE_SPLITTER = "=";
     private static final int KEY_INDEX = 0;
