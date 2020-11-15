@@ -54,6 +54,8 @@ public class RequestHandler implements Runnable {
                     requestBody.get("name"),
                     requestBody.get("email"));
                 DataBase.addUser(user);
+                DataOutputStream dos = new DataOutputStream(outputStream);
+                response302Header(dos);
             } else {
                 DataOutputStream dos = new DataOutputStream(outputStream);
                 byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getURI());
@@ -65,20 +67,21 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private String extractRequestHeader(BufferedReader bufferedReader) throws IOException {
-        StringBuilder stringBuilder = new StringBuilder();
-        String line;
-        while (Objects.nonNull(line = bufferedReader.readLine()) && !line.isEmpty()) {
-            stringBuilder.append(line).append(System.lineSeparator());
-        }
-        return stringBuilder.toString();
-    }
-
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
             dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void response302Header(DataOutputStream dos) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 Found \r\n");
+            dos.writeBytes("Location: /index.html \r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
