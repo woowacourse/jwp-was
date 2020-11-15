@@ -33,7 +33,7 @@ public class StaticResourceHandlerMapping implements HandlerMapping {
             makeResourceResponse(response, mime, body);
         } catch (UnsupportedMimeTypeException | ResourceNotFoundException e) {
             throw new NotFoundException(request.getPath());
-        } catch (IOException | URISyntaxException | RuntimeException e) {
+        } catch (IOException | URISyntaxException e) {
             throw new RuntimeException(RUNTIME_EXCEPTION_ERROR_MESSAGE);
         }
     }

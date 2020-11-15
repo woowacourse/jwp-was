@@ -29,7 +29,7 @@ public class WebServer {
             run(args);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            System.exit(0);
+            System.exit(1);
         }
     }
 

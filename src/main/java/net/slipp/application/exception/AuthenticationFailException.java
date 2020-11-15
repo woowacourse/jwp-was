@@ -1,6 +1,10 @@
 package net.slipp.application.exception;
 
-import kr.wootecat.dongle.http.exception.UnauthorizedException;
+public class AuthenticationFailException extends RuntimeException {
 
-public class AuthenticationFailException extends UnauthorizedException {
+    private static final String AUTHENTICATION_FAIL_EXCEPTION_MESSAGE = "인증에 실패했습니다.";
+
+    public AuthenticationFailException() {
+        super(AUTHENTICATION_FAIL_EXCEPTION_MESSAGE);
+    }
 }

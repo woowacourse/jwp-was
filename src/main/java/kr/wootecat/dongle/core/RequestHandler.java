@@ -11,13 +11,9 @@ import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import kr.wootecat.dongle.core.handler.HandlerMappingsFactory;
 import kr.wootecat.dongle.http.request.HttpRequest;
 import kr.wootecat.dongle.http.request.HttpRequestReader;
 import kr.wootecat.dongle.http.response.HttpResponse;
-import kr.wootecat.dongle.http.session.SessionStorage;
-import kr.wootecat.dongle.http.session.SessionValidator;
-import kr.wootecat.dongle.utils.IdGeneratorFactory;
 
 public class RequestHandler implements Runnable {
 
@@ -38,10 +34,7 @@ public class RequestHandler implements Runnable {
                 connectionSocket.getInputStream(), UTF_8));
              DataOutputStream outputStream = new DataOutputStream(connectionSocket.getOutputStream())) {
             HttpRequest request = HttpRequestReader.parse(reader);
-            RequestProcessor requestProcessor = new RequestProcessor(
-                    HandlerMappingsFactory.create(),
-                    new SessionValidator(SessionStorage.ofEmpty(), IdGeneratorFactory.create())
-            );
+            RequestProcessor requestProcessor = RequestProcessorFactory.create();
             HttpResponse response = requestProcessor.response(request);
             ResponseSender.send(outputStream, response);
         } catch (IOException e) {
