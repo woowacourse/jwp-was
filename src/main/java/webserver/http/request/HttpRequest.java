@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.http.Body;
 import webserver.http.HttpHeaders;
-import webserver.http.Url;
+import webserver.http.URL;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,7 +27,7 @@ public class HttpRequest {
         LOGGER.info("Create Clear!");
     }
 
-    public Url getUrl() {
+    public URL getUrl() {
         return httpRequestStartLine.getUrl();
     }
 

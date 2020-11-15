@@ -27,7 +27,7 @@ public abstract class AbstractController implements Controller {
 
     @Override
     public boolean isUrlPath(HttpRequest httpRequest) {
-        Url url = httpRequest.getUrl();
+        URL url = httpRequest.getUrl();
         return paths.stream()
                 .anyMatch(url::isEndsWith);
     }

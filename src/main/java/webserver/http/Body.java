@@ -43,6 +43,10 @@ public class Body {
         return new Body(BodyState.NOT_EMPTY, content);
     }
 
+    public static Body emptyBody() {
+        return new Body(BodyState.EMPTY, null);
+    }
+
     public BodyState getState() {
         return bodyState;
     }

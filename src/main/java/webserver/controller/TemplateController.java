@@ -4,7 +4,7 @@ import utils.FileIoUtils;
 import webserver.http.Body;
 import webserver.http.ContentType;
 import webserver.http.HttpHeaders;
-import webserver.http.Url;
+import webserver.http.URL;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 import webserver.http.response.HttpResponseStartLine;
@@ -22,9 +22,9 @@ public class TemplateController extends AbstractController {
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         HttpResponseStartLine httpResponseStartLine = response200StartLine();
 
-        Url url = httpRequest.getUrl();
+        URL url = httpRequest.getUrl();
         ContentType contentType = ContentType.from(url);
-        String filePath = contentType.getDirectory() + url.getUrl();
+        String filePath = contentType.getDirectory() + url.getPath();
         byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
         HttpHeaders httpResponseHeaders = responseWithContent(contentType, body);
 

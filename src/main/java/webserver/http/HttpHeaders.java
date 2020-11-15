@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -53,6 +54,10 @@ public class HttpHeaders {
             return new HttpHeaders(HttpHeadersState.EMPTY, httpHeaders);
         }
         return new HttpHeaders(HttpHeadersState.NOT_EMPTY, httpHeaders);
+    }
+
+    public static HttpHeaders emptyHeaders() {
+        return new HttpHeaders(HttpHeadersState.EMPTY, Collections.emptyList());
     }
 
     public HttpHeadersState getHttpHeadersState() {

@@ -18,7 +18,7 @@ public enum ContentType {
         this.fileExtender = fileExtender;
     }
 
-    public static ContentType from(Url url) {
+    public static ContentType from(URL url) {
         return Arrays.stream(values())
                 .filter(contentType -> url.isEndsWith(contentType.fileExtender))
                 .findFirst()

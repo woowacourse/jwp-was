@@ -1,5 +1,6 @@
 package model;
 
+import db.DataBase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +10,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class UserFactoryTest {
+public class UserServiceTest {
     @DisplayName("입력한 정보에 맞는 user가 생성되는지 테스트")
     @Test
     void createUserTest() {
@@ -18,7 +19,8 @@ public class UserFactoryTest {
         parameters.put("password", "password");
         parameters.put("name", "lavine2");
         parameters.put("email", "lavine@a.com");
-        User user = UserFactory.create(parameters);
+        UserService.create(parameters);
+        User user = DataBase.findUserById("lavine");
 
         assertAll(
                 () -> assertThat(user.getUserId()).isEqualTo("lavine"),

@@ -3,7 +3,7 @@ package webserver.controller;
 import webserver.http.Body;
 import webserver.http.ContentType;
 import webserver.http.HttpHeaders;
-import webserver.http.Url;
+import webserver.http.URL;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 import webserver.http.response.HttpResponseStartLine;
@@ -20,7 +20,7 @@ public class IndexController extends AbstractController {
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         HttpResponseStartLine httpResponseStartLine = response200StartLine();
 
-        Url url = httpRequest.getUrl();
+        URL url = httpRequest.getUrl();
         ContentType contentType = ContentType.from(url);
         byte[] body = "Hello World".getBytes();
         HttpHeaders httpResponseHeaders = responseWithContent(contentType, body);
