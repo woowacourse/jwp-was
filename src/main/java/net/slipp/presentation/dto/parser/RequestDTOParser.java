@@ -3,7 +3,7 @@ package net.slipp.presentation.dto.parser;
 import net.slipp.presentation.dto.JoinRequest;
 import net.slipp.presentation.dto.LoginRequest;
 
-import webserver.servlet.http.request.HttpRequest;
+import kr.wootecat.dongle.application.http.request.HttpRequest;
 
 public class RequestDTOParser {
 

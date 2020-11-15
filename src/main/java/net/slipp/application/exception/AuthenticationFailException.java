@@ -1,6 +1,6 @@
 package net.slipp.application.exception;
 
-import webserver.servlet.exception.UnAuthorizedException;
+import kr.wootecat.dongle.application.http.exception.UnauthorizedException;
 
-public class AuthenticationFailException extends UnAuthorizedException {
+public class AuthenticationFailException extends UnauthorizedException {
 }

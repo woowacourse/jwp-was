@@ -2,8 +2,8 @@ package net.slipp;
 
 import static net.slipp.config.ServletDescriptor.*;
 
-import webserver.ServletConfig;
-import webserver.WebServer;
+import kr.wootecat.dongle.ServletConfig;
+import kr.wootecat.dongle.WebServer;
 
 public class SlippApplication {
     public static void main(String[] args) {

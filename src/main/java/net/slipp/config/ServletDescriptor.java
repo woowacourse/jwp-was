@@ -9,7 +9,7 @@ import net.slipp.presentation.LoginServlet;
 import net.slipp.presentation.UserListServlet;
 import net.slipp.presentation.UserServlet;
 
-import webserver.servlet.HttpServlet;
+import kr.wootecat.dongle.application.servlet.HttpServlet;
 
 public class ServletDescriptor {
     private static final HashMap<String, Supplier<HttpServlet>> urlServletMapping = new HashMap<>();

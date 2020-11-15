@@ -7,7 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import webserver.servlet.exception.ResourceNotFoundException;
+import kr.wootecat.dongle.application.http.exception.ResourceNotFoundException;
 
 public class FileIoUtils {
     public static byte[] loadFileFromClasspath(String filePath) throws IOException, URISyntaxException {

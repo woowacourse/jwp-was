@@ -8,10 +8,10 @@ import net.slipp.config.ServiceFactory;
 import net.slipp.presentation.dto.LoginRequest;
 import net.slipp.presentation.dto.parser.RequestDTOParser;
 
-import webserver.servlet.HttpServlet;
-import webserver.servlet.http.Cookie;
-import webserver.servlet.http.request.HttpRequest;
-import webserver.servlet.http.response.HttpResponse;
+import kr.wootecat.dongle.application.http.Cookie;
+import kr.wootecat.dongle.application.http.request.HttpRequest;
+import kr.wootecat.dongle.application.http.response.HttpResponse;
+import kr.wootecat.dongle.application.servlet.HttpServlet;
 
 public class LoginServlet extends HttpServlet {
 

@@ -1,8 +1,8 @@
 package utils;
 
-import static webserver.servlet.http.Cookie.*;
+import static kr.wootecat.dongle.application.http.Cookie.*;
 
-import webserver.servlet.http.Cookie;
+import kr.wootecat.dongle.application.http.Cookie;
 
 public class CookieParser {
     private static final String DELIMITER = "; ";
@@ -29,7 +29,7 @@ public class CookieParser {
         return result;
     }
 
-    public static Cookie toCookie(String value) {
+    public static Cookie toCookie(String headerValue) {
         return null;
     }
 }
