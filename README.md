@@ -49,6 +49,22 @@
 - [x]  추가 요구사항이나 변경이 발생하는 경우를 고려한다.
     - [x]  HTTP에서 POST 방식으로 데이터를 전달할 때 body를 통한 데이터 전달뿐만 아니라 Query String을 활용한 데이터 전달도 지원하도록 한다.
 
+## 🚀 3단계 - 로그인 및 세션 구현
+
+### 요구사항
+
+- [x]  앞 단계에서 회원가입할 때 생성한 User 객체를 DataBase.addUser() 메서드를 활용해 RAM 메모리에 저장한다.
+- [ ]  회원가입한 사용자로 로그인할 수 있어야 한다.
+- [ ]  user/login.html에서 로그인이 성공하면 index.html로 이동하고, 로그인이 실패하면 /user/login_failed.html로 이동한다.
+- [ ]  로그인이 성공하면 cookie를 활용해 로그인 상태를 유지할 수 있어야 한다. 로그인이 성공할 경우 요청 header의 Cookie header 값이 logined=true, 로그인이 실패하면 Cookie header 값이 logined=false로 전달되어야 한다.
+    - [ ]  Set-Cookie 설정시 모든 요청에 대해 Cookie 처리가 가능하도록 Path 설정 값을 /(Path=/)로 설정한다.
+    - [ ]  응답 header에 Set-Cookie값을 설정한 후 요청 header에 Cookie이 전달되는지 확인한다.
+- [ ]  접근하고 있는 사용자가 “로그인” 상태일 경우(Cookie 값이 logined=true) 경우 http://localhost:8080/user/list 로 접근했을 때 사용자 목록을 출력한다.
+    - [ ]  만약 로그인하지 않은 상태라면 로그인 페이지(login.html)로 이동한다.
+    - [ ]  동적으로 html을 생성하기 위해 handlebars.java template engine을 활용한다.
+- [ ]  서블릿에서 지원하는 HttpSession API의 일부를 지원한다.
+    - [ ]  HttpSession API 중 getId(), setAttribute(String name, Object value), getAttribute(String name), removeAttribute(String name), invalidate() 5개의 메소드를 구현한다.
+    
 ## 진행 방법
 * 웹 애플리케이션 서버 요구사항을 파악한다.
 * 요구사항에 대한 구현을 완료한 후 자신의 github 아이디에 해당하는 브랜치에 Pull Request(이하 PR)를 통해 코드 리뷰 요청을 한다.
