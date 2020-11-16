@@ -85,13 +85,4 @@ public class SimpleHttpRequest implements HttpRequest {
     public String toString() {
         return rawRequest;
     }
-
-    private static int extractLastHeaderIndex(String[] lines) {
-        for (int i = 0; i < lines.length; i++) {
-            if ("".equals(lines[i])) {
-                return i;
-            }
-        }
-        return lines.length;
-    }
 }

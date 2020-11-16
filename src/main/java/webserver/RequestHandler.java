@@ -13,6 +13,8 @@ import java.nio.charset.StandardCharsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import controller.HttpServlet;
+import controller.UserController;
 import db.DataBase;
 import http.HttpRequest;
 import http.HttpResponse;
@@ -42,11 +44,11 @@ public class RequestHandler implements Runnable {
             OutputStream outputStream = connection.getOutputStream();
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            DataOutputStream dos = new DataOutputStream(outputStream);
         ) {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             HttpRequest httpRequest = SimpleHttpRequest.of(bufferedReader);
             logger.debug(System.lineSeparator() + httpRequest.toString());
-            DataOutputStream dos = new DataOutputStream(outputStream);
             HttpResponse httpResponse = new HttpResponse();
             // dispatcher.service(httpRequest, httpResponse);
             if (StaticResourceMatcher.isStaticResourcePath(httpRequest.getURI())) {
@@ -54,18 +56,10 @@ public class RequestHandler implements Runnable {
                 ContentType contentType = ContentType.findByURI(httpRequest.getURI());
                 httpResponse.setBody(body, contentType);
             } else if (httpRequest.getURI().contains("/user/create")) {
-                HttpBody httpBody = httpRequest.getBody();
-                User user = new User(
-                    httpBody.get("userId"),
-                    httpBody.get("password"),
-                    httpBody.get("name"),
-                    httpBody.get("email"));
-                DataBase.addUser(user);
-                httpResponse.setStatus(HttpStatus.FOUND);
-                httpResponse.addHeader("Location", "/index.html");
+                HttpServlet servlet = new UserController();
+                servlet.service(httpRequest, httpResponse);
             }
             httpResponse.send(dos);
-            logger.debug(System.lineSeparator() + httpResponse.toString());
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
