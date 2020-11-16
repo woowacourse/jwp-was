@@ -1,115 +1,0 @@
-r11:39:09,946 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
-p11:39:09,946 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.groovy]
-�11:39:09,946 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/Users/seyunkim/workspace/woowacourse/jwp-was/user-service/build/resources/main/logback.xml]
-i11:39:10,027 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - debug attribute not set
-�11:39:10,028 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
-e11:39:10,043 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [STDOUT]
-�11:39:10,096 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - This appender no longer admits a layout as a sub-component, set an encoder instead.
-�11:39:10,096 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - To ensure compatibility, wrapping your layout in LayoutWrappingEncoder.
-�11:39:10,096 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - See also http://logback.qos.ch/codes.html#layoutInsteadOfEncoder for details
-t11:39:10,097 |-INFO in ch.qos.logback.classic.joran.action.RootLoggerAction - Setting level of ROOT logger to DEBUG
-~11:39:10,097 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [STDOUT] to Logger[ROOT]
-g11:39:10,098 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - End of configuration.
-�11:39:10,099 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@24d6c199 - Registering current configuration as safe fallback point
-
-?11:39:10.116 [DEBUG] [Test worker] [http.was.utils.IOUtils] - 
-POST /users HTTP/1.1
-Accept : */*
-Connection : keep-alive
-Host : localhost:8080
-Content-Length : 73
-1Content-Type : application/x-www-form-urlencoded
-
-JuserId=javajigi&password=password&name=JaeSung&email=javajigi%40slipp.net
-?11:39:10.303 [DEBUG] [Test worker] [http.was.utils.IOUtils] - 
-rGET /users?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net HTTP/1.1
-Accept : */*
-Connection : keep-alive
-Host : localhost:8080
-
-
-?11:39:10.314 [DEBUG] [Test worker] [http.was.utils.IOUtils] - 
-GET /user/list HTTP/1.1
-Cookie : logined=false
-Accept : */*
-Connection : keep-alive
-Host : localhost:8080
-
-
-s11:39:10.362 [DEBUG] [Test worker] [c.g.j.h.internal.HbsParserFactory] - About to parse: /templates/user/list.html
-V11:39:10.448 [DEBUG] [Test worker] [c.g.j.h.internal.HbsParserFactory] - Building AST
-\11:39:10.483 [DEBUG] [Test worker] [c.g.j.h.internal.HbsParserFactory] - Creating templates
-N11:39:10.492 [INFO ] [Test worker] [u.s.controller.UserListController] - null
-?11:39:10.495 [DEBUG] [Test worker] [http.was.utils.IOUtils] - 
-GET /user/list HTTP/1.1
-Cookie : JSESSIONID=1
-Accept : */*
-Connection : keep-alive
-Host : localhost:8080
-
-
-s11:39:10.496 [DEBUG] [Test worker] [c.g.j.h.internal.HbsParserFactory] - About to parse: /templates/user/list.html
-V11:39:10.498 [DEBUG] [Test worker] [c.g.j.h.internal.HbsParserFactory] - Building AST
-\11:39:10.507 [DEBUG] [Test worker] [c.g.j.h.internal.HbsParserFactory] - Creating templates
-?11:39:10.532 [DEBUG] [Test worker] [http.was.utils.IOUtils] - 
-POST /user/login HTTP/1.1
-Accept : */*
-Connection : keep-alive
-Host : localhost:8080
-Content-Length : 29
-1Content-Type : application/x-www-form-urlencoded
-
-userId=javajigi&password=1234
-	?11:39:10.541 [DEBUG] [Test worker] [http.was.utils.IOUtils] - 
-	POST /user/login HTTP/1.1
-	Accept : */*
-	Connection : keep-alive
-	Host : localhost:8080
-	Content-Length : 29
-	1Content-Type : application/x-www-form-urlencoded
-	
-	userId=javajigi&password=1234
-	m11:39:10.541 [INFO ] [Test worker] [u.service.controller.LoginController] - 로그인에 실패했습니다.
-
-?11:39:10.551 [DEBUG] [Test worker] [http.was.utils.IOUtils] - 
-
-POST /user/login HTTP/1.1
-
-Accept : */*
-
-Connection : keep-alive
-
-Host : localhost:8080
-
-Content-Length : 29
-
-1Content-Type : application/x-www-form-urlencoded
-
-
-
-userId=javajigi&password=9999
-
-m11:39:10.553 [INFO ] [Test worker] [u.service.controller.LoginController] - 로그인에 실패했습니다.
-?11:39:10.559 [DEBUG] [Test worker] [http.was.utils.IOUtils] - 
-POST /user/login HTTP/1.1
-Accept : */*
-Connection : keep-alive
-Host : localhost:8080
-Content-Length : 29
-1Content-Type : application/x-www-form-urlencoded
-
-userId=javajigi&password=1234
-?11:39:10.567 [DEBUG] [Test worker] [http.was.utils.IOUtils] - 
-POST / HTTP/1.1
-Accept : */*
-Connection : keep-alive
-Host : localhost:8080
-
-
-?11:39:10.576 [DEBUG] [Test worker] [http.was.utils.IOUtils] - 
-GET / HTTP/1.1
-Accept : */*
-Connection : keep-alive
-Host : localhost:8080
-
-

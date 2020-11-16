@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="http.was.http.request.RequestBodyTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2020-11-16T02:22:46" hostname="MacBook-Pro-3.local" time="0.015">
-  <properties/>
-  <testcase name="parseRequestBodyExceptionTest()" classname="http.was.http.request.RequestBodyTest" time="0.005"/>
-  <testcase name="parseRequestBodyTest()" classname="http.was.http.request.RequestBodyTest" time="0.009"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
