@@ -10,22 +10,21 @@ import java.util.List;
 
 public class AuthFilter implements Filter {
     private static final List<String> PATH_PATTERN = Arrays.asList(
-        "/user/list"
+            "/user/list"
     );
 
     @Override
     public boolean doFilter(RequestEntity requestEntity, ResponseEntity responseEntity) {
         String path = requestEntity.getHttpUrl().getPath();
-        if (PATH_PATTERN.contains(path)) {
-            String cookie = requestEntity.getHttpHeader().findOrEmpty("Cookie");
-            if ("logined=true".equals(cookie)) {
-                return true;
-            } else {
-                responseEntity.status(HttpStatus.FOUND)
-                    .addHeader("Location", "/user/login.html");
-                return false;
-            }
+        String cookie = requestEntity.getHttpHeader().findOrEmpty("Cookie");
+        if (PATH_PATTERN.contains(path) && isNotAuthorized(cookie)) {
+            responseEntity.status(HttpStatus.FOUND).addHeader("Location", "/user/login.html");
+            return false;
         }
         return true;
+    }
+
+    private boolean isNotAuthorized(String cookie) {
+        return !"logined=true".equals(cookie);
     }
 }
