@@ -1,7 +1,6 @@
 package implementedbehavior;
 
 import db.DataBase;
-import http.HttpBody;
 import http.request.Params;
 import http.request.RequestEntity;
 import http.response.HttpStatus;
@@ -14,10 +13,8 @@ import java.util.Objects;
 public class UserLoginBehavior implements RequestBehavior {
     @Override
     public void behave(RequestEntity requestEntity, ResponseEntity responseEntity) {
-        HttpBody httpBody = requestEntity.getHttpBody();
-        Params userInfo = Params.from(httpBody.getContent());
-        User user = DataBase.findUserById(userInfo.findValueBy("userId"));
-        if (!Objects.isNull(user) && (user.getPassword().equals(userInfo.findValueBy("password")))) {
+        Params userInfo = Params.from(requestEntity.getHttpBody().getContent());
+        if (isValid(userInfo)) {
             responseEntity.status(HttpStatus.FOUND)
                 .addHeader("Location", "/index.html")
                 .addHeader("Set-Cookie", "logined=true");
@@ -26,5 +23,12 @@ public class UserLoginBehavior implements RequestBehavior {
                 .addHeader("Location", "/user/login_failed.html")
                 .addHeader("Set-Cookie", "logined=false");
         }
+    }
+
+    private boolean isValid(Params userInfo) {
+        String userId = userInfo.findValueBy("userId");
+        String password = userInfo.findValueBy("password");
+        User user = DataBase.findUserById(userId);
+        return Objects.nonNull(user) && user.hasPasswordOf(password);
     }
 }
