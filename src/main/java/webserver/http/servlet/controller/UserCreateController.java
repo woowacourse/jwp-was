@@ -6,12 +6,12 @@ import utils.ModelMapper;
 import webserver.http.request.HttpParams;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
-import webserver.http.servlet.view.RedirectView;
-import webserver.http.servlet.view.View;
+import webserver.http.servlet.AbstractView;
+import webserver.http.servlet.RedirectView;
 
 public class UserCreateController implements Controller {
     @Override
-    public View doService(HttpRequest request, HttpResponse response) {
+    public AbstractView doService(HttpRequest request, HttpResponse response) {
         HttpParams bodyParams = HttpParams.of(request.getBody());
 
         User user = ModelMapper.toModel(User.class, bodyParams);

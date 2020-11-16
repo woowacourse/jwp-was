@@ -1,9 +1,9 @@
-package webserver.http.servlet.view;
+package webserver.http.servlet;
 
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 
-public class RedirectView implements View {
+public class RedirectView extends AbstractView {
     private final String redirectUri;
 
     public RedirectView(String redirectUri) {
@@ -11,7 +11,7 @@ public class RedirectView implements View {
     }
 
     @Override
-    public void render(HttpRequest request, HttpResponse response) {
+    void render(HttpRequest request, HttpResponse response) {
         response.redirect(redirectUri);
     }
 }
