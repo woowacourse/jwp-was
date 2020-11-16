@@ -41,12 +41,15 @@ public class RequestHandler implements Runnable {
         try {
             Controller controller = requestMapping.getController(httpRequest);
             return controller.service(httpRequest);
-        } catch (ApplicationBusinessException | RequestException e) {
+        } catch (ApplicationBusinessException e) {
             logger.info(e.getMessage());
-            return HttpResponse.badRequest(e.getMessage()).build();
+            return HttpResponse.businessException(e).build();
+        } catch (ClientException e) {
+            logger.info(e.getMessage());
+            return HttpResponse.clientException(e).build();
         } catch (ServerException e) {
             logger.error(e.getMessage());
-            return HttpResponse.internalServer(e.getMessage()).build();
+            return HttpResponse.internalServerError(e).build();
         }
     }
 

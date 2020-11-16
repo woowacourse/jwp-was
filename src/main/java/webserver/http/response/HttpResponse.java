@@ -9,6 +9,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import webserver.ClientException;
+import webserver.ServerException;
+import webserver.controller.ApplicationBusinessException;
 import webserver.http.Protocol;
 
 public class HttpResponse {
@@ -44,9 +47,19 @@ public class HttpResponse {
             .error(errorMessage);
     }
 
-    public static Builder internalServer(String errorMessage) {
-        return new Builder(StatusCode.INTERNAL_SERVER_ERROR)
-            .error(errorMessage);
+    public static Builder internalServerError(ServerException e) {
+        return new Builder(e.getStatus())
+            .error(e.getMessage());
+    }
+
+    public static Builder clientException(ClientException e) {
+        return new Builder(e.getStatus())
+            .error(e.getMessage());
+    }
+
+    public static Builder businessException(ApplicationBusinessException e) {
+        return new Builder(e.getStatus())
+            .error(e.getMessage());
     }
 
     public void respond(DataOutputStream dos) {
