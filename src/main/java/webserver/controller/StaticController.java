@@ -5,7 +5,6 @@ import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 
 public class StaticController extends AbstractController {
-
     private static final String DELIMITER = "\\.";
 
     @Override
