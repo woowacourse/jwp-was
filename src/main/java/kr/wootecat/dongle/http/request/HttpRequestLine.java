@@ -4,7 +4,7 @@ import java.util.regex.Pattern;
 
 import kr.wootecat.dongle.http.HttpMethod;
 
-class HttpRequestLine {
+public class HttpRequestLine {
 
     private static final Pattern EXTENSION_PATTERN = Pattern.compile("[^\\s]+\\.[\\w]+");
 

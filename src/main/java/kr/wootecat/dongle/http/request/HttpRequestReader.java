@@ -89,7 +89,7 @@ public class HttpRequestReader {
             HttpRequestHeaders header, HttpRequestLine requestLine) throws IOException {
         Map<String, String> requestDatas = new HashMap<>();
         HttpMethod httpMethod = requestLine.getMethod();
-        if (!httpMethod.hasRequestBody()) {
+        if (!httpMethod.isPost()) {
             return new HttpRequestParameters(requestDatas);
         }
         String data = IOUtils.readData(br, Integer.parseInt(header.get(HttpHeaders.CONTENT_LENGTH)));

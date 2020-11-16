@@ -8,7 +8,7 @@ public enum HttpMethod {
         return this == GET;
     }
 
-    public boolean hasRequestBody() {
+    public boolean isPost() {
         return this == POST;
     }
 }

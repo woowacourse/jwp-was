@@ -5,7 +5,7 @@ import java.util.Map;
 
 import kr.wootecat.dongle.http.Cookie;
 
-class HttpRequestHeaders {
+public class HttpRequestHeaders {
 
     private final Map<String, String> headers;
     private final List<Cookie> cookies;

@@ -9,13 +9,13 @@ public enum MimeType {
     HTML_UTF_8("./templates", ".html", "text/html;charset=utf-8"),
     ICO("./templates", ".ico", "image/x-icon"),
     CSS_UTF_8("./static", ".css", "text/css;charset=utf-8"),
-    JS_UTF_8("./static", ".js", "net/slipp/js;charset=utf-8"),
+    JS_UTF_8("./static", ".js", "application/js;charset=utf-8"),
     PNG("./static", ".png", "image/png"),
-    EOT("./static", ".eot", "net/slipp/x-font-eot"),
+    EOT("./static", ".eot", "application/x-font-eot"),
     SVG("./static", ".svg", "image/svg+xml"),
-    WOFF("./static", ".woff", "net/slipp/x-font-woff"),
-    WOFF2("./static", ".woff2", "net/slipp/x-font-woff"),
-    TTF("./static", ".ttf", "net/slipp/x-font-ttf");
+    WOFF("./static", ".woff", "application/x-font-woff"),
+    WOFF2("./static", ".woff2", "application/x-font-woff"),
+    TTF("./static", ".ttf", "application/x-font-ttf");
 
     private final String filePosition;
     private final String extensionType;

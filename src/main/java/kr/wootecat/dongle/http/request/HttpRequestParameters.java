@@ -2,7 +2,7 @@ package kr.wootecat.dongle.http.request;
 
 import java.util.Map;
 
-class HttpRequestParameters {
+public class HttpRequestParameters {
 
     private final Map<String, String> requestParameters;
 
