@@ -8,6 +8,15 @@ import webserver.http.servlet.controller.ControllerMapping;
 import webserver.http.servlet.view.View;
 
 public class HttpServlet {
+    private static final HttpServlet HTTP_SERVLET = new HttpServlet();
+
+    private HttpServlet() {
+    }
+
+    public static HttpServlet getInstance() {
+        return HTTP_SERVLET;
+    }
+
     public void doDispatch(HttpRequest request, HttpResponse response) {
         RequestMapping requestMapping = request.toRequestMapping();
         Controller controller = ControllerMapping.get(requestMapping);

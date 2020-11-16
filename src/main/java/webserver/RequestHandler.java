@@ -35,7 +35,7 @@ public class RequestHandler implements Runnable {
                     .create(new BufferedReader(new InputStreamReader(in)));
             HttpResponse response = new HttpResponse(new DataOutputStream(out));
 
-            new HttpServlet().doDispatch(httpRequest, response);
+            HttpServlet.getInstance().doDispatch(httpRequest, response);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
