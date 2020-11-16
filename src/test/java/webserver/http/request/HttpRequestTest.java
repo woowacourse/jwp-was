@@ -25,40 +25,4 @@ class HttpRequestTest {
         assertThat(httpRequest.getDefaultPath()).isEqualTo("/user/create");
         assertThat(httpRequest.getParameters()).isEqualTo(expectedParameters);
     }
-    //
-    // @DisplayName("요청에 해당하는 templates 자원의 경로를 반환한다.")
-    // @Test
-    // void getPath_whenRequestTemplatesFiles() throws IOException {
-    //     InputStream inputStream = new FileInputStream(
-    //         new File("/Users/moon/Desktop/Github/jwp-was/build/resources/test/TemplatesResourceRequest.txt"));
-    //     HttpRequest httpRequest = HttpRequest.of(inputStream);
-    //
-    //     String path = httpRequest.getDefaultPath();
-    //
-    //     assertThat(path).isEqualTo("./templates/index.html");
-    // }
-    //
-    // @DisplayName("요청에 해당하는 static 자원의 경로를 반환한다.")
-    // @Test
-    // void getPath_whenRequestStaticFiles() throws IOException {
-    //     InputStream inputStream = new FileInputStream(
-    //         new File("/Users/moon/Desktop/Github/jwp-was/build/resources/test/StaticResourceRequest.txt"));
-    //     HttpRequest httpRequest = HttpRequest.of(inputStream);
-    //
-    //     String path = httpRequest.getDefaultPath();
-    //
-    //     assertThat(path).isEqualTo("./static/css/styles.css");
-    // }
-    //
-    // @DisplayName("요청에 해당하는 동적 처리 경로를 반환한다.")
-    // @Test
-    // void getPath_whenRequestNotResources() throws IOException {
-    //     InputStream inputStream = new FileInputStream(
-    //         new File("/Users/moon/Desktop/Github/jwp-was/build/resources/test/GetRequest.txt"));
-    //     HttpRequest httpRequest = HttpRequest.of(inputStream);
-    //
-    //     String path = httpRequest.getDefaultPath();
-    //
-    //     assertThat(path).isEqualTo("/user/create");
-    // }
 }

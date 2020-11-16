@@ -4,12 +4,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public class RequestHeader {
     private static final String BLANK = "";
     private static final String DELIMITER = ":\\s";
     private static final String lineSeparator = System.lineSeparator();
+    private static final String CONTENT_LENGTH = "content-length";
 
     private final Map<String, String> fields;
 
@@ -20,9 +20,9 @@ public class RequestHeader {
     public static RequestHeader of(BufferedReader bufferedReader) throws IOException {
         Map<String, String> fields = new HashMap<>();
 
-        while(bufferedReader.ready()) {
+        while (bufferedReader.ready()) {
             String line = bufferedReader.readLine();
-            if (line.equals(BLANK)) {
+            if (line.isEmpty()) {
                 break;
             }
 
@@ -31,7 +31,6 @@ public class RequestHeader {
                 fields.put(headerTokens[0].toLowerCase(), headerTokens[1]);
             }
         }
-
 
         return new RequestHeader(fields);
     }
@@ -46,7 +45,7 @@ public class RequestHeader {
         return sb.toString();
     }
 
-    public Optional<String> getContentLength() {
-        return Optional.ofNullable(fields.get("content-length"));
+    public String getContentLength() {
+        return fields.get(CONTENT_LENGTH);
     }
 }

@@ -21,7 +21,7 @@ public enum ContentTypeMapper {
         return Arrays.stream(values())
             .filter(value -> value.extension.equals(extension))
             .findAny()
-            .orElseThrow(() -> new UndefinedExtension(extension))
+            .orElseThrow(() -> new UndefinedExtensionException(extension))
             .contentType;
     }
 }

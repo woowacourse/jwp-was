@@ -22,7 +22,7 @@ public class ServletContainer {
     }
 
     public boolean hasMappingServlet(HttpRequest httpRequest) {
-        return servletNameMapper.get(httpRequest.getDefaultPath()) != null;
+        return servletNameMapper.containsKey(httpRequest.getDefaultPath());
     }
 
     public Controller getController(HttpRequest httpRequest) {

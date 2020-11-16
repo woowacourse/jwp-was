@@ -21,7 +21,8 @@ public class StaticController extends AbstractController {
         }
 
         byte[] body = FileIoUtils.loadFileFromClasspath(path);
-        String extension = path.split(DELIMITER)[1];
+        String[] splitPath = path.split(DELIMITER);
+        String extension = splitPath[splitPath.length-1];
         ContentType contentType = ContentTypeMapper.map(extension);
 
         return HttpResponse.ok()
