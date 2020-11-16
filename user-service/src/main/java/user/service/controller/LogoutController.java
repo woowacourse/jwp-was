@@ -13,7 +13,7 @@ import http.was.http.session.HttpSessionStore;
 @Controller
 public class LogoutController {
     @RequestMapping(path = "/user/logout", method = HttpMethod.DELETE)
-    public static void doDelete(Request request, Response response) {
+    public void doDelete(Request request, Response response) {
         try {
             HttpSession httpSession = request.getHttpSession(false);
 

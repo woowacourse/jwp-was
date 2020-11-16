@@ -1,4 +1,4 @@
-Y15:57:07.005 [Test worker] DEBUG http.was.utils.FileIoUtilsTest - file : <!DOCTYPE html>
+Y11:22:45.954 [Test worker] DEBUG http.was.utils.FileIoUtilsTest - file : <!DOCTYPE html>
 <html lang="kr">
 <head>
 H    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -151,8 +151,8 @@
 </body>
 </html>
 
-S15:57:07.035 [Test worker] DEBUG http.was.utils.IOUtilsTest - parse body : abcd123
-;15:57:07.136 [Test worker] DEBUG http.was.utils.IOUtils - 
+S11:22:45.977 [Test worker] DEBUG http.was.utils.IOUtilsTest - parse body : abcd123
+;11:22:46.115 [Test worker] DEBUG http.was.utils.IOUtils - 
 POST /users HTTP/1.1
 Accept : */*
 Connection : keep-alive
@@ -161,7 +161,7 @@
 1Content-Type : application/x-www-form-urlencoded
 
 JuserId=javajigi&password=password&name=JaeSung&email=javajigi%40slipp.net
-;15:57:07.139 [Test worker] DEBUG http.was.utils.IOUtils - 
+;11:22:46.117 [Test worker] DEBUG http.was.utils.IOUtils - 
 POST /users?id=1 HTTP/1.1
 Accept : */*
 Connection : keep-alive
@@ -170,14 +170,14 @@
 1Content-Type : application/x-www-form-urlencoded
 
 /userId=javajigi&password=password&name=JaeSung
-;15:57:07.141 [Test worker] DEBUG http.was.utils.IOUtils - 
+;11:22:46.120 [Test worker] DEBUG http.was.utils.IOUtils - 
 rGET /users?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net HTTP/1.1
 Accept : */*
 Connection : keep-alive
 Host : localhost:8080
 
 
-;15:57:07.145 [Test worker] DEBUG http.was.utils.IOUtils - 
+;11:22:46.123 [Test worker] DEBUG http.was.utils.IOUtils - 
 GET /index.html HTTP/1.1
 Accept : */*
 Connection : keep-alive

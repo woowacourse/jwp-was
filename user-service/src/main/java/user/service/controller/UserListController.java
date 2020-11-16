@@ -25,7 +25,7 @@ public class UserListController {
     private static final Logger logger = LoggerFactory.getLogger(UserListController.class);
 
     @RequestMapping(path = "/user/list")
-    public static void doGet(Request request, Response response) throws IOException {
+    public void doGet(Request request, Response response) throws IOException {
         try {
             String path = request.getPath();
             Template template = TemplateFactory.of(path);
@@ -44,7 +44,7 @@ public class UserListController {
     }
 
     @RequestMapping(path = "/user/list", method = HttpMethod.POST)
-    public static void doPost(Request request, Response response) {
+    public void doPost(Request request, Response response) {
         throw new HttpRequestMethodNotSupportedException(HttpMethod.GET);
     }
 }

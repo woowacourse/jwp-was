@@ -21,7 +21,8 @@ class IndexControllerTest {
         Request request = new Request(TestFileIo.readBufferedReader("http_index_request.txt"));
         Response response = new Response(result);
 
-        IndexController.doGet(request, response);
+        IndexController indexController = new IndexController();
+        indexController.doGet(request, response);
 
         String actual = result.toString();
 
@@ -37,8 +38,9 @@ class IndexControllerTest {
         ByteArrayOutputStream result = new ByteArrayOutputStream();
         Request request = new Request(TestFileIo.readBufferedReader("http_post_index_request.txt"));
         Response response = new Response(result);
+        IndexController indexController = new IndexController();
 
-        assertThatThrownBy(() -> IndexController.doPost(request, response))
+        assertThatThrownBy(() -> indexController.doPost(request, response))
                 .isInstanceOf(HttpRequestMethodNotSupportedException.class);
     }
 }

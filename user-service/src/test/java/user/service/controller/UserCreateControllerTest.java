@@ -20,8 +20,9 @@ class UserCreateControllerTest {
         ByteArrayOutputStream result = new ByteArrayOutputStream();
         Request request = new Request(TestFileIo.readBufferedReader("http_user_get_request.txt"));
         Response response = new Response(result);
+        UserCreateController userCreateController = new UserCreateController();
 
-        UserCreateController.doGet(request, response);
+        userCreateController.doGet(request, response);
 
         String actual = result.toString();
 
@@ -37,8 +38,9 @@ class UserCreateControllerTest {
         ByteArrayOutputStream result = new ByteArrayOutputStream();
         Request request = new Request(TestFileIo.readBufferedReader("http_user_post_request.txt"));
         Response response = new Response(result);
+        UserCreateController userCreateController = new UserCreateController();
 
-        UserCreateController.doPost(request, response);
+        userCreateController.doPost(request, response);
 
         String actual = result.toString();
 

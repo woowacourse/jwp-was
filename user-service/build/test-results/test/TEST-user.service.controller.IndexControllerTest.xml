@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="user.service.controller.IndexControllerTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2020-11-10T06:57:01" hostname="MacBook-Pro-3.local" time="0.017">
+<testsuite name="user.service.controller.IndexControllerTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2020-11-16T02:39:10" hostname="MacBook-Pro-3.local" time="0.03">
   <properties/>
-  <testcase name="doPostTest()" classname="user.service.controller.IndexControllerTest" time="0.005"/>
-  <testcase name="doGetTest()" classname="user.service.controller.IndexControllerTest" time="0.011"/>
-  <system-out><![CDATA[15:57:01.783 [DEBUG] [Test worker] [http.was.utils.IOUtils] - 
+  <testcase name="doPostTest()" classname="user.service.controller.IndexControllerTest" time="0.009"/>
+  <testcase name="doGetTest()" classname="user.service.controller.IndexControllerTest" time="0.02"/>
+  <system-out><![CDATA[11:39:10.567 [DEBUG] [Test worker] [http.was.utils.IOUtils] - 
 POST / HTTP/1.1
 Accept : */*
 Connection : keep-alive
 Host : localhost:8080
 
 
-15:57:01.789 [DEBUG] [Test worker] [http.was.utils.IOUtils] - 
+11:39:10.576 [DEBUG] [Test worker] [http.was.utils.IOUtils] - 
 GET / HTTP/1.1
 Accept : */*
 Connection : keep-alive

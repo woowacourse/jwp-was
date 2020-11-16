@@ -25,7 +25,7 @@ public class LoginController {
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @RequestMapping(path = "/user/login", method = HttpMethod.POST)
-    public static void doPost(Request request, Response response) {
+    public void doPost(Request request, Response response) {
         try {
             RequestBody requestBody = request.getRequestBody();
             Map<String, String> requestBodies = requestBody.parseRequestBody();
@@ -47,11 +47,11 @@ public class LoginController {
     }
 
     @RequestMapping(path = "/user/login", method = HttpMethod.GET)
-    public static void doGet(Request request, Response response) {
+    public void doGet(Request request, Response response) {
         throw new HttpRequestMethodNotSupportedException(HttpMethod.GET);
     }
 
-    private static void validate(Map<String, String> requestBodies, User user) throws IllegalRequestException {
+    private void validate(Map<String, String> requestBodies, User user) throws IllegalRequestException {
         if (user == null || !user.checkPassword(requestBodies.get("password"))) {
             throw new IllegalRequestException("로그인에 실패했습니다.");
         }

@@ -4,6 +4,7 @@ import http.was.webserver.WebServer;
 
 public class UserApplication {
     public static void main(String[] args) throws Exception {
-        WebServer.main(args);
+        WebServer webServer = new WebServer("user.service.controller");
+        webServer.start(args);
     }
 }

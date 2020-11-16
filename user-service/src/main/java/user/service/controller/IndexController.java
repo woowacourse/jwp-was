@@ -15,12 +15,12 @@ import http.was.http.response.Response;
 @Controller
 public class IndexController {
     @RequestMapping(path = "/", method = HttpMethod.GET)
-    public static void doGet(Request request, Response response) throws IOException, URISyntaxException {
+    public void doGet(Request request, Response response) throws IOException, URISyntaxException {
         response.ok("/index.html", HTML.getContentType());
     }
 
     @RequestMapping(path = "/", method = HttpMethod.POST)
-    public static void doPost(Request request, Response response) {
+    public void doPost(Request request, Response response) {
         throw new HttpRequestMethodNotSupportedException(HttpMethod.POST);
     }
 }

@@ -15,9 +15,11 @@ public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
+    private RequestMapper requestMapper;
 
-    public RequestHandler(Socket connectionSocket) {
+    public RequestHandler(Socket connectionSocket, RequestMapper requestMapper) {
         this.connection = connectionSocket;
+        this.requestMapper = requestMapper;
     }
 
     public void run() {
@@ -27,7 +29,7 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             Request request = new Request(br);
-            ResponseMapper.responseMapping(request, out);
+            ResponseMapper.responseMapping(request, out, requestMapper);
         } catch (Exception e) {
             logger.error(e.getMessage());
         }

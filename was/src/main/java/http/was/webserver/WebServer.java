@@ -13,9 +13,14 @@ public class WebServer {
     private static final int DEFAULT_PORT = 8080;
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newFixedThreadPool(100);
 
-    public static void main(String args[]) throws Exception {
-        RequestMapper.scanRequestMappingAnnotatedMethod();
-        
+    private static RequestMapper requestMapper;
+
+    public WebServer(String scanPackage) {
+        requestMapper = new RequestMapper(scanPackage);
+    }
+
+    public void start(String[] args) throws Exception {
+        requestMapper.scanRequestMappingAnnotatedMethod();
         int port = 0;
         if (args == null || args.length == 0) {
             port = DEFAULT_PORT;
@@ -30,7 +35,7 @@ public class WebServer {
             // 클라이언트가 연결될때까지 대기한다.
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
-                EXECUTOR_SERVICE.execute(new RequestHandler(connection));
+                EXECUTOR_SERVICE.execute(new RequestHandler(connection, requestMapper));
             }
         }
     }

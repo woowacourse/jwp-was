@@ -17,7 +17,7 @@ import user.service.model.User;
 public class UserCreateController {
 
     @RequestMapping(path = "/users", method = HttpMethod.GET)
-    public static void doGet(Request request, Response response) {
+    public void doGet(Request request, Response response) {
         QueryParams queryParams = request.getQueryParams();
 
         if (!queryParams.isEmpty()) {
@@ -29,7 +29,7 @@ public class UserCreateController {
     }
 
     @RequestMapping(path = "/users", method = HttpMethod.POST)
-    public static void doPost(Request request, Response response) throws IllegalRequestException {
+    public void doPost(Request request, Response response) throws IllegalRequestException {
         RequestBody requestBody = request.getRequestBody();
         Map<String, String> requestBodies = requestBody.parseRequestBody();
 

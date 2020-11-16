@@ -13,7 +13,7 @@ import http.was.http.response.Response;
 
 public class ResponseMapper {
 
-    public static void responseMapping(Request request, OutputStream out) throws
+    public static void responseMapping(Request request, OutputStream out, RequestMapper requestMapper) throws
             IOException,
             URISyntaxException,
             InvocationTargetException,
@@ -24,7 +24,8 @@ public class ResponseMapper {
             return;
         }
         MappedRequest mappedRequest = new MappedRequest(request.getRequestMethod(), request.getPath());
-        Method method = RequestMapper.get(mappedRequest);
-        method.invoke(null, request, response);
+        Method method = requestMapper.get(mappedRequest);
+        Object instance = requestMapper.getInstance(method.getDeclaringClass());
+        method.invoke(instance, request, response);
     }
 }

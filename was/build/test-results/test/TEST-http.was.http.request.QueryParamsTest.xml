@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="http.was.http.request.QueryParamsTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-11-10T06:57:07" hostname="MacBook-Pro-3.local" time="0.0">
+<testsuite name="http.was.http.request.QueryParamsTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-11-16T02:22:46" hostname="MacBook-Pro-3.local" time="0.001">
   <properties/>
-  <testcase name="getQueryParamsTest()" classname="http.was.http.request.QueryParamsTest" time="0.0"/>
+  <testcase name="getQueryParamsTest()" classname="http.was.http.request.QueryParamsTest" time="0.001"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

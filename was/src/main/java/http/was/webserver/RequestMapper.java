@@ -1,7 +1,10 @@
 package http.was.webserver;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -17,22 +20,44 @@ import http.was.exception.DuplicatedMappedRequestException;
 
 public class RequestMapper {
     private static final Map<MappedRequest, Method> requestMapper = new HashMap<>();
-    private static final String DEFAULT_PACKAGE_SCAN = "user/service/controller";
+    private static final Set<Object> controllerInstances = new HashSet<>();
 
-    public static void scanRequestMappingAnnotatedMethod() {
-        Reflections reflections = new Reflections(DEFAULT_PACKAGE_SCAN);
+    private Reflections reflections;
+
+    public RequestMapper(String scanPackage) {
+        reflections = new Reflections(scanPackage);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T getInstance(Class<T> aClass) {
+        return (T)controllerInstances.stream()
+                .filter(controllerInstance -> controllerInstance.getClass().equals(aClass))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("해당하는 인스턴스가 업습니다."));
+    }
+
+    public void scanRequestMappingAnnotatedMethod() {
         Set<Class<?>> controllerAnnotatedClasses = reflections.getTypesAnnotatedWith(Controller.class);
 
+        for (Class<?> cls : controllerAnnotatedClasses) {
+            for (Constructor<?> constructor : cls.getDeclaredConstructors()) {
+                try {
+                    controllerInstances.add(constructor.newInstance());
+                } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         controllerAnnotatedClasses.stream()
                 .map(scanRequestMappingAnnotatedMethods())
                 .forEach(applyAnnotatedMethods());
     }
 
-    private static Consumer<Set<Method>> applyAnnotatedMethods() {
+    private Consumer<Set<Method>> applyAnnotatedMethods() {
         return classes -> classes.forEach(addAnnotatedMethodToRequestMapper());
     }
 
-    private static Consumer<Method> addAnnotatedMethodToRequestMapper() {
+    private Consumer<Method> addAnnotatedMethodToRequestMapper() {
         return annotatedMethod -> {
             RequestMapping annotation = annotatedMethod.getAnnotation(RequestMapping.class);
             MappedRequest mappedRequest = new MappedRequest(annotation.method(), annotation.path());
@@ -40,7 +65,7 @@ public class RequestMapper {
         };
     }
 
-    private static void add(MappedRequest mappedRequest, Method method) {
+    private void add(MappedRequest mappedRequest, Method method) {
         if (requestMapper.containsKey(mappedRequest)) {
             throw new DuplicatedMappedRequestException("중복되는 값이 있습니다.");
         }
@@ -48,13 +73,13 @@ public class RequestMapper {
         requestMapper.put(mappedRequest, method);
     }
 
-    private static Function<Class<?>, Set<Method>> scanRequestMappingAnnotatedMethods() {
+    private Function<Class<?>, Set<Method>> scanRequestMappingAnnotatedMethods() {
         return aClass ->
                 new Reflections(aClass.getName(), new MethodAnnotationsScanner())
                         .getMethodsAnnotatedWith(RequestMapping.class);
     }
 
-    public static Method get(MappedRequest mappedRequest) {
+    public Method get(MappedRequest mappedRequest) {
         return requestMapper.get(mappedRequest);
     }
 }

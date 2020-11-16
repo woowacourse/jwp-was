@@ -30,8 +30,9 @@ class LoginControllerTest {
         ByteArrayOutputStream result = new ByteArrayOutputStream();
         Request request = new Request(TestFileIo.readBufferedReader("http_login_request.txt"));
         Response response = new Response(result);
+        LoginController loginController = new LoginController();
 
-        LoginController.doPost(request, response);
+        loginController.doPost(request, response);
 
         String actual = result.toString();
 
@@ -47,8 +48,9 @@ class LoginControllerTest {
         ByteArrayOutputStream result = new ByteArrayOutputStream();
         Request request = new Request(TestFileIo.readBufferedReader("http_login_request.txt"));
         Response response = new Response(result);
+        LoginController loginController = new LoginController();
 
-        LoginController.doPost(request, response);
+        loginController.doPost(request, response);
 
         String actual = result.toString();
 
@@ -66,8 +68,9 @@ class LoginControllerTest {
         ByteArrayOutputStream result = new ByteArrayOutputStream();
         Request request = new Request(TestFileIo.readBufferedReader("http_invalid_login_request.txt"));
         Response response = new Response(result);
+        LoginController loginController = new LoginController();
 
-        LoginController.doPost(request, response);
+        loginController.doPost(request, response);
 
         String actual = result.toString();
 

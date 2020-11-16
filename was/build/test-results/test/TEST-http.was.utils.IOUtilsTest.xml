@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="http.was.utils.IOUtilsTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-11-10T06:57:07" hostname="MacBook-Pro-3.local" time="0.002">
+<testsuite name="http.was.utils.IOUtilsTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-11-16T02:22:45" hostname="MacBook-Pro-3.local" time="0.001">
   <properties/>
-  <testcase name="readData()" classname="http.was.utils.IOUtilsTest" time="0.002"/>
-  <system-out><![CDATA[15:57:07.035 [Test worker] DEBUG http.was.utils.IOUtilsTest - parse body : abcd123
+  <testcase name="readData()" classname="http.was.utils.IOUtilsTest" time="0.001"/>
+  <system-out><![CDATA[11:22:45.977 [Test worker] DEBUG http.was.utils.IOUtilsTest - parse body : abcd123
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

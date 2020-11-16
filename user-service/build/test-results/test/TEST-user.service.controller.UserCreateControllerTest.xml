@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="user.service.controller.UserCreateControllerTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2020-11-10T06:57:01" hostname="MacBook-Pro-3.local" time="0.19">
+<testsuite name="user.service.controller.UserCreateControllerTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2020-11-16T02:39:09" hostname="MacBook-Pro-3.local" time="0.394">
   <properties/>
-  <testcase name="doPostTest()" classname="user.service.controller.UserCreateControllerTest" time="0.186"/>
+  <testcase name="doPostTest()" classname="user.service.controller.UserCreateControllerTest" time="0.389"/>
   <testcase name="doGetTest()" classname="user.service.controller.UserCreateControllerTest" time="0.004"/>
-  <system-out><![CDATA[15:57:01,427 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
-15:57:01,427 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.groovy]
-15:57:01,427 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/Users/seyunkim/workspace/woowacourse/jwp-was/user-service/build/resources/main/logback.xml]
-15:57:01,477 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - debug attribute not set
-15:57:01,478 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
-15:57:01,483 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [STDOUT]
-15:57:01,504 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - This appender no longer admits a layout as a sub-component, set an encoder instead.
-15:57:01,504 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - To ensure compatibility, wrapping your layout in LayoutWrappingEncoder.
-15:57:01,504 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - See also http://logback.qos.ch/codes.html#layoutInsteadOfEncoder for details
-15:57:01,505 |-INFO in ch.qos.logback.classic.joran.action.RootLoggerAction - Setting level of ROOT logger to DEBUG
-15:57:01,505 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [STDOUT] to Logger[ROOT]
-15:57:01,506 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - End of configuration.
-15:57:01,507 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@620d2479 - Registering current configuration as safe fallback point
+  <system-out><![CDATA[11:39:09,946 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+11:39:09,946 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.groovy]
+11:39:09,946 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/Users/seyunkim/workspace/woowacourse/jwp-was/user-service/build/resources/main/logback.xml]
+11:39:10,027 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - debug attribute not set
+11:39:10,028 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+11:39:10,043 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [STDOUT]
+11:39:10,096 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - This appender no longer admits a layout as a sub-component, set an encoder instead.
+11:39:10,096 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - To ensure compatibility, wrapping your layout in LayoutWrappingEncoder.
+11:39:10,096 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - See also http://logback.qos.ch/codes.html#layoutInsteadOfEncoder for details
+11:39:10,097 |-INFO in ch.qos.logback.classic.joran.action.RootLoggerAction - Setting level of ROOT logger to DEBUG
+11:39:10,097 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [STDOUT] to Logger[ROOT]
+11:39:10,098 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - End of configuration.
+11:39:10,099 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@24d6c199 - Registering current configuration as safe fallback point
 
-15:57:01.514 [DEBUG] [Test worker] [http.was.utils.IOUtils] - 
+11:39:10.116 [DEBUG] [Test worker] [http.was.utils.IOUtils] - 
 POST /users HTTP/1.1
 Accept : */*
 Connection : keep-alive
@@ -26,7 +26,7 @@ Content-Length : 73
 Content-Type : application/x-www-form-urlencoded
 
 userId=javajigi&password=password&name=JaeSung&email=javajigi%40slipp.net
-15:57:01.591 [DEBUG] [Test worker] [http.was.utils.IOUtils] - 
+11:39:10.303 [DEBUG] [Test worker] [http.was.utils.IOUtils] - 
 GET /users?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net HTTP/1.1
 Accept : */*
 Connection : keep-alive

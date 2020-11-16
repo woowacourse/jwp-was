@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="http.was.utils.FileIoUtilsTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-11-10T06:57:06" hostname="MacBook-Pro-3.local" time="0.041">
+<testsuite name="http.was.utils.FileIoUtilsTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-11-16T02:22:45" hostname="MacBook-Pro-3.local" time="0.038">
   <properties/>
-  <testcase name="loadFileFromClasspath()" classname="http.was.utils.FileIoUtilsTest" time="0.041"/>
-  <system-out><![CDATA[15:57:07.005 [Test worker] DEBUG http.was.utils.FileIoUtilsTest - file : <!DOCTYPE html>
+  <testcase name="loadFileFromClasspath()" classname="http.was.utils.FileIoUtilsTest" time="0.038"/>
+  <system-out><![CDATA[11:22:45.954 [Test worker] DEBUG http.was.utils.FileIoUtilsTest - file : <!DOCTYPE html>
 <html lang="kr">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">

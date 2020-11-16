@@ -36,7 +36,8 @@ class UserListControllerTest {
         Request request = new Request(TestFileIo.readBufferedReader("http_user_list_request.txt"));
         Response response = new Response(result);
 
-        UserListController.doGet(request, response);
+        UserListController userListController = new UserListController();
+        userListController.doGet(request, response);
 
         String actual = result.toString();
 
@@ -59,7 +60,8 @@ class UserListControllerTest {
         Request request = new Request(TestFileIo.readBufferedReader("http_user_list_not_login_request.txt"));
         Response response = new Response(result);
 
-        UserListController.doGet(request, response);
+        UserListController userListController = new UserListController();
+        userListController.doGet(request, response);
 
         String actual = result.toString();
 

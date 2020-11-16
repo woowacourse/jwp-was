@@ -24,10 +24,11 @@ class LogoutControllerTest {
         ByteArrayOutputStream result = new ByteArrayOutputStream();
         Request request = new Request(TestFileIo.readBufferedReader("http_login_request.txt"));
         Response response = new Response(result);
+        LoginController loginController = new LoginController();
+        LogoutController logoutController = new LogoutController();
 
-        LoginController.doPost(request, response);
-
-        LogoutController.doDelete(request, response);
+        loginController.doPost(request, response);
+        logoutController.doDelete(request, response);
 
         String actual = result.toString();
 
