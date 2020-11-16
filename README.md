@@ -40,11 +40,11 @@
     - [x] handlebar를 사용한다.
 
 ## 요구사항 3
-- [ ] HttpSession API의 일부를 구현한다.
-    - [ ] getId()
-    - [ ] setAttribute(String name, Object value)
-    - [ ] getAttribute(String name)
-    - [ ] removeAttribute(String name)
-    - [ ] invalidate()
-    - [ ] 세션 id는 쿠키를 활용해 공유한다.
-    - [ ] 세션 id는 UUID를 사용한다.
+- [x] HttpSession API의 일부를 구현한다.
+    - [x] getId()
+    - [x] setAttribute(String name, Object value)
+    - [x] getAttribute(String name)
+    - [x] removeAttribute(String name)
+    - [x] invalidate()
+    - [x] 세션 id는 쿠키를 활용해 공유한다.
+    - [x] 세션 id는 UUID를 사용한다.

@@ -50,8 +50,7 @@ class UserLoginBehaviorTest {
 
         assertAll(
             () -> assertThat(responseEntity.getHttpStatus()).isEqualTo(HttpStatus.FOUND),
-            () -> assertThat(responseEntity.getHttpHeader().findOrEmpty("Location")).isEqualTo("/user/login_failed.html"),
-            () -> assertThat(responseEntity.getHttpHeader().findOrEmpty("Set-Cookie")).isEqualTo("logined=false")
+            () -> assertThat(responseEntity.getHttpHeader().findOrEmpty("Location")).isEqualTo("/user/login_failed.html")
         );
     }
 
@@ -68,7 +67,7 @@ class UserLoginBehaviorTest {
         assertAll(
             () -> assertThat(responseEntity.getHttpStatus()).isEqualTo(HttpStatus.FOUND),
             () -> assertThat(responseEntity.getHttpHeader().findOrEmpty("Location")).isEqualTo("/index.html"),
-            () -> assertThat(responseEntity.getHttpHeader().findOrEmpty("Set-Cookie")).isEqualTo("logined=true")
+            () -> assertThat(responseEntity.getHttpHeader().findOrEmpty("Set-Cookie")).contains("jsessionid=")
         );
     }
 }

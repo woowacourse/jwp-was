@@ -3,6 +3,8 @@ package implementedfilter;
 import http.request.RequestEntity;
 import http.response.HttpStatus;
 import http.response.ResponseEntity;
+import http.session.HttpSession;
+import http.session.HttpSessionStorage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import webserver.filter.Filter;
@@ -18,14 +20,13 @@ class AuthFilterTest {
         "GET /user/list HTTP/1.1\n"
             + "Host: localhost:8080\n"
             + "Connection: keep-alive\n"
-            + "Cookie: logined=true\n"
+            + "Cookie: jsessionid=%s\n"
             + "\n";
 
     private static final String NOT_LOGINED_REQUEST_STRING =
         "GET /user/list HTTP/1.1\n"
             + "Host: localhost:8080\n"
             + "Connection: keep-alive\n"
-            + "Cookie: logined=false\n"
             + "\n";
 
     private Filter filter;
@@ -53,7 +54,10 @@ class AuthFilterTest {
 
     @Test
     void returnTrueForLogined() {
-        BufferedReader bufferedReader = new BufferedReader(new StringReader(LOGINED_REQUEST_STRING));
+        HttpSession httpSession = HttpSessionStorage.generate("yuan");
+        BufferedReader bufferedReader = new BufferedReader(
+            new StringReader(String.format(LOGINED_REQUEST_STRING, httpSession.getId().toString()))
+        );
 
         RequestEntity requestEntity = RequestEntity.from(bufferedReader);
         ResponseEntity responseEntity = ResponseEntity.empty();
