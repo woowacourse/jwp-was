@@ -1,6 +1,7 @@
 package exception;
 
 import webserver.response.ServletResponse;
+import webserver.response.StatusCode;
 
 public abstract class HttpRequestException extends HttpException {
 
@@ -8,5 +9,5 @@ public abstract class HttpRequestException extends HttpException {
         super(message);
     }
 
-    public abstract ServletResponse getHandledResponse();
+    public abstract StatusCode getStatusCode();
 }

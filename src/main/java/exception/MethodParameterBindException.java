@@ -11,8 +11,7 @@ public class MethodParameterBindException extends HttpRequestException {
     }
 
     @Override
-    public ServletResponse getHandledResponse() {
-        return ServletResponse.of(StatusCode.BAD_REQUEST,
-            ModelAndView.of("static/notFound.html"));
+    public StatusCode getStatusCode() {
+        return StatusCode.BAD_REQUEST;
     }
 }

@@ -11,8 +11,7 @@ public class MethodNotAllowedException extends HttpRequestException {
     }
 
     @Override
-    public ServletResponse getHandledResponse() {
-        return ServletResponse.of(StatusCode.METHOD_NOT_ALLOWED,
-            ModelAndView.of("static/notFound.html"));
+    public StatusCode getStatusCode() {
+        return StatusCode.METHOD_NOT_ALLOWED;
     }
 }

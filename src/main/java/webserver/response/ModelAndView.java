@@ -21,6 +21,19 @@ public class ModelAndView {
         return new ModelAndView(Model.emptyModel(), viewName);
     }
 
+    public static ModelAndView of(StatusCode statusCode) {
+        int statusCodeNum = statusCode.getStatusCode();
+
+        if (statusCodeNum < 400) {
+            throw new IllegalArgumentException();
+        }
+
+        if (statusCodeNum < 500) {
+            return new ModelAndView(Model.emptyModel(), "static/notFound.html");
+        }
+        return new ModelAndView(Model.emptyModel(), "static/internalServerError.html");
+    }
+
     public void put(String key, String value) {
         model.addBody(key, value);
     }

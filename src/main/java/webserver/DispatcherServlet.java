@@ -24,7 +24,6 @@ import webserver.handlermapping.HandlerMapping;
 import webserver.handlermapping.HandlerMappingStrategy;
 import webserver.messageconverter.DefaultHttpMessageConverter;
 import webserver.messageconverter.HttpMessageConverter;
-import webserver.request.MethodType;
 import webserver.request.ServletRequest;
 import webserver.response.ModelAndView;
 import webserver.response.ServletResponse;
@@ -71,16 +70,17 @@ public class DispatcherServlet implements Runnable {
             }
         } catch (HttpRequestException e) {
             logger.error(e.getMessage(), e);
-            servletResponse = e.getHandledResponse();
+            StatusCode statusCode = e.getStatusCode();
+            servletResponse = ServletResponse.of(statusCode, ModelAndView.of(statusCode));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             servletResponse = ServletResponse.of(StatusCode.INTERNAL_SERVER_ERROR,
-                ModelAndView.of("static/notFound.html"));
+                ModelAndView.of(StatusCode.INTERNAL_SERVER_ERROR));
         } finally {
             try (DataOutputStream dos = new DataOutputStream(connection.getOutputStream())) {
                 if (Objects.isNull(servletResponse)) {
                     servletResponse = ServletResponse.of(StatusCode.INTERNAL_SERVER_ERROR,
-                        ModelAndView.of("static/notFound.html"));
+                        ModelAndView.of(StatusCode.INTERNAL_SERVER_ERROR));
                 }
                 servletResponse.sendResponse(dos);
             } catch (IOException ex) {

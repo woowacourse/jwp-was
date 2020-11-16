@@ -10,7 +10,7 @@ public class ViewNotFoundException extends HttpRequestException {
         super(viewName + "을 찾을 수 없습니다.");
     }
 
-    public ServletResponse getHandledResponse() {
-        return ServletResponse.of(StatusCode.NOT_FOUND, ModelAndView.of("static/notFound.html"));
+    public StatusCode getStatusCode() {
+        return StatusCode.NOT_FOUND;
     }
 }
