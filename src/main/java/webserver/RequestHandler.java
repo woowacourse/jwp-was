@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import controller.DispatcherServlet;
 import controller.HttpServlet;
 import controller.UserController;
 import db.DataBase;
@@ -46,18 +47,16 @@ public class RequestHandler implements Runnable {
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             DataOutputStream dos = new DataOutputStream(outputStream);
         ) {
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
+            HttpServlet dispatcherServlet = new DispatcherServlet();
             HttpRequest httpRequest = SimpleHttpRequest.of(bufferedReader);
             logger.debug(System.lineSeparator() + httpRequest.toString());
             HttpResponse httpResponse = new HttpResponse();
-            // dispatcher.service(httpRequest, httpResponse);
             if (StaticResourceMatcher.isStaticResourcePath(httpRequest.getURI())) {
                 byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getURI());
                 ContentType contentType = ContentType.findByURI(httpRequest.getURI());
                 httpResponse.setBody(body, contentType);
-            } else if (httpRequest.getURI().contains("/user/create")) {
-                HttpServlet servlet = new UserController();
-                servlet.service(httpRequest, httpResponse);
+            } else {
+                dispatcherServlet.service(httpRequest, httpResponse);
             }
             httpResponse.send(dos);
         } catch (IOException | URISyntaxException e) {

@@ -5,6 +5,7 @@ import static http.HttpMethod.*;
 import java.util.Arrays;
 import java.util.List;
 
+import annotation.RequestMapping;
 import db.DataBase;
 import http.HttpBody;
 import http.HttpMethod;
@@ -13,6 +14,7 @@ import http.HttpResponse;
 import http.HttpStatus;
 import model.User;
 
+@RequestMapping(path = "/user")
 public class UserController extends AbstractController {
     private static final List<HttpMethod> ALLOWED_METHODS = Arrays.asList(GET, DELETE, PUT);
 

@@ -53,4 +53,8 @@ public class HttpResponse {
         }
         dos.flush();
     }
+
+    public void notFound() {
+        setStatus(HttpStatus.NOT_FOUND);
+    }
 }
