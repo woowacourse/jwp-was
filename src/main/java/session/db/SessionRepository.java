@@ -16,4 +16,8 @@ public class SessionRepository {
     public static HttpSession findById(String id) {
         return sessions.get(id);
     }
+
+    public static void update(HttpSession httpSession) {
+        sessions.replace(httpSession.getId(), httpSession);
+    }
 }

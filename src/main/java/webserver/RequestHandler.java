@@ -9,11 +9,14 @@ import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import controller.Controller;
+import session.model.HttpSession;
+import session.service.SessionService;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -21,11 +24,13 @@ public class RequestHandler implements Runnable {
     private final Socket connection;
     private final Context context;
     private final Map<String, Controller> controllers;
+    private final SessionService sessionService;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
         this.context = Context.getInstance();
         controllers = context.createControllerBifurcation();
+        sessionService = SessionService.getInstance();
     }
 
     public void run() {
@@ -35,10 +40,18 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             HttpRequest httpRequest = new HttpRequest(br);
+            if (Objects.isNull(httpRequest.getSessionId())) {
+                sessionService.add(httpRequest.getHttpSession());
+            }
+            if (Objects.nonNull(httpRequest.getSessionId())) {
+                HttpSession httpSession = sessionService.findById(httpRequest.getSessionId());
+                httpRequest.setHttpSession(httpSession);
+            }
             printHeader(httpRequest);
             printParameter(httpRequest);
             Controller controller = controllers.getOrDefault(httpRequest.getPath(), controllers.get("file"));
             controller.service(httpRequest, new HttpResponse(out));
+            sessionService.update(httpRequest.getHttpSession());
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }

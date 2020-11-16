@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Objects;
 
 import utils.Extension;
 import utils.FileIoUtils;
@@ -16,13 +17,13 @@ public class FileController extends AbstractController {
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         String path = httpRequest.getPath();
         byte[] body = FileIoUtils.findStaticFile(path);
-        if (body != null) {
+        if (Objects.nonNull(body)) {
             httpResponse.setHttpStatus(HttpStatus.OK);
             addContentType(httpResponse, path);
             httpResponse.addHeader(HttpHeader.CONTENT_LENGTH, String.valueOf(body.length));
             httpResponse.forward(body);
         }
-        if (body == null) {
+        if (Objects.isNull(body)) {
             httpResponse.setHttpStatus(HttpStatus.NOT_FOUND);
             httpResponse.error();
         }
@@ -30,12 +31,9 @@ public class FileController extends AbstractController {
 
     private void addContentType(HttpResponse httpResponse, String path) {
         String extension = RequestUtils.extractExtension(path);
-        if (Extension.isJS(extension)) {
-            httpResponse.addHeader(HttpHeader.CONTENT_TYPE, "application/javascript;charset=utf-8");
-        }
-        if (Extension.isCSS(extension) || Extension.isHTML(extension)) {
-            httpResponse.addHeader(HttpHeader.CONTENT_TYPE,
-                String.format("text/%s;charset=utf-8", RequestUtils.extractExtension(path)));
+        String contentType = Extension.getContentType(extension);
+        if (Objects.nonNull(contentType)) {
+            httpResponse.addHeader(HttpHeader.CONTENT_TYPE, contentType);
         }
     }
 }

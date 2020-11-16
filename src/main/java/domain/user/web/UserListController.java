@@ -27,8 +27,7 @@ public class UserListController extends AbstractController {
 
     @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
-        if (httpRequest.getSessionId() == null ||
-            !(boolean)sessionService.findById(httpRequest.getSessionId()).getAttribute("logined")) {
+        if (httpRequest.notAuthorized()) {
             httpResponse.setHttpStatus(HttpStatus.UNAUTHORIZED);
             httpResponse.sendRedirect("/user/login.html");
             return;

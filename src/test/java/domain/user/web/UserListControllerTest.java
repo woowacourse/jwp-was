@@ -53,10 +53,10 @@ class UserListControllerTest {
         HttpRequest httpRequest = new HttpRequest(br);
         HttpSession httpSession = new HttpSession();
         httpSession.setAttribute("logined", true);
+        httpRequest.setHttpSession(httpSession);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         HttpResponse httpResponse = new HttpResponse(byteArrayOutputStream);
 
-        given(sessionService.findById(anyString())).willReturn(httpSession);
         given(userService.list()).willReturn(
             Collections.singletonList(new User("userId", "password", "name", "email")));
 
@@ -78,10 +78,9 @@ class UserListControllerTest {
         HttpRequest httpRequest = new HttpRequest(br);
         HttpSession httpSession = new HttpSession();
         httpSession.setAttribute("logined", false);
+        httpRequest.setHttpSession(httpSession);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         HttpResponse httpResponse = new HttpResponse(byteArrayOutputStream);
-
-        given(sessionService.findById(anyString())).willReturn(httpSession);
 
         userListController.doGet(httpRequest, httpResponse);
 

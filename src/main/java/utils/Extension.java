@@ -11,15 +11,13 @@ public enum Extension {
         this.title = title;
     }
 
-    public static boolean isJS(String extension) {
-        return extension.equals(JS.title);
-    }
-
-    public static boolean isCSS(String extension) {
-        return extension.equals(CSS.title);
-    }
-
-    public static boolean isHTML(String extension) {
-        return extension.equals(HTML.title);
+    public static String getContentType(String extension) {
+        if (JS.title.equals(extension)) {
+            return "application/javascript;charset=utf-8";
+        }
+        if (CSS.title.equals(extension) || HTML.title.equals(extension)) {
+            return String.format("text/%s;charset=utf-8", extension);
+        }
+        return null;
     }
 }

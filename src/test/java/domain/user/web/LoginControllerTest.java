@@ -13,15 +13,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import domain.user.model.User;
 import domain.user.service.UserService;
-import session.service.SessionService;
 import webserver.HttpRequest;
 import webserver.HttpResponse;
 
@@ -30,15 +29,8 @@ class LoginControllerTest {
     @Mock
     private UserService userService;
 
-    @Mock
-    private SessionService sessionService;
-
+    @InjectMocks
     private LoginController loginController;
-
-    @BeforeEach
-    void setUp() {
-        loginController = new LoginController(userService, sessionService);
-    }
 
     @Test
     void doPost() throws IOException {

@@ -4,8 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
+import session.model.HttpSession;
 import utils.IOUtils;
 import utils.RequestUtils;
 
@@ -23,6 +25,7 @@ public class HttpRequest {
     private final Map<String, String> header;
     private final Map<String, String> parameter;
     private String path;
+    private HttpSession httpSession;
 
     public HttpRequest(BufferedReader br) throws IOException {
         this.header = new TreeMap<>();
@@ -52,7 +55,7 @@ public class HttpRequest {
 
     private void createHeader(BufferedReader br) throws IOException {
         String line = br.readLine();
-        while (!EMPTY.equals(line) && line != null) {
+        while (!EMPTY.equals(line) && Objects.nonNull(line)) {
             String key = line.split(COLON)[KEY_INDEX];
             String value = line.substring(key.length() + 2);
             header.put(key, value);
@@ -70,7 +73,7 @@ public class HttpRequest {
 
     public String getSessionId() {
         String cookie = header.get(HttpHeader.COOKIE);
-        if (cookie == null) {
+        if (Objects.isNull(cookie)) {
             return null;
         }
         return RequestUtils.extractSessionId(cookie);
@@ -99,6 +102,22 @@ public class HttpRequest {
 
     public boolean containsParameter(String key) {
         return parameter.containsKey(key);
+    }
+
+    public boolean notAuthorized() {
+        Object logined = httpSession.getAttribute("logined");
+        return Objects.isNull(logined) || !(boolean)logined;
+    }
+
+    public void setHttpSession(HttpSession httpSession) {
+        this.httpSession = httpSession;
+    }
+
+    public HttpSession getHttpSession() {
+        if (Objects.isNull(this.httpSession)) {
+            this.httpSession = new HttpSession();
+        }
+        return this.httpSession;
     }
 
     public String getHeader(String key) {

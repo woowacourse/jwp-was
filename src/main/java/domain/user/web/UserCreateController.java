@@ -33,7 +33,7 @@ public class UserCreateController extends AbstractController {
         userService.addUser(user);
         HttpSession httpSession = new HttpSession();
         httpSession.setAttribute("logined", true);
-        sessionService.addSession(httpSession);
+        sessionService.add(httpSession);
         HttpCookie httpCookie = new HttpCookie();
         httpCookie.add(String.format("SESSIONID=%s; Path=/", httpSession.getId()));
         httpCookie.apply(httpResponse);

@@ -1,6 +1,7 @@
 package domain.user.web;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -24,7 +25,7 @@ public class UserReadController extends AbstractController {
     @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         User user = userService.findByUserId(httpRequest.getParameter(User.USER_ID));
-        if (user == null) {
+        if (Objects.isNull(user)) {
             validateParameter(httpRequest, httpResponse);
             httpResponse.error();
             return;

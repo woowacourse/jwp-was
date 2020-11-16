@@ -33,7 +33,7 @@ public class Context {
         controllers.put("file", new FileController());
         controllers.put("/user/create", new UserCreateController(userService, sessionService));
         controllers.put("/user/profile", new UserReadController(userService, objectMapper));
-        controllers.put("/user/login", new LoginController(userService, sessionService));
+        controllers.put("/user/login", new LoginController(userService));
         controllers.put("/user/list", new UserListController(userService, sessionService, objectMapper));
         return controllers;
     }

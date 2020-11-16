@@ -11,9 +11,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -30,12 +30,8 @@ class UserCreateControllerTest {
     @Mock
     private SessionService sessionService;
 
+    @InjectMocks
     private UserCreateController userCreateController;
-
-    @BeforeEach
-    void setUp() {
-        userCreateController = new UserCreateController(userService, sessionService);
-    }
 
     @Test
     void doPost() throws IOException {
