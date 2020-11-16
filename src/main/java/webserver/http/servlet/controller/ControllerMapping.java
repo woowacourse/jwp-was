@@ -2,6 +2,7 @@ package webserver.http.servlet.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import webserver.http.request.HttpMethod;
 import webserver.http.request.RequestMapping;
@@ -14,10 +15,10 @@ public class ControllerMapping {
                 new UserCreateController());
     }
 
-    public static Controller get(RequestMapping requestMapping) {
+    public static Optional<Controller> get(RequestMapping requestMapping) {
         if (requestMappings.containsKey(requestMapping)) {
-            return requestMappings.get(requestMapping);
+            return Optional.of(requestMappings.get(requestMapping));
         }
-        return new ResourceController();
+        return Optional.empty();
     }
 }
