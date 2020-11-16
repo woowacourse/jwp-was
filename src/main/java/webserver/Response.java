@@ -48,7 +48,7 @@ public class Response {
     private void header(DataOutputStream outputStream, int length) {
         try {
             outputStream.writeBytes("HTTP/1.1 " + status + " \r\n");
-            outputStream.writeBytes("Content-Type: " + ContentType.value(path) + ";charset=utf-8\r\n");
+            outputStream.writeBytes("Content-Type: " + ContentType.from(path) + ";charset=utf-8\r\n");
             outputStream.writeBytes("Content-Length: " + length + "\r\n");
             redirectIfFound(outputStream);
             outputStream.writeBytes("\r\n");

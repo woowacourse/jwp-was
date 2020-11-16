@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import utils.IOUtils;
-import utils.StringUtils;
+import utils.RequestUtils;
 
 public class Request {
     public static final String EMPTY = "";
@@ -30,8 +30,8 @@ public class Request {
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
         this.request = parse(bufferedReader);
-        this.method = Method.valueOf(StringUtils.getMethod(request));
-        this.header = StringUtils.getHeader(request);
+        this.method = Method.valueOf(RequestUtils.getMethod(request));
+        this.header = RequestUtils.getHeader(request);
         this.body = parseBody(bufferedReader);
     }
 
@@ -50,7 +50,7 @@ public class Request {
         if (contentLength == 0) {
             return Collections.emptyMap();
         }
-        return StringUtils.getBody(IOUtils.readData(bufferedReader, contentLength));
+        return RequestUtils.getBody(IOUtils.readData(bufferedReader, contentLength));
     }
 
     public Method getMethod() {
@@ -58,7 +58,7 @@ public class Request {
     }
 
     public String getPath() {
-        return StringUtils.getFilename(request);
+        return RequestUtils.getFilename(request);
     }
 
     public Map<String, String> getBody() {
@@ -66,7 +66,7 @@ public class Request {
     }
 
     public Map<String, String> getQueryParameters() {
-        return StringUtils.getQueryParameters(request);
+        return RequestUtils.getQueryParameters(request);
     }
 
     @Override

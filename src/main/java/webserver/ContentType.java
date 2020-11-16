@@ -15,7 +15,7 @@ public enum ContentType {
         this.value = value;
     }
 
-    public static String value(String path) {
+    public static String from(String path) {
         return Arrays.stream(values())
             .filter(type -> path.endsWith(type.extension))
             .findAny()

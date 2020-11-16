@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import model.User;
-import utils.StringUtils;
+import utils.RequestUtils;
 
 public class Controller {
     public static final String DEFAULT = "default";
@@ -19,7 +19,7 @@ public class Controller {
     }
 
     public Response handle(Request request) {
-        String path = StringUtils.trimExtensionIfExists(request.getPath());
+        String path = RequestUtils.trimExtensionIfExists(request.getPath());
         String handlerName = handlers.keySet()
             .stream()
             .filter(route -> route.equals(path))

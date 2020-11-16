@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class StringUtils {
+public class RequestUtils {
     public static final String SPACE = " ";
     public static final String QUESTION_MARK = "\\?";
     public static final String AMPERSAND = "&";
@@ -28,6 +28,19 @@ public class StringUtils {
         return request.split(System.lineSeparator())[0];
     }
 
+    public static Map<String, String> getHeader(String request) {
+        return Arrays.stream(request.split(System.lineSeparator()))
+            .skip(1)
+            .collect(Collectors.toMap(
+                it -> it.split(COLON)[0],
+                it -> it.split(COLON)[1]
+            ));
+    }
+
+    public static Map<String, String> getBody(String body) {
+        return parseQuery(Arrays.stream(body.split(AMPERSAND)));
+    }
+
     public static String trimExtensionIfExists(String path) {
         return path.split("//.")[0];
     }
@@ -43,22 +56,9 @@ public class StringUtils {
             .split(AMPERSAND)));
     }
 
-    public static Map<String, String> getBody(String body) {
-        return parseQuery(Arrays.stream(body.split(AMPERSAND)));
-    }
-
     private static Map<String, String> parseQuery(Stream<String> queries) {
         return queries.collect(Collectors.toMap(
             it -> it.split(EQUAL)[0],
             it -> it.split(EQUAL)[1]));
-    }
-
-    public static Map<String, String> getHeader(String request) {
-        return Arrays.stream(request.split(System.lineSeparator()))
-            .skip(1)
-            .collect(Collectors.toMap(
-                it -> it.split(COLON)[0],
-                it -> it.split(COLON)[1]
-            ));
     }
 }
