@@ -5,12 +5,15 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class HttpResponse {
+    private static final String DEFAULT_PROTOCOL_VERSION = "HTTP/1.1";
+    private static final HttpStatus DEFAULT_STATUS = HttpStatus.OK;
+
     private StatusLine statusLine;
     private HttpHeaders headers;
-    private String body;
+    private byte[] body;
 
-    public HttpResponse(String version) {
-        this.statusLine = new StatusLine(version, HttpStatus.OK);
+    public HttpResponse() {
+        this.statusLine = new StatusLine(DEFAULT_PROTOCOL_VERSION, DEFAULT_STATUS);
         this.headers = new HttpHeaders();
     }
 
@@ -22,17 +25,18 @@ public class HttpResponse {
         this.headers.add(headerName, headerValue);
     }
 
-    public void setBody(String body) {
+    public void setBody(byte[] body, ContentType contentType) {
         this.body = body;
+        addHeader("Content-Type", contentType.getContentType());
+        addHeader("Content-Length", String.valueOf(body.length));
     }
 
     public void send(DataOutputStream dos) throws IOException {
         dos.writeBytes(statusLine.getStatusLineString() + System.lineSeparator());
         dos.writeBytes(headers.getHttpHeaderString() + System.lineSeparator());
         dos.writeBytes(System.lineSeparator());
-        if (Objects.nonNull(body) && !body.isEmpty()) {
-            byte[] bytes = body.getBytes();
-            dos.write(bytes, 0, bytes.length);
+        if (Objects.nonNull(body) && body.length != 0) {
+            dos.write(body, 0, body.length);
         }
         dos.flush();
     }

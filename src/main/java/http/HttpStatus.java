@@ -2,6 +2,7 @@ package http;
 
 public enum HttpStatus {
     OK(200, "OK"),
+    MOVED_PERMANENTLY(301, "Moved Permanently"),
     FOUND(302, "Found");
 
     private int code;

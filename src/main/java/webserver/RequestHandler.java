@@ -47,14 +47,12 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = SimpleHttpRequest.of(bufferedReader);
             logger.debug(System.lineSeparator() + httpRequest.toString());
             DataOutputStream dos = new DataOutputStream(outputStream);
-            HttpResponse httpResponse = new HttpResponse(httpRequest.getVersion());
+            HttpResponse httpResponse = new HttpResponse();
             // dispatcher.service(httpRequest, httpResponse);
             if (StaticResourceMatcher.isStaticResourcePath(httpRequest.getURI())) {
                 byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getURI());
                 ContentType contentType = ContentType.findByURI(httpRequest.getURI());
-                httpResponse.addHeader("Content-Type", contentType.getContentType());
-                httpResponse.addHeader("Content-Length", String.valueOf(body.length));
-                httpResponse.setBody(new String(body));
+                httpResponse.setBody(body, contentType);
             } else if (httpRequest.getURI().contains("/user/create")) {
                 HttpBody httpBody = httpRequest.getBody();
                 User user = new User(
