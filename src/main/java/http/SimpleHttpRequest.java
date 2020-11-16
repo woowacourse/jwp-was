@@ -9,7 +9,7 @@ import utils.IOUtils;
 public class SimpleHttpRequest implements HttpRequest {
     private StartLine startLine;
     private HttpHeaders headers;
-    private RequestBody requestBody;
+    private HttpBody httpBody;
     private String rawRequest;
 
     public static SimpleHttpRequest of(BufferedReader bufferedReader) throws IOException {
@@ -18,8 +18,8 @@ public class SimpleHttpRequest implements HttpRequest {
         String requestHeadersString = extractRequestHeader(bufferedReader);
         HttpHeaders httpHeaders = HttpHeaders.from(requestHeadersString);
         String requestBodyString = IOUtils.readData(bufferedReader, httpHeaders.getContentLength());
-        RequestBody requestBody = RequestBody.from(requestBodyString);
-        return new SimpleHttpRequest(startLine, httpHeaders, requestBody,
+        HttpBody httpBody = HttpBody.from(requestBodyString);
+        return new SimpleHttpRequest(startLine, httpHeaders, httpBody,
             joinRequest(startLineString, requestHeadersString, requestBodyString));
     }
 
@@ -43,11 +43,11 @@ public class SimpleHttpRequest implements HttpRequest {
         return stringBuilder.toString();
     }
 
-    private SimpleHttpRequest(StartLine startLine, HttpHeaders httpHeaders, RequestBody requestBody,
+    private SimpleHttpRequest(StartLine startLine, HttpHeaders httpHeaders, HttpBody httpBody,
         String rawRequest) {
         this.startLine = startLine;
         this.headers = httpHeaders;
-        this.requestBody = requestBody;
+        this.httpBody = httpBody;
         this.rawRequest = rawRequest;
     }
 
@@ -72,10 +72,11 @@ public class SimpleHttpRequest implements HttpRequest {
     }
 
     @Override
-    public RequestBody getBody() {
-        return requestBody;
+    public HttpBody getBody() {
+        return httpBody;
     }
 
+    @Override
     public String getVersion() {
         return startLine.getVersion();
     }

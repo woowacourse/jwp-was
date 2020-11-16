@@ -1,11 +1,11 @@
-package utils;
+package http;
 
 import java.util.Objects;
 
 public enum ContentType {
-    HTML("html", "text/html"),
-    CSS("css", "text/css"),
-    JS("js", "text/javascript"),
+    HTML("html", "text/html;charset=utf-8"),
+    CSS("css", "text/css;charset=utf-8"),
+    JS("js", "text/javascript;charset=utf-8"),
     ICO("ico", "image/icon"),
     PNG("png", "image/jpeg"),
     TTF("ttf", "application/font-ttf"),

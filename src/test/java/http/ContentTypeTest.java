@@ -1,4 +1,4 @@
-package utils;
+package http;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -11,8 +11,9 @@ class ContentTypeTest {
 
     @DisplayName("Content Type을 생성한다.")
     @ParameterizedTest
-    @CsvSource(value = {"/hello.css:text/css", "/hello.CSS:text/css", "/hello.js:text/javascript",
-        "/hello.JS:text/javascript", "/hello.html:text/html", "/hello.HTML:text/html"}, delimiterString = ":")
+    @CsvSource(value = {"/hello.css:text/css;charset=utf-8", "/hello.CSS:text/css;charset=utf-8",
+        "/hello.js:text/javascript;charset=utf-8", "/hello.JS:text/javascript;charset=utf-8",
+        "/hello.html:text/html;charset=utf-8", "/hello.HTML:text/html;charset=utf-8"}, delimiterString = ":")
     void contentType(String uri, String contentType) {
         ContentType extracted = ContentType.findByURI(uri);
 

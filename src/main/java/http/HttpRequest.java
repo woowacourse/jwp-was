@@ -7,10 +7,12 @@ public interface HttpRequest {
 
     String getURI();
 
+    String getVersion();
+
     @Nullable
     String getQuery();
 
     HttpHeaders getHeaders();
 
-    RequestBody getBody();
+    HttpBody getBody();
 }

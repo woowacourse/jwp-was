@@ -15,10 +15,12 @@ import org.slf4j.LoggerFactory;
 
 import db.DataBase;
 import http.HttpRequest;
-import http.RequestBody;
+import http.HttpResponse;
+import http.HttpBody;
+import http.HttpStatus;
 import http.SimpleHttpRequest;
 import model.User;
-import utils.ContentType;
+import http.ContentType;
 import utils.FileIoUtils;
 import utils.StaticResourceMatcher;
 
@@ -44,53 +46,29 @@ public class RequestHandler implements Runnable {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             HttpRequest httpRequest = SimpleHttpRequest.of(bufferedReader);
             logger.debug(System.lineSeparator() + httpRequest.toString());
+            DataOutputStream dos = new DataOutputStream(outputStream);
+            HttpResponse httpResponse = new HttpResponse(httpRequest.getVersion());
+            // dispatcher.service(httpRequest, httpResponse);
             if (StaticResourceMatcher.isStaticResourcePath(httpRequest.getURI())) {
-                DataOutputStream dos = new DataOutputStream(outputStream);
                 byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getURI());
-                response200Header(dos, body.length, ContentType.findByURI(httpRequest.getURI()));
-                responseBody(dos, body);
+                ContentType contentType = ContentType.findByURI(httpRequest.getURI());
+                httpResponse.addHeader("Content-Type", contentType.getContentType());
+                httpResponse.addHeader("Content-Length", String.valueOf(body.length));
+                httpResponse.setBody(new String(body));
             } else if (httpRequest.getURI().contains("/user/create")) {
-                RequestBody requestBody = httpRequest.getBody();
+                HttpBody httpBody = httpRequest.getBody();
                 User user = new User(
-                    requestBody.get("userId"),
-                    requestBody.get("password"),
-                    requestBody.get("name"),
-                    requestBody.get("email"));
+                    httpBody.get("userId"),
+                    httpBody.get("password"),
+                    httpBody.get("name"),
+                    httpBody.get("email"));
                 DataBase.addUser(user);
-                DataOutputStream dos = new DataOutputStream(outputStream);
-                response302Header(dos);
+                httpResponse.setStatus(HttpStatus.FOUND);
+                httpResponse.addHeader("Location", "/index.html");
             }
+            httpResponse.send(dos);
+            logger.debug(System.lineSeparator() + httpResponse.toString());
         } catch (IOException | URISyntaxException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, ContentType contentType) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: " + contentType.getContentType() + ";charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void response302Header(DataOutputStream dos) {
-        try {
-            dos.writeBytes("HTTP/1.1 302 Found \r\n");
-            dos.writeBytes("Location: /index.html \r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }

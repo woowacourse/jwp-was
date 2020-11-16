@@ -31,6 +31,10 @@ public class HttpHeaders {
         return new HttpHeaders(headers);
     }
 
+    public HttpHeaders() {
+        this.headers = new HashMap<>();
+    }
+
     public HttpHeaders(Map<String, String> headers) {
         this.headers = headers;
     }
@@ -52,5 +56,15 @@ public class HttpHeaders {
 
     public int size() {
         return headers.size();
+    }
+
+    public String getHttpHeaderString() {
+        return headers.entrySet().stream()
+            .map(entry -> entry.getKey() + ": " + entry.getValue())
+            .collect(Collectors.joining(System.lineSeparator()));
+    }
+
+    public void add(String headerName, String headerValue) {
+        headers.put(headerName, headerValue);
     }
 }
