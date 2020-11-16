@@ -10,7 +10,7 @@ import java.io.IOException;
 public class IOUtils {
     private static final String NEW_LINE = System.lineSeparator();
     private static final String SEPARATOR = " : ";
-    private static final Logger logger = LoggerFactory.getLogger(IOUtils.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(IOUtils.class);
 
     /**
      * @param BufferedReader는 Request Body를 시작하는 시점이어야
@@ -38,6 +38,6 @@ public class IOUtils {
         stringBuilder.append(NEW_LINE);
         stringBuilder.append(request.getRequestBody().getBody());
 
-        logger.debug(stringBuilder.toString());
+        LOGGER.debug(stringBuilder.toString());
     }
 }

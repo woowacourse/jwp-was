@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Collection;
 
 class HandlebarsTest {
-    private static final Logger log = LoggerFactory.getLogger(HandlebarsTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HandlebarsTest.class);
 
     @Test
     void name() throws Exception {
@@ -28,7 +28,7 @@ class HandlebarsTest {
         DataBase.addUser(user);
         Collection<User> users = DataBase.findAll();
         String profilePage = template.apply(users);
-        
-        log.debug("ProfilePage : {}", profilePage);
+
+        LOGGER.debug("ProfilePage : {}", profilePage);
     }
 }

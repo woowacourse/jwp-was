@@ -14,7 +14,7 @@ import java.net.URISyntaxException;
 import java.util.Objects;
 
 public class Response {
-    private static final Logger logger = LoggerFactory.getLogger(Response.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Response.class);
     private static final String HTTP_1_1 = "HTTP/1.1";
 
     private DataOutputStream dataOutputStream;
@@ -75,7 +75,7 @@ public class Response {
             }
             dataOutputStream.flush();
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
     }
 }

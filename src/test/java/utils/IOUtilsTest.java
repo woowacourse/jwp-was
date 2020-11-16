@@ -8,7 +8,7 @@ import java.io.BufferedReader;
 import java.io.StringReader;
 
 public class IOUtilsTest {
-    private static final Logger logger = LoggerFactory.getLogger(IOUtilsTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(IOUtilsTest.class);
 
     @Test
     public void readData() throws Exception {
@@ -16,6 +16,6 @@ public class IOUtilsTest {
         StringReader sr = new StringReader(data);
         BufferedReader br = new BufferedReader(sr);
 
-        logger.debug("parse body : {}", IOUtils.readData(br, data.length()));
+        LOGGER.debug("parse body : {}", IOUtils.readData(br, data.length()));
     }
 }

@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class LoginController extends AbstractController {
 
-    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
 
     @Override
     protected void doPost(Request request, Response response) {
@@ -34,7 +34,7 @@ public class LoginController extends AbstractController {
             response.setHeader(HttpHeaders.SET_COOKIE, "JSESSIONID=" + id + "; Path=/");
             response.found("/index.html");
         } catch (IllegalRequestException e) {
-            logger.info(e.getMessage());
+            LOGGER.info(e.getMessage());
             response.found("/user/login_failed.html");
         }
     }

@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.Collection;
 
 public class UserListController extends AbstractController {
-    private static final Logger logger = LoggerFactory.getLogger(UserListController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserListController.class);
 
     @Override
     public void doGet(Request request, Response response) throws IOException {
@@ -30,7 +30,7 @@ public class UserListController extends AbstractController {
             }
             response.ok(template.apply(users));
         } catch (AuthenticationException e) {
-            logger.info(e.getMessage());
+            LOGGER.info(e.getMessage());
             response.found("/user/login.html");
         }
     }

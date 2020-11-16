@@ -2,7 +2,6 @@ package http.request;
 
 import http.ContentType;
 import http.HttpHeaders;
-import utils.IOUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,16 +13,15 @@ public class Request {
     private static final String DELIMITER = ": ";
 
     private final RequestLine requestLine;
-    private final HttpHeaders httpHeader;
+    private final HttpHeaders httpHeaders;
     private final RequestBody requestBody;
     private Cookies cookies;
 
     public Request(BufferedReader br) throws IOException {
         this.requestLine = new RequestLine(br);
-        this.httpHeader = new HttpHeaders(ofRequestHeader(br));
-        this.requestBody = new RequestBody(br, httpHeader.getContentLength());
-        this.cookies = new Cookies(httpHeader.getHeader(HttpHeaders.COOKIE));
-        IOUtils.printRequest(this);
+        this.httpHeaders = new HttpHeaders(ofRequestHeader(br));
+        this.requestBody = new RequestBody(br, httpHeaders.getContentLength());
+        this.cookies = new Cookies(httpHeaders.getHeader(HttpHeaders.COOKIE));
     }
 
     private Map<String, String> ofRequestHeader(BufferedReader br) throws IOException {
@@ -47,11 +45,11 @@ public class Request {
     }
 
     public Map<String, String> getRequestHeaders() {
-        return Collections.unmodifiableMap(httpHeader.getHttpHeaders());
+        return Collections.unmodifiableMap(httpHeaders.getHttpHeaders());
     }
 
     public String getHeader(String key) {
-        return httpHeader.getHeader(key);
+        return httpHeaders.getHeader(key);
     }
 
     public RequestBody getRequestBody() {

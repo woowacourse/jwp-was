@@ -5,6 +5,7 @@ import http.request.Request;
 import http.response.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.IOUtils;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -30,6 +31,7 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             Request request = new Request(br);
             Response response = new Response(out);
+            IOUtils.printRequest(request);
 
             Controller controller = RequestMapping.getController(request.getPath());
             controller.service(request, response);
