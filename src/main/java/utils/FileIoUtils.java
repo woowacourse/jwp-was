@@ -1,6 +1,7 @@
 package utils;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -11,23 +12,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class FileIoUtils {
-    private static final Logger logger = LoggerFactory.getLogger(FileIoUtils.class);
 
-    public static byte[] loadFileFromClasspath(String filePath) throws IOException {
-        URL resource = FileIoUtils.class.getClassLoader()
-                .getResource(filePath);
-        try {
-            if (resource != null) {
-                Path path = Paths.get(resource.toURI());
-                return Files.readAllBytes(path);
-            }
-            return null;
-        } catch (URISyntaxException e) {
-            logger.error(e.getMessage());
-            throw new IllegalArgumentException(String.format(
-                    "[%s] is not formatted strictly according to RFC2396 and cannot be converted to a URI",
-                    filePath));
+    public static final String TEMPLATES_PREFIX = "./templates";
+    public static final String STATIC_PREFIX = "./static";
+
+    public static byte[] loadFileFromClasspath(String filePath) throws IOException, URISyntaxException {
+        return Files.readAllBytes(getPathByExtension(filePath));
+    }
+
+    private static Path getPathByExtension(String filePath) throws URISyntaxException {
+        if (filePath.endsWith("html")) {
+            return Paths.get(FileIoUtils.class.getClassLoader().getResource(TEMPLATES_PREFIX + filePath).toURI());
         }
+        return Paths.get(FileIoUtils.class.getClassLoader().getResource(STATIC_PREFIX + filePath).toURI());
     }
 }
 

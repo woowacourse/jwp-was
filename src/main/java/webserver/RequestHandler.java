@@ -7,13 +7,25 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import web.HttpRequest;
-import web.HttpResponse;
+import controller.DispatcherServlet;
+import controller.HttpServlet;
+import controller.UserController;
+import db.DataBase;
+import http.HttpRequest;
+import http.HttpResponse;
+import http.HttpBody;
+import http.HttpStatus;
+import http.SimpleHttpRequest;
+import model.User;
+import http.ContentType;
+import utils.FileIoUtils;
+import utils.StaticResourceMatcher;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -25,18 +37,29 @@ public class RequestHandler implements Runnable {
     }
 
     public void run() {
-        logger.debug("New Client Connect! Connected IP : {}, Port : {}",
-                connection.getInetAddress(),
-                connection.getPort());
-        try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            BufferedReader br = new BufferedReader(
-                    new InputStreamReader(in, StandardCharsets.UTF_8));
-            DataOutputStream dos = new DataOutputStream(out);
-            HttpRequest httpRequest = new HttpRequest(br);
-            logger.debug(httpRequest.toString());
-            HttpResponse httpResponse = new HttpResponse(dos);
-            httpResponse.process(httpRequest);
-        } catch (IOException e) {
+        logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
+            connection.getPort());
+
+        try (
+            InputStream inputStream = connection.getInputStream();
+            OutputStream outputStream = connection.getOutputStream();
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            DataOutputStream dos = new DataOutputStream(outputStream);
+        ) {
+            HttpServlet dispatcherServlet = new DispatcherServlet();
+            HttpRequest httpRequest = SimpleHttpRequest.of(bufferedReader);
+            logger.debug(System.lineSeparator() + httpRequest.toString());
+            HttpResponse httpResponse = new HttpResponse();
+            if (StaticResourceMatcher.isStaticResourcePath(httpRequest.getURI())) {
+                byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getURI());
+                ContentType contentType = ContentType.findByURI(httpRequest.getURI());
+                httpResponse.setBody(body, contentType);
+            } else {
+                dispatcherServlet.service(httpRequest, httpResponse);
+            }
+            httpResponse.send(dos);
+        } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }
