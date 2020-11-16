@@ -3,7 +3,6 @@ package webserver.http.request;
 import static org.assertj.core.api.Assertions.*;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.junit.jupiter.api.DisplayName;
@@ -24,7 +23,7 @@ class RequestLineTest {
 
     @DisplayName("요청라인이 비어있는 경우 예외를 던진다.")
     @Test
-    void of_fromEmptyRequest_shouldThrowException() throws FileNotFoundException {
+    void of_fromEmptyRequest_shouldThrowException() throws IOException {
         BufferedReader bufferedReader = HttpRequestFixture.bufferedReaderOfEmptyRequestLine();
 
         assertThatThrownBy(() -> RequestLine.of(bufferedReader))
