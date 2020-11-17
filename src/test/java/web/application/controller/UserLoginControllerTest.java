@@ -41,7 +41,7 @@ class UserLoginControllerTest {
         HttpRequest httpRequest = createRequest(fileName);
         HttpResponse httpResponse = new HttpResponse(createOutputStream("/out/root_page.txt"));
 
-        UserLoginController userLoginController = new UserLoginController();
+        UserLoginController userLoginController = UserLoginController.getInstance();
         userLoginController.service(httpRequest, httpResponse);
 
         String actual = readFile("/out/root_page.txt");
