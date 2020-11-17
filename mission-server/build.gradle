@@ -1,0 +1,6 @@
+dependencies {
+    implementation project(":mission-spec")
+    implementation project(":mission-was")
+    implementation 'pl.allegro.tech.boot:handlebars-spring-boot-starter:0.2.15'
+    implementation 'com.github.jknack:handlebars:4.2.0'
+}

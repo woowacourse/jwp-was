@@ -1,0 +1,3 @@
+include 'mission-spec'
+include 'mission-server'
+include 'mission-was'
