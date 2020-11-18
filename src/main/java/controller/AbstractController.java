@@ -1,11 +1,20 @@
 package controller;
 
+import java.util.Objects;
+
 import http.HttpRequest;
 import http.HttpResponse;
+import http.HttpStatus;
+import servlet.HttpServlet;
 
 public abstract class AbstractController implements HttpServlet {
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
+        String version = httpRequest.getVersion();
+        if (Objects.isNull(version) || version.isEmpty() || version.endsWith("0.9") || version.endsWith("1.0")) {
+            httpResponse.setStatus(HttpStatus.BAD_REQUEST);
+            return;
+        }
         switch (httpRequest.getMethod()) {
             case GET:
                 doGet(httpRequest, httpResponse);
@@ -24,11 +33,19 @@ public abstract class AbstractController implements HttpServlet {
         }
     }
 
-    protected abstract void doGet(HttpRequest httpRequest, HttpResponse httpResponse);
+    protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+        httpResponse.setMethodNotAllowed();
+    }
 
-    protected abstract void doPost(HttpRequest httpRequest, HttpResponse httpResponse);
+    protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
+        httpResponse.setMethodNotAllowed();
+    }
 
-    protected abstract void doDelete(HttpRequest httpRequest, HttpResponse httpResponse);
+    protected void doDelete(HttpRequest httpRequest, HttpResponse httpResponse) {
+        httpResponse.setMethodNotAllowed();
+    }
 
-    protected abstract void doPut(HttpRequest httpRequest, HttpResponse httpResponse);
+    protected void doPut(HttpRequest httpRequest, HttpResponse httpResponse) {
+        httpResponse.setMethodNotAllowed();
+    }
 }
