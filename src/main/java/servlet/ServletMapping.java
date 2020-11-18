@@ -1,4 +1,4 @@
-package controller;
+package servlet;
 
 import java.util.Arrays;
 import java.util.List;
@@ -6,10 +6,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import annotation.RequestMapping;
+import controller.UserController;
 import http.HttpRequest;
-import http.HttpResponse;
 
-public class DispatcherServlet implements HttpServlet {
+public class ServletMapping implements HandlerMapping {
     private static final Map<String, HttpServlet> SERVLET_MATCHER;
 
     static {
@@ -21,12 +21,7 @@ public class DispatcherServlet implements HttpServlet {
     }
 
     @Override
-    public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
-        if (!SERVLET_MATCHER.containsKey(httpRequest.getURI())) {
-            httpResponse.notFound();
-            return;
-        }
-        HttpServlet servlet = SERVLET_MATCHER.get(httpRequest.getURI());
-        servlet.service(httpRequest, httpResponse);
+    public HttpServlet getServlet(HttpRequest httpRequest) {
+        return SERVLET_MATCHER.get(httpRequest.getURI());
     }
 }

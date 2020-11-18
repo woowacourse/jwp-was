@@ -7,20 +7,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import controller.DispatcherServlet;
-import controller.HttpServlet;
-import http.ContentType;
 import http.HttpRequest;
 import http.HttpResponse;
 import http.SimpleHttpRequest;
-import utils.FileIoUtils;
-import utils.StaticResourceMatcher;
+import servlet.DispatcherServlet;
+import servlet.HttpServlet;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -42,20 +38,22 @@ public class RequestHandler implements Runnable {
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             DataOutputStream dos = new DataOutputStream(outputStream);
         ) {
-            HttpServlet dispatcherServlet = new DispatcherServlet();
             HttpRequest httpRequest = SimpleHttpRequest.of(bufferedReader);
             logger.debug(System.lineSeparator() + httpRequest.toString());
             HttpResponse httpResponse = new HttpResponse();
-            if (StaticResourceMatcher.isStaticResourcePath(httpRequest.getURI())) {
-                byte[] body = FileIoUtils.loadFileFromClasspath(httpRequest.getURI());
-                ContentType contentType = ContentType.findByURI(httpRequest.getURI());
-                httpResponse.setBody(body, contentType);
-            } else {
-                dispatcherServlet.service(httpRequest, httpResponse);
-            }
-            httpResponse.send(dos);
-        } catch (IOException | URISyntaxException e) {
+            doDispatch(dos, httpRequest, httpResponse);
+        } catch (IOException e) {
             logger.error(e.getMessage());
+        }
+    }
+
+    private void doDispatch(DataOutputStream dos, HttpRequest httpRequest, HttpResponse httpResponse) throws
+        IOException {
+        try {
+            HttpServlet dispatcherServlet = new DispatcherServlet();
+            dispatcherServlet.service(httpRequest, httpResponse);
+        } finally {
+            httpResponse.send(dos);
         }
     }
 }
