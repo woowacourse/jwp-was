@@ -7,11 +7,9 @@ import http.HttpHeaders;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 public class Request {
-    private static final String DELIMITER = ": ";
 
     private final RequestLine requestLine;
     private final HttpHeaders httpHeaders;
@@ -20,21 +18,9 @@ public class Request {
 
     public Request(BufferedReader br) throws IOException, IllegalRequestException {
         this.requestLine = new RequestLine(br);
-        this.httpHeaders = new HttpHeaders(ofRequestHeader(br));
+        this.httpHeaders = new HttpHeaders(br);
         this.requestBody = new RequestBody(br, httpHeaders.getContentLength());
         this.cookies = new Cookies(httpHeaders.getHeader(HttpHeaders.COOKIE));
-    }
-
-    private Map<String, String> ofRequestHeader(BufferedReader br) throws IOException {
-        String line = br.readLine();
-        Map<String, String> requestHeaders = new HashMap<>();
-        while (line != null && !"".equals(line)) {
-            String[] token = line.split(DELIMITER);
-            requestHeaders.put(token[0], token[1]);
-            line = br.readLine();
-        }
-
-        return requestHeaders;
     }
 
     public boolean isMethod(RequestMethod requestMethod) {

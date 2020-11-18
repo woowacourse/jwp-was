@@ -1,11 +1,14 @@
 package http;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class HttpHeaders {
+
+    private static final String DELIMITER = ": ";
 
     public static final String CONTENT_TYPE = "Content-Type";
     public static final String CONTENT_LENGTH = "Content-Length";
@@ -14,6 +17,17 @@ public class HttpHeaders {
     public static final String COOKIE = "Cookie";
     
     private Map<String, String> httpHeaders;
+
+    public HttpHeaders(BufferedReader br) throws IOException {
+        String line = br.readLine();
+        Map<String, String> requestHeaders = new HashMap<>();
+        while (line != null && !"".equals(line)) {
+            String[] token = line.split(DELIMITER);
+            requestHeaders.put(token[0], token[1]);
+            line = br.readLine();
+        }
+        this.httpHeaders = requestHeaders;
+    }
 
     public HttpHeaders(Map<String, String> httpHeaders) {
         this.httpHeaders = httpHeaders;
