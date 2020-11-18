@@ -34,13 +34,12 @@ class RequestBodyTest {
 
     @DisplayName("key에 대응하는 value값이 없는 경우 예외가 발생하는지 테스트")
     @Test
-    void parseRequestBodyExceptionTest() throws IOException {
+    void parseRequestBodyExceptionTest() {
         String request = "userId=";
         InputStream in = new ByteArrayInputStream(request.getBytes());
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
-        requestBody = new RequestBody(br, 7);
 
-        assertThatThrownBy(() -> requestBody.parseRequestBody())
+        assertThatThrownBy(() -> new RequestBody(br, 7))
                 .isInstanceOf(IllegalRequestException.class)
                 .hasMessage("key, value 쌍이 완전하지 않습니다.");
     }

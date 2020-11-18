@@ -2,7 +2,7 @@ package controller;
 
 import com.github.jknack.handlebars.Template;
 import config.TemplateFactory;
-import db.DataBase;
+import db.UserRepository;
 import http.request.Request;
 import http.response.Response;
 import http.session.HttpSessionStore;
@@ -22,7 +22,7 @@ public class UserListController extends AbstractController {
         try {
             String path = request.getPath();
             Template template = TemplateFactory.of(path);
-            Collection<User> users = DataBase.findAll();
+            Collection<User> users = UserRepository.findAll();
 
             String jsessionid = request.getCookie("JSESSIONID");
             if (!HttpSessionStore.isContains(jsessionid)) {

@@ -1,7 +1,7 @@
 package controller;
 
 import common.TestFileIo;
-import db.DataBase;
+import db.UserRepository;
 import http.request.Request;
 import http.response.Response;
 import http.session.HttpSessionStore;
@@ -22,8 +22,8 @@ class UserListControllerTest {
         User pobi = new User("javajigi", "password", "자바지기", "javajigi@gmail.com");
         User jun = new User("jun", "password", "메이커준", "jun@gmail.com");
 
-        DataBase.addUser(pobi);
-        DataBase.addUser(jun);
+        UserRepository.addUser(pobi);
+        UserRepository.addUser(jun);
         MockSession mockSession = new MockSession(null, "1");
         HttpSessionStore.addSession(mockSession);
 

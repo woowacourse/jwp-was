@@ -14,9 +14,11 @@ public class RequestBody {
     private static final String BODY_DELIMITER = "=";
 
     private String body;
+    private Map<String, String> params;
 
-    public RequestBody(BufferedReader br, Integer contentLength) throws IOException {
+    public RequestBody(BufferedReader br, Integer contentLength) throws IOException, IllegalRequestException {
         body = IOUtils.readData(br, contentLength);
+        params = parseRequestBody();
     }
 
     public Map<String, String> parseRequestBody() throws IllegalRequestException {
@@ -39,5 +41,9 @@ public class RequestBody {
 
     public String getBody() {
         return body;
+    }
+
+    public String getParam(String param) {
+        return params.get(param);
     }
 }

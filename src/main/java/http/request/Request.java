@@ -1,5 +1,6 @@
 package http.request;
 
+import exception.IllegalRequestException;
 import http.ContentType;
 import http.HttpHeaders;
 
@@ -17,7 +18,7 @@ public class Request {
     private final RequestBody requestBody;
     private Cookies cookies;
 
-    public Request(BufferedReader br) throws IOException {
+    public Request(BufferedReader br) throws IOException, IllegalRequestException {
         this.requestLine = new RequestLine(br);
         this.httpHeaders = new HttpHeaders(ofRequestHeader(br));
         this.requestBody = new RequestBody(br, httpHeaders.getContentLength());
@@ -74,5 +75,9 @@ public class Request {
 
     public String getCookie(String key) {
         return cookies.getCookie(key);
+    }
+
+    public String getParam(String param) {
+        return requestBody.getParam(param);
     }
 }

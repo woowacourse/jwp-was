@@ -1,7 +1,7 @@
 package controller;
 
 import common.TestFileIo;
-import db.DataBase;
+import db.UserRepository;
 import http.request.Request;
 import http.response.Response;
 import model.User;
@@ -18,7 +18,7 @@ class LogoutControllerTest {
     @DisplayName("로그아웃 성공 테스트")
     @Test
     void doDeleteTest() throws Exception {
-        DataBase.addUser(new User("javajigi", "1234", "박재성", "pobi@gmail.com"));
+        UserRepository.addUser(new User("javajigi", "1234", "박재성", "pobi@gmail.com"));
 
         ByteArrayOutputStream result = new ByteArrayOutputStream();
         Request request = new Request(TestFileIo.readBufferedReader("http_login_request.txt"));

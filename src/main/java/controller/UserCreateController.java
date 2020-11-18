@@ -1,14 +1,10 @@
 package controller;
 
-import db.DataBase;
-import exception.IllegalRequestException;
+import db.UserRepository;
 import http.request.QueryParams;
 import http.request.Request;
-import http.request.RequestBody;
 import http.response.Response;
 import model.User;
-
-import java.util.Map;
 
 public class UserCreateController extends AbstractController {
 
@@ -19,19 +15,19 @@ public class UserCreateController extends AbstractController {
         if (!queryParams.isEmpty()) {
             User user = new User(queryParams.getParam("userId"), queryParams.getParam("password"),
                     queryParams.getParam("name"), queryParams.getParam("email"));
-            DataBase.addUser(user);
+            UserRepository.addUser(user);
             response.found("/index.html");
         }
     }
 
     @Override
-    protected void doPost(Request request, Response response) throws IllegalRequestException {
-        RequestBody requestBody = request.getRequestBody();
-        Map<String, String> requestBodies = requestBody.parseRequestBody();
-
-        User user = new User(requestBodies.get("userId"), requestBodies.get("password"),
-                requestBodies.get("name"), requestBodies.get("email"));
-        DataBase.addUser(user);
+    protected void doPost(Request request, Response response) {
+        String userId = request.getParam("userId");
+        String password = request.getParam("password");
+        String name = request.getParam("name");
+        String email = request.getParam("email");
+        User user = new User(userId, password, name, email);
+        UserRepository.addUser(user);
 
         response.found("/index.html");
     }

@@ -1,7 +1,7 @@
 package controller;
 
 import common.TestFileIo;
-import db.DataBase;
+import db.UserRepository;
 import http.request.Request;
 import http.response.Response;
 import model.User;
@@ -18,7 +18,7 @@ class LoginControllerTest {
 
     @AfterEach
     void tearDown() {
-        DataBase.deleteAll();
+        UserRepository.deleteAll();
     }
 
     @DisplayName("로그인 성공 테스트")
@@ -80,6 +80,6 @@ class LoginControllerTest {
     }
 
     private void addUser() {
-        DataBase.addUser(new User("javajigi", "1234", "박재성", "pobi@gmail.com"));
+        UserRepository.addUser(new User("javajigi", "1234", "박재성", "pobi@gmail.com"));
     }
 }

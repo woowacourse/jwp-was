@@ -4,7 +4,7 @@ import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
-import db.DataBase;
+import db.UserRepository;
 import model.User;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -25,8 +25,8 @@ class HandlebarsTest {
         Template template = handlebars.compile("user/list");
 
         User user = new User("javajigi", "password", "자바지기", "javajigi@gmail.com");
-        DataBase.addUser(user);
-        Collection<User> users = DataBase.findAll();
+        UserRepository.addUser(user);
+        Collection<User> users = UserRepository.findAll();
         String profilePage = template.apply(users);
 
         LOGGER.debug("ProfilePage : {}", profilePage);

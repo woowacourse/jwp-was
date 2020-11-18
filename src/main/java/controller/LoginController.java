@@ -1,18 +1,15 @@
 package controller;
 
-import db.DataBase;
+import db.UserRepository;
 import exception.IllegalRequestException;
 import http.HttpHeaders;
 import http.request.Request;
-import http.request.RequestBody;
 import http.response.Response;
 import http.session.HttpSession;
 import http.session.HttpSessionStore;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Map;
 
 public class LoginController extends AbstractController {
 
@@ -21,10 +18,10 @@ public class LoginController extends AbstractController {
     @Override
     protected void doPost(Request request, Response response) {
         try {
-            RequestBody requestBody = request.getRequestBody();
-            Map<String, String> requestBodies = requestBody.parseRequestBody();
-            User user = DataBase.findUserById(requestBodies.get("userId"));
-            validate(requestBodies, user);
+            User user = UserRepository.findByUserId(request.getParam("userId"))
+                .orElseThrow(() -> new IllegalRequestException("로그인에 실패했습니다."));
+            String password = request.getParam("password");
+            validate(user, password);
 
             HttpSession httpSession = HttpSessionStore.create();
             httpSession.setAttribute("email", user.getEmail());
@@ -39,8 +36,8 @@ public class LoginController extends AbstractController {
         }
     }
 
-    private void validate(Map<String, String> requestBodies, User user) throws IllegalRequestException {
-        if (user == null || !user.checkPassword(requestBodies.get("password"))) {
+    private void validate(User user, String password) throws IllegalRequestException {
+        if (user == null || !user.checkPassword(password)) {
             throw new IllegalRequestException("로그인에 실패했습니다.");
         }
     }
