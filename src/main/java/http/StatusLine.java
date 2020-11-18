@@ -16,4 +16,8 @@ public class StatusLine {
     public void update(HttpStatus status) {
         this.status = status;
     }
+
+    public HttpStatus getStatus() {
+        return status;
+    }
 }

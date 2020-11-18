@@ -15,15 +15,10 @@ import org.slf4j.LoggerFactory;
 
 import controller.DispatcherServlet;
 import controller.HttpServlet;
-import controller.UserController;
-import db.DataBase;
+import http.ContentType;
 import http.HttpRequest;
 import http.HttpResponse;
-import http.HttpBody;
-import http.HttpStatus;
 import http.SimpleHttpRequest;
-import model.User;
-import http.ContentType;
 import utils.FileIoUtils;
 import utils.StaticResourceMatcher;
 

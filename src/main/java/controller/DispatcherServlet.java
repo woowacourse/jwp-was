@@ -3,7 +3,6 @@ package controller;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import annotation.RequestMapping;
@@ -24,8 +23,8 @@ public class DispatcherServlet implements HttpServlet {
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
         if (!SERVLET_MATCHER.containsKey(httpRequest.getURI())) {
-           httpResponse.notFound();
-           return;
+            httpResponse.notFound();
+            return;
         }
         HttpServlet servlet = SERVLET_MATCHER.get(httpRequest.getURI());
         servlet.service(httpRequest, httpResponse);
