@@ -5,6 +5,7 @@ import static kr.wootecat.dongle.http.CookieParser.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,14 +15,25 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.net.HttpHeaders;
 import kr.wootecat.dongle.http.Cookie;
 import kr.wootecat.dongle.http.HttpMethod;
+import kr.wootecat.dongle.http.exception.IllegalDataParsingException;
 import utils.IOUtils;
 
 public class HttpRequestReader {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpRequestReader.class);
+
+    private static final String HTTP_SPACE_CHARACTER = " ";
+    private static final String QUERY_PARAMETER_DELIMITER = "\\?";
+    private static final String HEADER_KEY_VALUE_DELIMITER = ": ";
+    private static final String UTF_8_ENCODING_TYPE = "UTF-8";
+    private static final String EACH_PAIR_DELIMITER = "&";
+    private static final String KEY_VALUE_DELIMITER = "=";
+    private static final String EMPTY_STRING = "";
+
+    private static final int COUNT_OF_REQUEST_LINE_DATA = 3;
+    private static final int PAIR_LENGTH = 2;
 
     private HttpRequestReader() {
     }
@@ -29,15 +41,20 @@ public class HttpRequestReader {
     public static HttpRequest parse(BufferedReader br) {
         try {
             String httpRequestLine = br.readLine();
-            String[] requestLines = httpRequestLine.split(" ");
-            String pathWithQueryString = requestLines[1];
-            String[] pathQueryString = pathWithQueryString.split("\\?");
+            String[] requestLines = httpRequestLine.split(HTTP_SPACE_CHARACTER);
+            if (requestLines.length != COUNT_OF_REQUEST_LINE_DATA) {
+                throw new IllegalDataParsingException();
+            }
 
-            HttpRequestLine requestLine = new HttpRequestLine(HttpMethod.valueOf(requestLines[0]), pathQueryString[0],
-                    requestLines[2]);
+            HttpMethod requestMethod = HttpMethod.valueOf(requestLines[0]);
+            String uri = requestLines[1];
+            String[] uriQueryPair = uri.split(QUERY_PARAMETER_DELIMITER);
+            String path = uriQueryPair[0];
+            String protocolVersion = requestLines[2];
+
+            HttpRequestLine requestLine = new HttpRequestLine(requestMethod, path, protocolVersion);
             HttpRequestHeaders requestHeader = parseRequestHeader(br);
-
-            HttpRequestParameters requestParameters = getHttpRequestParameters(br, pathQueryString, requestLine,
+            HttpRequestParameters requestParameters = parseRequestParam(br, requestMethod, uriQueryPair,
                     requestHeader);
             return new HttpRequest(requestLine, requestHeader, requestParameters);
         } catch (IOException e) {
@@ -46,63 +63,57 @@ public class HttpRequestReader {
         }
     }
 
-    private static HttpRequestParameters getHttpRequestParameters(BufferedReader br, String[] pathQueryString,
-            HttpRequestLine requestLine, HttpRequestHeaders requestHeader) throws IOException {
-        HttpRequestParameters requestParameters;
-        Map<String, String> queryParams = new HashMap<>();
-        if (requestLine.isGetMethod()) {
-            if (pathQueryString.length == 2) {
-                String queryString = pathQueryString[1];
-                String decode = URLDecoder.decode(queryString, "UTF-8");
-                String[] queries = decode.split("&");
-                for (String query : queries) {
-                    String[] keyValue = query.split("=");
-                    String name = keyValue[0];
-                    String value = keyValue.length == 2 ? keyValue[1] : "";
-                    queryParams.put(name, value);
-                }
-            }
-            return new HttpRequestParameters(queryParams);
-        }
-        requestParameters = parseRequestParameters(br, requestHeader, requestLine);
-        return requestParameters;
-    }
-
     private static HttpRequestHeaders parseRequestHeader(BufferedReader br) throws IOException {
         Map<String, String> headers = new HashMap<>();
         List<Cookie> cookies = new ArrayList<>();
-        String oneLine = br.readLine();
-        while (!"".equals(oneLine) && oneLine != null) {
-            String[] header = oneLine.split(": ");
-            String key = header[0];
-            String value = header[1];
-            if (COOKIE.equals(key)) {
+
+        String singleLine = br.readLine();
+        while (singleLine != null && !singleLine.isEmpty()) {
+            String[] headerPair = singleLine.split(HEADER_KEY_VALUE_DELIMITER);
+            String name = headerPair[0];
+            String value = getValueFrom(headerPair);
+            if (COOKIE.equals(name)) {
                 cookies = toCookie(value);
+            } else {
+                headers.put(name, value);
             }
-            headers.put(key, value);
-            oneLine = br.readLine();
+            singleLine = br.readLine();
         }
         return new HttpRequestHeaders(headers, cookies);
     }
 
-    private static HttpRequestParameters parseRequestParameters(BufferedReader br,
-            HttpRequestHeaders header, HttpRequestLine requestLine) throws IOException {
-        Map<String, String> requestDatas = new HashMap<>();
-        HttpMethod httpMethod = requestLine.getMethod();
-        if (!httpMethod.isPost()) {
-            return new HttpRequestParameters(requestDatas);
+    private static HttpRequestParameters parseRequestParam(BufferedReader br, HttpMethod requestMethod,
+            String[] uriQueryPair, HttpRequestHeaders requestHeader) throws IOException {
+        Map<String, String> parameters = new HashMap<>();
+
+        if (uriQueryPair.length == PAIR_LENGTH && requestMethod.isGet()) {
+            String queryString = uriQueryPair[1];
+            inputToRequestParameter(parameters, queryString);
+        } else if (requestMethod.isPost()) {
+            String requestBodyData = IOUtils.readData(br, Integer.parseInt(requestHeader.get(CONTENT_LENGTH)));
+            inputToRequestParameter(parameters, requestBodyData);
         }
-        String data = IOUtils.readData(br, Integer.parseInt(header.get(HttpHeaders.CONTENT_LENGTH)));
-        if (!"".equals(data)) {
-            String decode = URLDecoder.decode(data, "UTF-8");
-            String[] parameters = decode.split("&");
-            for (String parameter : parameters) {
-                String[] keyValue = parameter.split("=");
-                String name = keyValue[0];
-                String value = keyValue.length == 2 ? keyValue[1] : "";
-                requestDatas.put(name, value);
-            }
+        return new HttpRequestParameters(parameters);
+
+    }
+
+    private static void inputToRequestParameter(Map<String, String> params, String data) throws
+            UnsupportedEncodingException {
+        if (data.isEmpty()) {
+            return;
         }
-        return new HttpRequestParameters(requestDatas);
+
+        String decodedData = URLDecoder.decode(data, UTF_8_ENCODING_TYPE);
+        String[] eachPairs = decodedData.split(EACH_PAIR_DELIMITER);
+        for (String eachPair : eachPairs) {
+            String[] keyValuePair = eachPair.split(KEY_VALUE_DELIMITER);
+            String name = keyValuePair[0];
+            String value = getValueFrom(keyValuePair);
+            params.put(name, value);
+        }
+    }
+
+    private static String getValueFrom(String[] pair) {
+        return pair.length == PAIR_LENGTH ? pair[1] : EMPTY_STRING;
     }
 }
