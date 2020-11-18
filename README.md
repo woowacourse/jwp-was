@@ -77,5 +77,5 @@ Thread Pool을 적용해 일정 수의 사용자 동시에 처리가 가능하�
 #### 리뷰 반영
 - [x] 지원하는 메서드만 오버라이딩 해서 사용하도록 수정
 - [x] resource 처리 영역과 아닌 영역을 구분하여 response를 반환
-- [ ] html이나 원하는 resource postfix 형식이 아닐때에 대한 테스트도 작성 부탁드려요!
+- [x] 다양한 resource postfix 형식에 대한 테스트 작성
       
