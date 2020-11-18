@@ -1,24 +1,30 @@
 package controller;
 
 import annotation.RequestMapping;
-import db.DataBase;
+import dto.JoinRequestDto;
 import http.HttpBody;
 import http.HttpRequest;
 import http.HttpResponse;
 import http.HttpStatus;
-import model.User;
+import service.UserService;
 
 @RequestMapping(path = "/user")
 public class UserController extends AbstractController {
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
     @Override
     protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         HttpBody httpBody = httpRequest.getBody();
-        User user = new User(
+        JoinRequestDto joinRequestDto = new JoinRequestDto(
             httpBody.get("userId"),
             httpBody.get("password"),
             httpBody.get("name"),
             httpBody.get("email"));
-        DataBase.addUser(user);
+        userService.join(joinRequestDto);
         httpResponse.setStatus(HttpStatus.FOUND);
         httpResponse.addHeader("Location", "/index.html");
     }

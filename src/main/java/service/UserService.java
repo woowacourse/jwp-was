@@ -1,0 +1,33 @@
+package service;
+
+import java.util.Objects;
+
+import db.DataBase;
+import dto.JoinRequestDto;
+import dto.LoginRequestDto;
+import exception.UnAuthenticationException;
+import model.User;
+
+public class UserService {
+    public void login(LoginRequestDto loginRequestDto) {
+        String userId = loginRequestDto.getUserId();
+        String password = loginRequestDto.getPassword();
+        if (Objects.isNull(userId) || Objects.isNull(password)) {
+            throw new UnAuthenticationException("아이디 혹은 비밀번호 입력이 잘못되었습니다.");
+        }
+        User savedUser = DataBase.findUserById(userId);
+        if (Objects.isNull(savedUser) || !savedUser.checkPassword(password)) {
+            throw new UnAuthenticationException("아이디 혹은 비밀번호 입력이 잘못되었습니다.");
+        }
+    }
+
+    public void join(JoinRequestDto joinRequestDto) {
+        User user = new User(
+            joinRequestDto.getUserId(),
+            joinRequestDto.getPassword(),
+            joinRequestDto.getName(),
+            joinRequestDto.getEmail()
+        );
+        DataBase.addUser(user);
+    }
+}

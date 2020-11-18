@@ -12,54 +12,60 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
+import javax.sound.midi.Soundbank;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
+import dto.JoinRequestDto;
 import http.HttpRequest;
 import http.HttpResponse;
 import http.SimpleHttpRequest;
 import service.UserService;
 import servlet.HttpServlet;
 
-class UserControllerTest {
+class LoginControllerTest {
     private String testDirectory = "./src/test/resources/";
-
     private UserService userService;
-    private HttpServlet userController;
+    private HttpServlet loginController;
 
     @BeforeEach
     void setUp() {
         userService = new UserService();
-        userController = new UserController(userService);
+        loginController = new LoginController(userService);
     }
 
     @Test
-    void doPost() throws IOException {
-        HttpRequest request = getHttpRequest("Http_POST.txt");
+    void login() throws IOException {
+        JoinRequestDto joinRequestDto = new JoinRequestDto("javajigi", "password", "pobi", "pobi@slipp.com");
+        userService.join(joinRequestDto);
+
+        HttpRequest request = getHttpRequest("Http_LOGIN.txt");
         HttpResponse response = new HttpResponse();
 
-        userController.service(request, response);
+        loginController.service(request, response);
 
         assertAll(
-            () -> assertThat(response.getStatus()).isEqualTo(FOUND),
-            () -> assertThat(response.getHeader("Location")).isNotNull()
+            () -> assertThat(response.getStatus()).isEqualTo(OK),
+            () -> assertThat(response.getHeader("Set-Cookie")).isEqualTo("logined=true; Path=/")
         );
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = {"Http_GET.txt", "Http_PUT.txt", "Http_DELETE.txt"})
-    void doNotAllowedMethod_ThrownException(String path) throws IOException {
-        HttpRequest request = getHttpRequest(path);
+    @Test
+    void login_fail() throws IOException {
+        JoinRequestDto joinRequestDto = new JoinRequestDto("javajigi", "passold", "pobi", "pobi@slipp.com");
+        userService.join(joinRequestDto);
+
+        HttpRequest request = getHttpRequest("Http_LOGIN.txt");
         HttpResponse response = new HttpResponse();
 
-        userController.service(request, response);
+        loginController.service(request, response);
 
         assertAll(
-            () -> assertThat(response.getStatus()).isEqualTo(METHOD_NOT_ALLOWED),
-            () -> assertThat(response.getHeader("Content-Type")).isNotNull()
+            () -> assertThat(response.getStatus()).isEqualTo(UNAUTHORIZED),
+            () -> assertThat(response.getHeader("Set-Cookie")).isEqualTo("logined=false")
         );
+
     }
 
     private HttpRequest getHttpRequest(String path) throws IOException {

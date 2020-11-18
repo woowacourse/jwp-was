@@ -8,6 +8,10 @@ public class HttpResponse {
     private static final String DEFAULT_PROTOCOL_VERSION = "HTTP/1.1";
     private static final HttpStatus DEFAULT_STATUS = HttpStatus.OK;
 
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String SET_COOKIE = "Set-Cookie";
+    private static final String CONTENT_LENGTH = "Content-Length";
+
     private StatusLine statusLine;
     private HttpHeaders headers;
     private byte[] body;
@@ -27,13 +31,13 @@ public class HttpResponse {
 
     public void setBody(byte[] body, ContentType contentType) {
         this.body = body;
-        addHeader("Content-Type", contentType.getContentType());
-        addHeader("Content-Length", String.valueOf(body.length));
+        addHeader(CONTENT_TYPE, contentType.getContentType());
+        addHeader(CONTENT_LENGTH, String.valueOf(body.length));
     }
 
     public void setMethodNotAllowed() {
         setStatus(HttpStatus.METHOD_NOT_ALLOWED);
-        addHeader("Content-Type", "test/html");
+        addHeader(CONTENT_TYPE, "test/html");
         this.body = "<h1>405 Try another method!</h1>".getBytes();
     }
 
@@ -57,5 +61,9 @@ public class HttpResponse {
 
     public String getHeader(String name) {
         return headers.getHeader(name);
+    }
+
+    public void setCookie(String value) {
+        addHeader(SET_COOKIE, value);
     }
 }

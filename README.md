@@ -82,12 +82,12 @@ Thread Pool을 적용해 일정 수의 사용자 동시에 처리가 가능하�
 ### 🚀 3단계 - 로그인 및 세션 구현
 
 #### 요구사항 1
-- [ ] 로그인 기능 구현
+- [x] 로그인 기능 구현
     - 성공시
-        - [ ] /index.html로 이동
-        - [ ] Cookie Header 값이 logined=true 
+        - [x] /index.html로 이동
+        - [x] Cookie Header 값이 logined=true 
     - 실패시
-        - [ ] /user/login_failed.html로 이동
-        - [ ] Cookie Header 값이 logined=false 
+        - [x] /user/login_failed.html로 이동
+        - [x] Cookie Header 값이 logined=false 
  
       
