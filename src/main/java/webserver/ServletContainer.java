@@ -18,6 +18,7 @@ public class ServletContainer {
         servletNameMapper = new HashMap<>();
         servletContainer = new HashMap<>();
         servletNameMapper.put("/user/create", "webserver.controller.UserCreateController");
+        servletNameMapper.put("/user/login", "webserver.controller.LoginController");
         logger.info("ServletContainer has loaded.");
     }
 

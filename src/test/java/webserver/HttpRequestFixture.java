@@ -44,4 +44,9 @@ public class HttpRequestFixture {
         ClassPathResource resource = new ClassPathResource("EmptyRequestLine.txt");
         return new BufferedReader(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
     }
+
+    public static HttpRequest httpRequestOfLogin() throws IOException {
+        ClassPathResource resource = new ClassPathResource("usercreaterequest/PostRequest.txt");
+        return HttpRequest.of(resource.getInputStream());
+    }
 }
