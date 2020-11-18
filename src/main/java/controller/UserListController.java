@@ -5,6 +5,7 @@ import config.TemplateFactory;
 import db.UserRepository;
 import http.request.Request;
 import http.response.Response;
+import http.session.HttpSession;
 import http.session.HttpSessionStore;
 import model.User;
 import org.slf4j.Logger;
@@ -24,8 +25,8 @@ public class UserListController extends AbstractController {
             Template template = TemplateFactory.of(path);
             Collection<User> users = UserRepository.findAll();
 
-            String jsessionid = request.getCookie("JSESSIONID");
-            if (!HttpSessionStore.isContains(jsessionid)) {
+            HttpSession httpSession = request.getSession();
+            if (!HttpSessionStore.isContains(httpSession)) {
                 throw new AuthenticationException();
             }
             response.ok(template.apply(users));

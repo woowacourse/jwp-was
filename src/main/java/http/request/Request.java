@@ -3,6 +3,8 @@ package http.request;
 import exception.IllegalRequestException;
 import http.ContentType;
 import http.HttpHeaders;
+import http.session.HttpSession;
+import http.session.HttpSessionStore;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -59,11 +61,19 @@ public class Request {
         return ContentType.of(getPath()).getContentType();
     }
 
-    public String getCookie(String key) {
+    public Cookie getCookie(String key) {
         return cookies.getCookie(key);
     }
 
     public String getParam(String param) {
         return requestBody.getParam(param);
+    }
+
+    public HttpSession getSession() {
+        Cookie cookie = cookies.getCookie("JSESSIONID");
+        if (cookie == null) {
+            return null;
+        }
+        return HttpSessionStore.getSession(cookies.getCookie("JSESSIONID").getValue());
     }
 }

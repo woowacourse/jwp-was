@@ -5,28 +5,24 @@ import java.util.Map;
 
 public class HttpSessionStore {
 
-    private final static Map<String, HttpSession> httpSessionStore = new HashMap<>();
+    private static final Map<String, HttpSession> HTTP_SESSION_STORE = new HashMap<>();
+
+    private HttpSessionStore() {
+    }
 
     public static HttpSession getSession(String id) {
-        return httpSessionStore.get(id);
+        return HTTP_SESSION_STORE.get(id);
     }
 
     public static HttpSession addSession(HttpSession httpSession) {
-        return httpSessionStore.put(httpSession.getId(), httpSession);
+        return HTTP_SESSION_STORE.put(httpSession.getId(), httpSession);
     }
 
-    public static HttpSession create() {
-        WebSession webSession = new WebSession();
-        addSession(webSession);
-
-        return webSession;
-    }
-
-    public static boolean isContains(String key) {
-        return httpSessionStore.containsKey(key);
+    public static boolean isContains(HttpSession httpSession) {
+        return HTTP_SESSION_STORE.containsValue(httpSession);
     }
 
     public static void delete(String key) {
-        httpSessionStore.remove(key);
+        HTTP_SESSION_STORE.remove(key);
     }
 }

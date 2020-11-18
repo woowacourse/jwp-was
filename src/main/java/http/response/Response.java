@@ -2,6 +2,7 @@ package http.response;
 
 import http.ContentType;
 import http.HttpHeaders;
+import http.request.Cookie;
 import http.request.RequestMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,5 +78,9 @@ public class Response {
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
         }
+    }
+
+    public void setCookie(Cookie cookie) {
+        setHeader(HttpHeaders.SET_COOKIE, cookie.getName() + "=" + cookie.getValue() + "; Path=/");
     }
 }
