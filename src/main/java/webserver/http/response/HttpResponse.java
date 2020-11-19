@@ -9,12 +9,16 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import utils.FileIoUtils;
 import webserver.ClientException;
 import webserver.ServerException;
 import webserver.controller.ApplicationBusinessException;
+import webserver.controller.ContentType;
+import webserver.controller.ContentTypeMapper;
 import webserver.http.Protocol;
 
 public class HttpResponse {
+    private static final String DELIMITER = "\\.";
     private static final String lineSeparator = System.lineSeparator();
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
@@ -28,8 +32,16 @@ public class HttpResponse {
         this.body = body;
     }
 
-    public static Builder ok() {
-        return new Builder(StatusCode.OK);
+    public static Builder ok(String path) {
+        byte[] body = FileIoUtils.loadFileFromClasspath(path);
+        String[] splitPath = path.split(DELIMITER);
+        String extension = splitPath[splitPath.length-1];
+        ContentType contentType = ContentTypeMapper.map(extension);
+
+        return new Builder(StatusCode.OK)
+            .contentType(contentType.value())
+            .contentLength(body.length)
+            .body(body);
     }
 
     public static Builder created(String location) {
@@ -87,6 +99,10 @@ public class HttpResponse {
         return body;
     }
 
+    public String getCookie() {
+        return responseHeader.getCookie();
+    }
+
     public static class Builder {
         private final StatusLine statusLine;
         private Map<String, String> fields;
@@ -120,6 +136,11 @@ public class HttpResponse {
 
         public Builder error(String errorMessage) {
             this.body = String.format("error: %s", errorMessage).getBytes(StandardCharsets.UTF_8);
+            return this;
+        }
+
+        public Builder setCookie(String cookieName, String cookieValue, String path) {
+            fields.put("set-Cookie", String.format("%s=%s; Path=%s", cookieName, cookieValue, path));
             return this;
         }
 

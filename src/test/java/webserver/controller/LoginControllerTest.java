@@ -34,8 +34,10 @@ class LoginControllerTest {
         HttpResponse response = controller.service(httpRequest);
 
         assertThat(response.getStatusLine()).isEqualToComparingFieldByField(
-            new StatusLine(Protocol.ONE_POINT_ONE, StatusCode.FOUND));
-        assertThat(response.getHeader()).isEqualTo(String.format("Location: /index.html%n"));
+            new StatusLine(Protocol.ONE_POINT_ONE, StatusCode.OK));
+        assertThat(response.getHeader()).isEqualTo(String.format("Content-Length: 6902%n"
+            + "set-Cookie: logined=true; Path=/%n"
+            + "Content-Type: text/html;charset=utf-8%n"));
     }
 
     @DisplayName("로그인 요청한 아이디가 존재하지 않는 경우 로그인 실패 페이지로 이동한다.")
@@ -46,8 +48,10 @@ class LoginControllerTest {
         HttpResponse response = controller.service(httpRequest);
 
         assertThat(response.getStatusLine()).isEqualToComparingFieldByField(
-            new StatusLine(Protocol.ONE_POINT_ONE, StatusCode.FOUND));
-        assertThat(response.getHeader()).isEqualTo(String.format("Location: /user/login_failed.html%n"));
+            new StatusLine(Protocol.ONE_POINT_ONE, StatusCode.OK));
+        assertThat(response.getHeader()).isEqualTo(String.format("Content-Length: 4898%n"
+            + "set-Cookie: logined=false; Path=/%n"
+            + "Content-Type: text/html;charset=utf-8%n"));
     }
 
     @DisplayName("로그인 요청한 아이디의 패스워드가 일치하지 않으면 로그인 실패 페이지로 이동한다.")
@@ -59,7 +63,9 @@ class LoginControllerTest {
         HttpResponse response = controller.service(httpRequest);
 
         assertThat(response.getStatusLine()).isEqualToComparingFieldByField(
-            new StatusLine(Protocol.ONE_POINT_ONE, StatusCode.FOUND));
-        assertThat(response.getHeader()).isEqualTo(String.format("Location: /user/login_failed.html%n"));
+            new StatusLine(Protocol.ONE_POINT_ONE, StatusCode.OK));
+        assertThat(response.getHeader()).isEqualTo(String.format("Content-Length: 4898%n"
+            + "set-Cookie: logined=false; Path=/%n"
+            + "Content-Type: text/html;charset=utf-8%n"));
     }
 }
