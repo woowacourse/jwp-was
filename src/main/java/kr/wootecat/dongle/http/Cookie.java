@@ -6,7 +6,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import kr.wootecat.dongle.http.exception.IllegalCookieFormatException;
+import kr.wootecat.dongle.http.exception.IllegalRequestDataFormatException;
 
 public class Cookie {
 
@@ -44,7 +44,7 @@ public class Cookie {
             Objects.requireNonNull(value);
             validatePath(path);
         } catch (RuntimeException e) {
-            throw new IllegalCookieFormatException(e.getMessage());
+            throw new IllegalRequestDataFormatException(e.getMessage());
         }
     }
 

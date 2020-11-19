@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import kr.wootecat.dongle.http.exception.IllegalCookieFormatException;
+import kr.wootecat.dongle.http.exception.IllegalRequestDataFormatException;
 
 public class CookieParser {
 
     private static final Pattern HTTP_COOKIE_VALUE_PATTERN = Pattern.compile(
-            "[\\w-]+(\\s*=\\s*)[\\w-]*((\\s*;\\s*)[\\w-]+(\\s*=\\s*)[\\w-]*)*");
+            "[\\w-]+(\\s*=\\s*)[^=;]*((\\s*;\\s*)[\\w-]+(\\s*=\\s*)[^=;]*)*");
 
     private static final String COOKIE_PAIR_SPLIT_REGEX = "\\s*;\\s*";
     private static final String KEY_VALUE_SPLIT_REGEX = "\\s*=\\s*";
@@ -61,7 +61,7 @@ public class CookieParser {
     private static void validateValueFormat(String value) {
         Matcher cookieValueFormatMatcher = HTTP_COOKIE_VALUE_PATTERN.matcher(value);
         if (!cookieValueFormatMatcher.matches()) {
-            throw new IllegalCookieFormatException(
+            throw new IllegalRequestDataFormatException(
                     format(ILLEGAL_REQUEST_COOKIE_VALUE_EXCEPTION_MESSAGE_FORMAT, value));
         }
     }

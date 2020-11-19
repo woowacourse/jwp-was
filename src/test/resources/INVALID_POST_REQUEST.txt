@@ -6,4 +6,4 @@ Content-Type: application/x-www-form-urlencoded
 Accept: */*
 Cookie: JSESSIONID=1fb5b72c-fed0-42a3-9e8c-6197b446af76
 
-userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net HTTP/1.1
+userId=javajigi&&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net

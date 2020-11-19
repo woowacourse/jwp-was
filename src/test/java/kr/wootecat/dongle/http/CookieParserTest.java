@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import kr.wootecat.dongle.http.exception.IllegalCookieFormatException;
+import kr.wootecat.dongle.http.exception.IllegalRequestDataFormatException;
 
 class CookieParserTest {
 
@@ -48,7 +48,7 @@ class CookieParserTest {
     void toCookie_throw_IllegalCookieFormatException_when_request_cookie_format_is_not_valid(
             String requestCookieValue) {
         assertThatThrownBy(() -> CookieParser.toCookie(requestCookieValue))
-                .isInstanceOf(IllegalCookieFormatException.class)
+                .isInstanceOf(IllegalRequestDataFormatException.class)
                 .hasMessageContaining("파싱할 수 없는 쿠키값 형식으로 요청을 받았습니다.");
 
     }

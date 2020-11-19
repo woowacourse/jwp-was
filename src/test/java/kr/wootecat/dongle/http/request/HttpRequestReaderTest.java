@@ -8,8 +8,11 @@ import java.io.FileReader;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import kr.wootecat.dongle.http.HttpMethod;
+import kr.wootecat.dongle.http.exception.IllegalRequestDataFormatException;
 
 class HttpRequestReaderTest {
     private static final String TEST_DIRECTORY = "./src/test/resources/%s";
@@ -17,7 +20,8 @@ class HttpRequestReaderTest {
     @DisplayName("HTTP GET Request 요청을 HttpRequest 객체로 파싱한다.")
     @Test
     void parseGetRequest() throws Exception {
-        BufferedReader reader = new BufferedReader(new FileReader(String.format(TEST_DIRECTORY, "GET_REQUEST.txt")));
+        BufferedReader reader = new BufferedReader(
+                new FileReader(String.format(TEST_DIRECTORY, "VALID_GET_REQUEST.txt")));
         HttpRequest httpRequest = HttpRequestReader.parse(reader);
 
         assertAll(
@@ -39,7 +43,7 @@ class HttpRequestReaderTest {
     @Test
     void parseGetRequestWithQueryParam() throws Exception {
         BufferedReader reader = new BufferedReader(
-                new FileReader(String.format(TEST_DIRECTORY, "GET_REQUEST_WITH_QUERY_PARAM.txt")));
+                new FileReader(String.format(TEST_DIRECTORY, "VALID_GET_REQUEST_WITH_QUERY_PARAM.txt")));
         HttpRequest httpRequest = HttpRequestReader.parse(reader);
 
         assertAll(
@@ -65,7 +69,8 @@ class HttpRequestReaderTest {
     @DisplayName("HTTP POST Request 요청을 HttpRequest 객체로 파싱한다.")
     @Test
     void parsePostRequest() throws Exception {
-        BufferedReader reader = new BufferedReader(new FileReader(String.format(TEST_DIRECTORY, "POST_REQUSET.txt")));
+        BufferedReader reader = new BufferedReader(new FileReader(String.format(TEST_DIRECTORY,
+                "VALID_POST_REQUEST.txt")));
         HttpRequest httpRequest = HttpRequestReader.parse(reader);
 
         assertAll(
@@ -86,5 +91,18 @@ class HttpRequestReaderTest {
                 () -> assertThat(httpRequest.getParameter("name")).isEqualTo("박재성"),
                 () -> assertThat(httpRequest.getParameter("email")).isEqualTo("javajigi@slipp.net")
         );
+    }
+
+    @DisplayName("유효하지 않는 HTTP 요청은 request 객체 파싱중 IllegalRequestDataFormatException을 던진다.")
+    @ParameterizedTest
+    @CsvSource(value = {"INVALID_GET_REQUEST.txt", "INVALID_GET_REQUEST2.txt", "INVALID_GET_REQUEST3.txt",
+            "INVALID_GET_REQUEST4.txt", "INVALID_GET_REQUEST_WITH_QUERY_PARAM.txt",
+            "INVALID_POST_REQUEST.txt",})
+    void parseIllegalFormatRequest(String illegalHttpRequestFile) throws Exception {
+        BufferedReader reader = new BufferedReader(new FileReader(String.format(TEST_DIRECTORY,
+                illegalHttpRequestFile)));
+
+        assertThatThrownBy(() -> HttpRequestReader.parse(reader))
+                .isInstanceOf(IllegalRequestDataFormatException.class);
     }
 }

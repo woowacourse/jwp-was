@@ -11,6 +11,7 @@ import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import kr.wootecat.dongle.http.exception.IllegalRequestDataFormatException;
 import kr.wootecat.dongle.http.request.HttpRequest;
 import kr.wootecat.dongle.http.request.HttpRequestReader;
 import kr.wootecat.dongle.http.response.HttpResponse;
@@ -37,7 +38,7 @@ public class RequestHandler implements Runnable {
             RequestProcessor requestProcessor = RequestProcessorFactory.create();
             HttpResponse response = requestProcessor.response(request);
             ResponseSender.send(outputStream, response);
-        } catch (IOException e) {
+        } catch (IllegalRequestDataFormatException | IOException e) {
             logger.error(e.getMessage());
         }
     }
