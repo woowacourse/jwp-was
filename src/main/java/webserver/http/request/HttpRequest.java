@@ -42,6 +42,22 @@ public class HttpRequest {
         return httpRequestStartLine.getUrl();
     }
 
+    public String getMethod() {
+        return httpRequestStartLine.getHttpMethodType().name();
+    }
+
+    public String getHeader(HttpHeader httpHeader) {
+        return httpHeaders.getHttpHeader(httpHeader);
+    }
+
+    public String getParameter(String key) {
+        return httpRequestStartLine.getParameter(key);
+    }
+
+    public String getBodyParameter(String key) {
+        return body.getParameters().getParameter(key);
+    }
+
     public Parameters getParameters() {
         return body.getParameters();
     }

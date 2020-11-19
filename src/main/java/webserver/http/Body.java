@@ -9,16 +9,16 @@ import java.util.Objects;
 
 public class Body {
     private final BodyState bodyState;
-    private final String content;
+    private final Parameters parameters;
 
-    private Body(BodyState bodyState, String content) {
+    private Body(BodyState bodyState, Parameters parameters) {
         this.bodyState = bodyState;
-        this.content = content;
+        this.parameters = parameters;
     }
 
     public static Body of(BufferedReader bufferedReader, String contentLength) throws IOException {
         String body = IOUtils.readData(bufferedReader, Integer.parseInt(contentLength));
-        return new Body(BodyState.NOT_EMPTY, body);
+        return new Body(BodyState.NOT_EMPTY, Parameters.notEmptyQueryParameters(body));
     }
 
     private static boolean isNullLine(String line) {
@@ -30,7 +30,7 @@ public class Body {
         if (isNullLine(content)) {
             return new Body(BodyState.EMPTY, null);
         }
-        return new Body(BodyState.NOT_EMPTY, content);
+        return new Body(BodyState.NOT_EMPTY, Parameters.notEmptyQueryParameters(content));
     }
 
     public static Body emptyBody() {
@@ -38,7 +38,7 @@ public class Body {
     }
 
     public Parameters getParameters() {
-        return Parameters.notEmptyQueryParameters(content);
+        return parameters;
     }
 
     public byte[] getContent() {

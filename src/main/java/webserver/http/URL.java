@@ -41,4 +41,8 @@ public class URL {
     public ParametersState hasQueryParameters() {
         return parameters.getQueryParametersState();
     }
+
+    public String getParameter(String key) {
+        return parameters.getParameter(key);
+    }
 }

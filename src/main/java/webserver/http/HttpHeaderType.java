@@ -3,7 +3,8 @@ package webserver.http;
 public enum HttpHeaderType {
     CONTENT_TYPE("Content-Type: "),
     CONTENT_LENGTH("Content-Length: "),
-    LOCATION("Location: ");
+    LOCATION("Location: "),
+    CONNECTION("Connection: ");
 
     private final String type;
 
