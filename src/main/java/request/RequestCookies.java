@@ -38,6 +38,10 @@ public class RequestCookies {
             .collect(Collectors.toList());
     }
 
+    public boolean isValue(String cookieName, String expectedValue) {
+        return getValue(cookieName).equals(expectedValue);
+    }
+
     public String getValue(String cookieName) {
         if (cookiesByName.containsKey(cookieName)) {
             return cookiesByName.get(cookieName).getValue();
