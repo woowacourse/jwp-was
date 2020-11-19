@@ -38,29 +38,24 @@ public class HttpRequestReader {
     private HttpRequestReader() {
     }
 
-    public static HttpRequest parse(BufferedReader br) {
-        try {
-            String httpRequestLine = br.readLine();
-            String[] requestLines = httpRequestLine.split(HTTP_SPACE_CHARACTER);
-            if (requestLines.length != COUNT_OF_REQUEST_LINE_DATA) {
-                throw new IllegalDataParsingException();
-            }
-
-            HttpMethod requestMethod = HttpMethod.valueOf(requestLines[0]);
-            String uri = requestLines[1];
-            String[] uriQueryPair = uri.split(QUERY_PARAMETER_DELIMITER);
-            String path = uriQueryPair[0];
-            String protocolVersion = requestLines[2];
-
-            HttpRequestLine requestLine = new HttpRequestLine(requestMethod, path, protocolVersion);
-            HttpRequestHeaders requestHeader = parseRequestHeader(br);
-            HttpRequestParameters requestParameters = parseRequestParam(br, requestMethod, uriQueryPair,
-                    requestHeader);
-            return new HttpRequest(requestLine, requestHeader, requestParameters);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-            throw new RuntimeException();
+    public static HttpRequest parse(BufferedReader br) throws IOException {
+        String httpRequestLine = br.readLine();
+        String[] requestLines = httpRequestLine.split(HTTP_SPACE_CHARACTER);
+        if (requestLines.length != COUNT_OF_REQUEST_LINE_DATA) {
+            throw new IllegalDataParsingException();
         }
+
+        HttpMethod requestMethod = HttpMethod.valueOf(requestLines[0]);
+        String uri = requestLines[1];
+        String[] uriQueryPair = uri.split(QUERY_PARAMETER_DELIMITER);
+        String path = uriQueryPair[0];
+        String protocolVersion = requestLines[2];
+
+        HttpRequestLine requestLine = new HttpRequestLine(requestMethod, path, protocolVersion);
+        HttpRequestHeaders requestHeader = parseRequestHeader(br);
+        HttpRequestParameters requestParameters = parseRequestParam(br, requestMethod, uriQueryPair, requestHeader);
+
+        return new HttpRequest(requestLine, requestHeader, requestParameters);
     }
 
     private static HttpRequestHeaders parseRequestHeader(BufferedReader br) throws IOException {

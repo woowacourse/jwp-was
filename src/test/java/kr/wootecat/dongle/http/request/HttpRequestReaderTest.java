@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 import org.junit.jupiter.api.DisplayName;
@@ -17,7 +16,7 @@ class HttpRequestReaderTest {
 
     @DisplayName("HTTP GET Request 요청을 HttpRequest 객체로 파싱한다.")
     @Test
-    void parseGetRequest() throws FileNotFoundException {
+    void parseGetRequest() throws Exception {
         BufferedReader reader = new BufferedReader(new FileReader(String.format(TEST_DIRECTORY, "GET_REQUEST.txt")));
         HttpRequest httpRequest = HttpRequestReader.parse(reader);
 
@@ -38,7 +37,7 @@ class HttpRequestReaderTest {
 
     @DisplayName("Query parameter가 존재하는 HTTP GET Request 요청을 HttpRequest 객체로 파싱한다.")
     @Test
-    void parseGetRequestWithQueryParam() throws FileNotFoundException {
+    void parseGetRequestWithQueryParam() throws Exception {
         BufferedReader reader = new BufferedReader(
                 new FileReader(String.format(TEST_DIRECTORY, "GET_REQUEST_WITH_QUERY_PARAM.txt")));
         HttpRequest httpRequest = HttpRequestReader.parse(reader);
@@ -65,7 +64,7 @@ class HttpRequestReaderTest {
 
     @DisplayName("HTTP POST Request 요청을 HttpRequest 객체로 파싱한다.")
     @Test
-    void parsePostRequest() throws FileNotFoundException {
+    void parsePostRequest() throws Exception {
         BufferedReader reader = new BufferedReader(new FileReader(String.format(TEST_DIRECTORY, "POST_REQUSET.txt")));
         HttpRequest httpRequest = HttpRequestReader.parse(reader);
 

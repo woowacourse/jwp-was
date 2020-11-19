@@ -1,5 +1,6 @@
 package kr.wootecat.dongle.http;
 
+import static java.lang.String.*;
 import static java.util.Collections.*;
 import static kr.wootecat.dongle.http.Cookie.*;
 
@@ -13,7 +14,7 @@ import kr.wootecat.dongle.http.exception.IllegalCookieFormatException;
 public class CookieParser {
 
     private static final Pattern HTTP_COOKIE_VALUE_PATTERN = Pattern.compile(
-            "\\w+(\\s*=\\s*)\\w*((\\s*;\\s*)\\w+(\\s*=\\s*)\\w*)*");
+            "[\\w-]+(\\s*=\\s*)[\\w-]*((\\s*;\\s*)[\\w-]+(\\s*=\\s*)[\\w-]*)*");
 
     private static final String COOKIE_PAIR_SPLIT_REGEX = "\\s*;\\s*";
     private static final String KEY_VALUE_SPLIT_REGEX = "\\s*=\\s*";
@@ -23,7 +24,9 @@ public class CookieParser {
     private static final String EMPTY_COOKIE_VALUE = "";
 
     private static final int KEY_VALUE_PAIR_LENGTH = 2;
-    private static final String ILLEGAL_REQUEST_COOKIE_VALUE_EXCEPTION_MESSAGE = "파싱할 수 없는 쿠키값 형식으로 요청을 받았습니다.";
+
+    private static final String ILLEGAL_REQUEST_COOKIE_VALUE_EXCEPTION_MESSAGE_FORMAT =
+            "파싱할 수 없는 쿠키값 형식으로 요청을 받았습니다.: %s";
 
     private CookieParser() {
     }
@@ -58,7 +61,8 @@ public class CookieParser {
     private static void validateValueFormat(String value) {
         Matcher cookieValueFormatMatcher = HTTP_COOKIE_VALUE_PATTERN.matcher(value);
         if (!cookieValueFormatMatcher.matches()) {
-            throw new IllegalCookieFormatException(ILLEGAL_REQUEST_COOKIE_VALUE_EXCEPTION_MESSAGE);
+            throw new IllegalCookieFormatException(
+                    format(ILLEGAL_REQUEST_COOKIE_VALUE_EXCEPTION_MESSAGE_FORMAT, value));
         }
     }
 }
