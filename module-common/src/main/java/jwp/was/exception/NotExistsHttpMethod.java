@@ -1,4 +1,4 @@
-package exception;
+package jwp.was.exception;
 
 public class NotExistsHttpMethod extends IllegalArgumentException {
 

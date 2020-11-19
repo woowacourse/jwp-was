@@ -3,16 +3,16 @@ package jwp.was.webapplicationserver.configure.controller.info;
 import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import dto.HttpRequest;
-import dto.HttpResponse;
-import dto.HttpVersion;
-import dto.UrlPath;
 import java.util.Arrays;
+import jwp.was.dto.HttpRequest;
+import jwp.was.dto.HttpResponse;
+import jwp.was.dto.HttpVersion;
+import jwp.was.dto.UrlPath;
+import jwp.was.util.HttpMethod;
+import jwp.was.util.HttpStatusCode;
 import jwp.was.webapplicationserver.model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import util.HttpMethod;
-import util.HttpStatusCode;
 
 class ModelAndViewTest {
 

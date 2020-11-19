@@ -4,18 +4,18 @@ import static com.google.common.net.HttpHeaders.COOKIE;
 import static com.google.common.net.HttpHeaders.LOCATION;
 import static jwp.was.webapplicationserver.configure.security.LoginFilter.SET_COOKIE_SESSION_ID;
 
-import dto.HttpRequest;
-import dto.HttpResponse;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import jwp.was.dto.HttpRequest;
+import jwp.was.dto.HttpResponse;
+import jwp.was.util.HttpMethod;
+import jwp.was.util.HttpStatusCode;
 import jwp.was.webapplicationserver.configure.controller.info.HttpInfo;
 import jwp.was.webapplicationserver.configure.session.HttpSessions;
-import util.HttpMethod;
-import util.HttpStatusCode;
 
 public class WithLoginFilter {
 

@@ -1,19 +1,19 @@
 package jwp.was.webapplicationserver.controller;
 
 import static com.google.common.net.HttpHeaders.LOCATION;
-import static util.HttpStatusCode.FOUND;
+import static jwp.was.util.HttpStatusCode.FOUND;
 
-import dto.HttpRequest;
-import dto.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
+import jwp.was.dto.HttpRequest;
+import jwp.was.dto.HttpResponse;
+import jwp.was.util.HttpMethod;
 import jwp.was.webapplicationserver.configure.annotation.Autowired;
 import jwp.was.webapplicationserver.configure.annotation.RequestMapping;
 import jwp.was.webapplicationserver.configure.annotation.RestController;
 import jwp.was.webapplicationserver.controller.dto.UserRequest;
 import jwp.was.webapplicationserver.controller.dto.UserRequestAssembler;
 import jwp.was.webapplicationserver.service.UserService;
-import util.HttpMethod;
 
 @RestController
 public class UserController {

@@ -1,18 +1,16 @@
-package dto;
+package jwp.was.dto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static util.Constants.CONTENT_TYPE_TEXT_PLAIN;
-import static util.Constants.EMPTY;
 
 import com.google.common.net.HttpHeaders;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import jwp.was.util.Constants;
+import jwp.was.util.HttpStatusCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import util.Constants;
-import util.HttpStatusCode;
 
 class HttpResponseTest {
 
@@ -22,7 +20,7 @@ class HttpResponseTest {
     @Test
     void of_NullHttpVersion_ThrownException() {
         assertThatThrownBy(
-            () -> HttpResponse.of(null, HttpStatusCode.OK, new HashMap<>(), EMPTY))
+            () -> HttpResponse.of(null, HttpStatusCode.OK, new HashMap<>(), Constants.EMPTY))
             .isInstanceOf(NullPointerException.class);
     }
 
@@ -30,7 +28,7 @@ class HttpResponseTest {
     @Test
     void of_NullHttpStatusCode_ThrownException() {
         assertThatThrownBy(
-            () -> HttpResponse.of(HTTP_VERSION, null, new HashMap<>(), EMPTY))
+            () -> HttpResponse.of(HTTP_VERSION, null, new HashMap<>(), Constants.EMPTY))
             .isInstanceOf(NullPointerException.class);
     }
 
@@ -38,7 +36,7 @@ class HttpResponseTest {
     @Test
     void of_NullHeaders_ThrownException() {
         assertThatThrownBy(
-            () -> HttpResponse.of(HTTP_VERSION, HttpStatusCode.OK, null, EMPTY))
+            () -> HttpResponse.of(HTTP_VERSION, HttpStatusCode.OK, null, Constants.EMPTY))
             .isInstanceOf(NullPointerException.class);
     }
 
@@ -54,14 +52,14 @@ class HttpResponseTest {
     @Test
     void of_BodyIsEmpty_Success() {
         HttpResponse httpResponse
-            = HttpResponse.of(HTTP_VERSION, HttpStatusCode.OK, new HashMap<>(), EMPTY);
+            = HttpResponse.of(HTTP_VERSION, HttpStatusCode.OK, new HashMap<>(), Constants.EMPTY);
 
         assertThat(httpResponse.getHttpVersion()).isEqualTo(HTTP_VERSION);
         assertThat(httpResponse.getHttpStatusCode()).isEqualTo(HttpStatusCode.OK);
         assertThat(httpResponse.getHeaders()).hasSize(2);
         assertThat(httpResponse.getHeaders().get(HttpHeaders.CONTENT_LENGTH)).isEqualTo("0");
         assertThat(httpResponse.getHeaders().get(HttpHeaders.CONTENT_TYPE)).isEqualTo(
-            CONTENT_TYPE_TEXT_PLAIN);
+            Constants.CONTENT_TYPE_TEXT_PLAIN);
         assertThat(httpResponse.getBody()).isEmpty();
     }
 
@@ -79,7 +77,7 @@ class HttpResponseTest {
         assertThat(httpResponse.getHeaders().get(HttpHeaders.CONTENT_LENGTH))
             .isEqualTo(String.valueOf(expectedBody.length));
         assertThat(httpResponse.getHeaders().get(HttpHeaders.CONTENT_TYPE))
-            .isEqualTo(CONTENT_TYPE_TEXT_PLAIN);
+            .isEqualTo(Constants.CONTENT_TYPE_TEXT_PLAIN);
         assertThat(httpResponse.getBody()).isEqualTo(expectedBody);
     }
 
@@ -91,7 +89,7 @@ class HttpResponseTest {
         headers.put(HttpHeaders.CONTENT_TYPE, expectedContentType);
 
         HttpResponse httpResponse
-            = HttpResponse.of(HTTP_VERSION, HttpStatusCode.OK, headers, EMPTY);
+            = HttpResponse.of(HTTP_VERSION, HttpStatusCode.OK, headers, Constants.EMPTY);
 
         assertThat(httpResponse.getHttpVersion()).isEqualTo(HTTP_VERSION);
         assertThat(httpResponse.getHttpStatusCode()).isEqualTo(HttpStatusCode.OK);
@@ -110,14 +108,14 @@ class HttpResponseTest {
         headers.put(HttpHeaders.CONTENT_LOCATION, expectedLocation);
 
         HttpResponse httpResponse
-            = HttpResponse.of(HTTP_VERSION, HttpStatusCode.OK, headers, EMPTY);
+            = HttpResponse.of(HTTP_VERSION, HttpStatusCode.OK, headers, Constants.EMPTY);
 
         assertThat(httpResponse.getHttpVersion()).isEqualTo(HTTP_VERSION);
         assertThat(httpResponse.getHttpStatusCode()).isEqualTo(HttpStatusCode.OK);
         assertThat(httpResponse.getHeaders()).hasSize(3);
         assertThat(httpResponse.getHeaders().get(HttpHeaders.CONTENT_LENGTH)).isEqualTo("0");
         assertThat(httpResponse.getHeaders().get(HttpHeaders.CONTENT_TYPE))
-            .isEqualTo(CONTENT_TYPE_TEXT_PLAIN);
+            .isEqualTo(Constants.CONTENT_TYPE_TEXT_PLAIN);
         assertThat(httpResponse.getHeaders().get(HttpHeaders.CONTENT_LOCATION))
             .isEqualTo(expectedLocation);
         assertThat(httpResponse.getBody()).isEmpty();

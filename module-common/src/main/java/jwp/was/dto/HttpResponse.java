@@ -1,4 +1,4 @@
-package dto;
+package jwp.was.dto;
 
 import com.google.common.net.HttpHeaders;
 import java.nio.charset.StandardCharsets;
@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import util.HttpStatusCode;
+import jwp.was.util.HttpStatusCode;
 
 public class HttpResponse {
 

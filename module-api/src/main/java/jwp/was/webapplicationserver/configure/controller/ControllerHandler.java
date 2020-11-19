@@ -1,15 +1,15 @@
 package jwp.was.webapplicationserver.configure.controller;
 
-import static util.HttpStatusCode.METHOD_NOT_ALLOW;
-import static util.HttpStatusCode.NOT_FOUND;
+import static jwp.was.util.HttpStatusCode.METHOD_NOT_ALLOW;
+import static jwp.was.util.HttpStatusCode.NOT_FOUND;
 
-import dto.HttpRequest;
-import dto.HttpResponse;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import jwp.was.dto.HttpRequest;
+import jwp.was.dto.HttpResponse;
 import jwp.was.webapplicationserver.configure.annotation.AnnotationChecker;
 import jwp.was.webapplicationserver.configure.annotation.ResponseBody;
 import jwp.was.webapplicationserver.configure.controller.info.MatchedInfo;

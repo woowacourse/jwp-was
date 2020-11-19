@@ -1,7 +1,7 @@
 package jwp.was.webapplicationserver.configure.controller.info;
 
 import java.util.Objects;
-import util.HttpMethod;
+import jwp.was.util.HttpMethod;
 
 public class HttpInfo {
 

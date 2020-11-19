@@ -1,12 +1,12 @@
 package jwp.was.webserver;
 
+import com.google.common.base.Stopwatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StopWatch;
 
 public class ExecutorsTest {
 
@@ -16,8 +16,7 @@ public class ExecutorsTest {
     public static void main(String[] args) throws Exception {
         ExecutorService es = Executors.newFixedThreadPool(100);
 
-        StopWatch sw = new StopWatch();
-        sw.start();
+        Stopwatch sw = Stopwatch.createStarted();
         for (int i = 0; i < 100; i++) {
             es.execute(() -> {
                 int idx = COUNTER.addAndGet(1);
@@ -33,7 +32,7 @@ public class ExecutorsTest {
 
         es.shutdown();
         es.awaitTermination(100, TimeUnit.SECONDS);
-        LOGGER.info("Total Elaspsed: {}", sw.getTotalTimeSeconds());
+        LOGGER.info("Total Elaspsed Milliseconds : {}", sw.elapsed(TimeUnit.MILLISECONDS));
     }
 }
 

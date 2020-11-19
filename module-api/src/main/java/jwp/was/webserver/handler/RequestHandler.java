@@ -1,6 +1,5 @@
 package jwp.was.webserver.handler;
 
-import dto.HttpRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import jwp.was.dto.HttpRequest;
 import jwp.was.webserver.dto.HttpRequestAssembler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

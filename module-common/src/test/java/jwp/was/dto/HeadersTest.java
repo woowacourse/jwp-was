@@ -1,12 +1,12 @@
-package dto;
+package jwp.was.dto;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static util.Constants.EMPTY;
 
 import com.google.common.net.HttpHeaders;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import jwp.was.util.Constants;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -43,7 +43,7 @@ class HeadersTest {
         Map<String, String> headersDetail = headers.getHeaders();
         assertThat(headersDetail).hasSize(2);
         assertThat(headersDetail.get(HttpHeaders.CONTENT_LENGTH)).isEqualTo(CONTENT_LENGTH);
-        assertThat(headersDetail.get(HttpHeaders.CONTENT_TYPE)).isEqualTo(EMPTY);
+        assertThat(headersDetail.get(HttpHeaders.CONTENT_TYPE)).isEqualTo(Constants.EMPTY);
     }
 
     @DisplayName("정적 팩터리 메서드, 헤더 값이 없는 경우 EMPTY 치환")

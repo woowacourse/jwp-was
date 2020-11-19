@@ -3,10 +3,10 @@ package jwp.was.webserver;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import exception.NotExistsHttpMethod;
+import jwp.was.exception.NotExistsHttpMethod;
+import jwp.was.util.HttpMethod;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import util.HttpMethod;
 
 class HttpMethodTest {
 

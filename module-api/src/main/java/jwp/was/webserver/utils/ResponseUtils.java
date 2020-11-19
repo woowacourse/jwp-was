@@ -2,10 +2,10 @@ package jwp.was.webserver.utils;
 
 import static java.lang.System.lineSeparator;
 
-import dto.HttpResponse;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Map;
+import jwp.was.dto.HttpResponse;
 
 public class ResponseUtils {
 

@@ -6,17 +6,17 @@ import static jwp.was.util.Constants.HEADERS_EMPTY;
 import static jwp.was.util.Constants.HTTP_VERSION;
 import static jwp.was.util.Constants.PARAMETERS_EMPTY;
 import static jwp.was.util.Constants.URL_PATH_INDEX_HTML;
+import static jwp.was.util.HttpMethod.GET;
 import static org.assertj.core.api.Assertions.assertThat;
-import static util.HttpMethod.GET;
 
-import dto.HttpRequest;
-import dto.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import jwp.was.dto.HttpRequest;
+import jwp.was.dto.HttpResponse;
+import jwp.was.util.HttpStatusCode;
 import jwp.was.util.exception.ChildOfException;
 import jwp.was.util.exception.ChildOfIllegalArgumentException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import util.HttpStatusCode;
 
 class GlobalExceptionHandlerTest {
 

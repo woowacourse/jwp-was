@@ -1,13 +1,13 @@
-package dto;
+package jwp.was.dto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static util.Constants.EMPTY;
 
-import exception.NotExistsUrlPath;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import jwp.was.exception.NotExistsUrlPath;
+import jwp.was.util.Constants;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -61,7 +61,7 @@ class ParametersTest {
         Parameters parameters = Parameters.fromEncodedParameter(parameter);
 
         assertThat(parameters.getParameters()).hasSize(1);
-        assertThat(parameters.getParameters().get(key)).isEqualTo(EMPTY);
+        assertThat(parameters.getParameters().get(key)).isEqualTo(Constants.EMPTY);
     }
 
     @DisplayName("파라미터 키/값 구분자가 없는 경우 Drop")

@@ -1,10 +1,10 @@
 package jwp.was.util;
 
-import dto.Headers;
-import dto.HttpVersion;
-import dto.Parameters;
-import dto.UrlPath;
 import java.util.ArrayList;
+import jwp.was.dto.Headers;
+import jwp.was.dto.HttpVersion;
+import jwp.was.dto.Parameters;
+import jwp.was.dto.UrlPath;
 
 public class Constants {
 

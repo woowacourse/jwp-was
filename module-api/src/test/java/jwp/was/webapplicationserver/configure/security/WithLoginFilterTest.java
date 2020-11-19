@@ -13,16 +13,18 @@ import static jwp.was.util.Constants.USER_EMAIL;
 import static jwp.was.util.Constants.USER_ID;
 import static jwp.was.util.Constants.USER_NAME;
 import static jwp.was.util.Constants.USER_PASSWORD;
+import static jwp.was.util.HttpMethod.GET;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static util.HttpMethod.GET;
 
-import dto.Headers;
-import dto.HttpRequest;
-import dto.HttpResponse;
-import dto.UrlPath;
 import java.util.HashMap;
 import java.util.Map;
+import jwp.was.dto.Headers;
+import jwp.was.dto.HttpRequest;
+import jwp.was.dto.HttpResponse;
+import jwp.was.dto.UrlPath;
+import jwp.was.util.HttpMethod;
+import jwp.was.util.HttpStatusCode;
 import jwp.was.webapplicationserver.configure.controller.info.HttpInfo;
 import jwp.was.webapplicationserver.configure.session.HttpSession;
 import jwp.was.webapplicationserver.configure.session.HttpSessions;
@@ -30,8 +32,6 @@ import jwp.was.webapplicationserver.configure.session.UUIDBasedHttpSession;
 import jwp.was.webapplicationserver.model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import util.HttpMethod;
-import util.HttpStatusCode;
 
 class WithLoginFilterTest {
 

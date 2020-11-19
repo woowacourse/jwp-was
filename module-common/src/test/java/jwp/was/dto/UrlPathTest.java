@@ -1,8 +1,8 @@
-package dto;
+package jwp.was.dto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import exception.NotExistsUrlPath;
+import jwp.was.exception.NotExistsUrlPath;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

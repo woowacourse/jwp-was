@@ -1,8 +1,8 @@
-package dto;
+package jwp.was.dto;
 
-import exception.NotExistsUrlPath;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import jwp.was.exception.NotExistsUrlPath;
 
 public class UrlPath {
 

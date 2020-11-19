@@ -1,6 +1,6 @@
-package util;
+package jwp.was.util;
 
-import dto.HttpVersion;
+import jwp.was.dto.HttpVersion;
 
 public class Constants {
 

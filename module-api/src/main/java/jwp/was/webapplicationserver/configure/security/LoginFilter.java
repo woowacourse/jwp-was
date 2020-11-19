@@ -2,14 +2,14 @@ package jwp.was.webapplicationserver.configure.security;
 
 import static com.google.common.net.HttpHeaders.LOCATION;
 import static com.google.common.net.HttpHeaders.SET_COOKIE;
-import static util.HttpMethod.POST;
-import static util.HttpStatusCode.FOUND;
+import static jwp.was.util.HttpMethod.POST;
+import static jwp.was.util.HttpStatusCode.FOUND;
 
-import dto.HttpRequest;
-import dto.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import jwp.was.dto.HttpRequest;
+import jwp.was.dto.HttpResponse;
 import jwp.was.webapplicationserver.configure.annotation.UserDetails;
 import jwp.was.webapplicationserver.configure.maker.ConfigureMaker;
 import jwp.was.webapplicationserver.controller.dto.LoginRequest;

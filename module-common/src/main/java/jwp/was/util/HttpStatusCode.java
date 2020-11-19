@@ -1,4 +1,4 @@
-package util;
+package jwp.was.util;
 
 public enum HttpStatusCode {
 

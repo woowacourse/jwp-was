@@ -2,16 +2,16 @@ package jwp.was.webapplicationserver.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import dto.HttpRequest;
-import dto.HttpResponse;
-import dto.HttpVersion;
-import dto.UrlPath;
+import jwp.was.dto.HttpRequest;
+import jwp.was.dto.HttpResponse;
+import jwp.was.dto.HttpVersion;
+import jwp.was.dto.UrlPath;
+import jwp.was.util.HttpMethod;
+import jwp.was.util.HttpStatusCode;
 import jwp.was.webapplicationserver.configure.controller.info.ModelAndView;
 import jwp.was.webapplicationserver.configure.maker.ConfigureMaker;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import util.HttpMethod;
-import util.HttpStatusCode;
 
 class UserPageControllerTest {
 

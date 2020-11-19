@@ -17,17 +17,18 @@ import static jwp.was.util.Constants.USER_EMAIL;
 import static jwp.was.util.Constants.USER_ID;
 import static jwp.was.util.Constants.USER_NAME;
 import static jwp.was.util.Constants.USER_PASSWORD;
+import static jwp.was.util.HttpMethod.CONNECT;
+import static jwp.was.util.HttpMethod.GET;
+import static jwp.was.util.HttpMethod.POST;
 import static org.assertj.core.api.Assertions.assertThat;
-import static util.HttpMethod.CONNECT;
-import static util.HttpMethod.GET;
-import static util.HttpMethod.POST;
 
-import dto.Headers;
-import dto.HttpRequest;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import jwp.was.dto.Headers;
+import jwp.was.dto.HttpRequest;
+import jwp.was.util.HttpStatusCode;
 import jwp.was.webapplicationserver.configure.session.HttpSession;
 import jwp.was.webapplicationserver.configure.session.HttpSessions;
 import jwp.was.webapplicationserver.configure.session.UUIDBasedHttpSession;
@@ -36,7 +37,6 @@ import jwp.was.webapplicationserver.model.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import util.HttpStatusCode;
 
 class ControllerHandlerTest {
 

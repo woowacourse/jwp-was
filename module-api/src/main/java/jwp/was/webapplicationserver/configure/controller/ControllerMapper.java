@@ -1,10 +1,10 @@
 package jwp.was.webapplicationserver.configure.controller;
 
-import dto.HttpRequest;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import jwp.was.dto.HttpRequest;
 import jwp.was.webapplicationserver.configure.annotation.Controller;
 import jwp.was.webapplicationserver.configure.annotation.RequestMapping;
 import jwp.was.webapplicationserver.configure.controller.info.HttpInfo;

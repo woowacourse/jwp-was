@@ -9,14 +9,16 @@ import static jwp.was.util.Constants.PARAMETERS_EMPTY;
 import static jwp.was.util.Constants.URL_PATH_BOOTSTRAP_MIN_CSS;
 import static jwp.was.util.Constants.URL_PATH_INDEX_HTML;
 import static jwp.was.util.Constants.URL_PATH_NOT_EXISTS_FILE;
+import static jwp.was.util.HttpMethod.GET;
 import static org.assertj.core.api.Assertions.assertThat;
-import static util.HttpMethod.GET;
 
-import dto.HttpRequest;
-import dto.UrlPath;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import jwp.was.dto.HttpRequest;
+import jwp.was.dto.UrlPath;
+import jwp.was.util.HttpMethod;
+import jwp.was.util.HttpStatusCode;
 import jwp.was.webserver.utils.FileIoUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,8 +26,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.HttpMethod;
-import util.HttpStatusCode;
 
 class FileHandlerTest {
 

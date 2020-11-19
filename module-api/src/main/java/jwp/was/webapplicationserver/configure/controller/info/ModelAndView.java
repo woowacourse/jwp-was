@@ -6,13 +6,13 @@ import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
-import dto.HttpRequest;
-import dto.HttpResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import jwp.was.dto.HttpRequest;
+import jwp.was.dto.HttpResponse;
+import jwp.was.util.HttpStatusCode;
 import jwp.was.webapplicationserver.configure.controller.handlebar.RowNumberHelper;
-import util.HttpStatusCode;
 
 public class ModelAndView {
 

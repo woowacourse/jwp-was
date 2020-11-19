@@ -1,19 +1,19 @@
 package jwp.was.webserver.dto;
 
 import com.google.common.net.HttpHeaders;
-import dto.Headers;
-import dto.HttpRequest;
-import dto.HttpVersion;
-import dto.Parameters;
-import dto.UrlPath;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import jwp.was.dto.Headers;
+import jwp.was.dto.HttpRequest;
+import jwp.was.dto.HttpVersion;
+import jwp.was.dto.Parameters;
+import jwp.was.dto.UrlPath;
+import jwp.was.util.HttpMethod;
 import jwp.was.webserver.utils.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.HttpMethod;
 
 public class HttpRequestAssembler {
 

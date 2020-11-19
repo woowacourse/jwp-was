@@ -1,7 +1,7 @@
-package util;
+package jwp.was.util;
 
-import exception.NotExistsHttpMethod;
 import java.util.Arrays;
+import jwp.was.exception.NotExistsHttpMethod;
 
 public enum HttpMethod {
     GET(false),

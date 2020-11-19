@@ -1,6 +1,6 @@
-package dto;
+package jwp.was.dto;
 
-import static dto.UrlPath.getUrlPathAndQueryStrings;
+import static jwp.was.dto.UrlPath.getUrlPathAndQueryStrings;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;

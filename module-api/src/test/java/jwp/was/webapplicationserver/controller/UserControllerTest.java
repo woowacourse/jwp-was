@@ -6,18 +6,18 @@ import static jwp.was.util.Constants.HTTP_VERSION;
 import static jwp.was.util.Constants.PARAMETERS_FOR_CREATE_USER;
 import static jwp.was.util.Constants.URL_PATH_API_CREATE_USER;
 import static jwp.was.util.Constants.URL_PATH_INDEX_HTML;
+import static jwp.was.util.HttpMethod.POST;
 import static org.assertj.core.api.Assertions.assertThat;
-import static util.HttpMethod.POST;
 
-import dto.HttpRequest;
-import dto.HttpResponse;
-import dto.Parameters;
+import jwp.was.dto.HttpRequest;
+import jwp.was.dto.HttpResponse;
+import jwp.was.dto.Parameters;
+import jwp.was.util.HttpStatusCode;
 import jwp.was.webapplicationserver.configure.maker.ConfigureMaker;
 import jwp.was.webapplicationserver.db.DataBaseTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import util.HttpStatusCode;
 
 class UserControllerTest {
 

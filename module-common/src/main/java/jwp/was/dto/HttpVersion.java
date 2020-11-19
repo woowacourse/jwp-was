@@ -1,4 +1,4 @@
-package dto;
+package jwp.was.dto;
 
 public class HttpVersion {
 

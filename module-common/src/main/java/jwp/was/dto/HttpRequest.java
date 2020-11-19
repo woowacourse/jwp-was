@@ -1,7 +1,7 @@
-package dto;
+package jwp.was.dto;
 
 import java.util.Map;
-import util.HttpMethod;
+import jwp.was.util.HttpMethod;
 
 public class HttpRequest {
 

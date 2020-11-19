@@ -1,4 +1,4 @@
-package exception;
+package jwp.was.exception;
 
 public class NotExistsUrlPath extends IllegalArgumentException {
 

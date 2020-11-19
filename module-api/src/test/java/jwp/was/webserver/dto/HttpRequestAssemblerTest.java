@@ -3,7 +3,6 @@ package jwp.was.webserver.dto;
 import static java.lang.System.lineSeparator;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import dto.HttpRequest;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -13,7 +12,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import jwp.was.dto.HttpRequest;
 import jwp.was.util.Constants;
+import jwp.was.util.HttpMethod;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -21,7 +22,6 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.HttpMethod;
 
 class HttpRequestAssemblerTest {
 

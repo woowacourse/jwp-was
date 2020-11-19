@@ -1,20 +1,20 @@
 package jwp.was.webserver.handler;
 
 import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
-import static util.HttpMethod.GET;
+import static jwp.was.util.HttpMethod.GET;
 
-import dto.HttpRequest;
-import dto.HttpResponse;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import jwp.was.dto.HttpRequest;
+import jwp.was.dto.HttpResponse;
+import jwp.was.util.HttpStatusCode;
 import jwp.was.webserver.ExtensionMimeMatcher;
 import jwp.was.webserver.utils.FileIoUtils;
 import jwp.was.webserver.utils.FileNotExitsException;
 import jwp.was.webserver.utils.ResponseUtils;
-import util.HttpStatusCode;
 
 public class FileHandler {
 

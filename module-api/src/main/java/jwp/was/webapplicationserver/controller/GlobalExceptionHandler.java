@@ -1,8 +1,8 @@
 package jwp.was.webapplicationserver.controller;
 
-import dto.HttpRequest;
-import dto.HttpResponse;
-import util.HttpStatusCode;
+import jwp.was.dto.HttpRequest;
+import jwp.was.dto.HttpResponse;
+import jwp.was.util.HttpStatusCode;
 
 public class GlobalExceptionHandler {
 

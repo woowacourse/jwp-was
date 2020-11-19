@@ -1,0 +1,4 @@
+rootProject.name = 'jwp-was'
+
+include 'module-common'
+include 'module-api'
