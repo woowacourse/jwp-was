@@ -31,6 +31,10 @@ public class HttpRequest {
         return requestLine.getMethod();
     }
 
+    public String getHeader(String name) {
+        return requestHeaders.get(name);
+    }
+
     public String getParameter(String key) {
         return requestParameters.get(key);
     }
@@ -41,5 +45,13 @@ public class HttpRequest {
 
     public boolean hasCookie(String name) {
         return requestHeaders.containsCookie(name);
+    }
+
+    public String getCookie(String name) {
+        return requestHeaders.getCookie(name);
+    }
+
+    public String getProtocol() {
+        return requestLine.getVersion();
     }
 }

@@ -26,6 +26,10 @@ public class HttpRequestLine {
         return this.path;
     }
 
+    public String getVersion() {
+        return this.version;
+    }
+
     public HttpMethod getMethod() {
         return method;
     }

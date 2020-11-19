@@ -29,6 +29,14 @@ public class HttpRequestHeaders {
                 .anyMatch(cookie -> cookie.hasName(name));
     }
 
+    public String getCookie(String name) {
+        return cookies.stream()
+                .filter(cookie -> cookie.hasName(name))
+                .findAny()
+                .map(Cookie::getValue)
+                .orElse(null);
+    }
+
     public String get(String key) {
         return headers.get(key);
     }
