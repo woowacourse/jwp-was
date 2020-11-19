@@ -19,12 +19,15 @@ public class HttpRequest {
         httpRequestStartLine = HttpRequestStartLine.of(startLine);
         httpHeaders = HttpHeaders.of(bufferedReader);
         HttpHeader contentLengthHeader = HttpHeader.of(HttpHeaderType.CONTENT_LENGTH);
+        body = initializeBody(bufferedReader, contentLengthHeader);
+    }
+
+    private Body initializeBody(BufferedReader bufferedReader, HttpHeader contentLengthHeader) throws IOException {
         if (httpHeaders.contains(contentLengthHeader)) {
             String contentLength = httpHeaders.getHttpHeader(contentLengthHeader);
-            body = Body.of(bufferedReader, contentLength);
-            return;
+            return Body.of(bufferedReader, contentLength);
         }
-        body = Body.emptyBody();
+        return Body.emptyBody();
     }
 
     public boolean isGetRequest() {
