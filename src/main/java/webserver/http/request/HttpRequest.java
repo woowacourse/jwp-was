@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 public class HttpRequest {
     private final HttpRequestStartLine httpRequestStartLine;
     private final HttpHeaders httpHeaders;
-    private final Body body;
+    private final HttpRequestBody httpRequestBody;
 
     public HttpRequest(InputStream inputStream) throws IOException {
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
@@ -19,15 +19,16 @@ public class HttpRequest {
         httpRequestStartLine = HttpRequestStartLine.of(startLine);
         httpHeaders = HttpHeaders.of(bufferedReader);
         HttpHeader contentLengthHeader = HttpHeader.of(HttpHeaderType.CONTENT_LENGTH);
-        body = initializeBody(bufferedReader, contentLengthHeader);
+        httpRequestBody = initHttpRequestBody(bufferedReader, contentLengthHeader);
     }
 
-    private Body initializeBody(BufferedReader bufferedReader, HttpHeader contentLengthHeader) throws IOException {
+    private HttpRequestBody initHttpRequestBody(BufferedReader bufferedReader, HttpHeader contentLengthHeader)
+            throws IOException {
         if (httpHeaders.contains(contentLengthHeader)) {
             String contentLength = httpHeaders.getHttpHeader(contentLengthHeader);
-            return Body.of(bufferedReader, contentLength);
+            return HttpRequestBody.of(bufferedReader, contentLength);
         }
-        return Body.emptyBody();
+        return HttpRequestBody.emptyRequestBody();
     }
 
     public boolean isGetRequest() {
@@ -50,15 +51,15 @@ public class HttpRequest {
         return httpHeaders.getHttpHeader(httpHeader);
     }
 
-    public String getParameter(String key) {
+    public String getQueryParameter(String key) {
         return httpRequestStartLine.getParameter(key);
     }
 
     public String getBodyParameter(String key) {
-        return body.getParameters().getParameter(key);
+        return httpRequestBody.getParameters().getParameter(key);
     }
 
-    public Parameters getParameters() {
-        return body.getParameters();
+    public Parameters getBodyParameters() {
+        return httpRequestBody.getParameters();
     }
 }

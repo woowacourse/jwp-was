@@ -35,7 +35,7 @@ public class UserCreateController extends AbstractController {
 
     @Override
     public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
-        Parameters parameters = httpRequest.getParameters();
+        Parameters parameters = httpRequest.getBodyParameters();
         Map<String, String> bodyParameters = parameters.getParameters();
         UserService.create(bodyParameters);
 

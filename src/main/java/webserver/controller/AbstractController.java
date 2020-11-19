@@ -24,9 +24,6 @@ public abstract class AbstractController implements Controller {
         if (httpRequest.isPostRequest()) {
             doPost(httpRequest, httpResponse);
         }
-        // 베스킨 라빈스 == 31
-        // 31 == 쿨라임
-        // 베스킨 라빈스 == 쿨라
     }
 
     @Override

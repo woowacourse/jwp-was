@@ -49,7 +49,7 @@ public class HttpRequestTest {
                 () -> assertThat(request.getMethod()).isEqualTo("GET"),
                 () -> assertThat(request.getUrl().getPath()).isEqualTo("/user/create"),
                 () -> assertThat(request.getHeader(HttpHeader.of(HttpHeaderType.CONNECTION))).isEqualTo("keep-alive"),
-                () -> assertThat(request.getParameter("userId")).isEqualTo("javajigi")
+                () -> assertThat(request.getQueryParameter("userId")).isEqualTo("javajigi")
         );
     }
 

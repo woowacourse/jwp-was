@@ -28,6 +28,13 @@ public enum ContentType {
                 .orElse(HTML);
     }
 
+    public static ContentType from(String path) {
+        return Arrays.stream(values())
+                .filter(contentType -> path.endsWith(contentType.fileExtender))
+                .findFirst()
+                .orElse(HTML);
+    }
+
     public String getDirectory() {
         return directory;
     }

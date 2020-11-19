@@ -11,6 +11,10 @@ public class HttpResponseStartLine {
         this.httpStatusCode = httpStatusCode;
     }
 
+    public static HttpResponseStartLine defaultStartLine() {
+        return new HttpResponseStartLine(HttpVersion.HTTP_1_1, HttpStatusCode.OK);
+    }
+
     @Override
     public String toString() {
         return httpVersion.getVersion() + " "
