@@ -1,4 +1,4 @@
-package web;
+package web.application;
 
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;

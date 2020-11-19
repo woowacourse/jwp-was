@@ -1,4 +1,4 @@
-package web.common;
+package web.server.domain.common;
 
 import java.util.Objects;
 

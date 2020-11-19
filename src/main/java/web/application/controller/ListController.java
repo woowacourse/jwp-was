@@ -3,7 +3,7 @@ package web.application.controller;
 import db.DataBase;
 import java.util.ArrayList;
 import java.util.Optional;
-import web.HandlebarsHelper;
+import web.application.HandlebarsHelper;
 import web.application.dto.UserListResponse;
 import web.server.domain.request.HttpRequest;
 import web.server.domain.response.HttpResponse;

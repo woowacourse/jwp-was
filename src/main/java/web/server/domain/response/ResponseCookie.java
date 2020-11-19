@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 import lombok.Getter;
-import web.common.Cookie;
+import web.server.domain.common.Cookie;
 
 @Getter
 public class ResponseCookie {
