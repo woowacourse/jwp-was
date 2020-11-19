@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import webserver.Method;
+
 public class RequestUtils {
     public static final String SPACE = " ";
     public static final String QUESTION_MARK = "\\?";
@@ -19,9 +21,9 @@ public class RequestUtils {
             .split(QUESTION_MARK)[0];
     }
 
-    public static String getMethod(String request) {
-        return getFirstLine(request)
-            .split(SPACE)[0];
+    public static Method getMethod(String request) {
+        return Method.valueOf(getFirstLine(request)
+            .split(SPACE)[0]);
     }
 
     public static String getFirstLine(String request) {
@@ -45,7 +47,7 @@ public class RequestUtils {
         return path.split("//.")[0];
     }
 
-    public static Map<String, String> getQueryParameters(String request) {
+    public static Map<String, String> getQuery(String request) {
         String firstLine = getFirstLine(request);
         if (!firstLine.contains("?")) {
             return Collections.emptyMap();

@@ -28,7 +28,7 @@ public class RequestTest {
     void getQueryParameters() throws IOException {
         String input = "GET /user/create?userId=javajigi&password=password&name=jaesung&email=javajigi@slipp.net HTTP/1.1";
         Request request = new Request(new ByteArrayInputStream(input.getBytes()));
-        Map<String, String> queryParameters = request.getQueryParameters();
+        QueryParams queryParameters = request.getQuery();
 
         assertThat(queryParameters.get("userId")).isEqualTo("javajigi");
         assertThat(queryParameters.get("password")).isEqualTo("password");
@@ -40,8 +40,8 @@ public class RequestTest {
     void getEmptyQueryParameters() throws IOException {
         String input = "GET /user/create";
         Request request = new Request(new ByteArrayInputStream(input.getBytes()));
-        Map<String, String> queryParameters = request.getQueryParameters();
-        assertThat(queryParameters.keySet()).hasSize(0);
+        QueryParams queryParameters = request.getQuery();
+        assertThat(queryParameters.length()).isEqualTo(0);
     }
 
     @Test
