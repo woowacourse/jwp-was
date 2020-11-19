@@ -11,10 +11,10 @@ import java.util.HashMap;
 import jwp.was.dto.HttpRequest;
 import jwp.was.dto.HttpResponse;
 import jwp.was.util.HttpStatusCode;
+import jwp.was.util.ResponseUtils;
 import jwp.was.webserver.ExtensionMimeMatcher;
 import jwp.was.webserver.utils.FileIoUtils;
 import jwp.was.webserver.utils.FileNotExitsException;
-import jwp.was.webserver.utils.ResponseUtils;
 
 public class FileHandler {
 

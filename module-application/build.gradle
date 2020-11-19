@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-version '1.0.0'
+version 'unspecified'
 
 sourceCompatibility = 1.8
 
@@ -12,6 +12,7 @@ repositories {
 
 dependencies {
     implementation project(':module-common')
-    implementation project(':module-application')
+    implementation 'org.reflections:reflections:0.9.11'
     implementation 'ch.qos.logback:logback-classic:1.2.3'
+    implementation 'com.github.jknack:handlebars:4.2.0'
 }

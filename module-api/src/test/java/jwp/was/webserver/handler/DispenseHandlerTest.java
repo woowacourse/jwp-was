@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import jwp.was.dto.HttpRequest;
 import jwp.was.util.HttpStatusCode;
-import jwp.was.webapplicationserver.db.DataBaseTest;
+import jwp.was.webserver.db.DataBaseTest;
 import jwp.was.webserver.utils.FileIoUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
