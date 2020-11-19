@@ -48,7 +48,7 @@ public class HttpResponse {
     }
 
     public void addCookie(Cookie cookie) {
-        responseHeaders.addHeader(SET_COOKIE, CookieParser.parse(cookie));
+        responseHeaders.addHeader(SET_COOKIE, CookieParser.toHttpResponseFormat(cookie));
     }
 
     public void addBody(byte[] body, MimeType mimeType) {
