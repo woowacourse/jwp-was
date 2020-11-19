@@ -33,11 +33,10 @@ public class UserListServlet extends HttpServlet {
     protected void doGet(HttpRequest request, HttpResponse response) {
         boolean logined = request.hasCookie(LOGINED, true);
         if (!logined) {
-            logger.error("401");
             try {
                 response.addBody(FileIoUtils.loadFileFromClasspath(REQUIRE_AUTH_PAGE_URL), HTML_UTF_8);
             } catch (IOException | URISyntaxException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage());
             }
             return;
         }
@@ -54,7 +53,7 @@ public class UserListServlet extends HttpServlet {
             response.addBody(userListPage.getBytes(UTF_8), HTML_UTF_8);
             logger.debug("{}", userListPage);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
     }
 }
