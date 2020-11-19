@@ -1,4 +1,4 @@
-package controller;
+package servlet;
 
 import http.HttpRequest;
 import http.HttpResponse;
