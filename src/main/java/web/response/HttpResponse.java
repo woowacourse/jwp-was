@@ -39,6 +39,13 @@ public class HttpResponse {
         write();
     }
 
+    public void ok(String path) {
+        responseLine = new ResponseLine(ResponseStatus.OK, HTTP_VERSION);
+        addHeader(HttpHeader.CONTENT_TYPE, "text/html;charset=UTF-8");
+        responseBody = new ResponseBody(path.getBytes());
+        write();
+    }
+
     public void found(String location) {
         responseLine = new ResponseLine(ResponseStatus.FOUND, HTTP_VERSION);
         addHeader(HttpHeader.LOCATION, location);

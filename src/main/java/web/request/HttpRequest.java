@@ -21,6 +21,7 @@ public class HttpRequest {
     private final RequestLine requestLine;
     private final HttpHeader httpHeader;
     private final RequestBody requestBody;
+    private final Cookies cookies;
 
     public HttpRequest(InputStream inputStream) {
         try {
@@ -28,6 +29,7 @@ public class HttpRequest {
             requestLine = new RequestLine(request.readLine());
             httpHeader = new HttpHeader(mappingHeaders(request));
             requestBody = mappingBodies(request);
+            cookies = new Cookies(httpHeader.getHeaderByKey(HttpHeader.COOKIE));
         } catch (IndexOutOfBoundsException | NullPointerException | IOException e) {
             throw new InvalidHttpRequestException();
         }
@@ -90,5 +92,9 @@ public class HttpRequest {
 
     public String getRequestBodyByKey(String key) {
         return requestBody.getParameterByKey(key);
+    }
+
+    public String getCookieByKey(String key) {
+        return cookies.getCookieByKey(key);
     }
 }
