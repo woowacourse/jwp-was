@@ -14,7 +14,7 @@ import webserver.HttpRequestFixture;
 class HttpRequestTest {
     @DisplayName("GET 요청에 대한 HttpRequest 객체를 생성한다. ")
     @Test
-    void of_whenRequestMethodIsGet() throws IOException {
+    void of_shouldGenerateHttpRequest_whenRequestMethodIsGet() throws IOException {
         HttpRequest httpRequest = HttpRequestFixture.httpRequestOfGetMethod();
 
         Map<String, String> expectedParameters = new HashMap<>();
@@ -24,5 +24,14 @@ class HttpRequestTest {
         expectedParameters.put("email", "javajigi%40slipp.net");
         assertThat(httpRequest.getDefaultPath()).isEqualTo("/user/create");
         assertThat(httpRequest.getParameters()).isEqualTo(expectedParameters);
+    }
+
+    @Test
+    void of_shouldParseCookie_whenHttpRequestHasCookie() throws IOException {
+        HttpRequest httpRequest = HttpRequestFixture.httpRequestOfUserList();
+
+        String cookieValue = httpRequest.getCookieValue("logined");
+
+        assertThat(cookieValue).isEqualTo("true");
     }
 }

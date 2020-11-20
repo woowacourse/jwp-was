@@ -28,6 +28,10 @@ public class HttpRequest {
         return new HttpRequest(requestLine, requestHeader, requestBody);
     }
 
+    public String getCookieValue(String cookieName) {
+        return requestHeader.getCookieValue(cookieName);
+    }
+
     public String getDefaultPath() {
         return requestLine.getPath();
     }

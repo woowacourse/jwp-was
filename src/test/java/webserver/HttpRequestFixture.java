@@ -49,4 +49,9 @@ public class HttpRequestFixture {
         ClassPathResource resource = new ClassPathResource("usercreaterequest/PostRequest.txt");
         return HttpRequest.of(resource.getInputStream());
     }
+
+    public static HttpRequest httpRequestOfUserList() throws IOException {
+        ClassPathResource resource = new ClassPathResource("userlistrequest/GetRequest.txt");
+        return HttpRequest.of(resource.getInputStream());
+    }
 }
