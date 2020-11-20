@@ -38,13 +38,13 @@ public class LoginController extends AbstractController {
 
         if (user != null && password.equals(user.getPassword())) {
             return HttpResponse.ok()
-                .body("./templates/index.html")
+                .bodyByPath("./templates/index.html")
                 .setCookie("logined", "true", "/")
                 .build();
         }
 
         return HttpResponse.ok()
-            .body("./templates/user/login_failed.html")
+            .bodyByPath("./templates/user/login_failed.html")
             .setCookie("logined", "false", "/")
             .build();
     }

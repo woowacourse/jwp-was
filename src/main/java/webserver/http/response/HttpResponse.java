@@ -121,7 +121,7 @@ public class HttpResponse {
             return this;
         }
 
-        public Builder body(String path) {
+        public Builder bodyByPath(String path) {
             byte[] body = FileIoUtils.loadFileFromClasspath(path);
             String[] splitPath = path.split(DELIMITER);
             String extension = splitPath[splitPath.length-1];
@@ -130,6 +130,14 @@ public class HttpResponse {
             this.contentType(contentType.value())
                 .contentLength(body.length);
             this.body = body;
+            return this;
+        }
+
+        public Builder body(String body) {
+            byte[] bodyInBytes = body.getBytes();
+            this.contentType(ContentType.HTML.value())
+                .contentLength(bodyInBytes.length);
+            this.body = bodyInBytes;
             return this;
         }
 

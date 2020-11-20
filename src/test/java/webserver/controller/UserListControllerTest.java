@@ -1,24 +1,21 @@
 package webserver.controller;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.IOException;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.github.jknack.handlebars.Handlebars;
-import com.github.jknack.handlebars.Template;
-import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
-import com.github.jknack.handlebars.io.TemplateLoader;
-
-import model.User;
+import db.DataBase;
 import webserver.HttpRequestFixture;
+import webserver.TemplateFactory;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 
 class UserListControllerTest {
-    private static final Logger log = LoggerFactory.getLogger(UserListControllerTest.class);
     private Controller controller;
 
     @BeforeEach
@@ -26,26 +23,33 @@ class UserListControllerTest {
         controller = new UserListController();
     }
 
+    @DisplayName("로그인한 유저일 경우 회원 목록을 보여준다.")
     @Test
-    void get() throws IOException {
-        HttpRequest httpRequest = HttpRequestFixture.httpRequestOfUserList();
+    void get_shouldRedirectUserListPage_whenLogined() throws IOException {
+        HttpRequest httpRequest = HttpRequestFixture.httpRequestByLoginedUser();
 
         HttpResponse httpResponse = controller.service(httpRequest);
 
-
+        HttpResponse expected = HttpResponse.ok()
+            .body(TemplateFactory.of("user/list", DataBase.findAll()))
+            .build();
+        assertAll(() -> assertThat(httpResponse.getStatusLine().getValue()).isEqualTo(expected.getStatusLine().getValue()),
+            () -> assertThat(httpResponse.getHeader()).isEqualTo(expected.getHeader()),
+            () -> assertThat(httpResponse.getBody()).isEqualTo(expected.getBody())
+        );
     }
 
+    @DisplayName("로그인하지 않은 유저일 경우 로그인 화면을 보여준다.")
     @Test
-    void name() throws Exception {
-        TemplateLoader loader = new ClassPathTemplateLoader();
-        loader.setPrefix("/templates");
-        loader.setSuffix(".html");
-        Handlebars handlebars = new Handlebars(loader);
+    void get_shouldRedirectLoginPage_whenNotLogined() throws IOException {
+        HttpRequest httpRequest = HttpRequestFixture.httpRequestByNotLoginedUser();
 
-        Template template = handlebars.compile("user/profile");
+        HttpResponse httpResponse = controller.service(httpRequest);
 
-        User user = new User("javajigi", "password", "자바지기", "javajigi@gmail.com");
-        String profilePage = template.apply(user);
-        log.debug("ProfilePage : {}", profilePage);
+        HttpResponse expected = HttpResponse.ok().bodyByPath("./templates/user/login.html").build();
+        assertAll(() -> assertThat(httpResponse.getStatusLine().getValue()).isEqualTo(expected.getStatusLine().getValue()),
+            () -> assertThat(httpResponse.getHeader()).isEqualTo(expected.getHeader()),
+            () -> assertThat(httpResponse.getBody()).isEqualTo(expected.getBody())
+        );
     }
 }

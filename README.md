@@ -61,7 +61,7 @@
     - [x]  응답 header에 Set-Cookie값을 설정한 후 요청 header에 Cookie이 전달되는지 확인한다.
 - [x]  접근하고 있는 사용자가 “로그인” 상태일 경우(Cookie 값이 logined=true) http://localhost:8080/user/list 로 접근했을 때 사용자 목록을 출력한다.
     - [x]  만약 로그인하지 않은 상태라면 로그인 페이지(login.html)로 이동한다.
-    - [ ]  동적으로 html을 생성하기 위해 handlebars.java template engine을 활용한다.
+    - [x]  동적으로 html을 생성하기 위해 handlebars.java template engine을 활용한다.
 - [ ]  서블릿에서 지원하는 HttpSession API의 일부를 지원한다.
     - [ ]  HttpSession API 중 getId(), setAttribute(String name, Object value), getAttribute(String name), removeAttribute(String name), invalidate() 5개의 메소드를 구현한다.
     

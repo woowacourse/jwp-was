@@ -28,7 +28,7 @@ class HttpRequestTest {
 
     @Test
     void of_shouldParseCookie_whenHttpRequestHasCookie() throws IOException {
-        HttpRequest httpRequest = HttpRequestFixture.httpRequestOfUserList();
+        HttpRequest httpRequest = HttpRequestFixture.httpRequestByLoginedUser();
 
         String cookieValue = httpRequest.getCookieValue("logined");
 

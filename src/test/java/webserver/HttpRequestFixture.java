@@ -50,8 +50,13 @@ public class HttpRequestFixture {
         return HttpRequest.of(resource.getInputStream());
     }
 
-    public static HttpRequest httpRequestOfUserList() throws IOException {
-        ClassPathResource resource = new ClassPathResource("userlistrequest/GetRequest.txt");
+    public static HttpRequest httpRequestByLoginedUser() throws IOException {
+        ClassPathResource resource = new ClassPathResource("userlistrequest/GetRequestOfLoginedUser.txt");
+        return HttpRequest.of(resource.getInputStream());
+    }
+
+    public static HttpRequest httpRequestByNotLoginedUser() throws IOException {
+        ClassPathResource resource = new ClassPathResource("userlistrequest/GetRequestOfNotLoginedUser.txt");
         return HttpRequest.of(resource.getInputStream());
     }
 }

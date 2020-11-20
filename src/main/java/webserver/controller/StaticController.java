@@ -17,7 +17,7 @@ public class StaticController extends AbstractController {
         }
 
         return HttpResponse.ok()
-            .body(path)
+            .bodyByPath(path)
             .build();
     }
 

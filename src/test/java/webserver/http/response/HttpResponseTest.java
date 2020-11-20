@@ -10,7 +10,7 @@ class HttpResponseTest {
     @Test
     void of() {
         HttpResponse httpResponse = HttpResponse.ok()
-            .body("./templates/index.html")
+            .bodyByPath("./templates/index.html")
             .build();
 
         assertThat(httpResponse).isNotNull();
@@ -20,7 +20,7 @@ class HttpResponseTest {
     @Test
     void setCookie() {
         HttpResponse httpResponse = HttpResponse.ok()
-            .body("./templates/index.html")
+            .bodyByPath("./templates/index.html")
             .setCookie("logined","true", "/")
             .build();
 
