@@ -4,7 +4,12 @@ public enum ContentType {
     HTML("text/html", "charset=utf-8", ""),
     CSS("text/css", "", ""),
     JAVASCRIPT("application/javascript", "", ""),
-    TEXT("text/plain", "", "");
+    TEXT("text/plain", "", ""),
+    APPLICATION_JSON("application/json", "", ""),
+    ICO("image/x-icon", "", ""),
+    TTF("font/ttf", "", ""),
+    WOFF("font/woff", "", ""),
+    WOFF2("font/woff2", "", "");
 
     private final String mediaType;
     private final String charset;

@@ -20,14 +20,4 @@ class RequestLineTest {
 
         assertThat(requestLine).isNotNull();
     }
-
-    @DisplayName("요청라인이 비어있는 경우 예외를 던진다.")
-    @Test
-    void of_fromEmptyRequest_shouldThrowException() throws IOException {
-        BufferedReader bufferedReader = HttpRequestFixture.bufferedReaderOfEmptyRequestLine();
-
-        assertThatThrownBy(() -> RequestLine.of(bufferedReader))
-            .isInstanceOf(NotReadableHttpMessageException.class)
-            .hasMessage("HTTP 요청메시지의 요청라인이 비어있습니다.");
-    }
 }
