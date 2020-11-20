@@ -7,6 +7,8 @@ import java.io.IOException;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import webserver.request.Request;
+import webserver.response.Response;
 
 public class ResponseTest {
 

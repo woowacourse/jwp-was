@@ -1,4 +1,4 @@
-package webserver;
+package webserver.request.body;
 
 import utils.IOUtils;
 import utils.RequestUtils;

@@ -1,4 +1,4 @@
-package webserver;
+package webserver.response;
 
 public enum Status {
     OK(200),

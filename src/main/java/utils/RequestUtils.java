@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import webserver.Method;
+import webserver.request.Method;
 
 public class RequestUtils {
     public static final String SPACE = " ";

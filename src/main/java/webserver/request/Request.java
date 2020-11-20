@@ -1,4 +1,4 @@
-package webserver;
+package webserver.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.util.Objects;
 
 import utils.RequestUtils;
+import webserver.request.body.QueryBody;
+import webserver.request.body.RequestBody;
 
 public class Request {
     public static final String EMPTY = "";
