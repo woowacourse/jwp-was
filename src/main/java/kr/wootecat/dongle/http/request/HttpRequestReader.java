@@ -23,7 +23,7 @@ import utils.IOUtils;
 public class HttpRequestReader {
 
     private static final Pattern QUERY_PARAMETER_PATTERN = Pattern.compile("[\\w-]+=[^?=&\\s]*(&[\\w-]+=[^?=&\\s]*)*");
-    private static final Pattern HEADER_PATTERN = Pattern.compile("[\\w-]+: [-,;:*/=.\\s\\w]+");
+    private static final Pattern HEADER_PATTERN = Pattern.compile("[\\w-]+: [-,;:+?*/=.()\\s\\w]+");
 
     private static final String HTTP_SPACE_CHARACTER = " ";
     private static final String QUERY_PARAMETER_DELIMITER = "\\?";
