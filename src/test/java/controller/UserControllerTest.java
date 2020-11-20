@@ -15,11 +15,13 @@ import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import http.HttpRequest;
-import http.HttpResponse;
-import http.SimpleHttpRequest;
+import http.HttpStatus;
+import http.request.HttpRequest;
+import http.response.HttpResponse;
+import http.request.SimpleHttpRequest;
 import service.UserService;
 import servlet.HttpServlet;
 
@@ -49,7 +51,7 @@ class UserControllerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"Http_GET.txt", "Http_PUT.txt", "Http_DELETE.txt"})
+    @ValueSource(strings = {"Http_PUT.txt", "Http_DELETE.txt"})
     void doNotAllowedMethod_ThrownException(String path) throws IOException {
         HttpRequest request = getHttpRequest(path);
         HttpResponse response = new HttpResponse();
@@ -59,6 +61,19 @@ class UserControllerTest {
         assertAll(
             () -> assertThat(response.getStatus()).isEqualTo(METHOD_NOT_ALLOWED),
             () -> assertThat(response.getHeader("Content-Type")).isNotNull()
+        );
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {"HTTP_GET_WITH_LOGIN.txt:OK", "HTTP_GET_WITHOUT_LOGIN.txt:MOVED_PERMANENTLY"}, delimiterString = ":")
+    void doGet(String path, HttpStatus status) throws IOException {
+        HttpRequest request = getHttpRequest(path);
+        HttpResponse response = new HttpResponse();
+
+        userController.service(request, response);
+
+        assertAll(
+            () -> assertThat(response.getStatus()).isEqualTo(status)
         );
     }
 
