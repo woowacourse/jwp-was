@@ -1,5 +1,8 @@
 package http.response;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 public class HttpResponseBody {
 
     private byte[] body;
@@ -14,5 +17,9 @@ public class HttpResponseBody {
 
     public void setBody(byte[] body) {
         this.body = body;
+    }
+
+    public void write(final DataOutputStream dos) throws IOException {
+        dos.write(body, 0, body.length);
     }
 }

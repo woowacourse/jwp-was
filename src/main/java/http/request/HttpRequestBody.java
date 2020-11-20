@@ -11,7 +11,7 @@ public class HttpRequestBody {
 
     private final Map<String, String> body;
 
-    public HttpRequestBody(String paramLine) {
+    public HttpRequestBody(final String paramLine) {
         this.body = handler(paramLine);
     }
 
@@ -19,7 +19,7 @@ public class HttpRequestBody {
         return new HttpRequestBody(EMPTY);
     }
 
-    private Map<String, String> handler(String paramLine) {
+    private Map<String, String> handler(final String paramLine) {
         if (paramLine.isEmpty()) {
             return new HashMap<>();
         }
@@ -27,8 +27,8 @@ public class HttpRequestBody {
     }
 
     private Map<String, String> mapping(final String paramLine) {
-        Map<String, String> body = new HashMap<>();
-        String[] params = paramLine.split(AND);
+        final Map<String, String> body = new HashMap<>();
+        final String[] params = paramLine.split(AND);
 
         for (String param : params) {
             String[] data = param.split(EQUAL);

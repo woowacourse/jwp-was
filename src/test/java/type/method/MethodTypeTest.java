@@ -8,11 +8,11 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import exception.NotSupportedMethodException;
 
-public class MethodTypeTest {
+class MethodTypeTest {
 
     @ParameterizedTest
     @CsvSource(value = {"GET,GET", "POST,POST"})
-    void find(final String method, final MethodType expect) {
+    void find_HTTP_Method(final String method, final MethodType expect) {
         final MethodType actual = MethodType.find(method);
 
         assertThat(actual).isEqualTo(expect);

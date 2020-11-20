@@ -16,82 +16,80 @@ import type.method.MethodType;
 
 public class HttpRequestTest {
 
-    private HttpRequest httpRequestGetMethod;
-    private HttpRequest httpRequestPostMethod;
-    private HttpRequest httpRequestPostMethodSpecialCase;
+    private String testDirectory;
 
     @BeforeEach
-    void setUp() throws IOException {
-        String testDirectory = "./src/test/resources/";
+    void setUp() {
+        testDirectory = "./src/test/resources/";
+    }
 
+    @Test
+    void HTTP_GET() throws IOException {
+        // given
         InputStream inGetMethod = new FileInputStream(new File(testDirectory + "Http_GET.txt"));
-        InputStream inPostMethod = new FileInputStream(new File(testDirectory + "Http_POST.txt"));
-        InputStream inPostMethodSpecialCase = new FileInputStream(new File(testDirectory + "Http_POST2.txt"));
-
         BufferedReader brGetMethod = new BufferedReader(new InputStreamReader(inGetMethod,"UTF-8"));
-        BufferedReader brPostMethod = new BufferedReader(new InputStreamReader(inPostMethod,"UTF-8"));
-        BufferedReader brPostMethodSpecialCase = new BufferedReader(new InputStreamReader(inPostMethodSpecialCase,"UTF-8"));
 
-        httpRequestGetMethod = HttpRequestParser.parse(brGetMethod);
-        httpRequestPostMethod = HttpRequestParser.parse(brPostMethod);
-        httpRequestPostMethodSpecialCase = HttpRequestParser.parse(brPostMethodSpecialCase);
-    }
+        // when
+        HttpRequest httpRequestGetMethod = HttpRequestParser.parse(brGetMethod);
 
-    @Test
-    void getMethod() {
+        // then
         assertThat(httpRequestGetMethod.getMethod()).isEqualTo(MethodType.GET);
-
-        assertThat(httpRequestPostMethod.getMethod()).isEqualTo(MethodType.POST);
-
-        assertThat(httpRequestPostMethodSpecialCase.getMethod()).isEqualTo(MethodType.POST);
-    }
-
-    @Test
-    void getUrl() {
         assertThat(httpRequestGetMethod.getUrl()).isEqualTo("/user/create");
 
-        assertThat(httpRequestPostMethod.getUrl()).isEqualTo("/user/create");
-
-        assertThat(httpRequestPostMethodSpecialCase.getUrl()).isEqualTo("/user/create");
-    }
-
-    @Test
-    void getHttpRequestHeaderByName() {
         assertThat(httpRequestGetMethod.getHttpRequestHeaderByName("Host")).isEqualTo("localhost:8080");
         assertThat(httpRequestGetMethod.getHttpRequestHeaderByName("Connection")).isEqualTo("keep-alive");
 
-        assertThat(httpRequestPostMethod.getHttpRequestHeaderByName("Host")).isEqualTo("localhost:8080");
-        assertThat(httpRequestPostMethod.getHttpRequestHeaderByName("Connection")).isEqualTo("keep-alive");
-
-        assertThat(httpRequestPostMethodSpecialCase.getHttpRequestHeaderByName("Host")).isEqualTo("localhost:8080");
-        assertThat(httpRequestPostMethodSpecialCase.getHttpRequestHeaderByName("Connection")).isEqualTo("keep-alive");
-    }
-
-    @Test
-    void getHttpRequestParamsByName() {
         assertThat(httpRequestGetMethod.getHttpRequestParamsByName("userId")).isEqualTo("javajigi");
         assertThat(httpRequestGetMethod.getHttpRequestParamsByName("password")).isEqualTo("password");
         assertThat(httpRequestGetMethod.getHttpRequestParamsByName("name")).isEqualTo("JaeSung");
 
-        assertThat(httpRequestPostMethodSpecialCase.getHttpRequestParamsByName("id")).isEqualTo("1");
+        assertThat(httpRequestGetMethod.getContentType()).isEqualTo("*/*");
     }
 
     @Test
-    void getHttpRequestBodyByName() {
+    void HTTP_POST() throws IOException {
+        // given
+        InputStream inPostMethod = new FileInputStream(new File(testDirectory + "Http_POST.txt"));
+        BufferedReader brPostMethod = new BufferedReader(new InputStreamReader(inPostMethod,"UTF-8"));
+
+        // when
+        HttpRequest httpRequestPostMethod = HttpRequestParser.parse(brPostMethod);
+
+        // then
+        assertThat(httpRequestPostMethod.getMethod()).isEqualTo(MethodType.POST);
+        assertThat(httpRequestPostMethod.getUrl()).isEqualTo("/user/create");
+
+        assertThat(httpRequestPostMethod.getHttpRequestHeaderByName("Host")).isEqualTo("localhost:8080");
+        assertThat(httpRequestPostMethod.getHttpRequestHeaderByName("Connection")).isEqualTo("keep-alive");
+
         assertThat(httpRequestPostMethod.getHttpRequestBodyByName("userId")).isEqualTo("javajigi");
         assertThat(httpRequestPostMethod.getHttpRequestBodyByName("password")).isEqualTo("password");
         assertThat(httpRequestPostMethod.getHttpRequestBodyByName("name")).isEqualTo("JaeSung");
 
-        assertThat(httpRequestPostMethodSpecialCase.getHttpRequestBodyByName("userId")).isEqualTo("javajigi");
-        assertThat(httpRequestPostMethodSpecialCase.getHttpRequestBodyByName("password")).isEqualTo("password");
-        assertThat(httpRequestPostMethodSpecialCase.getHttpRequestBodyByName("name")).isEqualTo("JaeSung");
+        assertThat(httpRequestPostMethod.getContentType()).isEqualTo("*/*");
     }
 
     @Test
-    void getContentType() {
-        assertThat(httpRequestGetMethod.getContentType()).isEqualTo("*/*");
+    void HTTP_POST2() throws IOException {
+        // given
+        InputStream inPostMethodSpecialCase = new FileInputStream(new File(testDirectory + "Http_POST2.txt"));
+        BufferedReader brPostMethodSpecialCase = new BufferedReader(new InputStreamReader(inPostMethodSpecialCase,"UTF-8"));
 
-        assertThat(httpRequestPostMethod.getContentType()).isEqualTo("*/*");
+        // when
+        HttpRequest httpRequestPostMethodSpecialCase = HttpRequestParser.parse(brPostMethodSpecialCase);
+
+        // then
+        assertThat(httpRequestPostMethodSpecialCase.getMethod()).isEqualTo(MethodType.POST);
+        assertThat(httpRequestPostMethodSpecialCase.getUrl()).isEqualTo("/user/create");
+
+        assertThat(httpRequestPostMethodSpecialCase.getHttpRequestHeaderByName("Host")).isEqualTo("localhost:8080");
+        assertThat(httpRequestPostMethodSpecialCase.getHttpRequestHeaderByName("Connection")).isEqualTo("keep-alive");
+
+        assertThat(httpRequestPostMethodSpecialCase.getHttpRequestParamsByName("id")).isEqualTo("1");
+
+        assertThat(httpRequestPostMethodSpecialCase.getHttpRequestBodyByName("userId")).isEqualTo("javajigi");
+        assertThat(httpRequestPostMethodSpecialCase.getHttpRequestBodyByName("password")).isEqualTo("password");
+        assertThat(httpRequestPostMethodSpecialCase.getHttpRequestBodyByName("name")).isEqualTo("JaeSung");
 
         assertThat(httpRequestPostMethodSpecialCase.getContentType()).isEqualTo("*/*");
     }

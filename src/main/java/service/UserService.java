@@ -15,16 +15,20 @@ public class UserService {
         return UserServiceHolder.INSTANCE;
     }
 
-    public void createRequestParams(HttpRequest httpRequest) {
+    public void createRequestParams(final HttpRequest httpRequest) {
         User user = new User(httpRequest.getHttpRequestParamsByName(USER_ID), httpRequest.getHttpRequestParamsByName(PASSWORD), httpRequest.getHttpRequestParamsByName(NAME), httpRequest
                 .getHttpRequestParamsByName(EMAIL));
         DataBase.addUser(user);
     }
 
-    public void createRequestBody(HttpRequest httpRequest) {
+    public void createRequestBody(final HttpRequest httpRequest) {
         User user = new User(httpRequest.getHttpRequestBodyByName(USER_ID), httpRequest.getHttpRequestBodyByName(PASSWORD), httpRequest.getHttpRequestBodyByName(NAME), httpRequest
                 .getHttpRequestBodyByName(EMAIL));
         DataBase.addUser(user);
+    }
+
+    public User login(final String userId) {
+        return DataBase.findUserById(userId);
     }
 
     private static class UserServiceHolder {

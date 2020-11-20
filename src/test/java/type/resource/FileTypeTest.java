@@ -8,11 +8,11 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import exception.NotFoundFileTypeException;
 
-public class FileTypeTest {
+class FileTypeTest {
 
     @ParameterizedTest
     @CsvSource(value = {"html,TEMPLATE", "ico,TEMPLATE", "css,STATIC", "js,STATIC", "woff,STATIC", "woff2,STATIC"})
-    void find(final String file, final ResourceType expect) {
+    void find_Resource_File_Type(final String file, final ResourceType expect) {
         final FileType fileType = FileType.find(file);
 
         assertThat(fileType.getResourceType()).isEqualTo(expect);

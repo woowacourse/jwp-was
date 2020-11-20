@@ -4,24 +4,43 @@ import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-public class HttpResponseHeaderTest {
+import http.Cookies;
+
+class HttpResponseHeaderTest {
 
     @Test
-    void addResponseHeader() {
-        final HttpResponseHeader httpResponseHeader = new HttpResponseHeader();
+    void addResponseHeader() throws CloneNotSupportedException {
+        Cookies cookies = Cookies.from(null);
+        final HttpResponseHeader httpResponseHeader = new HttpResponseHeader(cookies);
         httpResponseHeader.addResponseHeader("Content-type", "text/html");
 
         assertThat(httpResponseHeader.getValue("Content-type")).isEqualTo("text/html");
     }
 
     @Test
-    void keySet() {
-        final HttpResponseHeader httpResponseHeader = new HttpResponseHeader();
-        httpResponseHeader.addResponseHeader("Content-type", "text/html");
-        httpResponseHeader.addResponseHeader("Content-Length", 7000);
+    void isEmptyCookie_True() throws CloneNotSupportedException {
+        Cookies cookies = Cookies.from(null);
+        final HttpResponseHeader httpResponseHeader = new HttpResponseHeader(cookies);
 
-        assertThat(httpResponseHeader.keySet()).hasSize(2);
-        assertThat(httpResponseHeader.keySet().contains("Content-type")).isTrue();
-        assertThat(httpResponseHeader.keySet().contains("Content-Length")).isTrue();
+        assertThat(httpResponseHeader.isEmptyCookie()).isTrue();
+    }
+
+    @Test
+    void isEmptyCookie_False() throws CloneNotSupportedException {
+        Cookies cookies = Cookies.from(null);
+        final HttpResponseHeader httpResponseHeader = new HttpResponseHeader(cookies);
+        httpResponseHeader.addCookie("logined", "true");
+
+        assertThat(httpResponseHeader.isEmptyCookie()).isFalse();
+    }
+
+    @Test
+    void flatCookie() throws CloneNotSupportedException {
+        Cookies cookies = Cookies.from(null);
+        final HttpResponseHeader httpResponseHeader = new HttpResponseHeader(cookies);
+        httpResponseHeader.addCookie("logined", "true");
+        httpResponseHeader.addCookie("Path", "/");
+
+        assertThat(httpResponseHeader.flatCookie()).isEqualTo("logined=true; Path=/");
     }
 }
