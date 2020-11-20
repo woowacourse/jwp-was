@@ -27,16 +27,19 @@ public class LoginController extends AbstractController {
             userService.login(loginRequestDto);
             loginSuccess(httpResponse);
         } catch (UnAuthenticationException e) {
-            httpResponse.setStatus(HttpStatus.UNAUTHORIZED);
             loginFail(httpResponse);
         }
     }
 
     private void loginSuccess(HttpResponse httpResponse) {
+        httpResponse.setStatus(HttpStatus.MOVED_PERMANENTLY);
         httpResponse.setCookie("logined=true; Path=/");
+        httpResponse.addHeader("Location", "/");
     }
 
     private void loginFail(HttpResponse httpResponse) {
+        httpResponse.setStatus(HttpStatus.MOVED_PERMANENTLY);
         httpResponse.setCookie("logined=false");
+        httpResponse.addHeader("Location", "/user/login_failed.html");
     }
 }
