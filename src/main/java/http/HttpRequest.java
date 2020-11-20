@@ -15,4 +15,6 @@ public interface HttpRequest {
     HttpHeaders getHeaders();
 
     HttpBody getBody();
+
+    String getCookie();
 }

@@ -1,10 +1,14 @@
 package service;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import db.DataBase;
 import dto.JoinRequestDto;
 import dto.LoginRequestDto;
+import dto.UserResponseDto;
 import exception.UnAuthenticationException;
 import model.User;
 
@@ -29,5 +33,12 @@ public class UserService {
             joinRequestDto.getEmail()
         );
         DataBase.addUser(user);
+    }
+
+    public List<UserResponseDto> findAll() {
+        List<User> users = DataBase.findAll();
+        return users.stream()
+            .map(UserResponseDto::new)
+            .collect(Collectors.toList());
     }
 }

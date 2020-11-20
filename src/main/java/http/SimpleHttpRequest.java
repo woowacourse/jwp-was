@@ -77,6 +77,11 @@ public class SimpleHttpRequest implements HttpRequest {
     }
 
     @Override
+    public String getCookie() {
+        return headers.getCookie();
+    }
+
+    @Override
     public String getVersion() {
         return startLine.getVersion();
     }
