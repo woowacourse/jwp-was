@@ -4,13 +4,13 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import http.ContentType;
-import http.HttpRequest;
-import http.HttpResponse;
+import http.request.HttpRequest;
+import http.response.HttpResponse;
 import utils.FileIoUtils;
 
 public class ResourceServlet implements HttpServlet {
-    private static final String ROOT_PATH ="/";
-    private static final String INDEX_PATH ="/index.html";
+    private static final String ROOT_PATH = "/";
+    private static final String INDEX_PATH = "/index.html";
 
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) {

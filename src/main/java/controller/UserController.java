@@ -17,9 +17,9 @@ import dto.JoinRequestDto;
 import dto.UserResponseDto;
 import http.ContentType;
 import http.HttpBody;
-import http.HttpRequest;
-import http.HttpResponse;
 import http.HttpStatus;
+import http.request.HttpRequest;
+import http.response.HttpResponse;
 import service.UserService;
 
 @RequestMapping(path = "/user")
@@ -58,7 +58,7 @@ public class UserController extends AbstractController {
             unauthorized(httpResponse);
             return;
         }
-        if("false".equals(logined)){
+        if ("false".equals(logined)) {
             unauthorized(httpResponse);
             return;
         }

@@ -14,12 +14,16 @@ import java.nio.charset.StandardCharsets;
 
 import org.junit.jupiter.api.Test;
 
+import http.request.HttpRequest;
+import http.request.QueryParameters;
+import http.request.SimpleHttpRequest;
+
 class SimpleHttpRequestTest {
     private String testDirectory = "./src/test/resources/";
 
     @Test
     public void request_GET() throws Exception {
-        InputStream in = new FileInputStream(new File(testDirectory + "Http_GET.txt"));
+        InputStream in = new FileInputStream(new File(testDirectory + "HTTP_GET_WITH_LOGIN.txt"));
         InputStreamReader inputStreamReader = new InputStreamReader(in, StandardCharsets.UTF_8);
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
         HttpRequest request = SimpleHttpRequest.of(bufferedReader);

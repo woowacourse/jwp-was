@@ -12,15 +12,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
-import javax.sound.midi.Soundbank;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import dto.JoinRequestDto;
-import http.HttpRequest;
-import http.HttpResponse;
-import http.SimpleHttpRequest;
+import http.request.HttpRequest;
+import http.response.HttpResponse;
+import http.request.SimpleHttpRequest;
 import service.UserService;
 import servlet.HttpServlet;
 
@@ -46,7 +44,7 @@ class LoginControllerTest {
         loginController.service(request, response);
 
         assertAll(
-            () -> assertThat(response.getStatus()).isEqualTo(OK),
+            () -> assertThat(response.getStatus()).isEqualTo(MOVED_PERMANENTLY),
             () -> assertThat(response.getHeader("Set-Cookie")).isEqualTo("logined=true; Path=/")
         );
     }
@@ -62,7 +60,7 @@ class LoginControllerTest {
         loginController.service(request, response);
 
         assertAll(
-            () -> assertThat(response.getStatus()).isEqualTo(UNAUTHORIZED),
+            () -> assertThat(response.getStatus()).isEqualTo(MOVED_PERMANENTLY),
             () -> assertThat(response.getHeader("Set-Cookie")).isEqualTo("logined=false")
         );
 

@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import annotation.RequestMapping;
 import controller.LoginController;
 import controller.UserController;
-import http.HttpRequest;
+import http.request.HttpRequest;
 import service.UserService;
 
 public class ServletMapping implements HandlerMapping {

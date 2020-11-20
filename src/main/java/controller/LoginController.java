@@ -4,9 +4,9 @@ import annotation.RequestMapping;
 import dto.LoginRequestDto;
 import exception.UnAuthenticationException;
 import http.HttpBody;
-import http.HttpRequest;
-import http.HttpResponse;
 import http.HttpStatus;
+import http.request.HttpRequest;
+import http.response.HttpResponse;
 import service.UserService;
 
 @RequestMapping(path = "/user/login")

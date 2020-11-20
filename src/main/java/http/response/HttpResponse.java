@@ -1,8 +1,12 @@
-package http;
+package http.response;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Objects;
+
+import http.ContentType;
+import http.HttpHeaders;
+import http.HttpStatus;
 
 public class HttpResponse {
     private static final String DEFAULT_PROTOCOL_VERSION = "HTTP/1.1";
