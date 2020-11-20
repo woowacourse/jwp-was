@@ -35,7 +35,7 @@ class LoginControllerTest {
 
         assertThat(response.getStatusLine()).isEqualToComparingFieldByField(
             new StatusLine(Protocol.ONE_POINT_ONE, StatusCode.OK));
-        assertThat(response.getHeader()).isEqualTo(String.format("Content-Length: 6902%n"
+        assertThat(response.getHeader()).isEqualTo(String.format("Content-Length: 6897%n"
             + "set-Cookie: logined=true; Path=/%n"
             + "Content-Type: text/html;charset=utf-8%n"));
     }
@@ -49,7 +49,7 @@ class LoginControllerTest {
 
         assertThat(response.getStatusLine()).isEqualToComparingFieldByField(
             new StatusLine(Protocol.ONE_POINT_ONE, StatusCode.OK));
-        assertThat(response.getHeader()).isEqualTo(String.format("Content-Length: 4898%n"
+        assertThat(response.getHeader()).isEqualTo(String.format("Content-Length: 4893%n"
             + "set-Cookie: logined=false; Path=/%n"
             + "Content-Type: text/html;charset=utf-8%n"));
     }
@@ -64,7 +64,7 @@ class LoginControllerTest {
 
         assertThat(response.getStatusLine()).isEqualToComparingFieldByField(
             new StatusLine(Protocol.ONE_POINT_ONE, StatusCode.OK));
-        assertThat(response.getHeader()).isEqualTo(String.format("Content-Length: 4898%n"
+        assertThat(response.getHeader()).isEqualTo(String.format("Content-Length: 4893%n"
             + "set-Cookie: logined=false; Path=/%n"
             + "Content-Type: text/html;charset=utf-8%n"));
     }

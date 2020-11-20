@@ -32,16 +32,8 @@ public class HttpResponse {
         this.body = body;
     }
 
-    public static Builder ok(String path) {
-        byte[] body = FileIoUtils.loadFileFromClasspath(path);
-        String[] splitPath = path.split(DELIMITER);
-        String extension = splitPath[splitPath.length-1];
-        ContentType contentType = ContentTypeMapper.map(extension);
-
-        return new Builder(StatusCode.OK)
-            .contentType(contentType.value())
-            .contentLength(body.length)
-            .body(body);
+    public static Builder ok() {
+        return new Builder(StatusCode.OK);
     }
 
     public static Builder created(String location) {
@@ -129,7 +121,14 @@ public class HttpResponse {
             return this;
         }
 
-        public Builder body(byte[] body) {
+        public Builder body(String path) {
+            byte[] body = FileIoUtils.loadFileFromClasspath(path);
+            String[] splitPath = path.split(DELIMITER);
+            String extension = splitPath[splitPath.length-1];
+            ContentType contentType = ContentTypeMapper.map(extension);
+
+            this.contentType(contentType.value())
+                .contentLength(body.length);
             this.body = body;
             return this;
         }

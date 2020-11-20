@@ -42,7 +42,7 @@ class RequestHandlerTest {
 
         byte[] body = FileIoUtils.loadFileFromClasspath("./templates/index.html");
         assertThat(httpResponse.getStatusLine().getValue()).isEqualTo("HTTP/1.1 200 OK");
-        assertThat(httpResponse.getHeader()).contains("Content-Type: text/html;charset=utf-8", "Content-Length: 6902");
+        assertThat(httpResponse.getHeader()).contains("Content-Type: text/html;charset=utf-8", "Content-Length: 6897");
         assertThat(httpResponse.getBody()).isEqualTo(body);
     }
 

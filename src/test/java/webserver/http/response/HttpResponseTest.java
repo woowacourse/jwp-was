@@ -9,7 +9,8 @@ class HttpResponseTest {
     @DisplayName("200상태의 HttpResponse를 생성한다.")
     @Test
     void of() {
-        HttpResponse httpResponse = HttpResponse.ok("./templates/index.html")
+        HttpResponse httpResponse = HttpResponse.ok()
+            .body("./templates/index.html")
             .build();
 
         assertThat(httpResponse).isNotNull();
@@ -18,7 +19,8 @@ class HttpResponseTest {
     @DisplayName("쿠키를 담은 HttpResponse를 생성한다.")
     @Test
     void setCookie() {
-        HttpResponse httpResponse = HttpResponse.ok("./templates/index.html")
+        HttpResponse httpResponse = HttpResponse.ok()
+            .body("./templates/index.html")
             .setCookie("logined","true", "/")
             .build();
 

@@ -10,8 +10,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import webserver.controller.ApplicationBusinessException;
-
 public class RequestHeader {
     private static final String HEADER_DELIMITER = ":\\s";
     private static final String lineSeparator = System.lineSeparator();
@@ -67,7 +65,7 @@ public class RequestHeader {
             .map(cookie -> cookie.get(cookieName))
             .filter(Objects::nonNull)
             .findAny()
-            .orElseThrow(() -> new ApplicationBusinessException(String.format("%s의 쿠키값이 존재하지 않습니다.", cookieName)));
+            .orElseGet(() -> "");
     }
 
     public String getContentLength() {

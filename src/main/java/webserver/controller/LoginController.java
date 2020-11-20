@@ -37,12 +37,14 @@ public class LoginController extends AbstractController {
         User user = DataBase.findUserById(userId);
 
         if (user != null && password.equals(user.getPassword())) {
-            return HttpResponse.ok("./templates/index.html")
+            return HttpResponse.ok()
+                .body("./templates/index.html")
                 .setCookie("logined", "true", "/")
                 .build();
         }
 
-        return HttpResponse.ok("./templates/user/login_failed.html")
+        return HttpResponse.ok()
+            .body("./templates/user/login_failed.html")
             .setCookie("logined", "false", "/")
             .build();
     }

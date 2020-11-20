@@ -16,7 +16,8 @@ public class StaticController extends AbstractController {
             path = String.format("./static%s", defaultPath);
         }
 
-        return HttpResponse.ok(path)
+        return HttpResponse.ok()
+            .body(path)
             .build();
     }
 
