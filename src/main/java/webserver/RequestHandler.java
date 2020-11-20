@@ -12,8 +12,11 @@ import java.nio.charset.StandardCharsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import web.HttpRequest;
-import web.HttpResponse;
+import http.HttpRequest;
+import http.HttpResponse;
+import http.SimpleHttpRequest;
+import servlet.DispatcherServlet;
+import servlet.HttpServlet;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -25,19 +28,32 @@ public class RequestHandler implements Runnable {
     }
 
     public void run() {
-        logger.debug("New Client Connect! Connected IP : {}, Port : {}",
-                connection.getInetAddress(),
-                connection.getPort());
-        try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            BufferedReader br = new BufferedReader(
-                    new InputStreamReader(in, StandardCharsets.UTF_8));
-            DataOutputStream dos = new DataOutputStream(out);
-            HttpRequest httpRequest = new HttpRequest(br);
-            logger.debug(httpRequest.toString());
-            HttpResponse httpResponse = new HttpResponse(dos);
-            httpResponse.process(httpRequest);
+        logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
+            connection.getPort());
+
+        try (
+            InputStream inputStream = connection.getInputStream();
+            OutputStream outputStream = connection.getOutputStream();
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            DataOutputStream dos = new DataOutputStream(outputStream);
+        ) {
+            HttpRequest httpRequest = SimpleHttpRequest.of(bufferedReader);
+            logger.debug(System.lineSeparator() + httpRequest.toString());
+            HttpResponse httpResponse = new HttpResponse();
+            doDispatch(dos, httpRequest, httpResponse);
         } catch (IOException e) {
             logger.error(e.getMessage());
+        }
+    }
+
+    private void doDispatch(DataOutputStream dos, HttpRequest httpRequest, HttpResponse httpResponse) throws
+        IOException {
+        try {
+            HttpServlet dispatcherServlet = new DispatcherServlet();
+            dispatcherServlet.service(httpRequest, httpResponse);
+        } finally {
+            httpResponse.send(dos);
         }
     }
 }

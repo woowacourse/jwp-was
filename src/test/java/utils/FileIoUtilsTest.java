@@ -1,6 +1,8 @@
 package utils;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,7 +11,15 @@ public class FileIoUtilsTest {
 
     @Test
     void loadFileFromClasspath() throws Exception {
-        byte[] body = FileIoUtils.loadFileFromClasspath("./templates/index.html");
+        byte[] body = FileIoUtils.loadFileFromClasspath("/index.html");
+        log.debug("file : {}", new String(body));
+    }
+
+
+    @ParameterizedTest
+    @ValueSource(strings = {"/css/styles.css", "/js/scripts.js", "/images/80-text.png", "/favicon.ico"})
+    void loadFileFromStatic(String path) throws Exception {
+        byte[] body = FileIoUtils.loadFileFromClasspath(path);
         log.debug("file : {}", new String(body));
     }
 }
