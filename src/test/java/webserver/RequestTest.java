@@ -63,7 +63,7 @@ public class RequestTest {
     void getBody() throws IOException {
         String input = "GET /user/create HTTP/1.1\nContent-Length: 70\n\nuserId=kimhodol&password=password&name=김호돌&email=woonjangahn@gmail.com";
         Request request = new Request(new ByteArrayInputStream(input.getBytes()));
-        Map<String, String> body = request.getBody();
+        RequestBody body = request.getBody();
         assertThat(body.get("userId")).isEqualTo("kimhodol");
         assertThat(body.get("password")).isEqualTo("password");
         assertThat(body.get("name")).isEqualTo("김호돌");

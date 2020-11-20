@@ -4,28 +4,25 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Collections;
-import java.util.Map;
 import java.util.Objects;
 
-import utils.IOUtils;
 import utils.RequestUtils;
 
 public class Request {
     public static final String EMPTY = "";
 
     private final String data;
-    private final Map<String, String> body;
+    private final RequestHeader header;
+    private final RequestBody body;
     private final QueryParams query;
     private final String path;
     private final Method method;
-    private final RequestHeader header;
 
     public Request(InputStream inputStream) throws IOException {
         if (Objects.isNull(inputStream)) {
             this.data = EMPTY;
             this.header = RequestHeader.empty();
-            this.body = Collections.emptyMap();
+            this.body = QueryBody.empty();
             this.query = QueryParams.empty();
             this.path = EMPTY;
             this.method = Method.GET;
@@ -35,7 +32,7 @@ public class Request {
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
         this.data = parse(bufferedReader);
         this.header = RequestHeader.of(data);
-        this.body = parseBody(bufferedReader);
+        this.body = QueryBody.of(bufferedReader, header.getContentLength());
         this.query = QueryParams.of(data);
         this.path = RequestUtils.getFilename(data);
         this.method = RequestUtils.getMethod(data);
@@ -51,14 +48,6 @@ public class Request {
         return builder.toString();
     }
 
-    private Map<String, String> parseBody(BufferedReader bufferedReader) throws IOException {
-        int contentLength = header.getContentLength();
-        if (contentLength == 0) {
-            return Collections.emptyMap();
-        }
-        return RequestUtils.getBody(IOUtils.readData(bufferedReader, contentLength));
-    }
-
     public Method getMethod() {
         return method;
     }
@@ -67,7 +56,11 @@ public class Request {
         return path;
     }
 
-    public Map<String, String> getBody() {
+    public RequestHeader getHeader() {
+        return header;
+    }
+
+    public RequestBody getBody() {
         return body;
     }
 
@@ -77,7 +70,7 @@ public class Request {
 
     @Override
     public String toString() {
-        if (body.keySet().size() == 0) {
+        if (body.isEmpty()) {
             return data;
         }
         return data + System.lineSeparator() + body;

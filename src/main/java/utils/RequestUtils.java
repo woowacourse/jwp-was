@@ -39,7 +39,7 @@ public class RequestUtils {
             ));
     }
 
-    public static Map<String, String> getBody(String body) {
+    public static Map<String, String> getQueryBody(String body) {
         return parseQuery(Arrays.stream(body.split(AMPERSAND)));
     }
 

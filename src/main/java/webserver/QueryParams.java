@@ -6,7 +6,7 @@ import java.util.Map;
 import utils.RequestUtils;
 
 public class QueryParams {
-    private Map<String, String> params;
+    private final Map<String, String> params;
 
     private QueryParams(Map<String, String> params) {
         this.params = params;

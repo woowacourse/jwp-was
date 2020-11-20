@@ -31,7 +31,7 @@ public class Controller {
     }
 
     private Response createUser(Request request) {
-        Map<String, String> body = request.getBody();
+        RequestBody body= request.getBody();
         User user = new User(
             body.get("userId"),
             body.get("password"),
