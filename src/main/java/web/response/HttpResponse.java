@@ -27,7 +27,7 @@ public class HttpResponse {
         httpHeader = new HttpHeader();
     }
 
-    private void addHeader(String key, String value) {
+    public void addHeader(String key, String value) {
         httpHeader.addHeader(key, value);
     }
 
