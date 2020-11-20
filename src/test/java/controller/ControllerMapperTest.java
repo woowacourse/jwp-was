@@ -3,6 +3,7 @@ package controller;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import application.controller.UserController;
+import java.lang.reflect.InvocationTargetException;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,14 +16,18 @@ class ControllerMapperTest {
 
     @ParameterizedTest
     @MethodSource("httpMethods")
-    @DisplayName("UserController 반환")
-    void findUserController(String httpRequestFormat) {
+    @DisplayName("UserController 정보 반환")
+    void findUserController(String httpRequestFormat) throws NoSuchMethodException,
+            IllegalAccessException, InvocationTargetException, InstantiationException {
         ControllerMapper controllerMapper = new ControllerMapper();
 
         HttpRequest httpRequest = new HttpRequest(httpRequestFormat, "");
 
-        assertThat(controllerMapper.findController(httpRequest))
-            .isInstanceOf(UserController.class);
+        Class<?> controller = controllerMapper.findController(httpRequest);
+
+        assertThat(controller).isInstanceOf(Class.class);
+        assertThat(controller.getConstructor()
+            .newInstance()).isInstanceOf(UserController.class);
     }
 
     private static Stream<Arguments> httpMethods() {
@@ -41,15 +46,19 @@ class ControllerMapperTest {
     }
 
     @Test
-    @DisplayName("정의된 uri 가 아닌 경우 StaticFileController 반환")
-    void findStaticFileController() {
+    @DisplayName("정의된 uri 가 아닌 경우 StaticFileController 정보 반환")
+    void findStaticFileController() throws NoSuchMethodException,
+            IllegalAccessException, InvocationTargetException, InstantiationException {
         ControllerMapper controllerMapper = new ControllerMapper();
 
         String httpRequestFormat = "GET /user HTTP/1.1\n"
             + "Host: localhost:8080\n";
         HttpRequest httpRequest = new HttpRequest(httpRequestFormat, "");
 
-        assertThat(controllerMapper.findController(httpRequest))
-            .isInstanceOf(StaticFileController.class);
+        Class<?> controller = controllerMapper.findController(httpRequest);
+
+        assertThat(controller).isInstanceOf(Class.class);
+        assertThat(controller.getConstructor()
+            .newInstance()).isInstanceOf(StaticFileController.class);
     }
 }

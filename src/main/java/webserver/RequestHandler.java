@@ -6,6 +6,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,13 +36,16 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = HttpRequest.readHttpRequest(in);
             logger.info("Receive HttpRequest\n{}", httpRequest.toString());
 
-            Controller controller = controllerMapper.findController(httpRequest);
+            Class<?> controllerClass = controllerMapper.findController(httpRequest);
+            Controller controller = (Controller) controllerClass.getDeclaredConstructor()
+                .newInstance();
             HttpResponse response = controller.service(httpRequest);
 
             logger.info("HttpResponse to send\n{}", response.toString());
             DataOutputStream dos = new DataOutputStream(out);
             writeResponseOnOutputStream(dos, response);
-        } catch (IOException e) {
+        } catch (IOException | NoSuchMethodException | IllegalAccessException
+                | InstantiationException | InvocationTargetException e) {
             logger.error(e.getMessage());
         }
     }

@@ -7,17 +7,17 @@ import request.HttpRequest;
 
 public class ControllerMapper {
 
-    private Map<String, Controller> controllersByUriPath = new HashMap<>();
-    private Controller staticFileController = new StaticFileController();
+    private Map<String, Class> controllersByUriPath = new HashMap<>();
+    private Class staticFileController = StaticFileController.class;
 
     public ControllerMapper() {
         /* Todo: 이부분을 application 패키지에서 할 수 있으면 좋을것같음 */
-        controllersByUriPath.put(UserController.CREATE_URI_PATH, new UserController());
-        controllersByUriPath.put(UserController.LOGIN_URI_PATH, new UserController());
-        controllersByUriPath.put(UserController.FIND_USER_URI_PATH, new UserController());
+        controllersByUriPath.put(UserController.CREATE_URI_PATH, UserController.class);
+        controllersByUriPath.put(UserController.LOGIN_URI_PATH, UserController.class);
+        controllersByUriPath.put(UserController.FIND_USER_URI_PATH, UserController.class);
     }
 
-    public Controller findController(HttpRequest httpRequest) {
+    public Class findController(HttpRequest httpRequest) {
         String uriPath = httpRequest.getUriPath();
 
         if (controllersByUriPath.containsKey(uriPath)) {
