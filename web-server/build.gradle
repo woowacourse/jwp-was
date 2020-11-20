@@ -1,0 +1,8 @@
+dependencies {
+    compile 'com.google.guava:guava:29.0-jre'
+    compile 'ch.qos.logback:logback-classic:1.2.3'
+    compile 'com.github.jknack:handlebars:4.2.0'
+    compile 'org.springframework:spring-core:5.2.6.RELEASE'
+    testCompile 'org.junit.jupiter:junit-jupiter:5.6.2'
+    testCompile 'org.assertj:assertj-core:3.16.1'
+}
