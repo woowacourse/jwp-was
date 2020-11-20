@@ -4,13 +4,15 @@ import java.util.Arrays;
 import java.util.function.Predicate;
 
 public enum ContentType {
-    HTML("text/html; charset=utf-8", path -> path.contains("html")),
-    ICON("image/x-icon; charset=utf-8", path -> path.contains("ico")),
-    CSS("text/css; charset=utf-8", path -> path.contains("css")),
-    JS("text/javascript; charset=utf-8", path -> path.contains("js")),
-    IMAGE("image/png; charset=utf-8", path -> path.contains("png")),
-    FONT_WOFF("application/x-font-woff; charset=utf-8", path -> path.contains("woff")),
-    FONT_TTF("application/x-font-ttf; charset=utf-8", path -> path.contains("ttf"));
+    HTML("text/html", containsPath("html")),
+    ICON("image/x-icon", containsPath("ico")),
+    CSS("text/css", containsPath("css")),
+    JS("text/javascript", containsPath("js")),
+    IMAGE("image/png", containsPath("png")),
+    FONT_WOFF("application/x-font-woff", containsPath("woff")),
+    FONT_TTF("application/x-font-ttf", containsPath("ttf"));
+
+    private static final String CHARSET = "charset=utf-8";
 
     private final String contentType;
     private final Predicate<String> predicate;
@@ -27,7 +29,11 @@ public enum ContentType {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 ContentType" + path));
     }
 
+    private static Predicate<String> containsPath(String type) {
+        return path -> path.contains(type);
+    }
+
     public String get() {
-        return contentType;
+        return String.format("%s; %s", contentType, CHARSET);
     }
 }
