@@ -8,6 +8,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import request.HttpRequest;
 import response.HttpResponse;
+import session.Session;
+import session.SessionStorage;
 
 @DisplayName("UserController - 이상한 사용")
 class UserControllerIllegalUsageTest extends UserControllerTest {
@@ -24,8 +26,9 @@ class UserControllerIllegalUsageTest extends UserControllerTest {
             + "Upgrade-Insecure-Requests: 1\n"
             + "Content-Length: 10\n",
             "userId=");
+        Session session = SessionStorage.createSession();
 
-        HttpResponse response = userController.service(joinRequest);
+        HttpResponse response = userController.service(joinRequest, session);
         String responseHeader = response.buildHeader();
 
         assertThat(responseHeader.startsWith("HTTP/1.1 404 NotFound")).isTrue();
@@ -43,8 +46,9 @@ class UserControllerIllegalUsageTest extends UserControllerTest {
             + "Upgrade-Insecure-Requests: 1\n"
             + "Content-Length: 10\n",
             "userId=");
+        Session session = SessionStorage.createSession();
 
-        HttpResponse response = userController.service(joinRequest);
+        HttpResponse response = userController.service(joinRequest, session);
         String responseHeader = response.buildHeader();
 
         assertThat(responseHeader.startsWith("HTTP/1.1 404 NotFound")).isTrue();

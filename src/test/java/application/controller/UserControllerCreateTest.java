@@ -8,6 +8,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import request.HttpRequest;
 import response.HttpResponse;
+import session.Session;
+import session.SessionStorage;
 
 @DisplayName("UserController - 회원가입")
 class UserControllerCreateTest {
@@ -24,8 +26,9 @@ class UserControllerCreateTest {
             + "Upgrade-Insecure-Requests: 1\n"
             + "Content-Length: 10\n",
             "userId=tls123&password=passwordoftls&name=신&email=test@email.com");
+        Session session = SessionStorage.createSession();
 
-        HttpResponse response = userController.service(joinRequest);
+        HttpResponse response = userController.service(joinRequest, session);
         String responseHeader = response.buildHeader();
 
         assertThat(responseHeader.startsWith("HTTP/1.1 302 Found")).isTrue();
@@ -43,8 +46,9 @@ class UserControllerCreateTest {
             + "Upgrade-Insecure-Requests: 1\n"
             + "Content-Length: 10\n",
             wrongBody);
+        Session session = SessionStorage.createSession();
 
-        HttpResponse response = userController.service(joinRequest);
+        HttpResponse response = userController.service(joinRequest, session);
         String responseHeader = response.buildHeader();
 
         assertThat(responseHeader.startsWith("HTTP/1.1 400 Bad Request")).isTrue();

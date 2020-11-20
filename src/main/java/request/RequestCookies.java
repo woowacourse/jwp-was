@@ -38,7 +38,7 @@ public class RequestCookies {
             .collect(Collectors.toList());
     }
 
-    public boolean isValue(String cookieName, String expectedValue) {
+    public boolean isValueOfName(String cookieName, String expectedValue) {
         return getValue(cookieName).equals(expectedValue);
     }
 
@@ -47,5 +47,9 @@ public class RequestCookies {
             return cookiesByName.get(cookieName).getValue();
         }
         throw new IllegalArgumentException("cookie name \"" + cookieName + "\" does not exist.");
+    }
+
+    public boolean isCookieExist(String cookieName) {
+        return cookiesByName.containsKey(cookieName);
     }
 }

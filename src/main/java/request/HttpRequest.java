@@ -67,7 +67,7 @@ public class HttpRequest {
     public static boolean isExistRequestHeader(String request, String headerName) {
         return new HttpRequest(request, MessageBody.EMPTY_BODY)
             .headers
-            .doesHeaderExist(headerName);
+            .isExist(headerName);
     }
 
     public static String findHeaderValue(String request, String headerName) {
@@ -93,6 +93,10 @@ public class HttpRequest {
 
     public String getUriPath() {
         return requestLine.getUriPath();
+    }
+
+    public boolean isHeaderExist(String headerName) {
+        return headers.isExist(headerName);
     }
 
     public String getHeader(String headerName) {

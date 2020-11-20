@@ -8,6 +8,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import request.HttpRequest;
 import response.HttpResponse;
+import session.Session;
+import session.SessionStorage;
 
 class StaticFileControllerTest {
 
@@ -20,8 +22,9 @@ class StaticFileControllerTest {
     void service_IfRequestUsesGetMethodAndExistingFilePath(String uri) {
         HttpRequest joinRequest = new HttpRequest(
             "GET " + uri + " HTTP/1.1\n", "");
+        Session session = SessionStorage.createSession();
 
-        HttpResponse response = staticFileController.service(joinRequest);
+        HttpResponse response = staticFileController.service(joinRequest, session);
         String responseHeader = response.buildHeader();
         byte[] body = response.getBody();
 
@@ -34,8 +37,9 @@ class StaticFileControllerTest {
     void service_IfRequestUsesGetMethodAndNotExistingFilePath_respondWith404() {
         HttpRequest joinRequest = new HttpRequest(
             "GET /ohOhOhOh HTTP/1.1\n", "");
+        Session session = SessionStorage.createSession();
 
-        HttpResponse response = staticFileController.service(joinRequest);
+        HttpResponse response = staticFileController.service(joinRequest, session);
         String responseHeader = response.buildHeader();
         byte[] body = response.getBody();
 
@@ -49,8 +53,9 @@ class StaticFileControllerTest {
     void service_IfRequestDoesNotUseGetMethod_respondWith404(String httpMethodNotGet) {
         HttpRequest joinRequest = new HttpRequest(
             httpMethodNotGet + " / HTTP/1.1\n", "");
+        Session session = SessionStorage.createSession();
 
-        HttpResponse response = staticFileController.service(joinRequest);
+        HttpResponse response = staticFileController.service(joinRequest, session);
         String responseHeader = response.buildHeader();
         byte[] body = response.getBody();
 

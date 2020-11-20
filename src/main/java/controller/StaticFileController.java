@@ -10,6 +10,7 @@ import resource.Resource;
 import resource.ResourcesHandler;
 import response.HttpResponse;
 import response.StatusCode;
+import session.Session;
 import webserver.RequestHandler;
 
 public class StaticFileController extends AbstractController {
@@ -54,7 +55,7 @@ public class StaticFileController extends AbstractController {
     }
 
     @Override
-    protected HttpResponse doGet(HttpRequest httpRequest) {
+    protected HttpResponse doGet(HttpRequest httpRequest, Session session) {
         return findStaticFile(httpRequest);
     }
 }

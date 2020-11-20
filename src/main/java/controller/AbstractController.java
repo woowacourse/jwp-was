@@ -7,15 +7,16 @@ import request.Method;
 import request.RequestDataFormatException;
 import response.HttpResponse;
 import response.StatusCode;
+import session.Session;
 
 abstract public class AbstractController implements Controller {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractController.class);
 
     @Override
-    public HttpResponse service(HttpRequest httpRequest) {
+    public HttpResponse service(HttpRequest httpRequest, Session session) {
         try {
-            return serviceWithoutExceptionCatch(httpRequest);
+            return serviceWithoutExceptionCatch(httpRequest, session);
         } catch (RequestDataFormatException e) {
             logger.debug(e.getMessage());
             return new HttpResponse(StatusCode.BAD_REQUEST);
@@ -25,35 +26,35 @@ abstract public class AbstractController implements Controller {
         }
     }
 
-    private HttpResponse serviceWithoutExceptionCatch(HttpRequest httpRequest) {
+    private HttpResponse serviceWithoutExceptionCatch(HttpRequest httpRequest, Session session) {
         if (httpRequest.isMethod(Method.GET)) {
-            return doGet(httpRequest);
+            return doGet(httpRequest, session);
         }
         if (httpRequest.isMethod(Method.POST)) {
-            return doPost(httpRequest);
+            return doPost(httpRequest, session);
         }
         if (httpRequest.isMethod(Method.PUT)) {
-            return doPut(httpRequest);
+            return doPut(httpRequest, session);
         }
         if (httpRequest.isMethod(Method.DELETE)) {
-            return doDelete(httpRequest);
+            return doDelete(httpRequest, session);
         }
         throw new WrongRequestException("http method of the request is weird.");
     }
 
-    protected HttpResponse doGet(HttpRequest httpRequest) {
+    protected HttpResponse doGet(HttpRequest httpRequest, Session session) {
         return new HttpResponse(StatusCode.NOT_FOUND);
     }
 
-    protected HttpResponse doPost(HttpRequest httpRequest) {
+    protected HttpResponse doPost(HttpRequest httpRequest, Session session) {
         return new HttpResponse(StatusCode.NOT_FOUND);
     }
 
-    protected HttpResponse doPut(HttpRequest httpRequest) {
+    protected HttpResponse doPut(HttpRequest httpRequest, Session session) {
         return new HttpResponse(StatusCode.NOT_FOUND);
     }
 
-    protected HttpResponse doDelete(HttpRequest httpRequest) {
+    protected HttpResponse doDelete(HttpRequest httpRequest, Session session) {
         return new HttpResponse(StatusCode.NOT_FOUND);
     }
 }

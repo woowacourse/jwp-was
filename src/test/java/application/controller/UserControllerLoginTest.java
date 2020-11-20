@@ -7,6 +7,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import request.HttpRequest;
 import response.HttpResponse;
+import session.Session;
+import session.SessionStorage;
 
 @DisplayName("UserController - 로그인")
 class UserControllerLoginTest extends UserControllerTest {
@@ -26,8 +28,9 @@ class UserControllerLoginTest extends UserControllerTest {
             + "Content-Length: 10\n",
             "userId=" + TEST_USER_ID +
                 "&password=" + TEST_PASSWORD + "&name=test&email=test@email.com");
+        Session session = SessionStorage.createSession();
 
-        HttpResponse response = userController.service(joinRequest);
+        HttpResponse response = userController.service(joinRequest, session);
         String responseHeader = response.buildHeader();
 
         assertThat(responseHeader.startsWith("HTTP/1.1 302 Found")).isTrue();
@@ -45,12 +48,15 @@ class UserControllerLoginTest extends UserControllerTest {
             + "Content-Length: 10\n",
             "userId=" + TEST_USER_ID + "&password=" + TEST_PASSWORD);
 
-        HttpResponse response = userController.service(loginRequest);
-        String responseHeader = response.buildHeader();
+        Session session = SessionStorage.createSession();
+        HttpResponse response = userController.service(loginRequest, session);
 
+        assertThat(session.getAttribute("login")).isEqualTo(true);
+
+        String responseHeader = response.buildHeader();
         assertThat(responseHeader.startsWith("HTTP/1.1 302 Found")).isTrue();
         assertThat(responseHeader.contains("Location: /")).isTrue();
-        assertThat(responseHeader.contains("Set-Cookie: login=true")).isTrue();
+        assertThat(responseHeader.contains("sessionId=" + session.getId())).isTrue();
     }
 
     @Test
@@ -63,13 +69,13 @@ class UserControllerLoginTest extends UserControllerTest {
             + "Upgrade-Insecure-Requests: 1\n"
             + "Content-Length: 10\n",
             "userId=idThatDoesNotExist&password=" + TEST_PASSWORD);
+        Session session = SessionStorage.createSession();
 
-        HttpResponse response = userController.service(loginRequest);
+        HttpResponse response = userController.service(loginRequest, session);
         String responseHeader = response.buildHeader();
 
         assertThat(responseHeader.startsWith("HTTP/1.1 302 Found")).isTrue();
         assertThat(responseHeader.contains("Location: /user/login_failed.html")).isTrue();
-        assertThat(responseHeader.contains("Set-Cookie: login=false")).isTrue();
     }
 
     @Test
@@ -82,12 +88,12 @@ class UserControllerLoginTest extends UserControllerTest {
             + "Upgrade-Insecure-Requests: 1\n"
             + "Content-Length: 10\n",
             "userId=" + TEST_USER_ID + "&password=wrong");
+        Session session = SessionStorage.createSession();
 
-        HttpResponse response = userController.service(loginRequest);
+        HttpResponse response = userController.service(loginRequest, session);
         String responseHeader = response.buildHeader();
 
         assertThat(responseHeader.startsWith("HTTP/1.1 302 Found")).isTrue();
         assertThat(responseHeader.contains("Location: /user/login_failed.html")).isTrue();
-        assertThat(responseHeader.contains("Set-Cookie: login=false")).isTrue();
     }
 }

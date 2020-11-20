@@ -22,15 +22,15 @@ class Headers {
         });
     }
 
-    boolean doesHeaderExist(String headerFieldName) {
-        return headers.containsKey(headerFieldName);
+    boolean isExist(String headerName) {
+        return headers.containsKey(headerName);
     }
 
-    String getValue(String headerFieldName) {
-        if (!doesHeaderExist(headerFieldName)) {
+    String getValue(String headerName) {
+        if (!isExist(headerName)) {
             throw new IllegalArgumentException("this header field does not exist.");
         }
-        return headers.get(headerFieldName);
+        return headers.get(headerName);
     }
 
     @Override

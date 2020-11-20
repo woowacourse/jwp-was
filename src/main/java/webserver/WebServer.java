@@ -2,19 +2,15 @@ package webserver;
 
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import session.Session;
 
 public class WebServer {
 
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
     private static final int DEFAULT_PORT = 8080;
-    private static final Map<String, Session> session = new HashMap<>();
 
     public static void main(String[] args) throws Exception {
         int port = decidePortNumber(args);

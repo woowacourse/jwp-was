@@ -1,7 +1,7 @@
 package application.controller;
 
 import application.dto.HttpRequestToDtoConverter;
-import application.filter.auth.AuthorityFilter;
+import application.filter.auth.Authority;
 import application.filter.auth.UnauthorizedException;
 import application.service.UserService;
 import com.github.jknack.handlebars.Template;
@@ -15,6 +15,7 @@ import resource.ContentType;
 import response.HttpResponse;
 import response.ResponseCookies;
 import response.StatusCode;
+import session.Session;
 import utils.TemplateBuilder;
 
 public class UserController extends AbstractController {
@@ -31,21 +32,22 @@ public class UserController extends AbstractController {
         return new HttpResponse(StatusCode.FOUND, "/");
     }
 
-    private HttpResponse login(HttpRequest request) {
+    private HttpResponse login(HttpRequest request, Session session) {
         boolean isRightUser = userService.isExistUser(
             HttpRequestToDtoConverter.toLoginRequest(request));
 
         if (isRightUser) {
-            return new HttpResponse(StatusCode.FOUND, "/")
-                .setCookies(ResponseCookies.createWithSingleCookie("login", "true", "/"));
+            session.setAttribute("login", true);
+
+            return new HttpResponse(StatusCode.FOUND, "/").setCookies(
+                ResponseCookies.createWithSingleCookie("sessionId", session.getId(), "/"));
         }
-        return new HttpResponse(StatusCode.FOUND, "/user/login_failed.html")
-            .setCookies(ResponseCookies.createWithSingleCookie("login", "false", "/"));
+        return new HttpResponse(StatusCode.FOUND, "/user/login_failed.html");
     }
 
-    private HttpResponse findAllUsers(HttpRequest httpRequest) {
+    private HttpResponse findAllUsers(HttpRequest httpRequest, Session session) {
         try {
-            AuthorityFilter.validateAuthority(httpRequest);
+            Authority.validateAuthority(session);
 
             return makeResponseForFindAllUsers(httpRequest);
         } catch (IOException e) {
@@ -67,22 +69,22 @@ public class UserController extends AbstractController {
     }
 
     @Override
-    protected HttpResponse doPost(HttpRequest httpRequest) {
+    protected HttpResponse doPost(HttpRequest httpRequest, Session session) {
         if (httpRequest.getUriPath().equals(CREATE_URI_PATH)) {
             return create(httpRequest);
         }
         if (httpRequest.getUriPath().equals(LOGIN_URI_PATH)) {
-            return login(httpRequest);
+            return login(httpRequest, session);
         }
         throw new WrongRequestException("uri that does not exist in the POST method.");
     }
 
     @Override
-    protected HttpResponse doGet(HttpRequest httpRequest) {
+    protected HttpResponse doGet(HttpRequest httpRequest, Session session) {
         String uriPath = httpRequest.getUriPath();
 
         if (uriPath.equals(FIND_USER_URI_PATH)) {
-            return findAllUsers(httpRequest);
+            return findAllUsers(httpRequest, session);
         }
         throw new WrongRequestException("uri that does not exist in the POST method.");
     }

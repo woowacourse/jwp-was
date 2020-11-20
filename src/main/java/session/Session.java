@@ -26,4 +26,8 @@ public class Session {
     public String getId() {
         return id;
     }
+
+    public boolean isEmpty() {
+        return session.isEmpty();
+    }
 }
