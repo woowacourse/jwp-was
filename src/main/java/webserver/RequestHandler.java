@@ -1,17 +1,13 @@
 package webserver;
 
-import application.controller.UserController;
 import controller.Controller;
+import controller.ControllerManager;
 import controller.ControllerMapper;
-import controller.StaticFileController;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.HttpRequest;
@@ -24,18 +20,8 @@ public class RequestHandler implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private static final ControllerMapper controllerMapper = new ControllerMapper();
-    private static final Map<Class<?>, Controller> controllers;
 
     private Socket connection;
-
-    static {
-        Map<Class<?>, Controller> controllersMap = new HashMap<>();
-
-        controllersMap.put(StaticFileController.class, new StaticFileController());
-        controllersMap.put(UserController.class, new UserController());
-
-        controllers = Collections.unmodifiableMap(controllersMap);
-    }
 
     RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -70,7 +56,7 @@ public class RequestHandler implements Runnable {
 
     private Controller findController(HttpRequest httpRequest) {
         Class<?> controllerClass = controllerMapper.findController(httpRequest);
-        return controllers.get(controllerClass);
+        return ControllerManager.get(controllerClass);
     }
 
     private Session findOrCreateSession(HttpRequest httpRequest) {
