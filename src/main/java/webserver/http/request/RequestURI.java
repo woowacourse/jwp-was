@@ -1,7 +1,5 @@
 package webserver.http.request;
 
-import webserver.http.FileType;
-
 public class RequestURI {
     private final String uri;
     private final HttpParams httpParams;
@@ -12,7 +10,7 @@ public class RequestURI {
     }
 
     public String getClassPath() {
-        return FileType.of(uri).getClassPath() + "/" + uri;
+        return FileType.of(uri).getClassPath() + uri;
     }
 
     public String getContentType() {

@@ -1,4 +1,4 @@
-package webserver.http.request;
+package webserver.http;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;

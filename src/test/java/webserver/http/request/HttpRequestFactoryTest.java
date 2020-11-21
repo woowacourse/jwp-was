@@ -12,6 +12,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import webserver.http.HttpVersion;
+
 class HttpRequestFactoryTest {
     private HttpRequestFactory httpRequestFactory;
 
@@ -32,9 +34,10 @@ class HttpRequestFactoryTest {
         HttpRequest request = httpRequestFactory.create(br);
 
         assertAll(
-                () -> assertThat(request.getHeader().getMethod()).isEqualTo(HttpMethod.GET),
-                () -> assertThat(request.getHeader().getRequestURI().getUri()).isEqualTo(uri),
-                () -> assertThat(request.getHeader().getVersion()).isEqualTo(HttpVersion.HTTP_1_1)
+                () -> assertThat(request.getRequestLine().getMethod()).isEqualTo(HttpMethod.GET),
+                () -> assertThat(request.getRequestLine().getRequestURI().getUri()).isEqualTo(uri),
+                () -> assertThat(request.getRequestLine().getVersion()).isEqualTo(
+                        HttpVersion.HTTP_1_1)
         );
     }
 }

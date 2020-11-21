@@ -10,6 +10,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import webserver.http.HttpHeaderFields;
+import webserver.http.HttpVersion;
+
 public class HttpRequestFactory {
     private static final int HTTP_METHOD = 0;
     private static final int REQUEST_URI = 1;
@@ -17,28 +20,36 @@ public class HttpRequestFactory {
     private static final String HEADER_DELIMITER = ":";
 
     public HttpRequest create(BufferedReader br) throws IOException {
+        HttpRequestLine requestLine = extractRequestLine(br);
         HttpHeader header = extractHeader(br);
-        HttpBody body = extractBody(br, header);
-        return new HttpRequest(header, body);
+        String body = extractBody(br, header.get(HttpHeaderFields.CONTENT_LENGTH));
+
+        return new HttpRequest(requestLine, header, body);
+    }
+
+    private HttpRequestLine extractRequestLine(BufferedReader br) throws IOException {
+        String requestLine = br.readLine();
+        String[] tokens = requestLine.split(SP);
+        String uri = tokens[REQUEST_URI];
+        RequestURIType URIType = RequestURIType.of(uri);
+
+        HttpMethod method = HttpMethod.valueOf(tokens[HTTP_METHOD]);
+        RequestURI requestURI = createRequestURI(URIType, uri);
+        HttpVersion version = HttpVersion.of(tokens[HTTP_VERSION]);
+        return new HttpRequestLine(method, requestURI, version);
+    }
+
+    private RequestURI createRequestURI(RequestURIType uriType, String uri) {
+        if (uriType.hasParams()) {
+            return new RequestURIFactory().create(uri);
+        }
+        return new RequestURI(uri, HttpParams.of(EMPTY));
     }
 
     private HttpHeader extractHeader(BufferedReader br) throws IOException {
-        String requestLine = br.readLine();
-        String[] tokens = requestLine.split(SP);
-
-        HttpMethod method = HttpMethod.valueOf(tokens[HTTP_METHOD]);
-        RequestURI uri = RequestURIType.of(tokens[REQUEST_URI])
-                .getFactory()
-                .create(tokens[REQUEST_URI]);
-        HttpVersion version = HttpVersion.of(tokens[HTTP_VERSION]);
-        Map<String, String> fields = extractFields(br);
-
-        return new HttpHeader(method, uri, version, fields);
-    }
-
-    private Map<String, String> extractFields(BufferedReader br) throws IOException {
         Map<String, String> fields = new HashMap<>();
         String line = br.readLine();
+
         while (nonNull(line) && !EMPTY.equals(line)) {
             int indexOfDelimiter = line.indexOf(HEADER_DELIMITER);
             String key = line.substring(0, indexOfDelimiter);
@@ -46,14 +57,14 @@ public class HttpRequestFactory {
             fields.put(key, value);
             line = br.readLine();
         }
-        return fields;
+
+        return new HttpHeader(fields);
     }
 
-    private HttpBody extractBody(BufferedReader br, HttpHeader header) throws IOException {
-        String contentLength = header.get(HttpHeaderFields.CONTENT_LENGTH);
+    private String extractBody(BufferedReader br, String contentLength) throws IOException {
         if (br.ready() && nonNull(contentLength)) {
-            return new HttpBody(readData(br, parseInt(contentLength)));
+            return readData(br, parseInt(contentLength));
         }
-        return HttpBody.EMPTY_BODY;
+        return EMPTY;
     }
 }

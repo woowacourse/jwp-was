@@ -1,18 +1,18 @@
-package webserver.http.request;
+package utils;
 
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
 import model.User;
+import webserver.http.request.HttpParams;
 
-class HttpParamsTest {
-
+class ModelMapperTest {
     @Test
     void toModel() {
         HttpParams params = HttpParams.of("userId=turtle");
         User expected = new User("turtle", null, null, null);
-        User actual = params.toModel(User.class);
+        User actual = ModelMapper.toModel(User.class, params);
         assertThat(actual.getUserId()).isEqualTo(expected.getUserId());
     }
 }
