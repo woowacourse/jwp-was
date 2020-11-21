@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import db.DataBase;
+import db.UserDataBase;
 import model.User;
 import webserver.HttpRequestFixture;
 import webserver.http.request.HttpRequest;
@@ -28,7 +28,7 @@ class UserCreateControllerTest {
 
         controller.service(httpRequest);
 
-        User persistUser = DataBase.findUserById("javajigi");
+        User persistUser = UserDataBase.findUserById("javajigi");
         assertThat(persistUser.getPassword()).isEqualTo("password");
         assertThat(persistUser.getName()).isEqualTo("%EB%B0%95%EC%9E%AC%EC%84%B1");
         assertThat(persistUser.getEmail()).isEqualTo("javajigi%40slipp.net");
@@ -51,7 +51,7 @@ class UserCreateControllerTest {
 
         controller.service(httpRequest);
 
-        User persistUser = DataBase.findUserById("javajigi");
+        User persistUser = UserDataBase.findUserById("javajigi");
         assertThat(persistUser.getPassword()).isEqualTo("password");
         assertThat(persistUser.getName()).isEqualTo("%EB%B0%95%EC%9E%AC%EC%84%B1");
         assertThat(persistUser.getEmail()).isEqualTo("javajigi%40slipp.net");

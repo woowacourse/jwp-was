@@ -4,9 +4,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import webserver.http.Protocol;
 
 public class RequestLine {
+    private static final Logger logger = LoggerFactory.getLogger(RequestLine.class);
     private static final String SPACE = "\\s";
 
     private final Method method;
@@ -20,10 +24,8 @@ public class RequestLine {
     }
 
     public static RequestLine of(BufferedReader bufferedReader) throws IOException {
-        if (!bufferedReader.ready()) {
-            throw new NotReadableHttpMessageException("HTTP 요청메시지의 요청라인이 비어있습니다.");
-        }
         String source = bufferedReader.readLine();
+        logger.debug(String.format("requestLine : %s", source));
 
         String[] sources = source.split(SPACE);
         Method method = Method.of(sources[0]);

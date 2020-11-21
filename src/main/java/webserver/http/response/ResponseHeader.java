@@ -11,6 +11,10 @@ public class ResponseHeader {
         this.fields = fields;
     }
 
+    public String getCookie() {
+        return fields.get("set-Cookie");
+    }
+
     public String toValue() {
         StringBuilder sb = new StringBuilder();
 

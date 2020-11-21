@@ -1,13 +1,9 @@
 package webserver.controller;
 
-import utils.FileIoUtils;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 
 public class StaticController extends AbstractController {
-
-    private static final String DELIMITER = "\\.";
-
     @Override
     protected HttpResponse get(HttpRequest httpRequest) {
         String defaultPath = httpRequest.getDefaultPath();
@@ -20,14 +16,8 @@ public class StaticController extends AbstractController {
             path = String.format("./static%s", defaultPath);
         }
 
-        byte[] body = FileIoUtils.loadFileFromClasspath(path);
-        String extension = path.split(DELIMITER)[1];
-        ContentType contentType = ContentTypeMapper.map(extension);
-
         return HttpResponse.ok()
-            .contentType(contentType.value())
-            .contentLength(body.length)
-            .body(body)
+            .bodyByPath(path)
             .build();
     }
 

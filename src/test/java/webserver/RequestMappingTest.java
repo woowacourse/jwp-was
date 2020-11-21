@@ -63,7 +63,7 @@ class RequestMappingTest {
         given(staticController.isForStaticContent(any(HttpRequest.class))).willReturn(false);
 
         assertThatThrownBy(() -> requestMapping.getController(httpRequest))
-            .isInstanceOf(UnsupportedRequestUrlException.class)
+            .isInstanceOf(UnsupportedClientUrlException.class)
             .hasMessageContaining(httpRequest.getDefaultPath());
     }
 }

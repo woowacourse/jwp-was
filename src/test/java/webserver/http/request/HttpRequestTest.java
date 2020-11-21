@@ -5,16 +5,18 @@ import static org.assertj.core.api.Assertions.*;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import db.SessionDataBase;
 import webserver.HttpRequestFixture;
 
 class HttpRequestTest {
     @DisplayName("GET 요청에 대한 HttpRequest 객체를 생성한다. ")
     @Test
-    void of_whenRequestMethodIsGet() throws IOException {
+    void of_shouldGenerateHttpRequest_whenRequestMethodIsGet() throws IOException {
         HttpRequest httpRequest = HttpRequestFixture.httpRequestOfGetMethod();
 
         Map<String, String> expectedParameters = new HashMap<>();
@@ -25,40 +27,35 @@ class HttpRequestTest {
         assertThat(httpRequest.getDefaultPath()).isEqualTo("/user/create");
         assertThat(httpRequest.getParameters()).isEqualTo(expectedParameters);
     }
-    //
-    // @DisplayName("요청에 해당하는 templates 자원의 경로를 반환한다.")
-    // @Test
-    // void getPath_whenRequestTemplatesFiles() throws IOException {
-    //     InputStream inputStream = new FileInputStream(
-    //         new File("/Users/moon/Desktop/Github/jwp-was/build/resources/test/TemplatesResourceRequest.txt"));
-    //     HttpRequest httpRequest = HttpRequest.of(inputStream);
-    //
-    //     String path = httpRequest.getDefaultPath();
-    //
-    //     assertThat(path).isEqualTo("./templates/index.html");
-    // }
-    //
-    // @DisplayName("요청에 해당하는 static 자원의 경로를 반환한다.")
-    // @Test
-    // void getPath_whenRequestStaticFiles() throws IOException {
-    //     InputStream inputStream = new FileInputStream(
-    //         new File("/Users/moon/Desktop/Github/jwp-was/build/resources/test/StaticResourceRequest.txt"));
-    //     HttpRequest httpRequest = HttpRequest.of(inputStream);
-    //
-    //     String path = httpRequest.getDefaultPath();
-    //
-    //     assertThat(path).isEqualTo("./static/css/styles.css");
-    // }
-    //
-    // @DisplayName("요청에 해당하는 동적 처리 경로를 반환한다.")
-    // @Test
-    // void getPath_whenRequestNotResources() throws IOException {
-    //     InputStream inputStream = new FileInputStream(
-    //         new File("/Users/moon/Desktop/Github/jwp-was/build/resources/test/GetRequest.txt"));
-    //     HttpRequest httpRequest = HttpRequest.of(inputStream);
-    //
-    //     String path = httpRequest.getDefaultPath();
-    //
-    //     assertThat(path).isEqualTo("/user/create");
-    // }
+
+    @DisplayName("GET 요청 내 쿠키 정보를 가진 HttpRequest 객체를 생성한다.")
+    @Test
+    void of_shouldParseCookie_whenHttpRequestHasCookie() throws IOException {
+        HttpRequest httpRequest = HttpRequestFixture.httpRequestByLoginedUser();
+
+        String cookieValue = httpRequest.getCookieValue("logined");
+
+        assertThat(cookieValue).isEqualTo("true");
+    }
+
+    @DisplayName("요청 내 JsessionId값이 없으면 새로운 HttpSession 객체로 HttpRequest 객체를 생성한다.")
+    @Test
+    void of_createHttpSession_whenHttpRequestDoesntHaveJSessionId() throws IOException {
+        HttpRequest httpRequest = HttpRequestFixture.httpRequestWithoutJSessionId();
+
+        String sessionId = httpRequest.getSessionId();
+
+        assertThat(SessionDataBase.findHttpSessionById(sessionId).getId()).isEqualTo(sessionId);
+    }
+
+    @DisplayName("요청 내 JsessionId값이 있으면 해당하는 HttpSession 객체로 HttpRequest 객체를 생성한다.")
+    @Test
+    void of_getHttpSession_whenHttpRequestHasJSessionId() throws IOException {
+        String sessionId = "c2b240da-cbf7-4f95-b4f6-e12247cf8a2f";
+        SessionDataBase.addHttpSession(new HttpSession(sessionId, new ConcurrentHashMap<>()));
+
+        HttpRequest httpRequest = HttpRequestFixture.httpRequestWithJSessionId();
+
+        assertThat(httpRequest.getSessionId()).isEqualTo(sessionId);
+    }
 }

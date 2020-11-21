@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import db.DataBase;
+import db.UserDataBase;
 import model.User;
 import utils.FileIoUtils;
 import webserver.controller.StaticController;
@@ -42,7 +42,7 @@ class RequestHandlerTest {
 
         byte[] body = FileIoUtils.loadFileFromClasspath("./templates/index.html");
         assertThat(httpResponse.getStatusLine().getValue()).isEqualTo("HTTP/1.1 200 OK");
-        assertThat(httpResponse.getHeader()).contains("Content-Type: text/html;charset=utf-8", "Content-Length: 6902");
+        assertThat(httpResponse.getHeader()).contains("Content-Type: text/html;charset=utf-8", "Content-Length: 6897");
         assertThat(httpResponse.getBody()).isEqualTo(body);
     }
 
@@ -57,7 +57,7 @@ class RequestHandlerTest {
         assertThat(httpResponse.getStatusLine().getValue()).isEqualTo("HTTP/1.1 302 Found");
         assertThat(httpResponse.getHeader()).contains("Location: /index.html");
         assertThat(httpResponse.getBody()).isEqualTo(new byte[0]);
-        assertThat(DataBase.findUserById("javajigi")).isEqualToComparingFieldByField(
+        assertThat(UserDataBase.findUserById("javajigi")).isEqualToComparingFieldByField(
             new User("javajigi", "password", "%EB%B0%95%EC%9E%AC%EC%84%B1", "javajigi%40slipp.net"));
     }
 }

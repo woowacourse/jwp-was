@@ -22,6 +22,6 @@ public class RequestMapping {
             return staticController;
         }
 
-        throw new UnsupportedRequestUrlException(httpRequest.getDefaultPath());
+        throw new UnsupportedClientUrlException(httpRequest.getDefaultPath());
     }
 }

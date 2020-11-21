@@ -2,7 +2,6 @@ package webserver.http.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Optional;
 
 import utils.IOUtils;
 
@@ -15,12 +14,12 @@ public class RequestBody {
         this.body = body;
     }
 
-    public static RequestBody of(BufferedReader bufferedReader, Optional<String> contentLength) throws IOException {
-        if (!contentLength.isPresent()) {
+    public static RequestBody of(BufferedReader bufferedReader, String contentLength) throws IOException {
+        if (contentLength == null || contentLength.isEmpty()) {
             return EMPTY_REQUEST_BODY;
         }
 
-        String body = IOUtils.readData(bufferedReader, Integer.parseInt(contentLength.get()));
+        String body = IOUtils.readData(bufferedReader, Integer.parseInt(contentLength));
         return new RequestBody(body);
     }
 

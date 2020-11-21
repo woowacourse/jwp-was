@@ -1,0 +1,5 @@
+GET /user/list HTTP/1.1
+Host: localhost:8080
+Connection: keep-alive
+Accept: */*
+Cookie: JSESSIONID=c2b240da-cbf7-4f95-b4f6-e12247cf8a2f

@@ -1,30 +1,32 @@
 package webserver.controller;
 
-import java.util.Optional;
-
 public enum ContentType {
-    HTML("text/html", Optional.of("charset=utf-8"), Optional.empty()),
-    CSS("text/css", Optional.empty(), Optional.empty()),
-    JAVASCRIPT("application/javascript", Optional.empty(), Optional.empty()),
-    TEXT("text/plain", Optional.empty(), Optional.empty());
+    HTML("text/html", "charset=utf-8", ""),
+    CSS("text/css", "", ""),
+    JAVASCRIPT("application/javascript", "", ""),
+    TEXT("text/plain", "", ""),
+    APPLICATION_JSON("application/json", "", ""),
+    ICO("image/x-icon", "", ""),
+    TTF("font/ttf", "", ""),
+    WOFF("font/woff", "", ""),
+    WOFF2("font/woff2", "", "");
 
     private final String mediaType;
-    private final Optional<String> charset;
-    private final Optional<String> boundary;
+    private final String charset;
+    private final String boundary;
 
-    ContentType(String mediaType, Optional<String> charset, Optional<String> boundary) {
+    ContentType(String mediaType, String charset, String boundary) {
         this.mediaType = mediaType;
         this.charset = charset;
         this.boundary = boundary;
     }
 
     public String value() {
-        StringBuilder stringBuilder = new StringBuilder();
+        String charsetToAppend = (charset == "") ? "" : (";" + charset);
+        String boundaryToAppend = (boundary == "") ? "" : ( ";" + boundary);
 
-        stringBuilder.append(mediaType);
-        charset.ifPresent(charset -> stringBuilder.append(String.format(";%s", charset)));
-        boundary.ifPresent(boundary -> stringBuilder.append(String.format(";%s", boundary)));
+        String value = mediaType + charsetToAppend + boundaryToAppend;
 
-        return stringBuilder.toString();
+        return value;
     }
 }
