@@ -6,9 +6,11 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import db.SessionDataBase;
 import db.UserDataBase;
 import model.User;
 import webserver.http.request.HttpRequest;
+import webserver.http.request.HttpSession;
 import webserver.http.response.HttpResponse;
 
 public class LoginController extends AbstractController {
@@ -35,17 +37,20 @@ public class LoginController extends AbstractController {
         String password = data.get("password");
 
         User user = UserDataBase.findUserById(userId);
+        HttpSession httpSession = httpRequest.getHttpSession();
+        httpSession.setAttribute("user", user);
+        SessionDataBase.addHttpSession(httpSession);
 
         if (user != null && password.equals(user.getPassword())) {
             return HttpResponse.ok()
                 .bodyByPath("./templates/index.html")
-                .setCookie("logined", "true", "/")
+                .setCookie("JSESSIONID", httpRequest.getSessionId(), "/")
                 .build();
         }
 
         return HttpResponse.ok()
             .bodyByPath("./templates/user/login_failed.html")
-            .setCookie("logined", "false", "/")
+            .setCookie("JSESSIONID", httpRequest.getSessionId(), "/")
             .build();
     }
 }

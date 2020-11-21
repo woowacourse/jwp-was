@@ -1,8 +1,8 @@
 package webserver.http.request;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class HttpSession {
     private final String id;
@@ -14,7 +14,7 @@ public class HttpSession {
     }
 
     public static HttpSession create() {
-        return new HttpSession(UUID.randomUUID().toString(), new ConcurrentHashMap<>());
+        return new HttpSession(UUID.randomUUID().toString(), new HashMap<>());
     }
 
     public String getId() {

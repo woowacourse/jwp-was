@@ -35,9 +35,10 @@ class LoginControllerTest {
 
         assertThat(response.getStatusLine()).isEqualToComparingFieldByField(
             new StatusLine(Protocol.ONE_POINT_ONE, StatusCode.OK));
-        assertThat(response.getHeader()).isEqualTo(String.format("Content-Length: 6897%n"
-            + "set-Cookie: logined=true; Path=/%n"
-            + "Content-Type: text/html;charset=utf-8%n"));
+        assertThat(response.getHeader())
+            .startsWith("Content-Length: 6897")
+            .contains("set-Cookie: JSESSIONID=")
+            .endsWith("Content-Type: text/html;charset=utf-8\n");
     }
 
     @DisplayName("로그인 요청한 아이디가 존재하지 않는 경우 로그인 실패 페이지로 이동한다.")
@@ -49,9 +50,10 @@ class LoginControllerTest {
 
         assertThat(response.getStatusLine()).isEqualToComparingFieldByField(
             new StatusLine(Protocol.ONE_POINT_ONE, StatusCode.OK));
-        assertThat(response.getHeader()).isEqualTo(String.format("Content-Length: 4893%n"
-            + "set-Cookie: logined=false; Path=/%n"
-            + "Content-Type: text/html;charset=utf-8%n"));
+        assertThat(response.getHeader())
+            .startsWith("Content-Length: 4893")
+            .contains("set-Cookie: JSESSIONID=")
+            .endsWith("Content-Type: text/html;charset=utf-8\n");
     }
 
     @DisplayName("로그인 요청한 아이디의 패스워드가 일치하지 않으면 로그인 실패 페이지로 이동한다.")
@@ -64,8 +66,9 @@ class LoginControllerTest {
 
         assertThat(response.getStatusLine()).isEqualToComparingFieldByField(
             new StatusLine(Protocol.ONE_POINT_ONE, StatusCode.OK));
-        assertThat(response.getHeader()).isEqualTo(String.format("Content-Length: 4893%n"
-            + "set-Cookie: logined=false; Path=/%n"
-            + "Content-Type: text/html;charset=utf-8%n"));
+        assertThat(response.getHeader())
+            .startsWith("Content-Length: 4893")
+            .contains("set-Cookie: JSESSIONID=")
+            .endsWith("Content-Type: text/html;charset=utf-8\n");
     }
 }

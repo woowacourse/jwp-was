@@ -45,7 +45,7 @@ class HttpRequestTest {
 
         String sessionId = httpRequest.getSessionId();
 
-        assertThat(sessionId).isNotEmpty();
+        assertThat(SessionDataBase.findHttpSessionById(sessionId).getId()).isEqualTo(sessionId);
     }
 
     @DisplayName("요청 내 JsessionId값이 있으면 해당하는 HttpSession 객체로 HttpRequest 객체를 생성한다.")

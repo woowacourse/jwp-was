@@ -37,7 +37,9 @@ public class HttpRequest {
     private static HttpSession getHttpSession(RequestHeader requestHeader) {
         String jSessionId = requestHeader.getCookieValue("JSESSIONID");
         if (jSessionId.isEmpty()) {
-            return HttpSession.create();
+            HttpSession httpSession = HttpSession.create();
+            SessionDataBase.addHttpSession(httpSession);
+            return httpSession;
         }
         return SessionDataBase.findHttpSessionById(jSessionId);
     }
@@ -80,5 +82,9 @@ public class HttpRequest {
 
     public String getSessionId() {
         return httpSession.getId();
+    }
+
+    public HttpSession getHttpSession() {
+        return httpSession;
     }
 }
