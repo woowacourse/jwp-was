@@ -11,9 +11,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import kr.wootecat.dongle.http.request.HttpRequest;
+import kr.wootecat.dongle.http.request.HttpRequestBody;
 import kr.wootecat.dongle.http.request.HttpRequestHeaders;
 import kr.wootecat.dongle.http.request.HttpRequestLine;
-import kr.wootecat.dongle.http.request.HttpRequestParameters;
+import kr.wootecat.dongle.http.request.ProtocolVersion;
+import kr.wootecat.dongle.http.request.Url;
 
 class HandlerMappingsTest {
 
@@ -29,9 +31,9 @@ class HandlerMappingsTest {
     }
 
     private HttpRequest createMockHttpRequest() {
-        HttpRequestLine requestLine = new HttpRequestLine(GET, "/test", "HTTP/1.1");
+        HttpRequestLine requestLine = new HttpRequestLine(GET, Url.from("/test"), ProtocolVersion.HTTP_1_1);
         HttpRequestHeaders requestHeaders = new HttpRequestHeaders(new HashMap<>(), new ArrayList<>());
-        HttpRequestParameters requestParameters = new HttpRequestParameters(new HashMap<>());
+        HttpRequestBody requestParameters = HttpRequestBody.empty();
         return new HttpRequest(requestLine, requestHeaders,
                 requestParameters);
     }

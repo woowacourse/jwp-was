@@ -6,10 +6,10 @@ public class HttpRequest {
 
     private final HttpRequestLine requestLine;
     private final HttpRequestHeaders requestHeaders;
-    private final HttpRequestParameters requestParameters;
+    private final HttpRequestBody requestParameters;
 
     public HttpRequest(HttpRequestLine requestLine, HttpRequestHeaders requestHeaders,
-            HttpRequestParameters requestParameters) {
+            HttpRequestBody requestParameters) {
         this.requestLine = requestLine;
         this.requestHeaders = requestHeaders;
         this.requestParameters = requestParameters;
@@ -35,8 +35,11 @@ public class HttpRequest {
         return requestHeaders.get(name);
     }
 
-    public String getParameter(String key) {
-        return requestParameters.get(key);
+    public String getParameter(String name) {
+        if (requestLine.isGetMethod()) {
+            return requestLine.getParameter(name);
+        }
+        return requestParameters.get(name);
     }
 
     public boolean hasCookie(String name, boolean value) {

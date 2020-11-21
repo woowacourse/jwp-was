@@ -13,9 +13,11 @@ import kr.wootecat.dongle.http.HttpMethod;
 import kr.wootecat.dongle.http.exception.MethodNotAllowedException;
 import kr.wootecat.dongle.http.exception.NotFoundException;
 import kr.wootecat.dongle.http.request.HttpRequest;
+import kr.wootecat.dongle.http.request.HttpRequestBody;
 import kr.wootecat.dongle.http.request.HttpRequestHeaders;
 import kr.wootecat.dongle.http.request.HttpRequestLine;
-import kr.wootecat.dongle.http.request.HttpRequestParameters;
+import kr.wootecat.dongle.http.request.ProtocolVersion;
+import kr.wootecat.dongle.http.request.Url;
 import kr.wootecat.dongle.http.response.HttpResponse;
 
 class StaticResourceHandlerMappingTest {
@@ -74,9 +76,9 @@ class StaticResourceHandlerMappingTest {
     }
 
     private HttpRequest createMockHttpRequest(HttpMethod method, String path) {
-        HttpRequestLine requestLine = new HttpRequestLine(method, path, "HTTP/1.1");
+        HttpRequestLine requestLine = new HttpRequestLine(method, Url.from(path), ProtocolVersion.HTTP_1_1);
         HttpRequestHeaders requestHeaders = new HttpRequestHeaders(new HashMap<>(), new ArrayList<>());
-        HttpRequestParameters requestParameters = new HttpRequestParameters(new HashMap<>());
+        HttpRequestBody requestParameters = HttpRequestBody.empty();
         return new HttpRequest(requestLine, requestHeaders,
                 requestParameters);
     }

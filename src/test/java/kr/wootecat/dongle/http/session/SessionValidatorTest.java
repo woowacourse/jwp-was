@@ -1,6 +1,6 @@
 package kr.wootecat.dongle.http.session;
 
-import static java.util.Arrays.*;
+import static java.util.Collections.*;
 import static kr.wootecat.dongle.http.HttpMethod.*;
 import static org.assertj.core.api.Assertions.*;
 
@@ -14,9 +14,11 @@ import org.junit.jupiter.api.Test;
 
 import kr.wootecat.dongle.http.Cookie;
 import kr.wootecat.dongle.http.request.HttpRequest;
+import kr.wootecat.dongle.http.request.HttpRequestBody;
 import kr.wootecat.dongle.http.request.HttpRequestHeaders;
 import kr.wootecat.dongle.http.request.HttpRequestLine;
-import kr.wootecat.dongle.http.request.HttpRequestParameters;
+import kr.wootecat.dongle.http.request.ProtocolVersion;
+import kr.wootecat.dongle.http.request.Url;
 import kr.wootecat.dongle.http.response.HttpResponse;
 import kr.wootecat.dongle.utils.IdGenerator;
 
@@ -42,24 +44,25 @@ class SessionValidatorTest {
         SessionValidator sessionValidator = new SessionValidator(SessionStorage.ofEmpty(), idGenerator);
         HttpResponse response = HttpResponse.with200Empty();
         sessionValidator.checkRequestSession(
-                createMockHttpRequest("/any-request-2", asList(new Cookie("JSESSIONID", "이미생성됐던세션아이디"))), response);
+                createMockHttpRequest("/any-request-2",
+                        singletonList(new Cookie("JSESSIONID", "이미생성됐던세션아이디"))), response);
         Map<String, String> responseHeaders = response.getResponseHeaders().getResponseHeaders();
 
         assertThat(responseHeaders).isEmpty();
     }
 
     private HttpRequest createMockHttpRequest(String path) {
-        HttpRequestLine requestLine = new HttpRequestLine(GET, path, "HTTP/1.1");
+        HttpRequestLine requestLine = new HttpRequestLine(GET, Url.from(path), ProtocolVersion.HTTP_1_1);
         HttpRequestHeaders requestHeaders = new HttpRequestHeaders(new HashMap<>(), new ArrayList<>());
-        HttpRequestParameters requestParameters = new HttpRequestParameters(new HashMap<>());
+        HttpRequestBody requestParameters = HttpRequestBody.empty();
         return new HttpRequest(requestLine, requestHeaders,
                 requestParameters);
     }
 
     private HttpRequest createMockHttpRequest(String path, List<Cookie> cookies) {
-        HttpRequestLine requestLine = new HttpRequestLine(GET, path, "HTTP/1.1");
+        HttpRequestLine requestLine = new HttpRequestLine(GET, Url.from(path), ProtocolVersion.HTTP_1_1);
         HttpRequestHeaders requestHeaders = new HttpRequestHeaders(new HashMap<>(), cookies);
-        HttpRequestParameters requestParameters = new HttpRequestParameters(new HashMap<>());
+        HttpRequestBody requestParameters = HttpRequestBody.empty();
         return new HttpRequest(requestLine, requestHeaders,
                 requestParameters);
     }

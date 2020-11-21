@@ -53,8 +53,6 @@ class HttpRequestReaderTest {
 
                 () -> assertThat(httpRequest.getHeader("Host")).isEqualTo("localhost:8080"),
                 () -> assertThat(httpRequest.getHeader("Connection")).isEqualTo("keep-alive"),
-                () -> assertThat(httpRequest.getHeader("Content-Length")).isEqualTo("93"),
-                () -> assertThat(httpRequest.getHeader("Content-Type")).isEqualTo("application/x-www-form-urlencoded"),
                 () -> assertThat(httpRequest.getHeader("Accept")).isEqualTo("*/*"),
 
                 () -> assertThat(httpRequest.getCookie("JSESSIONID")).isEqualTo("1fb5b72c-fed0-42a3-9e8c-6197b446af76"),
