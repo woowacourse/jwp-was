@@ -1,22 +1,21 @@
 package http.response;
 
+import http.ContentType;
+import http.HttpHeaders;
+import http.request.Cookie;
+import http.request.RequestMethod;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import utils.FileIoUtils;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.util.Objects;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import http.ContentType;
-import http.HttpHeaders;
-import http.request.RequestMethod;
-import utils.Directory;
-import utils.FileIoUtils;
-
 public class Response {
-    private static final Logger logger = LoggerFactory.getLogger(Response.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Response.class);
     private static final String HTTP_1_1 = "HTTP/1.1";
 
     private DataOutputStream dataOutputStream;
@@ -41,6 +40,14 @@ public class Response {
         write();
     }
 
+    public void ok(String body) {
+        statusLine = new StatusLine(HTTP_1_1, Status.OK);
+        setHeader(HttpHeaders.CONTENT_TYPE, ContentType.HTML.getContentType() + ";charset=UTF-8");
+        this.body = new ResponseBody(body.getBytes());
+        setHeader(HttpHeaders.CONTENT_LENGTH, String.valueOf(this.body.getContentLength()));
+        write();
+    }
+
     public void found(String locationUri) {
         statusLine = new StatusLine(HTTP_1_1, Status.FOUND);
         setHeader(HttpHeaders.LOCATION, locationUri);
@@ -54,10 +61,10 @@ public class Response {
     }
 
     private ResponseBody setResponseBody(String path) throws IOException, URISyntaxException {
-        if (ContentType.HTML.isHtml(headers.getContentType())) {
-            return new ResponseBody(FileIoUtils.loadFileFromClasspath(Directory.TEMPLATES.getDirectory() + path));
+        if (ContentType.HTML.isHtml(headers.getContentType()) && path.contains(".html")) {
+            return new ResponseBody(FileIoUtils.loadFileFromClasspath("./templates" + path));
         }
-        return new ResponseBody(FileIoUtils.loadFileFromClasspath(Directory.STATIC.getDirectory() + path));
+        return new ResponseBody(FileIoUtils.loadFileFromClasspath("./static" + path));
     }
 
     private void write() {
@@ -69,7 +76,11 @@ public class Response {
             }
             dataOutputStream.flush();
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
+    }
+
+    public void setCookie(Cookie cookie) {
+        setHeader(HttpHeaders.SET_COOKIE, cookie.getName() + "=" + cookie.getValue() + "; Path=/");
     }
 }

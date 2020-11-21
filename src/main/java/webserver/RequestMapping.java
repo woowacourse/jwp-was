@@ -1,25 +1,25 @@
 package webserver;
 
+import controller.*;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import controller.Controller;
-import controller.IndexController;
-import controller.ResourceController;
-import controller.UserCreateController;
-
 class RequestMapping {
-    private final static ResourceController RESOURCE_CONTROLLER = new ResourceController();
-    private final static Map<String, Controller> controllers = new HashMap<>();
+
+    private static final ResourceController RESOURCE_CONTROLLER = new ResourceController();
+    private static final Map<String, Controller> CONTROLLERS = new HashMap<>();
 
     static {
-        controllers.put("/users", new UserCreateController());
-        controllers.put("/", new IndexController());
+        CONTROLLERS.put("/user/list", new UserListController());
+        CONTROLLERS.put("/user/login", new LoginController());
+        CONTROLLERS.put("/users", new UserCreateController());
+        CONTROLLERS.put("/", new IndexController());
     }
 
     public static Controller getController(String requestUrl) {
-        Controller controller = controllers.get(requestUrl);
+        Controller controller = CONTROLLERS.get(requestUrl);
 
         if (Objects.nonNull(controller)) {
             return controller;

@@ -1,13 +1,6 @@
 package common;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 
 public class TestFileIo {
     private static final String TEST_DIRECTORY = "./src/test/resources/";

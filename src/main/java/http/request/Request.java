@@ -1,39 +1,28 @@
 package http.request;
 
+import exception.IllegalRequestException;
 import http.ContentType;
 import http.HttpHeaders;
-import utils.IOUtils;
+import http.session.HttpSession;
+import http.session.HttpSessionStore;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 public class Request {
-    private final static String DELIMITER = ": ";
 
     private final RequestLine requestLine;
-    private final HttpHeaders httpHeader;
+    private final HttpHeaders httpHeaders;
     private final RequestBody requestBody;
+    private Cookies cookies;
 
-    public Request(BufferedReader br) throws Exception {
+    public Request(BufferedReader br) throws IOException, IllegalRequestException {
         this.requestLine = new RequestLine(br);
-        this.httpHeader = new HttpHeaders(ofRequestHeader(br));
-        this.requestBody = new RequestBody(br, httpHeader.getContentLength());
-        IOUtils.printRequest(this);
-    }
-
-    private Map<String, String> ofRequestHeader(BufferedReader br) throws IOException {
-        String line = br.readLine();
-        Map<String, String> requestHeaders = new HashMap<>();
-        while (line != null && !"".equals(line)) {
-            String[] token = line.split(DELIMITER);
-            requestHeaders.put(token[0], token[1]);
-            line = br.readLine();
-        }
-
-        return requestHeaders;
+        this.httpHeaders = new HttpHeaders(br);
+        this.requestBody = new RequestBody(br, httpHeaders.getContentLength());
+        this.cookies = new Cookies(httpHeaders.getHeader(HttpHeaders.COOKIE));
     }
 
     public boolean isMethod(RequestMethod requestMethod) {
@@ -45,11 +34,11 @@ public class Request {
     }
 
     public Map<String, String> getRequestHeaders() {
-        return Collections.unmodifiableMap(httpHeader.getHttpHeaders());
+        return Collections.unmodifiableMap(httpHeaders.getHttpHeaders());
     }
 
     public String getHeader(String key) {
-        return httpHeader.getHeader(key);
+        return httpHeaders.getHeader(key);
     }
 
     public RequestBody getRequestBody() {
@@ -70,5 +59,21 @@ public class Request {
 
     public String getContentType() {
         return ContentType.of(getPath()).getContentType();
+    }
+
+    public Cookie getCookie(String key) {
+        return cookies.getCookie(key);
+    }
+
+    public String getParam(String param) {
+        return requestBody.getParam(param);
+    }
+
+    public HttpSession getSession() {
+        Cookie cookie = cookies.getCookie("JSESSIONID");
+        if (cookie == null) {
+            return null;
+        }
+        return HttpSessionStore.getSession(cookies.getCookie("JSESSIONID").getValue());
     }
 }
