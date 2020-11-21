@@ -1,6 +1,6 @@
 package servlet;
 
-import http.HttpRequest;
+import http.request.HttpRequest;
 
 public class StaticResourceMapping implements HandlerMapping {
     private static final ResourceServlet RESOURCE_SERVLET = new ResourceServlet();

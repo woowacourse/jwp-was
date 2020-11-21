@@ -1,9 +1,12 @@
-package http;
+package http.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Objects;
 
+import http.HttpBody;
+import http.HttpHeaders;
+import http.HttpMethod;
 import utils.IOUtils;
 
 public class SimpleHttpRequest implements HttpRequest {
@@ -74,6 +77,11 @@ public class SimpleHttpRequest implements HttpRequest {
     @Override
     public HttpBody getBody() {
         return httpBody;
+    }
+
+    @Override
+    public String getCookie() {
+        return headers.getCookie();
     }
 
     @Override

@@ -1,5 +1,7 @@
 package http;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -27,7 +29,14 @@ public class HttpBody {
         Map<String, String> body = Arrays.stream(input.split(HTTP_BODY_SPLITTER))
             .map(splited -> splited.split(HTTP_KEY_VALUE_SPLITTER))
             .collect(Collectors.toMap(
-                pair -> pair[KEY_INDEX], pair -> Objects.isNull(pair[VALUE_INDEX]) ? null : pair[VALUE_INDEX]
+                pair -> pair[KEY_INDEX], pair -> {
+                    try {
+                        return Objects.isNull(pair[VALUE_INDEX]) ? null : URLDecoder.decode(pair[VALUE_INDEX], "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
             ));
         return new HttpBody(body);
     }

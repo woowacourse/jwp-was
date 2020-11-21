@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 
 import org.junit.jupiter.api.Test;
 
+import http.response.HttpResponse;
 import utils.FileIoUtils;
 
 class HttpResponseTest {

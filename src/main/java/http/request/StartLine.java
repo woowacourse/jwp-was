@@ -1,6 +1,9 @@
-package http;
+package http.request;
 
 import java.util.Objects;
+
+import http.HttpMethod;
+import http.URI;
 
 public class StartLine {
     private static final String START_LINE_SPLITTER = " ";

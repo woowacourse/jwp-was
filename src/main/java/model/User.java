@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 public class User {
     private String userId;
     private String password;
@@ -33,5 +35,12 @@ public class User {
     public String toString() {
         return "User [userId=" + userId + ", password=" + password + ", name=" + name + ", email="
                 + email + "]";
+    }
+
+    public boolean checkPassword(String password) {
+        if (Objects.isNull(this.password)) {
+            return false;
+        }
+        return this.password.equals(password);
     }
 }

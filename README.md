@@ -78,4 +78,20 @@ Thread Pool을 적용해 일정 수의 사용자 동시에 처리가 가능하�
 - [x] 지원하는 메서드만 오버라이딩 해서 사용하도록 수정
 - [x] resource 처리 영역과 아닌 영역을 구분하여 response를 반환
 - [x] 다양한 resource postfix 형식에 대한 테스트 작성
+
+### 🚀 3단계 - 로그인 및 세션 구현
+
+#### 요구사항 1
+- [x] 로그인 기능 구현
+    - 성공시
+        - [x] /index.html로 이동
+        - [x] Cookie Header 값이 logined=true 
+    - 실패시
+        - [x] /user/login_failed.html로 이동
+        - [x] Cookie Header 값이 logined=false 
+ 
+#### 요구사항 2
+- [x] 유저 목록 출력하기
+    - [x] 로그인 상태일 경우 목록 출력
+    - [x] 로그인하지 않은 상태면 로그인 페이지로 이동
       

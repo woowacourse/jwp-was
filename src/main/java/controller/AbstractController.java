@@ -2,9 +2,9 @@ package controller;
 
 import java.util.Objects;
 
-import http.HttpRequest;
-import http.HttpResponse;
 import http.HttpStatus;
+import http.request.HttpRequest;
+import http.response.HttpResponse;
 import servlet.HttpServlet;
 
 public abstract class AbstractController implements HttpServlet {
@@ -34,18 +34,18 @@ public abstract class AbstractController implements HttpServlet {
     }
 
     protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        httpResponse.setMethodNotAllowed();
+        httpResponse.methodNotAllowed();
     }
 
     protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        httpResponse.setMethodNotAllowed();
+        httpResponse.methodNotAllowed();
     }
 
     protected void doDelete(HttpRequest httpRequest, HttpResponse httpResponse) {
-        httpResponse.setMethodNotAllowed();
+        httpResponse.methodNotAllowed();
     }
 
     protected void doPut(HttpRequest httpRequest, HttpResponse httpResponse) {
-        httpResponse.setMethodNotAllowed();
+        httpResponse.methodNotAllowed();
     }
 }
