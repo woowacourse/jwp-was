@@ -55,9 +55,53 @@ class SessionTest {
     }
 
     @Test
+    @DisplayName("getId")
     void getId() {
         Session session = new Session("abc12345");
 
         assertThat(session.getId()).isEqualTo("abc12345");
+    }
+
+    @Test
+    @DisplayName("removeAttribute")
+    void removeAttribute() {
+        Session session = new Session("abc12345");
+        session.setAttribute("hi", 1);
+        session.setAttribute("hello", 2);
+
+        session.removeAttribute("hi");
+        assertThatThrownBy(() -> session.getAttribute("hi"))
+            .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("removeAttribute - 존재하지 않는 attribute 에 대하여 remove 시도시 예외처리")
+    void removeAttribute_IfAttributeIsNotExist_ThrowException() {
+        Session session = new Session("abc12345");
+
+        assertThatThrownBy(() -> session.removeAttribute("hi"))
+            .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("invalidate")
+    void invalidate() {
+        Session session = new Session("abc12345");
+        session.setAttribute("hi", 1);
+        session.setAttribute("hello", 2);
+
+        session.invalidate();
+
+        assertThat(session.isInvalid()).isTrue();
+    }
+
+    @Test
+    @DisplayName("isInvalid")
+    void isInvalid() {
+        Session session = new Session("abc12345");
+        assertThat(session.isInvalid()).isTrue();
+
+        session.setAttribute("hi", true);
+        assertThat(session.isInvalid()).isFalse();
     }
 }

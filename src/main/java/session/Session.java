@@ -17,17 +17,30 @@ public class Session {
     }
 
     public Object getAttribute(String name) {
-        if (session.containsKey(name)) {
-            return session.get(name);
+        validateAttributeIsExist(name);
+        return session.get(name);
+    }
+
+    public void removeAttribute(String name) {
+        validateAttributeIsExist(name);
+        session.remove(name);
+    }
+
+    private void validateAttributeIsExist(String name) {
+        if (!session.containsKey(name)) {
+            throw new IllegalArgumentException("session \"" + name + "\" is not exist.");
         }
-        throw new IllegalArgumentException("session \"" + name + "\" is not exist.");
+    }
+
+    public void invalidate() {
+        session.clear();
     }
 
     public String getId() {
         return id;
     }
 
-    public boolean isEmpty() {
+    public boolean isInvalid() {
         return session.isEmpty();
     }
 }

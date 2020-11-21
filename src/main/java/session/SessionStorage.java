@@ -8,10 +8,6 @@ public class SessionStorage {
 
     private static final Map<String, Session> sessions = new HashMap<>();
 
-    public static boolean isSessionExist(String sessionId) {
-        return sessions.containsKey(sessionId);
-    }
-
     public static Session findSession(String sessionId) {
         validateSessionId(sessionId);
         return sessions.get(sessionId);
@@ -27,7 +23,7 @@ public class SessionStorage {
         validateSessionId(sessionId);
         Session session = sessions.get(sessionId);
 
-        if (session.isEmpty()) {
+        if (session.isInvalid()) {
             sessions.remove(sessionId);
         }
     }
