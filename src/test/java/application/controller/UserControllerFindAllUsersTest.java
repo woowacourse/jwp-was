@@ -2,6 +2,7 @@ package application.controller;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+import application.auth.Authority;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import request.HttpRequest;
@@ -21,7 +22,7 @@ class UserControllerFindAllUsersTest extends UserControllerTest {
             "GET /user/list HTTP/1.1\n"
             + "Cookie: login=true\n", "");
         Session session = SessionStorage.createSession();
-        session.setAttribute("login", true);
+        session.setAttribute(Authority.ATTRIBUTE_NAME_FOR_LOGIN, true);
 
         HttpResponse response = userController.service(findAllUsersRequest, session);
         String responseHeader = response.buildHeader();

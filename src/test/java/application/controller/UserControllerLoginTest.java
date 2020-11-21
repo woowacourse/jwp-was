@@ -2,6 +2,7 @@ package application.controller;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+import application.auth.Authority;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -51,7 +52,7 @@ class UserControllerLoginTest extends UserControllerTest {
         Session session = SessionStorage.createSession();
         HttpResponse response = userController.service(loginRequest, session);
 
-        assertThat(session.getAttribute("login")).isEqualTo(true);
+        assertThat(session.getAttribute(Authority.ATTRIBUTE_NAME_FOR_LOGIN)).isEqualTo(true);
 
         String responseHeader = response.buildHeader();
         assertThat(responseHeader.startsWith("HTTP/1.1 302 Found")).isTrue();

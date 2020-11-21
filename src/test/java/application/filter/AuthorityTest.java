@@ -2,8 +2,8 @@ package application.filter;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import application.filter.auth.Authority;
-import application.filter.auth.UnauthorizedException;
+import application.auth.Authority;
+import application.auth.UnauthorizedException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import session.Session;

@@ -1,8 +1,8 @@
 package application.controller;
 
+import application.auth.Authority;
+import application.auth.UnauthorizedException;
 import application.dto.HttpRequestToDtoConverter;
-import application.filter.auth.Authority;
-import application.filter.auth.UnauthorizedException;
 import application.service.UserService;
 import com.github.jknack.handlebars.Template;
 import controller.AbstractController;
@@ -37,7 +37,7 @@ public class UserController extends AbstractController {
             HttpRequestToDtoConverter.toLoginRequest(request));
 
         if (isRightUser) {
-            session.setAttribute("login", true);
+            session.setAttribute(Authority.ATTRIBUTE_NAME_FOR_LOGIN, true);
 
             return new HttpResponse(StatusCode.FOUND, "/").setCookies(
                 ResponseCookies.createWithSingleCookie("sessionId", session.getId(), "/"));
@@ -64,8 +64,7 @@ public class UserController extends AbstractController {
         Template template = TemplateBuilder.build(httpRequest.getUriPath());
         String usersPage = template.apply(handlebarData);
 
-        return new HttpResponse(StatusCode.OK, usersPage, ContentType.HTML)
-            .setCookies(ResponseCookies.createWithSingleCookie("login", "true", "/"));
+        return new HttpResponse(StatusCode.OK, usersPage, ContentType.HTML);
     }
 
     @Override

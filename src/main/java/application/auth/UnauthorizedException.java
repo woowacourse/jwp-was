@@ -1,4 +1,4 @@
-package application.filter.auth;
+package application.auth;
 
 public class UnauthorizedException extends Exception {
 
