@@ -1,6 +1,6 @@
 package webserver.controller;
 
-import db.DataBase;
+import db.UserDataBase;
 import webserver.TemplateFactory;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
@@ -10,7 +10,7 @@ public class UserListController extends AbstractController {
     protected HttpResponse get(HttpRequest httpRequest) {
         if ("true".equals(httpRequest.getCookieValue("logined"))) {
             return HttpResponse.ok()
-                .body(TemplateFactory.of("user/list", DataBase.findAll()))
+                .body(TemplateFactory.of("user/list", UserDataBase.findAll()))
                 .build();
         }
 

@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import db.DataBase;
+import db.UserDataBase;
 import model.User;
 import webserver.HttpRequestFixture;
 import webserver.http.Protocol;
@@ -28,7 +28,7 @@ class LoginControllerTest {
     @DisplayName("로그인 요청에 대한 회원정보가 존재하고 패스워드 일치하면 로그인 및 페이지 이동한다.")
     @Test
     void post() throws IOException {
-        DataBase.addUser(new User("javajigi", "password", "name", "email"));
+        UserDataBase.addUser(new User("javajigi", "password", "name", "email"));
         HttpRequest httpRequest = HttpRequestFixture.httpRequestOfLogin();
 
         HttpResponse response = controller.service(httpRequest);
@@ -57,7 +57,7 @@ class LoginControllerTest {
     @DisplayName("로그인 요청한 아이디의 패스워드가 일치하지 않으면 로그인 실패 페이지로 이동한다.")
     @Test
     void post_shouldRedirectToLoginFailPage_whenPasswordIsWrong() throws IOException {
-        DataBase.addUser(new User("javajigi", "another", "name", "email"));
+        UserDataBase.addUser(new User("javajigi", "another", "name", "email"));
         HttpRequest httpRequest = HttpRequestFixture.httpRequestOfLogin();
 
         HttpResponse response = controller.service(httpRequest);

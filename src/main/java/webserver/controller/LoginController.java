@@ -6,7 +6,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import db.DataBase;
+import db.UserDataBase;
 import model.User;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
@@ -34,7 +34,7 @@ public class LoginController extends AbstractController {
         String userId = data.get("userId");
         String password = data.get("password");
 
-        User user = DataBase.findUserById(userId);
+        User user = UserDataBase.findUserById(userId);
 
         if (user != null && password.equals(user.getPassword())) {
             return HttpResponse.ok()

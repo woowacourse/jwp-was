@@ -6,7 +6,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import db.DataBase;
+import db.UserDataBase;
 import model.User;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
@@ -52,6 +52,6 @@ public class UserCreateController extends AbstractController {
         }
 
         User user = new User(userId, password, name, email);
-        DataBase.addUser(user);
+        UserDataBase.addUser(user);
     }
 }

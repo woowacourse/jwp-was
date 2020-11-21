@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import db.DataBase;
+import db.UserDataBase;
 import webserver.HttpRequestFixture;
 import webserver.TemplateFactory;
 import webserver.http.request.HttpRequest;
@@ -31,7 +31,7 @@ class UserListControllerTest {
         HttpResponse httpResponse = controller.service(httpRequest);
 
         HttpResponse expected = HttpResponse.ok()
-            .body(TemplateFactory.of("user/list", DataBase.findAll()))
+            .body(TemplateFactory.of("user/list", UserDataBase.findAll()))
             .build();
         assertAll(() -> assertThat(httpResponse.getStatusLine().getValue()).isEqualTo(expected.getStatusLine().getValue()),
             () -> assertThat(httpResponse.getHeader()).isEqualTo(expected.getHeader()),
