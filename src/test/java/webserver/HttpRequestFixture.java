@@ -59,4 +59,14 @@ public class HttpRequestFixture {
         ClassPathResource resource = new ClassPathResource("userlistrequest/GetRequestOfNotLoginedUser.txt");
         return HttpRequest.of(resource.getInputStream());
     }
+
+    public static HttpRequest httpRequestWithJSessionId() throws IOException {
+        ClassPathResource resource = new ClassPathResource("userlistrequest/GetRequestWithJSessionId.txt");
+        return HttpRequest.of(resource.getInputStream());
+    }
+
+    public static HttpRequest httpRequestWithoutJSessionId() throws IOException {
+        ClassPathResource resource = new ClassPathResource("userlistrequest/GetRequestOfNotLoginedUser.txt");
+        return HttpRequest.of(resource.getInputStream());
+    }
 }

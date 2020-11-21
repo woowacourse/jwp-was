@@ -7,15 +7,20 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
+import db.SessionDataBase;
+
 public class HttpRequest {
     private final RequestLine requestLine;
     private final RequestHeader requestHeader;
     private final RequestBody requestBody;
+    private final HttpSession httpSession;
 
-    private HttpRequest(RequestLine requestLine, RequestHeader requestHeader, RequestBody requestBody) {
+    private HttpRequest(RequestLine requestLine, RequestHeader requestHeader, RequestBody requestBody,
+        HttpSession httpSession) {
         this.requestLine = requestLine;
         this.requestHeader = requestHeader;
         this.requestBody = requestBody;
+        this.httpSession = httpSession;
     }
 
     public static HttpRequest of(InputStream inputStream) throws IOException {
@@ -24,8 +29,17 @@ public class HttpRequest {
         RequestLine requestLine = RequestLine.of(bufferedReader);
         RequestHeader requestHeader = RequestHeader.of(bufferedReader);
         RequestBody requestBody = RequestBody.of(bufferedReader, requestHeader.getContentLength());
+        HttpSession httpSession = getHttpSession(requestHeader);
 
-        return new HttpRequest(requestLine, requestHeader, requestBody);
+        return new HttpRequest(requestLine, requestHeader, requestBody, httpSession);
+    }
+
+    private static HttpSession getHttpSession(RequestHeader requestHeader) {
+        String jSessionId = requestHeader.getCookieValue("JSESSIONID");
+        if (jSessionId.isEmpty()) {
+            return HttpSession.create();
+        }
+        return SessionDataBase.findHttpSessionById(jSessionId);
     }
 
     public String getCookieValue(String cookieName) {
@@ -62,5 +76,9 @@ public class HttpRequest {
 
     public String getMethod() {
         return requestLine.getMethod().getMethodName();
+    }
+
+    public String getSessionId() {
+        return httpSession.getId();
     }
 }

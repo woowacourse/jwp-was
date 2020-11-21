@@ -62,8 +62,8 @@
 - [x]  접근하고 있는 사용자가 “로그인” 상태일 경우(Cookie 값이 logined=true) http://localhost:8080/user/list 로 접근했을 때 사용자 목록을 출력한다.
     - [x]  만약 로그인하지 않은 상태라면 로그인 페이지(login.html)로 이동한다.
     - [x]  동적으로 html을 생성하기 위해 handlebars.java template engine을 활용한다.
-- [ ]  서블릿에서 지원하는 HttpSession API의 일부를 지원한다.
-    - [ ]  HttpSession API 중 getId(), setAttribute(String name, Object value), getAttribute(String name), removeAttribute(String name), invalidate() 5개의 메소드를 구현한다.
+- [x]  서블릿에서 지원하는 HttpSession API의 일부를 지원한다.
+    - [x]  HttpSession API 중 getId(), setAttribute(String name, Object value), getAttribute(String name), removeAttribute(String name), invalidate() 5개의 메소드를 구현한다.
     
 ## 진행 방법
 * 웹 애플리케이션 서버 요구사항을 파악한다.
