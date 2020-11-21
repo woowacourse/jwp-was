@@ -6,30 +6,57 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class HttpRequestTest {
 
-    @Test
+    @ParameterizedTest
+    @MethodSource("testcaseForReadHttpRequest")
     @DisplayName("HTTP 요청으로부터 HttpRequest 객체 생성하기")
-    void readHttpRequest() throws IOException {
-        String httpRequestFormat = "GET /join?id=1 HTTP/1.1\n"
-            + "Host: localhost:8080\n"
-            + "Connection: keep-alive\n"
-            + "Cache-Control: max-age=0\n"
-            + "Upgrade-Insecure-Requests: 1\n"
-            + "Content-Length: 10\n\n"
-            + "id=3456789";
+    void readHttpRequest(String httpRequestFormat, String expectedMethod, String expectedUriPath,
+            String expectedContentLength) throws IOException {
         InputStream testInput = new ByteArrayInputStream(httpRequestFormat.getBytes());
-
         HttpRequest httpRequest = HttpRequest.readHttpRequest(testInput);
 
-        assertThat(httpRequest.getMethod()).isEqualTo("GET");
-        assertThat(httpRequest.getUriPath()).isEqualTo("/join");
-        assertThat(httpRequest.getHeader("Content-Length")).isEqualTo("10");
+        assertThat(httpRequest.getMethod()).isEqualTo(expectedMethod);
+        assertThat(httpRequest.getUriPath()).isEqualTo(expectedUriPath);
+        assertThat(httpRequest.getHeader("Content-Length"))
+            .isEqualTo(expectedContentLength);
+    }
+
+    private static Stream<Arguments> testcaseForReadHttpRequest() {
+        return Stream.of(
+            Arguments.of(
+                "GET /join?id=1 HTTP/1.1\n"
+                + "Host: localhost:8080\n"
+                + "Connection: keep-alive\n"
+                + "Cache-Control: max-age=0\n"
+                + "Upgrade-Insecure-Requests: 1\n"
+                + "Content-Length: 10\n\n"
+                + "id=3456789",
+                "GET",
+                "/join",
+                "10"
+            ),
+            Arguments.of(
+                "POST /join?id=1 HTTP/1.1\n"
+                + "Host: localhost:8080\n"
+                + "Connection: keep-alive\n"
+                + "Cache-Control: max-age=0\n"
+                + "Upgrade-Insecure-Requests: 1\n"
+                + "Content-Length: 11\n\n"
+                + "id=3456789s",
+                "POST",
+                "/join",
+                "11"
+            )
+        );
     }
 
     @Test
@@ -175,20 +202,33 @@ class HttpRequestTest {
         assertThat(httpRequest.isUriPath("/join?")).isFalse();
     }
 
-    @Test
+    @ParameterizedTest
+    @MethodSource("testcaseForIsMethod")
     @DisplayName("요청의 method 알아보기")
-    void isMethod() {
-        String requestHeader = "GET /join?id=1 HTTP/1.1\n"
-            + "Host: localhost:8080\n"
-            + "Connection: keep-alive\n"
-            + "Cache-Control: max-age=0\n"
-            + "Upgrade-Insecure-Requests: 1\n"
-            + "Content-Length: 10\n";
-        String requestBody = "id=3456789";
+    void isMethod(String requestHeader, String requestBody, boolean isGet, boolean isPost) {
         HttpRequest httpRequest = new HttpRequest(requestHeader, requestBody);
 
-        assertThat(httpRequest.isMethod(Method.GET)).isTrue();
-        assertThat(httpRequest.isMethod(Method.POST)).isFalse();
+        assertThat(httpRequest.isMethod(Method.GET)).isEqualTo(isGet);
+        assertThat(httpRequest.isMethod(Method.POST)).isEqualTo(isPost);
+    }
+
+    private static Stream<Arguments> testcaseForIsMethod() {
+        return Stream.of(
+            Arguments.of(
+                "GET /join?id=1 HTTP/1.1\n",
+                "",
+                true,
+                false
+            ),
+            Arguments.of(
+                "POST /join?id=1 HTTP/1.1\n"
+                    + "Host: localhost:8080\n"
+                    + "Content-Length: 10\n",
+                "id=3456789",
+                false,
+                true
+            )
+        );
     }
 
     @Test
