@@ -19,11 +19,11 @@ public class Parameter {
 		IOException {
 		Map<String, String> parameters = new HashMap<>();
 
-		if (requestLine.getMethod().equals(HttpMethod.GET)) {
-			parameters = RequestParameterUtils.extractParametersIfGetMethod(requestLine.getPath());
-		} else if (requestLine.getMethod().equals(HttpMethod.POST)) {
+		parameters.putAll(RequestParameterUtils.extractRequestParameters(requestLine));
+
+		if (requestLine.getMethod().equals(HttpMethod.POST)) {
 			String body = IOUtils.readData(br, requestHeader.getContentLength());
-			parameters = RequestParameterUtils.extractParametersIfPostMethod(body);
+			parameters.putAll(RequestParameterUtils.extractBodyParameters(body));
 		}
 
 		return new Parameter(parameters);
