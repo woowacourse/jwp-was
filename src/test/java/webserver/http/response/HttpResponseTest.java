@@ -1,11 +1,14 @@
 package webserver.http.response;
 
 import org.junit.jupiter.api.Test;
+import webserver.http.HttpHeader;
+import webserver.http.HttpHeaderType;
+import webserver.http.request.HttpRequest;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.io.*;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class HttpResponseTest {
     private String testDirectory = "./src/test/resources/";
@@ -30,6 +33,20 @@ public class HttpResponseTest {
         HttpResponse response = new HttpResponse(createOutputStream("Http_Cookie.txt"));
         response.addHeader("Set-Cookie", "logined=true");
         response.sendRedirect("/index.html");
+    }
+
+    @Test
+    public void request_POST2() throws Exception {
+        InputStream in = new FileInputStream(new File(testDirectory + "Http_POST2.txt"));
+        HttpRequest request = new HttpRequest(in);
+
+        assertAll(
+                () -> assertThat(request.getMethod()).isEqualTo("POST"),
+                () -> assertThat(request.getUrl().getPath()).isEqualTo("/user/create"),
+                () -> assertThat(request.getHeader(HttpHeader.of(HttpHeaderType.CONNECTION))).isEqualTo("keep-alive"),
+                () -> assertThat(request.getQueryParameter("id")).isEqualTo("1"),
+                () -> assertThat(request.getBodyParameter("userId")).isEqualTo("javajigi")
+        );
     }
 
     private OutputStream createOutputStream(String filename) throws FileNotFoundException {
