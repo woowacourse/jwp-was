@@ -1,7 +1,5 @@
 package kr.wootecat.dongle.model.http.response;
 
-import static kr.wootecat.dongle.model.http.HttpStatus.*;
-
 import kr.wootecat.dongle.model.http.HttpStatus;
 
 public class HttpStatusLine {
@@ -16,8 +14,8 @@ public class HttpStatusLine {
         this.httpStatus = httpStatus;
     }
 
-    public static HttpStatusLine withDefaultVersion() {
-        return new HttpStatusLine(DEFAULT_VERSION, OK);
+    public static HttpStatusLine withDefaultVersion(HttpStatus httpStatus) {
+        return new HttpStatusLine(DEFAULT_VERSION, httpStatus);
     }
 
     public String getVersion() {

@@ -8,6 +8,8 @@ import kr.wootecat.dongle.model.http.exception.IllegalRequestDataFormatException
 
 public class Url {
 
+    static final Url INTERNAL_ERROR_PAGE_URL = Url.from("/internal-error.html");
+
     private static final String QUERY_PARAMETER_DELIMITER = "\\?";
 
     private static final int ONLY_PATH_SIZE = 1;

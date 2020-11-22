@@ -4,6 +4,8 @@ import static com.google.common.net.HttpHeaders.*;
 import static java.lang.String.*;
 import static utils.SplitUtils.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -33,6 +35,10 @@ public class HttpRequestHeaders {
     public HttpRequestHeaders(Map<String, String> headers, Cookies cookies) {
         this.headers = headers;
         this.cookies = cookies;
+    }
+
+    public static HttpRequestHeaders empty() {
+        return new HttpRequestHeaders(new HashMap<>(), new Cookies(new ArrayList<>()));
     }
 
     public static HttpRequestHeaders from(String rawData) {

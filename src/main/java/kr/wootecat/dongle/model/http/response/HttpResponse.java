@@ -3,6 +3,8 @@ package kr.wootecat.dongle.model.http.response;
 import static com.google.common.base.Charsets.*;
 import static com.google.common.net.HttpHeaders.*;
 import static kr.wootecat.dongle.model.http.HttpStatus.*;
+import static kr.wootecat.dongle.model.http.response.HttpResponseHeaders.*;
+import static kr.wootecat.dongle.model.http.response.HttpStatusLine.*;
 
 import com.google.common.net.HttpHeaders;
 import kr.wootecat.dongle.model.http.Cookie;
@@ -21,8 +23,23 @@ public class HttpResponse {
         this.responseHeaders = httpResponseHeaders;
     }
 
+    public static HttpResponse withEmpty(boolean parsedSuccessfully) {
+        if (parsedSuccessfully) {
+            return with200Empty();
+        }
+        return with500Empty();
+    }
+
+    public static HttpResponse withEmpty(HttpStatus httpStatus) {
+        return new HttpResponse(withDefaultVersion(httpStatus), ofEmpty());
+    }
+
     public static HttpResponse with200Empty() {
-        return new HttpResponse(HttpStatusLine.withDefaultVersion(), HttpResponseHeaders.ofEmpty());
+        return withEmpty(OK);
+    }
+
+    private static HttpResponse with500Empty() {
+        return withEmpty(INTERNAL_SERVER_ERROR);
     }
 
     public static HttpResponse withContent(HttpStatus httpStatus, MimeType mimeType, String content) {

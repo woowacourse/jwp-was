@@ -1,5 +1,9 @@
 package kr.wootecat.dongle.model.http.request;
 
+import static kr.wootecat.dongle.model.http.HttpMethod.*;
+import static kr.wootecat.dongle.model.http.request.ProtocolVersion.*;
+import static kr.wootecat.dongle.model.http.request.Url.*;
+
 import kr.wootecat.dongle.model.http.HttpMethod;
 import kr.wootecat.dongle.model.http.exception.IllegalRequestDataFormatException;
 
@@ -36,6 +40,10 @@ public class HttpRequestLine {
         String version = requestLines[2];
 
         return new HttpRequestLine(HttpMethod.of(methodType), Url.from(url), ProtocolVersion.of(version));
+    }
+
+    public static HttpRequestLine internalErrorPage() {
+        return new HttpRequestLine(GET, INTERNAL_ERROR_PAGE_URL, HTTP_1_1);
     }
 
     public boolean isFileRequest() {

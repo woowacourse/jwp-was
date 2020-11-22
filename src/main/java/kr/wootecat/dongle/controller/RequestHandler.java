@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import kr.wootecat.dongle.application.RequestProcessor;
 import kr.wootecat.dongle.application.RequestProcessorFactory;
-import kr.wootecat.dongle.model.http.exception.IllegalRequestDataFormatException;
 import kr.wootecat.dongle.model.http.request.HttpRequest;
 import kr.wootecat.dongle.model.http.response.HttpResponse;
 import kr.wootecat.dongle.view.HttpRequestReader;
@@ -41,7 +40,7 @@ public class RequestHandler implements Runnable {
             RequestProcessor requestProcessor = RequestProcessorFactory.create();
             HttpResponse response = requestProcessor.response(request);
             ResponseSender.send(outputStream, response);
-        } catch (IllegalRequestDataFormatException | IOException e) {
+        } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }

@@ -6,13 +6,25 @@ public class HttpRequest {
 
     private final HttpRequestLine requestLine;
     private final HttpRequestHeaders requestHeaders;
-    private final HttpRequestBody requestParameters;
+    private final HttpRequestBody requestBody;
+    private final boolean isParsedSuccessfully;
 
     public HttpRequest(HttpRequestLine requestLine, HttpRequestHeaders requestHeaders,
-            HttpRequestBody requestParameters) {
+            HttpRequestBody requestBody) {
+        this(requestLine, requestHeaders, requestBody, true);
+    }
+
+    public HttpRequest(HttpRequestLine requestLine, HttpRequestHeaders requestHeaders,
+            HttpRequestBody requestBody, boolean isParsedSuccessfully) {
         this.requestLine = requestLine;
         this.requestHeaders = requestHeaders;
-        this.requestParameters = requestParameters;
+        this.requestBody = requestBody;
+        this.isParsedSuccessfully = isParsedSuccessfully;
+    }
+
+    public static HttpRequest ofInternalError() {
+        return new HttpRequest(HttpRequestLine.internalErrorPage(), HttpRequestHeaders.empty(),
+                HttpRequestBody.empty(), false);
     }
 
     public boolean isStaticResourceRequest() {
@@ -39,7 +51,7 @@ public class HttpRequest {
         if (requestLine.isGetMethod()) {
             return requestLine.getParameter(name);
         }
-        return requestParameters.get(name);
+        return requestBody.get(name);
     }
 
     public boolean hasCookie(String name, boolean value) {
@@ -56,5 +68,9 @@ public class HttpRequest {
 
     public String getProtocol() {
         return requestLine.getVersion();
+    }
+
+    public boolean isParsedSuccessfully() {
+        return isParsedSuccessfully;
     }
 }

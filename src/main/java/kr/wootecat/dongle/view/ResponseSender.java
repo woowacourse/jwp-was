@@ -10,9 +10,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import kr.wootecat.dongle.model.http.Cookie;
 import kr.wootecat.dongle.model.http.HttpStatus;
 import kr.wootecat.dongle.model.http.response.HttpResponse;
@@ -24,18 +21,12 @@ public class ResponseSender {
     private static final String COOKIE_PAIR_APPEND_DELIMITER = "; ";
     private static final String KEY_VALUE_APPEND_DELIMITER = "=";
 
-    private static final Logger logger = LoggerFactory.getLogger(ResponseSender.class);
-
     private ResponseSender() {
     }
 
-    public static void send(DataOutputStream dos, HttpResponse response) {
-        try {
-            sendResponseHeader(dos, response);
-            sendResponseBodyIfPresent(dos, response);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+    public static void send(DataOutputStream dos, HttpResponse response) throws IOException {
+        sendResponseHeader(dos, response);
+        sendResponseBodyIfPresent(dos, response);
     }
 
     private static void sendResponseHeader(DataOutputStream dos, HttpResponse response) throws IOException {

@@ -12,7 +12,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import kr.wootecat.dongle.model.http.HttpMethod;
-import kr.wootecat.dongle.model.http.exception.IllegalRequestDataFormatException;
 import kr.wootecat.dongle.view.HttpRequestReader;
 
 class HttpRequestReaderTest {
@@ -151,7 +150,12 @@ class HttpRequestReaderTest {
         BufferedReader reader = new BufferedReader(new FileReader(String.format(TEST_DIRECTORY,
                 illegalHttpRequestFile)));
 
-        assertThatThrownBy(() -> HttpRequestReader.parse(reader))
-                .isInstanceOf(IllegalRequestDataFormatException.class);
+        HttpRequest httpRequest = HttpRequestReader.parse(reader);
+
+        assertAll(
+                () -> assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.GET),
+                () -> assertThat(httpRequest.getPath()).isEqualTo("/internal-error.html"),
+                () -> assertThat(httpRequest.getProtocol()).isEqualTo("HTTP/1.1")
+        );
     }
 }

@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URLDecoder;
 
+import kr.wootecat.dongle.model.http.exception.IllegalRequestDataFormatException;
 import kr.wootecat.dongle.model.http.request.HttpRequest;
 import kr.wootecat.dongle.model.http.request.HttpRequestBody;
 import kr.wootecat.dongle.model.http.request.HttpRequestHeaders;
@@ -20,10 +21,14 @@ public class HttpRequestReader {
     }
 
     public static HttpRequest parse(BufferedReader br) throws IOException {
-        HttpRequestLine line = parseRequestLine(br);
-        HttpRequestHeaders headers = parseRequestHeader(br);
-        HttpRequestBody body = parseRequestBody(br, headers);
-        return new HttpRequest(line, headers, body);
+        try {
+            HttpRequestLine line = parseRequestLine(br);
+            HttpRequestHeaders headers = parseRequestHeader(br);
+            HttpRequestBody body = parseRequestBody(br, headers);
+            return new HttpRequest(line, headers, body);
+        } catch (IllegalRequestDataFormatException e) {
+            return HttpRequest.ofInternalError();
+        }
     }
 
     private static HttpRequestLine parseRequestLine(BufferedReader br) throws IOException {

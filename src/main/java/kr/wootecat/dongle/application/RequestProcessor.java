@@ -25,7 +25,7 @@ public class RequestProcessor {
 
     public HttpResponse response(HttpRequest request) {
         try {
-            HttpResponse response = HttpResponse.with200Empty();
+            HttpResponse response = HttpResponse.withEmpty(request.isParsedSuccessfully());
             sessionValidator.checkRequestSession(request, response);
             HandlerMapping handler = handlerMappings.findHandler(request);
             handler.handle(request, response);
