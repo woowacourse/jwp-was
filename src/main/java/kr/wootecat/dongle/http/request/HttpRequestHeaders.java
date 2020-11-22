@@ -2,10 +2,8 @@ package kr.wootecat.dongle.http.request;
 
 import static com.google.common.net.HttpHeaders.*;
 import static java.lang.String.*;
-import static kr.wootecat.dongle.http.CookieParser.*;
+import static utils.SplitUtils.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -17,15 +15,13 @@ import kr.wootecat.dongle.http.exception.IllegalRequestDataFormatException;
 
 public class HttpRequestHeaders {
 
-    private static final Pattern HEADER_PATTERN = Pattern.compile("[\\w-]+: [-,;:+?*/=.()\\s\\w]+");
+    private static final Pattern HEADER_PATTERN = Pattern.compile("([\\w-]+: [-,;:+?*/=.()\\s\\w]+\r\n)+");
 
-    private static final String HEADER_KEY_VALUE_DELIMITER = ": ";
-    private static final String EMPTY_STRING = "";
-
-    private static final int PAIR_LENGTH = 2;
+    private static final String HEADER_KEY_VALUE_DELIMITER = ":\\s+";
+    private static final String LINE_FEED = "\r\n";
 
     private static final String ILLEGAL_REQUEST_FORMAT_EXCEPTION_MESSAGE_FORMAT = "유효하지 않는 요청 데이터 형식힙니다.: %s";
-    private static final String LINE_FEED = "\r\n";
+    private static final String EMPTY_VALUE = "";
 
     private final Map<String, String> headers;
     private final Cookies cookies;
@@ -40,29 +36,16 @@ public class HttpRequestHeaders {
     }
 
     public static HttpRequestHeaders from(String rawData) {
-        Map<String, String> headers = new HashMap<>();
-        List<Cookie> cookies = new ArrayList<>();
+        validateHttpHeaders(rawData);
+        Map<String, String> headerPairs = splitAndThenCollect(rawData, LINE_FEED, HEADER_KEY_VALUE_DELIMITER);
+        String cookieValue = headerPairs.getOrDefault(COOKIE, EMPTY_VALUE);
+        headerPairs.computeIfPresent(COOKIE, (key, value) -> null);
+        Cookies cookies = Cookies.from(cookieValue);
 
-        String[] headerLines = rawData.split(LINE_FEED);
-        for (String headerLine : headerLines) {
-            validateHeaderLine(headerLine);
-            String[] headerPair = headerLine.split(HEADER_KEY_VALUE_DELIMITER);
-            String name = headerPair[0];
-            String value = getValueFrom(headerPair);
-            if (COOKIE.equals(name)) {
-                cookies = toCookie(value);
-            } else {
-                headers.put(name, value);
-            }
-        }
-        return new HttpRequestHeaders(headers, cookies);
+        return new HttpRequestHeaders(headerPairs, cookies);
     }
 
-    private static String getValueFrom(String[] pair) {
-        return pair.length == PAIR_LENGTH ? pair[1] : EMPTY_STRING;
-    }
-
-    private static void validateHeaderLine(String header) {
+    private static void validateHttpHeaders(String header) {
         Matcher headerMatcher = HEADER_PATTERN.matcher(header);
         if (!headerMatcher.matches()) {
             throw new IllegalRequestDataFormatException(
