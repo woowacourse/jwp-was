@@ -9,7 +9,7 @@ import net.slipp.presentation.LoginServlet;
 import net.slipp.presentation.UserListServlet;
 import net.slipp.presentation.UserServlet;
 
-import kr.wootecat.dongle.core.servlet.HttpServlet;
+import kr.wootecat.dongle.model.servlet.HttpServlet;
 
 public class ServletDescriptor {
 

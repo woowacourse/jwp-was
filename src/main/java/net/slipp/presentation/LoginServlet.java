@@ -1,7 +1,7 @@
 package net.slipp.presentation;
 
-import static kr.wootecat.dongle.http.HttpStatus.*;
-import static kr.wootecat.dongle.http.MimeType.*;
+import static kr.wootecat.dongle.model.http.HttpStatus.*;
+import static kr.wootecat.dongle.model.http.MimeType.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -15,10 +15,10 @@ import net.slipp.application.exception.AuthenticationFailException;
 import net.slipp.presentation.dto.LoginRequest;
 import net.slipp.presentation.dto.parser.RequestDTOParser;
 
-import kr.wootecat.dongle.core.servlet.HttpServlet;
-import kr.wootecat.dongle.http.Cookie;
-import kr.wootecat.dongle.http.request.HttpRequest;
-import kr.wootecat.dongle.http.response.HttpResponse;
+import kr.wootecat.dongle.model.http.Cookie;
+import kr.wootecat.dongle.model.http.request.HttpRequest;
+import kr.wootecat.dongle.model.http.response.HttpResponse;
+import kr.wootecat.dongle.model.servlet.HttpServlet;
 import utils.FileIoUtils;
 
 public class LoginServlet extends HttpServlet {

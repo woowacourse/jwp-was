@@ -1,7 +1,7 @@
 package net.slipp.presentation;
 
 import static com.google.common.base.Charsets.*;
-import static kr.wootecat.dongle.http.MimeType.*;
+import static kr.wootecat.dongle.model.http.MimeType.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -17,9 +17,9 @@ import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
-import kr.wootecat.dongle.core.servlet.HttpServlet;
-import kr.wootecat.dongle.http.request.HttpRequest;
-import kr.wootecat.dongle.http.response.HttpResponse;
+import kr.wootecat.dongle.model.http.request.HttpRequest;
+import kr.wootecat.dongle.model.http.response.HttpResponse;
+import kr.wootecat.dongle.model.servlet.HttpServlet;
 import utils.FileIoUtils;
 
 public class UserListServlet extends HttpServlet {

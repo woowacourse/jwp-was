@@ -9,9 +9,9 @@ import net.slipp.presentation.dto.JoinRequest;
 import net.slipp.presentation.dto.JoinResponse;
 import net.slipp.presentation.dto.parser.RequestDTOParser;
 
-import kr.wootecat.dongle.core.servlet.HttpServlet;
-import kr.wootecat.dongle.http.request.HttpRequest;
-import kr.wootecat.dongle.http.response.HttpResponse;
+import kr.wootecat.dongle.model.http.request.HttpRequest;
+import kr.wootecat.dongle.model.http.response.HttpResponse;
+import kr.wootecat.dongle.model.servlet.HttpServlet;
 
 public class UserServlet extends HttpServlet {
 

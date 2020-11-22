@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import kr.wootecat.dongle.core.RequestHandler;
+import kr.wootecat.dongle.controller.RequestHandler;
 
 public class WebServer {
 
