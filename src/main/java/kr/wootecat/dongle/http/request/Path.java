@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 import kr.wootecat.dongle.http.exception.IllegalRequestDataFormatException;
 
 class Path {
+
     private static final Pattern VALID_PATH_PATTERN = Pattern.compile(
             "(/[\\w-]+)+(\\.[\\w]+)?");
     private static final Pattern EXTENSION_PATTERN = Pattern.compile("[^\\s]+\\.[\\w]+");

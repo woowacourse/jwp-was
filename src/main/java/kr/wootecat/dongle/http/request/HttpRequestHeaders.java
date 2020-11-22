@@ -12,6 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import kr.wootecat.dongle.http.Cookie;
+import kr.wootecat.dongle.http.Cookies;
 import kr.wootecat.dongle.http.exception.IllegalRequestDataFormatException;
 
 public class HttpRequestHeaders {
@@ -24,11 +25,16 @@ public class HttpRequestHeaders {
     private static final int PAIR_LENGTH = 2;
 
     private static final String ILLEGAL_REQUEST_FORMAT_EXCEPTION_MESSAGE_FORMAT = "유효하지 않는 요청 데이터 형식힙니다.: %s";
+    private static final String LINE_FEED = "\r\n";
 
     private final Map<String, String> headers;
-    private final List<Cookie> cookies;
+    private final Cookies cookies;
 
     public HttpRequestHeaders(Map<String, String> headers, List<Cookie> cookies) {
+        this(headers, new Cookies(cookies));
+    }
+
+    public HttpRequestHeaders(Map<String, String> headers, Cookies cookies) {
         this.headers = headers;
         this.cookies = cookies;
     }
@@ -37,7 +43,7 @@ public class HttpRequestHeaders {
         Map<String, String> headers = new HashMap<>();
         List<Cookie> cookies = new ArrayList<>();
 
-        String[] headerLines = rawData.split("\r\n");
+        String[] headerLines = rawData.split(LINE_FEED);
         for (String headerLine : headerLines) {
             validateHeaderLine(headerLine);
             String[] headerPair = headerLine.split(HEADER_KEY_VALUE_DELIMITER);
@@ -73,21 +79,15 @@ public class HttpRequestHeaders {
     }
 
     public boolean hasCookieWithPair(String name, String value) {
-        return cookies.stream()
-                .anyMatch(cookie -> cookie.hasValue(name, value));
+        return cookies.hasCookieWithPair(name, value);
     }
 
     public boolean containsCookie(String name) {
-        return cookies.stream()
-                .anyMatch(cookie -> cookie.hasName(name));
+        return cookies.containsCookie(name);
     }
 
     public String getCookie(String name) {
-        return cookies.stream()
-                .filter(cookie -> cookie.hasName(name))
-                .findAny()
-                .map(Cookie::getValue)
-                .orElse(null);
+        return cookies.get(name);
     }
 
     public String get(String key) {
