@@ -20,7 +20,7 @@ public class FileIoUtils {
     private static final String WEBAPP = "webapp";
     private static final String STATIC = "static";
     private static final int MINIMUM_DEPTH_EXISTS_DIRECTORY = 2;
-    private static final String STATIC_DIRECTORY_ROUTE = "./src/main/resources/static";
+    private static final String STATIC_DIRECTORY_ROUTE = "./module-api/src/main/resources/static";
     private static final List<String> STATIC_SUB_DIRECTORIES;
 
     static {

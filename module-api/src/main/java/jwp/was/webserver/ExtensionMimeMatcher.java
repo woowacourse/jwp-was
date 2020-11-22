@@ -11,7 +11,7 @@ import java.util.Objects;
 
 public class ExtensionMimeMatcher {
 
-    private static final String MIME_TXT_FILE_ROUTE = "./src/main/resources/mime.txt";
+    private static final String MIME_TXT_FILE_ROUTE = "./module-api/src/main/resources/mime.txt";
     private static final String LINE_SEPARATOR = ";";
     private static final String CONTENT_DELIMITER = " ";
     private static final String REPEATED_CONTENT_DELIMITER_REGEX = CONTENT_DELIMITER + "+";
