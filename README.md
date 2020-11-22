@@ -61,9 +61,9 @@ WAS 기능 요구사항
     -[x] 로그인 상태일 경우(Cookie 값이 logined=true) 사용자 목록을 출력한다.
     -[x] 로그읺하지 않은 상태라면 로그인 페이지(login.html)로 이동한다.
     
--[ ] HttpSession API의 일부를 지원한다.
-    -[ ] getId() 구현
-    -[ ] setAttribute(String name, Object value) 구현
-    -[ ] getAttribute(String name) 구현
-    -[ ] removeAttribute(String name) 구현
-    -[ ] invalidate() 구현
+-[x] HttpSession API의 일부를 지원한다.
+    -[x] getId() 구현
+    -[x] setAttribute(String name, Object value) 구현
+    -[x] getAttribute(String name) 구현
+    -[x] removeAttribute(String name) 구현
+    -[x] invalidate() 구현

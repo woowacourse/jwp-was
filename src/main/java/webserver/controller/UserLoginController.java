@@ -5,12 +5,17 @@ import model.User;
 import webserver.http.Parameters;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
+import webserver.http.session.HttpSession;
+import webserver.http.session.HttpSessionStorage;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Objects;
 
 public class UserLoginController extends AbstractController {
+    private static final String USER_LOGIN_SUCCESS_PATH = "/index.html";
+    private static final String USER_LOGIN_FAILED_PATH = "/user/login_failed.html";
+
     public UserLoginController() {
         this.paths = Collections.singletonList("/user/login");
     }
@@ -22,11 +27,11 @@ public class UserLoginController extends AbstractController {
         String password = parameters.getParameter("password");
 
         if (isValidUser(userId, password)) {
-            httpResponse.addHeader("Set-Cookie", "logined=true; Path=/");
-            httpResponse.sendRedirect("/index.html");
+            HttpSession httpSession = HttpSessionStorage.create(userId);
+            httpResponse.addHeader("Set-Cookie", httpSession.getHttpSessionString());
+            httpResponse.sendRedirect(USER_LOGIN_SUCCESS_PATH);
         } else {
-            httpResponse.addHeader("Set-Cookie", "logined=false; Path=/");
-            httpResponse.sendRedirect("/user/login_failed.html");
+            httpResponse.sendRedirect(USER_LOGIN_FAILED_PATH);
         }
     }
 
