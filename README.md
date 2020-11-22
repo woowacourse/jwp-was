@@ -96,9 +96,10 @@ Thread Pool을 적용해 일정 수의 사용자 동시에 처리가 가능하�
     - [x] 로그인하지 않은 상태면 로그인 페이지로 이동
 
 #### 요구사항 3
-- [ ] HttpSession 생성하여 적용하기
-    - [ ] String getId(): 현재 세션에 할당되어 있는 고유한 세션 아이디를 반환
-    - [ ] void setAttribute(String name, Object value): 현재 세션에 value 인자로 전달되는 객체를 name 인자 이름으로 저장
-    - [ ] Object getAttribute(String name): 현재 세션에 name 인자로 저장되어 있는 객체 값을 찾아 반환
-    - [ ] void removeAttribute(String name): 현재 세션에 name 인자로 저장되어 있는 객체 값을 삭제
+- [x] HttpSession 생성하여 적용하기
+    - [x] String getId(): 현재 세션에 할당되어 있는 고유한 세션 아이디를 반환
+    - [x] void setAttribute(String name, Object value): 현재 세션에 value 인자로 전달되는 객체를 name 인자 이름으로 저장
+    - [x] Object getAttribute(String name): 현재 세션에 name 인자로 저장되어 있는 객체 값을 찾아 반환
+    - [x] void removeAttribute(String name): 현재 세션에 name 인자로 저장되어 있는 객체 값을 삭제
     - [ ] void invalidate(): 현재 세션에 저장되어 있는 모든 값을 삭제
+- [ ] cookie 구조화

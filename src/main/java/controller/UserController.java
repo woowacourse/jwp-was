@@ -17,6 +17,7 @@ import dto.JoinRequestDto;
 import dto.UserResponseDto;
 import http.ContentType;
 import http.HttpBody;
+import http.HttpSession;
 import http.HttpStatus;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -50,15 +51,9 @@ public class UserController extends AbstractController {
             unauthorized(httpResponse);
             return;
         }
-        Map<String, String> cookies = Arrays.stream(cookie.split("; "))
-            .map(value -> value.split("="))
-            .collect(Collectors.toMap(arr -> arr[0], arr -> arr[1]));
-        String logined = cookies.get("logined");
-        if (Objects.isNull(logined)) {
-            unauthorized(httpResponse);
-            return;
-        }
-        if ("false".equals(logined)) {
+        HttpSession session = httpRequest.getSession();
+        String logined = String.valueOf(session.getAttribute("logined"));
+        if (Objects.isNull(logined) || !"true".equals(logined)) {
             unauthorized(httpResponse);
             return;
         }

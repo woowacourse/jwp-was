@@ -2,17 +2,23 @@ package http.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import http.HttpBody;
 import http.HttpHeaders;
 import http.HttpMethod;
+import http.HttpSession;
+import http.SimpleHttpSession;
 import utils.IOUtils;
 
 public class SimpleHttpRequest implements HttpRequest {
     private StartLine startLine;
     private HttpHeaders headers;
     private HttpBody httpBody;
+    private HttpSession httpSession;
     private String rawRequest;
 
     public static SimpleHttpRequest of(BufferedReader bufferedReader) throws IOException {
@@ -51,6 +57,16 @@ public class SimpleHttpRequest implements HttpRequest {
         this.startLine = startLine;
         this.headers = httpHeaders;
         this.httpBody = httpBody;
+        String cookie = getCookie();
+        if (Objects.isNull(cookie)) {
+            this.httpSession = SimpleHttpSession.getHttpSessionStorage("");
+        } else {
+            Map<String, String> cookies = Arrays.stream(cookie.split("; "))
+                    .map(value -> value.split("="))
+                    .collect(Collectors.toMap(arr -> arr[0], arr -> arr[1]));
+            String logined = cookies.get("JSESSIONID");
+            this.httpSession = SimpleHttpSession.getHttpSessionStorage(logined);
+        }
         this.rawRequest = rawRequest;
     }
 
@@ -82,6 +98,11 @@ public class SimpleHttpRequest implements HttpRequest {
     @Override
     public String getCookie() {
         return headers.getCookie();
+    }
+
+    @Override
+    public HttpSession getSession() {
+        return httpSession;
     }
 
     @Override

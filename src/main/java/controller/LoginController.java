@@ -4,6 +4,7 @@ import annotation.RequestMapping;
 import dto.LoginRequestDto;
 import exception.UnAuthenticationException;
 import http.HttpBody;
+import http.HttpSession;
 import http.HttpStatus;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -25,21 +26,21 @@ public class LoginController extends AbstractController {
         LoginRequestDto loginRequestDto = new LoginRequestDto(userId, password);
         try {
             userService.login(loginRequestDto);
-            loginSuccess(httpResponse);
+            loginSuccess(httpRequest, httpResponse);
         } catch (UnAuthenticationException e) {
             loginFail(httpResponse);
         }
     }
 
-    private void loginSuccess(HttpResponse httpResponse) {
+    private void loginSuccess(HttpRequest httpRequest, HttpResponse httpResponse) {
         httpResponse.setStatus(HttpStatus.MOVED_PERMANENTLY);
-        httpResponse.setCookie("logined=true; Path=/");
+        HttpSession session = httpRequest.getSession();
+        session.setAttribute("logined", "true");
         httpResponse.addHeader("Location", "/");
     }
 
     private void loginFail(HttpResponse httpResponse) {
         httpResponse.setStatus(HttpStatus.MOVED_PERMANENTLY);
-        httpResponse.setCookie("logined=false");
         httpResponse.addHeader("Location", "/user/login_failed.html");
     }
 }

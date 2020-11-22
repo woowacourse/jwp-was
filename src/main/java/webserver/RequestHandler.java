@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import http.HttpSession;
 import http.request.HttpRequest;
 import http.request.SimpleHttpRequest;
 import http.response.HttpResponse;
@@ -53,6 +54,9 @@ public class RequestHandler implements Runnable {
             HttpServlet dispatcherServlet = new DispatcherServlet();
             dispatcherServlet.service(httpRequest, httpResponse);
         } finally {
+            // TODO: 2020/11/21 나중에 분리 생각하기
+            HttpSession session = httpRequest.getSession();
+            httpResponse.setCookie("JSESSIONID=" + session.getId() + "; Path=/");
             httpResponse.send(dos);
         }
     }

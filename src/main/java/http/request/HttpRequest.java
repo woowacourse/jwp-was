@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
 import http.HttpBody;
 import http.HttpHeaders;
 import http.HttpMethod;
+import http.HttpSession;
 
 public interface HttpRequest {
     HttpMethod getMethod();
@@ -21,4 +22,6 @@ public interface HttpRequest {
     HttpBody getBody();
 
     String getCookie();
+
+    HttpSession getSession();
 }

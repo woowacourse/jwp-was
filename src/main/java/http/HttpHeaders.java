@@ -55,7 +55,7 @@ public class HttpHeaders {
             return DEFAULT_INT_VALUE;
         }
 
-        return Integer.valueOf(contentLength);
+        return Integer.parseInt(contentLength);
     }
 
     public int size() {

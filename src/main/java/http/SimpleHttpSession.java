@@ -14,7 +14,7 @@ public class SimpleHttpSession implements HttpSession {
         return HTTP_SESSION_STORAGE.getOrDefault(sessionId, new SimpleHttpSession());
     }
 
-    public SimpleHttpSession() {
+    private SimpleHttpSession() {
         this.id = UUID.randomUUID().toString();
         this.attributes = new HashMap<>();
         HTTP_SESSION_STORAGE.put(id, this);
