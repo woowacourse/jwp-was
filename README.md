@@ -50,12 +50,12 @@ WAS 기능 요구사항
 
 로그인 및 세션 구현
 
--[ ] 로그인을 구현한다.
-    -[ ] 로그인 메뉴를 클릭해서 로그인 페이지로 이동한다.
-    -[ ] 회원가입을 한 사용자로 로그인할 수 있어야 한다.
-    -[ ] 로그인이 성공하면 cookie를 활용해 로그인 상태를 유지할 수 있어야 한다.
-    -[ ] 로그인이 성공할 경우 요청 header의 cookie header 값이 logined=true, 실패하면 logined=false로 전달되어야 한다.
-    -[ ] Set-Cookie 설정 시 모든 요청에 대해 Cookie가 처리가 가능하도록 Path 설정 값을 Path=/로 설정한다.
+-[x] 로그인을 구현한다.
+    -[x] 로그인 메뉴를 클릭해서 로그인 페이지로 이동한다.
+    -[x] 회원가입을 한 사용자로 로그인할 수 있어야 한다.
+    -[x] 로그인이 성공하면 cookie를 활용해 로그인 상태를 유지할 수 있어야 한다.
+    -[x] 로그인이 성공할 경우 요청 header의 cookie header 값이 logined=true, 실패하면 logined=false로 전달되어야 한다.
+    -[x] Set-Cookie 설정 시 모든 요청에 대해 Cookie가 처리가 가능하도록 Path 설정 값을 Path=/로 설정한다.
 
 -[ ] /user/list 요청을 처리한다.
     -[ ] 로그인 상태일 경우(Cookie 값이 logined=true) 사용자 목록을 출력한다.
