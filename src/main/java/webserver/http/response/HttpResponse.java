@@ -41,6 +41,12 @@ public class HttpResponse {
         httpResponseBody = HttpResponseBody.add(body);
     }
 
+    public void forward(byte[] body) throws IOException {
+        response200Header(body, ContentType.HTML);
+        responseBody(body);
+        response();
+    }
+
     public void sendRedirect(String location) throws IOException {
         response302StartLine();
         response302Header(location);

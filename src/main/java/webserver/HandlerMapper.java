@@ -18,6 +18,7 @@ public class HandlerMapper {
         controllers.add(new ResourceController());
         controllers.add(new UserCreateController());
         controllers.add(new UserLoginController());
+        controllers.add(new UserListController());
     }
 
     public static void handle(HttpRequest httpRequest, HttpResponse httpResponse)

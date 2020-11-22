@@ -7,7 +7,8 @@ public enum HttpHeaderType {
     CONTENT_LENGTH("Content-Length"),
     LOCATION("Location"),
     CONNECTION("Connection"),
-    SET_COOKIE("Set-Cookie");
+    SET_COOKIE("Set-Cookie"),
+    COOKIE("Cookie");
 
     private final String type;
 

@@ -57,9 +57,9 @@ WAS 기능 요구사항
     -[x] 로그인이 성공할 경우 요청 header의 cookie header 값이 logined=true, 실패하면 logined=false로 전달되어야 한다.
     -[x] Set-Cookie 설정 시 모든 요청에 대해 Cookie가 처리가 가능하도록 Path 설정 값을 Path=/로 설정한다.
 
--[ ] /user/list 요청을 처리한다.
-    -[ ] 로그인 상태일 경우(Cookie 값이 logined=true) 사용자 목록을 출력한다.
-    -[ ] 로그읺하지 않은 상태라면 로그인 페이지(login.html)로 이동한다.
+-[x] /user/list 요청을 처리한다.
+    -[x] 로그인 상태일 경우(Cookie 값이 logined=true) 사용자 목록을 출력한다.
+    -[x] 로그읺하지 않은 상태라면 로그인 페이지(login.html)로 이동한다.
     
 -[ ] HttpSession API의 일부를 지원한다.
     -[ ] getId() 구현
