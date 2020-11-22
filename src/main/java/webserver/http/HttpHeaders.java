@@ -3,18 +3,16 @@ package webserver.http;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class HttpHeaders {
     private static final String EMPTY_STRING = "";
 
-    private final HttpHeadersState httpHeadersState;
     private final List<HttpHeader> httpHeaders;
 
-    public HttpHeaders(HttpHeadersState httpHeadersState, List<HttpHeader> httpHeaders) {
-        this.httpHeadersState = httpHeadersState;
+    public HttpHeaders(List<HttpHeader> httpHeaders) {
         this.httpHeaders = httpHeaders;
     }
 
@@ -29,29 +27,15 @@ public class HttpHeaders {
             line = bufferedReader.readLine();
         }
 
-        if (isEmptyHeaders(httpHeaders)) {
-            return new HttpHeaders(HttpHeadersState.EMPTY, httpHeaders);
-        }
-        return new HttpHeaders(HttpHeadersState.NOT_EMPTY, httpHeaders);
+        return new HttpHeaders(httpHeaders);
     }
 
     private static boolean isNotEmptyLine(String line) {
         return !EMPTY_STRING.equals(line);
     }
 
-    private static boolean isEmptyHeaders(List<HttpHeader> httpHeaders) {
-        return httpHeaders.isEmpty();
-    }
-
-    public static HttpHeaders of(List<HttpHeader> httpHeaders) {
-        if (isEmptyHeaders(httpHeaders)) {
-            return new HttpHeaders(HttpHeadersState.EMPTY, httpHeaders);
-        }
-        return new HttpHeaders(HttpHeadersState.NOT_EMPTY, httpHeaders);
-    }
-
     public static HttpHeaders emptyHeaders() {
-        return new HttpHeaders(HttpHeadersState.EMPTY, Collections.emptyList());
+        return new HttpHeaders(new ArrayList<>());
     }
 
     public boolean contains(HttpHeader httpHeader) {
@@ -66,8 +50,16 @@ public class HttpHeaders {
                 .getContent();
     }
 
-    public HttpHeadersState getHttpHeadersState() {
-        return httpHeadersState;
+    public void add(String type, String content) {
+        HttpHeader httpHeader = HttpHeader.of(type, content);
+        httpHeaders.add(httpHeader);
+    }
+
+    public String getHttpHeadersString() {
+        return httpHeaders.stream()
+                .map(HttpHeader::getHttpHeaderString)
+                .collect(Collectors.joining(System.lineSeparator()))
+                + System.lineSeparator();
     }
 
     public List<HttpHeader> getHttpHeaders() {

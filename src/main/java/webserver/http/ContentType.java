@@ -21,18 +21,11 @@ public enum ContentType {
         this.fileExtender = fileExtender;
     }
 
-    public static ContentType from(URL url) {
-        return Arrays.stream(values())
-                .filter(contentType -> url.isEndsWith(contentType.fileExtender))
-                .findFirst()
-                .orElse(HTML);
-    }
-
     public static ContentType from(String path) {
         return Arrays.stream(values())
                 .filter(contentType -> path.endsWith(contentType.fileExtender))
                 .findFirst()
-                .orElse(HTML);
+                .orElseThrow(IllegalArgumentException::new);
     }
 
     public String getDirectory() {

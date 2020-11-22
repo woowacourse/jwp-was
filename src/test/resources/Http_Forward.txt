@@ -1,5 +1,5 @@
-HTTP/1.1 200 OK
-Content-Type: null
+HTTP/1.1 200 OK 
+Content-Type: text/html;charset=utf-8
 Content-Length: 7049
 
 <!DOCTYPE html>
@@ -15,7 +15,7 @@ Content-Length: 7049
 		<![endif]-->
 		<link href="css/styles.css" rel="stylesheet">
 	</head>
-
+	
 	<body>
 <nav class="navbar navbar-fixed-top header">
  	<div class="col-md-12">
@@ -25,7 +25,7 @@ Content-Length: 7049
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse1">
           <i class="glyphicon glyphicon-search"></i>
           </button>
-
+      
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse1">
           <form class="navbar-form pull-left">
@@ -36,7 +36,7 @@ Content-Length: 7049
                 </div>
               </div>
           </form>
-          <ul class="nav navbar-nav navbar-right">
+          <ul class="nav navbar-nav navbar-right">             
              <li>
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-bell"></i></a>
                 <ul class="dropdown-menu">
@@ -46,8 +46,8 @@ Content-Length: 7049
              </li>
              <li><a href="./user/list.html"><i class="glyphicon glyphicon-user"></i></a></li>
            </ul>
-        </div>
-     </div>
+        </div>	
+     </div>	
 </nav>
 <div class="navbar navbar-default" id="subnav">
     <div class="col-md-12">
@@ -58,13 +58,13 @@ Content-Length: 7049
                 <li class="nav-divider"></li>
                 <li><a href="#"><i class="glyphicon glyphicon-cog" style="color:#dd1111;"></i> Settings</a></li>
             </ul>
-
+            
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse2">
             	<span class="sr-only">Toggle navigation</span>
             	<span class="icon-bar"></span>
             	<span class="icon-bar"></span>
             	<span class="icon-bar"></span>
-            </button>
+            </button>            
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse2">
             <ul class="nav navbar-nav navbar-right">

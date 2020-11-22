@@ -18,4 +18,27 @@ public class HttpHeaderTest {
                 () -> assertThat(httpHeader.getContent()).isEqualTo("localhost:8080")
         );
     }
+
+    @DisplayName("헤더의 타입과 내용으로 생성자 테스트")
+    @Test
+    void ofTestWithTypeAndContent() {
+        String type = "Set-Cookie";
+        String content = "logined=false";
+        HttpHeader httpHeader = HttpHeader.of(type, content);
+
+        assertAll(
+                () -> assertThat(httpHeader.getType()).isEqualTo("Set-Cookie"),
+                () -> assertThat(httpHeader.getContent()).isEqualTo("logined=false")
+        );
+    }
+
+    @DisplayName("헤더 정보 출력")
+    @Test
+    void getHttpHeaderStringTest() {
+        String input = "Host: localhost:8080";
+        HttpHeader httpHeader = HttpHeader.of(input);
+        String httpHeaderString = httpHeader.getHttpHeaderString();
+
+        assertThat(httpHeaderString).isEqualTo(input);
+    }
 }

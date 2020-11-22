@@ -1,7 +1,6 @@
 package webserver;
 
 import webserver.controller.Controller;
-import webserver.controller.IndexController;
 import webserver.controller.ResourceController;
 import webserver.controller.UserCreateController;
 import webserver.http.request.HttpRequest;
@@ -17,7 +16,6 @@ public class HandlerMapper {
 
     static {
         controllers = new ArrayList<>();
-        controllers.add(new IndexController());
         controllers.add(new ResourceController());
         controllers.add(new UserCreateController());
     }

@@ -14,4 +14,20 @@ public class HttpResponseBody {
     public static HttpResponseBody emptyResponseBody() {
         return new HttpResponseBody(BodyState.EMPTY, null);
     }
+
+    public static HttpResponseBody add(byte[] body) {
+        return new HttpResponseBody(BodyState.NOT_EMPTY, body);
+    }
+
+    public boolean isEmpty() {
+        return bodyState.isEmpty();
+    }
+
+    public int getLength() {
+        return body.length;
+    }
+
+    public byte[] getBody() {
+        return body;
+    }
 }

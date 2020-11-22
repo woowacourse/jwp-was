@@ -38,10 +38,6 @@ public class URL {
         return path;
     }
 
-    public ParametersState hasQueryParameters() {
-        return parameters.getQueryParametersState();
-    }
-
     public String getParameter(String key) {
         return parameters.getParameter(key);
     }

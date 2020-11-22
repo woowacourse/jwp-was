@@ -1,52 +1,72 @@
 package webserver.http.response;
 
-import webserver.http.*;
+import utils.FileIoUtils;
+import webserver.http.ContentType;
+import webserver.http.HttpHeaderType;
+import webserver.http.HttpHeaders;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.List;
+import java.net.URISyntaxException;
 
 public class HttpResponse {
-    private final DataOutputStream dos;
+    private DataOutputStream dos;
+    private HttpResponseStartLine httpResponseStartLine;
+    private HttpHeaders httpHeaders;
+    private HttpResponseBody httpResponseBody;
 
     public HttpResponse(OutputStream out) {
         this.dos = new DataOutputStream(out);
+        this.httpResponseStartLine = HttpResponseStartLine.defaultStartLine();
+        this.httpHeaders = HttpHeaders.emptyHeaders();
+        this.httpResponseBody = HttpResponseBody.emptyResponseBody();
     }
 
-    public void forward(HttpResponseStartLine httpResponseStartLine, HttpHeaders httpResponseHeaders,
-                        Body httpResponseBody) throws IOException {
-        writeHttpResponseStartLine(httpResponseStartLine);
-        writeHttpResponseHeaders(httpResponseHeaders);
-        writeHttpResponseBody(httpResponseBody);
+    public void forward(String path) throws IOException, URISyntaxException {
+        ContentType contentType = ContentType.from(path);
+        String filePath = contentType.getDirectory() + path;
+        byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
+        response200Header(body, contentType);
+        responseBody(body);
+        response();
     }
 
-    private void writeHttpResponseStartLine(HttpResponseStartLine httpResponseStartLine) throws IOException {
-        dos.writeBytes(httpResponseStartLine.toString());
-        dos.writeBytes(System.lineSeparator());
+    private void response200Header(byte[] body, ContentType contentType) {
+        addHeader(HttpHeaderType.CONTENT_TYPE.getType(), contentType.getContentType());
+        addHeader(HttpHeaderType.CONTENT_LENGTH.getType(), String.valueOf(body.length));
     }
 
-    private void writeHttpResponseHeaders(HttpHeaders httpResponseHeaders) throws IOException {
-        HttpHeadersState responseHeaderState = httpResponseHeaders.getHttpHeadersState();
-        if (HttpHeadersState.EMPTY.equals(responseHeaderState)) {
-            dos.writeBytes(System.lineSeparator());
-            return;
-        }
-        List<HttpHeader> httpHeaders = httpResponseHeaders.getHttpHeaders();
-        for (HttpHeader httpHeader : httpHeaders) {
-            dos.writeBytes(httpHeader.getType() + ": " + httpHeader.getContent());
-            dos.writeBytes(System.lineSeparator());
-        }
-        dos.writeBytes(System.lineSeparator());
+    private void responseBody(byte[] body) {
+        httpResponseBody = HttpResponseBody.add(body);
     }
 
-    private void writeHttpResponseBody(Body httpResponseBody) throws IOException {
-        BodyState bodyState = httpResponseBody.getState();
-        if (BodyState.EMPTY.equals(bodyState)) {
+    public void sendRedirect(String location) throws IOException {
+        response302StartLine();
+        response302Header(location);
+        response();
+    }
+
+    private void response302StartLine() {
+        httpResponseStartLine.update(HttpStatusCode.FOUND);
+    }
+
+    private void response302Header(String location) {
+        addHeader(HttpHeaderType.LOCATION.getType(), location);
+    }
+
+    public void addHeader(String type, String content) {
+        httpHeaders.add(type, content);
+    }
+
+    private void response() throws IOException {
+        dos.writeBytes(httpResponseStartLine.getHttpResponseStartLineString() + System.lineSeparator());
+        dos.writeBytes(httpHeaders.getHttpHeadersString() + System.lineSeparator());
+        if (httpResponseBody.isEmpty()) {
             dos.flush();
             return;
         }
-        dos.write(httpResponseBody.getContent(), 0, httpResponseBody.getLength());
+        dos.write(httpResponseBody.getBody(), 0, httpResponseBody.getLength());
         dos.flush();
     }
 }
