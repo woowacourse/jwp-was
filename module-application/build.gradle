@@ -1,0 +1,10 @@
+jar {
+    enabled = true
+}
+
+dependencies {
+    implementation project(':module-common')
+    implementation 'org.reflections:reflections:0.9.11'
+    implementation 'ch.qos.logback:logback-classic:1.2.3'
+    implementation 'com.github.jknack:handlebars:4.2.0'
+}

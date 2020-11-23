@@ -1,0 +1,9 @@
+jar {
+    enabled = true
+}
+
+dependencies {
+    implementation project(':module-common')
+    implementation project(':module-application')
+    implementation 'ch.qos.logback:logback-classic:1.2.3'
+}
