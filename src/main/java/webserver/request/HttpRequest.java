@@ -90,6 +90,6 @@ public class HttpRequest {
 
         return cookies.getCookie(DEFAULT_SESSION_NAME)
             .map(cookie -> HttpSessions.getHttpSession(cookie.getValue()))
-            .orElse(HttpSessions.createHttpSession(UUID.randomUUID().toString()));
+            .orElseGet(() -> HttpSessions.createHttpSession(UUID.randomUUID().toString()));
     }
 }
