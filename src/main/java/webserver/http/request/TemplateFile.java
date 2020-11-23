@@ -3,8 +3,7 @@ package webserver.http.request;
 import java.util.Arrays;
 
 public enum TemplateFile {
-    HTML(".html", "text/html"),
-    ICO(".ico", "image/x-icon");
+    HTML(".html", "text/html");
 
     private final String suffix;
     private final String contentType;

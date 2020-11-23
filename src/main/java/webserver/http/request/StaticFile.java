@@ -10,7 +10,8 @@ public enum StaticFile {
     TTF(".ttf", "font/ttf"),
     WOFF(".woff", "font/woff"),
     WOFF2(".woff2", "font/woff2"),
-    PNG(".png", "image/png");
+    PNG(".png", "image/png"),
+    ICO(".ico", "image/x-icon");
 
     private final String suffix;
     private final String contentType;
@@ -30,10 +31,6 @@ public enum StaticFile {
                 .filter(value -> uri.endsWith(value.suffix))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("지원하지 않는 파일입니다. : " + uri));
-    }
-
-    public String getSuffix() {
-        return suffix;
     }
 
     public String getContentType() {
