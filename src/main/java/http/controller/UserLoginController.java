@@ -15,7 +15,6 @@ public class UserLoginController extends AuthController {
     public HttpResponse post(HttpRequest httpRequest) {
         UserService userService = UserService.getInstance();
         boolean auth = userService.authenticateUser(httpRequest);
-        String header;
         HttpSession httpSession;
         Cookie cookie = new Cookie();
         if (auth) {
@@ -24,11 +23,9 @@ public class UserLoginController extends AuthController {
             httpSession.setAttribute("email", user.getEmail());
             cookie.setCookie("logined", "true");
             cookie.setCookie("SESSIONID", httpSession.getId());
-            header = HttpResponseHeaderParser.found("/", cookie);
-        } else {
-            cookie.setCookie("logined", "false");
-            header = HttpResponseHeaderParser.found("/user/login_failed.html", cookie);
+            return new HttpResponse(HttpResponseHeaderParser.found("/", cookie));
         }
-        return new HttpResponse(header);
+        cookie.setCookie("logined", "false");
+        return new HttpResponse(HttpResponseHeaderParser.found("/user/login_failed.html", cookie));
     }
 }
