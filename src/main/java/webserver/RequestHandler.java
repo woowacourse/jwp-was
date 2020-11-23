@@ -7,10 +7,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.HashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import webserver.http.request.HttpHeader;
 import webserver.http.request.HttpRequest;
 import webserver.http.request.HttpRequestFactory;
 import webserver.http.response.HttpResponse;
@@ -33,7 +35,8 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest httpRequest = new HttpRequestFactory()
                     .create(new BufferedReader(new InputStreamReader(in)));
-            HttpResponse response = new HttpResponse(new DataOutputStream(out));
+            HttpResponse response = new HttpResponse(new HttpHeader(new HashMap<>()),
+                    new DataOutputStream(out));
 
             HttpServlet.getInstance().doDispatch(httpRequest, response);
         } catch (IOException e) {

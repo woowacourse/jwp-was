@@ -13,6 +13,8 @@ public class ControllerMapping {
     static {
         requestMappings.put(new RequestMapping("/user/create", HttpMethod.POST),
                 new UserCreateController());
+        requestMappings.put(new RequestMapping("/user/login", HttpMethod.POST),
+                new UserLoginController());
     }
 
     public static Optional<Controller> get(RequestMapping requestMapping) {

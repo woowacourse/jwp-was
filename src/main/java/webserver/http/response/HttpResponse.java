@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import webserver.http.HttpHeaderFields;
 import webserver.http.HttpVersion;
+import webserver.http.request.HttpHeader;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
@@ -19,10 +20,14 @@ public class HttpResponse {
     private static final String COLON = ":";
     private static final String LOCATION = "Location";
     private static final String BASE_URI = "http://localhost:8080";
+    private static final String SEME_COLON = ";";
+    private static final String PATH = "Path=";
 
+    private final HttpHeader header;
     private final DataOutputStream dos;
 
-    public HttpResponse(DataOutputStream dos) {
+    public HttpResponse(HttpHeader header, DataOutputStream dos) {
+        this.header = header;
         this.dos = dos;
     }
 
@@ -34,6 +39,7 @@ public class HttpResponse {
             dos.writeBytes(HttpHeaderFields.CONTENT_TYPE + COLON + SP + contentType + NEW_LINE);
             dos.writeBytes(
                     HttpHeaderFields.CONTENT_LENGTH + COLON + SP + body.length + NEW_LINE);
+            writeCookieIfPresent();
             dos.writeBytes(NEW_LINE);
             dos.write(body, 0, body.length);
             dos.flush();
@@ -50,6 +56,7 @@ public class HttpResponse {
                     HttpVersion.HTTP_1_1.getVersion() + SP
                             + HttpStatusCode.NOT_FOUND.getValue()
                             + NEW_LINE);
+            writeCookieIfPresent();
             dos.writeBytes(NEW_LINE);
             dos.flush();
         } catch (IOException e) {
@@ -63,6 +70,7 @@ public class HttpResponse {
                     HttpVersion.HTTP_1_1.getVersion() + SP + HttpStatusCode.FOUND.getValue()
                             + NEW_LINE);
             dos.writeBytes(LOCATION + COLON + SP + BASE_URI + uri + SP + NEW_LINE);
+            writeCookieIfPresent();
             dos.writeBytes(NEW_LINE);
             dos.flush();
         } catch (IOException e) {
@@ -76,10 +84,22 @@ public class HttpResponse {
                     HttpVersion.HTTP_1_1.getVersion() + SP
                             + HttpStatusCode.BAD_REQUEST.getValue()
                             + NEW_LINE);
+            writeCookieIfPresent();
             dos.writeBytes(NEW_LINE);
             dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
+        }
+    }
+
+    public void setCookie(String cookie, String path) {
+        header.put(HttpHeaderFields.SET_COOKIE, cookie + SEME_COLON + PATH + path);
+    }
+
+    private void writeCookieIfPresent() throws IOException {
+        if (header.hasSetCookie()) {
+            dos.writeBytes(HttpHeaderFields.SET_COOKIE + COLON + SP + header.get(
+                    HttpHeaderFields.SET_COOKIE) + NEW_LINE);
         }
     }
 }
