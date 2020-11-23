@@ -9,11 +9,10 @@ import utils.HttpResponseHeaderParser;
 public class UserLogoutController extends AuthController {
     @Override
     public HttpResponse get(HttpRequest httpRequest) {
-        String header;
         Cookie cookie = new Cookie();
         cookie.setCookie("logined", "false");
         HttpSessionStorage.deleteSession(httpRequest.getSessionId());
-        header = HttpResponseHeaderParser.found("/", cookie);
+        String header = HttpResponseHeaderParser.found("/", cookie);
         return new HttpResponse(header);
     }
 }
