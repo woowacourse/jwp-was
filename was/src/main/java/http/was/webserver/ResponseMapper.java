@@ -3,7 +3,6 @@ package http.was.webserver;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 
 import http.was.controller.MappedRequest;
@@ -24,8 +23,8 @@ public class ResponseMapper {
             return;
         }
         MappedRequest mappedRequest = new MappedRequest(request.getRequestMethod(), request.getPath());
-        Method method = requestMapper.get(mappedRequest);
-        Object instance = requestMapper.getInstance(method.getDeclaringClass());
-        method.invoke(instance, request, response);
+        RequestInvoker requestInvoker = requestMapper.get(mappedRequest);
+
+        requestInvoker.invoke(request, response);
     }
 }

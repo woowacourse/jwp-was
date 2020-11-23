@@ -45,6 +45,6 @@ public class UserListController {
 
     @RequestMapping(path = "/user/list", method = HttpMethod.POST)
     public void doPost(Request request, Response response) {
-        throw new HttpRequestMethodNotSupportedException(HttpMethod.GET);
+        throw new HttpRequestMethodNotSupportedException(request.getRequestMethod());
     }
 }
