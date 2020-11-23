@@ -3,7 +3,6 @@ package http.session;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class HttpSessionStorageTest {
     public static final String COOKIE = "jsessionid=%s; path=/; expires=Mon, 30 Nov 2020 05:12:27 GMT; secure; HttpOnly; SameSite=Lax";

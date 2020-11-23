@@ -1,10 +1,11 @@
 package http.session;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
 public class HttpSessionStorage {
-    private static Map<UUID, HttpSession> sessions = new HashMap<>();
+    private static Map<UUID, HttpSession> sessions = new ConcurrentHashMap<>();
 
     public static HttpSession generate(String userId) {
         HttpSession httpSession = new HttpSession();
