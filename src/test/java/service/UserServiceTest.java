@@ -2,6 +2,7 @@ package service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import db.DataBase;
 import exception.NotExistUserException;
@@ -9,7 +10,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
-import java.util.stream.Stream;
 import model.domain.User;
 import model.request.HttpRequest;
 import org.junit.jupiter.api.DisplayName;
@@ -30,11 +30,11 @@ public class UserServiceTest {
         Collection<User> users = DataBase.findAll();
         User user = DataBase.findUserById("javajigi");
 
-        Stream.of(
-            assertThat(users).hasSize(1),
-            assertThat(user.getName()).isEqualTo("%EB%B0%95%EC%9E%AC%EC%84%B1"),
-            assertThat(user.getUserId()).isEqualTo("javajigi")
-        );
+        assertAll(() -> {
+            assertThat(users).hasSize(1);
+            assertThat(user.getName()).isEqualTo("%EB%B0%95%EC%9E%AC%EC%84%B1");
+            assertThat(user.getUserId()).isEqualTo("javajigi");
+        });
     }
 
     @Test
@@ -52,10 +52,10 @@ public class UserServiceTest {
         userService.createUser(joinHttpRequest);
         User user = userService.login(loginHttpRequest);
 
-        Stream.of(
-            assertThat(user.getName()).isEqualTo("%EB%B0%95%EC%9E%AC%EC%84%B1"),
-            assertThat(user.getUserId()).isEqualTo("javajigi")
-        );
+        assertAll(() -> {
+            assertThat(user.getName()).isEqualTo("%EB%B0%95%EC%9E%AC%EC%84%B1");
+            assertThat(user.getUserId()).isEqualTo("javajigi");
+        });
     }
 
     @Test
@@ -72,7 +72,7 @@ public class UserServiceTest {
 
         userService.createUser(joinHttpRequest);
 
-        assertThatThrownBy(()->userService.login(loginHttpRequest))
+        assertThatThrownBy(() -> userService.login(loginHttpRequest))
             .isInstanceOf(NotExistUserException.class)
             .hasMessage("Not Exist User");
     }

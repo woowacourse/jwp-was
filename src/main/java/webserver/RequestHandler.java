@@ -1,16 +1,15 @@
 package webserver;
 
 import controller.Controller;
-import exception.NoSessionException;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import model.general.Header;
+import model.general.Headers;
 import model.general.Status;
 import model.request.HttpRequest;
 import model.response.HttpResponse;
@@ -70,13 +69,11 @@ public class RequestHandler implements Runnable {
     }
 
     private void makeSession(HttpRequest httpRequest, HttpResponse httpResponse) {
-        try {
-            httpRequest.getSessionId();
-        } catch (NoSessionException e) {
-            Map<Header, String> headers = httpResponse.getHeaders();
+        if(!httpRequest.hasSession()){
+            Headers headers = httpResponse.getHeaders();
             UUID uuid = UUID.randomUUID();
 
-            headers.put(Header.SET_COOKIE, "JSESSIONID=" + uuid.toString());
+            headers.addHeader(Header.SET_COOKIE, "JSESSIONID=" + uuid.toString());
         }
     }
 }

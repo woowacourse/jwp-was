@@ -10,13 +10,12 @@ public class HandlebarUtils {
 
     private static final String TEMPLATE_LOCATION = "/templates";
     private static final String HTML_EXTENSION = ".html";
+    private static final TemplateLoader loader
+        = new ClassPathTemplateLoader(TEMPLATE_LOCATION, HTML_EXTENSION);
+    private static final Handlebars handlebars = new Handlebars(loader);
 
-    public static Template loadHandlebar(String location) throws IOException {
-        TemplateLoader loader = new ClassPathTemplateLoader();
-        loader.setPrefix(TEMPLATE_LOCATION);
-        loader.setSuffix(HTML_EXTENSION);
-        Handlebars handlebars = new Handlebars(loader);
-
-        return handlebars.compile(location);
+    public static String applyTemplate(String location, Object object) throws IOException {
+        Template template = handlebars.compile(location);
+        return template.apply(object);
     }
 }

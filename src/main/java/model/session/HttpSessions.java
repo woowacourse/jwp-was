@@ -3,10 +3,11 @@ package model.session;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class HttpSessions {
 
-    private static final Map<String, HttpSession> sessions = new HashMap<>();
+    private static final Map<String, HttpSession> sessions = new ConcurrentHashMap<>();
 
     public static HttpSession getHttpSession(String id) {
         HttpSession session = sessions.get(id);

@@ -1,6 +1,7 @@
 package model.response;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -21,10 +22,10 @@ public class StatusLineTest {
     void create(String filePath, Status status) throws IOException {
         InputStream inputStream = new FileInputStream(filePath);
         HttpRequest httpRequest = HttpRequest.of(inputStream);
-        Stream.of(
-            assertThat(StatusLine.of(httpRequest, status)).isInstanceOf(StatusLine.class),
-            assertThat(StatusLine.of(status)).isInstanceOf(StatusLine.class)
-        );
+        assertAll(() -> {
+            assertThat(StatusLine.of(httpRequest, status)).isInstanceOf(StatusLine.class);
+            assertThat(StatusLine.of(status)).isInstanceOf(StatusLine.class);
+        });
     }
 
     private static Stream<Arguments> provideStatus() {

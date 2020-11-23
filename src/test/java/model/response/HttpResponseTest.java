@@ -12,11 +12,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
 import model.general.Header;
+import model.general.Headers;
 import model.request.HttpRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -54,7 +53,7 @@ public class HttpResponseTest {
             + "HTTP/1.1 200 OK",
         "src/test/resources/input/get_api_request.txt:"
             + "src/test/resources/output/get_api_request_output.txt:"
-            + "HTTP/1.1 404 Not Found",
+            + "HTTP/1.1 405 Method Not Allowed",
         "src/test/resources/input/post_api_request.txt:"
             + "src/test/resources/output/post_api_request_output.txt:"
             + "HTTP/1.1 302 Found"
@@ -97,7 +96,7 @@ public class HttpResponseTest {
     @CsvSource(value = {
         "src/test/resources/input/get_template_file_request.txt:200",
         "src/test/resources/input/get_static_file_request.txt:200",
-        "src/test/resources/input/get_api_request.txt:404",
+        "src/test/resources/input/get_api_request.txt:405",
         "src/test/resources/input/post_api_request.txt:302",
         "src/test/resources/input/post_api_request_invalid_method.txt:405"
     }, delimiter = ':')
@@ -112,7 +111,7 @@ public class HttpResponseTest {
     @CsvSource(value = {
         "src/test/resources/input/get_template_file_request.txt:OK",
         "src/test/resources/input/get_static_file_request.txt:OK",
-        "src/test/resources/input/get_api_request.txt:Not Found",
+        "src/test/resources/input/get_api_request.txt:Method Not Allowed",
         "src/test/resources/input/post_api_request.txt:Found",
         "src/test/resources/input/post_api_request_invalid_method.txt:Method Not Allowed"
     }, delimiter = ':')
@@ -125,30 +124,31 @@ public class HttpResponseTest {
     @ParameterizedTest
     @DisplayName("headers 확인")
     @MethodSource("provideHeaders")
-    void getHeaders(String filePath, Map<Header, String> expected)
-        throws IOException {
+    void getHeaders(String filePath, Headers expected) throws IOException {
         HttpResponse httpResponse = makeHttpResponseFromFile(filePath);
 
         assertThat(httpResponse.getHeaders()).isEqualTo(expected);
     }
 
     private static Stream<Arguments> provideHeaders() throws IOException, URISyntaxException {
-        Map<Header, String> getMethodTemplateHeaders = new HashMap<>();
+        Headers getMethodTemplateHeaders = new Headers();
         byte[] indexHtmlBody = FileIoUtils
             .loadFileFromClasspath("./templates/index.html");
-        getMethodTemplateHeaders.put(Header.CONTENT_LENGTH, String.valueOf(indexHtmlBody.length));
-        getMethodTemplateHeaders.put(Header.CONTENT_TYPE, "text/html");
+        getMethodTemplateHeaders
+            .addHeader(Header.CONTENT_LENGTH, String.valueOf(indexHtmlBody.length));
+        getMethodTemplateHeaders.addHeader(Header.CONTENT_TYPE, "text/html");
 
-        Map<Header, String> getMethodStaticHeaders = new HashMap<>();
+        Headers getMethodStaticHeaders = new Headers();
         byte[] styleCssBody = FileIoUtils
             .loadFileFromClasspath("./static/css/styles.css");
-        getMethodStaticHeaders.put(Header.CONTENT_LENGTH, String.valueOf(styleCssBody.length));
-        getMethodStaticHeaders.put(Header.CONTENT_TYPE, "text/css");
+        getMethodStaticHeaders
+            .addHeader(Header.CONTENT_LENGTH, String.valueOf(styleCssBody.length));
+        getMethodStaticHeaders.addHeader(Header.CONTENT_TYPE, "text/css");
 
-        Map<Header, String> getMethodApiHeaders = new HashMap<>();
+        Headers getMethodApiHeaders = new Headers();
 
-        Map<Header, String> postMethodApiHeaders = new HashMap<>();
-        postMethodApiHeaders.put(Header.LOCATION, "/index.html");
+        Headers postMethodApiHeaders = new Headers();
+        postMethodApiHeaders.addHeader(Header.LOCATION, "/index.html");
 
         return Stream.of(
             Arguments.of("src/test/resources/input/get_template_file_request.txt",

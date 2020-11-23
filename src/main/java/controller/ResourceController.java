@@ -1,10 +1,9 @@
 package controller;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import model.general.ContentType;
 import model.general.Header;
+import model.general.Headers;
 import model.general.Method;
 import model.general.Status;
 import model.request.HttpRequest;
@@ -46,24 +45,24 @@ public class ResourceController extends AbstractController {
         Optional<ContentType> contentType = ContentType.of(httpRequest);
         String requestUri = httpRequest.getRequestUri();
 
-        if (contentType.isPresent()) {
-            byte[] body;
-            try {
-                body = FileIoUtils
-                    .loadFileFromClasspath(generatePath(contentType.get(), requestUri));
-            } catch (Exception e) {
-                return HttpResponse.of(Status.NOT_FOUND);
-            }
-            StatusLine statusLine = StatusLine.of(httpRequest, Status.OK);
-            Map<Header, String> headers = new HashMap<>();
-            headers.put(Header.CONTENT_TYPE, contentType.get()
-                .getContentTypeValue());
-            headers.put(Header.CONTENT_LENGTH, String.valueOf(body.length));
-
-            return HttpResponse.of(statusLine, headers, body);
+        if (!contentType.isPresent()) {
+            return HttpResponse.of(Status.NOT_FOUND);
         }
 
-        return HttpResponse.of(Status.NOT_FOUND);
+        byte[] body;
+        try {
+            body = FileIoUtils
+                .loadFileFromClasspath(generatePath(contentType.get(), requestUri));
+        } catch (Exception e) {
+            return HttpResponse.of(Status.NOT_FOUND);
+        }
+        StatusLine statusLine = StatusLine.of(httpRequest, Status.OK);
+        Headers headers = new Headers();
+        headers.addHeader(Header.CONTENT_TYPE, contentType.get()
+            .getContentTypeValue());
+        headers.addHeader(Header.CONTENT_LENGTH, String.valueOf(body.length));
+
+        return HttpResponse.of(statusLine, headers, body);
     }
 
     private static String generatePath(ContentType contentType, String requestUri) {

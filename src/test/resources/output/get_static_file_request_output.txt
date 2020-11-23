@@ -1,6 +1,6 @@
 HTTP/1.1 200 OK
-Content-Length: 7268
 Content-Type: text/css
+Content-Length: 7268
 
 /*
 A custom Bootstrap 3.2 'Google Plus style' theme

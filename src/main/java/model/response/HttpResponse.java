@@ -2,28 +2,28 @@ package model.response;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Map;
 import model.general.Header;
+import model.general.Headers;
 import model.general.Status;
 
 public class HttpResponse {
 
     private final StatusLine statusLine;
-    private final Map<Header, String> headers;
+    private final Headers headers;
     private final byte[] body;
 
-    private HttpResponse(StatusLine statusLine, Map<Header, String> headers, byte[] body) {
+    private HttpResponse(StatusLine statusLine, Headers headers, byte[] body) {
         this.statusLine = statusLine;
         this.headers = headers;
         this.body = body;
     }
 
     public static HttpResponse of(Status status) {
-        return new HttpResponse(StatusLine.of(status), Collections.emptyMap(), null);
+        return new HttpResponse(StatusLine.of(status), new Headers(), null);
     }
 
-    public static HttpResponse of(StatusLine statusLine, Map<Header, String> headers, byte[] body) {
+    public static HttpResponse of(StatusLine statusLine, Headers headers, byte[] body) {
         return new HttpResponse(statusLine, headers, body);
     }
 
@@ -42,9 +42,8 @@ public class HttpResponse {
 
     private void writeHeaders(DataOutputStream dataOutputStream)
         throws IOException {
-        Map<Header, String> headers = getHeaders();
-
-        for (Map.Entry<Header, String> entry : headers.entrySet()) {
+        for (Map.Entry<Header, String> entry : headers.getHeaders()
+            .entrySet()) {
             dataOutputStream.writeBytes(entry.getKey().getName() + ": " + entry.getValue()
                 + System.lineSeparator());
         }
@@ -59,7 +58,7 @@ public class HttpResponse {
     }
 
     private boolean hasContents() {
-        return headers.containsKey(Header.CONTENT_LENGTH);
+        return headers.hasKey(Header.CONTENT_LENGTH);
     }
 
     public String getHttpVersion() {
@@ -74,7 +73,7 @@ public class HttpResponse {
         return statusLine.getReasonPhrase();
     }
 
-    public Map<Header, String> getHeaders() {
+    public Headers getHeaders() {
         return headers;
     }
 
