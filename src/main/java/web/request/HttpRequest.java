@@ -17,6 +17,7 @@ import java.util.Objects;
 
 public class HttpRequest {
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
+    private static final String SESSION_ID = "JSESSIONID";
 
     private final RequestLine requestLine;
     private final HttpHeader httpHeader;
@@ -94,7 +95,7 @@ public class HttpRequest {
         return requestBody.getParameterByKey(key);
     }
 
-    public String getCookieByKey(String key) {
-        return cookies.getCookieByKey(key);
+    public String getSession() {
+        return cookies.getCookieByKey(SESSION_ID);
     }
 }

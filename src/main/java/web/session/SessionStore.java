@@ -11,7 +11,11 @@ public class SessionStore {
     }
 
     public static void addSession(HttpSession session) {
-        sessions.put(session.getId(), session);
+        addSession(session.getId(), session);
+    }
+
+    public static void addSession(String id, HttpSession session) {
+        sessions.put(id, session);
     }
 
     public static boolean isContains(String id) {

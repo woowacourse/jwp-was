@@ -42,7 +42,7 @@ public class LoginControllerTest {
             String result = outputStream.toString();
             assertAll(
                     () -> assertThat(result).contains("HTTP/1.1 302 FOUND"),
-                    () -> assertThat(result).contains("Set-Cookie: logined=true; Path=/")
+                    () -> assertThat(result).contains("Set-Cookie: JSESSIONID=")
             );
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -66,8 +66,7 @@ public class LoginControllerTest {
             String result = outputStream.toString();
             assertAll(
                     () -> assertThat(result).contains("HTTP/1.1 302 FOUND"),
-                    () -> assertThat(result).contains("Location: /user/login_failed.html "),
-                    () -> assertThat(result).contains("Set-Cookie: logined=false")
+                    () -> assertThat(result).contains("Location: /user/login_failed.html ")
             );
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -93,8 +92,7 @@ public class LoginControllerTest {
             String result = outputStream.toString();
             assertAll(
                     () -> assertThat(result).contains("HTTP/1.1 302 FOUND"),
-                    () -> assertThat(result).contains("Location: /user/login_failed.html "),
-                    () -> assertThat(result).contains("Set-Cookie: logined=false")
+                    () -> assertThat(result).contains("Location: /user/login_failed.html ")
             );
         } catch (IOException e) {
             logger.error(e.getMessage());

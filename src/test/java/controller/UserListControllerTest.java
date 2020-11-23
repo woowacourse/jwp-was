@@ -8,6 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import web.request.HttpRequest;
 import web.response.HttpResponse;
+import web.session.HttpSession;
+import web.session.SessionStore;
+import web.session.WebSession;
 
 import java.io.*;
 
@@ -25,6 +28,9 @@ public class UserListControllerTest {
         User pobi = new User("javajigi", "password", "자바지기", "javajigi@gmail.com");
         DataBase.addUser(kafka);
         DataBase.addUser(pobi);
+        HttpSession session = new WebSession();
+        session.setAttribute("id", "javajigi@gmail.com");
+        SessionStore.addSession("1", session);
         Controller controller = new UserListController();
         try {
             InputStream inputStream = new FileInputStream(new File(TEST_DIRECTORY + "HTTP_USER_LIST_LOGIN.txt"));

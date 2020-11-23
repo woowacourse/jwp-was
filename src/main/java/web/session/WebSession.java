@@ -6,7 +6,8 @@ import java.util.UUID;
 
 public class WebSession implements HttpSession {
     private final Map<String, Object> attributes = new HashMap<>();
-    private UUID id = UUID.randomUUID();
+
+    private final UUID id = UUID.randomUUID();
 
     @Override
     public String getId() {
@@ -26,5 +27,10 @@ public class WebSession implements HttpSession {
     @Override
     public void removeAttribute(String name) {
         attributes.remove(name);
+    }
+
+    @Override
+    public void invalidate() {
+        attributes.clear();
     }
 }
