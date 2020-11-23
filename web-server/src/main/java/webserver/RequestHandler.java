@@ -1,8 +1,8 @@
 package webserver;
 
-import application.controller.ControllerMapper;
 import controller.Controller;
 import controller.ControllerManager;
+import controller.ControllerMapperInterface;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,12 +19,15 @@ import session.SessionStorage;
 public class RequestHandler implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private static final ControllerMapper controllerMapper = new ControllerMapper();
-    private static final ControllerManager controllerManager = new ControllerManager(controllerMapper.readAllControllerInfo());
 
-    private Socket connection;
+    private final ControllerMapperInterface controllerMapper;
+    private final ControllerManager controllerManager;
+    private final Socket connection;
 
-    RequestHandler(Socket connectionSocket) {
+    RequestHandler(ControllerMapperInterface controllerMapper, Socket connectionSocket) {
+        this.controllerMapper = controllerMapper;
+        this.controllerManager = new ControllerManager(controllerMapper.readAllControllerInfo());
+
         this.connection = connectionSocket;
     }
 

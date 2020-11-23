@@ -1,5 +1,6 @@
 package webserver;
 
+import controller.ControllerMapperInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -12,8 +13,9 @@ public class WebServer {
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
     private static final int DEFAULT_PORT = 8080;
 
-    public static void main(String[] args) throws Exception {
-        int port = decidePortNumber(args);
+    public void run(ControllerMapperInterface controllerMapper, String[] programParameter)
+            throws Exception {
+        int port = decidePortNumber(programParameter);
         ExecutorService es = Executors.newFixedThreadPool(100);
 
         // 서버소켓을 생성한다. 웹서버는 기본적으로 8080번 포트를 사용한다.
@@ -23,7 +25,7 @@ public class WebServer {
             // 클라이언트가 연결될때까지 대기한다.
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
-                es.execute(new RequestHandler(connection));
+                es.execute(new RequestHandler(controllerMapper, connection));
             }
         }
     }

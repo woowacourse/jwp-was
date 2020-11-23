@@ -7,6 +7,7 @@ import application.dto.LoginRequest;
 import application.dto.UserCreateRequest;
 import application.dto.UserResponse;
 import java.util.List;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -46,7 +47,7 @@ class UserServiceTest {
     @Test
     void findUsers() {
         List<UserResponse> users = userService.findAllUsers();
-        assertThat(users).hasSize(0);
+        Assertions.assertThat(users).hasSize(0);
 
         // given
         userService.create(userCreateRequest);
