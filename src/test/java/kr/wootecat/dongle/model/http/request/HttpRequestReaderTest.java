@@ -22,7 +22,7 @@ class HttpRequestReaderTest {
     void parseGetRequest() throws Exception {
         BufferedReader reader = new BufferedReader(
                 new FileReader(String.format(TEST_DIRECTORY, "VALID_GET_REQUEST.txt")));
-        HttpRequest httpRequest = HttpRequestReader.parse(reader);
+        HttpRequest httpRequest = HttpRequestReader.from(reader);
 
         assertAll(
                 () -> assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.GET),
@@ -44,7 +44,7 @@ class HttpRequestReaderTest {
     void parseGetRequestWithQueryParam() throws Exception {
         BufferedReader reader = new BufferedReader(
                 new FileReader(String.format(TEST_DIRECTORY, "VALID_GET_REQUEST_WITH_QUERY_PARAM.txt")));
-        HttpRequest httpRequest = HttpRequestReader.parse(reader);
+        HttpRequest httpRequest = HttpRequestReader.from(reader);
 
         assertAll(
                 () -> assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.GET),
@@ -69,7 +69,7 @@ class HttpRequestReaderTest {
     void parseGetRequestWithoutCookie() throws Exception {
         BufferedReader reader = new BufferedReader(
                 new FileReader(String.format(TEST_DIRECTORY, "VALID_GET_REQUEST_WITHOUT_COOKIE.txt")));
-        HttpRequest httpRequest = HttpRequestReader.parse(reader);
+        HttpRequest httpRequest = HttpRequestReader.from(reader);
 
         assertAll(
                 () -> assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.GET),
@@ -87,7 +87,7 @@ class HttpRequestReaderTest {
         BufferedReader reader = new BufferedReader(
                 new FileReader(
                         String.format(TEST_DIRECTORY, "VALID_STATIC_RESOURCE_GET_REQUEST_WITH_MULTIPLE_DOT.txt")));
-        HttpRequest httpRequest = HttpRequestReader.parse(reader);
+        HttpRequest httpRequest = HttpRequestReader.from(reader);
 
         assertAll(
                 () -> assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.GET),
@@ -119,7 +119,7 @@ class HttpRequestReaderTest {
     void parsePostRequest() throws Exception {
         BufferedReader reader = new BufferedReader(new FileReader(String.format(TEST_DIRECTORY,
                 "VALID_POST_REQUEST.txt")));
-        HttpRequest httpRequest = HttpRequestReader.parse(reader);
+        HttpRequest httpRequest = HttpRequestReader.from(reader);
 
         assertAll(
                 () -> assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.POST),
@@ -150,7 +150,7 @@ class HttpRequestReaderTest {
         BufferedReader reader = new BufferedReader(new FileReader(String.format(TEST_DIRECTORY,
                 illegalHttpRequestFile)));
 
-        HttpRequest httpRequest = HttpRequestReader.parse(reader);
+        HttpRequest httpRequest = HttpRequestReader.from(reader);
 
         assertAll(
                 () -> assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.GET),

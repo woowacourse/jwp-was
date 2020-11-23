@@ -25,10 +25,6 @@ public class HttpRequestLine {
         this.version = version;
     }
 
-    public static HttpRequestLine of(String method, String url, String version) {
-        return new HttpRequestLine(HttpMethod.of(method), Url.from(url), ProtocolVersion.of(version));
-    }
-
     public static HttpRequestLine from(String requestLine) {
         String[] requestLines = requestLine.split(HTTP_SPACE_CHARACTER);
         if (requestLines.length != COUNT_OF_REQUEST_LINE_DATA) {

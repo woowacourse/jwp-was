@@ -20,29 +20,29 @@ public class HttpRequestReader {
     private HttpRequestReader() {
     }
 
-    public static HttpRequest parse(BufferedReader br) throws IOException {
+    public static HttpRequest from(BufferedReader br) throws IOException {
         try {
-            HttpRequestLine line = parseRequestLine(br);
-            HttpRequestHeaders headers = parseRequestHeader(br);
-            HttpRequestBody body = parseRequestBody(br, headers);
+            HttpRequestLine line = readRequestLine(br);
+            HttpRequestHeaders headers = readRequestHeader(br);
+            HttpRequestBody body = readRequestBody(br, headers);
             return new HttpRequest(line, headers, body);
         } catch (IllegalRequestDataFormatException e) {
             return HttpRequest.ofInternalError();
         }
     }
 
-    private static HttpRequestLine parseRequestLine(BufferedReader br) throws IOException {
+    private static HttpRequestLine readRequestLine(BufferedReader br) throws IOException {
         String httpRequestLine = br.readLine();
         httpRequestLine = URLDecoder.decode(httpRequestLine, UTF_8_ENCODING_TYPE);
         return HttpRequestLine.from(httpRequestLine);
     }
 
-    private static HttpRequestHeaders parseRequestHeader(BufferedReader br) throws IOException {
+    private static HttpRequestHeaders readRequestHeader(BufferedReader br) throws IOException {
         String allHeaders = IOUtils.readAllHeaders(br);
         return HttpRequestHeaders.from(allHeaders);
     }
 
-    private static HttpRequestBody parseRequestBody(BufferedReader br, HttpRequestHeaders headers) throws IOException {
+    private static HttpRequestBody readRequestBody(BufferedReader br, HttpRequestHeaders headers) throws IOException {
         HttpRequestBody body = HttpRequestBody.empty();
         if (headers.containsHeader(CONTENT_LENGTH)) {
             String requestBodyData = IOUtils.readData(br, Integer.parseInt(headers.get(CONTENT_LENGTH)));
