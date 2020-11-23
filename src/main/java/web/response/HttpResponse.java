@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 import utils.URIUtils;
 import web.HttpHeader;
+import web.session.HttpSession;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -16,6 +17,7 @@ public class HttpResponse {
     public static final String BAD_REQUEST_ERROR_MESSAGE = "errorMessage : ";
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
     private static final String HTTP_VERSION = "HTTP/1.1";
+    public static final String SESSION_PREFIX = "JSESSIONID=";
 
     private final DataOutputStream dataOutputStream;
     private final HttpHeader httpHeader;
@@ -27,8 +29,12 @@ public class HttpResponse {
         httpHeader = new HttpHeader();
     }
 
-    private void addHeader(String key, String value) {
+    public void addHeader(String key, String value) {
         httpHeader.addHeader(key, value);
+    }
+
+    public void addSession(HttpSession session) {
+        httpHeader.addHeader(HttpHeader.SET_COOKIE, SESSION_PREFIX + session.getId() + "; Path=/");
     }
 
     public void ok(String path, String contentType) throws IOException, URISyntaxException {
@@ -36,6 +42,13 @@ public class HttpResponse {
         responseLine = new ResponseLine(ResponseStatus.OK, HTTP_VERSION);
         addHeader(HttpHeader.CONTENT_TYPE, contentType + ";charset=UTF-8");
         responseBody = new ResponseBody(FileIoUtils.loadFileFromClasspath(filePath));
+        write();
+    }
+
+    public void ok(String path) {
+        responseLine = new ResponseLine(ResponseStatus.OK, HTTP_VERSION);
+        addHeader(HttpHeader.CONTENT_TYPE, "text/html;charset=UTF-8");
+        responseBody = new ResponseBody(path.getBytes());
         write();
     }
 

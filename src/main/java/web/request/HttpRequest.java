@@ -17,10 +17,12 @@ import java.util.Objects;
 
 public class HttpRequest {
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
+    private static final String SESSION_ID = "JSESSIONID";
 
     private final RequestLine requestLine;
     private final HttpHeader httpHeader;
     private final RequestBody requestBody;
+    private final Cookies cookies;
 
     public HttpRequest(InputStream inputStream) {
         try {
@@ -28,6 +30,7 @@ public class HttpRequest {
             requestLine = new RequestLine(request.readLine());
             httpHeader = new HttpHeader(mappingHeaders(request));
             requestBody = mappingBodies(request);
+            cookies = new Cookies(httpHeader.getHeaderByKey(HttpHeader.COOKIE));
         } catch (IndexOutOfBoundsException | NullPointerException | IOException e) {
             throw new InvalidHttpRequestException();
         }
@@ -90,5 +93,9 @@ public class HttpRequest {
 
     public String getRequestBodyByKey(String key) {
         return requestBody.getParameterByKey(key);
+    }
+
+    public String getSession() {
+        return cookies.getCookieByKey(SESSION_ID);
     }
 }

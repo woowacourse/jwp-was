@@ -1,28 +1,47 @@
 package utils;
 
-import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
-import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
-import com.github.jknack.handlebars.io.TemplateLoader;
+import db.DataBase;
 import model.User;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
 public class HandlebarsTest {
-    private static final Logger log = LoggerFactory.getLogger(HandlebarsTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(HandlebarsTest.class);
 
     @Test
-    void name() throws Exception {
-        TemplateLoader loader = new ClassPathTemplateLoader();
-        loader.setPrefix("/templates");
-        loader.setSuffix(".html");
-        Handlebars handlebars = new Handlebars(loader);
-
-        Template template = handlebars.compile("user/profile");
+    void profileTest() throws Exception {
+        Template template = TemplateUtils.buildTemplate("user/profile");
 
         User user = new User("javajigi", "password", "자바지기", "javajigi@gmail.com");
         String profilePage = template.apply(user);
-        log.debug("ProfilePage : {}", profilePage);
+        logger.debug("ProfilePage : {}", profilePage);
+        assertAll(
+                () -> assertThat(profilePage).contains(user.getName()),
+                () -> assertThat(profilePage).contains(user.getEmail()),
+                () -> assertThat(profilePage).contains(user.getUserId())
+        );
+    }
+
+    @Test
+    void listTest() throws Exception {
+        Template template = TemplateUtils.buildTemplate("user/list");
+
+        User user = new User("javajigi", "password", "자바지기", "javajigi@gmail.com");
+        DataBase.addUser(user);
+        Collection<User> users = DataBase.findAll();
+        String listPage = template.apply(users);
+        logger.debug("ProfilePage : {}", listPage);
+        assertAll(
+                () -> assertThat(listPage).contains(user.getName()),
+                () -> assertThat(listPage).contains(user.getEmail()),
+                () -> assertThat(listPage).contains(user.getUserId())
+        );
     }
 }

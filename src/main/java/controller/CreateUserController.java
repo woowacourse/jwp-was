@@ -7,7 +7,6 @@ import web.request.HttpRequest;
 import web.response.HttpResponse;
 
 public class CreateUserController extends AbstractController {
-
     public static final String CREATE_USER_LOGGING_MESSAGE = "New User created! -> {}";
     public static final String INDEX_HTML_PATH = "/index.html";
 

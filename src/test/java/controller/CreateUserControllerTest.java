@@ -1,6 +1,7 @@
 package controller;
 
 import db.DataBase;
+import exception.UserNotFoundException;
 import model.User;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -31,7 +32,9 @@ public class CreateUserControllerTest {
             controller.service(request, response);
 
             //DB에 정보가 저장되었는지 확인한다
-            User user = DataBase.findUserById(request.getRequestBodyByKey("userId"));
+            String userId = request.getRequestBodyByKey("userId");
+            User user = DataBase.findUserById(userId)
+                    .orElseThrow(() -> new UserNotFoundException(userId));
             Assertions.assertThat(user.getUserId()).isEqualTo(request.getRequestBodyByKey("userId"));
             Assertions.assertThat(user.getEmail()).isEqualTo(request.getRequestBodyByKey("email"));
             Assertions.assertThat(user.getName()).isEqualTo(request.getRequestBodyByKey("name"));
@@ -42,7 +45,7 @@ public class CreateUserControllerTest {
 
             Assertions.assertThat(result).contains("HTTP/1.1 302 FOUND");
             Assertions.assertThat(result).contains("Location: /index.html");
-        } catch (IOException e) {
+        } catch (IOException | UserNotFoundException e) {
             logger.error(e.getMessage());
             throw new AssertionError();
         }
