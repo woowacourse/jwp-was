@@ -13,11 +13,13 @@
 - [x] 다형성을 활용해 클라이언트 요청 URL에 대한 분기 처리를 제거한다.
 
 ## 3단계 요구사항
-- [ ] 로그인할 수 있다. 로그인이 성공하면 index.html로 이동하고, 로그인이 실패하면 /user/login_failed.html로 이동해야 한다.
-- [ ] 앞에서 회원가입한 사용자로 로그인할 수 있어야 한다.
-- [ ] 로그인이 성공하면 cookie를 활용해 로그인 상태를 유지할 수 있어야 한다. 
-- [ ] 로그인이 성공할 경우 요청 header의 Cookie header 값이 logined=true, 로그인이 실패하면 Cookie header 값이 logined=false로 전달되어야 한다.
-- [ ] 사용자가 “로그인” 상태일 경우(Cookie 값이 logined=true) 경우 http://localhost:8080/user/list 로 접근했을 때 사용자 목록을 출력한다. 만약 로그인하지 않은 상태라면 로그인 페이지(login.html)로 이동한다.
-- [ ] 서블릿에서 지원하는 HttpSession API의 일부를 지원해야 한다.
+- [x] 로그인할 수 있다. 로그인이 성공하면 index.html로 이동하고, 로그인이 실패하면 /user/login_failed.html로 이동해야 한다.
+- [x] 앞에서 회원가입한 사용자로 로그인할 수 있어야 한다.
+- [x] 로그인이 성공하면 cookie를 활용해 로그인 상태를 유지할 수 있어야 한다. 
+- [x] 로그인이 성공할 경우 요청 header의 Cookie header 값이 logined=true, 로그인이 실패하면 Cookie header 값이 logined=false로 전달되어야 한다.
+- [x] 사용자가 “로그인” 상태일 경우(Cookie 값이 logined=true) 경우 http://localhost:8080/user/list 로 접근했을 때 사용자 목록을 출력한다. 만약 로그인하지 않은 상태라면 로그인 페이지(login.html)로 이동한다.
+- [x] 서블릿에서 지원하는 HttpSession API의 일부를 지원해야 한다.
+- [x] SessionStore를 통해 백엔드에서 세션에 접근할 수 있어야 한다.
+- [x] 로그인 여부 확인을 세션으로 대체한다.
 ## 우아한테크코스 코드리뷰
 * [온라인 코드 리뷰 과정](https://github.com/woowacourse/woowacourse-docs/blob/master/maincourse/README.md)
