@@ -9,7 +9,9 @@ import model.User;
 import service.UserService;
 import utils.HttpResponseHeaderParser;
 
-public class UserLoginController extends AuthController {
+public class UserLoginController extends Controller {
+    public static final String SESSIONID = "SESSIONID";
+    public static final String LOGINED = "logined";
 
     @Override
     public HttpResponse post(HttpRequest httpRequest) {
@@ -19,13 +21,13 @@ public class UserLoginController extends AuthController {
         Cookie cookie = new Cookie();
         if (auth) {
             User user = DataBase.findUserById(httpRequest.getBodyValue("userId"));
-            httpSession = retrieveHttpSession(httpRequest);
+            httpSession = httpRequest.retrieveHttpSession();
             httpSession.setAttribute("email", user.getEmail());
-            cookie.setCookie("logined", "true");
+            cookie.setCookie(LOGINED, "true");
             cookie.setCookie(SESSIONID, httpSession.getId());
             return new HttpResponse(HttpResponseHeaderParser.found("/", cookie));
         }
-        cookie.setCookie("logined", "false");
+        cookie.setCookie(LOGINED, "false");
         return new HttpResponse(HttpResponseHeaderParser.found("/user/login_failed.html", cookie));
     }
 }

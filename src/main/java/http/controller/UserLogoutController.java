@@ -6,7 +6,7 @@ import http.response.HttpResponse;
 import http.session.HttpSessionStorage;
 import utils.HttpResponseHeaderParser;
 
-public class UserLogoutController extends AuthController {
+public class UserLogoutController extends Controller {
     @Override
     public HttpResponse get(HttpRequest httpRequest) {
         Cookie cookie = new Cookie();
