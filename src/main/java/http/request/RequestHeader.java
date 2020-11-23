@@ -23,11 +23,7 @@ public class RequestHeader {
             params.put(token[0].toLowerCase(), token[1]);
             line = br.readLine();
         }
-        if (params.containsKey("cookie")) {
-            this.cookie = new Cookie(params.get("cookie"));
-        } else {
-            this.cookie = new Cookie("");
-        }
+        this.cookie = new Cookie(params.getOrDefault("cookie", ""));
     }
 
     public boolean containsValueOf(HeaderParam key, String value) {
