@@ -1,5 +1,6 @@
 package http.controller;
 
+import exceptions.PageNotFoundException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
@@ -27,7 +28,7 @@ public class RawFileController extends Controller {
             byte[] body = FileIoUtils.loadFileFromClasspath(fileType.getRootPath() + filePath);
             String header = HttpResponseHeaderParser.ok(fileType.getContentType(), body.length);
             return new HttpResponse(header, body);
-        } catch (NullPointerException e) {
+        } catch (PageNotFoundException e) {
             logger.error(e.getMessage());
             String header = HttpResponseHeaderParser.notFound();
             return new HttpResponse(header);
