@@ -2,28 +2,25 @@ package kr.wootecat.dongle.model.servlet;
 
 import static kr.wootecat.dongle.model.http.HttpMethod.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.BiConsumer;
-
-import kr.wootecat.dongle.model.http.HttpMethod;
 import kr.wootecat.dongle.model.http.exception.MethodNotAllowedException;
 import kr.wootecat.dongle.model.http.request.HttpRequest;
 import kr.wootecat.dongle.model.http.response.HttpResponse;
 
 public abstract class HttpServlet extends GenericServlet {
 
-    private final Map<HttpMethod, BiConsumer<HttpRequest, HttpResponse>> methodActionPair = new HashMap<>();
+    private final ServletMethodInvoker methodInvoker;
 
     public HttpServlet() {
-        this.methodActionPair.put(GET, this::doGet);
-        this.methodActionPair.put(POST, this::doPost);
+        this(ServletMethodInvokerFactory.create());
+    }
+
+    private HttpServlet(ServletMethodInvoker methodInvoker) {
+        this.methodInvoker = methodInvoker;
     }
 
     @Override
     public void doService(HttpRequest request, HttpResponse response) {
-        BiConsumer<HttpRequest, HttpResponse> httpServiceInvoker = methodActionPair.get(request.getMethod());
-        httpServiceInvoker.accept(request, response);
+        methodInvoker.invoke(this, request, response);
     }
 
     protected void doGet(HttpRequest request, HttpResponse response) {
