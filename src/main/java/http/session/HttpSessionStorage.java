@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HttpSessionStorage {
-    private static Map<String, HttpSession> storage = new HashMap<>();
+    private static final Map<String, HttpSession> storage = new HashMap<>();
 
     public static HttpSession addSession(HttpSession httpSession) {
         storage.put(httpSession.getId(), httpSession);
