@@ -12,16 +12,19 @@ import utils.HttpResponseHeaderParser;
 import java.io.IOException;
 
 public class UserListController extends Controller {
+    private Handlebars handlebars;
+
     @Override
     public HttpResponse get(HttpRequest httpRequest) {
         try {
-            TemplateLoader loader = new ClassPathTemplateLoader();
-            loader.setPrefix("/templates");
-            loader.setSuffix(".html");
-            Handlebars handlebars = new Handlebars(loader);
+            if(handlebars == null) {
+                TemplateLoader loader = new ClassPathTemplateLoader();
+                loader.setPrefix("/templates");
+                loader.setSuffix(".html");
+                handlebars = new Handlebars(loader);
+            }
 
             Template template = handlebars.compile("user/list");
-
             byte[] userListPage = template.apply(DataBase.findAll()).getBytes();
             String header = HttpResponseHeaderParser.ok("text/html", userListPage.length);
             return new HttpResponse(header, userListPage);
