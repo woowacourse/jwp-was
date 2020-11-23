@@ -21,6 +21,10 @@ public class HttpRequest {
         header.put(COOKIE, value);
     }
 
+    public String getCookie() {
+        return header.get(COOKIE);
+    }
+
     public HttpRequestLine getRequestLine() {
         return requestLine;
     }

@@ -15,6 +15,8 @@ public class ControllerMapping {
                 new UserCreateController());
         requestMappings.put(new RequestMapping("/user/login", HttpMethod.POST),
                 new UserLoginController());
+        requestMappings.put(new RequestMapping("/user/list.html", HttpMethod.GET),
+                new UserListController());
     }
 
     public static Optional<Controller> get(RequestMapping requestMapping) {
