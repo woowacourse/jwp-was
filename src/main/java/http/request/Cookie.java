@@ -12,13 +12,17 @@ public class Cookie {
 
     public Cookie(String rawCookie) {
         if (rawCookie.length() != 0) {
-            String[] tokens = rawCookie.trim().split("; ");
-            for (String token : tokens) {
-                String[] tmp = token
-                        .replace(";", "")
-                        .split("=");
-                this.cookies.put(tmp[0], tmp[1]);
-            }
+            parseCookie(rawCookie);
+        }
+    }
+
+    private void parseCookie(String rawCookie) {
+        String[] tokens = rawCookie.trim().split("; ");
+        for (String token : tokens) {
+            String[] tmp = token
+                    .replace(";", "")
+                    .split("=");
+            this.cookies.put(tmp[0], tmp[1]);
         }
     }
 
