@@ -1,24 +1,37 @@
 package controller;
 
-import application.controller.UserController;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ControllerManager {
 
-    private static final Map<Class<?>, Controller> controllers;
+    private final Map<Class<?>, Controller> controllers;
 
-    static {
-        Map<Class<?>, Controller> controllersMap = new HashMap<>();
-
-        controllersMap.put(StaticFileController.class, new StaticFileController());
-        controllersMap.put(UserController.class, new UserController());
-
-        controllers = Collections.unmodifiableMap(controllersMap);
+    public ControllerManager(List<Class> controllerInfos) {
+        try {
+            controllers = createControllers(controllerInfos);
+        } catch (InstantiationException | InvocationTargetException | NoSuchMethodException
+                | IllegalAccessException e) {
+            throw new IllegalArgumentException("올바르지 않은 컨트롤러 정보가 들어왔습니다.");
+        }
     }
 
-    public static Controller get(Class<?> controllerClass) {
+    private Map<Class<?>, Controller> createControllers(List<Class> controllerInfos)
+            throws NoSuchMethodException, IllegalAccessException,
+                InvocationTargetException, InstantiationException {
+        Map<Class<?>, Controller> controllersMap = new HashMap<>();
+
+        for (Class<?> controllerInfo : controllerInfos) {
+            controllersMap.put(controllerInfo,
+                (Controller) controllerInfo.getConstructor().newInstance());
+        }
+        return Collections.unmodifiableMap(controllersMap);
+    }
+
+    public Controller get(Class<?> controllerClass) {
         if (!controllers.containsKey(controllerClass)) {
             throw new IllegalArgumentException("this controller does not exist.");
         }

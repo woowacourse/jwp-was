@@ -1,4 +1,4 @@
-package controller;
+package application.controller;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 

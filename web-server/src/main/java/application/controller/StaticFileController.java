@@ -1,5 +1,6 @@
-package controller;
+package application.controller;
 
+import controller.AbstractController;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import org.slf4j.Logger;

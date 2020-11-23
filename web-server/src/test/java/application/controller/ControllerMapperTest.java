@@ -1,8 +1,7 @@
-package controller;
+package application.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import application.controller.UserController;
 import java.lang.reflect.InvocationTargetException;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
