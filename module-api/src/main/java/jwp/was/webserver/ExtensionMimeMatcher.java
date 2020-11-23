@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +13,6 @@ import java.util.Objects;
 
 public class ExtensionMimeMatcher {
 
-    private static final String MIME_TXT_FILE_ROUTE = "./module-api/src/main/resources/mime.txt";
     private static final String LINE_SEPARATOR = ";";
     private static final String CONTENT_DELIMITER = " ";
     private static final String REPEATED_CONTENT_DELIMITER_REGEX = CONTENT_DELIMITER + "+";
@@ -22,18 +23,25 @@ public class ExtensionMimeMatcher {
     private static final String EXTENSION_DELIMITER = "\\.";
 
     static {
-        File mimeFile = new File(MIME_TXT_FILE_ROUTE);
         String mimeContent = "";
-        try (FileReader fileReader = new FileReader(mimeFile);
-            BufferedReader bufferedReader = new BufferedReader(fileReader)) {
-            mimeContent = readMimeFile(bufferedReader);
-        } catch (IOException e) {
+        try {
+            URI mimeTxtFileRoute = ClassLoader.getSystemResource("mime.txt").toURI();
+            File mimeFile = new File(mimeTxtFileRoute);
+            mimeContent = readMimeContent(mimeFile);
+        } catch (URISyntaxException | IOException e) {
             e.printStackTrace();
         }
         EXTENSION_MIME_MATCHER = makeExtensionMimeMatcher(mimeContent);
     }
 
     private ExtensionMimeMatcher() {
+    }
+
+    private static String readMimeContent(File mimeFile) throws IOException {
+        try (FileReader fileReader = new FileReader(mimeFile);
+            BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+            return readMimeFile(bufferedReader);
+        }
     }
 
     private static String readMimeFile(BufferedReader bufferedReader) throws IOException {

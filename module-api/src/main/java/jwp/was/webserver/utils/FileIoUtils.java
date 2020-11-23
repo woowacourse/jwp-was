@@ -20,17 +20,20 @@ public class FileIoUtils {
     private static final String WEBAPP = "webapp";
     private static final String STATIC = "static";
     private static final int MINIMUM_DEPTH_EXISTS_DIRECTORY = 2;
-    private static final String STATIC_DIRECTORY_ROUTE = "./module-api/src/main/resources/static";
     private static final List<String> STATIC_SUB_DIRECTORIES;
 
     static {
         List<String> staticSubDirectories = new ArrayList<>();
-        File staticDirectory = new File(STATIC_DIRECTORY_ROUTE);
-        File[] staticDirectorySubFiles = staticDirectory.listFiles();
-
-        assert staticDirectorySubFiles != null;
-        for (File staticDirectorySubFile : staticDirectorySubFiles) {
-            addSubDirectory(staticSubDirectories, staticDirectorySubFile);
+        try {
+            URI staticDirectoryRoute = ClassLoader.getSystemResource("static").toURI();
+            File staticDirectory = new File(staticDirectoryRoute);
+            File[] staticDirectorySubFiles = staticDirectory.listFiles();
+            assert staticDirectorySubFiles != null;
+            for (File staticDirectorySubFile : staticDirectorySubFiles) {
+                addSubDirectory(staticSubDirectories, staticDirectorySubFile);
+            }
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
         }
         STATIC_SUB_DIRECTORIES = Collections.unmodifiableList(staticSubDirectories);
     }
