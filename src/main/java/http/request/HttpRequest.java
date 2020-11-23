@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 public class HttpRequest {
+    public static final String SESSIONID = "SESSIONID";
     private final RequestLine requestLine;
     private final RequestHeader requestHeader;
     private final RequestBody requestBody;
@@ -35,6 +36,6 @@ public class HttpRequest {
     }
 
     public String getSessionId() {
-        return this.requestHeader.getCookie("SESSIONID");
+        return this.requestHeader.getCookie(SESSIONID);
     }
 }

@@ -5,8 +5,10 @@ import http.session.HttpSession;
 import http.session.HttpSessionStorage;
 
 public abstract class AuthController extends Controller {
+    protected static final String SESSIONID = "SESSIONID";
+
     protected HttpSession retrieveHttpSession(HttpRequest httpRequest) {
-        if (httpRequest.hasCookie("SESSIONID")) {
+        if (httpRequest.hasCookie(SESSIONID)) {
             HttpSession httpSession = HttpSessionStorage.getSession(httpRequest.getSessionId());
             if (httpSession == null) {
                 httpSession = HttpSessionStorage.create();

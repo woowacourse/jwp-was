@@ -22,7 +22,7 @@ public class UserLoginController extends AuthController {
             httpSession = retrieveHttpSession(httpRequest);
             httpSession.setAttribute("email", user.getEmail());
             cookie.setCookie("logined", "true");
-            cookie.setCookie("SESSIONID", httpSession.getId());
+            cookie.setCookie(SESSIONID, httpSession.getId());
             return new HttpResponse(HttpResponseHeaderParser.found("/", cookie));
         }
         cookie.setCookie("logined", "false");
