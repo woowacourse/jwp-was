@@ -1,4 +1,4 @@
-package webserver.requestmapping.behavior;
+package implementedbehavior;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.BufferedReader;
 import java.io.StringReader;
 
+import implementedbehavior.UserCreateBehavior;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
