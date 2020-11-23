@@ -1,0 +1,14 @@
+GET /css/bootstrap.min.css HTTP/1.1
+Accept: text/css,*/*;q=0.1
+Accept-Encoding: gzip, deflate, br
+Accept-Language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
+Cache-Control: no-cache
+Connection: keep-alive
+Cookie: JSESSIONID=1fb5b72c-fed0-42a3-9e8c-6197b446af76; logined=true
+Host: localhost:8080
+Pragma: no-cache
+Referer: http://localhost:8080/index.html
+Sec-Fetch-Dest: style
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Site: same-origin
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.183 Safari/537.36

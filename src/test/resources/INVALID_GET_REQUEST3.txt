@@ -1,0 +1,6 @@
+GET /index.html
+Host;localhost:8080
+Connection: keep-alive
+Accept-Encoding: gzip, deflate, br
+Accept-Language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
+Cookie: JSESSIONID==1fb5b72c-fed0-42a3-9e8c-6197b446af76
