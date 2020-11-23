@@ -34,20 +34,32 @@ public class HttpResponse {
     public void ok(String classPath, String contentType) {
         try {
             byte[] body = loadFileFromClasspath(classPath);
-            dos.writeBytes(HttpVersion.HTTP_1_1.getVersion() + SP + HttpStatusCode.OK.getValue()
-                    + NEW_LINE);
-            dos.writeBytes(HttpHeaderFields.CONTENT_TYPE + COLON + SP + contentType + NEW_LINE);
-            dos.writeBytes(
-                    HttpHeaderFields.CONTENT_LENGTH + COLON + SP + body.length + NEW_LINE);
-            writeCookieIfPresent();
-            dos.writeBytes(NEW_LINE);
-            dos.write(body, 0, body.length);
-            dos.flush();
+            proceedOK(body, contentType);
         } catch (NullPointerException e) {
             notFound();
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    public void ok(byte[] body, String contentType) {
+        try {
+            proceedOK(body, contentType);
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void proceedOK(byte[] body, String contentType) throws IOException {
+        dos.writeBytes(HttpVersion.HTTP_1_1.getVersion() + SP + HttpStatusCode.OK.getValue()
+                + NEW_LINE);
+        dos.writeBytes(HttpHeaderFields.CONTENT_TYPE + COLON + SP + contentType + NEW_LINE);
+        dos.writeBytes(
+                HttpHeaderFields.CONTENT_LENGTH + COLON + SP + body.length + NEW_LINE);
+        writeCookieIfPresent();
+        dos.writeBytes(NEW_LINE);
+        dos.write(body, 0, body.length);
+        dos.flush();
     }
 
     private void notFound() {
