@@ -1,2 +1,2 @@
 include 'web-server'
-include 'my-web-application'
+include 'slipp'
