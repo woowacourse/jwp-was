@@ -24,4 +24,15 @@ class HttpSessionStorageTest {
         boolean result = HttpSessionStorage.isValidSession(cookie);
         assertThat(result).isFalse();
     }
+
+    @Test
+    void getSessionNotValid() {
+        HttpSession httpSession = HttpSessionStorage.generate("yuan");
+        httpSession.invalidate();
+
+        String cookie = String.format(COOKIE, httpSession.getId().toString());
+        boolean result = HttpSessionStorage.isValidSession(cookie);
+
+        assertThat(result).isFalse();
+    }
 }

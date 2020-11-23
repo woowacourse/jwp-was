@@ -22,7 +22,7 @@ public class HttpSessionStorage {
             .findAny();
 
         try {
-            return sessions.containsKey(UUID.fromString(jsessionid.get()));
+            return sessions.get(UUID.fromString(jsessionid.get())).isValid();
         } catch (IllegalArgumentException | NoSuchElementException | NullPointerException e) {
             return false;
         }

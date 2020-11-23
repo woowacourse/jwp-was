@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 public class HttpSession {
     private UUID id = UUID.randomUUID();
+    private boolean isValid = true;
     private Map<String, Object> attributes = new HashMap<>();
 
     public void setAttribute(String name, Object value) {
@@ -22,6 +23,7 @@ public class HttpSession {
     }
 
     public void invalidate() {
+        this.isValid = false;
         attributes.clear();
     }
 
@@ -29,14 +31,18 @@ public class HttpSession {
         return id;
     }
 
+    public boolean isValid() {
+        return isValid;
+    }
+
     @Override
     public String toString() {
         String sessionId = String.format("jsessionid=%s; ", id.toString());
         String attributes = this.attributes.entrySet()
-            .stream()
-            .filter(this::exclude)
-            .map(this::parseAttribute)
-            .collect(Collectors.joining("; "));
+                .stream()
+                .filter(this::exclude)
+                .map(this::parseAttribute)
+                .collect(Collectors.joining("; "));
         return sessionId + attributes;
     }
 
