@@ -1,5 +1,7 @@
 package webserver.http.request;
 
+import static webserver.http.HttpHeaderFields.*;
+
 public class HttpRequest {
     private final HttpRequestLine requestLine;
     private final HttpHeader header;
@@ -13,6 +15,10 @@ public class HttpRequest {
 
     public RequestMapping toRequestMapping() {
         return new RequestMapping(requestLine.getRequestURI().getUri(), requestLine.getMethod());
+    }
+
+    public void setCookie(String value) {
+        header.put(COOKIE, value);
     }
 
     public HttpRequestLine getRequestLine() {
