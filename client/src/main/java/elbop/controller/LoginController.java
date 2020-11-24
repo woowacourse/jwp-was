@@ -1,7 +1,7 @@
-package server.controller;
+package elbop.controller;
 
-import db.DataBase;
-import model.User;
+import elbop.db.DataBase;
+import elbop.model.User;
 import server.web.controller.Controller;
 import server.web.controller.RequestMapping;
 import server.web.request.HttpMethod;

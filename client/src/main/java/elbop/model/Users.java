@@ -1,4 +1,4 @@
-package model;
+package elbop.model;
 
 import java.util.List;
 

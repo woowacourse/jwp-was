@@ -1,4 +1,4 @@
-package model;
+package elbop.model;
 
 public class User {
     private String userId;
