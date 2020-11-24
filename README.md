@@ -31,3 +31,13 @@
     - [x] Controller 인터페이스
     - [x] AbstractController로 중복 제거
     - [x] Http Methode에 따라 메서드 분리
+    
+## 3단계
+1. 로그인 할 수 있다.
+    - [x] 로그인 메뉴 클릭 시  http://localhost:8080/user/login.html 으로 이동해 로그인할 수 있다.
+    - [x] 로그인이 성공하면 index.html로 이동, header의 Cookie header 값이 logined=true
+    - [x] 로그인이 실패하면 /user/login_failed.html로 이동, header의 Cookie header 값이 logined=false
+2. /user/list로 접근할 수 있다.
+    - [] 로그인 상태일 시 사용자 목록 출력
+    - [] 로그인 하지 않았으면 로그인 페이지로 이동
+3. 서블릿에서 지원하는 HttpSession API의 일부를 지원    
