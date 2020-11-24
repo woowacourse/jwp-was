@@ -1,7 +1,7 @@
-package db;
+package elbop.db;
 
 import com.google.common.collect.Maps;
-import model.User;
+import elbop.model.User;
 
 import java.util.ArrayList;
 import java.util.List;

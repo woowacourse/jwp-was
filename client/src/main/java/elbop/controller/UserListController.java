@@ -1,6 +1,6 @@
-package server.controller;
+package elbop.controller;
 
-import db.DataBase;
+import elbop.db.DataBase;
 import server.web.HttpSession;
 import server.web.controller.Controller;
 import server.web.controller.RequestMapping;

@@ -1,3 +1,5 @@
+package elbop;
+
 import server.webserver.WebServer;
 
 public class ClientApplication {
