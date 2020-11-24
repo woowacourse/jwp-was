@@ -1,4 +1,4 @@
-package web;
+package web.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,15 +15,15 @@ public class Parameter {
 		this.parameterInfo = parameterInfo;
 	}
 
-	public static Parameter of(BufferedReader br, RequestLine requestLine, Header header) throws
+	public static Parameter of(BufferedReader br, RequestLine requestLine, RequestHeader requestHeader) throws
 		IOException {
 		Map<String, String> parameters = new HashMap<>();
 
-		if (requestLine.getMethod().equals(HttpMethod.GET)) {
-			parameters = RequestParameterUtils.extractParametersIfGetMethod(requestLine.getPath());
-		} else if (requestLine.getMethod().equals(HttpMethod.POST)) {
-			String body = IOUtils.readData(br, header.getContentLength());
-			parameters = RequestParameterUtils.extractParametersIfPostMethod(body);
+		parameters.putAll(RequestParameterUtils.extractRequestParameters(requestLine));
+
+		if (requestLine.getMethod().equals(HttpMethod.POST)) {
+			String body = IOUtils.readData(br, requestHeader.getContentLength());
+			parameters.putAll(RequestParameterUtils.extractBodyParameters(body));
 		}
 
 		return new Parameter(parameters);

@@ -8,6 +8,8 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import web.request.RequestLine;
+
 class RequestParameterUtilsTest {
 	private Map<String, String> expect = new HashMap<>();
 
@@ -20,17 +22,18 @@ class RequestParameterUtilsTest {
 	}
 
 	@Test
-	void extractParametersIfGetMethod() {
+	void extractRequestParameters() {
 		String path = "/user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
+		RequestLine requestLine = RequestLine.of("POST " + path);
 
-		assertThat(RequestParameterUtils.extractParametersIfGetMethod(path)).isEqualTo(expect);
+		assertThat(RequestParameterUtils.extractRequestParameters(requestLine)).isEqualTo(expect);
 	}
 
 	@Test
-	void extractParametersIfPostMethod() {
+	void extractBodyParameters() {
 		String body = "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
 
-		assertThat(RequestParameterUtils.extractParametersIfPostMethod(body)).isEqualTo(expect);
+		assertThat(RequestParameterUtils.extractBodyParameters(body)).isEqualTo(expect);
 
 	}
 }

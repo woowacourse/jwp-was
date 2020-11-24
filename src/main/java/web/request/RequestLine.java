@@ -1,4 +1,4 @@
-package web;
+package web.request;
 
 public class RequestLine {
 	private static final String SPACE_DELIMITER = " ";
@@ -31,5 +31,9 @@ public class RequestLine {
 
 	public String getHttpVersion() {
 		return httpVersion;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
 	}
 }

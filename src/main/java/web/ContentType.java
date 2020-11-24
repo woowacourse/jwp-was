@@ -27,6 +27,12 @@ public enum ContentType {
 			.orElseThrow(RuntimeException::new);
 	}
 
+	public static boolean isContainType(String path) {
+		return Arrays.stream(ContentType.values())
+			.map(contentType -> contentType.fileType)
+			.anyMatch(path::endsWith);
+	}
+
 	public String getFileType() {
 		return fileType;
 	}
