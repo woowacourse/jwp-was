@@ -18,7 +18,6 @@ public class ModelAndView {
     }
 
     public void render(HttpRequest httpRequest, HttpResponse httpResponse) {
-        //TODO: model이 비어잇으면?
         view.render(model, httpRequest, httpResponse);
     }
 }
