@@ -16,7 +16,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RequestMapping(uri="default", httpMethod = HttpMethod.GET)
+@RequestMapping(uri = "default", httpMethod = HttpMethod.GET)
 public class IOUtilsTest {
     private static final Logger logger = LoggerFactory.getLogger(IOUtilsTest.class);
 
