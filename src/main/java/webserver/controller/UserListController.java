@@ -7,13 +7,10 @@ import webserver.http.response.HttpResponse;
 import webserver.http.session.HttpSessionStorage;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class UserListController extends AbstractController {
-    private static final String COOKIE_JSESSIONID = "jsessionid";
     private static final String USER_LIST_PATH = "user/list";
     private static final String REDIRECT_PATH = "/user/login.html";
 
@@ -24,10 +21,7 @@ public class UserListController extends AbstractController {
     @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         try {
-            String[] cookieAttributes = parseCookie(httpRequest);
-            List<String> jSessionCookies = Arrays.stream(cookieAttributes)
-                    .filter(attribute -> attribute.contains(COOKIE_JSESSIONID))
-                    .collect(Collectors.toList());
+            List<String> jSessionCookies = httpRequest.getJSessionCookies();
             if (HttpSessionStorage.isValidSession(jSessionCookies)) {
                 String template = TemplateFactory.apply(USER_LIST_PATH, DataBase.findAll());
                 byte[] body = template.getBytes();

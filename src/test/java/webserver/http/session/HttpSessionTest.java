@@ -2,8 +2,10 @@ package webserver.http.session;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import webserver.http.session.exception.InvalidHttpSessionException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class HttpSessionTest {
@@ -32,6 +34,22 @@ public class HttpSessionTest {
         assertAll(
                 () -> assertThat(validSession.isValidSession()).isTrue(),
                 () -> assertThat(invalidSession.isValidSession()).isFalse()
+        );
+    }
+
+    @DisplayName("유효하지 않은 session에 대해 메서드 호출 시 예외 반환")
+    @Test
+    void callMethodWithInvalidHttpSessionTest() {
+        HttpSession invalidSession = new HttpSession();
+        invalidSession.invalidate();
+
+        assertAll(
+                () -> assertThatThrownBy(() -> invalidSession.setAttribute("userId", "userId"))
+                        .isInstanceOf(InvalidHttpSessionException.class),
+                () -> assertThatThrownBy(() -> invalidSession.getAttribute("userId"))
+                        .isInstanceOf(InvalidHttpSessionException.class),
+                () -> assertThatThrownBy(() -> invalidSession.removeAttribute("userId"))
+                        .isInstanceOf(InvalidHttpSessionException.class)
         );
     }
 }

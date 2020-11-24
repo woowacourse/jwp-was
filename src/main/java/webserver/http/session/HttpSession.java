@@ -1,8 +1,10 @@
 package webserver.http.session;
 
-import java.util.HashMap;
+import webserver.http.session.exception.InvalidHttpSessionException;
+
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public class HttpSession {
@@ -12,7 +14,7 @@ public class HttpSession {
 
     public HttpSession() {
         this.id = UUID.randomUUID();
-        this.attributes = new HashMap<>();
+        this.attributes = new ConcurrentHashMap<>();
         this.httpSessionStatus = HttpSessionStatus.VALID;
     }
 
@@ -21,14 +23,23 @@ public class HttpSession {
     }
 
     public void setAttribute(String name, Object value) {
+        validateSessionStatus();
         attributes.put(name, value);
     }
 
+    private void validateSessionStatus() {
+        if (!httpSessionStatus.isValid()) {
+            throw new InvalidHttpSessionException();
+        }
+    }
+
     public Object getAttribute(String name) {
+        validateSessionStatus();
         return attributes.get(name);
     }
 
     public void removeAttribute(String name) {
+        validateSessionStatus();
         attributes.remove(name);
     }
 

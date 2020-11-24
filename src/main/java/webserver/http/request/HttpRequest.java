@@ -7,8 +7,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class HttpRequest {
+    private static final String COOKIE_DELIMITER_REGEX = "; ";
+    private static final String COOKIE_JSESSIONID = "jsessionid";
+
     private final HttpRequestStartLine httpRequestStartLine;
     private final HttpHeaders httpHeaders;
     private final HttpRequestBody httpRequestBody;
@@ -38,6 +44,18 @@ public class HttpRequest {
 
     public boolean isPostRequest() {
         return httpRequestStartLine.isPostRequest();
+    }
+
+    public List<String> getJSessionCookies() {
+        String[] cookieAttributes = parseCookie();
+        return Arrays.stream(cookieAttributes)
+                .filter(attribute -> attribute.contains(COOKIE_JSESSIONID))
+                .collect(Collectors.toList());
+    }
+
+    private String[] parseCookie() {
+        String cookieHeader = getHeader(HttpHeader.of(HttpHeaderType.COOKIE));
+        return cookieHeader.split(COOKIE_DELIMITER_REGEX);
     }
 
     public URL getUrl() {

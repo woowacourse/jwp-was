@@ -8,6 +8,7 @@ import webserver.http.HttpHeader;
 import webserver.http.HttpHeaderType;
 
 import java.io.*;
+import java.util.List;
 import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -65,5 +66,21 @@ public class HttpRequestTest {
                 () -> assertThat(request.getHeader(HttpHeader.of(HttpHeaderType.CONNECTION))).isEqualTo("keep-alive"),
                 () -> assertThat(request.getBodyParameter("userId")).isEqualTo("javajigi")
         );
+    }
+
+    @DisplayName("HttpRequest에서 쿠키 값 조회")
+    @Test
+    void getJSessionCookiesTest() throws Exception {
+        String request = "GET /index.html HTTP/1.1" + System.lineSeparator() +
+                "Host: localhost:8080" + System.lineSeparator() +
+                "Connection: keep-alive" + System.lineSeparator() +
+                "Accept: */*" + System.lineSeparator() +
+                "Cookie: logined=true; jsessionid=3CB361E0BE1A9A7DE7DB926DF0772BAE" + System.lineSeparator();
+        InputStream inputStream = new ByteArrayInputStream(request.getBytes());
+        HttpRequest httpRequest = new HttpRequest(inputStream);
+
+        List<String> jSessionCookies = httpRequest.getJSessionCookies();
+
+        assertThat(jSessionCookies).contains("jsessionid=3CB361E0BE1A9A7DE7DB926DF0772BAE");
     }
 }
