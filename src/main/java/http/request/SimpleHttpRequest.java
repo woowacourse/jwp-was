@@ -8,6 +8,7 @@ import http.HttpBody;
 import http.HttpHeaders;
 import http.HttpMethod;
 import http.HttpSession;
+import http.HttpVersion;
 import utils.IOUtils;
 
 public class SimpleHttpRequest implements HttpRequest {
@@ -86,8 +87,8 @@ public class SimpleHttpRequest implements HttpRequest {
     }
 
     @Override
-    public String getVersion() {
-        return startLine.getVersion();
+    public HttpVersion getVersion() {
+        return HttpVersion.from(startLine.getVersion());
     }
 
     @Override

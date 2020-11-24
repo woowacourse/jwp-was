@@ -6,13 +6,14 @@ import http.HttpBody;
 import http.HttpHeaders;
 import http.HttpMethod;
 import http.HttpSession;
+import http.HttpVersion;
 
 public interface HttpRequest {
     HttpMethod getMethod();
 
     String getURI();
 
-    String getVersion();
+    HttpVersion getVersion();
 
     @Nullable
     String getQuery();

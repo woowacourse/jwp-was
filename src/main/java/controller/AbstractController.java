@@ -1,8 +1,7 @@
 package controller;
 
-import java.util.Objects;
-
 import http.HttpStatus;
+import http.HttpVersion;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import servlet.HttpServlet;
@@ -10,11 +9,12 @@ import servlet.HttpServlet;
 public abstract class AbstractController implements HttpServlet {
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
-        String version = httpRequest.getVersion();
-        if (Objects.isNull(version) || version.isEmpty() || version.endsWith("0.9") || version.endsWith("1.0")) {
+        HttpVersion httpVersion = httpRequest.getVersion();
+        if (!httpVersion.isValid()) {
             httpResponse.setStatus(HttpStatus.BAD_REQUEST);
             return;
         }
+
         switch (httpRequest.getMethod()) {
             case GET:
                 doGet(httpRequest, httpResponse);
