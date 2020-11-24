@@ -8,8 +8,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import utils.FileIoUtils;
-import utils.RequestPathUtil;
 import web.controller.Controller;
 import web.request.HttpMethod;
 import web.request.HttpRequest;
@@ -47,12 +45,6 @@ public abstract class AbstractController implements Controller {
 	}
 
 	protected void doGet(HttpRequest request, HttpResponse response) throws IOException, URISyntaxException {
-		String filePath = request.getPath();
-		String requestPath = RequestPathUtil.extractFilePath(filePath);
-		byte[] body = FileIoUtils.loadFileFromClasspath(requestPath);
-
-		response.response200Header(body.length);
-		response.responseBody(body);
 	}
 
 	protected void doPost(HttpRequest request, HttpResponse response) {
