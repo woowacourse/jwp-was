@@ -64,16 +64,15 @@ class UserControllerTest {
         );
     }
 
-    @ParameterizedTest
-    @CsvSource(value = {"HTTP_GET_WITH_LOGIN.txt:OK", "HTTP_GET_WITHOUT_LOGIN.txt:MOVED_PERMANENTLY"}, delimiterString = ":")
-    void doGet(String path, HttpStatus status) throws IOException {
-        HttpRequest request = getHttpRequest(path);
+    @Test
+    void doGet() throws IOException {
+        HttpRequest request = getHttpRequest("HTTP_GET_WITHOUT_LOGIN.txt");
         HttpResponse response = new HttpResponse();
 
         userController.service(request, response);
 
         assertAll(
-            () -> assertThat(response.getStatus()).isEqualTo(status)
+            () -> assertThat(response.getStatus()).isEqualTo(MOVED_PERMANENTLY)
         );
     }
 

@@ -16,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import dto.JoinRequestDto;
+import http.HttpSession;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.request.SimpleHttpRequest;
@@ -43,9 +44,10 @@ class LoginControllerTest {
 
         loginController.service(request, response);
 
+        HttpSession session = request.getSession();
         assertAll(
             () -> assertThat(response.getStatus()).isEqualTo(MOVED_PERMANENTLY),
-            () -> assertThat(response.getHeader("Set-Cookie")).isEqualTo("logined=true; Path=/")
+            () -> assertThat(session.getAttribute("logined")).isEqualTo("true")
         );
     }
 
@@ -61,7 +63,7 @@ class LoginControllerTest {
 
         assertAll(
             () -> assertThat(response.getStatus()).isEqualTo(MOVED_PERMANENTLY),
-            () -> assertThat(response.getHeader("Set-Cookie")).isEqualTo("logined=false")
+            () -> assertThat(response.getHeader("Location")).isEqualTo("/user/login_failed.html")
         );
 
     }

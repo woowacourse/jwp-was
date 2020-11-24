@@ -1,23 +1,15 @@
 package http;
 
-import static java.util.stream.Collectors.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-
 public class Cookie {
+    private static final String SESSION_ID_KEY = "JSESSIONID";
+    private static final String ROOT_PATH = "/";
+
     private String name;
     private String value;
+    private String path;
 
-    public static List<Cookie> listOf(String cookie) {
-        if(Objects.isNull(cookie) || cookie.isEmpty()){
-            return new ArrayList<>();
-        }
-        return Arrays.stream(cookie.split("; "))
-                .map(value -> new Cookie(value.split("=")[0], value.split("=")[1]))
-                .collect(toList());
+    public static Cookie createSessionIdCookie(String value) {
+        return new Cookie(SESSION_ID_KEY, value);
     }
 
     public static Cookie of(String name, String value) {
@@ -27,6 +19,15 @@ public class Cookie {
     private Cookie(String name, String value) {
         this.name = name;
         this.value = value;
+        this.path = ROOT_PATH;
+    }
+
+    public boolean isSessionId() {
+        return SESSION_ID_KEY.equals(name);
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public String getName() {
@@ -35,5 +36,9 @@ public class Cookie {
 
     public String getValue() {
         return value;
+    }
+
+    public String getPath() {
+        return path;
     }
 }

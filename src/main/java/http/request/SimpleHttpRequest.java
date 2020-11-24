@@ -2,15 +2,12 @@ package http.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.List;
 import java.util.Objects;
 
-import http.Cookie;
 import http.HttpBody;
 import http.HttpHeaders;
 import http.HttpMethod;
 import http.HttpSession;
-import http.SimpleHttpSession;
 import utils.IOUtils;
 
 public class SimpleHttpRequest implements HttpRequest {
@@ -18,7 +15,6 @@ public class SimpleHttpRequest implements HttpRequest {
     private HttpHeaders headers;
     private HttpBody httpBody;
     private HttpSession httpSession;
-    private List<Cookie> cookies;
     private String rawRequest;
 
     public static SimpleHttpRequest of(BufferedReader bufferedReader) throws IOException {
@@ -29,7 +25,7 @@ public class SimpleHttpRequest implements HttpRequest {
         String requestBodyString = IOUtils.readData(bufferedReader, httpHeaders.getContentLength());
         HttpBody httpBody = HttpBody.from(requestBodyString);
         return new SimpleHttpRequest(startLine, httpHeaders, httpBody,
-            joinRequest(startLineString, requestHeadersString, requestBodyString));
+                joinRequest(startLineString, requestHeadersString, requestBodyString));
     }
 
     private static String extractRequestHeader(BufferedReader bufferedReader) throws IOException {
@@ -51,23 +47,12 @@ public class SimpleHttpRequest implements HttpRequest {
     }
 
     private SimpleHttpRequest(StartLine startLine, HttpHeaders httpHeaders, HttpBody httpBody,
-        String rawRequest) {
+            String rawRequest) {
         this.startLine = startLine;
         this.headers = httpHeaders;
         this.httpBody = httpBody;
-        String cookie = headers.getCookie();
-        this.cookies = Cookie.listOf(cookie);
-        String jSessionId = getSessionId();
-        this.httpSession = SimpleHttpSession.getHttpSessionStorage(jSessionId);
+        this.httpSession = headers.getSession();
         this.rawRequest = rawRequest;
-    }
-
-    private String getSessionId() {
-        Cookie jSessionCookie = cookies.stream()
-            .filter(cookie -> "JSESSIONID".equals(cookie.getName()))
-            .findFirst()
-            .orElse(null);
-        return Objects.isNull(jSessionCookie) ? "" : jSessionCookie.getValue();
     }
 
     @Override

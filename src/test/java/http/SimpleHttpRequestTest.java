@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 import org.junit.jupiter.api.Test;
 
@@ -23,16 +24,16 @@ class SimpleHttpRequestTest {
 
     @Test
     public void request_GET() throws Exception {
-        InputStream in = new FileInputStream(new File(testDirectory + "HTTP_GET_WITH_LOGIN.txt"));
+        InputStream in = new FileInputStream(new File(testDirectory + "Http_GET.txt"));
         InputStreamReader inputStreamReader = new InputStreamReader(in, StandardCharsets.UTF_8);
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
         HttpRequest request = SimpleHttpRequest.of(bufferedReader);
 
         assertAll(
             () -> assertThat(request.getMethod()).isEqualTo(HttpMethod.GET),
-            () -> assertThat(request.getURI()).isEqualTo("/user/create"),
+            () -> assertThat(request.getURI()).isEqualTo("/user"),
             () -> assertThat(request.getHeaders().getHeader("Connection")).isEqualTo("keep-alive"),
-            () -> assertThat(QueryParameters.of(request.getQuery()).getParameter("userId")).isEqualTo("javajigi")
+            () -> assertThat(QueryParameters.of(Objects.requireNonNull(request.getQuery())).getParameter("userId")).isEqualTo("javajigi")
         );
     }
 

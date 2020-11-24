@@ -22,6 +22,7 @@ public class HttpHeaders {
     private static final String CONTENT_LENGTH = "Content-Length";
 
     private Map<String, String> headers;
+    private Cookies cookies;
 
     public static HttpHeaders from(String input) {
         if (Objects.isNull(input) || input.isEmpty()) {
@@ -37,10 +38,16 @@ public class HttpHeaders {
 
     public HttpHeaders() {
         this.headers = new HashMap<>();
+        this.cookies = Cookies.empty();
     }
 
     private HttpHeaders(Map<String, String> headers) {
         this.headers = headers;
+        this.cookies = Cookies.of(this.headers.get(COOKIE));
+    }
+
+    public HttpSession getSession() {
+        return SimpleHttpSession.getHttpSessionStorage(cookies.getSessionId());
     }
 
     @Nullable
@@ -62,12 +69,6 @@ public class HttpHeaders {
         return headers.size();
     }
 
-    public String getHttpHeaderString() {
-        return headers.entrySet().stream()
-            .map(entry -> entry.getKey() + ": " + entry.getValue())
-            .collect(Collectors.joining(System.lineSeparator()));
-    }
-
     public void add(String headerName, String headerValue) {
         headers.put(headerName, headerValue);
     }
@@ -87,4 +88,19 @@ public class HttpHeaders {
     public void setCookie(String cookie) {
         headers.put(SET_COOKIE, cookie);
     }
+
+    public void addCookie(Cookie cookie) {
+        cookies.addCookie(cookie);
+    }
+
+    public String getHttpHeaderString() {
+        String setCookies = cookies.toResponse().stream()
+                .map(cookie -> SET_COOKIE + HTTP_HEADER_KEY_VALUE_SPLITTER + cookie)
+                .collect(Collectors.joining(System.lineSeparator()));
+        return headers.entrySet().stream()
+                .map(entry -> entry.getKey() + HTTP_HEADER_KEY_VALUE_SPLITTER + entry.getValue())
+                .collect(Collectors.joining(System.lineSeparator()))
+                + setCookies;
+    }
+
 }

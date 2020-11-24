@@ -2,9 +2,12 @@ package http.response;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import http.ContentType;
+import http.Cookie;
 import http.HttpHeaders;
 import http.HttpStatus;
 
@@ -15,10 +18,12 @@ public class HttpResponse {
     private StatusLine statusLine;
     private HttpHeaders headers;
     private byte[] body;
+    private List<Cookie> cookies;
 
     public HttpResponse() {
         this.statusLine = new StatusLine(DEFAULT_PROTOCOL_VERSION, DEFAULT_STATUS);
         this.headers = new HttpHeaders();
+        this.cookies = new ArrayList<>();
     }
 
     public void setStatus(HttpStatus httpStatus) {
@@ -65,6 +70,10 @@ public class HttpResponse {
 
     public void setCookie(String value) {
         headers.setCookie(value);
+    }
+
+    public void addCookie(Cookie cookie) {
+        cookies.add(cookie);
     }
 
     public void internalServerError() {
