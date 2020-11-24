@@ -6,6 +6,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URLDecoder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kr.wootecat.dongle.model.http.exception.IllegalRequestDataFormatException;
 import kr.wootecat.dongle.model.http.request.HttpRequest;
 import kr.wootecat.dongle.model.http.request.HttpRequestBody;
@@ -14,6 +17,8 @@ import kr.wootecat.dongle.model.http.request.HttpRequestLine;
 import utils.IOUtils;
 
 public class HttpRequestReader {
+
+    private static final Logger logger = LoggerFactory.getLogger(HttpRequestReader.class);
 
     private static final String UTF_8_ENCODING_TYPE = "UTF-8";
 
@@ -27,6 +32,7 @@ public class HttpRequestReader {
             HttpRequestBody body = readRequestBody(br, headers);
             return new HttpRequest(line, headers, body);
         } catch (IllegalRequestDataFormatException e) {
+            logger.error(e.getMessage());
             return HttpRequest.ofInternalError();
         }
     }

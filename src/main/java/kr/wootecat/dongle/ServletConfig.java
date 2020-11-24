@@ -1,22 +1,18 @@
 package kr.wootecat.dongle;
 
-import java.util.Map;
-import java.util.function.Supplier;
-
-import kr.wootecat.dongle.model.servlet.HttpServlet;
 import kr.wootecat.dongle.model.servlet.ServletMapper;
+import kr.wootecat.dongle.view.dto.ServletMappingConfig;
 
 public class ServletConfig {
 
-    private final Map<String, Supplier<HttpServlet>> servletMapping;
+    private final ServletMappingConfig servletMappingConfig;
 
-    public ServletConfig(
-            Map<String, Supplier<HttpServlet>> servletMapping) {
-        this.servletMapping = servletMapping;
+    public ServletConfig(ServletMappingConfig servletMappingConfig) {
+        this.servletMappingConfig = servletMappingConfig;
     }
 
-    public void init() {
+    void init() {
         ServletMapper mapper = ServletMapper.getInstance();
-        mapper.putAll(servletMapping);
+        mapper.putAll(servletMappingConfig.getServletMapping());
     }
 }

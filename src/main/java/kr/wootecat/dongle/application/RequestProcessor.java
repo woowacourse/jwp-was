@@ -3,6 +3,9 @@ package kr.wootecat.dongle.application;
 import static kr.wootecat.dongle.model.http.HttpStatus.*;
 import static kr.wootecat.dongle.model.http.MimeType.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kr.wootecat.dongle.model.handler.HandlerMapping;
 import kr.wootecat.dongle.model.handler.HandlerMappings;
 import kr.wootecat.dongle.model.http.HttpStatus;
@@ -13,6 +16,8 @@ import kr.wootecat.dongle.model.http.response.HttpResponse;
 import kr.wootecat.dongle.model.http.session.SessionValidator;
 
 public class RequestProcessor {
+
+    private static final Logger logger = LoggerFactory.getLogger(RequestProcessor.class);
 
     private final HandlerMappings handlerMappings;
     private final SessionValidator sessionValidator;
@@ -35,6 +40,7 @@ public class RequestProcessor {
         } catch (MethodNotAllowedException e) {
             return getHttpResponseWithException(METHOD_NOT_ALLOWED, e);
         } catch (RuntimeException e) {
+            logger.error(e.getMessage());
             return getHttpResponseWithException(INTERNAL_SERVER_ERROR, e);
         }
     }

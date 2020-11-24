@@ -13,9 +13,9 @@ import kr.wootecat.dongle.model.http.request.HttpRequest;
 import kr.wootecat.dongle.model.http.response.HttpResponse;
 import kr.wootecat.dongle.model.servlet.HttpServlet;
 
-public class UserServlet extends HttpServlet {
+public class UserCreateServlet extends HttpServlet {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserServlet.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserCreateServlet.class);
 
     private static final String CREATE_USER_COMPLETE_DEBUG_LOG_MESSAGE_FORMAT = "회원가입 완료! {}, {}";
     private static final String INDEX_URL_PATH = "/index.html";

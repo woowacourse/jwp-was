@@ -7,7 +7,6 @@ import kr.wootecat.dongle.model.http.HttpStatus;
 import kr.wootecat.dongle.model.http.MimeType;
 import kr.wootecat.dongle.model.http.exception.MethodNotAllowedException;
 import kr.wootecat.dongle.model.http.exception.NotFoundException;
-import kr.wootecat.dongle.model.http.exception.ResourceNotFoundException;
 import kr.wootecat.dongle.model.http.exception.UnsupportedMimeTypeException;
 import kr.wootecat.dongle.model.http.request.HttpRequest;
 import kr.wootecat.dongle.model.http.response.HttpResponse;
@@ -31,7 +30,7 @@ public class StaticResourceHandlerMapping implements HandlerMapping {
             MimeType mime = MimeType.of(request.getPath());
             byte[] body = FileIoUtils.loadFileFromClasspath(mime.getFilePosition() + request.getPath());
             makeResourceResponse(response, mime, body);
-        } catch (UnsupportedMimeTypeException | ResourceNotFoundException e) {
+        } catch (UnsupportedMimeTypeException e) {
             throw new NotFoundException(request.getPath());
         } catch (IOException | URISyntaxException e) {
             throw new RuntimeException(RUNTIME_EXCEPTION_ERROR_MESSAGE);
