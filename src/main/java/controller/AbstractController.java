@@ -29,7 +29,7 @@ public abstract class AbstractController implements HttpServlet {
                 doPut(httpRequest, httpResponse);
                 break;
             default:
-                throw new IllegalArgumentException("잘못된 요청입니다.");
+                httpResponse.methodNotAllowed();
         }
     }
 
