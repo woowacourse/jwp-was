@@ -1,32 +1,21 @@
 package webserver.controller;
 
-import webserver.http.Body;
-import webserver.http.ContentType;
-import webserver.http.HttpHeaders;
-import webserver.http.URL;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
-import webserver.http.response.HttpResponseStartLine;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Collections;
 
 public class IndexController extends AbstractController {
+    private static final String INDEX_PATH = "/index.html";
+
     public IndexController() {
         this.paths = Collections.singletonList("/");
     }
 
     @Override
-    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
-        HttpResponseStartLine httpResponseStartLine = response200StartLine();
-
-        URL url = httpRequest.getUrl();
-        ContentType contentType = ContentType.from(url);
-        byte[] body = "Hello World".getBytes();
-        HttpHeaders httpResponseHeaders = responseWithContent(contentType, body);
-
-        Body httpResponseBody = Body.of(body);
-
-        httpResponse.forward(httpResponseStartLine, httpResponseHeaders, httpResponseBody);
+    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+        httpResponse.forward(INDEX_PATH);
     }
 }

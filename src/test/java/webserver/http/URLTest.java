@@ -6,7 +6,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class URLTest {
     @DisplayName("생성자 테스트")
@@ -15,10 +14,7 @@ public class URLTest {
         String requestUrl = "/index.html";
         URL url = URL.of(requestUrl);
 
-        assertAll(
-                () -> assertThat(url.getPath()).isEqualTo(requestUrl),
-                () -> assertThat(url.hasQueryParameters()).isEqualTo(ParametersState.EMPTY)
-        );
+        assertThat(url.getPath()).isEqualTo(requestUrl);
     }
 
     @DisplayName("url의 확장자 검사")

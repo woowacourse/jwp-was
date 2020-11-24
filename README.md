@@ -36,3 +36,34 @@
 요구사항 5
 
 -[x] 지금까지 구현한 소스 코드는 stylesheet 파일을 지원하지 못하고 있다. Stylesheet 파일을 지원하도록 구현하도록 한다.
+
+WAS 기능 요구사항
+
+-[x] 다수의 사용자 요청에 대해 Queue에 저장한 후 순차적으로 처리가 가능하도록 해야 한다.
+
+리팩토링
+
+-[x] RequestHandler 클래스의 책임을 분리한다.
+    -[x] 클라이언트 요청 데이터를 처리하는 로직을 별도의 클래스로 분리한다.(HttpRequest)
+    -[x] 클라이언트 응답 데이터를 처리하는 로직을 별도의 클래스로 분리한다.(HttpResponse)
+    -[x] 다형성을 활용해 클라이언트 요청 URL에 대한 분기 처리를 한다.
+
+로그인 및 세션 구현
+
+-[x] 로그인을 구현한다.
+    -[x] 로그인 메뉴를 클릭해서 로그인 페이지로 이동한다.
+    -[x] 회원가입을 한 사용자로 로그인할 수 있어야 한다.
+    -[x] 로그인이 성공하면 cookie를 활용해 로그인 상태를 유지할 수 있어야 한다.
+    -[x] 로그인이 성공할 경우 요청 header의 cookie header 값이 logined=true, 실패하면 logined=false로 전달되어야 한다.
+    -[x] Set-Cookie 설정 시 모든 요청에 대해 Cookie가 처리가 가능하도록 Path 설정 값을 Path=/로 설정한다.
+
+-[x] /user/list 요청을 처리한다.
+    -[x] 로그인 상태일 경우(Cookie 값이 logined=true) 사용자 목록을 출력한다.
+    -[x] 로그읺하지 않은 상태라면 로그인 페이지(login.html)로 이동한다.
+    
+-[x] HttpSession API의 일부를 지원한다.
+    -[x] getId() 구현
+    -[x] setAttribute(String name, Object value) 구현
+    -[x] getAttribute(String name) 구현
+    -[x] removeAttribute(String name) 구현
+    -[x] invalidate() 구현

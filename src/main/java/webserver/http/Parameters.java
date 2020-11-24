@@ -37,8 +37,12 @@ public class Parameters {
         return new Parameters(Collections.emptyMap(), ParametersState.EMPTY);
     }
 
+    public String getParameter(String key) {
+        return parameters.get(key);
+    }
+
     public Map<String, String> getParameters() {
-        return parameters;
+        return Collections.unmodifiableMap(parameters);
     }
 
     public ParametersState getQueryParametersState() {

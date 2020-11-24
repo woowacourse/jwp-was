@@ -1,9 +1,6 @@
 package webserver;
 
-import webserver.controller.Controller;
-import webserver.controller.IndexController;
-import webserver.controller.ResourceController;
-import webserver.controller.UserCreateController;
+import webserver.controller.*;
 import webserver.http.request.HttpRequest;
 import webserver.http.response.HttpResponse;
 
@@ -20,6 +17,8 @@ public class HandlerMapper {
         controllers.add(new IndexController());
         controllers.add(new ResourceController());
         controllers.add(new UserCreateController());
+        controllers.add(new UserLoginController());
+        controllers.add(new UserListController());
     }
 
     public static void handle(HttpRequest httpRequest, HttpResponse httpResponse)

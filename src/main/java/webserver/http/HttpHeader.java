@@ -20,9 +20,18 @@ public class HttpHeader {
         return new HttpHeader(lines[HEADER_TYPE_INDEX], lines[HEADER_CONTENT_INDEX]);
     }
 
+    public static HttpHeader of(String type, String content) {
+        HttpHeaderType httpHeaderType = HttpHeaderType.from(type);
+        return new HttpHeader(httpHeaderType.getType(), content);
+    }
+
     public static HttpHeader of(HttpHeaderType httpHeaderType) {
         String[] lines = httpHeaderType.getType().split(HEADER_DELIMITER);
         return new HttpHeader(lines[HEADER_TYPE_INDEX], null);
+    }
+
+    public String getHttpHeaderString() {
+        return type + HEADER_DELIMITER + content;
     }
 
     public String getType() {

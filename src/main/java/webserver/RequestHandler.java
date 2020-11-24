@@ -29,8 +29,7 @@ public class RequestHandler implements Runnable {
             HttpResponse httpResponse = new HttpResponse(out);
             HandlerMapper.handle(httpRequest, httpResponse);
         } catch (IOException | URISyntaxException e) {
-            e.printStackTrace();
-            LOGGER.error(e.getMessage());
+            LOGGER.error("error message >> {}", e.getMessage(), e);
         }
     }
 }
