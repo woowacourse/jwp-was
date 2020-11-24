@@ -28,7 +28,6 @@ public class UserLoginController implements Controller {
             return new RedirectView("/user/login_failed.html");
         }
 
-        request.setCookie(LOGINED_TRUE);
         response.setCookie(LOGINED_TRUE, PATH);
         return new RedirectView("/index.html");
     }

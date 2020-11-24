@@ -1,6 +1,7 @@
 package webserver.http.response;
 
 import static utils.FileIoUtils.*;
+import static webserver.http.HttpHeaderFields.*;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -56,7 +57,7 @@ public class HttpResponse {
         dos.writeBytes(HttpHeaderFields.CONTENT_TYPE + COLON + SP + contentType + NEW_LINE);
         dos.writeBytes(
                 HttpHeaderFields.CONTENT_LENGTH + COLON + SP + body.length + NEW_LINE);
-        writeCookieIfPresent();
+        writeSetCookieIfPresent();
         dos.writeBytes(NEW_LINE);
         dos.write(body, 0, body.length);
         dos.flush();
@@ -68,7 +69,7 @@ public class HttpResponse {
                     HttpVersion.HTTP_1_1.getVersion() + SP
                             + HttpStatusCode.NOT_FOUND.getValue()
                             + NEW_LINE);
-            writeCookieIfPresent();
+            writeSetCookieIfPresent();
             dos.writeBytes(NEW_LINE);
             dos.flush();
         } catch (IOException e) {
@@ -82,7 +83,7 @@ public class HttpResponse {
                     HttpVersion.HTTP_1_1.getVersion() + SP + HttpStatusCode.FOUND.getValue()
                             + NEW_LINE);
             dos.writeBytes(LOCATION + COLON + SP + BASE_URI + uri + SP + NEW_LINE);
-            writeCookieIfPresent();
+            writeSetCookieIfPresent();
             dos.writeBytes(NEW_LINE);
             dos.flush();
         } catch (IOException e) {
@@ -96,7 +97,7 @@ public class HttpResponse {
                     HttpVersion.HTTP_1_1.getVersion() + SP
                             + HttpStatusCode.BAD_REQUEST.getValue()
                             + NEW_LINE);
-            writeCookieIfPresent();
+            writeSetCookieIfPresent();
             dos.writeBytes(NEW_LINE);
             dos.flush();
         } catch (IOException e) {
@@ -105,13 +106,17 @@ public class HttpResponse {
     }
 
     public void setCookie(String cookie, String path) {
-        header.put(HttpHeaderFields.SET_COOKIE, cookie + SEME_COLON + PATH + path);
+        header.put(SET_COOKIE, cookie + SEME_COLON + SP + PATH + path + SEME_COLON);
     }
 
-    private void writeCookieIfPresent() throws IOException {
-        if (header.hasSetCookie()) {
-            dos.writeBytes(HttpHeaderFields.SET_COOKIE + COLON + SP + header.get(
-                    HttpHeaderFields.SET_COOKIE) + NEW_LINE);
+    public HttpHeader getHeader() {
+        return header;
+    }
+
+    private void writeSetCookieIfPresent() throws IOException {
+        if (header.containsKey(SET_COOKIE)) {
+            dos.writeBytes(
+                    SET_COOKIE + COLON + SP + header.get(SET_COOKIE) + NEW_LINE);
         }
     }
 }

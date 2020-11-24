@@ -35,9 +35,15 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest httpRequest = new HttpRequestFactory()
                     .create(new BufferedReader(new InputStreamReader(in)));
-            HttpResponse response = new HttpResponse(new HttpHeader(new HashMap<>()),
+            if (httpRequest.getHeader().hasSession()) {
+                HttpResponse response = new HttpResponse(new HttpHeader(new HashMap<>()),
+                        new DataOutputStream(out));
+                HttpServlet.getInstance().doDispatch(httpRequest, response);
+                return;
+            }
+            HttpSession session = new HttpSessionFactory().createWithSessionId();
+            HttpResponse response = new HttpResponse(HttpHeader.withSession(session),
                     new DataOutputStream(out));
-
             HttpServlet.getInstance().doDispatch(httpRequest, response);
         } catch (IOException e) {
             logger.error(e.getMessage());

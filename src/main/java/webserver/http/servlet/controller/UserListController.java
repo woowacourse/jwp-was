@@ -1,6 +1,7 @@
 package webserver.http.servlet.controller;
 
 import static java.util.Objects.*;
+import static webserver.http.HttpHeaderFields.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,17 +18,24 @@ import webserver.http.servlet.RedirectView;
 
 public class UserListController implements Controller {
     private static final String LOGINED_TRUE = "logined=true";
+    private static final String USERS = "users";
+    private static final String TO_LOGIN = "/user/login.html";
 
     @Override
     public AbstractView doService(HttpRequest request, HttpResponse response) {
-        String cookie = request.getCookie();
-        if (!isNull(cookie) && cookie.contains(LOGINED_TRUE)) {
+        String cookieValues = request.getHeader().get(COOKIE);
+
+        if (nonNull(cookieValues) && cookieValues.contains(LOGINED_TRUE)) {
             HttpRequestLine requestLine = request.getRequestLine();
             RequestURI uri = requestLine.getRequestURI();
-            Map<String, Object> attributes = new HashMap<>();
-            attributes.put("users", DataBase.findAll());
-            return HandlebarView.of(uri, new Model(attributes));
+            return HandlebarView.of(uri, initModel());
         }
-        return new RedirectView("/user/login.html");
+        return new RedirectView(TO_LOGIN);
+    }
+
+    private Model initModel() {
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put(USERS, DataBase.findAll());
+        return new Model(attributes);
     }
 }
