@@ -1,0 +1,4 @@
+rootProject.name = 'jwp-was'
+
+include 'module-web-server'
+include 'module-user-service'
