@@ -11,15 +11,17 @@ public class Handler {
         this.controller = controller;
     }
 
-    public static Handler of(String sourcePath) {
+    public static Handler of(String classPath) {
         try {
-            Class<?> maybeController = Class.forName(sourcePath);
+            Class<?> maybeController = Class.forName(classPath);
             server.web.controller.RequestMapping annotation = maybeController.getAnnotation(server.web.controller.RequestMapping.class);
 
             return new Handler(new server.web.request.RequestMapping(annotation.uri(), annotation.httpMethod()),
                     (Controller) maybeController.newInstance());
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-            throw new IllegalArgumentException("컨트롤러가 아닙니다.");
+        } catch (ClassNotFoundException e) {
+            throw new IllegalArgumentException(String.format("%s : 클래스가 존재하지 않습니다.", classPath));
+        } catch (IllegalAccessException | InstantiationException e) {
+            throw new IllegalArgumentException(String.format("인스턴스를 생성할 수 없습니다. : %s", e.getMessage()));
         }
     }
 

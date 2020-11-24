@@ -19,7 +19,7 @@ public class Handlers implements Iterable<Handler> {
     }
 
     private static boolean isController(String sourcePath) {
-        Class<?> maybeController = null;
+        Class<?> maybeController;
         try {
             maybeController = Class.forName(sourcePath);
         } catch (ClassNotFoundException e) {
