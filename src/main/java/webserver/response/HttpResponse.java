@@ -40,6 +40,9 @@ public class HttpResponse {
     public void sendRedirect(String location) {
         try {
             processStatusLine(Status.FOUND);
+            if (headers.containsKey(ResponseHeader.SET_COOKIE)) {
+                processHeader(ResponseHeader.SET_COOKIE, headers.get(ResponseHeader.SET_COOKIE));
+            }
             processHeader(ResponseHeader.LOCATION, location);
             dos.flush();
         } catch (IOException e) {

@@ -54,6 +54,7 @@ public class HttpRequest {
         Map<String, String> headers = new HashMap<>();
         String line = readLine(bufferedReader);
         while ((line != null) && (!line.isEmpty())) {
+            System.out.println(line);
             String[] tokens = line.split(HEADER_DELIMITER);
             headers.put(tokens[NAME_INDEX], tokens[VALUE_INDEX]);
             line = readLine(bufferedReader);

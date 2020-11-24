@@ -3,14 +3,15 @@ package controller;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 
-public enum Controllers {
+public enum ControllerType {
     TEMPLATES_CONTROLLER(new TemplatesController()),
     STATIC_RESOURCE_CONTROLLER(new StaticResourceController()),
-    USER_CONTROLLER(new UserController());
+    USER_CREATE_CONTROLLER(new UserCreateController()),
+    USER_LOGIN_CONTROLLER(new UserLoginController());
 
     private final Controller controller;
 
-    Controllers(Controller controller) {
+    ControllerType(Controller controller) {
         this.controller = controller;
     }
 

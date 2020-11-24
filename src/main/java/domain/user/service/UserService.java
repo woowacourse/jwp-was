@@ -11,4 +11,9 @@ public class UserService {
         User user = UserMapper.createUser(httpRequest);
         DataBase.addUser(user);
     }
+
+    public static User findUser(HttpRequest httpRequest) {
+        User user = UserMapper.createUser(httpRequest);
+        return DataBase.findUserById(user.getUserId());
+    }
 }
