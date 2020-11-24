@@ -23,8 +23,8 @@ public class ServeStaticTest {
         HttpResponse httpResponse = HttpResponse.from(out, httpRequest.version());
         new ServeStatic("templates").service(httpRequest, httpResponse);
         byte[] file = FileIoUtils.loadFileFromClasspath("./templates/index.html");
-        assertThat(out.toString()).isEqualTo("HTTP/1.1 200 OK\r\n"
-            + "Content-Length: " + file.length + "\r\n"
-            + "Content-Type: text/html;charset=utf-8\r\n\r\n" + new String(file));
+        assertThat(out.toString()).isEqualTo("HTTP/1.1 200 OK\n"
+            + "Content-Length: " + file.length + "\n"
+            + "Content-Type: text/html;charset=utf-8\n\n" + new String(file));
     }
 }

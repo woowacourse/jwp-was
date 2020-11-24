@@ -26,8 +26,8 @@ public class MiddlewaresTest {
             .chain(new NotFound())
             .run(httpRequest, httpResponse);
         byte[] file = FileIoUtils.loadFileFromClasspath("./templates/error/not_found.html");
-        assertThat(out.toString()).isEqualTo("HTTP/1.1 404 Not Found\r\n"
-            + "Content-Length: " + file.length + "\r\n"
-            + "Content-Type: text/html;charset=utf-8\r\n\r\n" + new String(file));
+        assertThat(out.toString()).isEqualTo("HTTP/1.1 404 Not Found\n"
+            + "Content-Length: " + file.length + "\n"
+            + "Content-Type: text/html;charset=utf-8\n\n" + new String(file));
     }
 }

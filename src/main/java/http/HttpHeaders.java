@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 public class HttpHeaders {
     private static final String DELIMITER = ": ";
     private static final String CONCAT_VALUE = ", ";
-    private static final String CRLF = "\r\n";
+    private static final String LINE_SEPARATOR = System.lineSeparator();
     private static final int KEY_INDEX = 0;
     private static final int VALUE_INDEX = 1;
 
@@ -49,7 +49,7 @@ public class HttpHeaders {
         return headers.entrySet()
             .stream()
             .map(it -> it.getKey() + DELIMITER + it.getValue())
-            .collect(Collectors.joining(CRLF));
+            .collect(Collectors.joining(LINE_SEPARATOR));
     }
 
     public boolean isNotEmpty() {

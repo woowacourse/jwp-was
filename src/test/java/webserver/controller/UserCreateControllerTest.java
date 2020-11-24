@@ -29,6 +29,6 @@ public class UserCreateControllerTest {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         HttpResponse httpResponse = HttpResponse.from(out, httpRequest.version());
         new UserCreateController().doPost(httpRequest, httpResponse);
-        assertThat(out.toString()).isEqualTo("HTTP/1.1 302 Found\r\nLocation: /index.html\r\n\r\n");
+        assertThat(out.toString()).isEqualTo("HTTP/1.1 302 Found\nLocation: /index.html\n\n");
     }
 }

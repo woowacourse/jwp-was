@@ -12,7 +12,7 @@ public class HttpHeadersTest {
     @DisplayName("HttpHeaders build 테스트")
     void build() {
         HttpHeaders headers = new HttpHeaders(new LinkedHashMap<>());
-        String expected = "Content-Type: text/plain\r\n" + "Content-Length: 100";
+        String expected = "Content-Type: text/plain\n" + "Content-Length: 100";
         headers.set("Content-Type", "text/plain");
         headers.set("Content-Length", "100");
         assertThat(headers.build()).isEqualTo(expected);

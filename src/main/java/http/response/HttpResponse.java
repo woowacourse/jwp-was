@@ -8,7 +8,7 @@ import http.HttpHeaders;
 import http.HttpStatus;
 
 public class HttpResponse {
-    private static final String CRLF = "\r\n";
+    private static final String LINE_SEPARATOR = System.lineSeparator();
 
     private final DataOutputStream writer;
     private final HttpStatusLine statusLine;
@@ -54,16 +54,16 @@ public class HttpResponse {
     }
 
     private void writeStatusLine() throws IOException {
-        writer.writeBytes(statusLine.build() + CRLF);
+        writer.writeBytes(statusLine.build() + LINE_SEPARATOR);
     }
 
     private void writeHeaders() throws IOException {
         if (headers.isNotEmpty()) {
-            writer.writeBytes(headers.build() + CRLF);
+            writer.writeBytes(headers.build() + LINE_SEPARATOR);
         }
     }
 
     private void writeEmptyLine() throws IOException {
-        writer.writeBytes(CRLF);
+        writer.writeBytes(LINE_SEPARATOR);
     }
 }
