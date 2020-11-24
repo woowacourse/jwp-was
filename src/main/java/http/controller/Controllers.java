@@ -16,9 +16,9 @@ public class Controllers {
     }
 
     private Controller findRawFile(String path) {
-        if (this.rawFileControllers.containsKey(path)) {
-            return this.rawFileControllers.get(path);
+        if (!this.rawFileControllers.containsKey(path)) {
+            this.rawFileControllers.put(path, new RawFileController(path));
         }
-        return this.rawFileControllers.put(path, new RawFileController(path));
+        return this.rawFileControllers.get(path);
     }
 }

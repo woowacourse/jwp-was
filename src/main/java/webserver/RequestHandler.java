@@ -1,15 +1,14 @@
 package webserver;
 
-import http.HttpRequest;
-import http.HttpResponse;
-import http.RequestMethod;
 import http.controller.Controller;
 import http.controller.Controllers;
 import http.controller.ControllersFactory;
+import http.request.HttpRequest;
+import http.request.RequestMethod;
+import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.HttpResponseHeaderParser;
-import utils.HttpResponseUtils;
 
 import java.io.*;
 import java.net.Socket;
@@ -40,14 +39,12 @@ public class RequestHandler implements Runnable {
         Controllers controllers = ControllersFactory.getControllers();
         try {
             HttpRequest httpRequest = new HttpRequest(br);
-            HttpResponse httpResponse;
             Controller controller = controllers.find(httpRequest.getPath());
-
             RequestMethod requestMethod = httpRequest.getRequestMethod();
-            httpResponse = requestMethod.extractResponse(controller, httpRequest);
-            HttpResponseUtils.response(dos, httpResponse);
+            HttpResponse httpResponse = requestMethod.extractResponse(controller, httpRequest);
+            httpResponse.createResponse(dos);
         } catch (IllegalArgumentException e) {
-            HttpResponseUtils.response(dos, new HttpResponse(HttpResponseHeaderParser.badRequest()));
+            new HttpResponse(HttpResponseHeaderParser.badRequest()).createResponse(dos);
         }
     }
 }
