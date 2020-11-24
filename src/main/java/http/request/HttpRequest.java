@@ -1,12 +1,11 @@
 package http.request;
 
+import http.HttpHeaders;
+import http.HttpMethod;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
-import http.HttpHeaders;
-import http.HttpMethod;
 import utils.IOUtils;
 
 public class HttpRequest {
@@ -23,7 +22,7 @@ public class HttpRequest {
     public static HttpRequest from(InputStream in) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         HttpRequestLine requestLine = HttpRequestLine.from(reader.readLine());
-        HttpHeaders headers = HttpHeaders.from(IOUtils.readHeaders(reader));
+        HttpHeaders headers = HttpHeaders.from(IOUtils.readLineUntilEmpty(reader));
         String body = "";
         if (headers.has("Content-Length")) {
             body = IOUtils.readData(reader, Integer.parseInt(headers.get("Content-Length")));
