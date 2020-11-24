@@ -2,11 +2,10 @@ package http.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Map;
+import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
+import http.Cookie;
 import http.HttpBody;
 import http.HttpHeaders;
 import http.HttpMethod;
@@ -19,6 +18,7 @@ public class SimpleHttpRequest implements HttpRequest {
     private HttpHeaders headers;
     private HttpBody httpBody;
     private HttpSession httpSession;
+    private List<Cookie> cookies;
     private String rawRequest;
 
     public static SimpleHttpRequest of(BufferedReader bufferedReader) throws IOException {
@@ -42,14 +42,12 @@ public class SimpleHttpRequest implements HttpRequest {
     }
 
     private static String joinRequest(String startLine, String httpHeaders, String requestBody) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(startLine);
-        stringBuilder.append(System.lineSeparator());
-        stringBuilder.append(httpHeaders);
-        stringBuilder.append(System.lineSeparator());
-        stringBuilder.append(System.lineSeparator());
-        stringBuilder.append(requestBody);
-        return stringBuilder.toString();
+        return startLine
+                + System.lineSeparator()
+                + httpHeaders
+                + System.lineSeparator()
+                + System.lineSeparator()
+                + requestBody;
     }
 
     private SimpleHttpRequest(StartLine startLine, HttpHeaders httpHeaders, HttpBody httpBody,
@@ -57,17 +55,19 @@ public class SimpleHttpRequest implements HttpRequest {
         this.startLine = startLine;
         this.headers = httpHeaders;
         this.httpBody = httpBody;
-        String cookie = getCookie();
-        if (Objects.isNull(cookie)) {
-            this.httpSession = SimpleHttpSession.getHttpSessionStorage("");
-        } else {
-            Map<String, String> cookies = Arrays.stream(cookie.split("; "))
-                    .map(value -> value.split("="))
-                    .collect(Collectors.toMap(arr -> arr[0], arr -> arr[1]));
-            String logined = cookies.get("JSESSIONID");
-            this.httpSession = SimpleHttpSession.getHttpSessionStorage(logined);
-        }
+        String cookie = headers.getCookie();
+        this.cookies = Cookie.listOf(cookie);
+        String jSessionId = getSessionId();
+        this.httpSession = SimpleHttpSession.getHttpSessionStorage(jSessionId);
         this.rawRequest = rawRequest;
+    }
+
+    private String getSessionId() {
+        Cookie jSessionCookie = cookies.stream()
+            .filter(cookie -> "JSESSIONID".equals(cookie.getName()))
+            .findFirst()
+            .orElse(null);
+        return Objects.isNull(jSessionCookie) ? "" : jSessionCookie.getValue();
     }
 
     @Override
@@ -93,11 +93,6 @@ public class SimpleHttpRequest implements HttpRequest {
     @Override
     public HttpBody getBody() {
         return httpBody;
-    }
-
-    @Override
-    public String getCookie() {
-        return headers.getCookie();
     }
 
     @Override

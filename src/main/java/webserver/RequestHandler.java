@@ -31,7 +31,6 @@ public class RequestHandler implements Runnable {
     public void run() {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
             connection.getPort());
-
         try (
             InputStream inputStream = connection.getInputStream();
             OutputStream outputStream = connection.getOutputStream();
@@ -54,9 +53,11 @@ public class RequestHandler implements Runnable {
             HttpServlet dispatcherServlet = new DispatcherServlet();
             dispatcherServlet.service(httpRequest, httpResponse);
         } finally {
-            // TODO: 2020/11/21 나중에 분리 생각하기
             HttpSession session = httpRequest.getSession();
-            httpResponse.setCookie("JSESSIONID=" + session.getId() + "; Path=/");
+            if(session.isNew()){
+                httpResponse.setCookie("JSESSIONID=" + session.getId() + "; Path=/");
+                session.toOld();
+            }
             httpResponse.send(dos);
         }
     }

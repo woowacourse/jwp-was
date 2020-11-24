@@ -6,4 +6,6 @@ public interface HttpSession {
     Object getAttribute(String name);
     void removeAttribute(String name);
     void invalidate();
+    boolean isNew();
+    void toOld();
 }

@@ -1,14 +1,15 @@
 package http;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SimpleHttpSession implements HttpSession {
-    private static Map<String, HttpSession> HTTP_SESSION_STORAGE = new HashMap<>();
+    private static Map<String, HttpSession> HTTP_SESSION_STORAGE = new ConcurrentHashMap<>();
 
     private String id;
     private Map<String, Object> attributes;
+    private boolean isNew;
 
     public static HttpSession getHttpSessionStorage(String sessionId) {
         return HTTP_SESSION_STORAGE.getOrDefault(sessionId, new SimpleHttpSession());
@@ -16,7 +17,8 @@ public class SimpleHttpSession implements HttpSession {
 
     private SimpleHttpSession() {
         this.id = UUID.randomUUID().toString();
-        this.attributes = new HashMap<>();
+        this.attributes = new ConcurrentHashMap<>();
+        this.isNew = true;
         HTTP_SESSION_STORAGE.put(id, this);
     }
 
@@ -43,5 +45,15 @@ public class SimpleHttpSession implements HttpSession {
     @Override
     public void invalidate() {
         attributes.clear();
+    }
+
+    @Override
+    public boolean isNew(){
+        return isNew;
+    }
+
+    @Override
+    public void toOld(){
+        this.isNew = false;
     }
 }

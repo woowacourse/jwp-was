@@ -1,18 +1,14 @@
 package controller;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
+import annotation.RequestMapping;
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
-
-import annotation.RequestMapping;
 import dto.JoinRequestDto;
 import dto.UserResponseDto;
 import http.ContentType;
@@ -46,11 +42,6 @@ public class UserController extends AbstractController {
 
     @Override
     protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        String cookie = httpRequest.getCookie();
-        if (Objects.isNull(cookie)) {
-            unauthorized(httpResponse);
-            return;
-        }
         HttpSession session = httpRequest.getSession();
         String logined = String.valueOf(session.getAttribute("logined"));
         if (Objects.isNull(logined) || !"true".equals(logined)) {

@@ -39,7 +39,7 @@ public class HttpHeaders {
         this.headers = new HashMap<>();
     }
 
-    public HttpHeaders(Map<String, String> headers) {
+    private HttpHeaders(Map<String, String> headers) {
         this.headers = headers;
     }
 

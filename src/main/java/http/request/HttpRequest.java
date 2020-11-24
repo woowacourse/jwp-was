@@ -21,7 +21,5 @@ public interface HttpRequest {
 
     HttpBody getBody();
 
-    String getCookie();
-
     HttpSession getSession();
 }
