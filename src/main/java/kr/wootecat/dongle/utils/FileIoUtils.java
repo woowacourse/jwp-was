@@ -1,4 +1,4 @@
-package utils;
+package kr.wootecat.dongle.utils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

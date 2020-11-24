@@ -2,7 +2,7 @@ package kr.wootecat.dongle.model.http;
 
 import static java.lang.String.*;
 import static java.util.stream.Collectors.*;
-import static utils.SplitUtils.*;
+import static kr.wootecat.dongle.utils.SplitUtils.*;
 
 import java.util.ArrayList;
 import java.util.Collection;

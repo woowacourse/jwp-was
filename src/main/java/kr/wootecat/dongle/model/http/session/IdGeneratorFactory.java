@@ -1,4 +1,4 @@
-package kr.wootecat.dongle.utils;
+package kr.wootecat.dongle.model.http.session;
 
 public class IdGeneratorFactory {
 

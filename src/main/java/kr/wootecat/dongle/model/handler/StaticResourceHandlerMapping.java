@@ -10,7 +10,7 @@ import kr.wootecat.dongle.model.http.exception.NotFoundException;
 import kr.wootecat.dongle.model.http.exception.UnsupportedMimeTypeException;
 import kr.wootecat.dongle.model.http.request.HttpRequest;
 import kr.wootecat.dongle.model.http.response.HttpResponse;
-import utils.FileIoUtils;
+import kr.wootecat.dongle.utils.FileIoUtils;
 
 public class StaticResourceHandlerMapping implements HandlerMapping {
 

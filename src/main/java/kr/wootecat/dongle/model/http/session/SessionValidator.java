@@ -3,7 +3,6 @@ package kr.wootecat.dongle.model.http.session;
 import kr.wootecat.dongle.model.http.Cookie;
 import kr.wootecat.dongle.model.http.request.HttpRequest;
 import kr.wootecat.dongle.model.http.response.HttpResponse;
-import kr.wootecat.dongle.utils.IdGenerator;
 
 public class SessionValidator {
 

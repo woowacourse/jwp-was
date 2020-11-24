@@ -1,7 +1,7 @@
 package kr.wootecat.dongle.model.http.request;
 
 import static java.lang.String.*;
-import static utils.SplitUtils.*;
+import static kr.wootecat.dongle.utils.SplitUtils.*;
 
 import java.util.HashMap;
 import java.util.Map;

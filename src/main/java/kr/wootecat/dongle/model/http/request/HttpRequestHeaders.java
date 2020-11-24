@@ -2,7 +2,7 @@ package kr.wootecat.dongle.model.http.request;
 
 import static com.google.common.net.HttpHeaders.*;
 import static java.lang.String.*;
-import static utils.SplitUtils.*;
+import static kr.wootecat.dongle.utils.SplitUtils.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;

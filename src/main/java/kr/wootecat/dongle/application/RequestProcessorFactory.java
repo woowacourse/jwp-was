@@ -1,9 +1,9 @@
 package kr.wootecat.dongle.application;
 
 import kr.wootecat.dongle.model.handler.HandlerMappingsFactory;
+import kr.wootecat.dongle.model.http.session.IdGeneratorFactory;
 import kr.wootecat.dongle.model.http.session.SessionStorage;
 import kr.wootecat.dongle.model.http.session.SessionValidator;
-import kr.wootecat.dongle.utils.IdGeneratorFactory;
 
 public class RequestProcessorFactory {
 

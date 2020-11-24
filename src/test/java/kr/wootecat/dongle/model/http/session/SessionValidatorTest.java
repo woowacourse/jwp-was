@@ -21,7 +21,6 @@ import kr.wootecat.dongle.model.http.request.HttpRequestLine;
 import kr.wootecat.dongle.model.http.request.ProtocolVersion;
 import kr.wootecat.dongle.model.http.request.Url;
 import kr.wootecat.dongle.model.http.response.HttpResponse;
-import kr.wootecat.dongle.utils.IdGenerator;
 
 class SessionValidatorTest {
 

@@ -14,7 +14,7 @@ import kr.wootecat.dongle.model.http.request.HttpRequest;
 import kr.wootecat.dongle.model.http.request.HttpRequestBody;
 import kr.wootecat.dongle.model.http.request.HttpRequestHeaders;
 import kr.wootecat.dongle.model.http.request.HttpRequestLine;
-import utils.IOUtils;
+import kr.wootecat.dongle.utils.IOUtils;
 
 public class HttpRequestReader {
 
