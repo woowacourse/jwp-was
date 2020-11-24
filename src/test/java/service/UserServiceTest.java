@@ -2,6 +2,8 @@ package service;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -10,11 +12,11 @@ import org.junit.jupiter.params.provider.CsvSource;
 import db.DataBase;
 import dto.JoinRequestDto;
 import dto.LoginRequestDto;
+import dto.UserResponseDto;
 import exception.UnAuthenticationException;
 import model.User;
 
 class UserServiceTest {
-
     private UserService userService;
 
     @BeforeEach
@@ -30,7 +32,6 @@ class UserServiceTest {
         LoginRequestDto loginRequestDto = new LoginRequestDto("javajigi", "1234");
 
         userService.login(loginRequestDto);
-
     }
 
     @ParameterizedTest
@@ -70,5 +71,15 @@ class UserServiceTest {
     void join() {
         JoinRequestDto joinRequestDto = new JoinRequestDto("javajigi", "1234", "pobi", "pobi@slipp.com");
         userService.join(joinRequestDto);
+    }
+
+    @Test
+    void findAll() {
+        userService.join(new JoinRequestDto("javajigi", "1234", "pobi", "pobi@slipp.com"));
+
+        List<UserResponseDto> saved = userService.findAll();
+
+        assertThat(saved).isNotEmpty();
+        assertThat(saved.size()).isEqualTo(1);
     }
 }
