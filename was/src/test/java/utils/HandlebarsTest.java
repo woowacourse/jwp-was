@@ -8,7 +8,6 @@ import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
-import model.User;
 
 public class HandlebarsTest {
     private static final Logger log = LoggerFactory.getLogger(HandlebarsTest.class);
@@ -22,7 +21,7 @@ public class HandlebarsTest {
 
         Template template = handlebars.compile("user/profile");
 
-        User user = new User("javajigi", "password", "자바지기", "javajigi@gmail.com");
+        UserModel user = new UserModel("javajigi", "password", "자바지기", "javajigi@gmail.com");
         String profilePage = template.apply(user);
         log.debug("ProfilePage : {}", profilePage);
     }
