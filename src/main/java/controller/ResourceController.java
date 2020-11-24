@@ -29,7 +29,7 @@ public class ResourceController extends AbstractController {
 
     @Override
     public HttpResponse doGet(HttpRequest httpRequest) {
-        Optional<ContentType> contentType = ContentType.of(httpRequest);
+        Optional<ContentType> contentType = httpRequest.extractContentType();
 
         if (contentType.isPresent()) {
             return findResourceFile(httpRequest);
@@ -42,7 +42,7 @@ public class ResourceController extends AbstractController {
     }
 
     private HttpResponse findResourceFile(HttpRequest httpRequest) {
-        Optional<ContentType> contentType = ContentType.of(httpRequest);
+        Optional<ContentType> contentType = httpRequest.extractContentType();
         String requestUri = httpRequest.getRequestUri();
 
         if (!contentType.isPresent()) {

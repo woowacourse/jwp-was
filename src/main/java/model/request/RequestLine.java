@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import model.general.ContentType;
 import model.general.Method;
 
 public class RequestLine {
@@ -43,14 +44,15 @@ public class RequestLine {
         return new RequestLine(method, requestUri, httpVersion);
     }
 
-    public Optional<String> extractRequestUriExtension() {
+    public Optional<ContentType> extractContentType() {
         String[] sections = makePureUri(requestUri).split(EXTENSION_DELIMITER);
 
         if (sections.length == NO_EXTENSION_SIZE) {
             return Optional.empty();
         }
 
-        return Optional.of(EXTENSION_LETTER + sections[sections.length - SIZE_CORRECTION_NUMBER]);
+        return ContentType
+            .of(EXTENSION_LETTER + sections[sections.length - SIZE_CORRECTION_NUMBER]);
     }
 
     private String makePureUri(String uri) {

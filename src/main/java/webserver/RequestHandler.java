@@ -45,24 +45,21 @@ public class RequestHandler implements Runnable {
     }
 
     private HttpResponse makeResponse(InputStream inputStream) {
-        HttpRequest httpRequest;
-
         try {
-            httpRequest = HttpRequest.of(inputStream);
+            HttpRequest httpRequest = HttpRequest.of(inputStream);
+
+            Controller controller = ControllerMapper.selectController(httpRequest);
+            if (Objects.isNull(controller)) {
+                return HttpResponse.of(Status.NOT_FOUND);
+            }
+
+            HttpResponse httpResponse = controller.service(httpRequest);
+            makeSession(httpRequest, httpResponse);
+            
+            return httpResponse;
         } catch (IOException e) {
             logger.error(e.getMessage());
             return HttpResponse.of(Status.BAD_REQUEST);
-        }
-
-        Controller controller = ControllerMapper.selectController(httpRequest);
-        if (Objects.isNull(controller)) {
-            return HttpResponse.of(Status.NOT_FOUND);
-        }
-
-        try {
-            HttpResponse httpResponse = controller.service(httpRequest);
-            makeSession(httpRequest, httpResponse);
-            return httpResponse;
         } catch (Exception e) {
             return HttpResponse.of(Status.INTERNAL_ERROR);
         }

@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import model.general.Cookie;
+import model.general.ContentType;
 import model.general.Cookies;
 import model.general.Header;
 import model.general.Headers;
@@ -68,8 +68,8 @@ public class HttpRequest {
         return requestLine.whetherUriHasExtension();
     }
 
-    public Optional<String> extractRequestUriExtension() {
-        return requestLine.extractRequestUriExtension();
+    public Optional<ContentType> extractContentType() {
+        return requestLine.extractContentType();
     }
 
     public Map<String, String> extractParameters() {

@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
+import model.general.ContentType;
 import model.general.Method;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,28 +34,29 @@ public class RequestLineTest {
     }
 
     @ParameterizedTest
-    @DisplayName("Request Uri 확장자 확인")
+    @DisplayName("ContentType 추출")
     @CsvSource(value = {
         "src/test/resources/input/get_template_file_request.txt:.html",
         "src/test/resources/input/get_static_file_request.txt:.css"
     }, delimiter = ':')
-    void extractRequestUriExtension(String filePath, String expected) throws IOException {
+    void extractContentType(String filePath, String expected) throws IOException {
         RequestLine requestLine = makeRequestLineFromFile(filePath);
 
-        assertThat(requestLine.extractRequestUriExtension()).isEqualTo(Optional.of(expected));
+        assertThat(requestLine.extractContentType())
+            .isEqualTo(ContentType.of(expected));
     }
 
     @ParameterizedTest
-    @DisplayName("Request Uri 확장자 확인 - 확장자가 없을 경우")
+    @DisplayName("ContentType 추출 - 확장자가 없을 경우")
     @ValueSource(strings = {
         "src/test/resources/input/get_api_request.txt",
         "src/test/resources/input/post_api_request.txt"
     })
-    void extractRequestUriExtension_IfNoExtension_ReturnEmpty(String filePath)
+    void extractContentType_IfNoExtension_ReturnEmpty(String filePath)
         throws IOException {
         RequestLine requestLine = makeRequestLineFromFile(filePath);
 
-        assertThat(requestLine.extractRequestUriExtension()).isEqualTo(Optional.empty());
+        assertThat(requestLine.extractContentType()).isEqualTo(Optional.empty());
     }
 
     @ParameterizedTest
