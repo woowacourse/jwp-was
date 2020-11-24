@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import server.TestWebServerApplication;
 import server.controller.TestController;
 import server.web.controller.Controller;
+import server.web.controller.HandlerMapping;
 import server.web.request.HttpRequest;
 
 import java.io.BufferedReader;

@@ -2,7 +2,7 @@ package server.webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import server.web.HandlerMapping;
+import server.web.controller.HandlerMapping;
 import server.web.HttpHeader;
 import server.web.controller.Controller;
 import server.web.request.HttpRequest;

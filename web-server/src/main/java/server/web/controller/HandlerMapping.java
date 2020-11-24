@@ -1,9 +1,6 @@
-package server.web;
+package server.web.controller;
 
-import server.utils.HandlerFactory;
 import server.utils.PathExtractor;
-import server.web.controller.Controller;
-import server.web.controller.ResourceController;
 import server.web.request.HttpMethod;
 import server.web.request.HttpRequest;
 import server.web.request.RequestMapping;
@@ -19,14 +16,14 @@ public class HandlerMapping {
     private final Map<RequestMapping, Controller> handler = new HashMap<>();
 
     public HandlerMapping(Class<?> rootApplication) {
-        List<String> sourcePaths = PathExtractor.extractSourcePath(rootApplication);
-        for (String sourcePath : sourcePaths) {
-            if (HandlerFactory.isController(sourcePath)) {
-                Handler handler = HandlerFactory.create(sourcePath);
-                this.handler.put(handler.getRequestMapping(), handler.getController());
-            }
-        }
+        initControllerMapping(rootApplication);
         initResourceMapping();
+    }
+
+    private void initControllerMapping(Class<?> rootApplication) {
+        List<String> sourcePaths = PathExtractor.extractSourcePath(rootApplication);
+        Handlers handlers = new Handlers(sourcePaths);
+        handlers.forEach(handler -> this.handler.put(handler.getRequestMapping(), handler.getController()));
     }
 
     private void initResourceMapping() {
