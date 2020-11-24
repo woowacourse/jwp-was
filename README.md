@@ -48,3 +48,9 @@
     
 #### 요구사항 3
 - [x] HttpSession API 중 getId(), setAttribute(String name, Object value), getAttribute(String name), removeAttribute(String name), invalidate() 를 구현한다.
+
+
+
+### 4단계
+#### 요구사항
+- [x] 멀티모듈로 분리
