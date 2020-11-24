@@ -15,10 +15,8 @@ import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import http.HttpStatus;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.request.SimpleHttpRequest;
@@ -39,7 +37,7 @@ class UserControllerTest {
 
     @Test
     void doPost() throws IOException {
-        HttpRequest request = getHttpRequest("Http_POST.txt");
+        HttpRequest request = getHttpRequest("HTTP_POST.txt");
         HttpResponse response = new HttpResponse();
 
         userController.service(request, response);
@@ -51,7 +49,7 @@ class UserControllerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"Http_PUT.txt", "Http_DELETE.txt"})
+    @ValueSource(strings = {"HTTP_PUT.txt", "HTTP_DELETE.txt"})
     void doNotAllowedMethod_ThrownException(String path) throws IOException {
         HttpRequest request = getHttpRequest(path);
         HttpResponse response = new HttpResponse();

@@ -24,7 +24,7 @@ class SimpleHttpRequestTest {
 
     @Test
     public void request_GET() throws Exception {
-        InputStream in = new FileInputStream(new File(testDirectory + "Http_GET.txt"));
+        InputStream in = new FileInputStream(new File(testDirectory + "HTTP_GET.txt"));
         InputStreamReader inputStreamReader = new InputStreamReader(in, StandardCharsets.UTF_8);
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
         HttpRequest request = SimpleHttpRequest.of(bufferedReader);
@@ -39,7 +39,7 @@ class SimpleHttpRequestTest {
 
     @Test
     public void request_POST() throws Exception {
-        InputStream in = new FileInputStream(new File(testDirectory + "Http_POST.txt"));
+        InputStream in = new FileInputStream(new File(testDirectory + "HTTP_POST.txt"));
         InputStreamReader inputStreamReader = new InputStreamReader(in, StandardCharsets.UTF_8);
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
         HttpRequest request = SimpleHttpRequest.of(bufferedReader);

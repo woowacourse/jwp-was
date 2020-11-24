@@ -39,7 +39,7 @@ class LoginControllerTest {
         JoinRequestDto joinRequestDto = new JoinRequestDto("javajigi", "password", "pobi", "pobi@slipp.com");
         userService.join(joinRequestDto);
 
-        HttpRequest request = getHttpRequest("Http_LOGIN.txt");
+        HttpRequest request = getHttpRequest("HTTP_LOGIN.txt");
         HttpResponse response = new HttpResponse();
 
         loginController.service(request, response);
@@ -56,7 +56,7 @@ class LoginControllerTest {
         JoinRequestDto joinRequestDto = new JoinRequestDto("javajigi", "passold", "pobi", "pobi@slipp.com");
         userService.join(joinRequestDto);
 
-        HttpRequest request = getHttpRequest("Http_LOGIN.txt");
+        HttpRequest request = getHttpRequest("HTTP_LOGIN.txt");
         HttpResponse response = new HttpResponse();
 
         loginController.service(request, response);
