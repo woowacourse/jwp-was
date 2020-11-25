@@ -6,6 +6,7 @@ import java.util.Map;
 import model.general.Header;
 import model.general.Headers;
 import model.general.Status;
+import model.request.HttpRequest;
 
 public class HttpResponse {
 
@@ -25,6 +26,16 @@ public class HttpResponse {
 
     public static HttpResponse of(StatusLine statusLine, Headers headers, byte[] body) {
         return new HttpResponse(statusLine, headers, body);
+    }
+
+    public static HttpResponse redirectResponse(HttpRequest httpRequest, String location,
+        String cookie) {
+        StatusLine statusLine = StatusLine.of(httpRequest, Status.FOUND);
+        Headers headers = new Headers();
+        headers.addHeader(Header.LOCATION, location);
+        headers.addHeader(Header.SET_COOKIE, cookie);
+
+        return HttpResponse.of(statusLine, headers, null);
     }
 
     public void writeToOutputStream(DataOutputStream dataOutputStream)

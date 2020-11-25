@@ -15,10 +15,11 @@ import model.response.HttpResponse;
 import model.response.StatusLine;
 import utils.HandlebarUtils;
 
-public class UserListController extends UserController {
+public class UserListController extends AbstractController {
 
     private static final String LIST_REQUEST = "/user/list";
     private static final String LOGIN_REDIRECT_LOCATION = "/user/login.html";
+    private static final String LOGIN_FAIL_COOKIE_VALUE = "logined=false; Path=/";
 
     @Override
     public HttpResponse service(HttpRequest httpRequest) {
@@ -43,7 +44,8 @@ public class UserListController extends UserController {
     private HttpResponse showList(HttpRequest httpRequest) {
         Cookies cookies = httpRequest.getCookies();
         if (!cookies.isLogined()) {
-            return redirectResponse(httpRequest, LOGIN_REDIRECT_LOCATION);
+            return HttpResponse.
+                redirectResponse(httpRequest, LOGIN_REDIRECT_LOCATION, LOGIN_FAIL_COOKIE_VALUE);
         }
 
         try {

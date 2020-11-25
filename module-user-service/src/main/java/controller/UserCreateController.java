@@ -9,7 +9,7 @@ import model.response.HttpResponse;
 import model.response.StatusLine;
 import service.UserService;
 
-public class UserCreateController extends UserController {
+public class UserCreateController extends AbstractController {
 
     private static final String USER_CREATE_REQUEST = "/user/create";
     private static final String HOME_LOCATION = "/index.html";

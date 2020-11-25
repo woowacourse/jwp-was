@@ -15,11 +15,12 @@ import model.response.StatusLine;
 import model.session.HttpSession;
 import utils.HandlebarUtils;
 
-public class UserProfileController extends UserController {
+public class UserProfileController extends AbstractController {
 
     private static final String PROFILE_REQUEST = "/user/profile";
     private static final String LOGIN_REDIRECT_LOCATION = "/user/login.html";
     private static final String USER_ATTRIBUTE_KEY = "user";
+    private static final String LOGIN_FAIL_COOKIE_VALUE = "logined=false; Path=/";
 
     @Override
     public HttpResponse service(HttpRequest httpRequest) {
@@ -44,7 +45,8 @@ public class UserProfileController extends UserController {
     private HttpResponse showProfile(HttpRequest httpRequest) {
         Cookies cookies = httpRequest.getCookies();
         if (!cookies.isLogined()) {
-            return redirectResponse(httpRequest, LOGIN_REDIRECT_LOCATION);
+            return HttpResponse.
+                redirectResponse(httpRequest, LOGIN_REDIRECT_LOCATION, LOGIN_FAIL_COOKIE_VALUE);
         }
 
         try {
@@ -63,7 +65,8 @@ public class UserProfileController extends UserController {
         } catch (IOException e) {
             return HttpResponse.of(Status.INTERNAL_ERROR);
         } catch (NoSessionException e) {
-            return redirectResponse(httpRequest, LOGIN_REDIRECT_LOCATION);
+            return HttpResponse.
+                redirectResponse(httpRequest, LOGIN_REDIRECT_LOCATION, LOGIN_FAIL_COOKIE_VALUE);
         }
     }
 }

@@ -14,7 +14,7 @@ import model.response.StatusLine;
 import model.session.HttpSession;
 import service.UserService;
 
-public class UserLoginController extends UserController {
+public class UserLoginController extends AbstractController {
 
     private static final String LOGIN_REQUEST = "/user/login";
     private static final String HOME_LOCATION = "/index.html";
@@ -22,6 +22,7 @@ public class UserLoginController extends UserController {
     private static final String LOGIN_REDIRECT_LOCATION = "/user/login.html";
     private static final String USER_ATTRIBUTE_KEY = "user";
     private static final String LOGIN_SUCCESS_COOKIE_VALUE = "logined=true; Path=/";
+    private static final String LOGIN_FAIL_COOKIE_VALUE = "logined=false; Path=/";
 
     @Override
     public HttpResponse service(HttpRequest httpRequest) {
@@ -60,9 +61,12 @@ public class UserLoginController extends UserController {
 
             return HttpResponse.of(statusLine, headers, null);
         } catch (NotExistUserException e) {
-            return redirectResponse(httpRequest, LOGIN_FAIL_REDIRECT_LOCATION);
+            return HttpResponse.
+                redirectResponse(httpRequest, LOGIN_FAIL_REDIRECT_LOCATION,
+                    LOGIN_FAIL_COOKIE_VALUE);
         } catch (NoSessionException e) {
-            return redirectResponse(httpRequest, LOGIN_REDIRECT_LOCATION);
+            return HttpResponse.
+                redirectResponse(httpRequest, LOGIN_REDIRECT_LOCATION, LOGIN_FAIL_COOKIE_VALUE);
         }
     }
 }
