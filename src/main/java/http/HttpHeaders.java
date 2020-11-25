@@ -30,9 +30,7 @@ public class HttpHeaders {
         }
         Map<String, String> headers = Arrays.stream(input.split(System.lineSeparator()))
             .map(line -> line.split(HTTP_HEADER_KEY_VALUE_SPLITTER))
-            .collect(Collectors.toMap(
-                pair -> pair[KEY_INDEX], pair -> Objects.isNull(pair[VALUE_INDEX]) ? null : pair[VALUE_INDEX]
-            ));
+            .collect(Collectors.toMap(pair -> pair[KEY_INDEX], pair -> pair[VALUE_INDEX]));
         return new HttpHeaders(headers);
     }
 
@@ -95,12 +93,12 @@ public class HttpHeaders {
 
     public String getHttpHeaderString() {
         String setCookies = cookies.toResponse().stream()
-                .map(cookie -> SET_COOKIE + HTTP_HEADER_KEY_VALUE_SPLITTER + cookie)
-                .collect(Collectors.joining(System.lineSeparator()));
+            .map(cookie -> SET_COOKIE + HTTP_HEADER_KEY_VALUE_SPLITTER + cookie)
+            .collect(Collectors.joining(System.lineSeparator()));
         return headers.entrySet().stream()
-                .map(entry -> entry.getKey() + HTTP_HEADER_KEY_VALUE_SPLITTER + entry.getValue())
-                .collect(Collectors.joining(System.lineSeparator()))
-                + setCookies;
+            .map(entry -> entry.getKey() + HTTP_HEADER_KEY_VALUE_SPLITTER + entry.getValue())
+            .collect(Collectors.joining(System.lineSeparator()))
+            + setCookies;
     }
 
 }

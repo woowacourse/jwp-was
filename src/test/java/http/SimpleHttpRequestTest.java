@@ -73,7 +73,7 @@ class SimpleHttpRequestTest {
             () -> assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.GET),
             () -> assertThat(httpRequest.getHeaders().size()).isEqualTo(7),
             () -> assertThat(httpRequest.getURI()).isEqualTo("/"),
-            () -> assertThat(httpRequest.getVersion()).isEqualTo("HTTP/1.1")
+            () -> assertThat(httpRequest.getVersion()).isEqualTo(HttpVersion.HTTP_11)
         );
     }
 

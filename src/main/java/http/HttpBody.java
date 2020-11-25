@@ -33,7 +33,7 @@ public class HttpBody {
             .collect(Collectors.toMap(
                 pair -> pair[KEY_INDEX], pair -> {
                     try {
-                        return Objects.isNull(pair[VALUE_INDEX]) ? null : URLDecoder.decode(pair[VALUE_INDEX], "UTF-8");
+                        return URLDecoder.decode(pair[VALUE_INDEX], "UTF-8");
                     } catch (UnsupportedEncodingException e) {
                         throw new DisabledEncodingException("HttpBody 생성에 실패하였습니다 - 인코딩 실패", e);
                     }

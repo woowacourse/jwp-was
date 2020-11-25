@@ -1,5 +1,7 @@
 package http;
 
+import java.util.Arrays;
+
 public enum HttpVersion {
     NONE("NONE"),
     HTTP_09("HTTP/0.9"),
@@ -9,11 +11,10 @@ public enum HttpVersion {
     private String version;
 
     public static HttpVersion from(String version) {
-        try {
-            return HttpVersion.valueOf(version);
-        } catch (IllegalArgumentException e) {
-            return NONE;
-        }
+        return Arrays.stream(HttpVersion.values())
+            .filter(value -> value.version.equals(version))
+            .findFirst()
+            .orElse(NONE);
     }
 
     HttpVersion(String version) {
@@ -23,6 +24,5 @@ public enum HttpVersion {
     public boolean isValid() {
         return this == HTTP_11;
     }
-
 
 }

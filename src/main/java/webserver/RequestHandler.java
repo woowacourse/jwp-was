@@ -45,7 +45,7 @@ public class RequestHandler implements Runnable {
                 HttpRequest httpRequest = SimpleHttpRequest.of(bufferedReader);
                 logger.debug(System.lineSeparator() + httpRequest.toString());
                 doDispatch(httpRequest, httpResponse);
-            } catch (DisabledEncodingException e) {
+            } catch (DisabledEncodingException | IndexOutOfBoundsException e) {
                 httpResponse.internalServerError();
             } finally {
                 httpResponse.send(dos);
