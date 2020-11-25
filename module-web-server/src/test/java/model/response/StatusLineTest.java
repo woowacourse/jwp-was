@@ -22,10 +22,10 @@ public class StatusLineTest {
     void create(String filePath, Status status) throws IOException {
         InputStream inputStream = new FileInputStream(filePath);
         HttpRequest httpRequest = HttpRequest.of(inputStream);
-        assertAll(() -> {
-            assertThat(StatusLine.of(httpRequest, status)).isInstanceOf(StatusLine.class);
-            assertThat(StatusLine.of(status)).isInstanceOf(StatusLine.class);
-        });
+        assertAll(
+            () -> assertThat(StatusLine.of(httpRequest, status)).isInstanceOf(StatusLine.class),
+            () -> assertThat(StatusLine.of(status)).isInstanceOf(StatusLine.class)
+        );
     }
 
     private static Stream<Arguments> provideStatus() {

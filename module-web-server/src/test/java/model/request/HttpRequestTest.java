@@ -160,14 +160,14 @@ public class HttpRequestTest {
         Cookies cookies = httpRequest.getCookies();
         Optional<Cookie> cookie = cookies.getCookie("logined");
 
-        assertAll(() -> {
-            assertThat(cookie).isNotEmpty();
-            assertThat(cookie.get()).isInstanceOf(Cookie.class);
-            assertThat(cookie.get()
-                .getKey()).isEqualTo("logined");
-            assertThat(cookie.get()
-                .getValue()).isEqualTo("true");
-        });
+        assertAll(
+            () -> assertThat(cookie).isNotEmpty(),
+            () -> assertThat(cookie.get()).isInstanceOf(Cookie.class),
+            () -> assertThat(cookie.get()
+                .getKey()).isEqualTo("logined"),
+            () -> assertThat(cookie.get()
+                .getValue()).isEqualTo("true")
+        );
     }
 
     @Test
@@ -191,10 +191,10 @@ public class HttpRequestTest {
 
         HttpSession httpSession = httpRequest.getSession();
 
-        assertAll(() -> {
-            assertThat(httpSession).isInstanceOf(HttpSession.class);
-            assertThat(httpSession.getId()).isEqualTo("6ab731c0-06e2-47d5-84b3-b8c2bc1d4a14");
-        });
+        assertAll(
+            () -> assertThat(httpSession).isInstanceOf(HttpSession.class),
+            () -> assertThat(httpSession.getId()).isEqualTo("6ab731c0-06e2-47d5-84b3-b8c2bc1d4a14")
+        );
     }
 
     @Test

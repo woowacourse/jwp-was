@@ -28,10 +28,10 @@ public class CookieUtilsTest {
 
         List<Cookie> cookies = CookieUtils.generateCookies(headers);
 
-        assertAll(() -> {
-            assertThat(cookies).isInstanceOf(List.class);
-            assertThat(cookies).isNotEmpty();
-            assertThat(cookies).hasSize(2);
-        });
+        assertAll(
+            () -> assertThat(cookies).isInstanceOf(List.class),
+            () -> assertThat(cookies).isNotEmpty(),
+            () -> assertThat(cookies).hasSize(2)
+        );
     }
 }

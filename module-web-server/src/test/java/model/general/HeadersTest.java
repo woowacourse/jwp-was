@@ -61,11 +61,12 @@ class HeadersTest {
         headers.addHeader(header, contentType.getContentTypeValue());
         Map<Header, String> generatedHeaders = headers.getHeaders();
 
-        assertAll(() -> {
-            assertThat(generatedHeaders).isInstanceOf(Map.class);
-            assertThat(generatedHeaders).hasSize(1);
-            assertThat(generatedHeaders).containsKey(header);
-            assertThat(generatedHeaders.get(header)).isEqualTo(contentType.getContentTypeValue());
-        });
+        assertAll(
+            () -> assertThat(generatedHeaders).isInstanceOf(Map.class),
+            () -> assertThat(generatedHeaders).hasSize(1),
+            () -> assertThat(generatedHeaders).containsKey(header),
+            () -> assertThat(generatedHeaders.get(header))
+                .isEqualTo(contentType.getContentTypeValue())
+        );
     }
 }

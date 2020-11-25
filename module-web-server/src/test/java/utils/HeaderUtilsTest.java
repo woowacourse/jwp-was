@@ -26,12 +26,12 @@ public class HeaderUtilsTest {
 
         Map<Header, String> headers = HeaderUtils.generateHeaders(bufferedReader);
 
-        assertAll(() -> {
-            assertThat(headers).isInstanceOf(Map.class);
-            assertThat(headers).containsKey(Header.HOST);
-            assertThat(headers).containsKey(Header.CONNECTION);
-            assertThat(headers).containsKey(Header.COOKIE);
-            assertThat(headers).containsKey(Header.ACCEPT);
-        });
+        assertAll(
+            () -> assertThat(headers).isInstanceOf(Map.class),
+            () -> assertThat(headers).containsKey(Header.HOST),
+            () -> assertThat(headers).containsKey(Header.CONNECTION),
+            () -> assertThat(headers).containsKey(Header.COOKIE),
+            () -> assertThat(headers).containsKey(Header.ACCEPT)
+        );
     }
 }

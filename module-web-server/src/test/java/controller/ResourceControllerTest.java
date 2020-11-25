@@ -33,15 +33,15 @@ public class ResourceControllerTest {
         Headers headers = httpResponse.getHeaders();
         byte[] body = httpResponse.getBody();
 
-        assertAll(() -> {
-            assertThat(httpResponse).isInstanceOf(HttpResponse.class);
-            assertThat(String.valueOf(body.length))
-                .isEqualTo(headers.getValue(Header.CONTENT_LENGTH));
-            assertThat(headers.getValue(Header.CONTENT_TYPE)).isEqualTo(contentType);
-            assertThat(httpResponse.getHttpVersion()).isEqualTo("HTTP/1.1");
-            assertThat(httpResponse.getStatusCode()).isEqualTo("200");
-            assertThat(httpResponse.getReasonPhrase()).isEqualTo("OK");
-        });
+        assertAll(
+            () -> assertThat(httpResponse).isInstanceOf(HttpResponse.class),
+            () -> assertThat(String.valueOf(body.length))
+                .isEqualTo(headers.getValue(Header.CONTENT_LENGTH)),
+            () -> assertThat(headers.getValue(Header.CONTENT_TYPE)).isEqualTo(contentType),
+            () -> assertThat(httpResponse.getHttpVersion()).isEqualTo("HTTP/1.1"),
+            () -> assertThat(httpResponse.getStatusCode()).isEqualTo("200"),
+            () -> assertThat(httpResponse.getReasonPhrase()).isEqualTo("OK")
+        );
     }
 
     @Test
@@ -55,15 +55,15 @@ public class ResourceControllerTest {
 
         Headers headers = httpResponse.getHeaders();
 
-        assertAll(() -> {
-            assertThat(httpResponse).isInstanceOf(HttpResponse.class);
-            assertThat(httpResponse.getBody()).isEqualTo(null);
-            assertThat(headers.getHeaders()
-                .size()).isEqualTo(0);
-            assertThat(httpResponse.getHttpVersion()).isEqualTo("HTTP/1.1");
-            assertThat(httpResponse.getStatusCode()).isEqualTo("404");
-            assertThat(httpResponse.getReasonPhrase()).isEqualTo("Not Found");
-        });
+        assertAll(
+            () -> assertThat(httpResponse).isInstanceOf(HttpResponse.class),
+            () -> assertThat(httpResponse.getBody()).isEqualTo(null),
+            () -> assertThat(headers.getHeaders()
+                .size()).isEqualTo(0),
+            () -> assertThat(httpResponse.getHttpVersion()).isEqualTo("HTTP/1.1"),
+            () -> assertThat(httpResponse.getStatusCode()).isEqualTo("404"),
+            () -> assertThat(httpResponse.getReasonPhrase()).isEqualTo("Not Found")
+        );
     }
 
     @Test
@@ -77,15 +77,15 @@ public class ResourceControllerTest {
 
         Headers headers = httpResponse.getHeaders();
 
-        assertAll(() -> {
-            assertThat(httpResponse).isInstanceOf(HttpResponse.class);
-            assertThat(httpResponse.getBody()).isEqualTo(null);
-            assertThat(headers.getHeaders()
-                .size()).isEqualTo(0);
-            assertThat(httpResponse.getHttpVersion()).isEqualTo("HTTP/1.1");
-            assertThat(httpResponse.getStatusCode()).isEqualTo("405");
-            assertThat(httpResponse.getReasonPhrase()).isEqualTo("Method Not Allowed");
-        });
+        assertAll(
+            () -> assertThat(httpResponse).isInstanceOf(HttpResponse.class),
+            () -> assertThat(httpResponse.getBody()).isEqualTo(null),
+            () -> assertThat(headers.getHeaders()
+                .size()).isEqualTo(0),
+            () -> assertThat(httpResponse.getHttpVersion()).isEqualTo("HTTP/1.1"),
+            () -> assertThat(httpResponse.getStatusCode()).isEqualTo("405"),
+            () -> assertThat(httpResponse.getReasonPhrase()).isEqualTo("Method Not Allowed")
+        );
     }
 
     @Test
@@ -99,15 +99,15 @@ public class ResourceControllerTest {
 
         Headers headers = httpResponse.getHeaders();
 
-        assertAll(() -> {
-            assertThat(httpResponse).isInstanceOf(HttpResponse.class);
-            assertThat(httpResponse.getBody()).isEqualTo(null);
-            assertThat(headers.getHeaders()
-                .size()).isEqualTo(0);
-            assertThat(httpResponse.getHttpVersion()).isEqualTo("HTTP/1.1");
-            assertThat(httpResponse.getStatusCode()).isEqualTo("404");
-            assertThat(httpResponse.getReasonPhrase()).isEqualTo("Not Found");
-        });
+        assertAll(
+            () -> assertThat(httpResponse).isInstanceOf(HttpResponse.class),
+            () -> assertThat(httpResponse.getBody()).isEqualTo(null),
+            () -> assertThat(headers.getHeaders()
+                .size()).isEqualTo(0),
+            () -> assertThat(httpResponse.getHttpVersion()).isEqualTo("HTTP/1.1"),
+            () -> assertThat(httpResponse.getStatusCode()).isEqualTo("404"),
+            () -> assertThat(httpResponse.getReasonPhrase()).isEqualTo("Not Found")
+        );
     }
 
     @Test
@@ -121,15 +121,15 @@ public class ResourceControllerTest {
 
         Headers headers = httpResponse.getHeaders();
 
-        assertAll(() -> {
-            assertThat(httpResponse).isInstanceOf(HttpResponse.class);
-            assertThat(httpResponse.getBody()).isEqualTo(null);
-            assertThat(headers.getHeaders()
-                .size()).isEqualTo(0);
-            assertThat(httpResponse.getHttpVersion()).isEqualTo("HTTP/1.1");
-            assertThat(httpResponse.getStatusCode()).isEqualTo("405");
-            assertThat(httpResponse.getReasonPhrase())
-                .isEqualTo("Method Not Allowed");
-        });
+        assertAll(
+            () -> assertThat(httpResponse).isInstanceOf(HttpResponse.class),
+            () -> assertThat(httpResponse.getBody()).isEqualTo(null),
+            () -> assertThat(headers.getHeaders()
+                .size()).isEqualTo(0),
+            () -> assertThat(httpResponse.getHttpVersion()).isEqualTo("HTTP/1.1"),
+            () -> assertThat(httpResponse.getStatusCode()).isEqualTo("405"),
+            () -> assertThat(httpResponse.getReasonPhrase())
+                .isEqualTo("Method Not Allowed")
+        );
     }
 }

@@ -24,13 +24,13 @@ public class NotFoundControllerTest {
         Controller controller = ControllerMapper.selectController(httpRequest);
         HttpResponse httpResponse = controller.service(httpRequest);
 
-        assertAll(() -> {
-            assertThat(controller).isInstanceOf(NotFoundController.class);
-            assertThat(httpResponse).isInstanceOf(HttpResponse.class);
-            assertThat(httpResponse.getBody()).isEqualTo(null);
-            assertThat(httpResponse.getHttpVersion()).isEqualTo("HTTP/1.1");
-            assertThat(httpResponse.getStatusCode()).isEqualTo("404");
-            assertThat(httpResponse.getReasonPhrase()).isEqualTo("Not Found");
-        });
+        assertAll(
+            () -> assertThat(controller).isInstanceOf(NotFoundController.class),
+            () -> assertThat(httpResponse).isInstanceOf(HttpResponse.class),
+            () -> assertThat(httpResponse.getBody()).isEqualTo(null),
+            () -> assertThat(httpResponse.getHttpVersion()).isEqualTo("HTTP/1.1"),
+            () -> assertThat(httpResponse.getStatusCode()).isEqualTo("404"),
+            () -> assertThat(httpResponse.getReasonPhrase()).isEqualTo("Not Found")
+        );
     }
 }

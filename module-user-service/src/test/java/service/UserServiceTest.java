@@ -30,11 +30,11 @@ public class UserServiceTest {
         Collection<User> users = DataBase.findAll();
         User user = DataBase.findUserById("javajigi");
 
-        assertAll(() -> {
-            assertThat(users).hasSize(1);
-            assertThat(user.getName()).isEqualTo("%EB%B0%95%EC%9E%AC%EC%84%B1");
-            assertThat(user.getUserId()).isEqualTo("javajigi");
-        });
+        assertAll(
+            () -> assertThat(users).hasSize(1),
+            () -> assertThat(user.getName()).isEqualTo("%EB%B0%95%EC%9E%AC%EC%84%B1"),
+            () -> assertThat(user.getUserId()).isEqualTo("javajigi")
+        );
     }
 
     @Test
@@ -52,10 +52,10 @@ public class UserServiceTest {
         userService.createUser(joinHttpRequest);
         User user = userService.login(loginHttpRequest);
 
-        assertAll(() -> {
-            assertThat(user.getName()).isEqualTo("%EB%B0%95%EC%9E%AC%EC%84%B1");
-            assertThat(user.getUserId()).isEqualTo("javajigi");
-        });
+        assertAll(
+            () -> assertThat(user.getName()).isEqualTo("%EB%B0%95%EC%9E%AC%EC%84%B1"),
+            () -> assertThat(user.getUserId()).isEqualTo("javajigi")
+        );
     }
 
     @Test
