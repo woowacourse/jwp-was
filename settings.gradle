@@ -1,2 +1,3 @@
 rootProject.name = 'jwp-was'
-include 'module-core', 'module-api', 'module-common'
+include 'application', 'application:module-api', 'application:module-common', 'application:module-core'
+include 'framework:module-webserver'
