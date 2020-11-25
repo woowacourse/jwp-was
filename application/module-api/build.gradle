@@ -1,0 +1,13 @@
+jar {
+    enabled = true
+}
+
+dependencies {
+    implementation project(':application:module-core')
+    implementation project(':application:module-common')
+    implementation project(':framework:module-webserver')
+
+    implementation 'org.springframework:spring-core:5.2.6.RELEASE'
+    implementation 'com.github.jknack:handlebars:4.2.0'
+    implementation 'ch.qos.logback:logback-classic:1.2.3'
+}

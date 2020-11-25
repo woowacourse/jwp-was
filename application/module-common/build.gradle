@@ -1,0 +1,7 @@
+jar {
+    enabled = true
+}
+
+dependencies {
+    implementation project(':application:module-core')
+}
