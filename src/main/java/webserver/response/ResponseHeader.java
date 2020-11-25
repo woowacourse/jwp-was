@@ -3,7 +3,8 @@ package webserver.response;
 import webserver.HttpField;
 
 public enum ResponseHeader implements HttpField {
-    LOCATION("Location");
+    LOCATION("Location"),
+    SET_COOKIE("Set-Cookie");
 
     private final String header;
 

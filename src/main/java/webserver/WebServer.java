@@ -26,7 +26,7 @@ public class WebServer {
             logger.info("Web Application Server started {} port.", port);
             // 클라이언트가 연결될때까지 대기한다.
             Socket connection;
-            ExecutorService executor = Executors.newWorkStealingPool();
+            ExecutorService executor = Executors.newCachedThreadPool();
             while ((connection = listenSocket.accept()) != null) {
                 executor.submit(new RequestHandler(connection));
             }
