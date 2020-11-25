@@ -1,0 +1,3 @@
+rootProject.name = 'jwp-was'
+include 'mission-slipp'
+include 'mission-was'
