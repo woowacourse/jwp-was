@@ -19,3 +19,7 @@ bin/
 *.iws
 *.iml
 *.ipr
+/client/build/
+/client/out/
+/was/build/
+/was/out/
