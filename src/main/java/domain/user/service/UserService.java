@@ -5,6 +5,8 @@ import domain.user.User;
 import utils.UserMapper;
 import webserver.request.HttpRequest;
 
+import java.util.Collection;
+
 public class UserService {
 
     public static void createUser(HttpRequest httpRequest) {
@@ -12,8 +14,11 @@ public class UserService {
         DataBase.addUser(user);
     }
 
-    public static User findUser(HttpRequest httpRequest) {
-        User user = UserMapper.createUser(httpRequest);
-        return DataBase.findUserById(user.getUserId());
+    public static User findById(String id) {
+        return DataBase.findUserById(id);
+    }
+
+    public static Collection<User> findAll() {
+        return DataBase.findAll();
     }
 }

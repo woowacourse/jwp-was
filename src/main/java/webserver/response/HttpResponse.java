@@ -60,6 +60,15 @@ public class HttpResponse {
         }
     }
 
+    public void forward(byte[] body) {
+        try {
+            response200Header(body);
+            responseBody(body);
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
     private void response200Header(byte[] body) throws IOException {
         processStatusLine(Status.OK);
         processHeader(EntityHeader.CONTENT_TYPE, headers.get(EntityHeader.CONTENT_TYPE));

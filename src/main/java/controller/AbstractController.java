@@ -20,11 +20,11 @@ public abstract class AbstractController implements Controller {
         httpResponse.sendError(Status.METHOD_NOT_ALLOWED);
     }
 
-    void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         httpResponse.sendError(Status.METHOD_NOT_ALLOWED);
     }
 
-    void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
+    public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         httpResponse.sendError(Status.METHOD_NOT_ALLOWED);
     }
 }

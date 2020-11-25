@@ -10,7 +10,8 @@ public enum HandlerMapping {
     TEMPLATES(Arrays.asList(".html", ".ico"), ControllerType.TEMPLATES_CONTROLLER),
     STATIC(Arrays.asList("/css", "/js", "/fonts"), ControllerType.STATIC_RESOURCE_CONTROLLER),
     USER_CREATE(Arrays.asList("/user/create"), ControllerType.USER_CREATE_CONTROLLER),
-    USER_LOGIN(Arrays.asList("/user/login"), ControllerType.USER_LOGIN_CONTROLLER);
+    USER_LOGIN(Arrays.asList("/user/setCookieAndRedirect"), ControllerType.USER_LOGIN_CONTROLLER),
+    USER_LIST(Arrays.asList("/user/list"), ControllerType.USER_LIST_CONTROLLER);
 
     private final List<String> paths;
     private final ControllerType controllerType;
