@@ -38,6 +38,6 @@
     - [x] 로그인이 성공하면 index.html로 이동, header의 Cookie header 값이 logined=true
     - [x] 로그인이 실패하면 /user/login_failed.html로 이동, header의 Cookie header 값이 logined=false
 2. /user/list로 접근할 수 있다.
-    - [] 로그인 상태일 시 사용자 목록 출력
-    - [] 로그인 하지 않았으면 로그인 페이지로 이동
+    - [x] 로그인 상태일 시 사용자 목록 출력
+    - [x] 로그인 하지 않았으면 로그인 페이지로 이동
 3. 서블릿에서 지원하는 HttpSession API의 일부를 지원    
