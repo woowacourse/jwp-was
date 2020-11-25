@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="http.response.HttpResponseHeaderTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2020-11-25T17:27:46" hostname="DESKTOP-L8UH5MK" time="0.005">
+  <properties/>
+  <testcase name="flatCookie()" classname="http.response.HttpResponseHeaderTest" time="0.002"/>
+  <testcase name="isEmptyCookie_False()" classname="http.response.HttpResponseHeaderTest" time="0.001"/>
+  <testcase name="isEmptyCookie_True()" classname="http.response.HttpResponseHeaderTest" time="0.001"/>
+  <testcase name="addResponseHeader()" classname="http.response.HttpResponseHeaderTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="type.resource.FileTypeTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2020-11-25T17:27:46" hostname="DESKTOP-L8UH5MK" time="0.026">
+  <properties/>
+  <testcase name="find_Exception()" classname="type.resource.FileTypeTest" time="0.008"/>
+  <testcase name="find_Resource_File_Type(String, ResourceType)[1]" classname="type.resource.FileTypeTest" time="0.001"/>
+  <testcase name="find_Resource_File_Type(String, ResourceType)[2]" classname="type.resource.FileTypeTest" time="0.001"/>
+  <testcase name="find_Resource_File_Type(String, ResourceType)[3]" classname="type.resource.FileTypeTest" time="0.001"/>
+  <testcase name="find_Resource_File_Type(String, ResourceType)[4]" classname="type.resource.FileTypeTest" time="0.001"/>
+  <testcase name="find_Resource_File_Type(String, ResourceType)[5]" classname="type.resource.FileTypeTest" time="0.001"/>
+  <testcase name="find_Resource_File_Type(String, ResourceType)[6]" classname="type.resource.FileTypeTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

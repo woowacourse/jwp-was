@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="http.request.HttpRequestTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2020-11-25T17:27:46" hostname="DESKTOP-L8UH5MK" time="0.087">
+  <properties/>
+  <testcase name="HTTP_POST2()" classname="http.request.HttpRequestTest" time="0.082"/>
+  <testcase name="HTTP_POST()" classname="http.request.HttpRequestTest" time="0.002"/>
+  <testcase name="HTTP_GET()" classname="http.request.HttpRequestTest" time="0.002"/>
+  <system-out><![CDATA[02:27:46.784 [Test worker] DEBUG webserver.RequestHandler - request line : POST /user/create?id=1 HTTP/1.1
+02:27:46.797 [Test worker] DEBUG webserver.RequestHandler - request header : Host: localhost:8080
+02:27:46.797 [Test worker] DEBUG webserver.RequestHandler - request header : Connection: keep-alive
+02:27:46.797 [Test worker] DEBUG webserver.RequestHandler - request header : Content-Length: 46
+02:27:46.798 [Test worker] DEBUG webserver.RequestHandler - request header : Content-Type: application/x-www-form-urlencoded
+02:27:46.798 [Test worker] DEBUG webserver.RequestHandler - request header : Accept: */*
+02:27:46.799 [Test worker] DEBUG webserver.RequestHandler - request body : userId=javajigi&password=password&name=JaeSung
+02:27:46.801 [Test worker] DEBUG webserver.RequestHandler - request line : POST /user/create HTTP/1.1
+02:27:46.801 [Test worker] DEBUG webserver.RequestHandler - request header : Host: localhost:8080
+02:27:46.801 [Test worker] DEBUG webserver.RequestHandler - request header : Connection: keep-alive
+02:27:46.801 [Test worker] DEBUG webserver.RequestHandler - request header : Content-Length: 46
+02:27:46.802 [Test worker] DEBUG webserver.RequestHandler - request header : Content-Type: application/x-www-form-urlencoded
+02:27:46.802 [Test worker] DEBUG webserver.RequestHandler - request header : Accept: */*
+02:27:46.802 [Test worker] DEBUG webserver.RequestHandler - request body : userId=javajigi&password=password&name=JaeSung
+02:27:46.803 [Test worker] DEBUG webserver.RequestHandler - request line : GET /user/create?userId=javajigi&password=password&name=JaeSung HTTP/1.1
+02:27:46.804 [Test worker] DEBUG webserver.RequestHandler - request header : Host: localhost:8080
+02:27:46.804 [Test worker] DEBUG webserver.RequestHandler - request header : Connection: keep-alive
+02:27:46.804 [Test worker] DEBUG webserver.RequestHandler - request header : Accept: */*
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
