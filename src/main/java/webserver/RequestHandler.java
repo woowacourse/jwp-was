@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exception.DisabledEncodingException;
 import http.Cookie;
 import http.HttpSession;
 import http.request.HttpRequest;
@@ -39,28 +40,32 @@ public class RequestHandler implements Runnable {
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             DataOutputStream dos = new DataOutputStream(outputStream);
         ) {
-            HttpRequest httpRequest = SimpleHttpRequest.of(bufferedReader);
-            logger.debug(System.lineSeparator() + httpRequest.toString());
             HttpResponse httpResponse = new HttpResponse();
-            doDispatch(dos, httpRequest, httpResponse);
+            try {
+                HttpRequest httpRequest = SimpleHttpRequest.of(bufferedReader);
+                logger.debug(System.lineSeparator() + httpRequest.toString());
+                doDispatch(httpRequest, httpResponse);
+            } catch (DisabledEncodingException e) {
+                httpResponse.internalServerError();
+            } finally {
+                httpResponse.send(dos);
+            }
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void doDispatch(DataOutputStream dos, HttpRequest httpRequest, HttpResponse httpResponse) throws
-        IOException {
+    private void doDispatch(HttpRequest httpRequest, HttpResponse httpResponse) {
         try {
             HttpServlet dispatcherServlet = new DispatcherServlet();
             dispatcherServlet.service(httpRequest, httpResponse);
         } finally {
             HttpSession session = httpRequest.getSession();
-            if(session.isNew()) {
+            if (session.isNew()) {
                 Cookie cookie = Cookie.createSessionIdCookie(session.getId());
                 httpResponse.addCookie(cookie);
                 session.toOld();
             }
-            httpResponse.send(dos);
         }
     }
 }

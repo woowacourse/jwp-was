@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
+import exception.DisabledEncodingException;
+
 public class HttpBody {
     private static final HttpBody DEFAULT_REQUEST_BODY =
         new HttpBody(Collections.unmodifiableMap(new HashMap<>()));
@@ -33,9 +35,8 @@ public class HttpBody {
                     try {
                         return Objects.isNull(pair[VALUE_INDEX]) ? null : URLDecoder.decode(pair[VALUE_INDEX], "UTF-8");
                     } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
+                        throw new DisabledEncodingException("HttpBody 생성에 실패하였습니다 - 인코딩 실패", e);
                     }
-                    return null;
                 }
             ));
         return new HttpBody(body);
