@@ -30,6 +30,6 @@ class UserServiceTest {
 
         Optional<User> user = UserService.findById("77");
 
-        assertThat(user.isPresent()).isFalse();
+        assertThat(user).isEmpty();
     }
 }
