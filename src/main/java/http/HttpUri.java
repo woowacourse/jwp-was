@@ -27,6 +27,6 @@ public class HttpUri {
     }
 
     public String getParam(String key) {
-        return query.get(key);
+        return query.getFirst(key);
     }
 }
