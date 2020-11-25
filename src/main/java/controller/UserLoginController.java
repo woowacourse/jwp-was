@@ -17,7 +17,8 @@ public class UserLoginController extends AbstractController {
     @Override
     public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         User requestUser = UserMapper.createUser(httpRequest);
-        User foundUser = UserService.findById(requestUser.getUserId());
+        User foundUser = UserService.findById(requestUser.getUserId())
+                .orElse(null);
         if (foundUser == null || foundUser.notMatchPassword(requestUser)) {
             setCookieAndRedirect(httpResponse, LOGIN_FALSE + PATH, USER_LOGIN_FAILED_HTML);
             return;
@@ -25,7 +26,7 @@ public class UserLoginController extends AbstractController {
         setCookieAndRedirect(httpResponse, LOGIN_TRUE + PATH, INDEX_HTML);
     }
 
-    public void setCookieAndRedirect(HttpResponse httpResponse, String cookieValue, String path) {
+    private void setCookieAndRedirect(HttpResponse httpResponse, String cookieValue, String path) {
         httpResponse.addHeader(ResponseHeader.SET_COOKIE, cookieValue);
         httpResponse.sendRedirect(path);
     }

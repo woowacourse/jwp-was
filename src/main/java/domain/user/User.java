@@ -13,6 +13,10 @@ public class User {
         this.email = email;
     }
 
+    public boolean notMatchPassword(User requestUser) {
+        return !this.password.equals(requestUser.password);
+    }
+
     public String getUserId() {
         return userId;
     }
@@ -32,9 +36,5 @@ public class User {
     @Override
     public String toString() {
         return "User [userId=" + userId + ", password=" + password + ", name=" + name + ", email=" + email + "]";
-    }
-
-    public boolean notMatchPassword(User requestUser) {
-        return !this.password.equals(requestUser.password);
     }
 }

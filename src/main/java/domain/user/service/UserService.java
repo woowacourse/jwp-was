@@ -6,6 +6,7 @@ import utils.UserMapper;
 import webserver.request.HttpRequest;
 
 import java.util.Collection;
+import java.util.Optional;
 
 public class UserService {
 
@@ -14,8 +15,12 @@ public class UserService {
         DataBase.addUser(user);
     }
 
-    public static User findById(String id) {
-        return DataBase.findUserById(id);
+    public static Optional<User> findById(String id) {
+        User user = DataBase.findUserById(id);
+        if (user == null) {
+            return Optional.empty();
+        }
+        return Optional.of(user);
     }
 
     public static Collection<User> findAll() {
