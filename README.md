@@ -103,3 +103,12 @@ Thread Pool을 적용해 일정 수의 사용자 동시에 처리가 가능하�
     - [x] void removeAttribute(String name): 현재 세션에 name 인자로 저장되어 있는 객체 값을 삭제
     - [x] void invalidate(): 현재 세션에 저장되어 있는 모든 값을 삭제
 - [x] cookie 구조화
+
+#### 리뷰 반영
+- [ ] e.printStackTrace() 반환하는 부분을 로그 출력으로 변경
+- [ ] null 반환 제거
+- [ ] doGet() 템플릿화하어 재사용 가능한 구조를 만들기
+    1. validation
+    2. get Data
+    3. make template
+    4. http response 
