@@ -26,6 +26,11 @@ class HeadersTest {
         ContentType contentType = ContentType.HTML;
 
         headers.addHeader(header, contentType.getContentTypeValue());
+
+        assertAll(
+            () -> assertThat(headers.getHeaders()).isNotEmpty(),
+            () -> assertThat(headers.getHeaders()).hasSize(1)
+        );
     }
 
     @ParameterizedTest
@@ -42,6 +47,7 @@ class HeadersTest {
     }
 
     @Test
+    @DisplayName("값 확인")
     void getValue() {
         Headers headers = new Headers();
         Header header = Header.CONTENT_TYPE;
@@ -53,6 +59,7 @@ class HeadersTest {
     }
 
     @Test
+    @DisplayName("헤더 확인")
     void getHeaders() {
         Headers headers = new Headers();
         Header header = Header.CONTENT_TYPE;
