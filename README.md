@@ -67,3 +67,9 @@ WAS 기능 요구사항
     -[x] getAttribute(String name) 구현
     -[x] removeAttribute(String name) 구현
     -[x] invalidate() 구현
+    
+멀티 모듈 적용
+
+-[x] gradle의 멀티 모듈 개념을 적용해 프로젝트를 분리한다.
+    -[x] web-server / 사용자 관리 응용 어플리케이션을 서로 다른 프로젝트로 분리한다.
+    
