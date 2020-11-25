@@ -1,5 +1,7 @@
 package webserver;
 
+import static constants.CookieConstants.SESSION_COOKIE_KEY;
+
 import controller.Controller;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -70,7 +72,7 @@ public class RequestHandler implements Runnable {
             Headers headers = httpResponse.getHeaders();
             UUID uuid = UUID.randomUUID();
 
-            headers.addHeader(Header.SET_COOKIE, "JSESSIONID=" + uuid.toString());
+            headers.addHeader(Header.SET_COOKIE, SESSION_COOKIE_KEY + uuid.toString());
         }
     }
 }

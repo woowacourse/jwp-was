@@ -10,7 +10,7 @@ public class Headers {
     private Map<Header, String> headers;
 
     public Headers() {
-        this.headers = new HashMap<>();
+        this(new HashMap<>());
     }
 
     public Headers(Map<Header, String> headers) {

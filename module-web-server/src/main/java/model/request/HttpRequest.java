@@ -1,5 +1,7 @@
 package model.request;
 
+import static constants.CookieConstants.SESSION_COOKIE_KEY;
+
 import exception.NoSessionException;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,9 +10,9 @@ import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import model.general.ContentType;
+import model.general.Cookie;
 import model.general.Cookies;
 import model.general.Header;
 import model.general.Headers;
@@ -22,12 +24,6 @@ import utils.HeaderUtils;
 import utils.IOUtils;
 
 public class HttpRequest {
-
-    private static final int VALUE_INDEX = 1;
-    private static final String SESSION_COOKIE_KEY = "JSESSIONID";
-    private static final String COOKIE_SEPARATOR = ";";
-    private static final String COOKIE_KEY_VALUE_SEPARATOR = "=";
-    private static final int FIRST_COOKIE_INDEX = 0;
 
     private final RequestLine requestLine;
     private final Headers headers;
@@ -111,18 +107,15 @@ public class HttpRequest {
     }
 
     private String getSessionId() throws NoSessionException {
-        if (hasSession()) {
-            return headers.getValue(Header.COOKIE)
-                .split(SESSION_COOKIE_KEY + COOKIE_KEY_VALUE_SEPARATOR)[VALUE_INDEX]
-                .split(COOKIE_SEPARATOR)[FIRST_COOKIE_INDEX];
-        }
+        Optional<Cookie> sessionCookie = getCookies().getCookie(SESSION_COOKIE_KEY);
 
-        throw new NoSessionException("No Session");
+        return sessionCookie.map(Cookie::getValue)
+            .orElseThrow(() -> new NoSessionException("No Session"));
     }
 
     public boolean hasSession() {
-        String cookies = headers.getValue(Header.COOKIE);
+        Optional<Cookie> sessionCookie = getCookies().getCookie(SESSION_COOKIE_KEY);
 
-        return Objects.nonNull(cookies) && cookies.contains(SESSION_COOKIE_KEY);
+        return sessionCookie.isPresent();
     }
 }

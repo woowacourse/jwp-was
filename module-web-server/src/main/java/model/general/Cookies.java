@@ -1,11 +1,11 @@
 package model.general;
 
+import static constants.CookieConstants.LOGIN_CHECK_COOKIE_KEY;
+
 import java.util.List;
 import java.util.Optional;
 
 public class Cookies {
-
-    private static final String LOGIN_CHECK_COOKIE = "logined";
 
     private List<Cookie> cookies;
 
@@ -20,7 +20,7 @@ public class Cookies {
     }
 
     public boolean isLogined() {
-        Optional<Cookie> loginedCookie = getCookie(LOGIN_CHECK_COOKIE);
+        Optional<Cookie> loginedCookie = getCookie(LOGIN_CHECK_COOKIE_KEY);
         if (!loginedCookie.isPresent()) {
             return false;
         }
