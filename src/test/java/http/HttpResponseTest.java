@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 
 import org.junit.jupiter.api.Test;
 
+import http.response.HttpResponse;
 import utils.FileIoUtils;
 
 class HttpResponseTest {
@@ -18,7 +19,7 @@ class HttpResponseTest {
         byte[] body = FileIoUtils.loadFileFromClasspath("/index.html");
         ContentType contentType = ContentType.findByURI("/index.html");
         response.setBody(body, contentType);
-        response.send(createOutputStream("Http_Forward.txt"));
+        response.send(createOutputStream("HTTP_FORWARD.txt"));
     }
 
     @Test
@@ -26,7 +27,7 @@ class HttpResponseTest {
         HttpResponse response = new HttpResponse();
         response.setStatus(HttpStatus.MOVED_PERMANENTLY);
         response.addHeader("Location", "/index.html");
-        response.send(createOutputStream("Http_Redirect.txt"));
+        response.send(createOutputStream("HTTP_REDIRECT.txt"));
     }
 
     @Test
@@ -35,7 +36,7 @@ class HttpResponseTest {
         response.setStatus(HttpStatus.MOVED_PERMANENTLY);
         response.addHeader("Set-Cookie", "logined=true");
         response.addHeader("Location", "/index.html");
-        response.send(createOutputStream("Http_Cookie.txt"));
+        response.send(createOutputStream("HTTP_COOKIE.txt"));
     }
 
     private DataOutputStream createOutputStream(String filename) throws FileNotFoundException {

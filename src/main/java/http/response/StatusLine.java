@@ -1,4 +1,6 @@
-package http;
+package http.response;
+
+import http.HttpStatus;
 
 public class StatusLine {
     private String version;

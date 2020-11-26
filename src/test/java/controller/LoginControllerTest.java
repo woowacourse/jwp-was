@@ -14,64 +14,58 @@ import java.nio.charset.StandardCharsets;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
+import dto.JoinRequestDto;
+import http.HttpSession;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.request.SimpleHttpRequest;
 import service.UserService;
 import servlet.HttpServlet;
 
-class UserControllerTest {
+class LoginControllerTest {
     private String testDirectory = "./src/test/resources/";
-
     private UserService userService;
-    private HttpServlet userController;
+    private HttpServlet loginController;
 
     @BeforeEach
     void setUp() {
         userService = new UserService();
-        userController = new UserController(userService);
+        loginController = new LoginController(userService);
     }
 
     @Test
-    void doPost() throws IOException {
-        HttpRequest request = getHttpRequest("HTTP_POST.txt");
+    void login() throws IOException {
+        JoinRequestDto joinRequestDto = new JoinRequestDto("javajigi", "password", "pobi", "pobi@slipp.com");
+        userService.join(joinRequestDto);
+
+        HttpRequest request = getHttpRequest("HTTP_LOGIN.txt");
         HttpResponse response = new HttpResponse();
 
-        userController.service(request, response);
+        loginController.service(request, response);
 
+        HttpSession session = request.getSession();
         assertAll(
-            () -> assertThat(response.getStatus()).isEqualTo(FOUND),
-            () -> assertThat(response.getHeader("Location")).isNotNull()
-        );
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"HTTP_PUT.txt", "HTTP_DELETE.txt"})
-    void doNotAllowedMethod_ThrownException(String path) throws IOException {
-        HttpRequest request = getHttpRequest(path);
-        HttpResponse response = new HttpResponse();
-
-        userController.service(request, response);
-
-        assertAll(
-            () -> assertThat(response.getStatus()).isEqualTo(METHOD_NOT_ALLOWED),
-            () -> assertThat(response.getHeader("Content-Type")).isNotNull()
+            () -> assertThat(response.getStatus()).isEqualTo(MOVED_PERMANENTLY),
+            () -> assertThat(session.getAttribute("logined")).isEqualTo("true")
         );
     }
 
     @Test
-    void doGet() throws IOException {
-        HttpRequest request = getHttpRequest("HTTP_GET_WITHOUT_LOGIN.txt");
+    void login_fail() throws IOException {
+        JoinRequestDto joinRequestDto = new JoinRequestDto("javajigi", "passold", "pobi", "pobi@slipp.com");
+        userService.join(joinRequestDto);
+
+        HttpRequest request = getHttpRequest("HTTP_LOGIN.txt");
         HttpResponse response = new HttpResponse();
 
-        userController.service(request, response);
+        loginController.service(request, response);
 
         assertAll(
-            () -> assertThat(response.getStatus()).isEqualTo(MOVED_PERMANENTLY)
+            () -> assertThat(response.getStatus()).isEqualTo(MOVED_PERMANENTLY),
+            () -> assertThat(response.getHeader("Location")).isEqualTo("/user/login_failed.html")
         );
+
     }
 
     private HttpRequest getHttpRequest(String path) throws IOException {
