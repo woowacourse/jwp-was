@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 import utils.HttpUtils;
 import utils.IOUtils;
 
@@ -48,6 +49,10 @@ public class HttpRequest {
 
     public String getParam(String key) {
         return requestLine.getParam(key);
+    }
+
+    public List<String> getParams(String key) {
+        return requestLine.getParams(key);
     }
 
     public String version() {

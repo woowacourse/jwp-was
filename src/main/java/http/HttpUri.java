@@ -1,5 +1,6 @@
 package http;
 
+import java.util.List;
 import utils.HttpUtils;
 
 public class HttpUri {
@@ -31,5 +32,9 @@ public class HttpUri {
 
     public String getParam(String key) {
         return query.getFirst(key);
+    }
+
+    public List<String> getParams(String key) {
+        return query.get(key);
     }
 }
