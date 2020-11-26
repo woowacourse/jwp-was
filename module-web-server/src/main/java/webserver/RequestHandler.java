@@ -22,6 +22,7 @@ import utils.ControllerMapper;
 public class RequestHandler implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final String COOKIE_KEY_VALUE_SEPARATOR = "=";
 
     private Socket connection;
 
@@ -57,7 +58,7 @@ public class RequestHandler implements Runnable {
 
             HttpResponse httpResponse = controller.service(httpRequest);
             makeSession(httpRequest, httpResponse);
-            
+
             return httpResponse;
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -72,7 +73,8 @@ public class RequestHandler implements Runnable {
             Headers headers = httpResponse.getHeaders();
             UUID uuid = UUID.randomUUID();
 
-            headers.addHeader(Header.SET_COOKIE, SESSION_COOKIE_KEY + uuid.toString());
+            headers.addHeader(Header.SET_COOKIE,
+                SESSION_COOKIE_KEY + COOKIE_KEY_VALUE_SEPARATOR + uuid.toString());
         }
     }
 }

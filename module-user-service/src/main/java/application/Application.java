@@ -1,10 +1,12 @@
 package application;
 
+import com.google.common.collect.Maps;
+import controller.Controller;
 import controller.UserCreateController;
 import controller.UserListController;
 import controller.UserLoginController;
 import controller.UserProfileController;
-import utils.ControllerMapper;
+import java.util.Map;
 import webserver.WebServer;
 
 public class Application {
@@ -12,15 +14,21 @@ public class Application {
     private static final int NO_ARGUMENTS_SIZE = 0;
 
     public static void main(String[] args) throws Exception {
-        ControllerMapper.addController("/user/create", new UserCreateController());
-        ControllerMapper.addController("/user/login", new UserLoginController());
-        ControllerMapper.addController("/user/list", new UserListController());
-        ControllerMapper.addController("/user/profile", new UserProfileController());
-
-        WebServer webServer = new WebServer();
+        WebServer webServer = new WebServer(setUpControllers());
         String userPort = getUserPort(args);
 
         webServer.run(userPort);
+    }
+
+    private static Map<String, Controller> setUpControllers() {
+        Map<String, Controller> controllerMap = Maps.newHashMap();
+
+        controllerMap.put("/user/create", new UserCreateController());
+        controllerMap.put("/user/login", new UserLoginController());
+        controllerMap.put("/user/list", new UserListController());
+        controllerMap.put("/user/profile", new UserProfileController());
+
+        return controllerMap;
     }
 
     private static String getUserPort(String[] args) {

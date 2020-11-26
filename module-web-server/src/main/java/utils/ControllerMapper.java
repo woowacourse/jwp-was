@@ -28,7 +28,7 @@ public class ControllerMapper {
         return notFoundController;
     }
 
-    public static void addController(String location, Controller controller) {
-        controllerMap.put(location, controller);
+    public static void addControllers(Map<String, Controller> controllers) {
+        controllerMap.putAll(controllers);
     }
 }
