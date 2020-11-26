@@ -52,7 +52,7 @@ public class UserLoginController extends AbstractController {
             HttpSession httpSession = httpRequest.getSession();
             httpSession.setAttribute(USER_ATTRIBUTE_KEY, user);
 
-            StatusLine statusLine = StatusLine.of(httpRequest, Status.FOUND);
+            StatusLine statusLine = StatusLine.of(httpRequest.getHttpVersion(), Status.FOUND);
             Headers headers = new Headers();
             headers.addHeader(Header.LOCATION, HOME_LOCATION);
             headers.addHeader(Header.CONTENT_TYPE, ContentType.HTML
@@ -62,11 +62,12 @@ public class UserLoginController extends AbstractController {
             return HttpResponse.of(statusLine, headers, null);
         } catch (NotExistUserException e) {
             return HttpResponse.
-                redirectResponse(httpRequest, LOGIN_FAIL_REDIRECT_LOCATION,
+                redirectResponse(httpRequest.getHttpVersion(), LOGIN_FAIL_REDIRECT_LOCATION,
                     LOGIN_FAIL_COOKIE_VALUE);
         } catch (NoSessionException e) {
             return HttpResponse.
-                redirectResponse(httpRequest, LOGIN_REDIRECT_LOCATION, LOGIN_FAIL_COOKIE_VALUE);
+                redirectResponse(httpRequest.getHttpVersion(), LOGIN_REDIRECT_LOCATION,
+                    LOGIN_FAIL_COOKIE_VALUE);
         }
     }
 }

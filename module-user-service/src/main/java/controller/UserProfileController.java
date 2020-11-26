@@ -46,7 +46,8 @@ public class UserProfileController extends AbstractController {
         Cookies cookies = httpRequest.getCookies();
         if (!cookies.isLogined()) {
             return HttpResponse.
-                redirectResponse(httpRequest, LOGIN_REDIRECT_LOCATION, LOGIN_FAIL_COOKIE_VALUE);
+                redirectResponse(httpRequest.getHttpVersion(), LOGIN_REDIRECT_LOCATION,
+                    LOGIN_FAIL_COOKIE_VALUE);
         }
 
         try {
@@ -55,7 +56,7 @@ public class UserProfileController extends AbstractController {
             String postPage = HandlebarUtils.applyTemplate(PROFILE_REQUEST, user);
             byte[] body = postPage.getBytes();
 
-            StatusLine statusLine = StatusLine.of(httpRequest, Status.OK);
+            StatusLine statusLine = StatusLine.of(httpRequest.getHttpVersion(), Status.OK);
             Headers headers = new Headers();
             headers.addHeader(Header.CONTENT_LENGTH, String.valueOf(body.length));
             headers.addHeader(Header.CONTENT_TYPE, ContentType.HTML
@@ -66,7 +67,8 @@ public class UserProfileController extends AbstractController {
             return HttpResponse.of(Status.INTERNAL_ERROR);
         } catch (NoSessionException e) {
             return HttpResponse.
-                redirectResponse(httpRequest, LOGIN_REDIRECT_LOCATION, LOGIN_FAIL_COOKIE_VALUE);
+                redirectResponse(httpRequest.getHttpVersion(), LOGIN_REDIRECT_LOCATION,
+                    LOGIN_FAIL_COOKIE_VALUE);
         }
     }
 }

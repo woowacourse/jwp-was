@@ -56,7 +56,7 @@ public class ResourceController extends AbstractController {
         } catch (Exception e) {
             return HttpResponse.of(Status.NOT_FOUND);
         }
-        StatusLine statusLine = StatusLine.of(httpRequest, Status.OK);
+        StatusLine statusLine = StatusLine.of(httpRequest.getHttpVersion(), Status.OK);
         Headers headers = new Headers();
         headers.addHeader(Header.CONTENT_TYPE, contentType.get()
             .getContentTypeValue());

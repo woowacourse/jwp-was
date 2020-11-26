@@ -45,7 +45,8 @@ public class UserListController extends AbstractController {
         Cookies cookies = httpRequest.getCookies();
         if (!cookies.isLogined()) {
             return HttpResponse.
-                redirectResponse(httpRequest, LOGIN_REDIRECT_LOCATION, LOGIN_FAIL_COOKIE_VALUE);
+                redirectResponse(httpRequest.getHttpVersion(), LOGIN_REDIRECT_LOCATION,
+                    LOGIN_FAIL_COOKIE_VALUE);
         }
 
         try {
@@ -53,7 +54,7 @@ public class UserListController extends AbstractController {
             String listPage = HandlebarUtils.applyTemplate(LIST_REQUEST, users);
             byte[] body = listPage.getBytes();
 
-            StatusLine statusLine = StatusLine.of(httpRequest, Status.OK);
+            StatusLine statusLine = StatusLine.of(httpRequest.getHttpVersion(), Status.OK);
             Headers headers = new Headers();
             headers.addHeader(Header.CONTENT_TYPE, ContentType.HTML
                 .getContentTypeValue());

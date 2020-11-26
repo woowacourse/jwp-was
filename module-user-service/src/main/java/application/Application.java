@@ -15,7 +15,7 @@ public class Application {
 
     public static void main(String[] args) throws Exception {
         WebServer webServer = new WebServer(setUpControllers());
-        String userPort = getUserPort(args);
+        Integer userPort = getUserPort(args);
 
         webServer.run(userPort);
     }
@@ -31,11 +31,11 @@ public class Application {
         return controllerMap;
     }
 
-    private static String getUserPort(String[] args) {
+    private static Integer getUserPort(String[] args) {
         if (args.length == NO_ARGUMENTS_SIZE) {
             return null;
         }
 
-        return args[0];
+        return Integer.valueOf(args[0]);
     }
 }

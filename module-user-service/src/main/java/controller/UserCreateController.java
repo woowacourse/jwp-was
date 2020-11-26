@@ -40,7 +40,7 @@ public class UserCreateController extends AbstractController {
 
         service.createUser(httpRequest);
 
-        StatusLine statusLine = StatusLine.of(httpRequest, Status.FOUND);
+        StatusLine statusLine = StatusLine.of(httpRequest.getHttpVersion(), Status.FOUND);
         headers.addHeader(Header.LOCATION, HOME_LOCATION);
 
         return HttpResponse.of(statusLine, headers, null);

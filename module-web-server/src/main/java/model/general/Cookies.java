@@ -21,10 +21,13 @@ public class Cookies {
 
     public boolean isLogined() {
         Optional<Cookie> loginedCookie = getCookie(LOGIN_CHECK_COOKIE_KEY);
+
         if (!loginedCookie.isPresent()) {
             return false;
         }
+
         Cookie cookie = loginedCookie.get();
+
         return new Boolean(cookie.getValue());
     }
 }

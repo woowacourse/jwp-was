@@ -22,7 +22,7 @@ public class WebServer {
         ControllerMapper.addControllers(controllers);
     }
 
-    public void run(String userPort) throws Exception {
+    public void run(Integer userPort) throws Exception {
         int port = initPort(userPort);
         ExecutorService executorService
             = Executors.newFixedThreadPool(NUMBER_OF_AVAILABLE_CORES * (1 + BLOCKING_COEFFICIENT));
@@ -41,11 +41,11 @@ public class WebServer {
         }
     }
 
-    private int initPort(String port) {
+    private int initPort(Integer port) {
         if (Objects.isNull(port)) {
             return DEFAULT_PORT;
         }
 
-        return Integer.parseInt(port);
+        return port.intValue();
     }
 }
