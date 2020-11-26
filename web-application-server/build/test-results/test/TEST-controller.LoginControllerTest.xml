@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="controller.LoginControllerTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2020-11-26T12:55:01" hostname="leewonmi-team02ui-MacBookPro.local" time="0.014">
+  <properties/>
+  <testcase name="login_fail()" classname="controller.LoginControllerTest" time="0.009"/>
+  <testcase name="login()" classname="controller.LoginControllerTest" time="0.003"/>
+  <system-out><![CDATA[21:55:01.548 [DEBUG] [Test worker] [db.DataBase] - USER 회원가입 성공 : User [userId=javajigi, password=passold, name=pobi, email=pobi@slipp.com]
+userId=javajigi&password=password
+21:55:01.557 [DEBUG] [Test worker] [db.DataBase] - USER 회원가입 성공 : User [userId=javajigi, password=password, name=pobi, email=pobi@slipp.com]
+userId=javajigi&password=password
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

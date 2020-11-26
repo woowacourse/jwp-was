@@ -113,3 +113,5 @@ Thread Pool을 적용해 일정 수의 사용자 동시에 처리가 가능하�
 
 #### 요구사항
 - [ ] Web Application Server(이하 WAS) 본연의 기능을 담당하는 부분 분리 사용자 관리라는 응용 애플리케이션을 구현하는 부분 분리
+
+web-application-server / slip-application

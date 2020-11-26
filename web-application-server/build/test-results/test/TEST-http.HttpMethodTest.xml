@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="http.HttpMethodTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2020-11-26T12:55:01" hostname="leewonmi-team02ui-MacBookPro.local" time="0.023">
+  <properties/>
+  <testcase name="createException()" classname="http.HttpMethodTest" time="0.002"/>
+  <testcase name="createGET(String, HttpMethod)[1]" classname="http.HttpMethodTest" time="0.001"/>
+  <testcase name="createGET(String, HttpMethod)[2]" classname="http.HttpMethodTest" time="0.001"/>
+  <testcase name="createGET(String, HttpMethod)[3]" classname="http.HttpMethodTest" time="0.001"/>
+  <testcase name="createGET(String, HttpMethod)[4]" classname="http.HttpMethodTest" time="0.0"/>
+  <testcase name="createGET(String, HttpMethod)[5]" classname="http.HttpMethodTest" time="0.001"/>
+  <testcase name="createGET(String, HttpMethod)[6]" classname="http.HttpMethodTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

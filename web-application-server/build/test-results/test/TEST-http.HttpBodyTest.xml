@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="http.HttpBodyTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-11-26T12:55:01" hostname="leewonmi-team02ui-MacBookPro.local" time="0.002">
+  <properties/>
+  <testcase name="create()" classname="http.HttpBodyTest" time="0.002"/>
+  <system-out><![CDATA[userId=jjj0611&password=1234&name=장재주&email=jjj0611@gmail.com
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

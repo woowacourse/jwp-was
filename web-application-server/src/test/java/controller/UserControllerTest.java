@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import exception.UnAuthenticationException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.request.SimpleHttpRequest;
@@ -67,11 +68,8 @@ class UserControllerTest {
         HttpRequest request = getHttpRequest("HTTP_GET_WITHOUT_LOGIN.txt");
         HttpResponse response = new HttpResponse();
 
-        userController.service(request, response);
-
-        assertAll(
-            () -> assertThat(response.getStatus()).isEqualTo(MOVED_PERMANENTLY)
-        );
+        assertThatThrownBy(() -> userController.service(request, response))
+            .isInstanceOf(UnAuthenticationException.class);
     }
 
     private HttpRequest getHttpRequest(String path) throws IOException {

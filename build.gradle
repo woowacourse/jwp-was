@@ -1,25 +1,21 @@
-plugins {
-    id 'java'
-    id 'idea'
-    id 'eclipse'
-}
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'eclipse'
 
-version = '1.0.0'
-sourceCompatibility = 1.8
+    version = '1.0.0'
+    sourceCompatibility = 1.8
 
-repositories {
-    mavenCentral()
-}
+    repositories {
+        mavenCentral()
+    }
 
-dependencies {
-    implementation 'com.google.guava:guava:29.0-jre'
-    implementation 'ch.qos.logback:logback-classic:1.2.3'
-    implementation 'com.github.jknack:handlebars:4.2.0'
-    implementation 'org.springframework:spring-core:5.2.6.RELEASE'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.6.2'
-    testImplementation 'org.assertj:assertj-core:3.16.1'
-}
+    dependencies {
+        testImplementation 'org.junit.jupiter:junit-jupiter:5.6.2'
+        testImplementation 'org.assertj:assertj-core:3.16.1'
+    }
 
-test {
-    useJUnitPlatform()
+    test {
+        useJUnitPlatform()
+    }
 }

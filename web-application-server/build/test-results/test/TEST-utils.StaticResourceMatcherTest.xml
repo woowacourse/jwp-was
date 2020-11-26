@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="utils.StaticResourceMatcherTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2020-11-26T12:55:01" hostname="leewonmi-team02ui-MacBookPro.local" time="0.026">
+  <properties/>
+  <testcase name="isStaticResource(String, boolean)[1]" classname="utils.StaticResourceMatcherTest" time="0.004"/>
+  <testcase name="isStaticResource(String, boolean)[2]" classname="utils.StaticResourceMatcherTest" time="0.003"/>
+  <testcase name="isStaticResource(String, boolean)[3]" classname="utils.StaticResourceMatcherTest" time="0.001"/>
+  <testcase name="isStaticResource(String, boolean)[4]" classname="utils.StaticResourceMatcherTest" time="0.001"/>
+  <testcase name="isStaticResource(String, boolean)[5]" classname="utils.StaticResourceMatcherTest" time="0.003"/>
+  <testcase name="isStaticResource(String, boolean)[6]" classname="utils.StaticResourceMatcherTest" time="0.001"/>
+  <testcase name="isStaticResource(String, boolean)[7]" classname="utils.StaticResourceMatcherTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

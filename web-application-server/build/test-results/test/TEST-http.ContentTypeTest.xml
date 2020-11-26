@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="http.ContentTypeTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2020-11-26T12:55:01" hostname="leewonmi-team02ui-MacBookPro.local" time="0.019">
+  <properties/>
+  <testcase name="contentType(String, String)[1]" classname="http.ContentTypeTest" time="0.001"/>
+  <testcase name="contentType(String, String)[2]" classname="http.ContentTypeTest" time="0.0"/>
+  <testcase name="contentType(String, String)[3]" classname="http.ContentTypeTest" time="0.001"/>
+  <testcase name="contentType(String, String)[4]" classname="http.ContentTypeTest" time="0.001"/>
+  <testcase name="contentType(String, String)[5]" classname="http.ContentTypeTest" time="0.002"/>
+  <testcase name="contentType(String, String)[6]" classname="http.ContentTypeTest" time="0.0"/>
+  <testcase name="contentTypeException(String)[1]" classname="http.ContentTypeTest" time="0.001"/>
+  <testcase name="contentTypeException(String)[2]" classname="http.ContentTypeTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
