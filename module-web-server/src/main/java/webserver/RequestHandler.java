@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import model.general.Header;
@@ -24,10 +25,12 @@ public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private static final String COOKIE_KEY_VALUE_SEPARATOR = "=";
 
-    private Socket connection;
+    private final Socket connection;
+    private final ControllerMapper controllerMapper;
 
-    public RequestHandler(Socket connectionSocket) {
+    public RequestHandler(Socket connectionSocket, Map<String, Controller> controllerMapper) {
         this.connection = connectionSocket;
+        this.controllerMapper = new ControllerMapper(controllerMapper);
     }
 
     public void run() {
@@ -51,7 +54,7 @@ public class RequestHandler implements Runnable {
         try {
             HttpRequest httpRequest = HttpRequest.of(inputStream);
 
-            Controller controller = ControllerMapper.selectController(httpRequest);
+            Controller controller = controllerMapper.selectController(httpRequest);
             if (Objects.isNull(controller)) {
                 return HttpResponse.of(Status.NOT_FOUND);
             }

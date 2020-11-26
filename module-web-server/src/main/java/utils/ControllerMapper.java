@@ -13,7 +13,11 @@ public class ControllerMapper {
     private static final Controller resourceController = new ResourceController();
     private static final Controller notFoundController = new NotFoundController();
 
-    public static Controller selectController(HttpRequest httpRequest) {
+    public ControllerMapper(Map<String, Controller> controllers) {
+        controllerMap.putAll(controllers);
+    }
+
+    public Controller selectController(HttpRequest httpRequest) {
         if (httpRequest.whetherUriHasExtension()) {
             return resourceController;
         }
@@ -26,9 +30,5 @@ public class ControllerMapper {
         }
 
         return notFoundController;
-    }
-
-    public static void addControllers(Map<String, Controller> controllers) {
-        controllerMap.putAll(controllers);
     }
 }
