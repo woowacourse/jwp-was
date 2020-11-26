@@ -11,7 +11,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 public class ContentTypeMatcherTest {
     @ParameterizedTest
     @MethodSource(value = "provideValidValue")
-    @DisplayName("ContentTypeMatcher from 테스트")
+    @DisplayName("ContentTypeMatcher match 테스트")
     void match(String path, String expected) {
         assertThat(ContentTypeMatcher.match(path)).isEqualTo(expected);
     }

@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.BufferedReader;
 import java.io.StringReader;
 import java.util.List;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +22,6 @@ public class IOUtilsTest {
     }
 
     @Test
-    @DisplayName("readLineUntilEmpty 테스트")
     public void readLineUntilEmpty() throws Exception {
         String data = "Accept: text/html\r\nContent-Length: 100\r\n";
         StringReader sr = new StringReader(data);
