@@ -1,16 +1,14 @@
 package webserver.controller;
 
-import static org.assertj.core.api.Assertions.*;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 public class UserCreateControllerTest {
     @Test
@@ -19,7 +17,7 @@ public class UserCreateControllerTest {
         String message = "POST /user/create HTTP/1.1\r\n"
             + "Host: localhost:8080\r\n"
             + "Connection: keep-alive\r\n"
-            + "Content-Length: 59\r\n"
+            + "Content-Length: 93\r\n"
             + "Content-Type: application/x-www-form-urlencoded\r\n"
             + "Accept: */*\r\n"
             + "\r\n"
@@ -29,6 +27,6 @@ public class UserCreateControllerTest {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         HttpResponse httpResponse = HttpResponse.from(out, httpRequest.version());
         new UserCreateController().doPost(httpRequest, httpResponse);
-        assertThat(out.toString()).isEqualTo("HTTP/1.1 302 Found\nLocation: /index.html\n\n");
+        assertThat(out.toString()).isEqualTo("HTTP/1.1 302 Found\nLocation: /index.html\n");
     }
 }

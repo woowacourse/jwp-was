@@ -1,5 +1,7 @@
 package http;
 
+import webserver.exception.NotImplementedException;
+
 public enum HttpMethod {
     GET,
     POST;
@@ -8,7 +10,7 @@ public enum HttpMethod {
         try {
             return valueOf(method);
         } catch (IllegalArgumentException ignored){
-            throw new IllegalArgumentException("지원하지 않는 방법 입니다.");
+            throw new NotImplementedException();
         }
     }
 }

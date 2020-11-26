@@ -1,14 +1,17 @@
 package http.response;
 
+import http.HttpHeaders;
+import http.HttpStatus;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import http.HttpHeaders;
-import http.HttpStatus;
-
 public class HttpResponse {
     private static final String LINE_SEPARATOR = System.lineSeparator();
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String CONTENT_LENGTH = "Content-Length";
+    private static final String LOCATION = "Location";
+    private static final byte[] EMPTY = new byte[0];
 
     private final DataOutputStream writer;
     private final HttpStatusLine statusLine;
@@ -35,26 +38,34 @@ public class HttpResponse {
         return this;
     }
 
+    public HttpResponse contentType(String contentType) {
+        return set(CONTENT_TYPE, contentType);
+    }
+
     public void end(byte[] body) throws IOException {
+        setContentLength(body.length);
         writeStatusLine();
-        if (body != null) {
-            headers.set("Content-Length", String.valueOf(body.length));
-            writeHeaders();
-            writeEmptyLine();
-            writer.write(body, 0, body.length);
-        } else {
-            writeHeaders();
-            writeEmptyLine();
-        }
+        writeHeaders();
+        writeBody(body);
         writer.flush();
     }
 
+    public void end() throws IOException {
+        end(EMPTY);
+    }
+
+    private void setContentLength(int length) {
+        if (length > 0) {
+            headers.set(CONTENT_LENGTH, String.valueOf(length));
+        }
+    }
+
     public void sendRedirect(String to) throws IOException {
-        status(HttpStatus.FOUND).set("Location", to).end(null);
+        status(HttpStatus.FOUND).set(LOCATION, to).end();
     }
 
     private void writeStatusLine() throws IOException {
-        writer.writeBytes(statusLine.build() + LINE_SEPARATOR);
+        writer.writeBytes(statusLine.build()+ LINE_SEPARATOR);
     }
 
     private void writeHeaders() throws IOException {
@@ -65,5 +76,12 @@ public class HttpResponse {
 
     private void writeEmptyLine() throws IOException {
         writer.writeBytes(LINE_SEPARATOR);
+    }
+
+    private void writeBody(byte[] body) throws IOException {
+        if (body.length > 0) {
+            writeEmptyLine();
+            writer.write(body);
+        }
     }
 }

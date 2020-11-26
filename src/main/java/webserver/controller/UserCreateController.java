@@ -6,12 +6,8 @@ import http.response.HttpResponse;
 import java.io.IOException;
 import webserver.service.UserService;
 
-public class UserCreateController extends Controller {
-    @Override
-    protected void doGet(HttpRequest request, HttpResponse response) throws IOException {
-        next(request, response);
-    }
-
+@RequestMapping("/user/create")
+public class UserCreateController extends AbstractController {
     @Override
     protected void doPost(HttpRequest request, HttpResponse response) throws IOException {
         QueryParams queryParams = QueryParams.parse(request.getBody());

@@ -1,14 +1,19 @@
 package http.request;
 
+import http.ContentType;
 import http.HttpHeaders;
 import http.HttpMethod;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import utils.HttpUtils;
 import utils.IOUtils;
 
 public class HttpRequest {
+    private static final String CONTENT_LENGTH = "Content-Length";
+    private static final String CONTENT_TYPE = "Content-Type";
+
     private final HttpRequestLine requestLine;
     private final HttpHeaders headers;
     private final String body;
@@ -24,8 +29,11 @@ public class HttpRequest {
         HttpRequestLine requestLine = HttpRequestLine.from(reader.readLine());
         HttpHeaders headers = HttpHeaders.from(IOUtils.readLineUntilEmpty(reader));
         String body = "";
-        if (headers.has("Content-Length")) {
-            body = IOUtils.readData(reader, Integer.parseInt(headers.get("Content-Length")));
+        if (headers.has(CONTENT_LENGTH)) {
+            body = IOUtils.readData(reader, Integer.parseInt(headers.get(CONTENT_LENGTH)));
+        }
+        if (ContentType.APPLICATION_X_WWW_FORM_URLENCODED.match(headers.get(CONTENT_TYPE))) {
+            body = HttpUtils.urlDecode(body);
         }
         return new HttpRequest(requestLine, headers, body);
     }

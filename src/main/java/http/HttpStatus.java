@@ -6,7 +6,10 @@ public enum HttpStatus {
     OK(200, "OK"),
     CREATED(201, "Created"),
     FOUND(302, "Found"),
-    NOT_FOUND(404, "Not Found");
+    NOT_FOUND(404, "Not Found"),
+    METHOD_NOT_ALLOWED(405, "Method Not Allowed"),
+    INTERNAL_SERVER_ERROR(500, "Internal Server Error"),
+    NOT_IMPLEMENTED(501, "Not Implemented");
 
     private final int statusCode;
     private final String reason;

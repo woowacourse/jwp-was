@@ -14,8 +14,8 @@ public class HttpResponseTest {
     void end() throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         HttpResponse httpResponse = HttpResponse.from(outputStream, "HTTP/1.1");
-        httpResponse.status(HttpStatus.OK).end(null);
-        assertThat(outputStream.toString()).isEqualTo("HTTP/1.1 200 OK\n\n");
+        httpResponse.status(HttpStatus.OK).end();
+        assertThat(outputStream.toString()).isEqualTo("HTTP/1.1 200 OK\n");
     }
 
     @Test
@@ -37,8 +37,7 @@ public class HttpResponseTest {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         HttpResponse httpResponse = HttpResponse.from(outputStream, "HTTP/1.1");
         String expected = "HTTP/1.1 302 Found\n"
-            + "Location: /index.html\n"
-            + "\n";
+            + "Location: /index.html\n";
         httpResponse.sendRedirect("/index.html");
         assertThat(outputStream.toString()).isEqualTo(expected);
     }

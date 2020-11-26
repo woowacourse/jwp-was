@@ -1,27 +1,30 @@
 package webserver;
 
+import http.request.HttpRequest;
+import http.response.HttpResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-
+import java.util.Arrays;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import http.request.HttpRequest;
-import http.response.HttpResponse;
+import webserver.controller.Controller;
 import webserver.controller.UserCreateController;
-import webserver.middleware.Middlewares;
-import webserver.middleware.NotFound;
-import webserver.middleware.ServeStatic;
+import webserver.filter.Filter;
+import webserver.filter.ServeStatic;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private static final Middlewares middlewares = new Middlewares()
-        .chain(new ServeStatic("templates"))
-        .chain(new ServeStatic("static"))
-        .chain("/user/create", new UserCreateController())
-        .chain(new NotFound());
+    private static final List<Filter> FILTERS = Arrays.asList(
+        new ServeStatic("templates"),
+        new ServeStatic("static")
+    );
+    private static final List<Controller> CONTROLLERS = Arrays.asList(
+        new UserCreateController()
+    );
+
 
     private final Socket connection;
 
@@ -30,13 +33,15 @@ public class RequestHandler implements Runnable {
     }
 
     public void run() {
-        logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
-            connection.getPort());
+        logger
+            .debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
+                connection.getPort());
 
-        try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
+        try (InputStream in = connection.getInputStream(); OutputStream out = connection
+            .getOutputStream()) {
             HttpRequest request = HttpRequest.from(in);
             HttpResponse response = HttpResponse.from(out, request.version());
-            middlewares.run(request, response);
+            new ApplicationFilterChain(FILTERS, CONTROLLERS).run(request, response);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
