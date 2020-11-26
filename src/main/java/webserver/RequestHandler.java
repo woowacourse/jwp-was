@@ -13,8 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exception.DisabledEncodingException;
+import exception.UnAuthenticationException;
 import http.Cookie;
 import http.HttpSession;
+import http.HttpStatus;
 import http.request.HttpRequest;
 import http.request.SimpleHttpRequest;
 import http.response.HttpResponse;
@@ -47,6 +49,9 @@ public class RequestHandler implements Runnable {
                 doDispatch(httpRequest, httpResponse);
             } catch (DisabledEncodingException | IndexOutOfBoundsException e) {
                 httpResponse.internalServerError();
+            } catch (UnAuthenticationException e) {
+                httpResponse.setStatus(HttpStatus.MOVED_PERMANENTLY);
+                httpResponse.addHeader("Location", "/user/login.html");
             } finally {
                 httpResponse.send(dos);
             }

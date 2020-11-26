@@ -1,5 +1,9 @@
 package controller;
 
+import java.util.Objects;
+
+import exception.UnAuthenticationException;
+import http.HttpSession;
 import http.HttpStatus;
 import http.HttpVersion;
 import http.request.HttpRequest;
@@ -14,7 +18,6 @@ public abstract class AbstractController implements HttpServlet {
             httpResponse.setStatus(HttpStatus.BAD_REQUEST);
             return;
         }
-
         switch (httpRequest.getMethod()) {
             case GET:
                 doGet(httpRequest, httpResponse);
@@ -47,5 +50,13 @@ public abstract class AbstractController implements HttpServlet {
 
     protected void doPut(HttpRequest httpRequest, HttpResponse httpResponse) {
         httpResponse.methodNotAllowed();
+    }
+
+    protected void validateLogin(HttpRequest httpRequest) {
+        HttpSession session = httpRequest.getSession();
+        String logined = String.valueOf(session.getAttribute("logined"));
+        if (Objects.isNull(logined) || !"true".equals(logined)) {
+            throw new UnAuthenticationException("로그인이 필요한 서비스입니다");
+        }
     }
 }

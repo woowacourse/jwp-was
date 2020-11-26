@@ -2,14 +2,12 @@ package controller;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 
 import annotation.RequestMapping;
 import dto.JoinRequestDto;
 import dto.UserResponseDto;
 import http.ContentType;
 import http.HttpBody;
-import http.HttpSession;
 import http.HttpStatus;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -39,12 +37,7 @@ public class UserController extends AbstractController {
 
     @Override
     protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        HttpSession session = httpRequest.getSession();
-        String logined = String.valueOf(session.getAttribute("logined"));
-        if (Objects.isNull(logined) || !"true".equals(logined)) {
-            unauthorized(httpResponse);
-            return;
-        }
+        validateLogin(httpRequest);
 
         List<UserResponseDto> users = userService.findAll();
 
@@ -55,10 +48,5 @@ public class UserController extends AbstractController {
         } catch (IOException e) {
             httpResponse.internalServerError();
         }
-    }
-
-    private void unauthorized(HttpResponse httpResponse) {
-        httpResponse.setStatus(HttpStatus.MOVED_PERMANENTLY);
-        httpResponse.addHeader("Location", "/user/login.html");
     }
 }
