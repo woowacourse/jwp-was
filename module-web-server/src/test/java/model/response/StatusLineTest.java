@@ -23,7 +23,8 @@ public class StatusLineTest {
         InputStream inputStream = new FileInputStream(filePath);
         HttpRequest httpRequest = HttpRequest.of(inputStream);
         assertAll(
-            () -> assertThat(StatusLine.of(httpRequest, status)).isInstanceOf(StatusLine.class),
+            () -> assertThat(StatusLine.of(httpRequest.getHttpVersion(), status))
+                .isInstanceOf(StatusLine.class),
             () -> assertThat(StatusLine.of(status)).isInstanceOf(StatusLine.class)
         );
     }
@@ -49,7 +50,7 @@ public class StatusLineTest {
     void getHttpVersion(String filePath, Status status) throws IOException {
         InputStream inputStream = new FileInputStream(filePath);
         HttpRequest httpRequest = HttpRequest.of(inputStream);
-        StatusLine statusLine = StatusLine.of(httpRequest, status);
+        StatusLine statusLine = StatusLine.of(httpRequest.getHttpVersion(), status);
 
         assertThat(statusLine.getHttpVersion()).isEqualTo("HTTP/1.1");
     }
@@ -60,7 +61,7 @@ public class StatusLineTest {
     void getStatusCode(String filePath, Status status) throws IOException {
         InputStream inputStream = new FileInputStream(filePath);
         HttpRequest httpRequest = HttpRequest.of(inputStream);
-        StatusLine statusLine = StatusLine.of(httpRequest, status);
+        StatusLine statusLine = StatusLine.of(httpRequest.getHttpVersion(), status);
 
         assertThat(statusLine.getStatusCode())
             .isEqualTo(String.valueOf(status.getStatusCode()));
@@ -72,7 +73,7 @@ public class StatusLineTest {
     void getReasonPhrase(String filePath, Status status) throws IOException {
         InputStream inputStream = new FileInputStream(filePath);
         HttpRequest httpRequest = HttpRequest.of(inputStream);
-        StatusLine statusLine = StatusLine.of(httpRequest, status);
+        StatusLine statusLine = StatusLine.of(httpRequest.getHttpVersion(), status);
 
         assertThat(statusLine.getReasonPhrase()).isEqualTo(status.getReasonPhrase());
     }

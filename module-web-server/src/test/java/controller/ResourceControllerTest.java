@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import model.general.Header;
 import model.general.Headers;
 import model.request.HttpRequest;
@@ -28,7 +29,8 @@ public class ResourceControllerTest {
         InputStream inputStream = new FileInputStream(filePath);
         HttpRequest httpRequest = HttpRequest.of(inputStream);
 
-        Controller controller = ControllerMapper.selectController(httpRequest);
+        ControllerMapper controllerMapper = new ControllerMapper(Collections.emptyMap());
+        Controller controller = controllerMapper.selectController(httpRequest);
         HttpResponse httpResponse = controller.service(httpRequest);
         Headers headers = httpResponse.getHeaders();
         byte[] body = httpResponse.getBody();
@@ -50,7 +52,9 @@ public class ResourceControllerTest {
         String filePath = "src/test/resources/input/get_template_file_request_invalid_file.txt";
         InputStream inputStream = new FileInputStream(filePath);
         HttpRequest httpRequest = HttpRequest.of(inputStream);
-        Controller controller = ControllerMapper.selectController(httpRequest);
+
+        ControllerMapper controllerMapper = new ControllerMapper(Collections.emptyMap());
+        Controller controller = controllerMapper.selectController(httpRequest);
         HttpResponse httpResponse = controller.service(httpRequest);
 
         Headers headers = httpResponse.getHeaders();
@@ -72,7 +76,9 @@ public class ResourceControllerTest {
         String filePath = "src/test/resources/input/get_template_file_request_invalid_method.txt";
         InputStream inputStream = new FileInputStream(filePath);
         HttpRequest httpRequest = HttpRequest.of(inputStream);
-        Controller controller = ControllerMapper.selectController(httpRequest);
+
+        ControllerMapper controllerMapper = new ControllerMapper(Collections.emptyMap());
+        Controller controller = controllerMapper.selectController(httpRequest);
         HttpResponse httpResponse = controller.service(httpRequest);
 
         Headers headers = httpResponse.getHeaders();

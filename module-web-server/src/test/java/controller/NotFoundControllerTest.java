@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import model.request.HttpRequest;
 import model.response.HttpResponse;
 import org.junit.jupiter.api.DisplayName;
@@ -21,7 +22,8 @@ public class NotFoundControllerTest {
         InputStream inputStream = new FileInputStream(filePath);
         HttpRequest httpRequest = HttpRequest.of(inputStream);
 
-        Controller controller = ControllerMapper.selectController(httpRequest);
+        ControllerMapper controllerMapper = new ControllerMapper(Collections.emptyMap());
+        Controller controller = controllerMapper.selectController(httpRequest);
         HttpResponse httpResponse = controller.service(httpRequest);
 
         assertAll(

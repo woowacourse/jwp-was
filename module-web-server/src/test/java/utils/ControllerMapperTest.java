@@ -6,6 +6,7 @@ import controller.Controller;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import model.request.HttpRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -25,7 +26,9 @@ class ControllerMapperTest {
     void getStatusCode(String filePath) throws IOException {
         InputStream inputStream = new FileInputStream(filePath);
         HttpRequest httpRequest = HttpRequest.of(inputStream);
-        Controller controller = ControllerMapper.selectController(httpRequest);
+
+        ControllerMapper controllerMapper = new ControllerMapper(Collections.emptyMap());
+        Controller controller = controllerMapper.selectController(httpRequest);
 
         assertThat(controller).isInstanceOf(Controller.class);
     }
