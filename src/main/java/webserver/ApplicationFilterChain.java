@@ -5,6 +5,7 @@ import http.request.HttpRequest;
 import http.response.HttpResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import webserver.controller.Controller;
 import webserver.controller.RequestMapping;
@@ -15,22 +16,18 @@ import webserver.filter.Filter;
 import webserver.filter.FilterChain;
 
 public class ApplicationFilterChain implements FilterChain {
-    private final List<Filter> filters;
+    private final Iterator<Filter> filterIterator;
     private final List<Controller> controllers;
-    private int filterIndex;
-    private final int filterLength;
 
     public ApplicationFilterChain(List<Filter> filters, List<Controller> controllers) {
-        this.filters = new ArrayList<>(filters);
+        this.filterIterator = filters.iterator();
         this.controllers = new ArrayList<>(controllers);
-        this.filterIndex = 0;
-        this.filterLength = this.filters.size();
     }
 
     @Override
     public void doFilter(HttpRequest request, HttpResponse response) throws IOException {
-        if (filterIndex < filterLength) {
-            filters.get(filterIndex++)
+        if (filterIterator.hasNext()) {
+            filterIterator.next()
                 .doFilter(request, response, this);
             return;
         }
