@@ -1,8 +1,7 @@
 package http.response;
 
-import java.util.Objects;
-
 import http.HttpStatus;
+import java.util.Objects;
 
 public class HttpStatusLine {
     private final String version;
@@ -17,7 +16,7 @@ public class HttpStatusLine {
         return new HttpStatusLine(version, HttpStatus.OK);
     }
 
-    public HttpStatusLine setStatus(HttpStatus status) {
+    protected HttpStatusLine setStatus(HttpStatus status) {
         this.status = Objects.requireNonNull(status, "상태 코드는 null이 될 수 없습니다.");
         return this;
     }

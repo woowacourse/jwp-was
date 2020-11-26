@@ -1,5 +1,8 @@
 package http;
 
+import java.util.List;
+import utils.HttpUtils;
+
 public class HttpUri {
     private static final String DELIMITER = "\\?";
     private static final int PATH_INDEX = 0;
@@ -15,7 +18,8 @@ public class HttpUri {
     }
 
     public static HttpUri from(String uri) {
-        String[] tokens = uri.split(DELIMITER);
+        String decodedUrl = HttpUtils.urlDecode(uri);
+        String[] tokens = decodedUrl.split(DELIMITER);
         if (tokens.length == HAS_QUERY) {
             return new HttpUri(tokens[PATH_INDEX], QueryParams.parse(tokens[QUERY_INDEX]));
         }
@@ -27,6 +31,10 @@ public class HttpUri {
     }
 
     public String getParam(String key) {
+        return query.getFirst(key);
+    }
+
+    public List<String> getParams(String key) {
         return query.get(key);
     }
 }

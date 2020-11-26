@@ -20,13 +20,13 @@ public class IOUtils {
         return String.copyValueOf(body);
     }
 
-    public static List<String> readHeaders(BufferedReader br) throws IOException {
-        List<String> headers = new ArrayList<>();
+    public static List<String> readLineUntilEmpty(BufferedReader br) throws IOException {
+        List<String> lines = new ArrayList<>();
         String line = br.readLine();
         while (line != null && !line.isEmpty()) {
-            headers.add(line);
+            lines.add(line);
             line = br.readLine();
         }
-        return headers;
+        return lines;
     }
 }

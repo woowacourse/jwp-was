@@ -2,6 +2,7 @@ package http.request;
 
 import http.HttpMethod;
 import http.HttpUri;
+import java.util.List;
 
 public class HttpRequestLine {
     private static final String DELIMITER = " ";
@@ -39,6 +40,10 @@ public class HttpRequestLine {
 
     public String getParam(String key) {
         return path.getParam(key);
+    }
+
+    public List<String> getParams(String key) {
+        return path.getParams(key);
     }
 
     public String getVersion() {
