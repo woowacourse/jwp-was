@@ -4,27 +4,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class UserCreateControllerTest {
+    private String testDirectory = "./src/test/resources/";
+
     @Test
     @DisplayName("UserCreateController 회원가입 후 리다이렉트 테스트")
     void doPost() throws IOException {
-        String message = "POST /user/create HTTP/1.1\r\n"
-            + "Host: localhost:8080\r\n"
-            + "Connection: keep-alive\r\n"
-            + "Content-Length: 93\r\n"
-            + "Content-Type: application/x-www-form-urlencoded\r\n"
-            + "Accept: */*\r\n"
-            + "\r\n"
-            + "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
-        ByteArrayInputStream in = new ByteArrayInputStream(message.getBytes());
+        InputStream in = new FileInputStream(new File(testDirectory + "Http_GET.txt"));
         HttpRequest httpRequest = HttpRequest.from(in);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        OutputStream out = new ByteArrayOutputStream();
         HttpResponse httpResponse = HttpResponse.from(out, httpRequest.version());
         new UserCreateController().doPost(httpRequest, httpResponse);
         assertThat(out.toString()).isEqualTo("HTTP/1.1 302 Found\nLocation: /index.html\n");

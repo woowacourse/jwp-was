@@ -3,20 +3,20 @@ package http.request;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import http.HttpMethod;
-import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class HttpRequestTest {
+    private String testDirectory = "./src/test/resources/";
+
     @Test
     @DisplayName("HttpRequest 생성 테스트")
     void from() throws IOException {
-        String message = "GET /users?name=홍길동 HTTP/1.1\r\n" +
-            "Host: localhost:8080\r\n" +
-            "Connection: keep-alive\r\n" +
-            "Accept: */*";
-        ByteArrayInputStream in = new ByteArrayInputStream(message.getBytes());
+        InputStream in = new FileInputStream(new File(testDirectory + "Http_GET.txt"));
         HttpRequest httpRequest = HttpRequest.from(in);
         assertThat(httpRequest.method()).isEqualTo(HttpMethod.GET);
         assertThat(httpRequest.path()).isEqualTo("/users");
@@ -30,15 +30,7 @@ public class HttpRequestTest {
     @Test
     @DisplayName("HttpRequest getBody 테스트")
     void getBody() throws IOException {
-        String message = "POST /user/create HTTP/1.1\r\n"
-            + "Host: localhost:8080\r\n"
-            + "Connection: keep-alive\r\n"
-            + "Content-Length: 93\r\n"
-            + "Content-Type: application/x-www-form-urlencoded\r\n"
-            + "Accept: */*\r\n"
-            + "\r\n"
-            + "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
-        ByteArrayInputStream in = new ByteArrayInputStream(message.getBytes());
+        InputStream in = new FileInputStream(new File(testDirectory + "Http_POST.txt"));
         HttpRequest httpRequest = HttpRequest.from(in);
         System.out.println(httpRequest.getBody());
     }
