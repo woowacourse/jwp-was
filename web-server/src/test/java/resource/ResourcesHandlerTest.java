@@ -15,7 +15,7 @@ class ResourcesHandlerTest {
     @Test
     @DisplayName("uri 로 resource 얻기")
     void convertUriToResource() throws IOException, URISyntaxException {
-        Resource resource = resourceHandler.convertUriToResource("/css/styles.css");
+        Resource resource = resourceHandler.convertUriToResource("/css/test.css");
         assertThat(resource).isInstanceOf(Resource.class);
         assertThat(resource.getContentType()).isEqualTo(ContentType.CSS);
     }

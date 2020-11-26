@@ -10,7 +10,7 @@ class FileIoUtilsTest {
 
     @Test
     void loadFileFromClasspath() throws Exception {
-        byte[] body = FileIoUtils.loadFileFromClasspath("./templates/index.html");
+        byte[] body = FileIoUtils.loadFileFromClasspath("static/css/test.css");
         log.debug("file : {}", new String(body));
     }
 }

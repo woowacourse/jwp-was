@@ -1,6 +1,5 @@
-package webserver;
-
 import application.controller.ControllerMapper;
+import webserver.WebServer;
 
 public class Application {
 
