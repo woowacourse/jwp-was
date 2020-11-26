@@ -1,6 +1,6 @@
 .DS_Store
 .gradle
-/build/
+build
 !gradle/wrapper/gradle-wrapper.jar
 /out/
 /target/
