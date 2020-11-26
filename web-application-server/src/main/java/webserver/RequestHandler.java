@@ -26,9 +26,11 @@ import servlet.HttpServlet;
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
+    private DispatcherServlet dispatcherServlet;
     private Socket connection;
 
-    public RequestHandler(Socket connectionSocket) {
+    public RequestHandler(DispatcherServlet dispatcherServlet, Socket connectionSocket) {
+        this.dispatcherServlet = dispatcherServlet;
         this.connection = connectionSocket;
     }
 
@@ -62,7 +64,6 @@ public class RequestHandler implements Runnable {
 
     private void doDispatch(HttpRequest httpRequest, HttpResponse httpResponse) {
         try {
-            HttpServlet dispatcherServlet = new DispatcherServlet();
             dispatcherServlet.service(httpRequest, httpResponse);
         } finally {
             HttpSession session = httpRequest.getSession();

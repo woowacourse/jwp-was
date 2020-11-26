@@ -26,9 +26,17 @@ public class ServletMapping implements HandlerMapping {
         //         servlet -> servlet));
     }
 
+    private final Map<String, HttpServlet> servletMatcher;
+
+    public ServletMapping(List<HttpServlet> httpServlets) {
+        servletMatcher = httpServlets.stream()
+            .collect(Collectors.toMap(
+                servlet -> servlet.getClass().getAnnotation(RequestMapping.class).path(),
+                servlet -> servlet));
+    }
+
     @Override
     public HttpServlet getServlet(HttpRequest httpRequest) {
-        return null;
-        // return SERVLET_MATCHER.get(httpRequest.getURI());
+        return servletMatcher.get(httpRequest.getURI());
     }
 }

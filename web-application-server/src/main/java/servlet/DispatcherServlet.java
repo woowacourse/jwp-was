@@ -8,10 +8,16 @@ import http.request.HttpRequest;
 import http.response.HttpResponse;
 
 public class DispatcherServlet implements HttpServlet {
-    private static final List<HandlerMapping> handlerMappings;
+    // private static final List<HandlerMapping> handlerMappings;
 
-    static {
-        handlerMappings = Arrays.asList(new ServletMapping(), new StaticResourceMapping());
+    // static {
+    //     handlerMappings = Arrays.asList(new ServletMapping(), new StaticResourceMapping());
+    // }
+    //
+    private final List<HandlerMapping> handlerMappings;
+
+    public DispatcherServlet(final List<HttpServlet> httpServlets) {
+        this.handlerMappings = Arrays.asList(new ServletMapping(httpServlets), new StaticResourceMapping());
     }
 
     @Override

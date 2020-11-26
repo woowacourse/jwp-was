@@ -2,24 +2,29 @@ package webserver;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import servlet.DispatcherServlet;
+import servlet.HttpServlet;
+
 public class WebServer {
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
     private static final int DEFAULT_PORT = 8080;
 
-    public static void main(String args[]) throws Exception {
+    public static void main(List<HttpServlet> httpServlets, String args[]) throws Exception {
         int port = initPort(args);
         ExecutorService executorService = Executors.newFixedThreadPool(ThreadPoolSizeCalculator.getThreadPoolSize());
+        DispatcherServlet dispatcherServlet = new DispatcherServlet(httpServlets);
         try (ServerSocket listenSocket = new ServerSocket(port)) {
             logger.info("Web Application Server started {} port.", port);
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
-                executorService.submit(new RequestHandler(connection));
+                executorService.submit(new RequestHandler(dispatcherServlet, connection));
             }
         }
         executorService.shutdown();
