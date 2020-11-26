@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 class HttpBodyTest {
-
     @Test
     void create() {
         HttpBody httpBody = HttpBody.from("userId=jjj0611&password=1234&name=장재주&email=jjj0611@gmail.com");

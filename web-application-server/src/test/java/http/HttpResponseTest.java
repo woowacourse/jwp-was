@@ -16,8 +16,8 @@ class HttpResponseTest {
     @Test
     public void responseForward() throws Exception {
         HttpResponse response = new HttpResponse();
-        byte[] body = FileIoUtils.loadFileFromClasspath("/index.html");
-        ContentType contentType = ContentType.findByURI("/index.html");
+        byte[] body = FileIoUtils.loadFileFromClasspath("/test.html");
+        ContentType contentType = ContentType.findByURI("/test.html");
         response.setBody(body, contentType);
         response.send(createOutputStream("HTTP_FORWARD.txt"));
     }
@@ -26,7 +26,7 @@ class HttpResponseTest {
     public void responseRedirect() throws Exception {
         HttpResponse response = new HttpResponse();
         response.setStatus(HttpStatus.MOVED_PERMANENTLY);
-        response.addHeader("Location", "/index.html");
+        response.addHeader("Location", "/test.html");
         response.send(createOutputStream("HTTP_REDIRECT.txt"));
     }
 
@@ -35,7 +35,7 @@ class HttpResponseTest {
         HttpResponse response = new HttpResponse();
         response.setStatus(HttpStatus.MOVED_PERMANENTLY);
         response.addHeader("Set-Cookie", "logined=true");
-        response.addHeader("Location", "/index.html");
+        response.addHeader("Location", "/test.html");
         response.send(createOutputStream("HTTP_COOKIE.txt"));
     }
 

@@ -7,7 +7,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class URITest {
-
     @DisplayName("URI를 생성한다.")
     @Test
     void create() {

@@ -7,7 +7,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 class StaticResourceMatcherTest {
-
     @DisplayName("static resource 확인")
     @ParameterizedTest
     @CsvSource(value = {"/css/style.css:true", "/js/scripts.js:true", "/index.html:true", "/js/bootstrap.min.js:true",

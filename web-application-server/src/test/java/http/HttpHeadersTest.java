@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 
 class HttpHeadersTest {
-
     @Test
     void create() {
         String headerRequest =

@@ -1,650 +1,0 @@
-/userId=javajigi&password=password&name=JaeSung
-r21:55:00,927 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
-p21:55:00,927 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.groovy]
-�21:55:00,927 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/Users/pobiseeyou/Projects/jwp-was/web-application-server/build/resources/main/logback.xml]
-i21:55:00,977 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - debug attribute not set
-�21:55:00,977 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
-e21:55:00,984 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [STDOUT]
-�21:55:01,011 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - This appender no longer admits a layout as a sub-component, set an encoder instead.
-�21:55:01,011 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - To ensure compatibility, wrapping your layout in LayoutWrappingEncoder.
-�21:55:01,011 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - See also http://logback.qos.ch/codes.html#layoutInsteadOfEncoder for details
-t21:55:01,012 |-INFO in ch.qos.logback.classic.joran.action.RootLoggerAction - Setting level of ROOT logger to DEBUG
-~21:55:01,012 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [STDOUT] to Logger[ROOT]
-g21:55:01,013 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - End of configuration.
-�21:55:01,013 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@277e6002 - Registering current configuration as safe fallback point
-
-�21:55:01.027 [DEBUG] [Test worker] [db.DataBase] - USER 회원가입 성공 : User [userId=javajigi, password=password, name=JaeSung, email=null]
-
-/userId=javajigi&password=password&name=JaeSung
-
-T21:55:01.194 [DEBUG] [Test worker] [utils.FileIoUtilsTest] - file : <!DOCTYPE html>
-<html lang="kr">
-	<head>
-F		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-		<meta charset="utf-8">
-,		<title>SLiPP Java Web Programming</title>
-X		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-7		<link href="css/bootstrap.min.css" rel="stylesheet">
-		<!--[if lt IE 9]>
-I			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-		<![endif]-->
-0		<link href="css/styles.css" rel="stylesheet">
-		</head>
-	
-	<body>
--<nav class="navbar navbar-fixed-top header">
- 	<div class="col-md-12">
-$        <div class="navbar-header">
-
-@            <a href="index.html" class="navbar-brand">SLiPP</a>
-n          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse1">
-5          <i class="glyphicon glyphicon-search"></i>
-          </button>
-      
-        </div>
-E        <div class="collapse navbar-collapse" id="navbar-collapse1">
-/          <form class="navbar-form pull-left">
-A              <div class="input-group" style="max-width:470px;">
-n                <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
-.                <div class="input-group-btn">
-�                  <button class="btn btn-default btn-primary" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-                </div>
-              </div>
-          </form>
-@          <ul class="nav navbar-nav navbar-right">             
-             <li>
-x                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-bell"></i></a>
-+                <ul class="dropdown-menu">
-Q                  <li><a href="https://slipp.net" target="_blank">SLiPP</a></li>
-W                  <li><a href="https://facebook.com" target="_blank">Facebook</a></li>
-                </ul>
-             </li>
-^             <li><a href="./user/list.html"><i class="glyphicon glyphicon-user"></i></a></li>
-           </ul>
-        </div>	
-     </div>	
-</nav>
-0<div class="navbar navbar-default" id="subnav">
-    <div class="col-md-12">
-$        <div class="navbar-header">
-�            <a href="#" style="margin-left:15px;" class="navbar-btn btn btn-default btn-plus dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-home" style="color:#dd1111;"></i> Home <small><i class="glyphicon glyphicon-chevron-down"></i></small></a>
-+            <ul class="nav dropdown-menu">
-�                <li><a href="user/profile.html"><i class="glyphicon glyphicon-user" style="color:#1111dd;"></i> Profile</a></li>
-.                <li class="nav-divider"></li>
-q                <li><a href="#"><i class="glyphicon glyphicon-cog" style="color:#dd1111;"></i> Settings</a></li>
-            </ul>
-            
-p            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse2">
-<            	<span class="sr-only">Toggle navigation</span>
-,            	<span class="icon-bar"></span>
-,            	<span class="icon-bar"></span>
-,            	<span class="icon-bar"></span>
-"            </button>            
-        </div>
-E        <div class="collapse navbar-collapse" id="navbar-collapse2">
-5            <ul class="nav navbar-nav navbar-right">
-G                <li class="active"><a href="index.html">Posts</a></li>
-O                <li><a href="user/login.html" role="button">로그인</a></li>
-Q                <li><a href="user/form.html" role="button">회원가입</a></li>
-                <!--
-_                <li><a href="#loginModal" role="button" data-toggle="modal">로그인</a></li>
-e                <li><a href="#registerModal" role="button" data-toggle="modal">회원가입</a></li>
-                -->
-D                <li><a href="#" role="button">로그아웃</a></li>
-J                <li><a href="#" role="button">개인정보수정</a></li>
-            </ul>
-        </div>
-    </div>
-</div>
-
-"<div class="container" id="main">
-?   <div class="col-md-12 col-sm-12 col-lg-10 col-lg-offset-1">
-1      <div class="panel panel-default qna-list">
-          <ul class="list">
-              <li>
-%                  <div class="wrap">
-)                      <div class="main">
-3                          <strong class="subject">
-�                              <a href="./qna/show.html">국내에서 Ruby on Rails와 Play가 활성화되기 힘든 이유는 뭘까?</a>
-$                          </strong>
-2                          <div class="auth-info">
-?                              <i class="icon-add-comment"></i>
-I                              <span class="time">2016-01-15 18:47</span>
-\                              <a href="./user/profile.html" class="author">자바지기</a>
-!                          </div>
-=                          <div class="reply" title="댓글">
-9                              <i class="icon-reply"></i>
-;                              <span class="point">8</span>
-!                          </div>
-                      </div>
-                  </div>
-              </li>
-              <li>
-%                  <div class="wrap">
-)                      <div class="main">
-3                          <strong class="subject">
-�                              <a href="./qna/show.html">runtime 에 reflect 발동 주체 객체가 뭔지 알 방법이 있을까요?</a>
-$                          </strong>
-2                          <div class="auth-info">
-?                              <i class="icon-add-comment"></i>
-I                              <span class="time">2016-01-05 18:47</span>
-Y                              <a href="./user/profile.html" class="author">김문수</a>
-!                          </div>
-=                          <div class="reply" title="댓글">
-9                              <i class="icon-reply"></i>
-<                              <span class="point">12</span>
-!                          </div>
-                      </div>
-                  </div>
-              </li>
-          </ul>
-          <div class="row">
-+              <div class="col-md-3"></div>
-1              <div class="col-md-6 text-center">
-U                  <ul class="pagination center-block" style="display:inline-block;">
-2                      <li><a href="#">«</a></li>
-1                      <li><a href="#">1</a></li>
-1                      <li><a href="#">2</a></li>
-1                      <li><a href="#">3</a></li>
-1                      <li><a href="#">4</a></li>
-1                      <li><a href="#">5</a></li>
-2                      <li><a href="#">»</a></li>
-                </ul>
-              </div>
-/              <div class="col-md-3 qna-write">
-n                  <a href="./qna/form.html" class="btn btn-primary pull-right" role="button">질문하기</a>
-              </div>
-          </div>
-        </div>
-    </div>
-</div>
-
-<!-- script references -->
-/<script src="js/jquery-2.2.0.min.js"></script>
-,<script src="js/bootstrap.min.js"></script>
-&<script src="js/scripts.js"></script>
-		</body>
-</html>
-G21:55:01.214 [DEBUG] [Test worker] [utils.FileIoUtilsTest] - file : /*
-1A custom Bootstrap 3.2 'Google Plus style' theme
-from http://bootply.com
-
-0This CSS code should follow the 'bootstrap.css'
-in your HTML file.
-
-license: MIT
-author: bootply.com
-*/
-
-@@import url(http://fonts.googleapis.com/css?family=Roboto:400);
-body {
-  background-color:#e0e0e0;
-'  -webkit-font-smoothing: antialiased;
--  font: normal 14px Roboto,arial,sans-serif;
-}
-U.navbar-default {background-color:#f4f4f4;margin-top:50px;border-width:0;z-index:5;}
-�.navbar-default .navbar-nav > .active > a,.navbar-default .navbar-nav > li:hover > a {border:0 solid #4285f4;border-bottom-width:2px;font-weight:800;background-color:transparent;}
-;.navbar-default .dropdown-menu {background-color:#ffffff;}
-;.navbar-default .dropdown-menu li > a {padding-left:30px;}
-
-3.header {background-color:#ffffff;border-width:0;}
-5.header .navbar-collapse {background-color:#ffffff;}
-R.btn,.form-control,.panel,.list-group,.well {border-radius:1px;box-shadow:0 0 0;}
-&.form-control {border-color:#d7d7d7;}
-).btn-primary {border-color:transparent;}
-�.btn-primary,.label-primary,.list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus {background-color:#4285f4;}
-�.btn-plus {background-color:#ffffff;border-width:1px;border-color:#dddddd;box-shadow:1px 1px 0 #999999;border-radius:3px;color:#666666;text-shadow:0 0 1px #bbbbbb;}
-R.well,.panel {border-color:#d2d2d2;box-shadow:0 1px 0 #cfcfcf;border-radius:3px;}
-M.btn-success,.label-success,.progress-bar-success{background-color:#65b045;}
-Y.btn-info,.label-info,.progress-bar-info{background-color:#a0c3ff;border-color:#a0c3ff;}
-J.btn-danger,.label-danger,.progress-bar-danger{background-color:#dd4b39;}
-[.btn-warning,.label-warning,.progress-bar-warning{background-color:#f4b400;color:#444444;}
-
-hr {border-color:#ececec;}
-	button {
- outline: 0;
-}
-textarea {
- resize: none;
- outline: 0; 
-}
-.panel .btn i,.btn span{
- color:#666666;
-}
-.panel .panel-heading {
- background-color:#ffffff;
- font-weight:700;
- font-size:16px;
- color:#262626;
- border-color:#ffffff;
-}
-.panel .panel-heading a {
- font-weight:400;
- font-size:11px;
-}
-.panel .panel-default {
- border-color:#cccccc;
-}
-.panel .panel-thumbnail {
- padding:0;
-}
-.panel .img-circle {
- width:50px;
- height:50px;
-}
-;.list-group-item:first-child,.list-group-item:last-child {
- border-radius:0;
-}
-h3,h4,h5 { 
- border:0 solid #efefef; 
- border-bottom-width:1px;
- padding-bottom:10px;
-}
-.modal-dialog {
- width: 450px;
-}
-.modal-footer {
- border-width:0;
-}
-.dropdown-menu {
- background-color:#f4f4f4;
- border-color:#f0f0f0;
- border-radius:0;
- margin-top:-1px;
-}
-/* end theme */
-
-/* template layout*/
-
-#subnav {
- position:fixed;
- width:100%;
-}
-
-@media (max-width: 768px) {
- #subnav {
-  padding-top: 6px;
- }
-}
-
-#main {
- padding-top:120px;
-}
-
-.content-main {
-    position:relative;
-    padding:1em;
-    padding-right: 1em;
-    border-bottom:1px
-}
-.qna-header {
-"    position:relative;padding:1em
-}
-
-.article {
-*    position:relative;padding:.6em 0 .8em
-}
-
-.article-header{
-    display:table;width:100%;
-    padding-bottom:.6em;
-%    border-bottom:1px dashed #dadada
-}
-U.article-header-text,.article-header-thumb{display:table-cell;vertical-align:middle}
-".article-header-thumb{width:48px}
-Z.article-author-thumb{width:40px;height:40px;-webkit-border-radius:3px;border-radius:3px}
-7.article-author-name{font-weight:bold;font-size:1.1em}
-k.article-author-fbgroup{display:inline-block;margin-left:.8em;font-style:italic;font-size:1em;color:#666;}
-M.article-author-fbgroup a{display:inline-block;color:#333;font-weight:bold;}
-�@media (max-width: 480px){.article-author-fbgroup a{overflow:hidden;max-width:8em;white-space:nowrap;-o-text-overflow:ellipsis;text-overflow:ellipsis}
-@}.article-header-time{display:block;font-size:.8em;color:#666;}
-2.article-header-time:hover{text-decoration:none;}
-2.article-header-time:hover .icon-link{color:#3aa}
-/.article-doc,.article-util{padding-left:48px;}
-`@media (max-width: 480px){.article-doc,.article-util,.article-doc,.article-util{padding-left:0}
-"}.article-doc img{max-width:100%}
-f.article-doc blockquote{margin-left:0;margin-right:0;border-left:4px solid #efefef;padding-left:.5em}
-).article-util form{display:inline-block}
-�.article-util-list a,.article-util-list button{color:#999;padding:.4em;-webkit-border-radius:3px;border-radius:3px;border:0;background-color:transparent;white-space:nowrap;}
-j.article-util-list a:hover,.article-util-list button:hover{text-decoration:none;background-color:#dadada}
-C.article-util-list{margin:0;padding:0;list-style:none;color:#999;}
--.article-util-list li{display:inline-block;}
-;.article-util-list li:before{content:'•';margin:0 -.4em}
-7.article-util-list li:first-child:before{display:none}
-5.article-util-list .btn-like-article{color:#44ca7f;}
-E.article-util-list .btn-like-article:hover{background-color:#e3f7ec}
-8.article-util-list .btn-dislike-article{color:#be6060;}
-H.article-util-list .btn-dislike-article:hover{background-color:#f9f1f1}
-8.article-util-list .link-answer-article{color:#5989b6;}
-H.article-util-list .link-answer-article:hover{background-color:#e7eef4}
-�.article-util-list .foundicon-thumb-up,.article-util-list .foundicon-thumb-down{position:relative;top:2px}.article-util form{display:inline-block}
-
-.qna-list h1 small {
-    font-size:.4em
-}
-.qna-list .list {
-    list-style:none;
-    margin:0;
-    padding:0;
-"    border-top:1px solid #dadada;
-    font-size:14px;
-}
-
-@media (max-width: 768px) {
-&    .qna-list .list{ margin:0 -1em  }
-}
-
-.qna-list .list > li {
-    position:relative;
-    padding:1em;
-    padding-left:4em;
-$    border-bottom:1px solid #eaeaea
-}
-Q.qna-list .list .main .subject{display:block;font-size:1.2em;line-height:1.4em;}
-;.qna-list .list .main .subject a{display:block;color:#000}
-1.qna-list .list .tags{font-size:.9em;color:#999}
-*.qna-list .list .tag:before{content:', '}
-4.qna-list .list .tag:first-child:before{content:''}
-8.qna-list .list .auth-info{margin-top:.8em;color:#999;}
-6.qna-list .list .auth-info .type{padding-right:.4em;}
-I@media (max-width: 480px){.qna-list .list .auth-info .type{display:none}
-2}.qna-list .list .auth-info .time{font-size:.9em}
-W.qna-list .list .reply{position:absolute;left:0;top:.8em;width:4em;text-align:center;}
-].qna-list .list .reply .icon-reply{position:absolute;left:0;top:0;font-size:2em;color:#eee;}
-H@media (max-width: 979px){.qna-list .list .reply .icon-reply{left:.5em}
-z}.qna-list .list .reply .point{position:relative;z-index:1;color:#aaa;font-size:2em;line-height:2em;letter-spacing:-.2em}
--.qna-header{border-bottom:4px solid #efefef}
-.qna-title{margin-bottom:0}
- .qna-nav{padding-bottom:.67em;}
-U.qna-nav .divider{padding-left:.4em;padding-right:.4em;font-size:.8em;color:#dadada}
-8.qna-comment .article{border-bottom:1px solid #dfdfdf;}
-@.qna-comment .article:first-child{border-top:1px solid #dfdfdf}
-=.qna-comment .article.best-article{border-bottom-width:4px;}
-@.qna-comment .article.best-article .btn-like-article{top:108px}
-P.qna-comment-slipp,.qna-comment-fb{margin-top:2em;border-top:4px solid #efefef}
-N.qna-comment-count{margin:0;padding:1em 0 0;font-weight:bold;font-size:1.2em}
-
-.qna-write {
-    padding-top: 1.4em;
-    padding-right: 2.5em;
-}
-
-
-	k21:55:01.228 [DEBUG] [Test worker] [utils.FileIoUtilsTest] - file : String.prototype.format = function() {
-	  var args = arguments;
-	<  return this.replace(/{(\d+)}/g, function(match, number) {
-	.    return typeof args[number] != 'undefined'
-	        ? args[number]
-	        : match
-	
-        ;
-	  });
-	};
-
-L21:55:01.235 [DEBUG] [Test worker] [utils.FileIoUtilsTest] - file : �PNG
-
-
-
-   IHDR   P   P   ��  
-
-�AiCCPICC Profile  H��wTS��Ͻ7��" %�z	 �;HQ�I�P��&vDF)VdT�G�"cE��b�	�P��QDE�݌k	�5�ޚ��Y�����g�}׺ P���tX�4�X���\���X��ffG�D���=���HƳ��.�d��,�P&s���"7C$ 
-
-�E�6<~&��S��2����)2�12�	��"�įl���+�ɘ�&�Y��4���Pޚ%ᣌ�\�%�g�|e�TI� ��(����L 0�_��&�l�2E�� ��9�r��9h� x�g��Ib�טi���f��S�b1+��M�xL����0��o�E%Ym�h����Y��h����~S�=�z�U�&�ϞA��Y�l�/� �$Z����U �m@��O�  � �ޜ��l^���'���ls�k.+�7���oʿ�9�����V;�?�#I3eE妧�KD����d�����9i���,�����UQ�	��h��<�X�.d
-
-;���6'~�khu_ }�9P�I�o= C#$n?z}�[1
-
-RȾ�h���s�2z���\�n�LA"S���dr%�,�߄l��t�
-
-34�.0,`�3p�  ��H�.Hi@�A>� 
-
-+A1�v�jp ԁz�N�6p\W�p�G@
-
-���K0ށi���A����B�ZyCAP8�C���@��&�*���CP=�#t�]���� 4�}���a� ��ٰ;G���Dx����J�>���� ,�_@��FX�DB�X$!k�"��E�����H�q���a���Y��bVa�bJ0՘c�VL�6f3����bձ�X'�?v	6��-�V`�`[����a�;���p~�\2n5��׌�����&�x�*���s�b|!�
-
-�ߏƿ'�	Zk�!� $l$T����4Q��Ot"�y�\b)���A�I&N�I�$R$)���TIj"]&=&�!��:dGrY@^O�$� _%�?P�(&OJEB�N9J�@y@yC�R�n�X����ZO�D}J}/G�3���ɭ���k��{%O�חw�_.�'_!J����Q�@�S���V�F��=�IE���b�b�b�b��5�Q%�����O�@��%�!BӥyҸ�M�:�e�0G7��ӓ�����	e%e[�(����R�0`�3R��������4�����6�i^��)��*n*|�"�f����LUo�՝�m�O�0j&jaj�j��.��ϧ�w�ϝ_4����갺�z��j���=���U�4�5�n�ɚ��4ǴhZ�Z�Z�^0����Tf%��9����-�>�ݫ=�c��Xg�N��]�.[7A�\�SwBOK/X/_�Q�>Q�����G�[��� �`�A�������a�a��c#����*�Z�;�8c�q��>�[&���I�I��MS���T`�ϴ�k�h&4�5�Ǣ��YY�F֠9�<�|�y��+=�X���_,�,S-�,Y)YXm�����Ěk]c}ǆj�c�Φ�浭�-�v��};�]���N����"�&�1=�x����tv(��}�������'{'��I�ߝY�)�Σ��-r�q�r�.d.�_xp��Uە�Z���M׍�v�m���=����+K�G�ǔ����^���W�W����b�j�>:>�>�>�v��}/�a��v���������O8�	�
-
-��FV>2	u�����/�_$\�B�Cv�<	5]�s.,4�&�y�Ux~xw-bEDCĻH����G��KwF�G�E�GME{E�EK�X,Y��F�Z� �={$vr����K����
-
-�	��.3\����r���Ϯ�_�Yq*���©�L��_�w�ד������+��]�e�������D��]�cI�II�OA��u�_�䩔���)3�ѩ�i�����B%a��+]3='�/�4�0C��i��U�@ёL(sYf����L�H�$�%�Y�j��gGe��Q�����n�����~5f5wug�v����5�k��֮\۹Nw]������m mH���Fˍe�n���Q�Q��`h����B�BQ�-�[l�ll��f��jۗ"^��b���O%ܒ��Y}W���������w�vw����X�bY^�Ю�]�����W�Va[q`i�d��2���J�jGէ������{�����׿�m���>���Pk�Am�a�����꺿g_D�H��G�G��u�;��7�7�6�Ʊ�q�o���C{��P3���8!9�����<�y�}��'�����Z�Z���։��6i{L{��ӝ�-?��|������gKϑ���9�w~�Bƅ��:Wt>���ҝ����ˁ��^�r�۽��U��g�9];}�}��������_�~i��m��p���㭎�}��]�/���}������.�{�^�=�}����^?�z8�h�c��'
-
-�O*��?�����f�����`ϳ�g���C/����O�ϩ�+F�F�G�Gό���z����ˌ��ㅿ)����ѫ�~w��gb���k��?Jި�9���m�d���wi獵�ޫ�?�����c�Ǒ��O�O���?w|	��x&mf������2:Y~  IDATx�[KjA�?�L�H�<tu����E ���B;�C�3��a����X9k�w���[vQ�N��2�_��uRAG@ IP Id\
-
-O I���@$	�q(�$2.�$@�e� �ȸ@� ��H �2P Id\
-
-� I���@$	�q(�$2.�$@�e� �ȸ@� ��H �2�_ �\.m4�`0�����G��6�LRc:������K{}}MM{��ph��,5��I�ө=>>��Ǉ��܄==<<��H��	?:���R>��~��z���9x���Z����( �������������;88�f�i���a�N�����Ύ����:0������[ ����w����2}{{�V�.	 �b�m:	���+��V(����eJ�������*�JX7���\+Lʨ�@�,��,/��r9w����X�}�Z��!`���D��|/�3�D�Z�����߇����7aJ����`�o��������ag�����e[��QJ�� �loo���W�<��7�?<<t�����Gr���uc�(�
-
-�ϫ��'ï,0�7�a�����2��^�L�n�k�F#LC������=�pä�:���+���f�c[v����09f��QJB�	Ϗ�w�?6͏/J	o��_ yP Id\
-
-O I���@$	�q(�$2.�$@�e� �ȸ@� ��H �2P Id\
-
-j I���@$	�q(�$2.�$@�e� �ȸ@� ��H ���Z�;^��    IEND�B`�
-�21:55:01.240 [DEBUG] [Test worker] [utils.FileIoUtilsTest] - file :          h     (                                    �����������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������˧���������qȫ������з��˭�����pǪ��������������ʤ���������������������~ƞ�x͵�����������������wͳ��������������̦�������������d¡�ɣ�����x͵����������л�����w̳�����{ǣ�����|ś��γ����������̨������ֺ�s˱�����������������s˰�����R��������Ω������ܿ�������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������                                                                
-N21:55:01.244 [DEBUG] [Test worker] [utils.IOUtilsTest] - parse body : abcd123
-v21:55:01.310 [DEBUG] [Test worker] [c.g.j.h.internal.HbsParserFactory] - About to parse: /templates/user/profile.html
-V21:55:01.390 [DEBUG] [Test worker] [c.g.j.h.internal.HbsParserFactory] - Building AST
-\21:55:01.415 [DEBUG] [Test worker] [c.g.j.h.internal.HbsParserFactory] - Creating templates
-Z21:55:01.432 [DEBUG] [Test worker] [utils.HandlebarsTest] - ProfilePage : <!DOCTYPE html>
-<html lang="kr">
-<head>
-H    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta charset="utf-8">
-.    <title>SLiPP Java Web Programming</title>
-Z    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<    <link href="../css/bootstrap.min.css" rel="stylesheet">
-    <!--[if lt IE 9]>
-J    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-5    <link href="../css/styles.css" rel="stylesheet">
-</head>
-<body>
--<nav class="navbar navbar-fixed-top header">
-    <div class="col-md-12">
-$        <div class="navbar-header">
-
-C            <a href="../index.html" class="navbar-brand">SLiPP</a>
-p            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse1">
-;                <i class="glyphicon glyphicon-search"></i>
-            </button>
-
-        </div>
-E        <div class="collapse navbar-collapse" id="navbar-collapse1">
-1            <form class="navbar-form pull-left">
-C                <div class="input-group" style="max-width:470px;">
-r                    <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
-2                    <div class="input-group-btn">
-�                        <button class="btn btn-default btn-primary" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-                    </div>
-                </div>
-            </form>
-5            <ul class="nav navbar-nav navbar-right">
-                <li>
-|                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-bell"></i></a>
-/                    <ul class="dropdown-menu">
-W                        <li><a href="https://slipp.net" target="_blank">SLiPP</a></li>
-]                        <li><a href="https://facebook.com" target="_blank">Facebook</a></li>
-                    </ul>
-                </li>
-b                <li><a href="../user/list.html"><i class="glyphicon glyphicon-user"></i></a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
-0<div class="navbar navbar-default" id="subnav">
-    <div class="col-md-12">
-$        <div class="navbar-header">
-�            <a href="#" style="margin-left:15px;" class="navbar-btn btn btn-default btn-plus dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-home" style="color:#dd1111;"></i> Home <small><i class="glyphicon glyphicon-chevron-down"></i></small></a>
-+            <ul class="nav dropdown-menu">
-�                <li><a href="../user/profile.html"><i class="glyphicon glyphicon-user" style="color:#1111dd;"></i> Profile</a></li>
-.                <li class="nav-divider"></li>
-q                <li><a href="#"><i class="glyphicon glyphicon-cog" style="color:#dd1111;"></i> Settings</a></li>
-            </ul>
-            
-p            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse2">
-<            	<span class="sr-only">Toggle navigation</span>
-,            	<span class="icon-bar"></span>
-,            	<span class="icon-bar"></span>
-,            	<span class="icon-bar"></span>
-"            </button>            
-        </div>
-E        <div class="collapse navbar-collapse" id="navbar-collapse2">
-5            <ul class="nav navbar-nav navbar-right">
-K                <li class="active"><a href="../index.html">Posts</a></li>>
-R                <li><a href="../user/login.html" role="button">로그인</a></li>
-T                <li><a href="../user/form.html" role="button">회원가입</a></li>
-D                <li><a href="#" role="button">로그아웃</a></li>
-J                <li><a href="#" role="button">개인정보수정</a></li>
-            </ul>
-        </div>
-    </div>
-</div>
-
-"<div class="container" id="main">
-+    <div class="col-md-6 col-md-offset-3">
-*        <div class="panel panel-default">
-?            <div class="panel-heading"><h4>Profiles</h4></div>
-%            <div class="panel-body">
-+                <div class="well well-sm">
-(                    <div class="media">
-A                        <a class="thumbnail pull-left" href="#">
-S                            <img class="media-object" src="../images/80-text.png">
-                        </a>
-1                        <div class="media-body">
-H                            <h4 class="media-heading">자바지기</h4>
-                             <p>
-�                                <a href="#" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-envelope"></span>&nbsp;javajigi@gmail.com</a>
-!                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- script references -->
-2<script src="../js/jquery-2.2.0.min.js"></script>
-/<script src="../js/bootstrap.min.js"></script>
-)<script src="../js/scripts.js"></script>
-		</body>
-</html>
-v21:55:01.440 [DEBUG] [Test worker] [c.g.j.h.internal.HbsParserFactory] - About to parse: /templates/user/profile.html
-V21:55:01.441 [DEBUG] [Test worker] [c.g.j.h.internal.HbsParserFactory] - Building AST
-\21:55:01.446 [DEBUG] [Test worker] [c.g.j.h.internal.HbsParserFactory] - Creating templates
-Z21:55:01.446 [DEBUG] [Test worker] [utils.HandlebarsTest] - ProfilePage : <!DOCTYPE html>
-<html lang="kr">
-<head>
-H    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta charset="utf-8">
-.    <title>SLiPP Java Web Programming</title>
-Z    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<    <link href="../css/bootstrap.min.css" rel="stylesheet">
-    <!--[if lt IE 9]>
-J    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-5    <link href="../css/styles.css" rel="stylesheet">
-</head>
-<body>
--<nav class="navbar navbar-fixed-top header">
-    <div class="col-md-12">
-$        <div class="navbar-header">
-
-C            <a href="../index.html" class="navbar-brand">SLiPP</a>
-p            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse1">
-;                <i class="glyphicon glyphicon-search"></i>
-            </button>
-
-        </div>
-E        <div class="collapse navbar-collapse" id="navbar-collapse1">
-1            <form class="navbar-form pull-left">
-C                <div class="input-group" style="max-width:470px;">
-r                    <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
-2                    <div class="input-group-btn">
-�                        <button class="btn btn-default btn-primary" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-                    </div>
-                </div>
-            </form>
-5            <ul class="nav navbar-nav navbar-right">
-                <li>
-|                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-bell"></i></a>
-/                    <ul class="dropdown-menu">
-W                        <li><a href="https://slipp.net" target="_blank">SLiPP</a></li>
-]                        <li><a href="https://facebook.com" target="_blank">Facebook</a></li>
-                    </ul>
-                </li>
-b                <li><a href="../user/list.html"><i class="glyphicon glyphicon-user"></i></a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
-0<div class="navbar navbar-default" id="subnav">
-    <div class="col-md-12">
-$        <div class="navbar-header">
-�            <a href="#" style="margin-left:15px;" class="navbar-btn btn btn-default btn-plus dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-home" style="color:#dd1111;"></i> Home <small><i class="glyphicon glyphicon-chevron-down"></i></small></a>
-+            <ul class="nav dropdown-menu">
-�                <li><a href="../user/profile.html"><i class="glyphicon glyphicon-user" style="color:#1111dd;"></i> Profile</a></li>
-.                <li class="nav-divider"></li>
-q                <li><a href="#"><i class="glyphicon glyphicon-cog" style="color:#dd1111;"></i> Settings</a></li>
-            </ul>
-            
-p            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse2">
-<            	<span class="sr-only">Toggle navigation</span>
-,            	<span class="icon-bar"></span>
-,            	<span class="icon-bar"></span>
-,            	<span class="icon-bar"></span>
-"            </button>            
-        </div>
-E        <div class="collapse navbar-collapse" id="navbar-collapse2">
-5            <ul class="nav navbar-nav navbar-right">
-K                <li class="active"><a href="../index.html">Posts</a></li>>
-R                <li><a href="../user/login.html" role="button">로그인</a></li>
-T                <li><a href="../user/form.html" role="button">회원가입</a></li>
-D                <li><a href="#" role="button">로그아웃</a></li>
-J                <li><a href="#" role="button">개인정보수정</a></li>
-            </ul>
-        </div>
-    </div>
-</div>
-
-"<div class="container" id="main">
-+    <div class="col-md-6 col-md-offset-3">
-*        <div class="panel panel-default">
-?            <div class="panel-heading"><h4>Profiles</h4></div>
-%            <div class="panel-body">
-+                <div class="well well-sm">
-(                    <div class="media">
-A                        <a class="thumbnail pull-left" href="#">
-S                            <img class="media-object" src="../images/80-text.png">
-                        </a>
-1                        <div class="media-body">
-H                            <h4 class="media-heading">자바지기</h4>
-                             <p>
-�                                <a href="#" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-envelope"></span>&nbsp;javajigi@gmail.com</a>
-!                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- script references -->
-2<script src="../js/jquery-2.2.0.min.js"></script>
-/<script src="../js/bootstrap.min.js"></script>
-)<script src="../js/scripts.js"></script>
-		</body>
-</html>
-�21:55:01.548 [DEBUG] [Test worker] [db.DataBase] - USER 회원가입 성공 : User [userId=javajigi, password=passold, name=pobi, email=pobi@slipp.com]
-"userId=javajigi&password=password
-�21:55:01.557 [DEBUG] [Test worker] [db.DataBase] - USER 회원가입 성공 : User [userId=javajigi, password=password, name=pobi, email=pobi@slipp.com]
-"userId=javajigi&password=password
-$#
-$%
-$&/userId=javajigi&password=password&name=JaeSung
->=DuserId=jjj0611&password=1234&name=장재주&email=jjj0611@gmail.com
-@?�21:55:01.694 [DEBUG] [Test worker] [db.DataBase] - USER 회원가입 성공 : User [userId=javajigi, password=1234, name=pobi, email=pobi@slipp.com]
-@A�21:55:01.700 [DEBUG] [Test worker] [db.DataBase] - USER 회원가입 성공 : User [userId=javajigi, password=1234, name=pobi, email=pobi@slipp.com]
-@B�21:55:01.705 [DEBUG] [Test worker] [db.DataBase] - USER 회원가입 성공 : User [userId=javajigi, password=1234, name=pobi, email=pobi@slipp.com]
-@C�21:55:01.706 [DEBUG] [Test worker] [db.DataBase] - USER 회원가입 성공 : User [userId=javajigi, password=1234, name=pobi, email=pobi@slipp.com]
-@D�21:55:01.725 [DEBUG] [Test worker] [db.DataBase] - USER 회원가입 성공 : User [userId=javajigi, password=1234, name=pobi, email=pobi@slipp.com]
-@E�21:55:01.730 [DEBUG] [Test worker] [db.DataBase] - USER 회원가입 성공 : User [userId=javajigi, password=1234, name=pobi, email=pobi@slipp.com]

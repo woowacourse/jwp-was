@@ -8,7 +8,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 class HttpMethodTest {
-
     @DisplayName("HTTP Method 생성")
     @ParameterizedTest
     @CsvSource(value = {"get:GET", "gEt:GET", "geT:GET", "GEt:GET", "gET:GET", "GET:GET"}, delimiterString = ":")

@@ -11,13 +11,13 @@ public class FileIoUtilsTest {
 
     @Test
     void loadFileFromClasspath() throws Exception {
-        byte[] body = FileIoUtils.loadFileFromClasspath("/index.html");
+        byte[] body = FileIoUtils.loadFileFromClasspath("/test.html");
         log.debug("file : {}", new String(body));
     }
 
 
     @ParameterizedTest
-    @ValueSource(strings = {"/css/styles.css", "/js/scripts.js", "/images/80-text.png", "/favicon.ico"})
+    @ValueSource(strings = {"/css/test.css", "/js/test.js", "/images/test.png", "/test.ico"})
     void loadFileFromStatic(String path) throws Exception {
         byte[] body = FileIoUtils.loadFileFromClasspath(path);
         log.debug("file : {}", new String(body));

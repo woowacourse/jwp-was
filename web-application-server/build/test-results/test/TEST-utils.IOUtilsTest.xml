@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="utils.IOUtilsTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-11-26T12:55:01" hostname="leewonmi-team02ui-MacBookPro.local" time="0.001">
-  <properties/>
-  <testcase name="readData()" classname="utils.IOUtilsTest" time="0.001"/>
-  <system-out><![CDATA[21:55:01.244 [DEBUG] [Test worker] [utils.IOUtilsTest] - parse body : abcd123
-]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import http.request.StartLine;
 
 class StartLineTest {
-
     @Test
     void create() {
         StartLine startLine = StartLine.from("GET / HTTP/1.1");
