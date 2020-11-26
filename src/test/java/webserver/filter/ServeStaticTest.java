@@ -8,14 +8,13 @@ import http.response.HttpResponse;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import org.junit.jupiter.api.Test;
 import utils.FileIoUtils;
 import webserver.ApplicationFilterChain;
 
 public class ServeStaticTest {
     @Test
-    void service() throws IOException, URISyntaxException {
+    void doFilter() throws IOException {
         String message = "GET /index.html HTTP/1.1";
         ByteArrayInputStream in = new ByteArrayInputStream(message.getBytes());
         HttpRequest httpRequest = HttpRequest.from(in);
