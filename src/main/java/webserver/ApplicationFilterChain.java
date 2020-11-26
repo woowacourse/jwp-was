@@ -4,7 +4,7 @@ import http.HttpStatus;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import java.io.IOException;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import webserver.controller.Controller;
 import webserver.controller.RequestMapping;
@@ -21,8 +21,8 @@ public class ApplicationFilterChain implements FilterChain {
     private final int filterLength;
 
     public ApplicationFilterChain(List<Filter> filters, List<Controller> controllers) {
-        this.filters = Collections.unmodifiableList(filters);
-        this.controllers = Collections.unmodifiableList(controllers);
+        this.filters = new ArrayList<>(filters);
+        this.controllers = new ArrayList<>(controllers);
         this.filterIndex = 0;
         this.filterLength = this.filters.size();
     }
