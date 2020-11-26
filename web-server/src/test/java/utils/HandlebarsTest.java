@@ -20,7 +20,7 @@ public class HandlebarsTest {
         users.put("name", "자바지기");
         users.put("email", "javajigi@gmail.com");
 
-        String profilePage = HandlebarUtils.apply("user/profile", users);
+        String profilePage = HandlebarUtils.apply("profile", users);
         log.debug("ProfilePage : {}", profilePage);
     }
 }

@@ -22,7 +22,7 @@ public class HttpResponseTest {
         response = new HttpResponse(byteArrayOutputStream);
     }
 
-    @DisplayName("HttpResponse Forward - HTML")
+    @DisplayName("HttpResponse Forward")
     @Test
     public void responseForward_HTML() throws Exception {
         response.forward("/index.html");
@@ -32,15 +32,6 @@ public class HttpResponseTest {
             () -> assertThat(body).contains("HTTP/1.1 200 Ok"),
             () -> assertThat(body).contains("Content-Length: ")
         );
-    }
-
-    @DisplayName("HttpResponse Forward - CSS")
-    @Test
-    public void responseForward_CSS() throws Exception {
-        response.forward("/css/styles.css");
-        String body = makeBody(byteArrayOutputStream);
-
-        assertThat(body).contains("HTTP/1.1 200 Ok");
     }
 
     @DisplayName("HttpResponse Redirect")
