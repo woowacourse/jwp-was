@@ -5,8 +5,8 @@ import java.util.Map;
 
 public class HttpSession {
 
-    private String id;
-    private Map<String, Object> attributes;
+    private final String id;
+    private final Map<String, Object> attributes;
 
     public HttpSession(String id) {
         this.id = id;

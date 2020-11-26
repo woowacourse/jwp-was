@@ -72,7 +72,7 @@ public class RequestHandler implements Runnable {
     }
 
     private void makeSession(HttpRequest httpRequest, HttpResponse httpResponse) {
-        if(!httpRequest.hasSession()){
+        if (!httpRequest.hasSession()) {
             Headers headers = httpResponse.getHeaders();
             UUID uuid = UUID.randomUUID();
 

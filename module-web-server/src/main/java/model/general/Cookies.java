@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public class Cookies {
 
-    private List<Cookie> cookies;
+    private final List<Cookie> cookies;
 
     public Cookies(List<Cookie> cookies) {
         this.cookies = cookies;

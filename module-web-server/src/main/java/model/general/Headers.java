@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class Headers {
 
-    private Map<Header, String> headers;
+    private final Map<Header, String> headers;
 
     public Headers() {
         this(new HashMap<>());
