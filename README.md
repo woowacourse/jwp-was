@@ -34,6 +34,8 @@
    - [x] removeAttribute(String name)
    - [x] invalidate()
    - [x] 세션은 클라이언트와 서버 간에 상태 값을 공유하기 위해 고유한 아이디를 활용하고, 이 고유한 아이디는 쿠키를 활용해 공유한다.
+4. [x] multi module 적용
+   - [x] WAS 본연의 기능을 담당하는 부분과 이 WAS를 기반으로 사용자 관리라는 응용 애플리케이션을 구현하는 부분으로 나눈다.
       
 ## 우아한테크코스 코드리뷰
 * [온라인 코드 리뷰 과정](https://github.com/woowacourse/woowacourse-docs/blob/master/maincourse/README.md)

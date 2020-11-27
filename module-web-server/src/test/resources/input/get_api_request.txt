@@ -1,0 +1,5 @@
+GET /user/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net HTTP/1.1
+Host: localhost:8080
+Connection: keep-alive
+Cookie: JSESSIONID=6ab731c0-06e2-47d5-84b3-b8c2bc1d4a14; logined=true;
+Accept: */*
