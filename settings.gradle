@@ -1,0 +1,5 @@
+rootProject.name = 'jwp-was'
+
+include 'web-application-server'
+include 'slipp-application'
+

@@ -108,3 +108,9 @@ Thread Pool을 적용해 일정 수의 사용자 동시에 처리가 가능하�
 - [x] 인코딩 실패 시 errorStack 출력 -> InternalServerError 반환 
 - [x] null 반환 제거
 - [x] doGet() 템플릿화하어 재사용 가능한 구조를 만들기
+
+### 🚀 4단계 - multi module 적용
+
+#### 요구사항
+- [x] Web Application Server(이하 WAS) 본연의 기능을 담당하는 부분 분리 사용자 관리라는 응용 애플리케이션을 구현하는 부분 분리
+
