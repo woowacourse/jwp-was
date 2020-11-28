@@ -1,15 +1,21 @@
-package http;
+package http.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Objects;
 
+import http.HttpBody;
+import http.HttpHeaders;
+import http.HttpMethod;
+import http.HttpSession;
+import http.HttpVersion;
 import utils.IOUtils;
 
 public class SimpleHttpRequest implements HttpRequest {
     private StartLine startLine;
     private HttpHeaders headers;
     private HttpBody httpBody;
+    private HttpSession httpSession;
     private String rawRequest;
 
     public static SimpleHttpRequest of(BufferedReader bufferedReader) throws IOException {
@@ -20,7 +26,7 @@ public class SimpleHttpRequest implements HttpRequest {
         String requestBodyString = IOUtils.readData(bufferedReader, httpHeaders.getContentLength());
         HttpBody httpBody = HttpBody.from(requestBodyString);
         return new SimpleHttpRequest(startLine, httpHeaders, httpBody,
-            joinRequest(startLineString, requestHeadersString, requestBodyString));
+                joinRequest(startLineString, requestHeadersString, requestBodyString));
     }
 
     private static String extractRequestHeader(BufferedReader bufferedReader) throws IOException {
@@ -33,21 +39,20 @@ public class SimpleHttpRequest implements HttpRequest {
     }
 
     private static String joinRequest(String startLine, String httpHeaders, String requestBody) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(startLine);
-        stringBuilder.append(System.lineSeparator());
-        stringBuilder.append(httpHeaders);
-        stringBuilder.append(System.lineSeparator());
-        stringBuilder.append(System.lineSeparator());
-        stringBuilder.append(requestBody);
-        return stringBuilder.toString();
+        return startLine
+                + System.lineSeparator()
+                + httpHeaders
+                + System.lineSeparator()
+                + System.lineSeparator()
+                + requestBody;
     }
 
     private SimpleHttpRequest(StartLine startLine, HttpHeaders httpHeaders, HttpBody httpBody,
-        String rawRequest) {
+            String rawRequest) {
         this.startLine = startLine;
         this.headers = httpHeaders;
         this.httpBody = httpBody;
+        this.httpSession = headers.getSession();
         this.rawRequest = rawRequest;
     }
 
@@ -77,8 +82,13 @@ public class SimpleHttpRequest implements HttpRequest {
     }
 
     @Override
-    public String getVersion() {
-        return startLine.getVersion();
+    public HttpSession getSession() {
+        return httpSession;
+    }
+
+    @Override
+    public HttpVersion getVersion() {
+        return HttpVersion.from(startLine.getVersion());
     }
 
     @Override

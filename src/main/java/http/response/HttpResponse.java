@@ -1,8 +1,15 @@
-package http;
+package http.response;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+
+import http.ContentType;
+import http.Cookie;
+import http.HttpHeaders;
+import http.HttpStatus;
 
 public class HttpResponse {
     private static final String DEFAULT_PROTOCOL_VERSION = "HTTP/1.1";
@@ -11,10 +18,12 @@ public class HttpResponse {
     private StatusLine statusLine;
     private HttpHeaders headers;
     private byte[] body;
+    private List<Cookie> cookies;
 
     public HttpResponse() {
         this.statusLine = new StatusLine(DEFAULT_PROTOCOL_VERSION, DEFAULT_STATUS);
         this.headers = new HttpHeaders();
+        this.cookies = new ArrayList<>();
     }
 
     public void setStatus(HttpStatus httpStatus) {
@@ -27,13 +36,13 @@ public class HttpResponse {
 
     public void setBody(byte[] body, ContentType contentType) {
         this.body = body;
-        addHeader("Content-Type", contentType.getContentType());
-        addHeader("Content-Length", String.valueOf(body.length));
+        headers.setContentType(contentType.getContentType());
+        headers.setContentLength(String.valueOf(body.length));
     }
 
-    public void setMethodNotAllowed() {
+    public void methodNotAllowed() {
         setStatus(HttpStatus.METHOD_NOT_ALLOWED);
-        addHeader("Content-Type", "test/html");
+        headers.setContentType("test/html");
         this.body = "<h1>405 Try another method!</h1>".getBytes();
     }
 
@@ -57,5 +66,19 @@ public class HttpResponse {
 
     public String getHeader(String name) {
         return headers.getHeader(name);
+    }
+
+    public void setCookie(String value) {
+        headers.setCookie(value);
+    }
+
+    public void addCookie(Cookie cookie) {
+        cookies.add(cookie);
+    }
+
+    public void internalServerError() {
+        setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+        headers.setContentType("test/html");
+        this.body = "<h1>500 Internal Server Error!</h1>".getBytes();
     }
 }

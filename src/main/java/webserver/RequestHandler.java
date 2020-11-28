@@ -12,9 +12,14 @@ import java.nio.charset.StandardCharsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import http.HttpRequest;
-import http.HttpResponse;
-import http.SimpleHttpRequest;
+import exception.DisabledEncodingException;
+import exception.UnAuthenticationException;
+import http.Cookie;
+import http.HttpSession;
+import http.HttpStatus;
+import http.request.HttpRequest;
+import http.request.SimpleHttpRequest;
+import http.response.HttpResponse;
 import servlet.DispatcherServlet;
 import servlet.HttpServlet;
 
@@ -30,7 +35,6 @@ public class RequestHandler implements Runnable {
     public void run() {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
             connection.getPort());
-
         try (
             InputStream inputStream = connection.getInputStream();
             OutputStream outputStream = connection.getOutputStream();
@@ -38,22 +42,35 @@ public class RequestHandler implements Runnable {
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             DataOutputStream dos = new DataOutputStream(outputStream);
         ) {
-            HttpRequest httpRequest = SimpleHttpRequest.of(bufferedReader);
-            logger.debug(System.lineSeparator() + httpRequest.toString());
             HttpResponse httpResponse = new HttpResponse();
-            doDispatch(dos, httpRequest, httpResponse);
+            try {
+                HttpRequest httpRequest = SimpleHttpRequest.of(bufferedReader);
+                logger.debug(System.lineSeparator() + httpRequest.toString());
+                doDispatch(httpRequest, httpResponse);
+            } catch (DisabledEncodingException | IndexOutOfBoundsException e) {
+                httpResponse.internalServerError();
+            } catch (UnAuthenticationException e) {
+                httpResponse.setStatus(HttpStatus.MOVED_PERMANENTLY);
+                httpResponse.addHeader("Location", "/user/login.html");
+            } finally {
+                httpResponse.send(dos);
+            }
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void doDispatch(DataOutputStream dos, HttpRequest httpRequest, HttpResponse httpResponse) throws
-        IOException {
+    private void doDispatch(HttpRequest httpRequest, HttpResponse httpResponse) {
         try {
             HttpServlet dispatcherServlet = new DispatcherServlet();
             dispatcherServlet.service(httpRequest, httpResponse);
         } finally {
-            httpResponse.send(dos);
+            HttpSession session = httpRequest.getSession();
+            if (session.isNew()) {
+                Cookie cookie = Cookie.createSessionIdCookie(session.getId());
+                httpResponse.addCookie(cookie);
+                session.toOld();
+            }
         }
     }
 }

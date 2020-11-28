@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import http.HttpRequest;
-import http.HttpResponse;
+import http.request.HttpRequest;
+import http.response.HttpResponse;
 
 public class DispatcherServlet implements HttpServlet {
     private static final List<HandlerMapping> handlerMappings;

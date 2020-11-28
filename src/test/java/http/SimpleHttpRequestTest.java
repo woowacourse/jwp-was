@@ -11,30 +11,35 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 import org.junit.jupiter.api.Test;
+
+import http.request.HttpRequest;
+import http.request.QueryParameters;
+import http.request.SimpleHttpRequest;
 
 class SimpleHttpRequestTest {
     private String testDirectory = "./src/test/resources/";
 
     @Test
     public void request_GET() throws Exception {
-        InputStream in = new FileInputStream(new File(testDirectory + "Http_GET.txt"));
+        InputStream in = new FileInputStream(new File(testDirectory + "HTTP_GET.txt"));
         InputStreamReader inputStreamReader = new InputStreamReader(in, StandardCharsets.UTF_8);
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
         HttpRequest request = SimpleHttpRequest.of(bufferedReader);
 
         assertAll(
             () -> assertThat(request.getMethod()).isEqualTo(HttpMethod.GET),
-            () -> assertThat(request.getURI()).isEqualTo("/user/create"),
+            () -> assertThat(request.getURI()).isEqualTo("/user"),
             () -> assertThat(request.getHeaders().getHeader("Connection")).isEqualTo("keep-alive"),
-            () -> assertThat(QueryParameters.of(request.getQuery()).getParameter("userId")).isEqualTo("javajigi")
+            () -> assertThat(QueryParameters.of(Objects.requireNonNull(request.getQuery())).getParameter("userId")).isEqualTo("javajigi")
         );
     }
 
     @Test
     public void request_POST() throws Exception {
-        InputStream in = new FileInputStream(new File(testDirectory + "Http_POST.txt"));
+        InputStream in = new FileInputStream(new File(testDirectory + "HTTP_POST.txt"));
         InputStreamReader inputStreamReader = new InputStreamReader(in, StandardCharsets.UTF_8);
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
         HttpRequest request = SimpleHttpRequest.of(bufferedReader);
@@ -68,7 +73,7 @@ class SimpleHttpRequestTest {
             () -> assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.GET),
             () -> assertThat(httpRequest.getHeaders().size()).isEqualTo(7),
             () -> assertThat(httpRequest.getURI()).isEqualTo("/"),
-            () -> assertThat(httpRequest.getVersion()).isEqualTo("HTTP/1.1")
+            () -> assertThat(httpRequest.getVersion()).isEqualTo(HttpVersion.HTTP_11)
         );
     }
 

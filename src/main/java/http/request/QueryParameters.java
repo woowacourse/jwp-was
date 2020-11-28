@@ -1,4 +1,4 @@
-package http;
+package http.request;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -22,9 +22,7 @@ public class QueryParameters {
     public static QueryParameters of(String queries) {
         Map<String, String> queryParams = Arrays.stream(queries.split(QUERY_SPLITTER))
             .map(query -> query.split(KEY_VALUE_SPLITTER))
-            .collect(Collectors.toMap(
-                pair -> pair[KEY_INDEX], pair -> Objects.isNull(pair[VALUE_INDEX]) ? null : pair[VALUE_INDEX]
-            ));
+            .collect(Collectors.toMap(pair -> pair[KEY_INDEX], pair -> pair[VALUE_INDEX]));
         return new QueryParameters(queryParams);
     }
 

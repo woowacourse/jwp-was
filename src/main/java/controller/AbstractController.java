@@ -2,16 +2,19 @@ package controller;
 
 import java.util.Objects;
 
-import http.HttpRequest;
-import http.HttpResponse;
+import exception.UnAuthenticationException;
+import http.HttpSession;
 import http.HttpStatus;
+import http.HttpVersion;
+import http.request.HttpRequest;
+import http.response.HttpResponse;
 import servlet.HttpServlet;
 
 public abstract class AbstractController implements HttpServlet {
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
-        String version = httpRequest.getVersion();
-        if (Objects.isNull(version) || version.isEmpty() || version.endsWith("0.9") || version.endsWith("1.0")) {
+        HttpVersion httpVersion = httpRequest.getVersion();
+        if (!httpVersion.isValid()) {
             httpResponse.setStatus(HttpStatus.BAD_REQUEST);
             return;
         }
@@ -29,23 +32,31 @@ public abstract class AbstractController implements HttpServlet {
                 doPut(httpRequest, httpResponse);
                 break;
             default:
-                throw new IllegalArgumentException("잘못된 요청입니다.");
+                httpResponse.methodNotAllowed();
         }
     }
 
     protected void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        httpResponse.setMethodNotAllowed();
+        httpResponse.methodNotAllowed();
     }
 
     protected void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        httpResponse.setMethodNotAllowed();
+        httpResponse.methodNotAllowed();
     }
 
     protected void doDelete(HttpRequest httpRequest, HttpResponse httpResponse) {
-        httpResponse.setMethodNotAllowed();
+        httpResponse.methodNotAllowed();
     }
 
     protected void doPut(HttpRequest httpRequest, HttpResponse httpResponse) {
-        httpResponse.setMethodNotAllowed();
+        httpResponse.methodNotAllowed();
+    }
+
+    protected void validateLogin(HttpRequest httpRequest) {
+        HttpSession session = httpRequest.getSession();
+        String logined = String.valueOf(session.getAttribute("logined"));
+        if (Objects.isNull(logined) || !"true".equals(logined)) {
+            throw new UnAuthenticationException("로그인이 필요한 서비스입니다");
+        }
     }
 }

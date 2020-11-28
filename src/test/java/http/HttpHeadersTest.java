@@ -22,13 +22,7 @@ class HttpHeadersTest {
             "Accept-Language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7" + "\n" +
             "Cookie: _ga=GA1.1.1818307867.1604572661" + "\n";
 
-        Map<String, String> headers = Arrays.stream(headerRequest.split(System.lineSeparator()))
-            .map(header -> header.split(": "))
-            .collect(Collectors.toMap(
-                pair -> pair[0], pair -> pair[1]
-            ));
-
-        HttpHeaders httpHeaders = new HttpHeaders(headers);
+        HttpHeaders httpHeaders = HttpHeaders.from(headerRequest);
 
         assertAll(
             () -> assertThat(httpHeaders.getHeader("Host")).isEqualTo("localhost:8080"),

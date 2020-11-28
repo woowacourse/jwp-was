@@ -1,6 +1,6 @@
 package servlet;
 
-import http.HttpRequest;
+import http.request.HttpRequest;
 
 public interface HandlerMapping {
     HttpServlet getServlet(HttpRequest httpRequest);
